@@ -15,13 +15,13 @@ from torch import nn
 
 from app.runtime import model_loader
 from app.runtime.event_stream import _cover_event
-from app.runtime.event_stream import stream_real_trace
+from app.runtime.event_stream import stream_real_trace, stream_trace
 from app.runtime.knob_resolution import resolve_knobs
 from app.runtime.ablation_probe import (
     run_real_ablation_control,
     run_real_ablation_effect,
 )
-from app.runtime.pythia_runner import _eraser_intervention
+from app.runtime.pythia_runner import _eraser_intervention, run_pythia
 from app.runtime.probe_runner import EraserIntervention, capture_probes
 from app.schemas.requests import CreateSessionRequest
 
@@ -57,6 +57,7 @@ class _QwenFixture(nn.Module):
         output_width: int = 896,
     ) -> None:
         super().__init__()
+        self.calls = 0
         self.model = SimpleNamespace(
             layers=nn.ModuleList(
                 [
@@ -67,6 +68,7 @@ class _QwenFixture(nn.Module):
         )
 
     def forward(self, activation):
+        self.calls += 1
         return torch.stack(
             [layer.mlp.down_proj(activation) for layer in self.model.layers]
         ).sum(dim=0)
@@ -388,6 +390,35 @@ def test_qwen_causal_ablation_functions_refuse_before_any_forward(monkeypatch) -
     assert tokenizer.calls == 0
 
 
+@pytest.mark.parametrize(
+    "runner",
+    [run_real_ablation_effect, run_real_ablation_control],
+)
+def test_qwen_object_cannot_use_pythia_ablation_under_pythia_binding(
+    monkeypatch,
+    runner,
+) -> None:
+    monkeypatch.delenv(model_loader.ACTIVE_MODEL_ENV, raising=False)
+    binding = model_loader.active_model_binding()
+    request = CreateSessionRequest(prompt="do not execute", max_new_tokens=1)
+    target = SimpleNamespace(layer=0, unit=0, mode="zero")
+    model = _QwenFixture(n_layers=1)
+    tokenizer = _MustNotRun()
+
+    with pytest.raises(RuntimeError, match="probe stack is unavailable"):
+        runner(
+            request,
+            model,
+            tokenizer,
+            1,
+            target,
+            model_binding=binding,
+        )
+
+    assert model.calls == 0
+    assert tokenizer.calls == 0
+
+
 @pytest.mark.asyncio
 async def test_qwen_real_stream_refuses_ablation_before_generation(monkeypatch) -> None:
     monkeypatch.setenv(
@@ -417,6 +448,149 @@ async def test_qwen_real_stream_refuses_ablation_before_generation(monkeypatch) 
     assert "no model forward was executed" in events[0].message
     assert loaded.model.calls == 0
     assert loaded.tokenizer.calls == 0
+
+
+@pytest.mark.asyncio
+async def test_qwen_real_stream_refuses_generic_generation_before_loading(
+    monkeypatch,
+) -> None:
+    monkeypatch.setenv(
+        model_loader.ACTIVE_MODEL_ENV,
+        model_loader.QWEN_05B_INSTRUCT_BINDING_KEY,
+    )
+
+    def _must_not_load():
+        raise AssertionError("generic Qwen stream must reject before model loading")
+
+    monkeypatch.setattr("app.runtime.event_stream.get_loaded_model", _must_not_load)
+    request = CreateSessionRequest(
+        prompt="do not execute",
+        max_new_tokens=1,
+        probes=["active_trace"],
+    )
+
+    events = [event async for event in stream_real_trace(request)]
+
+    assert len(events) == 1
+    assert events[0].type == "error"
+    assert events[0].retryable is False
+    assert "permit-gated Stage C capture" in events[0].message
+    assert "no model forward was executed" in events[0].message
+
+
+@pytest.mark.asyncio
+async def test_public_dispatch_refuses_qwen_before_loading(monkeypatch) -> None:
+    monkeypatch.setenv(
+        model_loader.ACTIVE_MODEL_ENV,
+        model_loader.QWEN_05B_INSTRUCT_BINDING_KEY,
+    )
+
+    def _must_not_load():
+        raise AssertionError("public generic dispatch must reject before loading Qwen")
+
+    monkeypatch.setattr("app.runtime.event_stream.get_loaded_model", _must_not_load)
+    request = CreateSessionRequest(prompt="do not load", max_new_tokens=1)
+
+    events = [event async for event in stream_trace(request)]
+
+    assert len(events) == 1
+    assert events[0].type == "error"
+    assert events[0].retryable is False
+    assert "no model load or forward was executed" in events[0].message
+
+
+@pytest.mark.asyncio
+async def test_cached_qwen_object_cannot_run_after_binding_changes_to_pythia(
+    monkeypatch,
+) -> None:
+    # Simulate a carrier whose metadata claims the active Pythia binding while
+    # the concrete cached Python model is Qwen-shaped.  The family-stack check
+    # must reject before tokenization, hook registration, or forward.
+    monkeypatch.delenv(model_loader.ACTIVE_MODEL_ENV, raising=False)
+    binding = model_loader.active_model_binding()
+    model = _QwenFixture(n_layers=binding.arch.n_layers)
+    tokenizer = _MustNotRun()
+    loaded = model_loader.LoadedModel(
+        manifest=_real_manifest_for_binding(binding),
+        model=model,
+        tokenizer=tokenizer,
+    )
+    monkeypatch.setattr("app.runtime.event_stream.get_loaded_model", lambda: loaded)
+    request = CreateSessionRequest(prompt="do not execute", max_new_tokens=1)
+
+    events = [event async for event in stream_real_trace(request)]
+
+    assert len(events) == 1
+    assert events[0].type == "error"
+    assert "rejected the loaded carrier" in events[0].message
+    assert model.calls == 0
+    assert tokenizer.calls == 0
+
+
+def test_cached_qwen_carrier_is_not_returned_after_binding_changes_to_pythia(
+    monkeypatch,
+) -> None:
+    monkeypatch.setenv(
+        model_loader.ACTIVE_MODEL_ENV,
+        model_loader.QWEN_05B_INSTRUCT_BINDING_KEY,
+    )
+    qwen = _QwenFixture(n_layers=24)
+    tokenizer = _MustNotRun()
+    monkeypatch.setattr(
+        model_loader,
+        "_LOADED",
+        model_loader.LoadedModel(
+            manifest=model_loader.bootstrap_manifest(),
+            model=qwen,
+            tokenizer=tokenizer,
+        ),
+    )
+    monkeypatch.delenv(model_loader.ACTIVE_MODEL_ENV, raising=False)
+
+    with pytest.raises(RuntimeError, match="cross-family cache reuse"):
+        model_loader.get_loaded_model()
+
+    assert qwen.calls == 0
+    assert tokenizer.calls == 0
+
+
+@pytest.mark.asyncio
+async def test_qwen_object_cannot_call_generic_runner_under_pythia_binding(
+    monkeypatch,
+) -> None:
+    monkeypatch.delenv(model_loader.ACTIVE_MODEL_ENV, raising=False)
+    request = CreateSessionRequest(prompt="do not execute", max_new_tokens=1)
+    model = _QwenFixture(n_layers=12)
+    tokenizer = _MustNotRun()
+
+    stream = run_pythia(request, model, tokenizer, 12)
+    with pytest.raises(RuntimeError, match="probe stack is unavailable"):
+        await stream.__anext__()
+
+    assert model.calls == 0
+    assert tokenizer.calls == 0
+
+
+@pytest.mark.asyncio
+async def test_qwen_cannot_call_the_generic_runner_directly(monkeypatch) -> None:
+    monkeypatch.setenv(
+        model_loader.ACTIVE_MODEL_ENV,
+        model_loader.QWEN_05B_INSTRUCT_BINDING_KEY,
+    )
+    request = CreateSessionRequest(
+        prompt="do not execute",
+        max_new_tokens=1,
+        probes=["active_trace"],
+    )
+    model = _MustNotRun()
+    tokenizer = _MustNotRun()
+
+    stream = run_pythia(request, model, tokenizer, 24)
+    with pytest.raises(RuntimeError, match="Stage C runtime-permit capture path"):
+        await stream.__anext__()
+
+    assert model.calls == 0
+    assert tokenizer.calls == 0
 
 
 def test_qwen_real_runner_refuses_pythia_calibrated_cover(monkeypatch) -> None:
@@ -574,31 +748,7 @@ def test_qwen_runtime_prompt_fails_closed_without_chat_template(monkeypatch) -> 
         )
 
 
-class _QwenCanaryFixture:
-    def __init__(self) -> None:
-        self.model = SimpleNamespace(
-            layers=[_QwenLayer() for _ in range(24)]
-        )
-
-    def __call__(self, **inputs):
-        input_ids = inputs["input_ids"]
-        sequence_length = int(input_ids.shape[1])
-        activation = torch.ones(
-            (1, sequence_length, 4864),
-            dtype=torch.float32,
-        )
-        self.model.layers[0].mlp.down_proj(activation)
-        attention = torch.ones(
-            (1, 14, sequence_length, sequence_length),
-            dtype=torch.float32,
-        )
-        return SimpleNamespace(
-            attentions=[attention] * 24,
-            logits=torch.ones((1, sequence_length, 32), dtype=torch.float32),
-        )
-
-
-def test_qwen_runtime_canary_uses_chat_input_and_exact_probe_geometry(
+def test_qwen_runtime_canary_is_forbidden_before_tokenizer_or_model_use(
     monkeypatch,
 ) -> None:
     monkeypatch.setenv(
@@ -606,18 +756,68 @@ def test_qwen_runtime_canary_uses_chat_input_and_exact_probe_geometry(
         model_loader.QWEN_05B_INSTRUCT_BINDING_KEY,
     )
     tokenizer = _PinnedQwenTokenizer()
+    model = _MustNotRun()
 
-    model_loader._validate_runtime_canary(
-        torch,
-        _QwenCanaryFixture(),
-        tokenizer,
-        device="cpu",
+    with pytest.raises(RuntimeError, match="zero-canary authorization scope"):
+        model_loader._validate_runtime_canary(
+            torch,
+            model,
+            tokenizer,
+            device="cpu",
+        )
+
+    assert tokenizer.calls == []
+    assert model.calls == 0
+
+
+def test_qwen_with_gpt_neox_alias_cannot_use_pythia_canary(monkeypatch) -> None:
+    monkeypatch.delenv(model_loader.ACTIVE_MODEL_ENV, raising=False)
+
+    class _AliasedQwenCanary:
+        def __init__(self) -> None:
+            self.calls = 0
+            self.config = SimpleNamespace(model_type="qwen2")
+            self.model = SimpleNamespace(layers=nn.ModuleList([_QwenLayer()]))
+            self.gpt_neox = SimpleNamespace(
+                layers=nn.ModuleList([_PythiaLayer() for _ in range(12)])
+            )
+
+        def __call__(self, *_args, **_kwargs):
+            self.calls += 1
+            raise AssertionError("aliased Qwen canary must not reach forward")
+
+    model = _AliasedQwenCanary()
+    tokenizer = _MustNotRun()
+
+    with pytest.raises(RuntimeError, match="concrete Pythia/GPT-NeoX model"):
+        model_loader._validate_runtime_canary(
+            torch,
+            model,
+            tokenizer,
+            device="cpu",
+        )
+
+    assert model.calls == 0
+    assert tokenizer.calls == 0
+
+
+def test_qwen_startup_load_cannot_run_a_runtime_canary(monkeypatch) -> None:
+    monkeypatch.setenv(
+        model_loader.ACTIVE_MODEL_ENV,
+        model_loader.QWEN_05B_INSTRUCT_BINDING_KEY,
     )
 
-    assert len(tokenizer.calls) == 1
-    assert tokenizer.calls[0][0] == [
-        {
-            "role": "user",
-            "content": "Project Coherence Gate 5 runtime canary.",
-        }
-    ]
+    assert (
+        model_loader._startup_runtime_canary_permitted(
+            model_loader.active_model_binding()
+        )
+        is False
+    )
+    assert (
+        model_loader._startup_runtime_canary_permitted(
+            model_loader._pythia_binding()
+        )
+        is True
+    )
+    with pytest.raises(RuntimeError, match="exact model binding"):
+        model_loader._startup_runtime_canary_permitted(object())

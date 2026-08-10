@@ -24,6 +24,8 @@ from typing import Any
 import pytest
 
 from app.runtime import model_loader
+from app.runtime import stagec_capture as stagec_capture_module
+from app.runtime import stagec_runtime_activation as runtime_gate
 from app.runtime import stagec_diagnostic_archive_admission as admission_module
 from app.runtime.stagec_archive import (
     STAGEC_ARCHIVE_MEMBER_ROLES,
@@ -53,7 +55,12 @@ from app.runtime.stagec_diagnostic_archive_admission import (
     load_diagnostic_stagec_archive_admission,
     replay_stagec_local_archive_admission,
 )
-from tests.test_stagec_capture import _FakeTokenizer, _capture, _loaded
+from tests.test_stagec_capture import (
+    _FakeTokenizer,
+    _TrustedCaptureTestBackend,
+    _capture,
+    _loaded,
+)
 
 
 _WRITE_BITS = stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH
@@ -68,14 +75,45 @@ def _select_qwen_and_make_archive_cleanup_safe(
         model_loader.ACTIVE_MODEL_ENV,
         model_loader.QWEN_05B_INSTRUCT_BINDING_KEY,
     )
-    yield
-    for path in sorted(tmp_path.rglob("*"), key=lambda item: len(item.parts), reverse=True):
-        try:
-            if path.is_symlink():
-                continue
-            os.chmod(path, 0o700 if path.is_dir() else 0o600)
-        except OSError:
-            pass
+    with runtime_gate._PERMIT_LOCK:
+        runtime_gate._PERMIT_RECORDS.clear()
+        runtime_gate._BACKEND_CLAIMS.clear()
+        runtime_gate._ENVELOPE_CLAIMS.clear()
+        runtime_gate._LOGICAL_ROW_CLAIMS.clear()
+        runtime_gate._ATTEMPT_SUBJECT_CLAIMS.clear()
+        runtime_gate._AMBIGUOUS_TERMINALS.clear()
+    with stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+        stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRIES.clear()
+        stagec_capture_module._STAGEC_CAPTURE_BOUND_PERMITS.clear()
+    backend = _TrustedCaptureTestBackend()
+    monkeypatch.setattr(
+        runtime_gate,
+        "_REGISTERED_WORKER_TRUST_BACKEND_TYPES",
+        (_TrustedCaptureTestBackend,),
+    )
+    monkeypatch.setattr(runtime_gate, "_WORKER_TRUST_BACKEND", backend)
+    try:
+        yield
+    finally:
+        with runtime_gate._PERMIT_LOCK:
+            runtime_gate._PERMIT_RECORDS.clear()
+            runtime_gate._BACKEND_CLAIMS.clear()
+            runtime_gate._ENVELOPE_CLAIMS.clear()
+            runtime_gate._LOGICAL_ROW_CLAIMS.clear()
+            runtime_gate._ATTEMPT_SUBJECT_CLAIMS.clear()
+            runtime_gate._AMBIGUOUS_TERMINALS.clear()
+        with stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+            stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRIES.clear()
+            stagec_capture_module._STAGEC_CAPTURE_BOUND_PERMITS.clear()
+        for path in sorted(
+            tmp_path.rglob("*"), key=lambda item: len(item.parts), reverse=True
+        ):
+            try:
+                if path.is_symlink():
+                    continue
+                os.chmod(path, 0o700 if path.is_dir() else 0o600)
+            except OSError:
+                pass
 
 
 def _canonical_bytes(value: Any) -> bytes:

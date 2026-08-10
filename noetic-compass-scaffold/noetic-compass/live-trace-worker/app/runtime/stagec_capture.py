@@ -1,11 +1,12 @@
 """Fail-closed STRUCTURE_ONLY Stage C Qwen W0 capture candidate.
 
 The seam is intentionally not wired into a worker route.  It consumes exact
-canonical request and non-authorizing projection bytes, requires the loader's
-exact ``LoadedModel`` carrier, performs one direct prefill call, and returns a
-self-replaying in-memory evidence bundle.  It does not revalidate model files,
-authorize a real execution, retain evidence durably, generate tokens, perform
-an intervention, or make a scientific/product claim.
+canonical request and non-authorizing projection bytes plus an authenticated,
+one-use process-local runtime permit, requires the loader's exact
+``LoadedModel`` carrier, performs one direct prefill call, and returns a
+self-replaying in-memory evidence bundle.  It does not itself authorize a real
+execution, revalidate model files, retain evidence durably, generate tokens,
+perform an intervention, or make a scientific/product claim.
 """
 
 from __future__ import annotations
@@ -25,7 +26,7 @@ import torch
 from torch.nn.modules import module as torch_module_hooks
 from torch.utils.hooks import RemovableHandle
 
-from . import model_loader
+from . import model_loader, stagec_runtime_activation
 
 
 STAGEC_MODEL_ID = "Qwen/Qwen2.5-0.5B-Instruct"
@@ -116,6 +117,10 @@ class StageCCaptureError(RuntimeError):
     """An exact capture or replay precondition was not established."""
 
 
+class _StageCRuntimeBindingError(StageCCaptureError):
+    """A deterministic local/envelope binding rejection before model access."""
+
+
 def _sha256_bytes(value: bytes) -> str:
     return sha256(value).hexdigest().upper()
 
@@ -173,6 +178,69 @@ def _canonical_json_bytes(value: Any) -> bytes:
         return text.encode("utf-8", errors="strict")
     except (TypeError, ValueError, UnicodeEncodeError) as exc:
         raise StageCCaptureError("value is not canonical strict UTF-8 JSON") from exc
+
+
+def _stagec_capture_profile_payload() -> dict[str, Any]:
+    """Return the exact local contract whose digest must be runtime-bound."""
+
+    return {
+        "schema_version": "cas_harness.stagec.qwen_w0_worker_capture_profile.v1",
+        "model": {
+            "model_id": STAGEC_MODEL_ID,
+            "model_revision": STAGEC_MODEL_REVISION,
+            "model_config_sha256": STAGEC_MODEL_CONFIG_SHA256.upper(),
+            "weights_sha256": STAGEC_WEIGHTS_SHA256.upper(),
+            "tokenizer_json_sha256": STAGEC_TOKENIZER_JSON_SHA256.upper(),
+            "tokenizer_config_sha256": STAGEC_TOKENIZER_CONFIG_SHA256.upper(),
+        },
+        "prompt": {
+            "message_count": 1,
+            "message_role": "user",
+            "chat_template_application_count": 1,
+            "add_generation_prompt": True,
+            "tokenizer_padding": False,
+            "tokenizer_truncation": False,
+            "observation_position": "FINAL_UNPADDED_PROMPT_TOKEN",
+        },
+        "forward": {
+            "direct_prefill_call_count": 1,
+            "pre_row_model_forward_count": 0,
+            "startup_canary_count": 0,
+            "generate_call_count": 0,
+            "intervention_count": 0,
+            "use_cache": False,
+            "output_attentions": False,
+            "output_hidden_states": False,
+            "return_dict": True,
+            "inference_mode": True,
+        },
+        "capture": {
+            "hook_kind": "FORWARD_PRE_HOOK_INPUT",
+            "registration_order": list(STAGEC_CAPTURE_LAYERS),
+            "firing_order": list(STAGEC_CAPTURE_LAYERS),
+            "cleanup_order": list(reversed(STAGEC_CAPTURE_LAYERS)),
+            "wrong_layer": STAGEC_WRONG_LAYER,
+            "wrong_layer_module_path": STAGEC_WRONG_LAYER_MODULE_PATH,
+            "target_layer": STAGEC_TARGET_LAYER,
+            "target_module_path": STAGEC_TARGET_MODULE_PATH,
+            "vector_width": STAGEC_VECTOR_WIDTH,
+            "retained_dtype": "torch.float32",
+            "retained_device": "cpu",
+        },
+        "scope": {
+            "capture_only": True,
+            "detector_scoring": False,
+            "outcome_access_before_model_call": False,
+            "generation": False,
+            "intervention": False,
+            "steering": False,
+        },
+    }
+
+
+STAGEC_CAPTURE_PROFILE_SHA256 = _sha256_bytes(
+    _canonical_json_bytes(_stagec_capture_profile_payload())
+)
 
 
 def _strict_json_object(raw_bytes: Any, *, field_name: str) -> dict[str, Any]:
@@ -1848,13 +1916,426 @@ def _artifact_ref(artifact_id: str, sha_value: str, byte_length: int, media_type
     )
 
 
-def capture_stagec_qwen_w0(
+class _StageCCaptureRuntimeEntry:
+    """Factory-only one-use entry from the public gate to capture mechanics."""
+
+    __slots__ = ()
+
+    def __new__(cls, *_args: Any, **_kwargs: Any) -> "_StageCCaptureRuntimeEntry":
+        raise TypeError("Stage C capture runtime entries are factory-only")
+
+
+@dataclass(slots=True)
+class _StageCCaptureRuntimeRecord:
+    entry: _StageCCaptureRuntimeEntry
+    runtime_activation_envelope: (
+        stagec_runtime_activation.StageCRuntimeActivationEnvelope
+    )
+    model_call_permit: stagec_runtime_activation.StageCModelCallPermit
+    request_artifact: CanonicalJsonArtifact
+    authorization_projection_artifact: CanonicalJsonArtifact
+    artifact_ids: CaptureArtifactIds
+    runtime_activation_sha256: str
+    runtime_payload_sha256: str
+    request_snapshot: tuple[Any, ...]
+    authorization_snapshot: tuple[Any, ...]
+    artifact_ids_snapshot: tuple[str, ...]
+    phase: str = "ISSUED"
+    redemption_attempted: bool = False
+    model_call_redeemed: bool = False
+
+
+_STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK = threading.RLock()
+_STAGEC_CAPTURE_RUNTIME_ENTRIES: dict[int, _StageCCaptureRuntimeRecord] = {}
+_STAGEC_CAPTURE_BOUND_PERMITS: dict[
+    int, stagec_runtime_activation.StageCModelCallPermit
+] = {}
+
+
+def _runtime_artifact_snapshot(artifact: CanonicalJsonArtifact) -> tuple[Any, ...]:
+    return (
+        artifact.ref.artifact_id,
+        artifact.ref.sha256,
+        artifact.ref.byte_length,
+        artifact.ref.media_type,
+        artifact.raw_bytes,
+    )
+
+
+def _runtime_artifact_ids_snapshot(
+    artifact_ids: CaptureArtifactIds,
+) -> tuple[str, ...]:
+    return tuple(
+        getattr(artifact_ids, name)
+        for name in stagec_runtime_activation.STAGEC_CAPTURE_ARTIFACT_ID_FIELDS
+    )
+
+
+def _detach_runtime_json_artifact(
+    artifact: Any,
     *,
+    field_name: str,
+) -> CanonicalJsonArtifact:
+    """Build an exact private carrier without retaining caller-owned objects."""
+
+    if type(artifact) is not CanonicalJsonArtifact:
+        raise StageCCaptureError(
+            f"{field_name} must be an exact CanonicalJsonArtifact"
+        )
+    try:
+        original_ref = artifact.ref
+        before = _runtime_artifact_snapshot(artifact)
+        artifact_id, digest, byte_length, media_type, raw_bytes = before
+        detached = CanonicalJsonArtifact(
+            ref=ArtifactIdentity(
+                artifact_id=artifact_id,
+                sha256=digest,
+                byte_length=byte_length,
+                media_type=media_type,
+            ),
+            raw_bytes=raw_bytes,
+        )
+        if (
+            artifact.ref is not original_ref
+            or _runtime_artifact_snapshot(artifact) != before
+        ):
+            raise StageCCaptureError(
+                f"{field_name} changed while its exact snapshot was taken"
+            )
+    except StageCCaptureError:
+        raise
+    except Exception as exc:
+        raise StageCCaptureError(
+            f"{field_name} cannot be detached as one exact artifact"
+        ) from exc
+    return detached
+
+
+def _detach_runtime_artifact_ids(
+    artifact_ids: Any,
+) -> CaptureArtifactIds:
+    if type(artifact_ids) is not CaptureArtifactIds:
+        raise StageCCaptureError("artifact_ids must be exact CaptureArtifactIds")
+    if tuple(artifact_ids.__slots__) != (
+        stagec_runtime_activation.STAGEC_CAPTURE_ARTIFACT_ID_FIELDS
+    ):
+        raise _StageCRuntimeBindingError(
+            "runtime/capture artifact-ID field order drifted"
+        )
+    try:
+        before = _runtime_artifact_ids_snapshot(artifact_ids)
+        detached = CaptureArtifactIds(
+            **dict(
+                zip(
+                    stagec_runtime_activation.STAGEC_CAPTURE_ARTIFACT_ID_FIELDS,
+                    before,
+                    strict=True,
+                )
+            )
+        )
+        if _runtime_artifact_ids_snapshot(artifact_ids) != before:
+            raise StageCCaptureError(
+                "artifact_ids changed while their exact snapshot was taken"
+            )
+    except StageCCaptureError:
+        raise
+    except Exception as exc:
+        raise StageCCaptureError(
+            "artifact_ids cannot be detached as exact values"
+        ) from exc
+    return detached
+
+
+def _detach_runtime_envelope(
+    envelope: Any,
+) -> stagec_runtime_activation.StageCRuntimeActivationEnvelope:
+    if type(envelope) is not stagec_runtime_activation.StageCRuntimeActivationEnvelope:
+        raise _StageCRuntimeBindingError(
+            "runtime activation envelope has the wrong exact type"
+        )
+    try:
+        raw_bytes = envelope.raw_bytes
+        digest = envelope.sha256
+        detached = stagec_runtime_activation.StageCRuntimeActivationEnvelope(
+            raw_bytes=raw_bytes,
+            sha256=digest,
+        )
+        stagec_runtime_activation.replay_stagec_runtime_activation_envelope(
+            detached
+        )
+        if envelope.raw_bytes != raw_bytes or envelope.sha256 != digest:
+            raise _StageCRuntimeBindingError(
+                "runtime activation envelope changed while snapshotted"
+            )
+    except _StageCRuntimeBindingError:
+        raise
+    except Exception as exc:
+        raise _StageCRuntimeBindingError(
+            "runtime activation envelope cannot be detached exactly"
+        ) from exc
+    return detached
+
+
+def _new_stagec_capture_runtime_entry(
+    *,
+    runtime_activation_envelope: (
+        stagec_runtime_activation.StageCRuntimeActivationEnvelope
+    ),
+    model_call_permit: stagec_runtime_activation.StageCModelCallPermit,
     request_artifact: CanonicalJsonArtifact,
     authorization_projection_artifact: CanonicalJsonArtifact,
     artifact_ids: CaptureArtifactIds,
-) -> StageCCaptureResult:
-    """Execute the isolated one-call structural capture against a loader carrier."""
+) -> _StageCCaptureRuntimeEntry:
+    """Validate and snapshot one exact row; return only an opaque entry."""
+
+    # This remains the first operation even for a direct call to this private
+    # factory.  Wrong/reused permits never trigger request parsing or loading.
+    stagec_runtime_activation.validate_stagec_model_call_permit(
+        permit=model_call_permit,
+        runtime_activation_envelope=runtime_activation_envelope,
+    )
+    terminal_envelope = runtime_activation_envelope
+    try:
+        exact_envelope = _detach_runtime_envelope(runtime_activation_envelope)
+        terminal_envelope = exact_envelope
+        exact_request_artifact = _detach_runtime_json_artifact(
+            request_artifact,
+            field_name="request_artifact",
+        )
+        exact_authorization_artifact = _detach_runtime_json_artifact(
+            authorization_projection_artifact,
+            field_name="authorization_projection_artifact",
+        )
+        exact_artifact_ids = _detach_runtime_artifact_ids(artifact_ids)
+        runtime_payload = (
+            stagec_runtime_activation.replay_stagec_runtime_activation_envelope(
+                exact_envelope
+            )
+        )
+        _validate_runtime_activation_capture_binding(
+            runtime_activation_payload=runtime_payload,
+            request_artifact=exact_request_artifact,
+            authorization_projection_artifact=exact_authorization_artifact,
+            artifact_ids=exact_artifact_ids,
+        )
+    except BaseException as primary_error:
+        try:
+            stagec_runtime_activation.invalidate_stagec_model_call_permit(
+                permit=model_call_permit,
+                runtime_activation_envelope=terminal_envelope,
+                disposition=(
+                    stagec_runtime_activation.StageCModelCallInvalidationDisposition.REJECTED
+                ),
+            )
+        except BaseException as terminalization_error:
+            raise StageCCaptureError(
+                "runtime-entry binding failure could not be durably rejected"
+            ) from terminalization_error
+        raise primary_error
+
+    entry = object.__new__(_StageCCaptureRuntimeEntry)
+    record = _StageCCaptureRuntimeRecord(
+        entry=entry,
+        runtime_activation_envelope=exact_envelope,
+        model_call_permit=model_call_permit,
+        request_artifact=exact_request_artifact,
+        authorization_projection_artifact=exact_authorization_artifact,
+        artifact_ids=exact_artifact_ids,
+        runtime_activation_sha256=exact_envelope.sha256,
+        runtime_payload_sha256=_sha256_bytes(
+            _canonical_json_bytes(runtime_payload)
+        ),
+        request_snapshot=_runtime_artifact_snapshot(exact_request_artifact),
+        authorization_snapshot=_runtime_artifact_snapshot(
+            exact_authorization_artifact
+        ),
+        artifact_ids_snapshot=_runtime_artifact_ids_snapshot(exact_artifact_ids),
+    )
+    with _STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+        retained_permit = _STAGEC_CAPTURE_BOUND_PERMITS.get(id(model_call_permit))
+        if retained_permit is not None:
+            raise _StageCRuntimeBindingError(
+                "model-call permit is already bound to a capture runtime entry"
+            )
+        _STAGEC_CAPTURE_BOUND_PERMITS[id(model_call_permit)] = model_call_permit
+        _STAGEC_CAPTURE_RUNTIME_ENTRIES[id(entry)] = record
+    return entry
+
+
+def _require_stagec_capture_runtime_inputs_locked(
+    entry: Any,
+    *,
+    phase: str,
+) -> tuple[
+    stagec_runtime_activation.StageCRuntimeActivationEnvelope,
+    CanonicalJsonArtifact,
+    CanonicalJsonArtifact,
+    CaptureArtifactIds,
+]:
+    if type(entry) is not _StageCCaptureRuntimeEntry:
+        raise _StageCRuntimeBindingError(
+            "capture mechanics received no sealed runtime entry"
+        )
+    record = _STAGEC_CAPTURE_RUNTIME_ENTRIES.get(id(entry))
+    try:
+        if (
+            record is None
+            or record.entry is not entry
+            or record.phase != phase
+            or type(record.runtime_activation_envelope)
+            is not stagec_runtime_activation.StageCRuntimeActivationEnvelope
+            or record.runtime_activation_sha256
+            != record.runtime_activation_envelope.sha256
+            or type(record.request_artifact) is not CanonicalJsonArtifact
+            or type(record.authorization_projection_artifact)
+            is not CanonicalJsonArtifact
+            or type(record.artifact_ids) is not CaptureArtifactIds
+            or record.request_snapshot
+            != _runtime_artifact_snapshot(record.request_artifact)
+            or record.authorization_snapshot
+            != _runtime_artifact_snapshot(
+                record.authorization_projection_artifact
+            )
+            or record.artifact_ids_snapshot
+            != _runtime_artifact_ids_snapshot(record.artifact_ids)
+        ):
+            raise _StageCRuntimeBindingError(
+                "capture runtime entry private snapshots drifted"
+            )
+        runtime_payload = (
+            stagec_runtime_activation.replay_stagec_runtime_activation_envelope(
+                record.runtime_activation_envelope
+            )
+        )
+        if record.runtime_payload_sha256 != _sha256_bytes(
+            _canonical_json_bytes(runtime_payload)
+        ):
+            raise _StageCRuntimeBindingError(
+                "capture runtime entry payload snapshot drifted"
+            )
+    except _StageCRuntimeBindingError:
+        raise
+    except Exception as exc:
+        raise _StageCRuntimeBindingError(
+            "capture runtime entry private snapshots cannot be replayed"
+        ) from exc
+    return (
+        record.runtime_activation_envelope,
+        record.request_artifact,
+        record.authorization_projection_artifact,
+        record.artifact_ids,
+    )
+
+
+def _stagec_capture_runtime_inputs(
+    entry: Any,
+    *,
+    phase: str,
+) -> tuple[
+    stagec_runtime_activation.StageCRuntimeActivationEnvelope,
+    CanonicalJsonArtifact,
+    CanonicalJsonArtifact,
+    CaptureArtifactIds,
+]:
+    with _STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+        return _require_stagec_capture_runtime_inputs_locked(entry, phase=phase)
+
+
+def _consume_stagec_capture_runtime_entry(
+    entry: Any,
+    *,
+    runtime_activation_payload: dict[str, Any],
+    request_artifact: CanonicalJsonArtifact,
+    authorization_projection_artifact: CanonicalJsonArtifact,
+    artifact_ids: CaptureArtifactIds,
+) -> tuple[
+    dict[str, Any],
+    CanonicalJsonArtifact,
+    CanonicalJsonArtifact,
+    CaptureArtifactIds,
+]:
+    with _STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+        (
+            runtime_envelope,
+            exact_request_artifact,
+            exact_authorization_artifact,
+            exact_artifact_ids,
+        ) = _require_stagec_capture_runtime_inputs_locked(entry, phase="ISSUED")
+        record = _STAGEC_CAPTURE_RUNTIME_ENTRIES[id(entry)]
+        try:
+            supplied_payload_sha256 = _sha256_bytes(
+                _canonical_json_bytes(runtime_activation_payload)
+            )
+            supplied_request_snapshot = _runtime_artifact_snapshot(
+                request_artifact
+            )
+            supplied_authorization_snapshot = _runtime_artifact_snapshot(
+                authorization_projection_artifact
+            )
+            supplied_artifact_ids_snapshot = _runtime_artifact_ids_snapshot(
+                artifact_ids
+            )
+        except Exception as exc:
+            raise _StageCRuntimeBindingError(
+                "capture runtime entry inputs cannot be snapshotted"
+            ) from exc
+        if (
+            record.runtime_payload_sha256 != supplied_payload_sha256
+            or record.request_snapshot != supplied_request_snapshot
+            or record.authorization_snapshot != supplied_authorization_snapshot
+            or record.artifact_ids_snapshot != supplied_artifact_ids_snapshot
+        ):
+            raise _StageCRuntimeBindingError(
+                "capture runtime entry binding is invalid, substituted, or consumed"
+            )
+        record.phase = "CONSUMED"
+        exact_payload = (
+            stagec_runtime_activation.replay_stagec_runtime_activation_envelope(
+                runtime_envelope
+            )
+        )
+        _require_stagec_capture_runtime_inputs_locked(entry, phase="CONSUMED")
+    return (
+        exact_payload,
+        exact_request_artifact,
+        exact_authorization_artifact,
+        exact_artifact_ids,
+    )
+
+
+def _stagec_capture_runtime_status(
+    entry: _StageCCaptureRuntimeEntry | None,
+) -> tuple[bool, bool]:
+    if entry is None:
+        return False, False
+    with _STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+        record = _STAGEC_CAPTURE_RUNTIME_ENTRIES.get(id(entry))
+        if record is None or record.entry is not entry:
+            # Missing state after issuance is ambiguous.  Treat it as if model
+            # redemption may have started so no caller can reopen the claim.
+            return True, False
+        return record.redemption_attempted, record.model_call_redeemed
+
+
+def _discard_stagec_capture_runtime_entry(
+    entry: _StageCCaptureRuntimeEntry | None,
+) -> None:
+    if entry is None:
+        return
+    with _STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+        retained = _STAGEC_CAPTURE_RUNTIME_ENTRIES.get(id(entry))
+        if retained is not None and retained.entry is entry:
+            del _STAGEC_CAPTURE_RUNTIME_ENTRIES[id(entry)]
+
+
+def _validate_runtime_activation_capture_binding(
+    *,
+    runtime_activation_payload: dict[str, Any],
+    request_artifact: CanonicalJsonArtifact,
+    authorization_projection_artifact: CanonicalJsonArtifact,
+    artifact_ids: CaptureArtifactIds,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Bind the authenticated row envelope to exact local capture inputs."""
 
     request = _validate_request_payload(
         _load_json_artifact(
@@ -1874,6 +2355,170 @@ def capture_stagec_qwen_w0(
     )
     if type(artifact_ids) is not CaptureArtifactIds:
         raise StageCCaptureError("artifact_ids must be exact CaptureArtifactIds")
+    if tuple(artifact_ids.__slots__) != (
+        stagec_runtime_activation.STAGEC_CAPTURE_ARTIFACT_ID_FIELDS
+    ):
+        raise _StageCRuntimeBindingError(
+            "runtime/capture artifact-ID field order drifted"
+        )
+    all_prospective_ids = (
+        request_artifact.ref.artifact_id,
+        authorization_projection_artifact.ref.artifact_id,
+        *(getattr(artifact_ids, name) for name in artifact_ids.__slots__),
+    )
+    if len(all_prospective_ids) != len(set(all_prospective_ids)):
+        raise _StageCRuntimeBindingError(
+            "request/auth/capture artifact IDs are not globally unique"
+        )
+
+    if runtime_activation_payload["request_artifact_identity"] != (
+        request_artifact.ref.to_payload()
+    ):
+        raise _StageCRuntimeBindingError(
+            "runtime activation binds a different request artifact"
+        )
+    if runtime_activation_payload[
+        "authorization_projection_artifact_identity"
+    ] != authorization_projection_artifact.ref.to_payload():
+        raise _StageCRuntimeBindingError(
+            "runtime activation binds a different authorization projection"
+        )
+    expected_capture_ids = {
+        name: getattr(artifact_ids, name)
+        for name in stagec_runtime_activation.STAGEC_CAPTURE_ARTIFACT_ID_FIELDS
+    }
+    if runtime_activation_payload["capture_artifact_ids"] != expected_capture_ids:
+        raise _StageCRuntimeBindingError(
+            "runtime activation capture artifact IDs drifted"
+        )
+    if runtime_activation_payload["attempt"]["case_id"] != request["case_id"]:
+        raise _StageCRuntimeBindingError("runtime activation binds a different case")
+
+    model_identity = runtime_activation_payload["model_identity"]
+    expected_model_identity = {
+        "model_id": STAGEC_MODEL_ID,
+        "model_revision": STAGEC_MODEL_REVISION,
+        "model_config_sha256": STAGEC_MODEL_CONFIG_SHA256.upper(),
+        "weights_sha256": STAGEC_WEIGHTS_SHA256.upper(),
+        "tokenizer_json_sha256": STAGEC_TOKENIZER_JSON_SHA256.upper(),
+        "tokenizer_config_sha256": STAGEC_TOKENIZER_CONFIG_SHA256.upper(),
+    }
+    for field_name, expected in expected_model_identity.items():
+        if model_identity[field_name] != expected:
+            raise _StageCRuntimeBindingError(
+                f"runtime activation model identity drifted: {field_name}"
+            )
+    if model_identity["capture_profile_sha256"] != STAGEC_CAPTURE_PROFILE_SHA256:
+        raise _StageCRuntimeBindingError(
+            "runtime activation model identity drifted: capture_profile_sha256"
+        )
+    return request, authorization
+
+
+def capture_stagec_qwen_w0(
+    *,
+    request_artifact: CanonicalJsonArtifact,
+    authorization_projection_artifact: CanonicalJsonArtifact,
+    artifact_ids: CaptureArtifactIds,
+    runtime_activation_envelope: (
+        stagec_runtime_activation.StageCRuntimeActivationEnvelope
+    ),
+    model_call_permit: stagec_runtime_activation.StageCModelCallPermit,
+) -> StageCCaptureResult:
+    """Execute one exactly bound capture through the authenticated choke point."""
+
+    # The factory's first operation validates the permit.  It also snapshots
+    # every exact local input and terminalizes any deterministic substitution
+    # before model loading.  It returns only this opaque one-use entry.
+    runtime_entry = _new_stagec_capture_runtime_entry(
+        runtime_activation_envelope=runtime_activation_envelope,
+        model_call_permit=model_call_permit,
+        request_artifact=request_artifact,
+        authorization_projection_artifact=authorization_projection_artifact,
+        artifact_ids=artifact_ids,
+    )
+    exact_runtime_envelope = runtime_activation_envelope
+    invalidation_disposition = (
+        stagec_runtime_activation.StageCModelCallInvalidationDisposition.INDETERMINATE
+    )
+
+    try:
+        (
+            exact_runtime_envelope,
+            exact_request_artifact,
+            exact_authorization_artifact,
+            exact_artifact_ids,
+        ) = _stagec_capture_runtime_inputs(runtime_entry, phase="ISSUED")
+        runtime_payload = (
+            stagec_runtime_activation.replay_stagec_runtime_activation_envelope(
+                exact_runtime_envelope
+            )
+        )
+        result = _capture_stagec_qwen_w0_after_runtime_gate(
+            request_artifact=exact_request_artifact,
+            authorization_projection_artifact=exact_authorization_artifact,
+            artifact_ids=exact_artifact_ids,
+            runtime_activation_payload=runtime_payload,
+            runtime_entry=runtime_entry,
+        )
+        _, model_call_redeemed = _stagec_capture_runtime_status(runtime_entry)
+        if not model_call_redeemed:
+            raise StageCCaptureError("capture returned without redeeming its model-call permit")
+        _discard_stagec_capture_runtime_entry(runtime_entry)
+        return result
+    except BaseException as primary_error:
+        redemption_attempted, _ = _stagec_capture_runtime_status(runtime_entry)
+        _discard_stagec_capture_runtime_entry(runtime_entry)
+        # A redemption attempt is already terminal: either CALL_STARTED was
+        # durably recorded, or the gate burned it as indeterminate.  Never
+        # attempt to reopen or re-terminalize that claim.
+        if not redemption_attempted:
+            if isinstance(primary_error, _StageCRuntimeBindingError):
+                invalidation_disposition = (
+                    stagec_runtime_activation.StageCModelCallInvalidationDisposition.REJECTED
+                )
+            try:
+                stagec_runtime_activation.invalidate_stagec_model_call_permit(
+                    permit=model_call_permit,
+                    runtime_activation_envelope=exact_runtime_envelope,
+                    disposition=invalidation_disposition,
+                )
+            except BaseException as terminalization_error:
+                raise StageCCaptureError(
+                    "pre-model-call failure could not be durably invalidated"
+                ) from terminalization_error
+        raise primary_error
+
+
+def _capture_stagec_qwen_w0_after_runtime_gate(
+    *,
+    request_artifact: CanonicalJsonArtifact,
+    authorization_projection_artifact: CanonicalJsonArtifact,
+    artifact_ids: CaptureArtifactIds,
+    runtime_activation_payload: dict[str, Any],
+    runtime_entry: _StageCCaptureRuntimeEntry,
+) -> StageCCaptureResult:
+    """Run capture mechanics only after exact runtime entry validation."""
+
+    (
+        runtime_activation_payload,
+        request_artifact,
+        authorization_projection_artifact,
+        artifact_ids,
+    ) = _consume_stagec_capture_runtime_entry(
+        runtime_entry,
+        runtime_activation_payload=runtime_activation_payload,
+        request_artifact=request_artifact,
+        authorization_projection_artifact=authorization_projection_artifact,
+        artifact_ids=artifact_ids,
+    )
+    request, authorization = _validate_runtime_activation_capture_binding(
+        runtime_activation_payload=runtime_activation_payload,
+        request_artifact=request_artifact,
+        authorization_projection_artifact=authorization_projection_artifact,
+        artifact_ids=artifact_ids,
+    )
+
     all_prospective_ids = (
         request_artifact.ref.artifact_id,
         authorization_projection_artifact.ref.artifact_id,
@@ -1887,6 +2532,12 @@ def capture_stagec_qwen_w0(
     except Exception as exc:
         raise StageCCaptureError("cannot obtain the model-loader singleton carrier") from exc
     binding, model, tokenizer, template_bytes, manifest_sha = _verify_loaded_carrier(loaded)
+    if runtime_activation_payload["model_identity"]["chat_template_sha256"] != (
+        _sha256_bytes(template_bytes)
+    ):
+        raise _StageCRuntimeBindingError(
+            "runtime activation chat-template digest drifted"
+        )
     manifest_object = loaded.manifest
     raw_prompt = _plain_prompt_bytes(tokenizer, request["prompt"])
     rendered, encoded = _render_and_tokenize(tokenizer, request["prompt"])
@@ -2020,8 +2671,43 @@ def capture_stagec_qwen_w0(
             handles=registered_handles,
             baseline=baseline_hooks,
         )
-        direct_model_calls += 1
         with torch.inference_mode():
+            with _STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+                runtime_record = _STAGEC_CAPTURE_RUNTIME_ENTRIES.get(
+                    id(runtime_entry)
+                )
+                if (
+                    runtime_record is None
+                    or runtime_record.entry is not runtime_entry
+                    or runtime_record.phase != "CONSUMED"
+                    or runtime_record.redemption_attempted
+                ):
+                    raise _StageCRuntimeBindingError(
+                        "capture runtime entry cannot reach the model-call boundary"
+                    )
+                runtime_record.redemption_attempted = True
+                runtime_envelope = runtime_record.runtime_activation_envelope
+                runtime_permit = runtime_record.model_call_permit
+            stagec_runtime_activation.redeem_stagec_model_call_permit(
+                permit=runtime_permit,
+                runtime_activation_envelope=runtime_envelope,
+            )
+            with _STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+                current_record = _STAGEC_CAPTURE_RUNTIME_ENTRIES.get(
+                    id(runtime_entry)
+                )
+                if (
+                    current_record is not runtime_record
+                    or current_record.entry is not runtime_entry
+                    or current_record.phase != "CONSUMED"
+                    or not current_record.redemption_attempted
+                    or current_record.model_call_redeemed
+                ):
+                    raise _StageCRuntimeBindingError(
+                        "capture runtime redemption acknowledgement drifted"
+                    )
+                current_record.model_call_redeemed = True
+            direct_model_calls += 1
             output = model(
                 input_ids=input_ids,
                 attention_mask=attention_mask,
@@ -2128,6 +2814,25 @@ def capture_stagec_qwen_w0(
     if not bool(torch.isfinite(logits).all().item()):
         raise StageCCaptureError("causal-LM logits contain nonfinite values")
     logits_digest = _tensor_value_sha256(logits)
+
+    # Final private-snapshot check: everything below emits artifacts/results,
+    # so prove the entry still owns the same detached inputs used at the call.
+    (
+        final_runtime_envelope,
+        final_request_artifact,
+        final_authorization_artifact,
+        final_artifact_ids,
+    ) = _stagec_capture_runtime_inputs(runtime_entry, phase="CONSUMED")
+    if (
+        final_runtime_envelope.sha256
+        != _sha256_bytes(final_runtime_envelope.raw_bytes)
+        or final_request_artifact is not request_artifact
+        or final_authorization_artifact is not authorization_projection_artifact
+        or final_artifact_ids is not artifact_ids
+    ):
+        raise _StageCRuntimeBindingError(
+            "capture runtime private input identity drifted before result emission"
+        )
 
     wrong_artifact = _raw_array_artifact(
         artifact_id=artifact_ids.wrong_layer_vector,
@@ -2302,6 +3007,7 @@ __all__ = [
     "REQUEST_SCHEMA",
     "RawArrayArtifact",
     "RawArrayArtifactRef",
+    "STAGEC_CAPTURE_PROFILE_SHA256",
     "STAGEC_MODEL_ID",
     "STAGEC_MODEL_REVISION",
     "STAGEC_TARGET_MODULE_PATH",

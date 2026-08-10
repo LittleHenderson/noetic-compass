@@ -210,26 +210,150 @@ STAGEC_DESIGN_REL = (
     "STAGEC_IMPLEMENTATION_OBLIGATIONS_AND_EVIDENCE_PLAN_v0.1.json"
 )
 STAGEC_DESIGN_SHA256 = (
-    "178C1B9BB39B337F2346C8F1E55CA9CF91FCEDEF090C8EF94BDF3419C2F3C710"
+    "76CD829493A1A334C2B4799C3A73BE17AA8076B54D29525D72BA8A49377C7B6B"
 )
-STAGEC_DESIGN_BYTES = 102_590
+STAGEC_DESIGN_BYTES = 116_336
 PACKAGED_HARNESS_V2_REL = "noetic-compass-scaffold/noetic-compass/cas_harness_v2"
 PACKAGED_HARNESS_V2_PROVENANCE_REL = (
     f"{PACKAGED_HARNESS_V2_REL}/PACKAGING_PROVENANCE.json"
 )
 PACKAGED_HARNESS_V2_PROVENANCE_SHA256 = (
-    "613A3E15748DC8F8CA49BB373BF3087F980E6A5762E709BC0E8ABFEB81A2957A"
+    "1561D0707AEB12ED720A1F70670494006B186628434CB6390A4DEEFBA5040D07"
 )
-PACKAGED_HARNESS_V2_FILE_COUNT = 21
-PACKAGED_HARNESS_V2_EXPORT_COUNT = 425
-PACKAGED_HARNESS_V2_TOTAL_BYTES = 1_283_080
+PACKAGED_HARNESS_V2_FILE_COUNT = 22
+PACKAGED_HARNESS_V2_EXPORT_COUNT = 469
+PACKAGED_HARNESS_V2_TOTAL_BYTES = 1_420_002
 PACKAGED_HARNESS_V2_INIT_SHA256 = (
-    "F6EDF1A49FFD81AEB11F952344AF697DC43B03C5AC7FD6630D0FF2AC02FF9E59"
+    "7D3A90FAFBD68C81888DD36A17CE7E075C48243C231E84A8BFDF8093C939037C"
 )
 PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256 = (
-    "752BC6F0081FDFBCA7EA58115897D545F5C3A75D322192533C58F41F37E33C91"
+    "CF21F42B81AD3E6CD50A211FB4FC6D01B035F6177921392B0F4811FCFFD641D0"
 )
-SAME_RUN_PYTEST_TIMEOUT_SECONDS = 2_400
+HISTORICAL_AUTHORITATIVE_HARNESS_NODES = 537
+HISTORICAL_AUTHORITATIVE_HARNESS_NODE_IDS_SHA256 = (
+    "3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19"
+)
+HISTORICAL_AUTHORITATIVE_WORKER_NODES = 594
+HISTORICAL_AUTHORITATIVE_WORKER_NODE_IDS_SHA256 = (
+    "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B"
+)
+EXPANDED_CONFIGURED_HARNESS_NODES = 565
+EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256 = (
+    "4CCAD2A4EF4868EBAD7EBDC9E219371A57CBE69C974E5D986A8714A0A0DDE601"
+)
+EXPANDED_CONFIGURED_WORKER_NODES = 719
+EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256 = (
+    "98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5"
+)
+EXPANDED_CONFIGURED_TEST_SUITE_NODE_TOTAL = 1_772
+CURRENT_AUTHORITATIVE_REPLAY_STATUS = (
+    "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+CURRENT_AUTHORITATIVE_FULL_SUITE_STATUS = (
+    "AUTHORITATIVE SAME-PROCESS HARNESS 565 AND WORKER 719 PASS / "
+    "STRUCTURE_ONLY / NON_AUTHORITY"
+)
+CURRENT_AUTHORITATIVE_HARNESS_STATUS = (
+    "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+    "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+CURRENT_AUTHORITATIVE_WORKER_STATUS = CURRENT_AUTHORITATIVE_REPLAY_STATUS
+CURRENT_QWEN_SUBSET_STATUS = (
+    "AUTHORITATIVE SAME-PROCESS 27 / 27 PASS AS EXECUTED SUBSET OF CURRENT "
+    "719-NODE WORKER RECEIPT / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+CURRENT_HARNESS_LOADED_CODE_DIGEST_RULE = (
+    "CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / "
+    "EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY "
+    "IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND "
+    "REVALIDATED"
+)
+RAW_LOADED_CODE_DIGEST_RULE = (
+    "CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION"
+)
+CURRENT_AUTHORITATIVE_HARNESS_RECEIPT = MappingProxyType(
+    {
+        "collected_nodes": 565,
+        "started_nodes": 565,
+        "finished_nodes": 565,
+        "all_phase_pass_nodes": 559,
+        "setup_skipped_nodes": 6,
+        "ordinary_reports": 1_689,
+        "passed_subtests": 163,
+        "warning_count": 0,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "2477.3",
+        "node_ids_sha256": EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256,
+        "ordinary_outcomes_sha256": (
+            "7FCD1D82405624E07792CD92DC5F9E40904F2B43FB723CC2DEFF5A7E2C4DDB6E"
+        ),
+        "subtest_outcomes_sha256": (
+            "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109"
+        ),
+        "locked_import_origins_sha256": (
+            "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+        ),
+        "pre_test_loaded_code_sha256": (
+            "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98"
+        ),
+        "loaded_code_sha256": (
+            "24F868086F5B21A263D06229B5FBEC36FC572878F0C2AA710001BCAF9C0CAE07"
+        ),
+        "loaded_code_digest_rule": CURRENT_HARNESS_LOADED_CODE_DIGEST_RULE,
+        "receipt_status": CURRENT_AUTHORITATIVE_HARNESS_STATUS,
+    }
+)
+CURRENT_AUTHORITATIVE_WORKER_RECEIPT = MappingProxyType(
+    {
+        "collected_nodes": 719,
+        "started_nodes": 719,
+        "finished_nodes": 719,
+        "all_phase_pass_nodes": 719,
+        "setup_skipped_nodes": 0,
+        "ordinary_reports": 2_157,
+        "passed_subtests": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "42.035",
+        "node_ids_sha256": EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256,
+        "ordinary_outcomes_sha256": (
+            "CF7F1676BAAA3E83999E758A35F311743B7B227DBD0A160EF79F85AA72477468"
+        ),
+        "subtest_outcomes_sha256": (
+            "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+        ),
+        "locked_import_origins_sha256": (
+            "035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6"
+        ),
+        "pre_test_loaded_code_sha256": (
+            "3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E"
+        ),
+        "loaded_code_sha256": (
+            "4B37B98E99C132E65C7095EBD0FC42A44E9C701923FD451DACC25EEC45636FBB"
+        ),
+        "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+        "receipt_status": CURRENT_AUTHORITATIVE_WORKER_STATUS,
+    }
+)
+STAGEC_RUNTIME_CORE_FOCUSED_NODES = 28
+STAGEC_RUNTIME_CORE_FOCUSED_EXECUTED_NODE_IDS_SHA256 = (
+    "5D501F3505A98E23BDD2AB8B191BC6EEE90260F1F169940B6A6F70A61525A632"
+)
+STAGEC_RUNTIME_CORE_FOCUSED_WARNING_COUNT = 0
+STAGEC_RUNTIME_CORE_FOCUSED_ELAPSED_SECONDS = "922.45"
+SAME_RUN_PYTEST_TIMEOUT_SECONDS = 3_600
 
 DIAGNOSTIC_RUNTIME_FILE_BINDINGS = MappingProxyType(
     {
@@ -317,6 +441,105 @@ DIAGNOSTIC_RUNTIME_FILE_BINDINGS = MappingProxyType(
             "E3014790E97872F825AA30865C0E3C4912B747C0DE7BC5F8B030C9C45508AA0B",
             14_844,
         ),
+        "src/cas_harness_v2/diagnostic_stagec_runtime_activation.py": (
+            "E4B9C390117A474B32DB790B5B7CB8DC2E3022823FF6F2F718725B1B3826E52E",
+            133_262,
+        ),
+        "tests/cas_harness_v2/test_diagnostic_stagec_runtime_activation.py": (
+            "5CCF0EEC47D1814A9CA46FC047DD089F415D113D990F234659460261971E1ACF",
+            52_693,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/cas_harness_v2/"
+            "diagnostic_stagec_runtime_activation.py"
+        ): (
+            "E4B9C390117A474B32DB790B5B7CB8DC2E3022823FF6F2F718725B1B3826E52E",
+            133_262,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/api/services/"
+            "cas_harness_v2_packaging.py"
+        ): (
+            "CF21F42B81AD3E6CD50A211FB4FC6D01B035F6177921392B0F4811FCFFD641D0",
+            6_036,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/tests/"
+            "test_cas_harness_v2_packaged_mirror.py"
+        ): (
+            "DBAFC0901CFE33A2C59A961B97F134CBC9408787B69B6A26AC843924A4BBFDF8",
+            15_689,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+            "runtime/stagec_runtime_activation.py"
+        ): (
+            "FC918942B2D324BCE1882577166A1F3FCFE8A98AAE2D5A39F90E0DCCD9B970B4",
+            61_983,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/"
+            "test_stagec_runtime_activation.py"
+        ): (
+            "0A3A177079AD28542C89F1EA9D745E448B6F6F3A7276DE26AD3EB62C72205489",
+            49_357,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+            "runtime/stagec_capture.py"
+        ): (
+            "0ECD006E3799A70FFED72688015C03BC2A1D8107BC25632FD93D87435D06519C",
+            124_345,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/"
+            "test_stagec_capture.py"
+        ): (
+            "E21ED834800845E51223203DF018DCDEFAE43FB60E2FC7D0D43017EE99676A7E",
+            84_540,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+            "runtime/model_loader.py"
+        ): (
+            "F3273EF256491D7489004AA4067B52E0F81A563856FAE4F6774035C69BAC0C14",
+            43_230,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+            "runtime/event_stream.py"
+        ): (
+            "EE0F938B06202FBC820320AF8E1F580E2CCA81A591821175F51F8CB64AD0F7FF",
+            15_264,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+            "runtime/pythia_runner.py"
+        ): (
+            "9A4EC3A1BE91A51616A2B7E270CC8D06F42F2641F7286B6D0CB26EFCDA9A93F2",
+            17_116,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+            "runtime/ablation_probe.py"
+        ): (
+            "B73CF7A48A359EAD3CD3D4EBD66D12D8AB650796BD5DDA4570BDBA49B8AB9D03",
+            18_730,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/"
+            "test_qwen_probe_adapter.py"
+        ): (
+            "08A6D58EA0E9D083D13CCC57A62956A23EEEC85D79C8F4C2F62F7DDE60320A3B",
+            27_690,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/"
+            "test_real_mode_dispatch.py"
+        ): (
+            "0AFEC52DEF62CB77F8FAEA6FCFE2ADA0691CED8CD3BB62B697DB8C6D22484A68",
+            5_951,
+        ),
         (
             "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
             "runtime/stagec_diagnostic_archive_admission.py"
@@ -328,8 +551,8 @@ DIAGNOSTIC_RUNTIME_FILE_BINDINGS = MappingProxyType(
             "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/"
             "test_stagec_diagnostic_archive_admission.py"
         ): (
-            "4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B",
-            28_541,
+            "E729485E6BFE16280592D668C998A8D39F932368CDB05F9B5BA0E0161F3DAB26",
+            30_151,
         ),
     }
 )
@@ -659,6 +882,33 @@ DIAGNOSTIC_RUNTIME_LITERAL_CONSTANTS = MappingProxyType(
                 ),
             }
         ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+            "runtime/stagec_runtime_activation.py"
+        ): MappingProxyType(
+            {
+                "STAGEC_RUNTIME_ACTIVATION_SCHEMA": (
+                    "cas_harness.stagec.worker_runtime_activation_envelope.v1"
+                ),
+                "STAGEC_RUNTIME_LEDGER_OBSERVATION_SCHEMA": (
+                    "cas_harness.stagec.worker_runtime_activation_ledger_observation.v1"
+                ),
+                "STAGEC_RUNTIME_TERMINAL_OBSERVATION_SCHEMA": (
+                    "cas_harness.stagec.worker_runtime_activation_terminal_observation.v1"
+                ),
+                "STAGEC_RUNTIME_AMBIGUOUS_TERMINAL_OBSERVATION_SCHEMA": (
+                    "cas_harness.stagec."
+                    "worker_runtime_activation_ambiguous_terminal_observation.v1"
+                ),
+                "REQUEST_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-capture-request+json"
+                ),
+                "AUTHORIZATION_PROJECTION_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "stagec-authorization-projection+json"
+                ),
+            }
+        ),
     }
 )
 STAGEC_PROMPT_CONTEXT_OPERATIONS = ("SOURCE", "UTF8_CONCAT")
@@ -721,17 +971,75 @@ STAGEC_EXTERNAL_PREREQUISITE_EXPORTS = (
     "load_stagec_external_prerequisite_binding",
     "load_stagec_external_prerequisite_snapshot",
 )
+STAGEC_RUNTIME_ACTIVATION_EXPORTS = (
+    "STAGEC_RUNTIME_ACTIVATION_ERROR_CODES",
+    "STAGEC_RUNTIME_ACTIVATION_INDETERMINATE",
+    "STAGEC_RUNTIME_CONTROL_BOUNDARY",
+    "STAGEC_RUNTIME_GATE_5_STATUS",
+    "STAGEC_RUNTIME_INVALIDATION_REASONS",
+    "STAGEC_RUNTIME_PERMIT_INDETERMINATE",
+    "STAGEC_RUNTIME_PERMIT_INVALIDATED",
+    "STAGEC_RUNTIME_PERMIT_REDEEMED",
+    "STAGEC_RUNTIME_PERMIT_UNREDEEMED",
+    "STAGEC_RUNTIME_PREPARED",
+    "STAGEC_RUNTIME_PROJECT_STATUS",
+    "STAGEC_RUNTIME_ROWS_ENABLED",
+    "STAGEC_RUNTIME_SERIALIZED_AUTHORITY",
+    "STAGEC_RUNTIME_STAGE_C_STATUS",
+    "STAGEC_RUNTIME_STARTUP_CANARY",
+    "StageCRuntimeActivationBackend",
+    "StageCRuntimeActivationError",
+    "ActivatedDiagnosticAttemptConsumption",
+    "ActivatedDiagnosticPhaseCoordinator",
+    "StageCRuntimeAmbiguousClaimTerminalObservation",
+    "StageCRuntimeAttemptClaimExpectation",
+    "StageCRuntimeAttemptClaimObservation",
+    "StageCRuntimeAttemptInvalidationExpectation",
+    "StageCRuntimeAttemptInvalidationObservation",
+    "StageCRuntimeDispatchPermit",
+    "StageCRuntimeIssuerAuthorizationObservation",
+    "StageCRuntimeModelCaptureTarget",
+    "StageCRuntimePhaseActivation",
+    "StageCRuntimePhaseActivationExpectation",
+    "StageCRuntimePhaseActivationObservation",
+    "StageCRuntimePreparation",
+    "StageCRuntimeStorageObservation",
+    "StageCRuntimeWorkerLeaseObservation",
+    "UnavailableStageCRuntimeActivationBackend",
+    "activate_stagec_runtime_phase",
+    "build_stagec_runtime_model_capture_target",
+    "invalidate_stagec_runtime_attempt_claim",
+    "mark_stagec_runtime_attempt_indeterminate",
+    "prepare_stagec_runtime_activation",
+    "redeem_stagec_runtime_dispatch_permit",
+    "require_stagec_runtime_startup_canary",
+    "stagec_runtime_dispatch_permit_state",
+    "stagec_runtime_phase_state",
+    "stagec_runtime_preparation_state",
+)
 DIAGNOSTIC_RUNTIME_SCHEMA_VALUES = tuple(
-    value
-    for constants in DIAGNOSTIC_RUNTIME_LITERAL_CONSTANTS.values()
-    for name, value in constants.items()
-    if name.endswith("_SCHEMA")
+    dict.fromkeys(
+        value
+        for constants in DIAGNOSTIC_RUNTIME_LITERAL_CONSTANTS.values()
+        for name, value in constants.items()
+        if name.endswith("_SCHEMA")
+    )
 )
 DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES = tuple(
-    value
-    for constants in DIAGNOSTIC_RUNTIME_LITERAL_CONSTANTS.values()
-    for name, value in constants.items()
-    if name.endswith("_MEDIA_TYPE")
+    dict.fromkeys(
+        value
+        for raw_path, constants in DIAGNOSTIC_RUNTIME_LITERAL_CONSTANTS.items()
+        for name, value in constants.items()
+        if name.endswith("_MEDIA_TYPE")
+        and not (
+            raw_path
+            == (
+                "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+                "runtime/stagec_runtime_activation.py"
+            )
+            and name in {"REQUEST_MEDIA_TYPE", "AUTHORIZATION_PROJECTION_MEDIA_TYPE"}
+        )
+    )
 )
 DIAGNOSTIC_WORKER_ADMISSION_LITERAL_CONSTANTS = MappingProxyType(
     {
@@ -1218,10 +1526,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": 537,
+        "expected_tests": EXPANDED_CONFIGURED_HARNESS_NODES,
         "expected_subtests": 163,
         "expected_test_ids_sha256": (
-            "3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19"
+            EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256
         ),
         "expected_setup_skipped_nodeids": [
             (
@@ -1255,10 +1563,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": [f"{WORKER_ROOT_REL}/scripts", API_ROOT_REL],
-        "expected_tests": 594,
+        "expected_tests": EXPANDED_CONFIGURED_WORKER_NODES,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B"
+            EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256
         ),
     },
     "Live trace worker numeric red team": {
@@ -1353,7 +1661,7 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "expected_tests": 99,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "DB5F9FD886A1714D4E9FE2CE4A2F2336DA3B0A414D5115D1B86B5A885EECDC39"
+            "2EC053F1688C97A76326A5ADDD79A07F31623D91FE9513DF9B4EC4C6B5D2167B"
         ),
     },
     "Harness v2 Stage B joined executor": {
@@ -1683,9 +1991,33 @@ REQUIRED_SUBSUITE_DIGESTS = {
 REQUIRED_WORKER_SUBSUITE_DIGESTS = {
     "Stage C structural capture": {
         "targets": ["live-trace-worker/tests/test_stagec_capture.py"],
-        "expected_tests": 119,
+        "expected_tests": 139,
         "expected_test_ids_sha256": (
-            "E81D7234171B311720A356A36A0B6CEE06B9C564E7FF91386CAFDEA21B503144"
+            "C306D70A052CDA8C0CFB12394B640A2ED2DDE9FEE58F16E92FF23771CAABFED1"
+        ),
+    },
+    "Stage C worker runtime activation": {
+        "targets": ["live-trace-worker/tests/test_stagec_runtime_activation.py"],
+        "expected_tests": 95,
+        "expected_test_ids_sha256": (
+            "0554F3710F9A35667A462CAF53584C9517CF945BFC64811765ACFB4E7CC7BCD3"
+        ),
+    },
+    "Stage C worker runtime activation and structural capture": {
+        "targets": [
+            "live-trace-worker/tests/test_stagec_runtime_activation.py",
+            "live-trace-worker/tests/test_stagec_capture.py",
+        ],
+        "expected_tests": 234,
+        "expected_test_ids_sha256": (
+            "08CAA558DEE27A5876DA29A15E9D0E3875994C630E2826BC52154DC215776E76"
+        ),
+    },
+    "Stage C Qwen runtime activation guards": {
+        "targets": ["live-trace-worker/tests/test_qwen_probe_adapter.py"],
+        "expected_tests": 27,
+        "expected_test_ids_sha256": (
+            "D80B52FFC48D0677F773269F640481A4C1CA0C434C707041FF391EA75BE90ECA"
         ),
     },
     "Stage C local capture archive": {
@@ -5053,8 +5385,8 @@ def verify_diagnostic_runtime_structure_only_surface() -> None:
     require(
         len(DIAGNOSTIC_RUNTIME_SCHEMA_VALUES)
         == len(set(DIAGNOSTIC_RUNTIME_SCHEMA_VALUES))
-        == 45,
-        "diagnostic runtime schema inventory is not exactly 45 unique values",
+        == 49,
+        "diagnostic runtime schema inventory is not exactly 49 unique values",
     )
     require(
         len(DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES)
@@ -5085,6 +5417,53 @@ def verify_diagnostic_runtime_structure_only_surface() -> None:
             observed_constants == dict(expected_constants),
             f"diagnostic runtime schema/media constants drifted: {raw_path}",
         )
+    core_activation_path = (
+        "src/cas_harness_v2/diagnostic_stagec_runtime_activation.py"
+    )
+    core_activation_assignments = _literal_module_assignments(core_activation_path)
+    require(
+        core_activation_assignments.get("__all__")
+        == list(STAGEC_RUNTIME_ACTIVATION_EXPORTS)
+        and len(STAGEC_RUNTIME_ACTIVATION_EXPORTS)
+        == len(set(STAGEC_RUNTIME_ACTIVATION_EXPORTS))
+        == 44,
+        "Stage C runtime-activation core export inventory is not exactly 44 names",
+    )
+    require(
+        core_activation_assignments.get("STAGEC_RUNTIME_GATE_5_STATUS")
+        == "OPEN / KEEP_OPEN"
+        and core_activation_assignments.get("STAGEC_RUNTIME_STAGE_C_STATUS")
+        == "DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED"
+        and core_activation_assignments.get("STAGEC_RUNTIME_PROJECT_STATUS")
+        == "NOT LICENSED / HELD / NOT FROZEN"
+        and core_activation_assignments.get("STAGEC_RUNTIME_SERIALIZED_AUTHORITY")
+        == "NONE"
+        and core_activation_assignments.get("STAGEC_RUNTIME_CONTROL_BOUNDARY")
+        == "PROCESS_LOCAL_CONTROL_INTERLOCK_NOT_WORKER_OR_MODEL_CALL_AUTHORITY",
+        "Stage C runtime-activation core promotes authority or status",
+    )
+    worker_activation_path = (
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+        "runtime/stagec_runtime_activation.py"
+    )
+    worker_activation_assignments = _literal_module_assignments(
+        worker_activation_path
+    )
+    require(
+        worker_activation_assignments.get("GATE5_STATUS") == "OPEN / KEEP_OPEN"
+        and worker_activation_assignments.get("STAGEC_DESIGN_STATUS")
+        == "DESIGN_ONLY"
+        and worker_activation_assignments.get("STAGEC_AUTHORIZATION_STATUS")
+        == "UNAUTHORIZED"
+        and worker_activation_assignments.get("STAGEC_EXECUTION_STATUS")
+        == "NOT_STARTED"
+        and worker_activation_assignments.get("LICENSE_STATUS") == "NOT LICENSED"
+        and worker_activation_assignments.get("GOVERNANCE_STATUS") == "HELD"
+        and worker_activation_assignments.get("FREEZE_STATUS") == "NOT FROZEN"
+        and worker_activation_assignments.get("STAGEC_RUNTIME_AUTHORITY_BOUNDARY")
+        == "NO_SCIENTIFIC_PRODUCT_EVIDENCE_PACKET_LICENSE_OR_DISCLOSURE_AUTHORITY",
+        "Stage C worker runtime gate promotes authority or status",
+    )
     require(
         _module_name_tuple_assignment(
             "src/cas_harness_v2/diagnostic_prompt_context_provenance.py",
@@ -5417,41 +5796,33 @@ def verify_stagec_design_package() -> dict[str, int]:
     full_suite_boundary = validation_receipts.get("full_suite_receipt_boundary")
     require(
         isinstance(full_suite_boundary, str)
-        and "EXACT LAST-COMMITTED b96c2c12 CHECKPOINT RECEIPTS"
-        in full_suite_boundary
-        and "437-NODE AND 489-NODE HARNESS REPLAYS REMAIN PRESERVED HISTORICAL CHECKPOINTS"
-        in full_suite_boundary
-        and "508-NODE PREREQUISITE-INTAKE CHECKPOINT IS ALSO PRESERVED HISTORICALLY"
-        in full_suite_boundary
-        and "8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2"
-        in full_suite_boundary
-        and "502 HAD EXACT ALL-PHASE PASS" in full_suite_boundary
-        and "1518 ORDINARY REPORTS" in full_suite_boundary
-        and "CURRENT AUTHORITATIVE LOCKED SAME-PROCESS HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 537 NODES IN 1680.3 SECONDS"
+        and "306-HARNESS, 437-HARNESS, 489-HARNESS, 508-HARNESS, 537-HARNESS, 576-WORKER, AND 594-WORKER RECEIPTS BELOW ARE PRESERVED HISTORICAL CHECKPOINTS"
         in full_suite_boundary
         and "3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19"
         in full_suite_boundary
-        and "531 HAD EXACT ALL-PHASE PASS" in full_suite_boundary
-        and "1605 ORDINARY REPORTS AND 163 PASSING SUBTESTS" in full_suite_boundary
-        and "ZERO WARNINGS, ERRORS, COLLECTION OR INTERNAL ERRORS, OR DESELECTIONS"
-        in full_suite_boundary
-        and "EXITED PYTEST AND THE VERIFIER PROCESS 0" in full_suite_boundary
-        and "423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF"
-        in full_suite_boundary
-        and "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109"
-        in full_suite_boundary
-        and "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
-        in full_suite_boundary
-        and "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98"
-        in full_suite_boundary
-        and "C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473"
-        in full_suite_boundary
-        and "637 ARTIFACTS, 409 SYNTAX-CHECKED PYTHON FILES, AND 2255 EXECUTABLE-SHADOW PATHS"
-        in full_suite_boundary
-        and "PASSED 594/594 NODES" in full_suite_boundary
         and "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B"
         in full_suite_boundary
-        and full_suite_boundary.endswith("STRUCTURE_ONLY / NON_AUTHORITY"),
+        and "CURRENT AUTHORITATIVE SAME-PROCESS FULL-SUITE RECEIPTS ARE HARNESS 565"
+        in full_suite_boundary
+        and "4CCAD2A4EF4868EBAD7EBDC9E219371A57CBE69C974E5D986A8714A0A0DDE601"
+        in full_suite_boundary
+        and "WORKER 719"
+        in full_suite_boundary
+        and "98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5"
+        in full_suite_boundary
+        and "WORKER 719/719 PASS"
+        in full_suite_boundary
+        and "CORE RUNTIME FOCUSED RECEIPT IS 28/28 PASS"
+        in full_suite_boundary
+        and "5D501F3505A98E23BDD2AB8B191BC6EEE90260F1F169940B6A6F70A61525A632"
+        in full_suite_boundary
+        and "WORKER GATE 95/95, CAPTURE 139/139, AND THEIR 234/234 UNION ARE FOCUSED STRUCTURAL PASSES"
+        in full_suite_boundary
+        and "QWEN 27 IS AN EXECUTED 27/27 PASS SUBSET OF THE CURRENT 719-NODE WORKER RECEIPT"
+        in full_suite_boundary
+        and full_suite_boundary.endswith(
+            "ALL LOCAL RECEIPTS REMAIN STRUCTURE_ONLY / NON_AUTHORITY"
+        ),
         "Stage C historical/current full-suite receipt boundary drifted",
     )
     diagnostic_focused = validation_receipts.get("diagnostic_runtime_focused")
@@ -5459,11 +5830,13 @@ def verify_stagec_design_package() -> dict[str, int]:
         diagnostic_focused,
         {
             "status",
-            "authoritative_standard_harness_receipt",
-            "authoritative_worker_full_suite_receipt",
+            "historical_standard_harness_receipt",
+            "historical_worker_594_full_suite_receipt",
             "historical_prompt_context_harness_receipt",
-            "authoritative_current_harness_receipt",
+            "historical_external_intake_harness_receipt",
             "historical_harness_508_receipt",
+            "current_authoritative_harness_full_suite_receipt",
+            "current_authoritative_worker_full_suite_receipt",
             "execution_v2",
             "per_attempt_lifecycle",
             "phase_coordinator",
@@ -5476,19 +5849,21 @@ def verify_stagec_design_package() -> dict[str, int]:
             "prompt_context_with_diagnostic_study",
             "stagec_prerequisite_intake",
             "stagec_external_prerequisite_intake",
+            "stagec_structural_runtime_activation",
         },
         label="Stage C diagnostic runtime focused receipts",
     )
     current_harness_537_receipt = {
         "status": (
-            "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+            "PRESERVED HISTORICAL PRE-RUNTIME AUTHORITATIVE SAME-PROCESS PASS "
+            "WITH SIX EXACT SETUP SKIPS / "
             "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / "
             "NON_AUTHORITY"
         ),
         "coverage_boundary": (
-            "CURRENT 537-NODE FULL-HARNESS RECEIPT / BINDS THE 21-FILE "
-            "EXTERNAL-INTAKE PACKAGE / DOES NOT ESTABLISH EXTERNAL TRUST OR "
-            "RUNTIME AUTHORITY"
+            "HISTORICAL 537-NODE FULL-HARNESS RECEIPT / BINDS THE 21-FILE "
+            "EXTERNAL-INTAKE PACKAGE / PREDATES THE STRUCTURAL RUNTIME "
+            "ACTIVATION TRANCHE"
         ),
         "collected": 537,
         "started": 537,
@@ -5573,16 +5948,138 @@ def verify_stagec_design_package() -> dict[str, int]:
             "Harness v2 kernel and history"
         ]["expected_setup_skipped_nodeids"],
     }
+    current_authoritative_harness_receipt = {
+        "status": (
+            "CURRENT AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP "
+            "SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / "
+            "NON_AUTHORITY"
+        ),
+        "coverage_boundary": (
+            "CURRENT 565-NODE FULL-HARNESS RECEIPT / BINDS THE STRUCTURAL "
+            "RUNTIME ACTIVATION TRANCHE / LOCAL SOFTWARE-TEST EVIDENCE ONLY"
+        ),
+        "collected": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["collected_nodes"],
+        "started": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["started_nodes"],
+        "finished": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["finished_nodes"],
+        "all_phase_passed": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "all_phase_pass_nodes"
+        ],
+        "setup_skipped": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "setup_skipped_nodes"
+        ],
+        "ordinary_reports": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "ordinary_reports"
+        ],
+        "passed_subtests": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "passed_subtests"
+        ],
+        "warning_count": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["warning_count"],
+        "error_count": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["error_count"],
+        "collection_errors": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "collection_errors"
+        ],
+        "internal_errors": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "internal_errors"
+        ],
+        "deselections": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["deselections"],
+        "pycache_status": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["pycache_status"],
+        "pytest_exit_status": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "pytest_exit_status"
+        ],
+        "process_exit_status": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "process_exit_status"
+        ],
+        "elapsed_seconds": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "elapsed_seconds"
+        ],
+        "python_ordinal_node_id_sha256": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "node_ids_sha256"
+        ],
+        "ordinary_outcomes_sha256": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "ordinary_outcomes_sha256"
+        ],
+        "subtest_outcomes_sha256": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "subtest_outcomes_sha256"
+        ],
+        "locked_import_origins_sha256": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "locked_import_origins_sha256"
+        ],
+        "pre_test_loaded_code_sha256": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "pre_test_loaded_code_sha256"
+        ],
+        "loaded_code_sha256": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "loaded_code_sha256"
+        ],
+        "loaded_code_digest_rule": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+            "loaded_code_digest_rule"
+        ],
+        "exact_setup_skipped_node_ids": REQUIRED_TEST_SUITES[
+            "Harness v2 kernel and history"
+        ]["expected_setup_skipped_nodeids"],
+    }
+    current_authoritative_worker_receipt = {
+        "status": (
+            "CURRENT AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / "
+            "NON_AUTHORITY"
+        ),
+        "coverage_boundary": (
+            "CURRENT 719-NODE FULL-WORKER RECEIPT / BINDS THE STRUCTURAL "
+            "RUNTIME ACTIVATION TRANCHE / LOCAL SOFTWARE-TEST EVIDENCE ONLY"
+        ),
+        "collected": CURRENT_AUTHORITATIVE_WORKER_RECEIPT["collected_nodes"],
+        "started": CURRENT_AUTHORITATIVE_WORKER_RECEIPT["started_nodes"],
+        "finished": CURRENT_AUTHORITATIVE_WORKER_RECEIPT["finished_nodes"],
+        "passed": CURRENT_AUTHORITATIVE_WORKER_RECEIPT["all_phase_pass_nodes"],
+        "total": CURRENT_AUTHORITATIVE_WORKER_RECEIPT["collected_nodes"],
+        "setup_skipped": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "setup_skipped_nodes"
+        ],
+        "ordinary_reports": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "ordinary_reports"
+        ],
+        "passed_subtests": CURRENT_AUTHORITATIVE_WORKER_RECEIPT["passed_subtests"],
+        "warning_count": CURRENT_AUTHORITATIVE_WORKER_RECEIPT["warning_count"],
+        "errors": CURRENT_AUTHORITATIVE_WORKER_RECEIPT["error_count"],
+        "deselections": CURRENT_AUTHORITATIVE_WORKER_RECEIPT["deselections"],
+        "pycache_status": CURRENT_AUTHORITATIVE_WORKER_RECEIPT["pycache_status"],
+        "pytest_exit_status": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "pytest_exit_status"
+        ],
+        "process_exit_status": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "process_exit_status"
+        ],
+        "elapsed_seconds": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "elapsed_seconds"
+        ],
+        "python_ordinal_node_id_sha256": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "node_ids_sha256"
+        ],
+        "ordinary_outcomes_sha256": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "ordinary_outcomes_sha256"
+        ],
+        "subtest_outcomes_sha256": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "subtest_outcomes_sha256"
+        ],
+        "locked_import_origins_sha256": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "locked_import_origins_sha256"
+        ],
+        "pre_test_loaded_code_sha256": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "pre_test_loaded_code_sha256"
+        ],
+        "loaded_code_sha256": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "loaded_code_sha256"
+        ],
+        "loaded_code_digest_rule": CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "loaded_code_digest_rule"
+        ],
+    }
     require(
         diagnostic_focused.get("status")
-        == (
-            "BOUNDED STRUCTURE_ONLY / NON_AUTHORITY RECEIPTS / AUTHORITATIVE "
-            "FULL-SUITE RECEIPTS ESTABLISHED"
-        )
-        and diagnostic_focused.get("authoritative_standard_harness_receipt")
+        == "BOUNDED STRUCTURE_ONLY / NON_AUTHORITY FOCUSED AND CURRENT AUTHORITATIVE FULL-SUITE RECEIPTS"
+        and diagnostic_focused.get("historical_standard_harness_receipt")
         == {
             "status": (
-                "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+                "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
                 "SKIPS ARE MISMATCH EVIDENCE, NOT PASS"
             ),
             "python": "3.14",
@@ -5618,10 +6115,11 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "SEPARATE PYTHON-3.12 FIT 10/10 AND ELIGIBLE DISPOSITION 3/3"
             ),
         }
-        and diagnostic_focused.get("authoritative_worker_full_suite_receipt")
+        and diagnostic_focused.get("historical_worker_594_full_suite_receipt")
         == {
             "status": (
-                "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+                "PRESERVED HISTORICAL PRE-RUNTIME AUTHORITATIVE SAME-PROCESS "
+                "PASS / STRUCTURE_ONLY / NON_AUTHORITY"
             ),
             "collected": 594,
             "started": 594,
@@ -5667,10 +6165,18 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "Harness v2 kernel and history"
             ]["expected_setup_skipped_nodeids"],
         }
-        and diagnostic_focused.get("authoritative_current_harness_receipt")
+        and diagnostic_focused.get("historical_external_intake_harness_receipt")
         == current_harness_537_receipt
         and diagnostic_focused.get("historical_harness_508_receipt")
-        == historical_harness_508_receipt,
+        == historical_harness_508_receipt
+        and diagnostic_focused.get(
+            "current_authoritative_harness_full_suite_receipt"
+        )
+        == current_authoritative_harness_receipt
+        and diagnostic_focused.get(
+            "current_authoritative_worker_full_suite_receipt"
+        )
+        == current_authoritative_worker_receipt,
         "Stage C historical/current authoritative Harness/worker receipt profile drifted",
     )
     require(
@@ -5764,7 +6270,8 @@ def verify_stagec_design_package() -> dict[str, int]:
             "collected_nodes": 11,
             "status": (
                 "ALL 11 CURRENT-BYTE NODES PASS ACROSS TWO BOUNDED SPLIT "
-                "RECEIPTS / NOT A SINGLE-PROCESS AUTHORITATIVE FULL-SUITE RECEIPT"
+                "RECEIPTS / CURRENT AUTHORITATIVE HARNESS 565 SEPARATELY "
+                "RECORDS SIX EXACT SETUP SKIPS AS MISMATCH EVIDENCE, NOT PASS"
             ),
             "split_receipts": [
                 {
@@ -5803,7 +6310,10 @@ def verify_stagec_design_package() -> dict[str, int]:
             ][0],
             "passed": 18,
             "total": 18,
-            "status": "PASS / WORKER-LOCAL ONLY",
+            "status": (
+                "PASS / WORKER-LOCAL ONLY / "
+                "PRIVATE TEST BACKEND EXPLICITLY INSTALLED"
+            ),
         }
         and diagnostic_focused.get("prompt_context_provenance")
         == {
@@ -5993,9 +6503,9 @@ def verify_stagec_design_package() -> dict[str, int]:
             },
             "full_harness_replay": {
                 "status": (
-                    "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
-                    "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / "
-                    "NON_AUTHORITY"
+                    "PRESERVED HISTORICAL PRE-RUNTIME AUTHORITATIVE SAME-PROCESS "
+                    "PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, "
+                    "NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY"
                 ),
                 "collected": 537,
                 "started": 537,
@@ -6013,9 +6523,9 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "pytest_exit_status": 0,
                 "process_exit_status": 0,
                 "elapsed_seconds": "1680.3",
-                "python_ordinal_node_id_sha256": REQUIRED_TEST_SUITES[
-                    "Harness v2 kernel and history"
-                ]["expected_test_ids_sha256"],
+                "python_ordinal_node_id_sha256": (
+                    "3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19"
+                ),
                 "ordinary_outcomes_sha256": (
                     "423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF"
                 ),
@@ -6042,8 +6552,8 @@ def verify_stagec_design_package() -> dict[str, int]:
                 ),
             },
             "packaging_status": (
-                "PACKAGING HANDOFF FROZEN / INCLUDED IN THE 21-FILE, 425-EXPORT, "
-                "1283080-BYTE MIRROR"
+                "HISTORICAL EXTERNAL-INTAKE HANDOFF NOW INCLUDED IN THE CURRENT "
+                "22-FILE, 469-EXPORT, 1420002-BYTE MIRROR"
             ),
             "authority_boundary": (
                 "THE IMPORTER DOES NOT AUTHENTICATE EXTERNAL TRUST, FREEZE A "
@@ -6053,17 +6563,272 @@ def verify_stagec_design_package() -> dict[str, int]:
         },
         "Stage C external prerequisite intake receipt drifted or promotes authority",
     )
+    runtime_activation = diagnostic_focused.get(
+        "stagec_structural_runtime_activation"
+    )
+    runtime_source = (
+        "src/cas_harness_v2/diagnostic_stagec_runtime_activation.py"
+    )
+    runtime_test = (
+        "tests/cas_harness_v2/test_diagnostic_stagec_runtime_activation.py"
+    )
+    worker_gate_source = (
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+        "app/runtime/stagec_runtime_activation.py"
+    )
+    worker_gate_test = (
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+        "tests/test_stagec_runtime_activation.py"
+    )
+    worker_capture_source = (
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+        "app/runtime/stagec_capture.py"
+    )
+    worker_capture_test = (
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+        "tests/test_stagec_capture.py"
+    )
+    qwen_test = (
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+        "tests/test_qwen_probe_adapter.py"
+    )
+    generic_runtime_paths = [
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+            "app/runtime/model_loader.py"
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+            "app/runtime/event_stream.py"
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+            "app/runtime/pythia_runner.py"
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+            "app/runtime/ablation_probe.py"
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+            "tests/test_real_mode_dispatch.py"
+        ),
+    ]
+    require(
+        runtime_activation
+        == {
+            "status": (
+                "FOCUSED AND CURRENT AUTHORITATIVE FULL-SUITE STRUCTURE_ONLY "
+                "RUNTIME CONTROL AND WORKER RECEIPTS / NON_AUTHORITY / NO REAL "
+                "POSITIVE ACTIVATION"
+            ),
+            "authority_boundary": (
+                "GATE 5 OPEN / KEEP_OPEN; STAGE C DESIGN_ONLY / UNAUTHORIZED / "
+                "NOT_STARTED; NOT LICENSED / HELD / NOT FROZEN"
+            ),
+            "core_control": {
+                "source_path": runtime_source,
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[runtime_source][0],
+                "source_byte_length": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    runtime_source
+                ][1],
+                "packaged_mirror_path": (
+                    "noetic-compass-scaffold/noetic-compass/cas_harness_v2/"
+                    "diagnostic_stagec_runtime_activation.py"
+                ),
+                "packaged_mirror_is_byte_identical": True,
+                "test_path": runtime_test,
+                "test_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[runtime_test][0],
+                "test_byte_length": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[runtime_test][1],
+                "focused_receipt": {
+                    "status": (
+                        "UNCHANGED-BYTE SAME-PROCESS PASS / STRUCTURE_ONLY / "
+                        "NON_AUTHORITY"
+                    ),
+                    "passed": 28,
+                    "total": 28,
+                    "warning_count": 0,
+                    "elapsed_seconds": "922.45",
+                    "python_ordinal_node_id_sha256": (
+                        "5D501F3505A98E23BDD2AB8B191BC6EEE90260F1F169940B6A6F70A61525A632"
+                    ),
+                },
+            },
+            "worker_activation_gate": {
+                "source_path": worker_gate_source,
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    worker_gate_source
+                ][0],
+                "source_byte_length": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    worker_gate_source
+                ][1],
+                "test_path": worker_gate_test,
+                "test_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    worker_gate_test
+                ][0],
+                "test_byte_length": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    worker_gate_test
+                ][1],
+                "focused_receipt": {
+                    "status": "PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+                    "passed": 95,
+                    "total": 95,
+                    "python_ordinal_node_id_sha256": REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                        "Stage C worker runtime activation"
+                    ]["expected_test_ids_sha256"],
+                },
+            },
+            "worker_capture": {
+                "source_path": worker_capture_source,
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    worker_capture_source
+                ][0],
+                "source_byte_length": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    worker_capture_source
+                ][1],
+                "test_path": worker_capture_test,
+                "test_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    worker_capture_test
+                ][0],
+                "test_byte_length": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    worker_capture_test
+                ][1],
+                "focused_receipt": {
+                    "status": "PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+                    "passed": 139,
+                    "total": 139,
+                    "python_ordinal_node_id_sha256": REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                        "Stage C structural capture"
+                    ]["expected_test_ids_sha256"],
+                },
+            },
+            "worker_gate_capture_union": {
+                "status": "PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+                "passed": 234,
+                "total": 234,
+                "python_ordinal_node_id_sha256": (
+                    "08CAA558DEE27A5876DA29A15E9D0E3875994C630E2826BC52154DC215776E76"
+                ),
+            },
+            "qwen_generic_route_exclusion": {
+                "test_path": qwen_test,
+                "test_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[qwen_test][0],
+                "test_byte_length": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[qwen_test][1],
+                "configured_nodes": 27,
+                "configured_node_id_sha256": REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                    "Stage C Qwen runtime activation guards"
+                ]["expected_test_ids_sha256"],
+                "same_process_focused_receipt": CURRENT_QWEN_SUBSET_STATUS,
+                "generic_sources": [
+                    {
+                        "path": path,
+                        "sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[path][0],
+                        "byte_length": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[path][1],
+                    }
+                    for path in generic_runtime_paths
+                ],
+                "route_rule": (
+                    "PUBLIC OR GENERIC STREAM, LOCKED CACHE, PYTHIA RUNNER, "
+                    "STARTUP CANARY, AND REAL ABLATION EFFECT OR CONTROL MUST "
+                    "REJECT QWEN, ALIASED, OR CACHED CROSS-FAMILY CARRIERS BEFORE "
+                    "TOKENIZER, HOOK, OR MODEL FORWARD; ONLY THE GATED STAGE C "
+                    "CAPTURE MAY FORWARD QWEN"
+                ),
+            },
+            "mechanical_invariants": [
+                (
+                    "PRIVATE SEALED EXPECTATIONS NEVER CROSS THE BACKEND BOUNDARY; "
+                    "DISPOSABLE DEEP COPIES AND DETACHED OBSERVATIONS ARE RECHECKED"
+                ),
+                (
+                    "PHASE, CLAIM, INVALIDATION, AND REDEMPTION ARE MONOTONE "
+                    "COMPARE-AND-SWAP TRANSITIONS"
+                ),
+                (
+                    "A CONTROL-OWNED OPERATION ID TERMINALIZES EVERY BACKEND-CROSSED "
+                    "AMBIGUOUS CLAIM BY IMMUTABLE LOGICAL ROW AS INDETERMINATE"
+                ),
+                (
+                    "WORKER FULL-ENVELOPE AND LOGICAL-ROW RESERVATIONS MAKE "
+                    "DUPLICATE, STALE, DRIFTED, MUTATED, OR AMBIGUOUS INPUTS "
+                    "TERMINAL WITHOUT RETRY"
+                ),
+                (
+                    "CAPTURE MARKS REDEMPTION ATTEMPTED BEFORE CONTROL REDEMPTION "
+                    "AND REQUIRES THE EXACT DURABLE CALL_STARTED RECEIPT BEFORE "
+                    "EXACTLY ONE DIRECT QWEN FORWARD"
+                ),
+            ],
+            "current_authoritative_replays": {
+                "status": "PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+                "harness": {
+                    "configured_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+                    "configured_node_id_sha256": (
+                        EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256
+                    ),
+                    "authoritative_same_process_receipt": (
+                        "CURRENT AUTHORITATIVE SAME-PROCESS 565-NODE RECEIPT / "
+                        "559 EXACT ALL-PHASE PASS PLUS SIX EXACT SETUP SKIPS / "
+                        "STRUCTURE_ONLY / NON_AUTHORITY"
+                    ),
+                    "historical_preserved_receipt_nodes": 537,
+                },
+                "worker": {
+                    "configured_nodes": EXPANDED_CONFIGURED_WORKER_NODES,
+                    "configured_node_id_sha256": (
+                        EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256
+                    ),
+                    "authoritative_same_process_receipt": (
+                        "CURRENT AUTHORITATIVE SAME-PROCESS 719 / 719 PASS / "
+                        "STRUCTURE_ONLY / NON_AUTHORITY"
+                    ),
+                    "historical_preserved_receipt_nodes": 594,
+                },
+                "complete_verifier_suite_map_nodes": (
+                    EXPANDED_CONFIGURED_TEST_SUITE_NODE_TOTAL
+                ),
+            },
+            "schema_media_delta": {
+                "new_unique_worker_schemas": 4,
+                "new_unique_media_types": 0,
+                "total_unique_schemas": 49,
+                "total_unique_media_types": 44,
+            },
+            "absent_positive_evidence": {
+                "exact_authenticated_four_plus_twelve_bundle": False,
+                "positive_real_storage_issuer_ledger_backend": False,
+                "real_one_use_authorization_nonce_consumed": False,
+                "model_calls": 0,
+                "provider_calls": 0,
+                "detector_results": 0,
+                "evidence_packets_created": 0,
+            },
+        },
+        "Stage C structural runtime activation receipt drifted or promotes authority",
+    )
     require(
         validation_receipts.get("packaged_kernel")
         == {
             "byte_mirrored_files": PACKAGED_HARNESS_V2_FILE_COUNT,
             "unique_exports": PACKAGED_HARNESS_V2_EXPORT_COUNT,
             "byte_mirrored_bytes": PACKAGED_HARNESS_V2_TOTAL_BYTES,
+            "runtime_activation_module_exports": len(
+                STAGEC_RUNTIME_ACTIVATION_EXPORTS
+            ),
             "packaging_provenance_sha256": PACKAGED_HARNESS_V2_PROVENANCE_SHA256,
+            "packaging_provenance_byte_length": 3_867,
             "canonical_and_mirror_init_sha256": PACKAGED_HARNESS_V2_INIT_SHA256,
+            "canonical_and_mirror_init_byte_length_each": 38_141,
             "packaging_allowlist_source_sha256": (
                 PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256
             ),
+            "packaging_allowlist_source_byte_length": 6_036,
+            "packaging_test_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                f"{API_ROOT_REL}/tests/test_cas_harness_v2_packaged_mirror.py"
+            ][0],
+            "packaging_test_byte_length": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                f"{API_ROOT_REL}/tests/test_cas_harness_v2_packaged_mirror.py"
+            ][1],
             "focused_mirror_tests_passed": 13,
         },
         "Stage C packaged-kernel validation receipt drifted",
@@ -6330,7 +7095,7 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "52E444142F5C3D8FC7F0AFC983DE060EFCACCC8975C61F97B48D5BDA52226055"
             ),
             "test_source_sha256": (
-                "6D7B3440CEDD02BD6E351CCA6D1E5494F4D3FBC58D0A9470D681FEF65FBBB472"
+                "B78434646D50A2B8BF96449B5AF53EE9EC80079F346420ED1A6E6C53D8AEB743"
             ),
             "member_count": 7,
             "copy_status": (
@@ -6558,10 +7323,10 @@ def verify_stagec_design_package() -> dict[str, int]:
                 ),
                 "receipt_boundary": (
                     "ALL 11 CURRENT-BYTE NODES PASS ACROSS TWO BOUNDED SPLIT "
-                    "RECEIPTS; THOSE SPLITS ARE NOT THE SEPARATE AUTHORITATIVE "
-                    "FULL-SUITE RECEIPT, WHOSE STANDARD RUNTIME SETUP-SKIPPED "
-                    "THE SIX EXACT LOCK-MISMATCH NODES AS MISMATCH EVIDENCE "
-                    "RATHER THAN PASS; THE POSITIVE "
+                    "RECEIPTS; THE CURRENT AUTHORITATIVE 565-NODE HARNESS "
+                    "RECEIPT SEPARATELY SETUP-SKIPPED THE SIX EXACT "
+                    "LOCK-MISMATCH NODES AS MISMATCH EVIDENCE RATHER THAN PASS; "
+                    "THE POSITIVE "
                     "POST_ACCESS_NO_ELIGIBLE_THRESHOLD BRANCH REMAINS PENDING"
                 ),
             },
@@ -7117,6 +7882,21 @@ def verify_stagec_design_package() -> dict[str, int]:
                         "ESTABLISHED / BLOCKS CALIBRATION"
                     )
                 )
+                or (
+                    row.get("obligation_id") == "stagec-obligation-verifier"
+                    and row["status"]
+                    == (
+                        "CLOSED / CURRENT HARNESS 565 AND WORKER 719 "
+                        "AUTHORITATIVE SAME-PROCESS REPLAYS GREEN / "
+                        "STRUCTURE_ONLY / NON_AUTHORITY"
+                    )
+                    and "without weakening Gate 5, Packet v2, or Stage B"
+                    in row.get("requirement", "")
+                    and "537/594 receipts remain preserved as historical"
+                    in row.get("requirement", "")
+                    and "real authenticated activation remains blocked"
+                    in row.get("requirement", "")
+                )
             )
             for row in obligations
         ),
@@ -7127,7 +7907,7 @@ def verify_stagec_design_package() -> dict[str, int]:
             row.get("obligation_id")
             == "stagec-obligation-prompt-context-provenance"
             and "future immutable diagnostic base" in row.get("requirement", "")
-            and "deterministic DRC" in row.get("requirement", "")
+            and "deterministic real DRC" in row.get("requirement", "")
             and "admitted runtime" in row.get("requirement", "")
             and "corpus freeze" in row.get("requirement", "")
             for row in obligations
@@ -7140,9 +7920,9 @@ def verify_stagec_design_package() -> dict[str, int]:
             row.get("obligation_id") == "stagec-obligation-prerequisite-intake"
             and row.get("status")
             == (
-                "STRUCTURE_ONLY EXACT INTAKE, PROSPECTIVE ADMISSION, AND READ-ONLY "
-                "EXTERNAL IMPORT TOOLING COMPLETE / REAL EXTERNAL INTAKE, PROVIDER "
-                "TRUST, AND RUNTIME ENFORCEMENT OPEN"
+                "STRUCTURE_ONLY EXACT INTAKE, PROSPECTIVE ADMISSION, READ-ONLY "
+                "IMPORT, AND FAIL-CLOSED RUNTIME ENFORCEMENT COMPLETE / REAL "
+                "EXTERNAL INTAKE, PROVIDER TRUST, AND POSITIVE ACTIVATION OPEN"
             )
             and "canonical context locator"
             in row.get("requirement", "")
@@ -7153,12 +7933,9 @@ def verify_stagec_design_package() -> dict[str, int]:
             and "unrelated directory files are outside the admitted closure and ignored"
             in row.get("requirement", "")
             and "29/29 focused receipt" in row.get("requirement", "")
-            and "current authoritative full-Harness replay collected 537 nodes"
+            and "537-node Harness and 594-node worker receipts remain historical pre-runtime checkpoints"
             in row.get("requirement", "")
-            and "passed 531 all phases" in row.get("requirement", "")
-            and "1605 ordinary reports and 163 passing subtests"
-            in row.get("requirement", "")
-            and "preserves the 508-node replay as a historical checkpoint"
+            and "current authoritative Harness 565 and worker 719 same-process receipts are green"
             in row.get("requirement", "")
             and "No external/provider authenticity" in row.get("requirement", "")
             for row in obligations
@@ -7180,9 +7957,14 @@ def verify_stagec_design_package() -> dict[str, int]:
         )
         and any(
             row.get("blocker_id")
-            == "diagnostic-family-is-structural-and-not-runtime-authorized"
+            == (
+                "diagnostic-family-runtime-gate-is-structural-and-not-positively-"
+                "authorized"
+            )
             and "typed execution-v2 carriers" in row.get("fact", "")
-            and "HTTP/container runtime" in row.get("fact", "")
+            and "sealed compare-and-swap activation" in row.get("fact", "")
+            and "operation-bound ambiguity tombstones" in row.get("fact", "")
+            and "admitted HTTP/container run" in row.get("fact", "")
             for row in schema_blockers
             if isinstance(row, dict)
         )
@@ -7204,18 +7986,22 @@ def verify_stagec_design_package() -> dict[str, int]:
         and any(
             row.get("blocker_id")
             == "diagnostic-freeze-or-reject-is-structural-only"
-            and "authoritative full-suite replay" in row.get("fact", "")
+            and "current authoritative 565-node Harness receipt"
+            in row.get("fact", "")
+            and "six exact setup skips as mismatch evidence rather than PASS"
+            in row.get("fact", "")
             and "POST_ACCESS_NO_ELIGIBLE_THRESHOLD" in row.get("fact", "")
             for row in schema_blockers
             if isinstance(row, dict)
         )
         and any(
             row.get("blocker_id")
-            == "prompt-context-companions-are-not-yet-preregistered-or-runtime-required"
+            == "prompt-context-companions-have-no-real-admitted-base-or-positive-runtime"
             and "SOURCE plus ordered UTF8_CONCAT" in row.get("fact", "")
             and "Corpus freeze remains NOT_ESTABLISHED" in row.get("fact", "")
             and "future diagnostic base" in row.get("fact", "")
-            and "deterministic DRC" in row.get("fact", "")
+            and "deterministic real DRC execution" in row.get("fact", "")
+            and "positive authenticated HTTP/container activation" in row.get("fact", "")
             for row in schema_blockers
             if isinstance(row, dict)
         )
@@ -7227,10 +8013,10 @@ def verify_stagec_design_package() -> dict[str, int]:
             )
             and "OWNER_ASSERTS_PRESENT" in row.get("fact", "")
             and "exactly 16 explicitly manifested" in row.get("fact", "")
-            and "19 library plus 10 CLI nodes pass" in row.get("fact", "")
+            and "successful local import mechanics" in row.get("fact", "")
             and "no real 4-plus-12 evidence set" in row.get("fact", "")
             and "cannot authenticate" in row.get("fact", "")
-            and "External/provider trust and runtime enforcement remain "
+            and "External/provider trust and positive runtime activation remain "
             "NOT_ESTABLISHED / NOT_PERFORMED"
             in row.get("fact", "")
             for row in schema_blockers
@@ -7385,7 +8171,12 @@ def verify_stagec_design_package() -> dict[str, int]:
         in activation["stagec-calibration"]
         and "PROSPECTIVE-ONLY ADMISSION"
         in activation["stagec-calibration"]
-        and "AUTHORITATIVE 508-NODE OR LATER FULL-SUITE INTEGRATION RECEIPT"
+        and "ACTIVATION CONTROL" in activation["stagec-calibration"]
+        and "WORKER REDEMPTION GATE" in activation["stagec-calibration"]
+        and "POSITIVE STORAGE/ISSUER/LEDGER/TRUSTED-TIME"
+        in activation["stagec-calibration"]
+        and "REAL ONE-USE NONCE STATE" in activation["stagec-calibration"]
+        and "CONFIGURED HARNESS 565 AND WORKER 719 SAME-PROCESS AUTHORITATIVE REPLAYS ARE GREEN"
         in activation["stagec-calibration"]
         and activation["stagec-evaluation"].startswith("FORBIDDEN UNTIL C-CAL")
         and "DIAGNOSTIC NONREPORTING DISPOSITION"
@@ -7501,7 +8292,7 @@ def verify_stagec_design_package() -> dict[str, int]:
         GATE5_DIR / "stagec_qwen_prompt_injection_v0.1" / "README.md"
     )
     for marker in (
-        "DESIGN ONLY / EXECUTION UNAUTHORIZED / EXPERIMENT NOT_STARTED",
+        "DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED",
         "Stage C-Cal",
         "Stage C-Eval",
         "320 independent",
@@ -7525,19 +8316,19 @@ def verify_stagec_design_package() -> dict[str, int]:
         "1,461 ordinary",
         "163 passing subtests",
         "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225",
-        "current authoritative locked same-process Harness replay collected",
-        "started, and finished 537 nodes in 1,680.3 seconds",
-        "Exactly 531 had exact",
-        "1,605 ordinary reports/outcomes",
-        "163 passing",
+        "Frozen structural runtime-activation tranche",
+        "E4B9C390117A474B32DB790B5B7CB8DC2E3022823FF6F2F718725B1B3826E52E",
+        "5D501F3505A98E23BDD2AB8B191BC6EEE90260F1F169940B6A6F70A61525A632",
+        "FC918942B2D324BCE1882577166A1F3FCFE8A98AAE2D5A39F90E0DCCD9B970B4",
+        "08CAA558DEE27A5876DA29A15E9D0E3875994C630E2826BC52154DC215776E76",
+        "22 byte-mirrored files, 469 unique exports",
+        "The current authoritative same-process Harness replay",
+        "4CCAD2A4EF4868EBAD7EBDC9E219371A57CBE69C974E5D986A8714A0A0DDE601",
+        "The current authoritative same-process worker replay passed 719/719",
+        "98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5",
+        "27/27 PASS as an exact executed subset of the authoritative 719-node worker same-process receipt",
+        "prior 537-node Harness and 594/594 worker receipts remain",
         "3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19",
-        "423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF",
-        "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109",
-        "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
-        "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
-        "C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473",
-        "637 artifacts, 409 syntax-checked Python",
-        "2,255 executable-shadow paths",
         "508-node receipt is",
         "preserved as a historical checkpoint",
         "8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2",
@@ -7581,6 +8372,7 @@ def verify_review_matrix(
             "disposition_counts",
             "kernel_schemas",
             "kernel_media_types",
+            "runtime_activation_review_basis",
             "review_basis",
             "receipts",
             "criteria",
@@ -7656,6 +8448,54 @@ def verify_review_matrix(
         == list(DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES),
         "Gate 5 review matrix diagnostic media-type list drifted",
     )
+    runtime_review_basis = matrix.get("runtime_activation_review_basis")
+    require(
+        isinstance(runtime_review_basis, str)
+        and "STRUCTURE_ONLY / NON_AUTHORITY" in runtime_review_basis
+        and "44 exports" in runtime_review_basis
+        and "28/28 PASS" in runtime_review_basis
+        and "zero warnings in 922.45 seconds" in runtime_review_basis
+        and STAGEC_RUNTIME_CORE_FOCUSED_EXECUTED_NODE_IDS_SHA256.lower()
+        in runtime_review_basis
+        and "gate 95/95" in runtime_review_basis
+        and REQUIRED_WORKER_SUBSUITE_DIGESTS["Stage C worker runtime activation"][
+            "expected_test_ids_sha256"
+        ].lower()
+        in runtime_review_basis
+        and "capture 139/139" in runtime_review_basis
+        and REQUIRED_WORKER_SUBSUITE_DIGESTS["Stage C structural capture"][
+            "expected_test_ids_sha256"
+        ].lower()
+        in runtime_review_basis
+        and "234/234 union" in runtime_review_basis
+        and "Qwen 27" in runtime_review_basis
+        and "passed as an exact executed subset" in runtime_review_basis
+        and "schema inventory to 49" in runtime_review_basis
+        and "unique media remains 44" in runtime_review_basis
+        and "Harness 537" in runtime_review_basis
+        and HISTORICAL_AUTHORITATIVE_HARNESS_NODE_IDS_SHA256.lower()
+        in runtime_review_basis
+        and "worker 594" in runtime_review_basis
+        and HISTORICAL_AUTHORITATIVE_WORKER_NODE_IDS_SHA256.lower()
+        in runtime_review_basis
+        and "Current authoritative same-process receipts are Harness 565"
+        in runtime_review_basis
+        and EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256.lower()
+        in runtime_review_basis
+        and "worker 719" in runtime_review_basis
+        and EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256.lower()
+        in runtime_review_basis
+        and "1772 configured suite nodes" in runtime_review_basis
+        and "three Qwen generic-route guards" in runtime_review_basis
+        and "3600 seconds" in runtime_review_basis
+        and "no performance authority" in runtime_review_basis
+        and "DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED"
+        in runtime_review_basis
+        and "OPEN / KEEP_OPEN" in runtime_review_basis
+        and "NOT LICENSED" in runtime_review_basis
+        and "HELD" in runtime_review_basis,
+        "Gate 5 runtime-activation review basis drifted or promoted authority",
+    )
     require(
         isinstance(matrix.get("review_basis"), str)
         and "No criterion creates ACCEPT, LICENSED, an enabled public route, or a product route."
@@ -7694,7 +8534,7 @@ def verify_review_matrix(
         and "zero warnings, collection or internal errors, or deselections occurred"
         in matrix["review_basis"]
         and "exact historical receipt digests bind ordinary outcomes" in matrix["review_basis"]
-        and "current authoritative Harness replay collected, started, and finished 537 nodes"
+        and "preserved historical authoritative Harness replay collected, started, and finished 537 nodes"
         in matrix["review_basis"]
         and "1,680.3 seconds" in matrix["review_basis"]
         and "531 had exact all-phase PASS" in matrix["review_basis"]
@@ -7719,9 +8559,9 @@ def verify_review_matrix(
         and "current adapter replay also passed 99/99 nodes"
         in matrix["review_basis"]
         and "one warning" in matrix["review_basis"]
-        and "21 byte-identical Python files" in matrix["review_basis"]
-        and "425 unique exports" in matrix["review_basis"]
-        and "1,283,080 bytes" in matrix["review_basis"]
+        and "22 byte-identical Python files" in matrix["review_basis"]
+        and "469 unique exports" in matrix["review_basis"]
+        and "1,420,002 bytes" in matrix["review_basis"]
         and GATE4_RETAINED_GIT_COMMIT in matrix["review_basis"]
         and GATE4_RETAINED_SOURCE_BOUNDARY in matrix["review_basis"]
         and "external-source portability remains OPEN" in matrix["review_basis"],
@@ -7887,8 +8727,16 @@ def verify_review_matrix(
             f"{criterion_id}: current package/prompt-context/prerequisite criterion evidence drifted",
         )
     packaged_criterion = criteria_by_id["G5-ENGINEERING-007"]["observed_result"]
+    runtime_activation_refs = {
+        "src/cas_harness_v2/diagnostic_stagec_runtime_activation.py",
+        "tests/cas_harness_v2/test_diagnostic_stagec_runtime_activation.py",
+        (
+            "noetic-compass-scaffold/noetic-compass/cas_harness_v2/"
+            "diagnostic_stagec_runtime_activation.py"
+        ),
+    }
     require(
-        "1,283,080 bytes" in packaged_criterion
+        "1,420,002 bytes" in packaged_criterion
         and PACKAGED_HARNESS_V2_PROVENANCE_SHA256 in packaged_criterion
         and PACKAGED_HARNESS_V2_INIT_SHA256
         in packaged_criterion
@@ -7897,10 +8745,59 @@ def verify_review_matrix(
         and "29/29" in packaged_criterion
         and "CANDIDATE_STRUCTURAL_REPLAY_COMPLETE_NON_AUTHORITY"
         in packaged_criterion
+        and DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+            "src/cas_harness_v2/diagnostic_stagec_runtime_activation.py"
+        ][0]
+        in packaged_criterion
+        and "44-export Stage C runtime-activation core" in packaged_criterion
         and external_intake_refs
+        <= set(criteria_by_id["G5-ENGINEERING-007"]["evidence_refs"])
+        and runtime_activation_refs
         <= set(criteria_by_id["G5-ENGINEERING-007"]["evidence_refs"])
         and "13/13" in packaged_criterion,
         "G5-ENGINEERING-007: current packaged mirror identity/receipt drifted",
+    )
+    integration_criterion = criteria_by_id["G5-ENGINEERING-001"]
+    integration_observed = integration_criterion["observed_result"]
+    require(
+        "44 exact public exports" in integration_observed
+        and "28/28 PASS" in integration_observed
+        and STAGEC_RUNTIME_CORE_FOCUSED_EXECUTED_NODE_IDS_SHA256
+        in integration_observed
+        and "gate 95/95" in integration_observed
+        and "capture 139/139" in integration_observed
+        and "234/234 union" in integration_observed
+        and "Qwen 27 passed as an exact executed subset"
+        in integration_observed
+        and "49" in integration_observed
+        and "unique media remains 44" in integration_observed
+        and "Historical authoritative same-process receipts remain Harness 537 and worker 594"
+        in integration_observed
+        and "Current authoritative same-process suites are Harness 565"
+        in integration_observed
+        and EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256 in integration_observed
+        and "worker 719" in integration_observed
+        and EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256 in integration_observed
+        and integration_criterion.get("disposition") == "OPEN_ENGINEERING"
+        and runtime_activation_refs
+        <= set(integration_criterion["evidence_refs"])
+        and "current 565-node Harness and 719-node worker authoritative same-process receipts close only"
+        in integration_criterion["remaining_obligation"],
+        "G5-ENGINEERING-001 runtime activation boundary drifted or was promoted",
+    )
+    structural_criterion = criteria_by_id["G5-ENGINEERING-004"]["observed_result"]
+    require(
+        "44 core exports" in structural_criterion
+        and "four new unique worker schemas" in structural_criterion
+        and "unchanged 44 unique media types" in structural_criterion
+        and "current authoritative Harness 565 and worker 719 receipts and digests"
+        in structural_criterion
+        and "1,772 configured suite nodes" in structural_criterion
+        and "3,600-second bounded same-process ceiling" in structural_criterion
+        and "no performance authority" in structural_criterion
+        and "Configured identity and exact same-process execution success are recorded separately"
+        in structural_criterion,
+        "G5-ENGINEERING-004 runtime-activation verifier boundary drifted",
     )
     require(
         len(criterion_ids) == len(set(criterion_ids)),
@@ -8104,7 +9001,7 @@ def verify_review_matrix(
         in kernel_receipt.get("scope", "")
         and "prerequisite-intake receipt is preserved historically at 508 nodes"
         in kernel_receipt.get("scope", "")
-        and "current authoritative external-intake replay is recorded separately at 537 nodes"
+        and "preserved historical authoritative external-intake replay is recorded separately at 537 nodes"
         in kernel_receipt.get("scope", "")
         and "not hermetic or independently attested" in kernel_receipt.get("scope", ""),
         "review-matrix retained Harness v2 checkpoint receipt drifted",
@@ -8347,14 +9244,41 @@ def verify_review_matrix(
             "stagec_external_intake_roles",
             "stagec_external_intake_error_codes",
             "stagec_external_intake_status",
+            "runtime_activation_core_focused_tests",
+            "runtime_activation_core_focused_node_ids_sha256",
+            "runtime_activation_core_focused_execution_status",
+            "worker_runtime_activation_focused_tests",
+            "worker_runtime_activation_focused_node_ids_sha256",
+            "worker_structural_capture_focused_tests",
+            "worker_structural_capture_focused_node_ids_sha256",
+            "qwen_runtime_activation_focused_tests",
+            "qwen_runtime_activation_focused_node_ids_sha256",
+            "qwen_runtime_activation_execution_status",
+            "worker_runtime_activation_capture_union_tests",
+            "worker_runtime_activation_capture_union_node_ids_sha256",
+            "worker_runtime_activation_unique_schemas_added",
+            "expanded_unique_kernel_schemas",
+            "expanded_unique_kernel_media_types",
+            "historical_authoritative_harness_nodes",
+            "historical_authoritative_harness_node_ids_sha256",
+            "historical_authoritative_harness_status",
             "expanded_harness_configured_nodes",
             "expanded_harness_configured_node_ids_sha256",
             "expanded_harness_authoritative_execution_status",
+            "historical_authoritative_worker_nodes",
+            "historical_authoritative_worker_node_ids_sha256",
+            "historical_authoritative_worker_status",
+            "expanded_worker_configured_nodes",
+            "expanded_worker_configured_node_ids_sha256",
+            "expanded_worker_authoritative_execution_status",
+            "expanded_configured_test_suite_total_nodes",
             "historical_prerequisite_intake_harness_nodes",
             "historical_prerequisite_intake_harness_node_ids_sha256",
             "historical_prerequisite_intake_harness_status",
             "worker_archive_admission_focused_tests",
             "new_full_suite_authoritative_replay_status",
+            "current_authoritative_harness_full_suite_receipt",
+            "current_authoritative_worker_full_suite_receipt",
             "packaged_mirror_files",
             "packaged_mirror_bytes",
             "package_exported_names",
@@ -8364,18 +9288,22 @@ def verify_review_matrix(
             "historical_w0_status",
             "capability_claim_effect",
             "independently_reproduced",
+            "runtime_activation_tranche_scope",
             "scope",
         },
         label="review-matrix Stage C design receipt",
     )
     stagec_summary = verify_stagec_design_package()
     stagec_scope = stagec_receipt.get("scope")
+    runtime_activation_tranche_scope = stagec_receipt.get(
+        "runtime_activation_tranche_scope"
+    )
     stagec_scope_lower = stagec_scope.lower() if isinstance(stagec_scope, str) else ""
     require(
         stagec_receipt
         == {
             "package": f"{STAGEC_PACKAGE_REL}/README.md",
-            "status": "DESIGN ONLY / EXECUTION UNAUTHORIZED / EXPERIMENT NOT_STARTED",
+            "status": "DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED",
             "execution_authorized": False,
             "model_runs": 0,
             "provider_calls": 0,
@@ -8429,14 +9357,79 @@ def verify_review_matrix(
                 "CANDIDATE_STRUCTURAL_REPLAY_COMPLETE_NON_AUTHORITY / EXTERNAL "
                 "TRUST NOT_ESTABLISHED / RUNTIME AUTHORIZATION NOT_GRANTED_BY_IMPORTER"
             ),
-            "expanded_harness_configured_nodes": 537,
-            "expanded_harness_configured_node_ids_sha256": REQUIRED_TEST_SUITES[
-                "Harness v2 kernel and history"
-            ]["expected_test_ids_sha256"].lower(),
+            "runtime_activation_core_focused_tests": STAGEC_RUNTIME_CORE_FOCUSED_NODES,
+            "runtime_activation_core_focused_node_ids_sha256": (
+                STAGEC_RUNTIME_CORE_FOCUSED_EXECUTED_NODE_IDS_SHA256.lower()
+            ),
+            "runtime_activation_core_focused_execution_status": (
+                "AUTHORITATIVE SAME-PROCESS 28 / 28 PASS / 0 WARNINGS / 922.45 "
+                "SECONDS / STRUCTURE_ONLY / NON_AUTHORITY"
+            ),
+            "worker_runtime_activation_focused_tests": 95,
+            "worker_runtime_activation_focused_node_ids_sha256": (
+                REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                    "Stage C worker runtime activation"
+                ]["expected_test_ids_sha256"].lower()
+            ),
+            "worker_structural_capture_focused_tests": 139,
+            "worker_structural_capture_focused_node_ids_sha256": (
+                REQUIRED_WORKER_SUBSUITE_DIGESTS["Stage C structural capture"][
+                    "expected_test_ids_sha256"
+                ].lower()
+            ),
+            "qwen_runtime_activation_focused_tests": 27,
+            "qwen_runtime_activation_focused_node_ids_sha256": (
+                REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                    "Stage C Qwen runtime activation guards"
+                ]["expected_test_ids_sha256"].lower()
+            ),
+            "qwen_runtime_activation_execution_status": CURRENT_QWEN_SUBSET_STATUS,
+            "worker_runtime_activation_capture_union_tests": 234,
+            "worker_runtime_activation_capture_union_node_ids_sha256": (
+                REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                    "Stage C worker runtime activation and structural capture"
+                ]["expected_test_ids_sha256"].lower()
+            ),
+            "worker_runtime_activation_unique_schemas_added": 4,
+            "expanded_unique_kernel_schemas": 49,
+            "expanded_unique_kernel_media_types": 44,
+            "historical_authoritative_harness_nodes": (
+                HISTORICAL_AUTHORITATIVE_HARNESS_NODES
+            ),
+            "historical_authoritative_harness_node_ids_sha256": (
+                HISTORICAL_AUTHORITATIVE_HARNESS_NODE_IDS_SHA256.lower()
+            ),
+            "historical_authoritative_harness_status": (
+                "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS / 531 "
+                "ALL-PHASE PASS PLUS SIX EXACT SETUP SKIPS / STRUCTURE_ONLY / "
+                "NON_AUTHORITY"
+            ),
+            "expanded_harness_configured_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+            "expanded_harness_configured_node_ids_sha256": (
+                EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256.lower()
+            ),
             "expanded_harness_authoritative_execution_status": (
-                "AUTHORITATIVE SAME-PROCESS PASS / 537 COLLECTED, STARTED, AND "
-                "FINISHED / 531 ALL-PHASE PASS PLUS SIX EXACT SETUP SKIPS / "
+                CURRENT_AUTHORITATIVE_REPLAY_STATUS
+            ),
+            "historical_authoritative_worker_nodes": (
+                HISTORICAL_AUTHORITATIVE_WORKER_NODES
+            ),
+            "historical_authoritative_worker_node_ids_sha256": (
+                HISTORICAL_AUTHORITATIVE_WORKER_NODE_IDS_SHA256.lower()
+            ),
+            "historical_authoritative_worker_status": (
+                "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS / "
                 "STRUCTURE_ONLY / NON_AUTHORITY"
+            ),
+            "expanded_worker_configured_nodes": EXPANDED_CONFIGURED_WORKER_NODES,
+            "expanded_worker_configured_node_ids_sha256": (
+                EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256.lower()
+            ),
+            "expanded_worker_authoritative_execution_status": (
+                CURRENT_AUTHORITATIVE_REPLAY_STATUS
+            ),
+            "expanded_configured_test_suite_total_nodes": (
+                EXPANDED_CONFIGURED_TEST_SUITE_NODE_TOTAL
             ),
             "historical_prerequisite_intake_harness_nodes": 508,
             "historical_prerequisite_intake_harness_node_ids_sha256": (
@@ -8448,9 +9441,24 @@ def verify_review_matrix(
             ),
             "worker_archive_admission_focused_tests": 18,
             "new_full_suite_authoritative_replay_status": (
-                "AUTHORITATIVE 537-NODE SAME-PROCESS PASS / HISTORICAL 508- AND "
-                "489-NODE RECEIPTS PRESERVED / STRUCTURE_ONLY / NON_AUTHORITY"
+                "AUTHORITATIVE SAME-PROCESS HARNESS 565 AND WORKER 719 PASS / "
+                "HISTORICAL 537-, "
+                "508-, AND 489-NODE HARNESS AND 594-NODE WORKER RECEIPTS "
+                "PRESERVED / STRUCTURE_ONLY / NON_AUTHORITY"
             ),
+            "current_authoritative_harness_full_suite_receipt": {
+                **{
+                    key: value.lower() if isinstance(value, str) and "sha256" in key else value
+                    for key, value in CURRENT_AUTHORITATIVE_HARNESS_RECEIPT.items()
+                },
+                "setup_skipped_nodeids": REQUIRED_TEST_SUITES[
+                    "Harness v2 kernel and history"
+                ]["expected_setup_skipped_nodeids"],
+            },
+            "current_authoritative_worker_full_suite_receipt": {
+                key: value.lower() if isinstance(value, str) and "sha256" in key else value
+                for key, value in CURRENT_AUTHORITATIVE_WORKER_RECEIPT.items()
+            },
             "packaged_mirror_files": PACKAGED_HARNESS_V2_FILE_COUNT,
             "packaged_mirror_bytes": PACKAGED_HARNESS_V2_TOTAL_BYTES,
             "package_exported_names": PACKAGED_HARNESS_V2_EXPORT_COUNT,
@@ -8464,8 +9472,34 @@ def verify_review_matrix(
             ),
             "capability_claim_effect": "NONE",
             "independently_reproduced": False,
+            "runtime_activation_tranche_scope": runtime_activation_tranche_scope,
             "scope": stagec_scope,
         }
+        and isinstance(runtime_activation_tranche_scope, str)
+        and "44-export canonical core gate" in runtime_activation_tranche_scope
+        and "four new unique worker schemas" in runtime_activation_tranche_scope
+        and "without adding a unique media type" in runtime_activation_tranche_scope
+        and "core 28" in runtime_activation_tranche_scope
+        and "worker gate 95" in runtime_activation_tranche_scope
+        and "capture 139" in runtime_activation_tranche_scope
+        and "gate-plus-capture 234" in runtime_activation_tranche_scope
+        and "Qwen 27" in runtime_activation_tranche_scope
+        and "28/28 PASS" in runtime_activation_tranche_scope
+        and "zero warnings in 922.45 seconds" in runtime_activation_tranche_scope
+        and "Qwen 27 passed as an exact executed subset"
+        in runtime_activation_tranche_scope
+        and "Historical authoritative receipts remain Harness 537 and worker 594"
+        in runtime_activation_tranche_scope
+        and "Current authoritative same-process suites are Harness 565 and worker 719"
+        in runtime_activation_tranche_scope
+        and "1772 configured nodes" in runtime_activation_tranche_scope
+        and "three legitimate Qwen generic-route guard nodes"
+        in runtime_activation_tranche_scope
+        and "22 byte-mirrored Python files" in runtime_activation_tranche_scope
+        and "1420002 bytes" in runtime_activation_tranche_scope
+        and "469 unique exports" in runtime_activation_tranche_scope
+        and "DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED"
+        in runtime_activation_tranche_scope
         and isinstance(stagec_scope, str)
         and "PROSPECTIVE DESIGN-ONLY CARRIER" in stagec_scope
         and "NOT A RUN AUTHORIZATION" in stagec_scope
@@ -8482,9 +9516,9 @@ def verify_review_matrix(
         and "160-group/480-case diagnostic Study plan" in stagec_scope
         and "create-only host-local seven-member archive" in stagec_scope
         and "acyclic completed-row post-terminal outcome carrier" in stagec_scope
-        and "21 byte-identical Python files" in stagec_scope
-        and "1,283,080 bytes" in stagec_scope
-        and "425 unique public exports" in stagec_scope
+        and "22 byte-identical Python files" in stagec_scope
+        and "1,420,002 bytes" in stagec_scope
+        and "469 unique public exports" in stagec_scope
         and PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower() in stagec_scope
         and "IN_MEMORY / NOT_DURABLY_RETAINED" in stagec_scope
         and "index and four raw arrays" in stagec_scope
@@ -8536,7 +9570,7 @@ def verify_review_matrix(
         and "zero warnings, collection or internal errors, or deselections"
         in stagec_scope
         and "historical receipt digests bind ordinary outcomes" in stagec_scope
-        and "current authoritative 537-node Harness replay" in stagec_scope
+        and "preserved historical authoritative 537-node Harness replay" in stagec_scope
         and "1,680.3 seconds" in stagec_scope
         and "531 had exact all-phase PASS" in stagec_scope
         and "1,605 ordinary reports and 163 passing subtests" in stagec_scope
@@ -8561,12 +9595,16 @@ def verify_review_matrix(
             "status",
             "same_process_timeout_seconds",
             "timeout_claim_effect",
-            "authoritative_harness_full_suite",
-            "authoritative_worker_full_suite",
+            "historical_authoritative_harness_full_suite",
+            "historical_authoritative_worker_full_suite",
             "historical_prompt_context_harness_receipt",
             "historical_prerequisite_intake_harness_receipt",
-            "authoritative_external_intake_harness_receipt",
+            "historical_authoritative_external_intake_harness_receipt",
+            "expanded_configured_full_suites",
+            "current_authoritative_harness_full_suite",
+            "current_authoritative_worker_full_suite",
             "focused_harness",
+            "runtime_activation_worker_and_generic",
             "worker_archive_admission",
             "packaged_kernel",
             "model_runs",
@@ -8574,22 +9612,22 @@ def verify_review_matrix(
             "runpod_used",
             "known_spend_usd",
             "independently_reproduced",
+            "runtime_activation_scope",
             "scope",
         },
         label="review-matrix diagnostic runtime receipt",
     )
-    worker_suite = REQUIRED_TEST_SUITES["Live trace worker complete"]
     require(
         diagnostic_receipt.get("status")
         == (
-            "STRUCTURE_ONLY / NON_AUTHORITY / AUTHORITATIVE HARNESS 537 / "
-            "HISTORICAL 508 AND 489 RECEIPTS PRESERVED"
+            "STRUCTURE_ONLY / NON_AUTHORITY / CURRENT AUTHORITATIVE HARNESS 565 "
+            "AND WORKER 719 PASS / HISTORICAL HARNESS 537 AND WORKER 594 PRESERVED"
         )
         and diagnostic_receipt.get("same_process_timeout_seconds")
         == SAME_RUN_PYTEST_TIMEOUT_SECONDS
         and diagnostic_receipt.get("timeout_claim_effect")
         == "BOUNDED PROCESS CEILING ONLY / NO PERFORMANCE AUTHORITY"
-        and diagnostic_receipt.get("authoritative_harness_full_suite")
+        and diagnostic_receipt.get("historical_authoritative_harness_full_suite")
         == {
             "collected_nodes": 437,
             "started_nodes": 437,
@@ -8617,27 +9655,30 @@ def verify_review_matrix(
                 "scipy": "1.17.1",
             },
             "receipt_status": (
-                "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+                "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
                 "SKIPS ARE MISMATCH EVIDENCE, NOT PASS"
             ),
         }
-        and diagnostic_receipt.get("authoritative_worker_full_suite")
+        and diagnostic_receipt.get("historical_authoritative_worker_full_suite")
         == {
-            "collected_nodes": worker_suite["expected_tests"],
-            "started_nodes": worker_suite["expected_tests"],
-            "finished_nodes": worker_suite["expected_tests"],
-            "all_phase_pass_nodes": worker_suite["expected_tests"],
+            "collected_nodes": HISTORICAL_AUTHORITATIVE_WORKER_NODES,
+            "started_nodes": HISTORICAL_AUTHORITATIVE_WORKER_NODES,
+            "finished_nodes": HISTORICAL_AUTHORITATIVE_WORKER_NODES,
+            "all_phase_pass_nodes": HISTORICAL_AUTHORITATIVE_WORKER_NODES,
             "setup_skipped_nodes": 0,
             "ordinary_reports": 1782,
-            "passed_subtests": worker_suite["expected_subtests"],
+            "passed_subtests": 0,
             "warning_count": 0,
             "errors": 0,
             "deselections": 0,
             "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
             "pytest_exit_status": 0,
-            "node_ids_sha256": worker_suite["expected_test_ids_sha256"].lower(),
+            "node_ids_sha256": (
+                HISTORICAL_AUTHORITATIVE_WORKER_NODE_IDS_SHA256.lower()
+            ),
             "receipt_status": (
-                "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+                "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS / "
+                "STRUCTURE_ONLY / NON_AUTHORITY"
             ),
         }
         and diagnostic_receipt.get("historical_prompt_context_harness_receipt")
@@ -8710,7 +9751,9 @@ def verify_review_matrix(
                 "STRUCTURE_ONLY / NON_AUTHORITY"
             ),
         }
-        and diagnostic_receipt.get("authoritative_external_intake_harness_receipt")
+        and diagnostic_receipt.get(
+            "historical_authoritative_external_intake_harness_receipt"
+        )
         == {
             "collected_nodes": 537,
             "started_nodes": 537,
@@ -8731,9 +9774,9 @@ def verify_review_matrix(
             "integrated_manifest_artifacts": 637,
             "syntax_checked_python_artifacts": 409,
             "executable_shadow_paths_scanned": 2255,
-            "node_ids_sha256": REQUIRED_TEST_SUITES[
-                "Harness v2 kernel and history"
-            ]["expected_test_ids_sha256"].lower(),
+            "node_ids_sha256": (
+                HISTORICAL_AUTHORITATIVE_HARNESS_NODE_IDS_SHA256.lower()
+            ),
             "ordinary_outcomes_sha256": (
                 "423154c5c83df299f844e87d289cbb98e331b302ce1aba8aea7075a12b1c0eff"
             ),
@@ -8753,17 +9796,54 @@ def verify_review_matrix(
                 "Harness v2 kernel and history"
             ]["expected_setup_skipped_nodeids"],
             "receipt_status": (
-                "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
-                "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / "
-                "NON_AUTHORITY"
+                "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS WITH SIX "
+                "EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / "
+                "STRUCTURE_ONLY / NON_AUTHORITY"
             ),
         },
         "review-matrix authoritative diagnostic full-suite receipt drifted",
+    )
+    require(
+        diagnostic_receipt.get("expanded_configured_full_suites")
+        == {
+            "harness_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+            "harness_node_ids_sha256": (
+                EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256.lower()
+            ),
+            "worker_nodes": EXPANDED_CONFIGURED_WORKER_NODES,
+            "worker_node_ids_sha256": (
+                EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256.lower()
+            ),
+            "complete_verifier_suite_map_nodes": EXPANDED_CONFIGURED_TEST_SUITE_NODE_TOTAL,
+            "receipt_status": CURRENT_AUTHORITATIVE_FULL_SUITE_STATUS,
+        },
+        "review-matrix expanded configured suite identity or receipt drifted",
+    )
+    current_harness_receipt = {
+        **{
+            key: value.lower() if isinstance(value, str) and "sha256" in key else value
+            for key, value in CURRENT_AUTHORITATIVE_HARNESS_RECEIPT.items()
+        },
+        "setup_skipped_nodeids": REQUIRED_TEST_SUITES[
+            "Harness v2 kernel and history"
+        ]["expected_setup_skipped_nodeids"],
+    }
+    current_worker_receipt = {
+        key: value.lower() if isinstance(value, str) and "sha256" in key else value
+        for key, value in CURRENT_AUTHORITATIVE_WORKER_RECEIPT.items()
+    }
+    require(
+        diagnostic_receipt.get("current_authoritative_harness_full_suite")
+        == current_harness_receipt
+        and diagnostic_receipt.get("current_authoritative_worker_full_suite")
+        == current_worker_receipt,
+        "review-matrix current authoritative Harness/worker receipts drifted",
     )
     focused_harness = diagnostic_receipt.get("focused_harness")
     require_exact_keys(
         focused_harness,
         {
+            "runtime_activation_core",
             "execution_v2",
             "per_attempt_lifecycle",
             "phase_coordinator",
@@ -8782,7 +9862,33 @@ def verify_review_matrix(
         label="review-matrix diagnostic focused Harness receipt",
     )
     require(
-        focused_harness.get("execution_v2")
+        focused_harness.get("runtime_activation_core")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_stagec_runtime_activation.py"
+            ][0].lower(),
+            "source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_stagec_runtime_activation.py"
+            ][1],
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_stagec_runtime_activation.py"
+            ][0].lower(),
+            "test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_stagec_runtime_activation.py"
+            ][1],
+            "public_exports": len(STAGEC_RUNTIME_ACTIVATION_EXPORTS),
+            "collected_nodes": STAGEC_RUNTIME_CORE_FOCUSED_NODES,
+            "node_ids_sha256": (
+                STAGEC_RUNTIME_CORE_FOCUSED_EXECUTED_NODE_IDS_SHA256.lower()
+            ),
+            "warning_count": STAGEC_RUNTIME_CORE_FOCUSED_WARNING_COUNT,
+            "elapsed_seconds": STAGEC_RUNTIME_CORE_FOCUSED_ELAPSED_SECONDS,
+            "focused_receipt": (
+                "AUTHORITATIVE SAME-PROCESS 28 / 28 PASS / STRUCTURE_ONLY / "
+                "NON_AUTHORITY"
+            ),
+        }
+        and focused_harness.get("execution_v2")
         == {
             "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
                 "src/cas_harness_v2/diagnostic_execution_protocol.py"
@@ -8995,6 +10101,185 @@ def verify_review_matrix(
         },
         "review-matrix diagnostic focused Harness receipts drifted",
     )
+    runtime_worker = diagnostic_receipt.get("runtime_activation_worker_and_generic")
+    require(
+        runtime_worker
+        == {
+            "worker_activation": {
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/stagec_runtime_activation.py"
+                    )
+                ][0].lower(),
+                "source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/stagec_runtime_activation.py"
+                    )
+                ][1],
+                "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "tests/test_stagec_runtime_activation.py"
+                    )
+                ][0].lower(),
+                "test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "tests/test_stagec_runtime_activation.py"
+                    )
+                ][1],
+                "collected_nodes": 95,
+                "node_ids_sha256": REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                    "Stage C worker runtime activation"
+                ]["expected_test_ids_sha256"].lower(),
+                "focused_receipt": "95 / 95 PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+            },
+            "worker_capture": {
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/stagec_capture.py"
+                    )
+                ][0].lower(),
+                "source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/stagec_capture.py"
+                    )
+                ][1],
+                "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "tests/test_stagec_capture.py"
+                    )
+                ][0].lower(),
+                "test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "tests/test_stagec_capture.py"
+                    )
+                ][1],
+                "collected_nodes": 139,
+                "node_ids_sha256": REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                    "Stage C structural capture"
+                ]["expected_test_ids_sha256"].lower(),
+                "focused_receipt": "139 / 139 PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+            },
+            "worker_activation_capture_union": {
+                "collected_nodes": 234,
+                "node_ids_sha256": REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                    "Stage C worker runtime activation and structural capture"
+                ]["expected_test_ids_sha256"].lower(),
+                "focused_receipt": "234 / 234 PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+            },
+            "generic_runtime_sources": {
+                "model_loader_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/model_loader.py"
+                    )
+                ][0].lower(),
+                "model_loader_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/model_loader.py"
+                    )
+                ][1],
+                "event_stream_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/event_stream.py"
+                    )
+                ][0].lower(),
+                "event_stream_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/event_stream.py"
+                    )
+                ][1],
+                "pythia_runner_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/pythia_runner.py"
+                    )
+                ][0].lower(),
+                "pythia_runner_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/pythia_runner.py"
+                    )
+                ][1],
+                "ablation_probe_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/ablation_probe.py"
+                    )
+                ][0].lower(),
+                "ablation_probe_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/ablation_probe.py"
+                    )
+                ][1],
+                "qwen_test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "tests/test_qwen_probe_adapter.py"
+                    )
+                ][0].lower(),
+                "qwen_test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "tests/test_qwen_probe_adapter.py"
+                    )
+                ][1],
+                "real_mode_dispatch_test_source_sha256": (
+                    DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                        (
+                            "noetic-compass-scaffold/noetic-compass/"
+                            "live-trace-worker/tests/test_real_mode_dispatch.py"
+                        )
+                    ][0].lower()
+                ),
+                "real_mode_dispatch_test_source_bytes": (
+                    DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                        (
+                            "noetic-compass-scaffold/noetic-compass/"
+                            "live-trace-worker/tests/test_real_mode_dispatch.py"
+                        )
+                    ][1]
+                ),
+                "qwen_collected_nodes": 27,
+                "qwen_node_ids_sha256": REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                    "Stage C Qwen runtime activation guards"
+                ]["expected_test_ids_sha256"].lower(),
+                "focused_receipt": CURRENT_QWEN_SUBSET_STATUS,
+            },
+            "schema_inventory": {
+                "unique_schemas": 49,
+                "unique_media_types": 44,
+                "new_worker_schemas": [
+                    "cas_harness.stagec.worker_runtime_activation_envelope.v1",
+                    (
+                        "cas_harness.stagec."
+                        "worker_runtime_activation_ledger_observation.v1"
+                    ),
+                    (
+                        "cas_harness.stagec."
+                        "worker_runtime_activation_terminal_observation.v1"
+                    ),
+                    (
+                        "cas_harness.stagec."
+                        "worker_runtime_activation_ambiguous_terminal_observation.v1"
+                    ),
+                ],
+                "new_unique_media_types": 0,
+            },
+        },
+        "review-matrix worker/generic runtime-activation receipt drifted",
+    )
     worker_admission = diagnostic_receipt.get("worker_archive_admission")
     require(
         worker_admission
@@ -9034,6 +10319,18 @@ def verify_review_matrix(
             "packaging_allowlist_source_sha256": (
                 PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256.lower()
             ),
+            "runtime_activation_mirror_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                (
+                    "noetic-compass-scaffold/noetic-compass/cas_harness_v2/"
+                    "diagnostic_stagec_runtime_activation.py"
+                )
+            ][0].lower(),
+            "runtime_activation_mirror_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                (
+                    "noetic-compass-scaffold/noetic-compass/cas_harness_v2/"
+                    "diagnostic_stagec_runtime_activation.py"
+                )
+            ][1],
             "focused_mirror_tests": "13 / 13 PASS",
         }
         and diagnostic_receipt.get("model_runs") == 0
@@ -9042,6 +10339,31 @@ def verify_review_matrix(
         and diagnostic_receipt.get("known_spend_usd") == "0.00"
         and diagnostic_receipt.get("independently_reproduced") is False,
         "review-matrix diagnostic packaging/non-authority receipt drifted",
+    )
+    runtime_activation_scope = diagnostic_receipt.get("runtime_activation_scope")
+    require(
+        isinstance(runtime_activation_scope, str)
+        and "STRUCTURE_ONLY / NON_AUTHORITY" in runtime_activation_scope
+        and "canonical core 28" in runtime_activation_scope
+        and "worker gate 95" in runtime_activation_scope
+        and "capture 139" in runtime_activation_scope
+        and "gate-plus-capture 234" in runtime_activation_scope
+        and "Qwen 27" in runtime_activation_scope
+        and "28/28 PASS" in runtime_activation_scope
+        and "zero warnings in 922.45 seconds" in runtime_activation_scope
+        and "Qwen 27 passed as an exact executed subset" in runtime_activation_scope
+        and "49" in runtime_activation_scope
+        and "unique media remains 44" in runtime_activation_scope
+        and "Harness 537 and worker 594" in runtime_activation_scope
+        and "Current authoritative same-process suites are Harness 565 and worker 719"
+        in runtime_activation_scope
+        and "1772" in runtime_activation_scope
+        and "3600 seconds" in runtime_activation_scope
+        and "bounded process ceiling" in runtime_activation_scope
+        and "never performance authority" in runtime_activation_scope
+        and "No model, provider, live trusted backend" in runtime_activation_scope
+        and "Gate 5 authority" in runtime_activation_scope,
+        "review-matrix runtime-activation scope drifted or promoted authority",
     )
     diagnostic_scope = diagnostic_receipt.get("scope")
     require(
@@ -9054,7 +10376,8 @@ def verify_review_matrix(
         and "1,518 ordinary reports" in diagnostic_scope
         and "historical receipt digests bind ordinary outcomes"
         in diagnostic_scope
-        and "current authoritative external-intake Harness receipt" in diagnostic_scope
+        and "preserved historical authoritative external-intake Harness receipt"
+        in diagnostic_scope
         and "1,680.3 seconds" in diagnostic_scope
         and "531 had exact all-phase PASS" in diagnostic_scope
         and "1,605 ordinary reports and 163 passing subtests" in diagnostic_scope
@@ -9130,16 +10453,48 @@ def verify_review_matrix(
             "current_complete_ordinary_phase_passes",
             "current_complete_passed_subtests",
             "complete_test_ids_sha256",
+            "current_complete_ordinary_outcomes_sha256",
+            "current_complete_subtest_outcomes_sha256",
+            "current_complete_locked_import_origins_sha256",
+            "current_complete_pre_test_loaded_code_sha256",
+            "current_complete_loaded_code_sha256",
+            "current_complete_loaded_code_digest_rule",
+            "current_complete_elapsed_seconds",
+            "current_complete_setup_skipped_tests",
+            "current_complete_process_exit_status",
+            "current_complete_pytest_exit_status",
             "current_complete_collection_errors",
             "current_complete_internal_errors",
             "current_complete_warning_count",
             "current_complete_deselected_tests",
             "current_complete_pycache_prefix_empty_after_run",
+            "historical_runtime_complete_passed",
+            "historical_runtime_complete_failed",
+            "historical_runtime_complete_total",
+            "historical_runtime_complete_ordinary_phase_passes",
+            "historical_runtime_complete_test_ids_sha256",
+            "historical_runtime_complete_status",
+            "expanded_runtime_configured_total",
+            "expanded_runtime_configured_test_ids_sha256",
+            "expanded_runtime_authoritative_execution_status",
+            "stagec_runtime_activation_focused_passed",
+            "stagec_runtime_activation_focused_failed",
+            "stagec_runtime_activation_focused_total",
+            "stagec_runtime_activation_focused_passed_subtests",
+            "stagec_runtime_activation_focused_test_ids_sha256",
             "stagec_capture_focused_passed",
             "stagec_capture_focused_failed",
             "stagec_capture_focused_total",
             "stagec_capture_focused_passed_subtests",
             "stagec_capture_focused_test_ids_sha256",
+            "stagec_runtime_activation_capture_union_passed",
+            "stagec_runtime_activation_capture_union_failed",
+            "stagec_runtime_activation_capture_union_total",
+            "stagec_runtime_activation_capture_union_passed_subtests",
+            "stagec_runtime_activation_capture_union_test_ids_sha256",
+            "stagec_qwen_runtime_activation_configured_total",
+            "stagec_qwen_runtime_activation_configured_test_ids_sha256",
+            "stagec_qwen_runtime_activation_execution_status",
             "stagec_archive_focused_passed",
             "stagec_archive_focused_failed",
             "stagec_archive_focused_total",
@@ -9151,9 +10506,12 @@ def verify_review_matrix(
             "test_id_digest_kind",
             "node_id_digest_rule",
             "current_candidate_green",
+            "expanded_candidate_green",
             "receipt_freeze_status",
             "independent_freeze_confirmed",
             "current_complete_green_receipt",
+            "expanded_complete_green_receipt",
+            "runtime_activation_scope",
             "scope",
         },
         label="review matrix worker receipt",
@@ -9165,15 +10523,32 @@ def verify_review_matrix(
         "weights_identity_complete_tests": 257,
         "latest_numeric_redteam_passed": 32,
         "latest_numeric_redteam_failed": 0,
-        "current_complete_passed": 576,
+        "current_complete_passed": 719,
         "current_complete_failed": 0,
-        "current_complete_total": 576,
-        "current_complete_ordinary_phase_passes": 1728,
+        "current_complete_total": 719,
+        "current_complete_ordinary_phase_passes": 2157,
         "current_complete_passed_subtests": 0,
-        "stagec_capture_focused_passed": 119,
+        "current_complete_setup_skipped_tests": 0,
+        "current_complete_process_exit_status": 0,
+        "current_complete_pytest_exit_status": 0,
+        "historical_runtime_complete_passed": HISTORICAL_AUTHORITATIVE_WORKER_NODES,
+        "historical_runtime_complete_failed": 0,
+        "historical_runtime_complete_total": HISTORICAL_AUTHORITATIVE_WORKER_NODES,
+        "historical_runtime_complete_ordinary_phase_passes": 1782,
+        "expanded_runtime_configured_total": EXPANDED_CONFIGURED_WORKER_NODES,
+        "stagec_runtime_activation_focused_passed": 95,
+        "stagec_runtime_activation_focused_failed": 0,
+        "stagec_runtime_activation_focused_total": 95,
+        "stagec_runtime_activation_focused_passed_subtests": 0,
+        "stagec_capture_focused_passed": 139,
         "stagec_capture_focused_failed": 0,
-        "stagec_capture_focused_total": 119,
+        "stagec_capture_focused_total": 139,
         "stagec_capture_focused_passed_subtests": 0,
+        "stagec_runtime_activation_capture_union_passed": 234,
+        "stagec_runtime_activation_capture_union_failed": 0,
+        "stagec_runtime_activation_capture_union_total": 234,
+        "stagec_runtime_activation_capture_union_passed_subtests": 0,
+        "stagec_qwen_runtime_activation_configured_total": 27,
         "stagec_archive_focused_passed": 32,
         "stagec_archive_focused_failed": 0,
         "stagec_archive_focused_total": 32,
@@ -9193,6 +10568,7 @@ def verify_review_matrix(
         worker_receipt.get("test_id_digest_kind")
         == "SAME_PROCESS_EXECUTED_NODE_ID_SET_SHA256 / LOCAL_UNATTESTED_HOST_REGRESSION"
         and worker_receipt.get("current_candidate_green") is True
+        and worker_receipt.get("expanded_candidate_green") is True
         and worker_receipt.get("current_complete_pycache_prefix_empty_after_run") is True,
         "review-matrix worker receipt kind or bounded-green status drifted",
     )
@@ -9202,11 +10578,47 @@ def verify_review_matrix(
             "expected_test_ids_sha256"
         ].lower()
         and worker_receipt.get("complete_test_ids_sha256")
-        == "f454c598e8e38af1b6c813ba124eb943e155eb3b927facb28f4b47c758804c9f"
+        == EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256.lower()
+        and worker_receipt.get("current_complete_ordinary_outcomes_sha256")
+        == CURRENT_AUTHORITATIVE_WORKER_RECEIPT["ordinary_outcomes_sha256"].lower()
+        and worker_receipt.get("current_complete_subtest_outcomes_sha256")
+        == CURRENT_AUTHORITATIVE_WORKER_RECEIPT["subtest_outcomes_sha256"].lower()
+        and worker_receipt.get("current_complete_locked_import_origins_sha256")
+        == CURRENT_AUTHORITATIVE_WORKER_RECEIPT["locked_import_origins_sha256"].lower()
+        and worker_receipt.get("current_complete_pre_test_loaded_code_sha256")
+        == CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+            "pre_test_loaded_code_sha256"
+        ].lower()
+        and worker_receipt.get("current_complete_loaded_code_sha256")
+        == CURRENT_AUTHORITATIVE_WORKER_RECEIPT["loaded_code_sha256"].lower()
+        and worker_receipt.get("current_complete_loaded_code_digest_rule")
+        == CURRENT_AUTHORITATIVE_WORKER_RECEIPT["loaded_code_digest_rule"]
+        and worker_receipt.get("current_complete_elapsed_seconds")
+        == CURRENT_AUTHORITATIVE_WORKER_RECEIPT["elapsed_seconds"]
+        and worker_receipt.get("historical_runtime_complete_test_ids_sha256")
+        == HISTORICAL_AUTHORITATIVE_WORKER_NODE_IDS_SHA256.lower()
+        and worker_receipt.get("expanded_runtime_configured_test_ids_sha256")
+        == EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256.lower()
+        and worker_receipt.get("stagec_runtime_activation_focused_test_ids_sha256")
+        == REQUIRED_WORKER_SUBSUITE_DIGESTS[
+            "Stage C worker runtime activation"
+        ]["expected_test_ids_sha256"].lower()
         and worker_receipt.get("stagec_capture_focused_test_ids_sha256")
         == REQUIRED_WORKER_SUBSUITE_DIGESTS["Stage C structural capture"][
             "expected_test_ids_sha256"
         ].lower()
+        and worker_receipt.get(
+            "stagec_runtime_activation_capture_union_test_ids_sha256"
+        )
+        == REQUIRED_WORKER_SUBSUITE_DIGESTS[
+            "Stage C worker runtime activation and structural capture"
+        ]["expected_test_ids_sha256"].lower()
+        and worker_receipt.get(
+            "stagec_qwen_runtime_activation_configured_test_ids_sha256"
+        )
+        == REQUIRED_WORKER_SUBSUITE_DIGESTS[
+            "Stage C Qwen runtime activation guards"
+        ]["expected_test_ids_sha256"].lower()
         and worker_receipt.get("stagec_archive_focused_test_ids_sha256")
         == REQUIRED_WORKER_SUBSUITE_DIGESTS["Stage C local capture archive"][
             "expected_test_ids_sha256"
@@ -9217,8 +10629,41 @@ def verify_review_matrix(
         worker_receipt.get("receipt_freeze_status")
         == "LOCAL_UNATTESTED_HOST_REGRESSION / NOT INDEPENDENTLY REPRODUCED"
         and worker_receipt.get("independent_freeze_confirmed") is False
-        and worker_receipt.get("current_complete_green_receipt") is True,
+        and worker_receipt.get("current_complete_green_receipt") is True
+        and worker_receipt.get("expanded_complete_green_receipt") is True
+        and worker_receipt.get("historical_runtime_complete_status")
+        == (
+            "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS / "
+            "STRUCTURE_ONLY / NON_AUTHORITY"
+        )
+        and worker_receipt.get("expanded_runtime_authoritative_execution_status")
+        == CURRENT_AUTHORITATIVE_REPLAY_STATUS
+        and worker_receipt.get("stagec_qwen_runtime_activation_execution_status")
+        == CURRENT_QWEN_SUBSET_STATUS,
         "review matrix promotes the locally green successor to independent reproduction",
+    )
+    worker_runtime_scope = worker_receipt.get("runtime_activation_scope")
+    require(
+        isinstance(worker_runtime_scope, str)
+        and "exact-envelope and canonical logical-row single-use gate"
+        in worker_runtime_scope
+        and "durable claim and ambiguity-terminal observations"
+        in worker_runtime_scope
+        and "detached capture request/authorization/artifact identities"
+        in worker_runtime_scope
+        and "gate 95" in worker_runtime_scope
+        and "capture 139" in worker_runtime_scope
+        and "234-node union" in worker_runtime_scope
+        and "Qwen 27" in worker_runtime_scope
+        and "Qwen 27 passed as an exact executed subset" in worker_runtime_scope
+        and "594-node receipt remains historical" in worker_runtime_scope
+        and "current authoritative 719-node worker suite passed" in worker_runtime_scope
+        and EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256.lower()
+        in worker_runtime_scope
+        and "STRUCTURE_ONLY / NON_AUTHORITY" in worker_runtime_scope
+        and "no trusted backend" in worker_runtime_scope
+        and "Gate 5 closure" in worker_runtime_scope,
+        "review-matrix expanded worker runtime scope drifted or promoted authority",
     )
     worker_scope = worker_receipt.get("scope")
     require(
@@ -9231,7 +10676,7 @@ def verify_review_matrix(
         and "f454c598e8e38af1b6c813ba124eb943e155eb3b927facb28f4b47c758804c9f"
         in worker_scope
         and "last-committed b96c2c12 receipt" in worker_scope
-        and "separate new diagnostic-runtime receipt" in worker_scope
+        and "preserved historical diagnostic-runtime receipt" in worker_scope
         and "passed 594/594 nodes" in worker_scope
         and "1,782 ordinary reports" in worker_scope
         and "b822d8efc57c45712fd960bc14e2fb271fdd72c91cf29d665ebab7ed27ae0d9b"
@@ -9924,16 +11369,18 @@ def verify_adversarial_review() -> None:
         "prospective execution ceiling is prefill-only",
         "only after activation",
         "C-Cal and C-Eval require separate activation receipts",
-        "21 byte-mirrored files",
-        "425 unique exports",
-        "613A3E15748DC8F8CA49BB373BF3087F980E6A5762E709BC0E8ABFEB81A2957A",
+        "legacy archive and archive-admission tests that reuse the capture helper",
+        "Production registration remains empty and still fails",
+        "22 byte-mirrored files",
+        "469 unique exports",
+        "1561D0707AEB12ED720A1F70670494006B186628434CB6390A4DEEFBA5040D07",
         "external handoff is now an executable read-only library plus isolated CLI",
         "all 16 roles",
         "19 library plus 10 CLI nodes",
         "29/29 PASS in 47.72",
         "A2D250135113EDD038C37040C94E11EE6E8B6208E14D53270F318FF48F06AD80",
-        "current 537-node authoritative full-Harness receipt",
-        "started, and finished 537 nodes in 1,680.3 seconds",
+        "last completed pre-runtime locked same-process Harness receipt",
+        "finished 537 nodes in 1,680.3",
         "Exactly 531 had exact",
         "1,605 ordinary reports/outcomes and 163 passing",
         "each exited 0",
@@ -9945,7 +11392,7 @@ def verify_adversarial_review() -> None:
         "C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473",
         "integrated verifier PASS covered 637 artifacts, 409 syntax-checked Python",
         "2,255 executable-shadow paths",
-        "508-node checkpoint remains historical evidence",
+        "508-node checkpoint remains earlier historical evidence",
         "grant or consume runtime",
         "Stage C prerequisite-intake adversarial disposition",
         "serialized candidate bodies are not an external trust root",
@@ -9953,7 +11400,7 @@ def verify_adversarial_review() -> None:
         "AD46AA964240C98D5C12070872C60B26E2310B35A88DD6FA50F68C10C62F09B3",
         "56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3",
         "3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863",
-        "current authoritative locked same-process Harness replay collected",
+        "preserved historical pre-runtime locked same-process Harness receipt",
         "8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2",
         "newer diagnostic runtime tranche",
         "7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F",
@@ -9967,7 +11414,7 @@ def verify_adversarial_review() -> None:
         "161EF93030FD42632D03B0ABD5CBBA3ECA084F7198B7E889C96D6FD10A6C9196",
         "CDB3218AA9CA8A3796062764D45A946408C9915BFD0BB134C0A981BA3C66BF95",
         "169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305",
-        "4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B",
+        "E729485E6BFE16280592D668C998A8D39F932368CDB05F9B5BA0E0161F3DAB26",
         "authoritative same-process standard Python-3.14 Harness receipt collected",
         "431 had all setup/call/teardown phases",
         "mismatch evidence, not PASS results",
@@ -9975,9 +11422,9 @@ def verify_adversarial_review() -> None:
         "85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8",
         "numpy==2.3.5",
         "numpy==2.5.1",
-        "authoritative same-process worker receipt collected, started, finished",
+        "preserved historical pre-runtime same-process worker receipt collected",
         "passed 594/594 nodes",
-        "1,782 ordinary reports and zero subtests",
+        "1,782 ordinary reports",
         "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B",
         "prior prompt-context Harness checkpoint is preserved historically at 489",
         "prompt-context checkpoint is also preserved historical evidence",
@@ -9985,7 +11432,7 @@ def verify_adversarial_review() -> None:
         "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225",
         "authoritative same-process 99/99 PASS receipt",
         "297 ordinary reports, zero subtests, one warning",
-        "DB5F9FD886A1714D4E9FE2CE4A2F2336DA3B0A414D5115D1B86B5A885EECDC39",
+        "2EC053F1688C97A76326A5ADDD79A07F31623D91FE9513DF9B4EC4C6B5D2167B",
         "NO_ELIGIBLE_THRESHOLD",
         "repaired Stage C capture seam",
         "focused capture receipt is 119/119",
@@ -10001,7 +11448,7 @@ def verify_adversarial_review() -> None:
         "20EFE11D953D6F6831BA3CF404292328B3A955DD3CA0DE250D18D66204D517C8",
         "9DA80335E4C6A554A890C98DF296635DADCF2EDFD63BC3ED65890A8960770696",
         "52E444142F5C3D8FC7F0AFC983DE060EFCACCC8975C61F97B48D5BDA52226055",
-        "6D7B3440CEDD02BD6E351CCA6D1E5494F4D3FBC58D0A9470D681FEF65FBBB472",
+        "B78434646D50A2B8BF96449B5AF53EE9EC80079F346420ED1A6E6C53D8AEB743",
         "D28908786C38DCAD63B39B51A82B51FAEF888CCA9DA9552CC00BE37785777D3A",
         "9564623A3001440AAA0E2CA51667CED9AF23127051BF57776CBD5ED289130624",
         "worker-local factory now supplies the strict fresh-archive admission",
@@ -14977,6 +16424,29 @@ def _canonical_json_digest(value: Any) -> str:
     )
 
 
+def _loaded_code_digest(
+    *, name: str, records: list[dict[str, Any]]
+) -> str:
+    if name != "Harness v2 kernel and history":
+        return _canonical_json_digest(records)
+    verifier_path = Path(__file__).resolve(strict=True)
+    projected: list[dict[str, Any]] = []
+    verifier_record_count = 0
+    for record in records:
+        projected_record = dict(record)
+        if Path(record["path"]).resolve(strict=True) == verifier_path:
+            verifier_record_count += 1
+            projected_record["bytes"] = 0
+            projected_record["sha256"] = "0" * 64
+        projected.append(projected_record)
+    require(
+        verifier_record_count == 1,
+        "Harness loaded-code inventory must contain exactly one verifier "
+        "self-record before self-reference normalization",
+    )
+    return _canonical_json_digest(projected)
+
+
 def _allowed_loaded_module_anchor(path: Path, lock: dict[str, Any]) -> Path:
     allowed_roots = [
         ROOT.resolve(),
@@ -15581,6 +17051,10 @@ def run_pytest_same_process_receipt(
             "name": name,
             "tests": len(collected),
             "subtests": len(subtests),
+            "all_phase_pass_nodes": len(collected)
+            - len(expected_setup_skipped_nodeids),
+            "setup_skipped_nodes": len(expected_setup_skipped_nodeids),
+            "ordinary_reports": len(ordinary),
             "executed_node_ids_sha256": executed_digest,
             "ordinary_outcomes_sha256": _canonical_json_digest(ordinary),
             "subtest_outcomes_sha256": _canonical_json_digest(subtests),
@@ -15590,8 +17064,21 @@ def run_pytest_same_process_receipt(
             "pre_test_loaded_code_sha256": _canonical_json_digest(
                 pre_test_loaded_files
             ),
-            "loaded_code_sha256": _canonical_json_digest(loaded_files),
+            "loaded_code_sha256": _loaded_code_digest(
+                name=name, records=loaded_files
+            ),
+            "loaded_code_digest_rule": (
+                CURRENT_HARNESS_LOADED_CODE_DIGEST_RULE
+                if name == "Harness v2 kernel and history"
+                else RAW_LOADED_CODE_DIGEST_RULE
+            ),
             "warnings": receipt["warning_count"],
+            "collection_errors": len(receipt["collection_errors"]),
+            "internal_errors": len(receipt["internal_errors"]),
+            "deselections": len(receipt["deselected_nodeids"]),
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "process_exit_status": completed.returncode,
+            "pytest_exit_status": receipt["pytest_exit_status"],
             "expected_setup_skipped_nodeids": expected_setup_skipped_nodeids,
             "collected_nodeids": collected,
             "subtest_reports": subtests,
@@ -15606,8 +17093,8 @@ def verify_test_suites(
             suite["expected_tests"]
             for suite in REQUIRED_TEST_SUITES.values()
         )
-        == 1_619,
-        "configured Gate 5 test-suite node total drifted from 1,619",
+        == EXPANDED_CONFIGURED_TEST_SUITE_NODE_TOTAL,
+        "configured Gate 5 test-suite node total drifted from 1,772",
     )
     suites = manifest.get("test_suites")
     require(isinstance(suites, list), "manifest test_suites is not a list")
@@ -15729,6 +17216,68 @@ def verify_test_suites(
         require(
             test_id_digest(ids) == receipt["expected_test_ids_sha256"],
             f"{name}: exact same-run executed worker pytest node-ID subset drifted",
+        )
+
+    def current_receipt_projection(result: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "collected_nodes": result["tests"],
+            "started_nodes": result["tests"],
+            "finished_nodes": result["tests"],
+            "all_phase_pass_nodes": result["all_phase_pass_nodes"],
+            "setup_skipped_nodes": result["setup_skipped_nodes"],
+            "ordinary_reports": result["ordinary_reports"],
+            "passed_subtests": result["subtests"],
+            "warning_count": result["warnings"],
+            "error_count": 0,
+            "collection_errors": result["collection_errors"],
+            "internal_errors": result["internal_errors"],
+            "deselections": result["deselections"],
+            "pycache_status": result["pycache_status"],
+            "process_exit_status": result["process_exit_status"],
+            "pytest_exit_status": result["pytest_exit_status"],
+            "node_ids_sha256": result["executed_node_ids_sha256"],
+            "ordinary_outcomes_sha256": result["ordinary_outcomes_sha256"],
+            "subtest_outcomes_sha256": result["subtest_outcomes_sha256"],
+            "locked_import_origins_sha256": result[
+                "locked_import_origins_sha256"
+            ],
+            "pre_test_loaded_code_sha256": result[
+                "pre_test_loaded_code_sha256"
+            ],
+            "loaded_code_sha256": result["loaded_code_sha256"],
+            "loaded_code_digest_rule": result["loaded_code_digest_rule"],
+        }
+
+    for name, result, expected in (
+        (
+            "Harness v2 kernel and history",
+            harness_result,
+            CURRENT_AUTHORITATIVE_HARNESS_RECEIPT,
+        ),
+        (
+            "Live trace worker complete",
+            worker_result,
+            CURRENT_AUTHORITATIVE_WORKER_RECEIPT,
+        ),
+    ):
+        expected_projection = {
+            key: value
+            for key, value in expected.items()
+            if key not in {"elapsed_seconds", "receipt_status"}
+        }
+        actual_projection = current_receipt_projection(result)
+        receipt_drift = {
+            key: {
+                "actual": actual_projection.get(key),
+                "expected": expected_projection.get(key),
+            }
+            for key in sorted(set(actual_projection) | set(expected_projection))
+            if actual_projection.get(key) != expected_projection.get(key)
+        }
+        require(
+            not receipt_drift,
+            f"{name}: current authoritative same-process receipt drifted: "
+            f"{receipt_drift}",
         )
     return results
 
@@ -15881,6 +17430,7 @@ def main() -> int:
             f"locked_import_origins={result['locked_import_origins_sha256']}; "
             f"pre_test_code={result['pre_test_loaded_code_sha256']}; "
             f"loaded_code={result['loaded_code_sha256']}; "
+            f"loaded_code_rule={result['loaded_code_digest_rule']}; "
             f"warnings={result['warnings']}"
         )
     print(

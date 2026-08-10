@@ -967,6 +967,113 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
             <= runner_calls
         )
 
+        verifier_record = {
+            "path": str(VERIFIER_PATH.resolve()),
+            "bytes": 123,
+            "sha256": "A" * 64,
+            "module_names": ["gate5_verifier_redteam"],
+            "kind": "PYTHON_OR_DATA",
+        }
+        runner_record = {
+            "path": str(RUNNER_PATH.resolve()),
+            "bytes": 456,
+            "sha256": "B" * 64,
+            "module_names": ["gate5_runner_redteam"],
+            "kind": "PYTHON_OR_DATA",
+        }
+        loaded_records = [verifier_record, runner_record]
+        normalized = self.verifier._loaded_code_digest(
+            name="Harness v2 kernel and history", records=loaded_records
+        )
+        rewritten_self = copy.deepcopy(loaded_records)
+        rewritten_self[0]["bytes"] = 999
+        rewritten_self[0]["sha256"] = "C" * 64
+        self.assertEqual(
+            self.verifier._loaded_code_digest(
+                name="Harness v2 kernel and history", records=rewritten_self
+            ),
+            normalized,
+        )
+        rewritten_other = copy.deepcopy(loaded_records)
+        rewritten_other[1]["sha256"] = "D" * 64
+        self.assertNotEqual(
+            self.verifier._loaded_code_digest(
+                name="Harness v2 kernel and history", records=rewritten_other
+            ),
+            normalized,
+        )
+        with self.assertRaisesRegex(
+            self.verifier.VerificationError, "exactly one verifier self-record"
+        ):
+            self.verifier._loaded_code_digest(
+                name="Harness v2 kernel and history", records=[runner_record]
+            )
+        with self.assertRaisesRegex(
+            self.verifier.VerificationError, "exactly one verifier self-record"
+        ):
+            self.verifier._loaded_code_digest(
+                name="Harness v2 kernel and history",
+                records=[verifier_record, verifier_record, runner_record],
+            )
+        self.assertEqual(
+            self.verifier._loaded_code_digest(
+                name="Live trace worker complete", records=loaded_records
+            ),
+            self.verifier._canonical_json_digest(loaded_records),
+        )
+        self.assertIn(
+            "NORMALIZED-PROJECTION V1",
+            self.verifier.CURRENT_HARNESS_LOADED_CODE_DIGEST_RULE,
+        )
+        self.assertEqual(
+            self.verifier.RAW_LOADED_CODE_DIGEST_RULE,
+            "CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION",
+        )
+
+        with tempfile.TemporaryDirectory() as validation_directory:
+            validation_site_root = Path(validation_directory) / "site-packages"
+            validation_site_root.mkdir()
+            validation_lock = {
+                "admitted_pytest_site_root": str(validation_site_root),
+                "python_identity": {"stdlib_root": str(Path(sys.base_prefix) / "Lib")},
+                "admitted_runner_distributions": [],
+            }
+            verifier_bytes = VERIFIER_PATH.read_bytes()
+            exact_verifier_record = {
+                "path": str(VERIFIER_PATH.resolve()),
+                "bytes": len(verifier_bytes),
+                "sha256": hashlib.sha256(verifier_bytes).hexdigest().upper(),
+                "module_names": ["gate5_verifier_redteam"],
+                "kind": "PYTHON_OR_DATA",
+            }
+            admitted_verifier_path = (
+                VERIFIER_PATH.resolve().relative_to(ROOT).as_posix()
+            )
+            self.assertEqual(
+                self.verifier._validate_loaded_module_records(
+                    name="synthetic exact verifier",
+                    records=[exact_verifier_record],
+                    lock=validation_lock,
+                    admitted_artifact_paths={admitted_verifier_path},
+                    pre_test=False,
+                ),
+                [exact_verifier_record],
+            )
+            for field, forged_value in (("bytes", 0), ("sha256", "F" * 64)):
+                forged_verifier_record = copy.deepcopy(exact_verifier_record)
+                forged_verifier_record[field] = forged_value
+                with self.assertRaisesRegex(
+                    self.verifier.VerificationError,
+                    "loaded-code identity drifted after the child exited",
+                ):
+                    self.verifier._validate_loaded_module_records(
+                        name=f"synthetic forged verifier {field}",
+                        records=[forged_verifier_record],
+                        lock=validation_lock,
+                        admitted_artifact_paths={admitted_verifier_path},
+                        pre_test=False,
+                    )
+
     def test_main_retains_post_subprocess_rehashes(self) -> None:
         tree = ast.parse(VERIFIER_PATH.read_bytes(), filename=VERIFIER_PATH.as_posix())
         main = next(

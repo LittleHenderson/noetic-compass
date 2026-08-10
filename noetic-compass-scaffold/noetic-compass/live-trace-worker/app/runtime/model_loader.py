@@ -468,35 +468,127 @@ class LoadedModel:
 
     @property
     def is_real(self) -> bool:
-        binding = active_model_binding()
-        expected = bootstrap_manifest(binding)
-        return bool(
-            self.manifest.is_real_model
-            and self.manifest.execution_kind == "real_model_weights"
-            and self.manifest.model_id == expected.model_id
-            and self.manifest.tokenizer_id == expected.tokenizer_id
-            and self.manifest.model_arch == expected.model_arch
-            and self.manifest.supported_hooks == expected.supported_hooks
-            and self.manifest.intervention_hook_contract
-            == expected.intervention_hook_contract
-            and self.manifest.worker_version == expected.worker_version
-            and self.manifest.requested_revision == binding.revision
-            and self.manifest.revision_verified
-            and self.manifest.resolved_revision == binding.revision
-            and self.manifest.weights_hash_verified
-            and self.manifest.weights_filename == binding.weights_filename
-            and self.manifest.weights_sha256 == binding.weights_sha256
-            and self.manifest.weights_bytes == binding.weights_bytes
-            and self.manifest.model_identity_status
+        return _loaded_model_is_real_for_binding(self, active_model_binding())
+
+
+def _loaded_model_is_real_for_binding(
+    loaded: LoadedModel,
+    binding: ModelBinding,
+) -> bool:
+    """Validate one loaded carrier against one already-selected binding.
+
+    The binding is supplied explicitly so a cached carrier cannot be judged
+    against a different environment selection midway through validation.
+    This validates the carrier metadata; callers that may execute a model must
+    additionally validate the concrete family stack with
+    :func:`require_pythia_runtime_model`.
+    """
+
+    if not _loaded_model_carrier_matches_binding(loaded, binding):
+        return False
+    return bool(
+            loaded.manifest.is_real_model
+            and loaded.manifest.execution_kind == "real_model_weights"
+            and loaded.manifest.revision_verified
+            and loaded.manifest.resolved_revision == binding.revision
+            and loaded.manifest.weights_hash_verified
+            and loaded.manifest.weights_filename == binding.weights_filename
+            and loaded.manifest.weights_sha256 == binding.weights_sha256
+            and loaded.manifest.weights_bytes == binding.weights_bytes
+            and loaded.manifest.model_identity_status
             == "PINNED_REVISION_AND_WEIGHTS_SHA256"
             and isinstance(
-                self.manifest.runtime_execution,
+                loaded.manifest.runtime_execution,
                 RuntimeExecutionEvidence,
             )
-            and self.model is not None
-            and self.tokenizer is not None
-            and self.load_error is None
+            and loaded.model is not None
+            and loaded.tokenizer is not None
+            and loaded.load_error is None
         )
+
+
+def _loaded_model_carrier_matches_binding(
+    loaded: LoadedModel,
+    binding: ModelBinding,
+) -> bool:
+    """Match cached carrier metadata to one exact selected binding.
+
+    This includes demo carriers, which intentionally are not ``is_real`` but
+    still must never be returned after the process selection changes to a
+    different model family.
+    """
+
+    if type(loaded) is not LoadedModel or type(binding) is not ModelBinding:
+        return False
+    try:
+        expected = bootstrap_manifest(binding)
+    except Exception:
+        return False
+    return bool(
+            loaded.manifest.model_id == expected.model_id
+            and loaded.manifest.tokenizer_id == expected.tokenizer_id
+            and loaded.manifest.model_arch == expected.model_arch
+            and loaded.manifest.supported_hooks == expected.supported_hooks
+            and loaded.manifest.intervention_hook_contract
+            == expected.intervention_hook_contract
+            and loaded.manifest.worker_version == expected.worker_version
+            and loaded.manifest.requested_revision == binding.revision
+        )
+
+
+def require_pythia_runtime_model(
+    model: Any,
+    *,
+    binding: ModelBinding,
+    expected_layers: int,
+) -> None:
+    """Reject any non-Pythia concrete model before generic execution.
+
+    Manifest checks alone cannot authenticate the Python object that will be
+    called.  In particular, a cached Qwen object must not become eligible when
+    the process environment later selects Pythia.  The exact Pythia stack is
+    therefore resolved at the final generic boundary before tokenization or a
+    forward pass.
+    """
+
+    if type(binding) is not ModelBinding or binding != _pythia_binding():
+        raise RuntimeError(
+            "generic real-model execution requires the exact pinned Pythia binding"
+        )
+    resolve_probe_layer_stack(
+        model,
+        binding,
+        expected_layers=expected_layers,
+        require_exact_count=(expected_layers == binding.arch.n_layers),
+    )
+    config = getattr(model, "config", None)
+    model_type = getattr(config, "model_type", None) if config is not None else None
+    if model_type is not None and model_type != "gpt_neox":
+        raise RuntimeError(
+            "generic real-model execution requires a concrete Pythia/GPT-NeoX model"
+        )
+
+
+def require_loaded_pythia_runtime(
+    loaded: LoadedModel,
+    *,
+    binding: ModelBinding,
+) -> None:
+    """Cross-bind a loaded carrier, its manifest, and concrete Pythia model."""
+
+    if not _loaded_model_is_real_for_binding(loaded, binding):
+        raise RuntimeError(
+            "loaded model carrier does not match the exact pinned Pythia binding"
+        )
+    require_pythia_runtime_model(
+        loaded.model,
+        binding=binding,
+        # This boundary authenticates the concrete model *family* before a
+        # carrier can be dispatched.  The real runner separately requires the
+        # full requested layer count immediately before any forward; keeping
+        # this check at one layer also permits isolated stub-runner tests.
+        expected_layers=1,
+    )
 
 
 _LOADED: LoadedModel | None = None
@@ -749,11 +841,20 @@ def _validate_runtime_canary(
     """Execute the attention/hook/numerics contract before real status."""
 
     binding = active_model_binding()
+    if binding.key != PYTHIA_160M_BINDING_KEY:
+        # Stage C authorization v1 fixes ``canary_count`` to zero.  Guard the
+        # low-level function itself so a direct caller cannot bypass the
+        # warm-load branch and execute an unpermitted Qwen forward.
+        raise RuntimeError(
+            "the Qwen Stage C runtime canary is forbidden by the exact "
+            "zero-canary authorization scope"
+        )
     architecture = binding.arch
-    canary_label = (
-        "Pythia"
-        if binding.key == PYTHIA_160M_BINDING_KEY
-        else "Qwen"
+    canary_label = "Pythia"
+    require_pythia_runtime_model(
+        model,
+        binding=binding,
+        expected_layers=architecture.n_layers,
     )
     layers = resolve_probe_layer_stack(
         model,
@@ -828,6 +929,19 @@ def _validate_runtime_canary(
         )
 
 
+def _startup_runtime_canary_permitted(binding: ModelBinding) -> bool:
+    """Return whether this binding's separate startup contract permits a forward.
+
+    Stage C Qwen authorization v1 allows exactly zero canaries.  This helper is
+    deliberately keyed to the closed model binding rather than an environment
+    flag or caller argument, so startup configuration cannot widen that scope.
+    """
+
+    if type(binding) is not ModelBinding:
+        raise RuntimeError("startup canary decision requires an exact model binding")
+    return binding.key != QWEN_05B_INSTRUCT_BINDING_KEY
+
+
 def warm_load() -> LoadedModel:
     """Load Pythia-160M into memory once. Idempotent + thread-safe.
 
@@ -839,6 +953,12 @@ def warm_load() -> LoadedModel:
     global _LOADED
     with _LOAD_LOCK:
         if _LOADED is not None:
+            binding = active_model_binding()
+            if not _loaded_model_carrier_matches_binding(_LOADED, binding):
+                raise RuntimeError(
+                    "cached model carrier does not match the active pinned binding; "
+                    "refusing cross-family cache reuse"
+                )
             return _LOADED
 
         profile = _worker_profile()
@@ -916,12 +1036,23 @@ def warm_load() -> LoadedModel:
                 expected_dtype=execution_dtype,
             )
 
-            _validate_runtime_canary(
-                torch,
-                model,
-                tokenizer,
-                device=execution_device,
-            )
+            # The Stage C prerequisite authorization v1 fixes
+            # ``canary_count`` to zero.  Loading and re-hashing the pinned Qwen
+            # bytes is therefore allowed to prepare a dormant carrier, but a
+            # startup forward would be an unauthorized model evaluation.  The
+            # per-row capture path has a separate runtime-activation choke
+            # point; it is the only place a Stage C Qwen forward may occur.
+            #
+            # Preserve the historical Pythia readiness canary for its separate
+            # worker contract.  It must not be silently reused as Stage C
+            # authority.
+            if _startup_runtime_canary_permitted(binding):
+                _validate_runtime_canary(
+                    torch,
+                    model,
+                    tokenizer,
+                    device=execution_device,
+                )
             post_load_observations = _validated_model_artifacts(hf_hub_download)
             if post_load_observations != artifact_observations:
                 raise RuntimeError(
@@ -970,9 +1101,11 @@ def get_loaded_model() -> LoadedModel:
     Routes call this to learn whether they should drive the real runner or
     the fake stream.
     """
-    if _LOADED is None:
-        return warm_load()
-    return _LOADED
+    # Always pass through the locked cache/binding check.  Reading ``_LOADED``
+    # directly here would allow a Qwen carrier cached under one environment
+    # selection to be reused after the process switches to Pythia (or vice
+    # versa).
+    return warm_load()
 
 
 def reset_for_test() -> None:

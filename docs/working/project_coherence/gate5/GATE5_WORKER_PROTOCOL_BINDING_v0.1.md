@@ -37,11 +37,12 @@ or tool authority into the rendered channel.
 The companion sources passed 30/30 and 22/22 focused tests (52/52 union), and
 the union with the diagnostic Study passed 98/98 in 33.77 seconds. The new
 prerequisite helper requires the aggregate ref in any future immutable
-diagnostic base `design.input_artifacts`; actual runtime admission is still
-absent, and the worker/controller path does not call this helper yet.
+diagnostic base `design.input_artifacts`. The structural activation control now
+calls this helper under controlled fixtures before issuing a permit; no actual
+real base, authenticated bundle, or positive runtime admission exists.
 Corpus freeze remains `NOT_ESTABLISHED`; exact source bytes remain external.
-The updated Harness and adapter surfaces now have authoritative same-process
-receipts. The prior prompt-context Harness checkpoint is preserved historically
+The prior Harness and adapter surfaces retain their exact same-process receipts.
+The prompt-context Harness checkpoint is preserved historically
 at 489 collected/started/finished nodes: 483 had all
 phases pass, six unchanged runtime-lock nodes setup-skipped as mismatch evidence
 rather than PASS, 1,461 ordinary reports and 163 passing subtests were emitted,
@@ -50,7 +51,7 @@ pytest exited 0, and the digest is
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 The adapter passed 99/99 with 297 ordinary reports, zero subtests, one warning,
 zero errors or deselections, empty isolated pycache, pytest exit 0, and digest
-`DB5F9FD886A1714D4E9FE2CE4A2F2336DA3B0A414D5115D1B86B5A885EECDC39`.
+`2EC053F1688C97A76326A5ADDD79A07F31623D91FE9513DF9B4EC4C6B5D2167B`.
 
 ## Stage C prerequisite admission boundary
 
@@ -78,8 +79,9 @@ test SHA-256
 `56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3`,
 and node-ID SHA-256
 `3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
-The current authoritative locked same-process Harness replay collected,
-started, and finished 537 nodes in 1,680.3 seconds. Exactly 531 had exact
+The last completed pre-runtime locked same-process Harness receipt, now
+preserved historically, collected, started, and finished 537 nodes in 1,680.3
+seconds. Exactly 531 had exact
 all-phase PASS; the same six exact nodes setup-skipped as runtime-lock mismatch
 evidence, not PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing
 subtests, recorded zero warnings, errors, collection or internal errors, or
@@ -132,14 +134,171 @@ Focused verification is 19 library plus 10 CLI nodes: 29/29 PASS in 47.72
 seconds, zero subtests, exit 0, digest
 `A2D250135113EDD038C37040C94E11EE6E8B6208E14D53270F318FF48F06AD80`.
 The independent pre-final audit passed 28/28 in 47.93 seconds with a clean P0/P1
-verdict. The current 537-node authoritative full-suite receipt is the integrated
-replay recorded above. The 508-node checkpoint remains historical evidence and
-is no longer current.
+verdict. The 537-node full-suite receipt is the integrated pre-runtime replay
+recorded above. The 508-node checkpoint remains earlier historical evidence;
+neither is a current-tree replay.
 
 This path is upstream input preparation, not worker activation. The worker,
 controller, lifecycle, and archive admission still must require the exact real
 4+12 import and an independently authenticated, atomically consumed runtime
 authorization after the final execution plan is frozen.
+
+## Structural Stage C runtime-activation binding
+
+The current frozen candidate implements the fail-closed control/worker seam
+that was previously absent. It remains `STRUCTURE_ONLY / NON_AUTHORITY`: its
+positive paths use controlled backends and fixtures, not the real authenticated
+Stage C prerequisites or authorization state.
+
+### Control-plane invariants
+
+The canonical source
+`src/cas_harness_v2/diagnostic_stagec_runtime_activation.py` is SHA-256
+`E4B9C390117A474B32DB790B5B7CB8DC2E3022823FF6F2F718725B1B3826E52E`
+at 133,262 bytes; the packaged mirror is byte-identical. Its test is SHA-256
+`5CCF0EEC47D1814A9CA46FC047DD089F415D113D990F234659460261971E1ACF`
+at 52,693 bytes. The unchanged-byte focused replay passed 28/28 in 922.45
+seconds with node-ID SHA-256
+`5D501F3505A98E23BDD2AB8B191BC6EEE90260F1F169940B6A6F70A61525A632`.
+
+The control-plane rules are exact:
+
+1. prerequisite, phase, claim, request, profile, model, capture, tenant,
+   subject, attempt, authorization, storage, issuer, ledger, and lease identities
+   remain paired through sealed private scalar expectations;
+2. backend calls receive only disposable deep-copied expectations, and returned
+   observations are detached and rechecked before validation or retention;
+3. phase activation, claim, invalidation, and redemption use monotone
+   compare-and-swap generation transitions with no trusted-time rollback;
+4. a control-owned `claim_operation_id` binds acquisition to the immutable
+   logical row; any backend-crossed exception, input mutation, malformed
+   observation, or duplicate returned claim ID is terminalized by that operation
+   and row as `INDETERMINATE`; and
+5. once an unredeemed permit is drifted, invalidated, redemption-attempted, or
+   consumed, it can never return to an active state or be retried.
+
+### Worker acquisition and capture invariants
+
+The worker gate source/test hashes and lengths are
+`FC918942B2D324BCE1882577166A1F3FCFE8A98AAE2D5A39F90E0DCCD9B970B4` /
+61,983 and
+`0A3A177079AD28542C89F1EA9D745E448B6F6F3A7276DE26AD3EB62C72205489` /
+49,357 bytes. Its 95/95 receipt binds node-ID SHA-256
+`0554F3710F9A35667A462CAF53584C9517CF945BFC64811765ACFB4E7CC7BCD3`.
+Capture source/test hashes and lengths are
+`0ECD006E3799A70FFED72688015C03BC2A1D8107BC25632FD93D87435D06519C` /
+124,345 and
+`E21ED834800845E51223203DF018DCDEFAE43FB60E2FC7D0D43017EE99676A7E` /
+84,540 bytes. Its 139/139 receipt binds node-ID SHA-256
+`C306D70A052CDA8C0CFB12394B640A2ED2DDE9FEE58F16E92FF23771CAABFED1`.
+The 234/234 gate-plus-capture union digest is
+`08CAA558DEE27A5876DA29A15E9D0E3875994C630E2826BC52154DC215776E76`.
+
+Before crossing the backend boundary, the worker permanently reserves the
+exact envelope, `(tenant, phase, subject)` row, and canonical
+`(tenant, subject)` subject. It passes a control-owned operation ID and an
+immutable row digest. If acquisition may have won durably but fails or returns
+an unusable observation, the worker must call the operation/row-bound ambiguous
+terminal API and validate an exact generation-plus-one tombstone receipt.
+Duplicate, stale, artifact/case/ordinal/phase drift, mutation, and ambiguous
+failure therefore terminate without backend or model retry.
+
+Capture sets `redemption_attempted` before asking the control plane to redeem.
+Only an exact durable `CALL_STARTED` receipt sets `model_call_redeemed`; then
+and only then may the function make exactly one direct `model(...)` call. The
+returned activation/capture carriers and tensor inputs are detached from
+caller/backend objects and replay checked. A forward can never precede or
+outlive its matching one-use permit transition.
+
+Archive and archive-admission compatibility tests explicitly install the
+private capture test backend and clear all permit/capture registries around each
+test. This is test-only dependency injection: the production backend registry
+remains empty and the live path still fails `BACKEND_UNAVAILABLE`.
+
+### Generic Qwen exclusion and package identity
+
+The Qwen exclusion test is SHA-256
+`08A6D58EA0E9D083D13CCC57A62956A23EEEC85D79C8F4C2F62F7DDE60320A3B`
+at 27,690 bytes. Its 27 configured node IDs hash to
+`D80B52FFC48D0677F773269F640481A4C1CA0C434C707041FF391EA75BE90ECA`;
+all 27 nodes passed as an exact executed subset of the authoritative 719-node
+worker same-process receipt. Generic source identities are:
+
+| File | SHA-256 | Bytes |
+|---|---|---:|
+| `model_loader.py` | `F3273EF256491D7489004AA4067B52E0F81A563856FAE4F6774035C69BAC0C14` | 43,230 |
+| `event_stream.py` | `EE0F938B06202FBC820320AF8E1F580E2CCA81A591821175F51F8CB64AD0F7FF` | 15,264 |
+| `pythia_runner.py` | `9A4EC3A1BE91A51616A2B7E270CC8D06F42F2641F7286B6D0CB26EFCDA9A93F2` | 17,116 |
+| `ablation_probe.py` | `B73CF7A48A359EAD3CD3D4EBD66D12D8AB650796BD5DDA4570BDBA49B8AB9D03` | 18,730 |
+| `test_real_mode_dispatch.py` | `0AFEC52DEF62CB77F8FAEA6FCFE2ADA0691CED8CD3BB62B697DB8C6D22484A68` | 5,951 |
+
+Generic/public stream dispatch rejects Qwen before loading. The locked cache
+rejects cross-family carriers. Pythia running, startup canaries, and both real
+ablation entrypoints require the concrete Pythia stack before tokenizer, hook,
+or forward use, including alias cases. The gated Stage C capture function is the
+only structurally admitted Qwen forward route.
+
+The packaged kernel is 22 byte-identical files, 469 exports, and 1,420,002
+bytes; the runtime module contributes 44 exports. Packaging provenance is
+`1561D0707AEB12ED720A1F70670494006B186628434CB6390A4DEEFBA5040D07` /
+3,867 bytes, canonical/mirror `__init__.py` is
+`7D3A90FAFBD68C81888DD36A17CE7E075C48243C231E84A8BFDF8093C939037C` /
+38,141 bytes each, the allowlist source is
+`CF21F42B81AD3E6CD50A211FB4FC6D01B035F6177921392B0F4811FCFFD641D0` /
+6,036 bytes, and package tests are
+`DBAFC0901CFE33A2C59A961B97F134CBC9408787B69B6A26AC843924A4BBFDF8` /
+15,689 bytes with 13/13 PASS. Four new unique worker schemas and zero new media
+types yield closed totals of 49 schemas and 44 media types.
+
+The current authoritative same-process Harness replay collected, started, and
+finished 565 nodes in 2,477.3 seconds at node-ID SHA-256
+`4CCAD2A4EF4868EBAD7EBDC9E219371A57CBE69C974E5D986A8714A0A0DDE601`:
+559 nodes had exact all-phase PASS, the six exact setup skips remain mismatch
+evidence rather than PASS, 1,689 ordinary reports and 163 passing subtests were
+emitted, and warnings, collection or internal errors, and deselections were
+zero. The isolated pycache remained empty and process and pytest exits were 0.
+Receipt digests bind ordinary outcomes
+`7FCD1D82405624E07792CD92DC5F9E40904F2B43FB723CC2DEFF5A7E2C4DDB6E`,
+subtest outcomes
+`6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`,
+locked import origins
+`3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+pre-test loaded code
+`0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+and loaded code
+`24F868086F5B21A263D06229B5FBEC36FC572878F0C2AA710001BCAF9C0CAE07`.
+
+The current authoritative same-process worker replay passed 719/719 in 42.035
+seconds at node-ID SHA-256
+`98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`,
+with 2,157 ordinary reports, zero subtests, skips, warnings, errors, or
+deselections, an empty isolated pycache, and process and pytest exits 0. Receipt
+digests bind ordinary outcomes
+`CF7F1676BAAA3E83999E758A35F311743B7B227DBD0A160EF79F85AA72477468`,
+subtest outcomes
+`4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945`,
+locked import origins
+`035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6`,
+pre-test loaded code
+`3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E`,
+and loaded code
+`4B37B98E99C132E65C7095EBD0FC42A44E9C701923FD451DACC25EEC45636FBB`.
+For the current Harness receipt only, `loaded_code_sha256` uses `CANONICAL
+VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER
+SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE
+DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED`. The
+current worker and the preserved 537- and 508-node historical Harness
+loaded-code digests use `CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW
+RECORDS / NO PROJECTION`; their recorded values remain unchanged.
+These current receipts sit within the complete 1,772-node verifier suite map,
+not a two-suite sum. The 537-node Harness and 594/594 worker receipts remain
+historical only, and all receipts remain `STRUCTURE_ONLY / NON_AUTHORITY`. No
+real authenticated exact 4+12 bundle, positive storage/issuer/ledger backend,
+actual nonce consumption,
+model/provider call, detector result, Evidence Packet, or authority follows.
+Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains
+`DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; claims remain
+`NOT LICENSED / HELD / NOT FROZEN`.
 
 ## 1. Purpose and source boundary
 
@@ -164,6 +323,8 @@ The current source surfaces are:
 | Diagnostic calibration fit and terminal disposition | `src/cas_harness_v2/diagnostic_calibration_fit.py`, `src/cas_harness_v2/diagnostic_calibration_disposition.py` | exact locked target/wrong-layer fit and one same-file freeze-or-reject nonreporting slot |
 | Stage C prerequisite intake/admission | `src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py` | exact four-role structural replay, owner intake, prospective-only admission, and immutable diagnostic-base binding; not external trust or runtime authority |
 | Stage C read-only external intake | `src/cas_harness_v2/diagnostic_stagec_prerequisite_external_intake.py`, `scripts/import_project_coherence_stagec_prerequisites.py` | explicit 16-role local locator replay and path-redacted structural reports; not external authentication, corpus freeze, nonce consumption, or runtime activation |
+| Stage C runtime activation control | `src/cas_harness_v2/diagnostic_stagec_runtime_activation.py` | sealed prerequisite/phase/claim expectations, durable compare-and-swap activation and redemption permit, operation-bound ambiguous terminalization, single-use invalidation; structural backends only |
+| Worker Stage C runtime gate and capture | `noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/stagec_runtime_activation.py`, `stagec_capture.py` | permanent envelope/row reservations, detached exact acquisition, durable redemption before one Qwen forward, and terminal/no-retry failure behavior; no real positive activation |
 | Worker-local diagnostic archive admission | `noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/stagec_diagnostic_archive_admission.py` | fresh seven-member archive replay and small diagnostic-v2 admission document; not HTTP/container wired |
 | Tenant/audit/fleet/worker callback identity | `noetic-compass-scaffold/noetic-compass/api/services/fleet_service_auth.py` | `FleetServicePrincipal`, `FleetServiceBoundIntakeReceipt`, `FleetServiceAuthStore.authenticate_with_bound_intake_receipt`, `verify_authenticated_callback` |
 | Fleet lease and receipt state | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py` | `FleetJobRecord`, `ActiveFleetJobLease`, `validate_active_fleet_job_lease`, `lease_next_job`, `submit_job_receipt` |
@@ -590,8 +751,10 @@ and emits the small admission document accepted by the terminal protocol. Its
 source/test hashes are
 `169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305`
 and
-`4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B`;
-18/18 tests pass. This is factory-only worker-local admission. The case ordinal
+`E729485E6BFE16280592D668C998A8D39F932368CDB05F9B5BA0E0161F3DAB26`;
+18/18 tests pass inside the current 50-node archive/admission compatibility
+replay. This is factory-only worker-local admission with an explicitly installed
+private test backend. The case ordinal
 is authorization-declared and range-bound, not archive-derived; controller-side
 canonical replay remains mandatory. No HTTP or container wiring exists.
 
@@ -613,9 +776,11 @@ and
 permits one `CALIBRATION_FROZEN_NONREPORTING` or
 `CALIBRATION_REJECTED_NONREPORTING` result per phase subject. All 11 final-byte
 nodes pass across two bounded split runs: 8 passed/3 deselected in 210.72s and 3
-passed/8 deselected in 870.18s. This is not one authoritative single-process
-full-suite receipt. The positive post-access `NO_ELIGIBLE_THRESHOLD` rejection
-branch remains unexecuted.
+passed/8 deselected in 870.18s. The current authoritative 565-node Harness
+receipt separately records the six exact runtime-lock nodes as setup skips and
+mismatch evidence rather than PASS, so it is not an 11/11 positive exact-lock
+receipt. The positive post-access `NO_ELIGIBLE_THRESHOLD` rejection branch
+remains unexecuted.
 
 The authoritative same-process standard Python-3.14 Harness receipt collected,
 started, and finished 437 nodes. Exactly 431 had all phases pass, while the six
@@ -638,8 +803,9 @@ collection or internal errors, or deselections, left the isolated pycache
 empty, exited pytest 0, and bound exact node-ID digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
-The current authoritative locked same-process Harness replay collected,
-started, and finished 537 nodes. Exactly 531 had exact all-phase PASS; the same
+The preserved historical pre-runtime locked same-process Harness receipt
+collected, started, and finished 537 nodes. Exactly 531 had exact all-phase PASS;
+the same
 six exact fit/disposition nodes setup-skipped as runtime-lock mismatch evidence,
 not PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing subtests,
 recorded zero warnings, errors, collection or internal errors, or deselections,
@@ -649,8 +815,9 @@ bound exact node-ID digest
 The 508-node receipt is retained as a historical checkpoint at
 `8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
-The authoritative same-process worker receipt collected, started, finished,
-and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,
+The preserved historical pre-runtime same-process worker receipt collected,
+started, finished, and passed 594/594 nodes, emitted 1,782 ordinary reports and
+zero subtests,
 warnings, errors, or deselections, left the isolated pycache empty, exited
 pytest 0, and bound exact node-ID digest
 `B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B`.
@@ -660,7 +827,7 @@ None of these diagnostic candidates supplies trusted execution or time,
 replication/host-loss authority, WORM/external anchoring, out-of-band
 execution/read prevention, a real-Qwen Stage C run, Packet or C-Eval authority,
 scientific correctness, product/public authority, or a license. Stage C remains
-`DESIGN ONLY / UNAUTHORIZED / NOT_STARTED`.
+`DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`.
 
 ## 4. State machine
 
@@ -1219,13 +1386,15 @@ execution, trusted time, WORM ordering, registry completeness beyond the
 configured local store, authenticated science, external validation, license,
 product readiness, canon, or disclosure authority.
 
-For Stage C specifically, the diagnostic coordinator and worker-local admission
-factory are not HTTP/container wired; no pinned-Qwen Stage C model run exists;
-trusted execution/time, independent WORM/external anchoring, and out-of-band
-execution/read prevention remain OPEN; and the positive
-`NO_ELIGIBLE_THRESHOLD` rejection branch remains unexecuted. The worker factory
-is local-only. No Packet, C-Eval, scientific, product, public, or license
-authority follows from its 18/18 receipt or from the focused diagnostic split
+For Stage C specifically, the structural activation gate is now joined to the
+worker capture seam, but no exact authenticated real 4+12 bundle or positive
+storage/issuer/ledger backend has reached it; no real one-use authorization
+nonce has been consumed; and no pinned-Qwen Stage C model call or result exists.
+Trusted execution/time, independent WORM/external anchoring, and out-of-band
+execution/read prevention remain OPEN, and the positive
+`NO_ELIGIBLE_THRESHOLD` rejection branch remains unexecuted. No Packet, C-Eval,
+scientific, product, public, or license authority follows from the structural
+runtime receipts, the 18/18 archive receipt, or the focused diagnostic split
 receipts.
 
 The Gate 5 structural verifier can bind exact bytes, schemas, required status

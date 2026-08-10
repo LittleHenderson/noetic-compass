@@ -11,6 +11,7 @@ M2_ACCEPTANCE.md on a RunPod box).
 from __future__ import annotations
 
 import asyncio
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -47,7 +48,12 @@ def _force_real_loaded(monkeypatch: pytest.MonkeyPatch) -> None:
     """Install a singleton claiming a real model is loaded."""
     loaded = LoadedModel(
         manifest=_real_manifest(),
-        model=object(),  # truthy placeholder so is_real is True
+        # The dispatcher now cross-checks the concrete family stack before it
+        # may hand the carrier to even a stubbed runner.  Keep this lightweight
+        # while representing the exact 12-layer Pythia/GPT-NeoX family.
+        model=SimpleNamespace(
+            gpt_neox=SimpleNamespace(layers=tuple(object() for _ in range(12)))
+        ),
         tokenizer=object(),
     )
     monkeypatch.setattr(model_loader, "_LOADED", loaded)

@@ -35,7 +35,11 @@ from typing import Any, Iterator
 
 from ..schemas.events import AblationControlEffectEvent, AblationEffectEvent
 from ..schemas.requests import AblationTargetRequest, CreateSessionRequest
-from .model_loader import ModelBinding, active_model_binding
+from .model_loader import (
+    ModelBinding,
+    active_model_binding,
+    require_pythia_runtime_model,
+)
 from .probe_runner import _get_pythia_layers, _softmax_margin
 
 logger = logging.getLogger(__name__)
@@ -165,7 +169,15 @@ def run_real_ablation_effect(
     ablated, then reports the measured deltas. The model is NOT mutated: the
     hook is attached only for the ablated pass and removed afterwards.
     """
-    _require_causal_ablation_binding(model_binding)
+    binding = _require_causal_ablation_binding(model_binding)
+    require_pythia_runtime_model(
+        model,
+        binding=binding,
+        # Authenticate the concrete family before tokenization/forward.  The
+        # target-specific code below separately checks the requested layer
+        # against both ``n_layers`` and the observed stack length.
+        expected_layers=1,
+    )
 
     import torch
 
@@ -297,7 +309,12 @@ def run_real_ablation_control(
     with no numeric deltas — the matched control did not run, so no control
     proof is claimed.
     """
-    _require_causal_ablation_binding(model_binding)
+    binding = _require_causal_ablation_binding(model_binding)
+    require_pythia_runtime_model(
+        model,
+        binding=binding,
+        expected_layers=1,
+    )
 
     import numpy as np
     import torch

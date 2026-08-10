@@ -31,7 +31,13 @@ from .knob_resolution import (
     enabled_methods as _resolve_enabled_methods,
     resolve_knobs,
 )
-from .model_loader import ModelBinding, active_model_binding, encode_runtime_prompt
+from .model_loader import (
+    PYTHIA_160M_BINDING_KEY,
+    ModelBinding,
+    active_model_binding,
+    encode_runtime_prompt,
+    require_pythia_runtime_model,
+)
 from .probe_runner import (
     EraserIntervention,
     assess_baseline_stability,
@@ -85,9 +91,24 @@ async def run_pythia(
 
     Caller wraps each dict into a TokenEvent.
     """
+    binding = active_model_binding()
+    if binding.key != PYTHIA_160M_BINDING_KEY:
+        raise RuntimeError(
+            "generic real-model generation is restricted to the pinned Pythia "
+            "binding; Qwen requires the Stage C runtime-permit capture path"
+        )
+
+    # The environment selection is not evidence that the concrete Python
+    # object is Pythia.  Cross-check the actual family stack before importing
+    # torch, tokenizing, registering hooks, or invoking model(...).
+    require_pythia_runtime_model(
+        model,
+        binding=binding,
+        expected_layers=n_layers,
+    )
+
     import torch
 
-    binding = active_model_binding()
     device = next(model.parameters()).device
     encoded_prompt = encode_runtime_prompt(
         tokenizer,

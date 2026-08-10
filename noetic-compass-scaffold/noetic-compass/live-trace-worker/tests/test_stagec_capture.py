@@ -10,6 +10,7 @@ from __future__ import annotations
 from collections import OrderedDict
 from dataclasses import FrozenInstanceError, replace
 from hashlib import sha256
+import inspect
 import json
 from types import MappingProxyType, SimpleNamespace
 from typing import Any, Callable
@@ -23,6 +24,8 @@ from torch.nn.modules import module as torch_module_hooks
 from torch.utils.hooks import RemovableHandle
 
 from app.runtime import model_loader
+from app.runtime import stagec_capture as stagec_capture_module
+from app.runtime import stagec_runtime_activation as runtime_gate
 from app.runtime.stagec_capture import (
     AUTHORIZATION_MEDIA_TYPE,
     CAPTURE_INDEX_MEDIA_TYPE,
@@ -39,6 +42,8 @@ from app.runtime.stagec_capture import (
     RAW_ARRAY_LAYOUT,
     RAW_ARRAY_MEDIA_TYPE,
     RawArrayArtifact,
+    STAGEC_CAPTURE_PROFILE_SHA256,
+    STAGEC_MODEL_CONFIG_SHA256,
     STAGEC_MODEL_ID,
     STAGEC_MODEL_REVISION,
     STAGEC_TARGET_MODULE_PATH,
@@ -48,6 +53,7 @@ from app.runtime.stagec_capture import (
     STAGEC_TOKENIZER_JSON_SHA256,
     STAGEC_VECTOR_WIDTH,
     STAGEC_VOCAB_SIZE,
+    STAGEC_WEIGHTS_SHA256,
     STAGEC_WRONG_LAYER_MODULE_PATH,
     STRUCTURE_ONLY_SCOPE,
     StageCCaptureError,
@@ -81,6 +87,95 @@ def _canonical_bytes(value: Any) -> bytes:
         sort_keys=True,
         separators=(",", ":"),
     ).encode("utf-8")
+
+
+class _TrustedCaptureTestBackend:
+    """Exact private test double; production registration remains empty."""
+
+    def __init__(self) -> None:
+        self.authenticate_calls = 0
+        self.redemption_calls = 0
+        self.invalidation_calls = 0
+        self.terminal_states: list[str] = []
+
+    def authenticate_and_claim_stagec_runtime_activation(
+        self,
+        *,
+        envelope: runtime_gate.StageCRuntimeActivationEnvelope,
+        claim_operation_id: str,
+    ) -> runtime_gate.StageCRuntimeActivationLedgerObservation:
+        self.authenticate_calls += 1
+        payload = runtime_gate.replay_stagec_runtime_activation_envelope(envelope)
+        return runtime_gate.StageCRuntimeActivationLedgerObservation(
+            schema_version=runtime_gate.STAGEC_RUNTIME_LEDGER_OBSERVATION_SCHEMA,
+            envelope_sha256=envelope.sha256,
+            logical_row_claim_sha256=runtime_gate._logical_row_claim_sha256(
+                payload
+            ),
+            claim_operation_id=claim_operation_id,
+            backend_claim_id=f"capture-test-claim-{self.authenticate_calls}",
+            ledger_observation_sha256="D" * 64,
+            phase_activation_id=payload["runtime_authorization"][
+                "phase_activation_id"
+            ],
+            case_id=payload["attempt"]["case_id"],
+            case_execution_ordinal=payload["attempt"][
+                "case_execution_ordinal"
+            ],
+            ledger_generation=payload["runtime_authorization"]["ledger_generation"],
+            prior_claim_state="UNCLAIMED",
+            claim_state="AUTHENTICATED_AND_CLAIMED_FOR_ONE_MODEL_CALL",
+            claimed_now=True,
+        )
+
+    @staticmethod
+    def _terminal_observation(
+        *,
+        envelope: runtime_gate.StageCRuntimeActivationEnvelope,
+        observation: runtime_gate.StageCRuntimeActivationLedgerObservation,
+        terminal_state: str,
+    ) -> runtime_gate.StageCRuntimeActivationTerminalObservation:
+        return runtime_gate.StageCRuntimeActivationTerminalObservation(
+            schema_version=runtime_gate.STAGEC_RUNTIME_TERMINAL_OBSERVATION_SCHEMA,
+            envelope_sha256=envelope.sha256,
+            backend_claim_id=observation.backend_claim_id,
+            ledger_observation_sha256=observation.ledger_observation_sha256,
+            fresh_trust_observation_sha256="E" * 64,
+            terminal_observation_sha256="F" * 64,
+            phase_activation_id=observation.phase_activation_id,
+            ledger_generation=observation.ledger_generation + 1,
+            terminal_state=terminal_state,
+        )
+
+    def reauthenticate_and_redeem_stagec_runtime_activation_claim(
+        self,
+        *,
+        envelope: runtime_gate.StageCRuntimeActivationEnvelope,
+        observation: runtime_gate.StageCRuntimeActivationLedgerObservation,
+        terminal_state: str,
+    ) -> runtime_gate.StageCRuntimeActivationTerminalObservation:
+        self.redemption_calls += 1
+        self.terminal_states.append(terminal_state)
+        return self._terminal_observation(
+            envelope=envelope,
+            observation=observation,
+            terminal_state=terminal_state,
+        )
+
+    def terminalize_stagec_runtime_activation_claim(
+        self,
+        *,
+        envelope: runtime_gate.StageCRuntimeActivationEnvelope,
+        observation: runtime_gate.StageCRuntimeActivationLedgerObservation,
+        terminal_state: str,
+    ) -> runtime_gate.StageCRuntimeActivationTerminalObservation:
+        self.invalidation_calls += 1
+        self.terminal_states.append(terminal_state)
+        return self._terminal_observation(
+            envelope=envelope,
+            observation=observation,
+            terminal_state=terminal_state,
+        )
 
 
 def _json_artifact(
@@ -345,6 +440,64 @@ def _artifact_ids() -> CaptureArtifactIds:
     )
 
 
+def _runtime_activation_envelope(
+    *,
+    request: CanonicalJsonArtifact,
+    authorization: CanonicalJsonArtifact,
+    artifact_ids: CaptureArtifactIds,
+    **changes: Any,
+) -> runtime_gate.StageCRuntimeActivationEnvelope:
+    request_payload = json.loads(request.raw_bytes)
+    values: dict[str, Any] = {
+        "request_artifact_identity": request.ref.to_payload(),
+        "authorization_projection_artifact_identity": authorization.ref.to_payload(),
+        "capture_artifact_ids": {
+            name: getattr(artifact_ids, name)
+            for name in runtime_gate.STAGEC_CAPTURE_ARTIFACT_ID_FIELDS
+        },
+        "tenant_id": "tenant-stagec-test",
+        "worker_id": "worker-stagec-test",
+        "lease_generation": 7,
+        "attempt_subject_sha256": _digest(b"stagec-test-attempt-subject"),
+        "case_id": request_payload["case_id"],
+        "case_execution_ordinal": 1,
+        "model_id": STAGEC_MODEL_ID,
+        "model_revision": STAGEC_MODEL_REVISION,
+        "model_config_sha256": STAGEC_MODEL_CONFIG_SHA256.upper(),
+        "weights_sha256": STAGEC_WEIGHTS_SHA256.upper(),
+        "tokenizer_json_sha256": STAGEC_TOKENIZER_JSON_SHA256.upper(),
+        "tokenizer_config_sha256": STAGEC_TOKENIZER_CONFIG_SHA256.upper(),
+        "chat_template_sha256": _digest(_CHAT_TEMPLATE.encode("utf-8")),
+        "capture_profile_sha256": STAGEC_CAPTURE_PROFILE_SHA256,
+        "phase_activation_id": "stagec-test-phase-activation",
+        "ledger_generation": 11,
+    }
+    values.update(changes)
+    return runtime_gate.build_stagec_runtime_activation_envelope(**values)
+
+
+def _runtime_gate_pair(
+    *,
+    request: CanonicalJsonArtifact,
+    authorization: CanonicalJsonArtifact,
+    artifact_ids: CaptureArtifactIds,
+    **changes: Any,
+) -> tuple[
+    runtime_gate.StageCRuntimeActivationEnvelope,
+    runtime_gate.StageCModelCallPermit,
+]:
+    envelope = _runtime_activation_envelope(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+        **changes,
+    )
+    permit = runtime_gate.acquire_stagec_model_call_permit(
+        runtime_activation_envelope=envelope
+    )
+    return envelope, permit
+
+
 def _real_manifest() -> Any:
     binding = model_loader.active_model_binding()
     payload = model_loader.bootstrap_manifest(binding).model_dump(mode="json")
@@ -397,16 +550,40 @@ def _capture(
     request: CanonicalJsonArtifact | None = None,
     authorization: CanonicalJsonArtifact | None = None,
     artifact_ids: CaptureArtifactIds | None = None,
+    runtime_activation_envelope: (
+        runtime_gate.StageCRuntimeActivationEnvelope | None
+    ) = None,
+    model_call_permit: runtime_gate.StageCModelCallPermit | None = None,
+    attempt_subject_sha256: str | None = None,
 ) -> StageCCaptureResult:
     selected_request = request or _request()
     selected_loaded = loaded or _loaded()
+    selected_authorization = authorization or _authorization(selected_request)
+    selected_artifact_ids = artifact_ids or _artifact_ids()
+    selected_envelope = runtime_activation_envelope
+    selected_permit = model_call_permit
+    if selected_envelope is None:
+        selected_envelope = _runtime_activation_envelope(
+            request=selected_request,
+            authorization=selected_authorization,
+            artifact_ids=selected_artifact_ids,
+            **(
+                {"attempt_subject_sha256": attempt_subject_sha256}
+                if attempt_subject_sha256 is not None
+                else {}
+            ),
+        )
+    if selected_permit is None:
+        selected_permit = runtime_gate.acquire_stagec_model_call_permit(
+            runtime_activation_envelope=selected_envelope
+        )
     with patch.object(model_loader, "get_loaded_model", return_value=selected_loaded):
         return capture_stagec_qwen_w0(
             request_artifact=selected_request,
-            authorization_projection_artifact=(
-                authorization or _authorization(selected_request)
-            ),
-            artifact_ids=artifact_ids or _artifact_ids(),
+            authorization_projection_artifact=selected_authorization,
+            artifact_ids=selected_artifact_ids,
+            runtime_activation_envelope=selected_envelope,
+            model_call_permit=selected_permit,
         )
 
 
@@ -449,11 +626,28 @@ def _hook_registry_fingerprint(model: nn.Module) -> tuple[Any, ...]:
 
 
 @pytest.fixture(autouse=True)
-def _select_qwen_and_restore_global_hooks(monkeypatch: pytest.MonkeyPatch):
+def _isolated_capture_runtime(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setenv(
         model_loader.ACTIVE_MODEL_ENV,
         model_loader.QWEN_05B_INSTRUCT_BINDING_KEY,
     )
+    with runtime_gate._PERMIT_LOCK:
+        runtime_gate._PERMIT_RECORDS.clear()
+        runtime_gate._BACKEND_CLAIMS.clear()
+        runtime_gate._ENVELOPE_CLAIMS.clear()
+        runtime_gate._LOGICAL_ROW_CLAIMS.clear()
+        runtime_gate._ATTEMPT_SUBJECT_CLAIMS.clear()
+        runtime_gate._AMBIGUOUS_TERMINALS.clear()
+    with stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+        stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRIES.clear()
+        stagec_capture_module._STAGEC_CAPTURE_BOUND_PERMITS.clear()
+    backend = _TrustedCaptureTestBackend()
+    monkeypatch.setattr(
+        runtime_gate,
+        "_REGISTERED_WORKER_TRUST_BACKEND_TYPES",
+        (_TrustedCaptureTestBackend,),
+    )
+    monkeypatch.setattr(runtime_gate, "_WORKER_TRUST_BACKEND", backend)
     names = (
         "_global_forward_pre_hooks",
         "_global_forward_hooks",
@@ -465,12 +659,387 @@ def _select_qwen_and_restore_global_hooks(monkeypatch: pytest.MonkeyPatch):
         for name in names
     }
     try:
-        yield
+        yield backend
     finally:
         for name, (mapping, entries) in originals.items():
             setattr(torch_module_hooks, name, mapping)
             mapping.clear()
             mapping.update(entries)
+        with runtime_gate._PERMIT_LOCK:
+            runtime_gate._PERMIT_RECORDS.clear()
+            runtime_gate._BACKEND_CLAIMS.clear()
+            runtime_gate._ENVELOPE_CLAIMS.clear()
+            runtime_gate._LOGICAL_ROW_CLAIMS.clear()
+            runtime_gate._ATTEMPT_SUBJECT_CLAIMS.clear()
+            runtime_gate._AMBIGUOUS_TERMINALS.clear()
+        with stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRY_LOCK:
+            stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRIES.clear()
+            stagec_capture_module._STAGEC_CAPTURE_BOUND_PERMITS.clear()
+
+
+def test_local_capture_profile_digest_replays_exact_worker_contract() -> None:
+    profile = stagec_capture_module._stagec_capture_profile_payload()
+    assert _digest(_canonical_bytes(profile)) == STAGEC_CAPTURE_PROFILE_SHA256
+    assert profile["model"] == {
+        "model_id": STAGEC_MODEL_ID,
+        "model_revision": STAGEC_MODEL_REVISION,
+        "model_config_sha256": STAGEC_MODEL_CONFIG_SHA256.upper(),
+        "weights_sha256": STAGEC_WEIGHTS_SHA256.upper(),
+        "tokenizer_json_sha256": STAGEC_TOKENIZER_JSON_SHA256.upper(),
+        "tokenizer_config_sha256": STAGEC_TOKENIZER_CONFIG_SHA256.upper(),
+    }
+    assert profile["forward"]["direct_prefill_call_count"] == 1
+    assert profile["forward"]["startup_canary_count"] == 0
+    assert profile["forward"]["generate_call_count"] == 0
+    assert profile["forward"]["intervention_count"] == 0
+    assert profile["capture"]["registration_order"] == [0, 18]
+    assert profile["capture"]["wrong_layer_module_path"] == (
+        STAGEC_WRONG_LAYER_MODULE_PATH
+    )
+    assert profile["capture"]["target_module_path"] == STAGEC_TARGET_MODULE_PATH
+    assert profile["prompt"]["observation_position"] == (
+        "FINAL_UNPADDED_PROMPT_TOKEN"
+    )
+    assert profile["scope"]["steering"] is False
+
+
+def test_runtime_envelope_and_permit_are_required_before_model_load() -> None:
+    parameters = inspect.signature(capture_stagec_qwen_w0).parameters
+    for name in ("runtime_activation_envelope", "model_call_permit"):
+        assert parameters[name].kind is inspect.Parameter.KEYWORD_ONLY
+        assert parameters[name].default is inspect.Parameter.empty
+    request = _request()
+    model = _FakeQwen()
+    with patch.object(model_loader, "get_loaded_model") as get_loaded:
+        with pytest.raises(TypeError, match="runtime_activation_envelope"):
+            capture_stagec_qwen_w0(  # type: ignore[call-arg]
+                request_artifact=request,
+                authorization_projection_artifact=_authorization(request),
+                artifact_ids=_artifact_ids(),
+            )
+    get_loaded.assert_not_called()
+    assert model.forward_calls == 0
+
+
+def test_wrong_permit_type_rejects_before_model_load() -> None:
+    request = _request()
+    authorization = _authorization(request)
+    artifact_ids = _artifact_ids()
+    envelope = _runtime_activation_envelope(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+    )
+    with patch.object(model_loader, "get_loaded_model") as get_loaded:
+        with pytest.raises(runtime_gate.StageCRuntimeActivationError) as observed:
+            capture_stagec_qwen_w0(
+                request_artifact=request,
+                authorization_projection_artifact=authorization,
+                artifact_ids=artifact_ids,
+                runtime_activation_envelope=envelope,
+                model_call_permit=object(),  # type: ignore[arg-type]
+            )
+    assert observed.value.code == (
+        runtime_gate.StageCRuntimeActivationErrorCode.INVALID_PERMIT.value
+    )
+    get_loaded.assert_not_called()
+
+
+def test_private_capture_mechanics_reject_unsealed_direct_entry_before_model_load() -> None:
+    request = _request()
+    authorization = _authorization(request)
+    artifact_ids = _artifact_ids()
+    envelope = _runtime_activation_envelope(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+    )
+    runtime_payload = runtime_gate.replay_stagec_runtime_activation_envelope(envelope)
+    with patch.object(model_loader, "get_loaded_model") as get_loaded:
+        with pytest.raises(StageCCaptureError, match="no sealed runtime entry"):
+            stagec_capture_module._capture_stagec_qwen_w0_after_runtime_gate(
+                request_artifact=request,
+                authorization_projection_artifact=authorization,
+                artifact_ids=artifact_ids,
+                runtime_activation_payload=runtime_payload,
+                runtime_entry=object(),
+            )
+    get_loaded.assert_not_called()
+
+
+def test_private_entry_factory_rejects_cross_row_substitution_and_burns_permit(
+    _isolated_capture_runtime: _TrustedCaptureTestBackend,
+) -> None:
+    bound_request = _request()
+    bound_authorization = _authorization(bound_request)
+    bound_artifact_ids = _artifact_ids()
+    envelope, permit = _runtime_gate_pair(
+        request=bound_request,
+        authorization=bound_authorization,
+        artifact_ids=bound_artifact_ids,
+    )
+    substituted_request = _request(
+        artifact_id="stagec-request-row-b",
+        case_id="stagec-case-row-b",
+        invocation_id="stagec-invocation-row-b",
+    )
+    substituted_authorization = _authorization(
+        substituted_request,
+        artifact_id="stagec-authorization-row-b",
+    )
+    with patch.object(model_loader, "get_loaded_model") as get_loaded:
+        with pytest.raises(StageCCaptureError, match="different request artifact"):
+            stagec_capture_module._new_stagec_capture_runtime_entry(
+                runtime_activation_envelope=envelope,
+                model_call_permit=permit,
+                request_artifact=substituted_request,
+                authorization_projection_artifact=substituted_authorization,
+                artifact_ids=bound_artifact_ids,
+            )
+    get_loaded.assert_not_called()
+    assert _isolated_capture_runtime.redemption_calls == 0
+    assert _isolated_capture_runtime.terminal_states == [
+        runtime_gate.StageCModelCallInvalidationDisposition.REJECTED.value
+    ]
+    assert stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRIES == {}
+
+
+def test_entry_factory_returns_only_opaque_entry_and_binds_permit_once(
+    _isolated_capture_runtime: _TrustedCaptureTestBackend,
+) -> None:
+    request = _request()
+    authorization = _authorization(request)
+    artifact_ids = _artifact_ids()
+    envelope, permit = _runtime_gate_pair(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+    )
+    entry = stagec_capture_module._new_stagec_capture_runtime_entry(
+        runtime_activation_envelope=envelope,
+        model_call_permit=permit,
+        request_artifact=request,
+        authorization_projection_artifact=authorization,
+        artifact_ids=artifact_ids,
+    )
+    assert type(entry) is stagec_capture_module._StageCCaptureRuntimeEntry
+    assert not hasattr(entry, "__dict__")
+    with pytest.raises(StageCCaptureError, match="already bound"):
+        stagec_capture_module._new_stagec_capture_runtime_entry(
+            runtime_activation_envelope=envelope,
+            model_call_permit=permit,
+            request_artifact=request,
+            authorization_projection_artifact=authorization,
+            artifact_ids=artifact_ids,
+        )
+    assert _isolated_capture_runtime.redemption_calls == 0
+    assert _isolated_capture_runtime.invalidation_calls == 0
+    stagec_capture_module._discard_stagec_capture_runtime_entry(entry)
+    runtime_gate.invalidate_stagec_model_call_permit(
+        permit=permit,
+        runtime_activation_envelope=envelope,
+    )
+
+
+def test_wrong_envelope_burns_genuine_permit_before_model_load(
+    _isolated_capture_runtime: _TrustedCaptureTestBackend,
+) -> None:
+    request = _request()
+    authorization = _authorization(request)
+    artifact_ids = _artifact_ids()
+    original, permit = _runtime_gate_pair(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+    )
+    substituted = _runtime_activation_envelope(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+        worker_id="worker-stagec-substituted",
+    )
+    assert substituted.raw_bytes != original.raw_bytes
+    with patch.object(model_loader, "get_loaded_model") as get_loaded:
+        with pytest.raises(runtime_gate.StageCRuntimeActivationError) as observed:
+            capture_stagec_qwen_w0(
+                request_artifact=request,
+                authorization_projection_artifact=authorization,
+                artifact_ids=artifact_ids,
+                runtime_activation_envelope=substituted,
+                model_call_permit=permit,
+            )
+    assert observed.value.code == (
+        runtime_gate.StageCRuntimeActivationErrorCode.PERMIT_BINDING_MISMATCH.value
+    )
+    get_loaded.assert_not_called()
+    assert _isolated_capture_runtime.terminal_states == [
+        runtime_gate.StageCModelCallInvalidationDisposition.REJECTED.value
+    ]
+
+
+def test_reused_permit_rejects_before_a_second_model_load(
+    _isolated_capture_runtime: _TrustedCaptureTestBackend,
+) -> None:
+    request = _request()
+    authorization = _authorization(request)
+    artifact_ids = _artifact_ids()
+    model = _FakeQwen()
+    loaded = _loaded(model=model)
+    envelope, permit = _runtime_gate_pair(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+    )
+    _capture(
+        loaded=loaded,
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+        runtime_activation_envelope=envelope,
+        model_call_permit=permit,
+    )
+    with patch.object(model_loader, "get_loaded_model") as second_load:
+        with pytest.raises(runtime_gate.StageCRuntimeActivationError) as observed:
+            capture_stagec_qwen_w0(
+                request_artifact=request,
+                authorization_projection_artifact=authorization,
+                artifact_ids=artifact_ids,
+                runtime_activation_envelope=envelope,
+                model_call_permit=permit,
+            )
+    assert observed.value.code == (
+        runtime_gate.StageCRuntimeActivationErrorCode.PERMIT_ALREADY_REDEEMED.value
+    )
+    second_load.assert_not_called()
+    assert model.forward_calls == 1
+    assert _isolated_capture_runtime.redemption_calls == 1
+    assert _isolated_capture_runtime.invalidation_calls == 0
+
+
+def test_local_request_substitution_invalidates_before_model_load(
+    _isolated_capture_runtime: _TrustedCaptureTestBackend,
+) -> None:
+    request = _request()
+    authorization = _authorization(request)
+    artifact_ids = _artifact_ids()
+    envelope, permit = _runtime_gate_pair(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+    )
+    substituted = _request(artifact_id="stagec-request-substituted")
+    with patch.object(model_loader, "get_loaded_model") as get_loaded:
+        with pytest.raises(StageCCaptureError, match="different request artifact"):
+            capture_stagec_qwen_w0(
+                request_artifact=substituted,
+                authorization_projection_artifact=_authorization(
+                    substituted, artifact_id="stagec-authorization-substituted"
+                ),
+                artifact_ids=artifact_ids,
+                runtime_activation_envelope=envelope,
+                model_call_permit=permit,
+            )
+    get_loaded.assert_not_called()
+    assert _isolated_capture_runtime.redemption_calls == 0
+    assert _isolated_capture_runtime.terminal_states == [
+        runtime_gate.StageCModelCallInvalidationDisposition.REJECTED.value
+    ]
+
+
+@pytest.mark.parametrize(
+    ("field_name", "replacement"),
+    [
+        ("model_id", "Qwen/substituted-model"),
+        ("model_revision", "b" * 40),
+        ("model_config_sha256", "A" * 64),
+        ("weights_sha256", "A" * 64),
+        ("tokenizer_json_sha256", "A" * 64),
+        ("tokenizer_config_sha256", "A" * 64),
+        ("capture_profile_sha256", "A" * 64),
+    ],
+)
+def test_authenticated_model_pin_substitution_invalidates_before_model_load(
+    _isolated_capture_runtime: _TrustedCaptureTestBackend,
+    field_name: str,
+    replacement: str,
+) -> None:
+    request = _request()
+    authorization = _authorization(request)
+    artifact_ids = _artifact_ids()
+    envelope, permit = _runtime_gate_pair(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+        **{field_name: replacement},
+    )
+    with patch.object(model_loader, "get_loaded_model") as get_loaded:
+        with pytest.raises(StageCCaptureError, match=field_name):
+            capture_stagec_qwen_w0(
+                request_artifact=request,
+                authorization_projection_artifact=authorization,
+                artifact_ids=artifact_ids,
+                runtime_activation_envelope=envelope,
+                model_call_permit=permit,
+            )
+    get_loaded.assert_not_called()
+    assert _isolated_capture_runtime.redemption_calls == 0
+    assert _isolated_capture_runtime.invalidation_calls == 1
+
+
+def test_chat_template_binding_failure_loads_but_never_calls_model(
+    _isolated_capture_runtime: _TrustedCaptureTestBackend,
+) -> None:
+    request = _request()
+    authorization = _authorization(request)
+    artifact_ids = _artifact_ids()
+    model = _FakeQwen()
+    loaded = _loaded(model=model)
+    envelope, permit = _runtime_gate_pair(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+        chat_template_sha256="A" * 64,
+    )
+    with patch.object(model_loader, "get_loaded_model", return_value=loaded) as get_loaded:
+        with pytest.raises(StageCCaptureError, match="chat-template digest"):
+            capture_stagec_qwen_w0(
+                request_artifact=request,
+                authorization_projection_artifact=authorization,
+                artifact_ids=artifact_ids,
+                runtime_activation_envelope=envelope,
+                model_call_permit=permit,
+            )
+    get_loaded.assert_called_once_with()
+    assert model.forward_calls == 0
+    assert _isolated_capture_runtime.redemption_calls == 0
+    assert _isolated_capture_runtime.invalidation_calls == 1
+    assert stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRIES == {}
+
+
+def test_pre_call_setup_failure_invalidates_without_redeeming(
+    _isolated_capture_runtime: _TrustedCaptureTestBackend,
+) -> None:
+    model = _FakeQwen()
+    with pytest.raises(StageCCaptureError, match="tokenization failed"):
+        _capture(
+            loaded=_loaded(model=model, tokenizer=_FakeTokenizer(mode="tokenizer_failure"))
+        )
+    assert model.forward_calls == 0
+    assert _isolated_capture_runtime.redemption_calls == 0
+    assert _isolated_capture_runtime.invalidation_calls == 1
+
+
+def test_model_failure_after_redemption_never_reopens_or_invalidates(
+    _isolated_capture_runtime: _TrustedCaptureTestBackend,
+) -> None:
+    model = _FakeQwen(mode="forward_failure")
+    with pytest.raises(StageCCaptureError, match="direct prefill call failed"):
+        _capture(loaded=_loaded(model=model))
+    assert model.forward_calls == 1
+    assert _isolated_capture_runtime.redemption_calls == 1
+    assert _isolated_capture_runtime.invalidation_calls == 0
+    assert _isolated_capture_runtime.terminal_states == ["CALL_STARTED"]
+    assert stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRIES == {}
 
 
 def test_success_derives_prompt_and_association_from_request_bytes() -> None:
@@ -481,6 +1050,7 @@ def test_success_derives_prompt_and_association_from_request_bytes() -> None:
 
     assert model.forward_calls == 1
     assert model.generate_calls == 0
+    assert stagec_capture_module._STAGEC_CAPTURE_RUNTIME_ENTRIES == {}
     assert tokenizer.template_calls == [
         (
             [{"role": "user", "content": _PROMPT}],
@@ -716,8 +1286,22 @@ def test_request_artifact_requires_unique_key_canonical_utf8_exact_schema(kind: 
         media_type=media_type,
         raw_bytes=raw,
     )
+    authorization = _authorization(request)
+    runtime_kwargs: dict[str, Any] = {}
+    if kind == "wrong_media":
+        artifact_ids = _artifact_ids()
+        envelope, permit = _runtime_gate_pair(
+            request=request,
+            authorization=authorization,
+            artifact_ids=artifact_ids,
+        )
+        runtime_kwargs = {
+            "artifact_ids": artifact_ids,
+            "runtime_activation_envelope": envelope,
+            "model_call_permit": permit,
+        }
     with pytest.raises(StageCCaptureError, match="duplicate|canonical|keys drifted|media type"):
-        _capture(request=forged, authorization=_authorization(request))
+        _capture(request=forged, authorization=authorization, **runtime_kwargs)
 
 
 def test_request_bytes_cannot_be_tampered_without_ref_update() -> None:
@@ -784,7 +1368,10 @@ def test_runtime_model_and_tokenizer_identity_drift_fail_before_template() -> No
     tokenizer = _FakeTokenizer()
     tokenizer.name_or_path = "Qwen/not-pinned"
     with pytest.raises(StageCCaptureError, match="tokenizer identity"):
-        _capture(loaded=_loaded(model=model, tokenizer=tokenizer))
+        _capture(
+            loaded=_loaded(model=model, tokenizer=tokenizer),
+            attempt_subject_sha256=_digest(b"stagec-test-attempt-subject-2"),
+        )
     assert tokenizer.template_calls == []
 
 
@@ -1226,10 +1813,69 @@ def test_tokenizer_template_value_change_during_forward_fails() -> None:
         _capture(loaded=loaded)
 
 
+def test_caller_owned_capture_inputs_mutated_during_forward_are_detached() -> None:
+    request = _request()
+    authorization = _authorization(request)
+    artifact_ids = _artifact_ids()
+    original_request_id = request.ref.artifact_id
+    original_authorization_id = authorization.ref.artifact_id
+    original_target_id = artifact_ids.target_vector
+    original_request_bytes = request.raw_bytes
+    original_authorization_bytes = authorization.raw_bytes
+
+    def mutate_caller_inputs() -> None:
+        object.__setattr__(request.ref, "artifact_id", "mutated-caller-request")
+        object.__setattr__(request, "raw_bytes", b"{}")
+        object.__setattr__(
+            authorization.ref,
+            "artifact_id",
+            "mutated-caller-authorization",
+        )
+        object.__setattr__(authorization, "raw_bytes", b"{}")
+        object.__setattr__(
+            artifact_ids,
+            "target_vector",
+            "mutated-caller-target-vector",
+        )
+
+    model = _FakeQwen(on_forward=mutate_caller_inputs)
+    result = _capture(
+        loaded=_loaded(model=model),
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+    )
+
+    assert model.forward_calls == 1
+    assert result.request_artifact is not request
+    assert result.authorization_projection_artifact is not authorization
+    assert result.request_artifact.ref is not request.ref
+    assert result.authorization_projection_artifact.ref is not authorization.ref
+    assert result.request_artifact.ref.artifact_id == original_request_id
+    assert result.request_artifact.raw_bytes == original_request_bytes
+    assert (
+        result.authorization_projection_artifact.ref.artifact_id
+        == original_authorization_id
+    )
+    assert (
+        result.authorization_projection_artifact.raw_bytes
+        == original_authorization_bytes
+    )
+    assert result.target_vector.ref.artifact_id == original_target_id
+    replay_stagec_capture_result(result)
+
+
 def test_loader_singleton_object_change_during_capture_fails() -> None:
     first = _loaded()
     second = _loaded()
     request = _request()
+    authorization = _authorization(request)
+    artifact_ids = _artifact_ids()
+    envelope, permit = _runtime_gate_pair(
+        request=request,
+        authorization=authorization,
+        artifact_ids=artifact_ids,
+    )
     with patch.object(
         model_loader,
         "get_loaded_model",
@@ -1238,8 +1884,10 @@ def test_loader_singleton_object_change_during_capture_fails() -> None:
         with pytest.raises(StageCCaptureError, match="singleton carrier identity changed"):
             capture_stagec_qwen_w0(
                 request_artifact=request,
-                authorization_projection_artifact=_authorization(request),
-                artifact_ids=_artifact_ids(),
+                authorization_projection_artifact=authorization,
+                artifact_ids=artifact_ids,
+                runtime_activation_envelope=envelope,
+                model_call_permit=permit,
             )
 
 
@@ -1455,18 +2103,23 @@ def test_capture_created_result_seal_and_cached_index_are_checked() -> None:
     with pytest.raises(StageCCaptureError, match="artifact fields drifted"):
         replay_stagec_capture_result(result)
 
-    fresh = _capture()
+    fresh = _capture(
+        attempt_subject_sha256=_digest(b"stagec-test-attempt-subject-2")
+    )
     other = _capture(
         request=_request(
             artifact_id="stagec-request-997",
             prompt=_OTHER_PROMPT,
-        )
+        ),
+        attempt_subject_sha256=_digest(b"stagec-test-attempt-subject-3"),
     )
     object.__setattr__(fresh, "index", other.index)
     with pytest.raises(StageCCaptureError, match="decoded index cache drifted"):
         replay_stagec_capture_result(fresh)
 
-    missing_cache = _capture()
+    missing_cache = _capture(
+        attempt_subject_sha256=_digest(b"stagec-test-attempt-subject-4")
+    )
     object.__delattr__(missing_cache, "index")
     with pytest.raises(StageCCaptureError, match="decoded index cache is missing"):
         replay_stagec_capture_result(missing_cache)
@@ -1550,5 +2203,18 @@ def test_every_request_auth_model_tokenizer_array_and_index_id_is_unique() -> No
     request = _request()
     ids_fixture = _artifact_ids()
     overlapping = replace(ids_fixture, capture_index=request.ref.artifact_id)
+    authorization = _authorization(request)
+    envelope, permit = _runtime_gate_pair(
+        request=request,
+        authorization=authorization,
+        artifact_ids=ids_fixture,
+        attempt_subject_sha256=_digest(b"stagec-test-attempt-subject-2"),
+    )
     with pytest.raises(StageCCaptureError, match="globally unique"):
-        _capture(request=request, artifact_ids=overlapping)
+        _capture(
+            request=request,
+            authorization=authorization,
+            artifact_ids=overlapping,
+            runtime_activation_envelope=envelope,
+            model_call_permit=permit,
+        )

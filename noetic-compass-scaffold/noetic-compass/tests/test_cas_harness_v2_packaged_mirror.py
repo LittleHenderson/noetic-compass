@@ -8,6 +8,7 @@ break this test until the mirror and its provenance record are updated together.
 
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
 import shutil
@@ -32,6 +33,52 @@ PROVENANCE_PATH = PACKAGED_MIRROR / "PACKAGING_PROVENANCE.json"
 PROVENANCE_SCHEMA = "cas_harness_v2.packaged_mirror_provenance.v1"
 IGNORED_PARTS = {"__pycache__"}
 IGNORED_SUFFIXES = {".pyc", ".pyo"}
+RUNTIME_ACTIVATION_EXPORTS = (
+    "STAGEC_RUNTIME_ACTIVATION_ERROR_CODES",
+    "STAGEC_RUNTIME_ACTIVATION_INDETERMINATE",
+    "STAGEC_RUNTIME_CONTROL_BOUNDARY",
+    "STAGEC_RUNTIME_GATE_5_STATUS",
+    "STAGEC_RUNTIME_INVALIDATION_REASONS",
+    "STAGEC_RUNTIME_PERMIT_INDETERMINATE",
+    "STAGEC_RUNTIME_PERMIT_INVALIDATED",
+    "STAGEC_RUNTIME_PERMIT_REDEEMED",
+    "STAGEC_RUNTIME_PERMIT_UNREDEEMED",
+    "STAGEC_RUNTIME_PREPARED",
+    "STAGEC_RUNTIME_PROJECT_STATUS",
+    "STAGEC_RUNTIME_ROWS_ENABLED",
+    "STAGEC_RUNTIME_SERIALIZED_AUTHORITY",
+    "STAGEC_RUNTIME_STAGE_C_STATUS",
+    "STAGEC_RUNTIME_STARTUP_CANARY",
+    "StageCRuntimeActivationBackend",
+    "StageCRuntimeActivationError",
+    "ActivatedDiagnosticAttemptConsumption",
+    "ActivatedDiagnosticPhaseCoordinator",
+    "StageCRuntimeAmbiguousClaimTerminalObservation",
+    "StageCRuntimeAttemptClaimExpectation",
+    "StageCRuntimeAttemptClaimObservation",
+    "StageCRuntimeAttemptInvalidationExpectation",
+    "StageCRuntimeAttemptInvalidationObservation",
+    "StageCRuntimeDispatchPermit",
+    "StageCRuntimeIssuerAuthorizationObservation",
+    "StageCRuntimeModelCaptureTarget",
+    "StageCRuntimePhaseActivation",
+    "StageCRuntimePhaseActivationExpectation",
+    "StageCRuntimePhaseActivationObservation",
+    "StageCRuntimePreparation",
+    "StageCRuntimeStorageObservation",
+    "StageCRuntimeWorkerLeaseObservation",
+    "UnavailableStageCRuntimeActivationBackend",
+    "activate_stagec_runtime_phase",
+    "build_stagec_runtime_model_capture_target",
+    "invalidate_stagec_runtime_attempt_claim",
+    "mark_stagec_runtime_attempt_indeterminate",
+    "prepare_stagec_runtime_activation",
+    "redeem_stagec_runtime_dispatch_permit",
+    "require_stagec_runtime_startup_canary",
+    "stagec_runtime_dispatch_permit_state",
+    "stagec_runtime_phase_state",
+    "stagec_runtime_preparation_state",
+)
 
 
 def _duplicate_rejecting_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -157,7 +204,23 @@ def test_packaged_mirror_import_resolves_inside_the_docker_context() -> None:
     assert completed.returncode == 0, completed.stderr
 
 
-def test_packaged_prompt_context_modules_are_exported_exactly(tmp_path: Path) -> None:
+def test_packaged_recent_modules_are_exported_exactly(tmp_path: Path) -> None:
+    package_tree = ast.parse((CANONICAL_PACKAGE / "__init__.py").read_text())
+    runtime_imports = [
+        node
+        for node in package_tree.body
+        if isinstance(node, ast.ImportFrom)
+        and node.module == "diagnostic_stagec_runtime_activation"
+    ]
+    assert len(runtime_imports) == 1
+    assert all(
+        alias.asname is None and alias.name != "*"
+        for alias in runtime_imports[0].names
+    )
+    assert {alias.name for alias in runtime_imports[0].names} == set(
+        RUNTIME_ACTIVATION_EXPORTS
+    )
+
     snapshot_payload = b'{"external":"candidate-snapshot"}\n'
     snapshot_path = tmp_path / "candidate.json"
     snapshot_path.write_bytes(snapshot_payload)
@@ -180,17 +243,25 @@ def test_packaged_prompt_context_modules_are_exported_exactly(tmp_path: Path) ->
             "external = importlib.import_module(",
             "    'cas_harness_v2.diagnostic_stagec_prerequisite_external_intake'",
             ")",
+            "runtime = importlib.import_module(",
+            "    'cas_harness_v2.diagnostic_stagec_runtime_activation'",
+            ")",
             "artifacts = importlib.import_module('cas_harness_v2.artifacts')",
             "assert len(provenance.__all__) == len(set(provenance.__all__)) == 32",
             "assert len(inventory.__all__) == len(set(inventory.__all__)) == 11",
             "assert len(prerequisite.__all__) == len(set(prerequisite.__all__)) == 62",
             "assert len(external.__all__) == len(set(external.__all__)) == 20",
-            "assert len(package.__all__) == len(set(package.__all__)) == 425",
+            f"assert tuple(runtime.__all__) == {RUNTIME_ACTIVATION_EXPORTS!r}",
+            "assert len(runtime.__all__) == len(set(runtime.__all__)) == 44",
+            "assert not [name for name in runtime.__all__ if name.endswith('_SCHEMA')]",
+            "assert not [name for name in runtime.__all__ if name.endswith('_MEDIA_TYPE')]",
+            "assert len(package.__all__) == len(set(package.__all__)) == 469",
+            "assert len(set(package.__all__) - set(runtime.__all__)) == 425",
             "assert len([name for name in prerequisite.__all__ if name.endswith('_SCHEMA')]) == 18",
             "assert len([name for name in prerequisite.__all__ if name.endswith('_MEDIA_TYPE')]) == 18",
             "assert len([name for name in external.__all__ if name.endswith('_SCHEMA')]) == 3",
             "assert len([name for name in external.__all__ if name.endswith('_MEDIA_TYPE')]) == 3",
-            "for module in (provenance, inventory, prerequisite, external):",
+            "for module in (provenance, inventory, prerequisite, external, runtime):",
             "    assert set(module.__all__) <= set(package.__all__)",
             "    assert all(",
             "        getattr(package, name) is getattr(module, name)",

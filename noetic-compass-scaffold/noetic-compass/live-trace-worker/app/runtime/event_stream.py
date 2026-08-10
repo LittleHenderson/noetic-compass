@@ -41,7 +41,12 @@ from .knob_resolution import (
     enabled_methods as _resolve_enabled_methods,
     resolve_knobs,
 )
-from .model_loader import active_model_binding, get_loaded_model
+from .model_loader import (
+    PYTHIA_160M_BINDING_KEY,
+    active_model_binding,
+    get_loaded_model,
+    require_loaded_pythia_runtime,
+)
 from .probe_runner import demo_intervention_result, resolve_probes
 from .word_spans import build_word_spans
 
@@ -262,17 +267,34 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
 
 async def stream_real_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTraceEvent]:
     """Real-model trace using the loaded Pythia + probe hooks."""
-    loaded = get_loaded_model()
-    if not loaded.is_real:
-        # Defensive: if someone routes here when weights aren't loaded,
-        # emit an error event so the UI falls back cleanly.
+    binding = active_model_binding()
+    if binding.key != PYTHIA_160M_BINDING_KEY:
+        # The Qwen binding belongs to the separately preregistered Stage C
+        # single-prefill path.  Generic live-trace generation has no Stage C
+        # runtime permit and would violate its zero-generation/intervention
+        # scope, so reject before model loading, tokenization, or a forward.
         yield ErrorEvent(
-            message="Real Pythia runner invoked but model is not loaded.",
+            message=(
+                "The selected Qwen binding is reserved for permit-gated Stage C "
+                "capture; generic live trace is forbidden and no model forward "
+                "was executed."
+            ),
+            retryable=False,
+        )
+        return
+    try:
+        loaded = get_loaded_model()
+        require_loaded_pythia_runtime(loaded, binding=binding)
+    except RuntimeError as exc:
+        # Defensive: if someone routes here when weights aren't loaded,
+        # or when the cached concrete model belongs to another family, emit an
+        # error event without tokenization or a model forward.
+        yield ErrorEvent(
+            message=f"Real Pythia runner rejected the loaded carrier: {exc}",
             retryable=False,
         )
         return
 
-    binding = active_model_binding()
     if ablation_requested(req) and not binding.single_unit_causal_ablation_supported:
         yield ErrorEvent(
             message=(
@@ -364,6 +386,19 @@ async def stream_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTraceEven
     Routes / tests that want to force one mode can call stream_real_trace
     or stream_fake_trace directly.
     """
+    # This public dispatcher is itself a model-loading boundary.  Reject Qwen
+    # here, before get_loaded_model() can download, allocate, tokenize, or run
+    # anything for a generic trace request.
+    if active_model_binding().key != PYTHIA_160M_BINDING_KEY:
+        yield ErrorEvent(
+            message=(
+                "The selected Qwen binding is reserved for permit-gated Stage C "
+                "capture; generic live trace is forbidden and no model load or "
+                "forward was executed."
+            ),
+            retryable=False,
+        )
+        return
     loaded = get_loaded_model()
     if loaded.is_real:
         async for event in stream_real_trace(req):

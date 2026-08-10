@@ -1,7 +1,7 @@
 # Gate 5 Stage C Qwen Prompt-Injection Detection v0.1
 
-Status: **DESIGN ONLY / EXECUTION UNAUTHORIZED / EXPERIMENT NOT_STARTED /
-GATE 5 OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN**
+Status: **DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED /
+GATE 5 OPEN / KEEP_OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN**
 
 This package defines the prospective Stage C prompt-injection **detection-only**
 program that follows the completed Stage B Qwen engineering smoke. The source
@@ -9,9 +9,10 @@ tree now contains repaired `STRUCTURE_ONLY / NON_AUTHORITY` carriers for a
 diagnostic preregistration, its fixed diagnostic Study, local capture retention,
 post-terminal association, typed execution-v2, one-attempt lifecycle, exact
 480-row coordination, worker-local archive admission, locked calibration fit,
-one freeze-or-reject disposition, and an exact Stage C prerequisite
-intake/admission contract. This design package still creates no activated
-preregistration or authoritative runtime authorization, terminal model result,
+one freeze-or-reject disposition, an exact Stage C prerequisite intake/admission
+contract, and a fail-closed structural runtime activation and worker-redemption
+candidate. This design package still creates no activated real preregistration
+or authoritative positive runtime authorization, terminal model result,
 Evidence Packet, model run, provider call, steering study, or product claim.
 
 ## Audit-only prompt-context companions
@@ -29,10 +30,11 @@ dependency closure evidence to a count plus ordered digest (including the
 Focused receipts are 30/30 provenance, 22/22 inventory, 52/52 union, and 98/98
 with the diagnostic Study in 33.77 seconds (node-ID SHA-256
 `C573CE9C70496C9FE0D1E7A3516E07F8454CF4F7085A26BDC5364342CA7A085E`).
-Corpus freeze is still `NOT_ESTABLISHED`. The additive prerequisite helper now
+Corpus freeze is still `NOT_ESTABLISHED`. The additive prerequisite helper
 requires the aggregate ref in any future immutable diagnostic base
-`design.input_artifacts`, but no actual base preregistration, deterministic DRC
-execution, or admitted runtime consumes that helper yet.
+`design.input_artifacts`, and the structural activation candidate calls it under
+controlled fixtures. No actual real base or authenticated bundle has reached
+that path and no deterministic real DRC has executed.
 The prior prompt-context checkpoint is preserved as a historical authoritative
 Harness replay that collected, started, and finished 489 nodes with digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`:
@@ -79,8 +81,9 @@ test SHA-256
 `56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3`,
 and node-ID SHA-256
 `3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
-The current authoritative locked same-process Harness replay collected,
-started, and finished 537 nodes in 1,680.3 seconds. Exactly 531 had exact
+The last completed pre-runtime locked same-process Harness receipt, now
+preserved historically, collected, started, and finished 537 nodes in 1,680.3
+seconds. Exactly 531 had exact
 all-phase PASS; the same six exact nodes setup-skipped as runtime-lock mismatch
 evidence, not PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing
 subtests, recorded zero warnings, errors, collection or internal errors, or
@@ -149,15 +152,110 @@ An independent pre-final audit passed 28/28 in 47.93 seconds and returned a
 clean current-source P0/P1 verdict; it is retained as a pre-final checkpoint,
 not substituted for the final 29-node count.
 
-The expanded 537-node Harness configuration is now the current authoritative
-full-Harness receipt recorded above. The 508-node/502-pass-plus-six-skip receipt
-remains preserved as historical evidence and is no longer current.
+The 537-node Harness receipt recorded above is the last completed pre-runtime
+historical checkpoint. The 508-node/502-pass-plus-six-skip receipt remains
+earlier historical evidence. Neither is a current-tree replay.
 
 This tooling is `STRUCTURAL REPLAY ONLY / NON_AUTHORITY`. It does not
 authenticate external trust, establish the real corpus freeze, grant or consume
-runtime authorization, or activate the worker. The next evidence obligation is
-one real, exact 4+12 intake through these locators, followed by separate
-post-plan runtime activation and one-use authorization enforcement.
+real runtime authorization, or activate the real worker. The next evidence
+obligation is one real, exact 4+12 intake through these locators, followed by a
+positive post-plan activation and one-use authorization consumption.
+
+## Frozen structural runtime-activation tranche
+
+The current tree now implements the planned activation seam as bounded
+software. It remains `STRUCTURE_ONLY / NON_AUTHORITY`; no real Stage C positive
+activation has occurred.
+
+| Surface | Source SHA-256 / bytes | Test SHA-256 / bytes | Focused receipt or identity |
+|---|---|---|---|
+| Core activation control | `E4B9C390117A474B32DB790B5B7CB8DC2E3022823FF6F2F718725B1B3826E52E` / 133,262 | `5CCF0EEC47D1814A9CA46FC047DD089F415D113D990F234659460261971E1ACF` / 52,693 | 28/28 PASS in 922.45 seconds; node-ID SHA-256 `5D501F3505A98E23BDD2AB8B191BC6EEE90260F1F169940B6A6F70A61525A632` |
+| Worker activation gate | `FC918942B2D324BCE1882577166A1F3FCFE8A98AAE2D5A39F90E0DCCD9B970B4` / 61,983 | `0A3A177079AD28542C89F1EA9D745E448B6F6F3A7276DE26AD3EB62C72205489` / 49,357 | 95/95 PASS; node-ID SHA-256 `0554F3710F9A35667A462CAF53584C9517CF945BFC64811765ACFB4E7CC7BCD3` |
+| Worker capture | `0ECD006E3799A70FFED72688015C03BC2A1D8107BC25632FD93D87435D06519C` / 124,345 | `E21ED834800845E51223203DF018DCDEFAE43FB60E2FC7D0D43017EE99676A7E` / 84,540 | 139/139 PASS; node-ID SHA-256 `C306D70A052CDA8C0CFB12394B640A2ED2DDE9FEE58F16E92FF23771CAABFED1` |
+| Gate plus capture union | exact two worker source pairs above | exact two worker test pairs above | 234/234 PASS; node-ID SHA-256 `08CAA558DEE27A5876DA29A15E9D0E3875994C630E2826BC52154DC215776E76` |
+| Qwen generic-route exclusion | generic runtime sources | `08A6D58EA0E9D083D13CCC57A62956A23EEEC85D79C8F4C2F62F7DDE60320A3B` / 27,690 | 27/27 PASS as an exact executed subset of the authoritative 719-node worker same-process receipt; node-ID SHA-256 `D80B52FFC48D0677F773269F640481A4C1CA0C434C707041FF391EA75BE90ECA` |
+
+The control plane uses sealed private expectations, disposable backend copies,
+detached and rechecked observations, and monotone compare-and-swap state. A
+control-owned operation ID lets an ambiguous backend-crossed claim be durably
+tombstoned by immutable logical row as `INDETERMINATE`; backend exceptions,
+mutation, malformed observations, duplicate returned claim IDs, duplicates,
+stale inputs, and identity drift terminate without retry.
+
+The worker permanently reserves the exact envelope and logical subject before
+acquisition. Capture marks redemption attempted before the control call and
+requires one exact durable `CALL_STARTED` receipt before exactly one direct Qwen
+forward. Request, profile, model, hook/layer/position, tenant, phase, subject,
+case, ordinal, authorization, storage, issuer, ledger, and lease identities
+remain paired.
+
+Generic streaming/loading, Pythia execution, startup canaries, and both real
+ablation entrypoints reject Qwen and aliased or cached cross-family carriers
+before tokenizer, hook, or model-forward use. Their hashes are
+`F3273EF256491D7489004AA4067B52E0F81A563856FAE4F6774035C69BAC0C14`,
+`EE0F938B06202FBC820320AF8E1F580E2CCA81A591821175F51F8CB64AD0F7FF`,
+`9A4EC3A1BE91A51616A2B7E270CC8D06F42F2641F7286B6D0CB26EFCDA9A93F2`,
+and `B73CF7A48A359EAD3CD3D4EBD66D12D8AB650796BD5DDA4570BDBA49B8AB9D03`.
+The Stage C gate is Qwen's only structurally admitted forward path.
+
+The packaged kernel now has 22 byte-mirrored files, 469 unique exports, and
+1,420,002 bytes under provenance SHA-256
+`1561D0707AEB12ED720A1F70670494006B186628434CB6390A4DEEFBA5040D07`;
+13/13 package tests pass and the runtime module contributes 44 exports. Four
+new unique worker schemas and zero new media types yield 49 schemas and 44 media
+types total.
+
+The current authoritative same-process Harness replay collected, started, and
+finished 565 nodes in 2,477.3 seconds at node-ID SHA-256
+`4CCAD2A4EF4868EBAD7EBDC9E219371A57CBE69C974E5D986A8714A0A0DDE601`:
+559 nodes had exact all-phase PASS, the six exact setup skips remain mismatch
+evidence rather than PASS, 1,689 ordinary reports and 163 passing subtests were
+emitted, and warnings, collection or internal errors, and deselections were
+zero. The isolated pycache remained empty and process and pytest exits were 0.
+Receipt digests bind ordinary outcomes
+`7FCD1D82405624E07792CD92DC5F9E40904F2B43FB723CC2DEFF5A7E2C4DDB6E`,
+subtest outcomes
+`6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`,
+locked import origins
+`3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+pre-test loaded code
+`0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+and loaded code
+`24F868086F5B21A263D06229B5FBEC36FC572878F0C2AA710001BCAF9C0CAE07`.
+
+The current authoritative same-process worker replay passed 719/719 in 42.035
+seconds at node-ID SHA-256
+`98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`,
+with 2,157 ordinary reports, zero subtests, skips, warnings, errors, or
+deselections, an empty isolated pycache, and process and pytest exits 0. Receipt
+digests bind ordinary outcomes
+`CF7F1676BAAA3E83999E758A35F311743B7B227DBD0A160EF79F85AA72477468`,
+subtest outcomes
+`4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945`,
+locked import origins
+`035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6`,
+pre-test loaded code
+`3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E`,
+and loaded code
+`4B37B98E99C132E65C7095EBD0FC42A44E9C701923FD451DACC25EEC45636FBB`.
+For the current Harness receipt only, `loaded_code_sha256` uses `CANONICAL
+VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER
+SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE
+DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED`. The
+current worker and the preserved 537- and 508-node historical Harness
+loaded-code digests use `CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW
+RECORDS / NO PROJECTION`; their recorded values remain unchanged.
+These receipts sit within the complete 1,772-node verifier suite map, not a
+two-suite sum. The prior 537-node Harness and 594/594 worker receipts remain
+historical, and all receipts remain `STRUCTURE_ONLY / NON_AUTHORITY`.
+
+No exact authenticated real 4+12 bundle, positive provider-backed
+storage/issuer/ledger state, actual one-use nonce consumption, model/provider
+call, detector result, Evidence Packet, or authority exists. Gate 5 remains
+`OPEN / KEEP_OPEN`; Stage C remains
+`DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; claims remain
+`NOT LICENSED / HELD / NOT FROZEN`.
 
 ## Decision
 
@@ -194,7 +292,7 @@ its structural path:
 - the worker-local capture archive at source SHA-256
   `52E444142F5C3D8FC7F0AFC983DE060EFCACCC8975C61F97B48D5BDA52226055`
   and test SHA-256
-  `6D7B3440CEDD02BD6E351CCA6D1E5494F4D3FBC58D0A9470D681FEF65FBBB472`;
+  `B78434646D50A2B8BF96449B5AF53EE9EC80079F346420ED1A6E6C53D8AEB743`;
 - the worker-output and post-terminal outcome-index carriers at source SHA-256
   `D28908786C38DCAD63B39B51A82B51FAEF888CCA9DA9552CC00BE37785777D3A`
   and test SHA-256
@@ -221,13 +319,13 @@ pycache, pytest exit status 0, and digest
 `49BD9090B3CF8990A213BF91CB95E154792444221CC0015F1BCA7D2E77C5D293`.
 It is local regression evidence, not hermetic or independently attested and not
 a model, detector, steering, product, licensing, or disclosure result. The
-packaged kernel now has 21 byte-mirrored files, 425 unique exports, and
-1,283,080 bytes. Its packaging-provenance SHA-256 is
-`613A3E15748DC8F8CA49BB373BF3087F980E6A5762E709BC0E8ABFEB81A2957A`;
+packaged kernel now has 22 byte-mirrored files, 469 unique exports, and
+1,420,002 bytes. Its packaging-provenance SHA-256 is
+`1561D0707AEB12ED720A1F70670494006B186628434CB6390A4DEEFBA5040D07`;
 13 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
-`F6EDF1A49FFD81AEB11F952344AF697DC43B03C5AC7FD6630D0FF2AC02FF9E59`
+`7D3A90FAFBD68C81888DD36A17CE7E075C48243C231E84A8BFDF8093C939037C`
 and the packaging allowlist source SHA-256 is
-`752BC6F0081FDFBCA7EA58115897D545F5C3A75D322192533C58F41F37E33C91`.
+`CF21F42B81AD3E6CD50A211FB4FC6D01B035F6177921392B0F4811FCFFD641D0`.
 Those retained 306-Harness/576-worker receipts predate the six-file diagnostic
 runtime tranche below and remain exact. The tranche now has a separate
 authoritative same-process standard Python-3.14 Harness receipt that collected,
@@ -251,8 +349,9 @@ deselections, left the isolated pycache empty, exited pytest 0, and bound
 node-ID digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
-The current authoritative locked same-process receipt is the 537-node replay:
-531 exact all-phase passes, the same six exact setup skips retained as mismatch
+The preserved historical pre-runtime locked same-process receipt is the
+537-node replay: 531 exact all-phase passes, with the same six exact setup skips
+retained as mismatch
 evidence rather than PASS, 1,605 ordinary reports/outcomes, 163 passing
 subtests, zero warnings/errors/collection or internal errors/deselections,
 empty isolated pycache, pytest and verifier process exits 0, and digest
@@ -261,8 +360,9 @@ The 508-node/502-pass-plus-six-skip receipt is retained as a historical
 checkpoint at
 `8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
-The authoritative same-process worker receipt collected, started, finished,
-and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,
+The preserved historical pre-runtime same-process worker receipt collected,
+started, finished, and passed 594/594 nodes, emitted 1,782 ordinary reports and
+zero subtests,
 warnings, errors, or deselections, left the isolated pycache empty, exited
 pytest 0, and bound exact node-ID digest
 `B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B`.
@@ -289,12 +389,14 @@ The new source/test pairs are exact-hash bound:
 | exact 480-row phase coordinator | `B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7` | `5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5` | 5/5 nonheavy in 50.70s; 2/2 rejected-480/payload in 80.32s; 1/1 clean-480/access in 238.10s |
 | exact locked calibration fit | `4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF` | `1418C49D72FD9893ACCFDF264F9D5D9BFB9B85D0699BA8EF6729444A26102021` | 10/10 exact locked PASS in 356.75s |
 | one freeze-or-reject disposition | `161EF93030FD42632D03B0ABD5CBBA3ECA084F7198B7E889C96D6FD10A6C9196` | `CDB3218AA9CA8A3796062764D45A946408C9915BFD0BB134C0A981BA3C66BF95` | all 11 current-byte nodes PASS across two bounded split runs |
-| worker-local archive admission | `169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305` | `4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B` | 18/18 PASS; worker-local only |
+| worker-local archive admission | `169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305` | `E729485E6BFE16280592D668C998A8D39F932368CDB05F9B5BA0E0161F3DAB26` | 18/18 PASS; worker-local only |
 
-The disposition evidence is 11/11 across two final-byte split runs, not one
-single-process authoritative full-suite receipt: the early/light selector passed
-8 with three deselections in 210.72s, and the eligible exact-lock selector passed
-3 with eight deselections in 870.18s. The post-access
+The disposition evidence is 11/11 across two final-byte split runs: the
+early/light selector passed 8 with three deselections in 210.72s, and the
+eligible exact-lock selector passed 3 with eight deselections in 870.18s. The
+current authoritative 565-node Harness receipt separately records the six exact
+runtime-lock nodes as setup skips and mismatch evidence rather than PASS, so it
+is not an 11/11 positive exact-lock receipt. The post-access
 `NO_ELIGIBLE_THRESHOLD` rejection branch has not yet been positively executed.
 
 The execution-v2 family has exactly five terminal statuses: `COMPLETED`,
@@ -605,9 +707,10 @@ detect-then-intervene policy is part of Stage C.
   That receipt supplies no current-source
   validation, portable external-source dependency, Stage C execution authority,
   or scientific evidence.
-- The diagnostic coordinator and worker-local archive admission factory are not
-  wired into an admitted HTTP route or the runtime container. Their current
-  receipts prove local structural behavior only.
+- The structural activation gate is joined to the Stage C capture seam in code,
+  but no real authenticated prerequisite/authorization set has entered an
+  admitted HTTP/container runtime. The receipts prove local structural behavior
+  only.
 - No real pinned-Qwen Stage C capture or C-Cal model run has occurred. The
   frozen fitting/disposition tests use controlled structural data and establish
   no detector performance or scientific result.
@@ -619,10 +722,12 @@ detect-then-intervene policy is part of Stage C.
   authorization-declared and range-bound; canonical controller replay is still
   required.
 - The post-access `NO_ELIGIBLE_THRESHOLD` rejection branch has not been
-  positively executed. The authoritative integrated Harness/worker receipts
-  are now established, while the 11 disposition nodes' positive exact-lock
-  evidence remains the two bounded split runs; the standard full Harness run
-  setup-skipped the six exact runtime-lock mismatches as evidence, not PASS.
+  positively executed. The current Harness 565 and worker 719 authoritative
+  same-process receipts close only their exact local software-test slices; the
+  537/594 receipts remain historical. The 11 disposition nodes' earlier
+  positive exact-lock evidence remains the two bounded
+  split runs; the historical full Harness run setup-skipped the six exact
+  runtime-lock mismatches as evidence, not PASS.
 - Corpus authoring/adjudication, surface screening, power evidence, final
   runtime identity freeze, and a valid C-Cal activation receipt remain
   prospective.
@@ -647,14 +752,14 @@ activation receipt, authorized request, model result, or runner.
 
 ## Claim ceiling
 
-Current package wording is limited to `DESIGN ONLY / UNAUTHORIZED /
+Current package wording is limited to `DESIGN_ONLY / UNAUTHORIZED /
 NOT_STARTED`.
 
 Future C-Cal ceiling: `DIAGNOSTIC_ONLY`.
 
 Future C-Eval ceiling, only if prospectively authorized:
 `PRIVATE_RESEARCH_RESULT`. Even a complete passing Packet can report only
-`REPORTED_CRITERIA_MET / NOT_ESTABLISHED`; Gate 5 remains `OPEN`, Ring 4,
+`REPORTED_CRITERIA_MET / NOT_ESTABLISHED`; Gate 5 remains `OPEN / KEEP_OPEN`, Ring 4,
 `NOT LICENSED / HELD`, and internal held-out evidence is not independent
 replication.
 

@@ -31,18 +31,21 @@ forbidden. Focused receipts are 30/30 provenance, 22/22 inventory, 52/52 union,
 and 98/98 when joined with the diagnostic Study (33.77 seconds; node-ID SHA-256
 `C573CE9C70496C9FE0D1E7A3516E07F8454CF4F7085A26BDC5364342CA7A085E`).
 
-This does not establish corpus freeze. The additive prerequisite helper now
-requires the aggregate ref in any future immutable diagnostic base
-`design.input_artifacts`, but no actual base, deterministic DRC execution, or
-admitted runtime consumes that helper. The prior prompt-context Harness
-checkpoint is preserved historically at 489 collected/started/finished nodes
+This does not establish corpus freeze. The additive prerequisite helper requires
+the aggregate ref in any future immutable diagnostic base
+`design.input_artifacts`, and the structural activation candidate now calls that
+helper under controlled fixtures. No actual real base or authenticated bundle
+has reached it and no deterministic real DRC has executed. The prior
+prompt-context Harness checkpoint is preserved historically at 489
+collected/started/finished nodes
 (digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`):
 483 had all phases pass, six unchanged runtime-lock nodes setup-skipped as
 mismatch evidence rather than PASS, and it emitted 1,461 ordinary reports and
 163 passing subtests. It recorded zero warnings, errors, or deselections, left
-the isolated pycache empty, and exited pytest 0. The packaged
-surface is 21 files, 425 exports, and 1,283,080 bytes under provenance SHA-256
+the isolated pycache empty, and exited pytest 0. At that historical checkpoint,
+the packaged surface was 21 files, 425 exports, and 1,283,080 bytes under
+provenance SHA-256
 `613A3E15748DC8F8CA49BB373BF3087F980E6A5762E709BC0E8ABFEB81A2957A`.
 Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains `DESIGN_ONLY /
 UNAUTHORIZED / NOT_STARTED`; claims remain `NOT LICENSED / HELD / NOT FROZEN`.
@@ -72,8 +75,9 @@ test SHA-256
 `56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3`,
 and node-ID SHA-256
 `3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
-The current authoritative locked same-process Harness replay collected,
-started, and finished 537 nodes in 1,680.3 seconds. Exactly 531 had exact
+The last completed pre-runtime locked same-process Harness receipt, now
+preserved historically, collected, started, and finished 537 nodes in 1,680.3
+seconds. Exactly 531 had exact
 all-phase PASS; the same six exact nodes setup-skipped as runtime-lock mismatch
 evidence, not PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing
 subtests, recorded zero warnings, errors, collection or internal errors, or
@@ -130,14 +134,123 @@ subtests, pytest exit 0, and digest
 `A2D250135113EDD038C37040C94E11EE6E8B6208E14D53270F318FF48F06AD80`.
 The independent pre-final audit passed 28/28 in 47.93 seconds and found no
 current-source P0/P1 issue; the final 29-node receipt supersedes it as the
-current focused count. The current 537-node authoritative full-Harness receipt
-is the integrated replay recorded above. The 508-node replay remains preserved
-as historical evidence and is no longer current.
+current focused count. The 537-node full-Harness receipt is the integrated
+pre-runtime replay recorded above. The 508-node replay remains preserved as
+earlier historical evidence; neither is a current-tree replay.
 
 The next obligation remains a real exact 4+12 intake, followed by post-plan
 runtime activation. Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains
 `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; `NOT LICENSED / HELD / NOT FROZEN`
 is unchanged.
+
+## Frozen Stage C structural runtime-activation tranche
+
+The current tree adds a reviewed `STRUCTURE_ONLY / NON_AUTHORITY` runtime
+control-plane and worker path. It implements durable one-use mechanics but does
+not supply a positive real activation. Exact frozen identities are:
+
+| Surface | Source SHA-256 / bytes | Test SHA-256 / bytes | Focused receipt or identity |
+|---|---|---|---|
+| Core activation control | `E4B9C390117A474B32DB790B5B7CB8DC2E3022823FF6F2F718725B1B3826E52E` / 133,262 | `5CCF0EEC47D1814A9CA46FC047DD089F415D113D990F234659460261971E1ACF` / 52,693 | 28/28 PASS in 922.45 seconds; node-ID SHA-256 `5D501F3505A98E23BDD2AB8B191BC6EEE90260F1F169940B6A6F70A61525A632` |
+| Worker activation gate | `FC918942B2D324BCE1882577166A1F3FCFE8A98AAE2D5A39F90E0DCCD9B970B4` / 61,983 | `0A3A177079AD28542C89F1EA9D745E448B6F6F3A7276DE26AD3EB62C72205489` / 49,357 | 95/95 PASS; node-ID SHA-256 `0554F3710F9A35667A462CAF53584C9517CF945BFC64811765ACFB4E7CC7BCD3` |
+| Worker capture | `0ECD006E3799A70FFED72688015C03BC2A1D8107BC25632FD93D87435D06519C` / 124,345 | `E21ED834800845E51223203DF018DCDEFAE43FB60E2FC7D0D43017EE99676A7E` / 84,540 | 139/139 PASS; node-ID SHA-256 `C306D70A052CDA8C0CFB12394B640A2ED2DDE9FEE58F16E92FF23771CAABFED1` |
+| Gate plus capture union | exact two worker source pairs above | exact two worker test pairs above | 234/234 PASS; node-ID SHA-256 `08CAA558DEE27A5876DA29A15E9D0E3875994C630E2826BC52154DC215776E76` |
+| Qwen exclusion surface | generic sources listed below | `08A6D58EA0E9D083D13CCC57A62956A23EEEC85D79C8F4C2F62F7DDE60320A3B` / 27,690 | 27/27 PASS as an exact executed subset of the authoritative 719-node worker same-process receipt; node-ID SHA-256 `D80B52FFC48D0677F773269F640481A4C1CA0C434C707041FF391EA75BE90ECA` |
+
+The core seals private expectations, passes only disposable deep copies across
+backend boundaries, detaches and rechecks every returned observation, and uses
+compare-and-swap phase/claim transitions. A control-owned operation ID binds an
+ambiguous backend-crossed claim to its immutable logical row; exception,
+mutation, malformed observation, or duplicate returned claim ID must durably
+tombstone that row as `INDETERMINATE`, advance generation exactly once, and
+forbid retry. The worker makes permanent full-envelope and logical-row
+reservations before acquisition, so duplicate, stale, or drifted variants stop
+before model use.
+
+Capture marks redemption attempted before the control-plane call, requires one
+matching durable `CALL_STARTED` receipt, then permits exactly one direct Qwen
+forward. Request, profile, model, tokenizer, hook/layer/position, tenant, phase,
+subject, case, ordinal, authorization, lease, and artifact identities remain
+paired. The generic Qwen boundary is separately hash-bound:
+
+| Generic runtime surface | SHA-256 | Bytes |
+|---|---|---:|
+| `model_loader.py` | `F3273EF256491D7489004AA4067B52E0F81A563856FAE4F6774035C69BAC0C14` | 43,230 |
+| `event_stream.py` | `EE0F938B06202FBC820320AF8E1F580E2CCA81A591821175F51F8CB64AD0F7FF` | 15,264 |
+| `pythia_runner.py` | `9A4EC3A1BE91A51616A2B7E270CC8D06F42F2641F7286B6D0CB26EFCDA9A93F2` | 17,116 |
+| `ablation_probe.py` | `B73CF7A48A359EAD3CD3D4EBD66D12D8AB650796BD5DDA4570BDBA49B8AB9D03` | 18,730 |
+| `test_real_mode_dispatch.py` | `0AFEC52DEF62CB77F8FAEA6FCFE2ADA0691CED8CD3BB62B697DB8C6D22484A68` | 5,951 |
+
+Public/generic streaming, cached loading, Pythia execution, startup canaries,
+and both real ablation entrypoints reject Qwen and aliased or cached
+cross-family carriers before tokenizer, hook, or forward use. Qwen's only
+structurally admitted forward path is the gated Stage C capture call.
+
+The packaged kernel now has 22 byte-mirrored files, 469 unique exports, and
+1,420,002 bytes. The runtime module contributes 44 exports. Packaging
+provenance is
+`1561D0707AEB12ED720A1F70670494006B186628434CB6390A4DEEFBA5040D07` /
+3,867 bytes; canonical and mirror `__init__.py` are each
+`7D3A90FAFBD68C81888DD36A17CE7E075C48243C231E84A8BFDF8093C939037C` /
+38,141 bytes; the allowlist source is
+`CF21F42B81AD3E6CD50A211FB4FC6D01B035F6177921392B0F4811FCFFD641D0` /
+6,036 bytes; and its test is
+`DBAFC0901CFE33A2C59A961B97F134CBC9408787B69B6A26AC843924A4BBFDF8` /
+15,689 bytes. The package suite is 13/13 PASS. Four new unique worker schemas
+and zero new media types produce closed totals of 49 schemas and 44 media types.
+
+The current authoritative same-process Harness replay collected, started, and
+finished 565 nodes in 2,477.3 seconds at node-ID SHA-256
+`4CCAD2A4EF4868EBAD7EBDC9E219371A57CBE69C974E5D986A8714A0A0DDE601`:
+559 nodes had exact all-phase PASS, the six exact setup skips remain mismatch
+evidence rather than PASS, 1,689 ordinary reports and 163 passing subtests were
+emitted, and warnings, collection or internal errors, and deselections were
+zero. The isolated pycache remained empty and process and pytest exits were 0.
+Receipt digests bind ordinary outcomes
+`7FCD1D82405624E07792CD92DC5F9E40904F2B43FB723CC2DEFF5A7E2C4DDB6E`,
+subtest outcomes
+`6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`,
+locked import origins
+`3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+pre-test loaded code
+`0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+and loaded code
+`24F868086F5B21A263D06229B5FBEC36FC572878F0C2AA710001BCAF9C0CAE07`.
+
+The current authoritative same-process worker replay passed 719/719 in 42.035
+seconds at node-ID SHA-256
+`98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`,
+with 2,157 ordinary reports, zero subtests, skips, warnings, errors, or
+deselections, an empty isolated pycache, and process and pytest exits 0. Receipt
+digests bind ordinary outcomes
+`CF7F1676BAAA3E83999E758A35F311743B7B227DBD0A160EF79F85AA72477468`,
+subtest outcomes
+`4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945`,
+locked import origins
+`035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6`,
+pre-test loaded code
+`3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E`,
+and loaded code
+`4B37B98E99C132E65C7095EBD0FC42A44E9C701923FD451DACC25EEC45636FBB`.
+For the current Harness receipt only, `loaded_code_sha256` uses `CANONICAL
+VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER
+SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE
+DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED`. The
+current worker and the preserved 537- and 508-node historical Harness
+loaded-code digests use `CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW
+RECORDS / NO PROJECTION`; their recorded values remain unchanged.
+These current receipts sit within the complete 1,772-node verifier suite map,
+not a two-suite sum. The prior 537-node Harness and 594/594 worker receipts
+remain exact historical evidence and are not substituted for current-tree
+replays. All receipts remain `STRUCTURE_ONLY / NON_AUTHORITY`.
+
+No exact authenticated external four-carrier plus twelve-dependency bundle has
+been admitted. No positive real storage/issuer/ledger backend, actual one-use
+authorization nonce consumption, model/provider call, detector result,
+Evidence Packet, or scientific/product/license/disclosure authority exists.
+Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains
+`DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; claims remain
+`NOT LICENSED / HELD / NOT FROZEN`.
 
 ## Control artifacts
 
@@ -427,20 +540,21 @@ checkpoint. Its canonical node-ID digest was:
 That historical receipt superseded the earlier stale 90-test receipt. The
 expanded adapter surface now has an authoritative same-process 99/99 PASS
 receipt with digest
-`DB5F9FD886A1714D4E9FE2CE4A2F2336DA3B0A414D5115D1B86B5A885EECDC39`.
+`2EC053F1688C97A76326A5ADDD79A07F31623D91FE9513DF9B4EC4C6B5D2167B`.
 It emitted 297 ordinary reports, zero subtests, one warning, and zero errors or
-deselections, left the isolated pycache empty, and exited pytest 0. The current package
-inventory contains 21 byte-mirrored kernel files, 425 unique exports, and
-1,283,080 bytes. Its packaging-provenance SHA-256 is
-`613A3E15748DC8F8CA49BB373BF3087F980E6A5762E709BC0E8ABFEB81A2957A`;
+deselections, left the isolated pycache empty, and exited pytest 0. The current
+package inventory contains 22 byte-mirrored kernel files, 469 unique exports,
+and 1,420,002 bytes. Its packaging-provenance SHA-256 is
+`1561D0707AEB12ED720A1F70670494006B186628434CB6390A4DEEFBA5040D07`;
 13 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
-`F6EDF1A49FFD81AEB11F952344AF697DC43B03C5AC7FD6630D0FF2AC02FF9E59`,
+`7D3A90FAFBD68C81888DD36A17CE7E075C48243C231E84A8BFDF8093C939037C`,
 and the packaging allowlist source SHA-256 is
-`752BC6F0081FDFBCA7EA58115897D545F5C3A75D322192533C58F41F37E33C91`.
-The historical 437-, 489-, and 508-node Harness receipts below predate this
-expanded package. The current 537-node authoritative Harness replay binds the
-new 21-file surface; the 99-node adapter receipt remains a historical integrated
-checkpoint. Every nonauthority boundary remains binding.
+`CF21F42B81AD3E6CD50A211FB4FC6D01B035F6177921392B0F4811FCFFD641D0`.
+The historical 437-, 489-, 508-, and 537-node Harness receipts below predate
+this runtime-expanded package. The current 565-node Harness and 719-node worker
+authoritative same-process receipts are recorded above; the 99-node adapter
+receipt remains a historical integrated checkpoint. Every nonauthority
+boundary remains binding.
 
 The retained local GPU-canary and joined-mechanics evidence suite passes 27/27
 without rerunning a model. Its canonical node-ID digest is:
@@ -808,7 +922,7 @@ must not be rerun merely to search for a favorable outcome.
 ## Prospective Stage C detection-only design
 
 `stagec_qwen_prompt_injection_v0.1/` records the dependency-ordered Stage C
-design as `DESIGN ONLY / EXECUTION UNAUTHORIZED / NOT_STARTED`. Additive
+design as `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`. Additive
 `STRUCTURE_ONLY / NON_AUTHORITY` source candidates now cover a standalone
 diagnostic preregistration, its fixed diagnostic Study, worker-local capture
 retention, post-terminal association, typed execution-v2 carriers, a same-host
@@ -885,7 +999,7 @@ members under a create-only, reread-verified manifest. Source and test SHA-256
 are
 `52E444142F5C3D8FC7F0AFC983DE060EFCACCC8975C61F97B48D5BDA52226055`
 and
-`6D7B3440CEDD02BD6E351CCA6D1E5494F4D3FBC58D0A9470D681FEF65FBBB472`.
+`B78434646D50A2B8BF96449B5AF53EE9EC80079F346420ED1A6E6C53D8AEB743`.
 It is host-local, nonrelocatable, same-path/file-identity bound, and covers only
 manifest-listed members. File `fsync`, reread checks, and read-only permission
 bits do not establish WORM retention, trusted time, closed-world membership, or
@@ -914,14 +1028,15 @@ shapes without creating runtime authority:
 | exact phase coordinator | `B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7` / `5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5` | split PASS: 5/5 nonheavy, 2/2 rejected-480, 1/1 clean-480/access |
 | exact locked calibration fit | `4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF` / `1418C49D72FD9893ACCFDF264F9D5D9BFB9B85D0699BA8EF6729444A26102021` | 10/10 exact locked PASS in 356.75s |
 | one freeze-or-reject disposition | `161EF93030FD42632D03B0ABD5CBBA3ECA084F7198B7E889C96D6FD10A6C9196` / `CDB3218AA9CA8A3796062764D45A946408C9915BFD0BB134C0A981BA3C66BF95` | all 11 final-byte nodes PASS across two bounded split runs |
-| worker-local archive admission | `169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305` / `4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B` | 18/18 PASS; worker-local only |
+| worker-local archive admission | `169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305` / `E729485E6BFE16280592D668C998A8D39F932368CDB05F9B5BA0E0161F3DAB26` | 18/18 PASS inside the current 50-node archive/admission compatibility replay; worker-local private test backend only |
 
 The phase split receipts were 5/5 in 50.70s, 2/2 in 80.32s, and 1/1 in
 238.10s. The disposition split receipts were 8 passed/3 deselected in 210.72s
-and 3 passed/8 deselected in 870.18s. Those split runs are not themselves the
-authoritative single-process full-suite receipt; the previous
-306-Harness/576-worker receipts remain bound to the last committed `b96c2c12`
-checkpoint, and the new diagnostic tranche receipts are recorded below. The
+and 3 passed/8 deselected in 870.18s. The current authoritative 565-node
+Harness receipt separately records the six exact runtime-lock nodes as setup
+skips and mismatch evidence rather than PASS, so it is not an 11/11 positive
+exact-lock receipt. The 306-Harness/576-worker receipts remain historical
+checkpoints at `b96c2c12`; the current 565/719 receipts are recorded above. The
 positive post-access `NO_ELIGIBLE_THRESHOLD` rejection branch remains
 unexecuted.
 
@@ -945,8 +1060,9 @@ zero warnings, collection or internal errors, or deselections, left the
 isolated pycache empty, exited pytest 0, and bound exact node-ID digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
-The current authoritative locked same-process Harness replay collected,
-started, and finished 537 nodes. Exactly 531 had exact all-phase PASS; the same
+The preserved historical pre-runtime locked same-process Harness receipt
+collected, started, and finished 537 nodes. Exactly 531 had exact all-phase PASS;
+the same
 six exact fit/disposition nodes setup-skipped as runtime-lock mismatch evidence,
 not PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing subtests,
 recorded zero warnings, errors, collection or internal errors, or deselections,
@@ -956,20 +1072,24 @@ bound exact node-ID digest
 The 508-node receipt is retained as a historical checkpoint at
 `8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
-The authoritative same-process worker receipt collected, started, finished,
-and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,
+The preserved historical pre-runtime same-process worker receipt collected,
+started, finished, and passed 594/594 nodes, emitted 1,782 ordinary reports and
+zero subtests,
 warnings, errors, or deselections, left the isolated pycache empty, exited
 pytest 0, and bound exact node-ID digest
 `B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B`.
 Both receipts remain local `STRUCTURE_ONLY / NON_AUTHORITY` evidence.
 
-The remaining blockers are authorized HTTP/container wiring for the coordinator
-and worker-local factory; a real pinned-Qwen Stage C/C-Cal run; trusted
-execution/time, independent WORM/external anchoring, replication/host-loss
-authority, and out-of-band execution/read prevention; corpus/surface/power and
-final prospective identity freeze; and preservation of the exact authoritative
-integrated receipts.
-Worker admission remains local-only. No detector performance, steering
+The remaining blockers are the exact authenticated real 4+12 prerequisite
+bundle and immutable C-Cal base; positive provider-backed storage, issuer,
+ledger, and trusted-time state; actual one-use nonce consumption; a real
+pinned-Qwen Stage C/C-Cal run; independent WORM/external anchoring,
+replication/host-loss authority, and out-of-band execution/read prevention;
+and corpus/surface/power and final prospective identity freeze. The current
+same-process Harness 565 and worker 719 receipts close only their exact local
+software-test slices.
+The new activation and capture path remains structural only. No detector
+performance, steering
 intervention, model result, Evidence Packet, evaluation authority, scientific
 result, product route, public release, or license authority exists. Steering, ablation,
 blocking, suppression, rewriting, and detect-then-intervene policy are outside
@@ -1043,8 +1163,8 @@ These receipts materially advance the candidate but do not close
 and skipped the direct-URL Torch entry; a separate OSV package/version query
 returned zero Torch findings. No scan PASS, real GPU forward, admitted
 experiment, or independent security receipt exists. The disposition therefore remains
-`OPEN_SECURITY`; `live_execution_authorized = false`, Gate 5 remains `HELD`,
-and the candidate is not accepted.
+`OPEN_SECURITY`; `live_execution_authorized = false`, Gate 5 remains
+`OPEN / KEEP_OPEN`, disclosure remains `HELD`, and the candidate is not accepted.
 
 ## Required OPEN boundaries
 
