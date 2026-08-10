@@ -5,8 +5,10 @@ Document status: `DRAFT / OPEN / NOT FROZEN`
 - Controlling charter: `PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md`
 - Published baseline snapshot: Git commit
   `14af9d28e172aa78c7ab543143d79a7aa562e569`
-- Additive evidence surface: the current uncommitted Gate 5 prompt-context,
-  packaging, verifier, manifest, and reconciliation working-tree tranche
+- Additive evidence surface: the successor Gate 5 prompt-context, packaging,
+  verifier, manifest, and reconciliation tranche bound by the enclosing Git
+  commit and Gate 5 artifact manifest; its commit identity is deliberately not
+  embedded in its own bytes
 - Review surface: draft PR `LittleHenderson/noetic-compass#209`
 - Reconciliation date: 2026-08-09
 - Promotion effect: `NONE`
@@ -48,12 +50,12 @@ was open with a clean merge state. CAS CI, Python/API, worker, Rust, dashboard,
 Atlas, image, PostgreSQL, Render-control, and Vercel checks were successful;
 the live auto-sync job was intentionally skipped.
 
-This proves the reviewed commit passed those bounded automation surfaces. The
-additive working-tree tranche described below is not part of that commit and
-is not covered by those GitHub checks until it is committed, pushed, and
-retested. Neither evidence surface proves merge, release, runtime
-authorization, external review, scientific validity, safety, licensing, or
-disclosure approval.
+This proves the reviewed baseline commit passed those bounded automation
+surfaces. Publication and CI state for the additive successor tranche are
+external, time-indexed evidence and must be checked against its current Git
+identity rather than inferred from this self-contained document. Neither
+evidence surface proves merge, release, runtime authorization, external
+review, scientific validity, safety, licensing, or disclosure approval.
 
 ## 3. Seven research cells
 
