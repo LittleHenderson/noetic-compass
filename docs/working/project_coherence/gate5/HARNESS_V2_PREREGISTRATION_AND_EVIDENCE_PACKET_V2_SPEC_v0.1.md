@@ -31,6 +31,25 @@ kernel's trust ceiling, prove provider-backed startup, create trusted time or
 WORM authority, establish absence of off-registry execution, or authorize a
 live route or experiment.
 
+### Prompt-context provenance input obligation
+
+The audit-only prompt-context family adds three schemas:
+`cas_harness_v2.stagec_prompt_context_node.v1`,
+`cas_harness_v2.stagec_prompt_context_provenance.v1`, and
+`cas_harness_v2.stagec_prompt_context_inventory.v1`. Its four exact media
+values are the node, provenance, and inventory JSON media types plus
+`text/plain;charset=utf-8` for external source bytes. The only allowed graph
+operations are `SOURCE` and ordered `UTF8_CONCAT`; normalization and declared
+origin-to-chat-role coercion are forbidden.
+
+These are companion artifacts, not a preregistration amendment or execution
+authority. A future diagnostic preregistration must place the exact aggregate
+inventory ref in `design.input_artifacts`; the deterministic DRC and admitted
+runtime must require and replay it before activation. Until then corpus freeze
+is `NOT_ESTABLISHED`. Focused structural receipts are 30/30, 22/22, 52/52, and
+98/98 with the diagnostic Study. They create no detector, Packet v2, claim,
+license, product route, trusted time, WORM proof, or scientific conclusion.
+
 ## 1. Normative executable schemas
 
 The closed, versioned schemas are enforced by exact-key Python loaders. The
@@ -278,13 +297,14 @@ The former 204-test/110-subtest receipt is historical pre-expansion evidence.
 All of these are repository-local controls, not live execution, independent
 reproduction, scientific evidence, or product authority.
 
-The current packaged kernel has 17 byte-mirrored files and 300 unique exports.
+The current packaged kernel has 19 byte-mirrored files, 343 unique exports, and
+1,148,019 bytes.
 Its packaging-provenance SHA-256 is
-`C87A1AA638E89FD76E1CDA5F854832E29C6BC8491D14DE81F20E7363E5F086AC`;
-12 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
-`115852A181C19839110E2E5E14A6814991087C0299ABFDF42CEB8EC744C0355A`,
+`66D567C3C4E31C2FE1925AF0F9E0CAD89DAF91A87C59591C469C7017B13087B2`;
+13 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
+`332D59841596D6AAEC091FDD63924E8F25DCB0E2B4F52BB6D27947340BA101B5`,
 and the packaging allowlist source SHA-256 is
-`4582E2A8DDED2330CD8557608FBAFBD5FF37D6AC2E51259D862702A3562E89D4`.
+`B13A5A5D7CF2656C55BE313FA2A20F252935744A23334B9C6E2ECA48CEC9BBCE`.
 
 The narrower Stage B joined-executor and runner-preparation suites pass 34/34
 and 17/17 with same-process executed-node digests
@@ -537,6 +557,15 @@ pycache empty, exited pytest 0, and bound exact node-ID digest
 `85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8`.
 Positive exact numerical evidence remains separate under Python 3.12: fit 10/10
 and eligible disposition 3/3.
+
+That 437-node receipt is preserved historical evidence. The current
+authoritative same-process Harness replay collected, started, and finished 489
+nodes. Exactly 483 had all phases pass; the same six exact fit/disposition nodes
+setup-skipped as runtime-lock mismatch evidence rather than PASS. It emitted
+1,461 ordinary reports and 163 passing subtests, recorded zero warnings,
+collection or internal errors, or deselections, left the isolated pycache
+empty, exited pytest 0, and bound exact node-ID digest
+`A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
 The authoritative same-process worker receipt collected, started, finished,
 and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,

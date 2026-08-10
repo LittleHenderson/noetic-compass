@@ -20,7 +20,7 @@
     "evidence_packet_status": "NOT CREATED"
   },
   "current_validation_receipts": {
-    "full_suite_receipt_boundary": "THE 576-WORKER AND 306-HARNESS RECEIPTS BELOW REMAIN THE EXACT LAST-COMMITTED b96c2c12 CHECKPOINT RECEIPTS. THE NEW DIAGNOSTIC RUNTIME TRANCHE NOW HAS SEPARATE AUTHORITATIVE SAME-PROCESS RECEIPTS. HARNESS COLLECTED, STARTED, AND FINISHED 437 NODES: 431 HAD EXACT ALL-PHASE PASS AND THE SIX EXACT NAMED FIT/DISPOSITION NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1305 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO COLLECTION OR INTERNAL ERRORS OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8. WORKER COLLECTED, STARTED, FINISHED, AND PASSED 594/594 NODES, EMITTED 1782 ORDINARY REPORTS AND ZERO SUBTESTS, WARNINGS, ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B. POSITIVE EXACT NUMERICAL EVIDENCE REMAINS THE SEPARATE PYTHON-3.12 LOCKED FIT 10/10 AND ELIGIBLE DISPOSITION 3/3 RECEIPTS. ALL OF THESE LOCAL RECEIPTS REMAIN STRUCTURE_ONLY / NON_AUTHORITY",
+    "full_suite_receipt_boundary": "THE 576-WORKER AND 306-HARNESS RECEIPTS BELOW REMAIN THE EXACT LAST-COMMITTED b96c2c12 CHECKPOINT RECEIPTS. THE DIAGNOSTIC RUNTIME TRANCHE HAS SEPARATE AUTHORITATIVE SAME-PROCESS RECEIPTS. THE PRESERVED HISTORICAL HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 437 NODES: 431 HAD EXACT ALL-PHASE PASS AND THE SIX EXACT NAMED FIT/DISPOSITION NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1305 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO COLLECTION OR INTERNAL ERRORS OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8. WORKER COLLECTED, STARTED, FINISHED, AND PASSED 594/594 NODES, EMITTED 1782 ORDINARY REPORTS AND ZERO SUBTESTS, WARNINGS, ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B. THE ADDITIVE AUDIT-ONLY PROMPT-CONTEXT PROVENANCE AND EXACT-480-ROW INVENTORY FOCUSED SURFACES PASS 30/30 AND 22/22, WITH EXACT COMBINED 52-NODE DIGEST DDEC58BA0B12A8699BDCB7BEB43B6D8656AD96D9E95347B37FAEA22ED3A572C0. THE CURRENT AUTHORITATIVE HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 489 NODES WITH NODE-ID SHA-256 A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225: 483 HAD EXACT ALL-PHASE PASS; THE SIX UNCHANGED FIT/DISPOSITION NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1461 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO WARNINGS, COLLECTION OR INTERNAL ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, AND EXITED PYTEST 0. POSITIVE EXACT NUMERICAL EVIDENCE REMAINS THE SEPARATE PYTHON-3.12 LOCKED FIT 10/10 AND ELIGIBLE DISPOSITION 3/3 RECEIPTS. ALL OF THESE LOCAL RECEIPTS REMAIN STRUCTURE_ONLY / NON_AUTHORITY",
     "worker_authoritative": {
       "status": "PASS",
       "passed": 576,
@@ -133,6 +133,31 @@
         "pytest_exit_status": 0,
         "python_ordinal_node_id_sha256": "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B"
       },
+      "authoritative_current_harness_receipt": {
+        "status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "collected": 489,
+        "started": 489,
+        "finished": 489,
+        "all_phase_passed": 483,
+        "setup_skipped": 6,
+        "ordinary_reports": 1461,
+        "passed_subtests": 163,
+        "warning_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "pytest_exit_status": 0,
+        "python_ordinal_node_id_sha256": "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225",
+        "exact_setup_skipped_node_ids": [
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_exact_locked_runtime_two_independent_fits",
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_arbitrary_coefficient_rejected_by_full_refit_binding",
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_altered_candidate_set_or_prediction_is_rejected_without_refit",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_fit_freezes_only_dual_layer18_layer0_nonreporting",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_projection_guards_cover_analysis_bundle_and_terminal",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_clean_phase_cannot_take_early_rejection_or_null_bundle_path"
+        ]
+      },
       "execution_v2": {
         "source_sha256": "7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F",
         "test_source_sha256": "C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199",
@@ -211,15 +236,44 @@
         "passed": 18,
         "total": 18,
         "status": "PASS / WORKER-LOCAL ONLY"
+      },
+      "prompt_context_provenance": {
+        "source_sha256": "CF4B8735FCBEAAE2FACE509AE2229AD471E120F39B3A766C9C8590153175546E",
+        "test_source_sha256": "41BFFD3E24D369E63ABBFD290D03B82ABA50F0360C9CAF069A73BAA23A6F26A0",
+        "passed": 30,
+        "total": 30,
+        "python_ordinal_node_id_sha256": "DE987934BB650B6960DDECB40DB33FBD3A6A02C984D93BABB3E2CCCA786A498E",
+        "status": "PASS / AUDIT_ONLY STRUCTURE_ONLY / NON_AUTHORITY"
+      },
+      "prompt_context_inventory": {
+        "source_sha256": "E0DAFBDC10AF59025BBC6B2C65F2B0E91C87AC8C25B5F3CE1AA56736C195C605",
+        "test_source_sha256": "E1A3E86E45B9E4CA0EB42EA5857CD79AEC25EC79913EFF0D56C490FDCF8D23CF",
+        "passed": 22,
+        "total": 22,
+        "python_ordinal_node_id_sha256": "06FC07AC75FA6AF3498872DE065F28BCDD84A1C74C9B27D4427EC30EE97D42AE",
+        "status": "PASS / EXACT 480-ROW AUDIT_ONLY INVENTORY / NON_AUTHORITY"
+      },
+      "prompt_context_union": {
+        "passed": 52,
+        "total": 52,
+        "python_ordinal_node_id_sha256": "DDEC58BA0B12A8699BDCB7BEB43B6D8656AD96D9E95347B37FAEA22ED3A572C0",
+        "status": "PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+      },
+      "prompt_context_with_diagnostic_study": {
+        "passed": 98,
+        "total": 98,
+        "elapsed_seconds": "33.77",
+        "python_ordinal_node_id_sha256": "C573CE9C70496C9FE0D1E7A3516E07F8454CF4F7085A26BDC5364342CA7A085E",
+        "status": "AUTHORITATIVE FOCUSED PASS / STRUCTURE_ONLY / NON_AUTHORITY"
       }
     },
     "packaged_kernel": {
-      "byte_mirrored_files": 17,
-      "unique_exports": 300,
-      "packaging_provenance_sha256": "C87A1AA638E89FD76E1CDA5F854832E29C6BC8491D14DE81F20E7363E5F086AC",
-      "canonical_and_mirror_init_sha256": "115852A181C19839110E2E5E14A6814991087C0299ABFDF42CEB8EC744C0355A",
-      "packaging_allowlist_source_sha256": "4582E2A8DDED2330CD8557608FBAFBD5FF37D6AC2E51259D862702A3562E89D4",
-      "focused_mirror_tests_passed": 12
+      "byte_mirrored_files": 19,
+      "unique_exports": 343,
+      "packaging_provenance_sha256": "66D567C3C4E31C2FE1925AF0F9E0CAD89DAF91A87C59591C469C7017B13087B2",
+      "canonical_and_mirror_init_sha256": "332D59841596D6AAEC091FDD63924E8F25DCB0E2B4F52BB6D27947340BA101B5",
+      "packaging_allowlist_source_sha256": "B13A5A5D7CF2656C55BE313FA2A20F252935744A23334B9C6E2ECA48CEC9BBCE",
+      "focused_mirror_tests_passed": 13
     }
   },
   "non_authority": [
@@ -443,6 +497,35 @@
         "slot": "EXACTLY ONE CREATE-ONLY SAME-FILE SQLITE DISPOSITION PER PHASE SUBJECT",
         "permanent_prohibitions": "REPORTING, PACKET V2, EVALUATION AUTHORITY, CLAIM PROMOTION, PRODUCT ROUTE, PUBLIC RELEASE, AND LICENSE GRANT",
         "receipt_boundary": "ALL 11 CURRENT-BYTE NODES PASS ACROSS TWO BOUNDED SPLIT RECEIPTS; THOSE SPLITS ARE NOT THE SEPARATE AUTHORITATIVE FULL-SUITE RECEIPT, WHOSE STANDARD RUNTIME SETUP-SKIPPED THE SIX EXACT LOCK-MISMATCH NODES AS MISMATCH EVIDENCE RATHER THAN PASS; THE POSITIVE POST_ACCESS_NO_ELIGIBLE_THRESHOLD BRANCH REMAINS PENDING"
+      },
+      "prompt_context_provenance": {
+        "source_sha256": "CF4B8735FCBEAAE2FACE509AE2229AD471E120F39B3A766C9C8590153175546E",
+        "test_source_sha256": "41BFFD3E24D369E63ABBFD290D03B82ABA50F0360C9CAF069A73BAA23A6F26A0",
+        "schemas": [
+          "cas_harness_v2.stagec_prompt_context_node.v1",
+          "cas_harness_v2.stagec_prompt_context_provenance.v1"
+        ],
+        "media_types": [
+          "application/vnd.cas-harness.stagec-prompt-context-node+json",
+          "application/vnd.cas-harness.stagec-prompt-context-provenance+json",
+          "text/plain;charset=utf-8"
+        ],
+        "operations": [
+          "SOURCE",
+          "UTF8_CONCAT"
+        ],
+        "replay_rule": "EXACT EXTERNAL UTF-8 SOURCE BYTES PLUS ORDERED PARENT DAG MUST RECONSTRUCT THE UNCHANGED SINGLE USER-CONTENT PROMPT BYTE-FOR-BYTE",
+        "boundary": "DECLARED ORIGINS ARE AUDIT LABELS ONLY / NOT CHAT ROLES, AUTHORITY, NORMALIZATION, EXECUTION, OR SCIENTIFIC EVIDENCE"
+      },
+      "prompt_context_inventory": {
+        "source_sha256": "E0DAFBDC10AF59025BBC6B2C65F2B0E91C87AC8C25B5F3CE1AA56736C195C605",
+        "test_source_sha256": "E1A3E86E45B9E4CA0EB42EA5857CD79AEC25EC79913EFF0D56C490FDCF8D23CF",
+        "schema": "cas_harness_v2.stagec_prompt_context_inventory.v1",
+        "media_type": "application/vnd.cas-harness.stagec-prompt-context-inventory+json",
+        "coverage_rule": "EXACT SPLIT-ORDER 480-ROW COVERAGE / ONE FULLY REPLAYED PROVENANCE COMPANION PER CAPTURE REQUEST",
+        "dependency_projection": "COUNT PLUS ORDERED DIGEST / 4321-DEPENDENCY REGRESSION COVERED WITHOUT EMBEDDING THE FULL REF LIST",
+        "prospective_binding": "THE AGGREGATE REF MUST ENTER DIAGNOSTIC PREREGISTRATION design.input_artifacts AND FUTURE DRC AND RUNTIME ADMISSION MUST REQUIRE IT",
+        "boundary": "CORPUS FREEZE NOT ESTABLISHED / SOURCE BYTES REMAIN EXTERNAL / NO EXECUTION, PACKET, CLAIM, LICENSE, OR PRODUCT AUTHORITY"
       }
     },
     "future_runnable_requirements_status": "PREFILL-ONLY / ZERO GENERATION / ZERO INTERVENTION REQUIREMENTS REMAIN PROSPECTIVE AND ARE NOT PROGRAM-LEVEL EXECUTION ATTESTATIONS FROM THE STRUCTURE_ONLY CANDIDATE",
@@ -993,6 +1076,11 @@
       "requirement": "Keep calibration outcome access and evaluation execution on separate preregistration chains; do not tune after evaluation outcomes exist."
     },
     {
+      "obligation_id": "stagec-obligation-prompt-context-provenance",
+      "status": "STRUCTURE_ONLY PROVENANCE AND EXACT-480 INVENTORY CANDIDATES COMPLETE / PREREGISTRATION, DRC, RUNTIME, AND CORPUS FREEZE BINDING OPEN",
+      "requirement": "Retain exact external UTF-8 source bytes and the SOURCE plus ordered UTF8_CONCAT DAG for every prompt. Prospectively place the exact aggregate prompt-context inventory ref in diagnostic preregistration design.input_artifacts; the future deterministic DRC and admitted runtime must both require and replay it before any activation. The current companion artifacts are audit-only, change no request, Study, authorization, or worker schema, and do not establish corpus freeze, execution, a detector, an Evidence Packet, a claim, a license, or product authority."
+    },
+    {
       "obligation_id": "stagec-obligation-corpus",
       "status": "OPEN / BLOCKS CALIBRATION",
       "requirement": "Author, double-adjudicate, secret-scan, surface-screen, split, and exact-hash all 960 prompt rows."
@@ -1070,6 +1158,11 @@
       "fact": "The deterministic exact-runtime fit candidate and create-once same-file SQLite disposition now enforce frozen-nonreporting or rejected-nonreporting only, with Packet, reporting, evaluation, claim, product, public, and license promotion forbidden. All 11 final-byte disposition nodes pass across two bounded split runs, not one authoritative full-suite replay. No real Qwen C-Cal run exists, and a positive POST_ACCESS_NO_ELIGIBLE_THRESHOLD rejection execution remains pending."
     },
     {
+      "blocker_id": "prompt-context-companions-are-not-yet-preregistered-or-runtime-required",
+      "source": "src/cas_harness_v2/diagnostic_prompt_context_provenance.py and diagnostic_prompt_context_inventory.py",
+      "fact": "The audit-only companions preserve exact external UTF-8 source bytes, SOURCE plus ordered UTF8_CONCAT lineage, and exact split-order 480-row coverage without changing the single-user-message rendering path. Corpus freeze remains NOT_ESTABLISHED. No current diagnostic preregistration design.input_artifacts, deterministic DRC, HTTP/container controller, or worker runtime requires the aggregate ref yet; those fail-closed bindings remain OPEN before activation."
+    },
+    {
       "blocker_id": "mandatory-heldout-role-does-not-establish-independence",
       "source": "src/cas_harness_v2/preregistration.py",
       "fact": "HELD_OUT_REPLICATION is mandatory, but an internal split cannot be reported as independent replication."
@@ -1099,6 +1192,7 @@
     "base_preregistration_artifact_ids": [
       "stagec-claim-ledger-001",
       "stagec-corpus-manifest-001",
+      "stagec-prompt-context-inventory-001",
       "stagec-label-adjudication-001",
       "stagec-surface-readiness-001",
       "stagec-confirmatory-split-001",

@@ -20,6 +20,32 @@ experiment, license a claim, create a product route, or authorize disclosure.
 It creates no live-execution, canon, product, license, disclosure, or scientific
 authority.
 
+## Additive prompt-context provenance tranche
+
+The current `STRUCTURE_ONLY / NON_AUTHORITY` surface now includes typed,
+audit-only prompt-context provenance and an exact split-order 480-row aggregate
+inventory. The only graph operations are `SOURCE` and ordered `UTF8_CONCAT`.
+Declared origins are labels, not actual chat roles or authority; exact source
+UTF-8 bytes remain external, and Unicode or line-ending normalization is
+forbidden. Focused receipts are 30/30 provenance, 22/22 inventory, 52/52 union,
+and 98/98 when joined with the diagnostic Study (33.77 seconds; node-ID SHA-256
+`C573CE9C70496C9FE0D1E7A3516E07F8454CF4F7085A26BDC5364342CA7A085E`).
+
+This does not establish corpus freeze. Before activation, the aggregate ref
+must prospectively enter diagnostic preregistration `design.input_artifacts`,
+and both the future deterministic DRC and admitted runtime must require and
+replay it. The current authoritative Harness replay collected, started, and
+finished 489 nodes (digest
+`A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`):
+483 had all phases pass, six unchanged runtime-lock nodes setup-skipped as
+mismatch evidence rather than PASS, and it emitted 1,461 ordinary reports and
+163 passing subtests. It recorded zero warnings, errors, or deselections, left
+the isolated pycache empty, and exited pytest 0. The packaged
+surface is 19 files, 343 exports, and 1,148,019 bytes under provenance SHA-256
+`66D567C3C4E31C2FE1925AF0F9E0CAD89DAF91A87C59591C469C7017B13087B2`.
+Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains `DESIGN_ONLY /
+UNAUTHORIZED / NOT_STARTED`; claims remain `NOT LICENSED / HELD / NOT FROZEN`.
+
 ## Control artifacts
 
 - `HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md` defines the
@@ -181,10 +207,11 @@ is locally tested but remains default-dark. HTTP exposure for the lower
 `INDETERMINATE`/`REJECTED`/`EXPIRED` dispositions, live Fleet execution,
 trusted time, and independently controlled storage remain unfinished.
 
-## Current bounded receipts
+## Preserved historical bounded receipts
 
-The current Harness-v2 surface has an authoritative same-process PASS receipt.
-It observed identical collected, started, and finished sequences of 306 pytest
+The earlier 306-node Harness-v2 surface retains an authoritative same-process
+PASS receipt for those exact historical bytes. It observed identical
+collected, started, and finished sequences of 306 pytest
 node IDs, 918 ordinary setup/call/teardown reports, and 151 passing subtests,
 with zero warnings, collection or internal errors, or deselections, an empty
 isolated pycache, and pytest exit status 0. Its exact Python-ordinal node-ID
@@ -305,15 +332,21 @@ checkpoint. Its canonical node-ID digest was:
 `65352B8B59CB654E449BA4A1CE8459D7109CC5B21E33F64AEAB6E2EA6EEB3C19`
 
 That historical receipt superseded the earlier stale 90-test receipt. The
-current package inventory contains 17 byte-mirrored kernel files and 300 unique
-exports. Its packaging-provenance SHA-256 is
-`C87A1AA638E89FD76E1CDA5F854832E29C6BC8491D14DE81F20E7363E5F086AC`;
-12 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
-`115852A181C19839110E2E5E14A6814991087C0299ABFDF42CEB8EC744C0355A`,
+expanded adapter surface now has an authoritative same-process 99/99 PASS
+receipt with digest
+`DB5F9FD886A1714D4E9FE2CE4A2F2336DA3B0A414D5115D1B86B5A885EECDC39`.
+It emitted 297 ordinary reports, zero subtests, one warning, and zero errors or
+deselections, left the isolated pycache empty, and exited pytest 0. The current package
+inventory contains 19 byte-mirrored kernel files, 343 unique exports, and
+1,148,019 bytes. Its packaging-provenance SHA-256 is
+`66D567C3C4E31C2FE1925AF0F9E0CAD89DAF91A87C59591C469C7017B13087B2`;
+13 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
+`332D59841596D6AAEC091FDD63924E8F25DCB0E2B4F52BB6D27947340BA101B5`,
 and the packaging allowlist source SHA-256 is
-`4582E2A8DDED2330CD8557608FBAFBD5FF37D6AC2E51259D862702A3562E89D4`.
-The rebuilt-manifest authoritative Harness replay below now validates the
-integrated package while retaining every nonauthority boundary.
+`B13A5A5D7CF2656C55BE313FA2A20F252935744A23334B9C6E2ECA48CEC9BBCE`.
+The historical 437-node Harness receipt below predates this expanded package;
+the current authoritative 489-node Harness and 99-node adapter receipts bind the
+expanded surface. Every nonauthority boundary remains binding.
 
 The retained local GPU-canary and joined-mechanics evidence suite passes 27/27
 without rerunning a model. Its canonical node-ID digest is:
@@ -809,6 +842,14 @@ left the isolated pycache empty, exited pytest 0, and bound exact node-ID digest
 `85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8`.
 Positive exact numerical evidence stays in the separate Python-3.12 lock
 receipts (fit 10/10 and eligible disposition 3/3).
+
+The current authoritative same-process Harness replay collected, started, and
+finished 489 nodes. Exactly 483 had all phases pass; the same six exact
+fit/disposition nodes setup-skipped as runtime-lock mismatch evidence rather
+than PASS. It emitted 1,461 ordinary reports and 163 passing subtests, recorded
+zero warnings, collection or internal errors, or deselections, left the
+isolated pycache empty, exited pytest 0, and bound exact node-ID digest
+`A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
 The authoritative same-process worker receipt collected, started, finished,
 and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,

@@ -157,6 +157,39 @@ def test_packaged_mirror_import_resolves_inside_the_docker_context() -> None:
     assert completed.returncode == 0, completed.stderr
 
 
+def test_packaged_prompt_context_modules_are_exported_exactly() -> None:
+    probe = "\n".join(
+        (
+            "import importlib",
+            "import sys",
+            f"sys.path.insert(0, {str(APP_ROOT)!r})",
+            "package = importlib.import_module('cas_harness_v2')",
+            "provenance = importlib.import_module(",
+            "    'cas_harness_v2.diagnostic_prompt_context_provenance'",
+            ")",
+            "inventory = importlib.import_module(",
+            "    'cas_harness_v2.diagnostic_prompt_context_inventory'",
+            ")",
+            "assert len(provenance.__all__) == len(set(provenance.__all__)) == 32",
+            "assert len(inventory.__all__) == len(set(inventory.__all__)) == 11",
+            "assert len(package.__all__) == len(set(package.__all__)) == 343",
+            "for module in (provenance, inventory):",
+            "    assert set(module.__all__) <= set(package.__all__)",
+            "    assert all(",
+            "        getattr(package, name) is getattr(module, name)",
+            "        for name in module.__all__",
+            "    )",
+        )
+    )
+    completed = subprocess.run(
+        [sys.executable, "-I", "-B", "-c", probe],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode == 0, completed.stderr
+
+
 def test_packaged_kernel_verifier_accepts_the_exact_packaged_mirror() -> None:
     expected_provenance_sha256 = hashlib.sha256(
         PROVENANCE_PATH.read_bytes()

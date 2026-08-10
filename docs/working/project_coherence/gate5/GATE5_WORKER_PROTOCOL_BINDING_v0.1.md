@@ -25,6 +25,32 @@ not changed by a passing local test, an authenticated HTTP callback, a content
 hash, an Object-Lock receipt, or this
 document.
 
+## Prompt-context companion boundary
+
+The typed prompt-context provenance and exact split-order 480-row inventory are
+additive audit companions. They do not alter the one-user-message worker
+contract. `SOURCE` nodes bind exact external UTF-8 bytes; ordered
+`UTF8_CONCAT` nodes reconstruct the final prompt without normalization.
+Declared origins are labels only and never coerce system, developer, retrieval,
+or tool authority into the rendered channel.
+
+The companion sources passed 30/30 and 22/22 focused tests (52/52 union), and
+the union with the diagnostic Study passed 98/98 in 33.77 seconds. Runtime
+admission is still absent. Before any activation, the aggregate ref must enter
+diagnostic preregistration `design.input_artifacts`; the future deterministic
+DRC and worker/controller runtime must reject its absence or replay failure.
+Corpus freeze remains `NOT_ESTABLISHED`; exact source bytes remain external.
+The updated Harness and adapter surfaces now have authoritative same-process
+receipts. Harness collected, started, and finished 489 nodes: 483 had all
+phases pass, six unchanged runtime-lock nodes setup-skipped as mismatch evidence
+rather than PASS, 1,461 ordinary reports and 163 passing subtests were emitted,
+zero warnings/errors/deselections occurred, the isolated pycache remained empty,
+pytest exited 0, and the digest is
+`A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
+The adapter passed 99/99 with 297 ordinary reports, zero subtests, one warning,
+zero errors or deselections, empty isolated pycache, pytest exit 0, and digest
+`DB5F9FD886A1714D4E9FE2CE4A2F2336DA3B0A414D5115D1B86B5A885EECDC39`.
+
 ## 1. Purpose and source boundary
 
 The purpose of this binding is to remove an interface ambiguity recorded by
@@ -510,6 +536,15 @@ isolated pycache empty, exited pytest 0, and bound exact node-ID digest
 `85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8`.
 The separate Python-3.12 exact-lock receipts remain the positive fit 10/10 and
 eligible-disposition 3/3 evidence.
+
+That 437-node receipt remains preserved historical evidence. The current
+authoritative same-process Harness replay collected, started, and finished 489
+nodes; 483 had all phases pass and the same six exact fit/disposition nodes
+setup-skipped as runtime-lock mismatch evidence rather than PASS. It emitted
+1,461 ordinary reports and 163 passing subtests, recorded zero warnings,
+collection or internal errors, or deselections, left the isolated pycache
+empty, exited pytest 0, and bound exact node-ID digest
+`A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
 The authoritative same-process worker receipt collected, started, finished,
 and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,

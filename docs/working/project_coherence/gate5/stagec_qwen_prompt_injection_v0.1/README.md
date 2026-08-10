@@ -13,6 +13,34 @@ and one freeze-or-reject disposition. This design package still creates no
 activated preregistration or authorization, terminal model result, Evidence
 Packet, model run, provider call, steering study, or product claim.
 
+## Audit-only prompt-context companions
+
+Two additive companions now preserve prompt lineage without changing the
+capture request, Study, authorization, or worker schemas. Per-request
+provenance admits only `SOURCE` and ordered `UTF8_CONCAT`; exact external UTF-8
+source bytes must replay the unchanged single `USER_CONTENT` message
+byte-for-byte. Declared origins are audit labels, not chat roles, and no
+normalization is allowed. The aggregate inventory requires one fully replayed
+companion for every row in exact 480-row split order and compacts large
+dependency closure evidence to a count plus ordered digest (including the
+4,321-dependency regression).
+
+Focused receipts are 30/30 provenance, 22/22 inventory, 52/52 union, and 98/98
+with the diagnostic Study in 33.77 seconds (node-ID SHA-256
+`C573CE9C70496C9FE0D1E7A3516E07F8454CF4F7085A26BDC5364342CA7A085E`).
+Corpus freeze is still `NOT_ESTABLISHED`. The aggregate ref must prospectively
+enter diagnostic preregistration `design.input_artifacts`; a future
+deterministic DRC and the admitted runtime must both require and replay it.
+The current authoritative Harness replay collected, started, and finished 489
+nodes with digest
+`A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`:
+483 had all phases pass, the same six runtime-lock nodes setup-skipped as
+mismatch evidence rather than PASS, and it emitted 1,461 ordinary reports and
+163 passing subtests. It recorded zero warnings, collection or internal errors,
+or deselections, left the isolated pycache empty, and exited pytest 0. None of
+this creates execution authority, a detector, an Evidence Packet, a claim, a
+license, a product route, or disclosure authority.
+
 ## Decision
 
 Stage C is viable, but it must be implemented as two dependency-ordered
@@ -75,13 +103,13 @@ pycache, pytest exit status 0, and digest
 `49BD9090B3CF8990A213BF91CB95E154792444221CC0015F1BCA7D2E77C5D293`.
 It is local regression evidence, not hermetic or independently attested and not
 a model, detector, steering, product, licensing, or disclosure result. The
-packaged kernel now has 17 byte-mirrored files, 300 unique exports, and
-packaging-provenance SHA-256
-`C87A1AA638E89FD76E1CDA5F854832E29C6BC8491D14DE81F20E7363E5F086AC`;
-12 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
-`115852A181C19839110E2E5E14A6814991087C0299ABFDF42CEB8EC744C0355A`
+packaged kernel now has 19 byte-mirrored files, 343 unique exports, and
+1,148,019 bytes. Its packaging-provenance SHA-256 is
+`66D567C3C4E31C2FE1925AF0F9E0CAD89DAF91A87C59591C469C7017B13087B2`;
+13 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
+`332D59841596D6AAEC091FDD63924E8F25DCB0E2B4F52BB6D27947340BA101B5`
 and the packaging allowlist source SHA-256 is
-`4582E2A8DDED2330CD8557608FBAFBD5FF37D6AC2E51259D862702A3562E89D4`.
+`B13A5A5D7CF2656C55BE313FA2A20F252935744A23334B9C6E2ECA48CEC9BBCE`.
 Those retained 306-Harness/576-worker receipts predate the six-file diagnostic
 runtime tranche below and remain exact. The tranche now has a separate
 authoritative same-process standard Python-3.14 Harness receipt that collected,
@@ -95,6 +123,15 @@ pycache empty, exited pytest 0, and bound exact node-ID digest
 `85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8`.
 Positive numerical evidence remains separate under the Python-3.12 exact lock:
 fit 10/10 and eligible disposition 3/3.
+
+The preserved 437-node receipt above is historical. The current authoritative
+same-process Harness replay collected, started, and finished 489 nodes; 483 had
+all phases pass and the same six exact fit/disposition nodes setup-skipped as
+runtime-lock mismatch evidence rather than PASS. It emitted 1,461 ordinary
+reports and 163 passing subtests, recorded zero warnings, collection or internal
+errors, or deselections, left the isolated pycache empty, exited pytest 0, and
+bound node-ID digest
+`A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
 The authoritative same-process worker receipt collected, started, finished,
 and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,
