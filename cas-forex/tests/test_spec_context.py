@@ -418,17 +418,19 @@ def test_spec_context_settings_ui_and_trace_skip_are_wired():
     api_client = (repo / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("SpecContextPanel")
-    assert "Spec Context" in settings_page
-    assert "AI Operator Edge" in settings_page
-    assert "Edge Decisions" in settings_page
-    assert "Allowed Intents" in settings_page
-    assert "Hard Boundaries" in settings_page
-    assert "fetchSpecContextStatus" in settings_page
+    # These panels moved to components/settings/SpecContextPanel.tsx in the settings decomposition.
+    extracted_panel = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "SpecContextPanel.tsx").read_text(encoding="utf-8")
+    assert "Spec Context" in extracted_panel
+    assert "AI Operator Edge" in extracted_panel
+    assert "Edge Decisions" in extracted_panel
+    assert "Allowed Intents" in extracted_panel
+    assert "Hard Boundaries" in extracted_panel
+    assert "fetchSpecContextStatus" in extracted_panel
     assert "SpecContextStatusReport" in api_client
     assert "AiHedgeIntelligenceLayer" in api_client
     assert "ai_hedge_intelligence_layer" in api_client
     assert "AutonomousExecutionCorrection" in api_client
     assert "autonomous_execution_correction" in api_client
-    assert "Autonomous Correction" in settings_page
+    assert "Autonomous Correction" in extracted_panel
     assert '"/settings/spec-context"' in api_client
     assert api_server._should_trace_request("GET", "/api/forex/settings/spec-context") is False

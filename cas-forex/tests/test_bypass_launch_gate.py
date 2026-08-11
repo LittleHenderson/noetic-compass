@@ -89,8 +89,11 @@ def test_bypass_launch_gate_is_in_professional_readiness_item_33_and_settings_ui
     assert "cas_forex/bypass_launch_gate.py" in rows["dangerous_edge_case_tests"]["present_evidence_refs"]
     assert "tests/test_bypass_launch_gate.py" in rows["dangerous_edge_case_tests"]["present_evidence_refs"]
     assert_panel_wired("BypassLaunchGatePanel")
-    assert "Bypass Launch Gate" in settings_page
-    assert "fetchBypassLaunchGate" in settings_page
+    from ui_contract import assert_ui_contains
+    assert_ui_contains("Bypass Launch Gate", why="panel title moved to components/settings/ in the decomposition")
+    # These panels moved to components/settings/LaunchGatePanels.tsx in the settings decomposition.
+    extracted_panel = (REPO_ROOT / "ui" / "src" / "components/settings/LaunchGatePanels.tsx").read_text(encoding="utf-8")
+    assert "fetchBypassLaunchGate" in extracted_panel
     assert "BypassLaunchGateReport" in api_client
     assert '"/settings/bypass-launch-gate"' in api_client
     assert api_server._should_trace_request("GET", "/api/forex/settings/bypass-launch-gate") is False

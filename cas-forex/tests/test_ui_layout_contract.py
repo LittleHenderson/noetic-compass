@@ -71,9 +71,12 @@ def test_ui_layout_contract_settings_ui_and_api_client_are_wired():
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("UILayoutContractPanel")
-    assert "UI Layout Contract" in settings_page
-    assert "browser-zoom regressions" in settings_page
-    assert "fetchUILayoutContract" in settings_page
+    from ui_contract import assert_ui_contains
+    assert_ui_contains("UI Layout Contract", why="panel title moved to components/settings/ in the decomposition")
+    # These panels moved to components/settings/UILayoutContractPanel.tsx in the settings decomposition.
+    extracted_panel = (REPO_ROOT / "ui" / "src" / "components/settings/UILayoutContractPanel.tsx").read_text(encoding="utf-8")
+    assert "browser-zoom regressions" in extracted_panel
+    assert "fetchUILayoutContract" in extracted_panel
     assert "UILayoutContractReport" in api_client
     assert '"/settings/ui-layout-contract"' in api_client
 

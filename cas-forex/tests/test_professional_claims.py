@@ -115,8 +115,10 @@ def test_professional_claims_settings_ui_and_trace_skip_are_wired():
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("ProfessionalClaimsPanel")
-    assert "Professional Claims & Disclosures" in settings_page
-    assert "fetchProfessionalClaims" in settings_page
+    # Panel moved to components/settings/ProfessionalClaimsPanel.tsx in the settings decomposition.
+    extracted_panel = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "ProfessionalClaimsPanel.tsx").read_text(encoding="utf-8")
+    assert "Professional Claims & Disclosures" in extracted_panel
+    assert "fetchProfessionalClaims" in extracted_panel
     assert "ProfessionalClaimsReport" in api_client
     assert '"/settings/professional-claims"' in api_client
     assert api_server._should_trace_request("GET", "/api/forex/settings/professional-claims") is False

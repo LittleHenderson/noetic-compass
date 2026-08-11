@@ -1810,8 +1810,11 @@ def test_mt4_bridge_panel_requires_heartbeat_before_demo_fill_claims():
 def test_settings_page_exposes_broker_funding_handoff_without_raw_payment_storage():
     settings = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     broker_portal = (REPO_ROOT / "ui" / "src" / "util" / "brokerPortal.ts").read_text(encoding="utf-8")
+    # Slice to the NEXT top-level function, whichever it is - the old end
+    # marker (ControlField) moved to components/settings/ in the decomposition,
+    # and a named-neighbour boundary silently widens the slice on any reorder.
     funding_panel = settings.split("function BrokerFundingHandoffPanel(", 1)[1].split(
-        "function ControlField",
+        "\nfunction ",
         1,
     )[0]
 

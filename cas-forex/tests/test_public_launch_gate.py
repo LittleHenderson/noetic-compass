@@ -196,8 +196,10 @@ def test_public_launch_gate_settings_ui_and_trace_skip_are_wired():
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("PublicLaunchGatePanel")
-    assert "Public Launch Gate" in settings_page
-    assert "fetchPublicLaunchGate" in settings_page
+    # These panels moved to components/settings/LaunchGatePanels.tsx in the settings decomposition.
+    extracted_panel = (REPO_ROOT / "ui" / "src" / "components/settings/LaunchGatePanels.tsx").read_text(encoding="utf-8")
+    assert "Public Launch Gate" in extracted_panel
+    assert "fetchPublicLaunchGate" in extracted_panel
     assert "PublicLaunchGateReport" in api_client
     assert '"/settings/public-launch-gate"' in api_client
     assert api_server._should_trace_request("GET", "/api/forex/settings/public-launch-gate") is False
