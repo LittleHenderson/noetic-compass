@@ -16,6 +16,7 @@ Tests pin the forbidden-phrase list — see `tests/test_risk_monitoring.py`.
 """
 
 from __future__ import annotations
+from cas_forex.account_ledger import money_sum
 
 from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
@@ -596,7 +597,7 @@ def compose_portfolio_risk_snapshot(
 
     open_position_count = sum(s.open_position_count for s in by_symbol)
     total_exposure_lots = round(sum(s.total_lots for s in by_symbol), 4)
-    total_floating_pnl = round(sum(s.total_floating_pnl for s in by_symbol), 2)
+    total_floating_pnl = money_sum(s.total_floating_pnl for s in by_symbol)
 
     largest_symbol_exposure: Optional[SymbolRiskExposure] = (
         by_symbol[0] if by_symbol else None

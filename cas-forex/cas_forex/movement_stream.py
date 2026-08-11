@@ -8,6 +8,7 @@ actions belong to the separate guarded dispatch/provider paths.
 """
 
 from __future__ import annotations
+from cas_forex.account_ledger import money_sum
 
 from datetime import datetime, timezone
 from dataclasses import asdict, dataclass
@@ -217,9 +218,9 @@ def build_movement_stream_state(
         )
     }
     quotes = tuple(quote_by_symbol[symbol] for symbol in sorted(quote_by_symbol))
-    floating = round(sum(pos.floating_pnl_usd for pos in positions), 2)
+    floating = money_sum(pos.floating_pnl_usd for pos in positions)
     balance = float(summary.get("balance_usd", 0.0) or 0.0)
-    margin = round(sum(pos.margin_estimate_usd for pos in positions), 2)
+    margin = money_sum(pos.margin_estimate_usd for pos in positions)
     equity = round(balance + floating, 2)
     free_margin = round(max(0.0, equity - margin), 2)
     initial = float(summary.get("initial_investment_usd", balance) or balance or 1.0)
