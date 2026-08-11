@@ -12,7 +12,7 @@
   "product_claim_effect": "NONE",
   "manifest_self_hash": null,
   "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
-  "artifact_count": 642,
+  "artifact_count": 686,
   "artifacts": [
     {
       "path": ".gitattributes",
@@ -52,8 +52,8 @@
     },
     {
       "path": "docs/working/project_coherence/PROJECT_COHERENCE_EXECUTION_RECONCILIATION_v0.1.md",
-      "sha256": "6E2EB8EBF80D7E859E1DB67A855FDE4C8EEC15A6893A083067188632AEFC9E2F",
-      "bytes": 25097,
+      "sha256": "4D03B7367411A7BDFB4A50EE0ED975CC0907184BE77621067E2F0C21943113A9",
+      "bytes": 32198,
       "role": "gate5_control_artifact"
     },
     {
@@ -70,8 +70,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
-      "sha256": "BF61D6C8E4C8DB4A335C9F621881A8390F1A50D8527B2D195C89765A11D47FDF",
-      "bytes": 90455,
+      "sha256": "87519EAD475AA7505040428269BE71B5C75BC800F817B1A4410B920EAECFEC4D",
+      "bytes": 97687,
       "role": "gate5_control_artifact"
     },
     {
@@ -84,6 +84,12 @@
       "path": "docs/working/project_coherence/gate5/GATE5_ENGINEERING_EXECUTION_RECONCILIATION_v0.1.json",
       "sha256": "EBD1A4CC6FBF5BEE62F3D28D98D822B6E50E67B317AFD9235B3F86B96257BFAD",
       "bytes": 4179,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_HISTORICAL_RECOVERY_AND_MODEL_COMPARISON_MATRIX_v0.1.md",
+      "sha256": "C9C9255DC8A21EAEAA447A65378025A90A89BEB075B3DF5A7810CA26A0C33FE1",
+      "bytes": 52491,
       "role": "gate5_control_artifact"
     },
     {
@@ -106,26 +112,26 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
-      "sha256": "35BF75394B0143BE55B895956FC85DABAEEFC279599341312CA632A26DB8A532",
-      "bytes": 191773,
+      "sha256": "D8CFBC95B98C905B22829534E131E9561550DD1BE98807476FE954088E199DCA",
+      "bytes": 237312,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_WORKER_PROTOCOL_BINDING_v0.1.md",
-      "sha256": "972EC2B3BBE1B8DBC5F84AFADDF0B5CF1C09B9FCF30D73B4C47D9D7B1AE3A9BA",
-      "bytes": 109775,
+      "sha256": "CEC1DE5EC0E844B1FFA97898A9E46BFF77D109E5D153C292110AECE24BA09B20",
+      "bytes": 115838,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
-      "sha256": "4837A7AEB8D16FF7C2F0180457D5F519315EDD5F4FC7305EC7D7C24A4E708E86",
-      "bytes": 51636,
+      "sha256": "1BA3FAE0D4C892E9298B780FB573FFFFBFD33F90B574B4AB89F044BBF48D83E0",
+      "bytes": 57937,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/README.md",
-      "sha256": "0F18A803001B26AC5023B71D323F719F231169181467E219BBEE8378584DA28A",
-      "bytes": 74238,
+      "sha256": "B27B6DCCB118F5062FF118C01DB3D91A55B85D72C1536A1BCE1F8670888A667A",
+      "bytes": 82402,
       "role": "gate5_control_artifact"
     },
     {
@@ -1240,14 +1246,14 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/stagec_qwen_prompt_injection_v0.1/README.md",
-      "sha256": "1FE157AB9960450CD56998C35AB69C3E997E446DC8314ADD5F35B808424530BA",
-      "bytes": 45611,
+      "sha256": "322F87E42ED4F9B80C57EBA68DDDBA50B9C1BFC4689FFE967D03B2C201373922",
+      "bytes": 52232,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/stagec_qwen_prompt_injection_v0.1/STAGEC_IMPLEMENTATION_OBLIGATIONS_AND_EVIDENCE_PLAN_v0.1.json",
-      "sha256": "76CD829493A1A334C2B4799C3A73BE17AA8076B54D29525D72BA8A49377C7B6B",
-      "bytes": 116336,
+      "sha256": "DDFEFA7B508A83E3C47DA5FFAEF2613AAF7FE462761B9D04D9BD2D83181D7744",
+      "bytes": 141668,
       "role": "gate5_control_artifact"
     },
     {
@@ -2110,8 +2116,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_packaging.py",
-      "sha256": "CF21F42B81AD3E6CD50A211FB4FC6D01B035F6177921392B0F4811FCFFD641D0",
-      "bytes": 6036,
+      "sha256": "0F7D7D18507E43F6D50240857797EF91D2401BE1741558EDEB1B389B848F3DE1",
+      "bytes": 6612,
       "role": "gate5_api_runtime_dependency"
     },
     {
@@ -2512,20 +2518,20 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/PACKAGING_PROVENANCE.json",
-      "sha256": "1561D0707AEB12ED720A1F70670494006B186628434CB6390A4DEEFBA5040D07",
-      "bytes": 3867,
+      "sha256": "D3074AC3F1B72FD150305F298159F185FD0AF259EB30109D80F10973BAA3F403",
+      "bytes": 6055,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/__init__.py",
-      "sha256": "7D3A90FAFBD68C81888DD36A17CE7E075C48243C231E84A8BFDF8093C939037C",
-      "bytes": 38141,
+      "sha256": "C82851C34C4917EE362C7A29FA894CDE1D345DAD623DFDA6F21FEB8700A0E1E6",
+      "bytes": 40808,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/_strict_json.py",
-      "sha256": "032EFD78A48A60C2AC0F3CC3B92274A346C5B044B8F22423722FDF55501C9BDC",
-      "bytes": 5760,
+      "sha256": "DA862433A62F4C537D091CB17E8438EFA2301F854E3106A683F9F7D679F0AF15",
+      "bytes": 6267,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
@@ -2538,6 +2544,60 @@
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/artifacts.py",
       "sha256": "969586F5FE5ED93C86F12F455D961E5EDFED62E023910F590772A9DD479BBC29",
       "bytes": 24247,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/comparison_adapters.py",
+      "sha256": "DC7741461D8C4A2C567F798A2695282350C2EB0B63586B0F2C2DB5FC1AAC353F",
+      "bytes": 32441,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/comparison_departure_metrics.py",
+      "sha256": "96FC7370E3AD2A3B228B49BAB1F2FBF5BC61C6D105A2BD2E3D028FCECC676A12",
+      "bytes": 95655,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/comparison_execution_boundary.py",
+      "sha256": "DFA7E8BB4E06005340CF3856C4B56B2BDA536816D0A0CB405BE86C18151DB647",
+      "bytes": 26519,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/comparison_model_protocol.py",
+      "sha256": "D65A695C97465FFF8C31A6429EA2D4036606D7A1A182D6D2D71D498E30612252",
+      "bytes": 59909,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/comparison_prompt_injection_layers.py",
+      "sha256": "9B5E99F7F256BDD3BCB522C48CAE426D66BEE39C3B221411A4C99A69A3AE54A4",
+      "bytes": 65684,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/comparison_shared_protocol.py",
+      "sha256": "32942AB2C36CD4CAD8663509BA41BE6F6AEEEED71AFDD48F82D85255DD6B12AD",
+      "bytes": 58727,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/comparison_shared_runner.py",
+      "sha256": "3E23440115CA6859926DB43E46ED74AFE4684A265A037224BA06B12ABDEC58AB",
+      "bytes": 36220,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/comparison_steering_effects.py",
+      "sha256": "C9267F04FA8175AAC5758CA689E8C836BB136356AEF50B0155B2E66EF2CD0C76",
+      "bytes": 59933,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/comparison_steering_protocol.py",
+      "sha256": "D2BFF44260B7234852088248AD951AADF131A1FBC839EF4BB9ACF062E86DC5F3",
+      "bytes": 66571,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
@@ -2613,6 +2673,12 @@
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/distributed_probe_contract.py",
+      "sha256": "76EFE7D146630A199473C47C9E51A99E818132E6DA629412240507B6C65AA53C",
+      "bytes": 129922,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/evidence_packet.py",
       "sha256": "925EC4E994063352ED2CF4D58A185D7D336910C2E9C453927D49AB041B6F28FD",
       "bytes": 29934,
@@ -2622,6 +2688,18 @@
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/evidence_packet_builder.py",
       "sha256": "791A45C3A0CB997B2892AAC9C1C7F1DDE3D41A6E3D514BD02A8D164D74FBAF2B",
       "bytes": 32342,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/historical_evidence_import.py",
+      "sha256": "10BFC49EC483B1E202D933960D12B226127FF8C0BDA7EECC640C070C94E17296",
+      "bytes": 47363,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/jspace_shadow_contract.py",
+      "sha256": "9AEB7BE89B8D4AA4D5B4934B5D6BD8F6D8C784CEF631CED9E05BFCC62C76C6F2",
+      "bytes": 77777,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
@@ -2640,6 +2718,18 @@
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/study_protocol.py",
       "sha256": "01A4EF7BB1481C753B6D7E25F6FF5748E4D750C67DD3F30893F70E81A8E57C04",
       "bytes": 52473,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/surface_meaning_preservation.py",
+      "sha256": "8AED0A46F9B4948DFCE7DD16AC98F2C433E8C3CB3DD650B68EADC497299B27BA",
+      "bytes": 39186,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/universal_probe_contract.py",
+      "sha256": "BB6993F9406B1E89A4768F084287ED6A7FBC0EC83582A8264E39D1DAFCA474C2",
+      "bytes": 113027,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
@@ -3412,8 +3502,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_packaged_mirror.py",
-      "sha256": "DBAFC0901CFE33A2C59A961B97F134CBC9408787B69B6A26AC843924A4BBFDF8",
-      "bytes": 15689,
+      "sha256": "E019285701CF35DC7C4A1D49CF37E3F9983B3F20EBE00EFCF180A739FFA74074",
+      "bytes": 18564,
       "role": "gate5_api_launcher_test"
     },
     {
@@ -3538,8 +3628,8 @@
     },
     {
       "path": "scripts/verify_project_coherence_gate5.py",
-      "sha256": "F07CFB8A3E54C7596D58E15CDB44D3FC08718CB877BFADB8F3408D7270272861",
-      "bytes": 742510,
+      "sha256": "AAB2071015235A9318A6132A463F82C53C2A5515E1A102403EC2D4CC9F555D94",
+      "bytes": 830902,
       "role": "gate5_verification_control"
     },
     {
@@ -3586,14 +3676,14 @@
     },
     {
       "path": "src/cas_harness_v2/__init__.py",
-      "sha256": "7D3A90FAFBD68C81888DD36A17CE7E075C48243C231E84A8BFDF8093C939037C",
-      "bytes": 38141,
+      "sha256": "C82851C34C4917EE362C7A29FA894CDE1D345DAD623DFDA6F21FEB8700A0E1E6",
+      "bytes": 40808,
       "role": "gate5_control_kernel_source"
     },
     {
       "path": "src/cas_harness_v2/_strict_json.py",
-      "sha256": "032EFD78A48A60C2AC0F3CC3B92274A346C5B044B8F22423722FDF55501C9BDC",
-      "bytes": 5760,
+      "sha256": "DA862433A62F4C537D091CB17E8438EFA2301F854E3106A683F9F7D679F0AF15",
+      "bytes": 6267,
       "role": "gate5_control_kernel_source"
     },
     {
@@ -3606,6 +3696,60 @@
       "path": "src/cas_harness_v2/artifacts.py",
       "sha256": "969586F5FE5ED93C86F12F455D961E5EDFED62E023910F590772A9DD479BBC29",
       "bytes": 24247,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/comparison_adapters.py",
+      "sha256": "DC7741461D8C4A2C567F798A2695282350C2EB0B63586B0F2C2DB5FC1AAC353F",
+      "bytes": 32441,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/comparison_departure_metrics.py",
+      "sha256": "96FC7370E3AD2A3B228B49BAB1F2FBF5BC61C6D105A2BD2E3D028FCECC676A12",
+      "bytes": 95655,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/comparison_execution_boundary.py",
+      "sha256": "DFA7E8BB4E06005340CF3856C4B56B2BDA536816D0A0CB405BE86C18151DB647",
+      "bytes": 26519,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/comparison_model_protocol.py",
+      "sha256": "D65A695C97465FFF8C31A6429EA2D4036606D7A1A182D6D2D71D498E30612252",
+      "bytes": 59909,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/comparison_prompt_injection_layers.py",
+      "sha256": "9B5E99F7F256BDD3BCB522C48CAE426D66BEE39C3B221411A4C99A69A3AE54A4",
+      "bytes": 65684,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/comparison_shared_protocol.py",
+      "sha256": "32942AB2C36CD4CAD8663509BA41BE6F6AEEEED71AFDD48F82D85255DD6B12AD",
+      "bytes": 58727,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/comparison_shared_runner.py",
+      "sha256": "3E23440115CA6859926DB43E46ED74AFE4684A265A037224BA06B12ABDEC58AB",
+      "bytes": 36220,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/comparison_steering_effects.py",
+      "sha256": "C9267F04FA8175AAC5758CA689E8C836BB136356AEF50B0155B2E66EF2CD0C76",
+      "bytes": 59933,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/comparison_steering_protocol.py",
+      "sha256": "D2BFF44260B7234852088248AD951AADF131A1FBC839EF4BB9ACF062E86DC5F3",
+      "bytes": 66571,
       "role": "gate5_control_kernel_source"
     },
     {
@@ -3681,6 +3825,12 @@
       "role": "gate5_control_kernel_source"
     },
     {
+      "path": "src/cas_harness_v2/distributed_probe_contract.py",
+      "sha256": "76EFE7D146630A199473C47C9E51A99E818132E6DA629412240507B6C65AA53C",
+      "bytes": 129922,
+      "role": "gate5_control_kernel_source"
+    },
+    {
       "path": "src/cas_harness_v2/evidence_packet.py",
       "sha256": "925EC4E994063352ED2CF4D58A185D7D336910C2E9C453927D49AB041B6F28FD",
       "bytes": 29934,
@@ -3690,6 +3840,18 @@
       "path": "src/cas_harness_v2/evidence_packet_builder.py",
       "sha256": "791A45C3A0CB997B2892AAC9C1C7F1DDE3D41A6E3D514BD02A8D164D74FBAF2B",
       "bytes": 32342,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/historical_evidence_import.py",
+      "sha256": "10BFC49EC483B1E202D933960D12B226127FF8C0BDA7EECC640C070C94E17296",
+      "bytes": 47363,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/jspace_shadow_contract.py",
+      "sha256": "9AEB7BE89B8D4AA4D5B4934B5D6BD8F6D8C784CEF631CED9E05BFCC62C76C6F2",
+      "bytes": 77777,
       "role": "gate5_control_kernel_source"
     },
     {
@@ -3711,10 +3873,82 @@
       "role": "gate5_control_kernel_source"
     },
     {
+      "path": "src/cas_harness_v2/surface_meaning_preservation.py",
+      "sha256": "8AED0A46F9B4948DFCE7DD16AC98F2C433E8C3CB3DD650B68EADC497299B27BA",
+      "bytes": 39186,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/universal_probe_contract.py",
+      "sha256": "BB6993F9406B1E89A4768F084287ED6A7FBC0EC83582A8264E39D1DAFCA474C2",
+      "bytes": 113027,
+      "role": "gate5_control_kernel_source"
+    },
+    {
       "path": "src/cas_harness_v2/worker_protocol.py",
       "sha256": "80E04B35072660CC26A0380974723AA2C5AAB5FA29F9A31A82844248E8DF7733",
       "bytes": 37515,
       "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_comparison_adapters.py",
+      "sha256": "238AE663163640A6AED2AB90DF618BA7E027DB830A7E06ACC53F793C2E77CF68",
+      "bytes": 23948,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_comparison_authority_constants.py",
+      "sha256": "699AABE5B6231B273B0A1F3D5FB24DF0D057D64660330C0CCA7B40BF61A6C3E1",
+      "bytes": 7821,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_comparison_departure_metrics.py",
+      "sha256": "8F281E7204A9970EFC62106D64B8962C7FC18449617B8FDE704B759005D4656A",
+      "bytes": 39887,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_comparison_execution_boundary.py",
+      "sha256": "9C84A7E4546CEA363DA6876D81C5F910425DCF8DC4221A1C59DA2F75B22A2CB6",
+      "bytes": 17690,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_comparison_model_protocol.py",
+      "sha256": "C04E8F98F5DBF04A08E9C4C0C7221CAC79DC0CAA4BB595B35BFEB863FD6D9988",
+      "bytes": 39295,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_comparison_prompt_injection_layers.py",
+      "sha256": "716B17C8BAF675A417208B4386C06B9FC9A3F158BF600D94180C16297EAC8167",
+      "bytes": 32628,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_comparison_shared_protocol.py",
+      "sha256": "EB2F46724B7C6C887DC497E1EC42E6FD6181F58515B1AD016DC0D5E46E1537E0",
+      "bytes": 25778,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_comparison_shared_runner.py",
+      "sha256": "FBAD60A83AF5C8A0147057CC34942ED7DAF00ACC36C3A78E6198FAF79D722877",
+      "bytes": 34134,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_comparison_steering_effects.py",
+      "sha256": "43F6609AB27FAB3ECB1F18A3C902FFAF03B3F8F6C6366E3AC789931FD12E9F95",
+      "bytes": 28949,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_comparison_steering_protocol.py",
+      "sha256": "6AC04085590C6A00E16EFD7A530988733B0B9AE6F9CCB571EA93D109A7797980",
+      "bytes": 25202,
+      "role": "gate5_control_kernel_test"
     },
     {
       "path": "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py",
@@ -3795,6 +4029,12 @@
       "role": "gate5_control_kernel_test"
     },
     {
+      "path": "tests/cas_harness_v2/test_distributed_probe_contract.py",
+      "sha256": "6B591871C398D80222D4E7838536EC0637067DEFC531C56D001E6F17D6501473",
+      "bytes": 69948,
+      "role": "gate5_control_kernel_test"
+    },
+    {
       "path": "tests/cas_harness_v2/test_evidence_packet_builder.py",
       "sha256": "614C47C45CBB106E08DC38D33C8FF56F60C1EA9647EF0758A5ED50B1A199B25F",
       "bytes": 29614,
@@ -3807,6 +4047,12 @@
       "role": "gate5_control_kernel_test"
     },
     {
+      "path": "tests/cas_harness_v2/test_historical_evidence_import.py",
+      "sha256": "9C42EF257406D0A8D0583F91F17C74677DA85D9F0DA950E18761112DC3E87232",
+      "bytes": 29170,
+      "role": "gate5_control_kernel_test"
+    },
+    {
       "path": "tests/cas_harness_v2/test_historical_v1_v4_portable_ci.py",
       "sha256": "C7F79EFE471828FA66AE6DB8B4E3074A41BD26B779C4D05C5A62B396236FAACB",
       "bytes": 4253,
@@ -3816,6 +4062,12 @@
       "path": "tests/cas_harness_v2/test_historical_v1_v4_recovery.py",
       "sha256": "0672ABD2E83193BB62EF9CC3693266525AA92CDBFBE31AF792D2FDAB675BF21C",
       "bytes": 7414,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_jspace_shadow_contract.py",
+      "sha256": "3094612E9288FCBC182E78E979971F64A67F86DFEECAE9E0469BD71AF2D49F69",
+      "bytes": 33273,
       "role": "gate5_control_kernel_test"
     },
     {
@@ -3840,6 +4092,18 @@
       "path": "tests/cas_harness_v2/test_study_protocol.py",
       "sha256": "EE2122FEE5B0B4E6CBE94D481EE9D78EEE439D716F33B25367311F6411AB55B5",
       "bytes": 43412,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_surface_meaning_preservation.py",
+      "sha256": "261845562D3D503B85330E1D8EC85903873CF767B440447AD64A256B21E5B20F",
+      "bytes": 13822,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_universal_probe_contract.py",
+      "sha256": "EB86DB71A717CBC48497BB1F54D21DDD968B559F89B4DB3BF46243DCCB73E93D",
+      "bytes": 43698,
       "role": "gate5_control_kernel_test"
     },
     {
@@ -3941,9 +4205,9 @@
         "src",
         "tests/cas_harness_v2"
       ],
-      "expected_tests": 565,
+      "expected_tests": 1082,
       "expected_subtests": 163,
-      "expected_test_ids_sha256": "4CCAD2A4EF4868EBAD7EBDC9E219371A57CBE69C974E5D986A8714A0A0DDE601",
+      "expected_test_ids_sha256": "E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928",
       "expected_setup_skipped_nodeids": [
         "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_exact_locked_runtime_two_independent_fits",
         "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_arbitrary_coefficient_rejected_by_full_refit_binding",
@@ -4087,7 +4351,7 @@
       ],
       "expected_tests": 99,
       "expected_subtests": 0,
-      "expected_test_ids_sha256": "2EC053F1688C97A76326A5ADDD79A07F31623D91FE9513DF9B4EC4C6B5D2167B",
+      "expected_test_ids_sha256": "B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B",
       "expected_setup_skipped_nodeids": [],
       "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
     },

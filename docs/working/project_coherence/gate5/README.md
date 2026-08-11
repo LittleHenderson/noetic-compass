@@ -155,7 +155,7 @@ not supply a positive real activation. Exact frozen identities are:
 | Worker activation gate | `FC918942B2D324BCE1882577166A1F3FCFE8A98AAE2D5A39F90E0DCCD9B970B4` / 61,983 | `0A3A177079AD28542C89F1EA9D745E448B6F6F3A7276DE26AD3EB62C72205489` / 49,357 | 95/95 PASS; node-ID SHA-256 `0554F3710F9A35667A462CAF53584C9517CF945BFC64811765ACFB4E7CC7BCD3` |
 | Worker capture | `0ECD006E3799A70FFED72688015C03BC2A1D8107BC25632FD93D87435D06519C` / 124,345 | `E21ED834800845E51223203DF018DCDEFAE43FB60E2FC7D0D43017EE99676A7E` / 84,540 | 139/139 PASS; node-ID SHA-256 `C306D70A052CDA8C0CFB12394B640A2ED2DDE9FEE58F16E92FF23771CAABFED1` |
 | Gate plus capture union | exact two worker source pairs above | exact two worker test pairs above | 234/234 PASS; node-ID SHA-256 `08CAA558DEE27A5876DA29A15E9D0E3875994C630E2826BC52154DC215776E76` |
-| Qwen exclusion surface | generic sources listed below | `08A6D58EA0E9D083D13CCC57A62956A23EEEC85D79C8F4C2F62F7DDE60320A3B` / 27,690 | 27/27 PASS as an exact executed subset of the authoritative 719-node worker same-process receipt; node-ID SHA-256 `D80B52FFC48D0677F773269F640481A4C1CA0C434C707041FF391EA75BE90ECA` |
+| Qwen exclusion surface | generic sources listed below | `08A6D58EA0E9D083D13CCC57A62956A23EEEC85D79C8F4C2F62F7DDE60320A3B` / 27,690 | 27/27 PASS as an exact executed subset of the preserved historical 719-node worker same-process receipt; node-ID SHA-256 `D80B52FFC48D0677F773269F640481A4C1CA0C434C707041FF391EA75BE90ECA` |
 
 The core seals private expectations, passes only disposable deep copies across
 backend boundaries, detaches and rechecks every returned observation, and uses
@@ -199,7 +199,7 @@ provenance is
 15,689 bytes. The package suite is 13/13 PASS. Four new unique worker schemas
 and zero new media types produce closed totals of 49 schemas and 44 media types.
 
-The current authoritative same-process Harness replay collected, started, and
+The preserved runtime-activation Harness checkpoint collected, started, and
 finished 565 nodes in 2,477.3 seconds at node-ID SHA-256
 `4CCAD2A4EF4868EBAD7EBDC9E219371A57CBE69C974E5D986A8714A0A0DDE601`:
 559 nodes had exact all-phase PASS, the six exact setup skips remain mismatch
@@ -217,7 +217,7 @@ pre-test loaded code
 and loaded code
 `24F868086F5B21A263D06229B5FBEC36FC572878F0C2AA710001BCAF9C0CAE07`.
 
-The current authoritative same-process worker replay passed 719/719 in 42.035
+The preserved runtime-activation worker checkpoint passed 719/719 in 42.035
 seconds at node-ID SHA-256
 `98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`,
 with 2,157 ordinary reports, zero subtests, skips, warnings, errors, or
@@ -232,17 +232,18 @@ pre-test loaded code
 `3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E`,
 and loaded code
 `4B37B98E99C132E65C7095EBD0FC42A44E9C701923FD451DACC25EEC45636FBB`.
-For the current Harness receipt only, `loaded_code_sha256` uses `CANONICAL
+For the preserved 565-node Harness receipt only, `loaded_code_sha256` uses `CANONICAL
 VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER
 SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE
 DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED`. The
-current worker and the preserved 537- and 508-node historical Harness
+preserved 719-node worker and the preserved 537- and 508-node historical Harness
 loaded-code digests use `CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW
 RECORDS / NO PROJECTION`; their recorded values remain unchanged.
-These current receipts sit within the complete 1,772-node verifier suite map,
-not a two-suite sum. The prior 537-node Harness and 594/594 worker receipts
-remain exact historical evidence and are not substituted for current-tree
-replays. All receipts remain `STRUCTURE_ONLY / NON_AUTHORITY`.
+At that checkpoint these receipts sat within the complete 1,772-node verifier
+suite map, not a two-suite sum. The 565-node Harness, 719/719 worker, 537-node
+Harness, 594/594 worker, and 99/99 adapter/reconciliation receipts are now exact
+historical evidence and are not substituted for current-tree replays. All
+remain `STRUCTURE_ONLY / NON_AUTHORITY`.
 
 No exact authenticated external four-carrier plus twelve-dependency bundle has
 been admitted. No positive real storage/issuer/ledger backend, actual one-use
@@ -250,6 +251,118 @@ authorization nonce consumption, model/provider call, detector result,
 Evidence Packet, or scientific/product/license/disclosure authority exists.
 Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains
 `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; claims remain
+`NOT LICENSED / HELD / NOT FROZEN`.
+
+## Provider-neutral model comparison and recovery tranche
+
+The expanded current-tree candidate is
+`STRUCTURE_ONLY / NON_AUTHORITY / REPLAY_ONLY / UNAVAILABLE`. It combines the
+strong historical research ideas without restoring their weak execution paths
+or promoting their results.
+
+| Canonical module | Structural function | Authority ceiling |
+|---|---|---|
+| `comparison_model_protocol.py` | Exact provider-neutral open-weight, closed-weight, replay identity, capability, case, observation, and pair carriers | No provider/model call or capability inference from a name |
+| `comparison_adapters.py` | Exact one-use replay adapter and fail-closed unavailable adapter | No live adapter |
+| `comparison_shared_protocol.py` | Frozen two-model protocol and matched three-role roster | No outcome or authorization |
+| `comparison_shared_runner.py` | Exact paired replay over both complete case streams | Association only; no verdict or composite |
+| `comparison_prompt_injection_layers.py` | Separate text/context, hidden-state, and runtime-policy results plus disagreement binding | No aggregate detector verdict |
+| `surface_meaning_preservation.py` | Per-cell Surface Gate and Meaning Preservation receipts | No overall PASS or evaluator execution |
+| `comparison_departure_metrics.py` | Deterministic signed `closed - open` component metrics and matched-group uncertainty | No composite index or scientific conclusion |
+| `comparison_steering_protocol.py` | Disabled separate steering and black-box-control plans | Unavailable backend; zero intervention |
+| `comparison_steering_effects.py` | Exact association of already-produced open steering and closed policy effects | No shared-mechanism claim |
+| `comparison_execution_boundary.py` | Canonical blocked-execution and zero-spend record | Positive execution state is not buildable |
+| `universal_probe_contract.py` | Config/replay semantic probe and bounded zero-call canary contracts | No model load, hook, or universality license |
+| `distributed_probe_contract.py` | Topology, rank ownership, fragment, checkpoint, and reconstruction contracts | No distributed framework/GPU/provider execution |
+| `jspace_shadow_contract.py` | Disabled source-bound vector JVP/VJP `SHADOW` contract | No import, autograd, verdict, or license |
+| `historical_evidence_import.py` | Read-only stable-byte inventory/import report | `HISTORICAL_EVIDENCE_ONLY`; no current result type |
+
+The shared comparison roster requires exactly three contiguous roles in every
+matched group, in fixed order: `ADVERSARIAL_PRESENT`, `CLEAN_ABSENT`, and
+`CLEAN_NULL_ABSENT`. It binds one exact open role and one exact closed role.
+Closed-model hidden-state evidence is `unavailable`, not a model failure. Raw
+paired outputs remain available for independent recomputation.
+
+The layered detector artifacts never collapse text/context, hidden-state, and
+runtime-policy disagreement. Departure metrics preserve direction, exact
+component values, a deterministic 10,000-replicate matched-group bootstrap, and
+plain sign meaning. Surface/meaning artifacts preserve failed cells. Steering
+stays out of Stage C and requires a future separate plan and authorization;
+`ACTIVATION_STEERING` is not `BLACK_BOX_POLICY_CONTROL`.
+
+The historical handoff remains read-only and `HISTORICAL EVIDENCE ONLY`. The
+read-only inventory found 672 files, 172 root-manifest entries, 170 exact
+matches, two drifted entries, and 500 files outside the root manifest. Attempt
+11 and Gate 2 status files are outside the root manifest and cannot be promoted.
+
+Bounded focused structural checkpoints include the 460-node comparison slice,
+57/57 immutable-authority tests, 39/39 historical-import tests, 102/102
+J-Space-plus-authority tests, 47/47 distributed tests, and the 160/160
+distributed dependency union. They prove only their local exact-byte test
+surfaces.
+
+The package candidate is 36 byte-mirrored Python files, 1,097 unique exports,
+and 2,332,110 bytes. The configured Harness inventory is 1,082 nodes at
+node-ID SHA-256
+`E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928`;
+the configured worker inventory is unchanged at 719 nodes and node-ID SHA-256
+`98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`.
+Current same-process suite receipts are authoritative software-test PASS within
+`STRUCTURE_ONLY / NON_AUTHORITY` only. Harness completed 1,082 nodes: 1,076
+all-phase PASS, six exact setup skips retained as mismatch evidence, 3,240
+ordinary reports, 163 passing subtests, zero warnings/errors, process/pytest
+0/0, empty pycache, and `3350.340165` seconds. Its exact
+node/ordinary/subtest/origin/pre-test/loaded digests are
+`E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928`,
+`60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29`,
+`6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`,
+`3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+`0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+and `B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826`
+under `CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED`.
+
+Worker passed 719/719 with 2,157 ordinary reports, no subtests, warnings, or
+errors, process/pytest 0/0, empty pycache, and `106.254353` seconds. Its exact
+digests are
+`98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`,
+`CF7F1676BAAA3E83999E758A35F311743B7B227DBD0A160EF79F85AA72477468`,
+`4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945`,
+`035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6`,
+`3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E`,
+and `44A6B0A13CAA30860D3802C042455F72C90FFC6D15FA7503F3B159384EFF4C34`.
+Adapter/reconciliation passed 99/99 with 297 ordinary reports, no subtests, one
+warning, no errors, process/pytest 0/0, empty pycache, and `47.452869` seconds.
+Its exact digests are
+`B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B`,
+`548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F`,
+`4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945`,
+`3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+`0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+and `5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3`.
+Worker and adapter use `CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION`.
+
+Harness attempt 1 timed out at 3,600 seconds with no receipt. Attempt 2 ended
+process/pytest 1 because of a stale manifest and produced no receipt. After the
+manifest was rebuilt to 686 artifacts, targeted red-team checks passed 22 tests
+plus 23 subtests; attempt 3 produced the current Harness PASS. The suite ceiling
+remains 5,400 seconds. Historical 565/719/99 receipts remain unchanged and
+historical. The final integrated 12-suite verifier is `READY / PENDING`; no
+final-verifier PASS is claimed.
+
+The stable current executable-shadow path count is 2,290. The exact ignored
+`noetic-compass-scaffold/noetic-compass/.tmp` transient trace subtree is
+excluded from path-count authority because it is not an admitted
+import/executable authority surface. All cache, native, and symlink checks
+remain.
+
+The only installed execution record is blocked with model/provider/network/
+generation/intervention/GPU/RunPod calls 0 and spend `$0.00`. The real exact
+four-carrier plus twelve-dependency bundle is absent. The requested exact
+model/revision, maximum spend, and UTC authorization start/expiry values remain
+placeholders. Stop before any model call or further spending.
+
+This tranche does not change Gate 5 `OPEN / KEEP_OPEN`, Stage C
+`DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`, or
 `NOT LICENSED / HELD / NOT FROZEN`.
 
 ## Control artifacts
@@ -269,6 +382,9 @@ Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains
   OPEN criteria without converting repository tests into acceptance.
 - `GATE5_ADVERSARIAL_REVIEW_v0.1.md` records reproduced defects, repairs, and
   residual boundaries.
+- `GATE5_HISTORICAL_RECOVERY_AND_MODEL_COMPARISON_MATRIX_v0.1.md` records the
+  read-only historical inventory, recovery classifications, and the current
+  replay/unavailable comparison implementation boundary.
 - `GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json` records the exact Pythia
   weights-file identity and the historical `transformers==4.46.3`
   container/dependency security hold. It remains unchanged adverse evidence.
@@ -538,12 +654,12 @@ checkpoint. Its canonical node-ID digest was:
 `65352B8B59CB654E449BA4A1CE8459D7109CC5B21E33F64AEAB6E2EA6EEB3C19`
 
 That historical receipt superseded the earlier stale 90-test receipt. The
-expanded adapter surface now has an authoritative same-process 99/99 PASS
+expanded adapter surface has a preserved historical same-process 99/99 PASS
 receipt with digest
 `2EC053F1688C97A76326A5ADDD79A07F31623D91FE9513DF9B4EC4C6B5D2167B`.
 It emitted 297 ordinary reports, zero subtests, one warning, and zero errors or
-deselections, left the isolated pycache empty, and exited pytest 0. The current
-package inventory contains 22 byte-mirrored kernel files, 469 unique exports,
+deselections, left the isolated pycache empty, and exited pytest 0. That
+historical package inventory contains 22 byte-mirrored kernel files, 469 unique exports,
 and 1,420,002 bytes. Its packaging-provenance SHA-256 is
 `1561D0707AEB12ED720A1F70670494006B186628434CB6390A4DEEFBA5040D07`;
 13 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
@@ -551,9 +667,9 @@ and 1,420,002 bytes. Its packaging-provenance SHA-256 is
 and the packaging allowlist source SHA-256 is
 `CF21F42B81AD3E6CD50A211FB4FC6D01B035F6177921392B0F4811FCFFD641D0`.
 The historical 437-, 489-, 508-, and 537-node Harness receipts below predate
-this runtime-expanded package. The current 565-node Harness and 719-node worker
-authoritative same-process receipts are recorded above; the 99-node adapter
-receipt remains a historical integrated checkpoint. Every nonauthority
+that runtime-expanded package. The 565-node Harness, 719-node worker, and
+99-node adapter same-process receipts recorded above are preserved historical
+checkpoints. Every nonauthority
 boundary remains binding.
 
 The retained local GPU-canary and joined-mechanics evidence suite passes 27/27
@@ -1032,11 +1148,11 @@ shapes without creating runtime authority:
 
 The phase split receipts were 5/5 in 50.70s, 2/2 in 80.32s, and 1/1 in
 238.10s. The disposition split receipts were 8 passed/3 deselected in 210.72s
-and 3 passed/8 deselected in 870.18s. The current authoritative 565-node
-Harness receipt separately records the six exact runtime-lock nodes as setup
+and 3 passed/8 deselected in 870.18s. The preserved historical 565-node Harness
+receipt separately records the six exact runtime-lock nodes as setup
 skips and mismatch evidence rather than PASS, so it is not an 11/11 positive
 exact-lock receipt. The 306-Harness/576-worker receipts remain historical
-checkpoints at `b96c2c12`; the current 565/719 receipts are recorded above. The
+checkpoints at `b96c2c12`; the historical 565/719 receipts are recorded above. The
 positive post-access `NO_ELIGIBLE_THRESHOLD` rejection branch remains
 unexecuted.
 

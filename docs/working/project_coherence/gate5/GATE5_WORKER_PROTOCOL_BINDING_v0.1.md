@@ -49,7 +49,8 @@ rather than PASS, 1,461 ordinary reports and 163 passing subtests were emitted,
 zero warnings/errors/deselections occurred, the isolated pycache remained empty,
 pytest exited 0, and the digest is
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
-The adapter passed 99/99 with 297 ordinary reports, zero subtests, one warning,
+The preserved historical adapter checkpoint passed 99/99 with 297 ordinary
+reports, zero subtests, one warning,
 zero errors or deselections, empty isolated pycache, pytest exit 0, and digest
 `2EC053F1688C97A76326A5ADDD79A07F31623D91FE9513DF9B4EC4C6B5D2167B`.
 
@@ -221,8 +222,8 @@ The Qwen exclusion test is SHA-256
 `08A6D58EA0E9D083D13CCC57A62956A23EEEC85D79C8F4C2F62F7DDE60320A3B`
 at 27,690 bytes. Its 27 configured node IDs hash to
 `D80B52FFC48D0677F773269F640481A4C1CA0C434C707041FF391EA75BE90ECA`;
-all 27 nodes passed as an exact executed subset of the authoritative 719-node
-worker same-process receipt. Generic source identities are:
+all 27 nodes passed as an exact executed subset of the preserved historical
+719-node worker same-process receipt. Generic source identities are:
 
 | File | SHA-256 | Bytes |
 |---|---|---:|
@@ -250,7 +251,7 @@ bytes; the runtime module contributes 44 exports. Packaging provenance is
 15,689 bytes with 13/13 PASS. Four new unique worker schemas and zero new media
 types yield closed totals of 49 schemas and 44 media types.
 
-The current authoritative same-process Harness replay collected, started, and
+The preserved runtime-activation Harness checkpoint collected, started, and
 finished 565 nodes in 2,477.3 seconds at node-ID SHA-256
 `4CCAD2A4EF4868EBAD7EBDC9E219371A57CBE69C974E5D986A8714A0A0DDE601`:
 559 nodes had exact all-phase PASS, the six exact setup skips remain mismatch
@@ -268,7 +269,7 @@ pre-test loaded code
 and loaded code
 `24F868086F5B21A263D06229B5FBEC36FC572878F0C2AA710001BCAF9C0CAE07`.
 
-The current authoritative same-process worker replay passed 719/719 in 42.035
+The preserved runtime-activation worker checkpoint passed 719/719 in 42.035
 seconds at node-ID SHA-256
 `98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`,
 with 2,157 ordinary reports, zero subtests, skips, warnings, errors, or
@@ -283,19 +284,116 @@ pre-test loaded code
 `3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E`,
 and loaded code
 `4B37B98E99C132E65C7095EBD0FC42A44E9C701923FD451DACC25EEC45636FBB`.
-For the current Harness receipt only, `loaded_code_sha256` uses `CANONICAL
+For the preserved 565-node Harness receipt only, `loaded_code_sha256` uses `CANONICAL
 VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER
 SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE
 DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED`. The
-current worker and the preserved 537- and 508-node historical Harness
+preserved 719-node worker and the preserved 537- and 508-node historical Harness
 loaded-code digests use `CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW
 RECORDS / NO PROJECTION`; their recorded values remain unchanged.
-These current receipts sit within the complete 1,772-node verifier suite map,
-not a two-suite sum. The 537-node Harness and 594/594 worker receipts remain
-historical only, and all receipts remain `STRUCTURE_ONLY / NON_AUTHORITY`. No
+At that checkpoint these receipts sat within the complete 1,772-node verifier
+suite map, not a two-suite sum. The 565-node Harness, 719/719 worker, 537-node
+Harness, 594/594 worker, and 99/99 adapter/reconciliation receipts are all
+preserved historical checkpoints. All remain
+`STRUCTURE_ONLY / NON_AUTHORITY`. No
 real authenticated exact 4+12 bundle, positive storage/issuer/ledger backend,
 actual nonce consumption,
 model/provider call, detector result, Evidence Packet, or authority follows.
+Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains
+`DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; claims remain
+`NOT LICENSED / HELD / NOT FROZEN`.
+
+## Provider-neutral comparison binding
+
+The expanded package now carries a replay-only comparison lane next to the
+worker protocol. It is `STRUCTURE_ONLY / NON_AUTHORITY` and does not add a live
+worker route.
+
+The comparison identity and capability carriers distinguish exact open-weight,
+closed-weight, and replay models. The shared protocol fixes one open role, one
+closed role, and exactly three contiguous case roles per matched group:
+`ADVERSARIAL_PRESENT`, `CLEAN_ABSENT`, and `CLEAN_NULL_ABSENT`. The shared runner
+accepts only the exact one-use replay adapters and returns a canonical paired
+association. It has no provider, model, network, generation, intervention, or
+spend path.
+
+Layered prompt-injection artifacts keep text/context detection, open-model
+hidden-state detection, and runtime-policy enforcement separate. They preserve
+disagreement and emit no aggregate detector verdict. Closed-model hidden-state
+evidence is `unavailable`, not a negative result. Deterministic departure
+metrics retain signed `closed - open` components and matched-group uncertainty;
+surface and meaning receipts stay visible per cell and axis.
+
+Steering remains a separate unavailable-only protocol. Open activation steering
+and closed `BLACK_BOX_POLICY_CONTROL` are not interchangeable. The effect
+association authorizes neither mechanism and performs zero intervention. The
+universal and distributed probe contracts bind replay-only configuration,
+semantic probes, topology, owning rank, fragments, checkpoints, and
+reconstruction. The disabled J-Space `SHADOW` contract binds vector JVP/VJP
+structure without import, autograd, model use, or verdict. The read-only
+historical importer can emit only `HISTORICAL_EVIDENCE_ONLY`.
+
+The only buildable comparison execution state is blocked. Model, provider,
+network, generation, intervention, GPU, and RunPod call counts are 0 and spend
+is `$0.00`. The 36-file package candidate exposes 1,097 unique exports and
+2,332,110 mirrored bytes. The current Harness collection is configured for
+1,082 nodes at digest
+`E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928`;
+the worker remains configured for 719 at digest
+`98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`.
+Current same-process suite receipts are authoritative software-test PASS within
+`STRUCTURE_ONLY / NON_AUTHORITY` only. Harness completed 1,082 nodes: 1,076
+exact all-phase PASS, six exact setup skips retained as mismatch evidence,
+3,240 ordinary reports, 163 passing subtests, all warning/error counters zero,
+process/pytest 0/0, empty pycache, and `3350.340165` seconds. Its exact
+node/ordinary/subtest/origin/pre-test/loaded digests are
+`E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928`,
+`60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29`,
+`6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`,
+`3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+`0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+and `B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826`
+under `CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED`.
+
+Worker passed 719/719 with 2,157 ordinary reports, zero subtests/warnings/errors,
+process/pytest 0/0, empty pycache, and `106.254353` seconds. Its corresponding
+digests are
+`98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`,
+`CF7F1676BAAA3E83999E758A35F311743B7B227DBD0A160EF79F85AA72477468`,
+`4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945`,
+`035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6`,
+`3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E`,
+and `44A6B0A13CAA30860D3802C042455F72C90FFC6D15FA7503F3B159384EFF4C34`.
+Adapter/reconciliation passed 99/99 with 297 ordinary reports, zero subtests,
+one warning, zero errors, process/pytest 0/0, empty pycache, and `47.452869`
+seconds. Its corresponding digests are
+`B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B`,
+`548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F`,
+`4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945`,
+`3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+`0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+and `5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3`.
+Worker and adapter use `CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION`.
+
+Harness attempt 1 timed out at 3,600 seconds with no receipt. Attempt 2 exited
+process/pytest 1 because of a stale manifest and produced no receipt. The
+manifest was rebuilt to 686 artifacts, targeted red-team checks passed 22 tests
+plus 23 subtests, and attempt 3 produced the Harness PASS above. The bounded
+suite ceiling remains 5,400 seconds. The historical 565/719/99 receipts remain
+unchanged and historical. The final integrated 12-suite verifier is
+`READY / PENDING`; it has not produced final-verifier PASS, worker authority, or model
+authority.
+
+The stable current executable-shadow path count is 2,290. The exact ignored
+`noetic-compass-scaffold/noetic-compass/.tmp` transient trace subtree is
+excluded from path-count authority because it is not an admitted
+import/executable authority surface. All cache, native, and symlink checks
+remain.
+
+Worker activation must still stop before acquisition or a model call because
+the real authenticated four-carrier plus twelve-dependency bundle is absent and
+the exact model/revision, maximum spend, and UTC start/expiry values remain
+placeholders. No comparison contract supplies or consumes Stage C authority.
 Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains
 `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; claims remain
 `NOT LICENSED / HELD / NOT FROZEN`.
@@ -776,7 +874,7 @@ and
 permits one `CALIBRATION_FROZEN_NONREPORTING` or
 `CALIBRATION_REJECTED_NONREPORTING` result per phase subject. All 11 final-byte
 nodes pass across two bounded split runs: 8 passed/3 deselected in 210.72s and 3
-passed/8 deselected in 870.18s. The current authoritative 565-node Harness
+passed/8 deselected in 870.18s. The preserved historical 565-node Harness
 receipt separately records the six exact runtime-lock nodes as setup skips and
 mismatch evidence rather than PASS, so it is not an 11/11 positive exact-lock
 receipt. The positive post-access `NO_ELIGIBLE_THRESHOLD` rejection branch

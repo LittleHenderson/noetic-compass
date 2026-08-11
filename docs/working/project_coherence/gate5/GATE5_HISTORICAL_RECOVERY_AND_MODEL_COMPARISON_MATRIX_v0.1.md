@@ -4,7 +4,7 @@ Document status: <code>DRAFT / OPEN / NOT FROZEN</code>
 
 Decision status: <code>OPEN / KEEP_OPEN</code>
 
-Engineering status: <code>RING 4 / RECOVERY PLAN ONLY</code>
+Engineering status: <code>RING 4 / STRUCTURE_ONLY RECOVERY CANDIDATE</code>
 
 Experimental execution status: <code>NOT_STARTED</code>
 
@@ -34,9 +34,11 @@ Current paths are relative to:
 
 <code>C:\Users\wakil\Documents\Codex\2026-08-05\referenced-chatgpt-conversation-this-is-an\work\project_coherence_model_smoke</code>
 
-The current implementation base inspected for this matrix is branch
+The initial implementation base inspected for this matrix was branch
 <code>codex/project-coherence-model-smoke</code> at exact commit
-<code>75713a7a6780c111cd8d81a1ef495de167f8d127</code>.
+<code>75713a7a6780c111cd8d81a1ef495de167f8d127</code>. The additive comparison
+candidate is bound by its canonical source/test hashes below and by the future
+enclosing Git commit; no self-referential future commit is embedded here.
 
 ## Historical handoff root verification
 
@@ -84,6 +86,101 @@ Each matrix row has exactly one controlling classification:
 | <code>PORT AND REPAIR</code> | Recover the useful contract or research idea, but implement it on the current base with the stated repairs and tests. Do not copy the historical implementation unchanged. |
 | <code>HISTORICAL EVIDENCE ONLY</code> | Preserve and verify the old bytes as research history. Never count them as a current run, current prerequisite, current provider receipt, or current Gate 5 result. |
 | <code>REJECT</code> | Do not restore the historical behavior or use the artifact for the stated authority or execution purpose. Retention as audit history is still allowed. |
+
+## Current structural recovery implementation checkpoint
+
+The historical classifications below remain controlling. This checkpoint
+records that their bounded software portions are now implemented through
+replay-only or unavailable contracts. It supersedes older “no current module”
+wording only for that structural portion. It does not convert any historical
+row into current evidence or close any remaining live, scientific, trust,
+licensing, or disclosure obligation.
+
+| Matrix rows | Current canonical module | Source SHA-256 / bytes | Test SHA-256 / bytes | Current ceiling |
+|---|---|---|---|---|
+| A2, A5, D4 | <code>src/cas_harness_v2/comparison_model_protocol.py</code> | <code>D65A695C97465FFF8C31A6429EA2D4036606D7A1A182D6D2D71D498E30612252</code> / 59,909 | <code>C04E8F98F5DBF04A08E9C4C0C7221CAC79DC0CAA4BB595B35BFEB863FD6D9988</code> / 39,295 | Exact open/closed/replay identity and capability carriers; no model/provider call |
+| D4 | <code>src/cas_harness_v2/comparison_adapters.py</code> | <code>DC7741461D8C4A2C567F798A2695282350C2EB0B63586B0F2C2DB5FC1AAC353F</code> / 32,441 | <code>238AE663163640A6AED2AB90DF618BA7E027DB830A7E06ACC53F793C2E77CF68</code> / 23,948 | Exact one-use replay and fail-closed unavailable adapters only |
+| D4, D7 | <code>src/cas_harness_v2/comparison_shared_protocol.py</code> | <code>32942AB2C36CD4CAD8663509BA41BE6F6AEEEED71AFDD48F82D85255DD6B12AD</code> / 58,727 | <code>EB2F46724B7C6C887DC497E1EC42E6FD6181F58515B1AD016DC0D5E46E1537E0</code> / 25,778 | Frozen two-model protocol and exact three-role matched roster |
+| D4, D7 | <code>src/cas_harness_v2/comparison_shared_runner.py</code> | <code>3E23440115CA6859926DB43E46ED74AFE4684A265A037224BA06B12ABDEC58AB</code> / 36,220 | <code>FBAD60A83AF5C8A0147057CC34942ED7DAF00ACC36C3A78E6198FAF79D722877</code> / 34,134 | Exact paired replay association; no verdict or composite |
+| D1, D7 | <code>src/cas_harness_v2/comparison_prompt_injection_layers.py</code> | <code>9B5E99F7F256BDD3BCB522C48CAE426D66BEE39C3B221411A4C99A69A3AE54A4</code> / 65,684 | <code>716B17C8BAF675A417208B4386C06B9FC9A3F158BF600D94180C16297EAC8167</code> / 32,628 | Separate text/context, hidden-state, and runtime-policy artifacts; no aggregate verdict |
+| B1 | <code>src/cas_harness_v2/surface_meaning_preservation.py</code> | <code>8AED0A46F9B4948DFCE7DD16AC98F2C433E8C3CB3DD650B68EADC497299B27BA</code> / 39,186 | <code>261845562D3D503B85330E1D8EC85903873CF767B440447AD64A256B21E5B20F</code> / 13,822 | Per-cell/per-axis receipts; no evaluator run or overall PASS |
+| D5, D7 | <code>src/cas_harness_v2/comparison_departure_metrics.py</code> | <code>96FC7370E3AD2A3B228B49BAB1F2FBF5BC61C6D105A2BD2E3D028FCECC676A12</code> / 95,655 | <code>8F281E7204A9970EFC62106D64B8962C7FC18449617B8FDE704B759005D4656A</code> / 39,887 | Deterministic signed component metrics and matched-group uncertainty; no composite |
+| B9, D6 | <code>src/cas_harness_v2/comparison_steering_protocol.py</code> | <code>D2BFF44260B7234852088248AD951AADF131A1FBC839EF4BB9ACF062E86DC5F3</code> / 66,571 | <code>6AC04085590C6A00E16EFD7A530988733B0B9AE6F9CCB571EA93D109A7797980</code> / 25,202 | Separately authorized plan; unavailable backend and zero-call canary |
+| B9, D6 | <code>src/cas_harness_v2/comparison_steering_effects.py</code> | <code>C9267F04FA8175AAC5758CA689E8C836BB136356AEF50B0155B2E66EF2CD0C76</code> / 59,933 | <code>43F6609AB27FAB3ECB1F18A3C902FFAF03B3F8F6C6366E3AC789931FD12E9F95</code> / 28,949 | Open steering and closed policy effects remain distinct; no shared-mechanism claim |
+| D7, E1 | <code>src/cas_harness_v2/comparison_execution_boundary.py</code> | <code>DFA7E8BB4E06005340CF3856C4B56B2BDA536816D0A0CB405BE86C18151DB647</code> / 26,519 | <code>9C84A7E4546CEA363DA6876D81C5F910425DCF8DC4221A1C59DA2F75B22A2CB6</code> / 17,690 | Blocked execution and zero spend are the only buildable state |
+| A2, A5 | <code>src/cas_harness_v2/universal_probe_contract.py</code> | <code>BB6993F9406B1E89A4768F084287ED6A7FBC0EC83582A8264E39D1DAFCA474C2</code> / 113,027 | <code>EB86DB71A717CBC48497BB1F54D21DDD968B559F89B4DB3BF46243DCCB73E93D</code> / 43,698 | Config/replay semantic probes and zero-call canary; no universality license |
+| C3, C4 | <code>src/cas_harness_v2/distributed_probe_contract.py</code> | <code>76EFE7D146630A199473C47C9E51A99E818132E6DA629412240507B6C65AA53C</code> / 129,922 | <code>6B591871C398D80222D4E7838536EC0637067DEFC531C56D001E6F17D6501473</code> / 69,948 | Ownership/fragment/checkpoint/reconstruction structure; no distributed execution |
+| B2, B4, B5 | <code>src/cas_harness_v2/jspace_shadow_contract.py</code> | <code>9AEB7BE89B8D4AA4D5B4934B5D6BD8F6D8C784CEF631CED9E05BFCC62C76C6F2</code> / 77,777 | <code>3094612E9288FCBC182E78E979971F64A67F86DFEECAE9E0469BD71AF2D49F69</code> / 33,273 | Disabled vector JVP/VJP <code>SHADOW</code>; no import, autograd, verdict, or license |
+| B3, B6, C5, C6, D2, E3 | <code>src/cas_harness_v2/historical_evidence_import.py</code> | <code>10BFC49EC483B1E202D933960D12B226127FF8C0BDA7EECC640C070C94E17296</code> / 47,363 | <code>9C42EF257406D0A8D0583F91F17C74677DA85D9F0DA950E18761112DC3E87232</code> / 29,170 | Read-only <code>HISTORICAL_EVIDENCE_ONLY</code>; no current result output |
+
+The shared roster's fixed role order is <code>ADVERSARIAL_PRESENT</code>,
+<code>CLEAN_ABSENT</code>, <code>CLEAN_NULL_ABSENT</code>. Layered detector
+disagreement remains visible and has no aggregate verdict. Closed-model hidden
+state is <code>unavailable</code>, not a failed model. Steering remains
+unavailable and separately authorized. Universal/distributed/J-Space contracts
+are unmeasured replay or shadow structure only.
+
+Bounded focused checkpoints include 460/460 for the comparison slice excluding
+the distributed module, 57/57 immutable-authority tests, 39/39 historical
+import, 102/102 J-Space plus authority, 47/47 distributed, and 160/160 for the
+distributed dependency union. They are local software receipts only.
+
+The packaging candidate is 36 byte-mirrored Python files, 1,097 unique exports,
+and 2,332,110 bytes. Harness is configured for 1,082 nodes at node-ID SHA-256
+<code>E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928</code>.
+Worker is configured for 719 nodes at node-ID SHA-256
+<code>98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5</code>.
+Current same-process suite receipts are authoritative software-test PASS within
+<code>STRUCTURE_ONLY / NON_AUTHORITY</code> only. Harness completed 1,082 nodes:
+1,076 exact all-phase PASS, six exact setup skips retained as mismatch evidence,
+3,240 ordinary reports, 163 passing subtests, zero warnings/errors,
+process/pytest 0/0, empty pycache, and <code>3350.340165</code> seconds. Its exact
+node/ordinary/subtest/origin/pre-test/loaded digests are
+<code>E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928</code>,
+<code>60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29</code>,
+<code>6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109</code>,
+<code>3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A</code>,
+<code>0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98</code>,
+and
+<code>B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826</code>
+under <code>CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED</code>.
+
+Worker passed 719/719 with 2,157 ordinary reports, no subtests, warnings, or
+errors, process/pytest 0/0, empty pycache, and <code>106.254353</code> seconds.
+Its exact digests are
+<code>98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5</code>,
+<code>CF7F1676BAAA3E83999E758A35F311743B7B227DBD0A160EF79F85AA72477468</code>,
+<code>4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945</code>,
+<code>035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6</code>,
+<code>3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E</code>,
+and
+<code>44A6B0A13CAA30860D3802C042455F72C90FFC6D15FA7503F3B159384EFF4C34</code>.
+Adapter/reconciliation passed 99/99 with 297 ordinary reports, no subtests, one
+warning, no errors, process/pytest 0/0, empty pycache, and
+<code>47.452869</code> seconds. Its exact digests are
+<code>B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B</code>,
+<code>548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F</code>,
+<code>4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945</code>,
+<code>3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A</code>,
+<code>0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98</code>,
+and
+<code>5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3</code>.
+Worker and adapter use <code>CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION</code>.
+
+Harness attempt 1 timed out at 3,600 seconds with no receipt. Attempt 2 ended
+process/pytest 1 because of a stale manifest and produced no receipt. After the
+manifest was rebuilt to 686 artifacts, targeted red-team checks passed 22 tests
+plus 23 subtests; attempt 3 produced the current Harness PASS. The bounded suite
+ceiling remains 5,400 seconds. The executed 565-node Harness, 719/719 worker,
+and 99/99 adapter/reconciliation receipts remain unchanged historical
+checkpoints only. The final integrated 12-suite verifier is
+<code>READY / PENDING</code>; no final-verifier PASS is claimed.
+
+The stable current executable-shadow path count is 2,290. The exact ignored
+<code>noetic-compass-scaffold/noetic-compass/.tmp</code> transient trace subtree
+is excluded from path-count authority because it is not an admitted
+import/executable authority surface. All cache, native, and symlink checks
+remain.
 
 ## A. Provenance, adapters, and model capability
 
@@ -144,20 +241,24 @@ Each matrix row has exactly one controlling classification:
 
 ## Recovery order and stop boundary
 
-The safe implementation order after this matrix is:
+The first seven recovery steps are now implemented only at their safe
+structural ceilings:
 
-1. A2 and A5: Probe IR plus exact capability reporting, with replay/unavailable
-   backends only.
-2. D4, D5, and D7: provider-neutral shared behavioral comparison, departure
-   metrics, and canonical artifacts, using fixtures only.
-3. D1: the three separately reported detector layers, still without a live
-   provider or model.
-4. B1: Surface Gate and Meaning Preservation receipts.
-5. C6: non-promoting historical evidence import.
-6. C4: a true distributed contract with an unavailable backend before any real
-   backend.
-7. B2, B4, B9, and D6: disabled shadow-only J-Space/JVP/VJP/steering and
-   black-box-control comparison.
+1. A2/A5 have provider-neutral capability and universal-probe replay contracts.
+2. D4/D5/D7 have shared behavioral protocol/runner, deterministic departure,
+   artifact, blocked-execution, and zero-spend contracts.
+3. D1 has three separately reported prompt-injection layers with no aggregate
+   verdict.
+4. B1 has per-cell Surface Gate and Meaning Preservation receipts.
+5. C6 has a non-promoting read-only historical importer.
+6. C4 has owning-rank/distributed reconstruction structure with no real backend.
+7. B2/B4/B9/D6 have disabled J-Space/JVP/VJP and unavailable steering/control
+   contracts.
+
+The remaining safe order is package/verifier binding, current full-suite
+execution, final unchanged-tree verifier, real exact 4+12 prerequisite intake,
+external authentication, and only then a separately authorized bounded model
+execution. No recovery step authorizes the next one automatically.
 
 Stop before every provider call, target-model load, GPU, RunPod action, model
 generation, intervention, or spend unless all current Stage C prerequisites
@@ -165,6 +266,11 @@ pass exactly, the exact model/revision and frozen corpus are bound, trusted
 storage/readback/retention/time are authenticated, the authoritative one-use
 authorization and nonce are valid and unused, the exact spend cap and UTC
 window contain no placeholders, and the final clean Gate 5 verifier passes.
+
+Those stop conditions currently fail: the real 4+12 bundle is absent and the
+requested exact model/revision, maximum spend, start UTC, and expiry UTC remain
+placeholders. Model/provider/GPU/RunPod calls are 0 and spend is
+<code>$0.00</code>.
 
 This matrix changes no gate or claim status. Gate 5 remains
 <code>OPEN / KEEP_OPEN</code>; Stage C remains
