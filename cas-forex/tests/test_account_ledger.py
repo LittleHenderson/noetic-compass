@@ -6,7 +6,40 @@ from cas_forex.account_ledger import (
     build_account_ledger_from_paper_review,
     build_live_account_ledger_from_terminal_history,
     build_paper_account_ledger,
+    money,
 )
+
+
+def test_money_rounds_half_cents_away_from_zero():
+    """round(float, 2) rounds the binary value, not the number the caller wrote.
+
+    0.345 is stored as 0.34499..., so round() yields 0.34 -- and always in the
+    down direction, so the error is biased rather than self-cancelling. These
+    are real values from runtime/*.json.
+    """
+    assert money(0.345) == 0.35
+    assert money(2.675) == 2.68
+    assert money(0.185) == 0.19
+    assert money(20.185) == 20.19
+    assert money(-0.345) == -0.35, "negative amounts round away from zero too"
+
+
+def test_money_still_absorbs_binary_float_noise():
+    """The property the evidence chain depends on: equal amounts hash equally."""
+    assert money(0.1 + 0.2) == money(0.3)
+    assert money(1.1 * 3) == money(3.3)
+    assert str(money(0.1 + 0.2)) == "0.3"
+
+
+def test_money_leaves_ordinary_amounts_untouched():
+    for value in (0.0, 5000.0, -250.75, 1234.56, 47.9):
+        assert money(value) == value
+
+
+def test_money_survives_non_finite_input():
+    """A ledger build must not raise because an upstream value went non-finite."""
+    assert money(float("inf")) == float("inf")
+    assert money(float("nan")) != money(float("nan"))  # NaN != NaN, but no raise
 
 
 def _risk_review(account_equity=5000.0):
