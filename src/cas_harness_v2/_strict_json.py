@@ -145,14 +145,14 @@ def freeze_json(value: Any) -> Any:
 
 
 def mapping_proxy_backing_dict(value: Any) -> dict[str, Any] | None:
-    """Return an exact-dict proxy backing without invoking mapping callbacks."""
+    """Return a detached exact-dict snapshot without invoking mapping callbacks."""
 
     if type(value) is not MappingProxyType:
         return None
     referents = gc.get_referents(value)
     if len(referents) != 1 or type(referents[0]) is not dict:
         return None
-    return referents[0]
+    return referents[0].copy()
 
 
 def thaw_json(value: Any) -> Any:
