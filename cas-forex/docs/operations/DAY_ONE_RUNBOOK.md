@@ -19,6 +19,16 @@ model. The broker demo account is NOT untouched. Live remains NOT LICENSED;
 the proof chain is broken at record 11 (diagnosed, not repaired); the 3 June
 bundle days do not count once the chain restarts.
 
+## 0a. Fence status (updated 2026-08-11, after the restart)
+
+Post-mortem blockers 2+3 are IMPLEMENTED and ARMED on this machine:
+`cas_forex/proof_lane_discipline.py`, enforced at the dispatch chokepoint,
+armed via `runtime/proof-lane-discipline.json`. While armed, only proof-plan
+dispatches (US30/NAS100, index_tsmom_126 lineage, a stop-loss, max 3/UTC-day)
+can touch a bridge - the June scalp lane is structurally fenced off. Disarm =
+set `"enabled": false` in that file (owner action, one line). The code default
+is disabled so CI and simulators are unaffected; arming is per-machine.
+
 ## 0. Read the loss post-mortem first
 
 `docs/operations/LOSS_POSTMORTEM_2026-07.md` — the -$55,069 was NOT the proof

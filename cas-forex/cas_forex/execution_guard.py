@@ -1907,6 +1907,15 @@ def guarded_place_order(
         live_telemetry=risk_live_telemetry,
         account_snapshot=risk_account_snapshot,
     )
+    # Proof-lane discipline (owner-armed via runtime state; post-mortem blocker
+    # 2+3): while the 30-day proof runs, only proof-plan dispatches - correct
+    # symbol, proof lineage, a stop-loss, and at most 3 per UTC day - may touch
+    # a bridge. Fail-closed and purely blocking; disarmed machines skip it.
+    from cas_forex.proof_lane_discipline import evaluate_proof_lane
+
+    lane = evaluate_proof_lane(proposed_intent if proposed_intent is not None else order)
+    if lane.blocked:
+        raise ExecutionBlocked(lane)
     guard(
         intent,
         config=config,
