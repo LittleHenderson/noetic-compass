@@ -1,6 +1,6 @@
 # CMB Lacunarity Detection — Eval Report
 
-Generated: `2026-07-26T06:46:00.987904+00:00`
+Generated: `2026-07-26T12:55:24.459333+00:00`
 Reviewer identity: `claude_opus5_local_reviewer_20260725`
 Reviewer type: AI/local code reviewer attestation, not a human signature.
 Result: `PASS`
@@ -218,5 +218,5 @@ board's charge-threshold scan or its never-written/leaked separation.
 ## Raw Evidence
 
 - Path: `docs\working\cmb_lacunarity_eval_raw_20260725.jsonl`
-- SHA-256: `9778518bfe677b7df90d2bd6a00be3969dc0cca9f308361dedd06d0c3633efef`
+- SHA-256: `5120a0e3de32340f822e7f186e34664326d921ce2a78a4c412c6822ef8560747`
 - JSONL records: `49` (`42` cases, `7` gap probes)

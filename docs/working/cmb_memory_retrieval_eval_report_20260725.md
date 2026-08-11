@@ -1,6 +1,6 @@
 # CMB Memory Retrieval — Structural and Behavioural Eval Report
 
-Generated: `2026-07-26T06:43:39.235844+00:00`
+Generated: `2026-07-26T12:55:21.755741+00:00`
 Reviewer identity: `claude_opus5_local_reviewer_20260725`
 Reviewer type: AI/local code reviewer attestation, not a human signature.
 Receipt targeted: `memory_board_cognitive_memory_claim__cmb_memory_retrieval_eval_pass`
@@ -430,7 +430,7 @@ These are findings about the BOOK, stated with file and line.
 ## Raw Evidence
 
 - Path: `docs\working\cmb_memory_retrieval_eval_raw_20260725.jsonl`
-- SHA-256: `1a958c4db5024aec8990ebb386dbebbbe525d7231d481868eacae7417d68b0f3`
+- SHA-256: `7b60984fed2fde0902d18ba7136dc1ee937316113d2d5c6203e8a8b1ad569bbf`
 - JSONL records: `53`
 - Script: `cas-forex\scripts\generate_cmb_memory_retrieval_eval_artifacts.py`
 - Determinism: the RNG is seeded with `20260725`, so every measured

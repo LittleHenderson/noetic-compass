@@ -1,6 +1,6 @@
 # CPMB Load Budget — Eval Report
 
-Generated: `2026-07-26T06:49:07.877752+00:00`
+Generated: `2026-07-26T12:55:41.393496+00:00`
 Reviewer identity: `claude_opus5_local_reviewer_20260725`
 Reviewer type: AI/local code reviewer attestation, not a human signature.
 Receipt targeted: `power_board_burnout_prevention_claim__cpmb_load_budget_eval_pass`
@@ -344,6 +344,6 @@ None.
 ## Raw Evidence
 
 - Path: `docs\working\cpmb_load_budget_eval_raw_20260725.jsonl`
-- SHA-256: `e0a8c3e5d604f753ab39896b4e2020701ffeef09bbb5f62c4a3da0f5baea19b4`
+- SHA-256: `1e37d68bb2a8e0d314ca099b1eccb53f37616845d24f1ab7b1d1e898ef054619`
 - JSONL records: `82`
 - Yield-engine probe: `cargo exit=0 records=11`
