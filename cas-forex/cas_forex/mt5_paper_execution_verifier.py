@@ -565,7 +565,7 @@ def _next_action(status: str) -> str:
     if status == "MT5_PAPER_EXECUTION_DEMO_ORDER_EXECUTED":
         return "Demo order path executed; rerun receipt/history ingest, memory, daily rollup, and terminal operability."
     if status == "MT5_PAPER_EXECUTION_DEMO_ORDER_REJECTED":
-        return "Demo order send reached MT5 but was rejected. If the error says AutoTrading disabled by client, turn on Algo Trading/AutoTrading in the MT5 terminal and rerun the verifier."
+        return "Demo order was rejected - either blocked before the broker request or refused by MT5. If the error says AutoTrading disabled by client or Algo Trading is off, turn on Algo Trading/AutoTrading in the MT5 terminal and rerun the verifier."
     if status == "MT5_PAPER_EXECUTION_BLOCKED_BY_API_VERIFIER":
         return "Resolve the MT5 terminal API verifier first so account state is broker/API verified."
     if status == "MT5_PAPER_EXECUTION_BLOCKED_NON_DEMO_ACCOUNT":

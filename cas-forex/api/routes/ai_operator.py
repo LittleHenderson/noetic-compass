@@ -660,6 +660,20 @@ def _fast_chat_fallback(message: str, *, error: str) -> dict[str, Any]:
         "LOCAL_TRADE_PATH_TRUTH",
         "LOCAL_LIVE_READINESS_TRUTH",
     }
+    # The public error field is a STABLE code the cockpit can match on;
+    # OperatorBadge.tsx keys its "backend failed before a reply" rendering off
+    # "operator_chat_unavailable". The raw error (exception class, message)
+    # stays in `diagnostic` for operators reading the wire. Without this
+    # normalisation the UI saw only dynamic strings like
+    # "operator_chat_backend_error:TypeError: ..." and could never show the
+    # owner its structured failure explanation.
+    public_error: str | None
+    if local_runtime_truth:
+        public_error = None
+    elif error.startswith("operator_chat_backend_error"):
+        public_error = "operator_chat_unavailable"
+    else:
+        public_error = error
     return {
         "ok": True,
         "model_ok": False,
@@ -668,8 +682,11 @@ def _fast_chat_fallback(message: str, *, error: str) -> dict[str, Any]:
         "provider": None,
         "provider_label": "Local bounded Operator",
         "paid": False,
-        "error": None if local_runtime_truth else error,
+        "error": public_error,
         "diagnostic": error,
+        # Structured money-impact statement for the cockpit's failure banner.
+        # Every fallback branch shares this truth: chat never dispatches.
+        "money_impact": "No command ran and no dials changed.",
         "dials_changed": False,
         "proposed_command": None,
         "command_preview": None,

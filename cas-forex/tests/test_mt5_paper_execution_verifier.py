@@ -214,8 +214,22 @@ def test_mt5_paper_execution_verifier_reports_autotrading_disabled(tmp_path):
     assert report["verifier_status"] == "MT5_PAPER_EXECUTION_DEMO_ORDER_REJECTED"
     assert report["summary"]["terminal_trade_allowed"] is False
     assert report["summary"]["execution_status"] == "ORDER_REJECTED"
-    assert "AutoTrading disabled by client" in report["summary"]["execution_error_message"]
-    assert report["summary"]["raw_response_hash"]
+    # The send may be pre-blocked by mt5_permissions before the broker request
+    # (newer, more fail-closed) or rejected by the terminal with the broker's
+    # own comment. Both convey the same fact: Algo Trading is off.
+    error_message = report["summary"]["execution_error_message"]
+    assert (
+        "AutoTrading disabled by client" in error_message
+        or "Algo Trading is off" in error_message
+    ), error_message
+    # The request that WAS built is hashed; a broker response that never
+    # happened is not. When the send is pre-blocked, raw_response_hash must be
+    # honestly absent - hashing a nonexistent response would be fake evidence.
+    assert report["summary"]["raw_request_hash"]
+    if "blocked before broker request" in error_message:
+        assert report["summary"]["raw_response_hash"] is None
+    else:
+        assert report["summary"]["raw_response_hash"]
     assert "AutoTrading disabled by client" in report["next_action"]
 
 

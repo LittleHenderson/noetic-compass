@@ -6940,10 +6940,16 @@ class AIOperator:
             running = "running" if compact_runtime["running"] else "not running"
             lane = str(compact_runtime.get("execution_lane") or "unavailable")
             bridge = str(compact_runtime.get("bridge_class") or "unavailable")
+            # Model unreachable: the greeting must say so. "Ask me anything"
+            # with no model behind it invites questions this canned branch
+            # cannot actually answer - that is exactly the overclaim the chat
+            # honesty rule exists to prevent.
             reply_text = (
-                "Hey. I'm here and answering. The Operator loop is "
-                f"{running} in {lane} through {bridge}. Ask me anything about "
-                "the market, current trades, sizing, compounding, or execution."
+                "Hey. The model path is unreachable right now, so this is the "
+                "local Operator fallback speaking from current app state. The "
+                f"Operator loop is {running} in {lane} through {bridge}. "
+                "Runtime and account questions still work; model interpretation "
+                "is unavailable until a model is reachable."
             )
         reply = {
             "ok": True,

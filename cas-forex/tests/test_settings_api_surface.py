@@ -376,7 +376,6 @@ def test_operator_badge_surfaces_cluster_signal_quality_metrics():
 
 def test_operator_badge_extracts_structured_chat_failure_details():
     operator_badge = (REPO_ROOT / "ui" / "src" / "components" / "OperatorBadge.tsx").read_text(encoding="utf-8")
-    operator_route = (REPO_ROOT / "api" / "routes" / "ai_operator.py").read_text(encoding="utf-8")
     ai_operator = (REPO_ROOT / "cas_forex" / "ai_operator.py").read_text(encoding="utf-8")
 
     assert "type ApiErrorLike = Error & { status?: number; payload?: unknown };" in operator_badge
@@ -384,9 +383,27 @@ def test_operator_badge_extracts_structured_chat_failure_details():
     assert "payloadDetail?.money_impact" in operator_badge
     assert "operator_chat_unavailable|internal server error" in operator_badge
     assert "Operator backend failed before a reply:" in operator_badge
-    assert '"error": "operator_chat_unavailable"' in operator_route
-    assert '"money_impact": "No command ran and no dials changed."' in operator_route
     assert "CHAT_CLAIM_BOUNDARY" in ai_operator
+
+    # Behavioural half (was a source grep on the route file): when the operator
+    # backend raises before producing a reply, the route must answer 200 with
+    # the STABLE error code the badge matches on, a structured money-impact
+    # statement, and the raw failure preserved in `diagnostic`.
+    from unittest import mock
+
+    with mock.patch(
+        "cas_forex.ai_operator.AIOperator.chat",
+        side_effect=TypeError("boom: constructor exploded"),
+    ):
+        status, body = asyncio.run(
+            _asgi_post("/api/forex/ai-operator/chat", {"message": "why is the loop stopped?"})
+        )
+    assert status == 200, "chat must fail soft, never 5xx the owner's message"
+    assert body["error"] == "operator_chat_unavailable"
+    assert body["money_impact"] == "No command ran and no dials changed."
+    assert body["fallback"] is True and body["model_ok"] is False
+    assert "operator_chat_backend_error:TypeError" in body["diagnostic"]
+    assert body["dials_changed"] is False
 
 
 def test_settings_owner_control_excludes_removed_hard_scope_fields():
