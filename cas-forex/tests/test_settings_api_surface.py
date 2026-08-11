@@ -261,8 +261,10 @@ def test_live_enable_ui_uses_typed_arm_confirmation():
     assert "confirm?: string" in api_types
     assert "need_confirmation?: string" in api_types
     assert "latest_audit?: Record<string, unknown>" in api_types
-    assert "armConfirmationForPatch" in settings_page
-    assert "requestArmConfirmation" in settings_page
+    # Moved to components/settings/GoLivePanels.tsx in the settings decomposition.
+    extracted_golivepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "GoLivePanels.tsx").read_text(encoding="utf-8")
+    assert "armConfirmationForPatch" in extracted_golivepanels
+    assert "requestArmConfirmation" in extracted_golivepanels
     assert "CONFIRM_REQUIRED" in settings_page
     assert "ARM REAL MONEY" in trade_page
     assert "patch.confirm = confirm" in trade_page
@@ -283,12 +285,13 @@ def test_money_movement_setup_ui_surfaces_runtime_scaffold_status():
     assert "export interface PaymentProviderRuntimeStatus" in api_types
     assert "provider_runtime: PaymentProviderRuntimeStatus;" in api_types
     assert "payout_runtime_ready: boolean;" in api_types
-    assert "<MoneyMovementSetupStatus" in settings_page
+    extracted_golivepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "GoLivePanels.tsx").read_text(encoding="utf-8")
+    assert "<MoneyMovementSetupStatus" in extracted_golivepanels
     assert "<MoneyMovementSetupStatus" in trade_page
     assert "<MoneyMovementSetupStatus" in proof_page
     assert "Real-money rail" in status_component
     assert "SCAFFOLDED" in status_component
-    assert "unsupported provider labels stay simulated at runtime" in settings_page
+    assert "unsupported provider labels stay simulated at runtime" in extracted_golivepanels
     assert "unsupported provider labels stay simulated at runtime" in trade_page
     assert "Saving a provider label does not make payouts live." in proof_page
     assert "PAYOUT SCAFFOLDED" in sweep_panel
