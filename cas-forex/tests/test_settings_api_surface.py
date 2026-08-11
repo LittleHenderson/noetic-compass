@@ -241,17 +241,15 @@ def test_account_ledger_types_and_pages_expose_movement_source_truth():
     assert "account?.movement_source_truth" in ledger_page
 
 
-def test_account_reconciliation_types_and_fixtures_expose_movement_source_truth():
+def test_account_reconciliation_types_expose_movement_source_truth():
+    # The fixture-file assertions that used to live here were dropped along with
+    # ui/src/data/fixtures.ts (2026-08-10). That file was imported by nothing, so
+    # these checks guarded a payload no screen could ever render. The type and
+    # helper contracts below are the part that actually binds the UI.
     evidence_types = (REPO_ROOT / "ui" / "src" / "types" / "evidence.ts").read_text(encoding="utf-8")
     movement_helper = (REPO_ROOT / "ui" / "src" / "util" / "movementSource.ts").read_text(encoding="utf-8")
-    fixtures = (REPO_ROOT / "ui" / "src" / "data" / "fixtures.ts").read_text(encoding="utf-8")
     assert "movement_source_truth?: MovementSourceTruthSnapshot | null;" in evidence_types
     assert "movement_source_truth?: MovementSourceTruthSnapshot | null;" in movement_helper
-    assert "movement_source_truth: {" in fixtures
-    assert "market_data_provider_requested: false" in fixtures
-    assert 'position_feed_title: "Simulator Proof Rows"' in fixtures
-    assert 'position_feed_count_label: "Simulator rows"' in fixtures
-    assert "static_quote_count: 2" in fixtures
 
 
 def test_live_enable_ui_uses_typed_arm_confirmation():
@@ -897,17 +895,15 @@ def test_dashboard_movement_panel_marks_static_fallback_explicitly():
     ).read_text(encoding="utf-8")
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
     deep_api_client = (REPO_ROOT / "ui" / "src" / "data" / "dashboardDeepApi.ts").read_text(encoding="utf-8")
-    fixtures = (REPO_ROOT / "ui" / "src" / "data" / "fixtures.ts").read_text(encoding="utf-8")
 
+    # Fixture-file assertions removed with ui/src/data/fixtures.ts (2026-08-10);
+    # it was dead code imported by nothing. The component and helper assertions
+    # below still cover the behaviour this test is named for.
     assert "Real-Time Movement Scaffold" not in component
     assert "Movement Source: Static Simulation" in movement_helper
     assert "summarizeMovementSource" in component
     assert "Static simulator rows are not being moved by usable provider/MT5 quotes right now" in movement_helper
     assert 'label={q.stale ? "STATIC" : "LIVE QUOTE"}' in component
-    assert 'source: "paper_route_snapshot:static_simulation"' in fixtures
-    assert "price_stale: true" in fixtures
-    assert 'price_source_status: "STATIC_SIMULATION_FALLBACK"' in fixtures
-    assert 'static_fallback_symbols: ["NAS100", "US30"]' in fixtures
     assert "fetchMovementStream(useProvider = true)" in api_client
     assert "fetchMovementStream(useProvider = true)" in deep_api_client
     assert "const suffix = useProvider ? \"\" : \"?use_provider=false\"" in api_client
