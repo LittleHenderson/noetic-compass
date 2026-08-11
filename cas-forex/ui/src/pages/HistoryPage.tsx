@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
+import { MovementTruthPanel } from "../components/MovementTruthPanel";
 import { StatusChip } from "../components/StatusChip";
-import { fetchAccountLedger, fetchConditionTally, fetchMTHistory } from "../data/api";
+import { fetchAccountHealth, fetchAccountLedger, fetchConditionTally, fetchMTHistory } from "../data/api";
 import type { DashboardState } from "../types/evidence";
 import "../components/RoutePrimitives.css";
 
@@ -14,23 +15,27 @@ interface HistoryPageProps {
 export function HistoryPage({ state }: HistoryPageProps) {
   const [liveMtHistory, setLiveMtHistory] = useState<DashboardState["mtHistory"] | null>(state.mtHistory ?? null);
   const [liveAccountLedger, setLiveAccountLedger] = useState<DashboardState["accountLedger"] | null>(state.accountLedger ?? null);
+  const [liveAccountHealth, setLiveAccountHealth] = useState<DashboardState["accountHealth"] | null>(state.accountHealth ?? null);
   const [liveConditionTally, setLiveConditionTally] = useState<DashboardState["conditionTally"] | null>(state.conditionTally ?? null);
 
   useEffect(() => { if (state.mtHistory) setLiveMtHistory(state.mtHistory); }, [state.mtHistory]);
   useEffect(() => { if (state.accountLedger) setLiveAccountLedger(state.accountLedger); }, [state.accountLedger]);
+  useEffect(() => { if (state.accountHealth) setLiveAccountHealth(state.accountHealth); }, [state.accountHealth]);
   useEffect(() => { if (state.conditionTally) setLiveConditionTally(state.conditionTally); }, [state.conditionTally]);
 
   useEffect(() => {
     let cancelled = false;
     async function refreshHistoryEvidence() {
-      const [nextMtHistory, nextAccountLedger, nextConditionTally] = await Promise.all([
+      const [nextMtHistory, nextAccountLedger, nextAccountHealth, nextConditionTally] = await Promise.all([
         fetchMTHistory(),
         fetchAccountLedger(),
+        fetchAccountHealth(),
         fetchConditionTally(),
       ]);
       if (cancelled) return;
       if (nextMtHistory) setLiveMtHistory(nextMtHistory);
       if (nextAccountLedger) setLiveAccountLedger(nextAccountLedger);
+      if (nextAccountHealth) setLiveAccountHealth(nextAccountHealth);
       if (nextConditionTally) setLiveConditionTally(nextConditionTally);
     }
     void refreshHistoryEvidence();
@@ -43,6 +48,12 @@ export function HistoryPage({ state }: HistoryPageProps) {
 
   const mt = liveMtHistory ?? state.mtHistory ?? null;
   const account = liveAccountLedger ?? state.accountLedger ?? null;
+  const accountHealth = liveAccountHealth ?? state.accountHealth ?? null;
+  const movementTruthReport = accountHealth ?? (
+    account?.movement_source_truth
+      ? ({ source_health: account.movement_source_truth } as DashboardState["accountHealth"])
+      : null
+  );
   const conditionTally = liveConditionTally ?? state.conditionTally ?? [];
 
   return (
@@ -101,6 +112,12 @@ export function HistoryPage({ state }: HistoryPageProps) {
         )}
       </GlassPanel>
 
+
+      <MovementTruthPanel
+        report={movementTruthReport}
+        title="History Movement Source Truth"
+        subtitle="Whether terminal-history prices are broker truth, provider-priced paper rows, or static simulator fallback"
+      />
 
       <GlassPanel title="Terminal History" subtitle="Positions / Orders / Deals · Day / Week / Month / Custom filters">
         <div className="dashboard-grid-3col" style={{ marginBottom: 12 }}>

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
@@ -27,9 +27,12 @@ DEFAULT_MAILBOX_DIR = REPO_ROOT / "evidence_runs" / "agent_workflow_mt4_mailbox"
 CLAIM_BOUNDARY = (
     "Agent workflow cycles generate paper/demo agent route intents, overseer "
     "decisions, terminal commands or demo execution receipts, and "
-    "learning-memory snapshots. They "
-    "do not by themselves execute live broker orders, create broker ACCEPT, "
-    "deposit, withdraw, move bank/card funds, or automate payouts."
+    "learning-memory snapshots. They do not by themselves execute live broker "
+    "orders, create broker ACCEPT, deposit, withdraw, move bank/card funds, "
+    "or automate payouts. Autonomous AI trading and configured money movement "
+    "occur only when approved intents continue through order_dispatch.py, "
+    "execution_guard.py, broker/provider truth, risk, receipt, and "
+    "kill-switch gates inside owner-delegated authority."
 )
 TERMINAL_LANE_MT4_MAILBOX = "PAPER_MT4_MAILBOX"
 TERMINAL_LANE_MT5_DEMO = "PAPER_MT5_DEMO"
@@ -67,9 +70,24 @@ class RouteIntent:
     evidence_refs: List[str] = field(default_factory=list)
     order_request: Optional[Dict[str, Any]] = None
     status: str = "PROPOSED"
+    market_quote_context: Optional[Dict[str, Any]] = None
+    market_geometry_policy: str = "ABSOLUTE"
+    learning_trade: bool = False
+    edge_label: Optional[Dict[str, Any]] = None
+    edge_authorization_ready: bool = False
+    _runtime_context: Optional[Dict[str, Any]] = field(
+        default=None,
+        repr=False,
+        compare=False,
+    )
 
     def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        payload = asdict(replace(self, _runtime_context=None))
+        # Runtime context may contain the one-shot edge token and rich Python
+        # objects needed immediately before dispatch. It is deliberately never
+        # serialized into reports, API payloads, or long-lived agent memory.
+        payload.pop("_runtime_context", None)
+        return payload
 
 
 @dataclass(frozen=True)
@@ -310,7 +328,7 @@ def render_agent_cycle_markdown(report: Mapping[str, Any]) -> str:
             "- "
             f"`{intent.get('intent_id')}` `{intent.get('agent_id')}` "
             f"`{intent.get('symbol')}` `{intent.get('timeframe')}` "
-            f"`{intent.get('action')}` confidence `{intent.get('confidence')}`"
+            f"`{intent.get('action')}` conviction_score `{_format_conviction_score(intent.get('confidence'))}`"
         )
     lines.extend(["", "## Overseer Decisions", ""])
     for decision in report.get("overseer_decisions") or []:
@@ -320,6 +338,14 @@ def render_agent_cycle_markdown(report: Mapping[str, Any]) -> str:
             f"{'; '.join(decision.get('reasons') or [])}"
         )
     return "\n".join(lines) + "\n"
+
+
+def _format_conviction_score(value: Any) -> str:
+    try:
+        bounded = max(0.0, min(1.0, float(value)))
+    except (TypeError, ValueError):
+        return "unknown (not_win_probability)"
+    return f"{round(bounded * 100):.0f}% (not_win_probability)"
 
 
 def _cycle_report(
@@ -360,11 +386,24 @@ def _cycle_report(
         "terminal_commands": list(terminal_commands),
         "memory_snapshots": [asdict(item) for item in memory],
         "live_execution_boundary": {
-            "live_trading_status": "CURRENTLY NOT LICENSED",
-            "broker_accept_status": "CURRENTLY NOT LICENSED",
-            "auto_deposit_status": "CURRENTLY NOT LICENSED",
-            "debit_card_bank_movement_status": "CURRENTLY NOT LICENSED",
-            "payout_automation_status": "CURRENTLY NOT LICENSED",
+            "live_trading_status": "OWNER_ARMING_REQUIRED",
+            "broker_accept_status": "OWNER_ARMING_REQUIRED",
+            "auto_deposit_status": "OWNER_AND_PROVIDER_PENDING",
+            "debit_card_bank_movement_status": "OWNER_AND_PROVIDER_PENDING",
+            "payout_automation_status": "OWNER_AND_PROVIDER_PENDING",
+            "owner_runtime_authorization_required": True,
+            "autonomous_execution_path": [
+                "approved route intent",
+                "order_dispatch.py",
+                "execution_guard.py",
+                "broker or provider bridge",
+                "receipt and ledger reconciliation",
+            ],
+            "plain_english": (
+                "This cycle records agent decisions and paper/demo execution "
+                "evidence. Live autonomous execution still requires owner-armed "
+                "authority and the guarded dispatch path."
+            ),
         },
         "claim_boundary": CLAIM_BOUNDARY,
         "output_dir": str(output_dir),

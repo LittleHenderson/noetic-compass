@@ -1,0 +1,1898 @@
+version: 2026-07-09-AUTONOMOUS-EXECUTION-CORRECTION
+last_updated: "2026-07-15"
+product: CAS Forex Web/Phone AI Trading Platform
+intent: autonomous_ai_execution
+status: GOVERNING_REPLACEMENT_LANGUAGE
+north_star_objective: >
+  Continuously maximize sustainable realized net account growth across paper,
+  external broker demo, and live accounts after spread, commission, swap,
+  slippage, and realized losses, while remaining inside the owner-delegated
+  loss, exposure, margin, liquidity, and kill-switch envelope. Trade count,
+  gross profit, win rate, confidence, lot size, and daily targets are supporting
+  measurements, never substitute objectives and never authority to chase a
+  quota, martingale losses, or hide risk.
+purpose: >
+  Correct any wording implying the AI cannot or should not trade, place orders,
+  take profit, close positions, or initiate configured money movement.
+non_negotiable_product_intent: >
+  The AI Operator is the trading edge and autonomous execution layer for the
+  platform, not a passive signal generator. Once the owner arms the relevant
+  live and money controls, the AI may autonomously place broker-bound orders,
+  manage positions, take profit, close or adjust exposure, and initiate
+  configured money movement without per-action human confirmation when all
+  runtime gates pass. Its governing objective is sustainable realized net
+  account growth after all trading costs and losses, not maximum trade count or
+  indiscriminate exposure.
+replacement_autonomy_clause: >
+  The AI can and will place orders, manage positions, take profit, enforce stop
+  loss, and initiate configured money movement when live or money mode is armed
+  and all runtime gates pass. Human approval is required for authority setup,
+  out-of-bounds overrides, new external destination onboarding, policy or
+  credential changes, and emergency recovery, not for every in-envelope order
+  or transfer.
+
+human_in_loop:
+  per_order_required: false
+  per_take_profit_required: false
+  per_configured_money_movement_required: false
+  required_for:
+    - initial_live_enablement
+    - credential_setup_or_change
+    - new_external_destination_onboarding
+    - cap_or_policy_increase_outside_existing_authority
+    - emergency_recovery_after_master_kill
+
+correct_interpretation_of_existing_controls:
+  mode_separation: >
+    Paper, demo, and live modes must be visually and mechanically distinct.
+    Live autonomy is allowed only when live mode is armed.
+  paper_learning_continuity: >
+    Requesting LIVE must not silence autonomous paper or demo execution while
+    live authority is still pending. When paper trading is enabled and the
+    live gates do not yet authorize real-money dispatch, the active execution
+    lane remains PAPER through a final paper-only runtime configuration. That
+    fallback may use an execution-ready demo terminal or the durable internal
+    simulator, but it must never submit to a connected live account. A failed
+    edge test still produces a genuine no-trade decision; continuity does not
+    authorize fabricated or threshold-bypassing trades.
+  mt5_account_panel: >
+    The MT5 account panel is a read-only cached mirror. That prevents accidental
+    order sends from snapshot routes. It does not prohibit AI order execution
+    through the order dispatch path.
+  mt5_algo_trading_for_demo_learning: >
+    Terminal Algo Trading must be ON when CAS is expected to place, modify, or
+    close MT5 demo orders and learn from broker acceptance, fills, slippage,
+    rejection, stop-loss, and take-profit outcomes. With Algo Trading OFF, CAS
+    may still observe real broker quotes and completed candles, but it cannot
+    collect genuine MT5 execution outcomes. The app must surface the terminal,
+    account, expert-trading, and trade-API permission truth without implying
+    that quote observation alone proves execution learning.
+  order_dispatch_chokepoint: >
+    All broker-bound orders must pass through order_dispatch.py and
+    execution_guard.py. This is the only permitted broker-bound order path.
+  ai_operator_trading_edge: >
+    The AI Operator reviews each exact fresh RouteIntent candidate and decides
+    APPROVE or STAND_DOWN and, when approving, controls lot size by selecting
+    one exact sizing_ref from broker-valid PROBE, STANDARD, PRESS_EDGE, and
+    MAX_WITHIN_ENVELOPE choices. Those choices are calculated from stop risk,
+    equity, free margin, margin utilization, portfolio exposure, broker minimum,
+    maximum and lot step, and owner caps. Approval is an executable entry
+    decision, not an advisory label: the selected exact order continues through
+    order_dispatch.py, execution_guard.py, and the selected broker bridge without
+    per-order human confirmation. The model cannot invent a free-form volume or
+    rewrite symbol, direction, entry, stop-loss, take-profit, strategy, or
+    decision identity. A daily profit-target deficit is never sizing authority.
+    The Operator cannot resurrect a deterministic rejection or bypass any
+    authority, risk, broker-truth, duplicate, recovery, or kill-switch gate.
+    A paper-lane model outage may continue only through the deterministic
+    growth-gated fallback: a positive sample-ready exact group may use at most
+    STANDARD, sparse or unknown evidence may use only PROBE or the smallest
+    broker-valid size, one loss may receive only one bounded retest, and a
+    sample-ready non-positive or repeated all-loss exact group must STAND_DOWN.
+    The fallback cannot invent a materially different regime case. Every
+    decision and broker-effect receipt retains the selected lot, every offered
+    sizing option, the maximum executable lot, and the binding limiting source,
+    so the owner can distinguish model restraint from a hard broker or risk cap.
+    A live-lane model or contract failure requires STAND_DOWN.
+  ai_operator_realized_outcome_feedback: >
+    Every immediate APPROVE or STAND_DOWN prompt must include current account
+    balance, equity, margin, open positions, combined paper learning, the
+    broker-verified MT5 demo subset, and candidate-specific realized outcomes
+    for the same symbol, direction, and strategy. The prompt and durable report
+    retain a context hash. One broker close observed through multiple audit
+    paths counts once by broker_ticket plus decision_ref; richer metadata is
+    merged rather than double-counted. Combined paper and broker-verified MT5
+    exact-group tables are merged by symbol, timeframe, direction, and profile,
+    then compared within the market regime captured at entry;
+    the presence of a differently profiled combined row may never replace or
+    hide the fuller broker-verified exact group. Sparse evidence remains
+    explicitly sparse. A prior loss requires materially differentiated regime
+    or strategy evidence before repeated sampling, but one loss is not a
+    permanent veto.
+  ai_operator_position_management_edge: >
+    Open-position management is not merely a fixed-rule subsystem labeled AI.
+    Fresh broker position and quote truth first produce deterministic,
+    broker-valid management drafts. In addition, every fresh manageable broker
+    position receives an immutable Operator-discretion menu even when no fixed
+    take-profit, stop, or R-multiple threshold has fired. That menu may include
+    exact full close, broker-valid partial close or exposure reduction, move to
+    breakeven, and owner-enabled trailing-stop choices; the exact choices depend
+    on current position size, after-cost P&L, protection geometry, broker grid,
+    and owner controls. The immediate AI Operator then selects one exact
+    discretionary action per broker position or returns STAND_DOWN using
+    current account truth, all open positions, owner guidance, owner-fenced
+    controls, and realized outcome history. The model cannot rewrite broker
+    ticket, symbol, side, volume, stop-loss, take-profit, or action identity.
+    Only position_action_candidates require model decisions; all other current
+    positions are portfolio context. A harmless extra model row for a
+    context-only position has no executable authority and is ignored, while
+    every required decision_position_key must still appear exactly once and
+    every SELECT must bind one exact supplied action_ref. One context-only row
+    may never invalidate an otherwise valid actionable-position decision.
+    Operator-discretion options are never selected by deterministic fallback.
+    A missing provider, timeout, malformed response, unknown action_ref, or
+    incomplete decision requires STAND_DOWN for those options and leaves the
+    position unchanged. Hard protective policy actions retain their separate
+    non-vetoable behavior. Repeated discretionary review is bounded so ordinary
+    tick movement does not spam the model, while new deterministic triggers,
+    scale-in choices, or materially changed action menus remain immediately
+    reviewable.
+    Provider schema drift may be normalized only when it unambiguously requests
+    no action: HOLD, WAIT, KEEP_OPEN, NO_ACTION, or STAND_DOWN. An actionless
+    SELECT with null action_ref, null intent, and NOT_APPLICABLE growth case is
+    an audited STAND_DOWN, never an executable SELECT. A unique human-readable
+    position label may identify one supplied position for this no-action-only
+    normalization, and an omitted required position becomes an audited
+    STAND_DOWN. Any close, reduce, modify, trail, scale, or other mutation still
+    requires one exact supplied action_ref and canonical binding fields; no
+    normalization may manufacture broker authority.
+    A fresh protected position inside the supplied discretionary observation
+    window cannot be closed or reduced merely because initial spread,
+    commission, or a tiny opening move makes it negative. In the absence of
+    deterministic thesis-invalidation evidence, generic account-risk reduction
+    requires either current R at or below -0.10R or elapsed observation equal
+    to 25% of the position timeframe, bounded to a minimum of 30 seconds and a
+    maximum of 900 seconds. This hysteresis applies only to discretionary
+    close or reduce choices; it never delays non-vetoable protection, a hard
+    risk breach, emergency flattening, or a deterministic invalidation exit.
+    Exact scale_in drafts are first-class discretionary actions. They are
+    generated only for a fresh, protected parent whose open P&L is net positive
+    after every currently reported swap, carry, and commission amount;
+    each sizing option is broker-grid valid and carries current stop risk,
+    margin, parent ticket, unit index, sizing_ref, and sizing-plan hash. The
+    Operator may select one add without per-add human confirmation. Its
+    short-lived authorization is account/config/parent/order bound and one-shot.
+    A pre-cost winner that is net losing after reported costs, stale parent,
+    changed parent volume or protective geometry, reused authorization, cap
+    breach, or unrecognized sizing_ref blocks before broker touch. Current
+    quote, open-P&L, cost, account, position, candidate, guidance, control, and
+    outcome evidence are bound into the decision cache identity. If any bound
+    evidence changes, the old model decision is not reused and a fresh
+    immediate position decision is required.
+    Every management cycle preserves scale-in status, broker-grid option count,
+    qualified-parent count, max compound units, minimum profit R, and each
+    binding parent/risk/margin/exposure/position-cap blocker through dispatch
+    status, Operator chat, and the Operator dropdown. Zero options is reported
+    as a no-trade configuration for those exact conditions, not as a permanent
+    0.01-lot policy or unexplained prudence.
+    Baseline stop/target installation and high-urgency invalidation exits are
+    non-vetoable policy actions. Every selected action still passes through
+    order_dispatch.py, execution_guard.py, fresh broker truth, terminal
+    permissions, duplicate suppression, and receipt reconciliation.
+  open_position_stop_risk_insight: >
+    Every broker position with a protective stop exposes broker-valued
+    entry-to-current-stop risk, remaining current-equity drawdown to the stop,
+    the current per-trade cap, and any cap breach to the MT5 UI, ordinary
+    Operator chat, and immediate Operator position management. This evidence
+    does not itself force-close an already-open trade.
+  market_closed_runtime_truth: >
+    A nonzero stale MT5 bid or ask must not keep the app labeled MARKET OPEN.
+    Weekend, post-Friday-close, disabled-symbol, materially future, and stale
+    tick evidence must fail closed. Protected open positions remain visible and
+    supervised as WATCHING_MARKET_CLOSED while broker-side stops and targets
+    remain in force; no fresh management action may be dispatched until
+    executable quote truth returns.
+  sunday_reopen_and_tick_freshness_truth: >
+    The standard forex week reopens at Sunday 22:00 UTC and remains open until
+    Friday 22:00 UTC unless symbol-specific broker truth says otherwise. CAS
+    must distinguish account-snapshot observation age from each instrument's
+    terminal tick age. A fresh account read never turns a stale or unavailable
+    market tick into fresh price evidence, and Sunday reopen may not be forced
+    closed by a Monday-through-Friday-only calendar shortcut.
+  adaptive_entry_timeframe_authority: >
+    The AI Operator owns an owner-fenced entry-timeframe dial. The autonomous
+    scheduler rotates the enabled completed-candle lanes rather than silently
+    fixing entries to one timeframe: M1 and M5 are the micro-scalp lane, while
+    M15 and H1 are the broader intraday lane. Changing the dial changes which
+    lanes may form candidates; it never bypasses edge, risk, quote, duplicate,
+    recovery, execution-guard, or kill-switch requirements.
+  entry_opportunity_visibility_and_operator_duty: >
+    Candidate formation is part of the Operator's mandatory decision-grade
+    evidence, not an opaque pre-model filter. Every full market scan preserves
+    the raw directional score, configured directional floor, margin to that
+    floor, candidate-formation status, edge-test status, strongest rejected
+    lane, the best statistically passing below-floor lane, and per-timeframe
+    attempt counts. A below-floor shadow edge evaluation is read-only: it may
+    estimate the same completed-candle candidate at an in-memory admission
+    floor of zero, but it must not mint or retain an edge token, register an
+    authorization, form a RouteIntent, touch a broker, or send an order. The
+    best shadow-PASS lane is tracked separately from the strongest directional
+    score because those can be different lanes. A scheduler invocation skipped
+    by a live-candle cache must report SCAN_THROTTLED_CACHE with
+    fresh_market_scan_performed=false; it may never be labeled or interpreted as
+    a completed scan or as proof that the market lacked opportunity. When
+    repeated fresh PAPER/DEMO scans show every observed lane below the current
+    directional floor, the scheduled AI Operator must inspect the strongest
+    rejected score, owner bounds, paper-learning state, and independent outcome
+    evidence before choosing one small owner-fenced adjustment or an explicit
+    evidence-based STAND_DOWN. A hold response that omits the exact strongest
+    score, current floor, and evidence-based stand-down reason is incomplete.
+    Candidate starvation uses a focused entry-opportunity model request before
+    broad portfolio commentary, followed by one focused repair attempt when
+    needed. If both model responses remain contract-invalid, a deterministic
+    continuation policy may lower only the PAPER admission floor to the exact
+    best shadow-PASS score when paper learning is active, MT5Bridge is
+    demonstrably order-send ready, the preview is unregistered and tokenless,
+    owner bounds permit the change, and every other stated prerequisite passes.
+    That fail-safe cannot run in LIVE, mint an edge authorization, choose an
+    order, touch the broker, or bypass any later gate. The daily profit-target
+    deficit cannot justify a lower floor. A lower floor admits candidates for
+    fresh edge testing and learning; it is not itself proof of edge,
+    profitability, or order authority. Every admitted candidate still requires
+    a new full edge evaluation, fresh one-shot authorization, risk feasibility,
+    immediate Operator approval, quote, duplicate, recovery, execution-guard,
+    and kill-switch gates before dispatch.
+  position_capacity_starvation_and_operator_duty: >
+    Repeated cross-market candidates blocked only because the ordinary
+    concurrent-position cap is full must remain durable Operator evidence when
+    separate lot-exposure utilization is low. Three or more cap-only events
+    across at least two symbols inside the bounded evidence window require one
+    focused scheduled Operator decision whenever no explicit owner override
+    fixes the cap and the owner envelope permits one additional slot. The
+    Operator may either add exactly one concurrent-position slot or return an
+    explicit evidence-based STAND_DOWN that cites the current cap, event count,
+    exposure utilization, and a portfolio, correlation, outcome, expectancy,
+    edge, or risk reason. It may not jump multiple slots, infer order authority
+    from spare capacity, or use the daily target deficit as justification. A
+    contract-invalid local-model reply may fall back only to the same bounded
+    one-slot policy in PAPER or DEMO. Immediately before applying any widening,
+    CAS must refresh the active MT5 account and position snapshot and prove the
+    cap is still full, exposure remains at or below 25 percent of its separate
+    owner-fenced ceiling, and the exact one-slot recommendation is still valid.
+    If positions have closed or state changed, the adjustment is skipped and
+    pressure is cleared. Every later candidate still requires fresh ordinary
+    edge, sizing, risk, quote, duplicate, recovery, execution-guard, and
+    kill-switch gates plus immediate entry-Operator approval before broker touch.
+  fresh_micro_scalp_execution: >
+    Micro-scalp execution must be formed from current completed M1 or M5 broker
+    candles, current bid/ask truth, and a direction derived from current market
+    state. Historical replay templates, hard-coded LONG or SHORT direction, and
+    default midpoint prices are research inputs only and cannot enter the
+    broker-bound RouteIntent collector. Every fresh scalp candidate still
+    requires immediate AI Operator APPROVE or STAND_DOWN before guarded dispatch.
+  pre_emission_quote_truth: >
+    Current quote truth is checked before a completed-candle candidate records
+    or consumes its one-shot route identity. A missing, closed, unusable, stale,
+    or materially future-dated quote produces no executable candidate and no
+    emission key, so a weekend scan cannot waste the setup identity that may be
+    valid after the market reopens.
+  actionable_candidate_scan_selection: >
+    Candidate ranking checks current quote actionability and one-shot emission
+    state before a PASS may terminate the market-universe scan. A PASS on a
+    closed, stale, missing, unusable, materially future-dated, or already-emitted
+    route is retained as blocked evidence while scanning continues through later
+    owner-allowed lanes. A blocked PASS cannot monopolize a timeframe, hide an
+    actionable alternative, or be represented as an executable opportunity.
+    Completed-candle normalization runs before edge preview, duplicate checks,
+    and actionability ranking. If a forming bar is removed, entry pairs,
+    profile, tuning, and CAS features are rebuilt from completed bars so preview
+    and final RouteIntent use the same exact route identity.
+  operator_chat_trade_path_truth: >
+    When the owner asks why CAS did or did not trade, scalp, enter, close, or
+    manage a position, the Operator leads with the exact current runtime state,
+    selected timeframe lane, and immediate route blockers before broader
+    strategy commentary. Public-launch, legal-review, or live-license state does
+    not by itself block paper or demo execution and must not be presented as the
+    paper/demo blocker unless runtime evidence says that gate actually fired.
+  operator_chat_control_plane_isolation: >
+    Observation-only chart and MT5 refresh work must not block the API event
+    loop or the shared Operator-chat worker pool. Slow chart/provider work runs
+    through an isolated bounded one-flight worker and returns stale or timeout
+    telemetry without silencing normal Operator Ask traffic.
+  bounded_conversational_runtime_truth: >
+    The Assistant and Operator must answer known authority, execution-state,
+    compounding, and navigation questions from bounded local runtime truth when
+    a paid or local language-model path is unavailable or slow. The word open
+    in an order or position question must not be misclassified as page
+    navigation. A timed-out model cannot leave the owner without a response or
+    falsely report a running dispatch thread as stopped. When a paid model key
+    and remaining budget are available, free-form Assistant and Operator
+    questions must run off the API event loop and return the real model answer
+    inside explicit response budgets. Configuration status must distinguish a
+    configured key from provider reachability, and a finite budget from an
+    exhausted budget. A current trade-inactivity or scalp question must answer
+    immediately from the same rich completed-cycle dispatch snapshot shown in
+    the cockpit, overlaid with the newest lock-free heartbeat. When no rich
+    cycle exists yet after startup, the answer must call that telemetry warm-up
+    rather than inventing prudence, a model stand-down, or a market blocker.
+    Availability diagnostics treat a selected local Operator model as a
+    configured free-form path even when the separate Claude allowance is
+    exhausted, but selected, installed, or configured is never a readiness
+    claim. READY requires a fresh successful generation request. Positive
+    response-status questions return grounded runtime truth and cannot invent
+    broad all-systems-green claims. Ordinary Assistant chat
+    builds its fast runtime, compact governing-spec digest, and command catalog
+    off the API event loop inside explicit context budgets. Mobile, APK, Docker,
+    and public-launch diagnostics are loaded only for a matching owner question,
+    never rebuilt for every trading conversation. When the paid Assistant path
+    is unavailable and the installed local Operator model is selected, the
+    Assistant may use that model with a smaller spec digest, bounded output, and
+    a separate response ceiling. A current-regime answer may not infer trend,
+    range, momentum, volatility, or opportunity when those fields are absent
+    from supplied runtime evidence.
+  tiered_deepseek_reasoning_roles: >
+    DeepSeek V4 Flash is the continuous low-latency reasoning lane for owner
+    chat, routine market review, and ordinary Operator decisions. DeepSeek V4
+    Pro is the escalation lane for configured high-consequence request kinds,
+    including compound scale-in, escalated entry or position management, money
+    movement, and emergency recovery. Request kind selects the lane before the
+    provider call and is retained with provider, exact model reference, role,
+    prompt/context hashes, response, and resulting action evidence. Pro may
+    fall back to Flash, then Gemma 4 31B Cloud, configured Claude, or local
+    Ollama; Flash may fall back to Gemma 4 31B Cloud, configured Claude, or
+    local Ollama. Every role reports capability from its own fresh successful
+    generation rather than configuration alone.
+    DeepSeek cloud usage is labeled metered/cloud usage, never local/free, and
+    DeepSeek calls cannot consume or increment the separate Claude token
+    allowance. A model role changes reasoning capacity, never broker geometry,
+    owner authority, action references, risk gates, or execution chokepoints.
+  gemma4_large_model_backup: >
+    Gemma 4 31B Cloud is the independent large-model backup after the
+    DeepSeek role routes and before configured Claude or the smaller local
+    emergency fallback. Normal request order is DeepSeek V4 Flash, Gemma 4
+    31B Cloud, Claude, then local; high-consequence request order is DeepSeek
+    V4 Pro, Flash, Gemma 4 31B Cloud, Claude, then local. Gemma is not READY
+    merely because its model reference is configured. A current no-side-effect
+    application-path probe must force a bounded first-rung failure, record the
+    automatic handoff, and require valid schema-constrained JSON from the exact
+    gemma4:31b-cloud reference. A single outer Markdown JSON fence may be
+    deterministically removed at the shared structured-output boundary;
+    commentary, malformed JSON, unsafe action geometry, or a nonempty order
+    list remains a capability failure. Gemma Cloud is metered cloud usage and
+    shares the Ollama Cloud transport, so it adds model diversity but does not
+    prove independent transport availability.
+  spec_context_availability: >
+    The current governing workbook snapshot must be directly available to the
+    Assistant and Operator. Its read-only status endpoint must not remain at
+    WARMING because an unrelated dashboard, broker, or cache refresh is slow.
+  operator_percentage_truth: >
+    Operator context percentage fields are expressed in percentage points, not
+    decimal fractions. A value of 0.1 means 0.1%, never 10%. Chat and scheduled
+    reasoning must receive this convention plus human-readable risk labels so
+    the model cannot silently multiply a risk cap by 100 in owner-facing prose.
+  position_management_exit_dials: >
+    Autonomous management must consume the actual owner-fenced exit dials at
+    action-draft time. trailing_stop_enabled=0 produces no trailing-stop draft.
+    When enabled, trailing_lock_fraction determines the exact lock fraction and
+    is retained in decision parameters and audit evidence. No hard-coded exit
+    constant may silently override the Operator or owner control surface.
+  active_alert_freshness: >
+    Critical-notification audit rows are immutable history, but transient
+    blocked attempts must not appear forever as current active conditions. The
+    in-app strip uses explicit display TTL and ACTIVE versus
+    EXPIRED_HISTORICAL state. Expiry changes only presentation; it never deletes
+    or rewrites the underlying audit event.
+  action_time_market_freshness: >
+    Quote age is rechecked at broker-touch time after AI deliberation. A stale
+    or materially future-dated attached market quote blocks dispatch even when
+    the Operator approved the candidate earlier.
+  entry_symbol_targeting: >
+    New-entry symbol filtering must occur before route ranking. The owner-fenced
+    AI symbol dial defines the base universe; an optional scheduler subset may
+    narrow it, and per-symbol position caps remove saturated markets from new
+    entries only. Existing saturated positions remain under autonomous
+    management. Targeting provenance, effective symbols, eligible symbols, and
+    saturation reasons must be visible and durably audited.
+  demo_execution_classification: >
+    An external MT5 terminal is not automatically live money. Every outcome and
+    provenance record must distinguish external_broker_terminal from
+    account_mode and live_money. A positively identified demo account is
+    PAPER_MT5 in the MT5_DEMO_BROKER lane and must not consume live-pilot
+    capacity. Historical misclassifications are corrected by immutable appended
+    evidence; original records are not rewritten.
+  broker_outcome_learning_binding: >
+    Every closed CAS MT5 demo position must join the originating AI decision and
+    finalized order attempt by exact broker position ticket. The join retains
+    decision_ref, order_id, strategy, direction, timeframe, gross profit,
+    commission, swap, close reason, and normalized broker timestamps. Repeated
+    syncs are idempotent. A history read with zero identity matches must be
+    reported as unbound, not as completed learning.
+  interrupted_demo_receipt_recovery: >
+    If MT5 demo executes and closes an order after CAS writes ATTEMPT_STARTED
+    but before CAS finalizes the receipt, later learning sync may finalize the
+    attempt only from one unambiguous closed-history match bound by demo mode,
+    MT5 bridge, canonical symbol, direction, exact volume, open-time window,
+    magic when present, and protective close geometry when applicable. Recovery
+    is idempotent, remains visible cumulatively, and never sends or retries an
+    order. Ambiguous or live-money attempts remain blocked for explicit recovery.
+  edge_pass: >
+    A fresh one-shot edge authorization is consumed where configured. If the
+    owner disables that requirement for a strategy, risk and broker gates still
+    apply.
+  risk_gates: >
+    Risk caps apply to paper and live. Within armed live mode, the AI may trade
+    autonomously up to the owner-configured caps. Owner override wins, then AI
+    dial, then config.
+  daily_realized_loss_cap_enforcement: >
+    A positive daily_loss_cap_usd is a hard new-exposure boundary measured from
+    reconciled broker realized P&L for the current UTC day. Once realized P&L is
+    at or below the negative cap, every new entry and scale-in is blocked in
+    paper, demo, and live operation regardless of model output, provider
+    failure, degraded paper fallback, upstream approval, or stale PASS. An
+    active cap fails closed when reconciled daily realized truth is unavailable.
+    Protective stop/target modification, take-profit, partial close, full close,
+    and other proven risk-reducing management remain available. Zero disables
+    this cap. The immediate Operator stage checks it before spending a model
+    call, and execution_guard.py checks it again immediately before broker touch.
+    Cached daily realized truth is valid only when its UTC day equals the current
+    UTC day. UTC rollover forces an immediate account-growth refresh and resets
+    the day window. Current-history latest-deal fingerprints are compared even
+    when the account balance is unchanged, preventing an offsetting deposit or
+    other same-balance deal sequence from hiding a new realized loss. A stale
+    period blocks new exposure until fresh reconciled truth exists.
+  risk_authority_persistence: >
+    Only explicit owner risk-control overrides are durable authority. They are
+    atomically persisted before becoming active and survive API restarts,
+    including an explicit null meaning unlimited. An absent override key leaves
+    that dimension under AI-dial then static-config precedence. Owner-editing
+    values, persisted override identity, and effective dispatch caps must be
+    reported as separate layers. Preview, confirmation, cooldown, and journal
+    posture are calculated from the before/after effective dispatch caps, not
+    from a static fallback that the Operator dial already supersedes.
+  pre_operator_broker_risk_feasibility: >
+    Every overseer-approved entry candidate is valued against current broker
+    tick economics, account equity, stop geometry, minimum lot, and lot step
+    before an AI Operator model call. A candidate that exceeds the per-trade
+    cap even at the broker minimum lot is blocked as
+    BLOCKED_AT_BROKER_MIN_LOT and consumes no Operator decision. A candidate
+    that can comply at one or more broker-grid sizes receives an exact sizing
+    plan containing only currently supportable choices. The AI Operator, not a
+    fixed 0.01-lot constant, selects one supplied sizing_ref when it approves
+    the entry. The model cannot invent volume and the preflight cannot approve
+    or dispatch an order. Unknown estimates remain explicitly unknown and may
+    expose only the conservative seed/floor until the authoritative final
+    execution guard recalculates the selected size at broker touch.
+    If all fresh candidates or qualified scale-in parents have zero broker-grid
+    options, runtime and chat must name every binding cap. The Operator may make
+    a small owner-fenced dial adjustment only when after-cost evidence supports
+    sustainable growth; otherwise it rotates to viable conditions or stands
+    down rather than forcing activity.
+  group_learning_readiness_truth: >
+    Learning readiness is evaluated per symbol x direction x profile group.
+    An overall count that reaches the sample threshold does not make grouped
+    adaptation ready when those outcomes are scattered across unrelated groups.
+    Runtime evidence exposes overall_sample_ready, group_learning_ready, and
+    learning_ready_group_count separately.
+  execution_truth_precedence: >
+    The connected broker account and open positions are authoritative from the
+    current MT5 terminal snapshot. Current entry and position-management
+    execution state is authoritative from the active dispatch loop. Separate
+    movement-stream supervision, simulator-ledger account health, live-readiness
+    monitoring, and durable auto-halt evidence retain their own scopes but may
+    not override the active primary MT5 PAPER or LIVE lane. force_paper_mode
+    blocks live escalation rather than PAPER or DEMO execution. Contradictory
+    source states must be exposed as conflicts and may not become durable
+    Operator lessons.
+  live_enablement: >
+    Owner arming of live and money switches grants standing authority. Arming
+    does not itself place a trade, but once armed the AI may place trades
+    without per-trade confirmation when gates pass.
+  broker_truth: >
+    Fresh broker account, balance, equity, margin, position, and open-order
+    truth is required before live dispatch. Stale truth blocks dispatch.
+  active_account_source_precedence: >
+    The account governed by the active execution lane is the owner and Operator
+    source of truth. When PAPER dispatch is running through a connected MT5 demo
+    bridge, the current MT5 account snapshot, balance, equity, open positions,
+    protection, and risk outrank an exported verifier, movement stream, or
+    separate simulator ledger. Secondary ledgers remain visible only under an
+    explicit non-authoritative label and are never added to MT5 money or P&L.
+  after_cost_growth_measurement: >
+    Account growth and open P&L are measured after reported trading costs. The
+    cockpit separately exposes price P&L, swap or carry, commission when known,
+    and net open P&L. The same active-account decomposition is mandatory in
+    immediate entry, position-management, scale-in, and time-stop reasoning; a
+    positive price subtotal cannot authorize compounding while reported costs
+    make the position net negative. A current balance is not called profit
+    without a reconciled deposit, withdrawal, transfer, fee, and
+    realized-outcome baseline.
+  reconciled_cashflow_adjusted_realized_growth: >
+    The north-star realized-growth baseline comes from the authoritative full
+    MT5 deal ledger queried from before the first effective account event through
+    the current broker snapshot. Every deal contributes profit, commission,
+    swap, and fee to the ledger. Balance deposits, withdrawals, credit, and
+    bonuses are classified as capital flow rather than trading profit. CAS may
+    report cashflow-adjusted realized growth only when the history belongs to
+    the selected account, the first effective event establishes opening
+    capital, every deal type is understood, the ledger ties to current balance
+    within account-currency rounding, and the growth components tie. Unknown
+    deal types, incomplete opening history, a stale or different account, or
+    any unexplained residual makes realized growth unavailable. Open P&L stays
+    separate and unrealized.
+  exact_group_after_cost_learning: >
+    Realized learning evidence is ordered by authoritative broker close time and
+    grouped by exact symbol, timeframe, direction, and profile or strategy.
+    Every autonomous execution receipt and opening memory row preserves the
+    candidate's opening market regime, and each exact behavior group is then
+    split into regime-comparable outcome groups. Pooled all-regime evidence
+    remains visible as context, but it cannot authorize PRESS_EDGE,
+    MAX_WITHIN_ENVELOPE, or adaptation promotion. At least one known-regime
+    subgroup must independently meet the sample, after-cost, risk-normalization,
+    and single-best-outcome robustness requirements. Legacy or unattributed
+    UNKNOWN-regime outcomes remain learning context and cannot by themselves
+    justify larger sizing or promotion.
+    Groups rank first by after-cost R expectancy using broker-valued admission
+    stop risk, then by lot-normalized after-cost expectancy, raw after-cost
+    expectancy, and actual net P&L. Actual net dollars remain the account
+    scoreboard; R removes cross-instrument contract and stop-distance distortion,
+    while per-lot normalization removes historical volume distortion inside a
+    comparable instrument. Win rate is supporting evidence only. Profit from
+    another group cannot subsidize or promote an unprofitable group. Adaptation
+    promotion requires complete risk-normalized evidence and the exact promoted
+    group to meet its own sample threshold and remain positive after commission,
+    swap, fees, and realized losses in R, raw dollars, and per lot when available.
+    A positive exact group is not robust press-size or promotion evidence when
+    removing its single best realized outcome makes the remaining group
+    non-positive. CAS records the removed ticket, leave-one-best-out net P&L and
+    after-cost R expectancy, largest-win concentration, recent-window growth,
+    and consecutive-loss count. An outlier-dependent group remains available to
+    autonomous PAPER minimum, PROBE, or STANDARD learning judgment, but it cannot
+    authorize PRESS_EDGE, MAX_WITHIN_ENVELOPE, or adaptation promotion until the
+    exact group's after-cost growth survives the single-best-outcome test.
+  canonical_broker_alias_market_identity: >
+    Learning, promotion, Operator candidate evidence, per-symbol exposure caps,
+    and scale-in exposure must compare every supported broker alias through the
+    canonical CAS instrument map. NAS100, USTEC, US100, and supported suffix
+    variants are one market identity; the same rule applies to every configured
+    alias family. Observed broker spellings remain visible for provenance.
+    Unknown symbols retain an isolated normalized identity and are never silently
+    merged into a supported instrument.
+  non_blocking_operator_observability: >
+    Operator status, dashboard polling, and chart-window reads are observational
+    control-plane surfaces. Slow broker IPC, provider data, account ledgers, or
+    readiness reports must refresh through bounded single-flight cache lanes and
+    must not hold the Operator scheduler lock, monopolize the shared dashboard
+    refresh queue, or make chat and execution status unreachable. Every cached or
+    warming packet exposes age, freshness, and refresh state; stale evidence is
+    never silently represented as fresh broker truth for dispatch.
+  non_blocking_trading_model_decisions: >
+    Entry and position-management inference must run through bounded
+    single-flight decision lanes so a slow or abandoned model request cannot
+    block broker reconciliation, position protection, the dispatch scheduler,
+    or owner chat. A lane permits at most one unfinished request. A result that
+    completes after its wall-clock deadline may be delivered exactly once to
+    the same decision kind, with its original request fingerprint retained;
+    entry output cannot be delivered as position-management output or vice
+    versa. Before any late result can affect an account, current action
+    references, broker truth, mode, and every risk and execution gate must be
+    revalidated. Selected, installed, or configured model state is not READY
+    until a fresh real generation succeeds. Exact provider failures, including
+    RAM or VRAM capacity errors, remain visible and auditable. Compact prompt
+    transport may reduce model context, but it never replaces the full
+    hash-bound decision evidence.
+  historical_admission_risk_reconstruction: >
+    Closed-outcome learning recomputes planned stop risk from the immutable entry,
+    stop, executed lot, broker tick size, and broker loss tick value before using
+    a stored pre-trade risk field. The original stored value remains visible. Any
+    material residual or ratio mismatch is counted and audited; stale estimates
+    produced by older tick-conversion code cannot become learning or promotion
+    authority. A legacy MT5 demo row that predates saved tick-contract fields may
+    recover admission risk only when MT5 history proves an exact broker-side stop
+    loss: the close reason identifies stop loss, close price equals the intended
+    stop, entry/stop direction geometry is valid, volume is known, and broker gross
+    P&L is negative. CAS uses the absolute broker gross stop-fill loss, excludes
+    commission from the reconstructed stop risk, records the ticket and evidence,
+    and leaves approximate, non-stop, profitable, simulator, or ambiguous closes
+    incomplete.
+  explicit_operator_sizing_choice: >
+    An Operator APPROVE with broker-valid sizing options must identify one exact
+    supplied sizing_ref. LOW, MEDIUM, or HIGH conviction is explanatory context,
+    not a substitute lot-size instruction and cannot be silently mapped to PROBE,
+    STANDARD, PRESS_EDGE, or MAX_WITHIN_ENVELOPE. Each option carries exact-group
+    sample state and a historical after-cost projection. When risk evidence is
+    complete, projection equals exact-group after-cost R expectancy times the
+    option's current broker-valued stop risk. Per-lot projection is an explicitly
+    non-comparable fallback only. Every projection is evidence, never a promised
+    forward profit.
+  position_growth_utility_evidence: >
+    Position-management prompts recover the originating strategy and timeframe
+    from the durable executed-order ledger when available. Every close, partial,
+    reduce, modify, hold, or scale-in draft states its immediate realization effect
+    using net open P&L after currently reported carry and commission. Future exit
+    commission, slippage, and fill uncertainty remain explicitly unmodeled. The
+    prompt positively instructs after-cost ranking and may not negate that rule.
+    Current R and every scale-in threshold comparison use immutable original
+    entry-to-stop risk recovered from the executed order receipt; moving the
+    current stop to breakeven or profit does not manufacture 1.0R. A
+    realization-only close below the scale-in horizon requires an explicit
+    machine-checkable growth case. SELECT-close paired with HOLD rationale or
+    summary is a binding-contract failure and leaves the position unchanged.
+  autonomous_broker_effect_provenance: >
+    Every Operator-selected entry, close, partial close, stop change, target
+    change, trail, or scale-in carries the actual decision provider, model,
+    backend, prompt version and hashes, decision-context hash, exact candidate,
+    sizing, or action reference, rationale, growth case, and Operator event hash
+    into order dispatch and the durable broker-effect receipt. Static configured
+    model names may remain visible as configuration but may not replace or be
+    reported as the model that actually made the decision.
+  operator_north_star_context_precedence: >
+    Every ordinary Operator conversation receives a non-optional priority
+    account block before compressible supporting context. It identifies the
+    account governed by the active execution lane, current balance, equity,
+    positions, price P&L, swap or carry, commission, net open P&L after reported
+    costs, baseline availability, and the separate status of simulator and
+    replay evidence. Context compaction may summarize other evidence but may not
+    remove or contradict this block. Fast owner chat declares its narrower
+    explanation-only required-section profile; scheduled autonomous reasoning
+    retains the full learning and adaptation profile.
+  take_profit: >
+    The AI may create, modify, trail, and execute take-profit logic as a
+    first-class trading action. Take-profit is part of autonomous position
+    management, not a human-only step.
+  money_movement: >
+    The AI may initiate deposits, withdrawals, payouts, and internal transfers
+    through configured provider rails, owner-enabled capabilities, destination
+    allowlists, transfer caps, and receipt logging. Sandbox and live provider
+    environments must be explicit; sandbox proof cannot authorize or claim
+    external money movement.
+  psychological_safeguards: >
+    FOMO, revenge, martingale or gambler loops, and post-loss risk loosening
+    become explicit dials, caps, cooldowns, and telemetry warnings. They do not
+    convert the product into advisory-only mode.
+  balance_growth: >
+    Sustainable realized net account growth after spread, commission, swap,
+    slippage, and losses is the north-star objective. Equity, drawdown, open
+    risk, and margin are leading constraints on whether that growth can
+    continue. Evidence quality must distinguish real signal from duplicated or
+    correlated trades, luck clustering, and overfit strategy behavior. A daily
+    target deficit, recent loss, winning streak, or desire for activity cannot
+    by itself increase size or force a trade; those behaviors undermine the
+    long-run growth objective.
+
+autonomous_trading_authority:
+  enabled_when:
+    - mode == LIVE
+    - live_trading_enabled == true
+    - broker_truth_fresh == true
+    - instrument_allowlisted == true
+    - risk_gates_pass == true
+    - cooldown_or_recovery_allows == true
+    - master_kill_active == false
+  allowed_actions:
+    - market_order
+    - limit_order
+    - stop_order
+    - stop_limit_order
+    - cancel_pending_order
+    - modify_pending_order
+    - set_stop_loss
+    - modify_stop_loss
+    - trail_stop_loss
+    - set_take_profit
+    - modify_take_profit
+    - partial_close
+    - full_close
+    - scale_in
+    - scale_out
+    - flatten_exposure
+  mandatory_path:
+    - order_dispatch.py
+    - execution_guard.py
+    - broker_bridge
+
+autonomous_money_movement_authority:
+  enabled_when:
+    - money_movement_enabled == true
+    - provider_configured == true
+    - provider_environment == LIVE
+    - provider_healthy == true
+    - origin_account_approved == true
+    - destination_allowlisted == true
+    - amount_within_caps == true
+    - anomaly_checks_pass == true
+    - master_kill_active == false
+  allowed_actions:
+    - deposit
+    - withdrawal
+    - payout
+    - internal_transfer
+    - owner_owned_account_transfer
+  required_evidence:
+    - provider_receipt
+    - ledger_entry
+    - event_hash
+    - before_after_balance_snapshot
+    - idempotency_key
+
+authority_model:
+  owner_delegated_authority_envelope:
+    - broker accounts and API credentials
+    - "mode: paper, demo, live"
+    - symbol_or_instrument_allowlist
+    - max_lot_size_or_notional_per_order
+    - max_open_positions
+    - max_leverage_and_margin_utilization
+    - max_daily_loss
+    - max_trailing_drawdown
+    - max_transfer_amount_per_event_and_per_day
+    - approved_money_movement_provider_rails
+    - approved_destination_allowlist
+    - emergency_stop_behavior
+  human_involvement_levels:
+    - level: setup
+      human_role: Owner configures credentials, brokers, destinations, caps, and strategy permissions.
+      ai_authority: No live trading until armed.
+    - level: normal_live_operation
+      human_role: Human is not required per order.
+      ai_authority: AI places orders, manages positions, and takes profit autonomously.
+    - level: normal_money_operation
+      human_role: Human is not required per transfer inside configured caps and allowlisted destinations.
+      ai_authority: AI initiates configured transfers and stores receipts.
+    - level: out_of_bounds_request
+      human_role: Human or owner authorization required.
+      ai_authority: AI cannot exceed the delegated authority envelope.
+    - level: emergency
+      human_role: Human may recover, service, or reset after the kill switch.
+      ai_authority: AI stops trading and money movement.
+
+execution_policy:
+  autonomous_order_lifecycle_requires:
+    - mode == LIVE
+    - live_trading_enabled == true
+    - account_connected_and_broker_truth_fresh == true
+    - instrument_allowlisted == true
+    - strategy_emits_actionable_signal == true
+    - edge_pass_fresh_when_configured == true
+    - risk_caps_pass == true
+    - recovery_or_cooldown_clear == true
+    - master_kill_active == false
+    - dispatch_path == order_dispatch.py -> execution_guard.py -> broker_bridge
+  position_management_actions:
+    - set_initial_stop_loss_and_take_profit
+    - move_stop_loss_to_breakeven
+    - trail_stop_loss
+    - move_or_ladder_take_profit_levels
+    - partial_close_at_configured_milestones
+    - scale_into_protected_net_winner_after_reported_costs_with_operator_selected_exact_lot
+    - full_close_on_invalidation_or_risk_breach
+    - flatten_all_exposure_on_emergency_or_policy_condition
+  money_movement_lifecycle_requires:
+    - money_movement_enabled == true
+    - provider_rail_configured_and_healthy == true
+    - provider_environment_is_live == true
+    - origin_account_approved == true
+    - destination_allowlisted == true
+    - amount_within_per_event_and_daily_limits == true
+    - transfer_purpose_allowed_by_policy == true
+    - fraud_or_anomaly_checks_pass == true
+    - master_kill_active == false
+    - receipt_provider_response_and_ledger_entry_stored == true
+    - lost_provider_reference_recoverable_by_idempotency_key == true
+
+hard_blocks:
+  - snapshot_route_order_send
+  - live_order_without_live_enablement
+  - stale_broker_truth
+  - dispatch_path_bypass
+  - edge_pass_reuse_when_edge_required
+  - risk_cap_breach
+  - per_trade_stop_risk_cap_breach
+  - broker_minimum_lot_exceeds_per_trade_stop_risk_cap
+  - free_form_or_non_broker_grid_operator_lot_size
+  - daily_profit_target_deficit_used_as_sizing_authority
+  - scale_in_parent_not_net_winning_after_reported_costs
+  - pre_cost_winner_compounded_while_net_losing
+  - scale_in_parent_unprotected_or_stale
+  - scale_in_parent_geometry_changed_after_authorization
+  - scale_in_r_multiple_inferred_from_current_breakeven_or_profit_stop
+  - scale_in_after_original_risk_geometry_becomes_unavailable
+  - operator_scale_in_authorization_reuse
+  - scale_in_without_exact_operator_action_ref
+  - position_decision_reused_after_account_or_cost_state_changed
+  - realization_only_close_below_scale_in_horizon_without_explicit_growth_case
+  - select_close_action_with_hold_or_leave_open_rationale
+  - autonomous_broker_effect_missing_actual_operator_decision_provenance
+  - unconfigured_provider
+  - unallowlisted_destination
+  - master_kill_active
+  - missing_receipt_for_money_movement
+  - sandbox_provider_claimed_as_live
+  - provider_timeout_retried_without_idempotency_reconciliation
+  - closed_or_stale_quote_consumes_route_identity
+  - deterministic_risk_infeasible_candidate_consumes_operator_model_decision
+  - legacy_simulator_diagnostic_overrides_primary_mt5_runtime
+  - stale_verifier_overrides_current_mt5_account_snapshot
+  - secondary_simulator_masquerades_as_active_mt5_account
+  - pre_swap_or_pre_cost_pnl_claimed_as_account_growth
+  - operator_context_compaction_drops_active_account_cost_truth
+  - deposit_or_withdrawal_counted_as_trading_profit
+  - stale_or_other_account_growth_baseline_used
+  - balance_baseline_claimed_without_full_deal_ledger_tie
+  - out_of_order_outcomes_drive_recent_loss_logic
+  - cross_timeframe_outcomes_pooled_for_adaptation
+  - win_rate_ranked_ahead_of_after_cost_expectancy
+  - pooled_profit_promotes_unprofitable_behavior_group
+  - historical_lot_size_confounds_strategy_edge
+  - operator_conviction_substitutes_for_missing_sizing_ref
+  - position_prompt_negates_after_cost_ranking
+  - position_action_hides_immediate_realization_effect
+  - route_timeframe_lost_before_outcome_learning_join
+  - stored_pre_trade_risk_used_without_broker_contract_recalculation
+  - per_lot_dollars_compared_across_instruments_as_edge
+  - incomplete_admission_risk_promotes_behavior
+  - single_best_outcome_promotes_behavior_or_authorizes_press_size
+  - mixed_market_regimes_authorize_press_size_or_adaptation_promotion
+  - opening_market_regime_lost_before_closed_outcome_learning
+  - malformed_prompt_assembly_obscures_growth_ranking
+  - broker_alias_fragmentation_hides_outcomes_or_exposure
+  - observational_poll_blocks_operator_chat_or_execution_control
+  - risk_override_persistence_failure_claimed_as_applied
+  - owner_or_static_fallback_mislabeled_as_effective_dispatch_cap
+  - sunday_reopen_falsely_forced_closed
+  - fresh_account_read_mislabeled_as_fresh_market_tick
+  - broker_demo_execution_left_unfinalized_after_exact_history_match
+  - model_or_context_timeout_leaves_owner_chat_unanswered
+  - assistant_diagnostic_context_blocks_api_event_loop
+  - assistant_local_model_invents_current_market_regime
+  - trading_question_misclassified_as_page_navigation
+  - trade_path_chat_diverges_from_cockpit_dispatch_snapshot
+  - configured_model_claimed_reachable_without_request_time_verification
+  - failed_or_stale_model_capability_reported_as_ready
+  - configured_gemma_backup_label_masks_missing_failover_capability
+  - structured_model_output_fence_or_commentary_breaks_action_json
+  - late_completed_model_decision_discarded_without_single_use_delivery
+  - late_model_result_delivered_to_different_decision_kind
+  - finite_model_budget_mislabeled_as_exhausted
+  - degraded_paper_fallback_opens_new_exposure_after_daily_realized_loss_cap
+  - model_approval_bypasses_daily_realized_loss_cap
+  - active_daily_loss_cap_uses_unreconciled_or_missing_realized_truth
+  - prior_utc_day_realized_loss_snapshot_used_for_current_day_admission
+  - same_balance_new_deal_sequence_bypasses_daily_loss_refresh
+  - context_only_position_row_invalidates_actionable_position_decision
+  - executable_operator_action_without_exact_supplied_action_ref
+  - noncanonical_model_mutation_normalized_to_executable_authority
+  - materially_future_broker_position_time_overrides_exact_cas_execution_receipt
+  - scale_in_zero_size_blockers_hidden_from_owner
+  - combined_group_stats_hide_broker_verified_exact_group
+  - forming_candle_preview_final_route_identity_drift
+  - fresh_initial_spread_close_without_invalidation_or_hysteresis
+  - valid_model_transport_misreported_as_provider_unavailable_after_contract_rejection
+  - compound_slot_reserved_without_exact_one_shot_scale_in_authorization
+  - settings_or_management_handoff_bypasses_active_scheduler_broker_truth
+  - review_interval_deferral_reported_as_operator_stand_down
+  - generic_json_object_accepted_without_exact_entry_or_position_decision_schema
+  - noncanonical_ticket_key_silently_discards_a_unique_exact_model_decision
+  - multi_slot_position_capacity_increase_from_single_review
+  - position_capacity_increase_without_fresh_action_time_mt5_revalidation
+
+explicit_prohibitions_retained:
+  - sending broker orders from the MT5 snapshot or account panel route
+  - trading when live mode is not armed
+  - using stale broker truth for live dispatch
+  - bypassing order_dispatch.py or execution_guard.py
+  - reusing consumed edge PASS tokens
+  - increasing risk after losses unless the configured risk-loosening rule permits it
+  - allowing an upstream risk claim to replace a higher server-calculated broker stop risk
+  - sending a candidate to the AI Operator after broker-valued evidence proves no compliant minimum lot exists
+  - locking every Operator entry to the broker minimum when larger risk-compliant broker-grid sizes exist
+  - allowing the model to invent a free-form lot size instead of selecting an exact sizing_ref
+  - increasing lot size because the account is behind a daily profit objective
+  - scaling into a losing, stale, unprotected, changed, or missing parent position
+  - treating positive price P&L as a winning-parent authorization when reported swap, carry, or commission makes net open P&L non-positive
+  - reusing a position-management decision after account, position, open-P&L, cost, guidance, control, candidate, or outcome evidence changes
+  - dispatching a scale-in after the authorized parent volume, stop loss, or take profit changes
+  - requiring per-add human confirmation for an exact in-envelope Operator scale-in
+  - describing overall outcome count as per-group learning readiness when no group meets the sample threshold
+  - describing movement-stream STATIC_SIMULATION_FALLBACK as an end-to-end MT5 management block when the primary MT5 dispatch lane is active
+  - allowing a stale exported verifier to overrule a newer connected MT5 account snapshot
+  - presenting or adding a separate simulator balance, equity, P&L, or positions as the active MT5 account
+  - presenting price-only floating P&L as net account growth while reported swap, carry, or commission is omitted
+  - allowing Operator context compression to remove active-account identity, after-cost open P&L, or simulator-separation truth
+  - counting a deposit, withdrawal, credit, or bonus as trading profit or loss
+  - using a stale, different-account, or balance-mismatched realized-growth baseline
+  - claiming a cashflow-adjusted growth baseline when the full MT5 deal effects do not tie to current balance
+  - treating insertion order as broker-close recency when evaluating the latest outcome
+  - pooling outcomes across timeframes to satisfy one behavior group's learning threshold
+  - ranking a high-win-rate net loser ahead of a lower-win-rate group with positive after-cost expectancy
+  - allowing profit from one symbol, timeframe, direction, or profile group to promote another unprofitable group
+  - ranking a historically larger-sized group as the better strategy without comparing after-cost P&L per executed lot
+  - converting LOW, MEDIUM, or HIGH conviction into a lot choice when APPROVE omits sizing_ref
+  - instructing position management not to rank exact behavior by after-cost evidence
+  - presenting a close or partial-close action without its estimated immediate after-cost realization and unmodeled future exit-cost boundary
+  - dropping entry timeframe before durable order-attempt and closed-outcome learning records are joined
+  - trusting a historical stored pre-trade risk field when immutable broker tick-size, tick-value, entry, stop, and lot evidence can recompute it
+  - reconstructing missing historical admission risk from an approximate close, non-stop exit, profitable close, simulator outcome, or ambiguous broker record
+  - comparing per-one-lot dollar expectancy across different instrument contracts as if it were comparable strategy edge
+  - promoting a behavior or presenting historical press-size support when its admission-risk evidence is incomplete
+  - promoting a behavior or authorizing PRESS_EDGE or MAX_WITHIN_ENVELOPE when removing the exact group's single best broker outcome makes after-cost growth non-positive
+  - allowing prompt concatenation to negate, reverse, or grammatically corrupt the required after-cost growth-ranking instruction
+  - treating supported broker aliases as different markets when grouping outcomes, attaching Operator evidence, enforcing per-symbol exposure, promoting behavior, or counting scale-in exposure
+  - allowing Operator status or chart refresh to synchronously wait on slow broker, provider, ledger, or readiness work beyond its bounded control-plane response budget
+  - rebuilding mobile, APK, Docker, or public-launch diagnostics on every ordinary Assistant trading conversation
+  - presenting a model-inferred current trend, range, momentum, volatility, or opportunity as runtime truth when the supplied current-state evidence does not contain it
+  - treating Sunday after 22:00 UTC as forex market closed without symbol-specific broker evidence
+  - describing an account snapshot as fresh price evidence when its attached market tick is stale or unavailable
+  - retrying an interrupted MT5 demo order after one exact broker-history execution match is available
+  - forgetting a recovered demo receipt in later clean learning-sync summaries
+  - routing an order or compounding question to page navigation merely because it contains the word open
+  - allowing PAPER_POLICY_FALLBACK or any AI approval to open or add exposure after the reconciled daily realized-loss boundary is reached
+  - blocking protective or exposure-reducing management merely because the daily entry-loss boundary is reached
+  - treating a positive daily loss cap as advisory model context instead of an execution-chokepoint invariant
+  - reusing a prior UTC day's realized-today value after day rollover
+  - treating unchanged account balance as proof that no new broker deals occurred
+  - failing an otherwise valid position decision because the model echoed a context-only open position with no action draft
+  - allowing a noncanonical close, reduce, modify, trail, scale, or other mutation to execute without one exact supplied immutable action_ref
+  - converting HOLD, WAIT, KEEP_OPEN, NO_ACTION, STAND_DOWN, or an actionless SELECT into any broker-authorized mutation
+  - trusting a materially future-dated broker server position timestamp over an exact CAS broker-execution receipt when calculating position age or discretionary hysteresis
+  - reporting generic watching while every compounding parent has zero broker-valid lot choices without naming the binding caps
+  - describing force_paper_mode as a PAPER or DEMO execution block
+  - treating historical CAS receipt gaps as current MT5 open positions without matching account and ticket identity
+  - persisting a durable Operator lesson whose premise is contradicted by primary execution truth
+  - activating an owner risk override in memory before its durable snapshot is atomically stored
+  - losing explicit owner risk authority on API restart
+  - requiring risk-loosening friction when the proposed owner-layer edit does not loosen effective dispatch latitude
+  - creating new external money destinations without owner setup
+  - moving funds through unconfigured providers
+  - executing trades or transfers while the master kill switch is active
+  - hiding losses, fills, rejected orders, transfer failures, or receipts
+  - labeling a configured model as the decision maker when another provider or model acted
+  - allowing a historical replay template or default midpoint to enter broker-bound scalp collection
+  - consuming a one-shot route identity before current quote truth passes
+  - terminating candidate-universe exploration on a closed, stale, missing, unusable, future-dated, or already-emitted PASS
+  - allowing a combined learning table with a different profile to hide a fuller broker-verified exact behavior group
+  - pooling profitable outcomes from different market regimes to authorize PRESS_EDGE, MAX_WITHIN_ENVELOPE, or adaptation promotion
+  - treating legacy UNKNOWN-regime outcomes as regime-comparable promotion authority
+  - computing edge preview or duplicate identity from a forming candle that final RouteIntent construction later removes
+  - closing or reducing a fresh protected position for generic account-risk reduction solely because of initial spread, commission, or a tiny opening loss before the observation or adverse-R threshold
+  - labeling a received but contract-rejected model response as a provider outage or model unavailability
+  - allowing the ordinary per-symbol entry cap to disable a separately authorized exact scale-in lane, or reserving a compound slot before one-shot scale-in authorization succeeds
+  - building Settings or AI Hedge management handoff from a static simulator while the active scheduler has current MT5 broker and account truth
+  - reporting a bounded review-interval deferral as an AI Operator stand-down, model rejection, or no-opinion decision
+  - requesting or accepting a generic JSON object when the entry or position model contract has an exact decision schema
+  - discarding a valid model decision solely because its unique bare broker ticket key can be mapped unambiguously to one supplied canonical ticket key
+  - relaxing exact action_ref authority while normalizing a unique bare broker ticket key
+
+required_logs_and_evidence:
+  - timestamp
+  - mode
+  - account_or_broker_or_provider
+  - strategy_state
+  - signal_and_edge_pass_status
+  - risk_gate_snapshot
+  - pre_operator_broker_risk_feasibility_snapshot
+  - operator_sizing_plan_hash_sizing_ref_selected_lots_and_money_estimate
+  - scale_in_parent_ticket_unit_index_operator_event_hash_and_one_shot_authorization
+  - primary_execution_truth_snapshot_and_conflict_codes
+  - order_or_transfer_request
+  - broker_or_provider_response
+  - resulting_account_position_or_money_state
+  - receipt_or_rejection_reason
+  - ai_rationale_summary
+  - correlation_or_grouping_id_for_clustered_wins_or_losses
+  - immutable_event_hash
+  - explicit_owner_risk_override_keys_and_persistence_status
+  - effective_dispatch_caps_before_and_after
+  - authoritative_account_source_snapshot_age_and_account_identity
+  - open_pnl_price_swap_commission_and_net_decomposition
+  - entry_and_position_decision_account_context_hashes
+  - position_decision_bound_state_hash
+  - scale_in_parent_snapshot_hash_before_and_at_dispatch
+  - original_entry_stop_risk_r_multiple_basis_current_r_scale_threshold_and_gap
+  - realization_only_close_growth_case_and_semantic_contract_result
+  - actual_operator_provider_model_backend_prompt_context_candidate_action_and_event_hash
+  - rejected_model_decision_reason_summary_and_validation_error
+  - cashflow_adjusted_growth_account_hash_balance_tie_and_event_hash
+  - chronological_broker_close_order_and_exact_behavior_group_hash
+  - after_cost_expectancy_net_pnl_and_supporting_win_rate_per_group
+  - promoted_group_identity_sample_count_and_after_cost_outcome
+  - executed_lot_size_and_after_cost_pnl_per_1_lot_for_each_bound_outcome
+  - explicit_operator_sizing_ref_and_exact_group_growth_evidence_state
+  - full_operator_sizing_option_menu_max_executable_lot_and_limiting_source
+  - position_origin_strategy_timeframe_and_order_decision_identity
+  - management_action_immediate_realization_and_future_exit_cost_boundary
+  - route_timeframe_retained_in_order_attempt_proposed_intent
+  - recomputed_admission_stop_risk_stored_risk_residual_and_mismatch_flag
+  - realized_after_cost_r_multiple_and_exact_group_r_expectancy
+  - risk_normalized_trade_count_completeness_and_total_admission_risk
+  - largest_win_concentration_leave_one_best_out_net_pnl_r_expectancy_removed_ticket_recent_window_and_loss_streak
+  - sizing_option_historical_projection_value_basis_and_cross_instrument_comparability
+  - canonical_instrument_identity_and_observed_broker_symbol_spellings
+  - operator_status_cache_age_refresh_state_and_runtime_stress_result
+  - account_snapshot_observed_at_and_age_separate_from_per_symbol_tick_observed_at_and_age
+  - sunday_reopen_week_schedule_and_symbol_specific_market_open_status
+  - demo_receipt_recovery_id_exact_match_fields_broker_ticket_and_no_retry_flag
+  - cumulative_demo_receipt_recovery_count_and_latest_recovered_attempt
+  - assistant_and_operator_chat_response_source_path_status_runtime_truth_and_elapsed_time
+  - assistant_context_build_elapsed_budget_fallback_source_and_event_loop_heartbeat
+  - assistant_current_regime_evidence_fields_and_no_inference_marker
+  - daily_realized_loss_cap_source_realized_today_value_reconciliation_event_and_final_dispatch_block
+  - utc_day_identity_growth_refresh_reason_and_latest_deal_fingerprint
+  - position_decision_keys_context_only_contract_and_prompt_version
+  - scale_in_status_option_parent_blocker_counts_and_exact_block_reasons
+  - scale_in_original_risk_geometry_and_r_multiple_basis
+  - operator_semantic_close_contract_and_no_touch_rejection
+  - broker_effect_execution_provenance_with_actual_decision_model
+  - candidate_group_stats_source_merge_count_and_exact_group_source
+  - opening_market_regime_source_execution_provenance_and_closed_outcome_binding
+  - regime_comparable_sample_count_all_regimes_context_and_promotion_readiness
+  - completed_candle_transform_preview_and_final_route_identity_hashes
+  - discretionary_close_position_age_observation_window_adverse_r_threshold_and_invalidation_evidence
+  - raw_model_decision_action_normalization_reason_and_canonical_stand_down_result
+  - position_opened_at_iso_source_broker_raw_time_receipt_time_and_conflict_resolution
+  - natural_operator_event_action_ref_guard_receipt_outcome_binding_and_cycle_net_pnl
+  - model_transport_ok_boolean
+  - model_response_rejected_boolean
+  - model_failure_stage_provider_parse_or_semantic_contract
+  - base_per_symbol_cap_authorized_compound_slot_allowance_effective_cap_and_one_shot_authorization_result
+
+acceptance_tests:
+  - name: ai_places_live_trade_autonomously
+    expected: >
+      Given live mode is armed, broker truth is fresh, edge and risk gates
+      pass, and no kill switch is active, the order is dispatched through the
+      chokepoint without per-order human confirmation.
+  - name: ai_operator_approves_exact_candidate_autonomously
+    expected: >
+      Given an exact fresh RouteIntent survives deterministic routing and the
+      Operator returns APPROVE plus one supplied sizing_ref for its candidate
+      ID, the chosen exact broker-grid lot proceeds through the protected
+      dispatch path without per-order human confirmation. Any free-form lot or
+      non-size geometry rewrite is rejected and audited.
+  - name: ai_operator_selects_larger_risk_compliant_lot
+    expected: >
+      Given 0.01 is the broker minimum but current stop economics, equity,
+      margin, exposure, and owner caps permit 0.02 or more, the sizing planner
+      exposes multiple exact choices and a high-conviction Operator approval may
+      bind the order to a larger supplied lot. The final execution guard repeats
+      every risk and broker check before touch.
+  - name: operator_approval_requires_explicit_sizing_ref
+    expected: >
+      Given sizing options are supplied and the model returns APPROVE without an
+      exact sizing_ref, conviction is not converted into a lot. The response
+      fails the binding contract; LIVE stands down before broker touch and PAPER
+      may use only the declared deterministic growth-gated fallback.
+  - name: paper_model_failure_cannot_recycle_known_losing_group_or_press_size
+    expected: >
+      Given the entry Operator model is unavailable or returns an invalid
+      contract, a sample-ready exact group with any non-positive after-cost
+      growth metric and a sparse exact group with two or more outcomes and zero
+      wins both STAND_DOWN before dispatch. One prior loss may receive only one
+      PROBE-or-smaller PAPER retest, no-history or incomplete evidence remains
+      bounded to PROBE or the smallest broker-valid lot, and only a complete
+      positive sample-ready exact group may use STANDARD. PRESS_EDGE and
+      MAX_WITHIN_ENVELOPE are never selected by deterministic outage fallback.
+      The durable decision and any resulting broker receipt retain every offered
+      size, selected size, maximum executable lot, and limiting risk or broker
+      source.
+  - name: learning_ranking_normalizes_historical_lot_size
+    expected: >
+      Given one exact group earned more raw dollars only by using larger lots and
+      another has stronger after-cost expectancy per executed lot, CAS ranks the
+      stronger normalized edge first while retaining raw net dollars as the
+      account-growth scoreboard.
+  - name: historical_admission_risk_recomputed_from_broker_tick_contract
+    expected: >
+      Given an older closed trade stores an understated pre-trade risk estimate
+      but retains entry, stop, lot, broker tick size, and broker loss tick value,
+      learning recomputes admission stop risk from those immutable contract fields,
+      preserves the original value, flags the mismatch, and derives realized
+      after-cost R from the recomputed risk.
+  - name: exact_mt5_stop_fill_repairs_legacy_admission_risk_without_outcome_leakage
+    expected: >
+      Given a legacy MT5 demo order retains intended entry, stop, and volume but
+      predates saved tick-contract fields, and authoritative MT5 history proves a
+      negative broker-side stop-loss close at the exact intended stop, learning
+      reconstructs admission risk from the absolute broker gross stop-fill loss,
+      excludes commission from stop risk, records the broker ticket and exact-stop
+      evidence, and derives after-cost R. An approximate close, non-stop exit,
+      profitable close, simulator row, missing volume, invalid direction geometry,
+      or ambiguous broker record remains risk-incomplete and cannot promote or
+      support larger sizing.
+  - name: learning_ranking_prefers_after_cost_r_expectancy_across_instruments
+    expected: >
+      Given one instrument earns more dollars per lot only because its contract
+      and planned stop risk are larger while another earns more after-cost P&L per
+      planned risk dollar, CAS ranks the stronger after-cost R expectancy first
+      and retains per-lot and raw-dollar metrics as secondary evidence.
+  - name: incomplete_admission_risk_cannot_promote_or_supply_press_evidence
+    expected: >
+      Given an exact group is sample-ready and positive in raw or per-lot dollars
+      but broker-valued admission stop risk is incomplete, the group cannot be
+      promoted and cannot be labeled historical press-size support. A materially
+      different bounded PAPER exploration remains possible only under the normal
+      owner envelope with an explicit rationale.
+  - name: single_best_outcome_dependency_cannot_promote_or_press_size
+    expected: >
+      Given an exact sample-ready group is positive after costs only because of
+      one unusually strong broker outcome, removing that single best outcome
+      makes the remaining group's net P&L or after-cost R expectancy non-positive.
+      CAS labels the group outlier-dependent, records the removed ticket and
+      robustness metrics, and rejects PRESS_EDGE, MAX_WITHIN_ENVELOPE, or
+      adaptation promotion. The autonomous Operator may still stand down or use
+      minimum, PROBE, or STANDARD sizing for bounded PAPER evidence collection
+      inside the owner envelope without per-trade human confirmation.
+  - name: entry_projection_uses_historical_r_expectancy_times_current_stop_risk
+    expected: >
+      Given complete exact-group after-cost R evidence and a current broker-valid
+      sizing option with valued stop risk, its historical dollar projection equals
+      R expectancy times current stop risk, records that basis, is comparable
+      across instruments, and remains explicitly not a forecast.
+  - name: operator_growth_ranking_prompt_is_well_formed
+    expected: >
+      Scheduled entry and position Operator prompts positively and grammatically
+      instruct after-cost R ranking before per-lot, raw expectancy, net P&L, and
+      supporting win rate. Prompt assembly contains no negation or malformed
+      concatenation that obscures this hierarchy.
+  - name: broker_aliases_share_learning_promotion_and_exposure_identity
+    expected: >
+      Given outcomes or open positions use supported broker aliases or suffixes
+      for the same instrument, CAS assigns one canonical market identity for
+      exact-group learning, promotion matching, Operator growth evidence,
+      per-symbol exposure caps, and scale-in exposure. Original broker spellings
+      remain visible, while unknown symbols remain isolated.
+  - name: operator_observability_remains_responsive_during_slow_evidence_refresh
+    expected: >
+      Given rich Operator evidence or chart market data is slow, concurrent
+      Operator-state, dispatch-status, MT5-account, and chart-window reads return
+      bounded warming, stale, or cached packets without holding the scheduler
+      lock or blocking chat and execution control. Rich refresh is single-flight,
+      cache age and refresh state remain explicit, and dispatch still requires
+      fresh broker truth independently of observational caches.
+  - name: ai_operator_stand_down_places_no_order
+    expected: >
+      Given the Operator returns STAND_DOWN for a fresh candidate, no broker
+      order is attempted and the rationale is written to the durable Operator
+      trade-edge audit.
+  - name: ai_operator_entry_decision_receives_realized_feedback
+    expected: >
+      Given a prior closed paper or MT5 demo outcome exists for the candidate's
+      symbol and direction, the immediate Operator prompt contains that unique
+      outcome, aggregate wins/losses/net P&L, current account state, and a flag
+      requiring differentiation after the latest loss. The durable decision
+      report stores the compact context and its hash.
+  - name: duplicate_learning_provenance_counts_one_broker_outcome
+    expected: >
+      Given one MT5 close is visible through both WASTE-cycle and finalized
+      order-attempt evidence, candidate statistics count one trade keyed by
+      broker_ticket plus decision_ref while preserving both provenance labels.
+  - name: combined_and_broker_exact_group_stats_are_merged
+    expected: >
+      Given combined paper learning contains a row for the same symbol,
+      timeframe, and direction under a different profile while broker-verified
+      MT5 learning contains the candidate's fuller exact profile, entry context
+      merges both source tables. Candidate evidence selects the full exact
+      broker group, retains source and merged-count telemetry, and cannot fall
+      back to a truncated recent-outcome window that reverses the measured
+      after-cost growth classification.
+  - name: dispatch_retains_timeframe_for_outcome_learning
+    expected: >
+      Given a RouteIntent reaches guarded dispatch, its timeframe and strategy
+      survive in the durable proposed-intent and order-attempt evidence so later
+      position supervision and closed-outcome learning can join the exact M1,
+      M5, M15, H1, or other behavior group.
+  - name: action_time_stale_quote_blocks_dispatch
+    expected: >
+      Given a quote becomes stale or is materially future-dated while the AI is
+      deliberating, broker-touch dispatch is blocked even if the earlier
+      candidate review returned APPROVE.
+  - name: ai_takes_profit_autonomously
+    expected: >
+      Given a live position has reached the configured profit condition, the AI
+      may emit a take-profit close, partial-close, or TP-modification action
+      through the same broker-bound dispatch path without per-action human
+      confirmation.
+  - name: ai_operator_selects_exact_position_management_action
+    expected: >
+      Given one broker position has multiple deterministic, broker-valid
+      discretionary drafts, the immediate Operator receives current account,
+      position, control, quote, and realized-outcome context and selects at most
+      one exact action_ref or STAND_DOWN. Any unknown action_ref, missing
+      decision, or attempted geometry rewrite fails the binding contract before
+      broker touch.
+  - name: position_context_overanswer_cannot_silence_operator_edge
+    expected: >
+      Given current_positions includes portfolio context without a management
+      draft and position_action_candidates contains the only required decision
+      key, a model response containing the valid exact decision plus an extra
+      context-only STAND_DOWN row retains the valid selection. The extra row has
+      no execution authority, every required key remains mandatory exactly once,
+      and an unknown action_ref or missing required decision still fails closed.
+  - name: position_prompt_preserves_after_cost_ranking_and_origin
+    expected: >
+      Given an open position originated from an executed CAS order, the immediate
+      position Operator receives its recoverable entry strategy, timeframe,
+      decision_ref, and order_id. The system prompt positively instructs exact-
+      group after-cost ranking and contains no negating instruction.
+  - name: management_actions_expose_immediate_growth_effect
+    expected: >
+      Given full-close, partial-close, reduce, modify, hold, or scale-in drafts,
+      each candidate states the estimated amount immediately realized after
+      currently reported costs and clearly states that future exit commission,
+      slippage, and fill uncertainty are not included.
+  - name: scale_in_r_uses_original_entry_stop_after_breakeven
+    expected: >
+      Given a protected winning parent has moved its current stop to breakeven
+      or profit, scale-in readiness still divides favorable movement by the
+      immutable original entry-to-stop risk from the executed order receipt.
+      A 0.20R move remains 0.20R rather than becoming 1.0R. If original risk
+      geometry is unavailable after principal protection, compounding blocks
+      instead of inventing an R multiple.
+  - name: tiny_winner_realization_close_requires_explicit_growth_case
+    expected: >
+      Given a healthy net-positive position remains below the supplied scale-in
+      horizon and the only close basis is realizing a tiny positive amount with
+      no thesis invalidation evidence, SELECT close must bind the exact selected
+      intent and explicitly identify thesis invalidation, deteriorating edge,
+      execution stress, portfolio pressure, or account-risk reduction. Tiny
+      positive P&L alone is not a close thesis.
+  - name: fresh_protected_position_initial_spread_cannot_force_discretionary_close
+    expected: >
+      Given a fresh broker-protected position is inside its timeframe-derived
+      observation window, current R is above -0.10R, and no deterministic
+      thesis-invalidation evidence is attached, a model selection to close or
+      reduce for generic account-risk reduction fails the semantic contract.
+      Operator-only fallback is STAND_DOWN, no broker method is called, and the
+      durable validation reason states that initial spread or a tiny opening
+      loss is not thesis invalidation. Hard protection and deterministic urgent
+      exits remain non-vetoable.
+  - name: contradictory_select_close_and_hold_language_stands_down
+    expected: >
+      Given the model binds a close_full action_ref but its selected intent,
+      growth case, reason, or summary says HOLD, leave open, or preserve upside,
+      the semantic contract fails before broker touch. Operator-only fallback
+      remains STAND_DOWN, the position is unchanged, and the rejected decision
+      plus validation reason is durably visible.
+  - name: autonomous_broker_effect_receipt_binds_actual_operator_identity
+    expected: >
+      Given an Operator-selected entry or position-management action reaches
+      order dispatch, its durable receipt records the actual provider, model,
+      backend, prompt version and hashes, decision-context hash, exact candidate,
+      sizing, or action reference, rationale, growth case, and Operator event
+      hash. A configured primary model may not be substituted when a fallback
+      model actually made the decision.
+  - name: ai_operator_compounds_protected_winner_autonomously
+    expected: >
+      Given a fresh protected parent position is net profitable after every
+      currently reported swap, carry, and commission amount, has reached the
+      configured R threshold, and compound-unit, position-count, exposure,
+      margin, and stop-risk caps permit an add, the position Operator may select
+      one exact scale_in action_ref and lot size. A short-lived
+      account/config/parent/order-bound authorization is consumed once through
+      order_dispatch.py and execution_guard.py, the added volume is reconciled,
+      and no per-add human confirmation is required.
+  - name: scale_in_feasibility_and_blockers_remain_owner_visible
+    expected: >
+      Given one or more open positions cannot receive a broker-valid add, every
+      management report, dispatch status, Operator chat answer, and Operator
+      dropdown exposes SCALE_IN_OPTIONS_READY or NO_SCALE_IN_CANDIDATE, exact
+      option and parent counts, max compound units, and each binding risk,
+      position, per-symbol, exposure, margin, protection, or profit blocker.
+  - name: scale_in_requires_net_profit_after_reported_open_costs
+    expected: >
+      Given a parent has positive price P&L but reported swap, carry, or
+      commission makes net open P&L non-positive, no scale-in candidate is
+      offered or authorized. Price P&L, each reported cost component, and net
+      open P&L remain visible in the decision and rejection evidence.
+  - name: position_decision_cache_invalidates_on_account_or_pnl_change
+    expected: >
+      Given an earlier position decision exists, any change in bound account,
+      position, open-P&L, reported cost, candidate, guidance, control, or
+      realized-outcome evidence changes the decision-state hash. The earlier
+      selection is not reused and the immediate Operator must decide again.
+  - name: scale_in_authorization_rechecks_parent_profit_and_geometry
+    expected: >
+      Given an exact scale-in was authorized, final dispatch re-reads the parent
+      from the broker and requires it to remain net winning after reported
+      costs with the same ticket, symbol, side, volume, open price, stop loss,
+      and take profit. A changed parent or non-winning parent blocks before
+      broker touch and leaves the authorization unconsumed.
+  - name: hard_position_protection_is_non_vetoable
+    expected: >
+      Given a position is missing its baseline stop/target or a high-urgency
+      invalidation exit is required, the policy action remains selected even
+      when the model is unavailable or stands down. It still requires the
+      guarded broker path and fresh receipt reconciliation.
+  - name: every_fresh_position_receives_operator_discretion_without_fixed_threshold
+    expected: >
+      Given a fresh manageable broker position is between every deterministic
+      R-multiple, take-profit, time-stop, and invalidation threshold, CAS still
+      constructs an immutable exact management menu for that position and asks
+      the AI Operator to select one action or STAND_DOWN. A model-selected
+      action continues through order dispatch, execution guard, broker truth,
+      terminal receipt, and reconciliation without per-action human approval.
+  - name: same_symbol_positions_receive_ticket_scoped_operator_choices
+    expected: >
+      Given two or more open positions share the same broker symbol, every
+      Operator choice remains bound to its exact broker ticket and position row.
+      Candidate matching resolves broker_ticket first, position or row identity
+      second, and symbol only as a final legacy fallback, so one ticket cannot
+      steal, suppress, or execute another ticket's management action.
+  - name: operator_discretion_model_failure_never_auto_closes_position
+    expected: >
+      Given only Operator-discretion options are available and the provider is
+      absent, times out, or returns an invalid contract, no deterministic or
+      paper fallback may select full close, partial close, breakeven, or trail.
+      CAS records STAND_DOWN, leaves the position unchanged, and keeps the exact
+      option, represented-position, blocked-option, and failure-policy truth
+      visible in dispatch status, Operator chat, and the Operator dropdown.
+  - name: trailing_exit_dials_reach_broker_management_drafts
+    expected: >
+      Given trailing_stop_enabled is false, no trail_stop management draft is
+      generated. Given it is true, the exact owner-fenced
+      trailing_lock_fraction determines the drafted stop and is visible in the
+      decision parameters.
+  - name: historical_trade_block_is_not_an_active_alert_forever
+    expected: >
+      Given a transient TRADE_BLOCKED warning is older than its display TTL, it
+      remains in the critical-notification audit as EXPIRED_HISTORICAL but is
+      absent from the active cockpit alert strip.
+  - name: ai_initiates_configured_money_movement_autonomously
+    expected: >
+      Given money movement is armed, the provider rail is healthy, the
+      destination is allowlisted, and the amount is within caps, provider
+      dispatch occurs and a receipt is stored without per-transfer human
+      confirmation.
+  - name: snapshot_route_order_send_blocked
+    expected: >
+      Any snapshot or account route attempt to send a broker order is blocked
+      and logged as a bypass attempt.
+  - name: stale_broker_truth_blocks_live_dispatch
+    expected: >
+      When broker truth is stale, live dispatch is blocked until fresh truth is
+      obtained.
+  - name: broker_tick_value_risk_cap_blocks_understated_index_order
+    expected: >
+      Given broker tick size/value and current account equity are available, the
+      server recalculates stop risk from order geometry, uses the higher of that
+      result and any upstream risk claim, and blocks before broker touch when the
+      owner-fenced per-trade risk percentage is exceeded.
+  - name: broker_minimum_lot_risk_blocks_before_operator
+    expected: >
+      Given broker tick size/value, current account equity, stop geometry,
+      minimum lot, and lot step are available, when the minimum broker lot
+      exceeds the owner-fenced per-trade stop-risk cap, the candidate is
+      recorded as BLOCKED_AT_BROKER_MIN_LOT before an AI Operator model call,
+      the provider call count remains zero, and the final execution guard
+      remains authoritative.
+  - name: mixed_outcomes_do_not_fake_group_learning_ready
+    expected: >
+      Given the overall bound-outcome count reaches the configured sample
+      threshold but no symbol x direction x profile group reaches that
+      threshold, overall_sample_ready is true while group_learning_ready and
+      learning_ready remain false. The Operator must treat the evidence as
+      sparse per group rather than adaptation-ready.
+  - name: primary_mt5_truth_overrides_legacy_simulator_diagnostics
+    expected: >
+      Given the active dispatch loop is running through MT5 and the connected
+      terminal reports current broker positions, while a separate movement-
+      stream or simulator-ledger diagnostic reports STATIC_SIMULATION_FALLBACK
+      or zero positions, primary_execution_truth identifies MT5 and dispatch_loop
+      as authoritative, exposes the contradiction, keeps PAPER or DEMO execution
+      active, and prevents the legacy interpretation from becoming a durable
+      Operator lesson.
+  - name: current_mt5_account_truth_replaces_stale_verifier_across_cockpit
+    expected: >
+      Given a current connected MT5 account snapshot and an older exported
+      verifier with a different position count or timestamp, the active-account
+      endpoint, dashboard, live telemetry, Operator briefing, and Operator
+      context all use the current MT5 account identity and position count. The
+      stale verifier remains historical evidence and cannot overwrite current
+      owner insight.
+  - name: secondary_simulator_never_masquerades_as_active_mt5_account
+    expected: >
+      Given the active PAPER lane is MT5 demo while the separate simulator has a
+      different balance, P&L, and position count, the cockpit labels MT5 DEMO as
+      PRIMARY and the simulator as SECONDARY - NOT ACTIVE ACCOUNT. Values are
+      neither merged nor substituted, and every conflict remains inspectable.
+  - name: open_pnl_and_growth_measurement_include_reported_carry_costs
+    expected: >
+      Given MT5 positions report price P&L plus swap or carry, live telemetry,
+      active-account truth, and the Operator briefing expose the gross price
+      component, carry component, and net open P&L after those reported costs.
+      A balance snapshot or pre-swap position sum is never mislabeled realized
+      net account growth.
+  - name: mt5_cashflow_adjusted_realized_growth_reconciles_to_balance
+    expected: >
+      Given complete authoritative MT5 deal history for the selected account,
+      CAS classifies deposits, withdrawals, credit, and bonuses as external
+      capital flow, includes profit, commission, swap, and fee from every deal,
+      and reports cashflow-adjusted realized growth only when the ledger plus
+      opening capital ties to the current balance and every deal type is
+      understood. A stale account, incomplete opening history, unknown deal
+      type, balance mismatch, or component residual makes growth unavailable;
+      open P&L remains separate and unrealized.
+  - name: recent_outcome_logic_uses_chronological_broker_closes
+    expected: >
+      Given broker outcomes arrive or merge out of order, CAS sorts them by
+      normalized broker close time before choosing recent samples or applying
+      post-loss differentiation. File insertion order cannot make an older win
+      hide a newer loss or make an older loss veto a newer result.
+  - name: learning_groups_rank_after_cost_expectancy_before_win_rate
+    expected: >
+      Given one exact behavior group wins often but loses money after costs and
+      another wins less often but has positive after-cost expectancy and net
+      P&L, CAS ranks the profitable group first and labels win rate supporting
+      evidence only.
+  - name: adaptation_promotion_requires_exact_profitable_behavior_group
+    expected: >
+      Given outcomes span different symbols, timeframes, directions, or
+      profiles, CAS does not pool them to satisfy a promotion threshold. The
+      exact promoted group must meet its own sample threshold and have positive
+      after-cost expectancy and net P&L; profit from another group cannot
+      authorize it.
+  - name: press_size_and_promotion_require_regime_comparable_outcomes
+    expected: >
+      Given a pooled symbol, timeframe, direction, and strategy group is
+      profitable and sample-ready only because outcomes from trend, range, or
+      other regimes were combined, CAS retains the pooled evidence as context
+      but rejects PRESS_EDGE, MAX_WITHIN_ENVELOPE, and adaptation promotion.
+      One known opening-regime subgroup must independently meet the minimum
+      sample, complete broker-valued risk evidence, positive after-cost R and
+      cash growth, and leave-one-best-out robustness requirements. UNKNOWN
+      regime history cannot supply that authority. Ordinary owner-fenced
+      autonomous PAPER exploration remains available at bounded size.
+  - name: operator_chat_preserves_north_star_account_truth_under_context_pressure
+    expected: >
+      Given a full owner-chat context exceeds a section or final packet budget,
+      the prompt still begins with ACTIVE_ACCOUNT_NORTH_STAR containing the
+      current account identity, balance, equity, position count, price P&L,
+      swap or carry, commission, net open P&L, baseline status, and separate
+      simulator and replay labels. The declared fast_owner_chat profile reports
+      DECISION_GRADE_CONTEXT only when all of its required owner-explanation
+      sections are present; it does not claim to replace the full scheduled
+      learning and adaptation profile.
+  - name: open_position_stop_risk_reaches_operator_and_ui
+    expected: >
+      Given an open broker position with entry, current quote, protective stop,
+      broker tick economics, and current equity, CAS exposes its direction-aware
+      entry-to-current-stop risk, remaining-to-stop drawdown, current cap, and
+      breach status to the MT5 panel, ordinary Operator chat, and immediate
+      position-management context without creating a retroactive forced-close
+      action.
+  - name: market_closed_positions_report_watching_not_broken
+    expected: >
+      Given protected open positions and stale terminal ticks during weekend or
+      post-Friday-close hours, CAS reports the quote as market closed and the
+      management loop as WATCHING_MARKET_CLOSED. It keeps exact block reasons
+      visible and sends no new broker-management action until fresh executable
+      quote truth returns.
+  - name: m1_m5_fresh_micro_scalp_reaches_operator_dispatch
+    expected: >
+      Given fresh completed M1 or M5 broker candles and a current executable
+      quote, CAS derives the current direction and geometry, labels the candidate
+      MICRO_SCALP, and submits that exact candidate to the immediate AI Operator
+      before the normal guarded dispatch path. No historical replay direction or
+      default midpoint enters broker-bound collection.
+  - name: timeframe_scans_rotate_without_cross_cache_starvation
+    expected: >
+      Given M1, M5, M15, and H1 are enabled in the owner-fenced timeframe dial,
+      consecutive scheduler cycles rotate those lanes and maintain independent
+      scan caches so an H1 scan cannot suppress a fresh M1 or M5 scalp scan.
+  - name: cache_throttled_scheduler_call_is_not_a_completed_market_scan
+    expected: >
+      Given a timeframe/universe scan remains inside its cache TTL, the next
+      scheduler call reports SCAN_THROTTLED_CACHE and
+      fresh_market_scan_performed=false while retaining the prior full-scan
+      evidence. Operator chat and scheduled context do not describe that call as
+      a completed market scan or as a new no-opportunity observation.
+  - name: pre_operator_candidate_starvation_reaches_operator_context
+    expected: >
+      Given repeated fresh PAPER or DEMO scans form no candidate because every
+      observed directional score is below the configured floor, the Operator's
+      mandatory context reports ALL_OBSERVED_LANES_BELOW_DIRECTIONAL_FLOOR,
+      attempt counts, active timeframes, the strongest rejected lane, current
+      floor, best tokenless shadow-PASS lane, owner bounds, paper-learning state,
+      and active dispatch bridge. The Operator then makes an evidence-based
+      owner-fenced adjustment or names an explicit STAND_DOWN. No threshold
+      bypass, executable PASS claim, order, or money movement occurs merely from
+      this visibility packet.
+  - name: below_floor_shadow_pass_is_non_authorizing
+    expected: >
+      Given an observed direction is below the current admission floor, the
+      scanner may perform a read-only edge preview at an in-memory floor of zero
+      and report PASS statistics. That preview sets unregistered=true,
+      authorization_minted=false, and edge_token_present=false; it cannot call
+      mint_token, register an authorization, form a RouteIntent, touch a broker,
+      send an order, or move money.
+  - name: best_shadow_pass_lane_drives_bounded_paper_admission
+    expected: >
+      Given every observed lane is below the current floor but at least one
+      tokenless shadow preview statistically passes, the focused Operator
+      contract identifies the best shadow-PASS lane separately from the highest
+      directional score and permits at most an owner-fenced PAPER floor change
+      to that shadow lane's exact score. The daily target deficit is not a valid
+      reason, and the change itself authorizes no order.
+  - name: paper_shadow_pass_policy_restores_candidate_flow_after_invalid_model
+    expected: >
+      Given both focused model responses violate the candidate-starvation
+      contract, PAPER learning is active, MT5Bridge is order-send ready, the best
+      shadow PASS is unregistered and tokenless, owner bounds permit the exact
+      score, and all fail-safe predicates pass, the deterministic continuation
+      policy may set only min_directional_confidence to that score. It cannot run
+      in LIVE, register an edge, form a route, touch a broker, or send an order.
+  - name: restored_candidate_reaches_immediate_operator_and_mt5_demo
+    expected: >
+      Given the bounded PAPER admission change allows a later fresh candidate to
+      form, that candidate must obtain a new ordinary edge PASS and one-shot
+      authorization, pass risk feasibility, receive an independent immediate
+      Operator decision, and traverse order dispatch and execution guard before
+      MT5 demo can accept it. The resulting broker ticket, filled price, SL, TP,
+      lot size, risk estimate, model provenance, and demo/live-money distinction
+      are durably recorded; the prior shadow preview is never reused.
+  - name: closed_quote_cannot_consume_route_identity
+    expected: >
+      Given a completed-candle setup while the broker quote is closed, missing,
+      stale, unusable, or materially future-dated, CAS emits no RouteIntent and
+      writes no one-shot route key. The setup may be evaluated afresh after
+      executable quote truth returns.
+  - name: blocked_pass_cannot_starve_later_actionable_candidate_lanes
+    expected: >
+      Given an earlier scan lane has a PASS but current quote truth is closed,
+      stale, missing, unusable, materially future-dated, or its exact one-shot
+      route was already emitted, the scanner records the blocker and continues
+      through later owner-allowed lanes. Only an actionable candidate may stop
+      the scan or reach RouteIntent formation; if every candidate is blocked,
+      runtime reports NO_ACTIONABLE_ROUTE and sends no order.
+  - name: completed_candle_transform_precedes_candidate_preview
+    expected: >
+      Given the newest market bar is still forming, candidate state removes it
+      and rebuilds entry pairs, profile, tuning, and CAS features before edge
+      preview, current-quote actionability, duplicate checks, and scan ranking.
+      Preview and final RouteIntent therefore bind the same completed-candle
+      route key; an already-emitted setup cannot appear new merely because the
+      preview included a forming bar.
+  - name: operator_chat_reports_current_trade_path_before_strategy_commentary
+    expected: >
+      Given the owner asks why CAS did not scalp or trade, the primary model
+      response leads with the current market-open state, selected timeframe
+      lane, and immediate route blockers. It clearly separates those facts from
+      risk or evidence commentary and does not misstate public-launch readiness
+      as a paper/demo execution block.
+  - name: slow_chart_refresh_cannot_silence_operator_chat
+    expected: >
+      Given a chart provider or MT5 candle call that exceeds its refresh window,
+      the chart returns stale or timeout telemetry from its isolated one-flight
+      worker while health, Operator state, and Operator Ask remain responsive.
+  - name: spec_context_status_cannot_starve_behind_deep_cache
+    expected: >
+      Given a current governing snapshot on disk, the read-only spec status
+      endpoint returns the current version and both prompt surfaces even when an
+      unrelated deep-cache refresh is slow or stalled.
+  - name: operator_percentage_points_are_not_rescaled
+    expected: >
+      Given a per-trade risk cap of 0.1 percentage points, both ordinary chat and
+      scheduled Operator prompts state that 0.1 means 0.1%, expose a 0.1% human-
+      readable label, and never describe the cap as 10%.
+  - name: explicit_owner_risk_override_survives_api_restart
+    expected: >
+      Given the owner explicitly sets a numeric or null risk override, CAS
+      atomically stores the override snapshot before activating it. After an API
+      restart, the same explicit key and value reload, owner_override remains
+      the effective source for that dimension, and reset removes the durable
+      file so AI-dial then static-config precedence resumes.
+  - name: risk_preview_uses_effective_dispatch_posture
+    expected: >
+      Given an owner-layer value differs from static config but equals the
+      already-effective AI dial, preview reports the owner-layer difference and
+      effective posture separately. The effective posture is unchanged, so no
+      anti-impulse journal, confirmation, or cooldown is invented. A change that
+      actually widens broker-facing latitude still receives every required
+      friction gate.
+  - name: live_pending_keeps_paper_learning_active
+    expected: >
+      Given LIVE is requested but not yet authorized and paper trading is
+      enabled, the autonomous scheduler continues collecting, managing, and
+      dispatching through a final paper-only lane without touching a live
+      account.
+  - name: paper_fallback_uses_execution_capable_bridge
+    expected: >
+      Given the connected MT5 account is demo but terminal order_send is not
+      available, the paper lane uses the durable internal simulator; given an
+      execution-ready demo terminal, it may use that demo bridge. A connected
+      live terminal is never selected by the fallback lane.
+  - name: algo_on_enables_real_mt5_demo_execution_learning
+    expected: >
+      Given the connected account is positively identified as demo and terminal
+      Algo Trading, account trading, and expert trading are ON, CAS may route an
+      Operator-approved paper order to MT5 and collect the resulting broker demo
+      receipt without human confirmation. With terminal Algo Trading OFF, that
+      same lane cannot claim MT5 execution learning.
+  - name: broker_server_clock_is_normalized_before_history_join
+    expected: >
+      Given the broker encodes MT5 epochs in server-local time, CAS detects the
+      whole-hour offset from a current terminal tick, shifts the deal-history
+      query window, retains raw timestamps, and joins normalized UTC closes
+      without waiting for the host clock to catch up.
+  - name: operator_order_attempt_binds_to_closed_demo_position
+    expected: >
+      Given an Operator-approved AI order was executed through MT5 demo and the
+      position later closes, the finalized order-attempt decision_ref and exact
+      broker position ticket bind that outcome into learning even when no legacy
+      WASTE-cycle row exists. A repeated sync produces no duplicate outcome.
+  - name: demo_fill_never_claimed_as_live_money
+    expected: >
+      Given account_mode is DEMO, execution provenance reports PAPER_MT5 and
+      MT5_DEMO_BROKER with live_money=false. Any older LIVE_MT5 classification
+      receives an immutable correction event rather than a rewritten history row.
+  - name: sunday_reopen_and_tick_freshness_are_not_conflated
+    expected: >
+      Given Sunday reaches 22:00 UTC, the forex weekly schedule permits current
+      broker ticks while Friday after 22:00 UTC and Saturday remain closed.
+      Account snapshot age and per-symbol market-tick age/status are reported
+      separately, so a fresh terminal read containing an old tick cannot be
+      displayed or used as current market movement.
+  - name: interrupted_demo_order_receipt_recovers_without_retry
+    expected: >
+      Given one unresolved PAPER or DEMO MT5 attempt and exactly one compatible
+      closed-history position, CAS finalizes the original attempt as
+      BROKER_EXECUTED_RECOVERED_FROM_DEMO_HISTORY, binds the broker ticket into
+      learning, writes cumulative recovery evidence, and sends no new order.
+      Repeated sync is idempotent; ambiguous and live attempts do not auto-recover.
+  - name: dispatch_status_reports_running_while_rich_diagnostics_refresh
+    expected: >
+      Given a local dispatch thread is alive while supervisor, Operator, broker,
+      or ledger diagnostics are slow, the status endpoint returns a bounded
+      FAST_IN_MEMORY_SHELL with truthful running, lane, cycle, management, and
+      durable-control fields instead of WARMING or stopped. Rich diagnostics
+      continue asynchronously and never replace action-time broker truth.
+  - name: assistant_and_operator_answer_compounding_without_timeout_or_navigation_misroute
+    expected: >
+      Given the owner asks whether the Operator should open or compound winning
+      trades, both chat surfaces answer the trading-authority question within
+      their response budgets using current dispatch truth. Neither sends the
+      owner to the Trade page, waits indefinitely on a local model, claims a
+      stopped loop while it is running, nor places an order from chat itself.
+      Known outage questions return immediate bounded local truth. With a
+      configured and reachable tiered DeepSeek path, free-form Operator and
+      Assistant questions return labeled model responses inside their explicit
+      budgets; status does not claim reachability merely because a route exists.
+      A question such as WHY DONT YOU SCALP TRADE returns immediate
+      LOCAL_TRADE_PATH_TRUTH from the cockpit's rich dispatch snapshot plus the
+      newest heartbeat; cold-start telemetry is labeled WARMING rather than
+      misreported as a completed AI decision.
+  - name: deepseek_v4_flash_and_pro_are_capability_probed_and_role_bound
+    expected: >
+      Given the DeepSeek V4 Ollama Cloud transport is configured, an ordinary
+      owner-chat request routes first to deepseek-v4-flash:cloud while a
+      compound_scale_in or other configured high-consequence request routes
+      first to deepseek-v4-pro:cloud. Both role routes report independent fresh
+      generation health and retain actual provider, model, role, and request
+      kind. Exhausted Claude allowance does not block either DeepSeek lane, and
+      successful DeepSeek calls do not increment Claude spent_tokens. Model
+      probes and chats send no broker order, move no money, and change no dial.
+  - name: gemma4_31b_cloud_backup_is_capability_probed_and_failover_bound
+    expected: >
+      Given Gemma 4 backup is enabled, an ordinary request chain is
+      deepseek-v4-flash:cloud then gemma4:31b-cloud, and a high-consequence
+      request chain is deepseek-v4-pro:cloud, deepseek-v4-flash:cloud, then
+      gemma4:31b-cloud before legacy fallbacks. A bounded forced first-rung
+      transport failure reaches Gemma through the real ModelProvider path,
+      records failover, and returns schema-valid JSON with
+      status=CAS_GEMMA4_BACKUP_READY, action=STAND_DOWN, and orders=[]. The
+      proof rejects commentary, malformed JSON, or a nonempty order list and
+      sends no broker order, moves no money, and changes no dial.
+  - name: assistant_context_builders_are_bounded_and_topic_scoped
+    expected: >
+      Given an ordinary Assistant trading question while mobile, APK, Docker,
+      public-launch, or spec diagnostics are slow, the API event-loop heartbeat
+      remains responsive and the model request begins after no more than the
+      explicit context budget. The prompt receives fast dispatch truth, a compact
+      governing-spec digest, and the command catalog. Expensive external-readiness
+      evidence is loaded only when the owner asks for that topic, and a timeout
+      becomes an honest unavailable marker instead of an unanswered request.
+  - name: assistant_local_fallback_cannot_invent_current_regime
+    expected: >
+      Given the paid Assistant model is unavailable and the installed local
+      deepseek-r1 provider is selected, a conceptual free-form question returns
+      an ai-local answer inside the bounded local-model window with bounded output.
+      Given a question asks which strategy fits the current PAPER or LIVE lane but
+      the fast runtime snapshot contains no validated regime classification, the
+      Assistant states that limitation and does not invent a trend, range,
+      momentum, volatility, or opportunity. Neither answer sends an order.
+  - name: exhausted_claude_budget_uses_working_local_operator_model
+    expected: >
+      Given the finite Claude allowance is exhausted, the Operator selects the
+      installed deepseek-r1 local model, disables hidden reasoning output, keeps
+      the model warm, and returns a concise English MODEL_PRIMARY reply inside
+      the bounded 55-second API / 50-second model window. Ordinary free-form
+      questions do not fail merely because Claude is unavailable, and local
+      discretionary position review is throttled so it cannot continuously
+      starve owner chat. Assistant diagnostics recognize the selected local
+      Operator provider as a configured free-form path and do not call it
+      unavailable merely because the Claude allowance is exhausted. Positive
+      questions such as are you responding return grounded runtime truth
+      without model inference or broad all-systems-green claims.
+  - name: local_operator_structured_decisions_survive_paid_budget_exhaustion
+    expected: >
+      With no paid-model allowance remaining, Ollama loads the configured
+      16,384-token context and JSON response mode. Immediate entry and position
+      prompts retain complete exact-candidate evidence in durable audit, project
+      a compact model view that omits only duplicated global group ledgers, and
+      return binding-complete structured decisions. Malformed or incomplete
+      output fails closed before broker touch.
+  - name: daily_realized_loss_cap_blocks_model_and_degraded_fallback_entries
+    expected: >
+      Given daily_loss_cap_usd is positive and reconciled broker realized P&L
+      today is at or below the negative boundary, the immediate Operator stands
+      down before calling a model and the final execution chokepoint independently
+      rejects every new entry or scale-in with daily_loss_cap_usd in its blocking
+      caps and no broker touch. Model approval and PAPER_POLICY_FALLBACK cannot
+      bypass the boundary. Existing-position protection, take-profit, partial
+      close, and full close remain available. If the cap is active but reconciled
+      daily truth is unavailable, new exposure fails closed; zero disables it.
+  - name: daily_loss_truth_rolls_on_utc_day_and_detects_same_balance_deals
+    expected: >
+      Given the stored reconciled growth snapshot belongs to the prior UTC day,
+      the scheduler and guard force a current-day refresh before admitting new
+      exposure and never carry yesterday's realized-today value forward. Given
+      new broker deals occur while an offsetting capital flow leaves balance
+      unchanged, a changed latest-deal fingerprint still forces refresh and the
+      current UTC day's complete realized result governs entry and scale-in.
+  - name: explicit_actionless_select_normalizes_to_stand_down_only
+    expected: >
+      Given a provider returns SELECT with null action_ref, null intent,
+      NOT_APPLICABLE growth case, and explicit HOLD or keep-open rationale, CAS
+      records the raw decision and normalization reason, emits canonical
+      STAND_DOWN, selects no broker action, and touches no broker. The adapter
+      cannot convert that response into executable authority.
+  - name: noncanonical_position_hold_is_bounded_and_mutations_fail_closed
+    expected: >
+      Given a provider returns a noncanonical single-position or global HOLD,
+      WAIT, KEEP_OPEN, NO_ACTION, or STAND_DOWN response, CAS may map it only to
+      the uniquely identified supplied position or all expected positions as
+      audited no-action decisions. An ambiguous position, unknown position, or
+      any noncanonical close, reduce, modify, trail, or scale request lacks an
+      exact supplied action_ref and fails closed before broker touch.
+  - name: omitted_position_decision_becomes_audited_stand_down
+    expected: >
+      Given a structured position response omits one required position while
+      every supplied executable selection is otherwise exact, CAS inserts an
+      audited STAND_DOWN for the omitted position. It never guesses an action,
+      symbol, direction, ticket, lot, or action_ref for that position.
+  - name: execution_receipt_time_overrides_materially_future_broker_position_time
+    expected: >
+      Given a broker reports an open-position timestamp materially ahead of the
+      host UTC clock while CAS retains the exact broker-execution receipt time,
+      position age and discretionary hysteresis use the normalized CAS receipt
+      timestamp and log the opened_at source. A future broker-server timestamp
+      cannot freeze age at zero or indefinitely suppress eligible management.
+  - name: natural_operator_management_receipt_binds_decision_execution_and_learning
+    expected: >
+      Given a natural PAPER or DEMO v14 Operator decision selects exact supplied
+      management actions, every broker effect retains the Operator event hash
+      and action_ref, passes order_dispatch.py and execution_guard.py, reconciles
+      a terminal receipt, and binds the eventual after-cost broker outcome into
+      learning. The evidence distinguishes management from a new entry order,
+      records no per-action human confirmation, and never implies money movement
+      or durable future edge.
+  - name: model_response_contract_rejection_is_not_reported_as_provider_outage
+    expected: >
+      Given the Operator model transport returns a response but JSON parsing or
+      semantic validation rejects it, CAS records model_transport_ok=true,
+      model_response_rejected=true, and MODEL_RESPONSE_CONTRACT as the failure
+      stage. The action stands down or uses only the existing bounded PAPER
+      fallback, but the runtime never calls the provider unavailable. A genuine
+      timeout or unreachable provider instead records MODEL_PROVIDER and
+      model_transport_ok=false.
+  - name: late_completed_trading_model_result_is_single_use_and_kind_bound
+    expected: >
+      Given an entry or position-management model request exceeds its
+      wall-clock budget but later completes, the dispatch scheduler, broker
+      reconciliation, position protection, and owner chat continue without
+      waiting. The completed result may be delivered exactly once to the same
+      decision kind with its original request fingerprint. It is never replayed
+      to a second cycle, never crosses between entry and position management,
+      and cannot affect an account until current action references, broker
+      truth, mode, risk, and execution gates are revalidated.
+  - name: model_ready_requires_fresh_successful_generation
+    expected: >
+      Given a provider is selected, installed, or configured but its latest
+      real generation failed, timed out, or has become stale, Assistant and
+      Operator status report FAILED, STALE, or NOT_PROBED instead of READY and
+      retain the exact provider error. An Ollama RAM or VRAM capacity response
+      remains visible to the owner. READY appears only after a fresh real
+      generation succeeds.
+  - name: authorized_compound_slot_extends_only_exact_scale_in_lane
+    expected: >
+      Given the ordinary per-symbol entry cap is already full and the owner has
+      delegated one or more compound units, an ordinary duplicate entry and an
+      unverified is_compound_add flag remain blocked at the base cap. Only after
+      the exact parent-bound, sizing-bound, short-lived one-shot scale-in
+      authorization succeeds may the final risk gate add the configured
+      compound-slot allowance. Planning and dispatch expose the same base cap,
+      authorized allowance, and effective cap; the ordinary entry cap remains
+      unchanged.
+  - name: settings_and_management_runtime_share_active_scheduler_broker_truth
+    expected: >
+      Given the autonomous scheduler is active on an MT5 demo or live lane, the
+      Settings handoff, AI Hedge handoff, and manual management-cycle route
+      resolve the scheduler's active bridge, account mode, broker positions, and
+      current broker truth. They never substitute a static simulator or a
+      disconnected default for that active runtime. If no active scheduler
+      runtime is available, the handoff is explicitly blocked or warming rather
+      than fabricated.
+  - name: review_interval_deferral_is_not_operator_stand_down
+    expected: >
+      Given a recent valid position review has the same material trigger hash
+      and the bounded review interval has not elapsed, CAS reports
+      AI_OPERATOR_REVIEW_DEFERRED with the current exact broker-valid choices,
+      next review time, and no model call or broker action. It does not count the
+      deferral as a model stand-down. A material account, protection, profit-band,
+      candidate-menu, guidance, control, or outcome change invalidates the
+      deferral and wakes a fresh review inside the interval.
+  - name: local_entry_and_position_models_receive_exact_json_schema
+    expected: >
+      Given entry or position discretion uses the local model, the Ollama request
+      carries the exact corresponding JSON schema, including required top-level
+      fields, decision enums, immutable candidate or position keys, sizing_ref or
+      action_ref binding, and bounded additional properties. Generic JSON-object
+      mode is insufficient. Output that violates the schema or semantic contract
+      is rejected before broker touch and is not mislabeled as provider outage.
+  - name: unique_bare_ticket_key_normalizes_without_relaxing_action_authority
+    expected: >
+      Given the model returns a bare broker ticket key that maps to exactly one
+      supplied canonical ticket:<id> position, CAS may normalize only that key
+      and retain the mapping in audit. The chosen mutation must still reference
+      one exact supplied immutable action_ref. Unknown or ambiguous ticket keys,
+      invented actions, and missing action_ref values fail closed before broker
+      touch.
+  - name: dual_chat_surfaces_disclose_answer_source
+    expected: >
+      Given either owner chat surface answers from deterministic CAS runtime
+      truth, the selected local model, Claude, or an explicit error fallback, the
+      rendered reply visibly discloses that source. A local runtime answer is not
+      presented as model inference, and a model response is not presented as a
+      broker execution receipt.
+  - name: natural_local_model_scale_in_executes_and_reconciles
+    expected: >
+      Given the local Operator selects one exact protected net-winning parent,
+      one exact scale_in action_ref, and one broker-grid lot option inside the
+      owner envelope, the one-shot authorization passes through order_dispatch.py
+      and execution_guard.py, the MT5 demo broker returns a child ticket, parent
+      volume reconciliation proves the add, and the immutable receipt records the
+      actual local provider and model. No per-action human confirmation is
+      required, and the evidence is labeled demo rather than live money.
+  - name: repeated_low_exposure_position_cap_starvation_reaches_operator
+    expected: >
+      Given at least three fresh cross-market candidates across at least two
+      symbols are blocked only by a full concurrent-position cap while total lot
+      exposure is no more than 25 percent of its separate ceiling, no explicit
+      owner cap override exists, and the owner envelope permits one more slot,
+      the focused scheduled Operator must either select the exact current-plus-one
+      cap or return an evidence-based STAND_DOWN citing the cap, event count,
+      exposure utilization, and portfolio or edge reason. A multi-slot jump is
+      rejected, the review itself touches no broker, and every later entry still
+      requires its own fresh execution gates and immediate Operator decision.
+  - name: position_capacity_widening_revalidates_fresh_mt5_state_at_apply_time
+    expected: >
+      Given a one-slot capacity decision was valid when proposed, CAS refreshes
+      the active MT5 account and positions immediately before applying it. If
+      the cap is no longer full, exposure exceeds 25 percent, the current cap or
+      owner envelope changed, or broker truth is unavailable, CAS skips the dial
+      change, records the exact clearing or block reason, and grants no order
+      authority. Only unchanged fresh state may apply the exact one-slot update.
+  - name: unallowlisted_destination_blocks_money_movement
+    expected: >
+      A payout or withdrawal to a destination outside the allowlist is blocked
+      and escalated for owner setup.
+  - name: master_kill_blocks_all_side_effects
+    expected: >
+      When the master kill switch is active, every trade and money-movement
+      action is blocked.
+
+one_line_summary: >
+  CAS Forex is an autonomous AI trading and money-movement platform: the AI
+  places orders, manages positions, takes profit, and initiates configured
+  funds movement through enforced dispatch, risk, broker-truth, provider,
+  receipt, and kill-switch gates; humans configure and recover authority, but
+  do not approve every in-envelope action.

@@ -25,6 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "evidence_runs" / "terminal_position_reconciliation"
 REPORT_KIND = "cas_forex_terminal_position_reconciliation_report"
 RECONCILIATION_SCHEMA = "cas_forex_terminal_position_reconciliation.v1"
+MAX_UNMATCHED_HISTORY_DETAILS = 200
 CLAIM_BOUNDARY = (
     "Terminal position reconciliation compares CAS Forex memory with terminal "
     "receipts, account snapshots, open-position evidence, and closed-history "
@@ -66,7 +67,14 @@ def _lane_for_record(record: Mapping[str, Any]) -> str:
     if broker_mode is None:
         return LANE_MT4_MAILBOX
     text = str(broker_mode).strip().upper()
-    if text.startswith("PAPER_MT5") or text.startswith("MT5"):
+    if "MT5" in text:
+        return LANE_MT5_DEMO
+    return LANE_MT4_MAILBOX
+
+
+def _active_execution_lane(value: Any) -> str:
+    token = str(value or LANE_MT4_MAILBOX).strip().lower()
+    if token in {LANE_MT5_DEMO, "mt5", "mt5_direct", "paper_mt5", "live_mt5"}:
         return LANE_MT5_DEMO
     return LANE_MT4_MAILBOX
 
@@ -82,11 +90,13 @@ def build_terminal_position_reconciliation_report(
     history_ingest_report: Optional[Mapping[str, Any]] = None,
     memory_report: Optional[Mapping[str, Any]] = None,
     mt4_history_export_verifier_report: Optional[Mapping[str, Any]] = None,
+    active_execution_lane: Optional[str] = None,
     output_dir: Path | str = DEFAULT_OUTPUT_DIR,
     write_report: bool = True,
 ) -> Dict[str, Any]:
     """Build a reconciliation report from the latest terminal/memory evidence."""
 
+    active_lane = _active_execution_lane(active_execution_lane)
     bridge = _source("terminal_bridge_supervisor", terminal_bridge_report, load_latest_terminal_bridge_supervisor_report)
     receipts = _source("terminal_receipt_ingest", receipt_ingest_report, load_latest_terminal_receipt_ingest_report)
     history = _source("terminal_history_ingest", history_ingest_report, load_latest_terminal_history_ingest_report)
@@ -98,11 +108,13 @@ def build_terminal_position_reconciliation_report(
     memory_updates = list((history["payload"] or {}).get("memory_updates") or [])
     memory_records = list((memory["payload"] or {}).get("memory_records") or [])
     receipt_records = list((receipts["payload"] or {}).get("receipt_records") or [])
+    classified_unmatched_history = _classified_unmatched_history_rows(history["payload"])
 
     closed_keys = _closed_identity_keys(history_records, memory_updates, memory_records)
     terminal_positions = _terminal_open_positions(account_snapshot, receipt_records, closed_keys)
     cas_positions = _cas_open_positions(memory_records, closed_keys)
     reconciled, mismatched = _match_open_positions(cas_positions, terminal_positions)
+    classified_unmatched = [_classify_unmatched_open_position(item) for item in mismatched]
 
     summary = _summary(
         bridge=bridge,
@@ -114,9 +126,11 @@ def build_terminal_position_reconciliation_report(
         terminal_positions=terminal_positions,
         cas_positions=cas_positions,
         reconciled=reconciled,
-        mismatched=mismatched,
+        mismatched=classified_unmatched,
         memory_updates=memory_updates,
         history_records=history_records,
+        classified_unmatched_history=classified_unmatched_history,
+        active_execution_lane=active_lane,
     )
     checks = _checks(summary)
     status = _reconciliation_status(summary, checks)
@@ -138,12 +152,16 @@ def build_terminal_position_reconciliation_report(
         "cas_open_positions": cas_positions,
         "reconciled_open_positions": reconciled,
         "unmatched_open_positions": mismatched,
+        "classified_unmatched_open_positions": classified_unmatched,
         "closed_history": {
             "history_record_count": len(history_records),
             "memory_update_count": len(memory_updates),
             "history_records": history_records[:20],
             "memory_updates": memory_updates[:20],
         },
+        "classified_unmatched_history_record_count": len(classified_unmatched_history),
+        "classified_unmatched_history_records": classified_unmatched_history[:MAX_UNMATCHED_HISTORY_DETAILS],
+        "classified_unmatched_history_records_truncated": len(classified_unmatched_history) > MAX_UNMATCHED_HISTORY_DETAILS,
         "checks": checks,
         "claim_boundary": CLAIM_BOUNDARY,
         "next_action": _next_action(status, summary),
@@ -359,7 +377,8 @@ def _cas_open_positions(
 def _position_record(row: Mapping[str, Any], *, source: str) -> Dict[str, Any]:
     open_snapshot = row.get("condition_snapshot_open") if isinstance(row.get("condition_snapshot_open"), Mapping) else {}
     order = open_snapshot.get("order_request") if isinstance(open_snapshot.get("order_request"), Mapping) else {}
-    return {
+    broker_mode = _first_text(row, open_snapshot, order, keys=("broker_mode", "account_mode"))
+    record = {
         "position_id": _position_id(row, source),
         "source": source,
         "symbol": _first_text(row, open_snapshot, order, keys=("symbol", "instrument")),
@@ -374,7 +393,10 @@ def _position_record(row: Mapping[str, Any], *, source: str) -> Dict[str, Any]:
         "receipt_id": _first_text(row, open_snapshot, order, keys=("receipt_id",)),
         "memory_id": row.get("memory_id"),
         "status": row.get("status") or row.get("terminal_receipt_status") or row.get("outcome_label"),
+        "broker_mode": broker_mode,
     }
+    record["lane"] = _lane_for_record(record)
+    return record
 
 
 def _match_open_positions(
@@ -446,6 +468,8 @@ def _summary(
     mismatched: Sequence[Mapping[str, Any]],
     memory_updates: Sequence[Mapping[str, Any]],
     history_records: Sequence[Mapping[str, Any]],
+    classified_unmatched_history: Sequence[Mapping[str, Any]],
+    active_execution_lane: str,
 ) -> Dict[str, Any]:
     bridge_summary = ((bridge.get("payload") or {}).get("summary") or {}) if bridge.get("present") else {}
     receipt_summary = ((receipts.get("payload") or {}).get("summary") or {}) if receipts.get("present") else {}
@@ -454,6 +478,45 @@ def _summary(
     mt4_summary = ((mt4_export.get("payload") or {}).get("summary") or {}) if mt4_export.get("present") else {}
     cas_pending = sum(1 for row in cas_positions if row.get("receipt_pending"))
     cas_ack = len(cas_positions) - cas_pending
+    terminal_unattributed = sum(
+        1
+        for row in mismatched
+        if str(row.get("classification_status") or "") == "TERMINAL_UNATTRIBUTED_BROKER_POSITION"
+    )
+    terminal_memory_gap = sum(
+        1
+        for row in mismatched
+        if str(row.get("classification_status") or "") == "TERMINAL_ATTRIBUTED_MEMORY_GAP_POSITION"
+    )
+    cas_memory_only = sum(
+        1
+        for row in mismatched
+        if str(row.get("classification_status") or "") == "CAS_MEMORY_ONLY_POSITION"
+    )
+    cas_receipt_pending = sum(
+        1
+        for row in mismatched
+        if str(row.get("classification_status") or "") == "CAS_RECEIPT_PENDING_POSITION"
+    )
+    unmatched_history_count = int(
+        history_summary.get("unmatched_history_count")
+        or len(
+            [
+                row
+                for row in ((history.get("payload") or {}).get("classified_unmatched_history_records") or [])
+                if isinstance(row, Mapping)
+            ]
+        )
+        or 0
+    )
+    unmatched_unattributed_history_count = int(
+        history_summary.get("unmatched_unattributed_history_count")
+        or 0
+    )
+    unmatched_attributed_history_gap_count = int(
+        history_summary.get("unmatched_attributed_history_memory_gap_count")
+        or 0
+    )
 
     # Per-lane breakdown: separate the MT4-mailbox legacy rows from the
     # MT5 demo lane so the cockpit can show which numbers belong to which
@@ -462,6 +525,10 @@ def _summary(
     cas_open_by_lane: Dict[str, int] = {LANE_MT4_MAILBOX: 0, LANE_MT5_DEMO: 0}
     pending_receipt_by_lane: Dict[str, int] = {LANE_MT4_MAILBOX: 0, LANE_MT5_DEMO: 0}
     terminal_open_by_lane: Dict[str, int] = {LANE_MT4_MAILBOX: 0, LANE_MT5_DEMO: 0}
+    unmatched_open_by_lane: Dict[str, int] = {LANE_MT4_MAILBOX: 0, LANE_MT5_DEMO: 0}
+    unmatched_history_by_lane: Dict[str, int] = {LANE_MT4_MAILBOX: 0, LANE_MT5_DEMO: 0}
+    attributed_history_gap_by_lane: Dict[str, int] = {LANE_MT4_MAILBOX: 0, LANE_MT5_DEMO: 0}
+    unattributed_history_by_lane: Dict[str, int] = {LANE_MT4_MAILBOX: 0, LANE_MT5_DEMO: 0}
     for row in cas_positions:
         lane = row.get("lane") or _lane_for_record(row)
         cas_open_by_lane[lane] = cas_open_by_lane.get(lane, 0) + 1
@@ -470,7 +537,22 @@ def _summary(
     for row in terminal_positions:
         lane = row.get("lane") or _lane_for_record(row)
         terminal_open_by_lane[lane] = terminal_open_by_lane.get(lane, 0) + 1
+    for row in mismatched:
+        position = row.get("position") if isinstance(row.get("position"), Mapping) else {}
+        lane = position.get("lane") or _lane_for_record(position)
+        unmatched_open_by_lane[lane] = unmatched_open_by_lane.get(lane, 0) + 1
+    for row in classified_unmatched_history:
+        lane = row.get("lane") or _lane_for_record(row)
+        unmatched_history_by_lane[lane] = unmatched_history_by_lane.get(lane, 0) + 1
+        classification = str(row.get("classification_status") or "")
+        if classification == "TERMINAL_ATTRIBUTED_HISTORY_MEMORY_GAP":
+            attributed_history_gap_by_lane[lane] = attributed_history_gap_by_lane.get(lane, 0) + 1
+        elif classification == "TERMINAL_UNATTRIBUTED_BROKER_HISTORY":
+            unattributed_history_by_lane[lane] = unattributed_history_by_lane.get(lane, 0) + 1
+    active_lane = _active_execution_lane(active_execution_lane)
     return {
+        "active_execution_lane": active_lane,
+        "mt4_lane_required": active_lane == LANE_MT4_MAILBOX,
         "bridge_report_present": bool(bridge.get("present")),
         "receipt_ingest_report_present": bool(receipts.get("present")),
         "history_ingest_report_present": bool(history.get("present")),
@@ -488,15 +570,31 @@ def _summary(
         "cas_open_position_count": len(cas_positions),
         "cas_open_position_count_by_lane": dict(cas_open_by_lane),
         "pending_receipt_count_by_lane": dict(pending_receipt_by_lane),
+        "active_pending_receipt_count": int(pending_receipt_by_lane.get(active_lane, 0)),
         "cas_receipt_pending_open_count": cas_pending,
         "cas_receipt_ack_open_count": cas_ack,
         "terminal_open_position_count": len(terminal_positions),
         "terminal_open_position_count_by_lane": dict(terminal_open_by_lane),
+        "active_terminal_open_position_count": int(terminal_open_by_lane.get(active_lane, 0)),
         "reconciled_open_position_count": len(reconciled),
         "unmatched_open_position_count": len(mismatched),
+        "unmatched_open_position_count_by_lane": dict(unmatched_open_by_lane),
+        "active_unmatched_open_position_count": int(unmatched_open_by_lane.get(active_lane, 0)),
+        "terminal_unattributed_open_position_count": terminal_unattributed,
+        "terminal_memory_gap_open_position_count": terminal_memory_gap,
+        "cas_memory_only_open_position_count": cas_memory_only,
+        "cas_receipt_pending_open_position_count": cas_receipt_pending,
         "history_record_count": len(history_records),
         "memory_update_count": len(memory_updates),
-        "unmatched_history_count": int(history_summary.get("unmatched_history_count") or mt4_summary.get("unmatched_history_count") or 0),
+        "unmatched_history_count": unmatched_history_count or int(mt4_summary.get("unmatched_history_count") or 0),
+        "unmatched_history_count_by_lane": dict(unmatched_history_by_lane),
+        "active_unmatched_history_count": int(unmatched_history_by_lane.get(active_lane, 0)),
+        "unmatched_unattributed_history_count": unmatched_unattributed_history_count,
+        "unmatched_unattributed_history_count_by_lane": dict(unattributed_history_by_lane),
+        "active_unmatched_unattributed_history_count": int(unattributed_history_by_lane.get(active_lane, 0)),
+        "unmatched_attributed_history_memory_gap_count": unmatched_attributed_history_gap_count,
+        "unmatched_attributed_history_memory_gap_count_by_lane": dict(attributed_history_gap_by_lane),
+        "active_unmatched_attributed_history_memory_gap_count": int(attributed_history_gap_by_lane.get(active_lane, 0)),
         "terminal_history_joined_count": int(memory_summary.get("terminal_history_joined_count") or 0),
         "closed_profit_count": int(history_summary.get("closed_profit_count") or memory_summary.get("closed_profit_count") or 0),
         "closed_loss_count": int(history_summary.get("closed_loss_count") or memory_summary.get("closed_loss_count") or 0),
@@ -505,61 +603,139 @@ def _summary(
 
 
 def _checks(summary: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    mt4_required = bool(summary.get("mt4_lane_required", True))
+    active_pending = int(summary.get("active_pending_receipt_count", summary.get("pending_receipt_count", 0)) or 0)
+    active_unmatched_open = int(
+        summary.get("active_unmatched_open_position_count", summary.get("unmatched_open_position_count", 0)) or 0
+    )
+    active_history = int(summary.get("active_unmatched_history_count", summary.get("unmatched_history_count", 0)) or 0)
+    active_unattributed_history = int(
+        summary.get(
+            "active_unmatched_unattributed_history_count",
+            summary.get("unmatched_unattributed_history_count", 0),
+        )
+        or 0
+    )
+    active_attributed_history_gap = int(
+        summary.get(
+            "active_unmatched_attributed_history_memory_gap_count",
+            summary.get("unmatched_attributed_history_memory_gap_count", 0),
+        )
+        or 0
+    )
     checks = [
         _check(
             "terminal_bridge_report_present",
-            STATUS_OK if summary.get("bridge_report_present") else STATUS_UNVERIFIABLE,
+            STATUS_OK if summary.get("bridge_report_present") or not mt4_required else STATUS_UNVERIFIABLE,
             bool(summary.get("bridge_report_present")),
             "latest terminal bridge supervisor report present",
-            "Terminal bridge supervisor evidence is available." if summary.get("bridge_report_present") else "No terminal bridge supervisor report is available.",
+            (
+                "Terminal bridge supervisor evidence is available."
+                if summary.get("bridge_report_present")
+                else (
+                    "The MT4 bridge supervisor is inactive and is not required for the active MT5 execution lane."
+                    if not mt4_required
+                    else "No terminal bridge supervisor report is available."
+                )
+            ),
         ),
         _check(
             "heartbeat_fresh",
-            STATUS_OK if summary.get("heartbeat_status") == "FRESH" else STATUS_UNVERIFIABLE,
+            STATUS_OK if summary.get("heartbeat_status") == "FRESH" or not mt4_required else STATUS_UNVERIFIABLE,
             summary.get("heartbeat_status"),
             "terminal heartbeat is fresh",
-            f"Heartbeat status is {summary.get('heartbeat_status') or 'missing'}; terminal position truth needs a fresh heartbeat.",
+            (
+                "The MT4 heartbeat is inactive and is not a readiness requirement for direct MT5 execution."
+                if not mt4_required and summary.get("heartbeat_status") != "FRESH"
+                else f"Heartbeat status is {summary.get('heartbeat_status') or 'missing'}; terminal position truth needs a fresh heartbeat."
+            ),
         ),
         _check(
             "account_snapshot_present",
-            STATUS_OK if summary.get("account_snapshot_present") else STATUS_UNVERIFIABLE,
+            STATUS_OK if summary.get("account_snapshot_present") or not mt4_required else STATUS_UNVERIFIABLE,
             summary.get("account_snapshot_present"),
             "terminal account snapshot is present",
-            "Account snapshot is present." if summary.get("account_snapshot_present") else "No terminal account snapshot is present.",
+            (
+                "Account snapshot is present."
+                if summary.get("account_snapshot_present")
+                else (
+                    "The MT4 mailbox snapshot is inactive; the broker-truth monitor reads the active MT5 account directly."
+                    if not mt4_required
+                    else "No terminal account snapshot is present."
+                )
+            ),
         ),
         _check(
             "receipt_lifecycle_clear",
-            STATUS_MISMATCH if summary.get("receipt_mismatch_count", 0) > 0 else (STATUS_UNVERIFIABLE if summary.get("pending_receipt_count", 0) > 0 else STATUS_OK),
-            {"pending": summary.get("pending_receipt_count"), "mismatches": summary.get("receipt_mismatch_count")},
+            STATUS_MISMATCH if summary.get("receipt_mismatch_count", 0) > 0 else (STATUS_UNVERIFIABLE if active_pending > 0 else STATUS_OK),
+            {
+                "active_lane": summary.get("active_execution_lane"),
+                "active_pending": active_pending,
+                "pending_all_lanes": summary.get("pending_receipt_count"),
+                "mismatches": summary.get("receipt_mismatch_count"),
+            },
             "terminal receipts are verified and not pending",
             "Receipt lifecycle has no pending or mismatched terminal responses."
-            if summary.get("pending_receipt_count", 0) == 0 and summary.get("receipt_mismatch_count", 0) == 0
-            else "Receipt lifecycle still has pending or mismatched terminal responses.",
+            if active_pending == 0 and summary.get("receipt_mismatch_count", 0) == 0
+            else "The active execution lane still has pending or mismatched terminal responses.",
         ),
         _check(
             "open_positions_match",
-            STATUS_MISMATCH if summary.get("unmatched_open_position_count", 0) > 0 and summary.get("cas_receipt_pending_open_count", 0) == 0 else (STATUS_UNVERIFIABLE if summary.get("cas_receipt_pending_open_count", 0) > 0 else STATUS_OK),
-            {"cas": summary.get("cas_open_position_count"), "terminal": summary.get("terminal_open_position_count"), "unmatched": summary.get("unmatched_open_position_count")},
+            STATUS_MISMATCH if active_unmatched_open > 0 and active_pending == 0 else (STATUS_UNVERIFIABLE if active_pending > 0 else STATUS_OK),
+            {
+                "active_lane": summary.get("active_execution_lane"),
+                "cas": summary.get("cas_open_position_count_by_lane", {}).get(summary.get("active_execution_lane")),
+                "terminal": summary.get("active_terminal_open_position_count"),
+                "unmatched": active_unmatched_open,
+                "unmatched_all_lanes": summary.get("unmatched_open_position_count"),
+            },
             "CAS open position memory matches terminal open positions",
-            "Open positions match." if summary.get("unmatched_open_position_count", 0) == 0 else "Open positions cannot all be matched between CAS memory and terminal evidence.",
+            "Open positions match on the active execution lane."
+            if active_unmatched_open == 0
+            else "Open positions cannot all be matched between CAS memory and active-lane terminal evidence.",
         ),
         _check(
             "closed_history_joined",
-            STATUS_MISMATCH if summary.get("unmatched_history_count", 0) > 0 else (STATUS_UNVERIFIABLE if summary.get("history_record_count", 0) > 0 and summary.get("memory_update_count", 0) == 0 else STATUS_OK),
-            {"history_rows": summary.get("history_record_count"), "memory_updates": summary.get("memory_update_count"), "unmatched_history": summary.get("unmatched_history_count")},
+            (
+                STATUS_MISMATCH
+                if active_attributed_history_gap > 0
+                else (
+                    STATUS_UNVERIFIABLE
+                    if active_history > 0 or (summary.get("history_record_count", 0) > 0 and summary.get("memory_update_count", 0) == 0)
+                    else STATUS_OK
+                )
+            ),
+            {
+                "active_lane": summary.get("active_execution_lane"),
+                "history_rows": summary.get("history_record_count"),
+                "memory_updates": summary.get("memory_update_count"),
+                "active_unmatched_history": active_history,
+                "active_unmatched_unattributed_history": active_unattributed_history,
+                "active_unmatched_attributed_history_memory_gap": active_attributed_history_gap,
+                "unmatched_history_all_lanes": summary.get("unmatched_history_count"),
+            },
             "closed terminal history rows join back to CAS memory",
             "Closed history rows join memory or no closed-history rows exist yet."
-            if summary.get("unmatched_history_count", 0) == 0
-            else "Some terminal closed-history rows do not join to CAS memory.",
+            if active_history == 0
+            else (
+                f"Some active-lane closed-history rows do not join to CAS memory: unattributed={active_unattributed_history}, "
+                f"attributed_memory_gap={active_attributed_history_gap}. Unattributed rows remain visible for review; only CAS-attributed memory gaps are a hard mismatch."
+            ),
         ),
         _check(
             "live_flag_not_visible",
-            STATUS_MISMATCH if summary.get("live_trading_flag_visible") else STATUS_OK,
+            STATUS_MISMATCH if summary.get("live_trading_flag_visible") and mt4_required else STATUS_OK,
             summary.get("live_trading_flag_visible"),
             "terminal evidence does not expose live-trading flag",
-            "No live-trading flag is visible in terminal supervisor evidence."
-            if not summary.get("live_trading_flag_visible")
-            else "Terminal supervisor evidence exposes a live-trading flag.",
+            (
+                "No live-trading flag is visible in terminal supervisor evidence."
+                if not summary.get("live_trading_flag_visible")
+                else (
+                    "The inactive MT4 supervisor exposes a live flag; it does not control the active MT5 lane."
+                    if not mt4_required
+                    else "Terminal supervisor evidence exposes a live-trading flag."
+                )
+            ),
         ),
     ]
     return checks
@@ -576,21 +752,22 @@ def _check(check_id: str, status: str, value: Any, description: str, detail: str
 
 
 def _reconciliation_status(summary: Mapping[str, Any], checks: Sequence[Mapping[str, Any]]) -> str:
-    if summary.get("live_trading_flag_visible"):
+    mt4_required = bool(summary.get("mt4_lane_required", True))
+    if summary.get("live_trading_flag_visible") and mt4_required:
         return "TERMINAL_POSITION_RECONCILIATION_LIVE_FLAG_VISIBLE"
-    if summary.get("mt4_history_export_verifier_status") == "MT4_HISTORY_EXPORT_NEEDS_MT4_TERMINAL":
+    if mt4_required and summary.get("mt4_history_export_verifier_status") == "MT4_HISTORY_EXPORT_NEEDS_MT4_TERMINAL":
         return "TERMINAL_POSITION_RECONCILIATION_NEEDS_MT4_TERMINAL"
-    if summary.get("heartbeat_status") in {None, "MISSING"}:
+    if mt4_required and summary.get("heartbeat_status") in {None, "MISSING"}:
         return "TERMINAL_POSITION_RECONCILIATION_NEEDS_TERMINAL_HEARTBEAT"
-    if not summary.get("account_snapshot_present"):
+    if mt4_required and not summary.get("account_snapshot_present"):
         return "TERMINAL_POSITION_RECONCILIATION_NEEDS_ACCOUNT_SNAPSHOT"
     if any(check.get("status") == STATUS_MISMATCH for check in checks):
         return "TERMINAL_POSITION_RECONCILIATION_MISMATCH"
-    if summary.get("pending_receipt_count", 0) > 0 or summary.get("cas_receipt_pending_open_count", 0) > 0:
+    if summary.get("active_pending_receipt_count", summary.get("pending_receipt_count", 0)) > 0:
         return "TERMINAL_POSITION_RECONCILIATION_WAITING_FOR_RECEIPTS"
     if any(check.get("status") == STATUS_UNVERIFIABLE for check in checks):
         return "TERMINAL_POSITION_RECONCILIATION_UNVERIFIABLE"
-    if summary.get("terminal_open_position_count", 0) > 0:
+    if summary.get("active_terminal_open_position_count", summary.get("terminal_open_position_count", 0)) > 0:
         return "TERMINAL_POSITION_RECONCILIATION_READY_OPEN_POSITIONS"
     return "TERMINAL_POSITION_RECONCILIATION_READY_FLAT"
 
@@ -605,9 +782,33 @@ def _next_action(status: str, summary: Mapping[str, Any]) -> str:
     if status == "TERMINAL_POSITION_RECONCILIATION_WAITING_FOR_RECEIPTS":
         return "Let the terminal answer pending command files, run terminal_receipt_ingest, rebuild memory, then rerun reconciliation."
     if status == "TERMINAL_POSITION_RECONCILIATION_MISMATCH":
+        if int(summary.get("terminal_unattributed_open_position_count", 0) or 0) > 0:
+            return (
+                "Owner-review unmatched broker-visible open positions that CAS cannot attribute; "
+                "they may be external/manual broker state or missing CAS memory, and live dispatch stays blocked until resolved."
+            )
+        if int(summary.get("terminal_memory_gap_open_position_count", 0) or 0) > 0:
+            return (
+                "Run terminal receipt/history ingest and rebuild memory; broker-visible open positions carry CAS identifiers but are not fully joined back to CAS memory yet."
+            )
+        if int(summary.get("unmatched_unattributed_history_count", 0) or 0) > 0:
+            return (
+                "Owner-review unmatched broker closed-history rows that CAS cannot attribute; they may reflect external/manual broker closes or missing CAS identity fields."
+            )
+        if int(summary.get("unmatched_attributed_history_memory_gap_count", 0) or 0) > 0:
+            return (
+                "Run terminal history ingest and rebuild memory; closed broker history carries CAS identifiers but is not fully joined back to CAS memory yet."
+            )
         return "Inspect unmatched_open_positions and closed_history unmatched rows before allowing another same-symbol cycle."
     if status == "TERMINAL_POSITION_RECONCILIATION_LIVE_FLAG_VISIBLE":
         return "Review the visible live flag against owner/runtime gates before any live command path is allowed."
+    if status == "TERMINAL_POSITION_RECONCILIATION_UNVERIFIABLE":
+        if int(summary.get("active_unmatched_unattributed_history_count", 0) or 0) > 0:
+            return (
+                "Review active-lane broker history rows that have no CAS identity. They remain visible as external/manual-or-missing-identity evidence, "
+                "but they do not by themselves prove a current open-position mismatch."
+            )
+        return "Review the UNVERIFIABLE checks and refresh the active execution lane evidence."
     if status == "TERMINAL_POSITION_RECONCILIATION_READY_OPEN_POSITIONS":
         return "Open positions reconcile; keep the supervisor and history exporter running so closes join memory."
     if summary.get("history_record_count", 0) == 0:
@@ -669,6 +870,91 @@ def _position_id(row: Mapping[str, Any], source: str) -> str:
         )
     )
     return f"terminal-position-{hashlib.sha256(material.encode('utf-8')).hexdigest()[:16]}"
+
+
+def _classified_unmatched_history_rows(history_payload: Mapping[str, Any] | None) -> list[dict[str, Any]]:
+    if not isinstance(history_payload, Mapping):
+        return []
+    rows = history_payload.get("classified_unmatched_history_records")
+    if not isinstance(rows, list):
+        rows = history_payload.get("unmatched_history_records")
+    if not isinstance(rows, list):
+        return []
+    out: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, Mapping):
+            continue
+        payload = dict(row)
+        if not payload.get("classification_status"):
+            command_id = str(payload.get("command_id") or "").strip()
+            receipt_id = str(payload.get("receipt_id") or "").strip()
+            if command_id or receipt_id:
+                payload["classification_status"] = "TERMINAL_ATTRIBUTED_HISTORY_MEMORY_GAP"
+                payload["classification_detail"] = (
+                    "Closed broker history carries CAS identity, but CAS memory did not join it back yet."
+                )
+            else:
+                payload["classification_status"] = "TERMINAL_UNATTRIBUTED_BROKER_HISTORY"
+                payload["classification_detail"] = (
+                    "Closed broker history has no CAS command/receipt identity and may be external/manual broker state."
+                )
+        out.append(payload)
+    return out
+
+
+def _classify_unmatched_open_position(row: Mapping[str, Any]) -> Dict[str, Any]:
+    payload = dict(row or {})
+    position = payload.get("position") if isinstance(payload.get("position"), Mapping) else {}
+    side = str(payload.get("side") or "").strip().lower()
+    reason = str(payload.get("reason") or "").strip().lower()
+    command_id = str(position.get("command_id") or "").strip()
+    receipt_id = str(position.get("receipt_id") or "").strip()
+    broker_ticket = str(position.get("broker_ticket") or "").strip()
+
+    classification = "UNMATCHED_OPEN_POSITION"
+    detail = "Open-position reconciliation found an unmatched row."
+    if side == "terminal" and reason == "no_matching_cas_memory_position":
+        if command_id or receipt_id:
+            classification = "TERMINAL_ATTRIBUTED_MEMORY_GAP_POSITION"
+            detail = (
+                "Broker-visible position carries CAS identifiers, but CAS memory/receipt history did not fully join it back yet."
+            )
+        else:
+            classification = "TERMINAL_UNATTRIBUTED_BROKER_POSITION"
+            detail = (
+                "Broker-visible position has no CAS command/receipt identity. It may be external/manual broker state or missing CAS memory."
+            )
+    elif side == "cas" and reason == "receipt_pending":
+        classification = "CAS_RECEIPT_PENDING_POSITION"
+        detail = "CAS memory is still waiting for a verified terminal receipt for this open position."
+    elif side == "cas" and reason == "no_matching_terminal_position":
+        classification = "CAS_MEMORY_ONLY_POSITION"
+        detail = "CAS memory shows an open position that terminal/broker evidence does not currently confirm."
+
+    payload["classification_status"] = classification
+    payload["classification_detail"] = detail
+    payload["requires_owner_broker_review"] = classification == "TERMINAL_UNATTRIBUTED_BROKER_POSITION"
+    payload["requires_reconciliation_repair"] = classification in {
+        "TERMINAL_ATTRIBUTED_MEMORY_GAP_POSITION",
+        "CAS_MEMORY_ONLY_POSITION",
+        "CAS_RECEIPT_PENDING_POSITION",
+    }
+    payload["suggested_next_action"] = _classified_unmatched_next_action(classification)
+    return payload
+
+
+def _classified_unmatched_next_action(classification: str) -> str:
+    if classification == "TERMINAL_UNATTRIBUTED_BROKER_POSITION":
+        return (
+            "Owner-review the unmatched broker-visible position against the terminal and broker history before any further live cycle."
+        )
+    if classification == "TERMINAL_ATTRIBUTED_MEMORY_GAP_POSITION":
+        return "Run receipt/history ingest and rebuild CAS memory, then rerun terminal position reconciliation."
+    if classification == "CAS_MEMORY_ONLY_POSITION":
+        return "Refresh terminal/broker evidence and inspect whether CAS memory retained a stale open-position row."
+    if classification == "CAS_RECEIPT_PENDING_POSITION":
+        return "Wait for or ingest the terminal receipt before treating this position as reconciled."
+    return "Inspect the unmatched row and rerun terminal position reconciliation."
 
 
 def _first_text(*mappings: Mapping[str, Any], keys: Sequence[str]) -> Optional[str]:

@@ -21,7 +21,10 @@ router = APIRouter()
 
 
 def _require_loopback(request: Request) -> JSONResponse | None:
-    host = request.client.host if request.client else None
+    host = owner_auth.effective_client_host(
+        request.client.host if request.client else None,
+        request.headers,
+    )
     if owner_auth.request_is_loopback(host):
         return None
     return JSONResponse(

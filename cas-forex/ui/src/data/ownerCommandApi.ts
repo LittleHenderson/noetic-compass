@@ -10,6 +10,40 @@ export interface CommandPreview {
   blockers?: string[];
   ready?: boolean;
   confirm_phrase?: string;
+  binding?: {
+    lever?: string;
+    label?: string;
+    operational_effect?: string;
+    enforced_by?: string;
+    loosens_when?: string;
+    tightens_when?: string;
+    value_kind?: string;
+    units?: string;
+    runtime_path?: string;
+    owner_bound?: unknown;
+  } | null;
+  contract_rows?: Array<{
+    field?: string;
+    label?: string;
+    posture?: string;
+    value_kind?: string;
+    units?: string;
+    operational_effect?: string;
+    enforced_by?: string;
+    runtime_path?: string;
+    owner_bound?: unknown;
+    requested?: unknown;
+    checked?: unknown;
+    before?: unknown;
+    after?: unknown;
+    before_count?: number;
+    after_count?: number;
+    added?: string[];
+    removed?: string[];
+  }>;
+  journal_required?: boolean;
+  journal_prompt?: string;
+  journal_minimum_length?: number | null;
 }
 
 export interface ProposedCommand {

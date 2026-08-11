@@ -13,7 +13,7 @@ from datetime import UTC, date, datetime, time, timedelta
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from cas_forex.config import config
-from cas_forex.instruments import broker_symbol
+from cas_forex.instruments import broker_symbol_candidates, resolve_broker_symbol
 from cas_forex.paper_proof import (
     BROKER_API_VERIFIED,
     PaperProofPlan,
@@ -72,7 +72,18 @@ class MT5DemoPaperReceiptAdapter:
         terminal = self._object_to_dict(mt5.terminal_info())
         start = datetime.combine(trading_date, time.min, tzinfo=UTC)
         end = start + timedelta(days=1)
-        mt5_symbols = {broker_symbol(symbol) for symbol in plan.symbols}
+        mt5_symbols: set[str] = set()
+        symbol_resolutions: list[dict[str, Any]] = []
+        for symbol in plan.symbols:
+            resolution = resolve_broker_symbol(
+                symbol,
+                broker=mt5,
+                overrides=getattr(config, "mt5_symbol_overrides", ""),
+            )
+            symbol_resolutions.append(resolution.as_dict())
+            if resolution.selected_symbol:
+                mt5_symbols.add(resolution.selected_symbol)
+            mt5_symbols.update(broker_symbol_candidates(symbol, getattr(config, "mt5_symbol_overrides", "")))
         orders = self._fetch_records(mt5, "history_orders_get", start, end)
         deals = self._fetch_records(mt5, "history_deals_get", start, end)
         positions = self._fetch_open_positions(mt5)
@@ -88,6 +99,7 @@ class MT5DemoPaperReceiptAdapter:
             "deals": filtered_deals,
             "positions": positions,
             "unexpected_open_symbols": unexpected_open_symbols,
+            "symbol_resolutions": symbol_resolutions,
             "plan": {
                 "plan_id": plan.plan_id,
                 "lead_id": plan.lead_id,

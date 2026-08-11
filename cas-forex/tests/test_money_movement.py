@@ -163,6 +163,21 @@ def test_withdraw_to_non_allowlisted_destination_is_rejected():
     assert result.provider_receipt is None
 
 
+def test_withdraw_blocked_without_allowlisted_destination_setup():
+    cfg = _authorized_cfg()
+    cfg.payout_destination_id = None
+    cfg.payout_destination_allowlisted = False
+    engine = MovementEngine(config=cfg)
+
+    result = engine.withdraw(200.0, destination_id="some-other-account")
+
+    assert result.status == STATUS_BLOCKED
+    assert result.authorized is False
+    assert "destination" in result.reason
+    assert "allowlisted" in result.reason
+    assert result.provider_receipt is None
+
+
 def test_amount_cap_rejects_over_limit_transfer():
     cfg = _authorized_cfg()
     cfg.movement_max_usd = 100.0

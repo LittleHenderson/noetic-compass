@@ -1,20 +1,20 @@
 """CAS Forex AI model adapter (CAS Harness + PCBA controlled).
 
 Attaches local/open-weight models and frontier LLM APIs to the cockpit for
-research and evidence analysis. This adapter is intentionally advisory only:
+research and evidence analysis. This adapter is not a direct execution path:
 
-  - It has NO authority to trade, create broker ACCEPT, deposit, move money, or
-    automate payouts. Every real-money capability is gated separately in
-    ``cas_forex.runtime_gates``.
+  - It may inform Operator/spec reasoning, but broker/provider side effects are
+    handled by the owner-delegated Operator and guarded runtime paths.
   - It is controlled by CAS Harness + PCBA: prompt-injection checks run before
     calls and on returned text, and every response carries the authority
     boundary.
   - Frontier APIs require an owner-provided API key. No key => no call.
 
 Supported backends:
-  - ``ollama``: local open-weight server (e.g. llama3.1:70b-instruct, qwen2.5).
+  - ``ollama``: local open-weight server (e.g. deepseek-r1, qwen2.5).
   - ``openai_compatible``: vLLM / LM Studio / llama.cpp / OpenAI-compatible.
   - ``frontier_openai``: OpenAI-style /v1/chat/completions.
+  - ``frontier_deepseek``: DeepSeek's OpenAI-compatible API.
   - ``frontier_anthropic``: Anthropic /v1/messages.
   - ``frontier_google``: Google Generative Language generateContent endpoint.
 """
@@ -22,17 +22,19 @@ Supported backends:
 from __future__ import annotations
 
 import json
+import re
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, Mapping, Optional
 
 from cas_forex.pcba_prompt_injection import evaluate_pcba_prompt_injection
 
 AI_AUTHORITY_BOUNDARY = (
-    "Research/advisory only. This model cannot trade, create broker ACCEPT, "
-    "deposit, move money, or automate payouts; all such capabilities are "
-    "owner-controlled in runtime_gates and are unaffected by this model."
+    "Research/model adapter only, not a direct execution path. Autonomous "
+    "trading and configured money movement belong to the owner-delegated "
+    "Operator plus runtime_gates, dispatch/provider gates, receipts, and "
+    "kill-switch checks."
 )
 
 
@@ -46,6 +48,7 @@ class AIModelStatus:
     has_api_key: bool
     control_plane: str
     pcba_guard_enabled: bool
+    context_window_tokens: int
     authority_boundary: str = AI_AUTHORITY_BOUNDARY
 
     def to_dict(self) -> dict[str, Any]:
@@ -58,6 +61,7 @@ class AIModelStatus:
             "has_api_key": self.has_api_key,
             "control_plane": self.control_plane,
             "pcba_guard_enabled": self.pcba_guard_enabled,
+            "context_window_tokens": self.context_window_tokens,
             "authority_boundary": self.authority_boundary,
         }
 
@@ -107,15 +111,58 @@ def model_status(config: Any = None) -> AIModelStatus:
         has_api_key=bool(getattr(config, "ai_model_api_key", None)),
         control_plane=str(getattr(config, "ai_model_control_plane", "CAS_HARNESS_PCBA") or "CAS_HARNESS_PCBA"),
         pcba_guard_enabled=bool(getattr(config, "ai_model_pcba_guard_enabled", True)),
+        context_window_tokens=int(getattr(config, "ai_model_context_tokens", 16384) or 16384),
     )
 
 
 _SYSTEM_PROMPT = (
     "You are the CAS Forex research assistant controlled by CAS Harness + PCBA. "
-    "Analyze evidence and produce research-only suggestions. You have no "
-    "authority to trade, create broker ACCEPT, deposit, move money, or automate "
-    "payouts. Never claim that you do. Be concise and direct."
+    "Analyze evidence and produce concise suggestions. This model adapter is "
+    "not a direct execution path; autonomous trading and configured money "
+    "movement belong to the owner-delegated Operator and guarded runtime "
+    "dispatch/provider paths."
 )
+
+
+def _clean_model_text(value: Any) -> str:
+    """Remove a stray non-English preamble emitted before an English answer."""
+    text = str(value or "").strip()
+    text = re.sub(r"(?is)^.*?<think>.*?</think>\s*", "", text).strip()
+    lines = text.splitlines()
+    if len(lines) < 2 or not any(ord(char) > 127 for char in lines[0]):
+        return text
+
+    remainder = "\n".join(lines[1:]).strip()
+    if not remainder:
+        return text
+    printable = [char for char in remainder if not char.isspace()]
+    ascii_ratio = (
+        sum(ord(char) < 128 for char in printable) / len(printable)
+        if printable
+        else 0.0
+    )
+    return remainder if ascii_ratio >= 0.95 else text
+
+
+def _clean_structured_model_text(value: Any) -> str:
+    """Normalize one JSON fence, then require syntactically valid JSON.
+
+    Some otherwise capable Ollama Cloud models wrap schema-constrained output
+    in a single Markdown fence. Accepting that fence at the shared adapter is
+    deterministic; accepting commentary or malformed JSON is not.
+    """
+
+    text = _clean_model_text(value)
+    fenced = re.fullmatch(
+        r"(?is)\x60{3}(?:json)?\s*(.*?)\s*\x60{3}",
+        text,
+    )
+    if fenced:
+        text = fenced.group(1).strip()
+    parsed = json.loads(text)
+    if not isinstance(parsed, (dict, list)):
+        raise ValueError("structured response must be a JSON object or array")
+    return text
 
 
 class AIModelClient:
@@ -128,7 +175,13 @@ class AIModelClient:
     def status(self) -> AIModelStatus:
         return model_status(self.config)
 
-    def generate(self, prompt: str, system: Optional[str] = None) -> AIModelResult:
+    def generate(
+        self,
+        prompt: str,
+        system: Optional[str] = None,
+        *,
+        response_format: str | Mapping[str, Any] | None = None,
+    ) -> AIModelResult:
         status = self.status()
         if not status.enabled:
             return AIModelResult(ok=False, error="AI model disabled. Set AI_MODEL_ENABLED=true and configure a backend.")
@@ -155,9 +208,23 @@ class AIModelClient:
         backend = status.backend.lower()
         try:
             if backend == "ollama":
-                text = self._generate_ollama(prompt, system or _SYSTEM_PROMPT)
-            elif backend in ("openai_compatible", "openai", "vllm", "frontier_openai"):
-                text = self._generate_openai_compatible(prompt, system or _SYSTEM_PROMPT)
+                text = self._generate_ollama(
+                    prompt,
+                    system or _SYSTEM_PROMPT,
+                    response_format=response_format,
+                )
+            elif backend in (
+                "openai_compatible",
+                "openai",
+                "vllm",
+                "frontier_openai",
+                "frontier_deepseek",
+            ):
+                text = self._generate_openai_compatible(
+                    prompt,
+                    system or _SYSTEM_PROMPT,
+                    response_format=response_format,
+                )
             elif backend == "frontier_anthropic":
                 text = self._generate_anthropic(prompt, system or _SYSTEM_PROMPT)
             elif backend == "frontier_google":
@@ -183,29 +250,113 @@ class AIModelClient:
                     pcba_guard_verdict="REJECT",
                 )
 
-        return AIModelResult(ok=True, text=text, model_name=status.model_name, backend=status.backend)
+        cleaned_text = _clean_model_text(text)
+        if response_format is not None:
+            try:
+                cleaned_text = _clean_structured_model_text(text)
+            except (json.JSONDecodeError, ValueError) as exc:
+                return AIModelResult(
+                    ok=False,
+                    error=f"AI backend returned invalid structured JSON: {exc}",
+                    model_name=status.model_name,
+                    backend=status.backend,
+                )
+
+        return AIModelResult(
+            ok=True,
+            text=cleaned_text,
+            model_name=status.model_name,
+            backend=status.backend,
+        )
 
     def _post_json(self, url: str, payload: dict[str, Any], headers: dict[str, str]) -> dict[str, Any]:
         data = json.dumps(payload).encode("utf-8")
         req = urllib.request.Request(url, data=data, headers=headers, method="POST")
-        with urllib.request.urlopen(req, timeout=self.timeout) as resp:  # noqa: S310 (owner-configured URL)
-            return json.loads(resp.read().decode("utf-8"))
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:  # noqa: S310 (owner-configured URL)
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            # Ollama and compatible providers put the actionable cause in the
+            # response body (for example, insufficient RAM/VRAM). Preserve that
+            # detail instead of collapsing every failure to "HTTP Error 500".
+            try:
+                raw = exc.read().decode("utf-8", errors="replace").strip()
+            except Exception:
+                raw = ""
+            detail = raw
+            if raw:
+                try:
+                    parsed = json.loads(raw)
+                    if isinstance(parsed, Mapping):
+                        detail = str(
+                            parsed.get("error")
+                            or parsed.get("message")
+                            or raw
+                        ).strip()
+                except json.JSONDecodeError:
+                    pass
+            raise ValueError(
+                f"HTTP {exc.code}: {detail or exc.reason or 'provider request failed'}"
+            ) from exc
 
-    def _generate_ollama(self, prompt: str, system: str) -> str:
+    def _generate_ollama(
+        self,
+        prompt: str,
+        system: str,
+        *,
+        response_format: str | Mapping[str, Any] | None = None,
+    ) -> str:
         url = f"{self.config.ai_model_base_url.rstrip('/')}/api/chat"
+        local_system = (
+            f"{system}\nRespond only in concise English. Begin directly with the "
+            "answer. Do not emit analysis, thinking tags, or a foreign-language preamble."
+        )
         payload = {
             "model": self.config.ai_model_name,
-            "messages": [{"role": "system", "content": system}, {"role": "user", "content": prompt}],
+            "messages": [{"role": "system", "content": local_system}, {"role": "user", "content": prompt}],
             "stream": False,
+            # Reasoning models can otherwise spend the entire output budget in
+            # an internal thinking field and return an empty visible answer.
+            "think": False,
+            # Avoid an 80+ second cold reload between bounded chat/decision calls.
+            "keep_alive": "30m",
             "options": {
                 "temperature": float(getattr(self.config, "ai_model_temperature", 0.2)),
-                "num_predict": int(getattr(self.config, "ai_model_max_tokens", 1024)),
+                "num_predict": int(
+                    getattr(
+                        self.config,
+                        (
+                            "ai_model_structured_max_tokens"
+                            if response_format is not None
+                            else "ai_model_max_tokens"
+                        ),
+                        1024,
+                    )
+                    or 1024
+                ),
+                # Ollama otherwise defaults this workstation to 4096 tokens even
+                # when the model advertises a much larger native context window.
+                "num_ctx": int(
+                    getattr(self.config, "ai_model_context_tokens", 16384) or 16384
+                ),
             },
         }
+        if response_format is not None:
+            payload["format"] = (
+                dict(response_format)
+                if isinstance(response_format, Mapping)
+                else str(response_format)
+            )
         body = self._post_json(url, payload, {"Content-Type": "application/json"})
         return (body.get("message") or {}).get("content", "")
 
-    def _generate_openai_compatible(self, prompt: str, system: str) -> str:
+    def _generate_openai_compatible(
+        self,
+        prompt: str,
+        system: str,
+        *,
+        response_format: str | Mapping[str, Any] | None = None,
+    ) -> str:
         url = f"{self.config.ai_model_base_url.rstrip('/')}/v1/chat/completions"
         headers = {"Content-Type": "application/json"}
         api_key = getattr(self.config, "ai_model_api_key", None)
@@ -217,6 +368,17 @@ class AIModelClient:
             "temperature": float(getattr(self.config, "ai_model_temperature", 0.2)),
             "max_tokens": int(getattr(self.config, "ai_model_max_tokens", 1024)),
         }
+        if response_format == "json":
+            payload["response_format"] = {"type": "json_object"}
+        elif isinstance(response_format, Mapping):
+            # DeepSeek currently documents JSON-object output, not OpenAI's
+            # provider-specific json_schema envelope. The exact schema remains
+            # in the Operator prompt and CAS validates the returned object
+            # before it can authorize any action.
+            if str(getattr(self.config, "ai_model_backend", "")).lower() == "frontier_deepseek":
+                payload["response_format"] = {"type": "json_object"}
+            else:
+                payload["response_format"] = dict(response_format)
         body = self._post_json(url, payload, headers)
         choices = body.get("choices") or []
         if not choices:
@@ -224,7 +386,6 @@ class AIModelClient:
         return (choices[0].get("message") or {}).get("content", "")
 
     def _generate_anthropic(self, prompt: str, system: str) -> str:
-        url = f"{self.config.ai_model_base_url.rstrip('/')}/v1/messages"
         # ``temperature`` is deprecated on the Claude 5 model family and returns
         # a 400 if sent, so it is omitted for the Anthropic backend. Structured/
         # reliable output comes from the system prompt, not the sampling temp.
@@ -234,6 +395,44 @@ class AIModelClient:
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": int(getattr(self.config, "ai_model_max_tokens", 1024)),
         }
+
+        # Use Anthropic's SDK when it is installed. The Assistant already uses
+        # this transport successfully, while urllib can intermittently fail on
+        # this Windows/Python runtime during TLS record handling.
+        try:
+            import anthropic
+        except ImportError:
+            anthropic = None
+
+        if anthropic is not None:
+            try:
+                try:
+                    client = anthropic.Anthropic(
+                        api_key=str(getattr(self.config, "ai_model_api_key", "")),
+                        base_url=str(self.config.ai_model_base_url).rstrip("/"),
+                        timeout=self.timeout,
+                        max_retries=1,
+                    )
+                except TypeError:
+                    # Keep lightweight test doubles and older SDKs compatible.
+                    client = anthropic.Anthropic(
+                        api_key=str(getattr(self.config, "ai_model_api_key", ""))
+                    )
+                response = client.messages.create(**payload)
+                return "".join(
+                    (
+                        str(part.get("text") or "")
+                        if isinstance(part, dict)
+                        else str(getattr(part, "text", "") or "")
+                    )
+                    for part in (getattr(response, "content", None) or [])
+                )
+            except Exception as exc:
+                raise OSError(
+                    f"Anthropic SDK call failed: {type(exc).__name__}: {exc}"
+                ) from exc
+
+        url = f"{self.config.ai_model_base_url.rstrip('/')}/v1/messages"
         body = self._post_json(
             url,
             payload,

@@ -113,6 +113,50 @@ def test_auto_halt_trips_on_broker_truth_reconciliation_failure(tmp_path, monkey
     assert "broker_truth_reconciliation" in report["triggered_checks"]
 
 
+def test_auto_halt_trips_on_unprotected_live_positions(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "DEFAULT_AUTO_HALT_STATE_PATH", tmp_path / "auto-halt.json")
+
+    report = auto_halt.build_auto_halt_report(
+        live_account_ledger=_live_ledger(realized_pnl=100.0, deals=[{"timestamp": "2026-06-30T10:00:00Z", "net_pnl_usd": 100.0}]),
+        paper_account_ledger=_paper_ledger(realized_pnl=100.0, deal_count=1),
+        reconciliation_report={"overall_status": "RECONCILED"},
+        position_protection_report={
+            "status": "UNPROTECTED_POSITIONS",
+            "connected": True,
+            "open_position_count": 2,
+            "unprotected_position_count": 1,
+            "detail": "1 open position(s) have no broker-side stop loss visible in the latest snapshot.",
+        },
+        persist=True,
+    )
+
+    assert report["status"] == auto_halt.STATUS_ACTIVE
+    assert "live_position_stop_loss_protection" in report["triggered_checks"]
+    protection_check = next(check for check in report["checks"] if check["check_id"] == "live_position_stop_loss_protection")
+    assert protection_check["status"] == auto_halt.CHECK_TRIPPED
+    assert protection_check["metric"] == 1
+    assert protection_check["threshold"] == 0
+
+
+def test_auto_halt_marks_position_protection_unverifiable_when_mt5_snapshot_unavailable():
+    report = auto_halt.build_auto_halt_report(
+        live_account_ledger=_live_ledger(realized_pnl=100.0, deals=[{"timestamp": "2026-06-30T10:00:00Z", "net_pnl_usd": 100.0}]),
+        paper_account_ledger=_paper_ledger(realized_pnl=100.0, deal_count=1),
+        reconciliation_report={"overall_status": "RECONCILED"},
+        position_protection_report={
+            "status": "POSITION_PROTECTION_UNAVAILABLE",
+            "connected": False,
+            "detail": "MT5 position protection cannot be verified because the account snapshot is unavailable.",
+        },
+        persist=False,
+    )
+
+    protection_check = next(check for check in report["checks"] if check["check_id"] == "live_position_stop_loss_protection")
+    assert protection_check["status"] == auto_halt.CHECK_UNVERIFIABLE
+    assert protection_check["trips_halt"] is False
+    assert "live_position_stop_loss_protection" not in report["triggered_checks"]
+
+
 def test_auto_halt_clear_requires_confirmation(tmp_path, monkeypatch):
     monkeypatch.setattr(auto_halt, "DEFAULT_AUTO_HALT_STATE_PATH", tmp_path / "auto-halt.json")
     auto_halt.activate_auto_halt(["TEST"], [{"check_id": "TEST"}])
@@ -124,3 +168,17 @@ def test_auto_halt_clear_requires_confirmation(tmp_path, monkeypatch):
     assert state["active"] is False
     assert state["force_paper_mode"] is False
     assert auto_halt.is_auto_halt_active() is False
+
+
+def test_manual_emergency_stop_latches_and_blocks_runtime_gate(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "DEFAULT_AUTO_HALT_STATE_PATH", tmp_path / "auto-halt.json")
+
+    state = auto_halt.manual_emergency_stop(reason="owner pressed emergency stop")
+
+    assert state["active"] is True
+    assert state["force_paper_mode"] is True
+    assert state["reasons"] == ["MANUAL_EMERGENCY_STOP"]
+    assert state["checks"][0]["check_id"] == "manual_emergency_stop"
+    decision = runtime_gates.evaluate_live_trading(GateConfig())
+    assert decision.authorized is False
+    assert "auto-halt circuit breaker is CLEAR" in decision.missing_requirements

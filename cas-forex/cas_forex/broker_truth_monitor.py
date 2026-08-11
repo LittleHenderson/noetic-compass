@@ -31,12 +31,18 @@ from cas_forex.account_reconciliation import (
     STATUS_OK,
     STATUS_UNVERIFIABLE,
 )
+from cas_forex.auto_halt import activate_auto_halt, is_auto_halt_active
 from cas_forex.broker_truth_monitor_supervisor import (
     BrokerTruthMonitorSupervisorConflict,
     BrokerTruthMonitorSupervisorStore,
     default_broker_truth_monitor_supervisor_store,
     process_owner_id,
 )
+from cas_forex.critical_notifications import (
+    build_unprotected_position_event,
+    emit_critical_notification,
+)
+from cas_forex.mt5_account_identity import evaluate_mt5_account_identity
 from cas_forex.time_utils import utc_now
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -119,8 +125,12 @@ def run_broker_truth_check(
 ) -> dict[str, Any]:
     """Run one read-only broker-truth check and persist the latest report."""
 
+    previous_report = _latest_report_for_transition_check(state_path=state_path)
     snapshot = dict(mt5_snapshot) if mt5_snapshot is not None else _read_mt5_snapshot()
-    terminal_report, terminal_error = _terminal_reconciliation(terminal_reconciliation_report)
+    terminal_report, terminal_error = _terminal_reconciliation(
+        terminal_reconciliation_report,
+        active_execution_lane="mt5_direct",
+    )
     report = build_broker_truth_monitor_report(
         mt5_snapshot=snapshot,
         terminal_reconciliation_report=terminal_report,
@@ -128,6 +138,7 @@ def run_broker_truth_check(
         interval_seconds=interval_seconds,
         fresh_for_live_seconds=fresh_for_live_seconds,
     )
+    report.update(_continuous_monitor_fail_closed_actions(report, previous_report=previous_report))
     if write_report:
         report["artifact_paths"] = {
             key: str(value)
@@ -156,9 +167,25 @@ def build_broker_truth_monitor_report(
     terminal = dict(terminal_reconciliation_report or {})
     terminal_status = str(terminal.get("reconciliation_status") or "")
     terminal_summary = terminal.get("summary") if isinstance(terminal.get("summary"), Mapping) else {}
+    classified_unmatched = (
+        terminal.get("classified_unmatched_open_positions")
+        if isinstance(terminal.get("classified_unmatched_open_positions"), list)
+        else []
+    )
     mt5_connected = bool(mt5_snapshot.get("connected", False))
     mt5_is_demo = bool(mt5_snapshot.get("is_demo", True)) if mt5_connected else None
     mt5_open_positions = int(mt5_snapshot.get("open_position_count", 0) or 0)
+    mt5_position_rows = mt5_snapshot.get("positions") if isinstance(mt5_snapshot.get("positions"), list) else None
+    mt5_account_snapshot = (
+        dict(mt5_snapshot.get("account"))
+        if isinstance(mt5_snapshot.get("account"), Mapping)
+        else {}
+    )
+    account_identity = evaluate_mt5_account_identity(mt5_snapshot)
+    position_protection = mt5_snapshot.get("position_protection") if isinstance(mt5_snapshot.get("position_protection"), Mapping) else {}
+    position_protection_status = str(position_protection.get("status") or "")
+    unprotected_position_count = int(position_protection.get("unprotected_position_count", 0) or 0)
+    position_protection_detail = str(position_protection.get("detail") or "").strip()
 
     checks = [
         _check(
@@ -177,19 +204,39 @@ def build_broker_truth_monitor_report(
             "A connected live MT5 account is visible for live-money truth.",
             "Connected MT5 account reports LIVE mode."
             if mt5_connected and mt5_is_demo is False
-            else "No connected live MT5 account is visible; live-money truth is not yet directly observable.",
+                else "No connected live MT5 account is visible; live-money truth is not yet directly observable.",
         ),
+        _mt5_account_identity_check(account_identity, connected=mt5_connected),
         _terminal_check(terminal_status, terminal_error, terminal_summary),
         _check(
             "live_open_positions_crosscheck",
-            _live_open_position_status(mt5_connected, mt5_is_demo, mt5_open_positions, terminal_summary),
+            _live_open_position_status(
+                mt5_connected,
+                mt5_is_demo,
+                mt5_open_positions,
+                terminal_summary,
+                mt5_position_rows=mt5_position_rows,
+            ),
             {
                 "mt5_open_positions": mt5_open_positions,
+                "mt5_position_rows": len(mt5_position_rows) if mt5_position_rows is not None else None,
                 "terminal_open_positions": terminal_summary.get("terminal_open_position_count"),
                 "unmatched_open_positions": terminal_summary.get("unmatched_open_position_count"),
             },
             "Live open positions are cross-checked against terminal reconciliation.",
-            _live_open_position_detail(mt5_connected, mt5_is_demo, mt5_open_positions, terminal_summary),
+            _live_open_position_detail(
+                mt5_connected,
+                mt5_is_demo,
+                mt5_open_positions,
+                terminal_summary,
+                mt5_position_rows=mt5_position_rows,
+            ),
+        ),
+        _position_protection_check(
+            mt5_connected=mt5_connected,
+            mt5_is_demo=mt5_is_demo,
+            mt5_open_positions=mt5_open_positions,
+            position_protection=position_protection,
         ),
         _check(
             "monitor_freshness_recorded",
@@ -225,16 +272,74 @@ def build_broker_truth_monitor_report(
         "fresh_for_live_seconds": fresh_for_live,
         "mt5_connected": mt5_connected,
         "mt5_is_demo": mt5_is_demo,
+        "mt5_account": mt5_account_snapshot.get("login"),
+        "mt5_account_server": mt5_account_snapshot.get("server"),
+        "mt5_expected_account": account_identity.get("expected_login"),
+        "mt5_expected_server": account_identity.get("expected_server"),
+        "mt5_account_identity_configured": account_identity.get("configured"),
+        "mt5_account_identity_observable": account_identity.get("observable"),
+        "mt5_account_identity_matches_config": account_identity.get("matches"),
+        "mt5_account_identity_mismatch_fields": account_identity.get("mismatch_fields"),
+        "mt5_account_currency": mt5_account_snapshot.get("currency"),
+        "mt5_balance_usd": mt5_account_snapshot.get("balance_usd"),
+        "mt5_equity_usd": mt5_account_snapshot.get("equity_usd"),
+        "mt5_margin_used_usd": mt5_account_snapshot.get("margin_used_usd"),
+        "mt5_free_margin_usd": mt5_account_snapshot.get("free_margin_usd"),
+        "mt5_account_money_snapshot": mt5_account_snapshot or None,
         "mt5_open_position_count": mt5_open_positions,
+        "position_protection_status": position_protection_status or None,
+        "position_protection_open_position_count": int(position_protection.get("open_position_count", mt5_open_positions) or 0),
+        "position_protection_unprotected_position_count": unprotected_position_count,
+        "position_protection_requires_owner_attention": bool(position_protection.get("requires_owner_attention", False)),
+        "position_protection_detail": position_protection_detail or None,
+        "position_protection_unprotected_preview": _compact_unprotected_position_preview(
+            position_protection.get("unprotected_positions")
+            if isinstance(position_protection.get("unprotected_positions"), list)
+            else []
+        ),
         "terminal_reconciliation_status": terminal_status or None,
         "terminal_unmatched_open_position_count": int(terminal_summary.get("unmatched_open_position_count", 0) or 0),
+        "terminal_unattributed_open_position_count": int(
+            terminal_summary.get("terminal_unattributed_open_position_count", 0) or 0
+        ),
+        "terminal_memory_gap_open_position_count": int(
+            terminal_summary.get("terminal_memory_gap_open_position_count", 0) or 0
+        ),
+        "cas_memory_only_open_position_count": int(
+            terminal_summary.get("cas_memory_only_open_position_count", 0) or 0
+        ),
+        "cas_receipt_pending_open_position_count": int(
+            terminal_summary.get("cas_receipt_pending_open_position_count", 0) or 0
+        ),
+        "terminal_unmatched_history_count": int(terminal_summary.get("unmatched_history_count", 0) or 0),
+        "terminal_unattributed_history_count": int(
+            terminal_summary.get("unmatched_unattributed_history_count", 0) or 0
+        ),
+        "terminal_attributed_history_memory_gap_count": int(
+            terminal_summary.get("unmatched_attributed_history_memory_gap_count", 0) or 0
+        ),
         "terminal_pending_receipt_count": int(terminal_summary.get("pending_receipt_count", 0) or 0),
         "terminal_receipt_mismatch_count": int(terminal_summary.get("receipt_mismatch_count", 0) or 0),
         "terminal_account_snapshot_present": bool(terminal_summary.get("account_snapshot_present", False)),
+        "terminal_unmatched_open_position_preview": _compact_unmatched_position_preview(classified_unmatched),
+        "terminal_unmatched_history_preview": _compact_unmatched_history_preview(
+            terminal.get("classified_unmatched_history_records")
+            if isinstance(terminal.get("classified_unmatched_history_records"), list)
+            else []
+        ),
         "checks": checks,
         "latest_terminal_reconciliation": terminal or None,
         "claim_boundary": CLAIM_BOUNDARY,
-        "next_action": _next_action(overall, mt5_connected, mt5_is_demo, terminal_status),
+        "next_action": _next_action(
+            overall,
+            mt5_connected,
+            mt5_is_demo,
+            position_protection_status,
+            unprotected_position_count,
+            terminal_status,
+            terminal_summary,
+            account_identity,
+        ),
     }
 
 
@@ -491,12 +596,42 @@ def _compact_broker_truth_report(report: Mapping[str, Any] | None) -> dict[str, 
         "running_status": report.get("running_status"),
         "mt5_connected": report.get("mt5_connected"),
         "mt5_is_demo": report.get("mt5_is_demo"),
+        "mt5_account": report.get("mt5_account"),
+        "mt5_account_server": report.get("mt5_account_server"),
+        "mt5_expected_account": report.get("mt5_expected_account"),
+        "mt5_expected_server": report.get("mt5_expected_server"),
+        "mt5_account_identity_configured": report.get("mt5_account_identity_configured"),
+        "mt5_account_identity_observable": report.get("mt5_account_identity_observable"),
+        "mt5_account_identity_matches_config": report.get("mt5_account_identity_matches_config"),
+        "mt5_account_identity_mismatch_fields": report.get("mt5_account_identity_mismatch_fields"),
+        "mt5_account_currency": report.get("mt5_account_currency"),
+        "mt5_balance_usd": report.get("mt5_balance_usd"),
+        "mt5_equity_usd": report.get("mt5_equity_usd"),
+        "mt5_margin_used_usd": report.get("mt5_margin_used_usd"),
+        "mt5_free_margin_usd": report.get("mt5_free_margin_usd"),
         "mt5_open_position_count": report.get("mt5_open_position_count"),
+        "position_protection_status": report.get("position_protection_status"),
+        "position_protection_open_position_count": report.get("position_protection_open_position_count"),
+        "position_protection_unprotected_position_count": report.get("position_protection_unprotected_position_count"),
+        "position_protection_requires_owner_attention": report.get("position_protection_requires_owner_attention"),
+        "position_protection_detail": report.get("position_protection_detail"),
+        "position_protection_unprotected_preview": report.get("position_protection_unprotected_preview"),
+        "auto_halt_latched_from_monitor": report.get("auto_halt_latched_from_monitor"),
+        "monitor_auto_halt_reason_ids": report.get("monitor_auto_halt_reason_ids"),
         "terminal_reconciliation_status": report.get("terminal_reconciliation_status"),
         "terminal_unmatched_open_position_count": report.get("terminal_unmatched_open_position_count"),
+        "terminal_unattributed_open_position_count": report.get("terminal_unattributed_open_position_count"),
+        "terminal_memory_gap_open_position_count": report.get("terminal_memory_gap_open_position_count"),
+        "cas_memory_only_open_position_count": report.get("cas_memory_only_open_position_count"),
+        "cas_receipt_pending_open_position_count": report.get("cas_receipt_pending_open_position_count"),
+        "terminal_unmatched_history_count": report.get("terminal_unmatched_history_count"),
+        "terminal_unattributed_history_count": report.get("terminal_unattributed_history_count"),
+        "terminal_attributed_history_memory_gap_count": report.get("terminal_attributed_history_memory_gap_count"),
         "terminal_pending_receipt_count": report.get("terminal_pending_receipt_count"),
         "terminal_receipt_mismatch_count": report.get("terminal_receipt_mismatch_count"),
         "terminal_account_snapshot_present": report.get("terminal_account_snapshot_present"),
+        "terminal_unmatched_open_position_preview": report.get("terminal_unmatched_open_position_preview"),
+        "terminal_unmatched_history_preview": report.get("terminal_unmatched_history_preview"),
         "fresh_for_live_seconds": report.get("fresh_for_live_seconds"),
         "next_action": report.get("next_action"),
     }
@@ -547,7 +682,8 @@ def _read_mt5_snapshot() -> dict[str, Any]:
             "config.mt5_password = ''",
             "config.mt5_server = ''",
             "from cas_forex.mt5_live import get_mt5_account_snapshot",
-            "print(json.dumps(get_mt5_account_snapshot(force=True), default=str))",
+            "snapshot = get_mt5_account_snapshot(force=True)",
+            "print(json.dumps(snapshot, default=str))",
         ]
     )
     try:
@@ -617,13 +753,18 @@ def _mt5_probe_creationflags() -> int:
 
 def _terminal_reconciliation(
     provided: Optional[Mapping[str, Any]],
+    *,
+    active_execution_lane: str = "mt5_direct",
 ) -> tuple[Optional[dict[str, Any]], Optional[str]]:
     if provided is not None:
         return dict(provided), None
     try:
         from cas_forex.terminal_position_reconciliation import build_terminal_position_reconciliation_report
 
-        return build_terminal_position_reconciliation_report(write_report=True), None
+        return build_terminal_position_reconciliation_report(
+            active_execution_lane=active_execution_lane,
+            write_report=True,
+        ), None
     except Exception as exc:
         return None, f"{type(exc).__name__}: {exc}"
 
@@ -653,10 +794,73 @@ def _terminal_check(
         {
             "status": status or None,
             "unmatched": summary.get("unmatched_open_position_count"),
+            "unmatched_history": summary.get("unmatched_history_count"),
+            "unattributed_history": summary.get("unmatched_unattributed_history_count"),
             "pending": summary.get("pending_receipt_count"),
         },
         "CAS memory and terminal position evidence reconcile.",
-        _terminal_detail(status),
+        _terminal_detail(status, summary),
+    )
+
+
+def _position_protection_check(
+    *,
+    mt5_connected: bool,
+    mt5_is_demo: Optional[bool],
+    mt5_open_positions: int,
+    position_protection: Mapping[str, Any],
+) -> dict[str, Any]:
+    if not mt5_connected:
+        return _check(
+            "live_position_stop_loss_protection",
+            STATUS_UNVERIFIABLE,
+            {"unprotected_position_count": None, "open_position_count": None},
+            "Live open positions have broker-visible stop-loss protection.",
+            "MT5 is not connected, so live stop-loss protection cannot be verified.",
+        )
+    if mt5_is_demo is not False:
+        return _check(
+            "live_position_stop_loss_protection",
+            STATUS_UNVERIFIABLE,
+            {"unprotected_position_count": None, "open_position_count": mt5_open_positions},
+            "Live open positions have broker-visible stop-loss protection.",
+            "MT5 is connected to demo/paper or mode is unknown; live stop-loss protection is not evaluated here.",
+        )
+    if not position_protection:
+        return _check(
+            "live_position_stop_loss_protection",
+            STATUS_UNVERIFIABLE,
+            {"unprotected_position_count": None, "open_position_count": mt5_open_positions},
+            "Live open positions have broker-visible stop-loss protection.",
+            "MT5 live snapshot did not include a position-protection report.",
+        )
+
+    status = str(position_protection.get("status") or "")
+    unprotected = int(position_protection.get("unprotected_position_count", 0) or 0)
+    open_count = int(position_protection.get("open_position_count", mt5_open_positions) or 0)
+    detail = str(position_protection.get("detail") or "").strip()
+    if status == "POSITION_PROTECTION_UNAVAILABLE" or position_protection.get("connected") is False:
+        return _check(
+            "live_position_stop_loss_protection",
+            STATUS_UNVERIFIABLE,
+            {"unprotected_position_count": None, "open_position_count": open_count},
+            "Live open positions have broker-visible stop-loss protection.",
+            detail or "Live stop-loss protection report is unavailable.",
+        )
+    if unprotected > 0:
+        return _check(
+            "live_position_stop_loss_protection",
+            STATUS_MISMATCH,
+            {"unprotected_position_count": unprotected, "open_position_count": open_count},
+            "Live open positions have broker-visible stop-loss protection.",
+            detail or f"Live MT5 snapshot shows {unprotected} open position(s) without visible broker-side stop loss.",
+        )
+    return _check(
+        "live_position_stop_loss_protection",
+        STATUS_OK,
+        {"unprotected_position_count": 0, "open_position_count": open_count},
+        "Live open positions have broker-visible stop-loss protection.",
+        detail or f"Live MT5 snapshot shows 0 unprotected positions across {open_count} open.",
     )
 
 
@@ -665,12 +869,25 @@ def _live_open_position_status(
     mt5_is_demo: Optional[bool],
     mt5_open_positions: int,
     terminal_summary: Mapping[str, Any],
+    *,
+    mt5_position_rows: Optional[list[Any]] = None,
 ) -> str:
     if not mt5_connected or mt5_is_demo is not False:
         return STATUS_UNVERIFIABLE
-    unmatched = int(terminal_summary.get("unmatched_open_position_count", 0) or 0)
+    active_mt5_lane = str(terminal_summary.get("active_execution_lane") or "") == "mt5_demo"
+    unmatched = int(
+        terminal_summary.get(
+            "active_unmatched_open_position_count" if active_mt5_lane else "unmatched_open_position_count",
+            0,
+        )
+        or 0
+    )
     if unmatched > 0:
         return STATUS_MISMATCH
+    if active_mt5_lane:
+        if mt5_position_rows is None:
+            return STATUS_UNVERIFIABLE
+        return STATUS_OK if len(mt5_position_rows) == int(mt5_open_positions) else STATUS_MISMATCH
     terminal_count = terminal_summary.get("terminal_open_position_count")
     if terminal_count is None:
         return STATUS_UNVERIFIABLE
@@ -687,21 +904,60 @@ def _live_open_position_detail(
     mt5_is_demo: Optional[bool],
     mt5_open_positions: int,
     terminal_summary: Mapping[str, Any],
+    *,
+    mt5_position_rows: Optional[list[Any]] = None,
 ) -> str:
     if not mt5_connected:
         return "MT5 is not connected, so live open positions are not directly observable."
     if mt5_is_demo is not False:
         return "MT5 is connected to demo/paper or mode is unknown; no live open-position crosscheck is possible."
-    unmatched = int(terminal_summary.get("unmatched_open_position_count", 0) or 0)
+    active_mt5_lane = str(terminal_summary.get("active_execution_lane") or "") == "mt5_demo"
+    unmatched = int(
+        terminal_summary.get(
+            "active_unmatched_open_position_count" if active_mt5_lane else "unmatched_open_position_count",
+            0,
+        )
+        or 0
+    )
     if unmatched > 0:
+        unattributed = int(terminal_summary.get("terminal_unattributed_open_position_count", 0) or 0)
+        memory_gap = int(terminal_summary.get("terminal_memory_gap_open_position_count", 0) or 0)
+        if unattributed > 0:
+            return (
+                f"Terminal reconciliation reports {unmatched} unmatched open position(s), including "
+                f"{unattributed} broker-visible position(s) CAS cannot attribute."
+            )
+        if memory_gap > 0:
+            return (
+                f"Terminal reconciliation reports {unmatched} unmatched open position(s), including "
+                f"{memory_gap} broker-visible position(s) that carry CAS identifiers but are missing from joined memory."
+            )
         return f"Terminal reconciliation reports {unmatched} unmatched open position(s)."
+    if active_mt5_lane:
+        if mt5_position_rows is None:
+            return "Direct MT5 position rows are unavailable, so the broker position count cannot be internally cross-checked."
+        if len(mt5_position_rows) != int(mt5_open_positions):
+            return (
+                f"Direct MT5 snapshot count is {mt5_open_positions}, but the snapshot contains "
+                f"{len(mt5_position_rows)} position row(s)."
+            )
+        return (
+            f"Direct MT5 snapshot count and position rows agree at {mt5_open_positions}; "
+            "inactive MT4 mailbox counts are not used for MT5 readiness."
+        )
     return f"Live MT5 open position count is {mt5_open_positions}; terminal reconciliation has no unmatched open positions."
 
 
-def _terminal_detail(status: str) -> str:
+def _terminal_detail(status: str, summary: Mapping[str, Any]) -> str:
     if status in TERMINAL_READY_STATUSES:
         return "Terminal position reconciliation is ready and reports no mismatch."
     if status in TERMINAL_MISMATCH_STATUSES:
+        unattributed_history = int(summary.get("unmatched_unattributed_history_count", 0) or 0)
+        unattributed_open = int(summary.get("terminal_unattributed_open_position_count", 0) or 0)
+        if unattributed_open > 0:
+            return "Terminal position reconciliation reports broker-visible open positions CAS cannot attribute."
+        if unattributed_history > 0:
+            return "Terminal position reconciliation reports broker closed-history rows CAS cannot attribute."
         return "Terminal position reconciliation reports a CAS-vs-terminal mismatch."
     if not status:
         return "No terminal position reconciliation report is available."
@@ -719,8 +975,95 @@ def _check(check_id: str, status: str, value: Any, description: str, detail: str
     }
 
 
-def _next_action(overall: str, mt5_connected: bool, mt5_is_demo: Optional[bool], terminal_status: str) -> str:
+def _mt5_account_identity_check(
+    identity: Mapping[str, Any],
+    *,
+    connected: bool,
+) -> dict[str, Any]:
+    evidence = {
+        "configured": bool(identity.get("configured")),
+        "observable": bool(identity.get("observable")),
+        "expected_login": identity.get("expected_login"),
+        "expected_server": identity.get("expected_server"),
+        "actual_login": identity.get("actual_login"),
+        "actual_server": identity.get("actual_server"),
+        "matches": identity.get("matches"),
+        "mismatch_fields": list(identity.get("mismatch_fields") or []),
+    }
+    if not connected:
+        status = STATUS_UNVERIFIABLE
+        detail = "MT5 is disconnected, so the configured account identity cannot be verified."
+    elif not identity.get("configured"):
+        status = STATUS_UNVERIFIABLE
+        detail = "Configured mt5_login and mt5_server are required to bind broker truth to the owner-approved account."
+    elif not identity.get("observable"):
+        status = STATUS_UNVERIFIABLE
+        detail = "MT5 is connected, but its account login/server identity is not fully observable."
+    elif identity.get("matches") is True:
+        status = STATUS_OK
+        detail = (
+            f"Connected MT5 login {identity.get('actual_login')} on server "
+            f"{identity.get('actual_server')} exactly matches the configured owner account."
+        )
+    else:
+        status = STATUS_MISMATCH
+        detail = (
+            f"Wrong MT5 account: connected login {identity.get('actual_login')} on server "
+            f"{identity.get('actual_server') or 'unknown'} does not match configured login "
+            f"{identity.get('expected_login')} on server {identity.get('expected_server') or 'unknown'}."
+        )
+    return _check(
+        "mt5_account_identity_matches_config",
+        status,
+        evidence,
+        "Connected MT5 login and server match the configured owner-approved account.",
+        detail,
+    )
+
+
+def _next_action(
+    overall: str,
+    mt5_connected: bool,
+    mt5_is_demo: Optional[bool],
+    position_protection_status: str,
+    unprotected_position_count: int,
+    terminal_status: str,
+    terminal_summary: Mapping[str, Any],
+    account_identity: Mapping[str, Any],
+) -> str:
+    if mt5_connected and account_identity.get("matches") is False:
+        return (
+            f"Keep CAS fail-closed: MT5 is connected to login {account_identity.get('actual_login')} "
+            f"on {account_identity.get('actual_server') or 'unknown'}, but CAS is configured for login "
+            f"{account_identity.get('expected_login')} on {account_identity.get('expected_server') or 'unknown'}. "
+            "Log the Risen terminal into the configured owner account and rerun broker truth."
+        )
+    if not account_identity.get("configured"):
+        return "Configure the owner-approved MT5 login and server before broker truth can unlock live execution."
+    if mt5_connected and not account_identity.get("observable"):
+        return "Keep CAS fail-closed until MT5 exposes the connected account login and server identity."
     if overall == RECONCILIATION_FAILED:
+        if position_protection_status == "UNPROTECTED_POSITIONS" or unprotected_position_count > 0:
+            return (
+                "Keep CAS in paper/fail-closed mode and add broker-side stop loss protection to every live open position "
+                "before allowing further automated exposure."
+            )
+        if int(terminal_summary.get("terminal_unattributed_open_position_count", 0) or 0) > 0:
+            return (
+                "Keep CAS in paper/fail-closed mode and owner-review unmatched broker-visible positions that CAS cannot attribute before allowing another live cycle."
+            )
+        if int(terminal_summary.get("terminal_memory_gap_open_position_count", 0) or 0) > 0:
+            return (
+                "Keep CAS in paper/fail-closed mode, run receipt/history ingest, rebuild memory, and rerun broker truth before allowing another live cycle."
+            )
+        if int(terminal_summary.get("unmatched_unattributed_history_count", 0) or 0) > 0:
+            return (
+                "Keep CAS in paper/fail-closed mode and owner-review unmatched broker closed-history rows that CAS cannot attribute before allowing another live cycle."
+            )
+        if int(terminal_summary.get("unmatched_attributed_history_memory_gap_count", 0) or 0) > 0:
+            return (
+                "Keep CAS in paper/fail-closed mode, rerun terminal history ingest, rebuild memory, and rerun broker truth before allowing another live cycle."
+            )
         return "Keep CAS in paper/fail-closed mode and inspect broker-truth mismatches before allowing another live cycle."
     if not mt5_connected:
         return "Open/log into MetaTrader, then keep broker-truth monitoring running before any live-money scaling."
@@ -729,6 +1072,173 @@ def _next_action(overall: str, mt5_connected: bool, mt5_is_demo: Optional[bool],
     if terminal_status not in TERMINAL_READY_STATUSES:
         return "Live account is visible, but terminal reconciliation is not fully ready; resolve warnings before scaling."
     return "Broker truth is fresh and live-visible; keep the monitor running during any owner-authorized live session."
+
+
+def _continuous_monitor_fail_closed_actions(
+    report: Mapping[str, Any],
+    *,
+    previous_report: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    live_visible = bool(report.get("mt5_connected")) and report.get("mt5_is_demo") is False
+    mismatched_checks = [
+        check
+        for check in (report.get("checks") or [])
+        if isinstance(check, Mapping) and str(check.get("status") or "") == STATUS_MISMATCH
+    ]
+    mismatch_reason_ids = [str(check.get("check_id") or "").strip() for check in mismatched_checks if str(check.get("check_id") or "").strip()]
+
+    identity_mismatch_checks = [
+        check
+        for check in mismatched_checks
+        if str(check.get("check_id") or "") == "mt5_account_identity_matches_config"
+    ]
+    latch_checks = mismatched_checks if live_visible else identity_mismatch_checks
+    auto_halt_latched = False
+    if latch_checks and not is_auto_halt_active():
+        activate_auto_halt(
+            [str(check.get("check_id") or "") for check in latch_checks],
+            [
+                {
+                    "check_id": check_id,
+                    "status": "TRIPPED",
+                    "metric": check.get("value"),
+                    "threshold": "MISMATCH_FREE",
+                    "detail": str(check.get("detail") or ""),
+                    "trips_halt": True,
+                    "source": "broker_truth_monitor",
+                    "source_report_kind": report.get("report_kind"),
+                }
+                for check in latch_checks
+                for check_id in [str(check.get("check_id") or "").strip()]
+                if check_id
+            ],
+        )
+        auto_halt_latched = True
+
+    status = str(report.get("position_protection_status") or "")
+    unprotected_count = int(report.get("position_protection_unprotected_position_count", 0) or 0)
+    if status != "UNPROTECTED_POSITIONS" or unprotected_count <= 0:
+        return {
+            "auto_halt_latched_from_monitor": auto_halt_latched,
+            "monitor_auto_halt_reason_ids": mismatch_reason_ids,
+            "position_protection_notification_emitted": False,
+        }
+
+    previous_unprotected = 0
+    if isinstance(previous_report, Mapping):
+        previous_unprotected = int(previous_report.get("position_protection_unprotected_position_count", 0) or 0)
+
+    notification_emitted = False
+    if previous_unprotected <= 0:
+        notification_audit = emit_critical_notification(
+            build_unprotected_position_event(
+                {
+                    "status": status,
+                    "source": "broker_truth_monitor",
+                    "open_position_count": report.get("position_protection_open_position_count"),
+                    "unprotected_position_count": unprotected_count,
+                    "unprotected_positions": report.get("position_protection_unprotected_preview") or [],
+                }
+            ),
+            source="broker_truth_monitor.position_protection",
+        )
+        notification_emitted = True
+        return {
+            "auto_halt_latched_from_monitor": auto_halt_latched,
+            "monitor_auto_halt_reason_ids": mismatch_reason_ids,
+            "position_protection_notification_emitted": notification_emitted,
+            "position_protection_notification_audit": notification_audit,
+        }
+
+    return {
+        "auto_halt_latched_from_monitor": auto_halt_latched,
+        "monitor_auto_halt_reason_ids": mismatch_reason_ids,
+        "position_protection_notification_emitted": notification_emitted,
+    }
+
+
+def _latest_report_for_transition_check(
+    *,
+    state_path: Path | str | None = None,
+) -> Mapping[str, Any] | None:
+    if state_path is not None:
+        try:
+            return load_latest_broker_truth_monitor_report(state_path=state_path)
+        except BrokerTruthMonitorError:
+            return None
+    with _lock:
+        if isinstance(_state.last_report, Mapping):
+            return dict(_state.last_report)
+    try:
+        return load_latest_broker_truth_monitor_report(state_path=state_path)
+    except BrokerTruthMonitorError:
+        return None
+
+
+def _compact_unmatched_position_preview(rows: list[Any]) -> list[dict[str, Any]]:
+    preview: list[dict[str, Any]] = []
+    for row in rows[:3]:
+        if not isinstance(row, Mapping):
+            continue
+        position = row.get("position") if isinstance(row.get("position"), Mapping) else {}
+        preview.append(
+            {
+                "side": row.get("side"),
+                "reason": row.get("reason"),
+                "classification_status": row.get("classification_status"),
+                "classification_detail": row.get("classification_detail"),
+                "symbol": position.get("symbol"),
+                "direction": position.get("direction"),
+                "lots": position.get("lots"),
+                "broker_ticket": position.get("broker_ticket"),
+                "command_id": position.get("command_id"),
+                "receipt_id": position.get("receipt_id"),
+            }
+        )
+    return preview
+
+
+def _compact_unmatched_history_preview(rows: list[Any]) -> list[dict[str, Any]]:
+    preview: list[dict[str, Any]] = []
+    for row in rows[:3]:
+        if not isinstance(row, Mapping):
+            continue
+        preview.append(
+            {
+                "classification_status": row.get("classification_status"),
+                "classification_detail": row.get("classification_detail"),
+                "symbol": row.get("symbol"),
+                "direction": row.get("direction"),
+                "lots": row.get("lots"),
+                "broker_ticket": row.get("broker_ticket"),
+                "command_id": row.get("command_id"),
+                "receipt_id": row.get("receipt_id"),
+                "closed_at": row.get("closed_at"),
+                "profit_loss_account": row.get("profit_loss_account"),
+            }
+        )
+    return preview
+
+
+def _compact_unprotected_position_preview(rows: list[Any]) -> list[dict[str, Any]]:
+    preview: list[dict[str, Any]] = []
+    for row in rows[:3]:
+        if not isinstance(row, Mapping):
+            continue
+        preview.append(
+            {
+                "ticket": row.get("ticket"),
+                "symbol": row.get("symbol"),
+                "side": row.get("side"),
+                "lots": row.get("lots"),
+                "open_price": row.get("open_price"),
+                "current_price": row.get("current_price"),
+                "stop_loss": row.get("stop_loss"),
+                "take_profit": row.get("take_profit"),
+                "floating_pnl_usd": row.get("floating_pnl_usd"),
+            }
+        )
+    return preview
 
 
 def _clamp_interval(value: int) -> int:
@@ -765,5 +1275,7 @@ def _report_ready_for_live(report: Mapping[str, Any], *, max_age_seconds: int | 
     if report.get("overall_status") == RECONCILIATION_FAILED:
         return False
     if not bool(report.get("mt5_connected")) or report.get("mt5_is_demo") is not False:
+        return False
+    if report.get("mt5_account_identity_matches_config") is not True:
         return False
     return _is_report_fresh(report, max_age_seconds=max_age_seconds)

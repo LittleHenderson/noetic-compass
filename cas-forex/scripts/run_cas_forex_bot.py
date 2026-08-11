@@ -3,7 +3,7 @@
 Usage:
     py -3.12 scripts/run_cas_forex_bot.py
     py -3.12 scripts/run_cas_forex_bot.py --api http://127.0.0.1:8765
-    py -3.12 scripts/run_cas_forex_bot.py --mt5 "C:\\Program Files\\Hugosway\\Hugosway PRO5 Terminal\\terminal64.exe"
+    py -3.12 scripts/run_cas_forex_bot.py --mt5 "C:\\Program Files\\Risen MT5 Terminal\\terminal64.exe"
 
 The bot presents:
 - A current status summary on startup
@@ -38,7 +38,7 @@ def main() -> int:
     parser.add_argument("--api", default="http://127.0.0.1:8765", help="API base URL")
     parser.add_argument(
         "--mt5",
-        default=r"C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe",
+        default=r"C:\Program Files\Risen MT5 Terminal\terminal64.exe",
         help="MT5 terminal64.exe path",
     )
     args = parser.parse_args()

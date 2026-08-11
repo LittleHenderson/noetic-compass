@@ -51,6 +51,10 @@ class MarketSnapshot(BaseModel):
         default=True,
         description="Whether the underlying market is open for trading.",
     )
+    synthetic_fallback: bool = Field(
+        default=False,
+        description="True when this snapshot is a synthetic closed-market fallback rather than a real provider/broker price.",
+    )
 
     @field_validator("symbol")
     @classmethod

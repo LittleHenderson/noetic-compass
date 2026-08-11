@@ -332,10 +332,29 @@ export interface AdaptiveCockpitPayload {
 
 export type OwnerControlMode = "DENY" | "NOTIFY_ONLY" | "LIMITED_PAPER" | "PAPER_AUTO" | "AI_FULL_AUTO_PAPER" | "LIVE_AUTO" | "AI_FULL_AUTO_LIVE_REQUESTED";
 
+export interface OwnerAutonomyStage {
+  stage: string;
+  label: string;
+  modes: OwnerControlMode[];
+  order_authority: string;
+  can_emit_signals: boolean;
+  can_open_paper_trades: boolean;
+  can_request_live_trades: boolean;
+  requires_owner_live_confirmation: boolean;
+  effect: string;
+}
+
 export interface OwnerControlState {
   mode: OwnerControlMode; max_concurrent_trades: number;
   max_loss_cap_pct: number; ai_autonomy_enabled: boolean;
   live_requested: boolean; live_blocked: boolean; claim_boundary: string;
+  current_autonomy_stage?: OwnerAutonomyStage;
+  current_autonomy_stage_label?: string;
+  autonomy_ladder?: OwnerAutonomyStage[];
+  can_open_paper_trades?: boolean;
+  owner_control_allows_live_trades?: boolean;
+  requires_owner_live_confirmation?: boolean;
+  staged_autonomy_summary?: string;
   claim_boundary_present?: boolean;
   override_count?: number; persisted?: boolean; override_state_path?: string | null;
   override_state_path_present?: boolean;
@@ -382,15 +401,256 @@ export interface AccountLedgerSummary {
 
 export interface AccountLedgerState {
   report_kind: string; plan_id: string; lead_id: string; strategy_setting: string; as_of_date: string; mode: string;
+  movement_stream_id?: string | null; movement_stream_timestamp?: string | null;
   summary: AccountLedgerSummary; cashflow_events: AccountLedgerEvent[];
   positions: AccountTerminalTradeRow[]; orders: AccountTerminalTradeRow[]; deals: AccountTerminalTradeRow[];
   supported_history_tabs: string[]; supported_time_filters: string[]; evidence_refs: string[];
   claim_boundary: string; trading_edge_status: string; live_trading_status: string; broker_accept_status: string;
   auto_deposit_status: string; debit_card_bank_movement_status: string; payout_automation_status: string;
   deployment_status: string; live_money_authorized: boolean; payment_movement_authorized: boolean;
+  movement_source_truth?: {
+      movement_stream_present?: boolean;
+      price_source_status?: string;
+      price_source_label?: string | null;
+      price_source_summary?: string | null;
+      price_source_warning?: string | null;
+      position_feed_label?: string | null;
+      position_feed_detail?: string | null;
+      static_simulation_active?: boolean;
+      open_position_count?: number;
+      broker_ticket_position_count?: number;
+      simulator_position_count?: number;
+      provider_priced_simulator_position_count?: number;
+      static_simulator_position_count?: number;
+      stale_price_position_count?: number;
+      source_label_counts?: Record<string, number>;
+      configured_market_data_provider?: string | null;
+      provider_usable_symbols?: string[];
+      static_fallback_symbols?: string[];
+      mt5_fallback_symbols?: string[];
+      provider_stale_symbols?: string[];
+      provider_freshness_max_age_seconds?: number;
+      snapshot_age_seconds_by_symbol?: Record<string, number | null>;
+      provider_error_count?: number;
+      stale_positions?: Array<Record<string, unknown>>;
+      static_positions?: Array<Record<string, unknown>>;
+      attention_required?: boolean;
+      detail?: string | null;
+      local_detail?: string | null;
+  };
   sync_to_broker_snapshot?: boolean; broker_snapshot_initial_investment_usd?: number | null;
   cache_status?: string;
   notes: string[];
+}
+
+export interface AccountHealthReport {
+  report_kind: string;
+  status: string;
+  generated_from?: Record<string, unknown>;
+  blockers: string[];
+  account: {
+    mode?: string;
+    currency?: string;
+    initial_investment_usd?: number;
+    balance_usd?: number;
+    equity_usd?: number;
+    free_margin_usd?: number;
+    margin_used_usd?: number;
+    margin_utilization_pct?: number | null;
+    realized_pnl_usd?: number;
+    floating_pnl_usd?: number;
+    swap_usd?: number;
+    commission_usd?: number;
+    broker_fees_usd?: number;
+    drawdown_usd?: number;
+    drawdown_pct?: number;
+    return_on_initial_pct?: number | null;
+  };
+  daily?: {
+    as_of_date?: string;
+    realized_pnl_usd?: number;
+    realized_trade_event_count?: number;
+  };
+  closed_trade_performance: {
+    closed_trade_count?: number;
+    winning_trade_count?: number;
+    losing_trade_count?: number;
+    breakeven_trade_count?: number;
+    win_rate_pct?: number | null;
+    gross_profit_usd?: number;
+    gross_loss_usd?: number;
+    net_pnl_usd?: number;
+    profit_factor?: number | null;
+    profit_factor_state?: string;
+    average_win_usd?: number | null;
+    average_loss_usd?: number | null;
+    expectancy_usd?: number | null;
+    average_r_multiple?: number | null;
+    r_multiple_count?: number;
+    by_symbol?: Record<string, Record<string, unknown>>;
+  };
+  open_exposure: {
+    open_position_count?: number;
+    pending_order_count?: number;
+    open_lots?: number;
+    exposure_by_symbol_lots?: Record<string, number>;
+    exposure_by_direction_lots?: Record<string, number>;
+    top_symbol_exposures?: Array<Record<string, unknown>>;
+    protected_position_count?: number;
+    unprotected_position_count?: number;
+    unprotected_positions?: Array<Record<string, unknown>>;
+    protective_order_coverage_pct?: number;
+    open_risk_estimate_usd?: number | null;
+    open_risk_estimate_source?: string;
+    open_risk_price_lots?: number;
+  };
+  source_health?: {
+      movement_stream_present?: boolean;
+      price_source_status?: string;
+      price_source_label?: string | null;
+      price_source_summary?: string | null;
+      price_source_warning?: string | null;
+      position_feed_label?: string | null;
+      position_feed_detail?: string | null;
+      static_simulation_active?: boolean;
+      open_position_count?: number;
+      broker_ticket_position_count?: number;
+      simulator_position_count?: number;
+      provider_priced_simulator_position_count?: number;
+      static_simulator_position_count?: number;
+      stale_price_position_count?: number;
+      source_label_counts?: Record<string, number>;
+      configured_market_data_provider?: string | null;
+      provider_usable_symbols?: string[];
+      static_fallback_symbols?: string[];
+      mt5_fallback_symbols?: string[];
+      provider_stale_symbols?: string[];
+      provider_freshness_max_age_seconds?: number;
+      snapshot_age_seconds_by_symbol?: Record<string, number | null>;
+      provider_error_count?: number;
+      stale_positions?: Array<Record<string, unknown>>;
+      static_positions?: Array<Record<string, unknown>>;
+      attention_required?: boolean;
+      detail?: string;
+      local_detail?: string;
+    };
+  data_quality?: Record<string, unknown>;
+  decision_metrics?: Record<string, unknown>;
+  summary_only?: boolean;
+  claim_boundary?: string;
+  claim_boundary_present?: boolean;
+}
+
+export interface ActiveAccountTruth {
+  report_kind: "cas_forex_active_account_truth" | string;
+  generated_at?: string;
+  status: string;
+  objective_account_established: boolean;
+  authoritative_account_source: "mt5_account_snapshot" | "simulator_account" | string;
+  source_label: string;
+  source_detail?: string;
+  account: {
+    login?: number | string | null;
+    server?: string | null;
+    name?: string | null;
+    currency?: string;
+    leverage?: number | null;
+    is_demo?: boolean;
+    mode?: string;
+    balance_usd?: number | null;
+    equity_usd?: number | null;
+    floating_pnl_usd?: number | null;
+    margin_used_usd?: number | null;
+    free_margin_usd?: number | null;
+    position_price_pnl_usd?: number | null;
+    open_swap_usd?: number | null;
+    open_commission_usd?: number | null;
+    reported_open_components_usd?: number | null;
+    unattributed_open_pnl_usd?: number | null;
+  };
+  open_exposure: {
+    open_position_count?: number;
+    open_lots?: number | null;
+    protected_position_count?: number;
+    unprotected_position_count?: number;
+    protective_order_coverage_pct?: number | null;
+    risk_cap_breach_count?: number | null;
+    risk_cap_pct?: number | null;
+    entry_to_stop_risk_usd?: number | null;
+    entry_to_stop_risk_pct_equity?: number | null;
+    remaining_to_stop_drawdown_usd?: number | null;
+  };
+  positions?: Array<Record<string, unknown>>;
+  position_protection?: Record<string, unknown>;
+  position_risk?: Record<string, unknown>;
+  execution?: {
+    running?: boolean;
+    execution_active?: boolean;
+    execution_lane?: string | null;
+    mode?: string | null;
+    bridge_class?: string | null;
+    bridge_status?: string | null;
+    management_status?: string | null;
+    management_detail?: string | null;
+  };
+  snapshot?: {
+    observed_at?: string | null;
+    age_seconds?: number | null;
+    fresh?: boolean | null;
+    cached?: boolean | null;
+    terminal_connected?: boolean;
+    algo_order_send_ready?: boolean;
+  };
+  objective?: {
+    north_star?: string;
+    measurement_basis?: string;
+    daily_or_monthly_target_is_trade_quota?: boolean;
+    target_deficit_can_manufacture_edge?: boolean;
+  };
+  growth_measurement?: {
+    current_balance_usd?: number | null;
+    current_equity_usd?: number | null;
+    floating_pnl_usd?: number | null;
+    current_balance_is_profit?: boolean;
+    balance_baseline_status?: string;
+    period_realized_status?: string;
+    cashflow_adjusted_realized_growth_usd?: number | null;
+    realized_today_usd?: number | null;
+    realized_month_usd?: number | null;
+    net_external_capital_flow_usd?: number | null;
+    growth_pct_on_net_external_capital?: number | null;
+    account_growth_reconciliation?: {
+      status?: string;
+      account_matches?: boolean;
+      balance_matches?: boolean;
+      reconciled?: boolean;
+      event_hash?: string | null;
+      generated_at?: string | null;
+      refresh_status?: string | null;
+      ledger_balance_usd?: number | null;
+      balance_residual_usd?: number | null;
+    };
+    cas_bound_closed_outcomes?: {
+      status?: string;
+      trades?: number | null;
+      wins?: number | null;
+      losses?: number | null;
+      net_pnl_usd?: number | null;
+      scope?: string;
+    };
+  };
+  secondary_simulator?: {
+    authoritative_for_active_account?: boolean;
+    status?: string;
+    account?: AccountHealthReport["account"];
+    open_exposure?: AccountHealthReport["open_exposure"];
+    source_health?: AccountHealthReport["source_health"];
+    scope?: string;
+  };
+  conflict_count?: number;
+  conflicts?: Array<{ code?: string; detail?: string }>;
+  presentation_rules?: string[];
+  claim_boundary?: string;
 }
 
 
@@ -408,7 +668,10 @@ export interface PositionMovement {
   floating_pnl_usd: number; floating_pnl_units: number;
   distance_to_sl_units: number | null; distance_to_tp_units: number | null;
   distance_to_sl_pct: number | null; distance_to_tp_pct: number | null;
-  margin_estimate_usd: number; broker_ticket: string | null; simulator_ticket: string;
+  margin_estimate_usd: number; price_source?: string; price_stale?: boolean;
+  stale_reason?: string | null; opened_at?: string | null;
+  age_seconds?: number | null; age_days?: number | null; position_source_label?: string;
+  broker_ticket: string | null; simulator_ticket: string;
   evidence_packet_id: string; ai_action: string; status: string;
 }
 
@@ -426,6 +689,25 @@ export interface MovementStreamState {
   trading_edge_status: string; live_trading_status: string; broker_accept_status: string;
   auto_deposit_status: string; debit_card_bank_movement_status: string; payout_automation_status: string;
   live_money_authorized: boolean; payment_movement_authorized: boolean; notes: string[];
+  movement_source_truth?: MovementSourceTruthSnapshot | null;
+  market_data_provider_requested?: boolean; market_data_provider?: string; configured_market_data_provider?: string;
+  provider_snapshot_symbols?: string[]; provider_usable_symbols?: string[];
+  static_fallback_symbols?: string[]; mt5_fallback_symbols?: string[]; provider_stale_symbols?: string[];
+  provider_freshness_max_age_seconds?: number;
+  snapshot_age_seconds_by_symbol?: Record<string, number | null>;
+  snapshot_source_by_symbol?: Record<string, string>; provider_errors?: Record<string, string>;
+  price_source_status?: string;
+  price_source_label?: string;
+  price_source_summary?: string;
+  price_source_warning?: string | null;
+  static_simulation_active?: boolean;
+  position_feed_title?: string;
+  position_feed_count_label?: string;
+  position_feed_label?: string;
+  position_feed_detail?: string;
+  broker_ticket_position_count?: number;
+  static_position_count?: number;
+  static_quote_count?: number;
 }
 
 
@@ -434,11 +716,62 @@ export interface ReconciliationCheck {
   internal_value: unknown; broker_value: unknown; detail: string;
 }
 
+export interface MovementSourceTruthSnapshot {
+  telemetry_source?: string | null;
+  telemetry_stale?: boolean;
+  telemetry_last_update_iso?: string | null;
+  movement_stream_present?: boolean;
+  market_data_provider_requested?: boolean;
+  market_data_provider?: string | null;
+  price_source_status?: string | null;
+  price_source_label?: string | null;
+  price_source_summary?: string | null;
+  price_source_warning?: string | null;
+  position_feed_title?: string | null;
+  position_feed_count_label?: string | null;
+  position_feed_label?: string | null;
+  position_feed_detail?: string | null;
+  static_simulation_active?: boolean;
+  open_position_count?: number;
+  broker_ticket_position_count?: number;
+  simulator_position_count?: number;
+  provider_priced_simulator_position_count?: number;
+  static_simulator_position_count?: number;
+  static_position_count?: number;
+  static_quote_count?: number;
+  stale_price_position_count?: number;
+  source_label_counts?: Record<string, number>;
+  configured_market_data_provider?: string | null;
+  provider_usable_symbols?: string[];
+  static_fallback_symbols?: string[];
+  mt5_fallback_symbols?: string[];
+  provider_stale_symbols?: string[];
+  closed_market_symbols?: string[];
+  closed_market_quote_count?: number;
+  provider_freshness_max_age_seconds?: number;
+  snapshot_age_seconds_by_symbol?: Record<string, number | null>;
+  provider_error_count?: number;
+  attention_required?: boolean;
+  detail?: string | null;
+  local_detail?: string | null;
+  account_mode?: "DEMO" | "LIVE" | string | null;
+  account_login?: number | string | null;
+  account_server?: string | null;
+  snapshot_cached?: boolean | null;
+  snapshot_age_seconds?: number | null;
+  snapshot_fresh?: boolean | null;
+  position_protection?: Record<string, unknown> | null;
+  position_risk?: Record<string, unknown> | null;
+}
+
 export interface AccountReconciliationReport {
   report_kind: string; mode: string; as_of_date: string; plan_id: string; lead_id: string;
   overall_status: string; checks_total: number; checks_ok: number; checks_mismatch: number; checks_unverifiable: number;
   broker_mode: string; broker_receipt_id: string | null; broker_receipt_validation_status: string | null;
   broker_chain_verified: boolean; internal_symbols: string[]; broker_symbols: string[];
+  movement_stream_present?: boolean; movement_price_source_status?: string | null;
+  movement_position_feed_label?: string | null; movement_position_feed_detail?: string | null;
+  movement_source_truth?: MovementSourceTruthSnapshot | null;
   checks: ReconciliationCheck[]; blockers: string[]; claim_boundary: string;
   trading_edge_status: string; live_trading_status: string; broker_accept_status: string;
   deployment_status: string; live_money_authorized: boolean; payment_movement_authorized: boolean;
@@ -2556,6 +2889,7 @@ export interface StrategyLead {
 
 export interface AuthorityBoundaryState {
   report_kind: string; operating_mode: string;
+  requested_mode?: string; live_mode_requested?: boolean; execution_mode?: string;
   live_trading_status: string; broker_accept_status: string;
   auto_deposit_status: string; debit_card_bank_movement_status: string;
   payout_automation_status: string; trading_edge_status: string;
@@ -2581,8 +2915,13 @@ export interface OwnerAuthorityModel {
   owner_controls_are_final_authority: boolean;
   metrics_and_ai_are_advisory_only: boolean;
   metrics_and_ai_can_veto_owner_authority: boolean;
+  ai_autonomous_execution_authority?: string;
+  human_in_loop_per_action_required?: boolean;
+  per_order_confirmation_required?: boolean;
+  per_configured_money_movement_confirmation_required?: boolean;
   technical_action_time_checks_still_required: boolean;
   advisory_inputs: string[];
+  decision_context_inputs?: string[];
   action_time_requirements: string[];
   statement: string;
 }
@@ -2594,9 +2933,15 @@ export interface RuntimeGatesState {
   summary: string;
   owner_authority_boundary?: string;
   advisory_only_inputs?: string[];
+  decision_context_inputs?: string[];
   action_time_requirements?: string[];
   owner_controls_are_final_authority?: boolean;
+  metrics_and_ai_are_advisory_only?: boolean;
   metrics_and_ai_can_veto_owner_authority?: boolean;
+  ai_autonomous_execution_authority?: string;
+  human_in_loop_per_action_required?: boolean;
+  per_order_confirmation_required?: boolean;
+  per_configured_money_movement_confirmation_required?: boolean;
 }
 
 export interface AutoHaltCheck {
@@ -2650,7 +2995,23 @@ export interface BrokerTruthMonitorReport {
   fresh_for_live_seconds?: number;
   mt5_connected: boolean;
   mt5_is_demo?: boolean | null;
+  mt5_account?: number | null;
+  mt5_account_server?: string | null;
+  mt5_expected_account?: number | null;
+  mt5_expected_server?: string | null;
+  mt5_account_identity_configured?: boolean;
+  mt5_account_identity_observable?: boolean;
+  mt5_account_identity_matches_config?: boolean | null;
+  mt5_account_identity_mismatch_fields?: string[];
   mt5_open_position_count?: number;
+  position_protection_status?: string | null;
+  position_protection_open_position_count?: number;
+  position_protection_unprotected_position_count?: number;
+  position_protection_requires_owner_attention?: boolean;
+  position_protection_detail?: string | null;
+  position_protection_unprotected_preview?: Array<Record<string, unknown>>;
+  auto_halt_latched_from_monitor?: boolean;
+  monitor_auto_halt_reason_ids?: string[];
   terminal_reconciliation_status?: string | null;
   terminal_unmatched_open_position_count?: number;
   terminal_pending_receipt_count?: number;
@@ -2811,6 +3172,9 @@ export interface LivePilotPolicy {
   owner_accepted_at?: string | null;
   updated_at?: string | null;
   allowed_symbols: string[];
+  sizing_mode: "RISK_DENOMINATED" | "ABSOLUTE_LOTS" | string;
+  continuous_authority: boolean;
+  max_trade_risk_pct_equity: number;
   max_trade_lots: number;
   max_open_live_lots: number;
   max_live_trade_count: number;
@@ -2818,7 +3182,7 @@ export interface LivePilotPolicy {
   max_total_loss_usd: number;
   max_pilot_days: number;
   live_trade_count: number;
-  pilot_capacity_remaining: number;
+  pilot_capacity_remaining: number | null;
   last_live_order_at?: string | null;
   last_live_order?: Record<string, unknown> | null;
   notes: string;
@@ -2964,6 +3328,8 @@ export interface CompoundAddDispatchHandoffStatus {
   dispatch_attempted?: boolean;
   owner_dispatch_confirmed?: boolean;
   live_trading_authorized?: boolean;
+  need_confirmation?: string;
+  confirm_phrase?: string;
   dispatch_preview_only?: boolean;
   would_call_dispatch_if_owner_attempted?: boolean;
   intent?: Record<string, unknown>;
@@ -2989,6 +3355,8 @@ export interface WasteEntryDispatchHandoffStatus {
   dispatch_attempted?: boolean;
   owner_dispatch_confirmed?: boolean;
   live_trading_authorized?: boolean;
+  need_confirmation?: string;
+  confirm_phrase?: string;
   dispatch_preview_only?: boolean;
   would_call_dispatch_if_owner_attempted?: boolean;
   intent?: Record<string, unknown>;
@@ -3523,6 +3891,10 @@ export interface PayoutRecoveryAttempt {
   created_at?: string;
   updated_at?: string;
   amount_usd?: number;
+  kind?: string;
+  purpose?: string;
+  policy_id?: string | null;
+  authority_mode?: string;
   destination_id?: string | null;
   preview_status?: string | null;
   preview_reason?: string | null;
@@ -3536,6 +3908,10 @@ export interface PayoutRecoveryAttempt {
   owner_resolution_notes?: string;
   claim_boundary?: string;
   movement?: Record<string, unknown>;
+  evidence_complete?: boolean;
+  event_hash?: string | null;
+  ledger_entry?: Record<string, unknown> | null;
+  before_after_balance_snapshot?: Record<string, unknown> | null;
 }
 
 export interface PayoutRecoveryStatus {
@@ -3543,6 +3919,7 @@ export interface PayoutRecoveryStatus {
   generated_at: string;
   attempt_count: number;
   pending_count: number;
+  pending_amount_usd?: number;
   has_pending_recovery: boolean;
   latest_attempt?: PayoutRecoveryAttempt | null;
   pending_attempts: PayoutRecoveryAttempt[];
@@ -3553,6 +3930,10 @@ export interface PayoutRecoveryStatus {
 export interface OrderAttemptAuditAttempt {
   attempt_id?: string;
   attempt_key?: string;
+  idempotency_key?: string;
+  idempotency_key_rule?: string;
+  order_shape_key?: string;
+  order_shape_key_rule?: string;
   status?: string;
   created_at?: string;
   updated_at?: string;
@@ -3570,7 +3951,23 @@ export interface OrderAttemptAuditAttempt {
   executed?: boolean;
   result_status?: string | null;
   result_reason?: string | null;
+  bridge_touch_unknown?: boolean;
+  requires_owner_review_before_retry?: boolean;
+  last_dispatch_error?: string | null;
   outcome?: Record<string, unknown> | null;
+  execution_provenance?: Record<string, unknown> | null;
+  claim_boundary?: string;
+}
+
+export interface OrderIdempotencyPolicy {
+  report_kind?: string;
+  exact_retry_key?: string;
+  near_duplicate_key?: string;
+  near_duplicate_window_seconds?: number;
+  near_duplicate_scope?: string;
+  manual_orders_excluded_from_near_duplicate_block?: boolean;
+  compound_or_pyramid_adds_excluded_from_near_duplicate_block?: boolean;
+  unresolved_real_attempt_policy?: string;
   claim_boundary?: string;
 }
 
@@ -3582,7 +3979,11 @@ export interface OrderAttemptAuditStatus {
   unresolved_attempt_count: number;
   unresolved_real_attempt_count: number;
   unresolved_real_attempts?: OrderAttemptAuditAttempt[];
+  bridge_touch_unknown_unresolved_count?: number;
   executed_count: number;
+  duplicate_suppressed_count?: number;
+  near_duplicate_suppressed_count?: number;
+  idempotency_policy?: OrderIdempotencyPolicy;
   latest_attempt?: OrderAttemptAuditAttempt | null;
   has_unresolved_real_attempt: boolean;
   state_path?: string;
@@ -3754,6 +4155,8 @@ export interface DashboardState {
   adaptive?: AdaptiveCockpitPayload;
   ownerControl?: OwnerControlState;
   accountLedger?: AccountLedgerState;
+  accountHealth?: AccountHealthReport;
+  activeAccountTruth?: ActiveAccountTruth;
   movementStream?: MovementStreamState;
   accountReconciliation?: AccountReconciliationReport;
   liveReadiness?: LiveReadinessReport;

@@ -8,7 +8,7 @@ money questions:
   1. How many lots express a fixed dollar risk for THIS instrument's economics?
      (``position_size`` / ``expected_loss_usd``)
   2. When is the floating profit large enough that we can move the stop to the
-     entry price and guarantee we cannot lose principal on the trade?
+     entry price and reduce principal risk on the trade under normal fills?
      (``breakeven_lock``)
 
 Mathematical honesty (non-negotiable):

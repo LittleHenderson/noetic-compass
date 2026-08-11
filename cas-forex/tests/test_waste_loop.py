@@ -122,6 +122,8 @@ def test_pass_path_executes_once_with_token():
     result = loop.tick()
 
     assert result["decision"] == "EXECUTE"
+    assert "measured_hit_rate=" in result["reason"]
+    assert "win_prob" not in result["reason"]
     assert result["stage_trace"][0] == "watch"
     assert result["stage_trace"] == ["watch", "analyze", "strategize", "test", "execute"]
     # execute called exactly once, with the gate's token threaded through.

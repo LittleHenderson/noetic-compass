@@ -3,7 +3,7 @@
 This module evaluates a *proposed* RouteIntent against the current
 portfolio risk snapshot (from `cas_forex.risk_monitoring`) and the
 operator's configured risk caps. It returns a structured decision that
-the agent cycle can consult BEFORE dispatching the intent to the broker.
+the dispatch chokepoint consults BEFORE touching the broker bridge.
 
 CRITICAL framing: this gate is strictly OBSERVATIONAL.  It REJECTS or
 APPROVES a proposed intent based on whether the would-be portfolio
@@ -12,8 +12,6 @@ NEVER tells the operator what to buy or sell, NEVER suggests scaling
 back, closing, taking profit, or any other trade action.  The plain-
 English reason explains *which cap fired* and *what the would-be value
 was*, nothing more.
-
-Wiring into the agent cycle is OUT OF SCOPE for this slice.
 
 Inputs are loose Mappings so the same function works against the
 risk_monitoring `snapshot_to_payload` shape and any equivalent dict.
@@ -60,6 +58,8 @@ class RiskCapConfig:
     max_open_position_count: Optional[int]
     max_drawdown_pct_from_equity_peak: Optional[float]
     max_floating_loss_usd: Optional[float]
+    max_risk_per_trade_pct: Optional[float] = None
+    max_compound_units: Optional[int] = 0
 
 
 @dataclass(frozen=True)
@@ -82,6 +82,8 @@ DEFAULT_CAPS = RiskCapConfig(
     max_open_position_count=20,
     max_drawdown_pct_from_equity_peak=15.0,
     max_floating_loss_usd=None,
+    max_risk_per_trade_pct=None,
+    max_compound_units=0,
 )
 
 
@@ -109,6 +111,14 @@ def _as_float(value: Any) -> Optional[float]:
 def _as_float_or_zero(value: Any) -> float:
     f = _as_float(value)
     return 0.0 if f is None else f
+
+
+def _first_float(mapping: Mapping[str, Any], keys: tuple[str, ...]) -> tuple[Optional[float], Optional[str]]:
+    for key in keys:
+        value = _as_float(mapping.get(key))
+        if value is not None:
+            return value, key
+    return None, None
 
 
 def _normalize_symbol(value: Any) -> Optional[str]:
@@ -163,6 +173,85 @@ def _extract_by_symbol(snapshot: Mapping[str, Any]) -> list[dict[str, Any]]:
     return out
 
 
+def _proposed_margin_impact(
+    proposed_intent: Mapping[str, Any],
+    portfolio_snapshot: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Return best-effort proposed margin facts for the risk decision.
+
+    The dispatcher attaches the pre-trade estimate when it has one. If an
+    upstream caller supplies only required margin, this derives would-be margin
+    utilization from the current account snapshot.
+    """
+
+    explicit_util, explicit_key = _first_float(
+        proposed_intent,
+        (
+            "estimated_margin_utilization_after_pct",
+            "margin_utilization_after_pct",
+            "would_be_margin_utilization_pct",
+        ),
+    )
+    required_margin, required_key = _first_float(
+        proposed_intent,
+        (
+            "estimated_margin_required_usd",
+            "margin_required_usd",
+            "required_margin_usd",
+            "margin_required",
+        ),
+    )
+    margin_after, margin_after_key = _first_float(
+        proposed_intent,
+        (
+            "estimated_margin_after_usd",
+            "margin_after_usd",
+            "would_be_margin_used_usd",
+        ),
+    )
+    free_margin_after, free_margin_after_key = _first_float(
+        proposed_intent,
+        (
+            "estimated_free_margin_after_usd",
+            "free_margin_after_usd",
+            "would_be_free_margin_usd",
+        ),
+    )
+    equity = _as_float(portfolio_snapshot.get("account_equity"))
+    current_margin = _as_float(portfolio_snapshot.get("account_margin"))
+    current_free_margin = _as_float(portfolio_snapshot.get("account_free_margin"))
+
+    if explicit_util is not None:
+        util_after = explicit_util
+        source = f"proposed_intent.{explicit_key}"
+    elif margin_after is not None and equity is not None and equity > 0:
+        util_after = (margin_after / equity) * 100.0
+        source = f"proposed_intent.{margin_after_key}/portfolio.account_equity"
+    elif (
+        required_margin is not None
+        and current_margin is not None
+        and equity is not None
+        and equity > 0
+    ):
+        util_after = ((current_margin + required_margin) / equity) * 100.0
+        source = f"portfolio.account_margin+proposed_intent.{required_key}/portfolio.account_equity"
+    else:
+        util_after = _as_float(portfolio_snapshot.get("margin_utilization_pct"))
+        source = "portfolio.margin_utilization_pct" if util_after is not None else None
+
+    return {
+        "estimated_margin_required_usd": required_margin,
+        "estimated_margin_after_usd": margin_after,
+        "estimated_free_margin_after_usd": free_margin_after,
+        "would_be_margin_utilization_pct": round(util_after, 4) if util_after is not None else None,
+        "margin_utilization_source": source,
+        "current_free_margin_usd": current_free_margin,
+        "free_margin_after_source": (
+            f"proposed_intent.{free_margin_after_key}" if free_margin_after_key is not None else None
+        ),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -174,6 +263,7 @@ def evaluate_proposed_intent(
     caps: RiskCapConfig,
     equity_peak: Optional[float] = None,
     now: Optional[datetime] = None,
+    compound_slot_authorized: bool = False,
 ) -> RiskGateDecision:
     """Evaluate a proposed RouteIntent against a portfolio snapshot and
     risk caps. Pure. Returns a `RiskGateDecision`. Never raises.
@@ -271,6 +361,29 @@ def evaluate_proposed_intent(
     would_be_symbol_lots = round(symbol_existing_lots + lots_value, 4)
     would_be_open_count = current_open_count + 1
     would_be_symbol_positions = symbol_existing_positions + 1
+    compound_add_requested = bool(
+        proposed_intent.get("is_compound_add")
+        or proposed_intent.get("compound_add")
+    )
+    compound_slot_allowance = 0
+    if compound_slot_authorized and compound_add_requested:
+        try:
+            compound_slot_allowance = max(0, int(caps.max_compound_units or 0))
+        except (TypeError, ValueError):
+            compound_slot_allowance = 0
+    effective_symbol_position_cap = caps.max_positions_per_symbol
+    if effective_symbol_position_cap is not None:
+        effective_symbol_position_cap += compound_slot_allowance
+    if isinstance(portfolio_summary, dict):
+        portfolio_summary.update(
+            {
+                "compound_add_requested": compound_add_requested,
+                "compound_slot_authorized": bool(compound_slot_authorized),
+                "compound_slot_allowance": compound_slot_allowance,
+                "base_max_positions_per_symbol": caps.max_positions_per_symbol,
+                "effective_max_positions_per_symbol": effective_symbol_position_cap,
+            }
+        )
 
     # The "would-be" concentration is the max symbol concentration after
     # adding the proposed lots. The proposed symbol gets +lots_value;
@@ -305,13 +418,22 @@ def evaluate_proposed_intent(
         would_be_concentration_pct = 0.0
         would_be_peak_symbol = symbol
 
-    # Margin utilization stays the snapshot value: the gate cannot
-    # predict the broker's margin requirement for the new position
-    # without a contract-spec lookup. We surface the current util as the
-    # would-be lower bound; a non-None cap is checked against it.
-    current_margin_util = _as_float(
-        portfolio_snapshot.get("margin_utilization_pct")
-    )
+    # Margin utilization can come from the dispatcher-attached pre-trade
+    # estimate when broker/account metadata is available, otherwise it
+    # degrades to the current snapshot fields.
+    margin_impact = _proposed_margin_impact(proposed_intent, portfolio_snapshot)
+    current_margin_util = _as_float(portfolio_snapshot.get("margin_utilization_pct"))
+    would_be_margin_util = _as_float(margin_impact.get("would_be_margin_utilization_pct"))
+    proposed_free_margin_after = _as_float(margin_impact.get("estimated_free_margin_after_usd"))
+    if isinstance(portfolio_summary, dict):
+        portfolio_summary.update(
+            {
+                "proposed_margin_required_usd": margin_impact.get("estimated_margin_required_usd"),
+                "proposed_free_margin_after_usd": margin_impact.get("estimated_free_margin_after_usd"),
+                "would_be_margin_utilization_pct": margin_impact.get("would_be_margin_utilization_pct"),
+                "margin_utilization_source": margin_impact.get("margin_utilization_source"),
+            }
+        )
 
     # Drawdown from equity peak.
     drawdown_pct: Optional[float] = None
@@ -320,7 +442,51 @@ def evaluate_proposed_intent(
             max(0.0, (equity_peak - equity) / equity_peak * 100.0), 2
         )
 
-    expected_loss_usd = _as_float(proposed_intent.get("expected_loss_usd"))
+    expected_loss_usd, expected_loss_key = _first_float(
+        proposed_intent,
+        ("risk_at_stop_usd", "expected_loss_usd"),
+    )
+    if expected_loss_usd is not None:
+        expected_loss_usd = abs(expected_loss_usd)
+    explicit_risk_at_stop_pct, risk_pct_key = _first_float(
+        proposed_intent,
+        ("risk_at_stop_pct_equity", "risk_per_trade_pct"),
+    )
+    if explicit_risk_at_stop_pct is not None:
+        explicit_risk_at_stop_pct = abs(explicit_risk_at_stop_pct)
+    derived_risk_at_stop_pct = None
+    derived_risk_source = None
+    if expected_loss_usd is not None and equity is not None and equity > 0:
+        derived_risk_at_stop_pct = (expected_loss_usd / equity) * 100.0
+        derived_risk_source = (
+            f"proposed_intent.{expected_loss_key}/portfolio.account_equity"
+            if expected_loss_key
+            else "proposed_intent.stop_risk/portfolio.account_equity"
+        )
+    risk_pct_candidates = [
+        (explicit_risk_at_stop_pct, f"proposed_intent.{risk_pct_key}" if risk_pct_key else None),
+        (derived_risk_at_stop_pct, derived_risk_source),
+    ]
+    risk_pct_candidates = [item for item in risk_pct_candidates if item[0] is not None]
+    risk_at_stop_pct = max((value for value, _ in risk_pct_candidates), default=None)
+    risk_pct_source = None
+    if risk_at_stop_pct is not None:
+        risk_pct_source = next(
+            (source for value, source in risk_pct_candidates if value == risk_at_stop_pct),
+            None,
+        )
+    if isinstance(portfolio_summary, dict):
+        portfolio_summary.update(
+            {
+                "proposed_risk_at_stop_usd": (
+                    round(expected_loss_usd, 2) if expected_loss_usd is not None else None
+                ),
+                "proposed_risk_at_stop_pct_equity": (
+                    round(risk_at_stop_pct, 4) if risk_at_stop_pct is not None else None
+                ),
+                "proposed_risk_at_stop_source": risk_pct_source,
+            }
+        )
 
     # ---- 4. Check each cap ----------------------------------------------
     blocking: list[str] = []
@@ -346,23 +512,50 @@ def evaluate_proposed_intent(
 
     if caps.max_margin_utilization_pct is not None:
         if (
-            current_margin_util is not None
-            and current_margin_util > caps.max_margin_utilization_pct
+            would_be_margin_util is not None
+            and would_be_margin_util > caps.max_margin_utilization_pct
         ):
             blocking.append("max_margin_utilization_pct")
+            if current_margin_util is not None and abs(would_be_margin_util - current_margin_util) > 0.01:
+                headline_parts.append(
+                    f"margin utilization would become {would_be_margin_util:.0f}% "
+                    f"from {current_margin_util:.0f}% "
+                    f"(cap {caps.max_margin_utilization_pct:.0f}%)"
+                )
+            else:
+                headline_parts.append(
+                    f"margin utilization {would_be_margin_util:.0f}% "
+                    f"(cap {caps.max_margin_utilization_pct:.0f}%)"
+                )
+
+    if proposed_free_margin_after is not None and proposed_free_margin_after < 0:
+        blocking.append("insufficient_free_margin")
+        if free_margin is not None:
             headline_parts.append(
-                f"margin utilization {current_margin_util:.0f}% "
-                f"(cap {caps.max_margin_utilization_pct:.0f}%)"
+                f"free margin would become {_format_money(proposed_free_margin_after)} "
+                f"from {_format_money(free_margin)}"
+            )
+        else:
+            headline_parts.append(
+                f"free margin would become {_format_money(proposed_free_margin_after)}"
             )
 
-    if caps.max_positions_per_symbol is not None:
-        if would_be_symbol_positions > caps.max_positions_per_symbol:
+    if effective_symbol_position_cap is not None:
+        if would_be_symbol_positions > effective_symbol_position_cap:
             blocking.append("max_positions_per_symbol")
-            headline_parts.append(
-                f"positions on {symbol} would become "
-                f"{would_be_symbol_positions} "
-                f"(cap {caps.max_positions_per_symbol})"
-            )
+            if compound_slot_allowance:
+                headline_parts.append(
+                    f"positions on {symbol} would become {would_be_symbol_positions} "
+                    f"(base cap {caps.max_positions_per_symbol} plus "
+                    f"{compound_slot_allowance} authorized compound slot"
+                    f"{'s' if compound_slot_allowance != 1 else ''})"
+                )
+            else:
+                headline_parts.append(
+                    f"positions on {symbol} would become "
+                    f"{would_be_symbol_positions} "
+                    f"(cap {effective_symbol_position_cap})"
+                )
 
     if caps.max_open_position_count is not None:
         if would_be_open_count > caps.max_open_position_count:
@@ -398,6 +591,14 @@ def evaluate_proposed_intent(
                 f"(cap {_format_money(-abs(caps.max_floating_loss_usd))})"
             )
 
+    if caps.max_risk_per_trade_pct is not None and risk_at_stop_pct is not None:
+        if risk_at_stop_pct > caps.max_risk_per_trade_pct:
+            blocking.append("max_risk_per_trade_pct")
+            headline_parts.append(
+                f"risk at the protective stop would be {risk_at_stop_pct:.3f}% of equity "
+                f"(cap {caps.max_risk_per_trade_pct:.3f}%)"
+            )
+
     proposed_intent_summary = _format_intent_summary(
         symbol=symbol, direction=direction, lots=lots_value
     )
@@ -427,10 +628,15 @@ def evaluate_proposed_intent(
         f"concentration in {would_be_peak_symbol} would be "
         f"{would_be_concentration_pct:.0f}%; "
     )
-    if current_margin_util is not None:
-        pass_reason += f"margin utilization {current_margin_util:.0f}%."
+    if would_be_margin_util is not None:
+        if current_margin_util is not None and abs(would_be_margin_util - current_margin_util) > 0.01:
+            pass_reason += f"margin utilization would become {would_be_margin_util:.0f}% from {current_margin_util:.0f}%."
+        else:
+            pass_reason += f"margin utilization {would_be_margin_util:.0f}%."
     else:
         pass_reason += "margin utilization not reported."
+    if risk_at_stop_pct is not None:
+        pass_reason += f" Risk at the protective stop is {risk_at_stop_pct:.3f}% of equity."
 
     return RiskGateDecision(
         accepted=True,

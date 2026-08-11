@@ -311,7 +311,7 @@ class BotState:
     last_capability: Optional[str] = None
     last_result: Optional[Dict[str, Any]] = None
     confirm_pending: Optional[str] = None  # capability key awaiting confirmation
-    mt5_path: str = r"C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe"
+    mt5_path: str = r"C:\Program Files\Risen MT5 Terminal\terminal64.exe"
     api_base: str = "http://127.0.0.1:8765"
 
 

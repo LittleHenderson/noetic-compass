@@ -177,6 +177,14 @@ def _findings(
     last_live_order_at = pilot.get("last_live_order_at")
     mt5_open = int(truth.get("mt5_open_position_count", 0) or 0) if truth else 0
     unmatched = int(truth.get("terminal_unmatched_open_position_count", 0) or 0) if truth else 0
+    unattributed = int(truth.get("terminal_unattributed_open_position_count", 0) or 0) if truth else 0
+    memory_gap = int(truth.get("terminal_memory_gap_open_position_count", 0) or 0) if truth else 0
+    cas_memory_only = int(truth.get("cas_memory_only_open_position_count", 0) or 0) if truth else 0
+    cas_receipt_pending = int(truth.get("cas_receipt_pending_open_position_count", 0) or 0) if truth else 0
+    unmatched_history = int(truth.get("terminal_unmatched_history_count", 0) or 0) if truth else 0
+    unattributed_history = int(truth.get("terminal_unattributed_history_count", 0) or 0) if truth else 0
+    attributed_history_gap = int(truth.get("terminal_attributed_history_memory_gap_count", 0) or 0) if truth else 0
+    blocking_history_gap = attributed_history_gap
     pending = int(truth.get("terminal_pending_receipt_count", 0) or 0) if truth else 0
     receipt_mismatch = int(truth.get("terminal_receipt_mismatch_count", 0) or 0) if truth else 0
     unresolved_rows = [
@@ -191,26 +199,70 @@ def _findings(
     unknown_unresolved_count = max(0, unresolved_real - len(classified_attempts))
     broker_review_required_count += unknown_unresolved_count
     has_unresolved_real = broker_review_required_count > 0
+    failed = str(truth.get("overall_status") or "") == RECONCILIATION_FAILED
     requires = (
-        live_trade_count > 0
+        failed
+        or live_trade_count > 0
         or bool(last_live_order_at)
         or mt5_open > 0
         or unmatched > 0
+        or blocking_history_gap > 0
         or pending > 0
         or receipt_mismatch > 0
         or has_unresolved_real
     )
     fresh = _fresh_enough(truth, fresh_seconds=fresh_seconds)
     connected = bool(truth.get("mt5_connected", False))
-    live_visible = connected and truth.get("mt5_is_demo") is False
-    failed = str(truth.get("overall_status") or "") == RECONCILIATION_FAILED
+    account_identity_matches = truth.get("mt5_account_identity_matches_config") is True
+    live_visible = connected and truth.get("mt5_is_demo") is False and account_identity_matches
 
     checks = [
         _check("prior_live_activity_or_positions", "OK" if requires else "CLEAR", {"live_trade_count": live_trade_count, "mt5_open_positions": mt5_open}, "Recovery review is required after live activity or visible positions." if requires else "No prior live activity or broker-visible positions require recovery review."),
         _check("broker_truth_present", "OK" if truth else "MISSING", {"present": bool(truth)}, "Latest broker-truth report is present." if truth else "No broker-truth report is available."),
         _check("broker_truth_fresh", "OK" if fresh else "MISSING", {"generated_at": truth.get("generated_at"), "fresh_seconds": fresh_seconds}, "Latest broker-truth report is fresh." if fresh else "Latest broker-truth report is missing or stale."),
-        _check("live_account_visible", "OK" if live_visible else "MISSING", {"mt5_connected": connected, "mt5_is_demo": truth.get("mt5_is_demo")}, "Live MT5 account is visible." if live_visible else "A connected live MT5 account is not visible."),
-        _check("position_reconciliation_clean", "OK" if not failed and unmatched == 0 and pending == 0 and receipt_mismatch == 0 else "MISSING", {"overall_status": truth.get("overall_status"), "unmatched": unmatched, "pending": pending, "receipt_mismatch": receipt_mismatch}, "Open-position reconciliation is clean." if not failed and unmatched == 0 and pending == 0 and receipt_mismatch == 0 else "Open-position reconciliation is failed, pending, or unmatched."),
+        _check(
+            "live_account_visible",
+            "OK" if live_visible else "MISSING",
+            {
+                "mt5_connected": connected,
+                "mt5_is_demo": truth.get("mt5_is_demo"),
+                "mt5_account": truth.get("mt5_account"),
+                "mt5_account_server": truth.get("mt5_account_server"),
+                "mt5_expected_account": truth.get("mt5_expected_account"),
+                "mt5_expected_server": truth.get("mt5_expected_server"),
+                "mt5_account_identity_matches_config": truth.get("mt5_account_identity_matches_config"),
+            },
+            "The connected live MT5 login/server matches the configured owner account."
+            if live_visible
+            else "A connected live MT5 account matching the configured owner login/server is not visible.",
+        ),
+        _check(
+            "position_reconciliation_clean",
+            "OK" if not failed and unmatched == 0 and blocking_history_gap == 0 and pending == 0 and receipt_mismatch == 0 else "MISSING",
+            {
+                "overall_status": truth.get("overall_status"),
+                "unmatched": unmatched,
+                "terminal_unattributed": unattributed,
+                "terminal_memory_gap": memory_gap,
+                "cas_memory_only": cas_memory_only,
+                "cas_receipt_pending": cas_receipt_pending,
+                "unmatched_history": unmatched_history,
+                "unattributed_history": unattributed_history,
+                "attributed_history_gap": attributed_history_gap,
+                "blocking_history_gap": blocking_history_gap,
+                "pending": pending,
+                "receipt_mismatch": receipt_mismatch,
+            },
+            "Open-position reconciliation is clean."
+            if not failed and unmatched == 0 and blocking_history_gap == 0 and pending == 0 and receipt_mismatch == 0
+            else (
+                f"Open-position reconciliation is blocked: unattributed broker positions={unattributed}, "
+                f"terminal memory-gap positions={memory_gap}, CAS memory-only positions={cas_memory_only}, "
+                f"CAS receipt-pending positions={cas_receipt_pending}, unmatched history={unmatched_history}, "
+                f"unattributed history={unattributed_history}, attributed history gap={attributed_history_gap}, "
+                f"pending receipts={pending}, receipt mismatches={receipt_mismatch}."
+            ),
+        ),
         _check(
             "synthetic_test_like_attempts_classified",
             "OK",
@@ -244,10 +296,24 @@ def _findings(
             "overall_status": truth.get("overall_status"),
             "mt5_connected": truth.get("mt5_connected"),
             "mt5_is_demo": truth.get("mt5_is_demo"),
+            "mt5_account": truth.get("mt5_account"),
+            "mt5_account_server": truth.get("mt5_account_server"),
+            "mt5_expected_account": truth.get("mt5_expected_account"),
+            "mt5_expected_server": truth.get("mt5_expected_server"),
+            "mt5_account_identity_matches_config": truth.get("mt5_account_identity_matches_config"),
             "mt5_open_position_count": mt5_open,
             "terminal_unmatched_open_position_count": unmatched,
+            "terminal_unattributed_open_position_count": unattributed,
+            "terminal_memory_gap_open_position_count": memory_gap,
+            "cas_memory_only_open_position_count": cas_memory_only,
+            "cas_receipt_pending_open_position_count": cas_receipt_pending,
+            "terminal_unmatched_history_count": unmatched_history,
+            "terminal_unattributed_history_count": unattributed_history,
+            "terminal_attributed_history_memory_gap_count": attributed_history_gap,
             "terminal_pending_receipt_count": pending,
             "terminal_receipt_mismatch_count": receipt_mismatch,
+            "terminal_unmatched_open_position_preview": list(truth.get("terminal_unmatched_open_position_preview") or [])[:3],
+            "terminal_unmatched_history_preview": list(truth.get("terminal_unmatched_history_preview") or [])[:3],
         },
         "live_pilot_summary": {
             "live_trade_count": live_trade_count,
@@ -320,8 +386,20 @@ def _fingerprint(
     material = {
         "truth_generated_at": truth.get("generated_at"),
         "truth_status": truth.get("overall_status"),
+        "mt5_account": truth.get("mt5_account"),
+        "mt5_account_server": truth.get("mt5_account_server"),
+        "mt5_expected_account": truth.get("mt5_expected_account"),
+        "mt5_expected_server": truth.get("mt5_expected_server"),
+        "mt5_account_identity_matches_config": truth.get("mt5_account_identity_matches_config"),
         "mt5_open": truth.get("mt5_open_position_count"),
         "unmatched": truth.get("terminal_unmatched_open_position_count"),
+        "terminal_unattributed": truth.get("terminal_unattributed_open_position_count"),
+        "terminal_memory_gap": truth.get("terminal_memory_gap_open_position_count"),
+        "cas_memory_only": truth.get("cas_memory_only_open_position_count"),
+        "cas_receipt_pending": truth.get("cas_receipt_pending_open_position_count"),
+        "unmatched_history": truth.get("terminal_unmatched_history_count"),
+        "unattributed_history": truth.get("terminal_unattributed_history_count"),
+        "attributed_history_gap": truth.get("terminal_attributed_history_memory_gap_count"),
         "pending": truth.get("terminal_pending_receipt_count"),
         "receipt_mismatch": truth.get("terminal_receipt_mismatch_count"),
         "live_trade_count": pilot.get("live_trade_count"),

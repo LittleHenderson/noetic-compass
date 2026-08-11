@@ -83,6 +83,8 @@ def test_agent_workflow_has_shared_knowledge_pack_and_live_boundary():
     assert any("forex_fury_replay_results" in path for path in paths)
     assert any("cas_harness_production_todo.md" in path for path in paths)
     assert "does not by itself execute live broker orders" in report["claim_boundary"]
+    assert "order_dispatch.py" in report["claim_boundary"]
+    assert report["live_execution_boundary"]["live_trading_status"] == "OWNER_ARMING_REQUIRED"
     overseer = next(agent for agent in report["agent_roster"] if agent["agent_id"] == "overseer_agent")
     assert "proposal conflicts with current exposure" in overseer["must_reject_conditions"]
     assert "APPROVE_ROUTE_INTENT" in overseer["decision_outputs"]
@@ -99,4 +101,3 @@ def test_agent_workflow_route_and_dashboard_surface_latest_report():
     assert status == 200
     assert "agentWorkflowPlan" in dashboard
     assert dashboard["agentWorkflowPlan"]["workflow_status"] == "AGENT_DESK_PLAN_READY"
-

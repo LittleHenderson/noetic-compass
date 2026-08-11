@@ -28,6 +28,21 @@ def _live(positions):
     return {"open_positions": list(positions)}
 
 
+def _live_with_truth(positions, *, source="movement_stream", stale=False, price_source_status=None, last_update_iso="2026-06-25T12:00:00+00:00"):
+    movement_source = {}
+    if price_source_status is not None:
+        movement_source["price_source_status"] = price_source_status
+    return {
+        "open_positions": list(positions),
+        "data_freshness": {
+            "source": source,
+            "stale": stale,
+            "last_update_iso": last_update_iso,
+            "movement_source": movement_source,
+        },
+    }
+
+
 def _acct(*, balance=None, equity=None, margin=None, free_margin=None):
     return {
         "balance": balance,
@@ -50,6 +65,12 @@ def test_empty_inputs_produce_zero_snapshot_with_explanatory_summary():
     assert snap.concentration_pct == 0.0
     assert snap.account_balance is None
     assert snap.margin_utilization_pct is None
+    assert snap.telemetry_source == "none"
+    assert snap.telemetry_stale is True
+    assert snap.position_feed_label == "NONE"
+    assert snap.movement_source_truth is not None
+    assert snap.movement_source_truth["movement_stream_present"] is False
+    assert snap.movement_source_truth["position_feed_label"] == "NONE"
     assert "no open positions" in snap.plain_english_summary.lower()
     assert snap.diagnostic_hints == ()
 
@@ -72,6 +93,180 @@ def test_single_position_eurusd_buy_one_lot_aggregates_correctly():
     assert snap.total_exposure_lots == pytest.approx(0.1)
     assert snap.largest_floating_pnl_gain == pytest.approx(5.0)
     assert snap.largest_floating_pnl_loss == 0.0
+
+
+def test_static_simulation_truth_is_exposed_in_portfolio_snapshot():
+    snap = compose_portfolio_risk_snapshot(
+        live_telemetry=_live_with_truth([
+            {
+                "symbol": "NAS100",
+                "direction": "BUY",
+                "lots": 0.1,
+                "floating_pnl": 0.0,
+                "price_source": "paper_route_snapshot:static_simulation",
+                "price_stale": True,
+                "position_source_label": "PAPER_SIM_STATIC",
+                "broker_ticket": None,
+            }
+        ], price_source_status="STATIC_SIMULATION_FALLBACK"),
+        account_snapshot=None,
+        now=_FIXED_NOW,
+    )
+    assert snap.telemetry_source == "movement_stream"
+    assert snap.telemetry_stale is False
+    assert snap.price_source_status == "STATIC_SIMULATION_FALLBACK"
+    assert snap.position_feed_label == "SIM PROOF"
+    assert "not live MT5 terminal positions" in snap.position_feed_detail
+    assert snap.broker_ticket_position_count == 0
+    assert snap.static_position_count == 1
+    assert snap.movement_source_truth is not None
+    assert snap.movement_source_truth["price_source_status"] == snap.price_source_status
+    assert snap.movement_source_truth["position_feed_label"] == "SIM PROOF"
+    assert snap.movement_source_truth["static_position_count"] == 1
+    assert snap.movement_source_truth["detail"] == snap.position_feed_detail
+    assert "static simulation" in snap.plain_english_summary
+    assert any("Position feed is static simulation, not MT5 broker truth." == h for h in snap.diagnostic_hints)
+
+
+def test_portfolio_snapshot_prefers_canonical_position_feed_detail_when_present():
+    detail = (
+        "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions. "
+        "Static simulator fallback is active for 1/1 row(s), so prices and floating P&L can remain at entry "
+        "until usable provider or MT5 quotes arrive. Requested provider: Yahoo. Static fallback symbols: NAS100. "
+        "Stale provider/MT5 snapshots were rejected for: NAS100 (max age 900s)."
+    )
+    snap = compose_portfolio_risk_snapshot(
+        live_telemetry={
+            "open_positions": [
+                {
+                    "symbol": "NAS100",
+                    "direction": "BUY",
+                    "lots": 0.1,
+                    "floating_pnl": 0.0,
+                    "price_source": "paper_route_snapshot:static_simulation",
+                    "price_stale": True,
+                    "position_source_label": "PAPER_SIM_STATIC",
+                    "broker_ticket": None,
+                }
+            ],
+            "position_feed_label": "SIM PROOF",
+            "position_feed_detail": detail,
+            "data_freshness": {
+                "source": "movement_stream",
+                "stale": False,
+                "last_update_iso": "2026-06-25T12:00:00+00:00",
+                "movement_source": {
+                    "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                },
+            },
+        },
+        account_snapshot=None,
+        now=_FIXED_NOW,
+    )
+    assert snap.position_feed_label == "SIM PROOF"
+    assert snap.position_feed_detail == detail
+    assert "Stale provider/MT5 snapshots were rejected for: NAS100 (max age 900s)." in snap.position_feed_detail
+
+
+def test_portfolio_snapshot_prefers_top_level_movement_source_truth_when_nested_summary_is_partial():
+    detail = (
+        "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions. "
+        "Static simulator fallback is active for 1/1 row(s), so prices and floating P&L can remain at entry "
+        "until usable provider or MT5 quotes arrive."
+    )
+    snap = compose_portfolio_risk_snapshot(
+        live_telemetry={
+            "open_positions": [
+                {
+                    "symbol": "NAS100",
+                    "direction": "BUY",
+                    "lots": 0.1,
+                    "floating_pnl": 0.0,
+                    "price_source": "paper_route_snapshot:static_simulation",
+                    "price_stale": True,
+                    "position_source_label": "PAPER_SIM_STATIC",
+                    "broker_ticket": None,
+                }
+            ],
+            "totals": {"open_position_count": 1, "total_floating_pnl": 0.0},
+            "position_feed_label": "SIM PROOF",
+            "position_feed_detail": detail,
+            "movement_source_truth": {
+                "movement_stream_present": True,
+                "telemetry_source": "movement_stream",
+                "telemetry_stale": False,
+                "telemetry_last_update_iso": "2026-06-25T12:00:00+00:00",
+                "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                "price_source_label": "STATIC SIM",
+                "price_source_summary": "Static simulation only.",
+                "position_feed_label": "SIM PROOF",
+                "position_feed_detail": detail,
+                "static_simulation_active": True,
+                "open_position_count": 1,
+                "static_position_count": 1,
+                "static_quote_count": 1,
+                "closed_market_symbols": ["NAS100"],
+                "closed_market_quote_count": 1,
+                "unsupported_provider_symbols": ["NAS100"],
+                "detail": detail,
+                "local_detail": detail,
+            },
+            "data_freshness": {
+                "source": "movement_stream",
+                "stale": False,
+                "last_update_iso": "2026-06-25T12:00:00+00:00",
+                "movement_source": {
+                    "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                },
+            },
+        },
+        account_snapshot=None,
+        now=_FIXED_NOW,
+    )
+    assert snap.movement_source_truth is not None
+    assert snap.movement_source_truth["price_source_status"] == "STATIC_SIMULATION_FALLBACK"
+    assert snap.movement_source_truth["static_quote_count"] == 1
+    assert snap.movement_source_truth["closed_market_symbols"] == ["NAS100"]
+    assert snap.movement_source_truth["unsupported_provider_symbols"] == ["NAS100"]
+    assert snap.movement_source_truth["detail"] == detail
+
+
+def test_live_mt5_truth_is_exposed_in_portfolio_snapshot():
+    snap = compose_portfolio_risk_snapshot(
+        live_telemetry=_live_with_truth([
+            {
+                "symbol": "EURUSD",
+                "direction": "BUY",
+                "lots": 0.2,
+                "floating_pnl": 5.0,
+                "price_source": "mt5_terminal_api_verifier",
+                "price_stale": False,
+                "position_source_label": "MT5_LIVE_BROKER",
+                "broker_ticket": "12345",
+            }
+        ], source="mt5_terminal_api_verifier"),
+        account_snapshot=None,
+        now=_FIXED_NOW,
+    )
+    assert snap.telemetry_source == "mt5_terminal_api_verifier"
+    assert snap.position_feed_label == "LIVE MT5"
+    assert "MT5 broker positions" in snap.position_feed_detail
+    assert snap.broker_ticket_position_count == 1
+    assert snap.static_position_count == 0
+    assert snap.movement_source_truth is not None
+    assert snap.movement_source_truth["telemetry_source"] == "mt5_terminal_api_verifier"
+    assert snap.movement_source_truth["broker_ticket_position_count"] == 1
+    assert "MT5 broker portfolio holds" in snap.plain_english_summary
+
+
+def test_stale_portfolio_snapshot_is_called_out():
+    snap = compose_portfolio_risk_snapshot(
+        live_telemetry=_live_with_truth([], stale=True, price_source_status="CACHE_WARMING"),
+        account_snapshot=None,
+        now=_FIXED_NOW,
+    )
+    assert snap.telemetry_stale is True
+    assert any("Telemetry snapshot is stale." == h for h in snap.diagnostic_hints)
 
 
 def test_two_positions_same_symbol_same_direction_aggregate():
@@ -247,6 +442,9 @@ def test_snapshot_to_payload_is_json_friendly_and_round_trips():
     assert isinstance(payload["by_symbol"], list)
     assert isinstance(payload["diagnostic_hints"], list)
     assert payload["largest_symbol_exposure"]["symbol"] == "EURUSD"
+    assert "telemetry_source" in payload
+    assert "position_feed_label" in payload
+    assert "position_feed_detail" in payload
     # JSON-serialisable
     import json
     assert json.loads(json.dumps(payload))["open_position_count"] == 1

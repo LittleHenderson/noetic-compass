@@ -84,6 +84,15 @@ def test_remove_returns_true_for_existing_url(tmp_path):
     assert store.list_all() == []
 
 
+def test_remove_accepts_subscription_id(tmp_path):
+    store = _store(tmp_path)
+    sub = _make_sub()
+    store.add(sub)
+
+    assert store.remove(sub.subscription_id) is True
+    assert store.list_all() == []
+
+
 def test_remove_returns_false_when_url_absent(tmp_path):
     store = _store(tmp_path)
     assert store.remove("https://hooks.example/never-added") is False
@@ -113,6 +122,16 @@ def test_update_last_used_returns_false_when_url_absent(tmp_path):
     assert store.update_last_used("https://hooks.example/missing", "now") is False
 
 
+def test_update_last_used_accepts_subscription_id(tmp_path):
+    store = _store(tmp_path)
+    sub = _make_sub(url="https://hooks.example/sub-id")
+    store.add(sub)
+
+    when = "2026-06-25T12:00:00+00:00"
+    assert store.update_last_used(sub.subscription_id, when) is True
+    assert store.list_all()[0].last_used_at_iso == when
+
+
 def test_clear_empties_store(tmp_path):
     store = _store(tmp_path)
     store.add(_make_sub(url="https://hooks.example/a"))
@@ -130,16 +149,47 @@ def test_atomic_write_then_read_roundtrip_persists_to_disk(tmp_path):
     store.add(sub)
 
     assert store_path.exists()
-    lines = [line for line in store_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    persisted = store_path.read_text(encoding="utf-8")
+    lines = [line for line in persisted.splitlines() if line.strip()]
     assert len(lines) == 1
+    assert "https://hooks.example/persist" not in persisted
+    assert '"encrypted": true' in persisted.lower()
     decoded = json.loads(lines[0])
-    assert decoded["webhook_url"] == "https://hooks.example/persist"
+    assert isinstance(decoded["webhook_url"], dict)
+    assert decoded["webhook_url"]["encrypted"] is True
     assert decoded["label"] == "discord-alerts"
 
     reopened = WebhookSubscriptionStore(path=store_path)
     listed = reopened.list_all()
     assert len(listed) == 1
     assert listed[0].webhook_url == "https://hooks.example/persist"
+
+
+def test_legacy_plaintext_webhook_url_is_migrated_to_encrypted(tmp_path):
+    store_path = tmp_path / "subscriptions.jsonl"
+    store_path.write_text(
+        json.dumps(
+            {
+                "webhook_url": "https://hooks.example/legacy",
+                "label": "legacy-alerts",
+                "created_at_iso": "2026-07-09T00:00:00+00:00",
+                "last_used_at_iso": None,
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    store = WebhookSubscriptionStore(path=store_path)
+    listed = store.list_all()
+
+    assert len(listed) == 1
+    assert listed[0].webhook_url == "https://hooks.example/legacy"
+    assert listed[0].label == "legacy-alerts"
+
+    rewritten = store_path.read_text(encoding="utf-8")
+    assert "https://hooks.example/legacy" not in rewritten
+    assert '"encrypted": true' in rewritten.lower()
 
 
 # ---------------------------------------------------------------------------

@@ -9,16 +9,25 @@ import requests  # type: ignore
 
 from cas_forex.broker.mt5_bridge import MT5_INIT_TIMEOUT_MS, _add_local_mt5_deps
 from cas_forex.instruments import (
-    broker_symbol,
+    canonical_symbol,
     default_mid,
     price_unit_size,
+    resolve_broker_symbol,
     round_price,
+    symbol_name_matches,
+    rank_symbol_candidates,
     yahoo_ticker,
 )
 from cas_forex.schemas.forecast import pip_multiplier as _pip_for
 from cas_forex.schemas.market import MarketSnapshot
 from cas_forex.config import config
 from cas_forex.time_utils import utc_now
+
+
+_MT5_FUTURE_CLOCK_TOLERANCE_SECONDS = 300.0
+_MT5_MAX_SERVER_OFFSET_SECONDS = 14 * 60 * 60
+_MT5_OFFSET_RESIDUAL_TOLERANCE_SECONDS = 10 * 60
+_MT5_OPEN_TICK_MAX_AGE_SECONDS = 5 * 60
 
 
 class MarketDataConnector(ABC):
@@ -204,7 +213,9 @@ class MT5TerminalMarketDataConnector(MarketDataConnector):
         self._initialized = mt5_module is not None
         self.last_error = ""
         self.last_symbol_resolution: dict[str, Any] = {}
+        self.last_time_normalization: dict[str, Any] = {}
         self._symbol_cache: dict[str, str] = {}
+        self._server_utc_offsets: dict[str, int] = {}
 
     def fetch_snapshot(self, symbol: str) -> MarketSnapshot:
         if not self._connect():
@@ -226,10 +237,23 @@ class MT5TerminalMarketDataConnector(MarketDataConnector):
             return _closed_snapshot(symbol)
         spread = (ask - bid) * _pip_for(symbol)
         tick_time = _float_attr(tick, "time", 0.0)
+        now = utc_now()
+        offset_seconds = infer_mt5_future_server_offset_seconds(
+            tick_time,
+            now_epoch=now.timestamp(),
+        )
+        self._server_utc_offsets[mt5_symbol] = offset_seconds
         timestamp = (
-            datetime.fromtimestamp(tick_time, tz=timezone.utc)
+            datetime.fromtimestamp(tick_time - offset_seconds, tz=timezone.utc)
             if tick_time > 0
-            else utc_now()
+            else now
+        )
+        self.last_time_normalization = _mt5_time_normalization_report(
+            symbol=mt5_symbol,
+            raw_seconds=tick_time,
+            normalized=timestamp,
+            offset_seconds=offset_seconds,
+            now_epoch=now.timestamp(),
         )
         return MarketSnapshot(
             symbol=symbol,
@@ -241,7 +265,14 @@ class MT5TerminalMarketDataConnector(MarketDataConnector):
             timeframe="M5",
             volume_1m=_int_attr(tick, "volume", None),
             session=YFinanceConnector._detect_session(),
-            is_market_open=_mt5_symbol_open(self._mt5, info, bid, ask),
+            is_market_open=_mt5_symbol_open(
+                self._mt5,
+                info,
+                bid,
+                ask,
+                timestamp=timestamp,
+                now=now,
+            ),
         )
 
     def fetch_historical(
@@ -266,12 +297,34 @@ class MT5TerminalMarketDataConnector(MarketDataConnector):
         if rates is None:
             self.last_error = f"MT5 returned no rates for {symbol} resolved as {mt5_symbol}"
             return []
+        rate_rows = list(rates)[-int(bars):]
+        offset_seconds = self._server_utc_offsets.get(mt5_symbol)
+        if offset_seconds is None:
+            tick = self._mt5.symbol_info_tick(mt5_symbol)
+            tick_time = _float_attr(tick, "time", 0.0)
+            offset_seconds = infer_mt5_future_server_offset_seconds(
+                tick_time,
+                now_epoch=utc_now().timestamp(),
+            )
+            if offset_seconds == 0 and rate_rows:
+                offset_seconds = infer_mt5_future_server_offset_seconds(
+                    _row_get(rate_rows[-1], "time", 0),
+                    now_epoch=utc_now().timestamp(),
+                )
+            self._server_utc_offsets[mt5_symbol] = offset_seconds
         candles: list[dict[str, Any]] = []
-        for row in list(rates)[-int(bars):]:
+        for row in rate_rows:
             ts = _row_get(row, "time", 0)
             candles.append(
                 {
-                    "timestamp": _mt5_time_iso(ts),
+                    "timestamp": _mt5_time_iso(ts, offset_seconds=offset_seconds),
+                    "raw_timestamp": _mt5_time_iso(ts),
+                    "timestamp_basis": (
+                        "mt5_broker_server_epoch_normalized_to_host_utc"
+                        if offset_seconds
+                        else "mt5_epoch_utc"
+                    ),
+                    "mt5_server_utc_offset_seconds": offset_seconds,
                     "open": float(_row_get(row, "open", 0.0)),
                     "high": float(_row_get(row, "high", 0.0)),
                     "low": float(_row_get(row, "low", 0.0)),
@@ -340,40 +393,16 @@ class MT5TerminalMarketDataConnector(MarketDataConnector):
         if key in self._symbol_cache:
             return self._symbol_cache[key]
 
-        configured = _configured_symbol_candidates(canonical)
-        static_candidates = _dedupe(
-            [
-                *configured,
-                broker_symbol(canonical),
-                canonical,
-                canonical.replace("/", ""),
-                *self.SYMBOL_ALIASES.get(key, ()),
-            ]
+        resolution = resolve_broker_symbol(
+            canonical,
+            broker=self._mt5,
+            overrides=getattr(config, "mt5_symbol_overrides", ""),
         )
-        tried: list[str] = []
-        for candidate in static_candidates:
-            tried.append(candidate)
-            if self._symbol_available(candidate):
-                return self._cache_symbol(canonical, candidate, "STATIC_OR_OWNER_OVERRIDE", tried, [])
-
-        discovered = self._discover_symbol_candidates(canonical)
-        for candidate in discovered:
-            if candidate in tried:
-                continue
-            tried.append(candidate)
-            if self._symbol_available(candidate):
-                return self._cache_symbol(canonical, candidate, "BROKER_SYMBOL_DISCOVERY", tried, discovered)
-
-        self.last_symbol_resolution = {
-            "canonical_symbol": canonical,
-            "configured_candidates": configured,
-            "tried_candidates": tried[:40],
-            "discovered_candidates": discovered[:40],
-            "selected_symbol": None,
-            "resolution_source": "UNRESOLVED",
-            "status": "UNRESOLVED",
-        }
-        self.last_error = (
+        self.last_symbol_resolution = resolution.as_dict()
+        if resolution.selected_symbol:
+            self._symbol_cache[key] = resolution.selected_symbol
+            return resolution.selected_symbol
+        self.last_error = resolution.detail or (
             f"MT5 symbol unresolved for {canonical}; set CAS_FOREX_MT5_SYMBOL_OVERRIDES "
             "or make the symbol visible in Market Watch."
         )
@@ -461,12 +490,19 @@ class OANDARestConnector(MarketDataConnector):
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
         })
+        self.last_error = ""
+        self._account_instruments_cache: Optional[list[str]] = None
+        self._symbol_cache: dict[str, Optional[str]] = {}
 
     def fetch_snapshot(self, symbol: str) -> MarketSnapshot:
         if not self.api_key or not self.account_id:
+            self.last_error = "OANDA credentials are not configured"
             return _closed_snapshot(symbol)
 
-        oanda_symbol = symbol.replace("/", "_")
+        self.last_error = ""
+        oanda_symbol = self._resolve_instrument(symbol)
+        if not oanda_symbol:
+            return _closed_snapshot(symbol)
         try:
             url = f"{self.base_url}/accounts/{self.account_id}/pricing"
             params = {"instruments": oanda_symbol}
@@ -489,8 +525,9 @@ class OANDARestConnector(MarketDataConnector):
                     session=self._detect_session(),
                     is_market_open=True,
                 )
+            self.last_error = f"pricing endpoint returned no prices for {symbol} resolved as {oanda_symbol}"
         except Exception:
-            pass
+            self.last_error = f"pricing request failed for {symbol} resolved as {oanda_symbol}"
 
         return _closed_snapshot(symbol)
 
@@ -498,9 +535,13 @@ class OANDARestConnector(MarketDataConnector):
         self, symbol: str, bars: int = 100, timeframe: str = "M5"
     ) -> List[dict]:
         if not self.api_key or not self.account_id:
+            self.last_error = "OANDA credentials are not configured"
             return []
 
-        oanda_symbol = symbol.replace("/", "_")
+        self.last_error = ""
+        oanda_symbol = self._resolve_instrument(symbol)
+        if not oanda_symbol:
+            return []
         oanda_tf = timeframe.replace("M", "M").replace("H", "H").replace("D", "D")
         try:
             url = f"{self.base_url}/accounts/{self.account_id}/instruments/{oanda_symbol}/candles"
@@ -522,6 +563,7 @@ class OANDARestConnector(MarketDataConnector):
                 })
             return candles
         except Exception:
+            self.last_error = f"historical candle request failed for {symbol} resolved as {oanda_symbol}"
             return []
 
     def is_connected(self) -> bool:
@@ -537,6 +579,58 @@ class OANDARestConnector(MarketDataConnector):
     @staticmethod
     def _detect_session() -> str:
         return YFinanceConnector._detect_session()
+
+    def _resolve_instrument(self, symbol: str) -> Optional[str]:
+        try:
+            canonical = canonical_symbol(symbol)
+        except ValueError:
+            canonical = str(symbol or "").strip()
+        cache_key = canonical.upper()
+        if cache_key in self._symbol_cache:
+            return self._symbol_cache[cache_key]
+
+        direct = canonical.replace("/", "_")
+        available = self._account_instruments()
+        if available is None:
+            self._symbol_cache[cache_key] = direct
+            return direct
+
+        if direct in available:
+            self._symbol_cache[cache_key] = direct
+            return direct
+
+        matches = [name for name in available if symbol_name_matches(canonical, name)]
+        ranked = rank_symbol_candidates(canonical, matches) if matches else []
+        if ranked:
+            self._symbol_cache[cache_key] = ranked[0]
+            return ranked[0]
+
+        self.last_error = f"symbol {canonical} is not available on the configured OANDA account"
+        self._symbol_cache[cache_key] = None
+        return None
+
+    def _account_instruments(self) -> Optional[list[str]]:
+        if self._account_instruments_cache is not None:
+            return self._account_instruments_cache
+        if not self.api_key or not self.account_id:
+            self.last_error = "OANDA credentials are not configured"
+            self._account_instruments_cache = []
+            return self._account_instruments_cache
+        try:
+            url = f"{self.base_url}/accounts/{self.account_id}/instruments"
+            resp = self._session.get(url, timeout=10)
+            resp.raise_for_status()
+            data = resp.json()
+            names = [
+                str(row.get("name")).strip()
+                for row in data.get("instruments", [])
+                if str(row.get("name") or "").strip()
+            ]
+            self._account_instruments_cache = names
+            return self._account_instruments_cache
+        except Exception:
+            self.last_error = "could not load OANDA account instrument list"
+            return None
 
 
 def get_connector() -> MarketDataConnector:
@@ -663,6 +757,7 @@ def _closed_snapshot(symbol: str) -> MarketSnapshot:
         timeframe="M5",
         session=YFinanceConnector._detect_session(),
         is_market_open=False,
+        synthetic_fallback=True,
     )
 
 
@@ -693,22 +788,135 @@ def _int_attr(obj: Any, key: str, default: Optional[int]) -> Optional[int]:
         return default
 
 
-def _mt5_time_iso(value: Any) -> str:
+def _mt5_time_iso(value: Any, *, offset_seconds: int = 0) -> str:
     try:
         seconds = float(value)
     except (TypeError, ValueError):
         return ""
     if seconds <= 0:
         return ""
-    return datetime.fromtimestamp(seconds, tz=timezone.utc).isoformat()
+    return datetime.fromtimestamp(seconds - int(offset_seconds), tz=timezone.utc).isoformat()
 
 
-def _mt5_symbol_open(mt5: Any, info: Any, bid: float, ask: float) -> bool:
+def infer_mt5_future_server_offset_seconds(
+    value: Any,
+    *,
+    now_epoch: float,
+) -> int:
+    """Detect broker epochs encoded in server-local time instead of UTC.
+
+    A stale quote can legitimately be behind the host clock, so negative
+    differences are never normalized. A quote cannot legitimately be hours in
+    the future. Only a positive, whole-hour-shaped offset with a small residual
+    is corrected; anything stranger remains visible for downstream rejection.
+    """
+
+    try:
+        seconds = float(value)
+        now_seconds = float(now_epoch)
+    except (TypeError, ValueError):
+        return 0
+    if seconds <= 0 or now_seconds <= 0:
+        return 0
+    delta = seconds - now_seconds
+    if (
+        delta <= _MT5_FUTURE_CLOCK_TOLERANCE_SECONDS
+        or delta > _MT5_MAX_SERVER_OFFSET_SECONDS
+    ):
+        return 0
+    candidate = int(round(delta / 3600.0)) * 3600
+    if candidate <= 0 or candidate > _MT5_MAX_SERVER_OFFSET_SECONDS:
+        return 0
+    if abs(delta - candidate) > _MT5_OFFSET_RESIDUAL_TOLERANCE_SECONDS:
+        return 0
+    return candidate
+
+
+# Backward-compatible private alias for older callers and saved diagnostics.
+_infer_mt5_future_server_offset_seconds = infer_mt5_future_server_offset_seconds
+
+
+def _mt5_time_normalization_report(
+    *,
+    symbol: str,
+    raw_seconds: float,
+    normalized: datetime,
+    offset_seconds: int,
+    now_epoch: float,
+) -> dict[str, Any]:
+    raw_timestamp = _mt5_time_iso(raw_seconds)
+    raw_delta = float(raw_seconds - now_epoch) if raw_seconds > 0 else None
+    return {
+        "status": (
+            "BROKER_SERVER_OFFSET_CORRECTED"
+            if offset_seconds
+            else "MT5_EPOCH_UTC_UNCHANGED"
+        ),
+        "symbol": symbol,
+        "raw_timestamp": raw_timestamp,
+        "normalized_timestamp": normalized.isoformat(),
+        "raw_clock_delta_seconds": raw_delta,
+        "server_utc_offset_seconds": int(offset_seconds),
+        "future_timestamp_after_normalization": (
+            (normalized.timestamp() - now_epoch) > _MT5_FUTURE_CLOCK_TOLERANCE_SECONDS
+        ),
+    }
+
+
+def _mt5_symbol_open(
+    mt5: Any,
+    info: Any,
+    bid: float,
+    ask: float,
+    *,
+    timestamp: datetime | None = None,
+    now: datetime | None = None,
+) -> bool:
     if bid <= 0 or ask <= 0:
         return False
     disabled = getattr(mt5, "SYMBOL_TRADE_MODE_DISABLED", None)
     trade_mode = getattr(info, "trade_mode", None) if info is not None else None
-    return disabled is None or trade_mode != disabled
+    if disabled is not None and trade_mode == disabled:
+        return False
+    observed_at = now or utc_now()
+    if observed_at.tzinfo is None:
+        observed_at = observed_at.replace(tzinfo=timezone.utc)
+    else:
+        observed_at = observed_at.astimezone(timezone.utc)
+    # A nonzero stale terminal bid/ask must not keep the cockpit falsely labeled
+    # MARKET OPEN. The shared week boundary matches the cockpit and session
+    # scheduler: Sunday 22:00 UTC through Friday 22:00 UTC.
+    if not forex_week_open(observed_at):
+        return False
+    if timestamp is not None:
+        tick_at = timestamp
+        if tick_at.tzinfo is None:
+            tick_at = tick_at.replace(tzinfo=timezone.utc)
+        else:
+            tick_at = tick_at.astimezone(timezone.utc)
+        age_seconds = (observed_at - tick_at).total_seconds()
+        if age_seconds > _MT5_OPEN_TICK_MAX_AGE_SECONDS:
+            return False
+        if age_seconds < -_MT5_FUTURE_CLOCK_TOLERANCE_SECONDS:
+            return False
+    return True
+
+
+def forex_week_open(observed_at: datetime) -> bool:
+    """Return the canonical CAS Forex weekly session boundary in UTC."""
+
+    if observed_at.tzinfo is None:
+        current = observed_at.replace(tzinfo=timezone.utc)
+    else:
+        current = observed_at.astimezone(timezone.utc)
+    weekday = current.weekday()
+    if weekday == 5:
+        return False
+    if weekday == 6:
+        return current.hour >= 22
+    if weekday == 4:
+        return current.hour < 22
+    return True
 
 
 def _mt5_last_error(mt5: Any) -> str:

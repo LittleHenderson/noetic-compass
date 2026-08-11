@@ -12,7 +12,7 @@ from typing import Any, Mapping, Optional
 
 from cas_forex.live_order_dry_run import DEFAULT_AUDIT_PATH, LiveOrderDryRunAuditLog
 from cas_forex.live_order_dry_run_review import build_live_order_dry_run_review
-from cas_forex.live_pilot import build_live_pilot_policy
+from cas_forex.live_pilot import build_live_pilot_policy, evaluate_live_pilot_intent
 from cas_forex.live_recovery import build_live_recovery_report
 from cas_forex.order_attempt_audit import build_order_attempt_audit_status
 from cas_forex.time_utils import utc_now
@@ -194,7 +194,9 @@ def _intent_payload(dry_run: Mapping[str, Any]) -> dict[str, Any]:
         intent = build_waste_entry_dispatch_intent_from_dry_run(dry_run)
     except Exception:
         return {}
+    attached = dict(dry_run.get("proposed_intent") or {}) if isinstance(dry_run.get("proposed_intent"), Mapping) else {}
     return {
+        **attached,
         "order_id": intent.order_id,
         "decision_ref": intent.decision_ref,
         "symbol": intent.symbol,
@@ -205,37 +207,21 @@ def _intent_payload(dry_run: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def _pilot_intent_review(policy: Mapping[str, Any], intent: Mapping[str, Any]) -> dict[str, Any]:
-    problems: list[str] = []
-    symbol = str(intent.get("symbol") or "").strip().upper()
+    review = evaluate_live_pilot_intent(intent, policy=policy)
+    problems: list[str] = list(review.get("missing_requirements") or [])
     direction = str(intent.get("direction") or "").strip().upper()
-    lots = _float(intent.get("lots"), 0.0)
-    expected_loss = intent.get("expected_loss_usd")
-    allowed = {str(item).strip().upper() for item in policy.get("allowed_symbols", []) if str(item).strip()}
 
     if not intent:
         problems.append("waste_entry_intent_unavailable")
     if direction not in {"LONG", "SHORT"}:
         problems.append("direction must be LONG or SHORT")
-    if not symbol or symbol not in allowed:
-        problems.append(f"{symbol or 'symbol'} outside pilot allowed_symbols")
-    if lots <= 0:
-        problems.append("lots must be positive")
-    elif lots > _float(policy.get("max_trade_lots"), 0.0):
-        problems.append("lots exceeds pilot max_trade_lots")
-    if expected_loss is not None and _float(expected_loss, 0.0) > _float(policy.get("max_daily_loss_usd"), 0.0):
-        problems.append("expected_loss_usd exceeds pilot max_daily_loss_usd")
 
     return {
         "passed": not problems,
         "missing_requirements": list(dict.fromkeys(problems)),
         "evidence": {
-            "symbol": symbol or None,
+            **dict(review.get("evidence") or {}),
             "direction": direction or None,
-            "lots": lots,
-            "allowed_symbols": sorted(allowed),
-            "max_trade_lots": policy.get("max_trade_lots"),
-            "expected_loss_usd": expected_loss,
-            "max_daily_loss_usd": policy.get("max_daily_loss_usd"),
             "missing_requirements": list(dict.fromkeys(problems)),
         },
     }

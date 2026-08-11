@@ -21,6 +21,7 @@ from typing import Any, Callable, Mapping, Optional, Sequence
 
 from fastapi import APIRouter, HTTPException, Query
 
+from cas_forex.performance_discipline import build_performance_discipline_report
 from cas_forex.strategy_comparison import (
     StrategyComparisonRecord,
     diff_strategies,
@@ -138,6 +139,19 @@ async def ranked(limit: int = Query(20, ge=1, le=200)) -> dict[str, Any]:
         "plain_english_summary": report.plain_english_summary,
         "diagnostic_hints": list(report.diagnostic_hints),
     }
+
+
+@router.get("/performance-discipline")
+async def performance_discipline(limit: int = Query(50, ge=1, le=200)) -> dict[str, Any]:
+    """Return performance-reporting coverage for loaded strategy evidence."""
+
+    payload = _LOADER()
+    return build_performance_discipline_report(
+        fury_candidates=payload.get("fury_candidates"),
+        strategy_leads=payload.get("strategy_leads"),
+        strategy_dev_queue_items=payload.get("strategy_dev_queue_items"),
+        limit=limit,
+    )
 
 
 def _find_record(

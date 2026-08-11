@@ -106,6 +106,28 @@ def _make_terminal_command(
     }
 
 
+def _make_dispatch_provenance() -> dict:
+    return {
+        "report_kind": "cas_forex_execution_provenance",
+        "schema_version": "cas_forex_execution_provenance.v1",
+        "provenance_hash": "prov-hash-123",
+        "config_hash": "config-hash-456",
+        "version_trace": {
+            "trace_status": "COMPLETE",
+            "trace_source": "execution_provenance",
+            "strategy_ref": "micro_scalp_v3",
+            "strategy_version": "strategy_context.v1",
+            "model_ref": "claude-sonnet-4-6",
+            "prompt_version": "ai_operator_system_prompt.v1",
+            "risk_engine_version": "risk_control.v1",
+            "dispatch_engine_version": "order_dispatch.v1",
+            "market_data_source": "mt5",
+            "config_hash": "config-hash-456",
+            "gaps": [],
+        },
+    }
+
+
 def _make_cycle_report(
     *,
     intents: list[dict] | None = None,
@@ -196,6 +218,29 @@ def test_no_inputs_returns_no_recent_decision():
     assert result.overall_status == "no_recent_decision"
     assert len(result.chain) == 5
     assert all(isinstance(step, DecisionChainStep) for step in result.chain)
+
+
+def test_movement_source_truth_is_compacted_into_result():
+    result = explain_latest_agent_decision(
+        movement_source_truth={
+            "price_source_status": "STATIC_SIMULATION_FALLBACK",
+            "position_feed_label": "SIM PROOF",
+            "position_feed_detail": (
+                "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions."
+            ),
+            "static_simulator_position_count": 2,
+            "stale_price_position_count": 1,
+            "provider_usable_symbols": ["EURUSD"],
+        }
+    )
+    assert result.movement_source_truth is not None
+    assert result.movement_source_truth["price_source_status"] == "STATIC_SIMULATION_FALLBACK"
+    assert result.movement_source_truth["position_feed_label"] == "SIM PROOF"
+    assert result.movement_source_truth["static_simulator_position_count"] == 2
+    assert result.movement_source_truth["stale_price_position_count"] == 1
+    assert result.movement_source_truth["provider_usable_symbols"] == ["EURUSD"]
+    assert result.version_trace["trace_status"] == "NO_AGENT_CYCLE"
+    assert "agent_cycle_report_missing" in result.version_trace["gaps"]
     # All five steps missing.
     assert {step.status for step in result.chain} == {"missing"}
     # Plain English must explain why.
@@ -236,6 +281,14 @@ def test_executed_trade_walks_full_chain():
     assert result.chain[4].status == "found"
     # PCBA step is found (no PCBA-block reason and overseer approved).
     assert result.chain[2].status == "found"
+    assert result.version_trace["trace_status"] == "PARTIAL"
+    assert result.version_trace["strategy_ref"] == "micro_scalp_v3"
+    assert result.version_trace["agent_policy_version"] == "micro_scalp_policy.v1"
+    assert "model_ref_not_attached" in result.version_trace["gaps"]
+    assert "dispatch_execution_provenance_missing" in result.version_trace["gaps"]
+    cycle_evidence = " ".join(result.chain[3].evidence)
+    assert "conviction_score=72% (not_win_probability)" in cycle_evidence
+    assert "confidence=" not in cycle_evidence
     # Execution step references the broker ticket.
     exec_evidence = " ".join(result.chain[4].evidence)
     assert "PAPER-MT5-12345" in exec_evidence
@@ -244,6 +297,25 @@ def test_executed_trade_walks_full_chain():
     strategy_evidence = " ".join(result.chain[0].evidence)
     assert "micro_scalp_v3" in strategy_evidence
     assert "hypothesis" in strategy_evidence.lower()
+
+
+def test_execution_provenance_version_trace_is_reused_when_attached():
+    command = _make_terminal_command()
+    command["dispatch_result"] = {"execution_provenance": _make_dispatch_provenance()}
+    cycle = _make_cycle_report(terminal_commands=[command])
+
+    result = explain_latest_agent_decision(
+        agent_cycle_report=cycle,
+        strategy_dev_queue_report=_make_strategy_dev_queue(),
+        walk_forward_report=_make_walk_forward_report(),
+    )
+
+    trace = result.version_trace
+    assert trace["trace_source"] == "execution_provenance"
+    assert trace["trace_status"] == "COMPLETE"
+    assert trace["dispatch_provenance_hash"] == "prov-hash-123"
+    assert trace["config_hash"] == "config-hash-456"
+    assert trace["prompt_version"] == "ai_operator_system_prompt.v1"
 
 
 def test_approved_intent_without_receipt_is_approved_not_executed():

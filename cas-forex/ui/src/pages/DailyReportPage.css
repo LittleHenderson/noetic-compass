@@ -14,6 +14,51 @@
   letter-spacing: 0.01em;
 }
 
+.daily-truth-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.daily-truth-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px 12px;
+}
+
+.daily-truth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.daily-truth-field-label {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.daily-truth-field-value {
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.daily-truth-detail,
+.daily-truth-note {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin-top: 10px;
+}
+
+.daily-truth-note {
+  color: var(--text-muted);
+}
+
 .daily-section {
   background: var(--bg-panel);
   border: 1px solid var(--border-subtle);
@@ -96,4 +141,16 @@
   gap: 4px;
   font-size: 0.82rem;
   color: var(--text-secondary);
+}
+
+@media (max-width: 900px) {
+  .daily-truth-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .daily-truth-grid {
+    grid-template-columns: 1fr;
+  }
 }

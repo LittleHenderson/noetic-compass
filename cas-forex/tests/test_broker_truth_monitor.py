@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 
+import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
@@ -11,6 +12,7 @@ from cas_forex import (
     broker_reality,
     broker_truth_monitor,
     broker_truth_monitor_supervisor,
+    critical_notifications,
     live_order_dry_run_review,
     live_pilot,
     live_recovery,
@@ -22,14 +24,69 @@ from cas_forex.broker_truth_monitor_supervisor import (
     STATUS_RECOVERY_CLEARED,
     STATUS_RECOVERY_REFUSED,
 )
+from cas_forex.config import config as runtime_config
 
 
-def _live_mt5_snapshot(*, connected=True, is_demo=False, open_positions=0):
+@pytest.fixture(autouse=True)
+def _trusted_mt5_identity(monkeypatch):
+    monkeypatch.setattr(runtime_config, "mt5_login", 123)
+    monkeypatch.setattr(runtime_config, "mt5_server", "Broker-Live")
+
+
+def _live_mt5_snapshot(
+    *,
+    connected=True,
+    is_demo=False,
+    open_positions=0,
+    unprotected=0,
+    login=123,
+    server="Broker-Live",
+):
     return {
         "report_kind": "cas_forex_mt5_live_account",
         "connected": connected,
         "is_demo": is_demo,
+        "account": {
+            "login": login,
+            "server": server,
+            "currency": "USD",
+            "balance_usd": 5_000.0,
+            "equity_usd": 5_000.0,
+            "margin_used_usd": 0.0,
+            "free_margin_usd": 5_000.0,
+        },
         "open_position_count": open_positions,
+        "position_protection": {
+            "report_kind": "cas_forex_position_protection_report",
+            "status": "UNPROTECTED_POSITIONS" if unprotected > 0 else "ALL_POSITIONS_PROTECTED",
+            "connected": connected,
+            "open_position_count": open_positions,
+            "protected_position_count": max(0, open_positions - unprotected),
+            "unprotected_position_count": unprotected,
+            "requires_owner_attention": unprotected > 0,
+            "detail": (
+                f"{unprotected} open position(s) have no broker-side stop loss visible in the latest snapshot."
+                if unprotected > 0
+                else "Every open position has a broker-side stop loss visible in the latest snapshot."
+            ),
+            "unprotected_positions": (
+                [
+                    {
+                        "ticket": 22,
+                        "symbol": "US30",
+                        "side": "LONG",
+                        "lots": 0.1,
+                        "open_price": 52000.0,
+                        "current_price": 52100.0,
+                        "stop_loss": None,
+                        "take_profit": 53000.0,
+                        "floating_pnl_usd": 25.0,
+                    }
+                ]
+                if unprotected > 0
+                else []
+            ),
+        },
     }
 
 
@@ -40,10 +97,32 @@ def _terminal_report(*, status="TERMINAL_POSITION_RECONCILIATION_READY_FLAT", un
         "summary": {
             "terminal_open_position_count": 0,
             "unmatched_open_position_count": unmatched,
+            "terminal_unattributed_open_position_count": unmatched,
+            "terminal_memory_gap_open_position_count": 0,
+            "cas_memory_only_open_position_count": 0,
+            "cas_receipt_pending_open_position_count": 0,
             "pending_receipt_count": 0,
             "receipt_mismatch_count": 0,
             "account_snapshot_present": True,
         },
+        "classified_unmatched_open_positions": (
+            [
+                {
+                    "side": "terminal",
+                    "reason": "no_matching_cas_memory_position",
+                    "classification_status": "TERMINAL_UNATTRIBUTED_BROKER_POSITION",
+                    "classification_detail": "Broker-visible position has no CAS command/receipt identity. It may be external/manual broker state or missing CAS memory.",
+                    "position": {
+                        "symbol": "EUR/USD",
+                        "direction": "LONG",
+                        "lots": 0.1,
+                        "broker_ticket": "ticket-ext-1",
+                    },
+                }
+            ]
+            if unmatched
+            else []
+        ),
     }
 
 
@@ -84,6 +163,111 @@ def test_broker_truth_report_is_clear_when_live_mt5_and_terminal_reconcile(tmp_p
     assert report["overall_status"] == "RECONCILED"
     assert report["monitor_status"] == broker_truth_monitor.STATUS_RECONCILED
     assert broker_truth_monitor.broker_truth_monitor_ready_for_live() is True
+    assert report["position_protection_status"] == "ALL_POSITIONS_PROTECTED"
+    assert report["position_protection_unprotected_position_count"] == 0
+    assert report["mt5_balance_usd"] == 5_000.0
+    assert report["mt5_free_margin_usd"] == 5_000.0
+    assert report["mt5_account_identity_matches_config"] is True
+
+
+def test_wrong_hugo_demo_account_blocks_risen_truth_and_latches_auto_halt(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "DEFAULT_AUTO_HALT_STATE_PATH", tmp_path / "auto-halt.json")
+    monkeypatch.setattr(runtime_config, "mt5_login", 101321)
+    monkeypatch.setattr(runtime_config, "mt5_server", "Risen-Trade")
+    report = broker_truth_monitor.run_broker_truth_check(
+        mt5_snapshot=_live_mt5_snapshot(
+            is_demo=True,
+            login=1000694,
+            server="Hugosway-Demo",
+        ),
+        terminal_reconciliation_report=_terminal_report(),
+        state_path=tmp_path / "broker-truth.json",
+        write_state=True,
+        write_report=False,
+    )
+
+    assert report["overall_status"] == "RECONCILIATION_FAILED"
+    assert report["mt5_account_identity_matches_config"] is False
+    assert report["mt5_account_identity_mismatch_fields"] == ["login", "server"]
+    assert report["auto_halt_latched_from_monitor"] is True
+    assert "mt5_account_identity_matches_config" in report["monitor_auto_halt_reason_ids"]
+    assert "1000694" in report["next_action"]
+    assert "101321" in report["next_action"]
+    assert broker_truth_monitor.broker_truth_monitor_ready_for_live(
+        state_path=tmp_path / "broker-truth.json"
+    ) is False
+
+
+def test_snapshot_cannot_spoof_the_configured_account_identity(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "DEFAULT_AUTO_HALT_STATE_PATH", tmp_path / "auto-halt.json")
+    monkeypatch.setattr(runtime_config, "mt5_login", 101321)
+    monkeypatch.setattr(runtime_config, "mt5_server", "Risen-Trade")
+    snapshot = _live_mt5_snapshot(
+        is_demo=False,
+        login=777777,
+        server="OtherBroker-Live",
+    )
+    snapshot["configured_account"] = {
+        "login": 777777,
+        "server": "OtherBroker-Live",
+    }
+
+    report = broker_truth_monitor.run_broker_truth_check(
+        mt5_snapshot=snapshot,
+        terminal_reconciliation_report=_terminal_report(),
+        state_path=tmp_path / "broker-truth.json",
+        write_state=True,
+        write_report=False,
+    )
+
+    assert report["mt5_expected_account"] == 101321
+    assert report["mt5_expected_server"] == "Risen-Trade"
+    assert report["mt5_account_identity_matches_config"] is False
+    assert report["mt5_account_identity_mismatch_fields"] == ["login", "server"]
+
+
+def test_different_live_account_cannot_satisfy_configured_risen_identity(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "DEFAULT_AUTO_HALT_STATE_PATH", tmp_path / "auto-halt.json")
+    monkeypatch.setattr(runtime_config, "mt5_login", 101321)
+    monkeypatch.setattr(runtime_config, "mt5_server", "Risen-Trade")
+    report = broker_truth_monitor.run_broker_truth_check(
+        mt5_snapshot=_live_mt5_snapshot(
+            is_demo=False,
+            login=777777,
+            server="Risen-Trade",
+        ),
+        terminal_reconciliation_report=_terminal_report(),
+        state_path=tmp_path / "broker-truth.json",
+        write_state=True,
+        write_report=False,
+    )
+
+    assert report["mt5_account_identity_matches_config"] is False
+    assert report["mt5_account_identity_mismatch_fields"] == ["login"]
+    assert report["auto_halt_latched_from_monitor"] is True
+    assert broker_truth_monitor.broker_truth_monitor_ready_for_live(
+        state_path=tmp_path / "broker-truth.json"
+    ) is False
+
+
+def test_exact_risen_login_and_server_unlock_identity_check(tmp_path, monkeypatch):
+    monkeypatch.setattr(broker_truth_monitor, "DEFAULT_STATE_PATH", tmp_path / "broker-truth.json")
+    monkeypatch.setattr(runtime_config, "mt5_login", 101321)
+    monkeypatch.setattr(runtime_config, "mt5_server", "risen-trade")
+    report = broker_truth_monitor.run_broker_truth_check(
+        mt5_snapshot=_live_mt5_snapshot(
+            is_demo=False,
+            login=101321,
+            server="Risen-Trade",
+        ),
+        terminal_reconciliation_report=_terminal_report(),
+        write_state=True,
+        write_report=False,
+    )
+
+    assert report["overall_status"] == "RECONCILED"
+    assert report["mt5_account_identity_matches_config"] is True
+    assert broker_truth_monitor.broker_truth_monitor_ready_for_live() is True
 
 
 def test_broker_truth_report_fails_on_terminal_position_mismatch(tmp_path):
@@ -100,6 +284,164 @@ def test_broker_truth_report_fails_on_terminal_position_mismatch(tmp_path):
 
     assert report["overall_status"] == "RECONCILIATION_FAILED"
     assert report["checks_mismatch"] >= 1
+    assert report["monitor_auto_halt_reason_ids"] == [
+        "terminal_position_reconciliation",
+        "live_open_positions_crosscheck",
+    ]
+    assert report["terminal_unattributed_open_position_count"] == 1
+    assert report["terminal_unmatched_open_position_preview"][0]["classification_status"] == (
+        "TERMINAL_UNATTRIBUTED_BROKER_POSITION"
+    )
+    assert "cannot attribute" in report["next_action"].lower()
+
+
+def test_broker_truth_report_latches_auto_halt_on_live_terminal_mismatch(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "DEFAULT_AUTO_HALT_STATE_PATH", tmp_path / "auto-halt.json")
+
+    report = broker_truth_monitor.run_broker_truth_check(
+        mt5_snapshot=_live_mt5_snapshot(open_positions=1),
+        terminal_reconciliation_report=_terminal_report(
+            status="TERMINAL_POSITION_RECONCILIATION_MISMATCH",
+            unmatched=1,
+        ),
+        state_path=tmp_path / "broker-truth.json",
+        write_state=True,
+        write_report=False,
+    )
+
+    assert report["overall_status"] == "RECONCILIATION_FAILED"
+    assert report["auto_halt_latched_from_monitor"] is True
+    assert "terminal_position_reconciliation" in report["monitor_auto_halt_reason_ids"]
+    assert "live_open_positions_crosscheck" in report["monitor_auto_halt_reason_ids"]
+    assert auto_halt.is_auto_halt_active() is True
+
+
+def test_demo_broker_truth_mismatch_does_not_latch_auto_halt(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "DEFAULT_AUTO_HALT_STATE_PATH", tmp_path / "auto-halt.json")
+
+    report = broker_truth_monitor.run_broker_truth_check(
+        mt5_snapshot=_live_mt5_snapshot(is_demo=True, open_positions=1),
+        terminal_reconciliation_report=_terminal_report(
+            status="TERMINAL_POSITION_RECONCILIATION_MISMATCH",
+            unmatched=1,
+        ),
+        state_path=tmp_path / "broker-truth.json",
+        write_state=True,
+        write_report=False,
+    )
+
+    assert report["overall_status"] == "RECONCILIATION_FAILED"
+    assert report["auto_halt_latched_from_monitor"] is False
+    assert "terminal_position_reconciliation" in report["monitor_auto_halt_reason_ids"]
+    assert auto_halt.is_auto_halt_active() is False
+
+
+def test_broker_truth_report_fails_on_unprotected_live_positions_and_latches_auto_halt(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "DEFAULT_AUTO_HALT_STATE_PATH", tmp_path / "auto-halt.json")
+    critical_notifications.set_critical_notification_context_for_tests(
+        audit_path=tmp_path / "critical-alerts.jsonl",
+        store=None,
+        transport=None,
+    )
+    try:
+        report = broker_truth_monitor.run_broker_truth_check(
+            mt5_snapshot=_live_mt5_snapshot(open_positions=1, unprotected=1),
+            terminal_reconciliation_report=_terminal_report(),
+            state_path=tmp_path / "broker-truth.json",
+            write_state=True,
+            write_report=False,
+        )
+    finally:
+        critical_notifications.set_critical_notification_context_for_tests()
+
+    assert report["overall_status"] == "RECONCILIATION_FAILED"
+    assert report["position_protection_status"] == "UNPROTECTED_POSITIONS"
+    assert report["position_protection_unprotected_position_count"] == 1
+    assert report["auto_halt_latched_from_monitor"] is True
+    assert report["position_protection_notification_emitted"] is True
+    assert "stop loss" in report["next_action"].lower()
+    protection_check = next(check for check in report["checks"] if check["check_id"] == "live_position_stop_loss_protection")
+    assert protection_check["status"] == "MISMATCH"
+    assert protection_check["trips_auto_halt"] is True
+    assert auto_halt.is_auto_halt_active() is True
+
+
+def test_broker_truth_report_emits_unprotected_position_alert_only_on_first_detection(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "DEFAULT_AUTO_HALT_STATE_PATH", tmp_path / "auto-halt.json")
+    critical_notifications.set_critical_notification_context_for_tests(
+        audit_path=tmp_path / "critical-alerts.jsonl",
+        store=None,
+        transport=None,
+    )
+    try:
+        first = broker_truth_monitor.run_broker_truth_check(
+            mt5_snapshot=_live_mt5_snapshot(open_positions=1, unprotected=1),
+            terminal_reconciliation_report=_terminal_report(),
+            state_path=tmp_path / "broker-truth.json",
+            write_state=True,
+            write_report=False,
+        )
+        second = broker_truth_monitor.run_broker_truth_check(
+            mt5_snapshot=_live_mt5_snapshot(open_positions=1, unprotected=1),
+            terminal_reconciliation_report=_terminal_report(),
+            state_path=tmp_path / "broker-truth.json",
+            write_state=True,
+            write_report=False,
+        )
+        audit = critical_notifications.build_critical_notification_report(limit=10)
+    finally:
+        critical_notifications.set_critical_notification_context_for_tests()
+
+    assert first["position_protection_notification_emitted"] is True
+    assert second["position_protection_notification_emitted"] is False
+    rows = audit["rows"]
+    assert len(rows) == 1
+    assert rows[0]["event"]["event_kind"] == critical_notifications.EVENT_UNPROTECTED_POSITION
+
+
+def test_broker_truth_report_surfaces_unattributed_closed_history_gap(tmp_path):
+    report = broker_truth_monitor.run_broker_truth_check(
+        mt5_snapshot=_live_mt5_snapshot(open_positions=0),
+        terminal_reconciliation_report={
+            "report_kind": "cas_forex_terminal_position_reconciliation_report",
+            "reconciliation_status": "TERMINAL_POSITION_RECONCILIATION_MISMATCH",
+            "summary": {
+                "terminal_open_position_count": 0,
+                "unmatched_open_position_count": 0,
+                "terminal_unattributed_open_position_count": 0,
+                "terminal_memory_gap_open_position_count": 0,
+                "cas_memory_only_open_position_count": 0,
+                "cas_receipt_pending_open_position_count": 0,
+                "unmatched_history_count": 1,
+                "unmatched_unattributed_history_count": 1,
+                "unmatched_attributed_history_memory_gap_count": 0,
+                "pending_receipt_count": 0,
+                "receipt_mismatch_count": 0,
+                "account_snapshot_present": True,
+            },
+            "classified_unmatched_history_records": [
+                {
+                    "classification_status": "TERMINAL_UNATTRIBUTED_BROKER_HISTORY",
+                    "classification_detail": "Closed broker/terminal history row has no CAS command or receipt identity. It may be an external/manual broker close or a missing CAS comment/identity field.",
+                    "symbol": "EUR/USD",
+                    "direction": "LONG",
+                    "lots": 0.1,
+                    "profit_loss_account": 25.0,
+                }
+            ],
+        },
+        state_path=tmp_path / "broker-truth.json",
+        write_state=True,
+        write_report=False,
+    )
+
+    assert report["overall_status"] == "RECONCILIATION_FAILED"
+    assert report["terminal_unmatched_history_count"] == 1
+    assert report["terminal_unattributed_history_count"] == 1
+    assert report["terminal_unmatched_history_preview"][0]["classification_status"] == (
+        "TERMINAL_UNATTRIBUTED_BROKER_HISTORY"
+    )
+    assert "closed-history rows" in report["next_action"].lower()
 
 
 def test_broker_truth_state_save_retries_transient_windows_replace_lock(tmp_path, monkeypatch):
@@ -155,11 +497,9 @@ def test_broker_truth_mt5_snapshot_uses_selected_python_command(monkeypatch):
     assert snapshot["open_position_count"] == 0
 
 
-def test_runtime_gate_surfaces_broker_truth_freshness_as_advisory(tmp_path, monkeypatch):
-    # Broker-truth monitor freshness is a continuous metric, and metrics are not
-    # authority (see runtime_gates OWNER_AUTHORITY_BOUNDARY): a stale monitor is
-    # surfaced as an ADVISORY, never an owner veto. The action-time freshness
-    # requirement lives in the live-order dry-run review instead.
+def test_runtime_gate_blocks_when_broker_truth_is_stale(tmp_path, monkeypatch):
+    # Broker-truth freshness is a hard live-dispatch prerequisite. Owner
+    # authority can delegate autonomy, but stale broker truth still blocks.
     monkeypatch.setattr(broker_truth_monitor, "DEFAULT_STATE_PATH", tmp_path / "broker-truth.json")
     monkeypatch.setattr(auto_halt, "is_auto_halt_active", lambda: False)
     monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
@@ -169,15 +509,13 @@ def test_runtime_gate_surfaces_broker_truth_freshness_as_advisory(tmp_path, monk
     decision_without_monitor = runtime_gates.evaluate_live_trading(GateConfig())
     assert (
         "continuous broker-truth monitor is fresh and live-connected"
-        in decision_without_monitor.advisory_requirements
+        in decision_without_monitor.missing_requirements
     )
     assert (
         "continuous broker-truth monitor is fresh and live-connected"
         not in decision_without_monitor.satisfied_requirements
     )
-    # Advisory alone never blocks: with every owner + action-time requirement
-    # satisfied, the gate authorizes even while the monitor is stale.
-    assert decision_without_monitor.authorized is True
+    assert decision_without_monitor.authorized is False
 
     broker_truth_monitor.run_broker_truth_check(
         mt5_snapshot=_live_mt5_snapshot(),
@@ -206,12 +544,11 @@ def test_demo_mt5_monitor_does_not_unlock_live_gate(tmp_path, monkeypatch):
 
     decision = runtime_gates.evaluate_live_trading(GateConfig())
     assert decision.authorized is False
-    # A DEMO snapshot never counts as live broker truth: the freshness advisory
-    # stays unsatisfied (and the hard owner/action-time requirements above keep
-    # the gate closed on their own).
+    # A DEMO snapshot never counts as live broker truth, so the hard freshness
+    # requirement stays unsatisfied.
     assert (
         "continuous broker-truth monitor is fresh and live-connected"
-        in decision.advisory_requirements
+        in decision.missing_requirements
     )
     assert (
         "continuous broker-truth monitor is fresh and live-connected"

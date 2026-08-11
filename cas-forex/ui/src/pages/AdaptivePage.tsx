@@ -2,6 +2,7 @@
 
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
+import { CONVICTION_SCORE_TITLE, formatConvictionScore } from "../util/conviction";
 import type { DashboardState, BasketState, AdaptiveTradeDecision, AdaptiveMemorySnapshot } from "../types/evidence";
 import "../components/RoutePrimitives.css";
 import "./AdaptivePage.css";
@@ -88,7 +89,7 @@ export function AdaptivePage({ state }: AdaptivePageProps) {
                 <tr>
                   <th>Symbol</th><th>Action</th><th>Dir</th><th>Lots</th>
                   <th>Entry</th><th>SL</th><th>TP</th>
-                  <th>Conf</th><th>Evidence</th><th>Reason</th>
+                  <th>Conviction</th><th>Evidence</th><th>Reason</th>
                 </tr>
               </thead>
               <tbody>
@@ -189,7 +190,7 @@ function DecisionRow({ decision }: { decision: AdaptiveTradeDecision }) {
       <td className="mono">{decision.entry_price?.toFixed(2) ?? "—"}</td>
       <td className="mono" style={{ color: "var(--danger)" }}>{decision.stop_loss?.toFixed(2) ?? "—"}</td>
       <td className="mono" style={{ color: "var(--success)" }}>{decision.take_profit?.toFixed(2) ?? "—"}</td>
-      <td className="mono">{decision.confidence != null ? `${(decision.confidence * 100).toFixed(0)}%` : "—"}</td>
+      <td className="mono" title={CONVICTION_SCORE_TITLE}>{formatConvictionScore(decision.confidence, "—")}</td>
       <td><StatusChip label={decision.evidence_status} variant={decision.evidence_score >= 0.6 ? "success" : decision.evidence_score >= 0.4 ? "warning" : "muted"} size="sm" /></td>
       <td style={{ color: "var(--text-muted)", fontSize: "0.7rem", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>{decision.reason}</td>
     </tr>

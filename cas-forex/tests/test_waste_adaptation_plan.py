@@ -64,6 +64,12 @@ def _review() -> dict:
 
 
 def _promotion(*, rows: int = 0, confirmed: int = 0, ready: bool = False, outcomes_ready: bool = False) -> dict:
+    recommended_group = {
+        "symbol": "NAS100",
+        "timeframe": "D1",
+        "profile": "blend",
+        "direction": "LONG",
+    }
     return {
         "report_kind": "cas_forex_waste_adaptation_promotion_rule",
         "status": "WASTE_ADAPTATION_PROMOTION_READY_FOR_OWNER_REVIEW" if ready and outcomes_ready else "WASTE_ADAPTATION_PROMOTION_COLLECTING",
@@ -72,6 +78,9 @@ def _promotion(*, rows: int = 0, confirmed: int = 0, ready: bool = False, outcom
         "promotion_ready_for_owner_review": ready and outcomes_ready,
         "learning_ready_for_adaptation": ready,
         "outcome_ready_for_promotion": outcomes_ready,
+        "outcome_ready_group_count": 1 if outcomes_ready else 0,
+        "selection_basis": "exact_group_after_cost_expectancy_r_then_per_1_lot_then_raw_expectancy_then_net_pnl",
+        "proxy_recommendation_overridden_by_growth": False,
         "min_confirmed_for_adaptation": 5,
         "confirmed_direction_count": confirmed,
         "confirmed_samples_needed": max(0, 5 - confirmed),
@@ -81,6 +90,14 @@ def _promotion(*, rows: int = 0, confirmed: int = 0, ready: bool = False, outcom
         "blocked_direction_count": max(0, rows - confirmed),
         "direction_rows": rows,
         "dominant_group": {"symbol": "NAS100", "timeframe": "D1", "profile": "blend", "direction": "LONG"},
+        "recommended_group": recommended_group,
+        "recommended_group_outcome": {
+            **recommended_group,
+            "trades": 5 if outcomes_ready else 0,
+            "net_pnl": 125.0 if outcomes_ready else 0.0,
+            "after_cost_expectancy": 25.0 if outcomes_ready else 0.0,
+            "outcome_ready_for_promotion": outcomes_ready,
+        },
         "runtime_changed": False,
         "would_enable_live_trading": False,
         "money_moved": False,
@@ -144,6 +161,13 @@ def test_adaptation_plan_ready_only_from_learning_and_outcome_evidence():
     assert plan["promotion_rule_summary"]["confirmed_samples_needed"] == 0
     assert plan["promotion_rule_summary"]["outcome_ready_for_promotion"] is True
     assert plan["promotion_rule_summary"]["bound_outcome_count"] == 5
+    priority = next(
+        proposal for proposal in plan["proposals"] if proposal["proposal_type"] == "PROFILE_PRIORITY_REVIEW"
+    )
+    assert priority["evidence"]["selection_basis"] == (
+        "exact_group_after_cost_expectancy_r_then_per_1_lot_then_raw_expectancy_then_net_pnl"
+    )
+    assert priority["evidence"]["recommended_group_outcome"]["net_pnl"] == 125.0
 
 
 def test_adaptation_plan_blocks_ready_learning_without_bound_outcomes():

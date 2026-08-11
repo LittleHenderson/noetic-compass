@@ -122,6 +122,28 @@ def activate_auto_halt(
     return payload
 
 
+def manual_emergency_stop(
+    *,
+    reason: str = "OWNER_EMERGENCY_STOP",
+    path: Path | str | None = None,
+) -> dict[str, Any]:
+    """Immediately latch auto-halt from an explicit owner emergency stop."""
+    detail = str(reason or "OWNER_EMERGENCY_STOP").strip() or "OWNER_EMERGENCY_STOP"
+    check = AutoHaltCheck(
+        check_id="manual_emergency_stop",
+        status=CHECK_TRIPPED,
+        metric=True,
+        threshold="OWNER_STOP",
+        detail=f"Owner manually triggered emergency stop: {detail}",
+        trips_halt=True,
+    )
+    return activate_auto_halt(
+        ["MANUAL_EMERGENCY_STOP"],
+        [check.to_dict()],
+        path=path,
+    )
+
+
 def clear_auto_halt(
     *,
     confirm_clear: bool,
@@ -151,6 +173,7 @@ def build_auto_halt_report(
     live_account_ledger: Optional[Mapping[str, Any]] = None,
     paper_account_ledger: Optional[Mapping[str, Any]] = None,
     reconciliation_report: Optional[Mapping[str, Any]] = None,
+    position_protection_report: Optional[Mapping[str, Any]] = None,
     settings: AutoHaltSettings | None = None,
     persist: bool = False,
     state_path: Path | str | None = None,
@@ -161,6 +184,7 @@ def build_auto_halt_report(
         _consecutive_loss_check(live_account_ledger, settings),
         _divergence_check(live_account_ledger, paper_account_ledger, settings),
         _reconciliation_check(live_account_ledger, reconciliation_report),
+        _position_protection_check(live_account_ledger, position_protection_report),
     ]
     tripped = [check for check in checks if check.trips_halt]
     active_state = load_auto_halt_state(state_path)
@@ -265,6 +289,62 @@ def _reconciliation_check(
         status or None,
         "RECONCILED",
         f"Broker-truth reconciliation status is {status or 'unavailable'}.",
+        tripped,
+    )
+
+
+def _position_protection_check(
+    ledger: Optional[Mapping[str, Any]],
+    position_protection_report: Optional[Mapping[str, Any]],
+) -> AutoHaltCheck:
+    if not _is_live_ledger(ledger):
+        return AutoHaltCheck(
+            "live_position_stop_loss_protection",
+            CHECK_UNVERIFIABLE,
+            None,
+            0,
+            "No live account ledger is available.",
+            False,
+        )
+    if not position_protection_report:
+        return AutoHaltCheck(
+            "live_position_stop_loss_protection",
+            CHECK_UNVERIFIABLE,
+            None,
+            0,
+            "No live MT5 position-protection snapshot is available.",
+            False,
+        )
+
+    connected = position_protection_report.get("connected")
+    status = str(position_protection_report.get("status") or "")
+    open_count = int(position_protection_report.get("open_position_count") or 0)
+    unprotected_count = int(position_protection_report.get("unprotected_position_count") or 0)
+    detail = str(position_protection_report.get("detail") or "").strip()
+    if connected is False or status == "POSITION_PROTECTION_UNAVAILABLE":
+        return AutoHaltCheck(
+            "live_position_stop_loss_protection",
+            CHECK_UNVERIFIABLE,
+            None,
+            0,
+            detail or "Live MT5 position protection cannot be verified right now.",
+            False,
+        )
+
+    tripped = unprotected_count > 0
+    if tripped:
+        message = (
+            f"Live MT5 protection snapshot shows {unprotected_count} unprotected position(s) "
+            f"out of {open_count} open."
+        )
+    else:
+        message = f"Live MT5 protection snapshot shows 0 unprotected positions across {open_count} open."
+    return AutoHaltCheck(
+        "live_position_stop_loss_protection",
+        CHECK_TRIPPED if tripped else CHECK_OK,
+        unprotected_count,
+        0,
+        detail or message,
         tripped,
     )
 

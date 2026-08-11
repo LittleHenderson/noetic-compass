@@ -48,6 +48,7 @@ CLAIM_BOUNDARY = (
 
 # Movement statuses.
 STATUS_SETTLED = "SETTLED"
+STATUS_PENDING = "PENDING"  # accepted/submitted; final settlement is not proven
 STATUS_BLOCKED = "BLOCKED"  # gate not authorized — provider never called
 STATUS_FAILED = "FAILED"  # provider was called but did not settle
 STATUS_REJECTED = "REJECTED"  # invalid request (e.g. non-positive amount)
@@ -87,11 +88,16 @@ class ProviderReceipt:
     kind: str
     amount_usd: float
     reference: str
-    status: str  # "SETTLED" | "FAILED"
+    status: str  # "SETTLED" | "PENDING" | "FAILED"
     is_real: bool
     source_id: Optional[str] = None
     destination_id: Optional[str] = None
     detail: str = ""
+    provider_status: str = ""
+    idempotency_key: Optional[str] = None
+    before_balance_usd: Optional[float] = None
+    after_balance_usd: Optional[float] = None
+    balance_snapshot_reference: Optional[str] = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -104,6 +110,11 @@ class ProviderReceipt:
             "source_id": self.source_id,
             "destination_id": self.destination_id,
             "detail": self.detail,
+            "provider_status": self.provider_status,
+            "idempotency_key": self.idempotency_key,
+            "before_balance_usd": self.before_balance_usd,
+            "after_balance_usd": self.after_balance_usd,
+            "balance_snapshot_reference": self.balance_snapshot_reference,
         }
 
 
@@ -114,14 +125,45 @@ class PaymentProvider(ABC):
     is_real: bool = False
 
     @abstractmethod
-    def deposit(self, amount_usd: float, *, source_id: Optional[str]) -> ProviderReceipt:
+    def deposit(
+        self,
+        amount_usd: float,
+        *,
+        source_id: Optional[str],
+        idempotency_key: Optional[str] = None,
+    ) -> ProviderReceipt:
         ...
 
     @abstractmethod
     def withdraw(
-        self, amount_usd: float, *, destination_id: Optional[str], kind: MovementKind
+        self,
+        amount_usd: float,
+        *,
+        destination_id: Optional[str],
+        kind: MovementKind,
+        idempotency_key: Optional[str] = None,
     ) -> ProviderReceipt:
         ...
+
+    def reconcile(
+        self,
+        reference: str,
+        *,
+        kind: MovementKind,
+    ) -> ProviderReceipt | None:
+        """Return current provider truth for a prior reference when supported."""
+
+        return None
+
+    def reconcile_idempotency_key(
+        self,
+        idempotency_key: str,
+        *,
+        kind: MovementKind,
+    ) -> ProviderReceipt | None:
+        """Find provider truth when the request escaped but its reference did not."""
+
+        return None
 
 
 class SimulatedPaymentProvider(PaymentProvider):
@@ -130,34 +172,63 @@ class SimulatedPaymentProvider(PaymentProvider):
     name = "simulated"
     is_real = False
 
-    def _reference(self, kind: MovementKind, amount_usd: float, who: Optional[str]) -> str:
-        material = f"{self.name}|{kind.value}|{money(amount_usd)}|{who or ''}"
+    def _reference(
+        self,
+        kind: MovementKind,
+        amount_usd: float,
+        who: Optional[str],
+        idempotency_key: Optional[str],
+    ) -> str:
+        material = (
+            f"{self.name}|{kind.value}|{money(amount_usd)}|{who or ''}|"
+            f"{idempotency_key or ''}"
+        )
         return "sim-" + sha256(material.encode("utf-8")).hexdigest()[:16]
 
-    def deposit(self, amount_usd: float, *, source_id: Optional[str]) -> ProviderReceipt:
+    def deposit(
+        self,
+        amount_usd: float,
+        *,
+        source_id: Optional[str],
+        idempotency_key: Optional[str] = None,
+    ) -> ProviderReceipt:
         return ProviderReceipt(
             provider=self.name,
             kind=MovementKind.DEPOSIT.value,
             amount_usd=money(amount_usd),
-            reference=self._reference(MovementKind.DEPOSIT, amount_usd, source_id),
+            reference=self._reference(
+                MovementKind.DEPOSIT,
+                amount_usd,
+                source_id,
+                idempotency_key,
+            ),
             status=STATUS_SETTLED,
             is_real=False,
             source_id=source_id,
             detail="Simulated deposit; no real funds moved.",
+            provider_status=STATUS_SETTLED,
+            idempotency_key=idempotency_key,
         )
 
     def withdraw(
-        self, amount_usd: float, *, destination_id: Optional[str], kind: MovementKind
+        self,
+        amount_usd: float,
+        *,
+        destination_id: Optional[str],
+        kind: MovementKind,
+        idempotency_key: Optional[str] = None,
     ) -> ProviderReceipt:
         return ProviderReceipt(
             provider=self.name,
             kind=kind.value,
             amount_usd=money(amount_usd),
-            reference=self._reference(kind, amount_usd, destination_id),
+            reference=self._reference(kind, amount_usd, destination_id, idempotency_key),
             status=STATUS_SETTLED,
             is_real=False,
             destination_id=destination_id,
             detail=f"Simulated {kind.value}; no real funds moved.",
+            provider_status=STATUS_SETTLED,
+            idempotency_key=idempotency_key,
         )
 
 
@@ -173,6 +244,9 @@ class MovementResult:
     reason: str
     missing_requirements: tuple[str, ...] = ()
     is_real_money: bool = False
+    provider_touched: bool = False
+    provider_outcome_uncertain: bool = False
+    master_kill_active: bool = False
     provider_receipt: Optional[ProviderReceipt] = None
     ledger_event: Optional[AccountLedgerEvent] = None
     claim_boundary: str = CLAIM_BOUNDARY
@@ -191,8 +265,18 @@ class MovementResult:
             "reason": self.reason,
             "missing_requirements": list(self.missing_requirements),
             "is_real_money": self.is_real_money,
+            "provider_touched": self.provider_touched,
+            "provider_outcome_uncertain": self.provider_outcome_uncertain,
+            "master_kill_active": self.master_kill_active,
             "provider_receipt": self.provider_receipt.to_dict() if self.provider_receipt else None,
+            "provider_receipt_status": self.provider_receipt.status if self.provider_receipt else None,
             "ledger_event": self.ledger_event.to_dict() if self.ledger_event else None,
+            "ledger_entry": self.ledger_event.to_dict() if self.ledger_event else None,
+            "event_hash": self.ledger_event.ledger_id if self.ledger_event else None,
+            "before_after_balance_snapshot": _movement_balance_snapshot(
+                self.ledger_event,
+                self.provider_receipt,
+            ),
             "claim_boundary": self.claim_boundary,
         }
 
@@ -259,6 +343,7 @@ class MovementEngine:
         source_id: Optional[str] = None,
         capability: Optional[str] = None,
         strategy_id: Optional[str] = None,
+        idempotency_key: Optional[str] = None,
     ) -> MovementResult:
         """Deposit funds into the trading account (gated by auto_deposit)."""
         cap = capability or _DEFAULT_CAPABILITY[MovementKind.DEPOSIT]
@@ -269,6 +354,7 @@ class MovementEngine:
             source_id=source_id,
             destination_id=None,
             strategy_id=strategy_id,
+            idempotency_key=idempotency_key,
         )
 
     def withdraw(
@@ -278,6 +364,7 @@ class MovementEngine:
         destination_id: Optional[str] = None,
         capability: Optional[str] = None,
         strategy_id: Optional[str] = None,
+        idempotency_key: Optional[str] = None,
     ) -> MovementResult:
         """Withdraw funds to a bank/card (gated by bank_card_movement)."""
         cap = capability or _DEFAULT_CAPABILITY[MovementKind.WITHDRAWAL]
@@ -288,6 +375,7 @@ class MovementEngine:
             source_id=None,
             destination_id=destination_id,
             strategy_id=strategy_id,
+            idempotency_key=idempotency_key,
         )
 
     def payout(
@@ -296,6 +384,7 @@ class MovementEngine:
         *,
         destination_id: Optional[str] = None,
         strategy_id: Optional[str] = None,
+        idempotency_key: Optional[str] = None,
     ) -> MovementResult:
         """Pay realized profit to an allowlisted destination (gated by payout_automation)."""
         return self._run(
@@ -305,6 +394,67 @@ class MovementEngine:
             source_id=None,
             destination_id=destination_id,
             strategy_id=strategy_id,
+            idempotency_key=idempotency_key,
+        )
+
+    def result_from_provider_receipt(
+        self,
+        kind: MovementKind | str,
+        amount_usd: float,
+        receipt: ProviderReceipt,
+        *,
+        strategy_id: Optional[str] = None,
+    ) -> MovementResult:
+        """Convert reconciled provider truth into the normal movement evidence shape."""
+
+        movement_kind = kind if isinstance(kind, MovementKind) else MovementKind(str(kind))
+        capability = _DEFAULT_CAPABILITY[movement_kind]
+        amount = money(float(amount_usd))
+        if receipt.status == STATUS_PENDING:
+            return MovementResult(
+                kind=movement_kind.value,
+                status=STATUS_PENDING,
+                requested_amount_usd=amount,
+                capability=capability,
+                authorized=True,
+                reason=f"Provider reconciliation remains pending: {receipt.detail}",
+                is_real_money=receipt.is_real,
+                provider_touched=True,
+                provider_outcome_uncertain=True,
+                provider_receipt=receipt,
+            )
+        if receipt.status != STATUS_SETTLED or not receipt.reference:
+            return MovementResult(
+                kind=movement_kind.value,
+                status=STATUS_FAILED,
+                requested_amount_usd=amount,
+                capability=capability,
+                authorized=True,
+                reason=f"Provider reconciliation did not settle: {receipt.detail}",
+                is_real_money=receipt.is_real,
+                provider_touched=True,
+                provider_receipt=receipt,
+            )
+        ledger_event = self._ledger_event(
+            movement_kind,
+            amount,
+            receipt,
+            strategy_id=strategy_id,
+        )
+        return MovementResult(
+            kind=movement_kind.value,
+            status=STATUS_SETTLED,
+            requested_amount_usd=amount,
+            capability=capability,
+            authorized=True,
+            reason=(
+                f"{movement_kind.value} settlement reconciled via "
+                f"{receipt.provider} ({receipt.reference})."
+            ),
+            is_real_money=receipt.is_real,
+            provider_touched=True,
+            provider_receipt=receipt,
+            ledger_event=ledger_event,
         )
 
     # -- reinvest split ----------------------------------------------------
@@ -410,6 +560,7 @@ class MovementEngine:
         source_id: Optional[str],
         destination_id: Optional[str],
         strategy_id: Optional[str],
+        idempotency_key: Optional[str],
     ) -> MovementResult:
         amount = float(amount_usd)
         if amount <= 0:
@@ -439,6 +590,25 @@ class MovementEngine:
                 missing_requirements=tuple(gate.missing_requirements),
             )
 
+        # 1a. Master emergency/auto-halt blocks real provider money movement
+        # before any provider call. Simulated provider movement remains
+        # available so paper/demo proof paths can still exercise the accounting
+        # loop without moving external funds.
+        if bool(getattr(self.provider, "is_real", False)) and _money_movement_kill_switch_active():
+            return MovementResult(
+                kind=kind.value,
+                status=STATUS_BLOCKED,
+                requested_amount_usd=money(amount),
+                capability=capability,
+                authorized=True,
+                reason=(
+                    "master kill switch / auto-halt is active; real provider money "
+                    "movement is blocked until the halt is cleared"
+                ),
+                missing_requirements=("master kill switch clear",),
+                master_kill_active=True,
+            )
+
         # 1b. Outflow destination must match the owner's allowlisted destination.
         # Both PAYOUT and WITHDRAWAL move money OUT of the account, so both bind
         # to the owner-allowlisted destination (payout_destination_id) when one
@@ -447,6 +617,26 @@ class MovementEngine:
         # authorized outflow can never be redirected to an arbitrary account.
         if kind in {MovementKind.PAYOUT, MovementKind.WITHDRAWAL}:
             allowed = getattr(self._cfg(), "payout_destination_id", None)
+            allowlisted = bool(getattr(self._cfg(), "payout_destination_allowlisted", False))
+            if not allowed or not allowlisted:
+                missing_requirements = []
+                if not allowed:
+                    missing_requirements.append("owner outflow destination configured")
+                if not allowlisted:
+                    missing_requirements.append("outflow destination allowlisted")
+                return MovementResult(
+                    kind=kind.value,
+                    status=STATUS_BLOCKED,
+                    requested_amount_usd=money(amount),
+                    capability=capability,
+                    authorized=False,
+                    reason=(
+                        "owner-gated outflow destination setup is incomplete; "
+                        "withdrawals and payouts remain blocked until the "
+                        "destination is configured and allowlisted"
+                    ),
+                    missing_requirements=tuple(missing_requirements),
+                )
             destination_id = destination_id if destination_id is not None else allowed
             if allowed is not None and destination_id != allowed:
                 return MovementResult(
@@ -479,11 +669,15 @@ class MovementEngine:
         # FAILED result rather than an exception escaping the engine.
         try:
             if kind == MovementKind.DEPOSIT:
-                receipt = self.provider.deposit(amount, source_id=source_id)
+                provider_kwargs: dict[str, Any] = {"source_id": source_id}
+                if idempotency_key:
+                    provider_kwargs["idempotency_key"] = idempotency_key
+                receipt = self.provider.deposit(amount, **provider_kwargs)
             else:
-                receipt = self.provider.withdraw(
-                    amount, destination_id=destination_id, kind=kind
-                )
+                provider_kwargs = {"destination_id": destination_id, "kind": kind}
+                if idempotency_key:
+                    provider_kwargs["idempotency_key"] = idempotency_key
+                receipt = self.provider.withdraw(amount, **provider_kwargs)
         except Exception as exc:  # provider unavailable / network / SDK error
             return MovementResult(
                 kind=kind.value,
@@ -492,6 +686,25 @@ class MovementEngine:
                 capability=capability,
                 authorized=True,
                 reason=f"payment provider error: {exc}",
+                provider_touched=True,
+                provider_outcome_uncertain=True,
+            )
+
+        if receipt.status == STATUS_PENDING:
+            return MovementResult(
+                kind=kind.value,
+                status=STATUS_PENDING,
+                requested_amount_usd=money(amount),
+                capability=capability,
+                authorized=True,
+                reason=(
+                    "Provider accepted the movement but final settlement is not "
+                    f"proven: {receipt.detail or receipt.provider_status or receipt.status}"
+                ),
+                is_real_money=receipt.is_real,
+                provider_touched=True,
+                provider_outcome_uncertain=True,
+                provider_receipt=receipt,
             )
 
         if receipt.status != STATUS_SETTLED:
@@ -503,6 +716,7 @@ class MovementEngine:
                 authorized=True,
                 reason=f"Provider did not settle: {receipt.detail or receipt.status}",
                 is_real_money=receipt.is_real,
+                provider_touched=True,
                 provider_receipt=receipt,
             )
 
@@ -515,6 +729,7 @@ class MovementEngine:
             authorized=True,
             reason=f"{kind.value} settled via {receipt.provider} ({receipt.reference}).",
             is_real_money=receipt.is_real,
+            provider_touched=True,
             provider_receipt=receipt,
             ledger_event=ledger_event,
         )
@@ -547,3 +762,50 @@ class MovementEngine:
             # keeps this False so the paper ledger accepts the event.
             external_money_movement=receipt.is_real,
         )
+
+
+def _money_movement_kill_switch_active() -> bool:
+    try:
+        from cas_forex.auto_halt import is_auto_halt_active
+
+        return bool(is_auto_halt_active())
+    except Exception:
+        return True
+
+
+def _movement_balance_snapshot(
+    ledger_event: AccountLedgerEvent | None,
+    provider_receipt: ProviderReceipt | None,
+) -> dict[str, Any] | None:
+    if ledger_event is None:
+        return None
+    before = provider_receipt.before_balance_usd if provider_receipt else None
+    after = provider_receipt.after_balance_usd if provider_receipt else None
+    real_provider = bool(provider_receipt and provider_receipt.is_real)
+    concrete = before is not None and after is not None
+    expected_delta = float(ledger_event.balance_delta_usd)
+    observed_delta = float(after) - float(before) if concrete else None
+    delta_matches = (
+        observed_delta is not None and abs(observed_delta - expected_delta) <= 0.01
+    )
+    complete = bool(concrete and delta_matches)
+    return {
+        "before_balance_usd": before,
+        "after_balance_usd": after,
+        "balance_delta_usd": ledger_event.balance_delta_usd,
+        "equity_delta_usd": ledger_event.equity_delta_usd,
+        "observed_balance_delta_usd": money(observed_delta) if observed_delta is not None else None,
+        "delta_matches_ledger": delta_matches,
+        "complete": complete,
+        "required_for_settlement_evidence": real_provider,
+        "source": "provider_balance_snapshot" if concrete else "movement_ledger_event_delta_only",
+        "reference": (
+            provider_receipt.balance_snapshot_reference if provider_receipt else None
+        ),
+        "detail": (
+            "Provider before/after balances match the movement ledger delta."
+            if complete
+            else "Concrete provider before/after balances are missing or do not match "
+            "the movement ledger delta; real settlement evidence is incomplete."
+        ),
+    }

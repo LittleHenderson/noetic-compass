@@ -195,3 +195,101 @@ def test_payload_summary_has_no_advisory_phrase():
     for phrase in forbidden:
         assert phrase not in summary, f"advisory phrase in summary: {phrase!r}"
         assert phrase not in headline, f"advisory phrase in headline: {phrase!r}"
+
+
+def test_payload_marks_static_simulator_risk_source_truth():
+    def _loader(date: str) -> dict[str, Any]:
+        return {
+            "daily_rollup": None,
+            "cycle_reports": None,
+            "event_journal": None,
+            "live_telemetry_snapshots": [
+                {
+                    "totals": {"open_position_count": 2, "total_floating_pnl": 0.0},
+                    "data_freshness": {
+                        "source": "movement_stream",
+                        "movement_source": {
+                            "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                        },
+                    },
+                }
+            ],
+            "risk_snapshots": [
+                {
+                    "peak_concentration": 0.25,
+                    "peak_margin_utilization": 0.08,
+                    "max_floating_loss": 0.0,
+                    "max_floating_gain": 0.0,
+                    "telemetry_source": "movement_stream",
+                    "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                }
+            ],
+            "system_health_snapshots": None,
+        }
+
+    route_module.set_loader_for_testing(_loader)
+    app = _make_app()
+    _, body = asyncio.run(_asgi_get(app, "/api/forex/daily-report/2026-06-25"))
+    risk = next(section for section in body["sections"] if section["section_name"] == "risk")
+
+    assert risk["metrics"]["movement_source_samples"] >= 1
+    assert risk["metrics"]["static_simulation_samples"] >= 1
+    assert risk["source_truth"]["movement_source_samples"] >= 1
+    assert risk["source_truth"]["static_simulation_samples"] >= 1
+    assert "static simulation fallback" in risk["detail"].lower()
+    assert "paper/demo simulator proof rows" in body["plain_english_summary"].lower()
+
+
+def test_payload_preserves_canonical_position_feed_detail():
+    detail = (
+        "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions. "
+        "Static simulator fallback is active for 1/1 row(s), so prices and floating P&L can remain at entry "
+        "until usable provider or MT5 quotes arrive. Requested provider: Yahoo. Static fallback symbols: NAS100. "
+        "Stale provider/MT5 snapshots were rejected for: NAS100 (max age 900s)."
+    )
+
+    def _loader(date: str) -> dict[str, Any]:
+        return {
+            "daily_rollup": None,
+            "cycle_reports": None,
+            "event_journal": None,
+            "live_telemetry_snapshots": [
+                {
+                    "totals": {"open_position_count": 1, "total_floating_pnl": 0.0},
+                    "data_freshness": {
+                        "source": "movement_stream",
+                        "movement_source": {
+                            "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                            "position_feed_label": "SIM PROOF",
+                            "position_feed_detail": detail,
+                        },
+                    },
+                }
+            ],
+            "risk_snapshots": [
+                {
+                    "peak_concentration": 0.25,
+                    "peak_margin_utilization": 0.08,
+                    "max_floating_loss": 0.0,
+                    "max_floating_gain": 0.0,
+                    "telemetry_source": "movement_stream",
+                    "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                    "position_feed_label": "SIM PROOF",
+                    "position_feed_detail": detail,
+                }
+            ],
+            "system_health_snapshots": None,
+        }
+
+    route_module.set_loader_for_testing(_loader)
+    app = _make_app()
+    _, body = asyncio.run(_asgi_get(app, "/api/forex/daily-report/2026-06-25"))
+    risk = next(section for section in body["sections"] if section["section_name"] == "risk")
+
+    assert risk["source_truth"]["latest_position_feed_label"] == "SIM PROOF"
+    assert risk["source_truth"]["latest_position_feed_detail"] == detail
+    assert risk["source_truth"]["source_truth_observation"] == detail
+    assert risk["metrics"]["source_truth_observation"] == detail
+    assert risk["metrics"]["latest_position_feed_detail"] == detail
+    assert detail in risk["detail"]
+    assert "Stale provider/MT5 snapshots were rejected for: NAS100 (max age 900s)." in body["plain_english_summary"]

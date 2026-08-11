@@ -36,6 +36,25 @@ class BrokerCandidate:
 
 BROKER_CANDIDATES: tuple[BrokerCandidate, ...] = (
     BrokerCandidate(
+        broker_id="risenfx",
+        display_name="RisenFX",
+        website="https://www.risenfx.com/",
+        platform_notes=(
+            "Owner-approved broker candidate with a verified local Risen MT5 "
+            "Terminal and advertised Risen-Trade server. Risen issued account "
+            "101321 as TradeLocker, not MT5; separate broker-issued MT5 login "
+            "credentials are still required. Broker terms must also be reviewed "
+            "for residency, automated-trading, bonus, withdrawal, and "
+            "negative-balance-protection conditions."
+        ),
+        owner_research_leverage_note=(
+            "TradeLocker account 101321 reports 1:100 leverage. Do not infer "
+            "MT5 leverage or contract terms until Risen issues an MT5 account."
+        ),
+        configured_env_prefix="CAS_FOREX_RISENFX_",
+        notes="Official contracting entity identified as RISEN LTD in Saint Lucia.",
+    ),
+    BrokerCandidate(
         broker_id="hugosway",
         display_name="Hugo'sWay",
         website="https://hugosway.com/",

@@ -24,6 +24,11 @@ def _clean_live_truth():
         "overall_status": "RECONCILED",
         "mt5_connected": True,
         "mt5_is_demo": False,
+        "mt5_account": 101321,
+        "mt5_account_server": "Risen-Trade",
+        "mt5_expected_account": 101321,
+        "mt5_expected_server": "Risen-Trade",
+        "mt5_account_identity_matches_config": True,
         "mt5_open_position_count": 0,
         "terminal_unmatched_open_position_count": 0,
         "terminal_pending_receipt_count": 0,
@@ -131,6 +136,27 @@ def test_prior_live_activity_requires_fresh_broker_truth(tmp_path, monkeypatch):
     assert "broker_truth_present" in report["missing_requirements"]
 
 
+def test_recovery_rejects_fresh_but_wrong_live_account(tmp_path, monkeypatch):
+    monkeypatch.setattr(live_recovery, "DEFAULT_STATE_PATH", tmp_path / "recovery.json")
+    truth = {
+        **_clean_live_truth(),
+        "mt5_account": 777777,
+        "mt5_account_identity_matches_config": False,
+    }
+
+    report = live_recovery.build_live_recovery_report(
+        broker_truth_report=truth,
+        live_pilot_policy=_pilot(trades=1),
+        order_attempt_status=_clean_order_attempts(),
+    )
+
+    assert report["recovery_clear_for_live"] is False
+    assert "live_account_visible" in report["missing_requirements"]
+    check = next(item for item in report["checks"] if item["check_id"] == "live_account_visible")
+    assert check["evidence"]["mt5_account"] == 777777
+    assert check["evidence"]["mt5_expected_account"] == 101321
+
+
 def test_accept_recovery_review_for_current_clean_fingerprint(tmp_path, monkeypatch):
     monkeypatch.setattr(live_recovery, "DEFAULT_STATE_PATH", tmp_path / "recovery.json")
     monkeypatch.setattr(live_recovery, "DEFAULT_AUDIT_PATH", tmp_path / "audit.jsonl")
@@ -151,11 +177,16 @@ def test_accept_recovery_review_for_current_clean_fingerprint(tmp_path, monkeypa
     assert (tmp_path / "audit.jsonl").exists()
 
     changed = live_recovery.build_live_recovery_report(
-        broker_truth_report={**truth, "terminal_unmatched_open_position_count": 1},
+        broker_truth_report={
+            **truth,
+            "terminal_unmatched_open_position_count": 1,
+            "terminal_unattributed_open_position_count": 1,
+        },
         live_pilot_policy=pilot,
         order_attempt_status=_clean_order_attempts(),
     )
     assert changed["recovery_clear_for_live"] is False
+    assert changed["broker_truth_summary"]["terminal_unattributed_open_position_count"] == 1
 
 
 def test_unresolved_real_order_attempt_blocks_live_recovery_until_reconciled(tmp_path, monkeypatch):
@@ -185,6 +216,77 @@ def test_unresolved_real_order_attempt_blocks_live_recovery_until_reconciled(tmp
             live_pilot_policy=_pilot(trades=0),
             order_attempt_status=attempts,
         )
+
+
+def test_unmatched_closed_history_requires_live_recovery_review(tmp_path, monkeypatch):
+    monkeypatch.setattr(live_recovery, "DEFAULT_STATE_PATH", tmp_path / "recovery.json")
+    truth = {
+        **_clean_live_truth(),
+        "overall_status": "RECONCILIATION_FAILED",
+        "terminal_unmatched_history_count": 1,
+        "terminal_unattributed_history_count": 1,
+        "terminal_attributed_history_memory_gap_count": 0,
+    }
+
+    report = live_recovery.build_live_recovery_report(
+        broker_truth_report=truth,
+        live_pilot_policy=_pilot(trades=0),
+        order_attempt_status=_clean_order_attempts(),
+    )
+
+    assert report["requires_recovery_review"] is True
+    assert report["recovery_clear_for_live"] is False
+    assert report["broker_truth_summary"]["terminal_unmatched_history_count"] == 1
+    assert report["broker_truth_summary"]["terminal_unattributed_history_count"] == 1
+    mismatch_check = next(check for check in report["checks"] if check["check_id"] == "position_reconciliation_clean")
+    assert "unmatched history=1" in mismatch_check["detail"]
+
+
+def test_unattributed_closed_history_is_nonblocking_when_truth_status_is_soft(tmp_path, monkeypatch):
+    monkeypatch.setattr(live_recovery, "DEFAULT_STATE_PATH", tmp_path / "recovery.json")
+    truth = {
+        **_clean_live_truth(),
+        "overall_status": "RECONCILED_WITH_WARNINGS",
+        "terminal_unmatched_history_count": 1,
+        "terminal_unattributed_history_count": 1,
+        "terminal_attributed_history_memory_gap_count": 0,
+    }
+
+    report = live_recovery.build_live_recovery_report(
+        broker_truth_report=truth,
+        live_pilot_policy=_pilot(trades=0),
+        order_attempt_status=_clean_order_attempts(),
+    )
+
+    assert report["requires_recovery_review"] is False
+    assert report["recovery_clear_for_live"] is True
+    mismatch_check = next(check for check in report["checks"] if check["check_id"] == "position_reconciliation_clean")
+    assert mismatch_check["status"] == "OK"
+    assert mismatch_check["evidence"]["unattributed_history"] == 1
+    assert mismatch_check["evidence"]["blocking_history_gap"] == 0
+
+
+def test_cas_attributed_closed_history_gap_blocks_recovery(tmp_path, monkeypatch):
+    monkeypatch.setattr(live_recovery, "DEFAULT_STATE_PATH", tmp_path / "recovery.json")
+    truth = {
+        **_clean_live_truth(),
+        "overall_status": "RECONCILED_WITH_WARNINGS",
+        "terminal_unmatched_history_count": 1,
+        "terminal_unattributed_history_count": 0,
+        "terminal_attributed_history_memory_gap_count": 1,
+    }
+
+    report = live_recovery.build_live_recovery_report(
+        broker_truth_report=truth,
+        live_pilot_policy=_pilot(trades=0),
+        order_attempt_status=_clean_order_attempts(),
+    )
+
+    assert report["requires_recovery_review"] is True
+    assert report["recovery_clear_for_live"] is False
+    mismatch_check = next(check for check in report["checks"] if check["check_id"] == "position_reconciliation_clean")
+    assert mismatch_check["status"] == "MISSING"
+    assert mismatch_check["evidence"]["blocking_history_gap"] == 1
 
 
 def test_synthetic_test_like_unresolved_attempts_do_not_block_live_recovery(tmp_path, monkeypatch):

@@ -18,10 +18,14 @@ from pydantic import BaseModel
 from ..live_money_cache import invalidate_live_money_gate_caches
 from ..route_cache import cache_first_payload
 from cas_forex.live_enable_control import (
+    CAPABILITY_ENABLE_KEYS,
     LIVE_ENABLE_KEYS,
+    PROVIDER_BOOL_KEYS,
+    REAL_MONEY_DISARM_CONFIRM_PHRASE,
     build_authorization_report,
     build_live_enable_report,
     clear_live_enable_overrides,
+    disarm_real_money_overrides,
     resolve_live_enable,
     set_live_enable_overrides,
 )
@@ -38,6 +42,7 @@ class LiveEnableUpdate(BaseModel):
     prefer_mt5: Optional[bool] = None
     owner_enable_live_trading: Optional[bool] = None
     live_trading_licensed: Optional[bool] = None
+    confirm: Optional[str] = None
 
 
 class AuthorizationUpdate(BaseModel):
@@ -58,8 +63,65 @@ class AuthorizationUpdate(BaseModel):
     # Shared payment-provider config. payment_api_key is a secret the owner sets;
     # it is stored but never returned by any report.
     payment_provider: Optional[str] = None
+    payment_provider_environment: Optional[str] = None
     payment_api_key: Optional[str] = None
+    payment_provider_base_url: Optional[str] = None
+    payment_provider_account_id: Optional[str] = None
     payout_destination_id: Optional[str] = None
+    confirm: Optional[str] = None
+
+
+class ConfirmedOwnerAction(BaseModel):
+    confirm: str = ""
+
+
+def _norm_confirm(text: Any) -> str:
+    return " ".join(str(text or "").strip().upper().split())
+
+
+REAL_MONEY_ARM_CONFIRM_PHRASE = "ARM REAL MONEY"
+PAYMENT_PROVIDER_LIVE_CONFIRM_PHRASE = "ARM PAYMENT PROVIDER LIVE"
+_ARM_CONFIRM_KEYS = frozenset(LIVE_ENABLE_KEYS + CAPABILITY_ENABLE_KEYS + PROVIDER_BOOL_KEYS)
+
+
+def _required_arm_confirmation(provided: dict[str, Any]) -> str | None:
+    provider_environment = str(
+        provided.get("payment_provider_environment") or ""
+    ).strip().lower()
+    enabling = sorted(
+        key
+        for key, value in provided.items()
+        if key in _ARM_CONFIRM_KEYS and value is True
+    )
+    if provider_environment in {"live", "production"}:
+        return (
+            REAL_MONEY_ARM_CONFIRM_PHRASE
+            if enabling
+            else PAYMENT_PROVIDER_LIVE_CONFIRM_PHRASE
+        )
+    if not enabling:
+        return None
+    if len(enabling) == 1:
+        return f"ARM {enabling[0]}"
+    return REAL_MONEY_ARM_CONFIRM_PHRASE
+
+
+def _arm_confirm_required(need: str, provided: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "report_kind": "cas_forex_real_money_arm_confirm_required",
+        "status": "CONFIRM_REQUIRED",
+        "need_confirmation": need,
+        "applied": False,
+        "pending_keys": sorted(provided.keys()),
+        "pending_enable_keys": sorted(
+            key for key, value in provided.items() if key in _ARM_CONFIRM_KEYS and value is True
+        ),
+        "claim_boundary": (
+            "Arming live or money-capability switches requires the exact owner "
+            "confirmation phrase. No switch was changed, no order was placed, "
+            "and no money movement was requested."
+        ),
+    }
 
 
 @router.get("/state")
@@ -78,9 +140,16 @@ async def get_live_enable() -> dict[str, Any]:
 async def post_live_enable(body: LiveEnableUpdate) -> dict[str, Any]:
     """Flip toggles. Field present = set; omitted = unchanged. Returns the full
     report (incl. runtime_gates) so the UI shows what is still missing."""
-    provided = {key: getattr(body, key) for key in body.model_fields_set}
+    provided = {key: getattr(body, key) for key in body.model_fields_set if key != "confirm"}
+    need_confirmation = _required_arm_confirmation(provided)
+    if need_confirmation and _norm_confirm(body.confirm) != _norm_confirm(need_confirmation):
+        return _arm_confirm_required(need_confirmation, provided)
     if provided:
-        set_live_enable_overrides(**provided)
+        set_live_enable_overrides(
+            audit_source="api.live_enable.update",
+            confirm_supplied=bool(need_confirmation),
+            **provided,
+        )
         invalidate_live_money_gate_caches()
     return build_live_enable_report()
 
@@ -101,11 +170,45 @@ async def get_authorization() -> dict[str, Any]:
 async def post_authorization(body: AuthorizationUpdate) -> dict[str, Any]:
     """Set any capability toggle / provider field. Returns the full authorization
     report (per-capability gate status + what is still missing)."""
-    provided = {key: getattr(body, key) for key in body.model_fields_set}
+    provided = {key: getattr(body, key) for key in body.model_fields_set if key != "confirm"}
+    need_confirmation = _required_arm_confirmation(provided)
+    if need_confirmation and _norm_confirm(body.confirm) != _norm_confirm(need_confirmation):
+        return _arm_confirm_required(need_confirmation, provided)
     if provided:
-        set_live_enable_overrides(**provided)
+        set_live_enable_overrides(
+            audit_source="api.live_enable.authorization.update",
+            confirm_supplied=bool(need_confirmation),
+            **provided,
+        )
         invalidate_live_money_gate_caches()
     return build_authorization_report()
+
+
+@router.post("/disarm-real-money")
+async def post_disarm_real_money(body: ConfirmedOwnerAction) -> dict[str, Any]:
+    """Turn off all live/money owner-enable switches after typed confirmation."""
+    if _norm_confirm(body.confirm) != REAL_MONEY_DISARM_CONFIRM_PHRASE:
+        return {
+            "report_kind": "cas_forex_real_money_disarm",
+            "status": "CONFIRM_REQUIRED",
+            "need_confirmation": REAL_MONEY_DISARM_CONFIRM_PHRASE,
+            "applied": False,
+            "claim_boundary": (
+                "Disarming real-money switches requires the exact typed phrase. "
+                "No order or money movement happens here."
+            ),
+        }
+    result = disarm_real_money_overrides(
+        audit_source="api.live_enable.disarm_real_money",
+        confirm_supplied=True,
+    )
+    invalidate_live_money_gate_caches()
+    return {
+        **result,
+        "status": "DISARMED",
+        "applied": True,
+        "authorization": build_authorization_report(),
+    }
 
 
 @router.post("/reset")
@@ -176,14 +279,25 @@ def _owner_authority_model_warming() -> dict[str, Any]:
         "authority": "OWNER",
         "authority_controls": ["owner switches", "Owner ACCEPT buttons"],
         "owner_controls_are_final_authority": True,
-        "metrics_and_ai_are_advisory_only": True,
+        "metrics_and_ai_are_advisory_only": False,
         "metrics_and_ai_can_veto_owner_authority": False,
+        "ai_autonomous_execution_authority": "OWNER_DELEGATED_WITHIN_GATES",
+        "human_in_loop_per_action_required": False,
+        "per_order_confirmation_required": False,
+        "per_configured_money_movement_confirmation_required": False,
         "technical_action_time_checks_still_required": True,
         "advisory_inputs": [
             "paper-proof day count",
             "12-month / multi-symbol evidence",
             "strategy win-rate / profit metrics",
-            "AI confidence or agent recommendation",
+            "AI conviction score (not win probability) or agent recommendation",
+            "daily/monthly profit pace",
+        ],
+        "decision_context_inputs": [
+            "paper-proof day count",
+            "12-month / multi-symbol evidence",
+            "strategy win-rate / profit metrics",
+            "AI conviction score (not win probability) or agent recommendation",
             "daily/monthly profit pace",
         ],
         "action_time_requirements": [
@@ -191,11 +305,12 @@ def _owner_authority_model_warming() -> dict[str, Any]:
             "broker or payment-provider credentials are configured",
             "broker/feed/provider bridge is reachable for the requested action",
             "fresh edge authorization exists when the dispatch path requires it",
-            "risk checks, emergency-stop checks, and explicit action confirmation pass",
+            "risk checks, cooldown/recovery checks, kill-switch checks, and configured confirmations pass",
         ],
         "statement": (
-            "The owner is the live-trading authority. Metrics and AI are advisory; "
-            "broker/provider/edge/risk checks still run at action time."
+            "The owner delegates live-trading and money-movement authority. Once "
+            "armed, the AI may autonomously act inside that envelope through "
+            "broker/provider/edge/risk gates."
         ),
     }
 
@@ -281,10 +396,32 @@ def _authorization_warming() -> dict[str, Any]:
         "capabilities": capabilities,
         "provider": {
             "payment_provider": "",
+            "payment_provider_environment": "sandbox",
             "payment_api_key_set": False,
+            "payment_api_key_runtime_override_set": False,
+            "payment_api_key_config_set": False,
+            "payment_api_key_storage": "",
+            "payment_provider_base_url": "",
+            "payment_provider_account_id": "",
             "payout_destination_id": "",
             "payout_destination_allowlisted": False,
             "allowlist_label": "Payout destination allowlisted",
+            "runtime_provider_name": "simulated",
+            "runtime_status": "NOT_CONFIGURED",
+            "runtime_detail": "No payment provider is configured yet. Money movement remains fail-closed.",
+            "supported_provider": False,
+            "supported_real_provider": False,
+            "runtime_is_simulated": True,
+            "real_money_provider_ready": False,
+            "broker_account_bound": False,
+            "custody_scope": "none",
+            "supported_actions": [],
+            "sandbox_conformance": {
+                "status": "unavailable",
+                "present": False,
+                "sandbox_only": True,
+                "detail": "Sandbox conformance status is warming.",
+            },
         },
         "all_real_money_authorized": False,
         "summary": "Owner-controlled capability audit is warming and remains fail-closed.",

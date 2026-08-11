@@ -114,6 +114,15 @@ def _authorized_live_cfg() -> SimpleNamespace:
     )
 
 
+def _risk_authorized_live_cfg() -> SimpleNamespace:
+    cfg = _authorized_live_cfg()
+    cfg.max_total_exposure_lots = 2.0
+    cfg.max_open_positions = 7
+    cfg.max_risk_per_trade_pct = 0.5
+    cfg.max_margin_utilization_pct = 50.0
+    return cfg
+
+
 def _clean_live_truth() -> dict:
     from cas_forex.time_utils import utc_now
 
@@ -123,6 +132,11 @@ def _clean_live_truth() -> dict:
         "overall_status": "RECONCILED",
         "mt5_connected": True,
         "mt5_is_demo": False,
+        "mt5_account": 101321,
+        "mt5_account_server": "Risen-Trade",
+        "mt5_expected_account": 101321,
+        "mt5_expected_server": "Risen-Trade",
+        "mt5_account_identity_matches_config": True,
         "mt5_open_position_count": 0,
         "terminal_unmatched_open_position_count": 0,
         "terminal_pending_receipt_count": 0,
@@ -162,7 +176,7 @@ class _FakePaperBridge:
         )
 
 
-def _authorize_edge(req: LiveOrderDryRunRequest) -> None:
+def _authorize_edge(req: LiveOrderDryRunRequest, *, config=None) -> None:
     evaluated_at = _now_iso()
     setup = CandidateSetup(
         symbol=req.symbol,
@@ -184,7 +198,16 @@ def _authorize_edge(req: LiveOrderDryRunRequest) -> None:
         evaluated_at=evaluated_at,
         reason="test edge PASS",
     )
-    edge_authorization.authorize(req.decision_ref, decision, setup)
+    edge_authorization.authorize(
+        req.decision_ref,
+        decision,
+        setup,
+        config=config,
+        is_real=bool(getattr(config, "live_mode", False)) if config is not None else None,
+        volume=float(req.volume),
+        order_type="MARKET",
+        price=float(req.price),
+    )
 
 
 def _waste_real_candle_source() -> dict:
@@ -213,7 +236,7 @@ def _passing_waste_entry_dry_run(tmp_path, monkeypatch, audit_path) -> dict:
     monkeypatch.setattr(live_recovery, "is_live_recovery_clear_for_live", lambda: True)
     _accept_live_pilot(tmp_path, monkeypatch)
     req = _request()
-    _authorize_edge(req)
+    _authorize_edge(req, config=_authorized_live_cfg())
     report = build_live_order_dry_run(req, config=_authorized_live_cfg(), audit=None)
     report["waste_real_candle_source"] = _waste_real_candle_source()
     report["audit"] = LiveOrderDryRunAuditLog(audit_path).append(report)
@@ -226,6 +249,8 @@ def _accept_live_pilot(tmp_path, monkeypatch) -> None:
     live_pilot.update_live_pilot_policy(
         {
             "allowed_symbols": ["EUR/USD"],
+            "sizing_mode": live_pilot.SIZING_MODE_ABSOLUTE_LOTS,
+            "continuous_authority": False,
             "max_trade_lots": 0.01,
             "max_open_live_lots": 0.02,
             "max_live_trade_count": 2,
@@ -233,8 +258,30 @@ def _accept_live_pilot(tmp_path, monkeypatch) -> None:
             "max_total_loss_usd": 50.0,
             "max_pilot_days": 5,
             "owner_understands_real_money_risk": True,
-            "owner_confirms_small_amounts_only": True,
-            "owner_confirms_no_scaling_without_review": True,
+            "owner_confirms_risk_denominated_sizing": True,
+            "owner_confirms_autonomous_scaling_within_envelope": True,
+            "owner_confirms_emergency_stop_ready": True,
+        },
+        confirm_owner_accept=True,
+    )
+
+
+def _accept_risk_denominated_live_authority(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(live_pilot, "DEFAULT_POLICY_PATH", tmp_path / "risk-authority.json")
+    monkeypatch.setattr(live_pilot, "DEFAULT_AUDIT_PATH", tmp_path / "risk-authority-audit.jsonl")
+    live_pilot.update_live_pilot_policy(
+        {
+            "allowed_symbols": ["EUR/USD"],
+            "sizing_mode": live_pilot.SIZING_MODE_RISK_DENOMINATED,
+            "continuous_authority": True,
+            "max_trade_risk_pct_equity": 0.5,
+            "max_live_trade_count": 10,
+            "max_daily_loss_usd": 25.0,
+            "max_total_loss_usd": 50.0,
+            "max_pilot_days": 5,
+            "owner_understands_real_money_risk": True,
+            "owner_confirms_risk_denominated_sizing": True,
+            "owner_confirms_autonomous_scaling_within_envelope": True,
             "owner_confirms_emergency_stop_ready": True,
         },
         confirm_owner_accept=True,
@@ -261,7 +308,7 @@ def test_live_order_dry_run_passes_only_when_all_live_gates_pass(tmp_path, monke
     monkeypatch.setattr(live_recovery, "is_live_recovery_clear_for_live", lambda: True)
     _accept_live_pilot(tmp_path, monkeypatch)
     req = _request()
-    _authorize_edge(req)
+    _authorize_edge(req, config=_authorized_live_cfg())
 
     report = build_live_order_dry_run(req, config=_authorized_live_cfg())
 
@@ -270,6 +317,103 @@ def test_live_order_dry_run_passes_only_when_all_live_gates_pass(tmp_path, monke
     assert report["broker_touched"] is False
     assert all(check["passed"] for check in report["checks"])
     assert "does not place orders" in report["claim_boundary"]
+
+
+def test_risk_denominated_dry_run_allows_1_09_lots_only_when_stop_risk_fits(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "is_auto_halt_active", lambda: False)
+    monkeypatch.setattr(broker_truth_monitor, "broker_truth_monitor_ready_for_live", lambda: True)
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
+    monkeypatch.setattr(live_recovery, "is_live_recovery_clear_for_live", lambda: True)
+    monkeypatch.setattr("cas_forex.execution_guard._ai_dial", lambda name: None)
+    _accept_risk_denominated_live_authority(tmp_path, monkeypatch)
+    cfg = _risk_authorized_live_cfg()
+    account = {
+        "balance": 50_000.0,
+        "equity": 50_000.0,
+        "margin": 1_000.0,
+        "margin_free": 49_000.0,
+        "leverage": 500,
+    }
+
+    qualified = LiveOrderDryRunRequest(
+        order_id="risk-sized-1-09-pass",
+        decision_ref="risk-sized-1-09-pass-ref",
+        symbol="EUR/USD",
+        direction="LONG",
+        volume=1.09,
+        price=1.1000,
+        stop_loss=1.0990,
+        take_profit=1.1020,
+    )
+    _authorize_edge(qualified, config=cfg)
+    qualified_report = build_live_order_dry_run(
+        qualified,
+        config=cfg,
+        account_snapshot=account,
+        live_telemetry={"positions": []},
+    )
+
+    assert qualified_report["status"] == STATUS_PASS
+    assert qualified_report["pre_trade_estimate"]["risk_at_stop_usd"] == pytest.approx(109.0)
+    assert qualified_report["pre_trade_estimate"]["risk_at_stop_pct_equity"] == pytest.approx(0.218)
+    assert next(
+        check for check in qualified_report["checks"] if check["check_id"] == "small_live_pilot"
+    )["passed"] is True
+
+    excessive = LiveOrderDryRunRequest(
+        order_id="risk-sized-1-09-block",
+        decision_ref="risk-sized-1-09-block-ref",
+        symbol="EUR/USD",
+        direction="LONG",
+        volume=1.09,
+        price=1.1000,
+        stop_loss=1.0950,
+        take_profit=1.1100,
+    )
+    _authorize_edge(excessive, config=cfg)
+    excessive_report = build_live_order_dry_run(
+        excessive,
+        config=cfg,
+        account_snapshot=account,
+        live_telemetry={"positions": []},
+    )
+
+    assert excessive_report["status"] == STATUS_BLOCKED
+    assert excessive_report["pre_trade_estimate"]["risk_at_stop_usd"] == pytest.approx(545.0)
+    assert excessive_report["pre_trade_estimate"]["risk_at_stop_pct_equity"] == pytest.approx(1.09)
+    pilot_check = next(
+        check for check in excessive_report["checks"] if check["check_id"] == "small_live_pilot"
+    )
+    assert pilot_check["passed"] is False
+    assert "exceeds live authority max_trade_risk_pct_equity" in pilot_check["detail"]
+
+
+def test_live_order_dry_run_blocks_on_bound_price_drift(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "is_auto_halt_active", lambda: False)
+    monkeypatch.setattr(broker_truth_monitor, "broker_truth_monitor_ready_for_live", lambda: True)
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
+    monkeypatch.setattr(live_recovery, "is_live_recovery_clear_for_live", lambda: True)
+    _accept_live_pilot(tmp_path, monkeypatch)
+    req = _request()
+    _authorize_edge(req, config=_authorized_live_cfg())
+    drifted = LiveOrderDryRunRequest(
+        order_id=req.order_id,
+        decision_ref=req.decision_ref,
+        symbol=req.symbol,
+        direction=req.direction,
+        volume=req.volume,
+        price=1.1010,
+        stop_loss=req.stop_loss,
+        take_profit=req.take_profit,
+        expected_loss_usd=req.expected_loss_usd,
+    )
+
+    report = build_live_order_dry_run(drifted, config=_authorized_live_cfg())
+
+    assert report["status"] == STATUS_BLOCKED
+    edge_check = next(check for check in report["checks"] if check["check_id"] == "edge_pass_token")
+    assert edge_check["passed"] is False
+    assert "price mismatch" in edge_check["detail"]
 
 
 def test_compound_add_dry_run_blocks_by_default_and_audits(tmp_path):
@@ -298,7 +442,7 @@ def test_compound_add_dry_run_passes_only_when_all_add_gates_pass(tmp_path, monk
         broker_grade_market_truth=True,
         cas_feature_map=_compound_cas_map(),
     )
-    _authorize_edge(req.to_live_order_request())
+    _authorize_edge(req.to_live_order_request(), config=_authorized_live_cfg())
 
     report = build_compound_add_order_dry_run(req, config=_authorized_live_cfg())
 
@@ -320,7 +464,7 @@ def test_compound_add_dry_run_review_accepts_current_pass_fingerprint(tmp_path, 
         broker_grade_market_truth=True,
         cas_feature_map=_compound_cas_map(),
     )
-    _authorize_edge(req.to_live_order_request())
+    _authorize_edge(req.to_live_order_request(), config=_authorized_live_cfg())
     dry_run = build_compound_add_order_dry_run(
         req,
         config=_authorized_live_cfg(),
@@ -470,7 +614,7 @@ def test_compound_add_dispatch_handoff_route_is_read_only_status(tmp_path, monke
         broker_grade_market_truth=True,
         cas_feature_map=_compound_cas_map(),
     )
-    _authorize_edge(req.to_live_order_request())
+    _authorize_edge(req.to_live_order_request(), config=_authorized_live_cfg())
     dry_run = build_compound_add_order_dry_run(
         req,
         config=_authorized_live_cfg(),
@@ -498,6 +642,28 @@ def test_compound_add_dispatch_handoff_route_is_read_only_status(tmp_path, monke
     assert ready.json()["would_call_dispatch_if_owner_attempted"] is True
     assert ready.json()["dispatched_to_bridge"] is False
     assert ready.json()["broker_touched"] is False
+
+
+def test_live_handoff_confirm_helper_requires_typed_phrase(monkeypatch):
+    monkeypatch.setattr(route_module.runtime_gates, "is_authorized", lambda capability: capability == "live_trading")
+
+    pending = route_module._live_handoff_confirm_required(
+        confirm=True,
+        confirm_phrase="",
+        payload={"report_kind": "unit", "owner_dispatch_confirmed": True},
+        detail="unit live handoff",
+    )
+    assert pending is not None
+    assert pending["status"] == "CONFIRM_REQUIRED"
+    assert pending["need_confirmation"] == route_module.LIVE_HANDOFF_CONFIRM_PHRASE
+
+    released = route_module._live_handoff_confirm_required(
+        confirm=True,
+        confirm_phrase=route_module.LIVE_HANDOFF_CONFIRM_PHRASE,
+        payload={"report_kind": "unit", "owner_dispatch_confirmed": True},
+        detail="unit live handoff",
+    )
+    assert released is None
 
 
 def test_compound_add_dispatch_handoff_dispatch_route_requires_confirm_and_current_accept(tmp_path, monkeypatch):
@@ -535,7 +701,7 @@ def test_compound_add_dispatch_handoff_dispatch_route_requires_confirm_and_curre
         broker_grade_market_truth=True,
         cas_feature_map=_compound_cas_map(),
     )
-    _authorize_edge(req.to_live_order_request())
+    _authorize_edge(req.to_live_order_request(), config=_authorized_live_cfg())
     dry_run = build_compound_add_order_dry_run(
         req,
         config=_authorized_live_cfg(),
@@ -567,8 +733,20 @@ def test_compound_add_dispatch_handoff_dispatch_route_requires_confirm_and_curre
     )
     assert confirm_required.status_code == 200
     assert confirm_required.json()["status"] == "CONFIRM_REQUIRED"
+    assert confirm_required.json()["need_confirmation"] == route_module.LIVE_HANDOFF_CONFIRM_PHRASE
     assert confirm_required.json()["dispatch_attempted"] is False
     assert confirm_required.json()["broker_touched"] is False
+    assert bridge.calls == []
+
+    boolean_only = client.post(
+        "/api/forex/live-order-dry-run/compound-add-order/dispatch-handoff/dispatch?confirm=true",
+        json={"confirm_owner_dispatch": True, "notes": "boolean-only live posture confirm"},
+    )
+    assert boolean_only.status_code == 200
+    assert boolean_only.json()["status"] == "CONFIRM_REQUIRED"
+    assert boolean_only.json()["need_confirmation"] == route_module.LIVE_HANDOFF_CONFIRM_PHRASE
+    assert boolean_only.json()["dispatch_attempted"] is False
+    assert boolean_only.json()["broker_touched"] is False
     assert bridge.calls == []
 
     monkeypatch.setattr(route_module.runtime_gates, "is_authorized", lambda capability: False)
@@ -746,8 +924,20 @@ def test_waste_entry_dispatch_handoff_dispatch_route_requires_confirm_and_curren
     )
     assert confirm_required.status_code == 200
     assert confirm_required.json()["status"] == "CONFIRM_REQUIRED"
+    assert confirm_required.json()["need_confirmation"] == route_module.LIVE_HANDOFF_CONFIRM_PHRASE
     assert confirm_required.json()["dispatch_attempted"] is False
     assert confirm_required.json()["broker_touched"] is False
+    assert bridge.calls == []
+
+    boolean_only = client.post(
+        "/api/forex/live-order-dry-run/waste-entry-order/dispatch-handoff/dispatch?confirm=true",
+        json={"confirm_owner_dispatch": True, "notes": "boolean-only live posture confirm"},
+    )
+    assert boolean_only.status_code == 200
+    assert boolean_only.json()["status"] == "CONFIRM_REQUIRED"
+    assert boolean_only.json()["need_confirmation"] == route_module.LIVE_HANDOFF_CONFIRM_PHRASE
+    assert boolean_only.json()["dispatch_attempted"] is False
+    assert boolean_only.json()["broker_touched"] is False
     assert bridge.calls == []
 
     monkeypatch.setattr(route_module.runtime_gates, "is_authorized", lambda capability: False)
@@ -800,7 +990,7 @@ def test_dry_run_review_accepts_current_pass_fingerprint(tmp_path, monkeypatch):
     monkeypatch.setattr(live_recovery, "is_live_recovery_clear_for_live", lambda: True)
     _accept_live_pilot(tmp_path, monkeypatch)
     req = _request()
-    _authorize_edge(req)
+    _authorize_edge(req, config=_authorized_live_cfg())
     dry_run = build_live_order_dry_run(
         req,
         config=_authorized_live_cfg(),
@@ -853,6 +1043,35 @@ def test_dry_run_review_rejects_accept_without_pass(tmp_path):
             broker_truth_report=_clean_live_truth(),
             state_path=tmp_path / "review.json",
             audit_path=tmp_path / "review-audit.jsonl",
+        )
+
+
+def test_dry_run_review_rejects_wrong_live_account_identity(tmp_path, monkeypatch):
+    monkeypatch.setattr(auto_halt, "is_auto_halt_active", lambda: False)
+    monkeypatch.setattr(broker_truth_monitor, "broker_truth_monitor_ready_for_live", lambda: True)
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
+    monkeypatch.setattr(live_recovery, "is_live_recovery_clear_for_live", lambda: True)
+    _accept_live_pilot(tmp_path, monkeypatch)
+    req = _request()
+    _authorize_edge(req, config=_authorized_live_cfg())
+    dry_run = build_live_order_dry_run(
+        req,
+        config=_authorized_live_cfg(),
+        audit=LiveOrderDryRunAuditLog(tmp_path / "wrong-account-dry-run.jsonl"),
+    )
+    wrong_truth = {
+        **_clean_live_truth(),
+        "mt5_account": 777777,
+        "mt5_account_identity_matches_config": False,
+    }
+
+    with pytest.raises(live_order_dry_run_review.LiveOrderDryRunReviewError):
+        live_order_dry_run_review.accept_live_order_dry_run_review(
+            confirm_owner_accept=True,
+            dry_run_audit=dry_run["audit"],
+            broker_truth_report=wrong_truth,
+            state_path=tmp_path / "wrong-account-review.json",
+            audit_path=tmp_path / "wrong-account-review-audit.jsonl",
         )
 
 

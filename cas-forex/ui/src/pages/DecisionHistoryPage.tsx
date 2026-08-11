@@ -7,6 +7,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DecisionHistoryRow } from "../components/DecisionHistoryRow";
+import { DecisionMovementTruth } from "../components/DecisionMovementTruth";
 import {
   fetchAgentDecisionHistory,
   type AgentDecisionHistoryItem,
@@ -151,6 +152,13 @@ export function DecisionHistoryPage() {
         <div className="decision-history-empty">
           No decisions recorded yet — the agent has not yet produced a cycle.
         </div>
+      )}
+
+      {response?.movement_source_truth && (
+        <DecisionMovementTruth
+          truth={response.movement_source_truth}
+          title="Decision History Pricing Truth"
+        />
       )}
 
       {decisions.length > 0 && (

@@ -15,6 +15,8 @@ import {
   type AgentDecisionResponse,
   type DecisionChainStep,
 } from "../data/api";
+import { DecisionVersionTrace } from "./DecisionVersionTrace";
+import { DecisionMovementTruth } from "./DecisionMovementTruth";
 import "./DecisionCardPrimitives.css";
 
 const POLL_INTERVAL_MS = 30_000;
@@ -100,6 +102,10 @@ export function AgentDecisionCard() {
         </div>
 
         <div className="decision-summary">{data.plain_english_summary}</div>
+
+        <DecisionMovementTruth truth={data.movement_source_truth} />
+
+        <DecisionVersionTrace trace={data.version_trace} />
 
         {data.chain.length > 0 && (
           <div className="decision-chain">

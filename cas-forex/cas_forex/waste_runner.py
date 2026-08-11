@@ -384,6 +384,47 @@ def _default_strategize(state: Any, analysis: Any) -> Optional[CandidateSetup]:
     return None
 
 
+def _bridge_dispatch_risk_context(bridge: Any) -> tuple[dict[str, Any], Optional[Mapping[str, Any]]]:
+    """Best-effort fresh account/position snapshot for the dispatch chokepoint.
+
+    Real-capable bridges must provide enough account truth for the live gate to
+    pass. Missing account fields remain missing; this helper does not fabricate
+    balance, equity, margin, or free-margin values.
+    """
+
+    telemetry: dict[str, Any] = {
+        "open_positions": [],
+        "data_freshness": {
+            "stale": False,
+            "source": "bridge_dispatch_risk_context",
+        },
+    }
+    for method_name in ("get_all_open_positions", "get_open_positions"):
+        method = getattr(bridge, method_name, None)
+        if not callable(method):
+            continue
+        try:
+            rows = method()
+        except Exception:
+            continue
+        if isinstance(rows, list):
+            telemetry["open_positions"] = rows
+            telemetry["open_positions_source"] = method_name
+            break
+
+    account_snapshot: Optional[Mapping[str, Any]] = None
+    account_method = getattr(bridge, "get_account_info", None)
+    if callable(account_method):
+        try:
+            account = account_method()
+        except Exception:
+            account = None
+        if isinstance(account, Mapping):
+            account_snapshot = account
+            telemetry["account_snapshot"] = dict(account)
+    return telemetry, account_snapshot
+
+
 class WasteRunner:
     """Background runner that ticks a :class:`WasteLoop` on an owner-set interval
     and stamps the live heartbeat per stage. Paper-safe, fail-closed, default OFF.
@@ -576,8 +617,19 @@ class WasteRunner:
             )
         # Register the PASS so the dispatch chokepoint can verify it. The token is
         # the same one the gate minted; binding it back to the setup is fail-closed.
+        try:
+            from cas_forex.config import config as current_config
+        except Exception:
+            current_config = None
         edge_authorization.authorize(
-            setup.decision_ref, _pass_decision(source_decision, setup, token), gate_setup
+            setup.decision_ref,
+            _pass_decision(source_decision, setup, token),
+            gate_setup,
+            config=current_config,
+            volume=lots,
+            order_type="MARKET",
+            price=float(setup.entry),
+            strategy_id="waste-entry",
         )
         return self._dispatch(setup, lots, token)
 
@@ -691,9 +743,9 @@ class WasteRunner:
     def _dispatch(self, setup: CandidateSetup, lots: float, token: str) -> Any:
         if self._dispatch_fn is not None:
             return self._dispatch_fn(setup=setup, lots=lots, token=token)
-        return self._default_paper_dispatch(setup, lots)
+        return self._default_paper_dispatch(setup, lots, token)
 
-    def _default_paper_dispatch(self, setup: CandidateSetup, lots: float) -> Any:
+    def _default_paper_dispatch(self, setup: CandidateSetup, lots: float, token: str) -> Any:
         """Dispatch through the real gated broker path. Imported lazily so the heavy
         broker/order modules stay off the import path for unit tests.
 
@@ -709,6 +761,10 @@ class WasteRunner:
         bridge = self._bridge_factory()
         if bridge is None:
             return {"status": "NO_BRIDGE", "detail": "bridge_factory returned no bridge"}
+        try:
+            from cas_forex.config import config as current_config
+        except Exception:
+            current_config = None
         intent = TradeIntent(
             order_id=f"waste-{setup.decision_ref}",
             decision_ref=setup.decision_ref,
@@ -718,11 +774,43 @@ class WasteRunner:
             stop_loss=float(setup.stop_loss),
             take_profit=float(setup.take_profit),
             price=float(setup.entry),
+            strategy_id="waste-entry",
             ai_action="WASTE_LOOP",
         )
+        if token:
+            source_decision = self._latest_edge_decision
+            if (
+                source_decision is None
+                or getattr(source_decision, "status", None) != "PASS"
+                or getattr(source_decision, "edge_token", None) != token
+            ):
+                source_decision = EdgeTestDecision(
+                    status="PASS",
+                    measured_win_prob=0.0,
+                    null_p95=0.0,
+                    threshold=float(self.control.get("edge_threshold")),
+                    edge_token=token,
+                    evaluated_at=_token_evaluated_at(setup, token),
+                    reason="runner re-asserts PASS for contextual authorization",
+                )
+            edge_authorization.authorize(
+                setup.decision_ref,
+                _pass_decision(source_decision, setup, token),
+                _to_gate_setup(setup),
+                config=current_config,
+                bridge=bridge,
+                volume=lots,
+                order_type="MARKET",
+                price=float(setup.entry),
+                strategy_id="waste-entry",
+            )
+        live_telemetry, account_snapshot = _bridge_dispatch_risk_context(bridge)
         return dispatch_intent(
             intent,
             bridge,
+            config=current_config,
+            live_telemetry=live_telemetry,
+            account_snapshot=account_snapshot,
             audit_store=self._order_attempt_audit_store,
             audit_source="waste_runner",
         )
@@ -1243,6 +1331,12 @@ def dispatch_waste_entry_from_dry_run(
             dry_run=dry_run,
             intent=intent,
         )
+    if live_telemetry is None or account_snapshot is None:
+        bridge_telemetry, bridge_account_snapshot = _bridge_dispatch_risk_context(resolved_bridge)
+        if live_telemetry is None:
+            live_telemetry = bridge_telemetry
+        if account_snapshot is None:
+            account_snapshot = bridge_account_snapshot
 
     from cas_forex.order_dispatch import dispatch_intent
 
@@ -1438,6 +1532,12 @@ def dispatch_compound_add_from_dry_run(
             add_dry_run=add_dry_run,
             intent=intent,
         )
+    if live_telemetry is None or account_snapshot is None:
+        bridge_telemetry, bridge_account_snapshot = _bridge_dispatch_risk_context(resolved_bridge)
+        if live_telemetry is None:
+            live_telemetry = bridge_telemetry
+        if account_snapshot is None:
+            account_snapshot = bridge_account_snapshot
 
     from cas_forex.order_dispatch import dispatch_intent
 

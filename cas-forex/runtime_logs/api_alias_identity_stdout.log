@@ -1,0 +1,4 @@
+INFO:     127.0.0.1:50876 - "GET /api/forex/operator-briefing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56152 - "GET /api/forex/mt/probe/latest HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56153 - "GET /api/forex/readiness/live HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56156 - "GET /api/forex/live-telemetry HTTP/1.1" 200 OK

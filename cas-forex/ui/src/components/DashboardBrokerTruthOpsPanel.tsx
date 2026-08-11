@@ -107,6 +107,19 @@ export function DashboardBrokerTruthOpsPanel({ ops }: { ops: any }) {
     wasteRunnerSource,
     wasteSupervisor,
   } = ops;
+  const brokerTruthProtectionStatus = String(brokerTruthReport?.position_protection_status ?? "POSITION_PROTECTION_UNAVAILABLE");
+  const brokerTruthUnprotectedCount = Number(brokerTruthReport?.position_protection_unprotected_position_count ?? 0);
+  const brokerTruthProtectionDetail = String(brokerTruthReport?.position_protection_detail ?? "").trim();
+  const brokerTruthAutoHaltReasonIds = Array.isArray(brokerTruthReport?.monitor_auto_halt_reason_ids)
+    ? brokerTruthReport.monitor_auto_halt_reason_ids.filter((value: unknown): value is string => typeof value === "string" && value.trim().length > 0)
+    : [];
+  const brokerTruthAutoHaltLatched = Boolean(brokerTruthReport?.auto_halt_latched_from_monitor) || brokerTruthAutoHaltReasonIds.length > 0;
+  const brokerTruthProtectionPreview = Array.isArray(brokerTruthReport?.position_protection_unprotected_preview)
+    ? brokerTruthReport.position_protection_unprotected_preview.filter((value: unknown): value is Record<string, unknown> => isRecord(value))
+    : [];
+  const brokerTruthIdentityMatch = brokerTruthReport?.mt5_account_identity_matches_config;
+  const brokerTruthActualIdentity = formatMt5Identity(brokerTruthReport?.mt5_account, brokerTruthReport?.mt5_account_server);
+  const brokerTruthExpectedIdentity = formatMt5Identity(brokerTruthReport?.mt5_expected_account, brokerTruthReport?.mt5_expected_server);
 
   return (
     <>
@@ -285,6 +298,21 @@ export function DashboardBrokerTruthOpsPanel({ ops }: { ops: any }) {
               size="sm"
             />
             <StatusChip
+              label={shortPositionProtectionStatus(brokerTruthProtectionStatus)}
+              variant={positionProtectionVariant(brokerTruthProtectionStatus, brokerTruthUnprotectedCount)}
+              size="sm"
+            />
+            <StatusChip
+              label={brokerTruthAutoHaltLatched ? "MONITOR PAPER FORCE" : "MONITOR WATCHING"}
+              variant={brokerTruthAutoHaltLatched ? "danger" : "muted"}
+              size="sm"
+            />
+            <StatusChip
+              label={brokerTruthIdentityMatch === true ? "ACCOUNT MATCH" : brokerTruthIdentityMatch === false ? "WRONG ACCOUNT" : "ACCOUNT UNVERIFIED"}
+              variant={brokerTruthIdentityMatch === true ? "success" : brokerTruthIdentityMatch === false ? "danger" : "warning"}
+              size="sm"
+            />
+            <StatusChip
               label={supervisorOwnershipLabel(brokerTruthSupervisor, brokerTruthRunning)}
               variant={supervisorOwnershipVariant(brokerTruthSupervisor, brokerTruthRunning)}
               size="sm"
@@ -314,11 +342,30 @@ export function DashboardBrokerTruthOpsPanel({ ops }: { ops: any }) {
         <div className="broker-truth-monitor-meta">
           <span className="mono">cycles {currentBrokerTruth?.cycles_run ?? 0}</span>
           <span className="mono">mt5 {brokerTruthReport?.mt5_connected ? (brokerTruthReport.mt5_is_demo ? "DEMO" : "LIVE") : "UNAVAILABLE"}</span>
+          <span className="mono">actual {brokerTruthActualIdentity}</span>
+          <span className="mono">expected {brokerTruthExpectedIdentity}</span>
           <span className="mono">unmatched {brokerTruthReport?.terminal_unmatched_open_position_count ?? "NA"}</span>
+          <span className="mono">unprotected {brokerTruthUnprotectedCount}</span>
           <span className="mono">owner {supervisorOwnerLabel(brokerTruthSupervisor)}</span>
           <span className="mono">beat {supervisorHeartbeatLabel(brokerTruthSupervisor)}</span>
           <span>{brokerTruthMessage ?? brokerTruthReport?.next_action ?? "Broker-truth monitor has not reported yet."}</span>
         </div>
+        {(brokerTruthAutoHaltReasonIds.length > 0 || brokerTruthProtectionDetail) && (
+          <div className="broker-truth-monitor-meta">
+            {brokerTruthAutoHaltReasonIds.length > 0 && (
+              <span className="mono">
+                halt {brokerTruthAutoHaltReasonIds.map(formatAutoHaltCheckId).join(", ")}
+              </span>
+            )}
+            {brokerTruthProtectionDetail && <span>{brokerTruthProtectionDetail}</span>}
+          </div>
+        )}
+        {brokerTruthProtectionPreview.length > 0 && (
+          <div className="broker-truth-monitor-meta">
+            <span className="mono">tickets {formatUnprotectedPreview(brokerTruthProtectionPreview)}</span>
+            <span>Latest broker-visible unprotected positions need owner review before more automated exposure.</span>
+          </div>
+        )}
         {supervisorRecoveryMessage && (
           <div className="broker-truth-monitor-meta">
             <span>{supervisorRecoveryMessage}</span>
@@ -513,8 +560,26 @@ function formatAutoHaltCheckId(value: string): string {
     max_consecutive_losses: "Loss Streak",
     live_vs_paper_divergence_pct: "Live vs Paper",
     broker_truth_reconciliation: "Broker Truth",
+    terminal_position_reconciliation: "Terminal Reconciliation",
+    live_open_positions_crosscheck: "Open Position Crosscheck",
+    live_position_stop_loss_protection: "Stop-Loss Protection",
+    mt5_account_identity_matches_config: "MT5 Account Identity",
   };
   return labels[value] ?? value.replace(/_/g, " ");
+}
+
+function shortPositionProtectionStatus(status: string): string {
+  if (status === "ALL_POSITIONS_PROTECTED") return "PROTECTION CLEAR";
+  if (status === "UNPROTECTED_POSITIONS") return "UNPROTECTED POSITIONS";
+  if (status === "POSITION_PROTECTION_UNAVAILABLE") return "PROTECTION UNAVAILABLE";
+  return status.replace(/_/g, " ");
+}
+
+function positionProtectionVariant(status: string, unprotectedCount: number): ChipVariant {
+  if (status === "UNPROTECTED_POSITIONS" || unprotectedCount > 0) return "danger";
+  if (status === "ALL_POSITIONS_PROTECTED") return "success";
+  if (status === "POSITION_PROTECTION_UNAVAILABLE") return "warning";
+  return "muted";
 }
 
 function shortDryRunStatus(status: string): string {
@@ -618,6 +683,13 @@ function wasteProbeTimestampLabel(report: any): string {
   return value ? formatShortTime(value) : "NONE";
 }
 
+function formatMt5Identity(login: unknown, server: unknown): string {
+  const normalizedServer = String(server ?? "").trim();
+  const normalizedLogin = login == null || String(login).trim() === "" ? "?" : `#${String(login).trim()}`;
+  if (normalizedLogin === "?" && !normalizedServer) return "UNSET";
+  return `${normalizedLogin}@${normalizedServer || "UNKNOWN"}`;
+}
+
 function shortBrokerTruthStatus(status: string): string {
   return status
     .replace(/^BROKER_TRUTH_/, "")
@@ -671,6 +743,19 @@ function supervisorOwnerLabel(status: SupervisorStatusLike | null | undefined): 
 function supervisorHeartbeatLabel(status: SupervisorStatusLike | null | undefined): string {
   const heartbeat = status?.active_lease?.last_heartbeat_at;
   return typeof heartbeat === "string" && heartbeat ? formatShortTime(heartbeat) : "NONE";
+}
+
+function formatUnprotectedPreview(rows: Array<Record<string, unknown>>): string {
+  const items = rows
+    .slice(0, 3)
+    .map((row) => {
+      const symbol = String(row.symbol ?? "NA");
+      const ticket = String(row.ticket ?? "NA");
+      const side = String(row.side ?? "NA");
+      return `${symbol} ${side} #${ticket}`;
+    })
+    .filter((value) => value.trim().length > 0);
+  return items.length > 0 ? items.join(", ") : "NONE";
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

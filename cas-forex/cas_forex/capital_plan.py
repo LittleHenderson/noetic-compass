@@ -1,7 +1,7 @@
 """Capital, risk-budget, and profit-allocation planning for CAS Forex.
 
-This module turns a money target into explicit math. It does not predict or
-guarantee profit; it shows the required monthly return, flags unrealistic risk,
+This module turns a money target into explicit math. It does not predict
+account outcomes; it shows the required monthly return, flags unrealistic risk,
 and builds a user-controlled sweep policy for realized profits.
 """
 

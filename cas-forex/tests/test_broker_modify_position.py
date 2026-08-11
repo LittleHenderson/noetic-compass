@@ -13,6 +13,8 @@ Covered here:
   * The MT4 mailbox path writes a paper-only MODIFY_SL command (never live money).
 """
 
+import json
+
 from cas_forex.broker.mt5_bridge import (
     MT5Bridge,
     SimulatedBrokerBridge,
@@ -80,6 +82,119 @@ def test_simulated_modify_unknown_ticket_is_rejected_not_crash():
     assert outcome.status == OrderStatus.REJECTED
     assert outcome.is_real_broker is False
     assert "No open position" in (outcome.error_message or "")
+
+
+def test_simulated_partial_close_reduces_volume_instead_of_flattening_position():
+    bridge = SimulatedBrokerBridge()
+    ticket = bridge.execute_order(_order(volume=0.04)).broker_ticket
+    assert ticket is not None
+
+    assert bridge.close_position(ticket, volume=0.02) is True
+
+    positions = bridge.get_open_positions()
+    assert len(positions) == 1
+    assert positions[0]["ticket"] == ticket
+    assert positions[0]["volume"] == 0.02
+
+
+def test_simulated_ticket_is_stable_across_bridge_recreation():
+    order = _order()
+
+    first = SimulatedBrokerBridge().execute_order(order)
+    second = SimulatedBrokerBridge().execute_order(order)
+
+    assert first.broker_ticket == second.broker_ticket
+    assert first.broker_ticket != 100000
+
+
+def test_simulated_bridge_rejects_duplicate_order_id():
+    bridge = SimulatedBrokerBridge()
+    order = _order()
+
+    first = bridge.execute_order(order)
+    duplicate = bridge.execute_order(order)
+
+    assert first.status == OrderStatus.EXECUTED
+    assert duplicate.status == OrderStatus.REJECTED
+    assert duplicate.is_duplicate is True
+    assert duplicate.broker_ticket == first.broker_ticket
+
+
+def test_simulated_different_orders_receive_different_tickets():
+    bridge = SimulatedBrokerBridge()
+    first = bridge.execute_order(_order())
+    second_order = _order().model_copy(update={"order_id": "be-EURUSD-2"})
+    second = bridge.execute_order(second_order)
+
+    assert first.broker_ticket != second.broker_ticket
+
+
+def test_simulated_paper_state_survives_bridge_recreation(tmp_path):
+    state = tmp_path / "simulated-broker-state.json"
+    first_bridge = SimulatedBrokerBridge(state_path=state)
+    fill = first_bridge.execute_order(_order(volume=0.04))
+    assert fill.broker_ticket is not None
+
+    restored = SimulatedBrokerBridge(state_path=state)
+    positions = restored.get_open_positions()
+
+    assert len(positions) == 1
+    assert positions[0]["ticket"] == fill.broker_ticket
+    assert positions[0]["volume"] == 0.04
+
+    restored.modify_position(fill.broker_ticket, stop_loss=1.1000, take_profit=1.1200)
+    after_modify = SimulatedBrokerBridge(state_path=state).get_open_positions()[0]
+    assert after_modify["stop_loss"] == 1.1000
+    assert after_modify["take_profit"] == 1.1200
+
+    assert SimulatedBrokerBridge(state_path=state).close_position(fill.broker_ticket) is True
+    assert SimulatedBrokerBridge(state_path=state).get_open_positions() == []
+
+
+def test_simulated_paper_state_reconciles_closed_outcome_ticket(tmp_path):
+    state = tmp_path / "simulated-broker-state.json"
+    ledger = tmp_path / "paper-outcomes.json"
+    bridge = SimulatedBrokerBridge(
+        state_path=state,
+        closed_ticket_ledger_path=ledger,
+    )
+    fill = bridge.execute_order(_order())
+    ledger.write_text(
+        json.dumps({"history_records": [{"broker_ticket": str(fill.broker_ticket)}]}),
+        encoding="utf-8",
+    )
+
+    restored = SimulatedBrokerBridge(
+        state_path=state,
+        closed_ticket_ledger_path=ledger,
+    )
+
+    assert restored.get_open_positions() == []
+    payload = json.loads(state.read_text(encoding="utf-8"))
+    assert payload["open_position_count"] == 0
+
+
+def test_simulated_paper_position_can_be_voided_without_fabricated_pnl(tmp_path):
+    state = tmp_path / "simulated-broker-state.json"
+    bridge = SimulatedBrokerBridge(state_path=state)
+    fill = bridge.execute_order(_order())
+
+    assert bridge.void_position(
+        fill.broker_ticket,
+        reason="forming_candle_reemission_bug",
+        evidence={"incident": "test"},
+    ) is True
+
+    restored = SimulatedBrokerBridge(state_path=state)
+    assert restored.get_open_positions() == []
+    voids = restored.get_void_events()
+    assert len(voids) == 1
+    assert voids[0]["broker_ticket"] == str(fill.broker_ticket)
+    assert voids[0]["reason"] == "forming_candle_reemission_bug"
+    payload = json.loads(state.read_text(encoding="utf-8"))
+    assert payload["close_events"] == []
+    assert payload["void_event_count"] == 1
+    assert payload["balance"] == 10000.0
 
 
 class _FakeMT5Position:
@@ -163,6 +278,8 @@ def test_mt5_live_modify_executes_when_authorized(monkeypatch):
 
     assert outcome.status == OrderStatus.EXECUTED
     assert outcome.is_real_broker is True
+    assert outcome.is_demo_account is False
+    assert outcome.broker_mode == BrokerMode.LIVE_MT5
     assert fake.order_send_called is True
 
 
@@ -183,6 +300,9 @@ def test_mt5_demo_modify_skips_live_gate(monkeypatch):
     outcome = bridge.modify_position(1, stop_loss=1.1000)
 
     assert outcome.status == OrderStatus.EXECUTED
+    assert outcome.is_real_broker is True
+    assert outcome.is_demo_account is True
+    assert outcome.broker_mode == BrokerMode.PAPER_MT5
     assert fake.order_send_called is True
 
 

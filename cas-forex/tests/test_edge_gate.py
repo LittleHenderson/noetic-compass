@@ -14,6 +14,7 @@ from datetime import datetime, timedelta, timezone
 
 import numpy as np
 
+from cas_forex import edge_gate
 from cas_forex.edge_gate import (
     CandidateSetup,
     EdgeTestDecision,
@@ -69,10 +70,34 @@ def test_planted_edge_passes_with_token_and_winprob():
     assert dec.status == "PASS"
     assert dec.edge_token is not None
     assert dec.measured_win_prob >= dec.threshold
+    assert "measured_hit_rate" in dec.reason
+    assert "win_prob" not in dec.reason
     # the minted token must verify against the exact setup it authorized
     assert verify_token(
         dec.edge_token, setup, dec.evaluated_at, now_iso=dec.evaluated_at
     )
+
+
+def test_read_only_shadow_pass_cannot_mint_authorization(monkeypatch):
+    monkeypatch.setattr(
+        edge_gate,
+        "mint_token",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("read-only preview must not mint an edge token")
+        ),
+    )
+
+    dec = evaluate_candidate(
+        _setup(),
+        _planted_pairs(),
+        threshold=0.65,
+        seed=5,
+        issue_edge_token=False,
+    )
+
+    assert dec.status == "PASS"
+    assert dec.edge_token is None
+    assert dec.measured_win_prob >= dec.threshold
 
 
 def test_direction_tagged_pairs_must_match_candidate_direction():
@@ -109,6 +134,8 @@ def test_direction_tagged_short_edge_beats_random_direction_null():
     assert dec.edge_token is not None
     assert dec.measured_win_prob >= dec.threshold
     assert "random-direction null" in dec.reason
+    assert "measured_hit_rate" in dec.reason
+    assert "win_prob" not in dec.reason
 
 
 def test_direction_tagged_same_side_noise_still_blocks():

@@ -22,22 +22,35 @@ from api.routes import readiness as readiness_route
 from api.routes import reconciliation as reconciliation_route
 from api.routes import settings as settings_route
 from api.routes import stack_health as stack_health_route
+from api.routes import mobile as mobile_route
 from api.server import app
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
-async def _asgi_request(path: str, *, method: str = "GET") -> tuple[int, dict[str, Any]]:
+async def _asgi_request(
+    path: str,
+    *,
+    method: str = "GET",
+    json_body: dict[str, Any] | None = None,
+    headers: dict[str, str] | None = None,
+) -> tuple[int, dict[str, Any]]:
     sent: list[dict[str, Any]] = []
+    request_body = (
+        json.dumps(json_body).encode("utf-8") if json_body is not None else b""
+    )
 
     async def receive() -> dict[str, Any]:
-        return {"type": "http.request", "body": b"", "more_body": False}
+        return {"type": "http.request", "body": request_body, "more_body": False}
 
     async def send(message: dict[str, Any]) -> None:
         sent.append(message)
 
     parsed = urlsplit(path)
+    request_headers = [(b"host", b"testserver"), (b"content-type", b"application/json")]
+    for key, value in (headers or {}).items():
+        request_headers.append((key.lower().encode("latin-1"), value.encode("latin-1")))
     scope = {
         "type": "http",
         "asgi": {"version": "3.0"},
@@ -47,7 +60,7 @@ async def _asgi_request(path: str, *, method: str = "GET") -> tuple[int, dict[st
         "path": parsed.path,
         "raw_path": parsed.path.encode("utf-8"),
         "query_string": parsed.query.encode("utf-8"),
-        "headers": [(b"host", b"testserver")],
+        "headers": request_headers,
         "client": ("127.0.0.1", 12345),
         "server": ("testserver", 80),
         "root_path": "",
@@ -60,6 +73,321 @@ async def _asgi_request(path: str, *, method: str = "GET") -> tuple[int, dict[st
 
 async def _asgi_get(path: str) -> tuple[int, dict[str, Any]]:
     return await _asgi_request(path, method="GET")
+
+
+async def _asgi_post(path: str, body: dict[str, Any]) -> tuple[int, dict[str, Any]]:
+    return await _asgi_request(path, method="POST", json_body=body)
+
+
+async def _asgi_post_with_headers(
+    path: str,
+    body: dict[str, Any],
+    headers: dict[str, str],
+) -> tuple[int, dict[str, Any]]:
+    return await _asgi_request(path, method="POST", json_body=body, headers=headers)
+
+
+def test_optimizer_agent_cycle_uses_conviction_not_fake_precision():
+    conviction_helper = (REPO_ROOT / "ui" / "src" / "util" / "conviction.ts").read_text(encoding="utf-8")
+    optimizer_page = (REPO_ROOT / "ui" / "src" / "pages" / "OptimizerPage.tsx").read_text(encoding="utf-8")
+    assert "export const CONVICTION_SCORE_TITLE" in conviction_helper
+    assert "export function formatConvictionScore" in conviction_helper
+    assert 'const label = pct >= 75 ? "High" : pct >= 50 ? "Medium" : "Low";' in conviction_helper
+    assert 'import { CONVICTION_SCORE_TITLE, formatConvictionScore } from "../util/conviction";' in optimizer_page
+    assert "<th>Conviction</th>" in optimizer_page
+    assert "formatConvictionScore(intent.confidence)" in optimizer_page
+    assert "CONVICTION_SCORE_TITLE" in optimizer_page
+    assert "intent.confidence.toFixed(4)" not in optimizer_page
+
+
+def test_decision_surfaces_share_conviction_formatter():
+    trade_page = (REPO_ROOT / "ui" / "src" / "pages" / "TradePage.tsx").read_text(encoding="utf-8")
+    proof_page = (REPO_ROOT / "ui" / "src" / "pages" / "ProofPage.tsx").read_text(encoding="utf-8")
+    audit_page = (REPO_ROOT / "ui" / "src" / "pages" / "AuditPage.tsx").read_text(encoding="utf-8")
+    adaptive_page = (REPO_ROOT / "ui" / "src" / "pages" / "AdaptivePage.tsx").read_text(encoding="utf-8")
+    dashboard_evidence = (REPO_ROOT / "ui" / "src" / "components" / "DashboardEvidencePanels.tsx").read_text(encoding="utf-8")
+
+    for source in (trade_page, proof_page, audit_page, adaptive_page, dashboard_evidence):
+        assert "CONVICTION_SCORE_TITLE" in source
+        assert "formatConvictionScore" in source
+        assert "Directional conviction score, not a win probability." not in source
+
+    assert "conviction: {formatConvictionScore(activeDecision.confidence)}" in trade_page
+    assert "conviction: {formatConvictionScore(d.confidence)}" in proof_page
+    assert "<span className=\"field-label\">Conviction</span>" in audit_page
+    assert "<th>Conviction</th>" in adaptive_page
+    assert "<th>Conviction</th>" in dashboard_evidence
+
+
+def test_settings_ai_dials_surface_impact_and_anti_impulse_state():
+    api_types = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    owner_command_api = (REPO_ROOT / "ui" / "src" / "data" / "ownerCommandApi.ts").read_text(encoding="utf-8")
+    settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
+    floating_assistant = (REPO_ROOT / "ui" / "src" / "components" / "FloatingAssistant.tsx").read_text(encoding="utf-8")
+    operator_badge = (REPO_ROOT / "ui" / "src" / "components" / "OperatorBadge.tsx").read_text(encoding="utf-8")
+    assert "dial_definitions?" in api_types
+    assert "anti_impulse?" in api_types
+    assert "export interface AiControlAdjustmentPreview" in api_types
+    assert '"/ai-control-authority/preview"' in api_types
+    assert "runtime_path?" in api_types
+    assert "value_kind?" in api_types
+    assert "contract_rows?" in owner_command_api
+    assert "journal_required?" in owner_command_api
+    assert "<th>Risk Posture</th>" in settings_page
+    assert "Loosens 24h" in settings_page
+    assert "definition.operational_effect" in settings_page
+    assert "definition.enforced_by" in settings_page
+    assert "definition.runtime_path" in settings_page
+    assert "definition.units" in settings_page
+    assert "preview.contract_rows" in floating_assistant
+    assert "preview.journal_required" in floating_assistant
+    assert "preview.contract_rows" in operator_badge
+    assert "preview.journal_required" in operator_badge
+
+
+def test_windows_positions_surface_age_and_static_stale_reason():
+    evidence_types = (REPO_ROOT / "ui" / "src" / "types" / "evidence.ts").read_text(encoding="utf-8")
+    windows_page = (REPO_ROOT / "ui" / "src" / "pages" / "WindowsPage.tsx").read_text(encoding="utf-8")
+    trading_window = (REPO_ROOT / "ui" / "src" / "components" / "TradingWindow.tsx").read_text(encoding="utf-8")
+    movement_helper = (REPO_ROOT / "ui" / "src" / "util" / "movementSource.ts").read_text(encoding="utf-8")
+    assert "stale_reason?: string | null" in evidence_types
+    assert "age_days?: number | null" in evidence_types
+    assert "<th>Age</th>" in windows_page
+    assert "formatMovementPositionAge(p)" in windows_page
+    assert "movement?.movement_source_truth ?? movement ?? null" in windows_page
+    assert "describeMovementPositionFeed(movementTruth, acct?.source)" in windows_page
+    assert "position feed: <strong>{positionsSource}</strong>" in windows_page
+    assert "paper/demo simulator proof rows with static stale pricing" in movement_helper
+    assert "live MT5 broker positions" in movement_helper
+    assert "SIM STATIC" in movement_helper
+    assert "fetchMovementStream(true)" in windows_page
+    assert "<th>Source</th>" in trading_window
+    assert "formatMovementPositionSourceLabel" in trading_window
+    assert "tw-source-pill" in trading_window
+    assert "formatMovementPositionAge(p)" in trading_window
+    assert "positionsDetail" in trading_window
+    assert "tw-position-source-warning" in trading_window
+    assert "Static simulator price:" in trading_window
+    assert "isStaticMovementPosition(p)" in trading_window
+    assert "export function isStaticMovementPosition" in movement_helper
+    assert "export function formatMovementPositionAge" in movement_helper
+    assert "export function describeMovementPositionFeed" in movement_helper
+    windows_css = (REPO_ROOT / "ui" / "src" / "pages" / "WindowsPage.css").read_text(encoding="utf-8")
+    assert ".tw-position-source-warning" in windows_css
+    assert ".tw-source-pill.stale" in windows_css
+
+
+def test_trading_window_surfaces_manual_order_explanation_card():
+    trading_window = (REPO_ROOT / "ui" / "src" / "components" / "TradingWindow.tsx").read_text(encoding="utf-8")
+    windows_css = (REPO_ROOT / "ui" / "src" / "pages" / "WindowsPage.css").read_text(encoding="utf-8")
+    assert "latestOrderResult" in trading_window
+    assert "<TradeExplanationCard result={latestOrderResult} />" in trading_window
+    assert "trade_explanation_card" in trading_window
+    assert "Gate trace" in trading_window
+    assert "Bridge touched" in trading_window
+    assert "Risk at SL" in trading_window
+    assert "Initiator" in trading_window
+    assert "Runtime lane" in trading_window
+    assert "provenance:" in trading_window
+    assert "Live readiness:" in trading_window
+    assert "Live evidence" in trading_window
+    assert "audit attempt" in trading_window
+    assert ".tw-explanation-card" in windows_css
+    assert ".tw-gate-trace" in windows_css
+
+
+def test_live_recovery_ui_surfaces_selected_attempt_provenance():
+    evidence_types = (REPO_ROOT / "ui" / "src" / "types" / "evidence.ts").read_text(encoding="utf-8")
+    settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
+    assert "execution_provenance?: Record<string, unknown> | null;" in evidence_types
+    assert "selectedAttemptProvenance" in settings_page
+    assert "Runtime Lane" in settings_page
+    assert "Provenance Hash" in settings_page
+    assert "Config Hash" in settings_page
+
+
+def test_agent_decision_ui_surfaces_version_trace():
+    api_types = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    decision_card = (REPO_ROOT / "ui" / "src" / "components" / "AgentDecisionCard.tsx").read_text(encoding="utf-8")
+    history_row = (REPO_ROOT / "ui" / "src" / "components" / "DecisionHistoryRow.tsx").read_text(encoding="utf-8")
+    history_page = (REPO_ROOT / "ui" / "src" / "pages" / "DecisionHistoryPage.tsx").read_text(encoding="utf-8")
+    movement_truth = (REPO_ROOT / "ui" / "src" / "components" / "DecisionMovementTruth.tsx").read_text(encoding="utf-8")
+    version_trace = (REPO_ROOT / "ui" / "src" / "components" / "DecisionVersionTrace.tsx").read_text(encoding="utf-8")
+    css = (REPO_ROOT / "ui" / "src" / "components" / "DecisionCardPrimitives.css").read_text(encoding="utf-8")
+    assert "AgentDecisionVersionTrace" in api_types
+    assert "version_trace?: AgentDecisionVersionTrace" in api_types
+    assert "export interface MovementSourceTruthSnapshot" in api_types
+    assert "movement_source_truth?: MovementSourceTruthSnapshot | null;" in api_types
+    assert "<DecisionVersionTrace trace={data.version_trace} />" in decision_card
+    assert "<DecisionMovementTruth truth={data.movement_source_truth} />" in decision_card
+    assert "<DecisionVersionTrace trace={decision.version_trace} />" in history_row
+    assert "response?.movement_source_truth" in history_page
+    assert "DecisionMovementTruth" in movement_truth
+    assert "Decision Pricing Truth" in movement_truth
+    assert "Version trace" in version_trace
+    assert "gaps:" in version_trace
+    assert ".decision-version-grid" in css
+    assert ".decision-movement-truth" in css
+
+
+def test_account_ledger_types_and_pages_expose_movement_source_truth():
+    evidence_types = (REPO_ROOT / "ui" / "src" / "types" / "evidence.ts").read_text(encoding="utf-8")
+    history_page = (REPO_ROOT / "ui" / "src" / "pages" / "HistoryPage.tsx").read_text(encoding="utf-8")
+    ledger_page = (REPO_ROOT / "ui" / "src" / "pages" / "LedgerPage.tsx").read_text(encoding="utf-8")
+    assert "movement_stream_id?: string | null;" in evidence_types
+    assert "movement_stream_timestamp?: string | null;" in evidence_types
+    assert "movement_source_truth?:" in evidence_types
+    assert "account?.movement_source_truth" in history_page
+    assert "account?.movement_source_truth" in ledger_page
+
+
+def test_account_reconciliation_types_and_fixtures_expose_movement_source_truth():
+    evidence_types = (REPO_ROOT / "ui" / "src" / "types" / "evidence.ts").read_text(encoding="utf-8")
+    movement_helper = (REPO_ROOT / "ui" / "src" / "util" / "movementSource.ts").read_text(encoding="utf-8")
+    fixtures = (REPO_ROOT / "ui" / "src" / "data" / "fixtures.ts").read_text(encoding="utf-8")
+    assert "movement_source_truth?: MovementSourceTruthSnapshot | null;" in evidence_types
+    assert "movement_source_truth?: MovementSourceTruthSnapshot | null;" in movement_helper
+    assert "movement_source_truth: {" in fixtures
+    assert "market_data_provider_requested: false" in fixtures
+    assert 'position_feed_title: "Simulator Proof Rows"' in fixtures
+    assert 'position_feed_count_label: "Simulator rows"' in fixtures
+    assert "static_quote_count: 2" in fixtures
+
+
+def test_live_enable_ui_uses_typed_arm_confirmation():
+    api_types = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
+    trade_page = (REPO_ROOT / "ui" / "src" / "pages" / "TradePage.tsx").read_text(encoding="utf-8")
+    proof_page = (REPO_ROOT / "ui" / "src" / "pages" / "ProofPage.tsx").read_text(encoding="utf-8")
+    assert "confirm?: string" in api_types
+    assert "need_confirmation?: string" in api_types
+    assert "latest_audit?: Record<string, unknown>" in api_types
+    assert "armConfirmationForPatch" in settings_page
+    assert "requestArmConfirmation" in settings_page
+    assert "CONFIRM_REQUIRED" in settings_page
+    assert "ARM REAL MONEY" in trade_page
+    assert "patch.confirm = confirm" in trade_page
+    assert "ARM REAL MONEY" in proof_page
+    assert "patch.confirm = confirm" in proof_page
+
+
+def test_money_movement_setup_ui_surfaces_runtime_scaffold_status():
+    api_types = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
+    trade_page = (REPO_ROOT / "ui" / "src" / "pages" / "TradePage.tsx").read_text(encoding="utf-8")
+    proof_page = (REPO_ROOT / "ui" / "src" / "pages" / "ProofPage.tsx").read_text(encoding="utf-8")
+    status_component = (REPO_ROOT / "ui" / "src" / "components" / "MoneyMovementSetupStatus.tsx").read_text(encoding="utf-8")
+    sweep_panel = (REPO_ROOT / "ui" / "src" / "components" / "DashboardSweepOpsPanel.tsx").read_text(encoding="utf-8")
+    assert "runtime_provider_name?: string;" in api_types
+    assert "runtime_status?: string;" in api_types
+    assert "real_money_provider_ready?: boolean;" in api_types
+    assert "export interface PaymentProviderRuntimeStatus" in api_types
+    assert "provider_runtime: PaymentProviderRuntimeStatus;" in api_types
+    assert "payout_runtime_ready: boolean;" in api_types
+    assert "<MoneyMovementSetupStatus" in settings_page
+    assert "<MoneyMovementSetupStatus" in trade_page
+    assert "<MoneyMovementSetupStatus" in proof_page
+    assert "Real-money rail" in status_component
+    assert "SCAFFOLDED" in status_component
+    assert "unsupported provider labels stay simulated at runtime" in settings_page
+    assert "unsupported provider labels stay simulated at runtime" in trade_page
+    assert "Saving a provider label does not make payouts live." in proof_page
+    assert "PAYOUT SCAFFOLDED" in sweep_panel
+    assert "const providerRuntime = currentSweep?.provider_runtime ?? null;" in sweep_panel
+    assert "const payoutRuntimeReady = Boolean(currentSweep?.payout_runtime_ready);" in sweep_panel
+    assert 'label={`RAIL ${payoutRuntimeStatus}`}' in sweep_panel
+    assert "providerRuntime?.detail" in sweep_panel
+
+
+def test_trade_page_surfaces_psychology_guard_panel():
+    api_types = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    dashboard_page = (REPO_ROOT / "ui" / "src" / "pages" / "DashboardPage.tsx").read_text(encoding="utf-8")
+    psychology_panel = (REPO_ROOT / "ui" / "src" / "components" / "PsychologyGuardPanel.tsx").read_text(encoding="utf-8")
+    trade_page = (REPO_ROOT / "ui" / "src" / "pages" / "TradePage.tsx").read_text(encoding="utf-8")
+    assert "anti_impulse_status?: {" in api_types
+    assert "export function PsychologyGuardPanel" in psychology_panel
+    assert 'title = "Psychology Guard"' in psychology_panel
+    assert "AI Dial Cooldown" in psychology_panel
+    assert "Risk-Cap Cooldown" in psychology_panel
+    assert "Anti-Impulse Journal" in psychology_panel
+    assert "fetchRiskControl()" in psychology_panel
+    assert "fetchAiControlAuthority()" in psychology_panel
+    assert "<PsychologyGuardPanel />" in trade_page
+    assert "<PsychologyGuardPanel subtitle=" in dashboard_page
+
+
+def test_legal_review_panel_surfaces_owner_record_workflow():
+    settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
+    api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+
+    assert "fetchLegalReviewControl" in settings_page
+    assert "updateLegalReviewControl" in settings_page
+    assert "resetLegalReviewControl" in settings_page
+    assert "Counsel Record Control" in settings_page
+    assert "Review Artifact Path" in settings_page
+    assert "Artifact SHA-256" in settings_page
+    assert "RECORD QUALIFIED COUNSEL REVIEW" in settings_page
+    assert "LegalReviewControlReport" in api_client
+    assert "LegalReviewControlUpdate" in api_client
+    assert '"/settings/legal-review-control"' in api_client
+
+
+def test_dashboard_surfaces_live_readiness_summary_panel():
+    dashboard_page = (REPO_ROOT / "ui" / "src" / "pages" / "DashboardPage.tsx").read_text(encoding="utf-8")
+    live_panel = (REPO_ROOT / "ui" / "src" / "components" / "LiveReadinessSummaryPanel.tsx").read_text(encoding="utf-8")
+
+    assert "export function LiveReadinessSummaryPanel" in live_panel
+    assert 'title="Live Gate Summary"' in live_panel
+    assert "Top Blocking Checks" in live_panel
+    assert "Next Actions" in live_panel
+    assert "fetchLiveReadinessSummary" in live_panel
+    assert "fetchAccountReconciliationSummary" in live_panel
+    assert "fetchBrokerTruthSummary" in live_panel
+    assert 'apiGet<LiveReadinessReport>("/readiness/live")' in live_panel
+    assert 'apiGet<AccountReconciliationReport>("/reconciliation/account")' in live_panel
+    assert 'apiGet<BrokerTruthMonitorStatus>("/broker-truth-monitor/status/fast")' in live_panel
+    assert "position_protection_status" in live_panel
+    assert "position_protection_unprotected_position_count" in live_panel
+    assert "monitor_auto_halt_reason_ids" in live_panel
+    assert "BROKER TRUTH PAPER FORCE" in live_panel
+    assert "Truth Halt Reasons" in live_panel
+    assert "Broker Truth Enforcement" in live_panel
+    assert "Stop-Loss Protection" in live_panel
+    assert "shortPositionProtectionStatus" in live_panel
+    assert "<LiveReadinessSummaryPanel" in dashboard_page
+    assert "initialLiveReadiness={state.liveReadiness ?? null}" in dashboard_page
+    assert "initialAccountReconciliation={state.accountReconciliation ?? null}" in dashboard_page
+    assert "initialBrokerTruthMonitor={state.brokerTruthMonitor ?? null}" in dashboard_page
+
+
+def test_operator_badge_surfaces_cluster_signal_quality_metrics():
+    operator_badge = (REPO_ROOT / "ui" / "src" / "components" / "OperatorBadge.tsx").read_text(encoding="utf-8")
+    operator_badge_css = (REPO_ROOT / "ui" / "src" / "components" / "OperatorBadge.css").read_text(encoding="utf-8")
+    floating_assistant = (REPO_ROOT / "ui" / "src" / "components" / "FloatingAssistant.tsx").read_text(encoding="utf-8")
+    assert "Cluster inflation (raw/unique)" in operator_badge
+    assert "Biggest copy stack" in operator_badge
+    assert "Avg win/loss stack" in operator_badge
+    assert "Blind stacking warning" in operator_badge
+    assert "WATCHING + PAPER SIM" in operator_badge
+    assert "WATCHING + MT5 DEMO" in operator_badge
+    assert "MT5 DEMO + SIM HANDOFF" in operator_badge
+    assert "MT5 demo learning:" in operator_badge
+    assert ".operator-badge-profit-warning" in operator_badge_css
+
+
+def test_operator_badge_extracts_structured_chat_failure_details():
+    operator_badge = (REPO_ROOT / "ui" / "src" / "components" / "OperatorBadge.tsx").read_text(encoding="utf-8")
+    operator_route = (REPO_ROOT / "api" / "routes" / "ai_operator.py").read_text(encoding="utf-8")
+    ai_operator = (REPO_ROOT / "cas_forex" / "ai_operator.py").read_text(encoding="utf-8")
+
+    assert "type ApiErrorLike = Error & { status?: number; payload?: unknown };" in operator_badge
+    assert "function operatorApiFailureDetail" in operator_badge
+    assert "payloadDetail?.money_impact" in operator_badge
+    assert "operator_chat_unavailable|internal server error" in operator_badge
+    assert "Operator backend failed before a reply:" in operator_badge
+    assert '"error": "operator_chat_unavailable"' in operator_route
+    assert '"money_impact": "No command ran and no dials changed."' in operator_route
+    assert "CHAT_CLAIM_BOUNDARY" in ai_operator
 
 
 def test_settings_owner_control_excludes_removed_hard_scope_fields():
@@ -417,6 +745,14 @@ def test_dashboard_fast_uses_tiny_proof_and_risk_summaries_with_full_reports_def
     assert risk_budget["summary_only"] is True
     assert risk_budget["claim_boundary"] == ""
     assert risk_budget["claim_boundary_present"] is True
+    account_health = body["accountHealth"]
+    assert account_health["report_kind"] == "cas_forex_account_health"
+    assert account_health["summary_only"] is True
+    assert "source_health" in account_health
+    assert "price_source_status" in account_health["source_health"]
+    assert "position_feed_detail" in account_health["source_health"]
+    assert "static_positions" in account_health["source_health"]
+    assert "stale_positions" in account_health["source_health"]
     # The sizing numbers summarize the LIVE risk-status evidence file — derive
     # the expectation from the same source instead of freezing values that
     # legitimately move with every sizing review.
@@ -549,6 +885,51 @@ def test_dashboard_evidence_panels_uses_central_daily_bundle_hydration():
     assert "scheduleFullDailyBundleHydration" in hydrator
 
 
+def test_dashboard_movement_panel_marks_static_fallback_explicitly():
+    component = (
+        REPO_ROOT / "ui" / "src" / "components" / "DashboardEvidencePanels.tsx"
+    ).read_text(encoding="utf-8")
+    movement_helper = (
+        REPO_ROOT / "ui" / "src" / "util" / "movementSource.ts"
+    ).read_text(encoding="utf-8")
+    workbench = (
+        REPO_ROOT / "ui" / "src" / "components" / "DashboardOperationsWorkbench.tsx"
+    ).read_text(encoding="utf-8")
+    api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    deep_api_client = (REPO_ROOT / "ui" / "src" / "data" / "dashboardDeepApi.ts").read_text(encoding="utf-8")
+    fixtures = (REPO_ROOT / "ui" / "src" / "data" / "fixtures.ts").read_text(encoding="utf-8")
+
+    assert "Real-Time Movement Scaffold" not in component
+    assert "Movement Source: Static Simulation" in movement_helper
+    assert "summarizeMovementSource" in component
+    assert "Static simulator rows are not being moved by usable provider/MT5 quotes right now" in movement_helper
+    assert 'label={q.stale ? "STATIC" : "LIVE QUOTE"}' in component
+    assert 'source: "paper_route_snapshot:static_simulation"' in fixtures
+    assert "price_stale: true" in fixtures
+    assert 'price_source_status: "STATIC_SIMULATION_FALLBACK"' in fixtures
+    assert 'static_fallback_symbols: ["NAS100", "US30"]' in fixtures
+    assert "fetchMovementStream(useProvider = true)" in api_client
+    assert "fetchMovementStream(useProvider = true)" in deep_api_client
+    assert "const suffix = useProvider ? \"\" : \"?use_provider=false\"" in api_client
+    assert "fetchMovementStream(true)" in workbench
+
+
+def test_settings_owner_control_shows_staged_autonomy_ladder():
+    settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
+    evidence_types = (REPO_ROOT / "ui" / "src" / "types" / "evidence.ts").read_text(encoding="utf-8")
+
+    assert '{ value: "DENY", label: "Lockdown" }' in settings_page
+    assert '{ value: "NOTIFY_ONLY", label: "Signal" }' in settings_page
+    assert '{ value: "LIVE_AUTO", label: "Live Confirm" }' in settings_page
+    assert "Live Autopilot Request" in settings_page
+    assert "autonomyLadder.map" in settings_page
+    assert "Staged autonomy ladder is loading." in settings_page
+    assert "staged_autonomy_summary" in settings_page
+    assert "OwnerAutonomyStage" in evidence_types
+    assert "current_autonomy_stage" in evidence_types
+    assert "owner_control_allows_live_trades" in evidence_types
+
+
 def test_dashboard_deep_operations_staggers_core_panel_hydration():
     dashboard = (
         REPO_ROOT / "ui" / "src" / "pages" / "DashboardPage.tsx"
@@ -632,6 +1013,9 @@ def test_dashboard_sweep_panel_css_is_lazy_not_root_first_paint():
     assert "brokerTruthPanelReady ? (" in panel
     assert "<DashboardBrokerTruthOpsPanel ops={brokerTruthOps} />" in panel
     assert "<DashboardBrokerTruthOpsPanelFallback />" in panel
+    assert 'payoutActionReady ? "Confirm Payout" : "Request Payout Setup"' in panel
+    assert 'label={`RAIL ${payoutRuntimeStatus}`}' in panel
+    assert "providerRuntime?.detail" in panel
     assert panel.index("brokerTruthPanelReady ? (") < panel.index(
         "<DashboardBrokerTruthOpsPanel ops={brokerTruthOps} />"
     )
@@ -647,12 +1031,26 @@ def test_dashboard_sweep_panel_css_is_lazy_not_root_first_paint():
     ):
         assert lazy_panel_selector not in app_css
         assert lazy_panel_selector in panel_css
-    for shared_selector in (
-        ".sweep-action-button",
-        ".sweep-confirm-check",
-        ".sweep-status-row",
-    ):
-        assert shared_selector in app_css
+
+
+def test_broker_truth_ui_surfaces_monitor_auto_halt_reasons_and_position_protection():
+    evidence_types = (REPO_ROOT / "ui" / "src" / "types" / "evidence.ts").read_text(encoding="utf-8")
+    broker_truth_panel = (
+        REPO_ROOT / "ui" / "src" / "components" / "DashboardBrokerTruthOpsPanel.tsx"
+    ).read_text(encoding="utf-8")
+    settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
+
+    assert "position_protection_status?: string | null;" in evidence_types
+    assert "position_protection_unprotected_position_count?: number;" in evidence_types
+    assert "auto_halt_latched_from_monitor?: boolean;" in evidence_types
+    assert "monitor_auto_halt_reason_ids?: string[];" in evidence_types
+    assert "MONITOR PAPER FORCE" in broker_truth_panel
+    assert "position_protection_detail" in broker_truth_panel
+    assert "monitor_auto_halt_reason_ids" in broker_truth_panel
+    assert "Truth Auto-Halt" in settings_page
+    assert "Truth Halt Reasons" in settings_page
+    assert "Position Protection" in settings_page
+    assert "Unprotected Positions" in settings_page
 
 
 def test_quick_start_page_css_is_lazy_not_root_first_paint():
@@ -670,11 +1068,27 @@ def test_quick_start_page_css_is_lazy_not_root_first_paint():
         ".quick-start-controls",
         ".quick-start-list",
         ".quick-start-item",
+        ".quick-start-pwa-actions",
         ".quick-start-pwa-self-mark",
+        ".quick-start-launch-sequence",
         ".quick-start-completion-banner",
     ):
         assert route_selector not in app_css
         assert route_selector in quick_start_css
+
+
+def test_quick_start_exposes_professional_launch_sequence():
+    quick_start_page = (
+        REPO_ROOT / "ui" / "src" / "pages" / "QuickStartPage.tsx"
+    ).read_text(encoding="utf-8")
+    assert "Professional Launch Sequence" in quick_start_page
+    assert "buildLaunchSequence(milestones)" in quick_start_page
+    assert "Observe mode online" in quick_start_page
+    assert "Demo broker terminal connected" in quick_start_page
+    assert "Risk profile and CAS dials reviewed" in quick_start_page
+    assert "Paper or demo loop running" in quick_start_page
+    assert "First AI decision reviewed" in quick_start_page
+    assert "Live unlock reviewed last" in quick_start_page
 
 
 def test_trading_windows_page_css_is_lazy_not_root_first_paint():
@@ -712,7 +1126,8 @@ def test_auto_trade_loop_sanitizes_raw_live_gate_last_error():
 
     assert "formatDispatchLoopLastError(loop?.last_error)" in windows_page
     assert 'rawLower.includes("live_trading is currently not licensed")' in windows_page
-    assert "Live dispatch blocked: paper/demo loop can keep running" in windows_page
+    assert "Live mode is requested, but the live runtime gates are not ready" in windows_page
+    assert "it will not collect or dispatch intents until those gates pass" in windows_page
     assert 'className="tw-loop-warning"' in windows_page
     assert "error: {loop.last_error}" not in windows_page
     assert ".tw-loop-warning" in windows_css
@@ -798,6 +1213,101 @@ def test_daily_report_page_css_is_lazy_not_root_first_paint():
     ):
         assert shared_selector in app_css
         assert f'className="{shared_selector[1:]}"' in daily_report_page
+
+
+def test_tracker_page_is_registered_and_css_is_lazy_not_root_first_paint():
+    app = (REPO_ROOT / "ui" / "src" / "App.tsx").read_text(encoding="utf-8")
+    page_config = (REPO_ROOT / "ui" / "src" / "pageConfig.ts").read_text(encoding="utf-8")
+    app_css = (REPO_ROOT / "ui" / "src" / "App.css").read_text(encoding="utf-8")
+    tracker_page = (
+        REPO_ROOT / "ui" / "src" / "pages" / "TrackerPage.tsx"
+    ).read_text(encoding="utf-8")
+    tracker_css = (
+        REPO_ROOT / "ui" / "src" / "pages" / "TrackerPage.css"
+    ).read_text(encoding="utf-8")
+
+    assert '{ id: "tracker", label: "Tracker", ready: true }' in page_config
+    assert 'tracker: lazyPage(() => import("./pages/TrackerPage"), "TrackerPage")' in app
+    assert 'import "./TrackerPage.css"' in tracker_page
+    assert "fetchMobileProofSessionLatest" in tracker_page
+    assert "fetchLiveReadiness" in tracker_page
+    assert "fetchMovementStream(true)" in tracker_page
+    assert "fetchAccountLedger" in tracker_page
+    assert 'label="Price source"' in tracker_page
+    assert 'label="Position feed"' in tracker_page
+    assert 'label="Broker-ticket rows"' in tracker_page
+    assert 'label="Static positions"' in tracker_page
+    assert 'label="Provider-backed"' in tracker_page
+    assert 'label="Static fallback"' in tracker_page
+    assert "positionFeed.detail" in tracker_page
+    assert "Static simulator rows are not being moved by usable provider/MT5 quotes" in tracker_page
+    for route_selector in (
+        ".tracker-page",
+        ".tracker-grid",
+        ".tracker-hero-grid",
+        ".tracker-metric-grid",
+        ".tracker-list-row",
+        ".tracker-check-row",
+        ".tracker-symbol-strip",
+    ):
+        assert route_selector not in app_css
+        assert route_selector in tracker_css
+
+
+def test_risk_disclosure_page_is_registered_and_surfaces_claim_boundaries():
+    app = (REPO_ROOT / "ui" / "src" / "App.tsx").read_text(encoding="utf-8")
+    page_config = (REPO_ROOT / "ui" / "src" / "pageConfig.ts").read_text(encoding="utf-8")
+    app_css = (REPO_ROOT / "ui" / "src" / "App.css").read_text(encoding="utf-8")
+    risk_page = (
+        REPO_ROOT / "ui" / "src" / "pages" / "RiskDisclosurePage.tsx"
+    ).read_text(encoding="utf-8")
+    terms_page = (
+        REPO_ROOT / "ui" / "src" / "pages" / "TermsPage.tsx"
+    ).read_text(encoding="utf-8")
+    privacy_page = (
+        REPO_ROOT / "ui" / "src" / "pages" / "PrivacyPage.tsx"
+    ).read_text(encoding="utf-8")
+    risk_css = (
+        REPO_ROOT / "ui" / "src" / "pages" / "RiskDisclosurePage.css"
+    ).read_text(encoding="utf-8")
+
+    assert '{ id: "risk", label: "Risk", ready: true }' in page_config
+    assert '{ id: "terms", label: "Terms", ready: true }' in page_config
+    assert '{ id: "privacy", label: "Privacy", ready: true }' in page_config
+    assert 'risk: lazyPage(() => import("./pages/RiskDisclosurePage"), "RiskDisclosurePage")' in app
+    assert 'terms: lazyPage(() => import("./pages/TermsPage"), "TermsPage")' in app
+    assert 'privacy: lazyPage(() => import("./pages/PrivacyPage"), "PrivacyPage")' in app
+    assert 'import "./RiskDisclosurePage.css"' in risk_page
+    assert 'import "./RiskDisclosurePage.css"' in terms_page
+    assert 'import "./RiskDisclosurePage.css"' in privacy_page
+    assert "fetchProfessionalClaims" in risk_page
+    assert "Risk Disclosure" in risk_page
+    assert "No Profit Guarantee" in risk_page
+    assert "AI Limitations" in risk_page
+    assert "Broker Execution" in risk_page
+    assert "Paper, Demo, and Live" in risk_page
+    assert "forbidden_claim_types" in risk_page
+    assert "preferred_language" in risk_page
+    assert "minimum_copy" in risk_page
+    assert "This page is disclosure visibility only" in risk_page
+    assert "Terms of Service" in terms_page
+    assert "REQUIRED BEFORE PUBLIC USE" in terms_page
+    assert "No Profit Guarantee" in terms_page
+    assert "Owner Responsibility" in terms_page
+    assert "Privacy Policy" in privacy_page
+    assert "Data CAS Forex May Store" in privacy_page
+    assert "Secrets" in privacy_page
+    assert "raw bank-card numbers" in privacy_page
+    for route_selector in (
+        ".risk-disclosure-page",
+        ".risk-disclosure-status-grid",
+        ".risk-disclosure-copy-grid",
+        ".risk-disclosure-policy-grid",
+        ".risk-disclosure-table",
+        ".risk-disclosure-boundary",
+    ):
+        assert route_selector not in app_css
+        assert route_selector in risk_css
 
 
 def test_stack_status_page_css_is_lazy_not_root_first_paint():
@@ -988,6 +1498,14 @@ def test_trade_page_and_selector_css_are_lazy_not_root_first_paint():
 
     assert 'import "./TradePage.css"' in trade_page
     assert 'import "../components/SelectorChips.css"' in trade_page
+    assert "fetchMovementStream(true)" in trade_page
+    assert "Active Market Movement - Static Simulation" in trade_page
+    assert "Static simulator pricing" in trade_page
+    assert "Position Source" in trade_page
+    assert "Opened" in trade_page
+    assert "Age" in trade_page
+    assert "formatMovementPositionAge(activePosition)" in trade_page
+    assert 'label={`${movementSource.staticFallbackCount} STATIC`}' in trade_page
     assert 'import "../components/SelectorChips.css"' in condition_lab_page
     assert 'import "../components/SelectorChips.css"' in settings_page
     assert 'import "./SelectorChips.css"' in mtf_component
@@ -1157,7 +1675,9 @@ def test_live_component_css_is_lazy_not_root_first_paint():
         ".live-telemetry-stat",
         ".live-telemetry-table-wrap",
         ".live-telemetry-table",
+        ".live-telemetry-source",
         ".live-telemetry-empty",
+        ".live-telemetry-boundary",
         ".live-telemetry-error",
     ):
         assert telemetry_selector not in app_css
@@ -1233,6 +1753,12 @@ def test_ai_activity_instant_badge_renders_stage_trace_without_fetching():
     assert "aifig-watch" not in instant_css
     assert "ai-flip" not in instant_css
     assert "wasteTraceLabels" in full_indicator
+    assert "last_management_account_position_count" in full_indicator
+    assert "paper lane scanning" in full_indicator
+    assert "PAPER SIM" in full_indicator
+    assert "simulator handoff" in full_indicator
+    assert "const connLabel = presentation.badgeLabel;" in full_indicator
+    assert 'lane ?? "LOOP"' in instant_badge
     assert 'import "./AiActivityIndicator.css"' in full_indicator
     assert "TRACE_LABEL.test" in full_indicator
     assert "TRACE_LABEL.execute" in full_indicator
@@ -1269,19 +1795,40 @@ def test_mt4_bridge_panel_requires_heartbeat_before_demo_fill_claims():
 
 def test_settings_page_exposes_broker_funding_handoff_without_raw_payment_storage():
     settings = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
-    funding_panel = settings.split("function BrokerFundingHandoffPanel()", 1)[1].split(
+    broker_portal = (REPO_ROOT / "ui" / "src" / "util" / "brokerPortal.ts").read_text(encoding="utf-8")
+    funding_panel = settings.split("function BrokerFundingHandoffPanel(", 1)[1].split(
         "function ControlField",
         1,
     )[0]
 
-    assert "<BrokerFundingHandoffPanel />" in settings
-    assert "https://app.hugosway.com" in settings
+    assert "<BrokerFundingHandoffPanel brokerReality={state.brokerReality} />" in settings
+    assert "https://secure.risenfx.com/" in broker_portal
+    assert "brokerPortal.url" in funding_panel
     assert "Open Broker Portal" in funding_panel
     assert "Sync Broker Snapshot" in funding_panel
     assert "fetchAccountReconciliation(true)" in funding_panel
     assert "NO RAW BANK/CARD STORAGE" in funding_panel
+    assert "Movement Feed" in funding_panel
+    assert "describeReconciliationMovementTruth(reconciliation)" in funding_panel
+    assert "movementTruth.detail" in funding_panel
     assert "input" not in funding_panel
     assert "apiPost" not in funding_panel
+
+
+def test_settings_live_recovery_exposes_order_idempotency_policy():
+    settings = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
+    evidence_types = (REPO_ROOT / "ui" / "src" / "types" / "evidence.ts").read_text(encoding="utf-8")
+
+    assert "Duplicate Suppressed" in settings
+    assert "Shape Duplicates" in settings
+    assert "Idempotency Window" in settings
+    assert "Exact Retry Key" in settings
+    assert "Near Duplicate Key" in settings
+    assert "Latest Shape Key" in settings
+    assert "manual and compound/pyramid adds are excluded" in settings.lower()
+    assert "OrderIdempotencyPolicy" in evidence_types
+    assert "near_duplicate_suppressed_count" in evidence_types
+    assert "order_shape_key" in evidence_types
 
 
 def test_proof_page_exposes_broker_funding_route_at_live_controls():
@@ -1291,11 +1838,14 @@ def test_proof_page_exposes_broker_funding_route_at_live_controls():
         1,
     )[0]
 
-    assert "https://app.hugosway.com" in proof
+    assert "brokerPortal.url" in funding_block
     assert "OPEN BROKER PORTAL" in funding_block
     assert "SYNC BROKER SNAPSHOT" in funding_block
     assert "fetchAccountReconciliation(true)" in proof
     assert "NO RAW BANK/CARD STORAGE" in funding_block
+    assert "Movement Feed" in funding_block
+    assert "describeReconciliationMovementTruth(reconciliation)" in proof
+    assert "movementTruth.detail" in funding_block
     assert "apiPost" not in funding_block
     assert "type=\"password\"" not in funding_block
 
@@ -1305,18 +1855,60 @@ def test_app_shell_share_page_config_and_single_active_route_renderer():
     shell = (
         REPO_ROOT / "ui" / "src" / "components" / "Shell.tsx"
     ).read_text(encoding="utf-8")
+    app_css = (REPO_ROOT / "ui" / "src" / "App.css").read_text(encoding="utf-8")
     page_config = (REPO_ROOT / "ui" / "src" / "pageConfig.ts").read_text(encoding="utf-8")
 
     assert "from \"./pageConfig\"" in app
     assert "from \"../pageConfig\"" in shell
     assert "export const NAV_ITEMS" in page_config
+    assert "Tracker" in page_config
+    assert '"tracker"' in page_config
     assert "type Page =" not in app
     assert "type Page =" not in shell
     assert "const NAV_ITEMS" not in shell
     assert "PAGE_COMPONENTS" in app
+    assert "TrackerPage" in app
     assert "<ActivePage state={state} />" in app
     assert "page === \"quick-start\"" not in app
     assert "page === \"dashboard\" && <DashboardPage" not in app
+    assert "const [navOverflowed, setNavOverflowed]" in shell
+    assert "ResizeObserver" in shell
+    assert "requiredLinkWidth > inlineAvailableWidth" in shell
+    assert 'className={`shell-nav ${navOverflowed ? "overflowed" : ""}`}' in shell
+    assert ".shell-nav.overflowed" in app_css
+    assert ".shell-nav.overflowed .shell-nav-links.open" in app_css
+    assert "max-height: 0" in app_css
+
+
+def test_shell_surfaces_recent_critical_alerts_across_pages():
+    shell = (
+        REPO_ROOT / "ui" / "src" / "components" / "Shell.tsx"
+    ).read_text(encoding="utf-8")
+    app_css = (REPO_ROOT / "ui" / "src" / "App.css").read_text(encoding="utf-8")
+    alert_strip = (
+        REPO_ROOT / "ui" / "src" / "components" / "CriticalAlertStrip.tsx"
+    ).read_text(encoding="utf-8")
+    alert_css = (
+        REPO_ROOT / "ui" / "src" / "components" / "CriticalAlertStrip.css"
+    ).read_text(encoding="utf-8")
+
+    assert 'import("./CriticalAlertStrip")' in shell
+    assert '<CriticalAlertStrip onOpenAlerts={() => onNavigate("settings")} />' in shell
+    assert "fetchCriticalNotificationAudit(5)" in alert_strip
+    assert "visibleRows" in alert_strip
+    assert 'severity === "alert" || severity === "warning"' in alert_strip
+    assert 'aria-live="polite"' in alert_strip
+    assert "Open alerts" in alert_strip
+    assert 'import "./CriticalAlertStrip.css"' in alert_strip
+    assert 'dispatchStatus === "DUPLICATE_SUPPRESSED"' in alert_strip
+    for selector in (
+        ".critical-alert-strip",
+        ".critical-alert-strip-warning",
+        ".critical-alert-strip-alert",
+        ".critical-alert-button",
+    ):
+        assert selector not in app_css
+        assert selector in alert_css
 
 
 def test_dashboard_full_detail_hydration_is_spread_after_fast_packet():
@@ -1376,15 +1968,17 @@ def test_dashboard_api_reads_prefer_last_successful_base_before_default_retry():
     assert "function rememberSuccessfulApiBase(base: string): void" in api_core
     assert "function clearRememberedApiBase(): void" in api_core
     assert "const rememberedBase = readLastSuccessfulApiBase();" in api_core
-    assert "? [rememberedBase, savedBase, DEFAULT_API_BASE]" in api_core
-    assert ": [savedBase, rememberedBase, DEFAULT_API_BASE]" in api_core
+    assert "const originBase = sameOriginApiBase();" in api_core
+    assert "? [savedOverride, originBase, rememberedBase, DEFAULT_API_BASE]" in api_core
+    assert ": [savedOverride, rememberedBase, originBase, DEFAULT_API_BASE]" in api_core
     assert "rememberSuccessfulApiBase(base);" in api_core
     assert api_core.count("rememberSuccessfulApiBase(base);") >= 4
     assert "function readLastSuccessfulWasteStageApiBase(): string | null" in stage_probe
     assert "function rememberSuccessfulWasteStageApiBase(base: string): void" in stage_probe
     assert "const rememberedBase = readLastSuccessfulWasteStageApiBase();" in stage_probe
-    assert "? [rememberedBase, savedBase, DEFAULT_API_BASE]" in stage_probe
-    assert ": [savedBase, rememberedBase, DEFAULT_API_BASE]" in stage_probe
+    assert "const originBase = sameOriginApiBase();" in stage_probe
+    assert "? [rememberedBase, savedBase, DEFAULT_API_BASE, originBase]" in stage_probe
+    assert ": [savedOverride, rememberedBase, originBase, DEFAULT_API_BASE]" in stage_probe
     assert "rememberSuccessfulWasteStageApiBase(base);" in stage_probe
     assert "window.localStorage.setItem(LAST_SUCCESSFUL_API_BASE_STORAGE_KEY" in api_core
     assert "window.localStorage.setItem(LAST_SUCCESSFUL_API_BASE_STORAGE_KEY" in stage_probe
@@ -1616,7 +2210,12 @@ def test_vite_splits_react_vendor_out_of_cas_app_shell():
 
 def test_pwa_precache_is_limited_to_first_paint_app_shell():
     vite_config = (REPO_ROOT / "ui" / "vite.config.ts").read_text(encoding="utf-8")
+    sw_register = (REPO_ROOT / "ui" / "src" / "registerServiceWorker.ts").read_text(encoding="utf-8")
 
+    assert "selfDestroying: true" not in vite_config
+    assert "registerType: \"autoUpdate\"" in vite_config
+    assert "skipWaiting: true" in vite_config
+    assert "clientsClaim: true" in vite_config
     assert '"**/*.{js,css,html,svg,png,ico,webmanifest,json}"' not in vite_config
     assert '"index.html"' in vite_config
     assert '"registerSW.js"' in vite_config
@@ -1624,7 +2223,1045 @@ def test_pwa_precache_is_limited_to_first_paint_app_shell():
     assert '"assets/index-*.css"' in vite_config
     assert '"assets/index-*.js"' in vite_config
     assert '"assets/react-vendor-*.js"' in vite_config
+    assert 'handler: "NetworkFirst"' in vite_config
+    assert 'cacheName: "cas-forex-code-v2"' in vite_config
     assert 'handler: "StaleWhileRevalidate"' in vite_config
+    assert "registration.update()" in sw_register
+    assert "SKIP_WAITING" in sw_register
+    assert "controllerchange" in sw_register
+    assert "clearRuntimeCaches" in sw_register
+    assert "'cas-forex-assets-'" in sw_register
+    assert "'cas-forex-code-'" in sw_register
+    assert "'workbox-precache'" in sw_register
+    assert "staleBundleRecoveryKey" in sw_register
+    assert "vite:preloadError" in sw_register
+    assert "failed to fetch dynamically imported module" in sw_register
+    assert "registration.unregister()" in sw_register
+    assert "window.setInterval(requestUpdate, 60_000)" in sw_register
+    assert "document.visibilityState === 'visible'" in sw_register
+    assert "window.location.reload()" in sw_register
+
+
+def test_windows_mt5_account_panel_explains_terminal_mirror_not_account_lock():
+    windows_page = (REPO_ROOT / "ui" / "src" / "pages" / "WindowsPage.tsx").read_text(encoding="utf-8")
+    mt5_live = (REPO_ROOT / "cas_forex" / "mt5_live.py").read_text(encoding="utf-8")
+    api_types = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+
+    assert "Live, read-only, straight from your MT5 terminal" not in windows_page
+    assert "subtitle={subtitle}" in windows_page
+    assert "DEMO - PAPER / MT5 BRIDGE" in windows_page
+    assert "LIVE MONEY ACCOUNT" in windows_page
+    assert "TERMINAL MIRROR" in windows_page
+    assert "MT5_READ_ONLY_MIRROR_TOOLTIP" in windows_page
+    assert "READ-ONLY MIRROR" in windows_page
+    assert "const readOnlyBoundary = mt5?.claim_boundary" in windows_page
+    assert "const mirrorScope = mt5?.mirror_scope" in windows_page
+    assert "const mirrorLabel = mt5?.mirror_label" in windows_page
+    assert "const readOnlyLabel = mt5?.read_only_label" in windows_page
+    assert "const writesFromPanel = mt5?.writes_from_panel" in windows_page
+    assert "const executionPathNote = mt5?.execution_path_note" in windows_page
+    assert "scope: <strong>{mirrorScope}</strong>" in windows_page
+    assert "writes: <strong>{writesFromPanel}</strong>" in windows_page
+    assert "execution: <strong>{executionPathNote}</strong>" in windows_page
+    assert "StatusChip label={mirrorLabel}" in windows_page
+    assert "StatusChip label={readOnlyLabel}" in windows_page
+    assert "CAS AI and automation still open, close, and manage trades" in windows_page
+    assert "protected order-dispatch path for real money" in windows_page
+    assert "observe-only from this panel" in windows_page
+    assert "MT5_TERMINAL_ALGO_TOOLTIP" in windows_page
+    assert "It does not disable CAS AI execution" in windows_page
+    assert "ALGO ON" in windows_page
+    assert "ALGO OFF" in windows_page
+    assert "permission_state" in windows_page
+    assert "MT5 permissions: terminal algo" in windows_page
+    assert "position_protection" in windows_page
+    assert "Position protection:" in windows_page
+    assert "STOPS PROTECTED" in windows_page
+    assert "UNPROTECTED" in windows_page
+    assert "ENTRY RISK > CAP" in windows_page
+    assert "Entry risk at SL" in windows_page
+    assert "positionRisk.risk_cap_pct" in windows_page
+    assert "this comparison alone does not force-close an existing trade" in windows_page
+    assert "place and manage paper/demo trades through the MT5 bridge/verifier path" in windows_page
+    assert "place and manage real-money trades through the protected order-dispatch path" in windows_page
+    assert "claim_boundary?: string;" in api_types
+    assert "mirror_scope?: string;" in api_types
+    assert "mirror_label?: string;" in api_types
+    assert "read_only_label?: string;" in api_types
+    assert "writes_from_panel?: string;" in api_types
+    assert "observational_only?: boolean;" in api_types
+    assert "execution_path_note?: string;" in api_types
+    assert "risk_at_stop_usd?: number | null;" in api_types
+    assert "risk_cap_breached?: boolean | null;" in api_types
+    assert "position_risk?: Mt5PositionRiskSummary;" in api_types
+    assert "_CLAIM_BOUNDARY" in mt5_live
+    assert "_MIRROR_SCOPE" in mt5_live
+    assert "_MIRROR_LABEL" in mt5_live
+    assert "_READ_ONLY_LABEL" in mt5_live
+    assert "_WRITES_FROM_PANEL" in mt5_live
+    assert "_mirror_surface_contract" in mt5_live
+    assert "_GENERIC_EXECUTION_PATH_NOTE" in mt5_live
+    assert "permission_state" in mt5_live
+    assert "build_mt5_permission_state" in mt5_live
+    assert "build_open_position_stop_risk" in mt5_live
+    assert "summarize_open_position_stop_risk" in mt5_live
+    assert "Terminal mirror from your MetaTrader 5 account." in mt5_live
+    assert "This panel is observational only." in mt5_live
+    assert "CAS AI and automation handle demo/paper trade actions through the MT5 bridge/verifier path." in mt5_live
+
+
+def test_mobile_preview_serves_installable_build_with_api_proxy():
+    package_json = (REPO_ROOT / "ui" / "package.json").read_text(encoding="utf-8")
+    vite_config = (REPO_ROOT / "ui" / "vite.config.ts").read_text(encoding="utf-8")
+    mobile_doc = (REPO_ROOT / "docs" / "MOBILE_APP.md").read_text(encoding="utf-8")
+    quick_start = (REPO_ROOT / "ui" / "src" / "pages" / "QuickStartPage.tsx").read_text(encoding="utf-8")
+    quick_start_css = (REPO_ROOT / "ui" / "src" / "pages" / "QuickStartPage.css").read_text(encoding="utf-8")
+    app_css = (REPO_ROOT / "ui" / "src" / "App.css").read_text(encoding="utf-8")
+    operator_badge = (REPO_ROOT / "ui" / "src" / "components" / "OperatorBadge.tsx").read_text(encoding="utf-8")
+    operator_badge_css = (REPO_ROOT / "ui" / "src" / "components" / "OperatorBadge.css").read_text(encoding="utf-8")
+    floating_assistant = (REPO_ROOT / "ui" / "src" / "components" / "FloatingAssistant.tsx").read_text(encoding="utf-8")
+    operator_api = (REPO_ROOT / "ui" / "src" / "data" / "operatorApi.ts").read_text(encoding="utf-8")
+    api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    api_core = (REPO_ROOT / "ui" / "src" / "data" / "apiCore.ts").read_text(encoding="utf-8")
+    owner_auth_api = (REPO_ROOT / "ui" / "src" / "data" / "ownerAuthApi.ts").read_text(encoding="utf-8")
+    api_server_file = (REPO_ROOT / "api" / "server.py").read_text(encoding="utf-8")
+    mobile_route = (REPO_ROOT / "api" / "routes" / "mobile.py").read_text(encoding="utf-8")
+    assistant_route = (REPO_ROOT / "api" / "routes" / "assistant.py").read_text(encoding="utf-8")
+    lan_launcher = (REPO_ROOT / "START_CAS_FOREX_LAN.bat").read_text(encoding="utf-8")
+    mobile_stack_runner = (REPO_ROOT / "cas_forex" / "mobile_stack_runner.py").read_text(encoding="utf-8")
+    mobile_proof_session = (REPO_ROOT / "cas_forex" / "mobile_proof_session.py").read_text(encoding="utf-8")
+    phone_release_bundle = (REPO_ROOT / "cas_forex" / "phone_release_bundle.py").read_text(encoding="utf-8")
+    release_bundle_script = (REPO_ROOT / "scripts" / "build_web_phone_release_bundle.py").read_text(encoding="utf-8")
+    api_server_script = (REPO_ROOT / "scripts" / "run_api_server.py").read_text(encoding="utf-8")
+
+    assert '"mobile:preview": "vite preview --host 0.0.0.0 --port 4173"' in package_json
+    assert "scripts/run_android_gradle.py assembleDebug" in package_json
+    assert "scripts/run_android_gradle.py assembleRelease" in package_json
+    assert "preview: {" in vite_config
+    assert "port: 4173" in vite_config
+    assert '"/api/forex": {' in vite_config
+    assert 'target: "http://127.0.0.1:8765"' in vite_config
+    assert "xfwd: true" in vite_config
+    assert "http://<YOUR-PC-LAN-IP>:4173" in mobile_doc
+    assert "does **not** need a separate API URL" in mobile_doc
+    assert "Allow `8765` only when" in mobile_doc
+    assert "expose the API directly" in mobile_doc
+    assert "scripts/build_web_phone_release_bundle.py" in mobile_doc
+    assert "evidence_runs/web_phone_release/latest/" in mobile_doc
+    assert "install-test required artifacts" in mobile_doc
+    assert "signed distribution artifact" in mobile_doc
+    assert "signed_release_apk_present" in mobile_doc
+    assert "scripts/run_mobile_stack_readiness.py" in mobile_doc
+    assert "direct phone Quick" in mobile_doc
+    assert "Start URL" in mobile_doc
+    assert "evidence_runs/mobile_stack/latest/" in mobile_doc
+    assert "proof-session" in mobile_doc
+    assert "pairing URLs are redacted evidence" in mobile_doc
+    assert "without injecting token-shaped pairing URLs" in mobile_doc
+    assert "prompt" in mobile_doc
+    assert "evidence_runs/mobile_phone_proof/latest/phone_runtime_proof.json" in mobile_doc
+    assert "phone_browser_verified=true" in mobile_doc
+    assert "non-localhost client/proxy evidence" in mobile_doc
+    assert "Fresh phone proof is overlaid" in mobile_doc
+    assert "stale browser/PWA phone-proof gate" in mobile_doc
+    assert "wrapped manual-copy text" in mobile_doc
+    assert "phone_quick_start_url" in mobile_doc
+    assert "X-Forwarded-For" in mobile_doc
+    assert "uses that forwarded address for owner-auth decisions" in mobile_doc
+    assert "loopback-only and are blocked for proxied phone clients" in mobile_doc
+    assert "Phone pairing link" in mobile_doc
+    assert "#cas_owner_token=" in mobile_doc
+    assert "cas_api_base" in mobile_doc
+    assert "fresh phone does not" in mobile_doc
+    assert "not sent in the HTTP request" in mobile_doc
+    assert "run_mobile_stack_readiness.py" in lan_launcher
+    assert "mobile_release_readiness.json" in lan_launcher
+    assert "CAS_FOREX_PHONE_QUICK_START" in lan_launcher
+    assert "%CAS_FOREX_PHONE_QUICK_START%" in lan_launcher
+    assert "phone_quick_start_url" in lan_launcher
+    assert "watch_mobile_phone_proof.py --timeout-seconds 600" in lan_launcher
+    assert "CAS Forex Phone Proof Watcher" in lan_launcher
+    assert "http://localhost:4173/?page=quick-start" in lan_launcher
+    assert "pairing link" in lan_launcher
+    assert "--api-workers" in (REPO_ROOT / "scripts" / "run_mobile_stack_readiness.py").read_text(encoding="utf-8")
+    assert "--workers" in api_server_script
+    assert "CAS_FOREX_API_WORKERS" in api_server_script
+    assert "phone_quick_start_url" in mobile_stack_runner
+    assert "Phone Quick Start URL:" in mobile_stack_runner
+    assert "api_workers: int = 1" in mobile_stack_runner
+    assert '"--workers"' in mobile_stack_runner
+    assert "tested_quick_start_url" in phone_release_bundle
+    assert '"phone_quick_start_url"' in phone_release_bundle
+    assert '"android_adb_path"' in phone_release_bundle
+    assert '"apk_install_pairing_attempt_status"' in phone_release_bundle
+    assert '"docker_engine_status"' in phone_release_bundle
+    assert "Tested Quick Start URL" in phone_release_bundle
+    assert "Phone-reachable Quick Start URL" in phone_release_bundle
+    assert "INSTALL_TEST_REQUIRED_ARTIFACT_IDS" in phone_release_bundle
+    assert "missing_install_test_required_artifacts" in phone_release_bundle
+    assert "signed_release_apk_present" in phone_release_bundle
+    assert "Signed release APK:" in phone_release_bundle
+    assert "Phone Quick Start URL:" in release_bundle_script
+    assert "APK install-pair attempt:" in release_bundle_script
+    assert "Docker Engine:" in release_bundle_script
+    assert "http://<your-LAN-IP>:4173" in quick_start
+    assert "beforeinstallprompt" in quick_start
+    assert "appinstalled" in quick_start
+    assert "isStandalonePwa()" in quick_start
+    assert "display-mode: standalone" in quick_start
+    assert "standaloneNavigator.standalone" in quick_start
+    assert "installPrompt.prompt()" in quick_start
+    assert "choice.outcome === \"accepted\"" in quick_start
+    assert "Install app" in quick_start
+    assert "quick-start-pwa-actions" in quick_start
+    assert "quick-start-pwa-button primary" in quick_start
+    assert "fetchMobileReadinessLatest" in quick_start
+    assert "fetchMobileProofSessionLatest" in quick_start
+    assert "fetchMobileVerificationSessionLatest" in quick_start
+    assert "refreshMobileVerificationSession" in quick_start
+    assert "fetchOwnerPairing" in quick_start
+    assert "isLoopbackHost()" in quick_start
+    assert 'host.startsWith("127.")' in owner_auth_api
+    assert "const [phonePairingUrl, setPhonePairingUrl]" in quick_start
+    assert "const [nativePairingUrl, setNativePairingUrl]" in quick_start
+    assert "const [phonePairingLanModeEnabled, setPhonePairingLanModeEnabled]" in quick_start
+    assert "const loadOwnerPairing = useCallback" in quick_start
+    assert "const retryDelays = [0, 1_500, 5_000, 10_000]" in quick_start
+    assert "setNativePairingUrl(nativeUrl)" in quick_start
+    assert "setPhonePairingLanModeEnabled(pairing?.lan_mode_enabled ?? null)" in quick_start
+    assert "postMobilePhoneProof" in quick_start
+    assert "buildPhoneProofPayload()" in quick_start
+    assert "type PhoneProofSubmitStatus" in quick_start
+    assert "const [phoneProofSubmit, setPhoneProofSubmit]" in quick_start
+    assert "const [mobileProofSession, setMobileProofSession]" in quick_start
+    assert "const [mobileVerificationSession, setMobileVerificationSession]" in quick_start
+    assert "function mobileEvidenceShowsInstalledMode" in quick_start
+    assert "recordFlag(verificationSession?.proof_state, \"installed_mode_detected\")" in quick_start
+    assert "recordFlag(proofSession?.phone_watch_status, \"installed_mode_detected\")" in quick_start
+    assert "const mobileInstalledModeOk = mobileEvidenceShowsInstalledMode" in quick_start
+    assert "pwaInstalled || isStandalonePwa() || mobileInstalledModeOk" in quick_start
+    assert "Installed-app/PWA mode is already present in the current mobile evidence." in quick_start
+    assert "function shouldSubmitPhoneProof" in quick_start
+    assert "setPhoneProofSubmit({ status: \"skipped\", detail: \"Desktop QA\" });" in quick_start
+    assert "status: \"submitting\"" in quick_start
+    assert "status: \"recorded\"" in quick_start
+    assert "status: \"failed\", detail: \"Submit failed\"" in quick_start
+    assert "payload.app_surface === \"apk\"" in quick_start
+    assert "[\"mobile\", \"iphone\", \"ipod\", \"android\"]" in quick_start
+    assert "phone_browser_observed" in api_client
+    assert "phone_browser_verified" in api_client
+    assert "phone_proof_fresh?: boolean" in api_client
+    assert "phone_proof_age_seconds?: number | null" in api_client
+    assert "phone_proof_expires_at?: string | null" in api_client
+    assert "phone_observation_fresh?: boolean" in api_client
+    assert "phone_observation_age_seconds?: number | null" in api_client
+    assert "phone_observation_expires_at?: string | null" in api_client
+    assert "phone_quick_start_url?: string | null" in api_client
+    assert "verification_commands?: MobileVerificationCommands | null" in api_client
+    assert "next_verification_actions?: MobileNextVerificationAction[]" in api_client
+    assert "export interface MobileVerificationCommands" in api_client
+    assert "mobile_final_verification_watch_all_live_links?: string" in api_client
+    assert "export interface MobileNextVerificationAction" in api_client
+    assert "export interface MobilePhoneVerificationSession" in api_client
+    assert "export interface MobileProofGate" in api_client
+    assert "export interface MobileProofSession" in api_client
+    assert "report_kind: \"cas_forex_mobile_external_proof_session\"" in api_client
+    assert "phone_proof_target_url?: string | null" in api_client
+    assert "phone_proof_target_kind?: string" in api_client
+    assert "phone_pairing_handoff?: string | null" in api_client
+    assert "proof_state?: Record<string, unknown>" in api_client
+    assert "release_artifact_summary?: Record<string, unknown>" in api_client
+    assert "gates: MobileProofGate[]" in api_client
+    assert "default_output_paths?: MobilePhoneVerificationSessionPaths" in api_client
+    assert "written_paths?: MobilePhoneVerificationSessionPaths" in api_client
+    assert "phone_browser_verified?: boolean" in api_client
+    assert "apk_runtime_status?: string | null" in api_client
+    assert "apk_install_pairing_attempt_status?: string | null" in api_client
+    assert "apk_install_pairing_attempt_current_apk_sha256?: string | null" in api_client
+    assert "android_device_ready?: boolean" in api_client
+    assert "docker_engine_status?: string | null" in api_client
+    assert "docker_desktop_install_command?: string | null" in api_client
+    assert "docker_desktop_install_attempt_status?: string | null" in api_client
+    assert "docker_desktop_install_attempt_admin_elevation_required?: boolean" in api_client
+    assert "docker_wsl_warnings?: string[]" in api_client
+    assert "secondary_commands?: string[]" in api_client
+    assert "blocks_completion: boolean" in api_client
+    assert "phone_proof_watcher: string" in api_client
+    assert "phone_verification_session: string" in api_client
+    assert "mobile_proof_session?: string" in api_client
+    assert "mobile_stack: string" in api_client
+    assert "release_bundle: string" in api_client
+    assert "apk_release_build: string" in api_client
+    assert "apk_build_all?: string" in api_client
+    assert "apk_device_list: string" in api_client
+    assert "apk_wait_install_pair?: string" in api_client
+    assert "docker_engine_diagnose?: string" in api_client
+    assert "docker_desktop_install?: string" in api_client
+    assert "docker_engine_check: string" in api_client
+    assert "docker_compose_build: string" in api_client
+    assert "saved proof-session" in mobile_proof_session
+    assert "pairing URLs are redacted by design" in mobile_proof_session
+    assert "phone_proof_target_kind" in mobile_proof_session
+    assert "pwa_pairing_context_available" in assistant_route
+    assert "native_pairing_context_available" in assistant_route
+    assert "docker_desktop_elevated_install_command" in assistant_route
+    assert "secondary_commands=" in assistant_route
+    assert "phone_observation_local_runtime_only" in api_client
+    assert "apk_install_pairing_proof" in api_client
+    assert "apk_install_pairing_verified" in api_client
+    assert "apk_install_pairing_generated_at" in api_client
+    assert "apk_install_pairing_current_apk_sha256?: string | null" in api_client
+    assert "apk_install_pairing_apk_matches_current_artifact?: boolean | null" in api_client
+    assert "apk_runtime_status?: string | null" in api_client
+    assert "apk_runtime_observed?: boolean" in api_client
+    assert "apk_runtime_verified?: boolean" in api_client
+    assert "apk_runtime_api_base_network_path?: string | null" in api_client
+    assert "apk_install_pairing_attempt" in api_client
+    assert "apk_install_pairing_attempt_status?: string | null" in api_client
+    assert "apk_install_pairing_attempt_apk_sha256?: string | null" in api_client
+    assert "apk_install_pairing_attempt_current_apk_sha256?: string | null" in api_client
+    assert "apk_install_pairing_attempt_apk_matches_current_artifact?: boolean | null" in api_client
+    assert "apk_install_pairing_attempt_message?: string | null" in api_client
+    assert "MobileAndroidReleaseSigning" in api_client
+    assert "android_release_signing?: MobileAndroidReleaseSigning | null" in api_client
+    assert "android_release_signing_ready?: boolean" in api_client
+    assert "android_release_signing_status?: string | null" in api_client
+    assert "android_release_signing_detail?: string | null" in api_client
+    assert "android_release_apk_exists?: boolean" in api_client
+    assert "android_device_ready?: boolean" in api_client
+    assert "android_device_count?: number" in api_client
+    assert "android_device_ready_count?: number" in api_client
+    assert "android_device_detail?: string | null" in api_client
+    assert "android_adb_path?: string | null" in api_client
+    assert "docker_engine_status?: string | null" in api_client
+    assert "docker_engine_detail?: string | null" in api_client
+    assert "docker_server_version?: string | null" in api_client
+    assert "docker_wsl_checked?: boolean" in api_client
+    assert "docker_desktop_winget_available?: boolean" in api_client
+    assert "docker_desktop_elevated_install_command?: string | null" in api_client
+    assert "docker_desktop_install_attempt_returncode?: number | null" in api_client
+    assert "docker_desktop_install_attempt_installer_exit_code?: number | null" in api_client
+    assert "attempts?: number" in api_client
+    assert "MobileDebugApkArtifact" in api_client
+    assert "MobileReleaseApkArtifact" in api_client
+    assert "apk_artifact" in api_client
+    assert "release_apk_artifact" in api_client
+    assert "fetchMobileDebugApkArtifact" in api_client
+    assert "fetchMobileReleaseApkArtifact" in api_client
+    assert "downloadMobileDebugApk" in api_client
+    assert "downloadMobileReleaseApk" in api_client
+    assert "apiDownloadBlob" in (REPO_ROOT / "ui" / "src" / "data" / "apiCore.ts").read_text(encoding="utf-8")
+    assert "MobilePhoneProofPayload" in api_client
+    assert '"/mobile/phone-proof"' in api_client
+    assert "fetchMobileVerificationSessionLatest" in api_client
+    assert "fetchMobileProofSessionLatest" in api_client
+    assert "MobileVerificationPlan" in api_client
+    assert "fetchMobileVerificationPlanLatest" in api_client
+    assert "refreshMobileVerificationPlan" in api_client
+    assert "MobileFinalVerification" in api_client
+    assert "fetchMobileFinalVerificationLatest" in api_client
+    assert "refreshMobileFinalVerification" in api_client
+    assert "default_output_paths?: MobilePhoneVerificationSessionPaths" in api_client
+    assert "written_paths?: MobilePhoneVerificationSessionPaths" in api_client
+    assert '"/mobile/readiness/latest", 45_000' in api_client
+    assert '"/mobile/verification-session/latest", 45_000' in api_client
+    assert '"/mobile/proof-session/latest", 45_000' in api_client
+    assert '"/mobile/verification-plan/latest", 45_000' in api_client
+    assert '"/mobile/verification-plan/refresh"' in api_client
+    assert '"/mobile/final-verification/latest", 45_000' in api_client
+    assert '"/mobile/final-verification/refresh"' in api_client
+    assert "refreshMobileVerificationSession" in api_client
+    assert '"/mobile/verification-session/latest"' in api_client
+    assert '"/mobile/proof-session/latest"' in api_client
+    assert '"/mobile/verification-session/refresh"' in api_client
+    assert "Phone/Web Readiness Evidence" in quick_start
+    assert "package_ready_for_phone_install" in quick_start
+    assert "Phone runtime proof" in quick_start
+    assert "phoneFreshnessMetricLabel" in quick_start
+    assert "Phone proof freshness" in quick_start
+    assert "Phone observation freshness" in quick_start
+    assert "formatPhoneProofFreshness" in quick_start
+    assert "Stale proof" in quick_start
+    assert "This device proof" in quick_start
+    assert "Phone network proof" in quick_start
+    assert "Debug APK" in quick_start
+    assert "Release APK" in quick_start
+    assert "Android device" in quick_start
+    assert "formatAndroidDeviceState" in quick_start
+    assert "No device, adb ready" in quick_start
+    assert "Android APK proof" in quick_start
+    assert "APK runtime" in quick_start
+    assert "formatApkRuntimeState" in quick_start
+    assert "Local only" in quick_start
+    assert "APK last attempt" in quick_start
+    assert "formatApkAttemptState" in quick_start
+    assert "Stale APK build" in quick_start
+    assert "apk_install_pairing_attempt_current_apk_sha256" in quick_start
+    assert "compactMetricText" in quick_start
+    assert "formatDockerEngineState" in quick_start
+    assert "CLI missing" in quick_start
+    assert "Engine down" in quick_start
+    assert "Docker install attempt" in quick_start
+    assert "formatDockerInstallAttemptState" in quick_start
+    assert "Needs admin elevation" in quick_start
+    assert "UAC prompt launched" in quick_start
+    assert "docker_desktop_install_attempt_installer_exit_code" in quick_start
+    assert "commands?.docker_desktop_install" in quick_start
+    assert "commands?.docker_desktop_install_elevated" in quick_start
+    assert "Copy elevated Docker install" in quick_start
+    assert "Copy verification plan" in quick_start
+    assert "Copy finish" in quick_start
+    assert "Copy finish watcher" in quick_start
+    assert "Copy live watcher" in quick_start
+    assert "finalVerificationWatchAllLiveLinksCommand" in quick_start
+    assert "Final verification watch all with live links" in quick_start
+    assert "Refresh plan" in quick_start
+    assert "Refresh final" in quick_start
+    assert "Final verification" in quick_start
+    assert "formatFinalVerificationState" in quick_start
+    assert "Submit device proof" in quick_start
+    assert "submitCurrentDeviceProof" in quick_start
+    assert "onSubmitDeviceProof" in quick_start
+    assert "buildVerificationPlanText" in quick_start
+    assert "fetchMobileVerificationPlanLatest" in quick_start
+    assert "refreshMobileVerificationPlan" in quick_start
+    assert "fetchMobileFinalVerificationLatest" in quick_start
+    assert "refreshMobileFinalVerification" in quick_start
+    assert "refreshFinalVerificationAction" in quick_start
+    assert "Final refreshed" in quick_start
+    assert "finalVerificationWatchAllCommand" in quick_start
+    assert "refreshVerificationPlanAction" in quick_start
+    assert "Plan refreshed" in quick_start
+    assert "verificationPlan?.text" in quick_start
+    assert "Live desktop copy context:" in quick_start
+    assert "Secondary commands:" in quick_start
+    assert "Docker elevated install:" in quick_start
+    assert "Proof session" in quick_start
+    assert "formatProofSessionState" in quick_start
+    assert "Verify session" in quick_start
+    assert "formatVerificationSessionState" in quick_start
+    assert "APK stale" in quick_start
+    assert "Android not ready" in quick_start
+    assert "Docker ${dockerStatus.replace" in quick_start
+    assert "Download debug APK" in quick_start
+    assert "Download release APK" in quick_start
+    assert "downloadMobileDebugApk" in quick_start
+    assert "downloadMobileReleaseApk" in quick_start
+    assert "startBrowserDownload" in quick_start
+    assert "apkPairingVerified" in quick_start
+    assert "Copy phone URL" in quick_start
+    assert "const phoneQuickStartUrl = readiness?.phone_quick_start_url || quickStartUrl(phoneWebBase)" in quick_start
+    assert "const phoneProofUrl = phonePairingUrl || phoneQuickStartUrl" in quick_start
+    assert "const phoneProofUrlMode = phonePairingUrl ? \"pairing\" : \"quick-start\"" in quick_start
+    assert "url={phoneProofUrl}" in quick_start
+    assert "mode={phoneProofUrlMode}" in quick_start
+    assert "fallbackUrl={phoneQuickStartUrl}" in quick_start
+    assert "pairingNeedsLan={pairingNeedsLan}" in quick_start
+    assert 'mode="apk-pairing"' in quick_start
+    assert "Copy APK pairing URL" in quick_start
+    assert "APK pairing QR" in quick_start
+    assert "Scan after APK install" in quick_start
+    assert "Opens the installed Android app with owner token" in quick_start
+    assert "phoneProofCopyLabel" in quick_start
+    assert "Copy pairing URL" in quick_start
+    assert "phoneProofCopyStatusLabel" in quick_start
+    assert "phoneProofUrlMode={phoneProofUrlMode}" in quick_start
+    assert "phonePairingLanModeEnabled={phonePairingLanModeEnabled}" in quick_start
+    assert "const lanAccessValue = phonePairingLanModeEnabled === null" in quick_start
+    assert "const pairingNeedsLan = phoneProofUrlMode === \"pairing\" && phonePairingLanModeEnabled === false" in quick_start
+    assert "LAN access" in quick_start
+    assert "Turn LAN access ON in Owner Access before scanning from the phone" in quick_start
+    assert "LAN access is OFF, so a paired phone cannot submit owner-authenticated proof yet." in quick_start
+    assert "quick-start-phone-qr-warning" in quick_start
+    assert "Scan/copy the pairing proof URL" in quick_start
+    assert "const nextActions = readiness?.next_verification_actions ?? []" in quick_start
+    assert "function NextVerificationActions" in quick_start
+    assert "function NextVerificationActionRow" in quick_start
+    assert "Next verification actions" in quick_start
+    assert "Copy command" in quick_start
+    assert "function PhoneProofQrCode" in quick_start
+    assert 'await import("qrcode")' in quick_start
+    assert "QRCode.toDataURL(url" in quick_start
+    assert "function redactSensitiveDisplayValue" in quick_start
+    assert "cas_owner_token=)[^&#\\s]+" in quick_start
+    assert "{redactSensitiveDisplayValue(targetUrl)}" in quick_start
+    assert "{redactSensitiveDisplayValue(url)}" in quick_start
+    assert "setManualCopyValue(redactSensitiveDisplayValue(value))" in quick_start
+    assert "Scan phone proof URL" in quick_start
+    assert "Phone pairing QR" in quick_start
+    assert "Scan pairing proof URL" in quick_start
+    assert "Pairs a fresh phone" in quick_start
+    assert "api.qrserver.com" not in quick_start
+    assert "const commands = readiness?.verification_commands ?? null" in quick_start
+    assert "commands?.mobile_proof_session" in quick_start
+    assert "commands?.phone_verification_session" in quick_start
+    assert "commands?.phone_proof_watcher" in quick_start
+    assert "commands?.mobile_readiness" in quick_start
+    assert "commands?.apk_release_build" in quick_start
+    assert "commands?.apk_build_all" in quick_start
+    assert "commands?.apk_device_list" in quick_start
+    assert "commands?.apk_install_pair" in quick_start
+    assert "commands?.apk_wait_install_pair" in quick_start
+    assert "commands?.docker_engine_diagnose" in quick_start
+    assert "commands?.docker_desktop_install" in quick_start
+    assert "commands?.docker_desktop_install_elevated" in quick_start
+    assert "commands?.docker_engine_check" in quick_start
+    assert "readiness?.phone_quick_start_url" in quick_start
+    assert "copyAction(phoneProofCopyStatusLabel, phoneProofUrl)" in quick_start
+    assert "function quickStartUrl(webBase: string)" in quick_start
+    assert "?page=quick-start" in quick_start
+    assert "Copy phone proof" in quick_start
+    assert "Refresh session" in quick_start
+    assert "Copy proof session" in quick_start
+    assert "Copy verify session" in quick_start
+    assert "Copy APK build all" in quick_start
+    assert "Copy readiness check" in quick_start
+    assert "Copy release build" in quick_start
+    assert "Copy Android devices" in quick_start
+    assert "Copy APK proof" in quick_start
+    assert "Copy Docker diagnosis" in quick_start
+    assert "Copy Docker install" in quick_start
+    assert "quick-start-mobile-readiness-actions" in quick_start
+    assert "quick-start-readiness-manual-copy" in quick_start
+    assert "navigator.clipboard.writeText" in quick_start
+    assert 'document.execCommand("copy")' in quick_start
+    assert "Phone-like observed" in quick_start
+    assert "Localhost only" in quick_start
+    assert "Installed app mode" in quick_start
+    assert "Release signing" in quick_start
+    assert "formatAndroidReleaseSigningState" in quick_start
+    assert "remaining_external_gates.map" in quick_start
+    assert ".slice(0, 2)" not in quick_start
+    assert "quick-start-mobile-readiness-grid" in quick_start_css
+    assert "quick-start-mobile-readiness-actions" in quick_start_css
+    assert "quick-start-next-actions" in quick_start_css
+    assert "quick-start-next-action-controls" in quick_start_css
+    assert "quick-start-readiness-action" in quick_start_css
+    assert "quick-start-readiness-manual-copy" in quick_start_css
+    assert "quick-start-phone-qr-warning" in quick_start_css
+    assert ".quick-start-pwa-actions" in quick_start_css
+    assert ".quick-start-pwa-button.primary" in quick_start_css
+    assert ".shell-nav-links" in app_css
+    assert "min-width: 0;" in app_css
+    assert "overflow-x: auto;" in app_css
+    assert ".shell-nav {" in app_css
+    assert "overflow: visible;" in app_css
+    assert "operator-badge--open" in operator_badge
+    assert 'import { createPortal } from "react-dom"' in operator_badge
+    assert "chipRef" in operator_badge
+    assert "--operator-panel-top" in operator_badge
+    assert "createPortal((" in operator_badge
+    assert ".operator-badge--open" in operator_badge_css
+    assert "position: fixed;" in operator_badge_css
+    assert "z-index: 5000;" in operator_badge_css
+    assert "max-height: min(34rem, calc(100vh - var(--operator-panel-top, 4.5rem) - 8px));" in operator_badge_css
+    assert "overflow-y: auto;" in operator_badge_css
+    assert '"/ai-operator/chat", { message }, 60_000' in operator_api
+    assert "chat_path_status" in operator_api
+    assert "operator-badge-chat-responder" in operator_badge
+    assert "Answered by" in operator_badge
+    assert "CAS runtime truth" in operator_badge
+    assert "Answered by:" in floating_assistant
+    assert "CAS runtime truth" in floating_assistant
+    assert "Local AI" in floating_assistant
+    assert "export async function fetchMobileReadinessLatest" in api_client
+    assert '"/mobile/readiness/latest"' in api_client
+    assert '"/mobile/apk/debug/metadata"' in api_client
+    assert '"/mobile/apk/debug/download"' in api_client
+    assert "mobile.router" in api_server_file
+    owner_auth_policy = (REPO_ROOT / "cas_forex" / "owner_auth.py").read_text(encoding="utf-8")
+    assert "effective_client_host" in owner_auth_policy
+    assert "extract_forwarded_client_host" in owner_auth_policy
+    assert "Trust forwarded client headers only when" in owner_auth_policy
+    assert '@router.get("/readiness/latest")' in mobile_route
+    assert "_MOBILE_EVIDENCE_CACHE_TTL_SECONDS" in mobile_route
+    assert "_cached_mobile_payload" in mobile_route
+    assert '@router.get("/verification-session/latest")' in mobile_route
+    assert '@router.get("/verification-plan/latest")' in mobile_route
+    assert '@router.post("/verification-plan/refresh")' in mobile_route
+    assert '@router.get("/final-verification/latest")' in mobile_route
+    assert '@router.post("/final-verification/refresh")' in mobile_route
+    assert '@router.post("/verification-session/refresh")' in mobile_route
+    assert "build_phone_verification_session" in mobile_route
+    assert "build_mobile_verification_plan" in mobile_route
+    assert "write_mobile_verification_plan" in mobile_route
+    assert "build_mobile_final_verification" in mobile_route
+    assert "write_mobile_final_verification" in mobile_route
+    assert "write_phone_verification_session" in mobile_route
+    assert "redact_phone_verification_session" in mobile_route
+    assert '@router.get("/apk/debug/metadata")' in mobile_route
+    assert '@router.get("/apk/debug/download")' in mobile_route
+    assert "FileResponse" in mobile_route
+    assert '@router.post("/phone-proof")' in mobile_route
+    assert "record_phone_runtime_proof" in mobile_route
+    assert 'request.headers.get("x-cas-client-api-base")' in mobile_route
+    assert "latest_phone_runtime_proof" in mobile_route
+    assert "X-CAS-Client-API-Base" in api_core
+    assert "headers: authHeaders(undefined, base)" in api_core
+    assert 'api_base: str | None = Field(default=None, max_length=240)' in mobile_route
+    assert "phone_proof_api_base_network_path" in api_client
+    assert "phone_observation_api_base_network_path" in api_client
+    assert "apk_runtime_api_base_network_path" in api_client
+    assert "Phone API route" in quick_start
+    assert "formatPhoneApiRoute" in quick_start
+    assert "Paired API bases" in quick_start
+    assert "Probe attempts" in quick_start
+    assert "formatProbeAttemptSummary" in quick_start
+    assert "readinessChecksSucceeded" in quick_start
+    assert '"web_phone_smoke"' in quick_start
+    assert '"owner_pairing_payload"' in quick_start
+    assert '"paired_api_bases"' in quick_start
+    assert "paired_api_bases_reachable" in api_client
+    assert "paired_api_bases_status?: string | null" in api_client
+    assert "paired_api_bases_detail?: string | null" in api_client
+    assert "Paired API bases" in mobile_doc
+    mobile_readiness_latest = (REPO_ROOT / "cas_forex" / "mobile_readiness_latest.py").read_text(encoding="utf-8")
+    assert "_current_remaining_gates" in mobile_readiness_latest
+    assert "debug_apk_artifact_metadata" in mobile_readiness_latest
+    assert "_phone_api_base_fields" in mobile_readiness_latest
+    assert "_paired_api_base_fields" in mobile_readiness_latest
+    assert "_phone_freshness_fields" in mobile_readiness_latest
+    assert "_android_device_probe_fields" in mobile_readiness_latest
+    assert "_android_release_signing_fields" in mobile_readiness_latest
+    assert "_docker_check_fields" in mobile_readiness_latest
+    assert "Debug APK" in mobile_doc
+    assert "Release APK" in mobile_doc
+    assert "Download debug APK" in mobile_doc
+    assert "Download release APK" in mobile_doc
+    assert "/api/forex/mobile/apk/debug/download" in mobile_doc
+    assert "/api/forex/mobile/apk/release/download" in mobile_doc
+
+
+def test_mobile_readiness_latest_route_is_registered():
+    status, body = asyncio.run(_asgi_get("/api/forex/mobile/readiness/latest"))
+    assert status == 200
+    assert body["report_kind"] == "cas_forex_mobile_readiness_latest"
+    assert "package_ready_for_phone_install" in body
+    assert "physical_phone_verified" in body
+    assert "phone_browser_observed" in body
+    assert "phone_browser_verified" in body
+    assert "phone_proof_fresh" in body
+    assert "phone_proof_age_seconds" in body
+    assert "phone_proof_expires_at" in body
+    assert "phone_observation_fresh" in body
+    assert "phone_observation_age_seconds" in body
+    assert "phone_observation_expires_at" in body
+    assert "phone_proof_installed_mode" in body
+    assert "phone_observation_local_runtime_only" in body
+    assert "apk_runtime_status" in body
+    assert "apk_runtime_observed" in body
+    assert "apk_runtime_verified" in body
+    assert "apk_runtime_fresh" in body
+    assert "apk_install_pairing_verified" in body
+    assert "apk_install_pairing_attempt_status" in body
+    assert "android_release_signing_ready" in body
+    assert "android_release_signing_status" in body
+    assert "android_release_apk_exists" in body
+    assert "paired_api_bases_reachable" in body
+    assert "paired_api_bases_status" in body
+    assert "paired_api_bases_detail" in body
+    assert "android_device_ready" in body
+    assert "android_device_count" in body
+    assert "docker_available" in body
+    assert "docker_engine_detail" in body
+    assert "docker_desktop_install_attempt_status" in body
+    assert "docker_desktop_install_attempt_installer_exit_code" in body
+    rendered = json.dumps(body)
+    assert "cas_owner_token=REDACTED" in rendered or "cas_owner_token=" not in rendered
+
+
+def test_mobile_phone_proof_route_accepts_flat_payload_and_rejects_unknown_fields(monkeypatch):
+    captured: dict[str, Any] = {}
+
+    def fake_record_phone_runtime_proof(
+        body,
+        *,
+        client_host=None,
+        forwarded_for=None,
+        real_ip=None,
+        request_user_agent=None,
+        client_api_base=None,
+    ):
+        captured["body"] = body
+        captured["client_host"] = client_host
+        captured["forwarded_for"] = forwarded_for
+        captured["real_ip"] = real_ip
+        captured["request_user_agent"] = request_user_agent
+        captured["client_api_base"] = client_api_base
+        return {
+            "report_kind": "cas_forex_phone_runtime_proof",
+            "phone_browser_verified": True,
+            "device_class": "phone",
+        }
+
+    monkeypatch.setattr(
+        mobile_route,
+        "record_phone_runtime_proof",
+        fake_record_phone_runtime_proof,
+    )
+    payload = {
+        "source": "quick-start",
+        "app_surface": "pwa",
+        "url_origin": "http://10.0.0.6:4173",
+        "url_path": "/",
+        "api_base": "http://10.0.0.6:4173/api/forex",
+        "display_mode": "standalone",
+        "standalone_pwa": True,
+        "user_agent": "Mozilla/5.0 (iPhone) Mobile Safari/604.1",
+        "platform": "iPhone",
+        "language": "en-US",
+        "timezone": "America/Los_Angeles",
+        "viewport_width": 390,
+        "viewport_height": 844,
+        "screen_width": 390,
+        "screen_height": 844,
+        "device_pixel_ratio": 3,
+        "max_touch_points": 5,
+        "online": True,
+    }
+
+    status, body = asyncio.run(
+        _asgi_post_with_headers(
+            "/api/forex/mobile/phone-proof",
+            payload,
+            {
+                "x-forwarded-for": "10.0.0.55",
+                "x-real-ip": "10.0.0.55",
+                "x-cas-client-api-base": "http://10.0.0.6:4173/api/forex",
+            },
+        )
+    )
+
+    assert status == 200
+    assert body["phone_browser_verified"] is True
+    assert captured["body"]["viewport_width"] == 390
+    assert captured["body"]["max_touch_points"] == 5
+    assert captured["body"]["api_base"] == "http://10.0.0.6:4173/api/forex"
+    assert captured["client_host"] == "127.0.0.1"
+    assert captured["forwarded_for"] == "10.0.0.55"
+    assert captured["real_ip"] == "10.0.0.55"
+    assert captured["client_api_base"] == "http://10.0.0.6:4173/api/forex"
+
+    status, body = asyncio.run(
+        _asgi_post(
+            "/api/forex/mobile/phone-proof",
+            payload | {"viewport": {"width": 390}, "touch": {"max_touch_points": 5}},
+        )
+    )
+
+    assert status == 422
+    rendered = json.dumps(body)
+    assert "extra_forbidden" in rendered
+    assert captured["body"]["viewport_width"] == 390
+
+
+def test_mobile_phone_proof_route_dry_run_does_not_record(monkeypatch):
+    calls: dict[str, int] = {"build": 0, "record": 0}
+
+    def fake_build_phone_runtime_proof(
+        body,
+        *,
+        client_host=None,
+        forwarded_for=None,
+        real_ip=None,
+        request_user_agent=None,
+        client_api_base=None,
+    ):
+        calls["build"] += 1
+        assert body["source"] == "web-phone-smoke"
+        assert "dry_run" not in body
+        assert client_host == "127.0.0.1"
+        assert forwarded_for == "10.0.0.55"
+        assert real_ip == "10.0.0.55"
+        assert client_api_base == "http://10.0.0.6:4173/api/forex"
+        return {
+            "report_kind": "cas_forex_phone_runtime_proof",
+            "phone_browser_verified": True,
+            "device_class": "phone",
+            "client_host_source": "x-forwarded-for",
+            "effective_client_host": "10.0.0.55",
+            "api_base_network_path": "same_origin_proxy",
+        }
+
+    def fake_record_phone_runtime_proof(*args, **kwargs):
+        calls["record"] += 1
+        raise AssertionError("dry-run phone proof must not write evidence")
+
+    monkeypatch.setattr(
+        mobile_route,
+        "build_phone_runtime_proof",
+        fake_build_phone_runtime_proof,
+    )
+    monkeypatch.setattr(
+        mobile_route,
+        "record_phone_runtime_proof",
+        fake_record_phone_runtime_proof,
+    )
+    payload = {
+        "source": "web-phone-smoke",
+        "app_surface": "pwa",
+        "url_origin": "http://10.0.0.6:4173",
+        "url_path": "/?page=quick-start",
+        "api_base": "http://10.0.0.6:4173/api/forex",
+        "display_mode": "standalone",
+        "standalone_pwa": True,
+        "user_agent": "Mozilla/5.0 (iPhone) Mobile Safari/604.1",
+        "platform": "iPhone",
+        "viewport_width": 390,
+        "screen_width": 390,
+        "max_touch_points": 5,
+        "dry_run": True,
+    }
+
+    status, body = asyncio.run(
+        _asgi_post_with_headers(
+            "/api/forex/mobile/phone-proof",
+            payload,
+            {
+                "x-forwarded-for": "10.0.0.55",
+                "x-real-ip": "10.0.0.55",
+                "x-cas-client-api-base": "http://10.0.0.6:4173/api/forex",
+            },
+        )
+    )
+
+    assert status == 200
+    assert body["dry_run"] is True
+    assert body["status"] == "DRY_RUN_NOT_RECORDED"
+    assert body["phone_browser_verified"] is True
+    assert calls == {"build": 1, "record": 0}
+
+
+def test_android_project_is_trackable_and_release_signing_is_explicit():
+    root_gitignore = (REPO_ROOT / ".gitignore").read_text(encoding="utf-8")
+    dockerignore = (REPO_ROOT / ".dockerignore").read_text(encoding="utf-8")
+    android_gitignore = (REPO_ROOT / "ui" / "android" / ".gitignore").read_text(encoding="utf-8")
+    package_json = (REPO_ROOT / "ui" / "package.json").read_text(encoding="utf-8")
+    app_gradle = (REPO_ROOT / "ui" / "android" / "app" / "build.gradle").read_text(encoding="utf-8")
+    example = (REPO_ROOT / "ui" / "android" / "keystore.properties.example").read_text(encoding="utf-8")
+    mobile_doc = (REPO_ROOT / "docs" / "MOBILE_APP.md").read_text(encoding="utf-8")
+    install_script = (REPO_ROOT / "scripts" / "install_android_debug_apk.py").read_text(encoding="utf-8")
+    final_verification_script = (REPO_ROOT / "scripts" / "run_mobile_final_verification.py").read_text(encoding="utf-8")
+    phone_proof_script = (REPO_ROOT / "scripts" / "watch_mobile_phone_proof.py").read_text(encoding="utf-8")
+    phone_proof_verifier = (REPO_ROOT / "cas_forex" / "mobile_phone_verifier.py").read_text(encoding="utf-8")
+    apk_proof = (REPO_ROOT / "cas_forex" / "mobile_apk_proof.py").read_text(encoding="utf-8")
+
+    assert "\nui/android/\n" not in root_gitignore
+    assert "ui/android/" in dockerignore
+    assert "ui/ios/" in dockerignore
+    assert "local.properties" in android_gitignore
+    assert "app/src/main/assets/public" in android_gitignore
+    assert "keystore.properties" not in root_gitignore
+    assert '"mobile:apk:release":' in package_json
+    assert '"mobile:apk:build-all":' in package_json
+    assert "scripts/build_android_apks.py" in package_json
+    assert "casReleaseSigningReady" in app_gradle
+    assert "keystore.properties" in app_gradle
+    assert "CAS_FOREX_ANDROID_STOREFILE" in app_gradle
+    assert "CAS Forex release signing is not configured" in app_gradle
+    assert "storeFile=cas-forex-release.jks" in example
+    assert "Signed release APK" in mobile_doc
+    assert "npm --prefix ui run mobile:apk:release" in mobile_doc
+    assert "npm --prefix ui run mobile:apk:build-all" in mobile_doc
+    assert "Build both debug and signed release APKs serially" in mobile_doc
+    assert '"mobile:apk:devices":' in package_json
+    assert '"mobile:apk:install":' in package_json
+    assert '"mobile:apk:pair":' in package_json
+    assert '"mobile:apk:install-pair":' in package_json
+    assert '"mobile:apk:wait-install-pair":' in package_json
+    assert '"@capacitor/app":' in package_json
+    assert "npm --prefix ui run mobile:apk:install" in mobile_doc
+    assert "npm --prefix ui run mobile:apk:wait-install-pair" in mobile_doc
+    assert "npm --prefix ui run mobile:apk:install-pair" in mobile_doc
+    assert "npm --prefix ui run mobile:apk:pair" in mobile_doc
+    assert "evidence_runs/mobile_apk_proof/latest/android_apk_install_pairing_proof.json" in mobile_doc
+    assert "Android APK/native-pairing" in mobile_doc
+    assert "gate without waiting for a full release-bundle regeneration" in mobile_doc
+    assert "android_adb_path" in mobile_doc
+    assert "No device, adb ready" in mobile_doc
+    assert "local.properties" in mobile_doc
+    assert '"mobile:readiness":' in package_json
+    assert '"mobile:stack":' in package_json
+    assert '"mobile:verify-session":' in package_json
+    assert '"mobile:proof-session":' in package_json
+    assert '"mobile:verification-plan":' in package_json
+    assert '"mobile:finish":' in package_json
+    assert '"mobile:phone-proof":' in package_json
+    assert '"mobile:docker-check":' in package_json
+    assert '"mobile:docker-install":' in package_json
+    assert '"mobile:docker-install-elevated":' in package_json
+    assert "run_mobile_release_readiness.py" in mobile_doc
+    assert "run_mobile_stack_readiness.py" in mobile_doc
+    assert "run_phone_verification_session.py" in package_json
+    assert "run_mobile_proof_session.py" in package_json
+    assert "run_mobile_verification_plan.py" in package_json
+    assert "run_mobile_final_verification.py" in package_json
+    assert "--watch-all" in final_verification_script
+    assert "--run-apk-pairing" in final_verification_script
+    assert "DEFAULT_WATCH_ALL_PHONE_TIMEOUT_SECONDS = 900.0" in final_verification_script
+    assert "--print-live-pairing-links" in final_verification_script
+    assert "terminal only; not written to evidence" in final_verification_script
+    assert "install_android_debug_apk" in final_verification_script
+    assert "watch_mobile_phone_proof.py" in package_json
+    assert "npm --prefix ui run mobile:phone-proof" in mobile_doc
+    assert "prints an initial phone handoff" in mobile_doc
+    assert "JSON mode stays machine-readable" in mobile_doc
+    assert "npm --prefix ui run mobile:proof-session" in mobile_doc
+    assert "npm --prefix ui run mobile:verification-plan" in mobile_doc
+    assert "npm --prefix ui run mobile:finish" in mobile_doc
+    assert "npm --prefix ui run mobile:finish -- --watch-all" in mobile_doc
+    assert "900-second default window" in mobile_doc
+    assert "-- --print-live-pairing-links" in mobile_doc
+    assert "Copy live watcher" in mobile_doc
+    assert "written into `mobile_final_verification.json`" in mobile_doc
+    assert "npm --prefix ui run mobile:verify-session" in mobile_doc
+    assert "npm --prefix ui run mobile:readiness" in mobile_doc
+    assert "npm --prefix ui run mobile:stack" in mobile_doc
+    assert "npm --prefix ui run mobile:docker-check" in mobile_doc
+    assert "npm --prefix ui run mobile:docker-install" in mobile_doc
+    assert "npm --prefix ui run mobile:docker-install-elevated" in mobile_doc
+    assert "docker_desktop_install_attempt.json" in mobile_doc
+    assert "GET /api/forex/mobile/proof-session/latest" in mobile_doc
+    assert "GET /api/forex/mobile/verification-plan/latest" in mobile_doc
+    assert "POST /api/forex/mobile/verification-plan/refresh" in mobile_doc
+    assert "GET /api/forex/mobile/final-verification/latest" in mobile_doc
+    assert "POST /api/forex/mobile/final-verification/refresh" in mobile_doc
+    assert "evidence_runs/mobile_verification_plan/latest/" in mobile_doc
+    assert "evidence_runs/mobile_final_verification/latest/" in mobile_doc
+    assert "Copy Docker diagnosis" in mobile_doc
+    assert "Copy elevated Docker install" in mobile_doc
+    assert "Copy verification plan" in mobile_doc
+    assert "wait_for_phone_proof" in phone_proof_script
+    assert "--exit-code-on-missing" in phone_proof_script
+    assert "Initial phone proof status:" in phone_proof_script
+    assert "Final phone proof status:" in phone_proof_script
+    assert "Waiting up to " in phone_proof_script
+    assert "Phone Quick Start URL:" in phone_proof_verifier
+    assert "Tested Quick Start URL:" in phone_proof_verifier
+    assert "LOCAL_DESKTOP_ONLY" in phone_proof_verifier
+    assert "Watch phone proof:" in phone_proof_verifier
+    assert "Refresh readiness:" in phone_proof_verifier
+    assert "LOCAL_DESKTOP_ONLY" in mobile_doc
+    assert "CAS_FOREX_ADB" in install_script
+    assert "--launch-native-pairing" in install_script
+    assert "--launch-only" in install_script
+    assert "--wait-for-device" in install_script
+    assert "--wait-timeout-seconds" in install_script
+    assert "record_android_apk_install_pairing_proof" in install_script
+    assert "android_apk_install_pairing_verified" in apk_proof
+    assert "latest_android_apk_install_pairing_proof" in apk_proof
+    assert "APK/dev-server direct API base" in mobile_doc
+    assert "casforex://pair" in mobile_doc
+    assert "VITE_CAS_FOREX_API_BASE" in mobile_doc
+
+
+def test_android_apk_accepts_native_pairing_deep_link():
+    manifest = (REPO_ROOT / "ui" / "android" / "app" / "src" / "main" / "AndroidManifest.xml").read_text(encoding="utf-8")
+    strings = (REPO_ROOT / "ui" / "android" / "app" / "src" / "main" / "res" / "values" / "strings.xml").read_text(encoding="utf-8")
+    plugins = (REPO_ROOT / "ui" / "android" / "app" / "src" / "main" / "assets" / "capacitor.plugins.json").read_text(encoding="utf-8")
+    app = (REPO_ROOT / "ui" / "src" / "App.tsx").read_text(encoding="utf-8")
+    api_core = (REPO_ROOT / "ui" / "src" / "data" / "apiCore.ts").read_text(encoding="utf-8")
+    owner_badge = (REPO_ROOT / "ui" / "src" / "components" / "OwnerAccessBadge.tsx").read_text(encoding="utf-8")
+    owner_auth_api = (REPO_ROOT / "ui" / "src" / "data" / "ownerAuthApi.ts").read_text(encoding="utf-8")
+
+    assert 'android:name="android.intent.action.VIEW"' in manifest
+    assert 'android:name="android.intent.category.BROWSABLE"' in manifest
+    assert 'android:scheme="casforex"' in manifest
+    assert 'android:host="pair"' in manifest
+    assert "<string name=\"custom_url_scheme\">casforex</string>" in strings
+    assert '"pkg": "@capacitor/app"' in plugins
+    assert '"classpath": "com.capacitorjs.plugins.app.AppPlugin"' in plugins
+    assert 'import("@capacitor/app")' in app
+    assert "CapacitorApp.getLaunchUrl()" in app
+    assert 'CapacitorApp.addListener("appUrlOpen"' in app
+    assert "consumeOwnerPairingFromUrl(url)" in app
+    assert "setPage(result.page)" in app
+    assert "export function consumeOwnerPairingFromUrl(" in api_core
+    assert "parsed.searchParams.get(OWNER_TOKEN_HASH_KEY)" in api_core
+    assert "parsed.searchParams.get(API_BASE_HASH_KEY)" in api_core
+    assert "isTrustedPairingApiBase(apiBase)" in api_core
+    assert "scrubPairingStateFromCurrentLocation()" in api_core
+    assert "native_pairing_urls?: string[]" in owner_auth_api
+    assert "Android app pairing link" in owner_badge
+    assert "nativePairingUrls[0]" in owner_badge
+
+
+def test_phone_browser_prefers_same_origin_api_proxy_without_saved_override():
+    api_core = (REPO_ROOT / "ui" / "src" / "data" / "apiCore.ts").read_text(encoding="utf-8")
+    waste_probe = (REPO_ROOT / "ui" / "src" / "data" / "wasteStageProbe.ts").read_text(encoding="utf-8")
+
+    assert "function sameOriginApiBase(): string | null" in api_core
+    assert "function isCapacitorShell(): boolean" in api_core
+    assert "if (isCapacitorShell()) return null;" in api_core
+    assert "const isCapacitor = isCapacitorShell();" in api_core
+    assert "const isLocalBrowser = !isCapacitor && (" in api_core
+    assert "function readSavedApiBaseOverride(): string | null" in api_core
+    assert ": [savedOverride, rememberedBase, originBase, DEFAULT_API_BASE]" in api_core
+    assert "function sameOriginApiBase(): string | null" in waste_probe
+    assert "function isCapacitorShell(): boolean" in waste_probe
+    assert "if (isCapacitorShell()) return null;" in waste_probe
+    assert "function readSavedApiBaseOverride(): string | null" in waste_probe
+    assert ": [savedOverride, rememberedBase, originBase, DEFAULT_API_BASE]" in waste_probe
+
+
+def test_phone_pairing_link_uses_hash_token_and_is_consumed_on_startup():
+    api_core = (REPO_ROOT / "ui" / "src" / "data" / "apiCore.ts").read_text(encoding="utf-8")
+    owner_auth_api = (REPO_ROOT / "ui" / "src" / "data" / "ownerAuthApi.ts").read_text(encoding="utf-8")
+    owner_badge = (REPO_ROOT / "ui" / "src" / "components" / "OwnerAccessBadge.tsx").read_text(encoding="utf-8")
+    app = (REPO_ROOT / "ui" / "src" / "App.tsx").read_text(encoding="utf-8")
+    package_json = (REPO_ROOT / "ui" / "package.json").read_text(encoding="utf-8")
+    mobile_doc = (REPO_ROOT / "docs" / "MOBILE_APP.md").read_text(encoding="utf-8")
+
+    assert 'OWNER_TOKEN_HASH_KEY = "cas_owner_token"' in api_core
+    assert 'API_BASE_HASH_KEY = "cas_api_base"' in api_core
+    assert "function consumeOwnerTokenFromLocation(): boolean" in api_core
+    assert "consumeOwnerPairingFromUrl(window.location.href" in api_core
+    assert "new URLSearchParams(hash)" in api_core
+    assert "hashParams.get(OWNER_TOKEN_HASH_KEY)" in api_core
+    assert "hashParams.get(API_BASE_HASH_KEY)" in api_core
+    assert "setOwnerToken(token);" in api_core
+    assert "setApiBase(apiBase);" in api_core
+    assert "function isTrustedPairingApiBase(value: string): boolean" in api_core
+    assert '["http:", "https:"].includes(parsed.protocol)' in api_core
+    assert "parsed.username || parsed.password || parsed.search || parsed.hash" in api_core
+    assert 'parsed.pathname.replace(/\\/+$/, "") !== "/api/forex"' in api_core
+    assert "function isPrivateIpv4Host(host: string): boolean" in api_core
+    assert 'host.endsWith(".local")' in api_core
+    assert "params.delete(OWNER_TOKEN_HASH_KEY);" in api_core
+    assert "params.delete(API_BASE_HASH_KEY);" in api_core
+    assert "window.history.replaceState(null, \"\", next.toString());" in api_core
+    assert "consumeOwnerTokenFromLocation" in owner_auth_api
+    assert "consumeOwnerPairingFromUrl" in app
+    assert "consumeOwnerPairingFromUrl(window.location.href, { scrubCurrentLocation: true })" in app
+    assert 'const raw = pairing.page ?? new URLSearchParams(window.location.search).get("page");' in app
+    assert "pairing_urls?: string[]" in owner_auth_api
+    assert "pairing_api_bases?: string[]" in owner_auth_api
+    assert "direct_api_bases?: string[]" in owner_auth_api
+    assert "Phone pairing link" in owner_badge
+    assert "Phone PWA API base" in owner_badge
+    assert "APK/dev-server direct API base" in owner_badge
+    assert "Copy APK API base" in owner_badge
+    assert "Android wait/install-pair command" in owner_badge
+    assert "Copy install-pair" in owner_badge
+    assert "manualCopyValue" in owner_badge
+    assert "navigator.clipboard.writeText" in owner_badge
+    assert 'document.execCommand("copy")' in owner_badge
+    assert "Copy unavailable; use the text below." in owner_badge
+    assert "pairingUrls[0]" in owner_badge
+    assert "pairingApiBases[0]" in owner_badge
+    assert "directApiBases[0]" in owner_badge
+    assert "nativePairingUrls[0]" in owner_badge
+    assert "Owner Access copy buttons use a checked clipboard path" in mobile_doc
+    assert "APK/direct" in mobile_doc
+    assert '"qrcode"' in package_json
+    assert '"@types/qrcode"' in package_json
+    assert 'import QRCode from "qrcode";' not in owner_badge
+    assert 'await import("qrcode")' in owner_badge
+    assert "QRCode.toDataURL(url" in owner_badge
+    assert "Scan to pair phone PWA" in owner_badge
+    assert "Scan after APK install" in owner_badge
+    assert "api.qrserver.com" not in owner_badge
+    assert "generated locally in the browser" in mobile_doc
 
 
 def test_dashboard_route_fallback_uses_instant_live_cockpit_shell():
@@ -1670,8 +3307,10 @@ def test_dashboard_route_mounts_hydrator_without_startup_delay():
     hydrator_effect = app.split('if (page === "dashboard") {', 1)[1].split("}, [page]);", 1)[0]
 
     assert 'if (page === "dashboard") {' in app
+    assert "const [initialPage] = useState<Page>(() => initialPageFromUrl());" in app
+    assert "const [page, setPageState] = useState<Page>(initialPage);" in app
     assert "const [dashboardHydratorMounted, setDashboardHydratorMounted] = useState(" in app
-    assert '() => initialPageFromUrl() === "dashboard",' in app
+    assert '() => initialPage === "dashboard",' in app
     assert "setDashboardHydratorMounted(true);" in app
     assert "DASHBOARD_FAST_LANE_FETCH_DELAY_MS = 50" in app
     assert "BACKGROUND_DASHBOARD_HYDRATOR_IDLE_TIMEOUT_MS = 2_200" in app
@@ -1753,6 +3392,8 @@ def test_dashboard_fast_cold_cache_returns_warming_without_blocking(monkeypatch)
 def test_dashboard_startup_prewarms_shell_and_fast_caches(monkeypatch):
     started: list[str] = []
     monkeypatch.setattr(api_server, "_dashboard_cache_disabled_for_tests", lambda: False)
+    monkeypatch.setattr(api_server.runtime_topology_core, "require_runtime_owner", lambda: None)
+    monkeypatch.setattr(api_server.runtime_topology_core, "write_runtime_topology_status", lambda: None)
     monkeypatch.setattr(api_server, "_restore_owner_runtime_switches", lambda: started.append("restore"))
     monkeypatch.setattr(api_server, "_start_dashboard_shell_cache_refresh", lambda: started.append("shell") or True)
     monkeypatch.setattr(api_server, "_start_dashboard_fast_cache_refresh", lambda: started.append("fast") or True)
@@ -1854,6 +3495,7 @@ def test_startup_route_cache_refreshes_hot_read_only_packets(monkeypatch):
         "waste_real_candle_probe_latest": True,
         "stack_health_check": True,
         "operator_briefing": True,
+        "ai_operator_state": True,
     }
     assert "_STARTUP_ROUTE_CACHE_DELAY_SECONDS = 1.0" in (
         REPO_ROOT / "api" / "server.py"
@@ -1868,9 +3510,13 @@ def test_startup_route_cache_refreshes_hot_read_only_packets(monkeypatch):
             api_server._STARTUP_ROUTE_CACHE_DELAY_SECONDS
             + index * api_server._STARTUP_ROUTE_CACHE_STAGGER_SECONDS,
         )
-        for index, key in enumerate(key for key in result if key not in {"operator_briefing", "stack_health_check"})
-        if key not in {"operator_briefing", "stack_health_check"}
-    ]
+            for index, key in enumerate(
+                key
+                for key in result
+                if key not in {"operator_briefing", "stack_health_check", "ai_operator_state"}
+            )
+            if key not in {"operator_briefing", "stack_health_check", "ai_operator_state"}
+        ]
     captured_delays = [delay for _, _, delay in captured]
     assert captured_delays == sorted(captured_delays)
     assert captured_delays[0] == api_server._STARTUP_ROUTE_CACHE_DELAY_SECONDS
@@ -2014,17 +3660,36 @@ def test_hot_polling_get_routes_skip_synchronous_request_trace():
         "/api/forex/timeframes/NAS100",
         "/api/forex/autonomous-loop/health",
         "/api/forex/stack-health/check",
+        "/api/forex/notifications/backend",
         "/api/forex/notifications/subscriptions",
         "/api/forex/webhook-notifications/subscriptions",
+        "/api/forex/webhook-notifications/critical-readiness",
         "/api/forex/proof-control/state",
         "/api/forex/settings/authority-boundary",
         "/api/forex/settings/runtime-gates",
+        "/api/forex/settings/security-posture",
+        "/api/forex/settings/professional-claims",
+        "/api/forex/settings/spec-context",
+        "/api/forex/settings/legal-review-readiness",
+        "/api/forex/settings/legal-review-control",
+        "/api/forex/settings/professional-readiness",
+        "/api/forex/settings/public-launch-gate",
+        "/api/forex/settings/bypass-launch-gate",
+        "/api/forex/settings/ui-layout-contract",
+        "/api/forex/settings/economic-calendar",
         "/api/forex/pcba/cockpit",
         "/api/forex/readiness/live",
         "/api/forex/live-enable/authorization",
         "/api/forex/live-enable/state",
         "/api/forex/waste-loop/stage",
         "/api/forex/dispatch-loop/status",
+        "/api/forex/mt5/account",
+        "/api/forex/ai-operator/state",
+        "/api/forex/owner-auth/state",
+        "/api/forex/strategy/leads",
+        "/api/forex/strategy/forex-fury-replay-candidates",
+        "/api/forex/webhook-notifications/critical-audit",
+        "/api/forex/chart/window",
         "/api/forex/waste-loop-control/status/fast",
         "/api/forex/waste-loop-control/paper-sample-collector/scheduler",
         "/api/forex/broker-truth-monitor/status/fast",
@@ -2234,6 +3899,15 @@ def test_account_ledger_route_accepts_owner_selected_positive_seed():
     assert body["supported_time_filters"] == ["Seconds", "Minutes", "Hour", "Day", "Week", "Month", "Custom"]
     assert body["live_money_authorized"] is False
     assert body["payment_movement_authorized"] is False
+    assert isinstance(body.get("movement_source_truth"), dict)
+    assert body["movement_source_truth"]["price_source_status"] in {
+        "STATIC_SIMULATION_FALLBACK",
+        "MIXED_PROVIDER_AND_STATIC_FALLBACK",
+        "PROVIDER_ACTIVE",
+        "CACHE_WARMING",
+        "WARMING",
+    }
+    assert isinstance(body["movement_source_truth"].get("position_feed_detail"), str)
 
 
 def test_broker_synced_risk_preview_reruns_sizing_without_authority_or_append():
@@ -2284,6 +3958,36 @@ def test_movement_snapshot_route_exposes_account_and_market_streams():
     assert body["live_money_authorized"] is False
     assert body["payment_movement_authorized"] is False
     assert body["trading_edge_status"] == "OPEN"
+    assert body["market_data_provider_requested"] is True
+    assert body["market_data_provider"] != "none"
+    assert body["price_source_status"] in {
+        "PROVIDER_ACTIVE",
+        "MIXED_PROVIDER_AND_STATIC_FALLBACK",
+        "STATIC_SIMULATION_FALLBACK",
+        "CACHE_WARMING",
+    }
+    assert "static_fallback_symbols" in body
+    assert isinstance(body.get("movement_source_truth"), dict)
+    assert body["movement_source_truth"]["movement_stream_present"] is True
+    assert body["movement_source_truth"]["price_source_status"] in {
+        "PROVIDER_ACTIVE",
+        "MIXED_PROVIDER_AND_STATIC_FALLBACK",
+        "STATIC_SIMULATION_FALLBACK",
+        "CACHE_WARMING",
+    }
+    assert isinstance(body["movement_source_truth"].get("position_feed_detail"), str)
+
+    static_status, static_body = asyncio.run(_asgi_get("/api/forex/movement/snapshot?use_provider=false"))
+    assert static_status == 200
+    assert static_body["market_data_provider_requested"] is False
+    assert static_body["market_data_provider"] == "none"
+    assert static_body["price_source_status"] in {"STATIC_SIMULATION_FALLBACK", "CACHE_WARMING"}
+    assert isinstance(static_body.get("movement_source_truth"), dict)
+    assert static_body["movement_source_truth"]["movement_stream_present"] is True
+    assert static_body["movement_source_truth"]["price_source_status"] in {
+        "STATIC_SIMULATION_FALLBACK",
+        "CACHE_WARMING",
+    }
 
 
 def test_reconciliation_route_exposes_checks_without_authority():
@@ -2297,6 +4001,17 @@ def test_reconciliation_route_exposes_checks_without_authority():
     assert body["payment_movement_authorized"] is False
     assert body["trading_edge_status"] == "OPEN"
     assert body["live_trading_status"] == "CURRENTLY NOT LICENSED"
+    assert isinstance(body.get("movement_source_truth"), dict)
+    assert body["movement_source_truth"]["movement_stream_present"] in {True, False}
+    assert body["movement_source_truth"]["price_source_status"] in {
+        "STATIC_SIMULATION_FALLBACK",
+        "MIXED_PROVIDER_AND_STATIC_FALLBACK",
+        "PROVIDER_ACTIVE",
+        "CACHE_WARMING",
+        "LEDGER_ONLY",
+        "UNKNOWN",
+        None,
+    }
 
 def test_mt5_probe_status_route_distinguishes_latest_attempt_from_verified_receipt():
     status, receipt = asyncio.run(_asgi_get("/api/forex/mt/receipt/latest"))
@@ -2315,6 +4030,8 @@ def test_reconciliation_route_can_preview_broker_synced_accounting():
     assert status == 200
     assert body["report_kind"] == "cas_forex_account_reconciliation"
     assert "sync_to_broker_snapshot" in body
+    assert isinstance(body.get("movement_source_truth"), dict)
+    assert isinstance(body["movement_source_truth"].get("detail"), (str, type(None)))
     assert body["live_money_authorized"] is False
     assert body["payment_movement_authorized"] is False
     assert body["trading_edge_status"] == "OPEN"
@@ -2344,3 +4061,144 @@ def test_live_readiness_route_exposes_plain_english_operability_checklist():
     if synced["sync_to_broker_snapshot"]:
         synced_by_id = {check["gate_id"]: check for check in synced["checks"]}
         assert synced_by_id["account_reconciliation"]["status"] == "PASSED"
+
+
+def test_live_telemetry_client_and_ui_expose_position_source_truth():
+    api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    live_telemetry = (
+        REPO_ROOT / "ui" / "src" / "components" / "LiveTradesTelemetry.tsx"
+    ).read_text(encoding="utf-8")
+
+    assert "price_source?: string | null;" in api_client
+    assert "price_stale?: boolean;" in api_client
+    assert "stale_reason?: string | null;" in api_client
+    assert "age_seconds?: number | null;" in api_client
+    assert "age_days?: number | null;" in api_client
+    assert "position_source_label?: string | null;" in api_client
+    assert 'telemetry_source?: "mt5_demo_account_snapshot" | "mt5_live_account_snapshot" | "mt5_terminal_api_verifier" | "movement_stream" | "none";' in api_client
+    assert "telemetry_stale?: boolean;" in api_client
+    assert "telemetry_last_update_iso?: string | null;" in api_client
+    assert "price_source_status?: string | null;" in api_client
+    assert "position_feed_label?: string;" in api_client
+    assert "position_feed_detail?: string;" in api_client
+    assert "broker_ticket_position_count?: number;" in api_client
+    assert "static_position_count?: number;" in api_client
+    assert "movement_source_truth?: MovementSourceTruthSnapshot | null;" in api_client
+
+    assert "Source update" in live_telemetry
+    assert "Response built" in live_telemetry
+    assert "Position feed" in live_telemetry
+    assert "Broker-ticket rows" in live_telemetry
+    assert "Static rows" in live_telemetry
+    assert "snapshot?.movement_source_truth ?? snapshot?.data_freshness.movement_source" in live_telemetry
+    assert "movementTruth?.position_feed_label" in live_telemetry
+    assert "movementTruth?.position_feed_detail" in live_telemetry
+    assert "snapshot?.broker_ticket_position_count" in live_telemetry
+    assert "snapshot?.static_position_count" in live_telemetry
+    assert "Reported rows" in live_telemetry
+    assert "No MT5 broker positions are currently reported." in live_telemetry
+    assert "No paper/demo simulator proof rows are currently reported." in live_telemetry
+    assert "position feed:" in live_telemetry
+    assert "No broker or paper/demo movement snapshot is feeding this panel right now" in live_telemetry
+
+
+def test_money_affecting_failure_messages_state_when_nothing_changed():
+    trade_page = (REPO_ROOT / "ui" / "src" / "pages" / "TradePage.tsx").read_text(encoding="utf-8")
+    settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
+    live_operability = (
+        REPO_ROOT / "ui" / "src" / "components" / "LiveOperabilityPanel.tsx"
+    ).read_text(encoding="utf-8")
+
+    assert "Provider settings were not saved. Withdrawal and payout configuration remains unchanged" in trade_page
+    assert "Owner switch save failed. Live, broker, and payment authority remains at its prior state" in trade_page
+    assert "Broker emergency request failed before execution confirmation. No broker emergency action was confirmed through this app" in settings_page
+    assert "Broker sync preview unavailable; using the default readiness report only." in live_operability
+
+
+def test_operator_briefing_surface_marks_simulator_vs_mt5_position_truth():
+    operator_api = (REPO_ROOT / "ui" / "src" / "data" / "operatorBriefingApi.ts").read_text(encoding="utf-8")
+    shared_api = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    operator_card = (
+        REPO_ROOT / "ui" / "src" / "components" / "OperatorBriefingCard.tsx"
+    ).read_text(encoding="utf-8")
+
+    for text in (
+        "live_telemetry_source?: string;",
+        "live_telemetry_stale?: boolean;",
+        "live_telemetry_last_update_iso?: string | null;",
+        "live_price_source_status?: string | null;",
+        "live_position_feed_label?: string;",
+        "live_position_feed_detail?: string;",
+        "live_movement_source_truth?: MovementSourceTruthSnapshot | null;",
+        "broker_truth_monitor_status?: string;",
+        "broker_truth_ready_for_live?: boolean;",
+        "broker_truth_paper_force_latched?: boolean;",
+        "broker_truth_halt_reason_labels?: string[];",
+        "broker_truth_halt_reason_summary?: string;",
+        "broker_truth_position_protection_label?: string;",
+        "broker_truth_unprotected_position_count?: number;",
+        "broker_truth_position_protection_detail?: string | null;",
+    ):
+        assert text in operator_api
+        assert text in shared_api
+
+    assert "formatMovementSourceStatus" in operator_card
+    assert "movementSourceStatusTone" in operator_card
+    assert "live_movement_source_truth" in operator_card
+    assert "brokerTruthVariant" in operator_card
+    assert "positionProtectionVariant" in operator_card
+    assert "position feed:" in operator_card
+    assert "telemetry source:" in operator_card
+    assert "broker truth:" in operator_card
+    assert "halt reasons:" in operator_card
+    assert "Broker truth enforcement" in operator_card
+    assert "Paper-force is latched by broker truth" in operator_card
+    assert "Position protection:" in operator_card
+    assert "Position feed boundary" in operator_card
+
+
+def test_portfolio_risk_surface_marks_simulator_vs_mt5_position_truth():
+    api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    portfolio_card = (
+        REPO_ROOT / "ui" / "src" / "components" / "PortfolioRiskCard.tsx"
+    ).read_text(encoding="utf-8")
+
+    for text in (
+        "telemetry_source: string;",
+        "telemetry_stale: boolean;",
+        "telemetry_last_update_iso: string | null;",
+        "price_source_status: string | null;",
+        "position_feed_label: string;",
+        "position_feed_detail: string;",
+        "broker_ticket_position_count: number;",
+        "static_position_count: number;",
+        "movement_source_truth?: MovementSourceTruthSnapshot | null;",
+    ):
+        assert text in api_client
+
+    assert 'import { StatusChip } from "./StatusChip"' in portfolio_card
+    assert "formatMovementSourceStatus" in portfolio_card
+    assert "movementSourceStatusTone" in portfolio_card
+    assert "movement_source_truth" in portfolio_card
+    assert "Position Feed" in portfolio_card
+    assert "Price Source" in portfolio_card
+    assert "position feed:" in portfolio_card
+    assert "telemetry source:" in portfolio_card
+
+
+def test_runtime_topology_is_exposed_in_settings_and_api_client():
+    api_types = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
+    settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
+    server = (REPO_ROOT / "api" / "server.py").read_text(encoding="utf-8")
+    launcher = (REPO_ROOT / "scripts" / "run_api_server.py").read_text(encoding="utf-8")
+
+    assert "export interface RuntimeTopologyStatus" in api_types
+    assert 'apiGet<RuntimeTopologyStatus>("/runtime-topology")' in api_types
+    assert "<RuntimeTopologyPanel />" in settings_page
+    assert 'title="Runtime Process Topology"' in settings_page
+    assert 'label="API Workers"' in settings_page
+    assert 'prefix="/api/forex/runtime-topology"' in server
+    assert "validate_api_worker_count" in launcher
+    assert "requires exactly one stateful API worker" in (
+        REPO_ROOT / "cas_forex" / "runtime_topology.py"
+    ).read_text(encoding="utf-8")

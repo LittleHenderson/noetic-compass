@@ -180,6 +180,44 @@ def test_terminal_position_reconciliation_reports_current_mt4_terminal_gap(tmp_p
     assert "does not by itself execute live broker orders" in report["claim_boundary"]
 
 
+def test_terminal_position_reconciliation_does_not_require_inactive_mt4_for_mt5(tmp_path):
+    report = build_terminal_position_reconciliation_report(
+        terminal_bridge_report={
+            "report_kind": "cas_forex_terminal_bridge_supervisor_report",
+            "supervisor_status": "TERMINAL_BRIDGE_HEARTBEAT_MISSING",
+            "summary": {"heartbeat_status": "MISSING", "heartbeat_present": False, "live_trading_flag_visible": False},
+            "account_snapshot": {"account_snapshot_present": False, "latest_account_snapshot": None},
+        },
+        receipt_ingest_report={"report_kind": "cas_forex_terminal_receipt_ingest", "summary": {"pending_receipt_count": 0}, "receipt_records": []},
+        history_ingest_report={"report_kind": "cas_forex_terminal_history_ingest", "summary": {}, "history_records": [], "memory_updates": []},
+        memory_report={"report_kind": "cas_forex_agent_memory_report", "summary": {}, "memory_records": []},
+        mt4_history_export_verifier_report={
+            "report_kind": "cas_forex_mt4_history_export_verifier_report",
+            "verifier_status": "MT4_HISTORY_EXPORT_NEEDS_MT4_TERMINAL",
+            "summary": {"mailbox_ready": False},
+        },
+        active_execution_lane="mt5_direct",
+        output_dir=tmp_path / "reconciliation",
+        write_report=False,
+    )
+
+    assert report["reconciliation_status"] == "TERMINAL_POSITION_RECONCILIATION_READY_FLAT"
+    assert report["summary"]["active_execution_lane"] == "mt5_demo"
+    assert report["summary"]["mt4_lane_required"] is False
+    heartbeat = next(check for check in report["checks"] if check["check_id"] == "heartbeat_fresh")
+    assert heartbeat["status"] == "OK"
+    assert "not a readiness requirement" in heartbeat["detail"]
+
+    packet = build_terminal_receipt_recovery_packet(
+        reconciliation_report=report,
+        event_log_path=tmp_path / "empty-events.jsonl",
+        legacy_snapshot_dir=tmp_path / "legacy-archive",
+    )
+    assert packet["status"] == "TERMINAL_RECEIPT_RECOVERY_CLEAR"
+    assert packet["mt4_lane_required"] is False
+    assert packet["active_lane_heartbeat_ready"] is True
+
+
 def test_terminal_position_reconciliation_matches_open_terminal_position(tmp_path):
     mailbox_dir = tmp_path / "mailbox"
     cycle = run_agent_workflow_cycle(output_dir=tmp_path / "cycles", mailbox_dir=mailbox_dir)
@@ -271,7 +309,158 @@ def test_terminal_position_reconciliation_flags_unmatched_open_memory(tmp_path):
 
     assert report["reconciliation_status"] == "TERMINAL_POSITION_RECONCILIATION_MISMATCH"
     assert report["summary"]["unmatched_open_position_count"] == 1
+    assert report["summary"]["cas_memory_only_open_position_count"] == 1
     assert report["checks"][4]["status"] == "MISMATCH"
+
+
+def test_terminal_position_reconciliation_classifies_unattributed_broker_visible_position(tmp_path):
+    report = build_terminal_position_reconciliation_report(
+        terminal_bridge_report={
+            "report_kind": "cas_forex_terminal_bridge_supervisor_report",
+            "supervisor_status": "TERMINAL_BRIDGE_READY",
+            "summary": {"heartbeat_status": "FRESH", "heartbeat_present": True, "live_trading_flag_visible": False},
+            "account_snapshot": {
+                "account_snapshot_present": True,
+                "latest_account_snapshot": {
+                    "balance": 5000.0,
+                    "equity": 5000.0,
+                    "open_positions": [
+                        {
+                            "broker_ticket": "ticket-ext-1",
+                            "symbol": "EUR/USD",
+                            "direction": "LONG",
+                            "lots": 0.1,
+                            "open_price": 1.1,
+                        }
+                    ],
+                },
+            },
+        },
+        receipt_ingest_report={"report_kind": "cas_forex_terminal_receipt_ingest", "summary": {"pending_receipt_count": 0, "receipt_mismatch_count": 0}, "receipt_records": []},
+        history_ingest_report={"report_kind": "cas_forex_terminal_history_ingest", "summary": {"unmatched_history_count": 0}, "history_records": [], "memory_updates": []},
+        memory_report={
+            "report_kind": "cas_forex_agent_memory_report",
+            "summary": {"pending_receipt_count": 0, "receipt_mismatch_count": 0},
+            "memory_records": [],
+        },
+        mt4_history_export_verifier_report={"report_kind": "cas_forex_mt4_history_export_verifier_report", "verifier_status": "MT4_HISTORY_EXPORT_EMPTY", "summary": {}},
+        output_dir=tmp_path / "reconciliation",
+        write_report=False,
+    )
+
+    assert report["reconciliation_status"] == "TERMINAL_POSITION_RECONCILIATION_MISMATCH"
+    assert report["summary"]["terminal_unattributed_open_position_count"] == 1
+    assert report["summary"]["terminal_memory_gap_open_position_count"] == 0
+    classified = report["classified_unmatched_open_positions"][0]
+    assert classified["classification_status"] == "TERMINAL_UNATTRIBUTED_BROKER_POSITION"
+    assert classified["requires_owner_broker_review"] is True
+    assert "external/manual broker state" in classified["classification_detail"]
+    assert "cannot attribute" in report["next_action"].lower()
+
+
+def test_terminal_position_reconciliation_surfaces_unattributed_closed_history_as_warning(tmp_path):
+    report = build_terminal_position_reconciliation_report(
+        terminal_bridge_report={
+            "report_kind": "cas_forex_terminal_bridge_supervisor_report",
+            "supervisor_status": "TERMINAL_BRIDGE_READY",
+            "summary": {"heartbeat_status": "FRESH", "heartbeat_present": True, "live_trading_flag_visible": False},
+            "account_snapshot": {"account_snapshot_present": True, "latest_account_snapshot": {"balance": 5000.0, "equity": 5000.0}},
+        },
+        receipt_ingest_report={"report_kind": "cas_forex_terminal_receipt_ingest", "summary": {"pending_receipt_count": 0, "receipt_mismatch_count": 0}, "receipt_records": []},
+        history_ingest_report={
+            "report_kind": "cas_forex_terminal_history_ingest",
+            "summary": {
+                "history_record_count": 1,
+                "memory_update_count": 0,
+                "unmatched_history_count": 1,
+                "unmatched_unattributed_history_count": 1,
+                "unmatched_attributed_history_memory_gap_count": 0,
+            },
+            "history_records": [
+                {
+                    "history_id": "hist-1",
+                    "symbol": "EUR/USD",
+                    "direction": "LONG",
+                    "lots": 0.1,
+                    "profit_loss_account": 25.0,
+                }
+            ],
+            "memory_updates": [],
+            "classified_unmatched_history_records": [
+                {
+                    "history_id": "hist-1",
+                    "symbol": "EUR/USD",
+                    "direction": "LONG",
+                    "lots": 0.1,
+                    "profit_loss_account": 25.0,
+                    "classification_status": "TERMINAL_UNATTRIBUTED_BROKER_HISTORY",
+                    "classification_detail": "Closed broker/terminal history row has no CAS command or receipt identity. It may be an external/manual broker close or a missing CAS comment/identity field.",
+                }
+            ],
+        },
+        memory_report={"report_kind": "cas_forex_agent_memory_report", "summary": {"pending_receipt_count": 0, "receipt_mismatch_count": 0}, "memory_records": []},
+        mt4_history_export_verifier_report={"report_kind": "cas_forex_mt4_history_export_verifier_report", "verifier_status": "MT4_HISTORY_EXPORT_EMPTY", "summary": {}},
+        output_dir=tmp_path / "reconciliation",
+        write_report=False,
+    )
+
+    assert report["reconciliation_status"] == "TERMINAL_POSITION_RECONCILIATION_UNVERIFIABLE"
+    assert report["summary"]["unmatched_history_count"] == 1
+    assert report["summary"]["unmatched_unattributed_history_count"] == 1
+    assert report["summary"]["unmatched_attributed_history_memory_gap_count"] == 0
+    assert report["classified_unmatched_history_records"][0]["classification_status"] == (
+        "TERMINAL_UNATTRIBUTED_BROKER_HISTORY"
+    )
+    assert "do not by themselves prove a current open-position mismatch" in report["next_action"]
+
+
+def test_terminal_position_reconciliation_blocks_cas_attributed_history_memory_gap(tmp_path):
+    history_row = {
+        "history_id": "hist-cas-gap-1",
+        "command_id": "cas-command-1",
+        "broker_mode": "PAPER_MT5",
+        "symbol": "EUR/USD",
+        "direction": "LONG",
+        "lots": 0.1,
+        "profit_loss_account": -25.0,
+        "classification_status": "TERMINAL_ATTRIBUTED_HISTORY_MEMORY_GAP",
+    }
+    report = build_terminal_position_reconciliation_report(
+        terminal_bridge_report={
+            "report_kind": "cas_forex_terminal_bridge_supervisor_report",
+            "supervisor_status": "TERMINAL_BRIDGE_HEARTBEAT_MISSING",
+            "summary": {"heartbeat_status": "MISSING", "heartbeat_present": False, "live_trading_flag_visible": False},
+            "account_snapshot": {"account_snapshot_present": False, "latest_account_snapshot": None},
+        },
+        receipt_ingest_report={"report_kind": "cas_forex_terminal_receipt_ingest", "summary": {}, "receipt_records": []},
+        history_ingest_report={
+            "report_kind": "cas_forex_terminal_history_ingest",
+            "summary": {
+                "history_record_count": 1,
+                "memory_update_count": 0,
+                "unmatched_history_count": 1,
+                "unmatched_unattributed_history_count": 0,
+                "unmatched_attributed_history_memory_gap_count": 1,
+            },
+            "history_records": [history_row],
+            "memory_updates": [],
+            "classified_unmatched_history_records": [history_row],
+        },
+        memory_report={"report_kind": "cas_forex_agent_memory_report", "summary": {}, "memory_records": []},
+        mt4_history_export_verifier_report={
+            "report_kind": "cas_forex_mt4_history_export_verifier_report",
+            "verifier_status": "MT4_HISTORY_EXPORT_NEEDS_MT4_TERMINAL",
+            "summary": {},
+        },
+        active_execution_lane="mt5_direct",
+        output_dir=tmp_path / "reconciliation",
+        write_report=False,
+    )
+
+    assert report["reconciliation_status"] == "TERMINAL_POSITION_RECONCILIATION_MISMATCH"
+    history_check = next(check for check in report["checks"] if check["check_id"] == "closed_history_joined")
+    assert history_check["status"] == "MISMATCH"
+    assert history_check["value"]["active_unmatched_attributed_history_memory_gap"] == 1
 
 
 def test_terminal_receipt_recovery_packet_previews_pending_receipt_blocker(tmp_path):

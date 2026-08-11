@@ -10,15 +10,14 @@ be unit-tested with injected clocks, sleepers, and dispatch transports.
 Heavy imports (operator briefing inputs, push notification store) happen
 inside ``main`` so importing this script as a module stays cheap.
 
-Dispatch-backend gap:
-    Real Web Push delivery requires the ``pywebpush`` package, which is
-    intentionally NOT a dependency of this repo today. The launcher's
-    default dispatch closure calls
+Dispatch backend behavior:
+    The launcher's default dispatch closure calls
     ``cas_forex.push_notifications.dispatch_test_push`` with no
-    transport, so every dispatch returns the documented stub failure
-    (``"dispatch backend not installed (pywebpush)"``). When pywebpush
-    is installed, this launcher will gain a transport closure that
-    actually delivers the payload.
+    injected transport, which means the module resolves the local
+    ``pywebpush`` backend from the server-side VAPID config. If
+    ``pywebpush`` is missing or the VAPID private key / subject are not
+    configured, each dispatch reports the documented readiness error
+    instead of delivering.
 
 Operator usage::
 
@@ -156,10 +155,8 @@ def _build_dispatch_fn():
     """Return the production dispatch closure.
 
     Calls :func:`cas_forex.push_notifications.dispatch_test_push` with no
-    transport. Until ``pywebpush`` is installed and a VAPID-signed
-    transport closure is wired here, every dispatch returns the
-    documented stub failure (``"dispatch backend not installed
-    (pywebpush)")``. This is the production gap.
+    injected transport so the module can resolve the default
+    server-side backend from runtime VAPID config.
     """
 
     from cas_forex.push_notifications import (

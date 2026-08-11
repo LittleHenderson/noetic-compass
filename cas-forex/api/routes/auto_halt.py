@@ -9,13 +9,17 @@ from pydantic import BaseModel, Field
 
 from ..route_cache import cache_first_payload
 from api.data import auto_halt_status
-from cas_forex.auto_halt import CLAIM_BOUNDARY, AutoHaltSettings, clear_auto_halt
+from cas_forex.auto_halt import CLAIM_BOUNDARY, AutoHaltSettings, clear_auto_halt, manual_emergency_stop
 
 router = APIRouter()
 
 
 class ClearAutoHaltRequest(BaseModel):
     reason: str = Field(default="OWNER_CLEAR", max_length=200)
+
+
+class EmergencyStopRequest(BaseModel):
+    reason: str = Field(default="OWNER_EMERGENCY_STOP", max_length=200)
 
 
 @router.get("/status")
@@ -56,4 +60,14 @@ async def post_clear_auto_halt(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     report = auto_halt_status(persist=False)
     report["clear_state"] = state
+    return report
+
+
+@router.post("/emergency-stop")
+async def post_emergency_stop(body: EmergencyStopRequest) -> dict[str, Any]:
+    """Immediately latch auto-halt from an explicit owner emergency stop."""
+    state = manual_emergency_stop(reason=body.reason)
+    report = auto_halt_status(persist=False)
+    report["emergency_stop_state"] = state
+    report["emergency_stop_applied"] = True
     return report

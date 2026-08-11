@@ -259,6 +259,79 @@ def test_reject_on_margin_utilization_cap() -> None:
     assert "max_margin_utilization_pct" in decision.blocking_caps
 
 
+def test_reject_on_would_be_margin_utilization_from_proposed_margin() -> None:
+    snapshot = _populated_snapshot(
+        total_lots=1.0,
+        eurusd_lots=1.0,
+        eurusd_count=1,
+        open_count=1,
+        equity=1_000.0,
+        free_margin=400.0,
+        margin_util=60.0,
+    )
+    caps = RiskCapConfig(
+        max_total_exposure_lots=None,
+        max_concentration_pct=None,
+        max_margin_utilization_pct=70.0,
+        max_positions_per_symbol=None,
+        max_open_position_count=None,
+        max_drawdown_pct_from_equity_peak=None,
+        max_floating_loss_usd=None,
+    )
+
+    decision = evaluate_proposed_intent(
+        proposed_intent={
+            **_BASE_INTENT,
+            "estimated_margin_required_usd": 150.0,
+        },
+        portfolio_snapshot=snapshot,
+        caps=caps,
+    )
+
+    assert decision.accepted is False
+    assert "max_margin_utilization_pct" in decision.blocking_caps
+    assert "would become 75%" in decision.plain_english_reason
+    assert decision.portfolio_snapshot_summary["proposed_margin_required_usd"] == 150.0
+    assert decision.portfolio_snapshot_summary["would_be_margin_utilization_pct"] == 75.0
+
+
+def test_reject_when_broker_aware_free_margin_would_turn_negative() -> None:
+    snapshot = _populated_snapshot(
+        total_lots=1.0,
+        eurusd_lots=1.0,
+        eurusd_count=1,
+        open_count=1,
+        equity=1_000.0,
+        free_margin=50.0,
+        margin_util=95.0,
+    )
+    caps = RiskCapConfig(
+        max_total_exposure_lots=None,
+        max_concentration_pct=None,
+        max_margin_utilization_pct=None,
+        max_positions_per_symbol=None,
+        max_open_position_count=None,
+        max_drawdown_pct_from_equity_peak=None,
+        max_floating_loss_usd=None,
+    )
+
+    decision = evaluate_proposed_intent(
+        proposed_intent={
+            **_BASE_INTENT,
+            "estimated_margin_required_usd": 120.0,
+            "estimated_free_margin_after_usd": -70.0,
+        },
+        portfolio_snapshot=snapshot,
+        caps=caps,
+    )
+
+    assert decision.accepted is False
+    assert "insufficient_free_margin" in decision.blocking_caps
+    assert "free margin would become -$70.00 from $50.00" in decision.plain_english_reason
+    assert decision.portfolio_snapshot_summary["proposed_margin_required_usd"] == 120.0
+    assert decision.portfolio_snapshot_summary["proposed_free_margin_after_usd"] == -70.0
+
+
 # ---------------------------------------------------------------------------
 # 6. REJECT on positions-per-symbol.
 # ---------------------------------------------------------------------------
@@ -343,6 +416,38 @@ def test_reject_on_drawdown_cap() -> None:
     )
     assert decision.accepted is False
     assert "max_drawdown_pct_from_equity_peak" in decision.blocking_caps
+
+
+def test_reject_on_floating_loss_cap_from_expected_stop_risk() -> None:
+    snapshot = _populated_snapshot(
+        total_lots=1.0,
+        eurusd_lots=1.0,
+        eurusd_count=1,
+        open_count=1,
+        floating_pnl=-80.0,
+    )
+    caps = RiskCapConfig(
+        max_total_exposure_lots=None,
+        max_concentration_pct=None,
+        max_margin_utilization_pct=None,
+        max_positions_per_symbol=None,
+        max_open_position_count=None,
+        max_drawdown_pct_from_equity_peak=None,
+        max_floating_loss_usd=100.0,
+    )
+
+    decision = evaluate_proposed_intent(
+        proposed_intent={
+            **_BASE_INTENT,
+            "expected_loss_usd": 30.0,
+        },
+        portfolio_snapshot=snapshot,
+        caps=caps,
+    )
+
+    assert decision.accepted is False
+    assert "max_floating_loss_usd" in decision.blocking_caps
+    assert "floating loss could reach -$110.00" in decision.plain_english_reason
 
 
 # ---------------------------------------------------------------------------
@@ -574,6 +679,7 @@ def test_default_caps_are_reasonable() -> None:
     assert DEFAULT_CAPS.max_drawdown_pct_from_equity_peak == 15.0
     # max_floating_loss_usd is intentionally None by default.
     assert DEFAULT_CAPS.max_floating_loss_usd is None
+    assert DEFAULT_CAPS.max_risk_per_trade_pct is None
     # All numeric caps are strictly positive.
     for value in (
         DEFAULT_CAPS.max_total_exposure_lots,
@@ -584,6 +690,126 @@ def test_default_caps_are_reasonable() -> None:
         DEFAULT_CAPS.max_drawdown_pct_from_equity_peak,
     ):
         assert value is not None and value > 0
+
+
+def test_per_trade_stop_risk_cap_blocks_from_attached_percent() -> None:
+    caps = RiskCapConfig(
+        max_total_exposure_lots=None,
+        max_concentration_pct=None,
+        max_margin_utilization_pct=None,
+        max_positions_per_symbol=None,
+        max_open_position_count=None,
+        max_drawdown_pct_from_equity_peak=None,
+        max_floating_loss_usd=None,
+        max_risk_per_trade_pct=0.5,
+    )
+    decision = evaluate_proposed_intent(
+        proposed_intent={**_BASE_INTENT, "risk_at_stop_usd": 60.0, "risk_at_stop_pct_equity": 0.6},
+        portfolio_snapshot=_empty_snapshot(),
+        caps=caps,
+    )
+
+    assert decision.accepted is False
+    assert decision.blocking_caps == ("max_risk_per_trade_pct",)
+    assert "0.600% of equity" in decision.plain_english_reason
+    assert decision.portfolio_snapshot_summary["proposed_risk_at_stop_usd"] == 60.0
+
+
+def test_per_trade_stop_risk_cap_derives_percent_from_dollars_and_equity() -> None:
+    caps = RiskCapConfig(
+        max_total_exposure_lots=None,
+        max_concentration_pct=None,
+        max_margin_utilization_pct=None,
+        max_positions_per_symbol=None,
+        max_open_position_count=None,
+        max_drawdown_pct_from_equity_peak=None,
+        max_floating_loss_usd=None,
+        max_risk_per_trade_pct=0.5,
+    )
+    decision = evaluate_proposed_intent(
+        proposed_intent={**_BASE_INTENT, "risk_at_stop_usd": 40.0},
+        portfolio_snapshot=_empty_snapshot(),
+        caps=caps,
+    )
+
+    assert decision.accepted is True
+    assert decision.portfolio_snapshot_summary["proposed_risk_at_stop_pct_equity"] == 0.4
+    assert "0.400% of equity" in decision.plain_english_reason
+
+
+def test_per_trade_cap_uses_higher_dollar_derived_percent_over_claimed_percent() -> None:
+    caps = RiskCapConfig(
+        max_total_exposure_lots=None,
+        max_concentration_pct=None,
+        max_margin_utilization_pct=None,
+        max_positions_per_symbol=None,
+        max_open_position_count=None,
+        max_drawdown_pct_from_equity_peak=None,
+        max_floating_loss_usd=None,
+        max_risk_per_trade_pct=0.5,
+    )
+    decision = evaluate_proposed_intent(
+        proposed_intent={
+            **_BASE_INTENT,
+            "risk_at_stop_usd": 100.0,
+            "risk_at_stop_pct_equity": 0.01,
+        },
+        portfolio_snapshot=_empty_snapshot(),
+        caps=caps,
+    )
+
+    assert decision.accepted is False
+    assert decision.blocking_caps == ("max_risk_per_trade_pct",)
+    assert decision.portfolio_snapshot_summary["proposed_risk_at_stop_pct_equity"] == 1.0
+    assert "1.000% of equity" in decision.plain_english_reason
+
+
+def test_dedicated_compound_slot_requires_verified_authorization() -> None:
+    caps = RiskCapConfig(
+        max_total_exposure_lots=1.0,
+        max_concentration_pct=None,
+        max_margin_utilization_pct=None,
+        max_positions_per_symbol=1,
+        max_open_position_count=4,
+        max_drawdown_pct_from_equity_peak=None,
+        max_floating_loss_usd=None,
+        max_risk_per_trade_pct=0.5,
+        max_compound_units=1,
+    )
+    snapshot = _populated_snapshot(
+        total_lots=0.10,
+        eurusd_lots=0.10,
+        eurusd_count=1,
+        open_count=1,
+    )
+    intent = {
+        **_BASE_INTENT,
+        "lots": 0.01,
+        "is_compound_add": True,
+        "parent_broker_ticket": "7001",
+        "risk_at_stop_pct_equity": 0.1,
+    }
+
+    unverified = evaluate_proposed_intent(
+        proposed_intent=intent,
+        portfolio_snapshot=snapshot,
+        caps=caps,
+    )
+    verified = evaluate_proposed_intent(
+        proposed_intent=intent,
+        portfolio_snapshot=snapshot,
+        caps=caps,
+        compound_slot_authorized=True,
+    )
+
+    assert unverified.accepted is False
+    assert unverified.blocking_caps == ("max_positions_per_symbol",)
+    assert unverified.portfolio_snapshot_summary["compound_slot_authorized"] is False
+    assert unverified.portfolio_snapshot_summary["effective_max_positions_per_symbol"] == 1
+    assert verified.accepted is True
+    assert verified.portfolio_snapshot_summary["compound_slot_authorized"] is True
+    assert verified.portfolio_snapshot_summary["compound_slot_allowance"] == 1
+    assert verified.portfolio_snapshot_summary["effective_max_positions_per_symbol"] == 2
 
 
 # ---------------------------------------------------------------------------

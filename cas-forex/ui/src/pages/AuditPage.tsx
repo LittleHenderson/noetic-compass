@@ -2,6 +2,7 @@
 
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
+import { CONVICTION_SCORE_TITLE, formatConvictionScore } from "../util/conviction";
 import type { DashboardState } from "../types/evidence";
 import "./AuditPage.css";
 
@@ -191,9 +192,9 @@ export function AuditPage({ state }: AuditPageProps) {
                 <StatusChip label={d.direction} variant="info" size="sm" />
               </div>
               <div className="trace-field">
-                <span className="field-label">Confidence</span>
-                <span className="field-value mono">
-                  {(d.confidence * 100).toFixed(1)}%
+                <span className="field-label">Conviction</span>
+                <span className="field-value mono" title={CONVICTION_SCORE_TITLE}>
+                  {formatConvictionScore(d.confidence)}
                 </span>
               </div>
               <div className="trace-field">

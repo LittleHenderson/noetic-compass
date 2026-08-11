@@ -17,9 +17,17 @@ from urllib.parse import urlsplit
 from fastapi import FastAPI
 
 from api.routes import webhook_notifications as route_module
+from cas_forex.external_monitoring_control import set_override_path_for_tests
 from cas_forex.webhook_notifications import (
     WebhookDispatchResult,
     WebhookSubscriptionStore,
+    build_webhook_subscription,
+    webhook_subscription_id,
+)
+from cas_forex.critical_notifications import (
+    CriticalNotificationEvent,
+    emit_critical_notification,
+    set_critical_notification_context_for_tests,
 )
 
 
@@ -81,6 +89,7 @@ async def _asgi(
 def _isolate(tmp_path) -> tuple[FastAPI, WebhookSubscriptionStore]:
     """Build a fresh app + isolate the route's store under tmp_path."""
     store = WebhookSubscriptionStore(path=tmp_path / "subscriptions.jsonl")
+    set_override_path_for_tests(tmp_path / "runtime" / "external-monitoring-overrides.json")
     route_module.set_store_for_testing(store)
     route_module.set_transport_for_testing(None)
     return _build_app(), store
@@ -104,7 +113,7 @@ def test_subscribe_missing_url_returns_400(tmp_path):
 
 
 def test_subscribe_then_list_returns_one(tmp_path):
-    app, _ = _isolate(tmp_path)
+    app, store = _isolate(tmp_path)
 
     status, body = asyncio.run(
         _asgi(
@@ -119,8 +128,13 @@ def test_subscribe_then_list_returns_one(tmp_path):
     )
     assert status == 200
     assert body["total_subscriptions"] == 1
-    assert body["subscription"]["webhook_url"] == "https://hooks.slack.example/services/A/B/C"
+    assert body["subscription"]["subscription_id"] == webhook_subscription_id("https://hooks.slack.example/services/A/B/C")
+    assert body["subscription"]["webhook_url_masked"] == "https://hooks.slack.example/..."
     assert body["subscription"]["label"] == "slack-trades"
+    assert "https://hooks.slack.example/services/A/B/C" not in json.dumps(body)
+    persisted = store.path.read_text(encoding="utf-8")
+    assert "https://hooks.slack.example/services/A/B/C" not in persisted
+    assert '"encrypted": true' in persisted.lower()
 
     status, body = asyncio.run(
         _asgi(app, "/api/forex/webhook-notifications/subscriptions")
@@ -128,13 +142,15 @@ def test_subscribe_then_list_returns_one(tmp_path):
     assert status == 200
     assert body["total_subscriptions"] == 1
     assert len(body["subscriptions"]) == 1
-    assert body["subscriptions"][0]["webhook_url"] == "https://hooks.slack.example/services/A/B/C"
+    assert body["subscriptions"][0]["subscription_id"] == webhook_subscription_id("https://hooks.slack.example/services/A/B/C")
+    assert body["subscriptions"][0]["webhook_url_masked"] == "https://hooks.slack.example/..."
+    assert "https://hooks.slack.example/services/A/B/C" not in json.dumps(body)
 
 
 def test_subscribe_then_unsubscribe_then_list_returns_zero(tmp_path):
     app, _ = _isolate(tmp_path)
 
-    asyncio.run(
+    _, subscribe_body = asyncio.run(
         _asgi(
             app,
             "/api/forex/webhook-notifications/subscribe",
@@ -148,7 +164,7 @@ def test_subscribe_then_unsubscribe_then_list_returns_zero(tmp_path):
             app,
             "/api/forex/webhook-notifications/unsubscribe",
             method="POST",
-            body={"webhook_url": "https://hooks.example/abc"},
+            body={"subscription_id": subscribe_body["subscription"]["subscription_id"]},
         )
     )
     assert status == 204
@@ -186,6 +202,120 @@ def test_test_with_no_subscriptions_returns_empty_results(tmp_path):
     )
     assert status == 200
     assert body == {"results": []}
+
+
+def test_critical_audit_route_returns_recent_events(tmp_path):
+    app, store = _isolate(tmp_path)
+    set_critical_notification_context_for_tests(
+        audit_path=tmp_path / "critical-notifications.jsonl",
+        store=store,
+        transport=lambda url, json, headers, timeout: WebhookDispatchResult(
+            webhook_url=url,
+            success=True,
+            status_code=200,
+            error_message=None,
+            response_snippet="ok",
+        ),
+    )
+    try:
+        store.add(build_webhook_subscription(webhook_url="https://hooks.example/route", label="ops"))
+        emit_critical_notification(
+            CriticalNotificationEvent(
+                event_kind="ROUTE_EVENT",
+                title="Route event",
+                body="A route-level event was observed.",
+            ),
+            source="test.route",
+        )
+
+        status, body = asyncio.run(
+            _asgi(app, "/api/forex/webhook-notifications/critical-audit")
+        )
+    finally:
+        set_critical_notification_context_for_tests()
+
+    assert status == 200
+    assert body["report_kind"] == "cas_forex_critical_notification_audit"
+    assert body["rows"][0]["event"]["event_kind"] == "ROUTE_EVENT"
+    assert body["rows"][0]["dispatch_results"][0]["webhook_url_masked"] == "https://hooks.example/..."
+    assert "https://hooks.example/route" not in json.dumps(body)
+
+
+def test_critical_readiness_route_reports_delivery_state(tmp_path):
+    app, store = _isolate(tmp_path)
+    set_critical_notification_context_for_tests(
+        audit_path=tmp_path / "critical-notifications.jsonl",
+        store=store,
+        transport=lambda url, json, headers, timeout: WebhookDispatchResult(
+            webhook_url=url,
+            success=True,
+            status_code=200,
+            error_message=None,
+            response_snippet="ok",
+        ),
+    )
+    try:
+        store.add(build_webhook_subscription(webhook_url="https://hooks.example/ready", label="ops"))
+        emit_critical_notification(
+            CriticalNotificationEvent(
+                event_kind="READY_ROUTE_EVENT",
+                title="Ready route event",
+                body="A route-level event was observed.",
+            ),
+            source="test.route.ready",
+        )
+        status, body = asyncio.run(
+            _asgi(app, "/api/forex/webhook-notifications/critical-readiness")
+        )
+    finally:
+        set_critical_notification_context_for_tests()
+
+    assert status == 200
+    assert body["report_kind"] == "cas_forex_critical_notification_delivery_readiness"
+    assert body["status"] == "DELIVERY_CONFIRMED"
+    assert body["subscription_count"] == 1
+    assert body["recent_dispatch_success_count"] >= 1
+
+
+def test_critical_test_route_emits_audited_delivery_attempt(tmp_path):
+    app, _ = _isolate(tmp_path)
+
+    asyncio.run(
+        _asgi(
+            app,
+            "/api/forex/webhook-notifications/subscribe",
+            method="POST",
+            body={
+                "webhook_url": "https://hooks.example/critical-test",
+                "label": "ops",
+            },
+        )
+    )
+
+    class _Resp:
+        def __init__(self):
+            self.status_code = 200
+            self.text = "ok"
+
+    route_module.set_transport_for_testing(lambda url, json, headers, timeout: _Resp())
+    try:
+        status, body = asyncio.run(
+            _asgi(
+                app,
+                "/api/forex/webhook-notifications/critical-test",
+                method="POST",
+                body={},
+            )
+        )
+    finally:
+        route_module.set_transport_for_testing(None)
+
+    assert status == 200
+    assert body["report_kind"] == "cas_forex_critical_notification_test"
+    assert body["status"] == "DISPATCHED"
+    assert body["audit"]["event"]["event_kind"] == "OFFSCREEN_ALERT_TEST"
+    assert body["audit"]["dispatch_success_count"] == 1
+    assert body["readiness"]["status"] == "DELIVERY_CONFIRMED"
 
 
 def test_test_with_injected_transport_reports_success(tmp_path):
@@ -230,11 +360,13 @@ def test_test_with_injected_transport_reports_success(tmp_path):
     assert status == 200
     assert len(body["results"]) == 1
     only = body["results"][0]
-    assert only["webhook_url"] == "https://hooks.example/abc"
+    assert only["subscription_id"] == webhook_subscription_id("https://hooks.example/abc")
+    assert only["webhook_url_masked"] == "https://hooks.example/..."
     assert only["success"] is True
     assert only["status_code"] == 200
     assert only["error_message"] is None
     assert only["response_snippet"] == "ok"
+    assert "https://hooks.example/abc" not in json.dumps(body)
 
     assert captured == [
         {
@@ -288,7 +420,8 @@ def test_test_label_filter_targets_only_matching_subscriptions(tmp_path):
         route_module.set_transport_for_testing(None)
 
     assert status == 200
-    assert [r["webhook_url"] for r in body["results"]] == ["https://hooks.example/slack"]
+    assert [r["webhook_url_masked"] for r in body["results"]] == ["https://hooks.example/..."]
+    assert [r["subscription_id"] for r in body["results"]] == [webhook_subscription_id("https://hooks.example/slack")]
     assert captured == ["https://hooks.example/slack"]
 
 

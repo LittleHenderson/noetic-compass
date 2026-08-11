@@ -17,7 +17,7 @@ from cas_forex.agent_message_bus import (
     load_open_agent_intents,
     make_agent_event,
 )
-from cas_forex.agent_state import run_agent_workflow_cycle
+from cas_forex.agent_state import render_agent_cycle_markdown, run_agent_workflow_cycle
 
 
 async def _asgi_get(path: str) -> tuple[int, dict[str, Any]]:
@@ -92,6 +92,15 @@ def test_agent_workflow_cycle_writes_append_only_event_journal(tmp_path):
     assert "TERMINAL_COMMAND_WRITTEN" in event_types
     assert "TERMINAL_RECEIPT_PENDING" in event_types
     assert event_journal["pending_receipt_count"] >= 1
+
+
+def test_agent_cycle_markdown_uses_conviction_score_not_raw_confidence(tmp_path):
+    report = run_agent_workflow_cycle(output_dir=tmp_path / "cycles", mailbox_dir=tmp_path / "mailbox")
+    markdown = render_agent_cycle_markdown(report)
+
+    assert "conviction_score" in markdown
+    assert "(not_win_probability)" in markdown
+    assert "confidence `" not in markdown
 
 
 def test_agent_message_bus_api_surfaces_summary_and_events(monkeypatch, tmp_path):

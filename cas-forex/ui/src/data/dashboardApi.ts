@@ -129,6 +129,8 @@ function mergeDashboardState(fallback: DashboardState, live: Partial<DashboardSt
     proofProgress: live.proofProgress ?? fallback.proofProgress,
     ownerControl: live.ownerControl ?? fallback.ownerControl,
     accountLedger: live.accountLedger ?? fallback.accountLedger,
+    accountHealth: live.accountHealth ?? fallback.accountHealth,
+    activeAccountTruth: live.activeAccountTruth ?? fallback.activeAccountTruth,
     movementStream: live.movementStream ?? fallback.movementStream,
     accountReconciliation: live.accountReconciliation ?? fallback.accountReconciliation,
     liveReadiness: live.liveReadiness ?? fallback.liveReadiness,

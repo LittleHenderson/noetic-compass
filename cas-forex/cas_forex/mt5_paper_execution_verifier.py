@@ -19,7 +19,7 @@ from typing import Any, Dict, Mapping, Optional
 
 from cas_forex.broker.mt5_bridge import MT5Bridge
 from cas_forex.config import config
-from cas_forex.instruments import broker_symbol, pip_multiplier, round_price
+from cas_forex.instruments import pip_multiplier, resolve_broker_symbol, round_price
 from cas_forex.mt5_terminal_api_verifier import build_mt5_terminal_api_verifier_report
 from cas_forex.schemas.forecast import Direction
 from cas_forex.schemas.order import BrokerOrderRequest, OrderStatus
@@ -305,7 +305,14 @@ def _build_probe_order(
 ) -> tuple[Dict[str, Any] | None, Dict[str, Any] | None, str | None]:
     if mt5 is None:
         return None, None, "MetaTrader5 Python package is unavailable."
-    mt5_symbol = broker_symbol(symbol)
+    resolution = resolve_broker_symbol(
+        symbol,
+        broker=mt5,
+        overrides=getattr(config, "mt5_symbol_overrides", ""),
+    )
+    if not resolution.selected_symbol:
+        return None, None, resolution.detail or f"MT5 symbol unresolved for {symbol}."
+    mt5_symbol = resolution.selected_symbol
     price = _current_price(mt5, mt5_symbol, direction)
     if price is None or price <= 0:
         return None, None, f"No usable MT5 tick price for {mt5_symbol}."
@@ -345,7 +352,14 @@ def _build_order_request_probe(
             if isinstance(order_request, BrokerOrderRequest)
             else BrokerOrderRequest.model_validate(dict(order_request))
         )
-        mt5_symbol = broker_symbol(order.symbol)
+        resolution = resolve_broker_symbol(
+            order.symbol,
+            broker=mt5,
+            overrides=getattr(config, "mt5_symbol_overrides", ""),
+        )
+        if not resolution.selected_symbol:
+            return None, None, resolution.detail or f"MT5 symbol unresolved for {order.symbol}."
+        mt5_symbol = resolution.selected_symbol
         current_price = _current_price(mt5, mt5_symbol, order.direction)
         if order.price <= 0:
             if current_price is None or current_price <= 0:

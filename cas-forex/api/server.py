@@ -13,7 +13,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.concurrency import run_in_threadpool
 from .data import dashboard_fast_state, dashboard_shell_state, dashboard_state
 from .route_cache import cached_payload_snapshot, run_serial_refresh, start_cache_refresh
-from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health, strategy_comparison, daily_report, stack_health, operator_audit, order_dispatch, money_movement, broker_control, assistant, risk_control, live_enable, chart, dispatch_loop, mt5_live, proof_control, mt4_control, loop_stage, waste_loop_control, ai_control_authority, auto_halt, broker_truth_monitor, broker_reality, live_pilot, live_recovery, live_money, live_order_dry_run, ai_operator, owner_auth, owner_command
+from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, external_monitoring, system_health, strategy_comparison, daily_report, stack_health, operator_audit, order_dispatch, money_movement, broker_control, assistant, risk_control, live_enable, chart, dispatch_loop, mt5_live, proof_control, mt4_control, loop_stage, waste_loop_control, ai_control_authority, auto_halt, broker_truth_monitor, broker_reality, live_pilot, live_recovery, live_money, live_order_dry_run, ai_operator, ai_hedge_management, owner_auth, owner_command, mobile, broker_emergency, runtime_topology as runtime_topology_route
+from cas_forex import runtime_topology as runtime_topology_core
 
 app = FastAPI(title="CAS Forex API", version="0.1.0")
 
@@ -342,10 +343,40 @@ app.add_middleware(
 @app.on_event("startup")
 async def warm_dashboard_fast_cache() -> None:
     if not _dashboard_cache_disabled_for_tests():
+        runtime_topology_core.require_runtime_owner()
+        runtime_topology_core.write_runtime_topology_status()
         _restore_owner_runtime_switches()
         _start_dashboard_shell_cache_refresh()
         _start_dashboard_fast_cache_refresh()
         _start_startup_route_cache_refreshes()
+
+
+@app.on_event("shutdown")
+async def stop_owned_runtime_loops() -> None:
+    if _dashboard_cache_disabled_for_tests() or not runtime_topology_core.is_runtime_owner():
+        return
+    try:
+        from cas_forex.ai_operator_runner import stop_runner as stop_ai_operator
+
+        stop_ai_operator(persist_desired=False)
+    except Exception:
+        pass
+    try:
+        from cas_forex.dispatch_loop import stop_loop
+
+        stop_loop(persist_desired=False)
+    except Exception:
+        pass
+    try:
+        from cas_forex.proof_runner import stop_runner as stop_proof_runner
+
+        stop_proof_runner(persist_desired=False)
+    except Exception:
+        pass
+    try:
+        runtime_topology_core.write_runtime_topology_status(lifecycle="STOPPED")
+    finally:
+        runtime_topology_core.release_runtime_owner()
 
 
 def _start_startup_route_cache_refreshes() -> dict[str, bool]:
@@ -402,6 +433,10 @@ def _start_startup_route_cache_refreshes() -> dict[str, bool]:
         results["operator_briefing"] = operator_briefing.start_operator_briefing_cache_refresh()
     except Exception:
         results["operator_briefing"] = False
+    try:
+        results[ai_operator.OPERATOR_STATE_CACHE_KEY] = ai_operator.start_operator_state_cache_refresh()
+    except Exception:
+        results[ai_operator.OPERATOR_STATE_CACHE_KEY] = False
     return results
 
 
@@ -514,22 +549,45 @@ _TRACE_SKIP_GET_PATHS = {
     "/api/forex/risk-monitoring/portfolio",
     "/api/forex/autonomous-loop/health",
     "/api/forex/stack-health/check",
+    "/api/forex/notifications/backend",
     "/api/forex/notifications/subscriptions",
     "/api/forex/webhook-notifications/subscriptions",
+    "/api/forex/webhook-notifications/critical-readiness",
     "/api/forex/proof-control/state",
     "/api/forex/settings/authority-boundary",
     "/api/forex/settings/runtime-gates",
+    "/api/forex/settings/security-posture",
+    "/api/forex/settings/professional-claims",
+    "/api/forex/settings/spec-context",
+    "/api/forex/settings/ai-hedge-supervision",
+    "/api/forex/settings/ai-hedge-management-handoff",
+    "/api/forex/settings/legal-review-readiness",
+    "/api/forex/settings/legal-review-control",
+    "/api/forex/settings/professional-readiness",
+    "/api/forex/settings/public-launch-gate",
+    "/api/forex/settings/bypass-launch-gate",
+    "/api/forex/settings/ui-layout-contract",
+    "/api/forex/settings/economic-calendar",
+    "/api/forex/settings/operational-readiness",
+    "/api/forex/settings/emergency-controls",
     "/api/forex/pcba/cockpit",
     "/api/forex/readiness/live",
     "/api/forex/live-enable/authorization",
     "/api/forex/live-enable/state",
     "/api/forex/waste-loop/stage",
     "/api/forex/dispatch-loop/status",
+    "/api/forex/mt5/account",
+    "/api/forex/ai-operator/state",
+    "/api/forex/owner-auth/state",
+    "/api/forex/strategy/leads",
+    "/api/forex/strategy/forex-fury-replay-candidates",
+    "/api/forex/webhook-notifications/critical-audit",
     "/api/forex/waste-loop-control/status/fast",
     "/api/forex/waste-loop-control/paper-sample-collector/scheduler",
     "/api/forex/broker-truth-monitor/status/fast",
     "/api/forex/operator-briefing",
     "/api/forex/account/ledger",
+    "/api/forex/account/health",
     "/api/forex/movement/snapshot",
     "/api/forex/reconciliation/account",
     "/api/forex/account/broker-sync-risk-preview",
@@ -551,6 +609,7 @@ _TRACE_SKIP_GET_PATHS = {
 }
 _TRACE_SKIP_GET_PREFIXES = (
     "/api/forex/timeframes/",
+    "/api/forex/chart/",
 )
 
 
@@ -596,6 +655,7 @@ async def owner_auth_gate(request: Request, call_next):
     carries its own trading/money gates behind it."""
     if _owner_auth_enforced():
         from cas_forex import owner_auth
+        from cas_forex.route_permissions import evaluate_route_permission
         from fastapi.responses import JSONResponse
 
         decision = owner_auth.evaluate_request(
@@ -611,6 +671,27 @@ async def owner_auth_gate(request: Request, call_next):
                     "error": "owner_auth_required",
                     "detail": decision.reason,
                     "report_kind": "cas_forex_owner_auth_denied",
+                },
+            )
+        permission = evaluate_route_permission(
+            method=request.method,
+            path=request.url.path,
+            client_host=request.client.host if request.client else None,
+            headers=request.headers,
+        )
+        if not permission["allowed"]:
+            return JSONResponse(
+                status_code=int(permission.get("http_status_if_denied") or 403),
+                content={
+                    "error": "route_permission_denied",
+                    "detail": permission["reason"],
+                    "report_kind": "cas_forex_route_permission_denied",
+                    "route_category": permission["route_category"],
+                    "required_permission": permission["required_permission"],
+                    "role_key": permission["role_key"],
+                    "money_or_live_sensitive": permission["money_or_live_sensitive"],
+                    "typed_confirmation_required": permission["typed_confirmation_required"],
+                    "claim_boundary": permission["claim_boundary"],
                 },
             )
     return await call_next(request)
@@ -662,6 +743,7 @@ app.include_router(strategy_dev_actions.router, prefix="/api/forex/strategy-dev-
 app.include_router(operator_briefing.router, prefix="/api/forex/operator-briefing", tags=["operator-briefing"])
 app.include_router(risk_monitoring.router, prefix="/api/forex/risk-monitoring", tags=["risk-monitoring"])
 app.include_router(webhook_notifications.router, prefix="/api/forex/webhook-notifications", tags=["webhook-notifications"])
+app.include_router(external_monitoring.router, prefix="/api/forex/external-monitoring", tags=["external-monitoring"])
 app.include_router(system_health.router, prefix="/api/forex/system-health", tags=["system-health"])
 app.include_router(strategy_comparison.router, prefix="/api/forex/strategy-comparison", tags=["strategy-comparison"])
 app.include_router(daily_report.router, prefix="/api/forex/daily-report", tags=["daily-report"])
@@ -688,8 +770,12 @@ app.include_router(live_recovery.router, prefix="/api/forex/live-recovery", tags
 app.include_router(live_money.router, prefix="/api/forex/live-money", tags=["live-money"])
 app.include_router(live_order_dry_run.router, prefix="/api/forex/live-order-dry-run", tags=["live-order-dry-run"])
 app.include_router(ai_operator.router, prefix="/api/forex/ai-operator", tags=["ai-operator"])
+app.include_router(ai_hedge_management.router, prefix="/api/forex/ai-hedge-management", tags=["ai-hedge-management"])
 app.include_router(owner_auth.router, prefix="/api/forex/owner-auth", tags=["owner-auth"])
 app.include_router(owner_command.router, prefix="/api/forex/owner-command", tags=["owner-command"])
+app.include_router(mobile.router, prefix="/api/forex/mobile", tags=["mobile"])
+app.include_router(broker_emergency.router, prefix="/api/forex/broker-emergency", tags=["broker-emergency"])
+app.include_router(runtime_topology_route.router, prefix="/api/forex/runtime-topology", tags=["runtime-topology"])
 
 
 @app.get("/api/forex/dashboard/shell")
@@ -867,6 +953,26 @@ async def get_dashboard(refresh: bool = False):
 @app.get("/api/forex/health")
 async def health():
     return {"status": "healthy", "version": "0.1.0"}
+
+
+def _route_permission_inventory() -> list[dict[str, Any]]:
+    return [
+        {
+            "path": str(getattr(route, "path", "")),
+            "methods": sorted(str(method).upper() for method in (getattr(route, "methods", None) or [])),
+        }
+        for route in app.routes
+        if getattr(route, "path", None)
+    ]
+
+
+def _install_route_permission_inventory_provider() -> None:
+    from cas_forex.route_permissions import set_route_inventory_provider
+
+    set_route_inventory_provider(_route_permission_inventory)
+
+
+_install_route_permission_inventory_provider()
 
 
 # ---------------------------------------------------------------------------

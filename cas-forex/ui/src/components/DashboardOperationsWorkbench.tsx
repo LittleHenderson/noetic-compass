@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { GlassPanel } from "./GlassPanel";
 import type {
+  AutonomousMoneyMovementStatus,
   AutoHaltReport,
   BrokerTruthMonitorStatus,
   LiveOrderDryRunLatest,
@@ -84,6 +85,8 @@ const fetchMT5MarketDataDiagnostic = (...args: DeepApiArgs<"fetchMT5MarketDataDi
   callDashboardDeepApi("fetchMT5MarketDataDiagnostic", ...args);
 const fetchPayoutRecoveryStatus = (...args: DeepApiArgs<"fetchPayoutRecoveryStatus">) =>
   callDashboardDeepApi("fetchPayoutRecoveryStatus", ...args);
+const fetchAutonomousMoneyMovementStatus = (...args: DeepApiArgs<"fetchAutonomousMoneyMovementStatus">) =>
+  callDashboardDeepApi("fetchAutonomousMoneyMovementStatus", ...args);
 const fetchStrategyLeads = (...args: DeepApiArgs<"fetchStrategyLeads">) =>
   callDashboardDeepApi("fetchStrategyLeads", ...args);
 const fetchVerifiedProfitSweepPolicy = (...args: DeepApiArgs<"fetchVerifiedProfitSweepPolicy">) =>
@@ -106,6 +109,8 @@ const requestVerifiedProfitSweepCurrent = (...args: DeepApiArgs<"requestVerified
   callDashboardDeepApi("requestVerifiedProfitSweepCurrent", ...args);
 const runBrokerTruthMonitorOnce = (...args: DeepApiArgs<"runBrokerTruthMonitorOnce">) =>
   callDashboardDeepApi("runBrokerTruthMonitorOnce", ...args);
+const runAutonomousMoneyMovementOnce = (...args: DeepApiArgs<"runAutonomousMoneyMovementOnce">) =>
+  callDashboardDeepApi("runAutonomousMoneyMovementOnce", ...args);
 const runMT5MarketDataDiagnostic = (...args: DeepApiArgs<"runMT5MarketDataDiagnostic">) =>
   callDashboardDeepApi("runMT5MarketDataDiagnostic", ...args);
 const runWasteRealCandleProbe = (...args: DeepApiArgs<"runWasteRealCandleProbe">) =>
@@ -120,6 +125,8 @@ const stopDispatchLoop = (...args: DeepApiArgs<"stopDispatchLoop">) =>
   callDashboardDeepApi("stopDispatchLoop", ...args);
 const stopWasteLoop = (...args: DeepApiArgs<"stopWasteLoop">) =>
   callDashboardDeepApi("stopWasteLoop", ...args);
+const triggerAutoHaltEmergencyStop = (...args: DeepApiArgs<"triggerAutoHaltEmergencyStop">) =>
+  callDashboardDeepApi("triggerAutoHaltEmergencyStop", ...args);
 const updateVerifiedProfitSweepPolicy = (...args: DeepApiArgs<"updateVerifiedProfitSweepPolicy">) =>
   callDashboardDeepApi("updateVerifiedProfitSweepPolicy", ...args);
 
@@ -136,6 +143,9 @@ const LiveOperabilityPanel = lazy(() => import("./LiveOperabilityPanel").then((m
 const DASHBOARD_LEADS_FIRST_LOAD_MS = 1_200;
 const DASHBOARD_ACCOUNT_LEDGER_FIRST_LOAD_MS = 1_600;
 const DASHBOARD_MOVEMENT_FIRST_LOAD_MS = 2_100;
+const MONEY_MOVEMENT_CONFIRM_PHRASE = "CONFIRM MONEY MOVEMENT";
+const AUTONOMOUS_SWEEP_ARM_PHRASE = "ARM AUTONOMOUS PROFIT SWEEP";
+const LIVE_HANDOFF_CONFIRM_PHRASE = "CONFIRM LIVE HANDOFF DISPATCH";
 const DASHBOARD_RECONCILIATION_FIRST_LOAD_MS = 2_600;
 const DASHBOARD_LIVE_READINESS_FIRST_LOAD_MS = 3_100;
 const DASHBOARD_CORE_POLL_MS = 30_000;
@@ -199,6 +209,7 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
   const [sweepState, setSweepState] = useState<VerifiedProfitSweepPreview | null>(null);
   const [sweepRequest, setSweepRequest] = useState<VerifiedProfitSweepRequestResult | null>(null);
   const [payoutRecovery, setPayoutRecovery] = useState<PayoutRecoveryStatus | null>(state.payoutRecovery ?? null);
+  const [autonomousSweep, setAutonomousSweep] = useState<AutonomousMoneyMovementStatus | null>(null);
   const [liveRecovery, setLiveRecovery] = useState<LiveRecoveryReport | null>(state.liveRecovery ?? null);
   const [sweepActionMessage, setSweepActionMessage] = useState<string | null>(null);
   const [sweepLoading, setSweepLoading] = useState(false);
@@ -252,6 +263,8 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
     sweep_pct: 30,
     tax_reserve_pct: 20,
     min_sweep_usd: 25,
+    autonomous_enabled: false,
+    max_daily_sweep_usd: 0,
   });
   const deepCacheWarmFieldsRef = useRef<Set<string>>(new Set());
 
@@ -332,6 +345,8 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
             sweep_pct: sweepPolicyPacket.settings.sweep_pct,
             tax_reserve_pct: sweepPolicyPacket.settings.tax_reserve_pct,
             min_sweep_usd: sweepPolicyPacket.settings.min_sweep_usd,
+            autonomous_enabled: sweepPolicyPacket.settings.autonomous_enabled ?? false,
+            max_daily_sweep_usd: sweepPolicyPacket.settings.max_daily_sweep_usd ?? 0,
           });
         }
 
@@ -343,6 +358,8 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
               sweep_pct: sweepStatePacket.settings.sweep_pct,
               tax_reserve_pct: sweepStatePacket.settings.tax_reserve_pct,
               min_sweep_usd: sweepStatePacket.settings.min_sweep_usd,
+              autonomous_enabled: sweepStatePacket.settings.autonomous_enabled ?? false,
+              max_daily_sweep_usd: sweepStatePacket.settings.max_daily_sweep_usd ?? 0,
             });
           }
         }
@@ -443,7 +460,7 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
     });
 
     scheduleCorePoll(DASHBOARD_MOVEMENT_FIRST_LOAD_MS, () => {
-      void fetchMovementStream().then((movementState) => {
+      void fetchMovementStream(true).then((movementState) => {
         if (!cancelled && movementState) setLiveMovement(movementState);
       });
     });
@@ -545,7 +562,7 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
         return;
       }
       if (!cancelled) setSweepLoading(true);
-      let pending = 4;
+      let pending = 5;
       let sweepPolicyApplied = false;
       const finishSweepRead = () => {
         pending -= 1;
@@ -560,6 +577,8 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
             sweep_pct: policy.settings.sweep_pct,
             tax_reserve_pct: policy.settings.tax_reserve_pct,
             min_sweep_usd: policy.settings.min_sweep_usd,
+            autonomous_enabled: policy.settings.autonomous_enabled ?? false,
+            max_daily_sweep_usd: policy.settings.max_daily_sweep_usd ?? 0,
           });
         })
         .finally(finishSweepRead);
@@ -571,12 +590,19 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
             sweep_pct: preview.settings.sweep_pct,
             tax_reserve_pct: preview.settings.tax_reserve_pct,
             min_sweep_usd: preview.settings.min_sweep_usd,
+            autonomous_enabled: preview.settings.autonomous_enabled ?? false,
+            max_daily_sweep_usd: preview.settings.max_daily_sweep_usd ?? 0,
           });
         })
         .finally(finishSweepRead);
       void fetchPayoutRecoveryStatus()
         .then((recovery) => {
           if (!cancelled && recovery) setPayoutRecovery(recovery);
+        })
+        .finally(finishSweepRead);
+      void fetchAutonomousMoneyMovementStatus()
+        .then((status) => {
+          if (!cancelled && status) setAutonomousSweep(status);
         })
         .finally(finishSweepRead);
       void fetchLiveRecoveryStatus()
@@ -869,27 +895,67 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
   }
 
   async function refreshSweepState(nextPolicy?: VerifiedProfitSweepPolicy) {
-    const [policy, preview, recovery] = await Promise.all([
+    const [policy, preview, recovery, autonomy] = await Promise.all([
       nextPolicy ? Promise.resolve(nextPolicy) : fetchVerifiedProfitSweepPolicy(),
       fetchVerifiedProfitSweepState(),
       fetchPayoutRecoveryStatus(),
+      fetchAutonomousMoneyMovementStatus(),
     ]);
     if (policy) setSweepPolicy(policy);
     if (preview) setSweepState(preview);
     if (recovery) setPayoutRecovery(recovery);
+    if (autonomy) setAutonomousSweep(autonomy);
   }
 
   async function handleSaveSweepPolicy() {
     if (sweepSaving) return;
+    let authorityPhrase = "";
+    if (sweepDraft.autonomous_enabled && !sweepPolicy?.settings.autonomous_enabled) {
+      const typed = window.prompt(
+        `Type exactly "${AUTONOMOUS_SWEEP_ARM_PHRASE}" to grant standing AI payout authority inside this policy.`,
+        "",
+      );
+      if (typed === null) {
+        setSweepActionMessage("AUTONOMOUS_SWEEP_ARM_CANCELED");
+        return;
+      }
+      authorityPhrase = typed;
+    }
     setSweepSaving(true);
     setSweepActionMessage(null);
     const saved = await updateVerifiedProfitSweepPolicy({
       sweep_pct: clamp(sweepDraft.sweep_pct, 0, 100),
       tax_reserve_pct: clamp(sweepDraft.tax_reserve_pct, 0, 100),
       min_sweep_usd: Math.max(0, sweepDraft.min_sweep_usd),
-    });
+      autonomous_enabled: sweepDraft.autonomous_enabled,
+      max_daily_sweep_usd: sweepDraft.max_daily_sweep_usd > 0
+        ? sweepDraft.max_daily_sweep_usd
+        : null,
+    }, authorityPhrase);
+    if (saved.status === "CONFIRM_REQUIRED") {
+      setSweepActionMessage(`Type exactly "${saved.need_confirmation ?? AUTONOMOUS_SWEEP_ARM_PHRASE}" to arm autonomous sweeps.`);
+      setSweepSaving(false);
+      return;
+    }
     await refreshSweepState(saved);
     setSweepSaving(false);
+  }
+
+  async function handleRunAutonomousSweep() {
+    if (sweepRequesting) return;
+    setSweepRequesting(true);
+    setSweepActionMessage(null);
+    try {
+      const result = await runAutonomousMoneyMovementOnce();
+      setAutonomousSweep(result);
+      setSweepActionMessage(`${result.status ?? "UNKNOWN"}: ${result.detail ?? "Autonomous sweep cycle returned."}`);
+      if (result.result) setSweepRequest(result.result);
+      await refreshSweepState();
+    } catch (error) {
+      setSweepActionMessage(`AUTONOMOUS_SWEEP_FAILED: ${error instanceof Error ? error.message : String(error)}`);
+    } finally {
+      setSweepRequesting(false);
+    }
   }
 
   async function handleSweepRequest(confirm: boolean) {
@@ -898,28 +964,61 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
       setSweepActionMessage(payoutConfirmBlocker);
       return;
     }
+    let confirmPhrase = "";
+    if (confirm) {
+      const typed = window.prompt(
+        `Type exactly "${MONEY_MOVEMENT_CONFIRM_PHRASE}" to request verified-profit money movement.`,
+        "",
+      );
+      if (typed === null) {
+        setSweepActionMessage("OWNER_PAYOUT_CONFIRM_CANCELED");
+        return;
+      }
+      confirmPhrase = typed;
+    }
     setSweepActionMessage(null);
     setSweepRequesting(true);
-    const result = await requestVerifiedProfitSweepCurrent({
-      sweep_pct: clamp(sweepDraft.sweep_pct, 0, 100),
-      tax_reserve_pct: clamp(sweepDraft.tax_reserve_pct, 0, 100),
-      min_sweep_usd: Math.max(0, sweepDraft.min_sweep_usd),
-    }, confirm);
-    setSweepRequest(result);
-    setSweepState(result.preview);
-    await refreshSweepState();
-    setOwnerConfirmSweep(false);
-    setSweepRequesting(false);
+    try {
+      const result = await requestVerifiedProfitSweepCurrent({
+        sweep_pct: clamp(sweepDraft.sweep_pct, 0, 100),
+        tax_reserve_pct: clamp(sweepDraft.tax_reserve_pct, 0, 100),
+        min_sweep_usd: Math.max(0, sweepDraft.min_sweep_usd),
+        autonomous_enabled: sweepDraft.autonomous_enabled,
+        max_daily_sweep_usd: sweepDraft.max_daily_sweep_usd > 0
+          ? sweepDraft.max_daily_sweep_usd
+          : null,
+      }, confirm, confirmPhrase);
+      setSweepRequest(result);
+      if (result.preview) setSweepState(result.preview);
+      if (result.status === "CONFIRM_REQUIRED" && result.need_confirmation) {
+        setSweepActionMessage(`Type exactly "${result.need_confirmation}" to confirm money movement.`);
+      }
+      await refreshSweepState();
+      setOwnerConfirmSweep(false);
+    } catch (error) {
+      setSweepActionMessage(`SWEEP_REQUEST_FAILED: ${error instanceof Error ? error.message : String(error)}`);
+    } finally {
+      setSweepRequesting(false);
+    }
   }
 
   async function handleEmergencyStop() {
     if (emergencyStopping) return;
     setEmergencyStopping(true);
-    const results = await Promise.allSettled([stopWasteLoop(), stopDispatchLoop()]);
-    const wasteResult = results[0];
+    const results = await Promise.allSettled([
+      triggerAutoHaltEmergencyStop("OWNER_EMERGENCY_STOP_BUTTON"),
+      stopWasteLoop(),
+      stopDispatchLoop(),
+    ]);
+    const haltResult = results[0];
+    if (haltResult.status === "fulfilled") {
+      setAutoHalt(haltResult.value);
+      setAutoHaltMessage("MANUAL_EMERGENCY_STOP_LATCHED");
+    }
+    const wasteResult = results[1];
     if (wasteResult.status === "fulfilled") setWasteLoop(wasteResult.value);
     const failed = results.filter((result) => result.status === "rejected").length;
-    setEmergencyStatus(failed === 0 ? "STOP_SENT" : `STOP_PARTIAL_${failed}`);
+    setEmergencyStatus(failed === 0 ? "STOP_LATCHED_AND_SENT" : `STOP_PARTIAL_${failed}`);
     setEmergencyStopping(false);
   }
 
@@ -1134,7 +1233,9 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
     setLiveOrderDryRunBusy(true);
     try {
       const report = await runWasteRealCandleProbeDryRun({
-        volume: Math.max(0.001, Number(state.livePilot?.max_trade_lots ?? 0.01)),
+        volume: state.livePilot?.sizing_mode === "ABSOLUTE_LOTS"
+          ? Math.max(0.001, Number(state.livePilot.max_trade_lots ?? 0.01))
+          : 0.01,
       });
       setLiveOrderDryRunReport(report);
       setLiveOrderDryRun({
@@ -1208,9 +1309,22 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
     }
     setWasteEntryHandoffBusy(true);
     try {
-      const report = await dispatchWasteEntryDispatchHandoff(wasteEntryDispatchNotes, true, false);
+      let report = await dispatchWasteEntryDispatchHandoff(wasteEntryDispatchNotes, true, false);
+      if (report.status === "CONFIRM_REQUIRED") {
+        const need = report.need_confirmation ?? LIVE_HANDOFF_CONFIRM_PHRASE;
+        const typed = window.prompt(`Type exactly "${need}" to dispatch this live handoff.`, "");
+        if (typed === null) {
+          setWasteEntryHandoffMessage("WASTE_ENTRY_HANDOFF_CONFIRM_CANCELED");
+          return;
+        }
+        report = await dispatchWasteEntryDispatchHandoff(wasteEntryDispatchNotes, true, true, typed);
+      }
       setWasteEntryHandoff(report.handoff_status ?? report);
-      setWasteEntryHandoffMessage(report.status);
+      setWasteEntryHandoffMessage(
+        report.status === "CONFIRM_REQUIRED"
+          ? `Type exactly "${report.need_confirmation ?? LIVE_HANDOFF_CONFIRM_PHRASE}" to dispatch this live handoff.`
+          : report.status,
+      );
       const latest = await fetchLatestLiveOrderDryRun();
       if (latest) {
         setLiveOrderDryRun(latest);
@@ -1359,6 +1473,7 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
             currentLiveRecovery,
             currentPayoutRecovery,
             currentSweep,
+            autonomousSweep,
             emergencyStatus,
             emergencyStopping,
             formatAutoHaltValue,
@@ -1366,6 +1481,7 @@ export function DashboardOperationsWorkbench({ state }: DashboardOperationsWorkb
             handleEmergencyStop,
             handleRefreshAutoHalt,
             handleSaveSweepPolicy,
+            handleRunAutonomousSweep,
             handleSweepRequest,
             isLiveLedger,
             latestPayoutAttempt,

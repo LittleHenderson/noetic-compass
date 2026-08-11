@@ -65,6 +65,7 @@ def build_hourly_intraday_intents(
             reason="Top H1/M15 replay candidate is queued for intraday paper route review.",
             evidence_refs=_dedupe(evidence_refs),
             order_request=order.model_dump(mode="json"),
+            market_geometry_policy="REPLAY_TEMPLATE_REQUIRES_CURRENT_DIRECTION",
         )
     ]
 

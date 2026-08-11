@@ -23,6 +23,9 @@ def test_authority_boundary_defaults_pending_owner_enable():
     assert report.debit_card_bank_movement_status == NOT_LICENSED
     assert report.payout_automation_status == NOT_LICENSED
     assert report.trading_edge_status == OPEN
+    assert report.requested_mode == "PAPER"
+    assert report.live_mode_requested is False
+    assert report.execution_mode == "PAPER"
     assert report.can_place_live_orders is False
     assert report.can_create_broker_accept is False
     assert report.can_move_money is False
@@ -53,6 +56,15 @@ def test_authority_boundary_runtime_lock_reflects_live_gate(monkeypatch):
     assert locked.live_execution_runtime_locked is True
     assert locked.live_trading_status == NOT_LICENSED
 
+    # Requesting live mode is distinct from both paper operation and authorized
+    # live execution. The global UI must show this middle state honestly.
+    monkeypatch.setattr(config, "live_mode", True)
+    pending_live = build_authority_boundary_report()
+    assert pending_live.requested_mode == "LIVE"
+    assert pending_live.live_mode_requested is True
+    assert pending_live.execution_mode == "LIVE_BLOCKED"
+    assert pending_live.operating_mode == "OWNER_REQUESTED_LIVE_PENDING_GATES"
+
     # Owner fully authorizes live trading -> runtime unlocks and status flips to
     # AUTHORIZED. This proves NOT LICENSED was a current state, not permanent.
     monkeypatch.setattr(config, "owner_enable_live_trading", True)
@@ -76,6 +88,7 @@ def test_authority_boundary_runtime_lock_reflects_live_gate(monkeypatch):
     assert unlocked.live_execution_runtime_locked is False
     assert unlocked.live_trading_status == AUTHORIZED
     assert unlocked.can_place_live_orders is True
+    assert unlocked.execution_mode == "LIVE"
     # assert_authority_boundary checks consistency against the live gates.
     assert_authority_boundary(unlocked)
 
@@ -96,3 +109,43 @@ def test_assert_authority_boundary_rejects_unbacked_active_claim(monkeypatch):
     )
     with pytest.raises(ValueError):
         assert_authority_boundary(forged)
+
+
+def test_authority_boundary_keeps_money_flags_off_when_provider_is_simulated(monkeypatch):
+    from types import SimpleNamespace
+
+    from cas_forex import broker_reality
+
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
+    cfg = SimpleNamespace(
+        owner_enable_live_trading=False,
+        live_trading_licensed=False,
+        owner_enable_broker_accept=False,
+        owner_enable_auto_deposit=True,
+        owner_enable_bank_card_movement=True,
+        owner_enable_payout_automation=True,
+        mt5_login=0,
+        mt5_password="",
+        mt5_server="",
+        live_mode=False,
+        prefer_mt5=False,
+        mt5_path="",
+        personal_account_ack=False,
+        no_pooled_capital_ack=False,
+        account_type="personal",
+        selected_broker_id="hugosway",
+        broker_name="HUGOSWAY",
+        payment_provider="simulated",
+        payment_api_key="key",
+        payout_destination_id="dest-1",
+        payout_destination_allowlisted=True,
+    )
+
+    report = build_authority_boundary_report(config=cfg)
+
+    assert report.auto_deposit_status == AUTHORIZED
+    assert report.payout_automation_status == AUTHORIZED
+    assert report.can_auto_deposit is False
+    assert report.can_move_money is False
+    assert report.can_automate_payouts is False
+    assert any("simulated provider only proves the money-movement loop" in blocker.lower() for blocker in report.blockers)

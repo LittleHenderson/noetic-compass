@@ -52,6 +52,42 @@ from cas_forex.waste_runner import (
 )
 
 router = APIRouter()
+LIVE_HANDOFF_CONFIRM_PHRASE = "CONFIRM LIVE HANDOFF DISPATCH"
+
+
+def _live_handoff_confirmation_matches(confirm_phrase: str) -> bool:
+    return (confirm_phrase or "").strip() == LIVE_HANDOFF_CONFIRM_PHRASE
+
+
+def _live_handoff_confirm_required(
+    *,
+    confirm: bool,
+    confirm_phrase: str,
+    payload: dict[str, Any],
+    detail: str,
+) -> Optional[dict[str, Any]]:
+    if not runtime_gates.is_authorized("live_trading"):
+        return None
+    if confirm and _live_handoff_confirmation_matches(confirm_phrase):
+        return None
+    blocked = dict(payload)
+    blocked.update(
+        {
+            "status": "CONFIRM_REQUIRED",
+            "broker_touched": False,
+            "dispatched_to_bridge": False,
+            "dispatch_attempted": False,
+            "live_trading_authorized": True,
+            "need_confirmation": LIVE_HANDOFF_CONFIRM_PHRASE,
+            "confirm_phrase": LIVE_HANDOFF_CONFIRM_PHRASE,
+            "detail": (
+                f"{detail} Re-POST with ?confirm=true and "
+                f'confirm_phrase="{LIVE_HANDOFF_CONFIRM_PHRASE}" to dispatch through '
+                "the normal live, edge, pilot, risk, emergency-stop, audit, and broker gates."
+            ),
+        }
+    )
+    return blocked
 
 
 def _latest_live_order_dry_run_payload() -> dict[str, Any]:
@@ -294,9 +330,11 @@ async def post_live_order_dry_run(body: LiveOrderDryRunBody) -> dict[str, Any]:
         request = request_from_mapping(body.model_dump())
         return build_live_order_dry_run(
             request,
+            config=default_config,
             live_telemetry=body.live_telemetry,
             account_snapshot=body.account_snapshot,
             equity_peak=body.equity_peak,
+            bridge=select_bridge(default_config),
             audit=LiveOrderDryRunAuditLog(DEFAULT_AUDIT_PATH),
         )
     except ValueError as exc:
@@ -310,9 +348,11 @@ async def post_compound_add_order_dry_run(body: CompoundAddDryRunBody) -> dict[s
         request = compound_add_request_from_mapping(body.model_dump())
         return build_compound_add_order_dry_run(
             request,
+            config=default_config,
             live_telemetry=body.live_telemetry,
             account_snapshot=body.account_snapshot,
             equity_peak=body.equity_peak,
+            bridge=select_bridge(default_config),
             audit=LiveOrderDryRunAuditLog(DEFAULT_COMPOUND_ADD_AUDIT_PATH),
         )
     except ValueError as exc:
@@ -356,12 +396,13 @@ async def get_waste_entry_pilot_promotion_status() -> dict[str, Any]:
 async def post_waste_entry_dispatch_handoff_dispatch(
     body: WasteEntryDispatchHandoffDispatch,
     confirm: bool = Query(default=False),
+    confirm_phrase: str = Query(default=""),
 ) -> dict[str, Any]:
     """Owner-confirmed attempt to hand an accepted WASTE entry intent to dispatch.
 
     This endpoint does not approve a trade by itself. It requires explicit owner
     dispatch confirmation, re-checks the current owner ACCEPT fingerprint,
-    requires a second ``?confirm=true`` when live trading is authorized, then
+    requires typed confirmation when live trading is authorized, then
     sends the exact WASTE dry-run intent through the normal dispatch chokepoint.
     Dispatch still enforces live, edge, pilot, risk, emergency-stop, audit, and
     broker-bridge gates.
@@ -389,25 +430,21 @@ async def post_waste_entry_dispatch_handoff_dispatch(
         )
         return blocked
 
-    if runtime_gates.is_authorized("live_trading") and not confirm:
-        return {
+    pending = _live_handoff_confirm_required(
+        confirm=confirm,
+        confirm_phrase=confirm_phrase,
+        payload={
             "report_kind": "cas_forex_waste_entry_dispatch_handoff",
-            "status": "CONFIRM_REQUIRED",
             "order_id": handoff.get("order_id"),
             "decision_ref": handoff.get("decision_ref"),
-            "broker_touched": False,
-            "dispatched_to_bridge": False,
-            "dispatch_attempted": False,
             "owner_dispatch_confirmed": True,
-            "live_trading_authorized": True,
             "handoff_status": handoff,
             "notes": body.notes or "",
-            "detail": (
-                "Live trading is owner-authorized; this WASTE entry handoff could "
-                "place a real order. Re-POST with ?confirm=true to dispatch through "
-                "the normal live, edge, pilot, risk, emergency-stop, audit, and broker gates."
-            ),
-        }
+        },
+        detail="Live trading is owner-authorized; this WASTE entry handoff could place a real order.",
+    )
+    if pending is not None:
+        return pending
 
     result = dispatch_waste_entry_from_dry_run(
         dry_run,
@@ -464,12 +501,13 @@ async def get_compound_add_dispatch_handoff_status() -> dict[str, Any]:
 async def post_compound_add_dispatch_handoff_dispatch(
     body: CompoundAddDispatchHandoffDispatch,
     confirm: bool = Query(default=False),
+    confirm_phrase: str = Query(default=""),
 ) -> dict[str, Any]:
     """Owner-confirmed attempt to hand the accepted compound-add intent to dispatch.
 
     This endpoint does not approve a trade by itself. It requires an explicit
     dispatch confirmation in the body, re-checks the current owner ACCEPT
-    fingerprint, requires a second ``?confirm=true`` when live trading is
+    fingerprint, requires typed confirmation when live trading is
     authorized, then sends the exact dry-run intent through the normal dispatch
     chokepoint. Dispatch still enforces live, edge, pilot, risk, emergency-stop,
     audit, and broker-bridge gates.
@@ -499,25 +537,21 @@ async def post_compound_add_dispatch_handoff_dispatch(
         )
         return blocked
 
-    if runtime_gates.is_authorized("live_trading") and not confirm:
-        return {
+    pending = _live_handoff_confirm_required(
+        confirm=confirm,
+        confirm_phrase=confirm_phrase,
+        payload={
             "report_kind": "cas_forex_waste_compound_add_dispatch_handoff",
-            "status": "CONFIRM_REQUIRED",
             "order_id": handoff.get("order_id"),
             "decision_ref": handoff.get("decision_ref"),
-            "broker_touched": False,
-            "dispatched_to_bridge": False,
-            "dispatch_attempted": False,
             "owner_dispatch_confirmed": True,
-            "live_trading_authorized": True,
             "handoff_status": handoff,
             "notes": body.notes or "",
-            "detail": (
-                "Live trading is owner-authorized; this compound-add handoff could "
-                "place a real order. Re-POST with ?confirm=true to dispatch through "
-                "the normal live, edge, pilot, risk, emergency-stop, audit, and broker gates."
-            ),
-        }
+        },
+        detail="Live trading is owner-authorized; this compound-add handoff could place a real order.",
+    )
+    if pending is not None:
+        return pending
 
     result = dispatch_compound_add_from_dry_run(
         add_dry_run,

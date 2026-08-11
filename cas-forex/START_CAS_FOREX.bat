@@ -13,7 +13,7 @@ rem ============================================================
 cd /d "%~dp0"
 
 echo Starting CAS Forex backend (port 8765, this PC only)...
-start "CAS Forex API" /min C:\Python314\python.exe -m uvicorn api.server:app --host 127.0.0.1 --port 8765
+start "CAS Forex API" /min C:\Python314\python.exe scripts\run_api_server.py --host 127.0.0.1 --port 8765 --workers 1
 
 echo Starting CAS Forex app server (port 4173, this PC only)...
 start "CAS Forex App" /min cmd /c "npm --prefix ui run preview -- --host 127.0.0.1 --port 4173"

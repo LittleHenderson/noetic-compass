@@ -71,6 +71,8 @@ class AgentDecisionExplanation:
     plain_english_summary: str
     chain: Tuple[DecisionChainStep, ...]
     next_action_hint: Optional[str] = None
+    movement_source_truth: Mapping[str, Any] | None = None
+    version_trace: Mapping[str, Any] = field(default_factory=dict)
 
 
 def explain_latest_agent_decision(
@@ -82,6 +84,7 @@ def explain_latest_agent_decision(
     strategy_leads: Optional[Mapping[str, Any]] = None,
     walk_forward_report: Optional[Mapping[str, Any]] = None,
     pcba_report: Optional[Mapping[str, Any]] = None,
+    movement_source_truth: Optional[Mapping[str, Any]] = None,
 ) -> AgentDecisionExplanation:
     """Walk the latest agent decision into an explanation the bot can surface.
 
@@ -141,6 +144,19 @@ def explain_latest_agent_decision(
             next_action_hint=(
                 "Trigger run_agent_workflow_cycle to produce an "
                 "agent-workflow-cycle report, then re-ask."
+            ),
+            movement_source_truth=_compact_movement_source_truth(movement_source_truth),
+            version_trace=_empty_version_trace(
+                "NO_AGENT_CYCLE",
+                gaps=(
+                    "agent_cycle_report_missing",
+                    "strategy_ref_not_attached",
+                    "model_ref_not_attached",
+                    "prompt_version_not_attached",
+                    "risk_engine_version_not_attached",
+                    "market_data_source_not_attached",
+                    "config_hash_not_attached",
+                ),
             ),
         )
 
@@ -210,6 +226,11 @@ def explain_latest_agent_decision(
         pcba_step=pcba_step,
         execution_step=execution_step,
     )
+    version_trace = _build_agent_version_trace(
+        agent_cycle_report=agent_cycle_report,
+        intent=intent,
+        decision=decision,
+    )
 
     return AgentDecisionExplanation(
         cycle_id=cycle_id,
@@ -217,6 +238,8 @@ def explain_latest_agent_decision(
         plain_english_summary=summary,
         chain=chain,
         next_action_hint=next_hint,
+        movement_source_truth=_compact_movement_source_truth(movement_source_truth),
+        version_trace=version_trace,
     )
 
 
@@ -643,7 +666,7 @@ def _build_cycle_step(
     if lot_size is not None:
         evidence.append(f"lot={lot_size}")
     if confidence is not None:
-        evidence.append(f"confidence={confidence}")
+        evidence.append(f"conviction_score={_format_conviction_score(confidence)}")
     if decision:
         evidence.append(f"overseer_decision={_coerce_str(decision.get('decision'))}")
         evidence.append(f"approved={bool(decision.get('approved'))}")
@@ -788,6 +811,290 @@ def _build_execution_step(
     )
 
 
+def _build_agent_version_trace(
+    *,
+    agent_cycle_report: Mapping[str, Any],
+    intent: Optional[Mapping[str, Any]],
+    decision: Optional[Mapping[str, Any]],
+) -> dict[str, Any]:
+    cycle_id = _coerce_str(agent_cycle_report.get("cycle_id"))
+    command = _find_terminal_command_for_intent(agent_cycle_report, intent)
+    provenance = _extract_execution_provenance(command)
+    if provenance:
+        trace = dict(_mapping(provenance.get("version_trace")))
+        if not trace:
+            trace = _version_trace_from_execution_provenance(provenance)
+        trace.setdefault("trace_source", "dispatch_execution_provenance")
+        trace.setdefault("cycle_id", cycle_id or "not_attached")
+        trace.setdefault("agent_workflow_version", "agent_workflow_cycle.v1")
+        trace.setdefault("dispatch_provenance_hash", _first_nonempty(provenance.get("provenance_hash")) or "not_attached")
+        trace.setdefault("gaps", [])
+        return trace
+
+    cycle_trace = _mapping(agent_cycle_report.get("version_trace"))
+    agent_id = _first_nonempty(
+        intent.get("agent_id") if intent else None,
+        decision.get("agent_id") if decision else None,
+    )
+    policy_version = _first_nonempty(
+        intent.get("agent_policy_version") if intent else None,
+        cycle_trace.get("agent_policy_version"),
+        _policy_version_for_agent(agent_id),
+    )
+    strategy_ref = _first_nonempty(
+        intent.get("strategy_setting") if intent else None,
+        intent.get("strategy_id") if intent else None,
+        cycle_trace.get("strategy_ref"),
+    )
+    strategy_version = _first_nonempty(
+        intent.get("strategy_version") if intent else None,
+        cycle_trace.get("strategy_version"),
+    )
+    model_ref = _first_nonempty(
+        intent.get("model_version") if intent else None,
+        intent.get("model_ref") if intent else None,
+        decision.get("model_version") if decision else None,
+        cycle_trace.get("model_ref"),
+    )
+    prompt_version = _first_nonempty(
+        intent.get("prompt_version") if intent else None,
+        decision.get("prompt_version") if decision else None,
+        cycle_trace.get("prompt_version"),
+    )
+    risk_engine_version = _first_nonempty(
+        decision.get("risk_engine_version") if decision else None,
+        cycle_trace.get("risk_engine_version"),
+        "agent_overseer.v1" if decision else "",
+    )
+    market_data_refs = _evidence_refs_for_trace(intent)
+    market_data_source = _first_nonempty(
+        intent.get("market_data_source") if intent else None,
+        cycle_trace.get("market_data_source"),
+        _market_data_source_from_refs(market_data_refs),
+    )
+    execution_router_version = _execution_router_version(command)
+    broker_mode = _first_nonempty(command.get("broker_mode") if command else None)
+    config_hash = _first_nonempty(
+        cycle_trace.get("config_hash"),
+        agent_cycle_report.get("config_hash"),
+    )
+
+    gaps: list[str] = []
+    if not strategy_ref:
+        gaps.append("strategy_ref_not_attached")
+    if not strategy_version:
+        gaps.append("strategy_version_not_attached")
+    if not model_ref:
+        gaps.append("model_ref_not_attached")
+    if not prompt_version:
+        gaps.append("prompt_version_not_attached")
+    if not risk_engine_version:
+        gaps.append("risk_engine_version_not_attached")
+    if not market_data_source:
+        gaps.append("market_data_source_not_attached")
+    if not execution_router_version:
+        gaps.append("execution_router_version_not_attached")
+    if not config_hash:
+        gaps.append("config_hash_not_attached")
+    gaps.append("dispatch_execution_provenance_missing")
+
+    return {
+        "trace_status": "COMPLETE" if not gaps else "PARTIAL",
+        "trace_source": "agent_cycle_report",
+        "cycle_id": cycle_id or "not_attached",
+        "cycle_schema_version": _coerce_str(agent_cycle_report.get("report_kind")) or "not_attached",
+        "agent_workflow_version": "agent_workflow_cycle.v1",
+        "agent_ref": agent_id or "not_attached",
+        "agent_policy_version": policy_version or "not_attached",
+        "strategy_ref": strategy_ref or "not_attached",
+        "strategy_version": strategy_version or "not_attached",
+        "model_ref": model_ref or "not_attached",
+        "prompt_version": prompt_version or "not_attached",
+        "risk_engine_version": risk_engine_version or "not_attached",
+        "execution_router_version": execution_router_version or "not_attached",
+        "broker_mode": broker_mode or "not_attached",
+        "market_data_source": market_data_source or "not_attached",
+        "market_data_refs": market_data_refs[:5],
+        "config_hash": config_hash or "not_attached",
+        "gaps": gaps,
+    }
+
+
+def _empty_version_trace(status: str, *, gaps: Sequence[str]) -> dict[str, Any]:
+    return {
+        "trace_status": status,
+        "trace_source": "agent_decision_explainer",
+        "cycle_id": "not_attached",
+        "agent_workflow_version": "agent_workflow_cycle.v1",
+        "strategy_ref": "not_attached",
+        "strategy_version": "not_attached",
+        "model_ref": "not_attached",
+        "prompt_version": "not_attached",
+        "risk_engine_version": "not_attached",
+        "execution_router_version": "not_attached",
+        "market_data_source": "not_attached",
+        "config_hash": "not_attached",
+        "gaps": list(gaps),
+    }
+
+
+def _find_terminal_command_for_intent(
+    agent_cycle_report: Mapping[str, Any],
+    intent: Optional[Mapping[str, Any]],
+) -> Optional[Mapping[str, Any]]:
+    intent_id = _coerce_str(intent.get("intent_id")) if intent else ""
+    commands = [
+        item
+        for item in (agent_cycle_report.get("terminal_commands") or [])
+        if isinstance(item, Mapping)
+    ]
+    if intent_id:
+        for command in commands:
+            if _coerce_str(command.get("intent_id")) == intent_id:
+                return command
+    return commands[0] if commands else None
+
+
+def _extract_execution_provenance(command: Optional[Mapping[str, Any]]) -> Mapping[str, Any]:
+    if not command:
+        return {}
+    direct = command.get("execution_provenance")
+    if isinstance(direct, Mapping):
+        return direct
+    dispatch_result = command.get("dispatch_result")
+    if isinstance(dispatch_result, Mapping):
+        direct = dispatch_result.get("execution_provenance")
+        if isinstance(direct, Mapping):
+            return direct
+        card = dispatch_result.get("trade_explanation_card")
+        if isinstance(card, Mapping) and isinstance(card.get("execution_provenance"), Mapping):
+            return card["execution_provenance"]
+    receipt = command.get("terminal_receipt")
+    if isinstance(receipt, Mapping) and isinstance(receipt.get("execution_provenance"), Mapping):
+        return receipt["execution_provenance"]
+    return {}
+
+
+def _version_trace_from_execution_provenance(provenance: Mapping[str, Any]) -> dict[str, Any]:
+    strategy = _mapping(provenance.get("strategy"))
+    model = _mapping(provenance.get("model"))
+    risk = _mapping(provenance.get("risk_engine"))
+    market = _mapping(provenance.get("market_data"))
+    return {
+        "trace_status": "PARTIAL",
+        "trace_source": "execution_provenance",
+        "strategy_ref": _first_nonempty(strategy.get("strategy_id")) or "not_attached",
+        "strategy_version": _first_nonempty(strategy.get("strategy_version")) or "not_attached",
+        "model_ref": _first_nonempty(
+            model.get("ai_operator_primary_model"),
+            model.get("ai_model_name"),
+            model.get("assistant_model"),
+        )
+        or "not_attached",
+        "prompt_version": _first_nonempty(model.get("ai_operator_prompt_version")) or "not_attached",
+        "risk_engine_version": _first_nonempty(
+            risk.get("risk_control_version"),
+            risk.get("pre_execution_risk_gate_version"),
+        )
+        or "not_attached",
+        "dispatch_engine_version": "order_dispatch.v1",
+        "market_data_source": _first_nonempty(market.get("market_data_provider")) or "not_attached",
+        "config_hash": _first_nonempty(provenance.get("config_hash")) or "not_attached",
+        "dispatch_provenance_hash": _first_nonempty(provenance.get("provenance_hash")) or "not_attached",
+        "gaps": ["version_trace_summary_missing"],
+    }
+
+
+def _policy_version_for_agent(agent_id: str) -> str:
+    token = agent_id.lower()
+    if "micro_scalp" in token:
+        return "micro_scalp_policy.v1"
+    if "hourly" in token or "intraday" in token:
+        return "hourly_intraday_policy.v1"
+    if "waste" in token:
+        return "waste_runner.v1"
+    if token:
+        return "agent_policy.v1"
+    return ""
+
+
+def _execution_router_version(command: Optional[Mapping[str, Any]]) -> str:
+    if not command:
+        return ""
+    broker_mode = _coerce_str(command.get("broker_mode")).upper()
+    command_type = _coerce_str(command.get("command_type"))
+    if "PAPER_MT5" in broker_mode or "MT5" in broker_mode:
+        return "mt5_demo_agent_loop.v1"
+    if "PAPER_MT4" in broker_mode or "MT4" in broker_mode:
+        return "mt4_mailbox_bridge.v1"
+    return command_type or ""
+
+
+def _evidence_refs_for_trace(intent: Optional[Mapping[str, Any]]) -> list[str]:
+    if not intent:
+        return []
+    refs = intent.get("evidence_refs") or []
+    if isinstance(refs, str):
+        return [refs]
+    if not isinstance(refs, Iterable):
+        return []
+    return [_coerce_str(ref) for ref in refs if _coerce_str(ref)]
+
+
+def _market_data_source_from_refs(refs: Sequence[str]) -> str:
+    lowered = " ".join(refs).lower()
+    if "forex_fury" in lowered or "forex-fury" in lowered:
+        return "forex_fury_replay_artifacts"
+    if refs:
+        return "evidence_refs"
+    return ""
+
+
+def _compact_movement_source_truth(
+    source_truth: Optional[Mapping[str, Any]],
+) -> Mapping[str, Any] | None:
+    if not isinstance(source_truth, Mapping):
+        return None
+    return {
+        "movement_stream_present": bool(source_truth.get("movement_stream_present")),
+        "price_source_status": _coerce_str(source_truth.get("price_source_status")) or None,
+        "price_source_label": _coerce_str(source_truth.get("price_source_label")) or None,
+        "price_source_summary": _coerce_str(source_truth.get("price_source_summary")) or None,
+        "price_source_warning": _coerce_str(source_truth.get("price_source_warning")) or None,
+        "position_feed_label": _coerce_str(source_truth.get("position_feed_label")) or None,
+        "position_feed_detail": _coerce_str(source_truth.get("position_feed_detail")) or None,
+        "static_simulation_active": bool(source_truth.get("static_simulation_active")),
+        "open_position_count": _coerce_int(source_truth.get("open_position_count")),
+        "broker_ticket_position_count": _coerce_int(source_truth.get("broker_ticket_position_count")),
+        "simulator_position_count": _coerce_int(source_truth.get("simulator_position_count")),
+        "provider_priced_simulator_position_count": _coerce_int(
+            source_truth.get("provider_priced_simulator_position_count")
+        ),
+        "static_simulator_position_count": _coerce_int(source_truth.get("static_simulator_position_count")),
+        "stale_price_position_count": _coerce_int(source_truth.get("stale_price_position_count")),
+        "source_label_counts": (
+            {
+                str(key): _coerce_int(value)
+                for key, value in dict(source_truth.get("source_label_counts") or {}).items()
+            }
+            if isinstance(source_truth.get("source_label_counts"), Mapping)
+            else {}
+        ),
+        "configured_market_data_provider": _coerce_str(source_truth.get("configured_market_data_provider")) or None,
+        "provider_usable_symbols": _coerce_string_list(source_truth.get("provider_usable_symbols")),
+        "static_fallback_symbols": _coerce_string_list(source_truth.get("static_fallback_symbols")),
+        "mt5_fallback_symbols": _coerce_string_list(source_truth.get("mt5_fallback_symbols")),
+        "provider_stale_symbols": _coerce_string_list(source_truth.get("provider_stale_symbols")),
+        "provider_freshness_max_age_seconds": _coerce_int(
+            source_truth.get("provider_freshness_max_age_seconds")
+        ),
+        "provider_error_count": _coerce_int(source_truth.get("provider_error_count")),
+        "attention_required": bool(source_truth.get("attention_required")),
+        "detail": _coerce_str(source_truth.get("detail")) or None,
+        "local_detail": _coerce_str(source_truth.get("local_detail")) or None,
+    }
+
+
 # ---------------------------------------------------------------------------
 # Overall status + summary
 # ---------------------------------------------------------------------------
@@ -916,6 +1223,50 @@ def _coerce_str(value: Any) -> str:
     if value is None:
         return ""
     return str(value)
+
+
+def _coerce_int(value: Any) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _coerce_string_list(value: Any) -> list[str]:
+    if isinstance(value, str):
+        text = _coerce_str(value).strip()
+        return [text] if text else []
+    if not isinstance(value, Iterable):
+        return []
+    out: list[str] = []
+    for item in value:
+        text = _coerce_str(item).strip()
+        if text:
+            out.append(text)
+    return out
+
+
+def _mapping(value: Any) -> Mapping[str, Any]:
+    return value if isinstance(value, Mapping) else {}
+
+
+def _first_nonempty(*values: Any) -> str:
+    for value in values:
+        if value is None:
+            continue
+        text = str(value).strip()
+        if text:
+            return text
+    return ""
+
+
+def _format_conviction_score(value: Any) -> str:
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return "unknown (not_win_probability)"
+    bounded = max(0.0, min(1.0, numeric))
+    return f"{round(bounded * 100):.0f}% (not_win_probability)"
 
 
 def _has_broker_ticket(command: Mapping[str, Any]) -> bool:

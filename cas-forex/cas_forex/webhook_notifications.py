@@ -18,10 +18,12 @@ Framing note (observational, never advisory):
 
 Storage:
     Subscriptions are persisted as JSONL at
-    ``evidence_runs/webhook_subscriptions/subscriptions.jsonl``. Writes
+    ``evidence_runs/webhook_subscriptions/subscriptions.jsonl`` with the
+    webhook destination URL encrypted at rest. Legacy plaintext rows are
+    still readable so they can be migrated on the next read/write. Writes
     are atomic (temp file + ``os.replace``). The store assumes a single
-    writer process; if the API moves to multi-worker uvicorn this needs
-    a file lock or a Redis/SQLite backend.
+    writer process; if the API moves to multi-worker uvicorn this needs a
+    file lock or a Redis/SQLite backend.
 
 Transport:
     ``dispatch_webhook`` accepts an injectable transport callable so
@@ -38,8 +40,16 @@ import os
 import tempfile
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from hashlib import sha256
 from pathlib import Path
 from typing import Any, Callable, Mapping, Optional
+from urllib.parse import urlsplit
+
+from cas_forex.secret_envelope import (
+    is_secret_envelope,
+    protect_secret,
+    unprotect_secret,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -61,9 +71,17 @@ class WebhookSubscription:
     created_at_iso: str
     last_used_at_iso: Optional[str]
 
+    @property
+    def subscription_id(self) -> str:
+        return webhook_subscription_id(self.webhook_url)
+
+    @property
+    def webhook_url_masked(self) -> str:
+        return mask_webhook_url(self.webhook_url)
+
     def to_jsonl_dict(self) -> dict:
         return {
-            "webhook_url": self.webhook_url,
+            "webhook_url": protect_secret(self.webhook_url),
             "label": self.label,
             "created_at_iso": self.created_at_iso,
             "last_used_at_iso": self.last_used_at_iso,
@@ -72,8 +90,14 @@ class WebhookSubscription:
     @classmethod
     def from_jsonl_dict(cls, payload: dict) -> "WebhookSubscription":
         last_used = payload.get("last_used_at_iso")
+        raw_url = payload.get("webhook_url")
+        if raw_url is None and "webhook_url_envelope" in payload:
+            raw_url = payload.get("webhook_url_envelope")
+        webhook_url = unprotect_secret(raw_url).strip()
+        if not webhook_url:
+            raise KeyError("webhook_url")
         return cls(
-            webhook_url=str(payload["webhook_url"]),
+            webhook_url=webhook_url,
             label=str(payload.get("label", "") or ""),
             created_at_iso=str(payload.get("created_at_iso", "")),
             last_used_at_iso=str(last_used) if last_used else None,
@@ -136,6 +160,21 @@ def _utcnow_iso() -> str:
     return datetime.now(tz=timezone.utc).replace(microsecond=0).isoformat()
 
 
+def webhook_subscription_id(webhook_url: str) -> str:
+    normalized = str(webhook_url or "").strip().encode("utf-8")
+    return f"whsub_{sha256(normalized).hexdigest()[:24]}"
+
+
+def mask_webhook_url(webhook_url: str) -> str:
+    value = str(webhook_url or "").strip()
+    if not value:
+        return ""
+    parsed = urlsplit(value)
+    if parsed.scheme and parsed.netloc:
+        return f"{parsed.scheme}://{parsed.netloc}/..."
+    return "configured-webhook-redacted"
+
+
 # ---------------------------------------------------------------------------
 # File-backed JSONL store
 # ---------------------------------------------------------------------------
@@ -171,6 +210,7 @@ class WebhookSubscriptionStore:
         if not self._path.exists():
             return []
         subs: list[WebhookSubscription] = []
+        migrated_plaintext = False
         with self._path.open("r", encoding="utf-8") as fh:
             for raw_line in fh:
                 line = raw_line.strip()
@@ -184,8 +224,16 @@ class WebhookSubscriptionStore:
                     continue
                 try:
                     subs.append(WebhookSubscription.from_jsonl_dict(payload))
-                except (KeyError, TypeError):
+                except (KeyError, TypeError, ValueError):
                     continue
+                raw_url = payload.get("webhook_url") if isinstance(payload, dict) else None
+                if not is_secret_envelope(raw_url):
+                    migrated_plaintext = True
+        if migrated_plaintext and subs:
+            try:
+                self._atomic_write(subs)
+            except OSError:
+                pass
         return subs
 
     # -- mutate -------------------------------------------------------------
@@ -199,11 +247,14 @@ class WebhookSubscriptionStore:
         self._atomic_write(deduped)
         return sub
 
-    def remove(self, webhook_url: str) -> bool:
-        """Drop the subscription identified by ``webhook_url``. Returns
-        True if a record was removed, False if no such URL was present."""
+    def remove(self, identifier: str) -> bool:
+        """Drop the subscription identified by raw URL or subscription id.
+
+        Returns True if a record was removed, False if no such subscription was
+        present.
+        """
         current = self.list_all()
-        remaining = [s for s in current if s.webhook_url != webhook_url]
+        remaining = [s for s in current if not _matches_subscription_identifier(s, identifier)]
         if len(remaining) == len(current):
             return False
         self._atomic_write(remaining)
@@ -214,17 +265,18 @@ class WebhookSubscriptionStore:
         "forget my webhooks" affordance)."""
         self._atomic_write([])
 
-    def update_last_used(self, webhook_url: str, when_iso: str) -> bool:
-        """Set ``last_used_at_iso`` on the record matching ``webhook_url``.
+    def update_last_used(self, identifier: str, when_iso: str) -> bool:
+        """Set ``last_used_at_iso`` on the matching subscription.
 
-        Returns True if a record was updated, False if no such URL was
-        present. The update is persisted atomically.
+        ``identifier`` may be the raw webhook URL or the derived subscription
+        id. Returns True if a record was updated, False if no such subscription
+        was present. The update is persisted atomically.
         """
         current = self.list_all()
         updated = False
         next_list: list[WebhookSubscription] = []
         for s in current:
-            if s.webhook_url == webhook_url:
+            if _matches_subscription_identifier(s, identifier):
                 next_list.append(
                     WebhookSubscription(
                         webhook_url=s.webhook_url,
@@ -283,6 +335,13 @@ def build_webhook_subscription(
         created_at_iso=created_at_iso or _utcnow_iso(),
         last_used_at_iso=last_used_at_iso,
     )
+
+
+def _matches_subscription_identifier(sub: WebhookSubscription, identifier: str) -> bool:
+    normalized = str(identifier or "").strip()
+    if not normalized:
+        return False
+    return normalized == sub.webhook_url or normalized == sub.subscription_id
 
 
 # ---------------------------------------------------------------------------
@@ -439,4 +498,6 @@ __all__ = [
     "WebhookTransport",
     "build_webhook_subscription",
     "dispatch_webhook",
+    "mask_webhook_url",
+    "webhook_subscription_id",
 ]

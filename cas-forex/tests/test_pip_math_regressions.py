@@ -144,6 +144,153 @@ def test_mt5_bridge_compares_abnormal_slippage_points_as_pips():
     assert outcome.is_abnormal_slippage is True
 
 
+def test_mt5_bridge_widens_market_stops_to_symbol_stop_level_for_indices():
+    class FakeMT5:
+        TRADE_RETCODE_DONE = 10009
+        TRADE_RETCODE_DONE_PARTIAL = 10010
+        TRADE_RETCODE_REJECT = 10006
+        TRADE_RETCODE_CANCEL = 10007
+        TRADE_ACTION_DEAL = 1
+        ORDER_TYPE_BUY = 0
+        ORDER_TYPE_SELL = 1
+        ORDER_TYPE_BUY_LIMIT = 2
+        ORDER_TYPE_SELL_LIMIT = 3
+        ORDER_TYPE_BUY_STOP = 4
+        ORDER_TYPE_SELL_STOP = 5
+        ORDER_TIME_GTC = 0
+        ORDER_FILLING_IOC = 1
+        ACCOUNT_TRADE_MODE_DEMO = 0
+
+        def __init__(self):
+            self.sent = []
+
+        def terminal_info(self):
+            return SimpleNamespace(connected=True)
+
+        def account_info(self):
+            return SimpleNamespace(server="Hugosway-Demo", company="Hugo's Way", trade_mode=0)
+
+        def symbol_info_tick(self, symbol):
+            return SimpleNamespace(bid=38999.0, ask=39000.0)
+
+        def symbol_info(self, symbol):
+            return SimpleNamespace(
+                point=1.0,
+                digits=2,
+                trade_stops_level=200,
+                trade_freeze_level=0,
+                filling_mode=2,
+            )
+
+        def order_send(self, request):
+            self.sent.append(dict(request))
+            return SimpleNamespace(
+                retcode=self.TRADE_RETCODE_DONE,
+                order=321,
+                price=request["price"],
+                commission=0.0,
+                comment="done",
+            )
+
+    order = BrokerOrderRequest(
+        order_id="us30-tight-stops",
+        decision_ref="d-1",
+        symbol="US30",
+        direction=Direction.LONG,
+        volume=0.01,
+        price=0.0,
+        stop_loss=38950.0,
+        take_profit=39100.0,
+    )
+    fake = FakeMT5()
+    bridge = MT5Bridge()
+    bridge._mt5 = fake
+    bridge._connected = True
+
+    outcome = bridge.execute_order(order)
+
+    assert outcome.status == OrderStatus.EXECUTED
+    assert len(fake.sent) == 1
+    sent = fake.sent[0]
+    assert sent["price"] == 39000.0
+    assert sent["price"] - sent["sl"] >= 201.0
+    assert sent["tp"] - sent["price"] >= 201.0
+    assert outcome.raw_request_snapshot["symbol"] == "US30"
+    assert outcome.raw_request_snapshot["sl"] == sent["sl"]
+
+
+def test_mt5_bridge_rejects_market_order_when_live_price_crossed_take_profit():
+    class FakeMT5:
+        TRADE_RETCODE_DONE = 10009
+        TRADE_RETCODE_DONE_PARTIAL = 10010
+        TRADE_RETCODE_REJECT = 10006
+        TRADE_RETCODE_CANCEL = 10007
+        TRADE_ACTION_DEAL = 1
+        ORDER_TYPE_BUY = 0
+        ORDER_TYPE_SELL = 1
+        ORDER_TYPE_BUY_LIMIT = 2
+        ORDER_TYPE_SELL_LIMIT = 3
+        ORDER_TYPE_BUY_STOP = 4
+        ORDER_TYPE_SELL_STOP = 5
+        ORDER_TIME_GTC = 0
+        ORDER_FILLING_IOC = 1
+        ACCOUNT_TRADE_MODE_DEMO = 0
+
+        def __init__(self):
+            self.sent = []
+
+        def terminal_info(self):
+            return SimpleNamespace(connected=True)
+
+        def account_info(self):
+            return SimpleNamespace(server="Hugosway-Demo", company="Hugo's Way", trade_mode=0)
+
+        def symbol_info_tick(self, symbol):
+            return SimpleNamespace(bid=0.98040, ask=0.98057)
+
+        def symbol_info(self, symbol):
+            return SimpleNamespace(
+                point=0.00001,
+                digits=5,
+                trade_stops_level=0,
+                trade_freeze_level=0,
+                filling_mode=1,
+            )
+
+        def order_send(self, request):
+            self.sent.append(dict(request))
+            return SimpleNamespace(
+                retcode=self.TRADE_RETCODE_DONE,
+                order=321,
+                price=request["price"],
+                commission=0.0,
+                comment="done",
+            )
+
+    order = BrokerOrderRequest(
+        order_id="audcad-stale",
+        decision_ref="d-1",
+        symbol="AUD/CAD",
+        direction=Direction.LONG,
+        volume=0.1,
+        price=0.0,
+        stop_loss=0.8971,
+        take_profit=0.9005,
+    )
+    fake = FakeMT5()
+    bridge = MT5Bridge()
+    bridge._mt5 = fake
+    bridge._connected = True
+
+    outcome = bridge.execute_order(order)
+
+    assert outcome.status == OrderStatus.REJECTED
+    assert "market price invalidates order geometry" in (outcome.error_message or "")
+    assert outcome.is_real_broker is False
+    assert fake.sent == []
+    assert outcome.raw_request_snapshot is None
+
+
 def test_mt5_bridge_live_account_requires_gate_before_order_send():
     # GB-1 bridge-level hardening: a connected LIVE (non-demo) account must not
     # reach order_send without the owner live-trading gate, even with live_mode
@@ -246,6 +393,42 @@ def _jpy_order():
         stop_loss=149.50,
         take_profit=151.00,
     )
+
+
+def test_mt5_bridge_blocks_terminal_algo_off_before_order_send():
+    class FakeDemoMT5:
+        ACCOUNT_TRADE_MODE_DEMO = 0
+
+        def __init__(self):
+            self.sent: list = []
+
+        def terminal_info(self):
+            return SimpleNamespace(connected=True, trade_allowed=False, tradeapi_disabled=False)
+
+        def account_info(self):
+            return SimpleNamespace(
+                server="MetaQuotes-Demo",
+                company="MetaQuotes Demo",
+                trade_mode=0,
+                trade_allowed=True,
+                trade_expert=True,
+            )
+
+        def order_send(self, request):
+            self.sent.append(request)
+            raise AssertionError("order_send must not run when MT5 Algo Trading is off")
+
+    fake = FakeDemoMT5()
+    bridge = MT5Bridge()
+    bridge._mt5 = fake
+    bridge._connected = True
+
+    outcome = bridge.execute_order(_jpy_order())
+
+    assert outcome.status == OrderStatus.REJECTED
+    assert "MT5 Algo Trading is off" in (outcome.error_message or "")
+    assert outcome.is_real_broker is False
+    assert fake.sent == []
 
 
 def test_live_account_with_demo_in_server_name_is_still_gated():

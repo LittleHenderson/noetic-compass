@@ -249,6 +249,8 @@ def test_agent_cycle_writes_paper_mt4_command_and_state(tmp_path):
     assert report["execution_mode"] == "PAPER_MT4_COMMAND_INTENT"
     assert report["summary"]["terminal_command_count"] == 1
     assert "do not by themselves execute live broker orders" in report["claim_boundary"]
+    assert "order_dispatch.py" in report["claim_boundary"]
+    assert report["live_execution_boundary"]["live_trading_status"] == "OWNER_ARMING_REQUIRED"
     command_path = Path(report["terminal_commands"][0]["command_path"])
     assert command_path.exists()
     command = json.loads(command_path.read_text(encoding="utf-8"))

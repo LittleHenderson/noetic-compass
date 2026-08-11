@@ -125,6 +125,8 @@ export interface LoopHeartbeat {
   stage: AiStage;
   live: boolean | null;
   trace?: AiStage[];
+  /** Raw heartbeat fields used for honest execution-lane/status presentation. */
+  payload?: Record<string, unknown>;
 }
 
 /** Poll the WASTE-loop stage endpoint ({ stage, running }). Falls back to
@@ -158,7 +160,8 @@ export function useLoopHeartbeat(
         const running = !!(data && typeof data === "object" && (data as { running?: unknown }).running);
         const stage = coerceAiStage(data) ?? "idle";
         const trace = running ? coerceStageTrace(data) : [];
-        if (!cancelled.current) setHb({ stage: running ? stage : "idle", live: running, trace });
+        const payload = asRecord(data);
+        if (!cancelled.current) setHb({ stage: running ? stage : "idle", live: running, trace, payload });
       } catch {
         if (!cancelled.current) setHb({ stage: "idle", live: false });
       }

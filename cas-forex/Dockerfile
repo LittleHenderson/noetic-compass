@@ -35,8 +35,10 @@ VOLUME ["/app/runtime"]
 
 EXPOSE 8765
 
+ENV CAS_FOREX_API_EFFECTIVE_WORKERS=1
+
 # A container healthcheck hits the unauthenticated liveness route.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
     CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8765/api/forex/health', timeout=4).status==200 else 1)"
 
-CMD ["python", "-m", "uvicorn", "api.server:app", "--host", "0.0.0.0", "--port", "8765", "--proxy-headers", "--forwarded-allow-ips", "*"]
+CMD ["python", "-m", "uvicorn", "api.server:app", "--host", "0.0.0.0", "--port", "8765", "--workers", "1", "--proxy-headers", "--forwarded-allow-ips", "*"]

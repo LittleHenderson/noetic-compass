@@ -2,11 +2,11 @@
 
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-from cas_forex.instruments import broker_symbol
+from cas_forex.instruments import broker_symbol, canonical_symbol
 from cas_forex.schemas.forecast import SUPPORTED_SYMBOLS, Direction
 from cas_forex.time_utils import utc_now
 
@@ -116,14 +116,16 @@ class BrokerOrderRequest(BaseModel):
         ge=1,
     )
 
-    @field_validator("symbol")
+    @field_validator("symbol", mode="before")
     @classmethod
     def symbol_must_be_supported(cls, v: str) -> str:
-        if v not in SUPPORTED_SYMBOLS:
+        try:
+            canonical = canonical_symbol(str(v))
+        except ValueError as exc:
             raise ValueError(
                 f"Unsupported symbol '{v}'. Supported: {sorted(SUPPORTED_SYMBOLS)}"
-            )
-        return v
+            ) from exc
+        return canonical
 
     @model_validator(mode="after")
     def validate_order_geometry(self):
@@ -244,11 +246,24 @@ class OrderOutcome(BaseModel):
     )
     is_real_broker: bool = Field(
         default=False,
-        description="True when an actual MetaTrader terminal executed or rejected the order.",
+        description=(
+            "True when an external broker terminal handled the request. This includes "
+            "demo terminals; inspect is_demo_account before making any live-money claim."
+        ),
+    )
+    is_demo_account: Optional[bool] = Field(
+        default=None,
+        description=(
+            "True for a positively identified broker demo account, False for a "
+            "positively identified live-money account, and null when unavailable."
+        ),
     )
     terminal_name: Optional[str] = Field(default=None)
     account_id_hash: Optional[str] = Field(default=None)
     server: Optional[str] = Field(default=None)
     raw_request_hash: Optional[str] = Field(default=None)
     raw_response_hash: Optional[str] = Field(default=None)
+    raw_request_snapshot: Optional[dict[str, Any]] = Field(default=None)
+    broker_symbol: Optional[str] = Field(default=None)
+    broker_symbol_resolution: Optional[dict[str, Any]] = Field(default=None)
     lock_reason: Optional[BrokerLockReason] = Field(default=None)

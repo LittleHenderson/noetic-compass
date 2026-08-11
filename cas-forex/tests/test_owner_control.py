@@ -1,12 +1,15 @@
 from cas_forex.owner_control import (
+    DEFAULT_OVERRIDE_PATH,
     MAX_OWNER_AUTO_TRADES,
     OwnerControlMode,
     OwnerPromotionVerdict,
     PromotionThresholds,
     StrategyPromotionCandidate,
+    build_owner_control_report,
     candidate_from_tally_bucket,
     count_condition_lab_simulator_wins,
     review_owner_promotion,
+    set_owner_control_override_store_for_tests,
 )
 
 
@@ -177,3 +180,22 @@ def test_count_condition_lab_simulator_wins_filters_by_setting_and_gaps():
 
     assert count_condition_lab_simulator_wins(cells, setting="range_scalper_24_120") == 1
     assert count_condition_lab_simulator_wins(cells, require_non_gap=False) == 3
+
+
+def test_owner_control_report_exposes_staged_autonomy_ladder(tmp_path):
+    set_owner_control_override_store_for_tests(tmp_path / "owner-control-overrides.json")
+    try:
+        report = build_owner_control_report()
+    finally:
+        set_owner_control_override_store_for_tests(DEFAULT_OVERRIDE_PATH)
+
+    assert report["current_autonomy_stage"]["stage"] == "PAPER_AUTOPILOT"
+    assert report["current_autonomy_stage_label"] == "Paper Autopilot"
+    assert report["can_open_paper_trades"] is True
+    assert report["owner_control_allows_live_trades"] is False
+    assert report["requires_owner_live_confirmation"] is False
+    stages = {step["stage"]: step for step in report["autonomy_ladder"]}
+    assert {"LOCKDOWN", "SIGNAL", "PAPER_LIMITED", "PAPER_AUTOPILOT", "LIVE_CONFIRM", "LIVE_AUTOPILOT_REQUESTED"} <= set(stages)
+    assert stages["SIGNAL"]["modes"] == ["NOTIFY_ONLY"]
+    assert "LIVE_AUTO" in stages["LIVE_CONFIRM"]["modes"]
+    assert "action-time gates" in report["staged_autonomy_summary"]

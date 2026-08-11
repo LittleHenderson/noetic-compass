@@ -11,7 +11,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { GlassPanel } from "./GlassPanel";
+import { StatusChip } from "./StatusChip";
 import { fetchPortfolioRisk, type PortfolioRiskResponse } from "../data/api";
+import {
+  formatMovementSourceStatus,
+  movementSourceStatusTone,
+} from "../util/movementSource";
 import "./LiveTelemetryTable.css";
 import "./PortfolioRiskCard.css";
 
@@ -102,6 +107,31 @@ export function PortfolioRiskCard() {
   const bySymbol = snapshot?.by_symbol ?? [];
   const hints = snapshot?.diagnostic_hints ?? [];
   const topSymbols = bySymbol.slice(0, 5);
+  const movementTruth = snapshot?.movement_source_truth ?? null;
+  const positionFeedLabel = movementTruth?.position_feed_label?.trim()
+    || snapshot?.position_feed_label
+    || "NONE";
+  const priceSourceStatus = movementTruth?.price_source_status?.trim()
+    || snapshot?.price_source_status
+    || null;
+  const positionFeedDetail = movementTruth?.position_feed_detail?.trim()
+    || movementTruth?.detail?.trim()
+    || snapshot?.position_feed_detail
+    || "No broker or paper/demo movement snapshot is reporting positions right now.";
+  const telemetrySource = movementTruth?.telemetry_source?.trim()
+    || snapshot?.telemetry_source
+    || "none";
+  const telemetryStale = movementTruth?.telemetry_stale ?? snapshot?.telemetry_stale ?? true;
+  const lastUpdate = movementTruth?.telemetry_last_update_iso?.trim()
+    || snapshot?.telemetry_last_update_iso
+    || "unknown";
+  const brokerTicketCount = movementTruth?.broker_ticket_position_count
+    ?? snapshot?.broker_ticket_position_count
+    ?? 0;
+  const staticPositionCount = movementTruth?.static_position_count
+    ?? movementTruth?.static_simulator_position_count
+    ?? snapshot?.static_position_count
+    ?? 0;
 
   return (
     <GlassPanel
@@ -127,6 +157,38 @@ export function PortfolioRiskCard() {
               ${formatPnl(totalPnl)}
             </span>
           </div>
+          <div className="live-telemetry-stat">
+            <span className="field-label">Position Feed</span>
+            <StatusChip
+              label={positionFeedLabel}
+              variant={positionFeedLabel === "LIVE MT5" ? "success" : positionFeedLabel === "SIM PROOF" ? "warning" : "muted"}
+              size="sm"
+            />
+          </div>
+          {priceSourceStatus && (
+            <div className="live-telemetry-stat">
+              <span className="field-label">Price Source</span>
+              <StatusChip
+                label={formatMovementSourceStatus(priceSourceStatus, "SOURCE")}
+                variant={movementSourceStatusTone(priceSourceStatus)}
+                size="sm"
+              />
+            </div>
+          )}
+          {telemetryStale && (
+            <div className="live-telemetry-stat">
+              <span className="field-label">Snapshot</span>
+              <StatusChip label="STALE" variant="warning" size="sm" />
+            </div>
+          )}
+        </div>
+
+        <div className="live-telemetry-boundary">
+          position feed: {positionFeedLabel} | telemetry source: {telemetrySource} | broker tickets: {brokerTicketCount} | static rows: {staticPositionCount} | last update: {lastUpdate}
+        </div>
+
+        <div className="live-telemetry-boundary">
+          {positionFeedDetail}
         </div>
 
         <MeterRow

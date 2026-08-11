@@ -1,8 +1,8 @@
-"""Small-controlled live-money pilot gate for CAS Forex.
+"""Risk-denominated live-money authority gate for CAS Forex.
 
-The final product is real-money capable, but the first live phase must be tiny,
-owner-confirmed, and evidence-producing before any scaling. This module records
-that pilot envelope and enforces it at the dispatch chokepoint.
+The Operator may size and dispatch autonomously inside an owner-delegated risk
+envelope. Lot quantity is an output of broker-valued stop risk, margin, and
+portfolio constraints; it is not itself the primary risk unit.
 
 It does not place trades, create broker ACCEPT, move money, or graduate the
 system to scaled live trading by itself.
@@ -23,6 +23,8 @@ DEFAULT_AUDIT_PATH = REPO_ROOT / "runtime" / "live-pilot-audit.jsonl"
 REPORT_KIND = "cas_forex_small_controlled_live_pilot"
 STATUS_OPEN = "OPEN"
 STATUS_ACCEPT = "ACCEPT"
+SIZING_MODE_RISK_DENOMINATED = "RISK_DENOMINATED"
+SIZING_MODE_ABSOLUTE_LOTS = "ABSOLUTE_LOTS"
 
 DEFAULT_MAX_TRADE_LOTS = 0.01
 DEFAULT_MAX_OPEN_LIVE_LOTS = 0.02
@@ -30,6 +32,7 @@ DEFAULT_MAX_LIVE_TRADE_COUNT = 3
 DEFAULT_MAX_DAILY_LOSS_USD = 25.0
 DEFAULT_MAX_TOTAL_LOSS_USD = 50.0
 DEFAULT_MAX_PILOT_DAYS = 5
+DEFAULT_MAX_TRADE_RISK_PCT_EQUITY = 0.5
 
 HARD_MAX_TRADE_LOTS = 0.05
 HARD_MAX_OPEN_LIVE_LOTS = 0.20
@@ -37,11 +40,12 @@ HARD_MAX_LIVE_TRADE_COUNT = 10
 HARD_MAX_DAILY_LOSS_USD = 250.0
 HARD_MAX_TOTAL_LOSS_USD = 500.0
 HARD_MAX_PILOT_DAYS = 30
+HARD_MAX_TRADE_RISK_PCT_EQUITY = 0.5
 
 REQUIRED_CHECKS = (
     "owner_understands_real_money_risk",
-    "owner_confirms_small_amounts_only",
-    "owner_confirms_no_scaling_without_review",
+    "owner_confirms_risk_denominated_sizing",
+    "owner_confirms_autonomous_scaling_within_envelope",
     "owner_confirms_emergency_stop_ready",
 )
 
@@ -52,13 +56,14 @@ NUMERIC_FIELDS = (
     "max_daily_loss_usd",
     "max_total_loss_usd",
     "max_pilot_days",
+    "max_trade_risk_pct_equity",
 )
 
 CLAIM_BOUNDARY = (
-    "Small-controlled live pilot is an owner-recorded live-money envelope for "
-    "the first real trades only. It caps lots, trade count, loss limits, symbols, "
-    "and duration before scaling. It does not prove profitability, place orders, "
-    "move bank/card funds, automate payouts, or authorize live trading by itself."
+    "Risk-denominated live authority is an owner-recorded execution envelope. "
+    "The Operator may choose any broker-valid lot size whose fresh stop-risk, "
+    "margin, and portfolio evidence pass all final dispatch gates. This policy "
+    "does not prove profitability, place orders, or override broker truth."
 )
 
 
@@ -91,6 +96,10 @@ def update_live_pilot_policy(
     for key in NUMERIC_FIELDS:
         if key in patch:
             policy[key] = patch.get(key)
+    if "sizing_mode" in patch:
+        policy["sizing_mode"] = str(patch.get("sizing_mode") or "").strip().upper()
+    if "continuous_authority" in patch:
+        policy["continuous_authority"] = bool(patch.get("continuous_authority"))
     if "allowed_symbols" in patch:
         policy["allowed_symbols"] = _clean_symbols(patch.get("allowed_symbols"))
     if "notes" in patch:
@@ -152,10 +161,43 @@ def require_live_pilot_intent(
 ) -> dict[str, Any]:
     """Raise unless a real-money intent stays inside the accepted pilot envelope."""
     policy = build_live_pilot_policy(policy_path=policy_path)
-    problems = _intent_problems(policy, proposed_intent, live_telemetry=live_telemetry)
+    review = evaluate_live_pilot_intent(
+        proposed_intent,
+        policy=policy,
+        live_telemetry=live_telemetry,
+    )
+    problems = list(review.get("missing_requirements") or [])
     if problems:
         raise LivePilotError("Live pilot blocks order: " + "; ".join(problems))
     return policy
+
+
+def evaluate_live_pilot_intent(
+    proposed_intent: Mapping[str, Any],
+    *,
+    policy: Mapping[str, Any] | None = None,
+    policy_path: Path | str | None = None,
+    live_telemetry: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    resolved = dict(policy) if isinstance(policy, Mapping) else build_live_pilot_policy(policy_path=policy_path)
+    problems = _intent_problems(resolved, proposed_intent, live_telemetry=live_telemetry)
+    return {
+        "passed": not problems,
+        "sizing_mode": resolved.get("sizing_mode"),
+        "missing_requirements": list(dict.fromkeys(problems)),
+        "evidence": {
+            "symbol": proposed_intent.get("symbol"),
+            "lots": proposed_intent.get("lots", proposed_intent.get("volume")),
+            "pre_trade_estimate_status": proposed_intent.get("pre_trade_estimate_status"),
+            "risk_at_stop_usd": proposed_intent.get("risk_at_stop_usd"),
+            "risk_at_stop_pct_equity": proposed_intent.get("risk_at_stop_pct_equity"),
+            "max_trade_risk_pct_equity": resolved.get("max_trade_risk_pct_equity"),
+            "estimated_margin_required_usd": proposed_intent.get("estimated_margin_required_usd"),
+            "estimated_free_margin_after_usd": proposed_intent.get("estimated_free_margin_after_usd"),
+            "estimated_margin_utilization_after_pct": proposed_intent.get("estimated_margin_utilization_after_pct"),
+            "missing_requirements": list(dict.fromkeys(problems)),
+        },
+    }
 
 
 def record_live_pilot_dispatch(
@@ -203,6 +245,9 @@ def _empty_policy() -> dict[str, Any]:
         "owner_accepted_at": None,
         "updated_at": None,
         "allowed_symbols": [],
+        "sizing_mode": SIZING_MODE_RISK_DENOMINATED,
+        "continuous_authority": True,
+        "max_trade_risk_pct_equity": DEFAULT_MAX_TRADE_RISK_PCT_EQUITY,
         "max_trade_lots": DEFAULT_MAX_TRADE_LOTS,
         "max_open_live_lots": DEFAULT_MAX_OPEN_LIVE_LOTS,
         "max_live_trade_count": DEFAULT_MAX_LIVE_TRADE_COUNT,
@@ -221,6 +266,10 @@ def _finalize_policy(policy: Mapping[str, Any]) -> dict[str, Any]:
     data = dict(policy)
     data["report_kind"] = REPORT_KIND
     data["allowed_symbols"] = _clean_symbols(data.get("allowed_symbols"))
+    data["sizing_mode"] = _sizing_mode(data.get("sizing_mode"))
+    data["continuous_authority"] = bool(
+        data.get("continuous_authority", data["sizing_mode"] == SIZING_MODE_RISK_DENOMINATED)
+    )
     data["checks"] = {key: bool((data.get("checks") or {}).get(key, False)) for key in REQUIRED_CHECKS}
     data["max_trade_lots"] = _float(data.get("max_trade_lots"), DEFAULT_MAX_TRADE_LOTS)
     data["max_open_live_lots"] = _float(data.get("max_open_live_lots"), DEFAULT_MAX_OPEN_LIVE_LOTS)
@@ -228,26 +277,36 @@ def _finalize_policy(policy: Mapping[str, Any]) -> dict[str, Any]:
     data["max_daily_loss_usd"] = _float(data.get("max_daily_loss_usd"), DEFAULT_MAX_DAILY_LOSS_USD)
     data["max_total_loss_usd"] = _float(data.get("max_total_loss_usd"), DEFAULT_MAX_TOTAL_LOSS_USD)
     data["max_pilot_days"] = _int(data.get("max_pilot_days"), DEFAULT_MAX_PILOT_DAYS)
+    data["max_trade_risk_pct_equity"] = _float(
+        data.get("max_trade_risk_pct_equity"),
+        DEFAULT_MAX_TRADE_RISK_PCT_EQUITY,
+    )
     data["live_trade_count"] = max(0, _int(data.get("live_trade_count"), 0))
 
     config_missing = _config_missing(data)
     raw_status = str(data.get("owner_pilot_status") or STATUS_OPEN)
     status = STATUS_ACCEPT if raw_status == STATUS_ACCEPT and not config_missing else STATUS_OPEN
     capacity_remaining = max(0, int(data["max_live_trade_count"]) - int(data["live_trade_count"]))
-    capacity_missing = ["pilot live trade count reached"] if status == STATUS_ACCEPT and capacity_remaining <= 0 else []
+    capacity_missing = (
+        ["pilot live trade count reached"]
+        if status == STATUS_ACCEPT and not data["continuous_authority"] and capacity_remaining <= 0
+        else []
+    )
     data["owner_pilot_status"] = status
     data["accepted_for_live_start"] = status == STATUS_ACCEPT
-    data["pilot_capacity_remaining"] = capacity_remaining
-    data["ready_for_next_live_order"] = status == STATUS_ACCEPT and capacity_remaining > 0
+    data["pilot_capacity_remaining"] = None if data["continuous_authority"] else capacity_remaining
+    data["ready_for_next_live_order"] = status == STATUS_ACCEPT and (
+        data["continuous_authority"] or capacity_remaining > 0
+    )
     data["missing_requirements"] = config_missing + capacity_missing
     data["claim_boundary"] = CLAIM_BOUNDARY
     data["next_action"] = (
-        "Live pilot is owner ACCEPT and has capacity for the next small live order."
+        "Risk-denominated live authority is ACCEPT; the next order may use the maximum lot size supported by fresh stop-risk, margin, and portfolio evidence."
         if data["ready_for_next_live_order"]
         else (
-            "Pilot capacity is exhausted; review broker-confirmed pilot outcomes before resetting or scaling."
+            "Legacy fixed-count pilot capacity is exhausted; review broker-confirmed outcomes before resetting it."
             if capacity_missing
-            else "Set small live limits, allowed symbols, required owner checks, then owner-confirm ACCEPT."
+            else "Set risk-denominated limits, allowed symbols, required owner checks, then owner-confirm ACCEPT."
         )
     )
     return data
@@ -269,17 +328,25 @@ def _config_missing(policy: Mapping[str, Any]) -> list[str]:
     if not _clean_symbols(policy.get("allowed_symbols")):
         missing.append("allowed_symbols")
 
+    sizing_mode = _sizing_mode(policy.get("sizing_mode"))
     max_trade = _float(policy.get("max_trade_lots"), 0.0)
     max_open = _float(policy.get("max_open_live_lots"), 0.0)
+    max_trade_risk = _float(policy.get("max_trade_risk_pct_equity"), 0.0)
     max_count = _int(policy.get("max_live_trade_count"), 0)
     max_daily_loss = _float(policy.get("max_daily_loss_usd"), 0.0)
     max_total_loss = _float(policy.get("max_total_loss_usd"), 0.0)
     max_days = _int(policy.get("max_pilot_days"), 0)
 
-    if max_trade <= 0 or max_trade > HARD_MAX_TRADE_LOTS:
-        missing.append(f"max_trade_lots must be >0 and <= {HARD_MAX_TRADE_LOTS}")
-    if max_open < max_trade or max_open > HARD_MAX_OPEN_LIVE_LOTS:
-        missing.append(f"max_open_live_lots must be >= max_trade_lots and <= {HARD_MAX_OPEN_LIVE_LOTS}")
+    if sizing_mode == SIZING_MODE_RISK_DENOMINATED:
+        if max_trade_risk <= 0 or max_trade_risk > HARD_MAX_TRADE_RISK_PCT_EQUITY:
+            missing.append(
+                f"max_trade_risk_pct_equity must be >0 and <= {HARD_MAX_TRADE_RISK_PCT_EQUITY}"
+            )
+    else:
+        if max_trade <= 0 or max_trade > HARD_MAX_TRADE_LOTS:
+            missing.append(f"max_trade_lots must be >0 and <= {HARD_MAX_TRADE_LOTS}")
+        if max_open < max_trade or max_open > HARD_MAX_OPEN_LIVE_LOTS:
+            missing.append(f"max_open_live_lots must be >= max_trade_lots and <= {HARD_MAX_OPEN_LIVE_LOTS}")
     if max_count < 1 or max_count > HARD_MAX_LIVE_TRADE_COUNT:
         missing.append(f"max_live_trade_count must be 1..{HARD_MAX_LIVE_TRADE_COUNT}")
     if max_daily_loss <= 0 or max_daily_loss > HARD_MAX_DAILY_LOSS_USD:
@@ -307,18 +374,65 @@ def _intent_problems(
     lots = _float(proposed_intent.get("lots", proposed_intent.get("volume")), 0.0)
     if lots <= 0:
         problems.append("lots must be positive")
-    if lots > float(policy.get("max_trade_lots") or 0.0):
-        problems.append(f"lots {lots:.4f} exceeds pilot max_trade_lots {float(policy.get('max_trade_lots') or 0.0):.4f}")
-    open_lots = _open_live_lots(live_telemetry)
-    if open_lots + lots > float(policy.get("max_open_live_lots") or 0.0):
-        problems.append(
-            f"open lots plus order {open_lots + lots:.4f} exceeds pilot max_open_live_lots "
-            f"{float(policy.get('max_open_live_lots') or 0.0):.4f}"
-        )
-    expected_loss = proposed_intent.get("expected_loss_usd")
-    if expected_loss is not None and _float(expected_loss, 0.0) > float(policy.get("max_daily_loss_usd") or 0.0):
-        problems.append("expected_loss_usd exceeds pilot max_daily_loss_usd")
+    if _sizing_mode(policy.get("sizing_mode")) == SIZING_MODE_RISK_DENOMINATED:
+        problems.extend(_risk_denominated_intent_problems(policy, proposed_intent))
+    else:
+        if lots > float(policy.get("max_trade_lots") or 0.0):
+            problems.append(f"lots {lots:.4f} exceeds pilot max_trade_lots {float(policy.get('max_trade_lots') or 0.0):.4f}")
+        open_lots = _open_live_lots(live_telemetry)
+        if open_lots + lots > float(policy.get("max_open_live_lots") or 0.0):
+            problems.append(
+                f"open lots plus order {open_lots + lots:.4f} exceeds pilot max_open_live_lots "
+                f"{float(policy.get('max_open_live_lots') or 0.0):.4f}"
+            )
+        expected_loss = proposed_intent.get("expected_loss_usd")
+        if expected_loss is not None and _float(expected_loss, 0.0) > float(policy.get("max_daily_loss_usd") or 0.0):
+            problems.append("expected_loss_usd exceeds pilot max_daily_loss_usd")
     return list(dict.fromkeys(problems))
+
+
+def _risk_denominated_intent_problems(
+    policy: Mapping[str, Any],
+    proposed_intent: Mapping[str, Any],
+) -> list[str]:
+    problems: list[str] = []
+    if str(proposed_intent.get("pre_trade_estimate_status") or "").upper() != "ESTIMATED":
+        problems.append("fresh complete pre-trade money estimate is required")
+
+    risk_usd = _optional_float(proposed_intent.get("risk_at_stop_usd"))
+    risk_pct = _optional_float(proposed_intent.get("risk_at_stop_pct_equity"))
+    equity = _optional_float(proposed_intent.get("account_equity_usd"))
+    margin_required = _optional_float(proposed_intent.get("estimated_margin_required_usd"))
+    free_after = _optional_float(proposed_intent.get("estimated_free_margin_after_usd"))
+    margin_after_pct = _optional_float(proposed_intent.get("estimated_margin_utilization_after_pct"))
+
+    if risk_usd is None or risk_usd <= 0:
+        problems.append("broker-valued risk_at_stop_usd must be positive")
+    if risk_pct is None or risk_pct <= 0:
+        problems.append("risk_at_stop_pct_equity must be positive")
+    if equity is None or equity <= 0:
+        problems.append("fresh account_equity_usd must be positive")
+    if risk_usd is not None and risk_usd > 0 and equity is not None and equity > 0 and risk_pct is not None:
+        recomputed = risk_usd / equity * 100.0
+        if abs(recomputed - risk_pct) > max(0.02, recomputed * 0.01):
+            problems.append("risk_at_stop_pct_equity is inconsistent with stop risk and equity")
+    max_risk_pct = _float(policy.get("max_trade_risk_pct_equity"), 0.0)
+    if risk_pct is not None and risk_pct > max_risk_pct + 1e-9:
+        problems.append(
+            f"stop risk {risk_pct:.4f}% exceeds live authority max_trade_risk_pct_equity {max_risk_pct:.4f}%"
+        )
+    if margin_required is None or margin_required < 0:
+        problems.append("fresh estimated_margin_required_usd is required")
+    if free_after is None or free_after < 0:
+        problems.append("estimated free margin after order must be nonnegative")
+    if margin_after_pct is None or margin_after_pct < 0:
+        problems.append("fresh estimated_margin_utilization_after_pct is required")
+    if not str(proposed_intent.get("unit_value_source") or "").strip():
+        problems.append("broker or instrument stop-value source is required")
+    expected_loss = _optional_float(proposed_intent.get("expected_loss_usd"))
+    if expected_loss is not None and risk_usd is not None and expected_loss > risk_usd + max(0.01, risk_usd * 0.005):
+        problems.append("expected_loss_usd exceeds the attached conservative stop-risk estimate")
+    return problems
 
 
 def _open_live_lots(live_telemetry: Mapping[str, Any] | None) -> float:
@@ -387,6 +501,19 @@ def _float(value: Any, default: float) -> float:
         return float(value)
     except (TypeError, ValueError):
         return float(default)
+
+
+def _optional_float(value: Any) -> float | None:
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed == parsed and abs(parsed) != float("inf") else None
+
+
+def _sizing_mode(value: Any) -> str:
+    mode = str(value or SIZING_MODE_RISK_DENOMINATED).strip().upper()
+    return mode if mode in {SIZING_MODE_RISK_DENOMINATED, SIZING_MODE_ABSOLUTE_LOTS} else SIZING_MODE_RISK_DENOMINATED
 
 
 def _int(value: Any, default: int) -> int:

@@ -1,8 +1,9 @@
 """Agentic trading-day workflow plan for CAS Forex.
 
-This module does not run a live trading loop. It defines the contract the next
-worker layer should execute: when the desk wakes, which agents exist, what
-evidence they must read, how often they act, and what they write back.
+This module does not run the broker or provider bridge itself. It defines the
+contract the downstream runtime should execute: when the desk wakes, which
+agents exist, what evidence they must read, how often they act, and what they
+write back before approved intents continue into guarded autonomous dispatch.
 """
 
 from __future__ import annotations
@@ -23,7 +24,10 @@ CLAIM_BOUNDARY = (
     "overseer, research, terminal-bridge, and memory agents. It creates "
     "schedules, route intents, research tasks, and evidence requirements; it "
     "does not by itself execute live broker orders, create broker ACCEPT, "
-    "deposit, withdraw, move bank/card funds, or automate payouts."
+    "deposit, withdraw, move bank/card funds, or automate payouts. Those "
+    "side effects occur only when approved intents continue through "
+    "order_dispatch.py, execution_guard.py, broker/provider truth, risk, "
+    "receipt, and kill-switch gates inside owner-delegated authority."
 )
 
 
@@ -75,17 +79,25 @@ def build_agent_workflow_plan(
             "forex_fury_replay_results": _source_ref(replay),
         },
         "live_execution_boundary": {
-            "live_trading_status": "CURRENTLY NOT LICENSED",
-            "broker_accept_status": "CURRENTLY NOT LICENSED",
-            "auto_deposit_status": "CURRENTLY NOT LICENSED",
-            "debit_card_bank_movement_status": "CURRENTLY NOT LICENSED",
-            "payout_automation_status": "CURRENTLY NOT LICENSED",
+            "live_trading_status": "OWNER_ARMING_REQUIRED",
+            "broker_accept_status": "OWNER_ARMING_REQUIRED",
+            "auto_deposit_status": "OWNER_AND_PROVIDER_PENDING",
+            "debit_card_bank_movement_status": "OWNER_AND_PROVIDER_PENDING",
+            "payout_automation_status": "OWNER_AND_PROVIDER_PENDING",
             "owner_runtime_authorization_required": True,
+            "autonomous_execution_path": [
+                "agent route intents",
+                "order_dispatch.py",
+                "execution_guard.py",
+                "broker or provider bridge",
+                "receipt and ledger reconciliation",
+            ],
             "plain_english": (
                 "This plan tells the agents how to wake up, analyze, propose, "
-                "compound, close, research, and record trades. A separate "
-                "runtime bridge must still be wired before live broker orders "
-                "or money movement can happen."
+                "compound, close, research, and record trades. Once the owner "
+                "arms live or money authority, approved intents may execute "
+                "autonomously through order_dispatch.py, execution_guard.py, "
+                "broker truth, risk, provider, receipt, and kill-switch gates."
             ),
         },
     }
@@ -650,4 +662,3 @@ def _file_sha256(path: Path) -> Optional[str]:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
-

@@ -11,7 +11,7 @@ What is and is NOT a lever here:
 
   - IS a lever: edge_threshold, max_risk_pct_per_trade, max_concurrent_trades,
     max_positions_per_symbol, max_total_exposure_lots, daily_loss_cap_usd,
-    symbols, sessions, max_compound_units. These shape HOW HARD the AI pursues
+    symbols, sessions, timeframes, max_compound_units. These shape HOW HARD the AI pursues
     the target, never WHETHER an edge exists.
   - NOT a lever: real-money / go-live. Flipping demo -> live money stays an
     explicit owner gate elsewhere in the stack (BRIDGE-level ``is_demo_account``
@@ -40,6 +40,10 @@ from cas_forex.instruments import SUPPORTED_SYMBOLS
 
 # Canonical trading sessions the AI may enable/disable.
 SUPPORTED_SESSIONS: Tuple[str, ...] = ("Asian", "London", "NewYork")
+# M1/M5 form the fresh micro-scalp lane. M15/H1 preserve the broader
+# intraday lane. Higher analytical timeframes do not silently become entry
+# schedules through this control surface.
+SUPPORTED_ENTRY_TIMEFRAMES: Tuple[str, ...] = ("M1", "M5", "M15", "H1")
 
 
 @dataclass(frozen=True)
@@ -86,8 +90,9 @@ class SetLever:
         return kept, dropped
 
 
-# Scalar lever specifications. daily_loss_cap_usd has no upper guardrail
-# (owner may run uncapped) -- represented as +inf so clamping never triggers high.
+# Scalar lever specifications. Zero disables daily_loss_cap_usd; positive values
+# stop new exposure once reconciled daily realized P&L reaches the boundary.
+# The authority envelope supplies its upper guardrail.
 _SCALAR_LEVERS: Dict[str, ScalarLever] = {
     "edge_threshold": ScalarLever("edge_threshold", 0.65, 0.50, 0.95),
     "max_risk_pct_per_trade": ScalarLever("max_risk_pct_per_trade", 0.5, 0.0, 5.0),
@@ -153,6 +158,11 @@ _SET_LEVERS: Dict[str, SetLever] = {
         "sessions",
         default=SUPPORTED_SESSIONS,
         allowed=SUPPORTED_SESSIONS,
+    ),
+    "timeframes": SetLever(
+        "timeframes",
+        default=SUPPORTED_ENTRY_TIMEFRAMES,
+        allowed=SUPPORTED_ENTRY_TIMEFRAMES,
     ),
 }
 
@@ -250,7 +260,31 @@ class AiControlSurface:
             ),
         }
 
+    def preview_adjust(self, lever: str, value: Any) -> Dict[str, Any]:
+        """Return the same shape as ``adjust`` without mutating or persisting."""
+        if lever in _SCALAR_LEVERS:
+            return self._preview_scalar(_SCALAR_LEVERS[lever], value)
+        if lever in _SET_LEVERS:
+            return self._preview_set(_SET_LEVERS[lever], value)
+        return {
+            "ok": False,
+            "clamped": False,
+            "old": None,
+            "new": None,
+            "reason": (
+                f"Unknown lever '{lever}'. Known levers: {sorted(LEVER_NAMES)}"
+            ),
+        }
+
     def _adjust_scalar(self, lever: ScalarLever, value: Any) -> Dict[str, Any]:
+        result = self._preview_scalar(lever, value)
+        if not result["ok"]:
+            return result
+        self._values[lever.name] = result["new"]
+        self._fire_persist(self.snapshot())
+        return result
+
+    def _preview_scalar(self, lever: ScalarLever, value: Any) -> Dict[str, Any]:
         old = self._values[lever.name]
         try:
             numeric = float(value)
@@ -265,7 +299,6 @@ class AiControlSurface:
                 ),
             }
         new, clamped = lever.clamp(numeric)
-        self._values[lever.name] = new
         if clamped:
             hi = "+inf" if lever.maximum == float("inf") else lever.maximum
             reason = (
@@ -281,10 +314,17 @@ class AiControlSurface:
             "new": new,
             "reason": reason,
         }
-        self._fire_persist(self.snapshot())
         return result
 
     def _adjust_set(self, lever: SetLever, value: Any) -> Dict[str, Any]:
+        result = self._preview_set(lever, value)
+        if not result["ok"]:
+            return result
+        self._values[lever.name] = result["new"]
+        self._fire_persist(self.snapshot())
+        return result
+
+    def _preview_set(self, lever: SetLever, value: Any) -> Dict[str, Any]:
         old = list(self._values[lever.name])
         kept, dropped = lever.normalize(value)
         if not kept:
@@ -302,7 +342,6 @@ class AiControlSurface:
                     f"are in allowed {list(lever.allowed)}."
                 ),
             }
-        self._values[lever.name] = kept
         clamped = bool(dropped)
         if clamped:
             reason = (
@@ -317,7 +356,6 @@ class AiControlSurface:
             "new": list(kept),
             "reason": reason,
         }
-        self._fire_persist(self.snapshot())
         return result
 
     # -- internals ------------------------------------------------------------

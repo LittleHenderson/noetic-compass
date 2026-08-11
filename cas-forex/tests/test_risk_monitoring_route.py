@@ -80,6 +80,10 @@ def test_route_returns_200_and_empty_snapshot_when_no_inputs(app):
     assert payload["by_symbol"] == []
     assert payload["largest_symbol_exposure"] is None
     assert payload["margin_utilization_pct"] is None
+    assert payload["telemetry_source"] == "none"
+    assert payload["position_feed_label"] == "NONE"
+    assert payload["movement_source_truth"]["movement_stream_present"] is False
+    assert payload["movement_source_truth"]["position_feed_label"] == "NONE"
     assert "no open positions" in payload["plain_english_summary"].lower()
 
 
@@ -87,9 +91,15 @@ def test_route_returns_200_with_populated_payload_when_loader_provides_inputs(ap
     route_module.set_loader_for_testing(lambda: {
         "live_telemetry": {
             "open_positions": [
-                {"symbol": "EURUSD", "direction": "BUY", "lots": 0.5, "floating_pnl": 12.0},
-                {"symbol": "GBPUSD", "direction": "SELL", "lots": 0.25, "floating_pnl": -3.0},
-            ]
+                {"symbol": "EURUSD", "direction": "BUY", "lots": 0.5, "floating_pnl": 12.0, "broker_ticket": None, "price_source": "paper_route_snapshot:static_simulation", "price_stale": True, "position_source_label": "PAPER_SIM_STATIC"},
+                {"symbol": "GBPUSD", "direction": "SELL", "lots": 0.25, "floating_pnl": -3.0, "broker_ticket": None, "price_source": "paper_route_snapshot:static_simulation", "price_stale": True, "position_source_label": "PAPER_SIM_STATIC"},
+            ],
+            "data_freshness": {
+                "source": "movement_stream",
+                "stale": False,
+                "last_update_iso": "2026-06-25T12:00:00+00:00",
+                "movement_source": {"price_source_status": "STATIC_SIMULATION_FALLBACK"},
+            },
         },
         "account_snapshot": {
             "balance": 10000.0,
@@ -107,6 +117,57 @@ def test_route_returns_200_with_populated_payload_when_loader_provides_inputs(ap
     assert payload["largest_symbol_exposure"]["symbol"] == "EURUSD"
     assert payload["account_equity"] == pytest.approx(10009.0)
     assert payload["margin_utilization_pct"] is not None
+    assert payload["telemetry_source"] == "movement_stream"
+    assert payload["price_source_status"] == "STATIC_SIMULATION_FALLBACK"
+    assert payload["position_feed_label"] == "SIM PROOF"
+    assert payload["static_position_count"] == 2
+    assert payload["movement_source_truth"]["price_source_status"] == "STATIC_SIMULATION_FALLBACK"
+    assert payload["movement_source_truth"]["position_feed_label"] == "SIM PROOF"
+    assert payload["movement_source_truth"]["static_position_count"] == 2
+    assert payload["movement_source_truth"]["detail"] == payload["position_feed_detail"]
+
+
+def test_route_preserves_canonical_position_feed_detail(app):
+    detail = (
+        "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions. "
+        "Static simulator fallback is active for 1/1 row(s), so prices and floating P&L can remain at entry "
+        "until usable provider or MT5 quotes arrive. Requested provider: Yahoo. Static fallback symbols: NAS100. "
+        "Stale provider/MT5 snapshots were rejected for: NAS100 (max age 900s)."
+    )
+    route_module.set_loader_for_testing(lambda: {
+        "live_telemetry": {
+            "open_positions": [
+                {
+                    "symbol": "NAS100",
+                    "direction": "BUY",
+                    "lots": 0.1,
+                    "floating_pnl": 0.0,
+                    "broker_ticket": None,
+                    "price_source": "paper_route_snapshot:static_simulation",
+                    "price_stale": True,
+                    "position_source_label": "PAPER_SIM_STATIC",
+                }
+            ],
+            "position_feed_label": "SIM PROOF",
+            "position_feed_detail": detail,
+            "data_freshness": {
+                "source": "movement_stream",
+                "stale": False,
+                "last_update_iso": "2026-06-25T12:00:00+00:00",
+                "movement_source": {
+                    "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                },
+            },
+        },
+        "account_snapshot": None,
+    })
+
+    status, payload = asyncio.run(_asgi_get(app, "/api/forex/risk-monitoring/portfolio"))
+
+    assert status == 200
+    assert payload["position_feed_label"] == "SIM PROOF"
+    assert payload["position_feed_detail"] == detail
+    assert "Stale provider/MT5 snapshots were rejected for: NAS100 (max age 900s)." in payload["position_feed_detail"]
 
 
 def test_route_payload_has_all_required_top_level_keys(app):
@@ -129,6 +190,15 @@ def test_route_payload_has_all_required_top_level_keys(app):
         "account_margin",
         "account_free_margin",
         "margin_utilization_pct",
+        "telemetry_source",
+        "telemetry_stale",
+        "telemetry_last_update_iso",
+        "price_source_status",
+        "position_feed_label",
+        "position_feed_detail",
+        "broker_ticket_position_count",
+        "static_position_count",
+        "movement_source_truth",
         "plain_english_summary",
         "diagnostic_hints",
     }

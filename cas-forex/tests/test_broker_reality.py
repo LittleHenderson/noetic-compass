@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 
 from api.routes import broker_reality as route_module
 from cas_forex import broker_reality
+from cas_forex.broker_profiles import selected_broker_profile
 
 
 def _complete_patch():
@@ -29,6 +30,16 @@ def _complete_patch():
         "broker_entity_reviewed": True,
         "owner_accepts_broker_terms": True,
     }
+
+
+def test_risenfx_profile_is_available_for_owner_selected_routing():
+    profile = selected_broker_profile("RISENFX")
+
+    assert profile is not None
+    assert profile["display_name"] == "RisenFX"
+    assert profile["website"] == "https://www.risenfx.com/"
+    assert profile["configured_env_prefix"] == "CAS_FOREX_RISENFX_"
+    assert "Risen-Trade" in profile["platform_notes"]
 
 
 def test_broker_reality_draft_is_open(tmp_path, monkeypatch):

@@ -24,10 +24,15 @@ runtime-override API.
 from __future__ import annotations
 
 import os
+import threading
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Optional
 
 PLATFORMS = ("auto", "mt5", "mt4", "simulated")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_SIMULATED_BROKER_STATE_PATH = REPO_ROOT / "runtime" / "simulated-broker-state.json"
+DEFAULT_PAPER_OUTCOME_LEDGER_PATH = REPO_ROOT / "runtime" / "paper-outcomes.json"
 
 # Strict-NORMAL simulator defaults (mirror SimulatedBrokerBridge constructor).
 _STRICT = {
@@ -74,6 +79,8 @@ _PRESETS = {
 
 # Process-global runtime overrides (single-owner cockpit). Reset on restart.
 _OVERRIDES: dict[str, Any] = {}
+_SIMULATED_RUNTIME_BRIDGE: Any = None
+_SIMULATED_RUNTIME_LOCK = threading.RLock()
 
 
 @dataclass(frozen=True)
@@ -232,16 +239,96 @@ def clear_broker_control_overrides() -> None:
     _OVERRIDES.clear()
 
 
-def _simulated_bridge(ctrl: BrokerControl):
+def _simulated_bridge(
+    ctrl: BrokerControl,
+    *,
+    selection_status: str = "SIMULATED_PAPER_SELECTED",
+    selection_detail: str = "The owner selected the internal paper simulator.",
+):
     from cas_forex.broker.mt5_bridge import SimulatedBrokerBridge
 
-    return SimulatedBrokerBridge(
-        max_spread_pips=ctrl.max_spread_pips,
-        max_slippage_pips=ctrl.max_slippage_pips,
-        min_lot=ctrl.min_lot,
-        max_lot=ctrl.max_lot,
-        min_stop_distance_pips=ctrl.min_stop_distance_pips,
+    global _SIMULATED_RUNTIME_BRIDGE
+    if os.environ.get("PYTEST_CURRENT_TEST"):
+        bridge = SimulatedBrokerBridge(
+            max_spread_pips=ctrl.max_spread_pips,
+            max_slippage_pips=ctrl.max_slippage_pips,
+            min_lot=ctrl.min_lot,
+            max_lot=ctrl.max_lot,
+            min_stop_distance_pips=ctrl.min_stop_distance_pips,
+        )
+    else:
+        with _SIMULATED_RUNTIME_LOCK:
+            if _SIMULATED_RUNTIME_BRIDGE is None:
+                _SIMULATED_RUNTIME_BRIDGE = SimulatedBrokerBridge(
+                    max_spread_pips=ctrl.max_spread_pips,
+                    max_slippage_pips=ctrl.max_slippage_pips,
+                    min_lot=ctrl.min_lot,
+                    max_lot=ctrl.max_lot,
+                    min_stop_distance_pips=ctrl.min_stop_distance_pips,
+                    state_path=DEFAULT_SIMULATED_BROKER_STATE_PATH,
+                    closed_ticket_ledger_path=DEFAULT_PAPER_OUTCOME_LEDGER_PATH,
+                )
+            bridge = _SIMULATED_RUNTIME_BRIDGE
+            bridge.max_spread_pips = ctrl.max_spread_pips
+            bridge.max_slippage_pips = ctrl.max_slippage_pips
+            bridge.min_lot = ctrl.min_lot
+            bridge.max_lot = ctrl.max_lot
+            bridge.min_stop_distance_pips = ctrl.min_stop_distance_pips
+    return _with_selection_metadata(
+        bridge,
+        status=selection_status,
+        detail=selection_detail,
+        execution_lane="PAPER",
     )
+
+
+def _with_selection_metadata(
+    bridge: Any,
+    *,
+    status: str,
+    detail: str,
+    execution_lane: str,
+) -> Any:
+    try:
+        bridge.cas_selection_status = str(status)
+        bridge.cas_selection_detail = str(detail)
+        bridge.cas_execution_lane = str(execution_lane)
+    except Exception:
+        pass
+    return bridge
+
+
+def bridge_selection_report(bridge: Any) -> dict[str, Any]:
+    """Owner-facing truth about the bridge chosen for this cycle."""
+
+    return {
+        "bridge_class": type(bridge).__name__,
+        "status": str(getattr(bridge, "cas_selection_status", "BRIDGE_SELECTED")),
+        "detail": str(getattr(bridge, "cas_selection_detail", "Configured broker bridge selected.")),
+        "execution_lane": str(getattr(bridge, "cas_execution_lane", "UNKNOWN")),
+        "executes_real_orders": bool(_safe_bridge_call(bridge, "will_execute_real_order", False)),
+    }
+
+
+def _safe_bridge_call(bridge: Any, name: str, default: Any) -> Any:
+    try:
+        fn = getattr(bridge, name, None)
+        return fn() if callable(fn) else default
+    except Exception:
+        return default
+
+
+def _paper_mt5_readiness(bridge: Any) -> tuple[bool, str, str]:
+    try:
+        state = bridge.order_send_permission_state()
+    except Exception as exc:
+        return False, "MT5_PERMISSION_UNAVAILABLE", f"MT5 permission check failed: {type(exc).__name__}: {exc}"
+    if not isinstance(state, dict) or not state:
+        return False, "MT5_PERMISSION_UNAVAILABLE", "MT5 order-send permission state is unavailable."
+    ready = bool(state.get("can_submit_order_send"))
+    status = str(state.get("status") or ("ORDER_SEND_READY_AT_TERMINAL" if ready else "ORDER_SEND_BLOCKED"))
+    detail = str(state.get("plain_english") or "; ".join(state.get("blockers") or []) or status)
+    return ready, status, detail
 
 
 def _try_mt5_bridge(config: Any, *, require_demo: bool):
@@ -271,6 +358,7 @@ def _try_mt5_bridge(config: Any, *, require_demo: bool):
         password=getattr(config, "mt5_password", ""),
         server=getattr(config, "mt5_server", ""),
         prefer_mt5=bool(getattr(config, "prefer_mt5", True)),
+        runtime_config=config,
     )
     try:
         if not bridge.connect():
@@ -342,6 +430,107 @@ def select_bridge(config: Any = None):
     if bridge is not None:
         return bridge
     return _simulated_bridge(ctrl)
+
+
+def select_paper_learning_bridge(config: Any = None):
+    """Select an execution-capable bridge for continuous paper learning.
+
+    This path never uses a connected LIVE account. A demo terminal is preferred
+    only when its terminal/account permissions say ``order_send`` can actually
+    run. If MT5 is readable but Algo Trading is off, the lane falls back to the
+    internal simulator instead of accumulating guaranteed broker rejects and
+    starving the learning ledger.
+    """
+
+    config = _resolve_config(config)
+    ctrl = resolve_broker_control(config)
+    from cas_forex.broker.mt5_bridge import MT4EABridge
+
+    if bool(getattr(config, "live_mode", False)):
+        raise ValueError("Paper learning bridge requires a final paper-only runtime config.")
+    if not bool(getattr(config, "paper_trading", False)):
+        raise ValueError("Paper learning bridge requires paper_trading=True.")
+
+    if ctrl.platform == "simulated":
+        return _simulated_bridge(ctrl)
+
+    if ctrl.platform == "mt4" or (
+        ctrl.platform == "auto"
+        and bool(getattr(config, "mt4_enabled", False))
+        and bool(getattr(config, "mt4_mailbox_dir", None))
+    ):
+        mt4 = MT4EABridge(
+            mailbox_dir=getattr(config, "mt4_mailbox_dir", None),
+            enabled=getattr(config, "mt4_enabled", None),
+            runtime_config=config,
+        )
+        if mt4.connect():
+            return _with_selection_metadata(
+                mt4,
+                status="PAPER_MT4_READY",
+                detail="Connected paper/demo MT4 mailbox selected for autonomous learning.",
+                execution_lane="PAPER",
+            )
+        if ctrl.platform == "mt4":
+            return _simulated_bridge(
+                ctrl,
+                selection_status="PAPER_SIMULATOR_FALLBACK",
+                selection_detail="Configured MT4 paper mailbox is unavailable; internal simulator is active.",
+            )
+
+    demo_bridge = _try_mt5_bridge(config, require_demo=True)
+    if demo_bridge is not None:
+        ready, permission_status, permission_detail = _paper_mt5_readiness(demo_bridge)
+        if ready:
+            return _with_selection_metadata(
+                demo_bridge,
+                status="PAPER_MT5_ORDER_SEND_READY",
+                detail=permission_detail,
+                execution_lane="PAPER",
+            )
+        return _simulated_bridge(
+            ctrl,
+            selection_status="PAPER_SIMULATOR_FALLBACK",
+            selection_detail=(
+                f"MT5 demo is readable but not execution-ready ({permission_status}): "
+                f"{permission_detail} Internal simulator is active so paper learning continues."
+            ),
+        )
+
+    return _simulated_bridge(
+        ctrl,
+        selection_status="PAPER_SIMULATOR_FALLBACK",
+        selection_detail=(
+            "No execution-ready DEMO MT5 terminal is available; internal simulator is active. "
+            "A connected LIVE terminal is never used by this paper lane."
+        ),
+    )
+
+
+def select_durable_simulator_handoff_bridge(config: Any = None):
+    """Return the durable simulator for management of pre-MT5 paper positions.
+
+    When an execution-ready MT5 demo terminal replaces the simulator as the
+    primary PAPER entry bridge, already-open simulator positions still need
+    stop/TP supervision until they close. This bridge is selected separately
+    for that management-only handoff; callers must never use it for new entries
+    while MT5 demo is primary.
+    """
+
+    config = _resolve_config(config)
+    if bool(getattr(config, "live_mode", False)):
+        raise ValueError("Simulator handoff management requires a final paper-only runtime config.")
+    if not bool(getattr(config, "paper_trading", False)):
+        raise ValueError("Simulator handoff management requires paper_trading=True.")
+    ctrl = resolve_broker_control(config)
+    return _simulated_bridge(
+        ctrl,
+        selection_status="PAPER_SIMULATOR_HANDOFF_MANAGEMENT",
+        selection_detail=(
+            "Durable simulator selected only to supervise positions opened before "
+            "MT5 demo became the primary paper entry bridge."
+        ),
+    )
 
 
 def build_broker_control_report(config: Any = None) -> dict[str, Any]:

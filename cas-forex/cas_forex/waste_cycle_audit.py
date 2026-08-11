@@ -76,6 +76,8 @@ class WasteCycleAuditStore:
             "edge": _edge_summary(edge),
             "execute_result": _safe_json(execute_result),
             "compound": _safe_json(compound),
+            "learning_trade": bool(result.get("learning_trade", False)),
+            "source": str(result.get("source") or "waste_runner"),
             "last_error": str(last_error or ""),
             "claim_boundary": CLAIM_BOUNDARY,
         }

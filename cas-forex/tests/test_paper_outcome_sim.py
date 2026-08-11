@@ -13,9 +13,11 @@ proven here with hand-computed numbers on injected candles:
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+import json
 
 import pytest
 
+import cas_forex.paper_outcome_sim as paper_outcome_sim
 from cas_forex.paper_outcome_sim import (
     load_paper_outcome_history,
     resolve_paper_outcomes,
@@ -53,7 +55,7 @@ def _attempt(ticket, *, direction="LONG", entry=1.1000, sl=1.0990, tp=1.1020, lo
             "take_profit": tp,
             "volume": lots,
         },
-        "outcome": {"broker_ticket": ticket, "filled_price": entry, "broker_mode": "PAPER_MT5"},
+        "outcome": {"broker_ticket": ticket, "filled_price": entry, "broker_mode": "SIMULATED"},
     }
 
 
@@ -130,7 +132,8 @@ def test_short_direction_mirrors(tmp_path):
     assert rec["profit"] > 0
 
 
-def test_untouched_trade_stays_open_with_no_record(tmp_path):
+def test_untouched_trade_stays_open_with_no_record(tmp_path, monkeypatch):
+    monkeypatch.setattr(paper_outcome_sim, "utc_now", lambda: T0 + timedelta(hours=1))
     candles = [_candle(1, high=1.1005, low=1.0995), _candle(2, high=1.1008, low=1.0996)]
     report = _run(tmp_path, [_attempt(105)], candles)
     assert report["newly_resolved"] == 0
@@ -163,12 +166,82 @@ def test_candles_before_open_are_ignored(tmp_path):
     assert rec["close_reason"] == "STOP_LOSS"
 
 
+def test_candles_ahead_of_resolution_clock_are_excluded(tmp_path, monkeypatch):
+    monkeypatch.setattr(paper_outcome_sim, "utc_now", lambda: T0 + timedelta(minutes=2))
+    candles = [
+        _candle(1, high=1.1005, low=1.0995),
+        _candle(10, high=1.1025, low=1.1002),
+    ]
+
+    report = _run(tmp_path, [_attempt(123)], candles)
+
+    assert report["newly_resolved"] == 0
+    assert report["still_open"] == 1
+    assert report["future_candles_discarded"] == 1
+    assert load_paper_outcome_history(tmp_path / "paper-outcomes.json")["history_records"] == []
+
+
+def test_impossible_future_outcome_is_quarantined_from_learning(tmp_path, monkeypatch):
+    observed_at = T0 + timedelta(minutes=2)
+    monkeypatch.setattr(paper_outcome_sim, "utc_now", lambda: observed_at)
+    ledger_path = tmp_path / "paper-outcomes.json"
+    ledger_path.write_text(
+        json.dumps(
+            {
+                "report_kind": "cas_forex_paper_outcome_ledger",
+                "history_records": [
+                    {
+                        "broker_ticket": "124",
+                        "decision_ref": "d-124",
+                        "order_id": "waste-d-124",
+                        "symbol": "EUR/USD",
+                        "direction": "LONG",
+                        "profit": 10.0,
+                        "open_time": T0.isoformat(),
+                        "close_time": (T0 + timedelta(hours=1)).isoformat(),
+                        "resolved_at": T0.isoformat(),
+                    }
+                ],
+                "unresolvable": {},
+                "updated_at": T0.isoformat(),
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = resolve_paper_outcomes(
+        attempts=[],
+        candles_by_symbol={},
+        ledger_path=ledger_path,
+    )
+    ledger = load_paper_outcome_history(ledger_path)
+
+    assert report["temporally_impossible_records_quarantined"] == 1
+    assert ledger["history_records"] == []
+    assert ledger["invalidated_records"][0]["broker_ticket"] == "124"
+    assert ledger["invalidated_records"][0]["invalidation_reason"] == (
+        "void_temporally_impossible_future_candle"
+    )
+    assert ledger["unresolvable"]["124"] == "void_temporally_impossible_future_candle"
+
+
 def test_real_money_attempts_are_never_eligible(tmp_path):
     att = _attempt(108, mode="LIVE")
     att["outcome"]["broker_mode"] = "LIVE_MT5"
     report = _run(tmp_path, [att], [_candle(1, high=1.1021, low=1.1002)])
     assert report["eligible_attempts"] == 0
     assert report["newly_resolved"] == 0
+
+
+def test_mt5_demo_attempt_waits_for_broker_history_instead_of_simulated_close(tmp_path):
+    att = _attempt(125)
+    att["outcome"]["broker_mode"] = "PAPER_MT5"
+
+    report = _run(tmp_path, [att], [_candle(1, high=1.1021, low=1.1002)])
+
+    assert report["eligible_attempts"] == 0
+    assert report["newly_resolved"] == 0
+    assert load_paper_outcome_history(tmp_path / "paper-outcomes.json")["history_records"] == []
 
 
 def test_spread_cost_always_charged_even_on_wins(tmp_path):
@@ -178,6 +251,159 @@ def test_spread_cost_always_charged_even_on_wins(tmp_path):
     rec = load_paper_outcome_history(tmp_path / "paper-outcomes.json")["history_records"][0]
     assert rec["profit"] < rec["gross_profit"]
     assert rec["commission"] < 0
+
+
+def test_durable_simulator_stop_and_volume_override_drive_outcome(tmp_path):
+    state = tmp_path / "simulated-broker-state.json"
+    attempt = _attempt(120, lots=0.10)
+    state.write_text(
+        json.dumps(
+            {
+                "positions": {
+                    "120": {
+                        "order": attempt["order"],
+                        "fill_price": 1.1000,
+                        "volume": 0.04,
+                        "timestamp": T0.isoformat(),
+                        "stop_loss": 1.1005,
+                        "take_profit": 1.1030,
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = _run(
+        tmp_path,
+        [attempt],
+        [_candle(1, high=1.1008, low=1.1004)],
+        simulated_broker_state_path=state,
+    )
+
+    assert report["newly_resolved"] == 1
+    rec = load_paper_outcome_history(tmp_path / "paper-outcomes.json")["history_records"][0]
+    assert rec["close_reason"] == "STOP_LOSS"
+    assert rec["exit"] == 1.1005
+    assert rec["lots"] == 0.04
+    assert rec["profit"] == _expected_pnl("EUR/USD", 1.1000, 1.1005, "LONG", 0.04)
+
+
+def test_durable_simulator_full_management_close_binds_realized_paper_pnl(tmp_path):
+    state = tmp_path / "simulated-broker-state.json"
+    state.write_text(
+        json.dumps(
+            {
+                "positions": {},
+                "close_events": [
+                    {
+                        "event_ticket": "121",
+                        "parent_broker_ticket": "121",
+                        "closed_volume": 0.10,
+                        "remaining_volume": 0.0,
+                        "full_close": True,
+                        "exit": 1.1010,
+                        "closed_at": (T0 + timedelta(minutes=2)).isoformat(),
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = _run(
+        tmp_path,
+        [_attempt(121)],
+        [],
+        simulated_broker_state_path=state,
+    )
+
+    assert report["newly_resolved_management_closes"] == 1
+    assert report["newly_resolved"] == 1
+    assert report["still_open"] == 0
+    rec = load_paper_outcome_history(tmp_path / "paper-outcomes.json")["history_records"][0]
+    assert rec["broker_ticket"] == "121"
+    assert rec["close_reason"] == "AI_HEDGE_SIMULATED_FULL_CLOSE"
+    assert rec["outcome_source"] == "paper_simulated_management_close"
+    assert rec["profit"] == _expected_pnl("EUR/USD", 1.1000, 1.1010, "LONG", 0.10)
+
+
+def test_durable_simulator_partial_close_records_slice_and_keeps_remainder_open(tmp_path, monkeypatch):
+    monkeypatch.setattr(paper_outcome_sim, "utc_now", lambda: T0 + timedelta(hours=1))
+    state = tmp_path / "simulated-broker-state.json"
+    attempt = _attempt(122, lots=0.10)
+    state.write_text(
+        json.dumps(
+            {
+                "positions": {
+                    "122": {
+                        "order": attempt["order"],
+                        "fill_price": 1.1000,
+                        "volume": 0.06,
+                        "timestamp": T0.isoformat(),
+                    }
+                },
+                "close_events": [
+                    {
+                        "event_ticket": "122:partial:1",
+                        "parent_broker_ticket": "122",
+                        "closed_volume": 0.04,
+                        "remaining_volume": 0.06,
+                        "full_close": False,
+                        "exit": 1.1010,
+                        "closed_at": (T0 + timedelta(minutes=2)).isoformat(),
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = _run(
+        tmp_path,
+        [attempt],
+        [_candle(1, high=1.1006, low=1.0996)],
+        simulated_broker_state_path=state,
+    )
+
+    assert report["newly_resolved_management_closes"] == 1
+    assert report["still_open"] == 1
+    rec = load_paper_outcome_history(tmp_path / "paper-outcomes.json")["history_records"][0]
+    assert rec["broker_ticket"] == "122:partial:1"
+    assert rec["parent_broker_ticket"] == "122"
+    assert rec["lots"] == 0.04
+    assert rec["remaining_volume"] == 0.06
+
+
+def test_voided_simulator_position_is_excluded_without_realized_pnl(tmp_path):
+    state = tmp_path / "simulated-broker-state.json"
+    state.write_text(
+        json.dumps(
+            {
+                "positions": {},
+                "void_events": [
+                    {
+                        "broker_ticket": "125",
+                        "reason": "forming_candle_reemission_bug",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = _run(
+        tmp_path,
+        [_attempt(125)],
+        [_candle(1, high=1.1025, low=1.1002)],
+        simulated_broker_state_path=state,
+    )
+    ledger = load_paper_outcome_history(tmp_path / "paper-outcomes.json")
+
+    assert report["newly_resolved"] == 0
+    assert report["newly_voided_simulated_positions"] == 1
+    assert ledger["history_records"] == []
+    assert ledger["unresolvable"]["125"] == "forming_candle_reemission_bug"
 
 
 def test_learning_engine_consumes_simulated_ledger(tmp_path):
@@ -487,6 +713,9 @@ def test_open_paper_positions_counts_unresolved_only(tmp_path):
         max_age_seconds=0,
     )
     assert len(rows) == 1
+    assert rows[0]["broker_ticket"] == "901"
+    assert rows[0]["order_id"] == "waste-d-901"
+    assert rows[0]["decision_ref"] == "d-901"
     assert rows[0]["symbol"] == "EUR/USD"
     assert rows[0]["direction"] == "LONG"
     assert rows[0]["lots"] == 0.10

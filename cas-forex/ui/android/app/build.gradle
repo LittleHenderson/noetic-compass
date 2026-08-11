@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+
+def casReleaseKeystoreProperties = new Properties()
+def casReleaseKeystorePropertiesFile = rootProject.file('keystore.properties')
+if (casReleaseKeystorePropertiesFile.exists()) {
+    casReleaseKeystorePropertiesFile.withInputStream { stream ->
+        casReleaseKeystoreProperties.load(stream)
+    }
+}
+def casReleaseProp = { name ->
+    def envName = "CAS_FOREX_ANDROID_${name.toUpperCase().replace('.', '_')}"
+    return casReleaseKeystoreProperties.getProperty(name) ?: System.getenv(envName)
+}
+def casReleaseStoreFile = casReleaseProp('storeFile')
+def casReleaseStorePassword = casReleaseProp('storePassword')
+def casReleaseKeyAlias = casReleaseProp('keyAlias')
+def casReleaseKeyPassword = casReleaseProp('keyPassword')
+def casReleaseSigningReady = casReleaseStoreFile && casReleaseStorePassword && casReleaseKeyAlias && casReleaseKeyPassword
+
+android {
+    namespace = "com.casforex.cockpit"
+    compileSdk = rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.casforex.cockpit"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    signingConfigs {
+        release {
+            if (casReleaseSigningReady) {
+                storeFile rootProject.file(casReleaseStoreFile)
+                storePassword casReleaseStorePassword
+                keyAlias casReleaseKeyAlias
+                keyPassword casReleaseKeyPassword
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            if (casReleaseSigningReady) {
+                signingConfig signingConfigs.release
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    def releaseRequested = taskGraph.allTasks.any { task ->
+        task.path in [':app:assembleRelease', ':app:bundleRelease']
+    }
+    if (releaseRequested && !casReleaseSigningReady) {
+        throw new GradleException(
+            'CAS Forex release signing is not configured. Create ui/android/keystore.properties ' +
+            'from keystore.properties.example or set CAS_FOREX_ANDROID_STOREFILE, ' +
+            'CAS_FOREX_ANDROID_STOREPASSWORD, CAS_FOREX_ANDROID_KEYALIAS, and ' +
+            'CAS_FOREX_ANDROID_KEYPASSWORD.'
+        )
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}

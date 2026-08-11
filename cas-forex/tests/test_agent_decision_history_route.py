@@ -96,6 +96,11 @@ def test_history_returns_decisions_newest_first():
     route_module.set_loader_for_testing(lambda: {
         "cycle_reports": reports,
         "context": _empty_context(),
+        "movement_source_truth": {
+            "price_source_status": "STATIC_SIMULATION_FALLBACK",
+            "position_feed_label": "SIM PROOF",
+            "position_feed_detail": "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions.",
+        },
     })
     status, body = asyncio.run(_asgi_get("/api/forex/agent-decision/history"))
     assert status == 200
@@ -105,6 +110,10 @@ def test_history_returns_decisions_newest_first():
     assert ids == ["c3", "c2", "c1"]
     paths = [d["cycle_report_path"] for d in body["decisions"]]
     assert paths[0].endswith("agent-workflow-cycle-c3-report.json")
+    assert body["decisions"][0]["version_trace"]["trace_source"] == "agent_cycle_report"
+    assert "strategy_ref_not_attached" in body["decisions"][0]["version_trace"]["gaps"]
+    assert body["movement_source_truth"]["position_feed_label"] == "SIM PROOF"
+    assert body["decisions"][0]["movement_source_truth"]["price_source_status"] == "STATIC_SIMULATION_FALLBACK"
 
 
 def test_history_respects_limit_parameter():
@@ -167,6 +176,38 @@ def test_history_summaries_never_advise_future_trade():
             assert phrase not in summary, (
                 f"forbidden trade-advisory phrase {phrase!r} in cycle {decision['cycle_id']}"
             )
+
+
+def test_history_preserves_movement_source_truth_when_loader_supplies_it():
+    reports = [
+        ("evidence_runs/agent_workflow_queue/agent-workflow-cycle-c2-report.json",
+         _make_cycle_report("c2")),
+        ("evidence_runs/agent_workflow_queue/agent-workflow-cycle-c1-report.json",
+         _make_cycle_report("c1")),
+    ]
+    route_module.set_loader_for_testing(lambda: {
+        "cycle_reports": reports,
+        "context": _empty_context(),
+        "movement_source_truth": {
+            "price_source_status": "STATIC_SIMULATION_FALLBACK",
+            "price_source_label": "Static Simulation",
+            "position_feed_label": "SIM PROOF",
+            "position_feed_detail": (
+                "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions. "
+                "Stale provider/MT5 snapshots were rejected for: NAS100 (max age 900s)."
+            ),
+            "static_simulator_position_count": 1,
+            "stale_price_position_count": 1,
+        },
+    })
+    status, body = asyncio.run(_asgi_get("/api/forex/agent-decision/history?limit=2"))
+    assert status == 200
+    truth = body["movement_source_truth"]
+    assert truth["price_source_status"] == "STATIC_SIMULATION_FALLBACK"
+    assert truth["position_feed_label"] == "SIM PROOF"
+    assert truth["static_simulator_position_count"] == 1
+    assert "Stale provider/MT5 snapshots were rejected for: NAS100 (max age 900s)." in truth["position_feed_detail"]
+    assert body["decisions"][1]["movement_source_truth"]["stale_price_position_count"] == 1
 
 
 def test_default_loader_limits_disk_reads_to_requested_newest_reports(tmp_path, monkeypatch):

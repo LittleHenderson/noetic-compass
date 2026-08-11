@@ -71,6 +71,7 @@ def build_micro_scalp_intents(
             ),
             evidence_refs=_dedupe(evidence_refs),
             order_request=order.model_dump(mode="json"),
+            market_geometry_policy="REPLAY_TEMPLATE_REQUIRES_CURRENT_DIRECTION",
         )
     ]
 

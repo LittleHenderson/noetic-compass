@@ -90,6 +90,7 @@ def test_agent_information_flow_preserves_agent_responsibility_boundaries():
     assert "TerminalReceiptPacket" in roles["terminal_bridge_agent"]["produces"]
     assert "OutcomeMemoryPacket" in roles["audit_memory_agent"]["produces"]
     assert "do not by themselves execute live broker orders" in report["claim_boundary"]
+    assert "order_dispatch.py" in report["claim_boundary"]
 
 
 def test_agent_information_flow_defines_event_journal_and_receipt_lifecycle():

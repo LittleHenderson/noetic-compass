@@ -7,12 +7,15 @@ BLOCKED result surfacing the missing requirements and never moves money.
 from __future__ import annotations
 
 import asyncio
+from urllib.parse import quote
 
+import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from api.routes import money_movement as route_module
 from api.routes.money_movement import VerifiedSweepPolicyUpdate
+from cas_forex.money_movement import MovementEngine
 
 
 def _client() -> TestClient:
@@ -21,12 +24,26 @@ def _client() -> TestClient:
     return TestClient(app)
 
 
+@pytest.fixture(autouse=True)
+def _isolated_attempt_store(tmp_path, monkeypatch):
+    monkeypatch.setattr(route_module, "DEFAULT_ATTEMPT_PATH", tmp_path / "attempts.json")
+    monkeypatch.setattr(
+        route_module,
+        "DEFAULT_PAYOUT_RECOVERY_AUDIT_PATH",
+        tmp_path / "attempts-audit.jsonl",
+    )
+
+
 def test_gates_default_not_authorized():
     resp = _client().get("/api/forex/money-movement/gates")
     assert resp.status_code == 200
     body = resp.json()
     assert set(body["gates"]) == {"auto_deposit", "bank_card_movement", "payout_automation"}
     assert body["all_authorized"] is False
+    assert body["payment_provider_runtime"]["status"] == "NOT_CONFIGURED"
+    assert body["real_money_provider_ready"] is False
+    assert body["runtime_scaffolded"] is True
+    assert "blocked until a supported broker funding rail is selected" in body["detail"].lower()
     # Each gate lists what is still required.
     assert body["gates"]["payout_automation"]["missing_requirements"]
 
@@ -87,13 +104,49 @@ def test_authorized_payout_requires_confirm_then_settles(monkeypatch):
         "/api/forex/money-movement/payout", json={"amount_usd": 100, "destination_id": "dest-1"}
     )
     assert pending.json()["status"] == "CONFIRM_REQUIRED"
+    assert pending.json()["need_confirmation"] == route_module.MONEY_MOVEMENT_CONFIRM_PHRASE
 
-    # With confirm -> the (simulated) payout settles to the allowlisted dest.
-    settled = client.post(
+    # Boolean confirmation alone is not enough for authorized money movement.
+    still_pending = client.post(
         "/api/forex/money-movement/payout?confirm=true",
         json={"amount_usd": 100, "destination_id": "dest-1"},
     )
+    assert still_pending.json()["status"] == "CONFIRM_REQUIRED"
+
+    # With confirm + typed phrase -> the (simulated) payout settles to the allowlisted dest.
+    phrase = quote(route_module.MONEY_MOVEMENT_CONFIRM_PHRASE)
+    settled = client.post(
+        f"/api/forex/money-movement/payout?confirm=true&confirm_phrase={phrase}",
+        json={"amount_usd": 100, "destination_id": "dest-1"},
+    )
     assert settled.json()["status"] == "SETTLED"
+
+
+def test_real_provider_manual_retry_requires_caller_idempotency_key(monkeypatch):
+    class UntouchedRealProvider:
+        name = "unit-real"
+        is_real = True
+
+        def deposit(self, *args, **kwargs):
+            raise AssertionError("provider must not be touched")
+
+        def withdraw(self, *args, **kwargs):
+            raise AssertionError("provider must not be touched")
+
+    monkeypatch.setattr(
+        route_module,
+        "_engine",
+        lambda: MovementEngine(provider=UntouchedRealProvider()),
+    )
+
+    result = route_module._manual_movement_dispatch(
+        kind="payout",
+        amount_usd=100.0,
+        destination_id="dest-1",
+    )
+
+    assert result["status"] == "IDEMPOTENCY_KEY_REQUIRED"
+    assert result["provider_touched"] is False
 
 
 def test_verified_profit_sweep_policy_update_invalidates_dependent_caches(monkeypatch):

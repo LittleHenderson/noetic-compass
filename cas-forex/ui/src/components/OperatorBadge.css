@@ -3,6 +3,11 @@
   display: inline-flex;
   align-items: center;
   margin-left: 0.5rem;
+  z-index: 1;
+}
+
+.operator-badge--open {
+  z-index: 1100;
 }
 
 .operator-badge-chip {
@@ -36,6 +41,22 @@
 .operator-badge--claude .operator-badge-chip {
   border-color: rgba(52, 211, 153, 0.5);
   color: #d6ffe9;
+}
+.operator-badge--deepseek .operator-badge-dot {
+  background: #22d3ee;
+  animation: operator-pulse 2s infinite;
+}
+.operator-badge--deepseek .operator-badge-chip {
+  border-color: rgba(34, 211, 238, 0.55);
+  color: #cffafe;
+}
+.operator-badge--gemma .operator-badge-dot {
+  background: #fb7185;
+  animation: operator-pulse 2s infinite;
+}
+.operator-badge--gemma .operator-badge-chip {
+  border-color: rgba(251, 113, 133, 0.55);
+  color: #ffe4e8;
 }
 .operator-badge--local .operator-badge-dot {
   background: #fbbf24;
@@ -73,11 +94,13 @@
 }
 
 .operator-badge-panel {
-  position: absolute;
-  top: 130%;
-  right: 0;
-  z-index: 50;
-  width: min(20rem, 88vw);
+  position: fixed;
+  top: var(--operator-panel-top, 4.5rem);
+  left: var(--operator-panel-left, 0.5rem);
+  z-index: 5000;
+  width: min(20rem, calc(100vw - 16px));
+  max-height: min(34rem, calc(100vh - var(--operator-panel-top, 4.5rem) - 8px));
+  overflow-y: auto;
   padding: 0.75rem;
   border-radius: 0.6rem;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -96,6 +119,13 @@
 .operator-badge-title {
   font-weight: 700;
   margin-bottom: 0.4rem;
+  position: sticky;
+  top: -0.75rem;
+  z-index: 2;
+  min-height: 1.7rem;
+  padding: 0.55rem 0 0.35rem;
+  background: #0b1a27;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .operator-badge-state {
   font-size: 0.62rem;
@@ -132,11 +162,54 @@
   color: #d6b36b;
   line-height: 1.3;
 }
+.operator-badge-profit-warning {
+  margin-top: 0.28rem;
+  padding-top: 0.28rem;
+  border-top: 1px solid rgba(248, 113, 113, 0.22);
+  color: #fca5a5;
+  font-size: 0.64rem;
+  line-height: 1.3;
+}
+.operator-badge-profit-proof {
+  margin-top: 0.28rem;
+  padding-top: 0.28rem;
+  border-top: 1px solid rgba(110, 231, 183, 0.22);
+  color: #a7f3d0;
+  font-size: 0.64rem;
+  line-height: 1.3;
+}
 
 .operator-badge-line { margin: 0.25rem 0; }
 .operator-badge-muted { color: #8ba0b3; }
 .operator-badge-switch { color: #fbbf24; }
 .operator-badge-summary { font-style: italic; color: #cfe8ff; }
+.operator-badge-readiness {
+  margin: 0.4rem 0 0.25rem;
+  padding: 0.38rem 0.5rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(159, 176, 192, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  color: #dceaf5;
+  font-size: 0.66rem;
+  line-height: 1.35;
+}
+.operator-badge-context {
+  margin: 0.25rem 0;
+  padding: 0.34rem 0.5rem;
+  border-radius: 0.45rem;
+  font-size: 0.66rem;
+  line-height: 1.35;
+}
+.operator-badge-context--ok {
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  background: rgba(16, 185, 129, 0.08);
+  color: #a7f3d0;
+}
+.operator-badge-context--attention {
+  border: 1px solid rgba(248, 113, 113, 0.28);
+  background: rgba(239, 68, 68, 0.08);
+  color: #fecaca;
+}
 
 .operator-badge-controls,
 .operator-badge-topup {
@@ -255,8 +328,14 @@
   cursor: pointer;
 }
 .operator-badge-chat-buttons button:disabled { opacity: 0.5; cursor: default; }
-.operator-badge-chat-reply {
+.operator-badge-chat-responder {
   margin-top: 0.45rem;
+  color: #8bd5c6;
+  font-size: 0.64rem;
+  font-weight: 600;
+}
+.operator-badge-chat-reply {
+  margin-top: 0.25rem;
   padding: 0.45rem 0.5rem;
   border-radius: 0.4rem;
   background: rgba(96, 165, 250, 0.08);

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
+import { CONVICTION_SCORE_TITLE, formatConvictionScore } from "../util/conviction";
 import {
   fetchAgentInformationFlow,
   fetchAgentMemory,
@@ -489,7 +490,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                         <th>Intent</th>
                         <th>Agent</th>
                         <th>Route</th>
-                        <th>Confidence</th>
+                        <th>Conviction</th>
                         <th>Overseer</th>
                       </tr>
                     </thead>
@@ -501,7 +502,9 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                             <td className="mono" style={{ fontSize: "0.58rem" }}>{intent.intent_id}</td>
                             <td>{intent.agent_id}</td>
                             <td className="mono">{intent.symbol} {intent.timeframe} {intent.action}</td>
-                            <td className="mono">{intent.confidence.toFixed(4)}</td>
+                            <td className="mono" title={CONVICTION_SCORE_TITLE}>
+                              {formatConvictionScore(intent.confidence)}
+                            </td>
                             <td>
                               <StatusChip
                                 label={decision?.decision ?? "PENDING"}

@@ -14,10 +14,12 @@ import { useCallback, useEffect, useState } from "react";
 import { GlassPanel } from "./GlassPanel";
 import { StatusChip } from "./StatusChip";
 import {
+  fetchPushBackendStatus,
   fetchPushSubscriptions,
   subscribeWebPush,
   testPushAll,
   unsubscribeWebPush,
+  type PushBackendStatus,
   type PushSubscriptionItem,
   type PushTestResult,
 } from "../data/api";
@@ -62,6 +64,7 @@ export function NotificationSubscriptionPanel() {
   const [permission, setPermission] = useState<PermissionState>("unknown");
   const [registered, setRegistered] = useState<boolean>(false);
   const [serverSubscriptions, setServerSubscriptions] = useState<PushSubscriptionItem[]>([]);
+  const [backendStatus, setBackendStatus] = useState<PushBackendStatus | null>(null);
   const [currentEndpoint, setCurrentEndpoint] = useState<string | null>(null);
   const [busy, setBusy] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -69,11 +72,20 @@ export function NotificationSubscriptionPanel() {
   const [testResults, setTestResults] = useState<PushTestResult[]>([]);
 
   const apiAvailable = isPushApiAvailable();
+  const effectiveVapidPublicKey = backendStatus
+    ? backendStatus.vapid_public_key || ""
+    : VAPID_PUBLIC_KEY;
 
   const refreshServer = useCallback(async () => {
-    const data = await fetchPushSubscriptions();
-    if (data) {
-      setServerSubscriptions(data.subscriptions);
+    const [subscriptions, backend] = await Promise.all([
+      fetchPushSubscriptions(),
+      fetchPushBackendStatus(),
+    ]);
+    if (subscriptions) {
+      setServerSubscriptions(subscriptions.subscriptions);
+    }
+    if (backend) {
+      setBackendStatus(backend);
     }
   }, []);
 
@@ -111,15 +123,15 @@ export function NotificationSubscriptionPanel() {
       const reg = await navigator.serviceWorker.ready;
       let sub = await reg.pushManager.getSubscription();
       if (!sub) {
-        if (!VAPID_PUBLIC_KEY) {
+        if (!effectiveVapidPublicKey) {
           setError(
-            "VAPID public key not configured (VITE_CAS_FOREX_VAPID_PUBLIC_KEY). Subscription cannot be created.",
+            "VAPID public key is not configured on the API side. Browser subscription cannot be created yet.",
           );
           return;
         }
         sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+          applicationServerKey: urlBase64ToUint8Array(effectiveVapidPublicKey),
         });
       }
       const p256dh = arrayBufferToBase64(sub.getKey("p256dh"));
@@ -142,7 +154,7 @@ export function NotificationSubscriptionPanel() {
     } finally {
       setBusy(false);
     }
-  }, [apiAvailable, refreshServer]);
+  }, [apiAvailable, effectiveVapidPublicKey, refreshServer]);
 
   const handleDisable = useCallback(async () => {
     if (!apiAvailable) return;
@@ -247,6 +259,11 @@ export function NotificationSubscriptionPanel() {
                 variant="info"
                 size="sm"
               />
+              <StatusChip
+                label={`dispatch: ${backendStatus?.dispatch_ready ? "ready" : "not ready"}`}
+                variant={backendStatus?.dispatch_ready ? "success" : "warning"}
+                size="sm"
+              />
             </div>
 
             <div className="notification-button-row">
@@ -291,24 +308,61 @@ export function NotificationSubscriptionPanel() {
               </button>
             </div>
 
-            {!VAPID_PUBLIC_KEY && (
+            {!effectiveVapidPublicKey && (
               <div
                 className="control-field-desc"
                 style={{ color: "var(--warning)" }}
               >
-                VAPID public key not configured. Set
-                <code> VITE_CAS_FOREX_VAPID_PUBLIC_KEY </code>
-                in the UI environment to allow new subscription creation.
+                VAPID public key is not configured on the API side, so this
+                browser cannot create a new push subscription yet.
               </div>
             )}
 
-            <div
-              className="control-field-desc"
-              style={{ color: "var(--warning)" }}
-            >
-              Backend dispatch backend (pywebpush) not yet installed —
-              subscriptions register but pushes will fail until installed.
-            </div>
+            {backendStatus && (
+              <>
+                <div className="control-field-desc">
+                  Backend status: <strong>{backendStatus.status}</strong>.{" "}
+                  {backendStatus.next_action}
+                </div>
+
+                {!backendStatus.dispatch_backend_available && (
+                  <div
+                    className="control-field-desc"
+                    style={{ color: "var(--warning)" }}
+                  >
+                    Server dispatch backend is missing. Install{" "}
+                    <code>pywebpush</code> in the API environment before
+                    expecting off-screen push delivery to work.
+                  </div>
+                )}
+
+                {!backendStatus.subscription_registration_ready && (
+                  <div
+                    className="control-field-desc"
+                    style={{ color: "var(--warning)" }}
+                  >
+                    Browser subscription creation is blocked until a VAPID
+                    public key is configured on the API side.
+                  </div>
+                )}
+
+                {!backendStatus.dispatch_ready && (
+                  <div
+                    className="control-field-desc"
+                    style={{ color: "var(--warning)" }}
+                  >
+                    Off-screen push delivery is blocked until the server has
+                    both a VAPID private key and VAPID subject configured.
+                  </div>
+                )}
+
+                <div className="control-field-desc">
+                  Public key source: {backendStatus.vapid_public_key_source || "unknown"}.
+                  Subject: {backendStatus.vapid_subject.value || "unset"}.
+                  Private key: {backendStatus.vapid_private_key.masked_value || "unset"}.
+                </div>
+              </>
+            )}
 
             {message && (
               <div
@@ -340,11 +394,11 @@ export function NotificationSubscriptionPanel() {
                   </thead>
                   <tbody>
                     {testResults.map((row, i) => (
-                      <tr key={i}>
+                      <tr key={row.subscription_id || i}>
                         <td className="mono">
-                          {row.endpoint.length > 48
-                            ? `${row.endpoint.slice(0, 48)}…`
-                            : row.endpoint}
+                          {row.endpoint_masked.length > 48
+                            ? `${row.endpoint_masked.slice(0, 48)}…`
+                            : row.endpoint_masked}
                         </td>
                         <td>
                           <StatusChip
@@ -376,11 +430,11 @@ export function NotificationSubscriptionPanel() {
                   </thead>
                   <tbody>
                     {serverSubscriptions.map((s) => (
-                      <tr key={s.endpoint}>
+                      <tr key={s.subscription_id}>
                         <td className="mono">
-                          {s.endpoint.length > 48
-                            ? `${s.endpoint.slice(0, 48)}…`
-                            : s.endpoint}
+                          {s.endpoint_masked.length > 48
+                            ? `${s.endpoint_masked.slice(0, 48)}…`
+                            : s.endpoint_masked}
                         </td>
                         <td>{s.label || "—"}</td>
                         <td className="mono">{s.created_at_iso}</td>

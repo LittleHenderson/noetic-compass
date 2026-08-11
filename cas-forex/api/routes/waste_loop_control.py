@@ -24,6 +24,7 @@ from cas_forex.waste_runner import (
     DEFAULT_INTERVAL_SECONDS,
     MAX_INTERVAL_SECONDS,
     MIN_INTERVAL_SECONDS,
+    _live_timer_confirmation_required,
     runner_status,
     start_runner,
     stop_runner,
@@ -90,6 +91,33 @@ from cas_forex.waste_background_worker import (
 )
 
 router = APIRouter()
+LIVE_WASTE_LOOP_CONFIRM_PHRASE = "CONFIRM LIVE WASTE LOOP"
+
+
+def _live_waste_loop_confirmation_matches(confirm_phrase: str) -> bool:
+    return (confirm_phrase or "").strip() == LIVE_WASTE_LOOP_CONFIRM_PHRASE
+
+
+def _live_waste_loop_confirm_required(confirm: bool, confirm_phrase: str) -> dict[str, Any] | None:
+    if not _live_timer_confirmation_required():
+        return None
+    if confirm and _live_waste_loop_confirmation_matches(confirm_phrase):
+        return None
+    return {
+        "report_kind": "cas_forex_waste_runner",
+        "status": "CONFIRM_REQUIRED",
+        "running": False,
+        "live_trading_authorized": True,
+        "broker_touched": False,
+        "dispatched_to_bridge": False,
+        "need_confirmation": LIVE_WASTE_LOOP_CONFIRM_PHRASE,
+        "confirm_phrase": LIVE_WASTE_LOOP_CONFIRM_PHRASE,
+        "detail": (
+            "Live trading is owner-authorized; this runner could place real orders "
+            "on a timer. Re-POST with ?confirm=true and "
+            f'confirm_phrase="{LIVE_WASTE_LOOP_CONFIRM_PHRASE}" to start it.'
+        ),
+    }
 
 
 class StartRunner(BaseModel):
@@ -719,9 +747,16 @@ async def post_adaptation_paper_apply_reset(reason: str = "OWNER_RESET") -> dict
 
 
 @router.post("/start")
-async def post_start(body: StartRunner, confirm: bool = Query(default=False)) -> dict[str, Any]:
+async def post_start(
+    body: StartRunner,
+    confirm: bool = Query(default=False),
+    confirm_phrase: str = Query(default=""),
+) -> dict[str, Any]:
     """Start the WASTE runner. Paper-safe by default; when live trading is
-    owner-authorized this runner could place real orders, so require ?confirm=true."""
+    owner-authorized this runner could place real orders, so require typed confirmation."""
+    pending = _live_waste_loop_confirm_required(confirm, confirm_phrase)
+    if pending is not None:
+        return pending
     if not use_in_process_workers_for_tests():
         return start_waste_runner_worker(
             interval_seconds=body.interval_seconds,

@@ -113,8 +113,8 @@ def _check_uvicorn_api(operator_briefing: Optional[Mapping[str, Any]]) -> CheckR
             "likely not running on the configured port."
         ),
         remediation=(
-            "Start uvicorn: py -3.12 -m uvicorn api.server:app --host "
-            "127.0.0.1 --port 8765"
+            "Start Uvicorn through the guarded API launcher: python scripts/run_api_server.py "
+            "--host 127.0.0.1 --port 8765 --workers 1"
         ),
     )
 
@@ -266,7 +266,7 @@ def _check_mt5_terminal(mt5_probe: Optional[Mapping[str, Any]]) -> CheckResult:
                 "did not succeed; symbol or account context may be wrong."
             ),
             remediation=(
-                "Restart MT5 terminal with Hugosway-Demo logged in and "
+                "Restart MT5 with the configured broker account logged in and "
                 "AutoTrading enabled"
             ),
         )
@@ -279,7 +279,7 @@ def _check_mt5_terminal(mt5_probe: Optional[Mapping[str, Any]]) -> CheckResult:
             "the MT5 terminal process is not running or not logged in."
         ),
         remediation=(
-            "Restart MT5 terminal with Hugosway-Demo logged in and "
+            "Restart MT5 with the configured broker account logged in and "
             "AutoTrading enabled"
         ),
     )

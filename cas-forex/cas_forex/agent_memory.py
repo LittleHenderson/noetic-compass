@@ -26,7 +26,9 @@ CLAIM_BOUNDARY = (
     "Agent outcome memory joins paper/demo route, decision, command, and "
     "receipt facts for future research. It does not by itself execute live "
     "broker orders, create broker ACCEPT, deposit, withdraw, move bank/card "
-    "funds, or automate payouts."
+    "funds, or automate payouts. Live autonomous side effects only occur when "
+    "approved intents continue through order_dispatch.py, execution_guard.py, "
+    "broker/provider truth, risk, receipt, and kill-switch gates."
 )
 
 

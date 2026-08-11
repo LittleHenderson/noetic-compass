@@ -4,6 +4,7 @@
 
 .app-shell {
   min-height: 100vh;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
@@ -49,19 +50,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   padding: 0 16px;
   height: 48px;
   background: var(--bg-panel);
   border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 30px;
-  z-index: 99;
+  z-index: 101;
+  overflow: visible;
 }
 
 .shell-nav-brand {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 0 0 auto;
 }
 
 .shell-nav-logo {
@@ -86,9 +90,17 @@
 .shell-nav-links {
   display: flex;
   gap: 2px;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
 }
 
 .shell-nav-link {
+  flex: 0 0 auto;
   background: none;
   border: 1px solid transparent;
   color: var(--text-secondary);
@@ -147,6 +159,91 @@
 .shell-nav-toggle-icon { font-size: 1.05rem; line-height: 1; }
 .shell-nav-toggle-label { font-weight: 600; }
 
+.shell-nav.overflowed {
+  flex-wrap: wrap;
+  height: auto;
+  min-height: 48px;
+  padding: 8px 12px;
+  gap: 8px;
+}
+
+.shell-nav.overflowed .shell-nav-toggle { display: inline-flex; }
+
+.shell-nav.overflowed .shell-nav-links {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.shell-nav.overflowed .shell-nav-links.open {
+  max-height: none;
+  opacity: 1;
+  overflow: visible;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.shell-nav.overflowed .shell-nav-link {
+  font-size: 0.9rem;
+  padding: 9px 13px;
+}
+
+.shell-layout-advisory {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
+  background: rgba(120, 53, 15, 0.28);
+  border-bottom: 1px solid var(--warning-dim);
+  color: var(--text-primary);
+}
+
+.shell-layout-advisory-copy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.shell-layout-advisory-label {
+  color: var(--warning);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.shell-layout-advisory-detail {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.shell-layout-advisory-close {
+  flex: 0 0 auto;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.74rem;
+  padding: 4px 8px;
+}
+
+.shell-layout-advisory-close:hover {
+  color: var(--text-primary);
+  border-color: var(--warning-dim);
+}
+
 /* On narrow screens (phones/tablets) the 18-item nav can't fit in one row, so
    collapse it behind the hamburger and reveal it as a full-width wrapping
    drawer. Every page — including Settings — is reachable. */
@@ -160,16 +257,37 @@
   }
   .shell-nav-toggle { display: inline-flex; }
   .shell-nav-links {
-    display: none;
+    display: flex;
     flex-basis: 100%;
     flex-wrap: wrap;
     gap: 6px;
     margin-top: 4px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    visibility: hidden;
   }
-  .shell-nav-links.open { display: flex; }
+  .shell-nav-links.open {
+    max-height: none;
+    opacity: 1;
+    overflow: visible;
+    pointer-events: auto;
+    visibility: visible;
+  }
   .shell-nav-link {
     font-size: 0.9rem;
     padding: 9px 13px;
+  }
+
+  .shell-layout-advisory {
+    padding: 8px 12px;
+  }
+
+  .shell-layout-advisory-copy {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 }
 
@@ -180,7 +298,9 @@
   padding: 16px;
   max-width: 1280px;
   width: 100%;
+  min-width: 0;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .api-status-strip {
@@ -797,6 +917,127 @@
 }
 
 /* ── Legal Gates ── */
+
+.ai-dial-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.ai-dial-table-wrap {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.ai-dial-table td {
+  vertical-align: top;
+}
+
+.ai-dial-name {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ai-dial-key,
+.ai-dial-detail {
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 0.66rem;
+  line-height: 1.35;
+}
+
+.risk-impact-preview {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent-teal);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+}
+
+.risk-impact-preview.requires-confirm {
+  border-left-color: var(--danger);
+}
+
+.risk-impact-header,
+.risk-impact-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.risk-impact-header {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+}
+
+.risk-impact-list {
+  display: grid;
+  gap: 5px;
+}
+
+.risk-impact-row {
+  padding: 6px 0;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.72rem;
+}
+
+.risk-impact-row span {
+  color: var(--text-secondary);
+}
+
+.risk-impact-row strong {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.risk-impact-row em {
+  min-width: 74px;
+  color: var(--text-muted);
+  font-style: normal;
+  font-weight: 800;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.risk-impact-row.loosen em {
+  color: var(--warning);
+}
+
+.risk-impact-row.tighten em {
+  color: var(--success);
+}
+
+.risk-confirm-box {
+  display: grid;
+  gap: 5px;
+}
+
+.control-audit-table td:nth-child(4),
+.control-audit-table td:nth-child(5) {
+  max-width: 320px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.control-audit-table td:nth-child(5) {
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.critical-notification-table td:nth-child(5) {
+  max-width: 420px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
 
 .broker-reality-grid {
   display: grid;

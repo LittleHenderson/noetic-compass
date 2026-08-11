@@ -19,6 +19,7 @@ import type {
 } from "../types/evidence";
 import { apiGet, apiPost, apiPostJson } from "./apiCore";
 import type {
+  AutonomousMoneyMovementStatus,
   AutoHaltReport,
   DispatchLoopState,
   LoopSupervisorStatus,
@@ -31,6 +32,7 @@ import type {
 } from "./api";
 
 export type {
+  AutonomousMoneyMovementStatus,
   AutoHaltReport,
   DispatchLoopState,
   LoopSupervisorStatus,
@@ -101,10 +103,30 @@ export async function fetchVerifiedProfitSweepPolicy(): Promise<VerifiedProfitSw
 
 export async function updateVerifiedProfitSweepPolicy(
   patch: VerifiedProfitSweepPolicyUpdate,
+  confirmPhrase = "",
 ): Promise<VerifiedProfitSweepPolicy> {
+  const q = confirmPhrase.trim()
+    ? `?confirm_phrase=${encodeURIComponent(confirmPhrase.trim())}`
+    : "";
   return apiPostJson<VerifiedProfitSweepPolicy, VerifiedProfitSweepPolicyUpdate>(
-    "/money-movement/verified-profit-sweep/policy",
+    `/money-movement/verified-profit-sweep/policy${q}`,
     patch,
+  );
+}
+
+export async function fetchAutonomousMoneyMovementStatus(): Promise<AutonomousMoneyMovementStatus | null> {
+  try {
+    return await apiGet<AutonomousMoneyMovementStatus>(
+      "/money-movement/verified-profit-sweep/autonomy",
+    );
+  } catch {
+    return null;
+  }
+}
+
+export async function runAutonomousMoneyMovementOnce(): Promise<AutonomousMoneyMovementStatus> {
+  return apiPost<AutonomousMoneyMovementStatus>(
+    "/money-movement/verified-profit-sweep/autonomy/run-once",
   );
 }
 
@@ -119,8 +141,12 @@ export async function fetchVerifiedProfitSweepState(): Promise<VerifiedProfitSwe
 export async function requestVerifiedProfitSweepCurrent(
   settings?: VerifiedProfitSweepPolicyUpdate,
   confirm = false,
+  confirmPhrase = "",
 ): Promise<VerifiedProfitSweepRequestResult> {
-  const q = confirm ? "?confirm=true" : "";
+  const params = new URLSearchParams();
+  if (confirm) params.set("confirm", "true");
+  if (confirmPhrase.trim()) params.set("confirm_phrase", confirmPhrase.trim());
+  const q = params.toString() ? `?${params.toString()}` : "";
   return apiPostJson<VerifiedProfitSweepRequestResult, VerifiedProfitSweepPolicyUpdate>(
     `/money-movement/verified-profit-sweep/request-current${q}`,
     settings ?? {},
@@ -163,8 +189,12 @@ export async function dispatchWasteEntryDispatchHandoff(
   notes = "",
   confirmOwnerDispatch = false,
   confirmLiveDispatch = false,
+  confirmPhrase = "",
 ): Promise<WasteEntryDispatchHandoffStatus> {
-  const q = confirmLiveDispatch ? "?confirm=true" : "";
+  const params = new URLSearchParams();
+  if (confirmLiveDispatch) params.set("confirm", "true");
+  if (confirmPhrase.trim()) params.set("confirm_phrase", confirmPhrase.trim());
+  const q = params.toString() ? `?${params.toString()}` : "";
   return apiPostJson<WasteEntryDispatchHandoffStatus, { confirm_owner_dispatch: boolean; notes: string }>(
     `/live-order-dry-run/waste-entry-order/dispatch-handoff/dispatch${q}`,
     { confirm_owner_dispatch: confirmOwnerDispatch, notes },
@@ -203,6 +233,13 @@ export async function clearAutoHalt(reason: string, confirmClear = false): Promi
   return apiPostJson<AutoHaltReport, { reason: string }>(
     `/auto-halt/clear${q}`,
     { reason: reason.trim() || "OWNER_CLEAR" },
+  );
+}
+
+export async function triggerAutoHaltEmergencyStop(reason = "OWNER_EMERGENCY_STOP"): Promise<AutoHaltReport> {
+  return apiPostJson<AutoHaltReport, { reason: string }>(
+    "/auto-halt/emergency-stop",
+    { reason: reason.trim() || "OWNER_EMERGENCY_STOP" },
   );
 }
 
@@ -336,8 +373,8 @@ export async function applyBrokerSyncedRiskReview(): Promise<BrokerSyncedRiskPre
   }
 }
 
-export async function fetchMovementStream(useProvider = false): Promise<MovementStreamState | null> {
-  const suffix = useProvider ? "?use_provider=true" : "";
+export async function fetchMovementStream(useProvider = true): Promise<MovementStreamState | null> {
+  const suffix = useProvider ? "" : "?use_provider=false";
   try {
     return await apiGet<MovementStreamState>(`/movement/snapshot${suffix}`);
   } catch {

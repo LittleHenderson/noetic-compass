@@ -16,8 +16,9 @@ from typing import Any, Mapping, Optional
 from cas_forex import edge_authorization, execution_guard, live_pilot, runtime_gates
 from cas_forex.account_ledger import stable_ledger_id
 from cas_forex.compounding_governor import decide as decide_compound
-from cas_forex.order_dispatch import TradeIntent
+from cas_forex.order_dispatch import TradeIntent, attach_pre_trade_estimate_to_intent
 from cas_forex.pre_execution_risk_gate import decision_to_payload
+from cas_forex.pre_trade_money import build_pre_trade_money_estimate
 from cas_forex.time_utils import utc_now
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -58,6 +59,7 @@ class LiveOrderDryRunRequest:
     price: float = 0.0
     expected_loss_usd: Optional[float] = None
     comment: str = "CAS_FOREX_DRY_RUN"
+    strategy_id: Optional[str] = None
 
     def to_intent(self) -> TradeIntent:
         return TradeIntent(
@@ -70,6 +72,7 @@ class LiveOrderDryRunRequest:
             take_profit=float(self.take_profit),
             price=float(self.price),
             comment=self.comment,
+            strategy_id=self.strategy_id,
             ai_action="LIVE_DRY_RUN",
             expected_loss_usd=self.expected_loss_usd,
         )
@@ -110,6 +113,7 @@ class CompoundAddDryRunRequest:
             price=float(self.price),
             expected_loss_usd=self.expected_loss_usd,
             comment=self.comment,
+            strategy_id="waste-compound",
         )
 
 
@@ -158,6 +162,7 @@ def build_live_order_dry_run(
     live_telemetry: Optional[Mapping[str, Any]] = None,
     account_snapshot: Optional[Mapping[str, Any]] = None,
     equity_peak: Optional[float] = None,
+    bridge: Any = None,
     audit: Optional[LiveOrderDryRunAuditLog] = None,
 ) -> dict[str, Any]:
     """Evaluate a proposed live order without touching a broker bridge."""
@@ -167,6 +172,32 @@ def build_live_order_dry_run(
     intent = request.to_intent()
     order = None
     proposed_intent = intent.proposed_intent()
+    pre_trade_estimate = build_pre_trade_money_estimate(
+        symbol=request.symbol,
+        direction=request.direction,
+        lots=request.volume,
+        price=request.price,
+        stop_loss=request.stop_loss,
+        take_profit=request.take_profit,
+        proposed_intent=proposed_intent,
+        account_snapshot=account_snapshot,
+        bridge=bridge,
+        config=config,
+    )
+    proposed_intent = attach_pre_trade_estimate_to_intent(proposed_intent, pre_trade_estimate)
+    estimate_ready = str(pre_trade_estimate.get("status") or "").upper() == "ESTIMATED"
+    checks.append(
+        _check(
+            "pre_trade_money_estimate",
+            estimate_ready,
+            "Fresh stop-risk and margin estimate is available."
+            if estimate_ready
+            else "Complete stop-risk and margin evidence is unavailable.",
+            pre_trade_estimate,
+        )
+    )
+    if not estimate_ready:
+        blocking_reasons.append("pre_trade_money_estimate: complete stop-risk and margin evidence is unavailable")
 
     try:
         order = intent.to_order()
@@ -190,7 +221,15 @@ def build_live_order_dry_run(
 
     if order is not None:
         try:
-            edge_authorization.require(order, is_real=True)
+            edge_authorization.require(
+                order,
+                is_real=True,
+                config=config,
+                volume=request.volume,
+                order_type=getattr(order, "order_type", None),
+                price=getattr(order, "price", None),
+                proposed_intent=proposed_intent,
+            )
             checks.append(_check("edge_pass_token", True, "Fresh matching edge PASS is registered.", None))
         except Exception as exc:
             checks.append(_check("edge_pass_token", False, str(exc), None))
@@ -232,6 +271,7 @@ def build_live_order_dry_run(
         "order_id": request.order_id,
         "decision_ref": request.decision_ref,
         "proposed_intent": proposed_intent,
+        "pre_trade_estimate": pre_trade_estimate,
         "order_request": order.model_dump(mode="json") if order is not None else None,
         "checks": checks,
         "blocking_reasons": list(dict.fromkeys(blocking_reasons)),
@@ -254,6 +294,7 @@ def build_compound_add_order_dry_run(
     live_telemetry: Optional[Mapping[str, Any]] = None,
     account_snapshot: Optional[Mapping[str, Any]] = None,
     equity_peak: Optional[float] = None,
+    bridge: Any = None,
     audit: Optional[LiveOrderDryRunAuditLog] = None,
 ) -> dict[str, Any]:
     """Evaluate a pyramid/add order without touching a broker bridge."""
@@ -271,6 +312,7 @@ def build_compound_add_order_dry_run(
         live_telemetry=live_telemetry,
         account_snapshot=account_snapshot,
         equity_peak=equity_peak,
+        bridge=bridge,
         audit=None,
     )
     base_checks = list(base.get("checks") or [])

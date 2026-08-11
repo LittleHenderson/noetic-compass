@@ -69,6 +69,17 @@ def test_reconciliation_passes_with_warnings_for_valid_paper_receipt():
     assert by_id["symbol_coverage"].status == STATUS_OK
     assert by_id["balance_equity_reconciliation"].status == "UNVERIFIABLE"
     assert by_id["movement_internal_consistency"].status == STATUS_OK
+    assert report.movement_stream_present is True
+    assert report.movement_price_source_status == "UNKNOWN"
+    assert report.movement_position_feed_label == "SIM PROOF"
+    assert report.movement_position_feed_detail is not None
+    assert report.movement_source_truth is not None
+    assert report.movement_source_truth["movement_stream_present"] is True
+    assert report.movement_source_truth["price_source_status"] == report.movement_price_source_status
+    assert report.movement_source_truth["position_feed_label"] == "SIM PROOF"
+    assert report.movement_source_truth["detail"] == report.movement_position_feed_detail
+    assert "paper/demo proof rows, not MT5 broker-truth positions" in report.movement_position_feed_detail
+    assert "Movement source truth: SIM PROOF" in by_id["movement_internal_consistency"].detail
     assert report.live_money_authorized is False
     assert report.payment_movement_authorized is False
     assert report.trading_edge_status == "OPEN"
@@ -137,3 +148,43 @@ def test_reconciliation_can_sync_to_broker_snapshot_only_when_requested():
     synced_report = build_account_reconciliation_report(synced_ledger, receipt)
     synced_by_id = {c.check_id: c for c in synced_report.checks}
     assert synced_by_id["balance_equity_reconciliation"].status == STATUS_OK
+
+
+def test_reconciliation_derives_movement_position_feed_detail_when_missing():
+    movement = {
+        "account": {"balance_usd": 5000.0},
+        "price_source_status": "STATIC_SIMULATION_FALLBACK",
+        "market_data_provider_requested": True,
+        "configured_market_data_provider": "Yahoo",
+        "provider_usable_symbols": [],
+        "static_fallback_symbols": ["US30"],
+        "provider_stale_symbols": ["US30"],
+        "provider_freshness_max_age_seconds": 900,
+        "positions": [
+            {
+                "row_id": "paper-us30",
+                "symbol": "US30",
+                "side": "LONG",
+                "lot_size": 0.01,
+                "price_source": "paper_route_snapshot:static_simulation",
+                "price_stale": True,
+                "position_source_label": "PAPER_SIM_STATIC",
+                "simulator_ticket": "sim-us30",
+                "broker_ticket": None,
+            }
+        ],
+        "quotes": [],
+    }
+    report = build_account_reconciliation_report(_ledger(), _valid_paper_receipt(), movement_stream=movement)
+    by_id = {c.check_id: c for c in report.checks}
+
+    assert report.movement_stream_present is True
+    assert report.movement_position_feed_label == "SIM PROOF"
+    assert report.movement_position_feed_detail is not None
+    assert report.movement_source_truth is not None
+    assert report.movement_source_truth["position_feed_label"] == "SIM PROOF"
+    assert report.movement_source_truth["configured_market_data_provider"] == "Yahoo"
+    assert report.movement_source_truth["provider_stale_symbols"] == ["US30"]
+    assert "Requested provider: Yahoo." in report.movement_position_feed_detail
+    assert "Stale provider/MT5 snapshots were rejected for: US30 (max age 900s)." in report.movement_position_feed_detail
+    assert "Requested provider: Yahoo." in by_id["movement_internal_consistency"].detail

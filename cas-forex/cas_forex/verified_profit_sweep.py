@@ -15,6 +15,7 @@ from typing import Any, Iterable, Mapping, Optional
 
 from cas_forex.account_ledger import money, stable_ledger_id
 from cas_forex.money_movement import MovementEngine
+from cas_forex.money_movement_dispatch import dispatch_money_movement
 from cas_forex.payout_recovery import PayoutAttemptStore, default_payout_attempt_store
 from cas_forex.time_utils import utc_now
 
@@ -32,6 +33,8 @@ class ProfitSweepSettings:
     min_sweep_usd: float = 25.0
     destination_id: Optional[str] = None
     allow_principal_sweep: bool = False
+    autonomous_enabled: bool = False
+    max_daily_sweep_usd: Optional[float] = None
     policy_id: str = "verified-profit-sweep-default"
 
     def normalized(self) -> "ProfitSweepSettings":
@@ -41,6 +44,8 @@ class ProfitSweepSettings:
             raise ValueError("tax_reserve_pct must be between 0 and 100")
         if float(self.min_sweep_usd) < 0:
             raise ValueError("min_sweep_usd must be >= 0")
+        if self.max_daily_sweep_usd is not None and float(self.max_daily_sweep_usd) < 0:
+            raise ValueError("max_daily_sweep_usd must be >= 0 when configured")
         return replace(
             self,
             sweep_pct=float(self.sweep_pct),
@@ -48,6 +53,12 @@ class ProfitSweepSettings:
             min_sweep_usd=float(self.min_sweep_usd),
             destination_id=self.destination_id or None,
             allow_principal_sweep=bool(self.allow_principal_sweep),
+            autonomous_enabled=bool(self.autonomous_enabled),
+            max_daily_sweep_usd=(
+                float(self.max_daily_sweep_usd)
+                if self.max_daily_sweep_usd is not None
+                else None
+            ),
             policy_id=str(self.policy_id or "verified-profit-sweep-default"),
         )
 
@@ -63,6 +74,7 @@ class VerifiedWinningsSummary:
     net_verified_winnings_usd: float
     sweepable_winnings_usd: float
     ignored_unverified_rows: int
+    evidence_fingerprint: str
     claim_status: str
     reason: str
 
@@ -76,12 +88,17 @@ class SweepPreview:
     winnings: VerifiedWinningsSummary
     tax_reserve_usd: float
     post_tax_winnings_usd: float
+    gross_sweep_entitlement_usd: float
+    already_swept_usd: float
+    incremental_sweep_amount_usd: float
     sweep_amount_usd: float
     keep_in_broker_usd: float
     principal_sweep_usd: float
     status: str
     reason: str
     payout_gate: dict[str, Any]
+    provider_runtime: dict[str, Any]
+    payout_runtime_ready: bool
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -90,12 +107,17 @@ class SweepPreview:
             "winnings": self.winnings.to_dict(),
             "tax_reserve_usd": self.tax_reserve_usd,
             "post_tax_winnings_usd": self.post_tax_winnings_usd,
+            "gross_sweep_entitlement_usd": self.gross_sweep_entitlement_usd,
+            "already_swept_usd": self.already_swept_usd,
+            "incremental_sweep_amount_usd": self.incremental_sweep_amount_usd,
             "sweep_amount_usd": self.sweep_amount_usd,
             "keep_in_broker_usd": self.keep_in_broker_usd,
             "principal_sweep_usd": self.principal_sweep_usd,
             "status": self.status,
             "reason": self.reason,
             "payout_gate": self.payout_gate,
+            "provider_runtime": self.provider_runtime,
+            "payout_runtime_ready": self.payout_runtime_ready,
             "hard_rule": (
                 "Sweep is calculated from broker-confirmed closed-trade net "
                 "winnings only. Paper/demo or unverified profit is not real "
@@ -175,6 +197,7 @@ def summarize_verified_winnings(account_ledger: Mapping[str, Any]) -> VerifiedWi
     losses = 0.0
     costs = 0.0
     count = 0
+    evidence_material: list[dict[str, Any]] = []
 
     if verified_events:
         for event in verified_events:
@@ -188,6 +211,15 @@ def summarize_verified_winnings(account_ledger: Mapping[str, Any]) -> VerifiedWi
                 costs += abs(amount)
             if event_type in {"realized_profit", "realized_loss"}:
                 count += 1
+            evidence_material.append(
+                {
+                    "event_type": event_type,
+                    "amount": money(amount),
+                    "broker_ticket": _get(event, "broker_ticket"),
+                    "evidence_packet_id": _get(event, "evidence_packet_id"),
+                    "timestamp": _get(event, "timestamp"),
+                }
+            )
     else:
         for deal in deals:
             if not _is_verified_deal(deal):
@@ -205,6 +237,17 @@ def summarize_verified_winnings(account_ledger: Mapping[str, Any]) -> VerifiedWi
             costs += commission + fees + abs(min(0.0, swap))
             profit += max(0.0, swap)
             count += 1
+            evidence_material.append(
+                {
+                    "net_pnl_usd": money(pnl),
+                    "commission_usd": money(commission),
+                    "fees_usd": money(fees),
+                    "swap_usd": money(swap),
+                    "broker_ticket": _get(deal, "broker_ticket"),
+                    "evidence_packet_id": _get(deal, "evidence_packet_id"),
+                    "closed_at": _get(deal, "closed_at"),
+                }
+            )
 
     net = money(max(0.0, profit - losses - costs))
     if not live_money:
@@ -234,6 +277,10 @@ def summarize_verified_winnings(account_ledger: Mapping[str, Any]) -> VerifiedWi
         net_verified_winnings_usd=net,
         sweepable_winnings_usd=money(sweepable),
         ignored_unverified_rows=ignored,
+        evidence_fingerprint=stable_ledger_id(
+            "verified-winnings-evidence",
+            json.dumps(evidence_material, sort_keys=True, default=str),
+        ),
         claim_status=status,
         reason=reason,
     )
@@ -244,34 +291,70 @@ def build_sweep_preview(
     settings: ProfitSweepSettings,
     *,
     config: Any = None,
+    already_swept_usd: float = 0.0,
 ) -> SweepPreview:
     settings = settings.normalized()
     winnings = summarize_verified_winnings(account_ledger)
     from cas_forex import runtime_gates
 
-    payout_gate = runtime_gates.evaluate_payout_automation(config).to_dict()
+    runtime_report = runtime_gates.build_runtime_gates_report(config)
+    payout_gate = dict(runtime_report.decisions.get("payout_automation", {}))
+    provider_runtime = dict(runtime_report.payment_provider_runtime or {})
+    payout_runtime_ready = bool(payout_gate.get("authorized", False)) and bool(
+        provider_runtime.get("real_money_provider_ready", False)
+    )
     sweepable = winnings.sweepable_winnings_usd
     tax = money(sweepable * settings.tax_reserve_pct / 100.0)
     post_tax = money(max(0.0, sweepable - tax))
-    sweep_amount = money(post_tax * settings.sweep_pct / 100.0)
-    keep = money(post_tax - sweep_amount)
-    status = "READY" if sweep_amount >= settings.min_sweep_usd and winnings.claim_status == "SWEEPABLE" else "BLOCKED"
-    reason = "Sweep preview ready; payout still requires explicit confirmation and payout gate authorization."
+    gross_entitlement = money(post_tax * settings.sweep_pct / 100.0)
+    already_swept = money(max(0.0, float(already_swept_usd)))
+    sweep_amount = money(max(0.0, gross_entitlement - already_swept))
+    keep = money(max(0.0, post_tax - gross_entitlement))
+    status = "READY"
+    reason = (
+        "Incremental sweep entitlement is ready. Manual requests use explicit "
+        "confirmation; an owner-armed autonomous policy may execute without per-transfer approval."
+    )
     if winnings.claim_status != "SWEEPABLE":
+        status = "BLOCKED"
         reason = winnings.reason
+    elif sweep_amount <= 0:
+        status = "BLOCKED"
+        reason = "No unswept verified-profit entitlement remains under this policy."
     elif sweep_amount < settings.min_sweep_usd:
+        status = "BLOCKED"
         reason = f"Sweep amount {sweep_amount:.2f} below minimum {settings.min_sweep_usd:.2f}."
+    elif not bool(payout_gate.get("authorized", False)):
+        status = "BLOCKED"
+        reason = (
+            "Sweep preview is blocked until payout automation is AUTHORIZED. "
+            + str(payout_gate.get("next_action") or "Turn on the owner payout gate and satisfy its requirements.")
+        )
+    elif not bool(provider_runtime.get("real_money_provider_ready", False)):
+        status = "BLOCKED"
+        reason = (
+            "Sweep preview is blocked because the payout provider runtime remains scaffolded. "
+            + str(
+                provider_runtime.get("detail")
+                or "Configure a supported real payout provider before broker-confirmed winnings can leave the account."
+            )
+        )
     return SweepPreview(
         settings=settings,
         winnings=winnings,
         tax_reserve_usd=tax,
         post_tax_winnings_usd=post_tax,
+        gross_sweep_entitlement_usd=gross_entitlement,
+        already_swept_usd=already_swept,
+        incremental_sweep_amount_usd=sweep_amount,
         sweep_amount_usd=sweep_amount,
         keep_in_broker_usd=keep,
         principal_sweep_usd=0.0,
         status=status,
         reason=reason,
         payout_gate=payout_gate,
+        provider_runtime=provider_runtime,
+        payout_runtime_ready=payout_runtime_ready,
     )
 
 
@@ -280,6 +363,7 @@ def request_verified_profit_sweep(
     settings: ProfitSweepSettings,
     *,
     confirm: bool,
+    autonomous: bool = False,
     destination_id: Optional[str] = None,
     engine: Optional[MovementEngine] = None,
     audit: Optional[ProfitSweepAuditLog] = None,
@@ -287,17 +371,63 @@ def request_verified_profit_sweep(
     attempt_store: Optional[PayoutAttemptStore] = None,
     idempotency_key: Optional[str] = None,
     live_recovery_report: Mapping[str, Any] | None = None,
+    broker_truth_report: Mapping[str, Any] | None = None,
+    preview: SweepPreview | None = None,
 ) -> dict[str, Any]:
     """Request a payout of the previewed sweep amount.
 
-    No provider is touched unless ``confirm`` is true and the preview is READY.
-    Even then, ``MovementEngine`` re-checks the payout gate before any movement.
+    Manual calls require ``confirm``. An owner-armed autonomous policy does not
+    require per-transfer confirmation, but it uses the same provider dispatch,
+    recovery, cap, allowlist, broker-truth, and receipt evidence path.
     """
-    preview = build_sweep_preview(account_ledger, settings, config=config)
+    settings = settings.normalized()
+    attempt_store = attempt_store or default_payout_attempt_store()
+    if preview is None:
+        already_swept = attempt_store.settled_total_usd(
+            purpose="verified_profit_sweep",
+            policy_id=settings.policy_id,
+        )
+        preview = build_sweep_preview(
+            account_ledger,
+            settings,
+            config=config,
+            already_swept_usd=already_swept,
+        )
     audit = audit or ProfitSweepAuditLog()
+    if idempotency_key:
+        existing_attempt = attempt_store.get(idempotency_key)
+        if existing_attempt:
+            existing_status = str(existing_attempt.get("status") or "")
+            response_status = (
+                "PAYOUT_RECOVERY_REQUIRED"
+                if existing_status in {"RESERVED", "PENDING", "RECOVERY_REQUIRED"}
+                else "PAYOUT_ALREADY_RECORDED"
+            )
+            record = audit.append(
+                "SWEEP_IDEMPOTENT_REPLAY",
+                {
+                    "preview": preview.to_dict(),
+                    "payout_attempt": existing_attempt,
+                },
+            )
+            return {
+                "status": response_status,
+                "detail": (
+                    "This exact payout intent already exists. Provider contact was not repeated."
+                ),
+                "preview": preview.to_dict(),
+                "movement": existing_attempt.get("movement"),
+                "payout_attempt": existing_attempt,
+                "audit": record,
+            }
     if preview.status != "READY":
         record = audit.append("SWEEP_BLOCKED", preview.to_dict())
-        return {"status": "BLOCKED", "preview": preview.to_dict(), "audit": record}
+        return {
+            "status": "BLOCKED",
+            "detail": preview.reason,
+            "preview": preview.to_dict(),
+            "audit": record,
+        }
     if live_recovery_report is not None and not bool(live_recovery_report.get("recovery_clear_for_live", False)):
         recovery = _compact_live_recovery(live_recovery_report)
         record = audit.append(
@@ -314,55 +444,99 @@ def request_verified_profit_sweep(
             "live_recovery": recovery,
             "audit": record,
         }
-    if not confirm:
+    if autonomous and not settings.autonomous_enabled:
+        record = audit.append("SWEEP_AUTONOMY_NOT_ARMED", preview.to_dict())
+        return {
+            "status": "AUTONOMY_NOT_ARMED",
+            "detail": (
+                "Autonomous verified-profit sweep is not owner-armed in the current policy."
+            ),
+            "preview": preview.to_dict(),
+            "audit": record,
+        }
+    if not confirm and not autonomous:
         record = audit.append("SWEEP_CONFIRM_REQUIRED", preview.to_dict())
         return {
             "status": "CONFIRM_REQUIRED",
-            "detail": "Verified profit sweep requires explicit confirm=true before payout is attempted.",
+            "detail": "Manual verified-profit sweep requires explicit confirm=true before payout is attempted.",
             "preview": preview.to_dict(),
             "audit": record,
         }
     engine = engine or MovementEngine.from_config(config)
-    attempt = None
-    key = idempotency_key or _sweep_idempotency_key(preview, destination_id or settings.destination_id)
-    if bool(preview.payout_gate.get("authorized", False)):
-        attempt_store = attempt_store or default_payout_attempt_store()
-        attempt, can_call_provider = attempt_store.reserve(
-            key,
-            amount_usd=preview.sweep_amount_usd,
-            destination_id=destination_id or settings.destination_id,
-            preview=preview.to_dict(),
-        )
-        if not can_call_provider:
-            record = audit.append(
-                "SWEEP_PAYOUT_RECOVERY_BLOCK",
-                {"preview": preview.to_dict(), "payout_attempt": attempt},
-            )
-            return {
-                "status": "PAYOUT_RECOVERY_REQUIRED"
-                if attempt.get("status") == "RECOVERY_REQUIRED"
-                else "PAYOUT_ALREADY_RECORDED",
-                "detail": "Payout attempt with this idempotency key already exists; resolve it before retrying.",
+    if not bool(getattr(engine.provider, "is_real", False)):
+        record = audit.append(
+            "SWEEP_PROVIDER_RUNTIME_BLOCKED",
+            {
                 "preview": preview.to_dict(),
-                "payout_attempt": attempt,
-                "audit": record,
-            }
-    movement = engine.payout(
-        preview.sweep_amount_usd,
+                "provider_name": getattr(engine.provider, "name", ""),
+                "provider_is_real": bool(getattr(engine.provider, "is_real", False)),
+            },
+        )
+        return {
+            "status": "BLOCKED",
+            "detail": (
+                "Verified profit sweep requires a real payout provider at execution time. "
+                "The current movement engine is still simulated."
+            ),
+            "preview": preview.to_dict(),
+            "audit": record,
+        }
+    key = idempotency_key or _sweep_idempotency_key(preview, destination_id or settings.destination_id)
+    dispatch_preview = preview.to_dict()
+    if broker_truth_report is not None:
+        dispatch_preview["broker_truth"] = {
+            "generated_at": broker_truth_report.get("generated_at"),
+            "mt5_connected": broker_truth_report.get("mt5_connected"),
+            "mt5_is_demo": broker_truth_report.get("mt5_is_demo"),
+            "mt5_account": broker_truth_report.get("mt5_account"),
+            "mt5_balance_usd": broker_truth_report.get("mt5_balance_usd"),
+            "mt5_equity_usd": broker_truth_report.get("mt5_equity_usd"),
+            "mt5_margin_used_usd": broker_truth_report.get("mt5_margin_used_usd"),
+            "mt5_free_margin_usd": broker_truth_report.get("mt5_free_margin_usd"),
+            "mt5_open_position_count": broker_truth_report.get(
+                "mt5_open_position_count",
+                broker_truth_report.get("mt5_open_positions"),
+            ),
+        }
+    dispatch = dispatch_money_movement(
+        kind="payout",
+        amount_usd=preview.sweep_amount_usd,
+        idempotency_key=key,
         destination_id=destination_id or settings.destination_id,
         strategy_id="verified-profit-sweep",
+        purpose="verified_profit_sweep",
+        policy_id=settings.policy_id,
+        authority_mode="AUTONOMOUS" if autonomous else "MANUAL",
+        require_real_provider=True,
+        preview=dispatch_preview,
+        engine=engine,
+        attempt_store=attempt_store,
+        config=config,
+        daily_cap_usd=settings.max_daily_sweep_usd,
     )
-    if attempt is not None:
-        attempt = attempt_store.record_result(key, movement=movement.to_dict())
+    movement = dispatch.get("movement")
+    attempt = dispatch.get("movement_attempt")
+    dispatch_status = str(dispatch.get("status") or "BLOCKED")
+    response_status = {
+        "ALREADY_RECORDED": "PAYOUT_ALREADY_RECORDED",
+        "RECOVERY_REQUIRED": "PAYOUT_RECOVERY_REQUIRED",
+    }.get(dispatch_status, dispatch_status)
     record = audit.append(
         "SWEEP_PAYOUT_ATTEMPT",
-        {"preview": preview.to_dict(), "movement": movement.to_dict(), "payout_attempt": attempt},
+        {
+            "preview": preview.to_dict(),
+            "dispatch": dispatch,
+            "movement": movement,
+            "payout_attempt": attempt,
+        },
     )
     return {
-        "status": movement.status,
+        "status": response_status,
+        "detail": dispatch.get("detail"),
         "preview": preview.to_dict(),
-        "movement": movement.to_dict(),
+        "movement": movement,
         "payout_attempt": attempt,
+        "money_movement_dispatch": dispatch,
         "audit": record,
     }
 
@@ -374,10 +548,13 @@ def _sweep_idempotency_key(preview: SweepPreview, destination_id: Optional[str])
         "destination_id": destination_id or preview.settings.destination_id or "",
         "sweep_pct": preview.settings.sweep_pct,
         "tax_reserve_pct": preview.settings.tax_reserve_pct,
+        "gross_sweep_entitlement_usd": preview.gross_sweep_entitlement_usd,
+        "already_swept_usd": preview.already_swept_usd,
         "sweep_amount_usd": preview.sweep_amount_usd,
         "ledger_mode": winnings.ledger_mode,
         "verified_closed_trade_count": winnings.verified_closed_trade_count,
         "net_verified_winnings_usd": winnings.net_verified_winnings_usd,
+        "evidence_fingerprint": winnings.evidence_fingerprint,
     }
     return stable_ledger_id("verified-profit-sweep", json.dumps(material, sort_keys=True, default=str))
 

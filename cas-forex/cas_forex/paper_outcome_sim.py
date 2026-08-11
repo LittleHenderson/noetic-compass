@@ -43,6 +43,7 @@ from cas_forex.trade_management import value_per_price_unit_per_lot
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_LEDGER_PATH = REPO_ROOT / "runtime" / "paper-outcomes.json"
 DEFAULT_ORDER_ATTEMPT_STATE_PATH = REPO_ROOT / "runtime" / "order-attempts.json"
+DEFAULT_SIMULATED_BROKER_STATE_PATH = REPO_ROOT / "runtime" / "simulated-broker-state.json"
 
 REPORT_KIND = "cas_forex_paper_outcome_sim"
 LEDGER_REPORT_KIND = "cas_forex_paper_outcome_ledger"
@@ -55,6 +56,9 @@ FALLBACK_SPREAD_UNITS = 2.0
 
 DEFAULT_MAX_CANDLES = 1500  # M1 ⇒ ~25 hours of walk window per run
 MAX_ATTEMPT_AGE_DAYS = 5  # older unresolved attempts are marked unresolvable
+FUTURE_CANDLE_TOLERANCE_SECONDS = 5
+FUTURE_OUTCOME_TOLERANCE_SECONDS = 30
+TEMPORALLY_IMPOSSIBLE_REASON = "void_temporally_impossible_future_candle"
 
 # Trailing-stop lock-in fractions tested per resolved trade (the implementable
 # "bank winners early" policies: lock in this share of the best run so far).
@@ -147,6 +151,7 @@ def open_paper_positions(
     *,
     ledger_path: Path | str = DEFAULT_LEDGER_PATH,
     order_attempt_state_path: Path | str = DEFAULT_ORDER_ATTEMPT_STATE_PATH,
+    simulated_broker_state_path: Path | str = DEFAULT_SIMULATED_BROKER_STATE_PATH,
     max_age_seconds: float = _OPEN_POS_TTL_SECONDS,
 ) -> list[dict[str, Any]]:
     """Currently-OPEN paper positions: executed paper attempts the simulator has
@@ -156,7 +161,11 @@ def open_paper_positions(
     against an empty portfolio (how 150+ positions piled up unchecked).
     Best-effort: any failure returns []."""
     now = time.monotonic()
-    cache_key = (str(ledger_path), str(order_attempt_state_path))
+    cache_key = (
+        str(ledger_path),
+        str(order_attempt_state_path),
+        str(simulated_broker_state_path),
+    )
     with _LOCK:
         cached = _OPEN_POS_CACHE["positions"]
         if (
@@ -173,16 +182,34 @@ def open_paper_positions(
             eligible = [
                 a for a in (_eligible_attempt(r) for r in _load_attempts(order_attempt_state_path)) if a
             ]
+            simulated_state = _load_simulated_broker_state(simulated_broker_state_path)
+            eligible = _apply_simulated_position_overrides(eligible, simulated_state)
+            fully_closed = {
+                str(row.get("parent_broker_ticket"))
+                for row in (simulated_state.get("close_events") or [])
+                if isinstance(row, Mapping) and bool(row.get("full_close"))
+            }
+            voided = {
+                str(row.get("broker_ticket"))
+                for row in (simulated_state.get("void_events") or [])
+                if isinstance(row, Mapping) and row.get("broker_ticket") not in (None, "")
+            }
             open_rows = [
                 {
+                    "broker_ticket": a["broker_ticket"],
+                    "order_id": a.get("order_id"),
+                    "decision_ref": a.get("decision_ref"),
                     "symbol": a["symbol"],
                     "direction": a["direction"],
                     "lots": float(a["lots"]),
+                    "entry_price": float(a["entry"]),
                     "floating_pnl": 0.0,  # unknown without live quotes; count/lots caps still bite
                 }
                 for a in eligible
                 if a["broker_ticket"] not in known
                 and a["broker_ticket"] not in unresolvable
+                and a["broker_ticket"] not in fully_closed
+                and a["broker_ticket"] not in voided
                 and not is_test_artifact(a)
             ]
         except Exception:
@@ -202,6 +229,7 @@ def _load_ledger(path: Path) -> dict[str, Any]:
             "report_kind": LEDGER_REPORT_KIND,
             "ingest_status": "PAPER_OUTCOME_SIMULATED",
             "history_records": [],
+            "invalidated_records": [],
             "unresolvable": {},
             "updated_at": None,
         }
@@ -214,8 +242,57 @@ def _load_ledger(path: Path) -> dict[str, Any]:
     data.setdefault("report_kind", LEDGER_REPORT_KIND)
     data.setdefault("ingest_status", "PAPER_OUTCOME_SIMULATED")
     data.setdefault("history_records", [])
+    data.setdefault("invalidated_records", [])
     data.setdefault("unresolvable", {})
     return data
+
+
+def _quarantine_temporally_impossible_records(
+    ledger: dict[str, Any],
+    *,
+    observed_at: datetime,
+) -> int:
+    """Remove impossible future outcomes from learning without erasing evidence."""
+
+    prior_updated_at = _parse_ts(ledger.get("updated_at")) or observed_at
+    keep: list[dict[str, Any]] = []
+    invalidated = list(ledger.get("invalidated_records") or [])
+    unresolvable = dict(ledger.get("unresolvable") or {})
+    quarantined = 0
+    for raw in ledger.get("history_records") or []:
+        if not isinstance(raw, dict):
+            continue
+        close_time = _parse_ts(raw.get("close_time"))
+        resolved_at = _parse_ts(raw.get("resolved_at")) or prior_updated_at
+        impossible = bool(
+            close_time is not None
+            and close_time
+            > resolved_at + timedelta(seconds=FUTURE_OUTCOME_TOLERANCE_SECONDS)
+        )
+        if not impossible:
+            keep.append(raw)
+            continue
+        ticket = str(raw.get("broker_ticket") or "")
+        invalidated.append(
+            {
+                **raw,
+                "invalidation_reason": TEMPORALLY_IMPOSSIBLE_REASON,
+                "invalidated_at": observed_at.isoformat(),
+                "original_resolved_at": resolved_at.isoformat(),
+                "claim_boundary": (
+                    "This paper outcome was excluded from P&L and learning because "
+                    "its recorded close occurred after the evidence-resolution clock."
+                ),
+            }
+        )
+        if ticket:
+            unresolvable[ticket] = TEMPORALLY_IMPOSSIBLE_REASON
+        quarantined += 1
+    if quarantined:
+        ledger["history_records"] = keep
+        ledger["invalidated_records"] = invalidated
+        ledger["unresolvable"] = unresolvable
+    return quarantined
 
 
 def _save_ledger(path: Path, ledger: dict[str, Any]) -> None:
@@ -234,6 +311,37 @@ def _save_ledger(path: Path, ledger: dict[str, Any]) -> None:
             time.sleep(0.2 * (attempt + 1))
     if last_error is not None:
         raise last_error
+
+
+def quarantine_temporally_impossible_paper_outcomes(
+    ledger_path: Path | str = DEFAULT_LEDGER_PATH,
+) -> dict[str, Any]:
+    """Durably exclude future-dated paper outcomes while retaining raw evidence."""
+
+    with _LOCK:
+        path = Path(ledger_path)
+        ledger = _load_ledger(path)
+        observed_at = utc_now()
+        quarantined = _quarantine_temporally_impossible_records(
+            ledger,
+            observed_at=observed_at,
+        )
+        if quarantined:
+            _save_ledger(path, ledger)
+        return {
+            "report_kind": "cas_forex_paper_outcome_temporal_quarantine",
+            "generated_at": observed_at.isoformat(),
+            "quarantined_now": quarantined,
+            "invalidated_record_count": len(ledger.get("invalidated_records") or []),
+            "remaining_history_record_count": len(ledger.get("history_records") or []),
+            "ledger_path": str(path),
+            "broker_touched": False,
+            "money_moved": False,
+            "claim_boundary": (
+                "Temporal quarantine removes impossible future-dated rows from "
+                "paper P&L and learning while preserving them as invalidated evidence."
+            ),
+        }
 
 
 def load_paper_outcome_history(path: Path | str = DEFAULT_LEDGER_PATH) -> dict[str, Any]:
@@ -269,6 +377,14 @@ def _eligible_attempt(row: Mapping[str, Any]) -> Optional[dict[str, Any]]:
     outcome = row.get("outcome") if isinstance(row.get("outcome"), Mapping) else {}
     broker_mode = str(outcome.get("broker_mode") or "").upper()
     if "LIVE" in mode or ("LIVE" in broker_mode and "PAPER" not in broker_mode):
+        return None
+    simulated_attempt = broker_mode in {"SIMULATED", "PAPER_SIM"} or (
+        not broker_mode and outcome.get("is_real_broker") is False
+    )
+    if not simulated_attempt:
+        # PAPER_MT5/PAPER_MT4 outcomes must come from terminal history. Running
+        # them through candle first-touch would fabricate a second close that
+        # can disagree with the broker's actual fill, commission, swap, or exit.
         return None
     order = row.get("order") if isinstance(row.get("order"), Mapping) else {}
     ticket = outcome.get("broker_ticket")
@@ -307,6 +423,100 @@ def _eligible_attempt(row: Mapping[str, Any]) -> Optional[dict[str, Any]]:
         "decision_ref": row.get("decision_ref"),
         "order_id": row.get("order_id"),
     }
+
+
+def _load_simulated_broker_state(path: Path | str) -> dict[str, Any]:
+    target = Path(path)
+    if not target.exists():
+        return {}
+    try:
+        payload = json.loads(target.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _apply_simulated_position_overrides(
+    eligible: list[dict[str, Any]],
+    state: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    positions = state.get("positions") if isinstance(state.get("positions"), Mapping) else {}
+    adjusted: list[dict[str, Any]] = []
+    for attempt in eligible:
+        row = dict(attempt)
+        position = positions.get(str(row["broker_ticket"])) if isinstance(positions, Mapping) else None
+        if isinstance(position, Mapping):
+            order = position.get("order") if isinstance(position.get("order"), Mapping) else {}
+            for target, source in (("stop_loss", "stop_loss"), ("take_profit", "take_profit")):
+                value = position.get(source)
+                if value in (None, ""):
+                    value = order.get(source)
+                try:
+                    row[target] = float(value)
+                except (TypeError, ValueError):
+                    pass
+            try:
+                row["lots"] = float(position.get("volume", row["lots"]))
+            except (TypeError, ValueError):
+                pass
+        adjusted.append(row)
+    return adjusted
+
+
+def _simulated_management_close_records(
+    eligible: list[dict[str, Any]],
+    state: Mapping[str, Any],
+    known_tickets: set[str],
+    *,
+    as_of: datetime,
+) -> list[dict[str, Any]]:
+    by_ticket = {str(row["broker_ticket"]): row for row in eligible}
+    records: list[dict[str, Any]] = []
+    for event in (state.get("close_events") or []):
+        if not isinstance(event, Mapping):
+            continue
+        event_ticket = str(event.get("event_ticket") or "")
+        parent_ticket = str(event.get("parent_broker_ticket") or "")
+        if not event_ticket or event_ticket in known_tickets:
+            continue
+        attempt = by_ticket.get(parent_ticket)
+        if attempt is None or is_test_artifact(attempt):
+            continue
+        close_time = _parse_ts(event.get("closed_at"))
+        try:
+            exit_price = float(event.get("exit"))
+            closed_volume = float(event.get("closed_volume"))
+        except (TypeError, ValueError):
+            continue
+        if (
+            close_time is None
+            or close_time
+            > as_of + timedelta(seconds=FUTURE_CANDLE_TOLERANCE_SECONDS)
+            or exit_price <= 0
+            or closed_volume <= 0
+        ):
+            continue
+        close_attempt = dict(attempt)
+        close_attempt["broker_ticket"] = event_ticket
+        close_attempt["lots"] = closed_volume
+        record = _closed(
+            close_attempt,
+            exit_price=exit_price,
+            close_reason=(
+                "AI_HEDGE_SIMULATED_FULL_CLOSE"
+                if bool(event.get("full_close"))
+                else "AI_HEDGE_SIMULATED_PARTIAL_CLOSE"
+            ),
+            close_time=close_time,
+            mfe_price=exit_price,
+        )
+        record["parent_broker_ticket"] = parent_ticket
+        record["management_close"] = True
+        record["full_close"] = bool(event.get("full_close"))
+        record["remaining_volume"] = event.get("remaining_volume")
+        record["outcome_source"] = "paper_simulated_management_close"
+        records.append(record)
+    return records
 
 
 def _parse_ts(value: Any) -> Optional[datetime]:
@@ -530,7 +740,9 @@ def _closed(
         "decision_ref": attempt.get("decision_ref"),
         "order_id": attempt.get("order_id"),
         "outcome_source": OUTCOME_SOURCE,
-        "timestamp_basis": "naive_candle_timestamps_treated_as_utc",
+        "timestamp_basis": (
+            "connector_normalized_utc_or_naive_utc; future_candles_excluded_at_resolution"
+        ),
     }
 
 
@@ -543,6 +755,7 @@ def resolve_paper_outcomes(
     candles_by_symbol: Mapping[str, list[Mapping[str, Any]]] | None = None,
     ledger_path: Path | str = DEFAULT_LEDGER_PATH,
     order_attempt_state_path: Path | str = DEFAULT_ORDER_ATTEMPT_STATE_PATH,
+    simulated_broker_state_path: Path | str = DEFAULT_SIMULATED_BROKER_STATE_PATH,
     max_candles: int = DEFAULT_MAX_CANDLES,
 ) -> dict[str, Any]:
     """Resolve every eligible unresolved paper attempt. Idempotent per ticket."""
@@ -550,11 +763,35 @@ def resolve_paper_outcomes(
     with _LOCK:
         path = Path(ledger_path)
         ledger = _load_ledger(path)
+        now = utc_now()
+        temporally_impossible_records_quarantined = (
+            _quarantine_temporally_impossible_records(ledger, observed_at=now)
+        )
         known = {str(r.get("broker_ticket")) for r in ledger.get("history_records", [])}
+        known_before = set(known)
         unresolvable = dict(ledger.get("unresolvable") or {})
 
         raw_attempts = list(attempts) if attempts is not None else _load_attempts(order_attempt_state_path)
         eligible = [a for a in (_eligible_attempt(r) for r in raw_attempts) if a]
+        simulated_state = _load_simulated_broker_state(simulated_broker_state_path)
+        eligible = _apply_simulated_position_overrides(eligible, simulated_state)
+        voided_reasons = {
+            str(row.get("broker_ticket")): str(
+                row.get("reason") or "voided_simulated_position"
+            )
+            for row in (simulated_state.get("void_events") or [])
+            if isinstance(row, Mapping) and row.get("broker_ticket") not in (None, "")
+        }
+        newly_voided = sum(1 for ticket in voided_reasons if ticket not in unresolvable)
+        unresolvable.update(voided_reasons)
+        ledger["unresolvable"] = unresolvable
+        management_resolved = _simulated_management_close_records(
+            eligible,
+            simulated_state,
+            known,
+            as_of=now,
+        )
+        known.update(str(row.get("broker_ticket")) for row in management_resolved)
         # Ingest guard: injected test/replay signals never enter the ledger —
         # they flatter the scoreboard and poison the learning loop (see
         # _TEST_REF_EXACT note; 2026-07-03 audit).
@@ -567,19 +804,22 @@ def resolve_paper_outcomes(
             and not is_test_artifact(a)
         ]
 
-        now = utc_now()
-        resolved: list[dict[str, Any]] = []
+        resolved: list[dict[str, Any]] = list(management_resolved)
         still_open = 0
         newly_unresolvable = 0
+        future_candles_discarded = 0
         candle_cache: dict[str, list[dict[str, Any]]] = {}
 
         for attempt in pending:
             symbol = attempt["symbol"]
             if symbol not in candle_cache:
                 if candles_by_symbol is not None:
-                    candle_cache[symbol] = _candle_rows(candles_by_symbol.get(symbol) or [])
+                    raw_candles = _candle_rows(candles_by_symbol.get(symbol) or [])
                 else:
-                    candle_cache[symbol] = _candle_rows(_fetch_candles(symbol, bars=max_candles))
+                    raw_candles = _candle_rows(_fetch_candles(symbol, bars=max_candles))
+                cutoff = now + timedelta(seconds=FUTURE_CANDLE_TOLERANCE_SECONDS)
+                candle_cache[symbol] = [row for row in raw_candles if row["ts"] <= cutoff]
+                future_candles_discarded += len(raw_candles) - len(candle_cache[symbol])
             candles = candle_cache[symbol]
             if not candles:
                 still_open += 1  # no data this run; retry later
@@ -611,6 +851,7 @@ def resolve_paper_outcomes(
                         record["exit_policy"] = "HOLD_TO_SL_TP"
                 else:
                     record["exit_policy"] = "HOLD_TO_SL_TP"
+                record["resolved_at"] = now.isoformat()
                 resolved.append(record)
             elif now - attempt["open_time"] > timedelta(days=MAX_ATTEMPT_AGE_DAYS):
                 unresolvable[attempt["broker_ticket"]] = "unresolved_after_max_age"
@@ -618,7 +859,12 @@ def resolve_paper_outcomes(
             else:
                 still_open += 1
 
-        if resolved or newly_unresolvable:
+        if (
+            resolved
+            or newly_unresolvable
+            or newly_voided
+            or temporally_impossible_records_quarantined
+        ):
             ledger["history_records"] = list(ledger.get("history_records", [])) + resolved
             ledger["unresolvable"] = unresolvable
             _save_ledger(path, ledger)
@@ -629,15 +875,22 @@ def resolve_paper_outcomes(
             "report_kind": REPORT_KIND,
             "generated_at": utc_now().isoformat(),
             "eligible_attempts": len(eligible),
-            "already_resolved": len(known),
+            "already_resolved": len(known_before),
             "newly_resolved": len(resolved),
+            "newly_resolved_management_closes": len(management_resolved),
             "newly_resolved_wins": wins,
             "newly_resolved_losses": losses,
             "newly_resolved_net_pnl": round(sum(r["profit"] for r in resolved), 4),
             "still_open": still_open,
             "test_artifacts_skipped": test_artifacts_skipped,
             "newly_unresolvable": newly_unresolvable,
-            "total_resolved": len(known) + len(resolved),
+            "newly_voided_simulated_positions": newly_voided,
+            "future_candles_discarded": future_candles_discarded,
+            "temporally_impossible_records_quarantined": (
+                temporally_impossible_records_quarantined
+            ),
+            "invalidated_record_count": len(ledger.get("invalidated_records") or []),
+            "total_resolved": len(known_before) + len(resolved),
             "ledger_path": str(path),
             "read_only_market_data": True,
             "broker_touched": False,

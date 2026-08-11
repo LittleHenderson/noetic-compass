@@ -155,6 +155,7 @@ def record_lesson(
     cat = category if category in VALID_CATEGORIES else "general"
     lesson = {
         "lesson_id": f"lesson-{uuid.uuid4().hex[:10]}",
+        "status": "ACTIVE",
         "text": cleaned,
         "category": cat,
         "evidence": str(evidence or "").strip()[:MAX_LESSON_CHARS],
@@ -166,6 +167,8 @@ def record_lesson(
         data = _load()
         lessons = [l for l in data["lessons"] if isinstance(l, dict)]
         for existing in lessons:
+            if str(existing.get("status") or "ACTIVE").upper() == "SUPERSEDED":
+                continue
             if _similar(existing.get("text", ""), cleaned):
                 # Same gist learned again — reinforce + refresh instead of dupe.
                 existing["reinforced_count"] = int(existing.get("reinforced_count", 1)) + 1
@@ -183,9 +186,47 @@ def record_lesson(
     return lesson
 
 
-def list_lessons(limit: int = 60) -> list[dict[str, Any]]:
+def list_lessons(
+    limit: int = 60,
+    *,
+    include_superseded: bool = False,
+) -> list[dict[str, Any]]:
     with _LOCK:
-        return [dict(l) for l in _load()["lessons"] if isinstance(l, dict)][: max(1, limit)]
+        rows = [dict(l) for l in _load()["lessons"] if isinstance(l, dict)]
+        if not include_superseded:
+            rows = [
+                row
+                for row in rows
+                if str(row.get("status") or "ACTIVE").upper() != "SUPERSEDED"
+            ]
+        return rows[: max(1, limit)]
+
+
+def supersede_lesson(
+    lesson_id: str,
+    *,
+    reason: str,
+    replacement_lesson_id: str | None = None,
+) -> Optional[dict[str, Any]]:
+    """Keep a stale lesson in the journal while excluding it from future prompts."""
+
+    target = str(lesson_id or "").strip()
+    if not target:
+        return None
+    with _LOCK:
+        data = _load()
+        lessons = [row for row in data["lessons"] if isinstance(row, dict)]
+        for row in lessons:
+            if str(row.get("lesson_id") or "") != target:
+                continue
+            row["status"] = "SUPERSEDED"
+            row["superseded_at"] = utc_now().isoformat()
+            row["supersede_reason"] = str(reason or "").strip()[:MAX_LESSON_CHARS]
+            row["replacement_lesson_id"] = replacement_lesson_id
+            data["lessons"] = lessons
+            _save(data)
+            return dict(row)
+    return None
 
 
 def lessons_for_prompt(limit: int = 25) -> list[dict[str, Any]]:
@@ -204,9 +245,16 @@ def lessons_for_prompt(limit: int = 25) -> list[dict[str, Any]]:
     return out
 
 
-def lessons_count() -> int:
+def lessons_count(*, include_superseded: bool = False) -> int:
     with _LOCK:
-        return len(_load()["lessons"])
+        rows = [row for row in _load()["lessons"] if isinstance(row, dict)]
+        if not include_superseded:
+            rows = [
+                row
+                for row in rows
+                if str(row.get("status") or "ACTIVE").upper() != "SUPERSEDED"
+            ]
+        return len(rows)
 
 
 __all__ = [
@@ -221,4 +269,5 @@ __all__ = [
     "record_lesson",
     "seed_founding_principles",
     "set_lessons_path_for_tests",
+    "supersede_lesson",
 ]

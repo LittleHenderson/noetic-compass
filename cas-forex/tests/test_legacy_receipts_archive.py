@@ -8,6 +8,7 @@ from pathlib import Path
 
 from cas_forex.legacy_receipts_archive import (
     LegacyReceiptArchiveResult,
+    archive_stale_mailbox_commands,
     archive_stale_receipts,
     identify_stale_pending_receipts,
 )
@@ -140,6 +141,125 @@ def test_identify_terminal_receipt_pending_via_event_type_no_broker_mode() -> No
         },
     ]
     assert identify_stale_pending_receipts(events, now=NOW) == (1,)
+
+
+def test_identify_real_paper_mt4_command_shape_and_preserve_live_or_resolved() -> None:
+    events = [
+        {
+            "event_type": "TERMINAL_COMMAND_WRITTEN",
+            "created_at": _iso(NOW, 48.0),
+            "payload": {
+                "command_id": "stale-paper-command",
+                "broker_mode": "PAPER_MT4",
+                "live_money_authorized": False,
+            },
+        },
+        {
+            "event_type": "TERMINAL_COMMAND_WRITTEN",
+            "created_at": _iso(NOW, 48.0),
+            "payload": {
+                "command_id": "never-archive-live",
+                "broker_mode": "LIVE_MT4",
+                "live_money_authorized": True,
+            },
+        },
+        {
+            "event_type": "TERMINAL_COMMAND_WRITTEN",
+            "created_at": _iso(NOW, 48.0),
+            "payload": {
+                "command_id": "resolved-paper-command",
+                "broker_mode": "PAPER_MT4",
+                "live_money_authorized": False,
+            },
+        },
+        {
+            "event_type": "TERMINAL_RECEIPT_RECEIVED",
+            "created_at": _iso(NOW, 47.0),
+            "payload": {"command_id": "resolved-paper-command"},
+            "status": "RECEIPT_VERIFIED",
+        },
+    ]
+
+    assert identify_stale_pending_receipts(events, now=NOW) == (0,)
+
+
+def test_execute_quarantines_real_stale_command_file(tmp_path: Path) -> None:
+    journal = tmp_path / "queue" / "agent-events.jsonl"
+    command = tmp_path / "mailbox" / "commands" / "old-paper-command.json"
+    command.parent.mkdir(parents=True)
+    command.write_text('{"command_id":"old-paper-command"}\n', encoding="utf-8")
+    _write_journal(
+        journal,
+        [
+            {
+                "event_type": "TERMINAL_COMMAND_WRITTEN",
+                "created_at": _iso(NOW, 48.0),
+                "payload": {
+                    "command_id": "old-paper-command",
+                    "command_path": str(command),
+                    "broker_mode": "PAPER_MT4",
+                    "live_money_authorized": False,
+                },
+            }
+        ],
+    )
+
+    result = archive_stale_receipts(
+        journal_path=journal,
+        snapshot_dir=tmp_path / "archive",
+        dry_run=False,
+        now=NOW,
+    )
+
+    assert result.error_message is None
+    assert result.pending_receipt_rows_archived == 1
+    assert result.command_files_identified == 1
+    assert result.command_files_quarantined == 1
+    assert result.command_quarantine_dir is not None
+    assert not command.exists()
+    assert (Path(result.command_quarantine_dir) / command.name).exists()
+    assert _read_jsonl(journal) == []
+
+
+def test_archive_stale_mailbox_commands_handles_pre_journal_orphan(tmp_path: Path) -> None:
+    command_dir = tmp_path / "mailbox" / "commands"
+    receipt_dir = tmp_path / "mailbox" / "receipts"
+    command_dir.mkdir(parents=True)
+    receipt_dir.mkdir(parents=True)
+    orphan = command_dir / "orphan.json"
+    orphan.write_text(
+        json.dumps(
+            {
+                "command_id": "orphan-paper-command",
+                "broker_mode": "PAPER_MT4",
+                "live_money_authorized": False,
+                "created_at": _iso(NOW, 48.0),
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    preview = archive_stale_mailbox_commands(
+        command_dir=command_dir,
+        receipt_dir=receipt_dir,
+        snapshot_dir=tmp_path / "archive",
+        dry_run=True,
+        now=NOW,
+    )
+    assert preview.command_files_identified == 1
+    assert orphan.exists()
+
+    result = archive_stale_mailbox_commands(
+        command_dir=command_dir,
+        receipt_dir=receipt_dir,
+        snapshot_dir=tmp_path / "archive",
+        dry_run=False,
+        now=NOW,
+    )
+    assert result.error_message is None
+    assert result.command_files_quarantined == 1
+    assert not orphan.exists()
+    assert Path(result.snapshot_path or "").exists()
 
 
 # ---------------------------------------------------------------------------

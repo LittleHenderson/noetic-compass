@@ -4,10 +4,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import {
+  fetchPerformanceDiscipline,
   fetchRankedStrategies,
   fetchStrategyDiff,
 } from "../data/api";
 import type {
+  PerformanceDisciplineReport,
   StrategyComparisonRecord,
   StrategyDiff,
   StrategyRankingReport,
@@ -93,6 +95,7 @@ export function StrategyComparisonPage() {
   const [mode, setMode] = useState<Mode>("ranked");
   const [limit, setLimit] = useState<number>(25);
   const [report, setReport] = useState<StrategyRankingReport | null>(null);
+  const [discipline, setDiscipline] = useState<PerformanceDisciplineReport | null>(null);
   const [loadingList, setLoadingList] = useState(true);
   const [listError, setListError] = useState<string | null>(null);
 
@@ -104,12 +107,18 @@ export function StrategyComparisonPage() {
 
   const loadRanked = useCallback(async () => {
     setLoadingList(true);
-    const data = await fetchRankedStrategies(limit);
+    const [data, disciplineData] = await Promise.all([
+      fetchRankedStrategies(limit),
+      fetchPerformanceDiscipline(limit),
+    ]);
     if (data) {
       setReport(data);
       setListError(null);
     } else {
       setListError("Ranked strategies endpoint unreachable.");
+    }
+    if (disciplineData) {
+      setDiscipline(disciplineData);
     }
     setLoadingList(false);
   }, [limit]);
@@ -196,6 +205,71 @@ export function StrategyComparisonPage() {
         {report?.plain_english_summary && (
           <p className="plain-english-block">{report.plain_english_summary}</p>
         )}
+      </GlassPanel>
+
+      <GlassPanel
+        title="Performance Discipline"
+        subtitle={discipline?.plain_english_summary ?? "Checking cost, drawdown, OOS, robustness, and mode-separation coverage"}
+        variant={discipline?.status === "OK" ? "default" : "warning"}
+      >
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+          <StatusChip
+            label={discipline?.status ?? "SYNCING"}
+            variant={discipline?.status === "OK" ? "success" : discipline?.status === "ATTENTION" ? "warning" : "muted"}
+            size="sm"
+          />
+          <StatusChip
+            label={`${discipline?.record_count ?? 0} RECORDS`}
+            variant="info"
+            size="sm"
+          />
+          <StatusChip
+            label={`${discipline?.attention_count ?? 0} NEED REVIEW`}
+            variant={(discipline?.attention_count ?? 0) ? "warning" : "success"}
+            size="sm"
+          />
+        </div>
+        <table className="comparison-table">
+          <thead>
+            <tr>
+              <th>Strategy</th>
+              <th>Mode</th>
+              <th>Coverage</th>
+              <th>Costs</th>
+              <th>OOS / WF</th>
+              <th>Mode Sep</th>
+              <th>Missing Critical</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(discipline?.records ?? []).slice(0, 6).map((row) => (
+              <tr key={`${row.source}-${row.strategy_id}`}>
+                <td className="mono" title={row.strategy_id}>{truncate(row.strategy_id, 20)}</td>
+                <td className="mono">{row.mode_label}</td>
+                <td className="mono">{fmtNum(row.coverage_pct, 1)}%</td>
+                <td>
+                  <StatusChip label={row.cost_model_present ? "COVERED" : "MISSING"} variant={row.cost_model_present ? "success" : "warning"} size="sm" />
+                </td>
+                <td>
+                  <StatusChip label={row.out_of_sample_present ? "COVERED" : "MISSING"} variant={row.out_of_sample_present ? "success" : "warning"} size="sm" />
+                </td>
+                <td>
+                  <StatusChip label={row.mode_separation_present ? "COVERED" : "MISSING"} variant={row.mode_separation_present ? "success" : "warning"} size="sm" />
+                </td>
+                <td>{row.critical_missing.length ? row.critical_missing.join(", ") : "none"}</td>
+              </tr>
+            ))}
+            {(!discipline || discipline.records.length === 0) && (
+              <tr>
+                <td colSpan={7} className="muted-cell">No strategy performance discipline records loaded.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        {discipline?.diagnostic_hints?.length ? (
+          <p className="plain-english-block">{discipline.diagnostic_hints.slice(0, 3).join(" ")}</p>
+        ) : null}
+        <p className="muted-cell">{discipline?.claim_boundary ?? "Read-only performance coverage check; no strategy recommendation or trading authority."}</p>
       </GlassPanel>
 
       {mode === "ranked" && (

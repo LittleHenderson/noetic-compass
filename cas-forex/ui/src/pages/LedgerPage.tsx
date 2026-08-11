@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
+import { MovementTruthPanel } from "../components/MovementTruthPanel";
 import { StatusChip } from "../components/StatusChip";
 import { EquityCurve } from "../components/charts/EquityCurve";
-import { fetchAccountLedger, fetchMT5Receipt } from "../data/api";
-import type { AccountLedgerState, DashboardState, MT5Receipt } from "../types/evidence";
+import { fetchAccountHealth, fetchAccountLedger, fetchMT5Receipt } from "../data/api";
+import type { AccountHealthReport, AccountLedgerState, DashboardState, MT5Receipt } from "../types/evidence";
 import "../components/RoutePrimitives.css";
 
 interface LedgerPageProps {
@@ -15,6 +16,7 @@ interface LedgerPageProps {
 export function LedgerPage({ state }: LedgerPageProps) {
   const sched = state.dailySchedule;
   const [liveAccount, setLiveAccount] = useState<AccountLedgerState | null>(state.accountLedger ?? null);
+  const [liveAccountHealth, setLiveAccountHealth] = useState<AccountHealthReport | null>(state.accountHealth ?? null);
   const [liveMtReceipt, setLiveMtReceipt] = useState<MT5Receipt | null>(state.mt5Receipt ?? null);
   const mt = liveMtReceipt ?? state.mt5Receipt ?? null;
   const completed = sched.completed_trading_days;
@@ -23,11 +25,16 @@ export function LedgerPage({ state }: LedgerPageProps) {
   const bundlesTarget = sched.ui_min_daily_bundles;
   const equity = state.dailyBundle.latest_risk.latest_review.account_equity;
   const account = liveAccount ?? state.accountLedger ?? null;
+  const accountHealth = liveAccountHealth ?? state.accountHealth ?? null;
   const [ownerSeedInput, setOwnerSeedInput] = useState(() => `${account?.summary.owner_selected_initial_investment_usd ?? equity}`);
 
   useEffect(() => {
     if (state.accountLedger) setLiveAccount(state.accountLedger);
   }, [state.accountLedger]);
+
+  useEffect(() => {
+    if (state.accountHealth) setLiveAccountHealth(state.accountHealth);
+  }, [state.accountHealth]);
 
   useEffect(() => {
     if (state.mt5Receipt) setLiveMtReceipt(state.mt5Receipt);
@@ -38,12 +45,14 @@ export function LedgerPage({ state }: LedgerPageProps) {
     let interval: number | undefined;
 
     async function loadLedgerEvidence() {
-      const [ledger, receipt] = await Promise.all([
+      const [ledger, accountHealth, receipt] = await Promise.all([
         fetchAccountLedger(),
+        fetchAccountHealth(),
         fetchMT5Receipt(),
       ]);
       if (cancelled) return;
       if (ledger) setLiveAccount(ledger);
+      if (accountHealth) setLiveAccountHealth(accountHealth);
       if (receipt) setLiveMtReceipt(receipt);
     }
 
@@ -65,6 +74,11 @@ export function LedgerPage({ state }: LedgerPageProps) {
     { date: "planned-risk-floor", equity: equity - plannedRisk },
     { date: sched.next_due_date, equity },
   ];
+  const movementTruthReport = accountHealth ?? (
+    account?.movement_source_truth
+      ? ({ source_health: account.movement_source_truth } as AccountHealthReport)
+      : null
+  );
   const accountPreview = useMemo(() => {
     const seed = Number.isFinite(ownerSeed) && ownerSeed > 0 ? ownerSeed : account?.summary.initial_investment_usd ?? equity;
     const realized = account?.summary.realized_pnl_usd ?? 0;
@@ -167,6 +181,12 @@ export function LedgerPage({ state }: LedgerPageProps) {
           )}
         </div>
       </GlassPanel>
+
+      <MovementTruthPanel
+        report={movementTruthReport}
+        title="Ledger Movement Source Truth"
+        subtitle="Whether proof-ledger prices are broker truth, provider-priced paper rows, or static simulator fallback"
+      />
 
       {/* Section 2: Daily Bundle Ledger */}
       <GlassPanel

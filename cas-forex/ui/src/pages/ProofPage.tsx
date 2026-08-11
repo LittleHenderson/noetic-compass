@@ -5,7 +5,11 @@ import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { LockReasonList } from "../components/LockReasonList";
 import { EvidenceHashRow } from "../components/EvidenceHashRow";
+import { MoneyMovementSetupStatus } from "../components/MoneyMovementSetupStatus";
 import { ProofControlPanel } from "../components/ProofControlPanel";
+import { CONVICTION_SCORE_TITLE, formatConvictionScore } from "../util/conviction";
+import { brokerPortalInfo } from "../util/brokerPortal";
+import { describeReconciliationMovementTruth } from "../util/movementSource";
 import {
   fetchBacksolve,
   fetchAuthorization,
@@ -24,6 +28,7 @@ import {
 import type {
   AccountReconciliationReport,
   BacksolveSummary,
+  BrokerRealityReview,
   DashboardState,
   MT5ProbeStatus,
   MT5Receipt,
@@ -36,7 +41,12 @@ interface ProofPageProps {
   state: DashboardState;
 }
 
-const HUGOSWAY_CLIENT_PORTAL_URL = "https://app.hugosway.com";
+const REAL_MONEY_ARM_CONFIRM_PHRASE = "ARM REAL MONEY";
+const PAYMENT_PROVIDER_LIVE_CONFIRM_PHRASE = "ARM PAYMENT PROVIDER LIVE";
+
+function realMoneyConfirmRequired(payload: { need_confirmation?: string | null }): string {
+  return `Type exactly "${payload.need_confirmation ?? REAL_MONEY_ARM_CONFIRM_PHRASE}" to arm live-money authority switches.`;
+}
 
 export function ProofPage({ state }: ProofPageProps) {
   const { uiReadiness: r, dailySchedule: s, dailyBundle: b } = state;
@@ -235,8 +245,11 @@ export function ProofPage({ state }: ProofPageProps) {
                 <span className="route-symbol">{d.symbol}</span>
                 <StatusChip label={d.direction} variant="info" size="sm" />
                 <StatusChip label={d.action} variant="paper" size="sm" />
-                <span className="route-confidence mono">
-                  conf: {(d.confidence * 100).toFixed(1)}%
+                <span
+                  className="route-confidence mono"
+                  title={CONVICTION_SCORE_TITLE}
+                >
+                  conviction: {formatConvictionScore(d.confidence)}
                 </span>
               </div>
               <div className="route-card-body">
@@ -453,14 +466,20 @@ export function ProofPage({ state }: ProofPageProps) {
         </GlassPanel>
       )}
 
-      <ProofLivePaymentControls />
+      <ProofLivePaymentControls mt5Receipt={mt5Receipt} brokerReality={state.brokerReality} />
     </div>
   );
 }
 
 /* ── Helpers ── */
 
-function ProofLivePaymentControls() {
+function ProofLivePaymentControls({
+  mt5Receipt,
+  brokerReality,
+}: {
+  mt5Receipt?: MT5Receipt | null;
+  brokerReality?: BrokerRealityReview;
+}) {
   const [auth, setAuth] = useState<AuthorizationState | null>(null);
   const [policy, setPolicy] = useState<VerifiedProfitSweepPolicy | null>(null);
   const [reconciliation, setReconciliation] = useState<AccountReconciliationReport | null>(null);
@@ -468,7 +487,10 @@ function ProofLivePaymentControls() {
   const [status, setStatus] = useState("");
   const [fundingStatus, setFundingStatus] = useState("");
   const [provider, setProvider] = useState("");
+  const [providerEnvironment, setProviderEnvironment] = useState("sandbox");
   const [apiKey, setApiKey] = useState("");
+  const [providerBaseUrl, setProviderBaseUrl] = useState("");
+  const [providerAccountId, setProviderAccountId] = useState("");
   const [destId, setDestId] = useState("");
   const [sweepPct, setSweepPct] = useState("30");
   const [taxReservePct, setTaxReservePct] = useState("20");
@@ -476,6 +498,9 @@ function ProofLivePaymentControls() {
 
   function loadAuthDraft(nextAuth: AuthorizationState) {
     setProvider(nextAuth.provider.payment_provider ?? "");
+    setProviderEnvironment(nextAuth.provider.payment_provider_environment ?? "sandbox");
+    setProviderBaseUrl(nextAuth.provider.payment_provider_base_url ?? "");
+    setProviderAccountId(nextAuth.provider.payment_provider_account_id ?? "");
     setDestId(nextAuth.provider.payout_destination_id ?? "");
   }
 
@@ -511,6 +536,10 @@ function ProofLivePaymentControls() {
     setStatus("");
     try {
       const nextAuth = await updateAuthorization(patch);
+      if (nextAuth.status === "CONFIRM_REQUIRED") {
+        setStatus(realMoneyConfirmRequired(nextAuth));
+        return;
+      }
       setAuth(nextAuth);
       loadAuthDraft(nextAuth);
       setStatus(okMessage);
@@ -524,10 +553,28 @@ function ProofLivePaymentControls() {
   async function saveProvider() {
     const patch: AuthorizationPatch = {
       payment_provider: provider.trim(),
+      payment_provider_environment: providerEnvironment,
+      payment_provider_base_url: providerBaseUrl.trim(),
+      payment_provider_account_id: providerAccountId.trim(),
       payout_destination_id: destId.trim(),
     };
     if (apiKey.trim()) patch.payment_api_key = apiKey.trim();
-    await applyAuth(patch, "__provider__", "Provider and destination saved.");
+    if (providerEnvironment === "live") {
+      const confirm = window.prompt(
+        `Type exactly "${PAYMENT_PROVIDER_LIVE_CONFIRM_PHRASE}" to mark this middleware as live.`,
+        "",
+      );
+      if (confirm == null) {
+        setStatus("Owner confirmation canceled; provider environment was not changed.");
+        return;
+      }
+      patch.confirm = confirm;
+    }
+    await applyAuth(
+      patch,
+      "__provider__",
+      "Provider configuration saved. Withdrawals and payouts stay scaffolded until the runtime rail, owner gate, allowlist, and receipt evidence are all ready.",
+    );
     setApiKey("");
   }
 
@@ -562,14 +609,23 @@ function ProofLivePaymentControls() {
       owner_enable_bank_card_movement: true,
       owner_enable_payout_automation: true,
       payment_provider: provider.trim(),
+      payment_provider_environment: providerEnvironment,
+      payment_provider_base_url: providerBaseUrl.trim(),
+      payment_provider_account_id: providerAccountId.trim(),
       payout_destination_id: destId.trim(),
     };
     if (destId.trim()) patch.payout_destination_allowlisted = true;
     if (apiKey.trim()) patch.payment_api_key = apiKey.trim();
+    const confirm = window.prompt(`Type exactly "${REAL_MONEY_ARM_CONFIRM_PHRASE}" to arm these live-money authority switches.`, "");
+    if (confirm == null) {
+      setStatus("Owner confirmation canceled; no switches changed.");
+      return;
+    }
+    patch.confirm = confirm;
     await applyAuth(
       patch,
       "__all__",
-      "Owner authority switches saved. Broker credentials, edge authorization, provider setup, and risk still re-check at action time.",
+      "Owner authority switches saved. Real money still depends on broker credentials, edge authorization, a supported real provider rail, allowlist, receipts, and action-time risk checks.",
     );
     setApiKey("");
   }
@@ -595,11 +651,25 @@ function ProofLivePaymentControls() {
     }
   }
 
-  const allAuthorized = auth?.all_real_money_authorized ?? false;
+  const allAuthorized = Boolean(auth?.all_real_money_authorized && auth?.provider.real_money_provider_ready);
   const snapshot = reconciliation?.broker_snapshot_initial_investment_usd;
   const blockerCount = reconciliation?.blockers?.length ?? 0;
   const syncStatus = reconciliation?.overall_status ?? "READY";
-  const statusVariant = syncStatus.includes("MISMATCH") ? "warning" : "info";
+  const statusVariant = syncStatus === "RECONCILIATION_FAILED"
+    ? "danger"
+    : syncStatus === "RECONCILED_WITH_WARNINGS"
+      ? "warning"
+      : "info";
+  const movementTruth = describeReconciliationMovementTruth(reconciliation);
+  const brokerPortal = brokerPortalInfo(
+    brokerReality?.broker_id,
+    brokerReality?.broker_display_name,
+    brokerReality?.broker_website,
+  );
+  const receiptVerified = Boolean(
+    mt5Receipt?.receipt_validation_status === "BROKER_API_VERIFIED" ||
+    mt5Receipt?.receipt_validation_status === "VERIFIED",
+  );
 
   return (
     <GlassPanel
@@ -609,6 +679,9 @@ function ProofLivePaymentControls() {
     >
       <div style={{ marginBottom: 12, fontSize: "0.78rem", color: "var(--text-secondary)" }}>
         {auth?.summary ?? "Loading owner-controlled capability state..."}
+      </div>
+      <div className="control-field-desc" style={{ marginBottom: 10 }}>
+        Broker funding and payout setup stay observational here until a supported real provider rail is actually ready. Saving a provider label does not make payouts live.
       </div>
 
       <div className="go-live-group-title">Broker Funding Route</div>
@@ -638,9 +711,20 @@ function ProofLivePaymentControls() {
               : `No broker-funded snapshot loaded yet${blockerCount ? `; ${blockerCount} blocker(s) reported.` : "."}`}
           </div>
         </div>
+        <div className="control-field">
+          <div className="control-field-header">
+            <span className="field-label">Movement Feed</span>
+            <StatusChip label={movementTruth.feedLabel} variant={movementTruth.feedTone} size="sm" />
+          </div>
+          <div className="control-field-desc">
+            {movementTruth.detail
+              ? `Price source: ${movementTruth.statusLabel}. ${movementTruth.detail}`
+              : "Broker snapshot sync has not reported canonical movement-source truth yet."}
+          </div>
+        </div>
       </div>
       <div className="mobile-api-row">
-        <a className="mobile-api-button" href={HUGOSWAY_CLIENT_PORTAL_URL} target="_blank" rel="noreferrer">
+        <a className="mobile-api-button" href={brokerPortal.url} target="_blank" rel="noreferrer">
           OPEN BROKER PORTAL
         </a>
         <button
@@ -660,6 +744,17 @@ function ProofLivePaymentControls() {
           {fundingStatus}
         </div>
       )}
+
+      <MoneyMovementSetupStatus
+        auth={auth}
+        receiptVerified={receiptVerified}
+        receiptStatusLabel={receiptVerified ? "VERIFIED" : "REQUIRED"}
+        receiptDetail={
+          receiptVerified
+            ? `MT5 receipt evidence status: ${mt5Receipt?.receipt_validation_status ?? "VERIFIED"}.`
+            : "Broker receipt and payout evidence are still required before real payouts should be trusted."
+        }
+      />
 
       <div className="not-licensed-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
         {(auth?.capabilities ?? []).map((cap) => (
@@ -707,9 +802,21 @@ function ProofLivePaymentControls() {
           <input
             className="mobile-api-input"
             value={provider}
-            placeholder="wise, stripe, broker payout provider"
+            placeholder="broker_webhook or simulated"
             onChange={(event) => { setProvider(event.target.value); setStatus(""); }}
           />
+        </div>
+        <div className="control-field">
+          <span className="field-label">Provider environment</span>
+          <select
+            className="mobile-api-input"
+            value={providerEnvironment}
+            onChange={(event) => { setProviderEnvironment(event.target.value); setStatus(""); }}
+          >
+            <option value="sandbox">Sandbox contract test</option>
+            <option value="live">Live broker middleware</option>
+          </select>
+          <div className="control-field-desc">Sandbox proves the same contract without moving or claiming real money.</div>
         </div>
         <div className="control-field">
           <span className="field-label">Provider API key{auth?.provider.payment_api_key_set ? " - set" : ""}</span>
@@ -721,7 +828,7 @@ function ProofLivePaymentControls() {
             autoComplete="off"
             onChange={(event) => { setApiKey(event.target.value); setStatus(""); }}
           />
-          <div className="control-field-desc">The app stores a provider key/token, not raw bank or card numbers.</div>
+          <div className="control-field-desc">The app stores a provider key/token as a local encrypted runtime envelope, not raw bank or card numbers.</div>
         </div>
         <div className="control-field">
           <span className="field-label">Bank/card destination token</span>
@@ -731,6 +838,35 @@ function ProofLivePaymentControls() {
             placeholder="allowlisted payout destination id"
             onChange={(event) => { setDestId(event.target.value); setStatus(""); }}
           />
+        </div>
+      </div>
+
+      <div className="dashboard-grid-3col">
+        <div className="control-field">
+          <span className="field-label">Broker funding middleware URL</span>
+          <input
+            className="mobile-api-input"
+            value={providerBaseUrl}
+            placeholder="https://funding.your-domain.example"
+            onChange={(event) => { setProviderBaseUrl(event.target.value); setStatus(""); }}
+          />
+        </div>
+        <div className="control-field">
+          <span className="field-label">Bound broker account ID</span>
+          <input
+            className="mobile-api-input"
+            value={providerAccountId}
+            placeholder="provider-side broker account id"
+            onChange={(event) => { setProviderAccountId(event.target.value); setStatus(""); }}
+          />
+        </div>
+        <div className="control-field">
+          <span className="field-label">Custody binding</span>
+          <div className="control-field-desc">
+            {auth?.provider.broker_account_bound
+              ? `Bound: ${auth.provider.custody_scope ?? "configured broker account"}`
+              : "Not broker-bound. Stripe alone does not withdraw from MT5/Hugo's Way."}
+          </div>
         </div>
       </div>
 

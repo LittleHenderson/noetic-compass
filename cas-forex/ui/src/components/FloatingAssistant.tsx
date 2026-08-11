@@ -5,12 +5,22 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { postAssistantChat, type AssistantTurn } from "../data/assistantApi";
+import {
+  postAssistantChat,
+  type AssistantReply,
+  type AssistantTurn,
+} from "../data/assistantApi";
+import {
+  executeCommand,
+  type CommandPreview,
+  type ProposedCommand,
+} from "../data/ownerCommandApi";
 
 interface Msg {
   role: "user" | "assistant";
   content: string;
   pending?: boolean;
+  responder?: string;
 }
 
 const GREETING: Msg = {
@@ -44,6 +54,11 @@ export function FloatingAssistant() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([GREETING]);
+  const [proposed, setProposed] = useState<ProposedCommand | null>(null);
+  const [preview, setPreview] = useState<CommandPreview | null>(null);
+  const [confirmInput, setConfirmInput] = useState("");
+  const [journalInput, setJournalInput] = useState("");
+  const [receiptMsg, setReceiptMsg] = useState("");
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -61,6 +76,11 @@ export function FloatingAssistant() {
     const history: AssistantTurn[] = msgs
       .filter((m) => !m.pending)
       .map((m) => ({ role: m.role, content: m.content }));
+    setProposed(null);
+    setPreview(null);
+    setConfirmInput("");
+    setJournalInput("");
+    setReceiptMsg("");
     setMsgs((prev) => [...prev, { role: "user", content: text }, { role: "assistant", content: "…", pending: true }]);
     setInput("");
     setBusy(true);
@@ -68,8 +88,21 @@ export function FloatingAssistant() {
       const res = await postAssistantChat(text, history);
       setMsgs((prev) => {
         const next = prev.slice(0, -1); // drop the pending placeholder
-        return [...next, { role: "assistant", content: res.reply }];
+        return [
+          ...next,
+          {
+            role: "assistant",
+            content: res.reply,
+            responder: assistantResponderLabel(res),
+          },
+        ];
       });
+      if (res.proposed_command && res.command_preview) {
+        setProposed(res.proposed_command);
+        setPreview(res.command_preview);
+        setConfirmInput(res.command_preview.confirm_phrase || "CONFIRM");
+        setJournalInput(extractPreviewReason(res.proposed_command.params));
+      }
     } catch {
       setMsgs((prev) => {
         const next = prev.slice(0, -1);
@@ -80,6 +113,7 @@ export function FloatingAssistant() {
             content:
               "Couldn't reach the assistant — is the API server running and is the " +
               "API address set correctly in Settings?",
+            responder: "Request failed",
           },
         ];
       });
@@ -92,6 +126,38 @@ export function FloatingAssistant() {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       void send();
+    }
+  }
+
+  async function runProposed() {
+    if (!proposed) return;
+    setBusy(true);
+    setReceiptMsg("");
+    try {
+      const res = await executeCommand(
+        proposed.command,
+        {
+          ...proposed.params,
+          ...(journalInput.trim() ? { journal_reason: journalInput.trim() } : {}),
+        },
+        confirmInput.trim(),
+      );
+      if (res.ok && res.applied) {
+        setReceiptMsg(`Done: ${JSON.stringify(res.result || {})}`);
+        setProposed(null);
+        setPreview(null);
+        setConfirmInput("");
+        setJournalInput("");
+      } else if (res.need_confirmation) {
+        setReceiptMsg(`Type exactly: "${res.need_confirmation}"`);
+      } else {
+        const blockers = res.preview?.blockers?.length ? ` - ${res.preview.blockers.join("; ")}` : "";
+        setReceiptMsg(`Not applied: ${res.reason ?? "blocked"}${blockers}`);
+      }
+    } catch {
+      setReceiptMsg("Command failed to run.");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -126,11 +192,95 @@ export function FloatingAssistant() {
           <div ref={scrollRef} style={S.scroll}>
             {msgs.map((m, i) => (
               <div key={i} style={{ ...S.row, justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
-                <div style={{ ...S.bubble, ...(m.role === "user" ? S.bubbleUser : S.bubbleAi) }}>
-                  {m.pending ? <TypingDots /> : m.content}
+                <div style={{ ...S.messageStack, alignItems: m.role === "user" ? "flex-end" : "flex-start" }}>
+                  <div style={{ ...S.bubble, ...(m.role === "user" ? S.bubbleUser : S.bubbleAi) }}>
+                    {m.pending ? <TypingDots /> : m.content}
+                  </div>
+                  {m.role === "assistant" && m.responder ? (
+                    <div style={S.responder}>Answered by: {m.responder}</div>
+                  ) : null}
                 </div>
               </div>
             ))}
+            {preview ? (
+              <div style={S.commandCard}>
+                <div style={S.commandTitle}>Proposed: {preview.title}</div>
+                <div style={S.commandSmall}>
+                  {String(JSON.stringify(preview.current))} → <strong>{String(JSON.stringify(preview.proposed))}</strong>
+                </div>
+                {preview.binding?.operational_effect ? (
+                  <div style={S.commandSmall}>{preview.binding.operational_effect}</div>
+                ) : null}
+                {(preview.contract_rows || []).map((row, i) => (
+                  <div key={`${row.field || "contract"}-${i}`} style={S.commandContract}>
+                    <div style={S.commandSmall}>
+                      <strong>{row.label || row.field || "Dial"}</strong>: {formatContractValue(row.before, row.value_kind)}
+                      {" "}to <strong>{formatContractValue(row.after, row.value_kind)}</strong>
+                      {row.units ? ` ${row.units}` : ""}
+                    </div>
+                    {row.value_kind === "subset" ? (
+                      <>
+                        {row.added?.length ? <div style={S.commandSmall}>Added: {row.added.join(", ")}</div> : null}
+                        {row.removed?.length ? <div style={S.commandSmall}>Removed: {row.removed.join(", ")}</div> : null}
+                      </>
+                    ) : null}
+                    {row.enforced_by ? <div style={S.commandSmall}>Enforced by {row.enforced_by}.</div> : null}
+                    {row.owner_bound ? <div style={S.commandSmall}>Owner bound: {formatOwnerBound(row.owner_bound)}</div> : null}
+                  </div>
+                ))}
+                {(preview.effects || []).map((effect, i) => (
+                  <div key={i} style={S.commandSmall}>{effect}</div>
+                ))}
+                {preview.blockers && preview.blockers.length > 0 ? (
+                  <div style={{ ...S.commandSmall, color: "#fca5a5" }}>
+                    Can't run yet: {preview.blockers.join("; ")}
+                  </div>
+                ) : null}
+                <>
+                  {preview.journal_required ? (
+                    <>
+                      <div style={S.commandSmall}>
+                        {preview.journal_prompt || "Record why this widening is not revenge, FOMO, or chasing losses."}
+                      </div>
+                      <textarea
+                        value={journalInput}
+                        onChange={(e) => setJournalInput(e.target.value)}
+                        aria-label="Anti-impulse journal reason"
+                        rows={3}
+                        style={{ ...S.confirmInput, minHeight: 84, resize: "vertical" }}
+                      />
+                      <div style={S.commandSmall}>
+                        Minimum {preview.journal_minimum_length ?? 20} characters.
+                      </div>
+                    </>
+                  ) : null}
+                  <div style={S.commandSmall}>
+                    To run, this must say exactly: <code>{preview.confirm_phrase}</code>
+                  </div>
+                  <input
+                    value={confirmInput}
+                    onChange={(e) => setConfirmInput(e.target.value)}
+                    aria-label="Type the confirmation phrase to run the command"
+                    style={S.confirmInput}
+                  />
+                  <div style={S.commandButtons}>
+                    <button disabled={busy} onClick={() => void runProposed()} style={S.commandButton}>
+                      Confirm & run
+                    </button>
+                    <button
+                      disabled={busy}
+                      onClick={() => { setProposed(null); setPreview(null); setConfirmInput(""); setJournalInput(""); setReceiptMsg(""); }}
+                      style={S.commandButtonGhost}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </>
+                {receiptMsg ? <div style={S.receiptMsg}>{receiptMsg}</div> : null}
+              </div>
+            ) : receiptMsg ? (
+              <div style={S.receiptMsg}>{receiptMsg}</div>
+            ) : null}
           </div>
 
           <div style={S.inputRow}>
@@ -154,6 +304,41 @@ export function FloatingAssistant() {
 }
 
 const ACCENT = "#3b82f6";
+
+function extractPreviewReason(params: Record<string, unknown> | null | undefined): string {
+  const value = params?.journal_reason ?? params?.reason;
+  return typeof value === "string" ? value : "";
+}
+
+function assistantResponderLabel(reply: AssistantReply): string {
+  const model = reply.model?.trim();
+  if (reply.source === "ai-local") return model ? `Local AI · ${model}` : "Local AI";
+  if (reply.source === "ai") return model ? `Claude · ${model}` : "Claude";
+  if (reply.source === "local") return "CAS runtime truth";
+  if (reply.source === "unconfigured") return "Configuration check";
+  if (reply.source === "error") return "Model fallback status";
+  return model || reply.source || "CAS Assistant";
+}
+
+function formatContractValue(value: unknown, valueKind?: string): string {
+  if (valueKind === "toggle") return value ? "ON" : "OFF";
+  if (Array.isArray(value)) return value.join(", ");
+  if (value == null) return "n/a";
+  return String(value);
+}
+
+function formatOwnerBound(bound: unknown): string {
+  if (!bound || typeof bound !== "object" || Array.isArray(bound)) return String(bound ?? "n/a");
+  const record = bound as Record<string, unknown>;
+  if ("min" in record || "max" in record) {
+    return `${String(record.min ?? "n/a")} to ${String(record.max ?? "n/a")}`;
+  }
+  if (Array.isArray(record.allowed)) {
+    return record.allowed.join(", ");
+  }
+  return JSON.stringify(record);
+}
+
 const S: Record<string, React.CSSProperties> = {
   fab: {
     position: "fixed",
@@ -202,10 +387,69 @@ const S: Record<string, React.CSSProperties> = {
   iconBtn: { background: "transparent", border: "none", color: "#9aa4b2", fontSize: 16, cursor: "pointer" },
   scroll: { flex: 1, overflowY: "auto", padding: 12, display: "flex", flexDirection: "column", gap: 8 },
   row: { display: "flex" },
-  bubble: { maxWidth: "85%", padding: "9px 12px", borderRadius: 12, fontSize: 14, lineHeight: 1.45, whiteSpace: "pre-wrap", wordBreak: "break-word" },
+  messageStack: { display: "flex", flexDirection: "column", maxWidth: "85%", minWidth: 0 },
+  bubble: { maxWidth: "100%", padding: "9px 12px", borderRadius: 12, fontSize: 14, lineHeight: 1.45, whiteSpace: "pre-wrap", wordBreak: "break-word" },
   bubbleUser: { background: ACCENT, color: "#fff", borderBottomRightRadius: 4 },
   bubbleAi: { background: "#1b2740", color: "#e5e7eb", borderBottomLeftRadius: 4 },
+  responder: { marginTop: 4, padding: "0 4px", color: "#8bd5c6", fontSize: 10, fontWeight: 600 },
   pending: { opacity: 0.6 },
+  commandCard: {
+    alignSelf: "stretch",
+    border: "1px solid #2a3650",
+    borderRadius: 10,
+    padding: 10,
+    background: "#111c33",
+    fontSize: 13,
+    display: "grid",
+    gap: 6,
+  },
+  commandTitle: { fontWeight: 700, color: "#f8fafc" },
+  commandSmall: { color: "#cbd5e1", fontSize: 12, lineHeight: 1.35, wordBreak: "break-word" },
+  commandContract: {
+    marginTop: 6,
+    padding: "8px 10px",
+    borderRadius: 8,
+    border: "1px solid #243049",
+    background: "#0d1526",
+  },
+  confirmInput: {
+    width: "100%",
+    boxSizing: "border-box",
+    background: "#0f1729",
+    color: "#e5e7eb",
+    border: "1px solid #243049",
+    borderRadius: 8,
+    padding: "8px 10px",
+    fontSize: 13,
+  },
+  commandButtons: { display: "flex", gap: 8, flexWrap: "wrap" },
+  commandButton: {
+    background: ACCENT,
+    color: "#fff",
+    border: "none",
+    borderRadius: 8,
+    padding: "7px 10px",
+    fontWeight: 600,
+    cursor: "pointer",
+  },
+  commandButtonGhost: {
+    background: "transparent",
+    color: "#cbd5e1",
+    border: "1px solid #334155",
+    borderRadius: 8,
+    padding: "7px 10px",
+    fontWeight: 600,
+    cursor: "pointer",
+  },
+  receiptMsg: {
+    color: "#bbf7d0",
+    background: "#102318",
+    border: "1px solid #22543d",
+    borderRadius: 8,
+    padding: "7px 9px",
+    fontSize: 12,
+    wordBreak: "break-word",
+  },
   inputRow: { display: "flex", gap: 8, padding: 10, borderTop: "1px solid #1f2a44", background: "#0c1424" },
   textarea: {
     flex: 1,

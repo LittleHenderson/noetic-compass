@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
 from typing import Any
 from urllib.parse import urlsplit
@@ -11,6 +11,7 @@ import pytest
 
 import api.server as api_server
 import api.routes.strategy as strategy_routes
+import cas_forex.mt5_deal_history_ingest as mt5_history
 from api.server import app
 from cas_forex.mt5_deal_history_ingest import (
     build_mt5_deal_history_ingest_report,
@@ -134,6 +135,69 @@ class FakeMT5DealHistory:
         ]
 
 
+class FakeMT5ServerOffset(FakeMT5DealHistory):
+    def __init__(self, now: datetime):
+        super().__init__()
+        self.now = now
+        self.requested_start = None
+        self.requested_end = None
+
+    def symbol_info_tick(self, symbol):
+        if symbol != "EURUSD":
+            return None
+        return SimpleNamespace(time=int((self.now + timedelta(hours=3)).timestamp()))
+
+    def history_deals_get(self, start, end, group=None):
+        self.requested_start = start
+        self.requested_end = end
+        entry_time = int((self.now + timedelta(hours=3, minutes=-5)).timestamp())
+        close_time = entry_time + 60
+        if not (start.timestamp() <= entry_time <= end.timestamp()):
+            return []
+        return [
+            SimpleNamespace(
+                ticket=44681,
+                order=45944826,
+                time=entry_time,
+                time_msc=entry_time * 1000,
+                type=self.DEAL_TYPE_SELL,
+                entry=self.DEAL_ENTRY_IN,
+                magic=20260708,
+                position_id=45944826,
+                reason=3,
+                volume=0.01,
+                price=7548.19,
+                commission=-0.05,
+                swap=0.0,
+                profit=0.0,
+                fee=0.0,
+                symbol="SPX500",
+                comment="CAS_PAPER_LEARNING",
+                external_id="",
+            ),
+            SimpleNamespace(
+                ticket=44682,
+                order=45944827,
+                time=close_time,
+                time_msc=close_time * 1000,
+                type=self.DEAL_TYPE_BUY,
+                entry=self.DEAL_ENTRY_OUT,
+                magic=20260708,
+                position_id=45944826,
+                reason=2,
+                volume=0.01,
+                price=7554.87,
+                commission=0.0,
+                swap=0.0,
+                profit=-6.68,
+                fee=0.0,
+                symbol="SPX500",
+                comment="[sl 7554.87]",
+                external_id="",
+            ),
+        ]
+
+
 def test_mt5_deal_history_ingest_exports_and_joins_memory(tmp_path):
     memory_report = {
         "summary": {"memory_record_count": 1, "pending_receipt_count": 0},
@@ -173,6 +237,34 @@ def test_mt5_deal_history_ingest_exports_and_joins_memory(tmp_path):
     latest = load_latest_mt5_deal_history_ingest_report(tmp_path / "mt5-deal-history")
     assert latest["summary"]["memory_update_count"] == 1
     assert latest["terminal_history_ingest"]["summary"]["memory_update_count"] == 1
+
+
+def test_mt5_deal_history_shifts_query_and_normalizes_broker_server_epoch(
+    tmp_path,
+    monkeypatch,
+):
+    now = datetime(2026, 7, 10, 13, 46, tzinfo=timezone.utc)
+    fake = FakeMT5ServerOffset(now)
+    monkeypatch.setattr(mt5_history, "utc_now", lambda: now)
+
+    report = build_mt5_deal_history_ingest_report(
+        mt5_module=fake,
+        output_dir=tmp_path / "mt5-deal-history",
+        export_dir=tmp_path / "terminal-history-exports",
+        terminal_history_output_dir=tmp_path / "terminal-history-ingest",
+        run_terminal_history_ingest=False,
+        write_report=False,
+    )
+
+    assert report["time_normalization"]["status"] == "BROKER_SERVER_OFFSET_CORRECTED"
+    assert report["time_normalization"]["server_utc_offset_seconds"] == 10800
+    assert fake.requested_end == now + timedelta(hours=5)
+    assert report["raw_deal_count"] == 2
+    assert report["history_records"][0]["broker_ticket"] == "45944826"
+    assert report["history_records"][0]["open_time"] == "2026-07-10T13:41:00+00:00"
+    assert report["history_records"][0]["close_time"] == "2026-07-10T13:42:00+00:00"
+    assert report["raw_deals"][0]["time_iso_raw"] == "2026-07-10T16:41:00+00:00"
+    assert report["raw_deals"][0]["timestamp_basis"] == "mt5_broker_server_epoch_normalized_to_host_utc"
 
 
 def test_mt5_deal_history_ingest_reports_empty_demo_history(tmp_path):

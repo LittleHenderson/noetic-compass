@@ -44,6 +44,56 @@ def test_bad_category_falls_back_to_general():
     assert stored["category"] == "general"
 
 
+def test_superseded_lesson_stays_auditable_but_leaves_operator_prompt():
+    stored = operator_lessons.record_lesson(
+        "Legacy static simulator blocks primary MT5 management",
+        category="data_quality",
+    )
+
+    superseded = operator_lessons.supersede_lesson(
+        stored["lesson_id"],
+        reason="Primary MT5 dispatch is independently active.",
+    )
+
+    assert superseded is not None
+    assert superseded["status"] == "SUPERSEDED"
+    assert operator_lessons.list_lessons() == []
+    audit_rows = operator_lessons.list_lessons(include_superseded=True)
+    assert audit_rows[0]["lesson_id"] == stored["lesson_id"]
+    assert operator_lessons.lessons_count() == 0
+    assert operator_lessons.lessons_count(include_superseded=True) == 1
+
+
+def test_operator_rejects_lesson_that_contradicts_primary_mt5_truth(tmp_path):
+    op = ai_operator.AIOperator(actions_path=tmp_path / "actions.jsonl")
+    decision = {
+        "lessons": [
+            {
+                "text": (
+                    "AI Hedge management is blocked end-to-end because the price "
+                    "source is STATIC_SIMULATION_FALLBACK."
+                ),
+                "category": "data_quality",
+                "evidence": "legacy movement stream",
+            }
+        ]
+    }
+    context = {
+        "primary_execution_truth": {
+            "primary_runtime_established": True,
+            "conflicts": [
+                {"code": "LEGACY_STATIC_SIM_DOES_NOT_BLOCK_PRIMARY_MT5"}
+            ],
+        }
+    }
+
+    recorded = op._record_lessons(decision, context=context)
+
+    assert recorded == []
+    assert operator_lessons.lessons_count() == 0
+    assert op._last_lesson_rejections[0]["reason"].startswith("Rejected because")
+
+
 class _StubProvider:
     def __init__(self, text):
         self._text = text

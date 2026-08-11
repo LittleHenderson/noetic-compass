@@ -41,6 +41,139 @@
   font-style: italic;
 }
 
+.decision-movement-truth {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 0 2px 0;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.decision-movement-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.decision-movement-title {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.decision-movement-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.decision-movement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 6px 10px;
+}
+
+.decision-movement-field {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.decision-movement-label {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.decision-movement-value {
+  font-size: 0.72rem;
+  color: var(--text-primary);
+}
+
+.decision-movement-detail,
+.decision-movement-warning {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.decision-movement-warning {
+  color: var(--warning);
+}
+
+.decision-version-trace {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.decision-version-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.decision-version-title {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.decision-version-source {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.decision-version-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 6px 10px;
+}
+
+.decision-version-item {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.decision-version-label {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.decision-version-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  color: var(--text-primary);
+}
+
+.decision-version-refs,
+.decision-version-gaps {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.decision-version-gaps {
+  color: var(--warning);
+}
+
 .decision-chain {
   display: flex;
   flex-direction: column;

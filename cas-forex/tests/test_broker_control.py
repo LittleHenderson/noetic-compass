@@ -13,6 +13,8 @@ from cas_forex.broker_control import (
     clear_broker_control_overrides,
     resolve_broker_control,
     select_bridge,
+    select_durable_simulator_handoff_bridge,
+    select_paper_learning_bridge,
     set_broker_control_overrides,
 )
 
@@ -162,7 +164,7 @@ def test_report_lists_platforms_and_env_vars():
 # even with mt5_login=0 (the bridge attaches to the running terminal). A
 # connected LIVE terminal is NOT auto-routed.
 # ---------------------------------------------------------------------------
-def _fake_mt5_class(*, demo: bool, connects: bool = True):
+def _fake_mt5_class(*, demo: bool, connects: bool = True, can_submit: bool = True):
     class _Fake:
         def __init__(self, **kwargs):
             pass
@@ -172,6 +174,18 @@ def _fake_mt5_class(*, demo: bool, connects: bool = True):
 
         def is_demo_account(self):
             return demo
+
+        def order_send_permission_state(self):
+            return {
+                "status": "ORDER_SEND_READY_AT_TERMINAL" if can_submit else "TERMINAL_ALGO_DISABLED",
+                "can_submit_order_send": can_submit,
+                "plain_english": (
+                    "Demo order_send is ready."
+                    if can_submit
+                    else "MT5 Algo Trading is off in the terminal."
+                ),
+                "blockers": [] if can_submit else ["MT5 Algo Trading is off in the terminal."],
+            }
 
     return _Fake
 
@@ -203,3 +217,58 @@ def test_auto_falls_back_to_sim_when_terminal_unreachable(monkeypatch):
     monkeypatch.setattr("cas_forex.broker.mt5_bridge.MT5Bridge", _fake_mt5_class(demo=True, connects=False))
     bridge = select_bridge(_cfg(mt5_login=0))
     assert isinstance(bridge, SimulatedBrokerBridge)
+
+
+def test_paper_learning_prefers_execution_ready_demo_mt5(monkeypatch):
+    monkeypatch.setattr(
+        "cas_forex.broker.mt5_bridge.MT5Bridge",
+        _fake_mt5_class(demo=True, can_submit=True),
+    )
+
+    bridge = select_paper_learning_bridge(_cfg())
+
+    assert not isinstance(bridge, SimulatedBrokerBridge)
+    assert bridge.cas_selection_status == "PAPER_MT5_ORDER_SEND_READY"
+    assert bridge.cas_execution_lane == "PAPER"
+
+
+def test_paper_learning_uses_simulator_when_demo_algo_is_off(monkeypatch):
+    monkeypatch.setattr(
+        "cas_forex.broker.mt5_bridge.MT5Bridge",
+        _fake_mt5_class(demo=True, can_submit=False),
+    )
+
+    bridge = select_paper_learning_bridge(_cfg())
+
+    assert isinstance(bridge, SimulatedBrokerBridge)
+    assert bridge.cas_selection_status == "PAPER_SIMULATOR_FALLBACK"
+    assert "TERMINAL_ALGO_DISABLED" in bridge.cas_selection_detail
+    assert "paper learning continues" in bridge.cas_selection_detail
+
+
+def test_paper_learning_never_uses_connected_live_terminal(monkeypatch):
+    monkeypatch.setattr(
+        "cas_forex.broker.mt5_bridge.MT5Bridge",
+        _fake_mt5_class(demo=False, can_submit=True),
+    )
+
+    bridge = select_paper_learning_bridge(_cfg())
+
+    assert isinstance(bridge, SimulatedBrokerBridge)
+    assert "LIVE terminal is never used" in bridge.cas_selection_detail
+
+
+def test_paper_learning_rejects_nonfinal_live_config():
+    with pytest.raises(ValueError, match="paper-only"):
+        select_paper_learning_bridge(_cfg(live_mode=True))
+
+
+def test_durable_simulator_handoff_bridge_is_paper_management_only():
+    bridge = select_durable_simulator_handoff_bridge(_cfg())
+
+    assert isinstance(bridge, SimulatedBrokerBridge)
+    assert bridge.cas_selection_status == "PAPER_SIMULATOR_HANDOFF_MANAGEMENT"
+    assert bridge.cas_execution_lane == "PAPER"
+
+    with pytest.raises(ValueError, match="paper-only"):
+        select_durable_simulator_handoff_bridge(_cfg(live_mode=True))

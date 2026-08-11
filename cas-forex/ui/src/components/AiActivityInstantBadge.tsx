@@ -24,9 +24,13 @@ export function AiActivityInstantBadge({ wasteLoop }: Props) {
   const stage = running ? stageFromWasteLoop(wasteRecord) : "idle";
   const conn = running ? "live" : "syncing";
   const label = STAGE_LABELS[stage];
-  const sub = stage === "no_trade" ? "no edge - capital safe" : running ? "loop stage active" : "checking heartbeat";
-  const connLabel = running ? "LIVE" : "SYNC";
-  const connTitle = running ? "Loop connected - live stage" : "Checking loop heartbeat";
+  const sub = stage === "no_trade" ? "no edge - no new order" : running ? "loop stage active" : "checking heartbeat";
+  const lane = normalizedLane(wasteRecord);
+  const connLabel = running ? (lane ?? "LOOP") : "SYNC";
+  const connTitle = running
+    ? lane ? `Execution heartbeat connected - ${lane} lane` : "Loop heartbeat connected; execution lane loading"
+    : "Checking loop heartbeat";
+  const badgeTone = running && lane === "PAPER" ? "paper" : conn;
   const traceText = running ? traceTextFromWasteLoop(wasteRecord, stage) : "";
 
   return (
@@ -42,7 +46,7 @@ export function AiActivityInstantBadge({ wasteLoop }: Props) {
         <span className="ai-activity-sub">{sub}</span>
         {traceText && <span className="ai-activity-trace">{traceText}</span>}
       </div>
-      <span className={`ai-conn-badge ai-conn-badge-${conn}`} title={connTitle}>
+      <span className={`ai-conn-badge ai-conn-badge-${badgeTone}`} title={connTitle}>
         <span className="ai-conn-dot" />
         {connLabel}
       </span>
@@ -103,4 +107,9 @@ function coerceAiStage(value: unknown): AiStage | null {
 
 function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" ? value as Record<string, unknown> : {};
+}
+
+function normalizedLane(payload: Record<string, unknown>): "PAPER" | "LIVE" | null {
+  const raw = String(payload.execution_lane ?? payload.last_execution_lane ?? "").trim().toUpperCase();
+  return raw === "PAPER" || raw === "LIVE" ? raw : null;
 }

@@ -20,6 +20,7 @@ from cas_forex import (
     broker_reality,
     broker_truth_monitor,
     edge_authorization,
+    execution_guard,
     live_enable_control,
     live_order_dry_run_review,
     live_pilot,
@@ -95,7 +96,13 @@ def _pass_decision(setup: CandidateSetup) -> EdgeTestDecision:
     )
 
 
-def _authorize_add_edge(decision_ref: str, setup: CandidateSetup) -> None:
+def _authorize_add_edge(
+    decision_ref: str,
+    setup: CandidateSetup,
+    *,
+    config=None,
+    volume: float = 0.01,
+) -> None:
     evaluated_at = _now_iso()
     gate_setup = GateCandidateSetup(
         symbol=setup.symbol,
@@ -117,7 +124,17 @@ def _authorize_add_edge(decision_ref: str, setup: CandidateSetup) -> None:
         evaluated_at=evaluated_at,
         reason="fresh add edge PASS",
     )
-    edge_authorization.authorize(decision_ref, decision, gate_setup)
+    edge_authorization.authorize(
+        decision_ref,
+        decision,
+        gate_setup,
+        config=config,
+        is_real=bool(getattr(config, "live_mode", False)) if config is not None else None,
+        volume=volume,
+        order_type="MARKET",
+        price=float(gate_setup.entry),
+        strategy_id="waste-compound",
+    )
 
 
 def _authorized_live_cfg():
@@ -159,6 +176,45 @@ def _patch_compound_add_dry_run_live_gates(monkeypatch) -> None:
     monkeypatch.setattr(live_pilot, "record_live_pilot_dispatch", lambda **kwargs: {})
     monkeypatch.setattr(live_recovery, "is_live_recovery_clear_for_live", lambda: True)
     monkeypatch.setattr(live_order_dry_run_review, "is_live_order_dry_run_review_clear_for_live", lambda: True)
+    monkeypatch.setattr(
+        execution_guard,
+        "_action_time_broker_truth_snapshot",
+        lambda: {
+            "report_kind": "cas_forex_broker_truth_monitor",
+            "generated_at": _now_iso(),
+            "overall_status": "RECONCILED",
+            "mt5_connected": True,
+            "mt5_is_demo": False,
+            "mt5_open_position_count": 1,
+            "terminal_unmatched_open_position_count": 0,
+            "terminal_pending_receipt_count": 0,
+            "terminal_receipt_mismatch_count": 0,
+        },
+    )
+    monkeypatch.setattr(execution_guard, "_latest_mt5_live_risk_snapshot", lambda: {})
+    monkeypatch.setattr(
+        execution_guard,
+        "_latest_mt5_permission_snapshot",
+        lambda: {
+            "connected": True,
+            "cached": False,
+            "is_demo": False,
+            "account": {
+                "login": 12345,
+                "server": "HugosWay-Live",
+                "currency": "USD",
+            },
+            "permission_state": {
+                "status": "MT5_ORDER_SEND_READY",
+                "permission_label": "MT5 READY",
+                "can_submit_order_send": True,
+                "blockers": [],
+                "plain_english": "MT5 order_send is ready for the connected real account.",
+            },
+            "detail": "MT5 terminal permissions are ready.",
+            "error": None,
+        },
+    )
 
 
 class _FakeRealBridge:
@@ -168,6 +224,17 @@ class _FakeRealBridge:
 
     def will_execute_real_order(self) -> bool:
         return True
+
+    def get_account_info(self):
+        return {
+            "balance": 1000.0,
+            "equity": 1000.0,
+            "margin": 0.0,
+            "free_margin": 1000.0,
+        }
+
+    def get_all_open_positions(self):
+        return []
 
     def execute_order(self, order):
         self.calls.append(order)
@@ -899,7 +966,7 @@ def test_compound_add_manage_stage_emits_passing_dry_run_from_reconciled_positio
     setup = _with_cas_meta(_setup())
     runner = _runner()
     add_decision_ref = "dref-test-1:compound-add:2"
-    _authorize_add_edge(add_decision_ref, setup)
+    _authorize_add_edge(add_decision_ref, setup, config=_authorized_live_cfg())
     audit = LiveOrderDryRunAuditLog(tmp_path / "compound-add-audit.jsonl")
 
     decision = runner._manage_stage(
@@ -962,7 +1029,7 @@ def test_waste_compound_add_dry_run_reaches_dashboard_owner_review_surface(tmp_p
     setup = _with_cas_meta(_setup())
     runner = _runner()
     add_decision_ref = "dref-test-1:compound-add:2"
-    _authorize_add_edge(add_decision_ref, setup)
+    _authorize_add_edge(add_decision_ref, setup, config=_authorized_live_cfg())
     audit = LiveOrderDryRunAuditLog(audit_path)
 
     decision = runner._manage_stage(
@@ -1012,7 +1079,7 @@ def test_waste_compound_add_dispatch_handoff_blocks_without_owner_accept(tmp_pat
     monkeypatch.setattr(review_module, "DEFAULT_STATE_PATH", tmp_path / "compound-add-review.json")
     setup = _with_cas_meta(_setup())
     add_decision_ref = "dref-test-1:compound-add:2"
-    _authorize_add_edge(add_decision_ref, setup)
+    _authorize_add_edge(add_decision_ref, setup, config=_authorized_live_cfg())
     bridge = _FakeRealBridge("waste-add-dref-test-1-2")
     order_store = OrderAttemptAuditStore(
         tmp_path / "compound-add-blocked-order-attempts.json",
@@ -1073,7 +1140,7 @@ def test_waste_compound_add_dispatch_handoff_reaches_bridge_after_owner_accept(t
 
     setup = _with_cas_meta(_setup())
     add_decision_ref = "dref-test-1:compound-add:2"
-    _authorize_add_edge(add_decision_ref, setup)
+    _authorize_add_edge(add_decision_ref, setup, config=_authorized_live_cfg())
     audit = LiveOrderDryRunAuditLog(audit_path)
     dry_decision = _runner()._manage_stage(
         setup=setup,

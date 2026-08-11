@@ -249,6 +249,10 @@ def analyze_market_state(state: Mapping[str, Any]) -> dict[str, Any]:
     candles = state.get("candles") or []
     symbol = str(state.get("symbol") or "")
     timeframe = str(state.get("timeframe") or "M15")
+    try:
+        min_confidence = float(get_authority().control.get("min_directional_confidence"))
+    except Exception:
+        min_confidence = 0.18
     firewall = _strategy_firewall_for_state(state, symbol, timeframe)
     if firewall and not bool(firewall.get("candidate_allowed", False)):
         hypothesis = _no_trade(
@@ -262,9 +266,19 @@ def analyze_market_state(state: Mapping[str, Any]) -> dict[str, Any]:
             "hypothesis": hypothesis.to_dict(),
             "reason": "; ".join(hypothesis.reasons),
             "strategy_firewall": firewall,
+            "directional_floor": min_confidence,
+            "directional_score": max(hypothesis.long_score, hypothesis.short_score),
+            "candidate_formation_status": "BLOCKED_BY_STRATEGY_FIREWALL",
         }
     if not symbol or not candles:
-        return {"confidence": 0.0, "hypothesis": None, "reason": "no candles in state"}
+        return {
+            "confidence": 0.0,
+            "hypothesis": None,
+            "reason": "no candles in state",
+            "directional_floor": min_confidence,
+            "directional_score": 0.0,
+            "candidate_formation_status": "NO_CANDLES",
+        }
     profile = _profile_from_state(state)
     cas_block = _cas_route_block_reason(state)
     if cas_block:
@@ -281,11 +295,10 @@ def analyze_market_state(state: Mapping[str, Any]) -> dict[str, Any]:
             "strategy_firewall": firewall,
             "hypothesis_tuning": state.get("directional_hypothesis_tuning"),
             "cas_feature_map": state.get("cas_feature_map"),
+            "directional_floor": min_confidence,
+            "directional_score": max(hypothesis.long_score, hypothesis.short_score),
+            "candidate_formation_status": "BLOCKED_BY_CAS_ROUTE_MAP",
         }
-    try:
-        min_confidence = float(get_authority().control.get("min_directional_confidence"))
-    except Exception:
-        min_confidence = 0.18
     hypothesis = score_direction(
         candles,
         symbol=symbol,
@@ -297,6 +310,17 @@ def analyze_market_state(state: Mapping[str, Any]) -> dict[str, Any]:
         "confidence": hypothesis.confidence,
         "hypothesis": hypothesis.to_dict(),
         "reason": "; ".join(hypothesis.reasons),
+        "directional_floor": min_confidence,
+        "directional_score": max(hypothesis.long_score, hypothesis.short_score),
+        "candidate_formation_status": (
+            "CANDIDATE_FORMED"
+            if hypothesis.direction is not None
+            else (
+                "BELOW_DIRECTIONAL_FLOOR"
+                if "directional confidence" in str(hypothesis.reasons[0] if hypothesis.reasons else "")
+                else "NO_DIRECTIONAL_CANDIDATE"
+            )
+        ),
         "strategy_firewall": firewall,
         "hypothesis_tuning": state.get("directional_hypothesis_tuning"),
         "cas_feature_map": state.get("cas_feature_map"),

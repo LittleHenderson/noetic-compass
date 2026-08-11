@@ -66,22 +66,34 @@ def build_terminal_receipt_recovery_packet(
         age_threshold_hours=age_threshold_hours,
     )
 
-    pending_count = int(summary.get("pending_receipt_count") or len(pending_positions) or 0)
-    unmatched_count = int(summary.get("unmatched_open_position_count") or 0)
+    active_lane = str(summary.get("active_execution_lane") or "mt4_mailbox")
+    mt4_required = bool(summary.get("mt4_lane_required", True))
+    pending_count = int(
+        summary.get("active_pending_receipt_count")
+        if summary.get("active_pending_receipt_count") is not None
+        else (summary.get("pending_receipt_count") or len(pending_positions) or 0)
+    )
+    unmatched_count = int(
+        summary.get("active_unmatched_open_position_count")
+        if summary.get("active_unmatched_open_position_count") is not None
+        else (summary.get("unmatched_open_position_count") or 0)
+    )
     heartbeat_status = str(summary.get("heartbeat_status") or "MISSING")
     account_snapshot_present = bool(summary.get("account_snapshot_present", False))
+    effective_heartbeat_status = heartbeat_status if mt4_required else "FRESH"
+    effective_account_snapshot_present = account_snapshot_present or not mt4_required
     status = _status(
         pending_count=pending_count,
         unmatched_count=unmatched_count,
-        heartbeat_status=heartbeat_status,
-        account_snapshot_present=account_snapshot_present,
+        heartbeat_status=effective_heartbeat_status,
+        account_snapshot_present=effective_account_snapshot_present,
         legacy_preview_count=int(legacy_preview.get("pending_receipt_rows_archived") or 0),
     )
     missing = _missing_requirements(
         pending_count=pending_count,
         unmatched_count=unmatched_count,
-        heartbeat_status=heartbeat_status,
-        account_snapshot_present=account_snapshot_present,
+        heartbeat_status=effective_heartbeat_status,
+        account_snapshot_present=effective_account_snapshot_present,
     )
 
     return {
@@ -93,6 +105,8 @@ def build_terminal_receipt_recovery_packet(
         "journal_rewritten": False,
         "receipt_ingest_attempted": False,
         "attempt_finalized": False,
+        "active_execution_lane": active_lane,
+        "mt4_lane_required": mt4_required,
         "pending_receipt_count": pending_count,
         "pending_receipt_count_by_lane": dict(summary.get("pending_receipt_count_by_lane") or {}),
         "cas_receipt_pending_open_count": int(summary.get("cas_receipt_pending_open_count") or 0),
@@ -100,6 +114,8 @@ def build_terminal_receipt_recovery_packet(
         "terminal_open_position_count": int(summary.get("terminal_open_position_count") or 0),
         "heartbeat_status": heartbeat_status,
         "account_snapshot_present": account_snapshot_present,
+        "active_lane_heartbeat_ready": effective_heartbeat_status == "FRESH",
+        "active_lane_account_snapshot_ready": effective_account_snapshot_present,
         "mt4_history_export_verifier_status": summary.get("mt4_history_export_verifier_status"),
         "pending_positions": pending_positions,
         "legacy_archive_preview": legacy_preview,

@@ -72,6 +72,7 @@ def test_agent_research_queue_builds_tasks_from_memory(tmp_path):
     assert queue["summary"]["terminal_receipt_task_count"] == 1
     assert queue["research_tasks"][0]["priority"] == 1
     assert "do not by themselves execute live broker orders" in queue["claim_boundary"]
+    assert "order_dispatch.py" in queue["claim_boundary"]
 
     latest = load_latest_agent_research_queue_report(tmp_path / "agent-research-queue")
     assert latest["summary"]["task_count"] == queue["summary"]["task_count"]

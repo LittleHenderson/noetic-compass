@@ -11,8 +11,11 @@ from cas_forex.ai_control_authority import AiControlAuthority, set_authority_for
 
 
 @pytest.fixture(autouse=True)
-def _isolated_guidance(tmp_path):
+def _isolated_guidance(tmp_path, monkeypatch):
+    import cas_forex.spec_context as spec_context
+
     operator_guidance.set_guidance_path_for_tests(tmp_path / "guidance.json")
+    monkeypatch.setattr(spec_context, "operator_constitution", lambda: "")
     yield
     operator_guidance.set_guidance_path_for_tests(None)
 
@@ -78,7 +81,9 @@ def test_chat_answers_with_context_and_never_moves_dials(tmp_path):
         # The guidance and the learning context both reached the model.
         assert "bank big winners early" in stub.last_prompt
         assert "OWNER'S MESSAGE" in stub.last_prompt
-        assert "never place" in stub.last_system or "never place" in stub.last_system.replace("\n", " ")
+        assert "Chat is not a direct order or money-movement surface" in stub.last_system
+        assert "autonomous side effects" in stub.last_system
+        assert reply["chat_path_status"] == "MODEL_PRIMARY"
         # No dial moved.
         from cas_forex.ai_control_authority import get_authority
 
@@ -102,8 +107,46 @@ def test_chat_no_model_is_honest(tmp_path):
     try:
         op = ai_operator.AIOperator(actions_path=tmp_path / "actions.jsonl")
         reply = op.chat("hello?")
-        assert reply["ok"] is False
+        assert reply["ok"] is True
+        assert reply["model_ok"] is False
+        assert reply["fallback"] is True
         assert reply["error"] == "no model reachable"
+        assert "local Operator fallback" in reply["reply"]
+    finally:
+        model_provider.set_model_provider_for_tests(None)
+        set_authority_for_tests(None)
+
+
+def test_chat_answers_floating_pnl_status_through_model_first(tmp_path):
+    class _Provider:
+        called = False
+        prompt = ""
+
+        def generate(self, prompt, system=None):
+            self.called = True
+            self.prompt = prompt
+            return {
+                "ok": True,
+                "text": "Floating P&L is unchanged because there are no open broker positions.",
+                "provider": "claude",
+                "provider_label": "Claude (stub)",
+                "paid": True,
+            }
+
+    provider = _Provider()
+    set_authority_for_tests(AiControlAuthority(tmp_path / "authority.json"))
+    model_provider.set_model_provider_for_tests(provider)
+    try:
+        op = ai_operator.AIOperator(actions_path=tmp_path / "actions.jsonl")
+        reply = op.chat("why hasn't the floating P&L changed in 24 hours?")
+        assert reply["ok"] is True
+        assert reply["model_ok"] is True
+        assert reply["fallback"] is False
+        assert reply["chat_path_status"] == "MODEL_PRIMARY"
+        assert reply["response_source"] == "MODEL"
+        assert "no open broker positions" in reply["reply"]
+        assert provider.called is True
+        assert "OWNER'S MESSAGE" in provider.prompt
     finally:
         model_provider.set_model_provider_for_tests(None)
         set_authority_for_tests(None)

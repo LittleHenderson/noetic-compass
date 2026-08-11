@@ -6,7 +6,7 @@ import os
 import threading
 import time
 from datetime import datetime, timezone
-from typing import Any, Callable
+from typing import Any, Callable, Mapping
 
 
 Builder = Callable[[], dict[str, Any]]
@@ -34,6 +34,24 @@ def invalidate_cache(*keys: str) -> None:
             return
         for key in keys:
             _CACHES.pop(key, None)
+
+
+def store_cache_payload(key: str, payload: Mapping[str, Any]) -> None:
+    """Seed a cache-first packet after a synchronous rebuild.
+
+    This is used after broker-affecting actions so the next dashboard read can
+    observe the freshly rebuilt packet instead of waiting for the normal
+    background warmer.
+    """
+
+    with _LOCK:
+        _CACHES[key] = {
+            "payload": dict(payload),
+            "built_at": time.time(),
+            "building": False,
+            "error": None,
+            "refresh_started_at": 0.0,
+        }
 
 
 def cached_payload_snapshot(key: str, *, ttl_seconds: float = 60.0) -> dict[str, Any] | None:
@@ -64,6 +82,7 @@ def cache_first_payload(
     fallback: Builder,
     ttl_seconds: float = 60.0,
     block_on_cold: bool = False,
+    serialize_refresh: bool = True,
 ) -> dict[str, Any]:
     """Return cached packet immediately and refresh expensive builders off-loop."""
     if under_pytest():
@@ -85,7 +104,7 @@ def cache_first_payload(
 
     if block_on_cold and not isinstance(payload, dict) and not building:
         try:
-            payload = run_serial_refresh(builder)
+            payload = run_serial_refresh(builder) if serialize_refresh else builder()
             if not isinstance(payload, dict):
                 payload = {"status": "UNAVAILABLE", "payload": payload}
             built_at = time.time()
@@ -103,7 +122,7 @@ def cache_first_payload(
                 cache["error"] = f"{type(exc).__name__}: {exc}"
 
     if not building:
-        start_cache_refresh(key, builder)
+        start_cache_refresh(key, builder, serialize_refresh=serialize_refresh)
 
     if isinstance(payload, dict):
         return _with_cache_meta(payload, "refreshing", built_at, ttl_seconds, None)
@@ -113,7 +132,13 @@ def cache_first_payload(
     return _with_cache_meta(fallback(), "warming", None, ttl_seconds, error)
 
 
-def start_cache_refresh(key: str, builder: Builder, *, delay_seconds: float = 0.2) -> bool:
+def start_cache_refresh(
+    key: str,
+    builder: Builder,
+    *,
+    delay_seconds: float = 0.2,
+    serialize_refresh: bool = True,
+) -> bool:
     """Start a background refresh for a cache-first packet.
 
     This lets API startup prewarm hot read-only status cards before the browser
@@ -131,16 +156,16 @@ def start_cache_refresh(key: str, builder: Builder, *, delay_seconds: float = 0.
         cache["building"] = True
         cache["refresh_started_at"] = time.time()
 
-    thread = threading.Timer(delay_seconds, _refresh, args=(key, builder))
+    thread = threading.Timer(delay_seconds, _refresh, args=(key, builder, serialize_refresh))
     thread.name = f"cas-forex-route-cache-{key}"
     thread.daemon = True
     thread.start()
     return True
 
 
-def _refresh(key: str, builder: Builder) -> None:
+def _refresh(key: str, builder: Builder, serialize_refresh: bool = True) -> None:
     try:
-        payload = run_serial_refresh(builder)
+        payload = run_serial_refresh(builder) if serialize_refresh else builder()
         if not isinstance(payload, dict):
             payload = {"status": "UNAVAILABLE", "payload": payload}
         with _LOCK:

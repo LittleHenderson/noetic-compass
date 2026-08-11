@@ -178,7 +178,12 @@ def _findings(
 
     truth_present = bool(broker_truth)
     truth_fresh = _fresh_enough(broker_truth.get("generated_at"), fresh_seconds=fresh_seconds)
-    truth_live_visible = bool(broker_truth.get("mt5_connected")) and broker_truth.get("mt5_is_demo") is False
+    truth_identity_matches = broker_truth.get("mt5_account_identity_matches_config") is True
+    truth_live_visible = (
+        bool(broker_truth.get("mt5_connected"))
+        and broker_truth.get("mt5_is_demo") is False
+        and truth_identity_matches
+    )
     truth_reconciled = str(broker_truth.get("overall_status") or "") != RECONCILIATION_FAILED
 
     checks = [
@@ -190,7 +195,22 @@ def _findings(
         _check("dry_run_live_gate_passed", live_gate_passed, {}, "Dry-run base live gate passed." if live_gate_passed else "Dry-run base live gate did not pass."),
         _check("broker_truth_present", truth_present, {"present": truth_present}, "Latest broker-truth report is present." if truth_present else "No broker-truth report is present."),
         _check("broker_truth_fresh", truth_fresh, {"generated_at": broker_truth.get("generated_at"), "fresh_seconds": fresh_seconds}, "Broker truth is fresh." if truth_fresh else "Broker truth is missing or stale."),
-        _check("live_account_visible", truth_live_visible, {"mt5_connected": broker_truth.get("mt5_connected"), "mt5_is_demo": broker_truth.get("mt5_is_demo")}, "Live MT5 account is visible." if truth_live_visible else "A connected live MT5 account is not visible."),
+        _check(
+            "live_account_visible",
+            truth_live_visible,
+            {
+                "mt5_connected": broker_truth.get("mt5_connected"),
+                "mt5_is_demo": broker_truth.get("mt5_is_demo"),
+                "mt5_account": broker_truth.get("mt5_account"),
+                "mt5_account_server": broker_truth.get("mt5_account_server"),
+                "mt5_expected_account": broker_truth.get("mt5_expected_account"),
+                "mt5_expected_server": broker_truth.get("mt5_expected_server"),
+                "mt5_account_identity_matches_config": broker_truth.get("mt5_account_identity_matches_config"),
+            },
+            "The live MT5 account matches the configured owner login/server."
+            if truth_live_visible
+            else "A connected live MT5 account matching the configured owner login/server is not visible.",
+        ),
         _check("broker_truth_reconciled", truth_reconciled, {"overall_status": broker_truth.get("overall_status")}, "Broker truth is not reporting reconciliation failure." if truth_reconciled else "Broker truth is reporting reconciliation failure."),
     ]
     missing = [check["check_id"] for check in checks if check["status"] != "OK"]
@@ -214,6 +234,11 @@ def _findings(
             "overall_status": broker_truth.get("overall_status"),
             "mt5_connected": broker_truth.get("mt5_connected"),
             "mt5_is_demo": broker_truth.get("mt5_is_demo"),
+            "mt5_account": broker_truth.get("mt5_account"),
+            "mt5_account_server": broker_truth.get("mt5_account_server"),
+            "mt5_expected_account": broker_truth.get("mt5_expected_account"),
+            "mt5_expected_server": broker_truth.get("mt5_expected_server"),
+            "mt5_account_identity_matches_config": broker_truth.get("mt5_account_identity_matches_config"),
             "mt5_open_position_count": broker_truth.get("mt5_open_position_count"),
         },
     }
@@ -250,6 +275,11 @@ def _fingerprint(
         "broker_truth_status": broker_truth.get("overall_status"),
         "mt5_connected": broker_truth.get("mt5_connected"),
         "mt5_is_demo": broker_truth.get("mt5_is_demo"),
+        "mt5_account": broker_truth.get("mt5_account"),
+        "mt5_account_server": broker_truth.get("mt5_account_server"),
+        "mt5_expected_account": broker_truth.get("mt5_expected_account"),
+        "mt5_expected_server": broker_truth.get("mt5_expected_server"),
+        "mt5_account_identity_matches_config": broker_truth.get("mt5_account_identity_matches_config"),
         "mt5_open_position_count": broker_truth.get("mt5_open_position_count"),
     }
     return hashlib.sha256(json.dumps(material, sort_keys=True, default=str).encode("utf-8")).hexdigest()[:24]

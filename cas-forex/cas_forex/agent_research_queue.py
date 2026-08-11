@@ -25,7 +25,9 @@ CLAIM_BOUNDARY = (
     "Agent research queue tasks organize paper/demo memory rows into research "
     "and strategy-development work. They do not by themselves execute live "
     "broker orders, create broker ACCEPT, deposit, withdraw, move bank/card "
-    "funds, or automate payouts."
+    "funds, or automate payouts. Autonomous trading and money movement remain "
+    "allowed elsewhere, but only through order_dispatch.py, execution_guard.py, "
+    "broker/provider truth, risk, receipt, and kill-switch gates."
 )
 
 

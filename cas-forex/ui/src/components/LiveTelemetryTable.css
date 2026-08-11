@@ -35,10 +35,20 @@
   font-variant-numeric: tabular-nums;
 }
 
+.live-telemetry-source.stale {
+  color: var(--warning);
+}
+
 .live-telemetry-empty {
   font-size: 0.8rem;
   color: var(--text-muted);
   padding: 8px 0 2px 0;
+}
+
+.live-telemetry-boundary {
+  margin-top: 8px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
 }
 
 .live-telemetry-error {

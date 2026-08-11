@@ -66,6 +66,8 @@ def test_route_returns_200_with_no_evidence():
     assert body["overall_status"] == "no_recent_decision"
     assert isinstance(body["chain"], list)
     assert len(body["chain"]) >= 1
+    assert body["version_trace"]["trace_status"] == "NO_AGENT_CYCLE"
+    assert "agent_cycle_report_missing" in body["version_trace"]["gaps"]
 
 
 def test_payload_shape_matches_dataclass():
@@ -77,6 +79,11 @@ def test_payload_shape_matches_dataclass():
         "strategy_leads": None,
         "walk_forward_report": None,
         "pcba_report": None,
+        "movement_source_truth": {
+            "price_source_status": "STATIC_SIMULATION_FALLBACK",
+            "position_feed_label": "SIM PROOF",
+            "position_feed_detail": "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions.",
+        },
     })
     status, body = asyncio.run(_asgi_get("/api/forex/agent-decision/latest"))
     assert status == 200
@@ -86,11 +93,15 @@ def test_payload_shape_matches_dataclass():
         "plain_english_summary",
         "chain",
         "next_action_hint",
+        "movement_source_truth",
+        "version_trace",
     }
     assert expected_top_keys.issubset(set(body.keys()))
     step = body["chain"][0]
     expected_step_keys = {"name", "headline", "detail", "evidence", "status"}
     assert expected_step_keys.issubset(set(step.keys()))
+    assert body["movement_source_truth"]["position_feed_label"] == "SIM PROOF"
+    assert "paper/demo proof rows" in body["movement_source_truth"]["position_feed_detail"]
 
 
 def test_plain_english_summary_never_advises_future_trade():
@@ -110,6 +121,36 @@ def test_plain_english_summary_never_advises_future_trade():
     forbidden = ("buy now", "should you trade", "good entry", "place a trade", "what should i do")
     for phrase in forbidden:
         assert phrase not in summary, f"forbidden trade-advisory phrase: {phrase!r}"
+
+
+def test_route_preserves_movement_source_truth_when_loader_supplies_it():
+    route_module.set_loader_for_testing(lambda: {
+        "agent_cycle_report": None,
+        "agent_memory_report": None,
+        "daily_learning_rollup": None,
+        "strategy_dev_queue_report": None,
+        "strategy_leads": None,
+        "walk_forward_report": None,
+        "pcba_report": None,
+        "movement_source_truth": {
+            "price_source_status": "STATIC_SIMULATION_FALLBACK",
+            "price_source_label": "Static Simulation",
+            "position_feed_label": "SIM PROOF",
+            "position_feed_detail": (
+                "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions. "
+                "Static simulator fallback is active for 2/2 row(s)."
+            ),
+            "static_simulator_position_count": 2,
+            "stale_price_position_count": 0,
+        },
+    })
+    status, body = asyncio.run(_asgi_get("/api/forex/agent-decision/latest"))
+    assert status == 200
+    truth = body["movement_source_truth"]
+    assert truth["price_source_status"] == "STATIC_SIMULATION_FALLBACK"
+    assert truth["position_feed_label"] == "SIM PROOF"
+    assert truth["static_simulator_position_count"] == 2
+    assert "Static simulator fallback is active for 2/2 row(s)." in truth["position_feed_detail"]
 
 
 def test_default_loader_is_pure_function():

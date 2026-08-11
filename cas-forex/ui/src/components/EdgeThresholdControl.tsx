@@ -75,7 +75,7 @@ export function EdgeThresholdControl({ value, onChange }: EdgeThresholdControlPr
 
         <div className="control-field-desc">
           The AI only trades setups it measures above this AND that beat the null.
-          Below this bar, or on a failed null test, it stands down — no trade, capital safe.
+          Below this bar, or on a failed null test, it stands down and sends no new order.
         </div>
       </div>
     </GlassPanel>

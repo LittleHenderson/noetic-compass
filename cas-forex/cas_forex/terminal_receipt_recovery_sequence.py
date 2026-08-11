@@ -54,6 +54,7 @@ def run_terminal_receipt_recovery_refresh(
     reconciliation_output_dir: Path | str = DEFAULT_RECONCILIATION_OUTPUT_DIR,
     current_recovery_packet: Mapping[str, Any] | None = None,
     current_live_recovery: Mapping[str, Any] | None = None,
+    active_execution_lane: str | None = None,
 ) -> dict[str, Any]:
     """Plan or owner-run the local receipt recovery refresh sequence."""
 
@@ -107,6 +108,7 @@ def run_terminal_receipt_recovery_refresh(
             steps,
             "terminal_position_reconciliation",
             lambda: build_terminal_position_reconciliation_report(
+                active_execution_lane=active_execution_lane or _configured_execution_lane(),
                 output_dir=reconciliation_output_dir,
                 write_report=True,
             ),
@@ -153,6 +155,15 @@ def run_terminal_receipt_recovery_refresh(
         steps=steps,
         reports=reports,
     )
+
+
+def _configured_execution_lane() -> str:
+    try:
+        from cas_forex.config import config
+
+        return "mt5_direct" if bool(getattr(config, "prefer_mt5", False)) else "mt4_mailbox"
+    except Exception:
+        return "mt4_mailbox"
 
 
 def _planned_steps() -> list[dict[str, Any]]:

@@ -10,6 +10,10 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      // Production/mobile builds are installable again. The temporary
+      // self-destroying worker used to clear a stale localhost shell is removed;
+      // updates still take over immediately through skipWaiting + clientsClaim
+      // below, while API responses remain uncached.
       registerType: "autoUpdate",
       injectRegister: "auto",
       strategies: "generateSW",
@@ -37,13 +41,25 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
           {
-            // Static assets: cache-first, long lived.
+            // Code assets must prefer the network so a rebuilt cockpit does not
+            // keep serving an old route chunk from a prior service worker cache.
             urlPattern: ({ request }) =>
-              ["style", "script", "worker", "image", "font"].includes(request.destination),
+              ["script", "worker", "style"].includes(request.destination),
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "cas-forex-code-v2",
+              networkTimeoutSeconds: 4,
+              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 7 },
+            },
+          },
+          {
+            // Visual assets can stay warm; they do not carry trading controls.
+            urlPattern: ({ request }) =>
+              ["image", "font"].includes(request.destination),
             handler: "StaleWhileRevalidate",
             options: {
-              cacheName: "cas-forex-assets-v1",
-              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheName: "cas-forex-assets-v2",
+              expiration: { maxEntries: 160, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
         ],
@@ -64,6 +80,19 @@ export default defineConfig({
       "/api/forex": {
         target: "http://127.0.0.1:8765",
         changeOrigin: true,
+        xfwd: true,
+      },
+    },
+  },
+  preview: {
+    port: 4173,
+    host: "0.0.0.0",
+    strictPort: true,
+    proxy: {
+      "/api/forex": {
+        target: "http://127.0.0.1:8765",
+        changeOrigin: true,
+        xfwd: true,
       },
     },
   },

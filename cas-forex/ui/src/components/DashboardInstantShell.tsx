@@ -1,4 +1,9 @@
 import type { DashboardState } from "../types/evidence";
+import {
+  formatMovementSourceStatus,
+  movementSourceStatusTone,
+  summarizeMovementSource,
+} from "../util/movementSource";
 
 interface DashboardInstantShellProps {
   state: DashboardState;
@@ -6,6 +11,9 @@ interface DashboardInstantShellProps {
 
 export function DashboardInstantShell({ state }: DashboardInstantShellProps) {
   const account = state.accountLedger?.summary;
+  const accountHealth = state.accountHealth;
+  const sourceHealth = accountHealth?.source_health;
+  const movementSource = summarizeMovementSource(state.movementStream ?? sourceHealth);
   const risk = state.dailyBundle.latest_risk.latest_review;
   const riskBudget = state.riskBudget;
   const proofProgress = state.proofProgress;
@@ -45,11 +53,31 @@ export function DashboardInstantShell({ state }: DashboardInstantShellProps) {
             <Metric label="Account" value={`$${(account?.balance_usd ?? account?.deposit_usd ?? accountEquity).toLocaleString()}`} mono />
           </div>
           <div className="metric-stack">
-            <Metric label="Equity" value={`$${(account?.equity_usd ?? accountEquity).toFixed(2)}`} mono />
+            <Metric label="Health" value={stringValue(accountHealth?.status) || "SYNC"} warning={(accountHealth?.blockers?.length ?? 0) > 0} />
+            <Metric label="Equity" value={`$${(accountHealth?.account?.equity_usd ?? account?.equity_usd ?? accountEquity).toFixed(2)}`} mono />
             <Metric label="Risk Budget" value={`$${plannedRiskTotal.toFixed(2)}`} mono />
-            <Metric label="Free Margin" value={`$${(account?.free_margin_usd ?? accountEquity).toFixed(2)}`} mono />
+            <Metric label="Protected" value={formatPercent(accountHealth?.open_exposure?.protective_order_coverage_pct)} warning={(accountHealth?.open_exposure?.unprotected_position_count ?? 0) > 0} />
+            <Metric
+              label="Price Source"
+              value={formatMovementSourceStatus(sourceHealth?.price_source_status, "SYNC")}
+              warning={
+                movementSourceStatusTone(
+                  sourceHealth?.price_source_status,
+                  (sourceHealth?.stale_price_position_count ?? 0) > 0,
+                ) === "warning"
+                || Boolean(sourceHealth?.attention_required)
+              }
+            />
           </div>
         </div>
+        {(sourceHealth?.detail || movementSource.warningText) && (
+          <div
+            className="control-field-desc"
+            style={{ marginTop: 8, color: movementSource.hasStaticFallback ? "var(--warning)" : "var(--text-muted)" }}
+          >
+            {sourceHealth?.detail || movementSource.warningText}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -74,6 +102,10 @@ function Metric({
       </span>
     </div>
   );
+}
+
+function formatPercent(value: number | null | undefined): string {
+  return typeof value === "number" && Number.isFinite(value) ? `${value.toFixed(0)}%` : "SYNC";
 }
 
 function stringValue(value: unknown): string {

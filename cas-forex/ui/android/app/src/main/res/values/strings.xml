@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CAS Forex</string>
+    <string name="title_activity_main">CAS Forex</string>
+    <string name="package_name">com.casforex.cockpit</string>
+    <string name="custom_url_scheme">casforex</string>
+</resources>

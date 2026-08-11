@@ -73,6 +73,7 @@ function sanitizeDashboardPacketForCache(packet: DashboardPacket): DashboardPack
   if (packet.uiReadiness) cached.uiReadiness = summarizeUiReadinessForCache(packet.uiReadiness);
   if (packet.proofProgress) cached.proofProgress = packet.proofProgress;
   if (packet.riskBudget) cached.riskBudget = packet.riskBudget;
+  if (packet.accountHealth) cached.accountHealth = packet.accountHealth;
   if (packet.dailySchedule) cached.dailySchedule = summarizeDailyScheduleForCache(packet.dailySchedule);
   if (packet.dailyBundle) cached.dailyBundle = summarizeDailyBundleForCache(packet.dailyBundle);
   if (packet.wasteLoop) cached.wasteLoop = staleWasteLoopForCache(packet.wasteLoop);

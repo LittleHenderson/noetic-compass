@@ -30,7 +30,7 @@ const STAGE_META: Record<AiStage, { label: string; sub: string }> = {
   execute: { label: "Executing", sub: "placing the order" },
   compound: { label: "Compounding", sub: "stacking a winner" },
   locked: { label: "Principal Locked", sub: "stop at breakeven" },
-  no_trade: { label: "No Trade", sub: "no edge — capital safe" },
+  no_trade: { label: "No Trade", sub: "no edge - no new order" },
   blocked: { label: "Blocked", sub: "gate rejected" },
 };
 
@@ -129,32 +129,28 @@ export function AiActivityIndicator({ stage, demo = false, intervalMs = 2200, wa
   const conn: "live" | "demo" | "offline" | "syncing" =
     controlled ? "live" : demo ? "demo" : hb.live === null ? "syncing" : hb.live ? "live" : "offline";
   const meta = STAGE_META[active];
+  const presentation = activityPresentation(active, meta, hb.payload, conn, demo);
   const trace = controlled || demo ? [] : compactTrace(hb.trace, active);
   const traceLabels = wasteTraceLabels(trace, active);
   const traceText = traceLabels.length > 1 ? traceLabels.join(" > ") : "";
   const traceTitle = wasteTraceTitle(trace, active, traceText);
-  const connLabel = conn === "live" ? "LIVE" : conn === "demo" ? "DEMO" : conn === "syncing" ? "SYNC" : "OFFLINE";
-  const connTitle =
-    conn === "live" ? "Loop connected — live stage" :
-    conn === "demo" ? "Demo preview — not connected to the loop" :
-    "Loop not running — engine offline";
-
-  const displayConnTitle = conn === "syncing" ? "Checking loop heartbeat" : connTitle;
+  const connLabel = presentation.badgeLabel;
+  const displayConnTitle = conn === "syncing" ? "Checking loop heartbeat" : presentation.badgeTitle;
 
   return (
     <div
       className={`ai-activity ai-stage-${active} ai-conn-${conn}`}
-      title={`AI: ${meta.label} — ${meta.sub} (${connLabel})`}
+      title={`AI: ${presentation.label} - ${presentation.sub} (${connLabel})`}
       aria-live="polite"
-      aria-label={`AI ${meta.label}: ${meta.sub}. ${displayConnTitle}`}
+      aria-label={`AI ${presentation.label}: ${presentation.sub}. ${displayConnTitle}`}
     >
         <Figure stage={active} />
       <div className="ai-activity-text">
-        <span className="ai-activity-label">{meta.label}</span>
-        <span className="ai-activity-sub">{meta.sub}</span>
+        <span className="ai-activity-label">{presentation.label}</span>
+        <span className="ai-activity-sub">{presentation.sub}</span>
         {traceText && <span className="ai-activity-trace" title={traceTitle}>{traceText}</span>}
       </div>
-      <span className={`ai-conn-badge ai-conn-badge-${conn}`} title={displayConnTitle}>
+      <span className={`ai-conn-badge ai-conn-badge-${presentation.badgeTone}`} title={displayConnTitle}>
         <span className="ai-conn-dot" />
         {connLabel}
       </span>
@@ -163,8 +159,19 @@ export function AiActivityIndicator({ stage, demo = false, intervalMs = 2200, wa
 }
 
 async function fetchLoopHeartbeatPayload(): Promise<unknown> {
-  const wasteStage = await fetchWasteLoopStage();
-  if (wasteStage?.running) return wasteStage;
+  const [wasteStage, dispatch] = await Promise.all([
+    fetchWasteLoopStage(),
+    fetchDispatchLoopStatus(),
+  ]);
+  if (wasteStage?.running) {
+    return {
+      ...dispatch,
+      ...wasteStage,
+      running: true,
+      stage: wasteStage.current_stage ?? wasteStage.stage ?? "watch",
+      execution_lane: dispatch?.execution_lane ?? dispatch?.last_execution_lane,
+    };
+  }
 
   const wasteStatus = await fetchWasteLoopStatus();
   if (wasteStatus?.running) {
@@ -175,7 +182,6 @@ async function fetchLoopHeartbeatPayload(): Promise<unknown> {
     };
   }
 
-  const dispatch = await fetchDispatchLoopStatus();
   if (dispatch?.running) {
     return {
       ...dispatch,
@@ -199,7 +205,100 @@ function heartbeatFromWasteLoop(wasteLoop?: Record<string, unknown> | null): Loo
     stage: running ? stage : "idle",
     live: running,
     trace: running ? traceFromWasteLoop(wasteLoop) : [],
+    payload: wasteLoop,
   };
+}
+
+interface ActivityPresentation {
+  label: string;
+  sub: string;
+  badgeLabel: string;
+  badgeTone: "live" | "paper" | "demo" | "syncing" | "offline";
+  badgeTitle: string;
+}
+
+function activityPresentation(
+  stage: AiStage,
+  meta: { label: string; sub: string },
+  payload: Record<string, unknown> | undefined,
+  conn: "live" | "demo" | "offline" | "syncing",
+  demo: boolean,
+): ActivityPresentation {
+  if (demo) {
+    return {
+      label: meta.label,
+      sub: meta.sub,
+      badgeLabel: "DEMO",
+      badgeTone: "demo",
+      badgeTitle: "Stage-animation preview; not connected to an execution loop",
+    };
+  }
+  if (conn === "syncing") {
+    return {
+      label: meta.label,
+      sub: "checking execution heartbeat",
+      badgeLabel: "SYNC",
+      badgeTone: "syncing",
+      badgeTitle: "Checking execution-loop heartbeat",
+    };
+  }
+  if (conn === "offline") {
+    return {
+      label: "Idle",
+      sub: "execution loop offline",
+      badgeLabel: "OFFLINE",
+      badgeTone: "offline",
+      badgeTitle: "Execution loop is not running",
+    };
+  }
+
+  const lane = normalizedLane(payload);
+  const positionCount = nonNegativeInteger(payload?.last_management_account_position_count);
+  const primaryPositionCount = nonNegativeInteger(payload?.last_management_primary_position_count);
+  const simulatorHandoffCount = nonNegativeInteger(
+    payload?.last_management_simulator_handoff_position_count,
+  );
+  const bridgeClass = String(payload?.last_bridge_class ?? "").trim().toUpperCase();
+  const paperSimulator = lane === "PAPER" && bridgeClass.includes("SIMULATED");
+  const paperMt5 = lane === "PAPER" && bridgeClass.includes("MT5");
+  const laneWord = lane === "LIVE" ? "Live" : lane === "PAPER" ? "Paper" : "";
+  const label = stage === "execute" && laneWord
+    ? `${laneWord} Executing`
+    : positionCount > 0 && laneWord
+      ? `Managing ${laneWord}`
+      : meta.label;
+  const handoffPositionSummary = paperMt5 && simulatorHandoffCount > 0
+    ? [
+        primaryPositionCount > 0 ? `${primaryPositionCount} MT5 demo` : "",
+        `${simulatorHandoffCount} simulator handoff`,
+      ].filter(Boolean).join(" + ")
+    : "";
+  const positionSource = paperSimulator ? "simulator" : paperMt5 ? "MT5 demo" : lane?.toLowerCase();
+  const sub = positionCount > 0 && handoffPositionSummary
+    ? `${handoffPositionSummary} position${positionCount === 1 ? "" : "s"}`
+    : positionCount > 0 && positionSource
+      ? `${positionCount} open ${positionSource} position${positionCount === 1 ? "" : "s"}`
+    : lane === "PAPER"
+      ? paperSimulator ? "paper simulator scanning" : paperMt5 ? "MT5 demo lane scanning" : "paper lane scanning"
+      : lane === "LIVE"
+        ? "live lane scanning"
+        : meta.sub;
+  const badgeLabel = paperSimulator ? "PAPER SIM" : paperMt5 ? "MT5 DEMO" : lane ?? "LOOP";
+  const badgeTone = lane === "LIVE" ? "live" : lane === "PAPER" ? "paper" : "live";
+  const badgeTitle = lane
+    ? `Execution heartbeat connected - ${paperSimulator ? "PAPER lane via internal simulator" : paperMt5 ? "PAPER lane via MT5 demo" : `${lane} lane`}${positionCount > 0 ? `, ${sub}` : ""}`
+    : "Execution-loop heartbeat connected; lane not reported";
+  return { label, sub, badgeLabel, badgeTone, badgeTitle };
+}
+
+function normalizedLane(payload: Record<string, unknown> | undefined): "PAPER" | "LIVE" | null {
+  const raw = String(payload?.execution_lane ?? payload?.last_execution_lane ?? "").trim().toUpperCase();
+  return raw === "PAPER" || raw === "LIVE" ? raw : null;
+}
+
+function nonNegativeInteger(value: unknown): number {
+  const parsed = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(parsed) ? Math.max(0, Math.trunc(parsed)) : 0;
 }
 
 function latestStageFromDurableCycle(cycle: Record<string, unknown>): string | null {

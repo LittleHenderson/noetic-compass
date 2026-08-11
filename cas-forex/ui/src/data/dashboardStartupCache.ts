@@ -57,6 +57,7 @@ function sanitizeDashboardPacketForStartup(packet: DashboardPacket): DashboardPa
   };
   if (packet.proofProgress) startupPacket.proofProgress = packet.proofProgress;
   if (packet.riskBudget) startupPacket.riskBudget = packet.riskBudget;
+  if (packet.accountHealth) startupPacket.accountHealth = packet.accountHealth;
   if (packet.dailySchedule) startupPacket.dailySchedule = {
     ...packet.dailySchedule,
     missing_tracks_for_next_due: [],

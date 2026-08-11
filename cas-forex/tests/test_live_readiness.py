@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from cas_forex.live_readiness import (
     NOT_READY_FOR_LIVE,
     PASSED,
@@ -98,6 +100,10 @@ def _report_inputs():
             ],
             "quotes": [{"symbol": "US30"}],
             "positions": [{"symbol": "US30"}],
+            "price_source_status": "PROVIDER_ACTIVE",
+            "market_data_provider_requested": True,
+            "configured_market_data_provider": "Yahoo",
+            "provider_usable_symbols": ["US30"],
         },
         "account_reconciliation": {
             "overall_status": "RECONCILIATION_FAILED",
@@ -145,6 +151,7 @@ def test_live_readiness_rolls_operability_gates_into_plain_english_report():
     assert by_id["owner_initial_investment"].status == PASSED
     assert by_id["account_movement_tracking"].status == PASSED
     assert by_id["market_movement_tracking"].status == PASSED
+    assert by_id["movement_price_source_truth"].status == PASSED
     assert by_id["broker_demo_receipt"].status == PASSED
     assert by_id["broker_account_snapshot"].status == PASSED
     assert by_id["account_reconciliation"].status == "MISMATCH"
@@ -163,6 +170,32 @@ def test_live_readiness_exposes_missing_market_streams_as_open_gap():
     by_id = {check.gate_id: check for check in report.checks}
     assert by_id["market_movement_tracking"].status == "OPEN"
     assert by_id["market_movement_tracking"].blocks_live is True
+
+
+def test_live_readiness_flags_static_simulation_as_live_blocking_price_truth_gap():
+    inputs = _report_inputs()
+    inputs["movement_stream"] = {
+        **inputs["movement_stream"],
+        "price_source_status": "STATIC_SIMULATION_FALLBACK",
+        "provider_usable_symbols": [],
+        "static_fallback_symbols": ["US30"],
+        "provider_stale_symbols": ["US30"],
+        "provider_freshness_max_age_seconds": 900,
+        "position_feed_label": "SIM PROOF",
+        "position_feed_detail": (
+            "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions. "
+            "Static simulator fallback is active for 1/1 row(s), so prices and floating P&L can remain at entry "
+            "until usable provider or MT5 quotes arrive. Requested provider: Yahoo. Static fallback symbols: US30. "
+            "Stale provider/MT5 snapshots were rejected for: US30 (max age 900s)."
+        ),
+    }
+    report = build_live_readiness_report(**inputs)
+
+    by_id = {check.gate_id: check for check in report.checks}
+    assert by_id["movement_price_source_truth"].status == "OPEN"
+    assert by_id["movement_price_source_truth"].blocks_live is True
+    assert "price_source_status=STATIC_SIMULATION_FALLBACK" in by_id["movement_price_source_truth"].evidence
+    assert "Stale provider/MT5 snapshots were rejected for: US30 (max age 900s)." in " ".join(by_id["movement_price_source_truth"].evidence)
 
 
 def test_live_readiness_can_pass_trading_edge_while_paper_maturity_stays_open():
@@ -187,3 +220,14 @@ def test_live_readiness_can_pass_trading_edge_while_paper_maturity_stays_open():
     assert by_id["trading_edge"].status == PASSED
     assert by_id["paper_proof_maturity"].status == "OPEN"
     assert "paper-proof maturity remains separate" in by_id["trading_edge"].plain_english
+
+
+def test_live_readiness_summary_ui_preserves_movement_truth_detail():
+    repo_root = Path(__file__).resolve().parents[1]
+    source = (repo_root / "ui" / "src" / "components" / "LiveReadinessSummaryPanel.tsx").read_text(encoding="utf-8")
+    helper = (repo_root / "ui" / "src" / "util" / "movementSource.ts").read_text(encoding="utf-8")
+
+    assert "detailEvidenceForLiveReadinessCheck" in helper
+    assert 'check.gate_id !== "movement_price_source_truth"' in helper
+    assert "check.plain_english" in source
+    assert "detailEvidenceForLiveReadinessCheck(check)" in source

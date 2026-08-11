@@ -15,7 +15,7 @@ import { GlassPanel } from "./GlassPanel";
 
 interface IncentiveLedgerCardProps {
   /** Broker-verified realized profit, in USD. Only this drives accrual. */
-  verifiedProfit: number;
+  verifiedProfit: number | null;
   /** Fee rate as a fraction, e.g. 0.025 for 2.5%. */
   rate: number;
   /** Profit unit the rate applies per, e.g. 5000 for "per $5K". */
@@ -43,11 +43,13 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
 
 export function IncentiveLedgerCard({ verifiedProfit, rate, per }: IncentiveLedgerCardProps) {
   const ratePct = rate * 100;
+  const profitMeasured = typeof verifiedProfit === "number" && Number.isFinite(verifiedProfit);
+  const verifiedValue = profitMeasured ? verifiedProfit : 0;
 
   // Fee accrues only on positive verified profit. A loss accrues nothing.
   // rate is per-`per` (e.g. 2.5% per $5K), so the realized fee is simply
   // rate × verified-profit (the `per` block size cancels out of the rate).
-  const accruableProfit = Math.max(0, verifiedProfit);
+  const accruableProfit = Math.max(0, verifiedValue);
   const feeEarned = accruableProfit * rate;
 
   // Next milestone: the next whole `per`-sized block of verified profit.
@@ -68,13 +70,17 @@ export function IncentiveLedgerCard({ verifiedProfit, rate, per }: IncentiveLedg
             gap: 10,
           }}
         >
-          <Stat label="Verified profit" value={money(verifiedProfit)} />
-          <Stat label="Fee accrued" value={money(feeEarned)} accent={feeEarned > 0} />
+          <Stat label="Verified profit" value={profitMeasured ? money(verifiedValue) : "UNAVAILABLE"} />
+          <Stat label="Fee accrued" value={profitMeasured ? money(feeEarned) : "UNAVAILABLE"} accent={feeEarned > 0} />
           <Stat label="Next milestone" value={money(nextMilestone)} />
-          <Stat label="To next milestone" value={money(toNextMilestone)} />
+          <Stat label="To next milestone" value={profitMeasured ? money(toNextMilestone) : "UNAVAILABLE"} />
         </div>
 
-        {verifiedProfit <= 0 ? (
+        {!profitMeasured ? (
+          <div className="control-field-desc">
+            Broker-verified live realized profit is unavailable. Demo outcomes and simulator P/L do not accrue a fee.
+          </div>
+        ) : verifiedValue <= 0 ? (
           <div className="control-field-desc">
             No fee yet — nothing accrues until the broker verifies realized profit.
           </div>

@@ -90,7 +90,13 @@ class CandidateSetup:
 
 @dataclass
 class EdgeTestDecision:
-    """The gate's verdict. A PASS (and ONLY a PASS) carries an ``edge_token``."""
+    """The gate's verdict.
+
+    Executable evaluation uses the default ``issue_edge_token=True`` contract,
+    where a PASS (and only a PASS) carries an ``edge_token``. Read-only shadow
+    evaluation may suppress token issuance while preserving the statistical
+    verdict; that result cannot be registered or dispatched.
+    """
 
     status: str  # PASS | NO_TRADE_NULL_FAILED | NO_TRADE_UNDERPOWERED
     #            | NO_TRADE_STALE_DATA | NO_TRADE_INSUFFICIENT_BARS
@@ -185,6 +191,7 @@ def evaluate_candidate(
     n_null: int = 500,
     min_events: int = 8,
     seed: int = 11,
+    issue_edge_token: bool = True,
 ) -> EdgeTestDecision:
     """Fail-closed TEST: authorize ``setup`` ONLY on a proven out-of-sample edge.
 
@@ -204,7 +211,9 @@ def evaluate_candidate(
         (tested + failed)
       * ``PASS`` -- beat the null AND net-positive AND win-prob >= threshold.
 
-    Only a PASS carries an ``edge_token``.
+    Only an executable PASS carries an ``edge_token``. Callers performing a
+    read-only shadow preview must set ``issue_edge_token=False``; the returned
+    PASS is then statistical evidence only and cannot authorize dispatch.
     """
     evaluated_at = _now_iso()
     pairs = _same_direction_pairs(setup, entry_pairs)
@@ -244,6 +253,7 @@ def evaluate_candidate(
             min_events=min_events,
             seed=seed,
             evaluated_at=evaluated_at,
+            issue_edge_token=issue_edge_token,
         )
         if direction_decision is not None:
             return direction_decision
@@ -286,7 +296,7 @@ def evaluate_candidate(
     )
 
     if passes:
-        token = mint_token(setup, evaluated_at)
+        token = mint_token(setup, evaluated_at) if issue_edge_token else None
         return EdgeTestDecision(
             status="PASS",
             measured_win_prob=measured_win_prob,
@@ -295,7 +305,7 @@ def evaluate_candidate(
             edge_token=token,
             evaluated_at=evaluated_at,
             reason=(
-                f"edge confirmed: win_prob {measured_win_prob:.3f} >= threshold "
+                f"edge confirmed: measured_hit_rate {measured_win_prob:.3f} >= threshold "
                 f"{threshold:.3f}, net {net_return:.5f} > 0, beats shuffled null"
             ),
         )
@@ -310,7 +320,7 @@ def evaluate_candidate(
         fail_reasons.append(f"net return {net_return:.5f} not positive after cost")
     if measured_win_prob < threshold:
         fail_reasons.append(
-            f"win_prob {measured_win_prob:.3f} below threshold {threshold:.3f}"
+            f"measured_hit_rate {measured_win_prob:.3f} below threshold {threshold:.3f}"
         )
     if not fail_reasons:
         fail_reasons.append("did not satisfy all edge conditions")
@@ -361,6 +371,7 @@ def _evaluate_direction_tagged_pairs(
     min_events: int,
     seed: int,
     evaluated_at: str,
+    issue_edge_token: bool = True,
 ) -> Optional[EdgeTestDecision]:
     """Evaluate WASTE direction-tagged rows against a random-direction null.
 
@@ -425,7 +436,7 @@ def _evaluate_direction_tagged_pairs(
 
     passes = beats_null and net_return > 0.0 and measured_win_prob >= threshold
     if passes:
-        token = mint_token(setup, evaluated_at)
+        token = mint_token(setup, evaluated_at) if issue_edge_token else None
         return EdgeTestDecision(
             status="PASS",
             measured_win_prob=measured_win_prob,
@@ -434,7 +445,7 @@ def _evaluate_direction_tagged_pairs(
             edge_token=token,
             evaluated_at=evaluated_at,
             reason=(
-                f"direction edge confirmed: win_prob {measured_win_prob:.3f} >= threshold "
+                f"direction edge confirmed: measured_hit_rate {measured_win_prob:.3f} >= threshold "
                 f"{threshold:.3f}, net {net_return:.5f} > 0, beats random-direction null"
             ),
         )
@@ -448,7 +459,7 @@ def _evaluate_direction_tagged_pairs(
         fail_reasons.append(f"net return {net_return:.5f} not positive after cost")
     if measured_win_prob < threshold:
         fail_reasons.append(
-            f"win_prob {measured_win_prob:.3f} below threshold {threshold:.3f}"
+            f"measured_hit_rate {measured_win_prob:.3f} below threshold {threshold:.3f}"
         )
     if not fail_reasons:
         fail_reasons.append("did not satisfy all direction edge conditions")

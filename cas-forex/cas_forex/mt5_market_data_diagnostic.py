@@ -32,6 +32,8 @@ SYMBOL_NOT_READY = "NO_BROKER_GRADE_CANDLES"
 
 DEFAULT_SYMBOLS = ("NAS100", "US30")
 COMMON_MT5_TERMINAL_PATHS = (
+    r"C:\Program Files\Risen MT5 Terminal\terminal64.exe",
+    r"C:\Program Files (x86)\Risen MT5 Terminal\terminal64.exe",
     r"C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe",
     r"C:\Program Files (x86)\Hugosway\Hugosway PRO5 Terminal\terminal64.exe",
     r"C:\Program Files\MetaTrader 5\terminal64.exe",

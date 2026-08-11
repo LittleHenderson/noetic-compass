@@ -19,11 +19,11 @@ the gate reports exactly what is still missing.
 Nothing here ever flips a capability on by itself. The owner does that through
 config / environment, and only then does the gate report ``AUTHORIZED``.
 
-Performance/readiness metrics are not authority. Paper-day counts, 12-month
-research evidence, AI confidence, proof maturity, and profit pace may warn or
-inform the owner, but they do not authorize or veto live trading. The owner's
-switches/ACCEPT buttons plus action-time technical prerequisites are the live
-authority path.
+The owner delegates authority. After live/money controls are armed, the AI may
+autonomously act inside that envelope through guarded runtime paths. Paper-day
+counts, 12-month research evidence, AI conviction scores, proof maturity, and
+profit pace may inform runtime decisions, but they do not replace owner
+switches/ACCEPT buttons or action-time technical prerequisites.
 """
 
 from __future__ import annotations
@@ -47,19 +47,20 @@ CAPABILITIES = (
 )
 
 OWNER_AUTHORITY_BOUNDARY = (
-    "The owner is the live-trading authority. CAS Forex metrics, AI agents, "
-    "paper-proof maturity, 12-month evidence, win-rate estimates, and profit "
-    "pace are advisory only and cannot authorize or veto live trading. Runtime "
-    "authorization is controlled by owner switches/ACCEPT buttons plus technical "
-    "requirements that must exist at action time, such as broker credentials, "
-    "provider config, edge authorization, and bridge/risk checks."
+    "The owner delegates live-trading and money-movement authority. Once the "
+    "owner arms the relevant controls, CAS AI agents may autonomously act "
+    "inside that delegated envelope through guarded dispatch/provider paths. "
+    "Metrics, proof maturity, AI scores, and profit pace inform decisions but "
+    "do not replace owner switches/ACCEPT buttons or action-time technical "
+    "requirements such as broker credentials, provider config, fresh broker "
+    "truth, edge authorization, bridge/risk checks, receipts, and kill switches."
 )
 
 ADVISORY_ONLY_INPUTS = (
     "paper-proof day count",
     "12-month / multi-symbol evidence",
     "strategy win-rate / profit metrics",
-    "AI confidence or agent recommendation",
+    "AI conviction score (not win probability) or agent recommendation",
     "daily/monthly profit pace",
 )
 
@@ -68,7 +69,8 @@ ACTION_TIME_REQUIREMENTS = (
     "broker or payment-provider credentials are configured",
     "broker/feed/provider bridge is reachable for the requested action",
     "fresh edge authorization exists when the dispatch path requires it",
-    "risk checks, emergency-stop checks, and explicit action confirmation pass",
+    "risk checks, cooldown/recovery checks, kill-switch checks, and configured confirmations pass",
+    "money movement re-checks the owner-allowlisted destination, movement caps, provider receipts/ledger evidence, and real-provider master-kill clear at execution time",
 )
 
 
@@ -124,8 +126,23 @@ def _resolve_config(config: Any = None) -> Any:
     return config
 
 
+def _payment_provider_runtime(config: Any) -> Any:
+    from cas_forex.payment_providers import describe_payment_provider_runtime
+
+    return describe_payment_provider_runtime(config)
+
+
+def _real_money_movement_clear() -> bool:
+    try:
+        from cas_forex.auto_halt import is_auto_halt_active
+
+        return not is_auto_halt_active()
+    except Exception:  # pragma: no cover - defensive: fail closed on unreadable halt state
+        return False
+
+
 def evaluate_live_trading(config: Any = None, *, require_dry_run_review: bool = True) -> GateDecision:
-    """Authorize live order placement only with owner flag + creds + broker."""
+    """Authorize live orders only for the armed, freshly verified MT5 account."""
 
     config = _resolve_config(config)
     satisfied: List[str] = []
@@ -184,14 +201,19 @@ def evaluate_live_trading(config: Any = None, *, require_dry_run_review: bool = 
         satisfied,
         missing,
     )
+    account_identity_configured = bool(getattr(config, "mt5_login", 0)) and bool(
+        str(getattr(config, "mt5_server", "") or "").strip()
+    )
     _check(
-        "broker credentials present (mt5_login + mt5_password + mt5_server)",
-        bool(getattr(config, "mt5_login", 0))
-        and bool(getattr(config, "mt5_password", ""))
-        and bool(getattr(config, "mt5_server", "")),
+        "owner-approved MT5 account identity configured (mt5_login + mt5_server)",
+        account_identity_configured,
         satisfied,
         missing,
     )
+    if account_identity_configured and not bool(getattr(config, "mt5_password", "")):
+        advisory.append(
+            "MT5 trading password remains terminal-held; live dispatch still requires fresh exact login/server broker truth and an action-time terminal permission check"
+        )
     _check(
         "live broker configured (live_mode ON, prefer_mt5/mt5_path set)",
         bool(getattr(config, "live_mode", False))
@@ -231,11 +253,11 @@ def evaluate_live_trading(config: Any = None, *, require_dry_run_review: bool = 
         satisfied,
         missing,
     )
-    _advise(
+    _check(
         "continuous broker-truth monitor is fresh and live-connected",
         broker_truth_fresh,
         satisfied,
-        advisory,
+        missing,
     )
     _check(
         "owner broker-reality review is ACCEPT for selected broker",
@@ -244,7 +266,7 @@ def evaluate_live_trading(config: Any = None, *, require_dry_run_review: bool = 
         missing,
     )
     _check(
-        "small-controlled live pilot is ACCEPT and has remaining capacity",
+        "risk-denominated live authority is ACCEPT and available",
         live_pilot_ready,
         satisfied,
         missing,
@@ -271,12 +293,12 @@ def evaluate_live_trading(config: Any = None, *, require_dry_run_review: bool = 
             "Review/clear any active auto-halt, start broker-truth monitoring "
             "until a fresh live MT5 snapshot is visible, select a broker "
             "candidate, record owner ACCEPT for broker withdrawal/KYC/fees/"
-            "currency/automation terms, owner-ACCEPT the small-controlled live "
-            "pilot, clear any crash/disconnect recovery review after fresh "
+            "currency/automation terms, verify the risk-denominated live "
+            "authority envelope is ACCEPT, clear any crash/disconnect recovery review after fresh "
             "broker-truth reconciliation, run and owner-ACCEPT a passing "
             "live-order dry run against fresh broker truth, turn on the "
             "Owner-enable live trading + Owner ACCEPT live authority switches, configure live "
-            "broker credentials, and sign the account acknowledgments."
+            "the owner-approved MT5 login/server, authenticate that exact account in the terminal, and sign the account acknowledgments."
         ),
     )
 
@@ -305,10 +327,19 @@ def evaluate_broker_accept(config: Any = None) -> GateDecision:
     )
 
 
-def _evaluate_money_movement(capability: str, enable_attr: str, config: Any) -> GateDecision:
+def _evaluate_money_movement(
+    capability: str,
+    enable_attr: str,
+    config: Any,
+    *,
+    require_outflow_destination: bool = False,
+    next_action_suffix: str = "",
+) -> GateDecision:
     config = _resolve_config(config)
     satisfied: List[str] = []
     missing: List[str] = []
+    provider_runtime = _payment_provider_runtime(config)
+    real_money_clear = _real_money_movement_clear()
 
     _check(f"{enable_attr} flag is ON", bool(getattr(config, enable_attr, False)), satisfied, missing)
     _check(
@@ -318,17 +349,57 @@ def _evaluate_money_movement(capability: str, enable_attr: str, config: Any) -> 
         missing,
     )
     _check(
-        "payment provider credentials present (payment_api_key)",
-        bool(getattr(config, "payment_api_key", None)),
+        "payment provider is supported by the runtime",
+        provider_runtime.supported_provider,
         satisfied,
         missing,
     )
+    _check(
+        "payment provider credentials present (payment_api_key)",
+        provider_runtime.api_key_present,
+        satisfied,
+        missing,
+    )
+    if provider_runtime.normalized_provider != "simulated":
+        _check(
+            "payment provider is broker-account bound and ready",
+            bool(
+                provider_runtime.real_money_provider_ready
+                and provider_runtime.broker_account_bound
+            ),
+            satisfied,
+            missing,
+        )
+    if require_outflow_destination:
+        _check(
+            "owner outflow destination configured (payout_destination_id)",
+            bool(getattr(config, "payout_destination_id", None)),
+            satisfied,
+            missing,
+        )
+        _check(
+            "outflow destination allowlisted",
+            bool(getattr(config, "payout_destination_allowlisted", False)),
+            satisfied,
+            missing,
+        )
+    if provider_runtime.real_money_provider_ready:
+        _check(
+            "master kill switch / auto-halt is CLEAR for real money movement",
+            real_money_clear,
+            satisfied,
+            missing,
+        )
 
     return _decision(
         capability,
         satisfied,
         missing,
-        next_action=f"Configure PAYMENT_PROVIDER + PAYMENT_API_KEY, then set {enable_attr.upper()}.",
+        next_action=(
+            f"Configure a broker-bound PAYMENT_PROVIDER + PAYMENT_API_KEY + "
+            f"PAYMENT_PROVIDER_BASE_URL + PAYMENT_PROVIDER_ACCOUNT_ID, then set "
+            f"{enable_attr.upper()}{next_action_suffix}."
+        ),
     )
 
 
@@ -337,13 +408,21 @@ def evaluate_auto_deposit(config: Any = None) -> GateDecision:
 
 
 def evaluate_bank_card_movement(config: Any = None) -> GateDecision:
-    return _evaluate_money_movement("bank_card_movement", "owner_enable_bank_card_movement", config)
+    return _evaluate_money_movement(
+        "bank_card_movement",
+        "owner_enable_bank_card_movement",
+        config,
+        require_outflow_destination=True,
+        next_action_suffix=", and set/allowlist PAYOUT_DESTINATION_ID for owner-approved outflows",
+    )
 
 
 def evaluate_payout_automation(config: Any = None) -> GateDecision:
     config = _resolve_config(config)
     satisfied: List[str] = []
     missing: List[str] = []
+    provider_runtime = _payment_provider_runtime(config)
+    real_money_clear = _real_money_movement_clear()
     selected_broker = str(
         getattr(config, "selected_broker_id", None)
         or getattr(config, "broker_name", "")
@@ -369,23 +448,46 @@ def evaluate_payout_automation(config: Any = None) -> GateDecision:
         missing,
     )
     _check(
-        "payment provider credentials present (payment_api_key)",
-        bool(getattr(config, "payment_api_key", None)),
+        "payment provider is supported by the runtime",
+        provider_runtime.supported_provider,
         satisfied,
         missing,
     )
     _check(
-        "payout destination set (payout_destination_id)",
+        "payment provider credentials present (payment_api_key)",
+        provider_runtime.api_key_present,
+        satisfied,
+        missing,
+    )
+    if provider_runtime.normalized_provider != "simulated":
+        _check(
+            "payment provider is broker-account bound and ready",
+            bool(
+                provider_runtime.real_money_provider_ready
+                and provider_runtime.broker_account_bound
+            ),
+            satisfied,
+            missing,
+        )
+    _check(
+        "owner outflow destination configured (payout_destination_id)",
         bool(getattr(config, "payout_destination_id", None)),
         satisfied,
         missing,
     )
     _check(
-        "payout destination allowlisted",
+        "outflow destination allowlisted",
         bool(getattr(config, "payout_destination_allowlisted", False)),
         satisfied,
         missing,
     )
+    if provider_runtime.real_money_provider_ready:
+        _check(
+            "master kill switch / auto-halt is CLEAR for real money movement",
+            real_money_clear,
+            satisfied,
+            missing,
+        )
     _check(
         "owner broker-reality review is ACCEPT for withdrawal/payout terms",
         broker_reality_accept,
@@ -398,7 +500,8 @@ def evaluate_payout_automation(config: Any = None) -> GateDecision:
         satisfied,
         missing,
         next_action=(
-            "Configure PAYMENT_PROVIDER + PAYMENT_API_KEY + PAYOUT_DESTINATION_ID, "
+            "Configure a broker-bound PAYMENT_PROVIDER + PAYMENT_API_KEY + PAYMENT_PROVIDER_BASE_URL + "
+            "PAYMENT_PROVIDER_ACCOUNT_ID + PAYOUT_DESTINATION_ID, "
             "allowlist the destination, record owner ACCEPT for broker withdrawal/KYC/fee/currency terms, "
             "then set OWNER_ENABLE_PAYOUT_AUTOMATION."
         ),
@@ -471,11 +574,17 @@ class RuntimeGatesReport:
     decisions: dict[str, dict[str, Any]] = field(default_factory=dict)
     all_real_money_authorized: bool = False
     summary: str = ""
+    payment_provider_runtime: dict[str, Any] = field(default_factory=dict)
     owner_authority_boundary: str = OWNER_AUTHORITY_BOUNDARY
     advisory_only_inputs: tuple[str, ...] = ADVISORY_ONLY_INPUTS
     action_time_requirements: tuple[str, ...] = ACTION_TIME_REQUIREMENTS
     owner_controls_are_final_authority: bool = True
+    metrics_and_ai_are_advisory_only: bool = False
     metrics_and_ai_can_veto_owner_authority: bool = False
+    ai_autonomous_execution_authority: str = "OWNER_DELEGATED_WITHIN_GATES"
+    human_in_loop_per_action_required: bool = False
+    per_order_confirmation_required: bool = False
+    per_configured_money_movement_confirmation_required: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -483,20 +592,36 @@ class RuntimeGatesReport:
             "decisions": self.decisions,
             "all_real_money_authorized": self.all_real_money_authorized,
             "summary": self.summary,
+            "payment_provider_runtime": self.payment_provider_runtime,
             "owner_authority_boundary": self.owner_authority_boundary,
             "advisory_only_inputs": list(self.advisory_only_inputs),
+            "decision_context_inputs": list(self.advisory_only_inputs),
             "action_time_requirements": list(self.action_time_requirements),
             "owner_controls_are_final_authority": self.owner_controls_are_final_authority,
+            "metrics_and_ai_are_advisory_only": self.metrics_and_ai_are_advisory_only,
             "metrics_and_ai_can_veto_owner_authority": self.metrics_and_ai_can_veto_owner_authority,
+            "ai_autonomous_execution_authority": self.ai_autonomous_execution_authority,
+            "human_in_loop_per_action_required": self.human_in_loop_per_action_required,
+            "per_order_confirmation_required": self.per_order_confirmation_required,
+            "per_configured_money_movement_confirmation_required": self.per_configured_money_movement_confirmation_required,
         }
 
 
 def build_runtime_gates_report(config: Any = None) -> RuntimeGatesReport:
+    config = _resolve_config(config)
     decisions = evaluate_all(config)
     serialized = {cap: dec.to_dict() for cap, dec in decisions.items()}
-    all_authorized = all(dec.authorized for dec in decisions.values())
+    provider_runtime = _payment_provider_runtime(config)
+    all_capabilities_authorized = all(dec.authorized for dec in decisions.values())
+    all_authorized = all_capabilities_authorized and provider_runtime.real_money_provider_ready
     if all_authorized:
-        summary = "All real-money capabilities are owner-authorized."
+        summary = "All real-money capabilities are owner-authorized and the payment provider runtime is ready."
+    elif all_capabilities_authorized:
+        summary = (
+            "Owner capability switches are satisfied, but money movement remains scaffolded "
+            f"until a supported real provider is ready. Current provider runtime: "
+            f"{provider_runtime.status}. {provider_runtime.detail}"
+        )
     else:
         pending = [cap for cap, dec in decisions.items() if not dec.authorized]
         authorized_now = [c for c in CAPABILITIES if c not in pending] or ["none"]
@@ -509,4 +634,5 @@ def build_runtime_gates_report(config: Any = None) -> RuntimeGatesReport:
         decisions=serialized,
         all_real_money_authorized=all_authorized,
         summary=summary,
+        payment_provider_runtime=provider_runtime.to_dict(),
     )

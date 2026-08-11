@@ -1,6 +1,11 @@
 import { lazy, Suspense } from "react";
 import { GlassPanel } from "./GlassPanel";
 import { StatusChip } from "./StatusChip";
+import { CONVICTION_SCORE_TITLE, formatConvictionScore } from "../util/conviction";
+import {
+  describeReconciliationMovementTruth,
+  summarizeMovementSource,
+} from "../util/movementSource";
 import type {
   AccountReconciliationReport,
   DashboardState,
@@ -27,10 +32,38 @@ export function DashboardEvidencePanels({ state, movement, strategyLeads, recon 
   const decision = b.latest_decision.latest_decision;
   const risk = b.latest_risk.latest_review;
   const account = state.accountLedger?.summary;
+  const movementTruth = movement?.movement_source_truth ?? movement ?? null;
+  const movementSource = summarizeMovementSource(movementTruth);
+  const reconMovementTruth = describeReconciliationMovementTruth(recon);
 
   return (
     <>
-      <GlassPanel title="Real-Time Movement Scaffold" subtitle="paper/demo account + market movement now; live providers later after gates">
+      <GlassPanel title={movementSource.panelTitle} subtitle={movementSource.panelSubtitle}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+          <StatusChip
+            label={movementSource.statusLabel}
+            variant={movementSource.statusTone}
+            size="sm"
+          />
+          <StatusChip
+            label={`${movementSource.providerBackedCount} PROVIDER`}
+            variant={movementSource.providerBackedCount ? "success" : "muted"}
+            size="sm"
+          />
+          <StatusChip
+            label={`${movementSource.staticFallbackCount} STATIC`}
+            variant={movementSource.staticFallbackCount ? "warning" : "success"}
+            size="sm"
+          />
+          {movementSource.mt5FallbackCount > 0 && (
+            <StatusChip
+              label={`${movementSource.mt5FallbackCount} MT5 FALLBACK`}
+              variant="info"
+              size="sm"
+            />
+          )}
+          <StatusChip label="PAPER / DEMO" variant="paper" size="sm" />
+        </div>
         <div className="dashboard-grid-3col">
           <div className="metric-stack" style={{ padding: 0 }}>
             <Metric label="Stream Mode" value={movement?.mode ?? "PAPER_DEMO_REALTIME_SCAFFOLD"} mono />
@@ -54,11 +87,16 @@ export function DashboardEvidencePanels({ state, movement, strategyLeads, recon 
             <Metric label="Boundary" value="PAPER / DEMO" warning />
           </div>
         </div>
+        {movementSource.warningText && (
+          <div className="control-field-desc" style={{ marginTop: 10, color: "var(--warning)" }}>
+            {movementSource.warningText}
+          </div>
+        )}
         {movement && movement.quotes.length > 0 && (
           <div className="positions-table-wrap" style={{ marginTop: 12 }}>
             <table className="data-table">
               <thead>
-                <tr><th>Symbol</th><th>Bid</th><th>Ask</th><th>Spread</th><th>ATR</th><th>Session</th><th>Source</th></tr>
+                <tr><th>Symbol</th><th>Bid</th><th>Ask</th><th>Spread</th><th>ATR</th><th>Session</th><th>Freshness</th><th>Source</th></tr>
               </thead>
               <tbody>
                 {movement.quotes.map((q) => (
@@ -69,6 +107,13 @@ export function DashboardEvidencePanels({ state, movement, strategyLeads, recon 
                     <td className="mono">{q.spread_units.toFixed(1)} {q.price_unit_name}</td>
                     <td className="mono">{q.atr_units.toFixed(2)}</td>
                     <td><StatusChip label={q.session} variant="muted" size="sm" /></td>
+                    <td>
+                      <StatusChip
+                        label={q.stale ? "STATIC" : "LIVE QUOTE"}
+                        variant={q.stale ? "warning" : "success"}
+                        size="sm"
+                      />
+                    </td>
                     <td className="mono" style={{ fontSize: "0.66rem" }}>{q.source}</td>
                   </tr>
                 ))}
@@ -84,7 +129,7 @@ export function DashboardEvidencePanels({ state, movement, strategyLeads, recon 
             <thead>
               <tr>
                 <th>Symbol</th><th>Dir</th><th>Entry</th><th>SL</th><th>TP</th>
-                <th>Conf</th><th>Pulse</th><th>Lots</th><th>Risk</th><th>Status</th>
+                <th>Conviction</th><th>Pulse</th><th>Lots</th><th>Risk</th><th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -97,7 +142,7 @@ export function DashboardEvidencePanels({ state, movement, strategyLeads, recon 
                     <td className="mono">{d.proposal.entry_price.toFixed(2)}</td>
                     <td className="mono" style={{ color: "var(--danger)" }}>{d.proposal.stop_loss.toFixed(2)}</td>
                     <td className="mono" style={{ color: "var(--success)" }}>{d.proposal.take_profit.toFixed(2)}</td>
-                    <td className="mono">{(d.confidence * 100).toFixed(0)}%</td>
+                    <td className="mono" title={CONVICTION_SCORE_TITLE}>{formatConvictionScore(d.confidence)}</td>
                     <td>
                       <Suspense fallback={<span className="mono">...</span>}>
                         <SparkChart data={[0.35, Math.max(0.2, d.confidence - 0.08), d.confidence]} width={72} height={24} />
@@ -189,6 +234,19 @@ export function DashboardEvidencePanels({ state, movement, strategyLeads, recon 
                 <Metric label="Edge" value={recon.trading_edge_status} warning />
               </div>
             </div>
+            {reconMovementTruth.hasTruth && (
+              <div style={{ marginBottom: 10 }}>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+                  <StatusChip label={reconMovementTruth.feedLabel} variant={reconMovementTruth.feedTone} size="sm" />
+                  <StatusChip label={reconMovementTruth.statusLabel} variant={reconMovementTruth.statusTone} size="sm" />
+                </div>
+                {reconMovementTruth.detail && (
+                  <div className="control-field-desc" style={{ color: reconMovementTruth.statusTone === "warning" ? "var(--warning)" : "var(--text-muted)" }}>
+                    {reconMovementTruth.detail}
+                  </div>
+                )}
+              </div>
+            )}
             <div className="positions-table-wrap">
               <table className="data-table">
                 <thead>

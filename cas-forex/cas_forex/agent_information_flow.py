@@ -15,7 +15,10 @@ CLAIM_BOUNDARY = (
     "Agent information-flow plans define message shapes, state transitions, "
     "storage paths, API surfaces, and agent responsibilities. They do not by "
     "themselves execute live broker orders, create broker ACCEPT, deposit, "
-    "withdraw, move bank/card funds, or automate payouts."
+    "withdraw, move bank/card funds, or automate payouts. Those side effects "
+    "happen only when approved intents continue through order_dispatch.py, "
+    "execution_guard.py, broker/provider truth, risk, receipt, and "
+    "kill-switch gates."
 )
 
 

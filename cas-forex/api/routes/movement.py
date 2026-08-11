@@ -1,5 +1,8 @@
 from fastapi import APIRouter, Query
 
+from cas_forex.movement_stream import MOVEMENT_SNAPSHOT_MAX_AGE_SECONDS
+from cas_forex.movement_stream import build_movement_source_truth_snapshot
+
 from ..route_cache import cache_first_payload
 from ..data import movement_stream
 
@@ -7,22 +10,24 @@ router = APIRouter()
 
 
 @router.get("/snapshot")
-async def get_movement_snapshot(use_provider: bool = Query(default=False)):
+async def get_movement_snapshot(use_provider: bool = Query(default=True)):
     """Returns paper/demo account + market movement telemetry snapshot.
 
-    Set ``use_provider=true`` to request configured-provider market snapshots.
-    The route remains paper/demo telemetry only and falls back to deterministic
-    paper-route prices per symbol when a provider is unavailable.
+    Provider/MT5 market snapshots are requested by default. Set
+    ``use_provider=false`` only when a deterministic simulator-only snapshot is
+    needed. The route remains paper/demo telemetry only and falls back to
+    clearly marked paper-route static simulation per symbol when a provider is
+    unavailable.
     """
     return cache_first_payload(
         f"movement_snapshot:{bool(use_provider)}",
         builder=lambda: movement_stream(use_provider_quotes=use_provider),
-        fallback=_movement_snapshot_warming,
+        fallback=lambda: _movement_snapshot_warming(use_provider=use_provider),
         ttl_seconds=10.0,
     )
 
 
-def _movement_snapshot_warming():
+def _movement_snapshot_warming(*, use_provider: bool = True):
     account = {
         "timestamp": "",
         "balance_usd": 0.0,
@@ -42,7 +47,7 @@ def _movement_snapshot_warming():
         "open_position_count": 0,
         "source": "CACHE_WARMING",
     }
-    return {
+    payload = {
         "report_kind": "cas_forex_movement_stream",
         "stream_id": "WARMING",
         "mode": "PAPER",
@@ -68,4 +73,35 @@ def _movement_snapshot_warming():
         "live_money_authorized": False,
         "payment_movement_authorized": False,
         "notes": ["Movement stream cache is warming."],
+        "market_data_provider_requested": bool(use_provider),
+        "market_data_provider": "warming" if use_provider else "none",
+        "provider_snapshot_symbols": [],
+        "provider_usable_symbols": [],
+        "static_fallback_symbols": [],
+        "mt5_fallback_symbols": [],
+        "provider_stale_symbols": [],
+        "provider_freshness_max_age_seconds": MOVEMENT_SNAPSHOT_MAX_AGE_SECONDS,
+        "snapshot_age_seconds_by_symbol": {},
+        "snapshot_source_by_symbol": {},
+        "provider_errors": {},
+        "price_source_status": "CACHE_WARMING",
+        "static_simulation_active": False,
+        "price_source_label": "WARMING",
+        "price_source_summary": "Movement snapshot is warming; source truth is not ready yet.",
+        "price_source_warning": None,
+        "position_feed_title": "Simulator Proof Rows",
+        "position_feed_count_label": "Simulator rows",
+        "position_feed_label": "SIM PROOF",
+        "position_feed_detail": "Movement snapshot is warming; source truth for paper/demo proof rows is not ready yet.",
+        "broker_ticket_position_count": 0,
+        "static_position_count": 0,
+        "static_quote_count": 0,
     }
+    payload["movement_source_truth"] = build_movement_source_truth_snapshot(
+        payload,
+        telemetry_source="none",
+        telemetry_stale=True,
+        telemetry_last_update_iso=None,
+        movement_stream_present=False,
+    )
+    return payload

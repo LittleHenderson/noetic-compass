@@ -25,6 +25,7 @@ from cas_forex.agent_decision_explainer import (
     AgentDecisionExplanation,
     explain_latest_agent_decision,
 )
+from .agent_decision import _safe_current_movement_source_truth
 
 router = APIRouter()
 
@@ -141,6 +142,8 @@ def _explanation_to_payload(
         "chain": [asdict(step) for step in exp.chain],
         "next_action_hint": exp.next_action_hint,
         "cycle_report_path": cycle_report_path,
+        "movement_source_truth": dict(exp.movement_source_truth or {}) if exp.movement_source_truth else None,
+        "version_trace": dict(exp.version_trace or {}),
     }
 
 
@@ -165,17 +168,23 @@ async def get_agent_decision_history(limit: int = 10) -> Any:
         "cycle_reports", []
     ) or []
     context: dict[str, Any] = loaded.get("context", {}) or {}
+    movement_source_truth = loaded.get("movement_source_truth")
+    if not isinstance(movement_source_truth, dict) and _LOADER is _default_loader:
+        movement_source_truth = _safe_current_movement_source_truth()
 
     selected = cycle_reports[:limit]
     decisions: list[dict[str, Any]] = []
     for path_str, cycle_dict in selected:
         explanation = explain_latest_agent_decision(
-            agent_cycle_report=cycle_dict, **context
+            agent_cycle_report=cycle_dict,
+            movement_source_truth=movement_source_truth,
+            **context,
         )
         decisions.append(_explanation_to_payload(explanation, path_str))
 
     return {
         "count": len(decisions),
         "limit": limit,
+        "movement_source_truth": movement_source_truth,
         "decisions": decisions,
     }

@@ -12,6 +12,7 @@ from dataclasses import asdict, dataclass, field
 from typing import Any, Mapping, Sequence
 
 from cas_forex.authority_boundary import NOT_LICENSED, OPEN
+from cas_forex.movement_stream import build_movement_position_feed_truth
 from cas_forex.runtime_gates import AUTHORIZED
 
 PASSED = "PASSED"
@@ -189,6 +190,7 @@ def _movement_checks(movement_stream: Mapping[str, Any]) -> list[LiveReadinessCh
     market_streams = set(str(item) for item in (movement_stream.get("market_streams") or ()))
     positions = list(movement_stream.get("positions") or [])
     quotes = list(movement_stream.get("quotes") or [])
+    movement_truth = _movement_source_truth(movement_stream)
     account_required = {
         "balance",
         "equity",
@@ -221,7 +223,7 @@ def _movement_checks(movement_stream: Mapping[str, Any]) -> list[LiveReadinessCh
     }
     account_missing = tuple(sorted(account_required - account_streams))
     market_missing = tuple(sorted(market_required - market_streams))
-    return [
+    checks = [
         LiveReadinessCheck(
             gate_id="account_movement_tracking",
             label="Investment movement tracking",
@@ -249,6 +251,75 @@ def _movement_checks(movement_stream: Mapping[str, Any]) -> list[LiveReadinessCh
             blocks_live=not quotes or not positions or bool(market_missing),
         ),
     ]
+    truth_status = movement_truth["price_source_status"]
+    position_feed_label = movement_truth["position_feed_label"] or "UNKNOWN"
+    position_feed_detail = movement_truth["position_feed_detail"] or "Movement price-source detail unavailable."
+    if truth_status == "PROVIDER_ACTIVE":
+        status = PASSED
+        plain_english = "Paper/demo movement rows are repriced by usable provider or MT5 fallback quotes rather than static simulation."
+        next_action = ""
+    elif truth_status == "MIXED_PROVIDER_AND_STATIC_FALLBACK":
+        status = OPEN_STATUS
+        plain_english = "Some paper/demo movement rows are repriced, but some still sit on static fallback, so movement price truth is not fully live-ready."
+        next_action = "Resolve the remaining static fallback symbols so active paper/demo rows are fully repriced by provider or MT5 quotes."
+    elif truth_status == "STATIC_SIMULATION_FALLBACK":
+        status = OPEN_STATUS
+        plain_english = "Paper/demo movement rows are still on static simulation fallback, so floating P&L can remain at entry until usable provider or MT5 quotes arrive."
+        next_action = "Bind active paper/demo rows to usable provider or MT5 quotes before treating movement telemetry as live-ready pricing truth."
+    elif truth_status == "CACHE_WARMING":
+        status = OPEN_STATUS
+        plain_english = "Paper/demo movement source truth is still warming, so pricing evidence is not ready for live promotion."
+        next_action = "Wait for movement source truth to warm, then confirm provider or MT5 repricing is active."
+    else:
+        status = UNVERIFIABLE
+        plain_english = "Movement price-source truth is not fully labeled yet, so live readiness cannot prove whether rows are repriced or static."
+        next_action = "Expose canonical movement source truth for the active paper/demo rows and confirm provider or MT5 repricing."
+    checks.append(
+        LiveReadinessCheck(
+            gate_id="movement_price_source_truth",
+            label="Movement price-source truth",
+            status=status,
+            plain_english=plain_english,
+            evidence=(
+                f"price_source_status={truth_status or 'unknown'}",
+                f"position_feed_label={position_feed_label}",
+                position_feed_detail,
+            ),
+            next_action=next_action,
+            blocks_live=status != PASSED,
+        )
+    )
+    return checks
+
+
+def _movement_source_truth(movement_stream: Mapping[str, Any]) -> dict[str, str | None]:
+    price_source_status = str(movement_stream.get("price_source_status") or "").strip() or None
+    position_feed_label = str(movement_stream.get("position_feed_label") or "").strip() or None
+    position_feed_detail = str(movement_stream.get("position_feed_detail") or "").strip() or None
+    if not (position_feed_label and position_feed_detail):
+        derived = build_movement_position_feed_truth(
+            positions=list(movement_stream.get("positions") or []),
+            quotes=list(movement_stream.get("quotes") or []),
+            price_source_status=str(price_source_status or "UNKNOWN"),
+            market_data_provider_requested=bool(movement_stream.get("market_data_provider_requested")),
+            configured_market_data_provider=str(
+                movement_stream.get("configured_market_data_provider")
+                or movement_stream.get("market_data_provider")
+                or ""
+            ),
+            provider_usable_symbols=movement_stream.get("provider_usable_symbols"),
+            static_fallback_symbols=movement_stream.get("static_fallback_symbols"),
+            mt5_fallback_symbols=movement_stream.get("mt5_fallback_symbols"),
+            provider_stale_symbols=movement_stream.get("provider_stale_symbols"),
+            provider_freshness_max_age_seconds=movement_stream.get("provider_freshness_max_age_seconds"),
+        )
+        position_feed_label = position_feed_label or str(derived.get("position_feed_label") or "").strip() or None
+        position_feed_detail = position_feed_detail or str(derived.get("position_feed_detail") or "").strip() or None
+    return {
+        "price_source_status": price_source_status,
+        "position_feed_label": position_feed_label,
+        "position_feed_detail": position_feed_detail,
+    }
 
 
 def _broker_checks(

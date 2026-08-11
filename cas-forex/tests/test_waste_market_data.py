@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 import json
 from types import SimpleNamespace
 
 from cas_forex.config import config
 from cas_forex.directional_intelligence import DIRECTIONAL_PROFILES
-from cas_forex.market_data.connector import MT5TerminalMarketDataConnector
+from cas_forex.market_data.connector import MT5TerminalMarketDataConnector, OANDARestConnector
+from cas_forex.market_data import connector as connector_module
 from cas_forex.ai_control_authority import AiControlAuthority, set_authority_for_tests
 from cas_forex.waste_market_data import (
     build_entry_pairs_from_candles,
@@ -32,6 +34,165 @@ def _candles(start: float = 1.1000, step: float = 0.0006, n: int = 180):
             }
         )
     return out
+
+
+def test_no_candidate_preview_exposes_directional_floor_starvation(monkeypatch):
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "analyze_market_state",
+        lambda _state: {
+            "confidence": 0.0,
+            "reason": "directional confidence 0.31 below 0.50",
+            "directional_score": 0.31,
+            "directional_floor": 0.5,
+            "candidate_formation_status": "BELOW_DIRECTIONAL_FLOOR",
+            "hypothesis": {
+                "long_score": 0.31,
+                "short_score": 0.12,
+                "action": "NO_TRADE",
+            },
+        },
+    )
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "strategize_market_state",
+        lambda _state, _analysis: None,
+    )
+
+    edge = waste_market_data_module._edge_preview_for_state(
+        {"symbol": "NAS100", "timeframe": "M5", "candles": _candles()},
+        threshold=0.65,
+    )
+    attempt = waste_market_data_module._market_scan_attempt(
+        {"symbol": "NAS100", "timeframe": "M5"},
+        {"symbol": "NAS100", "timeframe": "M5", "candles": _candles()},
+        edge,
+    )
+    report = waste_market_data_module._market_scan_report(
+        status="WASTE_MARKET_SCAN_NO_PASS",
+        attempts=[attempt],
+        selected_state={"symbol": "NAS100", "timeframe": "M5"},
+        selected_edge=edge,
+    )
+
+    assert edge["status"] == "NO_CANDIDATE"
+    assert edge["directional_score"] == 0.31
+    assert edge["directional_floor"] == 0.5
+    assert edge["directional_margin_to_floor"] == -0.19
+    assert report["entry_stage_summary"]["status"] == (
+        "ALL_LANES_BELOW_DIRECTIONAL_FLOOR"
+    )
+    assert report["entry_stage_summary"]["strongest_rejected_lane"][
+        "directional_score"
+    ] == 0.31
+
+
+def test_below_floor_shadow_pass_is_unregistered_and_tokenless(monkeypatch):
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "analyze_market_state",
+        lambda _state: {
+            "confidence": 0.0,
+            "reason": "directional confidence 0.31 below 0.50",
+            "directional_score": 0.31,
+            "directional_floor": 0.5,
+            "candidate_formation_status": "BELOW_DIRECTIONAL_FLOOR",
+            "hypothesis": {
+                "long_score": 0.31,
+                "short_score": 0.12,
+                "action": "NO_TRADE",
+                "profile": "blend",
+            },
+        },
+    )
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "strategize_market_state",
+        lambda _state, _analysis: None,
+    )
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "score_direction",
+        lambda *_args, **_kwargs: SimpleNamespace(direction="LONG"),
+    )
+    shadow_setup = SimpleNamespace(
+        symbol="NAS100",
+        timeframe="M5",
+        direction="LONG",
+        entry=29300.0,
+        stop_loss=29200.0,
+        take_profit=29500.0,
+        signal_strength=0.31,
+        regime="trend",
+        decision_ref="shadow-only",
+        entry_pairs=[{"signal_strength": 0.3, "ret": 0.01, "cost_ret": 0.001}] * 20,
+    )
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "candidate_from_hypothesis",
+        lambda *_args, **_kwargs: shadow_setup,
+    )
+    captured = {}
+
+    def evaluate(_setup, _pairs, **kwargs):
+        captured.update(kwargs)
+        return SimpleNamespace(
+            status="PASS",
+            measured_win_prob=0.8,
+            null_p95=0.02,
+            threshold=0.65,
+            edge_token=None,
+            reason="shadow statistical PASS",
+        )
+
+    monkeypatch.setattr(waste_market_data_module, "evaluate_candidate", evaluate)
+
+    edge = waste_market_data_module._edge_preview_for_state(
+        {
+            "symbol": "NAS100",
+            "timeframe": "M5",
+            "candles": _candles(),
+            "entry_pairs": shadow_setup.entry_pairs,
+        },
+        threshold=0.65,
+    )
+    attempt = waste_market_data_module._market_scan_attempt(
+        {"symbol": "NAS100", "timeframe": "M5"},
+        {"symbol": "NAS100", "timeframe": "M5", "candles": _candles()},
+        edge,
+    )
+    summary = waste_market_data_module._entry_stage_summary([attempt])
+
+    assert captured["issue_edge_token"] is False
+    assert edge["status"] == "NO_CANDIDATE"
+    assert edge["shadow_edge_status"] == "PASS"
+    assert edge["shadow_edge_preview_unregistered"] is True
+    assert edge["shadow_edge_authorization_minted"] is False
+    assert edge["shadow_has_edge_token"] is False
+    assert summary["shadow_pass_preview_count"] == 1
+    assert summary["strongest_rejected_lane"]["shadow_edge_status"] == "PASS"
+    assert summary["strongest_rejected_lane"][
+        "shadow_edge_authorization_minted"
+    ] is False
+
+
+def test_market_scan_candidates_honor_effective_allowed_symbols_before_limit(tmp_path):
+    authority = SimpleNamespace(
+        control={"symbols": ["EUR/USD", "US30", "USD/JPY", "XAU/USD"]}
+    )
+
+    candidates = waste_market_data_module._waste_market_scan_candidates(
+        authority=authority,
+        requested_symbol=None,
+        requested_timeframe="H1",
+        strategy_leads_path=tmp_path / "missing-ledger.json",
+        max_scan_candidates=32,
+        allowed_symbols=["USD/JPY"],
+    )
+
+    assert [(row["symbol"], row["timeframe"]) for row in candidates] == [
+        ("USD/JPY", "H1")
+    ]
 
 
 class FakeConnector:
@@ -78,6 +239,33 @@ class DiagnosticEmptyConnector(EmptyConnector):
 class FallbackConnector(FakeConnector):
     def __init__(self):
         super().__init__(_candles(start=19_000.0, step=45.0))
+
+
+class _FakeHTTPResponse:
+    def __init__(self, data, status_code: int = 200):
+        self._data = data
+        self.status_code = status_code
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise RuntimeError(f"http {self.status_code}")
+
+    def json(self):
+        return self._data
+
+
+class _FakeOANDASession:
+    def __init__(self, handlers):
+        self.handlers = handlers
+        self.calls = []
+        self.headers = {}
+
+    def get(self, url, params=None, timeout=10):
+        self.calls.append((url, params, timeout))
+        for fragment, handler in self.handlers:
+            if fragment in url:
+                return handler(url, params, timeout)
+        raise AssertionError(f"unexpected URL {url}")
 
 
 class BrokerTruthConnector(FakeConnector):
@@ -170,6 +358,93 @@ def test_mt5_terminal_market_data_connector_reads_rates_and_tick():
     assert snapshot.spread == 3.0
     assert connector.broker_grade_market_truth is True
     assert ("NAS100", True) in fake.selected
+
+
+def test_mt5_terminal_connector_normalizes_future_broker_server_epoch(monkeypatch):
+    host_now = datetime(2026, 7, 10, 10, 48, tzinfo=timezone.utc)
+    monkeypatch.setattr(connector_module, "utc_now", lambda: host_now)
+
+    class FakeMT5:
+        TIMEFRAME_M1 = 1
+        SYMBOL_TRADE_MODE_DISABLED = 99
+
+        def terminal_info(self):
+            return SimpleNamespace(connected=True)
+
+        def initialize(self, **kwargs):
+            return True
+
+        def symbol_select(self, symbol, enabled):
+            return True
+
+        def symbol_info(self, symbol):
+            return SimpleNamespace(trade_mode=1)
+
+        def symbol_info_tick(self, symbol):
+            raw = host_now + timedelta(hours=3, seconds=-5)
+            return SimpleNamespace(
+                bid=52_596.3,
+                ask=52_598.5,
+                last=52_597.4,
+                time=int(raw.timestamp()),
+                volume=42,
+            )
+
+        def copy_rates_from_pos(self, symbol, timeframe, start_pos, count):
+            return [
+                {
+                    "time": int((host_now + timedelta(hours=3, minutes=-1)).timestamp()),
+                    "open": 52_590.0,
+                    "high": 52_600.0,
+                    "low": 52_580.0,
+                    "close": 52_596.0,
+                    "tick_volume": 100,
+                    "spread": 2,
+                }
+            ]
+
+    connector = MT5TerminalMarketDataConnector(mt5_module=FakeMT5())
+    candles = connector.fetch_historical("US30", bars=1, timeframe="M1")
+    snapshot = connector.fetch_snapshot("US30")
+
+    assert candles[0]["raw_timestamp"] == "2026-07-10T13:47:00+00:00"
+    assert candles[0]["timestamp"] == "2026-07-10T10:47:00+00:00"
+    assert candles[0]["mt5_server_utc_offset_seconds"] == 10_800
+    assert snapshot.timestamp == host_now - timedelta(seconds=5)
+    assert connector.last_time_normalization["status"] == "BROKER_SERVER_OFFSET_CORRECTED"
+    assert connector.last_time_normalization["future_timestamp_after_normalization"] is False
+
+
+def test_mt5_terminal_connector_does_not_call_stale_weekend_tick_open(monkeypatch):
+    host_now = datetime(2026, 7, 11, 3, 40, tzinfo=timezone.utc)
+    last_tick = datetime(2026, 7, 10, 23, 56, tzinfo=timezone.utc)
+    monkeypatch.setattr(connector_module, "utc_now", lambda: host_now)
+
+    class FakeMT5:
+        SYMBOL_TRADE_MODE_DISABLED = 99
+
+        def terminal_info(self):
+            return SimpleNamespace(connected=True)
+
+        def symbol_select(self, symbol, enabled):
+            return True
+
+        def symbol_info(self, symbol):
+            return SimpleNamespace(trade_mode=1)
+
+        def symbol_info_tick(self, symbol):
+            return SimpleNamespace(
+                bid=52_692.72,
+                ask=52_695.39,
+                last=52_694.0,
+                time=int(last_tick.timestamp()),
+                volume=42,
+            )
+
+    snapshot = MT5TerminalMarketDataConnector(mt5_module=FakeMT5()).fetch_snapshot("US30")
+
+    assert snapshot.timestamp == last_tick
+    assert snapshot.is_market_open is False
 
 
 def test_mt5_terminal_market_data_connector_discovers_broker_alias_for_index_cfd():
@@ -285,6 +560,67 @@ def test_mt5_terminal_market_data_connector_reports_initialize_failure():
 
     assert connector.fetch_historical("NAS100", bars=1, timeframe="D1") == []
     assert "No IPC connection" in connector.last_error
+
+
+def test_oanda_connector_skips_pricing_for_unsupported_account_symbol():
+    session = _FakeOANDASession(
+        [
+            (
+                "/instruments",
+                lambda url, params, timeout: _FakeHTTPResponse(
+                    {"instruments": [{"name": "EUR_USD"}, {"name": "GBP_USD"}]}
+                ),
+            )
+        ]
+    )
+    connector = OANDARestConnector(api_key="token", account_id="acct")
+    connector._session = session
+
+    snapshot = connector.fetch_snapshot("NAS100")
+
+    assert snapshot.synthetic_fallback is True
+    assert snapshot.is_market_open is False
+    assert "symbol NAS100 is not available on the configured OANDA account" in connector.last_error
+    assert len(session.calls) == 1
+    assert session.calls[0][0].endswith("/accounts/acct/instruments")
+
+
+def test_oanda_connector_resolves_supported_symbol_from_account_instrument_list():
+    session = _FakeOANDASession(
+        [
+            (
+                "/instruments",
+                lambda url, params, timeout: _FakeHTTPResponse(
+                    {"instruments": [{"name": "EUR_USD"}, {"name": "GBP_USD"}]}
+                ),
+            ),
+            (
+                "/pricing",
+                lambda url, params, timeout: _FakeHTTPResponse(
+                    {
+                        "prices": [
+                            {
+                                "bids": [{"price": "1.1000"}],
+                                "asks": [{"price": "1.1002"}],
+                            }
+                        ]
+                    }
+                ),
+            ),
+        ]
+    )
+    connector = OANDARestConnector(api_key="token", account_id="acct")
+    connector._session = session
+
+    snapshot = connector.fetch_snapshot("EUR/USD")
+
+    assert snapshot.synthetic_fallback is False
+    assert snapshot.symbol == "EUR/USD"
+    assert snapshot.bid == 1.1
+    assert snapshot.ask == 1.1002
+    pricing_calls = [call for call in session.calls if call[0].endswith("/pricing")]
+    assert len(pricing_calls) == 1
+    assert pricing_calls[0][1] == {"instruments": "EUR_USD"}
 
 
 def test_entry_pairs_are_causal_signed_directional_outcomes(tmp_path):
@@ -626,6 +962,189 @@ def test_build_waste_market_state_scan_selects_later_pass_preview_without_author
     assert "preview-token-not-registered" not in json.dumps(scan)
     assert connector.requests[0][0:3] == ("EUR/USD", 140, "M15")
     assert connector.requests[1][0:3] == ("GBP/USD", 140, "H1")
+
+
+def test_market_scan_skips_closed_pass_and_selects_later_actionable_pass(monkeypatch):
+    candidates = [
+        {
+            "symbol": "SPX500",
+            "timeframe": "H1",
+            "lead_id": "index-lead",
+            "source": "strategy_leads",
+        },
+        {
+            "symbol": "EUR/USD",
+            "timeframe": "H1",
+            "lead_id": "fx-lead",
+            "source": "strategy_leads",
+        },
+    ]
+
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "_waste_market_scan_candidates",
+        lambda **kwargs: candidates,
+    )
+
+    def market_state(**kwargs):
+        symbol = kwargs["symbol"]
+        return {
+            "symbol": symbol,
+            "timeframe": "H1",
+            "source": "MT5TerminalMarketDataConnector",
+            "broker_grade_market_truth": True,
+            "fallback_used": False,
+            "candles": [{"timestamp": "2026-07-13T20:00:00+00:00"}],
+            "entry_pairs": [{"direction": "LONG"}] * 12,
+        }
+
+    monkeypatch.setattr(waste_market_data_module, "build_waste_market_state", market_state)
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "_edge_preview_for_state",
+        lambda state, **kwargs: {
+            "status": "PASS",
+            "has_edge_token": True,
+            "measured_win_prob": 0.75 if state["symbol"] == "SPX500" else 0.70,
+            "candidate_direction": "LONG",
+        },
+    )
+
+    state = build_waste_market_state_scan(
+        max_scan_candidates=2,
+        candidate_block_reason=lambda candidate_state, edge: (
+            "current broker quote reports the market or symbol is closed"
+            if candidate_state["symbol"] == "SPX500"
+            else ""
+        ),
+    )
+
+    scan = state["waste_market_scan"]
+    assert state["symbol"] == "EUR/USD"
+    assert scan["status"] == "WASTE_MARKET_SCAN_PASS_PREVIEW"
+    assert scan["attempt_count"] == 2
+    assert scan["selected_symbol"] == "EUR/USD"
+    assert scan["selected_candidate_actionable"] is True
+    assert scan["selected_candidate_block_reason"] is None
+    assert scan["attempts"][0]["candidate_actionable"] is False
+    assert "closed" in scan["attempts"][0]["candidate_block_reason"]
+    assert scan["attempts"][1]["candidate_actionable"] is True
+
+
+def test_market_scan_transforms_candidate_before_edge_and_duplicate_checks(monkeypatch):
+    candidates = [
+        {"symbol": "SPX500", "timeframe": "H1", "source": "ai_control_symbols"},
+        {"symbol": "EUR/USD", "timeframe": "H1", "source": "ai_control_symbols"},
+    ]
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "_waste_market_scan_candidates",
+        lambda **kwargs: candidates,
+    )
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "build_waste_market_state",
+        lambda **kwargs: {
+            "symbol": kwargs["symbol"],
+            "timeframe": "H1",
+            "source": "MT5TerminalMarketDataConnector",
+            "broker_grade_market_truth": True,
+            "fallback_used": False,
+            "candles": [
+                {"timestamp": "2026-07-13T20:00:00+00:00", "close": 1.0},
+                {"timestamp": "2026-07-13T21:00:00+00:00", "close": 2.0},
+            ],
+            "entry_pairs": [{"direction": "LONG"}] * 12,
+        },
+    )
+
+    def transform(state):
+        return {
+            **state,
+            "candles": list(state["candles"][:-1]),
+            "transformed_before_preview": True,
+        }
+
+    def preview(state, **kwargs):
+        assert state["transformed_before_preview"] is True
+        assert len(state["candles"]) == 1
+        return {
+            "status": "PASS",
+            "has_edge_token": True,
+            "measured_win_prob": 0.7,
+            "candidate_direction": "LONG",
+        }
+
+    monkeypatch.setattr(waste_market_data_module, "_edge_preview_for_state", preview)
+
+    state = build_waste_market_state_scan(
+        max_scan_candidates=2,
+        candidate_state_transform=transform,
+        candidate_block_reason=lambda candidate_state, edge: (
+            "completed-candle route already emitted"
+            if candidate_state["symbol"] == "SPX500"
+            else ""
+        ),
+    )
+
+    scan = state["waste_market_scan"]
+    assert state["symbol"] == "EUR/USD"
+    assert state["transformed_before_preview"] is True
+    assert scan["attempt_count"] == 2
+    assert scan["attempts"][0]["candidate_actionable"] is False
+    assert "already emitted" in scan["attempts"][0]["candidate_block_reason"]
+    assert scan["attempts"][1]["candidate_actionable"] is True
+
+
+def test_market_scan_reports_all_blocked_candidates_without_pass_claim(monkeypatch):
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "_waste_market_scan_candidates",
+        lambda **kwargs: [
+            {
+                "symbol": "SPX500",
+                "timeframe": "H1",
+                "lead_id": "index-lead",
+                "source": "strategy_leads",
+            }
+        ],
+    )
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "build_waste_market_state",
+        lambda **kwargs: {
+            "symbol": kwargs["symbol"],
+            "timeframe": "H1",
+            "source": "MT5TerminalMarketDataConnector",
+            "broker_grade_market_truth": True,
+            "fallback_used": False,
+            "candles": [{"timestamp": "2026-07-13T20:00:00+00:00"}],
+            "entry_pairs": [{"direction": "LONG"}] * 12,
+        },
+    )
+    monkeypatch.setattr(
+        waste_market_data_module,
+        "_edge_preview_for_state",
+        lambda state, **kwargs: {
+            "status": "PASS",
+            "has_edge_token": True,
+            "measured_win_prob": 0.75,
+            "candidate_direction": "LONG",
+        },
+    )
+
+    state = build_waste_market_state_scan(
+        max_scan_candidates=1,
+        candidate_block_reason=lambda state, edge: "symbol is closed",
+    )
+
+    scan = state["waste_market_scan"]
+    assert scan["status"] == "WASTE_MARKET_SCAN_NO_ACTIONABLE_ROUTE"
+    assert scan["selected_edge_status"] == "PASS"
+    assert scan["selected_edge_has_token"] is True
+    assert scan["selected_candidate_actionable"] is False
+    assert scan["selected_candidate_block_reason"] == "symbol is closed"
+    assert "No candidate is action-time executable" in scan["next_action"]
 
 
 def test_runner_data_backed_watch_passes_entry_pairs_to_edge_gate(tmp_path, monkeypatch):

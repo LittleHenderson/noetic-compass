@@ -282,6 +282,135 @@ def test_risk_section_observes_concentration_and_floating_range():
     assert risk.metrics["max_floating_gain"] >= 18.0
 
 
+def test_risk_section_carries_source_truth_when_simulator_pricing_is_static():
+    report = _compose(
+        live_telemetry_snapshots=[
+            {
+                "totals": {"open_position_count": 2, "total_floating_pnl": 0.0},
+                "data_freshness": {
+                    "source": "movement_stream",
+                    "movement_source": {
+                        "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                    },
+                },
+            }
+        ],
+        risk_snapshots=[
+            {
+                "peak_concentration": 0.35,
+                "peak_margin_utilization": 0.12,
+                "max_floating_loss": 0.0,
+                "max_floating_gain": 0.0,
+                "telemetry_source": "movement_stream",
+                "price_source_status": "STATIC_SIMULATION_FALLBACK",
+            }
+        ],
+    )
+
+    risk = next(s for s in report.sections if s.section_name == "risk")
+
+    assert risk.metrics["movement_source_samples"] >= 1
+    assert risk.metrics["static_simulation_samples"] >= 1
+    assert risk.source_truth is not None
+    assert risk.source_truth["static_simulation_samples"] >= 1
+    assert risk.source_truth["movement_source_samples"] >= 1
+    assert "static simulation fallback" in risk.detail.lower()
+    assert "paper/demo simulator proof rows" in report.plain_english_summary.lower()
+    assert any("static simulator pricing" in hint.lower() for hint in report.diagnostic_hints)
+
+
+def test_risk_section_prefers_canonical_position_feed_detail_when_present():
+    detail = (
+        "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions. "
+        "Static simulator fallback is active for 1/1 row(s), so prices and floating P&L can remain at entry "
+        "until usable provider or MT5 quotes arrive. Requested provider: Yahoo. Static fallback symbols: NAS100. "
+        "Stale provider/MT5 snapshots were rejected for: NAS100 (max age 900s)."
+    )
+    report = _compose(
+        live_telemetry_snapshots=[
+            {
+                "totals": {"open_position_count": 1, "total_floating_pnl": 0.0},
+                "data_freshness": {
+                    "source": "movement_stream",
+                    "movement_source": {
+                        "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                        "position_feed_label": "SIM PROOF",
+                        "position_feed_detail": detail,
+                    },
+                },
+            }
+        ],
+        risk_snapshots=[
+            {
+                "peak_concentration": 0.35,
+                "peak_margin_utilization": 0.12,
+                "max_floating_loss": 0.0,
+                "max_floating_gain": 0.0,
+                "telemetry_source": "movement_stream",
+                "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                "position_feed_label": "SIM PROOF",
+                "position_feed_detail": detail,
+            }
+        ],
+    )
+
+    risk = next(s for s in report.sections if s.section_name == "risk")
+
+    assert risk.metrics["movement_source_samples"] >= 1
+    assert risk.metrics["static_simulation_samples"] >= 1
+    assert risk.source_truth is not None
+    assert risk.source_truth["latest_position_feed_label"] == "SIM PROOF"
+    assert risk.source_truth["latest_position_feed_detail"] == detail
+    assert risk.source_truth["source_truth_observation"] == detail
+    assert risk.metrics["source_truth_observation"] == detail
+    assert risk.metrics["latest_position_feed_detail"] == detail
+    assert detail in risk.detail
+    assert "Stale provider/MT5 snapshots were rejected for: NAS100 (max age 900s)." in report.plain_english_summary
+
+
+def test_risk_section_prefers_top_level_movement_source_truth_when_nested_summary_is_partial():
+    detail = (
+        "Rows in this snapshot are paper/demo proof rows, not MT5 broker-truth positions. "
+        "Static simulator fallback is active for 1/1 row(s), so prices and floating P&L can remain at entry "
+        "until usable provider or MT5 quotes arrive."
+    )
+    report = _compose(
+        live_telemetry_snapshots=[
+            {
+                "totals": {"open_position_count": 1, "total_floating_pnl": 0.0},
+                "movement_source_truth": {
+                    "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                    "position_feed_label": "SIM PROOF",
+                    "position_feed_detail": detail,
+                },
+                "data_freshness": {
+                    "source": "movement_stream",
+                    "movement_source": {
+                        "price_source_status": "STATIC_SIMULATION_FALLBACK",
+                    },
+                },
+            }
+        ],
+        risk_snapshots=[
+            {
+                "peak_concentration": 0.35,
+                "peak_margin_utilization": 0.12,
+                "max_floating_loss": 0.0,
+                "max_floating_gain": 0.0,
+                "telemetry_source": "movement_stream",
+                "price_source_status": "STATIC_SIMULATION_FALLBACK",
+            }
+        ],
+    )
+
+    risk = next(s for s in report.sections if s.section_name == "risk")
+
+    assert risk.source_truth is not None
+    assert risk.source_truth["latest_position_feed_label"] == "SIM PROOF"
+    assert risk.source_truth["latest_position_feed_detail"] == detail
+    assert risk.source_truth["source_truth_observation"] == detail
+
+
 def test_system_section_uptime_percentages_observed():
     report = _compose(**_rich_inputs())
     system = next(s for s in report.sections if s.section_name == "system")

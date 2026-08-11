@@ -10,6 +10,7 @@ import {
 import { Shell } from "./components/Shell";
 import { DashboardInstantShell } from "./components/DashboardInstantShell";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { consumeOwnerPairingFromUrl } from "./data/ownerAuthApi";
 import { isPage, type Page } from "./pageConfig";
 import type { DashboardState } from "./types/evidence";
 import "./App.css";
@@ -31,9 +32,13 @@ const PAGE_COMPONENTS: Record<Page, LazyExoticComponent<RoutedPage>> = {
   proof: lazyPage(() => import("./pages/ProofPage"), "ProofPage"),
   audit: lazyPage(() => import("./pages/AuditPage"), "AuditPage"),
   dashboard: lazyPage(() => import("./pages/DashboardPage"), "DashboardPage"),
+  tracker: lazyPage(() => import("./pages/TrackerPage"), "TrackerPage"),
   trade: lazyPage(() => import("./pages/TradePage"), "TradePage"),
   adaptive: lazyPage(() => import("./pages/AdaptivePage"), "AdaptivePage"),
   history: lazyPage(() => import("./pages/HistoryPage"), "HistoryPage"),
+  risk: lazyPage(() => import("./pages/RiskDisclosurePage"), "RiskDisclosurePage"),
+  terms: lazyPage(() => import("./pages/TermsPage"), "TermsPage"),
+  privacy: lazyPage(() => import("./pages/PrivacyPage"), "PrivacyPage"),
   settings: lazyPage(() => import("./pages/SettingsPage"), "SettingsPage"),
   pcba: lazyPage(() => import("./pages/PcbaPage"), "PcbaPage"),
   ledger: lazyPage(() => import("./pages/LedgerPage"), "LedgerPage"),
@@ -73,7 +78,8 @@ function scheduleAppIdleWork(callback: () => void, timeoutMs: number): () => voi
 
 function initialPageFromUrl(): Page {
   if (typeof window === "undefined") return "proof";
-  const raw = new URLSearchParams(window.location.search).get("page");
+  const pairing = consumeOwnerPairingFromUrl(window.location.href, { scrubCurrentLocation: true });
+  const raw = pairing.page ?? new URLSearchParams(window.location.search).get("page");
   return isPage(raw) ? raw : "proof";
 }
 
@@ -182,10 +188,11 @@ async function fetchInstantWasteStage(): Promise<Record<string, unknown> | null>
 }
 
 export function App() {
-  const [page, setPageState] = useState<Page>(() => initialPageFromUrl());
+  const [initialPage] = useState<Page>(() => initialPageFromUrl());
+  const [page, setPageState] = useState<Page>(initialPage);
   const [assistantMounted, setAssistantMounted] = useState(false);
   const [dashboardHydratorMounted, setDashboardHydratorMounted] = useState(
-    () => initialPageFromUrl() === "dashboard",
+    () => initialPage === "dashboard",
   );
   const setPage = (next: Page) => {
     setPageState(next);
@@ -201,6 +208,37 @@ export function App() {
   const [error, setError] = useState<string | null>(null);
   const state = apiState ?? startupState;
   const ActivePage = PAGE_COMPONENTS[page];
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const nativeShell = Boolean((window as unknown as { Capacitor?: unknown }).Capacitor)
+      || window.location.protocol === "capacitor:";
+    if (!nativeShell) return;
+
+    let removeListener: (() => void) | null = null;
+    const consumeNativeUrl = (url?: string) => {
+      if (!url) return;
+      const result = consumeOwnerPairingFromUrl(url);
+      if (result.page && isPage(result.page)) {
+        setPage(result.page);
+      }
+    };
+
+    void import("@capacitor/app")
+      .then(async ({ App: CapacitorApp }) => {
+        const launch = await CapacitorApp.getLaunchUrl();
+        consumeNativeUrl(launch?.url);
+        const handle = await CapacitorApp.addListener("appUrlOpen", (event) => {
+          consumeNativeUrl(event.url);
+        });
+        removeListener = () => { void handle.remove(); };
+      })
+      .catch((err) => console.warn("CAS Forex native pairing listener unavailable", err));
+
+    return () => {
+      removeListener?.();
+    };
+  }, []);
 
   useEffect(() => {
     return scheduleAppIdleWork(

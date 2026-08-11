@@ -63,6 +63,15 @@ def test_terminal_history_ingest_joins_closed_trade_to_memory(tmp_path):
         event_log_path=cycle["event_journal"]["event_log_path"],
         output_dir=tmp_path / "agent-memory-before-history",
     )
+    opening_memory = next(
+        row
+        for row in memory["memory_records"]
+        if row.get("command_id") == command["command_id"]
+    )
+    opening_memory["market_regime"] = "directional_pressure"
+    opening_memory.setdefault("condition_snapshot_open", {})[
+        "market_regime"
+    ] = "directional_pressure"
     source_path = tmp_path / "terminal-history" / "closed-trades.json"
     source_path.parent.mkdir(parents=True, exist_ok=True)
     source_path.write_text(
@@ -106,6 +115,7 @@ def test_terminal_history_ingest_joins_closed_trade_to_memory(tmp_path):
     assert update["terminal_history_status"] == "CLOSED_HISTORY_JOINED"
     assert update["profit_loss_pips"] == pytest.approx(12.0)
     assert update["outcome_label"] == "TRADE_CLOSED_PROFIT"
+    assert update["market_regime"] == "directional_pressure"
 
     latest = load_latest_terminal_history_ingest_report(tmp_path / "terminal-history-ingest")
     assert latest["summary"]["memory_update_count"] == 1
@@ -147,3 +157,106 @@ def test_terminal_history_ingest_api_and_dashboard_surface(monkeypatch, tmp_path
     status, dashboard = asyncio.run(_asgi_get("/api/forex/dashboard"))
     assert status == 200
     assert dashboard["terminalHistoryIngest"]["summary"]["history_record_count"] == 0
+
+
+def test_terminal_history_ingest_classifies_unattributed_closed_history_row(tmp_path):
+    source_path = tmp_path / "terminal-history" / "closed-trades.json"
+    source_path.parent.mkdir(parents=True, exist_ok=True)
+    source_path.write_text(
+        json.dumps(
+            [
+                {
+                    "ticket": "manual-close-1",
+                    "symbol": "EUR/USD",
+                    "direction": "buy",
+                    "lots": 0.1,
+                    "open_time": "2026-06-24T10:00:00Z",
+                    "close_time": "2026-06-24T10:04:00Z",
+                    "open_price": 1.1000,
+                    "close_price": 1.1010,
+                    "profit": 25.0,
+                    "broker_mode": "LIVE_MT5",
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    report = ingest_terminal_history(
+        source_paths=[source_path],
+        memory_report={"summary": {}, "memory_records": []},
+        output_dir=tmp_path / "terminal-history-ingest",
+        write_report=False,
+    )
+
+    assert report["summary"]["unmatched_history_count"] == 1
+    assert report["summary"]["unmatched_unattributed_history_count"] == 1
+    assert report["summary"]["unmatched_attributed_history_memory_gap_count"] == 0
+    unmatched = report["unmatched_history_records"][0]
+    assert unmatched["classification_status"] == "TERMINAL_UNATTRIBUTED_BROKER_HISTORY"
+    assert unmatched["requires_owner_broker_review"] is True
+    assert "external/manual broker close" in unmatched["classification_detail"]
+    assert "cannot attribute" in report["next_action"].lower()
+
+
+def test_terminal_history_ingest_deduplicates_cumulative_mt5_snapshots(tmp_path):
+    source_dir = tmp_path / "terminal-history"
+    source_dir.mkdir(parents=True)
+    row = {
+        "ticket": "position-100",
+        "deal_ticket": "close-deal-200",
+        "symbol": "EUR/USD",
+        "direction": "buy",
+        "lots": 0.2,
+        "open_time": "2026-07-14T10:00:00Z",
+        "close_time": "2026-07-14T10:15:00Z",
+        "open_price": 1.1,
+        "close_price": 1.101,
+        "profit": 20.0,
+        "broker_mode": "PAPER_MT5",
+    }
+    (source_dir / "snapshot-a.json").write_text(json.dumps({"history_records": [row]}), encoding="utf-8")
+    (source_dir / "snapshot-b.json").write_text(json.dumps({"history_records": [row]}), encoding="utf-8")
+
+    report = ingest_terminal_history(
+        source_paths=[source_dir],
+        memory_report={"summary": {}, "memory_records": []},
+        output_dir=tmp_path / "terminal-history-ingest",
+        write_report=False,
+    )
+
+    assert report["summary"]["source_history_record_count"] == 2
+    assert report["summary"]["history_record_count"] == 1
+    assert report["summary"]["duplicate_history_record_count"] == 1
+    assert report["summary"]["unmatched_history_count"] == 1
+    assert len(report["history_records"]) == 1
+
+
+def test_terminal_history_ingest_limits_cumulative_snapshot_reparse(tmp_path):
+    source_dir = tmp_path / "terminal-history"
+    source_dir.mkdir(parents=True)
+    for index, stamp in enumerate(("20260714010000", "20260714020000", "20260714030000"), start=1):
+        row = {
+            "ticket": f"position-{index}",
+            "deal_ticket": f"deal-{index}",
+            "symbol": "EUR/USD",
+            "direction": "buy",
+            "lots": 0.1,
+            "close_time": f"2026-07-14T0{index}:00:00Z",
+            "profit": float(index),
+            "broker_mode": "PAPER_MT5",
+        }
+        (source_dir / f"mt5-deal-history-{stamp}.json").write_text(
+            json.dumps({"history_records": [row]}),
+            encoding="utf-8",
+        )
+
+    report = ingest_terminal_history(
+        source_paths=[source_dir],
+        memory_report={"summary": {}, "memory_records": []},
+        output_dir=tmp_path / "terminal-history-ingest",
+        write_report=False,
+    )
+
+    assert len(report["source_paths"]) == 2
+    assert {row["deal_ticket"] for row in report["history_records"]} == {"deal-2", "deal-3"}

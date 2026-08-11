@@ -1,5 +1,6 @@
 # Keep the image small + never bake in local state or secrets.
 runtime/
+evidence_runs/
 **/__pycache__/
 *.pyc
 .git/
@@ -10,6 +11,8 @@ scenarios/
 data/
 ui/node_modules/
 ui/src/
+ui/android/
+ui/ios/
 node_modules/
 *.log
 tmp_*

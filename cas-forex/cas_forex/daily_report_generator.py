@@ -64,6 +64,7 @@ class DailySection:
     detail: str
     metrics: Mapping[str, Any]
     notable_events: tuple[str, ...]
+    source_truth: Mapping[str, Any] | None = None
 
 
 @dataclass(frozen=True)
@@ -137,6 +138,7 @@ def compose_daily_report(
     diagnostic_hints = _build_diagnostic_hints(
         cycles_section=cycles_section,
         decisions_section=decisions_section,
+        risk_section=risk_section,
         system_section=system_section,
         incidents_section=incidents_section,
         top_block_reason=top_block_reason,
@@ -441,6 +443,7 @@ def _build_risk_section(
     max_float_loss = 0.0
     max_float_gain = 0.0
     samples_seen = 0
+    source_truth = _collect_risk_source_truth(live_snaps, risk_snaps)
 
     for snap in live_snaps:
         if not isinstance(snap, Mapping):
@@ -472,13 +475,35 @@ def _build_risk_section(
         if floating_gain > max_float_gain:
             max_float_gain = floating_gain
 
+    source_truth_observation = _risk_source_truth_observation(source_truth)
+    source_truth_payload = {
+        "source_truth_samples": int(source_truth.get("source_truth_samples", 0)),
+        "telemetry_sources_observed": dict(source_truth.get("telemetry_sources_observed") or {}),
+        "price_source_statuses_observed": dict(source_truth.get("price_source_statuses_observed") or {}),
+        "position_feed_labels_observed": dict(source_truth.get("position_feed_labels_observed") or {}),
+        "mt5_source_samples": int(source_truth.get("mt5_source_samples", 0)),
+        "movement_source_samples": int(source_truth.get("movement_source_samples", 0)),
+        "unlabeled_source_samples": int(source_truth.get("unlabeled_source_samples", 0)),
+        "static_simulation_samples": int(source_truth.get("static_simulation_samples", 0)),
+        "mixed_fallback_samples": int(source_truth.get("mixed_fallback_samples", 0)),
+        "provider_active_samples": int(source_truth.get("provider_active_samples", 0)),
+        "warming_source_samples": int(source_truth.get("warming_source_samples", 0)),
+        "position_feed_detail_variants": list(source_truth.get("position_feed_detail_variants") or []),
+        "latest_position_feed_label": source_truth.get("latest_position_feed_label"),
+        "latest_position_feed_detail": source_truth.get("latest_position_feed_detail"),
+        "source_truth_observation": source_truth_observation or None,
+    }
+
     metrics = {
         "peak_concentration": round(peak_concentration, 4),
         "peak_margin_utilization": round(peak_margin_util, 4),
         "max_floating_loss": round(max_float_loss, 2),
         "max_floating_gain": round(max_float_gain, 2),
         "samples_observed": samples_seen,
+        **source_truth_payload,
     }
+    if source_truth_observation:
+        metrics["source_truth_observation"] = source_truth_observation
 
     if samples_seen == 0:
         headline = "No risk telemetry observed today."
@@ -496,6 +521,8 @@ def _build_risk_section(
             f"P&L observed swung between {max_float_loss:+.2f} and "
             f"{max_float_gain:+.2f}."
         )
+        if source_truth_observation:
+            detail += " " + source_truth_observation
 
     return DailySection(
         section_name="risk",
@@ -503,7 +530,226 @@ def _build_risk_section(
         detail=detail,
         metrics=metrics,
         notable_events=tuple(),
+        source_truth=source_truth_payload,
     )
+
+
+def _collect_risk_source_truth(
+    live_snaps: Sequence[Mapping[str, Any]],
+    risk_snaps: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    source_counts: Counter[str] = Counter()
+    price_counts: Counter[str] = Counter()
+    label_counts: Counter[str] = Counter()
+    source_truth_samples = 0
+    detail_variants: list[str] = []
+    latest_label: str | None = None
+    latest_detail: str | None = None
+
+    for snap in live_snaps:
+        sample = _extract_live_source_truth_sample(snap)
+        if sample is None:
+            continue
+        source_truth_samples += 1
+        source = str(sample.get("source") or "")
+        price_status = str(sample.get("price_source_status") or "")
+        position_feed_label = str(sample.get("position_feed_label") or "")
+        position_feed_detail = str(sample.get("position_feed_detail") or "")
+        if source:
+            source_counts[source] += 1
+        if price_status:
+            price_counts[price_status] += 1
+        if position_feed_label:
+            label_counts[position_feed_label] += 1
+            latest_label = position_feed_label
+        if position_feed_detail:
+            latest_detail = position_feed_detail
+            if position_feed_detail not in detail_variants:
+                detail_variants.append(position_feed_detail)
+
+    for snap in risk_snaps:
+        sample = _extract_risk_source_truth_sample(snap)
+        if sample is None:
+            continue
+        source_truth_samples += 1
+        source = str(sample.get("source") or "")
+        price_status = str(sample.get("price_source_status") or "")
+        position_feed_label = str(sample.get("position_feed_label") or "")
+        position_feed_detail = str(sample.get("position_feed_detail") or "")
+        if source:
+            source_counts[source] += 1
+        if price_status:
+            price_counts[price_status] += 1
+        if position_feed_label:
+            label_counts[position_feed_label] += 1
+            latest_label = position_feed_label
+        if position_feed_detail:
+            latest_detail = position_feed_detail
+            if position_feed_detail not in detail_variants:
+                detail_variants.append(position_feed_detail)
+
+    return {
+        "source_truth_samples": source_truth_samples,
+        "telemetry_sources_observed": dict(source_counts),
+        "price_source_statuses_observed": dict(price_counts),
+        "position_feed_labels_observed": dict(label_counts),
+        "mt5_source_samples": int(source_counts.get("mt5_terminal_api_verifier", 0)),
+        "movement_source_samples": int(source_counts.get("movement_stream", 0)),
+        "unlabeled_source_samples": int(source_counts.get("unknown", 0)),
+        "static_simulation_samples": int(price_counts.get("STATIC_SIMULATION_FALLBACK", 0)),
+        "mixed_fallback_samples": int(price_counts.get("MIXED_PROVIDER_AND_STATIC_FALLBACK", 0)),
+        "provider_active_samples": int(price_counts.get("PROVIDER_ACTIVE", 0)),
+        "warming_source_samples": int(price_counts.get("CACHE_WARMING", 0)),
+        "position_feed_detail_variants": list(detail_variants),
+        "latest_position_feed_label": latest_label,
+        "latest_position_feed_detail": latest_detail,
+    }
+
+
+def _extract_live_source_truth_sample(
+    snap: Mapping[str, Any],
+) -> dict[str, str | None] | None:
+    data_freshness = snap.get("data_freshness")
+    if not isinstance(data_freshness, Mapping):
+        return None
+    raw_source = str(data_freshness.get("source") or "").strip()
+    movement_source_truth = snap.get("movement_source_truth")
+    movement_source = (
+        movement_source_truth
+        if isinstance(movement_source_truth, Mapping)
+        else data_freshness.get("movement_source")
+        if isinstance(data_freshness.get("movement_source"), Mapping)
+        else {}
+    )
+    price_status = str(movement_source.get("price_source_status") or "").strip() or None
+    position_feed_label = (
+        str(snap.get("position_feed_label") or "").strip()
+        or str(movement_source.get("position_feed_label") or "").strip()
+        or None
+    )
+    position_feed_detail = (
+        str(snap.get("position_feed_detail") or "").strip()
+        or str(movement_source.get("position_feed_detail") or "").strip()
+        or None
+    )
+    source = _normalize_risk_telemetry_source(raw_source, has_shape=True)
+    if source == "none" and price_status is None and position_feed_detail is None:
+        return None
+    return {
+        "source": source,
+        "price_source_status": price_status,
+        "position_feed_label": position_feed_label,
+        "position_feed_detail": position_feed_detail,
+    }
+
+
+def _extract_risk_source_truth_sample(
+    snap: Mapping[str, Any],
+) -> dict[str, str | None] | None:
+    raw_source = str(snap.get("telemetry_source") or "").strip()
+    price_status = str(snap.get("price_source_status") or "").strip() or None
+    position_feed_label = str(snap.get("position_feed_label") or "").strip() or None
+    position_feed_detail = str(snap.get("position_feed_detail") or "").strip() or None
+    source = _normalize_risk_telemetry_source(raw_source, has_shape=True)
+    if source == "none" and price_status is None and position_feed_detail is None:
+        return None
+    return {
+        "source": source,
+        "price_source_status": price_status,
+        "position_feed_label": position_feed_label,
+        "position_feed_detail": position_feed_detail,
+    }
+
+
+def _normalize_risk_telemetry_source(raw_source: str, *, has_shape: bool) -> str:
+    if raw_source in {"mt5_terminal_api_verifier", "movement_stream", "none"}:
+        return raw_source
+    if raw_source:
+        return "unknown"
+    return "unknown" if has_shape else "none"
+
+
+def _risk_source_truth_observation(source_truth: Mapping[str, Any]) -> str:
+    source_truth_samples = int(source_truth.get("source_truth_samples", 0))
+    if source_truth_samples <= 0:
+        return ""
+
+    mt5_samples = int(source_truth.get("mt5_source_samples", 0))
+    movement_samples = int(source_truth.get("movement_source_samples", 0))
+    unlabeled_samples = int(source_truth.get("unlabeled_source_samples", 0))
+    static_samples = int(source_truth.get("static_simulation_samples", 0))
+    mixed_samples = int(source_truth.get("mixed_fallback_samples", 0))
+    provider_samples = int(source_truth.get("provider_active_samples", 0))
+    warming_samples = int(source_truth.get("warming_source_samples", 0))
+    canonical_detail = _canonical_risk_source_truth_detail(source_truth)
+
+    if mt5_samples > 0 and movement_samples == 0 and unlabeled_samples == 0:
+        return canonical_detail or "Risk source truth came from MT5 broker position telemetry."
+
+    if movement_samples > 0 and mt5_samples == 0 and unlabeled_samples == 0:
+        if canonical_detail:
+            return canonical_detail
+        if static_samples > 0:
+            return (
+                "Risk source truth came from paper/demo simulator proof rows with static simulation fallback, "
+                "not MT5 broker positions."
+            )
+        if mixed_samples > 0:
+            return (
+                "Risk source truth came from paper/demo simulator proof rows with mixed provider repricing and static fallback, "
+                "not MT5 broker positions."
+            )
+        if provider_samples > 0:
+            return (
+                "Risk source truth came from paper/demo simulator proof rows repriced by provider or MT5 fallback, "
+                "not MT5 broker positions."
+            )
+        if warming_samples > 0:
+            return (
+                "Risk source truth came from paper/demo movement snapshots while price-source truth was still warming, "
+                "not MT5 broker positions."
+            )
+        return "Risk source truth came from paper/demo movement snapshots, not MT5 broker positions."
+
+    if mt5_samples > 0 and movement_samples > 0:
+        detail = "Risk source truth mixed MT5 broker position telemetry with paper/demo movement snapshots."
+        if static_samples > 0:
+            detail += " Some paper/demo samples used static simulation fallback."
+        elif mixed_samples > 0:
+            detail += " Some paper/demo samples mixed provider repricing with static fallback."
+        elif provider_samples > 0:
+            detail += " Some paper/demo samples were provider-repriced rather than broker-ticket MT5 rows."
+        elif warming_samples > 0:
+            detail += " Some paper/demo samples were still warming."
+        if canonical_detail:
+            detail += f" Latest source-truth detail: {canonical_detail}"
+        return detail
+
+    if unlabeled_samples > 0 and mt5_samples == 0 and movement_samples == 0:
+        return (
+            "Risk telemetry included unlabeled position snapshots, so this report cannot prove whether those rows were "
+            "MT5 broker truth or simulator proof."
+        )
+
+    if unlabeled_samples > 0:
+        return "Some risk telemetry samples were unlabeled alongside the known broker or paper/demo sources."
+
+    return ""
+
+
+def _canonical_risk_source_truth_detail(source_truth: Mapping[str, Any]) -> str:
+    detail_variants = source_truth.get("position_feed_detail_variants")
+    if not isinstance(detail_variants, list):
+        detail_variants = []
+    cleaned = [str(item).strip() for item in detail_variants if str(item).strip()]
+    if not cleaned:
+        latest = str(source_truth.get("latest_position_feed_detail") or "").strip()
+        return latest
+    if len(cleaned) == 1:
+        return cleaned[0]
+    latest = str(source_truth.get("latest_position_feed_detail") or "").strip()
+    latest = latest or cleaned[-1]
+    return f"Observed {len(cleaned)} source-truth detail variant(s) during the day. Latest detail: {latest}"
 
 
 def _build_system_section(
@@ -739,6 +985,9 @@ def _build_plain_english_summary(
         f"and floating P&L spanned "
         f"{float(rm.get('max_floating_loss', 0.0)):+.2f}..{float(rm.get('max_floating_gain', 0.0)):+.2f}."
     )
+    source_truth_observation = str(rm.get("source_truth_observation") or "").strip()
+    if source_truth_observation:
+        sentences.append(source_truth_observation)
 
     samples = int(sm.get("samples_observed", 0))
     if samples > 0:
@@ -770,12 +1019,14 @@ def _build_diagnostic_hints(
     *,
     cycles_section: DailySection,
     decisions_section: DailySection,
+    risk_section: DailySection,
     system_section: DailySection,
     incidents_section: DailySection,
     top_block_reason: Optional[str],
 ) -> tuple[str, ...]:
     hints: list[str] = []
     im = incidents_section.metrics
+    rm = risk_section.metrics
     sm = system_section.metrics
 
     loop_stalls = int(im.get("loop_stalls", 0))
@@ -797,6 +1048,18 @@ def _build_diagnostic_hints(
     if dispatch_failures > 0:
         hints.append(
             f"Dispatch failures observed {dispatch_failures} time(s) today."
+        )
+
+    static_samples = int(rm.get("static_simulation_samples", 0))
+    if static_samples > 0:
+        hints.append(
+            f"Risk telemetry used static simulator pricing on {static_samples} sample(s); floating P&L could sit at entry until provider or MT5 quotes were usable."
+        )
+
+    unlabeled_samples = int(rm.get("unlabeled_source_samples", 0))
+    if unlabeled_samples > 0:
+        hints.append(
+            f"Risk telemetry source was unlabeled on {unlabeled_samples} sample(s)."
         )
 
     cm = cycles_section.metrics

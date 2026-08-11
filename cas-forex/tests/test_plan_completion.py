@@ -465,7 +465,7 @@ def test_sweep_auto_executes_when_owner_authorized(monkeypatch):
 
     monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
     monkeypatch.setattr(forex_config, "owner_enable_payout_automation", True)
-    monkeypatch.setattr(forex_config, "payment_provider", "wise")
+    monkeypatch.setattr(forex_config, "payment_provider", "simulated")
     monkeypatch.setattr(forex_config, "payment_api_key", "key")
     monkeypatch.setattr(forex_config, "payout_destination_id", "dest-1")
     monkeypatch.setattr(forex_config, "payout_destination_allowlisted", True)

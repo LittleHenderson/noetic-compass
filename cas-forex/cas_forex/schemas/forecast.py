@@ -6,7 +6,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-from cas_forex.instruments import SUPPORTED_SYMBOLS, pip_multiplier
+from cas_forex.instruments import SUPPORTED_SYMBOLS, canonical_symbol, pip_multiplier
 from cas_forex.time_utils import utc_now
 
 
@@ -56,14 +56,16 @@ class ForecastProposal(BaseModel):
     )
     rationale: Optional[str] = Field(default=None)
 
-    @field_validator("symbol")
+    @field_validator("symbol", mode="before")
     @classmethod
     def symbol_must_be_supported(cls, v: str) -> str:
-        if v not in SUPPORTED_SYMBOLS:
+        try:
+            canonical = canonical_symbol(str(v))
+        except ValueError as exc:
             raise ValueError(
                 f"Unsupported symbol '{v}'. Supported: {sorted(SUPPORTED_SYMBOLS)}"
-            )
-        return v
+            ) from exc
+        return canonical
 
     @model_validator(mode="after")
     def validate_price_consistency(self):

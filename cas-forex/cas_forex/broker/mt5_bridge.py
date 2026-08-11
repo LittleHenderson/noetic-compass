@@ -12,13 +12,16 @@ Supports:
 from abc import ABC, abstractmethod
 import hashlib
 import json
-from datetime import datetime
+import os
+from datetime import datetime, timezone
 from pathlib import Path
 import sys
-from typing import Any, Dict, Optional, Tuple
+import threading
+from typing import Any, Dict, Mapping, Optional, Tuple
 
 from cas_forex.config import config
-from cas_forex.instruments import broker_symbol
+from cas_forex.instruments import price_unit_size, resolve_broker_symbol, round_price
+from cas_forex.mt5_permissions import build_mt5_permission_state, mt5_order_send_block_reason
 from cas_forex.schemas.order import (
     BrokerLockReason,
     BrokerMode,
@@ -33,6 +36,8 @@ from cas_forex.time_utils import utc_now
 REPO_ROOT = Path(__file__).resolve().parents[2]
 LOCAL_MT5_DEPS = REPO_ROOT / ".mt5deps"
 COMMON_MT5_TERMINAL_PATHS = (
+    r"C:\Program Files\Risen MT5 Terminal\terminal64.exe",
+    r"C:\Program Files (x86)\Risen MT5 Terminal\terminal64.exe",
     r"C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe",
     r"C:\Program Files (x86)\Hugosway\Hugosway PRO5 Terminal\terminal64.exe",
     r"C:\Program Files\MetaTrader 5\terminal64.exe",
@@ -61,6 +66,19 @@ def _resolve_mt5_terminal_path(cfg: object) -> str | None:
 # Bound the MT5 connect handshake (ms). MetaTrader's Python IPC can be flaky and
 # its default initialize timeout is 60s — far too long for a poller. Fail fast.
 MT5_INIT_TIMEOUT_MS = 8000
+
+
+def _position_opened_at_iso(position: Any) -> str | None:
+    try:
+        timestamp = float(getattr(position, "time", 0.0) or 0.0)
+    except (TypeError, ValueError):
+        return None
+    if timestamp <= 0:
+        return None
+    try:
+        return datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat()
+    except (OSError, OverflowError, ValueError):
+        return None
 
 
 def _add_local_mt5_deps() -> None:
@@ -166,8 +184,10 @@ class MT5Bridge(BrokerBridge):
         password: Optional[str] = None,
         server: Optional[str] = None,
         prefer_mt5: bool = True,
+        runtime_config: Any = None,
     ):
-        cfg = _effective_config()
+        cfg = runtime_config or _effective_config()
+        self._runtime_config = cfg
         self.login = login or cfg.mt5_login
         self.password = password or cfg.mt5_password
         self.server = server or cfg.mt5_server
@@ -175,6 +195,7 @@ class MT5Bridge(BrokerBridge):
         self.mt5_path = _resolve_mt5_terminal_path(cfg)
         self._mt5 = None
         self._connected = False
+        self.last_symbol_resolution: dict[str, Any] = {}
 
     def _initialize(self):
         """Attempt to initialize MT5 connection."""
@@ -261,7 +282,8 @@ class MT5Bridge(BrokerBridge):
         ``mt5_treat_account_as_demo`` config override (a deliberate, env-set
         loosening), in which case it is treated as demo.
         """
-        if bool(getattr(config, "mt5_treat_account_as_demo", False)):
+        cfg = getattr(self, "_runtime_config", None) or _effective_config()
+        if bool(getattr(cfg, "mt5_treat_account_as_demo", False)):
             return True
         if not self.is_connected():
             return False
@@ -285,7 +307,10 @@ class MT5Bridge(BrokerBridge):
         from cas_forex import runtime_gates
 
         try:
-            runtime_gates.require_authorized("live_trading", config)
+            runtime_gates.require_authorized(
+                "live_trading",
+                getattr(self, "_runtime_config", None) or config,
+            )
         except PermissionError as exc:
             return OrderOutcome(
                 order_ref=order_ref,
@@ -294,10 +319,32 @@ class MT5Bridge(BrokerBridge):
                 timestamp=utc_now(),
                 broker_mode=self._broker_mode(),
                 is_real_broker=False,
+                is_demo_account=False,
                 server=self.server,
                 account_id_hash=self._account_id_hash(),
             )
         return None
+
+    def _terminal_permission_block(self, order_ref: str = "mt5-permission") -> Optional[OrderOutcome]:
+        """Reject before order_send when MT5 explicitly reports trade is disabled."""
+        permission_state = self.order_send_permission_state()
+        if not permission_state:
+            return None
+        reason = mt5_order_send_block_reason(permission_state)
+        if reason is None:
+            return None
+        return OrderOutcome(
+            order_ref=order_ref,
+            status=OrderStatus.REJECTED,
+            error_message=reason,
+            timestamp=utc_now(),
+            broker_mode=self._broker_mode(),
+            is_real_broker=False,
+            is_demo_account=(self.is_demo_account() if self.is_connected() else None),
+            terminal_name="MetaTrader5",
+            account_id_hash=self._account_id_hash(),
+            server=self.server,
+        )
 
     def get_account_info(self) -> Dict[str, float]:
         """Get current account state from MT5."""
@@ -345,6 +392,10 @@ class MT5Bridge(BrokerBridge):
         gate_block = self._live_gate_block(order.order_id)
         if gate_block is not None:
             return gate_block
+        permission_block = self._terminal_permission_block(order.order_id)
+        if permission_block is not None:
+            return permission_block
+        is_demo_account = self.is_demo_account()
 
         try:
             request = self._build_mt5_request(order)
@@ -358,9 +409,13 @@ class MT5Bridge(BrokerBridge):
                     timestamp=utc_now(),
                     broker_mode=self._broker_mode(),
                     is_real_broker=True,
+                    is_demo_account=is_demo_account,
                     server=self.server,
                     account_id_hash=self._account_id_hash(),
                     raw_request_hash=_hash_payload(request),
+                    raw_request_snapshot=_request_payload(request),
+                    broker_symbol=request.get("symbol"),
+                    broker_symbol_resolution=dict(self.last_symbol_resolution or {}),
                 )
 
             retcode = getattr(result, "retcode", None)
@@ -419,14 +474,38 @@ class MT5Bridge(BrokerBridge):
                 ),
                 broker_mode=self._broker_mode(),
                 is_real_broker=True,
+                is_demo_account=is_demo_account,
                 terminal_name="MetaTrader5",
                 account_id_hash=self._account_id_hash(),
                 server=self.server,
                 raw_request_hash=_hash_payload(request),
+                raw_request_snapshot=_request_payload(request),
                 raw_response_hash=_hash_payload(_result_payload(result)),
+                broker_symbol=request.get("symbol"),
+                broker_symbol_resolution=dict(self.last_symbol_resolution or {}),
                 lock_reason=lock_reason,
             )
 
+        except ValueError as e:
+            lock_reason = None
+            if "volume" in str(e).lower():
+                lock_reason = BrokerLockReason.VOLUME_MISMATCH
+            elif "symbol" in str(e).lower():
+                lock_reason = BrokerLockReason.SYMBOL_MISMATCH
+            return OrderOutcome(
+                order_ref=order.order_id,
+                status=OrderStatus.REJECTED,
+                error_message=str(e),
+                timestamp=utc_now(),
+                broker_mode=self._broker_mode(),
+                is_real_broker=False,
+                is_demo_account=is_demo_account,
+                terminal_name="MetaTrader5",
+                account_id_hash=self._account_id_hash(),
+                server=self.server,
+                broker_symbol_resolution=dict(self.last_symbol_resolution or {}),
+                lock_reason=lock_reason,
+            )
         except Exception as e:
             return OrderOutcome(
                 order_ref=order.order_id,
@@ -435,6 +514,7 @@ class MT5Bridge(BrokerBridge):
                 timestamp=utc_now(),
                 broker_mode=self._broker_mode(),
                 is_real_broker=True,
+                is_demo_account=is_demo_account,
                 terminal_name="MetaTrader5",
                 account_id_hash=self._account_id_hash(),
                 server=self.server,
@@ -450,6 +530,8 @@ class MT5Bridge(BrokerBridge):
         if not self.is_connected():
             return False
         if self._live_gate_block() is not None:
+            return False
+        if self._terminal_permission_block(f"close-{ticket}") is not None:
             return False
         try:
             # Get position to determine close direction
@@ -520,6 +602,10 @@ class MT5Bridge(BrokerBridge):
         gate_block = self._live_gate_block(order_ref)
         if gate_block is not None:
             return gate_block
+        permission_block = self._terminal_permission_block(order_ref)
+        if permission_block is not None:
+            return permission_block
+        is_demo_account = self.is_demo_account()
         try:
             positions = self._mt5.positions_get(ticket=ticket)
             if not positions:
@@ -530,6 +616,7 @@ class MT5Bridge(BrokerBridge):
                     timestamp=utc_now(),
                     broker_mode=self._broker_mode(),
                     is_real_broker=True,
+                    is_demo_account=is_demo_account,
                     terminal_name="MetaTrader5",
                     account_id_hash=self._account_id_hash(),
                     server=self.server,
@@ -558,10 +645,12 @@ class MT5Bridge(BrokerBridge):
                     timestamp=utc_now(),
                     broker_mode=self._broker_mode(),
                     is_real_broker=True,
+                    is_demo_account=is_demo_account,
                     terminal_name="MetaTrader5",
                     account_id_hash=self._account_id_hash(),
                     server=self.server,
                     raw_request_hash=_hash_payload(request),
+                    raw_request_snapshot=_request_payload(request),
                 )
             retcode = getattr(result, "retcode", None)
             comment = getattr(result, "comment", "")
@@ -577,10 +666,12 @@ class MT5Bridge(BrokerBridge):
                 timestamp=utc_now(),
                 broker_mode=self._broker_mode(),
                 is_real_broker=True,
+                is_demo_account=is_demo_account,
                 terminal_name="MetaTrader5",
                 account_id_hash=self._account_id_hash(),
                 server=self.server,
                 raw_request_hash=_hash_payload(request),
+                raw_request_snapshot=_request_payload(request),
                 raw_response_hash=_hash_payload(_result_payload(result)),
             )
         except Exception as e:
@@ -591,16 +682,37 @@ class MT5Bridge(BrokerBridge):
                 timestamp=utc_now(),
                 broker_mode=self._broker_mode(),
                 is_real_broker=True,
+                is_demo_account=is_demo_account,
                 terminal_name="MetaTrader5",
                 account_id_hash=self._account_id_hash(),
                 server=self.server,
             )
 
+    def order_send_permission_state(self) -> dict[str, Any]:
+        """Current terminal/account ability to accept ``order_send``.
+
+        This is terminal capability only. It does not authorize CAS live
+        trading and does not call ``order_send``.
+        """
+
+        if self._mt5 is None:
+            return {}
+        try:
+            return build_mt5_permission_state(
+                self._mt5.terminal_info(),
+                self._mt5.account_info(),
+                is_demo=self.is_demo_account(),
+            )
+        except Exception:
+            return {}
+
     def _slippage_points_to_pips(self, symbol: str, points: int) -> float:
         """Convert MT5 deviation points to forex pips for evidence checks."""
         point_size = None
         if self._mt5 is not None and hasattr(self._mt5, "symbol_info"):
-            for candidate in (symbol, symbol.replace("/", "")):
+            resolved = str((self.last_symbol_resolution or {}).get("selected_symbol") or "")
+            candidates = [resolved, symbol, symbol.replace("/", "")]
+            for candidate in [value for value in candidates if value]:
                 try:
                     info = self._mt5.symbol_info(candidate)
                     point_size = getattr(info, "point", None) if info is not None else None
@@ -614,7 +726,7 @@ class MT5Bridge(BrokerBridge):
         return float(points) / 10.0
 
     def _broker_mode(self) -> BrokerMode:
-        return BrokerMode.LIVE_MT5 if _effective_config().live_mode else BrokerMode.PAPER_MT5
+        return BrokerMode.PAPER_MT5 if self.is_demo_account() else BrokerMode.LIVE_MT5
 
     def _account_id_hash(self) -> Optional[str]:
         if not self.login:
@@ -637,15 +749,103 @@ class MT5Bridge(BrokerBridge):
                     "volume": p.volume,
                     "open_price": p.price_open,
                     "current_price": p.price_current,
+                    "stop_loss": getattr(p, "sl", 0.0),
+                    "take_profit": getattr(p, "tp", 0.0),
                     "profit": p.profit,
                     "swap": p.swap,
                     "comment": p.comment,
+                    "opened_at_iso": _position_opened_at_iso(p),
                 }
                 for p in positions
                 if "CAS" in (p.comment or "")
             ]
         except Exception:
             return []
+
+    def get_all_open_positions(self) -> list:
+        """List every open MT5 position, including manual/outside-CAS rows."""
+        if not self.is_connected():
+            return []
+        try:
+            positions = self._mt5.positions_get()
+            if not positions:
+                return []
+            return [
+                {
+                    "ticket": p.ticket,
+                    "symbol": p.symbol,
+                    "type": "BUY" if p.type == 0 else "SELL",
+                    "volume": p.volume,
+                    "open_price": p.price_open,
+                    "current_price": p.price_current,
+                    "stop_loss": getattr(p, "sl", 0.0),
+                    "take_profit": getattr(p, "tp", 0.0),
+                    "profit": p.profit,
+                    "swap": getattr(p, "swap", 0.0),
+                    "comment": getattr(p, "comment", ""),
+                    "opened_at_iso": _position_opened_at_iso(p),
+                }
+                for p in positions
+            ]
+        except Exception:
+            return []
+
+    def get_pending_orders(self) -> list:
+        """List pending MT5 orders for emergency review/cancel."""
+        if not self.is_connected():
+            return []
+        try:
+            orders = self._mt5.orders_get()
+            if not orders:
+                return []
+            return [
+                {
+                    "ticket": getattr(order, "ticket", getattr(order, "order", 0)),
+                    "symbol": getattr(order, "symbol", ""),
+                    "type": getattr(order, "type", ""),
+                    "volume": getattr(order, "volume_current", getattr(order, "volume_initial", 0.0)),
+                    "price_open": getattr(order, "price_open", getattr(order, "price", 0.0)),
+                    "comment": getattr(order, "comment", ""),
+                }
+                for order in orders
+            ]
+        except Exception:
+            return []
+
+    def cancel_pending_order(self, ticket: int) -> bool:
+        """Cancel one pending order by ticket.
+
+        A pending-order cancel changes broker state, so connected LIVE accounts
+        use the same owner live-trading and terminal-permission gate as
+        ``execute_order`` and ``close_position`` before ``order_send``.
+        """
+        if not self.is_connected():
+            return False
+        order_ref = f"cancel-{ticket}"
+        if self._live_gate_block(order_ref) is not None:
+            return False
+        if self._terminal_permission_block(order_ref) is not None:
+            return False
+        try:
+            remove_action = getattr(self._mt5, "TRADE_ACTION_REMOVE", None)
+            if remove_action is None:
+                return False
+            request = {
+                "action": remove_action,
+                "order": int(ticket),
+                "magic": 20260601,
+                "comment": "CAS_CANCEL_PENDING",
+            }
+            result = self._mt5.order_send(request)
+            if result is None:
+                return False
+            done = (
+                getattr(result, "retcode", None) == getattr(self._mt5, "TRADE_RETCODE_DONE", None)
+                or getattr(result, "retcode", None) == getattr(self._mt5, "TRADE_RETCODE_DONE_PARTIAL", None)
+            )
+            return bool(done)
+        except Exception:
+            return False
 
     def shutdown(self):
         """Cleanly shut down MT5 connection."""
@@ -672,7 +872,17 @@ class MT5Bridge(BrokerBridge):
             (order.direction, order.order_type.value.upper()), mt5.ORDER_TYPE_BUY
         )
 
-        symbol = broker_symbol(order.symbol)
+        resolution = resolve_broker_symbol(
+            order.symbol,
+            broker=mt5,
+            overrides=getattr(_effective_config(), "mt5_symbol_overrides", ""),
+        )
+        self.last_symbol_resolution = resolution.as_dict()
+        if not resolution.selected_symbol:
+            raise ValueError(resolution.detail or f"MT5 symbol unresolved for {order.symbol}")
+        symbol = resolution.selected_symbol
+        symbol_info = self._safe_symbol_info(symbol)
+        self._validate_broker_contract(order, broker_symbol_value=symbol, info=symbol_info)
 
         # Get current price for market orders
         price = order.price
@@ -681,20 +891,145 @@ class MT5Bridge(BrokerBridge):
             if tick:
                 price = tick.ask if order.direction == Direction.LONG else tick.bid
 
+        sl, tp = self._broker_valid_market_stops(
+            order,
+            broker_symbol_value=symbol,
+            execution_price=float(price) if price > 0 else 0.0,
+            symbol_info=symbol_info,
+        )
+
         return {
             "action": mt5.TRADE_ACTION_DEAL,
             "symbol": symbol,
             "volume": float(order.volume),
             "type": ot,
             "price": float(price) if price > 0 else 0.0,
-            "sl": float(order.stop_loss),
-            "tp": float(order.take_profit),
+            "sl": sl,
+            "tp": tp,
             "deviation": order.slippage,
             "magic": order.magic_number,
             "comment": order.comment[:27],
             "type_time": mt5.ORDER_TIME_GTC,
             "type_filling": self._symbol_filling_mode(symbol),
         }
+
+    def _broker_valid_market_stops(
+        self,
+        order: BrokerOrderRequest,
+        *,
+        broker_symbol_value: str,
+        execution_price: float,
+        symbol_info: Any = None,
+    ) -> tuple[float, float]:
+        """Return SL/TP widened to the broker's minimum market stop distance.
+
+        MT5 rejects market orders with retcode 10016 ("Invalid stops") when the
+        submitted SL/TP are closer than the symbol's trade_stops_level or inside
+        the freeze level. Manual index defaults can be valid CAS geometry while
+        still too close for a specific broker symbol, so normalize at the last
+        broker-aware point before order_send.
+        """
+        sl = float(order.stop_loss)
+        tp = float(order.take_profit)
+        if execution_price <= 0:
+            return sl, tp
+        info = symbol_info if symbol_info is not None else self._safe_symbol_info(broker_symbol_value)
+        point = _positive_float(getattr(info, "point", None)) or price_unit_size(order.symbol)
+        stops_level = _positive_float(getattr(info, "trade_stops_level", None))
+        if stops_level is None:
+            stops_level = _positive_float(getattr(info, "stops_level", None)) or 0.0
+        freeze_level = _positive_float(getattr(info, "trade_freeze_level", None)) or 0.0
+        min_distance = max(stops_level, freeze_level) * point
+        required = max(min_distance + point, point)
+        if order.direction == Direction.LONG:
+            if sl >= execution_price:
+                raise ValueError(
+                    "MT5 market price invalidates order geometry: "
+                    f"LONG {order.symbol} requires stop_loss < current ask < take_profit "
+                    f"(stop_loss={sl}, current={execution_price}, take_profit={tp})"
+                )
+            if tp <= execution_price:
+                raise ValueError(
+                    "MT5 market price invalidates order geometry: "
+                    f"LONG {order.symbol} requires stop_loss < current ask < take_profit "
+                    f"(stop_loss={sl}, current={execution_price}, take_profit={tp})"
+                )
+            if (execution_price - sl) < required:
+                sl = execution_price - required
+            if (tp - execution_price) < required:
+                tp = execution_price + required
+        else:
+            if sl <= execution_price:
+                raise ValueError(
+                    "MT5 market price invalidates order geometry: "
+                    f"SHORT {order.symbol} requires take_profit < current bid < stop_loss "
+                    f"(take_profit={tp}, current={execution_price}, stop_loss={sl})"
+                )
+            if tp >= execution_price:
+                raise ValueError(
+                    "MT5 market price invalidates order geometry: "
+                    f"SHORT {order.symbol} requires take_profit < current bid < stop_loss "
+                    f"(take_profit={tp}, current={execution_price}, stop_loss={sl})"
+                )
+            if (sl - execution_price) < required:
+                sl = execution_price + required
+            if (execution_price - tp) < required:
+                tp = execution_price - required
+        sl = self._round_broker_price(order.symbol, sl, info)
+        tp = self._round_broker_price(order.symbol, tp, info)
+        return sl, tp
+
+    def _safe_symbol_info(self, broker_symbol_value: str) -> Any:
+        try:
+            return self._mt5.symbol_info(broker_symbol_value) if self._mt5 is not None else None
+        except Exception:
+            return None
+
+    def _validate_broker_contract(
+        self,
+        order: BrokerOrderRequest,
+        *,
+        broker_symbol_value: str,
+        info: Any,
+    ) -> None:
+        """Reject order sizes the connected MT5 symbol contract cannot accept."""
+        if info is None:
+            return
+        mt5 = self._mt5
+        disabled_const = getattr(mt5, "SYMBOL_TRADE_MODE_DISABLED", None) if mt5 is not None else None
+        trade_mode = getattr(info, "trade_mode", None)
+        if disabled_const is not None and trade_mode == disabled_const:
+            raise ValueError(f"MT5 broker symbol reject: {broker_symbol_value} is disabled for trading.")
+
+        volume = float(order.volume)
+        min_lot = _positive_float(getattr(info, "volume_min", None))
+        max_lot = _positive_float(getattr(info, "volume_max", None))
+        step = _positive_float(getattr(info, "volume_step", None))
+        if min_lot is not None and volume < min_lot - 1e-9:
+            raise ValueError(
+                "MT5 broker contract reject: "
+                f"{broker_symbol_value} volume {volume:g} is below broker minimum {min_lot:g}."
+            )
+        if max_lot is not None and volume > max_lot + 1e-9:
+            raise ValueError(
+                "MT5 broker contract reject: "
+                f"{broker_symbol_value} volume {volume:g} exceeds broker maximum {max_lot:g}."
+            )
+        if step is not None and not _volume_matches_step(volume, min_lot or 0.0, step):
+            raise ValueError(
+                "MT5 broker contract reject: "
+                f"{broker_symbol_value} volume {volume:g} does not align with broker volume_step {step:g}."
+            )
+
+    @staticmethod
+    def _round_broker_price(cas_symbol: str, price: float, info: Any = None) -> float:
+        digits = getattr(info, "digits", None)
+        try:
+            if digits is not None:
+                return round(float(price), int(digits))
+        except (TypeError, ValueError):
+            pass
+        return float(round_price(cas_symbol, float(price)))
 
     def _symbol_filling_mode(self, symbol: str) -> int:
         """Return the MT5 order filling constant supported by this symbol."""
@@ -827,7 +1162,7 @@ class MT4EABridge(BrokerBridge):
             order_ref=order.order_id,
             status=OrderStatus.PENDING,
             broker_mode=BrokerMode.PAPER_MT4,
-            is_real_broker=True,
+            is_real_broker=False,
             terminal_name="MetaTrader4-EA",
             raw_request_hash=payload["intent_hash"],
         )
@@ -883,7 +1218,7 @@ class MT4EABridge(BrokerBridge):
             broker_ticket=ticket,
             status=OrderStatus.PENDING,
             broker_mode=BrokerMode.PAPER_MT4,
-            is_real_broker=True,
+            is_real_broker=False,
             terminal_name="MetaTrader4-EA",
             raw_request_hash=command["raw_request_hash"],
         )
@@ -920,8 +1255,13 @@ class SimulatedBrokerBridge(BrokerBridge):
         max_lot: float = 1.0,
         min_stop_distance_pips: float = 5.0,
         margin_per_lot: float = 1000.0,
+        state_path: Optional[Path | str] = None,
+        closed_ticket_ledger_path: Optional[Path | str] = None,
     ):
         self._positions: Dict[int, dict] = {}
+        self._close_events: list[dict[str, Any]] = []
+        self._void_events: list[dict[str, Any]] = []
+        self._order_reference_prices: Dict[str, float] = {}
         self._ticket_counter = 100000
         self._balance = 10000.0
         self._equity = 10000.0
@@ -935,11 +1275,20 @@ class SimulatedBrokerBridge(BrokerBridge):
         self.max_lot = max_lot
         self.min_stop_distance_pips = min_stop_distance_pips
         self.margin_per_lot = margin_per_lot
+        self._state_path = Path(state_path) if state_path is not None else None
+        self._closed_ticket_ledger_path = (
+            Path(closed_ticket_ledger_path)
+            if closed_ticket_ledger_path is not None
+            else None
+        )
+        self._state_lock = threading.RLock()
+        self._load_persistent_state()
 
     def is_connected(self) -> bool:
         return True
 
     def get_account_info(self) -> Dict[str, float]:
+        self._refresh_persistent_state()
         return {
             "balance": self._balance,
             "equity": self._equity,
@@ -949,20 +1298,47 @@ class SimulatedBrokerBridge(BrokerBridge):
         }
 
     def execute_order(self, order: BrokerOrderRequest) -> OrderOutcome:
+        self._refresh_persistent_state()
         rejection = self._reject_reason(order)
         if rejection is not None:
             message, lock_reason = rejection
             return self._rejected(order, message, lock_reason=lock_reason)
 
+        existing = next(
+            (
+                (ticket, position)
+                for ticket, position in self._positions.items()
+                if position["order"].order_id == order.order_id
+            ),
+            None,
+        )
+        if existing is not None:
+            ticket, position = existing
+            return OrderOutcome(
+                order_ref=order.order_id,
+                broker_ticket=ticket,
+                status=OrderStatus.REJECTED,
+                filled_price=float(position["fill_price"]),
+                error_message="Simulated broker duplicate order_id rejected",
+                is_duplicate=True,
+                broker_mode=BrokerMode.SIMULATED,
+                is_real_broker=False,
+                raw_request_hash=_hash_payload(order.model_dump(mode="json")),
+            )
+
         partial = order.volume > self.max_lot
         filled_volume = min(order.volume, self.max_lot)
-        ticket = self._ticket_counter
-        self._ticket_counter += 1
+        ticket = self._stable_ticket(order.order_id)
 
+        reference_price = self._order_reference_prices.pop(str(order.order_id), None)
         fill_price = order.price if order.price > 0 else (
-            order.stop_loss * 1.0005
-            if order.direction == Direction.LONG
-            else order.stop_loss * 0.9995
+            float(reference_price)
+            if reference_price is not None and float(reference_price) > 0
+            else (
+                order.stop_loss * 1.0005
+                if order.direction == Direction.LONG
+                else order.stop_loss * 0.9995
+            )
         )
         slip = self.simulated_slippage_pips / pip_multiplier(order.symbol)
         fill_price = fill_price + slip if order.direction == Direction.LONG else fill_price - slip
@@ -973,6 +1349,7 @@ class SimulatedBrokerBridge(BrokerBridge):
             "volume": filled_volume,
             "timestamp": utc_now(),
         }
+        self._persist_state()
 
         return OrderOutcome(
             order_ref=order.order_id,
@@ -993,6 +1370,25 @@ class SimulatedBrokerBridge(BrokerBridge):
                 "partial": partial,
             }),
         )
+
+    def _stable_ticket(self, order_id: str) -> int:
+        """Stable positive ticket with collision probing across this bridge.
+
+        A fresh simulator used to restart at ticket 100000 every cycle, causing
+        unrelated paper attempts to collapse into one outcome-ledger identity.
+        Binding the ticket to the order id keeps attribution stable even if the
+        process later recreates the bridge.
+        """
+
+        digest = hashlib.sha256(str(order_id).encode("utf-8")).hexdigest()
+        ticket = 100_000_000 + (int(digest[:16], 16) % 900_000_000)
+        while ticket in self._positions:
+            existing = self._positions[ticket]["order"].order_id
+            if existing == order_id:
+                return ticket
+            ticket = 100_000_000 + ((ticket - 100_000_000 + 1) % 900_000_000)
+        self._ticket_counter = max(self._ticket_counter, ticket + 1)
+        return ticket
 
     def _reject_reason(self, order: BrokerOrderRequest) -> Optional[Tuple[str, Optional[BrokerLockReason]]]:
         if not self.market_open:
@@ -1050,6 +1446,7 @@ class SimulatedBrokerBridge(BrokerBridge):
         stored position as overrides so subsequent ``get_open_positions`` reflect
         the locked stop.
         """
+        self._refresh_persistent_state()
         order_ref = f"modify-{ticket}"
         pos = self._positions.get(ticket)
         if pos is None:
@@ -1063,6 +1460,7 @@ class SimulatedBrokerBridge(BrokerBridge):
         pos["stop_loss"] = float(stop_loss)
         if take_profit is not None:
             pos["take_profit"] = float(take_profit)
+        self._persist_state()
         return OrderOutcome(
             order_ref=order_ref,
             broker_ticket=ticket,
@@ -1080,12 +1478,65 @@ class SimulatedBrokerBridge(BrokerBridge):
         )
 
     def close_position(self, ticket: int, volume: Optional[float] = None) -> bool:
-        if ticket in self._positions:
+        self._refresh_persistent_state()
+        pos = self._positions.get(ticket)
+        if pos is None:
+            return False
+        current_volume = float(pos.get("volume", pos["order"].volume))
+        if volume is None or float(volume) >= current_volume - 1e-12:
+            self._record_close_event(
+                ticket,
+                pos,
+                closed_volume=current_volume,
+                remaining_volume=0.0,
+                full_close=True,
+            )
             del self._positions[ticket]
+            self._persist_state()
             return True
+        close_volume = float(volume)
+        if close_volume <= 0:
+            return False
+        remaining = round(current_volume - close_volume, 8)
+        self._record_close_event(
+            ticket,
+            pos,
+            closed_volume=close_volume,
+            remaining_volume=remaining,
+            full_close=False,
+        )
+        pos["volume"] = remaining
+        self._persist_state()
+        return True
+
+    def set_reference_price(self, ticket: int, price: float) -> bool:
+        """Attach the fresh management quote used for a simulated close."""
+
+        self._refresh_persistent_state()
+        pos = self._positions.get(int(ticket))
+        if pos is None or float(price) <= 0:
+            return False
+        pos["current_price"] = float(price)
+        self._persist_state()
+        return True
+
+    def set_order_reference_price(self, order_id: str, price: float) -> bool:
+        """Attach the fresh side-specific quote used for a simulated market fill."""
+
+        try:
+            parsed = float(price)
+        except (TypeError, ValueError):
+            return False
+        if not str(order_id or "").strip() or parsed <= 0:
+            return False
+        self._order_reference_prices[str(order_id)] = parsed
+        return True
+
+    def cancel_pending_order(self, ticket: int) -> bool:
         return False
 
     def get_open_positions(self) -> list:
+        self._refresh_persistent_state()
         return [
             {
                 "ticket": t,
@@ -1093,13 +1544,229 @@ class SimulatedBrokerBridge(BrokerBridge):
                 "type": p["order"].direction.value,
                 "volume": p.get("volume", p["order"].volume),
                 "open_price": p["fill_price"],
-                "current_price": p["fill_price"],
+                "current_price": p.get("current_price", p["fill_price"]),
+                "stop_loss": p.get("stop_loss", p["order"].stop_loss),
+                "take_profit": p.get("take_profit", p["order"].take_profit),
                 "profit": 0.0,
                 "swap": 0.0,
                 "comment": p["order"].comment,
+                "opened_at_iso": (
+                    p.get("timestamp").isoformat()
+                    if isinstance(p.get("timestamp"), datetime)
+                    else None
+                ),
             }
             for t, p in self._positions.items()
         ]
+
+    def get_all_open_positions(self) -> list:
+        return self.get_open_positions()
+
+    def get_pending_orders(self) -> list:
+        return []
+
+    def void_position(
+        self,
+        ticket: int,
+        *,
+        reason: str,
+        evidence: Optional[Mapping[str, Any]] = None,
+    ) -> bool:
+        """Quarantine a corrupted paper position without fabricating a close/P&L."""
+
+        self._refresh_persistent_state()
+        try:
+            key = int(ticket)
+        except (TypeError, ValueError):
+            return False
+        position = self._positions.pop(key, None)
+        if position is None:
+            return False
+        order = position["order"]
+        self._void_events.append(
+            {
+                "broker_ticket": str(key),
+                "order_id": order.order_id,
+                "decision_ref": order.decision_ref,
+                "symbol": order.symbol,
+                "direction": order.direction.value,
+                "volume": float(position.get("volume", order.volume)),
+                "fill_price": float(position["fill_price"]),
+                "opened_at": (
+                    position["timestamp"].isoformat()
+                    if isinstance(position.get("timestamp"), datetime)
+                    else str(position.get("timestamp") or "")
+                ),
+                "voided_at": utc_now().isoformat(),
+                "reason": str(reason),
+                "evidence": dict(evidence or {}),
+                "claim_boundary": (
+                    "A void event preserves a corrupted simulated position as audit "
+                    "evidence. It is not a market close and creates no realized P&L."
+                ),
+            }
+        )
+        self._persist_state()
+        return True
+
+    def get_void_events(self) -> list[dict[str, Any]]:
+        self._refresh_persistent_state()
+        return [dict(row) for row in self._void_events]
+
+    def _refresh_persistent_state(self) -> None:
+        if self._state_path is None:
+            return
+        with self._state_lock:
+            self._load_persistent_state()
+            if self._drop_closed_paper_tickets():
+                self._persist_state()
+
+    def _load_persistent_state(self) -> None:
+        if self._state_path is None or not self._state_path.exists():
+            return
+        try:
+            payload = json.loads(self._state_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return
+        if not isinstance(payload, dict):
+            return
+        loaded: Dict[int, dict] = {}
+        rows = payload.get("positions") if isinstance(payload.get("positions"), dict) else {}
+        for raw_ticket, raw in rows.items():
+            if not isinstance(raw, dict) or not isinstance(raw.get("order"), dict):
+                continue
+            try:
+                ticket = int(raw_ticket)
+                order = BrokerOrderRequest.model_validate(raw["order"])
+                timestamp = datetime.fromisoformat(str(raw.get("timestamp") or "").replace("Z", "+00:00"))
+                loaded[ticket] = {
+                    "order": order,
+                    "fill_price": float(raw.get("fill_price")),
+                    "volume": float(raw.get("volume", order.volume)),
+                    "timestamp": timestamp,
+                }
+                if raw.get("current_price") not in (None, ""):
+                    loaded[ticket]["current_price"] = float(raw["current_price"])
+                if raw.get("stop_loss") not in (None, ""):
+                    loaded[ticket]["stop_loss"] = float(raw["stop_loss"])
+                if raw.get("take_profit") not in (None, ""):
+                    loaded[ticket]["take_profit"] = float(raw["take_profit"])
+            except (TypeError, ValueError):
+                continue
+        self._positions = loaded
+        self._close_events = [
+            dict(row)
+            for row in (payload.get("close_events") or [])
+            if isinstance(row, dict)
+        ]
+        self._void_events = [
+            dict(row)
+            for row in (payload.get("void_events") or [])
+            if isinstance(row, dict)
+        ]
+        self._balance = float(payload.get("balance", self._balance))
+        self._equity = float(payload.get("equity", self._equity))
+        self._ticket_counter = int(payload.get("ticket_counter", self._ticket_counter))
+
+    def _persist_state(self) -> None:
+        if self._state_path is None:
+            return
+        with self._state_lock:
+            payload = {
+                "report_kind": "cas_forex_simulated_broker_state",
+                "updated_at": utc_now().isoformat(),
+                "balance": self._balance,
+                "equity": self._equity,
+                "ticket_counter": self._ticket_counter,
+                "open_position_count": len(self._positions),
+                "close_event_count": len(self._close_events),
+                "close_events": list(self._close_events),
+                "void_event_count": len(self._void_events),
+                "void_events": list(self._void_events),
+                "positions": {
+                    str(ticket): {
+                        "order": position["order"].model_dump(mode="json"),
+                        "fill_price": position["fill_price"],
+                        "volume": position.get("volume", position["order"].volume),
+                        "timestamp": (
+                            position["timestamp"].isoformat()
+                            if isinstance(position.get("timestamp"), datetime)
+                            else str(position.get("timestamp") or "")
+                        ),
+                        "current_price": position.get("current_price"),
+                        "stop_loss": position.get("stop_loss"),
+                        "take_profit": position.get("take_profit"),
+                    }
+                    for ticket, position in self._positions.items()
+                },
+                "claim_boundary": (
+                    "Durable internal paper broker state contains simulated positions only. "
+                    "It cannot authorize or reach a live broker account."
+                ),
+            }
+            self._state_path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = self._state_path.with_suffix(
+                f"{self._state_path.suffix}.{os.getpid()}.{threading.get_ident()}.tmp"
+            )
+            tmp.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+            tmp.replace(self._state_path)
+
+    def _record_close_event(
+        self,
+        ticket: int,
+        position: dict[str, Any],
+        *,
+        closed_volume: float,
+        remaining_volume: float,
+        full_close: bool,
+    ) -> None:
+        sequence = 1 + sum(
+            1 for row in self._close_events if str(row.get("parent_broker_ticket")) == str(ticket)
+        )
+        event_ticket = str(ticket) if full_close else f"{ticket}:partial:{sequence}"
+        self._close_events.append(
+            {
+                "event_ticket": event_ticket,
+                "parent_broker_ticket": str(ticket),
+                "order_id": position["order"].order_id,
+                "decision_ref": position["order"].decision_ref,
+                "symbol": position["order"].symbol,
+                "direction": position["order"].direction.value,
+                "entry": float(position["fill_price"]),
+                "exit": float(position.get("current_price", position["fill_price"])),
+                "closed_volume": float(closed_volume),
+                "remaining_volume": float(remaining_volume),
+                "full_close": bool(full_close),
+                "opened_at": (
+                    position["timestamp"].isoformat()
+                    if isinstance(position.get("timestamp"), datetime)
+                    else str(position.get("timestamp") or "")
+                ),
+                "closed_at": utc_now().isoformat(),
+                "source": "AI_HEDGE_SIMULATED_MANAGEMENT",
+            }
+        )
+
+    def _drop_closed_paper_tickets(self) -> bool:
+        path = self._closed_ticket_ledger_path
+        if path is None or not path.exists() or not self._positions:
+            return False
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return False
+        if not isinstance(payload, dict):
+            return False
+        closed = {
+            str(row.get("broker_ticket"))
+            for row in (payload.get("history_records") or [])
+            if isinstance(row, dict) and row.get("broker_ticket") not in (None, "")
+        }
+        closed.update(str(ticket) for ticket in (payload.get("unresolvable") or {}))
+        remove = [ticket for ticket in self._positions if str(ticket) in closed]
+        for ticket in remove:
+            self._positions.pop(ticket, None)
+        return bool(remove)
 
 
 def get_bridge() -> BrokerBridge:
@@ -1146,9 +1813,48 @@ def _enforce_live_legal_gates() -> None:
     runtime_gates.require_authorized("live_trading", cfg)
 
 
+def _positive_float(value: Any) -> Optional[float]:
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed > 0 else None
+
+
+def _volume_matches_step(volume: float, min_lot: float, step: float) -> bool:
+    if step <= 0:
+        return True
+    base = min_lot if min_lot > 0 else 0.0
+    if volume < base - 1e-9:
+        return False
+    steps = (volume - base) / step
+    return abs(steps - round(steps)) <= 1e-8
+
+
 def _hash_payload(payload) -> str:
     blob = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+def _request_payload(request: Any) -> dict[str, Any]:
+    if not isinstance(request, dict):
+        return {}
+    allowed = {
+        "action",
+        "symbol",
+        "volume",
+        "type",
+        "position",
+        "price",
+        "sl",
+        "tp",
+        "deviation",
+        "magic",
+        "comment",
+        "type_time",
+        "type_filling",
+    }
+    return {str(k): v for k, v in request.items() if k in allowed}
 
 
 def _result_payload(result) -> dict:

@@ -10,13 +10,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable, Mapping, Optional
+from typing import Any, Callable, Iterable, Mapping, Optional
 
 from cas_forex.ai_control_authority import AiControlAuthority, get_authority
 from cas_forex.config import config
 from cas_forex.directional_intelligence import (
     DIRECTIONAL_PROFILES,
     analyze_market_state,
+    candidate_from_hypothesis,
     normalize_candles,
     score_direction,
     strategize_market_state,
@@ -46,6 +47,8 @@ DEFAULT_COST_PIPS = 1.5
 DEFAULT_WASTE_SCAN_CANDIDATES = 8
 MAX_WASTE_SCAN_CANDIDATES = 32
 COMMON_MT5_TERMINAL_PATHS = (
+    r"C:\Program Files\Risen MT5 Terminal\terminal64.exe",
+    r"C:\Program Files (x86)\Risen MT5 Terminal\terminal64.exe",
     r"C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe",
     r"C:\Program Files (x86)\Hugosway\Hugosway PRO5 Terminal\terminal64.exe",
     r"C:\Program Files\MetaTrader 5\terminal64.exe",
@@ -684,7 +687,14 @@ def build_waste_market_state_scan(
     max_pairs: int = DEFAULT_MAX_ENTRY_PAIRS,
     strategy_leads_path: Path | str = LEDGER_PATH,
     max_scan_candidates: int | None = None,
+    allowed_symbols: Optional[Iterable[str]] = None,
     threshold: float | None = None,
+    candidate_state_transform: Optional[
+        Callable[[Mapping[str, Any]], Mapping[str, Any]]
+    ] = None,
+    candidate_block_reason: Optional[
+        Callable[[Mapping[str, Any], Mapping[str, Any]], Optional[str]]
+    ] = None,
 ) -> dict[str, Any]:
     """Fetch the best WASTE-ready state from eligible paper scan lanes.
 
@@ -699,6 +709,7 @@ def build_waste_market_state_scan(
         requested_timeframe=timeframe,
         strategy_leads_path=strategy_leads_path,
         max_scan_candidates=max_scan_candidates,
+        allowed_symbols=allowed_symbols,
     )
     if not candidates:
         state = build_waste_market_state(
@@ -723,7 +734,8 @@ def build_waste_market_state_scan(
     attempts: list[dict[str, Any]] = []
     selected_state: dict[str, Any] | None = None
     selected_edge: dict[str, Any] = {}
-    selected_score: tuple[int, int, int, float, float] | None = None
+    selected_score: tuple[int, int, int, int, float, float] | None = None
+    selected_block_reason = ""
 
     for candidate in candidates:
         state = build_waste_market_state(
@@ -736,15 +748,58 @@ def build_waste_market_state_scan(
             max_pairs=max_pairs,
             strategy_leads_path=strategy_leads_path,
         )
-        edge = _edge_preview_for_state(state, threshold=scan_threshold)
-        attempt = _market_scan_attempt(candidate, state, edge)
+        transform_error = ""
+        if candidate_state_transform is not None:
+            try:
+                transformed = candidate_state_transform(state)
+                if not isinstance(transformed, Mapping):
+                    raise TypeError("candidate state transform did not return a mapping")
+                state = dict(transformed)
+            except Exception as exc:
+                transform_error = (
+                    "candidate state transform failed closed: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+        edge = (
+            _edge_preview_for_state(state, threshold=scan_threshold)
+            if not transform_error
+            else {
+                "status": "PREVIEW_ERROR",
+                "has_edge_token": False,
+                "reason": transform_error,
+            }
+        )
+        block_reason = transform_error
+        if not block_reason and candidate_block_reason is not None:
+            try:
+                block_reason = str(candidate_block_reason(state, edge) or "").strip()
+            except Exception as exc:
+                block_reason = (
+                    "candidate actionability check failed closed: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+        attempt = _market_scan_attempt(
+            candidate,
+            state,
+            edge,
+            candidate_block_reason=block_reason,
+        )
         attempts.append(attempt)
-        score = _market_scan_score(state, edge)
+        score = _market_scan_score(
+            state,
+            edge,
+            candidate_block_reason=block_reason,
+        )
         if selected_score is None or score > selected_score:
             selected_state = state
             selected_edge = edge
             selected_score = score
-        if str(edge.get("status") or "") == "PASS" and bool(edge.get("has_edge_token", False)):
+            selected_block_reason = block_reason
+        if (
+            not block_reason
+            and str(edge.get("status") or "") == "PASS"
+            and bool(edge.get("has_edge_token", False))
+        ):
             break
 
     if selected_state is None:
@@ -759,16 +814,22 @@ def build_waste_market_state_scan(
             strategy_leads_path=strategy_leads_path,
         )
 
-    status = (
-        "WASTE_MARKET_SCAN_PASS_PREVIEW"
-        if str(selected_edge.get("status") or "") == "PASS" and bool(selected_edge.get("has_edge_token", False))
-        else "WASTE_MARKET_SCAN_NO_PASS"
+    selected_has_pass = (
+        str(selected_edge.get("status") or "") == "PASS"
+        and bool(selected_edge.get("has_edge_token", False))
     )
+    if selected_block_reason:
+        status = "WASTE_MARKET_SCAN_NO_ACTIONABLE_ROUTE"
+    elif selected_has_pass:
+        status = "WASTE_MARKET_SCAN_PASS_PREVIEW"
+    else:
+        status = "WASTE_MARKET_SCAN_NO_PASS"
     selected_state["waste_market_scan"] = _market_scan_report(
         status=status,
         attempts=attempts,
         selected_state=selected_state,
         selected_edge=selected_edge,
+        selected_candidate_block_reason=selected_block_reason,
     )
     return selected_state
 
@@ -780,10 +841,18 @@ def _waste_market_scan_candidates(
     requested_timeframe: Optional[str],
     strategy_leads_path: Path | str,
     max_scan_candidates: int | None,
+    allowed_symbols: Optional[Iterable[str]] = None,
 ) -> list[dict[str, Any]]:
     limit = _clamp_scan_candidate_limit(max_scan_candidates)
     requested_tf = _optional_text(requested_timeframe)
+    allowed = (
+        None
+        if allowed_symbols is None
+        else {str(item) for item in allowed_symbols if str(item).strip()}
+    )
     if requested_symbol:
+        if allowed is not None and str(requested_symbol) not in allowed:
+            return []
         return [
             {
                 "symbol": str(requested_symbol),
@@ -807,6 +876,8 @@ def _waste_market_scan_candidates(
             symbols = _strings(lead.get("symbols_promoted_for_next_tests"))
             timeframes = [requested_tf] if requested_tf else _lead_preferred_timeframes(lead)
             for sym in symbols:
+                if allowed is not None and sym not in allowed:
+                    continue
                 for tf in timeframes:
                     if not sym or not tf:
                         continue
@@ -828,7 +899,7 @@ def _waste_market_scan_candidates(
     # has FX pairs enabled. Previously these lanes were used only when no lead
     # produced a candidate at all.
     for sym in authority.control.get("symbols") or []:
-        if sym:
+        if sym and (allowed is None or str(sym) in allowed):
             candidates.append(
                 {
                     "symbol": str(sym),
@@ -875,6 +946,12 @@ def _edge_preview_for_state(state: Mapping[str, Any], *, threshold: float) -> di
                 "has_edge_token": False,
                 "reason": _analysis_reason(analysis) or "strategize produced no candidate",
                 "analysis_confidence": _float_value(_mapping(analysis).get("confidence"), 0.0),
+                **_directional_preview_fields(analysis),
+                **_shadow_edge_preview_for_below_floor(
+                    state,
+                    analysis,
+                    threshold=threshold,
+                ),
             }
         gate_setup = _gate_setup_from_candidate(setup)
         if gate_setup is None:
@@ -896,8 +973,13 @@ def _edge_preview_for_state(state: Mapping[str, Any], *, threshold: float) -> di
             "candidate_symbol": gate_setup.symbol,
             "candidate_timeframe": gate_setup.timeframe,
             "candidate_direction": gate_setup.direction,
+            "candidate_entry": gate_setup.entry,
+            "candidate_stop_loss": gate_setup.stop_loss,
+            "candidate_take_profit": gate_setup.take_profit,
+            "candidate_regime": gate_setup.regime,
             "candidate_decision_ref": gate_setup.decision_ref,
             "entry_pair_count": len(entry_pairs),
+            **_directional_preview_fields(analysis),
         }
     except Exception as exc:
         return {
@@ -907,10 +989,80 @@ def _edge_preview_for_state(state: Mapping[str, Any], *, threshold: float) -> di
         }
 
 
+def _shadow_edge_preview_for_below_floor(
+    state: Mapping[str, Any],
+    analysis: Mapping[str, Any],
+    *,
+    threshold: float,
+) -> dict[str, Any]:
+    """Evaluate a below-floor setup without exposing a token or forming a route."""
+
+    if str(analysis.get("candidate_formation_status") or "") != "BELOW_DIRECTIONAL_FLOOR":
+        return {}
+    hypothesis = _mapping(analysis.get("hypothesis"))
+    profile = str(hypothesis.get("profile") or "blend")
+    candles = state.get("candles") or []
+    symbol = str(state.get("symbol") or "")
+    timeframe = str(state.get("timeframe") or "M15")
+    try:
+        shadow_hypothesis = score_direction(
+            candles,
+            symbol=symbol,
+            timeframe=timeframe,
+            authority=get_authority(),
+            min_confidence=0.0,
+            profile=profile,
+        )
+        shadow_setup = candidate_from_hypothesis(
+            shadow_hypothesis,
+            candles,
+            entry_pairs=list(state.get("entry_pairs") or []),
+        )
+        gate_setup = _gate_setup_from_candidate(shadow_setup)
+        if gate_setup is None:
+            return {
+                "shadow_edge_status": "NO_SHADOW_CANDIDATE",
+                "shadow_edge_preview_unregistered": True,
+                "shadow_has_edge_token": False,
+            }
+        entry_pairs = list(getattr(shadow_setup, "entry_pairs", None) or [])
+        decision = evaluate_candidate(
+            gate_setup,
+            entry_pairs,
+            threshold=threshold,
+            issue_edge_token=False,
+        )
+        return {
+            "shadow_edge_status": decision.status,
+            "shadow_measured_win_prob": float(decision.measured_win_prob),
+            "shadow_null_p95": float(decision.null_p95),
+            "shadow_threshold": float(decision.threshold),
+            "shadow_candidate_direction": gate_setup.direction,
+            "shadow_candidate_entry": gate_setup.entry,
+            "shadow_candidate_stop_loss": gate_setup.stop_loss,
+            "shadow_candidate_take_profit": gate_setup.take_profit,
+            "shadow_entry_pair_count": len(entry_pairs),
+            "shadow_edge_reason": decision.reason,
+            "shadow_edge_preview_unregistered": True,
+            "shadow_edge_authorization_minted": False,
+            "shadow_has_edge_token": False,
+        }
+    except Exception as exc:
+        return {
+            "shadow_edge_status": "SHADOW_PREVIEW_ERROR",
+            "shadow_edge_reason": f"{type(exc).__name__}: {exc}",
+            "shadow_edge_preview_unregistered": True,
+            "shadow_edge_authorization_minted": False,
+            "shadow_has_edge_token": False,
+        }
+
+
 def _market_scan_attempt(
     candidate: Mapping[str, Any],
     state: Mapping[str, Any],
     edge: Mapping[str, Any],
+    *,
+    candidate_block_reason: str = "",
 ) -> dict[str, Any]:
     entry_pairs = state.get("entry_pairs") or []
     candles = state.get("candles") or []
@@ -925,6 +1077,25 @@ def _market_scan_attempt(
         "measured_win_prob": edge.get("measured_win_prob"),
         "null_p95": edge.get("null_p95"),
         "candidate_direction": edge.get("candidate_direction"),
+        "directional_best_direction": edge.get("directional_best_direction"),
+        "directional_score": edge.get("directional_score"),
+        "directional_floor": edge.get("directional_floor"),
+        "directional_margin_to_floor": edge.get("directional_margin_to_floor"),
+        "candidate_formation_status": edge.get("candidate_formation_status"),
+        "shadow_edge_status": edge.get("shadow_edge_status"),
+        "shadow_measured_win_prob": edge.get("shadow_measured_win_prob"),
+        "shadow_null_p95": edge.get("shadow_null_p95"),
+        "shadow_threshold": edge.get("shadow_threshold"),
+        "shadow_candidate_direction": edge.get("shadow_candidate_direction"),
+        "shadow_entry_pair_count": edge.get("shadow_entry_pair_count"),
+        "shadow_edge_reason": edge.get("shadow_edge_reason"),
+        "shadow_edge_preview_unregistered": bool(
+            edge.get("shadow_edge_preview_unregistered", False)
+        ),
+        "shadow_edge_authorization_minted": False,
+        "shadow_has_edge_token": False,
+        "candidate_actionable": not bool(candidate_block_reason),
+        "candidate_block_reason": candidate_block_reason or None,
         "broker_grade_market_truth": bool(state.get("broker_grade_market_truth", False)),
         "fallback_used": bool(state.get("fallback_used", False)),
         "candles_count": len(candles) if isinstance(candles, list) else 0,
@@ -934,13 +1105,20 @@ def _market_scan_attempt(
     }
 
 
-def _market_scan_score(state: Mapping[str, Any], edge: Mapping[str, Any]) -> tuple[int, int, int, float, float]:
+def _market_scan_score(
+    state: Mapping[str, Any],
+    edge: Mapping[str, Any],
+    *,
+    candidate_block_reason: str = "",
+) -> tuple[int, int, int, int, float, float, float]:
     entry_pairs = state.get("entry_pairs") or []
     return (
+        0 if candidate_block_reason else 1,
         1 if str(edge.get("status") or "") == "PASS" and bool(edge.get("has_edge_token", False)) else 0,
         1 if bool(state.get("broker_grade_market_truth", False)) and not bool(state.get("fallback_used", False)) else 0,
         1 if edge.get("candidate_direction") in {"LONG", "SHORT"} else 0,
         _float_value(edge.get("measured_win_prob"), 0.0),
+        _float_value(edge.get("directional_score"), 0.0),
         float(len(entry_pairs) if isinstance(entry_pairs, list) else 0),
     )
 
@@ -951,7 +1129,9 @@ def _market_scan_report(
     attempts: list[dict[str, Any]],
     selected_state: Mapping[str, Any],
     selected_edge: Mapping[str, Any],
+    selected_candidate_block_reason: str = "",
 ) -> dict[str, Any]:
+    entry_stage_summary = _entry_stage_summary(attempts)
     return {
         "report_kind": "cas_forex_waste_market_state_scan",
         "status": status,
@@ -965,14 +1145,19 @@ def _market_scan_report(
         "edge_authorization_registered": False,
         "owner_accept_created": False,
         "money_moved": False,
-        "candidate_source": "strategy_leads ACTIVE_RESEARCH_LEAD symbols/timeframes",
+        "candidate_source": (
+            "strategy_leads ACTIVE_RESEARCH_LEAD plus owner-fenced AI symbol/timeframe lanes"
+        ),
         "attempt_count": len(attempts),
         "attempts": attempts,
+        "entry_stage_summary": entry_stage_summary,
         "selected_symbol": selected_state.get("symbol"),
         "selected_timeframe": selected_state.get("timeframe"),
         "selected_source": selected_state.get("source"),
         "selected_edge_status": selected_edge.get("status"),
         "selected_edge_has_token": bool(selected_edge.get("has_edge_token", False)),
+        "selected_candidate_actionable": not bool(selected_candidate_block_reason),
+        "selected_candidate_block_reason": selected_candidate_block_reason or None,
         "selected_edge_preview_unregistered": True,
         "claim_boundary": (
             "WASTE market-state scan only chooses a read-only WATCH lane. "
@@ -983,8 +1168,120 @@ def _market_scan_report(
         "next_action": (
             "Runner should re-run TEST on the selected lane and remain fail-closed until a fresh PASS is registered."
             if status == "WASTE_MARKET_SCAN_PASS_PREVIEW"
-            else "Continue scanning eligible paper lanes; no selected lane has a PASS preview yet."
+            else (
+                "No candidate is action-time executable; retain every blocker and rescan "
+                "after current quote or one-shot emission conditions change."
+                if status == "WASTE_MARKET_SCAN_NO_ACTIONABLE_ROUTE"
+                else "Continue scanning eligible paper lanes; no selected lane has a PASS preview yet."
+            )
         ),
+    }
+
+
+def _directional_preview_fields(analysis: Any) -> dict[str, Any]:
+    obj = _mapping(analysis)
+    hypothesis = _mapping(obj.get("hypothesis"))
+    long_score = _float_value(hypothesis.get("long_score"), 0.0)
+    short_score = _float_value(hypothesis.get("short_score"), 0.0)
+    score = _float_value(obj.get("directional_score"), max(long_score, short_score))
+    floor = _float_value(obj.get("directional_floor"), 0.18)
+    best_direction = None
+    if max(long_score, short_score) > 0:
+        best_direction = "LONG" if long_score >= short_score else "SHORT"
+    return {
+        "directional_best_direction": best_direction,
+        "directional_score": round(score, 6),
+        "directional_floor": round(floor, 6),
+        "directional_margin_to_floor": round(score - floor, 6),
+        "candidate_formation_status": obj.get("candidate_formation_status"),
+    }
+
+
+def _entry_stage_summary(attempts: list[dict[str, Any]]) -> dict[str, Any]:
+    edge_status_counts: dict[str, int] = {}
+    formation_status_counts: dict[str, int] = {}
+    shadow_edge_status_counts: dict[str, int] = {}
+    strongest: dict[str, Any] | None = None
+    best_shadow_pass: dict[str, Any] | None = None
+    for row in attempts:
+        edge_status = str(row.get("edge_status") or "UNKNOWN")
+        formation_status = str(row.get("candidate_formation_status") or "UNKNOWN")
+        edge_status_counts[edge_status] = edge_status_counts.get(edge_status, 0) + 1
+        formation_status_counts[formation_status] = formation_status_counts.get(formation_status, 0) + 1
+        shadow_status = str(row.get("shadow_edge_status") or "")
+        if shadow_status:
+            shadow_edge_status_counts[shadow_status] = (
+                shadow_edge_status_counts.get(shadow_status, 0) + 1
+            )
+        if shadow_status == "PASS" and (
+            best_shadow_pass is None
+            or (
+                _float_value(row.get("directional_score"), 0.0),
+                _float_value(row.get("shadow_measured_win_prob"), 0.0),
+            )
+            > (
+                _float_value(best_shadow_pass.get("directional_score"), 0.0),
+                _float_value(best_shadow_pass.get("shadow_measured_win_prob"), 0.0),
+            )
+        ):
+            best_shadow_pass = row
+        if strongest is None or _float_value(row.get("directional_score"), 0.0) > _float_value(
+            strongest.get("directional_score"), 0.0
+        ):
+            strongest = row
+    all_below_floor = bool(attempts) and formation_status_counts.get(
+        "BELOW_DIRECTIONAL_FLOOR", 0
+    ) == len(attempts)
+    return {
+        "status": (
+            "ALL_LANES_BELOW_DIRECTIONAL_FLOOR"
+            if all_below_floor
+            else (
+                "DIRECTIONAL_CANDIDATES_REACHED_EDGE_TEST"
+                if any(row.get("candidate_direction") in {"LONG", "SHORT"} for row in attempts)
+                else "NO_EDGE_TEST_CANDIDATE"
+            )
+        ),
+        "edge_status_counts": edge_status_counts,
+        "candidate_formation_status_counts": formation_status_counts,
+        "shadow_edge_status_counts": shadow_edge_status_counts,
+        "shadow_pass_preview_count": shadow_edge_status_counts.get("PASS", 0),
+        "directional_candidate_count": sum(
+            1 for row in attempts if row.get("candidate_direction") in {"LONG", "SHORT"}
+        ),
+        "strongest_rejected_lane": _scan_lane_evidence(strongest),
+        "best_shadow_pass_lane": _scan_lane_evidence(best_shadow_pass),
+        "shadow_pass_selection_basis": (
+            "highest_directional_score_then_measured_win_probability"
+            if best_shadow_pass is not None
+            else None
+        ),
+    }
+
+
+def _scan_lane_evidence(row: Mapping[str, Any] | None) -> dict[str, Any] | None:
+    if row is None:
+        return None
+    return {
+        "symbol": row.get("symbol"),
+        "timeframe": row.get("timeframe"),
+        "direction": row.get("directional_best_direction"),
+        "directional_score": row.get("directional_score"),
+        "directional_floor": row.get("directional_floor"),
+        "margin_to_floor": row.get("directional_margin_to_floor"),
+        "formation_status": row.get("candidate_formation_status"),
+        "shadow_edge_status": row.get("shadow_edge_status"),
+        "shadow_measured_win_prob": row.get("shadow_measured_win_prob"),
+        "shadow_null_p95": row.get("shadow_null_p95"),
+        "shadow_threshold": row.get("shadow_threshold"),
+        "shadow_candidate_direction": row.get("shadow_candidate_direction"),
+        "shadow_entry_pair_count": row.get("shadow_entry_pair_count"),
+        "shadow_edge_reason": row.get("shadow_edge_reason"),
+        "shadow_edge_preview_unregistered": bool(
+            row.get("shadow_edge_preview_unregistered", False)
+        ),
+        "shadow_edge_authorization_minted": False,
+        "shadow_has_edge_token": False,
     }
 
 
@@ -1127,16 +1424,22 @@ def _connector_candidates(connector: Optional[MarketDataConnector]) -> list[Mark
 def _normalize_connector_candles(raw: Iterable[Mapping[str, Any]]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for candle in raw or []:
-        out.append(
-            {
-                "timestamp": str(candle.get("timestamp") or candle.get("time") or ""),
-                "open": float(candle.get("open", 0.0)),
-                "high": float(candle.get("high", 0.0)),
-                "low": float(candle.get("low", 0.0)),
-                "close": float(candle.get("close", 0.0)),
-                "volume": float(candle.get("volume", 0.0)),
-            }
-        )
+        row = {
+            "timestamp": str(candle.get("timestamp") or candle.get("time") or ""),
+            "open": float(candle.get("open", 0.0)),
+            "high": float(candle.get("high", 0.0)),
+            "low": float(candle.get("low", 0.0)),
+            "close": float(candle.get("close", 0.0)),
+            "volume": float(candle.get("volume", 0.0)),
+        }
+        for key in (
+            "raw_timestamp",
+            "timestamp_basis",
+            "mt5_server_utc_offset_seconds",
+        ):
+            if candle.get(key) not in (None, ""):
+                row[key] = candle.get(key)
+        out.append(row)
     return out
 
 
@@ -1247,4 +1550,7 @@ def _connector_diagnostics(connector: MarketDataConnector) -> dict[str, Any]:
     resolution = getattr(connector, "last_symbol_resolution", None)
     if isinstance(resolution, Mapping) and resolution:
         out["symbol_resolution"] = dict(resolution)
+    time_normalization = getattr(connector, "last_time_normalization", None)
+    if isinstance(time_normalization, Mapping) and time_normalization:
+        out["time_normalization"] = dict(time_normalization)
     return out

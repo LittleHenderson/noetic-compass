@@ -1,0 +1,121 @@
+/* Critical Alert Strip */
+
+.critical-alert-strip {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(15, 23, 42, 0.94);
+  color: var(--text-primary);
+}
+
+.critical-alert-strip-warning {
+  border-bottom-color: var(--warning-dim);
+  background: rgba(40, 31, 12, 0.94);
+}
+
+.critical-alert-strip-alert {
+  border-bottom-color: var(--danger-dim);
+  background: rgba(44, 13, 18, 0.94);
+}
+
+.critical-alert-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  color: var(--warning);
+  font-weight: 800;
+  font-size: 0.78rem;
+}
+
+.critical-alert-strip-alert .critical-alert-icon {
+  color: var(--danger);
+}
+
+.critical-alert-content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.critical-alert-headline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.critical-alert-label {
+  color: var(--warning);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.critical-alert-strip-alert .critical-alert-label {
+  color: var(--danger);
+}
+
+.critical-alert-title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.critical-alert-kind {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.critical-alert-body {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.critical-alert-button {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 6px 10px;
+}
+
+.critical-alert-button:hover {
+  border-color: var(--accent-teal-dim);
+  color: var(--accent-teal);
+}
+
+@media (max-width: 680px) {
+  .critical-alert-strip {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 8px 10px;
+  }
+
+  .critical-alert-button {
+    grid-column: 2;
+    justify-self: start;
+  }
+}

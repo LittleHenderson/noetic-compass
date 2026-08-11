@@ -65,6 +65,11 @@ class Preview:
     effects: list[str] = field(default_factory=list)
     blockers: list[str] = field(default_factory=list)
     confirm_phrase: str = "CONFIRM"
+    binding: dict[str, Any] | None = None
+    contract_rows: list[dict[str, Any]] = field(default_factory=list)
+    journal_required: bool = False
+    journal_prompt: str = ""
+    journal_minimum_length: int | None = None
 
     @property
     def ready(self) -> bool:
@@ -82,6 +87,11 @@ class Preview:
             "blockers": self.blockers,
             "ready": self.ready,
             "confirm_phrase": self.confirm_phrase,
+            "binding": self.binding,
+            "contract_rows": self.contract_rows,
+            "journal_required": self.journal_required,
+            "journal_prompt": self.journal_prompt,
+            "journal_minimum_length": self.journal_minimum_length,
             "claim_boundary": CLAIM_BOUNDARY,
         }
 
@@ -124,37 +134,55 @@ def _confirmation_matches(required: str, provided: Any) -> bool:
 # Command: set_ai_dial  ->  ai_control_authority.ai_adjust (owner-fenced dial)
 # ---------------------------------------------------------------------------
 def _preview_set_ai_dial(params: dict[str, Any]) -> Preview:
-    from cas_forex.ai_control_surface import LEVER_NAMES
-
     lever = str(params.get("lever") or "")
     value = params.get("value")
-    blockers: list[str] = []
-    if lever not in LEVER_NAMES:
-        blockers.append(f"Unknown dial '{lever}'. Known: {sorted(LEVER_NAMES)}")
-    current = _dial_value(lever) if not blockers else None
-    effects = []
-    if not blockers:
-        effects.append(
-            f"Sets '{lever}' from {current!r} to {value!r} (clamped to your owner "
-            "bounds; widen the envelope first to go beyond them)."
-        )
+    journal_reason = str(params.get("journal_reason") or params.get("reason") or "")
+    preview = _authority().preview_ai_adjust(lever, value, reason=journal_reason)
+    blockers = [str(item) for item in (preview.get("blockers") or [])]
+    effects = [str(item) for item in (preview.get("effects") or [])]
+    current = preview.get("current")
+    proposed = preview.get("proposed", value)
+    impact = preview.get("impact") if isinstance(preview.get("impact"), dict) else {}
+    binding = preview.get("binding") if isinstance(preview.get("binding"), dict) else None
+    contract_rows = (
+        [row for row in (preview.get("contract_rows") or []) if isinstance(row, dict)]
+        if isinstance(preview.get("contract_rows"), list)
+        else []
+    )
+    journal = preview.get("anti_impulse_journal") if isinstance(preview.get("anti_impulse_journal"), dict) else {}
+    label = str(impact.get("label") or lever)
     return Preview(
         command="set_ai_dial",
-        params={"lever": lever, "value": value},
-        title=f"Set AI dial '{lever}' to {value}",
+        params={"lever": lever, "value": value, "journal_reason": journal_reason},
+        title=f"Set AI dial '{label}' to {proposed}",
         current=current,
-        proposed=value,
+        proposed=proposed,
         effects=effects,
         blockers=blockers,
         confirm_phrase="CONFIRM",
+        binding=binding,
+        contract_rows=contract_rows,
+        journal_required=bool(preview.get("journal_prompt_required")),
+        journal_prompt=str(preview.get("journal_prompt") or ""),
+        journal_minimum_length=(
+            int(journal.get("minimum_reason_length"))
+            if journal.get("minimum_reason_length") is not None
+            else None
+        ),
     )
 
 
 def _apply_set_ai_dial(params: dict[str, Any]) -> dict[str, Any]:
     lever = str(params.get("lever") or "")
     value = params.get("value")
+    journal_reason = str(params.get("journal_reason") or params.get("reason") or "")
     before = _dial_value(lever)
-    result = _authority().ai_adjust(lever, value, reason="owner command broker")
+    result = _authority().ai_adjust(
+        lever,
+        value,
+        reason=journal_reason,
+        source="owner_command_broker.set_ai_dial",
+    )
     return {
         "lever": lever,
         "requested": value,
@@ -162,6 +190,7 @@ def _apply_set_ai_dial(params: dict[str, Any]) -> dict[str, Any]:
         "after": _dial_value(lever),
         "clamped": bool(result.get("owner_clamped") or result.get("clamped")),
         "reason": result.get("reason") or result.get("owner_reason"),
+        "journal_recorded": bool(journal_reason),
     }
 
 
@@ -178,8 +207,11 @@ def _risk_snapshot() -> dict[str, Any]:
 
 
 def _preview_set_risk_cap(params: dict[str, Any]) -> Preview:
+    from cas_forex.risk_control import RISK_LOOSEN_CONFIRM_PHRASE, assess_risk_control_update
+
     cap = str(params.get("cap") or "")
     raw = params.get("value")
+    journal_reason = str(params.get("journal_reason") or params.get("reason") or "")
     # value may be a number (a cap) or null/None (UNLIMITED — remove the cap).
     value: Any = None if raw in (None, "", "null", "none", "unlimited") else raw
     blockers: list[str] = []
@@ -193,31 +225,66 @@ def _preview_set_risk_cap(params: dict[str, Any]) -> Preview:
         except (TypeError, ValueError):
             blockers.append(f"{cap} needs a number or null (unlimited), got {raw!r}")
     current = _risk_snapshot().get(cap) if not blockers else None
+    assessment = assess_risk_control_update({cap: value}, journal_reason=journal_reason) if not blockers else {}
+    cooldown = assessment.get("cooldown") if isinstance(assessment.get("cooldown"), dict) else {}
+    journal = assessment.get("journal") if isinstance(assessment.get("journal"), dict) else {}
+    if bool(assessment.get("requires_journal_reason")) and not bool(journal.get("satisfied")):
+        blockers.extend(str(item) for item in (journal.get("blockers") or []))
+    if bool(cooldown.get("active")):
+        blockers.append(
+            "Risk loosening cooldown is active after a recent loosening; "
+            f"try again in {int(cooldown.get('remaining_seconds') or 0)} seconds, or tighten caps now."
+        )
     effect = (
         f"Removes the '{cap}' cap (UNLIMITED)."
         if value is None
         else f"Caps '{cap}' at {value}."
     ) + " Enforced at the dispatch chokepoint immediately (paper and live)."
+    if assessment.get("requires_confirmation"):
+        effect += " Because real-money controls are armed, this loosen/remove action needs the stronger confirmation phrase."
+    if assessment.get("requires_journal_reason"):
+        effect += " This loosen/remove action also requires an anti-impulse journal reason."
     return Preview(
         command="set_risk_cap",
-        params={"cap": cap, "value": value},
+        params={"cap": cap, "value": value, "journal_reason": journal_reason},
         title=(f"Set risk cap '{cap}' to " + ("UNLIMITED" if value is None else str(value))),
         current=current,
         proposed=("UNLIMITED" if value is None else value),
         effects=[] if blockers else [effect],
         blockers=blockers,
-        confirm_phrase="CONFIRM",
+        confirm_phrase=RISK_LOOSEN_CONFIRM_PHRASE if assessment.get("requires_confirmation") else "CONFIRM",
+        journal_required=bool(assessment.get("requires_journal_reason")),
+        journal_prompt=str(journal.get("prompt") or assessment.get("journal_prompt") or ""),
+        journal_minimum_length=(
+            int(journal.get("minimum_reason_length"))
+            if journal.get("minimum_reason_length") is not None
+            else None
+        ),
     )
 
 
 def _apply_set_risk_cap(params: dict[str, Any]) -> dict[str, Any]:
-    from cas_forex.risk_control import set_risk_control_overrides
+    from cas_forex.risk_control import assess_risk_control_update, set_risk_control_overrides
 
     cap = str(params.get("cap") or "")
     value = params.get("value")  # already normalized by preview caller
+    journal_reason = str(params.get("journal_reason") or "")
     before = _risk_snapshot().get(cap)
-    set_risk_control_overrides(**{cap: value})
-    return {"cap": cap, "requested": value, "before": before, "after": _risk_snapshot().get(cap)}
+    assessment = assess_risk_control_update({cap: value}, journal_reason=journal_reason)
+    set_risk_control_overrides(
+        **{cap: value},
+        audit_source="owner_command_broker.set_risk_cap",
+        audit_assessment=assessment,
+        audit_confirm_supplied=True,
+        audit_journal_reason=journal_reason,
+    )
+    return {
+        "cap": cap,
+        "requested": value,
+        "before": before,
+        "after": _risk_snapshot().get(cap),
+        "journal_recorded": bool(journal_reason),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -257,9 +324,9 @@ def _apply_set_lan_mode(params: dict[str, Any]) -> dict[str, Any]:
 
 # ---------------------------------------------------------------------------
 # Command: set_profit_target  ->  ai_control_authority.owner_update
-# The owner's daily WINNINGS target (and cap + monthly target). The operator
-# reads these and pushes toward the daily target, easing off once the daily cap
-# is hit. This is the "control the increase in daily winnings" lever.
+# The owner's daily reporting objective (and cap + monthly objective). A target
+# deficit is never trade authority: it cannot manufacture edge or loosen risk.
+# The daily cap may suppress new entries after it is reached.
 # ---------------------------------------------------------------------------
 def _owner_envelope() -> dict[str, Any]:
     return dict(_authority().snapshot().get("owner_envelope") or {})
@@ -301,7 +368,7 @@ def _preview_set_profit_target(params: dict[str, Any]) -> Preview:
     effects = []
     if not blockers:
         if "daily_profit_floor_usd" in changes:
-            effects.append(f"Daily winnings target → ${changes['daily_profit_floor_usd']:g} (the operator pushes to reach it each day).")
+            effects.append(f"Daily profit objective → ${changes['daily_profit_floor_usd']:g} (reporting reference only; never a trade quota or reason to loosen risk).")
         if "daily_profit_cap_usd" in changes:
             effects.append(f"Daily cap → ${changes['daily_profit_cap_usd']:g} (once hit, it stops opening new trades that day).")
         if "monthly_profit_target_usd" in changes:
@@ -309,7 +376,7 @@ def _preview_set_profit_target(params: dict[str, Any]) -> Preview:
     return Preview(
         command="set_profit_target",
         params={k: v for k, v in {"daily_target": params.get("daily_target"), "daily_cap": params.get("daily_cap"), "monthly_target": params.get("monthly_target")}.items() if v is not None},
-        title="Set daily winnings target",
+        title="Set daily profit objective",
         current=current,
         proposed={k.replace("_usd", ""): v for k, v in changes.items()},
         effects=effects,
@@ -326,7 +393,7 @@ def _apply_set_profit_target(params: dict[str, Any]) -> dict[str, Any]:
     }
     changes = {field_map[k]: float(params[k]) for k in field_map if params.get(k) is not None}
     before = _owner_envelope()
-    _authority().owner_update(**changes)
+    _authority().owner_update(source="owner_command_broker.set_profit_target", **changes)
     after = _owner_envelope()
     return {
         "changed": list(changes),
@@ -406,8 +473,78 @@ def _apply_arm_live_switch(params: dict[str, Any]) -> dict[str, Any]:
     switch = str(params.get("switch") or "")
     enabled = bool(params.get("enabled"))
     before = _live_switch_current(switch)
-    set_live_enable_overrides(**{switch: enabled})
-    return {"switch": switch, "before": before, "after": _live_switch_current(switch)}
+    set_live_enable_overrides(
+        audit_source="owner_command_broker.arm_live_switch",
+        confirm_supplied=True,
+        **{switch: enabled},
+    )
+    after = _live_switch_current(switch)
+    _notify_live_switch_changed(switch=switch, before=before, after=after, source="owner_command_broker.arm_live_switch")
+    return {"switch": switch, "before": before, "after": after}
+
+
+# ---------------------------------------------------------------------------
+# Command: disarm_real_money  ->  live_enable_control.disarm_real_money_overrides
+# Turns OFF every live/money capability switch while preserving setup/credentials.
+# ---------------------------------------------------------------------------
+def _preview_disarm_real_money(params: dict[str, Any]) -> Preview:
+    from cas_forex.live_enable_control import REAL_MONEY_DISARM_CONFIRM_PHRASE, REAL_MONEY_DISARM_KEYS
+
+    current = {key: _live_switch_current(key) for key in REAL_MONEY_DISARM_KEYS}
+    already_off = all(value is False for value in current.values())
+    effects = [
+        "Turns OFF live_mode, live trading authority, broker ACCEPT, auto-deposit, bank/card movement, and payout automation.",
+        "Keeps broker credentials, provider setup, account acknowledgments, evidence, and paper/demo operation intact.",
+    ]
+    if already_off:
+        effects.append("All real-money capability switches are already off; running this is idempotent.")
+    return Preview(
+        command="disarm_real_money",
+        params={},
+        title="Disarm real-money switches",
+        current=current,
+        proposed={key: False for key in REAL_MONEY_DISARM_KEYS},
+        effects=effects,
+        blockers=[],
+        confirm_phrase=REAL_MONEY_DISARM_CONFIRM_PHRASE,
+    )
+
+
+def _apply_disarm_real_money(params: dict[str, Any]) -> dict[str, Any]:
+    from cas_forex.live_enable_control import disarm_real_money_overrides
+
+    before = _preview_disarm_real_money({}).current
+    result = disarm_real_money_overrides(
+        audit_source="owner_command_broker.disarm_real_money",
+        confirm_supplied=True,
+    )
+    after = result.get("after") if isinstance(result, dict) else {}
+    if isinstance(before, dict) and isinstance(after, dict):
+        for switch, before_value in before.items():
+            after_value = after.get(switch)
+            if before_value != after_value:
+                _notify_live_switch_changed(
+                    switch=str(switch),
+                    before=before_value,
+                    after=after_value,
+                    source="owner_command_broker.disarm_real_money",
+                )
+    return result
+
+
+def _notify_live_switch_changed(*, switch: str, before: Any, after: Any, source: str) -> None:
+    try:
+        from cas_forex.critical_notifications import (
+            build_live_switch_changed_event,
+            emit_critical_notification,
+        )
+
+        emit_critical_notification(
+            build_live_switch_changed_event(switch=switch, before=before, after=after, source=source),
+            source=source,
+        )
+    except Exception:
+        return
 
 
 # ---------------------------------------------------------------------------
@@ -479,18 +616,31 @@ def _preview_move_money(params: dict[str, Any]) -> Preview:
 
 
 def _apply_move_money(params: dict[str, Any]) -> dict[str, Any]:
-    from cas_forex.money_movement import MovementEngine
+    from cas_forex.money_movement_dispatch import dispatch_money_movement
 
     action = str(params.get("action") or "").lower()
     amount = float(params.get("amount_usd") or 0.0)
-    engine = MovementEngine.from_config()
-    if action == "deposit":
-        result = engine.deposit(amount, source_id=params.get("source_id"))
-    elif action == "withdraw":
-        result = engine.withdraw(amount, destination_id=params.get("destination_id"))
-    else:  # payout
-        result = engine.payout(amount, destination_id=params.get("destination_id"))
-    return result.to_dict()
+    kind = "withdrawal" if action == "withdraw" else action
+    key = f"owner-command-{uuid.uuid4().hex}"
+    dispatch = dispatch_money_movement(
+        kind=kind,
+        amount_usd=amount,
+        idempotency_key=key,
+        source_id=params.get("source_id"),
+        destination_id=params.get("destination_id"),
+        purpose="owner_command_move_money",
+        authority_mode="MANUAL",
+        require_real_provider=False,
+    )
+    movement = dispatch.get("movement")
+    payload = dict(movement) if isinstance(movement, dict) else {
+        "status": dispatch.get("status"),
+        "reason": dispatch.get("detail"),
+        "provider_touched": dispatch.get("provider_touched", False),
+    }
+    payload["idempotency_key"] = key
+    payload["money_movement_dispatch"] = dispatch
+    return payload
 
 
 # ---------------------------------------------------------------------------
@@ -526,9 +676,9 @@ COMMANDS: dict[str, Command] = {
     ),
     "set_profit_target": Command(
         name="set_profit_target",
-        summary="Set your DAILY WINNINGS TARGET (and daily cap + monthly target). The operator pushes toward the daily target and eases off once the cap is hit.",
+        summary="Set a daily profit objective, daily cap, and monthly objective. A deficit never creates a trade or loosens risk; the cap may suppress new entries.",
         params=[
-            {"name": "daily_target", "type": "number?", "help": "daily winnings goal in USD"},
+            {"name": "daily_target", "type": "number?", "help": "daily reporting objective in USD; not a trade quota"},
             {"name": "daily_cap", "type": "number?", "help": "stop opening new trades once the day hits this USD"},
             {"name": "monthly_target", "type": "number?", "help": "monthly target in USD (sets the pace)"},
         ],
@@ -544,6 +694,13 @@ COMMANDS: dict[str, Command] = {
         ],
         build_preview=_preview_arm_live_switch,
         apply=_apply_arm_live_switch,
+    ),
+    "disarm_real_money": Command(
+        name="disarm_real_money",
+        summary="Turn OFF every live/money capability switch immediately while preserving paper/demo operation and saved setup.",
+        params=[],
+        build_preview=_preview_disarm_real_money,
+        apply=_apply_disarm_real_money,
     ),
     "move_money": Command(
         name="move_money",

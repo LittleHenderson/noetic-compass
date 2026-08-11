@@ -29,6 +29,14 @@ from cas_forex.webhook_notifications import (
     WebhookTransport,
     build_webhook_subscription,
     dispatch_webhook,
+    mask_webhook_url,
+    webhook_subscription_id,
+)
+from cas_forex.critical_notifications import (
+    build_critical_alert_test_event,
+    build_critical_notification_delivery_readiness,
+    build_critical_notification_report,
+    emit_critical_notification,
 )
 
 
@@ -78,10 +86,16 @@ class SubscribeRequest(BaseModel):
 
 class UnsubscribeRequest(BaseModel):
     webhook_url: Optional[str] = None
+    subscription_id: Optional[str] = None
 
 
 class TestWebhookRequest(BaseModel):
     label: Optional[str] = None
+    title: Optional[str] = None
+    body: Optional[str] = None
+
+
+class CriticalTestRequest(BaseModel):
     title: Optional[str] = None
     body: Optional[str] = None
 
@@ -93,7 +107,8 @@ class TestWebhookRequest(BaseModel):
 
 def _serialize_subscription(sub: WebhookSubscription) -> Dict[str, Any]:
     return {
-        "webhook_url": sub.webhook_url,
+        "subscription_id": sub.subscription_id,
+        "webhook_url_masked": sub.webhook_url_masked,
         "label": sub.label,
         "created_at_iso": sub.created_at_iso,
         "last_used_at_iso": sub.last_used_at_iso,
@@ -102,7 +117,8 @@ def _serialize_subscription(sub: WebhookSubscription) -> Dict[str, Any]:
 
 def _serialize_dispatch(result: WebhookDispatchResult) -> Dict[str, Any]:
     return {
-        "webhook_url": result.webhook_url,
+        "subscription_id": webhook_subscription_id(result.webhook_url) if result.webhook_url else "",
+        "webhook_url_masked": mask_webhook_url(result.webhook_url),
         "success": result.success,
         "status_code": result.status_code,
         "error_message": result.error_message,
@@ -155,23 +171,36 @@ async def subscribe(body: SubscribeRequest) -> Dict[str, Any]:
 
 @router.post("/unsubscribe")
 async def unsubscribe(body: UnsubscribeRequest) -> Response:
-    """Drop the subscription with the given URL. Idempotent — always
-    returns 204 regardless of whether the URL existed."""
-    if body.webhook_url:
-        get_store().remove(body.webhook_url)
+    """Drop the subscription with the given id or URL. Idempotent — always
+    returns 204 regardless of whether the subscription existed."""
+    identifier = body.subscription_id or body.webhook_url
+    if identifier:
+        get_store().remove(identifier)
     return Response(status_code=204)
 
 
 @router.get("/subscriptions")
 async def list_subscriptions() -> Dict[str, Any]:
-    # TODO: operator-only — gate this behind the same auth as the cockpit
-    # once the auth layer lands. Today there is no auth on /api/forex/*.
+    # Operator-only in the assembled app: api.server's owner-auth middleware
+    # admits loopback or a paired LAN phone before this route is reached.
     return cache_first_payload(
         "webhook_notification_subscriptions",
         builder=_subscriptions_payload,
         fallback=_subscriptions_warming,
         ttl_seconds=10.0,
     )
+
+
+@router.get("/critical-audit")
+async def critical_audit(limit: int = 25) -> Dict[str, Any]:
+    """Recent critical notification events and delivery attempts."""
+    return build_critical_notification_report(limit)
+
+
+@router.get("/critical-readiness")
+async def critical_readiness(limit: int = 25) -> Dict[str, Any]:
+    """Read-only delivery readiness for critical notification destinations."""
+    return build_critical_notification_delivery_readiness(limit, store=get_store())
 
 
 @router.post("/test")
@@ -200,3 +229,30 @@ async def test_webhook(body: TestWebhookRequest) -> Dict[str, Any]:
         results.append(result)
 
     return {"results": [_serialize_dispatch(r) for r in results]}
+
+
+@router.post("/critical-test")
+async def test_critical_notification(body: CriticalTestRequest) -> Dict[str, Any]:
+    """Emit one observational critical-alert test through the real critical-notification
+    audit/delivery path so readiness can prove off-screen delivery, not only config."""
+    audit = emit_critical_notification(
+        build_critical_alert_test_event(
+            title=body.title or "Critical alert test",
+            body=body.body or "Operator-triggered critical alert test from Settings (observational).",
+        ),
+        source="api.webhook_notifications.critical_test",
+        store=get_store(),
+        transport=_TEST_TRANSPORT,
+    )
+    readiness = build_critical_notification_delivery_readiness(store=get_store())
+    return {
+        "report_kind": "cas_forex_critical_notification_test",
+        "status": "DISPATCHED" if int(audit.get("dispatch_attempt_count") or 0) > 0 else "NO_DESTINATIONS",
+        "audit": audit,
+        "readiness": readiness,
+        "claim_boundary": (
+            "Critical alert test emits one observational test event through the "
+            "existing audit/delivery path. It does not place orders, change "
+            "risk settings, move money, or authorize live trading."
+        ),
+    }

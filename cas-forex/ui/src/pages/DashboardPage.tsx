@@ -1,5 +1,9 @@
 import { lazy, Suspense, useEffect, useState } from "react";
+import { AccountHealthPanel } from "../components/AccountHealthPanel";
 import { GlassPanel } from "../components/GlassPanel";
+import { LiveReadinessSummaryPanel } from "../components/LiveReadinessSummaryPanel";
+import { PsychologyGuardPanel } from "../components/PsychologyGuardPanel";
+import { StatusChip } from "../components/StatusChip";
 import type { DashboardState } from "../types/evidence";
 
 interface DashboardPageProps {
@@ -48,9 +52,47 @@ export function DashboardPage({ state }: DashboardPageProps) {
   const risk = b.latest_risk.latest_review;
   const riskBudget = state.riskBudget;
   const proofProgress = state.proofProgress;
-  const accountEquity = riskBudget?.account_equity ?? risk.account_equity;
+  const accountHealth = state.accountHealth;
+  const activeTruth = state.activeAccountTruth;
+  const activeAccount = activeTruth?.account;
+  const activeExposure = activeTruth?.open_exposure;
+  const activeGrowth = activeTruth?.growth_measurement;
+  const activeOutcomes = activeGrowth?.cas_bound_closed_outcomes;
+  const activeMt5Account = activeTruth?.authoritative_account_source === "mt5_account_snapshot";
+  const accountEquity = finiteNumber(activeAccount?.equity_usd)
+    ?? riskBudget?.account_equity
+    ?? risk.account_equity;
   const account = state.accountLedger?.summary;
-  const realizedPnl = account?.realized_pnl_usd ?? 0;
+  const healthAccount = accountHealth?.account;
+  const openExposure = accountHealth?.open_exposure;
+  const casBoundClosedNet = finiteNumber(activeOutcomes?.net_pnl_usd);
+  const simulatorRealizedPnl = finiteNumber(healthAccount?.realized_pnl_usd)
+    ?? finiteNumber(account?.realized_pnl_usd)
+    ?? 0;
+  const realizedPnl = activeMt5Account ? casBoundClosedNet : simulatorRealizedPnl;
+  const activeBalance = finiteNumber(activeAccount?.balance_usd) ?? accountEquity;
+  const activeEquity = finiteNumber(activeAccount?.equity_usd) ?? accountEquity;
+  const activeFloatingPnl = finiteNumber(activeAccount?.floating_pnl_usd);
+  const activeRealizedGrowth = finiteNumber(activeGrowth?.cashflow_adjusted_realized_growth_usd);
+  const activeRealizedToday = finiteNumber(activeGrowth?.realized_today_usd);
+  const activeRealizedMonth = finiteNumber(activeGrowth?.realized_month_usd);
+  const activeExternalCapital = finiteNumber(activeGrowth?.net_external_capital_flow_usd);
+  const activeGrowthPct = finiteNumber(activeGrowth?.growth_pct_on_net_external_capital);
+  const activeGrowthReconciled = activeGrowth?.account_growth_reconciliation?.reconciled === true;
+  const activeFreeMargin = finiteNumber(activeAccount?.free_margin_usd);
+  const activeOpenCount = finiteNumber(activeExposure?.open_position_count)
+    ?? finiteNumber(openExposure?.open_position_count)
+    ?? 0;
+  const activeClosedTrades = finiteNumber(activeOutcomes?.trades);
+  const activeWins = finiteNumber(activeOutcomes?.wins);
+  const activeLosses = finiteNumber(activeOutcomes?.losses);
+  const activeOutcomesLabel = activeClosedTrades == null
+    ? "UNAVAILABLE"
+    : `${activeClosedTrades.toFixed(0)} (${(activeWins ?? 0).toFixed(0)}W / ${(activeLosses ?? 0).toFixed(0)}L)`;
+  const activeSnapshotFresh = activeTruth?.snapshot?.fresh;
+  const accountIdentity = activeAccount?.login
+    ? `#${activeAccount.login}`
+    : activeTruth?.source_label || "SYNCING";
   const completedTradingDays = proofProgress?.completed_trading_days ?? r.completed_trading_days;
   const completeBundleDays = proofProgress?.complete_bundle_days ?? r.complete_bundle_days;
   const minDailyBundles = proofProgress?.min_daily_bundles_for_ui ?? r.min_daily_bundles_for_ui;
@@ -99,21 +141,64 @@ export function DashboardPage({ state }: DashboardPageProps) {
       )}
 
       <div className="dashboard-grid-3col">
-        <GlassPanel title="Account" variant="info">
+        <GlassPanel title="Active Account" variant="info">
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+            <StatusChip label={activeTruth?.source_label || "SOURCE SYNCING"} variant={activeMt5Account ? "success" : "paper"} size="sm" />
+            <StatusChip label="PRIMARY" variant="info" size="sm" />
+            <StatusChip
+              label={activeGrowthReconciled ? "REALIZED GROWTH RECONCILED" : "GROWTH BASELINE UNAVAILABLE"}
+              variant={activeGrowthReconciled ? "success" : "warning"}
+              size="sm"
+            />
+            {activeSnapshotFresh === false && <StatusChip label="STALE SNAPSHOT" variant="warning" size="sm" />}
+          </div>
           <div className="metric-stack">
-            <Metric label="Deposit" value={`$${(account?.deposit_usd ?? accountEquity).toLocaleString()}`} />
-            <Metric label="Balance" value={`$${(account?.balance_usd ?? accountEquity).toLocaleString()}`} />
-            <Metric label="Equity" value={`$${(account?.equity_usd ?? accountEquity).toLocaleString()}`} />
-            <Metric label="Mode" value={isLiveLedger ? "LIVE LEDGER" : "PAPER / DEMO"} warning={!isLiveLedger} />
+            <Metric label="Account" value={accountIdentity} mono />
+            <Metric label="Server" value={activeAccount?.server || "LOCAL SIMULATOR"} mono />
+            <Metric label="Balance" value={formatMoney(activeBalance)} mono />
+            <Metric label="Equity" value={formatMoney(activeEquity)} mono />
+            <Metric label="Net Open P/L" value={formatMoney(activeFloatingPnl, true)} mono />
+            <Metric label="Price P/L" value={formatMoney(activeAccount?.position_price_pnl_usd, true)} mono />
+            <Metric label="Swap / Carry" value={formatMoney(activeAccount?.open_swap_usd, true)} mono />
+            <Metric label="Realized Growth" value={formatMoney(activeRealizedGrowth, true)} mono warning={!activeGrowthReconciled} />
+            <Metric label="Realized Today" value={formatMoney(activeRealizedToday, true)} mono warning={!activeGrowthReconciled} />
+            <Metric label="Realized Month" value={formatMoney(activeRealizedMonth, true)} mono warning={!activeGrowthReconciled} />
+            <Metric label="External Capital" value={formatMoney(activeExternalCapital)} mono warning={!activeGrowthReconciled} />
+            <Metric label="Growth on Capital" value={formatPercent(activeGrowthPct, "UNAVAILABLE")} mono warning={!activeGrowthReconciled} />
+            <Metric label="Free Margin" value={formatMoney(activeFreeMargin)} mono />
+            <Metric label="Open Positions" value={activeOpenCount.toFixed(0)} mono />
+          </div>
+          <div className="control-field-desc" style={{ marginTop: 8 }}>
+            {activeGrowthReconciled
+              ? "Broker ledger reconciled to balance. Deposits, withdrawals, credit, and bonuses are excluded from trading growth."
+              : activeTruth?.source_detail || "Resolving the account governed by the active execution lane."}
           </div>
         </GlassPanel>
 
-        <GlassPanel title="Risk Budget">
+        <GlassPanel title="Decision Metrics">
           <div className="metric-stack">
-            <Metric label="Realized P/L" value={`$${(account?.realized_pnl_usd ?? 0).toFixed(2)}`} />
-            <Metric label="Floating P/L" value={`$${(account?.floating_pnl_usd ?? 0).toFixed(2)}`} />
-            <Metric label="Margin / Free" value={`$${(account?.margin_used_usd ?? 0).toFixed(0)} / $${(account?.free_margin_usd ?? accountEquity).toFixed(0)}`} mono />
-            <Metric label="Planned Risk" value={`$${(account?.planned_risk_usd ?? plannedRiskTotal).toFixed(2)}`} mono />
+            <Metric
+              label={activeMt5Account ? "CAS-Bound Closed Net" : "Realized P/L"}
+              value={formatMoney(realizedPnl, true)}
+              warning={realizedPnl == null}
+            />
+            <Metric label="CAS-Bound Outcomes" value={activeOutcomesLabel} mono warning={activeClosedTrades == null} />
+            <Metric
+              label="Open Risk at Stop"
+              value={formatMoney(activeExposure?.entry_to_stop_risk_usd ?? openExposure?.open_risk_estimate_usd ?? account?.planned_risk_usd ?? plannedRiskTotal)}
+              mono
+            />
+            <Metric
+              label="Risk-Cap Breaches"
+              value={activeExposure?.risk_cap_breach_count == null ? "UNAVAILABLE" : String(activeExposure.risk_cap_breach_count)}
+              mono
+              warning={(activeExposure?.risk_cap_breach_count ?? 0) > 0}
+            />
+            <Metric
+              label="Protection"
+              value={formatPercent(activeExposure?.protective_order_coverage_pct ?? openExposure?.protective_order_coverage_pct, "UNKNOWN")}
+              warning={(activeExposure?.unprotected_position_count ?? openExposure?.unprotected_position_count ?? 0) > 0}
+            />
           </div>
         </GlassPanel>
 
@@ -122,7 +207,11 @@ export function DashboardPage({ state }: DashboardPageProps) {
             <Metric label="Paper Days" value={`${completedTradingDays} / 30`} mono />
             <Metric label="Multi-Day Bundles" value={`${completeBundleDays} / ${minDailyBundles}`} mono />
             <Metric label="Chains Verified" value={chainsVerified ? chainsVerifiedLabel : "INCOMPLETE"} mono />
-            <Metric label="Edge" value="OPEN" warning />
+            <Metric
+              label="Protected"
+              value={formatPercent(openExposure?.protective_order_coverage_pct, "UNKNOWN")}
+              warning={(openExposure?.unprotected_position_count ?? 0) > 0}
+            />
           </div>
         </GlassPanel>
       </div>
@@ -133,11 +222,11 @@ export function DashboardPage({ state }: DashboardPageProps) {
             <ObjectivePaceCard
               dailyTarget={250}
               monthlyTarget={5000}
-              realizedToday={realizedPnl}
-              realizedMonth={realizedPnl}
+              realizedToday={finiteNumber(activeTruth?.growth_measurement?.realized_today_usd)}
+              realizedMonth={finiteNumber(activeTruth?.growth_measurement?.realized_month_usd)}
               tradingDayIndex={tradingDayIndex}
             />
-            <IncentiveLedgerCard verifiedProfit={realizedPnl} rate={0.025} per={5000} />
+            <IncentiveLedgerCard verifiedProfit={isLiveLedger ? realizedPnl : null} rate={0.025} per={5000} />
           </div>
         </Suspense>
       ) : (
@@ -147,6 +236,23 @@ export function DashboardPage({ state }: DashboardPageProps) {
         Objective is $250/day toward $5,000/month, with a $3,500 daily cap; the AI earns it only
         by pressing real, tested edges. A no-edge day stays at $0 with capital intact, never a miss.
       </div>
+
+      <LiveReadinessSummaryPanel
+        initialLiveReadiness={state.liveReadiness ?? null}
+        initialAccountReconciliation={state.accountReconciliation ?? null}
+        initialBrokerTruthMonitor={state.brokerTruthMonitor ?? null}
+      />
+
+      <PsychologyGuardPanel subtitle="Main-cockpit anti-impulse friction across AI dial widening and owner risk loosening" />
+
+      <AccountHealthPanel
+        report={accountHealth}
+        title={activeMt5Account ? "Secondary Simulator Evidence" : "Account Health"}
+        subtitle={activeMt5Account
+          ? "Separate research ledger; it is not the connected MT5 account"
+          : "Decision-grade exposure, protection, performance, and source health"}
+        authorityLabel={activeMt5Account ? "SECONDARY - NOT ACTIVE ACCOUNT" : undefined}
+      />
 
       {deepOperationsMounted ? (
         <Suspense fallback={<DashboardDeferredSectionsNotice />}>
@@ -218,6 +324,20 @@ function DashboardDeferredSectionsNotice() {
       </div>
     </GlassPanel>
   );
+}
+
+function finiteNumber(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+function formatMoney(value: number | null | undefined, signed = false): string {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "UNAVAILABLE";
+  const sign = value < 0 ? "-" : signed && value > 0 ? "+" : "";
+  return `${sign}$${Math.abs(value).toFixed(2)}`;
+}
+
+function formatPercent(value: number | null | undefined, fallback = "UNKNOWN"): string {
+  return typeof value === "number" && Number.isFinite(value) ? `${value.toFixed(1)}%` : fallback;
 }
 
 function Metric({ label, value, mono, danger, warning }: { label: string; value: string; mono?: boolean; danger?: boolean; warning?: boolean }) {

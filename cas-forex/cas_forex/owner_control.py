@@ -88,6 +88,75 @@ _DEFAULT_STATE: dict[str, Any] = {
     "max_loss_cap_pct": 10,
     "ai_autonomy_enabled": True,
 }
+
+AUTONOMY_LADDER: tuple[dict[str, Any], ...] = (
+    {
+        "stage": "LOCKDOWN",
+        "label": "Lockdown",
+        "modes": [OwnerControlMode.DENY.value],
+        "order_authority": "none",
+        "can_emit_signals": False,
+        "can_open_paper_trades": False,
+        "can_request_live_trades": False,
+        "requires_owner_live_confirmation": False,
+        "effect": "AI/operator can watch state but should not propose or open new trades.",
+    },
+    {
+        "stage": "SIGNAL",
+        "label": "Signal",
+        "modes": [OwnerControlMode.NOTIFY_ONLY.value],
+        "order_authority": "recommendations_only",
+        "can_emit_signals": True,
+        "can_open_paper_trades": False,
+        "can_request_live_trades": False,
+        "requires_owner_live_confirmation": False,
+        "effect": "AI/operator may surface trade ideas and reasons; execution stays manual.",
+    },
+    {
+        "stage": "PAPER_LIMITED",
+        "label": "Limited Paper",
+        "modes": [OwnerControlMode.LIMITED_PAPER.value],
+        "order_authority": "limited_paper",
+        "can_emit_signals": True,
+        "can_open_paper_trades": True,
+        "can_request_live_trades": False,
+        "requires_owner_live_confirmation": False,
+        "effect": "AI/operator may open a bounded number of paper/demo trades after evidence gates pass.",
+    },
+    {
+        "stage": "PAPER_AUTOPILOT",
+        "label": "Paper Autopilot",
+        "modes": [OwnerControlMode.PAPER_AUTO.value, OwnerControlMode.AI_FULL_AUTO_PAPER.value],
+        "order_authority": "paper_autopilot",
+        "can_emit_signals": True,
+        "can_open_paper_trades": True,
+        "can_request_live_trades": False,
+        "requires_owner_live_confirmation": False,
+        "effect": "AI/operator may run paper/demo automation inside owner risk caps and evidence gates.",
+    },
+    {
+        "stage": "LIVE_CONFIRM",
+        "label": "Live Confirm",
+        "modes": [OwnerControlMode.LIVE_AUTO.value],
+        "order_authority": "live_requested_confirmed_by_action_time_gates",
+        "can_emit_signals": True,
+        "can_open_paper_trades": True,
+        "can_request_live_trades": True,
+        "requires_owner_live_confirmation": True,
+        "effect": "Owner has requested live capability; broker dispatch still requires live enable flags and action-time gates.",
+    },
+    {
+        "stage": "LIVE_AUTOPILOT_REQUESTED",
+        "label": "Live Autopilot Requested",
+        "modes": [OwnerControlMode.AI_FULL_AUTO_LIVE_REQUESTED.value],
+        "order_authority": "live_autopilot_requested",
+        "can_emit_signals": True,
+        "can_open_paper_trades": True,
+        "can_request_live_trades": True,
+        "requires_owner_live_confirmation": True,
+        "effect": "Owner has requested full live autonomy; live broker orders still require owner live authority and action-time checks.",
+    },
+)
 _OVERRIDES: dict[str, Any] = {}
 _OVERRIDES_LOADED = False
 _OVERRIDE_PATH: Path | None = DEFAULT_OVERRIDE_PATH
@@ -195,11 +264,24 @@ def build_owner_control_report(*, live_authorized: bool = False) -> dict[str, An
     mode = OwnerControlMode(str(state["mode"]))
     live_requested = mode in {OwnerControlMode.LIVE_AUTO, OwnerControlMode.AI_FULL_AUTO_LIVE_REQUESTED}
     live_blocked = bool(live_requested and not live_authorized)
+    current_stage = _autonomy_stage_for_mode(mode)
     state.update(
         {
             "mode": mode.value,
             "live_requested": live_requested,
             "live_blocked": live_blocked,
+            "current_autonomy_stage": current_stage,
+            "current_autonomy_stage_label": current_stage["label"],
+            "autonomy_ladder": [dict(step) for step in AUTONOMY_LADDER],
+            "can_open_paper_trades": bool(
+                current_stage["can_open_paper_trades"] and state.get("ai_autonomy_enabled", True)
+            ),
+            "owner_control_allows_live_trades": bool(live_requested and live_authorized),
+            "requires_owner_live_confirmation": bool(current_stage["requires_owner_live_confirmation"]),
+            "staged_autonomy_summary": (
+                f"{current_stage['label']}: {current_stage['effect']} "
+                "Risk caps, broker truth, live-enable flags, emergency stop, and action-time gates/checks still apply."
+            ),
             "override_count": len(_OVERRIDES),
             "persisted": bool(_OVERRIDE_PATH is not None and _OVERRIDE_PATH.exists()),
             "override_state_path": str(_OVERRIDE_PATH) if _OVERRIDE_PATH is not None else None,
@@ -214,6 +296,13 @@ def build_owner_control_report(*, live_authorized: bool = False) -> dict[str, An
         }
     )
     return state
+
+
+def _autonomy_stage_for_mode(mode: OwnerControlMode) -> dict[str, Any]:
+    for step in AUTONOMY_LADDER:
+        if mode.value in step["modes"]:
+            return dict(step)
+    return dict(AUTONOMY_LADDER[0])
 
 
 def review_owner_promotion(

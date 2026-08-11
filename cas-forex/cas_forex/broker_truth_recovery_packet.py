@@ -70,12 +70,26 @@ def _monitor_summary(
         "overall_status": latest.get("overall_status"),
         "mt5_connected": latest.get("mt5_connected"),
         "mt5_is_demo": latest.get("mt5_is_demo"),
+        "mt5_account": latest.get("mt5_account"),
+        "mt5_account_server": latest.get("mt5_account_server"),
+        "mt5_expected_account": latest.get("mt5_expected_account"),
+        "mt5_expected_server": latest.get("mt5_expected_server"),
+        "mt5_account_identity_matches_config": latest.get("mt5_account_identity_matches_config"),
         "mt5_open_position_count": latest.get("mt5_open_position_count"),
         "terminal_reconciliation_status": latest.get("terminal_reconciliation_status"),
         "terminal_pending_receipt_count": latest.get("terminal_pending_receipt_count"),
         "terminal_unmatched_open_position_count": latest.get("terminal_unmatched_open_position_count"),
+        "terminal_unattributed_open_position_count": latest.get("terminal_unattributed_open_position_count"),
+        "terminal_memory_gap_open_position_count": latest.get("terminal_memory_gap_open_position_count"),
+        "cas_memory_only_open_position_count": latest.get("cas_memory_only_open_position_count"),
+        "cas_receipt_pending_open_position_count": latest.get("cas_receipt_pending_open_position_count"),
+        "terminal_unmatched_history_count": latest.get("terminal_unmatched_history_count"),
+        "terminal_unattributed_history_count": latest.get("terminal_unattributed_history_count"),
+        "terminal_attributed_history_memory_gap_count": latest.get("terminal_attributed_history_memory_gap_count"),
         "terminal_receipt_mismatch_count": latest.get("terminal_receipt_mismatch_count"),
         "terminal_account_snapshot_present": latest.get("terminal_account_snapshot_present"),
+        "terminal_unmatched_open_position_preview": list(latest.get("terminal_unmatched_open_position_preview") or [])[:3],
+        "terminal_unmatched_history_preview": list(latest.get("terminal_unmatched_history_preview") or [])[:3],
     }
 
 
@@ -111,9 +125,19 @@ def _blockers(
     _add_blocker(
         blockers,
         "mt5_live_account_visible",
-        bool(latest.get("mt5_connected")) and latest.get("mt5_is_demo") is False,
-        {"connected": latest.get("mt5_connected"), "is_demo": latest.get("mt5_is_demo")},
-        "A connected live MT5 account is not visible.",
+        bool(latest.get("mt5_connected"))
+        and latest.get("mt5_is_demo") is False
+        and latest.get("mt5_account_identity_matches_config") is True,
+        {
+            "connected": latest.get("mt5_connected"),
+            "is_demo": latest.get("mt5_is_demo"),
+            "actual_login": latest.get("mt5_account"),
+            "actual_server": latest.get("mt5_account_server"),
+            "expected_login": latest.get("mt5_expected_account"),
+            "expected_server": latest.get("mt5_expected_server"),
+            "identity_matches": latest.get("mt5_account_identity_matches_config"),
+        },
+        "A connected live MT5 account matching the configured owner login/server is not visible.",
     )
     _add_blocker(
         blockers,
@@ -135,6 +159,13 @@ def _blockers(
         _int(latest.get("terminal_unmatched_open_position_count")) == 0,
         latest.get("terminal_unmatched_open_position_count"),
         "CAS open-position memory does not match terminal open-position evidence.",
+    )
+    _add_blocker(
+        blockers,
+        "terminal_closed_history_match",
+        _int(latest.get("terminal_unmatched_history_count")) == 0,
+        latest.get("terminal_unmatched_history_count"),
+        "CAS closed-history memory does not match terminal closed-history evidence.",
     )
     _add_blocker(
         blockers,
@@ -179,8 +210,16 @@ def _next_action(blockers: list[Mapping[str, Any]], latest: Mapping[str, Any] | 
         return "Run Broker Truth from Settings Live Recovery so CAS Forex can read the latest broker/terminal truth."
     ids = {str(blocker.get("blocker_id")) for blocker in blockers}
     if "mt5_live_account_visible" in ids:
-        return "Connect the owner-approved live MT5 account, then run Broker Truth again; demo truth cannot unlock live-money gates."
-    if "terminal_pending_receipts_clear" in ids or "terminal_open_positions_match" in ids:
+        return "Connect the exact owner-approved MT5 login/server, then run Broker Truth again; demo or wrong-account truth cannot unlock live-money gates."
+    if (
+        "terminal_pending_receipts_clear" in ids
+        or "terminal_open_positions_match" in ids
+        or "terminal_closed_history_match" in ids
+    ):
+        if _int(latest.get("terminal_unattributed_open_position_count")) > 0:
+            return "Owner-review unmatched broker-visible positions that CAS cannot attribute, then rerun Broker Truth and Live Recovery."
+        if _int(latest.get("terminal_unattributed_history_count")) > 0:
+            return "Owner-review unmatched broker closed-history rows that CAS cannot attribute, then rerun Broker Truth and Live Recovery."
         return "Use terminal receipt archive/refresh only when owner-reviewed, then rerun Broker Truth and Live Recovery."
     if blockers:
         return "Clear the listed broker-truth blockers, then rerun Broker Truth before any live/payout progression."

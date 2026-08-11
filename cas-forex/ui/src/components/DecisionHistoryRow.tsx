@@ -11,6 +11,7 @@ import type {
   AgentDecisionHistoryItem,
   DecisionChainStep,
 } from "../data/api";
+import { DecisionVersionTrace } from "./DecisionVersionTrace";
 import "./DecisionCardPrimitives.css";
 
 type ChipVariant = "success" | "warning" | "danger" | "info" | "muted" | "paper";
@@ -109,6 +110,8 @@ export function DecisionHistoryRow({ decision }: DecisionHistoryRowProps) {
             {summaryExpanded ? "show less" : "show more"}
           </button>
         )}
+
+        <DecisionVersionTrace trace={decision.version_trace} />
 
         {decision.chain.length > 0 && (
           <div className="decision-chain">

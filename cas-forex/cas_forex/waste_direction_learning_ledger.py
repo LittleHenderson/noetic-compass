@@ -9,11 +9,11 @@ confirmed direction evidence exists.
 
 from __future__ import annotations
 
-import json
 from collections import Counter
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
+from cas_forex.jsonl_tail import read_jsonl_tail
 from cas_forex.time_utils import utc_now
 from cas_forex.waste_cycle_audit import DEFAULT_AUDIT_PATH
 
@@ -78,22 +78,7 @@ def build_waste_direction_learning_ledger(
 
 
 def _load_cycles(audit_path: Path | str, *, max_cycles: int) -> list[dict[str, Any]]:
-    path = Path(audit_path)
-    if not path.exists():
-        return []
-    try:
-        lines = [line for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    except OSError:
-        return []
-    out: list[dict[str, Any]] = []
-    for line in lines[-max(1, int(max_cycles)):]:
-        try:
-            payload = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-        if isinstance(payload, Mapping):
-            out.append(dict(payload))
-    return out
+    return read_jsonl_tail(audit_path, limit=max_cycles)
 
 
 def _cycle_row(cycle: Mapping[str, Any]) -> dict[str, Any] | None:

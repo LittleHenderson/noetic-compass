@@ -71,12 +71,12 @@ export function WebhookSubscriptionPanel() {
   }, [newUrl, newLabel, refresh]);
 
   const handleRemove = useCallback(
-    async (url: string) => {
+    async (subscriptionId: string) => {
       setBusy(true);
       setError(null);
       setMessage(null);
       try {
-        const result = await unsubscribeWebhook(url);
+        const result = await unsubscribeWebhook(subscriptionId);
         if (!result.ok) {
           setError(`Remove failed: ${result.error.message}`);
           return;
@@ -203,10 +203,10 @@ export function WebhookSubscriptionPanel() {
               </thead>
               <tbody>
                 {subscriptions.map((s) => (
-                  <tr key={s.webhook_url} className="webhook-row">
+                  <tr key={s.subscription_id} className="webhook-row">
                     <td>{s.label || "—"}</td>
-                    <td className="mono" title={s.webhook_url}>
-                      {truncateUrl(s.webhook_url)}
+                    <td className="mono" title={s.webhook_url_masked}>
+                      {truncateUrl(s.webhook_url_masked)}
                     </td>
                     <td className="mono">{s.created_at_iso || "—"}</td>
                     <td className="mono">{s.last_used_at_iso ?? "—"}</td>
@@ -215,7 +215,7 @@ export function WebhookSubscriptionPanel() {
                         type="button"
                         className="notification-button ghost"
                         disabled={busy}
-                        onClick={() => void handleRemove(s.webhook_url)}
+                        onClick={() => void handleRemove(s.subscription_id)}
                       >
                         Remove
                       </button>
@@ -240,8 +240,8 @@ export function WebhookSubscriptionPanel() {
               </thead>
               <tbody>
                 {testResults.map((row, i) => (
-                  <tr key={i}>
-                    <td className="mono">{truncateUrl(row.webhook_url)}</td>
+                  <tr key={row.subscription_id || i}>
+                    <td className="mono">{truncateUrl(row.webhook_url_masked)}</td>
                     <td>
                       <StatusChip
                         label={row.success ? "yes" : "no"}

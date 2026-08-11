@@ -18,7 +18,9 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Any, Mapping, Sequence
 
+from cas_forex.account_health import build_account_health_report
 from cas_forex.authority_boundary import AUTHORIZED, NOT_LICENSED, OPEN
+from cas_forex.movement_stream import build_movement_position_feed_truth
 
 CLAIM_BOUNDARY = (
     "Account reconciliation compares internal paper/demo ledger and movement "
@@ -79,6 +81,11 @@ class AccountReconciliationReport:
     deployment_status: str
     live_money_authorized: bool
     payment_movement_authorized: bool
+    movement_stream_present: bool = False
+    movement_price_source_status: str | None = None
+    movement_position_feed_label: str | None = None
+    movement_position_feed_detail: str | None = None
+    movement_source_truth: dict[str, Any] | None = None
     notes: tuple[str, ...] = field(default_factory=tuple)
 
     def to_dict(self) -> dict[str, Any]:
@@ -115,6 +122,10 @@ def build_account_reconciliation_report(
     positions = list(account_ledger.get("positions") or [])
     internal_symbols = _symbols_of(positions)
     broker_symbols = tuple(str(s) for s in (broker_receipt.get("symbols") or []))
+    movement_truth = _movement_source_truth(account_ledger, movement_stream)
+    movement_feed_detail = (
+        str(movement_truth.get("position_feed_detail") or movement_truth.get("detail") or "").strip() or None
+    )
 
     checks: list[ReconciliationCheck] = []
 
@@ -278,6 +289,17 @@ def build_account_reconciliation_report(
         ms_account = movement_stream.get("account") or {}
         ms_balance = ms_account.get("balance_usd")
         movement_ok = _close(ms_balance, internal_balance)
+        detail = (
+            "Movement-stream balance matches the account ledger balance."
+            if movement_ok
+            else "Movement-stream balance does not match the account ledger balance."
+        )
+        if movement_feed_detail:
+            detail += (
+                f" Movement source truth: {movement_truth.get('position_feed_label') or 'UNKNOWN'}, "
+                f"price_source_status={movement_truth.get('price_source_status') or 'unknown'}. "
+                f"{movement_feed_detail}"
+            )
         checks.append(
             ReconciliationCheck(
                 check_id="movement_internal_consistency",
@@ -285,11 +307,7 @@ def build_account_reconciliation_report(
                 status=STATUS_OK if movement_ok else STATUS_MISMATCH,
                 internal_value=internal_balance,
                 broker_value=ms_balance,
-                detail=(
-                    "Movement-stream balance matches the account ledger balance."
-                    if movement_ok
-                    else "Movement-stream balance does not match the account ledger balance."
-                ),
+                detail=detail,
             )
         )
 
@@ -334,6 +352,11 @@ def build_account_reconciliation_report(
         broker_chain_verified=chain_verified,
         internal_symbols=internal_symbols,
         broker_symbols=broker_symbols,
+        movement_stream_present=bool(movement_truth.get("movement_stream_present")),
+        movement_price_source_status=movement_truth.get("price_source_status"),
+        movement_position_feed_label=movement_truth.get("position_feed_label"),
+        movement_position_feed_detail=movement_feed_detail,
+        movement_source_truth=movement_truth,
         checks=tuple(checks),
         blockers=blockers,
         claim_boundary=CLAIM_BOUNDARY,
@@ -361,6 +384,62 @@ def _close(a: Any, b: Any, *, tol: float = 0.01) -> bool:
         return abs(float(a) - float(b)) <= tol
     except (TypeError, ValueError):
         return False
+
+
+def _movement_source_truth(
+    account_ledger: Mapping[str, Any],
+    movement_stream: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    try:
+        report = build_account_health_report(account_ledger, movement_stream=movement_stream)
+    except Exception:
+        report = {}
+    source_health = report.get("source_health") if isinstance(report, Mapping) else None
+    if isinstance(source_health, Mapping):
+        truth = dict(source_health)
+        truth["movement_stream_present"] = bool(truth.get("movement_stream_present"))
+        return truth
+
+    if not isinstance(movement_stream, Mapping) or not movement_stream:
+        return {
+            "movement_stream_present": False,
+            "price_source_status": None,
+            "position_feed_label": None,
+            "position_feed_detail": None,
+            "detail": None,
+        }
+
+    price_source_status = str(movement_stream.get("price_source_status") or "").strip() or None
+    position_feed_label = str(movement_stream.get("position_feed_label") or "").strip() or None
+    position_feed_detail = str(movement_stream.get("position_feed_detail") or "").strip() or None
+
+    if not (position_feed_label and position_feed_detail):
+        derived = build_movement_position_feed_truth(
+            positions=list(movement_stream.get("positions") or []),
+            quotes=list(movement_stream.get("quotes") or []),
+            price_source_status=str(price_source_status or "UNKNOWN"),
+            market_data_provider_requested=bool(movement_stream.get("market_data_provider_requested")),
+            configured_market_data_provider=str(
+                movement_stream.get("configured_market_data_provider")
+                or movement_stream.get("market_data_provider")
+                or ""
+            ),
+            provider_usable_symbols=movement_stream.get("provider_usable_symbols"),
+            static_fallback_symbols=movement_stream.get("static_fallback_symbols"),
+            mt5_fallback_symbols=movement_stream.get("mt5_fallback_symbols"),
+            provider_stale_symbols=movement_stream.get("provider_stale_symbols"),
+            provider_freshness_max_age_seconds=movement_stream.get("provider_freshness_max_age_seconds"),
+        )
+        position_feed_label = position_feed_label or str(derived.get("position_feed_label") or "").strip() or None
+        position_feed_detail = position_feed_detail or str(derived.get("position_feed_detail") or "").strip() or None
+
+    return {
+        "movement_stream_present": True,
+        "price_source_status": price_source_status,
+        "position_feed_label": position_feed_label,
+        "position_feed_detail": position_feed_detail,
+        "detail": position_feed_detail,
+    }
 
 
 def assert_reconciliation_boundary(report: AccountReconciliationReport) -> None:

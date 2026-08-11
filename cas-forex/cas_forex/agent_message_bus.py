@@ -23,8 +23,11 @@ EVENT_SCHEMA = "cas_forex_agent_event.v1"
 CLAIM_BOUNDARY = (
     "CAS Forex agent events are append-only coordination records for paper/demo "
     "agent workflows. They do not by themselves execute live broker orders, "
-    "create broker ACCEPT, deposit, withdraw, move bank/card funds, or automate "
-    "payouts."
+    "create broker ACCEPT, deposit, withdraw, move bank/card funds, or "
+    "automate payouts. Autonomous execution continues only when approved "
+    "intents leave the event log and pass through order_dispatch.py, "
+    "execution_guard.py, broker/provider truth, risk, receipt, and "
+    "kill-switch gates."
 )
 
 

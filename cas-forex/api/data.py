@@ -13,6 +13,8 @@ from cas_forex.account_ledger import (
     build_account_ledger_from_paper_review,
     build_live_account_ledger_from_terminal_history,
 )
+from cas_forex.account_health import build_account_health_report
+from cas_forex.active_account_truth import build_active_account_truth
 from cas_forex.auto_halt import build_auto_halt_report
 from cas_forex.broker_truth_monitor import (
     latest_reconciliation_report as latest_broker_truth_reconciliation_report,
@@ -31,6 +33,10 @@ from cas_forex.live_money_progression_packet import build_live_money_progression
 from cas_forex.order_attempt_audit import build_order_attempt_audit_status
 from cas_forex.order_attempt_recovery_packet import build_order_attempt_recovery_packet
 from cas_forex.payout_recovery import build_payout_recovery_status
+from cas_forex.dispatch_loop import loop_status as dispatch_loop_status
+from cas_forex.mt5_demo_learning_sync import load_mt5_demo_learning_sync
+from cas_forex.mt5_account_growth import load_mt5_account_growth
+from cas_forex.mt5_live import get_mt5_account_snapshot, get_mt5_position_protection_snapshot
 from cas_forex.mt5_market_data_diagnostic import latest_mt5_market_data_diagnostic
 from cas_forex.waste_real_candle_probe import latest_waste_real_candle_probe
 from cas_forex.waste_direction_review_packet import build_waste_direction_review_packet
@@ -47,7 +53,15 @@ from cas_forex.waste_adaptation_owner_review import build_waste_adaptation_owner
 from cas_forex.waste_adaptation_paper_apply import build_waste_adaptation_paper_apply_status
 from cas_forex.waste_runner import build_compound_add_dispatch_handoff_status
 from cas_forex.waste_pilot_promotion import build_waste_pilot_promotion_status
+from cas_forex.movement_stream import MOVEMENT_SNAPSHOT_MAX_AGE_SECONDS
 from cas_forex.movement_stream import build_movement_stream_state
+from cas_forex.movement_stream import build_movement_price_source_summary
+from cas_forex.movement_stream import build_movement_position_feed_truth
+from cas_forex.movement_stream import build_movement_source_truth_snapshot
+from cas_forex.movement_stream import movement_snapshot_age_seconds
+from cas_forex.movement_stream import movement_snapshot_issue_for_movement
+from cas_forex.movement_stream import movement_snapshot_stale_for_movement
+from cas_forex.movement_stream import movement_snapshot_usable_for_movement
 from cas_forex.account_reconciliation import build_account_reconciliation_report
 from cas_forex.live_readiness import build_live_readiness_report
 from cas_forex.paper_proof import build_index_tsmom_126_paper_proof_plan
@@ -59,7 +73,7 @@ from cas_forex.paper_risk import (
     write_paper_risk_status,
 )
 from cas_forex.owner_control import build_owner_control_report
-from cas_forex.market_data.connector import get_connector
+from cas_forex.market_data.connector import MT5TerminalMarketDataConnector, get_connector
 from cas_forex.authority_boundary import build_authority_boundary_report
 from cas_forex.runtime_gates import PENDING_OWNER_ENABLE, build_runtime_gates_report
 from cas_forex.ai_model import model_status
@@ -183,6 +197,8 @@ from cas_forex.pcba_readiness import (
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_ROOT = REPO_ROOT / "evidence_runs"
+DEFAULT_RUNTIME_SIMULATOR_STATE_PATH = REPO_ROOT / "runtime" / "simulated-broker-state.json"
+BACKSOLVE_DASHBOARD_MAX_BYTES = 25 * 1024 * 1024
 PROOF_DIR = EVIDENCE_ROOT / "index_tsmom_126_paper_proof"
 PLAN_ID = "index-tsmom-126-d1-paper-proof"
 
@@ -282,9 +298,18 @@ def dashboard_shell_state() -> Dict[str, Any]:
 def dashboard_fast_state() -> Dict[str, Any]:
     """Small live dashboard packet for the app shell and operational pages."""
     readiness = ui_readiness()
+    health = _optional_dashboard_value(account_health)
     return {
         "proofProgress": _dashboard_proof_progress_summary(readiness),
         "riskBudget": _dashboard_risk_budget_summary_from_latest_risk(),
+        "accountHealth": (
+            _dashboard_account_health_summary(health)
+            if isinstance(health, dict)
+            else None
+        ),
+        "activeAccountTruth": _optional_dashboard_value(
+            lambda: active_account_truth(simulator_health_report=health)
+        ),
         "ownerControl": _optional_dashboard_value(_dashboard_owner_control_summary_from_full),
         # Authority, WASTE, and broker-detail packets are already handled by the
         # shell route, instant stage probe, and deferred full fetches. Keep the
@@ -351,6 +376,84 @@ def _dashboard_owner_control_summary_from_full() -> Dict[str, Any]:
     return _dashboard_owner_control_summary(owner_control())
 
 
+def _dashboard_account_health_summary(report: Dict[str, Any]) -> Dict[str, Any]:
+    account = report.get("account") if isinstance(report.get("account"), dict) else {}
+    closed = report.get("closed_trade_performance") if isinstance(report.get("closed_trade_performance"), dict) else {}
+    exposure = report.get("open_exposure") if isinstance(report.get("open_exposure"), dict) else {}
+    source_health = report.get("source_health") if isinstance(report.get("source_health"), dict) else {}
+    decision = report.get("decision_metrics") if isinstance(report.get("decision_metrics"), dict) else {}
+    return {
+        "report_kind": report.get("report_kind", "cas_forex_account_health"),
+        "status": report.get("status"),
+        "blockers": report.get("blockers") if isinstance(report.get("blockers"), list) else [],
+        "account": {
+            "balance_usd": account.get("balance_usd"),
+            "equity_usd": account.get("equity_usd"),
+            "free_margin_usd": account.get("free_margin_usd"),
+            "realized_pnl_usd": account.get("realized_pnl_usd"),
+            "floating_pnl_usd": account.get("floating_pnl_usd"),
+            "drawdown_pct": account.get("drawdown_pct"),
+            "margin_utilization_pct": account.get("margin_utilization_pct"),
+        },
+        "closed_trade_performance": {
+            "closed_trade_count": closed.get("closed_trade_count"),
+            "win_rate_pct": closed.get("win_rate_pct"),
+            "profit_factor": closed.get("profit_factor"),
+            "profit_factor_state": closed.get("profit_factor_state"),
+            "expectancy_usd": closed.get("expectancy_usd"),
+        },
+        "open_exposure": {
+            "open_position_count": exposure.get("open_position_count"),
+            "open_lots": exposure.get("open_lots"),
+            "unprotected_position_count": exposure.get("unprotected_position_count"),
+            "protective_order_coverage_pct": exposure.get("protective_order_coverage_pct"),
+            "open_risk_estimate_usd": exposure.get("open_risk_estimate_usd"),
+        },
+        "source_health": {
+            "movement_stream_present": source_health.get("movement_stream_present"),
+            "price_source_status": source_health.get("price_source_status"),
+            "price_source_label": source_health.get("price_source_label"),
+            "price_source_summary": source_health.get("price_source_summary"),
+            "price_source_warning": source_health.get("price_source_warning"),
+            "position_feed_label": source_health.get("position_feed_label"),
+            "position_feed_detail": source_health.get("position_feed_detail"),
+            "static_simulation_active": source_health.get("static_simulation_active"),
+            "open_position_count": source_health.get("open_position_count"),
+            "broker_ticket_position_count": source_health.get("broker_ticket_position_count"),
+            "simulator_position_count": source_health.get("simulator_position_count"),
+            "provider_priced_simulator_position_count": source_health.get("provider_priced_simulator_position_count"),
+            "static_simulator_position_count": source_health.get("static_simulator_position_count"),
+            "stale_price_position_count": source_health.get("stale_price_position_count"),
+            "source_label_counts": (
+                source_health.get("source_label_counts")
+                if isinstance(source_health.get("source_label_counts"), dict)
+                else {}
+            ),
+            "configured_market_data_provider": source_health.get("configured_market_data_provider"),
+            "provider_usable_symbols": source_health.get("provider_usable_symbols") if isinstance(source_health.get("provider_usable_symbols"), list) else [],
+            "static_fallback_symbols": source_health.get("static_fallback_symbols") if isinstance(source_health.get("static_fallback_symbols"), list) else [],
+            "mt5_fallback_symbols": source_health.get("mt5_fallback_symbols") if isinstance(source_health.get("mt5_fallback_symbols"), list) else [],
+            "provider_stale_symbols": source_health.get("provider_stale_symbols") if isinstance(source_health.get("provider_stale_symbols"), list) else [],
+            "provider_freshness_max_age_seconds": source_health.get("provider_freshness_max_age_seconds"),
+            "snapshot_age_seconds_by_symbol": (
+                source_health.get("snapshot_age_seconds_by_symbol")
+                if isinstance(source_health.get("snapshot_age_seconds_by_symbol"), dict)
+                else {}
+            ),
+            "provider_error_count": int(source_health.get("provider_error_count") or 0),
+            "stale_positions": source_health.get("stale_positions") if isinstance(source_health.get("stale_positions"), list) else [],
+            "static_positions": source_health.get("static_positions") if isinstance(source_health.get("static_positions"), list) else [],
+            "attention_required": bool(source_health.get("attention_required")),
+            "detail": source_health.get("detail"),
+            "local_detail": source_health.get("local_detail"),
+        },
+        "decision_metrics": decision,
+        "summary_only": True,
+        "claim_boundary": "",
+        "claim_boundary_present": bool(report.get("claim_boundary")),
+    }
+
+
 def _dashboard_owner_control_summary(control: Dict[str, Any]) -> Dict[str, Any]:
     """Compact owner-control knobs; full policy prose stays on /settings/owner-control."""
     allowed_modes = control.get("allowed_modes") if isinstance(control.get("allowed_modes"), list) else []
@@ -392,6 +495,9 @@ def _dashboard_authority_boundary_summary(boundary: Dict[str, Any]) -> Dict[str,
     return {
         "report_kind": boundary.get("report_kind", "cas_forex_authority_boundary"),
         "operating_mode": boundary.get("operating_mode", "READ_ONLY_PAPER_RESEARCH"),
+        "requested_mode": boundary.get("requested_mode", "PAPER"),
+        "live_mode_requested": bool(boundary.get("live_mode_requested")),
+        "execution_mode": boundary.get("execution_mode", "PAPER"),
         "live_trading_status": boundary.get("live_trading_status", PENDING_OWNER_ENABLE),
         "broker_accept_status": boundary.get("broker_accept_status", PENDING_OWNER_ENABLE),
         "auto_deposit_status": boundary.get("auto_deposit_status", PENDING_OWNER_ENABLE),
@@ -701,13 +807,18 @@ def _dashboard_daily_bundle_summary(bundle: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def dashboard_state() -> Dict[str, Any]:
+    ledger = account_ledger()
+    movement = movement_stream(use_provider_quotes=True)
+    health = build_account_health_report(ledger, movement_stream=movement)
     state: Dict[str, Any] = {
         "uiReadiness": ui_readiness(),
         "dailySchedule": daily_schedule(),
         "dailyBundle": daily_bundle(),
         "ownerControl": owner_control(),
-        "accountLedger": account_ledger(),
-        "movementStream": movement_stream(),
+        "accountLedger": ledger,
+        "accountHealth": health,
+        "activeAccountTruth": active_account_truth(simulator_health_report=health),
+        "movementStream": movement,
         "accountReconciliation": account_reconciliation(),
         "liveReadiness": live_readiness(),
         "ownerPromotionReview": owner_promotion_review_summary(),
@@ -862,7 +973,15 @@ def strategy_lead_summaries(limit: int = 12) -> List[Dict[str, Any]]:
 
 def backsolve_summary() -> Dict[str, Any]:
     path = _latest_file(EVIDENCE_ROOT / "leverage_income_backsolve", "leverage-income-backsolve-*-report.json")
-    report = _read_json(path)
+    try:
+        if path.stat().st_size > BACKSOLVE_DASHBOARD_MAX_BYTES:
+            return _backsolve_unavailable_summary(
+                path,
+                f"Backsolve report is too large for dashboard inline loading ({path.stat().st_size} bytes).",
+            )
+        report = _read_json(path)
+    except (OSError, MemoryError, json.JSONDecodeError) as exc:
+        return _backsolve_unavailable_summary(path, f"Backsolve report unavailable: {exc}")
     autonomy = report.get("ai_autonomy") or {}
     math = report.get("required_return_math") or {}
     return {
@@ -882,6 +1001,27 @@ def backsolve_summary() -> Dict[str, Any]:
             "Paper-only leverage/income backsolve. Live trading remains NOT LICENSED.",
         ),
         "deployment_status": report.get("deployment_status", "NOT LICENSED"),
+    }
+
+
+def _backsolve_unavailable_summary(path: Path, detail: str) -> Dict[str, Any]:
+    return {
+        "run_id": path.stem,
+        "status": "unavailable",
+        "detail": detail,
+        "source_path": str(path),
+        "total_scenarios": 0,
+        "viable_scenarios": 0,
+        "ai_autonomy_mode": "unavailable",
+        "ai_selection": "unavailable",
+        "required_return_math": {
+            "target_5k_on_5k_pct": 100.0,
+            "target_12k_on_5k_pct": 240.0,
+        },
+        "verdict_counts": {},
+        "capital_label": "SURVIVAL_RISK",
+        "claim_boundary": "Paper-only leverage/income backsolve unavailable for dashboard inline loading. Live trading remains NOT LICENSED.",
+        "deployment_status": "NOT LICENSED",
     }
 
 
@@ -1417,7 +1557,140 @@ def account_ledger(initial_investment_usd: Optional[float] = None) -> Dict[str, 
             f"evidence_runs/index_tsmom_126_paper_proof/{PLAN_ID}-paper-decision-status.json",
         ),
     )
-    return state.to_dict()
+    ledger = state.to_dict()
+    if not os.environ.get("PYTEST_CURRENT_TEST"):
+        ledger = _overlay_runtime_simulator_positions(ledger)
+    movement = _movement_stream_from_ledger(ledger, use_provider_quotes=True)
+    return _attach_ledger_movement_source_truth(ledger, movement_stream=movement)
+
+
+def _overlay_runtime_simulator_positions(
+    ledger: Dict[str, Any],
+    *,
+    state_path: Path | str = DEFAULT_RUNTIME_SIMULATOR_STATE_PATH,
+) -> Dict[str, Any]:
+    """Keep paper plans as orders and expose only executed simulator positions."""
+
+    payload = dict(ledger)
+    planned_positions = [
+        dict(row) for row in (ledger.get("positions") or []) if isinstance(row, dict)
+    ]
+    path = Path(state_path)
+    try:
+        simulator = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        simulator = {}
+    raw_positions = simulator.get("positions") if isinstance(simulator, dict) else {}
+    runtime_rows: list[dict[str, Any]] = []
+    if isinstance(raw_positions, dict):
+        for raw_ticket, raw in raw_positions.items():
+            if not isinstance(raw, dict):
+                continue
+            order = raw.get("order") if isinstance(raw.get("order"), dict) else {}
+            symbol = str(order.get("symbol") or "").strip()
+            if not symbol:
+                continue
+            ticket = str(raw_ticket)
+            fill_price = _numeric(raw.get("fill_price"))
+            volume = _numeric(raw.get("volume") or order.get("volume"))
+            if fill_price is None or fill_price <= 0 or volume is None or volume <= 0:
+                continue
+            runtime_rows.append(
+                {
+                    "row_id": f"runtime-sim-{ticket}",
+                    "tab": "Positions",
+                    "symbol": symbol,
+                    "side": str(order.get("direction") or "UNKNOWN").upper(),
+                    "lot_size": volume,
+                    "open_price": fill_price,
+                    "close_or_current_price": _numeric(raw.get("current_price")) or fill_price,
+                    "stop_loss": _numeric(raw.get("stop_loss"))
+                    or _numeric(order.get("stop_loss")),
+                    "take_profit": _numeric(raw.get("take_profit"))
+                    or _numeric(order.get("take_profit")),
+                    "timestamp": str(raw.get("timestamp") or ""),
+                    "broker_ticket": None,
+                    "simulator_ticket": ticket,
+                    "strategy_id": str(order.get("comment") or "CAS_PAPER_SIMULATOR"),
+                    "ai_action": str(order.get("comment") or "CAS_PAPER_SIMULATOR"),
+                    "decision_ref": order.get("decision_ref"),
+                    "order_id": order.get("order_id"),
+                    "evidence_packet_id": f"simulated-broker:{ticket}",
+                    "net_pnl_usd": 0.0,
+                    "swap_usd": 0.0,
+                    "commission_usd": 0.0,
+                    "fees_usd": 0.0,
+                    "status": "PAPER_SIMULATOR_EXECUTED_OPEN",
+                    "position_provenance": str(path),
+                }
+            )
+    summary = dict(payload.get("summary") or {})
+    summary["open_position_count"] = len(runtime_rows)
+    payload["summary"] = summary
+    payload["paper_order_intents"] = planned_positions
+    payload["positions"] = runtime_rows
+    payload["runtime_position_source"] = {
+        "status": "DURABLE_PAPER_SIMULATOR",
+        "state_path": str(path),
+        "state_updated_at": simulator.get("updated_at") if isinstance(simulator, dict) else None,
+        "open_position_count": len(runtime_rows),
+        "planned_order_intent_count": len(planned_positions),
+        "void_event_count": int(simulator.get("void_event_count") or 0)
+        if isinstance(simulator, dict)
+        else 0,
+        "claim_boundary": (
+            "positions contains only durable executed simulator positions; "
+            "paper_order_intents contains approved plans that were not broker fills."
+        ),
+    }
+    payload["notes"] = list(payload.get("notes") or []) + [
+        "Trading-window positions come from durable simulated-broker execution state; approved paper order intents remain separate and are not presented as open trades."
+    ]
+    return payload
+
+
+def account_health(initial_investment_usd: Optional[float] = None) -> Dict[str, Any]:
+    ledger = account_ledger(initial_investment_usd=initial_investment_usd)
+    movement = _movement_stream_from_ledger(ledger, use_provider_quotes=True)
+    return build_account_health_report(ledger, movement_stream=movement)
+
+
+def active_account_truth(
+    *,
+    simulator_health_report: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Return one source-ranked account snapshot for owner-facing surfaces."""
+
+    health = (
+        simulator_health_report
+        if isinstance(simulator_health_report, dict)
+        else account_health()
+    )
+    return build_active_account_truth(
+        mt5_snapshot=get_mt5_account_snapshot(),
+        dispatch_loop=dispatch_loop_status(),
+        simulator_health=health,
+        demo_learning=load_mt5_demo_learning_sync(),
+        account_growth=load_mt5_account_growth(),
+    )
+
+
+def _attach_ledger_movement_source_truth(
+    ledger: Dict[str, Any],
+    *,
+    movement_stream: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    movement = movement_stream if isinstance(movement_stream, dict) else _movement_stream_from_ledger(ledger, use_provider_quotes=True)
+    source_health = (
+        build_account_health_report(ledger, movement_stream=movement).get("source_health")
+        if isinstance(ledger, dict)
+        else {}
+    )
+    payload = dict(ledger)
+    payload["movement_stream_id"] = movement.get("stream_id")
+    payload["movement_stream_timestamp"] = movement.get("timestamp")
+    payload["movement_source_truth"] = dict(source_health) if isinstance(source_health, dict) else None
+    return payload
 
 
 def live_broker_account_ledger() -> Optional[Dict[str, Any]]:
@@ -1466,10 +1739,17 @@ def verified_profit_account_ledger() -> Dict[str, Any]:
 
 def verified_profit_sweep_preview_status() -> Dict[str, Any]:
     from cas_forex.verified_profit_sweep import ProfitSweepPolicyStore, build_sweep_preview
+    from cas_forex.payout_recovery import default_payout_attempt_store
 
+    settings = ProfitSweepPolicyStore().load()
+    already_swept = default_payout_attempt_store().settled_total_usd(
+        purpose="verified_profit_sweep",
+        policy_id=settings.policy_id,
+    )
     return build_sweep_preview(
         verified_profit_account_ledger(),
-        ProfitSweepPolicyStore().load(),
+        settings,
+        already_swept_usd=already_swept,
     ).to_dict()
 
 
@@ -1477,10 +1757,12 @@ def auto_halt_status(*, persist: bool = True) -> Dict[str, Any]:
     live_ledger = live_broker_account_ledger()
     paper_ledger = account_ledger()
     reconciliation = latest_broker_truth_reconciliation_report()
+    position_protection = get_mt5_position_protection_snapshot(force=persist)
     return build_auto_halt_report(
         live_account_ledger=live_ledger,
         paper_account_ledger=paper_ledger,
         reconciliation_report=reconciliation,
+        position_protection_report=position_protection,
         persist=persist,
     )
 
@@ -1678,28 +1960,211 @@ def _best_strategy_edge_candidate(candidates: List[Dict[str, Any]]) -> Optional[
 
 
 def movement_stream(use_provider_quotes: bool = False) -> Dict[str, Any]:
-    ledger = account_ledger()
+    return _movement_stream_from_ledger(account_ledger(), use_provider_quotes=use_provider_quotes)
+
+
+def _movement_snapshot_usable(snapshot: Any) -> bool:
+    return movement_snapshot_usable_for_movement(snapshot)
+
+
+def _movement_snapshot_issue(source_name: str, snapshot: Any) -> str:
+    return movement_snapshot_issue_for_movement(source_name, snapshot)
+
+
+def _append_movement_provider_issue(existing: str | None, new_issue: str) -> str:
+    left = str(existing or "").strip()
+    right = str(new_issue or "").strip()
+    if not left:
+        return right
+    if not right or right == left:
+        return left
+    return f"{left} | {right}"
+
+
+def _movement_snapshot_issue_with_connector(source_name: str, connector: Any, snapshot: Any) -> str:
+    issue = _movement_snapshot_issue(source_name, snapshot)
+    connector_error = str(getattr(connector, "last_error", "") or "").strip()
+    if connector_error and bool(getattr(snapshot, "synthetic_fallback", False)):
+        if connector_error.lower().startswith(source_name.lower()):
+            return connector_error
+        return f"{source_name}: {connector_error}"
+    return issue
+
+
+def _movement_stream_from_ledger(ledger: Dict[str, Any], *, use_provider_quotes: bool = False) -> Dict[str, Any]:
     snapshots: Dict[str, Any] = {}
+    provider_name = "none"
+    provider_errors: Dict[str, str] = {}
+    snapshot_source_by_symbol: Dict[str, str] = {}
+    mt5_fallback_symbols: List[str] = []
+    stale_provider_symbols: set[str] = set()
+    snapshot_age_seconds_by_symbol: Dict[str, float | None] = {}
+    attempted_symbols: set[str] = set()
     if use_provider_quotes:
         connector = get_connector()
+        provider_name = type(connector).__name__
+        symbols: List[str] = []
         for row in ledger.get("positions", []):
             symbol = row.get("symbol")
-            if not symbol or symbol in snapshots:
+            if not symbol:
                 continue
+            sym = str(symbol)
+            if sym in symbols:
+                continue
+            symbols.append(sym)
             try:
-                snapshots[str(symbol)] = connector.fetch_snapshot(str(symbol))
-            except Exception:
+                attempted_symbols.add(sym)
+                primary_snapshot = connector.fetch_snapshot(sym)
+            except Exception as exc:
                 # Fail soft: movement stream must remain available even when the
                 # external provider is down or missing. The core builder falls
                 # back to paper-route prices for any missing symbol.
+                provider_errors[sym] = f"{type(exc).__name__}: {exc}"
                 continue
-    return build_movement_stream_state(ledger, market_snapshots=snapshots).to_dict()
+            age = movement_snapshot_age_seconds(primary_snapshot)
+            snapshot_age_seconds_by_symbol[sym] = round(age, 3) if age is not None else None
+            if _movement_snapshot_usable(primary_snapshot):
+                snapshots[sym] = primary_snapshot
+                snapshot_source_by_symbol[sym] = provider_name
+            else:
+                provider_errors[sym] = _movement_snapshot_issue_with_connector(provider_name, connector, primary_snapshot)
+                if movement_snapshot_stale_for_movement(primary_snapshot):
+                    stale_provider_symbols.add(sym)
+
+        unresolved = [sym for sym in symbols if sym not in snapshots]
+        if unresolved and provider_name != "MT5TerminalMarketDataConnector":
+            mt5_connector = MT5TerminalMarketDataConnector()
+            mt5_name = type(mt5_connector).__name__
+            for sym in unresolved:
+                try:
+                    attempted_symbols.add(sym)
+                    mt5_snapshot = mt5_connector.fetch_snapshot(sym)
+                except Exception as exc:
+                    provider_errors[sym] = _append_movement_provider_issue(
+                        provider_errors.get(sym),
+                        f"{mt5_name}: {type(exc).__name__}: {exc}",
+                    )
+                    continue
+                mt5_age = movement_snapshot_age_seconds(mt5_snapshot)
+                if _movement_snapshot_usable(mt5_snapshot):
+                    snapshot_age_seconds_by_symbol[sym] = round(mt5_age, 3) if mt5_age is not None else None
+                    snapshots[sym] = mt5_snapshot
+                    snapshot_source_by_symbol[sym] = mt5_name
+                    mt5_fallback_symbols.append(sym)
+                    stale_provider_symbols.discard(sym)
+                else:
+                    if sym not in snapshot_age_seconds_by_symbol:
+                        snapshot_age_seconds_by_symbol[sym] = round(mt5_age, 3) if mt5_age is not None else None
+                    provider_errors[sym] = _append_movement_provider_issue(
+                        provider_errors.get(sym),
+                        _movement_snapshot_issue_with_connector(mt5_name, mt5_connector, mt5_snapshot),
+                    )
+                    if movement_snapshot_stale_for_movement(mt5_snapshot):
+                        stale_provider_symbols.add(sym)
+    payload = build_movement_stream_state(
+        ledger,
+        market_snapshots=snapshots,
+        market_snapshot_sources=snapshot_source_by_symbol,
+    ).to_dict()
+    provider_usable_symbols = [
+        str(quote.get("symbol"))
+        for quote in payload.get("quotes", [])
+        if str(quote.get("source") or "").startswith("provider_snapshot:")
+    ]
+    closed_market_symbols = [
+        str(quote.get("symbol"))
+        for quote in payload.get("quotes", [])
+        if str(quote.get("source") or "").startswith("provider_snapshot:") and not bool(quote.get("is_market_open"))
+    ]
+    static_fallback_symbols = [
+        str(quote.get("symbol"))
+        for quote in payload.get("quotes", [])
+        if str(quote.get("source") or "").startswith("paper_route_snapshot")
+    ]
+    unsupported_provider_symbols = sorted(
+        symbol
+        for symbol, issue in provider_errors.items()
+        if "not available on the configured" in str(issue or "")
+    )
+    payload.update(
+        {
+            "market_data_provider_requested": bool(use_provider_quotes),
+            "market_data_provider": provider_name,
+            "configured_market_data_provider": provider_name,
+            "provider_snapshot_symbols": sorted(attempted_symbols),
+            "provider_usable_symbols": sorted(provider_usable_symbols),
+            "closed_market_symbols": sorted(closed_market_symbols),
+            "closed_market_quote_count": len(closed_market_symbols),
+            "static_fallback_symbols": sorted(static_fallback_symbols),
+            "unsupported_provider_symbols": unsupported_provider_symbols,
+            "mt5_fallback_symbols": sorted(mt5_fallback_symbols),
+            "provider_stale_symbols": sorted(stale_provider_symbols),
+            "provider_freshness_max_age_seconds": MOVEMENT_SNAPSHOT_MAX_AGE_SECONDS,
+            "snapshot_age_seconds_by_symbol": {
+                symbol: snapshot_age_seconds_by_symbol.get(symbol)
+                for symbol in sorted({*(payload.get("symbols") or []), *attempted_symbols})
+                if str(symbol or "").strip() and symbol in snapshot_age_seconds_by_symbol
+            },
+            "snapshot_source_by_symbol": {
+                str(symbol): str(snapshot_source_by_symbol.get(symbol) or "static_simulation")
+                for symbol in sorted({*(payload.get("symbols") or []), *attempted_symbols})
+                if str(symbol or "").strip()
+            },
+            "provider_errors": provider_errors,
+            "price_source_status": (
+                "PROVIDER_ACTIVE"
+                if provider_usable_symbols and not static_fallback_symbols
+                else "MIXED_PROVIDER_AND_STATIC_FALLBACK"
+                if provider_usable_symbols
+                else "STATIC_SIMULATION_FALLBACK"
+            ),
+        }
+    )
+    payload.update(
+        build_movement_price_source_summary(
+            price_source_status=str(payload.get("price_source_status") or "UNKNOWN"),
+            market_data_provider_requested=bool(use_provider_quotes),
+            configured_market_data_provider=str(payload.get("configured_market_data_provider") or provider_name or ""),
+            provider_usable_symbols=payload.get("provider_usable_symbols"),
+            static_fallback_symbols=payload.get("static_fallback_symbols"),
+            mt5_fallback_symbols=payload.get("mt5_fallback_symbols"),
+            closed_market_symbols=payload.get("closed_market_symbols"),
+            unsupported_provider_symbols=payload.get("unsupported_provider_symbols"),
+            provider_stale_symbols=payload.get("provider_stale_symbols"),
+            provider_freshness_max_age_seconds=payload.get("provider_freshness_max_age_seconds"),
+        )
+    )
+    payload.update(
+        build_movement_position_feed_truth(
+            positions=payload.get("positions"),
+            quotes=payload.get("quotes"),
+            price_source_status=str(payload.get("price_source_status") or "UNKNOWN"),
+            market_data_provider_requested=bool(use_provider_quotes),
+            configured_market_data_provider=str(payload.get("configured_market_data_provider") or provider_name or ""),
+            provider_usable_symbols=payload.get("provider_usable_symbols"),
+            static_fallback_symbols=payload.get("static_fallback_symbols"),
+            mt5_fallback_symbols=payload.get("mt5_fallback_symbols"),
+            closed_market_symbols=payload.get("closed_market_symbols"),
+            closed_market_quote_count=payload.get("closed_market_quote_count"),
+            unsupported_provider_symbols=payload.get("unsupported_provider_symbols"),
+            provider_stale_symbols=payload.get("provider_stale_symbols"),
+            provider_freshness_max_age_seconds=payload.get("provider_freshness_max_age_seconds"),
+        )
+    )
+    payload["movement_source_truth"] = build_movement_source_truth_snapshot(
+        payload,
+        telemetry_source="movement_stream",
+        telemetry_stale=False,
+        telemetry_last_update_iso=str(payload.get("timestamp") or "") or None,
+        movement_stream_present=True,
+    )
+    return payload
 
 def account_reconciliation(sync_to_broker: bool = False) -> Dict[str, Any]:
     receipt = mt5_receipt()
     initial = _broker_snapshot_initial_investment(receipt) if sync_to_broker else None
     ledger = account_ledger(initial_investment_usd=float(initial) if initial else None)
-    movement = build_movement_stream_state(ledger).to_dict()
+    movement = _movement_stream_from_ledger(ledger, use_provider_quotes=True)
     report = build_account_reconciliation_report(
         ledger,
         receipt,
@@ -1715,7 +2180,7 @@ def live_readiness(sync_to_broker: bool = False) -> Dict[str, Any]:
     receipt = mt5_receipt()
     initial = _broker_snapshot_initial_investment(receipt) if sync_to_broker else None
     ledger = account_ledger(initial_investment_usd=float(initial) if initial else None)
-    movement = build_movement_stream_state(ledger).to_dict()
+    movement = _movement_stream_from_ledger(ledger, use_provider_quotes=True)
     reconciliation = build_account_reconciliation_report(
         ledger,
         receipt,

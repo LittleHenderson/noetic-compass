@@ -17,6 +17,7 @@ import type {
 import { StatusChip } from "./StatusChip";
 
 type ChipVariant = "success" | "warning" | "danger" | "info" | "muted" | "paper";
+const LIVE_HANDOFF_CONFIRM_PHRASE = "CONFIRM LIVE HANDOFF DISPATCH";
 
 interface CompoundAddReviewPanelProps {
   state: Pick<DashboardState, "compoundAddOrderDryRun" | "compoundAddOrderDryRunReview" | "compoundAddDispatchHandoff">;
@@ -190,15 +191,29 @@ export function CompoundAddReviewPanel({ state, autoHydrateDelayMs = 15_000 }: C
     }
     setBusy(true);
     try {
+      let confirmPhrase = "";
+      if (ownerConfirmLiveDispatch) {
+        const typed = window.prompt(`Type exactly "${LIVE_HANDOFF_CONFIRM_PHRASE}" to dispatch this live handoff.`, "");
+        if (typed === null) {
+          setMessage("COMPOUND_ADD_HANDOFF_CONFIRM_CANCELED");
+          return;
+        }
+        confirmPhrase = typed;
+      }
       const nextHandoff = await dispatchCompoundAddDispatchHandoff(
         notes,
         ownerConfirmDispatch,
         ownerConfirmLiveDispatch,
+        confirmPhrase,
       );
       setHandoff(nextHandoff);
       setOwnerConfirmDispatch(false);
       setOwnerConfirmLiveDispatch(false);
-      setMessage(nextHandoff.status);
+      setMessage(
+        nextHandoff.status === "CONFIRM_REQUIRED"
+          ? `Type exactly "${nextHandoff.need_confirmation ?? LIVE_HANDOFF_CONFIRM_PHRASE}" to dispatch this live handoff.`
+          : nextHandoff.status,
+      );
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "COMPOUND_ADD_HANDOFF_DISPATCH_FAILED");
     } finally {

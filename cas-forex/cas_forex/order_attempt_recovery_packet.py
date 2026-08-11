@@ -115,7 +115,14 @@ def _attempt_packet(row: Mapping[str, Any]) -> dict[str, Any]:
         "direction": row.get("direction"),
         "volume": row.get("volume"),
         "result_finalized": bool(row.get("result_finalized", False)),
+        "dispatched_to_bridge": bool(row.get("dispatched_to_bridge", False)),
+        "result_status": row.get("result_status"),
+        "result_reason": row.get("result_reason"),
         "is_real_attempt": bool(row.get("is_real_attempt", False)),
+        "bridge_touch_unknown": bool(row.get("bridge_touch_unknown", False)),
+        "requires_owner_review_before_retry": bool(row.get("requires_owner_review_before_retry", False)),
+        "last_dispatch_error": row.get("last_dispatch_error"),
+        "execution_provenance": row.get("execution_provenance"),
         "classification_status": classification,
         "classification_reasons": reasons,
         "requires_owner_terminal_review": True,
@@ -127,7 +134,11 @@ def _attempt_packet(row: Mapping[str, Any]) -> dict[str, Any]:
 def _broker_truth_checks(truth: Mapping[str, Any], *, fresh_seconds: int) -> list[dict[str, Any]]:
     truth_present = bool(truth)
     fresh = _fresh_enough(truth.get("generated_at"), fresh_seconds=fresh_seconds)
-    live_visible = bool(truth.get("mt5_connected")) and truth.get("mt5_is_demo") is False
+    live_visible = (
+        bool(truth.get("mt5_connected"))
+        and truth.get("mt5_is_demo") is False
+        and truth.get("mt5_account_identity_matches_config") is True
+    )
     failed = str(truth.get("overall_status") or "") == RECONCILIATION_FAILED
     unmatched = _int(truth.get("terminal_unmatched_open_position_count"), 0)
     pending = _int(truth.get("terminal_pending_receipt_count"), 0)
@@ -151,10 +162,18 @@ def _broker_truth_checks(truth: Mapping[str, Any], *, fresh_seconds: int) -> lis
         _check(
             "live_account_visible",
             live_visible,
-            {"mt5_connected": truth.get("mt5_connected"), "mt5_is_demo": truth.get("mt5_is_demo")},
-            "A connected live MT5 account is visible."
+            {
+                "mt5_connected": truth.get("mt5_connected"),
+                "mt5_is_demo": truth.get("mt5_is_demo"),
+                "mt5_account": truth.get("mt5_account"),
+                "mt5_account_server": truth.get("mt5_account_server"),
+                "mt5_expected_account": truth.get("mt5_expected_account"),
+                "mt5_expected_server": truth.get("mt5_expected_server"),
+                "mt5_account_identity_matches_config": truth.get("mt5_account_identity_matches_config"),
+            },
+            "A connected live MT5 account matching the configured owner login/server is visible."
             if live_visible
-            else "A connected live MT5 account is not visible.",
+            else "A connected live MT5 account matching the configured owner login/server is not visible.",
         ),
         _check(
             "position_reconciliation_clean",
@@ -179,10 +198,24 @@ def _broker_truth_summary(truth: Mapping[str, Any]) -> dict[str, Any]:
         "overall_status": truth.get("overall_status"),
         "mt5_connected": truth.get("mt5_connected"),
         "mt5_is_demo": truth.get("mt5_is_demo"),
+        "mt5_account": truth.get("mt5_account"),
+        "mt5_account_server": truth.get("mt5_account_server"),
+        "mt5_expected_account": truth.get("mt5_expected_account"),
+        "mt5_expected_server": truth.get("mt5_expected_server"),
+        "mt5_account_identity_matches_config": truth.get("mt5_account_identity_matches_config"),
         "mt5_open_position_count": truth.get("mt5_open_position_count"),
         "terminal_unmatched_open_position_count": truth.get("terminal_unmatched_open_position_count"),
+        "terminal_unattributed_open_position_count": truth.get("terminal_unattributed_open_position_count"),
+        "terminal_memory_gap_open_position_count": truth.get("terminal_memory_gap_open_position_count"),
+        "cas_memory_only_open_position_count": truth.get("cas_memory_only_open_position_count"),
+        "cas_receipt_pending_open_position_count": truth.get("cas_receipt_pending_open_position_count"),
+        "terminal_unmatched_history_count": truth.get("terminal_unmatched_history_count"),
+        "terminal_unattributed_history_count": truth.get("terminal_unattributed_history_count"),
+        "terminal_attributed_history_memory_gap_count": truth.get("terminal_attributed_history_memory_gap_count"),
         "terminal_pending_receipt_count": truth.get("terminal_pending_receipt_count"),
         "terminal_receipt_mismatch_count": truth.get("terminal_receipt_mismatch_count"),
+        "terminal_unmatched_open_position_preview": list(truth.get("terminal_unmatched_open_position_preview") or [])[:3],
+        "terminal_unmatched_history_preview": list(truth.get("terminal_unmatched_history_preview") or [])[:3],
     }
 
 

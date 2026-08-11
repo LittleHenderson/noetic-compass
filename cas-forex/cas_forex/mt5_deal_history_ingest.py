@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
 from cas_forex.config import config
+from cas_forex.market_data.connector import infer_mt5_future_server_offset_seconds
 from cas_forex.terminal_history_ingest import (
     DEFAULT_OUTPUT_DIR as DEFAULT_TERMINAL_HISTORY_OUTPUT_DIR,
     DEFAULT_SOURCE_DIR as DEFAULT_TERMINAL_HISTORY_EXPORT_DIR,
@@ -41,6 +42,7 @@ CLAIM_BOUNDARY = (
     "create broker ACCEPT, deposit, withdraw, move bank/card funds, automate "
     "payouts, or override runtime gates."
 )
+_CLOCK_PROBE_SYMBOLS = ("EURUSD", "GBPUSD", "USDJPY", "XAUUSD", "US30", "NAS100", "SPX500")
 
 
 class MT5DealHistoryIngestError(ValueError):
@@ -72,26 +74,42 @@ def build_mt5_deal_history_ingest_report(
     mode = _normalize_account_mode(account_mode)
     _add_local_mt5_deps()
     mt5 = mt5_module or _import_mt5()
-    old_mt5_path = config.mt5_path
-    old_live_mode = config.live_mode
-    old_paper_trading = config.paper_trading
-    if mt5_path is not None:
-        config.mt5_path = str(mt5_path)
-    config.live_mode = mode == "live"
-    config.paper_trading = mode != "live"
-    try:
-        query_start, query_end = _query_window(start=start, end=end, days_back=days_back, future_minutes=future_minutes)
-        terminal_snapshot = _terminal_snapshot(mt5=mt5, mt5_path=mt5_path)
-        should_fetch = _should_fetch_deals(
-            terminal_snapshot,
-            account_mode=mode,
-            confirm_live_history=confirm_live_history,
+    resolved_mt5_path = str(mt5_path or config.mt5_path or "")
+    # Account mode is an explicit argument throughout this read-only pipeline.
+    # Do not mutate the process-global config while the autonomous dispatch
+    # thread may be evaluating another order.
+    query_start, query_end = _query_window(
+        start=start,
+        end=end,
+        days_back=days_back,
+        future_minutes=future_minutes,
+    )
+    terminal_snapshot = _terminal_snapshot(mt5=mt5, mt5_path=resolved_mt5_path or None)
+    should_fetch = _should_fetch_deals(
+        terminal_snapshot,
+        account_mode=mode,
+        confirm_live_history=confirm_live_history,
+    )
+    time_normalization = _mt5_server_time_normalization(
+        mt5=mt5,
+        symbol=symbol,
+        enabled=should_fetch,
+    )
+    server_offset_seconds = int(time_normalization.get("server_utc_offset_seconds") or 0)
+    broker_query_start = query_start + timedelta(seconds=server_offset_seconds)
+    broker_query_end = query_end + timedelta(seconds=server_offset_seconds)
+    raw_deals = (
+        _fetch_deals(
+            mt5=mt5,
+            start=broker_query_start,
+            end=broker_query_end,
+            ticket=ticket,
+            symbol=symbol,
+            server_offset_seconds=server_offset_seconds,
         )
-        raw_deals = _fetch_deals(mt5=mt5, start=query_start, end=query_end, ticket=ticket, symbol=symbol) if should_fetch else []
-    finally:
-        config.mt5_path = old_mt5_path
-        config.live_mode = old_live_mode
-        config.paper_trading = old_paper_trading
+        if should_fetch
+        else []
+    )
 
     history_rows = _closed_history_rows(
         raw_deals,
@@ -128,6 +146,7 @@ def build_mt5_deal_history_ingest_report(
         ticket=ticket,
         account_mode=mode,
         confirm_live_history=confirm_live_history,
+        time_normalization=time_normalization,
     )
     ingest_status = _ingest_status(summary)
     report = {
@@ -144,16 +163,19 @@ def build_mt5_deal_history_ingest_report(
             "ticket": str(ticket) if ticket is not None else None,
             "account_mode": mode,
             "confirm_live_history": bool(confirm_live_history),
+            "broker_query_start": broker_query_start.isoformat(),
+            "broker_query_end": broker_query_end.isoformat(),
         },
         "account_mode": mode,
         "confirm_live_history": bool(confirm_live_history),
-        "mt5_path": str(mt5_path) if mt5_path is not None else config.mt5_path,
+        "mt5_path": resolved_mt5_path,
         "terminal_snapshot": terminal_snapshot,
         "history_export_path": str(export_path) if export_path is not None else None,
         "raw_deal_count": len(raw_deals),
         "raw_deals_sha256": _sha256_json(raw_deals),
         "history_records": history_rows,
         "raw_deals": raw_deals,
+        "time_normalization": time_normalization,
         "terminal_history_ingest": _compact_terminal_history_report(terminal_history_report),
         "summary": summary,
         "claim_boundary": CLAIM_BOUNDARY,
@@ -400,6 +422,7 @@ def _fetch_deals(
     end: datetime,
     ticket: Optional[str | int],
     symbol: Optional[str],
+    server_offset_seconds: int = 0,
 ) -> List[Dict[str, Any]]:
     if mt5 is None:
         return []
@@ -414,7 +437,10 @@ def _fetch_deals(
             deals = method(start, end) or []
     except Exception:
         return []
-    snapshots = [_deal_snapshot(deal) for deal in deals]
+    snapshots = [
+        _deal_snapshot(deal, server_offset_seconds=server_offset_seconds)
+        for deal in deals
+    ]
     if ticket is None:
         return snapshots
     wanted = str(ticket)
@@ -428,6 +454,76 @@ def _fetch_deals(
             str(deal.get("position_id")),
         }
     ]
+
+
+def _mt5_server_time_normalization(
+    *,
+    mt5: Any | None,
+    symbol: Optional[str],
+    enabled: bool,
+) -> Dict[str, Any]:
+    """Detect broker-server-local epochs before querying deal history."""
+
+    now = utc_now()
+    if not enabled or mt5 is None:
+        return {
+            "status": "NOT_REQUIRED",
+            "probe_symbol": None,
+            "raw_tick_time": None,
+            "raw_tick_time_iso": None,
+            "normalized_tick_time_iso": None,
+            "server_utc_offset_seconds": 0,
+        }
+
+    candidates: List[str] = []
+    if symbol:
+        compact = str(symbol).strip().upper().replace("/", "").replace(".", "")
+        if compact:
+            candidates.append(compact)
+    candidates.extend(_CLOCK_PROBE_SYMBOLS)
+    seen: set[str] = set()
+    for candidate in candidates:
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        try:
+            tick = mt5.symbol_info_tick(candidate)
+            raw_seconds = _to_float(getattr(tick, "time", None))
+        except Exception:
+            continue
+        if raw_seconds is None or raw_seconds <= 0:
+            continue
+        offset_seconds = infer_mt5_future_server_offset_seconds(
+            raw_seconds,
+            now_epoch=now.timestamp(),
+        )
+        raw_delta = raw_seconds - now.timestamp()
+        if offset_seconds or abs(raw_delta) <= 300:
+            normalized_seconds = raw_seconds - offset_seconds
+            return {
+                "status": (
+                    "BROKER_SERVER_OFFSET_CORRECTED"
+                    if offset_seconds
+                    else "MT5_EPOCH_UTC_UNCHANGED"
+                ),
+                "probe_symbol": candidate,
+                "raw_tick_time": raw_seconds,
+                "raw_tick_time_iso": datetime.fromtimestamp(raw_seconds, tz=timezone.utc).isoformat(),
+                "normalized_tick_time_iso": datetime.fromtimestamp(
+                    normalized_seconds,
+                    tz=timezone.utc,
+                ).isoformat(),
+                "server_utc_offset_seconds": int(offset_seconds),
+            }
+
+    return {
+        "status": "SERVER_TIME_OFFSET_UNAVAILABLE",
+        "probe_symbol": None,
+        "raw_tick_time": None,
+        "raw_tick_time_iso": None,
+        "normalized_tick_time_iso": None,
+        "server_utc_offset_seconds": 0,
+    }
 
 
 def _mt5_group(symbol: Optional[str]) -> str:
@@ -515,6 +611,7 @@ def _summary(
     ticket: Optional[str | int],
     account_mode: str,
     confirm_live_history: bool,
+    time_normalization: Mapping[str, Any],
 ) -> Dict[str, Any]:
     terminal = terminal_snapshot.get("terminal") if isinstance(terminal_snapshot.get("terminal"), Mapping) else {}
     account = terminal_snapshot.get("account") if isinstance(terminal_snapshot.get("account"), Mapping) else {}
@@ -529,6 +626,10 @@ def _summary(
         "server": account.get("server"),
         "account_mode": account_mode,
         "confirm_live_history": bool(confirm_live_history),
+        "time_normalization_status": time_normalization.get("status"),
+        "server_utc_offset_seconds": int(
+            time_normalization.get("server_utc_offset_seconds") or 0
+        ),
         "demo_account_confirmed": bool(terminal_snapshot.get("demo_account_confirmed")),
         "live_account_confirmed": bool(terminal_snapshot.get("live_account_confirmed")),
         "account_snapshot_present": bool(account),
@@ -652,7 +753,7 @@ def _compact_terminal_history_report(report: Mapping[str, Any]) -> Dict[str, Any
     }
 
 
-def _deal_snapshot(deal: Any) -> Dict[str, Any]:
+def _deal_snapshot(deal: Any, *, server_offset_seconds: int = 0) -> Dict[str, Any]:
     payload = _object_to_dict(deal)
     out: Dict[str, Any] = {}
     for key in (
@@ -676,7 +777,22 @@ def _deal_snapshot(deal: Any) -> Dict[str, Any]:
         "external_id",
     ):
         out[key] = payload.get(key)
+    raw_time = _to_float(out.get("time"))
+    raw_time_msc = _to_float(out.get("time_msc"))
+    out["time_raw"] = raw_time
+    out["time_msc_raw"] = raw_time_msc
+    if raw_time is not None:
+        out["time"] = raw_time - int(server_offset_seconds)
+    if raw_time_msc is not None:
+        out["time_msc"] = raw_time_msc - (int(server_offset_seconds) * 1000)
+    out["time_iso_raw"] = _deal_time_iso({"time": raw_time})
     out["time_iso"] = _deal_time_iso(out)
+    out["timestamp_basis"] = (
+        "mt5_broker_server_epoch_normalized_to_host_utc"
+        if server_offset_seconds
+        else "mt5_epoch_utc"
+    )
+    out["mt5_server_utc_offset_seconds"] = int(server_offset_seconds)
     out["raw_sha256"] = _sha256_json(payload)
     return out
 

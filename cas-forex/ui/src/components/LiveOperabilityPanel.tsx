@@ -1,6 +1,7 @@
 import { GlassPanel } from "./GlassPanel";
 import { StatusChip } from "./StatusChip";
 import type { BrokerSyncedRiskPreview, LiveReadinessCheck, LiveReadinessReport } from "../types/evidence";
+import { detailEvidenceForLiveReadinessCheck } from "../util/movementSource";
 
 type ChipVariant = "success" | "warning" | "danger" | "info" | "muted" | "paper";
 type LiveReadinessMode = "default" | "broker-sync";
@@ -57,8 +58,12 @@ export function LiveOperabilityPanel({
                 Broker Sync
               </button>
             </div>
-            {brokerSyncBusy && <span className="readiness-mode-note">Loading broker snapshot...</span>}
-            {brokerSyncUnavailable && <span className="readiness-mode-note">Broker sync preview unavailable</span>}
+            {brokerSyncBusy && <span className="readiness-mode-note">Refreshing broker snapshot...</span>}
+            {brokerSyncUnavailable && (
+              <span className="readiness-mode-note">
+                Broker sync preview unavailable; using the default readiness report only.
+              </span>
+            )}
           </div>
           <div className="dashboard-grid-3col" style={{ marginBottom: 10 }}>
             <div className="metric-stack" style={{ padding: 0 }}>
@@ -185,6 +190,8 @@ function Metric({
 }
 
 function GateItem({ check }: { check: LiveReadinessCheck }) {
+  const evidenceDetail = detailEvidenceForLiveReadinessCheck(check);
+  const followup = evidenceDetail || check.next_action;
   return (
     <div className="gate-item">
       <div className="gate-item-header">
@@ -192,7 +199,7 @@ function GateItem({ check }: { check: LiveReadinessCheck }) {
         <StatusChip label={displayLiveCapabilityStatus(check.status)} variant={gateVariant(check.status)} size="sm" />
       </div>
       <div className="gate-item-detail">{check.plain_english}</div>
-      {check.next_action && <div className="gate-item-next">{check.next_action}</div>}
+      {followup && followup !== check.plain_english && <div className="gate-item-next">{followup}</div>}
     </div>
   );
 }

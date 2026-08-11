@@ -40,6 +40,9 @@ def _status(authorized: bool) -> str:
 class AuthorityBoundaryReport:
     report_kind: str = "cas_forex_authority_boundary"
     operating_mode: str = "READ_ONLY_PAPER_RESEARCH"
+    requested_mode: str = "PAPER"
+    live_mode_requested: bool = False
+    execution_mode: str = "PAPER"
     live_trading_status: str = NOT_LICENSED
     broker_accept_status: str = NOT_LICENSED
     auto_deposit_status: str = NOT_LICENSED
@@ -84,12 +87,18 @@ def build_authority_boundary_report(
     tallies each lead's deployment status so a dashboard can reveal drift.
     """
 
-    gates = runtime_gates.evaluate_all(config)
+    resolved_config = _resolved_config(config)
+    gates = runtime_gates.evaluate_all(resolved_config)
+    runtime_report = runtime_gates.build_runtime_gates_report(resolved_config)
     live = gates["live_trading"]
     broker = gates["broker_accept"]
     deposit = gates["auto_deposit"]
     movement = gates["bank_card_movement"]
     payout = gates["payout_automation"]
+    provider_runtime = runtime_report.payment_provider_runtime
+    real_money_provider_ready = bool(provider_runtime.get("real_money_provider_ready", False))
+    live_requested = bool(getattr(resolved_config, "live_mode", False))
+    execution_mode = "LIVE" if live.authorized else ("LIVE_BLOCKED" if live_requested else "PAPER")
 
     counts: dict[str, int] = {}
     for lead in strategy_leads or []:
@@ -99,9 +108,21 @@ def build_authority_boundary_report(
     blockers: list[str] = []
     for dec in gates.values():
         blockers.extend(dec.missing_requirements)
+    if (deposit.authorized or movement.authorized or payout.authorized) and not real_money_provider_ready:
+        blockers.append(
+            "payment provider runtime is not ready for real money: "
+            f"{provider_runtime.get('detail', '')}"
+        )
 
     return AuthorityBoundaryReport(
-        operating_mode="OWNER_AUTHORIZED_LIVE" if live.authorized else "READ_ONLY_PAPER_RESEARCH",
+        operating_mode=(
+            "OWNER_AUTHORIZED_LIVE"
+            if live.authorized
+            else ("OWNER_REQUESTED_LIVE_PENDING_GATES" if live_requested else "PAPER_DEMO_ACTIVE")
+        ),
+        requested_mode="LIVE" if live_requested else "PAPER",
+        live_mode_requested=live_requested,
+        execution_mode=execution_mode,
         live_trading_status=_status(live.authorized),
         broker_accept_status=_status(broker.authorized),
         auto_deposit_status=_status(deposit.authorized),
@@ -109,13 +130,26 @@ def build_authority_boundary_report(
         payout_automation_status=_status(payout.authorized),
         can_place_live_orders=live.authorized,
         can_create_broker_accept=broker.authorized,
-        can_auto_deposit=deposit.authorized,
-        can_move_money=movement.authorized or payout.authorized,
-        can_automate_payouts=payout.authorized,
+        can_auto_deposit=deposit.authorized and real_money_provider_ready,
+        can_move_money=(movement.authorized or payout.authorized) and real_money_provider_ready,
+        can_automate_payouts=payout.authorized and real_money_provider_ready,
         blockers=tuple(dict.fromkeys(blockers)),
         ledger_deployment_status_counts=counts,
         live_execution_runtime_locked=not live.authorized,
     )
+
+
+def _resolved_config(config: Any = None) -> Any:
+    if config is None:
+        from cas_forex.config import config as default_config
+
+        config = default_config
+    try:
+        from cas_forex.live_enable_control import apply_live_enable_overrides
+
+        return apply_live_enable_overrides(config)
+    except Exception:
+        return config
 
 
 def assert_authority_boundary(report: AuthorityBoundaryReport) -> None:

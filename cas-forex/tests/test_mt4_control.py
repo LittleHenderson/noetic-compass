@@ -100,6 +100,7 @@ def test_execute_order_writes_ea_readable_command(monkeypatch, tmp_path):
     outcome = bridge.execute_order(_order())
 
     assert outcome.broker_mode.value == "PAPER_MT4"
+    assert outcome.is_real_broker is False
     # Legacy audit log still written...
     assert (mailbox / "orders.jsonl").exists()
     # ...and the EA-readable command file the EA polls.

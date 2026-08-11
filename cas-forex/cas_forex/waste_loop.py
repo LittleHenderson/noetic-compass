@@ -421,7 +421,7 @@ class WasteLoop:
         return self._result(
             trace,
             "EXECUTE",
-            f"PASS token authorized execution (win_prob={edge.measured_win_prob} "
+            f"PASS token authorized execution (measured_hit_rate={edge.measured_win_prob} "
             f">= threshold={edge.threshold}, beats null_p95={edge.null_p95})",
             setup=setup,
             edge=edge,

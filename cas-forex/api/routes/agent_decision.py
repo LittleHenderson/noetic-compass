@@ -19,6 +19,7 @@ from typing import Any, Callable, Optional
 
 from fastapi import APIRouter
 
+from api import data as data_module
 from cas_forex.agent_decision_explainer import (
     AgentDecisionExplanation,
     explain_latest_agent_decision,
@@ -95,7 +96,22 @@ def _explanation_to_payload(exp: AgentDecisionExplanation) -> dict[str, Any]:
         "plain_english_summary": exp.plain_english_summary,
         "chain": [asdict(step) for step in exp.chain],
         "next_action_hint": exp.next_action_hint,
+        "movement_source_truth": dict(exp.movement_source_truth or {}) if exp.movement_source_truth else None,
+        "version_trace": dict(exp.version_trace or {}),
     }
+
+
+def _safe_current_movement_source_truth() -> dict[str, Any] | None:
+    try:
+        report = data_module.account_health()
+    except Exception:
+        return None
+    if not isinstance(report, dict):
+        return None
+    source_health = report.get("source_health")
+    if not isinstance(source_health, dict):
+        return None
+    return source_health
 
 
 @router.get("/latest")
@@ -107,5 +123,7 @@ async def get_latest_agent_decision() -> dict[str, Any]:
     chain explains which evidence is missing — the route never fabricates.
     """
     inputs = _LOADER()
+    if "movement_source_truth" not in inputs and _LOADER is _default_loader:
+        inputs["movement_source_truth"] = _safe_current_movement_source_truth()
     explanation = explain_latest_agent_decision(**inputs)
     return _explanation_to_payload(explanation)

@@ -770,12 +770,19 @@ def _sweep_summary(preview: Mapping[str, Any]) -> dict[str, Any]:
         if isinstance(preview.get("payout_gate"), Mapping)
         else {}
     )
+    provider_runtime = (
+        preview.get("provider_runtime")
+        if isinstance(preview.get("provider_runtime"), Mapping)
+        else {}
+    )
     return {
         "status": preview.get("status"),
         "claim_status": winnings.get("claim_status"),
         "sweepable_winnings_usd": winnings.get("sweepable_winnings_usd"),
         "sweep_amount_usd": preview.get("sweep_amount_usd"),
         "payout_gate_authorized": bool(payout_gate.get("authorized", False)),
+        "payout_runtime_ready": bool(preview.get("payout_runtime_ready", False)),
+        "provider_runtime_status": provider_runtime.get("status"),
         "reason": preview.get("reason"),
     }
 

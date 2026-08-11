@@ -3,6 +3,7 @@ from __future__ import annotations
 from cas_forex.ai_control_authority import AiControlAuthority
 from cas_forex.directional_intelligence import (
     DIRECTIONAL_PROFILES,
+    analyze_market_state,
     candidate_from_hypothesis,
     score_direction,
 )
@@ -115,3 +116,25 @@ def test_insufficient_candles_are_no_trade(tmp_path):
     )
     assert h.action == "NO_TRADE"
     assert "insufficient candles" in h.reasons[0]
+
+
+def test_analysis_preserves_raw_score_when_candidate_is_below_floor(tmp_path, monkeypatch):
+    import cas_forex.directional_intelligence as directional
+
+    auth = AiControlAuthority(tmp_path / "authority.json")
+    auth.control.adjust("min_directional_confidence", 0.9)
+    monkeypatch.setattr(directional, "get_authority", lambda: auth)
+    monkeypatch.setattr(directional, "_strategy_firewall_for_state", lambda *_args: None)
+
+    analysis = analyze_market_state(
+        {
+            "symbol": "EUR/USD",
+            "timeframe": "M15",
+            "candles": _candles(1.1000, 0.0008),
+        }
+    )
+
+    assert analysis["candidate_formation_status"] == "BELOW_DIRECTIONAL_FLOOR"
+    assert analysis["directional_floor"] == 0.9
+    assert 0 < analysis["directional_score"] < analysis["directional_floor"]
+    assert analysis["hypothesis"]["action"] == "NO_TRADE"

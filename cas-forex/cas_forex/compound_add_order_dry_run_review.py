@@ -237,7 +237,12 @@ def _findings(
 
     truth_present = bool(broker_truth)
     truth_fresh = _fresh_enough(broker_truth.get("generated_at"), fresh_seconds=fresh_seconds)
-    truth_live_visible = bool(broker_truth.get("mt5_connected")) and broker_truth.get("mt5_is_demo") is False
+    truth_identity_matches = broker_truth.get("mt5_account_identity_matches_config") is True
+    truth_live_visible = (
+        bool(broker_truth.get("mt5_connected"))
+        and broker_truth.get("mt5_is_demo") is False
+        and truth_identity_matches
+    )
     truth_reconciled = str(broker_truth.get("overall_status") or "") != RECONCILIATION_FAILED
     open_position_count = _int_value(broker_truth.get("mt5_open_position_count"))
     unmatched_positions = _int_value(broker_truth.get("terminal_unmatched_open_position_count"))
@@ -261,7 +266,22 @@ def _findings(
         _check("base_live_order_dry_run_passed", base_live_passed, {"base_status": (dry_run_payload.get("base_live_order_dry_run") or {}).get("status") if isinstance(dry_run_payload.get("base_live_order_dry_run"), Mapping) else None}, "Base live-order dry-run gates passed." if base_live_passed else "Base live-order dry-run gates did not pass."),
         _check("broker_truth_present", truth_present, {"present": truth_present}, "Latest broker-truth report is present." if truth_present else "No broker-truth report is present."),
         _check("broker_truth_fresh", truth_fresh, {"generated_at": broker_truth.get("generated_at"), "fresh_seconds": fresh_seconds}, "Broker truth is fresh." if truth_fresh else "Broker truth is missing or stale."),
-        _check("live_account_visible", truth_live_visible, {"mt5_connected": broker_truth.get("mt5_connected"), "mt5_is_demo": broker_truth.get("mt5_is_demo")}, "Live MT5 account is visible." if truth_live_visible else "A connected live MT5 account is not visible."),
+        _check(
+            "live_account_visible",
+            truth_live_visible,
+            {
+                "mt5_connected": broker_truth.get("mt5_connected"),
+                "mt5_is_demo": broker_truth.get("mt5_is_demo"),
+                "mt5_account": broker_truth.get("mt5_account"),
+                "mt5_account_server": broker_truth.get("mt5_account_server"),
+                "mt5_expected_account": broker_truth.get("mt5_expected_account"),
+                "mt5_expected_server": broker_truth.get("mt5_expected_server"),
+                "mt5_account_identity_matches_config": broker_truth.get("mt5_account_identity_matches_config"),
+            },
+            "The live MT5 account matches the configured owner login/server."
+            if truth_live_visible
+            else "A connected live MT5 account matching the configured owner login/server is not visible.",
+        ),
         _check("broker_truth_reconciled", truth_reconciled, {"overall_status": broker_truth.get("overall_status")}, "Broker truth is not reporting reconciliation failure." if truth_reconciled else "Broker truth is reporting reconciliation failure."),
         _check("live_open_parent_position_visible", live_open_position_visible, {"mt5_open_position_count": open_position_count}, "At least one live open position is visible for parent add context." if live_open_position_visible else "No live open parent position is visible."),
         _check("no_open_position_mismatch", no_open_position_mismatch, {"unmatched_open_positions": unmatched_positions, "terminal_receipt_mismatch_count": receipt_mismatches}, "No open-position or receipt mismatch is reported." if no_open_position_mismatch else "Broker truth reports open-position or receipt mismatch."),
@@ -292,6 +312,11 @@ def _findings(
             "overall_status": broker_truth.get("overall_status"),
             "mt5_connected": broker_truth.get("mt5_connected"),
             "mt5_is_demo": broker_truth.get("mt5_is_demo"),
+            "mt5_account": broker_truth.get("mt5_account"),
+            "mt5_account_server": broker_truth.get("mt5_account_server"),
+            "mt5_expected_account": broker_truth.get("mt5_expected_account"),
+            "mt5_expected_server": broker_truth.get("mt5_expected_server"),
+            "mt5_account_identity_matches_config": broker_truth.get("mt5_account_identity_matches_config"),
             "mt5_open_position_count": broker_truth.get("mt5_open_position_count"),
             "terminal_unmatched_open_position_count": broker_truth.get("terminal_unmatched_open_position_count"),
             "terminal_pending_receipt_count": broker_truth.get("terminal_pending_receipt_count"),
@@ -336,6 +361,11 @@ def _fingerprint(
         "broker_truth_status": broker_truth.get("overall_status"),
         "mt5_connected": broker_truth.get("mt5_connected"),
         "mt5_is_demo": broker_truth.get("mt5_is_demo"),
+        "mt5_account": broker_truth.get("mt5_account"),
+        "mt5_account_server": broker_truth.get("mt5_account_server"),
+        "mt5_expected_account": broker_truth.get("mt5_expected_account"),
+        "mt5_expected_server": broker_truth.get("mt5_expected_server"),
+        "mt5_account_identity_matches_config": broker_truth.get("mt5_account_identity_matches_config"),
         "mt5_open_position_count": broker_truth.get("mt5_open_position_count"),
         "terminal_unmatched_open_position_count": broker_truth.get("terminal_unmatched_open_position_count"),
         "terminal_pending_receipt_count": broker_truth.get("terminal_pending_receipt_count"),

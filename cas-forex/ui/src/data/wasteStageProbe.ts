@@ -1,3 +1,5 @@
+import { getOwnerToken } from "./apiCore";
+
 const DEFAULT_API_BASE =
   import.meta.env.VITE_CAS_FOREX_API_BASE ?? "http://127.0.0.1:8765/api/forex";
 const API_BASE_STORAGE_KEY = "cas_forex_api_base";
@@ -81,6 +83,7 @@ async function fetchWasteStageFromBases(timeoutMs: number): Promise<Record<strin
   for (const base of wasteStageApiBases()) {
     try {
       const res = await fetch(`${base}/waste-loop/stage`, {
+        headers: ownerAuthHeaders(),
         signal: AbortSignal.timeout(timeoutMs),
       });
       if (!res.ok) {
@@ -100,18 +103,37 @@ async function fetchWasteStageFromBases(timeoutMs: number): Promise<Record<strin
   return null;
 }
 
+function ownerAuthHeaders(): Record<string, string> {
+  const token = getOwnerToken();
+  return token ? { "X-CAS-Owner-Token": token } : {};
+}
+
 function wasteStageApiBases(): string[] {
   const savedBase = readSavedApiBase();
+  const savedOverride = readSavedApiBaseOverride();
   const rememberedBase = readLastSuccessfulWasteStageApiBase();
-  const isLocalBrowser = typeof window === "undefined"
-    || ["127.0.0.1", "localhost", "::1"].includes(window.location.hostname);
+  const originBase = sameOriginApiBase();
+  const isCapacitor = isCapacitorShell();
+  const isLocalBrowser = !isCapacitor && (
+    typeof window === "undefined"
+    || ["127.0.0.1", "localhost", "::1"].includes(window.location.hostname)
+  );
   const bases = isLocalBrowser
-    ? [rememberedBase, savedBase, DEFAULT_API_BASE]
-    : [savedBase, rememberedBase, DEFAULT_API_BASE];
-  if (typeof window !== "undefined") {
-    bases.push(`${window.location.origin}/api/forex`);
-  }
+    ? [rememberedBase, savedBase, DEFAULT_API_BASE, originBase]
+    : [savedOverride, rememberedBase, originBase, DEFAULT_API_BASE];
   return availableWasteStageApiBases(bases);
+}
+
+function sameOriginApiBase(): string | null {
+  if (typeof window === "undefined") return null;
+  if (isCapacitorShell()) return null;
+  return `${window.location.origin}/api/forex`;
+}
+
+function isCapacitorShell(): boolean {
+  if (typeof window === "undefined") return false;
+  const maybeCapacitor = (window as unknown as { Capacitor?: unknown }).Capacitor;
+  return Boolean(maybeCapacitor) || window.location.protocol === "capacitor:";
 }
 
 function readSavedApiBase(): string {
@@ -120,6 +142,15 @@ function readSavedApiBase(): string {
     return window.localStorage.getItem(API_BASE_STORAGE_KEY) || DEFAULT_API_BASE;
   } catch {
     return DEFAULT_API_BASE;
+  }
+}
+
+function readSavedApiBaseOverride(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(API_BASE_STORAGE_KEY);
+  } catch {
+    return null;
   }
 }
 

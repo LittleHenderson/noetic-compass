@@ -115,6 +115,24 @@ pick a host I'll tailor the exact commands and, if you want, add the `fly.toml` 
 
 ## After it's up
 
+After deploy, run the web/phone smoke check from a machine that can reach the
+HTTPS URL:
+
+```bash
+python scripts/run_web_phone_smoke.py \
+  --web-base https://your-domain.com \
+  --expect-cloud-api-auth \
+  --owner-token "$CAS_FOREX_OWNER_TOKEN" \
+  --skip-apk \
+  --exit-code-on-failure
+```
+
+That verifies the public app shell/PWA assets load, `/api/forex/health` works
+through the same origin, and a protected API route refuses no-token requests
+while accepting the owner token. The smoke checker defaults to a 10-second
+per-request timeout to allow cold cloud routes to answer; override it with
+`--timeout-seconds <seconds>` when needed.
+
 Open the HTTPS URL on your phone → **Owner Access** panel → paste the token →
 you're on the same instance as your desktop, and it keeps running when your
 laptop is off.

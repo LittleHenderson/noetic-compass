@@ -17,8 +17,8 @@ import { GlassPanel } from "./GlassPanel";
 interface ObjectivePaceCardProps {
   dailyTarget: number;
   monthlyTarget: number;
-  realizedToday: number;
-  realizedMonth: number;
+  realizedToday: number | null;
+  realizedMonth: number | null;
   /** 1-based index of the current trading day within the 20-day month (0 = not started). */
   tradingDayIndex: number;
 }
@@ -63,16 +63,20 @@ export function ObjectivePaceCard({
   tradingDayIndex,
 }: ObjectivePaceCardProps) {
   const started = tradingDayIndex > 0;
+  const todayMeasured = typeof realizedToday === "number" && Number.isFinite(realizedToday);
+  const monthMeasured = typeof realizedMonth === "number" && Number.isFinite(realizedMonth);
+  const todayValue = todayMeasured ? realizedToday : 0;
+  const monthValue = monthMeasured ? realizedMonth : 0;
 
   // Linear month pace expectation given how many trading days have elapsed.
   const expectedMonth = started ? dailyTarget * tradingDayIndex : 0;
-  const monthPace = paceFor(realizedMonth, expectedMonth);
-  const dayPace = paceFor(realizedToday, dailyTarget);
+  const monthPace = monthMeasured ? paceFor(monthValue, expectedMonth) : null;
+  const dayPace = todayMeasured ? paceFor(todayValue, dailyTarget) : null;
 
   // What's still needed today to hit the daily target (never negative).
-  const neededToday = Math.max(0, dailyTarget - realizedToday);
+  const neededToday = todayMeasured ? Math.max(0, dailyTarget - todayValue) : null;
 
-  const nothingYet = !started && realizedToday === 0 && realizedMonth === 0;
+  const nothingYet = !started && todayMeasured && monthMeasured && todayValue === 0 && monthValue === 0;
 
   return (
     <GlassPanel
@@ -80,7 +84,11 @@ export function ObjectivePaceCard({
       subtitle={`${money(dailyTarget)}/day · ${money(monthlyTarget)}/month over 20 trading days`}
     >
       <div style={{ display: "grid", gap: 14 }}>
-        {nothingYet ? (
+        {!todayMeasured && !monthMeasured ? (
+          <div className="control-field-desc">
+            Period-specific realized P/L is unavailable for the selected active account. The cockpit will not substitute a separate simulator ledger or call a current balance snapshot profit.
+          </div>
+        ) : nothingYet ? (
           <div className="control-field-desc">
             Nothing realized yet. The objective is {money(dailyTarget)}/day toward{" "}
             {money(monthlyTarget)}/month — but the AI only earns it by pressing real,
@@ -96,17 +104,19 @@ export function ObjectivePaceCard({
               }}
             >
               <Stat label="Trading day" value={started ? `${tradingDayIndex} / 20` : "not started"} />
-              <Stat label="Realized today" value={money(realizedToday)} tone={dayPace.tone} />
-              <Stat label="Realized month" value={money(realizedMonth)} tone={monthPace.tone} />
+              <Stat label="Realized today" value={todayMeasured ? money(todayValue) : "UNAVAILABLE"} tone={dayPace?.tone} />
+              <Stat label="Realized month" value={monthMeasured ? money(monthValue) : "UNAVAILABLE"} tone={monthPace?.tone} />
               <Stat label="Month pace target" value={money(expectedMonth)} />
             </div>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "baseline" }}>
-              <span className="field-value" style={{ color: toneColor(monthPace.tone), fontWeight: 600 }}>
-                {monthPace.label} for the month
+              <span className="field-value" style={{ color: toneColor(monthPace?.tone), fontWeight: 600 }}>
+                {monthPace ? `${monthPace.label} for the month` : "Monthly pace unavailable"}
               </span>
               <span className="control-field-desc">
-                {neededToday > 0
+                {neededToday == null
+                  ? "Daily realized P/L is not reconciled for this account."
+                  : neededToday > 0
                   ? `${money(neededToday)} more would meet today's ${money(dailyTarget)} target.`
                   : `Today's ${money(dailyTarget)} target met.`}
               </span>

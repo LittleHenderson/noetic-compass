@@ -19,6 +19,7 @@ def _monitor_state(
     pending: int = 28,
     unmatched: int = 28,
     account_snapshot: bool = False,
+    identity_matches: bool = True,
 ) -> dict:
     return {
         "report_kind": "cas_forex_broker_truth_monitor_status",
@@ -32,6 +33,11 @@ def _monitor_state(
             "overall_status": overall_status,
             "mt5_connected": mt5_connected,
             "mt5_is_demo": mt5_is_demo,
+            "mt5_account": 101321,
+            "mt5_account_server": "Risen-Trade",
+            "mt5_expected_account": 101321,
+            "mt5_expected_server": "Risen-Trade",
+            "mt5_account_identity_matches_config": identity_matches,
             "mt5_open_position_count": 0,
             "terminal_reconciliation_status": "TERMINAL_POSITION_RECONCILIATION_NEEDS_MT4_TERMINAL",
             "terminal_pending_receipt_count": pending,
@@ -78,6 +84,25 @@ def test_broker_truth_recovery_packet_clears_only_fully_live_reconciled_truth():
     assert packet["blockers"] == []
 
 
+def test_broker_truth_recovery_packet_blocks_wrong_live_account_identity():
+    packet = build_broker_truth_recovery_packet(
+        monitor_state=_monitor_state(
+            ready_for_live=False,
+            overall_status=RECONCILED,
+            mt5_is_demo=False,
+            pending=0,
+            unmatched=0,
+            account_snapshot=True,
+            identity_matches=False,
+        )
+    )
+
+    blocker = next(item for item in packet["blockers"] if item["blocker_id"] == "mt5_live_account_visible")
+    assert blocker["value"]["actual_login"] == 101321
+    assert blocker["value"]["identity_matches"] is False
+    assert "wrong-account" in packet["next_action"]
+
+
 def test_broker_truth_recovery_packet_route(monkeypatch):
     monkeypatch.setattr(route_module, "monitor_status", lambda: _monitor_state())
     app = FastAPI()
@@ -92,3 +117,36 @@ def test_broker_truth_recovery_packet_route(monkeypatch):
     assert body["status"] == "BROKER_TRUTH_RECOVERY_BLOCKED"
     assert body["broker_touched"] is False
     assert body["money_moved"] is False
+
+
+def test_broker_truth_recovery_packet_mentions_unattributed_closed_history():
+    packet = build_broker_truth_recovery_packet(
+        monitor_state={
+            **_monitor_state(
+                ready_for_live=False,
+                overall_status=RECONCILED_WITH_WARNINGS,
+                mt5_is_demo=False,
+                pending=0,
+                unmatched=0,
+                account_snapshot=True,
+            ),
+            "latest_report": {
+                **_monitor_state(
+                    ready_for_live=False,
+                    overall_status=RECONCILED_WITH_WARNINGS,
+                    mt5_is_demo=False,
+                    pending=0,
+                    unmatched=0,
+                    account_snapshot=True,
+                )["latest_report"],
+                "overall_status": "RECONCILIATION_FAILED",
+                "terminal_unmatched_history_count": 1,
+                "terminal_unattributed_history_count": 1,
+                "terminal_attributed_history_memory_gap_count": 0,
+            },
+        }
+    )
+
+    assert packet["monitor_summary"]["terminal_unmatched_history_count"] == 1
+    assert packet["monitor_summary"]["terminal_unattributed_history_count"] == 1
+    assert "closed-history rows" in packet["next_action"].lower()

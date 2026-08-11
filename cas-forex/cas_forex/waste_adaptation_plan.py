@@ -177,14 +177,20 @@ def _proposals(
         )
         return proposals
 
-    recommended = _dominant_group(rec)
+    recommended = _mapping(promotion.get("recommended_group")) or _dominant_group(rec)
+    recommended_outcome = _mapping(promotion.get("recommended_group_outcome"))
     proposals.append(
         _proposal(
             "review_profile_direction_priority",
             "PROFILE_PRIORITY_REVIEW",
-            "Use the recommended profile/direction as an owner-reviewed input to future PAPER profile selection.",
+            "Use the exact after-cost profitable behavior group as an owner-reviewed input to future PAPER profile selection.",
             {
                 "recommended_group": recommended,
+                "recommended_group_outcome": recommended_outcome,
+                "selection_basis": promotion.get("selection_basis"),
+                "proxy_recommendation_overridden_by_growth": bool(
+                    promotion.get("proxy_recommendation_overridden_by_growth", False)
+                ),
                 "confirmed_direction_count": confirmed,
                 "runtime_change_allowed": False,
                 "owner_accept_required_before_any_apply": True,
@@ -249,6 +255,11 @@ def _promotion_rule_summary(promotion: Mapping[str, Any]) -> dict[str, Any]:
         "promotion_ready_for_owner_review": bool(promotion.get("promotion_ready_for_owner_review", False)),
         "learning_ready_for_adaptation": bool(promotion.get("learning_ready_for_adaptation", False)),
         "outcome_ready_for_promotion": bool(promotion.get("outcome_ready_for_promotion", False)),
+        "outcome_ready_group_count": promotion.get("outcome_ready_group_count"),
+        "selection_basis": promotion.get("selection_basis"),
+        "proxy_recommendation_overridden_by_growth": bool(
+            promotion.get("proxy_recommendation_overridden_by_growth", False)
+        ),
         "min_confirmed_for_adaptation": promotion.get("min_confirmed_for_adaptation"),
         "confirmed_direction_count": promotion.get("confirmed_direction_count"),
         "confirmed_samples_needed": promotion.get("confirmed_samples_needed"),

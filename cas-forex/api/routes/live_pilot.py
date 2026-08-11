@@ -20,6 +20,9 @@ router = APIRouter()
 
 class LivePilotUpdate(BaseModel):
     allowed_symbols: Optional[List[str]] = None
+    sizing_mode: Optional[str] = None
+    continuous_authority: Optional[bool] = None
+    max_trade_risk_pct_equity: Optional[float] = Field(default=None, gt=0, le=0.5)
     max_trade_lots: Optional[float] = Field(default=None, gt=0)
     max_open_live_lots: Optional[float] = Field(default=None, gt=0)
     max_live_trade_count: Optional[int] = Field(default=None, ge=1)
@@ -28,8 +31,8 @@ class LivePilotUpdate(BaseModel):
     max_pilot_days: Optional[int] = Field(default=None, ge=1)
     notes: Optional[str] = None
     owner_understands_real_money_risk: Optional[bool] = None
-    owner_confirms_small_amounts_only: Optional[bool] = None
-    owner_confirms_no_scaling_without_review: Optional[bool] = None
+    owner_confirms_risk_denominated_sizing: Optional[bool] = None
+    owner_confirms_autonomous_scaling_within_envelope: Optional[bool] = None
     owner_confirms_emergency_stop_ready: Optional[bool] = None
 
 

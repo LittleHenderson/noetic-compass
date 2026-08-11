@@ -1,0 +1,130 @@
+/* Risk Disclosure Page */
+
+.risk-disclosure-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.risk-disclosure-status-grid,
+.risk-disclosure-copy-grid,
+.risk-disclosure-policy-grid,
+.risk-disclosure-doc-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.risk-disclosure-status-grid {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.risk-disclosure-copy-grid,
+.risk-disclosure-policy-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.risk-disclosure-doc-grid {
+  grid-template-columns: minmax(220px, 1.4fr) 110px minmax(260px, 2fr);
+}
+
+.risk-disclosure-status-cell,
+.risk-disclosure-copy-grid section,
+.risk-disclosure-policy-grid > div,
+.risk-disclosure-doc-grid > div {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: rgba(8, 14, 26, 0.48);
+  padding: 12px;
+}
+
+.risk-disclosure-status-cell,
+.risk-disclosure-doc-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.risk-disclosure-copy-grid h4,
+.risk-disclosure-policy-grid h4 {
+  margin: 0 0 6px;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.risk-disclosure-copy-grid p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.48;
+}
+
+.risk-disclosure-boundary {
+  margin-top: 12px;
+  border-left: 3px solid var(--accent-teal);
+  padding: 8px 12px;
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  background: rgba(0, 229, 255, 0.05);
+}
+
+.risk-disclosure-table-wrap {
+  overflow-x: auto;
+}
+
+.risk-disclosure-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.risk-disclosure-table th,
+.risk-disclosure-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+}
+
+.risk-disclosure-table th {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.risk-disclosure-table td {
+  color: var(--text-secondary);
+  line-height: 1.42;
+}
+
+.risk-disclosure-table td:first-child {
+  color: var(--text-primary);
+  font-weight: 650;
+}
+
+.risk-disclosure-muted {
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+}
+
+.risk-disclosure-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
+@media (max-width: 760px) {
+  .risk-disclosure-doc-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -24,6 +24,8 @@ DEFAULT_SOURCE_DIR = REPO_ROOT / "evidence_runs" / "terminal_history_exports"
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "evidence_runs" / "terminal_history_ingest"
 REPORT_KIND = "cas_forex_terminal_history_ingest"
 HISTORY_SCHEMA = "cas_forex_terminal_history_record.v1"
+MAX_CUMULATIVE_EXPORT_SNAPSHOTS = 2
+MAX_CANONICAL_HISTORY_REPORT_BYTES = 20 * 1024 * 1024
 CLAIM_BOUNDARY = (
     "Terminal history ingest normalizes paper/demo MT4/MT5 close-history "
     "exports and joins them to CAS Forex memory rows. It does not by itself "
@@ -58,15 +60,28 @@ def ingest_terminal_history(
             memory_report = None
 
     paths = _resolve_source_paths(source_paths)
-    records: List[Dict[str, Any]] = []
+    seed_records = _load_previous_canonical_records(output_dir) if _uses_incremental_source_scan(source_paths) else []
+    records: List[Dict[str, Any]] = list(seed_records)
     for path in paths:
         records.extend(_records_from_source(path))
+    source_record_count = len(records)
+    records = deduplicate_terminal_history_records(records)
     for record in records:
         validate_terminal_history_record(record)
 
     memory_records = list((memory_report or {}).get("memory_records") or [])
     memory_updates, unmatched_records = join_history_to_memory(records, memory_records)
-    summary = _summary(records, memory_updates, unmatched_records, memory_report)
+    classified_unmatched_records = [
+        _classify_unmatched_history_record(record) for record in unmatched_records
+    ]
+    summary = _summary(
+        records,
+        memory_updates,
+        classified_unmatched_records,
+        memory_report,
+        source_record_count=source_record_count,
+        previous_record_seed_count=len(seed_records),
+    )
     report = {
         "report_kind": REPORT_KIND,
         "created_at": utc_now().isoformat(),
@@ -79,7 +94,8 @@ def ingest_terminal_history(
         "summary": summary,
         "history_records": records,
         "memory_updates": memory_updates,
-        "unmatched_history_records": unmatched_records,
+        "unmatched_history_records": classified_unmatched_records,
+        "classified_unmatched_history_records": classified_unmatched_records,
         "claim_boundary": CLAIM_BOUNDARY,
         "next_action": _next_action(summary),
     }
@@ -108,6 +124,53 @@ def join_history_to_memory(
         update = _memory_update(history, memory, match_method)
         updates.append(update)
     return updates, unmatched
+
+
+def deduplicate_terminal_history_records(
+    records: Sequence[Mapping[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Collapse cumulative exports to one row per broker close identity.
+
+    MT5 history snapshots contain all prior closes. Treating every snapshot as
+    a new trade multiplies the same broker outcome on every monitor cycle.
+    Later exports replace earlier copies while retaining deterministic order.
+    """
+
+    unique: Dict[str, Dict[str, Any]] = {}
+    for record in records:
+        if not isinstance(record, Mapping):
+            continue
+        unique[_terminal_history_identity(record)] = dict(record)
+    return list(unique.values())
+
+
+def _terminal_history_identity(record: Mapping[str, Any]) -> str:
+    broker_mode = str(record.get("broker_mode") or "").strip().upper()
+    closed_at = str(record.get("closed_at") or "").strip()
+    for field in ("command_id", "receipt_id", "deal_ticket"):
+        value = str(record.get(field) or "").strip()
+        if value:
+            return f"{broker_mode}|{field}|{value}|{closed_at}"
+    ticket = str(record.get("broker_ticket") or record.get("ticket") or "").strip()
+    if ticket:
+        return f"{broker_mode}|broker_ticket|{ticket}|{closed_at}"
+    material = "|".join(
+        str(record.get(field) or "")
+        for field in (
+            "broker_mode",
+            "symbol",
+            "direction",
+            "lots",
+            "opened_at",
+            "closed_at",
+            "open_price",
+            "close_price",
+            "profit_loss_account",
+            "commission",
+            "swap",
+        )
+    )
+    return f"fallback|{hashlib.sha256(material.encode('utf-8')).hexdigest()}"
 
 
 def write_terminal_history_ingest_report(
@@ -232,13 +295,49 @@ def _resolve_source_paths(source_paths: Optional[Sequence[Path | str]]) -> List[
             if directory.exists():
                 candidates.append(directory)
     files: List[Path] = []
+    scanned_directory = False
     for candidate in candidates:
         if candidate.is_dir():
+            scanned_directory = True
             for pattern in ("*.json", "*.csv", "*.txt", "*.html", "*.htm"):
                 files.extend(sorted(candidate.glob(pattern)))
         elif candidate.exists():
             files.append(candidate)
-    return sorted(dict.fromkeys(files))
+    unique = sorted(dict.fromkeys(files))
+    return _collapse_cumulative_mt5_exports(unique) if scanned_directory else unique
+
+
+def _uses_incremental_source_scan(source_paths: Optional[Sequence[Path | str]]) -> bool:
+    if source_paths is None:
+        return True
+    return any(Path(path).is_dir() for path in source_paths)
+
+
+def _collapse_cumulative_mt5_exports(paths: Sequence[Path]) -> List[Path]:
+    cumulative_pattern = re.compile(r"^mt5-deal-history-\d{14}\.json$", re.IGNORECASE)
+    cumulative = sorted((path for path in paths if cumulative_pattern.match(path.name)), key=lambda path: path.name)
+    keep = set(cumulative[-MAX_CUMULATIVE_EXPORT_SNAPSHOTS:])
+    return sorted(path for path in paths if path not in cumulative or path in keep)
+
+
+def _load_previous_canonical_records(output_dir: Path | str) -> List[Dict[str, Any]]:
+    files = sorted(Path(output_dir).glob("terminal-history-ingest-*-report.json"))
+    if not files:
+        return []
+    latest = files[-1]
+    try:
+        if latest.stat().st_size > MAX_CANONICAL_HISTORY_REPORT_BYTES:
+            return []
+        payload = json.loads(latest.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    summary = payload.get("summary") if isinstance(payload, Mapping) else None
+    if not isinstance(summary, Mapping) or "duplicate_history_record_count" not in summary:
+        return []
+    rows = payload.get("history_records")
+    if not isinstance(rows, list):
+        return []
+    return [dict(row) for row in rows if isinstance(row, Mapping)]
 
 
 def _records_from_source(path: Path) -> List[Dict[str, Any]]:
@@ -248,8 +347,9 @@ def _records_from_source(path: Path) -> List[Dict[str, Any]]:
     else:
         report = import_mt_history(path)
         rows = report.get("trades") or []
+    source_sha256 = _file_sha256(path)
     return [
-        _normalize_history_row(row, source_path=path)
+        _normalize_history_row(row, source_path=path, source_sha256=source_sha256)
         for row in rows
         if isinstance(row, Mapping)
     ]
@@ -267,7 +367,12 @@ def _json_rows(payload: Any) -> List[Mapping[str, Any]]:
     return [payload]
 
 
-def _normalize_history_row(row: Mapping[str, Any], *, source_path: Path) -> Dict[str, Any]:
+def _normalize_history_row(
+    row: Mapping[str, Any],
+    *,
+    source_path: Path,
+    source_sha256: str | None = None,
+) -> Dict[str, Any]:
     normalized = {_norm_key(key): value for key, value in row.items()}
     source_row = row.get("source_row")
     if isinstance(source_row, Mapping):
@@ -275,6 +380,8 @@ def _normalize_history_row(row: Mapping[str, Any], *, source_path: Path) -> Dict
     ticket = _first_text(normalized, "ticket", "order", "deal", "position", "id", "brokerticket", "broker_ticket")
     command_id = _extract_command_id(normalized)
     receipt_id = _first_text(normalized, "receiptid", "receipt_id")
+    deal_ticket = _first_text(normalized, "dealticket", "deal_ticket", "closedealticket", "close_deal_ticket")
+    position_id = _first_text(normalized, "positionid", "position_id", "position")
     symbol = _normalize_symbol(_first_text(normalized, "symbol", "item", "instrument"))
     direction = _normalize_direction(_first_text(normalized, "direction", "side", "type"))
     lots = _first_number(normalized, "lots", "lot", "size", "volume") or 0.0
@@ -287,11 +394,13 @@ def _normalize_history_row(row: Mapping[str, Any], *, source_path: Path) -> Dict
         "schema": HISTORY_SCHEMA,
         "history_id": _history_id(str(source_path), ticket, command_id, symbol, open_price, close_price, profit_loss_account),
         "source_path": str(source_path),
-        "source_sha256": _file_sha256(source_path),
+        "source_sha256": source_sha256 or _file_sha256(source_path),
         "ticket": ticket,
         "broker_ticket": ticket,
         "command_id": command_id,
         "receipt_id": receipt_id,
+        "deal_ticket": deal_ticket,
+        "position_id": position_id,
         "symbol": symbol or "UNKNOWN",
         "direction": direction or "UNKNOWN",
         "lots": lots,
@@ -370,6 +479,12 @@ def _memory_update(history: Mapping[str, Any], memory: Mapping[str, Any], match_
         "broker_ticket": memory.get("broker_ticket") or history.get("broker_ticket"),
         "symbol": memory.get("symbol") or history.get("symbol"),
         "timeframe": memory.get("timeframe"),
+        "market_regime": memory.get("market_regime")
+        or (
+            memory.get("condition_snapshot_open", {}).get("market_regime")
+            if isinstance(memory.get("condition_snapshot_open"), Mapping)
+            else None
+        ),
         "match_method": match_method,
         "terminal_history_status": "CLOSED_HISTORY_JOINED",
         "profit_loss_account": profit_loss_account,
@@ -395,12 +510,30 @@ def _summary(
     updates: Sequence[Mapping[str, Any]],
     unmatched_records: Sequence[Mapping[str, Any]],
     memory_report: Optional[Mapping[str, Any]],
+    *,
+    source_record_count: int | None = None,
+    previous_record_seed_count: int = 0,
 ) -> Dict[str, Any]:
     pnl_values = [_to_float(update.get("profit_loss_account")) or 0.0 for update in updates]
+    unattributed_unmatched = sum(
+        1
+        for row in unmatched_records
+        if str(row.get("classification_status") or "") == "TERMINAL_UNATTRIBUTED_BROKER_HISTORY"
+    )
+    attributed_gap_unmatched = sum(
+        1
+        for row in unmatched_records
+        if str(row.get("classification_status") or "") == "TERMINAL_ATTRIBUTED_HISTORY_MEMORY_GAP"
+    )
     return {
         "history_record_count": len(records),
+        "source_history_record_count": int(source_record_count if source_record_count is not None else len(records)),
+        "duplicate_history_record_count": max(0, int(source_record_count if source_record_count is not None else len(records)) - len(records)),
+        "previous_record_seed_count": int(previous_record_seed_count),
         "memory_update_count": len(updates),
         "unmatched_history_count": len(unmatched_records),
+        "unmatched_unattributed_history_count": unattributed_unmatched,
+        "unmatched_attributed_history_memory_gap_count": attributed_gap_unmatched,
         "closed_trade_count": len(updates),
         "closed_profit_count": sum(1 for value in pnl_values if value > 0),
         "closed_loss_count": sum(1 for value in pnl_values if value < 0),
@@ -420,7 +553,11 @@ def _next_action(summary: Mapping[str, Any]) -> str:
     if int(summary.get("history_record_count", 0) or 0) == 0:
         return "Export MT4/MT5 account history or provide terminal history JSON/CSV so closed trades can join memory."
     if int(summary.get("unmatched_history_count", 0) or 0) > 0:
-        return "Add command_id, receipt_id, broker_ticket, or CAS comment fields so unmatched terminal history rows can join memory."
+        if int(summary.get("unmatched_unattributed_history_count", 0) or 0) > 0:
+            return (
+                "Owner-review unmatched broker closed-history rows that CAS cannot attribute; they may be external/manual broker closes or missing CAS identity fields."
+            )
+        return "Add or preserve command_id, receipt_id, broker_ticket, or CAS comment fields so attributed terminal history rows can join memory."
     if int(summary.get("memory_update_count", 0) or 0) > 0:
         return "Rerun agent memory so closed-trade PnL fields become durable memory rows."
     return "No terminal history memory updates were produced."
@@ -492,6 +629,34 @@ def _extract_command_id(normalized: Mapping[str, Any]) -> Optional[str]:
     )
     match = re.search(r"(agent-[A-Za-z0-9_-]+-\d{14}-\d+)", text)
     return match.group(1) if match else None
+
+
+def _classify_unmatched_history_record(row: Mapping[str, Any]) -> Dict[str, Any]:
+    payload = dict(row or {})
+    command_id = str(payload.get("command_id") or "").strip()
+    receipt_id = str(payload.get("receipt_id") or "").strip()
+
+    classification = "TERMINAL_UNATTRIBUTED_BROKER_HISTORY"
+    detail = (
+        "Closed broker/terminal history row has no CAS command or receipt identity. "
+        "It may be an external/manual broker close or a missing CAS comment/identity field."
+    )
+    if command_id or receipt_id:
+        classification = "TERMINAL_ATTRIBUTED_HISTORY_MEMORY_GAP"
+        detail = (
+            "Closed broker/terminal history row carries CAS identity, but CAS memory did not join it back yet."
+        )
+
+    payload["classification_status"] = classification
+    payload["classification_detail"] = detail
+    payload["requires_owner_broker_review"] = classification == "TERMINAL_UNATTRIBUTED_BROKER_HISTORY"
+    payload["requires_memory_repair"] = classification == "TERMINAL_ATTRIBUTED_HISTORY_MEMORY_GAP"
+    payload["suggested_next_action"] = (
+        "Owner-review this broker close against terminal/broker history before allowing another live cycle."
+        if classification == "TERMINAL_UNATTRIBUTED_BROKER_HISTORY"
+        else "Rerun terminal history ingest and agent memory so the closed trade joins back to CAS memory."
+    )
+    return payload
 
 
 def _normalize_symbol(value: Optional[str]) -> Optional[str]:
