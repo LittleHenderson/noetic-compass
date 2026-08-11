@@ -97,3 +97,9 @@ superiority_of_tks/figures/
 # Monograph LaTeX build artifacts
 docs/whitepapers/monograph/*/build/
 docs/whitepapers/tex/build/
+
+# --- stray shell/editor junk (2026-08-10 cleanup; files left on disk) ---
+/0,
+/New folder/
+/texput.log
+/grimoire_float_probe.stdout.txt

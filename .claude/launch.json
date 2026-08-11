@@ -1,0 +1,70 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "api",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "uvicorn",
+        "--app-dir",
+        "noetic-compass-scaffold/noetic-compass",
+        "api.main:app",
+        "--reload",
+        "--port",
+        "8000"
+      ],
+      "port": 8000
+    },
+    {
+      "name": "dashboard",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "noetic-compass-scaffold/noetic-compass/dashboard",
+        "run",
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "atlas-viewer",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer",
+        "run",
+        "dev"
+      ],
+      "port": 5173
+    },
+    {
+      "name": "atlas-viewer-redesign",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        ".claude/worktrees/ui-audit-bench/noetic-compass-scaffold/noetic-compass/atlas-viewer",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5174"
+      ],
+      "port": 5174
+    },
+    {
+      "name": "atlas-viewer-integration",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        ".claude/worktrees/integration/noetic-compass-scaffold/noetic-compass/atlas-viewer",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5180"
+      ],
+      "port": 5180
+    }
+  ]
+}
