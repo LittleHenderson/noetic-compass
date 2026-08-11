@@ -10,6 +10,7 @@ import yaml
 from api import server as api_server
 from api.routes import settings as settings_route
 from cas_forex import spec_context
+from ui_contract import assert_panel_wired
 
 
 def _cell(ref: str, text: str) -> str:
@@ -416,8 +417,7 @@ def test_spec_context_settings_ui_and_trace_skip_are_wired():
     settings_page = (repo / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (repo / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<SpecContextPanel />" in settings_page
-    assert "function SpecContextPanel()" in settings_page
+    assert_panel_wired("SpecContextPanel")
     assert "Spec Context" in settings_page
     assert "AI Operator Edge" in settings_page
     assert "Edge Decisions" in settings_page

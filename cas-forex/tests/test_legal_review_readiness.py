@@ -7,6 +7,7 @@ from typing import Any
 from api import server as api_server
 from api.routes import settings as settings_route
 from cas_forex.legal_review_readiness import build_legal_review_readiness
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -167,8 +168,7 @@ def test_legal_review_readiness_settings_ui_and_trace_skip_are_wired():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<LegalReviewReadinessPanel />" in settings_page
-    assert "function LegalReviewReadinessPanel()" in settings_page
+    assert_panel_wired("LegalReviewReadinessPanel")
     assert "Legal Review Readiness" in settings_page
     assert "Counsel Handoff" in settings_page
     assert "Package Docs" in settings_page

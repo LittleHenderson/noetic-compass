@@ -7,6 +7,7 @@ from typing import Any
 from api import server as api_server
 from api.routes import settings as settings_route
 from cas_forex.professional_claims import build_professional_claims_report
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -113,8 +114,7 @@ def test_professional_claims_settings_ui_and_trace_skip_are_wired():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<ProfessionalClaimsPanel />" in settings_page
-    assert "function ProfessionalClaimsPanel()" in settings_page
+    assert_panel_wired("ProfessionalClaimsPanel")
     assert "Professional Claims & Disclosures" in settings_page
     assert "fetchProfessionalClaims" in settings_page
     assert "ProfessionalClaimsReport" in api_client

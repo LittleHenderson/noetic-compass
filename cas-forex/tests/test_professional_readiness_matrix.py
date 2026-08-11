@@ -7,6 +7,7 @@ from typing import Any
 from api import server as api_server
 from api.routes import settings as settings_route
 from cas_forex.professional_readiness_matrix import build_professional_readiness_matrix, _evidence_present
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -235,8 +236,7 @@ def test_professional_readiness_settings_ui_and_trace_skip_are_wired():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<ProfessionalReadinessPanel />" in settings_page
-    assert "function ProfessionalReadinessPanel()" in settings_page
+    assert_panel_wired("ProfessionalReadinessPanel")
     assert "Professional Readiness Matrix" in settings_page
     assert "37-item audit" in settings_page
     assert "fetchProfessionalReadiness" in settings_page
@@ -245,22 +245,22 @@ def test_professional_readiness_settings_ui_and_trace_skip_are_wired():
     assert "completion_state" in api_client
     assert "blocked_by_external_dependency" in api_client
     assert '"/settings/professional-readiness"' in api_client
-    assert "<SpecContextPanel />" in settings_page
+    assert_panel_wired("SpecContextPanel")
     assert "Spec Context" in settings_page
     assert "fetchSpecContextStatus" in settings_page
     assert "SpecContextStatusReport" in api_client
     assert '"/settings/spec-context"' in api_client
-    assert "<LegalReviewReadinessPanel />" in settings_page
+    assert_panel_wired("LegalReviewReadinessPanel")
     assert "Legal Review Readiness" in settings_page
     assert "fetchLegalReviewReadiness" in settings_page
     assert "LegalReviewReadinessReport" in api_client
     assert '"/settings/legal-review-readiness"' in api_client
-    assert "<PublicLaunchGatePanel />" in settings_page
+    assert_panel_wired("PublicLaunchGatePanel")
     assert "Public Launch Gate" in settings_page
     assert "fetchPublicLaunchGate" in settings_page
     assert "PublicLaunchGateReport" in api_client
     assert '"/settings/public-launch-gate"' in api_client
-    assert "<BypassLaunchGatePanel />" in settings_page
+    assert_panel_wired("BypassLaunchGatePanel")
     assert "Bypass Launch Gate" in settings_page
     assert "fetchBypassLaunchGate" in settings_page
     assert "BypassLaunchGateReport" in api_client

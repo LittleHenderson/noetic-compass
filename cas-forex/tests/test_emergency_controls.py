@@ -7,6 +7,7 @@ from typing import Any
 from api import server as api_server
 from api.routes import settings as settings_route
 from cas_forex.emergency_controls import build_emergency_controls_report
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -128,8 +129,7 @@ def test_emergency_controls_settings_ui_and_trace_skip_are_wired():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<EmergencyControlsPanel />" in settings_page
-    assert "function EmergencyControlsPanel()" in settings_page
+    assert_panel_wired("EmergencyControlsPanel")
     assert "Emergency Controls Coverage" in settings_page
     assert "Broker Emergency Actions" in settings_page
     assert "Dry-run close all" in settings_page

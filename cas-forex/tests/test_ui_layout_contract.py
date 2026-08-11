@@ -9,6 +9,7 @@ from typing import Any
 
 from api.routes import settings as settings_route
 from cas_forex.ui_layout_contract import build_ui_layout_contract
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -69,8 +70,7 @@ def test_ui_layout_contract_settings_ui_and_api_client_are_wired():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<UILayoutContractPanel />" in settings_page
-    assert "function UILayoutContractPanel()" in settings_page
+    assert_panel_wired("UILayoutContractPanel")
     assert "UI Layout Contract" in settings_page
     assert "browser-zoom regressions" in settings_page
     assert "fetchUILayoutContract" in settings_page

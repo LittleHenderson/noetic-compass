@@ -4,6 +4,7 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 from cas_forex.broker_symbol_diagnostics import build_broker_symbol_diagnostics
+from ui_contract import assert_panel_wired
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -106,8 +107,7 @@ def test_settings_ui_exposes_broker_symbol_diagnostics_panel():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_ts = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<BrokerSymbolDiagnosticsPanel />" in settings_page
-    assert "function BrokerSymbolDiagnosticsPanel()" in settings_page
+    assert_panel_wired("BrokerSymbolDiagnosticsPanel")
     assert "Broker Symbol Diagnostics" in settings_page
     assert "fetchMt5SymbolDiagnostics" in settings_page
     assert "/mt5/symbol-diagnostics" in api_ts

@@ -8,6 +8,7 @@ from api import server as api_server
 from api.routes import settings as settings_route
 from cas_forex.bypass_launch_gate import build_bypass_launch_gate_report
 from cas_forex.professional_readiness_matrix import build_professional_readiness_matrix
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -87,8 +88,7 @@ def test_bypass_launch_gate_is_in_professional_readiness_item_33_and_settings_ui
     assert rows["dangerous_edge_case_tests"]["status"] == "OK"
     assert "cas_forex/bypass_launch_gate.py" in rows["dangerous_edge_case_tests"]["present_evidence_refs"]
     assert "tests/test_bypass_launch_gate.py" in rows["dangerous_edge_case_tests"]["present_evidence_refs"]
-    assert "<BypassLaunchGatePanel />" in settings_page
-    assert "function BypassLaunchGatePanel()" in settings_page
+    assert_panel_wired("BypassLaunchGatePanel")
     assert "Bypass Launch Gate" in settings_page
     assert "fetchBypassLaunchGate" in settings_page
     assert "BypassLaunchGateReport" in api_client

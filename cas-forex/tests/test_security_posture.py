@@ -8,6 +8,7 @@ from types import SimpleNamespace
 from api.routes import settings as settings_route
 from cas_forex import live_enable_control, operator_secrets, owner_auth, push_delivery_control
 from cas_forex.security_posture import build_security_posture_report
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -239,8 +240,7 @@ def test_security_posture_route_is_cache_first_and_read_only(monkeypatch):
 def test_settings_ui_exposes_security_posture_panel():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
 
-    assert "<SecurityPosturePanel />" in settings_page
-    assert "function SecurityPosturePanel()" in settings_page
+    assert_panel_wired("SecurityPosturePanel")
     assert "fetchSecurityPosture" in settings_page
     assert "Browser Secret Policy" in settings_page
     assert "Role Permission Model" in settings_page

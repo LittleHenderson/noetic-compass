@@ -24,6 +24,7 @@ from api.routes import settings as settings_route
 from api.routes import stack_health as stack_health_route
 from api.routes import mobile as mobile_route
 from api.server import app
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -310,7 +311,7 @@ def test_trade_page_surfaces_psychology_guard_panel():
     assert "Anti-Impulse Journal" in psychology_panel
     assert "fetchRiskControl()" in psychology_panel
     assert "fetchAiControlAuthority()" in psychology_panel
-    assert "<PsychologyGuardPanel />" in trade_page
+    assert_panel_wired("PsychologyGuardPanel")
     assert "<PsychologyGuardPanel subtitle=" in dashboard_page
 
 
@@ -982,9 +983,9 @@ def test_dashboard_deep_operations_staggers_core_panel_hydration():
     assert "sweepOpsPanelReady ? (" in component
     assert "evidencePanelsReady ? (" in component
     assert "liveOperabilityPanelReady ? (" in component
-    assert "<DashboardSweepOpsPanelFallback />" in component
-    assert "<DashboardEvidencePanelsFallback />" in component
-    assert "<LiveOperabilityPanelFallback />" in component
+    assert_panel_wired("DashboardSweepOpsPanelFallback")
+    assert_panel_wired("DashboardEvidencePanelsFallback")
+    assert_panel_wired("LiveOperabilityPanelFallback")
     assert "DASHBOARD_EVIDENCE_PANELS_IDLE_TIMEOUT_MS" in component.split("setEvidencePanelsReady(true)", 1)[1]
     assert "DASHBOARD_LIVE_OPERABILITY_IDLE_TIMEOUT_MS" in component.split("setLiveOperabilityPanelReady(true)", 1)[1]
     assert "operationsPanelReady" not in component
@@ -1008,7 +1009,7 @@ def test_dashboard_sweep_panel_css_is_lazy_not_root_first_paint():
     assert "setBrokerTruthPanelReady(true)" in panel
     assert "brokerTruthPanelReady ? (" in panel
     assert "<DashboardBrokerTruthOpsPanel ops={brokerTruthOps} />" in panel
-    assert "<DashboardBrokerTruthOpsPanelFallback />" in panel
+    assert_panel_wired("DashboardBrokerTruthOpsPanelFallback")
     assert 'payoutActionReady ? "Confirm Payout" : "Request Payout Setup"' in panel
     assert 'label={`RAIL ${payoutRuntimeStatus}`}' in panel
     assert "providerRuntime?.detail" in panel
@@ -2108,7 +2109,7 @@ def test_dashboard_startup_cache_writer_keeps_only_first_paint_fields():
     assert "failure_reasons: []" in cache_reader
     assert "symbol_decisions: []" in cache_reader
     assert "sizing: []" in cache_reader
-    assert "function readExistingDashboardCachePacket()" in writer
+    assert_panel_wired("readExistingDashboardCachePacket")
     assert "function mergeDashboardCachePackets(" in writer
     assert "function preferredDashboardMeta(" in writer
     assert "function dashboardPacketRank(" in writer
@@ -4190,7 +4191,7 @@ def test_runtime_topology_is_exposed_in_settings_and_api_client():
 
     assert "export interface RuntimeTopologyStatus" in api_types
     assert 'apiGet<RuntimeTopologyStatus>("/runtime-topology")' in api_types
-    assert "<RuntimeTopologyPanel />" in settings_page
+    assert_panel_wired("RuntimeTopologyPanel")
     assert 'title="Runtime Process Topology"' in settings_page
     assert 'label="API Workers"' in settings_page
     assert 'prefix="/api/forex/runtime-topology"' in server

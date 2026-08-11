@@ -7,6 +7,7 @@ from typing import Any
 from api import server as api_server
 from api.routes import settings as settings_route
 from cas_forex.ai_hedge_supervision import build_ai_hedge_supervision_report
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -254,8 +255,7 @@ def test_ai_hedge_supervision_settings_ui_and_trace_skip_are_wired():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<AiHedgeSupervisionPanel />" in settings_page
-    assert "function AiHedgeSupervisionPanel()" in settings_page
+    assert_panel_wired("AiHedgeSupervisionPanel")
     assert "AI Operator Edge / Hedge Supervision" in settings_page
     assert 'label="Position Feed"' in settings_page
     assert "report?.position_feed_detail" in settings_page

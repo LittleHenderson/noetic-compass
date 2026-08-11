@@ -9,6 +9,7 @@ from api import server as api_server
 from api.routes import settings as settings_route
 from cas_forex.backup_restore import BackupManifest, create_backup
 from cas_forex.operational_readiness import build_operational_readiness_report
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -187,8 +188,7 @@ def test_operational_readiness_settings_ui_and_trace_skip_are_wired():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<OperationalReadinessPanel />" in settings_page
-    assert "function OperationalReadinessPanel()" in settings_page
+    assert_panel_wired("OperationalReadinessPanel")
     assert "Operational Readiness" in settings_page
     assert "fetchOperationalReadiness" in settings_page
     assert "createOperatorBackup" in settings_page

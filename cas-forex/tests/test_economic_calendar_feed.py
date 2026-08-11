@@ -8,6 +8,7 @@ from types import SimpleNamespace
 from api import server as api_server
 from api.routes import settings as settings_route
 from cas_forex.economic_calendar_feed import build_economic_calendar_feed_report
+from ui_contract import assert_panel_wired
 
 
 def _cfg(tmp_path: Path, **overrides):
@@ -194,8 +195,7 @@ def test_economic_calendar_settings_ui_and_api_client_are_wired():
     settings_page = (Path(__file__).resolve().parents[1] / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (Path(__file__).resolve().parents[1] / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<EconomicCalendarPanel />" in settings_page
-    assert "function EconomicCalendarPanel()" in settings_page
+    assert_panel_wired("EconomicCalendarPanel")
     assert "Economic Calendar Feed" in settings_page
     assert "fetchEconomicCalendarFeed" in settings_page
     assert "EconomicCalendarFeedReport" in api_client

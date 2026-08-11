@@ -7,6 +7,7 @@ from typing import Any
 from api import server as api_server
 from api.routes import settings as settings_route
 from cas_forex.public_launch_gate import build_public_launch_gate
+from ui_contract import assert_panel_wired
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -194,8 +195,7 @@ def test_public_launch_gate_settings_ui_and_trace_skip_are_wired():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "<PublicLaunchGatePanel />" in settings_page
-    assert "function PublicLaunchGatePanel()" in settings_page
+    assert_panel_wired("PublicLaunchGatePanel")
     assert "Public Launch Gate" in settings_page
     assert "fetchPublicLaunchGate" in settings_page
     assert "PublicLaunchGateReport" in api_client
