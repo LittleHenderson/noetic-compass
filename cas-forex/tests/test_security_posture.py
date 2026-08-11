@@ -241,19 +241,21 @@ def test_settings_ui_exposes_security_posture_panel():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
 
     assert_panel_wired("SecurityPosturePanel")
-    assert "fetchSecurityPosture" in settings_page
-    assert "Browser Secret Policy" in settings_page
-    assert "Role Permission Model" in settings_page
-    assert "Managed Secret Store" in settings_page
+    # Moved to components/settings/SecurityPosturePanel.tsx in the settings decomposition (slice 2).
+    extracted_securityposturepanel = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "SecurityPosturePanel.tsx").read_text(encoding="utf-8")
+    assert "fetchSecurityPosture" in extracted_securityposturepanel
+    assert "Browser Secret Policy" in extracted_securityposturepanel
+    assert "Role Permission Model" in extracted_securityposturepanel
+    assert "Managed Secret Store" in extracted_securityposturepanel
     assert "managed_secret_store" in (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
-    assert "MFA Status" in settings_page
-    assert "Live Action 2nd Factor" in settings_page
-    assert "Route Permission Policy" in settings_page
-    assert "Default Mutations" in settings_page
-    assert "default_mutation_route_count" in settings_page
-    assert "coverage_status" in settings_page
-    assert "route_permission_policy" in settings_page
+    assert "MFA Status" in extracted_securityposturepanel
+    assert "Live Action 2nd Factor" in extracted_securityposturepanel
+    assert "Route Permission Policy" in extracted_securityposturepanel
+    assert "Default Mutations" in extracted_securityposturepanel
+    assert "default_mutation_route_count" in extracted_securityposturepanel
+    assert "coverage_status" in extracted_securityposturepanel
+    assert "route_permission_policy" in extracted_securityposturepanel
     assert "route_permission_policy" in (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
-    assert "mfa_hardening_backlog" in settings_page
-    assert "can_submit_live_order" in settings_page
-    assert "Security posture is read-only and never returns raw secrets." in settings_page
+    assert "mfa_hardening_backlog" in extracted_securityposturepanel
+    assert "can_submit_live_order" in extracted_securityposturepanel
+    assert "Security posture is read-only and never returns raw secrets." in extracted_securityposturepanel

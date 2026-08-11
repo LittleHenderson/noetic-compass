@@ -438,7 +438,7 @@ _MATRIX_ITEMS: tuple[dict[str, Any], ...] = (
             "tests/test_push_notifications.py",
             "tests/test_notifications_route.py",
             "tests/test_webhook_notifications.py",
-            "ui/src/pages/SettingsPage.tsx:Managed Secret Store",
+            "ui/src/components/settings/SecurityPosturePanel.tsx:Managed Secret Store",
         ),
         "gap": "",
         "next_action": "",

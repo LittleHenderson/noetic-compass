@@ -4220,8 +4220,10 @@ def test_runtime_topology_is_exposed_in_settings_and_api_client():
     assert "export interface RuntimeTopologyStatus" in api_types
     assert 'apiGet<RuntimeTopologyStatus>("/runtime-topology")' in api_types
     assert_panel_wired("RuntimeTopologyPanel")
-    assert 'title="Runtime Process Topology"' in settings_page
-    assert 'label="API Workers"' in settings_page
+    # RuntimeTopologyPanel moved to components/settings/OpsPanels.tsx (slice 2).
+    extracted_opspanels_local = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "OpsPanels.tsx").read_text(encoding="utf-8")
+    assert 'title="Runtime Process Topology"' in extracted_opspanels_local
+    assert 'label="API Workers"' in extracted_opspanels_local
     assert 'prefix="/api/forex/runtime-topology"' in server
     assert "validate_api_worker_count" in launcher
     assert "requires exactly one stateful API worker" in (

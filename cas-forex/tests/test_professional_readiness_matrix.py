@@ -237,17 +237,21 @@ def test_professional_readiness_settings_ui_and_trace_skip_are_wired():
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("ProfessionalReadinessPanel")
-    assert "Professional Readiness Matrix" in settings_page
-    assert "37-item audit" in settings_page
-    assert "fetchProfessionalReadiness" in settings_page
+    # Moved to components/settings/ProfessionalReadinessPanel.tsx in the settings decomposition (slice 2).
+    extracted_professionalreadinesspanel = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "ProfessionalReadinessPanel.tsx").read_text(encoding="utf-8")
+    assert "Professional Readiness Matrix" in extracted_professionalreadinesspanel
+    assert "37-item audit" in extracted_professionalreadinesspanel
+    assert "fetchProfessionalReadiness" in extracted_professionalreadinesspanel
     assert "ProfessionalReadinessMatrix" in api_client
     assert "external_blocked_count" in api_client
     assert "completion_state" in api_client
     assert "blocked_by_external_dependency" in api_client
     assert '"/settings/professional-readiness"' in api_client
     assert_panel_wired("SpecContextPanel")
-    assert "Spec Context" in settings_page
-    assert "fetchSpecContextStatus" in settings_page
+    # Moved to components/settings/SpecContextPanel.tsx in the settings decomposition (slice 2).
+    extracted_speccontextpanel = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "SpecContextPanel.tsx").read_text(encoding="utf-8")
+    assert "Spec Context" in extracted_speccontextpanel
+    assert "fetchSpecContextStatus" in extracted_speccontextpanel
     assert "SpecContextStatusReport" in api_client
     assert '"/settings/spec-context"' in api_client
     assert_panel_wired("LegalReviewReadinessPanel")
@@ -256,13 +260,15 @@ def test_professional_readiness_settings_ui_and_trace_skip_are_wired():
     assert "LegalReviewReadinessReport" in api_client
     assert '"/settings/legal-review-readiness"' in api_client
     assert_panel_wired("PublicLaunchGatePanel")
-    assert "Public Launch Gate" in settings_page
-    assert "fetchPublicLaunchGate" in settings_page
+    # Moved to components/settings/LaunchGatePanels.tsx in the settings decomposition (slice 2).
+    extracted_launchgatepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "LaunchGatePanels.tsx").read_text(encoding="utf-8")
+    assert "Public Launch Gate" in extracted_launchgatepanels
+    assert "fetchPublicLaunchGate" in extracted_launchgatepanels
     assert "PublicLaunchGateReport" in api_client
     assert '"/settings/public-launch-gate"' in api_client
     assert_panel_wired("BypassLaunchGatePanel")
-    assert "Bypass Launch Gate" in settings_page
-    assert "fetchBypassLaunchGate" in settings_page
+    assert "Bypass Launch Gate" in extracted_launchgatepanels
+    assert "fetchBypassLaunchGate" in extracted_launchgatepanels
     assert "BypassLaunchGateReport" in api_client
     assert '"/settings/bypass-launch-gate"' in api_client
     assert api_server._should_trace_request("GET", "/api/forex/settings/spec-context") is False

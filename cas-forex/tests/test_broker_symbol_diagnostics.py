@@ -108,6 +108,8 @@ def test_settings_ui_exposes_broker_symbol_diagnostics_panel():
     api_ts = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("BrokerSymbolDiagnosticsPanel")
-    assert "Broker Symbol Diagnostics" in settings_page
-    assert "fetchMt5SymbolDiagnostics" in settings_page
+    # Moved to components/settings/OpsPanels.tsx in the settings decomposition (slice 2).
+    extracted_opspanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "OpsPanels.tsx").read_text(encoding="utf-8")
+    assert "Broker Symbol Diagnostics" in extracted_opspanels
+    assert "fetchMt5SymbolDiagnostics" in extracted_opspanels
     assert "/mt5/symbol-diagnostics" in api_ts

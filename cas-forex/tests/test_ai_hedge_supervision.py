@@ -256,10 +256,12 @@ def test_ai_hedge_supervision_settings_ui_and_trace_skip_are_wired():
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("AiHedgeSupervisionPanel")
-    assert "AI Operator Edge / Hedge Supervision" in settings_page
-    assert 'label="Position Feed"' in settings_page
-    assert "report?.position_feed_detail" in settings_page
-    assert "fetchAiHedgeSupervision" in settings_page
+    # Moved to components/settings/AiHedgePanels.tsx in the settings decomposition (slice 2).
+    extracted_aihedgepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "AiHedgePanels.tsx").read_text(encoding="utf-8")
+    assert "AI Operator Edge / Hedge Supervision" in extracted_aihedgepanels
+    assert 'label="Position Feed"' in extracted_aihedgepanels
+    assert "report?.position_feed_detail" in extracted_aihedgepanels
+    assert "fetchAiHedgeSupervision" in extracted_aihedgepanels
     assert "AiHedgeSupervisionReport" in api_client
     assert "position_feed_detail?: string;" in api_client
     assert '"/settings/ai-hedge-supervision"' in api_client

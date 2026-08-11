@@ -365,8 +365,10 @@ def test_ai_hedge_management_settings_ui_operator_and_trace_skip_are_wired():
     operator = (REPO_ROOT / "cas_forex" / "ai_operator.py").read_text(encoding="utf-8")
 
     assert_panel_wired("AiHedgeManagementHandoffPanel")
-    assert "AI Operator Edge / Hedge Management Handoff" in settings_page
-    assert "fetchAiHedgeManagementHandoff" in settings_page
+    # Moved to components/settings/AiHedgePanels.tsx in the settings decomposition (slice 2).
+    extracted_aihedgepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "AiHedgePanels.tsx").read_text(encoding="utf-8")
+    assert "AI Operator Edge / Hedge Management Handoff" in extracted_aihedgepanels
+    assert "fetchAiHedgeManagementHandoff" in extracted_aihedgepanels
     assert "AiHedgeManagementHandoffReport" in api_client
     assert '"/settings/ai-hedge-management-handoff"' in api_client
     assert "ai_hedge_management_handoff" in operator

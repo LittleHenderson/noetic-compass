@@ -196,7 +196,9 @@ def test_economic_calendar_settings_ui_and_api_client_are_wired():
     api_client = (Path(__file__).resolve().parents[1] / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("EconomicCalendarPanel")
-    assert "Economic Calendar Feed" in settings_page
-    assert "fetchEconomicCalendarFeed" in settings_page
+    # Moved to components/settings/OpsPanels.tsx in the settings decomposition (slice 2).
+    extracted_opspanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "OpsPanels.tsx").read_text(encoding="utf-8")
+    assert "Economic Calendar Feed" in extracted_opspanels
+    assert "fetchEconomicCalendarFeed" in extracted_opspanels
     assert "EconomicCalendarFeedReport" in api_client
     assert '"/settings/economic-calendar"' in api_client
