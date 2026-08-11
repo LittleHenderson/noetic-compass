@@ -1,4 +1,6 @@
 import type { DashboardState } from "../types/evidence";
+import { Metric } from "./Metric";
+import { dashboardStateProvenance } from "../util/provenance";
 import {
   formatMovementSourceStatus,
   movementSourceStatusTone,
@@ -10,6 +12,9 @@ interface DashboardInstantShellProps {
 }
 
 export function DashboardInstantShell({ state }: DashboardInstantShellProps) {
+  // This shell renders BEFORE live hydration by design, so its provenance is
+  // almost always cached or unproven - exactly the data that must be marked.
+  const { provenance: stateProvenance, asOf: stateAsOf } = dashboardStateProvenance(state);
   const account = state.accountLedger?.summary;
   const accountHealth = state.accountHealth;
   const sourceHealth = accountHealth?.source_health;
@@ -43,21 +48,23 @@ export function DashboardInstantShell({ state }: DashboardInstantShellProps) {
       <div className="glass-panel-body">
         <div className="dashboard-grid-3col">
           <div className="metric-stack">
-            <Metric label="Stage" value={wasteStage} mono />
-            <Metric label="Loop" value={wasteRunning ? "LIVE" : "SYNC"} warning={!wasteRunning} />
-            <Metric label="Reason" value={stringValue(wasteLoop?.last_reason) || "Reading live heartbeat"} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Stage" value={wasteStage} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Loop" value={wasteRunning ? "LIVE" : "SYNC"} warning={!wasteRunning} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Reason" value={stringValue(wasteLoop?.last_reason) || "Reading live heartbeat"} />
           </div>
           <div className="metric-stack">
-            <Metric label="Proof" value={`${completedTradingDays} / 30 days`} mono />
-            <Metric label="Chain" value={paperProofChainVerified ? "PRESENT" : "WARMING"} warning={!paperProofChainVerified} />
-            <Metric label="Account" value={`$${(account?.balance_usd ?? account?.deposit_usd ?? accountEquity).toLocaleString()}`} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Proof" value={`${completedTradingDays} / 30 days`} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Chain" value={paperProofChainVerified ? "PRESENT" : "WARMING"} warning={!paperProofChainVerified} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Account" value={`$${(account?.balance_usd ?? account?.deposit_usd ?? accountEquity).toLocaleString()}`} mono />
           </div>
           <div className="metric-stack">
-            <Metric label="Health" value={stringValue(accountHealth?.status) || "SYNC"} warning={(accountHealth?.blockers?.length ?? 0) > 0} />
-            <Metric label="Equity" value={`$${(accountHealth?.account?.equity_usd ?? account?.equity_usd ?? accountEquity).toFixed(2)}`} mono />
-            <Metric label="Risk Budget" value={`$${plannedRiskTotal.toFixed(2)}`} mono />
-            <Metric label="Protected" value={formatPercent(accountHealth?.open_exposure?.protective_order_coverage_pct)} warning={(accountHealth?.open_exposure?.unprotected_position_count ?? 0) > 0} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Health" value={stringValue(accountHealth?.status) || "SYNC"} warning={(accountHealth?.blockers?.length ?? 0) > 0} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Equity" value={`$${(accountHealth?.account?.equity_usd ?? account?.equity_usd ?? accountEquity).toFixed(2)}`} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Risk Budget" value={`$${plannedRiskTotal.toFixed(2)}`} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Protected" value={formatPercent(accountHealth?.open_exposure?.protective_order_coverage_pct)} warning={(accountHealth?.open_exposure?.unprotected_position_count ?? 0) > 0} />
             <Metric
+              provenance={stateProvenance}
+              asOf={stateAsOf}
               label="Price Source"
               value={formatMovementSourceStatus(sourceHealth?.price_source_status, "SYNC")}
               warning={
@@ -83,26 +90,7 @@ export function DashboardInstantShell({ state }: DashboardInstantShellProps) {
   );
 }
 
-function Metric({
-  label,
-  value,
-  mono,
-  warning,
-}: {
-  label: string;
-  value: string;
-  mono?: boolean;
-  warning?: boolean;
-}) {
-  return (
-    <div className="dashboard-metric">
-      <span className="field-label">{label}</span>
-      <span className={`field-value ${mono ? "mono" : ""}`} style={{ color: warning ? "var(--warning)" : undefined }}>
-        {value}
-      </span>
-    </div>
-  );
-}
+// Local Metric copy removed - canonical components/Metric.tsx enforces provenance.
 
 function formatPercent(value: number | null | undefined): string {
   return typeof value === "number" && Number.isFinite(value) ? `${value.toFixed(0)}%` : "SYNC";

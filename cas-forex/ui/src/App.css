@@ -1490,3 +1490,38 @@
   .global-halt.global-halt-confirm,
   .stale-data-badge-dot { animation: none !important; }
 }
+
+/* ── Metric provenance (components/Metric.tsx) ──
+   Every value row declares live / cached / unproven. Live renders clean;
+   cached and unproven carry a tag so non-live data can never pass as fact. */
+.metric-value-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.metric-provenance-tag {
+  flex: none;
+  font-size: 0.60rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.metric-tag-cached {
+  color: var(--warning);
+  border-color: var(--warning-dim);
+  background: color-mix(in srgb, var(--warning-dim) 35%, transparent);
+}
+.metric-tag-unproven {
+  color: var(--text-secondary);
+  border-color: var(--border-active);
+  background: var(--bg-input);
+}
+.metric-unproven .field-value {
+  opacity: 0.62;
+  font-style: italic;
+}

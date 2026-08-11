@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { AccountHealthPanel } from "../components/AccountHealthPanel";
 import { GlassPanel } from "../components/GlassPanel";
+import { Metric } from "../components/Metric";
+import { dashboardStateProvenance } from "../util/provenance";
 import { LiveReadinessSummaryPanel } from "../components/LiveReadinessSummaryPanel";
 import { PsychologyGuardPanel } from "../components/PsychologyGuardPanel";
 import { StatusChip } from "../components/StatusChip";
@@ -49,6 +51,10 @@ export function DashboardPage({ state }: DashboardPageProps) {
   const [objectiveSupportMounted, setObjectiveSupportMounted] = useState(false);
   const [deepOperationsMounted, setDeepOperationsMounted] = useState(false);
   const { uiReadiness: r, dailyBundle: b } = state;
+  // One provenance verdict for everything this page derives from `state`:
+  // live (hydrated this session), cached (recovered packet), or unproven
+  // (the synthetic startup shell). Every Metric row below carries it.
+  const { provenance: stateProvenance, asOf: stateAsOf } = dashboardStateProvenance(state);
   const risk = b.latest_risk.latest_review;
   const riskBudget = state.riskBudget;
   const proofProgress = state.proofProgress;
@@ -153,20 +159,20 @@ export function DashboardPage({ state }: DashboardPageProps) {
             {activeSnapshotFresh === false && <StatusChip label="STALE SNAPSHOT" variant="warning" size="sm" />}
           </div>
           <div className="metric-stack">
-            <Metric label="Account" value={accountIdentity} mono />
-            <Metric label="Server" value={activeAccount?.server || "LOCAL SIMULATOR"} mono />
-            <Metric label="Balance" value={formatMoney(activeBalance)} mono />
-            <Metric label="Equity" value={formatMoney(activeEquity)} mono />
-            <Metric label="Net Open P/L" value={formatMoney(activeFloatingPnl, true)} mono />
-            <Metric label="Price P/L" value={formatMoney(activeAccount?.position_price_pnl_usd, true)} mono />
-            <Metric label="Swap / Carry" value={formatMoney(activeAccount?.open_swap_usd, true)} mono />
-            <Metric label="Realized Growth" value={formatMoney(activeRealizedGrowth, true)} mono warning={!activeGrowthReconciled} />
-            <Metric label="Realized Today" value={formatMoney(activeRealizedToday, true)} mono warning={!activeGrowthReconciled} />
-            <Metric label="Realized Month" value={formatMoney(activeRealizedMonth, true)} mono warning={!activeGrowthReconciled} />
-            <Metric label="External Capital" value={formatMoney(activeExternalCapital)} mono warning={!activeGrowthReconciled} />
-            <Metric label="Growth on Capital" value={formatPercent(activeGrowthPct, "UNAVAILABLE")} mono warning={!activeGrowthReconciled} />
-            <Metric label="Free Margin" value={formatMoney(activeFreeMargin)} mono />
-            <Metric label="Open Positions" value={activeOpenCount.toFixed(0)} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Account" value={accountIdentity} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Server" value={activeAccount?.server || "LOCAL SIMULATOR"} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Balance" value={formatMoney(activeBalance)} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Equity" value={formatMoney(activeEquity)} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Net Open P/L" value={formatMoney(activeFloatingPnl, true)} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Price P/L" value={formatMoney(activeAccount?.position_price_pnl_usd, true)} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Swap / Carry" value={formatMoney(activeAccount?.open_swap_usd, true)} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Realized Growth" value={formatMoney(activeRealizedGrowth, true)} mono warning={!activeGrowthReconciled} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Realized Today" value={formatMoney(activeRealizedToday, true)} mono warning={!activeGrowthReconciled} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Realized Month" value={formatMoney(activeRealizedMonth, true)} mono warning={!activeGrowthReconciled} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="External Capital" value={formatMoney(activeExternalCapital)} mono warning={!activeGrowthReconciled} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Growth on Capital" value={formatPercent(activeGrowthPct, "UNAVAILABLE")} mono warning={!activeGrowthReconciled} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Free Margin" value={formatMoney(activeFreeMargin)} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Open Positions" value={activeOpenCount.toFixed(0)} mono />
           </div>
           <div className="control-field-desc" style={{ marginTop: 8 }}>
             {activeGrowthReconciled
@@ -178,23 +184,31 @@ export function DashboardPage({ state }: DashboardPageProps) {
         <GlassPanel title="Decision Metrics">
           <div className="metric-stack">
             <Metric
+              provenance={stateProvenance}
+              asOf={stateAsOf}
               label={activeMt5Account ? "CAS-Bound Closed Net" : "Realized P/L"}
               value={formatMoney(realizedPnl, true)}
               warning={realizedPnl == null}
             />
-            <Metric label="CAS-Bound Outcomes" value={activeOutcomesLabel} mono warning={activeClosedTrades == null} />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="CAS-Bound Outcomes" value={activeOutcomesLabel} mono warning={activeClosedTrades == null} />
             <Metric
+              provenance={stateProvenance}
+              asOf={stateAsOf}
               label="Open Risk at Stop"
               value={formatMoney(activeExposure?.entry_to_stop_risk_usd ?? openExposure?.open_risk_estimate_usd ?? account?.planned_risk_usd ?? plannedRiskTotal)}
               mono
             />
             <Metric
+              provenance={stateProvenance}
+              asOf={stateAsOf}
               label="Risk-Cap Breaches"
               value={activeExposure?.risk_cap_breach_count == null ? "UNAVAILABLE" : String(activeExposure.risk_cap_breach_count)}
               mono
               warning={(activeExposure?.risk_cap_breach_count ?? 0) > 0}
             />
             <Metric
+              provenance={stateProvenance}
+              asOf={stateAsOf}
               label="Protection"
               value={formatPercent(activeExposure?.protective_order_coverage_pct ?? openExposure?.protective_order_coverage_pct, "UNKNOWN")}
               warning={(activeExposure?.unprotected_position_count ?? openExposure?.unprotected_position_count ?? 0) > 0}
@@ -204,10 +218,12 @@ export function DashboardPage({ state }: DashboardPageProps) {
 
         <GlassPanel title="Proof Progress">
           <div className="metric-stack">
-            <Metric label="Paper Days" value={`${completedTradingDays} / 30`} mono />
-            <Metric label="Multi-Day Bundles" value={`${completeBundleDays} / ${minDailyBundles}`} mono />
-            <Metric label="Chains Verified" value={chainsVerified ? chainsVerifiedLabel : "INCOMPLETE"} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Paper Days" value={`${completedTradingDays} / 30`} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Multi-Day Bundles" value={`${completeBundleDays} / ${minDailyBundles}`} mono />
+            <Metric provenance={stateProvenance} asOf={stateAsOf} label="Chains Verified" value={chainsVerified ? chainsVerifiedLabel : "INCOMPLETE"} mono />
             <Metric
+              provenance={stateProvenance}
+              asOf={stateAsOf}
               label="Protected"
               value={formatPercent(openExposure?.protective_order_coverage_pct, "UNKNOWN")}
               warning={(openExposure?.unprotected_position_count ?? 0) > 0}
@@ -270,16 +286,16 @@ function OperatorBriefingCardFallback() {
     <GlassPanel title="Operator Briefing" subtitle="Syncing live cockpit snapshot" variant="info">
       <div className="dashboard-grid-3col">
         <div className="metric-stack" style={{ padding: 0 }}>
-          <Metric label="Loop" value="SYNCING" mono />
-          <Metric label="Stage" value="LIVE HEADER ACTIVE" mono />
+          <Metric provenance="unproven" label="Loop" value="SYNCING" mono />
+          <Metric provenance="unproven" label="Stage" value="LIVE HEADER ACTIVE" mono />
         </div>
         <div className="metric-stack" style={{ padding: 0 }}>
-          <Metric label="Orders" value="OWNER GATED" mono warning />
-          <Metric label="Payment" value="PAYMENT SETUP PENDING" warning />
+          <Metric provenance="unproven" label="Orders" value="OWNER GATED" mono warning />
+          <Metric provenance="unproven" label="Payment" value="PAYMENT SETUP PENDING" warning />
         </div>
         <div className="metric-stack" style={{ padding: 0 }}>
-          <Metric label="Safety" value="READ ONLY" mono />
-          <Metric label="Status" value="WAITING" mono />
+          <Metric provenance="unproven" label="Safety" value="READ ONLY" mono />
+          <Metric provenance="unproven" label="Status" value="WAITING" mono />
         </div>
       </div>
     </GlassPanel>
@@ -291,14 +307,14 @@ function ObjectiveSupportCardsFallback() {
     <div className="dashboard-grid-2col">
       <GlassPanel title="Objective" subtitle="Syncing pace card" variant="info">
         <div className="metric-stack">
-          <Metric label="Daily Target" value="$250" mono />
-          <Metric label="Monthly Target" value="$5,000" mono />
+          <Metric provenance="unproven" label="Daily Target" value="$250" mono />
+          <Metric provenance="unproven" label="Monthly Target" value="$5,000" mono />
         </div>
       </GlassPanel>
       <GlassPanel title="AI Performance Fee" subtitle="Syncing verified-profit ledger" variant="info">
         <div className="metric-stack">
-          <Metric label="Rate" value="2.5%" mono />
-          <Metric label="Basis" value="VERIFIED PROFIT ONLY" mono />
+          <Metric provenance="unproven" label="Rate" value="2.5%" mono />
+          <Metric provenance="unproven" label="Basis" value="VERIFIED PROFIT ONLY" mono />
         </div>
       </GlassPanel>
     </div>
@@ -310,16 +326,16 @@ function DashboardDeferredSectionsNotice() {
     <GlassPanel title="Deep Operations" subtitle="Loading after first live dashboard paint" variant="info">
       <div className="dashboard-grid-3col">
         <div className="metric-stack" style={{ padding: 0 }}>
-          <Metric label="WASTE Loop" value="LIVE HEADER ACTIVE" mono />
-          <Metric label="Payment" value="PAYMENT SETUP PENDING" warning />
+          <Metric provenance="unproven" label="WASTE Loop" value="LIVE HEADER ACTIVE" mono />
+          <Metric provenance="unproven" label="Payment" value="PAYMENT SETUP PENDING" warning />
         </div>
         <div className="metric-stack" style={{ padding: 0 }}>
-          <Metric label="Controls" value="SYNCING" mono warning />
-          <Metric label="Broker Truth" value="QUEUED" mono />
+          <Metric provenance="unproven" label="Controls" value="SYNCING" mono warning />
+          <Metric provenance="unproven" label="Broker Truth" value="QUEUED" mono />
         </div>
         <div className="metric-stack" style={{ padding: 0 }}>
-          <Metric label="Live Orders" value="OWNER GATED" mono warning />
-          <Metric label="Status" value="READ ONLY" mono />
+          <Metric provenance="unproven" label="Live Orders" value="OWNER GATED" mono warning />
+          <Metric provenance="unproven" label="Status" value="READ ONLY" mono />
         </div>
       </div>
     </GlassPanel>
@@ -340,13 +356,5 @@ function formatPercent(value: number | null | undefined, fallback = "UNKNOWN"): 
   return typeof value === "number" && Number.isFinite(value) ? `${value.toFixed(1)}%` : fallback;
 }
 
-function Metric({ label, value, mono, danger, warning }: { label: string; value: string; mono?: boolean; danger?: boolean; warning?: boolean }) {
-  return (
-    <div className="summary-row">
-      <span className="field-label">{label}</span>
-      <span className={`field-value ${mono ? "mono" : ""}`} style={{ color: danger ? "var(--danger)" : warning ? "var(--warning)" : undefined }}>
-        {value}
-      </span>
-    </div>
-  );
-}
+// The local Metric copy is gone: this page uses components/Metric.tsx, whose
+// required `provenance` prop is what makes an unlabelled value a compile error.
