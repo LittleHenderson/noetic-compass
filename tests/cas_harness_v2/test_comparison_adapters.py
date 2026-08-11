@@ -17,6 +17,7 @@ from cas_harness_v2.comparison_adapters import (
     BEHAVIORAL_ADAPTER_AUTHORITY,
     BEHAVIORAL_ADAPTER_STATUS,
     BEHAVIORAL_REPLAY_MODE,
+    BehavioralAdapterBinding,
     BehavioralAdapterUnavailableError,
     BehavioralCaseInput,
     ReplayBehavioralAdapter,
@@ -243,6 +244,63 @@ def test_label_free_case_and_non_authority_metadata(fx: Fixture) -> None:
     assert adapter.case_count == 2
     assert adapter.consumed_case_count == 0
     assert adapter.complete is False
+
+
+def test_binding_is_exact_fresh_detached_and_mutation_safe(fx: Fixture) -> None:
+    adapter = fx.replay_adapter()
+    first = adapter.binding
+    second = adapter.binding
+    assert type(first) is BehavioralAdapterBinding
+    assert first == second
+    assert first is not second
+    assert first.identity_ref == fx.identity.artifact_ref
+    assert first.capabilities_ref == fx.capabilities.artifact_ref
+    assert first.configuration_ref == fx.configuration_ref
+    assert first.protocol_ref == fx.protocol_ref
+    assert first.identity_ref is not second.identity_ref
+    assert first.capabilities_ref is not second.capabilities_ref
+    assert first.configuration_ref is not fx.configuration_ref
+    assert first.protocol_ref is not fx.protocol_ref
+
+    object.__setattr__(first.configuration_ref, "artifact_id", "mutated-copy")
+    fresh = adapter.binding
+    assert fresh.configuration_ref == fx.configuration_ref
+    assert adapter.replay_all(fx.cases) == fx.observations
+
+
+def test_binding_rejects_wrong_media_and_cross_role_substitution(fx: Fixture) -> None:
+    with pytest.raises(SchemaValidationError, match="media_type"):
+        BehavioralAdapterBinding(
+            identity_ref=fx.protocol_ref,
+            capabilities_ref=fx.capabilities.artifact_ref,
+            configuration_ref=fx.configuration_ref,
+            protocol_ref=fx.protocol_ref,
+        )
+    with pytest.raises(SchemaValidationError, match="cross-role artifact reuse"):
+        BehavioralAdapterBinding(
+            identity_ref=fx.identity.artifact_ref,
+            capabilities_ref=fx.capabilities.artifact_ref,
+            configuration_ref=fx.configuration_ref,
+            protocol_ref=ArtifactRef(
+                artifact_id=fx.configuration_ref.artifact_id,
+                sha256=fx.configuration_ref.sha256,
+                byte_length=fx.configuration_ref.byte_length,
+                media_type=BEHAVIORAL_COMPARISON_PROTOCOL_MEDIA_TYPE,
+            ),
+        )
+    forged_ref = ref(
+        "forged-binding-identity",
+        b"forged binding identity",
+        protocol_module.COMPARISON_MODEL_IDENTITY_MEDIA_TYPE,
+    )
+    object.__setattr__(forged_ref, "byte_length", True)
+    with pytest.raises(SchemaValidationError, match="immutable scalar types"):
+        BehavioralAdapterBinding(
+            identity_ref=forged_ref,
+            capabilities_ref=fx.capabilities.artifact_ref,
+            configuration_ref=fx.configuration_ref,
+            protocol_ref=fx.protocol_ref,
+        )
 
 
 def test_adapter_is_bound_to_final_protocol_module_and_capability_status() -> None:

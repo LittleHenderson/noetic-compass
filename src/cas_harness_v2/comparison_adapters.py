@@ -25,7 +25,9 @@ from .comparison_model_protocol import (
     BEHAVIORAL_COMPARISON_CASE_MEDIA_TYPE,
     BEHAVIORAL_COMPARISON_PROTOCOL_MEDIA_TYPE,
     CLOSED_WEIGHT,
+    COMPARISON_MODEL_CAPABILITIES_MEDIA_TYPE,
     COMPARISON_MODEL_CONFIGURATION_MEDIA_TYPE,
+    COMPARISON_MODEL_IDENTITY_MEDIA_TYPE,
     HIDDEN_STATE_OBSERVATION,
     NON_AUTHORITY,
     OBSERVED,
@@ -106,6 +108,55 @@ class BehavioralCaseInput:
                 ("protocol_ref", self.protocol_ref),
             ),
             path="BehavioralCaseInput",
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class BehavioralAdapterBinding:
+    """Detached public references for one process-sealed replay adapter."""
+
+    identity_ref: ArtifactRef
+    capabilities_ref: ArtifactRef
+    configuration_ref: ArtifactRef
+    protocol_ref: ArtifactRef
+
+    def __post_init__(self) -> None:
+        for name, reference, media_type in (
+            (
+                "identity_ref",
+                self.identity_ref,
+                COMPARISON_MODEL_IDENTITY_MEDIA_TYPE,
+            ),
+            (
+                "capabilities_ref",
+                self.capabilities_ref,
+                COMPARISON_MODEL_CAPABILITIES_MEDIA_TYPE,
+            ),
+            (
+                "configuration_ref",
+                self.configuration_ref,
+                COMPARISON_MODEL_CONFIGURATION_MEDIA_TYPE,
+            ),
+            (
+                "protocol_ref",
+                self.protocol_ref,
+                BEHAVIORAL_COMPARISON_PROTOCOL_MEDIA_TYPE,
+            ),
+        ):
+            _require_ref(reference, f"BehavioralAdapterBinding.{name}")
+            _require_ref_media(
+                reference,
+                media_type,
+                f"BehavioralAdapterBinding.{name}",
+            )
+        _require_distinct_refs(
+            (
+                ("identity_ref", self.identity_ref),
+                ("capabilities_ref", self.capabilities_ref),
+                ("configuration_ref", self.configuration_ref),
+                ("protocol_ref", self.protocol_ref),
+            ),
+            path="BehavioralAdapterBinding",
         )
 
 
@@ -203,6 +254,20 @@ class ReplayBehavioralAdapter:
     def authority(self) -> str:
         _require_replay_seal(self)
         return BEHAVIORAL_ADAPTER_AUTHORITY
+
+    @property
+    def binding(self) -> BehavioralAdapterBinding:
+        """Return fresh detached references for the exact sealed dependencies."""
+
+        seal = _require_replay_seal(self)
+        with seal.lock:
+            _verify_replay_dependencies(seal)
+            return BehavioralAdapterBinding(
+                identity_ref=_detach_ref(seal.identity.artifact_ref),
+                capabilities_ref=_detach_ref(seal.capabilities.artifact_ref),
+                configuration_ref=_detach_ref(seal.configuration_ref),
+                protocol_ref=_detach_ref(seal.protocol_ref),
+            )
 
     @property
     def case_count(self) -> int:
@@ -544,6 +609,15 @@ def observe_behavioral_case(
 def _require_ref(value: object, path: str) -> ArtifactRef:
     if type(value) is not ArtifactRef:
         raise SchemaValidationError(f"{path} must be an exact ArtifactRef")
+    if (
+        type(value.artifact_id) is not str
+        or type(value.sha256) is not str
+        or type(value.byte_length) is not int
+        or type(value.media_type) is not str
+    ):
+        raise SchemaValidationError(
+            f"{path} fields must use exact immutable scalar types"
+        )
     return value
 
 
@@ -554,6 +628,18 @@ def _ref_signature(value: ArtifactRef) -> tuple[str, str, int, str]:
         value.sha256,
         value.byte_length,
         value.media_type,
+    )
+
+
+def _detach_ref(value: ArtifactRef) -> ArtifactRef:
+    """Copy one exact reference so public callers never receive seal-owned refs."""
+
+    _require_ref(value, "artifact reference")
+    return ArtifactRef(
+        artifact_id=value.artifact_id,
+        sha256=value.sha256,
+        byte_length=value.byte_length,
+        media_type=value.media_type,
     )
 
 
@@ -831,6 +917,7 @@ __all__ = (
     "BEHAVIORAL_REPLAY_MODE",
     "BehavioralAdapterError",
     "BehavioralAdapterUnavailableError",
+    "BehavioralAdapterBinding",
     "BehavioralCaseInput",
     "ReplayBehavioralAdapter",
     "UnavailableBehavioralAdapter",
