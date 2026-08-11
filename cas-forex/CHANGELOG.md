@@ -49,6 +49,22 @@ projected runtime and 10 failures at session start to ~16 min and zero).
   gated unreachable code). Repo-wide rewire keeps assertions pointing at
   moved code.
 
+**Settings decomposition complete (slices 3-4, follow-up commits)**
+- SettingsPage 4,346 -> 480 lines: go-live cluster (GoLivePanels,
+  BrokerRealityPanel, LivePilotPanel, shared gate consts), then
+  LiveRecoveryPanel (1,277 - largest component in the codebase),
+  LegalGovernancePanels (1,013), RiskControlPanel, AiControlAuthorityPanel,
+  BrokerFundingHandoffPanel. 23 modules total under components/settings/.
+- Slice-3 first attempt REVERTED before commit: the block-boundary regex
+  missed export-prefixed declarations and swallowed the page component; redo
+  added a no-block-may-contain-the-page assertion and per-block size ceiling.
+- Race-test flakiness root-caused: pytest names modules tests.test_x in full
+  collection vs test_x standalone; ProcessPool workers could import only the
+  latter. Worker moved to a stable helper module. (First attribution - the
+  msvcrt lock ceiling - was wrong; that fix stays as a real defect fix.)
+- Suite green after every slice: 2,978 passed, 0 failed, five consecutive
+  full runs.
+
 **Evidence chain (C-section groundwork)**
 - Located the July break precisely: broken_link at record 11, verified prefix
   11/18 - predecessor rewritten after append (state/file divergence +
