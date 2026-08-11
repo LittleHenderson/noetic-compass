@@ -1,5 +1,82 @@
 # CAS Forex - Changelog
 
+## 2026-08-11 - Suite green end-to-end; eligibility split; provenance renderer; grouped nav; evidence chain hardened (revamp steps 3+)
+
+Suite is fully green for the first time in project history and stayed green
+through every milestone below: **2,978 passed, 0 failed** (from 3.5 hr
+projected runtime and 10 failures at session start to ~16 min and zero).
+
+**Performance / suite usability**
+- Dashboard aggregation 86s -> ~14s: MT5 handshake cooldown shared across the
+  seven modules that connect (`mt5_connect_guard.py`), 68 MB order-attempt
+  state memoised on (mtime, size), per-build thread-local memo in `api/data.py`.
+  Worst test file 569s -> 34s.
+- Cleared all 10 pre-existing failures: honesty/disclosure fixes (operator
+  chat error envelope with `money_impact`, no-model greeting discloses local
+  fallback), stale fixtures updated to tightened gates (account-identity match,
+  same-UTC-day loss ledger, AI-dial-first risk caps), two spec-sheet
+  assertions moved off machine-state evidence.
+
+**Correctness on the money path**
+- `money()` now rounds half-up on the decimal value (0.345 -> 0.35, not 0.34);
+  334 of 314,290 stored runtime values had the downward bias. Chains stay
+  valid (verification re-hashes stored payloads).
+- Reconciliation no longer reports "matches broker figures" when the broker
+  exposed only one of balance/equity: partial comparisons are UNVERIFIABLE and
+  name the missing field.
+
+**Eligibility split (CAS-Ohm Ch11 "no drift by accumulation")**
+- New `eligibility_attestation.py`: authenticated axis with three NOT_WIRED
+  external authorities (broker API, external counsel, independent evidence
+  anchor). Constant False, no config/env/runtime read - flipping it requires a
+  reviewed code change. READY now requires structural completeness AND owner
+  authority AND external attestation (pure function, 8-combo exhaustive test).
+- Three fail-opens closed in `live_money_progression_packet.py`: a crashed
+  readiness or payout-recovery builder used to CLEAR its gate; an unevaluable
+  gate now blocks. Adversarially verified (3 lenses, refuted=false).
+
+**UI: provenance + grouped nav + settings decomposition**
+- Canonical `Metric` with REQUIRED provenance (live/cached/unproven) - an
+  unlabelled value is a compile error. Dashboard first-paint surfaces
+  migrated; fallback panels render dimmed UNPROVEN tags; ratchet test pins the
+  12 remaining legacy Metric copies (may only shrink). Verified in all three
+  runtime states against the running app.
+- Nav: 23 flat destinations -> 7 groups + secondary tabs + legal footer;
+  pushState/popstate so the back button works (verified live, desktop + 375px
+  drawer). `?page=` URLs unchanged. Partition property enforced by test.
+- SettingsPage 6,501 -> 4,346 lines across two slices; 11 modules under
+  `components/settings/`; dead legacy RiskControlPanel deleted (tautology-
+  gated unreachable code). Repo-wide rewire keeps assertions pointing at
+  moved code.
+
+**Evidence chain (C-section groundwork)**
+- Located the July break precisely: broken_link at record 11, verified prefix
+  11/18 - predecessor rewritten after append (state/file divergence +
+  unlocked writers). `verify_chain_report()` now names record, reason class,
+  and verified prefix; paper-proof failure reasons carry the diagnosis.
+- `append()` derives the chain from the FILE tail under a cross-process lock
+  that waits under contention (msvcrt's ~10s ceiling would crash a loaded
+  append). Proven with 4 real processes racing -> chain verifies.
+- Owner-gated `scripts/restart_paper_proof_chain.py`: archives the broken
+  store with a defect record (never rewrites hashes), refuses on a healthy
+  chain, requires the exact typed phrase. NOT executed - owner decision.
+
+**Open (owner actions, day 1 of 30)**
+- Run the restart script with its confirm phrase; start the Hugosway MT5 demo
+  terminal (may have expired after 48 idle days); run START_CAS_FOREX.bat for
+  a loop that outlives dev sessions. True day count: 3 complete bundle days
+  (June), not the 0/30 the startup shell displayed - those zeros now honestly
+  tag themselves UNPROVEN.
+
+**Failed approaches recorded**
+- The flaky race test was NOT the lock ceiling (first attribution wrong,
+  corrected in 839a46f8): pytest names modules `tests.test_x` in full
+  collection vs `test_x` standalone, and ProcessPool workers could only
+  import the latter. Workers now live in a stable helper module.
+- Naive chain re-hash walk produced false breaks on every record (wrong
+  recipe); always use the store's own verifier.
+
+
 ## 2026-08-10 - UI/UX audit + stabilise & emergency legibility fixes (revamp steps 1-2)
 
 Full audit of the cockpit ahead of a planned UI/UX revamp, then the first two
