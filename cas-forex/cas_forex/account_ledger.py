@@ -172,6 +172,28 @@ class AccountLedgerState:
 _CENTS = Decimal("0.01")
 
 
+def money_sum(values: "Iterable[float]") -> float:
+    """Sum monetary amounts exactly, then quantise once.
+
+    ``sum(float)`` carries binary representation error (sum([0.1]*3) is
+    0.30000000000000004). Honest scope note, verified empirically: at this
+    ledger's dollar scale that error stays far below half a cent, so
+    ``money(sum(...))`` happens to produce the right cents anyway. What float
+    summation cannot offer is exactness BY CONSTRUCTION - correctness that is
+    independent of magnitude, event count, and event order rather than a
+    property of today's account size. A ledger presented as evidence should
+    not owe its cents to IEEE754 being kind at the current scale.
+
+    Accumulating through ``Decimal(str(v))`` is exact for cent-grade inputs at
+    any scale and order. First slice of the Decimal-end-to-end pre-live
+    requirement: exact aggregation, floats still crossing the API surface.
+    """
+    total = Decimal("0")
+    for value in values:
+        total += Decimal(str(float(value)))
+    return float(total.quantize(_CENTS, rounding=ROUND_HALF_UP))
+
+
 def stable_ledger_id(prefix: str, *parts: object) -> str:
     material = "|".join(str(part) for part in parts)
     digest = sha256(material.encode("utf-8")).hexdigest()[:16]
@@ -264,21 +286,21 @@ def build_paper_account_ledger(
     events = (seed_event, *tuple(cashflow_events))
     _validate_events(events)
 
-    cash_balance = sum(event.balance_delta_usd for event in events)
+    cash_balance = money_sum(event.balance_delta_usd for event in events)
     floating = float(floating_pnl_usd)
-    margin = max(0.0, float(margin_used_usd) + sum(event.margin_delta_usd for event in events))
+    margin = max(0.0, float(margin_used_usd) + money_sum(event.margin_delta_usd for event in events))
 
-    realized_pnl = sum(
+    realized_pnl = money_sum(
         event.balance_delta_usd
         for event in events
         if event.event_type in {"realized_profit", "realized_loss"}
     )
-    swap = sum(event.balance_delta_usd for event in events if event.event_type in {"positive_swap", "negative_swap"})
-    commission = sum(event.balance_delta_usd for event in events if event.event_type == "commission")
-    fees = sum(event.balance_delta_usd for event in events if event.event_type == "broker_fee")
-    withdrawals = abs(sum(event.balance_delta_usd for event in events if event.event_type == "withdrawal"))
-    payouts = abs(sum(event.balance_delta_usd for event in events if event.event_type == "payout"))
-    deposits = sum(event.balance_delta_usd for event in events if event.event_type in {"initial_investment", "deposit"})
+    swap = money_sum(event.balance_delta_usd for event in events if event.event_type in {"positive_swap", "negative_swap"})
+    commission = money_sum(event.balance_delta_usd for event in events if event.event_type == "commission")
+    fees = money_sum(event.balance_delta_usd for event in events if event.event_type == "broker_fee")
+    withdrawals = abs(money_sum(event.balance_delta_usd for event in events if event.event_type == "withdrawal"))
+    payouts = abs(money_sum(event.balance_delta_usd for event in events if event.event_type == "payout"))
+    deposits = money_sum(event.balance_delta_usd for event in events if event.event_type in {"initial_investment", "deposit"})
 
     equity = cash_balance + floating
     free_margin = max(0.0, equity - margin)
@@ -501,7 +523,7 @@ def build_live_account_ledger_from_terminal_history(
             )
         )
 
-    realized_pnl = money(sum(event.balance_delta_usd for event in events))
+    realized_pnl = money(money_sum(event.balance_delta_usd for event in events))
     initial = money(float(initial_investment_usd or 0.0))
     account_balance = _optional_live_float(summary_payload.get("account_balance"))
     account_equity = _optional_live_float(summary_payload.get("account_equity"))
@@ -520,9 +542,9 @@ def build_live_account_ledger_from_terminal_history(
         payouts_usd=0.0,
         realized_pnl_usd=realized_pnl,
         floating_pnl_usd=0.0,
-        swap_usd=money(sum(row.swap_usd for row in deals)),
-        commission_usd=money(sum(row.commission_usd for row in deals)),
-        broker_fees_usd=money(sum(row.fees_usd for row in deals)),
+        swap_usd=money(money_sum(row.swap_usd for row in deals)),
+        commission_usd=money(money_sum(row.commission_usd for row in deals)),
+        broker_fees_usd=money(money_sum(row.fees_usd for row in deals)),
         balance_usd=balance,
         equity_usd=equity,
         margin_used_usd=0.0,

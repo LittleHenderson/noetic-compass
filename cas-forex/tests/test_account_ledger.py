@@ -7,7 +7,45 @@ from cas_forex.account_ledger import (
     build_live_account_ledger_from_terminal_history,
     build_paper_account_ledger,
     money,
+    money_sum,
 )
+
+
+def test_money_sum_is_exact_by_construction():
+    """sum([0.1]*3) demonstrates the representation error; money_sum is exact.
+
+    Recorded honestly: at this ledger's dollar scale, float error stays below
+    half a cent, so money(sum(...)) also lands on the right cents today. The
+    property money_sum adds is exactness independent of scale/count/order -
+    verified against pure Decimal arithmetic below, not against a folk drift
+    example. (An earlier version of this test asserted sum([0.01]*10_000) !=
+    100.0, which is FALSE - IEEE754 happens to cancel there. The test caught
+    its own author.)"""
+    assert sum([0.1] * 3) != 0.3  # representation error, demonstrated truly
+    assert money_sum([0.1] * 3) == 0.3
+    assert money_sum([0.01] * 10_000) == 100.0
+
+
+def test_money_sum_is_order_independent():
+    import random
+
+    values = [round(random.uniform(-500, 500), 2) for _ in range(2_000)]
+    forward = money_sum(values)
+    assert forward == money_sum(list(reversed(values)))
+    shuffled = values[:]
+    random.shuffle(shuffled)
+    assert forward == money_sum(shuffled)
+
+
+def test_money_sum_matches_exact_decimal_arithmetic():
+    from decimal import Decimal
+
+    values = [1234.56, -0.01, 0.005, 789.10, -1234.56]
+    exact = sum(Decimal(str(v)) for v in values)
+    assert money_sum(values) == float(
+        exact.quantize(Decimal("0.01"), rounding=__import__("decimal").ROUND_HALF_UP)
+    )
+    assert money_sum([]) == 0.0
 
 
 def test_money_rounds_half_cents_away_from_zero():
