@@ -407,7 +407,8 @@ def summarize_paper_proof(
 
     store = EvidenceStore(paper_proof_store_path(plan, output_dir), run_id=plan.plan_id)
     summaries = _load_daily_summaries(store)
-    chain_verified = store.verify_chain()
+    chain_report = store.verify_chain_report()
+    chain_verified = bool(chain_report["verified"])
     live_mode_used = bool(config.live_mode) or any(bool(s.get("live_mode")) for s in summaries)
     open_positions_reconciled = bool(summaries) and all(
         bool(summary.get("open_positions_reconciled")) for summary in summaries
@@ -446,7 +447,17 @@ def summarize_paper_proof(
             f"broker_verified_days {broker_verified_days} < required {plan.required_trading_days}"
         )
     if not chain_verified:
-        report.failure_reasons.append("Evidence chain did not verify.")
+        # Name the break: "did not verify" alone left the July defect
+        # undiagnosed for weeks. The report pinpoints record, reason, and how
+        # much of the chain is still a verified prefix.
+        report.failure_reasons.append(
+            "Evidence chain did not verify: "
+            f"{chain_report.get('break_reason') or 'unknown'} at record "
+            f"{chain_report.get('break_event_seq')} "
+            f"(verified prefix {chain_report.get('verified_prefix_records')} of "
+            f"{chain_report.get('record_count')} records). "
+            f"{chain_report.get('break_detail') or ''}".strip()
+        )
     if live_mode_used:
         report.failure_reasons.append("Live mode was used during a paper-proof session.")
     if not open_positions_reconciled:
