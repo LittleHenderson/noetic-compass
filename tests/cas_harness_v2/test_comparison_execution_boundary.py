@@ -7,6 +7,7 @@ import urllib.request
 
 import pytest
 
+import cas_harness_v2.comparison_execution_boundary as boundary_module
 from cas_harness_v2._strict_json import canonical_json_bytes, sha256_bytes, thaw_json
 from cas_harness_v2._validation import ArtifactRef, SchemaValidationError
 from cas_harness_v2.comparison_execution_boundary import (
@@ -215,9 +216,15 @@ def test_blocked_boundary_and_zero_spend_are_exact_and_replayable() -> None:
     "program_id",
     (
         "stagec-calibration",
+        "stage-c-calibration",
+        "stage_c_calibration",
+        "stage.c.calibration",
+        "stage/c/calibration",
         "stagec-calibration-comparison",
         "gate5-stagec-qwen-prompt-injection-v0.1",
         "comparison-c-cal-v1",
+        "comparison-c_cal-v1",
+        "comparison-c.cal-v1",
     ),
 )
 def test_boundary_cannot_reuse_stagec(program_id: str) -> None:
@@ -228,6 +235,124 @@ def test_boundary_cannot_reuse_stagec(program_id: str) -> None:
             program_id=program_id,
             protocol=protocol,
             roster=roster,
+        )
+
+
+@pytest.mark.parametrize(
+    "boundary_id",
+    (
+        "gate5-stagec-qwen-prompt-injection-v0.1",
+        "gate5-stage-c-qwen-prompt-injection-v0.1",
+        "comparison-boundary-c_cal-v1",
+    ),
+)
+def test_boundary_id_cannot_reuse_stagec_namespace(boundary_id: str) -> None:
+    protocol, roster = dependencies()
+    with pytest.raises(SchemaValidationError, match="Stage C"):
+        build_blocked_comparison_execution_boundary(
+            boundary_id=boundary_id,
+            program_id="open-closed-comparison-v1",
+            protocol=protocol,
+            roster=roster,
+        )
+
+
+@pytest.mark.parametrize(
+    "spend_record_id",
+    (
+        "gate5-stagec-spend-record-v1",
+        "gate5-stage-c-spend-record-v1",
+        "comparison-c_cal-spend-record-v1",
+    ),
+)
+def test_spend_record_id_cannot_reuse_stagec_namespace(
+    spend_record_id: str,
+) -> None:
+    protocol, roster, boundary, _ = artifacts()
+    with pytest.raises(SchemaValidationError, match="Stage C"):
+        build_zero_comparison_spend_record(
+            spend_record_id=spend_record_id,
+            boundary=boundary,
+            protocol=protocol,
+            roster=roster,
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "alias"),
+    (
+        ("boundary_id", "gate5-stage-c-qwen-prompt-injection-v0.1"),
+        ("program_id", "comparison-stage_c-calibration"),
+    ),
+)
+def test_loaded_boundary_rejects_stagec_namespace_aliases(
+    field: str, alias: str
+) -> None:
+    protocol, roster, boundary, _ = artifacts()
+    payload = thaw_json(boundary.payload)
+    payload[field] = alias
+    raw = canonical_json_bytes(payload)
+    artifact_id = alias if field == "boundary_id" else boundary.boundary_id
+    with pytest.raises(SchemaValidationError, match="Stage C"):
+        load_blocked_comparison_execution_boundary(
+            raw,
+            boundary_ref=ref(artifact_id, boundary.artifact_ref.media_type, raw),
+            protocol=protocol,
+            roster=roster,
+        )
+
+
+def test_boundary_and_spend_reject_transitive_owner_identity_aliases() -> None:
+    protocol, roster = dependencies()
+    with pytest.raises(SchemaValidationError, match="owner artifact_id"):
+        build_blocked_comparison_execution_boundary(
+            boundary_id=roster.cases[0].case_id,
+            program_id="open-closed-comparison-v1",
+            protocol=protocol,
+            roster=roster,
+        )
+    boundary = build_blocked_comparison_execution_boundary(
+        boundary_id="comparison-boundary-transitive-closure",
+        program_id="open-closed-comparison-v1",
+        protocol=protocol,
+        roster=roster,
+    )
+    with pytest.raises(SchemaValidationError, match="owner artifact_id"):
+        build_zero_comparison_spend_record(
+            spend_record_id=protocol.protocol_id,
+            boundary=boundary,
+            protocol=protocol,
+            roster=roster,
+        )
+
+
+def test_boundary_and_spend_preserve_full_unique_content_closure() -> None:
+    protocol, roster, boundary, spend = artifacts()
+    expected_boundary_refs = {
+        protocol.artifact_ref,
+        *protocol.artifact_refs,
+        roster.artifact_ref,
+        *roster.artifact_refs,
+    }
+    assert set(boundary.artifact_refs) == expected_boundary_refs
+    assert set(spend.artifact_refs) == {boundary.artifact_ref, *boundary.artifact_refs}
+    for references in (boundary.artifact_refs, spend.artifact_refs):
+        assert len({item.artifact_id for item in references}) == len(references)
+        assert len({(item.sha256, item.byte_length) for item in references}) == len(
+            references
+        )
+
+    content_alias = ArtifactRef(
+        artifact_id="protocol-content-alias",
+        sha256=protocol.artifact_ref.sha256,
+        byte_length=protocol.artifact_ref.byte_length,
+        media_type=protocol.artifact_ref.media_type,
+    )
+    with pytest.raises(SchemaValidationError, match="content identity"):
+        boundary_module._require_distinct_refs(
+            (protocol.artifact_ref, content_alias),
+            owner_id="comparison-boundary-content-alias",
+            path="artifact_refs",
         )
 
 

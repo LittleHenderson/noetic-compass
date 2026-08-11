@@ -151,7 +151,7 @@ def _require_ref(value: Any, path: str) -> ArtifactRef:
             byte_length=value.byte_length,
             media_type=value.media_type,
         )
-    except (TypeError, ValueError, SchemaValidationError) as exc:
+    except (AttributeError, TypeError, ValueError, SchemaValidationError) as exc:
         raise ComparisonExecutionBoundaryValidationError(
             f"{path} is a forged ArtifactRef: {exc}"
         ) from exc
@@ -202,22 +202,41 @@ def _require_frozen(value: Any, path: str) -> None:
 def _require_distinct_refs(
     references: tuple[ArtifactRef, ...], *, owner_id: str, path: str
 ) -> tuple[ArtifactRef, ...]:
-    ids: set[str] = set()
-    content: set[tuple[str, int]] = set()
+    by_id: dict[str, ArtifactRef] = {}
+    by_content: dict[tuple[str, int], ArtifactRef] = {}
+    ordered: list[ArtifactRef] = []
     for index, reference in enumerate(references):
         reference = _require_ref(reference, f"{path}[{index}]")
-        if reference.artifact_id == owner_id or reference.artifact_id in ids:
+        if reference.artifact_id == owner_id:
             raise ComparisonExecutionBoundaryValidationError(
-                f"{path} reuses or collides with an artifact_id"
+                f"{path} collides with its owner artifact_id"
             )
+        prior = by_id.get(reference.artifact_id)
+        if prior is not None:
+            if prior != reference:
+                raise ComparisonExecutionBoundaryValidationError(
+                    f"{path} aliases one artifact_id to different content"
+                )
+            continue
         content_key = (reference.sha256, reference.byte_length)
-        if content_key in content:
+        if content_key in by_content:
             raise ComparisonExecutionBoundaryValidationError(
-                f"{path} reuses content under another role"
+                f"{path} aliases one content identity under different artifact_ids"
             )
-        ids.add(reference.artifact_id)
-        content.add(content_key)
-    return references
+        by_id[reference.artifact_id] = reference
+        by_content[content_key] = reference
+        ordered.append(reference)
+    return tuple(ordered)
+
+
+def _reject_stage_c_namespace(value: str, path: str) -> None:
+    normalized = "".join(
+        character for character in value.casefold() if character.isalnum()
+    )
+    if "stagec" in normalized or "ccal" in normalized:
+        raise ComparisonExecutionBoundaryValidationError(
+            f"{path} cannot reuse the current Stage C program or phase namespace"
+        )
 
 
 def _validated_dependencies(
@@ -286,10 +305,8 @@ def build_blocked_comparison_execution_boundary(
     protocol, roster = _validated_dependencies(protocol, roster)
     boundary_id = expect_machine_id(boundary_id, "boundary_id")
     program_id = expect_machine_id(program_id, "program_id")
-    if "stagec" in program_id.casefold() or "c-cal" in program_id.casefold():
-        raise ComparisonExecutionBoundaryValidationError(
-            "comparison execution cannot reuse the current Stage C program or phase"
-        )
+    _reject_stage_c_namespace(boundary_id, "boundary_id")
+    _reject_stage_c_namespace(program_id, "program_id")
     raw = canonical_json_bytes(
         _boundary_value(
             boundary_id=boundary_id,
@@ -351,10 +368,8 @@ def load_blocked_comparison_execution_boundary(
     program_id = expect_machine_id(value["program_id"], "$.program_id")
     if boundary_id != boundary_ref.artifact_id:
         raise ComparisonExecutionBoundaryValidationError("boundary identity changed")
-    if "stagec" in program_id.casefold() or "c-cal" in program_id.casefold():
-        raise ComparisonExecutionBoundaryValidationError(
-            "comparison boundary collides with Stage C"
-        )
+    _reject_stage_c_namespace(boundary_id, "$.boundary_id")
+    _reject_stage_c_namespace(program_id, "$.program_id")
     if (
         parse_artifact_ref(value["protocol_ref"], "$.protocol_ref")
         != protocol.artifact_ref
@@ -451,7 +466,12 @@ def load_blocked_comparison_execution_boundary(
             "activity or status made an execution claim"
         )
     refs = _require_distinct_refs(
-        (protocol.artifact_ref, roster.artifact_ref, *model_refs),
+        (
+            protocol.artifact_ref,
+            *protocol.artifact_refs,
+            roster.artifact_ref,
+            *roster.artifact_refs,
+        ),
         owner_id=boundary_id,
         path="artifact_refs",
     )
@@ -564,6 +584,7 @@ def build_zero_comparison_spend_record(
         boundary, protocol=protocol, roster=roster
     )
     spend_record_id = expect_machine_id(spend_record_id, "spend_record_id")
+    _reject_stage_c_namespace(spend_record_id, "spend_record_id")
     raw = canonical_json_bytes(
         _spend_value(
             spend_record_id=spend_record_id,
@@ -616,6 +637,7 @@ def load_zero_comparison_spend_record(
         path="$",
     )
     spend_record_id = expect_machine_id(value["spend_record_id"], "$.spend_record_id")
+    _reject_stage_c_namespace(spend_record_id, "$.spend_record_id")
     expected_status = {
         "execution": NOT_EXECUTED,
         "spend": ZERO_SPEND,
@@ -641,7 +663,7 @@ def load_zero_comparison_spend_record(
             "zero-spend record made a nonzero or executed claim"
         )
     refs = _require_distinct_refs(
-        (boundary.artifact_ref,),
+        (boundary.artifact_ref, *boundary.artifact_refs),
         owner_id=spend_record_id,
         path="artifact_refs",
     )

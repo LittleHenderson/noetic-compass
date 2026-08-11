@@ -520,6 +520,17 @@ def _require_ref(value: Any, path: str) -> ArtifactRef:
         raise UniversalProbeContractValidationError(
             f"{path} must be an exact ArtifactRef"
         )
+    try:
+        ArtifactRef(
+            artifact_id=value.artifact_id,
+            sha256=value.sha256,
+            byte_length=value.byte_length,
+            media_type=value.media_type,
+        )
+    except (AttributeError, TypeError, ValueError, SchemaValidationError) as exc:
+        raise UniversalProbeContractValidationError(
+            f"{path} is a forged ArtifactRef: {exc}"
+        ) from exc
     return value
 
 
@@ -547,13 +558,19 @@ def _canonical_object(raw: Any, path: str) -> tuple[bytes, dict[str, Any]]:
 def _require_status_boundary(value: dict[str, Any]) -> None:
     status = expect_object(value["status"], "$.status")
     expect_keys(status, required=_STATUS, path="$.status")
-    if status != _STATUS:
+    if any(
+        type(status[name]) is not type(expected) or status[name] != expected
+        for name, expected in _STATUS.items()
+    ):
         raise UniversalProbeContractValidationError(
             "probe artifacts remain STRUCTURE_ONLY/NON_AUTHORITY/NOT_LICENSED"
         )
     boundary = expect_object(value["boundary"], "$.boundary")
     expect_keys(boundary, required=_BOUNDARY, path="$.boundary")
-    if boundary != _BOUNDARY:
+    if any(
+        type(boundary[name]) is not type(expected) or boundary[name] != expected
+        for name, expected in _BOUNDARY.items()
+    ):
         raise UniversalProbeContractValidationError(
             "probe artifacts must retain the exact zero-call boundary"
         )
@@ -848,6 +865,26 @@ def _owner_closure(owner_id: str, refs: tuple[ArtifactRef, ...], path: str) -> t
     return closure
 
 
+def _require_frozen_json(value: Any, path: str) -> None:
+    if type(value) is MappingProxyType:
+        for key, child in value.items():
+            if type(key) is not str:
+                raise UniversalProbeContractValidationError(
+                    f"{path} has a non-string key"
+                )
+            _require_frozen_json(child, f"{path}.{key}")
+        return
+    if type(value) is tuple:
+        for index, child in enumerate(value):
+            _require_frozen_json(child, f"{path}[{index}]")
+        return
+    if type(value) in (str, int, bool) or value is None:
+        return
+    raise UniversalProbeContractValidationError(
+        f"{path} must be recursively frozen canonical JSON"
+    )
+
+
 def _artifact_storage(value: Any, exact_type: type[Any], path: str) -> None:
     if type(value) is not exact_type:
         raise UniversalProbeContractValidationError(
@@ -864,6 +901,9 @@ def _artifact_storage(value: Any, exact_type: type[Any], path: str) -> None:
         raise UniversalProbeContractValidationError(
             f"{path} storage projections must remain exact immutable values"
         )
+    _require_frozen_json(value.payload, f"{path}.payload")
+    for index, reference in enumerate(value.artifact_refs):
+        _require_ref(reference, f"{path}.artifact_refs[{index}]")
 
 
 def _capability_state(identity: ComparisonModelIdentityArtifact) -> str:

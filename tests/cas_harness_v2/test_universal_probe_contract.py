@@ -6,6 +6,7 @@ from dataclasses import dataclass, replace
 import json
 from pathlib import Path
 import pickle
+from types import MappingProxyType
 
 import pytest
 
@@ -910,6 +911,35 @@ def test_zero_call_boundary_tampering_and_model_capability_promotion_fail_closed
         )
 
 
+@pytest.mark.parametrize(
+    "field",
+    (
+        "live_loader_calls",
+        "model_calls",
+        "provider_calls",
+        "network_calls",
+        "filesystem_calls",
+        "hook_registrations",
+        "torch_calls",
+        "spend_microusd",
+    ),
+)
+def test_zero_call_boundary_rejects_boolean_substitution_for_integer_counters(
+    field: str,
+) -> None:
+    bundle = make_bundle()
+    payload = json.loads(bundle.plan.raw_bytes)
+    payload["boundary"][field] = False
+    with pytest.raises(SchemaValidationError, match="zero-call boundary"):
+        load_universal_probe_canary_plan(
+            canonical_json_bytes(payload),
+            identity=bundle.identity,
+            capabilities=bundle.capabilities,
+            discovery=bundle.discovery,
+            manifest=bundle.manifest,
+        )
+
+
 def test_loaded_manifest_cannot_enable_remote_code() -> None:
     bundle = make_bundle()
     payload = json.loads(bundle.manifest.raw_bytes)
@@ -975,6 +1005,20 @@ def test_artifact_mutation_replacement_and_forgery_fail_exact_replay() -> None:
             discovery=bundle.discovery,
         )
 
+    shallow_payload = dict(bundle.manifest.payload)
+    shallow_payload["status"] = dict(bundle.manifest.payload["status"])
+    nested_mutable = replace(
+        bundle.manifest,
+        payload=MappingProxyType(shallow_payload),
+    )
+    with pytest.raises(SchemaValidationError, match="recursively frozen"):
+        replay_generated_probe_adapter_manifest(
+            nested_mutable,
+            identity=bundle.identity,
+            capabilities=bundle.capabilities,
+            discovery=bundle.discovery,
+        )
+
 
 def test_request_closure_rejects_artifact_id_and_content_aliases() -> None:
     bundle = make_bundle()
@@ -1006,6 +1050,18 @@ def test_request_closure_rejects_artifact_id_and_content_aliases() -> None:
     )
     with pytest.raises(SchemaValidationError, match="artifact ID"):
         replace(expected, capabilities_ref=id_alias)
+
+    forged_ref = object.__new__(ArtifactRef)
+    object.__setattr__(
+        forged_ref, "artifact_id", expected.configuration_ref.artifact_id
+    )
+    object.__setattr__(forged_ref, "sha256", expected.configuration_ref.sha256)
+    object.__setattr__(forged_ref, "byte_length", True)
+    object.__setattr__(
+        forged_ref, "media_type", expected.configuration_ref.media_type
+    )
+    with pytest.raises(SchemaValidationError, match="forged ArtifactRef"):
+        replace(expected, configuration_ref=forged_ref)
 
 
 def test_replay_backend_is_exact_single_use_and_returns_a_detached_receipt() -> None:
