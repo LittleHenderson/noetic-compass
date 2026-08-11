@@ -1,12 +1,19 @@
-/* ── CAS Forex — App Shell ── */
+/* ── CAS Forex — App Shell ──
+ *
+ * Grouped navigation: 7 top-level destinations, a secondary tab row for the
+ * active group's pages, and legal pages in the footer. This replaced a flat
+ * row of 23 buttons plus ~90 lines of overflow-measurement math and a
+ * "your browser is zoomed" advisory banner — the old nav needed an apology
+ * because it never fit; the grouped nav fits, so the apology is gone.
+ */
 
-import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { ModeBanner } from "./ModeBanner";
 import { AiActivityInstantBadge } from "./AiActivityInstantBadge";
 import { OperatorBadge } from "./OperatorBadge";
 import { OwnerAccessBadge } from "./OwnerAccessBadge";
 import { GlobalHaltButton } from "./GlobalHaltButton";
-import { NAV_ITEMS, type Page } from "../pageConfig";
+import { FOOTER_PAGES, NAV_GROUPS, groupForPage, type Page } from "../pageConfig";
 import type { UIReadinessReport, AuthorityBoundaryState, DashboardMeta } from "../types/evidence";
 
 interface ShellProps {
@@ -44,16 +51,11 @@ export function Shell({
   children,
 }: ShellProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [navOverflowed, setNavOverflowed] = useState(false);
   const [fullActivityIndicatorMounted, setFullActivityIndicatorMounted] = useState(false);
-  const [layoutAdvisoryDismissed, setLayoutAdvisoryDismissed] = useState(false);
-  const [layoutAdvisory, setLayoutAdvisory] = useState<{
-    label: string;
-    detail: string;
-  } | null>(null);
-  const navRef = useRef<HTMLElement | null>(null);
-  const linksRef = useRef<HTMLDivElement | null>(null);
-  const activeLabel = NAV_ITEMS.find((i) => i.id === activePage)?.label ?? "Menu";
+  const activeGroup = groupForPage(activePage);
+  const activeGroupLabel = activeGroup?.label
+    ?? FOOTER_PAGES.find((p) => p.id === activePage)?.label
+    ?? "Menu";
 
   useEffect(() => {
     const idleWindow = window as IdleSchedulerWindow;
@@ -72,109 +74,28 @@ export function Shell({
     return () => window.clearTimeout(id);
   }, []);
 
+  // The mobile drawer closes on Escape and on navigation.
   useEffect(() => {
-    const nav = navRef.current;
-    const links = linksRef.current;
-    if (!nav || !links) return;
-
-    let frame = 0;
-    const measure = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        const navStyle = window.getComputedStyle(nav);
-        const linkStyle = window.getComputedStyle(links);
-        const navGap = Number.parseFloat(navStyle.columnGap || navStyle.gap || "0") || 0;
-        const linkGap = Number.parseFloat(linkStyle.columnGap || linkStyle.gap || "0") || 0;
-        const fixedWidth = Array.from(nav.children).reduce((sum, child) => {
-          if (child === links || child.classList.contains("shell-nav-toggle")) return sum;
-          return sum + (child as HTMLElement).getBoundingClientRect().width;
-        }, 0);
-        const fixedChildCount = Array.from(nav.children).filter(
-          (child) => child !== links && !child.classList.contains("shell-nav-toggle"),
-        ).length;
-        const linkChildren = Array.from(links.children) as HTMLElement[];
-        const requiredLinkWidth = linkChildren.reduce(
-          (sum, child) => sum + child.getBoundingClientRect().width,
-          Math.max(0, linkChildren.length - 1) * linkGap,
-        );
-        const inlineAvailableWidth = Math.max(
-          0,
-          nav.clientWidth - fixedWidth - (fixedChildCount * navGap),
-        );
-        const viewportNeedsMenu = window.matchMedia("(max-width: 860px)").matches;
-        const shouldCollapse = viewportNeedsMenu || requiredLinkWidth > inlineAvailableWidth + 2;
-        setNavOverflowed(shouldCollapse);
-        if (!shouldCollapse) setMenuOpen(false);
-      });
+    if (!menuOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
     };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(nav);
-    observer.observe(links);
-    window.addEventListener("resize", measure);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      observer.disconnect();
-      window.removeEventListener("resize", measure);
-    };
-  }, []);
-
-  useEffect(() => {
-    function refreshLayoutAdvisory() {
-      if (!navOverflowed) {
-        setLayoutAdvisory(null);
-        setLayoutAdvisoryDismissed(false);
-        return;
-      }
-      const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
-      const physicalWidth = Math.max(window.screen?.width || 0, window.screen?.availWidth || 0);
-      const zoomScale = window.visualViewport?.scale ?? 1;
-      const desktopLikeScreen = physicalWidth >= 1100;
-
-      if (!desktopLikeScreen) {
-        setLayoutAdvisory(null);
-        setLayoutAdvisoryDismissed(false);
-        return;
-      }
-      if (zoomScale > 1.08) {
-        setLayoutAdvisory({
-          label: `Browser zoom ${Math.round(zoomScale * 100)}%`,
-          detail:
-            "Header controls have switched into compact layout. If pages or dropdowns seem hidden, reset browser zoom to 100% or widen the window.",
-        });
-        return;
-      }
-      if (viewportWidth <= 980) {
-        setLayoutAdvisory({
-          label: `Compact width ${viewportWidth}px`,
-          detail:
-            "Header controls have switched into compact layout. If pages or dropdowns seem hidden, widen the window or reset browser zoom to 100%.",
-        });
-        return;
-      }
-      setLayoutAdvisory(null);
-      setLayoutAdvisoryDismissed(false);
-    }
-
-    refreshLayoutAdvisory();
-    window.addEventListener("resize", refreshLayoutAdvisory);
-    const viewport = window.visualViewport;
-    viewport?.addEventListener("resize", refreshLayoutAdvisory);
-    return () => {
-      window.removeEventListener("resize", refreshLayoutAdvisory);
-      viewport?.removeEventListener("resize", refreshLayoutAdvisory);
-    };
-  }, [navOverflowed]);
+  const navigate = (page: Page) => {
+    onNavigate(page);
+    setMenuOpen(false);
+  };
 
   return (
     <div className="app-shell">
       <ModeBanner readiness={readiness} authority={authority} dashboardMeta={dashboardMeta} />
-      <nav className={`shell-nav ${navOverflowed ? "overflowed" : ""}`} ref={navRef}>
+      <nav className="shell-nav" aria-label="Primary">
         <div className="shell-nav-brand">
-          <span className="shell-nav-logo">◈</span>
+          <span className="shell-nav-logo" aria-hidden="true">◈</span>
           <span className="shell-nav-title">CAS Forex</span>
-          <span className="shell-nav-sub">Proof Cockpit</span>
         </div>
         {fullActivityIndicatorMounted ? (
           <Suspense fallback={<AiActivityInstantBadge wasteLoop={wasteLoop} />}>
@@ -183,65 +104,67 @@ export function Shell({
         ) : (
           <AiActivityInstantBadge wasteLoop={wasteLoop} />
         )}
+        <GlobalHaltButton />
         <OperatorBadge />
         <OwnerAccessBadge />
-        {/* Eagerly mounted on every page — the emergency stop must never be
-            behind a lazy chunk, an idle timer, or a scroll. */}
-        <GlobalHaltButton />
-        {/* Hamburger — only shown on narrow screens (CSS). Lets every page,
-            including Settings, be reached on a phone. */}
         <button
           className="shell-nav-toggle"
           aria-label="Toggle navigation menu"
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((v) => !v)}
         >
-          <span className="shell-nav-toggle-icon">{menuOpen ? "✕" : "☰"}</span>
-          <span className="shell-nav-toggle-label">{activeLabel}</span>
+          <span className="shell-nav-toggle-icon" aria-hidden="true">{menuOpen ? "✕" : "☰"}</span>
+          <span className="shell-nav-toggle-label">{activeGroupLabel}</span>
         </button>
-        <div className={`shell-nav-links ${menuOpen ? "open" : ""}`} ref={linksRef}>
-          {NAV_ITEMS.map((item) => (
+        <div className={`shell-nav-groups ${menuOpen ? "open" : ""}`} role="menubar">
+          {NAV_GROUPS.map((group) => {
+            const isActive = group.id === activeGroup?.id;
+            return (
+              <button
+                key={group.id}
+                className={`shell-nav-group ${isActive ? "active" : ""}`}
+                aria-current={isActive ? "page" : undefined}
+                onClick={() => navigate(group.pages[0].id)}
+              >
+                {group.label}
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+      {activeGroup && activeGroup.pages.length > 1 && (
+        <div className="shell-subnav" role="tablist" aria-label={`${activeGroup.label} pages`}>
+          {activeGroup.pages.map((page) => (
             <button
-              key={item.id}
-              className={`shell-nav-link ${
-                activePage === item.id ? "active" : ""
-              } ${!item.ready ? "disabled" : ""}`}
-              onClick={() => {
-                if (!item.ready) return;
-                onNavigate(item.id);
-                setMenuOpen(false);
-              }}
-              disabled={!item.ready}
-              title={!item.ready ? "Coming soon" : undefined}
+              key={page.id}
+              role="tab"
+              aria-selected={page.id === activePage}
+              className={`shell-subnav-link ${page.id === activePage ? "active" : ""}`}
+              onClick={() => navigate(page.id)}
             >
-              {item.label}
-              {!item.ready && (
-                <span className="shell-nav-badge">soon</span>
-              )}
+              {page.label}
             </button>
           ))}
         </div>
-      </nav>
-      {layoutAdvisory && !layoutAdvisoryDismissed ? (
-        <div className="shell-layout-advisory" role="status" aria-live="polite">
-          <div className="shell-layout-advisory-copy">
-            <span className="shell-layout-advisory-label">{layoutAdvisory.label}</span>
-            <span className="shell-layout-advisory-detail">{layoutAdvisory.detail}</span>
-          </div>
-          <button
-            type="button"
-            className="shell-layout-advisory-close"
-            aria-label="Dismiss compact layout notice"
-            onClick={() => setLayoutAdvisoryDismissed(true)}
-          >
-            Close
-          </button>
-        </div>
-      ) : null}
+      )}
       <Suspense fallback={null}>
-        <CriticalAlertStrip onOpenAlerts={() => onNavigate("settings")} />
+        <CriticalAlertStrip onOpenAlerts={() => navigate("settings")} />
       </Suspense>
       <main className="shell-main">{children}</main>
+      <footer className="shell-footer">
+        <span className="shell-footer-note">CAS Forex — paper/demo proof cockpit</span>
+        <span className="shell-footer-links">
+          {FOOTER_PAGES.map((page) => (
+            <button
+              key={page.id}
+              className={`shell-footer-link ${page.id === activePage ? "active" : ""}`}
+              onClick={() => navigate(page.id)}
+            >
+              {page.label}
+            </button>
+          ))}
+        </span>
+      </footer>
     </div>
   );
 }

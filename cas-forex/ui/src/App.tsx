@@ -195,13 +195,28 @@ export function App() {
     () => initialPage === "dashboard",
   );
   const setPage = (next: Page) => {
-    setPageState(next);
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href);
-      url.searchParams.set("page", next);
-      window.history.replaceState(null, "", url.toString());
-    }
+    setPageState((current) => {
+      if (typeof window !== "undefined" && next !== current) {
+        // pushState (not replaceState) so every navigation is a history entry:
+        // the back button used to exit the app - on Android it killed the
+        // session mid-flow. popstate below completes the loop.
+        const url = new URL(window.location.href);
+        url.searchParams.set("page", next);
+        window.history.pushState({ page: next }, "", url.toString());
+      }
+      return next;
+    });
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onPopState = () => {
+      const raw = new URLSearchParams(window.location.search).get("page");
+      setPageState(isPage(raw) ? raw : "proof");
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   const startupState = useMemo(() => startupDashboardState(), []);
   const [apiState, setApiState] = useState<DashboardState | null>(startupState);

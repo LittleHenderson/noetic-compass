@@ -1885,13 +1885,17 @@ def test_app_shell_share_page_config_and_single_active_route_renderer():
     assert "<ActivePage state={state} />" in app
     assert "page === \"quick-start\"" not in app
     assert "page === \"dashboard\" && <DashboardPage" not in app
-    assert "const [navOverflowed, setNavOverflowed]" in shell
-    assert "ResizeObserver" in shell
-    assert "requiredLinkWidth > inlineAvailableWidth" in shell
-    assert 'className={`shell-nav ${navOverflowed ? "overflowed" : ""}`}' in shell
-    assert ".shell-nav.overflowed" in app_css
-    assert ".shell-nav.overflowed .shell-nav-links.open" in app_css
-    assert "max-height: 0" in app_css
+    # Grouped navigation (2026-08-11): the shell renders NAV_GROUPS with a
+    # secondary tab row and legal footer; the overflow-measurement machinery
+    # and its zoom advisory are retired and must not return.
+    assert "NAV_GROUPS" in shell
+    assert "shell-subnav" in shell
+    assert "FOOTER_PAGES" in shell
+    assert "navOverflowed" not in shell
+    assert "ResizeObserver" not in shell
+    assert ".shell-nav-groups" in app_css
+    assert ".shell-subnav-link" in app_css
+    assert ".shell-footer-link" in app_css
 
 
 def test_shell_surfaces_recent_critical_alerts_across_pages():
@@ -1907,7 +1911,7 @@ def test_shell_surfaces_recent_critical_alerts_across_pages():
     ).read_text(encoding="utf-8")
 
     assert 'import("./CriticalAlertStrip")' in shell
-    assert '<CriticalAlertStrip onOpenAlerts={() => onNavigate("settings")} />' in shell
+    assert '<CriticalAlertStrip onOpenAlerts={() => navigate("settings")} />' in shell
     assert "fetchCriticalNotificationAudit(5)" in alert_strip
     assert "visibleRows" in alert_strip
     assert 'severity === "alert" || severity === "warning"' in alert_strip

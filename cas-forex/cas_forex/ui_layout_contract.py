@@ -130,21 +130,28 @@ def _build_checks(base: Path) -> Iterable[UILayoutCheck]:
     shell_tsx = _read(base, "ui/src/components/Shell.tsx")
     yield _check(
         "shell_nav_zoom_collapse",
-        ok=all(
-            needle in shell_tsx or needle in app_css
+        # Same protected outcome as before - no page becomes unreachable at
+        # high browser zoom - achieved structurally since the grouped-nav
+        # rebuild (2026-08-11): 7 short group buttons in place of 23 links, a
+        # CSS drawer below 860px (which browser zoom also triggers, because
+        # zoom shrinks the reported viewport width), and a horizontally
+        # scrollable secondary tab row. The old width-measuring collapse and
+        # its zoom-advisory banner are retired and must NOT return.
+        ok=all(needle in shell_tsx for needle in ("NAV_GROUPS", "shell-nav-groups", "shell-subnav"))
+        and all(
+            needle in app_css
             for needle in (
-                "ResizeObserver",
-                "requiredLinkWidth > inlineAvailableWidth",
-                "navOverflowed",
-                "shell-layout-advisory",
-                ".shell-nav.overflowed",
-                ".shell-nav-links.open",
                 "@media (max-width: 860px)",
+                ".shell-nav-groups.open",
+                ".shell-subnav",
+                "overflow-x: auto",
             )
-        ),
-        detail="Navigation measures available width, collapses when zoomed, exposes a wrapping drawer, and warns when desktop layout drops into compact mode.",
+        )
+        and "ResizeObserver" not in shell_tsx
+        and "navOverflowed" not in shell_tsx,
+        detail="Grouped navigation stays reachable at browser zoom: 7 group buttons, a CSS drawer under 860px, and a scrollable secondary tab row - no width measurement required.",
         evidence=("ui/src/components/Shell.tsx", "ui/src/App.css"),
-        next_action="Keep the measured nav collapse path covered; fixed breakpoint-only nav is not enough at browser zoom.",
+        next_action="Keep the grouped nav + drawer breakpoint + scrollable subnav; do not reintroduce measured overflow collapse.",
     )
 
     operator_tsx = _read(base, "ui/src/components/OperatorBadge.tsx")
@@ -260,7 +267,16 @@ def _check(
 def _route_ids(base: Path) -> tuple[set[str], set[str]]:
     page_config = _read(base, "ui/src/pageConfig.ts")
     app_tsx = _read(base, "ui/src/App.tsx")
-    page_ids = set(re.findall(r'id:\s*"([^"]+)"', page_config))
+    # Scope to the NAV_ITEMS block: pageConfig also declares NAV_GROUPS and
+    # FOOTER_PAGES whose ids are groups/aliases, not routable pages, and the
+    # old whole-file scan reported them as "missing routes".
+    nav_items_match = re.search(
+        r"export const NAV_ITEMS\s*=\s*\[(?P<body>.*?)\]\s*as const;",
+        page_config,
+        re.S,
+    )
+    nav_items_body = nav_items_match.group("body") if nav_items_match else page_config
+    page_ids = set(re.findall(r'id:\s*"([^"]+)"', nav_items_body))
     routed_ids: set[str] = set()
     match = re.search(
         r"const\s+PAGE_COMPONENTS\s*:\s*Record<Page,\s*LazyExoticComponent<RoutedPage>>\s*=\s*\{(?P<body>.*?)\n\};",
