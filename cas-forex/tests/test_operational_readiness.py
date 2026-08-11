@@ -201,12 +201,14 @@ def test_operational_readiness_settings_ui_and_trace_skip_are_wired():
     assert "https://your-cas-forex-host" in settings_page
     assert "Save external hooks" in settings_page
     assert "Reset runtime hooks" in settings_page
-    assert "Send critical alert test" in settings_page
+    # Moved to components/settings/AuditPanels.tsx in the settings decomposition.
+    extracted_auditpanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "AuditPanels.tsx").read_text(encoding="utf-8")
+    assert "Send critical alert test" in extracted_auditpanels
     assert "Off-screen alert webhook URL" in settings_page
     assert "alert_webhook_url" in settings_page
     assert "updateExternalMonitoringConfig" in settings_page
     assert "resetExternalMonitoringConfig" in settings_page
-    assert "testCriticalNotificationDelivery" in settings_page
+    assert "testCriticalNotificationDelivery" in extracted_auditpanels
     assert "external_monitoring" in api_client
     assert "ExternalMonitoringReadiness" in api_client
     assert "ExternalMonitoringDeploymentHandoff" in api_client

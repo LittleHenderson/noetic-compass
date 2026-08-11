@@ -30,7 +30,18 @@ def _append_lock(lock_path: Path) -> Iterator[None]:
     handle = open(lock_path, "a+b")
     try:
         if os.name == "nt":
-            msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
+            # LK_LOCK gives up with OSError after ~10s of contention. An
+            # evidence append on a loaded machine must WAIT, not crash - a
+            # crashed append under contention is exactly the failure mode that
+            # broke the chain in July. Retry indefinitely; the critical section
+            # is milliseconds, so real deadlock here would mean a hung process
+            # holding the lock, which surfaces as an operational alarm either way.
+            while True:
+                try:
+                    msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
+                    break
+                except OSError:
+                    continue
         else:  # pragma: no cover
             fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
         yield

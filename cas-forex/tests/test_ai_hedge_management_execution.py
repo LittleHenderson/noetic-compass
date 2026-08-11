@@ -782,9 +782,11 @@ def test_ai_hedge_management_execution_route_ui_and_server_are_wired():
     assert "runAiHedgeManagementAction" in api_client
     assert "/ai-hedge-management/execute?" in api_client
     assert "CONFIRM AI EDGE MANAGEMENT" not in settings_page
-    assert "Execute guarded draft" in settings_page
-    assert "Receipt Reconciliation" in settings_page
-    assert "Post-Execution Refresh" in settings_page
+    # Moved to components/settings/AiHedgePanels.tsx in the settings decomposition.
+    extracted_aihedgepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "AiHedgePanels.tsx").read_text(encoding="utf-8")
+    assert "Execute guarded draft" in extracted_aihedgepanels
+    assert "Receipt Reconciliation" in extracted_aihedgepanels
+    assert "Post-Execution Refresh" in extracted_aihedgepanels
     assert "terminal_receipt_status" in api_client
     assert "post_execution_refresh_status" in api_client
     assert any(
