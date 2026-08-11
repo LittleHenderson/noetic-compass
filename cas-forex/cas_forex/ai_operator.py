@@ -2842,9 +2842,10 @@ def _active_account_objective_context(
         ],
         "claim_boundary": (
             "This report selects the active account-growth scoreboard. It does not "
-            "place an order, invent a cashflow-adjusted baseline, guarantee profit, "
-            "authorize live trading, or weaken any execution gate. A baseline is "
-            "reported only when broker deal history reconciles to current balance."
+            "place an order, invent a cashflow-adjusted baseline, authorize live "
+            "trading, or weaken any execution gate; it does not guarantee profit. "
+            "A baseline is reported only when broker deal history reconciles to "
+            "current balance."
         ),
     }
 

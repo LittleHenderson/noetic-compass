@@ -148,4 +148,13 @@ def test_authority_boundary_keeps_money_flags_off_when_provider_is_simulated(mon
     assert report.can_auto_deposit is False
     assert report.can_move_money is False
     assert report.can_automate_payouts is False
-    assert any("simulated provider only proves the money-movement loop" in blocker.lower() for blocker in report.blockers)
+    # The report must EXPLAIN why the money flags are off, not just turn them
+    # off: a blocker names the simulated provider and states it moves no real
+    # money. Asserted on semantics, not one exact sentence - the previous
+    # assertion pinned wording that never shipped.
+    simulated_blockers = [b for b in report.blockers if "simulated provider" in b.lower()]
+    assert simulated_blockers, f"no blocker explains the simulated provider: {report.blockers}"
+    assert any(
+        "does not move" in b.lower() or "not ready for real money" in b.lower()
+        for b in simulated_blockers
+    ), simulated_blockers

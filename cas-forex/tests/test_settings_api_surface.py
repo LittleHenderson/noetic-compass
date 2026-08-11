@@ -2126,7 +2126,11 @@ def test_dashboard_startup_cache_writer_keeps_only_first_paint_fields():
     assert "failure_reasons: []" in cache_reader
     assert "symbol_decisions: []" in cache_reader
     assert "sizing: []" in cache_reader
-    assert_panel_wired("readExistingDashboardCachePacket")
+    # Data-layer function, not a React panel - the slice-1 migration script
+    # over-matched it into assert_panel_wired, whose "something renders it"
+    # check can never hold for a non-component. Presence + the call-site
+    # assertion below are the correct contract.
+    assert "function readExistingDashboardCachePacket()" in writer
     assert "function mergeDashboardCachePackets(" in writer
     assert "function preferredDashboardMeta(" in writer
     assert "function dashboardPacketRank(" in writer

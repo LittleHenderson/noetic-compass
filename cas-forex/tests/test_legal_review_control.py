@@ -23,9 +23,24 @@ def _write(path, text: str) -> None:
 
 
 def _write_draft_package(root) -> None:
+    # Mirrors legal_review_readiness.REQUIRED_DRAFTS and CHECKLIST_TERMS - the
+    # readiness checker grew three more required disclosures and two more
+    # checklist terms after this fixture was first written.
     _write(root / "docs/legal/CAS_FOREX_DISCLOSURE_DRAFT.md", "Risk Disclosure\nAutomated trading can lose money.\n")
     _write(root / "docs/legal/CAS_FOREX_TERMS_OF_SERVICE_DRAFT.md", "Terms\nNo profit guarantee.\n")
     _write(root / "docs/legal/CAS_FOREX_PRIVACY_POLICY_DRAFT.md", "Privacy\nData deletion and retention.\n")
+    _write(
+        root / "docs/legal/CAS_FOREX_AUTOMATED_TRADING_DISCLOSURE_DRAFT.md",
+        "Automated Trading Disclosure\nAutonomous execution can act without per-trade confirmation.\n",
+    )
+    _write(
+        root / "docs/legal/CAS_FOREX_AI_LIMITATIONS_DISCLOSURE_DRAFT.md",
+        "AI Limitations Disclosure\nModel output can be wrong; no profit is promised.\n",
+    )
+    _write(
+        root / "docs/legal/CAS_FOREX_BROKER_CONNECTIVITY_DISCLOSURE_DRAFT.md",
+        "Broker Connectivity Disclosure\nBroker/terminal connectivity can fail or lag.\n",
+    )
     _write(
         root / "docs/legal/CAS_FOREX_LEGAL_REVIEW_CHECKLIST.md",
         (
@@ -33,9 +48,11 @@ def _write_draft_package(root) -> None:
             "counsel\n"
             "jurisdiction\n"
             "automated trading\n"
+            "autonomous execution\n"
             "retail forex\n"
             "privacy\n"
             "broker\n"
+            "money movement\n"
             "risk disclosure\n"
         ),
     )
@@ -50,7 +67,10 @@ def test_write_counsel_review_record_computes_local_artifact_hash_and_turns_read
         root=tmp_path,
         reviewed_by="Example Legal LLP",
         review_date="2026-07-09",
-        scope="Terms, risk disclosure, privacy, automated trading, broker connectivity, retail forex, public launch",
+        scope=(
+            "Terms, risk disclosure, privacy, automated trading, autonomous "
+            "execution, broker connectivity, money movement, retail forex, public launch"
+        ),
         review_artifact_path=str(artifact),
         qualified_counsel_confirmed=True,
         confirm_phrase=RECORD_CONFIRM_PHRASE,

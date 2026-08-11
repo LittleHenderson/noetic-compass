@@ -157,6 +157,12 @@ def _authorized_live_cfg():
         max_total_exposure_lots=0.5,
         max_open_positions=5,
         max_weekly_drawdown_pct=5.0,
+        # Explicit per-trade cap sized for this file's fixtures (0.01 lots,
+        # 50-pip stop, small fake-bridge equity ~= 1.1% at the stop). Without
+        # it the global default (0.5%) applies and the risk engine correctly
+        # rejects the add - these tests exercise handoff mechanics, not cap
+        # tuning, so the cap must accommodate the fixture, not vice versa.
+        max_risk_per_trade_pct=2.0,
     )
 
 
@@ -185,6 +191,15 @@ def _patch_compound_add_dry_run_live_gates(monkeypatch) -> None:
             "overall_status": "RECONCILED",
             "mt5_connected": True,
             "mt5_is_demo": False,
+            # The action-time gate now also requires the connected terminal to
+            # be the CONFIGURED account (execution_guard.
+            # _broker_truth_snapshot_ready_for_live) - dispatching into the
+            # wrong MT5 account must block. Mirror the canonical stub in
+            # test_execution_guard.py.
+            "mt5_account_identity_matches_config": True,
+            "fresh_for_live_seconds": 120,
+            "action_time_refresh_performed": True,
+            "action_time_refresh_error": None,
             "mt5_open_position_count": 1,
             "terminal_unmatched_open_position_count": 0,
             "terminal_pending_receipt_count": 0,
@@ -192,6 +207,37 @@ def _patch_compound_add_dry_run_live_gates(monkeypatch) -> None:
         },
     )
     monkeypatch.setattr(execution_guard, "_latest_mt5_live_risk_snapshot", lambda: {})
+    # Risk caps resolve AI dial BEFORE config (caps_from_config). On a dev
+    # machine the control-authority runtime file carries whatever dial the
+    # operator last set (e.g. max_risk_pct_per_trade=0.5), silently overriding
+    # the fixture config. Neutralise the dial so the test's config governs.
+    monkeypatch.setattr(execution_guard, "_ai_dial", lambda name: None)
+    # The risk engine now fails closed when the reconciled broker loss ledger
+    # is not from the CURRENT UTC day (daily_loss_guard). Without this stub the
+    # test reads the repo's real runtime ledger - machine state - and blocks
+    # with DAILY_REALIZED_LOSS_UTC_PERIOD_STALE. Stub the report a same-day
+    # reconciled ledger would produce: fresh, in budget, not blocking.
+    import cas_forex.daily_loss_guard as daily_loss_guard
+
+    monkeypatch.setattr(
+        daily_loss_guard,
+        "evaluate_bridge_daily_realized_loss",
+        lambda bridge, **kwargs: {
+            "report_kind": "cas_forex_daily_realized_loss_guard",
+            "status": "WITHIN_BUDGET",
+            "block_new_exposure": False,
+            "cap_usd": 250.0,
+            "realized_today_usd": 0.0,
+            "remaining_loss_budget_usd": 250.0,
+            "cap_source": "test_fixture",
+            "blocking_cap": "daily_loss_cap_usd",
+            "position_management_allowed": True,
+            "risk_reducing_close_allowed": True,
+            "take_profit_and_stop_management_allowed": True,
+            "account_growth_reconciliation": {"period_current": True},
+            "detail": "Test fixture: same-day reconciled ledger, no realized loss.",
+        },
+    )
     monkeypatch.setattr(
         execution_guard,
         "_latest_mt5_permission_snapshot",
@@ -1019,6 +1065,11 @@ def test_waste_compound_add_dry_run_reaches_dashboard_owner_review_surface(tmp_p
             "overall_status": "BROKER_TRUTH_READY",
             "mt5_connected": True,
             "mt5_is_demo": False,
+            # Owner-accept review now requires the connected terminal to be the
+            # configured account (truth_live_visible in
+            # compound_add_order_dry_run_review) - see the canonical stub note in
+            # _patch_compound_add_dry_run_live_gates.
+            "mt5_account_identity_matches_config": True,
             "mt5_open_position_count": 1,
             "terminal_unmatched_open_position_count": 0,
             "terminal_pending_receipt_count": 0,
@@ -1116,6 +1167,10 @@ def test_waste_compound_add_dispatch_handoff_blocks_without_owner_accept(tmp_pat
 
 def test_waste_compound_add_dispatch_handoff_reaches_bridge_after_owner_accept(tmp_path, monkeypatch):
     _patch_compound_add_dry_run_live_gates(monkeypatch)
+    # The risk engine reads caps from the GLOBAL config, not the namespace
+    # handed to dispatch - mirror the global patch the pass-execute test does,
+    # so the fixture's per-trade cap (see _authorized_live_cfg) is in force.
+    _patch_global_config(monkeypatch, _authorized_live_cfg())
 
     from cas_forex import compound_add_order_dry_run_review as review_module
 
@@ -1128,6 +1183,11 @@ def test_waste_compound_add_dispatch_handoff_reaches_bridge_after_owner_accept(t
         "overall_status": "BROKER_TRUTH_READY",
         "mt5_connected": True,
         "mt5_is_demo": False,
+        # Owner-accept review now requires the connected terminal to be the
+        # configured account (truth_live_visible in
+        # compound_add_order_dry_run_review) - see the canonical stub note in
+        # _patch_compound_add_dry_run_live_gates.
+        "mt5_account_identity_matches_config": True,
         "mt5_open_position_count": 1,
         "terminal_unmatched_open_position_count": 0,
         "terminal_pending_receipt_count": 0,

@@ -458,8 +458,17 @@ def test_spec_sheet_builder_generates_live_authority_content(tmp_path):
     assert "Deferred position-review semantics" in runtime_truth_text
     assert "Unique broker-ticket normalization" in runtime_truth_text
     assert "Visible dual-chat responder attribution" in runtime_truth_text
-    assert "deepseek-r1:latest" in runtime_truth_text
-    assert "position-action-e07a3257013b8b3fb694" in runtime_truth_text
+    # The local-fallback model id is asserted against the Red Team Register,
+    # where the builder emits it unconditionally (RT-071). The Runtime Truth
+    # sheet is point-in-time machine evidence - its own header says unavailable
+    # values are expected - so asserting a model id there tested the state of
+    # the machine running the suite, not the product.
+    assert "deepseek-r1:latest" in red_team_text
+    # The v11 no-touch probe row must cite its durable evidence file. The
+    # previous assertion pinned one packet hash from that file - machine state,
+    # not product structure; whether the evidence is loadable is what the
+    # sheet's present/OPEN cell already reports.
+    assert "runtime/redteam-position-edge-v11-latest.json" in runtime_truth_text
     assert "Local structured Operator continuity" in runtime_truth_text
     assert "Operator model failure-stage truth" in runtime_truth_text
     assert "Bounded trading-model capability" in runtime_truth_text
