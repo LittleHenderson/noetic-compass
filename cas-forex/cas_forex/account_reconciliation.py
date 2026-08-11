@@ -262,17 +262,43 @@ def build_account_reconciliation_report(
             "internal balance/equity is not yet reconcilable to broker truth (live-readiness gap)."
         )
     else:
-        bal_ok = broker_balance is None or _close(internal_balance, broker_balance)
-        eq_ok = broker_equity is None or _close(internal_equity, broker_equity)
-        if bal_ok and eq_ok:
-            balance_status = STATUS_OK
-            balance_detail = "Internal balance/equity matches broker-reported figures."
-        else:
+        # A field the broker did not report cannot be reconciled. Treating an
+        # absent value as agreement let this check report the full-scope claim
+        # "internal balance/equity matches broker-reported figures" when only
+        # one of the two was ever compared. Partial agreement is reported as
+        # UNVERIFIABLE (fail-closed) and names exactly what was left out.
+        compared: list[str] = []
+        unreported: list[str] = []
+        disagreed: list[str] = []
+
+        for label, internal_value, broker_value in (
+            ("balance", internal_balance, broker_balance),
+            ("equity", internal_equity, broker_equity),
+        ):
+            if broker_value is None:
+                unreported.append(label)
+                continue
+            compared.append(label)
+            if not _close(internal_value, broker_value):
+                disagreed.append(label)
+
+        if disagreed:
             balance_status = STATUS_MISMATCH
             balance_detail = (
-                f"Balance/equity mismatch: internal balance={internal_balance}, equity={internal_equity}; "
+                f"Balance/equity mismatch on {', '.join(disagreed)}: "
+                f"internal balance={internal_balance}, equity={internal_equity}; "
                 f"broker balance={broker_balance}, equity={broker_equity}."
             )
+        elif unreported:
+            balance_status = STATUS_UNVERIFIABLE
+            balance_detail = (
+                f"Broker/demo receipt reported {', '.join(compared)} only; "
+                f"{', '.join(unreported)} was not exposed and stays unreconciled. "
+                "Partial agreement is not full balance/equity reconciliation."
+            )
+        else:
+            balance_status = STATUS_OK
+            balance_detail = "Internal balance/equity matches broker-reported figures."
     checks.append(
         ReconciliationCheck(
             check_id="balance_equity_reconciliation",

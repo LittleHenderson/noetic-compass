@@ -4,6 +4,7 @@ from cas_forex.account_reconciliation import (
     RECONCILIATION_FAILED,
     STATUS_MISMATCH,
     STATUS_OK,
+    STATUS_UNVERIFIABLE,
     assert_reconciliation_boundary,
     build_account_reconciliation_report,
 )
@@ -125,6 +126,38 @@ def test_reconciliation_matches_broker_balance_when_present():
 
     by_id = {c.check_id: c for c in report.checks}
     assert by_id["balance_equity_reconciliation"].status == STATUS_OK
+
+
+def test_reconciliation_will_not_claim_full_match_from_a_partial_broker_receipt():
+    """A field the broker never reported must not be counted as agreement.
+
+    Previously an absent balance (or equity) short-circuited to "ok", so the
+    check reported the full-scope claim "internal balance/equity matches
+    broker-reported figures" after comparing only one of the two values.
+    """
+    for reported, missing in (("balance", "equity"), ("equity", "balance")):
+        receipt = _valid_paper_receipt()
+        receipt[reported] = 5000.0  # the other field is deliberately absent
+        report = build_account_reconciliation_report(_ledger(), receipt)
+        check = {c.check_id: c for c in report.checks}["balance_equity_reconciliation"]
+
+        assert check.status == STATUS_UNVERIFIABLE, (
+            f"only {reported} was comparable; status must not be OK"
+        )
+        assert missing in check.detail, "the unreconciled field must be named"
+        assert "matches broker-reported figures" not in check.detail, (
+            "must not emit the full-scope match claim from a partial comparison"
+        )
+
+
+def test_reconciliation_still_flags_a_real_mismatch_on_a_partial_receipt():
+    receipt = _valid_paper_receipt()
+    receipt["balance"] = 999_999.0  # disagrees with the ledger; equity absent
+    report = build_account_reconciliation_report(_ledger(), receipt)
+    check = {c.check_id: c for c in report.checks}["balance_equity_reconciliation"]
+
+    assert check.status == STATUS_MISMATCH
+    assert "balance" in check.detail
 
 
 def test_reconciliation_matches_nested_account_snapshot_when_present():
