@@ -96,6 +96,18 @@ projected runtime and 10 failures at session start to ~16 min and zero).
 - Line counts in earlier entries were taken from pre-strip working states;
   corrected above. "Seven modules" for the MT5 guard was six by design.
 
+**Loss post-mortem (2026-08-11)**
+- Forensic post-mortem of the June-July -$55,069 demo loss, cross-validated
+  to the cent against the sha256-reconciled ledger: one day (2026-07-02) was
+  97.6% of the loss; NAS100 was 112% of it; the size tail (74 trades >=0.40
+  lots) exceeded the entire net loss; realized win rate 35.85% vs the 0.65
+  objective bar. The proof strategy never traded it - the autonomous M1
+  scalp/WASTE lane did, against the demo terminal promoted to primary paper
+  bridge on 2026-07-04. Today's daily_loss_guard would have capped the day;
+  it postdates the loss. The per-trade risk gate passed all 2,634 intents
+  because every one was stop-less. Three pre-restart blockers recorded in
+  docs/operations/LOSS_POSTMORTEM_2026-07.md and the runbook.
+
 **Failed approaches recorded**
 - The flaky race test was NOT the lock ceiling (first attribution wrong,
   corrected in 839a46f8): pytest names modules `tests.test_x` in full

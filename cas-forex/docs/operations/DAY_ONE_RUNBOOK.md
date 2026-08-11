@@ -19,6 +19,16 @@ model. The broker demo account is NOT untouched. Live remains NOT LICENSED;
 the proof chain is broken at record 11 (diagnosed, not repaired); the 3 June
 bundle days do not count once the chain restarts.
 
+## 0. Read the loss post-mortem first
+
+`docs/operations/LOSS_POSTMORTEM_2026-07.md` — the -$55,069 was NOT the proof
+strategy (which barely ran); it was the autonomous M1 scalp lane trading the
+demo terminal, 97.6% of it on a single day, with no daily loss cap in force
+and every order intent stop-less. The post-mortem lists three gate changes
+that are BLOCKERS for the restart (lane-universal loss ceilings, chokepoint
+lane discipline, no-stop-no-order). Restarting the chain before those are in
+place re-runs June's conditions with a cleaner ledger.
+
 ## 1. Restart the proof chain (~1 minute)
 
 The June chain is permanently unverifiable (concurrent-writer break at record
