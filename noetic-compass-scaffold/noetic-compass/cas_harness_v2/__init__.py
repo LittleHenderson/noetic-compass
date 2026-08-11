@@ -503,6 +503,20 @@ from .diagnostic_stagec_runtime_activation import (
     stagec_runtime_phase_state,
     stagec_runtime_preparation_state,
 )
+from . import comparison_adapters as _comparison_adapters
+from . import comparison_departure_metrics as _comparison_departure_metrics
+from . import comparison_execution_boundary as _comparison_execution_boundary
+from . import comparison_model_protocol as _comparison_model_protocol
+from . import comparison_prompt_injection_layers as _comparison_prompt_injection_layers
+from . import comparison_shared_protocol as _comparison_shared_protocol
+from . import comparison_shared_runner as _comparison_shared_runner
+from . import comparison_steering_effects as _comparison_steering_effects
+from . import comparison_steering_protocol as _comparison_steering_protocol
+from . import distributed_probe_contract as _distributed_probe_contract
+from . import historical_evidence_import as _historical_evidence_import
+from . import jspace_shadow_contract as _jspace_shadow_contract
+from . import surface_meaning_preservation as _surface_meaning_preservation
+from . import universal_probe_contract as _universal_probe_contract
 
 __all__ = [
     "ADVERSARIAL_PRESENT",
@@ -975,3 +989,50 @@ __all__ = [
     "stagec_runtime_phase_state",
     "stagec_runtime_preparation_state",
 ]
+
+
+_COMPARISON_PACKAGE_MODULES = (
+    _comparison_model_protocol,
+    _comparison_adapters,
+    _comparison_shared_protocol,
+    _comparison_shared_runner,
+    _comparison_prompt_injection_layers,
+    _surface_meaning_preservation,
+    _comparison_departure_metrics,
+    _comparison_steering_protocol,
+    _comparison_steering_effects,
+    _comparison_execution_boundary,
+    _universal_probe_contract,
+    _distributed_probe_contract,
+    _jspace_shadow_contract,
+    _historical_evidence_import,
+)
+_AMBIGUOUS_COMPARISON_EXPORTS = frozenset({"DTYPES", "TOKEN_SCOPES"})
+
+for _comparison_module in _COMPARISON_PACKAGE_MODULES:
+    for _comparison_name in _comparison_module.__all__:
+        if _comparison_name in _AMBIGUOUS_COMPARISON_EXPORTS:
+            continue
+        _comparison_value = getattr(_comparison_module, _comparison_name)
+        if _comparison_name in globals():
+            if globals()[_comparison_name] != _comparison_value:
+                raise ImportError(
+                    "CAS Harness v2 package export conflict for "
+                    f"{_comparison_name!r}."
+                )
+            continue
+        globals()[_comparison_name] = _comparison_value
+        __all__.append(_comparison_name)
+
+PROMPT_INJECTION_TOKEN_SCOPES = _comparison_prompt_injection_layers.TOKEN_SCOPES
+UNIVERSAL_PROBE_TOKEN_SCOPES = _universal_probe_contract.TOKEN_SCOPES
+UNIVERSAL_PROBE_DTYPES = _universal_probe_contract.DTYPES
+JSPACE_DTYPES = _jspace_shadow_contract.DTYPES
+__all__.extend(
+    (
+        "PROMPT_INJECTION_TOKEN_SCOPES",
+        "UNIVERSAL_PROBE_TOKEN_SCOPES",
+        "UNIVERSAL_PROBE_DTYPES",
+        "JSPACE_DTYPES",
+    )
+)

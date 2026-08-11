@@ -21,6 +21,7 @@ import pytest
 
 from api.services.cas_harness_v2_packaging import (
     HarnessV2PackagingError,
+    PACKAGED_KERNEL_FILES,
     verify_packaged_harness_v2_kernel,
 )
 
@@ -33,6 +34,34 @@ PROVENANCE_PATH = PACKAGED_MIRROR / "PACKAGING_PROVENANCE.json"
 PROVENANCE_SCHEMA = "cas_harness_v2.packaged_mirror_provenance.v1"
 IGNORED_PARTS = {"__pycache__"}
 IGNORED_SUFFIXES = {".pyc", ".pyo"}
+PACKAGED_KERNEL_FILE_COUNT = 36
+PACKAGED_KERNEL_EXPORT_COUNT = 1_097
+PACKAGED_KERNEL_SOURCE_BYTES = 2_332_110
+COMPARISON_MODULE_EXPORT_COUNTS = {
+    "comparison_model_protocol": 58,
+    "comparison_adapters": 12,
+    "comparison_shared_protocol": 40,
+    "comparison_shared_runner": 10,
+    "comparison_prompt_injection_layers": 80,
+    "surface_meaning_preservation": 45,
+    "comparison_departure_metrics": 63,
+    "comparison_steering_protocol": 53,
+    "comparison_steering_effects": 34,
+    "comparison_execution_boundary": 17,
+    "universal_probe_contract": 108,
+    "distributed_probe_contract": 60,
+    "jspace_shadow_contract": 74,
+    "historical_evidence_import": 21,
+}
+AMBIGUOUS_EXPORT_ALIASES = {
+    ("comparison_prompt_injection_layers", "TOKEN_SCOPES"):
+        "PROMPT_INJECTION_TOKEN_SCOPES",
+    ("universal_probe_contract", "TOKEN_SCOPES"):
+        "UNIVERSAL_PROBE_TOKEN_SCOPES",
+    ("universal_probe_contract", "DTYPES"): "UNIVERSAL_PROBE_DTYPES",
+    ("jspace_shadow_contract", "DTYPES"): "JSPACE_DTYPES",
+}
+AMBIGUOUS_RAW_EXPORTS = frozenset({"DTYPES", "TOKEN_SCOPES"})
 RUNTIME_ACTIVATION_EXPORTS = (
     "STAGEC_RUNTIME_ACTIVATION_ERROR_CODES",
     "STAGEC_RUNTIME_ACTIVATION_INDETERMINATE",
@@ -123,6 +152,11 @@ def test_packaged_mirror_is_exactly_the_canonical_source_tree() -> None:
     packaged = _package_files(PACKAGED_MIRROR, omit_provenance=True)
 
     assert canonical, "canonical cas_harness_v2 package is missing or empty"
+    assert len(canonical) == PACKAGED_KERNEL_FILE_COUNT
+    assert set(canonical) == set(PACKAGED_KERNEL_FILES)
+    assert sum(path.stat().st_size for path in canonical.values()) == (
+        PACKAGED_KERNEL_SOURCE_BYTES
+    )
     assert set(packaged) == set(canonical), (
         "packaged cas_harness_v2 file set drifted: "
         f"missing={sorted(set(canonical) - set(packaged))}, "
@@ -167,6 +201,10 @@ def test_packaging_provenance_binds_every_canonical_source_byte() -> None:
     canonical = _package_files(CANONICAL_PACKAGE)
     recorded = provenance["source_files"]
     assert type(recorded) is dict
+    assert len(recorded) == PACKAGED_KERNEL_FILE_COUNT
+    assert sum(entry["size_bytes"] for entry in recorded.values()) == (
+        PACKAGED_KERNEL_SOURCE_BYTES
+    )
     assert set(recorded) == set(canonical), (
         "packaging provenance file set drifted: "
         f"missing={sorted(set(canonical) - set(recorded))}, "
@@ -204,7 +242,7 @@ def test_packaged_mirror_import_resolves_inside_the_docker_context() -> None:
     assert completed.returncode == 0, completed.stderr
 
 
-def test_packaged_recent_modules_are_exported_exactly(tmp_path: Path) -> None:
+def test_packaged_public_modules_are_exported_exactly(tmp_path: Path) -> None:
     package_tree = ast.parse((CANONICAL_PACKAGE / "__init__.py").read_text())
     runtime_imports = [
         node
@@ -246,6 +284,13 @@ def test_packaged_recent_modules_are_exported_exactly(tmp_path: Path) -> None:
             "runtime = importlib.import_module(",
             "    'cas_harness_v2.diagnostic_stagec_runtime_activation'",
             ")",
+            f"comparison_export_counts = {COMPARISON_MODULE_EXPORT_COUNTS!r}",
+            f"ambiguous_export_aliases = {AMBIGUOUS_EXPORT_ALIASES!r}",
+            f"ambiguous_raw_exports = {AMBIGUOUS_RAW_EXPORTS!r}",
+            "comparison_modules = {",
+            "    name: importlib.import_module(f'cas_harness_v2.{name}')",
+            "    for name in comparison_export_counts",
+            "}",
             "artifacts = importlib.import_module('cas_harness_v2.artifacts')",
             "assert len(provenance.__all__) == len(set(provenance.__all__)) == 32",
             "assert len(inventory.__all__) == len(set(inventory.__all__)) == 11",
@@ -255,8 +300,23 @@ def test_packaged_recent_modules_are_exported_exactly(tmp_path: Path) -> None:
             "assert len(runtime.__all__) == len(set(runtime.__all__)) == 44",
             "assert not [name for name in runtime.__all__ if name.endswith('_SCHEMA')]",
             "assert not [name for name in runtime.__all__ if name.endswith('_MEDIA_TYPE')]",
-            "assert len(package.__all__) == len(set(package.__all__)) == 469",
-            "assert len(set(package.__all__) - set(runtime.__all__)) == 425",
+            f"assert len(package.__all__) == len(set(package.__all__)) == {PACKAGED_KERNEL_EXPORT_COUNT}",
+            "assert not (ambiguous_raw_exports & set(package.__all__))",
+            "assert not any(hasattr(package, name) for name in ambiguous_raw_exports)",
+            "for module_name, module in comparison_modules.items():",
+            "    assert len(module.__all__) == len(set(module.__all__))",
+            "    assert len(module.__all__) == comparison_export_counts[module_name]",
+            "    ordinary_exports = set(module.__all__) - ambiguous_raw_exports",
+            "    assert ordinary_exports <= set(package.__all__)",
+            "    assert all(",
+            "        getattr(package, name) == getattr(module, name)",
+            "        for name in ordinary_exports",
+            "    )",
+            "for (module_name, raw_name), alias in ambiguous_export_aliases.items():",
+            "    assert alias in package.__all__",
+            "    assert getattr(package, alias) is getattr(",
+            "        comparison_modules[module_name], raw_name",
+            "    )",
             "assert len([name for name in prerequisite.__all__ if name.endswith('_SCHEMA')]) == 18",
             "assert len([name for name in prerequisite.__all__ if name.endswith('_MEDIA_TYPE')]) == 18",
             "assert len([name for name in external.__all__ if name.endswith('_SCHEMA')]) == 3",
