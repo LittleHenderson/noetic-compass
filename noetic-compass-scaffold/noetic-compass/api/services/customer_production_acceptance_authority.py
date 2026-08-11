@@ -1847,10 +1847,26 @@ class CustomerProductionAcceptanceAuthorityStore:
                 raise AcceptanceAuthorityUnavailable(
                     "immutable acceptance backend readiness failed"
                 ) from exc
+        # The operation stamp is captured before a live immutable write or a
+        # concurrent content-addressed winner can finish.  Never re-evaluate an
+        # authenticated receipt before either of its own exact timestamps;
+        # later caller times still drive expiry checks without a wall-clock
+        # dependency.
+        revalidation_time = max(
+            now,
+            _parse_iso_utc_exact_unavailable(
+                verification_payload.get("verified_at"),
+                "receipt verification timestamp",
+            ),
+            _parse_iso_utc_exact_unavailable(
+                verification_payload.get("evaluated_at"),
+                "receipt evaluation timestamp",
+            ),
+        )
         verification = revalidate_object_lock_verification(
             verification_payload,
             expected=expected,
-            evaluated_at=now,
+            evaluated_at=revalidation_time,
         )
         if verification is None or not verification.verified:
             raise AcceptanceAuthorityUnavailable(
@@ -4197,7 +4213,7 @@ def _parse_utc_unavailable(value: Any, label: str) -> datetime:
         raise AcceptanceAuthorityUnavailable(str(exc)) from exc
 
 
-def _parse_iso_utc_unavailable(value: Any, label: str) -> datetime:
+def _parse_iso_utc_exact_unavailable(value: Any, label: str) -> datetime:
     if not isinstance(value, str):
         raise AcceptanceAuthorityUnavailable(f"{label} is invalid")
     try:
@@ -4206,7 +4222,11 @@ def _parse_iso_utc_unavailable(value: Any, label: str) -> datetime:
         raise AcceptanceAuthorityUnavailable(f"{label} is invalid") from exc
     if parsed.tzinfo is None or parsed.utcoffset() is None:
         raise AcceptanceAuthorityUnavailable(f"{label} is invalid")
-    return parsed.astimezone(UTC).replace(microsecond=0)
+    return parsed.astimezone(UTC)
+
+
+def _parse_iso_utc_unavailable(value: Any, label: str) -> datetime:
+    return _parse_iso_utc_exact_unavailable(value, label).replace(microsecond=0)
 
 
 def _utc_now(value: datetime | None) -> datetime:

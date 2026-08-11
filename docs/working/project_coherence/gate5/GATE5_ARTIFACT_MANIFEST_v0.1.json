@@ -2218,8 +2218,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/api/services/customer_production_acceptance_authority.py",
-      "sha256": "2F011C79E338D20C1FDE010BEF2F704593EF31D98E49405E443DFBAD4C77E6FC",
-      "bytes": 161142,
+      "sha256": "366129A767D6C33D8D8E4697B7DACC2EFE9C81B70C545864605AB5629E42B4EF",
+      "bytes": 162015,
       "role": "gate5_api_runtime_dependency"
     },
     {
