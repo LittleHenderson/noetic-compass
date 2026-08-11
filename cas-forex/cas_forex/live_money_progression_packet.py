@@ -136,16 +136,30 @@ def build_live_money_progression_packet(
         and direction_clear
         and bool(pilot.get("ready_for_pilot_sequence", False))
     )
+    # A crashed payout-recovery builder yields _unavailable() - a dict WITHOUT
+    # has_pending_recovery - and `not .get(..., False)` would read that crash
+    # as "no pending recovery". Same fail-open family as the readiness gate
+    # below: an unevaluable recovery status is NOT clear.
+    payout_recovery_evaluable = (
+        str(payout_recovery.get("status") or "") != "UNAVAILABLE"
+        and "has_pending_recovery" in payout_recovery
+    )
+    payout_recovery_clear = payout_recovery_evaluable and not bool(
+        payout_recovery.get("has_pending_recovery", False)
+    )
     verified_payout_clear = (
         bool(payout_gate.get("authorized", False))
         and bool(sweep_payout_gate.get("authorized", False))
         and str(sweep.get("status") or "") == "READY"
         and str(winnings.get("claim_status") or "") == "SWEEPABLE"
-        and not bool(payout_recovery.get("has_pending_recovery", False))
+        and payout_recovery_clear
     )
+    # Fail CLOSED when the readiness report is missing: `not readiness` used to
+    # count an unbuildable checklist as clear, so a crash in the readiness
+    # builder cleared the live-money blocker. A gate that cannot be evaluated
+    # is not passed.
     live_readiness_clear = (
-        not readiness
-        or str(readiness.get("overall_status") or "") == "READY_FOR_LIVE_EXECUTION"
+        str(readiness.get("overall_status") or "") == "READY_FOR_LIVE_EXECUTION"
     )
 
     direction_summary = (
@@ -253,29 +267,45 @@ def build_live_money_progression_packet(
         blockers,
         "payout_recovery_clear",
         "verified_payout",
-        not bool(payout_recovery.get("has_pending_recovery", False)),
+        payout_recovery_clear,
         {
             "pending_count": payout_recovery.get("pending_count", 0),
             "latest_attempt": payout_recovery.get("latest_attempt"),
+            "recovery_status": payout_recovery.get("status") or (
+                "REPORT_UNAVAILABLE" if not payout_recovery_evaluable else None
+            ),
         },
-        "Payout recovery has pending attempts that must be owner-resolved.",
+        (
+            "Payout recovery has pending attempts that must be owner-resolved."
+            if payout_recovery_evaluable
+            else "Payout recovery status could not be built; an unevaluable gate is not a passed gate."
+        ),
         payout_recovery.get("next_action"),
     )
-    if readiness:
-        _add_blocker(
-            blockers,
-            "live_readiness_ready_for_live_execution",
-            "live_readiness",
-            live_readiness_clear,
-            {
-                "overall_status": readiness.get("overall_status"),
-                "checks_open": readiness.get("checks_open"),
-                "checks_mismatch": readiness.get("checks_mismatch"),
-                "checks_currently_not_licensed": readiness.get("checks_currently_not_licensed"),
-            },
-            "The plain-English live readiness checklist is not ready for live execution.",
-            _first(readiness.get("next_actions")),
-        )
+    # Registered unconditionally: an EMPTY readiness report (builder crashed or
+    # unavailable) must surface as a blocker, not vanish. Previously this whole
+    # block sat behind `if readiness:` - the packet could report
+    # READY_FOR_OWNER_REVIEW precisely because the readiness gate could not be
+    # evaluated.
+    _add_blocker(
+        blockers,
+        "live_readiness_ready_for_live_execution",
+        "live_readiness",
+        live_readiness_clear,
+        {
+            "overall_status": readiness.get("overall_status") or "REPORT_UNAVAILABLE",
+            "checks_open": readiness.get("checks_open"),
+            "checks_mismatch": readiness.get("checks_mismatch"),
+            "checks_currently_not_licensed": readiness.get("checks_currently_not_licensed"),
+        },
+        (
+            "The plain-English live readiness checklist is not ready for live execution."
+            if readiness
+            else "The live readiness checklist could not be built; an unevaluable gate is not a passed gate."
+        ),
+        _first(readiness.get("next_actions"))
+        or (None if readiness else "Repair the live-readiness builder, then re-run this packet."),
+    )
 
     status = STATUS_READY_FOR_OWNER_REVIEW if not blockers else STATUS_BLOCKED
     return {

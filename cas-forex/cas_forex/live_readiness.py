@@ -12,6 +12,7 @@ from dataclasses import asdict, dataclass, field
 from typing import Any, Mapping, Sequence
 
 from cas_forex.authority_boundary import NOT_LICENSED, OPEN
+from cas_forex.eligibility_attestation import evaluate_authenticated_eligibility
 from cas_forex.movement_stream import build_movement_position_feed_truth
 from cas_forex.runtime_gates import AUTHORIZED
 
@@ -70,11 +71,42 @@ class LiveReadinessReport:
     debit_card_bank_movement_status: str
     payout_automation_status: str
     notes: tuple[str, ...] = field(default_factory=tuple)
+    # Two-axis eligibility (additive fields; consumers key on names above).
+    # structural_completeness: every blocking check in THIS checklist passed -
+    # evidence the app computes or records itself. authenticated_eligibility:
+    # external authorities positively attest (eligibility_attestation module);
+    # constant False until a verifier is wired by code change. The axes read
+    # disjoint evidence classes, so no volume of self-generated evidence can
+    # move a report across the second axis ("no drift by accumulation").
+    structural_completeness: bool = False
+    authenticated_eligibility: bool = False
+    authenticated_eligibility_report: Mapping[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         data = asdict(self)
         data["checks"] = [check.to_dict() for check in self.checks]
+        data["authenticated_eligibility_report"] = dict(self.authenticated_eligibility_report)
         return data
+
+
+def _resolve_overall_status(
+    *,
+    structural_completeness: bool,
+    live_money_authorized: bool,
+    authenticated_eligible: bool,
+) -> str:
+    """The single place the READY verdict is decided.
+
+    READY requires all three: the structural checklist is whole, the owner
+    authority switches are on, AND external authorities positively attest
+    (authenticated axis). The third input comes from
+    eligibility_attestation.evaluate_authenticated_eligibility(), which reads
+    no config or runtime state - so a report can never reach READY on
+    self-generated evidence plus switches alone.
+    """
+    if structural_completeness and live_money_authorized and authenticated_eligible:
+        return READY_FOR_LIVE_EXECUTION
+    return NOT_READY_FOR_LIVE
 
 
 def build_live_readiness_report(
@@ -116,7 +148,14 @@ def build_live_readiness_report(
     all_runtime_authorized = bool(runtime_gates.get("all_real_money_authorized", False))
     live_money_authorized = bool(authority_boundary.get("can_place_live_orders", False)) and all_runtime_authorized
     payment_movement_authorized = bool(authority_boundary.get("can_move_money", False))
-    overall = READY_FOR_LIVE_EXECUTION if not blocking and live_money_authorized else NOT_READY_FOR_LIVE
+    structural_completeness = not blocking
+    authenticated = evaluate_authenticated_eligibility()
+    authenticated_eligible = bool(authenticated.get("eligible", False))
+    overall = _resolve_overall_status(
+        structural_completeness=structural_completeness,
+        live_money_authorized=live_money_authorized,
+        authenticated_eligible=authenticated_eligible,
+    )
 
     next_actions = tuple(dict.fromkeys(check.next_action for check in blocking if check.next_action))
     summary = (
@@ -150,7 +189,11 @@ def build_live_readiness_report(
         notes=(
             "This report is the plain-English live-money checklist for the cockpit.",
             "A PASSED feature can be built for paper/demo while live authority remains pending.",
+            "READY additionally requires authenticated eligibility: external attestation that no volume of self-generated evidence can substitute for.",
         ),
+        structural_completeness=structural_completeness,
+        authenticated_eligibility=authenticated_eligible,
+        authenticated_eligibility_report=authenticated,
     )
 
 
@@ -609,3 +652,18 @@ def assert_live_readiness_boundary(report: LiveReadinessReport) -> None:
         raise ValueError("live readiness cannot authorize payment movement while overall status is not ready")
     if report.trading_edge_status != OPEN:
         raise ValueError("live readiness must preserve trading edge status OPEN until evidence promotes it")
+    if report.overall_status == READY_FOR_LIVE_EXECUTION:
+        if not report.structural_completeness:
+            raise ValueError(
+                "live readiness cannot report READY while structural completeness is false"
+            )
+        # Do not trust the report's own flag: recompute the authenticated axis
+        # from the pure module, so a forged report (constructed directly or via
+        # dataclasses.replace with authenticated_eligibility=True) still fails
+        # unless external attestations genuinely verify.
+        recomputed = evaluate_authenticated_eligibility()
+        if not report.authenticated_eligibility or not bool(recomputed.get("eligible", False)):
+            raise ValueError(
+                "live readiness cannot report READY without authenticated eligibility: "
+                "external attestation is a separate axis that structural evidence cannot satisfy"
+            )

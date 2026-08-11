@@ -33,6 +33,11 @@ def _live_readiness_warming():
         "checks_currently_not_licensed": 0,
         "live_money_authorized": False,
         "payment_movement_authorized": False,
+        # Two-axis fields mirror the built report's shape with fail-closed
+        # values so consumers see a stable schema across warming vs built.
+        "structural_completeness": False,
+        "authenticated_eligibility": False,
+        "authenticated_eligibility_report": {},
         "checks": [],
         "blocking_checks": [],
         "next_actions": ["Live-readiness cache is warming."],
