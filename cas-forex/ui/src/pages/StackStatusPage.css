@@ -10,7 +10,7 @@
 .stack-status-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
 }
 
 .stack-status-table th,
@@ -22,7 +22,7 @@
 }
 
 .stack-status-table th {
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -38,7 +38,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--text-primary);
 }
 

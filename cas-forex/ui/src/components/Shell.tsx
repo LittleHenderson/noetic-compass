@@ -5,13 +5,15 @@ import { ModeBanner } from "./ModeBanner";
 import { AiActivityInstantBadge } from "./AiActivityInstantBadge";
 import { OperatorBadge } from "./OperatorBadge";
 import { OwnerAccessBadge } from "./OwnerAccessBadge";
+import { GlobalHaltButton } from "./GlobalHaltButton";
 import { NAV_ITEMS, type Page } from "../pageConfig";
-import type { UIReadinessReport, AuthorityBoundaryState } from "../types/evidence";
+import type { UIReadinessReport, AuthorityBoundaryState, DashboardMeta } from "../types/evidence";
 
 interface ShellProps {
   readiness: UIReadinessReport;
   authority?: AuthorityBoundaryState;
   wasteLoop?: Record<string, unknown> | null;
+  dashboardMeta?: DashboardMeta;
   activePage: Page;
   onNavigate: (page: Page) => void;
   children: ReactNode;
@@ -36,6 +38,7 @@ export function Shell({
   readiness,
   authority,
   wasteLoop,
+  dashboardMeta,
   activePage,
   onNavigate,
   children,
@@ -166,7 +169,7 @@ export function Shell({
 
   return (
     <div className="app-shell">
-      <ModeBanner readiness={readiness} authority={authority} />
+      <ModeBanner readiness={readiness} authority={authority} dashboardMeta={dashboardMeta} />
       <nav className={`shell-nav ${navOverflowed ? "overflowed" : ""}`} ref={navRef}>
         <div className="shell-nav-brand">
           <span className="shell-nav-logo">◈</span>
@@ -182,6 +185,9 @@ export function Shell({
         )}
         <OperatorBadge />
         <OwnerAccessBadge />
+        {/* Eagerly mounted on every page — the emergency stop must never be
+            behind a lazy chunk, an idle timer, or a scroll. */}
+        <GlobalHaltButton />
         {/* Hamburger — only shown on narrow screens (CSS). Lets every page,
             including Settings, be reached on a phone. */}
         <button

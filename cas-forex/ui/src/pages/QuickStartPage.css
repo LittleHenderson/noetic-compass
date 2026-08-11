@@ -21,7 +21,7 @@
   border-radius: 6px;
   color: var(--text-primary, #f1f5f9);
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 
@@ -35,19 +35,19 @@
 }
 
 .quick-start-progress {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: var(--text-secondary, #94a3b8);
   font-weight: 600;
 }
 
 .quick-start-refreshed-at {
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   color: var(--text-secondary, #94a3b8);
 }
 
 .quick-start-intro {
   margin: 0 0 14px 0;
-  font-size: 0.86rem;
+  font-size: 0.875rem;
   line-height: 1.5;
   color: var(--text-secondary, #94a3b8);
 }
@@ -71,19 +71,19 @@
 
 .quick-start-launch-title {
   color: var(--text-primary, #f1f5f9);
-  font-size: 0.86rem;
+  font-size: 0.875rem;
   font-weight: 800;
 }
 
 .quick-start-launch-subtitle {
   margin-top: 2px;
   color: var(--text-secondary, #94a3b8);
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
 }
 
 .quick-start-launch-count {
   color: var(--text-primary, #f1f5f9);
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -124,7 +124,7 @@
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.07);
   color: var(--text-primary, #f1f5f9);
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   font-weight: 800;
 }
 
@@ -136,13 +136,13 @@
 
 .quick-start-launch-copy strong {
   color: var(--text-primary, #f1f5f9);
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   overflow-wrap: anywhere;
 }
 
 .quick-start-launch-copy small {
   color: var(--text-secondary, #94a3b8);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   line-height: 1.35;
 }
 
@@ -173,14 +173,14 @@
 }
 
 .quick-start-mobile-readiness-title {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-primary, #f1f5f9);
 }
 
 .quick-start-mobile-readiness-subtitle {
   margin-top: 3px;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   line-height: 1.45;
   color: var(--text-secondary, #94a3b8);
 }
@@ -189,7 +189,7 @@
   flex-shrink: 0;
   padding: 4px 9px;
   border-radius: 999px;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
   white-space: nowrap;
@@ -221,14 +221,14 @@
 .quick-start-readiness-metric span {
   display: block;
   margin-bottom: 4px;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   color: var(--text-secondary, #94a3b8);
 }
 
 .quick-start-readiness-metric strong {
   display: block;
   overflow-wrap: anywhere;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
 }
 
 .quick-start-readiness-metric strong.good {
@@ -242,7 +242,7 @@
 .quick-start-mobile-readiness-gates {
   display: grid;
   gap: 4px;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   line-height: 1.45;
   color: var(--text-secondary, #94a3b8);
 }
@@ -274,20 +274,20 @@
 }
 
 .quick-start-phone-qr-copy span {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   color: var(--text-secondary, #94a3b8);
 }
 
 .quick-start-phone-qr-copy strong {
   color: var(--text-primary, #f1f5f9);
-  font-size: 0.84rem;
+  font-size: 0.875rem;
 }
 
 .quick-start-phone-qr-copy p,
 .quick-start-phone-qr-copy small {
   margin: 0;
   color: var(--text-secondary, #94a3b8);
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   line-height: 1.38;
   overflow-wrap: anywhere;
 }
@@ -304,7 +304,7 @@
   background: rgba(2, 6, 23, 0.55);
   color: #cbd5e1;
   font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
@@ -318,7 +318,7 @@
   border-radius: 8px;
   background: #f8fafc;
   color: #020617;
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   text-align: center;
 }
@@ -336,7 +336,7 @@
 }
 
 .quick-start-next-actions-title {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   font-weight: 800;
   text-transform: uppercase;
   color: var(--text-secondary, #94a3b8);
@@ -366,7 +366,7 @@
   border-radius: 999px;
   background: rgba(56, 189, 248, 0.16);
   color: #bae6fd;
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   font-weight: 800;
 }
 
@@ -378,13 +378,13 @@
 
 .quick-start-next-action-copy strong {
   color: var(--text-primary, #f1f5f9);
-  font-size: 0.82rem;
+  font-size: 0.875rem;
 }
 
 .quick-start-next-action-copy p {
   margin: 0;
   color: var(--text-secondary, #94a3b8);
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   line-height: 1.42;
 }
 
@@ -392,7 +392,7 @@
   min-width: 0;
   color: #cbd5e1;
   font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
@@ -414,7 +414,7 @@
   color: var(--text-primary, #f1f5f9);
   cursor: pointer;
   font-family: inherit;
-  font-size: 0.76rem;
+  font-size: 0.8125rem;
   font-weight: 650;
   white-space: nowrap;
 }
@@ -441,7 +441,7 @@
 .quick-start-readiness-copy-status {
   min-width: 0;
   color: #86efac;
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   overflow-wrap: anywhere;
 }
@@ -455,7 +455,7 @@
   background: rgba(250, 204, 21, 0.08);
   color: #fde68a;
   font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   line-height: 1.4;
   overflow-wrap: anywhere;
   white-space: normal;
@@ -513,14 +513,14 @@
   height: 24px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   font-weight: 700;
   flex-shrink: 0;
 }
 
 .quick-start-item-title {
   flex: 1;
-  font-size: 0.92rem;
+  font-size: 1rem;
   font-weight: 500;
 }
 
@@ -528,7 +528,7 @@
   display: inline-block;
   padding: 3px 9px;
   border-radius: 999px;
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -556,14 +556,14 @@
 }
 
 .quick-start-item-caret {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: var(--text-secondary, #94a3b8);
   flex-shrink: 0;
 }
 
 .quick-start-detail {
   padding: 0 14px 14px 50px;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   line-height: 1.55;
   color: var(--text-secondary, #94a3b8);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -593,7 +593,7 @@
   border-radius: 6px;
   color: var(--text-primary, #f1f5f9);
   cursor: pointer;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   font-family: inherit;
 }
 
@@ -618,7 +618,7 @@
   border: 1px solid rgba(34, 197, 94, 0.4);
   border-radius: 8px;
   color: #86efac;
-  font-size: 0.92rem;
+  font-size: 1rem;
   font-weight: 600;
   text-align: center;
 }

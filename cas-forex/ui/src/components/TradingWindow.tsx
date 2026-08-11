@@ -186,7 +186,7 @@ export function TradingWindow({
         {(() => {
           const mine = positions.filter((p) => p.symbol === symbol);
           if (mine.length === 0) {
-            return <div className="tw-muted" style={{ fontSize: "0.7rem" }}>No open position in {symbol}.</div>;
+            return <div className="tw-muted" style={{ fontSize: "0.8125rem" }}>No open position in {symbol}.</div>;
           }
           const staleMine = mine.filter(isStaticMovementPosition);
           return (

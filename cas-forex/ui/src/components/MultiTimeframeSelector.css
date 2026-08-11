@@ -13,17 +13,17 @@
 }
 
 .mtf-loading {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
 .mtf-error {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--danger);
 }
 
 .mtf-summary {
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   line-height: 1.4;
 }

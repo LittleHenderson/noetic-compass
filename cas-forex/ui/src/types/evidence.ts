@@ -4146,8 +4146,25 @@ export interface MT5MarketDataDiagnostic {
   audit?: Record<string, unknown>;
 }
 
+/** Provenance of the dashboard packet currently held in state.
+ *  Written by the startup cache so the UI can tell cached data from live data.
+ *  Declared here (rather than only in data/dashboardStartupCache.ts) so that
+ *  components can actually read it off DashboardState — previously the field
+ *  was merged into state at runtime but absent from the type, so no component
+ *  could see it and cached values rendered identically to live ones. */
+export interface DashboardMeta {
+  kind?: "shell" | "fast" | "full";
+  full_cache_status?: string;
+  built_at_epoch?: number | null;
+  generated_at_iso?: string;
+  ttl_seconds?: number;
+  /** Epoch ms the packet was written to localStorage; drives the age readout. */
+  cached_at_epoch?: number;
+}
+
 export interface DashboardState {
   uiReadiness: UIReadinessReport;
+  dashboardMeta?: DashboardMeta;
   dailySchedule: DailySchedule;
   dailyBundle: DailyBundle;
   riskBudget?: DashboardRiskBudgetSummary;

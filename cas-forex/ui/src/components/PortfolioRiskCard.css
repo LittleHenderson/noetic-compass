@@ -58,13 +58,13 @@
 
 .risk-symbol-table th,
 .risk-symbol-table td {
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
 }
 
 .portfolio-risk-hints {
   margin: 0;
   padding-left: 18px;
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   display: flex;
   flex-direction: column;

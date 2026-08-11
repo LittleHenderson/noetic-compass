@@ -732,12 +732,12 @@ export function TradePage({ state }: TradePageProps) {
           <NoSignal symbol={symbol} timeframe={timeframe} />
         )}
         {activeQuoteIsStatic && (
-          <div style={{ marginTop: 8, fontSize: "0.7rem", color: "var(--warning)" }}>
+          <div style={{ marginTop: 8, fontSize: "0.8125rem", color: "var(--warning)" }}>
             Static simulator pricing: this row is not being moved by a usable provider/MT5 quote right now, so floating P/L can remain unchanged at the entry price.
             {activePosition?.stale_reason ? ` ${activePosition.stale_reason}` : ""}
           </div>
         )}
-        <div style={{ marginTop: 8, fontSize: "0.7rem", color: "var(--warning)" }}>
+        <div style={{ marginTop: 8, fontSize: "0.8125rem", color: "var(--warning)" }}>
           {movement?.claim_boundary ?? "Paper/demo movement only. Live trading and payment movement wait for owner authority switches and provider setup."}
         </div>
       </GlassPanel>
@@ -915,7 +915,7 @@ function LockLine({ reason }: { reason: string }) {
 function NoSignal({ symbol, timeframe }: { symbol: string; timeframe: string }) {
   return (
     <div className="no-signal">
-      <span style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}>No paper signal for {symbol} on {timeframe}. Try a different symbol or timeframe.</span>
+      <span style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>No paper signal for {symbol} on {timeframe}. Try a different symbol or timeframe.</span>
     </div>
   );
 }

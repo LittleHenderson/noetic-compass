@@ -89,7 +89,7 @@ export function AuditPage({ state }: AuditPageProps) {
                       className="pipeline-not-run-reason"
                       style={{
                         color: "var(--text-muted)",
-                        fontSize: "0.75rem",
+                        fontSize: "0.8125rem",
                         fontStyle: "italic",
                         marginTop: 4,
                       }}
@@ -109,7 +109,7 @@ export function AuditPage({ state }: AuditPageProps) {
                       <span
                         style={{
                           color: "var(--text-muted)",
-                          fontSize: "0.75rem",
+                          fontSize: "0.8125rem",
                           marginLeft: 8,
                         }}
                       >
@@ -163,7 +163,7 @@ export function AuditPage({ state }: AuditPageProps) {
           </div>
           <div className="evidence-row">
             <span className="field-label">WORM</span>
-            <span style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}>
+            <span style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>
               UNAVAILABLE — local hash chain only
             </span>
           </div>

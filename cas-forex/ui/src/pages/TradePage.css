@@ -13,7 +13,7 @@
 }
 
 .selector-label {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -71,12 +71,12 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  font-size: 0.76rem;
+  font-size: 0.8125rem;
 }
 
 .proposal-rationale,
 .sizing-rationale {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   font-style: italic;
   padding: 6px 8px;
@@ -142,11 +142,11 @@
 
 .forecast-model-name {
   color: var(--accent-teal);
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
 }
 
 .forecast-model-detail {
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
@@ -166,7 +166,7 @@
 .cas-expr-code {
   color: var(--paper);
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.875rem;
 }
 
 .trade-action {
@@ -187,7 +187,7 @@
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.15s;
 }
@@ -220,7 +220,7 @@
 }
 
 .trade-action-status {
-  font-size: 0.76rem;
+  font-size: 0.8125rem;
   color: var(--accent-teal);
   padding: 6px 8px;
   background: var(--bg-card);
@@ -231,11 +231,11 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
 .no-signal {
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
 }

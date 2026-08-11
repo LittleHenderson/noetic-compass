@@ -27,7 +27,7 @@ export function EvidenceHashRow({
           className="hash-row-badge"
           style={{
             color: verified ? "var(--success)" : "var(--danger)",
-            fontSize: "0.7rem",
+            fontSize: "0.8125rem",
             fontWeight: 600,
           }}
         >

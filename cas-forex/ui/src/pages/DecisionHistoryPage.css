@@ -19,13 +19,13 @@
 
 .decision-history-title {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.125rem;
   letter-spacing: 0.02em;
   color: var(--text-primary);
 }
 
 .decision-history-sub {
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   margin-top: 2px;
 }
@@ -41,7 +41,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -53,7 +53,7 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   padding: 3px 8px;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-family: inherit;
   cursor: pointer;
 }
@@ -67,7 +67,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   letter-spacing: 0.03em;
 }
@@ -98,7 +98,7 @@
 }
 
 .decision-history-time {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   letter-spacing: 0.03em;
 }
@@ -111,7 +111,7 @@
 }
 
 .decision-chain-detail {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   line-height: 1.4;
   margin-top: 2px;
@@ -120,7 +120,7 @@
 .decision-history-empty {
   padding: 20px;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
   border: 1px dashed var(--border-subtle);
   border-radius: var(--radius-sm);

@@ -8,7 +8,10 @@
   --border-active: #2a3345;
   --text-primary: #e2e6ed;
   --text-secondary: #8b93a5;
-  --text-muted: #5a6273;
+  /* Was #5a6273, which measured 2.8:1 on --bg-card and failed WCAG AA at the
+     0.6-0.7rem sizes it is used at. #7e8798 measures 4.8:1 on the same ground
+     while staying clearly subordinate to --text-secondary. */
+  --text-muted: #7e8798;
   --accent-teal: #2dd4bf;
   --accent-teal-dim: #0f766e;
   --accent-slate: #64748b;
@@ -20,10 +23,43 @@
   --success-dim: #14532d;
   --info: #3b82f6;
   --paper: #a78bfa;
+  /* Dim companion for --paper. Was hardcoded as #3b1f6e inside StatusChip
+     because no token existed for it. */
+  --paper-dim: #3b1f6e;
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
   --font-mono: "Cascadia Code", "Fira Code", "JetBrains Mono", "Consolas", monospace;
+
+  /* ── Aliases for tokens referenced across the app but never defined ──
+     These eight names were used in CSS and inline styles while resolving to
+     nothing, so the declarations using them were silently dropped by the
+     browser. The most visible casualty was TradePage's .btn-paper/.btn-send,
+     which asked for dark label text via --bg-root and instead inherited light
+     text onto light fills (measured 2.0:1 and 1.7:1 contrast).
+     Each alias points at the canonical token it was clearly meant to be. */
+  --bg-root: var(--bg-deep);
+  --border: var(--border-subtle);
+  --panel: var(--bg-panel);
+  --panel-dim: var(--bg-input);
+  --surface: var(--bg-card);
+  --text: var(--text-primary);
+  --muted-text: var(--text-muted);
+  /* Drives the AI activity indicator. Undefined until now, which invalidated
+     every color-mix() built on it, dropping those borders and glows entirely.
+     Value matches the fallback already hardcoded in AiActivityIndicator.css. */
+  --accent: #7fd8ff;
+
+  /* ── Type scale ──
+     Replaces a long tail of 31 ad-hoc sizes. Values are rem against a 16px
+     root, so they honour the reader's browser font-size preference. */
+  --fs-xs: 0.75rem;    /* 12px — smallest permitted text */
+  --fs-sm: 0.8125rem;  /* 13px */
+  --fs-md: 0.875rem;   /* 14px */
+  --fs-base: 1rem;     /* 16px */
+  --fs-lg: 1.125rem;   /* 18px */
+  --fs-xl: 1.375rem;   /* 22px */
+  --fs-2xl: 1.75rem;   /* 28px */
 }
 
 *,
@@ -35,7 +71,11 @@
 }
 
 html {
-  font-size: 14px;
+  /* Was a hard 14px, which silently overrode the reader's browser font-size
+     preference and shrank every rem in the app by 12.5%. Combined with a long
+     tail of sub-0.7rem sizes it put 87% of visible text below 12px. 100% keeps
+     the user's preference intact; the rem values were rescaled to match. */
+  font-size: 100%;
   -webkit-font-smoothing: antialiased;
 }
 

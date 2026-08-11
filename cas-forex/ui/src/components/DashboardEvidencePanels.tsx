@@ -114,7 +114,7 @@ export function DashboardEvidencePanels({ state, movement, strategyLeads, recon 
                         size="sm"
                       />
                     </td>
-                    <td className="mono" style={{ fontSize: "0.66rem" }}>{q.source}</td>
+                    <td className="mono" style={{ fontSize: "0.75rem" }}>{q.source}</td>
                   </tr>
                 ))}
               </tbody>
@@ -202,9 +202,9 @@ export function DashboardEvidencePanels({ state, movement, strategyLeads, recon 
                     />
                   </td>
                   <td className="mono">{lead.family}</td>
-                  <td className="mono" style={{ fontSize: "0.68rem" }}>{(lead.symbols_promoted_for_next_tests ?? []).join(", ") || "-"}</td>
-                  <td style={{ color: "var(--text-muted)", fontSize: "0.68rem", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lead.headline_results?.[0] ?? "-"}</td>
-                  <td className="mono" style={{ fontSize: "0.66rem", color: "var(--warning)" }}>{(lead.open_gates ?? []).length} gates</td>
+                  <td className="mono" style={{ fontSize: "0.75rem" }}>{(lead.symbols_promoted_for_next_tests ?? []).join(", ") || "-"}</td>
+                  <td style={{ color: "var(--text-muted)", fontSize: "0.75rem", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lead.headline_results?.[0] ?? "-"}</td>
+                  <td className="mono" style={{ fontSize: "0.75rem", color: "var(--warning)" }}>{(lead.open_gates ?? []).length} gates</td>
                 </tr>
               )) ?? (
                 <tr><td colSpan={7} className="text-muted">Loading strategy leads from strategy_leads.json...</td></tr>
@@ -255,15 +255,15 @@ export function DashboardEvidencePanels({ state, movement, strategyLeads, recon 
                 <tbody>
                   {recon.checks.map((c) => (
                     <tr key={c.check_id}>
-                      <td className="mono" style={{ fontSize: "0.68rem" }}>{c.check_id}</td>
+                      <td className="mono" style={{ fontSize: "0.75rem" }}>{c.check_id}</td>
                       <td><StatusChip label={c.status} variant={c.status === "OK" ? "success" : c.status === "MISMATCH" ? "danger" : "warning"} size="sm" /></td>
-                      <td style={{ fontSize: "0.68rem", color: "var(--text-muted)" }}>{c.detail}</td>
+                      <td style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{c.detail}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div style={{ marginTop: 8, fontSize: "0.68rem", color: "var(--warning)" }}>
+            <div style={{ marginTop: 8, fontSize: "0.75rem", color: "var(--warning)" }}>
               {recon.claim_boundary} Broker-synced reconciliation preview is available at /api/forex/reconciliation/account?sync_to_broker=true and remains paper/demo accounting only.
             </div>
           </>

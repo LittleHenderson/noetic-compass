@@ -208,7 +208,7 @@ export function ProofControlPanel() {
         {/* Thresholds — owner-tunable */}
         <div style={{ borderTop: "1px solid var(--border, rgba(255,255,255,0.08))", paddingTop: 12 }}>
           <div className="field-label" style={{ marginBottom: 8 }}>What counts as "passed" (your bar)</div>
-          <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.78rem", marginBottom: 10 }}>
+          <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.875rem", marginBottom: 10 }}>
             <input
               type="checkbox"
               checked={draft.require_net_positive}

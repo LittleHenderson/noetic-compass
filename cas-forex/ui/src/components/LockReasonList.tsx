@@ -33,7 +33,7 @@ export function LockReasonList({
         />
         <span
           style={{
-            fontSize: "0.8rem",
+            fontSize: "0.875rem",
             fontWeight: 600,
             color: "var(--text-secondary)",
             textTransform: "uppercase",

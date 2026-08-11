@@ -1,16 +1,10 @@
-import type { DashboardState } from "../types/evidence";
+import type { DashboardMeta, DashboardState } from "../types/evidence";
 
 export const DASHBOARD_STALE_CACHE_KEY = "cas_forex_dashboard_stale_packet_v1";
 export const DASHBOARD_STALE_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 export const DASHBOARD_STALE_CACHE_MAX_BYTES = 80_000;
 
-export interface DashboardMeta {
-  kind?: "shell" | "fast" | "full";
-  full_cache_status?: string;
-  built_at_epoch?: number | null;
-  generated_at_iso?: string;
-  ttl_seconds?: number;
-}
+export type { DashboardMeta };
 
 export type DashboardPacket = Partial<DashboardState> & {
   dashboardMeta?: DashboardMeta;
@@ -30,7 +24,7 @@ export function readStaleDashboardPacket(): DashboardPacket | null {
     const parsed = JSON.parse(raw) as Partial<DashboardCacheEnvelope>;
     if (!parsed || typeof parsed.savedAt !== "number" || !parsed.packet) return null;
     if (Date.now() - parsed.savedAt > DASHBOARD_STALE_CACHE_MAX_AGE_MS) return null;
-    return sanitizeDashboardPacketForStartup(parsed.packet);
+    return sanitizeDashboardPacketForStartup(parsed.packet, parsed.savedAt);
   } catch {
     return null;
   }
@@ -48,7 +42,10 @@ export function mergeStartupDashboardPacket(
   };
 }
 
-function sanitizeDashboardPacketForStartup(packet: DashboardPacket): DashboardPacket | null {
+function sanitizeDashboardPacketForStartup(
+  packet: DashboardPacket,
+  savedAt: number,
+): DashboardPacket | null {
   const startupPacket: DashboardPacket = {};
   if (packet.uiReadiness) startupPacket.uiReadiness = {
     ...packet.uiReadiness,
@@ -66,13 +63,16 @@ function sanitizeDashboardPacketForStartup(packet: DashboardPacket): DashboardPa
   };
   if (packet.dailyBundle) startupPacket.dailyBundle = trimDailyBundleForStartup(packet.dailyBundle);
   if (packet.wasteLoop) startupPacket.wasteLoop = staleWasteLoopForStartup(packet.wasteLoop);
-  if (packet.dashboardMeta) {
-    startupPacket.dashboardMeta = {
-      ...packet.dashboardMeta,
-      full_cache_status: packet.dashboardMeta.full_cache_status ?? "stale-ui-cache",
-    };
-  }
-  return Object.keys(startupPacket).length > 0 ? startupPacket : null;
+  // Nothing recovered from the cache is live, so mark provenance unconditionally
+  // rather than only when the stored packet happened to carry meta. Without this
+  // a packet saved with no dashboardMeta replayed as if it were fresh.
+  if (Object.keys(startupPacket).length === 0) return null;
+  startupPacket.dashboardMeta = {
+    ...packet.dashboardMeta,
+    full_cache_status: "stale-ui-cache",
+    cached_at_epoch: savedAt,
+  };
+  return startupPacket;
 }
 
 function trimDailyBundleForStartup(value: DashboardState["dailyBundle"]): DashboardState["dailyBundle"] {

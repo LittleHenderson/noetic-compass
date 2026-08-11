@@ -147,11 +147,11 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
                       onClick={() => setSelectedBucket(b)}
                       style={{ cursor: "pointer", background: isSelected ? "var(--bg-card)" : undefined }}
                     >
-                      <td className="mono" style={{ fontSize: "0.6rem" }}>
+                      <td className="mono" style={{ fontSize: "0.75rem" }}>
                         {b.key}
                       </td>
                       <td className="mono">{b.axes.timeframe ?? "—"}</td>
-                      <td className="mono" style={{ fontSize: "0.6rem" }}>
+                      <td className="mono" style={{ fontSize: "0.75rem" }}>
                         {(b.axes.setting ?? "").length > 18
                           ? (b.axes.setting ?? "").slice(0, 18) + "\u2026"
                           : b.axes.setting}
@@ -196,7 +196,7 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
           <div>
             <div className="sizing-row">
               <span className="field-label">Key</span>
-              <span className="field-value mono" style={{ fontSize: "0.68rem" }}>
+              <span className="field-value mono" style={{ fontSize: "0.75rem" }}>
                 {selectedBucket.key}
               </span>
             </div>
@@ -284,7 +284,7 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
                 padding: "4px 10px",
                 background: c.covered ? "var(--success-dim)" : "var(--warning-dim)",
                 borderRadius: "var(--radius-sm)",
-                fontSize: "0.68rem",
+                fontSize: "0.75rem",
                 display: "flex",
                 alignItems: "center",
                 gap: 6,
@@ -293,10 +293,10 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
               <span className="mono" style={{ color: c.covered ? "var(--success)" : "var(--warning)" }}>
                 {c.tf}
               </span>
-              <span style={{ color: "var(--text-muted)", fontSize: "0.6rem" }}>×</span>
+              <span style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>×</span>
               <span
                 className="mono"
-                style={{ fontSize: "0.58rem", color: "var(--text-secondary)" }}
+                style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}
               >
                 {c.strategy.length > 16 ? c.strategy.slice(0, 16) + "\u2026" : c.strategy}
               </span>
@@ -308,7 +308,7 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
             </div>
           ))}
         </div>
-        <div style={{ marginTop: 8, fontSize: "0.72rem", color: "var(--text-muted)" }}>
+        <div style={{ marginTop: 8, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
           {gaps} gaps / {gapCells.length} cells — {(gapFraction * 100).toFixed(1)}% gap fraction (target: &lt;25%)
         </div>
       </GlassPanel>

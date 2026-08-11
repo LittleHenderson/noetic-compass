@@ -141,7 +141,7 @@ export function AccountHealthPanel({
             {blockers.map((blocker) => (
               <div key={blocker} className="summary-row" style={{ justifyContent: "flex-start", gap: 8, alignItems: "flex-start" }}>
                 <span style={{ color: "var(--warning)", lineHeight: 1.2 }}>!</span>
-                <span style={{ color: "var(--text-secondary)", fontSize: "0.74rem", lineHeight: 1.4 }}>{blocker}</span>
+                <span style={{ color: "var(--text-secondary)", fontSize: "0.8125rem", lineHeight: 1.4 }}>{blocker}</span>
               </div>
             ))}
           </div>
@@ -230,8 +230,8 @@ function HealthDetailTable({
                 <td>{side}</td>
                 <td className="mono">{lots}</td>
                 <td className="mono">{ticket}</td>
-                <td className="mono" style={{ fontSize: "0.68rem" }}>{source}</td>
-                <td style={{ color: "var(--text-secondary)", fontSize: "0.7rem" }}>{reason}</td>
+                <td className="mono" style={{ fontSize: "0.75rem" }}>{source}</td>
+                <td style={{ color: "var(--text-secondary)", fontSize: "0.8125rem" }}>{reason}</td>
               </tr>
             );
           })}

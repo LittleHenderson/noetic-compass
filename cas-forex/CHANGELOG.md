@@ -1,5 +1,57 @@
 # CAS Forex - Changelog
 
+## 2026-08-10 - UI/UX audit + stabilise & emergency legibility fixes (revamp steps 1-2)
+
+Full audit of the cockpit ahead of a planned UI/UX revamp, then the first two
+remediation steps. Findings were measured in the running app (computed styles +
+DOM), not inferred from source.
+
+**Stabilise**
+- Committed 606 drifted working-tree files (+75,219 insertions) across four
+  area-scoped commits. There had been no cas-forex commit since 2026-07-04, so
+  the revamp had no rollback point. Verified first that `.env` stays ignored and
+  that the only credential-shaped strings in the diff are dummy test fixtures.
+- `pytest.ini`: `[tool:pytest]` -> `[pytest]`. pytest only honours the
+  `tool:` prefix inside `setup.cfg`, so `testpaths` and `--ignore` were both
+  silently discarded, collection walked a stray temp dir and died. Collection
+  now succeeds: **2,949 tests in 4.12s** (was a hard error at 56s).
+- Deleted `ui/src/data/fixtures.ts` (3,843 lines, 47 payloads). Confirmed
+  imported by nothing - dead code, not a fake-data source.
+
+**Emergency legibility + safety fixes**
+- Defined 8 tokens that were referenced app-wide but never declared
+  (`--bg-root`, `--border`, `--panel`, `--panel-dim`, `--surface`, `--text`,
+  `--muted-text`, `--accent`), plus `--paper-dim`. Every declaration using them
+  had been silently dropped. Most visible casualty: TradePage's `.btn-paper` /
+  `.btn-send` inherited light text onto light fills. Measured **2.0:1 -> 7.1:1**
+  and **1.7:1 -> 8.5:1**.
+- `html { font-size: 14px }` -> `100%`, and rescaled 466 `font-size`
+  declarations across 46 files onto a new 6-step scale with a 12px floor. The
+  hard 14px root had overridden the reader's browser preference and shrank every
+  rem by 12.5%. Visible text under 12px: **87% -> 1%**. Distinct sizes: 31 -> 11.
+- `--text-muted` #5a6273 -> #7e8798 (2.8:1 -> 4.8:1 on `--bg-card`).
+- `StatusChip` moved onto the type scale (was 11.2px in 46 files).
+- Overall contrast failures on the landing page: **45% -> 12%**. The residual is
+  the semantic chip palette (bright fg on dim bg), deliberately left for the
+  palette work in the revamp proper.
+- **New `GlobalHaltButton`**, mounted eagerly in the shell header on every page.
+  The only emergency stop previously sat in `DashboardOperationsWorkbench`,
+  lazy-mounted behind a ~1.6s idle timer at the bottom of the longest page.
+  Two-step confirm, self-cancels after 4s, 44px touch target, honest reporting
+  on partial failure.
+- **New `StaleDataBadge`**. The startup cache replays a packet up to 5 minutes
+  old and stamps `full_cache_status: "stale-ui-cache"`, but nothing rendered it,
+  so cached equity/risk/proof values looked live. `DashboardMeta` is now declared
+  on `DashboardState` (it was merged in at runtime but absent from the type, so
+  no component could read it), provenance is stamped unconditionally, and the
+  badge shows a live-updating age.
+
+Typecheck clean, production build 4.62s, no chunk over 500 kB.
+
+Not changed, and corrected against the audit: `runtime_topology` IS registered
+(`api/server.py:778`) and returns 200 - an agent report claiming it 404s was
+wrong, verified against the live server.
+
 ## 2026-07-04 — Cloud deploy scaffold (phone runs independently of the desktop)
 
 Owner chose cloud hosting so the engine runs 24/7 and the phone works even when

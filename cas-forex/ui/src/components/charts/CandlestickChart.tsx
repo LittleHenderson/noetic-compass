@@ -18,7 +18,7 @@ interface CandlestickChartProps {
 export function CandlestickChart({ candles, width = 700, height = 300, symbol }: CandlestickChartProps) {
   if (candles.length === 0) {
     return (
-      <div style={{ color: "var(--text-muted)", padding: 40, textAlign: "center", fontSize: "0.8rem" }}>
+      <div style={{ color: "var(--text-muted)", padding: 40, textAlign: "center", fontSize: "0.875rem" }}>
         No candle data
       </div>
     );

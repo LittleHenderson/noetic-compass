@@ -141,7 +141,7 @@ export function HistoryPage({ state }: HistoryPageProps) {
           {(account?.supported_history_tabs ?? ["Positions", "Orders", "Deals"]).map((tab) => (
             <StatusChip key={tab} label={tab} variant={tab === "Positions" ? "info" : "muted"} size="sm" />
           ))}
-          <span style={{ color: "var(--text-muted)", fontSize: "0.72rem", marginLeft: 8 }}>
+          <span style={{ color: "var(--text-muted)", fontSize: "0.8125rem", marginLeft: 8 }}>
             Filters: {(account?.supported_time_filters ?? ["Seconds", "Minutes", "Hour", "Day", "Week", "Month", "Custom"]).join(" / ")}
           </span>
         </div>
@@ -160,8 +160,8 @@ export function HistoryPage({ state }: HistoryPageProps) {
                     <td className="mono">{row.open_price.toFixed(2)} → {(row.close_or_current_price ?? row.open_price).toFixed(2)}</td>
                     <td className="mono" style={{ color: "var(--danger)" }}>{row.stop_loss?.toFixed(2) ?? "—"}</td>
                     <td className="mono" style={{ color: "var(--success)" }}>{row.take_profit?.toFixed(2) ?? "—"}</td>
-                    <td className="mono" style={{ fontSize: "0.66rem" }}>{row.broker_ticket ?? row.simulator_ticket}</td>
-                    <td className="mono" style={{ fontSize: "0.66rem" }}>{row.ai_action} / {row.evidence_packet_id}</td>
+                    <td className="mono" style={{ fontSize: "0.75rem" }}>{row.broker_ticket ?? row.simulator_ticket}</td>
+                    <td className="mono" style={{ fontSize: "0.75rem" }}>{row.ai_action} / {row.evidence_packet_id}</td>
                     <td className="mono" style={{ color: row.net_pnl_usd > 0 ? "var(--success)" : row.net_pnl_usd < 0 ? "var(--danger)" : "var(--text-muted)" }}>${row.net_pnl_usd.toFixed(2)}</td>
                   </tr>
                 ))}
@@ -171,7 +171,7 @@ export function HistoryPage({ state }: HistoryPageProps) {
         ) : (
           <div className="no-data-message"><p>No paper/demo terminal rows are available yet.</p></div>
         )}
-        <div style={{ marginTop: 8, color: "var(--warning)", fontSize: "0.7rem" }}>
+        <div style={{ marginTop: 8, color: "var(--warning)", fontSize: "0.8125rem" }}>
           {account?.claim_boundary ?? "Paper/demo history only. Live trading and payment movement wait for owner/provider gates."}
         </div>
       </GlassPanel>
@@ -187,7 +187,7 @@ export function HistoryPage({ state }: HistoryPageProps) {
               <tbody>
                 {conditionTally.map((b) => (
                   <tr key={b.key}>
-                    <td className="mono" style={{ fontSize: "0.68rem" }}>{b.key}</td>
+                    <td className="mono" style={{ fontSize: "0.75rem" }}>{b.key}</td>
                     <td className="mono">{b.windows}</td>
                     <td className="mono">{b.active_windows}</td>
                     <td className="mono" style={{ color: b.positive_window_rate >= 0.5 ? "var(--success)" : "var(--warning)" }}>{(b.positive_window_rate * 100).toFixed(0)}%</td>
@@ -198,7 +198,7 @@ export function HistoryPage({ state }: HistoryPageProps) {
                 ))}
               </tbody>
             </table>
-            <div style={{ marginTop: 8, color: "var(--text-muted)", fontSize: "0.68rem" }}>
+            <div style={{ marginTop: 8, color: "var(--text-muted)", fontSize: "0.75rem" }}>
               Source: latest walk-forward condition-tally evidence — {conditionTally.length} condition buckets
             </div>
           </div>
@@ -231,7 +231,7 @@ export function HistoryPage({ state }: HistoryPageProps) {
         <div className="sweep-ledger">
           <div className="sweep-status">
             <StatusChip label="DRY_RUN" variant="warning" size="sm" />
-            <span style={{ color: "var(--text-muted)", fontSize: "0.75rem", marginLeft: 8 }}>Sweep/payout automation is in owner setup</span>
+            <span style={{ color: "var(--text-muted)", fontSize: "0.8125rem", marginLeft: 8 }}>Sweep/payout automation is in owner setup</span>
           </div>
           <div style={{ marginTop: 8 }}>
             <div className="sizing-row"><span className="field-label">Mode</span><span className="field-value">DRY_RUN</span></div>

@@ -19,7 +19,7 @@
 
 .notification-button {
   padding: 7px 12px;
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--accent-teal-dim);
   background: var(--accent-teal-dim);
@@ -54,7 +54,7 @@
   align-items: center;
   gap: 4px;
   padding: 3px 8px;
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   border-radius: var(--radius-sm);
   background: var(--border-subtle);
   color: var(--text-secondary);
@@ -79,5 +79,5 @@
 }
 
 .webhook-row td {
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
 }

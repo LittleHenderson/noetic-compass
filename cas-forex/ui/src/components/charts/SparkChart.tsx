@@ -8,7 +8,7 @@ interface SparkChartProps {
 
 export function SparkChart({ data, width = 120, height = 32 }: SparkChartProps) {
   if (data.length < 2) {
-    return <span style={{ color: "var(--text-muted)", fontSize: "0.7rem" }}>No data</span>;
+    return <span style={{ color: "var(--text-muted)", fontSize: "0.8125rem" }}>No data</span>;
   }
 
   const min = Math.min(...data);

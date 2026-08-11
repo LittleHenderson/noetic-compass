@@ -187,7 +187,7 @@ export function ProofPage({ state }: ProofPageProps) {
               style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: 8, marginTop: 4 }}
             >
               <span className="hash-row-label">WORM Anchoring</span>
-              <span style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}>
+              <span style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>
                 UNAVAILABLE — local hash chain only
               </span>
             </div>
@@ -362,7 +362,7 @@ export function ProofPage({ state }: ProofPageProps) {
                 <Metric label="Margin Fail" value={backsolve.verdict_counts.TARGET_REACHED_BUT_MARGIN_FAIL?.toLocaleString() ?? "—"} mono />
               </div>
             </div>
-            <div style={{ marginTop: 8, padding: "6px 10px", background: "var(--danger-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.72rem", color: "var(--danger)" }}>
+            <div style={{ marginTop: 8, padding: "6px 10px", background: "var(--danger-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.8125rem", color: "var(--danger)" }}>
               {backsolve.capital_label}: $5K-$12K/month from $5K seed requires 100%-240% monthly return. Current D1 evidence baseline is $32.93/month. Leverage changes margin; it does not create edge.
             </div>
           </div>
@@ -388,7 +388,7 @@ export function ProofPage({ state }: ProofPageProps) {
               </div>
               <div className="receipt-field">
                 <span className="field-label">WORM</span>
-                <span style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>{mt5Receipt.worm_retained ? "RETAINED" : "UNAVAILABLE"}</span>
+                <span style={{ color: "var(--text-muted)", fontSize: "0.8125rem" }}>{mt5Receipt.worm_retained ? "RETAINED" : "UNAVAILABLE"}</span>
               </div>
               <div className="receipt-field">
                 <span className="field-label">Live Mode</span>
@@ -400,9 +400,9 @@ export function ProofPage({ state }: ProofPageProps) {
               </div>
             </div>
             <div className="receipt-hashes">
-              <div className="hash-row"><span className="field-label">Receipt Hash</span><code className="hash-row-value" style={{ fontSize: "0.62rem" }}>{mt5Receipt.receipt_hash_sha256.slice(0, 24)}...</code></div>
-              <div className="hash-row"><span className="field-label">Broker Export</span><code className="hash-row-value" style={{ fontSize: "0.62rem" }}>{mt5Receipt.broker_export_sha256.slice(0, 24)}...</code></div>
-              <div className="hash-row"><span className="field-label">Packet Hash</span><code className="hash-row-value" style={{ fontSize: "0.62rem" }}>{mt5Receipt.packet_hash.slice(0, 24)}...</code></div>
+              <div className="hash-row"><span className="field-label">Receipt Hash</span><code className="hash-row-value" style={{ fontSize: "0.75rem" }}>{mt5Receipt.receipt_hash_sha256.slice(0, 24)}...</code></div>
+              <div className="hash-row"><span className="field-label">Broker Export</span><code className="hash-row-value" style={{ fontSize: "0.75rem" }}>{mt5Receipt.broker_export_sha256.slice(0, 24)}...</code></div>
+              <div className="hash-row"><span className="field-label">Packet Hash</span><code className="hash-row-value" style={{ fontSize: "0.75rem" }}>{mt5Receipt.packet_hash.slice(0, 24)}...</code></div>
             </div>
           </div>
         </GlassPanel>
@@ -430,7 +430,7 @@ export function ProofPage({ state }: ProofPageProps) {
             </div>
           </div>
           {mt5ProbeStatus.reasons.length > 0 && (
-            <div style={{ marginTop: 8, color: "var(--warning)", fontSize: "0.72rem" }}>
+            <div style={{ marginTop: 8, color: "var(--warning)", fontSize: "0.8125rem" }}>
               Latest probe blocker: {mt5ProbeStatus.reasons.join("; ")}
             </div>
           )}
@@ -677,7 +677,7 @@ function ProofLivePaymentControls({
       subtitle="Owner authorization, broker/payment gates, and verified-profit payout destination"
       variant={allAuthorized ? "default" : "warning"}
     >
-      <div style={{ marginBottom: 12, fontSize: "0.78rem", color: "var(--text-secondary)" }}>
+      <div style={{ marginBottom: 12, fontSize: "0.875rem", color: "var(--text-secondary)" }}>
         {auth?.summary ?? "Loading owner-controlled capability state..."}
       </div>
       <div className="control-field-desc" style={{ marginBottom: 10 }}>

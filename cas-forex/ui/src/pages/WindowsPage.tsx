@@ -301,7 +301,7 @@ export function WindowsPage({ state }: WindowsPageProps) {
               </tbody>
             </table>
           ) : (
-            <div className="tw-muted" style={{ fontSize: "0.72rem" }}>No open positions right now.</div>
+            <div className="tw-muted" style={{ fontSize: "0.8125rem" }}>No open positions right now.</div>
           )}
         </div>
       </GlassPanel>
@@ -459,7 +459,7 @@ function Mt5LiveAccountPanel({ mt5 }: { mt5: Mt5LiveState | null }) {
         <>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
             <StatusDot on={true} />
-            <span style={{ fontWeight: 700, fontSize: "0.84rem" }}>#{acc.login}</span>
+            <span style={{ fontWeight: 700, fontSize: "0.875rem" }}>#{acc.login}</span>
             <span className="tw-loop-mode">{acc.server}</span>
             <StatusChip label={mt5?.is_demo ? "DEMO - PAPER / MT5 BRIDGE" : "LIVE MONEY ACCOUNT"} variant={mt5?.is_demo ? "success" : "danger"} size="sm" />
             <StatusChip label={mirrorLabel} variant="info" size="sm" />
@@ -589,7 +589,7 @@ function Mt5LiveAccountPanel({ mt5 }: { mt5: Mt5LiveState | null }) {
                 </tbody>
               </table>
             ) : (
-              <div className="tw-muted" style={{ fontSize: "0.72rem" }}>No open positions in MT5 right now.</div>
+              <div className="tw-muted" style={{ fontSize: "0.8125rem" }}>No open positions in MT5 right now.</div>
             )}
           </div>
           <div className="control-field-desc" style={{ marginTop: 8 }} title={readOnlyBoundary}>
@@ -616,7 +616,7 @@ function Mt5LiveAccountPanel({ mt5 }: { mt5: Mt5LiveState | null }) {
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
             <StatusDot on={false} />
-            <span style={{ fontWeight: 700, fontSize: "0.82rem" }}>Not connected</span>
+            <span style={{ fontWeight: 700, fontSize: "0.875rem" }}>Not connected</span>
             <StatusChip label={mirrorLabel} variant="info" size="sm" />
             <span title={readOnlyBoundary} aria-label={readOnlyBoundary}>
               <StatusChip label={readOnlyLabel} variant="muted" size="sm" />

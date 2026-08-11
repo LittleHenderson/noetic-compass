@@ -19,7 +19,7 @@
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.04);
   color: #cfe8ff;
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.03em;
   cursor: pointer;
@@ -89,7 +89,7 @@
 }
 
 .operator-badge-budget {
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   opacity: 0.75;
 }
 
@@ -107,7 +107,7 @@
   background: #0b1a27;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
   color: #dceaf5;
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   line-height: 1.35;
 }
 
@@ -128,7 +128,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .operator-badge-state {
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   padding: 0.1rem 0.4rem;
   border-radius: 999px;
 }
@@ -144,21 +144,21 @@
 }
 .operator-badge-profit-goal {
   font-weight: 700;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   margin-bottom: 0.3rem;
   color: #a7f3d0;
 }
 .operator-badge-profit-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   margin: 0.12rem 0;
 }
 .operator-badge-pos { color: #6ee7b7; font-weight: 600; }
 .operator-badge-neg { color: #fca5a5; font-weight: 600; }
 .operator-badge-profit-caveat {
   margin-top: 0.35rem;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   color: #d6b36b;
   line-height: 1.3;
 }
@@ -167,7 +167,7 @@
   padding-top: 0.28rem;
   border-top: 1px solid rgba(248, 113, 113, 0.22);
   color: #fca5a5;
-  font-size: 0.64rem;
+  font-size: 0.75rem;
   line-height: 1.3;
 }
 .operator-badge-profit-proof {
@@ -175,7 +175,7 @@
   padding-top: 0.28rem;
   border-top: 1px solid rgba(110, 231, 183, 0.22);
   color: #a7f3d0;
-  font-size: 0.64rem;
+  font-size: 0.75rem;
   line-height: 1.3;
 }
 
@@ -190,14 +190,14 @@
   border: 1px solid rgba(159, 176, 192, 0.18);
   background: rgba(255, 255, 255, 0.04);
   color: #dceaf5;
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   line-height: 1.35;
 }
 .operator-badge-context {
   margin: 0.25rem 0;
   padding: 0.34rem 0.5rem;
   border-radius: 0.45rem;
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   line-height: 1.35;
 }
 .operator-badge-context--ok {
@@ -225,7 +225,7 @@
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(255, 255, 255, 0.06);
   color: #eaf4ff;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -239,7 +239,7 @@
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(0, 0, 0, 0.25);
   color: #eaf4ff;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
 }
 
 .operator-badge-keyrow {
@@ -248,7 +248,7 @@
   padding-top: 0.5rem;
 }
 .operator-badge-keylabel {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 600;
   margin-bottom: 0.3rem;
 }
@@ -266,7 +266,7 @@
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(0, 0, 0, 0.25);
   color: #eaf4ff;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
 }
 .operator-badge-keyinput button {
   padding: 0.3rem 0.5rem;
@@ -274,7 +274,7 @@
   border: 1px solid rgba(52, 211, 153, 0.4);
   background: rgba(52, 211, 153, 0.12);
   color: #d6ffe9;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -289,7 +289,7 @@
 }
 .operator-badge-actions-title {
   font-weight: 700;
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   margin-bottom: 0.25rem;
   color: #9fb0c0;
 }
@@ -308,7 +308,7 @@
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(0, 0, 0, 0.25);
   color: #eaf4ff;
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   resize: vertical;
 }
 .operator-badge-chat-buttons {
@@ -323,7 +323,7 @@
   border: 1px solid rgba(96, 165, 250, 0.4);
   background: rgba(96, 165, 250, 0.12);
   color: #dbeafe;
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -331,7 +331,7 @@
 .operator-badge-chat-responder {
   margin-top: 0.45rem;
   color: #8bd5c6;
-  font-size: 0.64rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 .operator-badge-chat-reply {
@@ -358,13 +358,13 @@
   background: transparent;
   color: #f87171;
   cursor: pointer;
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   line-height: 1;
 }
 
 .operator-badge-boundary {
   margin-top: 0.6rem;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   color: #7d93a6;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 0.4rem;

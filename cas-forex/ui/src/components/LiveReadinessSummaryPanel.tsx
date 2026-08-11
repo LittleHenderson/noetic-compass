@@ -198,7 +198,7 @@ export function LiveReadinessSummaryPanel({
             {brokerTruthAutoHaltLatched && (
               <div className="summary-row" style={{ justifyContent: "flex-start", gap: 8, alignItems: "flex-start" }}>
                 <StatusChip label="PAPER FORCE" variant="danger" size="sm" />
-                <span style={{ color: "var(--text-secondary)", fontSize: "0.74rem", lineHeight: 1.4 }}>
+                <span style={{ color: "var(--text-secondary)", fontSize: "0.8125rem", lineHeight: 1.4 }}>
                   Broker-truth monitor latched fail-closed because of: {brokerTruthReasonSummary}.
                 </span>
               </div>
@@ -210,7 +210,7 @@ export function LiveReadinessSummaryPanel({
                   variant={positionProtectionVariant(brokerTruthProtectionStatus, brokerTruthUnprotectedCount)}
                   size="sm"
                 />
-                <span style={{ color: "var(--text-secondary)", fontSize: "0.74rem", lineHeight: 1.4 }}>
+                <span style={{ color: "var(--text-secondary)", fontSize: "0.8125rem", lineHeight: 1.4 }}>
                   {brokerTruthProtectionDetail || `${brokerTruthUnprotectedCount} broker-visible position(s) have no stop-loss protection.`}
                 </span>
               </div>
@@ -218,7 +218,7 @@ export function LiveReadinessSummaryPanel({
             {mt5IdentityMatch !== true && (
               <div className="summary-row" style={{ justifyContent: "flex-start", gap: 8, alignItems: "flex-start" }}>
                 <StatusChip label={mt5IdentityMatch === false ? "WRONG ACCOUNT" : "ACCOUNT UNVERIFIED"} variant={mt5IdentityMatch === false ? "danger" : "warning"} size="sm" />
-                <span style={{ color: "var(--text-secondary)", fontSize: "0.74rem", lineHeight: 1.4 }}>
+                <span style={{ color: "var(--text-secondary)", fontSize: "0.8125rem", lineHeight: 1.4 }}>
                   Connected: {mt5ActualIdentity}. Configured owner account: {mt5ExpectedIdentity}. Live execution remains blocked until these match exactly.
                 </span>
               </div>
@@ -245,7 +245,7 @@ export function LiveReadinessSummaryPanel({
             {liveReadiness.next_actions.slice(0, 3).map((action) => (
               <div key={action} className="summary-row" style={{ justifyContent: "flex-start", gap: 8, alignItems: "flex-start" }}>
                 <span style={{ color: "var(--warning)", lineHeight: 1.2 }}>!</span>
-                <span style={{ color: "var(--text-secondary)", fontSize: "0.74rem", lineHeight: 1.4 }}>{action}</span>
+                <span style={{ color: "var(--text-secondary)", fontSize: "0.8125rem", lineHeight: 1.4 }}>{action}</span>
               </div>
             ))}
           </div>
@@ -266,12 +266,12 @@ function BlockingCheckRow({ check }: { check: LiveReadinessCheck }) {
     <div className="summary-row" style={{ justifyContent: "flex-start", gap: 8, alignItems: "flex-start" }}>
       <StatusChip label={displayLiveCapabilityStatus(check.status)} variant={gateVariant(check.status)} size="sm" />
       <div style={{ minWidth: 0 }}>
-        <div style={{ color: "var(--text-primary)", fontSize: "0.74rem", fontWeight: 600 }}>{check.label}</div>
-        <div style={{ color: "var(--text-secondary)", fontSize: "0.72rem", lineHeight: 1.35 }}>
+        <div style={{ color: "var(--text-primary)", fontSize: "0.8125rem", fontWeight: 600 }}>{check.label}</div>
+        <div style={{ color: "var(--text-secondary)", fontSize: "0.8125rem", lineHeight: 1.35 }}>
           {check.plain_english}
         </div>
         {followup && followup !== check.plain_english && (
-          <div style={{ color: "var(--text-muted)", fontSize: "0.7rem", lineHeight: 1.35, marginTop: 4 }}>
+          <div style={{ color: "var(--text-muted)", fontSize: "0.8125rem", lineHeight: 1.35, marginTop: 4 }}>
             {followup}
           </div>
         )}

@@ -174,7 +174,7 @@ export function LedgerPage({ state }: LedgerPageProps) {
             <Metric label="Risk Review Equity" value={`$${(account?.summary.risk_review_account_equity_usd ?? equity).toLocaleString()}`} mono />
           </div>
         </div>
-        <div style={{ marginTop: 10, color: "var(--text-muted)", fontSize: "0.72rem" }}>
+        <div style={{ marginTop: 10, color: "var(--text-muted)", fontSize: "0.8125rem" }}>
           Changing this field previews the owner-selected paper/demo account seed. It does not deposit funds or move bank/card money.
           {accountPreview.seed !== (account?.summary.risk_review_account_equity_usd ?? equity) && (
             <span style={{ color: "var(--warning)", marginLeft: 6 }}>Rerun paper risk sizing for this amount before relying on lot/risk percentages.</span>
@@ -214,16 +214,16 @@ export function LedgerPage({ state }: LedgerPageProps) {
                   <td>
                     <StatusChip label={r.status} variant={r.status === "COMPLETE" ? "success" : "muted"} size="sm" />
                   </td>
-                  <td className="mono" style={{ fontSize: "0.68rem" }}>
+                  <td className="mono" style={{ fontSize: "0.75rem" }}>
                     {r.route}
                   </td>
-                  <td className="mono" style={{ fontSize: "0.68rem" }}>
+                  <td className="mono" style={{ fontSize: "0.75rem" }}>
                     {r.risk}
                   </td>
                   <td>
                     <StatusChip label={r.broker} variant={r.broker === "VERIFIED" ? "success" : "muted"} size="sm" />
                   </td>
-                  <td className="mono" style={{ fontSize: "0.6rem" }}>
+                  <td className="mono" style={{ fontSize: "0.75rem" }}>
                     {r.hash}
                   </td>
                 </tr>
@@ -237,25 +237,25 @@ export function LedgerPage({ state }: LedgerPageProps) {
       <GlassPanel title="Evidence Hash Chain">
         <div className="sizing-row">
           <span className="field-label">Bundle Hash</span>
-          <span className="field-value mono" style={{ fontSize: "0.65rem" }}>
+          <span className="field-value mono" style={{ fontSize: "0.75rem" }}>
             94d68da3b3c4d7bd...
           </span>
         </div>
         <div className="sizing-row">
           <span className="field-label">Decision Hash</span>
-          <span className="field-value mono" style={{ fontSize: "0.65rem" }}>
+          <span className="field-value mono" style={{ fontSize: "0.75rem" }}>
             56faa6ac644c30fa...
           </span>
         </div>
         <div className="sizing-row">
           <span className="field-label">Risk Hash</span>
-          <span className="field-value mono" style={{ fontSize: "0.65rem" }}>
+          <span className="field-value mono" style={{ fontSize: "0.75rem" }}>
             a5233429d7251512...
           </span>
         </div>
         <div className="sizing-row">
           <span className="field-label">Receipt Hash</span>
-          <span className="field-value mono" style={{ fontSize: "0.65rem" }}>
+          <span className="field-value mono" style={{ fontSize: "0.75rem" }}>
             {mt?.receipt_hash_sha256?.slice(0, 16) ?? "94d68da3b3c4d7bd"}...
           </span>
         </div>
@@ -266,7 +266,7 @@ export function LedgerPage({ state }: LedgerPageProps) {
             size="sm"
           />
           {!mt?.worm_retained && (
-            <span style={{ marginLeft: 8, fontSize: "0.68rem", color: "var(--warning)" }}>
+            <span style={{ marginLeft: 8, fontSize: "0.75rem", color: "var(--warning)" }}>
               WORM retention: UNAVAILABLE
             </span>
           )}
@@ -289,7 +289,7 @@ export function LedgerPage({ state }: LedgerPageProps) {
             padding: "8px 12px",
             background: "var(--warning-dim)",
             borderRadius: "var(--radius-sm)",
-            fontSize: "0.72rem",
+            fontSize: "0.8125rem",
             color: "var(--warning)",
           }}
         >

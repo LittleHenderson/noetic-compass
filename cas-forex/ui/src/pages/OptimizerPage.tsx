@@ -499,7 +499,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                         const decision = agentCycle.overseer_decisions.find((item) => item.intent_id === intent.intent_id);
                         return (
                           <tr key={intent.intent_id}>
-                            <td className="mono" style={{ fontSize: "0.58rem" }}>{intent.intent_id}</td>
+                            <td className="mono" style={{ fontSize: "0.75rem" }}>{intent.intent_id}</td>
                             <td>{intent.agent_id}</td>
                             <td className="mono">{intent.symbol} {intent.timeframe} {intent.action}</td>
                             <td className="mono" title={CONVICTION_SCORE_TITLE}>
@@ -536,12 +536,12 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <tr key={agent.agent_id}>
                       <td>
                         <div style={{ fontWeight: 600 }}>{agent.agent_id}</div>
-                        <div style={{ fontSize: "0.62rem", color: "var(--text-muted)" }}>{agent.role}</div>
+                        <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{agent.role}</div>
                       </td>
-                      <td style={{ fontSize: "0.64rem" }}>{agent.cadence}</td>
+                      <td style={{ fontSize: "0.75rem" }}>{agent.cadence}</td>
                       <td className="mono">{agent.timeframes.join(", ")}</td>
-                      <td style={{ fontSize: "0.58rem" }}>{agent.decision_outputs.slice(0, 4).join(", ")}</td>
-                      <td style={{ fontSize: "0.58rem" }}>{agent.memory_writes.slice(0, 3).join(", ")}</td>
+                      <td style={{ fontSize: "0.75rem" }}>{agent.decision_outputs.slice(0, 4).join(", ")}</td>
+                      <td style={{ fontSize: "0.75rem" }}>{agent.memory_writes.slice(0, 3).join(", ")}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -552,7 +552,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 <div key={event.event_id} className="dashboard-metric">
                   <span className="field-label">{event.event_id}</span>
                   <span className="field-value mono">{event.trigger}</span>
-                  <span style={{ fontSize: "0.62rem", color: "var(--text-muted)" }}>{event.action}</span>
+                  <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{event.action}</span>
                 </div>
               ))}
             </div>
@@ -571,17 +571,17 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <tr key={item.item_id}>
                       <td className="mono">{item.priority}</td>
                       <td>{item.item_id}</td>
-                      <td style={{ fontSize: "0.64rem" }}>{item.plain_english}</td>
-                      <td className="mono" style={{ fontSize: "0.58rem" }}>{item.target_file}</td>
+                      <td style={{ fontSize: "0.75rem" }}>{item.plain_english}</td>
+                      <td className="mono" style={{ fontSize: "0.75rem" }}>{item.target_file}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>
+            <div style={{ fontSize: "0.8125rem", color: "var(--text-muted)" }}>
               {agentWorkflow.thirty_day_window.objective}
             </div>
-            <div style={{ marginTop: 10, fontSize: "0.7rem", color: "var(--warning)" }}>
+            <div style={{ marginTop: 10, fontSize: "0.8125rem", color: "var(--warning)" }}>
               {agentWorkflow.claim_boundary}
             </div>
           </>
@@ -686,8 +686,8 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                       <tbody>
                         {terminalReceiptIngest.receipt_records.slice(0, 6).map((receipt) => (
                           <tr key={`${receipt.receipt_id}-${receipt.command_id}`}>
-                            <td className="mono" style={{ fontSize: "0.58rem" }}>{receipt.receipt_id}</td>
-                            <td className="mono" style={{ fontSize: "0.58rem" }}>{receipt.command_id}</td>
+                            <td className="mono" style={{ fontSize: "0.75rem" }}>{receipt.receipt_id}</td>
+                            <td className="mono" style={{ fontSize: "0.75rem" }}>{receipt.command_id}</td>
                             <td className="mono">{receipt.symbol ?? "N/A"}</td>
                             <td>
                               <StatusChip label={receipt.raw_request_hash_match ? "MATCH" : "MISMATCH"} variant={receipt.raw_request_hash_match ? "success" : "warning"} size="sm" />
@@ -739,7 +739,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                       <tbody>
                         {terminalHistoryIngest.memory_updates.slice(0, 6).map((update) => (
                           <tr key={`${update.memory_id}-${update.history_id}`}>
-                            <td className="mono" style={{ fontSize: "0.58rem" }}>{update.memory_id}</td>
+                            <td className="mono" style={{ fontSize: "0.75rem" }}>{update.memory_id}</td>
                             <td className="mono">{update.symbol}</td>
                             <td className="mono">{update.match_method ?? "N/A"}</td>
                             <td className="mono">{update.profit_loss_account}</td>
@@ -838,16 +838,16 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                       {agentResearchQueue.research_tasks.slice(0, 6).map((task) => (
                         <tr key={task.task_id}>
                           <td className="mono">{task.priority}</td>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{task.task_type}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{task.task_type}</td>
                           <td className="mono">{task.symbols.join(", ")} {task.timeframes.join(", ")}</td>
-                          <td style={{ fontSize: "0.64rem" }}>{task.research_question}</td>
-                          <td style={{ fontSize: "0.58rem" }}>{task.blocked_by.length ? task.blocked_by.join(", ") : "N/A"}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{task.research_question}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{task.blocked_by.length ? task.blocked_by.join(", ") : "N/A"}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {agentResearchQueue.next_action}
                 </div>
               </>
@@ -887,15 +887,15 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                           <td>
                             <StatusChip label={item.status} variant={item.status.startsWith("BLOCKED") ? "warning" : "info"} size="sm" />
                           </td>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{item.item_type}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{item.item_type}</td>
                           <td className="mono">{item.symbols.join(", ")} {item.timeframes.join(", ")}</td>
-                          <td style={{ fontSize: "0.64rem" }}>{item.plain_english_goal}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{item.plain_english_goal}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {strategyDevQueue.next_action}
                 </div>
               </>
@@ -930,15 +930,15 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                           <td>
                             <StatusChip label={decision.status} variant={decision.status.startsWith("BLOCKED") ? "warning" : "info"} size="sm" />
                           </td>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{decision.decision_type}</td>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{decision.patch_target}</td>
-                          <td style={{ fontSize: "0.64rem" }}>{decision.plain_english_decision}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{decision.decision_type}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{decision.patch_target}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{decision.plain_english_decision}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {strategyPatchRunner.next_action}
                 </div>
               </>
@@ -974,13 +974,13 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <tbody>
                       {dailyLearningRollup.queued_follow_up_work.slice(0, 6).map((item) => (
                         <tr key={`${item.work_type}-${item.source_id}`}>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{item.work_type}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{item.work_type}</td>
                           <td>
                             <StatusChip label={item.status ?? "N/A"} variant={(item.status ?? "").startsWith("BLOCKED") ? "warning" : "info"} size="sm" />
                           </td>
                           <td className="mono">{item.priority ?? "N/A"}</td>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{item.source_id ?? "N/A"}</td>
-                          <td style={{ fontSize: "0.64rem" }}>{item.plain_english ?? "N/A"}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{item.source_id ?? "N/A"}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{item.plain_english ?? "N/A"}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -991,11 +991,11 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <div key={blocker.blocker_id} className="dashboard-metric">
                       <span className="field-label">{blocker.blocker_id}</span>
                       <span className="field-value mono">{blocker.count}</span>
-                      <span style={{ fontSize: "0.58rem", color: "var(--text-muted)" }}>{blocker.plain_english}</span>
+                      <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{blocker.plain_english}</span>
                     </div>
                   ))}
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {dailyLearningRollup.next_action}
                 </div>
               </>
@@ -1031,19 +1031,19 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <tbody>
                       {sessionAutowake.event_evaluations.slice(0, 7).map((event) => (
                         <tr key={event.event_id}>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{event.event_id}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{event.event_id}</td>
                           <td>
                             <StatusChip label={event.status} variant={event.status.startsWith("DUE") ? "info" : "muted"} size="sm" />
                           </td>
                           <td>{event.due ? "YES" : "NO"}</td>
                           <td>{event.requested_agent_cycle ? "YES" : "NO"}</td>
-                          <td style={{ fontSize: "0.64rem" }}>{event.decision}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{event.decision}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {sessionAutowake.next_action}
                 </div>
               </>
@@ -1078,26 +1078,26 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <tbody>
                       {terminalReceiptWatcher.chain_steps.slice(0, 8).map((step) => (
                         <tr key={step.step}>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{step.step}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{step.step}</td>
                           <td>
                             <StatusChip label={step.status} variant={step.status === "FAILED" ? "warning" : "info"} size="sm" />
                           </td>
-                          <td style={{ fontSize: "0.64rem" }}>{step.status_label}</td>
-                          <td className="mono" style={{ fontSize: "0.55rem" }}>{step.artifact_paths?.json ?? "N/A"}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{step.status_label}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{step.artifact_paths?.json ?? "N/A"}</td>
                         </tr>
                       ))}
                       {terminalReceiptWatcher.chain_steps.length === 0 && (
                         <tr>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>watcher_idle</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>watcher_idle</td>
                           <td><StatusChip label="IDLE" variant="muted" size="sm" /></td>
-                          <td style={{ fontSize: "0.64rem" }}>waiting for terminal files</td>
-                          <td className="mono" style={{ fontSize: "0.55rem" }}>N/A</td>
+                          <td style={{ fontSize: "0.75rem" }}>waiting for terminal files</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>N/A</td>
                         </tr>
                       )}
                     </tbody>
                   </table>
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {terminalReceiptWatcher.next_action}
                 </div>
               </>
@@ -1131,24 +1131,24 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <tbody>
                       {terminalBridgeSupervisor.alerts.slice(0, 7).map((alert) => (
                         <tr key={alert.alert_id}>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{alert.alert_id}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{alert.alert_id}</td>
                           <td>
                             <StatusChip label={alert.severity} variant={alert.severity === "HIGH" ? "warning" : "info"} size="sm" />
                           </td>
-                          <td style={{ fontSize: "0.64rem" }}>{alert.plain_english}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{alert.plain_english}</td>
                         </tr>
                       ))}
                       {terminalBridgeSupervisor.alerts.length === 0 && (
                         <tr>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>bridge_clear</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>bridge_clear</td>
                           <td><StatusChip label="CLEAR" variant="success" size="sm" /></td>
-                          <td style={{ fontSize: "0.64rem" }}>No supervisor alerts in the latest bridge report.</td>
+                          <td style={{ fontSize: "0.75rem" }}>No supervisor alerts in the latest bridge report.</td>
                         </tr>
                       )}
                     </tbody>
                   </table>
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {terminalBridgeSupervisor.next_action}
                 </div>
               </>
@@ -1182,13 +1182,13 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                       {mt4TerminalActivation.activation_steps.slice(0, 5).map((step) => (
                         <tr key={step.step}>
                           <td className="mono">{step.step}</td>
-                          <td style={{ fontSize: "0.64rem" }}>{step.plain_english}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{step.plain_english}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {mt4TerminalActivation.next_action}
                 </div>
               </>
@@ -1210,7 +1210,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                   <Metric label="Live Flag" value={mt4PingRoundtrip.summary.live_flag_visible ? "VISIBLE" : "NOT_VISIBLE"} />
                   <Metric label="Command ID" value={mt4PingRoundtrip.summary.command_id ?? "N/A"} mono />
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {mt4PingRoundtrip.next_action}
                 </div>
               </>
@@ -1244,17 +1244,17 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <tbody>
                       {mt4TerminalSessionVerifier.step_results.slice(0, 6).map((step) => (
                         <tr key={step.step}>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{step.step}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{step.step}</td>
                           <td>
                             <StatusChip label={step.status_label ?? step.status} variant={step.status === "COMPLETE" ? "success" : step.status === "FAILED" ? "warning" : "muted"} size="sm" />
                           </td>
-                          <td style={{ fontSize: "0.64rem" }}>{step.message}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{step.message}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {mt4TerminalSessionVerifier.next_action}
                 </div>
               </>
@@ -1279,7 +1279,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 <div className="metric-stack" style={{ marginBottom: 10 }}>
                   <Metric label="Expected Export" value={mt4HistoryExportVerifier.history_export_path ?? "N/A"} mono />
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {mt4HistoryExportVerifier.next_action}
                 </div>
               </>
@@ -1314,7 +1314,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                   <Metric label="Reconciled" value={mt5TerminalApiVerifier.summary.open_positions_reconciled ? "YES" : "NO"} />
                   <Metric label="Live Mode Used" value={mt5TerminalApiVerifier.summary.live_mode_used ? "YES" : "NO"} />
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {mt5TerminalApiVerifier.next_action}
                 </div>
               </>
@@ -1344,7 +1344,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                   <Metric label="Response Hash" value={mt5PaperExecutionVerifier.summary.raw_response_hash ?? "N/A"} mono />
                   <Metric label="Live Mode Used" value={mt5PaperExecutionVerifier.summary.live_mode_used ? "YES" : "NO"} />
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {mt5PaperExecutionVerifier.next_action}
                 </div>
               </>
@@ -1369,10 +1369,10 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                   <Metric label="Terminal History" value={mt5DealHistoryIngest.summary.terminal_history_ingest_status ?? "N/A"} />
                   <Metric label="Ticket Filter" value={mt5DealHistoryIngest.summary.ticket_filter ?? "NONE"} mono />
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {mt5DealHistoryIngest.summary.history_export_path ?? "No MT5 deal-history export path yet."}
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {mt5DealHistoryIngest.next_action}
                 </div>
               </>
@@ -1406,17 +1406,17 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <tbody>
                       {terminalPositionReconciliation.checks.slice(0, 5).map((check) => (
                         <tr key={check.check_id}>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{check.check_id}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{check.check_id}</td>
                           <td>
                             <StatusChip label={check.status} variant={check.status === "OK" ? "success" : check.status === "MISMATCH" ? "warning" : "muted"} size="sm" />
                           </td>
-                          <td style={{ fontSize: "0.64rem" }}>{check.detail}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{check.detail}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {terminalPositionReconciliation.next_action}
                 </div>
               </>
@@ -1476,17 +1476,17 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <tbody>
                       {terminalOperabilityVerifier.checks.slice(0, 6).map((check) => (
                         <tr key={check.check_id}>
-                          <td className="mono" style={{ fontSize: "0.58rem" }}>{check.check_id}</td>
+                          <td className="mono" style={{ fontSize: "0.75rem" }}>{check.check_id}</td>
                           <td>
                             <StatusChip label={check.status} variant={check.status === "OK" ? "success" : check.status === "BLOCKED" ? "warning" : "muted"} size="sm" />
                           </td>
-                          <td style={{ fontSize: "0.64rem" }}>{check.detail}</td>
+                          <td style={{ fontSize: "0.75rem" }}>{check.detail}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <div style={{ marginBottom: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                <div style={{ marginBottom: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
                   {terminalOperabilityVerifier.next_action}
                 </div>
               </>
@@ -1510,7 +1510,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                     <tr key={review.agent}>
                       <td className="mono">{review.agent}</td>
                       <td>{review.focus}</td>
-                      <td style={{ fontSize: "0.64rem" }}>{review.plain_english}</td>
+                      <td style={{ fontSize: "0.75rem" }}>{review.plain_english}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -1521,7 +1521,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 <div key={plane.plane} className="dashboard-metric">
                   <span className="field-label">{plane.plane}</span>
                   <span className="field-value mono">{plane.primary_packet}</span>
-                  <span style={{ fontSize: "0.58rem", color: "var(--text-muted)" }}>{plane.path}</span>
+                  <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{plane.path}</span>
                 </div>
               ))}
             </div>
@@ -1539,7 +1539,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                       <td>
                         <StatusChip label={item.state} variant={item.state.includes("FAILED") || item.state.includes("LOCKED") ? "warning" : "info"} size="sm" />
                       </td>
-                      <td style={{ fontSize: "0.64rem" }}>{item.plain_english}</td>
+                      <td style={{ fontSize: "0.75rem" }}>{item.plain_english}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -1558,14 +1558,14 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                   {flowBottlenecks.slice(0, 5).map((item) => (
                     <tr key={item.bottleneck_id}>
                       <td className="mono">{item.bottleneck_id}</td>
-                      <td className="mono" style={{ fontSize: "0.58rem" }}>{item.fix_target}</td>
-                      <td style={{ fontSize: "0.64rem" }}>{item.plain_english}</td>
+                      <td className="mono" style={{ fontSize: "0.75rem" }}>{item.fix_target}</td>
+                      <td style={{ fontSize: "0.75rem" }}>{item.plain_english}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div style={{ marginTop: 10, fontSize: "0.7rem", color: "var(--warning)" }}>
+            <div style={{ marginTop: 10, fontSize: "0.8125rem", color: "var(--warning)" }}>
               {agentFlow.claim_boundary}
             </div>
           </>
@@ -1616,7 +1616,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                           {benchmark.name}
                         </a>
                       </td>
-                      <td className="mono" style={{ fontSize: "0.6rem" }}>
+                      <td className="mono" style={{ fontSize: "0.75rem" }}>
                         {platformLabel(benchmark.public_account_descriptor)}
                       </td>
                       <td className="mono">{benchmark.visible_symbol_focus}</td>
@@ -1635,7 +1635,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 </tbody>
               </table>
             </div>
-            <div style={{ marginTop: 10, fontSize: "0.7rem", color: "var(--text-muted)" }}>
+            <div style={{ marginTop: 10, fontSize: "0.8125rem", color: "var(--text-muted)" }}>
               Next build: {externalBenchmarks?.summary.next_build_target}
             </div>
           </>
@@ -1686,7 +1686,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 <tbody>
                   {furyProfiles.slice(0, 8).map((profile) => (
                     <tr key={profile.profile_id}>
-                      <td className="mono" style={{ fontSize: "0.58rem" }}>{profile.profile_id.slice(-12)}</td>
+                      <td className="mono" style={{ fontSize: "0.75rem" }}>{profile.profile_id.slice(-12)}</td>
                       <td className="mono">{profile.platform}</td>
                       <td>{profile.family}</td>
                       <td className="mono">{profile.symbol ?? "—"}</td>
@@ -1702,12 +1702,12 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
             </div>
             <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
               {(forexFuryImport?.cas_improvement_targets ?? []).slice(0, 4).map((target) => (
-                <div key={target} style={{ fontSize: "0.68rem", color: "var(--text-muted)" }}>
+                <div key={target} style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
                   {target}
                 </div>
               ))}
             </div>
-            <div style={{ marginTop: 10, fontSize: "0.7rem", color: "var(--warning)" }}>
+            <div style={{ marginTop: 10, fontSize: "0.8125rem", color: "var(--warning)" }}>
               {forexFuryImport?.claim_boundary}
             </div>
           </>
@@ -1769,7 +1769,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                       <td className="mono">{formatNullableNumber(candidate.evidence.profit_factor, 2)}</td>
                       <td className="mono">{formatNullableNumber(candidate.evidence.equity_drawdown_relative_pct, 2)}%</td>
                       <td className="mono">{candidate.execution_profile.max_orders ?? "—"}</td>
-                      <td className="mono" style={{ fontSize: "0.58rem" }}>
+                      <td className="mono" style={{ fontSize: "0.75rem" }}>
                         {candidate.execution_profile.uses_grid ? "grid " : ""}
                         {candidate.execution_profile.uses_close_by_money ? "money-close" : ""}
                       </td>
@@ -1792,12 +1792,12 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
             )}
             <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
               {(furyReplay?.next_actions ?? []).slice(0, 3).map((action) => (
-                <div key={action} style={{ fontSize: "0.68rem", color: "var(--text-muted)" }}>
+                <div key={action} style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
                   {action}
                 </div>
               ))}
             </div>
-            <div style={{ marginTop: 10, fontSize: "0.7rem", color: "var(--warning)" }}>
+            <div style={{ marginTop: 10, fontSize: "0.8125rem", color: "var(--warning)" }}>
               {furyReplay?.claim_boundary}
             </div>
           </>
@@ -1857,7 +1857,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                       <td className="mono">{cell.symbol}</td>
                       <td className="mono">{cell.timeframe}</td>
                       <td>{cell.regime}</td>
-                      <td className="mono" style={{ fontSize: "0.58rem" }}>{cell.setting}</td>
+                      <td className="mono" style={{ fontSize: "0.75rem" }}>{cell.setting}</td>
                       <td className="mono" style={{ color: "var(--success)" }}>{cell.mean_return_pct.toFixed(4)}%</td>
                       <td className="mono">{cell.mean_max_dd_pct.toFixed(4)}%</td>
                       <td className="mono">{cell.profit_factor.toFixed(2)}</td>
@@ -1869,7 +1869,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
             </div>
             <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
               {furyReplayResults.next_actions.slice(0, 3).map((action) => (
-                <div key={action} style={{ fontSize: "0.68rem", color: "var(--text-muted)" }}>
+                <div key={action} style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
                   {action}
                 </div>
               ))}
@@ -1881,7 +1881,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 size="sm"
               />
             </div>
-            <div style={{ marginTop: 10, fontSize: "0.7rem", color: "var(--warning)" }}>
+            <div style={{ marginTop: 10, fontSize: "0.8125rem", color: "var(--warning)" }}>
               {furyReplayResults.claim_boundary}
             </div>
           </>
@@ -1901,7 +1901,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
           <GateRow label="PCBA Authority Check" met={true} detail="PASS" />
           <GateRow label="LLM Prompt Injection Guard" met={true} detail="ACTIVE" />
         </div>
-        <div style={{ marginTop: 8, fontSize: "0.72rem", color: "var(--warning)" }}>
+        <div style={{ marginTop: 8, fontSize: "0.8125rem", color: "var(--warning)" }}>
           Optimization boundary: PAPER-ONLY — no broker orders, no live parameter changes.
         </div>
       </GlassPanel>
@@ -1923,7 +1923,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
             </thead>
             <tbody>
               <tr>
-                <td className="mono" style={{ fontSize: "0.62rem" }}>
+                <td className="mono" style={{ fontSize: "0.75rem" }}>
                   forex-fury-replay-results-20260624042821
                 </td>
                 <td>Replay Results</td>
@@ -1938,7 +1938,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 </td>
               </tr>
               <tr>
-                <td className="mono" style={{ fontSize: "0.62rem" }}>
+                <td className="mono" style={{ fontSize: "0.75rem" }}>
                   forex-fury-replay-candidates-20260624042429
                 </td>
                 <td>Replay Candidates</td>
@@ -1953,7 +1953,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 </td>
               </tr>
               <tr>
-                <td className="mono" style={{ fontSize: "0.62rem" }}>
+                <td className="mono" style={{ fontSize: "0.75rem" }}>
                   forex-fury-set-import-20260624034719
                 </td>
                 <td>Set Import</td>
@@ -1968,7 +1968,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 </td>
               </tr>
               <tr>
-                <td className="mono" style={{ fontSize: "0.62rem" }}>
+                <td className="mono" style={{ fontSize: "0.75rem" }}>
                   backsolve-20260622191201
                 </td>
                 <td>Leverage Backsolve</td>
@@ -1987,7 +1987,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 </td>
               </tr>
               <tr>
-                <td className="mono" style={{ fontSize: "0.62rem" }}>
+                <td className="mono" style={{ fontSize: "0.75rem" }}>
                   condition-tally-20260622055042
                 </td>
                 <td>Condition Tally</td>
@@ -2002,7 +2002,7 @@ export function OptimizerPage({ state }: OptimizerPageProps) {
                 </td>
               </tr>
               <tr>
-                <td className="mono" style={{ fontSize: "0.62rem" }}>
+                <td className="mono" style={{ fontSize: "0.75rem" }}>
                   walk-forward-20260622044930
                 </td>
                 <td>Walk-Forward</td>
@@ -2068,11 +2068,11 @@ function RunType({
       }}
     >
       <div>
-        <div style={{ fontWeight: 600, fontSize: "0.8rem" }}>{label}</div>
-        <div style={{ fontSize: "0.65rem", color: "var(--text-muted)" }}>{detail}</div>
+        <div style={{ fontWeight: 600, fontSize: "0.875rem" }}>{label}</div>
+        <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{detail}</div>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <span className="mono" style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>
+        <span className="mono" style={{ fontSize: "0.8125rem", color: "var(--text-secondary)" }}>
           {runs}
         </span>
         <StatusChip label={status} variant={variant} size="sm" />

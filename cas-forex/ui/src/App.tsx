@@ -309,6 +309,7 @@ export function App() {
         readiness={state.uiReadiness}
         authority={state.authorityBoundary}
         wasteLoop={state.wasteLoop}
+        dashboardMeta={state.dashboardMeta}
         activePage={page}
         onNavigate={setPage}
       >

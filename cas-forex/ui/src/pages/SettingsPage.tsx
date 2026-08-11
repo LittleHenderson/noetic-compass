@@ -291,7 +291,7 @@ export function SettingsPage({ state }: SettingsPageProps) {
                     title={`${m.label}${isLive ? " - live standby until owner authority and broker/provider setup are on" : ""}`}
                   >
                     {m.label}
-                    {isLive && <span style={{ color: "var(--danger)", marginLeft: 4, fontSize: "0.6rem" }}>BLOCKED</span>}
+                    {isLive && <span style={{ color: "var(--danger)", marginLeft: 4, fontSize: "0.75rem" }}>BLOCKED</span>}
                   </button>
                 );
               })}
@@ -305,7 +305,7 @@ export function SettingsPage({ state }: SettingsPageProps) {
               </div>
             )}
             {oc?.live_requested && (
-              <div style={{ marginTop: 8, padding: "6px 10px", background: "var(--warning-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.72rem", color: "var(--warning)" }}>
+              <div style={{ marginTop: 8, padding: "6px 10px", background: "var(--warning-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.8125rem", color: "var(--warning)" }}>
                 {oc.current_autonomy_stage_label ?? oc.mode}: owner requested a live stage; live trading, broker ACCEPT, and payment movement stay under owner switches, credentials, and action-time checks.
               </div>
             )}
@@ -378,7 +378,7 @@ export function SettingsPage({ state }: SettingsPageProps) {
           <ControlField label="Can Move Money" value={ab?.can_move_money ? "YES" : "NO"} danger={Boolean(ab?.can_move_money)} />
           <ControlField label="Live Execution Runtime" value={ab?.live_execution_runtime_locked === false ? "OWNER-AUTHORIZED" : "PENDING OWNER ENABLE"} description="Broker bridge permits live execution only when owner flag + credentials + broker config are present." />
         </div>
-        <div style={{ marginTop: 12, padding: "8px 12px", background: "var(--warning-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.72rem", color: "var(--text-secondary)" }}>
+        <div style={{ marginTop: 12, padding: "8px 12px", background: "var(--warning-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.8125rem", color: "var(--text-secondary)" }}>
           Backend boundary: {ownerFacingBoundary(ab?.claim_boundary ?? "Research/paper cockpit runs now. Live-money capabilities are owner-controlled and become AUTHORIZED only when owner flags, credentials, and provider config are present.")}
         </div>
       </GlassPanel>
@@ -396,7 +396,7 @@ export function SettingsPage({ state }: SettingsPageProps) {
           <ControlField label="Control Plane" value={ai?.control_plane ?? "CAS_HARNESS_PCBA"} mono />
           <ControlField label="PCBA Guard" value={pcbaGuardEnabled ? "ENABLED" : "DISABLED"} danger={!pcbaGuardEnabled} />
         </div>
-        <div style={{ marginTop: 12, padding: "8px 12px", background: "var(--panel-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.72rem", color: "var(--text-secondary)" }}>
+        <div style={{ marginTop: 12, padding: "8px 12px", background: "var(--panel-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.8125rem", color: "var(--text-secondary)" }}>
           {ai?.authority_boundary ?? "AI may autonomously trade and initiate configured money movement only after owner delegation, through runtime_gates plus dispatch/provider gates."}
         </div>
       </GlassPanel>
@@ -476,7 +476,7 @@ export function SettingsPage({ state }: SettingsPageProps) {
           <LegalGate label="Broker Terminal Proof" met={proofDays >= 30} detail={`30-day paper proof (${proofDays}/30 days)`} />
           <LegalGate label="WORM Evidence Anchoring" met={false} detail="UNAVAILABLE — local hash chain only" />
         </div>
-        <div style={{ marginTop: 12, padding: "8px 12px", background: "var(--danger-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.72rem", color: "var(--danger)" }}>
+        <div style={{ marginTop: 12, padding: "8px 12px", background: "var(--danger-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.8125rem", color: "var(--danger)" }}>
           Live/payment paths are owner-controlled. They become AUTHORIZED only when the matching owner flag, credentials, broker/payment provider config, and account acknowledgments are present.
         </div>
       </GlassPanel>
@@ -4106,7 +4106,7 @@ function GoLivePanel() {
                     <div className="go-live-row-label">
                       {f?.label ?? key}
                       {f?.overridden && (
-                        <span style={{ marginLeft: 6, fontSize: "0.62rem", color: "var(--text-secondary)" }}>
+                        <span style={{ marginLeft: 6, fontSize: "0.75rem", color: "var(--text-secondary)" }}>
                           (set in-app)
                         </span>
                       )}
@@ -4143,7 +4143,7 @@ function GoLivePanel() {
           padding: "8px 12px",
           background: "var(--panel-dim)",
           borderRadius: "var(--radius-sm)",
-          fontSize: "0.72rem",
+          fontSize: "0.8125rem",
           color: "var(--text-secondary)",
         }}
       >
@@ -4238,7 +4238,7 @@ function AuthorizePanel() {
       subtitle="Flip every live-money capability ON from here — no .env, no restart"
       variant={allGreen ? "default" : "warning"}
     >
-      <div style={{ marginBottom: 12, fontSize: "0.78rem", color: "var(--text-secondary)" }}>
+      <div style={{ marginBottom: 12, fontSize: "0.875rem", color: "var(--text-secondary)" }}>
         {auth?.summary ?? "Loading owner-controlled capabilities…"}
       </div>
 
@@ -4252,7 +4252,7 @@ function AuthorizePanel() {
         {(auth?.capabilities ?? []).map((cap) => (
           <div key={cap.capability} style={{ padding: "10px 0", borderBottom: "1px solid var(--border-subtle)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-              <span style={{ fontWeight: 700, fontSize: "0.84rem" }}>{cap.title}</span>
+              <span style={{ fontWeight: 700, fontSize: "0.875rem" }}>{cap.title}</span>
               <StatusChip
                 label={cap.authorized ? "AUTHORIZED" : "NOT YET"}
                 variant={cap.authorized ? "success" : "warning"}
@@ -4269,7 +4269,7 @@ function AuthorizePanel() {
                     onClick={() => void apply({ [t.key]: !t.enabled } as AuthorizationPatch, t.key)}
                   />
                   <div className="go-live-row-body">
-                    <div className="go-live-row-label">{t.label}{t.overridden && <span style={{ marginLeft: 6, fontSize: "0.62rem", color: "var(--text-secondary)" }}>(set in-app)</span>}</div>
+                    <div className="go-live-row-label">{t.label}{t.overridden && <span style={{ marginLeft: 6, fontSize: "0.75rem", color: "var(--text-secondary)" }}>(set in-app)</span>}</div>
                     <div className="go-live-row-consequence">{t.consequence}</div>
                   </div>
                 </div>
@@ -4375,7 +4375,7 @@ function AuthorizePanel() {
 
       {status && <div className="control-field-desc" style={{ color: status.startsWith("Couldn't") ? "var(--danger)" : "var(--success)" }}>{status}</div>}
 
-      <div style={{ marginTop: 14, padding: "8px 12px", background: "var(--panel-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.72rem", color: "var(--text-secondary)" }}>
+      <div style={{ marginTop: 14, padding: "8px 12px", background: "var(--panel-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.8125rem", color: "var(--text-secondary)" }}>
         <strong>What these switches do:</strong> they satisfy the owner-authorization gate for each capability — they do
         <strong> not</strong> move money or place orders by themselves. Money movement also needs a runtime-supported payment provider + API
         key, broker middleware URL, bound account ID, and a running process. Stripe alone is not a Hugo's Way/MT5 custody rail. Once owner-armed,
@@ -6093,7 +6093,7 @@ function RiskControlPanel() {
             <div key={f.key} className="control-field">
               <div className="control-field-header">
                 <span className="field-label">{f.label}</span>
-                <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.72rem" }}>
+                <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.8125rem" }}>
                   <input
                     type="checkbox"
                     checked={cell.unlimited}
@@ -6295,7 +6295,7 @@ function RiskControlPanelModern() {
             <div key={field.key} className="control-field">
               <div className="control-field-header">
                 <span className="field-label">{field.label}</span>
-                <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.72rem" }}>
+                <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.8125rem" }}>
                   <input
                     type="checkbox"
                     checked={cell.unlimited}

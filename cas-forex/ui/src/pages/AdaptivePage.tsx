@@ -192,7 +192,7 @@ function DecisionRow({ decision }: { decision: AdaptiveTradeDecision }) {
       <td className="mono" style={{ color: "var(--success)" }}>{decision.take_profit?.toFixed(2) ?? "—"}</td>
       <td className="mono" title={CONVICTION_SCORE_TITLE}>{formatConvictionScore(decision.confidence, "—")}</td>
       <td><StatusChip label={decision.evidence_status} variant={decision.evidence_score >= 0.6 ? "success" : decision.evidence_score >= 0.4 ? "warning" : "muted"} size="sm" /></td>
-      <td style={{ color: "var(--text-muted)", fontSize: "0.7rem", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>{decision.reason}</td>
+      <td style={{ color: "var(--text-muted)", fontSize: "0.8125rem", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>{decision.reason}</td>
     </tr>
   );
 }

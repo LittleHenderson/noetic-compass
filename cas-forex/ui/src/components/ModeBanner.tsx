@@ -4,13 +4,16 @@ import { useEffect, useState } from "react";
 import type {
   UIReadinessReport,
   AuthorityBoundaryState,
+  DashboardMeta,
 } from "../types/evidence";
 import { apiGet } from "../data/apiCore";
 import { StatusChip } from "./StatusChip";
+import { StaleDataBadge } from "./StaleDataBadge";
 
 interface ModeBannerProps {
   readiness: UIReadinessReport;
   authority?: AuthorityBoundaryState;
+  dashboardMeta?: DashboardMeta;
 }
 
 interface DispatchLaneState {
@@ -21,7 +24,7 @@ interface DispatchLaneState {
   live_execution_active?: boolean;
 }
 
-export function ModeBanner({ readiness, authority }: ModeBannerProps) {
+export function ModeBanner({ readiness, authority, dashboardMeta }: ModeBannerProps) {
   const [currentAuthority, setCurrentAuthority] = useState<AuthorityBoundaryState | undefined>(authority);
   const [dispatchLane, setDispatchLane] = useState<DispatchLaneState | null>(null);
 
@@ -98,6 +101,7 @@ export function ModeBanner({ readiness, authority }: ModeBannerProps) {
         </span>
       </div>
       <div className="mode-banner-right">
+        <StaleDataBadge meta={dashboardMeta} />
         <StatusChip
           label={isReady ? "COCKPIT READY" : "PROOF PENDING"}
           variant={isReady ? "success" : "warning"}

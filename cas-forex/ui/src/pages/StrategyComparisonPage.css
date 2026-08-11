@@ -22,7 +22,7 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-family: inherit;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
 }
 
 .comparison-mode-toggle .mode-btn.active {
@@ -34,7 +34,7 @@
 .comparison-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.76rem;
+  font-size: 0.8125rem;
 }
 
 .comparison-table th,
@@ -46,7 +46,7 @@
 }
 
 .comparison-table th {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-muted);

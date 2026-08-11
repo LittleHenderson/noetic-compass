@@ -13,7 +13,7 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   padding: 4px 8px;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   font-family: inherit;
 }
 
@@ -48,11 +48,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
 }
 
 .strategy-dev-row-meta {
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
@@ -60,7 +60,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
 }
 
 .strategy-dev-row-desc {
@@ -69,7 +69,7 @@
 
 .strategy-dev-row-sub {
   color: var(--text-muted);
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
 }
 
 .strategy-dev-row-controls {
@@ -87,7 +87,7 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   padding: 4px 8px;
-  font-size: 0.76rem;
+  font-size: 0.8125rem;
   font-family: inherit;
 }
 

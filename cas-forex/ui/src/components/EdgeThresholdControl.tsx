@@ -41,7 +41,7 @@ export function EdgeThresholdControl({ value, onChange }: EdgeThresholdControlPr
           }}
         >
           <span className="field-label">Min measured win-probability</span>
-          <span className="field-value mono" style={{ fontWeight: 600, fontSize: "1.1rem" }}>
+          <span className="field-value mono" style={{ fontWeight: 600, fontSize: "1.125rem" }}>
             {clamped}%
           </span>
         </div>
@@ -65,7 +65,7 @@ export function EdgeThresholdControl({ value, onChange }: EdgeThresholdControlPr
           style={{
             display: "flex",
             justifyContent: "space-between",
-            fontSize: "0.7rem",
+            fontSize: "0.8125rem",
             color: "var(--text-muted)",
           }}
         >

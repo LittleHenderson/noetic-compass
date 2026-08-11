@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--text-primary);
 }
 
@@ -15,7 +15,7 @@
 }
 
 .decision-cycle-id {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   max-width: 100%;
   overflow: hidden;
@@ -24,19 +24,19 @@
 }
 
 .decision-summary {
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   color: var(--text-primary);
   line-height: 1.4;
 }
 
 .decision-empty {
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
   line-height: 1.4;
 }
 
 .decision-next-action {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
   font-style: italic;
 }
@@ -56,7 +56,7 @@
 }
 
 .decision-movement-title {
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -82,20 +82,20 @@
 }
 
 .decision-movement-label {
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 .decision-movement-value {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-primary);
 }
 
 .decision-movement-detail,
 .decision-movement-warning {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   line-height: 1.4;
   color: var(--text-secondary);
 }
@@ -120,14 +120,14 @@
 }
 
 .decision-version-title {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 .decision-version-source {
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
@@ -145,7 +145,7 @@
 }
 
 .decision-version-label {
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -156,7 +156,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-primary);
 }
 
@@ -166,7 +166,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
@@ -188,7 +188,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   color: var(--accent-teal);
   text-align: left;
 }
@@ -228,18 +228,18 @@
 }
 
 .decision-chain-name {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
 }
 
 .decision-chain-headline {
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   color: var(--text-primary);
   line-height: 1.35;
 }
 
 .loop-stats {
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   letter-spacing: 0.01em;
 }
@@ -248,17 +248,17 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
 }
 
 .loop-last-cycle-iso {
-  font-size: 0.7rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
 }
 
 .loop-next-due {
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
 }
 
@@ -271,7 +271,7 @@
 }
 
 .loop-diagnostic-header {
-  font-size: 0.72rem;
+  font-size: 0.8125rem;
   color: var(--warning);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -287,7 +287,7 @@
 }
 
 .loop-diagnostic-item {
-  font-size: 0.74rem;
+  font-size: 0.8125rem;
   color: var(--text-primary);
   line-height: 1.35;
 }
