@@ -7,6 +7,7 @@ from typing import Any, List, Optional
 
 import requests  # type: ignore
 
+from cas_forex import mt5_connect_guard
 from cas_forex.broker.mt5_bridge import MT5_INIT_TIMEOUT_MS, _add_local_mt5_deps
 from cas_forex.instruments import (
     canonical_symbol,
@@ -357,7 +358,7 @@ class MT5TerminalMarketDataConnector(MarketDataConnector):
         if self.mt5_path:
             kwargs["path"] = self.mt5_path
         try:
-            self._initialized = bool(self._mt5.initialize(**kwargs))
+            self._initialized = mt5_connect_guard.guarded_initialize(self._mt5, **kwargs)
         except Exception as exc:
             self.last_error = f"MT5 initialize failed: {type(exc).__name__}: {exc}"
             self._initialized = False

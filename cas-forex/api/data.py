@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import threading
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -806,7 +807,42 @@ def _dashboard_daily_bundle_summary(bundle: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+# Per-build memo for expensive aggregations that a single dashboard_state()
+# rebuilds many times over (waste_direction_learning_ledger ran 21x per build,
+# waste_direction_outcome_binding 13x, each re-reading the same JSONL evidence).
+#
+# Thread-local and explicitly cleared at the start of every build, so a value can
+# never survive into a later request or leak across concurrent builds. This is a
+# within-request memo, NOT a cache: two separate requests always rebuild.
+_build_scope = threading.local()
+
+
+def _build_scoped(key: str, builder):
+    memo = getattr(_build_scope, "memo", None)
+    if memo is None:
+        return builder()
+    if key not in memo:
+        memo[key] = builder()
+    return memo[key]
+
+
+def _begin_build_scope() -> None:
+    _build_scope.memo = {}
+
+
+def _end_build_scope() -> None:
+    _build_scope.memo = None
+
+
 def dashboard_state() -> Dict[str, Any]:
+    _begin_build_scope()
+    try:
+        return _dashboard_state_uncached()
+    finally:
+        _end_build_scope()
+
+
+def _dashboard_state_uncached() -> Dict[str, Any]:
     ledger = account_ledger()
     movement = movement_stream(use_provider_quotes=True)
     health = build_account_health_report(ledger, movement_stream=movement)
@@ -2277,15 +2313,15 @@ def waste_entry_pilot_promotion_status() -> Dict[str, Any]:
 
 
 def waste_direction_review_packet() -> Dict[str, Any]:
-    return build_waste_direction_review_packet()
+    return _build_scoped("waste_direction_review_packet", build_waste_direction_review_packet)
 
 
 def waste_direction_learning_ledger() -> Dict[str, Any]:
-    return build_waste_direction_learning_ledger()
+    return _build_scoped("waste_direction_learning_ledger", build_waste_direction_learning_ledger)
 
 
 def waste_direction_outcome_binding() -> Dict[str, Any]:
-    return build_waste_direction_outcome_binding()
+    return _build_scoped("waste_direction_outcome_binding", build_waste_direction_outcome_binding)
 
 
 def waste_paper_sample_collector() -> Dict[str, Any]:

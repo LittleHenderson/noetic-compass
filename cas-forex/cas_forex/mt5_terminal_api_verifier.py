@@ -15,6 +15,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional
 
+from cas_forex import mt5_connect_guard
 from cas_forex.config import config
 from cas_forex.paper_broker_adapter import MT5DemoPaperReceiptAdapter
 from cas_forex.paper_proof import build_index_tsmom_126_paper_proof_plan
@@ -183,7 +184,7 @@ def _terminal_snapshot(*, mt5_module: Any | None, mt5_path: Optional[Path | str]
     try:
         terminal = _object_to_dict(mt5.terminal_info())
         if not terminal or not bool(terminal.get("connected")):
-            mt5.initialize(**kwargs)
+            mt5_connect_guard.guarded_initialize(mt5, **kwargs)
             terminal = _object_to_dict(mt5.terminal_info())
         account = _redacted_account_snapshot(_object_to_dict(mt5.account_info()))
         positions = [_position_snapshot(_object_to_dict(position)) for position in (mt5.positions_get() or [])]

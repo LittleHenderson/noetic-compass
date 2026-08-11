@@ -17,8 +17,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 import sys
 import threading
+import time
 from typing import Any, Dict, Mapping, Optional, Tuple
 
+from cas_forex import mt5_connect_guard
 from cas_forex.config import config
 from cas_forex.instruments import price_unit_size, resolve_broker_symbol, round_price
 from cas_forex.mt5_permissions import build_mt5_permission_state, mt5_order_send_block_reason
@@ -66,6 +68,13 @@ def _resolve_mt5_terminal_path(cfg: object) -> str | None:
 # Bound the MT5 connect handshake (ms). MetaTrader's Python IPC can be flaky and
 # its default initialize timeout is 60s — far too long for a poller. Fail fast.
 MT5_INIT_TIMEOUT_MS = 8000
+
+# The connect cooldown is shared process-wide with every other module that
+# performs an MT5 handshake -- see cas_forex/mt5_connect_guard.py.
+MT5_INIT_FAILURE_COOLDOWN_SECONDS = mt5_connect_guard.MT5_INIT_FAILURE_COOLDOWN_SECONDS
+_mt5_init_in_cooldown = mt5_connect_guard.in_cooldown
+_record_mt5_init_result = mt5_connect_guard.record_result
+reset_mt5_init_cooldown = mt5_connect_guard.reset
 
 
 def _position_opened_at_iso(position: Any) -> str | None:
@@ -242,11 +251,19 @@ class MT5Bridge(BrokerBridge):
         except ImportError:
             pass
 
-    def connect(self) -> bool:
-        """Try to connect to MT5. Must be called explicitly."""
+    def connect(self, *, force: bool = False) -> bool:
+        """Try to connect to MT5. Must be called explicitly.
+
+        After a failed handshake, further attempts short-circuit for
+        MT5_INIT_FAILURE_COOLDOWN_SECONDS rather than re-paying the 8s timeout.
+        Pass force=True to ignore the cooldown.
+        """
         if self._connected:
             return True
+        if not force and _mt5_init_in_cooldown():
+            return False
         self._initialize()
+        _record_mt5_init_result(self._connected)
         return self._connected
 
     def is_connected(self) -> bool:

@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, date, datetime, time, timedelta
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
+from cas_forex import mt5_connect_guard
 from cas_forex.config import config
 from cas_forex.instruments import broker_symbol_candidates, resolve_broker_symbol
 from cas_forex.paper_proof import (
@@ -208,7 +209,7 @@ class MT5DemoPaperReceiptAdapter:
             kwargs["password"] = config.mt5_password
             kwargs["server"] = config.mt5_server
         try:
-            mt5.initialize(**kwargs)
+            mt5_connect_guard.guarded_initialize(mt5, **kwargs)
         except Exception as exc:
             raise PaperBrokerReceiptUnavailable(f"MT5 initialize failed: {exc}") from exc
 

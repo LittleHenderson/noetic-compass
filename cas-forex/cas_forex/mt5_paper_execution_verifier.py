@@ -17,6 +17,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional
 
+from cas_forex import mt5_connect_guard
 from cas_forex.broker.mt5_bridge import MT5Bridge
 from cas_forex.config import config
 from cas_forex.instruments import pip_multiplier, resolve_broker_symbol, round_price
@@ -268,7 +269,7 @@ def _connect_snapshot(*, mt5: Any | None, mt5_path: Optional[Path | str]) -> Dic
     try:
         terminal = _object_to_dict(mt5.terminal_info())
         if not terminal or not bool(terminal.get("connected")):
-            mt5.initialize(**kwargs)
+            mt5_connect_guard.guarded_initialize(mt5, **kwargs)
             terminal = _object_to_dict(mt5.terminal_info())
         account = _object_to_dict(mt5.account_info())
         positions = [_object_to_dict(position) for position in (mt5.positions_get() or [])]

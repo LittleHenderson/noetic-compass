@@ -18,6 +18,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
+from cas_forex import mt5_connect_guard
 from cas_forex.config import config
 from cas_forex.market_data.connector import infer_mt5_future_server_offset_seconds
 from cas_forex.terminal_history_ingest import (
@@ -390,7 +391,7 @@ def _terminal_snapshot(*, mt5: Any | None, mt5_path: Optional[Path | str]) -> Di
     try:
         terminal = _object_to_dict(mt5.terminal_info())
         if not terminal or not bool(terminal.get("connected")):
-            mt5.initialize(**kwargs)
+            mt5_connect_guard.guarded_initialize(mt5, **kwargs)
             terminal = _object_to_dict(mt5.terminal_info())
         account = _object_to_dict(mt5.account_info())
         demo_confirmed = _is_demo_account(mt5, account)

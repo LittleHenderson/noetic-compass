@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import re
+import threading
 from dataclasses import asdict, is_dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,6 +29,11 @@ DEFAULT_STATE_PATH = REPO_ROOT / "runtime" / "order-attempts.json"
 DEFAULT_AUDIT_PATH = REPO_ROOT / "runtime" / "order-attempts-audit.jsonl"
 
 REPORT_KIND = "cas_forex_order_attempt_audit"
+
+# Parsed order-attempt state, keyed by path -> ((mtime_ns, size), attempts).
+# Guarded because the dashboard aggregation runs in a threadpool.
+_STATE_CACHE: dict[str, tuple[tuple[int, int], dict[str, dict[str, Any]]]] = {}
+_STATE_CACHE_LOCK = threading.Lock()
 STATUS_ATTEMPT_STARTED = "ATTEMPT_STARTED"
 STATUS_ATTEMPT_RECORDED = "ATTEMPT_RECORDED"
 STATUS_ATTEMPT_BROKER_REVIEW_REQUIRED = "ATTEMPT_BROKER_REVIEW_REQUIRED"
@@ -620,18 +626,51 @@ class OrderAttemptAuditStore:
     def latest_attempt(self) -> dict[str, Any] | None:
         return _latest_attempt(list(self._load().values()))
 
-    def _load(self) -> dict[str, dict[str, Any]]:
+    def _load(self, *, fresh: bool = False) -> dict[str, dict[str, Any]]:
+        """Parsed attempt records, memoised on (mtime, size).
+
+        The state file grows without bound and a single dashboard build calls
+        this ~48 times. Re-parsing a 68 MB document per call cost ~37s of an
+        86s dashboard aggregation, which is what made the API test suite
+        unusable. The cache key is the file stamp, so a write by ``_upsert``
+        (or any other process) invalidates it naturally.
+
+        Read paths get a shallow copy of the outer mapping: callers may add or
+        drop keys without corrupting the cache, while the row dicts are shared
+        and MUST be treated as read-only. Writers pass ``fresh=True`` to bypass
+        the cache entirely, since a stale read would silently drop attempts.
+        """
         if not self.state_path.exists():
             return {}
+        try:
+            stat = self.state_path.stat()
+        except OSError:
+            return {}
+
+        key = str(self.state_path)
+        stamp = (stat.st_mtime_ns, stat.st_size)
+        if not fresh:
+            with _STATE_CACHE_LOCK:
+                entry = _STATE_CACHE.get(key)
+            if entry is not None and entry[0] == stamp:
+                return dict(entry[1])
+
         try:
             payload = json.loads(self.state_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             return {}
         attempts = payload.get("attempts") if isinstance(payload, Mapping) else {}
-        return {str(k): dict(v) for k, v in (attempts or {}).items() if isinstance(v, Mapping)}
+        parsed = {
+            str(k): dict(v) for k, v in (attempts or {}).items() if isinstance(v, Mapping)
+        }
+        with _STATE_CACHE_LOCK:
+            _STATE_CACHE[key] = (stamp, parsed)
+        return dict(parsed)
 
     def _upsert(self, record: Mapping[str, Any]) -> None:
-        attempts = self._load()
+        # Never serve a write from cache: a stale snapshot would drop every
+        # attempt recorded since it was taken.
+        attempts = self._load(fresh=True)
         attempts[str(record.get("attempt_id"))] = dict(record)
         latest = _latest_attempt(list(attempts.values()))
         payload = {
