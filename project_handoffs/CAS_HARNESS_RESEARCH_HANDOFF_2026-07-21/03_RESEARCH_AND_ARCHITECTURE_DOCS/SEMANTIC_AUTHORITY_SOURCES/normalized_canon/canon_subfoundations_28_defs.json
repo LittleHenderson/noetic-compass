@@ -1,0 +1,226 @@
+[
+  {
+    "id": "1a",
+    "foundation_id": "1",
+    "world": "A",
+    "world_label": "Spiritual",
+    "meaning": "Core drive to merge with the divine, transcending ego. Manifests as meditation, prayer, seeking mystical experiences.",
+    "name": "Spiritual Unity"
+  },
+  {
+    "id": "1b",
+    "foundation_id": "1",
+    "world": "B",
+    "world_label": "Mental",
+    "meaning": "Mind's quest to comprehend the infinite, evolving mental models of the divine, intellectual humility.",
+    "name": "Mental Unity"
+  },
+  {
+    "id": "1c",
+    "foundation_id": "1",
+    "world": "C",
+    "world_label": "Emotional",
+    "meaning": "Overwhelming longing for divine connection, ecstatic joy, awe, peace in alignment, potential for rapture/\"catching the Holy Ghost.\"",
+    "name": "Emotional Unity"
+  },
+  {
+    "id": "1d",
+    "foundation_id": "1",
+    "world": "D",
+    "world_label": "Physical",
+    "meaning": "Bodily expressions of spiritual longing \u2013 prostration, fasting, pilgrimage, seeking altered states through physical means.",
+    "name": "Physical Unity"
+  },
+  {
+    "id": "2a",
+    "foundation_id": "2",
+    "world": "A",
+    "world_label": "Spiritual",
+    "meaning": "Hunger for esoteric knowledge, cosmic insights, perceiving reality's hidden structure. Drives study of sacred texts, occult practices, decoding symbols.",
+    "name": "Spiritual Wisdom"
+  },
+  {
+    "id": "2b",
+    "foundation_id": "2",
+    "world": "B",
+    "world_label": "Mental",
+    "meaning": "Cultivating discernment via analysis and intuition, pattern recognition, synthesizing information, critical thinking, continuous learning.",
+    "name": "Mental Wisdom"
+  },
+  {
+    "id": "2c",
+    "foundation_id": "2",
+    "world": "C",
+    "world_label": "Emotional",
+    "meaning": "Gut feelings, empathetic understanding, intuitive flashes, emotional intelligence, heart-centered knowing.",
+    "name": "Emotional Wisdom"
+  },
+  {
+    "id": "2d",
+    "foundation_id": "2",
+    "world": "D",
+    "world_label": "Physical",
+    "meaning": "Embodied cognition, somatic awareness, muscle memory, reflexes, instincts, learning through direct physical experience.",
+    "name": "Physical Wisdom"
+  },
+  {
+    "id": "3a",
+    "foundation_id": "3",
+    "world": "A",
+    "world_label": "Spiritual",
+    "meaning": "Aspiration for soul-level vigor, alignment with universal life force (prana), purifying the subtle body, spiritual immunity.",
+    "name": "Spiritual Life"
+  },
+  {
+    "id": "3b",
+    "foundation_id": "3",
+    "world": "B",
+    "world_label": "Mental",
+    "meaning": "Cognitive resilience, neuroplasticity, mindfulness, balancing analytical/creative thinking, mental stimulation, curiosity.",
+    "name": "Mental Life"
+  },
+  {
+    "id": "3c",
+    "foundation_id": "3",
+    "world": "C",
+    "world_label": "Emotional",
+    "meaning": "Vibrant enthusiasm, resilient joy, cathartic release, peaceful contentment, energizing passion, self-compassion.",
+    "name": "Emotional Life"
+  },
+  {
+    "id": "3d",
+    "foundation_id": "3",
+    "world": "D",
+    "world_label": "Physical",
+    "meaning": "Optimization of bodily functions, longevity, peak performance, disease resistance via fitness, nutrition, biohacking.",
+    "name": "Physical Life"
+  },
+  {
+    "id": "4a",
+    "foundation_id": "4",
+    "world": "A",
+    "world_label": "Spiritual",
+    "meaning": "Longing for soul-deep connections (twin flames, soul groups), guru-disciple bonds, telepathic connection, dissolving separation.",
+    "name": "Spiritual Love"
+  },
+  {
+    "id": "4b",
+    "foundation_id": "4",
+    "world": "B",
+    "world_label": "Mental",
+    "meaning": "Intellectual compatibility, shared mental models, cognitive empathy, collaborative problem-solving, balancing mental individuality/unity.",
+    "name": "Mental Love"
+  },
+  {
+    "id": "4c",
+    "foundation_id": "4",
+    "world": "C",
+    "world_label": "Emotional",
+    "meaning": "Heart-swelling affection, soul-deep resonance, vulnerability, empathetic bonds, unconditional acceptance, joyful camaraderie.",
+    "name": "Emotional Love"
+  },
+  {
+    "id": "4d",
+    "foundation_id": "4",
+    "world": "D",
+    "world_label": "Physical",
+    "meaning": "Tactile expressions (hugging, grooming), seeking physical proximity/touch, cuddle therapies, contact sports, dance.",
+    "name": "Physical Love"
+  },
+  {
+    "id": "5a",
+    "foundation_id": "5",
+    "world": "A",
+    "world_label": "Spiritual",
+    "meaning": "Drive to shape reality via will/consciousness, mastery over spiritual laws/forces, ritual magic, psychic abilities, cosmic influence.",
+    "name": "Spiritual Power"
+  },
+  {
+    "id": "5b",
+    "foundation_id": "5",
+    "world": "B",
+    "world_label": "Mental",
+    "meaning": "Strategic thinking, persuasive communication, understanding cognitive biases, mental discipline, ethical reasoning guiding influence.",
+    "name": "Mental Power"
+  },
+  {
+    "id": "5c",
+    "foundation_id": "5",
+    "world": "C",
+    "world_label": "Emotional",
+    "meaning": "Confidence from empowerment, satisfaction in moving others, charismatic leadership, emotional self-mastery, influencing others' emotions.",
+    "name": "Emotional Power"
+  },
+  {
+    "id": "5d",
+    "foundation_id": "5",
+    "world": "D",
+    "world_label": "Physical",
+    "meaning": "Dominance via strength/presence, controlling space/resources physically, developing weapons/enhancements, physical superiority.",
+    "name": "Physical Power"
+  },
+  {
+    "id": "6a",
+    "foundation_id": "6",
+    "world": "A",
+    "world_label": "Spiritual",
+    "meaning": "Hunger for divine sustenance (light, prana), acquiring/manipulating spiritual artifacts/talismans, alchemy, interacting with etheric blueprints.",
+    "name": "Spiritual Resources"
+  },
+  {
+    "id": "6b",
+    "foundation_id": "6",
+    "world": "B",
+    "world_label": "Mental",
+    "meaning": "Cognitive frameworks as resources, mental models, intellectual property, consuming information/entertainment, conceptualizing sustainability.",
+    "name": "Mental Resources"
+  },
+  {
+    "id": "6c",
+    "foundation_id": "6",
+    "world": "C",
+    "world_label": "Emotional",
+    "meaning": "Comfort from possessions, excitement of acquisition, nostalgic attachment, gratitude, nourishment from aesthetics, contentment in simple pleasures.",
+    "name": "Emotional Resources"
+  },
+  {
+    "id": "6d",
+    "foundation_id": "6",
+    "world": "D",
+    "world_label": "Physical",
+    "meaning": "Accumulation/consumption of tangible resources, hoarding, gluttony, seeking security/status via possessions, agriculture, manufacturing.",
+    "name": "Physical Resources"
+  },
+  {
+    "id": "7a",
+    "foundation_id": "7",
+    "world": "A",
+    "world_label": "Spiritual",
+    "meaning": "Drive for divine union/cosmic creation, harnessing sexual energy (Tantra, sex magic), awakening Kundalini, spiritual rebirth.",
+    "name": "Spiritual Creation"
+  },
+  {
+    "id": "7b",
+    "foundation_id": "7",
+    "world": "B",
+    "world_label": "Mental",
+    "meaning": "Yearning for intellectual debate/exercise, spreading ideas, replicating one's mentality in others.",
+    "name": "Mental Creation"
+  },
+  {
+    "id": "7c",
+    "foundation_id": "7",
+    "world": "C",
+    "world_label": "Emotional",
+    "meaning": "Passionate desire, tender affection, primal urges, emotional bonding, nurturing instincts, replicating one's feelings in others.",
+    "name": "Emotional Creation"
+  },
+  {
+    "id": "7d",
+    "foundation_id": "7",
+    "world": "D",
+    "world_label": "Physical",
+    "meaning": "Bodily drive for pleasure/procreation, sexual practices, fertility rites, maximizing reproductive success, peak physical pleasure.",
+    "name": "Physical Creation"
+  }
+]

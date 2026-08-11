@@ -1,0 +1,53 @@
+== host identity
+13e938fc50e8
+== boot+machine identity OK
+gpu: GPU-b7638993-cc34-ac95-7fc8-5002ce894e00, 46068 MiB, 580.126.09
+gpu_total_memory_bytes=48305799168
+== capacity gate OK
+CapEff:	00000000a80425fb
+== tool identities
+/usr/bin/git sha256=29aa689f38158d2e8941fa54e436f0260890af31cecad1e8799e5c2df7bc1ecc bytes=3710360
+/usr/bin/openssl sha256=4bfdc44f0870920e5bb599d3dadaaadd612cf3f59e93e5f5dbcf1bfa852e18fc bytes=1001272
+/usr/bin/python3.11 sha256=45c68b7ca1e3765a06756734c15af204ca9c0588a3f6d7a6d8bb8ed58e3e2a1a bytes=6724632
+git version 2.34.1
+OpenSSL 3.0.2 15 Mar 2022 (Library: OpenSSL 3.0.2 15 Mar 2022)
+Python 3.11.10
+== uploaded inputs
+== implementation bundle OK (36557255 bytes, 821dbc2dfad076dd8261768963f63d4cadd7726d2f6b635574ef0401f315088d)
+== implementation manifest OK (5689 bytes, abaee8b11af0c8d57969bfab19a28914e074dc9ae5eb6c1536a141edee53385d)
+== frozen input publications rehash
+== 8 frozen input publications OK
+== clearing prior derived outputs for a clean deterministic pass
+== bundle reconstruction
+The bundle contains this ref:
+29551624f4de0eec61c4035e364203be55d6c08a refs/heads/fix/jacobian-openssl-crlf-compat-20260723
+The bundle records a complete history.
+
+HEAD is now at 2955162 Normalize CRLF in human-readable OpenSSL output
+== repository reconstruction OK (29551624f4de0eec61c4035e364203be55d6c08a)
+== remote implementation manifest reconstruction
+{"byte_count":5689,"sha256":"abaee8b11af0c8d57969bfab19a28914e074dc9ae5eb6c1536a141edee53385d"}
+remote manifest: 5689 bytes, abaee8b11af0c8d57969bfab19a28914e074dc9ae5eb6c1536a141edee53385d
+== remote manifest byte-identical OK
+== dependency archive verification
+== dependency archive OK (706560 bytes, ed16af7ae5a1ac8d61c6d3e83cf946a8cb3669c10f0f679fb2351965d5922bb8)
+dependency bundle OK: 15 files, 581d398613e5602a5af361e1c34d3a92ea82ba8e
+== dependency OK, zero pyc
+== model snapshot rehash (no model load)
+== model snapshot 5/5 hashes OK
+== OpenSSL empty-config and stdin checks
+root fingerprint: 552f7bdcf1a7af9e6ce672017f4f12abf77240c78e761ac203d1d9d20ac89988
+== openssl x509 PEM-on-stdin (no -in -) OK
+== CRLF normalization contract checks on pod OpenSSL (LF platform)
+CRLF contract checks OK on pod (receiver + helper, real openssl output)
+== runner bound-OpenSSL real-binary checks (sealed memfd, Linux)
+bound OpenSSL sealed-memfd + normalized decode OK
+== wrapper fail-closed enforcement
+wrapper plain rc=2: FAILED_CLOSED: relaunch with Python isolated mode (-I).
+wrapper -I-only rc=2: FAILED_CLOSED: relaunch with Python bytecode writes disabled (-B).
+== wrapper fails closed without -I (rc 2) and without -B (rc 2) OK
+== final GPU compute application count
+compute_application_count=0
+== attempt identity boundary
+no nonce/run-id/PRE/protocol/query/response/anchor/launch artifacts under prestage root
+== ATTEMPT6_REMOTE_PRESTAGE_PASS

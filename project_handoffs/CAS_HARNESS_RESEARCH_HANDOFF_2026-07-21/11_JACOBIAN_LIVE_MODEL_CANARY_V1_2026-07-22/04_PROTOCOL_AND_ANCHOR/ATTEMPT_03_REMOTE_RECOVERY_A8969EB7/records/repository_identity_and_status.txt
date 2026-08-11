@@ -1,0 +1,6 @@
+head=a8969eb71c6d3e5c43d7ee2b7c7d4aa90dd70fc0
+tree=cce2d477bb0f423ee6a2669ee680eaac7b999322
+expected_head=a8969eb71c6d3e5c43d7ee2b7c7d4aa90dd70fc0
+expected_tree=cce2d477bb0f423ee6a2669ee680eaac7b999322
+status_porcelain_begin
+status_porcelain_end

@@ -1,0 +1,214 @@
+{
+  "schema_version": "cas_harness_tks_definition_anchor_protocol.v1",
+  "frozen_at_utc": "2026-07-21T09:07:32.0349700Z",
+  "diagnostic_class": "ZERO_SHOT_DEFINITION_ANCHOR_DIAGNOSTIC",
+  "licensing_status": "NOT_LICENSED_DIAGNOSTIC_ONLY",
+  "distribution_status": "INTERNAL_RESEARCH_ONLY",
+  "purpose": "Measure source alignment between exact D3 owner-original and A124 deployed-rewrite Foundation-28 definition anchors in one pinned Pythia-160M hidden-state space.",
+  "non_claim": "This protocol does not license semantic-probe validity, causal or output control, prompt-injection detection, cross-architecture universality, 300B execution, production readiness, ACCEPT, or an external customer/investor claim.",
+  "source_code": {
+    "protected_parent_commit": "81b5c18bd83e1f01ccd398dcad3865a674335b7f",
+    "protected_parent_tree": "4aa8b6dbd8d5f78345a3acd84f4c0e4716244908",
+    "diagnostic_script": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_tks_definition_anchor_diagnostic.py",
+      "sha256": "5b069f43af2d50cbc9cfd4735f316497b0c8ab26762cc871d18cd38edee761da"
+    },
+    "diagnostic_test": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_tks_definition_anchor_diagnostic.py",
+      "sha256": "44d9b042b6517f4365aee981860c3301f8d7994615b8ccccd7ac8df20688e9bf"
+    },
+    "hook_preflight_script": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/verify_pythia_block_hook_equivalence.py",
+      "sha256": "c618b0c80f659f494bd60d943ae9491feee80b861e1581be59c2645419d781e1"
+    },
+    "hook_preflight_test": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_verify_pythia_block_hook_equivalence.py",
+      "sha256": "050d8cf3d86a8ba90463a84e59758247ca52745fba6a3f0a2c38417e67f2dd99"
+    },
+    "probe_helper": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_probe_shard.py",
+      "sha256": "3c6275ea78aba19e0039f4841a7cfba15b8089f8bc72383cf320cdf739982bdc"
+    },
+    "compact_generator": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/build_foundation28_scenarios.py",
+      "sha256": "07dd7ac7ec5335beb332efeb3071e4058257040a9651c30bd3a392467c10b384"
+    },
+    "dependency_lock": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt",
+      "sha256": "b0e3f9c0306a5402bcc04cc7856caaf615f965d67be6339799bbdbf7c0c32934"
+    }
+  },
+  "definition_arms": {
+    "manifest_path": "docs/reference/tks_definition_anchor_diagnostic_arms_20260721.json",
+    "manifest_sha256": "5ef95e61b8df526fec1d66d59635f8b2a6d0f298537019463cd4babefa9b0d5b",
+    "owner_original_d3_sha256": "d3dac0ef5c94ccd768da0f18987846d8d0c0fa0b366e13dccc49c82252d2fc12",
+    "deployed_rewrite_a124_sha256": "a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0",
+    "compact_generator_sha256": "07dd7ac7ec5335beb332efeb3071e4058257040a9651c30bd3a392467c10b384",
+    "preregistered_changed_legacy_codes": [
+      "5a",
+      "3b",
+      "5b",
+      "6b",
+      "7b",
+      "1c",
+      "5c",
+      "2d"
+    ],
+    "changed_count": 8,
+    "unchanged_count": 20,
+    "changed_partition_sha256": "7fd33cf0c3684f33b83b6b2f4fb0e12c38ae3719ed2c8a2fdd5b47c2ba0b465d"
+  },
+  "model": {
+    "model_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "parameter_count": 162322944,
+    "expected_artifacts": {
+      "config.json": "76eb275107220e450d31258f792a2efcbee109d8b62ae0088260057dec06362f",
+      "model.safetensors": "29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270",
+      "special_tokens_map.json": "6f50ab5a5a509a1c309d6171f339b196a900dc9c99ad0408ff23bb615fdae7ad",
+      "tokenizer.json": "c24618a1b3e6a38167beff1c72cffd126c3a66254347304b50547d12c5f25624",
+      "tokenizer_config.json": "70e38394e494931c6f773ba41e19460dd4436526b852207367f04341b4066d3f"
+    }
+  },
+  "scenario_banks": {
+    "stage7_rolebound": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/stage7_foundation_rolebound_pilot_20260526.json",
+      "sha256": "c2fa18078feaad6f4970f31a380b67557f3684bb871f96695dbf00c750516d75",
+      "validation_rows": 672,
+      "validation_groups": 336,
+      "test_rows": 2352,
+      "test_groups": 1176,
+      "group_size": 2,
+      "validation_test_group_overlap": 0,
+      "independence_boundary": "Generated from D3 source vocabulary and shared paraphrase families; not an independently authored neutral bank."
+    },
+    "source_derived_sensitivity": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/foundation28_balanced_v0_20260526.json",
+      "sha256": "0868b37a718798cb30a7db8b8a23f5326d4e1ae2b6464842d16218e97ec1751a",
+      "included_variants": [
+        8,
+        9
+      ],
+      "rows": 56,
+      "groups": 28,
+      "grouping": "variants 8 and 9 grouped by Foundation/source unit",
+      "interpretation": "Lexical/source-alignment sensitivity only; not semantic transfer or an independent holdout."
+    }
+  },
+  "runtime": {
+    "provider": "RunPod",
+    "pod_role": "isolated_research_no_production_secrets",
+    "gpu": "1x RTX 4000 Ada 20GB",
+    "template": "runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04",
+    "ssh_required": true,
+    "jupyter_enabled": false,
+    "volume_encrypted": true,
+    "workspace_mount": "/workspace",
+    "workspace_persistent_volume_gb": 20,
+    "container_disk_gb": 20,
+    "estimated_gpu_cost_usd_per_hour": 0.26,
+    "estimated_disk_cost_usd_per_hour": 0.006,
+    "image_digest_requirement": "Record at execution if provider exposes it; a tag alone is not byte identity."
+  },
+  "capture": {
+    "architecture_adapter": "EleutherAI_Pythia_GPT_NeoX_complete_block.v1",
+    "required_hook_preflight_status": "PREFLIGHT_PASS",
+    "hook_target": "complete transformer block output, never MLP-only",
+    "layer_start": 0,
+    "layer_end": 11,
+    "primary_pooling": "attention-mask-weighted mean token",
+    "secondary_pooling": "last non-padding token",
+    "torch_dtype": "float16",
+    "device_map": "auto",
+    "max_length": 512,
+    "silent_truncation": "forbidden",
+    "evaluation_forward_passes": 3080,
+    "definition_forward_passes": 84,
+    "raw_vector_storage_dtype": "float16",
+    "token_id_hashes_required": true
+  },
+  "evaluation": {
+    "seed": 20260721,
+    "bootstrap_replicates": 2000,
+    "layer_selection": "Use Stage7 validation only; maximize the mean full-28 accuracy of D3 and A124 under mean pooling; tie-break by mean macro-F1, then earliest layer.",
+    "sole_primary_estimand": {
+      "name": "D3_MINUS_A124_FULL28_ACCURACY_DELTA",
+      "pooling": "mean",
+      "layer": "single Stage7-validation-frozen shared layer",
+      "bank": "Stage7 test",
+      "axis": "Foundation-28 full accuracy",
+      "inference": "paired clustered-bootstrap delta and 95% interval",
+      "interpretation": "D3-source alignment diagnostic, not universal definition superiority"
+    },
+    "prespecified_sensitivity": "changed-8 target-class slice",
+    "negative_control": "unchanged-20 target-class slice",
+    "secondary_exploratory": [
+      "last-token pooling",
+      "Drive-7 and Register-4 axes",
+      "source-derived sensitivity bank",
+      "compact comparator",
+      "per-class confusion and competing-anchor effects",
+      "descriptive row-level non-cluster-adjusted McNemar values"
+    ],
+    "multiplicity": "No secondary or exploratory endpoint is promoted to confirmatory inference."
+  },
+  "surface_controls": {
+    "word_unigram_tfidf": true,
+    "character_3_to_5_gram_tfidf": true,
+    "single_deterministic_derangement": "illustrative only; not a permutation null",
+    "precomputed_stage7_test_percent": {
+      "word_unigram": {
+        "D3": 6.2075,
+        "A124": 5.6122,
+        "compact": 9.5663
+      },
+      "character_3_to_5_grams": {
+        "D3": 10.5442,
+        "A124": 8.2483,
+        "compact": 13.1803
+      }
+    },
+    "precomputed_source_derived_sensitivity_percent": {
+      "word_unigram": {
+        "D3": 94.6429,
+        "A124": 89.2857,
+        "compact": 100.0
+      },
+      "character_3_to_5_grams": {
+        "D3": 96.4286,
+        "A124": 96.4286,
+        "compact": 100.0
+      }
+    }
+  },
+  "required_run_order": [
+    "Verify source archive and every declared SHA-256.",
+    "Install the protected dependency lock and record complete package/GPU/driver provenance.",
+    "Run all focused and adjacent tests.",
+    "Run exact-Pythia complete-block hook-equivalence preflight on the GPU and require PREFLIGHT_PASS.",
+    "Run a bounded eight-prompt, two-layer diagnostic canary into persistent /workspace.",
+    "Reopen and verify the canary NPZ; copy and independently hash it locally.",
+    "Run the full 12-layer diagnostic.",
+    "Reopen and verify every local diagnostic artifact; produce SHA256SUMS.",
+    "Copy artifacts to local archival storage and an independent object store before stopping or terminating the pod.",
+    "Update the canonical tracker and Amazon internal-review draft without widening claims."
+  ],
+  "stop_conditions": [
+    "Any source, code, scenario, dependency-lock, model-revision, or expected model-artifact hash mismatch.",
+    "Any hook-equivalence failure or ambiguous final-layer-normalization boundary.",
+    "Any silent truncation, invalid layer range, non-finite vector, missing token-ID hash, or failed atomic reopen verification.",
+    "Any attempt to use the production pod, production secrets, an ephemeral-only output path, or the source-derived sensitivity bank as an independent holdout.",
+    "Any report that is not permanently NOT_LICENSED_DIAGNOSTIC_ONLY."
+  ],
+  "required_artifacts": [
+    "source archive plus SHA-256",
+    "protocol manifest plus SHA-256",
+    "pip freeze and package-version record",
+    "nvidia-smi and GPU/driver record",
+    "GPU hook-equivalence JSON report",
+    "canary raw NPZ/report/manifest/log plus hashes",
+    "full raw NPZ/report Markdown/report JSON/local-artifact manifest/log plus hashes",
+    "local archival copy hash verification",
+    "independent object-store receipt or an explicit OPEN durability record"
+  ]
+}

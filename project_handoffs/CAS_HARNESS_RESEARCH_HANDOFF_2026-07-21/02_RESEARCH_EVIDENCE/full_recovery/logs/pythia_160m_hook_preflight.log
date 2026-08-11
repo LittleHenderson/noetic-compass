@@ -1,0 +1,4 @@
+[pythia-hook-preflight] report: /workspace/cas-tks-anchor-diagnostic-20260721/receipts/pythia_160m_hook_preflight.json
+[pythia-hook-preflight] sha256: b689da7f7c42c733f0725d445eed758c8b6b06cbc2f1c3a1fd46bccf34dc3b34
+[pythia-hook-preflight] status: PREFLIGHT_PASS
+[pythia-hook-preflight] licensing: NOT_LICENSED_PREFLIGHT_ONLY

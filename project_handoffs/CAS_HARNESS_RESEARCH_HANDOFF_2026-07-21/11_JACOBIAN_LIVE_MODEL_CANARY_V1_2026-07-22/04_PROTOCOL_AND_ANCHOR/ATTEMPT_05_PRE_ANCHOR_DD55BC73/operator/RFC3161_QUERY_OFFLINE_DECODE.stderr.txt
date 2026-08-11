@@ -1,0 +1,1 @@
+Using configuration from C:/Program Files/Git/mingw64/etc/ssl//openssl.cnf

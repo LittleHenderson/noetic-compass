@@ -1,0 +1,28 @@
+{
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_attempt5_offline_repair_manifest.v1",
+  "candidate_label": "ATTEMPT_05_OPENSSL3_STDIN_REPAIR_PROSPECTIVE_F72B89CD_20260723",
+  "candidate_commit": "f72b89cd2ec574400ffe69ad7bd1540791fb73c3",
+  "candidate_tree": "71c45fd5999b1d3f31636bbae8bd199d166ab2f5",
+  "candidate_parent": "be97bc7f76d1e9f5e501702660678d4af3081f5e",
+  "controlling_status": "PROSPECTIVE_ATTEMPT_5_OFFLINE_REPAIR_GATE_PASS / RETAINED_ATTEMPT_4_TSR_COMPATIBILITY_PASS / NO_PRE_OR_FROZEN_ATTEMPT_5_RUN_IDENTITY / NO_ATTEMPT_5_RFC3161_QUERY / NO_EXTERNAL_TRANSMISSION / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "artifact_count": 3,
+  "artifacts": [
+    {
+      "path": "ATTEMPT_05_OFFLINE_REPAIR_RECEIPT.json",
+      "bytes": 6537,
+      "sha256": "28e39b43f32abab25bdafbc9ef0b4691d9692bacf76d83f276876ce291345d23"
+    },
+    {
+      "path": "SOURCE_HASHES.txt",
+      "bytes": 1742,
+      "sha256": "df9f2198ef28be0ef944247752a8a4408235446e79bf33131d08dbd1865f3faa"
+    },
+    {
+      "path": "STATUS.md",
+      "bytes": 5305,
+      "sha256": "834d3408d98cda2f42cf6b00981d85c7542cbfdc8690c6df70b47cfb5645f7d5"
+    }
+  ],
+  "manifest_scope": "This manifest lists every non-manifest file in this prospective offline-repair handoff directory. It is implementation, regression, and retained-TSR compatibility evidence only; it is not PRE, an Attempt 5 run identity, an RFC3161 query, external-transmission evidence, GPU/model execution, or a scientific result.",
+  "manifest_self_hash_location": "The SHA-256 and byte length of this manifest are recorded in the canonical CAS Harness production tracker after independent local verification."
+}

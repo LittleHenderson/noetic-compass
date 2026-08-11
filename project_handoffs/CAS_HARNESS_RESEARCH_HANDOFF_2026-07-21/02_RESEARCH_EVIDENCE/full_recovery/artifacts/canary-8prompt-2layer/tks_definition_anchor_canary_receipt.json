@@ -1,0 +1,452 @@
+{
+  "capture": {
+    "cuda_contract": {
+      "cuda_available": true,
+      "cuda_device_count": 1,
+      "floating_parameter_dtypes": [
+        "torch.float16"
+      ],
+      "parameter_device_types": [
+        "cuda"
+      ]
+    },
+    "definition_arm_count": 3,
+    "definition_count_per_arm": 28,
+    "definition_prompt_forward_passes": 84,
+    "definition_shape": [
+      3,
+      28,
+      2,
+      768
+    ],
+    "eval_shape": [
+      8,
+      2,
+      768
+    ],
+    "evaluation_prompt_forward_passes": 8,
+    "explicitly_not_hooked": "mlp_submodule",
+    "hook_target": "complete_transformer_block_output",
+    "layers": [
+      0,
+      1
+    ],
+    "max_length": 512,
+    "pooling": [
+      "attention_masked_mean_token",
+      "last_nonpadding_token"
+    ],
+    "qualified_hook_modules": [
+      {
+        "layer": 0,
+        "qualified_class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "qualified_module_path": "gpt_neox.layers.0"
+      },
+      {
+        "layer": 1,
+        "qualified_class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "qualified_module_path": "gpt_neox.layers.1"
+      }
+    ],
+    "raw_vector_storage_dtype": "float16",
+    "selected_transformer_block_modules": [
+      {
+        "layer": 0,
+        "qualified_class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "qualified_module_path": "gpt_neox.layers.0"
+      },
+      {
+        "layer": 1,
+        "qualified_class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "qualified_module_path": "gpt_neox.layers.1"
+      }
+    ],
+    "truncated_sequence_count": 0,
+    "truncation_policy": "fail_closed_before_forward"
+  },
+  "claim_eligible": false,
+  "created_at": "2026-07-21T10:42:24.204183+00:00",
+  "diagnostic_class": "ZERO_SHOT_DEFINITION_ANCHOR_CAPTURE_CANARY",
+  "input_integrity_start_end": {
+    "end_snapshot_sha256": "4e93a743dd006fbe8756c4c703878754dbba706c1001af4b6981ef5a9624d163",
+    "file_count": 17,
+    "files": [
+      {
+        "bytes": 99,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/blobs/0204ed10c186a4c7c68f55dff8f26087a45898d6",
+        "sha256": "6f50ab5a5a509a1c309d6171f339b196a900dc9c99ad0408ff23bb615fdae7ad"
+      },
+      {
+        "bytes": 374998696,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/blobs/29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270",
+        "sha256": "29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270"
+      },
+      {
+        "bytes": 569,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/blobs/b8368ff94f3bcf3088de5e9912251fc0208ae524",
+        "sha256": "76eb275107220e450d31258f792a2efcbee109d8b62ae0088260057dec06362f"
+      },
+      {
+        "bytes": 396,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/blobs/f1860edb10f80bcaf7b023fce47c68a23b724c23",
+        "sha256": "70e38394e494931c6f773ba41e19460dd4436526b852207367f04341b4066d3f"
+      },
+      {
+        "bytes": 2113710,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/blobs/f74dfbfab8f97770a87769c739fb080c21c8bacc",
+        "sha256": "c24618a1b3e6a38167beff1c72cffd126c3a66254347304b50547d12c5f25624"
+      },
+      {
+        "bytes": 33521,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/operational_canary/run_tks_definition_anchor_canary.py",
+        "sha256": "4fed8ddbf9aa7cf899a87c3773d232e0c9ef3927ae3f7b953e1e1738e414024a"
+      },
+      {
+        "bytes": 1438,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/docs/reference/tks_definition_anchor_diagnostic_arms_20260721.json",
+        "sha256": "5ef95e61b8df526fec1d66d59635f8b2a6d0f298537019463cd4babefa9b0d5b"
+      },
+      {
+        "bytes": 10232,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/docs/reference/tks_definition_anchor_diagnostic_protocol_20260721.json",
+        "sha256": "d0e154c7ac9913425a16de8d9394b391ae0c788c1bfcdd8959e4d2554b10b715"
+      },
+      {
+        "bytes": 25304,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/docs/reference/tks_owner_locked_definitions_20260603.json",
+        "sha256": "a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0"
+      },
+      {
+        "bytes": 24324,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/docs/reference/tks_owner_original_raw_d3_20260603.json",
+        "sha256": "d3dac0ef5c94ccd768da0f18987846d8d0c0fa0b366e13dccc49c82252d2fc12"
+      },
+      {
+        "bytes": 864,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt",
+        "sha256": "b0e3f9c0306a5402bcc04cc7856caaf615f965d67be6339799bbdbf7c0c32934"
+      },
+      {
+        "bytes": 236254,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/foundation28_balanced_v0_20260526.json",
+        "sha256": "0868b37a718798cb30a7db8b8a23f5326d4e1ae2b6464842d16218e97ec1751a"
+      },
+      {
+        "bytes": 5686423,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/stage7_foundation_rolebound_pilot_20260526.json",
+        "sha256": "c2fa18078feaad6f4970f31a380b67557f3684bb871f96695dbf00c750516d75"
+      },
+      {
+        "bytes": 12527,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/build_foundation28_scenarios.py",
+        "sha256": "07dd7ac7ec5335beb332efeb3071e4058257040a9651c30bd3a392467c10b384"
+      },
+      {
+        "bytes": 19569,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_probe_shard.py",
+        "sha256": "3c6275ea78aba19e0039f4841a7cfba15b8089f8bc72383cf320cdf739982bdc"
+      },
+      {
+        "bytes": 111446,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_tks_definition_anchor_diagnostic.py",
+        "sha256": "5b069f43af2d50cbc9cfd4735f316497b0c8ab26762cc871d18cd38edee761da"
+      },
+      {
+        "bytes": 264,
+        "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/requirements-runtime.txt",
+        "sha256": "14bee317e43bf1966538af6b2737a9be1e9b20e81db66d05982ed0aed0059c7d"
+      }
+    ],
+    "hashes_equal": true,
+    "start_snapshot_sha256": "4e93a743dd006fbe8756c4c703878754dbba706c1001af4b6981ef5a9624d163",
+    "status": "VERIFIED_IDENTICAL"
+  },
+  "licensing_status": "NOT_LICENSED_CANARY_ONLY",
+  "model": {
+    "device_map": "cuda:0",
+    "expected_artifact_sha256": {
+      "config.json": "76eb275107220e450d31258f792a2efcbee109d8b62ae0088260057dec06362f",
+      "model.safetensors": "29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270",
+      "special_tokens_map.json": "6f50ab5a5a509a1c309d6171f339b196a900dc9c99ad0408ff23bb615fdae7ad",
+      "tokenizer.json": "c24618a1b3e6a38167beff1c72cffd126c3a66254347304b50547d12c5f25624",
+      "tokenizer_config.json": "70e38394e494931c6f773ba41e19460dd4436526b852207367f04341b4066d3f"
+    },
+    "model_id": "EleutherAI/pythia-160m",
+    "parameter_count": 162322944,
+    "requested_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "resolved_artifacts": {
+      "artifact_hash_policy": "SHA-256 every resolved file by bounded-memory streaming",
+      "artifacts": [
+        {
+          "bytes": 569,
+          "cache_path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/snapshots/50f5173d932e8e61f858120bcb800b97af589f46/config.json",
+          "filename": "config.json",
+          "resolved_path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/blobs/b8368ff94f3bcf3088de5e9912251fc0208ae524",
+          "sha256": "76eb275107220e450d31258f792a2efcbee109d8b62ae0088260057dec06362f"
+        },
+        {
+          "bytes": 396,
+          "cache_path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/snapshots/50f5173d932e8e61f858120bcb800b97af589f46/tokenizer_config.json",
+          "filename": "tokenizer_config.json",
+          "resolved_path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/blobs/f1860edb10f80bcaf7b023fce47c68a23b724c23",
+          "sha256": "70e38394e494931c6f773ba41e19460dd4436526b852207367f04341b4066d3f"
+        },
+        {
+          "bytes": 2113710,
+          "cache_path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/snapshots/50f5173d932e8e61f858120bcb800b97af589f46/tokenizer.json",
+          "filename": "tokenizer.json",
+          "resolved_path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/blobs/f74dfbfab8f97770a87769c739fb080c21c8bacc",
+          "sha256": "c24618a1b3e6a38167beff1c72cffd126c3a66254347304b50547d12c5f25624"
+        },
+        {
+          "bytes": 99,
+          "cache_path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/snapshots/50f5173d932e8e61f858120bcb800b97af589f46/special_tokens_map.json",
+          "filename": "special_tokens_map.json",
+          "resolved_path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/blobs/0204ed10c186a4c7c68f55dff8f26087a45898d6",
+          "sha256": "6f50ab5a5a509a1c309d6171f339b196a900dc9c99ad0408ff23bb615fdae7ad"
+        },
+        {
+          "bytes": 374998696,
+          "cache_path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/snapshots/50f5173d932e8e61f858120bcb800b97af589f46/model.safetensors",
+          "filename": "model.safetensors",
+          "resolved_path": "/workspace/cas-tks-anchor-diagnostic-20260721/hf_cache/hub/models--EleutherAI--pythia-160m/blobs/29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270",
+          "sha256": "29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270"
+        }
+      ],
+      "inspection_errors": [],
+      "snapshot_commits": [
+        "50f5173d932e8e61f858120bcb800b97af589f46"
+      ]
+    },
+    "resolved_commit_hashes": [
+      "50f5173d932e8e61f858120bcb800b97af589f46"
+    ],
+    "torch_dtype": "torch.float16"
+  },
+  "non_claims": "This bounded canary proves only that the exact frozen code can load the exact pinned Pythia-160M revision, validate the pinned definition/scenario sources, hook complete transformer blocks 0 and 1, and durably round-trip finite raw vectors for eight selected Stage-7 validation prompts plus all 84 definition prototypes. It is not a semantic-probe validation, accuracy result, causal-control result, prompt-injection detector, output-control result, cross-architecture or universal result, 300B execution, production readiness evidence, Evidence Packet, WORM anchor, ACCEPT verdict, LICENSED capability, or customer/investor claim. Passing this canary only permits the separately frozen full NOT_LICENSED_DIAGNOSTIC_ONLY run to proceed.",
+  "raw_npz": {
+    "allow_pickle": false,
+    "bytes": 555869,
+    "definition_shape": [
+      3,
+      28,
+      2,
+      768
+    ],
+    "eval_shape": [
+      8,
+      2,
+      768
+    ],
+    "required_field_count": 20,
+    "sha256": "57921a21e59c0c1b380a097da305dee2fe3bd54cea75282e505db6512e461e3b",
+    "status": "LOCAL_DIAGNOSTIC_ARTIFACT_ATOMIC_WRITE_REOPEN_VERIFIED"
+  },
+  "receipt_atomicity_contract": {
+    "atomic_replace": true,
+    "final_reopen_parse_and_hash": true,
+    "prepublish_reopen_and_parse": true,
+    "temporary_file_fsync": true
+  },
+  "schema_version": "cas_harness_tks_definition_anchor_canary_receipt.v1",
+  "selection": {
+    "algorithm": "sort complete pair IDs by SHA-256(seed|stage7_val_complete_pair|group_id), tie-break group_id; take first four; sort rows within pair by scenario_id",
+    "pair_count": 4,
+    "prompt_count": 8,
+    "seed": 20260721,
+    "selected_group_ids": [
+      "bundle032_water_utility_same_register_drive_cycle_f_F1f_F2f_concrete_human",
+      "bundle032_water_utility_same_register_drive_cycle_E_F5E_F6E_concrete_human",
+      "bundle031_food_safety_same_drive_register_f_E_F6f_F6E_role_inverse_minimal",
+      "bundle031_food_safety_same_drive_register_f_E_F7f_F7E_system_process"
+    ],
+    "selected_scenario_ids": [
+      "stage7_pilot_bundle032_water_utility_same_register_drive_cycle_f_F1f_F2f_concrete_human_F1f",
+      "stage7_pilot_bundle032_water_utility_same_register_drive_cycle_f_F1f_F2f_concrete_human_F2f",
+      "stage7_pilot_bundle032_water_utility_same_register_drive_cycle_E_F5E_F6E_concrete_human_F5E",
+      "stage7_pilot_bundle032_water_utility_same_register_drive_cycle_E_F5E_F6E_concrete_human_F6E",
+      "stage7_pilot_bundle031_food_safety_same_drive_register_f_E_F6f_F6E_role_inverse_minimal_F6E",
+      "stage7_pilot_bundle031_food_safety_same_drive_register_f_E_F6f_F6E_role_inverse_minimal_F6f",
+      "stage7_pilot_bundle031_food_safety_same_drive_register_f_E_F7f_F7E_system_process_F7E",
+      "stage7_pilot_bundle031_food_safety_same_drive_register_f_E_F7f_F7E_system_process_F7f"
+    ],
+    "selection_sha256": "c5621e6e168bd60eae7bbafe4e860a67fc3432375062054140f439c4ae0a4096",
+    "split": "stage7_val"
+  },
+  "source_and_script_hashes": {
+    "arm_manifest": {
+      "bytes": 1438,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/docs/reference/tks_definition_anchor_diagnostic_arms_20260721.json",
+      "sha256": "5ef95e61b8df526fec1d66d59635f8b2a6d0f298537019463cd4babefa9b0d5b"
+    },
+    "canary_helper": {
+      "bytes": 33521,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/operational_canary/run_tks_definition_anchor_canary.py",
+      "sha256": "4fed8ddbf9aa7cf899a87c3773d232e0c9ef3927ae3f7b953e1e1738e414024a"
+    },
+    "definition_arms": [
+      {
+        "admitted": true,
+        "definition_count": 28,
+        "derived_payload_sha256": "193fb6cdb72c676bf0fa3af3d435edc856f1e2ede1affd54fe8f488f3c3d387a",
+        "include_in_shared_layer_selection": true,
+        "name": "tks_owner_original_raw_d3",
+        "prototype_text_contract": "title + newline + definition",
+        "source_kind": "tks_f28_json",
+        "source_path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/docs/reference/tks_owner_original_raw_d3_20260603.json",
+        "source_role": "owner_original_raw",
+        "source_sha256": "d3dac0ef5c94ccd768da0f18987846d8d0c0fa0b366e13dccc49c82252d2fc12"
+      },
+      {
+        "admitted": true,
+        "definition_count": 28,
+        "derived_payload_sha256": "9d68ecfa6dea53e416740041391a5cee56b11d6438fd3768968399f25dbffc59",
+        "include_in_shared_layer_selection": true,
+        "name": "tks_deployed_operational_rewrite_a124",
+        "prototype_text_contract": "title + newline + definition",
+        "source_kind": "tks_f28_json",
+        "source_path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/docs/reference/tks_owner_locked_definitions_20260603.json",
+        "source_role": "deployed_operational_rewrite",
+        "source_sha256": "a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0"
+      },
+      {
+        "admitted": true,
+        "definition_count": 28,
+        "derived_payload_sha256": "f308d2ec8df8cc9505a50ee226de9fea397a41010608d86427ed3279541c4a52",
+        "include_in_shared_layer_selection": false,
+        "name": "cas_compact_v0_compositional",
+        "prototype_text_contract": "title + newline + definition",
+        "source_kind": "cas_compact_v0_compositional",
+        "source_path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/build_foundation28_scenarios.py",
+        "source_role": "diagnostic_compact_comparator",
+        "source_sha256": "07dd7ac7ec5335beb332efeb3071e4058257040a9651c30bd3a392467c10b384"
+      }
+    ],
+    "frozen_protocol": {
+      "bytes": 10232,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/docs/reference/tks_definition_anchor_diagnostic_protocol_20260721.json",
+      "sha256": "d0e154c7ac9913425a16de8d9394b391ae0c788c1bfcdd8959e4d2554b10b715"
+    },
+    "frozen_runner": {
+      "bytes": 111446,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_tks_definition_anchor_diagnostic.py",
+      "sha256": "5b069f43af2d50cbc9cfd4735f316497b0c8ab26762cc871d18cd38edee761da"
+    },
+    "sensitivity_bank_validated_but_not_captured": {
+      "bytes": 236254,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/foundation28_balanced_v0_20260526.json",
+      "sha256": "0868b37a718798cb30a7db8b8a23f5326d4e1ae2b6464842d16218e97ec1751a"
+    },
+    "stage7_bank": {
+      "bytes": 5686423,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/stage7_foundation_rolebound_pilot_20260526.json",
+      "sha256": "c2fa18078feaad6f4970f31a380b67557f3684bb871f96695dbf00c750516d75"
+    }
+  },
+  "status": "CANARY_PASS",
+  "token_id_hashes": {
+    "definition_token_id_sha256_by_arm": {
+      "cas_compact_v0_compositional": [
+        "61f2a8c6dc1d768d03445ab7f741b04f0a16bbb3d77f60840cf6b3e28c920df0",
+        "ecc87f8944a1c721037f4a51e91e0ecf0ca1503773cca864397983f7ed263040",
+        "45c576f6a3b6fbd1ee6751d8d7e18b78a3c63efff9699a101394a98290790bc8",
+        "81a84561e3b4f87c8ac1334d82d82ee91886a85893061f0e7cd50173af47bc8f",
+        "eebfca5064946d8e121b04482c0ae3d0667d2131f82e469db976d6a1620146b7",
+        "282ef1a1b09ed592bb4fce1c5dda0535dbc75fb5fb430b7d4bb7e580b6eb426f",
+        "c424f341a4277b050eb2525f14d969296c312d8b31fe4d3d627faf9a837b8808",
+        "ffeb7d976db209a721fff4a3014900a326c8c1c34393e91a85510cb51862e1d4",
+        "2c776b35372a3d9b21b8359f3a6737ed53dd1cd2b5dd87170a35b4a280c8ecb6",
+        "d88ca46bf816222cf5a72e1ad7fe099888e64b9e7865a2d52fcdcee02e6a4519",
+        "410806b4b7ff9e3cace3cc7e8b03b18f540750bc0c8ec66a86ae0400bec328e9",
+        "b197efe16712b8fc9853bfe6f5ffe3fc917d94ab684bfd831b3474b5fed60dc8",
+        "c04db9b3bd76a1f797d877cf17498da370d6e30491c09ad6b65fcbfd0c179133",
+        "5d53b46be2b97b5638db3f29ddee835b61d02c7b4ebdc58ae745e60fb200069c",
+        "1ca65dec37a75ae2445c0ac266f5371470767bd94ad6e57caa87c0edc7747985",
+        "8ec69cd2b5ae58aaa45d5eff21ba1cb6f0fd7814fde72de7fe21ba6a02befd79",
+        "81d519edadc50d5b41a70604dfe9d484e811f4c55f662b674c91d2725dc2e1d7",
+        "a19b5d911d07f69c12b05b57ba166a6d3dfd787ddea0194eb4181ba25b761c99",
+        "5945fa4aa5d83b68a6a25508649d699ff4a0f39c3ec596b5e408e43a75ce434d",
+        "cb2e516b4732e5306263ec082566ddac5dd487eea6732e9250cb94d761f23343",
+        "1a1af432daed5bde0b7de2bcf72cfbb3d788f40f036c33d1f11f9a5f03c97282",
+        "331e224c31c87cfb3db261186e9e79f467afd9a5582f26c08fd414125fd190ba",
+        "a94e8157a38d3620ecc643538ed9ab7d4a58d1f3e0f512849992bdae7213b132",
+        "b4a7dd4e6ec277580e397449e6055255daeb93e5a1a6dd3f1a0cffb82fdf8b7d",
+        "e800a962f600c3798ac94872ccbc2fc9b71fa0fb8e864e49cf2a2b959d105118",
+        "d43d79c3fa59da768af161c82b8dbef0681c47bea9de20e51710c2a552ea64e6",
+        "4097708b4cbff1ff045b5b07f9a703d94a01ea15b7030de1d6d0c7df1a5aa256",
+        "0597e7f11d16c7cde1871eb4ee4ec06ca8397caf66dacb016cda50c2add9f29b"
+      ],
+      "tks_deployed_operational_rewrite_a124": [
+        "55a74192bb4eec991ceab27bed287a0d43cb4602a3a99c8d8193e8c4ea066840",
+        "f20802014a04309bc7473b6ceffb02a94b74c051f4dab5ce5f7c579ab8b0ac6a",
+        "3aa6ad941055d80bfafe46702964a1bc4dbbc193546b828675d278514df6f009",
+        "177d5b249c58ee2c6dfed445dcefa81e9667e93fe6375b828461ee2a6b194e80",
+        "21d3493bf68507377ab9053bb159a106664d71dbef290fed0c97534fb1a9f4b4",
+        "44c53e6da449db392d2eb75c8cd5892f107f703c6b2424afc0eeb65358a3b88c",
+        "9bd316f0644382f81329fe5eaa3c4babbca1408219fd3b81294fbe4c51f8e13c",
+        "6ee655edb484d84becf82e37fc623f29192f13754082e7bc5f976a136059aed4",
+        "6f2277b91de456311aa3d0aac0bafd80bc267d039a05d75b5c0e226661ff1eab",
+        "65e0b9d5af5263bea6f02cb95384264fc7d592259bbfad28d0ba21d5ff31c6bd",
+        "842fb5e70994cec0d19ac2ec1d67c93dd0c0e6857c1b8cfc50134396c292a914",
+        "55e2237dac687d4496f9920aef7199f7e3fb240aec9d9ac0a0b1feca9aae6d8e",
+        "d973e363e0d9cb3801ecb60f535d0f348b7dfc60641ef7816cc74b2ee60d8e25",
+        "399b4ba7ba028b677611f1394d685f5c2d37495566b03b40e6b96ed58b1fdee0",
+        "609df18d690a1a3fb86c4a7238414f8f008184dc2d74764b7126903ba2711f48",
+        "dcdeb9f4220bb56608a7ab14dfc04955c58208424e6ec2c392cf4891372e2282",
+        "56341f6c947eb39921a0f8d3a727a35fdc5fb0253d92bdfa6513a81becf4942e",
+        "055ed8872a5ac8bf532d1f671b961a2cb24be2d81ff867a3a5efa931c823c653",
+        "9159005dd4f86fd35a4ce6457f5f478092e97b481cbd24e207a3eba307b2894e",
+        "648d2c2f2b4aef9d08a3129df9edd778f4392888fc6e3f071b779d2904f546d7",
+        "d80e4a2f4f23003c011128a2e76152821c45b627cc5c24a30bfeb6c97c607d1e",
+        "00018de40b2f1bda2be2b1626d7fe24d0349b4ca0cf46f6e752772f179c216d3",
+        "0149f5091ac087e60e15af47e0a682ef7489f9e37ee0bd90301858eaaa636983",
+        "08ced5163bb7c8c9a65b9165d0422822f57b18848685dc6097582c6b1dde0715",
+        "2cd28929945d68cafa275f4e5268fc9465766553058b78f7a008ea3d1180b5b2",
+        "39400942ca5d40dc5bac769ceb5630df4be904897b9f1836afc378dad3feef5a",
+        "30b47f38291d3f8338e419258a0df043364b13d4d08b202382c63336a1e1a05a",
+        "436a89ab26d4ae082fd2222de68d505472c36d66d3d8009aada9d2671fd29ecc"
+      ],
+      "tks_owner_original_raw_d3": [
+        "55a74192bb4eec991ceab27bed287a0d43cb4602a3a99c8d8193e8c4ea066840",
+        "f20802014a04309bc7473b6ceffb02a94b74c051f4dab5ce5f7c579ab8b0ac6a",
+        "a8b909aa5a2a533c813247a698d03f2845910bc5a69b99fdb6005093cf14af40",
+        "177d5b249c58ee2c6dfed445dcefa81e9667e93fe6375b828461ee2a6b194e80",
+        "21d3493bf68507377ab9053bb159a106664d71dbef290fed0c97534fb1a9f4b4",
+        "44c53e6da449db392d2eb75c8cd5892f107f703c6b2424afc0eeb65358a3b88c",
+        "9bd316f0644382f81329fe5eaa3c4babbca1408219fd3b81294fbe4c51f8e13c",
+        "eea8a51dc00e7cea9c013faf316b1c556224bc0ddd5d825f2abd59ec9284d76d",
+        "6f2277b91de456311aa3d0aac0bafd80bc267d039a05d75b5c0e226661ff1eab",
+        "6eba37225e4973ea41972686346e140b18572ce571c025428c47dae48607f8b3",
+        "842fb5e70994cec0d19ac2ec1d67c93dd0c0e6857c1b8cfc50134396c292a914",
+        "55e2237dac687d4496f9920aef7199f7e3fb240aec9d9ac0a0b1feca9aae6d8e",
+        "d973e363e0d9cb3801ecb60f535d0f348b7dfc60641ef7816cc74b2ee60d8e25",
+        "399b4ba7ba028b677611f1394d685f5c2d37495566b03b40e6b96ed58b1fdee0",
+        "609df18d690a1a3fb86c4a7238414f8f008184dc2d74764b7126903ba2711f48",
+        "dcdeb9f4220bb56608a7ab14dfc04955c58208424e6ec2c392cf4891372e2282",
+        "c8ddaff481e1b8a3a8f02493a52d353c98f12928377f417b29f7863abb0e9c50",
+        "4871f5a3d2674ace7bdf9341cf1e06fc8a0582caedb220a47c4366b390742890",
+        "7f421f2aa2214561f685b678accb1e441d630240de3db37dd8e94f4310782b21",
+        "648d2c2f2b4aef9d08a3129df9edd778f4392888fc6e3f071b779d2904f546d7",
+        "d80e4a2f4f23003c011128a2e76152821c45b627cc5c24a30bfeb6c97c607d1e",
+        "8dcddec98d05da9cba76261c4d227c8d120952fc0b4253ecc4a4615b8adfaed1",
+        "0149f5091ac087e60e15af47e0a682ef7489f9e37ee0bd90301858eaaa636983",
+        "08ced5163bb7c8c9a65b9165d0422822f57b18848685dc6097582c6b1dde0715",
+        "2cd28929945d68cafa275f4e5268fc9465766553058b78f7a008ea3d1180b5b2",
+        "93e8b9c2e7ae65bfd2f5ccaa15489d91e1915374f2fb207fc80a2f9d31817ba0",
+        "30b47f38291d3f8338e419258a0df043364b13d4d08b202382c63336a1e1a05a",
+        "436a89ab26d4ae082fd2222de68d505472c36d66d3d8009aada9d2671fd29ecc"
+      ]
+    },
+    "evaluation_prompt_token_id_sha256": [
+      "490238107f39bb20d9af364487b9372e41d5bdb9b64786ad2cbb6c5bb925c447",
+      "1cd6e4792ac0960b73614be9326d9422537221bbc1e32b49238b3336e14b8604",
+      "89fab098fb631e76bccb28c915aeb4f6ff3209e64dcdd53fa185ae682f38470e",
+      "12e4cff132d0c27f4a022e7f2d91e5d9f2d01fb8710635f62332800cceb6a77d",
+      "35123795868275712956071865c1b7ddd14bbb3a64d7efed94e69afaff7c971f",
+      "dd6ba79472bf65e7a327005f8c2b74eba00e1f02939b146e537ac13b7d965fd8",
+      "589d504b27e7ea85b54d6576367674866db81460c25af07d64ced55d12a35516",
+      "1e3aa1694bbf59d0c244f5d1d1424aa09da29cb2419a3be3dba34ce396e1ce0d"
+    ],
+    "hash_contract": "SHA-256 of canonical JSON integer token-ID list after tokenizer special-token handling and before device transfer"
+  }
+}

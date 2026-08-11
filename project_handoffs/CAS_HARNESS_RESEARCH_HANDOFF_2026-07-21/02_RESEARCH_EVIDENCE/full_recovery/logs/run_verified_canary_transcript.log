@@ -1,0 +1,59 @@
+{
+  "preflight_sha256": "b689da7f7c42c733f0725d445eed758c8b6b06cbc2f1c3a1fd46bccf34dc3b34",
+  "static_file_count": 11,
+  "status": "PREFLIGHT_AND_STATIC_INPUTS_VERIFIED"
+}
+[definition-anchor:canary-eval-8] 1/8 tokens=47 layers=2
+[definition-anchor:canary-eval-8] 8/8 tokens=49 layers=2
+[definition-anchor:canary-definitions-84] 1/84 tokens=88 layers=2
+[definition-anchor:canary-definitions-84] 25/84 tokens=88 layers=2
+[definition-anchor:canary-definitions-84] 50/84 tokens=75 layers=2
+[definition-anchor:canary-definitions-84] 75/84 tokens=47 layers=2
+[definition-anchor:canary-definitions-84] 84/84 tokens=48 layers=2
+{
+  "claim_eligible": false,
+  "licensing_status": "NOT_LICENSED_CANARY_ONLY",
+  "raw_npz": {
+    "allow_pickle": false,
+    "bytes": 555869,
+    "definition_shape": [
+      3,
+      28,
+      2,
+      768
+    ],
+    "eval_shape": [
+      8,
+      2,
+      768
+    ],
+    "required_field_count": 20,
+    "sha256": "57921a21e59c0c1b380a097da305dee2fe3bd54cea75282e505db6512e461e3b",
+    "status": "LOCAL_DIAGNOSTIC_ARTIFACT_ATOMIC_WRITE_REOPEN_VERIFIED"
+  },
+  "receipt": {
+    "bytes": 25181,
+    "path": "/workspace/cas-tks-anchor-diagnostic-20260721/artifacts/canary-8prompt-2layer/tks_definition_anchor_canary_receipt.json",
+    "sha256": "392e846e2393f89a84acc049f28c2729da792d31145899f6e18340296e0b7b06",
+    "status": "ATOMIC_JSON_WRITE_PREPUBLISH_AND_FINAL_REOPEN_VERIFIED"
+  },
+  "status": "CANARY_PASS"
+}
+{
+  "claim_eligible": false,
+  "file_count": 15,
+  "licensing_status": "NOT_LICENSED_CANARY_ONLY",
+  "manifest": {
+    "bytes": 5216,
+    "path": "/workspace/cas-tks-anchor-diagnostic-20260721/artifacts/canary-8prompt-2layer/tks_definition_anchor_canary_artifact_manifest.json",
+    "role": "canary_artifact_manifest",
+    "sha256": "a451f25bfa09d360484d349beb6edf66a7ba6440c194a6d7ea72f501f66ccad7"
+  },
+  "sha256sums": {
+    "bytes": 2788,
+    "path": "/workspace/cas-tks-anchor-diagnostic-20260721/artifacts/canary-8prompt-2layer/SHA256SUMS",
+    "role": "canary_sha256sums",
+    "sha256": "8f785723b2ab8be80f063de45f8c9cf8f88e98888a5236f69766e0da94521f54"
+  },
+  "status": "CANARY_BUNDLE_MANIFEST_VERIFIED"
+}

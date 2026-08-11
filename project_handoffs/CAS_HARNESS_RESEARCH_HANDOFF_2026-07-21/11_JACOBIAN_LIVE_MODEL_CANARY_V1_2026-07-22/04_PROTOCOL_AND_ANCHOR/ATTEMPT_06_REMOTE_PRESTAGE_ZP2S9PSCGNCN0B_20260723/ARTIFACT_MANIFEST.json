@@ -1,0 +1,35 @@
+{
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_attempt6_remote_prestage_manifest.v1",
+  "candidate_label": "ATTEMPT_06_REMOTE_PRESTAGE_ZP2S9PSCGNCN0B_20260723",
+  "candidate_commit": "29551624f4de0eec61c4035e364203be55d6c08a",
+  "controlling_status": "REMOTE_PRESTAGE_PASS / IMPLEMENTATION_RECONSTRUCTION_MATCH / DEPENDENCY_MATCH / MODEL_AND_PUBLICATION_INPUTS_REHASHED / OPENSSL3_STDIN_PASS / CRLF_NORMALIZATION_CONTRACT_PASS_ON_POD / CAPACITY_GATE_PASS / NO_PRE_OR_RUN_IDENTITY / NO_RFC3161_QUERY / NO_EXTERNAL_TSA_TRANSMISSION / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "artifact_count": 5,
+  "artifacts": [
+    {
+      "path": "attempt6_known_hosts",
+      "bytes": 162,
+      "sha256": "35bf30e13c4c3cf82f2bab8eeb6936570683a65c71676f5979e0a0ce97ce40be"
+    },
+    {
+      "path": "PRESTAGE_TRANSCRIPT.stderr.txt",
+      "bytes": 118,
+      "sha256": "90059fac07c4e6d9e9979faf4dd0663d9c67111f7cf914111ece8cf58a81d78b"
+    },
+    {
+      "path": "PRESTAGE_TRANSCRIPT.txt",
+      "bytes": 2835,
+      "sha256": "5ea7230a5eebf746284b7c5db84361a11371deeeb87da8dbd049ddb3a8ce8d5a"
+    },
+    {
+      "path": "remote_prestage_attempt6.sh",
+      "bytes": 13166,
+      "sha256": "c4bf0bf77572083e8e56b1e45ee200d78cf745f401c976633b5022d7a4ee2ee3"
+    },
+    {
+      "path": "STATUS.md",
+      "bytes": 4788,
+      "sha256": "ab62d3dddb9f3bce5d8f2b25286a3d1bb1cea8232f3ad8e91786ce352422d8df"
+    }
+  ],
+  "manifest_scope": "Non-model remote prestage evidence for prospective Attempt 6 only. Not PRE, a run identity, an RFC3161 query or response, transmission evidence, GPU/model execution, or a scientific result."
+}

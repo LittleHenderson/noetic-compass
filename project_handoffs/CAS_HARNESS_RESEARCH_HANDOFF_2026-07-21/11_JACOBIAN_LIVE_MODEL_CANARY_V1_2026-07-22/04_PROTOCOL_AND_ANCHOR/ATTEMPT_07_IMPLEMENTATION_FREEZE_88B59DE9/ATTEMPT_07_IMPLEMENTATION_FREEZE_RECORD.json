@@ -1,0 +1,46 @@
+{
+  "branch": "fix/jacobian-guard-procunix-churn-20260723",
+  "bundle": {
+    "byte_count": 36560536,
+    "complete_history": true,
+    "format_version": 2,
+    "head": "88b59de924857ad7c2f394122fe68f57ba97da77 refs/heads/fix/jacobian-guard-procunix-churn-20260723",
+    "head_count": 1,
+    "prerequisite_count": 0,
+    "sha256": "693b4da1538131959b9511076eb6ec27fa50d21b08a24f0c9ffc209fb487247d"
+  },
+  "claim_status": "NOT_LICENSED",
+  "code_commit": "88b59de924857ad7c2f394122fe68f57ba97da77",
+  "code_parent": "29551624f4de0eec61c4035e364203be55d6c08a",
+  "code_tree": "d38d83c0971596cbe86006e1dadf077d8b1a62f0",
+  "dependency_archive": {
+    "changed_by_this_repair": false,
+    "sha256": "ed16af7ae5a1ac8d61c6d3e83cf946a8cb3669c10f0f679fb2351965d5922bb8"
+  },
+  "execution_mode": "SHADOW",
+  "fix_summary": "Bounded retry-until-stable /proc/net/unix read (MAXIMUM_PROC_UNIX_READ_ATTEMPTS=64) tolerating unrelated system-wide unix-socket churn from the torch 2.12.0+cu130 / CUDA 13.0 stack; per-read atomicity guarantee unchanged; sole-UVM-record singularity/identity checks unchanged.",
+  "implementation_manifest": {
+    "byte_count": 5689,
+    "file_count": 31,
+    "git_blob_match_count": 31,
+    "reconstructed_byte_count": 5689,
+    "reconstructed_sha256": "af11038190763d477d43b87fdffb3b4e2dffa7f966ce95537384d740c59a7a72",
+    "sha256": "af11038190763d477d43b87fdffb3b4e2dffa7f966ce95537384d740c59a7a72"
+  },
+  "model_or_cuda_execution_in_this_freeze": false,
+  "pod_phase_two_validation": {
+    "pod_id": "zp2s9pscgncn0b",
+    "sequence": "phase_one -> cuda_bootstrap -> identify_sole_uvm_listener -> phase_two_tsync_install_and_uvm_close -> post_guard_cuda_proof",
+    "consecutive_passes": 13,
+    "pre_fix_behavior": "NON_DETERMINISTIC_FAIL_CLOSED_AT_PHASE_TWO"
+  },
+  "repaired_files": {
+    "live-trace-worker/research/jacobian_lens_network_guard.py": "8830637b1e9eb616a3ba5f325f4059671e2c6810ab3340599f09543a181ad0da",
+    "live-trace-worker/scripts/run_jacobian_lens_canary_v1.py": "f3ce93c4cbd21b7b52cc1408a890c3ffe4ec1ceb3cd78d15060396b80e7eea81",
+    "live-trace-worker/tests/test_jacobian_lens_network_guard.py": "3abf62a7f83ee50342246a1a8c8a416196b7191b1c0106a05f7d71da4b4df05a"
+  },
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_implementation_freeze.v2",
+  "status": "IMPLEMENTATION_FREEZE_PASS / CROSS_RECONSTRUCTION_MATCH / COMPLETE_V2_SINGLE_HEAD_BUNDLE / DEPENDENCY_ARCHIVE_UNCHANGED / POD_PHASE_TWO_VALIDATED / NO_PRE_OR_RUN_IDENTITY / NO_EXTERNAL_TRANSMISSION / NO_MODEL_OR_CUDA_EXECUTION_IN_THIS_FREEZE / SHADOW / NONE / NOT_LICENSED",
+  "suite": {"passed": 942, "skipped": 2},
+  "verdict": "NONE"
+}

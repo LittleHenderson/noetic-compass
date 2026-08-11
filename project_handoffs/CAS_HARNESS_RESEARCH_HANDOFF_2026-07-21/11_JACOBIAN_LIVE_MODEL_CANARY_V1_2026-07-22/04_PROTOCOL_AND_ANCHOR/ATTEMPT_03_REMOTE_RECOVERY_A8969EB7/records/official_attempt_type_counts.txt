@@ -1,0 +1,4 @@
+regular_files=2704
+directories=324
+symbolic_links=11
+other_entries=0

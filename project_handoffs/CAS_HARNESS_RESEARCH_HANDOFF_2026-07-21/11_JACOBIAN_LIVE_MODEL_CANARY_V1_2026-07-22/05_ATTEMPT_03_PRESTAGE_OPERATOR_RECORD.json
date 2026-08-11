@@ -1,0 +1,84 @@
+{
+  "attestation_status": "OPERATOR_RETAINED_UNATTESTED",
+  "captured_date": "2026-07-22",
+  "claim_eligible": false,
+  "claim_status": "NOT_LICENSED",
+  "code": {
+    "bundle_path": "/workspace/cas-jlcv1-implementation-a8969eb7.bundle",
+    "bundle_sha256": "0db2c2f6deb3bf797af2b9a42b84714236f66cce48e6c74b769ccbb63c101fff",
+    "commit": "a8969eb71c6d3e5c43d7ee2b7c7d4aa90dd70fc0",
+    "manifest_path": "/workspace/cas-jlcv1-implementation-manifest-a8969eb7.json",
+    "manifest_sha256": "5561105d014d0bd3a943fc9d498ebc6f657b2e1024018ff95af06f244a9974fa",
+    "repository_clean_after_checkout": true,
+    "repository_path": "/workspace/cas-jlcv1-repo-a8969eb7",
+    "tree": "cce2d477bb0f423ee6a2669ee680eaac7b999322"
+  },
+  "dependency_bundle": {
+    "file_count": 15,
+    "file_manifest_sha256": "10c9cfab8284582c2a46484dd74bb5435ba9d2dd4c6d946f7dac4d97aae20a00",
+    "linked_or_extra_entries": false,
+    "root": "/workspace/cas-jlcv1-dependency-bundle-a8969eb7",
+    "upstream_commit": "581d398613e5602a5af361e1c34d3a92ea82ba8e",
+    "uv_lock_sha256": "deb9d1f618aac3df95e5b93e226153e196d6aecbb8f619ca7e1e6cb34d839d7b",
+    "verifier": "frozen a8969eb7 verify_dependency_bundle",
+    "verifier_result": "PASS"
+  },
+  "execution_mode": "SHADOW",
+  "frozen_input_hashes": {
+    "model_manifest_sha256": "e78edf3255f59a69c03659585da04e6a6ca624c707b1567556180873fd54be17",
+    "model_publication_marker_sha256": "7207dd18ce0a77d49f443007677527dc486d4317318e187a4f96ea11f88f10df",
+    "provider_metadata_sha256": "8a16fab2fd7b1a268a42759cbde5c0162571e4a4166ac975fe69bbf8a96e39ca",
+    "source_attestation_sha256": "6a133cae284710669f5a46acb9a990c0c200f64a9213a0a2271555001c031755",
+    "source_manifest_sha256": "624f9c31208343ca9ea514d1abbd1c8d7a7af953ecd71337ce07e8390189886b",
+    "source_publication_marker_sha256": "8e214cc1c8a6869a7fc8b6707693d2f26b80110d20ee979dc13f45f20f641cce",
+    "token_manifest_sha256": "9cf4549abfaf6b8e44bce8a2578428d27b45f3e207a32f0472b2f53adeb54b28",
+    "token_publication_marker_sha256": "a953a9f3180391f21bfbb4763c47cba8d9df5669e7b3637a650823c4217d1c5f"
+  },
+  "model_snapshot": {
+    "files": {
+      "config.json": "76eb275107220e450d31258f792a2efcbee109d8b62ae0088260057dec06362f",
+      "model.safetensors": "29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270",
+      "special_tokens_map.json": "6f50ab5a5a509a1c309d6171f339b196a900dc9c99ad0408ff23bb615fdae7ad",
+      "tokenizer.json": "c24618a1b3e6a38167beff1c72cffd126c3a66254347304b50547d12c5f25624",
+      "tokenizer_config.json": "70e38394e494931c6f773ba41e19460dd4436526b852207367f04341b4066d3f"
+    },
+    "regular_file_count": 5,
+    "resolved_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "root": "/workspace/cas-model-a8969eb7"
+  },
+  "negative_assertions": {
+    "attempt_3_anchor_created": false,
+    "attempt_3_identity_frozen": false,
+    "attempt_3_query_created": false,
+    "attempt_3_query_sent": false,
+    "cuda_initialized_for_attempt_3": false,
+    "model_executed_for_attempt_3": false,
+    "network_guard_plan_captured_for_attempt_3": false,
+    "pre_capture_created_for_attempt_3": false,
+    "production_pod_used_or_changed": false
+  },
+  "provider_observation": {
+    "balance_display_after_stop": "$89.55",
+    "compute_state_after_prestage": "NOT_RUNNING",
+    "production_pod_id": "hilj2rzs54gi06",
+    "research_pod_id": "tto1s8rgz3ixvg",
+    "research_pod_total_idle_display": "$0.01/hour",
+    "state_source": "SIGNED_IN_RUNPOD_UI_OPERATOR_OBSERVATION",
+    "state_warning": "Mutable provider state; re-read before use"
+  },
+  "rejected_unexecuted_upload": {
+    "path": "/workspace/cas-jlcv1-implementation-rejected-a40efb18.bundle",
+    "sha256": "a40efb18b647272bfd199be036ae04bae86ea3ec60f6fef5984fa2702e1685f6",
+    "used_for_anchor_or_execution": false
+  },
+  "runtime": {
+    "numpy_version": "2.4.6",
+    "python_executable": "/workspace/cas-jacobian-v1-bootstrap/jacobian_lens_v1/.venv/bin/python",
+    "python_version": "3.11.10",
+    "pytorch_version": "2.12.0+cu130",
+    "transformers_version": "5.9.0"
+  },
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_attempt3_prestage_operator_record.v1",
+  "status": "PERSISTENT_PRESTAGE_VERIFIED_RESEARCH_POD_STOPPED_NO_EXTERNAL_QUERY",
+  "verdict_influence": "NONE"
+}

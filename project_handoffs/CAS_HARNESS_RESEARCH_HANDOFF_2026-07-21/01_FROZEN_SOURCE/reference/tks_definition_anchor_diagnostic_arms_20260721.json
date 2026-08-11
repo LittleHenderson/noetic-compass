@@ -1,0 +1,27 @@
+{
+  "schema_version": "cas_harness_tks_definition_anchor_arms.v1",
+  "diagnostic_class": "ZERO_SHOT_DEFINITION_ANCHOR_DIAGNOSTIC",
+  "licensing_status": "NOT_LICENSED_DIAGNOSTIC_ONLY",
+  "description": "Exact source arms for the 2026-07-21 source-bound diagnostic. D3 is the owner-original subject; A124 is the deployed operational rewrite; the compact arm is a source-biased diagnostic comparator.",
+  "arms": [
+    {
+      "name": "tks_owner_original_raw_d3",
+      "kind": "tks_f28_json",
+      "path": "tks_owner_original_raw_d3_20260603.json",
+      "expected_sha256": "d3dac0ef5c94ccd768da0f18987846d8d0c0fa0b366e13dccc49c82252d2fc12"
+    },
+    {
+      "name": "tks_deployed_operational_rewrite_a124",
+      "kind": "tks_f28_json",
+      "path": "tks_owner_locked_definitions_20260603.json",
+      "expected_sha256": "a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0"
+    },
+    {
+      "name": "cas_compact_v0_compositional",
+      "kind": "cas_compact_v0_compositional",
+      "path": "../../noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/build_foundation28_scenarios.py",
+      "expected_sha256": "07dd7ac7ec5335beb332efeb3071e4058257040a9651c30bd3a392467c10b384"
+    }
+  ],
+  "non_claim": "This manifest supports a source-bound zero-shot diagnostic only. It does not license semantic probes, causal control, universality, 300B execution, production readiness, ACCEPT, or an external claim."
+}

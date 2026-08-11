@@ -1,0 +1,30 @@
+{
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_attempt9_implementation_freeze_manifest.v1",
+  "candidate_label": "ATTEMPT_09_IMPLEMENTATION_FREEZE_6D676840",
+  "candidate_commit": "6d676840d575488cc71e95017c79aa372fd9813f",
+  "candidate_parent": "88b59de924857ad7c2f394122fe68f57ba97da77",
+  "artifact_count": 4,
+  "artifacts": [
+    {
+      "path": "ATTEMPT_09_IMPLEMENTATION_FREEZE_RECORD.json",
+      "bytes": 2430,
+      "sha256": "e9c862b2668abcbd1a19e75fe97296d3dae1b48b56774ea84f086d082b150398"
+    },
+    {
+      "path": "jacobian_lens_canary_v1_implementation.bundle",
+      "bytes": 36563272,
+      "sha256": "1cf1fc265cb01bf306e94bee4955ef14b49e8b773144e8e08aa391617c78765f"
+    },
+    {
+      "path": "jacobian_lens_canary_v1_implementation_manifest.json",
+      "bytes": 5689,
+      "sha256": "731e29affd02f62bcf4e3d5581a2dace307d47bcea6ce39734a86e0d8dadfe80"
+    },
+    {
+      "path": "jacobian_lens_canary_v1_implementation_manifest_reconstructed.json",
+      "bytes": 5689,
+      "sha256": "731e29affd02f62bcf4e3d5581a2dace307d47bcea6ce39734a86e0d8dadfe80"
+    }
+  ],
+  "manifest_scope": "Attempt 9 owner-directed tolerance recalibration (1e-4->5e-4). Portable source preservation + reconstruction. Not PRE/run-identity/query/anchor/execution."
+}

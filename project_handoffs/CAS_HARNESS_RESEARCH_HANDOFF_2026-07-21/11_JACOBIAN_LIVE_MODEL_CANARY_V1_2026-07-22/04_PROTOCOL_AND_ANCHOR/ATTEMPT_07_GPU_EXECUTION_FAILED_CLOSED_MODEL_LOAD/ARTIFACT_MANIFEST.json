@@ -1,0 +1,141 @@
+{
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_attempt7_gpu_execution_failed_manifest.v1",
+  "candidate_label": "ATTEMPT_07_GPU_EXECUTION_FAILED_CLOSED_MODEL_LOAD",
+  "candidate_commit": "88b59de924857ad7c2f394122fe68f57ba97da77",
+  "run_id": "jlcv1-rfc3161-09995d91a7d303181ef3358930a8f23236ff5452b25774a64c4016e47180fc2e",
+  "controlling_status": "OFFICIAL_SHADOW_ATTEMPT_FAILED_CLOSED_AT_MODEL_LOAD / PHASE_TWO_TSYNC_FIX_VALIDATED_IN_OFFICIAL_RUN / MODEL_LOAD_CONFIG_ERROR_DIAGNOSED_AND_FIX_CONFIRMED / SHADOW / NONE / NOT_LICENSED",
+  "artifact_count": 26,
+  "artifacts": [
+    {
+      "path": "control/jacobian_lens_canary_v1_anchor_receipt.json",
+      "bytes": 5597,
+      "sha256": "8a9443b6fee8559212872e8d85739e5324014f0a97f70c7bf578262373704c5d"
+    },
+    {
+      "path": "control/jacobian_lens_canary_v1_anchor_response.tsr",
+      "bytes": 6035,
+      "sha256": "5641d58e29aecfaaf0708db13049fbafaea2c9b7fe4656df3557924a6670ecfe"
+    },
+    {
+      "path": "control/jacobian_lens_canary_v1_launch_configuration.json",
+      "bytes": 7062,
+      "sha256": "125fb57a33f22a1ed693152c09694c3c627ad6c92ca4d6e8b64ff55a3d8ddb92"
+    },
+    {
+      "path": "control/jacobian_lens_canary_v1_launch_target_paths.json",
+      "bytes": 2606,
+      "sha256": "b62d6b31fead4a27e736dd8b2e3aec4aafa18b65b1a492d77e250354ef77c409"
+    },
+    {
+      "path": "control/jacobian_lens_canary_v1_protocol.json",
+      "bytes": 8141,
+      "sha256": "8a7de36222a2677007a73d0a4aa9ed4151a7422630d306808e5560a08e349da8"
+    },
+    {
+      "path": "diagnostic/cas-jlcv1-attempt7-cachepath-diag.py",
+      "bytes": 1479,
+      "sha256": "0a7c8195a2583e7cd6f24cb3df611b783a25b15ea18b6d22925fef983d40f7de"
+    },
+    {
+      "path": "diagnostic/cas-jlcv1-attempt7-modelload-guarded-diag.py",
+      "bytes": 1339,
+      "sha256": "ecbe0b44b56dddbcf8748b4e984aaa7a908ff0393886bdd17e086450f94a76c2"
+    },
+    {
+      "path": "diagnostic/cas-jlcv1-attempt7-validate2-diag.py",
+      "bytes": 1365,
+      "sha256": "14b6b05778e54abbcdce085d710f4656948a5c36041b4704b5675d4419370dc8"
+    },
+    {
+      "path": "environment_pre/pre.critical_runtime_files.json",
+      "bytes": 3336110,
+      "sha256": "e6e22f58fcdaf1565e774b2760aebb3a4907ba6efba3239a220d8feffda2963c"
+    },
+    {
+      "path": "environment_pre/pre.environment.json",
+      "bytes": 3684,
+      "sha256": "eafecd97515595d6990d233e9f846d54051fdb6feb6680433348d15efa4b91eb"
+    },
+    {
+      "path": "environment_pre/pre.installed_distributions.json",
+      "bytes": 165131,
+      "sha256": "666c739743ef741fda99bef8badab48d58f9f4aa3a95575af661f549ef1ea948"
+    },
+    {
+      "path": "environment_pre/pre.nvidia_smi.txt",
+      "bytes": 109,
+      "sha256": "9840a3a45b1f38a5a9cb70a96a573a01331313853545536d97620a3ab9fd8b9e"
+    },
+    {
+      "path": "environment_pre/pre.runtime_layout.json",
+      "bytes": 34905,
+      "sha256": "93634340c1c888f5e773a16db5b94a1278f6086e99b8dee838651751dd744b38"
+    },
+    {
+      "path": "operator/attempt7_launch_once.sh",
+      "bytes": 3180,
+      "sha256": "15f01253f33262fab7813bd2883c25cda98a90ace6ef8f83816b7378e92f706d"
+    },
+    {
+      "path": "operator/attempt7_post_anchor_prelaunch_guard.sh",
+      "bytes": 6300,
+      "sha256": "131124da726d3063eedfea600f5bbc42d52bae785ce21fb04cdb4c3d3cd212d4"
+    },
+    {
+      "path": "operator/launch_finished.json",
+      "bytes": 446,
+      "sha256": "daef716c2bd5611ff23064829b831ff691d02a49018af43d5eb16e758dab7f12"
+    },
+    {
+      "path": "operator/launch_started.json",
+      "bytes": 407,
+      "sha256": "b9b6e561fc974b661b5bf7a77d8775e2494517aebcb37474c94e6e6bdc77d715"
+    },
+    {
+      "path": "operator/TSA_TRANSMISSION_FINISHED.json",
+      "bytes": 755,
+      "sha256": "17c0732d4c9a1b6858452cedd2dd1f8144935c2a81290554022625615b261647"
+    },
+    {
+      "path": "operator/TSA_TRANSMISSION_STARTED.json",
+      "bytes": 527,
+      "sha256": "f5d166d281cc57a0395c5beb8c52c263c803852ca13325c5b6d1cc5c2cb8eb63"
+    },
+    {
+      "path": "output/jacobian_lens_canary_v1_execution_receipt.json",
+      "bytes": 15615,
+      "sha256": "f531be4fd0166a1fc0f94409b7d6ecf4ec2bfa7811f149a9c7f7d51df1f4c03e"
+    },
+    {
+      "path": "output/jacobian_lens_canary_v1_execution_receipt.json.publication.json",
+      "bytes": 687,
+      "sha256": "c939a5d2ea752f5ab37e6323a226a0ac1bbcf81c7f278f3307294bba3890e4ee"
+    },
+    {
+      "path": "runlog/prelaunch_guard.txt",
+      "bytes": 710,
+      "sha256": "9ada6a977d33691216472c748f9157eb586124fae353e66d56950fc8a0e44583"
+    },
+    {
+      "path": "runlog/wrapper.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "runlog/wrapper.stdout.log",
+      "bytes": 349,
+      "sha256": "66d5b34e9f00827dfa556ce0e24a257fc458f83073cc7cd35e243808906ee2df"
+    },
+    {
+      "path": "runlog/wrapper_exit_code.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "STATUS.md",
+      "bytes": 4009,
+      "sha256": "cc420d5055429ee37b702bfbb8bfc0211e2775f82e27da46379f32b3212e5897"
+    }
+  ],
+  "manifest_scope": "Attempt 7 official GPU-execution failure evidence (phase-two fix validated live; failed closed at MODEL_LOAD due to a target-path-mapping config error) plus non-official reproduction diagnostics. Not a technical-canary pass, scientific result, or LICENSED capability. Zero autograd calls, zero artifacts produced by the run."
+}

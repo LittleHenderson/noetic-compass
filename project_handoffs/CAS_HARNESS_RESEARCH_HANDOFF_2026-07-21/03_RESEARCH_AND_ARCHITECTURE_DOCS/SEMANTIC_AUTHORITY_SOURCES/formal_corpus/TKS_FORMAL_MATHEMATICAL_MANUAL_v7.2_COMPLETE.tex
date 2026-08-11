@@ -1,0 +1,2994 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TKS FORMAL MATHEMATICAL MANUAL v7.2 — UNIFIED RELEASE
+%% Complete Integration of:
+%%   - Mathematical Deepening (Transfinite Fractals, Measure Theory, Polish Spaces)
+%%   - Programming Language Expansion (Algorithm W, Compiler Architecture)
+%%   - Quantum Noetic Expansion (Hilbert Spaces, Spectral Theory)
+%%   - Unified Meta-System (Monoidal 2-Categories, Topos Theory, Coalgebras)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt,twoside,openright]{book}
+
+%% ============================================================================
+%% PACKAGES (Preserved from v7.1 + v7.2 additions)
+%% ============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{mathtools}
+\usepackage{stmaryrd}           % For semantic brackets
+\usepackage{bm}                 % Bold math
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{cd,arrows,positioning,calc,decorations.pathmorphing,shapes}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems,skins,breakable}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{multicol}
+
+%% v7.0 PACKAGE ADDITIONS
+\usepackage{braket}             % For quantum notation
+\usepackage{tikz-cd}            % For commutative diagrams
+\usepackage{bussproofs}         % For proof trees
+
+%% v7.1 PACKAGE ADDITIONS
+\usepackage{mathrsfs}           % For \mathscr (Scott topology)
+
+%% v7.2 PACKAGE ADDITIONS
+\usepackage{wasysym}            % Additional symbols
+\usepackage{extarrows}          % Extended arrows
+\usepackage{proof}              % Proof derivations
+
+\geometry{
+  paper=letterpaper,
+  inner=1.2in,
+  outer=1in,
+  top=1in,
+  bottom=1in
+}
+
+%% ============================================================================
+%% THEOREM ENVIRONMENTS (Preserved from v7.1)
+%% ============================================================================
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{axiom}[definition]{Axiom}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Corollary}
+
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{example}[definition]{Example}
+\newtheorem{notation}[definition]{Notation}
+
+%% ============================================================================
+%% CUSTOM COMMANDS (Preserved from v7.1)
+%% ============================================================================
+% Semantic brackets
+\newcommand{\sem}[1]{\llbracket #1 \rrbracket}
+
+% TKS-specific symbols
+\newcommand{\Worlds}{\mathcal{W}}
+\newcommand{\Ideas}{\mathcal{I}}
+\newcommand{\Elements}{\mathcal{E}}
+\newcommand{\Noetics}{\mathcal{N}}
+\newcommand{\Foundations}{\mathcal{F}}
+\newcommand{\Acquisitions}{\mathcal{A}}
+\newcommand{\Noetica}{\mathbf{Noetica}}
+\newcommand{\Acq}{\mathbf{Acq}}
+
+% Noetic operators
+\newcommand{\noe}[1]{\nu_{#1}}
+
+% Tootra operations
+\newcommand{\Tadd}{\oplus_T}
+\newcommand{\Tsub}{\ominus_T}
+\newcommand{\Tmul}{\otimes_T}
+\newcommand{\Tdiv}{\oslash_T}
+
+% World association
+\newcommand{\Wadd}{\oplus_W}
+\newcommand{\Wsub}{\ominus_W}
+
+% Type judgments
+\newcommand{\types}{\vdash}
+\newcommand{\typmark}{:}
+
+% RPM Monad
+\newcommand{\RPM}{\mathfrak{R}}
+\newcommand{\rpmret}{\mathsf{return}}
+\newcommand{\rpmbind}{\mathbin{\gg\!=}}
+\newcommand{\Kleisli}{\mathcal{K}}
+
+% Fractal notation
+\newcommand{\Frac}{\Phi}
+\newcommand{\FracSet}{\mathfrak{F}}
+\newcommand{\bigstep}{\Downarrow}
+\newcommand{\smallstep}{\rightarrow}
+\newcommand{\Failed}{\mathsf{Failed}}
+
+% Quantum notation (v7.0)
+\newcommand{\Hspace}{\mathcal{H}}
+\newcommand{\qket}[1]{|#1\rangle}
+\newcommand{\qbra}[1]{\langle #1|}
+\newcommand{\qbraket}[2]{\langle #1 | #2 \rangle}
+\newcommand{\qop}[1]{\hat{#1}}
+
+% v7.1 COMMANDS - Domain theory
+\newcommand{\Scott}{\mathscr{S}}
+\newcommand{\Dcpo}{\mathbf{Dcpo}}
+\newcommand{\Cont}{\mathbf{Cont}}
+\newcommand{\sqleq}{\sqsubseteq}
+\newcommand{\fix}{\mathsf{fix}}
+
+% Natural transformations
+\newcommand{\NatTrans}[2]{\eta_{#1 \to #2}}
+\newcommand{\WorldFunctor}[1]{\mathfrak{W}_{#1}}
+
+%% ============================================================================
+%% v7.2 NEW COMMANDS
+%% ============================================================================
+
+% Transfinite fractals
+\newcommand{\Ord}{\mathbf{Ord}}              % Class of ordinals
+\newcommand{\TransFrac}[1]{\Phi^{#1}}        % Transfinite fractal indexed by ordinal
+\newcommand{\limfrac}{\varinjlim}            % Limit of fractals
+\newcommand{\colfrac}{\varprojlim}           % Colimit of fractals
+\newcommand{\omegalim}{\omega\text{-}\lim}   % Omega-limit
+
+% Measure theory
+\newcommand{\SigAlg}{\Sigma}                 % Sigma-algebra
+\newcommand{\Meas}{\mathbf{Meas}}            % Category of measurable spaces
+\newcommand{\Prob}{\mathbf{Prob}}            % Probability measures
+\newcommand{\Bor}{\mathcal{B}}               % Borel sigma-algebra
+\newcommand{\Leb}{\lambda}                   % Lebesgue measure
+\newcommand{\intI}{\int_{\Ideas}}            % Integration over Idea space
+
+% Polish spaces
+\newcommand{\Polish}{\mathbf{Polish}}        % Category of Polish spaces
+\newcommand{\Stone}{\mathbf{Stone}}          % Stone spaces
+\newcommand{\Spec}{\mathrm{Spec}}            % Spectrum
+
+% Type inference (Algorithm W)
+\newcommand{\TypeScheme}{\sigma}             % Type scheme
+\newcommand{\TypeVar}{\alpha}                % Type variable
+\newcommand{\Subst}{\theta}                  % Substitution
+\newcommand{\Unify}{\mathsf{unify}}          % Unification
+\newcommand{\Inst}{\mathsf{inst}}            % Instantiation
+\newcommand{\Gen}{\mathsf{gen}}              % Generalization
+\newcommand{\FTV}{\mathsf{FTV}}              % Free type variables
+\newcommand{\AlgW}{\mathcal{W}}              % Algorithm W
+
+% Compiler infrastructure
+\newcommand{\AST}{\mathsf{AST}}              % Abstract syntax tree
+\newcommand{\IR}{\mathsf{IR}}                % Intermediate representation
+\newcommand{\BC}{\mathsf{BC}}                % Bytecode
+\newcommand{\VM}{\mathsf{VM}}                % Virtual machine
+
+% Quantum extensions
+\newcommand{\BoundedOp}{\mathcal{B}}         % Bounded operators
+\newcommand{\Unitary}{\mathcal{U}}           % Unitary operators
+\newcommand{\Projector}{\mathcal{P}}         % Projectors
+\newcommand{\Spectrum}{\sigma}               % Spectrum of operator
+\newcommand{\Trace}{\mathrm{Tr}}             % Trace
+
+% Topos and coalgebra
+\newcommand{\Topos}{\mathbf{Topos}}          % Topos
+\newcommand{\Sh}{\mathbf{Sh}}                % Sheaves
+\newcommand{\Coalg}{\mathbf{Coalg}}          % Coalgebras
+\newcommand{\Terminal}{\mathbf{1}}           % Terminal object
+\newcommand{\Initial}{\mathbf{0}}            % Initial object
+
+% Version markers
+\newcommand{\vnew}{\textbf{v7.0 New}}
+\newcommand{\vexp}{\textbf{v7.0 Expanded}}
+\newcommand{\vnewone}{\textbf{v7.1 New}}
+\newcommand{\vexpone}{\textbf{v7.1 Expanded}}
+\newcommand{\vnewtwo}{\textbf{v7.2 New}}
+\newcommand{\vexptwo}{\textbf{v7.2 Expanded}}
+
+%% ============================================================================
+%% DOCUMENT METADATA
+%% ============================================================================
+\title{\Huge\textbf{The TKS Formal Mathematical Manual}\\[0.5em]
+       \Large Version 7.2 — Unified Release\\[0.3em]
+       \large Mathematical Deepening $\cdot$ Language Expansion $\cdot$ Quantum Noetics $\cdot$ Meta-System}
+\author{TKS Formalization Project}
+\date{\today}
+
+\begin{document}
+
+\frontmatter
+\maketitle
+
+%% ============================================================================
+%% PREFACE: v7.1 → v7.2 CONTINUITY BRIDGE
+%% ============================================================================
+
+\chapter*{v7.1 $\to$ v7.2 Continuity Bridge}
+\addcontentsline{toc}{chapter}{v7.1 → v7.2 Continuity Bridge}
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=orange!75!black,title=\textbf{Canonical Inheritance Declaration}]
+This document, TKS v7.2, is a \textbf{strict superset} of TKS v7.1, which itself preserves all of v7.0 and v6.1. All definitions, theorems, axioms, and proofs from previous versions remain valid and unchanged. Version 7.2 introduces \textit{four major expansions}---no modifications to existing canon.
+\end{tcolorbox}
+
+\section*{Inheritance from v7.0--v7.1}
+
+The following components are inherited verbatim:
+\begin{itemize}
+  \item \textbf{v6.1 Canon}: Complete ontology (4 Worlds, 40 Elements, 10 Noetics, 7 Foundations, \textbf{28 Sub-Foundations}, 22 Acquisitions), noetic algebra, Tootra arithmetic, Category Noetica, ACBE functor
+  \item \textbf{v7.0 Canon}: RPM Monad, Noetic Fractal Calculus, Dynamic Semantics, Type System, Concurrency, Quantum Algebra, Sub-Foundation Lattice
+  \item \textbf{v7.1 Canon}: Natural transformations, Domain theory (dcpos, Scott topology), Extended denotational semantics, Topological noetic space, Multi-goal RPM, Sub-Foundation Natural Transformation
+\end{itemize}
+
+\section*{v7.2 Major Expansions}
+
+\begin{enumerate}
+  \item \textbf{Part I: Mathematical Deepening}
+  \begin{itemize}
+    \item Transfinite fractals (ordinal-indexed noetic sequences)
+    \item Measure theory and integration on Idea space
+    \item Polish spaces and Stone duality
+    \item Generalized fixed-point theorems (Banach, Tarski)
+  \end{itemize}
+
+  \item \textbf{Part II: Programming Language Expansion}
+  \begin{itemize}
+    \item Complete Hindley--Milner type inference (Algorithm W)
+    \item Full compiler architecture (lexer $\to$ VM)
+    \item Effect handlers for RPM monad
+    \item Module system and pattern matching
+  \end{itemize}
+
+  \item \textbf{Part III: Quantum Noetic Expansion}
+  \begin{itemize}
+    \item Noetic Hilbert spaces with inner products
+    \item Noetics as bounded linear operators
+    \item Spectral theorem and measurement theory
+    \item Quantum fractals and entanglement
+  \end{itemize}
+
+  \item \textbf{Part IV: Unified Meta-System}
+  \begin{itemize}
+    \item Monoidal 2-category structure
+    \item Topos-theoretic foundations
+    \item Coalgebraic dynamics
+    \item Indexed containers for multi-world semantics
+  \end{itemize}
+\end{enumerate}
+
+\section*{New Notation in v7.2}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Category} \\
+\midrule
+$\TransFrac{\alpha}$ & Transfinite fractal at ordinal $\alpha$ & Mathematical \\
+$\SigAlg$ & Sigma-algebra & Measure Theory \\
+$\AlgW$ & Algorithm W & Type Inference \\
+$\BoundedOp(\Hspace)$ & Bounded operators on $\Hspace$ & Quantum \\
+$\Coalg(F)$ & Category of $F$-coalgebras & Meta-System \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\tableofcontents
+
+\mainmatter
+
+%% ============================================================================
+%% CANONICAL REFERENCE: 28 SUB-FOUNDATIONS
+%% ============================================================================
+\part{Canonical Reference}
+
+\chapter{The 28 Sub-Foundations}
+\label{ch:v72-28-subfoundations}
+
+\begin{tcolorbox}[colback=gray!10!white,colframe=gray!75!black,title=\textbf{Canonical Reference (Inherited)}]
+This chapter documents the 28 Sub-Foundations as they appear throughout the v7.2 mathematical expansions. The sub-foundation structure underlies all four Parts of this document.
+\end{tcolorbox}
+
+\section{Sub-Foundation Space and Lattice}
+
+\begin{definition}[Sub-Foundation Space]
+\label{def:v72-subfoundation-space}
+The \textbf{Sub-Foundation space} is:
+\[
+\Foundations^* = \Foundations \times \Worlds = \{F_1, \ldots, F_7\} \times \{A, B, C, D\}
+\]
+with $|\Foundations^*| = 28$ elements. We write $i_w$ for the sub-foundation $(F_i, w)$.
+\end{definition}
+
+\begin{table}[ht]
+\centering
+\caption{The 28 Sub-Foundations}
+\label{tab:v72-28-subfoundations}
+\begin{tabular}{c|cccc}
+\toprule
+\textbf{Foundation} & \textbf{A (Spiritual)} & \textbf{B (Mental)} & \textbf{C (Emotional)} & \textbf{D (Physical)} \\
+\midrule
+$F_1$ (Unity) & $1_A$ & $1_B$ & $1_C$ & $1_D$ \\
+$F_2$ (Wisdom) & $2_A$ & $2_B$ & $2_C$ & $2_D$ \\
+$F_3$ (Life) & $3_A$ & $3_B$ & $3_C$ & $3_D$ \\
+$F_4$ (Companionship) & $4_A$ & $4_B$ & $4_C$ & $4_D$ \\
+$F_5$ (Power) & $5_A$ & $5_B$ & $5_C$ & $5_D$ \\
+$F_6$ (Material) & $6_A$ & $6_B$ & $6_C$ & $6_D$ \\
+$F_7$ (Lust) & $7_A$ & $7_B$ & $7_C$ & $7_D$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proposition}[Sub-Foundation Lattice]
+\label{prop:v72-subfoundation-lattice}
+$(\Foundations^*, \sqcup, \sqcap, \bot, \top)$ forms a bounded distributive lattice where:
+\begin{itemize}
+  \item $\bot$ = null foundation state (no development)
+  \item $\top$ = full foundation state (all 28 sub-foundations maximally developed)
+  \item $s_1 \sqcup s_2$ = combined foundation development
+  \item $s_1 \sqcap s_2$ = common foundation intersection
+\end{itemize}
+\end{proposition}
+
+\section{Sub-Foundations in v7.2 Extensions}
+
+\begin{remark}[Role in Mathematical Deepening]
+\label{rem:subfound-math}
+In Part I (Mathematical Deepening), sub-foundations appear as:
+\begin{itemize}
+  \item \textbf{Transfinite Fractals}: Ordinal-indexed sequences $\Phi^\alpha$ indexed by sub-foundation $s \in \Foundations^*$
+  \item \textbf{Measure Theory}: Sub-foundation measures $\mu_s$ on the Idea space
+  \item \textbf{Polish Spaces}: Stone duality between sub-foundation Boolean algebras and Stone spaces
+\end{itemize}
+\end{remark}
+
+\begin{remark}[Role in Quantum Extension]
+\label{rem:subfound-quantum}
+In Part III (Quantum Noetics), sub-foundations appear as:
+\begin{itemize}
+  \item \textbf{Quantum States}: $\qket{i_w}$ basis states for sub-foundation $i_w$
+  \item \textbf{Operators}: $\NoeticOp{i_w}$ quantum noetic operator for sub-foundation
+  \item \textbf{Measurement}: Projectors $P_{i_w} = \qket{i_w}\qbra{i_w}$ for foundation measurement
+\end{itemize}
+\end{remark}
+
+\begin{remark}[Role in Meta-System]
+\label{rem:subfound-meta}
+In Part IV (Meta-System), sub-foundations appear as:
+\begin{itemize}
+  \item \textbf{2-Cells}: Sub-foundations as 2-morphisms in $\mathbf{TKS}_2$
+  \item \textbf{Topos Objects}: Sub-foundations as objects in the Noetic Topos
+  \item \textbf{Coalgebra States}: Sub-foundation states as coalgebra carriers
+\end{itemize}
+\end{remark}
+
+%% ============================================================================
+%% PART II: MATHEMATICAL DEEPENING
+%% ============================================================================
+\part{Mathematical Deepening}
+
+\chapter{Transfinite Noetic Fractals}
+\label{ch:transfinite-fractals}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter extends the v7.0 Noetic Fractal Calculus to transfinite ordinal indices, enabling infinite compositions, limit constructions, and a complete theory of fractal ordinals.
+\end{tcolorbox}
+
+\section{Ordinal-Indexed Fractals}
+
+\begin{definition}[Ordinal Numbers for TKS]
+\label{def:ordinals-tks}
+We work with the class $\Ord$ of ordinal numbers. For TKS purposes, we focus on:
+\begin{enumerate}
+  \item \textbf{Finite ordinals}: $0, 1, 2, \ldots$ (natural numbers)
+  \item \textbf{$\omega$}: The first infinite ordinal (limit of finite ordinals)
+  \item \textbf{$\omega + n$}: Successor ordinals beyond $\omega$
+  \item \textbf{$\omega \cdot 2, \omega^2, \omega^\omega, \ldots$}: Higher limit ordinals
+  \item \textbf{$\omega_1$}: The first uncountable ordinal (when required)
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Transfinite Fractal]
+\label{def:transfinite-fractal}
+A \textbf{transfinite fractal} indexed by ordinal $\alpha \in \Ord$ is a function:
+\[
+\TransFrac{\alpha} : \alpha \to \{0, 1, \ldots, 9\}
+\]
+mapping each ordinal $\beta < \alpha$ to a noetic index. We write:
+\[
+\TransFrac{\alpha} = \langle k_0 : k_1 : k_2 : \cdots \rangle_\alpha
+\]
+where $k_\beta = \TransFrac{\alpha}(\beta)$ for each $\beta < \alpha$.
+\end{definition}
+
+\begin{example}[Finite and Infinite Fractals]
+\label{ex:finite-infinite-fractals}
+\begin{enumerate}
+  \item \textbf{Finite}: $\TransFrac{3} = \langle 1 : 4 : 7 \rangle_3$ has domain $\{0, 1, 2\}$
+  \item \textbf{$\omega$-indexed}: $\TransFrac{\omega} = \langle 1 : 2 : 3 : 4 : \cdots \rangle_\omega$ has domain $\mathbb{N}$
+  \item \textbf{Beyond $\omega$}: $\TransFrac{\omega+1} = \langle 1 : 2 : 3 : \cdots : 5 \rangle_{\omega+1}$ extends with $k_\omega = 5$
+\end{enumerate}
+\end{example}
+
+\begin{definition}[Successor and Limit Fractals]
+\label{def:succ-limit-fractals}
+\textbf{Successor fractal}: For ordinal $\alpha$ and noetic $k$:
+\[
+\TransFrac{\alpha+1} = \TransFrac{\alpha} \cdot k
+\]
+where $(\TransFrac{\alpha} \cdot k)(\beta) = \TransFrac{\alpha}(\beta)$ for $\beta < \alpha$, and $(\TransFrac{\alpha} \cdot k)(\alpha) = k$.
+
+\textbf{Limit fractal}: For limit ordinal $\lambda$:
+\[
+\TransFrac{\lambda} = \limfrac_{\alpha < \lambda} \TransFrac{\alpha}
+\]
+defined when the system $(\TransFrac{\alpha})_{\alpha < \lambda}$ is coherent (agrees on common domains).
+\end{definition}
+
+\begin{proposition}[Coherent Systems]
+\label{prop:coherent-systems}
+A system $(\TransFrac{\alpha})_{\alpha < \lambda}$ is \textbf{coherent} if for all $\alpha < \beta < \lambda$:
+\[
+\TransFrac{\beta} \restriction \alpha = \TransFrac{\alpha}
+\]
+where $\restriction$ denotes domain restriction.
+\end{proposition}
+
+\section{Transfinite Fractal Composition}
+
+\begin{definition}[Ordinal Composition]
+\label{def:ordinal-composition}
+For transfinite fractals $\TransFrac{\alpha}$ and $\TransFrac{\beta}$, their \textbf{ordinal composition} is:
+\[
+\TransFrac{\alpha} \circ_\Ord \TransFrac{\beta} : \alpha + \beta \to \{0, \ldots, 9\}
+\]
+defined by:
+\[
+(\TransFrac{\alpha} \circ_\Ord \TransFrac{\beta})(\gamma) =
+\begin{cases}
+\TransFrac{\beta}(\gamma) & \text{if } \gamma < \beta \\
+\TransFrac{\alpha}(\gamma - \beta) & \text{if } \beta \leq \gamma < \alpha + \beta
+\end{cases}
+\]
+Here $\gamma - \beta$ denotes ordinal subtraction (well-defined for $\gamma \geq \beta$).
+\end{definition}
+
+\begin{theorem}[Composition Associativity]
+\label{thm:transfinite-assoc}
+Ordinal composition is associative:
+\[
+(\TransFrac{\alpha} \circ_\Ord \TransFrac{\beta}) \circ_\Ord \TransFrac{\gamma} = \TransFrac{\alpha} \circ_\Ord (\TransFrac{\beta} \circ_\Ord \TransFrac{\gamma})
+\]
+Both sides have domain $\alpha + \beta + \gamma$.
+\end{theorem}
+
+\begin{proof}
+For any $\delta < \alpha + \beta + \gamma$:
+\begin{itemize}
+  \item If $\delta < \gamma$: Both sides yield $\TransFrac{\gamma}(\delta)$
+  \item If $\gamma \leq \delta < \beta + \gamma$: Both sides yield $\TransFrac{\beta}(\delta - \gamma)$
+  \item If $\beta + \gamma \leq \delta$: Both sides yield $\TransFrac{\alpha}(\delta - \beta - \gamma)$
+\end{itemize}
+This uses the associativity of ordinal addition: $(\alpha + \beta) + \gamma = \alpha + (\beta + \gamma)$.
+\end{proof}
+
+\begin{definition}[Identity Fractal]
+\label{def:identity-fractal}
+The \textbf{empty fractal} $\TransFrac{0}$ with domain $\varnothing$ serves as identity:
+\[
+\TransFrac{\alpha} \circ_\Ord \TransFrac{0} = \TransFrac{0} \circ_\Ord \TransFrac{\alpha} = \TransFrac{\alpha}
+\]
+\end{definition}
+
+\begin{corollary}[Transfinite Fractal Monoid]
+\label{cor:transfinite-monoid}
+The collection of transfinite fractals forms a monoid under $\circ_\Ord$ with identity $\TransFrac{0}$.
+\end{corollary}
+
+\section{Transfinite Eigenfractals}
+
+\begin{definition}[$\omega$-Eigenfractal]
+\label{def:omega-eigenfractal}
+For noetic $k \in \{0, \ldots, 9\}$, the \textbf{$\omega$-eigenfractal} is:
+\[
+\TransFrac{\omega}_k = \langle k : k : k : \cdots \rangle_\omega
+\]
+the constant $\omega$-sequence at $k$.
+\end{definition}
+
+\begin{theorem}[Eigenfractal Idempotence]
+\label{thm:omega-eigen-idem}
+For any finite fractal $\TransFrac{n}$ and $\omega$-eigenfractal $\TransFrac{\omega}_k$:
+\[
+\TransFrac{\omega}_k \circ_\Ord \TransFrac{n} \sim \TransFrac{\omega}_k
+\]
+where $\sim$ denotes semantic equivalence (same limiting behavior).
+\end{theorem}
+
+\begin{proof}
+The composition $\TransFrac{\omega}_k \circ_\Ord \TransFrac{n}$ has domain $\omega + n$. The first $n$ elements are $\TransFrac{n}$, followed by infinitely many $k$'s. Since only finitely many elements differ from $\TransFrac{\omega}_k$, and the noetic composition eventually stabilizes:
+\[
+\mathfrak{n}_{k}^{\omega}(x) = \lim_{m \to \omega} \mathfrak{n}_{k}^m(x)
+\]
+exists by idempotence of $\mathfrak{n}_k$ (Theorem 7.0.3.12), the semantic effect is equivalent.
+\end{proof}
+
+\begin{definition}[Transfinite Eigenvalue]
+\label{def:transfinite-eigenvalue}
+Element $x \in \Ideas$ is a \textbf{transfinite eigenelement} of $\TransFrac{\omega}_k$ if:
+\[
+\sem{\TransFrac{\omega}_k}(x) = \mathfrak{n}_k^\omega(x) = x
+\]
+\end{definition}
+
+\begin{theorem}[Transfinite Fixed Points]
+\label{thm:transfinite-fixed}
+For any noetic $k$ and Idea $x$, the sequence:
+\[
+x, \mathfrak{n}_k(x), \mathfrak{n}_k^2(x), \ldots, \mathfrak{n}_k^n(x), \ldots
+\]
+converges to a fixed point $\mathfrak{n}_k^\omega(x)$ by ordinal $\omega$.
+\end{theorem}
+
+\begin{proof}
+By the dcpo structure established in Theorem~\ref{thm:tks-dcpo} (v7.1), the sequence forms an $\omega$-chain in $\sem{\Ideas}_\bot$. The supremum exists and is a fixed point by Scott continuity of $\mathfrak{n}_k$ (Theorem~\ref{thm:noetic-scott}).
+\end{proof}
+
+\section{Limit Constructions}
+
+\begin{definition}[Directed System of Fractals]
+\label{def:directed-system}
+A \textbf{directed system} of fractals is a family $(\TransFrac{\alpha})_{\alpha \in I}$ indexed by a directed set $(I, \leq)$ with coherent transition maps:
+\[
+\iota_{\alpha\beta} : \TransFrac{\alpha} \hookrightarrow \TransFrac{\beta} \quad \text{for } \alpha \leq \beta
+\]
+satisfying:
+\begin{enumerate}
+  \item $\iota_{\alpha\alpha} = \mathrm{id}$
+  \item $\iota_{\beta\gamma} \circ \iota_{\alpha\beta} = \iota_{\alpha\gamma}$
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Colimit Fractal]
+\label{def:colimit-fractal}
+The \textbf{colimit} of a directed system is:
+\[
+\colfrac_{\alpha \in I} \TransFrac{\alpha} = \bigcup_{\alpha \in I} \TransFrac{\alpha}
+\]
+with the induced structure from the inclusions.
+\end{definition}
+
+\begin{theorem}[Colimit Existence]
+\label{thm:colimit-existence}
+Every directed system of transfinite fractals has a colimit in the category $\FracSet_\infty$ of transfinite fractals.
+\end{theorem}
+
+\begin{proof}
+The colimit is constructed as follows:
+\begin{enumerate}
+  \item Domain: $\bigcup_{\alpha \in I} \mathrm{dom}(\TransFrac{\alpha})$ with ordinal union
+  \item Noetic assignment: For $\beta$ in the union, find $\alpha$ with $\beta \in \mathrm{dom}(\TransFrac{\alpha})$ and set the value as $\TransFrac{\alpha}(\beta)$
+  \item Coherence ensures this is well-defined
+\end{enumerate}
+Universal property verification is standard.
+\end{proof}
+
+\section{Transfinite Semantic Evaluation}
+
+\begin{definition}[Transfinite Evaluation]
+\label{def:transfinite-eval}
+For transfinite fractal $\TransFrac{\alpha}$ and Idea $x$, define evaluation by transfinite recursion:
+\[
+\sem{\TransFrac{\alpha}}(x) =
+\begin{cases}
+x & \text{if } \alpha = 0 \\
+\mathfrak{n}_{k_\beta}(\sem{\TransFrac{\beta}}(x)) & \text{if } \alpha = \beta + 1, k_\beta = \TransFrac{\alpha}(\beta) \\
+\bigsqcup_{\beta < \alpha} \sem{\TransFrac{\beta}}(x) & \text{if } \alpha \text{ is a limit}
+\end{cases}
+\]
+\end{definition}
+
+\begin{theorem}[Transfinite Evaluation Well-Defined]
+\label{thm:transfinite-eval-defined}
+The transfinite evaluation $\sem{\TransFrac{\alpha}}(x)$ is well-defined for all $\alpha \in \Ord$ and $x \in \Ideas$.
+\end{theorem}
+
+\begin{proof}
+By transfinite induction on $\alpha$:
+\begin{itemize}
+  \item \textbf{Base}: $\alpha = 0$ is trivial
+  \item \textbf{Successor}: If $\sem{\TransFrac{\beta}}(x)$ is defined, so is $\mathfrak{n}_k(\sem{\TransFrac{\beta}}(x))$
+  \item \textbf{Limit}: The sequence $(\sem{\TransFrac{\beta}}(x))_{\beta < \alpha}$ is an $\alpha$-chain. By the dcpo structure extended to ordinal chains (using the Axiom of Choice for uncountable limits), the supremum exists
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[Stabilization Theorem]
+\label{thm:stabilization}
+For any $x \in \Ideas$ and transfinite fractal $\TransFrac{\alpha}$, there exists an ordinal $\gamma \leq \alpha$ such that:
+\[
+\sem{\TransFrac{\beta}}(x) = \sem{\TransFrac{\gamma}}(x) \quad \text{for all } \beta \geq \gamma, \beta \leq \alpha
+\]
+\end{theorem}
+
+\begin{proof}
+The Ideas form a set (not a proper class). The sequence $(\sem{\TransFrac{\beta}}(x))_{\beta \leq \alpha}$ cannot have more than $|\Ideas|$ distinct values. By cardinality arguments, stabilization occurs before ordinal $|\Ideas|^+$.
+\end{proof}
+
+%% ============================================================================
+%% CHAPTER 2: MEASURE THEORY ON IDEA SPACE
+%% ============================================================================
+
+\chapter{Measure Theory on Idea Space}
+\label{ch:measure-theory}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter develops measure-theoretic foundations for TKS, enabling probabilistic reasoning about Ideas, integration of noetic functions, and a rigorous treatment of ``density'' in Idea space.
+\end{tcolorbox}
+
+\section{Sigma-Algebras on Ideas}
+
+\begin{definition}[Idea Sigma-Algebra]
+\label{def:idea-sigma-algebra}
+A \textbf{sigma-algebra} on $\Ideas$ is a collection $\SigAlg \subseteq \mathcal{P}(\Ideas)$ satisfying:
+\begin{enumerate}
+  \item $\Ideas \in \SigAlg$ (contains the whole space)
+  \item If $A \in \SigAlg$, then $\Ideas \setminus A \in \SigAlg$ (closed under complement)
+  \item If $(A_n)_{n \in \mathbb{N}} \subseteq \SigAlg$, then $\bigcup_{n=0}^\infty A_n \in \SigAlg$ (closed under countable union)
+\end{enumerate}
+The pair $(\Ideas, \SigAlg)$ is a \textbf{measurable space}.
+\end{definition}
+
+\begin{definition}[Canonical TKS Sigma-Algebra]
+\label{def:canonical-sigma}
+The \textbf{canonical sigma-algebra} $\SigAlg_{TKS}$ on $\Ideas$ is generated by:
+\begin{enumerate}
+  \item \textbf{World singletons}: $\{A\}, \{B\}, \{C\}, \{D\}$
+  \item \textbf{Domain sets}: $D_j^{-1}(\cdot) = \{x \in \Ideas \mid \mathrm{domain}(x) = D_j\}$
+  \item \textbf{Noetic preimages}: $\mathfrak{n}_k^{-1}(S)$ for $S \in \SigAlg_{TKS}$
+  \item \textbf{Acquisition sets}: $\{x \mid x \text{ requires } p\}$ for each $p \in \Acquisitions$
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[Sigma-Algebra Properties]
+\label{prop:sigma-properties}
+The canonical sigma-algebra satisfies:
+\begin{enumerate}
+  \item Each world $W \in \Worlds$ is measurable
+  \item Each element $Wn$ is a measurable singleton
+  \item Noetic operators are measurable functions
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) Worlds are generators, hence in $\SigAlg_{TKS}$.
+
+(2) $\{Wn\} = \{W\} \cap D_j^{-1}(\cdot) \cap \{n\text{th position}\}$, a finite intersection of generators.
+
+(3) By definition, $\mathfrak{n}_k^{-1}(S) \in \SigAlg_{TKS}$ for measurable $S$.
+\end{proof}
+
+\section{Measures on Idea Space}
+
+\begin{definition}[Measure on Ideas]
+\label{def:idea-measure}
+A \textbf{measure} on $(\Ideas, \SigAlg_{TKS})$ is a function $\mu : \SigAlg_{TKS} \to [0, \infty]$ satisfying:
+\begin{enumerate}
+  \item $\mu(\varnothing) = 0$ (null empty set)
+  \item $\mu\left(\bigcup_{n=0}^\infty A_n\right) = \sum_{n=0}^\infty \mu(A_n)$ for pairwise disjoint $(A_n)$ (countable additivity)
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Counting Measure]
+\label{def:counting-measure}
+The \textbf{counting measure} $\mu_\#$ assigns:
+\[
+\mu_\#(S) = |S| \quad \text{for } S \in \SigAlg_{TKS}
+\]
+Since $\Ideas$ has 40 elements, all measures are finite.
+\end{definition}
+
+\begin{definition}[Uniform Measure]
+\label{def:uniform-measure}
+The \textbf{uniform probability measure} $\mu_U$ assigns:
+\[
+\mu_U(S) = \frac{|S|}{40} \quad \text{for } S \in \SigAlg_{TKS}
+\]
+This is a probability measure: $\mu_U(\Ideas) = 1$.
+\end{definition}
+
+\begin{definition}[World-Weighted Measure]
+\label{def:world-weighted}
+The \textbf{world-weighted measure} with weights $w_A, w_B, w_C, w_D \geq 0$ assigns:
+\[
+\mu_W(S) = \sum_{W \in \Worlds} w_W \cdot |S \cap \mathcal{M}_W|
+\]
+where $\mathcal{M}_W = \{Wn \mid n = 1, \ldots, 10\}$ is the world manifold from v7.1.
+\end{definition}
+
+\begin{example}[Hermetic Measure]
+\label{ex:hermetic-measure}
+The \textbf{hermetic measure} weights worlds by spiritual density:
+\[
+w_A = 4, \quad w_B = 3, \quad w_C = 2, \quad w_D = 1
+\]
+reflecting the principle that Spiritual ideas carry more ``substance'' than Physical ones.
+\end{example}
+
+\section{Noetic Measure Transform}
+
+\begin{definition}[Pushforward Measure]
+\label{def:pushforward}
+For noetic $\noe{k}$ and measure $\mu$, the \textbf{pushforward measure} $(\noe{k})_* \mu$ is:
+\[
+((\noe{k})_* \mu)(S) = \mu(\mathfrak{n}_k^{-1}(S))
+\]
+\end{definition}
+
+\begin{theorem}[Noetic Measure Invariants]
+\label{thm:noetic-measure-invariant}
+For the identity noetic $\noe{0}$:
+\[
+(\noe{0})_* \mu = \mu
+\]
+For any measure $\mu$ and noetics $\noe{j}, \noe{k}$:
+\[
+((\noe{j} \circ \noe{k}))_* \mu = (\noe{j})_* ((\noe{k})_* \mu)
+\]
+\end{theorem}
+
+\begin{proof}
+Identity: $\mathfrak{n}_0^{-1}(S) = S$ by definition of identity noetic.
+
+Composition:
+\begin{align}
+((\noe{j} \circ \noe{k}))_* \mu(S) &= \mu((\mathfrak{n}_j \circ \mathfrak{n}_k)^{-1}(S)) \\
+&= \mu(\mathfrak{n}_k^{-1}(\mathfrak{n}_j^{-1}(S))) \\
+&= (\noe{k})_* \mu(\mathfrak{n}_j^{-1}(S)) \\
+&= (\noe{j})_* ((\noe{k})_* \mu)(S)
+\end{align}
+\end{proof}
+
+\begin{definition}[Invariant Measure]
+\label{def:invariant-measure}
+Measure $\mu$ is \textbf{$\noe{k}$-invariant} if $(\noe{k})_* \mu = \mu$.
+\end{definition}
+
+\begin{theorem}[Eigenmeasures]
+\label{thm:eigenmeasures}
+For each noetic $\noe{k}$, there exists a probability measure $\mu_k$ that is $\noe{k}$-invariant.
+\end{theorem}
+
+\begin{proof}
+Since $\Ideas$ is finite, consider the sequence of measures:
+\[
+\mu^{(n)} = \frac{1}{n} \sum_{m=0}^{n-1} (\noe{k})_*^m \mu_U
+\]
+By compactness of probability measures on finite spaces, this sequence has a convergent subsequence. The limit is $\noe{k}$-invariant by continuity.
+\end{proof}
+
+\section{Integration on Idea Space}
+
+\begin{definition}[Simple Functions]
+\label{def:simple-functions}
+A \textbf{simple function} $f : \Ideas \to \mathbb{R}$ has the form:
+\[
+f = \sum_{i=1}^n a_i \cdot \mathbf{1}_{A_i}
+\]
+where $a_i \in \mathbb{R}$, $A_i \in \SigAlg_{TKS}$, and $\mathbf{1}_{A_i}$ is the indicator function.
+\end{definition}
+
+\begin{definition}[Integral of Simple Functions]
+\label{def:simple-integral}
+For simple $f$ and measure $\mu$:
+\[
+\intI f \, d\mu = \sum_{i=1}^n a_i \cdot \mu(A_i)
+\]
+\end{definition}
+
+\begin{definition}[General Integral]
+\label{def:general-integral}
+For any measurable $f : \Ideas \to \mathbb{R}$ (all functions are measurable on finite spaces):
+\[
+\intI f \, d\mu = \sum_{x \in \Ideas} f(x) \cdot \mu(\{x\})
+\]
+when $\mu$ has atoms (true for finite spaces).
+\end{definition}
+
+\begin{theorem}[Linearity of Integration]
+\label{thm:integration-linearity}
+For measurable $f, g$ and constants $a, b \in \mathbb{R}$:
+\[
+\intI (af + bg) \, d\mu = a \intI f \, d\mu + b \intI g \, d\mu
+\]
+\end{theorem}
+
+\begin{definition}[Noetic Expectation]
+\label{def:noetic-expectation}
+For noetic $\noe{k}$ viewed as a function $\mathfrak{n}_k : \Ideas \to \Ideas$, and numerical encoding $\phi : \Ideas \to \mathbb{R}$, the \textbf{noetic expectation} is:
+\[
+\mathbb{E}_\mu[\phi \circ \mathfrak{n}_k] = \intI (\phi \circ \mathfrak{n}_k) \, d\mu
+\]
+\end{definition}
+
+\begin{theorem}[Change of Variables]
+\label{thm:change-variables}
+For noetic $\noe{k}$ and measurable $\phi$:
+\[
+\intI \phi \, d((\noe{k})_* \mu) = \intI (\phi \circ \mathfrak{n}_k) \, d\mu
+\]
+\end{theorem}
+
+\begin{proof}
+\begin{align}
+\intI \phi \, d((\noe{k})_* \mu) &= \sum_{x \in \Ideas} \phi(x) \cdot ((\noe{k})_* \mu)(\{x\}) \\
+&= \sum_{x \in \Ideas} \phi(x) \cdot \mu(\mathfrak{n}_k^{-1}(\{x\})) \\
+&= \sum_{x \in \Ideas} \phi(x) \cdot \sum_{y : \mathfrak{n}_k(y) = x} \mu(\{y\}) \\
+&= \sum_{y \in \Ideas} \phi(\mathfrak{n}_k(y)) \cdot \mu(\{y\}) \\
+&= \intI (\phi \circ \mathfrak{n}_k) \, d\mu
+\end{align}
+\end{proof}
+
+\section{Fractal Integration}
+
+\begin{definition}[Fractal Integral]
+\label{def:fractal-integral}
+For transfinite fractal $\TransFrac{\alpha}$ and measure $\mu$, the \textbf{fractal integral} is:
+\[
+\intI^{\TransFrac{\alpha}} f \, d\mu = \intI f \, d((\TransFrac{\alpha})_* \mu)
+\]
+where $(\TransFrac{\alpha})_* \mu$ is the pushforward along $\sem{\TransFrac{\alpha}}$.
+\end{definition}
+
+\begin{theorem}[Fractal Integration Chain Rule]
+\label{thm:fractal-chain}
+For composable fractals $\TransFrac{\alpha}, \TransFrac{\beta}$:
+\[
+\intI^{\TransFrac{\alpha} \circ_\Ord \TransFrac{\beta}} f \, d\mu = \intI^{\TransFrac{\alpha}} f \, d((\TransFrac{\beta})_* \mu)
+\]
+\end{theorem}
+
+\begin{corollary}[Eigenfractal Integration]
+\label{cor:eigenfractal-integration}
+For $\omega$-eigenfractal $\TransFrac{\omega}_k$ and $\noe{k}$-invariant measure $\mu_k$:
+\[
+\intI^{\TransFrac{\omega}_k} f \, d\mu_k = \intI f \, d\mu_k
+\]
+\end{corollary}
+
+%% ============================================================================
+%% CHAPTER 3: POLISH SPACES AND STONE DUALITY
+%% ============================================================================
+
+\chapter{Polish Spaces and Stone Duality}
+\label{ch:polish-stone}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter develops the descriptive set-theoretic and topological algebraic properties of TKS, connecting the discrete structure to Polish spaces and Stone duality.
+\end{tcolorbox}
+
+\section{TKS as Polish Space}
+
+\begin{definition}[Polish Space]
+\label{def:polish-space}
+A \textbf{Polish space} is a separable completely metrizable topological space.
+\end{definition}
+
+\begin{proposition}[Finite Spaces are Polish]
+\label{prop:finite-polish}
+Every finite discrete space is Polish.
+\end{proposition}
+
+\begin{proof}
+The discrete metric $d(x, y) = \mathbf{1}_{x \neq y}$ is complete (all Cauchy sequences are eventually constant) and separable (the space itself is a countable dense subset).
+\end{proof}
+
+\begin{corollary}[TKS Polish Structure]
+\label{cor:tks-polish}
+The Idea space $\Ideas$ with discrete topology is Polish.
+\end{corollary}
+
+\begin{definition}[Borel Sigma-Algebra]
+\label{def:borel-algebra}
+The \textbf{Borel sigma-algebra} $\Bor(\Ideas)$ is the sigma-algebra generated by open sets. For discrete $\Ideas$:
+\[
+\Bor(\Ideas) = \mathcal{P}(\Ideas) = \SigAlg_{TKS}
+\]
+\end{definition}
+
+\begin{theorem}[Standard Borel Space]
+\label{thm:standard-borel}
+$(\Ideas, \Bor(\Ideas))$ is a standard Borel space (Borel-isomorphic to a Borel subset of a Polish space).
+\end{theorem}
+
+\section{Extended Polish Structures}
+
+\begin{definition}[Infinite Idea Space]
+\label{def:infinite-idea}
+For theoretical extensions, consider the \textbf{infinite Idea space}:
+\[
+\Ideas_\infty = \prod_{W \in \Worlds} \prod_{n \in \mathbb{N}} \{Wn\}^\mathbb{N}
+\]
+representing infinite sequences of Ideas.
+\end{definition}
+
+\begin{proposition}[Product Polish Space]
+\label{prop:product-polish}
+$\Ideas_\infty$ with the product topology is Polish.
+\end{proposition}
+
+\begin{proof}
+Countable products of Polish spaces are Polish. Each factor is discrete (hence Polish), and the product is metrizable by:
+\[
+d((x_n), (y_n)) = \sum_{n=0}^\infty \frac{1}{2^n} \mathbf{1}_{x_n \neq y_n}
+\]
+\end{proof}
+
+\begin{definition}[Transfinite Fractal Space]
+\label{def:fractal-polish}
+The space of $\omega$-fractals:
+\[
+\FracSet_\omega = \{0, 1, \ldots, 9\}^\mathbb{N}
+\]
+is homeomorphic to the Cantor space and hence Polish.
+\end{definition}
+
+\section{Stone Duality}
+
+\begin{definition}[Boolean Algebra of Ideas]
+\label{def:boolean-ideas}
+The powerset $\mathcal{P}(\Ideas)$ forms a Boolean algebra:
+\begin{itemize}
+  \item Join: $A \vee B = A \cup B$
+  \item Meet: $A \wedge B = A \cap B$
+  \item Complement: $\neg A = \Ideas \setminus A$
+  \item Top: $\top = \Ideas$
+  \item Bottom: $\bot = \varnothing$
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Stone Space]
+\label{def:stone-space}
+A \textbf{Stone space} is a compact, Hausdorff, totally disconnected topological space.
+\end{definition}
+
+\begin{theorem}[Stone Representation]
+\label{thm:stone-representation}
+For the Boolean algebra $\mathcal{P}(\Ideas)$:
+\[
+\Spec(\mathcal{P}(\Ideas)) \cong \Ideas
+\]
+where $\Spec$ denotes the Stone spectrum (ultrafilters).
+\end{theorem}
+
+\begin{proof}
+Ultrafilters on a finite Boolean algebra correspond bijectively to atoms. For $\mathcal{P}(\Ideas)$, the atoms are singletons $\{x\}$ for $x \in \Ideas$. The principal ultrafilter at $x$ is:
+\[
+\mathcal{U}_x = \{A \in \mathcal{P}(\Ideas) \mid x \in A\}
+\]
+This establishes the bijection $x \mapsto \mathcal{U}_x$.
+\end{proof}
+
+\begin{corollary}[Stone Self-Duality]
+\label{cor:stone-self-dual}
+TKS exhibits Stone self-duality: the Stone dual of $\mathcal{P}(\Ideas)$ recovers $\Ideas$.
+\end{corollary}
+
+\section{Noetic Boolean Homomorphisms}
+
+\begin{definition}[Induced Boolean Map]
+\label{def:induced-boolean}
+Each noetic $\noe{k}$ induces a Boolean algebra homomorphism:
+\[
+\mathfrak{n}_k^{-1} : \mathcal{P}(\Ideas) \to \mathcal{P}(\Ideas)
+\]
+given by preimage.
+\end{definition}
+
+\begin{proposition}[Boolean Homomorphism Properties]
+\label{prop:boolean-homo}
+For noetic $\noe{k}$:
+\begin{enumerate}
+  \item $\mathfrak{n}_k^{-1}(A \cup B) = \mathfrak{n}_k^{-1}(A) \cup \mathfrak{n}_k^{-1}(B)$
+  \item $\mathfrak{n}_k^{-1}(A \cap B) = \mathfrak{n}_k^{-1}(A) \cap \mathfrak{n}_k^{-1}(B)$
+  \item $\mathfrak{n}_k^{-1}(\Ideas \setminus A) = \Ideas \setminus \mathfrak{n}_k^{-1}(A)$
+\end{enumerate}
+\end{proposition}
+
+\begin{theorem}[Stone Dual of Noetics]
+\label{thm:stone-dual-noetics}
+Under Stone duality, noetic $\noe{k}$ corresponds to:
+\[
+\Spec(\mathfrak{n}_k^{-1}) : \Spec(\mathcal{P}(\Ideas)) \to \Spec(\mathcal{P}(\Ideas))
+\]
+which equals $\mathfrak{n}_k : \Ideas \to \Ideas$.
+\end{theorem}
+
+\begin{proof}
+For ultrafilter $\mathcal{U}_x$ at $x \in \Ideas$:
+\[
+\Spec(\mathfrak{n}_k^{-1})(\mathcal{U}_x) = \{A \mid \mathfrak{n}_k^{-1}(A) \in \mathcal{U}_x\} = \{A \mid x \in \mathfrak{n}_k^{-1}(A)\} = \{A \mid \mathfrak{n}_k(x) \in A\} = \mathcal{U}_{\mathfrak{n}_k(x)}
+\]
+\end{proof}
+
+%% ============================================================================
+%% CHAPTER 4: GENERALIZED FIXED-POINT THEOREMS
+%% ============================================================================
+
+\chapter{Generalized Fixed-Point Theorems}
+\label{ch:fixed-points}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter extends the Kleene fixed-point theorem from v7.1 to include Banach, Tarski, and Knaster-Tarski fixed-point theorems, providing a complete toolkit for recursive and iterative constructions in TKS.
+\end{tcolorbox}
+
+\section{Banach Fixed-Point Theorem}
+
+\begin{definition}[Contraction on TKS]
+\label{def:contraction}
+A function $f : \Ideas \to \Ideas$ is a \textbf{contraction} with respect to metric $d$ if there exists $0 \leq c < 1$ such that:
+\[
+d(f(x), f(y)) \leq c \cdot d(x, y) \quad \text{for all } x, y \in \Ideas
+\]
+\end{definition}
+
+\begin{remark}
+On the discrete space $\Ideas$ with metric $d(x,y) = \mathbf{1}_{x \neq y}$, a contraction must satisfy $c < 1$, which forces $f(x) = f(y)$ whenever $x \neq y$ with $f(x) \neq f(y)$---effectively requiring $f$ to be constant or highly constrained.
+\end{remark}
+
+\begin{definition}[Noetic Metric]
+\label{def:noetic-metric}
+The \textbf{noetic metric} on $\Ideas$ is:
+\[
+d_\nu(x, y) = \min\{n \in \mathbb{N} \mid \exists \text{ composition of } n \text{ noetics mapping } x \text{ to } y\}
+\]
+with $d_\nu(x, y) = \infty$ if no such composition exists.
+\end{definition}
+
+\begin{proposition}[Noetic Metric Properties]
+\label{prop:noetic-metric-props}
+The noetic metric satisfies:
+\begin{enumerate}
+  \item $d_\nu(x, x) = 0$
+  \item $d_\nu(x, y) = d_\nu(y, x)$ when both are finite (by invertibility within orbits)
+  \item $d_\nu(x, z) \leq d_\nu(x, y) + d_\nu(y, z)$ (triangle inequality)
+\end{enumerate}
+\end{proposition}
+
+\begin{theorem}[Banach Fixed-Point for TKS]
+\label{thm:banach-tks}
+Let $f : \Ideas \to \Ideas$ be a contraction with constant $c < 1$ under metric $d_\nu$. Then $f$ has a unique fixed point $x^* \in \Ideas$, and for any $x_0 \in \Ideas$:
+\[
+x^* = \lim_{n \to \infty} f^n(x_0)
+\]
+with convergence in at most $\lceil \log_c(\mathrm{diam}(\Ideas)) \rceil$ steps.
+\end{theorem}
+
+\begin{proof}
+Since $\Ideas$ is finite, the sequence $(f^n(x_0))$ must eventually repeat. Let $f^m(x_0) = f^{m+k}(x_0)$ for some $m, k > 0$.
+
+If $k > 1$, then $d_\nu(f^m(x_0), f^{m+1}(x_0)) > 0$ but:
+\[
+d_\nu(f^{m+k}(x_0), f^{m+k+1}(x_0)) = d_\nu(f^m(x_0), f^{m+1}(x_0))
+\]
+contradicting that $d_\nu(f^n(x_0), f^{n+1}(x_0)) \leq c^n \cdot d_\nu(x_0, f(x_0)) \to 0$.
+
+Thus $k = 1$, meaning $f^m(x_0) = f^{m+1}(x_0)$, so $x^* = f^m(x_0)$ is a fixed point.
+
+Uniqueness: If $f(x^*) = x^*$ and $f(y^*) = y^*$ with $x^* \neq y^*$:
+\[
+d_\nu(x^*, y^*) = d_\nu(f(x^*), f(y^*)) \leq c \cdot d_\nu(x^*, y^*) < d_\nu(x^*, y^*)
+\]
+Contradiction.
+\end{proof}
+
+\section{Tarski Fixed-Point Theorem}
+
+\begin{definition}[Complete Lattice on Ideas]
+\label{def:complete-lattice}
+The powerset $\mathcal{P}(\Ideas)$ with $\subseteq$ forms a complete lattice:
+\begin{itemize}
+  \item Meet: $\bigwedge \mathcal{S} = \bigcap \mathcal{S}$
+  \item Join: $\bigvee \mathcal{S} = \bigcup \mathcal{S}$
+  \item Top: $\top = \Ideas$
+  \item Bottom: $\bot = \varnothing$
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Monotone Function]
+\label{def:monotone-func}
+A function $F : \mathcal{P}(\Ideas) \to \mathcal{P}(\Ideas)$ is \textbf{monotone} if:
+\[
+A \subseteq B \implies F(A) \subseteq F(B)
+\]
+\end{definition}
+
+\begin{theorem}[Knaster-Tarski for TKS]
+\label{thm:knaster-tarski}
+Let $F : \mathcal{P}(\Ideas) \to \mathcal{P}(\Ideas)$ be monotone. Then:
+\begin{enumerate}
+  \item $F$ has a least fixed point: $\mathrm{lfp}(F) = \bigcap \{S \subseteq \Ideas \mid F(S) \subseteq S\}$
+  \item $F$ has a greatest fixed point: $\mathrm{gfp}(F) = \bigcup \{S \subseteq \Ideas \mid S \subseteq F(S)\}$
+  \item The set of fixed points forms a complete lattice
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Let $\mathcal{C} = \{S \mid F(S) \subseteq S\}$ (pre-fixed points) and $P = \bigcap \mathcal{C}$.
+
+\textbf{$P$ is a pre-fixed point:} For each $S \in \mathcal{C}$, we have $P \subseteq S$, so $F(P) \subseteq F(S) \subseteq S$. Thus $F(P) \subseteq \bigcap \mathcal{C} = P$.
+
+\textbf{$P$ is a fixed point:} Since $F(P) \subseteq P$, by monotonicity $F(F(P)) \subseteq F(P)$, so $F(P) \in \mathcal{C}$. Thus $P \subseteq F(P)$. Combined: $P = F(P)$.
+
+\textbf{$P$ is least:} Any fixed point $Q$ satisfies $F(Q) = Q \subseteq Q$, so $Q \in \mathcal{C}$, hence $P \subseteq Q$.
+
+The dual argument establishes $\mathrm{gfp}(F)$.
+\end{proof}
+
+\begin{definition}[Noetic Closure Operator]
+\label{def:noetic-closure}
+For noetic $\noe{k}$, the \textbf{noetic closure} is:
+\[
+\mathrm{cl}_k(S) = S \cup \mathfrak{n}_k(S) = S \cup \{\mathfrak{n}_k(x) \mid x \in S\}
+\]
+\end{definition}
+
+\begin{proposition}[Closure is Monotone]
+\label{prop:closure-monotone}
+Each $\mathrm{cl}_k$ is monotone on $(\mathcal{P}(\Ideas), \subseteq)$.
+\end{proposition}
+
+\begin{theorem}[Noetic Fixed Points]
+\label{thm:noetic-fixed-points}
+For any $S_0 \subseteq \Ideas$ and noetic $\noe{k}$:
+\[
+\mathrm{lfp}(\mathrm{cl}_k) = \bigcup_{n=0}^\infty \mathfrak{n}_k^n(S_0) = \text{orbit closure of } S_0 \text{ under } \noe{k}
+\]
+\end{theorem}
+
+\begin{proof}
+The sequence $S_0 \subseteq \mathrm{cl}_k(S_0) \subseteq \mathrm{cl}_k^2(S_0) \subseteq \cdots$ is increasing and bounded by $\Ideas$. On the finite lattice $\mathcal{P}(\Ideas)$, it stabilizes at the least fixed point.
+\end{proof}
+
+\section{Fixed Points for Fractal Operators}
+
+\begin{definition}[Fractal Closure]
+\label{def:fractal-closure}
+For fractal $\Frac = \langle k_1 : \cdots : k_n \rangle$, define:
+\[
+\mathrm{cl}_\Frac(S) = S \cup \sem{\Frac}(S)
+\]
+\end{definition}
+
+\begin{theorem}[Fractal Fixed-Point Hierarchy]
+\label{thm:fractal-fixed-hierarchy}
+For nested fractals $\Frac_1 \sqsubseteq \Frac_2$ (prefix relation):
+\[
+\mathrm{lfp}(\mathrm{cl}_{\Frac_1}) \subseteq \mathrm{lfp}(\mathrm{cl}_{\Frac_2})
+\]
+\end{theorem}
+
+\begin{proof}
+If $\Frac_1$ is a prefix of $\Frac_2$, then $\sem{\Frac_2} = \sem{\Frac_2'} \circ \sem{\Frac_1}$ for some $\Frac_2'$. The closure under $\Frac_2$ includes all elements reachable by $\Frac_1$, plus additional elements reachable by $\Frac_2'$.
+\end{proof}
+
+\section{Iterative Fixed-Point Computation}
+
+\begin{definition}[Kleene Chain]
+\label{def:kleene-chain}
+For monotone $F : \mathcal{P}(\Ideas) \to \mathcal{P}(\Ideas)$, the \textbf{Kleene chain} is:
+\[
+\varnothing = F^0(\varnothing) \subseteq F^1(\varnothing) \subseteq F^2(\varnothing) \subseteq \cdots
+\]
+\end{definition}
+
+\begin{theorem}[Finite Convergence]
+\label{thm:finite-convergence}
+On $\mathcal{P}(\Ideas)$ with $|\Ideas| = 40$, the Kleene chain stabilizes in at most 40 steps:
+\[
+\mathrm{lfp}(F) = F^{40}(\varnothing)
+\]
+\end{theorem}
+
+\begin{proof}
+Each step either adds at least one new element or stabilizes. With 40 elements maximum, convergence occurs in at most 40 iterations.
+\end{proof}
+
+\begin{corollary}[Polynomial Fixed-Point Algorithm]
+\label{cor:poly-fixed-point}
+Computing $\mathrm{lfp}(F)$ for monotone $F$ on TKS is $O(40 \cdot T_F)$ where $T_F$ is the cost of evaluating $F$ once.
+\end{corollary}
+
+%% ============================================================================
+%% PART II: PROGRAMMING LANGUAGE EXPANSION
+%% ============================================================================
+\part{Programming Language Expansion}
+
+\chapter{Hindley-Milner Type Inference}
+\label{ch:algorithm-w}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter develops complete Hindley-Milner type inference for TKS, including type schemes, substitutions, unification, and Algorithm W with correctness proofs.
+\end{tcolorbox}
+
+\section{Type Schemes and Polymorphism}
+
+\begin{definition}[TKS Type Syntax (Extended)]
+\label{def:tks-type-syntax-ext}
+The type grammar extends v7.0 with type variables:
+\begin{align}
+\tau ::=&\; \TypeVar \quad \text{(type variable)} \\
+    &\mid \mathsf{Int} \mid \mathsf{Bool} \mid \mathsf{Unit} \\
+    &\mid \mathsf{Element}[W] \mid \mathsf{Domain} \mid \mathsf{Foundation} \\
+    &\mid \mathsf{Frac}[\bar{k}] \mid \mathsf{RPM}[\tau] \\
+    &\mid \tau_1 \to \tau_2 \mid \tau_1 \times \tau_2 \mid \tau_1 + \tau_2
+\end{align}
+where $\TypeVar \in \{\alpha, \beta, \gamma, \ldots\}$ is a countable set of type variables.
+\end{definition}
+
+\begin{definition}[Type Scheme]
+\label{def:type-scheme}
+A \textbf{type scheme} has the form:
+\[
+\TypeScheme = \forall \alpha_1, \ldots, \alpha_n.\, \tau
+\]
+where $\alpha_1, \ldots, \alpha_n$ are bound type variables and $\tau$ is a type.
+\end{definition}
+
+\begin{definition}[Free Type Variables]
+\label{def:free-type-vars}
+The \textbf{free type variables} of a type or scheme:
+\begin{align}
+\FTV(\TypeVar) &= \{\TypeVar\} \\
+\FTV(\mathsf{Int}) &= \varnothing \\
+\FTV(\tau_1 \to \tau_2) &= \FTV(\tau_1) \cup \FTV(\tau_2) \\
+\FTV(\forall \alpha.\, \tau) &= \FTV(\tau) \setminus \{\alpha\} \\
+\FTV(\Gamma) &= \bigcup_{x : \TypeScheme \in \Gamma} \FTV(\TypeScheme)
+\end{align}
+\end{definition}
+
+\begin{definition}[Type Substitution]
+\label{def:type-substitution}
+A \textbf{substitution} $\Subst$ is a finite map from type variables to types:
+\[
+\Subst = [\alpha_1 \mapsto \tau_1, \ldots, \alpha_n \mapsto \tau_n]
+\]
+Application is defined recursively:
+\begin{align}
+\Subst(\TypeVar) &= \begin{cases} \tau_i & \text{if } \TypeVar = \alpha_i \\ \TypeVar & \text{otherwise} \end{cases} \\
+\Subst(\tau_1 \to \tau_2) &= \Subst(\tau_1) \to \Subst(\tau_2)
+\end{align}
+\end{definition}
+
+\begin{definition}[Substitution Composition]
+\label{def:subst-composition}
+For substitutions $\Subst_1, \Subst_2$:
+\[
+(\Subst_1 \circ \Subst_2)(\alpha) = \Subst_1(\Subst_2(\alpha))
+\]
+\end{definition}
+
+\section{Unification}
+
+\begin{definition}[Unification Problem]
+\label{def:unification-problem}
+A \textbf{unification problem} is a set of equations $\{(\tau_1 \doteq \sigma_1), \ldots, (\tau_n \doteq \sigma_n)\}$.
+
+A \textbf{unifier} is a substitution $\Subst$ such that $\Subst(\tau_i) = \Subst(\sigma_i)$ for all $i$.
+
+The \textbf{most general unifier (MGU)} $\Subst$ satisfies: for any unifier $\Subst'$, there exists $\Subst''$ with $\Subst' = \Subst'' \circ \Subst$.
+\end{definition}
+
+\begin{definition}[Unification Algorithm]
+\label{def:unify-algorithm}
+$\Unify(\tau, \sigma)$ computes the MGU:
+\begin{align}
+\Unify(\alpha, \alpha) &= [] \quad \text{(empty substitution)} \\
+\Unify(\alpha, \tau) &= [\alpha \mapsto \tau] \quad \text{if } \alpha \notin \FTV(\tau) \\
+\Unify(\tau, \alpha) &= [\alpha \mapsto \tau] \quad \text{if } \alpha \notin \FTV(\tau) \\
+\Unify(\tau_1 \to \tau_2, \sigma_1 \to \sigma_2) &= \Subst_2 \circ \Subst_1 \\
+  &\quad \text{where } \Subst_1 = \Unify(\tau_1, \sigma_1) \\
+  &\quad \text{and } \Subst_2 = \Unify(\Subst_1(\tau_2), \Subst_1(\sigma_2)) \\
+\Unify(\mathsf{Int}, \mathsf{Int}) &= [] \\
+\Unify(\mathsf{Element}[W], \mathsf{Element}[W]) &= [] \\
+\Unify(\_, \_) &= \mathsf{fail} \quad \text{(otherwise)}
+\end{align}
+\end{definition}
+
+\begin{theorem}[Unification Correctness]
+\label{thm:unify-correct}
+If $\Unify(\tau, \sigma) = \Subst$, then:
+\begin{enumerate}
+  \item $\Subst(\tau) = \Subst(\sigma)$ (soundness)
+  \item $\Subst$ is the MGU (principality)
+\end{enumerate}
+If $\Unify(\tau, \sigma) = \mathsf{fail}$, no unifier exists.
+\end{theorem}
+
+\begin{proof}
+By structural induction on the unification algorithm.
+
+\textbf{Case $\Unify(\alpha, \tau)$:} The occurs check $\alpha \notin \FTV(\tau)$ prevents infinite types. The substitution $[\alpha \mapsto \tau]$ clearly unifies, and any other unifier must map $\alpha$ to something that equals $\Subst'(\tau)$, establishing principality.
+
+\textbf{Case $\Unify(\tau_1 \to \tau_2, \sigma_1 \to \sigma_2)$:} By IH, $\Subst_1$ is MGU for $(\tau_1, \sigma_1)$. Applying $\Subst_1$ and computing $\Subst_2$ for the results, the composition $\Subst_2 \circ \Subst_1$ is MGU for the original pair.
+\end{proof}
+
+\section{Algorithm W}
+
+\begin{definition}[Instantiation]
+\label{def:instantiation}
+$\Inst(\forall \alpha_1, \ldots, \alpha_n.\, \tau)$ returns $[\alpha_1 \mapsto \beta_1, \ldots, \alpha_n \mapsto \beta_n](\tau)$ where $\beta_i$ are fresh type variables.
+\end{definition}
+
+\begin{definition}[Generalization]
+\label{def:generalization}
+$\Gen(\Gamma, \tau) = \forall \alpha_1, \ldots, \alpha_n.\, \tau$ where $\{\alpha_1, \ldots, \alpha_n\} = \FTV(\tau) \setminus \FTV(\Gamma)$.
+\end{definition}
+
+\begin{definition}[Algorithm W]
+\label{def:algorithm-w}
+$\AlgW(\Gamma, e) = (\Subst, \tau)$ where $\Subst(\Gamma) \vdash e : \tau$:
+
+\textbf{Variable:}
+\[
+\AlgW(\Gamma, x) = ([], \Inst(\Gamma(x)))
+\]
+
+\textbf{Abstraction:}
+\begin{align}
+\AlgW(\Gamma, \lambda x. e) &= (\Subst, \Subst(\alpha) \to \tau) \\
+  &\text{where } \alpha \text{ is fresh} \\
+  &\text{and } (\Subst, \tau) = \AlgW(\Gamma[x : \alpha], e)
+\end{align}
+
+\textbf{Application:}
+\begin{align}
+\AlgW(\Gamma, e_1\; e_2) &= (\Subst_3 \circ \Subst_2 \circ \Subst_1, \Subst_3(\alpha)) \\
+  &\text{where } (\Subst_1, \tau_1) = \AlgW(\Gamma, e_1) \\
+  &\text{and } (\Subst_2, \tau_2) = \AlgW(\Subst_1(\Gamma), e_2) \\
+  &\text{and } \alpha \text{ is fresh} \\
+  &\text{and } \Subst_3 = \Unify(\Subst_2(\tau_1), \tau_2 \to \alpha)
+\end{align}
+
+\textbf{Let:}
+\begin{align}
+\AlgW(\Gamma, \mathsf{let}\; x = e_1 \;\mathsf{in}\; e_2) &= (\Subst_2 \circ \Subst_1, \tau_2) \\
+  &\text{where } (\Subst_1, \tau_1) = \AlgW(\Gamma, e_1) \\
+  &\text{and } \TypeScheme = \Gen(\Subst_1(\Gamma), \tau_1) \\
+  &\text{and } (\Subst_2, \tau_2) = \AlgW(\Subst_1(\Gamma)[x : \TypeScheme], e_2)
+\end{align}
+\end{definition}
+
+\section{TKS-Specific Inference Rules}
+
+\begin{definition}[Noetic Inference]
+\label{def:noetic-inference}
+\begin{align}
+\AlgW(\Gamma, \noe{k}(e)) &= (\Subst', \mathsf{Domain}) \\
+  &\text{where } (\Subst, \tau) = \AlgW(\Gamma, e) \\
+  &\text{and } \Subst' = \Subst \circ \Unify(\tau, \mathsf{Domain})
+\end{align}
+\end{definition}
+
+\begin{definition}[Fractal Inference]
+\label{def:fractal-inference}
+\begin{align}
+\AlgW(\Gamma, \langle k_1 : \cdots : k_n \rangle(e)) &= (\Subst', \mathsf{Domain}) \\
+  &\text{where } (\Subst, \tau) = \AlgW(\Gamma, e) \\
+  &\text{and } \Subst' = \Subst \circ \Unify(\tau, \mathsf{Domain})
+\end{align}
+\end{definition}
+
+\begin{definition}[RPM Inference]
+\label{def:rpm-inference}
+\begin{align}
+\AlgW(\Gamma, \rpmret\; e) &= (\Subst, \mathsf{RPM}[\tau]) \\
+  &\text{where } (\Subst, \tau) = \AlgW(\Gamma, e)
+\end{align}
+
+\begin{align}
+\AlgW(\Gamma, m \rpmbind f) &= (\Subst_3 \circ \Subst_2 \circ \Subst_1, \mathsf{RPM}[\beta]) \\
+  &\text{where } (\Subst_1, \tau_m) = \AlgW(\Gamma, m) \\
+  &\text{and } (\Subst_2, \tau_f) = \AlgW(\Subst_1(\Gamma), f) \\
+  &\text{and } \alpha, \beta \text{ are fresh} \\
+  &\text{and } \Subst_3 = \Unify(\Subst_2(\tau_m), \mathsf{RPM}[\alpha]) \\
+  &\qquad\qquad \circ \Unify(\Subst_2(\tau_f), \alpha \to \mathsf{RPM}[\beta])
+\end{align}
+\end{definition}
+
+\begin{theorem}[Algorithm W Soundness]
+\label{thm:alg-w-sound}
+If $\AlgW(\Gamma, e) = (\Subst, \tau)$, then $\Subst(\Gamma) \vdash e : \tau$ is derivable.
+\end{theorem}
+
+\begin{theorem}[Algorithm W Completeness]
+\label{thm:alg-w-complete}
+If $\Subst'(\Gamma) \vdash e : \tau'$ is derivable, then $\AlgW(\Gamma, e) = (\Subst, \tau)$ succeeds with $\tau' = \Subst''(\tau)$ for some $\Subst''$.
+\end{theorem}
+
+%% ============================================================================
+%% CHAPTER 6: COMPILER ARCHITECTURE
+%% ============================================================================
+
+\chapter{Compiler Architecture}
+\label{ch:compiler}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter specifies the complete TKS compiler pipeline: lexical analysis, parsing, abstract syntax trees, intermediate representation, bytecode generation, and virtual machine execution.
+\end{tcolorbox}
+
+\section{Lexical Analysis}
+
+\begin{definition}[TKS Token Set]
+\label{def:token-set}
+The lexer produces tokens from the following categories:
+\begin{align}
+\mathsf{Token} ::=&\; \mathsf{ELEMENT}(W, n) \quad \text{(e.g., A1, B5, D10)} \\
+    &\mid \mathsf{NOETIC}(k) \quad \text{(e.g., } \nu_0, \nu_9\text{)} \\
+    &\mid \mathsf{FOUNDATION}(m, w) \quad \text{(e.g., F1a, F7d)} \\
+    &\mid \mathsf{INT}(n) \mid \mathsf{BOOL}(b) \mid \mathsf{IDENT}(s) \\
+    &\mid \mathsf{LAMBDA} \mid \mathsf{LET} \mid \mathsf{IN} \mid \mathsf{IF} \mid \mathsf{THEN} \mid \mathsf{ELSE} \\
+    &\mid \mathsf{RETURN} \mid \mathsf{BIND} \mid \mathsf{CHECK} \mid \mathsf{ACQUIRE} \\
+    &\mid \mathsf{FRAC\_OPEN} \mid \mathsf{FRAC\_CLOSE} \mid \mathsf{COLON} \\
+    &\mid \mathsf{LPAREN} \mid \mathsf{RPAREN} \mid \mathsf{ARROW} \mid \mathsf{EQUALS} \\
+    &\mid \mathsf{PLUS} \mid \mathsf{MINUS} \mid \mathsf{TIMES} \mid \mathsf{DIVIDE} \\
+    &\mid \mathsf{ACBE} \mid \mathsf{EOF}
+\end{align}
+\end{definition}
+
+\begin{definition}[Lexer Specification]
+\label{def:lexer-spec}
+The lexer function $\mathsf{lex} : \mathsf{String} \to \mathsf{Token}^*$ is defined by:
+\begin{enumerate}
+  \item Skip whitespace and comments (lines starting with \texttt{--})
+  \item Match keywords: \texttt{let}, \texttt{in}, \texttt{if}, \texttt{then}, \texttt{else}, \texttt{return}, \texttt{check}, \texttt{acquire}, \texttt{ACBE}
+  \item Match element literals: $[A-D][1-9]$ or $[A-D]10$
+  \item Match noetic literals: $\nu[0-9]$ or \texttt{nu[0-9]}
+  \item Match identifiers: $[a-z][a-zA-Z0-9\_]*$
+  \item Match integers: $[0-9]+$
+  \item Match operators and delimiters
+\end{enumerate}
+\end{definition}
+
+\section{Abstract Syntax Tree}
+
+\begin{definition}[TKS AST]
+\label{def:tks-ast}
+The abstract syntax tree type:
+\begin{align}
+\AST ::=&\; \mathsf{ElemLit}(W, n) \mid \mathsf{FoundLit}(m, w) \\
+    &\mid \mathsf{IntLit}(n) \mid \mathsf{BoolLit}(b) \mid \mathsf{Var}(x) \\
+    &\mid \mathsf{Lam}(x, \AST) \mid \mathsf{App}(\AST, \AST) \\
+    &\mid \mathsf{Let}(x, \AST, \AST) \\
+    &\mid \mathsf{If}(\AST, \AST, \AST) \\
+    &\mid \mathsf{Noetic}(k, \AST) \\
+    &\mid \mathsf{Fractal}(\bar{k}, \AST) \\
+    &\mid \mathsf{Return}(\AST) \mid \mathsf{Bind}(\AST, \AST) \\
+    &\mid \mathsf{Check}(\AST) \mid \mathsf{Acquire}(\AST) \\
+    &\mid \mathsf{ACBE}(\AST) \\
+    &\mid \mathsf{BinOp}(\mathsf{op}, \AST, \AST) \\
+    &\mid \mathsf{Pair}(\AST, \AST) \mid \mathsf{Fst}(\AST) \mid \mathsf{Snd}(\AST)
+\end{align}
+\end{definition}
+
+\begin{definition}[Parser Grammar]
+\label{def:parser-grammar}
+The TKS grammar (in BNF-like notation):
+\begin{verbatim}
+expr    ::= letexpr | lamexpr | ifexpr | bindexpr
+letexpr ::= 'let' IDENT '=' expr 'in' expr
+lamexpr ::= '\' IDENT '->' expr
+ifexpr  ::= 'if' expr 'then' expr 'else' expr
+bindexpr::= appexpr ('>>=' appexpr)*
+appexpr ::= primary+
+primary ::= ELEMENT | FOUNDATION | INT | BOOL | IDENT
+          | '(' expr ')' | noetic | fractal | rpm
+noetic  ::= 'nu' DIGIT '(' expr ')'
+fractal ::= '<' DIGIT (':' DIGIT)* '>' '(' expr ')'
+rpm     ::= 'return' primary | 'check' primary | 'acquire' primary
+\end{verbatim}
+\end{definition}
+
+\section{Intermediate Representation}
+
+\begin{definition}[TKS IR]
+\label{def:tks-ir}
+The intermediate representation uses A-normal form:
+\begin{align}
+\IR ::=&\; \mathsf{IRLet}(x, \mathsf{IRVal}, \IR) \quad \text{(let binding)} \\
+    &\mid \mathsf{IRRet}(\mathsf{IRAtom}) \quad \text{(return)} \\
+    &\mid \mathsf{IRTail}(\mathsf{IRAtom}, \mathsf{IRAtom}) \quad \text{(tail call)}
+\end{align}
+\begin{align}
+\mathsf{IRVal} ::=&\; \mathsf{IRAtom} \mid \mathsf{IRApp}(\mathsf{IRAtom}, \mathsf{IRAtom}) \\
+    &\mid \mathsf{IRNoetic}(k, \mathsf{IRAtom}) \\
+    &\mid \mathsf{IRFractal}(\bar{k}, \mathsf{IRAtom}) \\
+    &\mid \mathsf{IRPrim}(\mathsf{op}, \mathsf{IRAtom}, \mathsf{IRAtom}) \\
+    &\mid \mathsf{IRLam}(x, \IR) \\
+    &\mid \mathsf{IRBind}(\mathsf{IRAtom}, \mathsf{IRAtom}) \\
+    &\mid \mathsf{IRIf}(\mathsf{IRAtom}, \IR, \IR)
+\end{align}
+\begin{align}
+\mathsf{IRAtom} ::=&\; \mathsf{IRVar}(x) \mid \mathsf{IRInt}(n) \mid \mathsf{IRBool}(b) \\
+    &\mid \mathsf{IRElement}(W, n) \mid \mathsf{IRFoundation}(m, w)
+\end{align}
+\end{definition}
+
+\begin{definition}[ANF Transformation]
+\label{def:anf-transform}
+$\mathsf{toANF} : \AST \to \IR$ converts to A-normal form:
+\begin{align}
+\mathsf{toANF}(\mathsf{Var}(x)) &= \mathsf{IRRet}(\mathsf{IRVar}(x)) \\
+\mathsf{toANF}(\mathsf{IntLit}(n)) &= \mathsf{IRRet}(\mathsf{IRInt}(n)) \\
+\mathsf{toANF}(\mathsf{App}(e_1, e_2)) &= \mathsf{IRLet}(t_1, \mathsf{toANF}(e_1), \\
+  &\quad\; \mathsf{IRLet}(t_2, \mathsf{toANF}(e_2), \\
+  &\quad\quad\; \mathsf{IRRet}(\mathsf{IRApp}(t_1, t_2))))
+\end{align}
+where $t_1, t_2$ are fresh temporaries.
+\end{definition}
+
+\section{Bytecode Specification}
+
+\begin{definition}[TKS Bytecode Instructions]
+\label{def:bytecode}
+The bytecode instruction set:
+\begin{align}
+\BC ::=&\; \mathsf{PUSH\_INT}(n) \mid \mathsf{PUSH\_BOOL}(b) \\
+    &\mid \mathsf{PUSH\_ELEM}(W, n) \mid \mathsf{PUSH\_FOUND}(m, w) \\
+    &\mid \mathsf{LOAD}(x) \mid \mathsf{STORE}(x) \\
+    &\mid \mathsf{CALL}(n) \mid \mathsf{RET} \mid \mathsf{TAILCALL}(n) \\
+    &\mid \mathsf{CLOSURE}(\mathsf{label}, \bar{x}) \\
+    &\mid \mathsf{NOETIC}(k) \mid \mathsf{FRACTAL}(\bar{k}) \\
+    &\mid \mathsf{RPM\_RET} \mid \mathsf{RPM\_BIND} \\
+    &\mid \mathsf{RPM\_CHECK} \mid \mathsf{RPM\_ACQUIRE} \\
+    &\mid \mathsf{ACBE} \\
+    &\mid \mathsf{ADD} \mid \mathsf{SUB} \mid \mathsf{MUL} \mid \mathsf{DIV} \\
+    &\mid \mathsf{EQ} \mid \mathsf{LT} \mid \mathsf{NOT} \\
+    &\mid \mathsf{JMP}(\mathsf{label}) \mid \mathsf{JZ}(\mathsf{label}) \\
+    &\mid \mathsf{PAIR} \mid \mathsf{FST} \mid \mathsf{SND} \\
+    &\mid \mathsf{HALT}
+\end{align}
+\end{definition}
+
+\begin{definition}[Code Generation]
+\label{def:codegen}
+$\mathsf{compile} : \IR \to \BC^*$ generates bytecode:
+\begin{align}
+\mathsf{compile}(\mathsf{IRRet}(\mathsf{IRVar}(x))) &= [\mathsf{LOAD}(x), \mathsf{RET}] \\
+\mathsf{compile}(\mathsf{IRRet}(\mathsf{IRInt}(n))) &= [\mathsf{PUSH\_INT}(n), \mathsf{RET}] \\
+\mathsf{compile}(\mathsf{IRLet}(x, v, k)) &= \mathsf{compileVal}(v) \mathbin{++} [\mathsf{STORE}(x)] \mathbin{++} \mathsf{compile}(k)
+\end{align}
+\begin{align}
+\mathsf{compileVal}(\mathsf{IRNoetic}(k, a)) &= \mathsf{compileAtom}(a) \mathbin{++} [\mathsf{NOETIC}(k)] \\
+\mathsf{compileVal}(\mathsf{IRFractal}(\bar{k}, a)) &= \mathsf{compileAtom}(a) \mathbin{++} [\mathsf{FRACTAL}(\bar{k})] \\
+\mathsf{compileVal}(\mathsf{IRApp}(f, a)) &= \mathsf{compileAtom}(f) \mathbin{++} \mathsf{compileAtom}(a) \mathbin{++} [\mathsf{CALL}(1)]
+\end{align}
+\end{definition}
+
+\section{Virtual Machine}
+
+\begin{definition}[VM State]
+\label{def:vm-state}
+The TKS virtual machine state:
+\[
+\VM = (\mathsf{code}, \mathsf{pc}, \mathsf{stack}, \mathsf{env}, \mathsf{frames}, \alpha)
+\]
+where:
+\begin{itemize}
+  \item $\mathsf{code} : \BC^*$ --- bytecode program
+  \item $\mathsf{pc} : \mathbb{N}$ --- program counter
+  \item $\mathsf{stack} : \mathsf{Val}^*$ --- operand stack
+  \item $\mathsf{env} : \mathsf{Var} \to \mathsf{Val}$ --- local environment
+  \item $\mathsf{frames} : (\mathsf{pc} \times \mathsf{env})^*$ --- call stack
+  \item $\alpha : \mathcal{P}(\Acquisitions)$ --- RPM acquisition state
+\end{itemize}
+\end{definition}
+
+\begin{definition}[VM Values]
+\label{def:vm-values}
+Runtime values:
+\begin{align}
+\mathsf{Val} ::=&\; \mathsf{VInt}(n) \mid \mathsf{VBool}(b) \\
+    &\mid \mathsf{VElem}(W, n) \mid \mathsf{VFound}(m, w) \\
+    &\mid \mathsf{VClosure}(\mathsf{label}, \mathsf{env}) \\
+    &\mid \mathsf{VPair}(\mathsf{Val}, \mathsf{Val}) \\
+    &\mid \mathsf{VRPM}(\mathsf{RPMVal})
+\end{align}
+\begin{align}
+\mathsf{RPMVal} ::=&\; \mathsf{Success}(\mathsf{Val}) \mid \mathsf{Failure}(p)
+\end{align}
+\end{definition}
+
+\begin{definition}[VM Transition Rules]
+\label{def:vm-transitions}
+Selected transition rules $\VM \Rightarrow \VM'$:
+
+\textbf{Push Integer:}
+\[
+(\mathsf{code}, \mathsf{pc}, S, E, F, \alpha) \Rightarrow (\mathsf{code}, \mathsf{pc}+1, \mathsf{VInt}(n) :: S, E, F, \alpha)
+\]
+when $\mathsf{code}[\mathsf{pc}] = \mathsf{PUSH\_INT}(n)$
+
+\textbf{Noetic Application:}
+\[
+(\mathsf{code}, \mathsf{pc}, \mathsf{VElem}(W, n) :: S, E, F, \alpha) \Rightarrow (\mathsf{code}, \mathsf{pc}+1, \mathsf{VElem}(W', n') :: S, E, F, \alpha)
+\]
+when $\mathsf{code}[\mathsf{pc}] = \mathsf{NOETIC}(k)$ and $\mathfrak{n}_k(Wn) = W'n'$
+
+\textbf{Fractal Application:}
+\[
+(\mathsf{code}, \mathsf{pc}, v :: S, E, F, \alpha) \Rightarrow (\mathsf{code}, \mathsf{pc}+1, \sem{\langle \bar{k} \rangle}(v) :: S, E, F, \alpha)
+\]
+when $\mathsf{code}[\mathsf{pc}] = \mathsf{FRACTAL}(\bar{k})$
+
+\textbf{RPM Return:}
+\[
+(\mathsf{code}, \mathsf{pc}, v :: S, E, F, \alpha) \Rightarrow (\mathsf{code}, \mathsf{pc}+1, \mathsf{VRPM}(\mathsf{Success}(v)) :: S, E, F, \alpha)
+\]
+when $\mathsf{code}[\mathsf{pc}] = \mathsf{RPM\_RET}$
+
+\textbf{RPM Check:}
+\[
+(\mathsf{code}, \mathsf{pc}, \mathsf{VAcq}(p) :: S, E, F, \alpha) \Rightarrow (\mathsf{code}, \mathsf{pc}+1, r :: S, E, F, \alpha)
+\]
+when $\mathsf{code}[\mathsf{pc}] = \mathsf{RPM\_CHECK}$ and $r = \begin{cases} \mathsf{VRPM}(\mathsf{Success}(())) & p \in \alpha \\ \mathsf{VRPM}(\mathsf{Failure}(p)) & p \notin \alpha \end{cases}$
+
+\textbf{Function Call:}
+\[
+(\mathsf{code}, \mathsf{pc}, v :: \mathsf{VClosure}(L, E') :: S, E, F, \alpha) \Rightarrow (\mathsf{code}, L, S, E'[x \mapsto v], (\mathsf{pc}+1, E) :: F, \alpha)
+\]
+when $\mathsf{code}[\mathsf{pc}] = \mathsf{CALL}(1)$
+
+\textbf{Return:}
+\[
+(\mathsf{code}, \mathsf{pc}, v :: S, E, (\mathsf{pc}', E') :: F, \alpha) \Rightarrow (\mathsf{code}, \mathsf{pc}', v :: S, E', F, \alpha)
+\]
+when $\mathsf{code}[\mathsf{pc}] = \mathsf{RET}$
+\end{definition}
+
+\begin{theorem}[VM Correctness]
+\label{thm:vm-correct}
+For well-typed program $e$ with $\vdash e : \tau$:
+\[
+\langle e, \mathcal{E}_0 \rangle \bigstep (v, \mathcal{E}') \iff \mathsf{run}(\mathsf{compile}(\mathsf{toANF}(e))) = v'
+\]
+where $v$ and $v'$ are semantically equivalent.
+\end{theorem}
+
+%% ============================================================================
+%% CHAPTER 7: EFFECT HANDLERS
+%% ============================================================================
+
+\chapter{Effect Handlers for RPM}
+\label{ch:effect-handlers}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter develops algebraic effect handlers for the RPM monad, enabling modular composition of prerequisite checking, acquisition, and failure handling.
+\end{tcolorbox}
+
+\section{Algebraic Effects}
+
+\begin{definition}[Effect Signature]
+\label{def:effect-sig}
+The \textbf{RPM effect signature} $\Sigma_{RPM}$ consists of:
+\begin{align}
+\mathsf{Check} &: \Acquisitions \to \mathsf{Unit} \\
+\mathsf{Acquire} &: \Acquisitions \to \mathsf{Unit} \\
+\mathsf{Fail} &: \Acquisitions \to \mathsf{Void}
+\end{align}
+\end{definition}
+
+\begin{definition}[Free Monad Encoding]
+\label{def:free-monad}
+The free monad over $\Sigma_{RPM}$:
+\begin{align}
+\mathsf{Free}_{\Sigma}(\tau) ::=&\; \mathsf{Pure}(\tau) \\
+    &\mid \mathsf{Op}(\mathsf{Check}(p), \mathsf{Unit} \to \mathsf{Free}_\Sigma(\tau)) \\
+    &\mid \mathsf{Op}(\mathsf{Acquire}(p), \mathsf{Unit} \to \mathsf{Free}_\Sigma(\tau)) \\
+    &\mid \mathsf{Op}(\mathsf{Fail}(p), \mathsf{Void} \to \mathsf{Free}_\Sigma(\tau))
+\end{align}
+\end{definition}
+
+\begin{definition}[Effect Handler]
+\label{def:effect-handler}
+An \textbf{effect handler} for $\Sigma_{RPM}$ specifies:
+\begin{align}
+\mathsf{handler} &: \mathsf{Free}_\Sigma(\tau) \to \mathcal{P}(\Acquisitions) \to (\tau + \mathsf{Failure}) \times \mathcal{P}(\Acquisitions)
+\end{align}
+with clauses:
+\begin{align}
+\mathsf{handler}(\mathsf{Pure}(v))(\alpha) &= (\mathsf{Success}(v), \alpha) \\
+\mathsf{handler}(\mathsf{Op}(\mathsf{Check}(p), k))(\alpha) &=
+  \begin{cases}
+    \mathsf{handler}(k(()))(\alpha) & p \in \alpha \\
+    (\mathsf{Failure}(p), \alpha) & p \notin \alpha
+  \end{cases} \\
+\mathsf{handler}(\mathsf{Op}(\mathsf{Acquire}(p), k))(\alpha) &= \mathsf{handler}(k(()))(\alpha \cup \{p\}) \\
+\mathsf{handler}(\mathsf{Op}(\mathsf{Fail}(p), k))(\alpha) &= (\mathsf{Failure}(p), \alpha)
+\end{align}
+\end{definition}
+
+\section{Handler Composition}
+
+\begin{definition}[Handler Transformer]
+\label{def:handler-transformer}
+A \textbf{handler transformer} $H : \mathsf{Handler} \to \mathsf{Handler}$ modifies handling behavior.
+
+\textbf{Logging transformer:}
+\begin{align}
+H_{log}(h)(\mathsf{Op}(\mathsf{Check}(p), k))(\alpha) &= \mathsf{log}(p) \mathbin{;} h(\mathsf{Op}(\mathsf{Check}(p), k))(\alpha)
+\end{align}
+
+\textbf{Retry transformer:}
+\begin{align}
+H_{retry}(h)(\mathsf{Op}(\mathsf{Check}(p), k))(\alpha) &=
+  \begin{cases}
+    h(\mathsf{Op}(\mathsf{Check}(p), k))(\alpha) & p \in \alpha \\
+    h(\mathsf{Op}(\mathsf{Acquire}(p), \lambda (). \mathsf{Op}(\mathsf{Check}(p), k)))(\alpha) & p \notin \alpha
+  \end{cases}
+\end{align}
+\end{definition}
+
+\begin{theorem}[Handler Coherence]
+\label{thm:handler-coherence}
+For composable handlers $h_1, h_2$:
+\[
+\mathsf{handler}_{h_1 \circ h_2} = \mathsf{handler}_{h_1} \circ \mathsf{handler}_{h_2}
+\]
+when effect signatures are disjoint.
+\end{theorem}
+
+\section{Shallow vs Deep Handlers}
+
+\begin{definition}[Deep Handler]
+\label{def:deep-handler}
+A \textbf{deep handler} recursively handles all operations in the continuation:
+\[
+\mathsf{deep}(\mathsf{Op}(o, k))(\alpha) = \mathsf{clause}_o(\lambda v. \mathsf{deep}(k(v)))(\alpha)
+\]
+\end{definition}
+
+\begin{definition}[Shallow Handler]
+\label{def:shallow-handler}
+A \textbf{shallow handler} handles one operation, returning an unhandled continuation:
+\[
+\mathsf{shallow}(\mathsf{Op}(o, k))(\alpha) = \mathsf{clause}_o(k)(\alpha)
+\]
+\end{definition}
+
+\begin{proposition}[Deep-Shallow Equivalence]
+\label{prop:deep-shallow}
+For tail-recursive programs:
+\[
+\mathsf{deep}(m) = \mathsf{fix}(\lambda h. \lambda m. \mathsf{shallow}(m) \mathbin{;} h)
+\]
+\end{proposition}
+
+%% ============================================================================
+%% CHAPTER 8: MODULE SYSTEM
+%% ============================================================================
+
+\chapter{Module System and Pattern Matching}
+\label{ch:modules}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter defines the TKS module system for organizing code and the pattern matching facility for destructuring TKS values.
+\end{tcolorbox}
+
+\section{Module Structure}
+
+\begin{definition}[TKS Module]
+\label{def:tks-module}
+A \textbf{module} is a named collection of definitions:
+\begin{align}
+\mathsf{Module} ::=&\; \mathsf{module}\; M\; \mathsf{where}\; \bar{D} \\
+D ::=&\; \mathsf{def}\; x : \tau = e \quad \text{(value definition)} \\
+    &\mid \mathsf{type}\; T = \tau \quad \text{(type alias)} \\
+    &\mid \mathsf{import}\; M \quad \text{(module import)} \\
+    &\mid \mathsf{export}\; \bar{x} \quad \text{(export list)}
+\end{align}
+\end{definition}
+
+\begin{definition}[Module Signature]
+\label{def:module-sig}
+A \textbf{module signature} specifies the interface:
+\begin{align}
+\mathsf{Sig} ::=&\; \mathsf{sig}\; S\; \mathsf{where}\; \bar{Decl} \\
+Decl ::=&\; \mathsf{val}\; x : \tau \quad \text{(value declaration)} \\
+    &\mid \mathsf{type}\; T \quad \text{(abstract type)} \\
+    &\mid \mathsf{type}\; T = \tau \quad \text{(transparent type)}
+\end{align}
+\end{definition}
+
+\begin{definition}[Signature Matching]
+\label{def:sig-match}
+Module $M$ \textbf{matches} signature $S$, written $M : S$, if:
+\begin{enumerate}
+  \item For each $\mathsf{val}\; x : \tau \in S$, module $M$ exports $x$ with type $\tau' \leq \tau$
+  \item For each $\mathsf{type}\; T \in S$, module $M$ defines or exports type $T$
+  \item For each $\mathsf{type}\; T = \tau \in S$, module $M$ defines $T = \tau$
+\end{enumerate}
+\end{definition}
+
+\section{Pattern Matching}
+
+\begin{definition}[TKS Patterns]
+\label{def:tks-patterns}
+Patterns for destructuring TKS values:
+\begin{align}
+P ::=&\; x \quad \text{(variable pattern)} \\
+    &\mid \_ \quad \text{(wildcard)} \\
+    &\mid Wn \quad \text{(element literal)} \\
+    &\mid F_{mw} \quad \text{(foundation literal)} \\
+    &\mid n \quad \text{(integer literal)} \\
+    &\mid (P_1, P_2) \quad \text{(pair pattern)} \\
+    &\mid \mathsf{Success}(P) \mid \mathsf{Failure}(P) \quad \text{(RPM patterns)} \\
+    &\mid P_1 \mid P_2 \quad \text{(or-pattern)} \\
+    &\mid P\; \mathsf{when}\; e \quad \text{(guard)}
+\end{align}
+\end{definition}
+
+\begin{definition}[Pattern Matching Semantics]
+\label{def:pattern-sem}
+$\mathsf{match}(v, P) = \theta$ produces substitution $\theta$ or fails:
+\begin{align}
+\mathsf{match}(v, x) &= [x \mapsto v] \\
+\mathsf{match}(v, \_) &= [] \\
+\mathsf{match}(Wn, Wn) &= [] \\
+\mathsf{match}(Wn, W'n') &= \mathsf{fail} \quad \text{if } Wn \neq W'n' \\
+\mathsf{match}((v_1, v_2), (P_1, P_2)) &= \mathsf{match}(v_1, P_1) \cup \mathsf{match}(v_2, P_2) \\
+\mathsf{match}(v, P_1 \mid P_2) &= \mathsf{match}(v, P_1) \mathbin{\mathsf{or}} \mathsf{match}(v, P_2)
+\end{align}
+\end{definition}
+
+\begin{definition}[Case Expression]
+\label{def:case-expr}
+The case expression with exhaustiveness:
+\[
+\mathsf{case}\; e\; \mathsf{of}\; \{P_i \Rightarrow e_i\}_{i=1}^n
+\]
+Typing rule:
+\[
+\frac{\Gamma \vdash e : \tau \quad \forall i.\, \Gamma, \mathsf{bindings}(P_i : \tau) \vdash e_i : \sigma \quad \mathsf{exhaustive}(\{P_i\}, \tau)}
+{\Gamma \vdash \mathsf{case}\; e\; \mathsf{of}\; \{P_i \Rightarrow e_i\} : \sigma}
+\]
+\end{definition}
+
+\begin{definition}[World Pattern Matching]
+\label{def:world-pattern}
+Special patterns for world-level dispatch:
+\begin{align}
+\mathsf{case}\; e\; \mathsf{of} &\; A\_ \Rightarrow e_A \\
+    &\mid B\_ \Rightarrow e_B \\
+    &\mid C\_ \Rightarrow e_C \\
+    &\mid D\_ \Rightarrow e_D
+\end{align}
+where $W\_$ matches any element in world $W$.
+\end{definition}
+
+\begin{theorem}[Pattern Exhaustiveness]
+\label{thm:exhaustiveness}
+For type $\mathsf{Element}[W]$, patterns $\{Wn\}_{n=1}^{10}$ are exhaustive. For type $\mathsf{Element}$, patterns $\{A\_, B\_, C\_, D\_\}$ are exhaustive.
+\end{theorem}
+
+%% ============================================================================
+%% PART III: QUANTUM NOETIC EXPANSION
+%% ============================================================================
+\part{Quantum Noetic Expansion}
+
+\chapter{Noetic Hilbert Spaces}
+\label{ch:noetic-hilbert}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter develops the quantum-mechanical foundations for TKS, representing Ideas as vectors in Hilbert space and noetic operators as bounded linear operators.
+\end{tcolorbox}
+
+\section{The Noetic Hilbert Space}
+
+\begin{definition}[Noetic Hilbert Space]
+\label{def:noetic-hilbert}
+The \textbf{noetic Hilbert space} $\Hspace_\nu$ is the 40-dimensional complex Hilbert space:
+\[
+\Hspace_\nu = \mathbb{C}^{40} = \mathrm{span}_\mathbb{C}\{\qket{Wn} \mid W \in \{A,B,C,D\}, n \in \{1,\ldots,10\}\}
+\]
+with inner product:
+\[
+\qbraket{Wn}{W'n'} = \delta_{WW'} \delta_{nn'}
+\]
+\end{definition}
+
+\begin{definition}[Quantum Idea State]
+\label{def:quantum-idea}
+A \textbf{quantum Idea state} is a unit vector $\qket{\psi} \in \Hspace_\nu$:
+\[
+\qket{\psi} = \sum_{W,n} c_{Wn} \qket{Wn} \quad \text{with} \quad \sum_{W,n} |c_{Wn}|^2 = 1
+\]
+The coefficients $c_{Wn} \in \mathbb{C}$ are \textbf{probability amplitudes}.
+\end{definition}
+
+\begin{definition}[World Subspaces]
+\label{def:world-subspaces}
+Each world defines a 10-dimensional subspace:
+\begin{align}
+\Hspace_A &= \mathrm{span}\{\qket{A1}, \ldots, \qket{A10}\} \\
+\Hspace_B &= \mathrm{span}\{\qket{B1}, \ldots, \qket{B10}\} \\
+\Hspace_C &= \mathrm{span}\{\qket{C1}, \ldots, \qket{C10}\} \\
+\Hspace_D &= \mathrm{span}\{\qket{D1}, \ldots, \qket{D10}\}
+\end{align}
+These are orthogonal: $\Hspace_\nu = \Hspace_A \oplus \Hspace_B \oplus \Hspace_C \oplus \Hspace_D$.
+\end{definition}
+
+\begin{definition}[World Projectors]
+\label{def:world-projectors}
+The \textbf{world projector} onto $\Hspace_W$:
+\[
+\Projector_W = \sum_{n=1}^{10} \qket{Wn}\qbra{Wn}
+\]
+satisfying $\Projector_W^2 = \Projector_W$, $\Projector_W^\dagger = \Projector_W$, and $\sum_W \Projector_W = \mathbf{I}$.
+\end{definition}
+
+\section{Noetics as Linear Operators}
+
+\begin{definition}[Noetic Operator (Quantum)]
+\label{def:noetic-operator-quantum}
+Each noetic $\noe{k}$ extends to a linear operator $\qop{\nu}_k : \Hspace_\nu \to \Hspace_\nu$:
+\[
+\qop{\nu}_k = \sum_{Wn} \qket{\mathfrak{n}_k(Wn)}\qbra{Wn}
+\]
+where $\mathfrak{n}_k(Wn)$ is the classical noetic action.
+\end{definition}
+
+\begin{proposition}[Noetic Operator Properties]
+\label{prop:noetic-op-props}
+For each noetic operator $\qop{\nu}_k$:
+\begin{enumerate}
+  \item $\qop{\nu}_k$ is a linear operator
+  \item $\|\qop{\nu}_k\| \leq 1$ (bounded)
+  \item $\qop{\nu}_0 = \mathbf{I}$ (identity)
+  \item $\qop{\nu}_k \circ \qop{\nu}_j = \qop{\nu}_{k \circ j}$ (composition)
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) Linearity follows from the definition as a sum of rank-1 operators.
+
+(2) For any $\qket{\psi}$:
+\[
+\|\qop{\nu}_k\qket{\psi}\|^2 = \sum_{Wn} |\qbra{Wn}\psi|^2 \cdot |\qbraket{\mathfrak{n}_k(Wn)}{\mathfrak{n}_k(Wn)}|^2 \leq \|\qket{\psi}\|^2
+\]
+
+(3) $\qop{\nu}_0\qket{Wn} = \qket{\mathfrak{n}_0(Wn)} = \qket{Wn}$.
+
+(4) By associativity of the classical noetic composition.
+\end{proof}
+
+\begin{definition}[Unitary Noetics]
+\label{def:unitary-noetics}
+A noetic $\noe{k}$ is \textbf{unitary} if $\qop{\nu}_k^\dagger \qop{\nu}_k = \qop{\nu}_k \qop{\nu}_k^\dagger = \mathbf{I}$.
+
+This occurs when $\mathfrak{n}_k$ is a bijection on $\Ideas$.
+\end{definition}
+
+\begin{theorem}[Idempotent Noetics are Projective]
+\label{thm:idem-projective}
+If $\noe{k}$ is idempotent ($\noe{k} \circ \noe{k} = \noe{k}$), then:
+\[
+\qop{\nu}_k^2 = \qop{\nu}_k
+\]
+and $\qop{\nu}_k$ is a projector onto $\mathrm{Im}(\mathfrak{n}_k)$.
+\end{theorem}
+
+\begin{proof}
+\begin{align}
+\qop{\nu}_k^2 &= \left(\sum_{Wn} \qket{\mathfrak{n}_k(Wn)}\qbra{Wn}\right)^2 \\
+&= \sum_{Wn, W'n'} \qket{\mathfrak{n}_k(Wn)}\qbraket{Wn}{\mathfrak{n}_k(W'n')}\qbra{W'n'}
+\end{align}
+The inner product $\qbraket{Wn}{\mathfrak{n}_k(W'n')}$ is 1 iff $Wn = \mathfrak{n}_k(W'n')$. By idempotence of $\mathfrak{n}_k$, this simplifies to $\qop{\nu}_k$.
+\end{proof}
+
+\section{Bounded Operators and Spectrum}
+
+\begin{definition}[Bounded Operator Algebra]
+\label{def:bounded-ops}
+The algebra of bounded operators on $\Hspace_\nu$:
+\[
+\BoundedOp(\Hspace_\nu) = \{T : \Hspace_\nu \to \Hspace_\nu \mid T \text{ linear}, \|T\| < \infty\}
+\]
+This is a $C^*$-algebra with operator norm and adjoint.
+\end{definition}
+
+\begin{definition}[Noetic Algebra (Quantum)]
+\label{def:noetic-algebra-quantum}
+The \textbf{quantum noetic algebra} $\mathcal{A}_\nu \subseteq \BoundedOp(\Hspace_\nu)$ is:
+\[
+\mathcal{A}_\nu = \mathrm{span}_\mathbb{C}\{\qop{\nu}_0, \qop{\nu}_1, \ldots, \qop{\nu}_9\}
+\]
+\end{definition}
+
+\begin{theorem}[Noetic Algebra Dimension]
+\label{thm:noetic-algebra-dim}
+$\dim(\mathcal{A}_\nu) \leq 10$, with equality when noetic operators are linearly independent.
+\end{theorem}
+
+\begin{definition}[Spectrum of Noetic Operator]
+\label{def:noetic-spectrum}
+The \textbf{spectrum} of $\qop{\nu}_k$:
+\[
+\Spectrum(\qop{\nu}_k) = \{\lambda \in \mathbb{C} \mid \qop{\nu}_k - \lambda \mathbf{I} \text{ is not invertible}\}
+\]
+\end{definition}
+
+\begin{proposition}[Finite-Dimensional Spectrum]
+\label{prop:finite-spectrum}
+Since $\Hspace_\nu$ is 40-dimensional, $\Spectrum(\qop{\nu}_k)$ consists of at most 40 eigenvalues.
+\end{proposition}
+
+%% ============================================================================
+%% CHAPTER 10: SPECTRAL THEORY AND MEASUREMENT
+%% ============================================================================
+
+\chapter{Spectral Theory and Measurement}
+\label{ch:spectral}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter develops spectral decomposition of noetic operators and the quantum measurement theory for TKS.
+\end{tcolorbox}
+
+\section{Spectral Decomposition}
+
+\begin{theorem}[Spectral Theorem for Noetics]
+\label{thm:spectral-noetics}
+For self-adjoint noetic operator $\qop{\nu}_k = \qop{\nu}_k^\dagger$:
+\[
+\qop{\nu}_k = \sum_{i=1}^{r} \lambda_i \Projector_i
+\]
+where $\lambda_i$ are real eigenvalues and $\Projector_i$ are orthogonal projectors onto eigenspaces.
+\end{theorem}
+
+\begin{definition}[Noetic Eigenstates]
+\label{def:noetic-eigenstates}
+An \textbf{eigenstate} of $\qop{\nu}_k$ with eigenvalue $\lambda$:
+\[
+\qop{\nu}_k \qket{\phi_\lambda} = \lambda \qket{\phi_\lambda}
+\]
+The eigenspace $E_\lambda = \{\qket{\psi} \mid \qop{\nu}_k\qket{\psi} = \lambda\qket{\psi}\}$.
+\end{definition}
+
+\begin{definition}[Classical Eigenstates]
+\label{def:classical-eigenstates}
+The \textbf{classical basis states} $\qket{Wn}$ are eigenstates of position-like operators:
+\[
+\qop{W} \qket{Wn} = W \qket{Wn}, \quad \qop{N} \qket{Wn} = n \qket{Wn}
+\]
+where $\qop{W}$ measures world and $\qop{N}$ measures position within world.
+\end{definition}
+
+\begin{proposition}[Fixed-Point Eigenstates]
+\label{prop:fixed-point-eigenstates}
+If $\mathfrak{n}_k(Wn) = Wn$ (fixed point), then $\qket{Wn}$ is an eigenstate of $\qop{\nu}_k$ with eigenvalue 1.
+\end{proposition}
+
+\section{Quantum Measurement}
+
+\begin{definition}[World Measurement]
+\label{def:world-measurement}
+A \textbf{world measurement} on state $\qket{\psi} = \sum_{W,n} c_{Wn}\qket{Wn}$ produces:
+\begin{itemize}
+  \item Outcome $W \in \{A, B, C, D\}$ with probability $p_W = \sum_{n=1}^{10} |c_{Wn}|^2$
+  \item Post-measurement state: $\qket{\psi_W} = \frac{\Projector_W\qket{\psi}}{\|\Projector_W\qket{\psi}\|}$
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Element Measurement]
+\label{def:element-measurement}
+A \textbf{complete measurement} in the element basis produces:
+\begin{itemize}
+  \item Outcome $Wn$ with probability $p_{Wn} = |c_{Wn}|^2$
+  \item Post-measurement state: $\qket{Wn}$
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Measurement Postulates]
+\label{thm:measurement-postulates}
+TKS quantum measurement satisfies:
+\begin{enumerate}
+  \item \textbf{Completeness}: $\sum_{Wn} p_{Wn} = 1$
+  \item \textbf{Repeatability}: Measuring $\qket{Wn}$ again yields $Wn$ with certainty
+  \item \textbf{Collapse}: Post-measurement state is in eigenspace of measured observable
+\end{enumerate}
+\end{theorem}
+
+\begin{definition}[Noetic Observable]
+\label{def:noetic-observable}
+A \textbf{noetic observable} is a self-adjoint operator $\qop{O} \in \mathcal{A}_\nu$. Measurement of $\qop{O}$ on $\qket{\psi}$ yields:
+\[
+\langle \qop{O} \rangle_\psi = \qbra{\psi}\qop{O}\qket{\psi}
+\]
+with variance $\Delta O^2 = \langle \qop{O}^2 \rangle - \langle \qop{O} \rangle^2$.
+\end{definition}
+
+\begin{theorem}[Uncertainty Principle for Noetics]
+\label{thm:uncertainty}
+For non-commuting noetic operators $\qop{\nu}_j, \qop{\nu}_k$ with $[\qop{\nu}_j, \qop{\nu}_k] \neq 0$:
+\[
+\Delta \nu_j \cdot \Delta \nu_k \geq \frac{1}{2} |\langle [\qop{\nu}_j, \qop{\nu}_k] \rangle|
+\]
+\end{theorem}
+
+\begin{proof}
+Standard Robertson uncertainty relation applied to $\qop{\nu}_j$ and $\qop{\nu}_k$.
+\end{proof}
+
+\section{POVM Generalization}
+
+\begin{definition}[POVM for TKS]
+\label{def:povm}
+A \textbf{positive operator-valued measure} on $\Hspace_\nu$ is a set $\{E_i\}$ with:
+\begin{enumerate}
+  \item $E_i \geq 0$ (positive semidefinite)
+  \item $\sum_i E_i = \mathbf{I}$ (completeness)
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[World POVM]
+\label{def:world-povm}
+The \textbf{world POVM} $\{E_A, E_B, E_C, E_D\}$ with $E_W = \Projector_W$ represents world-level measurement without resolving individual elements.
+\end{definition}
+
+\begin{definition}[Fuzzy Element POVM]
+\label{def:fuzzy-povm}
+A \textbf{fuzzy element measurement} uses overlapping effects:
+\[
+E_{Wn}^\epsilon = (1-\epsilon)\qket{Wn}\qbra{Wn} + \frac{\epsilon}{39}\sum_{W'n' \neq Wn} \qket{W'n'}\qbra{W'n'}
+\]
+modeling imperfect measurement resolution.
+\end{definition}
+
+%% ============================================================================
+%% CHAPTER 11: QUANTUM FRACTALS AND ENTANGLEMENT
+%% ============================================================================
+
+\chapter{Quantum Fractals and Entanglement}
+\label{ch:quantum-fractals}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter extends fractal calculus to quantum operators and develops entanglement theory for multi-Idea systems.
+\end{tcolorbox}
+
+\section{Quantum Fractal Operators}
+
+\begin{definition}[Quantum Fractal]
+\label{def:quantum-fractal}
+For fractal $\Frac = \langle k_1 : k_2 : \cdots : k_n \rangle$, the \textbf{quantum fractal operator}:
+\[
+\qop{\Phi} = \qop{\nu}_{k_1} \circ \qop{\nu}_{k_2} \circ \cdots \circ \qop{\nu}_{k_n}
+\]
+\end{definition}
+
+\begin{theorem}[Quantum Fractal Associativity]
+\label{thm:quantum-frac-assoc}
+Quantum fractal composition is associative:
+\[
+\qop{\Phi_1 \circ \Phi_2} = \qop{\Phi_1} \circ \qop{\Phi_2}
+\]
+\end{theorem}
+
+\begin{definition}[Quantum Eigenfractal]
+\label{def:quantum-eigenfractal}
+The \textbf{quantum eigenfractal} for noetic $k$:
+\[
+\qop{\Phi}_k^\omega = \lim_{n \to \infty} \qop{\nu}_k^n
+\]
+when this limit exists in operator norm.
+\end{definition}
+
+\begin{theorem}[Eigenfractal Convergence]
+\label{thm:eigenfractal-convergence}
+For idempotent noetic $\noe{k}$:
+\[
+\qop{\Phi}_k^\omega = \qop{\nu}_k
+\]
+For general noetics, $\qop{\Phi}_k^\omega$ is the projector onto fixed points of $\mathfrak{n}_k$.
+\end{theorem}
+
+\begin{proof}
+If $\qop{\nu}_k^2 = \qop{\nu}_k$, then $\qop{\nu}_k^n = \qop{\nu}_k$ for all $n \geq 1$, so the limit is $\qop{\nu}_k$.
+
+For general noetics, on finite-dimensional space, $\qop{\nu}_k^n$ converges to the projector onto the eigenspace with eigenvalue 1 (fixed points) by the spectral theorem.
+\end{proof}
+
+\section{Multi-Idea Hilbert Space}
+
+\begin{definition}[Tensor Product Space]
+\label{def:tensor-product}
+For two Ideas, the \textbf{joint Hilbert space}:
+\[
+\Hspace_\nu^{(2)} = \Hspace_\nu \otimes \Hspace_\nu
+\]
+with basis $\{\qket{Wn} \otimes \qket{W'n'}\} = \{\qket{Wn, W'n'}\}$, dimension $40^2 = 1600$.
+\end{definition}
+
+\begin{definition}[Product State]
+\label{def:product-state}
+A \textbf{product state} has the form:
+\[
+\qket{\psi} \otimes \qket{\phi} = \qket{\psi, \phi}
+\]
+representing two independent Ideas.
+\end{definition}
+
+\begin{definition}[Entangled State]
+\label{def:entangled-state}
+A state $\qket{\Psi} \in \Hspace_\nu^{(2)}$ is \textbf{entangled} if it cannot be written as a product:
+\[
+\qket{\Psi} \neq \qket{\psi} \otimes \qket{\phi} \quad \text{for any } \qket{\psi}, \qket{\phi}
+\]
+\end{definition}
+
+\begin{example}[World-Entangled State]
+\label{ex:world-entangled}
+The \textbf{world-entangled Bell state}:
+\[
+\qket{\Psi_{AD}} = \frac{1}{\sqrt{10}} \sum_{n=1}^{10} \qket{An, Dn}
+\]
+represents perfect correlation between Spiritual and Physical Ideas.
+\end{example}
+
+\begin{definition}[Entanglement Entropy]
+\label{def:entanglement-entropy}
+For bipartite state $\qket{\Psi} \in \Hspace_\nu^{(2)}$, the \textbf{entanglement entropy}:
+\[
+S(\rho_1) = -\Trace(\rho_1 \log \rho_1)
+\]
+where $\rho_1 = \Trace_2(\qket{\Psi}\qbra{\Psi})$ is the reduced density matrix.
+\end{definition}
+
+\begin{theorem}[Maximum Entanglement]
+\label{thm:max-entanglement}
+The maximum entanglement entropy for TKS bipartite states:
+\[
+S_{max} = \log(40) \approx 3.69
+\]
+achieved by maximally entangled states.
+\end{theorem}
+
+\section{Entangled RPM}
+
+\begin{definition}[Quantum RPM]
+\label{def:quantum-rpm}
+A \textbf{quantum RPM computation} operates on $\Hspace_\nu$:
+\[
+\qop{R} : \Hspace_\nu \otimes \Hspace_\alpha \to \Hspace_\nu \otimes \Hspace_\alpha
+\]
+where $\Hspace_\alpha = \mathbb{C}^{2^{22}}$ is the acquisition state space.
+\end{definition}
+
+\begin{definition}[Superposition of Prerequisites]
+\label{def:superposition-prereq}
+A \textbf{prerequisite superposition}:
+\[
+\qket{\alpha} = \sum_{S \subseteq \Acquisitions} c_S \qket{S}
+\]
+represents uncertain acquisition state.
+\end{definition}
+
+\begin{theorem}[Entangled Goal Achievement]
+\label{thm:entangled-goal}
+For entangled Idea-acquisition state $\qket{\Psi} \in \Hspace_\nu \otimes \Hspace_\alpha$, measurement of goal success projects onto correlated subspace, enabling conditional acquisition strategies.
+\end{theorem}
+
+\section{ACBE as Quantum Channel}
+
+\begin{definition}[ACBE Quantum Channel]
+\label{def:acbe-channel}
+The ACBE transformation as a quantum channel $\mathcal{E}_{ACBE}$:
+\[
+\mathcal{E}_{ACBE}(\rho) = \sum_{n=1}^{10} K_n \rho K_n^\dagger
+\]
+where Kraus operators $K_n = \qket{Dn}\qbra{An}$ implement the descent.
+\end{definition}
+
+\begin{proposition}[ACBE Channel Properties]
+\label{prop:acbe-channel}
+The ACBE channel satisfies:
+\begin{enumerate}
+  \item \textbf{Trace-preserving}: $\Trace(\mathcal{E}_{ACBE}(\rho)) = \Trace(\rho)$
+  \item \textbf{Completely positive}: $(\mathcal{E}_{ACBE} \otimes \mathbf{I})(\sigma) \geq 0$ for any $\sigma \geq 0$
+  \item \textbf{World-shifting}: Maps $\Hspace_A$ to $\Hspace_D$
+\end{enumerate}
+\end{proposition}
+
+\begin{theorem}[Cascade Fidelity]
+\label{thm:cascade-fidelity}
+For pure state $\qket{\psi} \in \Hspace_A$, the ACBE output fidelity:
+\[
+F = |\qbra{\psi_{target}}\mathcal{E}_{ACBE}(\qket{\psi}\qbra{\psi})\qket{\psi_{target}}|
+\]
+equals 1 when $\qket{\psi_{target}} = \qket{Dn}$ and $\qket{\psi} = \qket{An}$.
+\end{theorem}
+
+%% ============================================================================
+%% PART IV: UNIFIED META-SYSTEM
+%% ============================================================================
+\part{Unified Meta-System}
+
+\chapter{Monoidal 2-Category Structure}
+\label{ch:monoidal-2cat}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter develops the monoidal 2-category structure unifying worlds, noetics, and transformations in TKS.
+\end{tcolorbox}
+
+\section{TKS as 2-Category}
+
+\begin{definition}[TKS 2-Category]
+\label{def:tks-2cat}
+The \textbf{TKS 2-category} $\mathbf{TKS}_2$ consists of:
+\begin{itemize}
+  \item \textbf{0-cells}: Worlds $\{A, B, C, D\}$
+  \item \textbf{1-cells}: Noetic operators $\noe{k} : W \to W'$ (potentially changing worlds via composition with descent)
+  \item \textbf{2-cells}: Natural transformations $\eta : \noe{j} \Rightarrow \noe{k}$
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Horizontal Composition]
+\label{def:horizontal-comp}
+For 1-cells $f : A \to B$ and $g : B \to C$:
+\[
+g \circ f : A \to C
+\]
+given by noetic composition.
+\end{definition}
+
+\begin{definition}[Vertical Composition]
+\label{def:vertical-comp}
+For 2-cells $\alpha : f \Rightarrow g$ and $\beta : g \Rightarrow h$:
+\[
+\beta \bullet \alpha : f \Rightarrow h
+\]
+given by natural transformation composition.
+\end{definition}
+
+\begin{theorem}[Interchange Law]
+\label{thm:interchange}
+For composable 2-cells, the interchange law holds:
+\[
+(\beta' \circ \alpha') \bullet (\beta \circ \alpha) = (\beta' \bullet \beta) \circ (\alpha' \bullet \alpha)
+\]
+\end{theorem}
+
+\section{Monoidal Structure}
+
+\begin{definition}[Tensor Product on Worlds]
+\label{def:tensor-worlds}
+Define the \textbf{tensor product} $\otimes$ on worlds:
+\[
+W \otimes W' = (W, W') \in \Worlds \times \Worlds
+\]
+with unit $I = ()$ (empty tuple).
+\end{definition}
+
+\begin{definition}[Monoidal 2-Category]
+\label{def:monoidal-2cat}
+$\mathbf{TKS}_2$ is a \textbf{monoidal 2-category} with:
+\begin{enumerate}
+  \item Tensor $\otimes$ on 0-cells, 1-cells, and 2-cells
+  \item Associator: $\alpha_{W,W',W''} : (W \otimes W') \otimes W'' \cong W \otimes (W' \otimes W'')$
+  \item Unitors: $\lambda_W : I \otimes W \cong W$, $\rho_W : W \otimes I \cong W$
+  \item Coherence: Pentagon and triangle identities hold
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Strictification]
+\label{thm:strictification}
+$\mathbf{TKS}_2$ is equivalent to a strict monoidal 2-category where associators and unitors are identities.
+\end{theorem}
+
+\section{Duality and Traces}
+
+\begin{definition}[Dual World]
+\label{def:dual-world}
+Each world $W$ has a \textbf{dual} $W^*$ with:
+\begin{align}
+A^* &= D \quad \text{(Spiritual $\leftrightarrow$ Physical)} \\
+B^* &= C \quad \text{(Mental $\leftrightarrow$ Astral)} \\
+C^* &= B \\
+D^* &= A
+\end{align}
+This reflects the hermetic correspondence principle.
+\end{definition}
+
+\begin{definition}[Evaluation and Coevaluation]
+\label{def:eval-coeval}
+The \textbf{evaluation} 1-cell $\mathrm{ev}_W : W^* \otimes W \to I$ and \textbf{coevaluation} $\mathrm{coev}_W : I \to W \otimes W^*$ satisfy the snake equations:
+\[
+(\mathrm{ev}_W \otimes \mathrm{id}_W) \circ (\mathrm{id}_W \otimes \mathrm{coev}_W) = \mathrm{id}_W
+\]
+\[
+(\mathrm{id}_{W^*} \otimes \mathrm{ev}_W) \circ (\mathrm{coev}_W \otimes \mathrm{id}_{W^*}) = \mathrm{id}_{W^*}
+\]
+\end{definition}
+
+\begin{theorem}[TKS is Rigid]
+\label{thm:tks-rigid}
+$\mathbf{TKS}_2$ is a \textbf{rigid} monoidal 2-category: every 0-cell has left and right duals.
+\end{theorem}
+
+\begin{definition}[Categorical Trace]
+\label{def:cat-trace}
+For 1-cell $f : W \to W$, the \textbf{trace} is:
+\[
+\mathrm{tr}(f) = \mathrm{ev}_W \circ (f \otimes \mathrm{id}_{W^*}) \circ \mathrm{coev}_W : I \to I
+\]
+\end{definition}
+
+\begin{proposition}[Trace Properties]
+\label{prop:trace-props}
+The categorical trace satisfies:
+\begin{enumerate}
+  \item $\mathrm{tr}(\mathrm{id}_W) = \dim(W) = 10$
+  \item $\mathrm{tr}(f \circ g) = \mathrm{tr}(g \circ f)$ (cyclicity)
+  \item $\mathrm{tr}(f \otimes g) = \mathrm{tr}(f) \cdot \mathrm{tr}(g)$
+\end{enumerate}
+\end{proposition}
+
+%% ============================================================================
+%% CHAPTER 13: TOPOS-THEORETIC FOUNDATIONS
+%% ============================================================================
+
+\chapter{Topos-Theoretic Foundations}
+\label{ch:topos}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter develops a topos-theoretic perspective on TKS, viewing worlds as objects in a presheaf topos and noetics as morphisms.
+\end{tcolorbox}
+
+\section{Presheaf Topos}
+
+\begin{definition}[TKS Site]
+\label{def:tks-site}
+The \textbf{TKS site} is the category $\mathbf{World}$ (from v7.1 Definition~\ref{def:world-cat}) equipped with the trivial Grothendieck topology (only maximal sieves cover).
+\end{definition}
+
+\begin{definition}[Presheaf Topos]
+\label{def:presheaf-topos}
+The \textbf{TKS presheaf topos} is:
+\[
+\Sh(\mathbf{World}) = \mathbf{Set}^{\mathbf{World}^{op}}
+\]
+Objects are functors $F : \mathbf{World}^{op} \to \mathbf{Set}$, morphisms are natural transformations.
+\end{definition}
+
+\begin{proposition}[Representable Presheaves]
+\label{prop:representable}
+Each world $W$ defines a representable presheaf:
+\[
+\mathbf{y}(W) = \mathrm{Hom}_{\mathbf{World}}(-, W) : \mathbf{World}^{op} \to \mathbf{Set}
+\]
+By Yoneda: $\mathrm{Hom}(\mathbf{y}(W), F) \cong F(W)$.
+\end{proposition}
+
+\begin{definition}[Element Presheaf]
+\label{def:element-presheaf}
+The \textbf{element presheaf} $\mathcal{E} : \mathbf{World}^{op} \to \mathbf{Set}$:
+\[
+\mathcal{E}(W) = \{Wn \mid n \in \{1, \ldots, 10\}\}
+\]
+with restriction along descent being inclusion of corresponding elements.
+\end{definition}
+
+\section{Subobject Classifier}
+
+\begin{definition}[Truth Values in TKS Topos]
+\label{def:truth-values}
+The \textbf{subobject classifier} $\Omega$ in $\Sh(\mathbf{World})$:
+\[
+\Omega(W) = \{\text{sieves on } W\}
+\]
+For the TKS site with 4 worlds in a chain, $\Omega(A) = \{\varnothing, \{A\}, \{A,B\}, \{A,B,C\}, \{A,B,C,D\}\}$.
+\end{definition}
+
+\begin{proposition}[Multi-Valued Logic]
+\label{prop:multi-valued}
+TKS topos has 5 truth values at the top world $A$, representing degrees of manifestation from pure Spirit to full Physical realization.
+\end{proposition}
+
+\begin{definition}[Characteristic Morphism]
+\label{def:char-morph}
+For subpresheaf $S \hookrightarrow F$, the characteristic morphism $\chi_S : F \to \Omega$:
+\[
+\chi_S(W)(x) = \{W' \leq W \mid x|_{W'} \in S(W')\}
+\]
+\end{definition}
+
+\section{Internal Logic}
+
+\begin{definition}[Internal Language]
+\label{def:internal-lang}
+The \textbf{internal language} of $\Sh(\mathbf{World})$ has:
+\begin{itemize}
+  \item Types: Objects of the topos
+  \item Terms: Morphisms
+  \item Propositions: Subobjects of 1
+  \item Connectives: Meet, join, implication, quantifiers
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Kripke-Joyal Semantics]
+\label{thm:kripke-joyal}
+For formula $\phi$ and world $W$:
+\[
+W \Vdash \phi \quad \text{iff} \quad \phi \text{ holds at stage } W
+\]
+with forcing defined recursively:
+\begin{align}
+W \Vdash \phi \land \psi &\iff W \Vdash \phi \text{ and } W \Vdash \psi \\
+W \Vdash \phi \lor \psi &\iff W \Vdash \phi \text{ or } W \Vdash \psi \\
+W \Vdash \phi \Rightarrow \psi &\iff \forall W' \leq W.\, W' \Vdash \phi \text{ implies } W' \Vdash \psi \\
+W \Vdash \forall x.\, \phi(x) &\iff \forall W' \leq W.\, \forall a \in F(W').\, W' \Vdash \phi(a)
+\end{align}
+\end{theorem}
+
+\begin{corollary}[Intuitionistic Logic]
+\label{cor:intuitionistic}
+The internal logic of TKS topos is intuitionistic: excluded middle $\phi \lor \neg\phi$ does not hold in general.
+\end{corollary}
+
+\begin{example}[World-Relative Truth]
+\label{ex:world-relative}
+The proposition ``Idea $x$ is Physical'' has truth value:
+\[
+\llbracket x \in \Hspace_D \rrbracket = \begin{cases}
+\{A,B,C,D\} & \text{if } x \in \Hspace_D \\
+\varnothing & \text{otherwise}
+\end{cases}
+\]
+A Physical Idea is ``true'' at all worlds; non-Physical Ideas are ``false'' everywhere.
+\end{example}
+
+\section{Geometric Morphisms}
+
+\begin{definition}[Descent Geometric Morphism]
+\label{def:descent-geom}
+Each descent $\iota_{WW'} : W \to W'$ induces a geometric morphism:
+\[
+f : \Sh(\{W'\}) \to \Sh(\{W\})
+\]
+with inverse image $f^* : \Sh(\{W\}) \to \Sh(\{W'\})$ given by restriction.
+\end{definition}
+
+\begin{theorem}[ACBE as Geometric Morphism]
+\label{thm:acbe-geom}
+The ACBE cascade induces a geometric morphism:
+\[
+\mathrm{ACBE}^* : \Sh(\{D\}) \to \Sh(\{A\})
+\]
+representing the manifestation of Spiritual ideas into Physical form.
+\end{theorem}
+
+%% ============================================================================
+%% CHAPTER 14: COALGEBRAIC DYNAMICS
+%% ============================================================================
+
+\chapter{Coalgebraic Dynamics}
+\label{ch:coalgebra}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter develops coalgebraic models for the dynamic evolution of Ideas and acquisition states in TKS.
+\end{tcolorbox}
+
+\section{TKS as Coalgebra}
+
+\begin{definition}[Idea State Functor]
+\label{def:idea-functor}
+The \textbf{Idea evolution functor} $F : \mathbf{Set} \to \mathbf{Set}$:
+\[
+F(X) = \Ideas \times X^{10}
+\]
+representing an Idea paired with 10 possible next states (one per noetic).
+\end{definition}
+
+\begin{definition}[TKS Coalgebra]
+\label{def:tks-coalgebra}
+A \textbf{TKS coalgebra} is a pair $(X, \gamma)$ where:
+\begin{itemize}
+  \item $X$ is a set of states
+  \item $\gamma : X \to F(X)$ is the transition function
+\end{itemize}
+\end{definition}
+
+\begin{example}[Canonical Coalgebra]
+\label{ex:canonical-coalg}
+The canonical coalgebra $(\Ideas, \gamma_0)$ where:
+\[
+\gamma_0(Wn) = (Wn, (\mathfrak{n}_0(Wn), \mathfrak{n}_1(Wn), \ldots, \mathfrak{n}_9(Wn)))
+\]
+\end{example}
+
+\begin{definition}[Coalgebra Homomorphism]
+\label{def:coalg-homo}
+A \textbf{homomorphism} $h : (X, \gamma) \to (Y, \delta)$ is a function $h : X \to Y$ such that:
+\[
+\delta \circ h = F(h) \circ \gamma
+\]
+\end{definition}
+
+\section{Final Coalgebra}
+
+\begin{theorem}[Final Coalgebra Existence]
+\label{thm:final-coalg}
+The category $\Coalg(F)$ has a final object $(\nu F, \mathrm{out})$ where:
+\[
+\nu F = \{\text{infinite trees labeled by } \Ideas \text{ with 10-ary branching}\}
+\]
+\end{theorem}
+
+\begin{definition}[Behavior Map]
+\label{def:behavior}
+For coalgebra $(X, \gamma)$, the unique homomorphism $\llbracket - \rrbracket : X \to \nu F$ is the \textbf{behavior map}. Two states $x, y$ are \textbf{behaviorally equivalent} iff $\llbracket x \rrbracket = \llbracket y \rrbracket$.
+\end{definition}
+
+\begin{theorem}[Bisimulation Characterization]
+\label{thm:bisim}
+States $x, y$ are behaviorally equivalent iff there exists a bisimulation $R \subseteq X \times X$ with $(x, y) \in R$.
+\end{theorem}
+
+\section{Acquisition Dynamics}
+
+\begin{definition}[Acquisition Functor]
+\label{def:acq-functor}
+The \textbf{acquisition evolution functor}:
+\[
+G(X) = X + (\Acquisitions \times X)
+\]
+representing either termination or acquiring a prerequisite and continuing.
+\end{definition}
+
+\begin{definition}[RPM Coalgebra]
+\label{def:rpm-coalgebra}
+An \textbf{RPM coalgebra} $(X, \delta)$ models prerequisite accumulation:
+\[
+\delta : X \to \mathcal{P}(\Acquisitions) \to (1 + X) \times \mathcal{P}(\Acquisitions)
+\]
+\end{definition}
+
+\begin{theorem}[RPM Trace Semantics]
+\label{thm:rpm-trace}
+The behavior of RPM coalgebra $(X, \delta)$ yields traces:
+\[
+\llbracket x \rrbracket = \{(p_1, p_2, \ldots, p_n) \mid \text{acquisition sequence from } x\}
+\]
+\end{theorem}
+
+\section{Corecursion and Coiteration}
+
+\begin{definition}[Corecursive Definition]
+\label{def:corecursive}
+A \textbf{corecursive definition} of $f : X \to \nu F$ is:
+\[
+f = \mathrm{out}^{-1} \circ F(f) \circ \gamma
+\]
+for some coalgebra $(X, \gamma)$.
+\end{definition}
+
+\begin{theorem}[Coiteration Principle]
+\label{thm:coiteration}
+For any coalgebra $(X, \gamma)$, there exists a unique $f : X \to \nu F$ satisfying the corecursive equation. This is the \textbf{coiteration} of $\gamma$.
+\end{theorem}
+
+\begin{example}[Infinite Fractal Corecursion]
+\label{ex:infinite-fractal}
+The infinite eigenfractal $\TransFrac{\omega}_k$ is defined corecursively:
+\[
+\TransFrac{\omega}_k = k :: \TransFrac{\omega}_k
+\]
+where $::$ is stream cons.
+\end{example}
+
+%% ============================================================================
+%% CHAPTER 15: INDEXED CONTAINERS
+%% ============================================================================
+
+\chapter{Indexed Containers for Multi-World Semantics}
+\label{ch:indexed-containers}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\vnewtwo]
+This chapter uses indexed containers to model world-dependent data structures and multi-world computations in TKS.
+\end{tcolorbox}
+
+\section{Indexed Containers}
+
+\begin{definition}[Indexed Container]
+\label{def:indexed-container}
+An \textbf{indexed container} over $\Worlds$ is a triple $(S, P, q)$ where:
+\begin{itemize}
+  \item $S : \Worlds \to \mathbf{Set}$ --- shapes at each world
+  \item $P : \sum_{W} S(W) \to \mathbf{Set}$ --- positions for each shape
+  \item $q : \sum_{W,s} P(W, s) \to \Worlds$ --- world assignment for positions
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Extension Functor]
+\label{def:extension}
+An indexed container $(S, P, q)$ determines a functor:
+\[
+\llbracket S, P, q \rrbracket : (\Worlds \to \mathbf{Set}) \to (\Worlds \to \mathbf{Set})
+\]
+\[
+\llbracket S, P, q \rrbracket(X)(W) = \sum_{s \in S(W)} \prod_{p \in P(W,s)} X(q(W, s, p))
+\]
+\end{definition}
+
+\begin{example}[World-Indexed List]
+\label{ex:world-list}
+The \textbf{world-indexed list} container:
+\begin{align}
+S(W) &= \mathbb{N} \quad \text{(length)} \\
+P(W, n) &= \{1, \ldots, n\} \quad \text{(positions)} \\
+q(W, n, i) &= W \quad \text{(all elements in same world)}
+\end{align}
+\end{example}
+
+\section{Multi-World Containers}
+
+\begin{definition}[Cross-World Container]
+\label{def:cross-world}
+A \textbf{cross-world container} allows positions to reference different worlds:
+\[
+q(W, s, p) \neq W \quad \text{possible}
+\]
+This models computations that span multiple worlds.
+\end{definition}
+
+\begin{example}[ACBE Container]
+\label{ex:acbe-container}
+The ACBE transformation as a container:
+\begin{align}
+S(A) &= \{*\} \quad \text{(single shape at Spiritual)} \\
+P(A, *) &= \{1\} \quad \text{(one position)} \\
+q(A, *, 1) &= D \quad \text{(position references Physical)}
+\end{align}
+This captures the cascade from $A$ to $D$.
+\end{example}
+
+\begin{theorem}[Container Composition]
+\label{thm:container-comp}
+Indexed containers compose:
+\[
+(S_1, P_1, q_1) \circ (S_2, P_2, q_2) = (S', P', q')
+\]
+where $S'(W) = \sum_{s_1 \in S_1(W)} \prod_{p_1 \in P_1(W, s_1)} S_2(q_1(W, s_1, p_1))$.
+\end{theorem}
+
+%% ============================================================================
+%% PART V: WORKED EXAMPLES
+%% ============================================================================
+\part{Integrated Worked Examples}
+
+\chapter{Comprehensive Examples}
+\label{ch:examples}
+
+\begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=\vnewtwo]
+This chapter provides detailed worked examples demonstrating the integration of all v7.2 expansions.
+\end{tcolorbox}
+
+\section{Example: Transfinite ACBE Cascade}
+
+\begin{example}[Transfinite Manifestation]
+\label{ex:transfinite-manifest}
+Consider the transfinite fractal representing infinite ACBE cascades:
+\[
+\TransFrac{\omega}_{ACBE} = \langle \iota_{AB} : \iota_{BC} : \iota_{CD} : \iota_{AB} : \iota_{BC} : \iota_{CD} : \cdots \rangle_\omega
+\]
+
+\textbf{Evaluation:} Starting from $A1$:
+\begin{align}
+\sem{\TransFrac{3}_{ACBE}}(A1) &= D1 \\
+\sem{\TransFrac{6}_{ACBE}}(A1) &= D1 \quad \text{(stabilizes)} \\
+\sem{\TransFrac{\omega}_{ACBE}}(A1) &= D1
+\end{align}
+
+\textbf{Measure-Theoretic View:} Under the hermetic measure $\mu_H$:
+\[
+\intI \mathbf{1}_{\Hspace_D} \, d((\TransFrac{\omega}_{ACBE})_* \mu_H) = \mu_H(\Hspace_A) = \frac{4 \cdot 10}{4 + 3 + 2 + 1} = 4
+\]
+\end{example}
+
+\section{Example: Quantum RPM with Type Inference}
+
+\begin{example}[Typed Quantum Prerequisite]
+\label{ex:typed-quantum-rpm}
+Consider the TKS program:
+\begin{verbatim}
+let quantumGoal = \x ->
+  return x >>= \y ->
+    check (prereq y) >>= \_ ->
+      return (nu3 y)
+\end{verbatim}
+
+\textbf{Type Inference (Algorithm W):}
+\begin{align}
+\AlgW(\varnothing, \mathsf{quantumGoal}) &= (\Subst, \mathsf{Domain} \to \mathsf{RPM}[\mathsf{Domain}])
+\end{align}
+
+\textbf{Quantum Interpretation:} In Hilbert space:
+\[
+\qop{R}_{goal} = \sum_{Wn} \Projector_{prereq(Wn)} \otimes \qop{\nu}_3 \qket{Wn}\qbra{Wn}
+\]
+
+\textbf{Entangled Execution:} For superposition $\qket{\psi} = \frac{1}{\sqrt{2}}(\qket{A1} + \qket{A2})$:
+\[
+\qop{R}_{goal}(\qket{\psi} \otimes \qket{\alpha_0}) = \frac{1}{\sqrt{2}}(\qket{\mathfrak{n}_3(A1)} \otimes \qket{\alpha_1} + \qket{\mathfrak{n}_3(A2)} \otimes \qket{\alpha_2})
+\]
+where $\alpha_i$ are updated acquisition states.
+\end{example}
+
+\section{Example: Topos-Theoretic Noetic Logic}
+
+\begin{example}[Internal Reasoning]
+\label{ex:topos-reasoning}
+In the TKS topos, prove: ``If an Idea is Spiritual, then its ACBE image is Physical.''
+
+\textbf{Formal Statement:}
+\[
+\forall x : \mathcal{E}.\, (x \in \Hspace_A) \Rightarrow (\mathrm{ACBE}(x) \in \Hspace_D)
+\]
+
+\textbf{Kripke-Joyal Proof:}
+\begin{enumerate}
+  \item At world $A$: Let $x \in \mathcal{E}(A)$, so $x = An$ for some $n$.
+  \item Assume $A \Vdash x \in \Hspace_A$ (trivially true).
+  \item Then $\mathrm{ACBE}(An) = Dn \in \Hspace_D$.
+  \item Check: $A \Vdash Dn \in \Hspace_D$. The truth value is $\{A, B, C, D\}$ (full sieve).
+  \item Hence $A \Vdash (\mathrm{ACBE}(x) \in \Hspace_D)$.
+\end{enumerate}
+The implication holds at all worlds by monotonicity.
+\end{example}
+
+\section{Example: Coalgebraic Fractal Behavior}
+
+\begin{example}[Bisimulation of Eigenfractals]
+\label{ex:bisim-eigen}
+Show that eigenfractals $\TransFrac{\omega}_k$ and $\TransFrac{\omega}_k$ applied to the same Idea are bisimilar.
+
+\textbf{Coalgebra Setup:}
+\[
+\gamma : \Ideas \times \FracSet_\omega \to \Ideas \times (\Ideas \times \FracSet_\omega)^{10}
+\]
+
+\textbf{Bisimulation Relation:}
+\[
+R = \{((x, \TransFrac{\omega}_k), (\mathfrak{n}_k(x), \TransFrac{\omega}_k)) \mid x \in \Ideas\}
+\]
+
+\textbf{Verification:} For $((x, \TransFrac{\omega}_k), (y, \TransFrac{\omega}_k)) \in R$ with $y = \mathfrak{n}_k(x)$:
+\begin{enumerate}
+  \item Outputs: $x$ and $y = \mathfrak{n}_k(x)$ --- related by noetic transformation.
+  \item Next states: $(\mathfrak{n}_j(x), \TransFrac{\omega}_k)$ and $(\mathfrak{n}_j(y), \TransFrac{\omega}_k)$ for each $j$.
+  \item By idempotence of $\mathfrak{n}_k$: $\mathfrak{n}_k(\mathfrak{n}_k(x)) = \mathfrak{n}_k(x)$, maintaining the relation.
+\end{enumerate}
+\end{example}
+
+%% ============================================================================
+%% PART VI: APPENDICES
+%% ============================================================================
+\part{Appendices}
+
+\chapter{Symbol Reference}
+\label{app:symbols}
+
+\begin{center}
+\begin{longtable}{lll}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Version} \\
+\midrule
+\endhead
+$\Worlds$ & Set of worlds $\{A, B, C, D\}$ & v6.1 \\
+$\Ideas$ & Set of 40 Ideas & v6.1 \\
+$\noe{k}$ & Noetic operator $k \in \{0, \ldots, 9\}$ & v6.1 \\
+$\Noetica$ & Category of domains and noetics & v6.1 \\
+$\RPM$ & RPM monad & v6.1 \\
+$\rpmret$ & Monadic return & v6.1 \\
+$\rpmbind$ & Monadic bind & v6.1 \\
+$\Frac$ & Fractal & v6.1 \\
+$\sem{\cdot}$ & Semantic brackets & v6.1 \\
+$\bigstep$ & Big-step evaluation & v7.0 \\
+$\smallstep$ & Small-step reduction & v7.0 \\
+$\Hspace$ & Hilbert space & v7.0 \\
+$\qket{\cdot}$ & Ket notation & v7.0 \\
+$\Scott$ & Scott topology & v7.1 \\
+$\sqleq$ & Information ordering & v7.1 \\
+$\fix$ & Fixed-point operator & v7.1 \\
+$\NatTrans{W}{W'}$ & Natural transformation & v7.1 \\
+$\TransFrac{\alpha}$ & Transfinite fractal & v7.2 \\
+$\SigAlg$ & Sigma-algebra & v7.2 \\
+$\AlgW$ & Algorithm W & v7.2 \\
+$\BoundedOp$ & Bounded operators & v7.2 \\
+$\Coalg$ & Coalgebra category & v7.2 \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+%% ============================================================================
+%% VERSION HISTORY
+%% ============================================================================
+
+\chapter{Version History}
+\label{app:versions}
+
+\begin{description}
+\item[v7.2 (Current)] Unified Release
+  \begin{itemize}
+  \item \textbf{Mathematical Deepening}: Transfinite fractals, measure theory, Polish spaces, Stone duality, generalized fixed-point theorems
+  \item \textbf{Programming Language}: Complete Hindley-Milner (Algorithm W), full compiler architecture (lexer through VM), effect handlers, module system, pattern matching
+  \item \textbf{Quantum Expansion}: Noetic Hilbert spaces, spectral theory, quantum measurement, entanglement, quantum fractals, ACBE as quantum channel
+  \item \textbf{Unified Meta-System}: Monoidal 2-category, topos-theoretic foundations, coalgebraic dynamics, indexed containers
+  \end{itemize}
+
+\item[v7.1] Advanced Formal Semantics Release
+  \begin{itemize}
+  \item Natural transformations between worlds
+  \item Domain-theoretic foundations (dcpos, Scott topology)
+  \item Extended denotational semantics with full abstraction
+  \item Topological structure of noetic space
+  \item Multi-goal RPM algebra
+  \end{itemize}
+
+\item[v7.0] Academic Expansion Release
+  \begin{itemize}
+  \item Complete Noetic Fractal Calculus
+  \item RPM Kleisli category and effect system
+  \item Complete dynamic semantics
+  \item Progress and Preservation proofs
+  \item Concurrency model prototype
+  \item Quantum Noetic algebra prototype
+  \end{itemize}
+
+\item[v6.1] Dynamic Semantics Release
+
+\item[v6.0] Academic Release
+
+\item[v5.0] Mathematical Framework
+
+\item[v3.2.1] Initial Formalization
+\end{description}
+
+%% ============================================================================
+%% BACKMATTER
+%% ============================================================================
+\backmatter
+
+\begin{thebibliography}{99}
+\bibitem{kybalion} Three Initiates. \textit{The Kybalion}. Yogi Publication Society, 1908.
+\bibitem{moggi} E. Moggi. ``Notions of computation and monads.'' \textit{Information and Computation}, 93(1):55--92, 1991.
+\bibitem{wadler} P. Wadler. ``Monads for functional programming.'' \textit{Advanced Functional Programming}, LNCS 925:24--52, 1995.
+\bibitem{pierce} B. C. Pierce. \textit{Types and Programming Languages}. MIT Press, 2002.
+\bibitem{plotkin} G. D. Plotkin. ``A structural approach to operational semantics.'' DAIMI FN-19, 1981.
+\bibitem{mac-lane} S. Mac Lane. \textit{Categories for the Working Mathematician}. Springer, 1971.
+\bibitem{plotkin-power} G. Plotkin and J. Power. ``Algebraic operations and generic effects.'' \textit{Applied Categorical Structures}, 11(1):69--94, 2003.
+\bibitem{nielsen-chuang} M. Nielsen and I. Chuang. \textit{Quantum Computation and Quantum Information}. Cambridge University Press, 2000.
+\bibitem{abramsky-jung} S. Abramsky and A. Jung. ``Domain Theory.'' \textit{Handbook of Logic in Computer Science}, Vol. 3, Oxford, 1994.
+\bibitem{scott} D. S. Scott. ``Data types as lattices.'' \textit{SIAM Journal on Computing}, 5(3):522--587, 1976.
+\bibitem{milner} R. Milner. ``A theory of type polymorphism in programming.'' \textit{JCSS}, 17:348--375, 1978.
+\bibitem{damas-milner} L. Damas and R. Milner. ``Principal type-schemes for functional programs.'' \textit{POPL}, 1982.
+\bibitem{rutten} J. Rutten. ``Universal coalgebra: a theory of systems.'' \textit{TCS}, 249(1):3--80, 2000.
+\bibitem{jacobs} B. Jacobs. \textit{Introduction to Coalgebra}. Cambridge University Press, 2016.
+\bibitem{johnstone} P. T. Johnstone. \textit{Sketches of an Elephant: A Topos Theory Compendium}. Oxford, 2002.
+\bibitem{maclane-moerdijk} S. Mac Lane and I. Moerdijk. \textit{Sheaves in Geometry and Logic}. Springer, 1992.
+\end{thebibliography}
+
+\end{document}

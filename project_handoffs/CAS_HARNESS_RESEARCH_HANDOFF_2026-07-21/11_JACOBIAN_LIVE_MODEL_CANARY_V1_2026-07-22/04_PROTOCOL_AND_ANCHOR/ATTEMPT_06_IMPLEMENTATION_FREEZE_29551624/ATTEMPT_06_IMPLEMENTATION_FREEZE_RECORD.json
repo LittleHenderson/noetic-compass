@@ -1,0 +1,136 @@
+{
+  "branch": "fix/jacobian-openssl-crlf-compat-20260723",
+  "bundle": {
+    "byte_count": 36557255,
+    "complete_history": true,
+    "format_version": 2,
+    "head": "29551624f4de0eec61c4035e364203be55d6c08a refs/heads/fix/jacobian-openssl-crlf-compat-20260723",
+    "head_count": 1,
+    "prerequisite_count": 0,
+    "sha256": "821dbc2dfad076dd8261768963f63d4cadd7726d2f6b635574ef0401f315088d"
+  },
+  "candidate": {
+    "clean_status": true,
+    "origin": "clone of the Attempt 5 implementation bundle (ATTEMPT_05_IMPLEMENTATION_FREEZE_F72B89CD/jacobian_lens_canary_v1_implementation.bundle)",
+    "worktree": "C:\\tmp\\cas-jlcv1-attempt6-crlf-repair"
+  },
+  "claim_status": "NOT_LICENSED",
+  "code_commit": "29551624f4de0eec61c4035e364203be55d6c08a",
+  "code_parent": "f72b89cd2ec574400ffe69ad7bd1540791fb73c3",
+  "code_tree": "0d70f8e8e8d9dfd9f36ed88ade731ab466935be6",
+  "dependency_archive": {
+    "byte_count": 706560,
+    "changed_by_this_repair": false,
+    "file_count": 15,
+    "file_manifest_sha256": "10c9cfab8284582c2a46484dd74bb5435ba9d2dd4c6d946f7dac4d97aae20a00",
+    "sha256": "ed16af7ae5a1ac8d61c6d3e83cf946a8cb3669c10f0f679fb2351965d5922bb8",
+    "source_relative_path": "../ATTEMPT_03_REMOTE_RECOVERY_A8969EB7/archives/dependency_bundle.tar",
+    "upstream_commit": "581d398613e5602a5af361e1c34d3a92ea82ba8e",
+    "uv_lock_sha256": "deb9d1f618aac3df95e5b93e226153e196d6aecbb8f619ca7e1e6cb34d839d7b"
+  },
+  "empirical_crlf_observations_20260723": {
+    "pinned_receiver_openssl": {
+      "emits": "LF_ONLY",
+      "path": "C:\\Program Files\\Git\\usr\\bin\\openssl.exe",
+      "sha256": "2c6f2c64612cf45349f15850e4647b2fe594c2759de63a695ec4cbe13b2404da",
+      "version": "OpenSSL 3.5.4 30 Sep 2025 (Library: OpenSSL 3.5.4 30 Sep 2025)"
+    },
+    "sibling_native_openssl": {
+      "emits": "CRLF",
+      "path": "C:\\Program Files\\Git\\mingw64\\bin\\openssl.exe",
+      "sha256": "060b787efc1e058068bfe4ff1c162fc40173df33fff8ceac6543d1ebaf340424",
+      "version": "OpenSSL 3.5.4 30 Sep 2025 (Library: OpenSSL 3.5.4 30 Sep 2025)"
+    },
+    "scope_note": "The receiver source pin (usr/bin MSYS binary) currently emits LF-only human-readable output; the sibling native mingw64 build emits CRLF. Per the retained Attempt 5 post-anchor failure record, the Attempt 5 ceremony tool binding had pinned the CRLF-emitting mingw64 binary and failed closed after the owner-approved one-shot DigiCert transmission (query text cr_count 9, no anchor receipt created). This repair therefore repairs a real consumed-attempt failure in addition to hardening the pinned configuration."
+  },
+  "attempt_5_post_anchor_context": {
+    "anchor_receipt_created": false,
+    "attempt_5_must_not_resume": true,
+    "ceremony_failure": "RFC3161 query text contains invalid controls",
+    "ceremony_pinned_openssl_sha256": "060b787efc1e058068bfe4ff1c162fc40173df33fff8ceac6543d1ebaf340424",
+    "record": "../ATTEMPT_05_PRE_ANCHOR_DD55BC73/ATTEMPT_05_POST_ANCHOR_VERIFIER_FAILURE_RECORD.json",
+    "response_retained_sha256": "2ea41173881414a17d1c9df7e02e9da7e44052f82c5ce39de523627e40cf510c",
+    "transmission_invocation_count": 1
+  },
+  "execution_mode": "SHADOW",
+  "implementation_manifest": {
+    "byte_count": 5689,
+    "candidate_repo_git_blob_match_count": 31,
+    "file_count": 31,
+    "reconstruction_repo_git_blob_match_count": 31,
+    "reconstructed_byte_count": 5689,
+    "reconstructed_sha256": "abaee8b11af0c8d57969bfab19a28914e074dc9ae5eb6c1536a141edee53385d",
+    "sha256": "abaee8b11af0c8d57969bfab19a28914e074dc9ae5eb6c1536a141edee53385d"
+  },
+  "model_or_cuda_execution": false,
+  "normalization_contract": "Every byte-mode decode of human-readable OpenSSL stdout applies exactly one CRLF-to-LF pass at the decode boundary; any surviving carriage return (bare CR, or the residue of a double-translated CRCRLF) or NUL fails closed. Downstream parsers retain their strict no-CR gates as defense in depth. Binary outputs (DER, -token_out, PEM blocks) are never normalized. Text-mode subprocess paths (text=True) already receive Python universal-newline translation and are unchanged.",
+  "post_freeze_verification": {
+    "attempt_4_retained_tsr_replay": {
+      "data_sha256": "49235313dad9541ec029d78b8a6ab9d1de90f5117cde9fb64ad6e2ec778a139b",
+      "openssl_executable_sha256": "2c6f2c64612cf45349f15850e4647b2fe594c2759de63a695ec4cbe13b2404da",
+      "query_sha256": "fa887272d01f436d37569f6d13b719f5392539dda897da870606c8845be11829",
+      "response_sha256": "08c2a34b3ea398bb1d64c9dd6fb6ae580becd9ba713d36652bae2a54f4e3f4f9",
+      "result": "PASS",
+      "status": "QUERY_NONCE_IMPRINT_POLICY_SIGNATURE_CHAIN_RESPONDER_AND_TRUST_ROOT_VERIFIED",
+      "timestamp_utc": "Jul 23 00:40:00 2026 GMT",
+      "verified_through": "repaired receiver verify_rfc3161 path with the exact pinned Windows OpenSSL 3.5.4"
+    },
+    "candidate_complete_suite": {
+      "failed": 0,
+      "passed": 938,
+      "skipped": 2
+    },
+    "exact_fixture_rerun_after_dependency_archive_materialization": {
+      "failed": 0,
+      "passed": 3
+    },
+    "final_reconstruction_complete_suite": {
+      "command": "C:\\Python314\\python.exe -B -m pytest tests -q -p no:cacheprovider",
+      "duration_seconds": 171.12,
+      "failed": 0,
+      "passed": 938,
+      "skipped": 2
+    },
+    "first_reconstruction_suite_before_dependency_archive": {
+      "failed": 3,
+      "failure_classification": "EXPECTED_RETAINED_DEPENDENCY_ARCHIVE_NOT_MATERIALIZED",
+      "passed": 935,
+      "skipped": 2
+    },
+    "focused_trust_path_files": {
+      "passed": 225,
+      "skipped": 2
+    },
+    "new_crlf_regression_tests": 5,
+    "reconstruction_checkout": "C:\\tmp\\cas-jlcv1-attempt6-recon",
+    "wsl_linux_leg": {
+      "openssl_version": "OpenSSL 3.0.13 30 Jan 2024",
+      "passed": 3,
+      "python_version": "3.12.3",
+      "tests": "two Linux sealed-memfd real-OpenSSL tests plus the new runner decode CRLF regression"
+    }
+  },
+  "repaired_files": {
+    "live-trace-worker/research/jacobian_lens_canary_runner.py": "46c530027f5f0bdc619fdd7a5cfb15c27e667cfb083800bb33dc8a4b27db54d8",
+    "live-trace-worker/scripts/run_cjt_ohm_statistical_validation.py": "4771f74f653ade01549440c4e1ce8dffb71c8df9d05a8621d11b823c4bc7c375",
+    "live-trace-worker/scripts/run_jacobian_lens_canary_v1.py": "5ce967c1150e2d2a42a8944133a0e1c21c822742e1883c240d10d2344bd66c6b",
+    "live-trace-worker/scripts/verify_jacobian_lens_canary_v1_independent.py": "55d93f65b1f7c5e13a9a75e56612d12e7e98e7a2ac9b83d8fca86705dcb30ab9",
+    "live-trace-worker/tests/test_cjt_ohm_statistical_cli.py": "a2bc1ee2b5860438d17f425aeaffc3fb9a738b062694cf23ca34e6df9f8301bb",
+    "live-trace-worker/tests/test_jacobian_lens_canary_runner.py": "36cf9dd66504354b6f93dfb0b3f8a9a0fd3f0c62ba69571f1353ae17074bac62",
+    "live-trace-worker/tests/test_verify_jacobian_lens_canary_v1_independent.py": "f6ba7aeb7953a280004a9382932ccbe2c3d76393649f66c7721b53a0b35005bd"
+  },
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_implementation_freeze.v2",
+  "status": "IMPLEMENTATION_FREEZE_PASS / CROSS_RECONSTRUCTION_MATCH / COMPLETE_V2_SINGLE_HEAD_BUNDLE / DEPENDENCY_ARCHIVE_UNCHANGED / NO_PRE_OR_RUN_IDENTITY / NO_EXTERNAL_TRANSMISSION / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "tooling": {
+    "git_executable": "C:\\Program Files\\Git\\cmd\\git.exe",
+    "git_executable_sha256": "3cbd024d9d11ef08bd6a0cb5a973613c50825b4952bc6006f3f4222f436091e5",
+    "git_version": "git version 2.52.0.windows.1",
+    "manifest_command_isolated_mode": false,
+    "manifest_command_isolated_mode_reason": "Python isolated mode excludes the bound user-site NumPy 2.3.5 dependency; the deterministic manifest was independently reconstructed and every record was checked against canonical Git blob bytes in both repositories.",
+    "numpy_version": "2.3.5",
+    "python_executable": "C:\\Python314\\python.exe",
+    "python_executable_sha256": "467014615a5255aca450ae88100dd2caf887da87657f00e3c2171ec44a685aec",
+    "python_version": "3.14.0"
+  },
+  "verdict": "NONE"
+}

@@ -1,0 +1,162 @@
+Collecting pytest==9.0.2
+  Downloading pytest-9.0.2-py3-none-any.whl.metadata (7.6 kB)
+Collecting fastapi==0.115.0 (from -r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 8))
+  Downloading fastapi-0.115.0-py3-none-any.whl.metadata (27 kB)
+Collecting uvicorn==0.30.6 (from uvicorn[standard]==0.30.6->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 9))
+  Downloading uvicorn-0.30.6-py3-none-any.whl.metadata (6.6 kB)
+Collecting pydantic==2.9.0 (from -r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 10))
+  Downloading pydantic-2.9.0-py3-none-any.whl.metadata (146 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 146.9/146.9 kB 3.6 MB/s eta 0:00:00
+Collecting sse-starlette==2.1.3 (from -r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 11))
+  Downloading sse_starlette-2.1.3-py3-none-any.whl.metadata (5.8 kB)
+Requirement already satisfied: httpx==0.27.2 in /usr/local/lib/python3.11/dist-packages (from -r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 12)) (0.27.2)
+Collecting transformers==4.46.3 (from -r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17))
+  Downloading transformers-4.46.3-py3-none-any.whl.metadata (44 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.1/44.1 kB 14.1 MB/s eta 0:00:00
+Collecting accelerate==1.1.1 (from -r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18))
+  Downloading accelerate-1.1.1-py3-none-any.whl.metadata (19 kB)
+Collecting safetensors==0.4.5 (from -r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 19))
+  Downloading safetensors-0.4.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.8 kB)
+Collecting scikit-learn==1.8.0 (from -r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 22))
+  Downloading scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (11 kB)
+Collecting iniconfig>=1.0.1 (from pytest==9.0.2)
+  Downloading iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Requirement already satisfied: packaging>=22 in /usr/local/lib/python3.11/dist-packages (from pytest==9.0.2) (24.1)
+Collecting pluggy<2,>=1.5 (from pytest==9.0.2)
+  Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Requirement already satisfied: pygments>=2.7.2 in /usr/local/lib/python3.11/dist-packages (from pytest==9.0.2) (2.18.0)
+Collecting starlette<0.39.0,>=0.37.2 (from fastapi==0.115.0->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 8))
+  Downloading starlette-0.38.6-py3-none-any.whl.metadata (6.0 kB)
+Requirement already satisfied: typing-extensions>=4.8.0 in /usr/local/lib/python3.11/dist-packages (from fastapi==0.115.0->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 8)) (4.9.0)
+Collecting click>=7.0 (from uvicorn==0.30.6->uvicorn[standard]==0.30.6->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 9))
+  Downloading click-8.4.2-py3-none-any.whl.metadata (2.6 kB)
+Requirement already satisfied: h11>=0.8 in /usr/local/lib/python3.11/dist-packages (from uvicorn==0.30.6->uvicorn[standard]==0.30.6->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 9)) (0.14.0)
+Collecting annotated-types>=0.4.0 (from pydantic==2.9.0->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 10))
+  Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.23.2 (from pydantic==2.9.0->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 10))
+  Downloading pydantic_core-2.23.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+Collecting tzdata (from pydantic==2.9.0->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 10))
+  Downloading tzdata-2026.3-py2.py3-none-any.whl.metadata (1.4 kB)
+Requirement already satisfied: anyio in /usr/local/lib/python3.11/dist-packages (from sse-starlette==2.1.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 11)) (4.6.0)
+Requirement already satisfied: certifi in /usr/local/lib/python3.11/dist-packages (from httpx==0.27.2->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 12)) (2024.8.30)
+Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.11/dist-packages (from httpx==0.27.2->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 12)) (1.0.5)
+Requirement already satisfied: idna in /usr/local/lib/python3.11/dist-packages (from httpx==0.27.2->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 12)) (3.10)
+Requirement already satisfied: sniffio in /usr/local/lib/python3.11/dist-packages (from httpx==0.27.2->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 12)) (1.3.1)
+Requirement already satisfied: filelock in /usr/local/lib/python3.11/dist-packages (from transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17)) (3.13.1)
+Collecting huggingface-hub<1.0,>=0.23.2 (from transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17))
+  Downloading huggingface_hub-0.36.2-py3-none-any.whl.metadata (15 kB)
+Requirement already satisfied: numpy>=1.17 in /usr/local/lib/python3.11/dist-packages (from transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17)) (1.26.3)
+Requirement already satisfied: pyyaml>=5.1 in /usr/local/lib/python3.11/dist-packages (from transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17)) (6.0.2)
+Collecting regex!=2019.12.17 (from transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17))
+  Downloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.5/40.5 kB 16.0 MB/s eta 0:00:00
+Requirement already satisfied: requests in /usr/local/lib/python3.11/dist-packages (from transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17)) (2.32.3)
+Collecting tokenizers<0.21,>=0.20 (from transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17))
+  Downloading tokenizers-0.20.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.7 kB)
+Collecting tqdm>=4.27 (from transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17))
+  Downloading tqdm-4.69.0-py3-none-any.whl.metadata (57 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.4/57.4 kB 13.5 MB/s eta 0:00:00
+Requirement already satisfied: psutil in /usr/local/lib/python3.11/dist-packages (from accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (6.0.0)
+Requirement already satisfied: torch>=1.10.0 in /usr/local/lib/python3.11/dist-packages (from accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (2.4.1+cu124)
+Collecting scipy>=1.10.0 (from scikit-learn==1.8.0->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 22))
+  Downloading scipy-1.17.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.1/62.1 kB 13.1 MB/s eta 0:00:00
+Collecting joblib>=1.3.0 (from scikit-learn==1.8.0->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 22))
+  Downloading joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+Collecting threadpoolctl>=3.2.0 (from scikit-learn==1.8.0->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 22))
+  Downloading threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+Collecting httptools>=0.5.0 (from uvicorn[standard]==0.30.6->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 9))
+  Downloading httptools-0.8.0-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (3.5 kB)
+Collecting python-dotenv>=0.13 (from uvicorn[standard]==0.30.6->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 9))
+  Downloading python_dotenv-1.2.2-py3-none-any.whl.metadata (27 kB)
+Collecting uvloop!=0.15.0,!=0.15.1,>=0.14.0 (from uvicorn[standard]==0.30.6->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 9))
+  Downloading uvloop-0.22.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (4.9 kB)
+Collecting watchfiles>=0.13 (from uvicorn[standard]==0.30.6->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 9))
+  Downloading watchfiles-1.2.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+Collecting websockets>=10.4 (from uvicorn[standard]==0.30.6->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 9))
+  Downloading websockets-16.1.1-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (6.8 kB)
+Requirement already satisfied: fsspec>=2023.5.0 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.23.2->transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17)) (2024.2.0)
+Collecting hf-xet<2.0.0,>=1.1.3 (from huggingface-hub<1.0,>=0.23.2->transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17))
+  Downloading hf_xet-1.5.2-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+Collecting numpy>=1.17 (from transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17))
+  Downloading numpy-2.4.6-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Requirement already satisfied: sympy in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (1.12)
+Requirement already satisfied: networkx in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (3.2.1)
+Requirement already satisfied: jinja2 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (3.1.3)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.4.99 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (12.4.99)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.4.99 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (12.4.99)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.4.99 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (12.4.99)
+Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (9.1.0.70)
+Requirement already satisfied: nvidia-cublas-cu12==12.4.2.65 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (12.4.2.65)
+Requirement already satisfied: nvidia-cufft-cu12==11.2.0.44 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (11.2.0.44)
+Requirement already satisfied: nvidia-curand-cu12==10.3.5.119 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (10.3.5.119)
+Requirement already satisfied: nvidia-cusolver-cu12==11.6.0.99 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (11.6.0.99)
+Requirement already satisfied: nvidia-cusparse-cu12==12.3.0.142 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (12.3.0.142)
+Requirement already satisfied: nvidia-nccl-cu12==2.20.5 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (2.20.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.4.99 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (12.4.99)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.4.99 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (12.4.99)
+Requirement already satisfied: triton==3.0.0 in /usr/local/lib/python3.11/dist-packages (from torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (3.0.0)
+Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.11/dist-packages (from requests->transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17)) (3.3.2)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.11/dist-packages (from requests->transformers==4.46.3->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 17)) (2.2.3)
+Requirement already satisfied: MarkupSafe>=2.0 in /usr/local/lib/python3.11/dist-packages (from jinja2->torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (2.1.5)
+Requirement already satisfied: mpmath>=0.19 in /usr/local/lib/python3.11/dist-packages (from sympy->torch>=1.10.0->accelerate==1.1.1->-r source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt (line 18)) (1.3.0)
+Downloading pytest-9.0.2-py3-none-any.whl (374 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 374.8/374.8 kB 10.8 MB/s eta 0:00:00
+Downloading fastapi-0.115.0-py3-none-any.whl (94 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 94.6/94.6 kB 22.9 MB/s eta 0:00:00
+Downloading uvicorn-0.30.6-py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.8/62.8 kB 15.6 MB/s eta 0:00:00
+Downloading pydantic-2.9.0-py3-none-any.whl (434 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 434.3/434.3 kB 41.1 MB/s eta 0:00:00
+Downloading sse_starlette-2.1.3-py3-none-any.whl (9.4 kB)
+Downloading transformers-4.46.3-py3-none-any.whl (10.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.0/10.0 MB 81.0 MB/s eta 0:00:00
+Downloading accelerate-1.1.1-py3-none-any.whl (333 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 333.2/333.2 kB 68.1 MB/s eta 0:00:00
+Downloading safetensors-0.4.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (435 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 435.0/435.0 kB 56.7 MB/s eta 0:00:00
+Downloading scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (9.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.1/9.1 MB 101.3 MB/s eta 0:00:00
+Downloading pydantic_core-2.23.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 111.1 MB/s eta 0:00:00
+Downloading annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Downloading click-8.4.2-py3-none-any.whl (119 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 119.2/119.2 kB 28.5 MB/s eta 0:00:00
+Downloading httptools-0.8.0-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (464 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 464.7/464.7 kB 62.4 MB/s eta 0:00:00
+Downloading huggingface_hub-0.36.2-py3-none-any.whl (566 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 67.1 MB/s eta 0:00:00
+Downloading iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Downloading joblib-1.5.3-py3-none-any.whl (309 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 309.1/309.1 kB 50.7 MB/s eta 0:00:00
+Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+Downloading python_dotenv-1.2.2-py3-none-any.whl (22 kB)
+Downloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 801.4/801.4 kB 60.7 MB/s eta 0:00:00
+Downloading scipy-1.17.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.3/35.3 MB 121.1 MB/s eta 0:00:00
+Downloading numpy-2.4.6-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.9/16.9 MB 161.4 MB/s eta 0:00:00
+Downloading starlette-0.38.6-py3-none-any.whl (71 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 71.5/71.5 kB 33.6 MB/s eta 0:00:00
+Downloading threadpoolctl-3.6.0-py3-none-any.whl (18 kB)
+Downloading tokenizers-0.20.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.0/3.0 MB 93.5 MB/s eta 0:00:00
+Downloading tqdm-4.69.0-py3-none-any.whl (676 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 676.7/676.7 kB 70.2 MB/s eta 0:00:00
+Downloading uvloop-0.22.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.8/3.8 MB 88.0 MB/s eta 0:00:00
+Downloading watchfiles-1.2.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (456 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 456.9/456.9 kB 62.1 MB/s eta 0:00:00
+Downloading websockets-16.1.1-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (186 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 186.9/186.9 kB 37.5 MB/s eta 0:00:00
+Downloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 348.2/348.2 kB 53.7 MB/s eta 0:00:00
+Downloading hf_xet-1.5.2-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.4/4.4 MB 84.3 MB/s eta 0:00:00
+Installing collected packages: websockets, uvloop, tzdata, tqdm, threadpoolctl, safetensors, regex, python-dotenv, pydantic-core, pluggy, numpy, joblib, iniconfig, httptools, hf-xet, click, annotated-types, watchfiles, uvicorn, starlette, scipy, pytest, pydantic, huggingface-hub, tokenizers, sse-starlette, scikit-learn, fastapi, transformers, accelerate
+  Attempting uninstall: numpy
+    Found existing installation: numpy 1.26.3
+    Not uninstalling numpy at /usr/local/lib/python3.11/dist-packages, outside environment /workspace/cas-tks-anchor-diagnostic-20260721/venv
+    Can't uninstall 'numpy'. No files were found to uninstall.
+Successfully installed accelerate-1.1.1 annotated-types-0.7.0 click-8.4.2 fastapi-0.115.0 hf-xet-1.5.2 httptools-0.8.0 huggingface-hub-0.36.2 iniconfig-2.3.0 joblib-1.5.3 numpy-2.4.6 pluggy-1.6.0 pydantic-2.9.0 pydantic-core-2.23.2 pytest-9.0.2 python-dotenv-1.2.2 regex-2026.7.19 safetensors-0.4.5 scikit-learn-1.8.0 scipy-1.17.1 sse-starlette-2.1.3 starlette-0.38.6 threadpoolctl-3.6.0 tokenizers-0.20.3 tqdm-4.69.0 transformers-4.46.3 tzdata-2026.3 uvicorn-0.30.6 uvloop-0.22.1 watchfiles-1.2.0 websockets-16.1.1

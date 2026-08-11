@@ -1,0 +1,52 @@
+CAS Harness Jacobian V1 retained RunPod operator observation
+Captured UTC: 2026-07-22T18:38:32.9532005+00:00
+Captured Unix milliseconds: 1784745512953
+Capture authority: operator-observed signed-in RunPod UI plus an SSH runtime cross-check.
+Provider authentication boundary: this file is not provider-signed and does not prove an immutable image digest.
+
+Pods page observation:
+- Research pod name: cas-jacobian-v1-research-20260722-migration
+- Research pod visible state: running (the available action was Stop)
+- Research pod identity: tto1s8rgz3ixvg
+- Research pod compute: A40 x1
+- Research pod displayed total cost: $0.45/hr
+- Production pod name: cas-live-worker-production
+- Production pod identity: hilj2rzs54gi06
+- Production pod remained separately listed and was not used by this research attempt.
+
+Research-pod Details observation:
+- Uptime: 4h 32m
+- GPU: A40, 1x
+- vCPU: 9 (Intel(R) Xeon(R) Gold 6342 CPU @ 2.80GHz)
+- Memory: 50 GB
+- Container disk: 30 GB
+- GPU location: CA-MTL-1 Secure cloud
+- Image tag: runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
+- Pod volume: encrypted, 50 GB, mounted at /workspace
+
+RunPod Deploy selector observation:
+- A40
+- $0.44/hr compute
+- 48 GB VRAM
+- 50 GB RAM
+- 9 vCPU
+
+SSH runtime cross-check at 2026-07-22T18:38:40Z:
+- hostname: 9e4b7f2759e2
+- nvidia-smi name: NVIDIA A40
+- GPU UUID: GPU-04e0f579-8546-8198-3968-411912ee007c
+- Reported total memory: 46068 MiB
+- Driver: 580.159.04
+- GPU utilization: 0%
+- The canonical GPU-name fact below uses the exact runtime name required for PRE/POST equality; the provider UI abbreviates it as A40.
+
+advertised-vram="48 GB"
+gpu-count="1"
+gpu-name="NVIDIA A40"
+image-digest-sha256="null"
+image-digest-status="UNAVAILABLE"
+image-reference="runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04"
+pod-state="RUNNING"
+production-pod-id="hilj2rzs54gi06"
+production-services-present="false"
+research-pod-id="tto1s8rgz3ixvg"

@@ -1,0 +1,242 @@
+[
+  {
+    "symbol": "D0",
+    "name": "D0.1 Physical Template",
+    "definition": "Concept of a physical thing",
+    "world": "D"
+  },
+  {
+    "symbol": "D1",
+    "name": "D1.1 Body Awareness",
+    "definition": "Physical sensation awareness",
+    "world": "D"
+  },
+  {
+    "symbol": "D2",
+    "name": "D2.1 Physical Health",
+    "definition": "Health, wellness, bodily order",
+    "world": "D"
+  },
+  {
+    "symbol": "D3",
+    "name": "D3.1 Physical Illness",
+    "definition": "Sickness, disorder, decay",
+    "world": "D"
+  },
+  {
+    "symbol": "D4",
+    "name": "D4.1 Physical Energy",
+    "definition": "Energy level, vitality",
+    "world": "D"
+  },
+  {
+    "symbol": "D5",
+    "name": "D5.1 Physical Woman",
+    "definition": "Woman, female person",
+    "world": "D"
+  },
+  {
+    "symbol": "D6",
+    "name": "D6.1 Physical Man",
+    "definition": "Man, male person",
+    "world": "D"
+  },
+  {
+    "symbol": "D7",
+    "name": "D7.1 Physical Habit",
+    "definition": "Habits, routines",
+    "world": "D"
+  },
+  {
+    "symbol": "D8",
+    "name": "D8.1 Physical Elevation",
+    "definition": "Status upgrade, material improvement",
+    "world": "D"
+  },
+  {
+    "symbol": "D9",
+    "name": "D9.1 Physical Foundation",
+    "definition": "Foundation, base, basics",
+    "world": "D"
+  },
+  {
+    "symbol": "C0",
+    "name": "C0.1 Emotional Concept",
+    "definition": "The idea of an emotion",
+    "world": "C"
+  },
+  {
+    "symbol": "C1",
+    "name": "C1.1 Emotional Awareness",
+    "definition": "Awareness of feelings",
+    "world": "C"
+  },
+  {
+    "symbol": "C2",
+    "name": "C2.1 Joy/Happiness",
+    "definition": "Positive emotions, happiness",
+    "world": "C"
+  },
+  {
+    "symbol": "C3",
+    "name": "C3.1 Fear",
+    "definition": "Fear, anxiety, negative emotions",
+    "world": "C"
+  },
+  {
+    "symbol": "C4",
+    "name": "C4.1 Emotional Intensity",
+    "definition": "How strongly felt",
+    "world": "C"
+  },
+  {
+    "symbol": "C5",
+    "name": "C5.1 Emotional Receptivity",
+    "definition": "Emotional openness",
+    "world": "C"
+  },
+  {
+    "symbol": "C6",
+    "name": "C6.1 Emotional Expression",
+    "definition": "Expressing feelings",
+    "world": "C"
+  },
+  {
+    "symbol": "C7",
+    "name": "C7.1 Mood Cycle",
+    "definition": "Mood patterns",
+    "world": "C"
+  },
+  {
+    "symbol": "C8",
+    "name": "C8.1 Emotional Trigger",
+    "definition": "What triggers feelings",
+    "world": "C"
+  },
+  {
+    "symbol": "C9",
+    "name": "C9.1 Emotional Response",
+    "definition": "Emotional reactions",
+    "world": "C"
+  },
+  {
+    "symbol": "B0",
+    "name": "B0.1 Thought Form",
+    "definition": "A specific idea/concept",
+    "world": "B"
+  },
+  {
+    "symbol": "B1",
+    "name": "B1.1 Meta-Cognition",
+    "definition": "Thinking about thinking",
+    "world": "B"
+  },
+  {
+    "symbol": "B2",
+    "name": "B2.1 Positive Belief",
+    "definition": "Empowering beliefs",
+    "world": "B"
+  },
+  {
+    "symbol": "B3",
+    "name": "B3.1 Limiting Belief",
+    "definition": "Limiting beliefs",
+    "world": "B"
+  },
+  {
+    "symbol": "B4",
+    "name": "B4.1 Thought Intensity",
+    "definition": "Strength of thought",
+    "world": "B"
+  },
+  {
+    "symbol": "B5",
+    "name": "B5.1 Learning Receptivity",
+    "definition": "Openness to learning",
+    "world": "B"
+  },
+  {
+    "symbol": "B6",
+    "name": "B6.1 Logical Thinking",
+    "definition": "Logic, reasoning",
+    "world": "B"
+  },
+  {
+    "symbol": "B7",
+    "name": "B7.1 Thought Pattern",
+    "definition": "Mental patterns",
+    "world": "B"
+  },
+  {
+    "symbol": "B8",
+    "name": "B8.1 Thought Trigger",
+    "definition": "What triggers thoughts",
+    "world": "B"
+  },
+  {
+    "symbol": "B9",
+    "name": "B9.1 Cognitive Response",
+    "definition": "Thought reactions",
+    "world": "B"
+  },
+  {
+    "symbol": "A0",
+    "name": "A0.1 Divine Blueprint",
+    "definition": "Life purpose, soul mission",
+    "world": "A"
+  },
+  {
+    "symbol": "A1",
+    "name": "A1.1 Soul Awareness",
+    "definition": "Spiritual awareness",
+    "world": "A"
+  },
+  {
+    "symbol": "A2",
+    "name": "A2.1 Spiritual Alignment",
+    "definition": "Being on path",
+    "world": "A"
+  },
+  {
+    "symbol": "A3",
+    "name": "A3.1 Spiritual Misalignment",
+    "definition": "Being off-path",
+    "world": "A"
+  },
+  {
+    "symbol": "A4",
+    "name": "A4.1 Spiritual Frequency",
+    "definition": "Spiritual vibration level",
+    "world": "A"
+  },
+  {
+    "symbol": "A5",
+    "name": "A5.1 Divine Receptivity",
+    "definition": "Openness to guidance",
+    "world": "A"
+  },
+  {
+    "symbol": "A6",
+    "name": "A6.1 Divine Will",
+    "definition": "Spiritual will in action",
+    "world": "A"
+  },
+  {
+    "symbol": "A7",
+    "name": "A7.1 Karmic Pattern",
+    "definition": "Karma, spiritual lessons",
+    "world": "A"
+  },
+  {
+    "symbol": "A8",
+    "name": "A8.1 Divine Cause",
+    "definition": "Spiritual causation",
+    "world": "A"
+  },
+  {
+    "symbol": "A9",
+    "name": "A9.1 Spiritual Effect",
+    "definition": "Spiritual outcomes",
+    "world": "A"
+  }
+]

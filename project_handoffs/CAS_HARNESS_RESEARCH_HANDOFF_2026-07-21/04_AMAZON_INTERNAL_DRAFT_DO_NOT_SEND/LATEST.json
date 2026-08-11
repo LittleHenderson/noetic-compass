@@ -1,0 +1,31 @@
+{
+  "schema_version": "cas_harness.amazon_evaluation_latest.v1",
+  "release_id": "cas-harness-amazon-evaluation-20260721-internal-draft",
+  "snapshot_date": "2026-07-21",
+  "status": "DISTRIBUTION_PAUSED_INTERNAL_REVIEW_DRAFT",
+  "distribution_allowed": false,
+  "protected_base_commit": "81b5c18bd83e1f01ccd398dcad3865a674335b7f",
+  "protected_base_tree": "4aa8b6dbd8d5f78345a3acd84f4c0e4716244908",
+  "files": [
+    {
+      "role": "canonical_spec_source",
+      "path": "docs/external/amazon/CAS_HARNESS_AMAZON_TECHNICAL_EVALUATION_SPEC_20260721.md",
+      "sha256": "22B651F84B5D6EFAA3B5F65BD63F4CA09D4A116F2932D35088C238DD33F9C8B2"
+    },
+    {
+      "role": "claim_evidence_manifest",
+      "path": "docs/external/amazon/CAS_HARNESS_AMAZON_CLAIM_EVIDENCE_MANIFEST_20260721.json",
+      "sha256": "F799BC74BBDE2DDCC50FE82AA387052082F0D67540064D7C7C216645ECEDBC44"
+    }
+  ],
+  "release_requirements": [
+    "All LATEST.json hashes match",
+    "All claim and retraction rows receive protected-source review",
+    "Mutable provider facts receive fresh readback if included",
+    "Recovered diagnostic evidence is mirrored to an independently controlled object store or escrow and every hash verifies",
+    "Confidentiality tier and Amazon recipient channel are approved",
+    "Project owner and required legal/IP reviewers approve distribution",
+    "Any generated PDF passes full visual inspection"
+  ],
+  "known_bound": "This pointer identifies an internal review draft only. It is not an external release, customer-production acceptance authority, provider receipt, or certification."
+}

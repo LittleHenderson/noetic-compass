@@ -1,0 +1,85 @@
+{
+  "attempt": 4,
+  "claim_status": "NOT_LICENSED",
+  "code_commit": "be97bc7f76d1e9f5e501702660678d4af3081f5e",
+  "code_tree": "4eb382528e8a4cee81a1c043f65bf0dcfa369ccf",
+  "cuda_api_invoked": false,
+  "dependency": {
+    "file_count": 15,
+    "file_manifest_sha256": "10c9cfab8284582c2a46484dd74bb5435ba9d2dd4c6d946f7dac4d97aae20a00",
+    "pyc_count_after_positive_import": 0,
+    "remote_root": "/workspace/cas-jlcv1-dependency-bundle-be97bc7f",
+    "upstream_commit": "581d398613e5602a5af361e1c34d3a92ea82ba8e",
+    "uv_lock_sha256": "deb9d1f618aac3df95e5b93e226153e196d6aecbb8f619ca7e1e6cb34d839d7b"
+  },
+  "execution_mode": "SHADOW",
+  "implementation_bundle": {
+    "byte_count": 36536084,
+    "complete_history": true,
+    "remote_path": "/workspace/cas-jlcv1-implementation-be97bc7f.bundle",
+    "sha256": "3ddf60a6f24c204489a70c62465efed3ccd421baa7739bffa923d26821512b67"
+  },
+  "implementation_manifest": {
+    "byte_count": 5689,
+    "remote_path": "/workspace/cas-jlcv1-implementation-manifest-be97bc7f.json",
+    "remote_reconstructed_path": "/workspace/cas-jlcv1-implementation-manifest-reconstructed-be97bc7f.json",
+    "remote_reconstruction_byte_identical": true,
+    "sha256": "bbaaa973372cd95c3c99472a31664ab2add699cf1d844a5b2ab28a763dd04ffb"
+  },
+  "linux_bytecode_guard": {
+    "bootstrap_without_B": {
+      "returncode": 2,
+      "stderr": "FAILED_CLOSED: relaunch with Python bytecode writes disabled (-B)."
+    },
+    "corrected_positive_import": {
+      "actual_jlens_source": true,
+      "bytecode_writes_disabled": true,
+      "dependency_inventory_unchanged": true,
+      "isolated_mode": true,
+      "real_torch_imported": false
+    },
+    "ordinary_I_disposable_probe": {
+      "pyc_count": 7,
+      "remote_path": "/workspace/cas-jlcv1-dependency-probe-rejected-pycache-be97bc7f",
+      "verifier_error": "dependency bundle file set differs"
+    },
+    "wrapper_without_B": {
+      "returncode": 2,
+      "stderr": "FAILED_CLOSED: Python bytecode writes must be disabled (-B)."
+    }
+  },
+  "model_loaded": false,
+  "model_or_cuda_execution": false,
+  "nvidia_smi_invoked": false,
+  "production_pod_touched": false,
+  "recorded_at_utc": "2026-07-22T23:15:32Z",
+  "rejected_git_archive_dependency": {
+    "actual_license_byte_count": 11358,
+    "actual_license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "expected_license_byte_count": 11560,
+    "expected_license_sha256": "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5",
+    "preserved_path": "/workspace/cas-jlcv1-dependency-bundle-rejected-git-archive-line-endings-be97bc7f"
+  },
+  "remote_host": {
+    "hostname": "d808fa853c3b",
+    "linux": "6.8.0-65-generic x86_64",
+    "python": "3.11.10",
+    "research_pod_id": "zp2s9pscgncn0b"
+  },
+  "remote_repository": {
+    "branch": "fix/jacobian-child-bytecode-guard-20260722",
+    "clean": true,
+    "path": "/workspace/cas-jlcv1-repo-be97bc7f"
+  },
+  "rfc3161_query_created": false,
+  "rfc3161_query_sent": false,
+  "run_identity_created": false,
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_attempt4_remote_preparation.v1",
+  "source_sha256": {
+    "live-trace-worker/research/jacobian_lens_canary_runner.py": "0bd470f69df75d8254f20012f2292ea80c873d14cef50e4f75bfd82b3903f662",
+    "live-trace-worker/scripts/run_jacobian_lens_canary_v1.py": "ae210bb41bce8dfad864f020a26c8d35298c56e0951df29862cf0a6b21e81cd6",
+    "live-trace-worker/scripts/run_jacobian_lens_canary_v1_seccomp.py": "e1d5bbf228747a4c702035f11e1c3b9b5afcc55ff313b2713376f1aeaa655c95"
+  },
+  "status": "PERSISTENT_ATTEMPT_4_PRESTAGE_VERIFIED / LINUX_BYTECODE_GUARD_PASS / NO_PRE_OR_FROZEN_RUN_IDENTITY / NO_RFC3161_QUERY / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "verdict": "NONE"
+}

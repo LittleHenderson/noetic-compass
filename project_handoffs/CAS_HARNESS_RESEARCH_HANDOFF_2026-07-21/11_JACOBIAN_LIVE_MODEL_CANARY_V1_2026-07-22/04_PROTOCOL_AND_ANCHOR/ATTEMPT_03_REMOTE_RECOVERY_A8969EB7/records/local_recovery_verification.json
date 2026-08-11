@@ -1,0 +1,114 @@
+{
+  "schema_version": "cas_harness_research_shadow.attempt3_offpod_recovery.v1",
+  "status": "RFC3161_ANCHOR_VERIFIED / SUPERSEDED_PRE_EXECUTION_BYTECODE_GUARD_DEFECT / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "run_id": "jlcv1-rfc3161-cfbe168004fb3677b3f7be08c3c15d87577fa75b554d4c93391d758d23015af3",
+  "remote_audit_utc": "2026-07-22T22:37:24.252993955Z",
+  "final_remote_recheck_utc": "2026-07-22T22:48:22.264526424Z",
+  "research_pod": {
+    "instance_id": "zp2s9pscgncn0b",
+    "hostname": "d808fa853c3b",
+    "boot_id_sha256": "8d6f65214f4ce130d8d342532a65ee41b4a8555fcd102502f6acb3840bbce7aa",
+    "machine_id_sha256": "aed9946c7ac389c687b73bd918790d99da1303140bc502277f8d7c016975a486",
+    "gpu_name": "NVIDIA A40",
+    "gpu_uuid": "GPU-5a2301c0-941c-a946-0ea2-f90016d4750f",
+    "gpu_memory_total_mib": 46068,
+    "gpu_memory_used_mib": 0,
+    "gpu_utilization_percent": 0,
+    "driver_version": "580.126.09",
+    "stopped_by_this_recovery": false
+  },
+  "execution_absence": {
+    "official_output_entry_count": 0,
+    "runlog_entry_count": 0,
+    "environment_post_entry_count": 0,
+    "matching_official_process_count": 0,
+    "wrapper_executed": false,
+    "model_executed": false,
+    "cuda_executed": false,
+    "post_fabricated": false,
+    "receiver_fabricated": false
+  },
+  "repository": {
+    "commit": "a8969eb71c6d3e5c43d7ee2b7c7d4aa90dd70fc0",
+    "tree": "cce2d477bb0f423ee6a2669ee680eaac7b999322",
+    "status_porcelain_empty": true
+  },
+  "remote_control_comparison": {
+    "remote_control_file_count": 21,
+    "local_present_count": 21,
+    "exact_sha256_match_count": 21,
+    "mismatch_count": 0
+  },
+  "dependency_root": {
+    "regular_file_count": 15,
+    "directory_count_including_root": 3,
+    "symbolic_link_count": 0,
+    "other_entry_count": 0,
+    "pycache_or_pyc_count": 0,
+    "dependency_file_manifest_sha256": "10c9cfab8284582c2a46484dd74bb5435ba9d2dd4c6d946f7dac4d97aae20a00",
+    "uv_lock_sha256": "deb9d1f618aac3df95e5b93e226153e196d6aecbb8f619ca7e1e6cb34d839d7b"
+  },
+  "archives": [
+    {
+      "name": "official_attempt.tar",
+      "byte_count": 327055360,
+      "sha256": "84b2fd846d371ccbb6a7c020f778615a66862f8c65c5dabe27fb969e3a406a9f",
+      "remote_local_match": true
+    },
+    {
+      "name": "dependency_bundle.tar",
+      "byte_count": 706560,
+      "sha256": "ed16af7ae5a1ac8d61c6d3e83cf946a8cb3669c10f0f679fb2351965d5922bb8",
+      "remote_local_match": true
+    },
+    {
+      "name": "model_snapshot.tar",
+      "byte_count": 377128960,
+      "sha256": "10c55e36459311f24ac0e6d69793f5873b460fbf4da9c78ba0b202afa4ad35f6",
+      "remote_local_match": true
+    }
+  ],
+  "normalized_materialized_comparison": [
+    {
+      "name": "official_attempt",
+      "regular_file_count": 2704,
+      "directory_count_including_root": 324,
+      "symbolic_link_count": 11,
+      "normalized_regular_file_inventory_sha256": "b584762d20ac5733963fc4bc119b8d08e430b0b59ef63a215b41f0f7f0ebf7c7",
+      "regular_file_inventory_difference_count": 0,
+      "normalized_symbolic_link_target_difference_count": 0
+    },
+    {
+      "name": "dependency_bundle",
+      "regular_file_count": 15,
+      "directory_count_including_root": 3,
+      "symbolic_link_count": 0,
+      "normalized_regular_file_inventory_sha256": "0e37049e61b7d4abbc00957b3da2e2c9449d8a857615b372133825a8520d346c",
+      "regular_file_inventory_difference_count": 0
+    },
+    {
+      "name": "model_snapshot",
+      "regular_file_count": 5,
+      "directory_count_including_root": 1,
+      "symbolic_link_count": 0,
+      "normalized_regular_file_inventory_sha256": "a309e3a52fede6c07c5d87417923d79648d18cd099696b70e524f4ee061b62a6",
+      "regular_file_inventory_difference_count": 0
+    }
+  ],
+  "remote_audit_records": {
+    "final_bound_record_count": 22,
+    "local_present_count": 22,
+    "exact_sha256_match_count": 22,
+    "mismatch_count": 0,
+    "record": "records_sha256_final_remote.txt",
+    "note": "The earlier records_sha256_before_recovery.txt included its own just-opened output file and therefore has one unavoidable self-reference mismatch. It is preserved; the final record explicitly excludes itself and verifies 22 of 22 files."
+  },
+  "production_pod": {
+    "instance_id": "hilj2rzs54gi06",
+    "touched_by_this_recovery": false
+  },
+  "blocking_condition": "Attempt 3 is superseded before execution because the anchored wrapper does not propagate Python -B to its execve child, allowing dependency-root bytecode cache creation after verification. A versioned corrected Attempt 4 and fresh ceremony are required.",
+  "scientific_conclusion": "NO_SCIENTIFIC_CONCLUSION",
+  "verdict": "NONE",
+  "claim_status": "NOT_LICENSED"
+}

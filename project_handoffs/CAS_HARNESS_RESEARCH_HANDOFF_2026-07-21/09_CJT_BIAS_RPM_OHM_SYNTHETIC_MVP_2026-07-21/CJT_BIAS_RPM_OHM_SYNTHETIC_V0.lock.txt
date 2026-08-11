@@ -1,0 +1,10 @@
+# Isolated dependency lock for the CPU-only CJT/Bias/RPM/CAS-Ohm synthetic MVP.
+# This file is source-bundle-bound and intentionally is not installed by the
+# production live-trace-worker Dockerfile.
+# Validated runtime: CPython 3.14.0 (the receipt records the exact executable).
+numpy==2.3.5
+pydantic==2.12.5
+pydantic-core==2.41.5
+annotated-types==0.7.0
+typing-extensions==4.15.0
+typing-inspection==0.4.2

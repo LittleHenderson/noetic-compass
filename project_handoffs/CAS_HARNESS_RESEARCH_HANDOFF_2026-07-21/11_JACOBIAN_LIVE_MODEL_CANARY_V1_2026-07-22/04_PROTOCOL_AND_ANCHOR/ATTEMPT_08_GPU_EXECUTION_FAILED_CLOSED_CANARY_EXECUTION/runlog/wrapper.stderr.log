@@ -1,0 +1,3 @@
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights:  61%|██████    | 90/148 [00:00<00:00, 862.29it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 1111.91it/s]
+/workspace/cas-jacobian-v1-bootstrap/jacobian_lens_v1/.venv/lib/python3.11/site-packages/torch/autograd/graph.py:882: UserWarning: Attempting to run cuBLAS, but there was no current CUDA context! Attempting to set the primary context... (Triggered internally at /pytorch/aten/src/ATen/cuda/CublasHandlePool.cpp:370.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass

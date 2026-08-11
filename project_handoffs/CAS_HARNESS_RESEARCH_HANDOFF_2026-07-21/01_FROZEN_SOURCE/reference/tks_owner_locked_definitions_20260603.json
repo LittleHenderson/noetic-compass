@@ -1,0 +1,361 @@
+{
+  "created_at": "2026-06-03T00:00:00+00:00",
+  "element_count": 40,
+  "foundation_count": 28,
+  "honesty_boundary": "These 40 Element and 28 Foundation definitions are owner-provided TKS source definitions captured on 2026-06-03. This artifact is an input fixture and not a model run, comparator result, or verdict.",
+  "schema_version": "tks_owner_provided_axis_definitions.v1",
+  "sources": [
+    {
+      "path": "conversation:user_provided_tks_definitions_2026_06_03",
+      "role": "owner-provided TKS 40 Element and TKS 28 Foundation source definitions"
+    },
+    {
+      "path": "docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+      "role": "canonical CAS noetic naming used for operator mapping"
+    }
+  ],
+  "tks_28_foundations": [
+    {
+      "code": "1a",
+      "definition": "The core drive to merge with the divine. Transcends ego, seeking ultimate truth and purpose. Manifests as meditation, prayer, contemplation. Drives mystical experiences and enlightenment quests. Fuels the search for life's deepest meaning. Can lead to self-sacrifice or extreme devotion. Paradoxically involves both self-annihilation and self-realization.",
+      "title": "Spiritual desire to be and be with God"
+    },
+    {
+      "code": "2a",
+      "definition": "The hunger for spiritual understanding beyond mundane facts. Seeks hidden truths, esoteric knowledge, and cosmic insights. Drives study of sacred texts, mystical traditions, and occult practices. Aims to perceive reality's underlying structure and laws. Can manifest as prophecy, clairvoyance, or profound intuition. Often involves decoding symbols and extracting meaning from synchronicities.",
+      "title": "Spiritual wisdom, insight, and knowledge"
+    },
+    {
+      "code": "3a",
+      "definition": "The aspiration for soul-level vigor and wholeness. Seeks alignment with universal life force or prana. Manifests in practices like Qi Gong, Reiki, or energy healing. Aims to purify the subtle body and balance chakras. Can involve astral projection or lucid dreaming to explore non-physical realms. Strives for spiritual immunity against negative energies and entities.",
+      "title": "Spiritual life, vitality, and health"
+    },
+    {
+      "code": "4a",
+      "definition": "The longing for soul-deep connections transcending physical reality. Seeks twin flames, soul groups, or spiritual lineages. Manifests in guru-disciple relationships or mystical orders. Aims for unconditional love and telepathic bonds. Can involve communication with non-physical entities or ancestors. Strives to dissolve the illusion of separation between all beings.",
+      "title": "Spiritual companionship, love, and friendship"
+    },
+    {
+      "code": "5a",
+      "definition": "The drive to shape reality through will and consciousness. Seeks mastery over spiritual laws and forces. Manifests in ritual magic, reality manipulation, or psychic abilities. Aims to influence events, heal at a distance, or command spiritual entities. Can involve battling dark forces or exerting authority in nonphysical realms. Strives for god-like creative power and cosmic influence.",
+      "title": "Spiritual worldly power, influence, and control"
+    },
+    {
+      "code": "6a",
+      "definition": "The hunger for divine sustenance and celestial objects. Seeks to consume spiritual energies, light, or prana. Manifests in practices like sun-gazing or breatharianism. Aims to acquire or manipulate spiritual artifacts and talismans. Can involve alchemy to transmute base matter into divine essence. Strives to perceive and interact with the etheric blueprint of physical reality.",
+      "title": "Spiritual material food and things"
+    },
+    {
+      "code": "7a",
+      "definition": "The drive for divine union and cosmic creation. Seeks to harness and elevate sexual energy for spiritual purposes. Manifests in Tantric practices, sex magic, or sacred sexuality. Aims to awaken Kundalini and achieve spiritual rebirth. Can involve union with deity forms or non-physical entities. Strives to create on spiritual planes and birth new realities through focused intention.",
+      "title": "Spiritual lust, sex, and reproduction"
+    },
+    {
+      "code": "1b",
+      "definition": "The mind's quest to comprehend the incomprehensible. Rational thought grappling with infinite concepts. Cognitive dissonance between human limitations and divine vastness. Mental models constantly evolving to approach godly understanding. Intellectual humility in the face of cosmic mysteries. Thoughts as prayers, consciousness as communion.",
+      "title": "Mental desire to be and be with God"
+    },
+    {
+      "code": "2b",
+      "definition": "Cultivating discernment through rigorous analysis and intuition. Pattern recognition across diverse fields of study. Synthesizing information to extract fundamental truths. Mental flexibility to adapt to new paradigms. Critical thinking balanced with open-mindedness. Continuous learning as a lifelong mental discipline.",
+      "title": "Mental wisdom, insight, and knowledge"
+    },
+    {
+      "code": "3b",
+      "definition": "Cognitive resilience in face of stress and trauma. Neuroplasticity as key to mental growth and healing. Mindfulness to sustain mental clarity. Balancing analytical and creative thinking for well-rounded mental health. Mental stimulation as essential nourishment for the brain. Curiosity.",
+      "title": "Mental life, vitality, and health"
+    },
+    {
+      "code": "4b",
+      "definition": "Intellectual compatibility. Shared mental models enhancing mutual understanding. Cognitive empathy. Collaborative problem-solving strengthening relationships. Mental challenges and growth as shared experiences. Balancing individuality and unity in thought processes. Thinking alike, group-think.",
+      "title": "Mental companionship, love, and friendship"
+    },
+    {
+      "code": "5b",
+      "definition": "To control, influence others or self with one's mind whether psychically, intellectually, or through strategic thinking. Also making sense out of complex systems. Persuasive communication rooted in logical argumentation. Understanding cognitive biases to influence decision-making. Mental discipline to maintain focus on long-term goals. Ethical reasoning to guide use of mental influence, meaning carefully considering the moral implications of how we influence others' thoughts, beliefs, emotions, and decisions.",
+      "title": "Mental worldly power, influence, and control"
+    },
+    {
+      "code": "6b",
+      "definition": "Cognitive frameworks as efficient resources of mental fuel and food for thought. Mental models and thought substance whether images, thought-forms, or inner monologue. Intellectual property as intangible yet vital asset. Schools of thought, doctrines, and entertainment that seek to occupy the mind's attention. Conceptualizing sustainability through systems thinking.",
+      "title": "Mental material food and things"
+    },
+    {
+      "code": "7b",
+      "definition": "Yearning for intellectual debate, intellectual exercise, to be bored out of one's mind, and/or to spread the ideas one holds, replicating one's mentality in the mind of another.",
+      "title": "Mental lust, sex, and reproduction"
+    },
+    {
+      "code": "1c",
+      "definition": "Overwhelming longing for divine connection. Ecstatic joy in perceived presence of the sacred. Deep comfort in surrendering to a higher power. Intense awe and wonder at the vastness of creation. Profound peace when feeling aligned with divine will. Aching emptiness when sensing separation from the divine. Being raptured or feeling intense spiritual union or connection with God, or the experience of being caught up in the presence of the Holy Spirit, often referred to as catching the Holy Ghost.",
+      "title": "Emotional desire to be and be with God"
+    },
+    {
+      "code": "2c",
+      "definition": "Gut feelings guiding important decisions. Empathetic understanding of others' emotional states. Intuitive flashes providing sudden clarity. Emotional intelligence navigating complex social situations. Heart-centered knowing transcending rational thought. Deep trust in one's emotional compass for life choices.",
+      "title": "Emotional wisdom, insight, and knowledge"
+    },
+    {
+      "code": "3c",
+      "definition": "Vibrant enthusiasm for life's experiences. Resilient joy bouncing back from setbacks. Cathartic release through emotional expression. Peaceful contentment in emotional balance. Energizing passion driving personal growth. Healing warmth of self-compassion and acceptance.",
+      "title": "Emotional life, vitality, and health"
+    },
+    {
+      "code": "4c",
+      "definition": "Heart-swelling affection for close ones. Soul-deep resonance with kindred spirits. Vulnerability creating profound intimacy. Empathetic bonds transcending words. Unconditional acceptance fostering secure attachments. Joyful camaraderie in shared emotional journeys.",
+      "title": "Emotional companionship, love, and friendship"
+    },
+    {
+      "code": "5c",
+      "definition": "Confidence surging from personal empowerment. Satisfaction in emotionally moving others. Thrill of charismatic leadership. Frustration when emotions are manipulated. Pride in emotional self-mastery. Compassionate use of emotional intelligence to guide others. To control one's emotions and/or control or influence the emotions of another.",
+      "title": "Emotional worldly power, influence, and control"
+    },
+    {
+      "code": "6c",
+      "definition": "Comfort derived from familiar possessions. Excitement of acquiring desired objects. Nostalgic attachment to meaningful items. Gratitude for life's material blessings. Emotional nourishment from aesthetically pleasing surroundings. Contentment in simple material pleasures.",
+      "title": "Emotional material food and things"
+    },
+    {
+      "code": "7c",
+      "definition": "Passionate desire for physical intimacy. Tender affection in romantic partnerships. Primal urges driving sexual attraction. Emotional bonding through shared vulnerability. Nurturing instincts towards offspring. Complex emotions surrounding fertility and reproduction. To get another to feel how one feels. To replicate one's feeling inside the heart of another.",
+      "title": "Emotional lust, sex, and reproduction"
+    },
+    {
+      "code": "1d",
+      "definition": "Bodily expressions of spiritual longing. Manifests in prostration, fasting, flagellation. Seeks altered states through physical deprivation or exertion. Drives pilgrimages, ascetic practices, extreme endurance rituals. Can lead to bodily neglect or self-harm. Strives to transcend physical limitations through flesh.",
+      "title": "Physical desire to be and be with God"
+    },
+    {
+      "code": "2d",
+      "definition": "Embodied cognition and somatic awareness. Manifests in muscle memory, reflexes, instincts. Seeks knowledge through direct physical experience. Drives development of martial arts, yoga, tactile learning. Can lead to overreliance on physical sensing. Strives for perfect mind-body integration.",
+      "title": "Physical wisdom, insight, and knowledge"
+    },
+    {
+      "code": "3d",
+      "definition": "Optimization of bodily functions and longevity. Manifests in fitness regimes, nutrition science, biohacking. Seeks peak physical performance and disease resistance. Drives development of sports medicine, anti-aging technologies. Can lead to orthorexia or exercise addiction. Strives for superhuman physical capabilities.",
+      "title": "Physical life, vitality, and health"
+    },
+    {
+      "code": "4d",
+      "definition": "Tactile expressions of bonding and affection. Manifests in hugging, grooming, co-sleeping behaviors. Seeks physical proximity and touch. Drives development of cuddle therapies, contact sports, dance. Can lead to touch addiction or boundary issues. Strives for constant physical connection with others.",
+      "title": "Physical companionship, love, and friendship"
+    },
+    {
+      "code": "5d",
+      "definition": "Dominance through bodily strength and presence. Manifests in bodybuilding, intimidation tactics, physical territorialism. Seeks to control space and resources through physical means. Drives development of weapons, armor, physical enhancements. Can lead to violence and tyranny. Strives for unbeatable physical superiority.",
+      "title": "Physical worldly power, influence, and control"
+    },
+    {
+      "code": "6d",
+      "definition": "Accumulation and consumption of tangible resources. Manifests in hoarding, gluttony, conspicuous consumption. Seeks security and status through physical possessions. Drives agriculture, manufacturing, resource extraction. Can lead to obesity, environmental destruction. Strives for unlimited physical abundance.",
+      "title": "Physical material food and things"
+    },
+    {
+      "code": "7d",
+      "definition": "Bodily drive for pleasure and procreation. Manifests in sexual practices, fertility rites, genetic selection. Seeks to maximize reproductive success and sensual enjoyment. Drives development of contraceptives, sex toys, fertility treatments. Can lead to sexual addiction or objectification. Strives for peak physical pleasure and optimal offspring.",
+      "title": "Physical lust, sex, and reproduction"
+    }
+  ],
+  "tks_40_elements": [
+    {
+      "code": "A1",
+      "definition": "Spiritual Mind at the highest degree is the 1st CAUSE of all causes, the Divine Mind commonly known as God who birthed all ideas, whom is within all and whom all is within. On the other hand men can be spiritual minded; indeed in our true identity we are a spirit mind. However we usually are blind to our true selves because of our lower appetites and passions. To be spiritual minded means to be connected to the spirit world, to have insight into the spirit realm, to know the Divine and the ultimate purpose of a thing, matter, or person, the absorbing of spiritual information, being in tune with the spirit of a thing, or when the Holy Spirit is the driver of one's actions and decisions.",
+      "title": "Spiritual Mind"
+    },
+    {
+      "code": "A2",
+      "definition": "Spiritual Positive is that which helps evolve the soul, brings it closer to God, to being God, and also puts the soul at peace, undisturbed, tranquil, and at ease. It agrees with one's religious or spiritual constitution. It is truth that reinforces or reaffirms one's spiritual beliefs, a moral lesson, and virtue.",
+      "title": "Spiritual Positive"
+    },
+    {
+      "code": "A3",
+      "definition": "Spiritual Negative is that which either disturbs the soul and/or hinders the soul's spiritual evolution. It includes spirits that intend to harm, hurt, or cause pain and fear to the soul, and that which the soul is tasked to come to grips with while causing turmoil. Vice.",
+      "title": "Spiritual Negative"
+    },
+    {
+      "code": "A4",
+      "definition": "Spiritual Vibration is aether energy, psychic energy. It is the base energy to all other energies, the frequency denoting a thing's purpose in the Grand Scheme of things, the aura.",
+      "title": "Spiritual Vibration"
+    },
+    {
+      "code": "A5",
+      "definition": "Spiritual Female is the soul's yearning for spiritual content necessary to evolve it, the portion of the soul that knows what it needs to grow spiritually, protects and nurtures the soul, as a spiritual womb or matrix of sorts, archetypically the Divine Mother or Amma of the 1st CAUSE.",
+      "title": "Spiritual Female"
+    },
+    {
+      "code": "A6",
+      "definition": "Spiritual Male is spiritual practices and precepts that are stern and austere, that put the soul through test and trial for the sake of its evolution. Archetypically the Heavenly Father, Abba in Hebrew, portion of the 1st CAUSE, the deliverer and transmitter of spiritual influence.",
+      "title": "Spiritual Male"
+    },
+    {
+      "code": "A7",
+      "definition": "Spiritual Rhythm is the ups and downs of life, one's spiritual journey through life as in one's natal chart or destiny.",
+      "title": "Spiritual Rhythm"
+    },
+    {
+      "code": "A8",
+      "definition": "Spiritual Above is the inner meaning of a thing, the Mysteries of the inner sanctum and those who have been initiated into such, the true reality of a matter, the esoteric. An advanced soul highly evolved. It is high morals and ethics.",
+      "title": "Spiritual Above"
+    },
+    {
+      "code": "A9",
+      "definition": "Spiritual Below is outer meaning, the symbols that represent the higher or inner truth but are themselves empty and false, an inferior soul capable of only grasping the exoteric meaning of things, the uninitiated masses. Low morals and ethics.",
+      "title": "Spiritual Below"
+    },
+    {
+      "code": "A10",
+      "definition": "Spiritual Idea is the manifestation of spiritual matters like the state of the soul, the True Self, all things pertaining to the spirit and the spirit world, a totally spiritual idea, an idea that is spirit, existing exclusively in the Akashic. The Akashic records are the database from where all Ideas derive and are stored; it is the Mind of God. It is the spiritual aspect of the thing.",
+      "title": "Spiritual Idea"
+    },
+    {
+      "code": "B1",
+      "definition": "Mental Mind is where the ego lies and all memories and past experiences that have contributed to the personality are stored. It processes information for the sake of continuously coming to conclusions concerned strictly with analyzing. Decision and action are driven by stoical logic.",
+      "title": "Mental Mind"
+    },
+    {
+      "code": "B2",
+      "definition": "Mental Positive is to be mentally stable, mental clarity, an optimistic outlook, sane and enlightened thought, and benevolent, altruistic thinking.",
+      "title": "Mental Positive"
+    },
+    {
+      "code": "B3",
+      "definition": "Mental Negative is to be confused and indecisive. It is a thought that disturbs one's mental state, cognitive dissonance, insanity, a pessimistic outlook, and malicious thinking.",
+      "title": "Mental Negative"
+    },
+    {
+      "code": "B4",
+      "definition": "Mental Vibration is the energy resonating from one's mind, psychic energy. It manifests as the electromagnetic waves emitted by the brain. It indicates the psychic states alpha, beta, delta, or theta, and the degree with which a thought resonates with the mind, its unique vibratory signature.",
+      "title": "Mental Vibration"
+    },
+    {
+      "code": "B5",
+      "definition": "Mental Female is right brain thinking, open mindedness, imaginative, creative, the subconscious mind.",
+      "title": "Mental Female"
+    },
+    {
+      "code": "B6",
+      "definition": "Mental Male is left brain thinking, rigid, closed minded, logical, and critical, the conscious mind.",
+      "title": "Mental Male"
+    },
+    {
+      "code": "B7",
+      "definition": "Mental Rhythm is one's thought pattern, transition from one ego state to another, how often a particular thought occurs in one's mind.",
+      "title": "Mental Rhythm"
+    },
+    {
+      "code": "B8",
+      "definition": "Mental Above is the comprehension and contemplation of complex matters, pondering issues of importance, lofty ideals, a high I.Q., astute intelligence, smart, or brilliant mind.",
+      "title": "Mental Above"
+    },
+    {
+      "code": "B9",
+      "definition": "Mental Below is the incapacity for comprehension. It is simplistic matters, menial matters of low importance, and the pondering of such matters.",
+      "title": "Mental Below"
+    },
+    {
+      "code": "B10",
+      "definition": "Mental Idea is an idea perceived as being exclusively of the mind, manifested solely in the mental world or solely in the mind. It is the mental aspect of a thing.",
+      "title": "Mental Idea"
+    },
+    {
+      "code": "C1",
+      "definition": "Emotional Mind is awareness of feelings, whether one's own or others, when emotions drive one's decisions and actions, the ability to sort through one's emotions, emotional intelligence.",
+      "title": "Emotional Mind"
+    },
+    {
+      "code": "C2",
+      "definition": "Emotional Positive is feelings of happiness, joy, elation, calm, and tranquility; pleasurable emotions, love, and comradery.",
+      "title": "Emotional Positive"
+    },
+    {
+      "code": "C3",
+      "definition": "Emotional Negative is feelings of heartache, sadness, anger, resentment, contempt, mixed emotions, loneliness, hate, etc.",
+      "title": "Emotional Negative"
+    },
+    {
+      "code": "C4",
+      "definition": "Emotional Vibration is the \"feeling\" energy emitted by a person, thing, or event. It is the ambiance or general mood of a person, thing, place, or event, its aura.",
+      "title": "Emotional Vibration"
+    },
+    {
+      "code": "C5",
+      "definition": "Emotional Female is compassion, sympathy, unconditional acceptance, sensuality, feelings feminine in character.",
+      "title": "Emotional Female"
+    },
+    {
+      "code": "C6",
+      "definition": "Emotional Male is aggression, pride, dominant, feelings masculine in character.",
+      "title": "Emotional Male"
+    },
+    {
+      "code": "C7",
+      "definition": "Emotional Rhythm is mood swings, the pattern or sequence of feelings projected, an emotional roller coaster.",
+      "title": "Emotional Rhythm"
+    },
+    {
+      "code": "C8",
+      "definition": "Emotional Above is the feelings brought about by enlightenment causing one to be above the usual emotions felt by the common masses. It is emotional resolve, the feelings caused by a healed soul or psyche, usually indescribable to the common mind, the feeling that comes with having control over one's own lower emotions.",
+      "title": "Emotional Above"
+    },
+    {
+      "code": "C9",
+      "definition": "Emotional Below is to be overwhelmed and controlled by way of emotions.",
+      "title": "Emotional Below"
+    },
+    {
+      "code": "C10",
+      "definition": "Emotional Idea is the sheath of an Idea, the figurative smell, or ambiance an Idea carries, like waking from a dream and not remembering it but still sensing or feeling its presence. It is the emotional aspect of a thing.",
+      "title": "Emotional Idea"
+    },
+    {
+      "code": "D1",
+      "definition": "Physical Mind is the brain organ. The vehicle through which the impalpable mind acts, the hardware hosting the software, computers, calculators, and other artificial intelligent machines. The physical body and cellular make up.",
+      "title": "Physical Mind"
+    },
+    {
+      "code": "D2",
+      "definition": "Physical Positive is the parts of a thing that complement one another, causing it to function and operate according to its designed purpose, order, and symmetrical things.",
+      "title": "Physical Positive"
+    },
+    {
+      "code": "D3",
+      "definition": "Physical Negative is misplaced or out-of-sync parts causing a thing to become dysfunctional according to its designed purpose. Disorder which causes disease and sickness, out-of-place, or unsymmetrical things.",
+      "title": "Physical Negative"
+    },
+    {
+      "code": "D4",
+      "definition": "Physical Vibration is light, sound, radiation, gamma waves, etc., the electromagnetism or heatwave signature of a thing, particle oscillation.",
+      "title": "Physical Vibration"
+    },
+    {
+      "code": "D5",
+      "definition": "Physical Female is a woman, the female of a species, an orifice, hole, receptacle, receiver, the womb, nurturer, or facilitator of the seed like soil.",
+      "title": "Physical Female"
+    },
+    {
+      "code": "D6",
+      "definition": "Physical Male is man, the male of a species, phallus, appendage, transmitter, deliverer, or the seed.",
+      "title": "Physical Male"
+    },
+    {
+      "code": "D7",
+      "definition": "Physical Rhythm is music, time (matter in motion through space), dance, song, sex, exercise, or any routine or pattern made by a series of physical movements.",
+      "title": "Physical Rhythm"
+    },
+    {
+      "code": "D8",
+      "definition": "Physical Above is upward distance, heights, degrees of height, things of good quality material well put together or of a high grade, the social haves or the person of high social status.",
+      "title": "Physical Above"
+    },
+    {
+      "code": "D9",
+      "definition": "Physical Below is that which is under something else's height, a thing of low quality, low physical integrity, poorly put together material, or of a low grade, societal have nots, persons of low social status.",
+      "title": "Physical Below"
+    },
+    {
+      "code": "D10",
+      "definition": "Physical Idea is an idea that is entirely physical, manifested in the physical world. It is dead matter, the physical aspect of a thing.",
+      "title": "Physical Idea"
+    }
+  ]
+}

@@ -1,0 +1,333 @@
+{
+  "schema_version": "cas_harness_research_protocol.v1",
+  "protocol_id": "JACOBIAN_LENS_CANARY_V0",
+  "protocol_version": "0.2.0",
+  "preregistered_at": "2026-07-21T11:06:22.8767760-07:00",
+  "canonicalization": {
+    "algorithm": "RFC8785_JSON_CANONICALIZATION_SCHEME_RESTRICTED_ASCII_IJSON",
+    "canonical_hash_algorithm": "SHA-256",
+    "raw_file_hash_algorithm": "SHA-256",
+    "canonical_and_raw_sidecars_are_distinct": true,
+    "duplicate_object_keys_forbidden": true,
+    "protocol_hash_is_external": false,
+    "external_timestamp_or_anchor_required_before_execution": true,
+    "numeric_contract": "Integers are JSON numbers. Non-integer thresholds and doses are strings."
+  },
+  "status_contract": {
+    "document_status": "FROZEN_TECHNICAL_PREREGISTRATION",
+    "execution_mode": "SHADOW",
+    "verdict_influence": "NONE",
+    "claim_status": "NOT_LICENSED",
+    "claim_eligible": false,
+    "maximum_positive_status": "TECHNICAL_CANARY_PASS",
+    "failure_status": "TECHNICAL_CANARY_FAIL",
+    "forbidden_automatic_claims": [
+      "semantic correspondence",
+      "product verdict",
+      "Evidence Packet proof chip",
+      "cross-architecture universality",
+      "prompt-injection detection",
+      "output control",
+      "300B execution",
+      "physical electrical law"
+    ]
+  },
+  "subject": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "architecture_family": "gpt_neox",
+    "parameter_count": 162322944,
+    "hidden_width": 768,
+    "layer_count": 12,
+    "model_dtype": "float32",
+    "jacobian_accumulation_dtype": "float32",
+    "expected_model_artifacts": {
+      "config.json": "76eb275107220e450d31258f792a2efcbee109d8b62ae0088260057dec06362f",
+      "model.safetensors": "29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270",
+      "special_tokens_map.json": "6f50ab5a5a509a1c309d6171f339b196a900dc9c99ad0408ff23bb615fdae7ad",
+      "tokenizer.json": "c24618a1b3e6a38167beff1c72cffd126c3a66254347304b50547d12c5f25624",
+      "tokenizer_config.json": "70e38394e494931c6f773ba41e19460dd4436526b852207367f04341b4066d3f"
+    },
+    "model_artifact_manifest_rule": "Each exact relative filename and its raw SHA-256 must match this object. No aggregate manifest digest substitutes for the per-file checks."
+  },
+  "implementation_binding": {
+    "jacobian_lens_repository": "https://github.com/anthropics/jacobian-lens",
+    "jacobian_lens_commit": "581d398613e5602a5af361e1c34d3a92ea82ba8e",
+    "jacobian_lens_license": "Apache-2.0",
+    "jacobian_lens_bundle_sha256": "1da9f6d9ef4e185615c1bd7a5b548c1fcac513340c24b1dd8de68115fc793e82",
+    "jacobian_lens_uv_lock_sha256": "deb9d1f618aac3df95e5b93e226153e196d6aecbb8f619ca7e1e6cb34d839d7b",
+    "exact_token_adapter": {
+      "path": "live-trace-worker/research/exact_token_lens.py",
+      "sha256": "01c8bcdaed57bc00b3ced68769ed12b6305a0bc622213969b6dff5ff38a08651"
+    },
+    "token_block_manifest": {
+      "path": "live-trace-worker/research/token_block_manifest.py",
+      "sha256": "384ce7766a85a1d6c702ca2e8c7c6bbf084355b8f45ed5566b6de07cc20000de"
+    },
+    "corpus_freezer": {
+      "path": "live-trace-worker/scripts/freeze_jspace_wikitext_blocks.py",
+      "sha256": "039cd1efac9e27dbe43918d7455ea3b49f491ba5c2699083ce3a194ee60e4773"
+    },
+    "focused_tests": [
+      {
+        "path": "live-trace-worker/tests/test_jspace_exact_token_lens.py",
+        "sha256": "826997f06356d3f4813dcbe2ffa604ad07d56eed6d5584256ffcb27750dc5124"
+      },
+      {
+        "path": "live-trace-worker/tests/test_jspace_token_manifest.py",
+        "sha256": "5858a9a692701e05f3ba5dac65cbc45fb78a064b3ae2c3e19773cc8c2420ce75"
+      }
+    ],
+    "environment": "ISOLATED_FROM_LIVE_WORKER",
+    "live_worker_dependency_upgrade_forbidden": true,
+    "hf_adapter_constructor": {
+      "force_bos": false,
+      "compile": false
+    },
+    "exact_token_adapter_contract": [
+      "fit prompt values are registered block_id strings, not natural-language text",
+      "encode(block_id,max_length=128) returns the exact registered 128 token IDs",
+      "the tokenizer is never called by encode",
+      "unknown block IDs, any non-128 max_length, wrong token count, out-of-vocabulary ID, or hash mismatch raise ExactTokenContractError",
+      "ExactTokenContractError is a RuntimeError so pinned jlens.fit cannot silently convert a contract violation into its ValueError skip path"
+    ]
+  },
+  "corpus_contract": {
+    "dataset_id": "Salesforce/wikitext",
+    "dataset_revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+    "configuration": "wikitext-103-raw-v1",
+    "split": "train",
+    "row_order": "source_order",
+    "skip_rule": "Skip a row only when it is empty after Unicode whitespace checking.",
+    "tokenizer_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "tokenizer_options": {
+      "add_special_tokens": false,
+      "force_bos": false,
+      "force_eos": false,
+      "padding": false,
+      "truncation": false
+    },
+    "block_length_token_ids": 128,
+    "block_rule": "Tokenize each source row independently, take nonoverlapping 128-ID blocks in source order, and discard that row's final remainder.",
+    "ranking_preimage": "ASCII('JSPACE_CORRESPONDENCE_V0/WIKITEXT/FIT') || UINT64_LE(row_index) || UINT64_LE(block_index) || repeated UINT32_LE(token_id)",
+    "ranking_hash": "SHA-256",
+    "ranking_tie_break": [
+      "digest_hex",
+      "row_index",
+      "block_index"
+    ],
+    "selected_block_count": 1000,
+    "technical_canary_selection_ranks": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "required_manifest_schema": "cas_harness_jspace_token_blocks.v1",
+    "required_source_snapshot_schema": "cas_harness_jspace_source_snapshot.v1",
+    "source_snapshot_contract": {
+      "input_is_required": true,
+      "canonical_profile": "ASCII_IJSON_SORTED_KEYS_NO_WHITESPACE_V1",
+      "dataset_file_list_domain": "CAS_HARNESS/JSPACE/DATASET_FILES/V1/",
+      "tokenizer_file_list_domain": "CAS_HARNESS/JSPACE/TOKENIZER_FILES/V1/",
+      "file_entry_fields": [
+        "relative_path",
+        "byte_count",
+        "sha256"
+      ],
+      "file_entry_order": "relative_path ascending",
+      "file_list_hash": "SHA256(UTF8(domain) || canonical sorted file-entry array)",
+      "minimum_entries_per_dataset_and_tokenizer_list": 1,
+      "boundary": "The freezer validates and binds the supplied canonical per-file snapshot. The provider cache must be independently inventoried and hashed before this input exists."
+    },
+    "token_id_digest_domain": "CAS_HARNESS/JSPACE/TOKEN_IDS/V1/",
+    "token_id_digest_preimage": "UTF8(domain) || UINT32_LE(token_count) || repeated UINT32_LE(token_id)",
+    "merkle_contract": {
+      "leaf_domain": "CAS_HARNESS/JSPACE/MERKLE_LEAF/V1/",
+      "leaf_preimage": "UTF8(leaf_domain) || restricted canonical block object without leaf_sha256",
+      "node_domain": "CAS_HARNESS/JSPACE/MERKLE_NODE/V1/",
+      "node_preimage": "UTF8(node_domain) || raw_32_byte_left || raw_32_byte_right",
+      "leaf_order": "selection_rank_ascending",
+      "odd_node_rule": "Duplicate the final node at that level.",
+      "single_leaf_rule": "Root equals leaf.",
+      "root_encoding": "lowercase_hex"
+    },
+    "required_frozen_outputs_before_gpu": [
+      "dataset snapshot identity and provider file hashes",
+      "exact selected token-ID arrays",
+      "per-block token-ID SHA-256",
+      "selection rank and source row/block indices",
+      "ordered corpus Merkle root",
+      "source snapshot canonical SHA-256 and dataset/tokenizer file-list hashes",
+      "canonical manifest SHA-256",
+      "raw manifest SHA-256"
+    ]
+  },
+  "estimator_contract": {
+    "reference_implementation": "jlens.fitting.jacobian_for_prompt at the pinned commit",
+    "source_hook_template": "gpt_neox.layers.{layer} complete transformer block output",
+    "target_hook": "gpt_neox.layers.11 complete transformer block output",
+    "source_layers": [
+      3,
+      6,
+      9
+    ],
+    "target_layer": 11,
+    "sequence_length": 128,
+    "skip_first_positions": 16,
+    "valid_source_positions_inclusive": [
+      16,
+      126
+    ],
+    "final_position_excluded": true,
+    "valid_position_count": 111,
+    "dim_batch": 8,
+    "backward_passes_per_block": 96,
+    "matrix_shape": [
+      768,
+      768
+    ],
+    "matrix_orientation": "Rows are target hidden dimensions; columns are source hidden dimensions.",
+    "exact_formula": "J_l = (1/111) * sum_{t=16..126} sum_{t'=t..126} partial h_11,t' / partial h_l,t",
+    "future_target_reduction": "SUM, not mean",
+    "source_position_reduction": "arithmetic mean over exactly 111 positions",
+    "eight_block_reduction": "equal-weight arithmetic mean of complete per-block matrices, only after every local check passes",
+    "official_unembed_path": "Pythia final_layer_norm followed by embed_out; apply configured logit softcap if present",
+    "linear_frame_nonclaim": "W_U times J_l omits nonlinear final LayerNorm and may be used only as a deliberately named pre-final-norm linear frame. It is not the official Jacobian-lens logit readout."
+  },
+  "technical_measurement_contract": {
+    "direction_generation": {
+      "algorithm": "domain-separated SHA-256 bitstream Rademacher vector",
+      "preimage": "ASCII(protocol_id || '/' || check_name || '/' || block_id || '/' || decimal_layer || '/' || decimal_counter)",
+      "bit_mapping": "0 maps to -1 and 1 maps to +1; consume most-significant bit first from successive SHA-256 counter blocks",
+      "normalization": "divide the first 768 signs by sqrt(768)",
+      "separate_source_and_target_domains": true
+    },
+    "local_jvp_vjp_check": {
+      "same_prompt_required": true,
+      "source_intervention": "Add alpha*u to complete block output h_l,t at every t in 16..126.",
+      "target_summary": "Y(alpha) = (1/111) * sum_{t'=16..126} h_11,t'(alpha).",
+      "matrix_prediction": "dY/dalpha = J_l*u at alpha=0.",
+      "bilinear_prediction": "d(v dot Y)/dalpha = v dot J_l*u at alpha=0.",
+      "direct_methods": [
+        "torch.func.jvp or mathematically equivalent forward-mode JVP",
+        "torch.autograd VJP on the same block and same prompt"
+      ],
+      "vector_relative_error": "norm(a-b) / max(norm(a), norm(b), 1e-12)",
+      "scalar_relative_error": "abs(a-b) / max(abs(a), abs(b), 1e-8)"
+    },
+    "output_functional_check": {
+      "source_layer": 6,
+      "source_sequence_position": 126,
+      "intervention_location": "complete block output after layer 6 and before layer 7",
+      "output_sequence_position": 127,
+      "logit_stage": "after final_layer_norm and embed_out, before softmax; Pythia config must report no final logit softcap or the configured softcap must be applied",
+      "baseline_token_selection": "Select top1 and top2 token IDs from baseline logits; ties resolve to lowest token ID.",
+      "functional": "F(alpha) = logit[baseline_top1_id] - logit[baseline_top2_id] at output position 127; token IDs stay frozen for every dose.",
+      "unit_direction": "Use the registered SHA-256 Rademacher source direction for this block and layer.",
+      "scale": "s = median across all eight blocks and all layer-6 positions 16..126 of norm(h_6,t)/sqrt(768); require finite s > 0.",
+      "relative_doses": [
+        "-2^-8",
+        "-2^-10",
+        "-2^-12",
+        "0",
+        "2^-12",
+        "2^-10",
+        "2^-8"
+      ],
+      "dose_application": "alpha = relative_dose * s; add alpha*u at only source position 126.",
+      "central_difference": "(F(+alpha)-F(-alpha))/(2*alpha)",
+      "symmetric_relative_error": "2*abs(analytic-finite_difference)/(abs(analytic)+abs(finite_difference)+noise_floor)",
+      "noise_floor": "max(1e-8, 10 times the maximum absolute difference among three repeated alpha=0 evaluations)",
+      "above_noise": "max(abs(analytic),abs(finite_difference)) >= noise_floor",
+      "sign_rule": "Values with absolute magnitude below noise_floor have sign 0; compute sign agreement only above noise.",
+      "affine_fit": "Ordinary least squares with intercept over all seven frozen relative doses independently for each block; report R2 and slope."
+    },
+    "all_required_gates": [
+      "all eight registered blocks execute; no skip is permitted",
+      "every local Jacobian is finite float32 with shape 768x768",
+      "hook paths, sequence length, position mask, and token hashes match",
+      "no tokenizer call, BOS insertion, EOS insertion, padding, or truncation",
+      "three repeated local matrices on the first two blocks have maximum pairwise relative Frobenius difference <= 1e-5",
+      "same-prompt direct JVP versus J_l*u relative error <= 1e-4",
+      "same-prompt direct VJP bilinear versus v dot J_l*u relative error <= 1e-4",
+      "middle-dose median symmetric output-functional error <= 0.05",
+      "middle-dose 90th-percentile symmetric output-functional error <= 0.15",
+      "at least 95% output-functional sign agreement among above-noise cases",
+      "per-block seven-dose affine fit R2 >= 0.98",
+      "no missing, zero, disconnected, or nonfinite gradient"
+    ]
+  },
+  "determinism_contract": {
+    "model_eval_mode": true,
+    "dropout_disabled": true,
+    "torch_deterministic_algorithms": true,
+    "tf32_enabled": false,
+    "autocast_enabled": false,
+    "compile_enabled": false,
+    "gradient_dtype": "float32",
+    "cublas_workspace_config": ":4096:8",
+    "dependency_lock_must_be_hash_bound": true,
+    "GPU_driver_CUDA_PyTorch_versions_must_be_receipted": true,
+    "failure_handling": "Any source, hash, shape, token, hook, determinism, gradient, or numeric-gate failure produces TECHNICAL_CANARY_FAIL and retains the failed receipt."
+  },
+  "resource_boundary": {
+    "minimum_gpu_vram_gb": 24,
+    "production_worker_must_not_be_disturbed": true,
+    "reference_backward_sweeps": 768,
+    "reference_backward_sweeps_formula": "8 blocks * 96 backward passes. The three source layers share each backward pass in the pinned implementation; the receipt must record actual backward calls.",
+    "cost_rule": "Record measured peak VRAM, wall time, and provider cost. An estimate is not an execution receipt.",
+    "300B_boundary": "This dense 768-wide small-model canary proves no 300B capacity. A 300B lane requires projected JVP/VJP or randomized low-rank sketches, sharding, checkpointing, and preregistered reconstruction-error gates."
+  },
+  "required_receipt_fields": [
+    "schema_version",
+    "protocol_id",
+    "protocol_version",
+    "protocol_canonical_sha256",
+    "protocol_raw_sha256",
+    "external_protocol_anchor",
+    "execution_mode",
+    "verdict_influence",
+    "claim_status",
+    "code_commit",
+    "dirty_worktree",
+    "jacobian_lens_commit_and_bundle_sha256",
+    "adapter_freezer_and_test_sha256",
+    "container_digest",
+    "dependency_lock_sha256",
+    "sanitized_command",
+    "model_id_revision_and_per_file_hashes",
+    "dataset_revision_configuration_split_and_snapshot_hashes",
+    "block_manifest_canonical_and_raw_hashes",
+    "block_token_hashes_and_corpus_merkle_root",
+    "attempted_successful_failed_skipped_counts",
+    "source_target_layers_and_hook_semantics",
+    "per_block_per_layer_tensor_hash_shape_dtype",
+    "local_repeat_JVP_VJP_and_finite_difference_metrics",
+    "output_token_ids_scale_doses_point_estimates_and_failed_gates",
+    "GPU_UUID_model_driver_CUDA_PyTorch",
+    "peak_VRAM_wall_time_and_provider_cost",
+    "technical_status",
+    "claim_eligibility",
+    "predecessor_receipt_hashes"
+  ],
+  "retention_contract": {
+    "retain_negative_and_failed_receipts": true,
+    "normal_evidence_packet_ingress": false,
+    "proof_chip_influence": false,
+    "customer_UI_influence": false
+  },
+  "stop_conditions": [
+    "The protocol digest lacks the required external timestamp or anchor.",
+    "Any implementation, dependency, dataset, model, tokenizer, token block, or manifest hash differs.",
+    "The production worker or production secrets would be used.",
+    "The GPU exposes less than 24 GB VRAM.",
+    "Any exact-token adapter condition fails or any block would be skipped.",
+    "Any required technical gate fails.",
+    "Any output is presented as semantic, customer-verdict, universality, prompt-injection, output-control, or 300B evidence."
+  ]
+}

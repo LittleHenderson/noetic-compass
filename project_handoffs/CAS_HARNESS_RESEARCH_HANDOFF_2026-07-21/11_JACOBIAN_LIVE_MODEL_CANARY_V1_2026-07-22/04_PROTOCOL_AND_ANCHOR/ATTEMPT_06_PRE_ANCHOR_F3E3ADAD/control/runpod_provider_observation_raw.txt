@@ -1,0 +1,53 @@
+CAS Harness Jacobian V1 Attempt 6 retained RunPod operator observation
+Captured UTC: 2026-07-23T15:20:32.657Z
+Captured Unix milliseconds: 1784820032657
+Capture authority: operator-signed-in RunPod console UI (console.runpod.io), read live through the operator's in-app browser session with the operator present, plus an SSH runtime cross-check over the pinned endpoint. A first observation pass at 2026-07-23T14:48:51.243Z is retained separately as superseded; this refreshed pass re-confirmed the pods listing and added the deploy-page GPU-card facts below.
+Provider authentication boundary: this file is not provider-signed and does not prove an immutable image digest.
+
+Pods page observation (signed-in UI, re-confirmed at capture time):
+- Research pod name: cas-jacobian-v1-research-20260722-migration-migration
+- Research pod identity: zp2s9pscgncn0b
+- Research pod state: RUNNING (green indicator; available action was Stop)
+- Research pod compute: A40 x1
+- Research pod displayed total cost: $0.45/hr (Compute $0.44/hr + container storage $0.004/hr + volume storage $0.007/hr)
+- Account balance display: $77.78 at first observation, $77.72 at the 14:48 pass
+- Production pod name: cas-live-worker-production
+- Production pod identity: hilj2rzs54gi06
+- Production pod remained separately listed (RTX 4000 Ada x1, $0.26/hr) and was not used or changed by this research attempt.
+- Three additional stopped storage line items were listed at $0.01/hr each (tto1s8rgz3ixvg, 8cdzstbik02ord, nppakqiaux91mk).
+
+Research-pod Details observation (signed-in UI drawer, 14:48 pass):
+- Uptime: 9h 1m
+- GPU: A40 1x
+- vCPU: 9 (Intel(R) Xeon(R) Gold 6342 CPU @ 2.80GHz)
+- Memory: 50 GB; Container disk: 30 GB; Pod volume: 50 GB encrypted at /workspace
+- GPU location: CA-MTL-1, Secure cloud
+- Container image: runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04 (template runpod-torch-v240); no immutable digest displayed.
+
+Research-pod Telemetry observation (signed-in UI drawer, 14:48 pass):
+- A40 card, GPU 0: VRAM 0% (0 Bytes / 45 GiB usable), Utilization 0%
+- Driver version 580.126.09; displayed CUDA version 13.0; Power limit 300 W; P-State P8
+- Processes: 8; CPU load 0%; Memory 1% (508.7 MiB / 46.57 GiB)
+
+Deploy-page GPU-card observation (signed-in UI, this capture pass):
+- The A40 GPU card displays "1x A40 (48 GB VRAM)" - the advertised VRAM for this GPU class is 48 GB.
+- The selected A40 GPU card's DOM carries the attribute data-ph-capture-attribute-gpu-card-selected="NVIDIA A40", the full vendor GPU name in the signed-in console DOM.
+
+Connect observation (signed-in UI drawer, 14:48 pass):
+- Direct TCP: SSH -> 69.30.85.51:22111 -> :22, matching the pinned endpoint used by every controlled Attempt 6 connection.
+
+SSH runtime cross-check (pinned endpoint, StrictHostKeyChecking=yes, 14:48 pass):
+- nvidia-smi GPU name NVIDIA A40, UUID GPU-b7638993-cc34-ac95-7fc8-5002ce894e00
+- GPU compute application count: 0
+- No production-service process names present on the research pod.
+
+advertised-vram="48 GB"
+gpu-count="1"
+gpu-name="NVIDIA A40"
+image-digest-sha256="null"
+image-digest-status="UNAVAILABLE"
+image-reference="runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04"
+pod-state="RUNNING"
+production-pod-id="hilj2rzs54gi06"
+production-services-present="false"
+research-pod-id="zp2s9pscgncn0b"

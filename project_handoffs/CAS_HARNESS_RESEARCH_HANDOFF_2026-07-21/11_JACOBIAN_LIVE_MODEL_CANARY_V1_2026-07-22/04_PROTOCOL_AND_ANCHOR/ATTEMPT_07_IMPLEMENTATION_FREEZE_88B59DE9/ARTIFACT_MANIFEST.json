@@ -1,0 +1,42 @@
+{
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_attempt7_implementation_freeze_manifest.v1",
+  "candidate_label": "ATTEMPT_07_IMPLEMENTATION_FREEZE_88B59DE9",
+  "candidate_commit": "88b59de924857ad7c2f394122fe68f57ba97da77",
+  "candidate_tree": "d38d83c0971596cbe86006e1dadf077d8b1a62f0",
+  "candidate_parent": "29551624f4de0eec61c4035e364203be55d6c08a",
+  "controlling_status": "IMPLEMENTATION_FREEZE_PASS / CROSS_RECONSTRUCTION_MATCH / POD_PHASE_TWO_VALIDATED / NO_PRE_OR_RUN_IDENTITY / SHADOW / NONE / NOT_LICENSED",
+  "artifact_count": 6,
+  "artifacts": [
+    {
+      "path": "ATTEMPT_07_IMPLEMENTATION_FREEZE_RECORD.json",
+      "bytes": 2653,
+      "sha256": "3d3ed2b447ab7b47e48dfbad119d7ea275ae4baf67f9c386db7a80d06cb0d30d"
+    },
+    {
+      "path": "jacobian_lens_canary_v1_implementation.bundle",
+      "bytes": 36560536,
+      "sha256": "693b4da1538131959b9511076eb6ec27fa50d21b08a24f0c9ffc209fb487247d"
+    },
+    {
+      "path": "jacobian_lens_canary_v1_implementation_manifest.json",
+      "bytes": 5689,
+      "sha256": "af11038190763d477d43b87fdffb3b4e2dffa7f966ce95537384d740c59a7a72"
+    },
+    {
+      "path": "jacobian_lens_canary_v1_implementation_manifest_reconstructed.json",
+      "bytes": 5689,
+      "sha256": "af11038190763d477d43b87fdffb3b4e2dffa7f966ce95537384d740c59a7a72"
+    },
+    {
+      "path": "pod_phase_two_validation_8x.txt",
+      "bytes": 608,
+      "sha256": "1c95656756951d24cb5f4c49e8ac48049650ff367d8877a89fea409957f9daa1"
+    },
+    {
+      "path": "STATUS.md",
+      "bytes": 4582,
+      "sha256": "785230d7e7c700989b61a0fe95a8a4b9892e4534d99ac9ecac40aa1bfaf09f23"
+    }
+  ],
+  "manifest_scope": "Attempt 7 CUDA-UVM proc-read churn hardening: portable source preservation, independent reconstruction, retained dependency identity, and a non-official pod phase-two validation. Not PRE, a run identity, RFC3161 query/response, official model/CUDA execution, or a LICENSED capability."
+}

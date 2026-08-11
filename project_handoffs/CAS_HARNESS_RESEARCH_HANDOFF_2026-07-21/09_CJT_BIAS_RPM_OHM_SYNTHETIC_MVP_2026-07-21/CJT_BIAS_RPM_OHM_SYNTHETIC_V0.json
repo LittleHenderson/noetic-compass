@@ -1,0 +1,729 @@
+{
+  "schema_version": "cas_harness_research_shadow.cjt_bias_rpm_ohm_synthetic_protocol.v0",
+  "protocol_id": "CJT_BIAS_RPM_OHM_SYNTHETIC_V0",
+  "protocol_version": "0.1.0-draft",
+  "authored_date": "2026-07-21",
+  "purpose": "CPU-only deterministic synthetic recovery test for the CJT bias, corrected RPM prerequisite-trace, and CAS-Ohm estimators before any real-model experiment.",
+  "canonicalization": {
+    "algorithm": "CAS_RESTRICTED_ASCII_SORTED_KEY_JSON_V1",
+    "canonical_hash_algorithm": "SHA-256",
+    "duplicate_object_keys_forbidden": true,
+    "non_finite_numbers_forbidden": true,
+    "numeric_contract": "Integers are JSON numbers. Non-integer doses, thresholds, and expected parameter values are decimal strings and must be parsed as finite base-10 values.",
+    "deterministic_bytes_required_for_same_inputs": true,
+    "scope": "The deterministic analysis report is byte-stable. The separately hash-bound execution envelope contains measured wall time and Python tracemalloc peak memory (not process RSS or native NumPy peak memory) and is intentionally not byte-stable."
+  },
+  "status_contract": {
+    "document_status": "DRAFT_PROSPECTIVE_SYNTHETIC_PROTOCOL",
+    "freeze_status": "NOT_FROZEN",
+    "externally_anchored": false,
+    "execution_mode": "SHADOW",
+    "verdict_influence": "NONE",
+    "claim_status": "NOT_LICENSED",
+    "claim_status_display": "NOT LICENSED",
+    "claim_eligible": false,
+    "synthetic_only": true,
+    "maximum_positive_status": "SYNTHETIC_HARNESS_MVP_PASS",
+    "future_promotion_status": "SYNTHETIC_HARNESS_PASS",
+    "provenance_assurance": "SELF_HASHED_UNATTESTED",
+    "license_candidate_status_available": false,
+    "customer_evidence_packet_ingress": false,
+    "proof_chip_influence": false,
+    "forbidden_automatic_claims": [
+      "semantic probe validation",
+      "prompt-injection detection",
+      "causal output control",
+      "universal open-weight probing",
+      "cross-architecture transfer",
+      "300B execution",
+      "customer ACCEPT verdict",
+      "physical electrical law"
+    ]
+  },
+  "source_contract": {
+    "controlling_design": "docs/working/CAS_HARNESS_CJT_BIAS_RPM_OHM_EXPERIMENT_CONTRACT_20260721.md",
+    "source_hash_required_before_freeze": true,
+    "implementation_hash_required_before_freeze": true,
+    "draft_nonclaim": "This file is a reviewable draft. It is neither frozen nor independently timestamped or anchored."
+  },
+  "execution_contract": {
+    "compute_tier": "CPU_ONLY",
+    "real_model_loaded": false,
+    "model_weights_used": false,
+    "hidden_states_captured": false,
+    "network_required": false,
+    "validated_runtime": "WINDOWS_CPYTHON_3.14.0",
+    "isolated_dependency_lock": "live-trace-worker/research_requirements/CJT_BIAS_RPM_OHM_SYNTHETIC_V0.lock.txt",
+    "runtime_distribution_count": 6,
+    "shared_production_requirements_modified": false,
+    "research_lock_rows_must_match_registered_versions": true,
+    "python_launch_mode": "ISOLATED_-I_REQUIRED",
+    "python_stdlib_provenance_scope": "LAUNCHER_AND_RUNTIME_DLL_ONLY_STDLIB_AND_EXTENSION_MODULE_CLOSURE_NOT_HASHED",
+    "dependency_verification_order": "LOCK_AND_METADATA_FILE_HASH_PREFLIGHT_BEFORE_THIRD_PARTY_IMPORT_THEN_POST_IMPORT_REVERIFY",
+    "random_generator": "numpy.random.Generator(PCG64DXSM)",
+    "root_seed_required": true,
+    "domain_separation_rule": "Each scenario, split, prompt group, seed, bootstrap replicate, and synthetic block receives a deterministic child seed derived from SHA-256(protocol_id || root_seed || domain labels).",
+    "atomic_receipt_required": true,
+    "atomicity_scope": "SAME_DIRECTORY_NO_REPLACE_LINK_AND_FILE_FSYNC_ONLY",
+    "receipt_publication_durability": "FILE_FSYNC_NO_PARENT_DIRECTORY_FSYNC_NOT_PROVEN_CRASH_DURABLE",
+    "same_inputs_same_canonical_bytes_required": "DETERMINISTIC_ANALYSIS_REPORT_ONLY"
+  },
+  "observation_map_contract": {
+    "selected_relationship": "EXPLICIT_TRANSDUCTION",
+    "external_drive": "V_ext",
+    "cause_coordinate": "c = dot(u_C, h_C - h_C0)",
+    "bias_coordinate": "b = dot(u_B, h_B - h_B0)",
+    "internal_response": "i = dot(u_I, h_I - h_I0)",
+    "output_effect": "e = F(output) - F0",
+    "transduction": "c = T(V_ext, B, RPM_state)",
+    "required_freezes_for_real_model_follow_on": [
+      "directions",
+      "baselines",
+      "normalization",
+      "hooks",
+      "layers",
+      "token positions",
+      "model revision",
+      "tokenizer bytes",
+      "output functional"
+    ],
+    "forbidden_equivalence": "An internal intervention dose alpha must not be relabelled as V_ext without a separate external-to-internal calibration."
+  },
+  "factorial_design": {
+    "crossed_factors": [
+      "external_drive_dose",
+      "bias_condition",
+      "RPM_condition",
+      "prompt_group",
+      "seed"
+    ],
+    "external_drive": {
+      "unit": "STANDARDIZED_SYNTHETIC_DOSE",
+      "ordered_grid": [
+        "-4",
+        "-3",
+        "-2.25",
+        "-1.5",
+        "-1",
+        "-0.5",
+        "0",
+        "0.5",
+        "1",
+        "1.5",
+        "2.25",
+        "3",
+        "4"
+      ],
+      "count": 13,
+      "contains_zero": true,
+      "contains_both_directions": true,
+      "overload_points": [
+        "-4",
+        "4"
+      ]
+    },
+    "bias_conditions": [
+      "NEUTRAL_BASELINE",
+      "LOW_BELOW_CUTOFF",
+      "CENTERED_ACTIVE",
+      "HIGH_NEAR_SATURATION",
+      "INTENDED_SAFETY",
+      "CONFLICTING_ADVERSARIAL",
+      "MATCHED_SHAM"
+    ],
+    "RPM_conditions": [
+      "INTACT_D_TO_W_TO_P",
+      "DESIRE_MISSING",
+      "WISDOM_MISSING",
+      "POWER_MISSING",
+      "REORDERED_CONTENT_MATCHED",
+      "IRRELEVANT_RANK_MATCHED",
+      "CORRUPTED_INVOLUTION",
+      "RESTORED_AFTER_FAILURE",
+      "MATCHED_SHAM"
+    ],
+    "prompt_groups": [
+      "CLEAN_TASK_COMPLETION",
+      "BENIGN_INSTRUCTION_CONFLICT",
+      "ATTACK_FOLLOWED",
+      "SAFE_REFUSAL",
+      "INJECTION_IGNORED",
+      "MATCHED_SURFACE_LENGTH_CONTROL",
+      "OFF_TARGET_CONTROL"
+    ],
+    "grouped_split": {
+      "unit": "prompt_group_id",
+      "calibration_fraction": "0.60",
+      "selection_fraction": "0.20",
+      "evaluation_fraction": "0.20",
+      "logical_group_counts": {
+        "CALIBRATION": 9,
+        "SELECTION": 3,
+        "EVALUATION": 3
+      },
+      "seeds_per_group": 2,
+      "registered_split_seeds": {
+        "CALIBRATION": [
+          101,
+          102
+        ],
+        "SELECTION": [
+          1001,
+          1002
+        ],
+        "EVALUATION": [
+          2001,
+          2002
+        ]
+      },
+      "group_overlap_allowed": false,
+      "seed_overlap_across_splits_allowed": false,
+      "evaluation_opened_after_selection": true
+    }
+  },
+  "synthetic_data_blocks": {
+    "response_block": {
+      "purpose": "Recover the response curve and local CAS-Ohm slope/reciprocal quantity, then classify fixed preregistered operating windows; this MVP does not discover change points or boundaries.",
+      "truth_separate_from_estimator_inputs": true
+    },
+    "derivative_logit_block": {
+      "purpose": "Recover signed directional cause gain, Fisher-Rao directional/full magnitudes, and bias sensitivity from analytically known Jacobian/Fisher objects.",
+      "truth_separate_from_estimator_inputs": true
+    },
+    "direct_equivalence_block": {
+      "purpose": "MVP synthetic check that registered cause-arm and commanded-Bias-arm interventions produce matched output effects in every evaluation group-by-seed cell.",
+      "registered_cause_doses": [
+        "-0.05",
+        "0.05"
+      ],
+      "commanded_bias_per_cause_dose": "CALIBRATION_SPLIT_BETA_DIR_OVER_G_B_ESTIMATE",
+      "evaluation_plan_rule": "Fit beta_dir and g_B on CALIBRATION derivative rows, require the calibration denominator outside the practical-zero band, and use their ratio to fix evaluation commanded-Bias doses before reading evaluation outputs.",
+      "cause_arm_invariants": "cause_primary equals dose; cause_auxiliary and bias_micro are zero; measured_cause equals cause_primary",
+      "bias_arm_invariants": "cause_primary, cause_auxiliary, and measured_cause are zero; bias_micro equals the calibration-split ratio times the registered cause dose",
+      "truth_separate_from_estimator_inputs": true
+    },
+    "RPM_DAG_block": {
+      "purpose": "Recover directional D-to-W-to-P prerequisite effects and reject final-output-only or confounded explanations.",
+      "truth_separate_from_estimator_inputs": true
+    }
+  },
+  "parameter_recovery_contract": {
+    "beta_dir": {
+      "definition": "beta_dir = u_E^T J_EC u_C",
+      "signed": true,
+      "conditioning": "fixed bias, intact RPM, registered operating region",
+      "success_rule": "The untouched-group interval covers the analytic truth, excludes zero when the truth is practically nonzero, and the sign is stable across registered seeds."
+    },
+    "beta_FR_directional": {
+      "definition": "beta_FR_directional = sqrt((J u_C)^T F (J u_C))",
+      "signed": false,
+      "separate_from_beta_dir": true,
+      "success_rule": "The untouched-group interval covers the analytic Fisher-Rao directional magnitude within the preregistered tolerance."
+    },
+    "beta_FR_full": {
+      "definition": "beta_FR_full = sqrt(trace(J^T F J))",
+      "signed": false,
+      "separate_from_beta_dir": true,
+      "separate_from_beta_FR_directional": true,
+      "success_rule": "The untouched-group interval covers the analytic full-map Fisher-Rao magnitude within the preregistered tolerance."
+    },
+    "g_B": {
+      "definition": "g_B = u_E^T J_EB u_B",
+      "signed": true,
+      "conditioning": "fixed cause, fixed RPM condition, commanded synthetic Bias micro-dose",
+      "cause_hold_required": true,
+      "success_rule": "The deterministic-plumbing interval covers the analytic truth, the commanded synthetic Bias dose changes as registered, and observed Cause drift remains inside the cause-hold equivalence bound.",
+      "measurement_limit": "No independent measured_bias coordinate exists in the MVP; g_B is response per commanded synthetic Bias dose, not proof of hidden-state Bias actuation."
+    },
+    "r_pi_CAS_derived": {
+      "definition": "r_pi_CAS_derived = beta_dir / g_B",
+      "interpretation": "cause-versus-bias effect-equivalence coefficient until direct validation passes",
+      "availability_requires": [
+        "beta_dir independently identified",
+        "g_B independently identified in the same local operating region",
+        "g_B denominator interval bounded away from the practical-zero band",
+        "ratio interval finite and bounded",
+        "ratio interval width inside the registered maximum",
+        "stable sign across seeds and untouched groups",
+        "direct cause-versus-bias equivalence validation passes"
+      ],
+      "failure_value": "UNAVAILABLE"
+    },
+    "G_eff": {
+      "definition": "Delta i = G_eff * Delta V_ext + error",
+      "fit_scope": "registered local active small-signal range only",
+      "availability_requires": [
+        "linear candidate is prediction-competitive under the one-standard-error rule",
+        "slope interval excludes the practical-zero band",
+        "residual and group-stability gates pass"
+      ],
+      "failure_value": "UNAVAILABLE"
+    },
+    "R_eff": {
+      "definition": "R_eff = 1 / G_eff",
+      "availability_requires": [
+        "G_eff is available",
+        "Fieller-style reciprocal confidence set is finite and bounded",
+        "reciprocal interval width inside the registered maximum"
+      ],
+      "failure_value": "UNAVAILABLE"
+    }
+  },
+  "bias_identification_contract": {
+    "mvp_measurement_mode": "COMMANDED_DOSE_ONLY_NO_MEASURED_BIAS",
+    "macro_conditions_are_not_derivatives": true,
+    "macro_condition_purpose": "Move the CJT operating point across cutoff, active, and saturation hypotheses.",
+    "derivative_method": "For the MVP, use symmetric registered micro-clamps around CENTERED_ACTIVE while holding external drive, RPM state, prompt group, and seed fixed.",
+    "release_candidate_extension_not_yet_implemented": "Repeat the registered micro-clamps around every macro bias condition.",
+    "micro_clamp_pairing": "Every +delta_b row is paired to a -delta_b row with the same group and seed.",
+    "cause_hold_measurement_required": true,
+    "cause_hold_equivalence_test": "The observed evaluation-group percentile range for induced Delta c must lie entirely inside the preregistered practical-equivalence band; this three-group range is not a calibrated confidence interval.",
+    "rank_and_collinearity_checks": [
+      "full design-matrix rank",
+      "registered maximum condition number",
+      "minimum principal angle between cause and bias directions"
+    ],
+    "fail_closed_reason": "BIAS_CAUSE_HOLD_FAILED",
+    "release_candidate_requirements_not_yet_implemented": [
+      "independent measured_bias coordinate",
+      "Bias-actuation uncertainty interval with demonstrated coverage",
+      "off-target leakage measurement",
+      "failed-actuation negative control"
+    ]
+  },
+  "curve_competition_contract": {
+    "families": [
+      "NULL",
+      "DELTA_LINEAR",
+      "AFFINE",
+      "RECIPROCAL",
+      "SATURATING",
+      "HILL",
+      "PIECEWISE",
+      "MONOTONE_NONPARAMETRIC"
+    ],
+    "family_count": 8,
+    "parameter_count_by_family": {
+      "NULL": 1,
+      "DELTA_LINEAR": 2,
+      "AFFINE": 2,
+      "RECIPROCAL": 3,
+      "SATURATING": 3,
+      "HILL": 4,
+      "PIECEWISE": 3,
+      "MONOTONE_NONPARAMETRIC": 13
+    },
+    "selection_data": "selection split only",
+    "final_scoring_data": "untouched evaluation split only",
+    "primary_loss": "grouped held-out RMSE",
+    "nonlinear_evaluation_acceptance": "selected family grouped evaluation RMSE must be at most heldout_RMSE_tolerance",
+    "complexity_rule": "Choose the least-complex model whose grouped selection error is within one standard error of the minimum.",
+    "nested_model_rule": "DELTA_LINEAR and AFFINE each count two fitted parameters; within-one-standard-error ties are resolved by selection RMSE then family identity.",
+    "nonlinear_winner_rule": "If a nonlinear family wins outside a registered local small-signal interval, G_eff and R_eff are UNAVAILABLE rather than forced.",
+    "mvp_current_reports": [
+      "held-out RMSE",
+      "complexity penalty",
+      "prompt-group variation",
+      "stable operating range"
+    ],
+    "release_candidate_reports_not_yet_implemented": [
+      "predictive R_squared for every family",
+      "calibration error for every family",
+      "residual structure for every family",
+      "cluster-bootstrap 95 percent interval for every family",
+      "seed variation for every family"
+    ],
+    "mvp_truth_families_exercised": [
+      "PIECEWISE",
+      "SATURATING"
+    ],
+    "family_specific_recovery_not_yet_validated": [
+      "NULL",
+      "DELTA_LINEAR",
+      "AFFINE",
+      "RECIPROCAL",
+      "HILL",
+      "MONOTONE_NONPARAMETRIC"
+    ],
+    "registered_but_not_run_in_mvp": [
+      "Bias-by-drive INTERACTION pending noncentered Bias calibration/selection/evaluation data"
+    ]
+  },
+  "uncertainty_and_ratio_contract": {
+    "current_tier": "MVP_DETERMINISTIC_PLUMBING_BOOTSTRAP",
+    "primary_interval": "prompt-group cluster-bootstrap percentile interval used to test deterministic plumbing only; calibrated confidence coverage is not claimed",
+    "cluster_unit": "prompt_group_id",
+    "evaluation_cluster_count": 3,
+    "generator_variation_limit": "Current group-by-seed stochastic variation is intercept-only, so many slope and paired-contrast intervals can collapse to zero width.",
+    "resampling_preserves": [
+      "all crossed-factor rows for a selected group",
+      "paired bias micro-clamps",
+      "RPM trace identity",
+      "seed identity"
+    ],
+    "release_candidate_bootstrap_status": "UNAVAILABLE_PENDING_MORE_CLUSTERS_STOCHASTIC_HETEROGENEITY_MONTE_CARLO_COVERAGE_TYPE_I_ERROR_AND_POWER",
+    "mvp_bootstrap_replicates_configurable": true,
+    "multiplicity_correction_required": true,
+    "nominal_familywise_alpha": "0.05",
+    "parameter_family_size": 7,
+    "RPM_family_size": 8,
+    "joint_15_endpoint_familywise_control": false,
+    "numeric_comparison_epsilon": "1e-12",
+    "ratio_method": "Fieller-style covariance-aware ratio confidence set computed from jointly resampled numerator and denominator estimates.",
+    "denominator_fail_closed_if": [
+      "denominator interval intersects the preregistered practical-zero band",
+      "Fieller confidence set is unbounded or disconnected",
+      "denominator sign is unstable across registered seeds or untouched groups",
+      "ratio interval exceeds the preregistered maximum relative width",
+      "direct equivalence validation fails",
+      "non-finite input or optimizer failure occurs"
+    ],
+    "ratio_failure_value": "UNAVAILABLE",
+    "forbidden_fallback": "Do not replace an unavailable ratio with a clipped denominator, point estimate, infinity, or arbitrarily large finite number."
+  },
+  "mvp_numeric_thresholds": {
+    "practical_zero_epsilon": "0.02",
+    "cause_hold_equivalence_margin": "0.02",
+    "minimum_commanded_bias_separation": "0.2",
+    "maximum_design_condition_number": "100",
+    "minimum_cause_bias_principal_angle_degrees": "30",
+    "maximum_ratio_relative_width": "0.5",
+    "maximum_gain_group_or_seed_range": "0.05",
+    "minimum_active_pooled_evaluation_fit_r_squared": "0.995",
+    "maximum_RPM_subspace_containment_r_squared": "0.9",
+    "minimum_RPM_probe_strength_ratio": "0.8",
+    "maximum_RPM_probe_strength_ratio": "1.25",
+    "direct_equivalence_absolute_tolerance": "0.02",
+    "heldout_RMSE_tolerance": "0.02",
+    "RPM_contrast_tolerance": "0.02",
+    "cutoff_maximum_absolute_slope": "0.05",
+    "cutoff_maximum_absolute_mean_effect": "0.05",
+    "active_minimum_absolute_slope": "0.2",
+    "saturation_maximum_absolute_slope": "0.05",
+    "breakdown_minimum_wrong_axis_effect": "0.05",
+    "RPM_state_near_zero_absolute": "0.15",
+    "RPM_state_retained_minimum_fraction": "0.5",
+    "RPM_reordered_minimum_absolute": "0.05",
+    "RPM_reordered_maximum_fraction": "0.6",
+    "RPM_state_matched_absolute_tolerance": "0.15",
+    "minimum_mvp_bootstrap_replicates": 100,
+    "fieller_bonferroni_critical_value": "2.6901",
+    "parameter_tolerances": {
+      "beta_dir": "0.02",
+      "beta_FR_directional": "0.02",
+      "beta_FR_full": "0.02",
+      "g_B": "0.02",
+      "r_pi_CAS_derived": "0.05",
+      "G_eff": "0.02",
+      "R_eff": "0.05"
+    }
+  },
+  "code_bound_draft_registration": {
+    "status": "CODE_REGISTERED_AND_SOURCE_HASH_BOUND_DRAFT",
+    "prospective_independent_preregistration": false,
+    "source_revision_and_bundle_hash_required": true,
+    "direct_equivalence_doses": [
+      "-0.05",
+      "0.05"
+    ],
+    "curve_candidate_grids": {
+      "RECIPROCAL_shift": [
+        "4.5",
+        "5",
+        "6",
+        "8"
+      ],
+      "SATURATING_rate": [
+        "0.4",
+        "0.7",
+        "1.1",
+        "1.6"
+      ],
+      "HILL_half": [
+        "0.5",
+        "1",
+        "1.5",
+        "2"
+      ],
+      "HILL_power": [
+        "1",
+        "2",
+        "3"
+      ],
+      "PIECEWISE_boundary": [
+        "0.5",
+        "1",
+        "1.5",
+        "2"
+      ]
+    },
+    "fixed_operating_window_selectors": {
+      "CUTOFF_maximum_dose": "-1.5",
+      "ACTIVE_minimum_dose": "-1",
+      "ACTIVE_maximum_dose": "1",
+      "SATURATION_minimum_dose": "1.5",
+      "SATURATION_maximum_dose": "2.25",
+      "BREAKDOWN_minimum_absolute_dose": "3",
+      "boundary_candidates": [
+        "-3",
+        "-1",
+        "1",
+        "3"
+      ]
+    },
+    "honesty_limit": "These values are draft code registration bound by the reported source revision/bundle hash, not evidence of prospective independent preregistration."
+  },
+  "registered_operating_window_contract": {
+    "method": "Classify four fixed preregistered dose windows; do not estimate change points or claim boundary recovery.",
+    "regions": [
+      "CUTOFF",
+      "ACTIVE",
+      "SATURATION",
+      "BREAKDOWN_CANDIDATE"
+    ],
+    "CUTOFF": "Effect remains within the registered baseline/noise band and local gain is below threshold.",
+    "ACTIVE": "A pooled line fitted and scored on the same untouched EVALUATION rows meets the registered fit R_squared threshold; this is not cross-fitted prediction.",
+    "SATURATION": "Effect plateaus and the incremental derivative remains below the registered saturation bound.",
+    "BREAKDOWN_CANDIDATE": "An independently generated wrong-axis or involution effect appears under overload.",
+    "registered_boundary_candidates": [
+      "-3.0",
+      "-1.0",
+      "1.0",
+      "3.0"
+    ],
+    "boundary_recovery_status": "NOT_IMPLEMENTED",
+    "wrong_axis_required_for_breakdown_candidate": true,
+    "forbidden_inference": "A large residual, random sign flip, or severe output alone does not establish breakdown or involution."
+  },
+  "RPM_directional_trace_contract": {
+    "formal_structure": "corrected_v7.4_section_retraction",
+    "required_composition": "epsilon_I composed_with eta_I = identity_I",
+    "reverse_composition_identity_assumed": false,
+    "registered_order": [
+      "DESIRE",
+      "WISDOM",
+      "POWER"
+    ],
+    "trace_event_requirements": [
+      "prerequisite identity",
+      "conduct_deny_or_control decision"
+    ],
+    "mvp_trace_scope": "Two-field synthetic trace-plumbing check only; each event is encoded as prerequisite_identity:decision.",
+    "release_candidate_structured_trace_fields_not_yet_implemented": [
+      "observed order index",
+      "registered coordinate or score",
+      "event hash"
+    ],
+    "primary_contrast": "Synthetic Delta_RPM(E) = E(INTACT_D_TO_W_TO_P) - E(missing, invalid, or reordered chain)",
+    "directionality_requirement": "The two-field synthetic trace order, per-cell planted state pattern, and intervention contrast must agree; this does not validate a production RPM event ledger.",
+    "containment_control": {
+      "method": "principal angles and subspace-containment residuals between W and P registered subspaces",
+      "failure_rule": "If P is not distinguishable from containment in W at the registered threshold, RPM prerequisite attribution is UNAVAILABLE."
+    },
+    "probe_strength_control": {
+      "mvp_method": "Per-cell min/max check of planted synthetic probe-strength ratios only.",
+      "release_candidate_method_not_yet_implemented": "Reliability- and decodability-matched W/P probes with coverage-validated uncertainty for the strength difference.",
+      "failure_rule": "If unequal reliability or decodability can explain the contrast, RPM prerequisite attribution is UNAVAILABLE."
+    },
+    "missing_trace_value": "UNAVAILABLE",
+    "confounded_trace_value": "UNAVAILABLE",
+    "mvp_success_rule": "All eight RPM contrasts require point error at most RPM_contrast_tolerance plus numeric_comparison_epsilon, interval containment of planted truth within numeric_comparison_epsilon, exact trace/state agreement, and bounded planted confounds.",
+    "nonzero_interval_zero_exclusion_required": false,
+    "bag_of_prerequisites_nonclaim": "All prerequisites being present without the registered order does not establish RPM execution."
+  },
+  "mvp_scenarios": [
+    {
+      "scenario_id": "IDENTIFIABLE_PIECEWISE",
+      "role": "POSITIVE_RECOVERY",
+      "truth": "Signed negative beta_dir; positive nonzero Fisher directional/full magnitudes; identifiable response to commanded synthetic Bias dose; locally linear active range embedded in a global piecewise response; valid calibration-planned direct ratio check; intact two-field synthetic RPM trace.",
+      "required_outcomes": [
+        "all seven registered parameters recover within tolerance",
+        "beta_dir sign remains negative while both Fisher quantities remain nonnegative",
+        "fixed CUTOFF, ACTIVE, SATURATION, and independently induced BREAKDOWN_CANDIDATE windows satisfy their registered classification thresholds",
+        "RPM contrast is available only from the complete two-field synthetic trace plus matching planted state pattern",
+        "scenario_status is SYNTHETIC_RECOVERY_PASS"
+      ]
+    },
+    {
+      "scenario_id": "NEAR_ZERO_BIAS_SENSITIVITY",
+      "role": "DENOMINATOR_NEGATIVE_CONTROL",
+      "truth": "g_B lies inside the practical-zero band.",
+      "required_outcomes": [
+        "g_B is reported with its uncertainty",
+        "r_pi_CAS_derived is UNAVAILABLE",
+        "no infinity or clipped large-number substitute is emitted",
+        "scenario_status is EXPECTED_FAIL_CLOSED"
+      ],
+      "required_stop_reasons": [
+        "R_PI_DENOMINATOR_NEAR_ZERO_OR_UNIDENTIFIED"
+      ]
+    },
+    {
+      "scenario_id": "NONLINEAR_ACTIVE_RESPONSE",
+      "role": "CURVE_COMPETITION_NEGATIVE_CONTROL",
+      "truth": "A saturating or Hill response dominates the broad tested range and no registered local linear interval passes stability gates.",
+      "required_outcomes": [
+        "SATURATING or HILL wins grouped held-out competition",
+        "selected nonlinear winner grouped evaluation RMSE is at most heldout_RMSE_tolerance",
+        "registered ACTIVE window fails the 0.995 pooled evaluation fit R_squared gate",
+        "G_eff is UNAVAILABLE",
+        "R_eff is UNAVAILABLE",
+        "scenario_status is EXPECTED_FAIL_CLOSED"
+      ],
+      "required_stop_reasons": [
+        "G_EFF_UNSTABLE_OR_NONPREDICTIVE",
+        "NONLINEAR_CURVE_REJECTS_OHM_SCOPE"
+      ]
+    },
+    {
+      "scenario_id": "RPM_CONFOUNDED",
+      "role": "RPM_CONFOUND_NEGATIVE_CONTROL",
+      "truth": "An apparent downstream RPM contrast is fully explainable by W/P subspace containment or unequal probe strength.",
+      "required_outcomes": [
+        "apparent output difference is retained",
+        "directional RPM attribution is UNAVAILABLE",
+        "the identified confound is explicit in the receipt",
+        "scenario_status is EXPECTED_FAIL_CLOSED"
+      ],
+      "required_stop_reasons": [
+        "DESIRE_MISSING:RPM_CONFOUND_UNBOUNDED",
+        "WISDOM_MISSING:RPM_CONFOUND_UNBOUNDED",
+        "POWER_MISSING:RPM_CONFOUND_UNBOUNDED",
+        "REORDERED_CONTENT_MATCHED:RPM_CONFOUND_UNBOUNDED",
+        "IRRELEVANT_RANK_MATCHED:RPM_CONFOUND_UNBOUNDED",
+        "CORRUPTED_INVOLUTION:RPM_CONFOUND_UNBOUNDED",
+        "RESTORED_AFTER_FAILURE:RPM_CONFOUND_UNBOUNDED",
+        "MATCHED_SHAM:RPM_CONFOUND_UNBOUNDED"
+      ]
+    },
+    {
+      "scenario_id": "INCOMPLETE_RPM_TRACE",
+      "role": "TRACE_COMPLETENESS_NEGATIVE_CONTROL",
+      "truth": "The final output is available but at least one prerequisite identity, decision, or order event is missing.",
+      "required_outcomes": [
+        "final output is not used as a substitute for the trace",
+        "directional RPM attribution is UNAVAILABLE",
+        "the missing event is explicit in the receipt",
+        "scenario_status is EXPECTED_FAIL_CLOSED"
+      ],
+      "required_stop_reasons": [
+        "WISDOM_MISSING:RPM_TRACE_UNAVAILABLE"
+      ]
+    }
+  ],
+  "global_acceptance_contract": {
+    "required_scenario_count": 5,
+    "required_positive_scenario_count": 1,
+    "required_fail_closed_scenario_count": 4,
+    "all_scenarios_must_pass_their_registered_expectations": true,
+    "maximum_success_status": "SYNTHETIC_HARNESS_MVP_PASS",
+    "future_promotion_status": "SYNTHETIC_HARNESS_PASS",
+    "failure_status": "FAILED_CLOSED",
+    "missing_or_extra_scenario_rule": "FAIL_CLOSED",
+    "non_finite_value_rule": "FAIL_CLOSED",
+    "schema_validation_rule": "FAIL_CLOSED",
+    "claim_transition_on_success": "NONE",
+    "real_model_gate_transition_on_success": "NONE"
+  },
+  "required_report_fields": [
+    "schema_version",
+    "execution_mode",
+    "verdict_influence",
+    "claim_status",
+    "claim_eligible",
+    "model_execution",
+    "maximum_positive_status",
+    "future_promotion_status",
+    "harness_status",
+    "provenance_assurance",
+    "protocol_id",
+    "protocol_sha256",
+    "source_revision",
+    "source_bundle_sha256",
+    "runner_content_sha256",
+    "dataset_content_sha256",
+    "dataset_evidence_retention",
+    "receipt_publication_durability",
+    "python_implementation",
+    "python_version",
+    "python_launch_mode",
+    "python_launcher_sha256",
+    "python_runtime_library_sha256",
+    "python_stdlib_provenance_scope",
+    "dependency_verification_order",
+    "research_dependency_lock_sha256",
+    "numpy_version",
+    "numpy_top_level_module_sha256",
+    "numpy_distribution_tree_sha256",
+    "numpy_distribution_file_count",
+    "pydantic_version",
+    "pydantic_top_level_module_sha256",
+    "pydantic_distribution_tree_sha256",
+    "pydantic_distribution_file_count",
+    "pydantic_core_version",
+    "pydantic_core_top_level_module_sha256",
+    "pydantic_core_distribution_tree_sha256",
+    "pydantic_core_distribution_file_count",
+    "runtime_dependency_records",
+    "runtime_dependency_versions",
+    "runtime_dependency_manifest_sha256",
+    "runtime_dependency_distribution_count",
+    "random_generator",
+    "multiplicity_correction",
+    "drive_grid",
+    "bias_conditions",
+    "bias_micro_clamps",
+    "rpm_conditions",
+    "truth_visible_to_estimator",
+    "direct_equivalence_plan_origin",
+    "split_group_hashes",
+    "generator_id",
+    "estimator_id",
+    "seed",
+    "bootstrap_replicates",
+    "uncertainty_tier",
+    "scenario_results",
+    "non_claim",
+    "report_content_sha256"
+  ],
+  "required_execution_envelope_fields": [
+    "schema_version",
+    "execution_mode",
+    "verdict_influence",
+    "claim_status",
+    "claim_eligible",
+    "report",
+    "wall_time_seconds",
+    "python_tracemalloc_peak_mb",
+    "telemetry_deterministic",
+    "non_claim",
+    "envelope_content_sha256"
+  ],
+  "falsification_and_stop_rules": [
+    "signed beta_dir is conflated with a Fisher magnitude",
+    "cause and bias are not separately identified",
+    "bias cause-hold equivalence fails",
+    "a ratio is emitted despite a practical-zero, unstable, unbounded, or unvalidated denominator",
+    "a nonlinear winner is relabelled as a global Ohm law",
+    "fixed operating windows are described as discovered regions or recovered boundaries",
+    "BREAKDOWN_CANDIDATE is inferred without an independent wrong-axis or involution effect",
+    "RPM is inferred from final output without the ordered trace",
+    "W/P containment or unequal probe strength remains unbounded",
+    "group leakage occurs between calibration, selection, and evaluation",
+    "truth fields enter estimator features or selection",
+    "deterministic rerun bytes or canonical hash differ",
+    "any non-finite value, missing receipt field, or unexpected schema member appears"
+  ],
+  "promotion_boundary": {
+    "current_step": "IMPLEMENT_AND_VALIDATE_SYNTHETIC_RECOVERY_MVP",
+    "next_step_after_pass": "ADD_FAMILY_FIXTURES_MONTE_CARLO_POWER_AND_FULL_DIAGNOSTICS_THEN_FREEZE",
+    "external_anchor_step": "AFTER_FREEZE_AND_BEFORE_REAL_MODEL_OUTCOME_ACCESS",
+    "first_real_model_step": "RUN_PYTHIA_TECHNICAL_CALIBRATION_ON_AN_ISOLATED_RESEARCH_GPU_WITH_AT_LEAST_24_GB_VRAM",
+    "later_steps": [
+      "untouched prompt-injection and causal-control experiments",
+      "unchanged cross-architecture replication",
+      "sharded 300B lane execution with recoverable authenticated receipts"
+    ],
+    "honesty_boundary": "The present SHADOW / NONE / NOT_LICENSED boundary records current evidence. It is not a ceiling on the universality objective or a reason to stop the research program."
+  }
+}

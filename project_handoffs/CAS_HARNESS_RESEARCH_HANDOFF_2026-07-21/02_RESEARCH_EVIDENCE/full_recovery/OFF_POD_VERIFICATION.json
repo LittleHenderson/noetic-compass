@@ -1,0 +1,134 @@
+{
+  "schema_version": "cas_harness_off_pod_verification.v1",
+  "record_type": "OFF_POD_INDEPENDENT_VERIFICATION",
+  "verification_status": "OFF_POD_RECOVERY_HASH_AND_REOPEN_VERIFIED",
+  "claim_eligible": false,
+  "licensing_status": "NOT_LICENSED_DIAGNOSTIC_ONLY",
+  "recovery": {
+    "local_root": "C:\\tmp\\cas-tks-anchor-diagnostic-20260721\\full_recovery",
+    "inventory_entry_count": 33,
+    "inventory_sha256": "b44e4457de6763bc41a27aa1b746cbaba19a753f788f472b2fe4ef9546624a93",
+    "all_33_inventory_entries_rehashed_off_pod": true,
+    "all_33_inventory_entries_matched_the_pod_bundle_manifest": true
+  },
+  "source_archive": {
+    "filename": "cas-tks-anchor-diagnostic-20260721-da00bd94.zip",
+    "bytes": 720034,
+    "sha256": "caeb3171d8f461e81aeb164888a41a7c33e105d2813a253df25a833cc58a2e20",
+    "git_commit": "da00bd9407e7e82662b53edd77980040e34eacf4",
+    "git_tree": "a95852594ce6c2e19862cb048bb3419b39812526",
+    "protected_parent_commit": "81b5c18bd83e1f01ccd398dcad3865a674335b7f",
+    "archive_member_count": 101,
+    "archive_members_verified_byte_identical_to_git_commit": true
+  },
+  "model": {
+    "model_id": "EleutherAI/pythia-160m",
+    "requested_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "resolved_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "revision_binding": "VERIFIED_EXACT",
+    "parameter_count": 162322944,
+    "architecture": "GPTNeoXForCausalLM",
+    "hidden_size": 768,
+    "num_hidden_layers": 12,
+    "torch_dtype": "torch.float16",
+    "execution_device": "cuda",
+    "gpu": "NVIDIA RTX 4000 Ada Generation"
+  },
+  "run_stages": {
+    "architecture_hook_preflight": {
+      "status": "PREFLIGHT_PASS",
+      "licensing_status": "NOT_LICENSED_PREFLIGHT_ONLY",
+      "claim_eligible": false,
+      "qualified_block_count": 12,
+      "receipt_sha256": "b689da7f7c42c733f0725d445eed758c8b6b06cbc2f1c3a1fd46bccf34dc3b34"
+    },
+    "bounded_operational_canary": {
+      "status": "CANARY_PASS",
+      "licensing_status": "NOT_LICENSED_CANARY_ONLY",
+      "claim_eligible": false,
+      "evaluation_prompt_count": 8,
+      "definition_prompt_count": 84,
+      "layers": [
+        0,
+        1
+      ],
+      "truncated_sequence_count": 0,
+      "raw_npz_sha256": "57921a21e59c0c1b380a097da305dee2fe3bd54cea75282e505db6512e461e3b"
+    },
+    "full_zero_shot_definition_anchor_diagnostic": {
+      "status": "NOT_LICENSED_DIAGNOSTIC_ONLY",
+      "diagnostic_class": "ZERO_SHOT_DEFINITION_ANCHOR_DIAGNOSTIC",
+      "claim_eligible": false,
+      "integrity_inputs_pinned": true,
+      "evaluation_prompt_forward_passes": 3080,
+      "definition_prompt_forward_passes": 84,
+      "layer_count": 12,
+      "truncated_sequence_count": 0,
+      "selected_primary_layer": 1,
+      "report_sha256": "0440462d278da53b2fc217f252dff0d295c878b356fd53bccb38cc810407cdef",
+      "report_markdown_sha256": "c35bf4ccc92ce94d4d5741fe12fe09f97e1db0dfd74479af6521ef29134c20d0",
+      "local_artifact_manifest_sha256": "99b7d3c9e1257d0ee78f948acd92b65b4a9ac6fc1bc2d3bb235428f98b370ed8"
+    }
+  },
+  "raw_diagnostic_artifact": {
+    "relative_path": "artifacts/full/tks_definition_anchor_raw_diagnostic_vectors.npz",
+    "bytes": 109414103,
+    "sha256": "454a4f017d56ed393e50d7e88d29486b3379e96ae930a1123698c6275298ead6",
+    "loaded_off_pod_with_allow_pickle_false": true,
+    "atomic_write_and_reopen_status": "LOCAL_DIAGNOSTIC_ARTIFACT_ATOMIC_WRITE_REOPEN_VERIFIED",
+    "eval_mean_shape": [
+      3080,
+      12,
+      768
+    ],
+    "eval_last_shape": [
+      3080,
+      12,
+      768
+    ],
+    "definition_mean_shape": [
+      3,
+      28,
+      12,
+      768
+    ],
+    "definition_last_shape": [
+      3,
+      28,
+      12,
+      768
+    ],
+    "token_id_sha256_entry_count": 3164,
+    "token_id_sha256_breakdown": {
+      "evaluation_prompts": 3080,
+      "definition_prompts": 84
+    }
+  },
+  "external_durability": {
+    "independent_object_store_status": "OPEN",
+    "note": "No independent object-store mirror or third-party escrow was verified in this run. The recovered local copy is not a WORM anchor or Evidence Packet."
+  },
+  "runpod": {
+    "pod_id": "nppakqiaux91mk",
+    "pod_name": "cas-tks-anchor-diagnostic-20260721",
+    "state_after_evidence_recovery": "STOPPED",
+    "provider_ui_evidence": "Start button visible",
+    "gpu_billing_ceased": true,
+    "stopped_volume_billing_usd_per_hour": 0.006,
+    "ssh_to_prior_endpoint_after_stop": "TIMED_OUT",
+    "balance_shown_usd": 100.94,
+    "termination_or_deletion_performed": false
+  },
+  "claim_boundaries": [
+    "No semantic-probe validity is licensed.",
+    "No causal control is licensed.",
+    "No prompt-injection detection is licensed.",
+    "No output control is licensed.",
+    "No cross-architecture universality is licensed.",
+    "No 300B execution result is licensed.",
+    "No production-readiness claim is licensed.",
+    "No ACCEPT verdict is licensed.",
+    "No customer or investor claim is licensed."
+  ],
+  "non_claim": "This is a zero-shot definition-anchor diagnostic on one exact model revision and two source-derived prompt banks. It does not license semantic-probe validity, causal control, prompt-injection detection, output control, cross-architecture universality, 300B execution, production readiness, an ACCEPT verdict, or any customer/investor claim. The NPZ and its manifest are local diagnostic artifacts, not WORM anchors or Evidence Packets."
+}

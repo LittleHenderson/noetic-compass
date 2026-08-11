@@ -1,0 +1,163 @@
+{
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_attempt5_offline_repair.v1",
+  "receipt_kind": "OFFLINE_REPAIR_GATE",
+  "candidate_label": "ATTEMPT_05_OPENSSL3_STDIN_REPAIR_PROSPECTIVE_F72B89CD_20260723",
+  "created_at_utc": "2026-07-23T03:17:29Z",
+  "controlling_status": "PROSPECTIVE_ATTEMPT_5_OFFLINE_REPAIR_GATE_PASS / RETAINED_ATTEMPT_4_TSR_COMPATIBILITY_PASS / NO_PRE_OR_FROZEN_ATTEMPT_5_RUN_IDENTITY / NO_ATTEMPT_5_RFC3161_QUERY / NO_EXTERNAL_TRANSMISSION / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "source": {
+    "branch": "fix/jacobian-openssl-stdin-compat-20260723",
+    "code_commit": "f72b89cd2ec574400ffe69ad7bd1540791fb73c3",
+    "code_tree": "71c45fd5999b1d3f31636bbae8bd199d166ab2f5",
+    "parent_commit": "be97bc7f76d1e9f5e501702660678d4af3081f5e",
+    "worktree_clean_after_commit": true,
+    "commit_pushed": false,
+    "commit_merged": false,
+    "changed_file_count": 10
+  },
+  "repair": {
+    "byte_mode_x509_call_sites_changed": 2,
+    "removed_argv_tokens": ["-in", "-"],
+    "pem_transport": "STDIN_BYTES",
+    "removed_security_checks": [],
+    "preserved_checks": [
+      "MESSAGE_IMPRINT",
+      "NONCE",
+      "POLICY_OID",
+      "RFC3161_SIGNATURE",
+      "CERTIFICATE_CHAIN",
+      "RESPONDER_FINGERPRINT",
+      "RESPONDER_SERIAL",
+      "RESPONDER_CRITICAL_TIME_STAMPING_ONLY_EKU",
+      "PINNED_TRUST_ROOT",
+      "PINNED_OPENSSL_EXECUTABLE",
+      "SECCOMP_BOUNDARY",
+      "FAIL_CLOSED_DEFAULT"
+    ],
+    "post_run_capture_schema": "cas_harness_research_shadow.jacobian_lens_post_run_capture.v2",
+    "negative_receiver_schema": "cas_harness_research_shadow.jacobian_lens_negative_receiver.v2",
+    "producer_receipt_schema": "cas_harness_research_shadow.jacobian_lens_canary_execution_receipt.v3",
+    "failure_record_schema": "cas_harness_research_shadow.jacobian_lens_failure_record.v1"
+  },
+  "bounded_command_evidence": {
+    "argv_retained_raw": false,
+    "argv_sha256_present_for_attempted_commands": true,
+    "stderr_retained_raw": false,
+    "stderr_sha256_present": true,
+    "stderr_byte_count_present": true,
+    "stderr_retention_limit_bytes": 4194304,
+    "stdout_retention_limit_bytes": 4194304,
+    "stdout_and_stderr_drained_concurrently": true,
+    "overflow_kills_and_reaps_process": true,
+    "timeout_kills_and_reaps_process": true,
+    "stderr_truncated_field_present": true,
+    "stderr_capture_complete_field_present": true,
+    "failure_codes": [
+      "NON_SUBPROCESS_FAIL_CLOSED",
+      "NUMERICAL_SUBGATES_REJECTED",
+      "OPENSSL_VERSION_REJECTED",
+      "OPENSSL_LAUNCH_REJECTED",
+      "OPENSSL_TIMEOUT_REJECTED",
+      "OPENSSL_OUTPUT_BOUNDS_REJECTED",
+      "RFC3161_VERIFY_REJECTED",
+      "RFC3161_QUERY_DECODE_REJECTED",
+      "RFC3161_REPLY_DECODE_REJECTED",
+      "RFC3161_OPENSSL_COMMAND_REJECTED",
+      "RFC3161_X509_STDIN_INSPECTION_REJECTED"
+    ]
+  },
+  "tests": {
+    "narrow_failure_and_streaming": {
+      "passed": 7,
+      "failed": 0,
+      "skipped": 2,
+      "deselected": 80,
+      "duration_seconds": 0.94
+    },
+    "focused_trust_surface": {
+      "passed": 184,
+      "failed": 0,
+      "skipped": 2,
+      "duration_seconds": 33.11
+    },
+    "complete_worker_suite": {
+      "interpreter": "C:/Python314/python.exe",
+      "python_version": "3.14.0",
+      "passed": 933,
+      "failed": 0,
+      "skipped": 2,
+      "duration_seconds": 186.99
+    },
+    "linux_sealed_regressions": {
+      "status": "ATTEMPT5_OPENSSL3_LINUX_BOUNDED_STREAM_REGRESSIONS_PASS",
+      "python_version": "3.12.3",
+      "python_executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118",
+      "openssl_version": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)",
+      "openssl_executable_sha256": "2ffb137d909db5deccfde594ab8706ab391d54e30ff3fd4efb910f3839157e05"
+    },
+    "retained_attempt4_tsr_compatibility": {
+      "status": "ATTEMPT5_RETAINED_TSR_OPENSSL3_BOUNDED_STREAM_COMPATIBILITY_PASS",
+      "offline_only": true,
+      "network_used": false,
+      "query_sha256": "fa887272d01f436d37569f6d13b719f5392539dda897da870606c8845be11829",
+      "response_sha256": "08c2a34b3ea398bb1d64c9dd6fb6ae580becd9ba713d36652bae2a54f4e3f4f9",
+      "root_fingerprint_sha256": "552f7bdcf1a7af9e6ce672017f4f12abf77240c78e761ac203d1d9d20ac89988",
+      "responder_serial_hex": "0A80EF184B8DF10582D1C476A7957468",
+      "responder_eku": "CRITICAL_TIME_STAMPING_ONLY",
+      "timestamp_utc": "Jul 23 00:40:00 2026 GMT"
+    },
+    "independent_code_security_reviews": {
+      "review_count": 2,
+      "final_result": "GO",
+      "remaining_blockers": 0
+    }
+  },
+  "retained_attempt4_inputs": {
+    "source_attempt_identity": "jlcv1-rfc3161-4108653e11369d812517e7f5d3ab44c10aa860df3131ac2f8636a14db654c0fc",
+    "source_identity_consumed": true,
+    "source_artifacts_modified": false,
+    "payload_sha256": "49235313dad9541ec029d78b8a6ab9d1de90f5117cde9fb64ad6e2ec778a139b",
+    "query_byte_count": 104,
+    "query_sha256": "fa887272d01f436d37569f6d13b719f5392539dda897da870606c8845be11829",
+    "response_byte_count": 6033,
+    "response_sha256": "08c2a34b3ea398bb1d64c9dd6fb6ae580becd9ba713d36652bae2a54f4e3f4f9",
+    "anchor_receipt_sha256": "577c9bb94b87e395444c2f9a1c65a500a4aae85878970db8deddf6e37387bc65",
+    "nonce_hex": "29044c20e70a805d3112d6c6bc1f789dda29ee27bcfb1cf248032271ef6d092e",
+    "policy_oid": "2.16.840.1.114412.7.1"
+  },
+  "attempt5_execution_boundary": {
+    "attempt5_pre_present": false,
+    "attempt5_implementation_manifest_present": false,
+    "attempt5_git_bundle_present": false,
+    "attempt5_protocol_present": false,
+    "attempt5_nonce_present": false,
+    "attempt5_run_id_present": false,
+    "attempt5_query_present": false,
+    "attempt5_response_present": false,
+    "attempt5_anchor_present": false,
+    "attempt5_launch_configuration_present": false,
+    "external_transmission_count": 0,
+    "runpod_action_count": 0,
+    "model_execution": false,
+    "cuda_execution": false,
+    "official_pass_authorized": false
+  },
+  "licensing": {
+    "execution_mode": "SHADOW",
+    "verdict": "NONE",
+    "claim_status": "NOT_LICENSED",
+    "claim_eligible": false,
+    "scientific_conclusion": "NO_SCIENTIFIC_CONCLUSION",
+    "whole_project_score": "0.33 / 1.00",
+    "nonlicensed_capabilities": [
+      "300B_EXECUTION",
+      "CAS_OHM",
+      "CJT",
+      "CROSS_ARCHITECTURE_UNIVERSALITY",
+      "JSPACE_SEMANTIC_CORRESPONDENCE",
+      "OUTPUT_CONTROL",
+      "PROMPT_INJECTION_DETECTION",
+      "RPM",
+      "SEMANTIC_PROBING"
+    ]
+  }
+}

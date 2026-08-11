@@ -1,0 +1,606 @@
+{
+  "schema_version": "cas_harness.amazon_claim_evidence_manifest.v1",
+  "manifest_id": "cas-harness-amazon-claim-evidence-20260721",
+  "snapshot_date": "2026-07-21",
+  "timezone": "America/Los_Angeles",
+  "status": "DISTRIBUTION_PAUSED_INTERNAL_REVIEW_DRAFT",
+  "external_approval": "OPEN",
+  "distribution_allowed": false,
+  "canonical_spec_path": "docs/external/amazon/CAS_HARNESS_AMAZON_TECHNICAL_EVALUATION_SPEC_20260721.md",
+  "latest_pointer_path": "docs/external/amazon/LATEST.json",
+  "source_binding": {
+    "repository": "LittleHenderson/noetic-compass",
+    "protected_base_commit": "81b5c18bd83e1f01ccd398dcad3865a674335b7f",
+    "protected_base_tree": "4aa8b6dbd8d5f78345a3acd84f4c0e4716244908",
+    "protected_base_commit_subject": "Harden customer-production evidence, alerts, and billing lineage (#204)",
+    "authoring_branch": "codex/amazon-eval-spec-20260721",
+    "remote_push_performed": false,
+    "deployment_performed": false
+  },
+  "classification_definitions": {
+    "DEMONSTRATED_RESEARCH_RESULT": "A local report or packet exists with exact bytes and a SHA-256 hash. This does not imply independent replication, production readiness, or a standing ACCEPT.",
+    "DIAGNOSTIC_OR_APPARATUS_EVIDENCE": "A component, planner, test, runtime observation, or packet mechanism exists. It does not establish a scientific model claim or frontier execution.",
+    "ENGINEERING_OBJECTIVE": "An intended capability with an explicit closure contract. It remains OPEN or NOT LICENSED until the contract is met."
+  },
+  "claim_status_vocabulary": [
+    "ACCEPT",
+    "FLAG_FOR_HUMAN_REVIEW",
+    "LICENSED",
+    "NOT LICENSED",
+    "OPEN",
+    "present",
+    "unavailable"
+  ],
+  "controlling_inputs": [
+    {
+      "input_id": "corrective_claim_matrix_md",
+      "path": "C:/tmp/cas-audit-legal-20260719/docs/legal_drafts_20260607/CAS_HARNESS_CLAIM_EVIDENCE_MATRIX_20260719.md",
+      "sha256": "EF8C7E88BFD0FA8B08B15D229D11473D99D7CACAF8D206AC3621481EAE3BE1E4",
+      "availability_in_protected_tree": "unavailable",
+      "role": "corrective claim authority input"
+    },
+    {
+      "input_id": "corrective_claim_matrix_pdf",
+      "path": "C:/tmp/cas-audit-legal-20260719/docs/legal_drafts_20260607/CAS_HARNESS_CLAIM_EVIDENCE_MATRIX_20260719.pdf",
+      "sha256": "163EAE696E24F26264B8D8187185DA1F7AD5E4577DE4A87F364BE9B7AE567524",
+      "availability_in_protected_tree": "unavailable",
+      "role": "visually reviewed corrective render input"
+    },
+    {
+      "input_id": "corrected_consolidated_spec_md",
+      "path": "C:/tmp/cas-audit-legal-20260719/docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md",
+      "sha256": "FD0243F9F5A210D49ECE7F7DDC8999638A69A06DB25FE3559D32B703FA1C70FD",
+      "availability_in_protected_tree": "unavailable",
+      "role": "distribution-paused narrative input"
+    },
+    {
+      "input_id": "corrected_consolidated_spec_pdf",
+      "path": "C:/tmp/cas-audit-legal-20260719/docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.pdf",
+      "sha256": "956328F4ADDAEAEEB6B9EA2AE83DC9180B7E1F3F8F0DD5A8A4D5F3D7E664FA9F",
+      "availability_in_protected_tree": "unavailable",
+      "role": "visually reviewed distribution-paused render input"
+    },
+    {
+      "input_id": "canonical_production_tracker",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/cas_harness_production_todo.md",
+      "sha256": "C6A9289F042F2DA21914B2D9817509E4ECC36727818A8215BA8BA596DCD0DE72",
+      "availability_in_protected_tree": "unavailable",
+      "role": "point-in-time mutable operational authority input after the recovered-run update",
+      "snapshot_semantics": "Hash binds the post-recovery-update bytes observed on 2026-07-21; later tracker edits do not alter this packet snapshot."
+    },
+    {
+      "input_id": "customer_production_successor",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/CAS_HARNESS_CUSTOMER_PRODUCTION_SUCCESSOR_SPEC_20260716.md",
+      "sha256": "2A16D7C457246B57D941E3C81370C2B061F70A9D9E1EA84F3F02260764C121D0",
+      "availability_in_protected_tree": "unavailable",
+      "role": "point-in-time operational handoff input after the recovered-run addendum; not acceptance authority"
+    },
+    {
+      "input_id": "tks_universality_program",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/CAS_HARNESS_TKS_UNIVERSALITY_LICENSING_PROGRAM_20260720.md",
+      "sha256": "B924ADC46D2A78E89379BC090F39AD29C48115F604A7C53F635266608F2076B7",
+      "availability_in_protected_tree": "unavailable",
+      "role": "engineering objective and closure-contract input"
+    },
+    {
+      "input_id": "semantic_source_registry_candidate",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/TKS_CAS_SEMANTIC_SOURCE_REGISTRY_CANDIDATE_20260720.json",
+      "sha256": "A68D1B431C98F51DCD61007FBD75595659486B0092292CD92A49392D58AEEF54",
+      "availability_in_protected_tree": "unavailable",
+      "role": "semantic provenance and unresolved-crosswalk input"
+    },
+    {
+      "input_id": "jspace_ohm_300b_analysis",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/CAS_HARNESS_JSPACE_OHM_300B_CAPABILITY_ANALYSIS_20260720.md",
+      "sha256": "F932951A85643AAF1F2D2CC3C8C8DFB7A06DD11494122633F3A7F95CC1306FD6",
+      "availability_in_protected_tree": "unavailable",
+      "role": "architecture and capability-gap input"
+    },
+    {
+      "input_id": "protected_public_evidence_manifest",
+      "path": "noetic-compass-scaffold/noetic-compass/research/cas_probe/cas_harness_public_evidence_manifest.json",
+      "sha256": "0CE64C1759459E9D942E71475C47BE18475A62A30295D5B8B2462CA57E056B50",
+      "availability_in_protected_tree": "present",
+      "role": "historical diagnostic manifest; not current claim authority"
+    }
+  ],
+  "evidence_artifacts": [
+    {
+      "artifact_id": "gpt20_f28_packet",
+      "path": "noetic-compass-scaffold/noetic-compass/docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json",
+      "sha256": "4FA6555754DF7E8A51CFBEB6FE4A59EFD8DF46CB6E7FD83A3926524B3330BD47",
+      "bytes": 20077,
+      "availability": "present",
+      "effective_verdict": "FLAG_FOR_HUMAN_REVIEW",
+      "integrity_bound": "present_only_not_verifier_clean"
+    },
+    {
+      "artifact_id": "gpt20_40e_probe_report",
+      "path": "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_probe_eval_report_20260527.json",
+      "sha256": "9CE9AF525FDD6FC47B6EB3C39C29F514096BD391C21DBEE22A1941A8B5E85E03",
+      "bytes": 13125,
+      "availability": "present"
+    },
+    {
+      "artifact_id": "gpt20_40e_subspace_report",
+      "path": "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_subspace_ablation_report_20260528T0155Z.json",
+      "sha256": "A4D06B1AD28A54BDC3F4A48CDBD70986D6B1B45D7C303567F4BF92CFBABD5B2D",
+      "bytes": 14444,
+      "availability": "present",
+      "preregistered_gate_status": "OPEN_NEAR_MISS"
+    },
+    {
+      "artifact_id": "gpt20_40e_bridge_report",
+      "path": "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_eta_epsilon_bridge_per2_20260528T0455Z.json",
+      "sha256": "CE7672A04C8C2B0D52735334436F4EBA11B5A923AEC76D6058B7E071E62DFF13",
+      "bytes": 220608,
+      "availability": "present"
+    },
+    {
+      "artifact_id": "gpt20_40e_historical_packet",
+      "path": "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json",
+      "sha256": "2B402931B35F7527D0BAF76467A9812D7C8D9DA232688C2A106238B5B5C7CF6D",
+      "bytes": 25748,
+      "availability": "present",
+      "stored_verdict": "ACCEPT",
+      "effective_verdict": "FLAG_FOR_HUMAN_REVIEW",
+      "withdrawn": true
+    },
+    {
+      "artifact_id": "gpt20_40e_historical_verifier",
+      "path": "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_verifier_report_20260528T0455Z.json",
+      "sha256": "79D140F0D5028578D8C776EB6069CBAD53A4733E0553004AA9ECB8366374A5F0",
+      "bytes": 5447,
+      "availability": "present",
+      "stored_verdict": "ACCEPT",
+      "effective_verdict": "FLAG_FOR_HUMAN_REVIEW",
+      "withdrawn": true
+    },
+    {
+      "artifact_id": "pythia160_40e_regenerated_probe",
+      "path": "noetic-compass-scaffold/noetic-compass/docs/working/pythia160m_gate1/pythia160m_stage9_40e_40_element_probe_eval_report.json",
+      "sha256": "87891C3FCE908056E1D071BD9AC7D5D914653128AC97D95AFD6BAD0B3B02BF2D",
+      "bytes": 9111,
+      "availability": "present"
+    },
+    {
+      "artifact_id": "pythia160_40e_regenerated_subspace",
+      "path": "noetic-compass-scaffold/noetic-compass/docs/working/pythia160m_gate1/pythia160m_stage9_40e_subspace_ablation_report.json",
+      "sha256": "D0201B0D55ABFC023867BB4377633C29A43AA1897CBD39B67A568CF88133C5C2",
+      "bytes": 14170,
+      "availability": "present"
+    },
+    {
+      "artifact_id": "pythia160_40e_regenerated_packet",
+      "path": "noetic-compass-scaffold/noetic-compass/docs/working/pythia160m_gate1/pythia160m_stage9_40e_evidence_packet.json",
+      "sha256": "64A9DE4D56CE0BEE14CA8108CF97B92DF23AD11CA4D4784AC0CBAF4AD0788C87",
+      "bytes": 26131,
+      "availability": "present",
+      "effective_verdict": "FLAG_FOR_HUMAN_REVIEW"
+    },
+    {
+      "artifact_id": "pythia160_40e_regenerated_verifier",
+      "path": "noetic-compass-scaffold/noetic-compass/docs/working/pythia160m_gate1/pythia160m_stage9_40e_verifier_report.json",
+      "sha256": "A0C7E2CED48B1C6603AAC78F94D34A0FA6653E3D8B8E15E31031E86DECB2E998",
+      "bytes": 5442,
+      "availability": "present",
+      "effective_verdict": "FLAG_FOR_HUMAN_REVIEW"
+    },
+    {
+      "artifact_id": "pythia160_tks_anchor_hook_preflight",
+      "path": "C:/tmp/cas-tks-anchor-diagnostic-20260721/full_recovery/receipts/pythia_160m_hook_preflight.json",
+      "sha256": "B689DA7F7C42C733F0725D445EED758C8B6B06CBC2F1C3A1FD46BCCF34DC3B34",
+      "bytes": 19987,
+      "availability": "present",
+      "availability_in_protected_tree": "unavailable",
+      "status": "PREFLIGHT_PASS",
+      "licensing_status": "NOT_LICENSED_PREFLIGHT_ONLY"
+    },
+    {
+      "artifact_id": "pythia160_tks_anchor_canary_receipt",
+      "path": "C:/tmp/cas-tks-anchor-diagnostic-20260721/full_recovery/artifacts/canary-8prompt-2layer/tks_definition_anchor_canary_receipt.json",
+      "sha256": "392E846E2393F89A84ACC049F28C2729DA792D31145899F6E18340296E0B7B06",
+      "bytes": 25181,
+      "availability": "present",
+      "availability_in_protected_tree": "unavailable",
+      "status": "CANARY_PASS",
+      "licensing_status": "NOT_LICENSED_CANARY_ONLY",
+      "claim_eligible": false,
+      "off_pod_hash_verified": true
+    },
+    {
+      "artifact_id": "pythia160_tks_anchor_raw_npz",
+      "path": "C:/tmp/cas-tks-anchor-diagnostic-20260721/full_recovery/artifacts/full/tks_definition_anchor_raw_diagnostic_vectors.npz",
+      "sha256": "454A4F017D56ED393E50D7E88D29486B3379E96AE930A1123698C6275298EAD6",
+      "bytes": 109414103,
+      "availability": "present",
+      "availability_in_protected_tree": "unavailable",
+      "evaluation_shape": [3080, 12, 768],
+      "definition_shape": [3, 28, 12, 768],
+      "token_id_hash_count": 3164,
+      "licensing_status": "NOT_LICENSED_DIAGNOSTIC_ONLY",
+      "claim_eligible": false
+    },
+    {
+      "artifact_id": "pythia160_tks_anchor_report_json",
+      "path": "C:/tmp/cas-tks-anchor-diagnostic-20260721/full_recovery/artifacts/full/tks_definition_anchor_report.json",
+      "sha256": "0440462D278DA53B2FC217F252DFF0D295C878B356FD53BCCB38CC810407CDEF",
+      "bytes": 255466,
+      "availability": "present",
+      "availability_in_protected_tree": "unavailable",
+      "licensing_status": "NOT_LICENSED_DIAGNOSTIC_ONLY",
+      "claim_eligible": false
+    },
+    {
+      "artifact_id": "pythia160_tks_anchor_bundle_inventory",
+      "path": "C:/tmp/cas-tks-anchor-diagnostic-20260721/full_recovery/artifacts/full/FULL_BUNDLE_SHA256SUMS",
+      "sha256": "B44E4457DE6763BC41A27AA1B746CBABA19A753F788F472B2FE4EF9546624A93",
+      "bytes": 5563,
+      "availability": "present",
+      "availability_in_protected_tree": "unavailable",
+      "entry_count": 33,
+      "off_pod_hash_verified": true
+    }
+  ],
+  "missing_or_external_artifacts": [
+    {
+      "artifact_id": "pythia160_f28_activation_manifest",
+      "path_listed_by_historical_manifest": "noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_smoke_activations_manifest_20260517.json",
+      "historical_manifest_sha256": "AE364271BD08245D016566CA9A3F72F5B628F19DE50EA1B33573AADEB652878F",
+      "availability_in_protected_tree": "unavailable"
+    },
+    {
+      "artifact_id": "pythia160_f28_activation_npz",
+      "path_listed_by_historical_manifest": "noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_smoke_activations_20260517.npz",
+      "historical_manifest_sha256": "04800D4263E16FF1AA25653D58FE8DB3531A9035602429EA7E658413320B4913",
+      "availability_in_protected_tree": "unavailable"
+    },
+    {
+      "artifact_id": "gpt20_f28_source_archive",
+      "path_listed_by_packet": "C:/tmp/gpt_neox_20b_foundation28_and_40element_20260526",
+      "availability_in_protected_tree": "unavailable",
+      "note": "The packet records per-report hashes, but the underlying source archive is outside this protected checkout."
+    },
+    {
+      "artifact_id": "pythia160_tks_anchor_independent_object_store",
+      "availability": "unavailable",
+      "status": "OPEN",
+      "note": "The 2026-07-21 definition-anchor bundle was recovered and hash-verified off-pod locally, but no independent object-store mirror or third-party escrow has been verified."
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "research.cross_model_f28_readout_and_bridge",
+      "evidence_class": "DEMONSTRATED_RESEARCH_RESULT",
+      "claim_scope_status": "BOUNDED",
+      "statement": "Foundation-28 held-out readout and readable-prefix likelihood shifts are reported on six named model points across Pythia/GPT-NeoX, OLMo, and Qwen.",
+      "models": [
+        "EleutherAI/pythia-160m",
+        "EleutherAI/pythia-1b",
+        "EleutherAI/pythia-2.8b",
+        "OLMo-1B",
+        "Qwen2.5-1.5B",
+        "EleutherAI/gpt-neox-20b"
+      ],
+      "exact_revisions_available": false,
+      "evidence_source_ids": [
+        "corrective_claim_matrix_md"
+      ],
+      "known_bounds": [
+        "One frozen English synthetic fixture",
+        "Causal evidence is not established model-by-model",
+        "No independent-lab replication",
+        "No natural-corpus or multilingual replication",
+        "Not a CAS-specificity or universality claim"
+      ],
+      "distribution_status": "DISTRIBUTION_PAUSED"
+    },
+    {
+      "claim_id": "research.gpt20_f28_packet",
+      "evidence_class": "DEMONSTRATED_RESEARCH_RESULT",
+      "claim_scope_status": "BOUNDED",
+      "statement": "The protected GPT-NeoX-20B F28 packet reports 86.8622% held-out readout, +0.596413 readable-prefix mean shift, and a captured-vector label-cover ablation larger than its named random and wrong-cover controls.",
+      "model": "EleutherAI/gpt-neox-20b",
+      "model_revision": null,
+      "weight_sha256": null,
+      "artifact_ids": [
+        "gpt20_f28_packet"
+      ],
+      "effective_verdict": "FLAG_FOR_HUMAN_REVIEW",
+      "known_bounds": [
+        "Post-hoc captured-vector ablation, not a live forward-pass intervention",
+        "Source archive outside protected checkout",
+        "Packet verifier integrity is present-only on this host"
+      ],
+      "distribution_status": "DISTRIBUTION_PAUSED"
+    },
+    {
+      "claim_id": "research.gpt20_40e_readout_bridge",
+      "evidence_class": "DEMONSTRATED_RESEARCH_RESULT",
+      "claim_scope_status": "BOUNDED",
+      "statement": "The protected GPT-NeoX-20B 40E reports record 95.625% layer-2 held-out readout, 95.617% macro-F1, and +1.41205 readable-prefix mean shift over 80 cases.",
+      "model": "EleutherAI/gpt-neox-20b",
+      "model_revision": null,
+      "artifact_ids": [
+        "gpt20_40e_probe_report",
+        "gpt20_40e_bridge_report"
+      ],
+      "effective_verdict": "FLAG_FOR_HUMAN_REVIEW",
+      "known_bounds": [
+        "Early layer peak",
+        "Fixed synthetic English fixture",
+        "No independent replication",
+        "Historical packet ACCEPT is withdrawn"
+      ],
+      "distribution_status": "DISTRIBUTION_PAUSED"
+    },
+    {
+      "claim_id": "research.gpt20_40e_causal",
+      "evidence_class": "DEMONSTRATED_RESEARCH_RESULT",
+      "claim_scope_status": "OPEN",
+      "statement": "Targeted subspace ablation disrupted 40E readout by 28.7277 percentage points while named same-rank random controls were small.",
+      "model": "EleutherAI/gpt-neox-20b",
+      "artifact_ids": [
+        "gpt20_40e_subspace_report"
+      ],
+      "preregistered_gate": "At least 30 percentage-point drop or final accuracy no greater than 65%",
+      "preregistered_gate_result": "OPEN_NEAR_MISS",
+      "prohibited_inference": "Do not call the 40E causal tier passed or closed.",
+      "distribution_status": "DISTRIBUTION_PAUSED"
+    },
+    {
+      "claim_id": "research.pythia160_40e_regenerated_packet",
+      "evidence_class": "DEMONSTRATED_RESEARCH_RESULT",
+      "claim_scope_status": "BOUNDED",
+      "statement": "A protected regenerated Pythia-160M 40E packet and verifier are present with effective verdict FLAG_FOR_HUMAN_REVIEW.",
+      "model": "EleutherAI/pythia-160m",
+      "artifact_ids": [
+        "pythia160_40e_regenerated_probe",
+        "pythia160_40e_regenerated_subspace",
+        "pythia160_40e_regenerated_packet",
+        "pythia160_40e_regenerated_verifier"
+      ],
+      "known_bound": "Do not conflate this regenerated packet's measurements with the historical original-TKS40 89.799% row.",
+      "distribution_status": "DISTRIBUTION_PAUSED"
+    },
+    {
+      "claim_id": "diagnostic.pythia160_tks_definition_anchor_20260721",
+      "evidence_class": "DIAGNOSTIC_OR_APPARATUS_EVIDENCE",
+      "claim_scope_status": "NOT_LICENSED_DIAGNOSTIC_ONLY",
+      "statement": "An exact-revision Pythia-160M GPU run compared D3 and A124 zero-shot definition anchors under a frozen source-derived protocol; the sole primary D3-minus-A124 result was inconclusive.",
+      "source_commit": "da00bd9407e7e82662b53edd77980040e34eacf4",
+      "runpod_pod_id": "nppakqiaux91mk",
+      "pod_state_after_recovery": "STOPPED",
+      "model": "EleutherAI/pythia-160m",
+      "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+      "preflight_status": "PREFLIGHT_PASS",
+      "canary_status": "CANARY_PASS",
+      "off_pod_bundle_verified": true,
+      "selected_layer": 1,
+      "primary_estimand": {
+        "name": "D3 minus A124 Stage7-test full-28 accuracy under mean pooling",
+        "estimate": 0.00425170068,
+        "paired_clustered_bootstrap_95_ci": [-0.0012755102, 0.0102040816],
+        "interpretation": "INCONCLUSIVE_INTERVAL_CROSSES_ZERO"
+      },
+      "selected_layer_results": {
+        "d3_test_accuracy": 0.099065,
+        "a124_test_accuracy": 0.094813,
+        "d3_character_3_5_gram_tfidf_accuracy": 0.105442
+      },
+      "prespecified_slices_percentage_points": {
+        "changed_8_d3_minus_a124": {
+          "estimate": -1.9345,
+          "paired_clustered_bootstrap_95_ci": [-3.4748, -0.59]
+        },
+        "unchanged_20_d3_minus_a124": {
+          "estimate": 1.369,
+          "paired_clustered_bootstrap_95_ci": [0.8368, 1.9094]
+        }
+      },
+      "artifact_ids": [
+        "pythia160_tks_anchor_hook_preflight",
+        "pythia160_tks_anchor_canary_receipt",
+        "pythia160_tks_anchor_raw_npz",
+        "pythia160_tks_anchor_report_json",
+        "pythia160_tks_anchor_bundle_inventory"
+      ],
+      "claim_eligible": false,
+      "independent_object_store_status": "OPEN",
+      "known_bounds": [
+        "Stage-7 evaluation prompts were generated from D3 glosses and carry source-generator bias",
+        "Changed-8 and unchanged-20 slices move in opposite directions and do not identify a causal own-class definition effect",
+        "One exact Pythia-160M revision only",
+        "No independently authored neutral holdout",
+        "Does not validate semantic probes, universality, prompt-injection detection, output control, 300B execution, production readiness, or ACCEPT"
+      ],
+      "distribution_status": "DISTRIBUTION_PAUSED"
+    },
+    {
+      "claim_id": "product.evidence_packet_apparatus",
+      "evidence_class": "DIAGNOSTIC_OR_APPARATUS_EVIDENCE",
+      "claim_scope_status": "BOUNDED",
+      "statement": "Protected source contains Evidence Packet, hashing, verification, external-anchor, audit-console, and fleet apparatus.",
+      "source_commit": "81b5c18bd83e1f01ccd398dcad3865a674335b7f",
+      "known_bounds": [
+        "Governance retention is operator-overridable",
+        "Retention is time-bounded",
+        "No standing ACCEPT",
+        "Worker computation honesty is not independently verified",
+        "Receipt counts are not durable raw evidence recovery"
+      ],
+      "customer_production_status": "OPEN"
+    },
+    {
+      "claim_id": "runtime.2026_07_16_readiness_observation",
+      "evidence_class": "DIAGNOSTIC_OR_APPARATUS_EVIDENCE",
+      "claim_scope_status": "BOUNDED",
+      "statement": "The July 16 successor handoff reported a live deployment bound to protected 81b5c18b with a real Pythia-160M worker and S3 Object Lock GOVERNANCE/31 readiness.",
+      "evidence_source_ids": [
+        "customer_production_successor"
+      ],
+      "observed_at": "2026-07-16",
+      "reverified_for_this_packet": false,
+      "current_runtime_claim_allowed": false,
+      "customer_production_status": "OPEN"
+    },
+    {
+      "claim_id": "objective.universal_open_weight_introspection",
+      "evidence_class": "ENGINEERING_OBJECTIVE",
+      "claim_status": "OPEN",
+      "statement": "Attempt introspection on legally accessible open-weight models whose runtimes expose internal tensors using discovery, adapter generation, canary capture, calibration, and a shared Probe IR.",
+      "closure_required": [
+        "Versioned architecture adapter",
+        "Exact model/revision and semantic-source hashes",
+        "Canary tensor capture",
+        "Strong text and matched-taxonomy controls",
+        "Uncertainty and held-out replication",
+        "Causal tests wherever causal claims are made",
+        "Complete recoverable Evidence Packet"
+      ]
+    },
+    {
+      "claim_id": "objective.real_300b_execution",
+      "evidence_class": "ENGINEERING_OBJECTIVE",
+      "claim_status": "NOT LICENSED",
+      "statement": "Execute a pinned 300B-class open-weight model with real model parallelism and recoverable evidence.",
+      "maximum_demonstrated_parameter_scale": "20B",
+      "execution_evidence_above_20b": "unavailable",
+      "closure_required": [
+        "Pinned legal model/revision",
+        "Real tensor/pipeline/expert parallel placement",
+        "Measured dense/MoE memory and routing",
+        "Cryptographic worker identity",
+        "Plan-to-execution binding",
+        "Checkpoint/restart and worker-loss fault injection",
+        "Durable raw fragment bytes and independent reconstruction",
+        "Complete policy-bound Evidence Packet"
+      ],
+      "prohibited_inference": "A plan, worker count, layer assignment, or receipt count is not 300B execution."
+    },
+    {
+      "claim_id": "objective.prompt_injection_detection",
+      "evidence_class": "ENGINEERING_OBJECTIVE",
+      "claim_status": "NOT LICENSED",
+      "statement": "Develop hidden-state prompt-injection detection that adds reliable value beyond strong surface and provenance baselines.",
+      "recorded_w0_hidden_balanced_accuracy": 0.896875,
+      "recorded_character_ngram_range": [
+        0.925,
+        0.931
+      ],
+      "historical_pass_withdrawn": true,
+      "closure_required": [
+        "Provenance-aware splits",
+        "Adaptive attacks",
+        "Strong character/token/embedding baselines",
+        "Architecture replication",
+        "Calibration and incremental utility"
+      ]
+    },
+    {
+      "claim_id": "objective.general_output_control",
+      "evidence_class": "ENGINEERING_OBJECTIVE",
+      "claim_status": "OPEN",
+      "statement": "Convert named internal-state measurements into reliable, safe, and useful output effects.",
+      "known_blocker": "The recorded drive-local eraser calibrates a 3072-wide MLP intermediate space but hooks a 768-wide post-projection output.",
+      "closure_required": [
+        "Correct semantic hook/coordinate space",
+        "Hook-fired receipt",
+        "Tensor-effect receipt",
+        "Output-effect receipt",
+        "Matched controls",
+        "Safety and utility tests"
+      ]
+    },
+    {
+      "claim_id": "objective.cas_specificity",
+      "evidence_class": "ENGINEERING_OBJECTIVE",
+      "claim_status": "NOT LICENSED",
+      "statement": "Establish whether TKS/CAS targets provide information beyond coherent matched alternative taxonomies.",
+      "first_blind_comparator": "GREY",
+      "latest_definition_anchor_diagnostic": {
+        "status": "INCONCLUSIVE",
+        "licensing_status": "NOT_LICENSED_DIAGNOSTIC_ONLY",
+        "claim_eligible": false,
+        "primary_d3_minus_a124_accuracy_delta": 0.00425170068,
+        "paired_clustered_bootstrap_95_ci": [-0.0012755102, 0.0102040816],
+        "source_generator_bias": "present"
+      },
+      "closure_required": [
+        "Original TKS definitions as a primary arm",
+        "Byte-different deployed payload as a separate arm",
+        "Normalized rich and compact CAS arms",
+        "Coherent matched alternative ontologies",
+        "Shuffled/random controls",
+        "Same model, hook, split, seed, classifier, and evaluation bank"
+      ]
+    },
+    {
+      "claim_id": "product.customer_production_accept",
+      "evidence_class": "ENGINEERING_OBJECTIVE",
+      "claim_status": "NOT LICENSED",
+      "statement": "Issue a customer-production ACCEPT under all required machine, legal, operational, commercial, support, and human authorities.",
+      "standing_accept_exists": false,
+      "required_gate_status_at_latest_bound_handoff": "OPEN"
+    }
+  ],
+  "retractions": [
+    {
+      "retraction_id": "withdrawn_stage9_40e_accept",
+      "status": "WITHDRAWN",
+      "affected_artifact_ids": [
+        "gpt20_40e_historical_packet",
+        "gpt20_40e_historical_verifier"
+      ],
+      "stored_verdict": "ACCEPT",
+      "effective_verdict": "FLAG_FOR_HUMAN_REVIEW",
+      "root_cause": "Historical verifier logic treated candidate control-cover presence as validated matched-ablation evidence; a separate policy mismatch allowed an SNR guard to substitute for the preregistered causal threshold.",
+      "corrective_commit": "337d0c29b0822228dbfbb35dfc9873ca69453f1d",
+      "historical_bytes_preserved": true,
+      "accept_revival_allowed": false
+    }
+  ],
+  "distribution_gates": [
+    {
+      "gate_id": "hash_binding",
+      "status": "SATISFIED_AT_BUILD",
+      "requirement": "LATEST.json must match the canonical spec and manifest SHA-256 values."
+    },
+    {
+      "gate_id": "protected_source_review",
+      "status": "OPEN",
+      "requirement": "Review every claim against the protected code snapshot and exact artifacts."
+    },
+    {
+      "gate_id": "stale_claim_tombstones",
+      "status": "OPEN",
+      "requirement": "Withdrawn ACCEPT and blanket six-model causal language must be visibly tombstoned across external and protected-repository briefing surfaces."
+    },
+    {
+      "gate_id": "runtime_freshness",
+      "status": "OPEN",
+      "requirement": "Re-read mutable deployment/provider facts immediately before any runtime claim."
+    },
+    {
+      "gate_id": "diagnostic_independent_object_store",
+      "status": "OPEN",
+      "requirement": "Mirror the recovered definition-anchor bundle to an independently controlled object store or escrow and verify every hash."
+    },
+    {
+      "gate_id": "confidentiality_and_recipient_authority",
+      "status": "OPEN",
+      "requirement": "Confirm the intended Amazon channel and recipients are authorized to receive the selected confidentiality tier."
+    },
+    {
+      "gate_id": "owner_and_required_reviewers",
+      "status": "OPEN",
+      "requirement": "Obtain project-owner and required legal/IP approval for release."
+    },
+    {
+      "gate_id": "render_quality",
+      "status": "OPEN",
+      "requirement": "If a PDF is produced, render and visually inspect every page before release."
+    }
+  ],
+  "manifest_known_bound": "This manifest reconciles already reviewed local sources and protected-commit artifacts. It does not independently reproduce the experiments, re-query mutable providers, create a customer-production authority, or license distribution."
+}

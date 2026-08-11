@@ -1,0 +1,38 @@
+{
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_attempt6_implementation_freeze_manifest.v1",
+  "candidate_label": "ATTEMPT_06_IMPLEMENTATION_FREEZE_29551624",
+  "candidate_commit": "29551624f4de0eec61c4035e364203be55d6c08a",
+  "candidate_tree": "0d70f8e8e8d9dfd9f36ed88ade731ab466935be6",
+  "candidate_parent": "f72b89cd2ec574400ffe69ad7bd1540791fb73c3",
+  "controlling_status": "IMPLEMENTATION_FREEZE_PASS / CROSS_RECONSTRUCTION_MATCH / COMPLETE_V2_SINGLE_HEAD_BUNDLE / DEPENDENCY_ARCHIVE_UNCHANGED / NO_PRE_OR_RUN_IDENTITY / NO_EXTERNAL_TRANSMISSION / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "artifact_count": 5,
+  "artifacts": [
+    {
+      "path": "ATTEMPT_06_IMPLEMENTATION_FREEZE_RECORD.json",
+      "bytes": 8034,
+      "sha256": "dcf55de151d76d65326842f477e6044e5ab24221d120472fdc4d9e3e93aff4af"
+    },
+    {
+      "path": "jacobian_lens_canary_v1_implementation.bundle",
+      "bytes": 36557255,
+      "sha256": "821dbc2dfad076dd8261768963f63d4cadd7726d2f6b635574ef0401f315088d"
+    },
+    {
+      "path": "jacobian_lens_canary_v1_implementation_manifest.json",
+      "bytes": 5689,
+      "sha256": "abaee8b11af0c8d57969bfab19a28914e074dc9ae5eb6c1536a141edee53385d"
+    },
+    {
+      "path": "jacobian_lens_canary_v1_implementation_manifest_reconstructed.json",
+      "bytes": 5689,
+      "sha256": "abaee8b11af0c8d57969bfab19a28914e074dc9ae5eb6c1536a141edee53385d"
+    },
+    {
+      "path": "STATUS.md",
+      "bytes": 8926,
+      "sha256": "181c0e01661093f7bec81c942a527af4f912db5441696a54ed62744107d4641e"
+    }
+  ],
+  "manifest_scope": "This manifest lists every non-manifest file in the Attempt 6 implementation-freeze handoff directory. It proves portable source preservation, independent reconstruction, and retained dependency identity only. It is not PRE, a run identity, an RFC3161 query or response, external-transmission evidence, GPU/model execution, or a scientific result.",
+  "manifest_self_hash_location": "The SHA-256 and byte length of this manifest are recorded in the canonical CAS Harness production tracker after independent local verification."
+}

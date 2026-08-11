@@ -1,0 +1,50 @@
+{
+  "base_commit": "a8969eb71c6d3e5c43d7ee2b7c7d4aa90dd70fc0",
+  "branch": "fix/jacobian-child-bytecode-guard-20260722",
+  "bundle": {
+    "byte_count": 36536084,
+    "complete_history": true,
+    "format_version": 2,
+    "head_count": 1,
+    "sha256": "3ddf60a6f24c204489a70c62465efed3ccd421baa7739bffa923d26821512b67"
+  },
+  "claim_status": "NOT_LICENSED",
+  "code_commit": "be97bc7f76d1e9f5e501702660678d4af3081f5e",
+  "code_tree": "4eb382528e8a4cee81a1c043f65bf0dcfa369ccf",
+  "execution_mode": "SHADOW",
+  "focused_tests": {
+    "command": "python -m pytest tests\\test_jacobian_lens_network_guard.py tests\\test_jacobian_lens_canary_runner.py -q -rs",
+    "passed": 94,
+    "skip_reason": "Linux sealed-memfd execution",
+    "skipped": 1
+  },
+  "implementation_manifest": {
+    "byte_count": 5689,
+    "file_count": 31,
+    "reconstructed_byte_count": 5689,
+    "reconstructed_sha256": "bbaaa973372cd95c3c99472a31664ab2add699cf1d844a5b2ab28a763dd04ffb",
+    "sha256": "bbaaa973372cd95c3c99472a31664ab2add699cf1d844a5b2ab28a763dd04ffb"
+  },
+  "local_full_tests": {
+    "command": "python -m pytest -q -rs",
+    "passed": 926,
+    "skip_reason": "Linux sealed-memfd execution",
+    "skipped": 1
+  },
+  "model_or_cuda_execution": false,
+  "recorded_at_utc": "2026-07-22T23:01:25.143Z",
+  "reconstruction": {
+    "clean_status": true,
+    "commit_match": true,
+    "manifest_byte_identity": true,
+    "tree_match": true
+  },
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_implementation_freeze.v1",
+  "source_sha256": {
+    "live-trace-worker/research/jacobian_lens_canary_runner.py": "0bd470f69df75d8254f20012f2292ea80c873d14cef50e4f75bfd82b3903f662",
+    "live-trace-worker/scripts/run_jacobian_lens_canary_v1.py": "ae210bb41bce8dfad864f020a26c8d35298c56e0951df29862cf0a6b21e81cd6",
+    "live-trace-worker/scripts/run_jacobian_lens_canary_v1_seccomp.py": "e1d5bbf228747a4c702035f11e1c3b9b5afcc55ff313b2713376f1aeaa655c95"
+  },
+  "status": "IMPLEMENTATION_CORRECTION_FROZEN / LOCAL_REGRESSION_PASS / CROSS_RECONSTRUCTION_MATCH / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "verdict": "NONE"
+}

@@ -1,0 +1,1191 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TKS FORMAL MATHEMATICAL MANUAL v7.4 — MASTER FILE
+%%
+%% CANONICAL INHERITANCE:
+%%   v6.1 -> v7.0 -> v7.1 -> v7.2 -> v7.3 -> v7.4
+%%
+%% v7.4 MAJOR EXPANSIONS:
+%%   - MATH TRACK: Extended Transfinite Fractals, Ordinal Hierarchies
+%%   - SEMANTICS TRACK: Domain-Theoretic Semantics, Scott Domains
+%%   - HIGHER CATEGORIES TRACK: ∞-Categories, Higher Topoi
+%%   - GEOMETRY TRACK: Differential Noetic Geometry, Noetic Manifolds
+%%
+%% This master file uses \input{...} to include modular track files.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt,twoside,openright]{book}
+
+%% ============================================================================
+%% PACKAGES (Inherited from v7.3 + v7.4 additions)
+%% ============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{mathtools}
+\usepackage{stmaryrd}           % For semantic brackets
+\usepackage{bm}                 % Bold math
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{cd,arrows,positioning,calc,decorations.pathmorphing,shapes}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems,skins,breakable}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{multicol}
+
+%% v7.0 PACKAGE ADDITIONS
+\usepackage{braket}             % For quantum notation
+\usepackage{tikz-cd}            % For commutative diagrams
+\usepackage{bussproofs}         % For proof trees
+
+%% v7.1 PACKAGE ADDITIONS
+\usepackage{mathrsfs}           % For \mathscr (Scott topology)
+
+%% v7.2 PACKAGE ADDITIONS
+\usepackage{wasysym}            % Additional symbols
+\usepackage{extarrows}          % Extended arrows
+\usepackage{proof}              % Proof derivations
+
+%% v7.4 PACKAGE ADDITIONS
+\usepackage{tensor}             % For tensor notation
+\usepackage{undertilde}         % For undertilde notation
+\usepackage{float}              % For [H] float placement
+\usepackage{adjustbox}          % For scaling wide tables to fit page
+
+\geometry{
+  paper=letterpaper,
+  inner=1.2in,
+  outer=1in,
+  top=1in,
+  bottom=1in
+}
+
+%% ============================================================================
+%% THEOREM ENVIRONMENTS (Inherited from v7.3)
+%% ============================================================================
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{axiom}[definition]{Axiom}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Corollary}
+
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{example}[definition]{Example}
+\newtheorem{notation}[definition]{Notation}
+\newtheorem{construction}[definition]{Construction}
+
+%% ============================================================================
+%% CUSTOM COMMANDS (Inherited from v7.3)
+%% ============================================================================
+% Semantic brackets
+\newcommand{\sem}[1]{\llbracket #1 \rrbracket}
+
+% TKS-specific symbols
+\newcommand{\Worlds}{\mathcal{W}}
+\newcommand{\Ideas}{\mathcal{I}}
+\newcommand{\Elements}{\mathcal{E}}
+\newcommand{\Noetics}{\mathcal{N}}
+\newcommand{\Foundations}{\mathcal{F}}
+\newcommand{\Acquisitions}{\mathcal{A}}
+\newcommand{\Noetica}{\mathbf{Noetica}}
+\newcommand{\Acq}{\mathbf{Acq}}
+
+% Noetic operators
+\newcommand{\noe}[1]{\nu_{#1}}
+
+% Tootra operations
+\newcommand{\Tadd}{\oplus_T}
+\newcommand{\Tsub}{\ominus_T}
+\newcommand{\Tmul}{\otimes_T}
+\newcommand{\Tdiv}{\oslash_T}
+
+% World association
+\newcommand{\Wadd}{\oplus_W}
+\newcommand{\Wsub}{\ominus_W}
+
+% Type judgments
+\newcommand{\types}{\vdash}
+\newcommand{\typmark}{:}
+
+% RPM Monad
+\newcommand{\RPM}{\mathfrak{R}}
+\newcommand{\rpmret}{\mathsf{return}}
+\newcommand{\rpmbind}{\mathbin{\gg\!=}}
+\newcommand{\Kleisli}{\mathcal{K}}
+
+% Fractal notation
+\newcommand{\Frac}{\Phi}
+\newcommand{\FracSet}{\mathfrak{F}}
+\newcommand{\bigstep}{\Downarrow}
+\newcommand{\smallstep}{\rightarrow}
+\newcommand{\Failed}{\mathsf{Failed}}
+
+% Quantum notation (v7.0)
+\newcommand{\Hspace}{\mathcal{H}}
+\newcommand{\qket}[1]{|#1\rangle}
+\newcommand{\qbra}[1]{\langle #1|}
+\newcommand{\qbraket}[2]{\langle #1 | #2 \rangle}
+\newcommand{\qop}[1]{\hat{#1}}
+
+% v7.1 COMMANDS - Domain theory
+\newcommand{\Scott}{\mathscr{S}}
+\newcommand{\Dcpo}{\mathbf{Dcpo}}
+\newcommand{\Cont}{\mathbf{Cont}}
+\newcommand{\sqleq}{\sqsubseteq}
+\newcommand{\fix}{\mathsf{fix}}
+
+% Natural transformations
+\newcommand{\NatTrans}[2]{\eta_{#1 \to #2}}
+\newcommand{\WorldFunctor}[1]{\mathfrak{W}_{#1}}
+
+%% ============================================================================
+%% v7.2 COMMANDS (Inherited)
+%% ============================================================================
+
+% Transfinite fractals
+\newcommand{\Ord}{\mathbf{Ord}}              % Class of ordinals
+\newcommand{\TransFrac}[1]{\Phi^{#1}}        % Transfinite fractal indexed by ordinal
+\newcommand{\limfrac}{\varinjlim}            % Limit of fractals
+\newcommand{\colfrac}{\varprojlim}           % Colimit of fractals
+\newcommand{\omegalim}{\omega\text{-}\lim}   % Omega-limit
+
+% Measure theory
+\newcommand{\SigAlg}{\Sigma}                 % Sigma-algebra
+\newcommand{\Meas}{\mathbf{Meas}}            % Category of measurable spaces
+\newcommand{\Prob}{\mathbf{Prob}}            % Probability measures
+\newcommand{\Bor}{\mathcal{B}}               % Borel sigma-algebra
+\newcommand{\Leb}{\lambda}                   % Lebesgue measure
+\newcommand{\intI}{\int_{\Ideas}}            % Integration over Idea space
+
+% Polish spaces
+\newcommand{\Polish}{\mathbf{Polish}}        % Category of Polish spaces
+\newcommand{\Stone}{\mathbf{Stone}}          % Stone spaces
+\newcommand{\Spec}{\mathrm{Spec}}            % Spectrum
+
+% Type inference (Algorithm W)
+\newcommand{\TypeScheme}{\sigma}             % Type scheme
+\newcommand{\TypeVar}{\alpha}                % Type variable
+\newcommand{\Subst}{\theta}                  % Substitution
+\newcommand{\Unify}{\mathsf{unify}}          % Unification
+\newcommand{\Inst}{\mathsf{inst}}            % Instantiation
+\newcommand{\Gen}{\mathsf{gen}}              % Generalization
+\newcommand{\FTV}{\mathsf{FTV}}              % Free type variables
+\newcommand{\AlgW}{\mathcal{W}}              % Algorithm W
+
+% Compiler infrastructure
+\newcommand{\AST}{\mathsf{AST}}              % Abstract syntax tree
+\newcommand{\IR}{\mathsf{IR}}                % Intermediate representation
+\newcommand{\BC}{\mathsf{BC}}                % Bytecode
+\newcommand{\VM}{\mathsf{VM}}                % Virtual machine
+
+% Quantum extensions
+\newcommand{\BoundedOp}{\mathcal{B}}         % Bounded operators
+\newcommand{\Unitary}{\mathcal{U}}           % Unitary operators
+\newcommand{\Projector}{\mathcal{P}}         % Projectors
+\newcommand{\Spectrum}{\sigma}               % Spectrum of operator
+\newcommand{\Trace}{\mathrm{Tr}}             % Trace
+
+% Topos and coalgebra
+\newcommand{\Topos}{\mathbf{Topos}}          % Topos
+\newcommand{\Sh}{\mathbf{Sh}}                % Sheaves
+\newcommand{\Coalg}{\mathbf{Coalg}}          % Coalgebras
+\newcommand{\Terminal}{\mathbf{1}}           % Terminal object
+\newcommand{\Initial}{\mathbf{0}}            % Initial object
+
+% Bisimulation
+\newcommand{\bisim}{\sim}
+
+%% ============================================================================
+%% v7.3 COMMANDS (Inherited)
+%% ============================================================================
+
+% Transfinite Noetic Fractal Extensions
+\newcommand{\OrdFrac}{\mathfrak{F}_{\Ord}}           % Ordinal fractal category
+\newcommand{\HausdorffDim}{\dim_H}                   % Hausdorff dimension
+\newcommand{\FractalMeasure}{\mu_\Phi}               % Fractal measure
+\newcommand{\SelfSimilar}{\mathcal{S}}               % Self-similarity operator
+\newcommand{\FractalAttractor}{\mathcal{A}_\Phi}     % Fractal attractor
+
+% Extended Compiler / VM
+\newcommand{\TKSLang}{\mathcal{L}_{\mathrm{TKS}}}    % TKS Language
+\newcommand{\EffHandler}{\mathsf{handle}}            % Effect handler
+\newcommand{\Resume}{\mathsf{resume}}                % Continuation resume
+\newcommand{\OpCall}{\mathsf{op}}                    % Operation call
+
+% Quantum Noetics Extensions
+\newcommand{\NoeticOp}[1]{\hat{\nu}_{#1}}            % Noetic operator (quantum)
+\newcommand{\DensityMat}{\rho}                       % Density matrix
+\newcommand{\Entangle}{\mathcal{E}}                  % Entanglement measure
+\newcommand{\QuantumChannel}{\mathcal{C}}            % Quantum channel
+\newcommand{\Kraus}{\mathcal{K}}                     % Kraus operators
+
+% Meta-System Extensions
+\newcommand{\TwoCat}{\mathbf{2Cat}}                  % 2-Category
+\newcommand{\Bicategory}{\mathbf{Bicat}}             % Bicategory
+\newcommand{\LaxFunctor}{\mathsf{Lax}}               % Lax functor
+\newcommand{\Pseudofunctor}{\mathsf{Pseudo}}         % Pseudofunctor
+\newcommand{\NoeticTopos}{\mathbf{Noe}}              % Noetic topos
+
+%% ============================================================================
+%% v7.4 NEW COMMANDS
+%% ============================================================================
+
+% Extended Transfinite Fractals
+\newcommand{\LargeOrd}{\boldsymbol{\Omega}}          % Large ordinal classes
+\newcommand{\OrdHierarchy}{\mathfrak{H}_{\Ord}}      % Ordinal hierarchy
+\newcommand{\FractalSpectrum}{\sigma_\Phi}           % Fractal spectrum
+\newcommand{\MultiFrac}[2]{\Phi^{#1}_{#2}}           % Multi-indexed fractal
+\newcommand{\FractalFunctor}{\mathbf{Frac}}          % Fractal functor category
+\newcommand{\ColimitFrac}{\varinjlim\Phi}            % Colimit of fractal system
+
+% Domain-Theoretic Semantics
+\newcommand{\ScottDom}{\mathbf{ScottDom}}            % Scott domains
+\newcommand{\NoeticDomain}{\mathfrak{D}_\nu}         % Noetic domain
+\newcommand{\ContinuousLattice}{\mathcal{L}_c}       % Continuous lattice
+\newcommand{\WayBelow}{\ll}                          % Way-below relation
+\newcommand{\DirectedSup}{\bigsqcup^{\uparrow}}      % Directed supremum
+\newcommand{\KleeneFix}{\mathsf{lfp}}                % Least fixed point (Kleene)
+\newcommand{\DomainEq}{\cong_D}                      % Domain isomorphism
+
+% Higher Category Extensions
+\newcommand{\InftyCat}{\mathbf{(\infty,1)\text{-}Cat}}  % (∞,1)-categories
+\newcommand{\InftyTopos}{\mathbf{(\infty,1)\text{-}Topos}} % (∞,1)-topoi
+\newcommand{\QuasiCat}{\mathbf{qCat}}                % Quasi-categories
+\newcommand{\SegalSpace}{\mathbf{Segal}}             % Segal spaces
+\newcommand{\NoeticHomotopy}{\pi^{\nu}_n}            % Noetic homotopy groups
+\newcommand{\HigherStack}{\mathfrak{St}}             % Higher stacks
+\newcommand{\Kan}{\mathbf{Kan}}                      % Kan complexes
+\newcommand{\NerveFunctor}{\mathcal{N}}              % Nerve functor
+
+% Differential Noetic Geometry
+\newcommand{\NoeticManifold}{\mathcal{M}_\nu}        % Noetic manifold
+\newcommand{\TangentBundle}{T\mathcal{M}_\nu}        % Tangent bundle
+\newcommand{\CotangentBundle}{T^*\mathcal{M}_\nu}    % Cotangent bundle
+\newcommand{\NoeticConnection}{\nabla^\nu}           % Noetic connection
+\newcommand{\NoeticCurvature}{R^\nu}                 % Noetic curvature tensor
+\newcommand{\NoeticMetric}{g^\nu}                    % Noetic metric
+\newcommand{\NoeticGeodesic}{\gamma_\nu}             % Noetic geodesic
+\newcommand{\ParallelTransport}{\mathcal{P}_\gamma}  % Parallel transport
+\newcommand{\HolonomyGroup}{\mathrm{Hol}(\nabla^\nu)} % Holonomy group
+
+% Version markers
+\newcommand{\vnew}{\textbf{v7.0 New}}
+\newcommand{\vexp}{\textbf{v7.0 Expanded}}
+\newcommand{\vnewone}{\textbf{v7.1 New}}
+\newcommand{\vexpone}{\textbf{v7.1 Expanded}}
+\newcommand{\vnewtwo}{\textbf{v7.2 New}}
+\newcommand{\vexptwo}{\textbf{v7.2 Expanded}}
+\newcommand{\vnewthree}{\textbf{v7.3 New}}
+\newcommand{\vexpthree}{\textbf{v7.3 Expanded}}
+\newcommand{\vnewfour}{\textbf{v7.4 New}}
+\newcommand{\vexpfour}{\textbf{v7.4 Expanded}}
+
+%% ============================================================================
+%% DOCUMENT METADATA
+%% ============================================================================
+\title{\Huge\textbf{The TKS Formal Mathematical Manual}\\[0.5em]
+       \Large Version 7.4 --- Extended Formalization\\[0.3em]
+       \large Extended Fractals $\cdot$ Domain Semantics $\cdot$ Higher Categories $\cdot$ Noetic Geometry}
+\author{TKS Formalization Project}
+\date{\today}
+
+\begin{document}
+
+\frontmatter
+\maketitle
+
+%% ============================================================================
+%% v7.3 -> v7.4 CONTINUITY BRIDGE
+%% ============================================================================
+
+\chapter*{v7.3 $\to$ v7.4 Continuity Bridge}
+\addcontentsline{toc}{chapter}{v7.3 -> v7.4 Continuity Bridge}
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=orange!75!black,title=\textbf{Canonical Inheritance Declaration}]
+This document, TKS v7.4, is a \textbf{strict superset} of TKS v7.3, which itself preserves all of v7.2, v7.1, v7.0, and v6.1. All definitions, theorems, axioms, and proofs from previous versions remain valid and unchanged. Version 7.4 introduces \textit{four new domain expansions}---no modifications to existing canon.
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=red!10!white,colframe=red!75!black,title=\textbf{v7.4 Canonical Authority Declaration}]
+\paragraph*{Canonical Status of Version 7.4.}
+This document constitutes the \textbf{canonical and authoritative specification} of the TKS Formal Mathematical System. Version~7.4 fully integrates, refines, and supersedes all prior releases in the v3.x--v7.3 development line. Earlier versions remain valuable as historical strata documenting the conceptual evolution of TKS, but no longer serve as normative references for definitions, constructions, or semantics.
+
+\medskip
+\noindent The present release establishes the \textbf{definitive ontology} of TKS, consisting of:
+\begin{itemize}[nosep]
+    \item The \textbf{forty canonical Elements} (A1--D10),
+    \item The \textbf{ten Noetic operators} $\{\nu_0,\dots,\nu_9\}$,
+    \item The \textbf{seven Foundations} and their \textbf{twenty-eight Sub-Foundations},
+    \item The \textbf{twenty-two Acquisitions} (A0 together with the D, W, and P chains).
+\end{itemize}
+
+\medskip
+\noindent\textbf{Normative Baseline:} All subsequent work, commentary, or extensions shall be considered extensions \emph{of} v7.4 and \textbf{must} adopt the definitions and conventions codified herein, unless explicitly superseded by a future canonical release.
+\end{tcolorbox}
+
+\medskip
+\noindent A precise mapping between historical metaphysical names and their formal v7.4 counterparts for the seven Foundations is provided in Table~\ref{tab:foundation-equivalence}, ensuring terminological continuity between earlier Tootra materials and the present canonical calculus.
+
+\section*{Inheritance Chain}
+
+\begin{itemize}
+  \item \textbf{v6.1 Canon}: Complete ontology (4 Worlds, 40 Elements, 10 Noetics, 7 Foundations, 22 Acquisitions), noetic algebra, Tootra arithmetic, Category $\Noetica$, ACBE functor
+  \item \textbf{v7.0 Canon}: RPM Monad, Noetic Fractal Calculus, Dynamic Semantics, Type System, Concurrency, Quantum Algebra foundations
+  \item \textbf{v7.1 Canon}: Natural transformations, Domain theory (dcpos, Scott topology), Extended denotational semantics, Topological noetic space, Multi-goal RPM
+  \item \textbf{v7.2 Canon}: Transfinite fractals (preliminary), Measure theory, Polish spaces, Algorithm W, Compiler architecture, Noetic Hilbert spaces, Spectral theory, Monoidal 2-categories, Topos foundations, Coalgebraic dynamics
+  \item \textbf{v7.3 Canon}: Full Transfinite Noetic Fractals, Extended TKS Language/VM, Complete Quantum Noetics, 2-Category/Topos/Coalgebra Unification
+\end{itemize}
+
+\section*{v7.4 Major Domain Expansions}
+
+\begin{enumerate}
+  \item \textbf{MATH Track: Extended Transfinite Fractals} (Agent: \texttt{tks-math})
+  \begin{itemize}
+    \item Large ordinal hierarchies and inaccessible cardinals
+    \item Multi-indexed fractal systems
+    \item Fractal spectrum theory
+    \item Functorial fractal constructions
+  \end{itemize}
+
+  \item \textbf{SEMANTICS Track: Domain-Theoretic Semantics} (Agent: \texttt{tks-semantics})
+  \begin{itemize}
+    \item Scott domains for noetic computation
+    \item Continuous lattices and way-below relation
+    \item Fixed-point semantics for recursive noetics
+    \item Domain equations and solutions
+  \end{itemize}
+
+  \item \textbf{HIGHER CATEGORIES Track: $(\infty,1)$-Categories} (Agent: \texttt{tks-computation})
+  \begin{itemize}
+    \item Quasi-categories and Segal spaces
+    \item $(\infty,1)$-topoi for noetic sheaves
+    \item Noetic homotopy theory
+    \item Higher stacks and descent
+  \end{itemize}
+
+  \item \textbf{GEOMETRY Track: Differential Noetic Geometry} (Agent: \texttt{tks-topology})
+  \begin{itemize}
+    \item Noetic manifolds and tangent structures
+    \item Noetic connections and curvature
+    \item Geodesics in Idea space
+    \item Holonomy and parallel transport
+  \end{itemize}
+\end{enumerate}
+
+\section*{New Notation in v7.4}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Track} \\
+\midrule
+$\LargeOrd$ & Large ordinal classes & Math \\
+$\OrdHierarchy$ & Ordinal hierarchy & Math \\
+$\FractalSpectrum$ & Fractal spectrum & Math \\
+$\ScottDom$ & Scott domains & Semantics \\
+$\WayBelow$ & Way-below relation & Semantics \\
+$\KleeneFix$ & Kleene fixed point & Semantics \\
+$\InftyCat$ & $(\infty,1)$-categories & Higher Categories \\
+$\InftyTopos$ & $(\infty,1)$-topoi & Higher Categories \\
+$\NoeticHomotopy$ & Noetic homotopy groups & Higher Categories \\
+$\NoeticManifold$ & Noetic manifold & Geometry \\
+$\NoeticConnection$ & Noetic connection & Geometry \\
+$\NoeticCurvature$ & Noetic curvature & Geometry \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\tableofcontents
+
+%% ============================================================================
+%% GUIDE TO THIS MANUAL
+%% ============================================================================
+
+\chapter*{Guide to This Manual}
+\addcontentsline{toc}{chapter}{Guide to This Manual}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\textbf{Prerequisites}]
+\textbf{Readers new to TKS should start with TKS v6.1 \S\S1--4} (ontology + basic noetic calculus), which this document presupposes. The v6.1 foundation defines the 4 Worlds, 40 Elements, 10 Noetics, 7 Foundations, 28 Sub-Foundations, and 22 Acquisitions---all assumed throughout this manual.
+\end{tcolorbox}
+
+\section*{Version 7.4 as Canonical Baseline}
+
+In brief, the reader may treat \textbf{Version~7.4 as the canonical baseline} of TKS. Part~0 introduces the core ontology and algebraic structures (Worlds, Elements, Noetics, Foundations, and Acquisitions), together with the RPM monad and finite Noetic Fractals that form the \emph{Core Calculus}. Subsequent parts develop four major expansion tracks:
+\begin{enumerate}[nosep]
+    \item \textbf{Mathematics Track}: Advanced transfinite and spectral fractal theory,
+    \item \textbf{Semantics Track}: Enriched domain-theoretic and denotational foundations,
+    \item \textbf{Higher Categories Track}: $(\infty,1)$-categorical and computational structure,
+    \item \textbf{Geometry Track}: Differential geometric and topological models of Noetic space.
+\end{enumerate}
+A technically oriented reader may safely begin with the Core Calculus chapter (Chapter~\ref{ch:core-calculus}) and then consult the expansion tracks according to interest.
+
+\section*{Reading Paths by Background}
+
+This manual serves four distinct audiences. Choose the path that matches your expertise:
+
+\begin{description}[style=nextline,leftmargin=2cm]
+
+\item[\textbf{Set Theorists / Ordinal Specialists}]
+Start with \textbf{Part V} (Extended Transfinite Fractals):
+\begin{itemize}
+  \item Chapters on large ordinal hierarchies and inaccessible cardinals
+  \item Multi-indexed fractal systems
+  \item Then read Part I from v7.3 for foundational fractal theory
+\end{itemize}
+
+\item[\textbf{Domain Theorists / Denotational Semanticists}]
+Start with \textbf{Part VI} (Domain-Theoretic Semantics):
+\begin{itemize}
+  \item Scott domains for noetic spaces
+  \item Way-below relation and continuous lattices
+  \item Fixed-point semantics and domain equations
+\end{itemize}
+
+\item[\textbf{Homotopy Theorists / Higher Category Theorists}]
+Start with \textbf{Part VII} (Higher Categories):
+\begin{itemize}
+  \item $(\infty,1)$-categories and quasi-categories
+  \item $(\infty,1)$-topoi for noetic sheaves
+  \item Noetic homotopy groups
+\end{itemize}
+
+\item[\textbf{Differential Geometers / Physicists}]
+Start with \textbf{Part VIII} (Differential Noetic Geometry):
+\begin{itemize}
+  \item Noetic manifolds and tangent structures
+  \item Connections, curvature, and geodesics
+  \item Holonomy groups and parallel transport
+\end{itemize}
+
+\end{description}
+
+\section*{Cross-Track Dependencies}
+
+\begin{center}
+\begin{tikzpicture}[node distance=2.5cm, auto]
+  \node (v73) [draw, rectangle, rounded corners, fill=gray!30] {v7.3 Complete};
+  \node (math) [draw, rectangle, rounded corners, fill=red!20, below left=1.5cm and 2cm of v73] {Part V: Extended Fractals};
+  \node (semantics) [draw, rectangle, rounded corners, fill=green!20, below left=1.5cm and -1cm of v73] {Part VI: Domain Semantics};
+  \node (higher) [draw, rectangle, rounded corners, fill=blue!20, below right=1.5cm and -1cm of v73] {Part VII: Higher Categories};
+  \node (geometry) [draw, rectangle, rounded corners, fill=purple!20, below right=1.5cm and 2cm of v73] {Part VIII: Noetic Geometry};
+  \node (unified) [draw, rectangle, rounded corners, fill=yellow!20, below=4cm of v73] {Part IX: Unified Theory};
+
+  \draw[->,thick] (v73) -- (math);
+  \draw[->,thick] (v73) -- (semantics);
+  \draw[->,thick] (v73) -- (higher);
+  \draw[->,thick] (v73) -- (geometry);
+  \draw[->,thick] (math) -- (unified);
+  \draw[->,thick] (semantics) -- (unified);
+  \draw[->,thick] (higher) -- (unified);
+  \draw[->,thick] (geometry) -- (unified);
+\end{tikzpicture}
+\end{center}
+
+\mainmatter
+
+%% ============================================================================
+%% PART 0: CANONICAL FOUNDATION (From v6.1 - Reference Only)
+%% ============================================================================
+\part{Canonical Foundation (v6.1 Reference)}
+\label{part:v61-reference}
+
+% Reference content inherited from v7.3
+
+\chapter{Ontological Foundations Reference}
+\label{ch:foundations-reference}
+
+\begin{tcolorbox}[colback=gray!10!white,colframe=gray!75!black,title=\textbf{Reference Chapter}]
+This chapter provides a condensed reference to the canonical v6.1 foundations. For complete details, see TKS\_FORMAL\_MATHEMATICAL\_MANUAL\_v6.1\_COMPLETE.tex.
+\end{tcolorbox}
+
+\section{Terminology Equivalence for Foundations}
+\label{sec:foundation-terminology}
+
+\begin{table}[ht]
+\centering
+\caption{Terminology Equivalence for the Seven Foundations}
+\label{tab:foundation-equivalence}
+\renewcommand{\arraystretch}{1.2}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{c l l p{5.5cm}}
+\toprule
+\textbf{Foundation} & \textbf{Metaphysical Name} & \textbf{Canonical v7.4 Label} & \textbf{Formal Principle} \\
+\midrule
+$\Foundations_1$ & Unity & Association & Coherence and linking of Ideas across Worlds \\
+$\Foundations_2$ & Wisdom & Wisdom & Discernment, truth-orientation, structural understanding \\
+$\Foundations_3$ & Life & Life & Vitality, persistence, and self-maintenance of patterns \\
+$\Foundations_4$ & Companionship & Companionship & Relational bonding, mutual support, shared context \\
+$\Foundations_5$ & Power & Power & Capacity to influence, direct, or constrain dynamics \\
+$\Foundations_6$ & Material & Wealth & Resources, structure, and embodied stability \\
+$\Foundations_7$ & Lust / Continuation & Continuation & Drive to extend, propagate, and iterate patterns \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{tcolorbox}[colback=green!5!white,colframe=green!60!black,title=\textbf{Interpretive Notes}]
+The metaphysical labels in the second column reflect the historical and experiential language used in earlier Tootra expositions. The canonical v7.4 labels in the third column capture the corresponding formal principles as they function within the algebraic and categorical TKS calculus. Throughout this manual, the Foundations $\Foundations_1,\dots,\Foundations_7$ are treated as the primary formal objects, with metaphysical names retained for interpretive continuity and cross-referencing to earlier texts.
+
+\medskip
+\noindent\textbf{Usage convention}: In formal proofs and definitions, use the canonical v7.4 label. In expository or philosophical discussion, either label is acceptable. The index notation $\Foundations_i$ is universal.
+\end{tcolorbox}
+
+%===========================================================
+\subsection{The 28 Sub-Foundations (Canonical Grid)}
+\label{sec:28-subfoundations}
+%===========================================================
+
+This subsection consolidates the full canonical structure of the
+\emph{twenty-eight Sub-Foundations} $\Foundations_{mw}$, which refine the seven
+Foundations $\Foundations_m$ across the four Worlds $w \in \{a,b,c,d\}$. The table and
+definitions here are a restatement of the established ontology (v6.1), made
+explicit in this volume to ensure that the present document is
+self-contained.
+
+Each Sub-Foundation $\Foundations_{mw}$ denotes the contextualization of Foundation
+$\Foundations_m$ within World $w$:
+\[
+\Foundations_{mw} : \mathrm{Domain} \to \mathrm{Domain}
+\]
+where the semantic effect of $\Foundations_{mw}$ is to filter or reinterpret a TKS
+expression with respect to the structural constraints of world-indexed
+cognition, affect, causality, or embodiment.
+
+The following table provides a compact canonical reference.
+
+%===========================================================
+\begin{table}[H]
+\centering
+\caption{Canonical 28 Sub-Foundations}
+\label{tab:subfoundations}
+\renewcommand{\arraystretch}{1.1}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{c|c|c|p{6.5cm}}
+\toprule
+$m$ & \textbf{Foundation} & \textbf{World} $w$ & \textbf{Formal Interpretation} \\
+\midrule
+1 & Unity / Association   & a & Abstract unification of Ideas (A-World coherence). \\
+  &                       & b & Cognitive unification: category-level grouping. \\
+  &                       & c & Affective synchrony and interpersonal resonance. \\
+  &                       & d & Material continuity: object persistence. \\
+\midrule
+2 & Wisdom / Structure    & a & Archetypal ordering; ideal structural pattern. \\
+  &                       & b & Conceptual structuring; mental models. \\
+  &                       & c & Emotional evaluation; felt coherence. \\
+  &                       & d & Physical constraints; environmental affordances. \\
+\midrule
+3 & Life / Animation      & a & Essential vitality; causal spark. \\
+  &                       & b & Motivation; cognitive impetus to act. \\
+  &                       & c & Emotional animation; energizing affect. \\
+  &                       & d & Biological / kinetic activation. \\
+\midrule
+4 & Companionship / Relation & a & Archetypal relational patterns. \\
+  &                          & b & Social cognition; theory of mind. \\
+  &                          & c & Emotional bonding; empathy dynamics. \\
+  &                          & d & Material relations; interaction pathways. \\
+\midrule
+5 & Power / Expression    & a & Abstract intentionality; divine will-pattern. \\
+  &                       & b & Strategic cognition; directed agency. \\
+  &                       & c & Emotional assertion; boundary formation. \\
+  &                       & d & Physical expression; force deployment. \\
+\midrule
+6 & Material / Acquisition & a & Ideal pattern of resource flow. \\
+  &                        & b & Conceptual economic models. \\
+  &                        & c & Emotional valuation; attachment/aversion. \\
+  &                        & d & Physical resources; material accumulation. \\
+\midrule
+7 & Lust / Continuation   & a & Archetypal continuation; pattern perpetuation. \\
+  &                       & b & Cognitive projection: planning continuations. \\
+  &                       & c & Desire dynamics; emotional momentum. \\
+  &                       & d & Biological reproductive / survival drives. \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+%===========================================================
+
+\paragraph{Semantic Rule.}
+Each Sub-Foundation applies a world-indexed contextual filter:
+\[
+E_{mw} = \phi_{mw}(E)
+\]
+where $\phi_{mw}$ preserves only those features of $E$ relevant to the
+interpretative structure of Foundation $m$ at World $w$.
+
+\paragraph{Example.}
+Let $E = B3^{4}$ denote a mental-mode vitality expression modified by the
+noetic $\noe{4}$ (Vibration). Then
+\[
+E_{3c} = \phi_{3c}(B3^{4})
+\]
+extracts the emotional-world instantiation of Life/Animation, yielding the
+affective-vital interpretation of the same underlying pattern.
+
+\paragraph{Remark.}
+The 28 Sub-Foundations serve as the contextual backbone for:
+\begin{itemize}
+  \item RPM prerequisite evaluation ($D_n$, $W_n$, $P_n$ chains),
+  \item Normal-form classification of TKS expressions,
+  \item World-indexed Noetic Fractal convergence behavior,
+  \item ACBE world descent semantics.
+\end{itemize}
+In all cases, the semantics defined here are conservative extensions of the
+canonical v6.1 definitions.
+
+\subsubsection{Sub-Foundation Effects on Noetic Fractals}
+
+The following table specifies how each Sub-Foundation $\Foundations_{mw}$ transforms
+a noetic fractal $\Frac = \langle k_1 : \cdots : k_n \rangle$ when applied as a
+contextual filter. These transformations are central to understanding how
+fractal iteration behaves under world-indexed constraints.
+
+%===========================================================
+\begin{longtable}{c|c|p{5cm}|p{5cm}}
+\caption{Sub-Foundation Effects on Noetic Fractals}
+\label{tab:subfoundation-fractal-effects} \\
+\toprule
+$\Foundations_{mw}$ & World & Effect on Fractal $\Frac = \langle k_1 : \cdots : k_n \rangle$ & Formal Interpretation \\
+\midrule
+\endfirsthead
+\multicolumn{4}{c}{\textit{Table \ref{tab:subfoundation-fractal-effects} continued from previous page}} \\
+\toprule
+$\Foundations_{mw}$ & World & Effect on Fractal $\Frac$ & Formal Interpretation \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\textit{Continued on next page}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+
+$\Foundations_{1a}$ & A & Projects $\Frac$ to its archetypal pattern: $\Frac \mapsto \Frac^{\ast}$ &
+Extracts the world-A ``pure form'' of the fractal; removes contingent modifiers. \\
+
+$\Foundations_{1b}$ & B & Normalizes $\Frac$ to canonical order: $\Frac \mapsto \mathrm{nf}(\Frac)$ &
+Applies mental/cognitive normalization: commutativity reduction, dual cancellation. \\
+
+$\Foundations_{1c}$ & C & Softens polarity transitions in $\Frac$ &
+Smooths emotional discontinuities, reducing $\langle 2:3 \rangle$ oscillations. \\
+
+$\Foundations_{1d}$ & D & Collapses adjacent identical operators: $\noe{k} \circ \noe{k} \mapsto \noe{k}$ &
+Enforces physical-world idempotence constraints. \\
+
+\midrule
+
+$\Foundations_{2a}$ & A & Rewrites $\Frac$ to emphasize structural operators: $\noe{5},\noe{6}$ &
+Archetypal structural extraction: highlights gender-mode symmetry. \\
+
+$\Foundations_{2b}$ & B & Inserts missing structural links: $\Frac \mapsto \Frac \cup \{\noe{6}\}$ (if absent) &
+Ensures cognitive completeness of relational structure. \\
+
+$\Foundations_{2c}$ & C & Weights $\noe{5},\noe{6}$ transitions by affective valence &
+Emotional coherence filter on structural reasoning. \\
+
+$\Foundations_{2d}$ & D & Constrains $\Frac$ to material feasibility &
+Removes noetic sequences impossible in physical embodiment. \\
+
+\midrule
+
+$\Foundations_{3a}$ & A & Lifts $\Frac$ into activation-potential space &
+Interprets fractal as primal vitality archetype. \\
+
+$\Foundations_{3b}$ & B & Adds cognitive activation weighting: $\noe{4} \uparrow$ &
+Enhances \emph{Vibration} transitions by mental energization. \\
+
+$\Foundations_{3c}$ & C & Amplifies emotional oscillation cycles $\noe{7}$ &
+Produces affective ``life-rhythm'' resonance. \\
+
+$\Foundations_{3d}$ & D & Converts fractal to kinetic sequence &
+Maps fractal iteration into physical actions or motion. \\
+
+\midrule
+
+$\Foundations_{4a}$ & A & Projects $\Frac$ onto relation-archetype lattice &
+Identifies ideal relational pattern. \\
+
+$\Foundations_{4b}$ & B & Introduces theory-of-mind ordering into $\Frac$ &
+Rewrites sequence to reflect cognitive empathy. \\
+
+$\Foundations_{4c}$ & C & Affective coupling: $\Frac \mapsto \Frac \otimes_{\mathrm{aff}} \Frac'$ &
+Blends fractal with emotional-relation profile. \\
+
+$\Foundations_{4d}$ & D & Enforces relational continuity constraints &
+Physical-world adjacency and interaction rules. \\
+
+\midrule
+
+$\Foundations_{5a}$ & A & Extracts pure intentionality from $\Frac$ &
+Maps fractal to its teleological vector. \\
+
+$\Foundations_{5b}$ & B & Converts $\Frac$ into strategic action sequence &
+Reorders operators for agentic optimization. \\
+
+$\Foundations_{5c}$ & C & Asserts boundary effects: increases $\noe{3}$ transitions &
+Maintains emotional sovereignty. \\
+
+$\Foundations_{5d}$ & D & Maps fractal into force-deployment profile &
+Directs physical implementation of noetic intent. \\
+
+\midrule
+
+$\Foundations_{6a}$ & A & Interprets $\Frac$ as archetypal resource flow &
+Extracts ideal acquisition pattern. \\
+
+$\Foundations_{6b}$ & B & Imposes economic structure: value-function weighting &
+Rewrites $\Frac$ according to conceptual valuation. \\
+
+$\Foundations_{6c}$ & C & Emotional appraisal of acquisition sequences &
+Modulates $\noe{2}$ (Positive) according to desire/aversion. \\
+
+$\Foundations_{6d}$ & D & Physical accumulation filter &
+Reduces fractal to materially actionable steps. \\
+
+\midrule
+
+$\Foundations_{7a}$ & A & Projects $\Frac$ into continuation archetypes &
+Identifies infinite or self-propagating fractal forms. \\
+
+$\Foundations_{7b}$ & B & Cognitive projection: future-extension operator applied &
+Computes long-range extrapolations of $\Frac$. \\
+
+$\Foundations_{7c}$ & C & Intensifies desire-driven transitions ($\noe{2},\noe{3}$ cycles) &
+Emotionally charged continuation. \\
+
+$\Foundations_{7d}$ & D & Biological momentum filter &
+Restricts $\Frac$ to survival or reproduction-viable forms. \\
+
+\end{longtable}
+%===========================================================
+
+\subsubsection{Sub-Foundation $\times$ Acquisition Dependency Matrix}
+
+The following table specifies how each Sub-Foundation $\Foundations_{mw}$ influences
+the three Acquisition chains: Desire ($D_n$), Wisdom ($W_n$), and Power ($P_n$).
+This matrix is essential for understanding RPM prerequisite evaluation and
+the interplay between ontological context and acquisition dynamics.
+
+%===========================================================
+\begin{longtable}{c|c|p{3.5cm}|p{3.5cm}|p{4cm}}
+\caption{Sub-Foundation $\times$ Acquisition Dependency Matrix}
+\label{tab:subfoundation-acquisition-matrix} \\
+\toprule
+\textbf{$\Foundations_{mw}$}
+& \textbf{W}
+& \textbf{Desire $D_n$ Influence}
+& \textbf{Wisdom $W_n$ Influence}
+& \textbf{Power $P_n$ / RPM Impact} \\
+\midrule
+\endfirsthead
+\multicolumn{5}{c}{\textit{Table \ref{tab:subfoundation-acquisition-matrix} continued from previous page}} \\
+\toprule
+\textbf{$\Foundations_{mw}$} & \textbf{W} & \textbf{Desire $D_n$} & \textbf{Wisdom $W_n$} & \textbf{Power $P_n$ / RPM} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\textit{Continued on next page}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+
+% UNITY
+$\Foundations_{1a}$ & A & Purifies $D_n$ (removes contradictory impulses)
+& Lifts $W_n$ to archetype level
+& Aligns $P_n$ with highest-order causal vector; eliminates RPM divergence \\
+
+$\Foundations_{1b}$ & B & Normalizes stated desires
+& Enforces cognitive coherence
+& Reduces RPM error by removing contradictory paths \\
+
+$\Foundations_{1c}$ & C & Stabilizes emotional valence of desires
+& Softens harsh interpretations of $W_n$
+& Prevents affective overload during $P_n$ \\
+
+$\Foundations_{1d}$ & D & Filters $D_n$ to practical physical terms
+& Removes ungrounded expectations
+& Ensures $P_n$ manifests in physically actionable steps \\
+
+\midrule
+
+% WISDOM
+$\Foundations_{2a}$ & A & Reveals deeper motives behind $D_n$
+& Extracts structural truth of $W_n$
+& Directs $P_n$ based on ideal structural alignment \\
+
+$\Foundations_{2b}$ & B & Clarifies ambiguity in $D_n$
+& Rationalizes $W_n$
+& Optimizes $P_n$ for cognitive efficiency \\
+
+$\Foundations_{2c}$ & C & Adds emotional insight into $D_n$
+& Makes $W_n$ empathic/contextual
+& Prevents misaligned or exploitative power expressions \\
+
+$\Foundations_{2d}$ & D & Reduces $D_n$ to feasible material needs
+& Validates $W_n$ within real constraints
+& Filters $P_n$ by practical feasibility \\
+
+\midrule
+
+% LIFE
+$\Foundations_{3a}$ & A & Enhances vital intent behind $D_n$
+& Identifies life-directed interpretations of $W_n$
+& Produces sustainable (non-self-terminating) $P_n$ \\
+
+$\Foundations_{3b}$ & B & Adds activation energy to $D_n$
+& Makes $W_n$ actionable
+& Speeds convergence of RPM evaluation \\
+
+$\Foundations_{3c}$ & C & Emotional amplification of $D_n$
+& Emotional intuition added to $W_n$
+& Provides momentum for $P_n$ execution \\
+
+$\Foundations_{3d}$ & D & Embodies $D_n$ biologically
+& Converts $W_n$ into somatic learning
+& Converts $P_n$ into kinetic patterns (action) \\
+
+\midrule
+
+% COMPANIONSHIP
+$\Foundations_{4a}$ & A & Aligns $D_n$ with relational archetypes
+& Reveals interpersonal moral context for $W_n$
+& Aligns $P_n$ with mutualistic outcomes \\
+
+$\Foundations_{4b}$ & B & Clarifies desires as they relate to others
+& Adds perspective-taking to $W_n$
+& Enables coordinated or collective $P_n$ \\
+
+$\Foundations_{4c}$ & C & Affective tuning of relational desires
+& Empathic expansion of $W_n$
+& Avoids relational harm in $P_n$ \\
+
+$\Foundations_{4d}$ & D & Material/behavioral grounding of relational needs
+& Social-practical adjustment of $W_n$
+& Produces cooperative or group-coherent action sequences \\
+
+\midrule
+
+% POWER
+$\Foundations_{5a}$ & A & Reveals primal intentionality behind $D_n$
+& Frames $W_n$ in teleological structure
+& Aligns $P_n$ with destiny vector \\
+
+$\Foundations_{5b}$ & B & Strategic planning for desires
+& Optimization of wisdom toward effectiveness
+& Maximum RPM efficiency: minimizes backtracking \\
+
+$\Foundations_{5c}$ & C & Emotional sovereignty of $D_n$
+& Boundaries embedded in $W_n$
+& Prevents power leakage during $P_n$ \\
+
+$\Foundations_{5d}$ & D & Converts $D_n$ into force-deployment schema
+& Makes $W_n$ materially enforceable
+& Direct implementation of $P_n$ in physical domain \\
+
+\midrule
+
+% WEALTH
+$\Foundations_{6a}$ & A & Archetypal abundance orientation for $D_n$
+& Reveals universal acquisition patterns in $W_n$
+& Aligns $P_n$ with resource-flow principles \\
+
+$\Foundations_{6b}$ & B & Clarifies desire in value/utility form
+& Rational valuation added to $W_n$
+& Optimizes $P_n$ for resource efficiency \\
+
+$\Foundations_{6c}$ & C & Emotional valuation of $D_n$
+& Affective appraisal added to $W_n$
+& Prevents self-sabotage during $P_n$ \\
+
+$\Foundations_{6d}$ & D & Reduces $D_n$ to concrete material goals
+& Provides logistical planning for $W_n$
+& Produces actionable acquisition strategies for $P_n$ \\
+
+\midrule
+
+% CONTINUATION
+$\Foundations_{7a}$ & A & Links $D_n$ to long-term archetypal continuity
+& Extends $W_n$ along infinite trajectories
+& Prevents short-term distortions in $P_n$ \\
+
+$\Foundations_{7b}$ & B & Future-projected desire modeling
+& Strategic foresight added to $W_n$
+& Generates long-horizon $P_n$ plans \\
+
+$\Foundations_{7c}$ & C & Desire-intensification via emotional drive
+& Deep emotional integration of $W_n$
+& Provides persistence and willpower during $P_n$ \\
+
+$\Foundations_{7d}$ & D & Biological grounding: survival/legacy constraints
+& Physical continuation framing for $W_n$
+& Produces durable, sustainable $P_n$ \\
+
+\end{longtable}
+%===========================================================
+
+%===========================================================
+\begin{longtable}{c|c|c|p{6.5cm}}
+\caption{The Noetic $\times$ Foundation $\times$ World Interaction Cube}
+\label{tab:noetic-foundation-world-cube} \\
+\toprule
+\textbf{Noetic $\nu_k$}
+& \textbf{Foundation $F_m$}
+& \textbf{W}
+& \textbf{Induced Transformation $\mathcal{T}(\nu_k, F_m, W)$}
+\\
+\midrule
+\endfirsthead
+\multicolumn{4}{c}{\textit{Table \ref{tab:noetic-foundation-world-cube} continued from previous page}} \\
+\toprule
+\textbf{Noetic $\nu_k$} & \textbf{Foundation $F_m$} & \textbf{W} & \textbf{Induced Transformation} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\textit{Continued on next page}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+
+%==================== A-WORLD ======================
+
+$\nu_1$ (Mind) & $F_1$ (Unity) & A
+& Projects $\nu_1$ into archetypal awareness; yields pure causal cognition:
+  $\nu_1^{A} = \operatorname{Lift}(\nu_1)$.
+\\
+
+$\nu_2$ (Positive) & $F_3$ (Life) & A
+& Converts attraction into vitality-awakening:
+  $\nu_2^{A,3} = \nu_2 \circ \operatorname{VitalArche}$.
+\\
+
+$\nu_7$ (Rhythm) & $F_4$ (Companionship) & A
+& Produces harmonic-relational oscillation:
+  $\nu_7^{A,4}$ implements archetypal interpersonal rhythm.
+\\
+
+\midrule
+%==================== B-WORLD ======================
+
+$\nu_1$ & $F_2$ (Wisdom) & B
+& Cognitive structuring of awareness:
+  $\nu_1^{B,2}$ = normalization + inference closure.
+\\
+
+$\nu_4$ (Vibration) & $F_3$ (Life) & B
+& Cognitive activation-energy enrichment:
+  $\nu_4^{B,3}$ increases informational amplitude.
+\\
+
+$\nu_6$ (Male) & $F_5$ (Power) & B
+& Strategic structuring of force:
+  $\nu_6^{B,5}$ enforces goal-aligned reasoning.
+\\
+
+\midrule
+%==================== C-WORLD ======================
+
+$\nu_5$ (Female) & $F_4$ (Companionship) & C
+& Produces empathic-receptive modulation:
+  $\nu_5^{C,4}$ = affective openness transformation.
+\\
+
+$\nu_3$ (Negative) & $F_5$ (Power) & C
+& Affective boundary formation:
+  $\nu_3^{C,5}$ strengthens emotional sovereignty.
+\\
+
+$\nu_7$ (Rhythm) & $F_3$ (Life) & C
+& Emotional oscillation regulation:
+  $\nu_7^{C,3}$ stabilizes or amplifies affective cycles.
+\\
+
+\midrule
+%==================== D-WORLD ======================
+
+$\nu_6$ (Male) & $F_6$ (Wealth) & D
+& Converts structuring-energy into material acquisition behavior:
+  $\nu_6^{D,6}$ = logistical enforcement.
+\\
+
+$\nu_8$ (Above) & $F_1$ (Unity) & D
+& Extracts latent ideal from physical pattern:
+  $\nu_8^{D,1}$ = inversion-to-archetype projection.
+\\
+
+$\nu_9$ (Below) & $F_7$ (Continuation) & D
+& Embeds survival/propagation constraints:
+  $\nu_9^{D,7}$ = physical continuation operator.
+\\
+
+\end{longtable}
+%===========================================================
+
+%% ============================================================================
+%% CORE CALCULUS OVERVIEW (v7.4 NEW)
+%% ============================================================================
+\input{TKS_v7.4_CoreCalculus}
+
+%% ============================================================================
+%% PARTS I-IV: INHERITED FROM v7.3
+%% ============================================================================
+
+\part{Transfinite Noetic Fractals (v7.3)}
+\label{part:math-track-v73}
+\input{TKS_v7.3_Math}
+
+\part{Extended TKS Language and Virtual Machine (v7.3)}
+\label{part:compiler-track-v73}
+\input{TKS_v7.3_Compiler}
+
+\part{Quantum Noetics (v7.3)}
+\label{part:quantum-track-v73}
+\input{TKS_v7.3_Quantum}
+
+\part{Noetic Meta-System: 2-Categories and Topoi (v7.3)}
+\label{part:meta-track-v73}
+\input{TKS_v7.3_Meta}
+
+%% ============================================================================
+%% PART V: EXTENDED TRANSFINITE FRACTALS (v7.4 NEW)
+%% ============================================================================
+\part{Extended Transfinite Fractals}
+\label{part:extended-fractals}
+
+\input{TKS_v7.4_Math}
+
+%% ============================================================================
+%% PART VI: DOMAIN-THEORETIC SEMANTICS (v7.4 NEW)
+%% ============================================================================
+\part{Domain-Theoretic Semantics}
+\label{part:domain-semantics}
+
+\input{TKS_v7.4_Semantics}
+
+%% ============================================================================
+%% PART VII: HIGHER CATEGORIES (v7.4 NEW)
+%% ============================================================================
+\part{Higher Categories and $(\infty,1)$-Topoi}
+\label{part:higher-categories}
+
+\input{TKS_v7.4_HigherCat}
+
+%% ============================================================================
+%% PART VIII: DIFFERENTIAL NOETIC GEOMETRY (v7.4 NEW)
+%% ============================================================================
+\part{Differential Noetic Geometry}
+\label{part:noetic-geometry}
+
+\input{TKS_v7.4_Geometry}
+
+%% ============================================================================
+%% PART IX: UNIFIED v7.4 THEORY
+%% ============================================================================
+\part{Unified Theory and Cross-Domain Integration}
+\label{part:unified}
+
+\chapter{Cross-Domain Integration}
+\label{ch:cross-domain}
+
+\begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=\textbf{Integration Chapter}]
+This chapter demonstrates how the four v7.4 domains interact with each other and with the v7.3 foundations, providing unified theorems and cross-domain constructions.
+\end{tcolorbox}
+
+\section{Fractal-Domain Correspondence}
+% Connection between extended fractals and Scott domains
+
+\section{Higher Categorical Semantics}
+% $(\infty,1)$-categorical interpretation of domain semantics
+
+\section{Geometric Interpretation of Fractals}
+% Noetic manifold structure on fractal spaces
+
+\section{Unified Noetic Field Theory}
+% Synthesis of all four domains
+
+%% ============================================================================
+%% PART X: APPENDICES
+%% ============================================================================
+\part{Appendices}
+\label{part:appendices}
+
+\chapter{Complete Symbol Reference}
+\label{ch:symbol-reference}
+
+\section{v6.1 Symbols}
+% Inherited symbols
+
+\section{v7.0--v7.3 Symbols}
+% Inherited symbols
+
+\section{v7.4 New Symbols}
+
+\begin{center}
+\begin{longtable}{lll}
+\toprule
+\textbf{Symbol} & \textbf{Command} & \textbf{Meaning} \\
+\midrule
+\endhead
+$\LargeOrd$ & \verb|\LargeOrd| & Large ordinal classes \\
+$\OrdHierarchy$ & \verb|\OrdHierarchy| & Ordinal hierarchy \\
+$\FractalSpectrum$ & \verb|\FractalSpectrum| & Fractal spectrum \\
+$\MultiFrac{\alpha}{\beta}$ & \verb|\MultiFrac{α}{β}| & Multi-indexed fractal \\
+$\ScottDom$ & \verb|\ScottDom| & Scott domains \\
+$\NoeticDomain$ & \verb|\NoeticDomain| & Noetic domain \\
+$\WayBelow$ & \verb|\WayBelow| & Way-below relation \\
+$\DirectedSup$ & \verb|\DirectedSup| & Directed supremum \\
+$\KleeneFix$ & \verb|\KleeneFix| & Kleene fixed point \\
+$\InftyCat$ & \verb|\InftyCat| & $(\infty,1)$-categories \\
+$\InftyTopos$ & \verb|\InftyTopos| & $(\infty,1)$-topoi \\
+$\QuasiCat$ & \verb|\QuasiCat| & Quasi-categories \\
+$\NoeticHomotopy$ & \verb|\NoeticHomotopy| & Noetic homotopy groups \\
+$\NoeticManifold$ & \verb|\NoeticManifold| & Noetic manifold \\
+$\TangentBundle$ & \verb|\TangentBundle| & Tangent bundle \\
+$\NoeticConnection$ & \verb|\NoeticConnection| & Noetic connection \\
+$\NoeticCurvature$ & \verb|\NoeticCurvature| & Noetic curvature \\
+$\NoeticGeodesic$ & \verb|\NoeticGeodesic| & Noetic geodesic \\
+$\HolonomyGroup$ & \verb|\HolonomyGroup| & Holonomy group \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\chapter{Version History}
+\label{ch:version-history}
+
+\section{Version 6.0--6.1}
+Initial formalization and canonical stabilization.
+
+\section{Version 7.0}
+RPM Monad, Fractals, Type System, Quantum foundations.
+
+\section{Version 7.1}
+Domain theory, Natural transformations, Extended semantics.
+
+\section{Version 7.2}
+Transfinite fractals (preliminary), Algorithm W, Compiler architecture, Spectral theory, Topos foundations.
+
+\section{Version 7.3}
+Four-track expansion: Full Transfinite Fractals, Extended Compiler/VM, Complete Quantum Noetics, Meta-Topos.
+
+\section{Version 7.4}
+Four-domain expansion: Extended Transfinite Fractals (large ordinals), Domain-Theoretic Semantics (Scott domains), Higher Categories ($(\infty,1)$-topoi), Differential Noetic Geometry (manifolds and connections).
+
+\backmatter
+
+\chapter*{Acknowledgments}
+\addcontentsline{toc}{chapter}{Acknowledgments}
+
+The TKS Formalization Project thanks all contributors to the mathematical, computational, quantum, categorical, and geometric development of this system.
+
+\end{document}

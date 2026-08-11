@@ -1,0 +1,179 @@
+{
+  "schema_version": "cas_harness_joined_canary_planning_source_ledger.v1",
+  "created_at": "2026-07-23T00:18:22.0538305Z",
+  "package_status": "PLANNING_PACKAGE_CREATED / IMPLEMENTATION_SEQUENCED_AFTER_ATTEMPT_4 / NO_JOINED_RUNNER / NO_JOINED_PROTOCOL / NO_JOINED_MODEL_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "joined_protocol_id": "CJT_JSPACE_OHM_JOINED_CANARY_V0",
+  "joined_protocol_exists": false,
+  "joined_runner_exists": false,
+  "joined_model_execution_exists": false,
+  "corrected_attempt4": {
+    "repository": "C:/Users/wakil/CAS-Harness-Run",
+    "worktree": "C:/tmp/cas-jlcv1-bytecode-guard-20260722",
+    "commit": "be97bc7f76d1e9f5e501702660678d4af3081f5e",
+    "tree": "4eb382528e8a4cee81a1c043f65bf0dcfa369ccf",
+    "status": "PRE_ANCHOR_FROZEN / WAITING_FOR_EXPLICIT_EXTERNAL_DISCLOSURE_APPROVAL / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+    "must_not_be_modified_for_joined_work": true
+  },
+  "historical_behavioral_branch": {
+    "ref": "origin/codex/cas-harness-public-beta-candidate",
+    "commit": "f8a72008c01f5133224dbea4be02bb1acff614f7",
+    "tree": "cb025a29dfd290ca129f6bdd44f4cf35ddacfbc5",
+    "merge_base_with_corrected_attempt4": "61c8bad739da4e11daddf855c0b2e570ea3373d2",
+    "corrected_only_commit_count": 112,
+    "historical_branch_only_commit_count": 68,
+    "whole_branch_merge_allowed": false,
+    "required_integration": "SEPARATE_WORKTREE_FILE_BY_FILE_RECONCILIATION_WITH_NEGATIVE_EVIDENCE_PRESERVED"
+  },
+  "cjt_statistical_source": {
+    "commit": "50cd375fdc179e6a60fbed785e5b726d1fd34c23",
+    "is_ancestor_of_corrected_attempt4": true,
+    "corrected_attempt4_commits_ahead": 7,
+    "model_execution": "NONE_SYNTHETIC_ONLY",
+    "claim_status": "NOT_LICENSED"
+  },
+  "corrected_attempt4_commits_after_cjt_statistical_source": [
+    {
+      "commit": "259fc4fa93c8486431da586a84d9a0c5a2526d78",
+      "tree": "c1e04dd6d7a9f677fe53bc3fec98c9b14ff4a38b",
+      "subject": "Add sealed Jacobian lens V1 live canary"
+    },
+    {
+      "commit": "a63b6db2517a643abadea28022c25d380cf1be74",
+      "tree": "b0a6f7e7bfeeb8e279f09652fba021d6c20fcf47",
+      "subject": "Harden live CUDA guard and evidence finalization"
+    },
+    {
+      "commit": "b44f6b91d4948edb314705963b41b7106f0827cc",
+      "tree": "9bb94cc326c23f3579d8365ed4c403111675b456",
+      "subject": "Handle RunPod sysfs network control entry"
+    },
+    {
+      "commit": "df540d3f3fbcd9bf6eb8fffa73fb1af8a994343d",
+      "tree": "15f9e8379f6e7f83ba3474dd41a153bd1b5b064c",
+      "subject": "Deduplicate resolved OS release evidence"
+    },
+    {
+      "commit": "44d9c6932d7dbe544ba2e5bff5543b0d62c2e451",
+      "tree": "798ae05ecb773f5a1561f933ce046a1367026afb",
+      "subject": "Harden Windows OpenSSL canary verification"
+    },
+    {
+      "commit": "a8969eb71c6d3e5c43d7ee2b7c7d4aa90dd70fc0",
+      "tree": "cce2d477bb0f423ee6a2669ee680eaac7b999322",
+      "subject": "Stabilize canary manifest bytes across platforms"
+    },
+    {
+      "commit": "be97bc7f76d1e9f5e501702660678d4af3081f5e",
+      "tree": "4eb382528e8a4cee81a1c043f65bf0dcfa369ccf",
+      "subject": "Harden Jacobian canary bytecode isolation"
+    }
+  ],
+  "controlling_document_hashes": [
+    {
+      "role": "CJT_BIAS_RPM_OHM_EXPERIMENT_CONTRACT",
+      "sha256": "c39eb46bcc5aa3d482c9a53ec82fbf4362058f56817b0c3e644d3fd9636ba4fe"
+    },
+    {
+      "role": "CJT_EXTERNAL_DRIVE_ONTOLOGY",
+      "sha256": "0a2962d9acc824bf8959b5f35830875e1728eb2ea33f7ed8ccba039d5594deb7"
+    },
+    {
+      "role": "JSPACE_CORRESPONDENCE_V0_DRAFT",
+      "sha256": "31dcfda7f85abc02f9692b95c82d0e6c9f89ca2c44ab063acf83a7ac3ce5215d"
+    },
+    {
+      "role": "CJT_BIAS_RPM_OHM_STATISTICAL_V1",
+      "sha256": "2452a8cb52038f2f6f93fc2217537ba1432622c9eda70e99c5039ad2825f14e7"
+    },
+    {
+      "role": "ATTEMPT_04_CORRECTED_STATUS",
+      "sha256": "4ed1a6d3405e6b3eb8c82cb50ee9269da79ee9a8db3dd46f5f99fad037d6c62b"
+    }
+  ],
+  "semantic_source_binding": {
+    "original_tks_d3": {
+      "role": "PRIMARY",
+      "raw_source_sha256": "d3dac0ef5c94ccd768da0f18987846d8d0c0fa0b366e13dccc49c82252d2fc12"
+    },
+    "a124": {
+      "role": "DEPLOYED_REWRITE_COMPARATOR",
+      "raw_source_sha256": "a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0"
+    },
+    "cas_compact": {
+      "role": "COMPACT_GENERATED_COMPARATOR",
+      "generator_sha256": "07dd7ac7ec5335beb332efeb3071e4058257040a9651c30bd3a392467c10b384"
+    }
+  },
+  "historical_commits_requiring_review_and_preservation": [
+    {
+      "commit": "8a89786a93761a6203308c9199a59a7542842db2",
+      "subject": "Build Lane A/B W0 pre-speech + causal apparatus (comply/refuse target, NOT LICENSED)",
+      "disposition": "REVIEW_APPARATUS_AND_TESTS"
+    },
+    {
+      "commit": "262ebcdc103394fee4d4ef5afde422af06e85079",
+      "subject": "Run Lane A on real comply/refuse W0 data — FAILS (W0 ~ chance, ties text)",
+      "disposition": "PRESERVE_NEGATIVE_EVIDENCE"
+    },
+    {
+      "commit": "25336f2c2b46c8b59a0fca6f06bb84ea0e190918",
+      "subject": "Withdraw scoped hidden prompt-injection W0 license (char-level control)",
+      "disposition": "PRESERVE_WITHDRAWN_LICENSE"
+    },
+    {
+      "commit": "da77d7cb099c244dafb64d40d26515f176c9f8cb",
+      "subject": "Close the W0-capture readiness blind spot (char-level leakage gate)",
+      "disposition": "REVIEW_CONTROL_APPARATUS"
+    },
+    {
+      "commit": "5903e38fa7223c8b31f3076e2717e58b2c29f48b",
+      "subject": "Record evidence: a surface-clean injection bank is not constructible here",
+      "disposition": "PRESERVE_NEGATIVE_EVIDENCE"
+    },
+    {
+      "commit": "7a1b7f407fa2755814bff5ab5357556638808760",
+      "subject": "Wire shadow pre-speech W0 screen into the live worker (shadow-only, NOT LICENSED)",
+      "disposition": "REVIEW_SHADOW_INTEGRATION"
+    },
+    {
+      "commit": "42c833a854677b726872894421700ae5e2b84153",
+      "subject": "Add PCBA bias vibration diagnostic lane",
+      "disposition": "REVIEW_APPARATUS"
+    },
+    {
+      "commit": "b69037cb021bd61fe45f5d0ac916616958a4c5a5",
+      "subject": "Record PCBA bias vibration W0 failure gate",
+      "disposition": "PRESERVE_NEGATIVE_EVIDENCE"
+    },
+    {
+      "commit": "74f5614123d11e8f6d4e75db0f3338ca0a9e959d",
+      "subject": "Add PCBA counterbalanced W0 pass evidence",
+      "disposition": "PRESERVE_SCOPED_POSITIVE_EVIDENCE_WITH_CEILING"
+    },
+    {
+      "commit": "ce0fd9440e1b15d6aced7896f2fef8d03dac7f35",
+      "subject": "Add PCBA causal intervention screen",
+      "disposition": "REVIEW_APPARATUS_AND_CONTROLS"
+    },
+    {
+      "commit": "ffd9d9eed6008c0de9d640ad61cced004a6a4d8b",
+      "subject": "Test expanded PCBA causal replication",
+      "disposition": "PRESERVE_NONREPLICATING_RESULT_AND_REVIEW_APPARATUS"
+    }
+  ],
+  "known_prompt_injection_boundary": {
+    "historical_hidden_balanced_accuracy_approximate": "0.897",
+    "character_ngram_balanced_accuracy_approximate_range": "0.925-0.931",
+    "conclusion": "INTERNAL_PROMPT_INJECTION_DETECTION_REMAINS_OPEN_NOT_LICENSED",
+    "prohibited_reinterpretation": "DO_NOT_RESURRECT_WITHDRAWN_LICENSE_OR_EQUATE_INJECTION_PRESENCE_WITH_ATTACK_SUCCESS"
+  },
+  "required_reconciliation_policy": [
+    "CREATE_SEPARATE_JOINED_RUNNER_WORKTREE_AFTER_ATTEMPT_4_TECHNICAL_PASS",
+    "PORT_FILES_AND_TESTS_INDIVIDUALLY",
+    "PRESERVE_FAIL_OPEN_NOT_LICENSED_AND_WITHDRAWN_RECORDS",
+    "REVIEW_SECURITY_SCHEMA_ADAPTER_AND_EVIDENCE_BOUNDARIES",
+    "DO_NOT_CHERRY_PICK_ONLY_FAVORABLE_COMMITS",
+    "DO_NOT_MODIFY_FROZEN_ATTEMPT_4_ARTIFACTS",
+    "DO_NOT_TREAT_SYNTHETIC_OR_HISTORICAL_RESULTS_AS_JOINED_MODEL_EVIDENCE"
+  ]
+}

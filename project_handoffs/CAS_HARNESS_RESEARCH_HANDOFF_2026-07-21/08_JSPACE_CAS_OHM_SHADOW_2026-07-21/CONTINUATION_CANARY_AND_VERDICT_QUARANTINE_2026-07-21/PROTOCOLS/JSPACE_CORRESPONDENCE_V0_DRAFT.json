@@ -1,0 +1,362 @@
+{
+  "schema_version": "cas_harness_research_plan.v1",
+  "protocol_id": "JSPACE_CORRESPONDENCE_V0_DRAFT",
+  "protocol_version": "0.2.0",
+  "authored_at": "2026-07-21T11:06:22.8767760-07:00",
+  "canonicalization": {
+    "algorithm": "RFC8785_JSON_CANONICALIZATION_SCHEME_RESTRICTED_ASCII_IJSON",
+    "canonical_hash_algorithm": "SHA-256",
+    "raw_file_hash_algorithm": "SHA-256",
+    "canonical_and_raw_sidecars_are_distinct": true,
+    "duplicate_object_keys_forbidden": true,
+    "protocol_hash_is_external": false,
+    "numeric_contract": "Integers are JSON numbers. Non-integer thresholds and doses are strings."
+  },
+  "status_contract": {
+    "document_status": "DRAFT_RETROSPECTIVE_PLAN",
+    "execution_mode": "SHADOW",
+    "verdict_influence": "NONE",
+    "claim_status": "NOT_LICENSED",
+    "claim_eligible": false,
+    "maximum_positive_status": "EXPLORATORY_EXACT_MODEL_SIGNAL",
+    "license_candidate_status_available": false,
+    "license_candidate_unlock": "A later separately hashed prospective protocol over a genuinely untouched independently authored and independently labelled neutral holdout.",
+    "forbidden_automatic_claims": [
+      "semantic probe validation",
+      "product verdict",
+      "Evidence Packet proof chip",
+      "cross-architecture universality",
+      "prompt-injection detection",
+      "output control",
+      "300B execution",
+      "physical electrical law"
+    ]
+  },
+  "known_data_access": {
+    "stage7_test_status": "ALREADY_ACCESSED_AND_SCORED_2026-07-21",
+    "stage7_test_vectors_persisted": true,
+    "stage7_test_labels_and_prompts_persisted": true,
+    "consequence": "No analysis of Stage-7 test can be called prospective or untouched. It is retrospective only.",
+    "template_overlap_status": "LEAKAGE_RISK_OPEN",
+    "representative_review_observation": "A reviewed validation/test pair had SequenceMatcher similarity 0.876 and token Jaccard 0.826 and differed mainly by a domain phrase.",
+    "recovered_activation_artifact": {
+      "artifact_id": "tks_definition_anchor_raw_diagnostic_vectors.npz",
+      "content_sha256": "454a4f017d56ed393e50d7e88d29486b3379e96ae930a1123698c6275298ead6",
+      "receipt_content_sha256": "0f1c18ffc42acb28ea9626529f759faeb36782557a2e2bfaf0894b4ec6a0f886",
+      "evaluation_rows": 3080,
+      "paired_groups": 1540,
+      "definition_arms": 3,
+      "definition_labels": 28,
+      "capture_layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "hidden_width": 768,
+      "stored_dtype": "float16",
+      "gradient_graph_retained": false,
+      "use_boundary": "Retrospective direction construction and diagnostics only. Detached vectors are not Jacobian evidence."
+    }
+  },
+  "subject": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "architecture_family": "gpt_neox",
+    "hidden_width": 768,
+    "layer_count": 12,
+    "required_technical_dependency": "JACOBIAN_LENS_CANARY_V0 must produce TECHNICAL_CANARY_PASS before any live-gradient J-Space analysis."
+  },
+  "semantic_source_binding": {
+    "definition_arm_manifest": {
+      "path": "docs/reference/tks_definition_anchor_diagnostic_arms_20260721.json",
+      "sha256": "5ef95e61b8df526fec1d66d59635f8b2a6d0f298537019463cd4babefa9b0d5b"
+    },
+    "original_TKS_D3": {
+      "role": "PRIMARY",
+      "raw_source_sha256": "d3dac0ef5c94ccd768da0f18987846d8d0c0fa0b366e13dccc49c82252d2fc12"
+    },
+    "A124": {
+      "role": "DEPLOYED_REWRITE_COMPARATOR",
+      "raw_source_sha256": "a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0"
+    },
+    "CAS_COMPACT": {
+      "role": "COMPACT_GENERATED_COMPARATOR",
+      "generator_path": "live-trace-worker/scripts/build_foundation28_scenarios.py",
+      "generator_sha256": "07dd7ac7ec5335beb332efeb3071e4058257040a9651c30bd3a392467c10b384"
+    },
+    "changed_definition_partition_sha256": "7fd33cf0c3684f33b83b6b2f4fb0e12c38ae3719ed2c8a2fdd5b47c2ba0b465d",
+    "changed_definition_count": 8,
+    "unchanged_definition_count": 20,
+    "direction_prototype_freeze_rule": "Before any new live-gradient or future-holdout access, emit all 84 exact definition texts, exact token IDs, source-text SHA-256 values, per-layer prototype hashes, and signed normalized direction hashes into a committed manifest."
+  },
+  "retrospective_scenario_binding": {
+    "stage7_rolebound": {
+      "path": "live-trace-worker/scenarios/stage7_foundation_rolebound_pilot_20260526.json",
+      "schema_version": "cas_harness_stage7_foundation_rolebound_scenario_library.v1",
+      "raw_sha256": "c2fa18078feaad6f4970f31a380b67557f3684bb871f96695dbf00c750516d75",
+      "total_rows": 4368,
+      "validation_split_literal": "val",
+      "validation_rows": 672,
+      "validation_groups": 336,
+      "test_split_literal": "test",
+      "test_rows": 2352,
+      "test_groups": 1176,
+      "group_field": "metadata.counterfactual_pair_id",
+      "group_size": 2,
+      "validation_test_group_overlap": 0,
+      "prompt_hash_field": "metadata.prompt_sha256",
+      "label_field": "metadata.foundation_label",
+      "independence_boundary": "Generated from original TKS/D3 gloss vocabulary and shared paraphrase/scenario-generator families. It is not an independently authored neutral semantic holdout."
+    },
+    "source_derived_sensitivity": {
+      "path": "live-trace-worker/scenarios/foundation28_balanced_v0_20260526.json",
+      "raw_sha256": "0868b37a718798cb30a7db8b8a23f5326d4e1ae2b6464842d16218e97ec1751a",
+      "rows": 56,
+      "groups": 28,
+      "interpretation": "Lexical and source-alignment sensitivity only. Never an independent holdout."
+    }
+  },
+  "correspondence_geometry": {
+    "jacobian_definition": "Use the exact estimator and tensor orientation from JACOBIAN_LENS_CANARY_V0.",
+    "direction_primary_arm": "original_TKS_D3",
+    "direction_comparator_arms": [
+      "A124",
+      "CAS_COMPACT"
+    ],
+    "primary_layer": 6,
+    "primary_pooling": "last_nonpadding_token",
+    "direction_formula": "u_class = normalize(z_class - mean(z_other_27_classes))",
+    "positive_sign": "toward_registered_class",
+    "j_frame": {
+      "formula": "V_l = W_U * J_l",
+      "status": "DELIBERATE_PRE_FINAL_NORM_LINEAR_FRAME",
+      "nonclaim": "This frame omits Pythia final LayerNorm and is not the official Jacobian-lens logits. Any official lens score must use the pinned model unembed path."
+    },
+    "sparse_cone_method": {
+      "method": "deterministic_nonnegative_orthogonal_matching_pursuit",
+      "sparsity_k": 25,
+      "row_filter": "finite nonzero vocabulary rows",
+      "row_normalization": "L2",
+      "special_tokens_excluded": true,
+      "selection_rule": "Unused frame row with the largest positive residual dot product.",
+      "selection_tie_break": "lowest token_id",
+      "coefficient_refit": "nonnegative least squares",
+      "stop_rule": "25 rows or no positive residual improvement",
+      "implementation_hash_required_before_execution": true
+    },
+    "primary_geometric_metric": "R2_J = 1 - squared_norm(u-u_J)/squared_norm(u)",
+    "nonclaim": "J-Space is treated as a sparse union of nonnegative cones, not an ordinary linear subspace."
+  },
+  "deterministic_control_contract": {
+    "rng_family": "numpy.random.Generator(PCG64DXSM)",
+    "rng_dependency_version_must_be_hash_locked": true,
+    "domain_seed_rule": "seed = big-endian integer represented by the first 16 bytes of SHA-256(ASCII('JSPACE_CORRESPONDENCE_V0/' || domain_name))",
+    "domains": [
+      "HAAR_ROTATION",
+      "CLUSTER_BOOTSTRAP",
+      "GROUP_LABEL_PERMUTATION",
+      "PSEUDO_DEFINITION",
+      "MATCHED_RANDOM_DIRECTION"
+    ],
+    "haar_rotated_j_frame": {
+      "draw_count": 999,
+      "matrix_draw": "Draw a 768x768 float64 standard-normal matrix with the domain RNG.",
+      "orthogonalization": "Reduced QR; multiply each Q column by sign(diag(R)); treat zero diagonal sign as +1.",
+      "shared_rotation_per_draw": true,
+      "preserve_norms_and_frame_geometry": true
+    },
+    "activation_pca": {
+      "fit_data": "WikiText calibration activations only",
+      "centering": "subtract float64 feature mean",
+      "solver": "deterministic full symmetric eigendecomposition of the float64 covariance matrix",
+      "rank": "number of J singular values >= 1e-6 times the largest J singular value",
+      "ordering": "eigenvalue descending; tied components resolve by lowest index of largest absolute loading",
+      "sign_rule": "largest absolute loading is positive; ties resolve to the lowest coordinate",
+      "randomized_solver": false
+    },
+    "pseudo_definitions": {
+      "name": "TOKEN_LENGTH_MATCHED_UNLABELLED_WIKITEXT_NULL",
+      "class_order": "legacy Foundation code ascending",
+      "target_length": "exact token count of that class's D3 definition with add_special_tokens=false",
+      "candidate_pool": "WikiText train source rows not contributing any registered fit block",
+      "candidate_windows": "every contiguous exact-target-length window in source row order",
+      "selection_preimage": "ASCII('JSPACE_PSEUDO_DEFINITION_V0') || UTF8(legacy_code) || UINT64_LE(row_index) || UINT64_LE(window_start) || repeated UINT32_LE(token_id)",
+      "selection": "Choose lowest SHA-256 rank not already selected and not an exact normalized duplicate of any real definition or Stage-7 prompt.",
+      "semantic_label_access": false,
+      "interpretation": "Length-matched unlabelled surface null, not guaranteed semantically unrelated.",
+      "selection_manifest_hash_required": true
+    },
+    "matched_random_directions": {
+      "draw": "768 float64 standard-normal values from the domain RNG",
+      "normalization": "L2 normalize, then multiply by the matched registered direction norm",
+      "count": "one per class, layer, control draw, and analysis seed"
+    },
+    "cluster_bootstrap": {
+      "replicates": 10000,
+      "unit": "counterfactual_pair_id",
+      "stratification": "Foundation label",
+      "sampling": "Within each Foundation label, sample the original count of group IDs with replacement and retain both rows of every sampled group.",
+      "interval": "percentile 2.5 and 97.5 using NumPy linear quantiles"
+    },
+    "group_label_permutation": {
+      "replicates": 10000,
+      "unit": "counterfactual_pair_id",
+      "sampling": "Fisher-Yates permutation of group labels while preserving both rows and the global label multiset.",
+      "ordinary_permutation_not_derangement": true
+    }
+  },
+  "duplicate_screen_contract": {
+    "normalization": "Unicode NFKC, Unicode casefold, replace each maximal Unicode whitespace run with one ASCII space, trim.",
+    "exact_duplicate": "Normalized strings are byte-identical UTF-8.",
+    "near_duplicate_features": "Set of all overlapping character 5-grams of the normalized string, including internal ASCII spaces. For normalized strings shorter than 5 characters, use the whole string as one feature.",
+    "similarity": "Jaccard intersection size divided by union size.",
+    "cross_split_threshold": "0.80",
+    "pairs_checked": "Every validation prompt against every test prompt.",
+    "failure_rule": "Any exact duplicate or Jaccard >= 0.80 marks the Stage-7 concentration analysis LEAKAGE_SCREEN_FAIL; do not remove rows after observing outcomes.",
+    "required_receipt": [
+      "normalization_version",
+      "validation_and_test_prompt_hash_manifests",
+      "pair_count",
+      "exact_duplicate_count",
+      "near_duplicate_count",
+      "maximum_similarity",
+      "all_threshold-crossing prompt IDs and similarities",
+      "implementation_sha256"
+    ]
+  },
+  "surface_baseline_contract": {
+    "text_normalization": "Use duplicate-screen normalization.",
+    "vectorizer": {
+      "implementation": "sklearn.feature_extraction.text.TfidfVectorizer",
+      "analyzer": "char",
+      "ngram_range": [
+        3,
+        5
+      ],
+      "lowercase": false,
+      "strip_accents": null,
+      "norm": "l2",
+      "use_idf": true,
+      "smooth_idf": true,
+      "sublinear_tf": false,
+      "binary": false,
+      "min_df": 1,
+      "max_df": "1.0",
+      "max_features": null,
+      "dtype": "float64"
+    },
+    "fit_corpus": "Stage-7 validation prompts plus exact D3 definition texts only.",
+    "classifier": "Cosine nearest D3 definition vector; ties resolve by legacy Foundation code.",
+    "test": "Apply the frozen vocabulary, IDF, and definition vectors to Stage-7 test without refit.",
+    "interpretation": "Surface/source alignment baseline, not an independently trained semantic authority."
+  },
+  "retrospective_hypotheses": {
+    "H1_geometric_correspondence": {
+      "status": "PROSPECTIVE_ONLY_AFTER_TECHNICAL_CANARY_AND_CODE_HASH_FREEZE",
+      "primary_statistic": "median R2_J across 28 original TKS/D3 directions at layer 6",
+      "all_required_gates": [
+        "Haar rotation Monte Carlo p <= 0.01",
+        "T_CAS - median(T_rotated) >= 0.02",
+        "paired class-bootstrap lower 95% bound of R2_J - R2_logit_lens > 0",
+        "D3 minus token-length-matched pseudo-definition lower 95% bound > 0",
+        "independent 500-block fit halves have the same effect sign"
+      ],
+      "maximum_interpretation": "Exploratory geometric signal on this exact model."
+    },
+    "H2_stage7_source_alignment_concentration": {
+      "status": "RETROSPECTIVE_ALREADY_ACCESSED",
+      "test_split": "stage7 literal test",
+      "test_group_count": 1176,
+      "scoring": "cosine nearest registered class without test-trained classifier",
+      "representations": [
+        "full_D3_direction",
+        "unit_J_component",
+        "unit_nonJ_residual"
+      ],
+      "reported_metrics": [
+        "balanced_accuracy",
+        "macro_F1"
+      ],
+      "diagnostic_gates": [
+        "full-direction balanced accuracy exceeds 99th percentile of group-label permutations",
+        "BA_J - BA_nonJ >= 0.02",
+        "cluster-bootstrap lower 95% bound of BA_J - BA_nonJ > 0",
+        "J-component lift over chance retains at least 80% of full-direction lift",
+        "BA_J - BA_character_3_5gram >= 0.02 with lower 95% bound > 0",
+        "every scenario Foundation maps to exactly one frozen definition label",
+        "duplicate screen passes"
+      ],
+      "failure_interpretation": "A failed duplicate screen or control remains a failed retrospective diagnostic and is never repaired by deleting rows.",
+      "maximum_interpretation": "Retrospective source-alignment diagnostic on this exact model; never a prospective semantic-validation result."
+    }
+  },
+  "prospective_holdout_unlock_contract": {
+    "current_status": "OPEN_NOT_BUILT",
+    "required_independence": [
+      "Prompts are authored without access to D3, A124, CAS_COMPACT, Stage-7 templates, or recovered hidden-state outcomes.",
+      "Labels are assigned by independent qualified reviewers using a separately frozen label manual.",
+      "Prompt authors and labelers are blinded to model outputs, hidden states, J-Space scores, and comparison-arm predictions.",
+      "The bank includes matched counterfactual pairs and surface-balanced controls.",
+      "Prompt text, labels, groups, splits, source records, author/labeler independence attestations, and hashes are frozen before model access.",
+      "A near-duplicate screen is run against every prior calibration and evaluation bank before model access.",
+      "The prospective protocol, code, thresholds, seeds, and data manifest receive an external timestamp or anchor before model access."
+    ],
+    "minimum_replication": "After exact-model closure, run the unchanged gate on at least one non-GPT-NeoX open-weight architecture before a cross-architecture claim.",
+    "license_candidate_ceiling": "LICENSE_CANDIDATE_EXACT_MODEL only under the future separate protocol; never from this draft or Stage-7."
+  },
+  "cas_ohm_cjt_bridge": {
+    "status": "DRAFT_MEASUREMENT_LANGUAGE_ONLY",
+    "controlling_decision": "docs/working/CAS_HARNESS_CJT_EXTERNAL_DRIVE_ONTOLOGY_20260721.md",
+    "external_drive_boundary": "Voltage/desire/stimulus/trigger/^8 Above-Cause sits outside the CJT and is applied to its cause/input boundary.",
+    "variables": {
+      "V_ext": "registered external desire, stimulus, trigger, or Above-Cause drive",
+      "C": "cause-terminal state or activation",
+      "B": "separately registered CJT bias",
+      "I_internal": "measured internal activation/flow surrogate",
+      "E": "downstream effect or output functional",
+      "alpha": "internal experimental clamp or injection dose"
+    },
+    "non_equivalence": "alpha is not V_ext. Calling an internal intervention voltage requires a separate prospective calibration from external drive to internal dose.",
+    "candidate_measurements": [
+      "beta = dE/dC at fixed B",
+      "g_m = dE/dB at fixed C",
+      "dI_internal/dV_ext",
+      "dE/dalpha",
+      "Delta V_ext / Delta I_internal only after operational calibration"
+    ],
+    "required_future_controls": [
+      "zero dose",
+      "positive and negative external-drive doses",
+      "positive and negative internal-intervention doses",
+      "sham",
+      "matched-norm random",
+      "orthogonal",
+      "wrong-direction",
+      "off-target mediator and output measurements",
+      "held-out curve-family comparison"
+    ],
+    "nonclaim": "These are model calibration quantities, not physical volts, amps, resistance, or proof of an Ohm law."
+  },
+  "resource_and_scale_boundary": {
+    "initial_model": "EleutherAI/pythia-160m exact registered revision",
+    "production_worker_must_not_be_disturbed": true,
+    "300B_status": "OPEN_NOT_EXECUTED",
+    "300B_required_method": "Projected JVP/VJP or randomized low-rank sketches with tensor/expert sharding, checkpointing, resume, reconstruction-error gates, authenticated workers, durable receipts, and measured provider cost.",
+    "planning_nonclaim": "A parameter-count or memory estimate is not execution evidence."
+  },
+  "retention_contract": {
+    "retain_negative_and_failed_receipts": true,
+    "normal_evidence_packet_ingress": false,
+    "proof_chip_influence": false,
+    "customer_UI_influence": false
+  }
+}

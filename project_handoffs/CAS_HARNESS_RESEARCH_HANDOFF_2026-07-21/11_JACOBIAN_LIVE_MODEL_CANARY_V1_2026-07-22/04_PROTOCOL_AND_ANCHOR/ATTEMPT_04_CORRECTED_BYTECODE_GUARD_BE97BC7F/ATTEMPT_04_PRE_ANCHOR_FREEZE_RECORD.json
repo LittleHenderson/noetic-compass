@@ -1,0 +1,106 @@
+{
+  "schema_version": "cas_harness_research_shadow.attempt_pre_anchor_freeze.v1",
+  "protocol_id": "JACOBIAN_LENS_CANARY_V1",
+  "attempt": 4,
+  "recorded_at_utc": "2026-07-22T23:54:33Z",
+  "controlling_status": "PRE_ANCHOR_FROZEN / WAITING_FOR_EXPLICIT_EXTERNAL_DISCLOSURE_APPROVAL / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "run_identity": {
+    "run_id": "jlcv1-rfc3161-4108653e11369d812517e7f5d3ab44c10aa860df3131ac2f8636a14db654c0fc",
+    "research_pod_instance_id": "zp2s9pscgncn0b",
+    "production_pod_instance_id": "hilj2rzs54gi06",
+    "remote_root": "/workspace/cas-jlcv1-official-be97bc7f-4108653e",
+    "corrected_commit": "be97bc7f76d1e9f5e501702660678d4af3081f5e",
+    "corrected_tree": "4eb382528e8a4cee81a1c043f65bf0dcfa369ccf"
+  },
+  "frozen_artifacts": {
+    "implementation_bundle": {
+      "byte_count": 36536084,
+      "sha256": "3ddf60a6f24c204489a70c62465efed3ccd421baa7739bffa923d26821512b67"
+    },
+    "implementation_manifest": {
+      "byte_count": 5689,
+      "sha256": "bbaaa973372cd95c3c99472a31664ab2add699cf1d844a5b2ab28a763dd04ffb"
+    },
+    "pre_environment": {
+      "byte_count": 3683,
+      "sha256": "176d7c0f25a101f939e7835704c79d310258bf1aad62014b8f96eff7a2fea48e"
+    },
+    "protocol": {
+      "byte_count": 8141,
+      "sha256": "823577ef0b10ae73076259de80ecf97e66bd29f5fde7682dd72752ede60ab780"
+    },
+    "launch_target_paths": {
+      "byte_count": 2606,
+      "sha256": "fd84da82c4962a36ad1a7cb20860f3e85d953d93f0d6fc5dcb8ddb42bd1a7a6a"
+    },
+    "anchor_payload": {
+      "byte_count": 3858,
+      "sha256": "49235313dad9541ec029d78b8a6ab9d1de90f5117cde9fb64ad6e2ec778a139b"
+    },
+    "rfc3161_query": {
+      "byte_count": 104,
+      "sha256": "fa887272d01f436d37569f6d13b719f5392539dda897da870606c8845be11829",
+      "message_imprint_algorithm": "SHA-256",
+      "message_imprint": "49235313dad9541ec029d78b8a6ab9d1de90f5117cde9fb64ad6e2ec778a139b",
+      "policy_oid": "2.16.840.1.114412.7.1",
+      "nonce_hex": "29044C20E70A805D3112D6C6BC1F789DDA29EE27BCFB1CF248032271EF6D092E",
+      "certificate_requested": true,
+      "transmission_status": "UNSENT"
+    },
+    "remote_pre_capture_script": {
+      "byte_count": 7575,
+      "sha256": "dde1b32af1f81cb7add79309ec5e8d740760f4db816b94b3be23b497e240a9ed"
+    },
+    "live_continuity_check_script": {
+      "byte_count": 5423,
+      "sha256": "88421f1283636eec258557408c1eef727dee5378af8bb658f7949f46a874d575"
+    }
+  },
+  "live_continuity_check": {
+    "checked_at_utc": "2026-07-22T23:54:33Z",
+    "result": "PASS",
+    "host_identity_sha256": "d88f4a806ead491d5c140d54615b6595c926b8e67c476a60a95d566ee732e03c",
+    "boot_id_sha256": "8d6f65214f4ce130d8d342532a65ee41b4a8555fcd102502f6acb3840bbce7aa",
+    "machine_id_sha256": "aed9946c7ac389c687b73bd918790d99da1303140bc502277f8d7c016975a486",
+    "gpu_uuid": "GPU-5a2301c0-941c-a946-0ea2-f90016d4750f",
+    "gpu_total_memory_bytes": 48305799168,
+    "driver_version": "580.126.09",
+    "gpu_utilization_percent": 0,
+    "gpu_memory_utilization_percent": 0,
+    "gpu_memory_used_mib": 0,
+    "repository_clean": true,
+    "dependency_file_count": 15,
+    "dependency_pyc_file_count": 0,
+    "dependency_manifest_sha256": "10c9cfab8284582c2a46484dd74bb5435ba9d2dd4c6d946f7dac4d97aae20a00",
+    "dependency_lock_sha256": "deb9d1f618aac3df95e5b93e226153e196d6aecbb8f619ca7e1e6cb34d839d7b",
+    "output_entry_count": 0,
+    "runlog_entry_count": 0,
+    "environment_post_entry_count": 0,
+    "matching_execution_process_count": 0,
+    "production_pod_used_or_changed": false
+  },
+  "negative_artifact_inventory": {
+    "rfc3161_response_present": false,
+    "anchor_receipt_present": false,
+    "launch_configuration_present": false,
+    "producer_receipt_present": false,
+    "receiver_receipt_present": false,
+    "execution_receipt_present": false,
+    "post_environment_present": false,
+    "model_or_cuda_execution_evidence_present": false
+  },
+  "approval_boundary": {
+    "approval_required": true,
+    "approval_is_query_byte_specific": true,
+    "approval_is_single_use": true,
+    "attempt_3_approval_reusable": false,
+    "required_exact_text": "I approve sending the exact 104-byte RFC3161 query with SHA-256 fa887272d01f436d37569f6d13b719f5392539dda897da870606c8845be11829 to DigiCert."
+  },
+  "claim_boundary": {
+    "mode": "SHADOW",
+    "verdict_influence": "NONE",
+    "claim_status": "NOT_LICENSED",
+    "scientific_model_result": false,
+    "product_readiness_inference": false
+  }
+}

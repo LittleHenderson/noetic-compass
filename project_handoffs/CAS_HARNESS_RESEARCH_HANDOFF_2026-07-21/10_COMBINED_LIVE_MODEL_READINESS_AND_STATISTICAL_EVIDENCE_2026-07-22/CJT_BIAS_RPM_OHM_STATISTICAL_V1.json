@@ -1,0 +1,529 @@
+{
+  "protocol_id": "CJT_BIAS_RPM_OHM_STATISTICAL_V1",
+  "schema_version": "cas_harness_research_protocol.cjt_bias_rpm_ohm_statistical.v1",
+  "status": "FROZEN_PROSPECTIVE_CANDIDATE_REQUIRES_EXTERNAL_ANCHOR_BEFORE_OFFICIAL_EXECUTION",
+  "execution_authority": {
+    "execution_mode": "SHADOW",
+    "verdict_influence": "NONE",
+    "claim_status": "NOT_LICENSED",
+    "claim_eligible": false,
+    "model_execution": "NONE_SYNTHETIC_ONLY",
+    "maximum_positive_status": "SYNTHETIC_STATISTICAL_OC_PASS",
+    "production_ingress": "FORBIDDEN"
+  },
+  "public_seed_contract": {
+    "mode": "PROTOCOL_PINNED_DRAND_ROUND_V1",
+    "study_id": "CJT_BIAS_RPM_OHM_STATISTICAL_V1_20260721",
+    "development_seed": 20260722,
+    "development_seed_status": "NONOFFICIAL_TEST_ONLY_MUST_NOT_EQUAL_OFFICIAL_ROOT_SEED",
+    "official_seed_derivation": "SHA256_DOMAIN_TLV_V1_FIRST_8_BYTES_BIG_ENDIAN_UINT64",
+    "official_seed_derivation_inputs": [
+      "study_id",
+      "protocol_sha256",
+      "prereg_manifest_sha256",
+      "source_artifact_sha256s_sorted_by_name",
+      "drand_chain_info_canonical_sha256",
+      "drand_chain_hash",
+      "target_round_uint64_be",
+      "drand_signature_offline_bls_reexecuted",
+      "recomputed_sha256_signature_randomness"
+    ],
+    "excluded_from_seed_derivation": [
+      "tsa_nonce",
+      "tsa_serial",
+      "rfc3161_query_sha256",
+      "rfc3161_response_sha256",
+      "commitment_sha256",
+      "rekor_entry_uuid",
+      "rekor_log_index",
+      "timestamps"
+    ],
+    "official_outcomes_require_public_seed": true,
+    "drand_chain_hash": "8990e7a9aaed2ffed73dbd7092123d6f289930540d7651336225dc172e51b2ce",
+    "drand_public_key": "868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31",
+    "drand_scheme": "pedersen-bls-chained",
+    "drand_genesis_time_unix_seconds": 1595431050,
+    "drand_period_seconds": 30,
+    "drand_genesis_seed": "176f93498eac9ca337150b46d21dd58673ea4e3581185f869672e59fa4cb390a",
+    "drand_chain_info_canonical_sha256": "2333e3c200481853db3123c61140de74096279381a61cb2f11c6a0117355654b",
+    "relay_urls": [
+      "https://api.drand.sh",
+      "https://drand.cloudflare.com"
+    ],
+    "drand_client_version": "1.4.2",
+    "drand_client_esm_sha256": "c5f6eff0d5692efd8f2e19953a49713d17554739016f9d0f3235380aab9ea904",
+    "drand_client_package_json_sha256": "71271cae1994991202a8e717923560d62db0c615e19e31e9a60f40b92d8ee9f7",
+    "drand_verifier_script_sha256": "4c895fe77575804cde1afc8341cc54c1f9dac0b6c76dd67e69e691928bd549dc",
+    "drand_offline_verifier_javascript_sha256": "2840ad448b42a251394812dfc97367d83631954ab51b0c1f2b02d76e4207c829",
+    "drand_tooling_package_json_sha256": "07b44d2de2cc806f99978315630d0c0aaa14986f05c3739387373c763dc71cde",
+    "drand_tooling_package_lock_sha256": "bb33c431996a8cd8a00a7d6653bb0d80f2ffc4f0f3b28ba189a1f82703816fa1",
+    "node_version": "v24.11.1",
+    "node_executable_sha256": "f13ac3ca23248dc389507e8fe38c34489ab7edb3e6d6700eb6da6a0b7e128eaf",
+    "target_round": 6312090,
+    "target_round_scheduled_time_unix_seconds": 1784793720,
+    "target_round_origin": "EXACT_PROTOCOL_PIN_BEFORE_SOURCE_COMMIT",
+    "abandoned_prelaunch_candidate": {
+      "round": 6309210,
+      "scheduled_time_unix_seconds": 1784707320,
+      "status": "ABANDONED_UNCOMMITTED_NEVER_UPLOADED_NEVER_EXECUTED",
+      "reason": "PRELAUNCH_TRUST_BOUNDARY_AUDIT_REQUIRED_CORRECTED_TOOLING"
+    },
+    "round_fallback_policy": "ABORT_STUDY_REVISION_NO_FALLBACK_NO_REROLL",
+    "rekor_server_url": "https://rekor.sigstore.dev",
+    "rekor_log_key_id_der_sha256": "c0d23d6ad406973f9559f3ba2d1ca01f84147d8ffc5b8445c224f98b9591801d",
+    "rekor_log_public_key_pem_sha256": "dce5ef715502ec9f3cdfd11f8cc384b31a6141023d3e7595e9908a81cb6241bd",
+    "rekor_log_public_key_asset": "research_trust/rekor-public-key.pem",
+    "sigstore_trusted_root_asset": "research_trust/sigstore-rekor-trusted-root-v1.json",
+    "sigstore_trusted_root_sha256": "5d0839753535948fbfdc58fe7fb6625e685e547e364b2714d45d5f37f20f3b2c",
+    "rekor_cli_version": "v1.5.1",
+    "rekor_cli_executable_sha256": "9f344ba908c640a6e12f2e50d2f39e28795d4d26950ea2cd42e9ff2ae3e7a219",
+    "cosign_version": "v3.0.2",
+    "cosign_executable_sha256": "7a137280d8686665ceb4d8565df2a0ac63f28031e014cdcae5d56891a6c8a400",
+    "rekor_inclusion_lead_seconds": 120,
+    "launch_attestations_required_before_target": true,
+    "post_round_publication_window_seconds": 86400,
+    "launch_commitment_policy": "ONE_SIGNED_ENTRY_OBSERVED_FOR_DETERMINISTIC_COMMITMENT_INDEX_BEST_EFFORT_UNATTESTED",
+    "rekor_retry_policy": "BYTE_IDENTICAL_SAME_UUID_RETRIEVAL_ONLY_DISTINCT_SECOND_ENTRY_INVALIDATES",
+    "launch_evidence_timestamp_policy": "RFC3161_NONCE_BOUND_OPENSSL_QUERYFILE_BEFORE_TARGET_OTS_SUPPLEMENTAL_BINDING_WITHOUT_AUTHENTICATED_SUBMISSION_TIME",
+    "missed_publication_policy": "PUBLISH_FAILED_CLOSED_RECEIPT_NO_OUTCOME_SUPPRESSION",
+    "official_seed_provenance_member": "trust/public_seed_provenance.json"
+  },
+  "prior_evidence_binding": {
+    "generator_source_revision": "25053461c94de23850da7f9c853c420aab1bae62",
+    "generator_source_bundle_sha256": "28cb29b80e27dd1e13e86e9c889b13a6963ce48de40c65703a75bb23e0ccf8bf",
+    "source_receipt_file_sha256": "76e907bd8a51b466a8bfb0ba84ee5d9a2e5dda7c51cc4b171d86c07b3fc9e764",
+    "source_report_content_sha256": "61007b04ae3d7eb96cf4d94e3c3a264794eec55d4cb041b0a5cd3ce93a5f46f6",
+    "source_envelope_content_sha256": "816c7f387a1cf42f971a64a885b537984694057bab4891747df152919ec01ef1",
+    "source_seed": 20260721,
+    "reconstructed_dataset_content_sha256": "f289a12d4e337f6ecd82fc5fd9daacf651681b8e8b6f45f9d4653d186f90f5db",
+    "raw_dataset_status": "DETERMINISTIC_RECONSTRUCTION_FROM_PRIOR_HASH_BOUND_GENERATOR",
+    "raw_dataset_is_contemporaneous_capture": false,
+    "truth_included_in_raw_members": false,
+    "scenario_order": [
+      "IDENTIFIABLE_PIECEWISE",
+      "NEAR_ZERO_BIAS_SENSITIVITY",
+      "NONLINEAR_ACTIVE_RESPONSE",
+      "RPM_CONFOUNDED",
+      "INCOMPLETE_RPM_TRACE"
+    ],
+    "scenario_members": [
+      {
+        "kind": "IDENTIFIABLE_PIECEWISE",
+        "path": "prior/raw/01_IDENTIFIABLE_PIECEWISE.json",
+        "rows": 25770,
+        "bytes": 19487781,
+        "sha256": "92e22672259471578e8bac3468e9bab5aa6a4fab5b6242b524cc39ed284ff03f"
+      },
+      {
+        "kind": "NEAR_ZERO_BIAS_SENSITIVITY",
+        "path": "prior/raw/02_NEAR_ZERO_BIAS_SENSITIVITY.json",
+        "rows": 25650,
+        "bytes": 19492497,
+        "sha256": "d88822a216f64d6b21fcad63552f2ef346d34276d0a5bc03ff1eb52392736fc5"
+      },
+      {
+        "kind": "NONLINEAR_ACTIVE_RESPONSE",
+        "path": "prior/raw/03_NONLINEAR_ACTIVE_RESPONSE.json",
+        "rows": 25770,
+        "bytes": 19576256,
+        "sha256": "6ae6397463f8f48eb22d1ebf75c7229dc46de984954f1c9de4a8e8856114e525"
+      },
+      {
+        "kind": "RPM_CONFOUNDED",
+        "path": "prior/raw/04_RPM_CONFOUNDED.json",
+        "rows": 25770,
+        "bytes": 19327523,
+        "sha256": "1b53329627704ec8bd13f57ae4af6b4f6fd94b41877d65571235a9fc54ac1bcf"
+      },
+      {
+        "kind": "INCOMPLETE_RPM_TRACE",
+        "path": "prior/raw/05_INCOMPLETE_RPM_TRACE.json",
+        "rows": 25770,
+        "bytes": 19350969,
+        "sha256": "b5a695c906ccd9a4a9151e5187cf7b0f16b3e9e82bbfd0169e8bc88be9c41bc4"
+      }
+    ],
+    "total_rows": 128730,
+    "total_canonical_bytes": 97235026,
+    "aggregate_algorithm": "SHA256(CANONICAL_JSON(ORDERED_SCENARIO_CONTENT_SHA256_LIST))"
+  },
+  "curve_fixture_contract": {
+    "curve_competition_source": "CJT_OHM_INDEPENDENT_ESTIMATOR_V0",
+    "calibration_selection_evaluation_preserved": true,
+    "fixture_row_count_each": 4550,
+    "curve_fixture_seed_uint64": 2026072101,
+    "fixtures": [
+      {
+        "fixture_id": "NULL",
+        "allowed_selected_families": [
+          "NULL"
+        ]
+      },
+      {
+        "fixture_id": "AFFINE_EQUIVALENCE_CLASS",
+        "allowed_selected_families": [
+          "AFFINE",
+          "DELTA_LINEAR"
+        ],
+        "exact_label_identifiable": false,
+        "reason": "Both current predictors are two-parameter affine prediction rules and cannot be licensed as separately identifiable families."
+      },
+      {
+        "fixture_id": "RECIPROCAL",
+        "allowed_selected_families": [
+          "RECIPROCAL"
+        ]
+      },
+      {
+        "fixture_id": "SATURATING",
+        "allowed_selected_families": [
+          "SATURATING"
+        ]
+      },
+      {
+        "fixture_id": "HILL",
+        "allowed_selected_families": [
+          "HILL"
+        ]
+      },
+      {
+        "fixture_id": "PIECEWISE",
+        "allowed_selected_families": [
+          "PIECEWISE"
+        ]
+      },
+      {
+        "fixture_id": "MONOTONE_NONPARAMETRIC",
+        "allowed_selected_families": [
+          "MONOTONE_NONPARAMETRIC"
+        ]
+      }
+    ]
+  },
+  "operating_characteristic_design": {
+    "random_generator": "numpy.random.PCG64DXSM",
+    "worlds_per_cell": 5000,
+    "calibration_cluster_count": 70,
+    "selection_cluster_count": 35,
+    "evaluation_cluster_count": 70,
+    "evaluation_degrees_of_freedom": 69,
+    "nested_seed_repetitions_per_cluster": 2,
+    "nested_seed_repetitions_are_independent_clusters": false,
+    "world_arms": [
+      "REFERENCE_EFFECT_COVERAGE",
+      "SYNTHETIC_POWER_DEMONSTRATION_EFFECT",
+      "GLOBAL_ZERO_TYPE_I",
+      "UNSAFE_DENOMINATORS"
+    ],
+    "outcome_world_count": 60000,
+    "truth_visible_to_estimator": false,
+    "prompt_role_balance": "SEVEN_ROLES_BALANCED_10_5_10_ACROSS_CALIBRATION_SELECTION_EVALUATION",
+    "split_generation": "INDEPENDENT_DOMAIN_SEPARATED_CLUSTER_SUFFICIENT_STATISTICS",
+    "regimes": [
+      "GAUSSIAN_RANDOM_INTERCEPT_SLOPE_RESIDUAL",
+      "CORRELATED_HETEROSKEDASTIC_RANDOM_SLOPES",
+      "STANDARDIZED_STUDENT_T5_RANDOM_EFFECTS"
+    ],
+    "cluster_correlation": 0.25,
+    "nested_seed_measurement_averaging": "TWO_REPETITIONS_AVERAGED_WITHIN_CLUSTER_BEFORE_INFERENCE",
+    "heteroscedastic_measurement_scale": {
+      "distribution": "LOGNORMAL_RMS_NORMALIZED_ZERO_MEAN_NOISE_ONLY",
+      "log_sigma": 0.35,
+      "formula": "exp(0.35*Z-0.35^2)",
+      "expected_squared_scale": 1.0,
+      "coefficient_truth_is_never_scaled": true
+    },
+    "student_t_random_effects": {
+      "degrees_of_freedom": 5,
+      "variance_standardization_multiplier": 0.7745966692414834
+    },
+    "direct_equivalence_evaluation": {
+      "paired_cluster_count": 70,
+      "truth_mean": 0.0,
+      "cluster_standard_deviation": 0.01,
+      "critical_value_df69": 2.7726795062270697,
+      "equivalence_margin": 0.02,
+      "pass_rule": "ENTIRE_PAIRED_CLUSTER_MEAN_T_INTERVAL_INSIDE_PLUS_OR_MINUS_MARGIN"
+    },
+    "primitive_parameter_order": [
+      "beta_dir",
+      "beta_FR_directional",
+      "beta_FR_full",
+      "g_B",
+      "G_eff"
+    ],
+    "primitive_parameter_truth": [
+      -1.6,
+      0.9624967532412773,
+      1.080185169311262,
+      0.4,
+      0.8
+    ],
+    "primitive_parameter_cluster_sd": [
+      0.22,
+      0.1,
+      0.12,
+      0.06,
+      0.1
+    ],
+    "primitive_parameter_measurement_sd": [
+      0.08,
+      0.04,
+      0.05,
+      0.025,
+      0.04
+    ],
+    "primitive_parameter_minimum_power_effect": [
+      -0.5,
+      0.33181320046074114,
+      0.39462007044751285,
+      0.2,
+      0.3
+    ],
+    "minimum_power_effect_interpretation": "SYNTHETIC_POWER_DEMONSTRATION_EFFECT_NOT_DOMAIN_MEANINGFUL_MDE",
+    "jacobian_component_order": [
+      "cause_state_0",
+      "cause_state_1",
+      "cause_state_2",
+      "auxiliary_state_0",
+      "auxiliary_state_1",
+      "auxiliary_state_2"
+    ],
+    "jacobian_truth": [
+      -1.6,
+      0.4,
+      0.2,
+      0.3,
+      -0.7,
+      0.5
+    ],
+    "jacobian_component_cluster_sd": [
+      0.22,
+      0.1,
+      0.08,
+      0.1,
+      0.12,
+      0.1
+    ],
+    "jacobian_component_measurement_sd": [
+      0.08,
+      0.04,
+      0.03,
+      0.04,
+      0.05,
+      0.04
+    ],
+    "jacobian_minimum_power_truth": [
+      -0.5,
+      0.2,
+      0.1,
+      0.15,
+      -0.3,
+      0.2
+    ],
+    "fisher_probabilities": [
+      0.5,
+      0.3,
+      0.2
+    ],
+    "fisher_null_method": "UNDERLYING_JACOBIAN_HOTELLING_F_REGION_MAPPED_TO_FISHER_NORM_BOUNDS",
+    "parameter_endpoint_order": [
+      "beta_dir",
+      "beta_FR_directional",
+      "beta_FR_full",
+      "g_B",
+      "r_pi_CAS_derived",
+      "G_eff",
+      "R_eff"
+    ],
+    "rpm_endpoint_order": [
+      "DESIRE_MISSING",
+      "WISDOM_MISSING",
+      "POWER_MISSING",
+      "REORDERED_CONTENT_MATCHED",
+      "IRRELEVANT_RANK_MATCHED",
+      "CORRUPTED_INVOLUTION",
+      "RESTORED_AFTER_FAILURE",
+      "MATCHED_SHAM"
+    ],
+    "rpm_truth": [
+      2.44,
+      1.44,
+      0.64,
+      1.14,
+      2.44,
+      2.88,
+      0.0,
+      0.0
+    ],
+    "rpm_cluster_sd": 0.15,
+    "rpm_measurement_sd": 0.05,
+    "rpm_minimum_power_effect": [
+      0.15,
+      0.15,
+      0.15,
+      0.15,
+      0.15,
+      0.15,
+      0.0,
+      0.0
+    ],
+    "rpm_minimum_power_effect_interpretation": "SYNTHETIC_POWER_DEMONSTRATION_EFFECT_NOT_DOMAIN_MEANINGFUL_MDE",
+    "rpm_power_endpoints": [
+      "DESIRE_MISSING",
+      "WISDOM_MISSING",
+      "POWER_MISSING",
+      "REORDERED_CONTENT_MATCHED",
+      "IRRELEVANT_RANK_MATCHED",
+      "CORRUPTED_INVOLUTION"
+    ],
+    "ratio_practical_zero_band": 0.02
+  },
+  "inference_contract": {
+    "parameter_family_size": 7,
+    "rpm_family_size": 8,
+    "joint_15_endpoint_familywise_control": false,
+    "parameter_endpoint_alpha": 0.007142857142857143,
+    "rpm_endpoint_alpha": 0.00625,
+    "parameter_two_sided_t_critical_df69": 2.7726795062270697,
+    "rpm_two_sided_t_critical_df69": 2.820808605369118,
+    "fisher_directional_dimension": 3,
+    "fisher_directional_f_quantile": 4.374111426025503,
+    "fisher_directional_hotelling_c": 13.514045749063866,
+    "fisher_full_dimension": 6,
+    "fisher_full_f_quantile": 3.2759453827187137,
+    "fisher_full_hotelling_c": 21.19127169446168,
+    "fisher_norm_bound": "HOTELLING_ELLIPSOID_SPECTRAL_RADIUS_MAPPED_BY_MAXIMUM_FISHER_EIGENVALUE",
+    "ratio_method": "FIELLER_FROM_PAIRED_CLUSTER_MEANS",
+    "reciprocal_method": "ORDERED_RECIPROCAL_OF_DENOMINATOR_INTERVAL",
+    "unsafe_ratio_value": null,
+    "unavailable_counts_as_failure_when_availability_expected": true
+  },
+  "monte_carlo_decision_contract": {
+    "primary_gate_count": 30,
+    "simultaneous_bound_family_alpha": 0.05,
+    "one_sided_wilson_z_after_30_gate_bonferroni": 2.935199468866699,
+    "familywise_coverage_lcb_minimum": 0.94,
+    "type_i_familywise_ucb_maximum": 0.06,
+    "joint_family_power_lcb_minimum": 0.8,
+    "safe_ratio_availability_lcb_minimum": 0.9,
+    "unsafe_ratio_unavailability_lcb_minimum": 0.99,
+    "metric_count_per_regime": 10,
+    "regime_count": 3,
+    "minimum_success_counts": {
+      "familywise_coverage": 4750,
+      "joint_family_power": 4084,
+      "safe_derived_availability": 4563,
+      "unsafe_derived_unavailability": 4971
+    },
+    "maximum_failure_counts": {
+      "global_null_false_declaration_worlds": 250
+    }
+  },
+  "evidence_package_contract": {
+    "single_canonical_artifact": true,
+    "archive_format": "DETERMINISTIC_ZIP_STORED",
+    "member_compression": "ZIP_STORED",
+    "fixed_member_timestamp": "1980-01-01T00:00:00",
+    "fixed_creator_system": 3,
+    "fixed_unix_mode": "100600",
+    "member_paths_ascii_relative_only": true,
+    "archive_sha256_is_external_to_archive": true,
+    "atomic_no_overwrite_publication": true,
+    "build_twice_and_require_identical_sha256": true,
+    "strict_reopen_required": true
+  },
+  "external_anchor_contract": {
+    "required_before_official_execution": true,
+    "protocol_and_source_bundle_signed_timestamp_must_predate_outcomes": true,
+    "required_immediate_anchor_type": "SIGNED_RFC3161_TIMESTAMP_RESPONSE",
+    "rfc3161_tsa_url": "http://timestamp.digicert.com",
+    "rfc3161_tsa_policy_oid": "2.16.840.1.114412.7.1",
+    "rfc3161_message_imprint_algorithm": "sha256",
+    "rfc3161_signature_and_certificate_chain_verification_required": true,
+    "rfc3161_response_must_bind_exact_preregistration_manifest": true,
+    "rfc3161_query_member_required": true,
+    "rfc3161_verification_mode": "OPENSSL_TS_VERIFY_QUERYFILE_WITH_NONCE_AND_IMPRINT_MATCH",
+    "rfc3161_openssl_version": "OpenSSL 3.5.4 30 Sep 2025 (Library: OpenSSL 3.5.4 30 Sep 2025)",
+    "rfc3161_openssl_executable_sha256": "2c6f2c64612cf45349f15850e4647b2fe594c2759de63a695ec4cbe13b2404da",
+    "rfc3161_root_certificate_asset": "research_trust/DigiCertTrustedRootG4.crt.pem",
+    "rfc3161_root_certificate_file_sha256": "ce7d6b44f5d510391be98c8d76b18709400a30cd87659bfebe1c6f97ff5181ee",
+    "rfc3161_root_certificate_fingerprint_sha256": "552f7bdcf1a7af9e6ce672017f4f12abf77240c78e761ac203d1d9d20ac89988",
+    "rfc3161_responder_certificate_fingerprint_sha256": "4aa03fa22cd75c84c55c938f828e676b9caecab33fe36d269aa334f146110a33",
+    "rfc3161_responder_certificate_serial_hex": "0A80EF184B8DF10582D1C476A7957468",
+    "rfc3161_responder_eku": "CRITICAL_TIME_STAMPING_ONLY",
+    "rfc3161_accuracy_semantics": "UNSPECIFIED_NOT_USED_FOR_ROUND_SELECTION_OR_BLINDING",
+    "open_timestamps_pending_receipt_is_supplemental_not_sufficient": true,
+    "open_timestamps_parser_environment": {
+      "opentimestamps_client_installed_member_verification": "15_NON_RECORD_WHEEL_MEMBERS_BYTE_IDENTICAL",
+      "opentimestamps_client_name": "opentimestamps-client",
+      "opentimestamps_client_version": "0.7.2",
+      "opentimestamps_client_wheel_filename": "opentimestamps_client-0.7.2-py3-none-any.whl",
+      "opentimestamps_client_wheel_member_count": 16,
+      "opentimestamps_client_wheel_member_tree_sha256": "9d52572f1aade623b6adbd9c49df27a6b2efffe505a4dda3f5d513ec925e0c09",
+      "opentimestamps_client_wheel_sha256": "84e604d7f76534da4bab61ab62b211a6559aa988da51438408ae7947b0e8b7ba",
+      "opentimestamps_launcher_path": "/tmp/cas_ots_20260721/bin/ots",
+      "opentimestamps_launcher_sha256": "fd0f22649d3309fe4522210605fa829c4edf2299eeb4d23fe14ae675aeeabf4c",
+      "opentimestamps_library_installed_member_verification": "31_NON_RECORD_WHEEL_MEMBERS_BYTE_IDENTICAL",
+      "opentimestamps_library_name": "opentimestamps",
+      "opentimestamps_library_version": "0.4.5",
+      "opentimestamps_library_wheel_filename": "opentimestamps-0.4.5-py3-none-any.whl",
+      "opentimestamps_library_wheel_member_count": 32,
+      "opentimestamps_library_wheel_member_tree_sha256": "9606c66fe1a34dfbd91abce73ed159a891a6a7fd4f6d3677373367360f3bc8c2",
+      "opentimestamps_library_wheel_sha256": "a4912b3bd1b612a3ef5fac925b9137889e6c5cb91cc9e76c8202a2bf8abe26b5",
+      "os_id": "ubuntu",
+      "os_version_id": "24.04",
+      "platform_machine": "x86_64",
+      "python_executable_path": "/usr/bin/python3.12",
+      "python_executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118",
+      "python_implementation": "CPython",
+      "python_version": "3.12.3",
+      "schema_version": "cas_harness_research_shadow.opentimestamps_parser_environment.v2"
+    },
+    "open_timestamps_parser_environment_sha256": "058e8b948597e2fcbfc046cd70e7a55e80be131f4bf74fe7ef1bc1dffb42ecc5",
+    "open_timestamps_pending_status": "STRUCTURALLY_PARSED_PENDING_CALENDAR_ATTESTATION_NOT_BITCOIN_CONFIRMED",
+    "outcome_package_anchor_required_after_execution": true,
+    "open_timestamps_pending_calendar_receipt_is_not_bitcoin_confirmation": true,
+    "bitcoin_attestation_status_until_upgrade": "PENDING"
+  },
+  "stop_rules": [
+    "public_seed_contract target round or scheduled time is null for official execution",
+    "fixed target round is changed, recalculated, overridden, replaced, skipped, or rerolled after the source commit",
+    "the observed Rekor commitment or launch RFC3161 response misses the registered pre-round deadline, or the supplemental OTS proof fails to bind the exact launch manifest",
+    "the two retained drand relay records disagree or the retained exact beacon fails offline BLS re-execution with the pinned drand-client 1.4.2 bytes and preregistered inline verifier",
+    "official seed equals the development seed or is not derived from the retained stable fields, exact round, retained drand signature, and recomputed randomness",
+    "an official setup, beacon, execution, packaging, or publication failure lacks a retained FAILED_CLOSED attempt receipt",
+    "protocol bytes or source bundle lack a verified signed RFC3161 timestamp before official outcomes",
+    "source receipt, report hash, envelope hash, or prior dataset root differs",
+    "raw scenario bytes, sizes, counts, hashes, order, or aggregate root differs",
+    "raw reconstruction is described as contemporaneous capture",
+    "truth enters a raw observation member or estimator input",
+    "DELTA_LINEAR and AFFINE are scored as separately identifiable exact families",
+    "split cluster count, nested-seed rule, world count, regime, critical value, Hotelling constant, gate count, or threshold differs",
+    "ratio is emitted when its denominator interval intersects the practical-zero band",
+    "any unavailable value is silently converted to zero, infinity, or a clipped finite number",
+    "Monte Carlo metrics cannot be recomputed from retained world outcomes",
+    "archive member metadata, member set, ordering, hash, canonical JSON, or no-overwrite publication differs",
+    "any non-finite value, duplicate key, duplicate path, traversal path, symlink, encryption, compression, or unexpected member appears"
+  ],
+  "promotion_boundary": {
+    "positive_result_closes": [
+      "retained deterministic reconstruction of the prior hash-bound raw synthetic observations",
+      "curve-family fixture plumbing including explicit affine equivalence-class handling",
+      "registered simulated cluster-layer coverage, type-I, power, and ratio-availability operating characteristics"
+    ],
+    "positive_result_does_not_close": [
+      "raw Fisher-norm null calibration on model observations",
+      "real-model hidden-state semantic probing",
+      "prompt-injection detection",
+      "causal output control",
+      "cross-architecture transfer",
+      "universal open-weight support",
+      "300B execution",
+      "production evidence integrity",
+      "customer verdict authority"
+    ],
+    "next_step_after_pass": "QUALIFY_A_REAL_MODEL_ADAPTER_AND_RUN_THE_EXTERNALLY_ANCHORED_TECHNICAL_CANARY_ON_AN_ISOLATED_GPU_WITH_AT_LEAST_24_GB_VRAM"
+  },
+  "non_claim": "This externally anchorable, verdict-excluded synthetic phase retains a deterministic reconstruction of prior planted observations and validates registered operating-characteristic plumbing for a simulated unbiased cluster-estimate layer. It does not prove that a real model supplies unbiased cluster estimates and does not license semantic probing, prompt-injection detection, causal output control, universality, cross-architecture transfer, or 300B execution."
+}

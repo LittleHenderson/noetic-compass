@@ -1,0 +1,15 @@
+{
+  "schema_version": "cas_harness_research_handoff_source_identity.v1",
+  "captured_at_utc": "2026-07-22T06:47:55.6357761Z",
+  "branch": "codex/cjt-ohm-stat-evidence-20260721",
+  "commit": "50cd375fdc179e6a60fbed785e5b726d1fd34c23",
+  "tree": "5072a086dbf6450e681c31f2f02dc581e1c90f4b",
+  "parent": "25053461c94de23850da7f9c853c420aab1bae62",
+  "bundle_file": "CAS_HARNESS_CJT_OHM_STAT_EVIDENCE_50cd375f.bundle",
+  "bundle_sha256": "7bd5ef9281932d967cdb16d877d24c96de2a595e03850f8fe41ae6694551a9c5",
+  "bundle_verification": "COMPLETE_HISTORY_OK",
+  "claim_status": "NOT_LICENSED",
+  "verdict_influence": "NONE",
+  "model_execution": "NONE"
+}
+

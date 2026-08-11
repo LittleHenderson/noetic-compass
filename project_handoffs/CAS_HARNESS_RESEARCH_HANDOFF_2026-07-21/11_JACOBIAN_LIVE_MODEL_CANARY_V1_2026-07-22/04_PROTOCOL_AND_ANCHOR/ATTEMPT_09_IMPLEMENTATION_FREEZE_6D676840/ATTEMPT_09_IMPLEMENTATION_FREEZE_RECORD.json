@@ -1,0 +1,21 @@
+{
+  "branch": "fix/jacobian-gradient-analytic-tolerance-20260724",
+  "code_commit": "6d676840d575488cc71e95017c79aa372fd9813f",
+  "code_parent": "88b59de924857ad7c2f394122fe68f57ba97da77",
+  "code_tree": "350931af792e9438e5c8281b15f8b3006bcb7bd7",
+  "bundle": {"byte_count": 36563272, "sha256": "1cf1fc265cb01bf306e94bee4955ef14b49e8b773144e8e08aa391617c78765f", "head_count": 1, "complete_history": true},
+  "implementation_manifest": {"byte_count": 5689, "sha256": "731e29affd02f62bcf4e3d5581a2dace307d47bcea6ce39734a86e0d8dadfe80", "file_count": 31, "reconstructed_sha256": "731e29affd02f62bcf4e3d5581a2dace307d47bcea6ce39734a86e0d8dadfe80", "git_blob_match_count": 31},
+  "dependency_archive": {"changed_by_this_repair": false, "sha256": "ed16af7ae5a1ac8d61c6d3e83cf946a8cb3669c10f0f679fb2351965d5922bb8"},
+  "fix_summary": "Owner-directed recalibration of GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT from 1e-4 to 5e-4 (functional forward-vs-reverse derivative agreement), from the empirical ~1.5e-4 float32 / ~1.8e-4 float64 floor on the pinned pythia-160m/torch2.12/CUDA13 stack. Constant in jacobian_lens_canary_core.py; runner protocol declaration references it; independent verifier's own copy matched. Empirically the full canary passes at 5e-4 producing all 213 artifacts (was FAILED_CLOSED at 1e-4 with 212).",
+  "repaired_files": {
+    "live-trace-worker/research/jacobian_lens_canary_core.py": "243c2275fbe26bed8f6b397aee90555b7c0b0385dd54c05be99607b33a41fc86",
+    "live-trace-worker/research/jacobian_lens_canary_runner.py": "54a5f72fa1ef0b4c39ff87ccdd2b785640bf73e2f0827c8fd98f48781a555bcc",
+    "live-trace-worker/scripts/verify_jacobian_lens_canary_v1_independent.py": "061b9fe180535a5a8a57d0507bcd832c4d1dd36d68f1c1393b5aec4c3ba4973d",
+    "live-trace-worker/scripts/run_jacobian_lens_canary_v1.py": "51f60cd6da9d5f2e1546afe86f2eaed5fb853d619749b01cc5410788efe17e6e"
+  },
+  "suite": {"passed": 942, "skipped": 2},
+  "empirical_canary_execution_at_5e4": {"passed": true, "artifacts": 213, "was_at_1e-4": "FAILED_CLOSED_212_artifacts"},
+  "status": "IMPLEMENTATION_FREEZE_PASS / CROSS_RECONSTRUCTION_MATCH / TOLERANCE_RECALIBRATED_OWNER_DIRECTED / CANARY_EXECUTION_VERIFIED_PASS_AT_5e-4 / NO_PRE_OR_RUN_IDENTITY / SHADOW / NONE / NOT_LICENSED",
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_implementation_freeze.v2",
+  "claim_status": "NOT_LICENSED", "execution_mode": "SHADOW", "verdict": "NONE"
+}

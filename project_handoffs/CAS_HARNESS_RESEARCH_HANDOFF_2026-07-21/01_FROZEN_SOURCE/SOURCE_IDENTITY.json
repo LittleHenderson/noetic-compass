@@ -1,0 +1,15 @@
+{
+  "schema_version": "cas_harness.frozen_source_identity.v1",
+  "snapshot_date": "2026-07-21",
+  "branch": "codex/tks-definition-ab-20260721",
+  "commit": "da00bd9407e7e82662b53edd77980040e34eacf4",
+  "tree": "a95852594ce6c2e19862cb048bb3419b39812526",
+  "protected_parent": "81b5c18bd83e1f01ccd398dcad3865a674335b7f",
+  "archive": "cas-tks-anchor-diagnostic-20260721-da00bd94.zip",
+  "archive_bytes": 720034,
+  "archive_sha256": "CAEB3171D8F461E81AEB164888A41A7C33E105D2813A253DF25A833CC58A2E20",
+  "archive_member_count": 101,
+  "claim_status": "NOT_LICENSED_DIAGNOSTIC_ONLY",
+  "superseded_archive_forbidden": "cas-tks-anchor-diagnostic-20260721-0fd25a7b-SUPERSEDED-DO-NOT-USE.zip"
+}
+

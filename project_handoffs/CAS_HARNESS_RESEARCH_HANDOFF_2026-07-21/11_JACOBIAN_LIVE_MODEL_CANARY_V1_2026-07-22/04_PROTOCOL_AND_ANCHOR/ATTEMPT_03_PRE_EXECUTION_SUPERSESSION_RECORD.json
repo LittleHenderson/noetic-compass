@@ -1,0 +1,117 @@
+{
+  "schema_version": "cas_harness_research_shadow.attempt_pre_execution_supersession.v1",
+  "record_id": "ATTEMPT_03_PRE_EXECUTION_SUPERSESSION_A8969EB7",
+  "recorded_utc": "2026-07-22T23:05:00.3319717Z",
+  "protocol_id": "JACOBIAN_LENS_CANARY_V1",
+  "attempt_number": 3,
+  "run_id": "jlcv1-rfc3161-cfbe168004fb3677b3f7be08c3c15d87577fa75b554d4c93391d758d23015af3",
+  "controlling_status": "RFC3161_ANCHOR_VERIFIED / SUPERSEDED_PRE_EXECUTION_BYTECODE_GUARD_DEFECT / NO_MODEL_OR_CUDA_EXECUTION / SHADOW / NONE / NOT_LICENSED",
+  "supersession_boundary": "BEFORE_OFFICIAL_WRAPPER_LAUNCH_AND_BEFORE_MODEL_OR_CUDA_EXECUTION",
+  "supersession_reason": {
+    "category": "BYTECODE_WRITE_GUARD_NOT_PROPAGATED_ACROSS_EXECVE",
+    "offending_source_relative_path": "live-trace-worker/scripts/run_jacobian_lens_canary_v1_seccomp.py",
+    "observed_child_argv": [
+      "sys.executable",
+      "-I",
+      "RUNNER_PATH",
+      "--launch-config",
+      "LAUNCH_CONFIG_PATH"
+    ],
+    "required_child_argv_property": "Python -B must be present in the execve child invocation and the runner must fail closed unless sys.dont_write_bytecode is true.",
+    "technical_effect": "The runner verifies the exact 15-file dependency root before importing torch, transformers, and jlens. Without child -B, those imports may create jlens/__pycache__/*.pyc after verification, invalidating the frozen dependency root.",
+    "environment_fallback_unavailable": "The child uses Python -I, which ignores PYTHON* environment variables; the outer interpreter's -B flag does not survive execve unless repeated in child argv.",
+    "verifier_weakened": false,
+    "attempt_executable": false
+  },
+  "anchored_identity": {
+    "code_commit": "a8969eb71c6d3e5c43d7ee2b7c7d4aa90dd70fc0",
+    "code_tree": "cce2d477bb0f423ee6a2669ee680eaac7b999322",
+    "environment_pre_capture_sha256": "a728ba85f813cf936ef55c5d8fd544551994b97f755d5946487a7e9be3ddefd0",
+    "protocol_sha256": "e5f6f8c527d6e9cc788853334b49108d036c7a6d867f6e882d0a57bae71497ef",
+    "anchor_payload_sha256": "8da22f257d0e799f08f7c543f391a6663879d1258f587dc5d1e473136bb13dc4",
+    "rfc3161_query_byte_count": 104,
+    "rfc3161_query_sha256": "9f5bbed1764fb69ed5aac28f8db8bbaa168b668e65eca5a7af8d87c02bbc6291",
+    "rfc3161_response_byte_count": 6034,
+    "rfc3161_response_sha256": "30b71774bb4b09e3889305e0f336d176dc57e6272e4943834b46e21da55411ea",
+    "rfc3161_timestamp_utc": "Jul 22 22:14:54 2026 GMT",
+    "anchor_receipt_sha256": "e7e1ba29411a36e7f655b1ba3047f80c77bb12c222305fb25940c7837c8ae15c",
+    "launch_path_mapping_sha256": "ae77feb5a3e403b8f248b8f568d710629be7a3113867dc397d992cbe7fed9d94",
+    "launch_config_sha256": "903600dbcb0bb213f896067d32938226be3fe6d7a60afcde2d222b320159a148",
+    "implementation_bundle_sha256": "0db2c2f6deb3bf797af2b9a42b84714236f66cce48e6c74b769ccbb63c101fff",
+    "implementation_manifest_sha256": "5561105d014d0bd3a943fc9d498ebc6f657b2e1024018ff95af06f244a9974fa",
+    "dependency_file_manifest_sha256": "10c9cfab8284582c2a46484dd74bb5435ba9d2dd4c6d946f7dac4d97aae20a00",
+    "dependency_lock_sha256": "deb9d1f618aac3df95e5b93e226153e196d6aecbb8f619ca7e1e6cb34d839d7b"
+  },
+  "execution_absence": {
+    "wrapper_executed": false,
+    "model_executed": false,
+    "cuda_executed": false,
+    "official_output_entry_count": 0,
+    "runlog_entry_count": 0,
+    "environment_post_entry_count": 0,
+    "matching_official_process_count": 0,
+    "post_capture_exists": false,
+    "producer_receipt_exists": false,
+    "receiver_receipt_exists": false,
+    "post_or_receiver_fabricated": false
+  },
+  "final_remote_audit": {
+    "audit_utc": "2026-07-22T22:37:24.252993955Z",
+    "final_recheck_utc": "2026-07-22T22:48:22.264526424Z",
+    "research_pod_instance_id": "zp2s9pscgncn0b",
+    "hostname": "d808fa853c3b",
+    "boot_id_sha256": "8d6f65214f4ce130d8d342532a65ee41b4a8555fcd102502f6acb3840bbce7aa",
+    "machine_id_sha256": "aed9946c7ac389c687b73bd918790d99da1303140bc502277f8d7c016975a486",
+    "gpu_name": "NVIDIA A40",
+    "gpu_uuid": "GPU-5a2301c0-941c-a946-0ea2-f90016d4750f",
+    "gpu_memory_total_mib": 46068,
+    "gpu_memory_used_mib": 0,
+    "gpu_utilization_percent": 0,
+    "driver_version": "580.126.09",
+    "repository_clean": true,
+    "dependency_regular_file_count": 15,
+    "dependency_symbolic_link_count": 0,
+    "dependency_special_entry_count": 0,
+    "dependency_pycache_or_pyc_count": 0,
+    "remote_control_file_count": 21,
+    "remote_control_exact_local_hash_match_count": 21
+  },
+  "offpod_recovery": {
+    "relative_root": "ATTEMPT_03_REMOTE_RECOVERY_A8969EB7",
+    "official_attempt_archive": {
+      "byte_count": 327055360,
+      "sha256": "84b2fd846d371ccbb6a7c020f778615a66862f8c65c5dabe27fb969e3a406a9f",
+      "remote_local_match": true
+    },
+    "dependency_bundle_archive": {
+      "byte_count": 706560,
+      "sha256": "ed16af7ae5a1ac8d61c6d3e83cf946a8cb3669c10f0f679fb2351965d5922bb8",
+      "remote_local_match": true
+    },
+    "model_snapshot_archive": {
+      "byte_count": 377128960,
+      "sha256": "10c55e36459311f24ac0e6d69793f5873b460fbf4da9c78ba0b202afa4ad35f6",
+      "remote_local_match": true
+    },
+    "normalized_inventories": {
+      "official_attempt_sha256": "b584762d20ac5733963fc4bc119b8d08e430b0b59ef63a215b41f0f7f0ebf7c7",
+      "dependency_bundle_sha256": "0e37049e61b7d4abbc00957b3da2e2c9449d8a857615b372133825a8520d346c",
+      "model_snapshot_sha256": "a309e3a52fede6c07c5d87417923d79648d18cd099696b70e524f4ee061b62a6",
+      "difference_count": 0
+    },
+    "final_remote_record_index_sha256": "8c5258eb8dcc5451c1f1ca32a22d6fe3d2d03e5ad2af4fd67a3696f49223d4b3",
+    "final_remote_records_exact_match_count": 22,
+    "final_remote_records_mismatch_count": 0
+  },
+  "preservation": {
+    "attempt_3_evidence_mutated": false,
+    "attempt_3_identity_reusable": false,
+    "research_pod_stopped_by_recovery": false,
+    "production_pod_instance_id": "hilj2rzs54gi06",
+    "production_pod_touched": false
+  },
+  "required_next_action": "Version the wrapper so execve child argv includes -B, make the runner fail closed unless sys.dont_write_bytecode is true, add regression coverage proving the 15-file dependency root remains unchanged across imports, freeze a new commit/tree/bundle, and perform a fresh Attempt 4 PRE/protocol/RFC3161 ceremony. Do not reuse Attempt 3 identity or anchor for corrected code.",
+  "scientific_conclusion": "NO_SCIENTIFIC_CONCLUSION",
+  "verdict": "NONE",
+  "claim_status": "NOT_LICENSED"
+}

@@ -1,0 +1,21 @@
+{
+  "version": "1.2.0",
+  "files": [
+    "canon_elements_40.json",
+    "canon_foundations_7.json",
+    "canon_noetics_10.json",
+    "canon_lexicon.json",
+    "canon_acquisitions_22.json",
+    "canon_subfoundations_28.json",
+    "canon_worlds_4.json"
+  ],
+  "hashes": {
+    "canon_elements_40.json": "f56eabed920236c36dd7f1c2b1334de822be770bfd4df1c72331673644eb4177",
+    "canon_foundations_7.json": "0331866d6c18276c21e0be24718fa3f8f4b0a5653d107c8213fc31954a710150",
+    "canon_noetics_10.json": "80326339ea04b74733cc8644456de2f5d6296680a82e12d75553793af111c68f",
+    "canon_lexicon.json": "281285017dae363f68db7f93cc97606ebd98e53f5155aa5b7eef4ce8804606e9",
+    "canon_acquisitions_22.json": "f38adedf5978c6accee49fe30de244fec27e61dca069951783ed810c29c9fa00",
+    "canon_subfoundations_28.json": "2370fbd94ee75372df9b9aef0c1238cd3bd4ded31729c3877351d737f3b43ccc",
+    "canon_worlds_4.json": "b5171534c99fa2dc995e33be3263af577b3ebe4b007a386fa39a20aadea60bbb"
+  }
+}

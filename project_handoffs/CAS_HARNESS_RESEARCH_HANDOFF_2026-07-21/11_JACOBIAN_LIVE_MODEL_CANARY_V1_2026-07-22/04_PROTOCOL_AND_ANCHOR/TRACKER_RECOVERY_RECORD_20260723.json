@@ -1,0 +1,60 @@
+{
+  "schema_version": "cas_harness_governance.canonical_tracker_recovery.v1",
+  "recorded_at_utc": "2026-07-23T07:53:49Z",
+  "canonical_tracker": "docs/working/cas_harness_production_todo.md",
+  "incident": {
+    "description": "A bounded PowerShell line replacement used a mixed-line-ending boundary incorrectly and removed the canonical tracker interior after 'Closure record:' through the paragraph immediately before 'The CORS repair is merged and deployed.'.",
+    "claim_impact": "NONE",
+    "execution_impact": "NONE",
+    "project_score_change": false
+  },
+  "damaged_checkpoint": {
+    "relative_path": ".tmp/cas_harness_production_todo.corrupted_checkpoint_20260723.md",
+    "byte_count": 1525404,
+    "sha256": "0ab6c20ed9308c839ec52aa3bb44e82985acecf044754e4d3b821f09ed735ede",
+    "preserved": true
+  },
+  "recovery_source": {
+    "session_path": "C:/Users/wakil/.codex/sessions/2026/07/22/rollout-2026-07-22T21-29-28-019f8d3c-532a-7232-aa6b-bea7d881a581.jsonl",
+    "one_based_jsonl_records": [
+      398,
+      403,
+      413
+    ],
+    "source_property": "payload.result.Ok.content[0].text",
+    "capture_times_utc": [
+      "2026-07-23T06:27:14.951Z",
+      "2026-07-23T06:27:18.055Z",
+      "2026-07-23T06:27:33.666Z"
+    ],
+    "relationship": "Three contiguous, non-overlapping reads from the same pre-edit in-memory tracker value."
+  },
+  "recovered_interior": {
+    "original_line_span_in_source_snapshot": "623-2077 inclusive",
+    "line_count": 1455,
+    "character_count_normalized_lf": 277074,
+    "utf8_byte_count_normalized_lf": 277087,
+    "sha256_normalized_lf_without_appended_trailing_lf": "059d771aaa9991d84694739bdea640ecaa86651b3e32dd46f913ca25c5193fe4",
+    "first_line_blank": true,
+    "last_line_blank": true
+  },
+  "restored_baseline_before_normal_tracker_updates": {
+    "byte_count": 1802354,
+    "sha256": "788e3465c0b9978751d726ea965714fa216e8f75b3f3ed88303bc8ff18d02558",
+    "newline_terminated_logical_line_count": 17309,
+    "closure_marker_count": 1,
+    "cors_marker_count": 1,
+    "active_attempt_5_heading_count": 1,
+    "mixed_eol_disclosed": true,
+    "bare_cr_count": 0
+  },
+  "independent_read_only_audit": {
+    "result": "PASS",
+    "recovered_interior_sha256_match": true,
+    "splice_boundaries_coherent": true,
+    "closure_rows_present": true,
+    "current_distance_rows_present": true,
+    "duplicate_or_truncation_observed": false
+  },
+  "continuity_note": "The restored-baseline tracker hash records the exact recovery checkpoint. The canonical tracker is intentionally mutable and will receive later status updates, so future tracker hashes are expected to differ."
+}

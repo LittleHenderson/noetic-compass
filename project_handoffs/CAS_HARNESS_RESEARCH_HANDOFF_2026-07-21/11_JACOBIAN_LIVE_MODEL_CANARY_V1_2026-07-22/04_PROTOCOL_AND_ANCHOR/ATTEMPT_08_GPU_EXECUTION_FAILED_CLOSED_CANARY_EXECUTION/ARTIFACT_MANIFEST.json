@@ -1,0 +1,97 @@
+{
+  "schema_version": "cas_harness_research_shadow.jacobian_lens_attempt8_gpu_execution_failed_manifest.v1",
+  "candidate_label": "ATTEMPT_08_GPU_EXECUTION_FAILED_CLOSED_CANARY_EXECUTION",
+  "candidate_commit": "88b59de924857ad7c2f394122fe68f57ba97da77",
+  "run_id": "jlcv1-rfc3161-77097e7bfb0d04a461e0db14a64a356cc5a300fbeffec86d1a2940802d2ef91e",
+  "controlling_status": "FAILED_CLOSED_AT_CANARY_EXECUTION / FULL_MEASUREMENT_212_ARTIFACTS / FINAL_GATE_FORWARD_VS_REVERSE_AUTODIFF_SYSTEMATIC_DISAGREEMENT_20_OF_40_OVER_1e-4_MAX_4.24e-3 / OWNER_SCIENTIFIC_DECISION / SHADOW / NONE / NOT_LICENSED",
+  "exact_failure": "functional analytic derivative differs from prepared gradient norm (jacobian_lens_canary_torch.py:673). Forward(jvp) vs reverse(grad) systematically disagree: 40 comparisons, median 1.07e-4, max 4.24e-3, 20/40 over the 1e-4 limit.",
+  "artifact_count": 17,
+  "artifacts": [
+    {
+      "path": "attempt8_counter_probe.py",
+      "bytes": 1825,
+      "sha256": "01565a6d3405bfa5cf096ea1504317db6091d5ad1afd1e7986e0a16c7eb5933f"
+    },
+    {
+      "path": "attempt8_distribution.py",
+      "bytes": 3319,
+      "sha256": "9322ff3e052f940efc4f82a84f28bf42f75ba9689964cc9121a99d616a13e914"
+    },
+    {
+      "path": "attempt8_faithful_repro.py",
+      "bytes": 2268,
+      "sha256": "9b0f0ce61bbf5798029466791a19e9656a29ac4f03c4537ce31f32d4e5b2d906"
+    },
+    {
+      "path": "attempt8_instrument.py",
+      "bytes": 2613,
+      "sha256": "58747dbc8980b0dcc82c4580b97bd3a58beb11a7cd967a97f75159893e439e87"
+    },
+    {
+      "path": "control/jacobian_lens_canary_v1_anchor_receipt.json",
+      "bytes": 5597,
+      "sha256": "ff661473f94bb0e000a12443c7146f04666100896d01bd6c3ceae979ceaf269c"
+    },
+    {
+      "path": "control/jacobian_lens_canary_v1_launch_configuration.json",
+      "bytes": 7139,
+      "sha256": "d1b3aabffc53b052c63412f1204f6fc88d0d6da275482ac52fe68b2750ff2d24"
+    },
+    {
+      "path": "operator/launch_finished.json",
+      "bytes": 431,
+      "sha256": "c0ee76cec3a828fd8757b24a3fbad94c2df0138c5040f2696e9264cd2fba8211"
+    },
+    {
+      "path": "operator/launch_started.json",
+      "bytes": 392,
+      "sha256": "f1f50be8fdc13bcabef114cc9513994e6b007e41d2a884bf657ad29cec5ad693"
+    },
+    {
+      "path": "operator/TSA_TRANSMISSION_FINISHED.json",
+      "bytes": 755,
+      "sha256": "2005cc496a1028eea08073ef1108957cff64aa97b00efcf39e1773d3f14d0fc3"
+    },
+    {
+      "path": "output_receipt/artifact_filenames.txt",
+      "bytes": 5445,
+      "sha256": "a1c1c7916f5844b37c94c80c39f28354692ba0fc8231dc2b3b2df260d9973d4c"
+    },
+    {
+      "path": "output_receipt/jacobian_lens_canary_v1_execution_receipt.json",
+      "bytes": 163485,
+      "sha256": "e0a9221634f05402355e373616fddc58b9932e032c377885ce1815dfc09e32c0"
+    },
+    {
+      "path": "output_receipt/jacobian_lens_canary_v1_execution_receipt.json.publication.json",
+      "bytes": 687,
+      "sha256": "de003e4d04817f6e906cf4068a1c50dee4ce3642b21d19f9dc2d9b8941563826"
+    },
+    {
+      "path": "runlog/prelaunch_guard.txt",
+      "bytes": 710,
+      "sha256": "5525ec4015c890c32c3bef981797554bd6ca37700b839a5dc4420375862b4b95"
+    },
+    {
+      "path": "runlog/wrapper.stderr.log",
+      "bytes": 647,
+      "sha256": "f79907480da0aa84853402926868ad404c40daa6547101477feb3bbaadb90ea6"
+    },
+    {
+      "path": "runlog/wrapper.stdout.log",
+      "bytes": 349,
+      "sha256": "d81d50270c3212bea9c807a61de5059ea636bba4f6524c1fd8785dd25239e8dc"
+    },
+    {
+      "path": "runlog/wrapper_exit_code.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "STATUS.md",
+      "bytes": 7496,
+      "sha256": "c1092d8b376ece0066f866853dacaebf1dd37f5394dc9741f7f62f1bd68d0009"
+    }
+  ],
+  "manifest_scope": "Attempt 8 GPU-execution evidence + faithful repro + full forward-vs-reverse relerr distribution. Canary ran the full measurement (212 artifacts on pod); fails at the analytic-vs-gradient agreement gate which is systematically exceeded on the pinned torch2.12/CUDA13 float32 stack. Owner scientific decision required. Not a canary pass or LICENSED capability."
+}

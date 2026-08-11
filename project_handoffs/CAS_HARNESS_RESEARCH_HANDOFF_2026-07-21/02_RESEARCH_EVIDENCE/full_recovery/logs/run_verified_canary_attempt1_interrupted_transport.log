@@ -1,0 +1,8 @@
+{
+  "preflight_sha256": "b689da7f7c42c733f0725d445eed758c8b6b06cbc2f1c3a1fd46bccf34dc3b34",
+  "static_file_count": 11,
+  "status": "PREFLIGHT_AND_STATIC_INPUTS_VERIFIED"
+}
+[definition-anchor:canary-eval-8] 1/8 tokens=47 layers=2
+[definition-anchor:canary-eval-8] 8/8 tokens=49 layers=2
+[definition-anchor:canary-definitions-84] 1/84 tokens=88 layers=2

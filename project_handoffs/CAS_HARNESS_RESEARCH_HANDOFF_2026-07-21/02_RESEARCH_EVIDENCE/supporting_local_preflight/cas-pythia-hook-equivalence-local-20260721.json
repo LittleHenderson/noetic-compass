@@ -1,0 +1,762 @@
+{
+  "adapter_qualification_status": "PYTHIA_GPT_NEOX_BLOCK_HOOK_EQUIVALENCE_VERIFIED",
+  "claim_eligible": false,
+  "code": {
+    "git_branch": "codex/tks-definition-ab-20260721",
+    "git_commit": "81b5c18bd83e1f01ccd398dcad3865a674335b7f",
+    "git_status_for_script": "?? noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/verify_pythia_block_hook_equivalence.py",
+    "script_path": "C:\\tmp\\cas-harness-tks-definition-ab-20260721\\noetic-compass-scaffold\\noetic-compass\\live-trace-worker\\scripts\\verify_pythia_block_hook_equivalence.py",
+    "script_sha256": "c618b0c80f659f494bd60d943ae9491feee80b861e1581be59c2645419d781e1"
+  },
+  "comparison_contract": {
+    "atol": 1e-06,
+    "final_block_mapping": "block[n-1] == pre_hook_input(gpt_neox.final_layer_norm)",
+    "forbidden_final_mapping": "block[n-1] must not be treated as hidden_states[-1]; that is post-norm",
+    "non_final_block_mapping": "block[i] == hidden_states[i+1] for i=0..n-2",
+    "post_norm_mapping": "hidden_states[-1] == output(gpt_neox.final_layer_norm)",
+    "rtol": 1e-05
+  },
+  "created_at": "2026-07-21T09:05:09.302257+00:00",
+  "diagnostic_class": "PYTHIA_GPT_NEOX_BLOCK_HOOK_EQUIVALENCE_PREFLIGHT",
+  "equivalence": {
+    "adapter": "EleutherAI_Pythia_GPT_NeoX_complete_block.v1",
+    "all_required_checks_pass": true,
+    "block_count": 12,
+    "block_modules": [
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 0,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.0"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 1,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.1"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 2,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.2"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 3,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.3"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 4,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.4"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 5,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.5"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 6,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.6"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 7,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.7"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 8,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.8"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 9,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.9"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 10,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.10"
+      },
+      {
+        "class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXLayer",
+        "hook_fire_count": 1,
+        "index": 11,
+        "output": {
+          "device": "cpu",
+          "dtype": "torch.float32",
+          "finite": true,
+          "shape": [
+            1,
+            13,
+            768
+          ]
+        },
+        "path": "gpt_neox.layers.11"
+      }
+    ],
+    "final_block_to_post_norm_hidden_state_informational": {
+      "allclose": false,
+      "exact_equal": false,
+      "expected_mapping": "informational only: final block is pre-norm; hidden_states[-1] is post-norm",
+      "finite_left": true,
+      "finite_right": true,
+      "left_dtype": "torch.float32",
+      "left_shape": [
+        1,
+        13,
+        768
+      ],
+      "max_abs_diff": 15.242676258087158,
+      "required_gate": false,
+      "right_dtype": "torch.float32",
+      "right_shape": [
+        1,
+        13,
+        768
+      ],
+      "shape_equal": true,
+      "used_as_final_block_equivalence": false
+    },
+    "final_block_to_pre_final_norm": {
+      "allclose": true,
+      "block_boundary": "gpt_neox.layers.11.output",
+      "block_index": 11,
+      "comparison_boundary": "gpt_neox.final_layer_norm.pre_hook_input",
+      "exact_equal": true,
+      "expected_mapping": "final block output == final_layer_norm pre-hook input",
+      "finite_left": true,
+      "finite_right": true,
+      "left_dtype": "torch.float32",
+      "left_shape": [
+        1,
+        13,
+        768
+      ],
+      "max_abs_diff": 0.0,
+      "required_gate": true,
+      "right_dtype": "torch.float32",
+      "right_shape": [
+        1,
+        13,
+        768
+      ],
+      "shape_equal": true
+    },
+    "final_layer_norm": {
+      "class": "torch.nn.modules.normalization.LayerNorm",
+      "forward_hook_fire_count": 1,
+      "input": {
+        "device": "cpu",
+        "dtype": "torch.float32",
+        "finite": true,
+        "shape": [
+          1,
+          13,
+          768
+        ]
+      },
+      "output": {
+        "device": "cpu",
+        "dtype": "torch.float32",
+        "finite": true,
+        "shape": [
+          1,
+          13,
+          768
+        ]
+      },
+      "path": "gpt_neox.final_layer_norm",
+      "pre_hook_fire_count": 1
+    },
+    "hidden_state_count": 13,
+    "hidden_state_shapes": [
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ],
+      [
+        1,
+        13,
+        768
+      ]
+    ],
+    "non_final_block_to_hidden_state": [
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.0.output",
+        "block_index": 0,
+        "exact_equal": true,
+        "expected_mapping": "block[0] == hidden_states[1]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 1,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      },
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.1.output",
+        "block_index": 1,
+        "exact_equal": true,
+        "expected_mapping": "block[1] == hidden_states[2]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 2,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      },
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.2.output",
+        "block_index": 2,
+        "exact_equal": true,
+        "expected_mapping": "block[2] == hidden_states[3]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 3,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      },
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.3.output",
+        "block_index": 3,
+        "exact_equal": true,
+        "expected_mapping": "block[3] == hidden_states[4]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 4,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      },
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.4.output",
+        "block_index": 4,
+        "exact_equal": true,
+        "expected_mapping": "block[4] == hidden_states[5]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 5,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      },
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.5.output",
+        "block_index": 5,
+        "exact_equal": true,
+        "expected_mapping": "block[5] == hidden_states[6]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 6,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      },
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.6.output",
+        "block_index": 6,
+        "exact_equal": true,
+        "expected_mapping": "block[6] == hidden_states[7]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 7,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      },
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.7.output",
+        "block_index": 7,
+        "exact_equal": true,
+        "expected_mapping": "block[7] == hidden_states[8]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 8,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      },
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.8.output",
+        "block_index": 8,
+        "exact_equal": true,
+        "expected_mapping": "block[8] == hidden_states[9]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 9,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      },
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.9.output",
+        "block_index": 9,
+        "exact_equal": true,
+        "expected_mapping": "block[9] == hidden_states[10]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 10,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      },
+      {
+        "allclose": true,
+        "block_boundary": "gpt_neox.layers.10.output",
+        "block_index": 10,
+        "exact_equal": true,
+        "expected_mapping": "block[10] == hidden_states[11]",
+        "finite_left": true,
+        "finite_right": true,
+        "hidden_state_index": 11,
+        "left_dtype": "torch.float32",
+        "left_shape": [
+          1,
+          13,
+          768
+        ],
+        "max_abs_diff": 0.0,
+        "required_gate": true,
+        "right_dtype": "torch.float32",
+        "right_shape": [
+          1,
+          13,
+          768
+        ],
+        "shape_equal": true
+      }
+    ],
+    "post_final_norm_hidden_state_to_norm_output": {
+      "allclose": true,
+      "comparison_boundary": "gpt_neox.final_layer_norm.output",
+      "exact_equal": true,
+      "expected_mapping": "hidden_states[-1] == final_layer_norm output",
+      "finite_left": true,
+      "finite_right": true,
+      "hidden_state_index": 12,
+      "left_dtype": "torch.float32",
+      "left_shape": [
+        1,
+        13,
+        768
+      ],
+      "max_abs_diff": 0.0,
+      "required_gate": true,
+      "right_dtype": "torch.float32",
+      "right_shape": [
+        1,
+        13,
+        768
+      ],
+      "shape_equal": true
+    },
+    "tolerances": {
+      "atol": 1e-06,
+      "rtol": 1e-05
+    }
+  },
+  "input": {
+    "max_tokens": 256,
+    "prompt_character_count": 84,
+    "prompt_utf8_sha256": "4d52cbed0d7854f1bf03a4b154c28d6cf351c62d15379f4ab573b9bce3858e69",
+    "token_count": 13,
+    "token_ids_sha256": "ed6de83bd198d1180c7fd42ba25575a02ac362067c2625a8c2b8a006bf41f3ba",
+    "truncation": false
+  },
+  "licensing_status": "NOT_LICENSED_PREFLIGHT_ONLY",
+  "model": {
+    "adapter_module_paths": {
+      "blocks": [
+        "gpt_neox.layers.0",
+        "gpt_neox.layers.1",
+        "gpt_neox.layers.2",
+        "gpt_neox.layers.3",
+        "gpt_neox.layers.4",
+        "gpt_neox.layers.5",
+        "gpt_neox.layers.6",
+        "gpt_neox.layers.7",
+        "gpt_neox.layers.8",
+        "gpt_neox.layers.9",
+        "gpt_neox.layers.10",
+        "gpt_neox.layers.11"
+      ],
+      "final_layer_norm": "gpt_neox.final_layer_norm"
+    },
+    "architectures": [
+      "GPTNeoXForCausalLM"
+    ],
+    "config_class": "transformers.models.gpt_neox.configuration_gpt_neox.GPTNeoXConfig",
+    "device": "cpu",
+    "first_parameter_dtype": "torch.float32",
+    "hidden_size": 768,
+    "local_files_only": true,
+    "model_class": "transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXForCausalLM",
+    "model_id": "EleutherAI/pythia-160m",
+    "model_type": "gpt_neox",
+    "num_hidden_layers": 12,
+    "parameter_count": 162322944,
+    "requested_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "requested_torch_dtype": "float32",
+    "resolved_commit_hashes": [
+      "50f5173d932e8e61f858120bcb800b97af589f46"
+    ],
+    "revision_binding": "VERIFIED_EXACT",
+    "tokenizer_class": "transformers.models.gpt_neox.tokenization_gpt_neox.GPTNeoXTokenizer",
+    "trust_remote_code": false
+  },
+  "non_claim": "This report qualifies only the complete-transformer-block hook boundary for the exact EleutherAI Pythia model ID and 40-hex revision recorded here. It does not license semantic probe validity, prompt-injection detection, causal or output control, architecture-general or universal probing, 300B execution, production readiness, an ACCEPT verdict, or any customer/investor claim.",
+  "output_contract": {
+    "allow_nan": false,
+    "atomic_write": "same-directory temporary file + flush + fsync + os.replace",
+    "format": "JSON",
+    "reopen_and_parse_verification": true
+  },
+  "runtime": {
+    "cuda_available": false,
+    "cuda_device_count": 0,
+    "cuda_devices": [],
+    "machine": "AMD64",
+    "nvidia_smi": [
+      "NVIDIA GeForce RTX 4070 Laptop GPU, 595.79, 8188 MiB"
+    ],
+    "packages": {
+      "accelerate": "1.13.0",
+      "huggingface-hub": "1.15.0",
+      "safetensors": "0.7.0",
+      "torch": "2.11.0",
+      "transformers": "5.8.1"
+    },
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python_executable": "C:\\Python314\\python.exe",
+    "python_version": "3.14.0",
+    "torch_cuda_version": "None",
+    "torch_version": "2.11.0+cpu"
+  },
+  "schema_version": "cas_harness.pythia_gpt_neox_block_hook_equivalence_preflight.v1",
+  "scope": {
+    "adapter": "EleutherAI_Pythia_GPT_NeoX_complete_block.v1",
+    "explicitly_not_tested": [
+      "other_model_revisions",
+      "other_GPT_NeoX_model_ids",
+      "other_architecture_families",
+      "semantic_probe_accuracy",
+      "causal_control",
+      "prompt_injection_detection",
+      "300B_execution"
+    ],
+    "requested_model_id": "EleutherAI/pythia-160m",
+    "requested_model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "requested_revision_contract": "exact_40_hex_commit"
+  },
+  "status": "PREFLIGHT_PASS",
+  "universality_status": "NOT_EVALUATED"
+}

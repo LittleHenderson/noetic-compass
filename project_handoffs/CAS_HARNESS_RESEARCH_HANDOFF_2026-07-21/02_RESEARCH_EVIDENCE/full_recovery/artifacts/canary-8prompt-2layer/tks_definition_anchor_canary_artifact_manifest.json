@@ -1,0 +1,110 @@
+{
+  "canary_execution_difference": {
+    "canary_device_map": "cuda:0",
+    "full_diagnostic_device_map": "auto",
+    "reason": "Single-GPU canary forbids silent CPU/disk offload; full run follows frozen protocol."
+  },
+  "claim_eligible": false,
+  "created_at": "2026-07-21T10:42:25.872706+00:00",
+  "durability": {
+    "independent_object_store": "OPEN",
+    "off_pod_copy_verified": false,
+    "runpod_persistent_workspace": true
+  },
+  "files": [
+    {
+      "bytes": 33521,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/operational_canary/run_tks_definition_anchor_canary.py",
+      "role": "canary_helper",
+      "sha256": "4fed8ddbf9aa7cf899a87c3773d232e0c9ef3927ae3f7b953e1e1738e414024a"
+    },
+    {
+      "bytes": 3923,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/operational_canary/test_tks_definition_anchor_canary.py",
+      "role": "canary_helper_test",
+      "sha256": "5f226eebe0043966fcd6a2b5867478522cc6e5a949f310761933637978206aaf"
+    },
+    {
+      "bytes": 13336,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/operational_canary/build_verified_canary_bundle.py",
+      "role": "bundle_builder",
+      "sha256": "704a1eb44300582c101e4f90daef5d2debcfbcb2c71c05f9cd00f8029017afb4"
+    },
+    {
+      "bytes": 10232,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/docs/reference/tks_definition_anchor_diagnostic_protocol_20260721.json",
+      "role": "frozen_protocol",
+      "sha256": "d0e154c7ac9913425a16de8d9394b391ae0c788c1bfcdd8959e4d2554b10b715"
+    },
+    {
+      "bytes": 111446,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_tks_definition_anchor_diagnostic.py",
+      "role": "frozen_runner",
+      "sha256": "5b069f43af2d50cbc9cfd4735f316497b0c8ab26762cc871d18cd38edee761da"
+    },
+    {
+      "bytes": 1438,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/docs/reference/tks_definition_anchor_diagnostic_arms_20260721.json",
+      "role": "definition_arm_manifest",
+      "sha256": "5ef95e61b8df526fec1d66d59635f8b2a6d0f298537019463cd4babefa9b0d5b"
+    },
+    {
+      "bytes": 5686423,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/stage7_foundation_rolebound_pilot_20260526.json",
+      "role": "stage7_scenario_bank",
+      "sha256": "c2fa18078feaad6f4970f31a380b67557f3684bb871f96695dbf00c750516d75"
+    },
+    {
+      "bytes": 236254,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/foundation28_balanced_v0_20260526.json",
+      "role": "sensitivity_scenario_bank_validated_not_captured",
+      "sha256": "0868b37a718798cb30a7db8b8a23f5326d4e1ae2b6464842d16218e97ec1751a"
+    },
+    {
+      "bytes": 19987,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/receipts/pythia_160m_hook_preflight.json",
+      "role": "gpu_hook_preflight_receipt",
+      "sha256": "b689da7f7c42c733f0725d445eed758c8b6b06cbc2f1c3a1fd46bccf34dc3b34"
+    },
+    {
+      "bytes": 326,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/logs/pythia_160m_hook_preflight.log",
+      "role": "gpu_hook_preflight_log",
+      "sha256": "1d5d3411891aaeacfde9c3aba6fae7f91a6a4955ce159f13ed35bfa1eacbf873"
+    },
+    {
+      "bytes": 720034,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/source/cas-tks-anchor-diagnostic-20260721-da00bd94.zip",
+      "role": "frozen_source_archive",
+      "sha256": "caeb3171d8f461e81aeb164888a41a7c33e105d2813a253df25a833cc58a2e20"
+    },
+    {
+      "bytes": 555869,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/artifacts/canary-8prompt-2layer/tks_definition_anchor_canary_vectors.npz",
+      "role": "canary_raw_npz",
+      "sha256": "57921a21e59c0c1b380a097da305dee2fe3bd54cea75282e505db6512e461e3b"
+    },
+    {
+      "bytes": 25181,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/artifacts/canary-8prompt-2layer/tks_definition_anchor_canary_receipt.json",
+      "role": "canary_json_receipt",
+      "sha256": "392e846e2393f89a84acc049f28c2729da792d31145899f6e18340296e0b7b06"
+    },
+    {
+      "bytes": 1262,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/logs/tks_definition_anchor_canary.log",
+      "role": "canary_combined_stdout_stderr_log",
+      "sha256": "fe3d99edc2eb8d1c1785a1d91a49969f1827ae034d575f725076e23b0666da6c"
+    }
+  ],
+  "licensing_status": "NOT_LICENSED_CANARY_ONLY",
+  "non_claim": "Operational capture canary only. Not semantic validation, causal/output control, prompt-injection detection, universality, 300B execution, production readiness, an Evidence Packet, ACCEPT, LICENSED evidence, or an external claim.",
+  "preflight_binding": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "sha256": "b689da7f7c42c733f0725d445eed758c8b6b06cbc2f1c3a1fd46bccf34dc3b34",
+    "status": "PREFLIGHT_PASS"
+  },
+  "schema_version": "cas_harness_tks_definition_anchor_canary_bundle.v1",
+  "status": "CANARY_PASS"
+}

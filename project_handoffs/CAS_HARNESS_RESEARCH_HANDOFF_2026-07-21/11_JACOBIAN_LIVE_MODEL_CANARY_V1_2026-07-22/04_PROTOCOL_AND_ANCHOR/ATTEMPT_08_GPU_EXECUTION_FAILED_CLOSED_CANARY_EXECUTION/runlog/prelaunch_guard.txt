@@ -1,0 +1,12 @@
+post_anchor_prelaunch_guard=PASS
+checked_at_utc=2026-07-24T04:57:26Z
+hostname=13e938fc50e8
+host_identity_sha256=d88f4a806ead491d5c140d54615b6595c926b8e67c476a60a95d566ee732e03c
+boot_id_sha256=8d6f65214f4ce130d8d342532a65ee41b4a8555fcd102502f6acb3840bbce7aa
+machine_id_sha256=aed9946c7ac389c687b73bd918790d99da1303140bc502277f8d7c016975a486
+gpu_uuid=GPU-b7638993-cc34-ac95-7fc8-5002ce894e00
+gpu_total_memory_bytes=48305799168
+gpu_memory_used_mib=0
+gpu_utilization_percent=0
+driver_version=580.126.09
+dependency={"dependency_lock_sha256":"deb9d1f618aac3df95e5b93e226153e196d6aecbb8f619ca7e1e6cb34d839d7b","file_count":15,"file_manifest_sha256":"10c9cfab8284582c2a46484dd74bb5435ba9d2dd4c6d946f7dac4d97aae20a00"}

@@ -1,0 +1,24 @@
+{
+  "code_sha256": "5b069f43af2d50cbc9cfd4735f316497b0c8ab26762cc871d18cd38edee761da",
+  "created_at": "2026-07-21T10:46:23.483977+00:00",
+  "diagnostic_class": "ZERO_SHOT_DEFINITION_ANCHOR_DIAGNOSTIC",
+  "files": [
+    {
+      "bytes": 109414103,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/artifacts/full/tks_definition_anchor_raw_diagnostic_vectors.npz",
+      "sha256": "454a4f017d56ed393e50d7e88d29486b3379e96ae930a1123698c6275298ead6"
+    },
+    {
+      "bytes": 255466,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/artifacts/full/tks_definition_anchor_report.json",
+      "sha256": "0440462d278da53b2fc217f252dff0d295c878b356fd53bccb38cc810407cdef"
+    },
+    {
+      "bytes": 4551,
+      "path": "/workspace/cas-tks-anchor-diagnostic-20260721/artifacts/full/tks_definition_anchor_report.md",
+      "sha256": "c35bf4ccc92ce94d4d5741fe12fe09f97e1db0dfd74479af6521ef29134c20d0"
+    }
+  ],
+  "non_claim": "This is a zero-shot definition-anchor diagnostic on one exact model revision and two source-derived prompt banks. It does not license semantic-probe validity, causal control, prompt-injection detection, output control, cross-architecture universality, 300B execution, production readiness, an ACCEPT verdict, or any customer/investor claim. The NPZ and its manifest are local diagnostic artifacts, not WORM anchors or Evidence Packets.",
+  "schema_version": "cas_harness_tks_definition_anchor_local_artifact_manifest.v1"
+}

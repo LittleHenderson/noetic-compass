@@ -1,0 +1,22 @@
+[phase-one] installed OK; filter_count= 2
+[torch] 2.12.0+cu130
+[cuda] bootstrap sum= 1024.0 device_count= 1
+[fd:post-cuda] sockets=[('15', 'socket:[1671893955]')] io_uring=[] anon/cuda=[('16', 'anon_inode:[eventfd]'), ('23', 'anon_inode:[eventfd]'), ('3', 'anon_inode:[eventfd]'), ('30', 'anon_inode:[eventfd]')]
+[uvm] fd= 15 name= @cuda-uvmfd-4026536912-22958@
+[fd:at-failure] sockets=[('15', 'socket:[1671893955]')] io_uring=[] anon/cuda=[('16', 'anon_inode:[eventfd]'), ('23', 'anon_inode:[eventfd]'), ('3', 'anon_inode:[eventfd]'), ('30', 'anon_inode:[eventfd]')]
+=== DIAGNOSTIC REPORT ===
+{"diagnostic": "PHASE_TWO_NON_OFFICIAL", "exception_str": "/proc/net/unix changed while being read", "exception_type": "NetworkGuardError", "result": "FAILED", "stage": "PHASE_TWO_INSTALL"}
+=== DIAGNOSTIC TRACEBACK ===
+Traceback (most recent call last):
+  File "/workspace/cas-jlcv1-attempt6-diag/phase_two_diagnostic.py", line 76, in <module>
+    phase_two = guard.install_phase_two_guard(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/cas-jlcv1-official-29551624-f3e3adad/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/research/jacobian_lens_network_guard.py", line 1297, in install_phase_two_guard
+    if identify_sole_cuda_uvm_listener() != uvm_listener:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/cas-jlcv1-official-29551624-f3e3adad/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/research/jacobian_lens_network_guard.py", line 1205, in identify_sole_cuda_uvm_listener
+    proc_record = _proc_unix_record(inode)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/cas-jlcv1-official-29551624-f3e3adad/repo/noetic-compass-scaffold/noetic-compass/live-trace-worker/research/jacobian_lens_network_guard.py", line 1093, in _proc_unix_record
+    raise NetworkGuardError("/proc/net/unix changed while being read")
+research.jacobian_lens_network_guard.NetworkGuardError: /proc/net/unix changed while being read
