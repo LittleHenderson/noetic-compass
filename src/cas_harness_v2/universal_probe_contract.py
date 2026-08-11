@@ -18,7 +18,13 @@ from types import MappingProxyType
 from typing import Any, NoReturn
 from weakref import WeakKeyDictionary
 
-from ._strict_json import canonical_json_bytes, freeze_json, load_json_object, sha256_bytes
+from ._strict_json import (
+    canonical_json_bytes,
+    freeze_json,
+    load_json_object,
+    mapping_proxy_backing_dict,
+    sha256_bytes,
+)
 from ._validation import (
     ArtifactRef,
     SchemaValidationError,
@@ -236,7 +242,7 @@ _CANARY_CHECKS = (
     "ZERO_CONTROL_NO_EFFECT",
     "SHAM_CONTROL_NO_EFFECT",
 )
-_SITE_PROJECTION = {
+_SITE_PROJECTION = MappingProxyType({
     RESIDUAL: RESIDUAL_STREAM,
     ATTENTION: ATTENTION_OUTPUT,
     MLP: MLP_OUTPUT,
@@ -244,43 +250,45 @@ _SITE_PROJECTION = {
     EXPERT: EXPERT_OUTPUT,
     RECURRENT: RECURRENT_STATE,
     MULTIMODAL_SITE: MULTIMODAL_FUSION,
-}
-_SITE_TRANSFORMS = {
-    RESIDUAL: {IDENTITY_TRANSFORM, SELECT_TOKEN_TRANSFORM},
-    ATTENTION: {SELECT_HEAD_TRANSFORM, SELECT_TOKEN_TRANSFORM},
-    MLP: {IDENTITY_TRANSFORM, SELECT_TOKEN_TRANSFORM},
-    ROUTER: {ROUTER_LOGITS_TRANSFORM},
-    EXPERT: {SELECT_EXPERT_TRANSFORM},
-    RECURRENT: {RECURRENT_STATE_TRANSFORM},
-    MULTIMODAL_SITE: {MULTIMODAL_FUSION_TRANSFORM},
-}
-_FAMILY_REQUIRED_SITES = {
-    DENSE_DECODER: {RESIDUAL, ATTENTION, MLP},
-    ENCODER_DECODER: {RESIDUAL, ATTENTION, MLP},
-    MIXTURE_OF_EXPERTS: {RESIDUAL, ATTENTION, MLP, ROUTER, EXPERT},
-    SSM_RECURRENT: {RESIDUAL, RECURRENT},
-    MULTIMODAL: {RESIDUAL, ATTENTION, MLP, MULTIMODAL_SITE},
-}
-_FAMILY_CONFIG_TOKENS = {
-    DENSE_DECODER: {
+})
+_SITE_TRANSFORMS = MappingProxyType({
+    RESIDUAL: frozenset({IDENTITY_TRANSFORM, SELECT_TOKEN_TRANSFORM}),
+    ATTENTION: frozenset({SELECT_HEAD_TRANSFORM, SELECT_TOKEN_TRANSFORM}),
+    MLP: frozenset({IDENTITY_TRANSFORM, SELECT_TOKEN_TRANSFORM}),
+    ROUTER: frozenset({ROUTER_LOGITS_TRANSFORM}),
+    EXPERT: frozenset({SELECT_EXPERT_TRANSFORM}),
+    RECURRENT: frozenset({RECURRENT_STATE_TRANSFORM}),
+    MULTIMODAL_SITE: frozenset({MULTIMODAL_FUSION_TRANSFORM}),
+})
+_FAMILY_REQUIRED_SITES = MappingProxyType({
+    DENSE_DECODER: frozenset({RESIDUAL, ATTENTION, MLP}),
+    ENCODER_DECODER: frozenset({RESIDUAL, ATTENTION, MLP}),
+    MIXTURE_OF_EXPERTS: frozenset({RESIDUAL, ATTENTION, MLP, ROUTER, EXPERT}),
+    SSM_RECURRENT: frozenset({RESIDUAL, RECURRENT}),
+    MULTIMODAL: frozenset({RESIDUAL, ATTENTION, MLP, MULTIMODAL_SITE}),
+})
+_FAMILY_CONFIG_TOKENS = MappingProxyType({
+    DENSE_DECODER: frozenset({
         "hidden_size", "num_hidden_layers", "num_attention_heads", "intermediate_size"
-    },
-    ENCODER_DECODER: {
+    }),
+    ENCODER_DECODER: frozenset({
         "encoder_layers", "decoder_layers", "d_model",
         "encoder_attention_heads", "decoder_attention_heads",
-    },
-    MIXTURE_OF_EXPERTS: {
+    }),
+    MIXTURE_OF_EXPERTS: frozenset({
         "hidden_size", "num_hidden_layers", "num_experts", "num_experts_per_tok"
-    },
-    SSM_RECURRENT: {"hidden_size", "num_hidden_layers", "state_size", "conv_kernel"},
-    MULTIMODAL: {
+    }),
+    SSM_RECURRENT: frozenset({
+        "hidden_size", "num_hidden_layers", "state_size", "conv_kernel"
+    }),
+    MULTIMODAL: frozenset({
         "hidden_size", "vision_hidden_size", "text_hidden_size", "projector_type"
-    },
-}
-_FORBIDDEN_INFERENCE_TOKENS = {
+    }),
+})
+_FORBIDDEN_INFERENCE_TOKENS = frozenset({
     "model_name", "model_id", "model_type", "parameter_count", "parameters",
     "num_parameters", "parameter_size", "size_label",
-}
+})
 _NATIVE_PATH_RE = re.compile(
     r"^[A-Za-z_][A-Za-z0-9_]*(?:\.(?:[A-Za-z_][A-Za-z0-9_]*|[0-9]+))*$"
 )
@@ -867,7 +875,12 @@ def _owner_closure(owner_id: str, refs: tuple[ArtifactRef, ...], path: str) -> t
 
 def _require_frozen_json(value: Any, path: str) -> None:
     if type(value) is MappingProxyType:
-        for key, child in value.items():
+        backing = mapping_proxy_backing_dict(value)
+        if backing is None:
+            raise UniversalProbeContractValidationError(
+                f"{path} mapping proxy must wrap an exact dict"
+            )
+        for key, child in backing.items():
             if type(key) is not str:
                 raise UniversalProbeContractValidationError(
                     f"{path} has a non-string key"

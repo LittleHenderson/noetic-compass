@@ -21,6 +21,7 @@ from ._strict_json import (
     canonical_json_bytes,
     freeze_json,
     load_json_object,
+    mapping_proxy_backing_dict,
     sha256_bytes,
 )
 from ._validation import (
@@ -146,7 +147,9 @@ _BOUNDARY = MappingProxyType({
 })
 _MAPPING_PROXY_TYPE = type(MappingProxyType({}))
 _MAX_ABS_INTEGER = 1 << (MAX_CASE_COUNT + 2)
-_MUTABLE_REVISIONS = {"latest", "main", "master", "current", "default", "head"}
+_MUTABLE_REVISIONS = frozenset(
+    {"latest", "main", "master", "current", "default", "head"}
+)
 
 
 class ComparisonDepartureMetricsError(RuntimeError):
@@ -2123,7 +2126,12 @@ def load_comparison_departure_metrics(
 
 def _require_frozen_json(value: Any, path: str) -> None:
     if type(value) is _MAPPING_PROXY_TYPE:
-        for key, item in value.items():
+        backing = mapping_proxy_backing_dict(value)
+        if backing is None:
+            raise ComparisonDepartureMetricsValidationError(
+                f"{path} mapping proxy must wrap an exact dict"
+            )
+        for key, item in backing.items():
             if type(key) is not str:
                 raise ComparisonDepartureMetricsValidationError(
                     f"{path} contains a non-string key"

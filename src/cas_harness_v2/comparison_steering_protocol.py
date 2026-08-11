@@ -17,6 +17,7 @@ from ._strict_json import (
     canonical_json_bytes,
     freeze_json,
     load_json_object,
+    mapping_proxy_backing_dict,
     sha256_bytes,
     thaw_json,
 )
@@ -152,13 +153,13 @@ _BLACK_BOX_BOUNDARY = MappingProxyType({
     "internal_activation_access": "UNAVAILABLE_BY_ACCESS_MODEL",
     "mechanism_equivalence_claim": "FORBIDDEN",
 })
-_FORBIDDEN_STAGEC_PHASES = {
+_FORBIDDEN_STAGEC_PHASES = frozenset({
     "stagec-calibration",
     "c-cal",
     "stagec-c-cal",
     "gate5-stagec-qwen-prompt-injection-v0.1",
-}
-_STEERING_CONTROL_EVIDENCE = {
+})
+_STEERING_CONTROL_EVIDENCE = MappingProxyType({
     ZERO_DOSE: "ZERO_DOSE_BASELINE",
     NULL_DIRECTION: "NULL_DIRECTION_BASELINE",
     WRONG_LAYER: "WRONG_LAYER_CAUSAL_CONTROL",
@@ -170,14 +171,14 @@ _STEERING_CONTROL_EVIDENCE = {
     HOOK_FIRED: "HOOK_FIRE_RECEIPT",
     ACTIVATION_CHANGED: "ACTIVATION_CHANGE_RECEIPT",
     OUTPUT_CHANGED: "OUTPUT_CHANGE_RECEIPT",
-}
-_BLACK_BOX_CONTROL_EVIDENCE = {
+})
+_BLACK_BOX_CONTROL_EVIDENCE = MappingProxyType({
     STRONGER_SYSTEM_INSTRUCTIONS: "SYSTEM_INSTRUCTION_POLICY_RECEIPT",
     INPUT_FILTERING: "INPUT_FILTER_POLICY_RECEIPT",
     CONTEXT_ISOLATION: "CONTEXT_ISOLATION_POLICY_RECEIPT",
     TOOL_PERMISSION_RESTRICTIONS: "TOOL_PERMISSION_POLICY_RECEIPT",
     OUTPUT_VALIDATION: "OUTPUT_VALIDATION_POLICY_RECEIPT",
-}
+})
 
 
 class ComparisonSteeringValidationError(SchemaValidationError):
@@ -350,7 +351,12 @@ def _canonical(raw: bytes | bytearray | memoryview, path: str) -> tuple[bytes, d
 
 def _require_frozen(value: Any, path: str) -> None:
     if type(value) is MappingProxyType:
-        for key, child in value.items():
+        backing = mapping_proxy_backing_dict(value)
+        if backing is None:
+            raise ComparisonSteeringValidationError(
+                f"{path} mapping proxy must wrap an exact dict"
+            )
+        for key, child in backing.items():
             if type(key) is not str:
                 raise ComparisonSteeringValidationError(f"{path} key changed")
             _require_frozen(child, f"{path}.{key}")

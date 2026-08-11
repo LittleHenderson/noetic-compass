@@ -15,6 +15,7 @@ from ._strict_json import (
     canonical_json_bytes,
     freeze_json,
     load_json_object,
+    mapping_proxy_backing_dict,
     sha256_bytes,
     thaw_json,
 )
@@ -182,7 +183,12 @@ def _canonical(raw: bytes | bytearray | memoryview, path: str) -> tuple[bytes, d
 
 def _require_frozen(value: Any, path: str) -> None:
     if type(value) is MappingProxyType:
-        for key, child in value.items():
+        backing = mapping_proxy_backing_dict(value)
+        if backing is None:
+            raise ComparisonExecutionBoundaryValidationError(
+                f"{path} mapping proxy must wrap an exact dict"
+            )
+        for key, child in backing.items():
             if type(key) is not str:
                 raise ComparisonExecutionBoundaryValidationError(
                     f"{path} has a non-string key"

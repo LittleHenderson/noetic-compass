@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+import gc
 import hashlib
 import json
 from types import MappingProxyType
@@ -144,8 +144,26 @@ def freeze_json(value: Any) -> Any:
     raise StrictJSONError(f"cannot freeze non-JSON value: {type(value).__name__}")
 
 
+def mapping_proxy_backing_dict(value: Any) -> dict[str, Any] | None:
+    """Return an exact-dict proxy backing without invoking mapping callbacks."""
+
+    if type(value) is not MappingProxyType:
+        return None
+    referents = gc.get_referents(value)
+    if len(referents) != 1 or type(referents[0]) is not dict:
+        return None
+    return referents[0]
+
+
 def thaw_json(value: Any) -> Any:
-    if isinstance(value, Mapping):
+    if type(value) is MappingProxyType:
+        backing = mapping_proxy_backing_dict(value)
+        if backing is None:
+            raise StrictJSONError(
+                "canonical JSON mapping proxy must wrap an exact dict"
+            )
+        value = backing
+    if type(value) is dict:
         result: dict[str, Any] = {}
         for key, item in value.items():
             if type(key) is not str:
@@ -158,6 +176,4 @@ def thaw_json(value: Any) -> Any:
         return value
     if type(value) is list:
         return [thaw_json(item) for item in value]
-    if type(value) is dict:
-        return {key: thaw_json(item) for key, item in value.items()}
     raise StrictJSONError(f"cannot thaw non-JSON value: {type(value).__name__}")
