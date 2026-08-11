@@ -207,15 +207,15 @@ _MUTABLE_REVISION_NAMESPACE_PREFIXES = (
     "refs/heads/",
     "refs/remotes/",
 )
-_STATUS = {"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY}
-_BOUNDARY = {
+_STATUS = MappingProxyType({"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY})
+_BOUNDARY = MappingProxyType({
     "execution": "NOT_PERFORMED",
     "live_model_call": "NOT_PERFORMED",
     "provider_call": "NOT_PERFORMED",
     "execution_authority": "NOT_GRANTED",
     "observation_scope": "RAW_BEHAVIORAL_REFERENCES_ONLY",
     "intervention": "FORBIDDEN",
-}
+})
 
 
 class ComparisonModelProtocolValidationError(SchemaValidationError):

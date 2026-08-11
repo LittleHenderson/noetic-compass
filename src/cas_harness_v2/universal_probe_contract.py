@@ -211,12 +211,12 @@ NOT_EXECUTED = "NOT_EXECUTED"
 REPLAY_ONLY = "REPLAY_ONLY"
 UNAVAILABLE_BACKEND = "UNAVAILABLE"
 
-_STATUS = {
+_STATUS = MappingProxyType({
     "scope": STRUCTURE_ONLY,
     "authority": NON_AUTHORITY,
     "license": NOT_LICENSED,
-}
-_BOUNDARY = {
+})
+_BOUNDARY = MappingProxyType({
     "execution": NOT_EXECUTED,
     "live_loader_calls": 0,
     "model_calls": 0,
@@ -228,7 +228,7 @@ _BOUNDARY = {
     "spend_microusd": 0,
     "remote_code": "FORBIDDEN",
     "execution_authority": "NOT_GRANTED",
-}
+})
 _CANARY_CHECKS = (
     "NONEMPTY_CAPTURE",
     "SENTINEL_ROUNDTRIP",

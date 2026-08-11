@@ -139,8 +139,8 @@ _COMMON_REF_SPECS = (
     ("independent_evaluator_ref", INDEPENDENT_EVALUATOR_MEDIA_TYPE),
     ("time_policy_ref", TIME_POLICY_MEDIA_TYPE),
 )
-_STATUS = {"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY}
-_BOUNDARY = {
+_STATUS = MappingProxyType({"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY})
+_BOUNDARY = MappingProxyType({
     "execution": "NOT_PERFORMED",
     "live_model_call": "NOT_PERFORMED",
     "provider_call": "NOT_PERFORMED",
@@ -148,7 +148,7 @@ _BOUNDARY = {
     "filesystem_io": "NOT_PERFORMED",
     "execution_authority": "NOT_GRANTED",
     "outcome": "NOT_ESTABLISHED",
-}
+})
 
 
 class SharedComparisonProtocolValidationError(SchemaValidationError):

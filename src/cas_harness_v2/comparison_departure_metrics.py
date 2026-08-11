@@ -129,8 +129,8 @@ UNDEFINED_NO_MARGINAL_VARIATION = "UNDEFINED_NO_MARGINAL_VARIATION"
 AVAILABLE = "AVAILABLE"
 UNAVAILABLE_UNDEFINED_REPLICATE = "UNAVAILABLE_UNDEFINED_REPLICATE"
 
-_STATUS = {"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY}
-_BOUNDARY = {
+_STATUS = MappingProxyType({"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY})
+_BOUNDARY = MappingProxyType({
     "composite_score": "FORBIDDEN",
     "model_calls": "FORBIDDEN",
     "provider_calls": "FORBIDDEN",
@@ -143,7 +143,7 @@ _BOUNDARY = {
     "scientific_conclusion": "NOT_ESTABLISHED",
     "product_claim": "NOT LICENSED",
     "public_release": "HELD",
-}
+})
 _MAPPING_PROXY_TYPE = type(MappingProxyType({}))
 _MAX_ABS_INTEGER = 1 << (MAX_CASE_COUNT + 2)
 _MUTABLE_REVISIONS = {"latest", "main", "master", "current", "default", "head"}

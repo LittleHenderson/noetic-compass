@@ -70,8 +70,8 @@ __all__ = (
     "run_shared_behavioral_replay",
 )
 
-_STATUS = {"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY}
-_BOUNDARY = {
+_STATUS = MappingProxyType({"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY})
+_BOUNDARY = MappingProxyType({
     "local_replay": "PERFORMED",
     "live_execution": "NOT_PERFORMED",
     "execution_authority": "NOT_GRANTED",
@@ -80,7 +80,7 @@ _BOUNDARY = {
     "network_calls": 0,
     "filesystem_calls": 0,
     "spend_actions": 0,
-}
+})
 
 
 class SharedBehavioralReplayValidationError(SchemaValidationError):

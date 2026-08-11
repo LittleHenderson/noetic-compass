@@ -163,8 +163,8 @@ STRUCTURE_ONLY = "STRUCTURE_ONLY"
 NON_AUTHORITY = "NON_AUTHORITY"
 NOT_PERFORMED = "NOT_PERFORMED"
 
-_STATUS = {"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY}
-_BOUNDARY = {
+_STATUS = MappingProxyType({"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY})
+_BOUNDARY = MappingProxyType({
     "execution": NOT_PERFORMED,
     "model_call": NOT_PERFORMED,
     "provider_call": NOT_PERFORMED,
@@ -173,7 +173,7 @@ _BOUNDARY = {
     "action_execution": NOT_PERFORMED,
     "data_access": NOT_PERFORMED,
     "filesystem_write": NOT_PERFORMED,
-}
+})
 
 
 class PromptInjectionLayerValidationError(SchemaValidationError):

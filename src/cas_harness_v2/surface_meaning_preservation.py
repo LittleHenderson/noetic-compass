@@ -84,14 +84,14 @@ NOT_LICENSED = "NOT_LICENSED"
 REPLAY_ONLY = "REPLAY_ONLY"
 PER_CELL_ONLY = "PER_CELL_ONLY / NO AGGREGATE PASS"
 
-_STATUS = {
+_STATUS = MappingProxyType({
     "scope": STRUCTURE_ONLY,
     "authority": NON_AUTHORITY,
     "license": NOT_LICENSED,
     "execution": REPLAY_ONLY,
     "claim_scope": PER_CELL_ONLY,
-}
-_BOUNDARY = {
+})
+_BOUNDARY = MappingProxyType({
     "model_calls": 0,
     "provider_calls": 0,
     "network_calls": 0,
@@ -99,7 +99,7 @@ _BOUNDARY = {
     "interventions": 0,
     "aggregate_verdict": None,
     "execution_authority": "NOT_GRANTED",
-}
+})
 _OVERLAP_AXES = (
     TEXT_OVERLAP,
     CHARACTER_OVERLAP,

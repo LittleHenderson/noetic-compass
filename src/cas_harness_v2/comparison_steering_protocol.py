@@ -134,8 +134,8 @@ STEERING_DIRECTION_METHODS = (
     "CAS_OHM_DOSE_DIRECTION",
 )
 
-_STATUS = {"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY}
-_STEERING_BOUNDARY = {
+_STATUS = MappingProxyType({"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY})
+_STEERING_BOUNDARY = MappingProxyType({
     "execution": "NOT_PERFORMED",
     "model_call": "NOT_PERFORMED",
     "provider_call": "NOT_PERFORMED",
@@ -144,14 +144,14 @@ _STEERING_BOUNDARY = {
     "authorization": SEPARATE_AUTHORIZATION_REQUIRED,
     "backend": BACKEND_UNAVAILABLE,
     "canary_count": 0,
-}
-_BLACK_BOX_BOUNDARY = {
+})
+_BLACK_BOX_BOUNDARY = MappingProxyType({
     "execution": "NOT_PERFORMED",
     "model_call": "NOT_PERFORMED",
     "provider_call": "NOT_PERFORMED",
     "internal_activation_access": "UNAVAILABLE_BY_ACCESS_MODEL",
     "mechanism_equivalence_claim": "FORBIDDEN",
-}
+})
 _FORBIDDEN_STAGEC_PHASES = {
     "stagec-calibration",
     "c-cal",

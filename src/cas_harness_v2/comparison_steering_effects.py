@@ -140,8 +140,8 @@ MECHANISM_EQUIVALENCE_FORBIDDEN = "FORBIDDEN"
 NOT_PERFORMED = "NOT_PERFORMED"
 NOT_ESTABLISHED = "NOT_ESTABLISHED"
 
-_STATUS = {"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY}
-_BOUNDARY = {
+_STATUS = MappingProxyType({"scope": STRUCTURE_ONLY, "authority": NON_AUTHORITY})
+_BOUNDARY = MappingProxyType({
     "execution": NOT_PERFORMED,
     "model_call": NOT_PERFORMED,
     "provider_call": NOT_PERFORMED,
@@ -150,7 +150,7 @@ _BOUNDARY = {
     "spend": NOT_PERFORMED,
     "outcome": NOT_ESTABLISHED,
     "mechanism_equivalence": MECHANISM_EQUIVALENCE_FORBIDDEN,
-}
+})
 
 _RESULT_MEDIA_TYPES = MappingProxyType(
     {
