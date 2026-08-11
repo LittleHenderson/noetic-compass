@@ -130,18 +130,20 @@ def test_emergency_controls_settings_ui_and_trace_skip_are_wired():
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("EmergencyControlsPanel")
-    assert "Emergency Controls Coverage" in settings_page
-    assert "Broker Emergency Actions" in settings_page
-    assert "Dry-run close all" in settings_page
-    assert "Dry-run close profitable" in settings_page
-    assert "Dry-run close losing" in settings_page
-    assert "Close all positions" in settings_page
-    assert "Close profitable positions" in settings_page
-    assert "Close losing positions" in settings_page
-    assert "Cancel pending orders" in settings_page
-    assert "fetchEmergencyControls" in settings_page
-    assert "runBrokerEmergencyAction" in settings_page
-    assert "fetchBrokerEmergencyStatus" in settings_page
+    # Moved to components/settings/LegalGovernancePanels.tsx in the settings decomposition.
+    extracted_legalgovernancepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "LegalGovernancePanels.tsx").read_text(encoding="utf-8")
+    assert "Emergency Controls Coverage" in extracted_legalgovernancepanels
+    assert "Broker Emergency Actions" in extracted_legalgovernancepanels
+    assert "Dry-run close all" in extracted_legalgovernancepanels
+    assert "Dry-run close profitable" in extracted_legalgovernancepanels
+    assert "Dry-run close losing" in extracted_legalgovernancepanels
+    assert "Close all positions" in extracted_legalgovernancepanels
+    assert "Close profitable positions" in extracted_legalgovernancepanels
+    assert "Close losing positions" in extracted_legalgovernancepanels
+    assert "Cancel pending orders" in extracted_legalgovernancepanels
+    assert "fetchEmergencyControls" in extracted_legalgovernancepanels
+    assert "runBrokerEmergencyAction" in extracted_legalgovernancepanels
+    assert "fetchBrokerEmergencyStatus" in extracted_legalgovernancepanels
     assert "EmergencyControlsReport" in api_client
     assert "BrokerEmergencyActionResult" in api_client
     assert '"/settings/emergency-controls"' in api_client

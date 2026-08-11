@@ -189,25 +189,27 @@ def test_operational_readiness_settings_ui_and_trace_skip_are_wired():
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("OperationalReadinessPanel")
-    assert "Operational Readiness" in settings_page
-    assert "fetchOperationalReadiness" in settings_page
-    assert "createOperatorBackup" in settings_page
-    assert "Create operator backup" in settings_page
-    assert "External Monitoring" in settings_page
-    assert "Deployment Handoff" in settings_page
-    assert "Hosted Handoff" in settings_page
-    assert "Public Base" in settings_page
-    assert "Health Endpoints" in settings_page
-    assert "https://your-cas-forex-host" in settings_page
-    assert "Save external hooks" in settings_page
-    assert "Reset runtime hooks" in settings_page
+    # Moved to components/settings/LegalGovernancePanels.tsx in the settings decomposition.
+    extracted_legalgovernancepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "LegalGovernancePanels.tsx").read_text(encoding="utf-8")
+    assert "Operational Readiness" in extracted_legalgovernancepanels
+    assert "fetchOperationalReadiness" in extracted_legalgovernancepanels
+    assert "createOperatorBackup" in extracted_legalgovernancepanels
+    assert "Create operator backup" in extracted_legalgovernancepanels
+    assert "External Monitoring" in extracted_legalgovernancepanels
+    assert "Deployment Handoff" in extracted_legalgovernancepanels
+    assert "Hosted Handoff" in extracted_legalgovernancepanels
+    assert "Public Base" in extracted_legalgovernancepanels
+    assert "Health Endpoints" in extracted_legalgovernancepanels
+    assert "https://your-cas-forex-host" in extracted_legalgovernancepanels
+    assert "Save external hooks" in extracted_legalgovernancepanels
+    assert "Reset runtime hooks" in extracted_legalgovernancepanels
     # Moved to components/settings/AuditPanels.tsx in the settings decomposition.
     extracted_auditpanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "AuditPanels.tsx").read_text(encoding="utf-8")
     assert "Send critical alert test" in extracted_auditpanels
-    assert "Off-screen alert webhook URL" in settings_page
-    assert "alert_webhook_url" in settings_page
-    assert "updateExternalMonitoringConfig" in settings_page
-    assert "resetExternalMonitoringConfig" in settings_page
+    assert "Off-screen alert webhook URL" in extracted_legalgovernancepanels
+    assert "alert_webhook_url" in extracted_legalgovernancepanels
+    assert "updateExternalMonitoringConfig" in extracted_legalgovernancepanels
+    assert "resetExternalMonitoringConfig" in extracted_legalgovernancepanels
     assert "testCriticalNotificationDelivery" in extracted_auditpanels
     assert "external_monitoring" in api_client
     assert "ExternalMonitoringReadiness" in api_client

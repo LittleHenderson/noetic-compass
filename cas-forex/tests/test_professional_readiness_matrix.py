@@ -255,8 +255,10 @@ def test_professional_readiness_settings_ui_and_trace_skip_are_wired():
     assert "SpecContextStatusReport" in api_client
     assert '"/settings/spec-context"' in api_client
     assert_panel_wired("LegalReviewReadinessPanel")
-    assert "Legal Review Readiness" in settings_page
-    assert "fetchLegalReviewReadiness" in settings_page
+    # Moved to components/settings/LegalGovernancePanels.tsx in the settings decomposition.
+    extracted_legalgovernancepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "LegalGovernancePanels.tsx").read_text(encoding="utf-8")
+    assert "Legal Review Readiness" in extracted_legalgovernancepanels
+    assert "fetchLegalReviewReadiness" in extracted_legalgovernancepanels
     assert "LegalReviewReadinessReport" in api_client
     assert '"/settings/legal-review-readiness"' in api_client
     assert_panel_wired("PublicLaunchGatePanel")

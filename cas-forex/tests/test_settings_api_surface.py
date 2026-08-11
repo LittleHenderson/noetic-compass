@@ -134,12 +134,14 @@ def test_settings_ai_dials_surface_impact_and_anti_impulse_state():
     assert "value_kind?" in api_types
     assert "contract_rows?" in owner_command_api
     assert "journal_required?" in owner_command_api
-    assert "<th>Risk Posture</th>" in settings_page
-    assert "Loosens 24h" in settings_page
-    assert "definition.operational_effect" in settings_page
-    assert "definition.enforced_by" in settings_page
-    assert "definition.runtime_path" in settings_page
-    assert "definition.units" in settings_page
+    # Moved to components/settings/AiControlAuthorityPanel.tsx in the settings decomposition.
+    extracted_aicontrolauthoritypanel = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "AiControlAuthorityPanel.tsx").read_text(encoding="utf-8")
+    assert "<th>Risk Posture</th>" in extracted_aicontrolauthoritypanel
+    assert "Loosens 24h" in extracted_aicontrolauthoritypanel
+    assert "definition.operational_effect" in extracted_aicontrolauthoritypanel
+    assert "definition.enforced_by" in extracted_aicontrolauthoritypanel
+    assert "definition.runtime_path" in extracted_aicontrolauthoritypanel
+    assert "definition.units" in extracted_aicontrolauthoritypanel
     assert "preview.contract_rows" in floating_assistant
     assert "preview.journal_required" in floating_assistant
     assert "preview.contract_rows" in operator_badge
@@ -201,10 +203,12 @@ def test_live_recovery_ui_surfaces_selected_attempt_provenance():
     evidence_types = (REPO_ROOT / "ui" / "src" / "types" / "evidence.ts").read_text(encoding="utf-8")
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     assert "execution_provenance?: Record<string, unknown> | null;" in evidence_types
-    assert "selectedAttemptProvenance" in settings_page
-    assert "Runtime Lane" in settings_page
-    assert "Provenance Hash" in settings_page
-    assert "Config Hash" in settings_page
+    # Moved to components/settings/LiveRecoveryPanel.tsx in the settings decomposition.
+    extracted_liverecoverypanel = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "LiveRecoveryPanel.tsx").read_text(encoding="utf-8")
+    assert "selectedAttemptProvenance" in extracted_liverecoverypanel
+    assert "Runtime Lane" in extracted_liverecoverypanel
+    assert "Provenance Hash" in extracted_liverecoverypanel
+    assert "Config Hash" in extracted_liverecoverypanel
 
 
 def test_agent_decision_ui_surfaces_version_trace():
@@ -265,7 +269,9 @@ def test_live_enable_ui_uses_typed_arm_confirmation():
     extracted_golivepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "GoLivePanels.tsx").read_text(encoding="utf-8")
     assert "armConfirmationForPatch" in extracted_golivepanels
     assert "requestArmConfirmation" in extracted_golivepanels
-    assert "CONFIRM_REQUIRED" in settings_page
+    # Moved to components/settings/GoLivePanels.tsx in the settings decomposition.
+    extracted_golivepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "GoLivePanels.tsx").read_text(encoding="utf-8")
+    assert "CONFIRM_REQUIRED" in extracted_golivepanels
     assert "ARM REAL MONEY" in trade_page
     assert "patch.confirm = confirm" in trade_page
     assert "ARM REAL MONEY" in proof_page
@@ -322,13 +328,15 @@ def test_legal_review_panel_surfaces_owner_record_workflow():
     settings_page = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
-    assert "fetchLegalReviewControl" in settings_page
-    assert "updateLegalReviewControl" in settings_page
-    assert "resetLegalReviewControl" in settings_page
-    assert "Counsel Record Control" in settings_page
-    assert "Review Artifact Path" in settings_page
-    assert "Artifact SHA-256" in settings_page
-    assert "RECORD QUALIFIED COUNSEL REVIEW" in settings_page
+    # Moved to components/settings/LegalGovernancePanels.tsx in the settings decomposition.
+    extracted_legalgovernancepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "LegalGovernancePanels.tsx").read_text(encoding="utf-8")
+    assert "fetchLegalReviewControl" in extracted_legalgovernancepanels
+    assert "updateLegalReviewControl" in extracted_legalgovernancepanels
+    assert "resetLegalReviewControl" in extracted_legalgovernancepanels
+    assert "Counsel Record Control" in extracted_legalgovernancepanels
+    assert "Review Artifact Path" in extracted_legalgovernancepanels
+    assert "Artifact SHA-256" in extracted_legalgovernancepanels
+    assert "RECORD QUALIFIED COUNSEL REVIEW" in extracted_legalgovernancepanels
     assert "LegalReviewControlReport" in api_client
     assert "LegalReviewControlUpdate" in api_client
     assert '"/settings/legal-review-control"' in api_client
@@ -1064,10 +1072,12 @@ def test_broker_truth_ui_surfaces_monitor_auto_halt_reasons_and_position_protect
     assert "MONITOR PAPER FORCE" in broker_truth_panel
     assert "position_protection_detail" in broker_truth_panel
     assert "monitor_auto_halt_reason_ids" in broker_truth_panel
-    assert "Truth Auto-Halt" in settings_page
-    assert "Truth Halt Reasons" in settings_page
-    assert "Position Protection" in settings_page
-    assert "Unprotected Positions" in settings_page
+    # Moved to components/settings/LiveRecoveryPanel.tsx in the settings decomposition.
+    extracted_liverecoverypanel = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "LiveRecoveryPanel.tsx").read_text(encoding="utf-8")
+    assert "Truth Auto-Halt" in extracted_liverecoverypanel
+    assert "Truth Halt Reasons" in extracted_liverecoverypanel
+    assert "Position Protection" in extracted_liverecoverypanel
+    assert "Unprotected Positions" in extracted_liverecoverypanel
 
 
 def test_quick_start_page_css_is_lazy_not_root_first_paint():
@@ -1811,15 +1821,14 @@ def test_mt4_bridge_panel_requires_heartbeat_before_demo_fill_claims():
 
 
 def test_settings_page_exposes_broker_funding_handoff_without_raw_payment_storage():
+    # The panel moved wholesale to components/settings/ (slice 4); the
+    # no-raw-payment-storage property now holds over its own module file.
     settings = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     broker_portal = (REPO_ROOT / "ui" / "src" / "util" / "brokerPortal.ts").read_text(encoding="utf-8")
-    # Slice to the NEXT top-level function, whichever it is - the old end
-    # marker (ControlField) moved to components/settings/ in the decomposition,
-    # and a named-neighbour boundary silently widens the slice on any reorder.
-    funding_panel = settings.split("function BrokerFundingHandoffPanel(", 1)[1].split(
-        "\nfunction ",
-        1,
-    )[0]
+    funding_module = (
+        REPO_ROOT / "ui" / "src" / "components" / "settings" / "BrokerFundingHandoffPanel.tsx"
+    ).read_text(encoding="utf-8")
+    funding_panel = funding_module.split("export function BrokerFundingHandoffPanel(", 1)[1]
 
     assert "<BrokerFundingHandoffPanel brokerReality={state.brokerReality} />" in settings
     assert "https://secure.risenfx.com/" in broker_portal
@@ -1839,13 +1848,18 @@ def test_settings_live_recovery_exposes_order_idempotency_policy():
     settings = (REPO_ROOT / "ui" / "src" / "pages" / "SettingsPage.tsx").read_text(encoding="utf-8")
     evidence_types = (REPO_ROOT / "ui" / "src" / "types" / "evidence.ts").read_text(encoding="utf-8")
 
-    assert "Duplicate Suppressed" in settings
-    assert "Shape Duplicates" in settings
-    assert "Idempotency Window" in settings
-    assert "Exact Retry Key" in settings
-    assert "Near Duplicate Key" in settings
-    assert "Latest Shape Key" in settings
-    assert "manual and compound/pyramid adds are excluded" in settings.lower()
+    # Moved to components/settings/LiveRecoveryPanel.tsx in the settings decomposition.
+    extracted_liverecoverypanel = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "LiveRecoveryPanel.tsx").read_text(encoding="utf-8")
+    assert "Duplicate Suppressed" in extracted_liverecoverypanel
+    assert "Shape Duplicates" in extracted_liverecoverypanel
+    assert "Idempotency Window" in extracted_liverecoverypanel
+    assert "Exact Retry Key" in extracted_liverecoverypanel
+    assert "Near Duplicate Key" in extracted_liverecoverypanel
+    assert "Latest Shape Key" in extracted_liverecoverypanel
+    live_recovery_module = (
+        REPO_ROOT / "ui" / "src" / "components" / "settings" / "LiveRecoveryPanel.tsx"
+    ).read_text(encoding="utf-8")
+    assert "manual and compound/pyramid adds are excluded" in live_recovery_module.lower()
     assert "OrderIdempotencyPolicy" in evidence_types
     assert "near_duplicate_suppressed_count" in evidence_types
     assert "order_shape_key" in evidence_types
@@ -4139,7 +4153,9 @@ def test_money_affecting_failure_messages_state_when_nothing_changed():
 
     assert "Provider settings were not saved. Withdrawal and payout configuration remains unchanged" in trade_page
     assert "Owner switch save failed. Live, broker, and payment authority remains at its prior state" in trade_page
-    assert "Broker emergency request failed before execution confirmation. No broker emergency action was confirmed through this app" in settings_page
+    # Moved to components/settings/LegalGovernancePanels.tsx in the settings decomposition.
+    extracted_legalgovernancepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "LegalGovernancePanels.tsx").read_text(encoding="utf-8")
+    assert "Broker emergency request failed before execution confirmation. No broker emergency action was confirmed through this app" in extracted_legalgovernancepanels
     assert "Broker sync preview unavailable; using the default readiness report only." in live_operability
 
 

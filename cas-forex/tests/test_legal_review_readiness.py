@@ -169,12 +169,14 @@ def test_legal_review_readiness_settings_ui_and_trace_skip_are_wired():
     api_client = (REPO_ROOT / "ui" / "src" / "data" / "api.ts").read_text(encoding="utf-8")
 
     assert_panel_wired("LegalReviewReadinessPanel")
-    assert "Legal Review Readiness" in settings_page
-    assert "Counsel Handoff" in settings_page
-    assert "Package Docs" in settings_page
-    assert "Required Fields" in settings_page
-    assert "Record Template" in settings_page
-    assert "fetchLegalReviewReadiness" in settings_page
+    # Moved to components/settings/LegalGovernancePanels.tsx in the settings decomposition.
+    extracted_legalgovernancepanels = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "LegalGovernancePanels.tsx").read_text(encoding="utf-8")
+    assert "Legal Review Readiness" in extracted_legalgovernancepanels
+    assert "Counsel Handoff" in extracted_legalgovernancepanels
+    assert "Package Docs" in extracted_legalgovernancepanels
+    assert "Required Fields" in extracted_legalgovernancepanels
+    assert "Record Template" in extracted_legalgovernancepanels
+    assert "fetchLegalReviewReadiness" in extracted_legalgovernancepanels
     assert "LegalReviewReadinessReport" in api_client
     assert "LegalReviewCounselHandoff" in api_client
     assert "counsel_review_handoff" in api_client

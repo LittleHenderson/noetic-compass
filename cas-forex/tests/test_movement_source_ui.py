@@ -112,9 +112,11 @@ def test_movement_source_helper_is_wired_across_ui_surfaces():
     assert "Movement Feed" in proof_page
     assert "movementTruth.detail" in proof_page
 
-    assert "describeReconciliationMovementTruth" in settings_page
-    assert "Movement Feed" in settings_page
-    assert "movementTruth.detail" in settings_page
+    # Moved to components/settings/BrokerFundingHandoffPanel.tsx in the settings decomposition.
+    extracted_brokerfundinghandoffpanel = (Path(__file__).resolve().parents[1] / "ui" / "src" / "components" / "settings" / "BrokerFundingHandoffPanel.tsx").read_text(encoding="utf-8")
+    assert "describeReconciliationMovementTruth" in extracted_brokerfundinghandoffpanel
+    assert "Movement Feed" in extracted_brokerfundinghandoffpanel
+    assert "movementTruth.detail" in extracted_brokerfundinghandoffpanel
 
     assert "summarizeMovementSource" in tracker_page
     assert "describeMovementPositionFeed" in tracker_page
