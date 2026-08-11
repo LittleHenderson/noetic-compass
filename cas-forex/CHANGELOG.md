@@ -44,16 +44,16 @@ projected runtime and 10 failures at session start to ~16 min and zero).
 - Nav: 23 flat destinations -> 7 groups + secondary tabs + legal footer;
   pushState/popstate so the back button works (verified live, desktop + 375px
   drawer). `?page=` URLs unchanged. Partition property enforced by test.
-- SettingsPage 6,501 -> 4,346 lines across two slices; 11 modules under
+- SettingsPage 6,501 -> 4,340 lines across two slices; 11 modules under
   `components/settings/`; dead legacy RiskControlPanel deleted (tautology-
   gated unreachable code). Repo-wide rewire keeps assertions pointing at
   moved code.
 
 **Settings decomposition complete (slices 3-4, follow-up commits)**
-- SettingsPage 4,346 -> 480 lines: go-live cluster (GoLivePanels,
+- SettingsPage 4,340 -> 391 lines (final, after import strips): go-live cluster (GoLivePanels,
   BrokerRealityPanel, LivePilotPanel, shared gate consts), then
-  LiveRecoveryPanel (1,277 - largest component in the codebase),
-  LegalGovernancePanels (1,013), RiskControlPanel, AiControlAuthorityPanel,
+  LiveRecoveryPanel (1,289; the largest single-component file remains OperatorBadge.tsx at 1,348),
+  LegalGovernancePanels (1,023), RiskControlPanel, AiControlAuthorityPanel,
   BrokerFundingHandoffPanel. 23 modules total under components/settings/.
 - Slice-3 first attempt REVERTED before commit: the block-boundary regex
   missed export-prefixed declarations and swallowed the page component; redo
@@ -83,6 +83,18 @@ projected runtime and 10 failures at session start to ~16 min and zero).
   a loop that outlives dev sessions. True day count: 3 complete bundle days
   (June), not the 0/30 the startup shell displayed - those zeros now honestly
   tag themselves UNPROVEN.
+
+**Session claims audit (adversarial, post-hoc) - corrections**
+- The "$5,000, $0 P/L, 0 trades" figures reported during this session describe
+  the INTERNAL LEDGER model only. The broker demo account
+  (runtime/mt5-account-growth.json, reconciled 2026-07-15) shows $100,000
+  deposited, 1,723 closed positions, net realized -$55,069.22, balance
+  $44,930.73. Conflating the two is precisely the provenance failure this
+  session built fences against; the runbook now states both records.
+- Runbook "done" criteria were materially incomplete (missing: >=15 real-trade
+  days, daily position reconciliation, net-positive P&L). Corrected.
+- Line counts in earlier entries were taken from pre-strip working states;
+  corrected above. "Seven modules" for the MT5 guard was six by design.
 
 **Failed approaches recorded**
 - The flaky race test was NOT the lock ceiling (first attribution wrong,
