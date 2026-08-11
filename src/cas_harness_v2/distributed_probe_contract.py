@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass
+import gc
 import re
 import threading
 from types import MappingProxyType
@@ -117,27 +118,53 @@ REPLAY_ONLY = "REPLAY_ONLY"
 UNAVAILABLE = "UNAVAILABLE"
 FRAGMENT_OBJECT_VERSION = "distributed-fragment-v1"
 
-_STATUS = {
-    "scope": STRUCTURE_ONLY,
-    "authority": NON_AUTHORITY,
-    "license": NOT_LICENSED,
-    "capability": UNMEASURED,
-}
-_BOUNDARY = {
-    "execution": NOT_EXECUTED,
-    "distributed_framework_calls": 0,
-    "model_calls": 0,
-    "provider_calls": 0,
-    "network_calls": 0,
-    "filesystem_calls": 0,
-    "gpu_calls": 0,
-    "spend_microusd": 0,
-    "executed_attempts": 0,
-    "execution_authority": "NOT_GRANTED",
-}
+_STATUS_ITEMS = (
+    ("scope", STRUCTURE_ONLY),
+    ("authority", NON_AUTHORITY),
+    ("license", NOT_LICENSED),
+    ("capability", UNMEASURED),
+)
+_BOUNDARY_ITEMS = (
+    ("execution", NOT_EXECUTED),
+    ("distributed_framework_calls", 0),
+    ("model_calls", 0),
+    ("provider_calls", 0),
+    ("network_calls", 0),
+    ("filesystem_calls", 0),
+    ("gpu_calls", 0),
+    ("spend_microusd", 0),
+    ("executed_attempts", 0),
+    ("execution_authority", "NOT_GRANTED"),
+)
+_STATUS = MappingProxyType(dict(_STATUS_ITEMS))
+_BOUNDARY = MappingProxyType(dict(_BOUNDARY_ITEMS))
+_ZERO_BOUNDARY_FIELDS = (
+    "distributed_framework_calls",
+    "model_calls",
+    "provider_calls",
+    "network_calls",
+    "filesystem_calls",
+    "gpu_calls",
+    "spend_microusd",
+    "executed_attempts",
+)
+_FROZEN_JSON_MAX_DEPTH = 40
+_FROZEN_JSON_MAX_NODES = 50_000
 _VERSION_RE = re.compile(
     r"^[A-Za-z0-9][A-Za-z0-9._-]*-v[1-9][0-9]*(?:\.[0-9]+){0,2}$"
 )
+
+
+def _status_value(
+    _expected_items: tuple[tuple[str, Any], ...] = _STATUS_ITEMS,
+) -> dict[str, Any]:
+    return dict(_expected_items)
+
+
+def _boundary_value(
+    _expected_items: tuple[tuple[str, Any], ...] = _BOUNDARY_ITEMS,
+) -> dict[str, Any]:
+    return dict(_expected_items)
 
 
 class DistributedProbeContractValidationError(SchemaValidationError):
@@ -146,6 +173,142 @@ class DistributedProbeContractValidationError(SchemaValidationError):
 
 class DistributedProbeBackendUnavailableError(RuntimeError):
     """The distributed probe backend is deliberately unavailable."""
+
+
+def _contains_stage_c_namespace(value: str) -> bool:
+    compact = re.sub(r"[^a-z0-9]+", "", value.casefold())
+    return "stagec" in compact or "ccal" in compact
+
+
+def _reject_stage_c_text(value: Any, path: str) -> str:
+    result = expect_string(value, path, maximum=128)
+    if _contains_stage_c_namespace(result):
+        raise DistributedProbeContractValidationError(
+            f"{path} cannot reuse the current Stage C namespace"
+        )
+    return result
+
+
+def _local_machine_id(value: Any, path: str) -> str:
+    result = expect_machine_id(value, path)
+    _reject_stage_c_text(result, path)
+    return result
+
+
+def _require_exact_frozen_json(
+    value: Any,
+    path: str,
+    *,
+    _get_referents: Any = gc.get_referents,
+) -> Any:
+    active: set[int] = set()
+    node_count = 0
+
+    def visit(node: Any, node_path: str, depth: int) -> Any:
+        nonlocal node_count
+        node_count += 1
+        if node_count > _FROZEN_JSON_MAX_NODES:
+            raise DistributedProbeContractValidationError(
+                f"{path} exceeds the frozen JSON node bound"
+            )
+        if depth > _FROZEN_JSON_MAX_DEPTH:
+            raise DistributedProbeContractValidationError(
+                f"{path} exceeds the frozen JSON depth bound"
+            )
+        if type(node) is MappingProxyType:
+            referents = _get_referents(node)
+            if len(referents) != 1 or type(referents[0]) is not dict:
+                raise DistributedProbeContractValidationError(
+                    f"{node_path} must have an exact dict-backed mapping proxy"
+                )
+            backing = referents[0]
+            identities = (id(node), id(backing))
+            if any(identity in active for identity in identities):
+                raise DistributedProbeContractValidationError(
+                    f"{node_path} contains a frozen JSON cycle or alias"
+                )
+            active.update(identities)
+            try:
+                result: dict[str, Any] = {}
+                for key, item in backing.items():
+                    if type(key) is not str:
+                        raise DistributedProbeContractValidationError(
+                            f"{node_path} keys must be exact strings"
+                        )
+                    result[key] = visit(item, f"{node_path}.{key}", depth + 1)
+                return result
+            finally:
+                active.difference_update(identities)
+        if type(node) is tuple:
+            identity = id(node)
+            if identity in active:
+                raise DistributedProbeContractValidationError(
+                    f"{node_path} contains a frozen JSON cycle or alias"
+                )
+            active.add(identity)
+            try:
+                return [
+                    visit(item, f"{node_path}[{index}]", depth + 1)
+                    for index, item in enumerate(node)
+                ]
+            finally:
+                active.remove(identity)
+        if type(node) in (str, int, bool) or node is None:
+            return node
+        raise DistributedProbeContractValidationError(
+            f"{node_path} contains a non-JSON or callback-capable value"
+        )
+
+    return visit(value, path, 0)
+
+
+def _require_exact_json_projection(
+    actual: Any,
+    expected: Any,
+    path: str,
+    *,
+    mismatch_message: str | None = None,
+) -> None:
+    if type(actual) is not type(expected):
+        raise DistributedProbeContractValidationError(
+            f"{path} must preserve exact JSON container and scalar types"
+        )
+    if type(expected) is dict:
+        if set(actual) != set(expected):
+            raise DistributedProbeContractValidationError(
+                mismatch_message or f"{path} keys differ from the exact projection"
+            )
+        for key, expected_item in expected.items():
+            _require_exact_json_projection(
+                actual[key],
+                expected_item,
+                f"{path}.{key}",
+                mismatch_message=mismatch_message,
+            )
+        return
+    if type(expected) is list:
+        if len(actual) != len(expected):
+            raise DistributedProbeContractValidationError(
+                mismatch_message or f"{path} length differs from the exact projection"
+            )
+        for index, (actual_item, expected_item) in enumerate(
+            zip(actual, expected, strict=True)
+        ):
+            _require_exact_json_projection(
+                actual_item,
+                expected_item,
+                f"{path}[{index}]",
+                mismatch_message=mismatch_message,
+            )
+        return
+    if type(expected) not in (str, int, bool) and expected is not None:
+        raise DistributedProbeContractValidationError(
+            f"{path} contains a non-JSON projection value"
+        )
+    if actual != expected:
+        raise DistributedProbeContractValidationError(
+            mismatch_message or f"{path} differs from the exact projection"
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -194,7 +357,10 @@ class DistributedRankSpec:
                 "DistributedRankSpec.owned_site_ids must be a non-empty exact tuple"
             )
         for index, site_id in enumerate(self.owned_site_ids):
-            expect_machine_id(site_id, f"DistributedRankSpec.owned_site_ids[{index}]")
+            _local_machine_id(
+                site_id,
+                f"DistributedRankSpec.owned_site_ids[{index}]",
+            )
         for path, reference, expected_media in (
             (
                 "DistributedRankSpec.model_shard_ref",
@@ -255,8 +421,8 @@ class FragmentSlot:
                 "checkpoint ordinal must equal the immutable merge ordinal"
             )
         expect_int(self.rank, "FragmentSlot.rank", minimum=0)
-        expect_machine_id(self.site_id, "FragmentSlot.site_id")
-        expect_machine_id(self.case_id, "FragmentSlot.case_id")
+        _local_machine_id(self.site_id, "FragmentSlot.site_id")
+        _local_machine_id(self.case_id, "FragmentSlot.case_id")
 
 
 @dataclass(frozen=True, slots=True)
@@ -423,6 +589,8 @@ def _require_ref(value: Any, path: str) -> ArtifactRef:
         raise DistributedProbeContractValidationError(
             f"{path} must be an exact ArtifactRef"
         )
+    value.__post_init__()
+    _local_machine_id(value.artifact_id, f"{path}.artifact_id")
     return value
 
 
@@ -457,22 +625,58 @@ def _canonical_object(raw: Any, path: str) -> tuple[bytes, dict[str, Any]]:
         raise DistributedProbeContractValidationError(f"{path}: {exc}") from exc
 
 
-def _require_status_boundary(value: dict[str, Any]) -> None:
+def _require_status_boundary(
+    value: dict[str, Any],
+    *,
+    _expected_status_items: tuple[tuple[str, Any], ...] = _STATUS_ITEMS,
+    _expected_boundary_items: tuple[tuple[str, Any], ...] = _BOUNDARY_ITEMS,
+    _zero_fields: tuple[str, ...] = _ZERO_BOUNDARY_FIELDS,
+) -> None:
+    expected_status = dict(_expected_status_items)
+    expected_boundary = dict(_expected_boundary_items)
     status = expect_object(value["status"], "$.status")
-    expect_keys(status, required=_STATUS, path="$.status")
-    if status != _STATUS:
+    expect_keys(status, required=expected_status, path="$.status")
+    for field, expected in expected_status.items():
+        if expect_string(status[field], f"$.status.{field}", maximum=128) != expected:
+            raise DistributedProbeContractValidationError(
+                "distributed artifacts remain "
+                "STRUCTURE_ONLY/NON_AUTHORITY/NOT_LICENSED/UNMEASURED"
+            )
+    if status != expected_status:
         raise DistributedProbeContractValidationError(
             "distributed artifacts remain STRUCTURE_ONLY/NON_AUTHORITY/NOT_LICENSED/UNMEASURED"
         )
     boundary = expect_object(value["boundary"], "$.boundary")
-    expect_keys(boundary, required=_BOUNDARY, path="$.boundary")
-    if boundary != _BOUNDARY:
+    expect_keys(boundary, required=expected_boundary, path="$.boundary")
+    if (
+        expect_string(boundary["execution"], "$.boundary.execution", maximum=128)
+        != expected_boundary["execution"]
+    ):
+        raise DistributedProbeContractValidationError(
+            "distributed artifacts must retain the exact zero-call boundary"
+        )
+    if (
+        expect_string(
+            boundary["execution_authority"],
+            "$.boundary.execution_authority",
+            maximum=128,
+        )
+        != expected_boundary["execution_authority"]
+    ):
+        raise DistributedProbeContractValidationError(
+            "distributed artifacts must retain the exact zero-call boundary"
+        )
+    for field in _zero_fields:
+        expect_int(boundary[field], f"$.boundary.{field}", minimum=0, maximum=0)
+    if boundary != expected_boundary:
         raise DistributedProbeContractValidationError(
             "distributed artifacts must retain the exact zero-call boundary"
         )
 
 
 def _model_binding(identity: ComparisonModelIdentityArtifact) -> dict[str, Any]:
+    for field in ("identity_id", "provider", "model_id", "revision"):
+        _reject_stage_c_text(getattr(identity, field), f"identity.{field}")
     return {
         "identity_ref": _ref_value(identity.artifact_ref),
         "access_kind": identity.access_kind,
@@ -491,14 +695,18 @@ def _require_model_binding(
         required={"identity_ref", "access_kind", "provider", "model_id", "revision"},
         path=path,
     )
-    if binding != _model_binding(identity):
-        raise DistributedProbeContractValidationError(
+    _require_exact_json_projection(
+        binding,
+        _model_binding(identity),
+        path,
+        mismatch_message=(
             f"{path} differs from the exact model/revision/access binding"
-        )
+        ),
+    )
 
 
 def _immutable_version(value: Any, path: str) -> str:
-    result = expect_string(value, path, maximum=128)
+    result = _reject_stage_c_text(value, path)
     if not _VERSION_RE.fullmatch(result):
         raise DistributedProbeContractValidationError(
             f"{path} must be an immutable numbered version"
@@ -533,6 +741,17 @@ def _unique_ref_closure(
     return tuple(ordered)
 
 
+def _distinct_ref_closure(
+    references: tuple[ArtifactRef, ...], path: str
+) -> tuple[ArtifactRef, ...]:
+    closure = _unique_ref_closure(references, path)
+    if len(closure) != len(references):
+        raise DistributedProbeContractValidationError(
+            f"{path} must use one distinct artifact reference per role"
+        )
+    return closure
+
+
 def _owner_closure(
     owner_id: str, references: tuple[ArtifactRef, ...], path: str
 ) -> tuple[ArtifactRef, ...]:
@@ -560,6 +779,17 @@ def _artifact_storage(value: Any, expected: type[Any], path: str) -> None:
         raise DistributedProbeContractValidationError(
             f"{path} storage projections must remain exact immutable values"
         )
+    frozen_projection = _require_exact_frozen_json(
+        value.payload, f"{path}.payload"
+    )
+    _, raw_projection = _canonical_object(value.raw_bytes, f"{path}.raw_bytes")
+    _require_exact_json_projection(
+        frozen_projection,
+        raw_projection,
+        f"{path}.payload",
+    )
+    for index, reference in enumerate(value.artifact_refs):
+        _require_ref(reference, f"{path}.artifact_refs[{index}]")
 
 
 def _validate_universal_dependencies(
@@ -657,6 +887,12 @@ def _validate_ranges(
             raise DistributedProbeContractValidationError(
                 f"{path}[{index}] must be an exact ParameterRange"
             )
+        start = expect_int(value.start, f"{path}[{index}].start", minimum=0)
+        stop = expect_int(value.stop, f"{path}[{index}].stop", minimum=1)
+        if stop <= start:
+            raise DistributedProbeContractValidationError(
+                f"{path}[{index}].stop must be greater than start"
+            )
         if last_stop is not None and value.start < last_stop:
             raise DistributedProbeContractValidationError(
                 f"{path} contains overlapping or out-of-order ranges"
@@ -702,19 +938,19 @@ def build_distributed_runtime_identity_body(
     return canonical_json_bytes(
         {
             "schema": DISTRIBUTED_RUNTIME_IDENTITY_SCHEMA,
-            "runtime_id": expect_machine_id(runtime_id, "runtime_id"),
+            "runtime_id": _local_machine_id(runtime_id, "runtime_id"),
             "role": role,
             "rank": rank,
-            "implementation": expect_machine_id(implementation, "implementation"),
+            "implementation": _local_machine_id(implementation, "implementation"),
             "version": _immutable_version(version, "version"),
             "model_identity": _model_binding(identity),
             "configuration_ref": _ref_value(configuration_ref),
-            "topology_id": expect_machine_id(topology_id, "topology_id"),
+            "topology_id": _local_machine_id(topology_id, "topology_id"),
             "topology_type": topology_type,
             "world_size": world_size,
             "runtime_scope": "IDENTITY_ONLY_NO_EXECUTION",
-            "status": dict(_STATUS),
-            "boundary": dict(_BOUNDARY),
+            "status": _status_value(),
+            "boundary": _boundary_value(),
         }
     )
 
@@ -752,7 +988,7 @@ def _validate_runtime_identity_body(
     )
     if value["schema"] != DISTRIBUTED_RUNTIME_IDENTITY_SCHEMA:
         raise DistributedProbeContractValidationError(f"{path} schema drifted")
-    if expect_machine_id(value["runtime_id"], "$.runtime_id") != reference.artifact_id:
+    if _local_machine_id(value["runtime_id"], "$.runtime_id") != reference.artifact_id:
         raise DistributedProbeContractValidationError(
             f"{path} runtime ID differs from its artifact reference"
         )
@@ -763,14 +999,14 @@ def _validate_runtime_identity_body(
         parsed_rank = expect_int(parsed_rank, "$.rank")
     if parsed_rank != rank:
         raise DistributedProbeContractValidationError(f"{path} rank drifted")
-    expect_machine_id(value["implementation"], "$.implementation")
+    _local_machine_id(value["implementation"], "$.implementation")
     _immutable_version(value["version"], "$.version")
     _require_model_binding(value["model_identity"], identity, "$.model_identity")
     if parse_artifact_ref(value["configuration_ref"], "$.configuration_ref") != configuration_ref:
         raise DistributedProbeContractValidationError(
             f"{path} configuration binding drifted"
         )
-    if expect_machine_id(value["topology_id"], "$.topology_id") != topology_id:
+    if _local_machine_id(value["topology_id"], "$.topology_id") != topology_id:
         raise DistributedProbeContractValidationError(f"{path} topology ID drifted")
     if expect_enum(value["topology_type"], set(TOPOLOGY_TYPES), "$.topology_type") != topology_type:
         raise DistributedProbeContractValidationError(f"{path} topology type drifted")
@@ -831,10 +1067,10 @@ def build_no_full_copy_proof_body(
     return canonical_json_bytes(
         {
             "schema": NO_FULL_COPY_PROOF_SCHEMA,
-            "proof_id": expect_machine_id(proof_id, "proof_id"),
+            "proof_id": _local_machine_id(proof_id, "proof_id"),
             "model_identity": _model_binding(identity),
             "configuration_ref": _ref_value(configuration_ref),
-            "topology_id": expect_machine_id(topology_id, "topology_id"),
+            "topology_id": _local_machine_id(topology_id, "topology_id"),
             "topology_type": topology_type,
             "world_size": world_size,
             "rank": rank,
@@ -844,8 +1080,8 @@ def build_no_full_copy_proof_body(
             "model_shard_ref": _ref_value(model_shard_ref),
             "full_model_copy": False,
             "proof_scope": "STRUCTURAL_DECLARATION_ONLY",
-            "status": dict(_STATUS),
-            "boundary": dict(_BOUNDARY),
+            "status": _status_value(),
+            "boundary": _boundary_value(),
         }
     )
 
@@ -884,14 +1120,14 @@ def _validate_no_full_copy_proof(
     )
     if value["schema"] != NO_FULL_COPY_PROOF_SCHEMA:
         raise DistributedProbeContractValidationError(f"{path} schema drifted")
-    if expect_machine_id(value["proof_id"], "$.proof_id") != reference.artifact_id:
+    if _local_machine_id(value["proof_id"], "$.proof_id") != reference.artifact_id:
         raise DistributedProbeContractValidationError(
             f"{path} proof ID differs from its reference"
         )
     _require_model_binding(value["model_identity"], identity, "$.model_identity")
     if parse_artifact_ref(value["configuration_ref"], "$.configuration_ref") != configuration_ref:
         raise DistributedProbeContractValidationError(f"{path} configuration drifted")
-    if expect_machine_id(value["topology_id"], "$.topology_id") != topology_id:
+    if _local_machine_id(value["topology_id"], "$.topology_id") != topology_id:
         raise DistributedProbeContractValidationError(f"{path} topology ID drifted")
     if expect_enum(value["topology_type"], set(TOPOLOGY_TYPES), "$.topology_type") != topology_type:
         raise DistributedProbeContractValidationError(f"{path} topology type drifted")
@@ -933,7 +1169,7 @@ def _validate_case_ids(value: tuple[str, ...]) -> tuple[str, ...]:
             "case_ids must be a non-empty exact tuple with at most 128 entries"
         )
     result = tuple(
-        expect_machine_id(item, f"case_ids[{index}]")
+        _local_machine_id(item, f"case_ids[{index}]")
         for index, item in enumerate(value)
     )
     if len(result) != len(set(result)):
@@ -956,11 +1192,30 @@ def _validate_rank_specs(
         raise DistributedProbeContractValidationError(
             "rank_specs must be an exact tuple matching world_size"
         )
+    if any(type(spec) is not DistributedRankSpec for spec in rank_specs):
+        raise DistributedProbeContractValidationError(
+            "rank_specs must contain exact DistributedRankSpec values"
+        )
+    for spec in rank_specs:
+        spec.__post_init__()
+        expect_int(spec.rank, f"rank_specs[{spec.rank}].rank", minimum=0)
     expected_ranks = tuple(range(world_size))
     if tuple(spec.rank for spec in rank_specs) != expected_ranks:
         raise DistributedProbeContractValidationError(
             "rank_specs must be contiguous, unique, zero-based, and rank ordered"
         )
+    _distinct_ref_closure(
+        tuple(spec.model_shard_ref for spec in rank_specs),
+        "rank model shard references",
+    )
+    _distinct_ref_closure(
+        tuple(spec.no_full_copy_proof_ref for spec in rank_specs),
+        "rank no-full-copy proof references",
+    )
+    _distinct_ref_closure(
+        tuple(spec.worker_runtime_ref for spec in rank_specs),
+        "rank worker runtime references",
+    )
     site_owner = {site.site_id: site.owning_rank for site in manifest.sites}
     if any(rank < 0 or rank >= world_size for rank in site_owner.values()):
         raise DistributedProbeContractValidationError(
@@ -979,10 +1234,6 @@ def _validate_rank_specs(
     flat_ranges: list[tuple[int, int, int]] = []
     validated: list[DistributedRankSpec] = []
     for spec in rank_specs:
-        if type(spec) is not DistributedRankSpec:
-            raise DistributedProbeContractValidationError(
-                "rank_specs must contain exact DistributedRankSpec values"
-            )
         ranges = _validate_ranges(
             spec.parameter_ranges, f"rank_specs[{spec.rank}].parameter_ranges"
         )
@@ -1140,8 +1391,8 @@ def _plan_value(
         "retry": "FORBIDDEN",
         "replacement": "FORBIDDEN",
         "resume": "FORBIDDEN",
-        "status": dict(_STATUS),
-        "boundary": dict(_BOUNDARY),
+        "status": _status_value(),
+        "boundary": _boundary_value(),
     }
 
 
@@ -1181,7 +1432,7 @@ def _load_distributed_probe_plan(
     )
     if value["schema"] != DISTRIBUTED_PROBE_PLAN_SCHEMA:
         raise DistributedProbeContractValidationError("distributed plan schema drifted")
-    plan_id = expect_machine_id(value["plan_id"], "$.plan_id")
+    plan_id = _local_machine_id(value["plan_id"], "$.plan_id")
     _require_model_binding(value["model_identity"], identity, "$.model_identity")
     expected_refs = (
         ("capabilities_ref", capabilities.artifact_ref),
@@ -1195,7 +1446,7 @@ def _load_distributed_probe_plan(
             raise DistributedProbeContractValidationError(
                 f"distributed plan {field} differs from its exact dependency"
             )
-    topology_id = expect_machine_id(value["topology_id"], "$.topology_id")
+    topology_id = _local_machine_id(value["topology_id"], "$.topology_id")
     topology_type = expect_enum(
         value["topology_type"], set(TOPOLOGY_TYPES), "$.topology_type"
     )
@@ -1239,10 +1490,14 @@ def _load_distributed_probe_plan(
         row = expect_object(raw_rank, f"$.ranks[{index}]")
         expected_row = _rank_value(spec)
         expect_keys(row, required=expected_row, path=f"$.ranks[{index}]")
-        if row != expected_row:
-            raise DistributedProbeContractValidationError(
+        _require_exact_json_projection(
+            row,
+            expected_row,
+            f"$.ranks[{index}]",
+            mismatch_message=(
                 "distributed plan rank projection differs from exact caller-bound rank"
-            )
+            ),
+        )
     raw_cases = expect_list(value["case_ids"], "$.case_ids")
     case_ids = _validate_case_ids(tuple(raw_cases))
     slots = _build_fragment_slots(case_ids=case_ids, manifest=manifest)
@@ -1255,10 +1510,12 @@ def _load_distributed_probe_plan(
         row = expect_object(raw_slot, f"$.fragment_slots[{index}]")
         expected_row = _slot_value(slot)
         expect_keys(row, required=expected_row, path=f"$.fragment_slots[{index}]")
-        if row != expected_row:
-            raise DistributedProbeContractValidationError(
-                "distributed plan checkpoint or merge order drifted"
-            )
+        _require_exact_json_projection(
+            row,
+            expected_row,
+            f"$.fragment_slots[{index}]",
+            mismatch_message="distributed plan checkpoint or merge order drifted",
+        )
     if (
         value["checkpoint_policy"] != "ONE_IMMUTABLE_CHECKPOINT_PER_MERGE_SLOT"
         or value["merge_policy"] != "EXACT_FROZEN_SLOT_ORDER"
@@ -1339,8 +1596,8 @@ def build_distributed_probe_plan(
 ) -> DistributedProbePlanArtifact:
     """Build a zero-call exact distributed ownership and fragment schedule."""
 
-    plan_id = expect_machine_id(plan_id, "plan_id")
-    topology_id = expect_machine_id(topology_id, "topology_id")
+    plan_id = _local_machine_id(plan_id, "plan_id")
+    topology_id = _local_machine_id(topology_id, "topology_id")
     topology_type = expect_enum(
         topology_type, set(TOPOLOGY_TYPES), "topology_type"
     )
@@ -1455,6 +1712,36 @@ def replay_distributed_probe_plan(
         raise DistributedProbeContractValidationError(
             "distributed plan projections must remain exact immutable types"
         )
+    _local_machine_id(plan.plan_id, "plan.plan_id")
+    _local_machine_id(plan.topology_id, "plan.topology_id")
+    expect_enum(plan.topology_type, set(TOPOLOGY_TYPES), "plan.topology_type")
+    expect_int(plan.total_parameter_units, "plan.total_parameter_units", minimum=2)
+    expect_int(plan.world_size, "plan.world_size", minimum=2, maximum=4096)
+    _validate_case_ids(plan.case_ids)
+    for index, slot in enumerate(plan.fragment_slots):
+        slot.__post_init__()
+        if slot.merge_ordinal != index + 1:
+            raise DistributedProbeContractValidationError(
+                "distributed plan fragment slot projections drifted"
+            )
+    for path, reference in (
+        ("plan.identity_ref", plan.identity_ref),
+        ("plan.capabilities_ref", plan.capabilities_ref),
+        ("plan.configuration_ref", plan.configuration_ref),
+        ("plan.discovery_ref", plan.discovery_ref),
+        ("plan.manifest_ref", plan.manifest_ref),
+        ("plan.canary_plan_ref", plan.canary_plan_ref),
+        ("plan.coordinator_runtime_ref", plan.coordinator_runtime_ref),
+    ):
+        _require_ref(reference, path)
+    if type(plan.configuration_bytes) is not bytes:
+        raise DistributedProbeContractValidationError(
+            "plan.configuration_bytes must remain exact bytes"
+        )
+    if type(plan.coordinator_runtime_bytes) is not bytes:
+        raise DistributedProbeContractValidationError(
+            "plan.coordinator_runtime_bytes must remain exact bytes"
+        )
     replayed = _load_distributed_probe_plan(
         plan.raw_bytes,
         identity=identity,
@@ -1526,8 +1813,8 @@ def _fragment_value(
         "retry": "FORBIDDEN",
         "replacement": "FORBIDDEN",
         "resume": "FORBIDDEN",
-        "status": dict(_STATUS),
-        "boundary": dict(_BOUNDARY),
+        "status": _status_value(),
+        "boundary": _boundary_value(),
     }
 
 
@@ -1572,7 +1859,7 @@ def _load_distributed_probe_fragment(
     )
     if value["schema"] != DISTRIBUTED_PROBE_FRAGMENT_SCHEMA:
         raise DistributedProbeContractValidationError("fragment schema drifted")
-    fragment_id = expect_machine_id(value["fragment_id"], "$.fragment_id")
+    fragment_id = _local_machine_id(value["fragment_id"], "$.fragment_id")
     object_version = _immutable_version(value["object_version"], "$.object_version")
     if object_version != FRAGMENT_OBJECT_VERSION:
         raise DistributedProbeContractValidationError(
@@ -1595,7 +1882,7 @@ def _load_distributed_probe_fragment(
         ),
         rank=expect_int(value["rank"], "$.rank"),
         site_id=expect_machine_id(value["site_id"], "$.site_id"),
-        case_id=expect_machine_id(value["case_id"], "$.case_id"),
+        case_id=_local_machine_id(value["case_id"], "$.case_id"),
     )
     if supplied_slot != expected_slot:
         if supplied_slot.rank != expected_slot.rank:
@@ -1668,7 +1955,7 @@ def build_distributed_probe_fragment(
 ) -> DistributedProbeFragmentArtifact:
     """Build one preloaded fragment for one exact rank/site/case slot."""
 
-    fragment_id = expect_machine_id(fragment_id, "fragment_id")
+    fragment_id = _local_machine_id(fragment_id, "fragment_id")
     object_version = _immutable_version(object_version, "object_version")
     if object_version != FRAGMENT_OBJECT_VERSION:
         raise DistributedProbeContractValidationError(
@@ -1764,6 +2051,27 @@ def replay_distributed_probe_fragment(
     canary_plan: UniversalProbeCanaryPlanArtifact,
 ) -> DistributedProbeFragmentArtifact:
     _artifact_storage(fragment, DistributedProbeFragmentArtifact, "fragment")
+    _local_machine_id(fragment.fragment_id, "fragment.fragment_id")
+    if (
+        _immutable_version(fragment.object_version, "fragment.object_version")
+        != FRAGMENT_OBJECT_VERSION
+    ):
+        raise DistributedProbeContractValidationError(
+            "fragment object version differs from the frozen version"
+        )
+    _require_ref(fragment.plan_ref, "fragment.plan_ref")
+    expect_int(fragment.merge_ordinal, "fragment.merge_ordinal", minimum=1)
+    expect_int(fragment.checkpoint_ordinal, "fragment.checkpoint_ordinal", minimum=1)
+    expect_int(fragment.rank, "fragment.rank", minimum=0)
+    expect_machine_id(fragment.site_id, "fragment.site_id")
+    _local_machine_id(fragment.case_id, "fragment.case_id")
+    expect_int(
+        fragment.attempt_number,
+        "fragment.attempt_number",
+        minimum=1,
+        maximum=1,
+    )
+    _require_ref(fragment.content_ref, "fragment.content_ref")
     replayed = _load_distributed_probe_fragment(
         fragment.raw_bytes,
         plan=plan,
@@ -1794,6 +2102,13 @@ def _validate_fragments(
     if type(fragments) is not tuple or len(fragments) != len(plan.fragment_slots):
         raise DistributedProbeContractValidationError(
             "fragments must be an exact tuple covering every frozen slot"
+        )
+    if any(
+        type(fragment) is not DistributedProbeFragmentArtifact
+        for fragment in fragments
+    ):
+        raise DistributedProbeContractValidationError(
+            "fragments must contain exact DistributedProbeFragmentArtifact values"
         )
     validated: list[DistributedProbeFragmentArtifact] = []
     fragment_ids: set[str] = set()
@@ -1831,6 +2146,10 @@ def _validate_fragments(
             )
         fragment_ids.add(replayed.fragment_id)
         validated.append(replayed)
+    _distinct_ref_closure(
+        tuple(fragment.content_ref for fragment in validated),
+        "fragment slot content references",
+    )
     all_refs: list[ArtifactRef] = []
     for fragment in validated:
         all_refs.extend(
@@ -1887,6 +2206,12 @@ def _validate_rank_outcomes(
         raise DistributedProbeContractValidationError(
             "rank outcomes must be an exact tuple matching world_size"
         )
+    if any(type(item) is not DistributedRankOutcome for item in outcomes):
+        raise DistributedProbeContractValidationError(
+            "rank outcomes must contain exact DistributedRankOutcome values"
+        )
+    for outcome in outcomes:
+        outcome.__post_init__()
     if tuple(item.rank for item in outcomes) != tuple(range(plan.world_size)):
         raise DistributedProbeContractValidationError(
             "rank outcomes must be unique, contiguous, zero-based, and rank ordered"
@@ -1901,10 +2226,6 @@ def _validate_rank_outcomes(
     }
     validated: list[DistributedRankOutcome] = []
     for outcome in outcomes:
-        if type(outcome) is not DistributedRankOutcome:
-            raise DistributedProbeContractValidationError(
-                "rank outcomes must contain exact DistributedRankOutcome values"
-            )
         if outcome.status == RANK_FAILED:
             raise DistributedProbeContractValidationError(
                 f"distributed rank {outcome.rank} failed"
@@ -1986,8 +2307,8 @@ def build_independent_reconstruction_evidence_body(
     return canonical_json_bytes(
         {
             "schema": INDEPENDENT_RECONSTRUCTION_EVIDENCE_SCHEMA,
-            "evidence_id": expect_machine_id(evidence_id, "evidence_id"),
-            "receipt_id": expect_machine_id(receipt_id, "receipt_id"),
+            "evidence_id": _local_machine_id(evidence_id, "evidence_id"),
+            "receipt_id": _local_machine_id(receipt_id, "receipt_id"),
             "model_identity": _model_binding(identity),
             "configuration_ref": _ref_value(configuration_ref),
             "plan_ref": _ref_value(plan_ref),
@@ -1997,8 +2318,8 @@ def build_independent_reconstruction_evidence_body(
             "algorithm": "BYTE_CONCAT_IN_FROZEN_MERGE_ORDER_V1",
             "independence": "SEPARATE_RUNTIME_IDENTITY_REPLAY",
             "model_capability_claim": UNMEASURED,
-            "status": dict(_STATUS),
-            "boundary": dict(_BOUNDARY),
+            "status": _status_value(),
+            "boundary": _boundary_value(),
         }
     )
 
@@ -2040,11 +2361,14 @@ def _validate_independent_evidence(
         raise DistributedProbeContractValidationError(
             "independent reconstruction evidence schema drifted"
         )
-    if expect_machine_id(value["evidence_id"], "$.evidence_id") != reference.artifact_id:
+    if (
+        _local_machine_id(value["evidence_id"], "$.evidence_id")
+        != reference.artifact_id
+    ):
         raise DistributedProbeContractValidationError(
             "independent evidence ID differs from its reference"
         )
-    if expect_machine_id(value["receipt_id"], "$.receipt_id") != receipt_id:
+    if _local_machine_id(value["receipt_id"], "$.receipt_id") != receipt_id:
         raise DistributedProbeContractValidationError(
             "independent evidence receipt ID drifted"
         )
@@ -2133,8 +2457,8 @@ def _receipt_value(
         "retry": "FORBIDDEN",
         "replacement": "FORBIDDEN",
         "resume": "FORBIDDEN",
-        "status": dict(_STATUS),
-        "boundary": dict(_BOUNDARY),
+        "status": _status_value(),
+        "boundary": _boundary_value(),
     }
 
 
@@ -2196,7 +2520,7 @@ def _load_independent_reconstruction_receipt(
         raise DistributedProbeContractValidationError(
             "independent reconstruction receipt schema drifted"
         )
-    receipt_id = expect_machine_id(value["receipt_id"], "$.receipt_id")
+    receipt_id = _local_machine_id(value["receipt_id"], "$.receipt_id")
     _require_model_binding(value["model_identity"], identity, "$.model_identity")
     if parse_artifact_ref(value["configuration_ref"], "$.configuration_ref") != plan.configuration_ref:
         raise DistributedProbeContractValidationError(
@@ -2217,10 +2541,15 @@ def _load_independent_reconstruction_receipt(
         row = expect_object(raw_fragment, f"$.fragments[{index}]")
         expected_row = _fragment_receipt_value(fragment)
         expect_keys(row, required=expected_row, path=f"$.fragments[{index}]")
-        if row != expected_row:
-            raise DistributedProbeContractValidationError(
-                "reconstruction fragment is stale, conflicting, corrupted, or out of merge order"
-            )
+        _require_exact_json_projection(
+            row,
+            expected_row,
+            f"$.fragments[{index}]",
+            mismatch_message=(
+                "reconstruction fragment is stale, conflicting, corrupted, "
+                "or out of merge order"
+            ),
+        )
     raw_outcomes = expect_list(value["rank_outcomes"], "$.rank_outcomes")
     parsed_outcomes = tuple(
         _parse_outcome(item, f"$.rank_outcomes[{index}]")
@@ -2349,7 +2678,7 @@ def build_independent_reconstruction_receipt(
 ) -> IndependentReconstructionReceiptArtifact:
     """Mechanically verify every fragment and seal an independent replay receipt."""
 
-    receipt_id = expect_machine_id(receipt_id, "receipt_id")
+    receipt_id = _local_machine_id(receipt_id, "receipt_id")
     plan = _validate_plan_dependency(
         plan=plan,
         identity=identity,
@@ -2482,13 +2811,43 @@ def replay_independent_reconstruction_receipt(
     _artifact_storage(
         receipt, IndependentReconstructionReceiptArtifact, "reconstruction receipt"
     )
-    if (
-        type(receipt.fragment_refs) is not tuple
-        or type(receipt.rank_outcomes) is not tuple
-        or any(type(item) is not DistributedRankOutcome for item in receipt.rank_outcomes)
-    ):
+    if type(receipt.fragment_refs) is not tuple or type(receipt.rank_outcomes) is not tuple:
         raise DistributedProbeContractValidationError(
             "reconstruction receipt projections must remain exact immutable values"
+        )
+    if any(type(item) is not DistributedRankOutcome for item in receipt.rank_outcomes):
+        raise DistributedProbeContractValidationError(
+            "receipt.rank_outcomes must contain exact DistributedRankOutcome values"
+        )
+    _local_machine_id(receipt.receipt_id, "receipt.receipt_id")
+    _require_ref(receipt.plan_ref, "receipt.plan_ref")
+    for index, reference in enumerate(receipt.fragment_refs):
+        _require_ref(reference, f"receipt.fragment_refs[{index}]")
+    _require_ref(receipt.reconstructed_output_ref, "receipt.reconstructed_output_ref")
+    _require_ref(receipt.independent_runtime_ref, "receipt.independent_runtime_ref")
+    _require_ref(receipt.independent_evidence_ref, "receipt.independent_evidence_ref")
+    if type(receipt.reconstructed_output_bytes) is not bytes:
+        raise DistributedProbeContractValidationError(
+            "receipt.reconstructed_output_bytes must remain exact bytes"
+        )
+    if type(receipt.independent_runtime_bytes) is not bytes:
+        raise DistributedProbeContractValidationError(
+            "receipt.independent_runtime_bytes must remain exact bytes"
+        )
+    if type(receipt.independent_evidence_bytes) is not bytes:
+        raise DistributedProbeContractValidationError(
+            "receipt.independent_evidence_bytes must remain exact bytes"
+        )
+    if (
+        expect_string(
+            receipt.capability_state,
+            "receipt.capability_state",
+            maximum=128,
+        )
+        != UNMEASURED
+    ):
+        raise DistributedProbeContractValidationError(
+            "reconstruction receipt capability must remain UNMEASURED"
         )
     replayed = _load_independent_reconstruction_receipt(
         receipt.raw_bytes,

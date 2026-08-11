@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import ast
+from collections.abc import Mapping
 import copy
 from dataclasses import dataclass, replace
+import gc
 import json
 from pathlib import Path
 import pickle
+from types import MappingProxyType
 
 import pytest
 
@@ -38,6 +41,7 @@ from cas_harness_v2.distributed_probe_contract import (
     DistributedProbeReplayRequest,
     DistributedRankOutcome,
     DistributedRankSpec,
+    FragmentSlot,
     ParameterRange,
     ReplayDistributedProbeBackend,
     UnavailableDistributedProbeBackend,
@@ -100,18 +104,31 @@ def make_rank_specs(
     ranges_by_rank: tuple[tuple[ParameterRange, ...], ...] = DEFAULT_RANGES,
     *,
     shared_shard_bytes: bool = False,
+    shared_exact_shard_ref: bool = False,
 ) -> tuple[DistributedRankSpec, ...]:
     world_size = 3
     result = []
+    exact_shared_bytes = b"one-exact-shard-object"
+    exact_shared_ref = ref(
+        "model-shard-shared-exact",
+        exact_shared_bytes,
+        DISTRIBUTED_MODEL_SHARD_MEDIA_TYPE,
+    )
     for rank, ranges in enumerate(ranges_by_rank):
-        shard_bytes = (
-            b"shared-shard-bytes"
-            if shared_shard_bytes
-            else f"exact-model-shard-rank-{rank}".encode()
-        )
-        shard_ref = ref(
-            f"model-shard-{rank}", shard_bytes, DISTRIBUTED_MODEL_SHARD_MEDIA_TYPE
-        )
+        if shared_exact_shard_ref:
+            shard_bytes = exact_shared_bytes
+            shard_ref = exact_shared_ref
+        else:
+            shard_bytes = (
+                b"shared-shard-bytes"
+                if shared_shard_bytes
+                else f"exact-model-shard-rank-{rank}".encode()
+            )
+            shard_ref = ref(
+                f"model-shard-{rank}",
+                shard_bytes,
+                DISTRIBUTED_MODEL_SHARD_MEDIA_TYPE,
+            )
         proof_bytes = build_no_full_copy_proof_body(
             proof_id=f"no-full-copy-proof-{rank}",
             identity=universal.identity,
@@ -434,6 +451,422 @@ def test_plan_fragments_and_reconstruction_round_trip_exactly() -> None:
     ) == bundle.receipt
 
 
+def test_status_and_zero_call_boundary_constants_are_immutable() -> None:
+    with pytest.raises(TypeError):
+        distributed_module._STATUS["license"] = "LICENSED"
+    with pytest.raises(TypeError):
+        distributed_module._BOUNDARY["model_calls"] = 1
+    with pytest.raises(TypeError):
+        distributed_module._BOUNDARY["spend_microusd"] = 1
+
+
+def test_status_and_boundary_global_rebinding_cannot_change_sealed_defaults(
+    monkeypatch,
+) -> None:
+    status_backing = gc.get_referents(distributed_module._STATUS)[0]
+    boundary_backing = gc.get_referents(distributed_module._BOUNDARY)[0]
+    assert type(status_backing) is dict
+    assert type(boundary_backing) is dict
+    monkeypatch.setitem(status_backing, "license", "LICENSED")
+    monkeypatch.setitem(status_backing, "authority", "GRANTED")
+    monkeypatch.setitem(boundary_backing, "execution", "EXECUTED")
+    monkeypatch.setitem(boundary_backing, "model_calls", 7)
+    monkeypatch.setitem(boundary_backing, "spend_microusd", 123456)
+    monkeypatch.setitem(boundary_backing, "execution_authority", "GRANTED")
+    monkeypatch.setitem(boundary_backing, "authorization", "GRANTED")
+    monkeypatch.setattr(
+        distributed_module,
+        "_STATUS",
+        {
+            "scope": "CURRENT_AUTHORITY",
+            "authority": "GRANTED",
+            "license": "LICENSED",
+            "capability": "MEASURED",
+        },
+    )
+    monkeypatch.setattr(
+        distributed_module,
+        "_BOUNDARY",
+        {
+            "execution": "EXECUTED",
+            "distributed_framework_calls": 9,
+            "model_calls": 7,
+            "provider_calls": 6,
+            "network_calls": 5,
+            "filesystem_calls": 4,
+            "gpu_calls": 3,
+            "spend_microusd": 123456,
+            "executed_attempts": 2,
+            "execution_authority": "GRANTED",
+        },
+    )
+    monkeypatch.setattr(distributed_module, "_ZERO_BOUNDARY_FIELDS", ())
+
+    bundle = make_distributed_bundle()
+    for artifact in (bundle.plan, *bundle.fragments, bundle.receipt):
+        assert artifact.payload["status"] == {
+            "scope": STRUCTURE_ONLY,
+            "authority": NON_AUTHORITY,
+            "license": "NOT_LICENSED",
+            "capability": UNMEASURED,
+        }
+        assert artifact.payload["boundary"]["model_calls"] == 0
+        assert artifact.payload["boundary"]["spend_microusd"] == 0
+        assert artifact.payload["boundary"]["execution_authority"] == "NOT_GRANTED"
+
+
+def test_zero_call_boundary_rejects_boolean_substitution_for_every_integer() -> None:
+    bundle = make_distributed_bundle()
+    kwargs = dict(
+        identity=bundle.universal.identity,
+        capabilities=bundle.universal.capabilities,
+        discovery=bundle.universal.discovery,
+        manifest=bundle.universal.manifest,
+        canary_plan=bundle.universal.plan,
+        coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+        rank_specs=bundle.rank_specs,
+    )
+    zero_fields = (
+        "distributed_framework_calls",
+        "model_calls",
+        "provider_calls",
+        "network_calls",
+        "filesystem_calls",
+        "gpu_calls",
+        "spend_microusd",
+        "executed_attempts",
+    )
+    for field in zero_fields:
+        payload = json.loads(bundle.plan.raw_bytes)
+        payload["boundary"][field] = False
+        with pytest.raises(SchemaValidationError, match="exact integer"):
+            load_distributed_probe_plan(canonical_json_bytes(payload), **kwargs)
+
+    payload = json.loads(bundle.plan.raw_bytes)
+    payload["status"]["license"] = False
+    with pytest.raises(SchemaValidationError, match="exact string"):
+        load_distributed_probe_plan(canonical_json_bytes(payload), **kwargs)
+
+
+def test_raw_nested_projection_rows_reject_boolean_integer_aliases() -> None:
+    bundle = make_distributed_bundle()
+    dependency_kwargs = dict(
+        identity=bundle.universal.identity,
+        capabilities=bundle.universal.capabilities,
+        discovery=bundle.universal.discovery,
+        manifest=bundle.universal.manifest,
+        canary_plan=bundle.universal.plan,
+    )
+    plan_cases = (
+        (("ranks", 0, "rank"), False),
+        (("ranks", 0, "attempt_limit"), True),
+        (("ranks", 0, "parameter_ranges", 0, "start"), False),
+        (("fragment_slots", 0, "rank"), False),
+        (("fragment_slots", 0, "merge_ordinal"), True),
+        (("fragment_slots", 0, "checkpoint_ordinal"), True),
+        (("model_identity", "identity_ref", "byte_length"), False),
+    )
+    for path, replacement in plan_cases:
+        payload = json.loads(bundle.plan.raw_bytes)
+        target = payload
+        for key in path[:-1]:
+            target = target[key]
+        target[path[-1]] = replacement
+        with pytest.raises(
+            SchemaValidationError,
+            match="exact JSON container and scalar types",
+        ):
+            load_distributed_probe_plan(
+                canonical_json_bytes(payload),
+                **dependency_kwargs,
+                coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+                rank_specs=bundle.rank_specs,
+            )
+
+    receipt_cases = (
+        (("fragments", 0, "rank"), False),
+        (("fragments", 0, "merge_ordinal"), True),
+        (("fragments", 0, "checkpoint_ordinal"), True),
+        (("fragments", 0, "attempt_number"), True),
+    )
+    for path, replacement in receipt_cases:
+        payload = json.loads(bundle.receipt.raw_bytes)
+        target = payload
+        for key in path[:-1]:
+            target = target[key]
+        target[path[-1]] = replacement
+        with pytest.raises(
+            SchemaValidationError,
+            match="exact JSON container and scalar types",
+        ):
+            load_independent_reconstruction_receipt(
+                canonical_json_bytes(payload),
+                **dependency_kwargs,
+                plan=bundle.plan,
+                fragments=bundle.fragments,
+                rank_outcomes=bundle.outcomes,
+                reconstructed_output_bytes=bundle.output_bytes,
+                independent_runtime_bytes=bundle.independent_runtime_bytes,
+                independent_evidence_bytes=bundle.evidence_bytes,
+            )
+
+
+def test_stage_c_namespace_is_rejected_for_every_local_identity_and_case_role() -> None:
+    bundle = make_distributed_bundle()
+    slot = bundle.plan.fragment_slots[0]
+    content_bytes = b"stage-namespace-regression"
+    content_ref = ref(
+        "stage-namespace-content",
+        content_bytes,
+        DISTRIBUTED_FRAGMENT_CONTENT_MEDIA_TYPE,
+    )
+
+    for token in ("stagec", "stage-c", "stage_c", "C-Cal", "c_cal"):
+        operations = (
+            lambda token=token: build_distributed_runtime_identity_body(
+                runtime_id=token,
+                role=COORDINATOR,
+                rank=None,
+                implementation="separate-runtime",
+                version="separate-runtime-v1",
+                identity=bundle.universal.identity,
+                configuration_ref=bundle.universal.configuration_ref,
+                topology_id="separate-topology",
+                topology_type=TENSOR_PARALLEL,
+                world_size=3,
+            ),
+            lambda token=token: build_distributed_runtime_identity_body(
+                runtime_id="separate-runtime",
+                role=COORDINATOR,
+                rank=None,
+                implementation=token,
+                version="separate-runtime-v1",
+                identity=bundle.universal.identity,
+                configuration_ref=bundle.universal.configuration_ref,
+                topology_id="separate-topology",
+                topology_type=TENSOR_PARALLEL,
+                world_size=3,
+            ),
+            lambda token=token: build_distributed_runtime_identity_body(
+                runtime_id="separate-runtime",
+                role=COORDINATOR,
+                rank=None,
+                implementation="separate-runtime",
+                version=f"{token}-runtime-v1",
+                identity=bundle.universal.identity,
+                configuration_ref=bundle.universal.configuration_ref,
+                topology_id="separate-topology",
+                topology_type=TENSOR_PARALLEL,
+                world_size=3,
+            ),
+            lambda token=token: build_no_full_copy_proof_body(
+                proof_id=token,
+                identity=bundle.universal.identity,
+                configuration_ref=bundle.universal.configuration_ref,
+                topology_id="fixture-topology",
+                topology_type=TENSOR_PARALLEL,
+                world_size=3,
+                rank=0,
+                total_parameter_units=300,
+                parameter_ranges=DEFAULT_RANGES[0],
+                model_shard_ref=bundle.rank_specs[0].model_shard_ref,
+            ),
+            lambda token=token: build_no_full_copy_proof_body(
+                proof_id="separate-proof",
+                identity=bundle.universal.identity,
+                configuration_ref=bundle.universal.configuration_ref,
+                topology_id="fixture-topology",
+                topology_type=TENSOR_PARALLEL,
+                world_size=3,
+                rank=0,
+                total_parameter_units=300,
+                parameter_ranges=DEFAULT_RANGES[0],
+                model_shard_ref=ArtifactRef(
+                    artifact_id=f"{token}-model-shard",
+                    sha256=bundle.rank_specs[0].model_shard_ref.sha256,
+                    byte_length=bundle.rank_specs[0].model_shard_ref.byte_length,
+                    media_type=bundle.rank_specs[0].model_shard_ref.media_type,
+                ),
+            ),
+            lambda token=token: build_distributed_probe_plan(
+                plan_id=token,
+                identity=bundle.universal.identity,
+                capabilities=bundle.universal.capabilities,
+                discovery=bundle.universal.discovery,
+                manifest=bundle.universal.manifest,
+                canary_plan=bundle.universal.plan,
+                topology_id="fixture-topology",
+                topology_type=TENSOR_PARALLEL,
+                total_parameter_units=300,
+                world_size=3,
+                coordinator_runtime_ref=bundle.plan.coordinator_runtime_ref,
+                coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+                rank_specs=bundle.rank_specs,
+                case_ids=("separate-case",),
+            ),
+            lambda token=token: build_distributed_probe_plan(
+                plan_id="separate-plan",
+                identity=bundle.universal.identity,
+                capabilities=bundle.universal.capabilities,
+                discovery=bundle.universal.discovery,
+                manifest=bundle.universal.manifest,
+                canary_plan=bundle.universal.plan,
+                topology_id=token,
+                topology_type=TENSOR_PARALLEL,
+                total_parameter_units=300,
+                world_size=3,
+                coordinator_runtime_ref=bundle.plan.coordinator_runtime_ref,
+                coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+                rank_specs=bundle.rank_specs,
+                case_ids=("separate-case",),
+            ),
+            lambda token=token: build_distributed_probe_plan(
+                plan_id="separate-plan",
+                identity=bundle.universal.identity,
+                capabilities=bundle.universal.capabilities,
+                discovery=bundle.universal.discovery,
+                manifest=bundle.universal.manifest,
+                canary_plan=bundle.universal.plan,
+                topology_id="fixture-topology",
+                topology_type=TENSOR_PARALLEL,
+                total_parameter_units=300,
+                world_size=3,
+                coordinator_runtime_ref=bundle.plan.coordinator_runtime_ref,
+                coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+                rank_specs=bundle.rank_specs,
+                case_ids=(token,),
+            ),
+            lambda token=token: build_distributed_probe_fragment(
+                fragment_id=token,
+                object_version=FRAGMENT_OBJECT_VERSION,
+                plan=bundle.plan,
+                identity=bundle.universal.identity,
+                capabilities=bundle.universal.capabilities,
+                discovery=bundle.universal.discovery,
+                manifest=bundle.universal.manifest,
+                canary_plan=bundle.universal.plan,
+                merge_ordinal=slot.merge_ordinal,
+                checkpoint_ordinal=slot.checkpoint_ordinal,
+                rank=slot.rank,
+                site_id=slot.site_id,
+                case_id=slot.case_id,
+                attempt_number=1,
+                content_ref=content_ref,
+                content_bytes=content_bytes,
+            ),
+            lambda token=token: build_distributed_probe_fragment(
+                fragment_id="separate-fragment",
+                object_version=FRAGMENT_OBJECT_VERSION,
+                plan=bundle.plan,
+                identity=bundle.universal.identity,
+                capabilities=bundle.universal.capabilities,
+                discovery=bundle.universal.discovery,
+                manifest=bundle.universal.manifest,
+                canary_plan=bundle.universal.plan,
+                merge_ordinal=slot.merge_ordinal,
+                checkpoint_ordinal=slot.checkpoint_ordinal,
+                rank=slot.rank,
+                site_id=slot.site_id,
+                case_id=slot.case_id,
+                attempt_number=1,
+                content_ref=ArtifactRef(
+                    artifact_id=f"{token}-fragment-content",
+                    sha256=content_ref.sha256,
+                    byte_length=content_ref.byte_length,
+                    media_type=content_ref.media_type,
+                ),
+                content_bytes=content_bytes,
+            ),
+            lambda token=token: build_distributed_probe_fragment(
+                fragment_id="separate-fragment",
+                object_version=f"{token}-fragment-v1",
+                plan=bundle.plan,
+                identity=bundle.universal.identity,
+                capabilities=bundle.universal.capabilities,
+                discovery=bundle.universal.discovery,
+                manifest=bundle.universal.manifest,
+                canary_plan=bundle.universal.plan,
+                merge_ordinal=slot.merge_ordinal,
+                checkpoint_ordinal=slot.checkpoint_ordinal,
+                rank=slot.rank,
+                site_id=slot.site_id,
+                case_id=slot.case_id,
+                attempt_number=1,
+                content_ref=content_ref,
+                content_bytes=content_bytes,
+            ),
+            lambda token=token: FragmentSlot(
+                merge_ordinal=slot.merge_ordinal,
+                checkpoint_ordinal=slot.checkpoint_ordinal,
+                rank=slot.rank,
+                site_id=f"{token}-probe-site",
+                case_id=slot.case_id,
+            ),
+            lambda token=token: replace(
+                bundle.rank_specs[0],
+                owned_site_ids=(f"{token}-probe-site",),
+            ),
+            lambda token=token: build_independent_reconstruction_evidence_body(
+                evidence_id=token,
+                receipt_id="separate-receipt",
+                identity=bundle.universal.identity,
+                configuration_ref=bundle.universal.configuration_ref,
+                plan_ref=bundle.plan.artifact_ref,
+                fragment_refs=tuple(item.artifact_ref for item in bundle.fragments),
+                reconstructed_output_ref=bundle.output_ref,
+                independent_runtime_ref=bundle.independent_runtime_ref,
+            ),
+            lambda token=token: build_independent_reconstruction_evidence_body(
+                evidence_id="separate-evidence",
+                receipt_id=token,
+                identity=bundle.universal.identity,
+                configuration_ref=bundle.universal.configuration_ref,
+                plan_ref=bundle.plan.artifact_ref,
+                fragment_refs=tuple(item.artifact_ref for item in bundle.fragments),
+                reconstructed_output_ref=bundle.output_ref,
+                independent_runtime_ref=bundle.independent_runtime_ref,
+            ),
+            lambda token=token: build_independent_reconstruction_receipt(
+                receipt_id=token,
+                identity=bundle.universal.identity,
+                capabilities=bundle.universal.capabilities,
+                discovery=bundle.universal.discovery,
+                manifest=bundle.universal.manifest,
+                canary_plan=bundle.universal.plan,
+                plan=bundle.plan,
+                fragments=bundle.fragments,
+                rank_outcomes=bundle.outcomes,
+                reconstructed_output_ref=bundle.output_ref,
+                reconstructed_output_bytes=bundle.output_bytes,
+                independent_runtime_ref=bundle.independent_runtime_ref,
+                independent_runtime_bytes=bundle.independent_runtime_bytes,
+                independent_evidence_ref=bundle.evidence_ref,
+                independent_evidence_bytes=bundle.evidence_bytes,
+            ),
+        )
+        for operation in operations:
+            with pytest.raises(SchemaValidationError, match="Stage C"):
+                operation()
+
+        for field in ("plan_id", "case_id"):
+            payload = json.loads(bundle.plan.raw_bytes)
+            if field == "plan_id":
+                payload["plan_id"] = token
+            else:
+                payload["case_ids"][0] = token
+            with pytest.raises(SchemaValidationError, match="Stage C"):
+                load_distributed_probe_plan(
+                    canonical_json_bytes(payload),
+                    identity=bundle.universal.identity,
+                    capabilities=bundle.universal.capabilities,
+                    discovery=bundle.universal.discovery,
+                    manifest=bundle.universal.manifest,
+                    canary_plan=bundle.universal.plan,
+                    coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+                    rank_specs=bundle.rank_specs,
+                )
+
+
 @pytest.mark.parametrize(
     ("ranges", "message"),
     (
@@ -556,6 +989,82 @@ def test_missing_duplicate_and_out_of_order_fragments_fail_closed(fragments) -> 
         rebuild_receipt(bundle, fragments=tuple(fragments(bundle.fragments)))
 
 
+def test_fragment_slots_require_distinct_content_references_and_identities() -> None:
+    bundle = make_distributed_bundle()
+    shared_bytes = b"same-content-cannot-fill-distinct-slots"
+    shared_ref = ref(
+        "one-shared-fragment-content",
+        shared_bytes,
+        DISTRIBUTED_FRAGMENT_CONTENT_MEDIA_TYPE,
+    )
+
+    for reuse_exact_ref in (True, False):
+        fragments = []
+        for slot in bundle.plan.fragment_slots:
+            content_ref = (
+                shared_ref
+                if reuse_exact_ref
+                else ref(
+                    f"aliased-fragment-content-{slot.merge_ordinal:03d}",
+                    shared_bytes,
+                    DISTRIBUTED_FRAGMENT_CONTENT_MEDIA_TYPE,
+                )
+            )
+            fragments.append(
+                build_distributed_probe_fragment(
+                    fragment_id=f"content-alias-fragment-{slot.merge_ordinal:03d}",
+                    object_version=FRAGMENT_OBJECT_VERSION,
+                    plan=bundle.plan,
+                    identity=bundle.universal.identity,
+                    capabilities=bundle.universal.capabilities,
+                    discovery=bundle.universal.discovery,
+                    manifest=bundle.universal.manifest,
+                    canary_plan=bundle.universal.plan,
+                    merge_ordinal=slot.merge_ordinal,
+                    checkpoint_ordinal=slot.checkpoint_ordinal,
+                    rank=slot.rank,
+                    site_id=slot.site_id,
+                    case_id=slot.case_id,
+                    attempt_number=1,
+                    content_ref=content_ref,
+                    content_bytes=shared_bytes,
+                )
+            )
+        with pytest.raises(
+            SchemaValidationError,
+            match="distinct artifact reference|content identity",
+        ):
+            rebuild_receipt(bundle, fragments=tuple(fragments))
+
+
+def test_distinct_slot_fragments_cannot_share_one_fragment_id() -> None:
+    bundle = make_distributed_bundle()
+    fragments = list(bundle.fragments)
+    for index in (0, 1):
+        original = bundle.fragments[index]
+        slot = bundle.plan.fragment_slots[index]
+        fragments[index] = build_distributed_probe_fragment(
+            fragment_id="one-fragment-id-for-two-slots",
+            object_version=FRAGMENT_OBJECT_VERSION,
+            plan=bundle.plan,
+            identity=bundle.universal.identity,
+            capabilities=bundle.universal.capabilities,
+            discovery=bundle.universal.discovery,
+            manifest=bundle.universal.manifest,
+            canary_plan=bundle.universal.plan,
+            merge_ordinal=slot.merge_ordinal,
+            checkpoint_ordinal=slot.checkpoint_ordinal,
+            rank=slot.rank,
+            site_id=slot.site_id,
+            case_id=slot.case_id,
+            attempt_number=1,
+            content_ref=original.content_ref,
+            content_bytes=original.content_bytes,
+        )
+    with pytest.raises(SchemaValidationError, match="duplicate fragment object"):
+        rebuild_receipt(bundle, fragments=tuple(fragments))
+
+
 def test_fragment_content_corruption_hash_and_length_fail_closed() -> None:
     bundle = make_distributed_bundle()
     fragment = bundle.fragments[0]
@@ -627,6 +1136,120 @@ def test_reconstruction_hash_length_and_merge_bytes_must_all_agree() -> None:
         rebuild_receipt(bundle, output_bytes=bundle.output_bytes[:-1])
 
 
+def test_reconstructed_output_reference_cannot_alias_the_plan_identity() -> None:
+    bundle = make_distributed_bundle()
+    alias_ref = ArtifactRef(
+        artifact_id=bundle.plan.plan_id,
+        sha256=sha256_bytes(bundle.output_bytes),
+        byte_length=len(bundle.output_bytes),
+        media_type=DISTRIBUTED_RECONSTRUCTED_OUTPUT_MEDIA_TYPE,
+    )
+    evidence_bytes = build_independent_reconstruction_evidence_body(
+        evidence_id="output-alias-evidence",
+        receipt_id="output-alias-receipt",
+        identity=bundle.universal.identity,
+        configuration_ref=bundle.universal.configuration_ref,
+        plan_ref=bundle.plan.artifact_ref,
+        fragment_refs=tuple(item.artifact_ref for item in bundle.fragments),
+        reconstructed_output_ref=alias_ref,
+        independent_runtime_ref=bundle.independent_runtime_ref,
+    )
+    evidence_ref = ref(
+        "output-alias-evidence",
+        evidence_bytes,
+        INDEPENDENT_RECONSTRUCTION_EVIDENCE_MEDIA_TYPE,
+    )
+    with pytest.raises(SchemaValidationError, match="aliases one artifact ID"):
+        build_independent_reconstruction_receipt(
+            receipt_id="output-alias-receipt",
+            identity=bundle.universal.identity,
+            capabilities=bundle.universal.capabilities,
+            discovery=bundle.universal.discovery,
+            manifest=bundle.universal.manifest,
+            canary_plan=bundle.universal.plan,
+            plan=bundle.plan,
+            fragments=bundle.fragments,
+            rank_outcomes=bundle.outcomes,
+            reconstructed_output_ref=alias_ref,
+            reconstructed_output_bytes=bundle.output_bytes,
+            independent_runtime_ref=bundle.independent_runtime_ref,
+            independent_runtime_bytes=bundle.independent_runtime_bytes,
+            independent_evidence_ref=evidence_ref,
+            independent_evidence_bytes=evidence_bytes,
+        )
+
+
+def test_same_exact_model_shard_reference_cannot_be_reused_across_ranks() -> None:
+    bundle = make_distributed_bundle()
+    specs = make_rank_specs(
+        bundle.universal,
+        TENSOR_PARALLEL,
+        shared_exact_shard_ref=True,
+    )
+    with pytest.raises(SchemaValidationError, match="distinct artifact reference"):
+        build_distributed_probe_plan(
+            plan_id="shared-exact-shard-plan",
+            identity=bundle.universal.identity,
+            capabilities=bundle.universal.capabilities,
+            discovery=bundle.universal.discovery,
+            manifest=bundle.universal.manifest,
+            canary_plan=bundle.universal.plan,
+            topology_id="fixture-topology",
+            topology_type=TENSOR_PARALLEL,
+            total_parameter_units=300,
+            world_size=3,
+            coordinator_runtime_ref=bundle.plan.coordinator_runtime_ref,
+            coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+            rank_specs=specs,
+            case_ids=("case-001",),
+        )
+
+
+@pytest.mark.parametrize(
+    ("ref_field", "bytes_field", "plan_id"),
+    (
+        (
+            "no_full_copy_proof_ref",
+            "no_full_copy_proof_bytes",
+            "shared-proof-ref-plan",
+        ),
+        ("worker_runtime_ref", "worker_runtime_bytes", "shared-runtime-ref-plan"),
+    ),
+)
+def test_rank_owned_proof_and_runtime_references_cannot_be_reused(
+    ref_field: str,
+    bytes_field: str,
+    plan_id: str,
+) -> None:
+    bundle = make_distributed_bundle()
+    source = bundle.rank_specs[0]
+    reused = replace(
+        bundle.rank_specs[1],
+        **{
+            ref_field: getattr(source, ref_field),
+            bytes_field: getattr(source, bytes_field),
+        },
+    )
+    specs = (bundle.rank_specs[0], reused, bundle.rank_specs[2])
+    with pytest.raises(SchemaValidationError, match="distinct artifact reference"):
+        build_distributed_probe_plan(
+            plan_id=plan_id,
+            identity=bundle.universal.identity,
+            capabilities=bundle.universal.capabilities,
+            discovery=bundle.universal.discovery,
+            manifest=bundle.universal.manifest,
+            canary_plan=bundle.universal.plan,
+            topology_id="fixture-topology",
+            topology_type=TENSOR_PARALLEL,
+            total_parameter_units=300,
+            world_size=3,
+            coordinator_runtime_ref=bundle.plan.coordinator_runtime_ref,
+            coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+            rank_specs=specs,
+            case_ids=("case-001",),
+        )
+
+
 def test_shard_corruption_alias_and_wrong_worker_runtime_fail_closed() -> None:
     bundle = make_distributed_bundle()
     with pytest.raises(SchemaValidationError, match="model_shard_bytes"):
@@ -658,7 +1281,7 @@ def test_shard_corruption_alias_and_wrong_worker_runtime_fail_closed() -> None:
         worker_runtime_ref=bundle.rank_specs[0].worker_runtime_ref,
         worker_runtime_bytes=bundle.rank_specs[0].worker_runtime_bytes,
     )
-    with pytest.raises(SchemaValidationError, match="rank drifted"):
+    with pytest.raises(SchemaValidationError, match="distinct artifact reference"):
         build_distributed_probe_plan(
             plan_id="wrong-runtime-plan",
             identity=bundle.universal.identity,
@@ -727,6 +1350,292 @@ def test_artifact_mutation_replacement_and_forgery_fail_replay() -> None:
             canary_plan=bundle.universal.plan,
             plan=bundle.plan,
             fragments=bundle.fragments,
+        )
+
+
+def test_replay_rejects_custom_backed_mapping_proxies_without_callbacks() -> None:
+    bundle = make_distributed_bundle()
+    dependency_kwargs = dict(
+        identity=bundle.universal.identity,
+        capabilities=bundle.universal.capabilities,
+        discovery=bundle.universal.discovery,
+        manifest=bundle.universal.manifest,
+        canary_plan=bundle.universal.plan,
+    )
+
+    class InertMapping(Mapping):
+        def __init__(self) -> None:
+            self.calls = []
+
+        def __iter__(self):
+            self.calls.append("iter")
+            return iter(())
+
+        def __len__(self):
+            self.calls.append("len")
+            return 0
+
+        def __getitem__(self, key):
+            self.calls.append(("getitem", key))
+            raise KeyError(key)
+
+        def __eq__(self, other):
+            self.calls.append(("eq", type(other).__name__))
+            return False
+
+    cases = (
+        (
+            bundle.plan,
+            lambda artifact: replay_distributed_probe_plan(
+                artifact,
+                **dependency_kwargs,
+            ),
+        ),
+        (
+            bundle.fragments[0],
+            lambda artifact: replay_distributed_probe_fragment(
+                artifact,
+                plan=bundle.plan,
+                **dependency_kwargs,
+            ),
+        ),
+        (
+            bundle.receipt,
+            lambda artifact: replay_independent_reconstruction_receipt(
+                artifact,
+                plan=bundle.plan,
+                fragments=bundle.fragments,
+                **dependency_kwargs,
+            ),
+        ),
+    )
+    for artifact, replay in cases:
+        backing = InertMapping()
+        forged = replace(artifact, payload=MappingProxyType(backing))
+        with pytest.raises(SchemaValidationError, match="exact dict-backed"):
+            replay(forged)
+        assert backing.calls == []
+
+
+def test_replay_binds_frozen_payload_scalars_to_exact_raw_json_types() -> None:
+    bundle = make_distributed_bundle()
+    dependency_kwargs = dict(
+        identity=bundle.universal.identity,
+        capabilities=bundle.universal.capabilities,
+        discovery=bundle.universal.discovery,
+        manifest=bundle.universal.manifest,
+        canary_plan=bundle.universal.plan,
+    )
+    plan_backing = gc.get_referents(bundle.plan.payload)[0]
+    plan_rank_backing = gc.get_referents(plan_backing["ranks"][0])[0]
+    plan_rank_backing["rank"] = False
+    with pytest.raises(
+        SchemaValidationError,
+        match="exact JSON container and scalar types",
+    ):
+        replay_distributed_probe_plan(bundle.plan, **dependency_kwargs)
+
+    bundle = make_distributed_bundle()
+    dependency_kwargs = dict(
+        identity=bundle.universal.identity,
+        capabilities=bundle.universal.capabilities,
+        discovery=bundle.universal.discovery,
+        manifest=bundle.universal.manifest,
+        canary_plan=bundle.universal.plan,
+    )
+    fragment_backing = gc.get_referents(bundle.fragments[0].payload)[0]
+    fragment_backing["rank"] = False
+    with pytest.raises(
+        SchemaValidationError,
+        match="exact JSON container and scalar types",
+    ):
+        replay_distributed_probe_fragment(
+            bundle.fragments[0],
+            plan=bundle.plan,
+            **dependency_kwargs,
+        )
+
+    bundle = make_distributed_bundle()
+    dependency_kwargs = dict(
+        identity=bundle.universal.identity,
+        capabilities=bundle.universal.capabilities,
+        discovery=bundle.universal.discovery,
+        manifest=bundle.universal.manifest,
+        canary_plan=bundle.universal.plan,
+    )
+    receipt_backing = gc.get_referents(bundle.receipt.payload)[0]
+    receipt_fragment_backing = gc.get_referents(
+        receipt_backing["fragments"][0]
+    )[0]
+    receipt_fragment_backing["rank"] = False
+    with pytest.raises(
+        SchemaValidationError,
+        match="exact JSON container and scalar types",
+    ):
+        replay_independent_reconstruction_receipt(
+            bundle.receipt,
+            plan=bundle.plan,
+            fragments=bundle.fragments,
+            **dependency_kwargs,
+        )
+
+
+def test_tuple_and_dataclass_elements_fail_type_checks_before_callbacks() -> None:
+    bundle = make_distributed_bundle()
+    calls = []
+
+    class InertElement:
+        def __getattribute__(self, name):
+            calls.append(name)
+            raise AssertionError(f"element attribute read: {name}")
+
+        def __eq__(self, other):
+            calls.append(("eq", type(other).__name__))
+            raise AssertionError("element equality called")
+
+    with pytest.raises(SchemaValidationError, match="exact DistributedRankSpec"):
+        build_distributed_probe_plan(
+            plan_id="inert-rank-plan",
+            identity=bundle.universal.identity,
+            capabilities=bundle.universal.capabilities,
+            discovery=bundle.universal.discovery,
+            manifest=bundle.universal.manifest,
+            canary_plan=bundle.universal.plan,
+            topology_id="fixture-topology",
+            topology_type=TENSOR_PARALLEL,
+            total_parameter_units=300,
+            world_size=3,
+            coordinator_runtime_ref=bundle.plan.coordinator_runtime_ref,
+            coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+            rank_specs=(InertElement(), *bundle.rank_specs[1:]),
+            case_ids=("case-001",),
+        )
+    assert calls == []
+
+    with pytest.raises(
+        SchemaValidationError,
+        match="exact DistributedProbeFragmentArtifact",
+    ):
+        rebuild_receipt(
+            bundle,
+            fragments=(InertElement(), *bundle.fragments[1:]),
+        )
+    assert calls == []
+
+    forged_receipt = replace(
+        bundle.receipt,
+        rank_outcomes=(InertElement(), *bundle.outcomes[1:]),
+    )
+    with pytest.raises(SchemaValidationError, match="exact DistributedRankOutcome"):
+        replay_independent_reconstruction_receipt(
+            forged_receipt,
+            identity=bundle.universal.identity,
+            capabilities=bundle.universal.capabilities,
+            discovery=bundle.universal.discovery,
+            manifest=bundle.universal.manifest,
+            canary_plan=bundle.universal.plan,
+            plan=bundle.plan,
+            fragments=bundle.fragments,
+        )
+    assert calls == []
+
+    bad_outcome = copy.copy(bundle.outcomes[0])
+    object.__setattr__(bad_outcome, "rank", InertElement())
+    forged_receipt = replace(
+        bundle.receipt,
+        rank_outcomes=(bad_outcome, *bundle.outcomes[1:]),
+    )
+    with pytest.raises(SchemaValidationError, match="exact integer"):
+        replay_independent_reconstruction_receipt(
+            forged_receipt,
+            identity=bundle.universal.identity,
+            capabilities=bundle.universal.capabilities,
+            discovery=bundle.universal.discovery,
+            manifest=bundle.universal.manifest,
+            canary_plan=bundle.universal.plan,
+            plan=bundle.plan,
+            fragments=bundle.fragments,
+        )
+    assert calls == []
+
+
+def test_boolean_scalar_substitution_cannot_survive_frozen_projection_replay() -> None:
+    bundle = make_distributed_bundle()
+    dependency_kwargs = dict(
+        identity=bundle.universal.identity,
+        capabilities=bundle.universal.capabilities,
+        discovery=bundle.universal.discovery,
+        manifest=bundle.universal.manifest,
+        canary_plan=bundle.universal.plan,
+    )
+
+    bad_rank = copy.copy(bundle.rank_specs[0])
+    object.__setattr__(bad_rank, "rank", False)
+    with pytest.raises(SchemaValidationError, match="exact integer"):
+        build_distributed_probe_plan(
+            plan_id="boolean-rank-plan",
+            **dependency_kwargs,
+            topology_id="fixture-topology",
+            topology_type=TENSOR_PARALLEL,
+            total_parameter_units=300,
+            world_size=3,
+            coordinator_runtime_ref=bundle.plan.coordinator_runtime_ref,
+            coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+            rank_specs=(bad_rank, *bundle.rank_specs[1:]),
+            case_ids=("case-001",),
+        )
+
+    bad_range = copy.copy(bundle.rank_specs[0].parameter_ranges[0])
+    object.__setattr__(bad_range, "start", False)
+    bad_range_spec = replace(
+        bundle.rank_specs[0],
+        parameter_ranges=(bad_range,),
+    )
+    with pytest.raises(SchemaValidationError, match="exact integer"):
+        build_distributed_probe_plan(
+            plan_id="boolean-range-plan",
+            **dependency_kwargs,
+            topology_id="fixture-topology",
+            topology_type=TENSOR_PARALLEL,
+            total_parameter_units=300,
+            world_size=3,
+            coordinator_runtime_ref=bundle.plan.coordinator_runtime_ref,
+            coordinator_runtime_bytes=bundle.coordinator_runtime_bytes,
+            rank_specs=(bad_range_spec, *bundle.rank_specs[1:]),
+            case_ids=("case-001",),
+        )
+
+    bad_slot = copy.copy(bundle.plan.fragment_slots[0])
+    object.__setattr__(bad_slot, "merge_ordinal", True)
+    object.__setattr__(bad_slot, "checkpoint_ordinal", True)
+    forged_plan = replace(
+        bundle.plan,
+        fragment_slots=(bad_slot, *bundle.plan.fragment_slots[1:]),
+    )
+    with pytest.raises(SchemaValidationError, match="exact integer"):
+        replay_distributed_probe_plan(forged_plan, **dependency_kwargs)
+
+    bad_fragment = copy.copy(bundle.fragments[0])
+    object.__setattr__(bad_fragment, "merge_ordinal", True)
+    with pytest.raises(SchemaValidationError, match="exact integer"):
+        replay_distributed_probe_fragment(
+            bad_fragment,
+            plan=bundle.plan,
+            **dependency_kwargs,
+        )
+
+    bad_outcome = copy.copy(bundle.outcomes[0])
+    object.__setattr__(bad_outcome, "attempt_number", True)
+    forged_receipt = replace(
+        bundle.receipt,
+        rank_outcomes=(bad_outcome, *bundle.outcomes[1:]),
+    )
+    with pytest.raises(SchemaValidationError, match="exact integer"):
+        replay_independent_reconstruction_receipt(
+            forged_receipt,
+            plan=bundle.plan,
+            fragments=bundle.fragments,
+            **dependency_kwargs,
         )
 
 
