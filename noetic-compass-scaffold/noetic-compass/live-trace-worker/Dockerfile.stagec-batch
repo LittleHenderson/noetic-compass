@@ -1,0 +1,89 @@
+# syntax=docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+# Sealed Stage C batch scaffold.
+#
+# This final layer is built with --network=none from the exact Qwen image made
+# in the same owner-triggered workflow.  It deliberately replaces the parent's
+# FastAPI command with an offline, unprivileged, fail-closed batch preflight.
+# There is no positive model execution path in this image version.
+
+ARG PARENT_IMAGE
+FROM ${PARENT_IMAGE}
+
+USER 0:0
+ARG SOURCE_COMMIT=UNBOUND
+ARG CLEAN_BASE_CONFIG_DIGEST=UNBOUND
+ARG QWEN_PARENT_CONFIG_DIGEST=UNBOUND
+ARG STAGEC_ENTRYPOINT_SHA256=UNBOUND
+
+RUN test "${#SOURCE_COMMIT}" -eq 40 \
+    && case "$SOURCE_COMMIT" in *[!0-9a-f]*) exit 1 ;; *) exit 0 ;; esac \
+    && case "$CLEAN_BASE_CONFIG_DIGEST" in sha256:*) clean_hex="${CLEAN_BASE_CONFIG_DIGEST#sha256:}" ;; *) exit 1 ;; esac \
+    && test "${#clean_hex}" -eq 64 \
+    && case "$clean_hex" in *[!0-9a-f]*) exit 1 ;; *) : ;; esac \
+    && case "$QWEN_PARENT_CONFIG_DIGEST" in sha256:*) qwen_hex="${QWEN_PARENT_CONFIG_DIGEST#sha256:}" ;; *) exit 1 ;; esac \
+    && test "${#qwen_hex}" -eq 64 \
+    && case "$qwen_hex" in *[!0-9a-f]*) exit 1 ;; *) : ;; esac \
+    && test "${#STAGEC_ENTRYPOINT_SHA256}" -eq 64 \
+    && case "$STAGEC_ENTRYPOINT_SHA256" in *[!0-9a-f]*) exit 1 ;; *) exit 0 ;; esac
+
+WORKDIR /worker/stagec_batch
+COPY --chown=0:0 scripts/stagec_batch_entrypoint.py ./entrypoint.py
+
+# Verify the copied entrypoint and the inherited dependency closure without a
+# GPU or model forward.  Torch/CUDA/BF16 device checks are repeated by the
+# entrypoint only after every external input identity is present.
+RUN printf '%s  %s\n' "$STAGEC_ENTRYPOINT_SHA256" /worker/stagec_batch/entrypoint.py \
+      | sha256sum --check --strict - \
+    && python -B - <<'PY'
+import os
+import torch
+
+assert torch.__version__ == "2.13.0+cu126", torch.__version__
+assert torch.version.cuda == "12.6", torch.version.cuda
+assert os.environ["TORCH_DISABLE_NATIVE_JIT"] == "1"
+assert os.environ["HF_HUB_OFFLINE"] == "1"
+assert os.environ["TRANSFORMERS_OFFLINE"] == "1"
+assert os.environ["ATLAS_WORKER_MODEL"] == "qwen2.5-0.5b-instruct"
+PY
+
+RUN chown -R 0:0 /worker/stagec_batch \
+    && find /worker/stagec_batch -type d -exec chmod 0555 '{}' + \
+    && find /worker/stagec_batch -type f -exec chmod 0444 '{}' +
+
+ENV ATLAS_WORKER_PROFILE=production \
+    ATLAS_WORKER_MODEL=qwen2.5-0.5b-instruct \
+    ATLAS_WORKER_REQUIRE_READ_ONLY_ROOTFS=1 \
+    HF_HUB_OFFLINE=1 \
+    TRANSFORMERS_OFFLINE=1 \
+    TORCH_DISABLE_NATIVE_JIT=1 \
+    CAS_STAGEC_BATCH_ACTIVATION=DISABLED_NOT_IMPLEMENTED
+
+LABEL org.opencontainers.image.revision="${SOURCE_COMMIT}" \
+      org.opencontainers.image.version="gate5-stagec-qwen05b-batch-v0.1" \
+      org.opencontainers.image.base.config.digest="${CLEAN_BASE_CONFIG_DIGEST}" \
+      io.cas-harness.stagec.qwen-parent.config-digest="${QWEN_PARENT_CONFIG_DIGEST}" \
+      io.cas-harness.stagec.entrypoint.sha256="${STAGEC_ENTRYPOINT_SHA256}" \
+      io.cas-harness.claim-status="DESIGN_ONLY" \
+      io.cas-harness.stagec.activation="DISABLED_NOT_IMPLEMENTED" \
+      io.cas-harness.stagec.default-process="SEALED_BATCH_PREFLIGHT_NOT_FASTAPI" \
+      io.cas-harness.stagec.torch="2.13.0+cu126" \
+      io.cas-harness.stagec.cuda-runtime="12.6" \
+      io.cas-harness.stagec.dtype="NATIVE_BF16_REQUIRED" \
+      io.cas-harness.stagec.native-jit="DISABLED" \
+      io.cas-harness.stagec.runtime-network="EXTERNAL_NONE_GUARD_AND_RECEIPT_REQUIRED" \
+      io.cas-harness.gate5-status="OPEN" \
+      io.cas-harness.experiment-status="NOT_STARTED" \
+      io.cas-harness.license-status="NOT_LICENSED" \
+      io.cas-harness.disclosure-status="HELD"
+
+USER 10001:10001
+RUN test ! -w /worker/stagec_batch \
+    && test ! -w /worker/stagec_batch/entrypoint.py \
+    && test ! -w /worker/.cache/huggingface
+
+# The parent is a web worker, so explicitly remove its web healthcheck and
+# replace its FastAPI CMD.  The only default process is the sealed preflight;
+# it always exits 78 and never evaluates a model.
+HEALTHCHECK NONE
+ENTRYPOINT ["python", "-B", "/worker/stagec_batch/entrypoint.py"]
+CMD ["sealed"]
