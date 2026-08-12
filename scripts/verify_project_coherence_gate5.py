@@ -214,32 +214,81 @@ STAGEC_DESIGN_SHA256 = (
 )
 STAGEC_DESIGN_BYTES = 155_264
 STAGEC_README_SHA256 = (
-    "B6BFAF8D4012237DFF29026035FC18FE90346DBDEB2F4295BB9F6CAA7420CBE0"
+    "B8CD8277DEBF54C7A65210A91A4CA9FAFFA8422A5F0E4AEF76692A7B9B034A39"
 )
-STAGEC_README_BYTES = 56_375
+STAGEC_README_BYTES = 66_980
+STAGEC_RUNPOD_CONTROL_DOCUMENT_BINDINGS = MappingProxyType(
+    {
+        "docs/working/project_coherence/PROJECT_COHERENCE_EXECUTION_RECONCILIATION_v0.1.md": (
+            "D07A9D3FF34F2614F8F2E5B7B264DAF5E7C5D36BF331803A43E9A5BB5F4A8499",
+            46_063,
+        ),
+        "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md": (
+            "9F5DAD25BB42AC7D4F4D5DC9CF57ACF82AA090032202C315D323E1F66145D19E",
+            112_293,
+        ),
+        "docs/working/project_coherence/gate5/GATE5_WORKER_PROTOCOL_BINDING_v0.1.md": (
+            "E86AA3501B0B8E841E2C32548D263F47FB31943E93E50467F25DB2D546029AA5",
+            130_399,
+        ),
+        "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md": (
+            "5F822B08047D44E2FCAADBE95BCFD95C18931B798B183620CA49AFA838A834AE",
+            72_334,
+        ),
+        "docs/working/project_coherence/gate5/README.md": (
+            "0E5E75BFCEF68FC7F240F9B75E4D0069350ACBD839EB2DC7A2E0CE0352A32096",
+            97_641,
+        ),
+        "docs/working/project_coherence/gate5/stagec_qwen_prompt_injection_v0.1/README.md": (
+            STAGEC_README_SHA256,
+            STAGEC_README_BYTES,
+        ),
+    }
+)
 PACKAGED_HARNESS_V2_REL = "noetic-compass-scaffold/noetic-compass/cas_harness_v2"
+# The Stage C design carrier was issued before the additive RunPod/corpus
+# modules.  These counts stay local to that frozen historical snapshot.
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_FILE_COUNT = 36
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_EXPORT_COUNT = 1_097
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_TOTAL_BYTES = 2_332_110
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_PROVENANCE_SHA256 = (
+    "D3074AC3F1B72FD150305F298159F185FD0AF259EB30109D80F10973BAA3F403"
+)
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_PROVENANCE_BYTES = 6_055
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_INIT_SHA256 = (
+    "C82851C34C4917EE362C7A29FA894CDE1D345DAD623DFDA6F21FEB8700A0E1E6"
+)
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_INIT_BYTES = 40_808
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256 = (
+    "0F7D7D18507E43F6D50240857797EF91D2401BE1741558EDEB1B389B848F3DE1"
+)
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_BYTES = 6_612
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_TEST_SHA256 = (
+    "E019285701CF35DC7C4A1D49CF37E3F9983B3F20EBE00EFCF180A739FFA74074"
+)
+HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_TEST_BYTES = 18_564
 PACKAGED_HARNESS_V2_PROVENANCE_REL = (
     f"{PACKAGED_HARNESS_V2_REL}/PACKAGING_PROVENANCE.json"
 )
 PACKAGED_HARNESS_V2_PROVENANCE_SHA256 = (
-    "D3074AC3F1B72FD150305F298159F185FD0AF259EB30109D80F10973BAA3F403"
+    "01B026C5DD4FEC14D83486421BA7BF7AA87491AB01F162820EF2AE51F730BC3A"
 )
-PACKAGED_HARNESS_V2_PROVENANCE_BYTES = 6_055
-PACKAGED_HARNESS_V2_FILE_COUNT = 36
-PACKAGED_HARNESS_V2_EXPORT_COUNT = 1_097
-PACKAGED_HARNESS_V2_TOTAL_BYTES = 2_332_110
+PACKAGED_HARNESS_V2_PROVENANCE_BYTES = 6_886
+PACKAGED_HARNESS_V2_FILE_COUNT = 41
+PACKAGED_HARNESS_V2_EXPORT_COUNT = 1_242
+PACKAGED_HARNESS_V2_TOTAL_BYTES = 2_551_834
 PACKAGED_HARNESS_V2_INIT_SHA256 = (
-    "C82851C34C4917EE362C7A29FA894CDE1D345DAD623DFDA6F21FEB8700A0E1E6"
+    "C76ED2B74B464CAE2F5B9877D2E6F051D23E8675CBBB35DB2DA675844A7CC7E7"
 )
-PACKAGED_HARNESS_V2_INIT_BYTES = 40_808
+PACKAGED_HARNESS_V2_INIT_BYTES = 42_962
 PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256 = (
-    "0F7D7D18507E43F6D50240857797EF91D2401BE1741558EDEB1B389B848F3DE1"
+    "9A6D03743A7F67DD0B5E8CCDB6E3E7DBCE110E36012D35BE27671B359C98A02C"
 )
-PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_BYTES = 6_612
+PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_BYTES = 6_868
 PACKAGED_HARNESS_V2_TEST_SHA256 = (
-    "E019285701CF35DC7C4A1D49CF37E3F9983B3F20EBE00EFCF180A739FFA74074"
+    "CCFEFEC136C85CD798B32491254DD63DA8DD00A8C2C9E588B5990D1EDE38CF7C"
 )
-PACKAGED_HARNESS_V2_TEST_BYTES = 18_564
+PACKAGED_HARNESS_V2_TEST_BYTES = 21_529
 HISTORICAL_AUTHORITATIVE_HARNESS_NODES = 537
 HISTORICAL_AUTHORITATIVE_HARNESS_NODE_IDS_SHA256 = (
     "3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19"
@@ -256,22 +305,53 @@ HISTORICAL_RUNTIME_ACTIVATION_ADAPTER_NODES = 99
 HISTORICAL_RUNTIME_ACTIVATION_ADAPTER_NODE_IDS_SHA256 = (
     "2EC053F1688C97A76326A5ADDD79A07F31623D91FE9513DF9B4EC4C6B5D2167B"
 )
-EXPANDED_CONFIGURED_HARNESS_NODES = 1_082
-EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256 = (
+HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODES = 1_082
+HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODE_IDS_SHA256 = (
     "E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928"
 )
-EXPANDED_CONFIGURED_WORKER_NODES = 719
-EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256 = (
+HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODES = 719
+HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODE_IDS_SHA256 = (
     "98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5"
+)
+# Compatibility names below bind the already-issued Stage C design and review
+# snapshots.  They are historical identities, never the current expanded
+# RunPod/corpus tranche.
+EXPANDED_CONFIGURED_HARNESS_NODES = HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODES
+EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256 = (
+    HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODE_IDS_SHA256
+)
+EXPANDED_CONFIGURED_WORKER_NODES = HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODES
+EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256 = (
+    HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODE_IDS_SHA256
 )
 EXPANDED_CONFIGURED_ADAPTER_NODES = 99
 EXPANDED_CONFIGURED_ADAPTER_NODE_IDS_SHA256 = (
     "B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B"
 )
 EXPANDED_CONFIGURED_TEST_SUITE_NODE_TOTAL = 2_289
-CURRENT_MANIFEST_ARTIFACT_COUNT = 686
-CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT = 457
-CURRENT_EXECUTABLE_SHADOW_PATH_COUNT = 2_290
+CURRENT_RUNPOD_CONFIGURED_HARNESS_NODES = 1_452
+CURRENT_RUNPOD_CONFIGURED_HARNESS_NODE_IDS_SHA256 = (
+    "4419F4BE8F2CCEE417763854814DA0FA5B7D4D6173BDAD18DF12F5AA06AFFC96"
+)
+CURRENT_RUNPOD_CONFIGURED_WORKER_NODES = 732
+CURRENT_RUNPOD_CONFIGURED_WORKER_NODE_IDS_SHA256 = (
+    "F53562BAECCC4982B402A9A747F8CADC29468B5F14D8B4A8C17CFC2A8E89B568"
+)
+CURRENT_RUNPOD_CONFIGURED_TEST_SUITE_NODE_TOTAL = 2_672
+CURRENT_RUNPOD_INTEGRATED_RECEIPT_STATUS = (
+    "AUTHORITATIVE CURRENT-TRANCHE INTEGRATED 12-SUITE PASS / LOCAL "
+    "ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+CURRENT_RUNPOD_INTEGRATED_VERIFIER_COMMAND = (
+    r"C:\Python314\python.exe -I -B scripts/verify_project_coherence_gate5.py"
+)
+CURRENT_RUNPOD_INTEGRATED_SUITE_COUNT = 12
+HISTORICAL_PRE_RUNPOD_MANIFEST_ARTIFACT_COUNT = 686
+HISTORICAL_PRE_RUNPOD_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT = 457
+HISTORICAL_PRE_RUNPOD_EXECUTABLE_SHADOW_PATH_COUNT = 2_290
+CURRENT_MANIFEST_ARTIFACT_COUNT = 708
+CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT = 475
+CURRENT_EXECUTABLE_SHADOW_PATH_COUNT = 2_317
 EXECUTABLE_SHADOW_IGNORED_TRANSIENT_SUBTREE = f"{API_ROOT_REL}/.tmp"
 EXECUTABLE_SHADOW_SCOPE_BOUNDARY = (
     "IGNORED TRANSIENT TRACE SUBTREE / NOT AN IMPORT OR EXECUTABLE AUTHORITY "
@@ -285,6 +365,7 @@ COMPARISON_FULL_SUITE_RECEIPT_STATUS = (
 CURRENT_AUTHORITATIVE_REPLAY_STATUS = (
     "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
 )
+CURRENT_RUNPOD_EXPANDED_RECEIPT_STATUS = CURRENT_AUTHORITATIVE_REPLAY_STATUS
 CURRENT_HARNESS_AUTHORITATIVE_REPLAY_STATUS = (
     "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
     "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY"
@@ -297,8 +378,13 @@ FINAL_INTEGRATED_VERIFIER_COMMAND = (
 )
 FINAL_INTEGRATED_VERIFIER_TOOL_WALL_SECONDS = "3568.3"
 FINAL_INTEGRATED_VERIFIER_REVIEW_CRITERIA = 51
+CURRENT_REVIEW_MATRIX_CRITERIA = 52
 FINAL_INTEGRATED_VERIFIER_OPEN_BOUNDARIES = 22
-FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES = 1_258
+HISTORICAL_PRE_RUNPOD_POSTFLIGHT_IDENTITIES = 1_258
+FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES = 1_280
+CURRENT_RUNPOD_INTEGRATED_REVIEW_CRITERIA = 52
+CURRENT_RUNPOD_INTEGRATED_OPEN_BOUNDARIES = 22
+CURRENT_RUNPOD_INTEGRATED_POSTFLIGHT_IDENTITIES = 1_280
 CURRENT_AUTHORITATIVE_FULL_SUITE_STATUS = (
     "CURRENT AUTHORITATIVE SAME-PROCESS HARNESS 1082 / WORKER 719 / "
     "ADAPTER 99 RECEIPTS PASS / FINAL INTEGRATED 12-SUITE VERIFIER PASS / "
@@ -369,9 +455,9 @@ HISTORICAL_RUNTIME_ACTIVATION_HARNESS_RECEIPT = MappingProxyType(
 )
 HISTORICAL_ATTEMPT3_HARNESS_RECEIPT = MappingProxyType(
     {
-        "collected_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
-        "started_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
-        "finished_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+        "collected_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODES,
+        "started_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODES,
+        "finished_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODES,
         "all_phase_pass_nodes": 1_076,
         "setup_skipped_nodes": 6,
         "ordinary_reports": 3_240,
@@ -385,7 +471,9 @@ HISTORICAL_ATTEMPT3_HARNESS_RECEIPT = MappingProxyType(
         "process_exit_status": 0,
         "pytest_exit_status": 0,
         "elapsed_seconds": "3350.340165",
-        "node_ids_sha256": EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256,
+        "node_ids_sha256": (
+            HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODE_IDS_SHA256
+        ),
         "ordinary_outcomes_sha256": (
             "60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29"
         ),
@@ -405,11 +493,11 @@ HISTORICAL_ATTEMPT3_HARNESS_RECEIPT = MappingProxyType(
         "receipt_status": CURRENT_HARNESS_AUTHORITATIVE_REPLAY_STATUS,
     }
 )
-CURRENT_AUTHORITATIVE_HARNESS_RECEIPT = MappingProxyType(
+HISTORICAL_PRE_RUNPOD_AUTHORITATIVE_HARNESS_RECEIPT = MappingProxyType(
     {
-        "collected_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
-        "started_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
-        "finished_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+        "collected_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODES,
+        "started_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODES,
+        "finished_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODES,
         "all_phase_pass_nodes": 1_076,
         "setup_skipped_nodes": 6,
         "ordinary_reports": 3_240,
@@ -423,7 +511,9 @@ CURRENT_AUTHORITATIVE_HARNESS_RECEIPT = MappingProxyType(
         "process_exit_status": 0,
         "pytest_exit_status": 0,
         "elapsed_seconds": "3059.695080",
-        "node_ids_sha256": EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256,
+        "node_ids_sha256": (
+            HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODE_IDS_SHA256
+        ),
         "ordinary_outcomes_sha256": (
             "60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29"
         ),
@@ -461,7 +551,9 @@ HISTORICAL_RUNTIME_ACTIVATION_WORKER_RECEIPT = MappingProxyType(
         "process_exit_status": 0,
         "pytest_exit_status": 0,
         "elapsed_seconds": "42.035",
-        "node_ids_sha256": EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256,
+        "node_ids_sha256": (
+            HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODE_IDS_SHA256
+        ),
         "ordinary_outcomes_sha256": (
             "CF7F1676BAAA3E83999E758A35F311743B7B227DBD0A160EF79F85AA72477468"
         ),
@@ -481,12 +573,12 @@ HISTORICAL_RUNTIME_ACTIVATION_WORKER_RECEIPT = MappingProxyType(
         "receipt_status": HISTORICAL_RUNTIME_ACTIVATION_WORKER_STATUS,
     }
 )
-CURRENT_AUTHORITATIVE_WORKER_RECEIPT = MappingProxyType(
+HISTORICAL_PRE_RUNPOD_AUTHORITATIVE_WORKER_RECEIPT = MappingProxyType(
     {
-        "collected_nodes": EXPANDED_CONFIGURED_WORKER_NODES,
-        "started_nodes": EXPANDED_CONFIGURED_WORKER_NODES,
-        "finished_nodes": EXPANDED_CONFIGURED_WORKER_NODES,
-        "all_phase_pass_nodes": EXPANDED_CONFIGURED_WORKER_NODES,
+        "collected_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODES,
+        "started_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODES,
+        "finished_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODES,
+        "all_phase_pass_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODES,
         "setup_skipped_nodes": 0,
         "ordinary_reports": 2_157,
         "passed_subtests": 0,
@@ -499,7 +591,9 @@ CURRENT_AUTHORITATIVE_WORKER_RECEIPT = MappingProxyType(
         "process_exit_status": 0,
         "pytest_exit_status": 0,
         "elapsed_seconds": "106.254353",
-        "node_ids_sha256": EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256,
+        "node_ids_sha256": (
+            HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODE_IDS_SHA256
+        ),
         "ordinary_outcomes_sha256": (
             "CF7F1676BAAA3E83999E758A35F311743B7B227DBD0A160EF79F85AA72477468"
         ),
@@ -595,6 +689,299 @@ CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT = MappingProxyType(
         "receipt_status": CURRENT_AUTHORITATIVE_REPLAY_STATUS,
     }
 )
+# Compatibility aliases remain limited to the frozen pre-RunPod design/review
+# snapshots.  They intentionally retain the published 1,082/719/99 identities
+# and are not repointed by the current RunPod/corpus receipt promotion.
+CURRENT_AUTHORITATIVE_HARNESS_RECEIPT = (
+    HISTORICAL_PRE_RUNPOD_AUTHORITATIVE_HARNESS_RECEIPT
+)
+CURRENT_AUTHORITATIVE_WORKER_RECEIPT = (
+    HISTORICAL_PRE_RUNPOD_AUTHORITATIVE_WORKER_RECEIPT
+)
+CURRENT_RUNPOD_RECEIPT_BUNDLE_BINDINGS = MappingProxyType(
+    {
+        "harness": MappingProxyType(
+            {
+                "receipt_file_sha256": (
+                    "526F02B798757CD58B70002F6507639BC3879750F5CD484A726AEAEA250007F0"
+                ),
+                "receipt_file_bytes": 277_731,
+                "suite_name": "Harness v2 kernel and history",
+                "scope": (
+                    "LOCAL ENGINEERING REGRESSION / EPHEMERAL SAME-RUN RECEIPT "
+                    "SUMMARY / NOT TRUSTED TIME OR WORM / STRUCTURE_ONLY / "
+                    "NON_AUTHORITY"
+                ),
+                "verifier_sha256": (
+                    "87AA366193EBC0DDBFF6CF8ABC3C21C89ADA4B2322D543DD6058BAFB32C28B42"
+                ),
+                "manifest_sha256": (
+                    "507629AE1D90FB40F8AE197B75A9BB17FDBD2DE876C4A59AC6DDC96E24DA6620"
+                ),
+                "runner_lock_sha256": (
+                    "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+                ),
+            }
+        ),
+        "worker": MappingProxyType(
+            {
+                "receipt_file_sha256": (
+                    "D7F939E268E26D2532E281EBBD16AF47D3B29392C9D87E211A15B8988A64F10F"
+                ),
+                "receipt_file_bytes": 98_819,
+                "suite_name": "Live trace worker complete",
+                "scope": (
+                    "LOCAL ENGINEERING REGRESSION / EPHEMERAL SAME-RUN RECEIPT "
+                    "SUMMARY / NOT TRUSTED TIME OR WORM / STRUCTURE_ONLY / "
+                    "NON_AUTHORITY"
+                ),
+                "verifier_sha256": (
+                    "87AA366193EBC0DDBFF6CF8ABC3C21C89ADA4B2322D543DD6058BAFB32C28B42"
+                ),
+                "manifest_sha256": (
+                    "507629AE1D90FB40F8AE197B75A9BB17FDBD2DE876C4A59AC6DDC96E24DA6620"
+                ),
+                "runner_lock_sha256": (
+                    "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+                ),
+            }
+        ),
+        "adapter": MappingProxyType(
+            {
+                "receipt_file_sha256": (
+                    "44455E29889D9B1C5E958763368E50716A195BDDF9DC0778FA1A469C0318F6B4"
+                ),
+                "receipt_file_bytes": 16_513,
+                "suite_name": (
+                    "Harness v2 admitted adapter and bounded reconciliation"
+                ),
+                "scope": (
+                    "LOCAL ENGINEERING REGRESSION / EPHEMERAL SAME-RUN RECEIPT "
+                    "SUMMARY / NOT TRUSTED TIME OR WORM / STRUCTURE_ONLY / "
+                    "NON_AUTHORITY"
+                ),
+                "verifier_sha256": (
+                    "87AA366193EBC0DDBFF6CF8ABC3C21C89ADA4B2322D543DD6058BAFB32C28B42"
+                ),
+                "manifest_sha256": (
+                    "507629AE1D90FB40F8AE197B75A9BB17FDBD2DE876C4A59AC6DDC96E24DA6620"
+                ),
+                "runner_lock_sha256": (
+                    "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+                ),
+            }
+        ),
+    }
+)
+CURRENT_RUNPOD_AUTHORITATIVE_HARNESS_RECEIPT = MappingProxyType(
+    {
+        "collected_nodes": CURRENT_RUNPOD_CONFIGURED_HARNESS_NODES,
+        "started_nodes": CURRENT_RUNPOD_CONFIGURED_HARNESS_NODES,
+        "finished_nodes": CURRENT_RUNPOD_CONFIGURED_HARNESS_NODES,
+        "all_phase_pass_nodes": 1_446,
+        "setup_skipped_nodes": 6,
+        "ordinary_reports": 4_350,
+        "passed_subtests": 163,
+        "warning_count": 0,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "2747.329161",
+        "node_ids_sha256": CURRENT_RUNPOD_CONFIGURED_HARNESS_NODE_IDS_SHA256,
+        "ordinary_outcomes_sha256": (
+            "E600DEDCA64A9EBBA3584C6F44E4D69174817B13FD4E4B84F1B197BC935B8628"
+        ),
+        "subtest_outcomes_sha256": (
+            "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109"
+        ),
+        "locked_import_origins_sha256": (
+            "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+        ),
+        "pre_test_loaded_code_sha256": (
+            "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98"
+        ),
+        "loaded_code_sha256": (
+            "848B8099C06A7E3DBE5E970EAAE23ED228843934BA062D85CC3D307444DD6784"
+        ),
+        "loaded_code_digest_rule": CURRENT_HARNESS_LOADED_CODE_DIGEST_RULE,
+        "receipt_status": CURRENT_HARNESS_AUTHORITATIVE_REPLAY_STATUS,
+    }
+)
+CURRENT_RUNPOD_AUTHORITATIVE_WORKER_RECEIPT = MappingProxyType(
+    {
+        "collected_nodes": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
+        "started_nodes": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
+        "finished_nodes": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
+        "all_phase_pass_nodes": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
+        "setup_skipped_nodes": 0,
+        "ordinary_reports": 2_196,
+        "passed_subtests": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "162.481646",
+        "node_ids_sha256": CURRENT_RUNPOD_CONFIGURED_WORKER_NODE_IDS_SHA256,
+        "ordinary_outcomes_sha256": (
+            "889E455626A3DC5F7EC26CFC253CABED4572F0F9E95E68CCF56142380404664E"
+        ),
+        "subtest_outcomes_sha256": (
+            "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+        ),
+        "locked_import_origins_sha256": (
+            "035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6"
+        ),
+        "pre_test_loaded_code_sha256": (
+            "3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E"
+        ),
+        "loaded_code_sha256": (
+            "58A306279E05EBDF7F4C18A8B153170AB058C7DACF906D5E00AB92372F018681"
+        ),
+        "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+        "receipt_status": CURRENT_AUTHORITATIVE_REPLAY_STATUS,
+    }
+)
+CURRENT_RUNPOD_AUTHORITATIVE_ADAPTER_RECEIPT = MappingProxyType(
+    {
+        "collected_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "started_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "finished_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "all_phase_pass_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "setup_skipped_nodes": 0,
+        "ordinary_reports": 297,
+        "passed_subtests": 0,
+        "warning_count": 1,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "55.537553",
+        "node_ids_sha256": EXPANDED_CONFIGURED_ADAPTER_NODE_IDS_SHA256,
+        "ordinary_outcomes_sha256": (
+            "548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F"
+        ),
+        "subtest_outcomes_sha256": (
+            "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+        ),
+        "locked_import_origins_sha256": (
+            "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+        ),
+        "pre_test_loaded_code_sha256": (
+            "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98"
+        ),
+        "loaded_code_sha256": (
+            "EFA05FB2B5AEA5000FFB8B77F910A06C14F1BA433A4DC1CCE71474807F708F53"
+        ),
+        "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+        "receipt_status": CURRENT_AUTHORITATIVE_REPLAY_STATUS,
+    }
+)
+CURRENT_RUNPOD_INTEGRATED_RECEIPT = MappingProxyType(
+    {
+        "run_id": "retry-20260812T203610Z-c2861637",
+        "supervisor_schema": "project-coherence-integrated-replay-supervisor-v1",
+        "supervisor_result_state": "EXIT_0_WITH_EXACT_PASS_LINE",
+        "command": CURRENT_RUNPOD_INTEGRATED_VERIFIER_COMMAND,
+        "status": CURRENT_RUNPOD_INTEGRATED_RECEIPT_STATUS,
+        "authority_boundary": "LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY",
+        "started_utc_observational": "2026-08-12T20:36:10.4841955Z",
+        "ended_utc_observational": "2026-08-12T21:23:04.1021881Z",
+        "wall_seconds_observational": "2813.248",
+        "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+        "process_exit_status": 0,
+        "exact_pass_line_observed": True,
+        "configured_suite_count": CURRENT_RUNPOD_INTEGRATED_SUITE_COUNT,
+        "configured_nodes": CURRENT_RUNPOD_CONFIGURED_TEST_SUITE_NODE_TOTAL,
+        "manifest_artifacts": CURRENT_MANIFEST_ARTIFACT_COUNT,
+        "syntax_checked_python_artifacts": (
+            CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
+        ),
+        "executable_shadow_paths_before_and_after": (
+            CURRENT_EXECUTABLE_SHADOW_PATH_COUNT
+        ),
+        "harness_nodes": CURRENT_RUNPOD_CONFIGURED_HARNESS_NODES,
+        "harness_subtests": 163,
+        "harness_setup_skips": 6,
+        "harness_loaded_code_sha256": (
+            CURRENT_RUNPOD_AUTHORITATIVE_HARNESS_RECEIPT["loaded_code_sha256"]
+        ),
+        "worker_nodes": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
+        "worker_loaded_code_sha256": (
+            CURRENT_RUNPOD_AUTHORITATIVE_WORKER_RECEIPT["loaded_code_sha256"]
+        ),
+        "adapter_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "adapter_loaded_code_sha256": (
+            CURRENT_RUNPOD_AUTHORITATIVE_ADAPTER_RECEIPT["loaded_code_sha256"]
+        ),
+        "review_criteria": CURRENT_RUNPOD_INTEGRATED_REVIEW_CRITERIA,
+        "required_open_boundaries": CURRENT_RUNPOD_INTEGRATED_OPEN_BOUNDARIES,
+        "postflight_file_identities": (
+            CURRENT_RUNPOD_INTEGRATED_POSTFLIGHT_IDENTITIES
+        ),
+        "freeze_ledger_sha256": (
+            "533B661DC730647703540DD0D107A574BF832AFD24599D84ABD0DD28D63368E2"
+        ),
+        "verifier_before_sha256": (
+            "E687BD3BD01926763E737EE82C17AADB2222CBCC78172C500A7E5715C1C51D38"
+        ),
+        "verifier_before_bytes": 931_351,
+        "verifier_after_sha256": (
+            "E687BD3BD01926763E737EE82C17AADB2222CBCC78172C500A7E5715C1C51D38"
+        ),
+        "verifier_after_bytes": 931_351,
+        "manifest_before_sha256": (
+            "74A42ED7CFB252A8F14B0E72735DBB9C0DD711CC7536063BBD84A7345BECDB62"
+        ),
+        "manifest_before_bytes": 204_635,
+        "manifest_after_sha256": (
+            "74A42ED7CFB252A8F14B0E72735DBB9C0DD711CC7536063BBD84A7345BECDB62"
+        ),
+        "manifest_after_bytes": 204_635,
+        "runner_lock_before_sha256": (
+            "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+        ),
+        "runner_lock_before_bytes": 121_525,
+        "runner_lock_after_sha256": (
+            "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+        ),
+        "runner_lock_after_bytes": 121_525,
+        "supervisor_started_sha256": (
+            "7D4299A21350E033E397BE2F88CC63A4ACB8B464A8A24C5D3A6D6AC0C0593F3D"
+        ),
+        "supervisor_started_bytes": 2_465,
+        "supervisor_result_sha256": (
+            "9186AC199ADB038E4C462A5B420C1B777D95EDE694EB4DF3D803C8EFE3BA9FFB"
+        ),
+        "supervisor_result_bytes": 3_189,
+        "stdout_sha256": (
+            "AA4C46BA71EA2467C6963C21A8C54C70906943BB14644607AC98A7FF2950751C"
+        ),
+        "stdout_bytes": 11_116,
+        "stderr_sha256": (
+            "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        ),
+        "stderr_bytes": 0,
+        "trusted_time": "UNAVAILABLE / NOT CLAIMED",
+        "worm_retention": "UNAVAILABLE / NOT CLAIMED",
+        "attempt_ordinal_claim": "NONE / NOT INFERRED",
+        "aggregate_digest_claim": "NONE / NOT CLAIMED",
+        "claim_effect": (
+            "STRUCTURE_ONLY / NON_AUTHORITY / NO EXPERIMENTAL, PRODUCT, "
+            "LICENSE, OR DISCLOSURE AUTHORITY"
+        ),
+    }
+)
 STAGEC_RUNTIME_CORE_FOCUSED_NODES = 28
 STAGEC_RUNTIME_CORE_FOCUSED_EXECUTED_NODE_IDS_SHA256 = (
     "5D501F3505A98E23BDD2AB8B191BC6EEE90260F1F169940B6A6F70A61525A632"
@@ -602,6 +989,249 @@ STAGEC_RUNTIME_CORE_FOCUSED_EXECUTED_NODE_IDS_SHA256 = (
 STAGEC_RUNTIME_CORE_FOCUSED_WARNING_COUNT = 0
 STAGEC_RUNTIME_CORE_FOCUSED_ELAPSED_SECONDS = "922.45"
 SAME_RUN_PYTEST_TIMEOUT_SECONDS = 5_400
+
+STAGEC_RUNPOD_IMAGE_SOURCE_COMMIT = "b163fee30634a21d2e717eda8a33de287426ee41"
+STAGEC_RUNPOD_EXECUTION_IMAGE_REPOSITORY = (
+    "ghcr.io/littlehenderson/noetic-compass-stagec-qwen-batch"
+)
+STAGEC_RUNPOD_EXECUTION_IMAGE_MANIFEST_DIGEST = (
+    "sha256:69f7e43a79501a075c50adff4c4f2fd7ec2932c62213e76144ea16a1b86b6df2"
+)
+STAGEC_RUNPOD_EXECUTION_IMAGE_CONFIG_DIGEST = (
+    "sha256:e56c9971a93ce3ae5cf51c49440093620006e2fcad8ee890fd1b1732ede481b1"
+)
+STAGEC_RUNPOD_EXECUTION_IMAGE_REF = (
+    STAGEC_RUNPOD_EXECUTION_IMAGE_REPOSITORY
+    + "@"
+    + STAGEC_RUNPOD_EXECUTION_IMAGE_MANIFEST_DIGEST
+)
+STAGEC_RUNPOD_IMAGE_RECEIPT = MappingProxyType(
+    {
+        "workflow_run_id": "31566811228",
+        "artifact_id": "9129938731",
+        "artifact_name": (
+            "stagec-qwen-batch-image-receipt-"
+            + STAGEC_RUNPOD_IMAGE_SOURCE_COMMIT
+        ),
+        "source_commit": STAGEC_RUNPOD_IMAGE_SOURCE_COMMIT,
+        "execution_image_ref": STAGEC_RUNPOD_EXECUTION_IMAGE_REF,
+        "manifest_digest": STAGEC_RUNPOD_EXECUTION_IMAGE_MANIFEST_DIGEST,
+        "manifest_media_type": (
+            "application/vnd.docker.distribution.manifest.v2+json"
+        ),
+        "manifest_byte_length": 5_958,
+        "manifest_capture_sha256": (
+            "69F7E43A79501A075C50ADFF4C4F2FD7EC2932C62213E76144EA16A1B86B6DF2"
+        ),
+        "config_digest": STAGEC_RUNPOD_EXECUTION_IMAGE_CONFIG_DIGEST,
+        "canonical_receipt_byte_length": 1_858,
+        "canonical_receipt_sha256": (
+            "9FFE68BA81B81E2B3AE3210101F09381BB70180007CD6CB9A52546C84E9228CD"
+        ),
+        "artifact_zip_byte_length": 2_607,
+        "artifact_zip_sha256": (
+            "8EC0720B59D725D98C4C590E68D0D904134DB2870B8DA5D4BFF14A6AFB627CB1"
+        ),
+        "registry_visibility": "private",
+        "runtime_activation": "DISABLED_NOT_IMPLEMENTED",
+        "runpod_mutation_count": 0,
+    }
+)
+STAGEC_RUNPOD_READONLY_PROVIDER_RECEIPT = MappingProxyType(
+    {
+        "observation_byte_length": 9_447,
+        "observation_sha256": (
+            "081BE716EE26E5FA572F69614CEA21EF59E183295D30F8994D49246527F0EA82"
+        ),
+        "blocked_plan_byte_length": 7_848,
+        "blocked_plan_sha256": (
+            "705DF68AA8CFB7673C2313E0F2FA420739DB204BD6413ABCB48430351972603E"
+        ),
+        "authenticated_get_observations": 2,
+        "billing_rows": 71,
+        "billing_window_hours": 72,
+        "observed_amount_usd": "0.982638896210119131",
+        "application_capability": "ABSENT",
+        "provider_mutations": 0,
+        "pod_starts": 0,
+        "model_invocations": 0,
+        "paid_gpu_compute_usd": "0.00",
+    }
+)
+STAGEC_RUNPOD_READINESS_MODULE_NAMES = (
+    "diagnostic_stagec_historical_source_inventory",
+    "diagnostic_stagec_corpus_authoring_scaffold",
+    "diagnostic_stagec_runpod_authorization_v2",
+    "stagec_runpod_readonly_preflight",
+    "stagec_runpod_runner",
+)
+STAGEC_RUNPOD_READINESS_FILE_BINDINGS = MappingProxyType(
+    {
+        "src/cas_harness_v2/diagnostic_stagec_historical_source_inventory.py": (
+            "E2D2A25DF59813A1AD7EAE2CA0A48342265154DA2CCF31BEB9EF85F2E5DFA473",
+            21_070,
+        ),
+        "tests/cas_harness_v2/test_diagnostic_stagec_historical_source_inventory.py": (
+            "B52561796E3A5E42168FC230278D0E646D0F91C7CED3AF9E6282B2EB3613CDCE",
+            14_110,
+        ),
+        "src/cas_harness_v2/diagnostic_stagec_corpus_authoring_scaffold.py": (
+            "27A487EFF3150E334A015D8B32D98375CC9C00A286F5FCBFD461CCF0C1793209",
+            53_144,
+        ),
+        "tests/cas_harness_v2/test_diagnostic_stagec_corpus_authoring_scaffold.py": (
+            "B3ADF3ABC5AC75636E56F03B5BA8199A0AADF1D9733254D52D3DF3668E9BFD47",
+            38_828,
+        ),
+        "src/cas_harness_v2/diagnostic_stagec_runpod_authorization_v2.py": (
+            "E5D5A6B5718DD9CDBF374F32E37260BB3374A20FDEF74EE2323204FF877E505D",
+            28_820,
+        ),
+        "tests/cas_harness_v2/test_diagnostic_stagec_runpod_authorization_v2.py": (
+            "8291825993B86907D71044B3F7FD1467304E47A4FC29BBC6F639795D395B36F5",
+            20_458,
+        ),
+        "src/cas_harness_v2/stagec_runpod_readonly_preflight.py": (
+            "F049E8BFFF23ED9A24FE2F332CF6CE21BCCDC592B0EF2D243BD850F84E472C25",
+            82_333,
+        ),
+        "tests/cas_harness_v2/test_stagec_runpod_readonly_preflight.py": (
+            "D5C890B82BEF054EC52F3EF4F50C12412E38A66E23A6A2219FC483361C76BD1A",
+            56_324,
+        ),
+        "src/cas_harness_v2/stagec_runpod_runner.py": (
+            "1A3995232617FD89731643D896D7C001D69421A2F3268C2CA3632ACD8AC8AB4A",
+            32_203,
+        ),
+        "tests/cas_harness_v2/test_stagec_runpod_runner.py": (
+            "0313DD2838E6300643DB6B1BCDBB458D9DC2A3A5BDD4A4B7CDF32FA82D60EA26",
+            24_032,
+        ),
+        ".github/workflows/stagec-qwen-batch-image.yml": (
+            "1763377C92B3754A51D8A19766FC1F16DDB44F52377C7EA1EA620B851C088DDF",
+            15_916,
+        ),
+        ".github/workflows/live-worker-image.yml": (
+            "86215CBA4FA0A2B2DD00FBA9915E2AFE578D952A8507DB0D663309CDCB6A886B",
+            6_382,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+            "Dockerfile.qwen-stagec-model"
+        ): (
+            "F66C82DE2AC2DB49DCE70140F1163098D745422A0103CB1962FD97C4ADAFA8D2",
+            3_494,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+            "Dockerfile.stagec-batch"
+        ): (
+            "B32F6B502EDB6C0416F52FAEF9249D2F0D324BE20A37F11F229FCB1A37EF276D",
+            4_143,
+        ),
+    }
+)
+STAGEC_RUNPOD_READINESS_LITERAL_CONSTANTS = MappingProxyType(
+    {
+        "src/cas_harness_v2/diagnostic_stagec_historical_source_inventory.py": MappingProxyType(
+            {
+                "HISTORICAL_W0_SOURCE_SCHEMA": (
+                    "cas_harness_hidden_prompt_injection_bank.v1"
+                ),
+                "HISTORICAL_W0_SUMMARY_SCHEMA": (
+                    "cas_harness_hidden_prompt_injection_bank.v1.summary"
+                ),
+                "STAGEC_HISTORICAL_SOURCE_GAP_SCHEMA": (
+                    "cas_harness_v2.stagec_historical_source_gap_inventory.v1"
+                ),
+                "STAGEC_HISTORICAL_SOURCE_GAP_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "stagec-historical-source-gap-inventory+json"
+                ),
+            }
+        ),
+        "src/cas_harness_v2/diagnostic_stagec_corpus_authoring_scaffold.py": MappingProxyType(
+            {
+                "STAGEC_CORPUS_AUTHORING_SCAFFOLD_SCHEMA": (
+                    "cas_harness_v2.stagec_corpus_authoring_scaffold.v1"
+                ),
+                "STAGEC_CORPUS_AUTHORING_SCAFFOLD_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "stagec-corpus-authoring-scaffold+json"
+                ),
+            }
+        ),
+        "src/cas_harness_v2/diagnostic_stagec_runpod_authorization_v2.py": MappingProxyType(
+            {
+                "STAGEC_RUNPOD_AUTHORIZATION_V2_SCHEMA": (
+                    "cas_harness_v2."
+                    "stagec_runpod_c_cal_execution_authorization_candidate.v2"
+                ),
+                "STAGEC_RUNPOD_AUTHORIZATION_V2_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "stagec-runpod-c-cal-authorization-candidate-v2+json"
+                ),
+                "STAGEC_RUNPOD_CONTAINER_IMAGE_MANIFEST_MEDIA_TYPE": (
+                    "application/vnd.docker.distribution.manifest.v2+json"
+                ),
+            }
+        ),
+        "src/cas_harness_v2/stagec_runpod_readonly_preflight.py": MappingProxyType(
+            {
+                "STAGEC_RUNPOD_READONLY_OBSERVATION_SCHEMA": (
+                    "cas-harness.stagec-runpod-readonly-observation.v1"
+                ),
+                "STAGEC_RUNPOD_READONLY_OBSERVATION_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "stagec-runpod-readonly-observation.v1+json"
+                ),
+                "STAGEC_RUNPOD_STOPPED_UPDATE_PLAN_SCHEMA": (
+                    "cas-harness.stagec-runpod-stopped-update-plan.v1"
+                ),
+                "STAGEC_RUNPOD_STOPPED_UPDATE_PLAN_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "stagec-runpod-stopped-update-plan.v1+json"
+                ),
+                "STAGEC_RUNPOD_CONFIGURED_IMAGE_MANIFEST_MEDIA_TYPE": (
+                    "application/vnd.docker.distribution.manifest.v2+json"
+                ),
+            }
+        ),
+        "src/cas_harness_v2/stagec_runpod_runner.py": MappingProxyType(
+            {
+                "STAGEC_RUNPOD_ENVIRONMENT_V1_SCHEMA": (
+                    "cas_harness_v2.stagec_runpod_environment_candidate.v1"
+                ),
+                "STAGEC_RUNPOD_ENVIRONMENT_V1_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "stagec-runpod-environment-candidate-v1+json"
+                ),
+                "STAGEC_RUNPOD_DOCKER_V2_MANIFEST_MEDIA_TYPE": (
+                    "application/vnd.docker.distribution.manifest.v2+json"
+                ),
+                "STAGEC_RUNPOD_OCI_IMAGE_MANIFEST_MEDIA_TYPE": (
+                    "application/vnd.oci.image.manifest.v1+json"
+                ),
+            }
+        ),
+    }
+)
+STAGEC_RUNPOD_READINESS_SCHEMA_VALUES = tuple(
+    dict.fromkeys(
+        value
+        for constants in STAGEC_RUNPOD_READINESS_LITERAL_CONSTANTS.values()
+        for name, value in constants.items()
+        if name.endswith("_SCHEMA")
+    )
+)
+STAGEC_RUNPOD_READINESS_MEDIA_TYPE_VALUES = tuple(
+    dict.fromkeys(
+        value
+        for constants in STAGEC_RUNPOD_READINESS_LITERAL_CONSTANTS.values()
+        for name, value in constants.items()
+        if name.endswith("_MEDIA_TYPE")
+    )
+)
 
 DIAGNOSTIC_RUNTIME_FILE_BINDINGS = MappingProxyType(
     {
@@ -1838,6 +2468,8 @@ API_RUNTIME_SURFACE_DIR = f"{API_ROOT_REL}/api"
 
 REQUIRED_CONTROL_ARTIFACTS = {
     ".gitattributes",
+    ".github/workflows/live-worker-image.yml",
+    ".github/workflows/stagec-qwen-batch-image.yml",
     "docs/working/project_coherence/CHANGELOG.md",
     "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
     "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
@@ -1882,7 +2514,9 @@ REQUIRED_CONTROL_ARTIFACTS = {
     f"{API_ROOT_REL}/tests/test_evidence_routes.py",
     f"{WORKER_ROOT_REL}/Dockerfile",
     f"{WORKER_ROOT_REL}/Dockerfile.qwen-instruct-overlay",
+    f"{WORKER_ROOT_REL}/Dockerfile.qwen-stagec-model",
     f"{WORKER_ROOT_REL}/Dockerfile.qwen-stageb-runtime-overlay",
+    f"{WORKER_ROOT_REL}/Dockerfile.stagec-batch",
     f"{WORKER_ROOT_REL}/.dockerignore",
     f"{WORKER_ROOT_REL}/requirements.in",
     f"{WORKER_ROOT_REL}/requirements.txt",
@@ -2056,6 +2690,7 @@ REQUIRED_IMPLEMENTED_CRITERION_IDS = {
     "G5-ENGINEERING-008",
     "G5-ENGINEERING-009",
     "G5-ENGINEERING-010",
+    "G5-ENGINEERING-011",
 }
 REQUIRED_NEGATIVE_CRITERION_IDS = {"G5-HISTORY-002"}
 
@@ -2077,10 +2712,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": EXPANDED_CONFIGURED_HARNESS_NODES,
+        "expected_tests": CURRENT_RUNPOD_CONFIGURED_HARNESS_NODES,
         "expected_subtests": 163,
         "expected_test_ids_sha256": (
-            EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256
+            CURRENT_RUNPOD_CONFIGURED_HARNESS_NODE_IDS_SHA256
         ),
         "expected_setup_skipped_nodeids": [
             (
@@ -2114,10 +2749,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": [f"{WORKER_ROOT_REL}/scripts", API_ROOT_REL],
-        "expected_tests": EXPANDED_CONFIGURED_WORKER_NODES,
+        "expected_tests": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            EXPANDED_CONFIGURED_WORKER_NODE_IDS_SHA256
+            CURRENT_RUNPOD_CONFIGURED_WORKER_NODE_IDS_SHA256
         ),
     },
     "Live trace worker numeric red team": {
@@ -6112,6 +6747,45 @@ def verify_packaged_harness_v2_surface() -> None:
             "JSPACE_DTYPES",
         )
     )
+    allowed_equal_stagec_collisions = {
+        "STAGEC_RUNPOD_MAXIMUM_AGGREGATE_SPEND_MICROUSD",
+        "STAGEC_RUNPOD_POD_ID",
+        "STAGEC_RUNPOD_POD_NAME",
+    }
+    observed_stagec_collisions: set[str] = set()
+    for module_name in STAGEC_RUNPOD_READINESS_MODULE_NAMES:
+        module_path = canonical_root / f"{module_name}.py"
+        module_tree = ast.parse(
+            read_stable_text(module_path),
+            filename=f"src/cas_harness_v2/{module_name}.py",
+        )
+        module_all_values = [
+            ast.literal_eval(node.value)
+            for node in module_tree.body
+            if (
+                isinstance(node, ast.Assign)
+                and len(node.targets) == 1
+                and isinstance(node.targets[0], ast.Name)
+                and node.targets[0].id == "__all__"
+            )
+        ]
+        require(
+            len(module_all_values) == 1
+            and isinstance(module_all_values[0], (list, tuple))
+            and all(
+                isinstance(name, str) and name for name in module_all_values[0]
+            ),
+            f"Stage C RunPod module {module_name!r} public exports are not literal",
+        )
+        for export_name in module_all_values[0]:
+            if export_name in resolved_all_values:
+                observed_stagec_collisions.add(export_name)
+                continue
+            resolved_all_values.append(export_name)
+    require(
+        observed_stagec_collisions == allowed_equal_stagec_collisions,
+        "Stage C RunPod package export collision inventory drifted",
+    )
     require(
         len(resolved_all_values) == PACKAGED_HARNESS_V2_EXPORT_COUNT
         and len(set(resolved_all_values)) == PACKAGED_HARNESS_V2_EXPORT_COUNT,
@@ -6159,6 +6833,383 @@ def _module_name_tuple_assignment(raw_path: str, assignment_name: str) -> tuple[
         f"{raw_path}: {assignment_name} is not a closed tuple of constant names",
     )
     return tuple(item.id for item in value.elts)
+
+
+def verify_stagec_runpod_readiness_surface() -> None:
+    """Bind the build-only/read-only RunPod tranche without run authority."""
+
+    require(
+        len(STAGEC_RUNPOD_CONTROL_DOCUMENT_BINDINGS) == 6,
+        "Stage C RunPod control-document inventory is not exactly six files",
+    )
+    for raw_path, (expected_sha256, expected_bytes) in (
+        STAGEC_RUNPOD_CONTROL_DOCUMENT_BINDINGS.items()
+    ):
+        path = ROOT / Path(*PurePosixPath(raw_path).parts)
+        require(
+            path.stat().st_size == expected_bytes
+            and sha256_file(path) == expected_sha256,
+            f"Stage C RunPod control-document identity drifted: {raw_path}",
+        )
+    require(
+        len(STAGEC_RUNPOD_READINESS_MODULE_NAMES)
+        == len(set(STAGEC_RUNPOD_READINESS_MODULE_NAMES))
+        == 5,
+        "Stage C RunPod/corpus module inventory is not exactly five unique names",
+    )
+    canonical_bindings = {
+        path: identity
+        for path, identity in STAGEC_RUNPOD_READINESS_FILE_BINDINGS.items()
+        if path.startswith(("src/cas_harness_v2/", "tests/cas_harness_v2/"))
+    }
+    image_lane_bindings = {
+        path: identity
+        for path, identity in STAGEC_RUNPOD_READINESS_FILE_BINDINGS.items()
+        if path not in canonical_bindings
+    }
+    require(
+        len(canonical_bindings) == 10
+        and len(image_lane_bindings) == 4
+        and len(STAGEC_RUNPOD_READINESS_FILE_BINDINGS) == 14,
+        "Stage C RunPod/corpus exact file-binding surface is not 10 plus 4",
+    )
+    for raw_path, (expected_sha256, expected_bytes) in (
+        STAGEC_RUNPOD_READINESS_FILE_BINDINGS.items()
+    ):
+        payload = read_stable_bytes(ROOT / Path(*PurePosixPath(raw_path).parts))
+        require(
+            len(payload) == expected_bytes
+            and hashlib.sha256(payload).hexdigest().upper() == expected_sha256,
+            f"Stage C RunPod/corpus source, test, or image control drifted: {raw_path}",
+        )
+
+    require(
+        len(STAGEC_RUNPOD_READINESS_SCHEMA_VALUES)
+        == len(set(STAGEC_RUNPOD_READINESS_SCHEMA_VALUES))
+        == 8,
+        "Stage C RunPod/corpus schema inventory is not exactly eight unique values",
+    )
+    require(
+        len(STAGEC_RUNPOD_READINESS_MEDIA_TYPE_VALUES)
+        == len(set(STAGEC_RUNPOD_READINESS_MEDIA_TYPE_VALUES))
+        == 8,
+        "Stage C RunPod/corpus media-type inventory is not exactly eight unique values",
+    )
+    export_counts = {
+        "diagnostic_stagec_historical_source_inventory": 14,
+        "diagnostic_stagec_corpus_authoring_scaffold": 20,
+        "diagnostic_stagec_runpod_authorization_v2": 44,
+        "stagec_runpod_readonly_preflight": 47,
+        "stagec_runpod_runner": 23,
+    }
+    canonical_root = ROOT / "src" / "cas_harness_v2"
+    packaged_root = ROOT / Path(*PurePosixPath(PACKAGED_HARNESS_V2_REL).parts)
+    for module_name in STAGEC_RUNPOD_READINESS_MODULE_NAMES:
+        raw_path = f"src/cas_harness_v2/{module_name}.py"
+        assignments = _literal_module_assignments(raw_path)
+        expected_constants = STAGEC_RUNPOD_READINESS_LITERAL_CONSTANTS[raw_path]
+        observed_constants = {
+            name: value
+            for name, value in assignments.items()
+            if name.endswith(("_SCHEMA", "_MEDIA_TYPE"))
+        }
+        require(
+            observed_constants == dict(expected_constants),
+            f"Stage C RunPod/corpus schema/media constants drifted: {raw_path}",
+        )
+        exports = assignments.get("__all__")
+        require(
+            isinstance(exports, list)
+            and len(exports) == len(set(exports)) == export_counts[module_name]
+            and all(isinstance(name, str) and name for name in exports),
+            f"Stage C RunPod/corpus export inventory drifted: {module_name}",
+        )
+        require(
+            read_stable_bytes(canonical_root / f"{module_name}.py")
+            == read_stable_bytes(packaged_root / f"{module_name}.py"),
+            f"Stage C RunPod/corpus package mirror drifted: {module_name}",
+        )
+
+    historical = _literal_module_assignments(
+        "src/cas_harness_v2/diagnostic_stagec_historical_source_inventory.py"
+    )
+    require(
+        historical.get("HISTORICAL_W0_SOURCE_SHA256")
+        == "ECC50EFB1D3BE25BC665FE7A1E04BF30632C0E1D1FACDF2F1885922D6BB8F164"
+        and historical.get("HISTORICAL_W0_SOURCE_BYTE_LENGTH") == 4_762_046
+        and historical.get("HISTORICAL_W0_RAW_ROW_COUNT") == 2_560
+        and historical.get("HISTORICAL_W0_PROMPT_GROUP_ID_COUNT") == 320
+        and historical.get("HISTORICAL_W0_COLLAPSED_PAIR_COUNT") == 160
+        and historical.get("STAGEC_REQUIRED_GROUP_COUNT") == 320
+        and historical.get("STAGEC_REQUIRED_ROW_COUNT") == 960,
+        "historical W0 source-gap identity or Stage C requirement drifted",
+    )
+    corpus = _literal_module_assignments(
+        "src/cas_harness_v2/diagnostic_stagec_corpus_authoring_scaffold.py"
+    )
+    require(
+        corpus.get("STAGEC_AUTHORING_GROUP_COUNT") == 320
+        and corpus.get("STAGEC_AUTHORING_ROW_COUNT") == 960
+        and corpus.get("STAGEC_AUTHORING_VARIANT_COUNT") == 3
+        and corpus.get("_CLASSIFICATION_ITEMS")
+        == (
+            ("lifecycle", "DRAFT"),
+            ("content_status", "SYNTHETIC"),
+            ("authority", "NON_AUTHORITY"),
+            ("scope", "AUTHORING_WORKSHEET_ONLY"),
+            ("admission", "NOT_ESTABLISHED"),
+            ("evidence_relabeling", "FORBIDDEN"),
+        )
+        and corpus.get("_BOUNDARY_ITEMS")
+        == (
+            ("stagec_corpus", "DRAFT"),
+            ("stagec_corpus_freeze", "NOT_ESTABLISHED"),
+            ("double_adjudication_authority", "NOT_ESTABLISHED"),
+            ("reviewer_identity_authentication", "NOT_PROVIDED"),
+            ("admitted_group_count", 0),
+            ("admitted_row_count", 0),
+            ("execution_authority", "NOT_GRANTED"),
+            ("scientific_conclusion", "NOT_ESTABLISHED"),
+            ("license", "NOT LICENSED"),
+            ("disclosure", "HELD"),
+        ),
+        "Stage C corpus scaffold no longer remains DRAFT/NON_AUTHORITY at 0/960 admitted rows",
+    )
+
+    authorization_path = (
+        "src/cas_harness_v2/diagnostic_stagec_runpod_authorization_v2.py"
+    )
+    authorization = _literal_module_assignments(authorization_path)
+    require(
+        authorization.get("STAGEC_RUNPOD_PROVIDER") == "RUNPOD"
+        and authorization.get("STAGEC_RUNPOD_POD_ID") == "zp2s9pscgncn0b"
+        and authorization.get("STAGEC_RUNPOD_GPU_PRODUCT") == "NVIDIA A40"
+        and authorization.get("STAGEC_RUNPOD_GPU_COUNT") == 1
+        and authorization.get("STAGEC_RUNPOD_MODEL_ID")
+        == "Qwen/Qwen2.5-0.5B-Instruct"
+        and authorization.get("STAGEC_RUNPOD_MODEL_REVISION")
+        == "7ae557604adf67be50417f59c2c2f167def9a775"
+        and authorization.get("STAGEC_RUNPOD_WEIGHTS_SHA256")
+        == "FDF756FA7FCBE7404D5C60E26BFF1A0C8B8AA1F72CED49E7DD0210FE288FB7FE"
+        and authorization.get("STAGEC_RUNPOD_WEIGHTS_BYTE_LENGTH") == 988_097_824
+        and authorization.get("STAGEC_RUNPOD_TOTAL_ATTEMPT_COUNT") == 480
+        and authorization.get("STAGEC_RUNPOD_MAXIMUM_AGGREGATE_SPEND_MICROUSD")
+        == 100_000_000
+        and authorization.get("STAGEC_RUNPOD_GATE_5_STATUS") == "OPEN / KEEP_OPEN"
+        and authorization.get("STAGEC_RUNPOD_STAGE_C_STATUS")
+        == "DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED"
+        and authorization.get("STAGEC_RUNPOD_PROJECT_STATUS")
+        == "NOT LICENSED / HELD / NOT FROZEN"
+        and authorization.get("STAGEC_RUNPOD_AUTHORIZATION_STATUS")
+        == "UNAUTHORIZED"
+        and authorization.get("STAGEC_RUNPOD_ACTIVATION_STATUS")
+        == "NOT_ACTIVATED"
+        and authorization.get("STAGEC_RUNPOD_AUTHENTICATION_STATUS")
+        == "NOT_AUTHENTICATED"
+        and authorization.get("STAGEC_RUNPOD_CONTROL_BOUNDARY")
+        == "STRUCTURAL_CANDIDATE_ONLY_NOT_PROVIDER_START_OR_MODEL_EXECUTION_AUTHORITY",
+        "Stage C RunPod authorization candidate drifted or promotes authority",
+    )
+
+    preflight_path = "src/cas_harness_v2/stagec_runpod_readonly_preflight.py"
+    preflight = _literal_module_assignments(preflight_path)
+    require(
+        preflight.get("STAGEC_RUNPOD_GET_METHOD") == "GET"
+        and preflight.get("STAGEC_RUNPOD_OBSERVATION_STATE")
+        == "READ_ONLY_SANITIZED_NON_AUTHORITY"
+        and preflight.get("STAGEC_RUNPOD_PLAN_STATE")
+        == "BLOCKED_NON_EXECUTABLE_UPDATE_PLAN_CANDIDATE"
+        and preflight.get("STAGEC_RUNPOD_EXECUTION_IMAGE_REPOSITORY")
+        == STAGEC_RUNPOD_EXECUTION_IMAGE_REPOSITORY
+        and preflight.get("STAGEC_RUNPOD_MAXIMUM_AGGREGATE_SPEND_MICROUSD")
+        == 100_000_000
+        and preflight.get("STAGEC_RUNPOD_BLOCKERS")
+        == (
+            "AUDITED_READ_ONLY_TRANSPORT_EXTERNAL_REQUIRED",
+            "REGISTRY_AUTH_VALIDITY_EXTERNAL_REQUIRED",
+            "DERIVED_EXECUTION_IMAGE_DIGEST_EXTERNAL_REQUIRED",
+            "DERIVED_EXECUTION_IMAGE_MEDIA_TYPE_EXTERNAL_REQUIRED",
+            "DERIVED_EXECUTION_IMAGE_CONFIG_DIGEST_EXTERNAL_REQUIRED",
+            "FULL_STOPPED_POD_UPDATE_READBACK_EXTERNAL_REQUIRED",
+            "TRUSTED_TIME_RECEIPT_EXTERNAL_REQUIRED",
+            "AUTHENTICATED_BILLING_RECEIPT_EXTERNAL_REQUIRED",
+            "AGGREGATE_SPEND_LEDGER_EXTERNAL_REQUIRED",
+        ),
+        "Stage C RunPod preflight no longer remains read-only and blocked",
+    )
+    require(
+        dict(STAGEC_RUNPOD_READONLY_PROVIDER_RECEIPT)
+        == {
+            "observation_byte_length": 9_447,
+            "observation_sha256": "081BE716EE26E5FA572F69614CEA21EF59E183295D30F8994D49246527F0EA82",
+            "blocked_plan_byte_length": 7_848,
+            "blocked_plan_sha256": "705DF68AA8CFB7673C2313E0F2FA420739DB204BD6413ABCB48430351972603E",
+            "authenticated_get_observations": 2,
+            "billing_rows": 71,
+            "billing_window_hours": 72,
+            "observed_amount_usd": "0.982638896210119131",
+            "application_capability": "ABSENT",
+            "provider_mutations": 0,
+            "pod_starts": 0,
+            "model_invocations": 0,
+            "paid_gpu_compute_usd": "0.00",
+        },
+        "Stage C read-only provider observation receipt drifted",
+    )
+
+    runner_path = "src/cas_harness_v2/stagec_runpod_runner.py"
+    runner = _literal_module_assignments(runner_path)
+    require(
+        runner.get("STAGEC_RUNPOD_OFFLINE_PREPARATION_STATE")
+        == "STRUCTURALLY_PREPARED_NO_PROVIDER_CALL"
+        and runner.get("STAGEC_RUNPOD_EXTERNAL_ACTIVATION_REQUIRED")
+        == "EXTERNAL_AUTHENTICATED_ACTIVATION_REQUIRED"
+        and runner.get("STAGEC_RUNPOD_EXECUTION_IMAGE_REPOSITORY")
+        == STAGEC_RUNPOD_EXECUTION_IMAGE_REPOSITORY
+        and runner.get("STAGEC_RUNPOD_MODEL_ID")
+        == "Qwen/Qwen2.5-0.5B-Instruct"
+        and runner.get("STAGEC_RUNPOD_MODEL_REVISION")
+        == "7ae557604adf67be50417f59c2c2f167def9a775"
+        and runner.get("STAGEC_RUNPOD_MAXIMUM_AGGREGATE_SPEND_MICROUSD")
+        == 100_000_000
+        and isinstance(runner.get("STAGEC_RUNPOD_OFFLINE_BLOCKERS"), tuple)
+        and len(runner["STAGEC_RUNPOD_OFFLINE_BLOCKERS"]) == 17,
+        "Stage C RunPod offline runner drifted or gained activation authority",
+    )
+
+    for raw_path, function_name in (
+        (authorization_path, "require_stagec_runpod_external_activation_v2"),
+        (runner_path, "require_stagec_runpod_external_activation"),
+    ):
+        tree = ast.parse(
+            read_stable_bytes(ROOT / Path(*PurePosixPath(raw_path).parts)),
+            filename=raw_path,
+        )
+        functions = [
+            node
+            for node in tree.body
+            if isinstance(node, ast.FunctionDef) and node.name == function_name
+        ]
+        require(
+            len(functions) == 1
+            and functions[0].body
+            and isinstance(functions[0].body[-1], ast.Raise),
+            f"Stage C RunPod activation function is not terminal fail-closed: {raw_path}",
+        )
+        imported_roots = {
+            alias.name.split(".", 1)[0]
+            for node in tree.body
+            if isinstance(node, ast.Import)
+            for alias in node.names
+        } | {
+            (node.module or "").split(".", 1)[0]
+            for node in tree.body
+            if isinstance(node, ast.ImportFrom) and node.level == 0
+        }
+        require(
+            imported_roots.isdisjoint(
+                {"boto3", "docker", "httpx", "requests", "runpod", "socket", "subprocess", "urllib"}
+            ),
+            f"Stage C offline authorization/runner gained an external client: {raw_path}",
+        )
+
+    image_receipt = dict(STAGEC_RUNPOD_IMAGE_RECEIPT)
+    require(
+        image_receipt["source_commit"] == STAGEC_RUNPOD_IMAGE_SOURCE_COMMIT
+        and image_receipt["execution_image_ref"]
+        == STAGEC_RUNPOD_EXECUTION_IMAGE_REF
+        and image_receipt["manifest_digest"]
+        == STAGEC_RUNPOD_EXECUTION_IMAGE_MANIFEST_DIGEST
+        and image_receipt["config_digest"]
+        == STAGEC_RUNPOD_EXECUTION_IMAGE_CONFIG_DIGEST
+        and image_receipt["manifest_capture_sha256"]
+        == STAGEC_RUNPOD_EXECUTION_IMAGE_MANIFEST_DIGEST.removeprefix(
+            "sha256:"
+        ).upper()
+        and image_receipt["registry_visibility"] == "private"
+        and image_receipt["runtime_activation"] == "DISABLED_NOT_IMPLEMENTED"
+        and type(image_receipt["runpod_mutation_count"]) is int
+        and image_receipt["runpod_mutation_count"] == 0,
+        "Stage C private image receipt/digest binding drifted",
+    )
+    stagec_workflow = read_stable_text(
+        ROOT / ".github" / "workflows" / "stagec-qwen-batch-image.yml"
+    )
+    bridge_workflow = read_stable_text(
+        ROOT / ".github" / "workflows" / "live-worker-image.yml"
+    )
+    require(
+        all(
+            marker in stagec_workflow
+            for marker in (
+                "BUILD STAGE C IMAGE ONLY",
+                "--network=none",
+                '"schema_version": "cas.stagec.image.registry_receipt.v1"',
+                '"claim_status": "DESIGN_ONLY"',
+                '"gate5_status": "OPEN"',
+                '"experiment_status": "NOT_STARTED"',
+                '"registry_visibility": "private"',
+                '"execution_reference_policy": "DIGEST_ONLY"',
+                '"runtime_activation": "DISABLED_NOT_IMPLEMENTED"',
+                '"runpod_mutation_count": 0',
+                "retention-days: 30",
+            )
+        )
+        and "uses: ./.github/workflows/stagec-qwen-batch-image.yml"
+        in bridge_workflow
+        and "inputs.stagec_confirmation == 'BUILD STAGE C IMAGE ONLY'"
+        in bridge_workflow,
+        "Stage C build-only workflow receipt or owner-intent bridge drifted",
+    )
+    runpod_lines = [
+        line.strip()
+        for line in stagec_workflow.splitlines()
+        if "runpod" in line.casefold()
+    ]
+    require(
+        runpod_lines == ['"runpod_mutation_count": 0,']
+        and all(
+            marker not in (stagec_workflow + "\n" + bridge_workflow).casefold()
+            for marker in (
+                "api.runpod.io",
+                "console.runpod.io",
+                "/v1/pods/",
+                "podfindanddeployondemand",
+                "podresume",
+                "podstop",
+            )
+        ),
+        "Stage C image workflows gained a RunPod mutation surface",
+    )
+    model_dockerfile = read_stable_text(
+        WORKER_ROOT / "Dockerfile.qwen-stagec-model"
+    )
+    batch_dockerfile = read_stable_text(WORKER_ROOT / "Dockerfile.stagec-batch")
+    require(
+        all(
+            marker in model_dockerfile
+            for marker in (
+                "Qwen/Qwen2.5-0.5B-Instruct",
+                "7ae557604adf67be50417f59c2c2f167def9a775",
+                "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+                'io.cas-harness.claim-status="DESIGN_ONLY"',
+                'io.cas-harness.gate5-status="OPEN"',
+                'io.cas-harness.experiment-status="NOT_STARTED"',
+            )
+        )
+        and all(
+            marker in batch_dockerfile
+            for marker in (
+                "CAS_STAGEC_BATCH_ACTIVATION=DISABLED_NOT_IMPLEMENTED",
+                'io.cas-harness.stagec.activation="DISABLED_NOT_IMPLEMENTED"',
+                'io.cas-harness.stagec.runtime-network="EXTERNAL_NONE_GUARD_AND_RECEIPT_REQUIRED"',
+                "HEALTHCHECK NONE",
+                'ENTRYPOINT ["python", "-B", "/worker/stagec_batch/entrypoint.py"]',
+                'CMD ["sealed"]',
+            )
+        ),
+        "Stage C model/batch Dockerfile fail-closed binding drifted",
+    )
 
 
 def verify_diagnostic_runtime_structure_only_surface() -> None:
@@ -6510,6 +7561,7 @@ def verify_stagec_design_package() -> dict[str, int]:
     """Verify the prospective Stage C carrier without granting run authority."""
 
     verify_packaged_harness_v2_surface()
+    verify_stagec_runpod_readiness_surface()
     verify_diagnostic_runtime_structure_only_surface()
     verify_comparison_recovery_structure_only_surface()
     require(
@@ -6713,9 +7765,15 @@ def verify_stagec_design_package() -> dict[str, int]:
         == expected_comparison_identities
         and comparison_candidate.get("package_candidate")
         == {
-            "byte_mirrored_files": PACKAGED_HARNESS_V2_FILE_COUNT,
-            "unique_exports": PACKAGED_HARNESS_V2_EXPORT_COUNT,
-            "byte_mirrored_bytes": PACKAGED_HARNESS_V2_TOTAL_BYTES,
+            "byte_mirrored_files": (
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_FILE_COUNT
+            ),
+            "unique_exports": (
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_EXPORT_COUNT
+            ),
+            "byte_mirrored_bytes": (
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_TOTAL_BYTES
+            ),
         }
         and comparison_candidate.get("current_full_suite_status")
         == {
@@ -6797,7 +7855,7 @@ def verify_stagec_design_package() -> dict[str, int]:
             ],
             "inter_attempt_repair_receipt": {
                 "manifest_artifact_count_after_rebuild": (
-                    CURRENT_MANIFEST_ARTIFACT_COUNT
+                    HISTORICAL_PRE_RUNPOD_MANIFEST_ARTIFACT_COUNT
                 ),
                 "targeted_redteam_tests_passed": 22,
                 "targeted_redteam_subtests_passed": 23,
@@ -6815,7 +7873,9 @@ def verify_stagec_design_package() -> dict[str, int]:
         }
         and comparison_candidate.get("executable_shadow_path_authority")
         == {
-            "stable_path_count": CURRENT_EXECUTABLE_SHADOW_PATH_COUNT,
+            "stable_path_count": (
+                HISTORICAL_PRE_RUNPOD_EXECUTABLE_SHADOW_PATH_COUNT
+            ),
             "excluded_transient_trace_subtree": (
                 EXECUTABLE_SHADOW_IGNORED_TRANSIENT_SUBTREE
             ),
@@ -6966,15 +8026,15 @@ def verify_stagec_design_package() -> dict[str, int]:
                 ),
                 "suite_passed": len(REQUIRED_TEST_SUITES),
                 "suite_total": len(REQUIRED_TEST_SUITES),
-                "manifest_artifacts": CURRENT_MANIFEST_ARTIFACT_COUNT,
+                "manifest_artifacts": HISTORICAL_PRE_RUNPOD_MANIFEST_ARTIFACT_COUNT,
                 "syntax_checked_python_artifacts": (
-                    CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
+                    HISTORICAL_PRE_RUNPOD_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
                 ),
                 "executable_shadow_paths_before": (
-                    CURRENT_EXECUTABLE_SHADOW_PATH_COUNT
+                    HISTORICAL_PRE_RUNPOD_EXECUTABLE_SHADOW_PATH_COUNT
                 ),
                 "executable_shadow_paths_after": (
-                    CURRENT_EXECUTABLE_SHADOW_PATH_COUNT
+                    HISTORICAL_PRE_RUNPOD_EXECUTABLE_SHADOW_PATH_COUNT
                 ),
                 "current_suite_receipts": {
                     "harness": {
@@ -7017,7 +8077,7 @@ def verify_stagec_design_package() -> dict[str, int]:
                     FINAL_INTEGRATED_VERIFIER_OPEN_BOUNDARIES
                 ),
                 "postflight_rechecked_files": (
-                    FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES
+                    HISTORICAL_PRE_RUNPOD_POSTFLIGHT_IDENTITIES
                 ),
                 "stdout_terminal_line": (
                     "Project Coherence integrated Gate 5 verification: PASS"
@@ -9852,12 +10912,20 @@ def verify_stagec_design_package() -> dict[str, int]:
         "27/27 PASS as an exact executed subset of the preserved historical 719-node worker same-process receipt",
         "565-node Harness, 719/719 worker, 537-node",
         "594/594 worker, and 99/99 adapter/reconciliation receipts are now",
-        "Current same-process suite receipts are authoritative software-test PASS",
+        "package candidate is 41 mirrored files, 1,242 exports, and 2,551,834 bytes",
+        "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        CURRENT_RUNPOD_INTEGRATED_RECEIPT_STATUS,
+        "retry-20260812T203610Z-c2861637",
+        "9186AC199ADB038E4C462A5B420C1B777D95EDE694EB4DF3D803C8EFE3BA9FFB",
+        "526F02B798757CD58B70002F6507639BC3879750F5CD484A726AEAEA250007F0",
+        "D7F939E268E26D2532E281EBBD16AF47D3B29392C9D87E211A15B8988A64F10F",
+        "44455E29889D9B1C5E958763368E50716A195BDDF9DC0778FA1A469C0318F6B4",
+        "receipts were authoritative software-test PASS within",
         "Harness attempt 1 timed out at 3,600 seconds with no receipt",
         "Attempt 2 ended",
         "attempt 3 produced the now-historical Harness PASS",
-        "fresh current-tree replay then produced the",
-        "Adapter/reconciliation has the current authoritative same-process receipt",
+        "published-baseline replay then produced the",
+        "At that published baseline, adapter/reconciliation had the authoritative",
         "25.401532",
         "B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101",
         "earlier adapter/reconciliation same-process PASS is preserved explicitly as",
@@ -9867,7 +10935,8 @@ def verify_stagec_design_package() -> dict[str, int]:
         "descriptive failure record infers no attempt ordinal and no",
         "whole-run elapsed value",
         "suite ceiling remains 5,400 seconds",
-        "subsequent final integrated replay produced the 12-suite Gate 5",
+        "subsequent published-baseline integrated replay produced the",
+        "12-suite Gate 5",
         "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY",
         r"C:\Python314\python.exe -I -B scripts/verify_project_coherence_gate5.py",
         "All 12/12 suites passed",
@@ -9986,6 +11055,7 @@ def verify_review_matrix(
             "cas_harness_v2.stagec_worker_output.v1",
             "cas_harness_v2.stagec_post_terminal_study_outcome_index.v1",
             *DIAGNOSTIC_RUNTIME_SCHEMA_VALUES,
+            *STAGEC_RUNPOD_READINESS_SCHEMA_VALUES,
             "cas_harness_v2.evidence_packet.v2",
             *COMPARISON_SCHEMA_VALUES,
         ],
@@ -9993,7 +11063,11 @@ def verify_review_matrix(
     )
     require(
         matrix.get("kernel_media_types")
-        == [*DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES, *COMPARISON_MEDIA_TYPE_VALUES],
+        == [
+            *DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES,
+            *STAGEC_RUNPOD_READINESS_MEDIA_TYPE_VALUES,
+            *COMPARISON_MEDIA_TYPE_VALUES,
+        ],
         "Gate 5 review matrix diagnostic media-type list drifted",
     )
     runtime_review_basis = matrix.get("runtime_activation_review_basis")
@@ -10167,7 +11241,7 @@ def verify_review_matrix(
         in matrix["review_basis"]
         and "1,097 unique exports" in matrix["review_basis"]
         and "2,332,110 bytes" in matrix["review_basis"]
-        and PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
+        and HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
         in matrix["review_basis"]
         and "comparison/recovery tranche binds 14 modules" in matrix["review_basis"]
         and "45 unique schemas and 87 unique media types" in matrix["review_basis"]
@@ -10245,8 +11319,8 @@ def verify_review_matrix(
         "review matrix does not cover the complete Gate 5 boundary surface",
     )
     require(
-        len(criteria) == FINAL_INTEGRATED_VERIFIER_REVIEW_CRITERIA,
-        "final integrated receipt review-criterion count drifted from 51",
+        len(criteria) == CURRENT_REVIEW_MATRIX_CRITERIA,
+        "current review-matrix criterion count drifted from 52",
     )
     require(
         len(REQUIRED_OPEN_BOUNDARY_IDS)
@@ -10401,8 +11475,9 @@ def verify_review_matrix(
             else set()
         )
         require(
-            str(PACKAGED_HARNESS_V2_FILE_COUNT) in observed
-            and str(PACKAGED_HARNESS_V2_EXPORT_COUNT) in observed
+            str(HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_FILE_COUNT) in observed
+            and str(HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_EXPORT_COUNT)
+            in observed
             and "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY" in observed
             and diagnostic_intake_refs <= evidence_refs,
             f"{criterion_id}: current package/prompt-context/prerequisite criterion evidence drifted",
@@ -10418,12 +11493,14 @@ def verify_review_matrix(
     }
     require(
         "2,332,110 bytes" in packaged_criterion
-        and PACKAGED_HARNESS_V2_PROVENANCE_SHA256 in packaged_criterion
-        and PACKAGED_HARNESS_V2_INIT_SHA256
+        and HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_PROVENANCE_SHA256
         in packaged_criterion
-        and PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256
+        and HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_INIT_SHA256
         in packaged_criterion
-        and PACKAGED_HARNESS_V2_TEST_SHA256 in packaged_criterion
+        and HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256
+        in packaged_criterion
+        and HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_TEST_SHA256
+        in packaged_criterion
         and "29/29" in packaged_criterion
         and "CANDIDATE_STRUCTURAL_REPLAY_COMPLETE_NON_AUTHORITY"
         in packaged_criterion
@@ -10704,6 +11781,33 @@ def verify_review_matrix(
         isinstance(security, dict) and security.get("disposition") == "OPEN_SECURITY",
         "dependency-security boundary is not an explicit OPEN_SECURITY hold",
     )
+    runpod_readiness_criterion = criteria_by_id.get("G5-ENGINEERING-011")
+    require(
+        isinstance(runpod_readiness_criterion, dict)
+        and runpod_readiness_criterion.get("subsystem")
+        == "STAGEC_RUNPOD_READINESS"
+        and runpod_readiness_criterion.get("disposition")
+        == "IMPLEMENTED_AND_HASH_VERIFIED"
+        and runpod_readiness_criterion.get("canon_effect") == "NONE"
+        and runpod_readiness_criterion.get("product_claim_effect") == "NONE"
+        and "0 / 960" in runpod_readiness_criterion.get("observed_result", "")
+        and CURRENT_RUNPOD_EXPANDED_RECEIPT_STATUS
+        in runpod_readiness_criterion.get("observed_result", "")
+        and CURRENT_RUNPOD_INTEGRATED_RECEIPT_STATUS
+        in runpod_readiness_criterion.get("observed_result", "")
+        and CURRENT_RUNPOD_INTEGRATED_RECEIPT["run_id"]
+        in runpod_readiness_criterion.get("observed_result", "")
+        and CURRENT_RUNPOD_INTEGRATED_RECEIPT["supervisor_result_sha256"].lower()
+        in runpod_readiness_criterion.get("observed_result", "").lower()
+        and {
+            ".github/workflows/stagec-qwen-batch-image.yml",
+            "src/cas_harness_v2/diagnostic_stagec_corpus_authoring_scaffold.py",
+            "src/cas_harness_v2/diagnostic_stagec_runpod_authorization_v2.py",
+            "src/cas_harness_v2/stagec_runpod_readonly_preflight.py",
+            "src/cas_harness_v2/stagec_runpod_runner.py",
+        }.issubset(set(runpod_readiness_criterion.get("evidence_refs", []))),
+        "Stage C RunPod readiness criterion drifted or omitted its open boundary",
+    )
 
     actual_disposition_counts = {
         disposition: count for disposition, count in sorted(disposition_counts.items())
@@ -10765,10 +11869,261 @@ def verify_review_matrix(
             "successor_dependency_container_candidate",
             "local_test_runner",
             "raw_build_and_security_evidence",
+            "stagec_runpod_readiness",
             "comparison_recovery_structure_only",
             "historical_recovery",
         },
         label="review matrix receipts",
+    )
+    runpod_receipt = receipts.get("stagec_runpod_readiness")
+    expected_runpod_source_test_bindings = [
+        {
+            "path": path,
+            "sha256": identity[0].lower(),
+            "bytes": identity[1],
+        }
+        for path, identity in STAGEC_RUNPOD_READINESS_FILE_BINDINGS.items()
+        if path.startswith(("src/cas_harness_v2/", "tests/cas_harness_v2/"))
+    ]
+    expected_runpod_image_lane_bindings = [
+        {
+            "path": path,
+            "sha256": identity[0].lower(),
+            "bytes": identity[1],
+        }
+        for path, identity in STAGEC_RUNPOD_READINESS_FILE_BINDINGS.items()
+        if not path.startswith(("src/cas_harness_v2/", "tests/cas_harness_v2/"))
+    ]
+    expected_current_runpod_receipts = {
+        name: {
+            "bundle": {
+                key: value.lower()
+                if isinstance(value, str) and key.endswith("sha256")
+                else value
+                for key, value in CURRENT_RUNPOD_RECEIPT_BUNDLE_BINDINGS[
+                    name
+                ].items()
+            },
+            "projection": {
+                key: value.lower()
+                if isinstance(value, str) and key.endswith("sha256")
+                else value
+                for key, value in receipt.items()
+            },
+        }
+        for name, receipt in (
+            ("harness", CURRENT_RUNPOD_AUTHORITATIVE_HARNESS_RECEIPT),
+            ("worker", CURRENT_RUNPOD_AUTHORITATIVE_WORKER_RECEIPT),
+            ("adapter", CURRENT_RUNPOD_AUTHORITATIVE_ADAPTER_RECEIPT),
+        )
+    }
+    expected_current_runpod_integrated_receipt = {
+        key: value.lower()
+        if isinstance(value, str) and key.endswith("sha256")
+        else value
+        for key, value in CURRENT_RUNPOD_INTEGRATED_RECEIPT.items()
+    }
+    require(
+        runpod_receipt
+        == {
+            "status": (
+                "STRUCTURE_ONLY / NON_AUTHORITY / READ_ONLY PREFLIGHT PASS / "
+                "CURRENT AUTHORITATIVE SAME-PROCESS SUITE RECEIPTS PASS / "
+                "CURRENT INTEGRATED 12-SUITE REPLAY PASS"
+            ),
+            "gate5_status": "OPEN / KEEP_OPEN",
+            "stagec_status": "DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED",
+            "project_status": "NOT LICENSED / HELD / NOT FROZEN",
+            "image_receipt": {
+                key: value.lower() if key.endswith("sha256") else value
+                for key, value in STAGEC_RUNPOD_IMAGE_RECEIPT.items()
+            },
+            "readonly_provider_receipt": {
+                key: value.lower() if key.endswith("sha256") else value
+                for key, value in STAGEC_RUNPOD_READONLY_PROVIDER_RECEIPT.items()
+            },
+            "source_test_bindings": expected_runpod_source_test_bindings,
+            "image_lane_bindings": expected_runpod_image_lane_bindings,
+            "documentation_bindings": [
+                {
+                    "path": path,
+                    "sha256": identity[0].lower(),
+                    "bytes": identity[1],
+                }
+                for path, identity in STAGEC_RUNPOD_CONTROL_DOCUMENT_BINDINGS.items()
+            ],
+            "schema_media_inventory": {
+                "unique_schemas_added": len(
+                    STAGEC_RUNPOD_READINESS_SCHEMA_VALUES
+                ),
+                "unique_media_types_added": len(
+                    STAGEC_RUNPOD_READINESS_MEDIA_TYPE_VALUES
+                ),
+                "total_unique_kernel_schemas": 120,
+                "total_unique_kernel_media_types": 139,
+            },
+            "package_surface": {
+                "byte_mirrored_python_files": PACKAGED_HARNESS_V2_FILE_COUNT,
+                "unique_exports": PACKAGED_HARNESS_V2_EXPORT_COUNT,
+                "total_python_bytes": PACKAGED_HARNESS_V2_TOTAL_BYTES,
+                "provenance_sha256": (
+                    PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
+                ),
+                "canonical_and_mirror_init_sha256": (
+                    PACKAGED_HARNESS_V2_INIT_SHA256.lower()
+                ),
+                "allowlist_source_sha256": (
+                    PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256.lower()
+                ),
+                "packaged_mirror_test_sha256": (
+                    PACKAGED_HARNESS_V2_TEST_SHA256.lower()
+                ),
+            },
+            "current_configured_suites": {
+                "harness_nodes": CURRENT_RUNPOD_CONFIGURED_HARNESS_NODES,
+                "harness_node_ids_sha256": (
+                    CURRENT_RUNPOD_CONFIGURED_HARNESS_NODE_IDS_SHA256.lower()
+                ),
+                "worker_nodes": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
+                "worker_node_ids_sha256": (
+                    CURRENT_RUNPOD_CONFIGURED_WORKER_NODE_IDS_SHA256.lower()
+                ),
+                "adapter_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+                "adapter_node_ids_sha256": (
+                    EXPANDED_CONFIGURED_ADAPTER_NODE_IDS_SHA256.lower()
+                ),
+                "complete_verifier_suite_map_nodes": (
+                    CURRENT_RUNPOD_CONFIGURED_TEST_SUITE_NODE_TOTAL
+                ),
+                "receipt_status": CURRENT_RUNPOD_EXPANDED_RECEIPT_STATUS,
+                "integrated_receipt_status": (
+                    CURRENT_RUNPOD_INTEGRATED_RECEIPT_STATUS
+                ),
+            },
+            "current_authoritative_same_process_receipts": {
+                "aggregate_status": CURRENT_RUNPOD_EXPANDED_RECEIPT_STATUS,
+                "integrated_12_suite_receipt_status": (
+                    CURRENT_RUNPOD_INTEGRATED_RECEIPT_STATUS
+                ),
+                **expected_current_runpod_receipts,
+            },
+            "current_integrated_12_suite_receipt": (
+                expected_current_runpod_integrated_receipt
+            ),
+            "historical_pre_runpod_receipts": {
+                "harness": {
+                    "nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODES,
+                    "node_ids_sha256": (
+                        HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODE_IDS_SHA256.lower()
+                    ),
+                    "loaded_code_sha256": (
+                        HISTORICAL_PRE_RUNPOD_AUTHORITATIVE_HARNESS_RECEIPT[
+                            "loaded_code_sha256"
+                        ].lower()
+                    ),
+                    "status": "HISTORICAL / SUPERSEDED NODE SET / NON_AUTHORITY",
+                },
+                "worker": {
+                    "nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODES,
+                    "node_ids_sha256": (
+                        HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODE_IDS_SHA256.lower()
+                    ),
+                    "loaded_code_sha256": (
+                        HISTORICAL_PRE_RUNPOD_AUTHORITATIVE_WORKER_RECEIPT[
+                            "loaded_code_sha256"
+                        ].lower()
+                    ),
+                    "status": "HISTORICAL / SUPERSEDED NODE SET / NON_AUTHORITY",
+                },
+                "adapter": {
+                    "nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+                    "node_ids_sha256": (
+                        EXPANDED_CONFIGURED_ADAPTER_NODE_IDS_SHA256.lower()
+                    ),
+                    "loaded_code_sha256": (
+                        CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT[
+                            "loaded_code_sha256"
+                        ].lower()
+                    ),
+                    "status": "HISTORICAL / RETAINED UNCHANGED / NON_AUTHORITY",
+                },
+                "integrated_12_suite": {
+                    "command": FINAL_INTEGRATED_VERIFIER_COMMAND,
+                    "status": FINAL_INTEGRATED_VERIFIER_STATUS,
+                    "configured_suite_count": len(REQUIRED_TEST_SUITES),
+                    "configured_nodes": EXPANDED_CONFIGURED_TEST_SUITE_NODE_TOTAL,
+                    "manifest_artifacts": (
+                        HISTORICAL_PRE_RUNPOD_MANIFEST_ARTIFACT_COUNT
+                    ),
+                    "syntax_checked_python_artifacts": (
+                        HISTORICAL_PRE_RUNPOD_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
+                    ),
+                    "executable_shadow_paths_before_and_after": (
+                        HISTORICAL_PRE_RUNPOD_EXECUTABLE_SHADOW_PATH_COUNT
+                    ),
+                    "harness_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_HARNESS_NODES,
+                    "harness_subtests": 163,
+                    "harness_setup_skips": 6,
+                    "harness_loaded_code_sha256": (
+                        HISTORICAL_PRE_RUNPOD_AUTHORITATIVE_HARNESS_RECEIPT[
+                            "loaded_code_sha256"
+                        ].lower()
+                    ),
+                    "worker_nodes": HISTORICAL_PRE_RUNPOD_CONFIGURED_WORKER_NODES,
+                    "worker_loaded_code_sha256": (
+                        HISTORICAL_PRE_RUNPOD_AUTHORITATIVE_WORKER_RECEIPT[
+                            "loaded_code_sha256"
+                        ].lower()
+                    ),
+                    "adapter_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+                    "adapter_loaded_code_sha256": (
+                        CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT[
+                            "loaded_code_sha256"
+                        ].lower()
+                    ),
+                    "review_criteria": FINAL_INTEGRATED_VERIFIER_REVIEW_CRITERIA,
+                    "required_open_boundaries": (
+                        FINAL_INTEGRATED_VERIFIER_OPEN_BOUNDARIES
+                    ),
+                    "postflight_file_identities": (
+                        HISTORICAL_PRE_RUNPOD_POSTFLIGHT_IDENTITIES
+                    ),
+                    "tool_wall_seconds": FINAL_INTEGRATED_VERIFIER_TOOL_WALL_SECONDS,
+                    "elapsed_semantic": (
+                        "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+                    ),
+                    "disposition": (
+                        "HISTORICAL PUBLISHED INTEGRATED RECEIPT / SUPERSEDED "
+                        "NODE SET / NON_AUTHORITY"
+                    ),
+                },
+            },
+            "corpus_boundary": {
+                "required_groups": 320,
+                "required_rows": 960,
+                "draft_groups": 320,
+                "draft_rows": 960,
+                "admitted_groups": 0,
+                "admitted_rows": 0,
+                "classification": "DRAFT / SYNTHETIC / NON_AUTHORITY",
+                "historical_w0_role": "SOURCE MATERIAL ONLY / NO RELABELING",
+            },
+            "execution_boundary": {
+                "application_capability": "ABSENT",
+                "authorization": "UNAUTHORIZED",
+                "activation": "NOT_ACTIVATED",
+                "provider_mutations": 0,
+                "pod_starts": 0,
+                "model_invocations": 0,
+                "paid_gpu_compute_usd": "0.00",
+                "next_required_authority": (
+                    "EXTERNAL AUTHENTICATED STOPPED-POD UPDATE/READBACK, "
+                    "TRUSTED TIME, NONCE/LEDGER, WORM/READBACK, NO-EGRESS, "
+                    "AND 960 ADMITTED ROWS"
+                ),
+            },
+        },
+        "Stage C RunPod/corpus review receipt drifted or promotes execution",
     )
     comparison_receipt = receipts.get("comparison_recovery_structure_only")
     require(
@@ -10886,7 +12241,9 @@ def verify_review_matrix(
                         "PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH "
                         "EVIDENCE, NOT PASS"
                     ),
-                    "manifest_artifacts": CURRENT_MANIFEST_ARTIFACT_COUNT,
+                    "manifest_artifacts": (
+                        HISTORICAL_PRE_RUNPOD_MANIFEST_ARTIFACT_COUNT
+                    ),
                     "receipt_created": True,
                     "receipt_status": CURRENT_HARNESS_AUTHORITATIVE_REPLAY_STATUS,
                     "historical_disposition": (
@@ -10947,7 +12304,9 @@ def verify_review_matrix(
                         "PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH "
                         "EVIDENCE, NOT PASS"
                     ),
-                    "manifest_artifacts": CURRENT_MANIFEST_ARTIFACT_COUNT,
+                    "manifest_artifacts": (
+                        HISTORICAL_PRE_RUNPOD_MANIFEST_ARTIFACT_COUNT
+                    ),
                     "receipt_created": True,
                     "receipt_status": CURRENT_HARNESS_AUTHORITATIVE_REPLAY_STATUS,
                     "current_disposition": "CURRENT AUTHORITATIVE HARNESS RECEIPT",
@@ -10993,12 +12352,14 @@ def verify_review_matrix(
             "final_integrated_verifier_replay": {
                 "configured_suite_count": len(REQUIRED_TEST_SUITES),
                 "configured_nodes": EXPANDED_CONFIGURED_TEST_SUITE_NODE_TOTAL,
-                "expected_manifest_artifacts": CURRENT_MANIFEST_ARTIFACT_COUNT,
+                "expected_manifest_artifacts": (
+                    HISTORICAL_PRE_RUNPOD_MANIFEST_ARTIFACT_COUNT
+                ),
                 "expected_syntax_checked_python_artifacts": (
-                    CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
+                    HISTORICAL_PRE_RUNPOD_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
                 ),
                 "expected_executable_shadow_paths": (
-                    CURRENT_EXECUTABLE_SHADOW_PATH_COUNT
+                    HISTORICAL_PRE_RUNPOD_EXECUTABLE_SHADOW_PATH_COUNT
                 ),
                 "ignored_transient_trace_subtree": (
                     EXECUTABLE_SHADOW_IGNORED_TRANSIENT_SUBTREE
@@ -11013,15 +12374,17 @@ def verify_review_matrix(
                     "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
                 ),
                 "passed_suite_count": len(REQUIRED_TEST_SUITES),
-                "manifest_artifacts": CURRENT_MANIFEST_ARTIFACT_COUNT,
+                "manifest_artifacts": (
+                    HISTORICAL_PRE_RUNPOD_MANIFEST_ARTIFACT_COUNT
+                ),
                 "syntax_checked_python_artifacts": (
-                    CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
+                    HISTORICAL_PRE_RUNPOD_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
                 ),
                 "executable_shadow_paths_before": (
-                    CURRENT_EXECUTABLE_SHADOW_PATH_COUNT
+                    HISTORICAL_PRE_RUNPOD_EXECUTABLE_SHADOW_PATH_COUNT
                 ),
                 "executable_shadow_paths_after": (
-                    CURRENT_EXECUTABLE_SHADOW_PATH_COUNT
+                    HISTORICAL_PRE_RUNPOD_EXECUTABLE_SHADOW_PATH_COUNT
                 ),
                 "harness_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
                 "harness_subtests": REQUIRED_TEST_SUITES[
@@ -11054,7 +12417,7 @@ def verify_review_matrix(
                     FINAL_INTEGRATED_VERIFIER_OPEN_BOUNDARIES
                 ),
                 "postflight_file_identities_rechecked": (
-                    FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES
+                    HISTORICAL_PRE_RUNPOD_POSTFLIGHT_IDENTITIES
                 ),
                 "status": FINAL_INTEGRATED_VERIFIER_STATUS,
                 "authoritative_same_process_receipt": (
@@ -11103,29 +12466,39 @@ def verify_review_matrix(
                 ),
             },
             "packaged_kernel": {
-                "byte_mirrored_python_files": PACKAGED_HARNESS_V2_FILE_COUNT,
-                "total_python_bytes": PACKAGED_HARNESS_V2_TOTAL_BYTES,
-                "unique_exports": PACKAGED_HARNESS_V2_EXPORT_COUNT,
+                "byte_mirrored_python_files": (
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_FILE_COUNT
+                ),
+                "total_python_bytes": (
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_TOTAL_BYTES
+                ),
+                "unique_exports": (
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_EXPORT_COUNT
+                ),
                 "packaging_provenance_sha256": (
-                    PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
                 ),
                 "packaging_provenance_bytes": (
-                    PACKAGED_HARNESS_V2_PROVENANCE_BYTES
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_PROVENANCE_BYTES
                 ),
                 "canonical_and_mirror_init_sha256": (
-                    PACKAGED_HARNESS_V2_INIT_SHA256.lower()
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_INIT_SHA256.lower()
                 ),
-                "canonical_and_mirror_init_bytes": PACKAGED_HARNESS_V2_INIT_BYTES,
+                "canonical_and_mirror_init_bytes": (
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_INIT_BYTES
+                ),
                 "packaging_allowlist_source_sha256": (
-                    PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256.lower()
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256.lower()
                 ),
                 "packaging_allowlist_source_bytes": (
-                    PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_BYTES
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_BYTES
                 ),
                 "packaged_mirror_test_sha256": (
-                    PACKAGED_HARNESS_V2_TEST_SHA256.lower()
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_TEST_SHA256.lower()
                 ),
-                "packaged_mirror_test_bytes": PACKAGED_HARNESS_V2_TEST_BYTES,
+                "packaged_mirror_test_bytes": (
+                    HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_TEST_BYTES
+                ),
             },
             "historical_recovery_matrix": {
                 "path": (
@@ -11726,12 +13099,20 @@ def verify_review_matrix(
                 ),
                 "setup_skipped_nodeids": [],
             },
-            "packaged_mirror_files": PACKAGED_HARNESS_V2_FILE_COUNT,
-            "packaged_mirror_bytes": PACKAGED_HARNESS_V2_TOTAL_BYTES,
-            "package_exported_names": PACKAGED_HARNESS_V2_EXPORT_COUNT,
-            "package_unique_exported_names": PACKAGED_HARNESS_V2_EXPORT_COUNT,
+            "packaged_mirror_files": (
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_FILE_COUNT
+            ),
+            "packaged_mirror_bytes": (
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_TOTAL_BYTES
+            ),
+            "package_exported_names": (
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_EXPORT_COUNT
+            ),
+            "package_unique_exported_names": (
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_EXPORT_COUNT
+            ),
             "packaging_provenance_sha256": (
-                PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
             ),
             "detector_status": "NOT RUN / CONTRACTS ONLY / NO DETECTOR RESULT",
             "historical_w0_status": (
@@ -11808,7 +13189,8 @@ def verify_review_matrix(
         and "36 byte-identical Python files" in stagec_scope
         and "2,332,110 bytes" in stagec_scope
         and "1,097 unique public exports" in stagec_scope
-        and PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower() in stagec_scope
+        and HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
+        in stagec_scope
         and "IN_MEMORY / NOT_DURABLY_RETAINED" in stagec_scope
         and "index and four raw arrays" in stagec_scope
         and "process-local" in stagec_scope
@@ -12750,17 +14132,23 @@ def verify_review_matrix(
     require(
         diagnostic_receipt.get("packaged_kernel")
         == {
-            "byte_mirrored_python_files": PACKAGED_HARNESS_V2_FILE_COUNT,
-            "total_python_bytes": PACKAGED_HARNESS_V2_TOTAL_BYTES,
-            "unique_exports": PACKAGED_HARNESS_V2_EXPORT_COUNT,
+            "byte_mirrored_python_files": (
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_FILE_COUNT
+            ),
+            "total_python_bytes": (
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_TOTAL_BYTES
+            ),
+            "unique_exports": (
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_EXPORT_COUNT
+            ),
             "packaging_provenance_sha256": (
-                PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
             ),
             "canonical_and_mirror_init_sha256": (
-                PACKAGED_HARNESS_V2_INIT_SHA256.lower()
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_INIT_SHA256.lower()
             ),
             "packaging_allowlist_source_sha256": (
-                PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256.lower()
+                HISTORICAL_PRE_RUNPOD_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256.lower()
             ),
             "runtime_activation_mirror_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
                 (
@@ -14014,7 +15402,7 @@ def verify_adversarial_review() -> None:
         "prompt-context checkpoint is also preserved historical evidence",
         "1,461 ordinary reports and 163 passing subtests",
         "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225",
-        "Adapter/reconciliation has the current authoritative same-process receipt",
+        "At that published baseline, adapter/reconciliation had the authoritative",
         "297 ordinary reports, zero subtests, and one warning",
         "25.401532",
         "B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101",
@@ -19886,8 +21274,14 @@ def verify_test_suites(
             suite["expected_tests"]
             for suite in REQUIRED_TEST_SUITES.values()
         )
-        == EXPANDED_CONFIGURED_TEST_SUITE_NODE_TOTAL,
-        "configured Gate 5 test-suite node total drifted from 2,289",
+        == CURRENT_RUNPOD_CONFIGURED_TEST_SUITE_NODE_TOTAL,
+        "configured Gate 5 test-suite node total drifted from 2,672",
+    )
+    require(
+        CURRENT_RUNPOD_EXPANDED_RECEIPT_STATUS
+        == CURRENT_AUTHORITATIVE_REPLAY_STATUS,
+        "current expanded per-suite receipt status is not the exact authoritative "
+        "same-process STRUCTURE_ONLY / NON_AUTHORITY status",
     )
     suites = manifest.get("test_suites")
     require(isinstance(suites, list), "manifest test_suites is not a list")
@@ -20051,17 +21445,17 @@ def verify_test_suites(
         (
             "Harness v2 kernel and history",
             harness_result,
-            CURRENT_AUTHORITATIVE_HARNESS_RECEIPT,
+            CURRENT_RUNPOD_AUTHORITATIVE_HARNESS_RECEIPT,
         ),
         (
             "Live trace worker complete",
             worker_result,
-            CURRENT_AUTHORITATIVE_WORKER_RECEIPT,
+            CURRENT_RUNPOD_AUTHORITATIVE_WORKER_RECEIPT,
         ),
         (
             "Harness v2 admitted adapter and bounded reconciliation",
             adapter_result,
-            CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT,
+            CURRENT_RUNPOD_AUTHORITATIVE_ADAPTER_RECEIPT,
         ),
     ):
         expected_projection = {
@@ -20134,7 +21528,7 @@ def main() -> int:
     shadow_surface_count = verify_no_executable_shadow_artifacts()
     require(
         shadow_surface_count == CURRENT_EXECUTABLE_SHADOW_PATH_COUNT,
-        "current executable-shadow path count drifted from 2,290",
+        "current executable-shadow path count drifted from 2,317",
     )
     manifest_observation = observe_regular_file(
         MANIFEST_PATH, anchor=FILESYSTEM_ANCHOR
@@ -20145,7 +21539,7 @@ def main() -> int:
     artifacts = verify_manifest(manifest)
     require(
         len(artifacts) == CURRENT_MANIFEST_ARTIFACT_COUNT,
-        "current Gate 5 manifest artifact count drifted from 686",
+        "current Gate 5 manifest artifact count drifted from 708",
     )
     gate4_artifact_count, gate4_manifest_sha = verify_gate4_dependency(artifacts)
     claim_count = verify_claim_ledger()
@@ -20162,14 +21556,14 @@ def main() -> int:
     python_count = verify_python_syntax(artifacts)
     require(
         python_count == CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT,
-        "current syntax-checked Python artifact count drifted from 457",
+        "current syntax-checked Python artifact count drifted from 475",
     )
     runner_lock = verify_local_test_runner_lock()
     integrated_observations = capture_integrated_file_observations(artifacts)
     require(
         len(integrated_observations)
         == FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES,
-        "final integrated receipt postflight identity count drifted from 1,258",
+        "current postflight identity count drifted from 1,280",
     )
     suite_results = verify_test_suites(manifest, runner_lock)
     require(

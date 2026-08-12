@@ -517,6 +517,16 @@ from . import historical_evidence_import as _historical_evidence_import
 from . import jspace_shadow_contract as _jspace_shadow_contract
 from . import surface_meaning_preservation as _surface_meaning_preservation
 from . import universal_probe_contract as _universal_probe_contract
+from . import (
+    diagnostic_stagec_historical_source_inventory
+    as _diagnostic_stagec_historical_source_inventory,
+    diagnostic_stagec_corpus_authoring_scaffold
+    as _diagnostic_stagec_corpus_authoring_scaffold,
+    diagnostic_stagec_runpod_authorization_v2
+    as _diagnostic_stagec_runpod_authorization_v2,
+    stagec_runpod_readonly_preflight as _stagec_runpod_readonly_preflight,
+    stagec_runpod_runner as _stagec_runpod_runner,
+)
 
 __all__ = [
     "ADVERSARIAL_PRESENT",
@@ -1036,3 +1046,51 @@ __all__.extend(
         "JSPACE_DTYPES",
     )
 )
+
+
+_STAGEC_EXTENSION_PACKAGE_MODULES = (
+    _diagnostic_stagec_historical_source_inventory,
+    _diagnostic_stagec_corpus_authoring_scaffold,
+    _diagnostic_stagec_runpod_authorization_v2,
+    _stagec_runpod_readonly_preflight,
+    _stagec_runpod_runner,
+)
+_ALLOWED_EQUAL_STAGEC_EXTENSION_EXPORT_COLLISIONS = frozenset(
+    {
+        "STAGEC_RUNPOD_MAXIMUM_AGGREGATE_SPEND_MICROUSD",
+        "STAGEC_RUNPOD_POD_ID",
+        "STAGEC_RUNPOD_POD_NAME",
+    }
+)
+_observed_stagec_extension_export_collisions: set[str] = set()
+
+for _stagec_extension_module in _STAGEC_EXTENSION_PACKAGE_MODULES:
+    for _stagec_extension_name in _stagec_extension_module.__all__:
+        _stagec_extension_value = getattr(
+            _stagec_extension_module,
+            _stagec_extension_name,
+        )
+        if _stagec_extension_name in globals():
+            if (
+                _stagec_extension_name
+                not in _ALLOWED_EQUAL_STAGEC_EXTENSION_EXPORT_COLLISIONS
+                or globals()[_stagec_extension_name] != _stagec_extension_value
+            ):
+                raise ImportError(
+                    "CAS Harness v2 Stage C package export conflict for "
+                    f"{_stagec_extension_name!r}."
+                )
+            _observed_stagec_extension_export_collisions.add(
+                _stagec_extension_name
+            )
+            continue
+        globals()[_stagec_extension_name] = _stagec_extension_value
+        __all__.append(_stagec_extension_name)
+
+if (
+    _observed_stagec_extension_export_collisions
+    != _ALLOWED_EQUAL_STAGEC_EXTENSION_EXPORT_COLLISIONS
+):
+    raise ImportError(
+        "CAS Harness v2 Stage C package export collision inventory changed."
+    )

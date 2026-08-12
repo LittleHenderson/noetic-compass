@@ -5,8 +5,8 @@
   "copy_policy": "BYTE_FOR_BYTE_SOURCE_MIRROR",
   "source_files": {
     "__init__.py": {
-      "sha256": "c82851c34c4917ee362c7a29fa894cde1d345dad623dfda6f21feb8700a0e1e6",
-      "size_bytes": 40808
+      "sha256": "c76ed2b74b464cae2f5b9877d2e6f051d23e8675cbbb35db2da675844a7cc7e7",
+      "size_bytes": 42962
     },
     "_strict_json.py": {
       "sha256": "da862433a62f4c537d091cb17e8438efa2301f854e3106a683f9f7d679f0af15",
@@ -88,6 +88,14 @@
       "sha256": "cf4b8735fcbeaae2face509ae2229ad471e120f39b3a766c9c8590153175546e",
       "size_bytes": 37268
     },
+    "diagnostic_stagec_corpus_authoring_scaffold.py": {
+      "sha256": "27a487eff3150e334a015d8b32d98375cc9c00a286f5fcbfd461ccf0c1793209",
+      "size_bytes": 53144
+    },
+    "diagnostic_stagec_historical_source_inventory.py": {
+      "sha256": "e2d2a25df59813a1ad7eae2ca0a48342265154da2ccf31beb9ef85f2e5dfa473",
+      "size_bytes": 21070
+    },
     "diagnostic_stagec_prerequisite_admission.py": {
       "sha256": "ad46aa964240c98d5c12070872c60b26e2310b35a88dd6fa50f68c10c62f09b3",
       "size_bytes": 83199
@@ -95,6 +103,10 @@
     "diagnostic_stagec_prerequisite_external_intake.py": {
       "sha256": "865707dbbe5be1560ffd1f065378c505be89e48156f853166bc0e6cda5896bb4",
       "size_bytes": 38821
+    },
+    "diagnostic_stagec_runpod_authorization_v2.py": {
+      "sha256": "e5d5a6b5718dd9cdbf374f32e37260bb3374a20fdef74ee2323204ff877e505d",
+      "size_bytes": 28820
     },
     "diagnostic_stagec_runtime_activation.py": {
       "sha256": "e4b9c390117a474b32db790b5b7cb8dc2e3022823ff6f2f718725b1b3826e52e",
@@ -131,6 +143,14 @@
     "stagec_outcome.py": {
       "sha256": "d28908786c38dcad63b39b51a82b51faef888cca9da9552cc00be37785777d3a",
       "size_bytes": 69842
+    },
+    "stagec_runpod_readonly_preflight.py": {
+      "sha256": "f049e8bfff23ed9a24fe2f332cf6ce21bccdc592b0ef2d243bd850f84e472c25",
+      "size_bytes": 82333
+    },
+    "stagec_runpod_runner.py": {
+      "sha256": "1a3995232617fd89731643d896d7c001d69421a2f3268c2ca3632acd8ac8ab4a",
+      "size_bytes": 32203
     },
     "study_protocol.py": {
       "sha256": "01a4ef7bb1481c753b6d7e25f6ff5748e4d750c67dd3f30893f70e81a8e57c04",

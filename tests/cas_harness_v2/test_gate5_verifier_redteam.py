@@ -156,6 +156,24 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
 
         artifact_paths = {record["path"] for record in self.manifest["artifacts"]}
         self.assertTrue(surface <= artifact_paths)
+        runpod_controls = {
+            ".github/workflows/live-worker-image.yml",
+            ".github/workflows/stagec-qwen-batch-image.yml",
+            (
+                "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                "Dockerfile.qwen-stagec-model"
+            ),
+            (
+                "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                "Dockerfile.stagec-batch"
+            ),
+        }
+        self.assertTrue(runpod_controls <= self.verifier.REQUIRED_CONTROL_ARTIFACTS)
+        self.assertTrue(runpod_controls <= artifact_paths)
+        self.assertTrue(
+            set(self.verifier.STAGEC_RUNPOD_READINESS_FILE_BINDINGS)
+            <= artifact_paths
+        )
         self.assertIn(
             "noetic-compass-scaffold/noetic-compass/tests/conftest.py",
             artifact_paths,
@@ -1076,6 +1094,18 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
 
     def test_main_retains_post_subprocess_rehashes(self) -> None:
         tree = ast.parse(VERIFIER_PATH.read_bytes(), filename=VERIFIER_PATH.as_posix())
+        design_verifier = next(
+            node
+            for node in tree.body
+            if isinstance(node, ast.FunctionDef)
+            and node.name == "verify_stagec_design_package"
+        )
+        design_calls = {
+            node.func.id
+            for node in ast.walk(design_verifier)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+        }
+        self.assertIn("verify_stagec_runpod_readiness_surface", design_calls)
         main = next(
             node
             for node in tree.body

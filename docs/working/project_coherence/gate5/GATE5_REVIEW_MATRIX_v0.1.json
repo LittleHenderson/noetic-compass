@@ -11,13 +11,13 @@
   "product_route_authorized": false,
   "canon_effect": "NONE",
   "product_claim_effect": "NONE",
-  "criterion_count": 51,
-  "implemented_or_hash_verified_count": 25,
+  "criterion_count": 52,
+  "implemented_or_hash_verified_count": 26,
   "preserved_negative_evidence_count": 1,
   "open_criterion_count": 25,
   "disposition_counts": {
     "IMPLEMENTED_AND_REGRESSION_TESTED": 22,
-    "IMPLEMENTED_AND_HASH_VERIFIED": 3,
+    "IMPLEMENTED_AND_HASH_VERIFIED": 4,
     "PRESERVED_NEGATIVE_EVIDENCE": 1,
     "OPEN_ENGINEERING": 10,
     "OPEN_SECURITY": 1,
@@ -91,6 +91,14 @@
     "cas_harness.stagec.worker_runtime_activation_ledger_observation.v1",
     "cas_harness.stagec.worker_runtime_activation_terminal_observation.v1",
     "cas_harness.stagec.worker_runtime_activation_ambiguous_terminal_observation.v1",
+    "cas_harness_hidden_prompt_injection_bank.v1",
+    "cas_harness_hidden_prompt_injection_bank.v1.summary",
+    "cas_harness_v2.stagec_historical_source_gap_inventory.v1",
+    "cas_harness_v2.stagec_corpus_authoring_scaffold.v1",
+    "cas_harness_v2.stagec_runpod_c_cal_execution_authorization_candidate.v2",
+    "cas-harness.stagec-runpod-readonly-observation.v1",
+    "cas-harness.stagec-runpod-stopped-update-plan.v1",
+    "cas_harness_v2.stagec_runpod_environment_candidate.v1",
     "cas_harness_v2.evidence_packet.v2",
     "cas_harness_v2.comparison_model_identity.v1",
     "cas_harness_v2.comparison_model_capabilities.v1",
@@ -183,6 +191,14 @@
     "application/vnd.cas-harness.stagec-prerequisite-external-binding-report+json",
     "application/vnd.cas-harness.stagec-prerequisite-context-locator+json",
     "application/vnd.cas-harness.stagec-prerequisite-external-cli-report+json",
+    "application/vnd.cas-harness.stagec-historical-source-gap-inventory+json",
+    "application/vnd.cas-harness.stagec-corpus-authoring-scaffold+json",
+    "application/vnd.cas-harness.stagec-runpod-c-cal-authorization-candidate-v2+json",
+    "application/vnd.docker.distribution.manifest.v2+json",
+    "application/vnd.cas-harness.stagec-runpod-readonly-observation.v1+json",
+    "application/vnd.cas-harness.stagec-runpod-stopped-update-plan.v1+json",
+    "application/vnd.cas-harness.stagec-runpod-environment-candidate-v1+json",
+    "application/vnd.oci.image.manifest.v1+json",
     "application/vnd.cas-harness.comparison-model-identity-v1+json",
     "application/vnd.cas-harness.comparison-model-capabilities-v1+json",
     "application/vnd.cas-harness.behavioral-observation-v1+json",
@@ -1454,6 +1470,412 @@
       "independent_trust_root": false,
       "disposition": "OPEN_SECURITY"
     },
+    "stagec_runpod_readiness": {
+      "status": "STRUCTURE_ONLY / NON_AUTHORITY / READ_ONLY PREFLIGHT PASS / CURRENT AUTHORITATIVE SAME-PROCESS SUITE RECEIPTS PASS / CURRENT INTEGRATED 12-SUITE REPLAY PASS",
+      "gate5_status": "OPEN / KEEP_OPEN",
+      "stagec_status": "DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED",
+      "project_status": "NOT LICENSED / HELD / NOT FROZEN",
+      "image_receipt": {
+        "workflow_run_id": "31566811228",
+        "artifact_id": "9129938731",
+        "artifact_name": "stagec-qwen-batch-image-receipt-b163fee30634a21d2e717eda8a33de287426ee41",
+        "source_commit": "b163fee30634a21d2e717eda8a33de287426ee41",
+        "execution_image_ref": "ghcr.io/littlehenderson/noetic-compass-stagec-qwen-batch@sha256:69f7e43a79501a075c50adff4c4f2fd7ec2932c62213e76144ea16a1b86b6df2",
+        "manifest_digest": "sha256:69f7e43a79501a075c50adff4c4f2fd7ec2932c62213e76144ea16a1b86b6df2",
+        "manifest_media_type": "application/vnd.docker.distribution.manifest.v2+json",
+        "manifest_byte_length": 5958,
+        "manifest_capture_sha256": "69f7e43a79501a075c50adff4c4f2fd7ec2932c62213e76144ea16a1b86b6df2",
+        "config_digest": "sha256:e56c9971a93ce3ae5cf51c49440093620006e2fcad8ee890fd1b1732ede481b1",
+        "canonical_receipt_byte_length": 1858,
+        "canonical_receipt_sha256": "9ffe68ba81b81e2b3ae3210101f09381bb70180007cd6cb9a52546c84e9228cd",
+        "artifact_zip_byte_length": 2607,
+        "artifact_zip_sha256": "8ec0720b59d725d98c4c590e68d0d904134db2870b8da5d4bff14a6afb627cb1",
+        "registry_visibility": "private",
+        "runtime_activation": "DISABLED_NOT_IMPLEMENTED",
+        "runpod_mutation_count": 0
+      },
+      "readonly_provider_receipt": {
+        "observation_byte_length": 9447,
+        "observation_sha256": "081be716ee26e5fa572f69614cea21ef59e183295d30f8994d49246527f0ea82",
+        "blocked_plan_byte_length": 7848,
+        "blocked_plan_sha256": "705df68aa8cfb7673c2313e0f2fa420739db204bd6413abcb48430351972603e",
+        "authenticated_get_observations": 2,
+        "billing_rows": 71,
+        "billing_window_hours": 72,
+        "observed_amount_usd": "0.982638896210119131",
+        "application_capability": "ABSENT",
+        "provider_mutations": 0,
+        "pod_starts": 0,
+        "model_invocations": 0,
+        "paid_gpu_compute_usd": "0.00"
+      },
+      "source_test_bindings": [
+        {
+          "path": "src/cas_harness_v2/diagnostic_stagec_historical_source_inventory.py",
+          "sha256": "e2d2a25df59813a1ad7eae2ca0a48342265154da2ccf31beb9ef85f2e5dfa473",
+          "bytes": 21070
+        },
+        {
+          "path": "tests/cas_harness_v2/test_diagnostic_stagec_historical_source_inventory.py",
+          "sha256": "b52561796e3a5e42168fc230278d0e646d0f91c7ced3af9e6282b2eb3613cdce",
+          "bytes": 14110
+        },
+        {
+          "path": "src/cas_harness_v2/diagnostic_stagec_corpus_authoring_scaffold.py",
+          "sha256": "27a487eff3150e334a015d8b32d98375cc9c00a286f5fcbfd461ccf0c1793209",
+          "bytes": 53144
+        },
+        {
+          "path": "tests/cas_harness_v2/test_diagnostic_stagec_corpus_authoring_scaffold.py",
+          "sha256": "b3adf3abc5ac75636e56f03b5ba8199a0aadf1d9733254d52d3df3668e9bfd47",
+          "bytes": 38828
+        },
+        {
+          "path": "src/cas_harness_v2/diagnostic_stagec_runpod_authorization_v2.py",
+          "sha256": "e5d5a6b5718dd9cdbf374f32e37260bb3374a20fdef74ee2323204ff877e505d",
+          "bytes": 28820
+        },
+        {
+          "path": "tests/cas_harness_v2/test_diagnostic_stagec_runpod_authorization_v2.py",
+          "sha256": "8291825993b86907d71044b3f7fd1467304e47a4fc29bbc6f639795d395b36f5",
+          "bytes": 20458
+        },
+        {
+          "path": "src/cas_harness_v2/stagec_runpod_readonly_preflight.py",
+          "sha256": "f049e8bfff23ed9a24fe2f332cf6ce21bccdc592b0ef2d243bd850f84e472c25",
+          "bytes": 82333
+        },
+        {
+          "path": "tests/cas_harness_v2/test_stagec_runpod_readonly_preflight.py",
+          "sha256": "d5c890b82bef054ec52f3ef4f50c12412e38a66e23a6a2219fc483361c76bd1a",
+          "bytes": 56324
+        },
+        {
+          "path": "src/cas_harness_v2/stagec_runpod_runner.py",
+          "sha256": "1a3995232617fd89731643d896d7c001d69421a2f3268c2ca3632acd8ac8ab4a",
+          "bytes": 32203
+        },
+        {
+          "path": "tests/cas_harness_v2/test_stagec_runpod_runner.py",
+          "sha256": "0313dd2838e6300643db6b1bcdbb458d9dc2a3a5bdd4a4b7cdf32fa82d60ea26",
+          "bytes": 24032
+        }
+      ],
+      "image_lane_bindings": [
+        {
+          "path": ".github/workflows/stagec-qwen-batch-image.yml",
+          "sha256": "1763377c92b3754a51d8a19766fc1f16ddb44f52377c7ea1ea620b851c088ddf",
+          "bytes": 15916
+        },
+        {
+          "path": ".github/workflows/live-worker-image.yml",
+          "sha256": "86215cba4fa0a2b2dd00fba9915e2afe578d952a8507db0d663309cdcb6a886b",
+          "bytes": 6382
+        },
+        {
+          "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-stagec-model",
+          "sha256": "f66c82de2ac2db49dce70140f1163098d745422a0103cb1962fd97c4adafa8d2",
+          "bytes": 3494
+        },
+        {
+          "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.stagec-batch",
+          "sha256": "b32f6b502edb6c0416f52faef9249d2f0d324be20a37f11f229fcb1a37ef276d",
+          "bytes": 4143
+        }
+      ],
+      "documentation_bindings": [
+        {
+          "path": "docs/working/project_coherence/PROJECT_COHERENCE_EXECUTION_RECONCILIATION_v0.1.md",
+          "sha256": "d07a9d3ff34f2614f8f2e5b7b264daf5e7c5d36bf331803a43e9a5bb5f4a8499",
+          "bytes": 46063
+        },
+        {
+          "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
+          "sha256": "9f5dad25bb42ac7d4f4d5dc9cf57acf82aa090032202c315d323e1f66145d19e",
+          "bytes": 112293
+        },
+        {
+          "path": "docs/working/project_coherence/gate5/GATE5_WORKER_PROTOCOL_BINDING_v0.1.md",
+          "sha256": "e86aa3501b0b8e841e2c32548d263f47fb31943e93e50467f25db2d546029aa5",
+          "bytes": 130399
+        },
+        {
+          "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+          "sha256": "5f822b08047d44e2fcaadbe95bcfd95c18931b798b183620ca49afa838a834ae",
+          "bytes": 72334
+        },
+        {
+          "path": "docs/working/project_coherence/gate5/README.md",
+          "sha256": "0e5e75bfcef68fc7f240f9b75e4d0069350acbd839eb2dc7a2e0ce0352a32096",
+          "bytes": 97641
+        },
+        {
+          "path": "docs/working/project_coherence/gate5/stagec_qwen_prompt_injection_v0.1/README.md",
+          "sha256": "b8cd8277debf54c7a65210a91a4ca9faffa8422a5f0e4aef76692a7b9b034a39",
+          "bytes": 66980
+        }
+      ],
+      "schema_media_inventory": {
+        "unique_schemas_added": 8,
+        "unique_media_types_added": 8,
+        "total_unique_kernel_schemas": 120,
+        "total_unique_kernel_media_types": 139
+      },
+      "package_surface": {
+        "byte_mirrored_python_files": 41,
+        "unique_exports": 1242,
+        "total_python_bytes": 2551834,
+        "provenance_sha256": "01b026c5dd4fec14d83486421ba7bf7aa87491ab01f162820ef2ae51f730bc3a",
+        "canonical_and_mirror_init_sha256": "c76ed2b74b464cae2f5b9877d2e6f051d23e8675cbbb35db2da675844a7cc7e7",
+        "allowlist_source_sha256": "9a6d03743a7f67dd0b5e8ccdb6e3e7dbce110e36012d35be27671b359c98a02c",
+        "packaged_mirror_test_sha256": "ccfefec136c85cd798b32491254dd63da8dd00a8c2c9e588b5990d1ede38cf7c"
+      },
+      "current_configured_suites": {
+        "harness_nodes": 1452,
+        "harness_node_ids_sha256": "4419f4be8f2ccee417763854814da0fa5b7d4d6173bdad18df12f5aa06affc96",
+        "worker_nodes": 732,
+        "worker_node_ids_sha256": "f53562baeccc4982b402a9a747f8cadc29468b5f14d8b4a8c17cfc2a8e89b568",
+        "adapter_nodes": 99,
+        "adapter_node_ids_sha256": "b84eb29c59563dd0270c3bd8b230d604d59a2e45d38b9e375c7fa697468d656b",
+        "complete_verifier_suite_map_nodes": 2672,
+        "receipt_status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "integrated_receipt_status": "AUTHORITATIVE CURRENT-TRANCHE INTEGRATED 12-SUITE PASS / LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY"
+      },
+      "current_authoritative_same_process_receipts": {
+        "aggregate_status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "integrated_12_suite_receipt_status": "AUTHORITATIVE CURRENT-TRANCHE INTEGRATED 12-SUITE PASS / LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY",
+        "harness": {
+          "bundle": {
+            "receipt_file_sha256": "526f02b798757cd58b70002f6507639bc3879750f5cd484a726aeaea250007f0",
+            "receipt_file_bytes": 277731,
+            "suite_name": "Harness v2 kernel and history",
+            "scope": "LOCAL ENGINEERING REGRESSION / EPHEMERAL SAME-RUN RECEIPT SUMMARY / NOT TRUSTED TIME OR WORM / STRUCTURE_ONLY / NON_AUTHORITY",
+            "verifier_sha256": "87aa366193ebc0ddbff6cf8abc3c21c89ada4b2322d543dd6058bafb32c28b42",
+            "manifest_sha256": "507629ae1d90fb40f8ae197b75a9bb17fdbd2de876c4a59ac6ddc96e24da6620",
+            "runner_lock_sha256": "eb7d2d661bfe262c1e3bb4657e418eade8339f35d1089c7ae6a87efc6a360b13"
+          },
+          "projection": {
+            "collected_nodes": 1452,
+            "started_nodes": 1452,
+            "finished_nodes": 1452,
+            "all_phase_pass_nodes": 1446,
+            "setup_skipped_nodes": 6,
+            "ordinary_reports": 4350,
+            "passed_subtests": 163,
+            "warning_count": 0,
+            "error_count": 0,
+            "collection_errors": 0,
+            "internal_errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "process_exit_status": 0,
+            "pytest_exit_status": 0,
+            "elapsed_seconds": "2747.329161",
+            "node_ids_sha256": "4419f4be8f2ccee417763854814da0fa5b7d4d6173bdad18df12f5aa06affc96",
+            "ordinary_outcomes_sha256": "e600dedca64a9ebba3584c6f44e4d69174817b13fd4e4b84f1b197bc935b8628",
+            "subtest_outcomes_sha256": "6c2afb12d8f1dbc529c9493967b1cbb06ae98228b318da724d093d3c84721109",
+            "locked_import_origins_sha256": "3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a",
+            "pre_test_loaded_code_sha256": "0cbcb82dcf24426a868cfca8dbc334661d1504a23c882dd342d5ec6767b30d98",
+            "loaded_code_sha256": "848b8099c06a7e3dbe5e970eaae23ed228843934ba062d85cc3d307444dd6784",
+            "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED",
+            "receipt_status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+          }
+        },
+        "worker": {
+          "bundle": {
+            "receipt_file_sha256": "d7f939e268e26d2532e281ebbd16af47d3b29392c9d87e211a15b8988a64f10f",
+            "receipt_file_bytes": 98819,
+            "suite_name": "Live trace worker complete",
+            "scope": "LOCAL ENGINEERING REGRESSION / EPHEMERAL SAME-RUN RECEIPT SUMMARY / NOT TRUSTED TIME OR WORM / STRUCTURE_ONLY / NON_AUTHORITY",
+            "verifier_sha256": "87aa366193ebc0ddbff6cf8abc3c21c89ada4b2322d543dd6058bafb32c28b42",
+            "manifest_sha256": "507629ae1d90fb40f8ae197b75a9bb17fdbd2de876c4a59ac6ddc96e24da6620",
+            "runner_lock_sha256": "eb7d2d661bfe262c1e3bb4657e418eade8339f35d1089c7ae6a87efc6a360b13"
+          },
+          "projection": {
+            "collected_nodes": 732,
+            "started_nodes": 732,
+            "finished_nodes": 732,
+            "all_phase_pass_nodes": 732,
+            "setup_skipped_nodes": 0,
+            "ordinary_reports": 2196,
+            "passed_subtests": 0,
+            "warning_count": 0,
+            "error_count": 0,
+            "collection_errors": 0,
+            "internal_errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "process_exit_status": 0,
+            "pytest_exit_status": 0,
+            "elapsed_seconds": "162.481646",
+            "node_ids_sha256": "f53562baeccc4982b402a9a747f8cadc29468b5f14d8b4a8c17cfc2a8e89b568",
+            "ordinary_outcomes_sha256": "889e455626a3dc5f7ec26cfc253cabed4572f0f9e95e68ccf56142380404664e",
+            "subtest_outcomes_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "locked_import_origins_sha256": "035effd9dc44c1fd2d9f07a3be62ea1bf07e3fd17d5807323f8d1b58ae6b0fd6",
+            "pre_test_loaded_code_sha256": "3696a5457fdf85823dac360679c750dec5b8a691207958ee0a1854a790a21a5e",
+            "loaded_code_sha256": "58a306279e05ebdf7f4c18a8b153170ab058c7dacf906d5e00ab92372f018681",
+            "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION",
+            "receipt_status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+          }
+        },
+        "adapter": {
+          "bundle": {
+            "receipt_file_sha256": "44455e29889d9b1c5e958763368e50716a195bddf9dc0778fa1a469c0318f6b4",
+            "receipt_file_bytes": 16513,
+            "suite_name": "Harness v2 admitted adapter and bounded reconciliation",
+            "scope": "LOCAL ENGINEERING REGRESSION / EPHEMERAL SAME-RUN RECEIPT SUMMARY / NOT TRUSTED TIME OR WORM / STRUCTURE_ONLY / NON_AUTHORITY",
+            "verifier_sha256": "87aa366193ebc0ddbff6cf8abc3c21c89ada4b2322d543dd6058bafb32c28b42",
+            "manifest_sha256": "507629ae1d90fb40f8ae197b75a9bb17fdbd2de876c4a59ac6ddc96e24da6620",
+            "runner_lock_sha256": "eb7d2d661bfe262c1e3bb4657e418eade8339f35d1089c7ae6a87efc6a360b13"
+          },
+          "projection": {
+            "collected_nodes": 99,
+            "started_nodes": 99,
+            "finished_nodes": 99,
+            "all_phase_pass_nodes": 99,
+            "setup_skipped_nodes": 0,
+            "ordinary_reports": 297,
+            "passed_subtests": 0,
+            "warning_count": 1,
+            "error_count": 0,
+            "collection_errors": 0,
+            "internal_errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "process_exit_status": 0,
+            "pytest_exit_status": 0,
+            "elapsed_seconds": "55.537553",
+            "node_ids_sha256": "b84eb29c59563dd0270c3bd8b230d604d59a2e45d38b9e375c7fa697468d656b",
+            "ordinary_outcomes_sha256": "548361800978af55ee04b8e45b71ae70a09bbbe015025c5d6bf428f8e2fd9c9f",
+            "subtest_outcomes_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "locked_import_origins_sha256": "3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a",
+            "pre_test_loaded_code_sha256": "0cbcb82dcf24426a868cfca8dbc334661d1504a23c882dd342d5ec6767b30d98",
+            "loaded_code_sha256": "efa05fb2b5aea5000ffb8b77f910a06c14f1ba433a4dc1cce71474807f708f53",
+            "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION",
+            "receipt_status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+          }
+        }
+      },
+      "current_integrated_12_suite_receipt": {
+        "run_id": "retry-20260812T203610Z-c2861637",
+        "supervisor_schema": "project-coherence-integrated-replay-supervisor-v1",
+        "supervisor_result_state": "EXIT_0_WITH_EXACT_PASS_LINE",
+        "command": "C:\\Python314\\python.exe -I -B scripts/verify_project_coherence_gate5.py",
+        "status": "AUTHORITATIVE CURRENT-TRANCHE INTEGRATED 12-SUITE PASS / LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY",
+        "authority_boundary": "LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY",
+        "started_utc_observational": "2026-08-12T20:36:10.4841955Z",
+        "ended_utc_observational": "2026-08-12T21:23:04.1021881Z",
+        "wall_seconds_observational": "2813.248",
+        "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+        "process_exit_status": 0,
+        "exact_pass_line_observed": true,
+        "configured_suite_count": 12,
+        "configured_nodes": 2672,
+        "manifest_artifacts": 708,
+        "syntax_checked_python_artifacts": 475,
+        "executable_shadow_paths_before_and_after": 2317,
+        "harness_nodes": 1452,
+        "harness_subtests": 163,
+        "harness_setup_skips": 6,
+        "harness_loaded_code_sha256": "848b8099c06a7e3dbe5e970eaae23ed228843934ba062d85cc3d307444dd6784",
+        "worker_nodes": 732,
+        "worker_loaded_code_sha256": "58a306279e05ebdf7f4c18a8b153170ab058c7dacf906d5e00ab92372f018681",
+        "adapter_nodes": 99,
+        "adapter_loaded_code_sha256": "efa05fb2b5aea5000ffb8b77f910a06c14f1ba433a4dc1cce71474807f708f53",
+        "review_criteria": 52,
+        "required_open_boundaries": 22,
+        "postflight_file_identities": 1280,
+        "freeze_ledger_sha256": "533b661dc730647703540dd0d107a574bf832afd24599d84abd0dd28d63368e2",
+        "verifier_before_sha256": "e687bd3bd01926763e737ee82c17aadb2222cbcc78172c500a7e5715c1c51d38",
+        "verifier_before_bytes": 931351,
+        "verifier_after_sha256": "e687bd3bd01926763e737ee82c17aadb2222cbcc78172c500a7e5715c1c51d38",
+        "verifier_after_bytes": 931351,
+        "manifest_before_sha256": "74a42ed7cfb252a8f14b0e72735dbb9c0dd711cc7536063bbd84a7345becdb62",
+        "manifest_before_bytes": 204635,
+        "manifest_after_sha256": "74a42ed7cfb252a8f14b0e72735dbb9c0dd711cc7536063bbd84a7345becdb62",
+        "manifest_after_bytes": 204635,
+        "runner_lock_before_sha256": "eb7d2d661bfe262c1e3bb4657e418eade8339f35d1089c7ae6a87efc6a360b13",
+        "runner_lock_before_bytes": 121525,
+        "runner_lock_after_sha256": "eb7d2d661bfe262c1e3bb4657e418eade8339f35d1089c7ae6a87efc6a360b13",
+        "runner_lock_after_bytes": 121525,
+        "supervisor_started_sha256": "7d4299a21350e033e397be2f88cc63a4acb8b464a8a24c5d3a6d6ac0c0593f3d",
+        "supervisor_started_bytes": 2465,
+        "supervisor_result_sha256": "9186ac199adb038e4c462a5b420c1b777d95ede694eb4df3d803c8efe3ba9ffb",
+        "supervisor_result_bytes": 3189,
+        "stdout_sha256": "aa4c46ba71ea2467c6963c21a8c54c70906943bb14644607ac98a7ff2950751c",
+        "stdout_bytes": 11116,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_bytes": 0,
+        "trusted_time": "UNAVAILABLE / NOT CLAIMED",
+        "worm_retention": "UNAVAILABLE / NOT CLAIMED",
+        "attempt_ordinal_claim": "NONE / NOT INFERRED",
+        "aggregate_digest_claim": "NONE / NOT CLAIMED",
+        "claim_effect": "STRUCTURE_ONLY / NON_AUTHORITY / NO EXPERIMENTAL, PRODUCT, LICENSE, OR DISCLOSURE AUTHORITY"
+      },
+      "historical_pre_runpod_receipts": {
+        "harness": {
+          "nodes": 1082,
+          "node_ids_sha256": "e791e0a7960201323a94f8b0bc88f53af611771118a369d332b36100d80b7928",
+          "loaded_code_sha256": "dc4f9c8664415c211d257dffbfd8d0dbc942f830c138c60d6ac3a0e8d4eac768",
+          "status": "HISTORICAL / SUPERSEDED NODE SET / NON_AUTHORITY"
+        },
+        "worker": {
+          "nodes": 719,
+          "node_ids_sha256": "98f7152b532c713dd22df910fb762ce92e281a350aca4e1a3cf2113c84d3dbb5",
+          "loaded_code_sha256": "44a6b0a13caa30860d3802c042455f72c90ffc6d15fa7503f3b159384eff4c34",
+          "status": "HISTORICAL / SUPERSEDED NODE SET / NON_AUTHORITY"
+        },
+        "adapter": {
+          "nodes": 99,
+          "node_ids_sha256": "b84eb29c59563dd0270c3bd8b230d604d59a2e45d38b9e375c7fa697468d656b",
+          "loaded_code_sha256": "b543cd078076717c80341b0b9c52f158cbd20b9bb3718e4128f81373aeea1101",
+          "status": "HISTORICAL / RETAINED UNCHANGED / NON_AUTHORITY"
+        },
+        "integrated_12_suite": {
+          "command": "C:\\Python314\\python.exe -I -B scripts/verify_project_coherence_gate5.py",
+          "status": "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+          "configured_suite_count": 12,
+          "configured_nodes": 2289,
+          "manifest_artifacts": 686,
+          "syntax_checked_python_artifacts": 457,
+          "executable_shadow_paths_before_and_after": 2290,
+          "harness_nodes": 1082,
+          "harness_subtests": 163,
+          "harness_setup_skips": 6,
+          "harness_loaded_code_sha256": "dc4f9c8664415c211d257dffbfd8d0dbc942f830c138c60d6ac3a0e8d4eac768",
+          "worker_nodes": 719,
+          "worker_loaded_code_sha256": "44a6b0a13caa30860d3802c042455f72c90ffc6d15fa7503f3b159384eff4c34",
+          "adapter_nodes": 99,
+          "adapter_loaded_code_sha256": "b543cd078076717c80341b0b9c52f158cbd20b9bb3718e4128f81373aeea1101",
+          "review_criteria": 51,
+          "required_open_boundaries": 22,
+          "postflight_file_identities": 1258,
+          "tool_wall_seconds": "3568.3",
+          "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+          "disposition": "HISTORICAL PUBLISHED INTEGRATED RECEIPT / SUPERSEDED NODE SET / NON_AUTHORITY"
+        }
+      },
+      "corpus_boundary": {
+        "required_groups": 320,
+        "required_rows": 960,
+        "draft_groups": 320,
+        "draft_rows": 960,
+        "admitted_groups": 0,
+        "admitted_rows": 0,
+        "classification": "DRAFT / SYNTHETIC / NON_AUTHORITY",
+        "historical_w0_role": "SOURCE MATERIAL ONLY / NO RELABELING"
+      },
+      "execution_boundary": {
+        "application_capability": "ABSENT",
+        "authorization": "UNAUTHORIZED",
+        "activation": "NOT_ACTIVATED",
+        "provider_mutations": 0,
+        "pod_starts": 0,
+        "model_invocations": 0,
+        "paid_gpu_compute_usd": "0.00",
+        "next_required_authority": "EXTERNAL AUTHENTICATED STOPPED-POD UPDATE/READBACK, TRUSTED TIME, NONCE/LEDGER, WORM/READBACK, NO-EGRESS, AND 960 ADMITTED ROWS"
+      }
+    },
     "comparison_recovery_structure_only": {
       "status": "STRUCTURE_ONLY / NON_AUTHORITY / CURRENT SUITE RECEIPTS PASS / FINAL INTEGRATED VERIFIER PASS",
       "module_count": 14,
@@ -2405,6 +2827,35 @@
         "scripts/verify_project_coherence_gate5.py"
       ],
       "remaining_obligation": "G5-TRUST-005, G5-SCIENCE-001, G5-SCIENCE-003, G5-SCIENCE-009, and G5-GOV-001 remain OPEN: authenticate real identities and exact authorization, freeze the real corpus and matched controls, preserve the final integrated 12-suite authoritative same-process PASS receipt, and perform any separately authorized model/provider execution before interpreting detector, steering, comparison, universality, or J-Space outcomes.",
+      "canon_effect": "NONE",
+      "product_claim_effect": "NONE"
+    },
+    {
+      "id": "G5-ENGINEERING-011",
+      "subsystem": "STAGEC_RUNPOD_READINESS",
+      "question": "Does the current Stage C RunPod preparation bind the private image, exact offline contracts, read-only provider observation, corpus boundary, and zero-mutation workflow without claiming run authority?",
+      "acceptance_requirement": "The verifier must bind ten exact canonical source/test files plus both image workflows and both Stage C Dockerfiles; preserve the private digest-addressed image receipt; require GET-only sanitized preflight evidence; prove both activation functions terminate fail-closed; retain the corpus as DRAFT / SYNTHETIC / NON_AUTHORITY at 0 / 960 admitted rows; preserve zero provider mutation, pod start, model invocation, and paid GPU compute; bind every exact projection field and retained bundle identity for the current Harness 1,452, worker 732, and adapter 99 authoritative same-process receipts; preserve the pre-RunPod receipts and published integrated receipt as historical; and bind a separate exact current-tranche local integrated 12-suite PASS object without granting experimental, product, license, disclosure, provider-execution, trusted-time, or WORM authority.",
+      "observed_result": "The exact private image is bound at ghcr.io/littlehenderson/noetic-compass-stagec-qwen-batch@sha256:69f7e43a79501a075c50adff4c4f2fd7ec2932c62213e76144ea16a1b86b6df2 with config sha256:e56c9971a93ce3ae5cf51c49440093620006e2fcad8ee890fd1b1732ede481b1 and canonical receipt SHA-256 9ffe68ba81b81e2b3ae3210101f09381bb70180007cd6cb9a52546c84e9228cd. The authenticated no-spend preflight is two GET observations with application_capability ABSENT, provider mutations 0, pod starts 0, model invocations 0, and paid GPU compute $0.00. Five canonical modules and tests are exact-byte bound and mirrored; the image workflow contains no RunPod mutation surface. The authoring scaffold has 320 draft groups and 960 draft rows but admissible corpus remains 0 / 960 with NON_AUTHORITY and no historical relabeling. The package is 41 mirrored Python files, 1,242 exports, and 2,551,834 bytes; the schema/media totals are 120/139. Current retained authoritative same-process receipts bind Harness 1,452 collected/started/finished with 1,446 all-phase PASS, six exact setup skips retained as mismatch evidence rather than PASS, 4,350 ordinary reports, 163 passing subtests, zero warnings/errors, exits 0/0, and receipt SHA-256 526f02b798757cd58b70002f6507639bc3879750f5cd484a726aeaea250007f0; worker 732/732 with 2,196 ordinary reports, zero warnings/errors, exits 0/0, and receipt SHA-256 d7f939e268e26d2532e281ebbd16af47d3b29392c9d87e211a15b8988a64f10f; and adapter 99/99 with 297 ordinary reports, one warning, zero errors, exits 0/0, and receipt SHA-256 44455e29889d9b1c5e958763368e50716a195bddf9dc0778fa1a469c0318f6b4. The exact current per-suite status is AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY. Pre-RunPod 1,082/719/99 receipts and the published integrated 12-suite PASS remain historical and byte-semantically unchanged. Current local replay retry-20260812T203610Z-c2861637 exited 0 with the exact PASS line, 12/12 suites, 2,672 configured nodes, 708 manifest artifacts, 475 syntax-checked Python artifacts, 2,317 executable-shadow paths before and after, 52 review criteria, all 22 required OPEN boundaries, and 1,280 postflight identities. Verifier, manifest, and runner-lock identities were unchanged before and after; the supervisor result is 3,189 bytes with SHA-256 9186ac199adb038e4c462a5b420c1b777d95ede694eb4df3d803c8efe3ba9ffb, stdout is 11,116 bytes with the exact PASS line, and stderr is empty. Its status is AUTHORITATIVE CURRENT-TRANCHE INTEGRATED 12-SUITE PASS / LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY; trusted time and WORM remain unavailable and no provider, pod, model, or paid GPU action occurred.",
+      "disposition": "IMPLEMENTED_AND_HASH_VERIFIED",
+      "evidence_refs": [
+        ".github/workflows/stagec-qwen-batch-image.yml",
+        ".github/workflows/live-worker-image.yml",
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-stagec-model",
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.stagec-batch",
+        "src/cas_harness_v2/diagnostic_stagec_historical_source_inventory.py",
+        "src/cas_harness_v2/diagnostic_stagec_corpus_authoring_scaffold.py",
+        "src/cas_harness_v2/diagnostic_stagec_runpod_authorization_v2.py",
+        "src/cas_harness_v2/stagec_runpod_readonly_preflight.py",
+        "src/cas_harness_v2/stagec_runpod_runner.py",
+        "tests/cas_harness_v2/test_diagnostic_stagec_historical_source_inventory.py",
+        "tests/cas_harness_v2/test_diagnostic_stagec_corpus_authoring_scaffold.py",
+        "tests/cas_harness_v2/test_diagnostic_stagec_runpod_authorization_v2.py",
+        "tests/cas_harness_v2/test_stagec_runpod_readonly_preflight.py",
+        "tests/cas_harness_v2/test_stagec_runpod_runner.py",
+        "noetic-compass-scaffold/noetic-compass/cas_harness_v2/PACKAGING_PROVENANCE.json",
+        "scripts/verify_project_coherence_gate5.py"
+      ],
+      "remaining_obligation": "G5-TRUST-002, G5-TRUST-003, G5-TRUST-005, G5-SCIENCE-001, G5-SCIENCE-003, and G5-SCIENCE-009 remain OPEN: publish the receipt-promoted tranche with an exact manifest rebuild and unchanged-tree verifier/CI replay; author and independently adjudicate all 960 real rows; authenticate the exact four carriers and twelve dependencies; and establish trusted time, nonce/ledger, WORM/readback, registry credential binding, stopped-pod full update/readback, no-egress, post-start A40/BF16 identity, and stop-watchdog evidence before any bounded start.",
       "canon_effect": "NONE",
       "product_claim_effect": "NONE"
     }

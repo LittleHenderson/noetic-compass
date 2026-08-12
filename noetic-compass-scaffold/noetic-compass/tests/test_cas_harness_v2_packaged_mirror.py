@@ -34,9 +34,9 @@ PROVENANCE_PATH = PACKAGED_MIRROR / "PACKAGING_PROVENANCE.json"
 PROVENANCE_SCHEMA = "cas_harness_v2.packaged_mirror_provenance.v1"
 IGNORED_PARTS = {"__pycache__"}
 IGNORED_SUFFIXES = {".pyc", ".pyo"}
-PACKAGED_KERNEL_FILE_COUNT = 36
-PACKAGED_KERNEL_EXPORT_COUNT = 1_097
-PACKAGED_KERNEL_SOURCE_BYTES = 2_332_110
+PACKAGED_KERNEL_FILE_COUNT = 41
+PACKAGED_KERNEL_EXPORT_COUNT = 1_242
+PACKAGED_KERNEL_SOURCE_BYTES = 2_551_834
 COMPARISON_MODULE_EXPORT_COUNTS = {
     "comparison_model_protocol": 58,
     "comparison_adapters": 12,
@@ -107,6 +107,20 @@ RUNTIME_ACTIVATION_EXPORTS = (
     "stagec_runtime_dispatch_permit_state",
     "stagec_runtime_phase_state",
     "stagec_runtime_preparation_state",
+)
+STAGEC_EXTENSION_MODULE_EXPORT_COUNTS = {
+    "diagnostic_stagec_historical_source_inventory": 14,
+    "diagnostic_stagec_corpus_authoring_scaffold": 20,
+    "diagnostic_stagec_runpod_authorization_v2": 44,
+    "stagec_runpod_readonly_preflight": 47,
+    "stagec_runpod_runner": 23,
+}
+STAGEC_EXTENSION_ALLOWED_EQUAL_COLLISIONS = frozenset(
+    {
+        "STAGEC_RUNPOD_MAXIMUM_AGGREGATE_SPEND_MICROUSD",
+        "STAGEC_RUNPOD_POD_ID",
+        "STAGEC_RUNPOD_POD_NAME",
+    }
 )
 
 
@@ -258,6 +272,23 @@ def test_packaged_public_modules_are_exported_exactly(tmp_path: Path) -> None:
     assert {alias.name for alias in runtime_imports[0].names} == set(
         RUNTIME_ACTIVATION_EXPORTS
     )
+    stagec_extension_imports = [
+        node
+        for node in package_tree.body
+        if isinstance(node, ast.ImportFrom)
+        and node.level == 1
+        and node.module is None
+        and {alias.name for alias in node.names}
+        == set(STAGEC_EXTENSION_MODULE_EXPORT_COUNTS)
+    ]
+    assert len(stagec_extension_imports) == 1
+    assert tuple(alias.name for alias in stagec_extension_imports[0].names) == tuple(
+        STAGEC_EXTENSION_MODULE_EXPORT_COUNTS
+    )
+    assert all(
+        alias.asname == f"_{alias.name}"
+        for alias in stagec_extension_imports[0].names
+    )
 
     snapshot_payload = b'{"external":"candidate-snapshot"}\n'
     snapshot_path = tmp_path / "candidate.json"
@@ -287,9 +318,17 @@ def test_packaged_public_modules_are_exported_exactly(tmp_path: Path) -> None:
             f"comparison_export_counts = {COMPARISON_MODULE_EXPORT_COUNTS!r}",
             f"ambiguous_export_aliases = {AMBIGUOUS_EXPORT_ALIASES!r}",
             f"ambiguous_raw_exports = {AMBIGUOUS_RAW_EXPORTS!r}",
+            f"stagec_extension_export_counts = {STAGEC_EXTENSION_MODULE_EXPORT_COUNTS!r}",
+            "stagec_extension_allowed_equal_collisions = (",
+            f"    {STAGEC_EXTENSION_ALLOWED_EQUAL_COLLISIONS!r}",
+            ")",
             "comparison_modules = {",
             "    name: importlib.import_module(f'cas_harness_v2.{name}')",
             "    for name in comparison_export_counts",
+            "}",
+            "stagec_extension_modules = {",
+            "    name: importlib.import_module(f'cas_harness_v2.{name}')",
+            "    for name in stagec_extension_export_counts",
             "}",
             "artifacts = importlib.import_module('cas_harness_v2.artifacts')",
             "assert len(provenance.__all__) == len(set(provenance.__all__)) == 32",
@@ -327,6 +366,34 @@ def test_packaged_public_modules_are_exported_exactly(tmp_path: Path) -> None:
             "        getattr(package, name) is getattr(module, name)",
             "        for name in module.__all__",
             "    )",
+            "assert {",
+            "    name: len(module.__all__)",
+            "    for name, module in stagec_extension_modules.items()",
+            "} == stagec_extension_export_counts",
+            "assert all(",
+            "    len(module.__all__) == len(set(module.__all__))",
+            "    for module in stagec_extension_modules.values()",
+            ")",
+            "stagec_extension_owners = {}",
+            "for module_name, module in stagec_extension_modules.items():",
+            "    for name in module.__all__:",
+            "        stagec_extension_owners.setdefault(name, []).append(module_name)",
+            "assert {",
+            "    name",
+            "    for name, owners in stagec_extension_owners.items()",
+            "    if len(owners) > 1",
+            "} == stagec_extension_allowed_equal_collisions",
+            "assert all(",
+            "    len(stagec_extension_owners[name]) == 2",
+            "    for name in stagec_extension_allowed_equal_collisions",
+            ")",
+            "for module in stagec_extension_modules.values():",
+            "    for name in module.__all__:",
+            "        assert name in package.__all__",
+            "        if name in stagec_extension_allowed_equal_collisions:",
+            "            assert getattr(package, name) == getattr(module, name)",
+            "        else:",
+            "            assert getattr(package, name) is getattr(module, name)",
             f"payload = {snapshot_payload!r}",
             f"source = Path({str(snapshot_path)!r})",
             "evidence_file = artifacts.EvidenceFile.from_path(",

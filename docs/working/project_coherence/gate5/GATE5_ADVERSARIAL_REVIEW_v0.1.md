@@ -36,6 +36,132 @@ its criteria status is `REPORTED_CRITERIA_NOT_MET`, and its scientific
 eligibility is `INELIGIBLE`. None of these runs established prompt-injection
 detection or steering efficacy. Experimental execution remains `NOT_STARTED`.
 
+## Current RunPod readiness adversarial disposition (2026-08-12)
+
+Build-only run `31566811228` at exact commit
+`b163fee30634a21d2e717eda8a33de287426ee41` successfully registry-verified the
+private image
+`ghcr.io/littlehenderson/noetic-compass-stagec-qwen-batch@sha256:69f7e43a79501a075c50adff4c4f2fd7ec2932c62213e76144ea16a1b86b6df2`
+and config digest
+`sha256:e56c9971a93ce3ae5cf51c49440093620006e2fcad8ee890fd1b1732ede481b1`.
+This closes image construction only; it does not close runtime activation.
+
+The signed-in visual console was inspected without saving a mutation. Pod
+`zp2s9pscgncn0b` was stopped and unlocked, offered one A40 at `$0.44/hour`, and
+displayed stopped storage at about `$0.014/hour`. It still used the incompatible
+`runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04` image, inherited
+`8888/HTTP` and `22/TCP`, had an empty container start-command override, and
+showed no selected registry credential. Conflicting `$86.97` and `$105.54`
+balance surfaces leave usable balance unresolved.
+
+The bounded no-spend preflight itself made exactly two authenticated GET
+observations and passed only its read-only observation contract: 71 billing
+rows and `$0.982638896210119131` over the exact observed 72-hour window. The
+observation is `9447` bytes / SHA-256
+`081BE716EE26E5FA572F69614CEA21EF59E183295D30F8994D49246527F0EA82`;
+the blocked plan is `7848` bytes / SHA-256
+`705DF68AA8CFB7673C2313E0F2FA420739DB204BD6413ABCB48430351972603E`.
+The plan's `application_capability` is `ABSENT`. Treating that narrow PASS as
+permission or ability to update/start the pod is forbidden.
+
+The additive offline package candidate now contains 41 byte-mirrored Python
+files, 1,242 exports, and 2,551,834 bytes; 383 focused additive tests passed.
+Three expanded same-process suite receipts now hold current authoritative
+software-test status within `STRUCTURE_ONLY / NON_AUTHORITY` scope; the current
+integrated 12-suite same-run PASS is recorded below within that same limited
+scope. Earlier receipts remain exact historical evidence only. The corpus scaffold is
+`DRAFT / SYNTHETIC / NON_AUTHORITY`, with real admissible corpus `0 / 960` and
+no completed real adjudication.
+
+Provider mutations, starts, model invocations, and paid GPU compute by this
+work remain `0 / 0 / 0 / $0.00`. The unresolved adversarial gates are the full
+stopped-pod update/readback and rollback path, private-registry credential
+validity, trusted time/nonce/ledger plus WORM readback, kernel/provider-backed
+no-egress, real corpus authoring/double adjudication, and post-start A40/BF16
+attestation. Gate 5 stays `OPEN / KEEP_OPEN`; Stage C stays
+`DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; execution and disclosure stay
+`NOT LICENSED / HELD / NOT FROZEN`.
+
+### Current expanded same-process suite receipts
+
+The current aggregate comprises three authoritative same-process suite
+receipts. Their shared exact status is:
+
+`AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY`
+
+The three strict-JSON receipt bundles bind verifier SHA-256
+`87AA366193EBC0DDBFF6CF8ABC3C21C89ADA4B2322D543DD6058BAFB32C28B42`,
+the pre-promotion 708-artifact manifest SHA-256
+`507629AE1D90FB40F8AE197B75A9BB17FDBD2DE876C4A59AC6DDC96E24DA6620`,
+and runner-lock SHA-256
+`EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13`.
+
+- Harness bundle
+  `gate5-expanded-harness-3eb295c211974984add34d4dbba9aad0.json`
+  (`277731` bytes; SHA-256
+  `526F02B798757CD58B70002F6507639BC3879750F5CD484A726AEAEA250007F0`)
+  collected, started, and finished `1452` nodes. Exactly `1446` had all-phase
+  PASS; the six exact setup skips remain mismatch evidence rather than PASS.
+  It emitted `4350` ordinary reports and `163` passing subtests, recorded zero
+  warnings, errors, collection errors, internal errors, or deselections, left
+  the isolated pycache empty, and exited process/pytest `0 / 0`. Observational
+  elapsed time was `2747.329161` seconds. Node-ID, ordinary-outcome,
+  subtest-outcome, locked-import-origin, pre-test-loaded-code, and loaded-code
+  SHA-256 values are, respectively,
+  `4419F4BE8F2CCEE417763854814DA0FA5B7D4D6173BDAD18DF12F5AA06AFFC96`,
+  `E600DEDCA64A9EBBA3584C6F44E4D69174817B13FD4E4B84F1B197BC935B8628`,
+  `6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`,
+  `3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+  `0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+  and `848B8099C06A7E3DBE5E970EAAE23ED228843934BA062D85CC3D307444DD6784`.
+  Its exact status is `AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY`.
+- Worker bundle
+  `gate5-expanded-worker-111768e866d8449cb4573292b1e4746a.json`
+  (`98819` bytes; SHA-256
+  `D7F939E268E26D2532E281EBBD16AF47D3B29392C9D87E211A15B8988A64F10F`)
+  collected, started, finished, and passed all `732` nodes, emitted `2196`
+  ordinary reports, and recorded zero skips, subtests, warnings, errors,
+  collection errors, internal errors, or deselections. It left the isolated
+  pycache empty, exited process/pytest `0 / 0`, and had observational elapsed
+  time `162.481646` seconds. Node-ID, ordinary-outcome, subtest-outcome,
+  locked-import-origin, pre-test-loaded-code, and loaded-code SHA-256 values
+  are, respectively,
+  `F53562BAECCC4982C402A9A747F8CADC29468B5F14D8B4A8C17CFC2A8E89B568`,
+  `889E455626A3DC5F7EC26CFC253CABED4572F0F9E95E68CCF56142380404664E`,
+  `4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945`,
+  `035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6`,
+  `3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E`,
+  and `58A306279E05EBDF7F4C18A8B153170AB058C7DACF906D5E00AB92372F018681`.
+  Its exact status is
+  `AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY`.
+- Adapter/reconciliation bundle
+  `gate5-expanded-adapter-ac618af4947f40d9a0175d9fc721acfe.json`
+  (`16513` bytes; SHA-256
+  `44455E29889D9B1C5E958763368E50716A195BDDF9DC0778FA1A469C0318F6B4`)
+  collected, started, finished, and passed all `99` nodes, emitted `297`
+  ordinary reports, and recorded zero skips, subtests, errors, collection
+  errors, internal errors, or deselections and exactly one warning. It left the
+  isolated pycache empty, exited process/pytest `0 / 0`, and had observational
+  elapsed time `55.537553` seconds. Node-ID, ordinary-outcome, subtest-outcome,
+  locked-import-origin, pre-test-loaded-code, and loaded-code SHA-256 values
+  are, respectively,
+  `B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B`,
+  `548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F`,
+  `4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945`,
+  `3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+  `0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+  and `EFA05FB2B5AEA5000FFB8B77F910A06C14F1BA433A4DC1CCE71474807F708F53`.
+  Its exact status is
+  `AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY`.
+
+The pre-RunPod `1082`-node Harness and `719`-node worker receipts remain
+`HISTORICAL / SUPERSEDED NODE SET / NON_AUTHORITY`. The pre-RunPod `99`-node
+adapter receipt and every older receipt remain
+`HISTORICAL EVIDENCE ONLY / NOT CURRENT-TREE SUBSTITUTE / NON_AUTHORITY`.
+No historical receipt is rewritten or promoted.
+
+Current integrated 12-suite replay status is `AUTHORITATIVE CURRENT-TRANCHE INTEGRATED 12-SUITE PASS / LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY`. Run `retry-20260812T203610Z-c2861637` executed exact command `C:\Python314\python.exe -I -B scripts\verify_project_coherence_gate5.py`, exited `0`, and observed the exact PASS line across `12 / 12` suites and `2672` configured nodes. It revalidated `708` bound artifacts, `475` syntax-checked Python artifacts, `2317` executable-shadow paths before and after tests, `52` review criteria with `22` required `OPEN` boundaries, and `1280` postflight file identities. Loaded-code SHA-256 values for Harness `1452`, worker `732`, and adapter/reconciliation `99` were `848B8099C06A7E3DBE5E970EAAE23ED228843934BA062D85CC3D307444DD6784`, `58A306279E05EBDF7F4C18A8B153170AB058C7DACF906D5E00AB92372F018681`, and `EFA05FB2B5AEA5000FFB8B77F910A06C14F1BA433A4DC1CCE71474807F708F53`. Before/after input identities were identical: verifier `931351` bytes / SHA-256 `E687BD3BD01926763E737EE82C17AADB2222CBCC78172C500A7E5715C1C51D38`; manifest `204635` bytes / SHA-256 `74A42ED7CFB252A8F14B0E72735DBB9C0DD711CC7536063BBD84A7345BECDB62`; runner lock `121525` bytes / SHA-256 `EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13`. The result `retry-20260812T203610Z-c2861637.result.json` is `3189` bytes / SHA-256 `9186AC199ADB038E4C462A5B420C1B777D95EDE694EB4DF3D803C8EFE3BA9FFB`; stdout is `11116` bytes / SHA-256 `AA4C46BA71EA2467C6963C21A8C54C70906943BB14644607AC98A7FF2950751C`; stderr is `0` bytes / SHA-256 `E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`. Supervisor wall time `2813.248` seconds is observational only and carries no performance authority. No run ordinal, whole-run aggregate digest, trusted-time receipt, or WORM receipt is claimed. The replay used no RunPod, made no model invocation, and spent `$0.00`. It does not close Gate 5, authorize Stage C, admit any corpus row, license or disclose a claim, or establish scientific, provider, WORM, trusted-time, or product authority. Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; real admissible corpus remains `0 / 960`; license/disclosure/canon remains `NOT LICENSED / HELD / NOT FROZEN`.
+
 ## Prompt-context provenance adversarial disposition
 
 The additive prompt-context carrier and exact-480 inventory passed 30/30 and
@@ -281,7 +407,7 @@ the sum of those suites. The 565-node Harness, 719/719 worker, 537-node Harness,
 historical checkpoints, and every receipt remains
 `STRUCTURE_ONLY / NON_AUTHORITY`. No real
 authenticated exact 4+12 bundle, positive storage/issuer/ledger backend,
-actual nonce consumption, model/provider call, detector result, or Evidence
+actual nonce consumption, model/provider execution call, detector result, or Evidence
 Packet exists. The tranche therefore leaves
 Gate 5 `OPEN / KEEP_OPEN`, Stage C
 `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`, and claims
@@ -331,14 +457,24 @@ tests, 39/39 historical-import tests, 102/102 J-Space-plus-authority tests, and
 47/47 distributed tests; these bounded receipts do not replace the pending
 current full suites.
 
-The packaging candidate is 36 byte-mirrored files, 1,097 exports, and 2,332,110
-bytes. Harness collection is configured at 1,082 nodes with digest
+The expanded packaging candidate is 41 byte-mirrored files, 1,242 exports, and
+2,551,834 bytes; its focused additive RunPod/corpus contract slice passed 383
+tests. The three current expanded same-process suite receipts and the current
+integrated 12-suite same-run PASS are recorded above within
+`LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY` scope.
+
+At published baseline commit
+`b163fee30634a21d2e717eda8a33de287426ee41`, the packaging candidate was 36
+byte-mirrored files, 1,097 exports, and 2,332,110 bytes. Harness collection was
+configured at 1,082 nodes with digest
 `E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928`;
-worker collection is configured at the unchanged 719 nodes with digest
+worker collection was configured at 719 nodes with digest
 `98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`.
-The current same-process Harness, worker, and adapter/reconciliation suites have
-authoritative software-test PASS receipts within `STRUCTURE_ONLY /
-NON_AUTHORITY` scope only. Harness collected/started/finished 1,082 nodes:
+The detailed receipts below are exact historical receipts for that baseline,
+not an expanded-current-tree PASS. At that baseline, the same-process Harness,
+worker, and adapter/reconciliation suites had authoritative software-test PASS
+receipts within `STRUCTURE_ONLY / NON_AUTHORITY` scope only. Harness
+collected/started/finished 1,082 nodes:
 1,076 had exact all-phase PASS, six exact setup skips remain mismatch evidence,
 3,240 ordinary reports and 163 passing subtests were emitted, and warnings,
 errors, collection errors, internal errors, and deselections were all zero.
@@ -369,7 +505,8 @@ node/ordinary/subtest/origin/pre-test/loaded digests are respectively
 `035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6`,
 `3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E`,
 and `44A6B0A13CAA30860D3802C042455F72C90FFC6D15FA7503F3B159384EFF4C34`.
-Adapter/reconciliation has the current authoritative same-process receipt: 99
+At that published baseline, adapter/reconciliation had the authoritative
+same-process receipt: 99
 nodes were collected, started, finished, and had all phases pass; skips were
 zero (`[]`); it emitted 297 ordinary reports, zero subtests, and one warning;
 errors, collection errors, internal errors, and deselections were zero;
@@ -399,18 +536,19 @@ manifest was rebuilt to 686 artifacts, targeted red-team checks passed 22 tests
 plus 23 subtests; attempt 3 produced the now-historical Harness PASS described
 above. An intervening Harness attempt failed at a literal host-throughput timing
 gate. No full-suite receipt or exact elapsed value was retained for that failed
-attempt, so none is claimed. The fresh current-tree replay then produced the
-current PASS above. The bounded ceiling remains 5,400 seconds and carries no
+attempt, so none is claimed. The published-baseline replay then produced the
+baseline PASS above. The bounded ceiling remains 5,400 seconds and carries no
 performance authority. Historical 565/719/99 receipts remain unchanged and
-historical. The subsequent final integrated replay produced the 12-suite Gate 5
+historical. The subsequent published-baseline integrated replay produced the
+12-suite Gate 5
 verifier result `AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY`. Its
 exact command was
 `C:\Python314\python.exe -I -B scripts/verify_project_coherence_gate5.py`; exit
 status was 0. Tool wall time was 3568.3 seconds, observational only and with no
 performance authority. All 12/12 suites passed. The verifier bound 686 manifest
 artifacts and 457 syntax-checked Python artifacts, and observed 2,290
-executable-shadow paths both before and after suite replay. Current suite
-receipts remained Harness 1,082 nodes with 163 passing subtests and six exact
+executable-shadow paths both before and after suite replay. Published-baseline
+suite receipts were Harness 1,082 nodes with 163 passing subtests and six exact
 setup skips at loaded-code SHA-256
 `DC4F9C8664415C211D257DFFBFD8D0DBC942F830C138C60D6AC3A0E8D4EAC768`,
 worker 719/719 at loaded-code SHA-256
@@ -423,7 +561,7 @@ Review remained 51 criteria with 22 `OPEN` boundaries, and postflight rechecked
 made. This final replay has no inferred attempt ordinal and grants no Packet,
 worker, model, execution, release, disclosure, or product authority.
 
-The stable current executable-shadow path count is 2,290. The exact ignored
+The published-baseline executable-shadow path count is 2,290. The exact ignored
 `noetic-compass-scaffold/noetic-compass/.tmp` transient trace subtree is
 excluded from path-count authority because it is not an admitted
 import/executable authority surface. All cache, native, and symlink checks
@@ -434,10 +572,13 @@ entries; 170 exact matches; two drifts; and 500 files outside the root manifest.
 Attempt 11 and Gate 2 are `HISTORICAL EVIDENCE ONLY` and cannot enter a current
 result lane.
 
-No real 4+12 prerequisite bundle has been admitted. Exact model/revision,
-maximum spend, and UTC authorization-window values remain unresolved
-placeholders. Therefore the model/provider/RunPod call count is 0 and spend is
-`$0.00`. Gate 5 stays `OPEN / KEEP_OPEN`; Stage C stays
+No real 4+12 prerequisite bundle has been admitted. Exact model/revision and
+the `$100.00` aggregate spend ceiling are bound in the offline candidate, but a
+prospective consumable authorization window and executable provider application
+path remain absent. The bounded preflight itself made two authenticated
+read-only GET observations. Provider mutations, pod starts, model/GPU
+execution, and paid GPU compute by this work remain `0 / 0 / 0 / $0.00`.
+Gate 5 stays `OPEN / KEEP_OPEN`; Stage C stays
 `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; claims stay
 `NOT LICENSED / HELD / NOT FROZEN`.
 
@@ -1057,7 +1198,7 @@ increase binds additive Qwen model selection, probe-adapter geometry/refusal,
 health identity, and container-preflight behavior without executing a Stage B
 model run. The post-Stage-B successor adds 11 observation-contract and
 unsupported-intervention fail-closed tests; the repaired Stage C capture seam
-adds 119 fake/tiny-tensor tests without a real model or provider call. The
+adds 119 fake/tiny-tensor tests without a real model or provider execution call. The
 focused capture receipt is 119/119, with node-ID digest
 `e81d7234171b311720a356a36a0b6cee06b9c564e7ff91386cafdea21b503144`,
 source SHA-256
@@ -1418,7 +1559,8 @@ rendered chat template, input IDs, attention mask, final prompt-token index,
 and no-truncation proof. The label null is 10,000 fixed-score within-triplet
 positive-designation rotations with no classifier refit, not an invariant
 shuffle of identical three-label groups. It creates no activated
-preregistration, worker authorization, terminal outcome, Packet, provider call,
+preregistration, worker authorization, terminal outcome, Packet, provider
+execution call,
 or model execution.
 The prospective execution ceiling is prefill-only: zero generation calls and
 zero generated tokens. A runtime canary is allowed only after activation, as
@@ -1717,6 +1859,8 @@ Until every applicable criterion is evidenced, the six axes remain: document
 license/disclosure/canon `NOT LICENSED / HELD / NOT FROZEN`; and live/product
 route `UNAVAILABLE / NOT AUTHORIZED`.
 
-The `$107.00` RunPod balance is user-reported. No provider billing ledger or
-balance receipt was inspected, no RunPod or paid job was launched, retained
-local GPU provider calls were zero, and known spend for this tranche is `$0.00`.
+The bounded read-only RunPod billing surface was inspected as described above,
+but conflicting `$86.97` and `$105.54` UI values do not establish usable
+balance. No RunPod mutation, pod start, model invocation, or paid GPU compute
+was performed by this work; existing stopped-storage billing is observational
+provider state, not spend caused by this checkpoint.
