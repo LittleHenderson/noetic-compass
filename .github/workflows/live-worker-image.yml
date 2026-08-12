@@ -12,6 +12,15 @@ on:
       - '.github/workflows/live-worker-image.yml'
       - 'noetic-compass-scaffold/noetic-compass/live-trace-worker/**'
   workflow_dispatch:
+    inputs:
+      stagec_expected_commit:
+        description: Exact commit for the isolated Stage C build-only lane
+        required: false
+        type: string
+      stagec_confirmation:
+        description: Leave empty for the normal worker image; type BUILD STAGE C IMAGE ONLY for Stage C
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -23,6 +32,7 @@ concurrency:
 
 jobs:
   worker_image:
+    if: ${{ inputs.stagec_confirmation != 'BUILD STAGE C IMAGE ONLY' }}
     name: live-worker-image
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -153,3 +163,17 @@ jobs:
           docker push "$IMAGE_NAME:$GITHUB_SHA"
           docker tag "$IMAGE_NAME:$GITHUB_SHA" "$IMAGE_NAME:master"
           docker push "$IMAGE_NAME:master"
+
+  stagec_qwen_batch_image:
+    if: >-
+      ${{
+        github.event_name == 'workflow_dispatch' &&
+        github.actor == github.repository_owner &&
+        inputs.stagec_confirmation == 'BUILD STAGE C IMAGE ONLY' &&
+        inputs.stagec_expected_commit == github.sha
+      }}
+    uses: ./.github/workflows/stagec-qwen-batch-image.yml
+    with:
+      expected_commit: ${{ inputs.stagec_expected_commit }}
+      confirmation: ${{ inputs.stagec_confirmation }}
+    secrets: inherit

@@ -28,6 +28,7 @@ from app.runtime import model_loader  # noqa: E402
 WORKER = Path(__file__).resolve().parents[1]
 REPOSITORY = WORKER.parents[2]
 WORKFLOW = REPOSITORY / ".github" / "workflows" / "stagec-qwen-batch-image.yml"
+LIVE_WORKER_WORKFLOW = REPOSITORY / ".github" / "workflows" / "live-worker-image.yml"
 
 
 class _FakeResponse(io.BytesIO):
@@ -310,6 +311,7 @@ def test_docker_context_admits_only_the_two_stagec_helpers() -> None:
 def test_workflow_is_owner_dispatched_build_only_and_never_mutates_runpod() -> None:
     workflow = WORKFLOW.read_text("utf-8")
     assert "  workflow_dispatch:" in workflow
+    assert "  workflow_call:" in workflow
     assert "\n  push:" not in workflow
     assert "\n  pull_request:" not in workflow
     assert "github.actor == github.repository_owner" in workflow
@@ -339,3 +341,17 @@ def test_workflow_is_owner_dispatched_build_only_and_never_mutates_runpod() -> N
     assert ":latest" not in workflow
     assert "/pods/" not in workflow
     assert "api.runpod" not in workflow.lower()
+
+
+def test_existing_default_branch_workflow_bridges_only_exact_stagec_dispatch() -> None:
+    workflow = LIVE_WORKER_WORKFLOW.read_text("utf-8")
+    assert "stagec_expected_commit:" in workflow
+    assert "stagec_confirmation:" in workflow
+    assert "inputs.stagec_confirmation != 'BUILD STAGE C IMAGE ONLY'" in workflow
+    assert "github.actor == github.repository_owner" in workflow
+    assert "inputs.stagec_confirmation == 'BUILD STAGE C IMAGE ONLY'" in workflow
+    assert "inputs.stagec_expected_commit == github.sha" in workflow
+    assert "uses: ./.github/workflows/stagec-qwen-batch-image.yml" in workflow
+    assert "expected_commit: ${{ inputs.stagec_expected_commit }}" in workflow
+    assert "confirmation: ${{ inputs.stagec_confirmation }}" in workflow
+    assert "secrets: inherit" in workflow
