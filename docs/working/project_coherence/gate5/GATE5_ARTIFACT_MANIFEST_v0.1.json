@@ -52,8 +52,8 @@
     },
     {
       "path": "docs/working/project_coherence/PROJECT_COHERENCE_EXECUTION_RECONCILIATION_v0.1.md",
-      "sha256": "4D03B7367411A7BDFB4A50EE0ED975CC0907184BE77621067E2F0C21943113A9",
-      "bytes": 32198,
+      "sha256": "1FA13516018509BD34AD9D4CC89EA934246B33E73D6A6F04A90574D0A75BDCB1",
+      "bytes": 35568,
       "role": "gate5_control_artifact"
     },
     {
@@ -70,8 +70,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
-      "sha256": "87519EAD475AA7505040428269BE71B5C75BC800F817B1A4410B920EAECFEC4D",
-      "bytes": 97687,
+      "sha256": "441758813D51B0A0E0A8A463A6404212B3726D1515CCA7DDDB07D27A8A39193C",
+      "bytes": 101732,
       "role": "gate5_control_artifact"
     },
     {
@@ -88,8 +88,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_HISTORICAL_RECOVERY_AND_MODEL_COMPARISON_MATRIX_v0.1.md",
-      "sha256": "C9C9255DC8A21EAEAA447A65378025A90A89BEB075B3DF5A7810CA26A0C33FE1",
-      "bytes": 52491,
+      "sha256": "3E3B22E75E49992A3226A4C24081D7F670DF1F5DB15F13B370AD53B416AC19A8",
+      "bytes": 56201,
       "role": "gate5_control_artifact"
     },
     {
@@ -112,26 +112,26 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
-      "sha256": "D8CFBC95B98C905B22829534E131E9561550DD1BE98807476FE954088E199DCA",
-      "bytes": 237312,
+      "sha256": "6BA6F06C527013BEAC9ED07DE6C1AB0FF8919C88FED474A10D7D954924810A42",
+      "bytes": 261752,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_WORKER_PROTOCOL_BINDING_v0.1.md",
-      "sha256": "CEC1DE5EC0E844B1FFA97898A9E46BFF77D109E5D153C292110AECE24BA09B20",
-      "bytes": 115838,
+      "sha256": "DA566CE4292300ECAC7A1DF9B0EBD1CD07F9BFD11615EF432E5A3335F57CA67C",
+      "bytes": 119934,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
-      "sha256": "1BA3FAE0D4C892E9298B780FB573FFFFBFD33F90B574B4AB89F044BBF48D83E0",
-      "bytes": 57937,
+      "sha256": "DC7E2AAEEE65F2823902669CA2A846A5F14507DFA35CBF0E9C9C732315E61EF0",
+      "bytes": 62031,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/README.md",
-      "sha256": "B27B6DCCB118F5062FF118C01DB3D91A55B85D72C1536A1BCE1F8670888A667A",
-      "bytes": 82402,
+      "sha256": "CC78F5910180C299CDF4735D2D5F5EA470DBE7376BE442625BF673BE52576D30",
+      "bytes": 86506,
       "role": "gate5_control_artifact"
     },
     {
@@ -1246,14 +1246,14 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/stagec_qwen_prompt_injection_v0.1/README.md",
-      "sha256": "322F87E42ED4F9B80C57EBA68DDDBA50B9C1BFC4689FFE967D03B2C201373922",
-      "bytes": 52232,
+      "sha256": "B6BFAF8D4012237DFF29026035FC18FE90346DBDEB2F4295BB9F6CAA7420CBE0",
+      "bytes": 56375,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/stagec_qwen_prompt_injection_v0.1/STAGEC_IMPLEMENTATION_OBLIGATIONS_AND_EVIDENCE_PLAN_v0.1.json",
-      "sha256": "DDFEFA7B508A83E3C47DA5FFAEF2613AAF7FE462761B9D04D9BD2D83181D7744",
-      "bytes": 141668,
+      "sha256": "39129BD7774DDA613BC457B2749B306898F34F55C439112907DBF35D8C24721A",
+      "bytes": 155264,
       "role": "gate5_control_artifact"
     },
     {
@@ -3628,8 +3628,8 @@
     },
     {
       "path": "scripts/verify_project_coherence_gate5.py",
-      "sha256": "AAB2071015235A9318A6132A463F82C53C2A5515E1A102403EC2D4CC9F555D94",
-      "bytes": 830902,
+      "sha256": "25A622BEDAA012560AD424B503EC6AE4C149B9A10FDABD64D3734E7479CF3F0D",
+      "bytes": 875507,
       "role": "gate5_verification_control"
     },
     {
@@ -3970,14 +3970,14 @@
     },
     {
       "path": "tests/cas_harness_v2/test_diagnostic_lifecycle.py",
-      "sha256": "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E",
-      "bytes": 37372,
+      "sha256": "C8467C7C46FA5B08A11BB8012EAD96E3A628F823734415A4E32A86588BA4978D",
+      "bytes": 37040,
       "role": "gate5_control_kernel_test"
     },
     {
       "path": "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py",
-      "sha256": "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5",
-      "bytes": 50872,
+      "sha256": "EDFDA3AE7096B7E2B9401939A7DC89B136D6EA33965B322BC72C803FD55C066C",
+      "bytes": 50393,
       "role": "gate5_control_kernel_test"
     },
     {

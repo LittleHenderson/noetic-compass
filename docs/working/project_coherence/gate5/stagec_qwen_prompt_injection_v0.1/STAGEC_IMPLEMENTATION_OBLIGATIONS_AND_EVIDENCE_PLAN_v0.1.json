@@ -19,11 +19,11 @@
     "runpod_authorized": false,
     "comparison_candidate": "STRUCTURE_ONLY / NON_AUTHORITY / REPLAY_ONLY / UNAVAILABLE",
     "current_full_suite_receipts": "HARNESS 1082 / WORKER 719 / ADAPTER-RECONCILIATION 99 AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY",
-    "final_integrated_12_suite_verifier": "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS",
+    "final_integrated_12_suite_verifier": "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY",
     "evidence_packet_status": "NOT CREATED"
   },
   "current_validation_receipts": {
-    "full_suite_receipt_boundary": "ALL EXECUTED 306/437/489/508/537/565 HARNESS, 576/594/719 WORKER, AND 99 ADAPTER-RECONCILIATION RECEIPTS PRECEDING THIS COMPARISON TRANCHE ARE PRESERVED HISTORICAL CHECKPOINTS. CURRENT HARNESS 1082, WORKER 719, AND ADAPTER-RECONCILIATION 99 HAVE AUTHORITATIVE SAME-PROCESS SOFTWARE-TEST PASS RECEIPTS WITHIN STRUCTURE_ONLY / NON_AUTHORITY SCOPE. HARNESS ATTEMPT 1 TERMINALIZED AT ITS 3600-SECOND CEILING WITH NO RECEIPT. ATTEMPT 2 ENDED PROCESS/PYTEST 1 BECAUSE OF A STALE MANIFEST AND PRODUCED NO RECEIPT. THE MANIFEST WAS REBUILT TO 686 ARTIFACTS; TARGETED RED-TEAM CHECKS PASSED 22 TESTS PLUS 23 SUBTESTS; ATTEMPT 3 PRODUCED THE CURRENT HARNESS PASS RECEIPT. THE BOUNDED SUITE CEILING IS 5400 SECONDS AND HAS NO PERFORMANCE AUTHORITY. THE FINAL INTEGRATED 12-SUITE GATE 5 VERIFIER IS READY FOR AUTHORITATIVE REPLAY / NOT YET PASS.",
+    "full_suite_receipt_boundary": "ALL EXECUTED 306/437/489/508/537/565 HARNESS, 576/594/719 WORKER, AND EARLIER 99 ADAPTER-RECONCILIATION RECEIPTS PRECEDING THIS COMPARISON TRANCHE ARE PRESERVED HISTORICAL CHECKPOINTS. CURRENT HARNESS 1082, WORKER 719, AND ADAPTER-RECONCILIATION 99 HAVE AUTHORITATIVE SAME-PROCESS SOFTWARE-TEST PASS RECEIPTS WITHIN STRUCTURE_ONLY / NON_AUTHORITY SCOPE. HARNESS ATTEMPT 1 TERMINALIZED AT ITS 3600-SECOND CEILING WITH NO RECEIPT. ATTEMPT 2 ENDED PROCESS/PYTEST 1 BECAUSE OF A STALE MANIFEST AND PRODUCED NO RECEIPT. THE MANIFEST WAS REBUILT TO 686 ARTIFACTS; TARGETED RED-TEAM CHECKS PASSED 22 TESTS PLUS 23 SUBTESTS; ATTEMPT 3 PRODUCED AN AUTHORITATIVE HARNESS PASS THAT IS NOW HISTORICAL. AN INTERVENING HARNESS ATTEMPT FAILED AT A LITERAL HOST-THROUGHPUT TIMING GATE; NO FULL-SUITE RECEIPT OR EXACT ELAPSED VALUE WAS RETAINED, SO NONE IS CLAIMED. THE FRESH CURRENT-TREE REPLAY PRODUCED THE CURRENT HARNESS PASS. AN INTEGRATED VERIFIER REPLAY THEN REJECTED THE HISTORICAL ADAPTER LOADED-CODE DIGEST AS STALE; NO ATTEMPT ORDINAL OR WHOLE-RUN ELAPSED VALUE IS INFERRED. THE FRESH ADAPTER REPLAY PRODUCED THE CURRENT ADAPTER PASS. THE BOUNDED SUITE CEILING IS 5400 SECONDS AND HAS NO PERFORMANCE AUTHORITY. THE SUBSEQUENT FINAL INTEGRATED REPLAY PASSED 12/12 SUITES WITH EXIT 0 AS AN AUTHORITATIVE INTEGRATED 12-SUITE PASS WITHIN STRUCTURE_ONLY / NON_AUTHORITY SCOPE; ITS 3568.3-SECOND TOOL WALL TIME IS OBSERVATIONAL ONLY AND HAS NO PERFORMANCE AUTHORITY. NO ATTEMPT ORDINAL IS INFERRED.",
     "current_authoritative_harness_full_suite_receipt": {
       "status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY",
       "collected_nodes": 1082,
@@ -42,14 +42,46 @@
       "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
       "process_exit_status": 0,
       "pytest_exit_status": 0,
-      "elapsed_seconds": "3350.340165",
+      "elapsed_seconds": "3059.695080",
+      "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
       "node_ids_sha256": "E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928",
       "ordinary_outcomes_sha256": "60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29",
       "subtest_outcomes_sha256": "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109",
       "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
       "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
-      "loaded_code_sha256": "B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826",
+      "loaded_code_sha256": "DC4F9C8664415C211D257DFFBFD8D0DBC942F830C138C60D6AC3A0E8D4EAC768",
       "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED"
+    },
+    "historical_harness_attempt_3_full_suite_receipt": {
+      "historical_disposition": "PRESERVED HISTORICAL / SUPERSEDED BY FRESH CURRENT-TREE RECEIPT",
+      "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+      "receipt": {
+        "status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "collected_nodes": 1082,
+        "started_nodes": 1082,
+        "finished_nodes": 1082,
+        "all_phase_pass_nodes": 1076,
+        "setup_skipped_nodes": 6,
+        "setup_skip_scope": "SIX EXACT NUMERICAL LOCK-MISMATCH NODES / MISMATCH EVIDENCE, NOT PASS",
+        "ordinary_reports": 3240,
+        "passed_subtests": 163,
+        "warning_count": 0,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "3350.340165",
+        "node_ids_sha256": "E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928",
+        "ordinary_outcomes_sha256": "60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29",
+        "subtest_outcomes_sha256": "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109",
+        "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
+        "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
+        "loaded_code_sha256": "B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826",
+        "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED"
+      }
     },
     "current_authoritative_worker_full_suite_receipt": {
       "status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY",
@@ -84,6 +116,7 @@
       "finished_nodes": 99,
       "all_phase_pass_nodes": 99,
       "setup_skipped_nodes": 0,
+      "setup_skip_scope": [],
       "ordinary_reports": 297,
       "passed_subtests": 0,
       "warning_count": 1,
@@ -94,16 +127,91 @@
       "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
       "process_exit_status": 0,
       "pytest_exit_status": 0,
-      "elapsed_seconds": "47.452869",
+      "elapsed_seconds": "25.401532",
+      "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
       "node_ids_sha256": "B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B",
       "ordinary_outcomes_sha256": "548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F",
       "subtest_outcomes_sha256": "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945",
       "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
       "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
-      "loaded_code_sha256": "5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3",
+      "loaded_code_sha256": "B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101",
       "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION"
     },
-    "final_integrated_12_suite_verifier": "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS",
+    "historical_adapter_reconciliation_full_suite_receipt": {
+      "historical_disposition": "PRESERVED HISTORICAL / SUPERSEDED BY FRESH ADAPTER REPLAY",
+      "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+      "receipt": {
+        "status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "collected_nodes": 99,
+        "started_nodes": 99,
+        "finished_nodes": 99,
+        "all_phase_pass_nodes": 99,
+        "setup_skipped_nodes": 0,
+        "ordinary_reports": 297,
+        "passed_subtests": 0,
+        "warning_count": 1,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "47.452869",
+        "node_ids_sha256": "B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B",
+        "ordinary_outcomes_sha256": "548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F",
+        "subtest_outcomes_sha256": "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945",
+        "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
+        "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
+        "loaded_code_sha256": "5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3",
+        "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION"
+      }
+    },
+    "integrated_adapter_stale_digest_failure": {
+      "status": "HISTORICAL INTEGRATED VERIFIER FAILURE / DESCRIPTIVE ONLY / NON_AUTHORITY",
+      "failure": "INTEGRATED VERIFIER REJECTED HISTORICAL ADAPTER LOADED-CODE DIGEST AS STALE",
+      "stale_loaded_code_sha256": "5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3",
+      "attempt_ordinal_claim": "NONE / NOT INFERRED",
+      "whole_run_elapsed_claim": "NONE / NOT INFERRED"
+    },
+    "final_integrated_12_suite_verifier": "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+    "final_integrated_12_suite_receipt": {
+      "status": "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+      "event_label": "FINAL INTEGRATED REPLAY AFTER FRESH ADAPTER RECEIPT",
+      "attempt_ordinal_claim": "NONE / NOT INFERRED",
+      "command": "C:\\Python314\\python.exe -I -B scripts/verify_project_coherence_gate5.py",
+      "process_exit_status": 0,
+      "tool_wall_seconds": "3568.3",
+      "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+      "suite_passed": 12,
+      "suite_total": 12,
+      "manifest_artifacts": 686,
+      "syntax_checked_python_artifacts": 457,
+      "executable_shadow_paths_before": 2290,
+      "executable_shadow_paths_after": 2290,
+      "current_suite_receipts": {
+        "harness": {
+          "collected_nodes": 1082,
+          "passed_subtests": 163,
+          "setup_skipped_nodes": 6,
+          "loaded_code_sha256": "DC4F9C8664415C211D257DFFBFD8D0DBC942F830C138C60D6AC3A0E8D4EAC768"
+        },
+        "worker": {
+          "passed_nodes": 719,
+          "total_nodes": 719,
+          "loaded_code_sha256": "44A6B0A13CAA30860D3802C042455F72C90FFC6D15FA7503F3B159384EFF4C34"
+        },
+        "adapter_reconciliation": {
+          "passed_nodes": 99,
+          "total_nodes": 99,
+          "loaded_code_sha256": "B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101"
+        }
+      },
+      "review_criteria": 51,
+      "review_open_boundaries": 22,
+      "postflight_rechecked_files": 1258,
+      "stdout_terminal_line": "Project Coherence integrated Gate 5 verification: PASS"
+    },
     "worker_authoritative": {
       "status": "PASS",
       "passed": 576,
@@ -163,7 +271,7 @@
       }
     },
     "diagnostic_runtime_focused": {
-      "status": "BOUNDED STRUCTURE_ONLY / NON_AUTHORITY FOCUSED RECEIPTS / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 AUTHORITATIVE SAME-PROCESS PASS / PRESERVED HISTORICAL FULL-SUITE CHECKPOINTS / FINAL INTEGRATED 12-SUITE VERIFIER READY FOR AUTHORITATIVE REPLAY / NOT YET PASS",
+      "status": "BOUNDED STRUCTURE_ONLY / NON_AUTHORITY FOCUSED RECEIPTS / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 AUTHORITATIVE SAME-PROCESS PASS / PRESERVED HISTORICAL FULL-SUITE CHECKPOINTS / FINAL VERIFIER AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY",
       "historical_standard_harness_receipt": {
         "status": "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS",
         "python": "3.14",
@@ -376,37 +484,88 @@
       },
       "per_attempt_lifecycle": {
         "source_sha256": "F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6",
-        "test_source_sha256": "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E",
+        "test_source_sha256": "C8467C7C46FA5B08A11BB8012EAD96E3A628F823734415A4E32A86588BA4978D",
+        "test_source_bytes": 37040,
         "passed": 55,
         "total": 55,
-        "elapsed_seconds": "29.86",
-        "status": "PASS"
+        "status": "PASS / CURRENT EXACT-BYTE JOINT FOCUSED RECEIPT / NO PERFORMANCE AUTHORITY"
       },
       "phase_coordinator": {
         "source_sha256": "B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7",
-        "test_source_sha256": "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5",
+        "test_source_sha256": "EDFDA3AE7096B7E2B9401939A7DC89B136D6EA33965B322BC72C803FD55C066C",
+        "test_source_bytes": 50393,
         "collected_nodes": 8,
-        "split_receipts": [
-          {
-            "scope": "nonheavy registration, store binding, admission, contention, and inventory",
-            "passed": 5,
-            "total": 5,
-            "elapsed_seconds": "50.70"
-          },
-          {
-            "scope": "exact 480-row rejected phase plus closed nonreporting payload",
-            "passed": 2,
-            "total": 2,
-            "elapsed_seconds": "80.32"
-          },
-          {
-            "scope": "exact clean 480-row reconciliation and aggregate outcome access",
-            "passed": 1,
-            "total": 1,
-            "elapsed_seconds": "238.10"
-          }
-        ],
-        "status": "ALL 8 NODES PASS IN BOUNDED SPLIT RECEIPTS"
+        "passed": 8,
+        "total": 8,
+        "status": "PASS / CURRENT EXACT-BYTE JOINT FOCUSED RECEIPT / NO PERFORMANCE AUTHORITY"
+      },
+      "lifecycle_phase_current_focused_receipt": {
+        "scope": "tests/cas_harness_v2/test_diagnostic_lifecycle.py + tests/cas_harness_v2/test_diagnostic_phase_coordinator.py",
+        "per_attempt_lifecycle_test_source_sha256": "C8467C7C46FA5B08A11BB8012EAD96E3A628F823734415A4E32A86588BA4978D",
+        "per_attempt_lifecycle_test_source_bytes": 37040,
+        "phase_coordinator_test_source_sha256": "EDFDA3AE7096B7E2B9401939A7DC89B136D6EA33965B322BC72C803FD55C066C",
+        "phase_coordinator_test_source_bytes": 50393,
+        "passed": 63,
+        "total": 63,
+        "elapsed_seconds": "517.14",
+        "pytest_reported_duration": "0:08:37",
+        "process_exit_status": 0,
+        "elapsed_semantic": "OBSERVATIONAL ONLY / NOT A BOUND OR PASS CONDITION",
+        "removed_literal_host_throughput_pass_assertions": 9,
+        "removed_assertion_breakdown": {
+          "per_attempt_lifecycle": 4,
+          "phase_coordinator": 5
+        },
+        "remaining_nonperformance_ceilings": {
+          "unrelated_liveness_ceilings": 7,
+          "runner_ceiling_seconds": 5400,
+          "authority": "NO PERFORMANCE AUTHORITY"
+        },
+        "preserved_checks": "EXACT FUNCTIONAL / 480-ROW CARDINALITY / SAME-HOST SQLITE STATE-TRANSITION / RECEIPT / RECONCILIATION",
+        "authority_boundary": "STRUCTURE_ONLY / NON_AUTHORITY",
+        "status": "PASS / CURRENT EXACT-BYTE FOCUSED / STRUCTURE_ONLY / NON_AUTHORITY"
+      },
+      "lifecycle_phase_historical_pre_correction_receipts": {
+        "status": "HISTORICAL ONLY / SUPERSEDED TEST BYTES",
+        "superseded_joint_focused_receipt": {
+          "per_attempt_lifecycle_test_source_sha256": "C8467C7C46FA5B08A11BB8012EAD96E3A628F823734415A4E32A86588BA4978D",
+          "per_attempt_lifecycle_test_source_bytes": 37040,
+          "phase_coordinator_test_source_sha256": "3C0C3C4B2605BC2FAF76DF25ABC870A2B6E70B6E84E7F8CBB30A722E80405D5D",
+          "phase_coordinator_test_source_bytes": 50378,
+          "passed": 63,
+          "total": 63,
+          "elapsed_seconds": "585.25",
+          "elapsed_semantic": "OBSERVATIONAL ONLY / NOT A BOUND OR PASS CONDITION"
+        },
+        "per_attempt_lifecycle": {
+          "test_source_sha256": "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E",
+          "passed": 55,
+          "total": 55,
+          "elapsed_seconds": "29.86"
+        },
+        "phase_coordinator": {
+          "test_source_sha256": "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5",
+          "split_receipts": [
+            {
+              "scope": "nonheavy registration, store binding, admission, contention, and inventory",
+              "passed": 5,
+              "total": 5,
+              "elapsed_seconds": "50.70"
+            },
+            {
+              "scope": "exact 480-row rejected phase plus closed nonreporting payload",
+              "passed": 2,
+              "total": 2,
+              "elapsed_seconds": "80.32"
+            },
+            {
+              "scope": "exact clean 480-row reconciliation and aggregate outcome access",
+              "passed": 1,
+              "total": 1,
+              "elapsed_seconds": "238.10"
+            }
+          ]
+        }
       },
       "calibration_fit": {
         "source_sha256": "4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF",
@@ -647,7 +806,7 @@
         "authority_boundary": "THE IMPORTER DOES NOT AUTHENTICATE EXTERNAL TRUST, FREEZE A CORPUS, GRANT OR CONSUME RUNTIME AUTHORIZATION, WRITE EVIDENCE, CONTACT A NETWORK OR PROVIDER, OR EXECUTE A MODEL"
       },
       "stagec_structural_runtime_activation": {
-        "status": "FOCUSED STRUCTURE_ONLY RUNTIME CONTROL AND WORKER RECEIPTS / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 AUTHORITATIVE SAME-PROCESS PASS / PRESERVED HISTORICAL FULL-SUITE CHECKPOINTS / FINAL INTEGRATED 12-SUITE VERIFIER READY FOR AUTHORITATIVE REPLAY / NOT YET PASS / NON_AUTHORITY / NO REAL POSITIVE ACTIVATION",
+        "status": "FOCUSED STRUCTURE_ONLY RUNTIME CONTROL AND WORKER RECEIPTS / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 AUTHORITATIVE SAME-PROCESS PASS / PRESERVED HISTORICAL FULL-SUITE CHECKPOINTS / FINAL VERIFIER AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY / NO REAL POSITIVE ACTIVATION",
         "authority_boundary": "GATE 5 OPEN / KEEP_OPEN; STAGE C DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED; NOT LICENSED / HELD / NOT FROZEN",
         "core_control": {
           "source_path": "src/cas_harness_v2/diagnostic_stagec_runtime_activation.py",
@@ -745,7 +904,7 @@
           "CAPTURE MARKS REDEMPTION ATTEMPTED BEFORE CONTROL REDEMPTION AND REQUIRES THE EXACT DURABLE CALL_STARTED RECEIPT BEFORE EXACTLY ONE DIRECT QWEN FORWARD"
         ],
         "historical_executed_and_current_configured_replays": {
-          "status": "HISTORICAL EXECUTED CHECKPOINTS PRESERVED / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY / FINAL INTEGRATED 12-SUITE VERIFIER READY FOR AUTHORITATIVE REPLAY / NOT YET PASS",
+          "status": "HISTORICAL EXECUTED CHECKPOINTS PRESERVED / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY / FINAL VERIFIER AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY",
           "harness": {
             "current_configured_nodes": 1082,
             "current_configured_node_id_sha256": "E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928",
@@ -767,7 +926,7 @@
             "historical_same_process_receipt": "99 / 99 PASS / PRESERVED HISTORICAL ONLY"
           },
           "complete_verifier_suite_map_nodes": 1772,
-          "final_integrated_12_suite_verifier": "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS"
+          "final_integrated_12_suite_verifier": "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY"
         },
         "schema_media_delta": {
           "new_unique_worker_schemas": 4,
@@ -1027,7 +1186,7 @@
     "current_full_suite_status": {
       "status": "CURRENT HARNESS 1082 / WORKER 719 / ADAPTER-RECONCILIATION 99 AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY",
       "bounded_suite_ceiling_seconds": 5400,
-      "final_integrated_12_suite_verifier": "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS",
+      "final_integrated_12_suite_verifier": "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY",
       "harness_attempts": [
         {
           "attempt_ordinal": 1,
@@ -1056,6 +1215,23 @@
           "pytest_exit_status": 0,
           "elapsed_seconds": "3350.340165",
           "pass": true,
+          "full_suite_receipt": "HISTORICAL AUTHORITATIVE HARNESS RECEIPT"
+        },
+        {
+          "attempt_label": "INTERVENING TIMING-GATE FAILURE AFTER ATTEMPT 3",
+          "terminal_state": "TEST FAILURE / LITERAL HOST-THROUGHPUT TIMING GATE",
+          "pass": false,
+          "receipt_status": "NO FULL-SUITE RECEIPT RETAINED / NONE CLAIMED",
+          "elapsed_status": "NO EXACT ELAPSED VALUE RETAINED / NONE CLAIMED"
+        },
+        {
+          "attempt_label": "FRESH CURRENT-TREE REPLAY AFTER TIMING-GATE REPAIR",
+          "terminal_state": "AUTHORITATIVE SAME-PROCESS PASS",
+          "process_exit_status": 0,
+          "pytest_exit_status": 0,
+          "elapsed_seconds": "3059.695080",
+          "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+          "pass": true,
           "full_suite_receipt": "CURRENT AUTHORITATIVE HARNESS RECEIPT"
         }
       ],
@@ -1063,6 +1239,8 @@
         "manifest_artifact_count_after_rebuild": 686,
         "targeted_redteam_tests_passed": 22,
         "targeted_redteam_subtests_passed": 23,
+        "intervening_timing_gate_failure_recorded": true,
+        "literal_host_throughput_pass_assertions_removed": 9,
         "status": "PASS / STRUCTURE_ONLY / NON_AUTHORITY"
       },
       "harness": {
@@ -1083,13 +1261,14 @@
         "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
         "process_exit_status": 0,
         "pytest_exit_status": 0,
-        "elapsed_seconds": "3350.340165",
+        "elapsed_seconds": "3059.695080",
+        "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
         "node_ids_sha256": "E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928",
         "ordinary_outcomes_sha256": "60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29",
         "subtest_outcomes_sha256": "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109",
         "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
         "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
-        "loaded_code_sha256": "B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826",
+        "loaded_code_sha256": "DC4F9C8664415C211D257DFFBFD8D0DBC942F830C138C60D6AC3A0E8D4EAC768",
         "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED"
       },
       "worker": {
@@ -1125,6 +1304,7 @@
         "finished_nodes": 99,
         "all_phase_pass_nodes": 99,
         "setup_skipped_nodes": 0,
+        "setup_skip_scope": [],
         "ordinary_reports": 297,
         "passed_subtests": 0,
         "warning_count": 1,
@@ -1135,13 +1315,14 @@
         "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
         "process_exit_status": 0,
         "pytest_exit_status": 0,
-        "elapsed_seconds": "47.452869",
+        "elapsed_seconds": "25.401532",
+        "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
         "node_ids_sha256": "B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B",
         "ordinary_outcomes_sha256": "548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F",
         "subtest_outcomes_sha256": "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945",
         "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
         "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
-        "loaded_code_sha256": "5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3",
+        "loaded_code_sha256": "B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101",
         "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION"
       },
       "historical_receipts": "HARNESS 565 / WORKER 719 / ADAPTER-RECONCILIATION 99 / PRESERVED HISTORICAL ONLY"
@@ -1163,7 +1344,7 @@
       "maximum_spend": "UNRESOLVED PLACEHOLDER",
       "authorization_window_start_utc": "UNRESOLVED PLACEHOLDER",
       "authorization_window_expiry_utc": "UNRESOLVED PLACEHOLDER",
-      "final_gate5_verifier": "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS",
+      "final_gate5_verifier": "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY / NOT A CURRENT EXECUTION BLOCKER",
       "stop_rule": "STOP BEFORE MODEL CALL OR FURTHER SPENDING IF ANY BLOCKER OR CHECK FAILS"
     }
   },
@@ -1336,7 +1517,8 @@
       },
       "per_attempt_lifecycle": {
         "source_sha256": "F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6",
-        "test_source_sha256": "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E",
+        "test_source_sha256": "C8467C7C46FA5B08A11BB8012EAD96E3A628F823734415A4E32A86588BA4978D",
+        "test_source_bytes": 37040,
         "profile": "ONE ATTEMPT / CREATE-ONLY / IN-MEMORY PROCESS LOCK OR SAME-HOST SQLITE FILE",
         "terminal_statuses": [
           "COMPLETED",
@@ -1345,11 +1527,14 @@
           "REJECTED",
           "EXPIRED"
         ],
-        "durability_boundary": "NO REPLICATION, HOST-LOSS AUTHORITY, TRUSTED TIME, WORM, OR OUT-OF-BAND EXECUTION PREVENTION"
+        "durability_boundary": "NO REPLICATION, HOST-LOSS AUTHORITY, TRUSTED TIME, WORM, OR OUT-OF-BAND EXECUTION PREVENTION",
+        "current_focused_receipt": "55 OF CURRENT EXACT-BYTE JOINT 63/63 PASS / 517.14 SECONDS OBSERVATIONAL ONLY / EXIT 0",
+        "performance_authority": "NONE / FOUR LITERAL HOST-THROUGHPUT PASS ASSERTIONS REMOVED / EXACT FUNCTIONAL, CARDINALITY, SAME-HOST SQLITE STATE-TRANSITION, RECEIPT, AND RECONCILIATION CHECKS REMAIN"
       },
       "phase_coordinator": {
         "source_sha256": "B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7",
-        "test_source_sha256": "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5",
+        "test_source_sha256": "EDFDA3AE7096B7E2B9401939A7DC89B136D6EA33965B322BC72C803FD55C066C",
+        "test_source_bytes": 50393,
         "roster": "EXACT PLAN-ORDERED 480 CASES / 160 GROUPS / ONE ATTEMPT PER SUBJECT",
         "states": [
           "OPEN",
@@ -1359,7 +1544,9 @@
         ],
         "clean_access_rule": "ONE AGGREGATE OUTCOME ACCESS ONLY AFTER EXACT CLEAN 480-ROW RECONCILIATION",
         "rejected_rule": "ANY TERMINAL REJECTION CLOSES NONREPORTING WITHOUT REPLACEMENT OR OUTCOME ACCESS",
-        "store_boundary": "SAME-HOST SQLITE IDENTITY BINDING / NOT REPLICATED OR WORM"
+        "store_boundary": "SAME-HOST SQLITE IDENTITY BINDING / NOT REPLICATED OR WORM",
+        "current_focused_receipt": "8 OF CURRENT EXACT-BYTE JOINT 63/63 PASS / 517.14 SECONDS OBSERVATIONAL ONLY / EXIT 0",
+        "performance_authority": "NONE / FIVE LITERAL HOST-THROUGHPUT PASS ASSERTIONS REMOVED / SEVEN UNRELATED LIVENESS CEILINGS AND THE 5400-SECOND RUNNER CEILING REMAIN WITHOUT PERFORMANCE AUTHORITY / EXACT FUNCTIONAL, 480-ROW CARDINALITY, SAME-HOST SQLITE STATE-TRANSITION, RECEIPT, AND RECONCILIATION CHECKS REMAIN"
       },
       "worker_archive_admission": {
         "source_sha256": "169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305",
@@ -1988,12 +2175,12 @@
     {
       "obligation_id": "stagec-obligation-study-v1",
       "status": "STRUCTURE_ONLY CANDIDATE COMPLETE INCLUDING FAIL-CLOSED ACTIVATION GATE / POSITIVE AUTHENTICATED HTTP-CONTAINER EXECUTION STILL OPEN",
-      "requirement": "The diagnostic preregistration and Study plan now join exact typed execution-v2 carriers, one-attempt same-host lifecycle state, exact 480-row phase coordination, and a sealed compare-and-swap runtime activation control joined to worker capture. This closes the bounded carrier, coordination, and structural one-use model-call shape only. Harness 565 and worker 719 remain preserved historical software-test checkpoints. Current Harness 1082, worker 719, and adapter/reconciliation 99 authoritative same-process receipts pass within STRUCTURE_ONLY / NON_AUTHORITY scope; the final integrated 12-suite Gate 5 verifier remains ready for authoritative replay and not yet PASS. Before real activation, supply and authenticate the exact external 4-plus-12 bundle, immutable C-Cal base, storage, issuer, ledger, trusted-time, lease, and nonce state; establish independent WORM/external anchoring and out-of-band prevention; and freeze the final prospective execution identity. Local receipts do not satisfy those real-runtime blockers."
+      "requirement": "The diagnostic preregistration and Study plan now join exact typed execution-v2 carriers, one-attempt same-host lifecycle state, exact 480-row phase coordination, and a sealed compare-and-swap runtime activation control joined to worker capture. This closes the bounded carrier, coordination, and structural one-use model-call shape only. Harness 565 and worker 719 remain preserved historical software-test checkpoints. Current Harness 1082, worker 719, and adapter/reconciliation 99 authoritative same-process receipts pass within STRUCTURE_ONLY / NON_AUTHORITY scope; the final integrated 12-suite Gate 5 verifier also has an authoritative integrated PASS within STRUCTURE_ONLY / NON_AUTHORITY scope. Before real activation, supply and authenticate the exact external 4-plus-12 bundle, immutable C-Cal base, storage, issuer, ledger, trusted-time, lease, and nonce state; establish independent WORM/external anchoring and out-of-band prevention; and freeze the final prospective execution identity. Local receipts do not satisfy those real-runtime blockers."
     },
     {
       "obligation_id": "stagec-obligation-batch-lifecycle",
       "status": "STRUCTURE_ONLY SAME-HOST CANDIDATE COMPLETE / LIVE AUTHORIZATION AND TRUST OPEN",
-      "requirement": "The phase coordinator registers exactly 480 ordered subjects, permits one local attempt per subject, rejects a 481st or late attempt, closes rejected batches without replacement, and opens aggregate access once only for a clean 480-row reconciliation. This remains same-host SQLite evidence, not a live authorized batch, trusted clock, replicated registry, WORM record, or proof that no out-of-band execution occurred."
+      "requirement": "The phase coordinator registers exactly 480 ordered subjects, permits one local attempt per subject, rejects a 481st or late attempt, closes rejected batches without replacement, and opens aggregate access once only for a clean 480-row reconciliation. The current exact-byte lifecycle-plus-phase focused receipt is 63/63 PASS in 517.14 seconds (0:08:37), exit 0; elapsed time is observational only, not a bound or PASS condition. A superseded joint receipt tied to lifecycle test C8467C7C46FA5B08A11BB8012EAD96E3A628F823734415A4E32A86588BA4978D and interim phase test 3C0C3C4B2605BC2FAF76DF25ABC870A2B6E70B6E84E7F8CBB30A722E80405D5D passed 63/63 in 585.25 seconds; that elapsed time is also observational only. Nine literal host-throughput PASS assertions were removed from the two diagnostic tests (four lifecycle and five phase-coordinator). Seven unrelated liveness ceilings and the 5400-second runner ceiling remain without performance authority. Exact functional, 480-row cardinality, same-host SQLite state-transition, receipt, and reconciliation checks remain. This remains same-host SQLite evidence, not a live authorized batch, trusted clock, replicated registry, WORM record, performance authority, or proof that no out-of-band execution occurred."
     },
     {
       "obligation_id": "stagec-obligation-full-vector-capture",
@@ -2018,7 +2205,7 @@
     {
       "obligation_id": "stagec-obligation-prerequisite-intake",
       "status": "STRUCTURE_ONLY EXACT INTAKE, PROSPECTIVE ADMISSION, READ-ONLY IMPORT, AND FAIL-CLOSED RUNTIME ENFORCEMENT COMPLETE / REAL EXTERNAL INTAKE, PROVIDER TRUST, AND POSITIVE ACTIVATION OPEN",
-      "requirement": "Use the canonical context locator and fixed stagec_prerequisite_locator_manifest.v1.json to identify, snapshot, hash, full-replay, and role-check exactly four candidate carriers plus twelve dependency bodies from stable absolute local filesystem sources; filename inference is forbidden; the manifest role set and mapping-mode members must be exact, while unrelated directory files are outside the admitted closure and ignored. Then caller-supply the exact owner intake and admission and create a new immutable diagnostic base containing the exact prompt inventory, candidate/dependency, intake, and admission refs before its execution window. The library 19-node and CLI 10-node surfaces pass as one 29/29 focused receipt; the 537-node Harness, 594-node worker, 565-node Harness, and 719-node worker receipts remain historical checkpoints. Current Harness 1082, worker 719, and adapter/reconciliation 99 authoritative same-process receipts pass within STRUCTURE_ONLY / NON_AUTHORITY scope; the final integrated 12-suite Gate 5 verifier remains ready for authoritative replay and not yet PASS. No external/provider authenticity, actual DRC run, actual corpus freeze, WORM/readback/trusted-time truth, authoritative runtime nonce issuance or consumption, model execution, or result is established."
+      "requirement": "Use the canonical context locator and fixed stagec_prerequisite_locator_manifest.v1.json to identify, snapshot, hash, full-replay, and role-check exactly four candidate carriers plus twelve dependency bodies from stable absolute local filesystem sources; filename inference is forbidden; the manifest role set and mapping-mode members must be exact, while unrelated directory files are outside the admitted closure and ignored. Then caller-supply the exact owner intake and admission and create a new immutable diagnostic base containing the exact prompt inventory, candidate/dependency, intake, and admission refs before its execution window. The library 19-node and CLI 10-node surfaces pass as one 29/29 focused receipt; the 537-node Harness, 594-node worker, 565-node Harness, and 719-node worker receipts remain historical checkpoints. Current Harness 1082, worker 719, and adapter/reconciliation 99 authoritative same-process receipts pass within STRUCTURE_ONLY / NON_AUTHORITY scope; the final integrated 12-suite Gate 5 verifier also has an authoritative integrated PASS within STRUCTURE_ONLY / NON_AUTHORITY scope. No external/provider authenticity, actual DRC run, actual corpus freeze, WORM/readback/trusted-time truth, authoritative runtime nonce issuance or consumption, model execution, or result is established."
     },
     {
       "obligation_id": "stagec-obligation-corpus",
@@ -2032,7 +2219,7 @@
     },
     {
       "obligation_id": "stagec-obligation-calibration",
-      "status": "STRUCTURE_ONLY FIT AND FREEZE-OR-REJECT CANDIDATES COMPLETE / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 SUITE RECEIPTS PASS / FINAL INTEGRATED 12-SUITE VERIFIER READY FOR AUTHORITATIVE REPLAY / NOT YET PASS / REAL C-CAL RUN OPEN",
+      "status": "STRUCTURE_ONLY FIT AND FREEZE-OR-REJECT CANDIDATES COMPLETE / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 SUITE RECEIPTS PASS / FINAL VERIFIER AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY / REAL C-CAL RUN OPEN",
       "requirement": "The locked post-access fitter deterministically derives separate layer-18 and layer-0 detector candidates from the exact 480-row aggregate-access dataset, and the same-file SQLite disposition registry permits one frozen-nonreporting or rejected-nonreporting result only. All 11 disposition nodes pass on final bytes across the earlier two bounded split runs; the preserved historical 565-node Harness receipt separately records six exact setup skips as mismatch evidence rather than PASS and therefore is not an 11/11 positive exact-lock receipt. No real C-Cal rows have run. A positive POST_ACCESS_NO_ELIGIBLE_THRESHOLD rejection execution remains pending, and no C-Eval preregistration or authority may follow until an authorized real C-Cal run is terminal and reconciled."
     },
     {
@@ -2048,16 +2235,16 @@
     {
       "obligation_id": "stagec-obligation-runtime-binding",
       "status": "STRUCTURE_ONLY CONTROL-WORKER ACTIVATION AND SINGLE-USE REDEMPTION CANDIDATE COMPLETE / REAL AUTHENTICATED ACTIVATION OPEN / BLOCKS EXECUTION",
-      "requirement": "The frozen control/worker candidate now seals the plan, prerequisite admission, request/profile/model/capture, storage, issuer, ledger, lease, phase, subject, case, and ordinal; uses operation-bound compare-and-swap ambiguity tombstones; and requires a durable CALL_STARTED redemption before one Qwen forward. Harness 565 and worker 719 remain preserved historical checkpoints. Current Harness 1082, worker 719, and adapter/reconciliation 99 authoritative same-process receipts pass within STRUCTURE_ONLY / NON_AUTHORITY scope; the final integrated 12-suite Gate 5 verifier remains ready for authoritative replay and not yet PASS. Before real activation bind a final clean executable commit, complete source manifest, exact runtime image, local hardware profile, archive registry, and actual exact 4-plus-12 admission; authenticate the positive storage/issuer/ledger and nonce state; and consume that real nonce once. A serialized candidate, fixture backend, owner assertion, or local software-test receipt is insufficient."
+      "requirement": "The frozen control/worker candidate now seals the plan, prerequisite admission, request/profile/model/capture, storage, issuer, ledger, lease, phase, subject, case, and ordinal; uses operation-bound compare-and-swap ambiguity tombstones; and requires a durable CALL_STARTED redemption before one Qwen forward. Harness 565 and worker 719 remain preserved historical checkpoints. Current Harness 1082, worker 719, and adapter/reconciliation 99 authoritative same-process receipts pass within STRUCTURE_ONLY / NON_AUTHORITY scope; the final integrated 12-suite Gate 5 verifier also has an authoritative integrated PASS within STRUCTURE_ONLY / NON_AUTHORITY scope. Before real activation bind a final clean executable commit, complete source manifest, exact runtime image, local hardware profile, archive registry, and actual exact 4-plus-12 admission; authenticate the positive storage/issuer/ledger and nonce state; and consume that real nonce once. A serialized candidate, fixture backend, owner assertion, or local software-test receipt is insufficient."
     },
     {
       "obligation_id": "stagec-obligation-verifier",
-      "status": "OPEN / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 AUTHORITATIVE SAME-PROCESS RECEIPTS PASS / FINAL INTEGRATED 12-SUITE VERIFIER READY FOR AUTHORITATIVE REPLAY / NOT YET PASS / STRUCTURE_ONLY / NON_AUTHORITY / BLOCKS EXECUTION",
-      "requirement": "Current strict same-process receipts pass for Harness 1082, worker 719, and adapter/reconciliation 99 within STRUCTURE_ONLY / NON_AUTHORITY scope. Harness attempt 1 timed out at 3600 seconds with no receipt; attempt 2 ended process/pytest 1 because of a stale manifest and produced no receipt; the manifest was rebuilt to 686 artifacts; targeted red-team checks passed 22 tests plus 23 subtests; and attempt 3 produced the current Harness PASS receipt. Preserve the executed 565/719/99 and 537/594 receipts as historical rather than substituting them for current-tree execution. Run the final unchanged-tree integrated 12-suite Gate 5 verifier, which is ready for authoritative replay and not yet PASS. Real authenticated activation remains blocked by the separate open obligations."
+      "status": "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY / REAL AUTHENTICATED ACTIVATION STILL BLOCKED BY SEPARATE OPEN OBLIGATIONS",
+      "requirement": "Current strict same-process receipts pass for Harness 1082, worker 719, and adapter/reconciliation 99 within STRUCTURE_ONLY / NON_AUTHORITY scope. Harness attempt 1 timed out at 3600 seconds with no receipt; attempt 2 ended process/pytest 1 because of a stale manifest and produced no receipt; the manifest was rebuilt to 686 artifacts; targeted red-team checks passed 22 tests plus 23 subtests; and attempt 3 produced an authoritative Harness PASS now preserved as historical with elapsed 3350.340165 seconds and loaded-code SHA-256 B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826. An intervening Harness attempt failed at a literal host-throughput timing gate; no full-suite receipt or exact elapsed value was retained, so none is claimed. The fresh current-tree replay produced the current authoritative Harness PASS with elapsed 3059.695080 seconds and loaded-code SHA-256 DC4F9C8664415C211D257DFFBFD8D0DBC942F830C138C60D6AC3A0E8D4EAC768. An integrated verifier replay then rejected the historical adapter loaded-code digest 5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3 as stale; no attempt ordinal or whole-run elapsed value is inferred. The fresh adapter replay produced the current authoritative adapter/reconciliation PASS with elapsed 25.401532 seconds and loaded-code SHA-256 B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101. Elapsed values are observational only and carry no performance authority. Preserve the executed 565/719/99 and 537/594 receipts as historical rather than substituting them for current-tree execution. The subsequent final unchanged-tree integrated Gate 5 replay used C:\\Python314\\python.exe -I -B scripts/verify_project_coherence_gate5.py and passed 12/12 suites with exit 0, 686 manifest artifacts, 457 syntax-checked Python artifacts, 2290 executable-shadow paths before and after replay, 51 review criteria with 22 OPEN boundaries, and 1258 postflight-rechecked files. Its 3568.3-second tool wall time is observational only and carries no performance authority. No attempt ordinal is inferred. This is an authoritative integrated PASS only within STRUCTURE_ONLY / NON_AUTHORITY scope. Real authenticated activation remains blocked by the separate open obligations."
     },
     {
       "obligation_id": "stagec-obligation-comparison-companion-boundary",
-      "status": "STRUCTURE_ONLY REPLAY-UNAVAILABLE COMPARISON CANDIDATE COMPLETE / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 SUITE RECEIPTS PASS / FINAL INTEGRATED 12-SUITE VERIFIER READY FOR AUTHORITATIVE REPLAY / NOT YET PASS / LIVE COMPARISON AND STEERING UNAUTHORIZED",
+      "status": "STRUCTURE_ONLY REPLAY-UNAVAILABLE COMPARISON CANDIDATE COMPLETE / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 SUITE RECEIPTS PASS / FINAL VERIFIER AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY / LIVE COMPARISON AND STEERING UNAUTHORIZED",
       "requirement": "Keep open/closed behavioral replay, layered detector evidence, surface/meaning receipts, departure metrics, steering/control plans, universal/distributed probe contracts, J-Space shadow structure, historical import, and blocked execution as separate NON_AUTHORITY carriers. Never use this companion to widen Stage C, mint an aggregate detector verdict, infer hidden-state failure from unavailability, equate activation steering with black-box policy control, promote historical evidence, call a provider/model, or spend."
     }
   ],

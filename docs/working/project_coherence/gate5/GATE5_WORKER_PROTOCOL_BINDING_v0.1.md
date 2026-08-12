@@ -95,7 +95,7 @@ pre-test-loaded-code, and loaded-code SHA-256 values are, respectively,
 `3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
 `0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
 and `C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473`.
-The integrated verifier PASS covered 637 artifacts, 409 syntax-checked Python
+That historical integrated verifier PASS covered 637 artifacts, 409 syntax-checked Python
 files, and 2,255 executable-shadow paths. The preceding 508-node receipt is
 preserved as a historical checkpoint: 502 all-phase passes plus the same six
 exact setup skips, 1,518 ordinary reports, 163 passing subtests, and node-ID
@@ -342,18 +342,27 @@ is `$0.00`. The 36-file package candidate exposes 1,097 unique exports and
 the worker remains configured for 719 at digest
 `98F7152B532C713DD22DF910FB762CE92E281A350ACA4E1A3CF2113C84D3DBB5`.
 Current same-process suite receipts are authoritative software-test PASS within
-`STRUCTURE_ONLY / NON_AUTHORITY` only. Harness completed 1,082 nodes: 1,076
+`STRUCTURE_ONLY / NON_AUTHORITY` only. Harness collected, started, and finished
+1,082 nodes: 1,076
 exact all-phase PASS, six exact setup skips retained as mismatch evidence,
-3,240 ordinary reports, 163 passing subtests, all warning/error counters zero,
-process/pytest 0/0, empty pycache, and `3350.340165` seconds. Its exact
+3,240 ordinary reports, 163 passing subtests, and zero warnings, errors,
+collection errors, internal errors, or deselections. Process/pytest was 0/0,
+pycache was empty, and elapsed time was `3059.695080` seconds. The elapsed value
+is observational only and carries no performance authority. Its exact
 node/ordinary/subtest/origin/pre-test/loaded digests are
 `E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928`,
 `60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29`,
 `6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`,
 `3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
 `0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
-and `B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826`
+and `DC4F9C8664415C211D257DFFBFD8D0DBC942F830C138C60D6AC3A0E8D4EAC768`
 under `CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED`.
+
+Attempt 3's earlier same-process PASS is preserved as historical evidence with
+the same counts and node, ordinary, subtest, origin, and pre-test-code digests,
+elapsed `3350.340165` seconds, and loaded-code SHA-256
+`B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826`
+under the same digest rule. Its elapsed value is also observational only.
 
 Worker passed 719/719 with 2,157 ordinary reports, zero subtests/warnings/errors,
 process/pytest 0/0, empty pycache, and `106.254353` seconds. Its corresponding
@@ -364,25 +373,59 @@ digests are
 `035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6`,
 `3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E`,
 and `44A6B0A13CAA30860D3802C042455F72C90FFC6D15FA7503F3B159384EFF4C34`.
-Adapter/reconciliation passed 99/99 with 297 ordinary reports, zero subtests,
-one warning, zero errors, process/pytest 0/0, empty pycache, and `47.452869`
-seconds. Its corresponding digests are
+Adapter/reconciliation has the current authoritative same-process receipt: 99
+nodes were collected, started, finished, and had all phases pass; skips were
+zero (`[]`); it emitted 297 ordinary reports, zero subtests, and one warning;
+errors, collection errors, internal errors, and deselections were zero;
+process/pytest was 0/0; and pycache was empty. Elapsed time was `25.401532`
+seconds, observational only with no performance authority. Its corresponding
+digests are
 `B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B`,
 `548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F`,
 `4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945`,
 `3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
 `0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
-and `5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3`.
+and `B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101`.
 Worker and adapter use `CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION`.
+
+The earlier adapter/reconciliation same-process PASS is preserved explicitly as
+historical evidence with the same counts and first five digests, elapsed
+`47.452869` seconds, and loaded-code SHA-256
+`5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3`
+under the same raw-record rule. Its elapsed value is observational only. An
+integrated verifier replay rejected that historical adapter loaded-code digest
+as stale. This descriptive failure record infers no attempt ordinal and no
+whole-run elapsed value.
 
 Harness attempt 1 timed out at 3,600 seconds with no receipt. Attempt 2 exited
 process/pytest 1 because of a stale manifest and produced no receipt. The
 manifest was rebuilt to 686 artifacts, targeted red-team checks passed 22 tests
-plus 23 subtests, and attempt 3 produced the Harness PASS above. The bounded
-suite ceiling remains 5,400 seconds. The historical 565/719/99 receipts remain
-unchanged and historical. The final integrated 12-suite verifier is
-`READY / PENDING`; it has not produced final-verifier PASS, worker authority, or model
-authority.
+plus 23 subtests, and attempt 3 produced the now-historical Harness PASS
+described above. An intervening Harness attempt failed at a literal
+host-throughput timing gate. No full-suite receipt or exact elapsed value was
+retained for that failed attempt, so none is claimed. The fresh current-tree
+replay then produced the current PASS above. The bounded suite ceiling remains
+5,400 seconds and carries no performance authority. The historical 565/719/99
+receipts remain unchanged and historical. The subsequent final integrated
+replay produced the 12-suite Gate 5 verifier result
+`AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY`. Its exact command was
+`C:\Python314\python.exe -I -B scripts/verify_project_coherence_gate5.py`; exit
+status was 0. Tool wall time was 3568.3 seconds, observational only and with no
+performance authority. All 12/12 suites passed. The verifier bound 686 manifest
+artifacts and 457 syntax-checked Python artifacts, and observed 2,290
+executable-shadow paths both before and after suite replay. Current suite
+receipts remained Harness 1,082 nodes with 163 passing subtests and six exact
+setup skips at loaded-code SHA-256
+`DC4F9C8664415C211D257DFFBFD8D0DBC942F830C138C60D6AC3A0E8D4EAC768`,
+worker 719/719 at loaded-code SHA-256
+`44A6B0A13CAA30860D3802C042455F72C90FFC6D15FA7503F3B159384EFF4C34`,
+and adapter/reconciliation 99/99 at loaded-code SHA-256
+`B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101`.
+Review remained 51 criteria with 22 `OPEN` boundaries, and postflight rechecked
+1,258 files. Verifier stdout reported
+`Project Coherence integrated Gate 5 verification: PASS`. No stderr claim is
+made. This final replay has no inferred attempt ordinal and grants no Packet,
+worker, model, execution, release, disclosure, or product authority.
 
 The stable current executable-shadow path count is 2,290. The exact ignored
 `noetic-compass-scaffold/noetic-compass/.tmp` transient trace subtree is
@@ -830,18 +873,38 @@ they do not authenticate a worker or authorize execution.
 The matching one-attempt lifecycle source/test hashes are
 `F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6`
 and
-`09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E`;
-55/55 focused tests pass in 29.86s. Its atomic ceiling is one process lock or
-one SQLite file on one host. The phase coordinator then binds one exact
+`C8467C7C46FA5B08A11BB8012EAD96E3A628F823734415A4E32A86588BA4978D`
+/ 37,040 bytes; 55/55 pass in the current exact-byte joint focused receipt.
+Its atomic ceiling is one process lock or one SQLite file on one host. The
+phase coordinator then binds one exact
 plan-ordered roster of 480 subjects, permits one local attempt per subject,
 rejects a 481st or late issuance, terminalizes a rejected batch without
 replacement, and releases aggregate outcome access once only after a clean
 480-row reconciliation. Its source/test hashes are
 `B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7`
 and
-`5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5`.
-All eight nodes pass in bounded splits: 5/5 nonheavy in 50.70s, 2/2
-rejected-480/payload in 80.32s, and 1/1 clean-480/access in 238.10s.
+`EDFDA3AE7096B7E2B9401939A7DC89B136D6EA33965B322BC72C803FD55C066C`
+/ 50,393 bytes; all eight nodes pass in the same receipt.
+
+The current exact-byte lifecycle-plus-phase focused receipt is 63/63 PASS in
+517.14s (0:08:37), exit 0. That elapsed time is observational only, not a bound
+or a PASS condition. The superseded joint receipt bound lifecycle test identity
+`C8467C7C46FA5B08A11BB8012EAD96E3A628F823734415A4E32A86588BA4978D`
+and interim phase test identity
+`3C0C3C4B2605BC2FAF76DF25ABC870A2B6E70B6E84E7F8CBB30A722E80405D5D`
+/ 50,378 bytes; it passed 63/63 in 585.25s. That elapsed time is
+observational only, not a bound or a PASS condition.
+Nine literal host-throughput PASS assertions were removed from the two
+diagnostic tests: four from lifecycle and five from the phase coordinator.
+Seven unrelated liveness ceilings and the 5,400-second runner ceiling remain;
+all carry `NO PERFORMANCE AUTHORITY`. Exact functional, 480-row cardinality,
+same-host SQLite state-transition, receipt, and reconciliation checks remain. The
+earlier lifecycle test identity
+`09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E`
+and its 55/55-in-29.86s receipt, plus phase test identity
+`5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5`
+and its 50.70s, 80.32s, and 238.10s split receipts, remain historical evidence
+only.
 
 The worker-local archive admission factory freshly reloads and semantically
 replays all seven capture members, exact-binds the diagnostic-v2 authorization,
@@ -1386,8 +1449,8 @@ local scope:
 | `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_protocol_routes.py` | default-dark/OpenAPI-hidden routing, exact request-bound callback nonce rows, opaque-body media/size limits, no JWT fallback, and fail-start without an admitted service | provider-backed startup, reachable live execution, authenticated model execution, or product/public authority |
 | `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_protocol_adapter.py`, `test_cas_harness_v2_reconciliation_report.py`, `test_cas_harness_v2_fleet_snapshot_loader.py`, and `test_cas_harness_v2_packaged_mirror.py` | exact packaged-adapter admission, issuance/current Fleet snapshot separation, joint identity, active-lease and terminal-intake binding, lifecycle replay, controller reconciliation reports, and byte-identical packaged kernel provenance within local tests | a joined provider-backed application startup, trusted time, independent WORM authority, live experiment, license, disclosure, canon, or product route |
 | `tests/cas_harness_v2/test_diagnostic_execution_protocol.py` | 47/47 exact execution-contract, child-binding, authorization, five-way terminal, mutation, collision, and v1-isolation controls | authentication, one-use consumption, real execution, trusted time, or science |
-| `tests/cas_harness_v2/test_diagnostic_lifecycle.py` | 55/55 one-attempt issue/consume/terminal/reconciliation, same-host SQLite arbitration/reopen, rollback, tamper, shared-plan, and bounded 480-row cost controls | replication, host-loss authority, trusted time, WORM, or out-of-band execution absence |
-| `tests/cas_harness_v2/test_diagnostic_phase_coordinator.py` | all eight nodes pass in three bounded splits covering exact 480 registration, archive/body admission, 481st/late rejection, rejected closure, and clean aggregate access | HTTP/container wiring, trusted execution, or a real model |
+| `tests/cas_harness_v2/test_diagnostic_lifecycle.py` | 55/55 one-attempt issue/consume/terminal/reconciliation, same-host SQLite arbitration/reopen, rollback, tamper, shared-plan, and exact 480-row cardinality/event checks; no host wall-clock PASS bound | replication, host-loss authority, trusted time, WORM, out-of-band execution absence, or performance authority |
+| `tests/cas_harness_v2/test_diagnostic_phase_coordinator.py` | all eight nodes pass, covering exact 480 registration, archive/body admission, 481st/late rejection, rejected closure, and clean aggregate access; no host wall-clock PASS bound | HTTP/container wiring, trusted execution, a real model, or performance authority |
 | `tests/cas_harness_v2/test_diagnostic_calibration_fit.py` | 10/10 exact runtime lock, post-access dataset, independent target/wrong-layer refits, binary64 candidates, forgery, and role-swap controls | scientific validity, independent numerical review, or C-Eval authority |
 | `tests/cas_harness_v2/test_diagnostic_calibration_disposition.py` | all 11 final-byte nodes pass across two bounded split runs for create-once reject/freeze, cross-instance contention, projection replay, and permanent nonauthority locks | a positively executed `NO_ELIGIBLE_THRESHOLD` branch, reporting, Packet, evaluation, product, public, or license authority |
 | `noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_stagec_diagnostic_archive_admission.py` | 18/18 fresh seven-member replay, exact authorization/archive binding, identifier collisions, canonical path, ordinal boundary, forgery, and import-closure controls | HTTP/container integration, canonical controller execution history, WORM, trusted time, or a real Qwen run |

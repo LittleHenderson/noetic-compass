@@ -133,8 +133,10 @@ Worker is configured for 719 nodes at node-ID SHA-256
 Current same-process suite receipts are authoritative software-test PASS within
 <code>STRUCTURE_ONLY / NON_AUTHORITY</code> only. Harness completed 1,082 nodes:
 1,076 exact all-phase PASS, six exact setup skips retained as mismatch evidence,
-3,240 ordinary reports, 163 passing subtests, zero warnings/errors,
-process/pytest 0/0, empty pycache, and <code>3350.340165</code> seconds. Its exact
+3,240 ordinary reports, 163 passing subtests, zero warnings, errors, collection
+errors, internal errors, or deselections, process/pytest 0/0, empty pycache, and
+<code>3059.695080</code> seconds. The
+elapsed time is observational only; it is not a bound or PASS condition. Its exact
 node/ordinary/subtest/origin/pre-test/loaded digests are
 <code>E791E0A7960201323A94F8B0BC88F53AF611771118A369D332B36100D80B7928</code>,
 <code>60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29</code>,
@@ -142,8 +144,19 @@ node/ordinary/subtest/origin/pre-test/loaded digests are
 <code>3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A</code>,
 <code>0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98</code>,
 and
-<code>B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826</code>
+<code>DC4F9C8664415C211D257DFFBFD8D0DBC942F830C138C60D6AC3A0E8D4EAC768</code>
 under <code>CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED</code>.
+
+Historical Harness attempt 3 remains exact and is not promoted as the current
+receipt. It collected, started, and finished 1,082 nodes: 1,076 exact all-phase
+PASS, the same six exact setup skips retained as mismatch evidence, 3,240
+ordinary reports, 163 passing subtests, zero warnings, errors, collection
+errors, internal errors, or deselections, process/pytest 0/0, and empty pycache.
+Its elapsed time was <code>3350.340165</code> seconds. Its exact
+node/ordinary/subtest/origin/pre-test digests are unchanged from the current
+receipt above, and its loaded-code digest was
+<code>B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826</code>
+under the same normalized-projection rule.
 
 Worker passed 719/719 with 2,157 ordinary reports, no subtests, warnings, or
 errors, process/pytest 0/0, empty pycache, and <code>106.254353</code> seconds.
@@ -155,26 +168,68 @@ Its exact digests are
 <code>3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E</code>,
 and
 <code>44A6B0A13CAA30860D3802C042455F72C90FFC6D15FA7503F3B159384EFF4C34</code>.
-Adapter/reconciliation passed 99/99 with 297 ordinary reports, no subtests, one
-warning, no errors, process/pytest 0/0, empty pycache, and
-<code>47.452869</code> seconds. Its exact digests are
+The current adapter/reconciliation receipt collected, started, and finished 99
+nodes and recorded all-phase PASS for all 99. It emitted 297 ordinary reports
+and zero subtests,
+recorded zero skips, one warning, and zero errors, collection errors, internal
+errors, or deselections, exited process/pytest 0/0, and left the isolated
+pycache empty. Its elapsed time was <code>25.401532</code> seconds,
+observational only and not a bound or PASS condition. Its exact digests are
 <code>B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B</code>,
 <code>548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F</code>,
 <code>4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945</code>,
 <code>3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A</code>,
 <code>0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98</code>,
 and
-<code>5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3</code>.
+<code>B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101</code>.
+Its exact status is <code>AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY</code>.
 Worker and adapter use <code>CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION</code>.
+
+The prior adapter/reconciliation receipt remains historical only. It carried
+the same 99-node identity, outcome counts, ordinary/subtest/origin/pre-test
+digests, exits, warning shape, and empty-pycache result, with observational
+elapsed time <code>47.452869</code> seconds and loaded-code digest
+<code>5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3</code>
+under the same raw-record rule. It is not the current receipt.
 
 Harness attempt 1 timed out at 3,600 seconds with no receipt. Attempt 2 ended
 process/pytest 1 because of a stale manifest and produced no receipt. After the
 manifest was rebuilt to 686 artifacts, targeted red-team checks passed 22 tests
-plus 23 subtests; attempt 3 produced the current Harness PASS. The bounded suite
-ceiling remains 5,400 seconds. The executed 565-node Harness, 719/719 worker,
-and 99/99 adapter/reconciliation receipts remain unchanged historical
-checkpoints only. The final integrated 12-suite verifier is
-<code>READY / PENDING</code>; no final-verifier PASS is claimed.
+plus 23 subtests; attempt 3 produced the historical Harness PASS recorded above.
+An intervening integrated replay then failed during setup at
+<code>tests/cas_harness_v2/test_diagnostic_phase_coordinator.py::test_clean_480_opens_exactly_one_aggregate_access</code>
+because a literal 180-second host-throughput correctness gate remained. Its
+focused reproduction observed <code>population_seconds = 192.38694559999567</code>
+against <code>&lt; 180.0</code>. That failed integrated replay created no
+authoritative Harness receipt, and no exact whole-attempt elapsed time is
+claimed here. The post-correction Harness replay produced the current receipt
+above. A later integrated verifier replay failed at adapter receipt validation:
+its expected loaded-code digest still named historical
+<code>5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3</code>
+while the current-tree receipt yielded
+<code>B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101</code>.
+It produced no integrated PASS or authoritative integrated receipt; no replay
+ordinal or exact whole-run elapsed time is claimed. The fresh
+adapter/reconciliation replay produced the current receipt above. The bounded
+suite ceiling remains 5,400 seconds and
+carries no performance authority. The executed 565-node Harness, 719/719
+worker, and historical adapter/reconciliation receipts remain unchanged
+historical checkpoints only. The final integrated 12-suite verifier command
+<code>C:\Python314\python.exe -I -B scripts/verify_project_coherence_gate5.py</code>
+exited 0 and produced <code>PASS</code>: 686 hash-bound artifacts, 457
+syntax-checked Python artifacts, 2,290 executable-shadow paths before and after
+tests, all 12/12 suites, Harness 1,082 nodes plus 163 passing subtests and six
+exact setup skips at loaded-code digest
+<code>DC4F9C8664415C211D257DFFBFD8D0DBC942F830C138C60D6AC3A0E8D4EAC768</code>,
+worker 719 at
+<code>44A6B0A13CAA30860D3802C042455F72C90FFC6D15FA7503F3B159384EFF4C34</code>,
+adapter/reconciliation 99 at
+<code>B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101</code>,
+51 review criteria, all 22 required OPEN boundaries, and 1,258 same-run file
+identities rechecked in postflight. Tool-observed wall time was 3,568.3
+seconds; it is observational only and is not a bound or PASS condition. This
+descriptive final-replay event assigns no inferred attempt ordinal and claims
+no aggregate digest.
 
 The stable current executable-shadow path count is 2,290. The exact ignored
 <code>noetic-compass-scaffold/noetic-compass/.tmp</code> transient trace subtree

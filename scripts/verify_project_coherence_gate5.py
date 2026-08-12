@@ -210,9 +210,13 @@ STAGEC_DESIGN_REL = (
     "STAGEC_IMPLEMENTATION_OBLIGATIONS_AND_EVIDENCE_PLAN_v0.1.json"
 )
 STAGEC_DESIGN_SHA256 = (
-    "DDFEFA7B508A83E3C47DA5FFAEF2613AAF7FE462761B9D04D9BD2D83181D7744"
+    "39129BD7774DDA613BC457B2749B306898F34F55C439112907DBF35D8C24721A"
 )
-STAGEC_DESIGN_BYTES = 141_668
+STAGEC_DESIGN_BYTES = 155_264
+STAGEC_README_SHA256 = (
+    "B6BFAF8D4012237DFF29026035FC18FE90346DBDEB2F4295BB9F6CAA7420CBE0"
+)
+STAGEC_README_BYTES = 56_375
 PACKAGED_HARNESS_V2_REL = "noetic-compass-scaffold/noetic-compass/cas_harness_v2"
 PACKAGED_HARNESS_V2_PROVENANCE_REL = (
     f"{PACKAGED_HARNESS_V2_REL}/PACKAGING_PROVENANCE.json"
@@ -275,8 +279,8 @@ EXECUTABLE_SHADOW_SCOPE_BOUNDARY = (
 )
 COMPARISON_FULL_SUITE_RECEIPT_STATUS = (
     "CURRENT HARNESS 1082 / WORKER 719 / ADAPTER 99 AUTHORITATIVE "
-    "SAME-PROCESS RECEIPTS PASS / FINAL INTEGRATED 12-SUITE VERIFIER "
-    "REPLAY PENDING"
+    "SAME-PROCESS RECEIPTS PASS / FINAL INTEGRATED 12-SUITE VERIFIER PASS / "
+    "STRUCTURE_ONLY / NON_AUTHORITY"
 )
 CURRENT_AUTHORITATIVE_REPLAY_STATUS = (
     "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
@@ -286,13 +290,21 @@ CURRENT_HARNESS_AUTHORITATIVE_REPLAY_STATUS = (
     "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY"
 )
 FINAL_INTEGRATED_VERIFIER_STATUS = (
-    "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS"
+    "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY"
 )
+FINAL_INTEGRATED_VERIFIER_COMMAND = (
+    r"C:\Python314\python.exe -I -B scripts/verify_project_coherence_gate5.py"
+)
+FINAL_INTEGRATED_VERIFIER_TOOL_WALL_SECONDS = "3568.3"
+FINAL_INTEGRATED_VERIFIER_REVIEW_CRITERIA = 51
+FINAL_INTEGRATED_VERIFIER_OPEN_BOUNDARIES = 22
+FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES = 1_258
 CURRENT_AUTHORITATIVE_FULL_SUITE_STATUS = (
     "CURRENT AUTHORITATIVE SAME-PROCESS HARNESS 1082 / WORKER 719 / "
-    "ADAPTER 99 RECEIPTS PASS / FINAL INTEGRATED 12-SUITE VERIFIER REPLAY "
-    "PENDING / ATTEMPT 1 TIMEOUT / ATTEMPT 2 FAILED STALE MANIFEST / "
-    "ATTEMPT 3 HARNESS PASS / "
+    "ADAPTER 99 RECEIPTS PASS / FINAL INTEGRATED 12-SUITE VERIFIER PASS / "
+    "STRUCTURE_ONLY / NON_AUTHORITY / ATTEMPT 1 TIMEOUT / ATTEMPT 2 FAILED STALE MANIFEST / "
+    "ATTEMPT 3 HISTORICAL HARNESS PASS / INTERVENING TIMING-GATE FAILURE / "
+    "NO RECEIPT / ELAPSED NOT RECORDED / FRESH CURRENT-TREE HARNESS PASS / "
     "HISTORICAL RUNTIME-ACTIVATION HARNESS 565, WORKER 719, AND ADAPTER 99 "
     "RECEIPTS PRESERVED / STRUCTURE_ONLY / NON_AUTHORITY"
 )
@@ -355,7 +367,7 @@ HISTORICAL_RUNTIME_ACTIVATION_HARNESS_RECEIPT = MappingProxyType(
         "receipt_status": HISTORICAL_RUNTIME_ACTIVATION_HARNESS_STATUS,
     }
 )
-CURRENT_AUTHORITATIVE_HARNESS_RECEIPT = MappingProxyType(
+HISTORICAL_ATTEMPT3_HARNESS_RECEIPT = MappingProxyType(
     {
         "collected_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
         "started_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
@@ -388,6 +400,44 @@ CURRENT_AUTHORITATIVE_HARNESS_RECEIPT = MappingProxyType(
         ),
         "loaded_code_sha256": (
             "B95348D54FD003715848CBD27B79D3D486DE182E3CF9717E176E5883C7675826"
+        ),
+        "loaded_code_digest_rule": CURRENT_HARNESS_LOADED_CODE_DIGEST_RULE,
+        "receipt_status": CURRENT_HARNESS_AUTHORITATIVE_REPLAY_STATUS,
+    }
+)
+CURRENT_AUTHORITATIVE_HARNESS_RECEIPT = MappingProxyType(
+    {
+        "collected_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+        "started_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+        "finished_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+        "all_phase_pass_nodes": 1_076,
+        "setup_skipped_nodes": 6,
+        "ordinary_reports": 3_240,
+        "passed_subtests": 163,
+        "warning_count": 0,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "3059.695080",
+        "node_ids_sha256": EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256,
+        "ordinary_outcomes_sha256": (
+            "60F1AB42E3BA883AA3C093F506C4B0896E498C1FC3258A887895C596AAA38F29"
+        ),
+        "subtest_outcomes_sha256": (
+            "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109"
+        ),
+        "locked_import_origins_sha256": (
+            "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+        ),
+        "pre_test_loaded_code_sha256": (
+            "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98"
+        ),
+        "loaded_code_sha256": (
+            "DC4F9C8664415C211D257DFFBFD8D0DBC942F830C138C60D6AC3A0E8D4EAC768"
         ),
         "loaded_code_digest_rule": CURRENT_HARNESS_LOADED_CODE_DIGEST_RULE,
         "receipt_status": CURRENT_HARNESS_AUTHORITATIVE_REPLAY_STATUS,
@@ -469,7 +519,7 @@ CURRENT_AUTHORITATIVE_WORKER_RECEIPT = MappingProxyType(
         "receipt_status": CURRENT_AUTHORITATIVE_REPLAY_STATUS,
     }
 )
-CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT = MappingProxyType(
+HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT = MappingProxyType(
     {
         "collected_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
         "started_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
@@ -507,6 +557,44 @@ CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT = MappingProxyType(
         "receipt_status": CURRENT_AUTHORITATIVE_REPLAY_STATUS,
     }
 )
+CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT = MappingProxyType(
+    {
+        "collected_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "started_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "finished_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "all_phase_pass_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "setup_skipped_nodes": 0,
+        "ordinary_reports": 297,
+        "passed_subtests": 0,
+        "warning_count": 1,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "25.401532",
+        "node_ids_sha256": EXPANDED_CONFIGURED_ADAPTER_NODE_IDS_SHA256,
+        "ordinary_outcomes_sha256": (
+            "548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F"
+        ),
+        "subtest_outcomes_sha256": (
+            "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+        ),
+        "locked_import_origins_sha256": (
+            "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+        ),
+        "pre_test_loaded_code_sha256": (
+            "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98"
+        ),
+        "loaded_code_sha256": (
+            "B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101"
+        ),
+        "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+        "receipt_status": CURRENT_AUTHORITATIVE_REPLAY_STATUS,
+    }
+)
 STAGEC_RUNTIME_CORE_FOCUSED_NODES = 28
 STAGEC_RUNTIME_CORE_FOCUSED_EXECUTED_NODE_IDS_SHA256 = (
     "5D501F3505A98E23BDD2AB8B191BC6EEE90260F1F169940B6A6F70A61525A632"
@@ -534,16 +622,16 @@ DIAGNOSTIC_RUNTIME_FILE_BINDINGS = MappingProxyType(
             160_487,
         ),
         "tests/cas_harness_v2/test_diagnostic_lifecycle.py": (
-            "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E",
-            37_372,
+            "C8467C7C46FA5B08A11BB8012EAD96E3A628F823734415A4E32A86588BA4978D",
+            37_040,
         ),
         "src/cas_harness_v2/diagnostic_phase_coordinator.py": (
             "B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7",
             195_762,
         ),
         "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py": (
-            "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5",
-            50_872,
+            "EDFDA3AE7096B7E2B9401939A7DC89B136D6EA33965B322BC72C803FD55C066C",
+            50_393,
         ),
         "src/cas_harness_v2/diagnostic_calibration_fit.py": (
             "4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF",
@@ -873,8 +961,8 @@ COMPARISON_FILE_BINDINGS = MappingProxyType(
             "docs/working/project_coherence/gate5/"
             "GATE5_HISTORICAL_RECOVERY_AND_MODEL_COMPARISON_MATRIX_v0.1.md"
         ): (
-            "C9C9255DC8A21EAEAA447A65378025A90A89BEB075B3DF5A7810CA26A0C33FE1",
-            52_491,
+            "3E3B22E75E49992A3226A4C24081D7F670DF1F5DB15F13B370AD53B416AC19A8",
+            56_201,
         ),
         (
             "noetic-compass-scaffold/noetic-compass/tests/"
@@ -2784,6 +2872,36 @@ class VerificationError(RuntimeError):
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise VerificationError(message)
+
+
+def has_final_integrated_pass_receipt(value: Any) -> bool:
+    if not isinstance(value, str):
+        return False
+    compact = value.replace(",", "")
+    lower = compact.lower()
+    required_fragments = (
+        FINAL_INTEGRATED_VERIFIER_COMMAND,
+        "exited 0",
+        FINAL_INTEGRATED_VERIFIER_STATUS,
+        "686 artifacts",
+        "457 Python artifacts",
+        "2290 executable-shadow paths before and after",
+        "all 12/12 suites",
+        "Harness 1082 plus 163 subtests and six exact setup skips",
+        "51 review criteria",
+        "all 22 required OPEN boundaries",
+        "1258 postflight file identities",
+        "Tool wall 3568.3 seconds is observational only",
+        "no attempt ordinal or aggregate digest is inferred",
+    )
+    return all(fragment in compact for fragment in required_fragments) and all(
+        digest.lower() in lower
+        for digest in (
+            CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["loaded_code_sha256"],
+            CURRENT_AUTHORITATIVE_WORKER_RECEIPT["loaded_code_sha256"],
+            CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT["loaded_code_sha256"],
+        )
+    )
 
 
 def require_exact_keys(
@@ -6477,7 +6595,8 @@ def verify_stagec_design_package() -> dict[str, int]:
     )
 
     def stagec_current_receipt(
-        receipt: MappingProxyType[str, Any], *, harness: bool = False
+        receipt: MappingProxyType[str, Any], *, harness: bool = False,
+        adapter: bool = False
     ) -> dict[str, Any]:
         projected = {
             key: value
@@ -6490,17 +6609,61 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "SIX EXACT NUMERICAL LOCK-MISMATCH NODES / MISMATCH EVIDENCE, "
                 "NOT PASS"
             )
+            projected["elapsed_semantic"] = (
+                "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+            )
+        if adapter:
+            projected["elapsed_semantic"] = (
+                "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+            )
+            projected["setup_skip_scope"] = []
         return projected
 
     stagec_current_harness_receipt = stagec_current_receipt(
         CURRENT_AUTHORITATIVE_HARNESS_RECEIPT, harness=True
     )
+    stagec_historical_attempt3_harness_receipt = stagec_current_receipt(
+        HISTORICAL_ATTEMPT3_HARNESS_RECEIPT, harness=True
+    )
+    stagec_historical_attempt3_harness_receipt.pop("elapsed_semantic")
+    stagec_historical_attempt3_harness_receipt = {
+        "historical_disposition": (
+            "PRESERVED HISTORICAL / SUPERSEDED BY FRESH CURRENT-TREE RECEIPT"
+        ),
+        "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+        "receipt": stagec_historical_attempt3_harness_receipt,
+    }
     stagec_current_worker_receipt = stagec_current_receipt(
         CURRENT_AUTHORITATIVE_WORKER_RECEIPT
     )
     stagec_current_adapter_receipt = stagec_current_receipt(
-        CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT
+        CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT, adapter=True
     )
+    stagec_historical_adapter_receipt = stagec_current_receipt(
+        HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT
+    )
+    stagec_historical_adapter_receipt = {
+        "historical_disposition": (
+            "PRESERVED HISTORICAL / SUPERSEDED BY FRESH ADAPTER REPLAY"
+        ),
+        "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+        "receipt": stagec_historical_adapter_receipt,
+    }
+    stagec_integrated_adapter_stale_digest_failure = {
+        "status": (
+            "HISTORICAL INTEGRATED VERIFIER FAILURE / DESCRIPTIVE ONLY / "
+            "NON_AUTHORITY"
+        ),
+        "failure": (
+            "INTEGRATED VERIFIER REJECTED HISTORICAL ADAPTER LOADED-CODE "
+            "DIGEST AS STALE"
+        ),
+        "stale_loaded_code_sha256": (
+            HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT["loaded_code_sha256"]
+        ),
+        "attempt_ordinal_claim": "NONE / NOT INFERRED",
+        "whole_run_elapsed_claim": "NONE / NOT INFERRED",
+    }
     comparison_candidate = design.get("comparison_structure_candidate")
     require_exact_keys(
         comparison_candidate,
@@ -6597,6 +6760,37 @@ def verify_stagec_design_package() -> dict[str, int]:
                     "elapsed_seconds": "3350.340165",
                     "pass": True,
                     "full_suite_receipt": (
+                        "HISTORICAL AUTHORITATIVE HARNESS RECEIPT"
+                    ),
+                },
+                {
+                    "attempt_label": (
+                        "INTERVENING TIMING-GATE FAILURE AFTER ATTEMPT 3"
+                    ),
+                    "terminal_state": (
+                        "TEST FAILURE / LITERAL HOST-THROUGHPUT TIMING GATE"
+                    ),
+                    "pass": False,
+                    "receipt_status": (
+                        "NO FULL-SUITE RECEIPT RETAINED / NONE CLAIMED"
+                    ),
+                    "elapsed_status": (
+                        "NO EXACT ELAPSED VALUE RETAINED / NONE CLAIMED"
+                    ),
+                },
+                {
+                    "attempt_label": (
+                        "FRESH CURRENT-TREE REPLAY AFTER TIMING-GATE REPAIR"
+                    ),
+                    "terminal_state": "AUTHORITATIVE SAME-PROCESS PASS",
+                    "process_exit_status": 0,
+                    "pytest_exit_status": 0,
+                    "elapsed_seconds": "3059.695080",
+                    "elapsed_semantic": (
+                        "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+                    ),
+                    "pass": True,
+                    "full_suite_receipt": (
                         "CURRENT AUTHORITATIVE HARNESS RECEIPT"
                     ),
                 },
@@ -6607,6 +6801,8 @@ def verify_stagec_design_package() -> dict[str, int]:
                 ),
                 "targeted_redteam_tests_passed": 22,
                 "targeted_redteam_subtests_passed": 23,
+                "intervening_timing_gate_failure_recorded": True,
+                "literal_host_throughput_pass_assertions_removed": 9,
                 "status": "PASS / STRUCTURE_ONLY / NON_AUTHORITY",
             },
             "harness": stagec_current_harness_receipt,
@@ -6645,7 +6841,10 @@ def verify_stagec_design_package() -> dict[str, int]:
             "maximum_spend": "UNRESOLVED PLACEHOLDER",
             "authorization_window_start_utc": "UNRESOLVED PLACEHOLDER",
             "authorization_window_expiry_utc": "UNRESOLVED PLACEHOLDER",
-            "final_gate5_verifier": FINAL_INTEGRATED_VERIFIER_STATUS,
+            "final_gate5_verifier": (
+                FINAL_INTEGRATED_VERIFIER_STATUS
+                + " / NOT A CURRENT EXECUTION BLOCKER"
+            ),
             "stop_rule": (
                 "STOP BEFORE MODEL CALL OR FURTHER SPENDING IF ANY BLOCKER OR "
                 "CHECK FAILS"
@@ -6659,9 +6858,13 @@ def verify_stagec_design_package() -> dict[str, int]:
         {
             "full_suite_receipt_boundary",
             "current_authoritative_harness_full_suite_receipt",
+            "historical_harness_attempt_3_full_suite_receipt",
             "current_authoritative_worker_full_suite_receipt",
             "current_authoritative_adapter_full_suite_receipt",
+            "historical_adapter_reconciliation_full_suite_receipt",
+            "integrated_adapter_stale_digest_failure",
             "final_integrated_12_suite_verifier",
+            "final_integrated_12_suite_receipt",
             "worker_authoritative",
             "worker_focused",
             "harness_v2_authoritative",
@@ -6678,6 +6881,11 @@ def verify_stagec_design_package() -> dict[str, int]:
                     "current_authoritative_harness_full_suite_receipt"
                 )
             ),
+            "historical_harness_attempt_3_full_suite_receipt": (
+                validation_receipts.get(
+                    "historical_harness_attempt_3_full_suite_receipt"
+                )
+            ),
             "current_authoritative_worker_full_suite_receipt": (
                 validation_receipts.get(
                     "current_authoritative_worker_full_suite_receipt"
@@ -6688,8 +6896,21 @@ def verify_stagec_design_package() -> dict[str, int]:
                     "current_authoritative_adapter_full_suite_receipt"
                 )
             ),
+            "historical_adapter_reconciliation_full_suite_receipt": (
+                validation_receipts.get(
+                    "historical_adapter_reconciliation_full_suite_receipt"
+                )
+            ),
+            "integrated_adapter_stale_digest_failure": (
+                validation_receipts.get(
+                    "integrated_adapter_stale_digest_failure"
+                )
+            ),
             "final_integrated_12_suite_verifier": validation_receipts.get(
                 "final_integrated_12_suite_verifier"
+            ),
+            "final_integrated_12_suite_receipt": validation_receipts.get(
+                "final_integrated_12_suite_receipt"
             ),
             "worker_authoritative": validation_receipts.get("worker_authoritative"),
             "worker_focused": validation_receipts.get("worker_focused"),
@@ -6713,15 +6934,95 @@ def verify_stagec_design_package() -> dict[str, int]:
             "current_authoritative_harness_full_suite_receipt": (
                 stagec_current_harness_receipt
             ),
+            "historical_harness_attempt_3_full_suite_receipt": (
+                stagec_historical_attempt3_harness_receipt
+            ),
             "current_authoritative_worker_full_suite_receipt": (
                 stagec_current_worker_receipt
             ),
             "current_authoritative_adapter_full_suite_receipt": (
                 stagec_current_adapter_receipt
             ),
+            "historical_adapter_reconciliation_full_suite_receipt": (
+                stagec_historical_adapter_receipt
+            ),
+            "integrated_adapter_stale_digest_failure": (
+                stagec_integrated_adapter_stale_digest_failure
+            ),
             "final_integrated_12_suite_verifier": (
                 FINAL_INTEGRATED_VERIFIER_STATUS
             ),
+            "final_integrated_12_suite_receipt": {
+                "status": FINAL_INTEGRATED_VERIFIER_STATUS,
+                "event_label": (
+                    "FINAL INTEGRATED REPLAY AFTER FRESH ADAPTER RECEIPT"
+                ),
+                "attempt_ordinal_claim": "NONE / NOT INFERRED",
+                "command": FINAL_INTEGRATED_VERIFIER_COMMAND,
+                "process_exit_status": 0,
+                "tool_wall_seconds": FINAL_INTEGRATED_VERIFIER_TOOL_WALL_SECONDS,
+                "elapsed_semantic": (
+                    "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+                ),
+                "suite_passed": len(REQUIRED_TEST_SUITES),
+                "suite_total": len(REQUIRED_TEST_SUITES),
+                "manifest_artifacts": CURRENT_MANIFEST_ARTIFACT_COUNT,
+                "syntax_checked_python_artifacts": (
+                    CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
+                ),
+                "executable_shadow_paths_before": (
+                    CURRENT_EXECUTABLE_SHADOW_PATH_COUNT
+                ),
+                "executable_shadow_paths_after": (
+                    CURRENT_EXECUTABLE_SHADOW_PATH_COUNT
+                ),
+                "current_suite_receipts": {
+                    "harness": {
+                        "collected_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+                        "passed_subtests": REQUIRED_TEST_SUITES[
+                            "Harness v2 kernel and history"
+                        ]["expected_subtests"],
+                        "setup_skipped_nodes": len(
+                            REQUIRED_TEST_SUITES[
+                                "Harness v2 kernel and history"
+                            ]["expected_setup_skipped_nodeids"]
+                        ),
+                        "loaded_code_sha256": (
+                            CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+                                "loaded_code_sha256"
+                            ]
+                        ),
+                    },
+                    "worker": {
+                        "passed_nodes": EXPANDED_CONFIGURED_WORKER_NODES,
+                        "total_nodes": EXPANDED_CONFIGURED_WORKER_NODES,
+                        "loaded_code_sha256": (
+                            CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+                                "loaded_code_sha256"
+                            ]
+                        ),
+                    },
+                    "adapter_reconciliation": {
+                        "passed_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+                        "total_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+                        "loaded_code_sha256": (
+                            CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT[
+                                "loaded_code_sha256"
+                            ]
+                        ),
+                    },
+                },
+                "review_criteria": FINAL_INTEGRATED_VERIFIER_REVIEW_CRITERIA,
+                "review_open_boundaries": (
+                    FINAL_INTEGRATED_VERIFIER_OPEN_BOUNDARIES
+                ),
+                "postflight_rechecked_files": (
+                    FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES
+                ),
+                "stdout_terminal_line": (
+                    "Project Coherence integrated Gate 5 verification: PASS"
+                ),
+            },
             "worker_authoritative": {
                 "status": "PASS",
                 "passed": 576,
@@ -6811,7 +7112,8 @@ def verify_stagec_design_package() -> dict[str, int]:
         full_suite_boundary
         == (
             "ALL EXECUTED 306/437/489/508/537/565 HARNESS, 576/594/719 "
-            "WORKER, AND 99 ADAPTER-RECONCILIATION RECEIPTS PRECEDING THIS "
+            "WORKER, AND EARLIER 99 ADAPTER-RECONCILIATION RECEIPTS PRECEDING "
+            "THIS "
             "COMPARISON TRANCHE ARE PRESERVED HISTORICAL CHECKPOINTS. CURRENT "
             "HARNESS 1082, WORKER 719, AND ADAPTER-RECONCILIATION 99 HAVE "
             "AUTHORITATIVE SAME-PROCESS SOFTWARE-TEST PASS RECEIPTS WITHIN "
@@ -6820,10 +7122,21 @@ def verify_stagec_design_package() -> dict[str, int]:
             "2 ENDED PROCESS/PYTEST 1 BECAUSE OF A STALE MANIFEST AND PRODUCED "
             "NO RECEIPT. THE MANIFEST WAS REBUILT TO 686 ARTIFACTS; TARGETED "
             "RED-TEAM CHECKS PASSED 22 TESTS PLUS 23 SUBTESTS; ATTEMPT 3 "
-            "PRODUCED THE CURRENT HARNESS PASS RECEIPT. THE BOUNDED SUITE "
+            "PRODUCED AN AUTHORITATIVE HARNESS PASS THAT IS NOW HISTORICAL. "
+            "AN INTERVENING HARNESS ATTEMPT FAILED AT A LITERAL HOST-THROUGHPUT "
+            "TIMING GATE; NO FULL-SUITE RECEIPT OR EXACT ELAPSED VALUE WAS "
+            "RETAINED, SO NONE IS CLAIMED. THE FRESH CURRENT-TREE REPLAY "
+            "PRODUCED THE CURRENT HARNESS PASS. AN INTEGRATED VERIFIER REPLAY "
+            "THEN REJECTED THE HISTORICAL ADAPTER LOADED-CODE DIGEST AS STALE; "
+            "NO ATTEMPT ORDINAL OR WHOLE-RUN ELAPSED VALUE IS INFERRED. THE "
+            "FRESH ADAPTER REPLAY PRODUCED THE CURRENT ADAPTER PASS. THE "
+            "BOUNDED SUITE "
             "CEILING IS 5400 SECONDS AND HAS NO PERFORMANCE AUTHORITY. THE "
-            "FINAL INTEGRATED 12-SUITE GATE 5 VERIFIER IS READY FOR "
-            "AUTHORITATIVE REPLAY / NOT YET PASS."
+            "SUBSEQUENT FINAL INTEGRATED REPLAY PASSED 12/12 SUITES WITH "
+            "EXIT 0 AS AN AUTHORITATIVE INTEGRATED 12-SUITE PASS WITHIN "
+            "STRUCTURE_ONLY / NON_AUTHORITY SCOPE; ITS 3568.3-SECOND TOOL "
+            "WALL TIME IS OBSERVATIONAL ONLY AND HAS NO PERFORMANCE "
+            "AUTHORITY. NO ATTEMPT ORDINAL IS INFERRED."
         ),
         "Stage C historical/current full-suite receipt boundary drifted",
     )
@@ -6842,6 +7155,8 @@ def verify_stagec_design_package() -> dict[str, int]:
             "execution_v2",
             "per_attempt_lifecycle",
             "phase_coordinator",
+            "lifecycle_phase_current_focused_receipt",
+            "lifecycle_phase_historical_pre_correction_receipts",
             "calibration_fit",
             "calibration_disposition",
             "worker_archive_admission",
@@ -7083,8 +7398,8 @@ def verify_stagec_design_package() -> dict[str, int]:
             "BOUNDED STRUCTURE_ONLY / NON_AUTHORITY FOCUSED RECEIPTS / "
             "CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 AUTHORITATIVE "
             "SAME-PROCESS PASS / PRESERVED HISTORICAL FULL-SUITE CHECKPOINTS / "
-            "FINAL INTEGRATED 12-SUITE VERIFIER READY FOR AUTHORITATIVE REPLAY "
-            "/ NOT YET PASS"
+            "FINAL VERIFIER AUTHORITATIVE INTEGRATED 12-SUITE PASS / "
+            "STRUCTURE_ONLY / NON_AUTHORITY"
         )
         and diagnostic_focused.get("historical_standard_harness_receipt")
         == {
@@ -7206,10 +7521,15 @@ def verify_stagec_design_package() -> dict[str, int]:
             "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
                 "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
             ][0],
+            "test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+            ][1],
             "passed": 55,
             "total": 55,
-            "elapsed_seconds": "29.86",
-            "status": "PASS",
+            "status": (
+                "PASS / CURRENT EXACT-BYTE JOINT FOCUSED RECEIPT / NO "
+                "PERFORMANCE AUTHORITY"
+            ),
         }
         and diagnostic_focused.get("phase_coordinator")
         == {
@@ -7219,35 +7539,134 @@ def verify_stagec_design_package() -> dict[str, int]:
             "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
                 "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
             ][0],
+            "test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+            ][1],
             "collected_nodes": 8,
-            "split_receipts": [
-                {
-                    "scope": (
-                        "nonheavy registration, store binding, admission, "
-                        "contention, and inventory"
-                    ),
-                    "passed": 5,
-                    "total": 5,
-                    "elapsed_seconds": "50.70",
-                },
-                {
-                    "scope": (
-                        "exact 480-row rejected phase plus closed nonreporting payload"
-                    ),
-                    "passed": 2,
-                    "total": 2,
-                    "elapsed_seconds": "80.32",
-                },
-                {
-                    "scope": (
-                        "exact clean 480-row reconciliation and aggregate outcome access"
-                    ),
-                    "passed": 1,
-                    "total": 1,
-                    "elapsed_seconds": "238.10",
-                },
-            ],
-            "status": "ALL 8 NODES PASS IN BOUNDED SPLIT RECEIPTS",
+            "passed": 8,
+            "total": 8,
+            "status": (
+                "PASS / CURRENT EXACT-BYTE JOINT FOCUSED RECEIPT / NO "
+                "PERFORMANCE AUTHORITY"
+            ),
+        }
+        and diagnostic_focused.get("lifecycle_phase_current_focused_receipt")
+        == {
+            "scope": (
+                "tests/cas_harness_v2/test_diagnostic_lifecycle.py + "
+                "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+            ),
+            "per_attempt_lifecycle_test_source_sha256": (
+                DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+                ][0]
+            ),
+            "per_attempt_lifecycle_test_source_bytes": (
+                DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+                ][1]
+            ),
+            "phase_coordinator_test_source_sha256": (
+                DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+                ][0]
+            ),
+            "phase_coordinator_test_source_bytes": (
+                DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+                ][1]
+            ),
+            "passed": 63,
+            "total": 63,
+            "elapsed_seconds": "517.14",
+            "pytest_reported_duration": "0:08:37",
+            "process_exit_status": 0,
+            "elapsed_semantic": (
+                "OBSERVATIONAL ONLY / NOT A BOUND OR PASS CONDITION"
+            ),
+            "removed_literal_host_throughput_pass_assertions": 9,
+            "removed_assertion_breakdown": {
+                "per_attempt_lifecycle": 4,
+                "phase_coordinator": 5,
+            },
+            "remaining_nonperformance_ceilings": {
+                "unrelated_liveness_ceilings": 7,
+                "runner_ceiling_seconds": SAME_RUN_PYTEST_TIMEOUT_SECONDS,
+                "authority": "NO PERFORMANCE AUTHORITY",
+            },
+            "preserved_checks": (
+                "EXACT FUNCTIONAL / 480-ROW CARDINALITY / SAME-HOST SQLITE "
+                "STATE-TRANSITION / RECEIPT / RECONCILIATION"
+            ),
+            "authority_boundary": "STRUCTURE_ONLY / NON_AUTHORITY",
+            "status": (
+                "PASS / CURRENT EXACT-BYTE FOCUSED / STRUCTURE_ONLY / "
+                "NON_AUTHORITY"
+            ),
+        }
+        and diagnostic_focused.get(
+            "lifecycle_phase_historical_pre_correction_receipts"
+        )
+        == {
+            "status": "HISTORICAL ONLY / SUPERSEDED TEST BYTES",
+            "superseded_joint_focused_receipt": {
+                "per_attempt_lifecycle_test_source_sha256": (
+                    "C8467C7C46FA5B08A11BB8012EAD96E3A628F823734415A4E32A86588BA4978D"
+                ),
+                "per_attempt_lifecycle_test_source_bytes": 37_040,
+                "phase_coordinator_test_source_sha256": (
+                    "3C0C3C4B2605BC2FAF76DF25ABC870A2B6E70B6E84E7F8CBB30A722E80405D5D"
+                ),
+                "phase_coordinator_test_source_bytes": 50_378,
+                "passed": 63,
+                "total": 63,
+                "elapsed_seconds": "585.25",
+                "elapsed_semantic": (
+                    "OBSERVATIONAL ONLY / NOT A BOUND OR PASS CONDITION"
+                ),
+            },
+            "per_attempt_lifecycle": {
+                "test_source_sha256": (
+                    "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E"
+                ),
+                "passed": 55,
+                "total": 55,
+                "elapsed_seconds": "29.86",
+            },
+            "phase_coordinator": {
+                "test_source_sha256": (
+                    "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5"
+                ),
+                "split_receipts": [
+                    {
+                        "scope": (
+                            "nonheavy registration, store binding, admission, "
+                            "contention, and inventory"
+                        ),
+                        "passed": 5,
+                        "total": 5,
+                        "elapsed_seconds": "50.70",
+                    },
+                    {
+                        "scope": (
+                            "exact 480-row rejected phase plus closed "
+                            "nonreporting payload"
+                        ),
+                        "passed": 2,
+                        "total": 2,
+                        "elapsed_seconds": "80.32",
+                    },
+                    {
+                        "scope": (
+                            "exact clean 480-row reconciliation and aggregate "
+                            "outcome access"
+                        ),
+                        "passed": 1,
+                        "total": 1,
+                        "elapsed_seconds": "238.10",
+                    },
+                ],
+            },
         },
         "Stage C execution/lifecycle/phase focused receipts drifted",
     )
@@ -7628,8 +8047,8 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "FOCUSED STRUCTURE_ONLY RUNTIME CONTROL AND WORKER RECEIPTS / "
                 "CURRENT HARNESS 1082, WORKER 719, AND ADAPTER 99 AUTHORITATIVE "
                 "SAME-PROCESS PASS / PRESERVED HISTORICAL FULL-SUITE "
-                "CHECKPOINTS / FINAL INTEGRATED 12-SUITE VERIFIER READY FOR "
-                "AUTHORITATIVE REPLAY / NOT YET PASS / NON_AUTHORITY / NO REAL "
+                "CHECKPOINTS / FINAL VERIFIER AUTHORITATIVE INTEGRATED "
+                "12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY / NO REAL "
                 "POSITIVE ACTIVATION"
             ),
             "authority_boundary": (
@@ -7777,8 +8196,8 @@ def verify_stagec_design_package() -> dict[str, int]:
                     "HISTORICAL EXECUTED CHECKPOINTS PRESERVED / CURRENT "
                     "HARNESS 1082, WORKER 719, AND ADAPTER 99 AUTHORITATIVE "
                     "SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY / "
-                    "FINAL INTEGRATED 12-SUITE VERIFIER READY FOR AUTHORITATIVE "
-                    "REPLAY / NOT YET PASS"
+                    "FINAL VERIFIER AUTHORITATIVE INTEGRATED 12-SUITE PASS / "
+                    "STRUCTURE_ONLY / NON_AUTHORITY"
                 ),
                 "harness": {
                     "current_configured_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
@@ -8254,6 +8673,9 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
                     "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
                 ][0],
+                "test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+                ][1],
                 "profile": (
                     "ONE ATTEMPT / CREATE-ONLY / IN-MEMORY PROCESS LOCK OR "
                     "SAME-HOST SQLITE FILE"
@@ -8269,6 +8691,15 @@ def verify_stagec_design_package() -> dict[str, int]:
                     "NO REPLICATION, HOST-LOSS AUTHORITY, TRUSTED TIME, WORM, "
                     "OR OUT-OF-BAND EXECUTION PREVENTION"
                 ),
+                "current_focused_receipt": (
+                    "55 OF CURRENT EXACT-BYTE JOINT 63/63 PASS / 517.14 "
+                    "SECONDS OBSERVATIONAL ONLY / EXIT 0"
+                ),
+                "performance_authority": (
+                    "NONE / FOUR LITERAL HOST-THROUGHPUT PASS ASSERTIONS "
+                    "REMOVED / EXACT FUNCTIONAL, CARDINALITY, SAME-HOST SQLITE "
+                    "STATE-TRANSITION, RECEIPT, AND RECONCILIATION CHECKS REMAIN"
+                ),
             },
             "phase_coordinator": {
                 "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
@@ -8277,6 +8708,9 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
                     "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
                 ][0],
+                "test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+                ][1],
                 "roster": (
                     "EXACT PLAN-ORDERED 480 CASES / 160 GROUPS / ONE ATTEMPT "
                     "PER SUBJECT"
@@ -8297,6 +8731,18 @@ def verify_stagec_design_package() -> dict[str, int]:
                 ),
                 "store_boundary": (
                     "SAME-HOST SQLITE IDENTITY BINDING / NOT REPLICATED OR WORM"
+                ),
+                "current_focused_receipt": (
+                    "8 OF CURRENT EXACT-BYTE JOINT 63/63 PASS / 517.14 "
+                    "SECONDS OBSERVATIONAL ONLY / EXIT 0"
+                ),
+                "performance_authority": (
+                    "NONE / FIVE LITERAL HOST-THROUGHPUT PASS ASSERTIONS "
+                    "REMOVED / SEVEN UNRELATED LIVENESS CEILINGS AND THE "
+                    "5400-SECOND RUNNER CEILING REMAIN WITHOUT PERFORMANCE "
+                    "AUTHORITY / EXACT FUNCTIONAL, 480-ROW CARDINALITY, "
+                    "SAME-HOST SQLITE STATE-TRANSITION, RECEIPT, AND "
+                    "RECONCILIATION CHECKS REMAIN"
                 ),
             },
             "worker_archive_admission": {
@@ -8951,8 +9397,8 @@ def verify_stagec_design_package() -> dict[str, int]:
                     == (
                         "STRUCTURE_ONLY REPLAY-UNAVAILABLE COMPARISON CANDIDATE "
                         "COMPLETE / CURRENT HARNESS 1082, WORKER 719, AND ADAPTER "
-                        "99 SUITE RECEIPTS PASS / FINAL INTEGRATED 12-SUITE "
-                        "VERIFIER READY FOR AUTHORITATIVE REPLAY / NOT YET PASS / "
+                        "99 SUITE RECEIPTS PASS / FINAL VERIFIER AUTHORITATIVE "
+                        "INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY / "
                         "LIVE COMPARISON AND STEERING UNAUTHORIZED"
                     )
                     and "separate NON_AUTHORITY carriers"
@@ -9002,7 +9448,7 @@ def verify_stagec_design_package() -> dict[str, int]:
             in row.get("requirement", "")
             and "Current Harness 1082, worker 719, and adapter/reconciliation 99 authoritative same-process receipts pass"
             in row.get("requirement", "")
-            and "final integrated 12-suite Gate 5 verifier remains ready for authoritative replay and not yet PASS"
+            and "final integrated 12-suite Gate 5 verifier also has an authoritative integrated PASS within STRUCTURE_ONLY / NON_AUTHORITY scope"
             in row.get("requirement", "")
             and "No external/provider authenticity" in row.get("requirement", "")
             for row in obligations
@@ -9360,6 +9806,14 @@ def verify_stagec_design_package() -> dict[str, int]:
     readme = read_stable_text(
         GATE5_DIR / "stagec_qwen_prompt_injection_v0.1" / "README.md"
     )
+    stagec_readme_path = (
+        GATE5_DIR / "stagec_qwen_prompt_injection_v0.1" / "README.md"
+    )
+    require(
+        stagec_readme_path.stat().st_size == STAGEC_README_BYTES
+        and sha256_file(stagec_readme_path) == STAGEC_README_SHA256,
+        "Stage C README identity drifted",
+    )
     for marker in (
         "DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED",
         "Stage C-Cal",
@@ -9401,9 +9855,26 @@ def verify_stagec_design_package() -> dict[str, int]:
         "Current same-process suite receipts are authoritative software-test PASS",
         "Harness attempt 1 timed out at 3,600 seconds with no receipt",
         "Attempt 2 ended",
-        "attempt 3 produced the current Harness PASS",
-        "suite ceiling\nremains 5,400 seconds",
-        "final integrated 12-suite verifier is `READY / PENDING`",
+        "attempt 3 produced the now-historical Harness PASS",
+        "fresh current-tree replay then produced the",
+        "Adapter/reconciliation has the current authoritative same-process receipt",
+        "25.401532",
+        "B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101",
+        "earlier adapter/reconciliation same-process PASS is preserved explicitly as",
+        "47.452869",
+        "5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3",
+        "integrated verifier replay rejected that historical adapter loaded-code digest",
+        "descriptive failure record infers no attempt ordinal and no",
+        "whole-run elapsed value",
+        "suite ceiling remains 5,400 seconds",
+        "subsequent final integrated replay produced the 12-suite Gate 5",
+        "AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        r"C:\Python314\python.exe -I -B scripts/verify_project_coherence_gate5.py",
+        "All 12/12 suites passed",
+        "postflight rechecked",
+        "1,258 files",
+        "No stderr claim is",
+        "no inferred attempt ordinal",
         "3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19",
         "508-node receipt is",
         "preserved as a historical checkpoint",
@@ -9568,22 +10039,49 @@ def verify_review_matrix(
         and "Attempt 2 failed after 4179.3 seconds because the manifest was stale"
         in runtime_review_basis
         and "686-artifact manifest" in runtime_review_basis
-        and "Attempt 3 produced the current authoritative Harness 1082 receipt"
+        and "Attempt 3 produced a now-historical authoritative Harness 1082 receipt"
         in runtime_review_basis
         and "1076 all-phase PASS" in runtime_review_basis
         and "3240 ordinary reports" in runtime_review_basis
         and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["ordinary_outcomes_sha256"].lower()
         in runtime_review_basis
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in runtime_review_basis
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["elapsed_seconds"]
+        in runtime_review_basis
+        and "intervening Harness attempt failed at a literal host-throughput timing gate"
+        in runtime_review_basis
+        and "no full-suite receipt or exact elapsed value was retained"
+        in runtime_review_basis
+        and "fresh current-tree replay produced the current authoritative Harness 1082 receipt"
+        in runtime_review_basis
         and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in runtime_review_basis
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["elapsed_seconds"]
         in runtime_review_basis
         and CURRENT_AUTHORITATIVE_WORKER_RECEIPT["loaded_code_sha256"].lower()
         in runtime_review_basis
-        and CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT["loaded_code_sha256"].lower()
+        and "earlier adapter 99 receipt" in runtime_review_basis
+        and HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT[
+            "loaded_code_sha256"
+        ].lower()
         in runtime_review_basis
-        and "final integrated 12-suite verifier replay remains PENDING"
+        and HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT["elapsed_seconds"]
         in runtime_review_basis
-        and "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS"
+        and "preserved explicitly as historical evidence" in runtime_review_basis
+        and "integrated verifier replay rejected that historical adapter loaded-code digest as stale"
         in runtime_review_basis
+        and "descriptive failure record infers no attempt ordinal and no whole-run elapsed value"
+        in runtime_review_basis
+        and "fresh current-tree adapter replay produced the current authoritative adapter 99 receipt"
+        in runtime_review_basis
+        and CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT[
+            "loaded_code_sha256"
+        ].lower()
+        in runtime_review_basis
+        and CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT["elapsed_seconds"]
+        in runtime_review_basis
+        and has_final_integrated_pass_receipt(runtime_review_basis)
         and "5400 seconds" in runtime_review_basis
         and "no performance authority" in runtime_review_basis
         and "14 exact modules" in runtime_review_basis
@@ -9687,23 +10185,52 @@ def verify_review_matrix(
         and "Attempt 2 failed after 4179.3 seconds because of a stale manifest"
         in matrix["review_basis"]
         and "686-artifact rebuild" in matrix["review_basis"]
-        and "Attempt 3 created the current authoritative Harness receipt"
+        and "Attempt 3 created a now-historical authoritative Harness receipt"
         in matrix["review_basis"]
         and "1076 all-phase PASS" in matrix["review_basis"]
         and "3240 ordinary reports" in matrix["review_basis"]
         and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["ordinary_outcomes_sha256"].lower()
         in matrix["review_basis"]
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in matrix["review_basis"]
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["elapsed_seconds"]
+        in matrix["review_basis"]
+        and "intervening Harness attempt failed at a literal host-throughput timing gate"
+        in matrix["review_basis"]
+        and "no full-suite receipt or exact elapsed value was retained"
+        in matrix["review_basis"]
+        and "fresh current-tree replay created the current authoritative Harness receipt"
+        in matrix["review_basis"]
         and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in matrix["review_basis"]
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["elapsed_seconds"]
         in matrix["review_basis"]
         and CURRENT_AUTHORITATIVE_WORKER_RECEIPT["loaded_code_sha256"].lower()
         in matrix["review_basis"]
-        and CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT["loaded_code_sha256"].lower()
+        and "earlier adapter 99 authoritative same-process receipt"
         in matrix["review_basis"]
-        and "final integrated 12-suite verifier replay is READY FOR AUTHORITATIVE REPLAY / NOT YET PASS"
+        and HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT[
+            "loaded_code_sha256"
+        ].lower()
         in matrix["review_basis"]
-        and "authoritative receipt remains PENDING"
+        and HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT["elapsed_seconds"]
         in matrix["review_basis"]
-        and "5400-second bounded process ceiling" in matrix["review_basis"]
+        and "preserved explicitly as historical evidence" in matrix["review_basis"]
+        and "integrated verifier replay rejected that historical adapter loaded-code digest as stale"
+        in matrix["review_basis"]
+        and "descriptive failure record infers no attempt ordinal and no whole-run elapsed value"
+        in matrix["review_basis"]
+        and "fresh current-tree adapter replay produced the current authoritative adapter 99 receipt"
+        in matrix["review_basis"]
+        and CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT[
+            "loaded_code_sha256"
+        ].lower()
+        in matrix["review_basis"]
+        and CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT["elapsed_seconds"]
+        in matrix["review_basis"]
+        and has_final_integrated_pass_receipt(matrix["review_basis"])
+        and "5400-second process ceiling remains a bound only"
+        in matrix["review_basis"]
         and "no performance authority" in matrix["review_basis"]
         and "BLOCKED_MISSING_EXACT_EXTERNAL_AUTHORIZATION / NOT_EXECUTED / ZERO_SPEND"
         in matrix["review_basis"]
@@ -9716,6 +10243,15 @@ def verify_review_matrix(
     require(
         isinstance(criteria, list) and len(criteria) >= len(REQUIRED_OPEN_BOUNDARY_IDS),
         "review matrix does not cover the complete Gate 5 boundary surface",
+    )
+    require(
+        len(criteria) == FINAL_INTEGRATED_VERIFIER_REVIEW_CRITERIA,
+        "final integrated receipt review-criterion count drifted from 51",
+    )
+    require(
+        len(REQUIRED_OPEN_BOUNDARY_IDS)
+        == FINAL_INTEGRATED_VERIFIER_OPEN_BOUNDARIES,
+        "final integrated receipt required-OPEN-boundary count drifted from 22",
     )
     criterion_ids: list[str] = []
     disposition_counts: dict[str, int] = {}
@@ -9908,6 +10444,17 @@ def verify_review_matrix(
         in packaged_criterion
         and CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT["elapsed_seconds"]
         in packaged_criterion
+        and "zero setup skips (`[]`)" in packaged_criterion
+        and "earlier admitted-adapter authoritative same-process receipt"
+        in packaged_criterion
+        and HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT["loaded_code_sha256"]
+        in packaged_criterion
+        and HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT["elapsed_seconds"]
+        in packaged_criterion
+        and "integrated verifier replay rejected that historical loaded-code digest as stale"
+        in packaged_criterion
+        and "descriptive failure record infers no attempt ordinal and no whole-run elapsed value"
+        in packaged_criterion
         and HISTORICAL_RUNTIME_ACTIVATION_ADAPTER_NODE_IDS_SHA256
         in packaged_criterion,
         "G5-ENGINEERING-007: current packaged mirror identity/receipt drifted",
@@ -9938,20 +10485,33 @@ def verify_review_matrix(
         and "TIMEOUT / NO PASS / NO RECEIPT" in integration_observed
         and "FAILED / NO PASS / NO RECEIPT" in integration_observed
         and "686-artifact rebuild" in integration_observed
-        and "attempt 3 produced the current authoritative Harness 1,082 receipt"
+        and "attempt 3 produced the now-historical authoritative Harness 1,082 receipt"
+        in integration_observed
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["loaded_code_sha256"]
+        in integration_observed
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["elapsed_seconds"]
+        in integration_observed
+        and "intervening Harness attempt failed at a literal host-throughput timing gate"
+        in integration_observed
+        and "no full-suite receipt or exact elapsed value was retained"
+        in integration_observed
+        and "fresh current-tree replay produced the current authoritative Harness 1,082 receipt"
+        in integration_observed
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["loaded_code_sha256"]
+        in integration_observed
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["elapsed_seconds"]
         in integration_observed
         and "Current worker 719 and adapter 99 authoritative receipts also pass"
         in integration_observed
-        and "final integrated 12-suite verifier replay is READY FOR AUTHORITATIVE REPLAY / NOT YET PASS and remains PENDING"
-        in integration_observed
-        and "5,400-second bounded process ceiling with no performance authority"
+        and has_final_integrated_pass_receipt(integration_observed)
+        and "5,400-second process ceiling remains a bound only and has no performance authority"
         in integration_observed
         and integration_criterion.get("disposition") == "OPEN_ENGINEERING"
         and runtime_activation_refs
         <= set(integration_criterion["evidence_refs"])
         and "current 1082-node Harness, 719-node worker, and 99-node adapter authoritative same-process receipts pass"
         in integration_criterion["remaining_obligation"]
-        and "final integrated 12-suite verifier replay remains PENDING"
+        and "final integrated 12-suite verifier replay now passes within STRUCTURE_ONLY / NON_AUTHORITY"
         in integration_criterion["remaining_obligation"],
         "G5-ENGINEERING-001 runtime activation boundary drifted or was promoted",
     )
@@ -9973,14 +10533,27 @@ def verify_review_matrix(
         and "3,600-second child ceiling" in structural_criterion
         and "TIMEOUT / NO PASS / NO RECEIPT" in structural_criterion
         and "FAILED / NO PASS / NO RECEIPT" in structural_criterion
-        and "Attempt 3 produced the current authoritative Harness 1,082 receipt"
+        and "Attempt 3 produced the now-historical authoritative Harness 1,082 receipt"
+        in structural_criterion
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in structural_criterion
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["elapsed_seconds"]
+        in structural_criterion
+        and "intervening Harness attempt failed at a literal host-throughput timing gate"
+        in structural_criterion
+        and "no full-suite receipt or exact elapsed value was retained"
+        in structural_criterion
+        and "fresh current-tree replay produced the current authoritative Harness 1,082 receipt"
+        in structural_criterion
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in structural_criterion
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["elapsed_seconds"]
         in structural_criterion
         and "Current worker 719 and adapter 99 authoritative receipts also pass"
         in structural_criterion
-        and "final integrated 12-suite verifier replay remains PENDING"
+        and has_final_integrated_pass_receipt(structural_criterion)
+        and "5,400-second same-process ceiling remains a bound only"
         in structural_criterion
-        and "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS" in structural_criterion
-        and "5,400-second bounded same-process ceiling" in structural_criterion
         and "no performance authority" in structural_criterion
         and "Configured identity and exact same-process execution outcome are recorded separately"
         in structural_criterion,
@@ -10055,9 +10628,21 @@ def verify_review_matrix(
         in comparison_observed
         and "attempt 3 passed with six exact setup skips retained as mismatch evidence rather than PASS"
         in comparison_observed
-        and "final integrated 12-suite verifier replay is READY FOR AUTHORITATIVE REPLAY / NOT YET PASS"
+        and "attempt 3 is now historical" in comparison_observed
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["loaded_code_sha256"].lower()
         in comparison_observed
-        and "authoritative receipt remains PENDING" in comparison_observed
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["elapsed_seconds"]
+        in comparison_observed
+        and "intervening timing-gate attempt failed with no full-suite receipt"
+        in comparison_observed
+        and "no exact elapsed value retained" in comparison_observed
+        and "fresh current-tree replay is the current authoritative Harness receipt"
+        in comparison_observed
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in comparison_observed
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["elapsed_seconds"]
+        in comparison_observed
+        and has_final_integrated_pass_receipt(comparison_observed)
         and "Historical runtime-activation Harness 565, worker 719, and adapter 99"
         in comparison_observed
         and "Attempt 11 and Gate 2 remain HISTORICAL EVIDENCE ONLY"
@@ -10191,7 +10776,7 @@ def verify_review_matrix(
         == {
             "status": (
                 "STRUCTURE_ONLY / NON_AUTHORITY / CURRENT SUITE RECEIPTS PASS / "
-                "FINAL INTEGRATED VERIFIER REPLAY PENDING"
+                "FINAL INTEGRATED VERIFIER PASS"
             ),
             "module_count": len(COMPARISON_MODULE_NAMES),
             "bound_source_test_and_control_files": len(COMPARISON_FILE_BINDINGS),
@@ -10291,9 +10876,12 @@ def verify_review_matrix(
                         EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256.lower()
                     ),
                     "child_ceiling_seconds": SAME_RUN_PYTEST_TIMEOUT_SECONDS,
-                    "elapsed_seconds": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+                    "elapsed_seconds": HISTORICAL_ATTEMPT3_HARNESS_RECEIPT[
                         "elapsed_seconds"
                     ],
+                    "elapsed_semantic": (
+                        "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+                    ),
                     "terminal_status": (
                         "PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH "
                         "EVIDENCE, NOT PASS"
@@ -10301,6 +10889,24 @@ def verify_review_matrix(
                     "manifest_artifacts": CURRENT_MANIFEST_ARTIFACT_COUNT,
                     "receipt_created": True,
                     "receipt_status": CURRENT_HARNESS_AUTHORITATIVE_REPLAY_STATUS,
+                    "historical_disposition": (
+                        "PRESERVED HISTORICAL / SUPERSEDED BY FRESH CURRENT-TREE "
+                        "RECEIPT"
+                    ),
+                    "authoritative_receipt": {
+                        **{
+                            key: value.lower()
+                            if isinstance(value, str) and "sha256" in key
+                            else value
+                            for key, value in HISTORICAL_ATTEMPT3_HARNESS_RECEIPT.items()
+                        },
+                        "elapsed_semantic": (
+                            "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+                        ),
+                        "setup_skipped_nodeids": REQUIRED_TEST_SUITES[
+                            "Harness v2 kernel and history"
+                        ]["expected_setup_skipped_nodeids"],
+                    },
                     "final_integrated_verifier_effect": (
                         "NONE / INDIVIDUAL HARNESS RECEIPT ONLY"
                     ),
@@ -10308,6 +10914,45 @@ def verify_review_matrix(
                         "0 REPO PYCACHE / 0 REPO PYTEST CACHE / 0 LOCKED-REPO "
                         "PYTHON OR PYTEST PROCESSES / TEMP DIRECTORY REMOVED / "
                         "FROZEN INPUT HASHES UNCHANGED"
+                    ),
+                },
+                {
+                    "attempt_label": (
+                        "INTERVENING TIMING-GATE FAILURE AFTER ATTEMPT 3"
+                    ),
+                    "terminal_status": "FAILED / NO PASS / NO RECEIPT",
+                    "cause": "TIMING-GATE FAILURE",
+                    "receipt_created": False,
+                    "elapsed_status": "NOT RECORDED / NONE CLAIMED",
+                    "historical_status": (
+                        "PRESERVED HISTORICAL FAILURE / NON_AUTHORITY"
+                    ),
+                },
+                {
+                    "attempt_label": (
+                        "FRESH CURRENT-TREE REPLAY AFTER TIMING-GATE REPAIR"
+                    ),
+                    "configured_harness_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+                    "configured_harness_node_ids_sha256": (
+                        EXPANDED_CONFIGURED_HARNESS_NODE_IDS_SHA256.lower()
+                    ),
+                    "child_ceiling_seconds": SAME_RUN_PYTEST_TIMEOUT_SECONDS,
+                    "elapsed_seconds": CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+                        "elapsed_seconds"
+                    ],
+                    "elapsed_semantic": (
+                        "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+                    ),
+                    "terminal_status": (
+                        "PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH "
+                        "EVIDENCE, NOT PASS"
+                    ),
+                    "manifest_artifacts": CURRENT_MANIFEST_ARTIFACT_COUNT,
+                    "receipt_created": True,
+                    "receipt_status": CURRENT_HARNESS_AUTHORITATIVE_REPLAY_STATUS,
+                    "current_disposition": "CURRENT AUTHORITATIVE HARNESS RECEIPT",
+                    "final_integrated_verifier_effect": (
+                        "NONE / INDIVIDUAL HARNESS RECEIPT ONLY"
                     ),
                 },
             ],
@@ -10319,6 +10964,9 @@ def verify_review_matrix(
                         else value
                         for key, value in CURRENT_AUTHORITATIVE_HARNESS_RECEIPT.items()
                     },
+                    "elapsed_semantic": (
+                        "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+                    ),
                     "setup_skipped_nodeids": REQUIRED_TEST_SUITES[
                         "Harness v2 kernel and history"
                     ]["expected_setup_skipped_nodeids"],
@@ -10330,10 +10978,16 @@ def verify_review_matrix(
                     for key, value in CURRENT_AUTHORITATIVE_WORKER_RECEIPT.items()
                 },
                 "adapter": {
-                    key: value.lower()
-                    if isinstance(value, str) and "sha256" in key
-                    else value
-                    for key, value in CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT.items()
+                    **{
+                        key: value.lower()
+                        if isinstance(value, str) and "sha256" in key
+                        else value
+                        for key, value in CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT.items()
+                    },
+                    "elapsed_semantic": (
+                        "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+                    ),
+                    "setup_skipped_nodeids": [],
                 },
             },
             "final_integrated_verifier_replay": {
@@ -10352,12 +11006,83 @@ def verify_review_matrix(
                 "executable_shadow_scope_boundary": (
                     EXECUTABLE_SHADOW_SCOPE_BOUNDARY
                 ),
-                "status": FINAL_INTEGRATED_VERIFIER_STATUS,
-                "authoritative_same_process_receipt": "PENDING",
-                "claim_effect": (
-                    "NONE / INDIVIDUAL SUITE RECEIPTS DO NOT ESTABLISH FINAL "
-                    "INTEGRATED VERIFIER PASS"
+                "command": FINAL_INTEGRATED_VERIFIER_COMMAND,
+                "process_exit_status": 0,
+                "tool_wall_seconds": FINAL_INTEGRATED_VERIFIER_TOOL_WALL_SECONDS,
+                "elapsed_semantic": (
+                    "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
                 ),
+                "passed_suite_count": len(REQUIRED_TEST_SUITES),
+                "manifest_artifacts": CURRENT_MANIFEST_ARTIFACT_COUNT,
+                "syntax_checked_python_artifacts": (
+                    CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
+                ),
+                "executable_shadow_paths_before": (
+                    CURRENT_EXECUTABLE_SHADOW_PATH_COUNT
+                ),
+                "executable_shadow_paths_after": (
+                    CURRENT_EXECUTABLE_SHADOW_PATH_COUNT
+                ),
+                "harness_nodes": EXPANDED_CONFIGURED_HARNESS_NODES,
+                "harness_subtests": REQUIRED_TEST_SUITES[
+                    "Harness v2 kernel and history"
+                ]["expected_subtests"],
+                "harness_setup_skips": len(
+                    REQUIRED_TEST_SUITES["Harness v2 kernel and history"][
+                        "expected_setup_skipped_nodeids"
+                    ]
+                ),
+                "harness_loaded_code_sha256": (
+                    CURRENT_AUTHORITATIVE_HARNESS_RECEIPT[
+                        "loaded_code_sha256"
+                    ].lower()
+                ),
+                "worker_nodes": EXPANDED_CONFIGURED_WORKER_NODES,
+                "worker_loaded_code_sha256": (
+                    CURRENT_AUTHORITATIVE_WORKER_RECEIPT[
+                        "loaded_code_sha256"
+                    ].lower()
+                ),
+                "adapter_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+                "adapter_loaded_code_sha256": (
+                    CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT[
+                        "loaded_code_sha256"
+                    ].lower()
+                ),
+                "review_criteria": FINAL_INTEGRATED_VERIFIER_REVIEW_CRITERIA,
+                "required_open_boundaries": (
+                    FINAL_INTEGRATED_VERIFIER_OPEN_BOUNDARIES
+                ),
+                "postflight_file_identities_rechecked": (
+                    FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES
+                ),
+                "status": FINAL_INTEGRATED_VERIFIER_STATUS,
+                "authoritative_same_process_receipt": (
+                    "RECORDED / EXACT CURRENT-TREE INTEGRATED REPLAY"
+                ),
+                "attempt_ordinal_claim": "NONE / NOT INFERRED",
+                "aggregate_digest_claim": "NONE / NOT CLAIMED",
+                "claim_effect": (
+                    "STRUCTURE_ONLY / NON_AUTHORITY / NO EXPERIMENTAL, PRODUCT, "
+                    "LICENSE, OR DISCLOSURE AUTHORITY"
+                ),
+                "historical_stale_adapter_digest_failure": {
+                    "status": (
+                        "HISTORICAL INTEGRATED VERIFIER FAILURE / DESCRIPTIVE "
+                        "ONLY / NON_AUTHORITY"
+                    ),
+                    "failure": (
+                        "INTEGRATED VERIFIER REJECTED HISTORICAL ADAPTER "
+                        "LOADED-CODE DIGEST AS STALE"
+                    ),
+                    "stale_loaded_code_sha256": (
+                        HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT[
+                            "loaded_code_sha256"
+                        ].lower()
+                    ),
+                    "attempt_ordinal_claim": "NONE / NOT INFERRED",
+                    "whole_run_elapsed_claim": "NONE / NOT INFERRED",
+                },
             },
             "historical_runtime_activation_receipts": {
                 "harness_nodes": HISTORICAL_RUNTIME_ACTIVATION_HARNESS_NODES,
@@ -10980,6 +11705,9 @@ def verify_review_matrix(
                     key: value.lower() if isinstance(value, str) and "sha256" in key else value
                     for key, value in CURRENT_AUTHORITATIVE_HARNESS_RECEIPT.items()
                 },
+                "elapsed_semantic": (
+                    "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+                ),
                 "setup_skipped_nodeids": REQUIRED_TEST_SUITES[
                     "Harness v2 kernel and history"
                 ]["expected_setup_skipped_nodeids"],
@@ -10989,8 +11717,14 @@ def verify_review_matrix(
                 for key, value in CURRENT_AUTHORITATIVE_WORKER_RECEIPT.items()
             },
             "current_authoritative_adapter_full_suite_receipt": {
-                key: value.lower() if isinstance(value, str) and "sha256" in key else value
-                for key, value in CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT.items()
+                **{
+                    key: value.lower() if isinstance(value, str) and "sha256" in key else value
+                    for key, value in CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT.items()
+                },
+                "elapsed_semantic": (
+                    "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY"
+                ),
+                "setup_skipped_nodeids": [],
             },
             "packaged_mirror_files": PACKAGED_HARNESS_V2_FILE_COUNT,
             "packaged_mirror_bytes": PACKAGED_HARNESS_V2_TOTAL_BYTES,
@@ -11032,15 +11766,26 @@ def verify_review_matrix(
         in runtime_activation_tranche_scope
         and "FAILED / NO PASS / NO RECEIPT" in runtime_activation_tranche_scope
         and "686-artifact manifest rebuild" in runtime_activation_tranche_scope
-        and "attempt 3 produced the current authoritative Harness 1082 receipt"
+        and "attempt 3 produced the now-historical authoritative Harness 1082 receipt"
+        in runtime_activation_tranche_scope
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in runtime_activation_tranche_scope
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["elapsed_seconds"]
+        in runtime_activation_tranche_scope
+        and "intervening Harness attempt failed at a literal host-throughput timing gate"
+        in runtime_activation_tranche_scope
+        and "no full-suite receipt or exact elapsed value was retained"
+        in runtime_activation_tranche_scope
+        and "fresh current-tree replay produced the current authoritative Harness 1082 receipt"
+        in runtime_activation_tranche_scope
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in runtime_activation_tranche_scope
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["elapsed_seconds"]
         in runtime_activation_tranche_scope
         and "Current authoritative worker 719 and adapter 99 receipts also pass"
         in runtime_activation_tranche_scope
-        and "final integrated 12-suite verifier replay remains PENDING"
-        in runtime_activation_tranche_scope
-        and "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS"
-        in runtime_activation_tranche_scope
-        and "5400-second bounded process ceiling with no performance authority"
+        and has_final_integrated_pass_receipt(runtime_activation_tranche_scope)
+        and "5400-second process ceiling remains a bound only and has no performance authority"
         in runtime_activation_tranche_scope
         and "DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED"
         in runtime_activation_tranche_scope
@@ -11171,7 +11916,7 @@ def verify_review_matrix(
             "STRUCTURE_ONLY / NON_AUTHORITY / HISTORICAL RUNTIME-ACTIVATION "
             "HARNESS 565 AND WORKER 719 PASS PRESERVED / CURRENT HARNESS "
             "1082, WORKER 719, AND ADAPTER 99 RECEIPTS PASS / FINAL INTEGRATED "
-            "12-SUITE VERIFIER REPLAY PENDING"
+            "12-SUITE VERIFIER PASS"
         )
         and diagnostic_receipt.get("same_process_timeout_seconds")
         == SAME_RUN_PYTEST_TIMEOUT_SECONDS
@@ -11382,6 +12127,7 @@ def verify_review_matrix(
             key: value.lower() if isinstance(value, str) and "sha256" in key else value
             for key, value in CURRENT_AUTHORITATIVE_HARNESS_RECEIPT.items()
         },
+        "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
         "setup_skipped_nodeids": REQUIRED_TEST_SUITES[
             "Harness v2 kernel and history"
         ]["expected_setup_skipped_nodeids"],
@@ -11391,8 +12137,12 @@ def verify_review_matrix(
         for key, value in CURRENT_AUTHORITATIVE_WORKER_RECEIPT.items()
     }
     current_authoritative_adapter_receipt = {
-        key: value.lower() if isinstance(value, str) and "sha256" in key else value
-        for key, value in CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT.items()
+        **{
+            key: value.lower() if isinstance(value, str) and "sha256" in key else value
+            for key, value in CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT.items()
+        },
+        "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+        "setup_skipped_nodeids": [],
     }
     require(
         diagnostic_receipt.get("current_authoritative_harness_full_suite")
@@ -11433,6 +12183,7 @@ def verify_review_matrix(
             "execution_v2",
             "per_attempt_lifecycle",
             "phase_coordinator",
+            "timing_correctness_boundary",
             "calibration_fit",
             "calibration_disposition",
             "five_file_union",
@@ -11496,11 +12247,26 @@ def verify_review_matrix(
             "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
                 "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
             ][0].lower(),
+            "test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+            ][1],
             "collected_nodes": 55,
             "node_ids_sha256": REQUIRED_SUBSUITE_DIGESTS[
                 "diagnostic per-attempt lifecycle"
             ]["expected_test_ids_sha256"].lower(),
-            "focused_receipt": "55 / 55 PASS",
+            "focused_receipt": (
+                "55 / 55 PASS AS A SUBSET OF CURRENT FINAL-BYTE JOINT 63 / "
+                "63 PASS"
+            ),
+            "host_wall_clock_assertions_removed": 4,
+            "retained_correctness_authority": (
+                "EXACT FUNCTIONAL / CARDINALITY / SAME-HOST SQLITE "
+                "STATE-TRANSITION CHECKS REMAIN"
+            ),
+            "performance_authority": (
+                "NO PERFORMANCE AUTHORITY / HOST WALL-CLOCK THROUGHPUT "
+                "REMAINS BENCHMARK EVIDENCE ONLY"
+            ),
         }
         and focused_harness.get("phase_coordinator")
         == {
@@ -11510,12 +12276,99 @@ def verify_review_matrix(
             "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
                 "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
             ][0].lower(),
+            "test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+            ][1],
             "collected_nodes": 8,
             "node_ids_sha256": REQUIRED_SUBSUITE_DIGESTS[
                 "diagnostic phase coordinator"
             ]["expected_test_ids_sha256"].lower(),
-            "split_passed_nodes": [5, 2, 1],
-            "split_elapsed_seconds": ["50.70", "80.32", "238.10"],
+            "focused_receipt": (
+                "8 / 8 PASS AS A SUBSET OF CURRENT FINAL-BYTE JOINT 63 / "
+                "63 PASS"
+            ),
+            "host_wall_clock_assertions_removed": 5,
+            "retained_correctness_authority": (
+                "EXACT FUNCTIONAL / CARDINALITY / SAME-HOST SQLITE "
+                "STATE-TRANSITION CHECKS REMAIN"
+            ),
+            "performance_authority": (
+                "NO PERFORMANCE AUTHORITY / HOST WALL-CLOCK THROUGHPUT "
+                "REMAINS BENCHMARK EVIDENCE ONLY"
+            ),
+            "historical_pre_change_split_receipt": {
+                "test_source_sha256": (
+                    "5a5c4bf5a34b48a2870f5412419f005d0d20f4b60c0b61fcb51b742895824bc5"
+                ),
+                "test_source_bytes": 50_872,
+                "split_passed_nodes": [5, 2, 1],
+                "split_elapsed_seconds": ["50.70", "80.32", "238.10"],
+                "status": (
+                    "HISTORICAL EVIDENCE ONLY / NOT CURRENT SOURCE OR "
+                    "PERFORMANCE AUTHORITY"
+                ),
+            },
+        }
+        and focused_harness.get("timing_correctness_boundary")
+        == {
+            "removed_host_throughput_pass_assertions": 9,
+            "removed_scope": (
+                "NINE LITERAL HOST-THROUGHPUT PASS ASSERTIONS REMOVED FROM THE "
+                "TWO DIAGNOSTIC TESTS"
+            ),
+            "retained_liveness_ceilings": 7,
+            "runner_ceiling_seconds": SAME_RUN_PYTEST_TIMEOUT_SECONDS,
+            "liveness_ceiling_authority": (
+                "RETAINED FOR LIVENESS ONLY / NO PERFORMANCE AUTHORITY"
+            ),
+            "retained_correctness_authority": (
+                "EXACT FUNCTIONAL / CARDINALITY / SAME-HOST SQLITE "
+                "STATE-TRANSITION CHECKS REMAIN"
+            ),
+            "current_final_byte_joint_receipt_status": "63 / 63 PASS / EXIT 0",
+            "current_final_byte_joint_receipt": {
+                "lifecycle_test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+                ][0].lower(),
+                "lifecycle_test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+                ][1],
+                "phase_test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+                ][0].lower(),
+                "phase_test_source_bytes": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+                ][1],
+                "passed": 63,
+                "total": 63,
+                "elapsed_seconds": "517.14",
+                "reported_duration": "0:08:37",
+                "process_exit_status": 0,
+                "elapsed_authority": (
+                    "OBSERVATIONAL ONLY / NOT A BOUND OR PASS CONDITION"
+                ),
+                "performance_authority": "NONE",
+            },
+            "historical_superseded_joint_receipt": {
+                "lifecycle_test_source_sha256": (
+                    "c8467c7c46fa5b08a11bb8012ead96e3a628f823734415a4e32a86588ba4978d"
+                ),
+                "lifecycle_test_source_bytes": 37_040,
+                "phase_test_source_sha256": (
+                    "3c0c3c4b2605bc2faf76df25abc870a2b6e70b6e84e7f8cbb30a722e80405d5d"
+                ),
+                "phase_test_source_bytes": 50_378,
+                "passed": 63,
+                "total": 63,
+                "elapsed_seconds": "585.25",
+                "elapsed_authority": (
+                    "OBSERVATIONAL ONLY / NOT A BOUND OR PASS CONDITION"
+                ),
+                "status": "HISTORICAL ONLY / SUPERSEDED PHASE TEST BYTES",
+            },
+            "configured_node_identity_effect": "NONE",
+            "configured_node_count_effect": "NONE",
+            "status_boundary_effect": "NONE",
         }
         and focused_harness.get("calibration_fit")
         == {
@@ -11953,16 +12806,27 @@ def verify_review_matrix(
         and "TIMEOUT / NO PASS / NO RECEIPT" in runtime_activation_scope
         and "Attempt 2 failed because of the stale manifest" in runtime_activation_scope
         and "FAILED / NO PASS / NO RECEIPT" in runtime_activation_scope
-        and "attempt 3 produced the current authoritative Harness 1082 receipt"
+        and "attempt 3 produced the now-historical authoritative Harness 1082 receipt"
+        in runtime_activation_scope
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in runtime_activation_scope
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["elapsed_seconds"]
+        in runtime_activation_scope
+        and "intervening Harness attempt failed at a literal host-throughput timing gate"
+        in runtime_activation_scope
+        and "no full-suite receipt or exact elapsed value was retained"
+        in runtime_activation_scope
+        and "fresh current-tree replay produced the current authoritative Harness 1082 receipt"
+        in runtime_activation_scope
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in runtime_activation_scope
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["elapsed_seconds"]
         in runtime_activation_scope
         and "Current authoritative worker 719 and adapter 99 receipts also pass"
         in runtime_activation_scope
-        and "final integrated 12-suite verifier replay remains PENDING"
+        and has_final_integrated_pass_receipt(runtime_activation_scope)
+        and "5400-second process ceiling remains a bound only"
         in runtime_activation_scope
-        and "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS"
-        in runtime_activation_scope
-        and "5400-second bounded process ceiling" in runtime_activation_scope
-        and "bounded process ceiling" in runtime_activation_scope
         and "no performance authority" in runtime_activation_scope
         and "No model, provider, live trusted backend" in runtime_activation_scope
         and "Gate 5 authority" in runtime_activation_scope,
@@ -12006,14 +12870,27 @@ def verify_review_matrix(
         and "Attempt 2 ended after 4,179.3 seconds in FAILED / NO PASS / NO RECEIPT because the manifest was stale"
         in diagnostic_scope
         and "rebuilt 686-artifact manifest" in diagnostic_scope
-        and "Attempt 3 produced the current authoritative Harness 1,082 receipt"
+        and "Attempt 3 produced the now-historical authoritative Harness 1,082 receipt"
+        in diagnostic_scope
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in diagnostic_scope
+        and HISTORICAL_ATTEMPT3_HARNESS_RECEIPT["elapsed_seconds"]
+        in diagnostic_scope
+        and "intervening Harness attempt failed at a literal host-throughput timing gate"
+        in diagnostic_scope
+        and "no full-suite receipt or exact elapsed value was retained"
+        in diagnostic_scope
+        and "fresh current-tree replay produced the current authoritative Harness 1,082 receipt"
+        in diagnostic_scope
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["loaded_code_sha256"].lower()
+        in diagnostic_scope
+        and CURRENT_AUTHORITATIVE_HARNESS_RECEIPT["elapsed_seconds"]
         in diagnostic_scope
         and "current worker 719 and adapter 99 receipts also pass"
         in diagnostic_scope
-        and "final integrated 12-suite verifier receipt remains PENDING"
+        and has_final_integrated_pass_receipt(diagnostic_scope)
+        and "5,400-second process ceiling remains a bound only"
         in diagnostic_scope
-        and "READY FOR AUTHORITATIVE REPLAY / NOT YET PASS" in diagnostic_scope
-        and "5,400-second bounded process ceiling" in diagnostic_scope
         and "no performance authority" in diagnostic_scope
         and "No model, provider, Docker, RunPod" in diagnostic_scope
         and "Gate 5 closure" in diagnostic_scope,
@@ -12476,6 +13353,7 @@ def verify_review_matrix(
             "current_configured_node_ids_sha256",
             "current_authoritative_replay_status",
             "current_authoritative_receipt",
+            "historical_pre_refresh_authoritative_receipt",
             "route_enabled",
             "configured_scope_only",
             "independently_reproduced",
@@ -12526,8 +13404,25 @@ def verify_review_matrix(
         == CURRENT_AUTHORITATIVE_REPLAY_STATUS
         and adapter_receipt.get("current_authoritative_receipt")
         == {
-            key: value.lower() if isinstance(value, str) and "sha256" in key else value
-            for key, value in CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT.items()
+            **{
+                key: value.lower() if isinstance(value, str) and "sha256" in key else value
+                for key, value in CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT.items()
+            },
+            "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+            "setup_skipped_nodeids": [],
+        }
+        and adapter_receipt.get("historical_pre_refresh_authoritative_receipt")
+        == {
+            "historical_disposition": (
+                "PRESERVED HISTORICAL / SUPERSEDED BY FRESH ADAPTER REPLAY"
+            ),
+            "elapsed_semantic": "OBSERVATIONAL ONLY / NO PERFORMANCE AUTHORITY",
+            "receipt": {
+                key: value.lower()
+                if isinstance(value, str) and "sha256" in key
+                else value
+                for key, value in HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT.items()
+            },
         }
         and adapter_receipt.get("route_enabled") is False
         and adapter_receipt.get("configured_scope_only") is True
@@ -12540,12 +13435,27 @@ def verify_review_matrix(
         and "provider-backed durability" in adapter_scope.lower()
         and "preserved historical runtime-activation replay" in adapter_scope.lower()
         and "passed 99/99 nodes" in adapter_scope.lower()
-        and "current authoritative same-process replay separately" in adapter_scope.lower()
-        and "passed 99/99 nodes at current digest" in adapter_scope.lower()
-        and CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT["loaded_code_sha256"].lower()
+        and "earlier authoritative same-process replay separately" in adapter_scope.lower()
+        and "passed 99/99 nodes at digest" in adapter_scope.lower()
+        and HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT[
+            "loaded_code_sha256"
+        ].lower()
+        in adapter_scope
+        and HISTORICAL_PRE_REFRESH_ADAPTER_RECEIPT["elapsed_seconds"]
+        in adapter_scope
+        and "preserved explicitly as historical evidence" in adapter_scope.lower()
+        and "integrated verifier replay rejected that historical loaded-code digest as stale"
+        in adapter_scope.lower()
+        and "descriptive failure record infers no attempt ordinal and no whole-run elapsed value"
+        in adapter_scope.lower()
+        and "fresh current-tree authoritative replay" in adapter_scope.lower()
+        and CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT[
+            "loaded_code_sha256"
+        ].lower()
         in adapter_scope
         and CURRENT_AUTHORITATIVE_ADAPTER_RECEIPT["elapsed_seconds"]
         in adapter_scope
+        and "zero setup skips (`[]`)" in adapter_scope.lower()
         and "one warning" in adapter_scope.lower()
         and "live execution" in adapter_scope.lower(),
         "review-matrix admitted-adapter/reconciliation receipt drifted or promotes authority",
@@ -13061,6 +13971,25 @@ def verify_adversarial_review() -> None:
         "7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F",
         "C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199",
         "F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6",
+        DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+            "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+        ][0],
+        "37,040 bytes",
+        DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+            "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+        ][0],
+        "50,393 bytes",
+        "current exact-byte lifecycle-plus-phase focused receipt is 63/63 PASS in",
+        "517.14s (0:08:37), exit 0",
+        "superseded joint receipt bound lifecycle test identity",
+        "3C0C3C4B2605BC2FAF76DF25ABC870A2B6E70B6E84E7F8CBB30A722E80405D5D",
+        "50,378 bytes; it passed 63/63 in 585.25s",
+        "Nine literal host-throughput PASS assertions were removed from the two",
+        "Seven unrelated liveness ceilings and the 5,400-second runner",
+        "`NO PERFORMANCE AUTHORITY`",
+        "Exact functional,",
+        "same-host SQLite state-transition, receipt, and",
+        "reconciliation checks remain",
         "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E",
         "B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7",
         "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5",
@@ -13085,8 +14014,16 @@ def verify_adversarial_review() -> None:
         "prompt-context checkpoint is also preserved historical evidence",
         "1,461 ordinary reports and 163 passing subtests",
         "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225",
-        "authoritative same-process 99/99 PASS receipt",
-        "297 ordinary reports, zero subtests, one warning",
+        "Adapter/reconciliation has the current authoritative same-process receipt",
+        "297 ordinary reports, zero subtests, and one warning",
+        "25.401532",
+        "B543CD078076717C80341B0B9C52F158CBD20B9BB3718E4128F81373AEEA1101",
+        "earlier adapter/reconciliation same-process PASS is preserved explicitly as",
+        "47.452869",
+        "5C860DD3A7F787DD0826920D134796F42E02C74C1A4123F256982DF29CA499C3",
+        "integrated verifier replay rejected that historical adapter loaded-code digest",
+        "descriptive failure record infers no attempt ordinal and no",
+        "whole-run elapsed value",
         "2EC053F1688C97A76326A5ADDD79A07F31623D91FE9513DF9B4EC4C6B5D2167B",
         "NO_ELIGIBLE_THRESHOLD",
         "repaired Stage C capture seam",
@@ -19229,6 +20166,11 @@ def main() -> int:
     )
     runner_lock = verify_local_test_runner_lock()
     integrated_observations = capture_integrated_file_observations(artifacts)
+    require(
+        len(integrated_observations)
+        == FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES,
+        "final integrated receipt postflight identity count drifted from 1,258",
+    )
     suite_results = verify_test_suites(manifest, runner_lock)
     require(
         verify_local_test_runner_lock() == runner_lock,
