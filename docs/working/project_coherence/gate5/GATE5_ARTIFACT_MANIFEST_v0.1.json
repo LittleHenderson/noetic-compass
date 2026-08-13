@@ -12,7 +12,7 @@
   "product_claim_effect": "NONE",
   "manifest_self_hash": null,
   "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
-  "artifact_count": 708,
+  "artifact_count": 712,
   "artifacts": [
     {
       "path": ".gitattributes",
@@ -22,14 +22,14 @@
     },
     {
       "path": ".github/workflows/live-worker-image.yml",
-      "sha256": "86215CBA4FA0A2B2DD00FBA9915E2AFE578D952A8507DB0D663309CDCB6A886B",
-      "bytes": 6382,
+      "sha256": "03A6B61EC399B257851BE0A60D403E8171876FB082DD83EFF30225DFC5105016",
+      "bytes": 6457,
       "role": "gate5_control_artifact"
     },
     {
       "path": ".github/workflows/stagec-qwen-batch-image.yml",
-      "sha256": "1763377C92B3754A51D8A19766FC1F16DDB44F52377C7EA1EA620B851C088DDF",
-      "bytes": 15916,
+      "sha256": "6190EBE4182FB1665298285018820F3C7BD2D48C6A6387279C6558EBD056942C",
+      "bytes": 16267,
       "role": "gate5_control_artifact"
     },
     {
@@ -46,8 +46,8 @@
     },
     {
       "path": "docs/working/project_coherence/CHANGELOG.md",
-      "sha256": "52F264F2753369E7CA5B31BC60CFF8972F3B61CD084D6D1510A17EAE89698DE8",
-      "bytes": 36539,
+      "sha256": "A8C1E429A6E173BF3165DAD7895EE545027FBFB2A5D3D7B7E829710CDD532CB5",
+      "bytes": 42674,
       "role": "gate5_control_artifact"
     },
     {
@@ -82,8 +82,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
-      "sha256": "9F5DAD25BB42AC7D4F4D5DC9CF57ACF82AA090032202C315D323E1F66145D19E",
-      "bytes": 112293,
+      "sha256": "854EB187F9AA45C0EA1B747FC27539E896A952AC50E003ABBB8978C1E7510F1C",
+      "bytes": 118779,
       "role": "gate5_control_artifact"
     },
     {
@@ -124,8 +124,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
-      "sha256": "B43A3CB015FA6376C754DEAB43D95642B993F2E1A059883E533DD43F2D7A0416",
-      "bytes": 290901,
+      "sha256": "CB5124A973EEDC29B2093EFE18A44D7F5DF8EF8B07F0A07AA0D5843185E9808A",
+      "bytes": 325345,
       "role": "gate5_control_artifact"
     },
     {
@@ -142,8 +142,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/README.md",
-      "sha256": "0E5E75BFCEF68FC7F240F9B75E4D0069350ACBD839EB2DC7A2E0CE0352A32096",
-      "bytes": 97641,
+      "sha256": "75E2AFE486EECCF918D27B161D7B8E76064BCE2C0F204388FFD635A5921C3955",
+      "bytes": 104959,
       "role": "gate5_control_artifact"
     },
     {
@@ -204,6 +204,12 @@
       "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/vz8s61131470ab8uivga0qcdq.dockerbuild",
       "sha256": "4E9B23B4CAE00C566AC0BD952F1DDDFF2FCC5811D06F43CA093639369B81E017",
       "bytes": 29058,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence_coverage_dispersion_stage1/CAS_HARNESS_LACUNARITY_RND_HANDOFF_v0.2.md",
+      "sha256": "9AB9CEF1419B431F6884BC758499F71F60C766A8635C5118FA454E640A971EC4",
+      "bytes": 40607,
       "role": "gate5_control_artifact"
     },
     {
@@ -2128,8 +2134,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_packaging.py",
-      "sha256": "9A6D03743A7F67DD0B5E8CCDB6E3E7DBCE110E36012D35BE27671B359C98A02C",
-      "bytes": 6868,
+      "sha256": "079304387E30F08614721F07A92D3F444FB2C29CA0DDB61416FE3A8C9A99732C",
+      "bytes": 6922,
       "role": "gate5_api_runtime_dependency"
     },
     {
@@ -2530,14 +2536,14 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/PACKAGING_PROVENANCE.json",
-      "sha256": "01B026C5DD4FEC14D83486421BA7BF7AA87491AB01F162820EF2AE51F730BC3A",
-      "bytes": 6886,
+      "sha256": "3F6AF85D8A8DCE06B35E97BA2170186BEC70D7DE4719071C02F33EEF8C7A8B2C",
+      "bytes": 7055,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/__init__.py",
-      "sha256": "C76ED2B74B464CAE2F5B9877D2E6F051D23E8675CBBB35DB2DA675844A7CC7E7",
-      "bytes": 42962,
+      "sha256": "72F3FECEBAE16706EB0DA73EE2F156E745D0283DF6A5FBFBED5085F00FCCC5F7",
+      "bytes": 43640,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
@@ -2622,6 +2628,12 @@
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/diagnostic_calibration_fit.py",
       "sha256": "4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF",
       "bytes": 99655,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/diagnostic_evidence_coverage_dispersion.py",
+      "sha256": "C894C44479408735091DEE96931D6904DD4E050692F422AAFE21AB1A9BC1E8B3",
+      "bytes": 40682,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
@@ -2800,26 +2812,26 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-instruct-overlay",
-      "sha256": "A598D39D59B095C604B1ED0F12C326FE2A6AACEA32DF5EA8630943DD559B6E93",
-      "bytes": 4598,
+      "sha256": "67FC73E3753A021790875852BDA118FC6542623309684F6F0057090250C082A4",
+      "bytes": 4694,
       "role": "gate5_environment_control"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-stageb-runtime-overlay",
-      "sha256": "1584F0F48E30C7F0E17148B18E4D43E7C94681D994DCC86C20716CC588412D28",
-      "bytes": 3931,
+      "sha256": "AD462F5995BF81AF465B9E5EBFEE147C0018C0E6128D0403B0C4683556DDD504",
+      "bytes": 4024,
       "role": "gate5_environment_control"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-stagec-model",
-      "sha256": "F66C82DE2AC2DB49DCE70140F1163098D745422A0103CB1962FD97C4ADAFA8D2",
-      "bytes": 3494,
+      "sha256": "37E5280378C9683914B6FEA6FACB670AE66FAF19102A67817861F7DCD09A3DC8",
+      "bytes": 3554,
       "role": "gate5_environment_control"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.stagec-batch",
-      "sha256": "B32F6B502EDB6C0416F52FAEF9249D2F0D324BE20A37F11F229FCB1A37EF276D",
-      "bytes": 4143,
+      "sha256": "63D1C91E2088EC37730F3650E8458C9EF77D384795BA46A0429EC4EBDE95196A",
+      "bytes": 4232,
       "role": "gate5_environment_control"
     },
     {
@@ -3574,8 +3586,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_packaged_mirror.py",
-      "sha256": "CCFEFEC136C85CD798B32491254DD63DA8DD00A8C2C9E588B5990D1EDE38CF7C",
-      "bytes": 21529,
+      "sha256": "853F8721F14EB5A3C8BDA194661133E2E66915C5593E91B38471C0C2F94578E3",
+      "bytes": 23107,
       "role": "gate5_api_launcher_test"
     },
     {
@@ -3628,8 +3640,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/tests/test_evidence_routes.py",
-      "sha256": "4FD4B8D5ED4A819058E421CB0D99753B13EC407C644FB94BB23D46E818F27A15",
-      "bytes": 38566,
+      "sha256": "991F9EAFF4B8F73076B29E1CFC9682EE67145B1F8B2DBC44CAF458505A0A413B",
+      "bytes": 38568,
       "role": "gate5_control_artifact"
     },
     {
@@ -3676,14 +3688,14 @@
     },
     {
       "path": "scripts/run_project_coherence_gate5_joined_local_gpu_smoke.py",
-      "sha256": "DAD13B35DDAC0C575144DD5B7A3503167416BE4615CEA7FB2BA0CB5577701AC9",
-      "bytes": 82175,
+      "sha256": "3598030CFB61F820743278A1EE385A1A63B0A7A54B67504EED1FEC1B3CF095E3",
+      "bytes": 83752,
       "role": "gate5_verification_control"
     },
     {
       "path": "scripts/run_project_coherence_gate5_local_gpu_canary.py",
-      "sha256": "86587E471E1518A1724ACF69368F187CE921DEF9A37B37FEE00B1D3B24000D5F",
-      "bytes": 62206,
+      "sha256": "8AFE3ECE35D06F8CCDDDA3A4ECE0B548EC3B6C05D7B360D17098DCDB94988684",
+      "bytes": 63715,
       "role": "gate5_verification_control"
     },
     {
@@ -3694,14 +3706,14 @@
     },
     {
       "path": "scripts/run_project_coherence_gate5_stageb_qwen_smoke.py",
-      "sha256": "F537CCDC474A2C2D499CDAF440A14C7C6E58FF9F4B4942AF9534423611A0A1DA",
-      "bytes": 120803,
+      "sha256": "C1D95829F3D2765B4185BA490D1BFC634649AA51A796C800090BE13F7A1D70F7",
+      "bytes": 123732,
       "role": "gate5_verification_control"
     },
     {
       "path": "scripts/verify_project_coherence_gate5.py",
-      "sha256": "09F45F416DC6D28DB604C477F9143C42C243FA37328160EE9EF0F882682375E5",
-      "bytes": 936792,
+      "sha256": "06D10226B53F47878A1A57D5FC9D3D666FDFC1E45EAAC5F25D09E9C084A68B05",
+      "bytes": 997771,
       "role": "gate5_verification_control"
     },
     {
@@ -3748,8 +3760,8 @@
     },
     {
       "path": "src/cas_harness_v2/__init__.py",
-      "sha256": "C76ED2B74B464CAE2F5B9877D2E6F051D23E8675CBBB35DB2DA675844A7CC7E7",
-      "bytes": 42962,
+      "sha256": "72F3FECEBAE16706EB0DA73EE2F156E745D0283DF6A5FBFBED5085F00FCCC5F7",
+      "bytes": 43640,
       "role": "gate5_control_kernel_source"
     },
     {
@@ -3834,6 +3846,12 @@
       "path": "src/cas_harness_v2/diagnostic_calibration_fit.py",
       "sha256": "4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF",
       "bytes": 99655,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/diagnostic_evidence_coverage_dispersion.py",
+      "sha256": "C894C44479408735091DEE96931D6904DD4E050692F422AAFE21AB1A9BC1E8B3",
+      "bytes": 40682,
       "role": "gate5_control_kernel_source"
     },
     {
@@ -4065,6 +4083,12 @@
       "role": "gate5_control_kernel_test"
     },
     {
+      "path": "tests/cas_harness_v2/test_diagnostic_evidence_coverage_dispersion.py",
+      "sha256": "E9B533F4438D44A5A3D4DE5117B783F6859DD4FB5F7D12C1C62A3963E1C42F52",
+      "bytes": 82937,
+      "role": "gate5_control_kernel_test"
+    },
+    {
       "path": "tests/cas_harness_v2/test_diagnostic_execution_protocol.py",
       "sha256": "C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199",
       "bytes": 30571,
@@ -4246,20 +4270,20 @@
     },
     {
       "path": "tests/model_smoke/test_gate5_joined_local_gpu_smoke.py",
-      "sha256": "329380ED7DF8B38C06725DB2317FC219CAAA3C329B8EC91CAEB44E76D89C3C2D",
-      "bytes": 21903,
+      "sha256": "7FDE3ABC648046A48267828CCA1C5EA3A7F2892BB1FB38F7862E220D3399F579",
+      "bytes": 22437,
       "role": "gate5_control_artifact"
     },
     {
       "path": "tests/model_smoke/test_gate5_local_gpu_canary.py",
-      "sha256": "5873A7520056BCC2F10F5B2CABA6DA8AE87B1D4C98BB294958FE50E83B7CD304",
-      "bytes": 17872,
+      "sha256": "ABF95A01BDB551F56FEACADEB42DB7D254201A97AA5892B081E6ED83493CFBB3",
+      "bytes": 18352,
       "role": "gate5_control_artifact"
     },
     {
       "path": "tests/model_smoke/test_gate5_stageb_qwen_smoke.py",
-      "sha256": "343BCA539E46A18A629B56942DA52CA07E49E823E2771A5501965488A148A072",
-      "bytes": 27135,
+      "sha256": "7C2C431D14B05B35313174A102E1AE04620BF74F4967E6AD0DE37B0AB53E90BA",
+      "bytes": 27834,
       "role": "gate5_control_artifact"
     }
   ],
@@ -4337,9 +4361,9 @@
         "src",
         "tests/cas_harness_v2"
       ],
-      "expected_tests": 1452,
+      "expected_tests": 1570,
       "expected_subtests": 163,
-      "expected_test_ids_sha256": "4419F4BE8F2CCEE417763854814DA0FA5B7D4D6173BDAD18DF12F5AA06AFFC96",
+      "expected_test_ids_sha256": "8887298311BBFAFFF45421F43FEEC4E68160FF84D360EF108743E9EF90858510",
       "expected_setup_skipped_nodeids": [
         "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_exact_locked_runtime_two_independent_fits",
         "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_arbitrary_coefficient_rejected_by_full_refit_binding",

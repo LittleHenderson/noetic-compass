@@ -2,6 +2,113 @@
 
 All dates use the repository's working timezone. This changelog records control-package changes, not product releases.
 
+## 2026-08-12 - Offline synthetic Evidence-Coverage Dispersion Stage 1 candidate
+
+### Added
+
+- A corrected v0.2 ECD specification and separate canonical/package-mirrored
+  Stage 1 module for exact required-cell support counts, gaps, reduced-rational
+  coverage/HHI/population-CV2 summaries, and deterministic advisory next-test
+  ordering.
+- Four additive schemas, four media types, 27 public exports, exact resource
+  ceilings, frozen synthetic fixtures, arithmetic invariants, adversarial
+  strict-input tests, package provenance/export integration, and a separate
+  Gate 5 review receipt and `OPEN_ENGINEERING` criterion.
+- Explicit rejection of all Unicode general-category `Cc` controls; explicit
+  identity-only treatment for externally admitted `ArtifactRef` values; and an
+  explicit pure-Python reflection boundary that invalidates all in-process
+  seal claims after verifier-state mutation.
+
+### Verification state
+
+- The canonical focused suite is `118 / 118 PASS`; the package mirror suite is
+  `13 / 13 PASS`; canonical and packaged sources are byte-identical. Independent
+  frozen-byte source/package review reports P0/P1 `0 / 0`.
+- Current run `ecd-stage1-suite-receipts-20260812T182522-d7b2ef6d` passed the
+  `1,570`-node Harness inventory at node-ID SHA-256
+  `8887298311BBFAFFF45421F43FEEC4E68160FF84D360EF108743E9EF90858510`;
+  its six exact setup skips remain mismatch evidence rather than pass. The
+  `99`-node adapter also passed at node-ID SHA-256
+  `B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B`.
+  The complete 12-suite map is `2,790` configured nodes. The published
+  Phase 0 `1,452`-node Harness receipt predates ECD and is preserved unchanged;
+  it covers none of the new `118` nodes.
+- The archived Harness receipt is `295,566` bytes /
+  `A7AF4C73517DF93B1FFE04979D8D3688E61DBE730638FCAE7963E9D8BC5471A5`;
+  the adapter receipt is `16,663` bytes /
+  `7AFCE687047363D2B27E53D7978E220B6B4F36C85DFA6FA6DEA3B5FDA5AE9FBB`.
+  Both bind issuance verifier `BFB3DE9B...7CF3`, manifest `9D94072D...0473`,
+  and runner `EB7D2D66...60B13`; independent receipt audit reports P0/P1
+  `0 / 0`.
+- First integrated attempt `first-20260813T023503Z-f3de22ee` completed suite
+  execution but retained a stale Phase 0 worker loaded-code comparator. It
+  emitted no exact PASS line and remains `FAILED / STALE PHASE0 WORKER RECEIPT
+  COMPARATOR / EXIT 0 WITHOUT EXACT PASS LINE / STRUCTURE_ONLY /
+  NON_AUTHORITY`. Its result is `3,202` bytes /
+  `F6CC658B34C5BEDDD84DD7FF501BD36575942D6675EDDF8D9CBF3C9DEF0AB303`;
+  stderr is `500` bytes /
+  `1A50674944CFADFB705D584EDFC70F192E23109A22918F6A97E38A0C67C773D7`;
+  stdout is empty.
+- Separate ECD-only worker run
+  `ecd-stage1-worker-receipt-20260812T202101-c1cb7da6` passed `732 / 732`.
+  The receipt is `98,968` bytes /
+  `60EA620DA91F29E0D1F059ECCFF1BDC4DD206EC68BB17AD92D4C566401380342`;
+  pre-test/complete loaded-code digests are `5859DC61...94B7A1` /
+  `47C816D2...0BFAB`. It is promoted only on ECD Stage 1 surfaces; published
+  Phase 0 worker current and historical receipts remain unchanged.
+- The current manifest is `712` artifacts / `478` Python artifacts, with
+  `2,314` executable-shadow paths and `1,284` integrated postflight identities.
+- Audited intermediate integrated run `retry-20260813T033443Z-64762d21`
+  exited `0` with the exact PASS line once across `12 / 12` suites and `2,790`
+  configured nodes, `53` criteria / all `22` required OPEN boundaries. Result,
+  start, stdout, and stderr are respectively `3,200` B /
+  `163E7D60111978CD40C191680DD49DF33B562E7C4C842A915544C281E52936F8`,
+  `2,597` B /
+  `6FFA96A6C7B8EC3E2CC5A9482A5AA46452544D701A552D8501DBD0314D1F000F`,
+  `12,118` B /
+  `61D027192FF7E8B89BB85854F72D834AE2C97768915C387F6745D5DFF9424EDD`,
+  and `0` B /
+  `E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`.
+  Before/after verifier, manifest, and runner were exact at `976,022` B /
+  `9ECEEE47D33855135A9A7A2749CD0239EDEBC51AA0EF008B433C15C0837B31B1`,
+  `205,702` B /
+  `C6C50718BEB5D9EC4FDD2772B92483747C113CF00EB8A6BEAE38995D811CC859`,
+  and `121,525` B /
+  `EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13`.
+- Mandatory correction: the supervisor start field
+  `8605BCA3935F14370900963A6D48E4C236C69A8A9D3792F3E776AFE677546355` is stale
+  pre-worker-promotion state and is explicitly rejected as a binding for the
+  run. The actual launch tree was independently reconstructed post hoc as
+  `2,228` bytes / `15` paths /
+  `20E463B9A88D016E7C2E27991E282EDA44DC65A2D7762C532015A7B129C10F70`;
+  the correction artifact is `1,436` B /
+  `5854A202FB06A59ABC1BF37225A0712AC8141E2B9D36762AD0F3A38D5AD28FC8`.
+  The reconstruction is not trusted time or
+  WORM and adds no authority.
+- All 12 exact suite identities are bound. Harness `1,570`, worker `732`, and
+  adapter `99` use node/loaded-code pairs
+  `8887298311BBFAFFF45421F43FEEC4E68160FF84D360EF108743E9EF90858510` /
+  `973AD5E7905130A17D29798C94593D5BA3BFFE807AC2C82F0AF2AB89A4FE77A5`,
+  `F53562BAECCC4982B402A9A747F8CADC29468B5F14D8B4A8C17CFC2A8E89B568` /
+  `47C816D2873400775F353F6832DD6656CFB0B19471BD596B3829D530ACE0BFAB`,
+  and `B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B` /
+  `6EDFF27912DC8C73FF508C11D850F18E6A6146C6B93238FA431E00D49B12299F`.
+- Current ECD status is `CURRENT HARNESS, WORKER, AND ADAPTER SAME-PROCESS
+  RECEIPTS PASS / AUDITED INTERMEDIATE INTEGRATED 12-SUITE REPLAY PASS / FINAL
+  UNCHANGED-TREE REPLAY PENDING / STRUCTURE_ONLY / NON_AUTHORITY`. Manifest
+  rebuild after receipt promotion, independent promotion audit, and the final
+  unchanged-tree integrated replay remain open.
+
+### Boundaries
+
+Stage 1 is `R&D / OFFLINE SYNTHETIC / ADVISORY_ONLY / NON_AUTHORITY`. It adds no
+adjacency, rates, uncertainty, Evidence Packet, production, provider, model,
+Stage C, decision, licensing, disclosure, or canon authority. CV2 remains
+`EXPERIMENTAL / NOT PROMOTED`; Stage 2 is blocked until a separate
+preregistration defines a genuinely non-equivalent CV2 action rule and complete
+policy-independent common-horizon outcomes against all frozen simple baselines
+and the CV2-removed ablation.
+
 ## 2026-08-07 - Gate 5 retained-evidence reconciliation
 
 ### Added

@@ -41,7 +41,7 @@ import subprocess
 import tarfile
 import tempfile
 from types import MappingProxyType
-from typing import Any, Callable, Iterable
+from typing import Any, Callable, Iterable, Mapping
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -385,6 +385,168 @@ FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES = 1_280
 CURRENT_RUNPOD_INTEGRATED_REVIEW_CRITERIA = 52
 CURRENT_RUNPOD_INTEGRATED_OPEN_BOUNDARIES = 22
 CURRENT_RUNPOD_INTEGRATED_POSTFLIGHT_IDENTITIES = 1_280
+
+# Evidence-Coverage Dispersion (ECD) Stage 1 is an additive offline R&D
+# tranche.  These names are deliberately separate from every published
+# Phase-0/RunPod/current-integrated identity above.  Do not repoint an older
+# receipt or compatibility alias at this surface.
+ECD_STAGE1_SCOPE = "R&D / OFFLINE SYNTHETIC / ADVISORY_ONLY / NON_AUTHORITY"
+ECD_STAGE1_VERIFICATION_STATUS = (
+    "CURRENT HARNESS, WORKER, AND ADAPTER SAME-PROCESS RECEIPTS PASS / "
+    "AUDITED INTERMEDIATE INTEGRATED 12-SUITE REPLAY PASS / FINAL "
+    "UNCHANGED-TREE REPLAY PENDING / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+ECD_STAGE1_PACKAGE_STATUS = (
+    "LOCAL PACKAGE MIRROR PASS / SYNTHETIC RECEIPT ONLY / NON_AUTHORITY"
+)
+ECD_STAGE1_HARNESS_STATUS = (
+    "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+    "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+ECD_STAGE1_ADAPTER_STATUS = (
+    "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+ECD_STAGE1_WORKER_STATUS = (
+    "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+ECD_STAGE1_PHASE0_HARNESS_COVERAGE = (
+    "NONE / PUBLISHED PHASE0 1452-NODE HARNESS RECEIPT PREDATES ECD STAGE1"
+)
+ECD_STAGE1_CURRENT_HARNESS_COVERAGE = (
+    "CURRENT ECD STAGE1 1570-NODE HARNESS RECEIPT INCLUDES ALL 118 ECD NODES / "
+    "PUBLISHED PHASE0 1452-NODE RECEIPT PRESERVED UNCHANGED"
+)
+ECD_STAGE1_INTEGRATED_STATUS = (
+    "AUDITED INTERMEDIATE INTEGRATED 12-SUITE PASS / LOCAL ENGINEERING / "
+    "STRUCTURE_ONLY / NON_AUTHORITY / FINAL UNCHANGED-TREE REPLAY PENDING"
+)
+ECD_STAGE1_SPEC_REL = (
+    "docs/working/project_coherence/gate5/"
+    "evidence_coverage_dispersion_stage1/"
+    "CAS_HARNESS_LACUNARITY_RND_HANDOFF_v0.2.md"
+)
+ECD_STAGE1_SPEC_SHA256 = (
+    "9AB9CEF1419B431F6884BC758499F71F60C766A8635C5118FA454E640A971EC4"
+)
+ECD_STAGE1_SPEC_BYTES = 40_607
+ECD_STAGE1_SOURCE_REL = (
+    "src/cas_harness_v2/diagnostic_evidence_coverage_dispersion.py"
+)
+ECD_STAGE1_SOURCE_SHA256 = (
+    "C894C44479408735091DEE96931D6904DD4E050692F422AAFE21AB1A9BC1E8B3"
+)
+ECD_STAGE1_SOURCE_BYTES = 40_682
+ECD_STAGE1_TEST_REL = (
+    "tests/cas_harness_v2/test_diagnostic_evidence_coverage_dispersion.py"
+)
+ECD_STAGE1_TEST_SHA256 = (
+    "E9B533F4438D44A5A3D4DE5117B783F6859DD4FB5F7D12C1C62A3963E1C42F52"
+)
+ECD_STAGE1_TEST_BYTES = 82_937
+ECD_STAGE1_FOCUSED_NODES = 118
+ECD_STAGE1_FOCUSED_NODE_IDS_SHA256 = (
+    "D186DB44D31FA01B336815D1824033C9C8099886A73B12516E1FBE7C252D490C"
+)
+ECD_STAGE1_FOCUSED_NODE_IDS_BYTES = 16_623
+ECD_STAGE1_FOCUSED_STATUS = (
+    "LOCAL FOCUSED 118 / 118 PASS / R&D / OFFLINE SYNTHETIC / "
+    "ADVISORY_ONLY / NON_AUTHORITY"
+)
+ECD_STAGE1_CONFIGURED_HARNESS_NODES = 1_570
+ECD_STAGE1_CONFIGURED_HARNESS_NODE_IDS_SHA256 = (
+    "8887298311BBFAFFF45421F43FEEC4E68160FF84D360EF108743E9EF90858510"
+)
+ECD_STAGE1_CONFIGURED_HARNESS_NODE_IDS_BYTES = 213_431
+ECD_STAGE1_CONFIGURED_TEST_SUITE_NODE_TOTAL = 2_790
+ECD_STAGE1_EXPECTED_MANIFEST_ARTIFACT_COUNT = 712
+ECD_STAGE1_EXPECTED_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT = 478
+ECD_STAGE1_EXPECTED_EXECUTABLE_SHADOW_PATH_COUNT = 2_314
+ECD_STAGE1_EXPECTED_POSTFLIGHT_IDENTITIES = 1_284
+ECD_STAGE1_MIRROR_REL = (
+    f"{PACKAGED_HARNESS_V2_REL}/diagnostic_evidence_coverage_dispersion.py"
+)
+ECD_STAGE1_PACKAGED_HARNESS_V2_PROVENANCE_SHA256 = (
+    "3F6AF85D8A8DCE06B35E97BA2170186BEC70D7DE4719071C02F33EEF8C7A8B2C"
+)
+ECD_STAGE1_PACKAGED_HARNESS_V2_PROVENANCE_BYTES = 7_055
+ECD_STAGE1_PACKAGED_HARNESS_V2_FILE_COUNT = 42
+ECD_STAGE1_PACKAGED_HARNESS_V2_EXPORT_COUNT = 1_269
+ECD_STAGE1_PACKAGED_HARNESS_V2_TOTAL_BYTES = 2_593_194
+ECD_STAGE1_PACKAGED_HARNESS_V2_INIT_SHA256 = (
+    "72F3FECEBAE16706EB0DA73EE2F156E745D0283DF6A5FBFBED5085F00FCCC5F7"
+)
+ECD_STAGE1_PACKAGED_HARNESS_V2_INIT_BYTES = 43_640
+ECD_STAGE1_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256 = (
+    "079304387E30F08614721F07A92D3F444FB2C29CA0DDB61416FE3A8C9A99732C"
+)
+ECD_STAGE1_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_BYTES = 6_922
+ECD_STAGE1_PACKAGED_HARNESS_V2_TEST_SHA256 = (
+    "853F8721F14EB5A3C8BDA194661133E2E66915C5593E91B38471C0C2F94578E3"
+)
+ECD_STAGE1_PACKAGED_HARNESS_V2_TEST_BYTES = 23_107
+ECD_STAGE1_PACKAGE_FOCUSED_NODES = 13
+ECD_STAGE1_PACKAGE_FOCUSED_NODE_IDS_SHA256 = (
+    "B68CB064B501B640FB5BB0CFD60963E262897A749C653C1BC89AC07BF29FFA9D"
+)
+ECD_STAGE1_PACKAGE_FOCUSED_NODE_IDS_BYTES = 1_611
+ECD_STAGE1_PACKAGE_FOCUSED_STATUS = (
+    "LOCAL PACKAGE MIRROR 13 / 13 PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+ECD_STAGE1_SCHEMA_VALUES = (
+    "cas_harness_v2.evidence_coverage_required_universe.v1",
+    "cas_harness_v2.evidence_coverage_observation.v1",
+    "cas_harness_v2.evidence_coverage_metric_policy.v1",
+    "cas_harness_v2.evidence_coverage_dispersion.v1",
+)
+ECD_STAGE1_MEDIA_TYPE_VALUES = (
+    "application/vnd.cas-harness.evidence-coverage-required-universe+json",
+    "application/vnd.cas-harness.evidence-coverage-observation+json",
+    "application/vnd.cas-harness.evidence-coverage-metric-policy+json",
+    "application/vnd.cas-harness.evidence-coverage-dispersion+json",
+)
+ECD_STAGE1_PUBLIC_EXPORTS = (
+    "EVIDENCE_COVERAGE_REQUIRED_UNIVERSE_SCHEMA",
+    "EVIDENCE_COVERAGE_OBSERVATION_SCHEMA",
+    "EVIDENCE_COVERAGE_METRIC_POLICY_SCHEMA",
+    "EVIDENCE_COVERAGE_DISPERSION_SCHEMA",
+    "EVIDENCE_COVERAGE_REQUIRED_UNIVERSE_MEDIA_TYPE",
+    "EVIDENCE_COVERAGE_OBSERVATION_MEDIA_TYPE",
+    "EVIDENCE_COVERAGE_METRIC_POLICY_MEDIA_TYPE",
+    "EVIDENCE_COVERAGE_DISPERSION_MEDIA_TYPE",
+    "EVIDENCE_COVERAGE_DISPERSION_SPEC_REPOSITORY_PATH",
+    "EVIDENCE_COVERAGE_DISPERSION_SPEC_SHA256",
+    "EVIDENCE_COVERAGE_DISPERSION_SPEC_BYTE_LENGTH",
+    "EVIDENCE_COVERAGE_MAX_DIMENSIONS",
+    "EVIDENCE_COVERAGE_MAX_ROSTER_CELLS",
+    "EVIDENCE_COVERAGE_MAX_ELIGIBLE_CELLS",
+    "EVIDENCE_COVERAGE_MAX_EVIDENCE_ITEMS",
+    "EVIDENCE_COVERAGE_MAX_IDENTIFIER_UTF8_BYTES",
+    "EVIDENCE_COVERAGE_MAX_RECOMMENDATIONS",
+    "EVIDENCE_COVERAGE_MAX_PROCESS_SEALS",
+    "EvidenceCoverageDispersionError",
+    "EvidenceCoverageDispersionArtifact",
+    "build_evidence_coverage_dispersion",
+    "load_evidence_coverage_dispersion",
+    "replay_evidence_coverage_dispersion",
+    "MAX_DOCUMENT_BYTES",
+    "MAX_DEPTH",
+    "MAX_NODES",
+    "MAX_INTEGER_BITS",
+)
+ECD_STAGE1_REVIEW_MATRIX_CRITERIA = 53
+ECD_STAGE1_ACTIVE_RUNPOD_CONTROL_DOCUMENT_BINDINGS = MappingProxyType(
+    {
+        **STAGEC_RUNPOD_CONTROL_DOCUMENT_BINDINGS,
+        "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md": (
+            "854EB187F9AA45C0EA1B747FC27539E896A952AC50E003ABBB8978C1E7510F1C",
+            118_779,
+        ),
+        "docs/working/project_coherence/gate5/README.md": (
+            "75E2AFE486EECCF918D27B161D7B8E76064BCE2C0F204388FFD635A5921C3955",
+            104_959,
+        ),
+    }
+)
 CURRENT_AUTHORITATIVE_FULL_SUITE_STATUS = (
     "CURRENT AUTHORITATIVE SAME-PROCESS HARNESS 1082 / WORKER 719 / "
     "ADAPTER 99 RECEIPTS PASS / FINAL INTEGRATED 12-SUITE VERIFIER PASS / "
@@ -414,6 +576,720 @@ CURRENT_HARNESS_LOADED_CODE_DIGEST_RULE = (
 )
 RAW_LOADED_CODE_DIGEST_RULE = (
     "CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION"
+)
+ECD_STAGE1_RECEIPT_RUN_ID = (
+    "ecd-stage1-suite-receipts-20260812T182522-d7b2ef6d"
+)
+ECD_STAGE1_WORKER_RECEIPT_RUN_ID = (
+    "ecd-stage1-worker-receipt-20260812T202101-c1cb7da6"
+)
+ECD_STAGE1_RECEIPT_SCOPE = (
+    "LOCAL ENGINEERING REGRESSION / SAME-RUN RECEIPT SUMMARY / "
+    "NOT TRUSTED TIME OR WORM / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+ECD_STAGE1_CURRENT_RECEIPT_BUNDLE_BINDINGS = MappingProxyType(
+    {
+        "harness": MappingProxyType(
+            {
+                "run_id": ECD_STAGE1_RECEIPT_RUN_ID,
+                "receipt_file_sha256": (
+                    "A7AF4C73517DF93B1FFE04979D8D3688E61DBE730638FCAE7963E9D8BC5471A5"
+                ),
+                "receipt_file_bytes": 295_566,
+                "suite_name": "Harness v2 kernel and history",
+                "scope": ECD_STAGE1_RECEIPT_SCOPE,
+                "started_utc": "2026-08-13T01:25:46.666728Z",
+                "ended_utc": "2026-08-13T02:07:03.286037Z",
+                "verifier_sha256": (
+                    "BFB3DE9B9061298A7735454FF3FB4ED8FDB6DC31AA4A2F580DEE47E16AB97CF3"
+                ),
+                "manifest_sha256": (
+                    "9D94072DCF4FCE4A305020C90AA52A72E884034CA11DA8D148D8865BECFB0473"
+                ),
+                "runner_lock_sha256": (
+                    "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+                ),
+            }
+        ),
+        "worker": MappingProxyType(
+            {
+                "run_id": ECD_STAGE1_WORKER_RECEIPT_RUN_ID,
+                "receipt_file_sha256": (
+                    "60EA620DA91F29E0D1F059ECCFF1BDC4DD206EC68BB17AD92D4C566401380342"
+                ),
+                "receipt_file_bytes": 98_968,
+                "suite_name": "Live trace worker complete",
+                "scope": ECD_STAGE1_RECEIPT_SCOPE,
+                "started_utc": "2026-08-13T03:21:08.090082Z",
+                "ended_utc": "2026-08-13T03:21:48.524075Z",
+                "verifier_sha256": (
+                    "4A2749E818883FF3F755B45F2699777594CEDFDC819FCE7158CD12F65C045805"
+                ),
+                "manifest_sha256": (
+                    "EC76FC103CFBC206E7B153C8FAFCAE5AEE2F0C7E294DD4FE538F3E7B14A3DBB9"
+                ),
+                "runner_lock_sha256": (
+                    "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+                ),
+            }
+        ),
+        "adapter": MappingProxyType(
+            {
+                "run_id": ECD_STAGE1_RECEIPT_RUN_ID,
+                "receipt_file_sha256": (
+                    "7AFCE687047363D2B27E53D7978E220B6B4F36C85DFA6FA6DEA3B5FDA5AE9FBB"
+                ),
+                "receipt_file_bytes": 16_663,
+                "suite_name": (
+                    "Harness v2 admitted adapter and bounded reconciliation"
+                ),
+                "scope": ECD_STAGE1_RECEIPT_SCOPE,
+                "started_utc": "2026-08-13T02:07:22.192988Z",
+                "ended_utc": "2026-08-13T02:07:47.699354Z",
+                "verifier_sha256": (
+                    "BFB3DE9B9061298A7735454FF3FB4ED8FDB6DC31AA4A2F580DEE47E16AB97CF3"
+                ),
+                "manifest_sha256": (
+                    "9D94072DCF4FCE4A305020C90AA52A72E884034CA11DA8D148D8865BECFB0473"
+                ),
+                "runner_lock_sha256": (
+                    "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+                ),
+            }
+        ),
+    }
+)
+ECD_STAGE1_CURRENT_HARNESS_RECEIPT = MappingProxyType(
+    {
+        "collected_nodes": ECD_STAGE1_CONFIGURED_HARNESS_NODES,
+        "started_nodes": ECD_STAGE1_CONFIGURED_HARNESS_NODES,
+        "finished_nodes": ECD_STAGE1_CONFIGURED_HARNESS_NODES,
+        "all_phase_pass_nodes": 1_564,
+        "setup_skipped_nodes": 6,
+        "ordinary_reports": 4_704,
+        "passed_subtests": 163,
+        "warning_count": 0,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "2476.919921",
+        "node_ids_sha256": ECD_STAGE1_CONFIGURED_HARNESS_NODE_IDS_SHA256,
+        "ordinary_outcomes_sha256": (
+            "555C2E97BA6553EC85CCA55993C98B2816E7051670C122EFD1B60A9A84D72DC6"
+        ),
+        "subtest_outcomes_sha256": (
+            "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109"
+        ),
+        "locked_import_origins_sha256": (
+            "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+        ),
+        "pre_test_loaded_code_sha256": (
+            "F7ABD42464420E10D1B9F75FDC57701BC99541F46B814E71F795F47431E2DF21"
+        ),
+        "loaded_code_sha256": (
+            "973AD5E7905130A17D29798C94593D5BA3BFFE807AC2C82F0AF2AB89A4FE77A5"
+        ),
+        "loaded_code_digest_rule": CURRENT_HARNESS_LOADED_CODE_DIGEST_RULE,
+        "receipt_status": ECD_STAGE1_HARNESS_STATUS,
+    }
+)
+ECD_STAGE1_CURRENT_WORKER_RECEIPT = MappingProxyType(
+    {
+        "collected_nodes": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
+        "started_nodes": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
+        "finished_nodes": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
+        "all_phase_pass_nodes": CURRENT_RUNPOD_CONFIGURED_WORKER_NODES,
+        "setup_skipped_nodes": 0,
+        "ordinary_reports": 2_196,
+        "passed_subtests": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "40.435683",
+        "node_ids_sha256": CURRENT_RUNPOD_CONFIGURED_WORKER_NODE_IDS_SHA256,
+        "ordinary_outcomes_sha256": (
+            "889E455626A3DC5F7EC26CFC253CABED4572F0F9E95E68CCF56142380404664E"
+        ),
+        "subtest_outcomes_sha256": (
+            "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+        ),
+        "locked_import_origins_sha256": (
+            "035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6"
+        ),
+        "pre_test_loaded_code_sha256": (
+            "5859DC614883F19A02FBABEC51455CE4728054531AEB0E665D1CAE788394B7A1"
+        ),
+        "loaded_code_sha256": (
+            "47C816D2873400775F353F6832DD6656CFB0B19471BD596B3829D530ACE0BFAB"
+        ),
+        "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+        "receipt_status": ECD_STAGE1_WORKER_STATUS,
+    }
+)
+ECD_STAGE1_CURRENT_ADAPTER_RECEIPT = MappingProxyType(
+    {
+        "collected_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "started_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "finished_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "all_phase_pass_nodes": EXPANDED_CONFIGURED_ADAPTER_NODES,
+        "setup_skipped_nodes": 0,
+        "ordinary_reports": 297,
+        "passed_subtests": 0,
+        "warning_count": 1,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "process_exit_status": 0,
+        "pytest_exit_status": 0,
+        "elapsed_seconds": "25.510511",
+        "node_ids_sha256": EXPANDED_CONFIGURED_ADAPTER_NODE_IDS_SHA256,
+        "ordinary_outcomes_sha256": (
+            "548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F"
+        ),
+        "subtest_outcomes_sha256": (
+            "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+        ),
+        "locked_import_origins_sha256": (
+            "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+        ),
+        "pre_test_loaded_code_sha256": (
+            "F7ABD42464420E10D1B9F75FDC57701BC99541F46B814E71F795F47431E2DF21"
+        ),
+        "loaded_code_sha256": (
+            "6EDFF27912DC8C73FF508C11D850F18E6A6146C6B93238FA431E00D49B12299F"
+        ),
+        "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+        "receipt_status": ECD_STAGE1_ADAPTER_STATUS,
+    }
+)
+ECD_STAGE1_FIRST_INTEGRATED_ATTEMPT_STATUS = (
+    "FAILED / STALE PHASE0 WORKER RECEIPT COMPARATOR / "
+    "EXIT 0 WITHOUT EXACT PASS LINE / STRUCTURE_ONLY / NON_AUTHORITY"
+)
+ECD_STAGE1_FIRST_INTEGRATED_ATTEMPT = MappingProxyType(
+    {
+        "run_id": "first-20260813T023503Z-f3de22ee",
+        "status": ECD_STAGE1_FIRST_INTEGRATED_ATTEMPT_STATUS,
+        "supervisor_state": "EXIT_0_WITHOUT_EXACT_PASS_LINE",
+        "started_utc": "2026-08-13T02:35:03.5985312Z",
+        "ended_utc_observational": "2026-08-13T03:19:19.6438698Z",
+        "wall_seconds_observational": "2656.063",
+        "supervisor_exit_code": 0,
+        "exact_pass_line_observed": False,
+        "result_file_sha256": (
+            "F6CC658B34C5BEDDD84DD7FF501BD36575942D6675EDDF8D9CBF3C9DEF0AB303"
+        ),
+        "result_file_bytes": 3_202,
+        "stdout_sha256": (
+            "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        ),
+        "stdout_bytes": 0,
+        "stderr_sha256": (
+            "1A50674944CFADFB705D584EDFC70F192E23109A22918F6A97E38A0C67C773D7"
+        ),
+        "stderr_bytes": 500,
+        "verifier_sha256": (
+            "4A2749E818883FF3F755B45F2699777594CEDFDC819FCE7158CD12F65C045805"
+        ),
+        "verifier_bytes": 969_891,
+        "manifest_sha256": (
+            "EC76FC103CFBC206E7B153C8FAFCAE5AEE2F0C7E294DD4FE538F3E7B14A3DBB9"
+        ),
+        "manifest_bytes": 205_702,
+        "runner_lock_sha256": (
+            "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+        ),
+        "runner_lock_bytes": 121_525,
+        "stale_expected_pre_test_loaded_code_sha256": (
+            "3696A5457FDF85823DAC360679C750DEC5B8A691207958EE0A1854A790A21A5E"
+        ),
+        "observed_pre_test_loaded_code_sha256": (
+            "5859DC614883F19A02FBABEC51455CE4728054531AEB0E665D1CAE788394B7A1"
+        ),
+        "stale_expected_loaded_code_sha256": (
+            "58A306279E05EBDF7F4C18A8B153170AB058C7DACF906D5E00AB92372F018681"
+        ),
+        "observed_loaded_code_sha256": (
+            "47C816D2873400775F353F6832DD6656CFB0B19471BD596B3829D530ACE0BFAB"
+        ),
+        "authority_boundary": "LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY",
+    }
+)
+ECD_STAGE1_INTERMEDIATE_INTEGRATED_STATUS = (
+    "AUDITED INTERMEDIATE INTEGRATED 12-SUITE PASS / LOCAL ENGINEERING / "
+    "STRUCTURE_ONLY / NON_AUTHORITY / FINAL UNCHANGED-TREE REPLAY PENDING"
+)
+ECD_STAGE1_INTERMEDIATE_INTEGRATED_SUITE_IDENTITIES = MappingProxyType(
+    {
+        "Harness v2 kernel and history": MappingProxyType(
+            {
+                "tests": 1_570,
+                "subtests": 163,
+                "expected_setup_skips": 6,
+                "executed_nodes_sha256": (
+                    "8887298311BBFAFFF45421F43FEEC4E68160FF84D360EF108743E9EF90858510"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "555C2E97BA6553EC85CCA55993C98B2816E7051670C122EFD1B60A9A84D72DC6"
+                ),
+                "subtest_outcomes_sha256": (
+                    "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109"
+                ),
+                "locked_import_origins_sha256": (
+                    "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "F7ABD42464420E10D1B9F75FDC57701BC99541F46B814E71F795F47431E2DF21"
+                ),
+                "loaded_code_sha256": (
+                    "973AD5E7905130A17D29798C94593D5BA3BFFE807AC2C82F0AF2AB89A4FE77A5"
+                ),
+                "loaded_code_digest_rule": CURRENT_HARNESS_LOADED_CODE_DIGEST_RULE,
+                "warnings": 0,
+            }
+        ),
+        "Live trace worker complete": MappingProxyType(
+            {
+                "tests": 732,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "F53562BAECCC4982B402A9A747F8CADC29468B5F14D8B4A8C17CFC2A8E89B568"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "889E455626A3DC5F7EC26CFC253CABED4572F0F9E95E68CCF56142380404664E"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "5859DC614883F19A02FBABEC51455CE4728054531AEB0E665D1CAE788394B7A1"
+                ),
+                "loaded_code_sha256": (
+                    "47C816D2873400775F353F6832DD6656CFB0B19471BD596B3829D530ACE0BFAB"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 0,
+            }
+        ),
+        "Live trace worker numeric red team": MappingProxyType(
+            {
+                "tests": 32,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "12602041756F20D1AFD402FA56968660839E5EB1098438BA84C69BFF8DE7050B"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "473227B79854277D5C3363E8F39B008A58BC27E3F5EF86D3E3F49857625E1A0C"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "5859DC614883F19A02FBABEC51455CE4728054531AEB0E665D1CAE788394B7A1"
+                ),
+                "loaded_code_sha256": (
+                    "F58FE17D1280182DA2B1BC4E7309621E2E2F7661FEA623C7B4FAFDB94D55601C"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 0,
+            }
+        ),
+        "API, fleet state, and launcher identity": MappingProxyType(
+            {
+                "tests": 78,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "603DEBF7DF9AC7B5A69543C3736F4CD38692D3330690A7559A6F9DE6F0E2AF77"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "5347A87C7E07B39300F6521B0B1A24B4D52AB01642504095497B7516754014D9"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "5859DC614883F19A02FBABEC51455CE4728054531AEB0E665D1CAE788394B7A1"
+                ),
+                "loaded_code_sha256": (
+                    "DB50CB847CBF357B98A8CA0780389B893E075498444498ADD316D61300646247"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 0,
+            }
+        ),
+        "Durable fleet callback and Object-Lock repository seams": MappingProxyType(
+            {
+                "tests": 38,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "D3EAF533FEDB5B03168200AA399AC53A6E2A6F22874EBABEAECEFB227400778D"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "4A8F13874E55C6C0915BB098285B4290DF56E5D28942E57CC201F3552C65B883"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "5859DC614883F19A02FBABEC51455CE4728054531AEB0E665D1CAE788394B7A1"
+                ),
+                "loaded_code_sha256": (
+                    "ADB7A4607E639D66E0BB9AAE603B21537224C427C49FCAA6AD80302D6787427D"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 0,
+            }
+        ),
+        "Harness v2 worker terminal bridge": MappingProxyType(
+            {
+                "tests": 17,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "FA6C985CD6CAA734034E006BB4BAF6BE9D02269D7312BEE7355E9C3833759C51"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "0A9FC9A728BE81034A71DC93B492D5865EEB89B219AB0C7B3A86BCCFECEF520E"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "5859DC614883F19A02FBABEC51455CE4728054531AEB0E665D1CAE788394B7A1"
+                ),
+                "loaded_code_sha256": (
+                    "800941879C2DF294A463D4338C78965EDC6636181C0F888D793D07A9A7C7EFC4"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 0,
+            }
+        ),
+        "Harness v2 prospective lifecycle, SQLite, and dark route": MappingProxyType(
+            {
+                "tests": 134,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "67F7507579749E11E27714E8513F6909E26A503A8DD18112CC402207D9735940"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "793F17F6C6983A570F21A1829E83FFFB49CC7F7F4C50B4F1090359B702AAA90D"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "F7ABD42464420E10D1B9F75FDC57701BC99541F46B814E71F795F47431E2DF21"
+                ),
+                "loaded_code_sha256": (
+                    "22BB1FFF7E369ACB036F59AC68E62E2240F1607E792AEAFFC9E9BACF4165AEAD"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 1,
+            }
+        ),
+        "Harness v2 admitted adapter and bounded reconciliation": MappingProxyType(
+            {
+                "tests": 99,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "548361800978AF55EE04B8E45B71AE70A09BBBE015025C5D6BF428F8E2FD9C9F"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "F7ABD42464420E10D1B9F75FDC57701BC99541F46B814E71F795F47431E2DF21"
+                ),
+                "loaded_code_sha256": (
+                    "6EDFF27912DC8C73FF508C11D850F18E6A6146C6B93238FA431E00D49B12299F"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 1,
+            }
+        ),
+        "Harness v2 Stage B joined executor": MappingProxyType(
+            {
+                "tests": 34,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "C2B5EF68B2491A19BD09345DED44704CA37A57AB21E07E09FFA928E25ABA4570"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "9BF40F2932FC8CE05F9D9CF4D07CD4224CE2FD4D44C1785408E62830E4006A76"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "035EFFD9DC44C1FD2D9F07A3BE62EA1BF07E3FD17D5807323F8D1B58AE6B0FD6"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "5859DC614883F19A02FBABEC51455CE4728054531AEB0E665D1CAE788394B7A1"
+                ),
+                "loaded_code_sha256": (
+                    "FE9A508A1324C97917F4E782591C8CA09638FCE5865BF64C13C2B9875C903021"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 0,
+            }
+        ),
+        "Gate 5 Stage B runner preparation": MappingProxyType(
+            {
+                "tests": 17,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "40FBF9298CB6DF939C5502D5B8C1E2ADBFA79011167E14E25252E663C114B8E6"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "C55190FCBCDCD2F8FA5CADA8B60B1A3F6620219B186F0C3673DBC3BC4C40F97E"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "F7ABD42464420E10D1B9F75FDC57701BC99541F46B814E71F795F47431E2DF21"
+                ),
+                "loaded_code_sha256": (
+                    "81E125D6E2432F9302A13290B5CD581C365C10FD41F79F863B35214639E754FF"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 0,
+            }
+        ),
+        "Gate 5 retained local GPU and joined evidence": MappingProxyType(
+            {
+                "tests": 27,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "DC0C0ED22E0F158F014277B9D3CD26AD21D6A8FCDFBE1E76A67D09406975C952"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "5F18B01FD9836488BB0CFDA10191606BA03F2F4F914B6F020617DD1E45D31FBB"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "F7ABD42464420E10D1B9F75FDC57701BC99541F46B814E71F795F47431E2DF21"
+                ),
+                "loaded_code_sha256": (
+                    "996F819FCA923C78CADFFB4FBEDF5744AB81E84E355E04DAC811AAFB3FA3D93C"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 0,
+            }
+        ),
+        "Instruction-integrity shadow scanner": MappingProxyType(
+            {
+                "tests": 12,
+                "subtests": 0,
+                "expected_setup_skips": 0,
+                "executed_nodes_sha256": (
+                    "822FD7113370AC9BB6C2DAFAF0BC33507A199860FA8F47F7C1DE35E880ABEDEE"
+                ),
+                "ordinary_outcomes_sha256": (
+                    "F310B312D5B630CA628F490F7DE3636DC1C891D340AA74A3BE1B632BBA5775E7"
+                ),
+                "subtest_outcomes_sha256": (
+                    "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945"
+                ),
+                "locked_import_origins_sha256": (
+                    "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "F7ABD42464420E10D1B9F75FDC57701BC99541F46B814E71F795F47431E2DF21"
+                ),
+                "loaded_code_sha256": (
+                    "180BC805FADA0E381BB5E5A9F1BF351259E651FA877AA2231B80B508CCD0ACC9"
+                ),
+                "loaded_code_digest_rule": RAW_LOADED_CODE_DIGEST_RULE,
+                "warnings": 1,
+            }
+        ),
+    }
+)
+ECD_STAGE1_INTERMEDIATE_INTEGRATED_RECEIPT = MappingProxyType(
+    {
+        "run_id": "retry-20260813T033443Z-64762d21",
+        "status": ECD_STAGE1_INTERMEDIATE_INTEGRATED_STATUS,
+        "supervisor_state": "EXIT_0_WITH_EXACT_PASS_LINE",
+        "command": FINAL_INTEGRATED_VERIFIER_COMMAND,
+        "started_utc": "2026-08-13T03:34:43.2413739Z",
+        "ended_utc_observational": "2026-08-13T04:19:09.1772298Z",
+        "wall_seconds_observational": "2665.834",
+        "supervisor_exit_code": 0,
+        "exact_pass_line_count": 1,
+        "result_file": MappingProxyType(
+            {
+                "name": "retry-20260813T033443Z-64762d21.result.json",
+                "sha256": (
+                    "163E7D60111978CD40C191680DD49DF33B562E7C4C842A915544C281E52936F8"
+                ),
+                "bytes": 3_200,
+            }
+        ),
+        "started_file": MappingProxyType(
+            {
+                "name": "retry-20260813T033443Z-64762d21.started.json",
+                "sha256": (
+                    "6FFA96A6C7B8EC3E2CC5A9482A5AA46452544D701A552D8501DBD0314D1F000F"
+                ),
+                "bytes": 2_597,
+            }
+        ),
+        "stdout_file": MappingProxyType(
+            {
+                "name": "retry-20260813T033443Z-64762d21.stdout.txt",
+                "sha256": (
+                    "61D027192FF7E8B89BB85854F72D834AE2C97768915C387F6745D5DFF9424EDD"
+                ),
+                "bytes": 12_118,
+            }
+        ),
+        "stderr_file": MappingProxyType(
+            {
+                "name": "retry-20260813T033443Z-64762d21.stderr.txt",
+                "sha256": (
+                    "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                ),
+                "bytes": 0,
+            }
+        ),
+        "input_identities_before_and_after": MappingProxyType(
+            {
+                "verifier": MappingProxyType(
+                    {
+                        "sha256": (
+                            "9ECEEE47D33855135A9A7A2749CD0239EDEBC51AA0EF008B433C15C0837B31B1"
+                        ),
+                        "bytes": 976_022,
+                    }
+                ),
+                "manifest": MappingProxyType(
+                    {
+                        "sha256": (
+                            "C6C50718BEB5D9EC4FDD2772B92483747C113CF00EB8A6BEAE38995D811CC859"
+                        ),
+                        "bytes": 205_702,
+                    }
+                ),
+                "runner_lock": MappingProxyType(
+                    {
+                        "sha256": (
+                            "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+                        ),
+                        "bytes": 121_525,
+                    }
+                ),
+                "before_after_identical": True,
+            }
+        ),
+        "freeze_ledger_correction": MappingProxyType(
+            {
+                "original_recorded_sha256": (
+                    "8605BCA3935F14370900963A6D48E4C236C69A8A9D3792F3E776AFE677546355"
+                ),
+                "original_value_scope": (
+                    "PRE-WORKER-RECEIPT-PROMOTION TREE / NOT THE RETRY LAUNCH TREE"
+                ),
+                "original_value_status": (
+                    "STALE SUPERVISOR FIELD / EXPLICITLY REJECTED AS RUN BINDING"
+                ),
+                "correct_launch_tree_post_hoc_sha256": (
+                    "20E463B9A88D016E7C2E27991E282EDA44DC65A2D7762C532015A7B129C10F70"
+                ),
+                "correct_launch_tree_serialized_bytes": 2_228,
+                "dirty_paths": 15,
+                "modified_paths": 11,
+                "untracked_paths": 4,
+                "all_dirty_file_mtimes_predate_launch": True,
+                "latest_dirty_file_mtime_utc": "2026-08-13T03:34:14Z",
+                "correction_file": MappingProxyType(
+                    {
+                        "name": (
+                            "retry-20260813T033443Z-64762d21."
+                            "freeze-ledger-correction.json"
+                        ),
+                        "sha256": (
+                            "5854A202FB06A59ABC1BF37225A0712AC8141E2B9D36762AD0F3A38D5AD28FC8"
+                        ),
+                        "bytes": 1_436,
+                    }
+                ),
+                "claim_boundary": (
+                    "POST-HOC RECONSTRUCTION / NOT TRUSTED TIME OR WORM / "
+                    "LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY"
+                ),
+            }
+        ),
+        "counts": MappingProxyType(
+            {
+                "manifest_artifacts": 712,
+                "syntax_checked_python_artifacts": 478,
+                "executable_shadow_paths": 2_314,
+                "test_suites": 12,
+                "configured_nodes": 2_790,
+                "review_criteria": 53,
+                "required_open_boundaries": 22,
+                "postflight_file_identities": 1_284,
+            }
+        ),
+        "suite_identities": ECD_STAGE1_INTERMEDIATE_INTEGRATED_SUITE_IDENTITIES,
+        "authority_boundary": "LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY",
+        "next_required_receipt": (
+            "FINAL UNCHANGED-TREE INTEGRATED 12-SUITE REPLAY / NOT YET PRODUCED"
+        ),
+    }
 )
 HISTORICAL_RUNTIME_ACTIVATION_HARNESS_RECEIPT = MappingProxyType(
     {
@@ -1108,26 +1984,26 @@ STAGEC_RUNPOD_READINESS_FILE_BINDINGS = MappingProxyType(
             24_032,
         ),
         ".github/workflows/stagec-qwen-batch-image.yml": (
-            "1763377C92B3754A51D8A19766FC1F16DDB44F52377C7EA1EA620B851C088DDF",
-            15_916,
+            "6190EBE4182FB1665298285018820F3C7BD2D48C6A6387279C6558EBD056942C",
+            16_267,
         ),
         ".github/workflows/live-worker-image.yml": (
-            "86215CBA4FA0A2B2DD00FBA9915E2AFE578D952A8507DB0D663309CDCB6A886B",
-            6_382,
+            "03A6B61EC399B257851BE0A60D403E8171876FB082DD83EFF30225DFC5105016",
+            6_457,
         ),
         (
             "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
             "Dockerfile.qwen-stagec-model"
         ): (
-            "F66C82DE2AC2DB49DCE70140F1163098D745422A0103CB1962FD97C4ADAFA8D2",
-            3_494,
+            "37E5280378C9683914B6FEA6FACB670AE66FAF19102A67817861F7DCD09A3DC8",
+            3_554,
         ),
         (
             "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
             "Dockerfile.stagec-batch"
         ): (
-            "B32F6B502EDB6C0416F52FAEF9249D2F0D324BE20A37F11F229FCB1A37EF276D",
-            4_143,
+            "63D1C91E2088EC37730F3650E8458C9EF77D384795BA46A0429EC4EBDE95196A",
+            4_232,
         ),
     }
 )
@@ -1598,6 +2474,37 @@ COMPARISON_FILE_BINDINGS = MappingProxyType(
             "noetic-compass-scaffold/noetic-compass/tests/"
             "test_cas_harness_v2_packaged_mirror.py"
         ): (PACKAGED_HARNESS_V2_TEST_SHA256, PACKAGED_HARNESS_V2_TEST_BYTES),
+    }
+)
+ECD_STAGE1_PACKAGE_ALLOWLIST_REL = (
+    f"{API_ROOT_REL}/api/services/cas_harness_v2_packaging.py"
+)
+ECD_STAGE1_PACKAGE_MIRROR_TEST_REL = (
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_packaged_mirror.py"
+)
+# The published Phase-0 binding dictionaries above remain exact historical
+# receipt inputs.  These additive active-tree views replace only the two
+# package files changed by the separately reviewable ECD tranche.
+ECD_STAGE1_ACTIVE_DIAGNOSTIC_RUNTIME_FILE_BINDINGS = MappingProxyType(
+    {
+        **DIAGNOSTIC_RUNTIME_FILE_BINDINGS,
+        ECD_STAGE1_PACKAGE_ALLOWLIST_REL: (
+            ECD_STAGE1_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256,
+            ECD_STAGE1_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_BYTES,
+        ),
+        ECD_STAGE1_PACKAGE_MIRROR_TEST_REL: (
+            ECD_STAGE1_PACKAGED_HARNESS_V2_TEST_SHA256,
+            ECD_STAGE1_PACKAGED_HARNESS_V2_TEST_BYTES,
+        ),
+    }
+)
+ECD_STAGE1_ACTIVE_COMPARISON_FILE_BINDINGS = MappingProxyType(
+    {
+        **COMPARISON_FILE_BINDINGS,
+        ECD_STAGE1_PACKAGE_MIRROR_TEST_REL: (
+            ECD_STAGE1_PACKAGED_HARNESS_V2_TEST_SHA256,
+            ECD_STAGE1_PACKAGED_HARNESS_V2_TEST_BYTES,
+        ),
     }
 )
 COMPARISON_SCHEMA_VALUES = (
@@ -2485,6 +3392,7 @@ REQUIRED_CONTROL_ARTIFACTS = {
     "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json",
     "docs/working/project_coherence/gate5/GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json",
     "docs/working/project_coherence/gate5/GATE5_ENGINEERING_EXECUTION_RECONCILIATION_v0.1.json",
+    ECD_STAGE1_SPEC_REL,
     "docs/working/project_coherence/gate5/history/HISTORICAL_CAPABILITY_EVIDENCE_RECONCILIATION_v0.1.json",
     "docs/working/project_coherence/gate5/GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json",
     "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_CURRENT_TREE_SHA256.json",
@@ -2712,11 +3620,9 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": CURRENT_RUNPOD_CONFIGURED_HARNESS_NODES,
+        "expected_tests": ECD_STAGE1_CONFIGURED_HARNESS_NODES,
         "expected_subtests": 163,
-        "expected_test_ids_sha256": (
-            CURRENT_RUNPOD_CONFIGURED_HARNESS_NODE_IDS_SHA256
-        ),
+        "expected_test_ids_sha256": ECD_STAGE1_CONFIGURED_HARNESS_NODE_IDS_SHA256,
         "expected_setup_skipped_nodeids": [
             (
                 "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::"
@@ -6621,21 +7527,23 @@ def verify_packaged_harness_v2_surface() -> None:
         *PurePosixPath(PACKAGED_HARNESS_V2_PROVENANCE_REL).parts
     )
     require(
-        provenance_path.stat().st_size == PACKAGED_HARNESS_V2_PROVENANCE_BYTES
-        and sha256_file(provenance_path) == PACKAGED_HARNESS_V2_PROVENANCE_SHA256,
+        provenance_path.stat().st_size
+        == ECD_STAGE1_PACKAGED_HARNESS_V2_PROVENANCE_BYTES
+        and sha256_file(provenance_path)
+        == ECD_STAGE1_PACKAGED_HARNESS_V2_PROVENANCE_SHA256,
         "Harness v2 packaging provenance bytes drifted",
     )
     provenance = load_json(provenance_path)
     source_files = provenance.get("source_files") if isinstance(provenance, dict) else None
     require(
         isinstance(source_files, dict)
-        and len(source_files) == PACKAGED_HARNESS_V2_FILE_COUNT
+        and len(source_files) == ECD_STAGE1_PACKAGED_HARNESS_V2_FILE_COUNT
         and sum(
             record.get("size_bytes", -1)
             for record in source_files.values()
             if isinstance(record, dict)
         )
-        == PACKAGED_HARNESS_V2_TOTAL_BYTES
+        == ECD_STAGE1_PACKAGED_HARNESS_V2_TOTAL_BYTES
         and provenance.get("canonical_source_path") == "src/cas_harness_v2"
         and provenance.get("packaged_destination_path") == PACKAGED_HARNESS_V2_REL
         and provenance.get("copy_policy") == "BYTE_FOR_BYTE_SOURCE_MIRROR",
@@ -6653,13 +7561,13 @@ def verify_packaged_harness_v2_surface() -> None:
     )
     require(
         (canonical_root / "__init__.py").stat().st_size
-        == PACKAGED_HARNESS_V2_INIT_BYTES
+        == ECD_STAGE1_PACKAGED_HARNESS_V2_INIT_BYTES
         and (packaged_root / "__init__.py").stat().st_size
-        == PACKAGED_HARNESS_V2_INIT_BYTES
+        == ECD_STAGE1_PACKAGED_HARNESS_V2_INIT_BYTES
         and sha256_file(canonical_root / "__init__.py")
-        == PACKAGED_HARNESS_V2_INIT_SHA256
+        == ECD_STAGE1_PACKAGED_HARNESS_V2_INIT_SHA256
         and sha256_file(packaged_root / "__init__.py")
-        == PACKAGED_HARNESS_V2_INIT_SHA256,
+        == ECD_STAGE1_PACKAGED_HARNESS_V2_INIT_SHA256,
         "Harness v2 canonical/package __init__ identity drifted",
     )
     packaging_allowlist_source = (
@@ -6671,9 +7579,9 @@ def verify_packaged_harness_v2_surface() -> None:
     )
     require(
         packaging_allowlist_source.stat().st_size
-        == PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_BYTES
+        == ECD_STAGE1_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_BYTES
         and sha256_file(packaging_allowlist_source)
-        == PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256,
+        == ECD_STAGE1_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256,
         "Harness v2 packaging allowlist source identity drifted",
     )
     for filename, record in source_files.items():
@@ -6786,9 +7694,32 @@ def verify_packaged_harness_v2_surface() -> None:
         observed_stagec_collisions == allowed_equal_stagec_collisions,
         "Stage C RunPod package export collision inventory drifted",
     )
+    ecd_module_path = canonical_root / "diagnostic_evidence_coverage_dispersion.py"
+    ecd_tree = ast.parse(
+        read_stable_text(ecd_module_path),
+        filename="src/cas_harness_v2/diagnostic_evidence_coverage_dispersion.py",
+    )
+    ecd_all_values = [
+        ast.literal_eval(node.value)
+        for node in ecd_tree.body
+        if (
+            isinstance(node, ast.Assign)
+            and len(node.targets) == 1
+            and isinstance(node.targets[0], ast.Name)
+            and node.targets[0].id == "__all__"
+        )
+    ]
     require(
-        len(resolved_all_values) == PACKAGED_HARNESS_V2_EXPORT_COUNT
-        and len(set(resolved_all_values)) == PACKAGED_HARNESS_V2_EXPORT_COUNT,
+        ecd_all_values == [list(ECD_STAGE1_PUBLIC_EXPORTS)],
+        "ECD Stage 1 package export inventory is not the frozen public surface",
+    )
+    for export_name in ecd_all_values[0]:
+        if export_name not in resolved_all_values:
+            resolved_all_values.append(export_name)
+    require(
+        len(resolved_all_values) == ECD_STAGE1_PACKAGED_HARNESS_V2_EXPORT_COUNT
+        and len(set(resolved_all_values))
+        == ECD_STAGE1_PACKAGED_HARNESS_V2_EXPORT_COUNT,
         "Harness v2 public export inventory does not match the exact configured count",
     )
 
@@ -6835,15 +7766,152 @@ def _module_name_tuple_assignment(raw_path: str, assignment_name: str) -> tuple[
     return tuple(item.id for item in value.elts)
 
 
+def verify_evidence_coverage_dispersion_stage1_surface() -> dict[str, Any]:
+    """Bind the separate offline synthetic ECD Stage 1 without authority."""
+
+    frozen_bindings = {
+        ECD_STAGE1_SPEC_REL: (ECD_STAGE1_SPEC_SHA256, ECD_STAGE1_SPEC_BYTES),
+        ECD_STAGE1_SOURCE_REL: (ECD_STAGE1_SOURCE_SHA256, ECD_STAGE1_SOURCE_BYTES),
+        ECD_STAGE1_TEST_REL: (ECD_STAGE1_TEST_SHA256, ECD_STAGE1_TEST_BYTES),
+    }
+    for raw_path, (expected_sha256, expected_bytes) in frozen_bindings.items():
+        payload = read_stable_bytes(ROOT / Path(*PurePosixPath(raw_path).parts))
+        require(
+            len(payload) == expected_bytes
+            and hashlib.sha256(payload).hexdigest().upper() == expected_sha256,
+            f"ECD Stage 1 frozen identity drifted: {raw_path}",
+        )
+
+    specification = read_stable_text(
+        ROOT / Path(*PurePosixPath(ECD_STAGE1_SPEC_REL).parts)
+    )
+    for marker in (
+        "CORRECTED SPECIFICATION CANDIDATE / OFFLINE R&D ONLY / NON_AUTHORITY",
+        "Evidence Packet status: **NO SCHEMA CHANGE AUTHORIZED**",
+        "classification: SYNTHETIC_ONLY",
+        "authority: NON_AUTHORITY",
+        "recommendation_authority: ADVISORY_ONLY",
+        "Adjacency, graph components, connected voids, geometry, distance, and scale are excluded",
+        "Stage 1 does not accept exposure denominators and does not calculate rate dispersion.",
+        "no Unicode general-category `Cc` control character (including C0, DEL, and C1 controls)",
+        "An embedded reference to an external scope artifact remains identity-only in Stage 1",
+        "Arbitrary same-interpreter reflection is outside the process-seal provenance boundary.",
+        "that descriptor is not proof of factory issuance",
+        "CV2 does not alter this ordering in Stage 1.",
+        "`CV2_ASSISTED`, currently `UNSPECIFIED_BLOCKED_ANALYTIC_FUTILITY`",
+        "analytically identical to `MINIMUM_SUPPORT_FIRST`",
+        "policy-independent common-support labels for the entire candidate roster",
+        "NO STAGE2 CV2 EVALUATION / NO PROMOTION",
+        "CV2 / “LACUNARITY”: EXPERIMENTAL / NOT PROMOTED",
+    ):
+        require(marker in specification, f"ECD Stage 1 specification omits {marker!r}")
+
+    assignments = _literal_module_assignments(ECD_STAGE1_SOURCE_REL)
+    expected_literal_assignments = {
+        "EVIDENCE_COVERAGE_REQUIRED_UNIVERSE_SCHEMA": ECD_STAGE1_SCHEMA_VALUES[0],
+        "EVIDENCE_COVERAGE_OBSERVATION_SCHEMA": ECD_STAGE1_SCHEMA_VALUES[1],
+        "EVIDENCE_COVERAGE_METRIC_POLICY_SCHEMA": ECD_STAGE1_SCHEMA_VALUES[2],
+        "EVIDENCE_COVERAGE_DISPERSION_SCHEMA": ECD_STAGE1_SCHEMA_VALUES[3],
+        "EVIDENCE_COVERAGE_REQUIRED_UNIVERSE_MEDIA_TYPE": (
+            ECD_STAGE1_MEDIA_TYPE_VALUES[0]
+        ),
+        "EVIDENCE_COVERAGE_OBSERVATION_MEDIA_TYPE": ECD_STAGE1_MEDIA_TYPE_VALUES[1],
+        "EVIDENCE_COVERAGE_METRIC_POLICY_MEDIA_TYPE": ECD_STAGE1_MEDIA_TYPE_VALUES[2],
+        "EVIDENCE_COVERAGE_DISPERSION_MEDIA_TYPE": ECD_STAGE1_MEDIA_TYPE_VALUES[3],
+        "EVIDENCE_COVERAGE_DISPERSION_SPEC_REPOSITORY_PATH": ECD_STAGE1_SPEC_REL,
+        "EVIDENCE_COVERAGE_DISPERSION_SPEC_SHA256": ECD_STAGE1_SPEC_SHA256,
+        "EVIDENCE_COVERAGE_DISPERSION_SPEC_BYTE_LENGTH": ECD_STAGE1_SPEC_BYTES,
+        "EVIDENCE_COVERAGE_MAX_DIMENSIONS": 16,
+        "EVIDENCE_COVERAGE_MAX_ROSTER_CELLS": 2_048,
+        "EVIDENCE_COVERAGE_MAX_ELIGIBLE_CELLS": 2_048,
+        "EVIDENCE_COVERAGE_MAX_EVIDENCE_ITEMS": 2_048,
+        "EVIDENCE_COVERAGE_MAX_IDENTIFIER_UTF8_BYTES": 128,
+        "EVIDENCE_COVERAGE_MAX_RECOMMENDATIONS": 2_048,
+        "EVIDENCE_COVERAGE_MAX_PROCESS_SEALS": 4_096,
+        "__all__": list(ECD_STAGE1_PUBLIC_EXPORTS),
+    }
+    require(
+        all(assignments.get(name) == value for name, value in expected_literal_assignments.items()),
+        "ECD Stage 1 literal contract, resource ceiling, or public API drifted",
+    )
+    require(
+        len(ECD_STAGE1_SCHEMA_VALUES) == len(set(ECD_STAGE1_SCHEMA_VALUES)) == 4
+        and len(ECD_STAGE1_MEDIA_TYPE_VALUES)
+        == len(set(ECD_STAGE1_MEDIA_TYPE_VALUES))
+        == 4,
+        "ECD Stage 1 schema/media inventory is not exactly four plus four",
+    )
+
+    source_path = ROOT / Path(*PurePosixPath(ECD_STAGE1_SOURCE_REL).parts)
+    mirror_path = ROOT / Path(*PurePosixPath(ECD_STAGE1_MIRROR_REL).parts)
+    source_bytes = read_stable_bytes(source_path)
+    require(
+        source_bytes == read_stable_bytes(mirror_path),
+        "ECD Stage 1 canonical/package source mirror differs",
+    )
+    tree = ast.parse(source_bytes, filename=ECD_STAGE1_SOURCE_REL)
+    imported_roots = {
+        alias.name.split(".", 1)[0]
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Import)
+        for alias in node.names
+    } | {
+        (node.module or "").split(".", 1)[0]
+        for node in ast.walk(tree)
+        if isinstance(node, ast.ImportFrom) and node.level == 0
+    }
+    require(
+        imported_roots
+        <= {
+            "__future__",
+            "collections",
+            "dataclasses",
+            "math",
+            "threading",
+            "typing",
+            "unicodedata",
+            "weakref",
+        },
+        "ECD Stage 1 gained an ambient I/O, provider, model, or execution import",
+    )
+    source_text = source_bytes.decode("utf-8")
+    for marker in (
+        "SYNTHETIC_ONLY / NON_AUTHORITY",
+        '"authority": "NON_AUTHORITY"',
+        '"recommendation_authority": "ADVISORY_ONLY"',
+        '"decision_effect": "NONE"',
+        '"execution_authority": "NOT_GRANTED"',
+        '"scientific_status": "STRUCTURE_ONLY"',
+        '"evidence_packet_effect": "NONE"',
+        '"rate_status": "UNAVAILABLE_RATE_MODE_NOT_IN_STAGE1"',
+        '"spatial_claim": "NONE"',
+        '"multiscale_claim": "NONE"',
+    ):
+        require(marker in source_text, f"ECD Stage 1 source omits {marker!r}")
+
+    return {
+        "scope": ECD_STAGE1_SCOPE,
+        "verification_status": ECD_STAGE1_VERIFICATION_STATUS,
+        "package_status": ECD_STAGE1_PACKAGE_STATUS,
+        "harness_status": ECD_STAGE1_HARNESS_STATUS,
+        "phase0_harness_coverage": ECD_STAGE1_PHASE0_HARNESS_COVERAGE,
+        "current_harness_coverage": ECD_STAGE1_CURRENT_HARNESS_COVERAGE,
+        "integrated_status": ECD_STAGE1_INTEGRATED_STATUS,
+        "schemas": len(ECD_STAGE1_SCHEMA_VALUES),
+        "media_types": len(ECD_STAGE1_MEDIA_TYPE_VALUES),
+        "public_exports": len(ECD_STAGE1_PUBLIC_EXPORTS),
+    }
+
+
 def verify_stagec_runpod_readiness_surface() -> None:
     """Bind the build-only/read-only RunPod tranche without run authority."""
 
     require(
-        len(STAGEC_RUNPOD_CONTROL_DOCUMENT_BINDINGS) == 6,
+        len(ECD_STAGE1_ACTIVE_RUNPOD_CONTROL_DOCUMENT_BINDINGS) == 6,
         "Stage C RunPod control-document inventory is not exactly six files",
     )
     for raw_path, (expected_sha256, expected_bytes) in (
-        STAGEC_RUNPOD_CONTROL_DOCUMENT_BINDINGS.items()
+        ECD_STAGE1_ACTIVE_RUNPOD_CONTROL_DOCUMENT_BINDINGS.items()
     ):
         path = ROOT / Path(*PurePosixPath(raw_path).parts)
         require(
@@ -7228,7 +8296,7 @@ def verify_diagnostic_runtime_structure_only_surface() -> None:
         "diagnostic runtime media-type inventory is not exactly 44 unique values",
     )
     for raw_path, (expected_sha256, expected_bytes) in (
-        DIAGNOSTIC_RUNTIME_FILE_BINDINGS.items()
+        ECD_STAGE1_ACTIVE_DIAGNOSTIC_RUNTIME_FILE_BINDINGS.items()
     ):
         path = ROOT / Path(*PurePosixPath(raw_path).parts)
         payload = read_stable_bytes(path)
@@ -7452,7 +8520,9 @@ def verify_comparison_recovery_structure_only_surface() -> None:
         == 87,
         "comparison/recovery media-type inventory is not exactly 87 unique values",
     )
-    for raw_path, (expected_sha256, expected_bytes) in COMPARISON_FILE_BINDINGS.items():
+    for raw_path, (expected_sha256, expected_bytes) in (
+        ECD_STAGE1_ACTIVE_COMPARISON_FILE_BINDINGS.items()
+    ):
         payload = read_stable_bytes(ROOT / Path(*PurePosixPath(raw_path).parts))
         require(
             len(payload) == expected_bytes
@@ -11058,6 +12128,7 @@ def verify_review_matrix(
             *STAGEC_RUNPOD_READINESS_SCHEMA_VALUES,
             "cas_harness_v2.evidence_packet.v2",
             *COMPARISON_SCHEMA_VALUES,
+            *ECD_STAGE1_SCHEMA_VALUES,
         ],
         "Gate 5 review matrix kernel-schema list drifted",
     )
@@ -11067,6 +12138,7 @@ def verify_review_matrix(
             *DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES,
             *STAGEC_RUNPOD_READINESS_MEDIA_TYPE_VALUES,
             *COMPARISON_MEDIA_TYPE_VALUES,
+            *ECD_STAGE1_MEDIA_TYPE_VALUES,
         ],
         "Gate 5 review matrix diagnostic media-type list drifted",
     )
@@ -11319,8 +12391,8 @@ def verify_review_matrix(
         "review matrix does not cover the complete Gate 5 boundary surface",
     )
     require(
-        len(criteria) == CURRENT_REVIEW_MATRIX_CRITERIA,
-        "current review-matrix criterion count drifted from 52",
+        len(criteria) == ECD_STAGE1_REVIEW_MATRIX_CRITERIA,
+        "ECD Stage 1 review-matrix criterion count drifted from 53",
     )
     require(
         len(REQUIRED_OPEN_BOUNDARY_IDS)
@@ -11808,6 +12880,82 @@ def verify_review_matrix(
         }.issubset(set(runpod_readiness_criterion.get("evidence_refs", []))),
         "Stage C RunPod readiness criterion drifted or omitted its open boundary",
     )
+    ecd_criterion = criteria_by_id.get("G5-ENGINEERING-012")
+    require(
+        isinstance(ecd_criterion, dict)
+        and ecd_criterion.get("subsystem")
+        == "EVIDENCE_COVERAGE_DISPERSION_STAGE1"
+        and ecd_criterion.get("disposition") == "OPEN_ENGINEERING"
+        and ecd_criterion.get("canon_effect") == "NONE"
+        and ecd_criterion.get("product_claim_effect") == "NONE"
+        and ECD_STAGE1_SCOPE in ecd_criterion.get("observed_result", "")
+        and ECD_STAGE1_VERIFICATION_STATUS
+        in ecd_criterion.get("observed_result", "")
+        and ECD_STAGE1_SOURCE_SHA256.lower()
+        in ecd_criterion.get("observed_result", "").lower()
+        and ECD_STAGE1_TEST_SHA256.lower()
+        in ecd_criterion.get("observed_result", "").lower()
+        and ECD_STAGE1_FOCUSED_NODE_IDS_SHA256.lower()
+        in ecd_criterion.get("observed_result", "").lower()
+        and ECD_STAGE1_PACKAGE_FOCUSED_NODE_IDS_SHA256.lower()
+        in ecd_criterion.get("observed_result", "").lower()
+        and ECD_STAGE1_WORKER_RECEIPT_RUN_ID
+        in ecd_criterion.get("observed_result", "")
+        and ECD_STAGE1_CURRENT_RECEIPT_BUNDLE_BINDINGS["worker"][
+            "receipt_file_sha256"
+        ].lower()
+        in ecd_criterion.get("observed_result", "").lower()
+        and ECD_STAGE1_CURRENT_WORKER_RECEIPT["loaded_code_sha256"].lower()
+        in ecd_criterion.get("observed_result", "").lower()
+        and ECD_STAGE1_FIRST_INTEGRATED_ATTEMPT["run_id"]
+        in ecd_criterion.get("observed_result", "")
+        and ECD_STAGE1_FIRST_INTEGRATED_ATTEMPT_STATUS
+        in ecd_criterion.get("observed_result", "")
+        and ECD_STAGE1_INTERMEDIATE_INTEGRATED_RECEIPT["run_id"]
+        in ecd_criterion.get("observed_result", "")
+        and ECD_STAGE1_INTERMEDIATE_INTEGRATED_STATUS
+        in ecd_criterion.get("observed_result", "")
+        and ECD_STAGE1_INTERMEDIATE_INTEGRATED_RECEIPT["result_file"][
+            "sha256"
+        ].lower()
+        in ecd_criterion.get("observed_result", "").lower()
+        and ECD_STAGE1_INTERMEDIATE_INTEGRATED_RECEIPT[
+            "freeze_ledger_correction"
+        ]["original_recorded_sha256"].lower()
+        in ecd_criterion.get("observed_result", "").lower()
+        and ECD_STAGE1_INTERMEDIATE_INTEGRATED_RECEIPT[
+            "freeze_ledger_correction"
+        ]["correct_launch_tree_post_hoc_sha256"].lower()
+        in ecd_criterion.get("observed_result", "").lower()
+        and ECD_STAGE1_PHASE0_HARNESS_COVERAGE
+        in ecd_criterion.get("observed_result", "")
+        and ECD_STAGE1_CURRENT_HARNESS_COVERAGE
+        in ecd_criterion.get("observed_result", "")
+        and "Unicode general-category Cc"
+        in ecd_criterion.get("observed_result", "")
+        and "external ArtifactRef values are identity-only"
+        in ecd_criterion.get("observed_result", "")
+        and "same-interpreter reflection is outside the process-seal provenance boundary"
+        in ecd_criterion.get("observed_result", "")
+        and "CV2 is EXPERIMENTAL / NOT PROMOTED"
+        in ecd_criterion.get("observed_result", "")
+        and "Stage 2 is BLOCKED" in ecd_criterion.get("observed_result", "")
+        and "genuinely non-equivalent"
+        in ecd_criterion.get("remaining_obligation", "")
+        and "policy-independent common-horizon outcomes"
+        in ecd_criterion.get("remaining_obligation", "")
+        and {
+            ECD_STAGE1_SPEC_REL,
+            ECD_STAGE1_SOURCE_REL,
+            ECD_STAGE1_TEST_REL,
+            ECD_STAGE1_MIRROR_REL,
+            PACKAGED_HARNESS_V2_PROVENANCE_REL,
+            ECD_STAGE1_PACKAGE_ALLOWLIST_REL,
+            ECD_STAGE1_PACKAGE_MIRROR_TEST_REL,
+            "scripts/verify_project_coherence_gate5.py",
+        }.issubset(set(ecd_criterion.get("evidence_refs", []))),
+        "ECD Stage 1 criterion drifted, promoted authority, or omitted its final-replay PENDING boundary",
+    )
 
     actual_disposition_counts = {
         disposition: count for disposition, count in sorted(disposition_counts.items())
@@ -11870,10 +13018,223 @@ def verify_review_matrix(
             "local_test_runner",
             "raw_build_and_security_evidence",
             "stagec_runpod_readiness",
+            "evidence_coverage_dispersion_stage1",
             "comparison_recovery_structure_only",
             "historical_recovery",
         },
         label="review matrix receipts",
+    )
+    ecd_receipt = receipts.get("evidence_coverage_dispersion_stage1")
+
+    def ecd_matrix_receipt_projection(value: Any, *, key: str = "") -> Any:
+        if isinstance(value, Mapping):
+            return {
+                nested_key: ecd_matrix_receipt_projection(
+                    nested_value,
+                    key=nested_key,
+                )
+                for nested_key, nested_value in value.items()
+            }
+        if isinstance(value, tuple):
+            return [ecd_matrix_receipt_projection(item) for item in value]
+        if key.endswith("_sha256") and isinstance(value, str):
+            return value.lower()
+        return value
+
+    require(
+        ecd_receipt
+        == {
+            "status": ECD_STAGE1_VERIFICATION_STATUS,
+            "scope": ECD_STAGE1_SCOPE,
+            "specification": {
+                "path": ECD_STAGE1_SPEC_REL,
+                "sha256": ECD_STAGE1_SPEC_SHA256.lower(),
+                "bytes": ECD_STAGE1_SPEC_BYTES,
+            },
+            "canonical_source": {
+                "path": ECD_STAGE1_SOURCE_REL,
+                "sha256": ECD_STAGE1_SOURCE_SHA256.lower(),
+                "bytes": ECD_STAGE1_SOURCE_BYTES,
+            },
+            "canonical_test": {
+                "path": ECD_STAGE1_TEST_REL,
+                "sha256": ECD_STAGE1_TEST_SHA256.lower(),
+                "bytes": ECD_STAGE1_TEST_BYTES,
+            },
+            "focused_test_receipt": {
+                "status": ECD_STAGE1_FOCUSED_STATUS,
+                "collected_nodes": ECD_STAGE1_FOCUSED_NODES,
+                "passed_nodes": ECD_STAGE1_FOCUSED_NODES,
+                "failed_nodes": 0,
+                "process_exit_status": 0,
+                "node_ids_sha256": ECD_STAGE1_FOCUSED_NODE_IDS_SHA256.lower(),
+                "serialized_node_ids_bytes": ECD_STAGE1_FOCUSED_NODE_IDS_BYTES,
+                "cache_provider": "DISABLED",
+            },
+            "package_surface": {
+                "byte_mirrored_python_files": (
+                    ECD_STAGE1_PACKAGED_HARNESS_V2_FILE_COUNT
+                ),
+                "unique_exports": ECD_STAGE1_PACKAGED_HARNESS_V2_EXPORT_COUNT,
+                "total_python_bytes": ECD_STAGE1_PACKAGED_HARNESS_V2_TOTAL_BYTES,
+                "canonical_and_mirror_init_sha256": (
+                    ECD_STAGE1_PACKAGED_HARNESS_V2_INIT_SHA256.lower()
+                ),
+                "canonical_and_mirror_init_bytes": (
+                    ECD_STAGE1_PACKAGED_HARNESS_V2_INIT_BYTES
+                ),
+                "provenance_sha256": (
+                    ECD_STAGE1_PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
+                ),
+                "provenance_bytes": (
+                    ECD_STAGE1_PACKAGED_HARNESS_V2_PROVENANCE_BYTES
+                ),
+                "allowlist_source_sha256": (
+                    ECD_STAGE1_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_SHA256.lower()
+                ),
+                "allowlist_source_bytes": (
+                    ECD_STAGE1_PACKAGED_HARNESS_V2_ALLOWLIST_SOURCE_BYTES
+                ),
+                "packaged_mirror_test_sha256": (
+                    ECD_STAGE1_PACKAGED_HARNESS_V2_TEST_SHA256.lower()
+                ),
+                "packaged_mirror_test_bytes": (
+                    ECD_STAGE1_PACKAGED_HARNESS_V2_TEST_BYTES
+                ),
+                "focused_status": ECD_STAGE1_PACKAGE_FOCUSED_STATUS,
+                "focused_nodes": ECD_STAGE1_PACKAGE_FOCUSED_NODES,
+                "focused_node_ids_sha256": (
+                    ECD_STAGE1_PACKAGE_FOCUSED_NODE_IDS_SHA256.lower()
+                ),
+                "focused_serialized_node_ids_bytes": (
+                    ECD_STAGE1_PACKAGE_FOCUSED_NODE_IDS_BYTES
+                ),
+            },
+            "current_authoritative_same_process_receipts": {
+                "run_id": ECD_STAGE1_RECEIPT_RUN_ID,
+                "status": ECD_STAGE1_VERIFICATION_STATUS,
+                "integrated_12_suite_receipt_status": ECD_STAGE1_INTEGRATED_STATUS,
+                "harness": {
+                    "bundle": ecd_matrix_receipt_projection(
+                        ECD_STAGE1_CURRENT_RECEIPT_BUNDLE_BINDINGS["harness"]
+                    ),
+                    "projection": ecd_matrix_receipt_projection(
+                        ECD_STAGE1_CURRENT_HARNESS_RECEIPT
+                    ),
+                },
+                "worker": {
+                    "bundle": ecd_matrix_receipt_projection(
+                        ECD_STAGE1_CURRENT_RECEIPT_BUNDLE_BINDINGS["worker"]
+                    ),
+                    "projection": ecd_matrix_receipt_projection(
+                        ECD_STAGE1_CURRENT_WORKER_RECEIPT
+                    ),
+                },
+                "adapter": {
+                    "bundle": ecd_matrix_receipt_projection(
+                        ECD_STAGE1_CURRENT_RECEIPT_BUNDLE_BINDINGS["adapter"]
+                    ),
+                    "projection": ecd_matrix_receipt_projection(
+                        ECD_STAGE1_CURRENT_ADAPTER_RECEIPT
+                    ),
+                },
+                "first_integrated_attempt": ecd_matrix_receipt_projection(
+                    ECD_STAGE1_FIRST_INTEGRATED_ATTEMPT
+                ),
+                "intermediate_integrated_receipt": ecd_matrix_receipt_projection(
+                    ECD_STAGE1_INTERMEDIATE_INTEGRATED_RECEIPT
+                ),
+            },
+            "harness_integration": {
+                "status": ECD_STAGE1_HARNESS_STATUS,
+                "published_phase0_harness_receipt_coverage": (
+                    ECD_STAGE1_PHASE0_HARNESS_COVERAGE
+                ),
+                "current_ecd_harness_receipt_coverage": (
+                    ECD_STAGE1_CURRENT_HARNESS_COVERAGE
+                ),
+                "ecd_focused_nodes": ECD_STAGE1_FOCUSED_NODES,
+                "current_harness_nodes": ECD_STAGE1_CONFIGURED_HARNESS_NODES,
+                "current_harness_node_ids_sha256": (
+                    ECD_STAGE1_CONFIGURED_HARNESS_NODE_IDS_SHA256.lower()
+                ),
+                "current_harness_serialized_node_ids_bytes": (
+                    ECD_STAGE1_CONFIGURED_HARNESS_NODE_IDS_BYTES
+                ),
+                "current_complete_verifier_suite_map_nodes": (
+                    ECD_STAGE1_CONFIGURED_TEST_SUITE_NODE_TOTAL
+                ),
+                "current_manifest_artifacts": (
+                    ECD_STAGE1_EXPECTED_MANIFEST_ARTIFACT_COUNT
+                ),
+                "current_syntax_checked_python_artifacts": (
+                    ECD_STAGE1_EXPECTED_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT
+                ),
+                "current_executable_shadow_paths": (
+                    ECD_STAGE1_EXPECTED_EXECUTABLE_SHADOW_PATH_COUNT
+                ),
+                "current_postflight_file_identities": (
+                    ECD_STAGE1_EXPECTED_POSTFLIGHT_IDENTITIES
+                ),
+                "next_required_receipt": (
+                    "FINAL UNCHANGED-TREE INTEGRATED 12-SUITE REPLAY / "
+                    "NOT YET PRODUCED"
+                ),
+            },
+            "schema_media_inventory": {
+                "unique_schemas_added": len(ECD_STAGE1_SCHEMA_VALUES),
+                "unique_media_types_added": len(ECD_STAGE1_MEDIA_TYPE_VALUES),
+                "total_unique_kernel_schemas": 124,
+                "total_unique_kernel_media_types": 143,
+            },
+            "authority_boundary": {
+                "classification": "SYNTHETIC_ONLY",
+                "authority": "NON_AUTHORITY",
+                "recommendation_authority": "ADVISORY_ONLY",
+                "decision_effect": "NONE",
+                "execution_authority": "NOT_GRANTED",
+                "scientific_status": "STRUCTURE_ONLY",
+                "evidence_packet_effect": "NONE",
+                "adjacency": "NOT_IN_STAGE1",
+                "rate_dispersion": "UNAVAILABLE_RATE_MODE_NOT_IN_STAGE1",
+                "uncertainty": "NOT_IN_STAGE1",
+                "unicode_controls": "ALL UNICODE GENERAL-CATEGORY Cc REJECTED",
+                "external_artifact_refs": (
+                    "IDENTITY_ONLY / EXTERNAL ADMISSION AND BYTE VERIFICATION "
+                    "NOT INFERRED"
+                ),
+                "process_seal_reflection": (
+                    "OUTSIDE PROVENANCE BOUNDARY / ANY SUCH MUTATION INVALIDATES "
+                    "ALL IN-PROCESS CLAIMS"
+                ),
+                "production_effect": "NONE",
+                "stagec_effect": "NONE",
+                "provider_mutations": 0,
+                "model_invocations": 0,
+                "paid_gpu_compute_usd": "0.00",
+            },
+            "stage2_boundary": {
+                "status": "BLOCKED / NOT_STARTED / NON_AUTHORITY",
+                "cv2_status": "EXPERIMENTAL / NOT PROMOTED",
+                "forbidden_incremental_rule": (
+                    "CV2(x)-CV2(x+e_i) / ANALYTICALLY IDENTICAL TO "
+                    "MINIMUM_SUPPORT_FIRST"
+                ),
+                "next_required_design": (
+                    "SEPARATELY PREREGISTERED GENUINELY NON-EQUIVALENT ACTION "
+                    "RULE PLUS POLICY-INDEPENDENT COMPLETE COMMON-HORIZON OUTCOMES"
+                ),
+                "required_baselines": [
+                    "ZERO_CELL_FIRST",
+                    "MINIMUM_SUPPORT_FIRST",
+                    "UNCERTAINTY_FIRST",
+                    "RANDOM",
+                    "CURRENT_RISK_RANKING",
+                    "CV2_REMOVED_ABLATION",
+                ],
+            },
+        },
+        "ECD Stage 1 review receipt drifted or promoted authority",
     )
     runpod_receipt = receipts.get("stagec_runpod_readiness")
     expected_runpod_source_test_bindings = [
@@ -21274,8 +22635,8 @@ def verify_test_suites(
             suite["expected_tests"]
             for suite in REQUIRED_TEST_SUITES.values()
         )
-        == CURRENT_RUNPOD_CONFIGURED_TEST_SUITE_NODE_TOTAL,
-        "configured Gate 5 test-suite node total drifted from 2,672",
+        == ECD_STAGE1_CONFIGURED_TEST_SUITE_NODE_TOTAL,
+        "ECD Stage 1 configured Gate 5 test-suite node total drifted from 2,790",
     )
     require(
         CURRENT_RUNPOD_EXPANDED_RECEIPT_STATUS
@@ -21445,17 +22806,17 @@ def verify_test_suites(
         (
             "Harness v2 kernel and history",
             harness_result,
-            CURRENT_RUNPOD_AUTHORITATIVE_HARNESS_RECEIPT,
+            ECD_STAGE1_CURRENT_HARNESS_RECEIPT,
         ),
         (
             "Live trace worker complete",
             worker_result,
-            CURRENT_RUNPOD_AUTHORITATIVE_WORKER_RECEIPT,
+            ECD_STAGE1_CURRENT_WORKER_RECEIPT,
         ),
         (
             "Harness v2 admitted adapter and bounded reconciliation",
             adapter_result,
-            CURRENT_RUNPOD_AUTHORITATIVE_ADAPTER_RECEIPT,
+            ECD_STAGE1_CURRENT_ADAPTER_RECEIPT,
         ),
     ):
         expected_projection = {
@@ -21527,8 +22888,8 @@ def main() -> int:
     require(not MANIFEST_PATH.is_symlink(), "Gate 5 manifest may not be a symlink")
     shadow_surface_count = verify_no_executable_shadow_artifacts()
     require(
-        shadow_surface_count == CURRENT_EXECUTABLE_SHADOW_PATH_COUNT,
-        "current executable-shadow path count drifted from 2,317",
+        shadow_surface_count == ECD_STAGE1_EXPECTED_EXECUTABLE_SHADOW_PATH_COUNT,
+        "ECD Stage 1 executable-shadow path count drifted from 2,314",
     )
     manifest_observation = observe_regular_file(
         MANIFEST_PATH, anchor=FILESYSTEM_ANCHOR
@@ -21538,8 +22899,8 @@ def main() -> int:
     require(isinstance(manifest, dict), "Gate 5 manifest root is not an object")
     artifacts = verify_manifest(manifest)
     require(
-        len(artifacts) == CURRENT_MANIFEST_ARTIFACT_COUNT,
-        "current Gate 5 manifest artifact count drifted from 708",
+        len(artifacts) == ECD_STAGE1_EXPECTED_MANIFEST_ARTIFACT_COUNT,
+        "ECD Stage 1 Gate 5 manifest artifact count drifted from 712",
     )
     gate4_artifact_count, gate4_manifest_sha = verify_gate4_dependency(artifacts)
     claim_count = verify_claim_ledger()
@@ -21547,6 +22908,7 @@ def main() -> int:
     verify_engineering_execution_reconciliation(artifacts)
     verify_historical_capability_reconciliation(artifacts)
     stagec_summary = verify_stagec_design_package()
+    ecd_stage1_summary = verify_evidence_coverage_dispersion_stage1_surface()
     criterion_count, open_count = verify_review_matrix(artifacts)
     verify_adversarial_review()
     verify_no_status_promotion_text(artifacts)
@@ -21555,15 +22917,15 @@ def main() -> int:
     raw_evidence_result = verify_raw_build_and_security_evidence_receipt()
     python_count = verify_python_syntax(artifacts)
     require(
-        python_count == CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT,
-        "current syntax-checked Python artifact count drifted from 475",
+        python_count == ECD_STAGE1_EXPECTED_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT,
+        "ECD Stage 1 syntax-checked Python artifact count drifted from 478",
     )
     runner_lock = verify_local_test_runner_lock()
     integrated_observations = capture_integrated_file_observations(artifacts)
     require(
         len(integrated_observations)
-        == FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES,
-        "current postflight identity count drifted from 1,280",
+        == ECD_STAGE1_EXPECTED_POSTFLIGHT_IDENTITIES,
+        "ECD Stage 1 postflight identity count drifted from 1,284",
     )
     suite_results = verify_test_suites(manifest, runner_lock)
     require(
@@ -21684,6 +23046,24 @@ def main() -> int:
         f"prompt_rows={stagec_summary['total_prompt_rows']} / thresholds="
         f"{stagec_summary['thresholds']} / detector NOT RUN / Packet NOT CREATED / "
         "RunPod unauthorized / spend $0.00"
+    )
+    print(
+        "  Evidence-Coverage Dispersion Stage 1: "
+        f"{ecd_stage1_summary['scope']} / "
+        f"schemas={ecd_stage1_summary['schemas']} / "
+        f"media_types={ecd_stage1_summary['media_types']} / "
+        f"exports={ecd_stage1_summary['public_exports']} / "
+        f"package={ecd_stage1_summary['package_status']} / "
+        f"Harness={ecd_stage1_summary['harness_status']} / "
+        f"Phase0_Harness_coverage={ecd_stage1_summary['phase0_harness_coverage']} / "
+        f"current_Harness_coverage={ecd_stage1_summary['current_harness_coverage']} / "
+        f"integrated={ecd_stage1_summary['integrated_status']} / "
+        "NO ADJACENCY, RATES, UNCERTAINTY, EVIDENCE PACKET, PRODUCTION, "
+        "STAGE C, OR DECISION AUTHORITY / CV2 EXPERIMENTAL, NOT PROMOTED / "
+        "UNICODE Cc CONTROLS REJECTED / EXTERNAL REFS IDENTITY-ONLY / "
+        "REFLECTION OUTSIDE PROCESS-SEAL PROVENANCE / "
+        "STAGE 2 BLOCKED PENDING A GENUINELY NON-EQUIVALENT RULE AND "
+        "COMMON-HORIZON OUTCOME DESIGN"
     )
     print("  experimental execution: NOT_STARTED")
     print("  Gate 5 status: OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN")

@@ -34,9 +34,9 @@ PROVENANCE_PATH = PACKAGED_MIRROR / "PACKAGING_PROVENANCE.json"
 PROVENANCE_SCHEMA = "cas_harness_v2.packaged_mirror_provenance.v1"
 IGNORED_PARTS = {"__pycache__"}
 IGNORED_SUFFIXES = {".pyc", ".pyo"}
-PACKAGED_KERNEL_FILE_COUNT = 41
-PACKAGED_KERNEL_EXPORT_COUNT = 1_242
-PACKAGED_KERNEL_SOURCE_BYTES = 2_551_834
+PACKAGED_KERNEL_FILE_COUNT = 42
+PACKAGED_KERNEL_EXPORT_COUNT = 1_269
+PACKAGED_KERNEL_SOURCE_BYTES = 2_593_194
 COMPARISON_MODULE_EXPORT_COUNTS = {
     "comparison_model_protocol": 58,
     "comparison_adapters": 12,
@@ -122,6 +122,9 @@ STAGEC_EXTENSION_ALLOWED_EQUAL_COLLISIONS = frozenset(
         "STAGEC_RUNPOD_POD_NAME",
     }
 )
+OFFLINE_RND_MODULE_EXPORT_COUNTS = {
+    "diagnostic_evidence_coverage_dispersion": 27,
+}
 
 
 def _duplicate_rejecting_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -289,6 +292,23 @@ def test_packaged_public_modules_are_exported_exactly(tmp_path: Path) -> None:
         alias.asname == f"_{alias.name}"
         for alias in stagec_extension_imports[0].names
     )
+    offline_rnd_imports = [
+        node
+        for node in package_tree.body
+        if isinstance(node, ast.ImportFrom)
+        and node.level == 1
+        and node.module is None
+        and {alias.name for alias in node.names}
+        == set(OFFLINE_RND_MODULE_EXPORT_COUNTS)
+    ]
+    assert len(offline_rnd_imports) == 1
+    assert tuple(alias.name for alias in offline_rnd_imports[0].names) == tuple(
+        OFFLINE_RND_MODULE_EXPORT_COUNTS
+    )
+    assert all(
+        alias.asname == f"_{alias.name}"
+        for alias in offline_rnd_imports[0].names
+    )
 
     snapshot_payload = b'{"external":"candidate-snapshot"}\n'
     snapshot_path = tmp_path / "candidate.json"
@@ -315,10 +335,14 @@ def test_packaged_public_modules_are_exported_exactly(tmp_path: Path) -> None:
             "runtime = importlib.import_module(",
             "    'cas_harness_v2.diagnostic_stagec_runtime_activation'",
             ")",
+            "dispersion = importlib.import_module(",
+            "    'cas_harness_v2.diagnostic_evidence_coverage_dispersion'",
+            ")",
             f"comparison_export_counts = {COMPARISON_MODULE_EXPORT_COUNTS!r}",
             f"ambiguous_export_aliases = {AMBIGUOUS_EXPORT_ALIASES!r}",
             f"ambiguous_raw_exports = {AMBIGUOUS_RAW_EXPORTS!r}",
             f"stagec_extension_export_counts = {STAGEC_EXTENSION_MODULE_EXPORT_COUNTS!r}",
+            f"offline_rnd_export_counts = {OFFLINE_RND_MODULE_EXPORT_COUNTS!r}",
             "stagec_extension_allowed_equal_collisions = (",
             f"    {STAGEC_EXTENSION_ALLOWED_EQUAL_COLLISIONS!r}",
             ")",
@@ -330,6 +354,10 @@ def test_packaged_public_modules_are_exported_exactly(tmp_path: Path) -> None:
             "    name: importlib.import_module(f'cas_harness_v2.{name}')",
             "    for name in stagec_extension_export_counts",
             "}",
+            "offline_rnd_modules = {",
+            "    name: importlib.import_module(f'cas_harness_v2.{name}')",
+            "    for name in offline_rnd_export_counts",
+            "}",
             "artifacts = importlib.import_module('cas_harness_v2.artifacts')",
             "assert len(provenance.__all__) == len(set(provenance.__all__)) == 32",
             "assert len(inventory.__all__) == len(set(inventory.__all__)) == 11",
@@ -337,11 +365,20 @@ def test_packaged_public_modules_are_exported_exactly(tmp_path: Path) -> None:
             "assert len(external.__all__) == len(set(external.__all__)) == 20",
             f"assert tuple(runtime.__all__) == {RUNTIME_ACTIVATION_EXPORTS!r}",
             "assert len(runtime.__all__) == len(set(runtime.__all__)) == 44",
+            "assert len(dispersion.__all__) == len(set(dispersion.__all__)) == 27",
             "assert not [name for name in runtime.__all__ if name.endswith('_SCHEMA')]",
             "assert not [name for name in runtime.__all__ if name.endswith('_MEDIA_TYPE')]",
             f"assert len(package.__all__) == len(set(package.__all__)) == {PACKAGED_KERNEL_EXPORT_COUNT}",
             "assert not (ambiguous_raw_exports & set(package.__all__))",
             "assert not any(hasattr(package, name) for name in ambiguous_raw_exports)",
+            "assert {",
+            "    name: len(module.__all__)",
+            "    for name, module in offline_rnd_modules.items()",
+            "} == offline_rnd_export_counts",
+            "for module in offline_rnd_modules.values():",
+            "    for name in module.__all__:",
+            "        assert name in package.__all__",
+            "        assert getattr(package, name) is getattr(module, name)",
             "for module_name, module in comparison_modules.items():",
             "    assert len(module.__all__) == len(set(module.__all__))",
             "    assert len(module.__all__) == comparison_export_counts[module_name]",

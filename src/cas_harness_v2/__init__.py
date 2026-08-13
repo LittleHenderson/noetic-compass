@@ -513,6 +513,10 @@ from . import comparison_shared_runner as _comparison_shared_runner
 from . import comparison_steering_effects as _comparison_steering_effects
 from . import comparison_steering_protocol as _comparison_steering_protocol
 from . import distributed_probe_contract as _distributed_probe_contract
+from . import (
+    diagnostic_evidence_coverage_dispersion
+    as _diagnostic_evidence_coverage_dispersion,
+)
 from . import historical_evidence_import as _historical_evidence_import
 from . import jspace_shadow_contract as _jspace_shadow_contract
 from . import surface_meaning_preservation as _surface_meaning_preservation
@@ -1046,6 +1050,24 @@ __all__.extend(
         "JSPACE_DTYPES",
     )
 )
+
+
+_OFFLINE_RND_PACKAGE_MODULES = (
+    _diagnostic_evidence_coverage_dispersion,
+)
+
+for _offline_rnd_module in _OFFLINE_RND_PACKAGE_MODULES:
+    for _offline_rnd_name in _offline_rnd_module.__all__:
+        if _offline_rnd_name in globals():
+            raise ImportError(
+                "CAS Harness v2 offline R&D package export conflict for "
+                f"{_offline_rnd_name!r}."
+            )
+        globals()[_offline_rnd_name] = getattr(
+            _offline_rnd_module,
+            _offline_rnd_name,
+        )
+        __all__.append(_offline_rnd_name)
 
 
 _STAGEC_EXTENSION_PACKAGE_MODULES = (

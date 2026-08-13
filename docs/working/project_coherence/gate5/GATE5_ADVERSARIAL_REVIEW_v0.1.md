@@ -36,6 +36,121 @@ its criteria status is `REPORTED_CRITERIA_NOT_MET`, and its scientific
 eligibility is `INELIGIBLE`. None of these runs established prompt-injection
 detection or steering efficacy. Experimental execution remains `NOT_STARTED`.
 
+## Evidence-Coverage Dispersion Stage 1 adversarial disposition (2026-08-12)
+
+The exact ECD Stage 1 source/package and focused adversarial slices passed
+their independent frozen-byte audit with P0/P1 `0 / 0`. The admitted ceiling is
+still only `R&D / OFFLINE SYNTHETIC / ADVISORY_ONLY / NON_AUTHORITY`: an exact
+required-cell coverage map and deterministic next-test advice. It is not an
+adjacency or graph analysis, unequal-exposure rate analysis, uncertainty
+estimate, Evidence Packet component, production capability, Stage C input, or
+decision authority.
+
+The revised boundary rejects every Unicode general-category `Cc` character,
+including C0, DEL, and C1 controls. Embedded external references remain
+identity descriptors only and cannot establish external admission or byte
+verification. The process-local seal resists ordinary construction and
+module-global rebinding in an unmodified interpreter, but arbitrary
+same-interpreter reflection is explicitly outside its provenance boundary;
+mutation of closure cells, defaults, code objects, tracing state, or equivalent
+verifier state invalidates all in-process claims. Durable validity still
+requires exact independent replay from frozen source and input/result bytes.
+
+The scientific claim remains deliberately negative: CV2 is
+`EXPERIMENTAL / NOT PROMOTED`, and its natural add-one score is analytically
+equivalent to minimum-support ranking. Stage 2 is blocked until a separate
+preregistration supplies a genuinely non-equivalent action rule, a CV2-removed
+ablation, all simpler baselines, and complete policy-independent common-horizon
+outcomes.
+
+Focused evidence is `118 / 118 PASS` at node-ID SHA-256
+`D186DB44D31FA01B336815D1824033C9C8099886A73B12516E1FBE7C252D490C`;
+the package mirror slice is `13 / 13 PASS` at
+`B68CB064B501B640FB5BB0CFD60963E262897A749C653C1BC89AC07BF29FFA9D`.
+These receipts do not rewrite the published Phase 0 Harness receipt. That
+`1,452`-node receipt covers no ECD node and remains unchanged. Separate run
+`ecd-stage1-suite-receipts-20260812T182522-d7b2ef6d` now binds a current
+`1,570`-node Harness PASS (six exact setup skips) and `99`-node adapter PASS.
+The Harness node-ID digest is
+`8887298311BBFAFFF45421F43FEEC4E68160FF84D360EF108743E9EF90858510`;
+the adapter node-ID digest is
+`B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B`.
+The archived receipt files are `295,566` bytes /
+`A7AF4C73517DF93B1FFE04979D8D3688E61DBE730638FCAE7963E9D8BC5471A5`
+and `16,663` bytes /
+`7AFCE687047363D2B27E53D7978E220B6B4F36C85DFA6FA6DEA3B5FDA5AE9FBB`.
+Both bind issuance verifier
+`BFB3DE9B9061298A7735454FF3FB4ED8FDB6DC31AA4A2F580DEE47E16AB97CF3`,
+manifest `9D94072DCF4FCE4A305020C90AA52A72E884034CA11DA8D148D8865BECFB0473`,
+and runner lock
+`EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13`.
+Independent receipt audit is P0/P1 `0 / 0`. The complete 12-suite map is
+`2,790` nodes.
+
+First integrated attempt `first-20260813T023503Z-f3de22ee` reached the worker
+comparison after suite execution but expected the stale published Phase 0
+worker loaded-code pair. It emitted no exact PASS line and is retained as
+`FAILED / STALE PHASE0 WORKER RECEIPT COMPARATOR / EXIT 0 WITHOUT EXACT PASS
+LINE / STRUCTURE_ONLY / NON_AUTHORITY`; result `3,202` bytes /
+`F6CC658B34C5BEDDD84DD7FF501BD36575942D6675EDDF8D9CBF3C9DEF0AB303`,
+empty stdout, stderr `500` bytes /
+`1A50674944CFADFB705D584EDFC70F192E23109A22918F6A97E38A0C67C773D7`.
+The exact ECD-only successor worker receipt
+`ecd-stage1-worker-receipt-20260812T202101-c1cb7da6` passes `732 / 732` and is
+`98,968` bytes /
+`60EA620DA91F29E0D1F059ECCFF1BDC4DD206EC68BB17AD92D4C566401380342`,
+with pre-test/complete loaded-code digests
+`5859DC614883F19A02FBABEC51455CE4728054531AEB0E665D1CAE788394B7A1` /
+`47C816D2873400775F353F6832DD6656CFB0B19471BD596B3829D530ACE0BFAB`.
+It is an additive ECD receipt and does not rewrite Phase 0 worker current or
+historical evidence.
+
+Audited intermediate run `retry-20260813T033443Z-64762d21` then passed the
+complete `12`-suite / `2,790`-node verifier with exit `0` and exactly one PASS
+line. It rechecked `712` manifest artifacts, `478` Python artifacts, `2,314`
+executable-shadow paths, `53` review criteria / all `22` required OPEN
+boundaries, and `1,284` postflight identities. Result, start, stdout, and
+stderr identities are `3,200` /
+`163E7D60111978CD40C191680DD49DF33B562E7C4C842A915544C281E52936F8`,
+`2,597` /
+`6FFA96A6C7B8EC3E2CC5A9482A5AA46452544D701A552D8501DBD0314D1F000F`,
+`12,118` /
+`61D027192FF7E8B89BB85854F72D834AE2C97768915C387F6745D5DFF9424EDD`,
+and `0` /
+`E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`.
+The before/after verifier, manifest, and runner identities are exactly
+`976,022` /
+`9ECEEE47D33855135A9A7A2749CD0239EDEBC51AA0EF008B433C15C0837B31B1`,
+`205,702` /
+`C6C50718BEB5D9EC4FDD2772B92483747C113CF00EB8A6BEAE38995D811CC859`,
+and `121,525` /
+`EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13`.
+
+The supervisor start record contains a stale freeze-ledger value:
+`8605BCA3935F14370900963A6D48E4C236C69A8A9D3792F3E776AFE677546355`
+describes the pre-worker-receipt-promotion tree and is explicitly rejected as
+a run binding. Independent post-hoc reconstruction of the actual launch tree
+is `20E463B9A88D016E7C2E27991E282EDA44DC65A2D7762C532015A7B129C10F70`
+over `2,228` serialized bytes and `15` paths. Its correction artifact is
+`1,436` bytes /
+`5854A202FB06A59ABC1BF37225A0712AC8141E2B9D36762AD0F3A38D5AD28FC8`.
+This correction closes the audit finding but is still post-hoc, not trusted
+time or WORM. The intermediate PASS is therefore only `LOCAL ENGINEERING /
+STRUCTURE_ONLY / NON_AUTHORITY`.
+
+All 12 suite identities are frozen in the verifier and review matrix. The
+Harness, worker, and adapter exact node/loaded-code pairs are respectively
+`8887298311BBFAFFF45421F43FEEC4E68160FF84D360EF108743E9EF90858510` /
+`973AD5E7905130A17D29798C94593D5BA3BFFE807AC2C82F0AF2AB89A4FE77A5`,
+`F53562BAECCC4982B402A9A747F8CADC29468B5F14D8B4A8C17CFC2A8E89B568` /
+`47C816D2873400775F353F6832DD6656CFB0B19471BD596B3829D530ACE0BFAB`,
+and `B84EB29C59563DD0270C3BD8B230D604D59A2E45D38B9E375C7FA697468D656B` /
+`6EDFF27912DC8C73FF508C11D850F18E6A6146C6B93238FA431E00D49B12299F`.
+Current ECD status is `CURRENT HARNESS, WORKER, AND ADAPTER SAME-PROCESS
+RECEIPTS PASS / AUDITED INTERMEDIATE INTEGRATED 12-SUITE REPLAY PASS / FINAL
+UNCHANGED-TREE REPLAY PENDING / STRUCTURE_ONLY / NON_AUTHORITY`; the final
+unchanged-tree integrated replay remains required.
+
 ## Current RunPod readiness adversarial disposition (2026-08-12)
 
 Build-only run `31566811228` at exact commit

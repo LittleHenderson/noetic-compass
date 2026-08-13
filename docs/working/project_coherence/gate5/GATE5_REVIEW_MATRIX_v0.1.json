@@ -11,15 +11,15 @@
   "product_route_authorized": false,
   "canon_effect": "NONE",
   "product_claim_effect": "NONE",
-  "criterion_count": 52,
+  "criterion_count": 53,
   "implemented_or_hash_verified_count": 26,
   "preserved_negative_evidence_count": 1,
-  "open_criterion_count": 25,
+  "open_criterion_count": 26,
   "disposition_counts": {
     "IMPLEMENTED_AND_REGRESSION_TESTED": 22,
     "IMPLEMENTED_AND_HASH_VERIFIED": 4,
     "PRESERVED_NEGATIVE_EVIDENCE": 1,
-    "OPEN_ENGINEERING": 10,
+    "OPEN_ENGINEERING": 11,
     "OPEN_SECURITY": 1,
     "OPEN_GOVERNANCE": 5,
     "OPEN_EXTERNAL_VALIDATION": 9
@@ -144,7 +144,11 @@
     "cas_harness_v2.jspace_source_bundle_manifest.v1",
     "cas_harness_v2.jspace_shadow_protocol.v1",
     "cas_harness_v2.historical_source_manifest.v1",
-    "cas_harness_v2.historical_evidence_import_report.v1"
+    "cas_harness_v2.historical_evidence_import_report.v1",
+    "cas_harness_v2.evidence_coverage_required_universe.v1",
+    "cas_harness_v2.evidence_coverage_observation.v1",
+    "cas_harness_v2.evidence_coverage_metric_policy.v1",
+    "cas_harness_v2.evidence_coverage_dispersion.v1"
   ],
   "kernel_media_types": [
     "application/vnd.cas-harness.diagnostic-stagec-execution-contract-v2+json",
@@ -285,7 +289,11 @@
     "application/vnd.cas-harness.jspace-source-bundle-manifest-v1+json",
     "application/vnd.cas-harness.jspace-shadow-protocol-v1+json",
     "application/vnd.cas-harness.historical-source-manifest-v1+json",
-    "application/vnd.cas-harness.historical-evidence-import-report-v1+json"
+    "application/vnd.cas-harness.historical-evidence-import-report-v1+json",
+    "application/vnd.cas-harness.evidence-coverage-required-universe+json",
+    "application/vnd.cas-harness.evidence-coverage-observation+json",
+    "application/vnd.cas-harness.evidence-coverage-metric-policy+json",
+    "application/vnd.cas-harness.evidence-coverage-dispersion+json"
   ],
   "runtime_activation_review_basis": "The frozen Stage C runtime-activation tranche remains STRUCTURE_ONLY / NON_AUTHORITY. Historical focused receipts remain core 28/28 at 5d501f3505a98e23bdd2ab8b191bc6eee90260f1f169940b6a6f70a61525a632, worker gate 95/95 at 0554f3710f9a35667a462caf53584c9517cf945bfc64811765acfb4e7cc7bcd3, capture 139/139 at c306d70a052cda8c0cfb12394b640a2ed2dde9fee58f16e92ff23771caabfed1, their 234/234 union at 08caa558dee27a5876da29a15e9d0e3875994c630e2826bc52154dc215776e76, and Qwen 27 at d80b52ffc48d0677f773269f640481a4c1ca0c434c707041ff391ea75be90eca. Historical authoritative receipts remain Harness 537 at 3aa22ae520fd2604ab8e8b1eaa6ed4a955dddeb4bebef95f8b750a163aa5fb19, worker 594 at b822d8efc57c45712fd960bc14e2fb271fdd72c91cf29d665ebab7ed27ae0d9b, and the later runtime-activation Harness 565, worker 719, and adapter 99 receipts, all preserved as historical non-authority evidence. Current configured identities are Harness 1082 at e791e0a7960201323a94f8b0bc88f53af611771118a369d332b36100d80b7928, worker 719 at 98f7152b532c713dd22df910fb762ce92e281a350aca4e1a3cf2113c84d3dbb5, and adapter 99 at b84eb29c59563dd0270c3bd8b230d604d59a2e45d38b9e375c7fa697468d656b within 2289 configured suite nodes. Attempt 1 for the current 1082-node Harness reached its exact 3600-second child ceiling and produced TIMEOUT / NO PASS / NO RECEIPT. Attempt 2 failed after 4179.3 seconds because the manifest was stale and produced FAILED / NO PASS / NO RECEIPT; the rebuilt 686-artifact manifest then passed targeted redteam checks with 22 tests and 23 subtests. Attempt 3 produced a now-historical authoritative Harness 1082 receipt: 1076 all-phase PASS, six exact setup skips retained as mismatch evidence rather than PASS, 3240 ordinary reports, 163 passed subtests, and exact digests 60f1ab42e3ba883aa3c093f506c4b0896e498c1fc3258a887895c596aaa38f29 and b95348d54fd003715848cbd27b79d3d486de182e3cf9717e176e5883c7675826 in 3350.340165 seconds; that elapsed value is observational only. An intervening Harness attempt failed at a literal host-throughput timing gate; no full-suite receipt or exact elapsed value was retained, so none is claimed. The fresh current-tree replay produced the current authoritative Harness 1082 receipt with the same counts and stable digests, loaded-code digest dc4f9c8664415c211d257dffbfd8d0dbc942f830c138c60d6ac3a0e8d4eac768, and elapsed 3059.695080 seconds; that elapsed value is observational only and carries no performance authority. The current authoritative worker 719 receipt passes at loaded-code digest 44a6b0a13caa30860d3802c042455f72c90ffc6d15fa7503f3b159384eff4c34. The earlier adapter 99 receipt at loaded-code digest 5c860dd3a7f787dd0826920d134796f42e02c74c1a4123f256982df29ca499c3 and observational elapsed 47.452869 seconds is preserved explicitly as historical evidence. An integrated verifier replay rejected that historical adapter loaded-code digest as stale; the descriptive failure record infers no attempt ordinal and no whole-run elapsed value. The fresh current-tree adapter replay produced the current authoritative adapter 99 receipt with 297 ordinary reports, one warning, zero setup skips (`[]`), loaded-code digest b543cd078076717c80341b0b9c52f158cbd20b9bb3718e4128f81373aeea1101, and observational elapsed 25.401532 seconds with no performance authority. The final integrated 12-suite verifier command C:\\Python314\\python.exe -I -B scripts/verify_project_coherence_gate5.py exited 0 and produced AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY with 686 artifacts, 457 Python artifacts, 2290 executable-shadow paths before and after, all 12/12 suites, Harness 1082 plus 163 subtests and six exact setup skips at loaded-code digest dc4f9c8664415c211d257dffbfd8d0dbc942f830c138c60d6ac3a0e8d4eac768, worker 719 at 44a6b0a13caa30860d3802c042455f72c90ffc6d15fa7503f3b159384eff4c34, adapter 99 at b543cd078076717c80341b0b9c52f158cbd20b9bb3718e4128f81373aeea1101, 51 review criteria, all 22 required OPEN boundaries, and 1258 postflight file identities. Tool wall 3568.3 seconds is observational only and carries no performance authority; no attempt ordinal or aggregate digest is inferred. The verifier ceiling is 5400 seconds and remains a bounded process ceiling with no performance authority. The comparison/recovery tranche adds 14 exact modules, 45 unique schemas, 87 unique media types, and a 517-node focused union while preserving 112 total schemas and 131 total media types. Stage C remains DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED; Gate 5 remains OPEN / KEEP_OPEN; license remains NOT LICENSED; disclosure remains HELD; no provider/model run, detector or steering result, Evidence Packet, product, ACCEPT, canon, or disclosure authority follows.",
   "review_basis": "Criteria distinguish exact-byte and regression-tested research controls, preserved historical failures, worker structural controls, retained local engineering executions, and obligations requiring durable trust infrastructure, scientific execution, independent review, product authority, or disclosure authority. The authoritative worker 576-node and Harness-v2 306-node receipts remain exact and bind the last committed b96c2c12 checkpoint. The diagnostic-runtime tranche has separate authoritative same-process receipts. The preserved historical Harness replay collected, started, and finished 437 nodes with digest 85aacf5bd7909979f4ec8db7680b279d0795d32525973bc00be16ec0157cf5e8: 431 had exact all-phase PASS, exactly six named numerical exact-lock nodes setup-skipped as mismatch evidence rather than PASS, 1,305 ordinary reports and 163 passing subtests were emitted, no collection or internal errors or deselections occurred, the isolated pycache remained empty, and pytest exited 0. Worker collected, started, finished, and passed 594/594 nodes with digest b822d8efc57c45712fd960bc14e2fb271fdd72c91cf29d665ebab7ed27ae0d9b, emitted 1,782 ordinary reports and zero subtests, warnings, errors, or deselections, left the isolated pycache empty, and exited 0. Separate exact Python 3.12 receipts remain the positive fit/disposition execution evidence. The additive audit-only prompt-context provenance and exact-480-row inventory pass 30/30 and 22/22 focused nodes; their 52-node union digest is ddec58ba0b12a8699bdcb7beb43b6d8656ad96d9e95347b37faea22ed3a572c0, and the combined diagnostic Study plus prompt-context surface passes 98/98 in 33.77 seconds with digest c573ce9c70496c9fe0d1e7a3516e07f8454cf4f7085a26bdc5364342ca7a085e. They permit only SOURCE and ordered UTF8_CONCAT, require exact external UTF-8 source bytes, treat declared origins as audit labels rather than chat roles, and do not normalize. The aggregate ref must prospectively enter diagnostic preregistration design.input_artifacts and future DRC and runtime admission must require it; corpus freeze remains NOT_ESTABLISHED. The additive prerequisite intake/admission contract passes 19/19 focused nodes with digest 3785adb97900abab40242dfd6df1d0665b9996bae94ec2697672a8506dcbe863, exposes exactly 18 schema/media pairs and 62 public exports, and remains OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY. It can admit exact candidate structure only for prospective preregistration; serialized candidate bodies are not an external trust root and grant no runtime authority. The deterministic read-only external-intake library and CLI separately pass 19/19 and 10/10 focused nodes; their frozen 29-node union passed in 47.72 seconds at digest a2d250135113edd038c37040c94e11ee6e8b6208e14d53270f318ff48f06ad80, while an independent 28/28 result is retained only as a pre-final checkpoint. The library adds exactly three schema/media pairs, 20 public exports, 16 closed roles, and 17 closed error codes; the CLI adds exactly two schema/media pairs. Successful snapshot replay remains CANDIDATE_STRUCTURAL_REPLAY_COMPLETE_NON_AUTHORITY with external trust NOT_ESTABLISHED and runtime authorization NOT_GRANTED_BY_IMPORTER; CLI failures remain FAIL_CLOSED_NON_AUTHORITY. The command writes no files, makes no network or provider requests, and creates or consumes no nonce. The 508-node prerequisite-intake Harness replay is preserved historically at digest 8cdba8f539912573d04723f39ad819c413f8ae5b69006bdc43e653f6af6ccae2: 502 had exact all-phase PASS, the same six setup skips remained mismatch evidence rather than PASS, 1,518 ordinary reports and 163 passing subtests were emitted, zero warnings, collection or internal errors, or deselections occurred, the isolated pycache remained empty, and pytest exited 0. Its exact historical receipt digests bind ordinary outcomes 4a9d6f31d341f51bbc7d339750bdcb69b444827cf58b08439bf05bc3a86dd766, subtest outcomes 6c2afb12d8f1dbc529c9493967b1cbb06ae98228b318da724d093d3c84721109, locked import origins 3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a, pre-test loaded code 0cbcb82dcf24426a868cfca8dbc334661d1504a23c882dd342d5ec6767b30d98, and loaded code 61b3498ca938329fad5ba181199f658db5bf53712d890d3a9095711074e91846. The preserved historical authoritative Harness replay collected, started, and finished 537 nodes in 1,680.3 seconds at digest 3aa22ae520fd2604ab8e8b1eaa6ed4a955dddeb4bebef95f8b750a163aa5fb19: 531 had exact all-phase PASS, the same six setup skips remained mismatch evidence rather than PASS, 1,605 ordinary reports and 163 passing subtests were emitted, zero warnings, collection or internal errors, or deselections occurred, process and pytest exited 0, and exact receipt digests bind ordinary outcomes 423154c5c83df299f844e87d289cbb98e331b302ce1aba8aea7075a12b1c0eff, subtest outcomes 6c2afb12d8f1dbc529c9493967b1cbb06ae98228b318da724d093d3c84721109, locked import origins 3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a, pre-test loaded code 0cbcb82dcf24426a868cfca8dbc334661d1504a23c882dd342d5ec6767b30d98, and loaded code c186acebf8165a195a4d66af968a58e323b4c5943e84191daa2cef72fbd2b473. The 508-node prerequisite-intake receipt remains historical. The historical prompt-context Harness replay remains preserved separately as the 489-node receipt with digest a24a129f295810836dae12a3345670a41e3500fb2dfcfbec27dac6cdc65bb225: 483 had exact all-phase PASS, six unchanged setup skips remained mismatch evidence rather than PASS, 1,461 ordinary reports and 163 passing subtests were emitted, zero warnings, collection or internal errors, or deselections occurred, the isolated pycache remained empty, and pytest exited 0. The historical runtime-activation adapter replay passed 99/99 nodes with digest 2ec053f1688c97a76326a5addd79a07f31623d91fe9513df9b4ec4c6b5d2167b, 297 ordinary reports, zero subtests, one warning, zero errors or deselections, empty isolated pycache, and pytest exit 0; the earlier historical 98/98 adapter receipt remains preserved separately. The historical runtime-activation package mirror had 22 byte-identical Python files, 469 unique exports, and 1,420,002 bytes under provenance SHA-256 1561d0707aeb12ed720a1f70670494006b186628434cb6390a4deefba5040d07. The current package mirror has 36 byte-identical Python files, 1,097 unique exports, and 2,332,110 bytes under provenance SHA-256 d3074ac3f1b72fd150305f298159f185fd0af259eb30109d80f10973baa3f403. These carriers and receipts provide no trusted time, replicated cross-host one-use, WORM/external anchor, authenticated order/counters, live HTTP/container admission, model run, detector result, or Evidence Packet. Stage B remains a separate engineering-only historical execution whose Packet reported criteria not met and scientific ineligibility. The private route remains default-dark. Two Gate 4 registered live paths have drifted; Gate 5 can rerun the frozen dependency only from exact local Git commit 130168b3bd215e2975c8eb88776ed2be3b1c2227 under the boundary RETAINED GIT BLOB / LIVE REGISTERED PATH DRIFTED / LOCAL NONPORTABLE / NO CURRENT-SOURCE EQUIVALENCE. This is a historical retained-byte dependency, not current-source validation, and external-source portability remains OPEN. No provider, RunPod, Docker, or paid model action occurred in this tranche; known spend is $0.00. Gate 5 remains OPEN / KEEP_OPEN, Ring 4, NOT LICENSED, HELD, and experiment NOT_STARTED. The comparison/recovery tranche binds 14 modules, adds 45 unique schemas and 87 unique media types for totals of 112 and 131, and retains 15 focused subsets in a 517-node union at digest 7c56f7ab2b3ed5bb969944af9d6d7ff61c3ee278fc9e20e3a7b903aec213dd92. Current configured identities are Harness 1082/e791e0a7960201323a94f8b0bc88f53af611771118a369d332b36100d80b7928, worker 719/98f7152b532c713dd22df910fb762ce92e281a350aca4e1a3cf2113c84d3dbb5, and adapter 99/b84eb29c59563dd0270c3bd8b230d604d59a2e45d38b9e375c7fa697468d656b within 2289 configured nodes. Attempt 1 reached the 3600-second child ceiling and produced TIMEOUT / NO PASS / NO RECEIPT. Attempt 2 failed after 4179.3 seconds because of a stale manifest and produced FAILED / NO PASS / NO RECEIPT; the 686-artifact rebuild then passed targeted redteam checks with 22 tests and 23 subtests. Attempt 3 created a now-historical authoritative Harness receipt with 1082 collected, started, and finished nodes, 1076 all-phase PASS, six exact setup skips retained as mismatch evidence rather than PASS, 3240 ordinary reports, 163 passed subtests, zero warnings or errors, exits 0/0, ordinary digest 60f1ab42e3ba883aa3c093f506c4b0896e498c1fc3258a887895c596aaa38f29, and loaded-code digest b95348d54fd003715848cbd27b79d3d486de182e3cf9717e176e5883c7675826 in 3350.340165 seconds; its elapsed value is observational only. An intervening Harness attempt failed at a literal host-throughput timing gate; no full-suite receipt or exact elapsed value was retained, so none is claimed. The fresh current-tree replay created the current authoritative Harness receipt with the same counts and stable digests, loaded-code digest dc4f9c8664415c211d257dffbfd8d0dbc942f830c138c60d6ac3a0e8d4eac768, and elapsed 3059.695080 seconds; its elapsed value is observational only and carries no performance authority. The current worker 719 authoritative same-process receipt passes at loaded-code digest 44a6b0a13caa30860d3802c042455f72c90ffc6d15fa7503f3b159384eff4c34 in 106.254353 seconds. The earlier adapter 99 authoritative same-process receipt at loaded-code digest 5c860dd3a7f787dd0826920d134796f42e02c74c1a4123f256982df29ca499c3 and observational elapsed 47.452869 seconds is preserved explicitly as historical evidence. An integrated verifier replay rejected that historical adapter loaded-code digest as stale; the descriptive failure record infers no attempt ordinal and no whole-run elapsed value. The fresh current-tree adapter replay produced the current authoritative adapter 99 receipt with 297 ordinary reports, one warning, zero setup skips (`[]`), loaded-code digest b543cd078076717c80341b0b9c52f158cbd20b9bb3718e4128f81373aeea1101, and observational elapsed 25.401532 seconds with no performance authority. The final integrated 12-suite verifier command C:\\Python314\\python.exe -I -B scripts/verify_project_coherence_gate5.py exited 0 and produced AUTHORITATIVE INTEGRATED 12-SUITE PASS / STRUCTURE_ONLY / NON_AUTHORITY with 686 artifacts, 457 Python artifacts, 2290 executable-shadow paths before and after, all 12/12 suites, Harness 1082 plus 163 subtests and six exact setup skips at loaded-code digest dc4f9c8664415c211d257dffbfd8d0dbc942f830c138c60d6ac3a0e8d4eac768, worker 719 at 44a6b0a13caa30860d3802c042455f72c90ffc6d15fa7503f3b159384eff4c34, adapter 99 at b543cd078076717c80341b0b9c52f158cbd20b9bb3718e4128f81373aeea1101, 51 review criteria, all 22 required OPEN boundaries, and 1258 postflight file identities. Tool wall 3568.3 seconds is observational only and carries no performance authority; no attempt ordinal or aggregate digest is inferred. The 5400-second process ceiling remains a bound only and has no performance authority. Historical runtime-activation Harness 565, worker 719, and adapter 99 receipts remain immutable and explicitly historical. Comparison execution remains BLOCKED_MISSING_EXACT_EXTERNAL_AUTHORIZATION / NOT_EXECUTED / ZERO_SPEND with zero model, provider, GPU, RunPod, network, or spend activity. No criterion creates ACCEPT, LICENSED, an enabled public route, or a product route.",
@@ -1564,23 +1572,23 @@
       "image_lane_bindings": [
         {
           "path": ".github/workflows/stagec-qwen-batch-image.yml",
-          "sha256": "1763377c92b3754a51d8a19766fc1f16ddb44f52377c7ea1ea620b851c088ddf",
-          "bytes": 15916
+          "sha256": "6190ebe4182fb1665298285018820f3c7bd2d48c6a6387279c6558ebd056942c",
+          "bytes": 16267
         },
         {
           "path": ".github/workflows/live-worker-image.yml",
-          "sha256": "86215cba4fa0a2b2dd00fba9915e2afe578d952a8507db0d663309cdcb6a886b",
-          "bytes": 6382
+          "sha256": "03a6b61ec399b257851be0a60d403e8171876fb082dd83eff30225dfc5105016",
+          "bytes": 6457
         },
         {
           "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-stagec-model",
-          "sha256": "f66c82de2ac2db49dce70140f1163098d745422a0103cb1962fd97c4adafa8d2",
-          "bytes": 3494
+          "sha256": "37e5280378c9683914b6fea6facb670ae66faf19102a67817861f7dcd09a3dc8",
+          "bytes": 3554
         },
         {
           "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.stagec-batch",
-          "sha256": "b32f6b502edb6c0416f52faef9249d2f0d324be20a37f11f229fcb1a37ef276d",
-          "bytes": 4143
+          "sha256": "63d1c91e2088ec37730f3650e8458c9ef77d384795ba46a0429ec4ebde95196a",
+          "bytes": 4232
         }
       ],
       "documentation_bindings": [
@@ -2184,6 +2192,253 @@
         "spend_microusd": 0
       },
       "authority_boundary": "Gate 5 OPEN / KEEP_OPEN; Stage C DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED; NOT LICENSED / HELD / NOT FROZEN. No detector, steering, comparison, universality, J-Space, scientific, product, ACCEPT, LICENSED, disclosure, provider, model, GPU, RunPod, or spend result follows."
+    },
+    "evidence_coverage_dispersion_stage1": {
+      "status": "CURRENT HARNESS, WORKER, AND ADAPTER SAME-PROCESS RECEIPTS PASS / AUDITED INTERMEDIATE INTEGRATED 12-SUITE REPLAY PASS / FINAL UNCHANGED-TREE REPLAY PENDING / STRUCTURE_ONLY / NON_AUTHORITY",
+      "scope": "R&D / OFFLINE SYNTHETIC / ADVISORY_ONLY / NON_AUTHORITY",
+      "specification": {
+        "path": "docs/working/project_coherence/gate5/evidence_coverage_dispersion_stage1/CAS_HARNESS_LACUNARITY_RND_HANDOFF_v0.2.md",
+        "sha256": "9ab9cef1419b431f6884bc758499f71f60c766a8635c5118fa454e640a971ec4",
+        "bytes": 40607
+      },
+      "canonical_source": {
+        "path": "src/cas_harness_v2/diagnostic_evidence_coverage_dispersion.py",
+        "sha256": "c894c44479408735091dee96931d6904dd4e050692f422aafe21ab1a9bc1e8b3",
+        "bytes": 40682
+      },
+      "canonical_test": {
+        "path": "tests/cas_harness_v2/test_diagnostic_evidence_coverage_dispersion.py",
+        "sha256": "e9b533f4438d44a5a3d4de5117b783f6859dd4fb5f7d12c1c62a3963e1c42f52",
+        "bytes": 82937
+      },
+      "focused_test_receipt": {
+        "status": "LOCAL FOCUSED 118 / 118 PASS / R&D / OFFLINE SYNTHETIC / ADVISORY_ONLY / NON_AUTHORITY",
+        "collected_nodes": 118,
+        "passed_nodes": 118,
+        "failed_nodes": 0,
+        "process_exit_status": 0,
+        "node_ids_sha256": "d186db44d31fa01b336815d1824033c9c8099886a73b12516e1fbe7c252d490c",
+        "serialized_node_ids_bytes": 16623,
+        "cache_provider": "DISABLED"
+      },
+      "package_surface": {
+        "byte_mirrored_python_files": 42,
+        "unique_exports": 1269,
+        "total_python_bytes": 2593194,
+        "canonical_and_mirror_init_sha256": "72f3fecebae16706eb0da73ee2f156e745d0283df6a5fbfbed5085f00fccc5f7",
+        "canonical_and_mirror_init_bytes": 43640,
+        "provenance_sha256": "3f6af85d8a8dce06b35e97ba2170186bec70d7de4719071c02f33eef8c7a8b2c",
+        "provenance_bytes": 7055,
+        "allowlist_source_sha256": "079304387e30f08614721f07a92d3f444fb2c29ca0ddb61416fe3a8c9a99732c",
+        "allowlist_source_bytes": 6922,
+        "packaged_mirror_test_sha256": "853f8721f14eb5a3c8bda194661133e2e66915c5593e91b38471c0c2f94578e3",
+        "packaged_mirror_test_bytes": 23107,
+        "focused_status": "LOCAL PACKAGE MIRROR 13 / 13 PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "focused_nodes": 13,
+        "focused_node_ids_sha256": "b68cb064b501b640fb5bb0cfd60963e262897a749c653c1bc89ac07bf29ffa9d",
+        "focused_serialized_node_ids_bytes": 1611
+      },
+      "current_authoritative_same_process_receipts": {
+        "run_id": "ecd-stage1-suite-receipts-20260812T182522-d7b2ef6d",
+        "status": "CURRENT HARNESS, WORKER, AND ADAPTER SAME-PROCESS RECEIPTS PASS / AUDITED INTERMEDIATE INTEGRATED 12-SUITE REPLAY PASS / FINAL UNCHANGED-TREE REPLAY PENDING / STRUCTURE_ONLY / NON_AUTHORITY",
+        "integrated_12_suite_receipt_status": "AUDITED INTERMEDIATE INTEGRATED 12-SUITE PASS / LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY / FINAL UNCHANGED-TREE REPLAY PENDING",
+        "harness": {
+          "bundle": {
+            "run_id": "ecd-stage1-suite-receipts-20260812T182522-d7b2ef6d",
+            "receipt_file_sha256": "a7af4c73517df93b1ffe04979d8d3688e61dbe730638fcae7963e9d8bc5471a5",
+            "receipt_file_bytes": 295566,
+            "suite_name": "Harness v2 kernel and history",
+            "scope": "LOCAL ENGINEERING REGRESSION / SAME-RUN RECEIPT SUMMARY / NOT TRUSTED TIME OR WORM / STRUCTURE_ONLY / NON_AUTHORITY",
+            "started_utc": "2026-08-13T01:25:46.666728Z",
+            "ended_utc": "2026-08-13T02:07:03.286037Z",
+            "verifier_sha256": "bfb3de9b9061298a7735454ff3fb4ed8fdb6dc31aa4a2f580dee47e16ab97cf3",
+            "manifest_sha256": "9d94072dcf4fce4a305020c90aa52a72e884034ca11da8d148d8865becfb0473",
+            "runner_lock_sha256": "eb7d2d661bfe262c1e3bb4657e418eade8339f35d1089c7ae6a87efc6a360b13"
+          },
+          "projection": {
+            "collected_nodes": 1570,
+            "started_nodes": 1570,
+            "finished_nodes": 1570,
+            "all_phase_pass_nodes": 1564,
+            "setup_skipped_nodes": 6,
+            "ordinary_reports": 4704,
+            "passed_subtests": 163,
+            "warning_count": 0,
+            "error_count": 0,
+            "collection_errors": 0,
+            "internal_errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "process_exit_status": 0,
+            "pytest_exit_status": 0,
+            "elapsed_seconds": "2476.919921",
+            "node_ids_sha256": "8887298311bbfafff45421f43feec4e68160ff84d360ef108743e9ef90858510",
+            "ordinary_outcomes_sha256": "555c2e97ba6553ec85cca55993c98b2816e7051670c122efd1b60a9a84d72dc6",
+            "subtest_outcomes_sha256": "6c2afb12d8f1dbc529c9493967b1cbb06ae98228b318da724d093d3c84721109",
+            "locked_import_origins_sha256": "3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a",
+            "pre_test_loaded_code_sha256": "f7abd42464420e10d1b9f75fdc57701bc99541f46b814e71f795f47431e2df21",
+            "loaded_code_sha256": "973ad5e7905130a17d29798c94593d5ba3bffe807ac2c82f0af2ab89a4fe77a5",
+            "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED",
+            "receipt_status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+          }
+        },
+        "worker": {
+          "bundle": {
+            "run_id": "ecd-stage1-worker-receipt-20260812T202101-c1cb7da6",
+            "receipt_file_sha256": "60ea620da91f29e0d1f059eccff1bdc4dd206ec68bb17ad92d4c566401380342",
+            "receipt_file_bytes": 98968,
+            "suite_name": "Live trace worker complete",
+            "scope": "LOCAL ENGINEERING REGRESSION / SAME-RUN RECEIPT SUMMARY / NOT TRUSTED TIME OR WORM / STRUCTURE_ONLY / NON_AUTHORITY",
+            "started_utc": "2026-08-13T03:21:08.090082Z",
+            "ended_utc": "2026-08-13T03:21:48.524075Z",
+            "verifier_sha256": "4a2749e818883ff3f755b45f2699777594cedfdc819fce7158cd12f65c045805",
+            "manifest_sha256": "ec76fc103cfbc206e7b153c8fafcae5aee2f0c7e294dd4fe538f3e7b14a3dbb9",
+            "runner_lock_sha256": "eb7d2d661bfe262c1e3bb4657e418eade8339f35d1089c7ae6a87efc6a360b13"
+          },
+          "projection": {
+            "collected_nodes": 732,
+            "started_nodes": 732,
+            "finished_nodes": 732,
+            "all_phase_pass_nodes": 732,
+            "setup_skipped_nodes": 0,
+            "ordinary_reports": 2196,
+            "passed_subtests": 0,
+            "warning_count": 0,
+            "error_count": 0,
+            "collection_errors": 0,
+            "internal_errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "process_exit_status": 0,
+            "pytest_exit_status": 0,
+            "elapsed_seconds": "40.435683",
+            "node_ids_sha256": "f53562baeccc4982b402a9a747f8cadc29468b5f14d8b4a8c17cfc2a8e89b568",
+            "ordinary_outcomes_sha256": "889e455626a3dc5f7ec26cfc253cabed4572f0f9e95e68ccf56142380404664e",
+            "subtest_outcomes_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "locked_import_origins_sha256": "035effd9dc44c1fd2d9f07a3be62ea1bf07e3fd17d5807323f8d1b58ae6b0fd6",
+            "pre_test_loaded_code_sha256": "5859dc614883f19a02fbabec51455ce4728054531aeb0e665d1cae788394b7a1",
+            "loaded_code_sha256": "47c816d2873400775f353f6832dd6656cfb0b19471bd596b3829d530ace0bfab",
+            "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION",
+            "receipt_status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+          }
+        },
+        "adapter": {
+          "bundle": {
+            "run_id": "ecd-stage1-suite-receipts-20260812T182522-d7b2ef6d",
+            "receipt_file_sha256": "7afce687047363d2b27e53d7978e220b6b4f36c85dfa6fa6dea3b5fda5ae9fbb",
+            "receipt_file_bytes": 16663,
+            "suite_name": "Harness v2 admitted adapter and bounded reconciliation",
+            "scope": "LOCAL ENGINEERING REGRESSION / SAME-RUN RECEIPT SUMMARY / NOT TRUSTED TIME OR WORM / STRUCTURE_ONLY / NON_AUTHORITY",
+            "started_utc": "2026-08-13T02:07:22.192988Z",
+            "ended_utc": "2026-08-13T02:07:47.699354Z",
+            "verifier_sha256": "bfb3de9b9061298a7735454ff3fb4ed8fdb6dc31aa4a2f580dee47e16ab97cf3",
+            "manifest_sha256": "9d94072dcf4fce4a305020c90aa52a72e884034ca11da8d148d8865becfb0473",
+            "runner_lock_sha256": "eb7d2d661bfe262c1e3bb4657e418eade8339f35d1089c7ae6a87efc6a360b13"
+          },
+          "projection": {
+            "collected_nodes": 99,
+            "started_nodes": 99,
+            "finished_nodes": 99,
+            "all_phase_pass_nodes": 99,
+            "setup_skipped_nodes": 0,
+            "ordinary_reports": 297,
+            "passed_subtests": 0,
+            "warning_count": 1,
+            "error_count": 0,
+            "collection_errors": 0,
+            "internal_errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "process_exit_status": 0,
+            "pytest_exit_status": 0,
+            "elapsed_seconds": "25.510511",
+            "node_ids_sha256": "b84eb29c59563dd0270c3bd8b230d604d59a2e45d38b9e375c7fa697468d656b",
+            "ordinary_outcomes_sha256": "548361800978af55ee04b8e45b71ae70a09bbbe015025c5d6bf428f8e2fd9c9f",
+            "subtest_outcomes_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "locked_import_origins_sha256": "3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a",
+            "pre_test_loaded_code_sha256": "f7abd42464420e10d1b9f75fdc57701bc99541f46b814e71f795f47431e2df21",
+            "loaded_code_sha256": "6edff27912dc8c73ff508c11d850f18e6a6146c6b93238fa431e00d49b12299f",
+            "loaded_code_digest_rule": "CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION",
+            "receipt_status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+          }
+        },
+        "first_integrated_attempt": {
+          "run_id": "first-20260813T023503Z-f3de22ee",
+          "status": "FAILED / STALE PHASE0 WORKER RECEIPT COMPARATOR / EXIT 0 WITHOUT EXACT PASS LINE / STRUCTURE_ONLY / NON_AUTHORITY",
+          "supervisor_state": "EXIT_0_WITHOUT_EXACT_PASS_LINE",
+          "started_utc": "2026-08-13T02:35:03.5985312Z",
+          "ended_utc_observational": "2026-08-13T03:19:19.6438698Z",
+          "wall_seconds_observational": "2656.063",
+          "supervisor_exit_code": 0,
+          "exact_pass_line_observed": false,
+          "result_file_sha256": "f6cc658b34c5beddd84dd7ff501bd36575942d6675eddf8d9cbf3c9def0ab303",
+          "result_file_bytes": 3202,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout_bytes": 0,
+          "stderr_sha256": "1a50674944cfadfb705d584edfc70f192e23109a22918f6a97e38a0c67c773d7",
+          "stderr_bytes": 500,
+          "verifier_sha256": "4a2749e818883ff3f755b45f2699777594cedfdc819fce7158cd12f65c045805",
+          "verifier_bytes": 969891,
+          "manifest_sha256": "ec76fc103cfbc206e7b153c8fafcae5aee2f0c7e294dd4fe538f3e7b14a3dbb9",
+          "manifest_bytes": 205702,
+          "runner_lock_sha256": "eb7d2d661bfe262c1e3bb4657e418eade8339f35d1089c7ae6a87efc6a360b13",
+          "runner_lock_bytes": 121525,
+          "stale_expected_pre_test_loaded_code_sha256": "3696a5457fdf85823dac360679c750dec5b8a691207958ee0a1854a790a21a5e",
+          "observed_pre_test_loaded_code_sha256": "5859dc614883f19a02fbabec51455ce4728054531aeb0e665d1cae788394b7a1",
+          "stale_expected_loaded_code_sha256": "58a306279e05ebdf7f4c18a8b153170ab058c7dacf906d5e00ab92372f018681",
+          "observed_loaded_code_sha256": "47c816d2873400775f353f6832dd6656cfb0b19471bd596b3829d530ace0bfab",
+          "authority_boundary": "LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY"
+        },
+        "intermediate_integrated_receipt": {"run_id":"retry-20260813T033443Z-64762d21","status":"AUDITED INTERMEDIATE INTEGRATED 12-SUITE PASS / LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY / FINAL UNCHANGED-TREE REPLAY PENDING","supervisor_state":"EXIT_0_WITH_EXACT_PASS_LINE","command":"C:\\Python314\\python.exe -I -B scripts/verify_project_coherence_gate5.py","started_utc":"2026-08-13T03:34:43.2413739Z","ended_utc_observational":"2026-08-13T04:19:09.1772298Z","wall_seconds_observational":"2665.834","supervisor_exit_code":0,"exact_pass_line_count":1,"result_file":{"name":"retry-20260813T033443Z-64762d21.result.json","sha256":"163E7D60111978CD40C191680DD49DF33B562E7C4C842A915544C281E52936F8","bytes":3200},"started_file":{"name":"retry-20260813T033443Z-64762d21.started.json","sha256":"6FFA96A6C7B8EC3E2CC5A9482A5AA46452544D701A552D8501DBD0314D1F000F","bytes":2597},"stdout_file":{"name":"retry-20260813T033443Z-64762d21.stdout.txt","sha256":"61D027192FF7E8B89BB85854F72D834AE2C97768915C387F6745D5DFF9424EDD","bytes":12118},"stderr_file":{"name":"retry-20260813T033443Z-64762d21.stderr.txt","sha256":"E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855","bytes":0},"input_identities_before_and_after":{"verifier":{"sha256":"9ECEEE47D33855135A9A7A2749CD0239EDEBC51AA0EF008B433C15C0837B31B1","bytes":976022},"manifest":{"sha256":"C6C50718BEB5D9EC4FDD2772B92483747C113CF00EB8A6BEAE38995D811CC859","bytes":205702},"runner_lock":{"sha256":"EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13","bytes":121525},"before_after_identical":true},"freeze_ledger_correction":{"original_recorded_sha256":"8605bca3935f14370900963a6d48e4c236c69a8a9d3792f3e776afe677546355","original_value_scope":"PRE-WORKER-RECEIPT-PROMOTION TREE / NOT THE RETRY LAUNCH TREE","original_value_status":"STALE SUPERVISOR FIELD / EXPLICITLY REJECTED AS RUN BINDING","correct_launch_tree_post_hoc_sha256":"20e463b9a88d016e7c2e27991e282eda44dc65a2d7762c532015a7b129c10f70","correct_launch_tree_serialized_bytes":2228,"dirty_paths":15,"modified_paths":11,"untracked_paths":4,"all_dirty_file_mtimes_predate_launch":true,"latest_dirty_file_mtime_utc":"2026-08-13T03:34:14Z","correction_file":{"name":"retry-20260813T033443Z-64762d21.freeze-ledger-correction.json","sha256":"5854A202FB06A59ABC1BF37225A0712AC8141E2B9D36762AD0F3A38D5AD28FC8","bytes":1436},"claim_boundary":"POST-HOC RECONSTRUCTION / NOT TRUSTED TIME OR WORM / LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY"},"counts":{"manifest_artifacts":712,"syntax_checked_python_artifacts":478,"executable_shadow_paths":2314,"test_suites":12,"configured_nodes":2790,"review_criteria":53,"required_open_boundaries":22,"postflight_file_identities":1284},"suite_identities":{"Harness v2 kernel and history":{"tests":1570,"subtests":163,"expected_setup_skips":6,"executed_nodes_sha256":"8887298311bbfafff45421f43feec4e68160ff84d360ef108743e9ef90858510","ordinary_outcomes_sha256":"555c2e97ba6553ec85cca55993c98b2816e7051670c122efd1b60a9a84d72dc6","subtest_outcomes_sha256":"6c2afb12d8f1dbc529c9493967b1cbb06ae98228b318da724d093d3c84721109","locked_import_origins_sha256":"3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a","pre_test_loaded_code_sha256":"f7abd42464420e10d1b9f75fdc57701bc99541f46b814e71f795f47431e2df21","loaded_code_sha256":"973ad5e7905130a17d29798c94593d5ba3bffe807ac2c82f0af2ab89a4fe77a5","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / NORMALIZED-PROJECTION V1 / EXACT VERIFIER SELF-RECORD BYTE COUNT AND SHA-256 NORMALIZED TO ZERO ONLY IN THE AGGREGATE DIGEST / ACTUAL VERIFIER BYTES REMAIN MANIFEST-BOUND AND REVALIDATED","warnings":0},"Live trace worker complete":{"tests":732,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"f53562baeccc4982b402a9a747f8cadc29468b5f14d8b4a8c17cfc2a8e89b568","ordinary_outcomes_sha256":"889e455626a3dc5f7ec26cfc253cabed4572f0f9e95e68ccf56142380404664e","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"035effd9dc44c1fd2d9f07a3be62ea1bf07e3fd17d5807323f8d1b58ae6b0fd6","pre_test_loaded_code_sha256":"5859dc614883f19a02fbabec51455ce4728054531aeb0e665d1cae788394b7a1","loaded_code_sha256":"47c816d2873400775f353f6832dd6656cfb0b19471bd596b3829d530ace0bfab","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":0},"Live trace worker numeric red team":{"tests":32,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b","ordinary_outcomes_sha256":"473227b79854277d5c3363e8f39b008a58bc27e3f5ef86d3e3f49857625e1a0c","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"035effd9dc44c1fd2d9f07a3be62ea1bf07e3fd17d5807323f8d1b58ae6b0fd6","pre_test_loaded_code_sha256":"5859dc614883f19a02fbabec51455ce4728054531aeb0e665d1cae788394b7a1","loaded_code_sha256":"f58fe17d1280182da2b1bc4e7309621e2e2f7661fea623c7b4fafdb94d55601c","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":0},"API, fleet state, and launcher identity":{"tests":78,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"603debf7df9ac7b5a69543c3736f4cd38692d3330690a7559a6f9de6f0e2af77","ordinary_outcomes_sha256":"5347a87c7e07b39300f6521b0b1a24b4d52ab01642504095497b7516754014d9","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"035effd9dc44c1fd2d9f07a3be62ea1bf07e3fd17d5807323f8d1b58ae6b0fd6","pre_test_loaded_code_sha256":"5859dc614883f19a02fbabec51455ce4728054531aeb0e665d1cae788394b7a1","loaded_code_sha256":"db50cb847cbf357b98a8ca0780389b893e075498444498add316d61300646247","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":0},"Durable fleet callback and Object-Lock repository seams":{"tests":38,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"d3eaf533fedb5b03168200aa399ac53a6e2a6f22874ebabeaecefb227400778d","ordinary_outcomes_sha256":"4a8f13874e55c6c0915bb098285b4290df56e5d28942e57cc201f3552c65b883","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"035effd9dc44c1fd2d9f07a3be62ea1bf07e3fd17d5807323f8d1b58ae6b0fd6","pre_test_loaded_code_sha256":"5859dc614883f19a02fbabec51455ce4728054531aeb0e665d1cae788394b7a1","loaded_code_sha256":"adb7a4607e639d66e0bb9aae603b21537224c427c49fcaa6ad80302d6787427d","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":0},"Harness v2 worker terminal bridge":{"tests":17,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"fa6c985cd6caa734034e006bb4baf6be9d02269d7312bee7355e9c3833759c51","ordinary_outcomes_sha256":"0a9fc9a728be81034a71dc93b492d5865eeb89b219ab0c7b3a86bccfecef520e","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"035effd9dc44c1fd2d9f07a3be62ea1bf07e3fd17d5807323f8d1b58ae6b0fd6","pre_test_loaded_code_sha256":"5859dc614883f19a02fbabec51455ce4728054531aeb0e665d1cae788394b7a1","loaded_code_sha256":"800941879c2df294a463d4338c78965edc6636181c0f888d793d07a9a7c7efc4","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":0},"Harness v2 prospective lifecycle, SQLite, and dark route":{"tests":134,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"67f7507579749e11e27714e8513f6909e26a503a8dd18112cc402207d9735940","ordinary_outcomes_sha256":"793f17f6c6983a570f21a1829e83fffb49cc7f7f4c50b4f1090359b702aaa90d","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a","pre_test_loaded_code_sha256":"f7abd42464420e10d1b9f75fdc57701bc99541f46b814e71f795f47431e2df21","loaded_code_sha256":"22bb1fff7e369acb036f59ac68e62e2240f1607e792aeaffc9e9bacf4165aead","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":1},"Harness v2 admitted adapter and bounded reconciliation":{"tests":99,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"b84eb29c59563dd0270c3bd8b230d604d59a2e45d38b9e375c7fa697468d656b","ordinary_outcomes_sha256":"548361800978af55ee04b8e45b71ae70a09bbbe015025c5d6bf428f8e2fd9c9f","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a","pre_test_loaded_code_sha256":"f7abd42464420e10d1b9f75fdc57701bc99541f46b814e71f795f47431e2df21","loaded_code_sha256":"6edff27912dc8c73ff508c11d850f18e6a6146c6b93238fa431e00d49b12299f","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":1},"Harness v2 Stage B joined executor":{"tests":34,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"c2b5ef68b2491a19bd09345ded44704ca37a57ab21e07e09ffa928e25aba4570","ordinary_outcomes_sha256":"9bf40f2932fc8ce05f9d9cf4d07cd4224ce2fd4d44c1785408e62830e4006a76","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"035effd9dc44c1fd2d9f07a3be62ea1bf07e3fd17d5807323f8d1b58ae6b0fd6","pre_test_loaded_code_sha256":"5859dc614883f19a02fbabec51455ce4728054531aeb0e665d1cae788394b7a1","loaded_code_sha256":"fe9a508a1324c97917f4e782591c8ca09638fce5865bf64c13c2b9875c903021","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":0},"Gate 5 Stage B runner preparation":{"tests":17,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"40fbf9298cb6df939c5502d5b8c1e2adbfa79011167e14e25252e663c114b8e6","ordinary_outcomes_sha256":"c55190fcbcdcd2f8fa5cada8b60b1a3f6620219b186f0c3673dbc3bc4c40f97e","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a","pre_test_loaded_code_sha256":"f7abd42464420e10d1b9f75fdc57701bc99541f46b814e71f795f47431e2df21","loaded_code_sha256":"81e125d6e2432f9302a13290b5cd581c365c10fd41f79f863b35214639e754ff","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":0},"Gate 5 retained local GPU and joined evidence":{"tests":27,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"dc0c0ed22e0f158f014277b9d3cd26ad21d6a8fcdfbe1e76a67d09406975c952","ordinary_outcomes_sha256":"5f18b01fd9836488bb0cfda10191606ba03f2f4f914b6f020617dd1e45d31fbb","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a","pre_test_loaded_code_sha256":"f7abd42464420e10d1b9f75fdc57701bc99541f46b814e71f795f47431e2df21","loaded_code_sha256":"996f819fca923c78cadffb4fbedf5744ab81e84e355e04dac811aafb3fa3d93c","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":0},"Instruction-integrity shadow scanner":{"tests":12,"subtests":0,"expected_setup_skips":0,"executed_nodes_sha256":"822fd7113370ac9bb6c2dafaf0bc33507a199860fa8f47f7c1de35e880abedee","ordinary_outcomes_sha256":"f310b312d5b630ca628f490f7de3636dc1c891d340aa74a3be1b632bba5775e7","subtest_outcomes_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","locked_import_origins_sha256":"3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a","pre_test_loaded_code_sha256":"f7abd42464420e10d1b9f75fdc57701bc99541f46b814e71f795f47431e2df21","loaded_code_sha256":"180bc805fada0e381bb5e5a9f1bf351259e651fa877aa2231b80b508ccd0acc9","loaded_code_digest_rule":"CANONICAL VALIDATED LOADED-MODULE RECORDS / RAW RECORDS / NO PROJECTION","warnings":1}},"authority_boundary":"LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY","next_required_receipt":"FINAL UNCHANGED-TREE INTEGRATED 12-SUITE REPLAY / NOT YET PRODUCED"}
+      },
+      "harness_integration": {
+        "status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "published_phase0_harness_receipt_coverage": "NONE / PUBLISHED PHASE0 1452-NODE HARNESS RECEIPT PREDATES ECD STAGE1",
+        "current_ecd_harness_receipt_coverage": "CURRENT ECD STAGE1 1570-NODE HARNESS RECEIPT INCLUDES ALL 118 ECD NODES / PUBLISHED PHASE0 1452-NODE RECEIPT PRESERVED UNCHANGED",
+        "ecd_focused_nodes": 118,
+        "current_harness_nodes": 1570,
+        "current_harness_node_ids_sha256": "8887298311bbfafff45421f43feec4e68160ff84d360ef108743e9ef90858510",
+        "current_harness_serialized_node_ids_bytes": 213431,
+        "current_complete_verifier_suite_map_nodes": 2790,
+        "current_manifest_artifacts": 712,
+        "current_syntax_checked_python_artifacts": 478,
+        "current_executable_shadow_paths": 2314,
+        "current_postflight_file_identities": 1284,
+        "next_required_receipt": "FINAL UNCHANGED-TREE INTEGRATED 12-SUITE REPLAY / NOT YET PRODUCED"
+      },
+      "schema_media_inventory": {
+        "unique_schemas_added": 4,
+        "unique_media_types_added": 4,
+        "total_unique_kernel_schemas": 124,
+        "total_unique_kernel_media_types": 143
+      },
+      "authority_boundary": {
+        "classification": "SYNTHETIC_ONLY",
+        "authority": "NON_AUTHORITY",
+        "recommendation_authority": "ADVISORY_ONLY",
+        "decision_effect": "NONE",
+        "execution_authority": "NOT_GRANTED",
+        "scientific_status": "STRUCTURE_ONLY",
+        "evidence_packet_effect": "NONE",
+        "adjacency": "NOT_IN_STAGE1",
+        "rate_dispersion": "UNAVAILABLE_RATE_MODE_NOT_IN_STAGE1",
+        "uncertainty": "NOT_IN_STAGE1",
+        "unicode_controls": "ALL UNICODE GENERAL-CATEGORY Cc REJECTED",
+        "external_artifact_refs": "IDENTITY_ONLY / EXTERNAL ADMISSION AND BYTE VERIFICATION NOT INFERRED",
+        "process_seal_reflection": "OUTSIDE PROVENANCE BOUNDARY / ANY SUCH MUTATION INVALIDATES ALL IN-PROCESS CLAIMS",
+        "production_effect": "NONE",
+        "stagec_effect": "NONE",
+        "provider_mutations": 0,
+        "model_invocations": 0,
+        "paid_gpu_compute_usd": "0.00"
+      },
+      "stage2_boundary": {
+        "status": "BLOCKED / NOT_STARTED / NON_AUTHORITY",
+        "cv2_status": "EXPERIMENTAL / NOT PROMOTED",
+        "forbidden_incremental_rule": "CV2(x)-CV2(x+e_i) / ANALYTICALLY IDENTICAL TO MINIMUM_SUPPORT_FIRST",
+        "next_required_design": "SEPARATELY PREREGISTERED GENUINELY NON-EQUIVALENT ACTION RULE PLUS POLICY-INDEPENDENT COMPLETE COMMON-HORIZON OUTCOMES",
+        "required_baselines": ["ZERO_CELL_FIRST", "MINIMUM_SUPPORT_FIRST", "UNCERTAINTY_FIRST", "RANDOM", "CURRENT_RISK_RANKING", "CV2_REMOVED_ABLATION"]
+      }
     },
     "historical_recovery": {
       "exact_file_count": 537,
@@ -2856,6 +3111,27 @@
         "scripts/verify_project_coherence_gate5.py"
       ],
       "remaining_obligation": "G5-TRUST-002, G5-TRUST-003, G5-TRUST-005, G5-SCIENCE-001, G5-SCIENCE-003, and G5-SCIENCE-009 remain OPEN: publish the receipt-promoted tranche with an exact manifest rebuild and unchanged-tree verifier/CI replay; author and independently adjudicate all 960 real rows; authenticate the exact four carriers and twelve dependencies; and establish trusted time, nonce/ledger, WORM/readback, registry credential binding, stopped-pod full update/readback, no-egress, post-start A40/BF16 identity, and stop-watchdog evidence before any bounded start.",
+      "canon_effect": "NONE",
+      "product_claim_effect": "NONE"
+    },
+    {
+      "id": "G5-ENGINEERING-012",
+      "subsystem": "EVIDENCE_COVERAGE_DISPERSION_STAGE1",
+      "question": "Does the separate Evidence-Coverage Dispersion Stage 1 implement an exact offline synthetic evidence-gap map while preserving its non-authority and scientific-promotion boundaries?",
+      "acceptance_requirement": "The verifier must bind the checked-in v0.2 specification, canonical source, canonical adversarial test, byte-identical package mirror, package provenance and export surface; preserve exact rational gap, coverage, HHI, and population-CV2 arithmetic and eligibility semantics; reject adjacency, unequal-exposure rates, uncertainty, Evidence Packet, production, provider, model, and Stage C effects; retain recommendations as ADVISORY_ONLY; keep CV2 experimental; preserve every Phase 0 receipt unchanged; bind fresh current same-process Harness, worker, and adapter receipts to their exact issuance verifier, manifest, and runner; and keep integrated Stage 1 verification PENDING until a final unchanged-tree replay is frozen.",
+      "observed_result": "The v0.2 specification is frozen at 40,607 bytes / 9ab9cef1419b431f6884bc758499f71f60c766a8635c5118fa454e640a971ec4. Canonical source and byte-identical package mirror are each 40,682 bytes / c894c44479408735091dee96931d6904dd4e050692f422aafe21ab1a9bc1e8b3, and canonical adversarial tests are 82,937 bytes / e9b533f4438d44a5a3d4de5117b783f6859dd4fb5f7d12c1c62a3963e1c42f52. The focused suite passes 118/118 nodes at digest d186db44d31fa01b336815d1824033c9c8099886a73b12516e1fbe7c252d490c. The package has 42 byte-mirrored Python files, 1,269 unique exports, and 2,593,194 bytes; its focused mirror suite passes 13/13 at digest b68cb064b501b640fb5bb0cfd60963e262897a749c653c1bc89ac07bf29ffa9d. Scope remains R&D / OFFLINE SYNTHETIC / ADVISORY_ONLY / NON_AUTHORITY. Unicode general-category Cc controls, including C0, DEL, and C1, reject; external ArtifactRef values are identity-only and do not infer admission or byte verification; arbitrary same-interpreter reflection is outside the process-seal provenance boundary and invalidates all in-process claims. There is no adjacency, rate-dispersion, uncertainty, Evidence Packet, production, provider, model, or Stage C authority. CV2 is EXPERIMENTAL / NOT PROMOTED. Stage 2 is BLOCKED because the add-one CV2 rule is analytically identical to minimum-support ranking; a genuinely non-equivalent action rule and policy-independent complete common-horizon outcome design remain required. NONE / PUBLISHED PHASE0 1452-NODE HARNESS RECEIPT PREDATES ECD STAGE1. CURRENT ECD STAGE1 1570-NODE HARNESS RECEIPT INCLUDES ALL 118 ECD NODES / PUBLISHED PHASE0 1452-NODE RECEIPT PRESERVED UNCHANGED. Exact run ecd-stage1-suite-receipts-20260812T182522-d7b2ef6d produced an authoritative 1,570-node Harness PASS with six exact setup skips and a 99-node adapter PASS. The archived receipt files are 295,566 bytes / a7af4c73517df93b1ffe04979d8d3688e61dbe730638fcae7963e9d8bc5471a5 and 16,663 bytes / 7afce687047363d2b27e53d7978e220b6b4f36c85dfa6fa6dea3b5fda5ae9fbb; both bind issuance verifier bfb3de9b9061298a7735454ff3fb4ed8fdb6dc31aa4a2f580dee47e16ab97cf3, manifest 9d94072dcf4fce4a305020c90aa52a72e884034ca11da8d148d8865becfb0473, and runner eb7d2d661bfe262c1e3bb4657e418eade8339f35d1089c7ae6a87efc6a360b13. First integrated run first-20260813T023503Z-f3de22ee is FAILED / STALE PHASE0 WORKER RECEIPT COMPARATOR / EXIT 0 WITHOUT EXACT PASS LINE / STRUCTURE_ONLY / NON_AUTHORITY. The additive ECD-only worker receipt ecd-stage1-worker-receipt-20260812T202101-c1cb7da6 passed 732/732 and is 98,968 bytes / 60ea620da91f29e0d1f059eccff1bdc4dd206ec68bb17ad92d4c566401380342 with loaded-code digest 47c816d2873400775f353f6832dd6656cfb0b19471bd596b3829d530ace0bfab; no Phase 0 current or historical worker receipt was repointed. Current status is CURRENT HARNESS, WORKER, AND ADAPTER SAME-PROCESS RECEIPTS PASS / AUDITED INTERMEDIATE INTEGRATED 12-SUITE REPLAY PASS / FINAL UNCHANGED-TREE REPLAY PENDING / STRUCTURE_ONLY / NON_AUTHORITY. Audited intermediate integrated run retry-20260813T033443Z-64762d21 exited 0 and emitted the exact PASS line once across 712 artifacts / 478 Python / 2314 shadow paths / 12 suites / 2790 nodes / 53 criteria / 22 required OPEN boundaries / 1284 postflight identities. Its result is 3,200 bytes / 163e7d60111978cd40c191680dd49df33b562e7c4c842a915544c281e52936f8. The supervisor-recorded freeze ledger 8605bca3935f14370900963a6d48e4c236c69a8a9d3792f3e776afe677546355 is stale pre-worker-promotion state and is explicitly rejected as a run binding; the actual launch tree was independently reconstructed post hoc as 20e463b9a88d016e7c2e27991e282eda44dc65a2d7762c532015a7b129c10f70. Correction artifact is 1,436 bytes / 5854a202fb06a59abc1bf37225a0712ac8141e2b9d36762ad0f3a38d5ad28fc8. Intermediate receipt status is AUDITED INTERMEDIATE INTEGRATED 12-SUITE PASS / LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY / FINAL UNCHANGED-TREE REPLAY PENDING. This is LOCAL ENGINEERING / STRUCTURE_ONLY / NON_AUTHORITY; the final unchanged-tree integrated receipt remains PENDING.",
+      "disposition": "OPEN_ENGINEERING",
+      "evidence_refs": [
+        "docs/working/project_coherence/gate5/evidence_coverage_dispersion_stage1/CAS_HARNESS_LACUNARITY_RND_HANDOFF_v0.2.md",
+        "src/cas_harness_v2/diagnostic_evidence_coverage_dispersion.py",
+        "tests/cas_harness_v2/test_diagnostic_evidence_coverage_dispersion.py",
+        "noetic-compass-scaffold/noetic-compass/cas_harness_v2/diagnostic_evidence_coverage_dispersion.py",
+        "noetic-compass-scaffold/noetic-compass/cas_harness_v2/PACKAGING_PROVENANCE.json",
+        "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_packaging.py",
+        "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_packaged_mirror.py",
+        "scripts/verify_project_coherence_gate5.py"
+      ],
+      "remaining_obligation": "Rebuild the Gate 5 artifact manifest after receipt promotion; produce a final unchanged-tree integrated verifier replay and independent P0/P1 audit; keep CV2 unpromoted; and do not start Stage 2 until a separate preregistered amendment supplies a genuinely non-equivalent CV2 action rule, CV2-removed ablation, frozen simpler baselines, and complete policy-independent common-horizon outcomes.",
       "canon_effect": "NONE",
       "product_claim_effect": "NONE"
     }

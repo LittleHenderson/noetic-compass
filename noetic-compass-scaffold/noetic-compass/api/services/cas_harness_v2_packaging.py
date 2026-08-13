@@ -27,6 +27,7 @@ PACKAGED_KERNEL_FILES = frozenset(
         "comparison_steering_protocol.py",
         "diagnostic_calibration_disposition.py",
         "diagnostic_calibration_fit.py",
+        "diagnostic_evidence_coverage_dispersion.py",
         "diagnostic_execution_protocol.py",
         "diagnostic_lifecycle.py",
         "diagnostic_phase_coordinator.py",

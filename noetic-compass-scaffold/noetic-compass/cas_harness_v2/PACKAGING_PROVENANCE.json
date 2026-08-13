@@ -5,8 +5,8 @@
   "copy_policy": "BYTE_FOR_BYTE_SOURCE_MIRROR",
   "source_files": {
     "__init__.py": {
-      "sha256": "c76ed2b74b464cae2f5b9877d2e6f051d23e8675cbbb35db2da675844a7cc7e7",
-      "size_bytes": 42962
+      "sha256": "72f3fecebae16706eb0da73ee2f156e745d0283df6a5fbfbed5085f00fccc5f7",
+      "size_bytes": 43640
     },
     "_strict_json.py": {
       "sha256": "da862433a62f4c537d091cb17e8438efa2301f854e3106a683f9f7d679f0af15",
@@ -63,6 +63,10 @@
     "diagnostic_calibration_fit.py": {
       "sha256": "4e0a196f3def71a29c3eb1425fc777727377154bf010580570acb2115f6b21df",
       "size_bytes": 99655
+    },
+    "diagnostic_evidence_coverage_dispersion.py": {
+      "sha256": "c894c44479408735091dee96931d6904dd4e050692f422aafe21ab1a9bc1e8b3",
+      "size_bytes": 40682
     },
     "diagnostic_execution_protocol.py": {
       "sha256": "7c16f098046e533176a1fc37b1f3d303c028b9750cd4132dece1768858e3623f",
