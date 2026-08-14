@@ -352,6 +352,14 @@ HISTORICAL_PRE_RUNPOD_EXECUTABLE_SHADOW_PATH_COUNT = 2_290
 CURRENT_MANIFEST_ARTIFACT_COUNT = 708
 CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT = 475
 CURRENT_EXECUTABLE_SHADOW_PATH_COUNT = 2_317
+# The historical values remain the exact integrated-replay receipt.  These
+# live-surface values admit the later dark activation/budget ledger and its
+# focused test, and observe the current cache-free path surface, without
+# rewriting or overclaiming that sealed 12-suite run.
+CURRENT_LIVE_MANIFEST_ARTIFACT_COUNT = 710
+CURRENT_LIVE_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT = 477
+CURRENT_LIVE_EXECUTABLE_SHADOW_PATH_COUNT = 2_312
+CURRENT_LIVE_POSTFLIGHT_IDENTITIES = 1_282
 EXECUTABLE_SHADOW_IGNORED_TRANSIENT_SUBTREE = f"{API_ROOT_REL}/.tmp"
 EXECUTABLE_SHADOW_SCOPE_BOUNDARY = (
     "IGNORED TRANSIENT TRACE SUBTREE / NOT AN IMPORT OR EXECUTABLE AUTHORITY "
@@ -2501,6 +2509,7 @@ REQUIRED_CONTROL_ARTIFACTS = {
     "tests/model_smoke/test_gate5_joined_local_gpu_smoke.py",
     "tests/model_smoke/test_gate5_stageb_qwen_smoke.py",
     "tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_external_intake_cli.py",
+    f"{API_ROOT_REL}/tests/test_stagec_activation_budget_ledger.py",
     "docs/working/cas_harness_instruction_integrity_spec.md",
     "docs/working/cas_harness_research_only_steering_plan.md",
     f"{API_ROOT_REL}/api/routes/evidence.py",
@@ -21527,8 +21536,8 @@ def main() -> int:
     require(not MANIFEST_PATH.is_symlink(), "Gate 5 manifest may not be a symlink")
     shadow_surface_count = verify_no_executable_shadow_artifacts()
     require(
-        shadow_surface_count == CURRENT_EXECUTABLE_SHADOW_PATH_COUNT,
-        "current executable-shadow path count drifted from 2,317",
+        shadow_surface_count == CURRENT_LIVE_EXECUTABLE_SHADOW_PATH_COUNT,
+        "current executable-shadow path count drifted from 2,312",
     )
     manifest_observation = observe_regular_file(
         MANIFEST_PATH, anchor=FILESYSTEM_ANCHOR
@@ -21538,8 +21547,8 @@ def main() -> int:
     require(isinstance(manifest, dict), "Gate 5 manifest root is not an object")
     artifacts = verify_manifest(manifest)
     require(
-        len(artifacts) == CURRENT_MANIFEST_ARTIFACT_COUNT,
-        "current Gate 5 manifest artifact count drifted from 708",
+        len(artifacts) == CURRENT_LIVE_MANIFEST_ARTIFACT_COUNT,
+        "current Gate 5 manifest artifact count drifted from 710",
     )
     gate4_artifact_count, gate4_manifest_sha = verify_gate4_dependency(artifacts)
     claim_count = verify_claim_ledger()
@@ -21555,15 +21564,15 @@ def main() -> int:
     raw_evidence_result = verify_raw_build_and_security_evidence_receipt()
     python_count = verify_python_syntax(artifacts)
     require(
-        python_count == CURRENT_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT,
-        "current syntax-checked Python artifact count drifted from 475",
+        python_count == CURRENT_LIVE_SYNTAX_CHECKED_PYTHON_ARTIFACT_COUNT,
+        "current syntax-checked Python artifact count drifted from 477",
     )
     runner_lock = verify_local_test_runner_lock()
     integrated_observations = capture_integrated_file_observations(artifacts)
     require(
         len(integrated_observations)
-        == FINAL_INTEGRATED_VERIFIER_POSTFLIGHT_IDENTITIES,
-        "current postflight identity count drifted from 1,280",
+        == CURRENT_LIVE_POSTFLIGHT_IDENTITIES,
+        "current postflight identity count drifted from 1,282",
     )
     suite_results = verify_test_suites(manifest, runner_lock)
     require(

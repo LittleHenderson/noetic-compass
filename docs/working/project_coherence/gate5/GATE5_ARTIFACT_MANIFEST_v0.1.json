@@ -12,12 +12,12 @@
   "product_claim_effect": "NONE",
   "manifest_self_hash": null,
   "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
-  "artifact_count": 708,
+  "artifact_count": 710,
   "artifacts": [
     {
       "path": ".gitattributes",
-      "sha256": "9469FE4EC0432A70E4E1E86A3F49FE349021348E1497C32F453FCFD5C9E0C30F",
-      "bytes": 4837,
+      "sha256": "E31395838804248E61DF67B913CCFEF0CD6A602EC064E024AD2C3422A301F897",
+      "bytes": 4934,
       "role": "gate5_control_artifact"
     },
     {
@@ -2319,6 +2319,12 @@
       "role": "gate5_api_runtime_dependency"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/stagec_activation_budget_ledger.py",
+      "sha256": "7EB7592F44C3C3D4648EB65349F17388768D10CBAB07F2007DA39DFAB73373DF",
+      "bytes": 46601,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/__init__.py",
       "sha256": "B2FBCBB99CCAED705DF25D3A670F26687BE0430D06CD37067278ADA3518EED39",
       "bytes": 4795,
@@ -3639,6 +3645,12 @@
       "role": "gate5_api_launcher_test"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_stagec_activation_budget_ledger.py",
+      "sha256": "81B300DA56A0B9C8CDC5699219E6EBF9A935D939D5E64BFF4DDFE34CB84A8810",
+      "bytes": 28661,
+      "role": "gate5_control_artifact"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/tests/test_state_ledger_operational_enable.py",
       "sha256": "679B634FA6B0BAF4263474112B13054AB2AAE5D880BAA56BDD1C795DF0030032",
       "bytes": 20687,
@@ -3700,8 +3712,8 @@
     },
     {
       "path": "scripts/verify_project_coherence_gate5.py",
-      "sha256": "09F45F416DC6D28DB604C477F9143C42C243FA37328160EE9EF0F882682375E5",
-      "bytes": 936792,
+      "sha256": "6FCE40CA0C4D5DEEEBCF562B7FBF044965145FB7B08E9C5134DCE3C98C5FC3EF",
+      "bytes": 937333,
       "role": "gate5_verification_control"
     },
     {

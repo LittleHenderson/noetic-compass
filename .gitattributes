@@ -58,6 +58,7 @@ noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_*.py text eol=l
 noetic-compass-scaffold/noetic-compass/tests/test_state_substrate_sqlite.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_state_ledger_operational_enable.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_state_substrate_live_migration.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/test_stagec_activation_budget_ledger.py text eol=lf
 
 # Historical Harness V1-V4 recovery is evidence by exact original Git bytes,
 # including its known LF/CRLF inconsistency and binary raw-logit artifacts.
