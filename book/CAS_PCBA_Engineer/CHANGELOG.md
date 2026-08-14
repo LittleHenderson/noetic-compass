@@ -1,5 +1,33 @@
 # CAS PCBA Engineer — Changelog
 
+## 2026-08-14 — v0.8.1 (KDP print-compliance rebuild; published)
+
+Published on Amazon KDP: Kindle eBook (from the existing v0.8 EPUB, $9.99, DRM on)
+and 6×9 paperback (ISBN 9798192600276, $34.99, worldwide, matte). Both in KDP review.
+
+The paperback interior is a print-compliance rebuild of v0.8 (`CAS_PCBA_Engineer_print.pdf`,
+783 pages vs 787). KDP's Print Previewer rejected the v0.8 PDF: insufficient gutter
+(787 pages require 0.875" inside margin; the build's memoir layout produced ~0.868"),
+chapter numbers hanging into the gutter (`hangnum` style), and ~20 pages of unbreakable
+inline-code tokens and wide tables/TikZ protruding past the text block. Fixes, all in
+`build/` (content unchanged — layout only):
+
+- Gutter 0.875" → 0.9375", fore-edge 0.625" → 0.5" (`preamble_pcba.tex`).
+- `\chapterstyle{hangnum}` → `\chapterstyle{default}` (numbers inside the block).
+- `build/patch_texttt.py` + `build/patch_overflows.py`: insert `\allowbreak{}` after
+  delimiters (`= | , ; → / › ( ·` and `\_`) inside long `\texttt` args and after `→`
+  in prose/table cells (Verbatim and TikZ excluded); ten natural-width longtables set
+  `\footnotesize`; the tp_lock capture table given wrapping p-columns; the
+  domain-layers TikZ figure wrapped in `\resizebox{\linewidth}{!}`.
+- Gotcha for future rebuilds: longtable caches column widths in the `.aux` and never
+  shrinks them — delete `manuscript_pcba.aux` when narrowing a table.
+
+Verified programmatically: 0 margin violations across all 783 pages; KDP previewer
+passed with no errors. Cover wraps regenerated at exact spine widths (paperback spine
+1.7633" = 783 × 0.002252"). Hardcover is NOT possible on KDP at this length (hardcover
+maximum is 550 pages for B&W at every trim size); IngramSpark is the route if a
+hardcover edition is wanted.
+
 ## 2026-08-08 — v0.8 (external-audit corrections: the CSB safety chain, the CCDL grammar)
 
 An external audit — the five-volume *Project Coherence* monograph set, working from the
