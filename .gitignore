@@ -103,3 +103,9 @@ docs/whitepapers/tex/build/
 /New folder/
 /texput.log
 /grimoire_float_probe.stdout.txt
+
+# Oversized evidence archives (>100MB, GitHub-blocked) — live on disk + D:/tksCAS-archive/project_handoffs_oversize_20260816; never commit
+project_handoffs/**/attempt4_complete_evidence.tar
+project_handoffs/**/model_snapshot.tar
+project_handoffs/**/official_attempt.tar
+project_handoffs/**/tks_definition_anchor_raw_diagnostic_vectors.npz
