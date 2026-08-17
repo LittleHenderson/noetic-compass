@@ -62,6 +62,37 @@ the real AWS API; RUNTIME-1 and IAM-SCOPE are reasoned + live-corroborated. Befo
 → execute → export path is *also* previously-untested; further defects there remain
 possible and will be recorded here if the live run surfaces any.
 
-## Live-run result
+## Two more defects found by running the corrected package live
 
-_(in progress — updated when the corrected run completes)_
+The corrected package (5 fixes) was then run live. It advanced through the **entire
+orchestration path** — bootstrap, preflight, private bucket, full ~1 GB capsule upload +
+remote re-hash, run-instances **dry-run pass**, **instance launch**, **post-launch config
+verification**, and **EventBridge scheduler arming** — proving FLAG-1 and TRUST-1 fixed
+live. Two further never-run-before defects then surfaced:
+
+| ID | File : line | Defect | Status |
+|---|---|---|---|
+| **JQ-1** (blocker) | `02_provision.sh:658` | Post-launch instance config check reads `.BlockDeviceMappings` at the **top level** of the describe-instances JSON (always `null`, length 0) instead of `$i.BlockDeviceMappings`; every other clause uses `$i.`. The `0 == 2` fails → the launched (correctly-configured) instance is rejected every time. | **FIXED** in the package (→ `$i.BlockDeviceMappings`); proven — the next run passed this check. |
+| **BOOT-1** (blocker) | `02_provision.sh:298–527` (Windows user-data) | The Windows VM's boot script (`<powershell>`, `ErrorActionPreference='Stop'`) configures the machine and writes `C:\ProgramData\CasHarness\bootstrap.json` as its final step. On the real VM the marker never appears within the 10-minute wait (`02:682`), so the SSM host-observation returns `Failed` and provision aborts. Some step in the ~230-line boot sequence (disk-letter juggling / disk init / watchdog task / `wakil` S4U identity / IMDS firewall rule) throws before the marker is written. Exact failing step requires reading the EC2Launch agent log off a live instance. | **OPEN** — not yet diagnosed to the exact line. |
+
+## Current corrected identity
+
+The corrected package with the **five** applied fixes (FLAG-1, TRUST-1, JQ-1, RUNTIME-1,
+IAM-SCOPE) is:
+- Archive: `aws_cloudshell_unarmed_20260819.tar.gz`, SHA-256
+  `3c68d134735ec29fec4aabbfb1a5902fac61e9610cde1d1eddb73a1e08b46979`
+- Package identity: `ca5189a9e02978100999e153e73163952c60819f8e8edfa75adc202d9f60c1e0`
+- (Identity changes on each rebuild; this is the current head.)
+
+## Honest overall assessment
+
+Six real defects, all in the provision → Windows-boot → (materialize → execute → export)
+path that **no audit and no attempt had ever run**. The "triple-audited GO" certified a
+path that had never executed once. Five are fixed and the entire orchestration is now
+proven working up to the Windows VM. The remaining wall (BOOT-1) is in the VM's own
+boot-time self-configuration, and the materialize/execute/export lanes beyond it are
+**still untested** — more defects are likely. Finishing this is a **build-and-test
+effort on the package's Windows/execution path**, not a series of quick patches, and is
+better done in a proper dev loop (by the package's author) than reverse-engineered live on
+paid compute one defect per launch. Total AWS spend across all discovery: **~$0.25**;
+account verified at zero footprint after each attempt.
