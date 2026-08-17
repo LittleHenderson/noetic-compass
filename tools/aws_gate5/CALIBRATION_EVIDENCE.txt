@@ -1,0 +1,65 @@
+known_live_failure_lint.sh — positive-control calibration transcript
+generated: 2026-08-17T06:59:55Z  (offline, read-only, $0.00, zero AWS contact)
+linter sha256: aba1cf009537fd5bc5571c6c62233156cd3ec7499bce09395b7962792529ac16
+packages linted from canonical build dir:
+  C:\Users\wakil\Documents\Codex\2026-08-05\referenced-chatgpt-conversation-this-is-an\work\
+
+EXPECTED (matches the real live-failure history):
+  20260815 FAIL  (C1 bridge throw; C2 root/AssumeRole and C3 duration also latent)
+  20260816 FAIL  (C2 root/AssumeRole — the live P0; C3 still latent)
+  20260817 FAIL  (C3 role-chaining 3600s cap — the live P0)
+  20260818 PASS  (current triple-audited GO package, identity 525365c4...)
+
+================================================================
+== known-live-failure lint: aws_cloudshell_unarmed_20260815 ==
+  C1 FAIL  PowerShell Test-Path bound to a bare -or/-and (runtime throw):
+    aws_cloudshell_unarmed_20260815/windows/materialize_stage_bridge.ps1:275:if (Test-Path -LiteralPath $CapsuleRoot -or Test-Path -LiteralPath $MaterializedRoot -or Test-Path -LiteralPath $WrapperPackageRoot) {
+  C2 FAIL  a script both requires/pins root AND performs sts assume-role (root cannot AssumeRole):
+    require-root gate co-located with assume-role:
+      aws_cloudshell_unarmed_20260815/00_root_bootstrap_and_assume.sh:
+        27:[[ "$CALLER_ARN" == "arn:aws:iam::${ACCOUNT_ID}:root" ]] || \
+    trust policy pins aws:PrincipalArn to root in:
+      aws_cloudshell_unarmed_20260815/00_root_bootstrap_and_assume.sh
+  C3 FAIL  STS/role duration > 3600s (illegal for role-chained CloudShell creds):
+    aws_cloudshell_unarmed_20260815/00_root_bootstrap_and_assume.sh:572:    --max-session-duration 21600 \
+    aws_cloudshell_unarmed_20260815/00_root_bootstrap_and_assume.sh:596:  --duration-seconds 21600 \
+    aws_cloudshell_unarmed_20260815/00_root_bootstrap_and_assume.sh:564:  [[ "$(aws iam get-role --role-name "$ROLE_NAME" --query 'Role.MaxSessionDuration' --output text)" == '21600' ]] || \
+
+RESULT aws_cloudshell_unarmed_20260815: FAIL (a known live-fatal class is present) — DO NOT STAGE
+  [exit=1]
+================================================================
+== known-live-failure lint: aws_cloudshell_unarmed_20260816 ==
+  C1 PASS  no unparenthesized Test-Path boolean in windows/*.ps1
+  C2 FAIL  a script both requires/pins root AND performs sts assume-role (root cannot AssumeRole):
+    require-root gate co-located with assume-role:
+      aws_cloudshell_unarmed_20260816/00_root_bootstrap_and_assume.sh:
+        27:[[ "$CALLER_ARN" == "arn:aws:iam::${ACCOUNT_ID}:root" ]] || \
+    trust policy pins aws:PrincipalArn to root in:
+      aws_cloudshell_unarmed_20260816/00_root_bootstrap_and_assume.sh
+  C3 FAIL  STS/role duration > 3600s (illegal for role-chained CloudShell creds):
+    aws_cloudshell_unarmed_20260816/00_root_bootstrap_and_assume.sh:572:    --max-session-duration 21600 \
+    aws_cloudshell_unarmed_20260816/00_root_bootstrap_and_assume.sh:596:  --duration-seconds 21600 \
+    aws_cloudshell_unarmed_20260816/00_root_bootstrap_and_assume.sh:564:  [[ "$(aws iam get-role --role-name "$ROLE_NAME" --query 'Role.MaxSessionDuration' --output text)" == '21600' ]] || \
+
+RESULT aws_cloudshell_unarmed_20260816: FAIL (a known live-fatal class is present) — DO NOT STAGE
+  [exit=1]
+================================================================
+== known-live-failure lint: aws_cloudshell_unarmed_20260817 ==
+  C1 PASS  no unparenthesized Test-Path boolean in windows/*.ps1
+  C2 PASS  no root-required-then-assume-role pattern
+  C3 FAIL  STS/role duration > 3600s (illegal for role-chained CloudShell creds):
+    aws_cloudshell_unarmed_20260817/00_root_bootstrap_and_assume.sh:588:    --max-session-duration 21600 \
+    aws_cloudshell_unarmed_20260817/00_root_bootstrap_and_assume.sh:612:  --duration-seconds 21600 \
+    aws_cloudshell_unarmed_20260817/00_root_bootstrap_and_assume.sh:580:  [[ "$(aws iam get-role --role-name "$ROLE_NAME" --query 'Role.MaxSessionDuration' --output text)" == '21600' ]] || \
+
+RESULT aws_cloudshell_unarmed_20260817: FAIL (a known live-fatal class is present) — DO NOT STAGE
+  [exit=1]
+================================================================
+== known-live-failure lint: aws_cloudshell_unarmed_20260818 ==
+  C1 PASS  no unparenthesized Test-Path boolean in windows/*.ps1
+  C2 PASS  no root-required-then-assume-role pattern
+  C3 PASS  no STS/role duration knob above 3600s
+
+RESULT aws_cloudshell_unarmed_20260818: PASS (clean on all three known live-fatal classes)
+  [exit=0]
+================================================================
