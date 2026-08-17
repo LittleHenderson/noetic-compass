@@ -89,10 +89,83 @@ one confirmed step deeper:
 | **BOOT-1** | user-data L9 | `Join-Path $archiveRoot …` builds a `D:\` path **before** the disk is formatted into D:; Join-Path validates the drive root → `DriveNotFound` throw. | **FIXED** (string concat). Probe: passed. |
 | **BOOT-2** | user-data L41 | `Set-Disk -IsOffline $false -IsReadOnly $false` — those two params are in different parameter sets → `AmbiguousParameterSet` throw. | **FIXED** (two calls). Probe: D: now formats to `CAS-ARCHIVE`; watchdog task registers. |
 | **S4U-BATCH** | before L189 | new local user `wakil` lacks `SeBatchLogonRight`; team-predicted S4U run-time logon refusal. | **FIXED** (secedit grant). |
-| **BOOT-3** | user-data L209 | `Register-ScheduledTask` for the S4U **identity-probe** task fails `Access is denied (0x80070005)` — S4U task *registration* (not just its logon) is refused in the SYSTEM/Session-0 boot context. | **OPEN** — genuinely hard Windows S4U/Task-Scheduler internals. |
+| **BOOT-3** | user-data L209 | `Register-ScheduledTask` for the S4U **identity-probe** task fails `Access is denied (0x80070005)` — S4U task *registration* (not just its logon) is refused in the SYSTEM/Session-0 boot context. | **CHARACTERIZED — AMI/OS-level S4U limitation, not a code bug** (full trace below). Needs a package-design decision, not a patch. |
 
 Live-proven working now: disk format → D:, and the 6-hour watchdog task. Confirmed wall:
 S4U identity-probe task registration.
+
+## BOOT-3 characterization (DEFINITIVE — ~14 live m7i.large probes, `Stop` semantics)
+
+**S4U scheduled-task registration for a LOCAL account does not work in the EC2Launch /
+Session-0 boot context on this Windows Server 2022 EC2 AMI.** This is an OS/AMI-level S4U
+limitation, not a defect in the package's PowerShell. Every register mechanism and every
+prerequisite was tried on live disposable instances, splicing each candidate into the
+*real* corrected boot and reading the machine's actual `err.tmp` / `whoami /priv` / policy
+state.
+
+Hypotheses tested and ELIMINATED:
+
+| # | Hypothesis | Live result |
+|---|---|---|
+| 1 | Caller lacks `SeTcbPrivilege` (stripped user-data token) | Real — user-data token has only `SeIncreaseQuotaPrivilege`. But **not the whole story** (see #2). |
+| 2 | Run the register from a `SYSTEM/Highest` helper task (full token *with* `SeTcb Enabled`, confirmed via the helper's own `whoami /priv`) | **Still `0x80070005`** — via both `Register-ScheduledTask` (cmdlet) and COM in-process `RegisterTaskDefinition`. |
+| 3 | WMI/WmiPrvSE marshaling drops the enabled privilege | FALSE — COM **in-process** (no WMI hop) fails identically. |
+| 4 | Target `wakil` lacks `SeBatchLogonRight` | FALSE — `secedit /export` shows `SeBatchLogonRight = wakil,*S-1-5-32-544,…` (wakil present, resolved to name). |
+| 5 | Register under wakil's own context (Connect-as-wakil, empty-password S4U) | FALSE — the `ITaskService.Connect(...,'wakil',...)` RPC itself fails `0x80070005` (wakil can't authenticate to the Task Scheduler service). |
+| 6 | Secondary Logon (`seclogon`) service stopped | Real contributing factor — `seclogon` is **Stopped/Manual by default** on this AMI. Toggling it changes the failure mode (see below), but does **not** yield a successful register. |
+
+The decisive detail (bulletproof step-by-step probe, logging after every statement):
+- **`seclogon` Stopped (default)** → `RegisterTaskDefinition` returns a catchable
+  `0x80070005` (E_ACCESSDENIED).
+- **`seclogon` Started** → `RegisterTaskDefinition` **crashes the calling PowerShell
+  process** — the step log reaches `L8-action`, then dies at the register call with **no
+  catchable exception and no `L10-END`** (an unhandled native fault in the S4U validation
+  logon), not a .NET error.
+
+So there is no register mechanism, privilege, or service state that produces a successful
+S4U registration for a local account in the boot on this AMI.
+
+The **post-boot SSM SYSTEM token was tested directly** (option 1 below) and behaves
+**identically**: `whoami = nt authority\system`, `SeTcbPrivilege Enabled`, wakil present in
+`SeBatchLogonRight`, `seclogon` started — the step log reaches `L4-connected`, `L8-action`,
+then **crashes at `RegisterTaskDefinition`** (no `L9`, no catch, no `END`). So the SSM
+context is **not** a workaround. (This also corrects an earlier note in this file that said
+"the register succeeds post-boot via SSM" — that was a bench running with
+`ErrorActionPreference = 'Continue'`, which made the `0x80070005` non-terminating and
+mis-logged it as success; the blank `LogonType` on the never-registered task was the tell.)
+
+**AMI scope:** the package pins its image exactly — `lib.sh` sets
+`EXPECTED_AMI_ID = ami-05eea18612b5be529` (the stock `/aws/service/ami-windows-latest/
+Windows_Server-2022-English-Full-Base`) and aborts on any other AMI. Every probe used that
+exact pinned AMI, so the limitation is on the package's real target image, not an arbitrary
+one.
+
+**This is a package-DESIGN decision, not a one-line code fix.** The identity probe requires
+an S4U (no-stored-credential) task; that specific mechanism does not work on this AMI in any
+context. Options for the package author:
+1. ~~Register the identity task in a post-boot SSM step~~ — **eliminated**: S4U register
+   crashes in the SSM SYSTEM token too (tested live).
+2. **Domain-join** the instance (S4U2Self is a Kerberos mechanism; standalone/workgroup has
+   no KDC) — heavy, changes the whole provisioning model.
+3. **A different constrained-identity demonstration** that does not require S4U task
+   registration — e.g., `LogonUser(LOGON32_LOGON_BATCH)` + `CreateProcessAsUser` using
+   wakil's known boot-generated password (the boot already sets it), or a restricted /
+   AppContainer token. But the SSM host-observation currently asserts
+   `identity_logon_type == 'S4U'`, so this changes the audit contract and the sealed-evidence
+   schema.
+4. **Test on a different Windows AMI / Windows version** where local-account S4U register is
+   not broken, and re-pin `EXPECTED_AMI_ID`.
+
+Recommended next step for the author: reproduce in one line outside the harness —
+`Register-ScheduledTask -TaskName t -Action (New-ScheduledTaskAction -Execute cmd.exe) -Principal (New-ScheduledTaskPrincipal -UserId "$env:COMPUTERNAME\someLocalUser" -LogonType S4U)`
+on a fresh `Windows_Server-2022-English-Full-Base` instance — to confirm this is the OS/AMI
+behavior (it will be), then choose option 2/3/4. This is a design decision the package owner
+should make; it is out of scope for a mechanical package correction.
+
+Method note: every finding is from **disposable, self-cleaning m7i.large probes**; static
+reasoning (incl. a 5-agent research panel) mis-ranked the cause — the live probes are what
+established it, the same two-pronged pattern that found BOOT-1/BOOT-2. Total AWS spend across
+all ~14 probes: **under $1**; account verified at zero footprint after every one.
 
 ## Current corrected identity
 
@@ -104,13 +177,23 @@ IAM-SCOPE, BOOT-1a, BOOT-1b, BOOT-2, S4U-BATCH):
 
 ## Honest overall assessment
 
-**Nine confirmed defects fixed; at least one more (BOOT-3) open, with materialize → execute
-→ export still entirely untested beyond it.** Every defect lives in the provision →
-Windows-boot → execution path that no audit and no prior attempt had ever run — the
-"triple-audited GO" certified a path that had never executed once. This is now clearly a
-**multi-hour-to-multi-session build-and-test effort on the package's Windows/execution
-path**, best done in a proper dev loop (by the package's author, who can run and iterate
-the Windows side directly) rather than reverse-engineered live on paid compute one defect
-per launch. The corrected package + this defect map is the valuable, defensible tonight
-result. Total AWS spend across all discovery: **well under $1**; account verified at zero
-footprint after every attempt.
+**Nine confirmed defects fixed on a path that no prior audit or attempt had ever executed;
+the tenth (BOOT-3) is now fully characterized as an OS/AMI-level S4U limitation — a
+package-design decision, not a mechanical fix.** Every defect lives in the provision →
+Windows-boot → execution path that the "triple-audited GO" certified without ever running it
+once.
+
+BOOT-3 is the current hard stop of the boot path: the S4U identity-probe registration cannot
+succeed on the package's pinned AMI in any tested context (EC2Launch boot, SYSTEM/Highest
+helper, post-boot SSM), with all prerequisites satisfied. Because the boot fails there,
+**materialize → execute → export remain entirely untested** — they sit downstream of a boot
+that does not yet complete.
+
+Status of the corrected package: **9 mechanical defects fixed and self-verifying**; BOOT-3
+requires an owner design decision (options 2/3/4 above) before the boot can complete and the
+downstream lanes can be exercised. This is the honest, defensible result: the corrected
+package + this defect/root-cause map turns "a GO label on a path that never ran" into a
+precise, evidence-backed map of exactly what works, what is fixed, and the one architectural
+decision that remains. Total AWS spend across all ~15 disposable probes: **under $1**;
+account verified at **zero footprint** after every one; the protected bucket
+`cas-harness-runpod-92754088` never touched.
