@@ -4,6 +4,30 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-17 — Gate 5 AWS package: durable backup + version-controlled regression guard
+
+Two receipts landed for the Gate 5 staging package, both offline and $0.00.
+
+- **Durable backup of the triple-audited GO package.** The frozen one-hour-session
+  package `aws_cloudshell_unarmed_20260818` (identity `525365c4…`, archive 89,510 B /
+  `a843f37e…`) previously existed only in the Codex build dir plus a volatile Temp
+  scratchpad. It is now backed up to `D:\tksCAS-archive\project_coherence_gate5_one_hour_package_20260818\`
+  with a `BACKUP_RECEIPT.md` and 3-way sha256 confirms — including a round-trip that
+  re-extracts the D: archive and re-verifies all 18 member rows byte-exact.
+- **Regression guard brought into git.** New `tools/aws_gate5/known_live_failure_lint.sh`
+  encodes the three defect classes that each killed a package generation *live* after
+  all static audits passed: C1 PowerShell `Test-Path` bound to a bare `-or` (20260815),
+  C2 a script that both requires/pins root and calls `sts assume-role` (20260816, live),
+  C3 an STS/role duration knob >3600s illegal for role-chained CloudShell creds
+  (20260817, live). Positive-control calibrated: the verdict grid is strictly monotone
+  and matches the real failure history — 20260815/16/17 each FAIL on their live class,
+  the GO package PASSes all three. It is a floor to run before the full triple audit,
+  not a substitute. Transcript committed at `tools/aws_gate5/CALIBRATION_EVIDENCE.txt`.
+
+Statuses unchanged: Gate 5 OPEN / KEEP_OPEN; Stage C DESIGN_ONLY / UNAUTHORIZED;
+corpus 0/960. Staging still awaits the owner's fresh `stage AWS now` bound to
+`525365c4…`, with paid compute and final deletion as separate confirmations.
+
 ## 2026-08-08 — Noetic Topos 2.0 monograph: audit + corrections + adversarial verification (final volume)
 
 Completes the five-volume audit campaign. 11 auditors → 128 findings (11 critical,
