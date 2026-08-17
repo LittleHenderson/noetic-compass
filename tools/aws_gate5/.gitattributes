@@ -1,0 +1,4 @@
+# The linter runs on Linux (AWS CloudShell) and Git Bash. Force LF so the shebang
+# and heredocs are not broken by CRLF conversion on Windows checkouts.
+*.sh text eol=lf
+*.txt text eol=lf
