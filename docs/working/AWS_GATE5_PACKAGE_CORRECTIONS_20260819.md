@@ -125,6 +125,19 @@ The decisive detail (bulletproof step-by-step probe, logging after every stateme
 So there is no register mechanism, privilege, or service state that produces a successful
 S4U registration for a local account in the boot on this AMI.
 
+**Cross-OS-version confirmation (minimal repro).** A stripped-down repro — create a generic
+local user `tuser`, grant it `SeBatchLogonRight`, start `seclogon`, `RegisterTaskDefinition`
+LogonType S4U — was run via SSM (SYSTEM token, `SeTcb Enabled`) on **two** stock AMIs:
+- `Windows_Server-2022-English-Full-Base` (build 20348, = the pinned `ami-05eea18612b5be529`)
+- `Windows_Server-2025-English-Full-Base` (build 26100, `ami-031c9f613c7f5fd53`)
+
+**Both crash identically** at `RegisterTaskDefinition` (log reaches `L8-action`, no `L9`, no
+catch, no `L10-END`). So the failure is **not** wakil-specific, **not** package-specific, and
+**not** a stale-AMI issue — it is the behavior of S4U scheduled-task registration for a
+**local** account on a **standalone (workgroup, non-domain)** Windows Server on EC2, across
+OS versions. (S4U2Self is fundamentally a Kerberos/domain mechanism; a workgroup box has no
+KDC, and the local-account S4U validation logon faults.)
+
 The **post-boot SSM SYSTEM token was tested directly** (option 1 below) and behaves
 **identically**: `whoami = nt authority\system`, `SeTcbPrivilege Enabled`, wakil present in
 `SeBatchLogonRight`, `seclogon` started — the step log reaches `L4-connected`, `L8-action`,
@@ -153,14 +166,18 @@ context. Options for the package author:
    AppContainer token. But the SSM host-observation currently asserts
    `identity_logon_type == 'S4U'`, so this changes the audit contract and the sealed-evidence
    schema.
-4. **Test on a different Windows AMI / Windows version** where local-account S4U register is
-   not broken, and re-pin `EXPECTED_AMI_ID`.
+4. ~~Test on a different Windows AMI / Windows version~~ — **eliminated**: both stock Server
+   2022 (20348) and Server 2025 (26100) crash identically (tested live). Re-pinning the AMI
+   does not escape it.
 
-Recommended next step for the author: reproduce in one line outside the harness —
-`Register-ScheduledTask -TaskName t -Action (New-ScheduledTaskAction -Execute cmd.exe) -Principal (New-ScheduledTaskPrincipal -UserId "$env:COMPUTERNAME\someLocalUser" -LogonType S4U)`
-on a fresh `Windows_Server-2022-English-Full-Base` instance — to confirm this is the OS/AMI
-behavior (it will be), then choose option 2/3/4. This is a design decision the package owner
-should make; it is out of scope for a mechanical package correction.
+**Realistic recommendation:** options 2 (domain-join) and 3 (non-S4U constrained-identity)
+are the only paths, and both are genuine design changes. Option 3 is the lighter one — run
+the probe as the constrained user via `LogonUser(LOGON32_LOGON_BATCH)` +
+`CreateProcessAsUser` (the boot already generates wakil's password), which demonstrates the
+same "constrained identity cannot reach IMDS" property **without** an S4U task — but it
+changes the sealed-evidence contract (`identity_logon_type` would no longer be `"S4U"`), so
+it needs an explicit owner decision and a schema/verdict update. This is out of scope for a
+mechanical package correction; it is a design decision for the package owner.
 
 Method note: every finding is from **disposable, self-cleaning m7i.large probes**; static
 reasoning (incl. a 5-agent research panel) mis-ranked the cause — the live probes are what
