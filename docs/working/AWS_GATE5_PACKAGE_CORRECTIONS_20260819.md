@@ -75,24 +75,42 @@ live. Two further never-run-before defects then surfaced:
 | **JQ-1** (blocker) | `02_provision.sh:658` | Post-launch instance config check reads `.BlockDeviceMappings` at the **top level** of the describe-instances JSON (always `null`, length 0) instead of `$i.BlockDeviceMappings`; every other clause uses `$i.`. The `0 == 2` fails → the launched (correctly-configured) instance is rejected every time. | **FIXED** in the package (→ `$i.BlockDeviceMappings`); proven — the next run passed this check. |
 | **BOOT-1** (blocker) | `02_provision.sh:298–527` (Windows user-data) | The Windows VM's boot script (`<powershell>`, `ErrorActionPreference='Stop'`) configures the machine and writes `C:\ProgramData\CasHarness\bootstrap.json` as its final step. On the real VM the marker never appears within the 10-minute wait (`02:682`), so the SSM host-observation returns `Failed` and provision aborts. Some step in the ~230-line boot sequence (disk-letter juggling / disk init / watchdog task / `wakil` S4U identity / IMDS firewall rule) throws before the marker is written. Exact failing step requires reading the EC2Launch agent log off a live instance. | **OPEN** — not yet diagnosed to the exact line. |
 
+## Windows boot-layer investigation (defects #6–#8) — expert team + live probes
+
+A 7-agent expert team dissected the 231-line Windows boot user-data statically (ranking 8
+possible throw-points), and 4 disposable throwaway probe instances (cheap t3/m7i, each
+auto-terminating + self-cleaning) read the machine's **actual** `err.tmp` and EC2Launch
+log to confirm which statement really fires. Static reasoning ranked the true cause LOW;
+the live probe caught it — vindicating the two-pronged method. Each fix moved the failure
+one confirmed step deeper:
+
+| ID | File : line (rendered) | Defect | Status |
+|---|---|---|---|
+| **BOOT-1** | user-data L9 | `Join-Path $archiveRoot …` builds a `D:\` path **before** the disk is formatted into D:; Join-Path validates the drive root → `DriveNotFound` throw. | **FIXED** (string concat). Probe: passed. |
+| **BOOT-2** | user-data L41 | `Set-Disk -IsOffline $false -IsReadOnly $false` — those two params are in different parameter sets → `AmbiguousParameterSet` throw. | **FIXED** (two calls). Probe: D: now formats to `CAS-ARCHIVE`; watchdog task registers. |
+| **S4U-BATCH** | before L189 | new local user `wakil` lacks `SeBatchLogonRight`; team-predicted S4U run-time logon refusal. | **FIXED** (secedit grant). |
+| **BOOT-3** | user-data L209 | `Register-ScheduledTask` for the S4U **identity-probe** task fails `Access is denied (0x80070005)` — S4U task *registration* (not just its logon) is refused in the SYSTEM/Session-0 boot context. | **OPEN** — genuinely hard Windows S4U/Task-Scheduler internals. |
+
+Live-proven working now: disk format → D:, and the 6-hour watchdog task. Confirmed wall:
+S4U identity-probe task registration.
+
 ## Current corrected identity
 
-The corrected package with the **five** applied fixes (FLAG-1, TRUST-1, JQ-1, RUNTIME-1,
-IAM-SCOPE) is:
-- Archive: `aws_cloudshell_unarmed_20260819.tar.gz`, SHA-256
-  `3c68d134735ec29fec4aabbfb1a5902fac61e9610cde1d1eddb73a1e08b46979`
-- Package identity: `ca5189a9e02978100999e153e73163952c60819f8e8edfa75adc202d9f60c1e0`
-- (Identity changes on each rebuild; this is the current head.)
+Corrected package with the **nine** applied fixes (FLAG-1, TRUST-1, JQ-1, RUNTIME-1,
+IAM-SCOPE, BOOT-1a, BOOT-1b, BOOT-2, S4U-BATCH):
+- Package identity: `81ac4f71c5ba4087646a8c3bed1bdf03a12821285d824d172473673906248fa0`
+- Archive `aws_cloudshell_unarmed_20260819.tar.gz` (identity changes each rebuild; this is head).
+- Backup: `D:\tksCAS-archive\project_coherence_gate5_corrected_package_20260819\`.
 
 ## Honest overall assessment
 
-Six real defects, all in the provision → Windows-boot → (materialize → execute → export)
-path that **no audit and no attempt had ever run**. The "triple-audited GO" certified a
-path that had never executed once. Five are fixed and the entire orchestration is now
-proven working up to the Windows VM. The remaining wall (BOOT-1) is in the VM's own
-boot-time self-configuration, and the materialize/execute/export lanes beyond it are
-**still untested** — more defects are likely. Finishing this is a **build-and-test
-effort on the package's Windows/execution path**, not a series of quick patches, and is
-better done in a proper dev loop (by the package's author) than reverse-engineered live on
-paid compute one defect per launch. Total AWS spend across all discovery: **~$0.25**;
-account verified at zero footprint after each attempt.
+**Nine confirmed defects fixed; at least one more (BOOT-3) open, with materialize → execute
+→ export still entirely untested beyond it.** Every defect lives in the provision →
+Windows-boot → execution path that no audit and no prior attempt had ever run — the
+"triple-audited GO" certified a path that had never executed once. This is now clearly a
+**multi-hour-to-multi-session build-and-test effort on the package's Windows/execution
+path**, best done in a proper dev loop (by the package's author, who can run and iterate
+the Windows side directly) rather than reverse-engineered live on paid compute one defect
+per launch. The corrected package + this defect map is the valuable, defensible tonight
+result. Total AWS spend across all discovery: **well under $1**; account verified at zero
+footprint after every attempt.
