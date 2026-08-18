@@ -236,6 +236,40 @@ the same way. Converting it is materially bigger than the probe:
 This is an owner design decision (same options as BOOT-3, applied to the harness itself), not
 a mechanical correction.
 
+### DECIDED design (owner-approved 2026-08-17): Option B — Password logon + full per-SID outbound block
+
+A 4-agent isolation analysis (S4U network semantics + the package's real boundary + a
+firewall-block option) reached a clear verdict, and the owner approved it as the plan
+(implementation deferred as a deliberate follow-on, not rushed):
+
+- **Core finding:** the S4U token was **never** wakil's network boundary. S4U's "no network
+  access" strips *authenticated* network access (no credentials), not raw outbound sockets.
+  The controls that actually gate wakil are all **token-independent and unchanged** by
+  S4U→Password: the SID-keyed IMDS firewall rule, the Security Group (egress ≤ TCP 443, no
+  inbound), and launcher credential-stripping (`AWS_EC2_METADATA_DISABLED`, cleared AWS keys).
+  On this standalone, no-domain, inbound-closed, ephemeral instance the switch is
+  **isolation-neutral for network reach** (Password's added authenticated-remote-Windows
+  capability has no target here).
+- **Design: Option B** — convert the execute bridge to Password logon (same transient-password
+  pattern already proven in the identity probe: SYSTEM mints a throwaway GUID, uses it only to
+  register, scrambles after) **and ADD** one additive, SID-keyed, block-ALL-outbound firewall
+  rule for wakil (`-Protocol Any -RemoteAddress Any -LocalUser "D:(A;;CC;;;<wakilSid>)"`),
+  leaving the frozen IMDS rule byte-identical. This makes isolation deterministic and
+  firewall-enforced (stronger than S4U — S4U never blocked raw egress), closes a pre-existing
+  "wakil can HTTPS anywhere on 443" gap, and leaves loopback + SYSTEM's S3/SSM transport intact.
+- **Gating dependencies (why implementation is a deliberate follow-on, not tonight):**
+  (1) confirm from the on-instance `invoke_gate5_aws_full_verifier.ps1` (only in the
+  materialized capsule) that the harness makes **no** wakil-side outbound call — else relocate
+  that call to SYSTEM, don't weaken the block; (2) update every S4U evidence literal +
+  **re-seal + re-audit** the capsule; (3) the full execute lane can't be validated without a
+  full capsule+harness run. **Fast-follow Option C** (narrow the SG to S3/SSM prefix-lists) if
+  ENI-layer tightening is wanted.
+
+**Scope note:** this evidence-layer work is separate from confirming the harness's *novel
+analytical capabilities* (hidden-state analysis, probing, ablation, circuit discovery, causal
+intervention), which are exercised against real models on GPU (RunPod). The execute-phase
+conversion should not block that capability confirmation.
+
 ## Current corrected identity
 
 Corrected package with **fourteen** applied fixes — the nine mechanical (FLAG-1, TRUST-1,
