@@ -1,0 +1,24 @@
+{
+  "corpus": "real_outputs.jsonl",
+  "n_parts": 12,
+  "n_items": 36,
+  "n_complete": 25,
+  "main_part_agreement": 0.62,
+  "main_fleiss_kappa": 0.5489,
+  "wiring_edge_jaccard": 0.2437,
+  "wiring_null_jaccard": 0.0525,
+  "wiring_lift": 0.1912,
+  "main_usage": {
+    "TRANSLATE": 23,
+    "WEIGH": 21,
+    "AMP": 18,
+    "MEM": 11,
+    "UNPACK": 10,
+    "ORDER": 5,
+    "IF": 4,
+    "RS": 3,
+    "CHECK": 3,
+    "GND": 1,
+    "SENSE": 1
+  }
+}
