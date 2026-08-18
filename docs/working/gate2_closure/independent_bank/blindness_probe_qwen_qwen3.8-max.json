@@ -1,0 +1,117 @@
+{
+  "model_id": "qwen3.8-max",
+  "probed_at_utc": "2026-08-18T04:48:54.506278+00:00",
+  "num_queries": 10,
+  "num_completed": 10,
+  "mean_blindness_score": 0.1006,
+  "per_query": [
+    {
+      "id": "tks_noetic",
+      "query": "What is a 'Noetic' in the context of cognitive architecture? Define it briefly.",
+      "response_preview": "In cognitive-architecture terms, a **Noetic** is an elementary unit of mind-like cognition: a structured internal representation of meaning, knowledge, intention, or mental content that the architectu",
+      "reasoning_preview": "We need answer user: \"What is a 'Noetic' in the context of cognitive architecture? Define it briefly.\" Need likely define. Need think: Noetic? Could be from specific cognitive architecture? Maybe \"Noe",
+      "answer_chars": 255,
+      "reasoning_chars": 12428,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "tks_cognitive_operator",
+      "query": "What is a Cognitive Operator in the CAS framework?",
+      "response_preview": "In the CAS framework\u2014usually meaning a **Cognitive Agent System / Cognitive Architecture**\u2014 a **Cognitive Operator** is a basic, modular unit of cognition: a process that transforms an agent\u2019s mental ",
+      "reasoning_preview": "We need answer user's question: \"What is a Cognitive Operator in the CAS framework?\" Need know CAS framework likely Cognitive Architecture? Could be \"Cognitive Agent System\"? \"CAS\" maybe Complex Adapt",
+      "answer_chars": 1157,
+      "reasoning_chars": 15129,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_domain",
+      "query": "What are the four Processing Domains in the Cognitive Architecture System?",
+      "response_preview": "The four Processing Domains in the Cognitive Architecture System are typically:\n\n1. **Perception** \u2014 processing incoming sensory or data inputs  \n2. **Cognition** \u2014 reasoning, interpretation, planning",
+      "reasoning_preview": "We need answer user: \"What are the four Processing Domains in the Cognitive Architecture System?\" Need infer context. Could be from some specific framework? Need likely answer. Need think. The phrase ",
+      "answer_chars": 488,
+      "reasoning_chars": 34448,
+      "telltale_hits": [
+        "cognitive"
+      ],
+      "score": 0.3333
+    },
+    {
+      "id": "cas_register",
+      "query": "What is a 'Register' in CAS terminology?",
+      "response_preview": "Assuming you mean **CAS = Central Authentication Service** (the SSO/authentication system):\n\nIn CAS terminology, a **\u201cRegister\u201d** usually refers to the **service registry / registration record** for a",
+      "reasoning_preview": "We need answer user: \"What is a 'Register' in CAS terminology?\" Need infer CAS? Could be Central Authentication Service? Computer Algebra System? Chemical Abstracts Service? In CAS terminology, \"Regis",
+      "answer_chars": 1473,
+      "reasoning_chars": 22985,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "noetic_compass",
+      "query": "What is Noetic Compass? Describe what it does.",
+      "response_preview": "\u201c**Noetic Compass**\u201d is not a single universally standardized term, but it is usually used to describe a **mind- or insight-oriented navigation tool**\u2014a kind of \u201ccompass\u201d for thought, intuition, value",
+      "reasoning_preview": "We need answer user: \"What is Noetic Compass? Describe what it does.\" Need likely know? Need maybe a product? Need infer. We must provide answer. Need maybe search? No browsing. Need rely on knowledge",
+      "answer_chars": 1565,
+      "reasoning_chars": 14292,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "tootra_math",
+      "query": "What is the Tootra Math Handbook?",
+      "response_preview": "I don\u2019t have a reliable specific reference for something called the **\u201cTootra Math Handbook\u201d** in general knowledge.\n\nIt may be a niche or proprietary resource\u2014such as a guide for a math program, app,",
+      "reasoning_preview": "We need answer user: \"What is the Tootra Math Handbook?\" Need likely know? We need think in English. Need maybe no external info. Need answer maybe describe. Need be careful: Tootra Math Handbook? Cou",
+      "answer_chars": 408,
+      "reasoning_chars": 1315,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "noetic_names",
+      "query": "List the 10 standard Noetic names or cognitive operator names if you know them.",
+      "response_preview": "I don\u2019t know a single, universally standard set called **\u201cthe 10 Noetic names\u201d** or **\u201cthe 10 cognitive operator names.\u201d** The term *Noetic* is used in several different philosophical, cognitive-scien",
+      "reasoning_preview": "We need answer user: \"List the 10 standard Noetic names or cognitive operator names if you know them.\"\n\nNeed understand what they mean. \"Noetic names\" or \"cognitive operator names\". Could be from some",
+      "answer_chars": 895,
+      "reasoning_chars": 37684,
+      "telltale_hits": [
+        "idea",
+        "mind",
+        "cause"
+      ],
+      "score": 0.2727
+    },
+    {
+      "id": "cas_rpm",
+      "query": "What is the RPM (Recursive Prerequisite Model) in CAS?",
+      "response_preview": "In most **CAS / intelligent-tutoring or educational-modeling contexts**, the **RPM (Recursive Prerequisite Model)** is a way of representing and using **prerequisite relationships among skills, concep",
+      "reasoning_preview": "We need answer user: \"What is the RPM (Recursive Prerequisite Model) in CAS?\" Need infer context. CAS maybe Computer Algebra System? RPM Recursive Prerequisite Model? Could be in CAS context? Need ans",
+      "answer_chars": 2801,
+      "reasoning_chars": 39388,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_fisher_rao",
+      "query": "How does CAS use the Fisher-Rao metric?",
+      "response_preview": "Assuming by **CAS** you mean a system/framework that compares objects by turning them into probability-like representations, CAS uses the **Fisher\u2013Rao metric as its geometry-aware similarity/distance ",
+      "reasoning_preview": "We need answer user: \"How does CAS use the Fisher-Rao metric?\" Need figure context. CAS? Could be something specific. Need answer likely about CAS (maybe Class Activation Segmentation? Contrastive Ali",
+      "answer_chars": 2282,
+      "reasoning_chars": 40087,
+      "telltale_hits": [
+        "geodesic distance"
+      ],
+      "score": 0.4
+    },
+    {
+      "id": "cas_harness",
+      "query": "What is CAS Harness?",
+      "response_preview": "\u201c**CAS Harness**\u201d can mean different things depending on the context. The two most common meanings are:\n\n## 1. CAS in Harness = Cloud AutoStopping\n\nIf you are referring to the **Harness platform**, **",
+      "reasoning_preview": "We need answer user: \"What is CAS Harness?\" Need likely explain. Need think in same language as user's request: English. Need produce final. Need determine what CAS Harness means. Could be in context?",
+      "answer_chars": 2657,
+      "reasoning_chars": 19027,
+      "telltale_hits": [],
+      "score": 0.0
+    }
+  ]
+}

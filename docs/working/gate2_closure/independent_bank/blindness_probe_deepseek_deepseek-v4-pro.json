@@ -1,0 +1,117 @@
+{
+  "model_id": "deepseek-v4-pro",
+  "probed_at_utc": "2026-08-18T04:15:53.270710+00:00",
+  "num_queries": 10,
+  "num_completed": 10,
+  "mean_blindness_score": 0.0788,
+  "per_query": [
+    {
+      "id": "tks_noetic",
+      "query": "What is a 'Noetic' in the context of cognitive architecture? Define it briefly.",
+      "response_preview": "In cognitive architecture, a **noetic** state refers to **semantic, knowledge-level cognition**\u2014the awareness of facts or concepts (\u201cknowing that\u201d)\u2014as opposed to **autonoetic** episodic recollection (",
+      "reasoning_preview": "We need answer user: \"What is a 'Noetic' in the context of cognitive architecture? Define it briefly.\"\n\nNeed understand term \"Noetic\" in cognitive architecture. Need define briefly. Let's recall. \"Noe",
+      "answer_chars": 322,
+      "reasoning_chars": 9131,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "tks_cognitive_operator",
+      "query": "What is a Cognitive Operator in the CAS framework?",
+      "response_preview": "In the Complex Adaptive Systems (CAS) framework, a **Cognitive Operator** is an internal rule, schema, or processing mechanism that an agent uses to interpret information and decide how to act. It tra",
+      "reasoning_preview": "We need answer question. Need know \"Cognitive Operator in CAS framework\". CAS could mean Complex Adaptive Systems? Cognitive Operator? Need infer. User asks \"What is a Cognitive Operator in the CAS fr",
+      "answer_chars": 912,
+      "reasoning_chars": 10267,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_domain",
+      "query": "What are the four Processing Domains in the Cognitive Architecture System?",
+      "response_preview": "The four Processing Domains in the Cognitive Architecture System are:\n\n1. **Planning**  \n2. **Attention**  \n3. **Simultaneous processing**  \n4. **Successive processing**\n\nThese are often referred to a",
+      "reasoning_preview": "We need answer question. Need know \"four Processing Domains in the Cognitive Architecture System\". This sounds from a specific framework? Need identify. Cognitive Architecture System maybe \"Montreal C",
+      "answer_chars": 234,
+      "reasoning_chars": 4174,
+      "telltale_hits": [
+        "cognitive"
+      ],
+      "score": 0.3333
+    },
+    {
+      "id": "cas_register",
+      "query": "What is a 'Register' in CAS terminology?",
+      "response_preview": "In **CAS (Chemical Abstracts Service) terminology**, a **\u201cRegister\u201d** usually refers to the **CAS Registry** \u2014 the authoritative, curated database of chemical substances.\n\nEach substance in the CAS Re",
+      "reasoning_preview": "We need answer user asks \"What is a 'Register' in CAS terminology?\" Need interpret CAS. Could be Computer Algebra System? CAS terminology. Or Chemical Abstracts Service? \"Register\" in CAS terminology ",
+      "answer_chars": 537,
+      "reasoning_chars": 5014,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "noetic_compass",
+      "query": "What is Noetic Compass? Describe what it does.",
+      "response_preview": "",
+      "reasoning_preview": "We need answer user: \"What is Noetic Compass? Describe what it does.\" Need know Noetic Compass. This could be a specific product/tool? Need infer. \"Noetic Compass\" maybe from Institute of Noetic Scien",
+      "answer_chars": 0,
+      "reasoning_chars": 12841,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "tootra_math",
+      "query": "What is the Tootra Math Handbook?",
+      "response_preview": "",
+      "reasoning_preview": "We need answer user asks \"What is the Tootra Math Handbook?\" Need know what this is. I need identify. \"Tootra Math Handbook\" maybe a book? I need search memory. Tootra? Could be a typo? \"Tootra Math H",
+      "answer_chars": 0,
+      "reasoning_chars": 11287,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "noetic_names",
+      "query": "List the 10 standard Noetic names or cognitive operator names if you know them.",
+      "response_preview": "",
+      "reasoning_preview": "We need answer user asks: \"List the 10 standard Noetic names or cognitive operator names if you know them.\" Need know context. \"Noetic names or cognitive operator names\" likely refers to \"cognitive op",
+      "answer_chars": 0,
+      "reasoning_chars": 11386,
+      "telltale_hits": [
+        "idea",
+        "mind",
+        "female",
+        "male",
+        "cause"
+      ],
+      "score": 0.4545
+    },
+    {
+      "id": "cas_rpm",
+      "query": "What is the RPM (Recursive Prerequisite Model) in CAS?",
+      "response_preview": "",
+      "reasoning_preview": "We need answer user asks \"What is the RPM (Recursive Prerequisite Model) in CAS?\" Need infer context. CAS could be \"Complex Adaptive Systems\"? \"Computer Algebra System\"? RPM Recursive Prerequisite Mod",
+      "answer_chars": 0,
+      "reasoning_chars": 12961,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_fisher_rao",
+      "query": "How does CAS use the Fisher-Rao metric?",
+      "response_preview": "Assuming **CAS = Complex Adaptive Systems**, the Fisher\u2013Rao metric is used as an **information-geometric distance** between probability distributions over the system\u2019s states.\n\nA complex adaptive syst",
+      "reasoning_preview": "We need answer question. Need understand context. \"CAS\" likely complex adaptive systems? Or maybe \"CAS\" in mathematics? Fisher-Rao metric used in information geometry. Question: \"How does CAS use the ",
+      "answer_chars": 1903,
+      "reasoning_chars": 9684,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_harness",
+      "query": "What is CAS Harness?",
+      "response_preview": "A **CAS Harness** is most commonly a wiring/adapter harness used for a vehicle\u2019s **CAS module** or **CAS sensor**.\n\nIn European car electronics, especially BMW/Mini, **CAS** stands for **Car Access Sy",
+      "reasoning_preview": "We need answer user: \"What is CAS Harness?\" Need understand. CAS Harness could refer to something specific. Need infer. \"CAS Harness\" maybe in automotive? CAS = Car Access System? Harness? Or in compu",
+      "answer_chars": 1052,
+      "reasoning_chars": 9803,
+      "telltale_hits": [],
+      "score": 0.0
+    }
+  ]
+}

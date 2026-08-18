@@ -100,6 +100,23 @@ PROBE_QUERIES = [
 ]
 
 
+def extract_text(resp) -> tuple:
+    """Return (answer_text, reasoning_text). Reasoning models put their chain-of-thought
+    in message.reasoning_content / message.reasoning and often leave content short/empty.
+    We capture BOTH so a model that knows TKS can't hide it in the reasoning trace."""
+    msg = resp.choices[0].message
+    answer = getattr(msg, "content", None) or ""
+    reasoning = getattr(msg, "reasoning_content", None) or getattr(msg, "reasoning", None) or ""
+    if not (answer or reasoning):
+        try:  # fall back to raw dump for extra fields the SDK didn't map
+            d = msg.model_dump()
+            answer = d.get("content") or ""
+            reasoning = d.get("reasoning_content") or d.get("reasoning") or ""
+        except Exception:
+            pass
+    return answer, reasoning
+
+
 def score_response(response_text: str, telltale: list[str]) -> float:
     """Score 0-1 based on how many telltale keywords appear in the response.
     
@@ -112,33 +129,39 @@ def score_response(response_text: str, telltale: list[str]) -> float:
     return min(1.0, hits / max(1, len(telltale) * 0.5))
 
 
-def probe_model(model_id: str, api_key: str = None, base_url: str = None) -> dict:
-    """Run all probe queries against the model and return scores."""
+def probe_model(model_id: str, api_key: str = None, base_url: str = None,
+                max_tokens: int = 3000) -> dict:
+    """Run all probe queries against the model and return scores.
+    Scores each query on the COMBINED answer+reasoning text, so a model that knows
+    TKS is caught whether it reveals it in the answer or only in its reasoning."""
     try:
         from openai import OpenAI
     except ImportError:
         print("ERROR: openai package required. Install with: pip install openai")
         sys.exit(1)
-    
+
     client = OpenAI(api_key=api_key or os.environ.get("OPENAI_API_KEY"),
                     base_url=base_url or os.environ.get("OPENAI_BASE_URL"))
-    
+
     results = []
     for pq in PROBE_QUERIES:
         try:
             resp = client.chat.completions.create(
                 model=model_id,
                 messages=[{"role": "user", "content": pq["query"]}],
-                max_tokens=256,
-                temperature=0.0
+                max_tokens=max_tokens,
             )
-            text = resp.choices[0].message.content or ""
-            score = score_response(text, pq["telltale"])
+            answer, reasoning = extract_text(resp)
+            combined = (answer + "\n" + reasoning).strip()
+            score = score_response(combined, pq["telltale"])
             results.append({
                 "id": pq["id"],
                 "query": pq["query"],
-                "response_preview": text[:200],
-                "telltale_hits": [t for t in pq["telltale"] if t.lower() in text.lower()],
+                "response_preview": answer[:200],
+                "reasoning_preview": reasoning[:200],
+                "answer_chars": len(answer),
+                "reasoning_chars": len(reasoning),
+                "telltale_hits": [t for t in pq["telltale"] if t.lower() in combined.lower()],
                 "score": round(score, 4)
             })
         except Exception as e:
@@ -163,16 +186,26 @@ def probe_model(model_id: str, api_key: str = None, base_url: str = None) -> dic
 
 def main():
     parser = argparse.ArgumentParser(description="Probe an AI model for TKS/CAS exposure")
-    parser.add_argument("--model", required=True, help="Model ID (e.g. gpt-4o, claude-3-opus)")
+    parser.add_argument("--model", default=None, help="Model ID (e.g. gpt-4o); optional if --provider given")
+    parser.add_argument("--provider", default=None,
+                        help="Short provider name (deepseek|qwen|glm|gemini|openai); reads key from keys file")
+    parser.add_argument("--keys-file", default=None, help="KEY=VALUE keys file (default ~/.cas_llm_keys.env)")
     parser.add_argument("--threshold", type=float, default=0.3,
                         help="Max mean score to pass blindness check (default 0.3)")
     parser.add_argument("--output", default=None, help="Output JSON file")
     parser.add_argument("--api-key", default=None, help="API key (or set OPENAI_API_KEY)")
     parser.add_argument("--base-url", default=None, help="API base URL")
     args = parser.parse_args()
-    
-    print(f"Probing {args.model} for TKS/CAS exposure...")
-    report = probe_model(args.model, args.api_key, args.base_url)
+
+    api_key, base_url, model = args.api_key, args.base_url, args.model
+    if args.provider:
+        import providers
+        base_url, api_key, model = providers.resolve(args.provider, args.model, args.keys_file)
+    if not model:
+        parser.error("need --model or --provider")
+
+    print(f"Probing {model} ({args.provider or 'raw'}) for TKS/CAS exposure...")
+    report = probe_model(model, api_key, base_url)
     
     passed = report["mean_blindness_score"] < args.threshold
     report["passed_blindness_check"] = passed
@@ -189,10 +222,12 @@ def main():
     
     # Per-query detail
     for r in report["per_query"]:
-        status = "PASS" if (r["score"] or 1.0) < args.threshold else "FAIL"
-        print(f"  {r['id']:30s} score={r['score']:.4f}  {status}")
+        sc = r.get("score")
+        status = "PASS" if (sc if sc is not None else 1.0) < args.threshold else "FAIL"
+        sc_str = f"{sc:.4f}" if sc is not None else " ERR  "
+        print(f"  {r['id']:30s} score={sc_str}  {status}")
     
-    out_path = args.output or f"blindness_probe_{args.model.replace('/', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    out_path = args.output or f"blindness_probe_{model.replace('/', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
     print(f"\nFull report: {out_path}")

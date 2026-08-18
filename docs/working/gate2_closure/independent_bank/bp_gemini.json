@@ -1,0 +1,83 @@
+{
+  "model_id": "gemini-2.5-flash",
+  "probed_at_utc": "2026-08-18T02:31:16.649111+00:00",
+  "num_queries": 10,
+  "num_completed": 10,
+  "mean_blindness_score": 0.0333,
+  "per_query": [
+    {
+      "id": "tks_noetic",
+      "query": "What is a 'Noetic' in the context of cognitive architecture? Define it briefly.",
+      "response_preview": "In the context of cognitive architecture, a 'Noetic' refers to:\n\n**Knowledge or understanding that is direct, intuitive, and holistic, often involving the immediate apprehension of meaning, concepts, ",
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "tks_cognitive_operator",
+      "query": "What is a Cognitive Operator in the CAS framework?",
+      "response_preview": "In the context of Complex Adaptive Systems (CAS), a **Cognitive Operator** is an entity (which can be human or artificial) that possesses capabilities for perception, interpretation, decision-making, ",
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_domain",
+      "query": "What are the four Processing Domains in the Cognitive Architecture System?",
+      "response_preview": "The \"four Processing Domains\" you're referring to are most prominently defined within the **Common Model of Cognition (CMC)**, which is an effort to synthesize the commonalities across various success",
+      "telltale_hits": [
+        "cognitive"
+      ],
+      "score": 0.3333
+    },
+    {
+      "id": "cas_register",
+      "query": "What is a 'Register' in CAS terminology?",
+      "response_preview": "In the context of Computer Algebra Systems (CAS), particularly those implemented on calculators or handheld devices (like TI-Nspire CAS, HP Prime, or older HP RPN calculators), a 'register' refers to ",
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "noetic_compass",
+      "query": "What is Noetic Compass? Describe what it does.",
+      "response_preview": "The **Noetic Compass** is a metaphorical concept that represents an individual's internal system for guidance, decision-making, and navigating life's complexities. It draws upon a blend of intuition, ",
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "tootra_math",
+      "query": "What is the Tootra Math Handbook?",
+      "response_preview": "It seems there might be a slight misunderstanding or a unique resource you're referring to.\n\nThe most prominent and likely interpretation of \"Tootra Math Handbook\" is a reference to **Toot-Ra Math**.\n",
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "noetic_names",
+      "query": "List the 10 standard Noetic names or cognitive operator names if you know them.",
+      "response_preview": "While there isn't one single, universally standardized list of \"10 standard Noetic names\" or \"cognitive operators\" that all fields agree upon, the concept generally refers to fundamental mental proces",
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_rpm",
+      "query": "What is the RPM (Recursive Prerequisite Model) in CAS?",
+      "response_preview": "The acronym **RPM** (Recursive Prerequisite Model) in the context of **CAS** (which itself can have a few meanings, but we'll focus on the most likely ones where this model would apply) refers to a",
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_fisher_rao",
+      "query": "How does CAS use the Fisher-Rao metric?",
+      "response_preview": "The question \"How does CAS use the Fisher-Rao metric?\" is interesting because the acronym \"CAS\" can refer to a few different things, and the application of the Fisher-Rao metric depends heavily on whi",
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_harness",
+      "query": "What is CAS Harness?",
+      "response_preview": "A **CAS Harness** refers to the electrical wiring assembly specifically designed to connect a **Crank Angle Sensor (CAS)** or **Cam Angle Sensor (CAS)** to the Engine Control Unit (ECU) or other relev",
+      "telltale_hits": [],
+      "score": 0.0
+    }
+  ],
+  "passed_blindness_check": true,
+  "threshold": 0.3
+}

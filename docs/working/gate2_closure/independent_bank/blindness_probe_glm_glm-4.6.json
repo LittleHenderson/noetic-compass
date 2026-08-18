@@ -1,0 +1,118 @@
+{
+  "model_id": "glm-4.6",
+  "probed_at_utc": "2026-08-18T05:00:37.403276+00:00",
+  "num_queries": 10,
+  "num_completed": 10,
+  "mean_blindness_score": 0.1097,
+  "per_query": [
+    {
+      "id": "tks_noetic",
+      "query": "What is a 'Noetic' in the context of cognitive architecture? Define it briefly.",
+      "response_preview": "In the context of cognitive architecture, a **Noetic** refers to the **knowledge-based or intellectual component** of the system.\n\nDerived from the Greek word *nous* (mind or intellect), it describes ",
+      "reasoning_preview": "\n1.  **Analyze the Request:**\n    *   **Term:** \"Noetic\"\n    *   **Context:** Cognitive architecture\n    *   **Requirement:** Define it briefly.\n\n2.  **Initial Knowledge Retrieval & Association:**\n   ",
+      "answer_chars": 646,
+      "reasoning_chars": 10172,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "tks_cognitive_operator",
+      "query": "What is a Cognitive Operator in the CAS framework?",
+      "response_preview": "In the context of **Complex Adaptive Systems (CAS)**, specifically within the framework of **Cultural Evolution and Creativity** developed primarily by theoretical biologist and cognitive scientist **",
+      "reasoning_preview": "\n1.  **Analyze the Request:**\n    *   **Subject:** \"Cognitive Operator\"\n    *   **Context:** \"CAS framework\" (Complex Adaptive Systems framework, but specifically in the context of modeling cognition/",
+      "answer_chars": 4261,
+      "reasoning_chars": 4992,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_domain",
+      "query": "What are the four Processing Domains in the Cognitive Architecture System?",
+      "response_preview": "Based on the terminology used, you are most likely referring to the **PASS Theory of Intelligence**, which serves as the theoretical foundation for the **Cognitive Assessment System (CAS)**.\n\nIn this ",
+      "reasoning_preview": "\n1.  **Analyze the user's request:**\n    *   The user is asking for the \"four Processing Domains\" within the \"Cognitive Architecture System.\"\n\n2.  **Identify the core concepts:**\n    *   \"Cognitive Ar",
+      "answer_chars": 2346,
+      "reasoning_chars": 18320,
+      "telltale_hits": [
+        "cognitive"
+      ],
+      "score": 0.3333
+    },
+    {
+      "id": "cas_register",
+      "query": "What is a 'Register' in CAS terminology?",
+      "response_preview": "Because **CAS** is an acronym that refers to two very different major fields\u2014Chemistry and Information Technology\u2014the definition of a \"Register\" depends entirely on which context you are asking about.",
+      "reasoning_preview": "\n1.  **Analyze the Request:**\n    *   **Core concept:** \"Register\".\n    *   **Context:** \"CAS terminology\".\n    *   **Goal:** Explain what a register is within the specific context of CAS.\n\n2.  **Iden",
+      "answer_chars": 2557,
+      "reasoning_chars": 5591,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "noetic_compass",
+      "query": "What is Noetic Compass? Describe what it does.",
+      "response_preview": "The **Noetic Compass** is a framework or assessment tool generally used within the fields of **conscious leadership, organizational development, and noetic sciences.**\n\nWhile it can refer to a specifi",
+      "reasoning_preview": "\n1.  **Analyze the Request:**\n    *   **Target:** \"Noetic Compass\".\n    *   **Action:** Define/describe what it is and what it does.\n    *   **Context:** This sounds like a specific tool, framework, o",
+      "answer_chars": 3350,
+      "reasoning_chars": 9112,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "tootra_math",
+      "query": "What is the Tootra Math Handbook?",
+      "response_preview": "Based on current mathematical literature and educational resources, **there is no widely recognized or standard publication known as the \"Tootra Math Handbook.\"**\n\nIt is possible that the name is miss",
+      "reasoning_preview": "\n1.  **Analyze the user's request:** The user is asking for information about something called the \"Tootra Math Handbook.\"\n\n2.  **Initial Knowledge Retrieval:**\n    *   Search internal database for \"T",
+      "answer_chars": 1531,
+      "reasoning_chars": 5296,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "noetic_names",
+      "query": "List the 10 standard Noetic names or cognitive operator names if you know them.",
+      "response_preview": "Based on the work of Dr. Andrew Newberg and Eugene D'Aquili in the field of neurotheology (specifically in books like *Why God Won't Go Away* and *The Mystical Mind*), the brain utilizes specific \"cog",
+      "reasoning_preview": "\n1.  **Analyze the Request:**\n    *   **Topic:** Noetic names or cognitive operator names.\n    *   **Quantity:** 10.\n    *   **Context:** This refers to the work of Andrew Newberg, specifically in his",
+      "answer_chars": 3385,
+      "reasoning_chars": 15510,
+      "telltale_hits": [
+        "idea",
+        "mind",
+        "cause",
+        "effect"
+      ],
+      "score": 0.3636
+    },
+    {
+      "id": "cas_rpm",
+      "query": "What is the RPM (Recursive Prerequisite Model) in CAS?",
+      "response_preview": "Based on standard technical terminology and common acronyms, **there is no widely recognized standard model called the \"Recursive Prerequisite Model\" (RPM) associated with the acronym \"CAS\".**\n\nIt is ",
+      "reasoning_preview": "\n1.  **Identify the user's core question:** The user is asking about \"RPM (Recursive Prerequisite Model) in CAS\".\n\n2.  **Analyze the acronym \"RPM\":** What does RPM stand for in the context of \"CAS\"?\n ",
+      "answer_chars": 3108,
+      "reasoning_chars": 14706,
+      "telltale_hits": [],
+      "score": 0.0
+    },
+    {
+      "id": "cas_fisher_rao",
+      "query": "How does CAS use the Fisher-Rao metric?",
+      "response_preview": "Computer Algebra Systems (CAS)\u2014such as Wolfram Mathematica, Maple, and SymPy\u2014utilize the Fisher-Rao metric primarily as a tool in the field of **Information Geometry**.\n\nIn a CAS, the Fisher-Rao metri",
+      "reasoning_preview": "\n1.  **Analyze the Request:**\n    *   **Core Subject:** CAS (Computer Algebra Systems).\n    *   **Specific Concept:** Fisher-Rao metric.\n    *   **Action:** How does the former use the latter?\n\n2.  **",
+      "answer_chars": 5428,
+      "reasoning_chars": 5734,
+      "telltale_hits": [
+        "geodesic distance"
+      ],
+      "score": 0.4
+    },
+    {
+      "id": "cas_harness",
+      "query": "What is CAS Harness?",
+      "response_preview": "The term **CAS Harness** can refer to different things depending on the context, most notably in the automotive and software industries.\n\nHere are the three most common meanings:\n\n### 1. BMW Car Acces",
+      "reasoning_preview": "\n1.  **Deconstruct the Request:** The user is asking for a definition and explanation of \"CAS Harness\".\n\n2.  **Identify the Core Term:** The key term is \"CAS Harness\".\n\n3.  **Analyze the Term:** \"CAS\"",
+      "answer_chars": 2963,
+      "reasoning_chars": 7844,
+      "telltale_hits": [],
+      "score": 0.0
+    }
+  ]
+}

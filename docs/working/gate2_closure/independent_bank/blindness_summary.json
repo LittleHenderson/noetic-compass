@@ -1,0 +1,26 @@
+[
+  {
+    "provider": "deepseek",
+    "model": "deepseek-v4-pro",
+    "base": "https://api.deepseek.com",
+    "score": 0.0788,
+    "nonempty": 10,
+    "verdict": "PASS(blind)"
+  },
+  {
+    "provider": "qwen",
+    "model": "qwen3.8-max",
+    "base": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+    "score": 0.1006,
+    "nonempty": 10,
+    "verdict": "PASS(blind)"
+  },
+  {
+    "provider": "glm",
+    "model": "glm-4.6",
+    "base": "https://open.bigmodel.cn/api/paas/v4",
+    "score": 0.1097,
+    "nonempty": 10,
+    "verdict": "PASS(blind)"
+  }
+]
