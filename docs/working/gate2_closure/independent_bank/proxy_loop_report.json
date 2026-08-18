@@ -1,0 +1,98 @@
+{
+  "n_items": 8,
+  "readers": [
+    "gemini",
+    "deepseek",
+    "qwen",
+    "glm"
+  ],
+  "localization_accuracy": 0.75,
+  "localization_detail": {
+    "WEIGH": {
+      "diagnosed": "WEIGH",
+      "votes": [
+        "WEIGH",
+        "WEIGH",
+        "WEIGH",
+        "WEIGH"
+      ],
+      "hit": true
+    },
+    "RS": {
+      "diagnosed": "TRANSLATE",
+      "votes": [
+        "TRANSLATE",
+        "TRANSLATE",
+        "TRANSLATE",
+        "TRANSLATE"
+      ],
+      "hit": false
+    },
+    "CHECK": {
+      "diagnosed": "ORDER",
+      "votes": [
+        "ORDER",
+        "TRANSLATE",
+        "ORDER",
+        "TRANSLATE"
+      ],
+      "hit": false
+    },
+    "UNPACK": {
+      "diagnosed": "UNPACK",
+      "votes": [
+        "UNPACK",
+        "UNPACK",
+        "UNPACK",
+        "UNPACK"
+      ],
+      "hit": true
+    },
+    "MEM": {
+      "diagnosed": "MEM",
+      "votes": [
+        "MEM",
+        "MEM",
+        "MEM",
+        "MEM"
+      ],
+      "hit": true
+    },
+    "ORDER": {
+      "diagnosed": "ORDER",
+      "votes": [
+        "ORDER",
+        "ORDER",
+        "ORDER",
+        "ORDER"
+      ],
+      "hit": true
+    },
+    "IF": {
+      "diagnosed": "IF",
+      "votes": [
+        "IF",
+        "IF",
+        "IF",
+        "IF"
+      ],
+      "hit": true
+    },
+    "TRANSLATE": {
+      "diagnosed": "TRANSLATE",
+      "votes": [
+        "TRANSLATE",
+        "TRANSLATE",
+        "TRANSLATE",
+        "TRANSLATE"
+      ],
+      "hit": true
+    }
+  },
+  "target_part_score_faulted": 2.38,
+  "target_part_score_targeted": 7.19,
+  "target_part_score_generic": 4.59,
+  "repair_worked_targeted_gt_faulted": true,
+  "targeting_beats_generic": true,
+  "n_scores": 32
+}
