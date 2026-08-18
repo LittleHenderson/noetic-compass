@@ -23,6 +23,12 @@ from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 
+try:  # Windows console is cp1252; gate prints use unicode (<=) — display only, no logic change
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 STOP_WORDS = set("the a an of and or to in is are be for on with that this it as by "
                  "from at was were not no all any some its their".split())
 

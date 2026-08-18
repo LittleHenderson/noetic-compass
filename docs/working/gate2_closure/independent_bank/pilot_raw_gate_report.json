@@ -1,0 +1,55 @@
+{
+  "bank_path": "pilot_raw.jsonl",
+  "num_items": 640,
+  "checked_at_utc": "2026-08-18T05:41:39.423646+00:00",
+  "g1_surface": {
+    "char_ngram_tfidf": {
+      "mean": 0.478125,
+      "std": 0.053765,
+      "pass": false
+    },
+    "word_unigram": {
+      "mean": 0.417187,
+      "std": 0.030298,
+      "pass": false
+    },
+    "length": {
+      "mean": 0.032813,
+      "std": 0.015934,
+      "pass": true
+    },
+    "g1_pass": false
+  },
+  "g2_vocab_overlap": {
+    "tks_mean_overlap": 0.021749,
+    "cas_mean_overlap": 0.028179,
+    "asymmetry_ratio": 1.2956,
+    "asymmetry_pass": true,
+    "ceiling_pass": true,
+    "g2_pass": true
+  },
+  "g3_inter_rater": {
+    "multi_rated_items": 0,
+    "agreement_count": 0,
+    "raw_agreement": 0.0,
+    "discard_rate": 1.0,
+    "g3_pass": false
+  },
+  "g4_admissibility": {
+    "total_items": 640,
+    "unique_items": 640,
+    "duplicates": 0,
+    "unique_labels": 40,
+    "effective_n": 640,
+    "g4_pass": true
+  },
+  "g5_coverage": {
+    "total_cells_represented": 40,
+    "cells_with_5plus_items": 40,
+    "min_items_per_cell": 16,
+    "max_items_per_cell": 16,
+    "g5_pass": true
+  },
+  "all_gates_pass": false,
+  "verdict": "REJECT — bank fails one or more gates; do not use"
+}
