@@ -89,7 +89,7 @@ one confirmed step deeper:
 | **BOOT-1** | user-data L9 | `Join-Path $archiveRoot …` builds a `D:\` path **before** the disk is formatted into D:; Join-Path validates the drive root → `DriveNotFound` throw. | **FIXED** (string concat). Probe: passed. |
 | **BOOT-2** | user-data L41 | `Set-Disk -IsOffline $false -IsReadOnly $false` — those two params are in different parameter sets → `AmbiguousParameterSet` throw. | **FIXED** (two calls). Probe: D: now formats to `CAS-ARCHIVE`; watchdog task registers. |
 | **S4U-BATCH** | before L189 | new local user `wakil` lacks `SeBatchLogonRight`; team-predicted S4U run-time logon refusal. | **FIXED** (secedit grant). |
-| **BOOT-3** | user-data L209 | `Register-ScheduledTask` for the S4U **identity-probe** task fails `Access is denied (0x80070005)` — S4U task *registration* (not just its logon) is refused in the SYSTEM/Session-0 boot context. | **CHARACTERIZED — AMI/OS-level S4U limitation, not a code bug** (full trace below). Needs a package-design decision, not a patch. |
+| **BOOT-3** | user-data L209 | `Register-ScheduledTask` for the S4U **identity-probe** task fails `Access is denied (0x80070005)` — S4U task *registration* (not just its logon) is refused in the SYSTEM/Session-0 boot context. | **RESOLVED for the identity probe** — converted to a non-S4U Password-logon task; **the boot now completes end-to-end** (validated live, full `bootstrap.json`). Same S4U dependency remains OPEN in the execute-phase bridge (see "Execute-phase" below). |
 
 Live-proven working now: disk format → D:, and the 6-hour watchdog task. Confirmed wall:
 S4U identity-probe task registration.
@@ -184,33 +184,89 @@ reasoning (incl. a 5-agent research panel) mis-ranked the cause — the live pro
 established it, the same two-pronged pattern that found BOOT-1/BOOT-2. Total AWS spend across
 all ~14 probes: **under $1**; account verified at zero footprint after every one.
 
+## BOOT-3 RESOLUTION — non-S4U identity probe (validated: boot completes end-to-end)
+
+The identity probe was converted from an S4U task to a **Password-logon task**, whose
+credential is validated by a **batch logon** — the logon flavor that *works* on this AMI
+(`LogonUser(BATCH)` returns a valid non-admin token; live-confirmed). Details:
+
+- **Register mechanism (PW-REGISTER):** reset wakil's password to a fresh in-memory GUID,
+  `Register-ScheduledTask -User "$COMPUTERNAME\wakil" -Password … -RunLevel Limited` (no S4U),
+  run, verify, then **scramble** wakil's password so the task's stored credential is inert.
+  Password cleared from memory immediately after register.
+- **HOMEDRIVE/HOMEPATH:** batch logons don't run `userinit`, so those env vars are empty and
+  the probe's `environment/profile` check fails. A thin wrapper
+  (`runtime\wakil-identity-wrapper.ps1`) sets `HOMEDRIVE=C:` / `HOMEPATH=\Users\wakil` (the
+  interactive-logon values) then dot-runs the real probe. `USERNAME`/`USERPROFILE` are already
+  correct; the IMDS firewall block holds for the full token (probe writes its receipt).
+- **Trigger-count bug (side finding):** the package used `@($task.Triggers).Count`, which is
+  **1** for a triggerless task (`$null` Triggers wrapped by `@()`), not 0 — so the boot's own
+  assertion, the host-observation `identity_trigger_count`, the verdict, and the `05` preclaim
+  boundary check would all have failed even for S4U. Fixed to `($x | Measure-Object).Count`
+  (correctly 0). This was never caught because the path never ran.
+- **Downstream updates:** `identity_probe_logon_type` `S4U→Password` (bootstrap.json);
+  verdict `.identity_logon_type == "Password"`; `05` preclaim boundary `LogonType -cne "Password"`.
+- **Security property preserved:** wakil still runs **non-admin, IMDS-firewalled**; the
+  password is transient (in-memory, then scrambled), never persisted in a task. Only the logon
+  *type* changes S4U→Password. Trade-off vs S4U: a transient in-memory credential exists for
+  ~1s (vs never), and the task token carries network (IMDS-blocked) rather than being
+  identity-only. Owner-approved (capability preserved; evidence adapts).
+
+**Live regression (unmodified rebuilt package, real long task names):** `MARKER=True`;
+`bootstrap.json` fully populated with `identity_probe_logon_type: "Password"`,
+`local_identity_admin: false`, exact IMDS firewall SDDL, `data_drive D:` `CAS-ARCHIVE`;
+identity task `logon=Password state=Ready last=0x00000000`; receipt written; watchdog `Ready`;
+no `err.tmp`. **The boot path now completes end-to-end on the pinned AMI.**
+
+## Execute-phase — SAME S4U dependency remains OPEN (owner decision)
+
+Now that the boot completes, the next lane is reachable and shares the identical wall.
+`windows/s4u_run_bridge.ps1` (a **sealed capsule object**) has `Register-S4UTask` — the exact
+`New-ScheduledTaskPrincipal -LogonType S4U` + `Register-ScheduledTask` pattern (and the same
+`@($task.Triggers).Count` bug) — and it registers the **Template / Execute / Reconcile**
+tasks that run the *actual harness* as wakil. So `04_materialize` → `05b` execute would fail
+the same way. Converting it is materially bigger than the probe:
+1. It is a **sealed capsule artifact** — changing it changes `S4U_BRIDGE_SHA` and ripples
+   through the materialization manifest + seal and the runtime hash-verification.
+2. It is a **trust-model change** — S4U gives the running harness an *identity-only token with
+   no network*; a Password-logon token carries network (IMDS-firewalled). That is a more
+   consequential change to what the harness can do than the read-only probe.
+3. It **cannot be validated tonight** — the full execute lane needs the whole capsule +
+   harness in a much larger live run; those lanes have never once run.
+This is an owner design decision (same options as BOOT-3, applied to the harness itself), not
+a mechanical correction.
+
 ## Current corrected identity
 
-Corrected package with the **nine** applied fixes (FLAG-1, TRUST-1, JQ-1, RUNTIME-1,
-IAM-SCOPE, BOOT-1a, BOOT-1b, BOOT-2, S4U-BATCH):
-- Package identity: `81ac4f71c5ba4087646a8c3bed1bdf03a12821285d824d172473673906248fa0`
+Corrected package with **fourteen** applied fixes — the nine mechanical (FLAG-1, TRUST-1,
+JQ-1, RUNTIME-1, IAM-SCOPE, BOOT-1a, BOOT-1b, BOOT-2, S4U-BATCH) plus the five non-S4U
+identity fixes (PW-REGISTER, BOOTSTRAP-LOGON, HOSTOBS-TRIGGER, VERDICT-LOGON, PRECLAIM-BOUNDARY):
+- Package identity: `15a292bc66787e08c7e0fdc1241e9cd8de68c00726aac97bc9d3ed82a5bf5125`
+  (supersedes `81ac4f71…`; self-check 18/18, `bash -n` clean).
 - Archive `aws_cloudshell_unarmed_20260819.tar.gz` (identity changes each rebuild; this is head).
 - Backup: `D:\tksCAS-archive\project_coherence_gate5_corrected_package_20260819\`.
 
 ## Honest overall assessment
 
-**Nine confirmed defects fixed on a path that no prior audit or attempt had ever executed;
-the tenth (BOOT-3) is now fully characterized as an OS/AMI-level S4U limitation — a
-package-design decision, not a mechanical fix.** Every defect lives in the provision →
-Windows-boot → execution path that the "triple-audited GO" certified without ever running it
-once.
+**Fourteen defects fixed on a path that no prior audit or attempt had ever executed — and
+the entire Windows BOOT path now completes end-to-end on the pinned AMI (live-validated).**
+Every defect lived in the provision → Windows-boot → execution path that the "triple-audited
+GO" certified without ever running it once.
 
-BOOT-3 is the current hard stop of the boot path: the S4U identity-probe registration cannot
-succeed on the package's pinned AMI in any tested context (EC2Launch boot, SYSTEM/Highest
-helper, post-boot SSM), with all prerequisites satisfied. Because the boot fails there,
-**materialize → execute → export remain entirely untested** — they sit downstream of a boot
-that does not yet complete.
+BOOT-3 (the S4U identity-probe register that faults on this AMI) is **resolved** by the
+non-S4U Password-logon conversion; the boot writes its full `bootstrap.json` and the identity
+probe runs as constrained, IMDS-firewalled wakil. That unblocked the lanes below it — and
+immediately surfaced the **next** blocker: the execute phase (`s4u_run_bridge.ps1`) runs the
+*actual harness* as wakil via the same broken S4U mechanism. So **materialize → execute →
+export remain untested**, now gated on the execute-phase S4U decision (a bigger, sealed-capsule,
+trust-model change — owner's call; see "Execute-phase" above).
 
-Status of the corrected package: **9 mechanical defects fixed and self-verifying**; BOOT-3
-requires an owner design decision (options 2/3/4 above) before the boot can complete and the
-downstream lanes can be exercised. This is the honest, defensible result: the corrected
-package + this defect/root-cause map turns "a GO label on a path that never ran" into a
-precise, evidence-backed map of exactly what works, what is fixed, and the one architectural
-decision that remains. Total AWS spend across all ~15 disposable probes: **under $1**;
+Status of the corrected package (identity `15a292bc…`): **14 fixes, self-verifying (18/18),
+boot completes end-to-end.** The remaining work to actually *run* Gate 5 is the execute-phase
+S4U conversion — an owner design decision, not a mechanical correction. This is the honest,
+defensible result: "a GO label on a path that never ran" is now a package whose whole boot
+path is fixed and live-proven, with exactly one architectural decision (harness execution
+identity) standing between here and a full run. Total AWS spend across all ~20 disposable
+probes: **under $1**;
 account verified at **zero footprint** after every one; the protected bucket
 `cas-harness-runpod-92754088` never touched.
