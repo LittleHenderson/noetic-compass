@@ -1,0 +1,379 @@
+{
+  "n_pairs": 14,
+  "mean_reader_split_rate": 0.893,
+  "per_reader_split_rate": {
+    "gemini": 0.929,
+    "deepseek": null,
+    "qwen": 0.857,
+    "glm": null
+  },
+  "majority_readers_split_rate": 0.0,
+  "thesaurus_split_rate": 0.857,
+  "DECISIVE_readers_split_where_thesaurus_ties": false,
+  "per_pair": [
+    {
+      "pair": 0,
+      "axis": "think/feel",
+      "thesaurus_a": "B6",
+      "thesaurus_b": "A9",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "B6",
+          "C9"
+        ],
+        "deepseek": [
+          "B6",
+          null
+        ],
+        "qwen": [
+          "B6",
+          "B7"
+        ],
+        "glm": [
+          "B6",
+          null
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 1,
+      "axis": "remember/analyze",
+      "thesaurus_a": "A9",
+      "thesaurus_b": "B1",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "B8",
+          "D6"
+        ],
+        "deepseek": [
+          null,
+          "D6"
+        ],
+        "qwen": [
+          "D8",
+          "D6"
+        ],
+        "glm": [
+          null,
+          "D6"
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 2,
+      "axis": "drawn/averse",
+      "thesaurus_a": "A2",
+      "thesaurus_b": "C3",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "C2",
+          "C3"
+        ],
+        "deepseek": [
+          null,
+          null
+        ],
+        "qwen": [
+          "D2",
+          "D3"
+        ],
+        "glm": [
+          null,
+          null
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 3,
+      "axis": "analyze/absent",
+      "thesaurus_a": "B6",
+      "thesaurus_b": "C5",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "B6",
+          "C4"
+        ],
+        "deepseek": [
+          null,
+          null
+        ],
+        "qwen": [
+          "B6",
+          "B4"
+        ],
+        "glm": [
+          null,
+          null
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 4,
+      "axis": "trigger/physical",
+      "thesaurus_a": "C6",
+      "thesaurus_b": "A6",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "B8",
+          "D8"
+        ],
+        "deepseek": [
+          null,
+          null
+        ],
+        "qwen": [
+          "C8",
+          "D8"
+        ],
+        "glm": [
+          null,
+          null
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 5,
+      "axis": "meaning/feel",
+      "thesaurus_a": "D4",
+      "thesaurus_b": "D4",
+      "thesaurus_split": false,
+      "readers": {
+        "gemini": [
+          "A1",
+          "C9"
+        ],
+        "deepseek": [
+          null,
+          null
+        ],
+        "qwen": [
+          "A1",
+          "C9"
+        ],
+        "glm": [
+          null,
+          null
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 6,
+      "axis": "analyze/feel",
+      "thesaurus_a": "C7",
+      "thesaurus_b": "C6",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "B6",
+          "C4"
+        ],
+        "deepseek": [
+          null,
+          null
+        ],
+        "qwen": [
+          "B6",
+          "D4"
+        ],
+        "glm": [
+          null,
+          null
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 7,
+      "axis": "purpose/physical",
+      "thesaurus_a": "A1",
+      "thesaurus_b": "A6",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "A1",
+          "D7"
+        ],
+        "deepseek": [
+          null,
+          null
+        ],
+        "qwen": [
+          "A7",
+          "A7"
+        ],
+        "glm": [
+          null,
+          null
+        ]
+      },
+      "reader_split_count": 1
+    },
+    {
+      "pair": 8,
+      "axis": "attracted/repelled",
+      "thesaurus_a": "A10",
+      "thesaurus_b": "C9",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "B2",
+          "C3"
+        ],
+        "deepseek": [
+          null,
+          null
+        ],
+        "qwen": [
+          "C2",
+          "C3"
+        ],
+        "glm": [
+          null,
+          null
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 9,
+      "axis": "analyze/gut",
+      "thesaurus_a": "A10",
+      "thesaurus_b": "B6",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "B6",
+          "C1"
+        ],
+        "deepseek": [
+          null,
+          null
+        ],
+        "qwen": [
+          "B6",
+          "C1"
+        ],
+        "glm": [
+          null,
+          null
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 10,
+      "axis": "memory/sensory",
+      "thesaurus_a": "C8",
+      "thesaurus_b": "C8",
+      "thesaurus_split": false,
+      "readers": {
+        "gemini": [
+          "D8",
+          "D1"
+        ],
+        "deepseek": [
+          "C8",
+          null
+        ],
+        "qwen": [
+          "C8",
+          "D1"
+        ],
+        "glm": [
+          "D8",
+          null
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 11,
+      "axis": "feel/operational",
+      "thesaurus_a": "C9",
+      "thesaurus_b": "B6",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "C4",
+          "D1"
+        ],
+        "deepseek": [
+          null,
+          "D1"
+        ],
+        "qwen": [
+          "C4",
+          "D1"
+        ],
+        "glm": [
+          null,
+          "D1"
+        ]
+      },
+      "reader_split_count": 2
+    },
+    {
+      "pair": 12,
+      "axis": "insight/visceral",
+      "thesaurus_a": "A7",
+      "thesaurus_b": "C5",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "C7",
+          "C7"
+        ],
+        "deepseek": [
+          null,
+          null
+        ],
+        "qwen": [
+          "C7",
+          "C7"
+        ],
+        "glm": [
+          null,
+          null
+        ]
+      },
+      "reader_split_count": 0
+    },
+    {
+      "pair": 13,
+      "axis": "meaning/analyze",
+      "thesaurus_a": "A3",
+      "thesaurus_b": "B6",
+      "thesaurus_split": true,
+      "readers": {
+        "gemini": [
+          "B6",
+          "D6"
+        ],
+        "deepseek": [
+          null,
+          null
+        ],
+        "qwen": [
+          "B6",
+          "D6"
+        ],
+        "glm": [
+          null,
+          null
+        ]
+      },
+      "reader_split_count": 2
+    }
+  ]
+}

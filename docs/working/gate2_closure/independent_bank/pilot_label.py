@@ -30,17 +30,34 @@ except Exception:
 
 _SEM = {"gemini": threading.Semaphore(4), "deepseek": threading.Semaphore(2),
         "qwen": threading.Semaphore(2), "glm": threading.Semaphore(1)}
+# proactive min interval (s) between calls to a rate-limited provider (GLM/Zhipu is strict)
+_MIN_INTERVAL = {"glm": 7.0}
+_LAST = {}
+
+
+def _enforce_interval(provider):
+    mi = _MIN_INTERVAL.get(provider, 0)
+    if mi <= 0:
+        return
+    now = time.time()                       # safe: GLM sem=1 serializes access to _LAST['glm']
+    wait = _LAST.get(provider, 0.0) + mi - now
+    if wait > 0:
+        time.sleep(wait)
+    _LAST[provider] = time.time()
 
 
 def call_with_retry(client, provider, **kw):
     delay = 5.0
     for attempt in range(6):
         with _SEM.get(provider, threading.Semaphore(2)):
+            _enforce_interval(provider)     # space calls out so we never trip the rate limit
             try:
                 return client.chat.completions.create(**kw)
             except Exception as e:
-                msg = str(e)
-                transient = "429" in msg or "rate" in msg.lower() or "500" in msg or "502" in msg or "503" in msg
+                msg = str(e).lower()
+                transient = ("429" in msg or "rate" in msg or "500" in msg or "502" in msg
+                             or "503" in msg or "timeout" in msg or "timed out" in msg
+                             or "connection" in msg)
                 if not (transient and attempt < 5):
                     raise
         time.sleep(delay); delay = min(delay * 2, 60)
@@ -83,9 +100,18 @@ def label_batch(provider, model, menu, batch):
               '\n\nFor EACH scenario, choose the single best-fitting category code. '
               'Return ONLY a JSON array: [{"id": <number>, "code": "<code>"}]. '
               "Every scenario id must appear exactly once.")
-    r = call_with_retry(client, provider, model=model, max_tokens=8000, temperature=0.0,
+    r = call_with_retry(client, provider, model=model, max_tokens=16000, temperature=0.0,
                         messages=[{"role": "user", "content": prompt}])
-    txt = getattr(r.choices[0].message, "content", None) or ""
+    msg = r.choices[0].message
+    txt = getattr(msg, "content", None) or ""
+    if not txt:                       # reasoning models (deepseek/glm) can leave content empty
+        txt = getattr(msg, "reasoning_content", None) or getattr(msg, "reasoning", None) or ""
+        if not txt:
+            try:
+                d = msg.model_dump()
+                txt = d.get("content") or d.get("reasoning_content") or d.get("reasoning") or ""
+            except Exception:
+                txt = ""
     out = {}
     for m in ARR.finditer(txt):
         out[int(m.group(1))] = m.group(2)

@@ -1,0 +1,26 @@
+{
+  "corpus": "pilot_raw.jsonl",
+  "n_items": 120,
+  "n_complete": 88,
+  "readers": [
+    "gemini",
+    "deepseek",
+    "qwen",
+    "glm"
+  ],
+  "reader_reader_agreement": 0.8845,
+  "fleiss_kappa_readers": 0.88,
+  "reader_thesaurus_agreement": 0.2841,
+  "reader_author_accuracy": 0.8068,
+  "thesaurus_author_accuracy": 0.3068,
+  "per_reader_vs_author": {
+    "gemini": 0.8523,
+    "deepseek": 0.8182,
+    "qwen": 0.7841,
+    "glm": 0.7727
+  },
+  "surface_misleading_n": 61,
+  "surface_misleading_reader_reader_agreement": 0.8689,
+  "surface_misleading_reader_author_recovery": 0.7828,
+  "DECISIVE_readers_converge_beyond_thesaurus": true
+}
