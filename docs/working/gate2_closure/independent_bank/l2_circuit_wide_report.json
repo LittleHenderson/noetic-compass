@@ -1,0 +1,33 @@
+{
+  "corpus": "real_outputs.jsonl",
+  "n_parts": 20,
+  "n_items": 36,
+  "n_complete": 21,
+  "reader_jaccard": 0.5493,
+  "null_jaccard": 0.3183,
+  "lift_over_null": 0.231,
+  "mean_parts_per_answer": 5.06,
+  "part_usage": {
+    "DR": 37,
+    "RS": 41,
+    "MEM": 46,
+    "DIR": 2,
+    "IF": 34,
+    "AMP": 46,
+    "LOOP": 5,
+    "CHECK": 10,
+    "WEIGH": 34,
+    "FILTER": 0,
+    "GND": 14,
+    "PICK": 5,
+    "BUFFER": 12,
+    "HABIT": 0,
+    "STOP": 1,
+    "TRANSLATE": 44,
+    "SENSE": 13,
+    "RESET": 0,
+    "UNPACK": 65,
+    "ORDER": 16
+  },
+  "DECISIVE_beyond_null": true
+}
