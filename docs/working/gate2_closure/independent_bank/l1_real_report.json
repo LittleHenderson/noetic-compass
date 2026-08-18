@@ -1,0 +1,22 @@
+{
+  "corpus": "real_outputs.jsonl",
+  "n_items": 36,
+  "n_complete": 20,
+  "readers": [
+    "gemini",
+    "deepseek",
+    "qwen",
+    "glm"
+  ],
+  "reader_reader_agreement": 0.5333,
+  "fleiss_kappa": 0.4479,
+  "reader_thesaurus_agreement": 0.025,
+  "majority_3of4_share_cell": 0.55,
+  "label_spread_per_item": {
+    "1": 7,
+    "2": 6,
+    "3": 6,
+    "4": 1
+  },
+  "DECISIVE_beyond_thesaurus": true
+}
