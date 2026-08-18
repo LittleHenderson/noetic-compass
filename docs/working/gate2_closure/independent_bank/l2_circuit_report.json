@@ -1,0 +1,28 @@
+{
+  "corpus": "real_outputs.jsonl",
+  "n_items": 36,
+  "n_complete": 33,
+  "readers": [
+    "gemini",
+    "deepseek",
+    "qwen",
+    "glm"
+  ],
+  "reader_jaccard": 0.6099,
+  "null_jaccard": 0.4002,
+  "lift_over_null": 0.2097,
+  "mean_parts_per_answer": 4.11,
+  "part_usage": {
+    "DR": 102,
+    "RS": 73,
+    "MEM": 83,
+    "DIR": 21,
+    "IF": 62,
+    "AMP": 98,
+    "LOOP": 8,
+    "CHECK": 25,
+    "WEIGH": 50,
+    "FILTER": 21
+  },
+  "DECISIVE_beyond_null": true
+}
