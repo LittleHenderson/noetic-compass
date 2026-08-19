@@ -1,0 +1,413 @@
+{
+  "schema_version": "component_atlas_v0.2",
+  "frame": "Parts are the MODEL'S (discovered functionally), names are OURS (CAS-PCBA types), ablation is the JUDGE. A label sticks only if its preregistered directional ablation prediction holds vs matched controls. This does NOT claim the model encodes CAS.",
+  "boundary": "Bounded claim only. This run, at best, causally supports assigning CAS-PCBA type labels to specific internal parts of one pinned model under specific prompts, measures, and matched controls. It does not find 'the' neurons or 'the' circuit; it does not show the model encodes CAS; it does not establish that the measured directions carry drive semantics rather than topic/lexical content (CAS-specificity remains GREY per the matched-taxonomy lane); it does not license generation-control claims (cite Stage 27P for the eraser channel, two families only); it does not transfer to other models, layers, hook points, or prompt distributions without rerunning.",
+  "aggregate_caveat": "The five core tests are NOT independent: DR-F5, AMP-F5, and CONN share the F5 judge bank and the u_F5 direction; DR-F5 and DR-F2 share method. The pass fraction is DESCRIPTIVE ONLY; no binomial p-value is licensed as a headline. Per-test evidence (each against its own matched controls) is the primary result.",
+  "provenance": {
+    "model": "EleutherAI/pythia-1b",
+    "revision": "f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
+    "claim_eligible": false,
+    "seed": 0,
+    "device": "cuda",
+    "smoke": true,
+    "n_controls": 2,
+    "max_new_tokens": 10,
+    "prompt_bank_sha256": "a4d6914ac74b06f15367be3bf48d00a7517eddc6c725dc186a8eef4719c86594",
+    "fit_frame_indices": [
+      0,
+      2,
+      4,
+      6
+    ],
+    "judge_frame_indices": [
+      1,
+      3,
+      5,
+      7
+    ],
+    "torch": "2.12.0+cu130",
+    "started_utc": "2026-08-19T03:59:32Z",
+    "runtime_seconds": 89.2,
+    "note": "SMOKE RUN -- mechanical validation only; numbers are never evidence"
+  },
+  "surface_control": {
+    "f5_vs_neutral": {
+      "status": "OK",
+      "judge_accuracy": 0.5,
+      "interpretation": "Banks are minimal pairs: separability is confined to the drive slot BY DESIGN and is expected to be high. This descriptor bounds the claim (directions may carry topic/lexical content); the typed directional signatures (sign, presence-vs-magnitude, selectivity, connection) are what the tests judge, and drive-vs-topic semantics is explicitly NOT claimed (see PREREG section 6)."
+    },
+    "f2_vs_neutral": {
+      "status": "OK",
+      "judge_accuracy": 0.75,
+      "interpretation": "Banks are minimal pairs: separability is confined to the drive slot BY DESIGN and is expected to be high. This descriptor bounds the claim (directions may carry topic/lexical content); the typed directional signatures (sign, presence-vs-magnitude, selectivity, connection) are what the tests judge, and drive-vs-topic semantics is explicitly NOT claimed (see PREREG section 6)."
+    }
+  },
+  "discover": {
+    "n_blocks": 16,
+    "sweep_blocks": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "probe_acc_f5_per_block": [
+      0.25,
+      0.5,
+      0.75,
+      0.75,
+      0.75,
+      0.5,
+      0.75,
+      0.75,
+      0.75,
+      0.75,
+      0.5
+    ],
+    "probe_acc_f2_per_block": [
+      0.5,
+      0.75,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "L_star": 6,
+    "best_mean_acc": 0.875,
+    "shuffled_label_floor": [
+      0.5,
+      0.25,
+      0.5
+    ],
+    "shuffled_label_floor_max": 0.5,
+    "L_dr": 2,
+    "tau_F5": 5.763473655229884,
+    "tau_F2": 5.125206986699644
+  },
+  "atlas": [
+    {
+      "component_id": "DR-F5",
+      "type_label": "DR",
+      "location": {
+        "kind": "mlp_intermediate_cover",
+        "block": 2,
+        "coords": [
+          6450,
+          6064,
+          5468,
+          4581,
+          7823,
+          227,
+          3041,
+          4388,
+          4641,
+          2669,
+          5894,
+          3387,
+          2107,
+          3863,
+          7632,
+          3664,
+          1827,
+          7546,
+          4974,
+          7037,
+          7957,
+          1429,
+          2458,
+          1452,
+          5144,
+          5359,
+          3051,
+          7522,
+          7969,
+          4703,
+          1719,
+          5141
+        ]
+      }
+    },
+    {
+      "component_id": "DR-F2",
+      "type_label": "DR",
+      "location": {
+        "kind": "mlp_intermediate_cover",
+        "block": 2,
+        "coords": [
+          6450,
+          7969,
+          7037,
+          3041,
+          7823,
+          2669,
+          7127,
+          1827,
+          4818,
+          2821,
+          5540,
+          6785,
+          4771,
+          935,
+          4581,
+          1719,
+          8076,
+          3377,
+          1452,
+          7044,
+          6474,
+          8047,
+          154,
+          1375,
+          2977,
+          3623,
+          719,
+          2805,
+          5833,
+          7782,
+          7193,
+          3591
+        ]
+      }
+    },
+    {
+      "component_id": "RS-F5",
+      "type_label": "RS",
+      "location": {
+        "kind": "residual_direction",
+        "block": 6,
+        "note": "restraint direction, orthogonalized vs drive direction"
+      }
+    },
+    {
+      "component_id": "AMP-F5",
+      "type_label": "AMP",
+      "location": {
+        "kind": "residual_direction",
+        "block": 6,
+        "note": "drive subspace rank-1"
+      }
+    }
+  ],
+  "tests": {
+    "DR_F5": {
+      "baseline_mean_proj": 7.613285025874105,
+      "target_mean_proj": 7.5840120806871445,
+      "targeted_drop": 0.029272945186960442,
+      "matched_control_drops": [
+        0.0,
+        0.0
+      ],
+      "max_matched_control_drop": 0.0,
+      "cross_cover_drop": 0.029272945186960442,
+      "sign_test_p": 0.75,
+      "baseline_presence_rate": 0.75,
+      "target_presence_rate": 0.75,
+      "effect_size_target": 0.010088412228149601,
+      "effect_size_cross_rail": 0.11426670788135451,
+      "selectivity_gate": "|d_cross_rail| <= 0.5 x d_target",
+      "coherence_target": 0.9642857142857143,
+      "sample_texts_target": [
+        " the next.\n\n\"I'm going to",
+        " the committee voted to approve the budget.\n\n",
+        " the alarm went off.\n\n\"I was"
+      ],
+      "beats_matched_and_cross_controls": false,
+      "starvation_signature_holds": false,
+      "selectivity_gate_holds": false,
+      "status": "FAIL"
+    },
+    "DR_F2": {
+      "baseline_mean_proj": 5.787649369821883,
+      "target_mean_proj": 5.787649369821883,
+      "targeted_drop": 0.0,
+      "matched_control_drops": [
+        0.0,
+        0.0
+      ],
+      "max_matched_control_drop": 0.0,
+      "cross_cover_drop": 0.3477789869067003,
+      "sign_test_p": 1.0,
+      "baseline_presence_rate": 0.5,
+      "target_presence_rate": 0.5,
+      "effect_size_target": 0.0,
+      "effect_size_cross_rail": 0.01008841222815052,
+      "selectivity_gate": "|d_cross_rail| <= 0.5 x d_target",
+      "coherence_target": 0.8303571428571428,
+      "sample_texts_target": [
+        " the next, and the next, until she found",
+        ", when the committee was ready to vote, she",
+        " the technician found the problem.\n\nThe technician"
+      ],
+      "status": "VACUOUS",
+      "reason": "baseline presence rate 0.50 below precondition 0.6; nothing demonstrably fires to be lost"
+    },
+    "AMP_F5": {
+      "baseline_mean_proj": 7.613285025874105,
+      "target_mean_proj": 5.718109654226383,
+      "targeted_drop": 1.8951753716477215,
+      "matched_control_drops": [
+        1.729778817894589,
+        -0.1796503358503303
+      ],
+      "max_matched_control_drop": 1.729778817894589,
+      "cross_direction_drop": 0.028025264384385018,
+      "sign_test_p": 0.25,
+      "baseline_presence_rate": 0.75,
+      "target_presence_rate": 0.5,
+      "effect_size_target": 0.6531392817397645,
+      "effect_size_cross_rail": 0.5493334231076346,
+      "coherence_target": 0.9330357142857143,
+      "sample_texts_target": [
+        " she and her husband, who was standing nearby,",
+        " the committee voted to approve the budget.\n\n",
+        " the alarm went off.\n\n\"I'm"
+      ],
+      "beats_matched_and_cross_controls": false,
+      "attenuation_signature_holds": true,
+      "selectivity_gate_holds": false,
+      "status": "FAIL"
+    },
+    "RS_F5": {
+      "baseline_mean_proj": 4.345357389232173,
+      "target_mean_proj": 5.442221679952197,
+      "targeted_increase": 1.0968642907200241,
+      "matched_control_increases": [
+        -0.5994934639915042,
+        -0.21642680299548012
+      ],
+      "max_matched_control_increase": -0.21642680299548012,
+      "sign_test_p": 0.65625,
+      "baseline_mean_hedge": 0.0,
+      "target_mean_hedge": 0.0,
+      "baseline_frac_hedged": 0.0,
+      "targeted_hedge_drop": 0.0,
+      "matched_control_hedge_drops": [
+        0.0,
+        0.0
+      ],
+      "max_matched_control_hedge_drop": 0.0,
+      "coherence_target": 0.9338624338624338,
+      "sample_texts_target": [
+        " have to get the committee to do something. I",
+        "'s going to have to do it.\n\n",
+        " said, \"I'll sign it.\"\n\n"
+      ],
+      "status": "VACUOUS",
+      "reason": "baseline hedging too sparse (mean 0.00, frac 0.00 < 0.25); the brake never demonstrably fires, so its removal predicts no change (unreachable-threshold logic)"
+    },
+    "CONN_DRF5_to_AMPF5": {
+      "effect_size_uF5_downstream": 0.010088412228149601,
+      "effect_size_uF2_downstream": 0.05547526654158177,
+      "effect_sizes_random_dirs_downstream": [
+        -0.1369154613211305,
+        -0.028253619838027037,
+        -0.023584477636221464
+      ],
+      "max_random_dir_effect": -0.023584477636221464,
+      "effect_sizes_matched_cover_controls": [
+        0.0,
+        0.0
+      ],
+      "max_matched_cover_effect": 0.0,
+      "sign_test_p": 0.75,
+      "note": "clean-pass only; correlated with DR-F5 (shared bank and direction) -- counted with that caveat in the aggregate",
+      "status": "FAIL",
+      "upstream": {
+        "kind": "mlp_intermediate_cover",
+        "block": 2
+      },
+      "downstream_site_block": 6
+    }
+  },
+  "harness_sanity": {
+    "MEM_SANITY": {
+      "heads": [
+        [
+          13,
+          1
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          10,
+          5
+        ],
+        [
+          12,
+          3
+        ]
+      ],
+      "n_discovery_items": 3,
+      "n_judgment_items": 3,
+      "baseline_copy_acc": 1.0,
+      "ablated_copy_acc": 1.0,
+      "targeted_drop": 0.0,
+      "control_drops": [
+        0.33333333333333337,
+        0.33333333333333337
+      ],
+      "max_control_drop": 0.33333333333333337,
+      "status": "SANITY_FAIL"
+    },
+    "CHECK_SANITY": {
+      "heads": [
+        [
+          4,
+          4
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          10,
+          5
+        ]
+      ],
+      "baseline_gate_score_nats": 12.412524941948835,
+      "ablated_gate_score_nats": 9.565126053311609,
+      "targeted_drop": 2.847398888637226,
+      "control_drops": [
+        0.005023542474107856,
+        -0.029664596648547814
+      ],
+      "max_control_drop": 0.005023542474107856,
+      "status": "SANITY_FAIL"
+    }
+  },
+  "aggregate": {
+    "core_test_order": [
+      "DR_F5",
+      "DR_F2",
+      "AMP_F5",
+      "RS_F5",
+      "CONN_DRF5_to_AMPF5"
+    ],
+    "n_evaluable": 3,
+    "n_pass": 0,
+    "fraction_pass_descriptive": 0.0,
+    "non_independence_caveat": "The five core tests are NOT independent: DR-F5, AMP-F5, and CONN share the F5 judge bank and the u_F5 direction; DR-F5 and DR-F2 share method. The pass fraction is DESCRIPTIVE ONLY; no binomial p-value is licensed as a headline. Per-test evidence (each against its own matched controls) is the primary result.",
+    "rs_sign_anchor_status": "VACUOUS",
+    "harness_sanity_excluded_from_aggregate": true,
+    "status": "NULL_ATLAS_V0",
+    "kill_statement_triggered": null,
+    "language": "Every PASS is worded 'causally supports the <TYPE> labeling'; never 'found THE neurons' or 'the circuit'."
+  }
+}
