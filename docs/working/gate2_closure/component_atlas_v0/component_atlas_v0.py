@@ -3716,8 +3716,14 @@ def main():
         "DOSE_MATCH_TOL": DOSE_MATCH_TOL,
         "DOSE_MATCH_TRIES": DOSE_MATCH_TRIES,
         "PASS_WINDOW_MIN_SE": PASS_WINDOW_MIN_SE,
-        "LAYER_SWEEP_MIN_FRAC": LAYER_SWEEP_MIN_FRAC,
-        "L_STAR_MIN_FRAC": L_STAR_MIN_FRAC, "L_STAR_MAX_FRAC": L_STAR_MAX_FRAC,
+        # D56: the LOWER bounds are absolute now; the superseded rev-0.3
+        # fractions are still recorded so the change is auditable in-artifact.
+        "LAYER_SWEEP_MIN_ABS": LAYER_SWEEP_MIN_ABS,
+        "L_STAR_MIN_ABS": L_STAR_MIN_ABS,
+        "LAYER_SWEEP_MIN_FRAC_REV03_SUPERSEDED": LAYER_SWEEP_MIN_FRAC_REV03,
+        "L_STAR_MIN_FRAC_REV03_SUPERSEDED": L_STAR_MIN_FRAC_REV03,
+        "SHALLOW_L_STAR_CAVEAT_FRAC": SHALLOW_L_STAR_CAVEAT_FRAC,
+        "L_STAR_MAX_FRAC": L_STAR_MAX_FRAC,
         "DR_OFFSET_FRAC": DR_OFFSET_FRAC,
         "TOPK_HEADS_FRAC": TOPK_HEADS_FRAC, "SIGN_ALPHA": SIGN_ALPHA,
         "CONTROL_PERM_ALPHA": CONTROL_PERM_ALPHA,
@@ -3845,8 +3851,12 @@ def main():
                 "sweep_lo": sweep_lo, "L_STAR_MIN": l_star_min,
                 "L_STAR_MAX": l_star_max,
                 "DR_OFFSET": dr_offset, "topk_heads": topk_heads,
-                "fractions": {"sweep": LAYER_SWEEP_MIN_FRAC,
-                              "l_star_min": L_STAR_MIN_FRAC,
+                "fractions": {"sweep_abs_D56": LAYER_SWEEP_MIN_ABS,
+                              "l_star_min_abs_D56": L_STAR_MIN_ABS,
+                              "sweep_frac_rev03_superseded":
+                                  LAYER_SWEEP_MIN_FRAC_REV03,
+                              "l_star_min_frac_rev03_superseded":
+                                  L_STAR_MIN_FRAC_REV03,
                               "l_star_max": L_STAR_MAX_FRAC,
                               "dr_offset": DR_OFFSET_FRAC,
                               "topk_heads": TOPK_HEADS_FRAC,

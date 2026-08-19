@@ -41,7 +41,7 @@ VP="$VENV/bin/python"
 echo "  python: $("$VP" --version 2>&1)"
 
 echo "=== 2. deps ==="
-"$VP" -m pip install -q torch transformers numpy scikit-learn huggingface_hub
+"$VP" -m pip install -q torch transformers numpy scikit-learn huggingface_hub accelerate
 "$VP" - <<'PY'
 import torch, transformers, numpy, sklearn
 print(f"  torch {torch.__version__} cuda={torch.cuda.is_available()}")
