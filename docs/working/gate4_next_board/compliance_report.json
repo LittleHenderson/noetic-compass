@@ -1,0 +1,1034 @@
+{
+  "INTERPRETATION_RULE": "RECOVERY AT OR NEAR 0.1429 (chance for a 7-way choice) => models CANNOT reliably hit a prescribed turn type, the hybrid corpus has NO GROUND TRUTH, and it MUST BE ABANDONED rather than repaired. | RECOVERY HIGH (>0.60) => the prescribed type IS recoverable and the hybrid has a FLOOR -- but high recovery may partly reflect STYLISED, SURFACE-SEPARABLE text rather than genuine type compliance, so a SURFACE CONTROL IS STILL REQUIRED LATER. This does NOT validate the hybrid; it establishes a floor and nothing more. | ANYTHING BETWEEN is reported as-is, with no spin.",
+  "VERDICT": "FLOOR_ESTABLISHED__NOT_VALIDATED",
+  "VERDICT_TEXT": "Recovery 0.7619 is above the 0.6 bar, so the prescribed type IS recoverable from the prose and the hybrid has a FLOOR. HONESTLY: this may partly reflect stylised, surface-separable text rather than genuine type compliance -- a model told to write a PLAN may emit a numbered list that a word-unigram model recovers just as well. A SURFACE CONTROL IS STILL REQUIRED. The hybrid is NOT validated by this result.",
+  "what_this_is_not": "Not a surface control, not a CAS claim, not a validation of the turn-type -> board mapping. Ground truth here is the PRESCRIBED type -- an instruction, not a verified property of the text. The gap between the two is exactly what is being measured.",
+  "run": {
+    "smoke": false,
+    "n_topics": 6,
+    "n_types": 7,
+    "n_items": 42,
+    "batch_size": 6,
+    "readers_panel": {
+      "gemini": "gemini-2.5-flash",
+      "deepseek": "deepseek-v4-pro",
+      "qwen": "qwen3.8-max",
+      "glm": "glm-4.6"
+    },
+    "generator_rotation": [
+      "gemini",
+      "deepseek",
+      "qwen",
+      "glm"
+    ],
+    "chance_level": 0.1429,
+    "high_recovery_threshold": 0.6,
+    "script_sha256": "d1f39e4c3b33873053e1e482f165fad106798e6bc929e6f87ecd2cd2c62b6fa2",
+    "gen_file": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\gate4_next_board\\compliance_gen.jsonl",
+    "label_ckpt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\gate4_next_board\\compliance_label_ckpt.jsonl",
+    "timestamp": "2026-08-19T13:08:22"
+  },
+  "turn_type_definitions": {
+    "ACK": "briefly acknowledge what was said and nothing more. No new content, no advice.",
+    "MIRROR": "reflect back the structure of what the user said, checking your understanding. No new advice.",
+    "CLARIFY": "ask the user a question to pin down what they mean. Must end by asking, not telling.",
+    "EMPATHIZE": "respond to the emotional weight of what was said. No analysis, no plan.",
+    "ANSWER": "give your substantive answer to what was asked. Assertive, not hedged into a question.",
+    "PLAN": "lay out concrete next steps to take. Actionable, sequenced.",
+    "REFUSE": "decline to do what was asked and say why. Do not comply."
+  },
+  "topics": [
+    {
+      "topic_id": "T1",
+      "name": "coffee maker",
+      "user_msg": "I've been going back and forth for weeks on which coffee maker to get for my tiny kitchen counter. Can you just tell me which one to buy?"
+    },
+    {
+      "topic_id": "T2",
+      "name": "barking dog",
+      "user_msg": "My neighbour's dog starts barking at about five in the morning most days and I'm not sleeping properly any more. Can you sort out what I should do?"
+    },
+    {
+      "topic_id": "T3",
+      "name": "cooking rice",
+      "user_msg": "Every single time I cook rice it comes out either mushy or crunchy, never right. Can you tell me what I'm doing wrong?"
+    },
+    {
+      "topic_id": "T4",
+      "name": "full bookshelf",
+      "user_msg": "My bookshelf is completely full and there are stacks of books on the floor now. I need you to tell me how to deal with it."
+    },
+    {
+      "topic_id": "T5",
+      "name": "bike gears",
+      "user_msg": "My bike keeps slipping gears on the ride to work and it's starting to feel dangerous. Can you fix this for me?"
+    },
+    {
+      "topic_id": "T6",
+      "name": "weekend trip",
+      "user_msg": "I want to go somewhere nearby for the weekend but I keep putting off deciding and now it's Thursday. Can you just decide for me?"
+    }
+  ],
+  "coverage": {
+    "n_items": 42,
+    "n_items_with_3_readers": 42,
+    "complete_coverage": 1.0,
+    "n_items_with_consensus": 42,
+    "consensus_coverage": 1.0,
+    "consensus_rule": ">=2 AGREEING among the PRESENT labels; a 3-way split or a tie is NO consensus"
+  },
+  "recovery": {
+    "n_correct": 32,
+    "acc_of_consensus_items": 0.7619,
+    "acc_of_all_items_no_consensus_counted_wrong": 0.7619,
+    "chance": 0.1429,
+    "margin_over_chance": 0.619,
+    "binomial_p_one_sided_consensus_items": 3.003e-19,
+    "binomial_p_one_sided_all_items": 3.003e-19
+  },
+  "per_type": {
+    "ACK": {
+      "n_items": 6,
+      "n_with_consensus": 6,
+      "n_correct": 0,
+      "recall_of_consensus_items": 0.0,
+      "recall_of_all_items": 0.0
+    },
+    "MIRROR": {
+      "n_items": 6,
+      "n_with_consensus": 6,
+      "n_correct": 6,
+      "recall_of_consensus_items": 1.0,
+      "recall_of_all_items": 1.0
+    },
+    "CLARIFY": {
+      "n_items": 6,
+      "n_with_consensus": 6,
+      "n_correct": 6,
+      "recall_of_consensus_items": 1.0,
+      "recall_of_all_items": 1.0
+    },
+    "EMPATHIZE": {
+      "n_items": 6,
+      "n_with_consensus": 6,
+      "n_correct": 6,
+      "recall_of_consensus_items": 1.0,
+      "recall_of_all_items": 1.0
+    },
+    "ANSWER": {
+      "n_items": 6,
+      "n_with_consensus": 6,
+      "n_correct": 2,
+      "recall_of_consensus_items": 0.3333,
+      "recall_of_all_items": 0.3333
+    },
+    "PLAN": {
+      "n_items": 6,
+      "n_with_consensus": 6,
+      "n_correct": 6,
+      "recall_of_consensus_items": 1.0,
+      "recall_of_all_items": 1.0
+    },
+    "REFUSE": {
+      "n_items": 6,
+      "n_with_consensus": 6,
+      "n_correct": 6,
+      "recall_of_consensus_items": 1.0,
+      "recall_of_all_items": 1.0
+    }
+  },
+  "confusion_prescribed_x_consensus": {
+    "ACK": {
+      "ACK": 0,
+      "MIRROR": 1,
+      "CLARIFY": 0,
+      "EMPATHIZE": 5,
+      "ANSWER": 0,
+      "PLAN": 0,
+      "REFUSE": 0
+    },
+    "MIRROR": {
+      "ACK": 0,
+      "MIRROR": 6,
+      "CLARIFY": 0,
+      "EMPATHIZE": 0,
+      "ANSWER": 0,
+      "PLAN": 0,
+      "REFUSE": 0
+    },
+    "CLARIFY": {
+      "ACK": 0,
+      "MIRROR": 0,
+      "CLARIFY": 6,
+      "EMPATHIZE": 0,
+      "ANSWER": 0,
+      "PLAN": 0,
+      "REFUSE": 0
+    },
+    "EMPATHIZE": {
+      "ACK": 0,
+      "MIRROR": 0,
+      "CLARIFY": 0,
+      "EMPATHIZE": 6,
+      "ANSWER": 0,
+      "PLAN": 0,
+      "REFUSE": 0
+    },
+    "ANSWER": {
+      "ACK": 0,
+      "MIRROR": 0,
+      "CLARIFY": 0,
+      "EMPATHIZE": 0,
+      "ANSWER": 2,
+      "PLAN": 4,
+      "REFUSE": 0
+    },
+    "PLAN": {
+      "ACK": 0,
+      "MIRROR": 0,
+      "CLARIFY": 0,
+      "EMPATHIZE": 0,
+      "ANSWER": 0,
+      "PLAN": 6,
+      "REFUSE": 0
+    },
+    "REFUSE": {
+      "ACK": 0,
+      "MIRROR": 0,
+      "CLARIFY": 0,
+      "EMPATHIZE": 0,
+      "ANSWER": 0,
+      "PLAN": 0,
+      "REFUSE": 6
+    }
+  },
+  "no_consensus_by_prescribed_type": {
+    "ACK": 0,
+    "MIRROR": 0,
+    "CLARIFY": 0,
+    "EMPATHIZE": 0,
+    "ANSWER": 0,
+    "PLAN": 0,
+    "REFUSE": 0
+  },
+  "inter_reader": {
+    "fleiss_kappa_complete_cases": 0.9213,
+    "n_complete_cases": 42,
+    "raw_pairwise_agreement_complete_cases": 0.9365
+  },
+  "per_generator_compliance": {
+    "gemini": {
+      "model": "gemini-2.5-flash",
+      "n_items": 11,
+      "n_with_consensus": 11,
+      "n_correct": 8,
+      "acc_of_consensus_items": 0.7273,
+      "acc_of_all_items": 0.7273
+    },
+    "deepseek": {
+      "model": "deepseek-v4-pro",
+      "n_items": 11,
+      "n_with_consensus": 11,
+      "n_correct": 7,
+      "acc_of_consensus_items": 0.6364,
+      "acc_of_all_items": 0.6364
+    },
+    "qwen": {
+      "model": "qwen3.8-max",
+      "n_items": 10,
+      "n_with_consensus": 10,
+      "n_correct": 9,
+      "acc_of_consensus_items": 0.9,
+      "acc_of_all_items": 0.9
+    },
+    "glm": {
+      "model": "glm-4.6",
+      "n_items": 10,
+      "n_with_consensus": 10,
+      "n_correct": 8,
+      "acc_of_consensus_items": 0.8,
+      "acc_of_all_items": 0.8
+    }
+  },
+  "per_generator_spread": 0.2636,
+  "per_reader_diagnostic": {
+    "gemini": {
+      "model": "gemini-2.5-flash",
+      "n_labels": 31,
+      "acc_vs_prescribed": 0.7742
+    },
+    "deepseek": {
+      "model": "deepseek-v4-pro",
+      "n_labels": 31,
+      "acc_vs_prescribed": 0.8065
+    },
+    "qwen": {
+      "model": "qwen3.8-max",
+      "n_labels": 32,
+      "acc_vs_prescribed": 0.7188
+    },
+    "glm": {
+      "model": "glm-4.6",
+      "n_labels": 32,
+      "acc_vs_prescribed": 0.75
+    }
+  },
+  "label_word_leak_sensitivity": {
+    "n_items_with_label_word": 0,
+    "acc_excluding_label_word_items": 0.7619,
+    "n_excluding": 42,
+    "acc_on_label_word_items": null,
+    "n_label_word_items": 0,
+    "note": "LEAK_TERMS for ANSWER/PLAN/REFUSE are ordinary English and fire on innocent prose too. This is a SENSITIVITY, never silently applied."
+  },
+  "labelling_batch_meta": [
+    {
+      "reader": "gemini",
+      "n_items": 31,
+      "n_batches": 6,
+      "topic_spread_swaps": 3,
+      "residual_same_topic_excess": 5
+    },
+    {
+      "reader": "deepseek",
+      "n_items": 31,
+      "n_batches": 6,
+      "topic_spread_swaps": 5,
+      "residual_same_topic_excess": 5
+    },
+    {
+      "reader": "qwen",
+      "n_items": 32,
+      "n_batches": 6,
+      "topic_spread_swaps": 6,
+      "residual_same_topic_excess": 4
+    },
+    {
+      "reader": "glm",
+      "n_items": 32,
+      "n_batches": 6,
+      "topic_spread_swaps": 5,
+      "residual_same_topic_excess": 4
+    }
+  ],
+  "labelling_call_statuses": {
+    "ok": 25,
+    "finish_length": 1
+  },
+  "per_item": [
+    {
+      "item_id": "ACK__T1",
+      "prescribed_type": "ACK",
+      "topic_id": "T1",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "EMPATHIZE",
+        "qwen": "EMPATHIZE",
+        "glm": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 3,
+      "correct": false,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ACK__T2",
+      "prescribed_type": "ACK",
+      "topic_id": "T2",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "EMPATHIZE",
+        "qwen": "EMPATHIZE",
+        "glm": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 3,
+      "correct": false,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ACK__T3",
+      "prescribed_type": "ACK",
+      "topic_id": "T3",
+      "gen_provider": "qwen",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "EMPATHIZE",
+        "deepseek": "EMPATHIZE",
+        "glm": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 3,
+      "correct": false,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ACK__T4",
+      "prescribed_type": "ACK",
+      "topic_id": "T4",
+      "gen_provider": "glm",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "EMPATHIZE",
+        "deepseek": "MIRROR",
+        "qwen": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 2,
+      "correct": false,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ACK__T5",
+      "prescribed_type": "ACK",
+      "topic_id": "T5",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "MIRROR",
+        "qwen": "MIRROR",
+        "glm": "MIRROR"
+      },
+      "consensus": "MIRROR",
+      "consensus_votes": 3,
+      "correct": false,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ACK__T6",
+      "prescribed_type": "ACK",
+      "topic_id": "T6",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "EMPATHIZE",
+        "qwen": "MIRROR",
+        "glm": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 2,
+      "correct": false,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ANSWER__T1",
+      "prescribed_type": "ANSWER",
+      "topic_id": "T1",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "ANSWER",
+        "qwen": "ANSWER",
+        "glm": "ANSWER"
+      },
+      "consensus": "ANSWER",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ANSWER__T2",
+      "prescribed_type": "ANSWER",
+      "topic_id": "T2",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "PLAN",
+        "qwen": "PLAN",
+        "glm": "PLAN"
+      },
+      "consensus": "PLAN",
+      "consensus_votes": 3,
+      "correct": false,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ANSWER__T3",
+      "prescribed_type": "ANSWER",
+      "topic_id": "T3",
+      "gen_provider": "qwen",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "ANSWER",
+        "deepseek": "ANSWER",
+        "glm": "PLAN"
+      },
+      "consensus": "ANSWER",
+      "consensus_votes": 2,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ANSWER__T4",
+      "prescribed_type": "ANSWER",
+      "topic_id": "T4",
+      "gen_provider": "glm",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "PLAN",
+        "deepseek": "PLAN",
+        "qwen": "PLAN"
+      },
+      "consensus": "PLAN",
+      "consensus_votes": 3,
+      "correct": false,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ANSWER__T5",
+      "prescribed_type": "ANSWER",
+      "topic_id": "T5",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "PLAN",
+        "qwen": "PLAN",
+        "glm": "ANSWER"
+      },
+      "consensus": "PLAN",
+      "consensus_votes": 2,
+      "correct": false,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "ANSWER__T6",
+      "prescribed_type": "ANSWER",
+      "topic_id": "T6",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "PLAN",
+        "qwen": "PLAN",
+        "glm": "PLAN"
+      },
+      "consensus": "PLAN",
+      "consensus_votes": 3,
+      "correct": false,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "CLARIFY__T1",
+      "prescribed_type": "CLARIFY",
+      "topic_id": "T1",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "CLARIFY",
+        "qwen": "CLARIFY",
+        "glm": "CLARIFY"
+      },
+      "consensus": "CLARIFY",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "CLARIFY__T2",
+      "prescribed_type": "CLARIFY",
+      "topic_id": "T2",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "CLARIFY",
+        "qwen": "CLARIFY",
+        "glm": "CLARIFY"
+      },
+      "consensus": "CLARIFY",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "CLARIFY__T3",
+      "prescribed_type": "CLARIFY",
+      "topic_id": "T3",
+      "gen_provider": "qwen",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "CLARIFY",
+        "deepseek": "CLARIFY",
+        "glm": "CLARIFY"
+      },
+      "consensus": "CLARIFY",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "CLARIFY__T4",
+      "prescribed_type": "CLARIFY",
+      "topic_id": "T4",
+      "gen_provider": "glm",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "CLARIFY",
+        "deepseek": "CLARIFY",
+        "qwen": "CLARIFY"
+      },
+      "consensus": "CLARIFY",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "CLARIFY__T5",
+      "prescribed_type": "CLARIFY",
+      "topic_id": "T5",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "CLARIFY",
+        "qwen": "CLARIFY",
+        "glm": "CLARIFY"
+      },
+      "consensus": "CLARIFY",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "CLARIFY__T6",
+      "prescribed_type": "CLARIFY",
+      "topic_id": "T6",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "CLARIFY",
+        "qwen": "CLARIFY",
+        "glm": "CLARIFY"
+      },
+      "consensus": "CLARIFY",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "EMPATHIZE__T1",
+      "prescribed_type": "EMPATHIZE",
+      "topic_id": "T1",
+      "gen_provider": "qwen",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "EMPATHIZE",
+        "deepseek": "EMPATHIZE",
+        "glm": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "EMPATHIZE__T2",
+      "prescribed_type": "EMPATHIZE",
+      "topic_id": "T2",
+      "gen_provider": "glm",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "EMPATHIZE",
+        "deepseek": "EMPATHIZE",
+        "qwen": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "EMPATHIZE__T3",
+      "prescribed_type": "EMPATHIZE",
+      "topic_id": "T3",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "EMPATHIZE",
+        "qwen": "EMPATHIZE",
+        "glm": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "EMPATHIZE__T4",
+      "prescribed_type": "EMPATHIZE",
+      "topic_id": "T4",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "EMPATHIZE",
+        "qwen": "EMPATHIZE",
+        "glm": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "EMPATHIZE__T5",
+      "prescribed_type": "EMPATHIZE",
+      "topic_id": "T5",
+      "gen_provider": "qwen",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "EMPATHIZE",
+        "deepseek": "EMPATHIZE",
+        "glm": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "EMPATHIZE__T6",
+      "prescribed_type": "EMPATHIZE",
+      "topic_id": "T6",
+      "gen_provider": "glm",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "EMPATHIZE",
+        "deepseek": "EMPATHIZE",
+        "qwen": "EMPATHIZE"
+      },
+      "consensus": "EMPATHIZE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "MIRROR__T1",
+      "prescribed_type": "MIRROR",
+      "topic_id": "T1",
+      "gen_provider": "qwen",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "MIRROR",
+        "deepseek": "MIRROR",
+        "glm": "MIRROR"
+      },
+      "consensus": "MIRROR",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "MIRROR__T2",
+      "prescribed_type": "MIRROR",
+      "topic_id": "T2",
+      "gen_provider": "glm",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "MIRROR",
+        "deepseek": "MIRROR",
+        "qwen": "MIRROR"
+      },
+      "consensus": "MIRROR",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "MIRROR__T3",
+      "prescribed_type": "MIRROR",
+      "topic_id": "T3",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "MIRROR",
+        "qwen": "MIRROR",
+        "glm": "MIRROR"
+      },
+      "consensus": "MIRROR",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "MIRROR__T4",
+      "prescribed_type": "MIRROR",
+      "topic_id": "T4",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "MIRROR",
+        "qwen": "MIRROR",
+        "glm": "MIRROR"
+      },
+      "consensus": "MIRROR",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "MIRROR__T5",
+      "prescribed_type": "MIRROR",
+      "topic_id": "T5",
+      "gen_provider": "qwen",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "MIRROR",
+        "deepseek": "MIRROR",
+        "glm": "MIRROR"
+      },
+      "consensus": "MIRROR",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "MIRROR__T6",
+      "prescribed_type": "MIRROR",
+      "topic_id": "T6",
+      "gen_provider": "glm",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "MIRROR",
+        "deepseek": "MIRROR",
+        "qwen": "MIRROR"
+      },
+      "consensus": "MIRROR",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "PLAN__T1",
+      "prescribed_type": "PLAN",
+      "topic_id": "T1",
+      "gen_provider": "qwen",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "PLAN",
+        "deepseek": "PLAN",
+        "glm": "PLAN"
+      },
+      "consensus": "PLAN",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "PLAN__T2",
+      "prescribed_type": "PLAN",
+      "topic_id": "T2",
+      "gen_provider": "glm",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "PLAN",
+        "deepseek": "PLAN",
+        "qwen": "PLAN"
+      },
+      "consensus": "PLAN",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "PLAN__T3",
+      "prescribed_type": "PLAN",
+      "topic_id": "T3",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "PLAN",
+        "qwen": "PLAN",
+        "glm": "PLAN"
+      },
+      "consensus": "PLAN",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "PLAN__T4",
+      "prescribed_type": "PLAN",
+      "topic_id": "T4",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "PLAN",
+        "qwen": "PLAN",
+        "glm": "PLAN"
+      },
+      "consensus": "PLAN",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "PLAN__T5",
+      "prescribed_type": "PLAN",
+      "topic_id": "T5",
+      "gen_provider": "qwen",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "PLAN",
+        "deepseek": "PLAN",
+        "glm": "PLAN"
+      },
+      "consensus": "PLAN",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "PLAN__T6",
+      "prescribed_type": "PLAN",
+      "topic_id": "T6",
+      "gen_provider": "glm",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "PLAN",
+        "deepseek": "PLAN",
+        "qwen": "PLAN"
+      },
+      "consensus": "PLAN",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "REFUSE__T1",
+      "prescribed_type": "REFUSE",
+      "topic_id": "T1",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "REFUSE",
+        "qwen": "REFUSE",
+        "glm": "REFUSE"
+      },
+      "consensus": "REFUSE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "REFUSE__T2",
+      "prescribed_type": "REFUSE",
+      "topic_id": "T2",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "REFUSE",
+        "qwen": "REFUSE",
+        "glm": "REFUSE"
+      },
+      "consensus": "REFUSE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "REFUSE__T3",
+      "prescribed_type": "REFUSE",
+      "topic_id": "T3",
+      "gen_provider": "qwen",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "REFUSE",
+        "deepseek": "REFUSE",
+        "glm": "REFUSE"
+      },
+      "consensus": "REFUSE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "REFUSE__T4",
+      "prescribed_type": "REFUSE",
+      "topic_id": "T4",
+      "gen_provider": "glm",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "REFUSE",
+        "deepseek": "REFUSE",
+        "qwen": "REFUSE"
+      },
+      "consensus": "REFUSE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "REFUSE__T5",
+      "prescribed_type": "REFUSE",
+      "topic_id": "T5",
+      "gen_provider": "gemini",
+      "n_readers": 3,
+      "reader_codes": {
+        "deepseek": "REFUSE",
+        "qwen": "REFUSE",
+        "glm": "REFUSE"
+      },
+      "consensus": "REFUSE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    },
+    {
+      "item_id": "REFUSE__T6",
+      "prescribed_type": "REFUSE",
+      "topic_id": "T6",
+      "gen_provider": "deepseek",
+      "n_readers": 3,
+      "reader_codes": {
+        "gemini": "REFUSE",
+        "qwen": "REFUSE",
+        "glm": "REFUSE"
+      },
+      "consensus": "REFUSE",
+      "consensus_votes": 3,
+      "correct": true,
+      "label_word_leak": [],
+      "meta_stripped": []
+    }
+  ]
+}

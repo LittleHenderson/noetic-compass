@@ -1,0 +1,54 @@
+{
+  "ran": true,
+  "WHAT_THIS_IS": "a $0 precheck that decides the SDG arm BEFORE any labelling call. No reader panel, no API call, no network. It exists because preregistering a foregone kill is not a study.",
+  "conv_file": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\gate4_next_board\\conversations_sdg_smoke.jsonl",
+  "n_prescribed_turns": 25,
+  "prescribed_mix": {
+    "B0": 9,
+    "B1": 9,
+    "B5": 7
+  },
+  "n_distinct_assistant_strings": 15,
+  "n_strings_mapping_to_more_than_one_board": 0,
+  "EXACT_STRING_LOOKUP_IS_A_BIJECTION_ONTO_THE_ANSWER_KEY": true,
+  "per_class_length_ranges_chars": {
+    "B0": [
+      30,
+      97
+    ],
+    "B1": [
+      104,
+      104
+    ],
+    "B5": [
+      108,
+      117
+    ]
+  },
+  "length_ranges_are_disjoint_one_feature_suffices": true,
+  "surface_on_ground_truth_task_LOCO": {
+    "strongest": "char",
+    "acc": 1.0,
+    "by_kind": {
+      "char": 1.0,
+      "word": 1.0,
+      "length": 0.96
+    },
+    "note": "LOCO folds grouped by conversation. `length` is RAW CHARACTER COUNT -- a one-feature classifier."
+  },
+  "modal_prescribed_class_rate": 0.36,
+  "bar": 0.6,
+  "KILL_1_SURFACE_DETERMINED_CORPUS": true,
+  "KILL_1_DETAIL": "surface accuracy on the ground-truth task is 1.0 against a bar of 0.6. The primary-kill gate requires (ra_acc - surface_acc) >= 0.05; with the measured surface accuracy that is SATISFIABLE=False. When it is not satisfiable the arm's verdict is fixed before any reader sees a single excerpt, so labelling would buy nothing. An UNCOMPUTABLE control counts as a KILL, never as a pass.",
+  "PRIMARY_KILL_GATE_IS_SATISFIABLE_AT_ALL": false,
+  "KILL_2_MAPPING_CIRCULARITY": true,
+  "KILL_2_DETAIL": "MAPPING CIRCULARITY -- NAMED KILL. The turn-type -> board answer key was authored by reading the rendered template strings THROUGH THE SAME RUBRIC the reader panel is given. B1's answer key is ONE byte-identical string whose wording ('it would break the admissibility of the dialog', an explicit decline citing a standing principle) is a near-verbatim cue for the B1 rubric's lead clause; B5's is one template ('the next step on the pathway would be to strengthen the prerequisite that's currently weakest') against a rubric containing 'sequences explicitly before engaging'. The statistic therefore measures whether an LLM panel applying rubric R to string S reproduces the label an author assigned to string S by applying rubric R. It has NO INFORMATIVE RANGE: a pass is guaranteed by the authoring, a fail indicates reader noise only. It is NOT CALIBRATION and the truth is NOT INDEPENDENTLY KNOWN. Reported as RUBRIC ADHERENCE / READER RELIABILITY. The words CALIBRATED and KNOWN GROUND TRUTH are not available verdicts anywhere in this arm.",
+  "TEMPLATE_DISCLOSURE": "cas-synthetic's multi-turn generator is TEMPLATE-RENDERED. It calls no model, makes no network request and runs no inference: _render_turn selects a string from a fixed table and does template.format(cas=...). Its ENTIRE live surface vocabulary is 22 authored strings (7 user openers, 4 user repairs, 2 user closes, 15 assistant templates, of which 6 differ only by a substituted CAS expression; a further 6 authored strings are unreachable dead constants). Only 7 distinct CAS expressions exist in the whole generator. CONSEQUENCE: a lens applied to this text is evidence about THE LENS and THE TEMPLATES and carries NO information whatsoever about model outputs. Because the phrasing is fixed, the SURFACE CONTROL MATTERS MORE HERE, NOT LESS: a char/word model will learn the template table almost perfectly. A surface WIN on this corpus KILLS the arm outright (GATE RA-2). MEASURED: char 1.0000, word 1.0000, RAW CHARACTER COUNT 1.0000 -- the surface control did not merely win, it is a BIJECTION onto the answer key, so GATE RA-2 is unsatisfiable by any accuracy whatsoever.",
+  "weak_mappings": {
+    "PLAN->B5": "the single PLAN template is an explicit prerequisite-ordering move ('strengthen the prerequisite that's currently weakest'), which is B5's ordering-gate clause -- but it carries NO capacity / budget / throttle / silence content, which is the clause B5's rubric LEADS with.",
+    "REFUSE_CLAIM->B0": "the single REFUSE_CLAIM template ('I don't think the structure you're proposing fits. The closer reading I'd stand behind is <cas>') is an EXPLICIT DECLINE plus a COMPETING READING. It plausibly reads as B1 (the rubric's 'decides whether to answer or to decline ... an explicit refusal') or as B3 (two readings held side by side); PREREG 3B.2 already concedes it 'comes nearest' to B3. Any reader choosing B1 or B3 here is scored WRONG against an author judgement with the same standing as the one under test. B0 is a POSITIVE PRESCRIPTION readers are scored against, not a neutral residue -- so it is flagged, not presented as 'the honest read'."
+  },
+  "ARM_STATUS": "WITHDRAWN BY DEFAULT. The corpus is surface-determined (measured 1.0000 on char, word AND raw length), so the primary-kill gate cannot be passed by any accuracy and the answer key is circular with the rubric. Both defects are obtained on the record at $0 by `--stage precheck`. Labelling is BLOCKED unless --allow-surface-determined-corpus is passed, which is PREREG-DEVIATING and must be logged in the amendment log. To revive the arm, replace the corpus with text whose surface does not determine the label -- not by relaxing a bar.",
+  "PRECHECK_VERDICT": "ARM WITHDRAWN -- DO NOT LABEL",
+  "HOW_TO_REVIVE": "replace the corpus with text whose SURFACE DOES NOT DETERMINE THE LABEL, and derive the answer key from something other than reading the same strings through the same rubric. Relaxing a bar does not revive the arm; it only hides the defect."
+}

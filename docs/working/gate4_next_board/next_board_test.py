@@ -17,8 +17,48 @@ WHAT THIS IS NOT
     sequencing richly and inter-board sequencing not at all (PREREG section 3).
     CAS-specificity is addressed (not settled) by the v1 matched-taxonomy arm.
 
+TWO CORPUS SOURCES (--generator, Rev 0.5 / PREREG v2, amended v2.1)
+    --generator api   (default, unchanged)  four commercial models write the turns.
+                      PRIMARY CLAIM = ecological sequential prediction.
+    --generator sdg   forced-transition corpus from cas-synthetic's multi-turn
+                      generator. That generator is TEMPLATE-RENDERED: it makes no
+                      model call, no network call and no inference of any kind; its
+                      whole live surface vocabulary is 22 authored strings.
+
+                      *** THIS ARM IS WITHDRAWN AT v2.1 ON TWO NAMED KILLS. ***
+
+                      (1) MAPPING CIRCULARITY. The turn-type -> board answer key was
+                          authored by reading the rendered template strings THROUGH
+                          THE SAME RUBRIC the reader panel is given. The statistic
+                          therefore measures whether an LLM panel applying rubric R
+                          to string S reproduces the label an author assigned to S by
+                          applying R. It has NO INFORMATIVE RANGE. The v2 name
+                          "INSTRUMENT CALIBRATION AGAINST KNOWN GROUND TRUTH" is
+                          WITHDRAWN as unearned -- the truth was not known
+                          independently, it was authored by the process under test.
+                          The statistic is now RUBRIC ADHERENCE / READER RELIABILITY,
+                          and CALIBRATED is not an available verdict anywhere.
+
+                      (2) SURFACE-DETERMINED CORPUS. Measured on the realised
+                          36-conversation corpus with LOCO folds grouped by
+                          conversation: char TF-IDF = 1.0000, word unigram = 1.0000,
+                          RAW CHARACTER COUNT = 1.0000. 38 distinct strings, zero
+                          ambiguous, disjoint per-class length ranges. The
+                          primary-kill gate (ra_acc - surface_acc >= 0.05) is
+                          UNSATISFIABLE by any accuracy, so the verdict was fixed
+                          before any labelling call. Preregistering a foregone kill
+                          is not a study.
+
+                      Both kills are taken for $0 by `--stage precheck`, and
+                      `--stage label` REFUSES TO SPEND MONEY while either fires.
+                      Reviving the arm requires a corpus whose SURFACE DOES NOT
+                      DETERMINE THE LABEL and an answer key not derived from the
+                      rubric -- not a relaxed bar.
+
 STAGES
     --stage generate                 multi-turn conversations, generator rotated
+    --stage precheck                 (sdg only) $0 surface-determinism + circularity
+                                     kill; no reader panel, no network, no spend
     --stage label --taxonomy board   3 blind readers per turn; never its generator
     --stage label --taxonomy alt     matched 6-class discourse taxonomy, same panel
     --stage gate0                    agreement/coverage ONLY (read before prediction)
@@ -28,6 +68,9 @@ STAGES
     python next_board_test.py --stage label --taxonomy board --smoke
     python next_board_test.py --stage gate0 --smoke
     python next_board_test.py --stage analyze --smoke
+
+    python next_board_test.py --stage generate --generator sdg
+    python next_board_test.py --stage precheck --generator sdg    # <- stops here
 
 Both API stages CHECKPOINT to JSONL as each unit lands and SKIP completed units
 on restart, so a crash never costs the stage.
@@ -89,6 +132,32 @@ try:  # Windows console is cp1252 and provider errors carry non-latin text
 except Exception:
     pass
 
+# --- cas-synthetic SDG (forced-transition arm) -------------------------------
+# IMPORTED, NEVER COPIED. The package directory name contains a hyphen so it is
+# not importable as a package; spec_from_file_location + an EXPLICIT sys.modules
+# registration is required (on Python 3.14 @dataclass looks up cls.__module__ in
+# sys.modules and raises AttributeError if the module was not registered before
+# exec_module()). Loaded LAZILY so the api arm never pays for it and never fails
+# when cas-synthetic is absent.
+SDG_PATH = os.path.abspath(os.path.join(
+    HERE, "..", "..", "..", "cas-synthetic", "generator", "multi_turn",
+    "conversation_generator.py"))
+_SDG_MOD = None
+
+
+def load_sdg():
+    global _SDG_MOD
+    if _SDG_MOD is None:
+        import importlib.util
+        if not os.path.exists(SDG_PATH):
+            raise SystemExit(f"--generator sdg requires {SDG_PATH}, which was not found.")
+        spec = importlib.util.spec_from_file_location("cas_sdg_conversation_generator", SDG_PATH)
+        mod = importlib.util.module_from_spec(spec)
+        sys.modules["cas_sdg_conversation_generator"] = mod   # MUST precede exec_module
+        spec.loader.exec_module(mod)
+        _SDG_MOD = mod
+    return _SDG_MOD
+
 # =====================================================================
 # FROZEN CONSTANTS (mirror PREREG_NEXT_BOARD_V1.md -- do not edit post-hoc)
 # =====================================================================
@@ -104,6 +173,8 @@ SEED_BATCH_BASE = 4242           # + reader index -> labelling batch shuffle
 SEED_ALIAS_BASE = 91000          # + reader/batch -> per-batch excerpt alias ids
 SEED_PERM_NULL = 0               # permutation-null rng
 SEED_BOOTSTRAP = 7               # paired cluster-bootstrap rng
+SEED_SDG_BASE = 880000           # + conv_id -> SDG template-render rng (ADDED at v2;
+                                 # a NEW constant, so no v1 value is edited post-hoc)
 N_PERM_TRIALS = 1000
 N_BOOT = 2000
 
@@ -170,6 +241,206 @@ FOLLOWUPS = [
     ("U4", "Okay - what should I actually do first?"),
     ("U5", "How would you know if you were wrong here?"),
 ]
+
+# =====================================================================
+# SDG FORCED-TRANSITION ARM (ADDED at v2; nothing above this block is edited)
+# =====================================================================
+# TEMPLATE DISCLOSURE -- decisive, and repeated in the first paragraph of the
+# preregistration and in the first key of every SDG report.
+SDG_TEMPLATE_DISCLOSURE = (
+    "cas-synthetic's multi-turn generator is TEMPLATE-RENDERED. It calls no model, "
+    "makes no network request and runs no inference: _render_turn selects a string "
+    "from a fixed table and does template.format(cas=...). Its ENTIRE live surface "
+    "vocabulary is 22 authored strings (7 user openers, 4 user repairs, 2 user "
+    "closes, 15 assistant templates, of which 6 differ only by a substituted CAS "
+    "expression; a further 6 authored strings are unreachable dead constants). Only "
+    "7 distinct CAS expressions exist in the whole generator. CONSEQUENCE: a lens "
+    "applied to this text is evidence about THE LENS and THE TEMPLATES and carries "
+    "NO information whatsoever about model outputs. Because the phrasing is fixed, "
+    "the SURFACE CONTROL MATTERS MORE HERE, NOT LESS: a char/word model will learn "
+    "the template table almost perfectly. A surface WIN on this corpus KILLS the arm "
+    "outright (GATE RA-2). MEASURED: char 1.0000, word 1.0000, RAW CHARACTER COUNT "
+    "1.0000 -- the surface control did not merely win, it is a BIJECTION onto the "
+    "answer key, so GATE RA-2 is unsatisfiable by any accuracy whatsoever."
+)
+SDG_MODEL_ID = ("cas-synthetic/generator/multi_turn/conversation_generator.py "
+                "(template renderer, NO model inference)")
+
+# ---- MAPPING CIRCULARITY -- A NAMED KILL, NOT A CAVEAT (added at v2.1) ----
+# The defect that VOIDS the primary statistic, disclosed here and in PREREG v2
+# section 3B.0. The turn-type -> board answer key was authored by READING THE
+# RENDERED TEMPLATE STRINGS THROUGH THE SAME RUBRIC the reader panel is given.
+# REFUSE renders exactly one string -- "I can't take that turn -- it would break
+# the admissibility of the dialog. Want to try a different angle?" -- and the B1
+# rubric's lead clause is "Decides whether to answer or to decline ... a real
+# answer OR an explicit refusal". That is a near-verbatim cue, not an independent
+# construction. So the statistic measures "does an LLM panel applying rubric R to
+# string S reproduce the label an author assigned to string S by applying rubric
+# R". It has NO INFORMATIVE RANGE: a pass is guaranteed by the authoring, a fail
+# indicates only reader noise. The phrase "known ground truth" is therefore
+# UNEARNED -- the truth was not known independently, it was authored by the
+# process under test. The statistic is consequently reported as a RUBRIC-ADHERENCE
+# / READER-RELIABILITY check and is NOT LICENSED as calibration.
+SDG_MAPPING_CIRCULARITY_KILL = True      # standing kill for THIS answer key
+SDG_MAPPING_CIRCULARITY_DISCLOSURE = (
+    "MAPPING CIRCULARITY -- NAMED KILL. The turn-type -> board answer key was "
+    "authored by reading the rendered template strings THROUGH THE SAME RUBRIC "
+    "the reader panel is given. B1's answer key is ONE byte-identical string "
+    "whose wording ('it would break the admissibility of the dialog', an explicit "
+    "decline citing a standing principle) is a near-verbatim cue for the B1 "
+    "rubric's lead clause; B5's is one template ('the next step on the pathway "
+    "would be to strengthen the prerequisite that's currently weakest') against a "
+    "rubric containing 'sequences explicitly before engaging'. The statistic "
+    "therefore measures whether an LLM panel applying rubric R to string S "
+    "reproduces the label an author assigned to string S by applying rubric R. It "
+    "has NO INFORMATIVE RANGE: a pass is guaranteed by the authoring, a fail "
+    "indicates reader noise only. It is NOT CALIBRATION and the truth is NOT "
+    "INDEPENDENTLY KNOWN. Reported as RUBRIC ADHERENCE / READER RELIABILITY. The "
+    "words CALIBRATED and KNOWN GROUND TRUTH are not available verdicts anywhere "
+    "in this arm."
+)
+
+# ---- SURFACE DETERMINISM -- MEASURED AT $0, BEFORE ANY LABELLING CALL ----
+# The second reason the arm as specified is unfalsifiable. Measured on the realised
+# 36-conversation corpus (228 labelled turns) with LOCO folds grouped by
+# conversation, on the ground-truth task itself:
+#     char TF-IDF(3,5) = 1.0000    word unigram = 1.0000    RAW CHAR COUNT = 1.0000
+# The corpus is 38 DISTINCT STRINGS with ZERO ambiguity across boards, so exact
+# string lookup is a BIJECTION onto the prescribed board; and the three classes
+# have DISJOINT LENGTH DISTRIBUTIONS (B0 30-97 chars, B1 exactly 104, B5 108-117),
+# so a ONE-FEATURE LENGTH CLASSIFIER is perfect. Any surface-margin gate of the
+# form (acc - 1.0000) >= margin is UNSATISFIABLE for any accuracy whatsoever, so
+# the arm's verdict is decided before a single labelling call is made.
+# Preregistering a foregone kill is not a study. The kill is therefore taken at $0
+# by sdg_precheck() -- no reader panel, no ~256 label calls, no GLM serialisation --
+# and stage_label REFUSES TO SPEND MONEY while the precheck fails.
+SDG_PRECHECK_SURFACE_MAX = 0.60  # surface acc on the ground-truth task at or above
+                                 # which the corpus is SURFACE-DETERMINED and the arm
+                                 # is WITHDRAWN. 0.60 is well above the 0.3947 modal
+                                 # -prescribed-class rate and far below the measured
+                                 # 1.0000, so the bar is neither trivial nor unreachable.
+SDG_ARM_STATUS = (
+    "WITHDRAWN BY DEFAULT. The corpus is surface-determined (measured 1.0000 on "
+    "char, word AND raw length), so the primary-kill gate cannot be passed by any "
+    "accuracy and the answer key is circular with the rubric. Both defects are "
+    "obtained on the record at $0 by `--stage precheck`. Labelling is BLOCKED "
+    "unless --allow-surface-determined-corpus is passed, which is PREREG-DEVIATING "
+    "and must be logged in the amendment log. To revive the arm, replace the corpus "
+    "with text whose surface does not determine the label -- not by relaxing a bar."
+)
+
+# ---- THE TURN-TYPE -> BOARD MAPPING IS OURS ----
+# cas-synthetic speaks DIALOG ACTS (OPEN/ACK/CLARIFY/ANSWER/PLAN/REFUSE/...); the
+# taxonomy speaks BOARDS (CSB/COB/CDAB/CMB/CPMB). NOTHING in either framework
+# supplies a correspondence between them. The mapping below is an ASSUMPTION WE
+# ARE MAKING and is preregistered as such (PREREG v2 section 3B), exactly like the
+# sequencing claim in PREREG section 3. Where no board is defensible the turn type
+# maps to None and is EXCLUDED from the labelled corpus rather than forced.
+SDG_TURN_TYPE_TO_BOARD = {
+    # MAPPED
+    "REFUSE":       "B1",   # the single REFUSE template is an explicit decline that
+                            # cites a firm standing principle ("it would break the
+                            # admissibility of the dialog") -- B1's core behaviour.
+    "PLAN":         "B5",   # the single PLAN template is an explicit prerequisite-
+                            # ordering move ("strengthen the prerequisite that's
+                            # currently weakest") -- B5's ordering-gate clause. WEAK:
+                            # it carries NO capacity/budget/throttle/silence content,
+                            # which is the clause B5's rubric LEADS with. Flagged.
+    # PRESCRIBED "none dominates" -- not a forced fit: a turn constructed to exhibit
+    # none of the five board behaviours is exactly what B0 names.
+    "ACK":          "B0",
+    "MIRROR":       "B0",
+    "CLARIFY":      "B0",
+    "EMPATHIZE":    "B0",
+    "ANSWER":       "B0",
+    "REFUSE_CLAIM": "B0",   # WEAK -- flagged on the SAME FOOTING as PLAN->B5.
+    # EXCLUDED (mapped to None): no defensible board, or never an assistant turn.
+    "CLOSE":        None,   # terminator; also role-ambiguous (50/50 coin flip)
+    "OPEN":         None,   # user-side
+    "REPAIR":       None,   # user-side
+}
+# ---- WEAK MAPPINGS, MACHINE-READABLE ----
+# A weak mapping is one where a reader choosing a DIFFERENT board is making a
+# defensible judgement, yet is scored WRONG against an author judgement that has no
+# greater standing than the reading being tested. Both are disclosed; neither is
+# quietly presented as settled.
+SDG_WEAK_MAPPINGS = {
+    "PLAN->B5": "the single PLAN template is an explicit prerequisite-ordering move "
+                "('strengthen the prerequisite that's currently weakest'), which is "
+                "B5's ordering-gate clause -- but it carries NO capacity / budget / "
+                "throttle / silence content, which is the clause B5's rubric LEADS "
+                "with.",
+    "REFUSE_CLAIM->B0": "the single REFUSE_CLAIM template ('I don't think the "
+                "structure you're proposing fits. The closer reading I'd stand "
+                "behind is <cas>') is an EXPLICIT DECLINE plus a COMPETING READING. "
+                "It plausibly reads as B1 (the rubric's 'decides whether to answer "
+                "or to decline ... an explicit refusal') or as B3 (two readings held "
+                "side by side); PREREG 3B.2 already concedes it 'comes nearest' to "
+                "B3. Any reader choosing B1 or B3 here is scored WRONG against an "
+                "author judgement with the same standing as the one under test. B0 "
+                "is a POSITIVE PRESCRIPTION readers are scored against, not a "
+                "neutral residue -- so it is flagged, not presented as 'the honest "
+                "read'.",
+}
+# ---- REALISED vs NOMINAL MAPPING ----
+# The 11-row table above OVERSTATES what actually governs. No forced path in
+# SDG_FORCED_PATHS contains ACK or EMPATHIZE, so realised B0 mass comes only from
+# MIRROR / ANSWER / CLARIFY / REFUSE_CLAIM and the EFFECTIVE mapping is SIX turn
+# types, not eleven. Worse, every ACK and EMPATHIZE template is under the 30-char
+# floor gen_conversation_sdg applies ("Got it." = 7, "Yeah. That's heavy." = 19,
+# "That sounds like a lot." = 23), so a path using them would be SILENTLY TRUNCATED
+# at that turn. sdg_validated_paths() now refuses such a path outright rather than
+# leaving the trap latent for whoever next edits the path bank.
+SDG_SHORT_TEMPLATE_TURN_TYPES = ("ACK", "EMPATHIZE")
+SDG_MIN_TURN_CHARS = 30
+# STRUCTURAL CEILING, preregistered: three of the five boards CANNOT BE CONSTRUCTED
+# from this generator at all. No turn type renders a rate/cycle/rigidity claim (B2),
+# a two-input comparison with cancellation of the shared part (B3), or a
+# resemblance-of-shape memory retrieval (B4). The SDG arm therefore calibrates the
+# instrument on B1 / B5 / B0 ONLY and is SILENT about B2 / B3 / B4 whatever it finds.
+SDG_UNREACHABLE_BOARDS = ("B2", "B3", "B4")
+# Structurally unrealisable transition: PLAN is admissible only after MIRROR or
+# ANSWER (both B0), so a B1 turn can never be immediately followed by a B5 turn.
+SDG_UNREALISABLE_TRANSITIONS = ("B1->B5",)
+
+# ---- FORCED PATHS ----
+# Constructed, not sampled. Every path is validated at load time against
+# dialog_grammar.is_admissible (an inadmissible path is not a valid conversation),
+# and every path is constructed so that CONSECUTIVE LABELLED TURNS CARRY DIFFERENT
+# PRESCRIBED BOARDS -- persistence is 0.000 BY CONSTRUCTION, which is the whole
+# point: the api-corpus smoke was REJECTED because natural conversation is sticky
+# (persistence 0.5238 vs Markov 0.5079, i.e. almost nothing left to predict).
+SDG_FORCED_PATHS = (
+    ("P1", ("OPEN", "REFUSE", "OPEN", "MIRROR", "PLAN", "OPEN", "REFUSE",
+            "OPEN", "ANSWER", "PLAN", "OPEN", "REFUSE", "CLOSE")),
+    ("P2", ("OPEN", "ANSWER", "PLAN", "OPEN", "REFUSE", "REPAIR", "MIRROR",
+            "PLAN", "OPEN", "REFUSE", "CLOSE")),
+    ("P3", ("OPEN", "REFUSE", "OPEN", "MIRROR", "PLAN", "OPEN", "ANSWER",
+            "OPEN", "REFUSE", "OPEN", "MIRROR", "PLAN", "CLOSE")),
+    ("P4", ("OPEN", "REFUSE_CLAIM", "OPEN", "REFUSE", "OPEN", "ANSWER",
+            "PLAN", "OPEN", "REFUSE", "CLOSE")),
+    ("P5", ("OPEN", "REFUSE", "REPAIR", "MIRROR", "PLAN", "OPEN", "REFUSE",
+            "OPEN", "ANSWER", "PLAN", "OPEN", "REFUSE", "CLOSE")),
+    ("P6", ("OPEN", "REFUSE", "OPEN", "CLARIFY", "OPEN", "REFUSE", "OPEN",
+            "MIRROR", "PLAN", "OPEN", "REFUSE", "CLOSE")),
+)
+SDG_MAX_REPLICATES = 6           # 6 paths x 6 replicates = 36 conversations, the
+                                 # same corpus size as the api arm
+
+# ---- RUBRIC-ADHERENCE GATES (added v2 as "calibration"; RENAMED at v2.1) ----
+# RENAMED because the answer key is CIRCULAR with the rubric (see
+# SDG_MAPPING_CIRCULARITY_DISCLOSURE): this is a RUBRIC-ADHERENCE / READER-
+# RELIABILITY check, NOT calibration, and "CALIBRATED" / "known ground truth" are
+# not available verdicts anywhere in this arm. The threshold VALUES are unchanged;
+# only the name and the licensed interpretation changed.
+RA_ACC_MIN = 0.60                # absolute floor for "readers apply the rubric the way
+                                 # the answer key's author applied it"
+RA_MARGIN_OVER_CHANCE = 0.10     # over always-predict-the-modal-PRESCRIBED-class
+RA_MARGIN_OVER_SURFACE = 0.05    # over max(char, word, length) on the SAME task.
+                                 # MEASURED AT 1.0000 ON THIS CORPUS, so this gate is
+                                 # UNSATISFIABLE for ANY accuracy here -- which is why
+                                 # sdg_precheck() takes the kill at $0 and blocks the
+                                 # spend instead of confirming arithmetic with money.
 
 # =====================================================================
 # READER RUBRICS (zero CAS/TKS/board vocabulary; no Noetic renamed to a function)
@@ -426,7 +697,368 @@ def gen_conversation(spec, n_turns, max_tokens, min_turns):
             "truncated_at": truncated_at, "turns": turns}
 
 
+# ---------------------------------------------------------------------
+# SDG forced-transition generator (local, template-rendered, no API)
+# ---------------------------------------------------------------------
+def sdg_validated_paths():
+    """Materialise the forced-path bank as real TurnType members and VALIDATE it.
+
+    Three checks, all fatal:
+      1. every (prev, next) pair satisfies dialog_grammar.is_admissible -- the SDG
+         itself never checks the path it renders (is_admissible is imported into
+         conversation_generator.py and never called), so an illegal path would
+         render happily and produce a grammar-violating record;
+      2. no two CONSECUTIVE LABELLED turns carry the same prescribed board, i.e.
+         persistence is 0 by construction;
+      3. real TurnType members are used, never bare strings -- TurnType subclasses
+         str, so a string path survives every dict lookup and every == comparison
+         and then dies at the .value call inside to_dict()/_stable_id();
+      4. (v2.1) no path may use a turn type whose every template is under the
+         30-char floor. ACK and EMPATHIZE templates are all shorter than that
+         ("Got it." = 7, "Yeah. That's heavy." = 19, "That sounds like a lot." = 23),
+         so a path using them would hit gen_conversation_sdg's `len(out) < 30` break
+         and be SILENTLY TRUNCATED mid-conversation. That was a latent trap for
+         whoever next edits the path bank; it is now a load-time failure.
+    """
+    sdg = load_sdg()
+    tt_enum = sdg.TurnType
+    out = []
+    for name, seq in SDG_FORCED_PATHS:
+        path = [tt_enum[s] for s in seq]
+        prev = None
+        for step in path:
+            if not sdg.is_admissible(prev, step):
+                raise SystemExit(f"forced path {name}: INADMISSIBLE transition "
+                                 f"{prev} -> {step}. Fix SDG_FORCED_PATHS.")
+            if step.value in SDG_SHORT_TEMPLATE_TURN_TYPES:
+                raise SystemExit(
+                    f"forced path {name}: turn type {step.value} has NO template "
+                    f"reaching the {SDG_MIN_TURN_CHARS}-char floor, so the "
+                    f"conversation would be silently TRUNCATED there. Remove it "
+                    f"from SDG_FORCED_PATHS or lower SDG_MIN_TURN_CHARS knowingly.")
+            prev = step
+        boards = [SDG_TURN_TYPE_TO_BOARD[t.value] for t in path
+                  if SDG_TURN_TYPE_TO_BOARD[t.value]]
+        for a, b in zip(boards, boards[1:]):
+            if a == b:
+                raise SystemExit(f"forced path {name}: consecutive prescribed board "
+                                 f"{a}->{b}. Persistence must be 0 by construction.")
+        if len(boards) < 2:
+            raise SystemExit(f"forced path {name}: fewer than 2 labelled turns.")
+        out.append((name, path))
+    return out
+
+
+def build_sdg_conversation_plan(n_convos):
+    """Deterministic forced-path plan. There is no sampling of the dialog path.
+
+    gen_provider is the literal sentinel 'sdg' so provenance is never lost when
+    these records sit next to api records (the SDG's own output carries no marker
+    of being synthetic). Because 'sdg' is outside ORDER, no reader can ever equal
+    it and GATE 4 would be VACUOUSLY true while FOUR readers labelled every turn --
+    which would silently break fleiss_kappa's fixed row width and build_arm's
+    hardcoded combinations(range(3), 2). excluded_reader therefore carries a
+    deterministic STRUCTURE-PRESERVING holdout so the panel stays exactly 3 wide.
+    """
+    paths = sdg_validated_paths()
+    cap = len(paths) * SDG_MAX_REPLICATES
+    if n_convos > cap:
+        raise SystemExit(f"--n-convos {n_convos} exceeds the SDG bank capacity "
+                         f"({len(paths)} forced paths x {SDG_MAX_REPLICATES} replicates "
+                         f"= {cap}).")
+    plan = []
+    for cid in range(n_convos):
+        name, path = paths[cid % len(paths)]
+        plan.append({
+            "conv_id": cid,
+            "path_name": name,
+            "path": path,
+            "seed_prompt": f"[SDG forced path {name}: {'>'.join(t.value for t in path)}]",
+            "render_seed": SEED_SDG_BASE + cid,
+            "gen_provider": "sdg",
+            "gen_model": SDG_MODEL_ID,
+            "excluded_reader": ORDER[cid % len(ORDER)],
+        })
+    return plan
+
+
+def gen_conversation_sdg(spec, min_turns):
+    """Render ONE forced-path conversation. NO API call, NO model, NO network.
+
+    Drives cas-synthetic's _render_turn directly (option B of the three documented
+    drive strategies) rather than generate_conversation, because generate_conversation
+    hardcodes `path = generate_dialog_path(seed, target_turns)` and exposes no path=
+    parameter. Turn types whose board mapping is None are rendered for context but
+    NEVER labelled.
+
+    NO CAS EVOLUTION HAPPENS HERE. current_cas is threaded into _render_turn because
+    that is its signature, but _render_turn NEVER READS IT: on every CAS-load-bearing
+    turn it re-samples an INDEPENDENT (bucket, _, cas, transition) row from
+    _USER_TEMPLATES. cas-synthetic's own module docstring says so ("There is NO
+    coherence constraint across CAS states within a single record"). The
+    cas_state_after sequence of these records is therefore NOISE and must never be
+    described as evolution, refinement, or a response to a REPAIR turn. It is
+    irrelevant to the prescribed boards, which come from the turn TYPE alone.
+    """
+    sdg = load_sdg()
+    rng = random.Random(spec["render_seed"])
+    turns, truncated_at = [], None
+    pending_user_text, pending_user_type = "", None
+    current_cas = ""
+    for tt in spec["path"]:
+        r = sdg._render_turn(tt, rng, current_cas=current_cas, target_buckets=None)
+        if r["cas_state_after"]:
+            current_cas = r["cas_state_after"]
+        board = SDG_TURN_TYPE_TO_BOARD.get(tt.value)
+        if r["role"] == "user" or board is None:
+            if r["role"] == "user":
+                pending_user_text, pending_user_type = r["text"], tt.value
+            continue
+        out = r["text"]
+        if len(out) < SDG_MIN_TURN_CHARS:      # same floor as the api arm. Reachable
+                                               # only if the path bank is edited to use
+                                               # a short-template turn type, which
+                                               # sdg_validated_paths() now refuses.
+            truncated_at = f"turn {len(turns)}: short/empty ({len(out)} chars)"
+            break
+        turns.append({
+            "turn_idx": len(turns),
+            "followup_id": ("SEED" if not turns else
+                            (f"U-{pending_user_type}" if pending_user_type else "U-NONE")),
+            "user": pending_user_text,
+            "assistant": out,
+            "gt_board": board,
+            "gt_turn_type": tt.value,
+        })
+        pending_user_text, pending_user_type = "", None
+    if len(turns) < min_turns:
+        raise RuntimeError(f"conv {spec['conv_id']}: only {len(turns)} usable turns "
+                           f"({truncated_at})")
+    return {"conv_id": spec["conv_id"], "seed_prompt": spec["seed_prompt"],
+            "gen_provider": "sdg", "gen_model": SDG_MODEL_ID,
+            "excluded_reader": spec["excluded_reader"],
+            "truncated_at": truncated_at, "turns": turns,
+            "sdg": {"path_name": spec["path_name"],
+                    "forced_path": [t.value for t in spec["path"]],
+                    "render_seed": spec["render_seed"],
+                    "prescribed_boards": [t["gt_board"] for t in turns],
+                    "source": SDG_PATH,
+                    "TEMPLATE_DISCLOSURE": SDG_TEMPLATE_DISCLOSURE}}
+
+
+def stage_generate_sdg(A):
+    plan = build_sdg_conversation_plan(A.n_convos)
+    existing = {r["conv_id"] for r in _jsonl_read(A.conv_file)}
+    todo = [s for s in plan if s["conv_id"] not in existing]
+    print("*** SDG ARM: TEMPLATE-RENDERED CORPUS, NO MODEL CALL ***")
+    print(f"    {SDG_TEMPLATE_DISCLOSURE}\n", flush=True)
+    print(f"forced-path corpus: {len(todo)} conversations over "
+          f"{len(SDG_FORCED_PATHS)} constructed paths ({len(existing)} already "
+          f"checkpointed). --n-turns is IGNORED here: path length is prescribed.",
+          flush=True)
+    if not todo:
+        print("nothing to do -- all conversations already in the checkpoint file.")
+        return
+    n_ok = 0
+    for s in todo:                       # serial: local, no rate limit, no pool needed
+        try:
+            conv = gen_conversation_sdg(s, A.min_turns)
+        except Exception as e:
+            print(f"  [conv {s['conv_id']}] DROPPED: {str(e)[:140]}", flush=True)
+            continue
+        _jsonl_append(A.conv_file, conv)
+        n_ok += 1
+        print(f"  [conv {conv['conv_id']}] {conv['sdg']['path_name']}: "
+              f"{conv['sdg']['prescribed_boards']} "
+              f"({[len(t['assistant']) for t in conv['turns']]} chars/turn)", flush=True)
+    rows = _jsonl_read(A.conv_file)
+    all_turns = [t for c in rows for t in c["turns"]]
+    pres = Counter(t["gt_board"] for t in all_turns)
+    # realised transition matrix + persistence of the CORPUS ITSELF
+    trans, same, tot = Counter(), 0, 0
+    for c in rows:
+        seq = [t["gt_board"] for t in sorted(c["turns"], key=lambda x: x["turn_idx"])]
+        for a, b in zip(seq, seq[1:]):
+            trans[(a, b)] += 1; tot += 1; same += int(a == b)
+    print(f"\n{n_ok} new; file now holds {len(rows)} conversations / {len(all_turns)} "
+          f"labelled turns -> {A.conv_file}")
+    print(f"  prescribed board mix: {dict(sorted(pres.items()))} "
+          f"(B0 share {pres.get('B0', 0) / max(1, len(all_turns)):.4f}; "
+          f"Gate 0 cap {G0_B0_SHARE_MAX})")
+    print(f"  UNREACHABLE boards (zero prescribed instances, by construction): "
+          f"{list(SDG_UNREACHABLE_BOARDS)}")
+    print(f"  realised prescribed transition matrix ({tot} pairs): "
+          f"{ {f'{a}->{b}': n for (a, b), n in sorted(trans.items())} }")
+    print(f"  CORPUS PERSISTENCE RATE (prescribed b_N == b_N+1): "
+          f"{(same / tot) if tot else 0.0:.4f}   <- stickiness removed by construction")
+    print(f"  structurally unrealisable transitions: {list(SDG_UNREALISABLE_TRANSITIONS)}")
+    if rows:
+        s = sorted(rows, key=lambda c: c["conv_id"])[0]
+        print(f"\nSAMPLE conv {s['conv_id']} path {s['sdg']['forced_path']}")
+        for t in s["turns"][:3]:
+            print(f"  t{t['turn_idx']} [{t['gt_turn_type']} -> {t['gt_board']}] "
+                  f"{t['assistant'][:110]}")
+    print("\n>>> RUN `--stage precheck --generator sdg` NEXT. Labelling is BLOCKED "
+          "until the corpus passes the $0 surface-determinism precheck.")
+
+
+# ---------------------------------------------------------------------
+# $0 PRECHECK -- take both kills BEFORE any labelling call (added v2.1)
+# ---------------------------------------------------------------------
+def sdg_precheck(conv_file, out_path=None):
+    """Decide the SDG arm's fate for $0: no reader panel, no label call, no network.
+
+    A preregistered study must be able to fail. This arm as originally specified
+    could not: the primary-kill gate is (ra_acc - surface_acc) >= 0.05, and the
+    surface accuracy on the ground-truth task is 1.0000 on char, on word AND on raw
+    character count, so no accuracy whatsoever can satisfy it. The verdict was
+    therefore decided before the first labelling call, and running the panel would
+    have bought nothing but an arithmetic confirmation at the price of ~256 label
+    calls and hours of GLM serialisation.
+
+    This function obtains that kill on the record at zero cost, and reports the
+    second, independent kill (mapping circularity) beside it. stage_label refuses to
+    spend money while either fires.
+
+    Returns a dict; writes it beside the corpus when out_path is given.
+    """
+    rows = load_conversations(conv_file)
+    turns = [t for c in rows for t in c["turns"] if t.get("gt_board")]
+    if len(turns) < 2:
+        return {"ran": False, "why": f"{conv_file} carries no prescribed boards."}
+    txt = [t["assistant"] for t in turns]
+    y = [t["gt_board"] for t in turns]
+    grp = [c["conv_id"] for c in rows for t in c["turns"] if t.get("gt_board")]
+
+    # exact-string -> board relation. If it is a function (no string maps to two
+    # boards) then string lookup ALONE recovers the answer key.
+    by_string = defaultdict(set)
+    for s, b in zip(txt, y):
+        by_string[s].add(b)
+    ambiguous = sum(1 for v in by_string.values() if len(v) > 1)
+    bijective = bool(ambiguous == 0)
+
+    # per-class length ranges: disjoint ranges mean ONE FEATURE suffices.
+    lens = defaultdict(list)
+    for s, b in zip(txt, y):
+        lens[b].append(len(s))
+    ranges = {b: [min(v), max(v)] for b, v in sorted(lens.items())}
+    disjoint = True
+    ordered = sorted(ranges.items(), key=lambda kv: kv[1][0])
+    for (_b1, r1), (_b2, r2) in zip(ordered, ordered[1:]):
+        if r1[1] >= r2[0]:
+            disjoint = False
+
+    folds = loco_folds(grp)
+    by_kind, strongest, surface_acc = {}, None, None
+    if folds and len(set(y)) >= 2:
+        for kind in ("char", "word", "length"):
+            a, _c = loco_surface(kind, txt, y, grp, folds)
+            by_kind[kind] = round(a, 4)
+            if surface_acc is None or a > surface_acc:
+                strongest, surface_acc = kind, a
+    # FAIL CLOSED: an uncomputable control is NOT a pass.
+    surface_determined = True if surface_acc is None else bool(
+        surface_acc >= SDG_PRECHECK_SURFACE_MAX)
+
+    mix = Counter(y)
+    n = sum(mix.values())
+    modal = max(mix.values()) / n
+    # The gate the arm would have had to clear, evaluated in advance.
+    gate_satisfiable = bool(surface_acc is not None
+                            and (1.0 - surface_acc) >= RA_MARGIN_OVER_SURFACE)
+
+    rep = {
+        "ran": True,
+        "WHAT_THIS_IS": "a $0 precheck that decides the SDG arm BEFORE any labelling "
+                        "call. No reader panel, no API call, no network. It exists "
+                        "because preregistering a foregone kill is not a study.",
+        "conv_file": conv_file,
+        "n_prescribed_turns": n,
+        "prescribed_mix": dict(sorted(mix.items())),
+        "n_distinct_assistant_strings": len(by_string),
+        "n_strings_mapping_to_more_than_one_board": ambiguous,
+        "EXACT_STRING_LOOKUP_IS_A_BIJECTION_ONTO_THE_ANSWER_KEY": bijective,
+        "per_class_length_ranges_chars": ranges,
+        "length_ranges_are_disjoint_one_feature_suffices": disjoint,
+        "surface_on_ground_truth_task_LOCO": {
+            "strongest": strongest, "acc": (round(surface_acc, 4)
+                                            if surface_acc is not None else None),
+            "by_kind": by_kind,
+            "note": "LOCO folds grouped by conversation. `length` is RAW CHARACTER "
+                    "COUNT -- a one-feature classifier."},
+        "modal_prescribed_class_rate": round(modal, 4),
+        "bar": SDG_PRECHECK_SURFACE_MAX,
+        "KILL_1_SURFACE_DETERMINED_CORPUS": surface_determined,
+        "KILL_1_DETAIL": (
+            f"surface accuracy on the ground-truth task is "
+            f"{('UNCOMPUTABLE' if surface_acc is None else round(surface_acc, 4))} "
+            f"against a bar of {SDG_PRECHECK_SURFACE_MAX}. The primary-kill gate "
+            f"requires (ra_acc - surface_acc) >= {RA_MARGIN_OVER_SURFACE}; with the "
+            f"measured surface accuracy that is SATISFIABLE={gate_satisfiable}. When "
+            f"it is not satisfiable the arm's verdict is fixed before any reader "
+            f"sees a single excerpt, so labelling would buy nothing. An UNCOMPUTABLE "
+            f"control counts as a KILL, never as a pass."),
+        "PRIMARY_KILL_GATE_IS_SATISFIABLE_AT_ALL": gate_satisfiable,
+        "KILL_2_MAPPING_CIRCULARITY": SDG_MAPPING_CIRCULARITY_KILL,
+        "KILL_2_DETAIL": SDG_MAPPING_CIRCULARITY_DISCLOSURE,
+        "TEMPLATE_DISCLOSURE": SDG_TEMPLATE_DISCLOSURE,
+        "weak_mappings": dict(SDG_WEAK_MAPPINGS),
+        "ARM_STATUS": SDG_ARM_STATUS,
+        "PRECHECK_VERDICT": (
+            "ARM WITHDRAWN -- DO NOT LABEL" if (surface_determined
+                                                or SDG_MAPPING_CIRCULARITY_KILL)
+            else "precheck clear -- labelling permitted"),
+        "HOW_TO_REVIVE": "replace the corpus with text whose SURFACE DOES NOT "
+                         "DETERMINE THE LABEL, and derive the answer key from "
+                         "something other than reading the same strings through the "
+                         "same rubric. Relaxing a bar does not revive the arm; it "
+                         "only hides the defect.",
+    }
+    if out_path:
+        with open(out_path, "w", encoding="utf-8") as f:
+            json.dump(rep, f, indent=2, ensure_ascii=False)
+    return rep
+
+
+def stage_precheck(A):
+    if A.generator != "sdg":
+        raise SystemExit("--stage precheck applies to the sdg arm only. The api arm "
+                         "has no answer key to be surface-determined against.")
+    rep = sdg_precheck(A.conv_file, A.precheck_report)
+    if not rep.get("ran"):
+        raise SystemExit(f"precheck could not run: {rep.get('why')}")
+    print("\n=== SDG ARM $0 PRECHECK (no labelling call, no network) ===")
+    print(f"  corpus                        : {rep['n_prescribed_turns']} prescribed "
+          f"turns, mix {rep['prescribed_mix']}")
+    print(f"  distinct assistant strings    : {rep['n_distinct_assistant_strings']} "
+          f"({rep['n_strings_mapping_to_more_than_one_board']} ambiguous)")
+    print(f"  exact-string lookup bijective : "
+          f"{rep['EXACT_STRING_LOOKUP_IS_A_BIJECTION_ONTO_THE_ANSWER_KEY']}")
+    print(f"  per-class length ranges       : {rep['per_class_length_ranges_chars']} "
+          f"(disjoint={rep['length_ranges_are_disjoint_one_feature_suffices']})")
+    print(f"  surface on the GT task (LOCO) : "
+          f"{rep['surface_on_ground_truth_task_LOCO']['by_kind']} "
+          f"-> {rep['surface_on_ground_truth_task_LOCO']['acc']} "
+          f"[{rep['surface_on_ground_truth_task_LOCO']['strongest']}]  bar {rep['bar']}")
+    print(f"  primary-kill gate satisfiable : "
+          f"{rep['PRIMARY_KILL_GATE_IS_SATISFIABLE_AT_ALL']}")
+    print(f"\n  KILL 1 surface-determined corpus : {rep['KILL_1_SURFACE_DETERMINED_CORPUS']}")
+    print(f"  KILL 2 mapping circularity       : {rep['KILL_2_MAPPING_CIRCULARITY']}")
+    print(f"\n  PRECHECK VERDICT: {rep['PRECHECK_VERDICT']}")
+    if rep["PRECHECK_VERDICT"].startswith("ARM WITHDRAWN"):
+        print("  *** Labelling is BLOCKED. The kill is now on the record at $0: no "
+              "reader panel,\n      no ~256 label calls, no GLM serialisation. "
+              "--allow-surface-determined-corpus\n      overrides this, is "
+              "PREREG-DEVIATING, and must be logged in the amendment log. ***")
+    if A.precheck_report:
+        print(f"  wrote {A.precheck_report}")
+    return rep
+
+
 def stage_generate(A):
+    if A.generator == "sdg":
+        return stage_generate_sdg(A)
     plan = build_conversation_plan(A.n_convos, A.n_turns)
     existing = {r["conv_id"] for r in _jsonl_read(A.conv_file)}
     todo = [s for s in plan if s["conv_id"] not in existing]
@@ -480,12 +1112,31 @@ def load_conversations(path):
     return out
 
 
+def _excluded_reader(meta):
+    """Which panel model is held out for this turn.
+
+    api arm: the model that GENERATED the turn -- GATE 4 / requirement 4 separation.
+    sdg arm: gen_provider is the sentinel 'sdg', which is OUTSIDE ORDER, so nothing
+    would be held out and FOUR readers would label every turn. That silently breaks
+    two hardcoded 3-reader assumptions (build_arm's combinations(range(3), 2), which
+    would score only the first 3 of 4, and fleiss_kappa's fixed row width, which
+    would change what G0_FLEISS_MIN=0.35 means) and raises labelling cost 33%. The
+    sdg arm therefore carries a deterministic STRUCTURE-PRESERVING holdout. It is
+    NOT a separation control there -- GATE 4 is VACUOUSLY true in the sdg arm and
+    the report says so in those words.
+    """
+    return meta.get("excluded_reader") or meta.get("gen_provider")
+
+
 def flatten_turns(convs, truncate):
     """Flat turn list with a stable integer uid used ONLY on the analysis side.
 
     The uid is never shown to a reader (Rev 0.4 fix): uid = 6*conv_position + turn_idx
     deterministically encodes conversation and turn position, so printing it in the
     prompt leaked position. read_batch emits per-batch ALIAS ids instead.
+
+    v2: gt_board / gt_turn_type are carried through for the sdg arm (None in the api
+    arm, which has no answer key at all -- its labels come only from readers).
     """
     turns, uid = [], 0
     for c in convs:
@@ -493,6 +1144,8 @@ def flatten_turns(convs, truncate):
             turns.append({
                 "uid": uid, "conv_id": c["conv_id"], "turn_idx": t["turn_idx"],
                 "followup_id": t["followup_id"], "gen_provider": c["gen_provider"],
+                "excluded_reader": _excluded_reader(c),
+                "gt_board": t.get("gt_board"), "gt_turn_type": t.get("gt_turn_type"),
                 "text": t["assistant"][:truncate],
             })
             uid += 1
@@ -649,6 +1302,32 @@ def _run_jobs(jobs, pool, ckpt_path, taxonomy, allow_reasoning_only, done_keys, 
 
 def stage_label(A):
     tax = A.taxonomy
+    # ---- v2.1: THE SPEND GATE. Refuse to buy a foregone conclusion. -------
+    # The SDG arm's primary-kill gate is unsatisfiable on a surface-determined
+    # corpus, so labelling it would confirm arithmetic with money. Both kills are
+    # obtainable at $0; take them here before the first call.
+    if A.generator == "sdg":
+        pre = sdg_precheck(A.conv_file, getattr(A, "precheck_report", None))
+        if pre.get("ran") and pre["PRECHECK_VERDICT"].startswith("ARM WITHDRAWN"):
+            msg = (
+                "\nABORT -- SDG ARM WITHDRAWN, NO LABELLING CALL MADE.\n"
+                f"  KILL 1 surface-determined corpus : "
+                f"{pre['KILL_1_SURFACE_DETERMINED_CORPUS']} "
+                f"(surface {pre['surface_on_ground_truth_task_LOCO']['acc']} "
+                f"[{pre['surface_on_ground_truth_task_LOCO']['strongest']}] "
+                f"vs bar {pre['bar']}; primary-kill gate satisfiable at all: "
+                f"{pre['PRIMARY_KILL_GATE_IS_SATISFIABLE_AT_ALL']})\n"
+                f"  KILL 2 mapping circularity       : "
+                f"{pre['KILL_2_MAPPING_CIRCULARITY']}\n"
+                f"  {pre['HOW_TO_REVIVE']}\n"
+                "  --allow-surface-determined-corpus proceeds anyway; that is "
+                "PREREG-DEVIATING and must be logged in the amendment log.")
+            if not A.allow_surface_determined_corpus:
+                raise SystemExit(msg)
+            print(msg)
+            print("\n*** PROCEEDING UNDER --allow-surface-determined-corpus. The "
+                  "resulting numbers are NOT LICENSED as calibration and the report "
+                  "will say so. ***\n", flush=True)
     convs = load_conversations(A.conv_file)
     turns = flatten_turns(convs, A.truncate)
     by_uid = {t["uid"]: t for t in turns}
@@ -659,7 +1338,8 @@ def stage_label(A):
     jobs, batch_meta = [], []
     for ri, reader in enumerate(ORDER):
         # GATE 4 / requirement 4: a model never labels a turn it generated.
-        mine = [t for t in turns if t["gen_provider"] != reader]
+        # (sdg arm: a structure-preserving holdout, not a separation control.)
+        mine = [t for t in turns if _excluded_reader(t) != reader]
         batches, swaps, collisions = make_batches(mine, A.batch_size, SEED_BATCH_BASE + ri)
         batch_meta.append({"reader": reader, "n_turns": len(mine), "n_batches": len(batches),
                            "repair_swaps": swaps, "residual_same_conv_collisions": collisions})
@@ -690,7 +1370,7 @@ def stage_label(A):
         marks = collect_marks(ckpt, tax, by_uid)
         missing = []
         for ri, reader in enumerate(ORDER):
-            want = {t["uid"] for t in turns if t["gen_provider"] != reader}
+            want = {t["uid"] for t in turns if _excluded_reader(t) != reader}
             have = set(marks.get(reader, {}))
             gap = sorted(want - have)
             if gap:
@@ -718,9 +1398,17 @@ def stage_label(A):
     marks = collect_marks(ckpt, tax, by_uid)
     payload = {
         "taxonomy": tax, "conv_file": A.conv_file, "n_convs": len(convs), "n_turns": len(turns),
+        "generator": A.generator,
         "truncate": A.truncate, "batch_size": A.batch_size, "readers_panel": MODELS,
         "batch_meta": batch_meta, "call_status_counts": dict(stats),
-        "turns": [{k: t[k] for k in ("uid", "conv_id", "turn_idx", "followup_id", "gen_provider")}
+        # THIS PROJECTION IS THE SILENT-BREAK POINT. Any per-turn field that is not
+        # named here is dropped WITHOUT AN ERROR and never reaches build_arm or
+        # stage_analyze. excluded_reader / gt_board / gt_turn_type were ADDED at v2
+        # for exactly that reason -- the ground-truth answer key would otherwise
+        # vanish between the label stage and the primary statistic.
+        "turns": [{k: t[k] for k in ("uid", "conv_id", "turn_idx", "followup_id",
+                                     "gen_provider", "excluded_reader",
+                                     "gt_board", "gt_turn_type")}
                   for t in turns],
         "turn_text": {str(t["uid"]): t["text"] for t in turns},
         "labels": {p: {str(k): v for k, v in d.items()} for p, d in marks.items()},
@@ -746,7 +1434,7 @@ def collect_marks(ckpt_path, taxonomy, by_uid):
             uid = int(suid)
             if uid not in by_uid:
                 continue
-            if by_uid[uid]["gen_provider"] == prov:      # separation, enforced structurally
+            if _excluded_reader(by_uid[uid]) == prov:    # separation, enforced structurally
                 continue
             marks[prov].setdefault(uid, code)            # first write wins; no overwrite
     return marks
@@ -1015,7 +1703,7 @@ def build_arm(payload, none_code):
 
     per_turn, complete, consensus = {}, [], {}
     for uid, meta in turn_meta.items():
-        readers = [p for p in ORDER if p != meta["gen_provider"]]
+        readers = [p for p in ORDER if p != _excluded_reader(meta)]
         got = {p: labels.get(p, {}).get(uid) for p in readers}
         codes = [c for c in got.values() if c]
         per_turn[uid] = {"readers": readers, "codes": got}
@@ -1076,6 +1764,248 @@ def build_arm(payload, none_code):
         "derived_raw_floor": derived_raw_floor,
         "bn": bn, "bnext": bnext, "groups": groups, "texts": texts,
         "cond_user": cond_user, "cond_pos": cond_pos, "consensus": consensus,
+    }
+
+
+def prescribed_corpus_structure(arm):
+    """The corpus's OWN structure, read off the answer key and NOT off any reader.
+
+    Mandatory disclosure for a forced-transition corpus: a reader must be able to
+    see that stickiness was actually removed. Returns None in the api arm, which
+    has no answer key.
+    """
+    by_conv = defaultdict(dict)
+    for uid, m in arm["turn_meta"].items():
+        if m.get("gt_board"):
+            by_conv[m["conv_id"]][m["turn_idx"]] = m["gt_board"]
+    if not by_conv:
+        return None
+    trans, same, tot = Counter(), 0, 0
+    for _cid, d in sorted(by_conv.items()):
+        for ti in sorted(d):
+            if (ti + 1) in d:
+                trans[(d[ti], d[ti + 1])] += 1
+                tot += 1
+                same += int(d[ti] == d[ti + 1])
+    mix = Counter(m["gt_board"] for m in arm["turn_meta"].values() if m.get("gt_board"))
+    n = sum(mix.values()) or 1
+    return {
+        "n_prescribed_turns": sum(mix.values()),
+        "prescribed_board_mix": {b: mix.get(b, 0) for b in BOARDS},
+        "prescribed_none_share": round(mix.get("B0", 0) / n, 4),
+        "n_prescribed_pairs": tot,
+        "realised_transition_matrix": {f"{a}->{b}": c for (a, b), c in sorted(trans.items())},
+        "CORPUS_PERSISTENCE_RATE": round((same / tot) if tot else 0.0, 4),
+        "why_this_is_reported": "the api-corpus smoke was REJECTED because natural "
+                                "conversation is STICKY (persistence 0.5238 vs Markov "
+                                "0.5079 -- almost nothing left to predict). Forced "
+                                "paths break persistence BY CONSTRUCTION; this number "
+                                "is the evidence that it was actually removed.",
+        "unreachable_boards_zero_prescribed_instances": list(SDG_UNREACHABLE_BOARDS),
+        "structurally_unrealisable_transitions": list(SDG_UNREALISABLE_TRANSITIONS),
+    }
+
+
+def rubric_adherence_check(arm, n_boot, boot_seed):
+    """RUBRIC ADHERENCE / READER RELIABILITY -- NOT calibration, NOT ground truth.
+
+    RENAMED AT v2.1. This function was called ground_truth_calibration and its
+    statistic was called gt_acc. Both names were UNEARNED and are withdrawn.
+
+    WHY (the defect that voids the statistic, preregistered as a NAMED KILL in
+    PREREG v2 section 3B.0 alongside GATE RA-2): the answer key was authored by
+    reading the rendered template strings THROUGH THE SAME RUBRIC the reader panel
+    is given. B1's entire prescribed class is ONE byte-identical string whose
+    wording is a near-verbatim cue for the B1 rubric's lead clause; B5's is one
+    template against a rubric clause it paraphrases. So this statistic measures
+    whether an LLM panel applying rubric R to string S reproduces the label an
+    author assigned to string S by applying rubric R. It HAS NO INFORMATIVE RANGE:
+    a high value is guaranteed by the authoring, a low value indicates reader noise
+    only. Nothing here is calibration, and the truth is not independently known.
+
+    What it CAN legitimately be read as: a reader-reliability probe -- do three
+    blind commercial readers apply this rubric to fixed strings the way its author
+    did? That is a fact about READERS and a RUBRIC, never about model behaviour and
+    never about the world.
+
+    Returns None in the api arm (no answer key exists there).
+    """
+    # ---- denominators, honestly split -------------------------------------
+    # PRESCRIBED = the design count. WITH CONSENSUS = what survived to a consensus
+    # label. Reporting only the second hides NON-RANDOM DROPOUT: if readers
+    # systematically fail to reach consensus on one prescribed class, the accuracy
+    # is computed on a survivor set and the loss is invisible.
+    prescribed_all = Counter(m["gt_board"] for m in arm["turn_meta"].values()
+                             if m.get("gt_board"))
+    if not prescribed_all:
+        return None
+    uids = [u for u in sorted(arm["consensus"]) if arm["turn_meta"][u].get("gt_board")]
+    if len(uids) < 2:
+        return None
+    y_true = [arm["turn_meta"][u]["gt_board"] for u in uids]
+    y_read = [arm["consensus"][u] for u in uids]
+    grp = [arm["turn_meta"][u]["conv_id"] for u in uids]
+    txt = [arm["turn_text"][u] for u in uids]
+
+    corr_ra = [int(a == b) for a, b in zip(y_true, y_read)]
+    ra_acc = _acc(corr_ra)
+
+    survived = Counter(y_true)
+    folds = loco_folds(grp)
+
+    # ---- chance level, LOCO (not in-sample) -------------------------------
+    # v2.1: the in-sample modal-class rate was mixed with a LOCO surface control.
+    # The gating chance level is now LOCO-measured on the same folds; the in-sample
+    # value is still reported so the two are visibly separated.
+    maj_in_sample = _mode(y_true, prior=survived)
+    corr_chance_in_sample = [int(t == maj_in_sample) for t in y_true]
+    chance_in_sample = _acc(corr_chance_in_sample)
+    if folds:
+        chance_majority, corr_chance = loco_marginal(y_true, folds)
+    else:
+        chance_majority, corr_chance = chance_in_sample, corr_chance_in_sample
+
+    conf = Counter(zip(y_true, y_read))
+    per_class = {}
+    for b in BOARDS:
+        n_pres = prescribed_all.get(b, 0)
+        n_cons = survived.get(b, 0)
+        per_class[b] = {
+            # v2.1: the field formerly called n_prescribed was NOT the prescribed
+            # count -- it counted only instances that reached a consensus label.
+            "n_prescribed_by_design": n_pres,
+            "n_prescribed_with_consensus": n_cons,
+            "consensus_coverage_for_this_prescribed_class": (
+                round(n_cons / n_pres, 4) if n_pres else None),
+            "recall_among_those_with_consensus": (
+                round(conf.get((b, b), 0) / n_cons, 4) if n_cons else None),
+            "note": ("UNREACHABLE -- this board cannot be constructed from the SDG "
+                     "template table at all, so it has zero prescribed instances by "
+                     "construction and nothing here speaks to it."
+                     if n_pres == 0 else
+                     ("NO CONSENSUS SURVIVED -- every prescribed instance of this "
+                      "class was lost before scoring; the accuracy above is computed "
+                      "on a survivor set that excludes it entirely."
+                      if n_cons == 0 else None)),
+            "weak_mapping": sorted(
+                k for k in SDG_WEAK_MAPPINGS if k.endswith("->" + b)) or None,
+        }
+
+    # ---- SURFACE CONTROL ON THE SAME TASK -- FAILS CLOSED ------------------
+    # v2.1 FIX: this used to initialise surface_acc = 0.0 and run the battery only
+    # `if folds and len(set(y_true)) >= 2`. When it did not run, the comparison
+    # corr vector was filled with zeros and the PRIMARY KILL silently PASSED with
+    # NO SURFACE CONTROL HAVING BEEN COMPUTED. A kill gate must FAIL CLOSED: an
+    # uncomputable control yields None gates and a VACUOUS verdict, never a pass.
+    surf, surf_name, corr_surf, surface_acc = {}, None, None, None
+    if folds and len(set(y_true)) >= 2:
+        for kind in ("char", "word", "length"):
+            a, c = loco_surface(kind, txt, y_true, grp, folds)
+            surf[kind] = round(a, 4)
+            if surface_acc is None or a > surface_acc:
+                surf_name, surface_acc, corr_surf = kind, a, c
+    surface_computed = bool(corr_surf)
+
+    boot = {"ra_minus_chance": paired_cluster_bootstrap(corr_ra, corr_chance, grp,
+                                                        n_boot, boot_seed + 1)}
+    if surface_computed:
+        boot["ra_minus_surface"] = paired_cluster_bootstrap(corr_ra, corr_surf, grp,
+                                                            n_boot, boot_seed + 2)
+
+    ra1 = bool(ra_acc >= RA_ACC_MIN
+               and (ra_acc - chance_majority) >= RA_MARGIN_OVER_CHANCE
+               and boot["ra_minus_chance"]["p5"] > 0.0)
+    # GATE RA-2 is None (NOT False, NOT True) when the control could not be run.
+    ra2 = (None if not surface_computed else
+           bool((ra_acc - surface_acc) >= RA_MARGIN_OVER_SURFACE
+                and boot["ra_minus_surface"]["p5"] > 0.0))
+
+    # ---- VERDICT VOCABULARY: CALIBRATED IS NOT AVAILABLE -------------------
+    if SDG_MAPPING_CIRCULARITY_KILL:
+        verdict = ("NOT LICENSED -- MAPPING CIRCULAR (the answer key was authored "
+                   "from these same strings through this same rubric)")
+    elif ra2 is None:
+        verdict = "VACUOUS -- the surface control could not be computed"
+    elif not ra2:
+        verdict = "NOT LICENSED -- SURFACE CONTROL WON"
+    elif ra1:
+        verdict = "RUBRIC-ADHERENT (readers reproduce the author's rubric application)"
+    else:
+        verdict = "NOT RUBRIC-ADHERENT"
+
+    return {
+        "STATISTIC": "RUBRIC ADHERENCE / READER RELIABILITY. NOT calibration, NOT "
+                     "validation against known ground truth. Renamed at v2.1: the "
+                     "words CALIBRATED and KNOWN GROUND TRUTH are UNEARNED here and "
+                     "are not available verdicts anywhere in this arm.",
+        "KILL_MAPPING_CIRCULARITY": SDG_MAPPING_CIRCULARITY_KILL,
+        "KILL_MAPPING_CIRCULARITY_DETAIL": SDG_MAPPING_CIRCULARITY_DISCLOSURE,
+        "WHAT_IT_MEASURES": "whether an LLM panel applying rubric R to string S "
+                            "reproduces the label an author assigned to string S by "
+                            "applying rubric R. A pass is guaranteed by the "
+                            "authoring; a fail indicates reader noise. NO "
+                            "INFORMATIVE RANGE.",
+        "TEMPLATE_DISCLOSURE": SDG_TEMPLATE_DISCLOSURE,
+        "MAPPING_IS_OURS": "cas-synthetic emits DIALOG ACTS; the taxonomy names "
+                           "BOARDS. Neither framework supplies a correspondence. The "
+                           "turn-type -> board mapping used here is AN ASSUMPTION WE "
+                           "ARE MAKING, preregistered in PREREG v2 section 3B, on the "
+                           "same disclosure footing as the sequencing claim of "
+                           "section 3. Turn types with no defensible board are mapped "
+                           "to NONE and EXCLUDED, never forced.",
+        "turn_type_to_board": dict(SDG_TURN_TYPE_TO_BOARD),
+        "WEAK_MAPPINGS": dict(SDG_WEAK_MAPPINGS),
+        "EFFECTIVE_MAPPING_IS_SIX_TURN_TYPES_NOT_ELEVEN":
+            "no forced path uses ACK or EMPATHIZE, so realised B0 mass comes only "
+            "from MIRROR / ANSWER / CLARIFY / REFUSE_CLAIM. The 11-row table "
+            "overstates what governs.",
+        "n_scored_turns": len(uids),
+        "n_prescribed_turns_by_design": sum(prescribed_all.values()),
+        "consensus_coverage_overall_on_prescribed_turns":
+            round(len(uids) / sum(prescribed_all.values()), 4),
+        "rubric_adherence_acc": round(ra_acc, 4),
+        "chance_uniform_1_over_6": round(CHANCE, 4),
+        "chance_modal_prescribed_class_LOCO": round(chance_majority, 4),
+        "chance_modal_prescribed_class_in_sample_not_gating":
+            round(chance_in_sample, 4),
+        "chance_note": "1/6 is NOT the operative chance level. The gating one is the "
+                       "LOCO-measured always-predict-the-modal-PRESCRIBED-class rate. "
+                       "v2.1: this was formerly computed IN-SAMPLE while the surface "
+                       "control was LOCO -- inconsistent, and conservative in the "
+                       "wrong direction to be left unstated. Both are now printed.",
+        "confusion_prescribed_x_read": {f"{a}|{b}": c for (a, b), c in sorted(conf.items())},
+        "per_class_recall": per_class,
+        "n_boards_with_zero_prescribed_instances": sum(
+            1 for b in BOARDS if prescribed_all.get(b, 0) == 0),
+        "surface_control_on_the_same_task": {
+            "computed": surface_computed,
+            "strongest": surf_name,
+            "acc": (round(surface_acc, 4) if surface_acc is not None else None),
+            "by_kind": surf,
+            "kill_rule": "a surface WIN (or the margin failing) KILLS the arm "
+                         "outright -- the reader would be doing nothing a "
+                         "bag-of-chars over the template table could not do. "
+                         "v2.1: if this control CANNOT BE COMPUTED the gate is None "
+                         "and the verdict is VACUOUS. It never fails open.",
+            "measured_at_precheck": "1.0000 on char, word AND raw character count "
+                                    "over the realised 36-conversation corpus, so "
+                                    "GATE RA-2 is UNSATISFIABLE by any accuracy. See "
+                                    "`--stage precheck`."},
+        "uncertainty": boot,
+        "GATE_RA1_reads_above_chance": ra1,
+        "GATE_RA2_beats_surface_PRIMARY_KILL": ra2,
+        "GATE_RA_thresholds": {"ra_acc_min": RA_ACC_MIN,
+                               "margin_over_chance": RA_MARGIN_OVER_CHANCE,
+                               "margin_over_surface": RA_MARGIN_OVER_SURFACE},
+        "RUBRIC_ADHERENCE_VERDICT": verdict,
+        "CEILING": f"Whatever this run finds, nothing here speaks to "
+                   f"{list(SDG_UNREACHABLE_BOARDS)}: no SDG turn type renders a "
+                   f"rate/cycle/rigidity claim, a two-input comparison with "
+                   f"cancellation, or a resemblance-of-shape memory retrieval, so "
+                   f"those three boards have ZERO prescribed instances by "
+                   f"construction. And nothing here speaks to model behaviour at "
+                   f"all: the text is a 38-string lookup table and the answer key is "
+                   f"circular with the rubric.",
     }
 
 
@@ -1140,6 +2070,38 @@ def stage_gate0(A):
 def stage_analyze(A):
     payload = json.load(open(A.label_file, encoding="utf-8"))
     arm = build_arm(payload, "B0")
+
+    # ---- v2.1: PROVENANCE IS DECIDED BY THE DATA, NOT BY A CLI FLAG -------
+    # --label-file has a CLI override and --stage analyze does not require
+    # --generator, so `--stage analyze --label-file labels_board_sdg.json` with the
+    # flag omitted used to analyse TEMPLATE data as an api run: the verdict came off
+    # the sequential ladder, every sdg claim-ceiling entry was dropped, and
+    # TEMPLATE_DISCLOSURE was affirmatively written as "n/a -- the api arm's turns
+    # are real model outputs" -- a FALSE PROVENANCE STATEMENT in the report, on the
+    # exact axis this design spends most of its length defending. is_sdg is now read
+    # off the payload and off the presence of an answer key, and a disagreement with
+    # the flag is FATAL rather than silent.
+    gen_in_payload = payload.get("generator")
+    has_answer_key = any(t.get("gt_board") for t in payload.get("turns", []))
+    is_sdg = bool(gen_in_payload == "sdg" or has_answer_key)
+    if gen_in_payload not in (None, A.generator):
+        raise SystemExit(
+            f"ABORT: provenance mismatch. {A.label_file} was labelled with "
+            f"generator='{gen_in_payload}' but --generator is '{A.generator}'. "
+            f"Re-run with --generator {gen_in_payload}. (Analysing an sdg label "
+            f"file as an api run writes a FALSE provenance statement into the "
+            f"report.)")
+    if is_sdg and A.generator != "sdg":
+        raise SystemExit(
+            f"ABORT: {A.label_file} carries a prescribed-board answer key, so it is "
+            f"a TEMPLATE-RENDERED sdg corpus, but --generator is '{A.generator}'. "
+            f"Re-run with --generator sdg.")
+    if A.generator == "sdg" and not is_sdg:
+        raise SystemExit(
+            f"ABORT: --generator sdg was requested but {A.label_file} carries no "
+            f"answer key and no generator marker. Refusing to label api data as "
+            f"template-rendered.")
+
     bn, bnext, groups, texts = arm["bn"], arm["bnext"], arm["groups"], arm["texts"]
     n_pairs = len(bn)
     folds = loco_folds(groups)
@@ -1164,6 +2126,12 @@ def stage_analyze(A):
     pos_acc, corr_pos = loco_conditional(arm["cond_pos"], bnext, folds) if folds else (0.0, [])
 
     # PRIMARY KILL uses the STRONGEST surface baseline, not just char.
+    # v2.1 FAIL-CLOSED: when there are no LOCO folds every control above collapses to
+    # (0.0, []) and GATE 1 used to evaluate (board_acc - 0.0) >= 0.05 -- i.e. the
+    # PRIMARY KILL silently PASSED with no surface control having been computed at
+    # all. controls_computed now forces every gate to None and the verdict to
+    # VACUOUS. A kill gate must fail closed.
+    controls_computed = bool(folds and corr_char and corr_board)
     surf = {"char": (char_acc, corr_char), "word": (word_acc, corr_word),
             "length": (len_acc, corr_len)}
     surf_name = max(surf, key=lambda k: surf[k][0]) if folds else "char"
@@ -1255,6 +2223,9 @@ def stage_analyze(A):
 
     # ---- gates -----------------------------------------------------------
     def gate(margin_name, acc_a, acc_b, margin):
+        # v2.1: None (not False, not True) when the control could not be computed.
+        if not controls_computed:
+            return None
         b = boot.get(margin_name, {})
         return bool((acc_a - acc_b) >= margin and b.get("p5", -1.0) > 0.0)
 
@@ -1272,12 +2243,18 @@ def stage_analyze(A):
     # REJECT, not merely downgrade.
     g6 = gate("board_minus_usermove", board_acc, user_acc, G6_MARGIN_OVER_USERMOVE)
     g7 = gate("board_minus_turnpos", board_acc, pos_acc, G7_MARGIN_OVER_TURNPOS)
+    # GATE 8 speaks to CAS-specificity. v2.1: it is FORCED TO None in the sdg arm --
+    # claim-ceiling 10B.14 says no CAS-specificity claim is available from a
+    # template corpus, so a bare `true` sitting in gates/ is a lift surface even
+    # though the cas_spec prose overrides it.
     g8 = None
-    if alt_acc is not None:
+    if alt_acc is not None and not is_sdg:
         g8 = gate("board_minus_alt_taxonomy_on_shared_pairs",
                   alt_g0["_board_acc_on_shared_pairs"], alt_acc, G8_MARGIN_OVER_ALT_TAXONOMY)
 
-    if not g0_pass:
+    if not controls_computed:
+        verdict = "VACUOUS -- controls could not be computed (no LOCO folds)"
+    elif not g0_pass:
         verdict = "VACUOUS"
     elif not (g1 and g2 and g3 and g4 and g6):
         verdict = "REJECTED"
@@ -1306,10 +2283,97 @@ def stage_analyze(A):
     taxonomy_kill = bool(arm["kappa"] < KILL_FLEISS_BELOW and arm["n_kappa_rows"] >= 10)
     fit_kill = bool(arm["none_share"] > KILL_B0_SHARE_ABOVE and arm["n_consensus"] >= 10)
 
+    # ---- v2: RUBRIC ADHERENCE (PRIMARY in the sdg arm) --------------------
+    ra = rubric_adherence_check(arm, A.n_boot, SEED_BOOTSTRAP + 10)
+    corpus_struct = prescribed_corpus_structure(arm)
+    # v2.1: a SECOND top-level surface-kill flag. KILLED_BY_SURFACE_CONTROL above is
+    # computed only from the SEQUENTIAL surface and can read false while the
+    # ground-truth-task surface won outright, so a skim of the headline keys could
+    # miss the kill that actually decides this arm.
+    ra_surface = (ra or {}).get("surface_control_on_the_same_task", {})
+    killed_by_surface_ra = (
+        None if not ra or not ra_surface.get("computed") else
+        bool(ra_surface["acc"] >= ra["rubric_adherence_acc"]
+             or ra["GATE_RA2_beats_surface_PRIMARY_KILL"] is not True))
+    sequential_verdict = verdict
+    if is_sdg:
+        # ---- v2.1: THE WORD "SUPPORTED" IS NOT AVAILABLE IN THIS ARM ------
+        # The sdg sequential verdict used to be an f-string wrapping the UNMODIFIED
+        # api ladder, so it could read "SUPPORTED (weak) (SECONDARY / DESCRIPTIVE
+        # ONLY ...)" and anyone grepping the report for a verdict could lift the
+        # token SUPPORTED off a template corpus -- directly contradicting the
+        # preregistration, which reserves the word for the api arm. The verdict is
+        # now HARD-MAPPED onto a vocabulary that excludes it.
+        _SDG_SEQ_VOCAB = {
+            "SUPPORTED": "DESCRIPTIVE-ONLY (pattern present in the forced-path corpus)",
+            "SUPPORTED (weak)": "DESCRIPTIVE-ONLY (weak pattern in the forced-path corpus)",
+            "REJECTED": "NOT-LICENSED (sequential controls failed)",
+            "VACUOUS": "NOT-LICENSED (vacuous)",
+        }
+        sequential_verdict = (
+            _SDG_SEQ_VOCAB.get(verdict, "NOT-LICENSED")
+            + " -- SECONDARY / DESCRIPTIVE ONLY, forced-path template corpus. "
+              "The word SUPPORTED is reserved for the api arm and is not available "
+              "here at any value of any gate.")
+        # ---- v2.1: THE REAL REASON THE SEQUENTIAL TEST CANNOT CARRY A CLAIM.
+        # v2 preregistered that "CONTROL 5 / GATE 6 is EXPECTED TO FAIL BY
+        # CONSTRUCTION" and named that as the safeguard. THAT EXPECTATION IS FALSE.
+        # Measured on the realised corpus: usermove_acc 0.7188 vs board_acc (LOCO
+        # Markov) 0.8750, margin +0.1562 >= 0.05 -- GATE 6 PASSES. The follow-up ids
+        # are only U-NONE (-> B5, 60/60), U-OPEN (-> B1 66 / B0 54) and U-REPAIR
+        # (-> B0, 12/12), so the scripted stimulus is INFORMATIVE BUT NOT SUFFICIENT.
+        # The correct reason is that THE TRANSITION MATRIX ITSELF IS AUTHORED:
+        # B1->B0 is 60/60 = 100% deterministic in the forced-path bank, so board_acc
+        # measures the path bank we wrote, not a property of any text.
+        seq_reason = (
+            "THE TRANSITION MATRIX IS AUTHORED. B1->B0 runs at 60/60 = 100% in the "
+            "forced-path bank, so a Markov model of b_N -> b_{N+1} is reading the "
+            "path bank we wrote down, not a property of any text or any model. "
+            "CORRECTION (v2.1): v2 preregistered that CONTROL 5 / GATE 6 was "
+            "'EXPECTED TO FAIL BY CONSTRUCTION' and named that as the reason the "
+            "sequential arm could not carry a claim. THAT EXPECTATION WAS FALSE and "
+            "is withdrawn -- measured usermove_acc 0.7188 vs board_acc 0.8750, "
+            "margin +0.1562, so GATE 6 PASSES. The follow-up ids (U-NONE, U-OPEN, "
+            "U-REPAIR) are informative but not sufficient. The safeguard v2 relied "
+            "on does not fire; the authored transition matrix is the actual reason.")
+        if ra is None:
+            verdict = "VACUOUS -- no prescribed board survived to a consensus label"
+        elif not controls_computed:
+            verdict = "VACUOUS -- controls could not be computed"
+        elif not g0_pass:
+            verdict = "VACUOUS"
+        else:
+            verdict = ra["RUBRIC_ADHERENCE_VERDICT"]
+        cas_spec = ("NOT ASSESSED in the sdg arm. This corpus is template-rendered, "
+                    "so a taxonomy comparison on it measures the template table, not "
+                    "CAS-specificity. GATE 8 is forced to null here. CAS-specificity "
+                    "stays GREY.")
+    else:
+        seq_reason = "n/a -- in the api arm the sequential test IS the claim."
+
     trans = Counter(zip(bn, bnext))
     rep = {
         "prereg": "PREREG_NEXT_BOARD_V1.md",
-        "revision": "Rev 0.4 (post-adversarial-review)",
+        "revision": "v2.1 (forced-transition SDG arm added and then WITHDRAWN on two "
+                    "named kills; api arm unchanged)",
+        "generator": A.generator,
+        "generator_recorded_in_label_payload": gen_in_payload,
+        "provenance_source": "derived from the label payload and the presence of an "
+                             "answer key, NOT from the --generator flag; a mismatch "
+                             "with the flag aborts the run",
+        "PRIMARY_CLAIM": (
+            "RUBRIC ADHERENCE / READER RELIABILITY on a template corpus. NOT "
+            "calibration, NOT validation against known ground truth, NOT ecological "
+            "prediction. The answer key is CIRCULAR with the rubric and the corpus "
+            "is SURFACE-DETERMINED, so this arm is WITHDRAWN: see "
+            "PRECHECK_two_named_kills. The sequential test in this file is SECONDARY "
+            "and DESCRIPTIVE only and may not use the word SUPPORTED." if is_sdg else
+            "ECOLOGICAL SEQUENTIAL PREDICTION -- does b_N predict b_{N+1} in natural "
+            "multi-turn model output, beyond surface text, marginals, a "
+            "within-conversation permutation null, the scripted user move and turn "
+            "position."),
+        "TEMPLATE_DISCLOSURE": (SDG_TEMPLATE_DISCLOSURE if is_sdg else
+                                "n/a -- the api arm's turns are real model outputs."),
         "immutability": {
             "prereg_sha256": _sha256(os.path.join(HERE, "PREREG_NEXT_BOARD_V1.md")),
             "script_sha256": _sha256(os.path.abspath(__file__)),
@@ -1329,6 +2393,34 @@ def stage_analyze(A):
                       "chance_agreement_Pe_observed": round(arm["pe"], 4),
                       "consensus_board_usage": {b: arm["usage"].get(b, 0) for b in BOARDS},
                       "b0_share": round(arm["none_share"], 4)},
+        # ---- PRIMARY in the sdg arm; absent in the api arm, which has no answer key.
+        # RENAMED at v2.1 from PRIMARY_ground_truth_calibration: the key asserted a
+        # calibration against known ground truth that was never earned.
+        "PRIMARY_rubric_adherence_NOT_calibration": (ra if ra is not None else {
+            "ran": False,
+            "why": "no turn carries a prescribed board. The api arm has NO ANSWER KEY "
+                   "at all -- its labels come only from readers (kappa ~0.54), which "
+                   "is one of the four corpus problems the sdg arm was built to fix "
+                   "and did not fix."}),
+        "PRECHECK_two_named_kills": (
+            sdg_precheck(payload.get("conv_file", A.conv_file)) if is_sdg else
+            {"ran": False, "why": "api arm: no answer key to be surface-determined "
+                                  "against."}),
+        "corpus_prescribed_structure": (corpus_struct if corpus_struct is not None else {
+            "ran": False, "why": "api arm: no prescribed labels to read structure off."}),
+        "SECONDARY_sequential_prediction_note": (
+            "In the sdg arm everything under 'prediction', 'controls' and 'gates' "
+            "below is SECONDARY AND DESCRIPTIVE and the word SUPPORTED is not "
+            "available to it. " + seq_reason if is_sdg else seq_reason),
+        "GATE0_NOT_COMPARABLE_ACROSS_ARMS": (
+            "Gate 0's floors (Fleiss kappa 0.35, the marginal-derived raw-agreement "
+            "floor, the B0-share cap) were calibrated against NATURAL TEXT. On a "
+            "3-effective-class corpus of 38 byte-distinct strings kappa is INFLATED "
+            "and derived_raw_floor is trivially cleared (Pe rises, so the floor "
+            "moves from ~0.35 toward ~0.58 while observed agreement moves far "
+            "higher). PASSING GATE 0 IN THE SDG ARM IS NOT THE SAME HURDLE as "
+            "passing it in the api arm and must never be presented as the same "
+            "check." if is_sdg else "n/a -- api arm."),
         "prediction": {
             "board_acc_LOCO_markov": round(board_acc, 4),
             "nmi_bN_bNext": round(real_nmi, 4),
@@ -1368,7 +2460,17 @@ def stage_analyze(A):
                 "p95": round(null_p95, 4), "p_empirical": round(p_perm, 4),
                 "seed": SEED_PERM_NULL},
             "C4_generator_labeller_separation": {
-                "computed": True, "violations": violations, "pass": g4},
+                "computed": True, "violations": violations, "pass": g4,
+                "note": ("VACUOUS IN THE SDG ARM. gen_provider is the sentinel 'sdg', "
+                         "which is outside the reader panel, so no reader can ever "
+                         "equal it and the violation set is empty by construction. "
+                         "That IS genuine separation, but a vacuous pass is not "
+                         "evidence of anything (PREREG 5.4 makes the same point about "
+                         "Rev 0.3's hardcoded g4=True). The 3-reader panel width is "
+                         "preserved by a deterministic structure-preserving holdout "
+                         "recorded in excluded_reader, which is NOT a separation "
+                         "control." if is_sdg else
+                         "api arm: a model never labels a turn it generated.")},
             "C5_user_followup_only": {
                 "acc": round(user_acc, 4),
                 "sampling": "follow-ups drawn i.i.d. WITH REPLACEMENT, one independent draw "
@@ -1421,10 +2523,29 @@ def stage_analyze(A):
                   "GATE5_beats_persistence_downgrade": g5,
                   "GATE6_beats_usermove_HARD_KILL": g6,
                   "GATE7_beats_turn_position_downgrade": g7,
-                  "GATE8_beats_matched_taxonomy": g8},
+                  "GATE8_beats_matched_taxonomy": g8,
+                  "GATE8_note": ("forced to null in the sdg arm: claim-ceiling 10B.14 "
+                                 "allows no CAS-specificity claim from a template "
+                                 "corpus, so a bare boolean here would be a lift "
+                                 "surface." if is_sdg else "computed"),
+                  "GATE_RA1_reads_above_chance": (ra or {}).get("GATE_RA1_reads_above_chance"),
+                  "GATE_RA2_beats_surface_PRIMARY_KILL":
+                      (ra or {}).get("GATE_RA2_beats_surface_PRIMARY_KILL"),
+                  "KILL_MAPPING_CIRCULARITY": (ra or {}).get("KILL_MAPPING_CIRCULARITY"),
+                  "gates_are_null_when_uncomputable":
+                      "every margin gate returns null (never true) when its control "
+                      "could not be computed; the verdict is then VACUOUS. Kill gates "
+                      "fail closed."},
         "VERDICT": verdict,
+        "SEQUENTIAL_VERDICT_secondary": sequential_verdict,
         "CAS_SPECIFICITY": cas_spec,
         "KILLED_BY_SURFACE_CONTROL": killed_by_surface,
+        "KILLED_BY_SURFACE_CONTROL_GT": killed_by_surface_ra,
+        "KILLED_BY_SURFACE_CONTROL_GT_note":
+            "the SEQUENTIAL flag above is computed only from the sequential surface "
+            "control and can read false while the surface model WON OUTRIGHT on the "
+            "ground-truth task. This second flag is the one that decides the sdg arm; "
+            "both are printed at the top level so a skim cannot miss either.",
         "TAXONOMY_KILL_kappa_below_0.20": taxonomy_kill,
         "FIT_KILL_b0_share_above_0.60": fit_kill,
         "claim_ceiling": [
@@ -1449,18 +2570,108 @@ def stage_analyze(A):
             "human-cognition, no cross-model-universality claim.",
             "A VACUOUS verdict means the prediction numbers in this file are NOT evidence and "
             "may not be cited.",
-        ],
+        ] + ([
+            "SDG ARM ONLY -- THE ARM IS WITHDRAWN ON TWO NAMED KILLS. (1) MAPPING "
+            "CIRCULARITY: the answer key was authored by reading these same rendered "
+            "strings through this same rubric, so the primary statistic has no "
+            "informative range -- a pass is guaranteed by the authoring and a fail "
+            "indicates reader noise. (2) SURFACE-DETERMINED CORPUS: char, word AND "
+            "raw character count all score 1.0000 on the ground-truth task under "
+            "LOCO folds, so the primary-kill gate is unsatisfiable by any accuracy. "
+            "Both were obtained at $0 by `--stage precheck` before any labelling "
+            "call. Nothing in this arm is licensed as calibration.",
+            "SDG ARM ONLY -- 'CALIBRATED' AND 'KNOWN GROUND TRUTH' ARE WITHDRAWN "
+            "TERMS. The truth was not known independently; it was authored by the "
+            "process under test. The statistic is a RUBRIC-ADHERENCE / "
+            "READER-RELIABILITY check: at best it says three blind commercial "
+            "readers apply this rubric to fixed strings the way its author did. That "
+            "is a fact about READERS and a RUBRIC. It licenses NOTHING about natural "
+            "model output and may never be reported as if it did.",
+            "SDG ARM ONLY -- THE WORD 'SUPPORTED' IS NOT AVAILABLE. The sequential "
+            "verdict is hard-mapped onto DESCRIPTIVE-ONLY / NOT-LICENSED so the "
+            "token cannot be lifted off a template corpus by anyone grepping the "
+            "report.",
+            "SDG ARM ONLY -- THE TEXT IS A LOOKUP TABLE, NOT GENERATION. 22 authored "
+            "strings, 7 CAS expressions, one template each for PLAN / REFUSE / "
+            "REFUSE_CLAIM. Any lens number here is a fact about the lens and the "
+            "templates. Never merge these records into a corpus of real outputs "
+            "without the gen_provider='sdg' marker.",
+            "SDG ARM ONLY -- THE TURN-TYPE -> BOARD MAPPING IS OURS, AND TWO ROWS OF "
+            "IT ARE WEAK. Dialog acts are not boards; no framework supplies the "
+            "correspondence. PLAN->B5 carries no capacity/budget/throttle/silence "
+            "content, which is the clause B5's rubric leads with. REFUSE_CLAIM->B0 "
+            "is an explicit decline plus a competing reading, which plausibly reads "
+            "as B1 or B3 -- a reader choosing either is scored WRONG against an "
+            "author judgement with no greater standing than the reading under test. "
+            "Both are flagged on the same footing. The effective mapping is SIX turn "
+            "types, not the eleven the table lists: no forced path uses ACK or "
+            "EMPATHIZE.",
+            f"SDG ARM ONLY -- STRUCTURAL CEILING. {list(SDG_UNREACHABLE_BOARDS)} have "
+            f"ZERO prescribed instances and cannot be constructed from this generator, "
+            f"so the instrument is UNCALIBRATED for three of the five boards no matter "
+            f"what this run reports. {list(SDG_UNREALISABLE_TRANSITIONS)} is "
+            f"structurally unrealisable.",
+            "SDG ARM ONLY -- LOCO FOLDS ARE NOT TOPICALLY INDEPENDENT. The forced-path "
+            "bank repeats every 6 conversations, so held-out and training folds can "
+            "share a path and a template draw. The api arm's no-seed-prompt-reuse "
+            "guarantee does NOT hold here.",
+        ] if is_sdg else []),
     }
     with open(A.report, "w", encoding="utf-8") as f:
         json.dump(rep, f, indent=2, ensure_ascii=False)
 
-    print("\n=== GATE 4 -- NEXT-BOARD PREDICTION v1 (Rev 0.4) ===")
+    print(f"\n=== GATE 4 -- NEXT-BOARD v2.1 [generator={A.generator}] ===")
+    if is_sdg:
+        print("  *** TEMPLATE-RENDERED CORPUS. ARM WITHDRAWN ON TWO NAMED KILLS:")
+        print("      (1) MAPPING CIRCULARITY -- the answer key was authored from these")
+        print("          same strings through this same rubric, so the statistic has")
+        print("          NO INFORMATIVE RANGE. 'CALIBRATED' is a withdrawn term.")
+        print("      (2) SURFACE-DETERMINED CORPUS -- char/word/length all 1.0000.")
+        print("      PRIMARY = RUBRIC ADHERENCE / READER RELIABILITY, not calibration.")
+        print("      This says NOTHING about natural model output. ***")
     print(f"  corpus: {payload['n_convs']} convs / {arm['n_turns']} turns / {n_pairs} usable "
           f"pairs / {len(folds)} LOCO folds")
-    print("\n  -- GATE 0 (read before any prediction number) --")
+    if corpus_struct:
+        print("\n  -- CORPUS STRUCTURE (from the answer key, not from readers) --")
+        print(f"      prescribed mix          : {corpus_struct['prescribed_board_mix']} "
+              f"(none-share {corpus_struct['prescribed_none_share']})")
+        print(f"      CORPUS PERSISTENCE RATE : "
+              f"{corpus_struct['CORPUS_PERSISTENCE_RATE']}  <- stickiness removed")
+        print(f"      transition matrix       : {corpus_struct['realised_transition_matrix']}")
+        print(f"      UNREACHABLE boards      : "
+              f"{corpus_struct['unreachable_boards_zero_prescribed_instances']}")
+    print("\n  -- GATE 0 (read before ANY reader-derived number, calibration included) --")
     for k, v in g0.items():
         print(f"      {k:36s} {v['value']}  {'ok' if v['pass'] else 'FAIL'}")
     print(f"  GATE 0: {'PASS' if g0_pass else 'FAIL -> VACUOUS'}")
+    if ra:
+        print(f"\n  -- PRIMARY: RUBRIC ADHERENCE, NOT CALIBRATION "
+              f"({ra['n_scored_turns']} turns) --")
+        if not g0_pass:
+            print("      (GATE 0 FAILED -> these numbers are NOT evidence and may not be cited)")
+        print(f"      rubric_adherence_acc                  : {ra['rubric_adherence_acc']}")
+        print(f"      chance (modal prescribed class, LOCO) : "
+              f"{ra['chance_modal_prescribed_class_LOCO']}   [1/6 = "
+              f"{ra['chance_uniform_1_over_6']}, NOT the operative level; in-sample "
+              f"{ra['chance_modal_prescribed_class_in_sample_not_gating']}]")
+        print(f"      surface on the SAME task (max of 3)   : "
+              f"{ra['surface_control_on_the_same_task']['acc']} "
+              f"[{ra['surface_control_on_the_same_task']['strongest']}]  <- KILLS IF IT WINS")
+        print(f"      recall (consensus survivors only)     : "
+              f"{ {b: v['recall_among_those_with_consensus'] for b, v in ra['per_class_recall'].items()} }")
+        print(f"      consensus coverage per prescribed cls : "
+              f"{ {b: v['consensus_coverage_for_this_prescribed_class'] for b, v in ra['per_class_recall'].items()} }")
+        print(f"      GATE RA-1 above chance {ra['GATE_RA1_reads_above_chance']} | "
+              f"GATE RA-2 beats surface {ra['GATE_RA2_beats_surface_PRIMARY_KILL']} | "
+              f"KILL mapping-circularity {ra['KILL_MAPPING_CIRCULARITY']}")
+        print(f"      RUBRIC ADHERENCE: {ra['RUBRIC_ADHERENCE_VERDICT']}")
+        if ra["KILL_MAPPING_CIRCULARITY"]:
+            print("      *** MAPPING CIRCULARITY: the answer key was authored by reading")
+            print("          these strings through this rubric. The statistic has NO")
+            print("          INFORMATIVE RANGE and is NOT LICENSED as calibration. ***")
+        if ra["GATE_RA2_beats_surface_PRIMARY_KILL"] is not True:
+            print("      *** SURFACE CONTROL WON (or was uncomputable) ON TEMPLATE TEXT")
+            print("          -> THE ARM IS KILLED OUTRIGHT. ***")
     print(f"\n  board_acc (LOCO Markov)  : {board_acc:.4f}")
     print(f"  C1 surface (max of 3)    : {surface_acc:.4f}  [{surf_name}]  "
           f"char {char_acc:.4f} / word {word_acc:.4f} / len {len_acc:.4f}   <- PRIMARY KILL")
@@ -1478,8 +2689,11 @@ def stage_analyze(A):
     for k, v in boot.items():
         print(f"      {k:44s} {v['mean']:+.4f} / {v['p5']:+.4f}")
     print(f"\n  gates: G1={g1} G2={g2} G3={g3} G4={g4} G6={g6} | "
-          f"downgrades G5={g5} G7={g7} | G8={g8}")
+          f"downgrades G5={g5} G7={g7} | G8={g8}"
+          + ("   [SECONDARY / DESCRIPTIVE ONLY in the sdg arm]" if is_sdg else ""))
     print(f"  VERDICT: {verdict}")
+    if is_sdg:
+        print(f"  sequential (secondary, descriptive): {sequential_verdict}")
     print(f"  CAS-specificity: {cas_spec}")
     if killed_by_surface:
         print("  *** KILLED BY SURFACE CONTROL: a surface model on turn N matched or beat the "
@@ -1499,7 +2713,12 @@ def stage_analyze(A):
 def main():
     ap = argparse.ArgumentParser(
         description="Gate 4 next-board prediction test (see PREREG_NEXT_BOARD_V1.md)")
-    ap.add_argument("--stage", required=True, choices=["generate", "label", "gate0", "analyze"])
+    ap.add_argument("--stage", required=True,
+                    choices=["generate", "precheck", "label", "gate0", "analyze"],
+                    help="'precheck' (sdg only) decides the arm for $0 -- no reader "
+                         "panel, no labelling call, no network -- by measuring "
+                         "whether the corpus surface determines the answer key. "
+                         "stage label refuses to spend money while it fails.")
     ap.add_argument("--taxonomy", default="board", choices=["board", "alt"],
                     help="'board' = the 5 CCB board types; 'alt' = matched 6-class discourse "
                          "taxonomy (CONTROL 8)")
@@ -1507,6 +2726,15 @@ def main():
     ap.add_argument("--n-convos", type=int, default=36,   # == len(gen_real_outputs.PROMPTS)
                     help="max 36 -- the size of the reused seed-prompt bank")
     ap.add_argument("--n-turns", type=int, default=7)
+    ap.add_argument("--generator", default="api", choices=["api", "sdg"],
+                    help="'api' (default, unchanged) = four commercial models write the "
+                         "turns; PRIMARY CLAIM is ecological sequential prediction. "
+                         "'sdg' = FORCED-TRANSITION corpus from cas-synthetic's "
+                         "TEMPLATE-RENDERED multi-turn generator (no model, no network); "
+                         "PRIMARY CLAIM changes to INSTRUMENT CALIBRATION AGAINST KNOWN "
+                         "GROUND TRUTH -- a different and weaker, SOFTWARE-ONLY claim. "
+                         "The flag namespaces every derived path, so an sdg run can "
+                         "never contaminate an api run's checkpoints or reports.")
     ap.add_argument("--min-turns", type=int, default=3,
                     help="keep a truncated conversation if it reached this many good turns")
     ap.add_argument("--gen-max-tokens", type=int, default=800)
@@ -1514,6 +2742,13 @@ def main():
     ap.add_argument("--batch-size", type=int, default=6)
     ap.add_argument("--repair-batch-size", type=int, default=3)
     ap.add_argument("--repair-rounds", type=int, default=2)
+    ap.add_argument("--allow-surface-determined-corpus", action="store_true",
+                    help="PREREG-DEVIATING: label an SDG corpus whose surface "
+                         "DETERMINES the answer key, i.e. whose primary-kill gate is "
+                         "already unsatisfiable. Off by default; the run is blocked "
+                         "instead. Deviating must be logged in the prereg amendment "
+                         "log, and the resulting numbers are NOT LICENSED as "
+                         "calibration under any verdict.")
     ap.add_argument("--allow-reasoning-only", action="store_true",
                     help="PREREG-DEVIATING: accept a JSON array found in a reasoning trace when "
                          "message.content is empty. Off by default; deviating must be logged in "
@@ -1531,16 +2766,27 @@ def main():
         A.n_convos, A.n_turns = min(A.n_convos, 4), min(A.n_turns, 3)
         A.perm_trials = min(A.perm_trials, 200)
         A.n_boot = min(A.n_boot, 300)
-    tag = "_smoke" if A.smoke else ""
+    # v2.1: the silent clamp `A.n_convos = min(A.n_convos, len(SDG_FORCED_PATHS) *
+    # SDG_MAX_REPLICATES)` was removed. It made build_sdg_conversation_plan's own
+    # capacity check DEAD CODE and silently gave the operator a smaller corpus than
+    # requested. build_sdg_conversation_plan is now the single authority and raises.
+    # Every derived path is namespaced by generator. Three of the six have NO CLI
+    # override (label_ckpt, alt_label_file, gate0_report) and alt_label_file also
+    # ignores --label-file, so without this an sdg run would append its labelling
+    # calls into the api run's checkpoint and overwrite its gate0 report.
+    tag = ("_sdg" if A.generator != "api" else "") + ("_smoke" if A.smoke else "")
     A.conv_file = A.conv_file or os.path.join(HERE, f"conversations{tag}.jsonl")
     A.label_ckpt = os.path.join(HERE, f"label_calls{tag}.jsonl")
     A.label_file = A.label_file or os.path.join(HERE, f"labels_{A.taxonomy}{tag}.json")
     A.alt_label_file = os.path.join(HERE, f"labels_alt{tag}.json")
     A.report = A.report or os.path.join(HERE, f"next_board_report{tag}.json")
     A.gate0_report = os.path.join(HERE, f"gate0_report_{A.taxonomy}{tag}.json")
+    A.precheck_report = os.path.join(HERE, f"precheck_report{tag}.json")
 
     if A.stage == "generate":
         stage_generate(A)
+    elif A.stage == "precheck":
+        stage_precheck(A)
     elif A.stage == "label":
         stage_label(A)
     elif A.stage == "gate0":
