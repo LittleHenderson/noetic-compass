@@ -1,0 +1,1063 @@
+# CAS HARNESS — MASTER SPEC SHEET (LIVING DOCUMENT)
+
+**Path:** `docs/CAS_HARNESS_SPEC_SHEET.md`
+**Status:** LIVING master record. Created 2026-08-19 to satisfy the `CLAUDE.md` mandate added in commit `fd6ab181` (which until now pointed at a file that did not exist). **Revised 2026-08-19 after an adversarial audit: 3 statuses downgraded, 3 licensed sentences narrowed, 1 missing negative added (§7.12), 6 wrong numbers corrected, 11 rounded figures restated exactly, 10 broken artifact paths fixed, and 8 undefined status words defined. Nothing was upgraded and no negative was removed. See the Change Log (§11).** **Second audit pass, same date: the seven findings were re-checked and the five still open were closed — the `HOLDS` / `INCONCLUSIVE BY DESIGN` ceilings sharpened, Cap. 2 restated as `REAL` + `OPEN (missing pre-registered control)`, Cap. 4's `95.4%` given its 10% chance reference, Cap. 23 marked `ENGINEERED-NOT-VALIDATED` with its figures labelled prose-quoted, the `n = 1` preflight claim moved out of the LICENSED list, and a plain-text "no ACCEPT anywhere in the harness record" statement added to §5.2. Again: no number changed, no negative removed.**
+**Repo root:** `C:/Users/wakil/OneDrive/Desktop/tksCAS` · **Branch:** `codex/cascompass-legal-live-source` · **HEAD at creation:** `fd6ab181`
+
+---
+
+## 1. HOW TO USE THIS DOCUMENT
+
+> **THIS IS THE LIVING MASTER SPEC SHEET FOR THE CAS HARNESS. IT IS THE FIRST THING YOU READ WHEN YOU PICK UP THIS PROJECT — BEFORE DESIGNING AN EXPERIMENT, BEFORE QUOTING A CAPABILITY, BEFORE WRITING ANY MARKETING, LEGAL, OR REGULATOR-FACING SENTENCE, AND BEFORE ANSWERING "CAN THE HARNESS DO X".**
+>
+> **ANY AGENT WHO PRODUCES A NEW RESULT MUST UPDATE THIS FILE IN THE SAME COMMIT AS THE RESULT. NOT THE NEXT COMMIT. THE SAME ONE.**
+
+Why this file exists, plainly: two flagship artifacts were found living **only** on a rented GPU machine that could have been switched off at any moment (the η→ε bridge scripts, and the Stage-9 40E verifier), and several experiments have re-run work that was already settled and already negative. This sheet is the defence against both. It is a memory, not a brochure.
+
+### The update rule, concretely
+
+When you finish a result — pass, fail, null, `GREY`, `VACUOUS`, withdrawn, anything:
+
+1. **Add the row.** Put it in the Capability Matrix (Section 4) in the right group, or add a new row if it is a new capability. Every row carries: plain-English meaning, status, exact numbers, model scale, artifact path, caveat.
+2. **Keep the claim-status vocabulary.** Use only the words in the legend (Section 3). Do not invent new status words. If a result does not fit an existing word, say so in the caveat column — do not coin a new label.
+3. **Never delete a negative.** Disconfirmations are load-bearing product assets. The whole credibility of this project rests on the fact that the same discipline that produced `+1.412` also produced `14/14 LAST`. A sheet with the negatives trimmed out is worth nothing.
+4. **Never upgrade a status without an artifact path in the same edit.** A status with no checkable file is not a status. `LICENSED` with no path is a marketing claim wearing a lab coat.
+5. **Keep every number exact.** Never round, never paraphrase a metric. `0.03225806451612903` is not `0.03`. `28.7277 pp` is not `~29 pp`.
+6. **Add a dated row to the Change Log** (Section 11) for every edit — date, what changed, which commit.
+7. **Mark single-copy and off-repo evidence.** If a claim rests on something that exists in exactly one place (a pod, `D:/tksCAS-archive`, an unmerged commit, a branch not reachable from HEAD), say so in the row. Those are the claims that quietly evaporate.
+
+### What this document does NOT do
+
+It does not grant an `ACCEPT`. **No `ACCEPT` verdict stands anywhere in the project record.** Nothing here may be read as one, and nothing written into it later may create one.
+
+---
+
+## 2. ONE-PARAGRAPH SUMMARY — WHAT THE HARNESS IS
+
+The CAS Harness is an audit rig for language models. It does four things. **It reads**: trains simple classifiers on a model's internal activations to recover which of the CAS categories a piece of text belongs to, and separately has independent blind readers rate what a model actually *wrote*. **It proves cause**: knocks out the specific directions, neurons, or attention heads it found and checks that the model's behaviour moves — always against matched random controls of the same size, because a big effect that random directions also produce is worth nothing. **It corrects**: writes the CAS algebra as compilable notation, injects a fault on a named axis, detects which axis broke, and puts it back. **It records**: every audit emits a signed Evidence Packet with six hash-committed proof chips, appended to a tamper-evident hash chain and mirrored to write-once cloud storage, so an outside party can re-check the result without the operator's cooperation. What it has *established* is narrower than what it can *do*: on models from 160M to 20B parameters, the harness demonstrably reads structure out of hidden states, that structure is causally load-bearing on at least one model, and rewriting it as an English prefix measurably shifts what the model says next. What it has **not** established is that the structure it reads is specifically **CAS** rather than ordinary topic-and-frame structure wearing CAS labels. That question — CAS-specificity — is the open frontier, and the honest current answer is `GREY`. **Say the consequence out loud: Claim A — "the weights are natively CAS" — is DEAD, formally retired by the owner on 2026-08-18 (§8.1). The live thesis is Claim B — CAS as a measurement and correction language, where the ruler need not be inside the table (§8.2).**
+
+---
+
+## 3. CLAIM-STATUS LEGEND
+
+This vocabulary is the product. Use it exactly. One word, one meaning, everywhere.
+
+| Status | Means | Does NOT mean |
+|---|---|---|
+| **`REAL`** | The thing exists and runs. Code executes, artifacts are on disk, numbers were produced by a real execution rather than a description of one. | That the numbers support any claim about the world. Wired ≠ works. |
+| **`VALIDATED`** | It ran and it passed its own pre-registered criterion, against matched controls. The apparatus does what the apparatus is supposed to do. | That the result generalises beyond the fixture, corpus, language, seed, split, or model point it was measured on. |
+| **`LICENSED`** | You may say this sentence out loud, in this exact wording, to a customer or a regulator. The evidence covers the claim as worded. | Anything broader than the exact wording. Widening the sentence voids the licence. |
+| **`NOT LICENSED`** | You may not say it. Either the evidence does not exist, or it exists and does not reach the claim. | That the claim is false. It means unproven, and sometimes it means untested. |
+| **`GREY`** | The test ran, was valid, and returned neither a pass nor a clean refutation. **A `GREY` is not a pass.** | A soft yes. Do not report `GREY` as encouraging. |
+| **`VACUOUS`** | The test could not be read, because a precondition failed — the intervention changed nothing at all, or the controls were mis-dosed, or the readout was below the instrument's resolution. **The label was never tested, rather than tested and rejected.** | A `FAIL`. Do not average `VACUOUS` into a pass rate. |
+| **`WITHDRAWN`** | A claim was made, then retracted, on the record, with a reason code and a date. It stays in this document forever. | That it can be quietly revived. Withdrawal is permanent unless a new artifact re-earns it under a new row. |
+| **`ENGINEERED-NOT-VALIDATED`** | The machinery is built and the design is sound, but no result has come out of it. Capacity, not evidence. | Anything about performance. "Built for 300B" is not "works at 300B". |
+| **`FLAG_FOR_HUMAN_REVIEW`** | The verdict ceiling for an artifact whose checks did not all clear. It is the honest verdict, not a holding pattern. | A pending `ACCEPT`. |
+| **`PASS` / `FAIL`** | A single pre-registered test met / did not meet its stated criterion. Always report which criterion, and whether it was set before the run. | A verdict on the whole battery. |
+| **`SANITY_PASS` / `SANITY_FAIL`** | A generic control experiment (nothing to do with CAS) showing the measuring instrument can or cannot produce a real, selective effect at all. Held **outside** any aggregate and outside the verdict, by design. | Evidence for or against any CAS hypothesis. It only tells you whether the apparatus is alive. |
+| **`NULL`** | A pre-registered test ran, was evaluable, and found nothing. An honest empty hand. | An error. Nulls are results and are kept. |
+| **`FALSIFIED`** | A pre-registered test ran and the hypothesis was refuted, with the control rig catching the failure. | A defect. This is the machinery working. |
+| **`VOID`** | The run is unusable for reasons unrelated to the hypothesis (degenerate metric, contaminated fixture, wrong configuration). Numbers from a `VOID` run may never be cited. | A negative result about the hypothesis. |
+| **`OPEN`** | Never run, or run and not yet adjudicated. Untested is not the same as null. | That it failed. |
+| **`unavailable`** | The fact is unrecoverable from the record. Write the word. **Never fill it in with a plausible value** — that is fabrication. | That it can be looked up later from an external source. |
+| **`PARTIAL`** | The test ran and returned a real, readable result that reaches **part** of the claim and not the rest. Always name which part is reached and which is not. | A pass with a footnote. A `PARTIAL` never licenses the full sentence. |
+| **`HOLDS`** | A **result-level** word for the output-lens group only (§4.2). The measurement reproduced **above its stated null, on real data, with the null named** — the comparison came out in the predicted direction on the stated fixture. **Evidential ceiling: it is one comparison against one null on one fixture — weaker than `VALIDATED`, because no pre-registered absolute criterion and/or no matched *control condition* (only a null) was involved. A `HOLDS` states that an effect is PRESENT. It never states that the effect is CAS-SPECIFIC.** | `VALIDATED`. Never promote a `HOLDS` to `VALIDATED` without a pre-registered criterion and matched controls. **Never that the effect is CAS-specific** — specificity is `GREY` project-wide (§10 frontier 1). |
+| **`INCONCLUSIVE BY DESIGN`** | The measurement **cannot discriminate the hypothesis as constructed**, because **its own fixture broke the test's logic** — distinct from `VACUOUS` (precondition failure at run time) and from `VOID` (unusable run). **A negative result about the fixture, not about the hypothesis. Recorded explicitly so it is never mistaken for a `NULL`.** | Evidence either way about the hypothesis. **Never count it as a `NULL` and never average it into a pass rate.** |
+| **`DISCONFIRMED`** | A specific structural prediction was tested against the full set of rival alternatives and came **last / opposite**. Stronger than `NULL`, narrower than `FALSIFIED` (which additionally requires the control rig to have caught a would-be false positive). | That the whole framework is refuted. Scope it to the prediction tested. |
+| **`REJECTED`** | An acceptance gate on an **input artifact** (a scenario bank, a fixture) failed, and the binding rule is **reject-not-repair**. | That the artifact can be patched and re-submitted. |
+| **`NOT TESTABLE`** | No eligible fixture or data exists, so the experiment has never been run. **Untested is not null.** | A negative result. Reporting a `NOT TESTABLE` cell as "not found" is an overclaim. |
+| **`DEAD` / `LIVE`** | Reserved for the two top-level claims in §8 only. `DEAD` = formally retired by the owner on the record, never to be revived in an external document. `LIVE` = the current working thesis, ratified by the owner, with named outstanding gaps. | A status for any capability row. Do not use these words in §4. |
+| **`IN FORCE`** | A **process rule** (not a result) that currently binds, e.g. gated build discipline. | Evidence of anything. |
+
+**Prohibited words in every surface, always:** `certified`, `guaranteed`, `100%`, `world-first`, `only`, `court-admissible`, `regulator-grade by construction`, `validated at 300B`, `validated at frontier scale`.
+
+**Prohibited sentences (verbatim, per the 2026-07-19 governance rules):** "presence, causal role and conditionability across six models"; "two independent evidence tiers across six models"; "the 20B chain closes on two axes"; "every verdict is validated causally"; `PASS_BOUNDED_ATLAS_V0` used as a shorthand for `PASS_BOUNDED_ATLAS_V0_F5_RAIL_ONLY` ("the suffix names a measurement that was not made").
+
+---
+
+## 4. CAPABILITY MATRIX
+
+Grouped as: **4.1 Reading internals** · **4.2 Reading outputs (the output lens)** · **4.3 Proving cause and effect** · **4.4 Symbolic algebra layer** · **4.5 Safety detectors** · **4.6 Plumbing**.
+(4.2 is an added group: the output lens is a reading capability, but it reads *text the model produced*, not activations. Keeping it separate is the point — conflating the two is the single largest overclaim risk in this project.)
+
+Each group opens with a one-line index, then full entries. **Every number below is exact and must stay exact.**
+
+---
+
+### 4.1 Reading internals
+
+| # | Capability | Status |
+|---|---|---|
+| 1 | Cognitive-structure detection (linear probing of hidden states) | `VALIDATED` / `LICENSED` under a narrow reading only |
+| 2 | η→ε bridge (probe → realize-as-prefix → likelihood shift) | `REAL` + **`OPEN (missing pre-registered control)`** — claim-level ceiling `PARTIAL` |
+| 3 | Layer sweeps / per-layer readout selection | `REAL` / `VALIDATED` as apparatus |
+| 4 | Multi-layer trace + blind-spot detection | `REAL` — **no matched control, no pre-registered criterion, no null** |
+| 5 | Lacunarity detection (factorization-gappiness preflight) | `VALIDATED` as internal diagnostic; clean `NULL` as injection detector |
+| 6 | Fractal classifier (orbit-class preflight) | `VALIDATED` as preflight, proxy-grade at 20B |
+| 7 | Weight-geometry alignment (static weights) | `REAL` but **overstated as usually quoted** |
+
+---
+
+**[1] Cognitive-structure detection — linear probing / hidden-state readout**
+
+- **Plain English:** train a simple balanced linear classifier on the model's internal activations to recover which CAS class a scenario belongs to, and race it against text-only baselines (word counts, character n-grams), a majority-class baseline, and a shuffled-label null.
+- **Status:** `VALIDATED` / `LICENSED` under a **narrow reading only**: *"the model linearly encodes the label distinction more strongly than a bag-of-words text classifier."* The reading *"CAS-specific cognition at 95.6%"* is `NOT LICENSED`. The signal-vs-leakage adjudication (Stage LSA) is `OPEN`.
+- **Method:** `sklearn LogisticRegression(class_weight='balanced', C=0.1)` after `StandardScaler`; group-aware held-out split.
+- **Numbers (exact):**
+  - GPT-NeoX-20B 40E: **95.625%** (`4284/4480`), best layer `L2`, macro-F1 `0.9561734767543545`, `n_train 3840`, `n_test 4480`, `train_test_group_overlap_count 0` over `4160` counterfactual-pair groups, Wilson 95% `[94.986, 96.186]`. Controls: `CountVectorizer(1-2gram)` **49.241071%**, `HashingVectorizer` **50.0%**, majority **2.500%**, shuffled-label mean **2.619%**.
+  - GPT-NeoX-20B F28: **86.8622%** (`2043/2352`), `L40`.
+  - Pythia-160M F28: **78.571%** (`1848/2352`), `L6`, vs char 3-5-gram TF-IDF **49.660%**, McNemar `p = 2.6557483981655295e-95`.
+  - Pythia-160M 40E: **89.799%** (`4023/4480`), `L5`, vs `tfidf_char_3_5` **50.089%**.
+  - Pythia-1B **82.398%** · Pythia-2.8B **85.884%** · OLMo-1B **90.604%** · Qwen2.5-1.5B **82.015%**.
+  - Other axes, all Pythia-160M: 10 Noetics **73.9%** (+27.5 pp); 5 Operators **99.2%**; 10 Expression Shapes **93.0%**; 10 Compiler-Valid Formulas **90.0%**; Multi-Layer Trace **95.4%**.
+- **Model scale:** 6 model points, 3 families (Pythia/GPT-NeoX, OLMo, Qwen), 160M → 20B.
+- **Artifacts:** `master:noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_probe_eval_report_20260527.json`; `C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/cas_harness_original_closure_methodology_20260526.md` Step 5.
+- **Caveat:** `control_proof` is **PARTIAL at 20B on both axes** — no character-level n-gram arm was ever run at 20B, and on F28 at 20B **no text control at all** was run against the headline 86.862%. The v1 40E prompts embed each Element's definition **gloss verbatim** (class codes and framework words were stripped; the meaning-bearing gloss was not), so a meaningful fraction of the lift may be gloss-carried. Anti-example on record: the Qwen2.5-1.5B-Instruct typed row (**91.566%**) is **not** statistically separable from TF-IDF (McNemar `p = 0.289`, `n = 83`). A Pythia-160M 40E numeric conflict is unreconciled: **89.799%** at `L5` vs **91.719%** at `L3`, two different runs.
+
+**[2] η→ε bridge — probe → realize-as-prefix → likelihood shift**
+
+- **Plain English:** read a CAS class out of the hidden states (η), rewrite that class as a readable English prefix (ε), prepend it to the original prompt, re-run the model, and measure how far the next-token log-likelihood moves toward the CAS-expected continuation versus its involution-partner continuation.
+- **Status:** `REAL` + **`OPEN (missing pre-registered control)`** — claim-level ceiling `PARTIAL`. **Downgraded 2026-08-19 from the `VALIDATED` / `LICENSED` it previously carried.** Reason, by this sheet's own legend: `VALIDATED` means *"it ran and it passed its own pre-registered criterion, **against matched controls**"* — and **the pre-registered matched control for this result (a stance-explicitness-matched non-CAS English prefix) was never run.** The run is `REAL` and the effect is large and replicated; the *claim* is `PARTIAL` and stays `OPEN` until that control exists. **Stated without hedging: the pre-registered stance-matched control was never run, so the claim that a CAS prefix beats a non-CAS prefix is NOT ESTABLISHED.** (Elsewhere in this sheet the pair `REAL` + `PARTIAL` refers to this same row — `PARTIAL` is the claim-level ceiling, `OPEN (missing pre-registered control)` is the run-level status.) The carrying packet is `FLAG_FOR_HUMAN_REVIEW` (Cap. 30). The script emits likelihood evidence and deliberately emits no `ACCEPT`/`SUPPRESS`.
+- **Numbers (exact):**
+  - GPT-NeoX-20B 40E (project record): probe-readable Δ **+1.412050**, probe-minus-partner margin **+2.881239**, gold-readable Δ **+1.497513**, gold margin **+2.966701**, probe/gold handoff efficiency **94.3%**, all-test element accuracy **0.952679**, selected element/operator accuracy **0.975**, domain **1.000**.
+  - F28 ladder: Pythia-160M **+0.283** (`81/112`, `p<0.0001`, `L6`); Pythia-1B **+0.554** (`90/112`, `p=2.58e-14`, `L8`); Pythia-2.8B **+0.583** (`92/112`, `p=3.08e-15`, `L14`); OLMo-1B **+0.604** (`87/112`, `~1e-15`, `L16`); Qwen2.5-1.5B **+0.7960** (`83/112`, `p=2.92e-12`, `L11`); GPT-NeoX-20B F28 **+0.596413** (`90/112`, sign-test `p=3e-11`, `L40`).
+  - Raw-CAS-symbol prefix control is null at every scale: **−0.020 to +0.003** (20B probe raw **+0.013817** / **+0.002524**; Qwen `raw_symbol_probe` **−0.0002**).
+  - 40E at 20B = **1.77×** the prior Qwen record and **2.37×** same-model F28.
+  - Run config: status `PROBE_PREDICTED_40E_ETA_EPSILON_BRIDGE_PASS`, 80 cases, seed `20260528`, readout layer `2`, `--per-element 2`, float16, max-length 256, RunPod H100 80GB.
+  - **THE FIRST 20B F28 READOUT MISSED THE GATE. The reported pass came only after a post-hoc readout-methodology change.** On the first readout (nearest-centroid), probe/readable was **+0.1974**, **72/112** positive rows, `p = 0.001608` — *"miss the original strict full-loop gate by about 0.0026"* (`cas_harness_original_closure_methodology_20260526.md:410`). Gold/readable passed strongly on that same readout (**+0.6601**, **93/112**). A confidence-filter follow-up (centroid-margin filtering at q25/q50/q75) also missed: `q75` kept **28/112** rows, raised selected Foundation accuracy to **57.14%** and probe/readable delta to **+0.2775**, but sign-test `p` was **0.017849** rather than `≤ 0.01`. Only then — *"Methodology correction: replacing nearest-centroid with the original balanced logistic linear-probe readout closes the 20B Step 11 bridge"* (`:413`) — did the reported **+0.596413** (`90/112`, sign-test `p = 3e-11`) appear, alongside gold-readable **+0.660065** (`93/112`) and raw-symbol controls **+0.002524** probe raw / **+0.002186** gold raw.
+- **Model scale:** 6 model points / 3 families — Pythia-160M, Pythia-1B, Pythia-2.8B, OLMo-1B, Qwen2.5-1.5B, GPT-NeoX-20B (20B on both F28 and 40E).
+- **Artifacts:** `.../live-trace-worker/scripts/run_stage9_40e_eta_epsilon_bridge.py` (919 lines, sha256 `92e6fd525bb9e247ee04640ad3f2b95f07b7ae29c48784606cf37dc3f32cf8bf`, byte-identical across all 9 pod snapshots); dependency `.../run_open_weight_eta_epsilon_bridge.py`; `docs/working/gpt_neox_20b_stage9_original_40e_bridge_proof_REPRODUCIBILITY_NOTES_20260528.md`; `docs/working/CAS_HARNESS_BRIDGE_SCRIPT_RECOVERY_20260818.md`.
+- **Caveat:** `+1.412` is bounded to **one frozen English synthetic fixture** (`input_sha256 3e4a1aca…`), one language, one corpus. The pre-registered **MISSING control** is a stance-explicitness-matched **non-CAS English prefix**; without it, `+1.412` is consistent with *"a fluent prefix naming the answer is attended"* rather than CAS structure. **That missing control is exactly why this row reads `REAL` + `PARTIAL` and not `VALIDATED`.** All six model points share the same fixture, so no corpus- or language-independence claim is supported. The packet carrying this result is `FLAG_FOR_HUMAN_REVIEW`. **SECOND CAVEAT, EQUALLY BINDING — the 20B F28 pass followed an instrument swap after the first outcome was known.** The nearest-centroid readout missed the strict full-loop gate by about `0.0026`; the balanced-logistic readout was substituted and the gate closed. The substitution is **disclosed in the source and was not hidden**, and the balanced-logistic readout is the *original* methodology (so this is a restoration, not an invention) — but **swapping a criterion or an instrument after an outcome is known is this project's own named defect pattern**, the same shape as substituting a `107×` SNR guard for a missed absolute gate (Cap. 13, Cap. 30). Report the `+0.1974` miss alongside the `+0.596413` pass, always. See §7.12. **Recovery note: these scripts existed nowhere but a rented pod until commit `6269147d` (2026-08-18).**
+
+**[3] Layer sweeps / per-layer readout selection**
+
+- **Plain English:** train the probe at every layer, report where the signal lives, and pick the reporting layer by a written rule — highest validation accuracy, ties broken by lowest validation lacunarity.
+- **Status:** `REAL` / `VALIDATED` as apparatus. The rule is honest and pre-stated; the selected-layer choice is a documented source of uncertainty that **no reported confidence interval covers**.
+- **Numbers (exact):** selected layers — Pythia-160M F28 `L6`, 40E `L5`; Pythia-1B `L8`; Pythia-2.8B `L14`; OLMo-1B `L16`; Qwen2.5-1.5B `L11`; GPT-NeoX-20B F28 `L40` (of 44), 40E `L2` (of 44). Three of four selected layers are **not** the best test layer: Pythia-1B `L8` **0.82398** vs best `L13` **0.89328**; Pythia-2.8B `L14` **0.85884** vs best `L13` **0.88095**; Qwen2.5-1.5B `L11` **0.82015** vs best `L28` **0.91241**. OLMo-1B is the exception (`L16` **0.90604**, which is best). Pythia-1B had **three** layers tied at validation 1.0 (`L8/9/10`); Pythia-2.8B had **thirteen** (`L14`–`L26`) — the lacunarity tie-break did the selecting, not accuracy. `layer_scan` blocks are present in exactly **4 of 13** reconciled rows; the 20B 40E sweep is stored under a differently-named `per_layer` block. Capture is last-token hidden state per scenario per layer, features shape `[N_scenarios, N_layers, hidden_dim]`.
+- **Model scale:** all six model points; 20B swept across all 44 layers.
+- **Artifacts:** `docs/working/gate2_closure/GATE2_ITEM1_CLAIMS_MATRIX.md` §4.4 preamble, §4.5 items 2-3.
+- **Caveat:** the 20B 40E headline peaks at **layer 2 of 44** — an early-layer peak, consistent with the probe reading near-surface lexical features as much as deep structure. Every F28 row is **one fixed split** (`1344/672/2352`), **one seed**, no cross-validation and no cross-seed variation anywhere. "Selection never saw test" is established by the rule text and the split, not by the outcome pattern.
+
+**[4] Multi-layer trace + blind-spot detection**
+
+- **Plain English:** read the probe's prediction at *every* layer and classify the whole depth-trajectory as stable or problem-like; then, for classes that read badly, separate "the model does not represent this" from "our readout position is wrong."
+- **Status:** `REAL`. **Downgraded 2026-08-19 from `VALIDATED`.** Reason: under this sheet's legend, `VALIDATED` requires a **pre-registered criterion AND matched controls**, and this entry has **neither** — no matched control, no pre-registered criterion, and **no null is named anywhere in the record for it**. The `95.4%` 10-way figure is reported **bare**. It is described in the source as the cleanest signal in the project; that is a description, not a validation. Introduced because single-layer probes lose signal distributed across depth; needed for models above 1B parameters.
+- **Numbers (exact):** Multi-Layer Trace classification **95.4%** (10-way, Pythia-160M). **Chance for a 10-way task is `1/10` = 10.0%** — stated here because the `95.4%` is otherwise unreadable, and because chance is the ONLY reference point this row has: there is no text baseline, no shuffled-label null, and no matched control to compare it against. **Beating 10% chance is not evidence of anything CAS-specific** — a topic classifier beats 10% too. Stage 13 multi-layer lacunarity **0.0016** — cleanest in project. 20B layer-trace class: `Amplifying`.
+- **Model scale:** Pythia-160M; layer-trace diagnostics also ran at GPT-NeoX-20B.
+- **Artifacts:** `docs/working/cas_harness_original_closure_methodology_20260526.md` (Stage 13 section, lines 261+).
+- **Caveat:** **the bare `95.4%` has no control of any kind attached to it** — no text baseline, no shuffled-label null, no matched random comparison, and **no pre-registered criterion**. The only reference point available is **10-way chance = 10.0%**, and clearing chance is not a result. Quoting it beside the controlled Cap. 1 numbers implies a comparison that was never made. Separately: some CAS classes carry systematically more signal than others — the affective register is measurably harder to read than the transcendent. What the evidence supports is *blind-spot classes are identified with readout-vs-model-side disambiguation*; it does **not** license per-class strength claims beyond the per-class evidence, and it does **not** license the word `VALIDATED`.
+
+**[5] Lacunarity detection — factorization-gappiness gate**
+
+- **Plain English:** measure how gappy or lumpy a candidate CAS axis is inside the model's activation geometry (`Var/Mean²` on the axis subspace across layers). A cheap preflight that says whether an axis is cleanly factorised **before** you spend GPU time on causal or steering work. Pass threshold `≤ 0.05`.
+- **Status:** `VALIDATED` as a framework-internal diagnostic and preflight gate. As a structural **injection detector** it is a clean `NULL` — both the proxy and the faithful profile-lacunarity variants failed their benign-append controls.
+- **Numbers (exact):** empirical range **0.793 → 0.0016**. GPT-NeoX-20B F28 Foundation lacunarity **0.006715** (classed `Uniform`, cleaner than every prior Pythia comparator); drive-within-Foundation **0.002752**; register-within-Foundation **0.001283**. Pythia-160M Foundation **0.021** (38× cleaner than Noetic-alone **0.793**); Pythia-1B **0.015**; Qwen2.5-1.5B **0.0084**; Stage 13 multi-layer **0.0016**. Fail signature: Noetic-alone **0.793** — do not proceed to steering on a lumpy axis.
+- **Model scale:** Pythia-160M / 1B / Qwen2.5-1.5B / GPT-NeoX-20B (F28 axis). **40E lacunarity at 20B is on the roadmap, not run.**
+- **Artifacts:** `docs/working/cas_harness_original_closure_methodology_20260526.md` (Step 3, lines 147-151; 20B trace diagnostics line 414); negative result: `docs/working/structural_break_lacunarity_result_20260611.md`.
+- **Caveat:** as an injection / structural-break detector it **FAILED** the decisive benign-append control in both forms. Proxy form: kurtosis ≠ CAS lacunarity, and cosine-jump ≠ RPM prerequisite-satisfaction. Faithful form (boundary-token profile-lacunarity, 60 carriers × 3 arms, probe `L14`): probe-free raw lacunarity at the boundary gave covert-vs-benign `p = 0.37`, with **overt actually LOWER** (`p = 1.3e-5`, opposite direction), AUC injection-vs-benign **0.33**.
+
+**[6] Fractal classifier — orbit-class preflight**
+
+- **Plain English:** classify how a candidate axis subspace behaves across the layer stack — `Stabilizing` / `Amplifying` / `Oscillatory` / `Neutral` — and use that to predict *in advance* whether steering on that axis will work. Pass = `Stabilizing` or `Amplifying`.
+- **Status:** `VALIDATED` as a preflight with demonstrated predictive value (it predicted a failure before the run). `REAL` but proxy-grade at 20B.
+- **Numbers (exact):** Pythia-160M Foundation axis = `Stabilizing` → steering worked. Pythia-160M Noetic axis = `Oscillatory` → Noetic generation steering subsequently **FAILED, as predicted**. GPT-NeoX-20B layer-trace class = `Amplifying` (gate layer 40, alongside lacunarity `0.006715`). Predictive value confirmed by Stage 6.6B.
+- **Model scale:** Pythia-160M, GPT-NeoX-20B.
+- **Artifacts:** `docs/working/cas_harness_original_closure_methodology_20260526.md` Step 4 (lines 153-157) and line 414.
+- **Caveat:** explicit self-caveat in the source — at 20B the fractal class is *"currently a numeric layer-trace proxy, not the discrete cas-engine CognitiveFractal orbit object."* It counts as one of the six framework-predictive wins, but it is a **preflight heuristic, not a causal measurement**.
+
+**[7] Weight-geometry alignment — static weights, not activations**
+
+- **Plain English:** principal-angle analysis asking whether the CAS Foundation subspace lines up with the model's static output-weight space more than random subspaces of the same rank would. Evidence from the frozen weights themselves, not from any activation.
+- **Status:** `REAL` but **OVERSTATED as usually quoted**. The headline reports best-of-three checks with no multiplicity policy. A second evidence tier present on **1 of 6** model points cannot support "two independent evidence tiers across six models" — that phrasing is **prohibited verbatim**.
+- **Numbers (exact):** `n_random = 100` same-rank random controls. `output_logit_lens_energy_fraction` **2.830531385486643×** random, `p = 0.009900990099009901`; `output_weight_energy_fraction` **1.0621312951730846×**, `p = 0.009900990099009901`; `input_weight_energy_fraction` **1.0033496167943243×**, `p = 0.3465346534653465` (**not** above random). The artifact's own wording: *"At least one weight-geometry check is above random same-rank controls."*
+- **Model scale:** **Pythia-2.8B ONLY** (revision `2a259cdd…`). 20B replication is on the roadmap, not run.
+- **Artifacts:** `experiment/cas-probe-pythia:noetic-compass-scaffold/noetic-compass/research/cas_probe/stage14_weight_geometry_alignment_20260519.json` — **branch NOT reachable from HEAD**; reconciled at `docs/working/gate2_closure/GATE2_ITEM1_CLAIMS_MATRIX.md` §4.3 row 22.
+- **Caveat:** two of three checks are essentially at random (1.06×, 1.00×) and the input side is explicitly random (`p = 0.35`). Quoting "2.83× random (p = 0.0099)" as *the* weight-geometry result reports the best of three with no multiplicity correction. The claims matrix marks this row **overstated**.
+
+---
+
+### 4.2 Reading outputs — the output lens
+
+This group reads **what the model wrote**, not what it computed. It is the evidence base for Claim B (Section 8). Nothing in this group says anything about model internals.
+
+| # | Capability | Status |
+|---|---|---|
+| 8 | L1 — reader convergence on clean authored exemplars (anti-thesaurus test) | `HOLDS` (floor case) |
+| 9 | Ecological validity — single-cell reading of real model outputs | `PARTIAL` / boundary |
+| 10 | L2 — component reading and wiring | `HOLDS` — best signal-to-chance in the track |
+| 11 | L3 — matched-surface minimal pairs (sharpest anti-thesaurus test) | `INCONCLUSIVE BY DESIGN` — fixture defect |
+| 12 | Diagnose → localize → repair loop, behavioural proxy (black-box) | `HOLDS` as a proxy only |
+
+---
+
+**[8] Output-lens L1 — reader convergence on clean authored exemplars**
+
+- **Plain English:** four independent blind LLM readers are each asked which of the 40 CAS cells a scenario shows. If CAS were just a thesaurus, a word-overlap counter would agree with the readers. It does not — the readers agree with each other far more than the word-counter does. This is the strongest positive result in the whole lens track.
+- **Status:** `HOLDS` — Stage-1 lens non-arbitrariness **passes**. Explicitly the **floor case**, not the product claim.
+- **Numbers (exact):** honest re-run, `n_complete 88/120` = **73%** coverage: reader-to-reader agreement **0.8845**, Fleiss kappa **0.88**, versus reader-to-thesaurus **0.2841** — a gap of about **0.60**, decisive. Per-reader vs author: Gemini **0.8523**, DeepSeek **0.8182**, Qwen **0.7841**, GLM **0.7727**. On the **61 surface-misleading items** readers still recover the author's structure at **0.7828**.
+- **Model scale:** 4 frontier API readers on authored exemplars (`n=120`, 88 complete).
+- **Artifacts:** `docs/working/gate2_closure/independent_bank/l1_agreement_report_v2.json`; `docs/working/gate2_closure/PREREG_LENS_NONARBITRARINESS_20260817.md`.
+- **Caveat:** four named limits, all load-bearing. (1) These are authored **clean exemplars** — the easy case, deliberately. (2) Readers match against a **provided colloquial key**, so this is not fully-blind understanding. (3) All four readers are frontier LLMs and share priors — this is not four independent minds. (4) Coverage is 73%; at 100% the number would likely drop, though the gap to the thesaurus is robust. **The first run's 0.9792 at 48/120 coverage was selection-biased and must never be cited** (reasoning models over-reasoned on subtle items, blew `max_tokens`, returned empty content, and their labels were silently dropped, leaving only the easy items). The honest headline is **0.8845**.
+
+**[9] Ecological validity — single-cell reading of REAL model outputs**
+
+- **Plain English:** the same four readers are pointed at 36 genuine model answers to ordinary prompts, with no planted labels. The thesaurus objection dies even harder here — word-overlap falls to exactly chance — but forcing one dominant cell per answer collapses agreement, because real answers are multi-structure.
+- **Status:** `PARTIAL` / boundary. The thesaurus objection is defeated harder than on exemplars, but the clean-exemplar floor does **not** transfer at strength. **The measurement unit is wrong**, not the lens.
+- **Numbers (exact):** `n_complete 20/36`. Reader-to-reader agreement **0.5333**, Fleiss kappa **0.4479** ("moderate"), versus reader-to-thesaurus **0.025** — exactly chance for 40 cells. Majority 3-of-4 share a cell on **55%** of items. Label spread across 4 readers: **7 unanimous, 6 two-cell, 6 three-cell, 1 all-differ**.
+- **Model scale:** 4 frontier API readers on 36 real model outputs (20 complete), 9 per model, truncated to 1000 chars.
+- **Artifacts:** `docs/working/gate2_closure/independent_bank/l1_real_report.json`; `.../gen_real_outputs.py`.
+- **Caveat:** **0.5333 is optimistic** — coverage is only 20/36 because reasoning models keep dropping the longer, harder items even with reasoning-capture and `max_tokens 16000`, so the 16 dropped items are likely the most ambiguous. Positively, disagreements are mostly near-misses (spread 1-2 cells, only 1 of 20 is chaos), supporting the diagnosis that real answers are multi-structure (money + values + emotion in one answer) and that forcing **one** dominant cell manufactures disagreement. The recurring reasoning-model coverage drop is an **unfixed methodological defect** affecting every future stage.
+
+**[10] Output-lens L2 — circuit / component reading and WIRING**
+
+- **Plain English:** instead of forcing one cell per answer, readers mark which plain-English "parts" an answer uses (push, brakes, memory, switch, engine, feedback, danger-check, scale, sieve) and then draw the signal path between them. Reading the **connections** is the strongest signal-relative-to-chance found anywhere in the lens track — **`0.2437 / 0.0525 = 4.642×` chance** (**corrected 2026-08-19 from the rounded "≈4.7×"**; this figure is load-bearing in the Claim B bar, so it is kept exact).
+- **Status:** `HOLDS` — moderate but real. **Components beat cells as the unit of measurement.**
+- **Numbers (exact):**
+  - 10-part presence (`n_complete 33/36` = **92%**): reader Jaccard **0.6099** vs shuffled null **0.4002**, lift **+0.2097**, mean **4.11** parts/answer. Part usage discriminative: `DR 102`, `AMP 98`, `MEM 83` common; `LOOP 8`, `DIR 21`, `FILTER 21` rare.
+  - WIRING (12 used parts, `n_complete 25/36` = **69%**): main-part agreement **0.6200**, Fleiss kappa **0.5489** — which **beats** the single-cell **0.5333** / kappa **0.4479**. Directed-edge Jaccard **0.2437** vs null **0.0525**, lift **+0.1912**, **`0.2437 / 0.0525 = 4.642×`** chance (presence-Jaccard `0.6099 / 0.4002` is only **1.524×** chance).
+  - 20-part widening attempt (`n_complete 21/36` = 58%): lift **+0.231**, essentially flat versus +0.210; reader agreement **fell 0.61 → 0.55**; 7 of the 10 new parts barely or never used (`FILTER 0`, `HABIT 0`, `RESET 0`, `STOP 1`, `DIR 2`); effective vocabulary stayed ~12-13; null only fell **0.40 → 0.32** rather than the predicted ~0.14.
+- **Model scale:** 4 frontier API readers on 36 real model outputs.
+- **Artifacts:** `docs/working/gate2_closure/independent_bank/l2_circuit_report.json`; `.../l2_circuit_wide_report.json`; `.../l2_wiring_report.json`.
+- **Caveat:** (1) The presence signal is **moderate and capped** — the raw 0.61 is inflated by a high null (0.40), because with only 10 parts two random 4-part sets already overlap ~0.40. **The honest number is the +0.2097 lift, not 0.61.** (2) **Adding vocabulary did not help — do not propose "more parts" again.** (3) Absolute wiring agreement is still moderate: readers share only about **24%** of edges, and coverage is 69%.
+
+**[11] Output-lens L3 — matched-surface minimal pairs**
+
+- **Plain English:** the design that would have been decisive — sentence pairs using the same words but differing in structure, so a word-counter must tie while a real reader must split them. The pairs built were not truly matched on surface, so the test could not decide anything.
+- **Status:** `INCONCLUSIVE BY DESIGN` — did not run as a valid test. **A negative result about the fixture, not about CAS.**
+- **Numbers (exact):** `n_pairs 14`. Mean reader split rate **0.893** (Gemini **0.929**, Qwen **0.857**; DeepSeek and GLM returned null). Thesaurus split rate **0.857** — nearly identical to the readers, which is the failure. Majority-readers split rate **0.0**. `DECISIVE_readers_split_where_thesaurus_ties = FALSE`.
+- **Model scale:** 4 frontier API readers, 14 pairs.
+- **Artifacts:** `docs/working/gate2_closure/independent_bank/l3_minimal_pairs_report.json`; `.../l3_minimal_pairs.py`.
+- **Caveat:** a clean L3 requires **role-swap pairs scored at the cause/effect level**, where the surface really is held constant. Until that is built, **the sharpest available discriminator between real structural reading and sophisticated word matching has not been run**, and the L1/L2 positives rest on weaker discriminators than the design intended.
+
+**[12] Diagnose → localize → repair loop — behavioural proxy (black-box)**
+
+- **Plain English:** a cheap stand-in for the real repair loop. Deliberately break one part of an answer, see whether readers can spot which part is missing, then fix that specific part versus asking for a generic improvement. Targeted repair beats generic repair — which is what makes localization worth anything.
+- **Status:** `HOLDS` **as a proxy**. It is **not** the white-box loop and must never be reported as internal steering.
+- **Numbers (exact):** localization **6/8 = 75%** (correct on `WEIGH`, `UNPACK`, `MEM`, `ORDER`, `IF`, `TRANSLATE`; missed `RS` → diagnosed `TRANSLATE`, and `CHECK` → diagnosed `ORDER`). Target-part score across 32 scores: `FAULTED` **2.38** → `TARGETED` **7.19** → `GENERIC` **4.59**. So repair works (7.19 > 2.38) **and** targeting beats generic (**+2.6** out of 10). Scored in blinded A/B/C order.
+- **Model scale:** 4 frontier API readers, 8 injected-fault items.
+- **Artifacts:** `docs/working/gate2_closure/independent_bank/proxy_loop_report.json`; `.../proxy_loop.py`.
+- **Caveat:** three mandatory caveats. (1) **Repair here is re-prompting, not internal steering** — conflating them would be the single largest overclaim risk in the current material. (2) `n=8` items. (3) The scorers are LLMs, albeit blinded. This licenses **building** the white-box version; it licenses **no** claim about model internals.
+
+---
+
+### 4.3 Proving cause and effect
+
+The rule that governs this entire group: **a big effect that size-matched random controls also produce is worth nothing. Selectivity is the whole game.**
+
+| # | Capability | Status |
+|---|---|---|
+| 13 | Subspace ablation (readout-causal necessity) | `VALIDATED` at Pythia-160M; `OPEN` at 20B (**pre-registered gate MISSED**) |
+| 14 | Sparse MLP-neuron-cover causal localization | `VALIDATED` / `LICENSED` at Pythia-160M only |
+| 15 | Attention-head localization (heads → slices → single dims) | `VALIDATED` at Pythia-160M; headline `GREY` on provenance |
+| 16 | Drive-local eraser-channel steering | `VALIDATED` / `LICENSED`, two families |
+| 17 | Global / coarse activation steering on the `^2−^3` polarity axis | **`WITHDRAWN` / `FALSIFIED`** |
+| 18 | White-box probe → ablate → steer loop (tier-1) | Steering `VALIDATED` on Pythia-1B; **ablation `INCONCLUSIVE`** |
+| 19 | Component Atlas v0 directional-ablation battery | `NULL` → `GREY` → `GREY` (full arc in Section 6) |
+
+---
+
+**[13] Subspace ablation — readout-causal necessity**
+
+- **Plain English:** take the class/logit subspace from the trained probe, project it out of the captured hidden states, retrain the same probe on the ablated states, and compare the accuracy collapse against random same-rank projection controls.
+- **Status:** `VALIDATED` at Pythia-160M (closed, exact-chance collapse). At GPT-NeoX-20B 40E it is `OPEN` — the artifact self-labels `packet_decision: not_applicable_ablation_diagnostic_only` and **its pre-registered gate was MISSED**. The blanket "causally load-bearing across six models" claim is `NOT LICENSED` / overstated.
+- **Numbers (exact):**
+  - Pythia-160M F28: **78.571% → 3.571%** (exact `1/28`), 30 random controls, mean/max disruption **0.0**, one-sided empirical `p = 0.03225806451612903`. Pre-registered `decision_gates`: chance `0.03571428571428571`, `foundation_ablated_acc_max 0.08`, `random_ge_foundation_empirical_p_max 0.05` — all three met; status `FOUNDATION_SUBSPACE_CAUSAL_FOR_PROBE_READOUT`.
+  - GPT-NeoX-20B 40E: **95.625% → 66.897%**, `true_disruption 0.2872767857142857` (**28.7277 pp**), random same-rank `max_disruption 0.002678571428571419` (**0.268 pp**), mean `0.0006808035714286175` (**0.068 pp**) → **107.25×** vs random MAX (**421.97×** vs random MEAN).
+  - Other exact-chance axes, all Pythia-160M: Stage 3 noetic `L3` **0.8986 → 0.1014** (`1/10`); Stage 6.5 role-bound `L5` → **0.1** with random disruption **0.0**, `p = 0.0322580645`.
+- **Model scale:** Pythia-160M (closed); GPT-NeoX-20B (diagnostic, gate missed). Model-specific causal evidence for Pythia-1B, Pythia-2.8B, OLMo-1B, Qwen2.5-1.5B is `unavailable`.
+- **Artifacts:** `.../live-trace-worker/scripts/run_stage9_40e_subspace_ablation.py`; `gpt_neox_20b_stage9_original_40e_subspace_ablation_report_20260528T0155Z.json`; `stage7_foundation_layer6_ablation_report_20260517.json`. **Artifacts live on branches `master` and `experiment/cas-probe-pythia` — NOT reachable from HEAD.** Reconciled at `docs/working/gate2_closure/GATE2_ITEM1_CLAIMS_MATRIX.md` §4.1, §4.3 rows 20/21, §4.4.
+- **Caveat:** **CRITICAL. The 20B 40E pre-registered gate was MISSED ON BOTH DISJUNCTS** — required **≥30 pp** drop **OR** **≤65%** floor; achieved **28.73 pp** (short by **1.27 pp**) and **66.90%** (over by **1.90 pp**). The "107×" divisor is the random **MAX** and is not named in the marketing sentence; against the mean it is **421.97×**. **Substituting a 107× SNR guard for the pre-registered absolute gate is exactly the defect that produced the withdrawn ACCEPT.** The "five axes collapse to exact chance" claim is overstated — only **three** Pythia-160M axes were verified as reaching exact chance, and the 40E axis at 20B demonstrably does **not** collapse (66.897% vs chance 0.025). **No dated pre-registration artifact for the 20B ≥30pp/≤65% gate has been located** (§7 gap 14).
+
+**[14] Sparse MLP-neuron-cover causal localization**
+
+- **Plain English:** find a small set of MLP neurons per CAS class whose ablation maximally degrades the probe margin for that class; check the drop beats random and wrong-class neuron sets; restore the original activations to prove the effect is exactly recoverable; then amplify and polarity-flip the same neurons to show control in both directions.
+- **Status:** `VALIDATED` / `LICENSED` at Pythia-160M with **necessity AND sufficiency**. Single-neuron monosemantic localization is explicitly `NOT LICENSED` — **the sparse cover is the validated unit.** As a six-model claim it is overstated.
+- **Numbers (exact):** headline **112/112 at `p < 10⁻³³`**. Stage 27F: **28/28** wins, `p = 3.7×10⁻⁹`, mean targeted drop **3.46** vs mean random drop **0.028**, ~256 neurons/class, disjoint train/eval split. Stage 27G: target amplification mean delta **+12.74** (random **−0.22**); target flip mean reduction **+25.31** (random **−0.27**); 28 classes × 4 conditions; amplify ×2.0, flip ×−1.0. Bit-exact patch-back: mean absolute error **0.0**. Amplifying the **wrong-class** cover flips the prediction in **25.9%** of rows. Activation-level cover ablation: label-specific cover drop **0.054762** vs wrong-cover **0.003572** vs same-size random `max_drop` **0.005953** over 20 trials, `label_drop_exceeds_random_max: true`; union cover drop **0.108334** vs union random max **0.0**.
+- **Model scale:** **Pythia-160M ONLY.** The four other non-20B model points have no cover artifact. A 20B candidate cover file exists (`gpt_neox_20b_stage9_original_40e_neuron_covers_top8_20260528T0210Z.json`) but self-declares `status candidate_cover_discovery_completed`.
+- **Artifacts:** `.../live-trace-worker/scripts/discover_stage9_40e_neuron_covers.py` (discovery tier constant `DEFAULT_COVER_DISCOVERY_TIER = 'candidate-readout-weight-v0'`); `experiment/cas-probe-pythia:noetic-compass-scaffold/noetic-compass/research/cas_probe/run_stage27f_targeted_mlp_neuron_covers.py` and `…/run_stage27g_mlp_neuron_cover_steering.py` — **branch prefix added 2026-08-19; these do NOT resolve from HEAD or from the repo root**; `master:.../pythia160m_gate1/pythia160m_activation_cover_ablation_report.json`.
+- **Caveat:** the discovery script's own CAVEAT string: *"Cover discovery is candidate-only until matched ablation validates targeted drops against random same-size and wrong-class controls."* **Treating a candidate cover as verified is exactly the producer defect that minted the withdrawn ACCEPT** (`merge_stage9_40e_evidence_packet.py::_control_chip_status` pre-fix logic `if class_count >= 40: return "verified"`). The matched Pythia-160M ablation is **activation-level post-hoc on captured vectors, not a live forward-pass hook intervention** — the artifact says so itself.
+
+**[15] Attention-head localization — heads, within-head slices, single dims**
+
+- **Plain English:** narrow the causal locus from whole layers down to specific attention heads, then to slices inside a head, then to individual coordinate dimensions — each step tested against a matched random control on the same class.
+- **Status:** `VALIDATED` at Pythia-160M for the Stage 27C/D/E cover chain. The widely-quoted **"78% → 19%, p = 0.0323, 100% path-patch sufficiency"** headline is **`GREY` on provenance** — it survives only in prose surfaces and is carried in the provisional-patent draft as literal `[VERIFY]` placeholders; the Gate-2 reconciliation's own supported-replacement wording **drops "head-level" entirely**.
+- **Numbers (exact):** Stage 27C head covers: **27/28** wins, `p = 1.08×10⁻⁷`, mean delta **+4.17**, positive margin share **1.0000** (28 learn + 28 disjoint eval rows). Stage 27D within-head slice covers: **20/28** wins, `p = 0.018`. Stage 27E single-dim coordinate covers (width 16): **28/28** wins, `p = 3.7×10⁻⁹`. Prose-only head-level headline: **78% → 19%**, `p = 0.0323` vs matched control, **100%** sufficiency recovery via path patching.
+- **Model scale:** Pythia-160M.
+- **Artifacts:** `experiment/cas-probe-pythia:noetic-compass-scaffold/noetic-compass/research/cas_probe/run_stage27c_per_class_component_covers.py`, `…/run_stage27d_within_head_slice_covers.py`, `…/run_stage27e_single_dim_coordinate_covers.py` — **branch prefix added 2026-08-19; NOT reachable from HEAD**; prose surfaces `docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md:320`, `docs/working/cas_harness_synopsis_20260630.md:117`; `[VERIFY]` placeholders at `docs/legal_drafts_20260607/CAS_provisional_patent_updated.md:212,222` and `CAS_provisional_flowcharts_described.md:133,139`.
+- **Caveat:** `p = 0.0323` is `1/31` — the standard empirical p-value from 30 random controls, and it is **the same value the Pythia-160M F28 subspace ablation reports** (`0.03225806451612903`). **Do not present the head-level p as independent corroboration of the subspace result** without locating a distinct head-level artifact. A separate, live head-level sanity result from 2026-08-19 (Component Atlas rev 0.3, pythia-2.8b) **is** clean: ablating 31 induction heads moved the gate score **12.465 → 5.436 nats** (drop **7.029**) vs best control drop **0.821** — **8.6×** the best of 24 count-matched control head sets, `control_ensemble_p = 0.04`, the first `SANITY_PASS` in the project. That proves the instrument measures; the component hypotheses are what failed.
+
+**[16] Drive-local eraser-channel steering — output-side behavioural steering**
+
+- **Plain English:** during the forward pass, suppress a drive-local subspace through an "eraser channel" and measure the shift in the model's generated output on a calibrated rubric. **This is the only generation-steering method in the project that worked.**
+- **Status:** `VALIDATED` / `LICENSED`, bounded to drive-local eraser-channel methodology on **two** architecture families. Three-family parity (OLMo replication) is `OPEN`. Global / universal-cover steering was **empirically `FALSIFIED`** (too coarse).
+- **Numbers (exact):** Pythia-160M **+0.85** mean lift, **181/245** wins, `p = 2.0×10⁻¹⁴`. Pythia-1B **+0.84** mean lift, **54/56** wins, `p = 2.2×10⁻¹⁴`. Qwen2.5-1.5B **+0.90** mean lift, **56/56 unanimous**, `p = 1.4×10⁻¹⁷`. Pass bar was win-share ≫50%, `p < 10⁻¹⁰`.
+- **Model scale:** Pythia-160M, Pythia-1B, Qwen2.5-1.5B (2 families: Pythia + Qwen). **Not run at 20B.**
+- **Artifacts:** `experiment/cas-probe-pythia:noetic-compass-scaffold/noetic-compass/research/cas_probe/run_stage27p_qwen_drive_local_eraser_steering.py` — **branch prefix added 2026-08-19; NOT reachable from HEAD**; `docs/working/cas_harness_original_closure_methodology_20260526.md` Step 12 (lines 230-238).
+- **Caveat:** this is a **drive-local likelihood shift on the 28F/40E axes — it is NOT a comply/refuse flip and must not be sold as one** (explicit VERIFY note in `prespeech_causal_team_verdict_20260610.md:22`). **Known nulls that must not be re-run as primary experiments:** Stage 27H prefix-plus-neuron steering (`NULL_NOT_ESTABLISHED`); Stage 27I prediction-position neuron steering (`NULL`); drive-subspace steering **without** the eraser channel (`NULL`, `p = 1.0`); Stage 6.6 / 7.3 / 7.OA / 7.LA ablation-based generation steering (all **FAILED** — they try to invert ε, structurally impossible under section-retraction); Noetic-axis steering (`NULL` — the fractal classifier predicted it by classifying that axis `Oscillatory`).
+
+**[17] Global / coarse activation steering on the `^2−^3` polarity axis**
+
+- **Plain English:** add a probe-derived "attraction-minus-aversion" direction into the residual stream before generation, to try to flip a model between complying and refusing.
+- **Status:** **`WITHDRAWN` / `FALSIFIED`** — a clean pre-registered negative. Recorded so it is never re-proposed.
+- **Numbers (exact):** Qwen2.5-1.5B, steer at prompt-final residual, block 13, before any token generated. 44 borderline prompts × 3 directions × 9 α-levels (`−4..+4` × residual norm). Baseline refuse-rate **0.68**. Polarity direction swing `−4↔+4` = **0.11**; norm-matched **random** direction swing = **0.30** — random moved it **more**. At `α=−1`, random **0.82** vs polarity **0.68**. Pushing toward CO-3 was flat (**0.68** at −0.5/−1/−2) — one-sided, not the symmetric dose-response a causal axis predicts. At `|α|=4` generation length collapses (random −4 → **32 tokens**), so near-zero refuse rates there are a fluency confound. `orth_polarity ≈ polarity` (cos **0.996**), moot. `n=44`, SE ≈ **0.075**. Archived `D:/tksCAS-archive/steering_causal_20260611/`.
+- **Model scale:** Qwen2.5-1.5B.
+- **Artifacts:** `docs/working/steering_causal_result_20260611.md`. **Raw run archived off-repo on `D:` only.**
+- **Caveat:** the control rig caught both the non-specificity and the fluency confound, so this is a **true negative, not a false positive**. It does **not** rule out the untested drive-contrast axis. Related 2026-08-19 finding (Component Atlas rev 0.3, pythia-2.8b): the F5 drive direction produced a highly significant drop (`targeted_drop 0.3660`, wilcoxon-pratt `p = 5.515e-05`, behavioural change **0.96875**) but size-matched random directions dropped it **more** (`max_matched_control_drop` **0.9766559642427914**, **2.7×**), `control_ensemble_p = 0.16` → real, powerful, reproducible, and **not drive-specific**.
+
+**[18] White-box probe → ablate → steer loop (spec-sheet tier-1)**
+
+- **Plain English:** run the real internal loop on real weights — find the direction for a behaviour, push the model toward it, check the output actually moved, against a matched random direction. Steering works and beats its control. Ablation does not yet.
+- **Status:** **Steering `VALIDATED`** (calibrated, coherent, control-checked) on Pythia-1B. **Ablation `INCONCLUSIVE` — do NOT claim ablation works.** The first attempt (v1) was **wired but not working** and is `VOID`.
+- **Numbers (exact):** v2 Pythia-1B (16 layers, hook layer 8): probe separation-accuracy **1.000** (present projection **3.3** vs absent **−12.2**, `||diff|| 15.5`). Baseline generation projection **−6.28**. Steering lift by fraction of the natural gap: `0.5 → +0.8`; `1.0 → +1.6` (best, coherence **0.58**); `2.0 → +1.3`; `4.0 → −0.3`. The matched random control moved the **other** way at every strength (**−1.3 to −2.5**), giving a steer-minus-control gap of about **+4** in the intended direction. Ablation: lift **+2.4** versus random-control **0.0**. v1 Pythia-160M (`VOID`): probe separation-accuracy **0.781**, `||diff|| 187.6`, steer at 6× diff (norm ~**1125**) drove the model into pure repetition.
+- **Model scale:** Pythia-160M (v1, `VOID`) and Pythia-1B (v2, validated). Not yet run at 2.8B or 20B.
+- **Artifacts:** `docs/working/gate2_closure/whitebox/RESULT_A_TIER1_V2_PYTHIA1B_20260818.md`; `.../RESULT_A_TIER1_WHITEBOX_20260818.md`; `.../cas_whitebox_loop_v2.py`.
+- **Caveat:** (1) **Every steer and control number from v1 is meaningless** — steer strength ~6× too strong, out of distribution, and Pythia-160M is too small for coherent caveating so there was no behaviour to add or remove. (2) The v2 steering magnitude is modest — about **10%** of the full present-absent range — and saturates by fraction 2-4. (3) **Ablation is not validated:** it had a real causal effect (not noise, since the random control moved 0.0) but moved the output projection in the **unexpected direction**, pointing at an imperfect projection-on-final-text proxy and a crude single-layer projection-removal method. (4) **Strategic caveat recorded by the owner:** this white-box A loop was reinventing a cruder slice of already-closed harness work — coarse global steering was already empirically falsified, and the proven tools are η→ε realization, subspace ablation, and drive-local eraser steering.
+
+**[19] Component Atlas v0 — preregistered directional ablation against matched controls**
+
+- **Plain English:** discover internal parts functionally (probe sweep, diff-of-means directions, top-k MLP coordinate covers), attach a CAS-PCBA type name to each (`DR` drive rail, `AMP` amplifier, `RS` restraint/brake, `CONN` rail-to-amplifier wiring), then try to knock each part out. **A name only sticks if the ablation moves the model in the direction the name predicted, by more than matched control ablations of the same size.** Nothing here claims the model "encodes CAS".
+- **Status:** Preregistered and executed **three times**; **no label has ever stuck at any scale under any design revision.** rev 0.2 `NULL_ATLAS_V0` → rev 0.3 `GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE` → rev 0.4 `GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE`.
+- **Numbers (exact):** 5 core tests (`DR-F5`, `DR-F2`, `AMP-F5`, `RS-F5`, `CONN`); 2 harness-sanity checks (`MEM`, `CHECK`) held **outside** the aggregate and the verdict; **58 logged deviations D1-D58**. Full arc, every number, in **Section 6**.
+- **Model scale:** pythia-1b → pythia-2.8b → gpt-neox-20b (fp32, H200).
+- **Artifacts:** `docs/working/gate2_closure/component_atlas_v0/PREREG_COMPONENT_ATLAS_V0.md`; `atlas_v0_FULL_report.json`; `atlas_v0_rev03_report.json`; `atlas_v0_rev04_report_20b.json`.
+- **Caveat:** the aggregate pass fraction is **descriptive only** and carries a verbatim non-independence caveat — `DR-F5`, `AMP-F5` and `CONN` share the F5 judge bank and the `u_F5` direction. **No binomial headline p is licensed.** Per-test evidence against each test's own matched controls is the primary result. **CORRECTION 2026-08-19: an earlier revision of this sheet asserted three times that "there is no `RESULT_ATLAS_REV04` markdown write-up on disk." That was FALSE. `docs/working/gate2_closure/component_atlas_v0/RESULT_ATLAS_REV04_20B_20260819.md` EXISTS** — 3,824 bytes, written 2026-08-19 10:02, the **same timestamp** as `atlas_v0_rev04_report_20b.json`. All three assertions are struck. What remains outstanding is narrower and is stated in §6.4: the existing write-up **does** carry the engagement-failure history and the both-checks-pass sanity pairing, but does **not** carry the bank-re-use weakness or the narrowed-CHECK-margin disclosure.
+
+---
+
+### 4.4 Symbolic algebra layer
+
+**The load-bearing distinction for this whole group:** everything here operates on **notation strings, typed symbols, and caller-supplied float arrays**. Parsing, type-checking, regex token swaps, involution flips, admissibility guards, entropy/variance arithmetic over supplied vectors, band arithmetic. **None of it reads model activations, gradients, or parameters, and none of it makes any claim about what a transformer internally represents.** No result in this group transfers to the weights track, and no result here is evidence for it. Quoting the loop demo's `exit 0` as CAS evidence about a model would be exactly the category error this separation exists to prevent.
+
+| # | Capability | Status |
+|---|---|---|
+| 20 | RPM/DWP → CAS notation → compile → detect-inverted-axis → correct loop | `REAL` — re-executed live 2026-08-19, `EXIT=0`, nothing stubbed |
+| 21 | 7-axis inversion scanner + operator admissibility guard | `REAL` — implemented twice (Rust + Python), **not equivalent** |
+| 22 | CAS-Ohm quantifiers (`delta_current`, `r_hidden`, `maturity_q4`) | **`NOT LICENSED`** — proposed instrument, never run against a model |
+
+---
+
+**[20] RPM/DWP → CAS notation → compile → detect → correct loop**
+
+- **Plain English:** take a capability pathway (the RPM chain `A0 → Desire → Wisdom → Power` for one of the 7 drives), write each stage as a CAS notation string, run those strings through the real CAS compiler to check they are well-formed and type-correct, then deliberately break the expression on one **named** failure axis, have an independent detector say **which** axis broke, and put it back. It is a spelling-and-grammar checker plus a fault-injector for a formal language.
+- **Status:** `REAL` — ran end-to-end on real repo modules, `exit 0`. **Re-executed live during the 2026-08-19 audit; output reproduced identically to the 2026-08-18 result document.** Nothing stubbed. Compiler reported `engine='rust+python'`.
+- **Numbers (exact):**
+  - `compile_expression('RPM(F5)')` → `valid=True`, emits chain `['A0 -> D5','D5 -> W5','W5 -> P5']`, `completeness=1.0`.
+  - Stage literals all `valid=True` with `dominant_state`: `^2^C_{F5}→C2` (D5), `^6^E_{F5}→E6` (W5), `^9^O_{F5}→O9` (P5).
+  - Descent as two binary transitions: both `valid=True`, `kind='relation'`, `descent_ok=True`.
+  - **Axis A (numeric plane):** baseline resistance **1.0000** (severity **0.0000**); inject F5 pathway scores `[0.20, 0.10, 0.10, 0.90]` → resistance **0.8571**, severity **0.1429** = exactly **1/7**; correct to `[0.85, 0.80, 0.75, 0.90]` → resistance back to **1.0000**. Belief-gate cross-check `axis_a_check` → `clean=False`, reason `'RPM gate did not clear; pathway prerequisite chain broken'`.
+  - **Axis N (symbolic plane):** `invert_expression('^2^P_{F5}','N')` → `'^3^P_{F5}'`; detector flags `N.clean=False`, `flagged_pairs=[(2, 3)]`; invert back → `'^2^P_{F5}'`, `restored == original True`, recompiles `valid=True` (full involutive round trip).
+- **Model scale:** **N/A — no model weights involved.** Runs identically with zero models loaded.
+- **Artifacts:** `noetic-compass-scaffold/noetic-compass/rpm_compiler_loop_demo.py`; `docs/working/gate2_closure/cas_specificity/RESULT_RPM_COMPILER_LOOP_20260818.md`. Real modules imported, none stubbed — **all four live under `noetic-compass-scaffold/noetic-compass/`, NOT at the repo root** (path prefixes corrected 2026-08-19; the line numbers below were verified correct): `noetic-compass-scaffold/noetic-compass/api/notation/compiler.py` (`compile_expression`), `noetic-compass-scaffold/noetic-compass/api/notation/inversion.py` (`invert_expression`), `noetic-compass-scaffold/noetic-compass/cas-native/belief/inversion_gate.py` (`run_inversion_scan`, `axis_a_check`), Rust PyO3 `cas_engine` (`InversionScanner`, `CognitiveStateVector`).
+- **Caveat — five disclosed gaps:** (1) **"Corrected or inverted on ANY of its axes" is 4/7 at string level** — `IMPLEMENTED_AXES=('N','W','F','P')` and `DEFERRED_AXES=('E','S','A')` at `noetic-compass-scaffold/noetic-compass/api/notation/inversion.py:67-68`; the deferred three each raise `DeferredAxisError` (same file, `:242-243`), confirmed live for all three. (2) The axis-A inject/detect/correct was done on the **numeric plane** (pathway-score arrays), not by a string corrector. (3) **No auto axis→repair dispatcher exists** — the scanner **names** the axis that fired; no code takes "axis A fired" and produces the corrected object. The correction was applied by the caller by hand. (4) Pathway node tokens `A0/D5/W5/P5` are **not lexable inputs** (they error as undefined variables); stage semantics are carried by `RPM(F5)`, which emits the chain as **output**. (5) Arrows are strictly binary — `'A -> B -> C'` is rejected by typecheck, so descent must be split. Also: **`completeness: 1.0` inside `RPM(F5)` is HARDCODED** (`noetic-compass-scaffold/noetic-compass/api/notation/compiler.py:4384`; the `StateValue` branch at `:4391` is likewise `1.0 if drive is not None else 0.0`) — the compiler type-checks **form only**; real prerequisite satisfaction lives in the Rust RPM engine (`noetic-compass-scaffold/noetic-compass/cas-engine/src/rpm/recursive.rs`) and is exercised only by that module's own Rust tests, **not** re-executed by this demo. Not wired to the steering levers — **the links exist, the weld does not.**
+
+**[21] 7-axis inversion scanner + operator admissibility guard**
+
+- **Plain English:** two things. **The scanner** looks at a cognitive profile and reports, on seven separately named axes, whether it has gone structurally lopsided — mismatched opposite pairs, a lower priority level outranking a higher one, a broken prerequisite chain. It returns a per-axis score, so it tells you **which** axis, not just that something is wrong. **The admissibility guard** asks, before any operator is applied from one cognitive state to another, whether that `(source, target)` move is legal for that operator at all. This is the code realization of `CORRECTION 1` in `CLAUDE.md`.
+- **Status:** `REAL` and implemented in **two independent codebases that agree on the axis catalogue** — a **numeric** scanner in Rust (`cas_engine`, PyO3-exposed, exercised live in the loop demo) and a **pure-Python string/boolean** scanner in the belief gate. The admissibility guard is wired into the compiler's `ARROW` / `LARROW` / `BIARROW` evaluation.
+- **Numbers (exact):** 7 axes, scored as `resistance = 1 − severity`, so a clean axis reads **1.0**. Default `severity_threshold = 0.05`. Axis A (Pathway) severity = `violated_chains / 7` with `satisfaction_threshold 0.5`; one violated chain of seven gives exactly **0.142857** — the observed **1.0000 → 0.8571** drop. Axis P (Compound) severity = product of the top-2 individual severities, **0.0** when fewer than 2 axes fired. Stealth resistance = `1 − (stealth_count / 7)`. Axis index order (`InversionAxis::index()`, `noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/pathways.rs:236-246`): `Operator(N)=0, Domain(W)=1, Drive(F)=2, State(E)=3, SubDrive(S)=4, Pathway(A)=5, Compound(P)=6`. Admissibility rule (Rust, authoritative): **CO-0 is admissible ONLY on the diagonal** (`source == target`), i.e. `D0 = {(I,I)}`; every non-identity operator is admissible intra-domain (`source.domain() == target.domain()`) or cross-domain only when `target.operator() == the operator itself`. Involution pairs CO-2↔CO-3, CO-5↔CO-6, CO-8↔CO-9; self-duals CO-0/1/4/7. Domain total order P ≻ C ≻ E ≻ O (`DOMAIN_ORDER P=0, C=1, E=2, O=3`). Drive pairs F1↔F7, F2↔F6, F3↔F5, F4 self-dual.
+- **Model scale:** **N/A.** The Rust scanner consumes caller-supplied float arrays (10 operator scores, 7 drive scores, a 40-dim `CognitiveStateVector`, 4 domain averages, 7×4 domain-drive scores, 7×4 pathway scores); the Python scanner consumes a CAS expression **string** and regexes over its tokens. Neither reads activations or parameters.
+- **Artifacts — all under `noetic-compass-scaffold/noetic-compass/`, NOT at the repo root** (prefixes corrected 2026-08-19; line numbers verified correct): `noetic-compass-scaffold/noetic-compass/cas-engine/src/inversions/mod.rs` (`InversionScanner::scan` at `:256`, `InversionScanInput` at `:186`); `noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs:110` (`CognitiveOperator::is_admissible`, Rust unit test `test_admissibility_co0_diagonal_only` at `:312`); `noetic-compass-scaffold/noetic-compass/cas-native/belief/inversion_gate.py` (`run_inversion_scan` at `:273`); `noetic-compass-scaffold/noetic-compass/api/notation/inversion.py`; `noetic-compass-scaffold/noetic-compass/api/notation/compiler.py:1588` (`_is_admissible`, used at `:4735/:4739/:4743`).
+- **Caveat:** **the two scanners are NOT equivalent and must never be quoted as one number.** In the Python belief gate, axes **E** (state-vector entropy deficit) and **S** (sub-drive cross-domain variance) are explicit **placeholders**: `axis_e_check` and `axis_s_check` unconditionally return `clean=True` with `placeholder=True`, and the aggregate `clean` deliberately excludes placeholder axes — **a Python-side "clean scan" is a 5-axis result wearing a 7-axis label.** Only the Rust scanner actually computes E (Shannon entropy) and S. Python axis W is documented in its own module as a **v1 heuristic** (detects O-then-P sequencing in the source string), and Python axis A is **not an independent test at all** — it mirrors whether the RPM gate cleared, so it is only as good as its caller's `rpm_satisfied` argument. **Divergence risk:** `noetic-compass-scaffold/noetic-compass/api/notation/compiler.py:1588` delegates to Rust when present but falls back to a hand-written Python approximation `(source_index // 10) == (target_index // 10) or (target_index % 10) == operator` when `cas_engine is None` — **two implementations of the same rule kept in sync by hand, with no test asserting they agree.** Axis P is compound-by-construction in both and cannot fire without other axes firing first. And: **naming the axis is where this stops.** A fired axis produces a label and a severity, not a corrected object.
+
+**[22] CAS-Ohm quantifiers — `delta_current`, `r_hidden`, `maturity_q4`**
+
+- **Plain English:** three proposed measuring instruments that borrow electrical vocabulary as an **analogy**. `delta_current` is a residual — observed minus predicted response — tagged only with a **direction** (below / above / within tolerance) and explicitly refusing to say why. `r_hidden` is apparent-resistance minus known-resistance (`V/I_obs − R_known`); it refuses to compute at all when the observation could be zero. `maturity_q4` sorts a score into one of four bands using exact decimal arithmetic so a display rounding can never move a value across a band edge. All three are pure arithmetic over numbers a caller supplies.
+- **Status:** **PROPOSED INSTRUMENT — WORKING DRAFT. `NOT LICENSED`. NEVER RUN against real `I_obs` from any model.** The module's own header declares it RING 4 / NOT LICENSED / HELD: *"a data contract plus a registered hypothesis with an implemented guard apparatus, NOT an established law. No live calibration exists; every worked number in the sources and in the tests is FABRICATED for exposition."* **Passing tests is evidence about code↔spec, never about spec↔world.**
+- **Numbers (exact):** tests re-run live during the 2026-08-19 audit: **`PASSED 39/39`** (39 `test_` functions, all green, runs with or without pytest). **Zero callers repo-wide.** (Corrected 2026-08-19: the earlier wording — *"a repo-wide grep for `cas_ohm` across all `.py` files returns exactly ONE hit"* — was **false as stated**. Three `.py` files match the string: `noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py` itself, `docs/whitepapers/monograph/sanitize_chapters.py:55` (the literal `'cas_ohm1'`, a directory name), and `book/cognitive-circuit-grimoire/build/build_book.py:39` (the literal `'cas_ohms'`). **The substantive claim survives intact and is the one that matters: no file anywhere imports the module or calls any function in it.** The other two hits are string literals naming a docs folder and a book chapter — not importers.) Worked example (**FABRICATED**): `V=8, R_known=2, I_obs=2` → `r_apparent = 4.0`, magnitude `4.0 − 2.0 = 2.0`, `role=APPARENT_SAME_SAMPLE`, `identifies_mechanism=False`. `maturity_q4` half-open bands on cut points **2.5 / 5 / 7.5**, cut points assigned **upward**, read off the exact **pre-rounding** decimal: `2.499→Q1`, `2.5→Q2`, `4.999→Q2`, `5.0→Q3`, `7.499→Q3`, `7.5→Q4`; `0.0→Q1`; `12.0→Q4` (overload, top band has no upper test); `2.495→Q1` even though a 2-decimal display renders `'2.50'`. `delta_current` tolerance transitions pinned on both sides at `tol=0.25`: exactly `−0.25` and exactly `+0.25` are `WITHIN_TOLERANCE`; `−0.5 → UNDERSHOOT`; `+0.5 → OVERSHOOT`. Censoring: point mode censors iff `|i_obs| ≤ eps` (default `1e-9`) — `0.0`, `1e-12`, `NaN` and `inf` all return `CensoredResult(marker='OBSERVED_INTERVAL_INCLUDES_ZERO')`; interval mode (monograph-faithful) censors iff lower bound ≤ 0 even when the point value is far from zero (`(-0.05, 0.25)` at `i_obs=2.6` censors; `(0.0, 0.5)` censors; `(1.8, 2.2)` admits). ASOM overlay over the full **7×4 = 28**-cell census names exactly **3** cells distinctly (`STARVED` / `ALIGNED` / `OVERSATURATED`), merges **14** into `MISALIGNED` (lossy, non-invertible), leaves **11** as `None`. `r_cap` monotone decreasing: `p_cap=0 → R_max=5.0`, `p_cap=10 → R_min=1.0`.
+- **Model scale:** **N/A**, and **no model observation has ever been fed in.**
+- **Artifacts:** `noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py`; `noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py` (**not at the repo root** — prefix corrected 2026-08-19; the `39` `def test_` functions were counted in that file). Sources reconciled: `docs/whitepapers/monograph/cas_ohm1/chapters/` ch05 (calibration), ch06 (response model), ch07 (classification), ch08 (quantization), ch10 (residuals).
+- **Caveat — this is the entry most at risk of being over-read:** (a) **Never validated against a model.** No calibration profile exists; every number in module and tests is fabricated. 39/39 green proves the code matches the written spec and says nothing about whether the spec matches the world. **No importer anywhere in the repo** confirms it has never been pointed at a real observation. (b) The electrical vocabulary is a **modelling analogy** naming structural roles; units are MODEL units (`ALPHA`, `ACTIVATION`, `ALPHA_PER_ACTIVATION`, `Q10`) — volt/ampere/ohm are **forbidden aliases** and never appear. (c) **Non-identification is enforced structurally:** `identifies_mechanism` is a frozen `False` on every emitted record; the sign labels were deliberately renamed from `HIDDEN_OPPOSITION` / `EXCESS_AMPLIFICATION` to the purely directional `UNDERSHOOT` / `OVERSHOOT` / `WITHIN_TOLERANCE`; a test asserts no emitted label contains `OPPOSITION`, `AMPLIFICATION`, `BYPASS`, or `HIDDEN`. **At least seven mechanisms reproduce any given residual sign and are observationally equivalent** — the sign ranks which probe to spend budget on, never a cause. (d) **Naming override disclosed in-code:** ch10 bans hidden-resistance vocabulary in emitted quantities; the caller-facing name `r_hidden` is an owner decision departing from the monograph. The substance stays faithful (role `APPARENT_SAME_SAMPLE`) and the neutral monograph name `RESISTANCE_DELTA` is exposed alongside as `.resistance_delta`. (e) **Two callables are extra-chapter**, flagged in their own docstrings: `r_total`'s additive `R_cap+R_policy+R_context+R_resource` decomposition (in ch05/06 `R_total` appears **only** inside the **rejected** legacy form `I=V/R_total`) and the `r_cap(P_cap)` capability→resistance inversion. (f) `maturity_q4`'s convenience trend is a **display mnemonic**, not the admissible ch08 trend — with the default `minimum_effect=0.0` any nonzero delta reads as a trend; the disciplined version is `admissible_trend()`, which fails closed (`InadmissibleTrendError`) when axis / interval / minimum-effect / uncertainty-rule is missing. (g) Point-mode censoring is a simplified fallback that cannot honour a tight interval excluding zero at a tiny point value — disclosed in the docstring.
+- **Honesty signal worth preserving:** the refusals are enforced **by the type system**, not by a comment asking readers to be careful — `identifies_mechanism` is a frozen field, censoring returns a typed `CensoredResult` carrying an explicit reason instead of leaving an empty slot, a `Score` wrapper is rejected **by type** from any resistance position (`KindError`, not a numeric warning), and non-`ACTIVE` regions **raise** rather than degrade.
+
+---
+
+### 4.5 Safety detectors and verdict machinery
+
+| # | Capability | Status |
+|---|---|---|
+| 23 | Runtime verification stack (accept / suppress without gold labels at inference) | **`ENGINEERED-NOT-VALIDATED`** / **`NOT LICENSED`** — figures carried in prose only, **no raw artifact** |
+| 24 | Hidden-content / suppression detection (two-bridge η₁/η₂) | `ENGINEERED-NOT-VALIDATED` — prototype |
+| 25 | Pre-output (pre-speech) trajectory detection | **`NOT LICENSED` / DATA-BLOCKED** |
+| 26 | Matched-Taxonomy Control (CAS-specificity) | **`GREY` / `NOT LICENSED`** |
+| 27 | W0 hidden-prompt-injection detection | **licence `WITHDRAWN` 2026-06-18** |
+| 28 | RPM/diode directional causal-necessity knockout | `ENGINEERED-NOT-VALIDATED` — synthetic ground truth only |
+
+---
+
+**[23] Runtime verification stack — accept / suppress without gold labels at inference**
+
+- **Plain English:** at inference time, using only the model's own internal states and no answer key, decide whether to accept an output, caveat it, constrain it, or suppress it — with a reason attached to every suppression.
+- **Status:** **`ENGINEERED-NOT-VALIDATED` / `NOT LICENSED`. Downgraded 2026-08-19 from the `VALIDATED` / `LICENSED` it previously carried.** Reason, by this sheet's own rule 4 (§1): *"a status with no checkable file is not a status; `LICENSED` with no path is a marketing claim wearing a lab coat."* **The only artifact for this row is a prose section of another document.** A prose section is not a checkable artifact. There is no report JSON, no run manifest, no seed, no split, no control arm, and **no model scale attributed anywhere in the record**. The mechanism (mode selector, readiness gate) is built and described — that is what `ENGINEERED-NOT-VALIDATED` covers, capacity rather than evidence; the **numbers** are unverified. **Say it plainly: `87.6%` / `99.78%` / `0.22%` are QUOTED FROM A PROSE SECTION. They were not re-derived from a raw artifact, and they are not attributed to any model scale.** Per-customer **production** `ACCEPT` verdicts are `NOT LICENSED` in any case, and **a scoped-validation ACCEPT is explicitly not a customer-production ACCEPT.**
+- **Numbers (unverified — do not quote as measurements):** **87.6%** accept rate at **99.78%** accepted accuracy, **0.22%** silent error rate. Three modes (`HIGH_PRECISION` / `BALANCED` / `MAX_COVERAGE_TRIAGE`). Four readiness tiers (`allow` / `caveat` / `constrain` / `suppress`).
+- **Model scale:** `unavailable` — **not scale-attributed anywhere in the record.**
+- **Artifacts:** **prose only** — `docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md` §5.13. **No raw artifact exists.**
+- **Caveat:** these figures are carried in the legacy spec sheet and **were not re-derived from a raw artifact** in the Gate-2 reconciliation pass. **No standing `ACCEPT` exists anywhere in the project record, so this stack has never produced a live accepted production verdict.** **Would settle it:** a run report on disk with seed, split, control arm and an attributed model — see §10 frontier 15.
+
+**[24] Hidden-content / suppression detection — two-bridge η₁/η₂ detector**
+
+- **Plain English:** run one probe on the model's internal states and a second probe on the text it actually emitted, then flag divergence between the two and sort it into one of seven named hiding shapes.
+- **Status:** **`ENGINEERED-NOT-VALIDATED` / prototype.** Wired and returning typed output; **no pre-registered confirmatory gate has closed**; not licensed for production accept/suppress decisions. "Hidden-content / suppression detection at CAS-class granularity" is LICENSED **WITH CAVEATS ONLY** (prototype tier).
+- **Numbers (exact):** 2 bridges (η₁ internal, η₂ re-probed emitted text); **7** typed hiding shapes — withheld content, self-censored content, latent capability, suppressed reasoning, frame manipulation, persona drift, involution content. **No confirmatory numbers exist.**
+- **Model scale:** not scale-attributed.
+- **Artifacts:** `docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md` §5.12.
+- **Caveat:** the output is a bounded typed-class assignment that cannot confabulate beyond the seven-class set — that is a design property, not evidence of accuracy.
+
+**[25] Pre-output (pre-speech) trajectory detection**
+
+- **Plain English:** trying to read, from the model's internal state **before it emits any token**, which way it is about to go — e.g. whether it is about to refuse. The cheap decisive gate was run and it established a **ceiling, not a capability**.
+- **Status:** **`NOT LICENSED` / DATA-BLOCKED.**
+- **Numbers (exact):** `$0` leave-one-family-out logistic probes at the W0 prompt state (zero generated tokens) on a 280-trace Qwen capture. `raw_prompt_vec[1536]`: cross-family AUC **0.948**, within-family **0.972** — **but the layer-0 embedding control** (pure token vectors, no computation) scores **0.931 / 0.986**, i.e. **equal or higher** ⇒ **the entire raw-vector signal is token-identity payload leakage.** The one genuinely cognitive readout (10-way typed profile) is at chance cross-family (**0.524** — the good sign: it cannot identify payload) and **0.806** within-family (permutation `p = 0.005`) — but on only **10 REFUSED points** (≤2 per family). Collapsed `^2−^3` scalar AUC **0.486** window / **0.615** prompt. **Output-side audit AUC 0.956 is what actually ships.**
+- **Model scale:** Qwen2.5-1.5B.
+- **Artifacts:** `docs/working/prespeech_causal_team_verdict_20260610.md`; `docs/working/internal_polarity_readout_test_20260610.md`.
+- **Caveat:** binding honesty ceiling from the source: *"any 0.9x grouped-CV number must NEVER be sold as detection — it is the confound."* Pre-speech detection is gated on a more-refusing model **plus** a per-step matched-pair recapture (≥40 matched pairs; currently `G_matched = 2`). Per-step trajectory / velocity / Lyapunov / lacunarity variants are **DATA-BLOCKED** — no per-step activations exist on disk (the npz is mean-pooled) and 3-token outputs leave no pre-surface window. **Lyapunov and activation-lacunarity are KILLED — no canonical estimator exists.**
+
+**[26] Matched-Taxonomy Control — CAS-specificity**
+
+- **Plain English:** the test that would show CAS labels recover something real rather than being one coherent relabeling of ordinary semantic categories — race CAS against a same-size rival taxonomy on the same activations, blind.
+- **Status:** **`GREY` / `NOT LICENSED`.** Two fixture nulls, then the first blind comparator returned `GREY`. **A `GREY` is not a pass.**
+- **Numbers (exact):** gate order is fixed — text-only baseline ≤ **60%**, then CAS hidden readout lift ≥ **+20 pp**, then matched-taxonomy specificity.
+  - **MTC v1** — Surface Gate FAIL, text baseline **100%** (answer key leaked in surface text).
+  - **MTC v2** — Recoverability Gate FAIL: de-leakage worked (text baseline ~**1-4.5%**) but stripped the TKS meaning; 40E **5.50%** hidden vs **4.50%** text (**+1.00 pp**); F28 **5.036%** vs **2.878%** (**+2.158 pp**), against a required **+20 pp**.
+  - **Condition-3 blind comparator — IN-REPO run** (`condition3_mtc_comparator_result_20260531.json`, GPT-NeoX-20B): `cas_element` hidden **0.06527777777777778** vs matched control `matched_control_tf` **0.8472222222222222**. **This is the copy that exists in the repository and can be checked today.**
+  - **Condition-3 blind comparator — 2026-06-03 H200 re-run, `SINGLE-COPY / OFF-REPO`:** `pass false`, `grey true`, `falsify false`; CAS accuracy **0.5347222222222222** vs matched NC40 control **1.0**; observed margin **−46.52777777777778 pp** against a required **+5 pp**. **These four values are NOT in the in-repo JSON.** They live only in `D:/tksCAS-archive/condition3_mtc_comparator_20260603/` (pointer at `cas_harness_production_todo.md:20711`). **Archive/in-repo labels corrected 2026-08-19 — an earlier revision of this sheet had them the wrong way round, calling the in-repo file "earlier archived" and presenting the D:-only run as primary.**
+  - **F28 vs GoEmotions-28** (Pythia-2.8B): CAS hidden-minus-text lift **+13.857 pp** vs GoEmotions **+0.429 pp** (**corrected 2026-08-19 from the rounded `+0.4 pp`**; source `CAS_HARNESS_TKS_UNIVERSALITY_LICENSING_PROGRAM_20260720.md:391`), scrambled-CAS null at **3.857%** — real off-gate signal, but `BLOCKED_CAS_NOT_RECOVERABLE` because **+13.857 pp** missed the **+20 pp** floor, **which was not retuned post-hoc**.
+- **Model scale:** GPT-NeoX-20B (Condition-3), Pythia-2.8B (GoEmotions arm).
+- **Artifacts:** `docs/working/cas_harness_mtc_20b_pilot_results_20260530.md`; `docs/working/mtc_matched_taxonomy_20260530/`; `docs/working/cas_harness_leakage_signal_adjudication_prereg_20260530.md`; archived `D:/tksCAS-archive/condition3_mtc_comparator_20260603/`.
+- **Caveat — the claim ladder is explicit:** rung 1 **Detection** = `LICENSED` (narrow reading); rung 2 **Comparative speciality** = **not supported** (one blind comparator, `GREY`); rung 3 **Probabilistic speciality** = reachable but **not earned** (needs one clean blind matched-comparator **WIN**, which has never occurred); rung 4 **Absolute uniqueness** = explicitly **disclaimed and not the target**. **"Universal rather than something we invented" is `NOT LICENSED`.**
+
+**[27] W0 hidden-prompt-injection detection**
+
+- **Plain English:** detecting a hidden instruction planted inside a prompt, by reading hidden states.
+- **Status:** **licence `WITHDRAWN` 2026-06-18.** The surface control won.
+- **Numbers (exact):** Qwen2.5-1.5B `L18` hidden balanced accuracy **89.6875%** vs a character n-gram text control at **92.5-93.1%**.
+- **Model scale:** Qwen2.5-1.5B (detector); extraction targets pythia-1b and pythia-2.8b.
+- **Artifacts:** bank recovered at `docs/working/gate3_injection/w0_bank/hidden_prompt_injection_bank_v0_20260617.json` (640 scenarios, created 2026-06-18, 1,170,788 bytes, sha256 `2df5b9ced77d767694ed13829fd9995432fc3e53d27862cd1145c5dd139b2a34`), commit `bfa3ad48`.
+- **Caveat:** the bank's own metadata carries the ceiling: **"Data-readiness only."** This is a **fixture, not a validated detector.** The char-level surface gate is now **permanent**. **Prompt-injection detection is GATE 3 scope, not Gate 2** — the word "injection" does not appear in the Gate 2 section at all.
+
+**[28] RPM / diode directional causal-necessity knockout**
+
+- **Plain English:** testing that a prerequisite chain is directional by knocking out the earlier stage and showing the later stage cannot be reached.
+- **Status:** **`ENGINEERED-NOT-VALIDATED` / prototype.** Synthetic ground truth only, **never run on a real model**, verdict ceiling `FLAG_FOR_HUMAN_REVIEW`.
+- **Numbers (exact):** a red team manufactured a `PASS_DIRECTIONAL_PENDING_REVIEW` from it using `n_random=0` plus `subsumption_threshold=2.0`.
+- **Model scale:** none — synthetic.
+- **Artifacts:** its two executable/test files were **removed from the legal-branch tip** pending a claim-safe rebuild.
+- **Caveat:** the red-team result is the point — with controls disabled, the rig will emit a pass. Never quote a directional verdict from this component.
+
+---
+
+### 4.6 Plumbing — evidence, verdicts, and scale machinery
+
+| # | Capability | Status |
+|---|---|---|
+| 29 | Audit chain — Evidence Packets, six proof chips, hash chain, five-check verify, S3 WORM, ACCEPT-requires-WORM gate | `VALIDATED` as apparatus / `LICENSED` as mechanism; **no packet has ever passed it to a standing ACCEPT** |
+| 30 | Stage-9 40E Evidence Packet (the flagship 20B validation packet) | **`FLAG_FOR_HUMAN_REVIEW`** — its `ACCEPT` was **`WITHDRAWN`** 2026-06-03 |
+| 31 | Fleet build — sharded audit toward 300B+ | **`ENGINEERED-NOT-VALIDATED`** |
+
+---
+
+**[29] Audit chain — Evidence Packets and the verification stack**
+
+- **Plain English:** every audit produces a signed record — a verdict plus six SHA-256-committed proof chips — written to disk, appended to a tamper-evident hash chain, mirrored to a cloud object under Object Lock, and re-checked on every audit call, so an outside party (even a regulator) can re-verify it **without the operator's cooperation**.
+- **Status:** `VALIDATED` as apparatus / `LICENSED` as mechanism. **The gate mechanism works and is verified — but no packet has ever passed it to a standing `ACCEPT`.** Immutability is `NOT LICENSED` (tamper-evidence only). Multi-instance / host-loss durability is **not proven**.
+- **How it works — five layers:** (1) disk persistence with regression-tested bit-identical reload; (2) append-only JSONL hash chain (`cas_harness_evidence_chain`), each entry fingerprinting the previous; (3) `/evidence/{trace_id}/verify` running **five independent checks** — payload hash, log entry exists, chain continuity from genesis, local anchor-manifest consistency, live S3 `GetObject` round-trip + hash; (4) `HeadObject` confirming `ObjectLockMode = GOVERNANCE` and `RetainUntilDate` in the future; (5) the ACCEPT-requires-WORM gate. Three-state UI: "S3 object verified" / "Anchored to S3" / "S3 verify failed".
+- **Numbers (exact):** **6** proof chips (model / readout / baseline / causal / control-cover / output-bridge). **5** verify checks per call. **3** retention proofs required for `ACCEPT` (anchor written, S3 re-read hash-matched, Object Lock active) — any one missing forces `FLAG_FOR_HUMAN_REVIEW`. ~**30-day rolling** retention window. Withdrawal registry holds **exactly 2 records**, both `ACCEPT → FLAG_FOR_HUMAN_REVIEW`, `reason_code candidate_control_proof_misclassified`, `withdrawn_on 2026-06-03`. Forensic bytes independently re-hashed and matched: GPT-NeoX packet `2b402931b35f7527d0baf76467a9812d7c8d9da232688c2a106238b5b5c7cf6d`; Pythia-160M pre-fix `0af6964f9446e61376530ff9f3d305540f6eaed709e29fbfa2d02cf37e706f4e`, corrected `64a9de4d56ce0bee14ca8108cf97b92df23ad11ca4d4784ac0cbaf4ad0788c87`.
+- **Model scale:** model-independent (service layer). Exercised on the GPT-NeoX-20B and Pythia-160M Stage 9 packets.
+- **Artifacts:** `.../live-trace-worker/scripts/merge_stage9_40e_evidence_packet.py` and `build_stage9_40e_verifier_report.py`; `docs/working/gate2_closure/GATE2_ITEM2_WITHDRAWN_ACCEPT_ROOT_CAUSE.md`; `docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md` §3.6.
+- **Caveat:** **S3 Object Lock is `GOVERNANCE` mode — operator-overridable by any principal holding `s3:BypassGovernanceRetention`.** The guarantee is that an override is **detected on the next verify call**, not that deletion is prevented. Durability is proven for **single-instance restart-survival only** (one Postgres server, no replica, no failover). **Two P0 regressions are OPEN and NOT deployed:** **RT-02** — the withdrawal downgrade fires only when WORM proof is **absent**, so successfully anchoring the withdrawn packet **removes the only thing suppressing its ACCEPT** (the safety property is strongest exactly when the artifact is least verified; established by code reading, not execution); **RT-05** — the anonymous share path (`evidence_shares.py`) applies **no withdrawal projection at all**. The tombstone registry exists in **unmerged commit `846ee041`** (24 named tests) and is **absent from protected `master`, `origin/master`, the live clone, and GitHub** — **the deployed system currently has ZERO withdrawal regression coverage.** 13 of 24 tombstone paths carry no projection and no test; **row 21 is worse than absent — 9 deployment-verifier tests PASS by asserting the stale ACCEPT expectation.** The reference audit target on deployed `master` **is the withdrawn trace** (`cas_harness_audit.py:209`). **No SOC 2 / ISO 42001 / third-party certification is held.**
+
+**[30] Stage-9 40E Evidence Packet — the flagship 20B validation packet**
+
+- **Plain English:** the single most-cited artifact in the project — the merged 20B 40-Element evidence packet carrying the 95.625% readout, the 107× ablation diagnostic and the +1.412 bridge result.
+- **Status:** **`FLAG_FOR_HUMAN_REVIEW`.** Its `ACCEPT` was **`WITHDRAWN` 2026-06-03** with `accept_revival_allowed: false`. **The verifier decision layer was MISSING at the time it was emitted.**
+- **Numbers (exact):** `trace_id stage9-40e-original-baseline-readout-20260527`. Three packet revisions retained side by side: `..._20260527.json` **FLAG** (line 261); `..._20260528T0215Z.json` **FLAG** (line 401); `..._20260528T0455Z.json` **ACCEPT** (line 508) — **the ACCEPT appeared ONLY in revision 3, the one that merged the candidate cover report** (timestamped `20260528T0210Z`). Correcting commits `337d0c29b0822228dbfbb35dfc9873ca69453f1d` and `24e15a9b5f7c4632246dd14d9cf261d0c32bc5d7`, both 2026-06-03. The uniqueness/MTC gate was **ABSENT, not weak**: `PASSING_UNIQUENESS_STATUSES` / `_uniqueness_gate` occurrences went **0 → 8** in `build_stage9_40e_verifier_report.py` at commit `24e15a9b`. Verifier report `..._verifier_report_20260528T0455Z.json` sha256 `79d140f0d5028578d8c776eb6069cbad53a4733e0553004aa9ecb8366374a5f0`.
+- **Root cause (exact):** `merge_stage9_40e_evidence_packet.py::_control_chip_status` pre-fix logic `if isinstance(class_count, int) and class_count >= 40: return "verified"` — **counting 40 cover classes was treated as proof a matched control had run**; the consumed cover report's own status string was `candidate_cover_discovery_completed`.
+- **Model scale:** GPT-NeoX-20B — and **its `model_revision` is a literal `null`**, i.e. `unavailable` and unrecoverable without fabrication. **It must read `unavailable` and must never be filled in by looking up a plausible HuggingFace commit.**
+- **Artifacts:** `C:/Users/wakil/CAS-Harness-Run/noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json` (and `master:…`); `docs/working/gate2_closure/GATE2_ITEM2_WITHDRAWN_ACCEPT_ROOT_CAUSE.md`.
+- **Caveat:** **its pre-registered closure gate was MISSED ON BOTH DISJUNCTS** — required **≥30 pp** drop **OR** **≤65%** accuracy floor; achieved **28.73 pp** and **66.90%**, short by **1.27 pp** and over by **1.90 pp** respectively. The withdrawal registry's own contributing factor names the defect exactly: *"the 20B 40E causal result missed its pre-registered absolute gate but the verifier used a different signal-to-noise guard."* The **corrected Pythia-160M packet REUSES the withdrawn packet's `trace_id`**, so identity alone cannot distinguish the withdrawn artifact from its correction — only content fingerprints can. Record 1's `recognized_corrected_packet_canonical_sha256` is an **EMPTY array**, so the policy refuses every new anchor write for that trace. **Completeness of the withdrawn set is `unavailable`** — the adjudication says *"AT LEAST two machine packets… were affected"* and no artifact establishes that only two legacy ACCEPTs ever existed. Verbatim from the reproducibility notes: *"The bridge proof is present in the Evidence Packet, but the packet remains FLAG_FOR_HUMAN_REVIEW because the verifier decision layer is still missing."*
+
+**[31] Fleet build — sharded audit toward 300B+**
+
+- **Plain English:** split a model too big for one machine across many Probe Workers, each running the same probe stack on its layer slice and committing a SHA-256 of its raw activation tensor so no worker can swap tensors; a Fleet Executor stitches the chips and a Scale Planner assigns workers.
+- **Status:** **`ENGINEERED-NOT-VALIDATED`.** The apparatus is validated; **the 300B figure describes engineered capacity, not a result.**
+- **How it works:** conservative-default topology gate — a fleet `ACCEPT` is emitted only if **every** worker independently reports `ACCEPT`, all fragment hashes verify, and topology is complete; any `SUPPRESS`/`FLAG`, invalid hash, or absent/timed-out worker forces `FLAG`/`SUPPRESS`. **Raw activations never cross the wire** — only chips, hashes and local verdicts. Converted-checkpoint provenance schema records `model_publisher_of_record`, `original_checkpoint_format`, `conversion_authority`, `consumed_checkpoint_revision_sha`, per-shard SHA-256, and `conversion_audit_status: unverified-by-cas-harness`.
+- **Numbers (exact):** target **300B+**. In-flight target is a **314B**-parameter BF16 community HF conversion of a JAX original. **Scale ladder validated to 20B only.**
+- **Model scale:** validated apparatus; **no model above 20B has produced a licensed result.**
+- **Artifacts:** `docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md` §4.4, §5.11; `cas_harness_scale_planner.py`, `cas_harness_fleet_executor.py`.
+- **Caveat:** **no detection, causal, or bridge result above 20B is licensed.** Frontier-scale work is **infrastructure-only LICENSED, results NOT LICENSED**. **"Validated at 300B / frontier scale" is a prohibited claim.**
+
+---
+
+## 5. WHAT IS LICENSED vs WHAT IS NOT
+
+Blunt, both lists. If a sentence is not on the first list, do not say it.
+
+### 5.1 LICENSED — you may say these, in this wording
+
+1. **"The harness reads structure out of hidden states."** Specifically: *the model linearly encodes the label distinction more strongly than a text classifier does* — and **this sentence is licensed ONLY on the two Pythia-160M rows that actually carry a character-level arm** (`tfidf_char_3_5`): F28 **78.571%** vs **49.660%** (McNemar `p = 2.6557483981655295e-95`) and 40E **89.799%** vs **50.089%**. **Scope corrected 2026-08-19 — the previous wording said "six model points, three families, 160M → 20B" and that is NOT supported.** `GATE2_ITEM1_CLAIMS_MATRIX.md:400` states flatly: *"no hidden-beats-surface framing of either 20B row is supported"* — the 40E row at 20B has **word-only** controls and the F28 row at 20B has **no text control at all** against its **86.8622%** headline. This sheet already conceded that in Cap. 1, §7.13 and §10 frontier 4; the licensed sentence now matches. (Cap. 1)
+2. **"Rewriting the read-out class as an English prefix measurably shifts what the model says next."** Likelihood-conditioning tier, `+1.412050` at 20B 40E, replicated on six model points. **Licensed as a `PARTIAL` statement of what was observed, NOT as a validated causal claim** — the pre-registered stance-explicitness-matched non-CAS prefix control was never run, and the 20B F28 pass followed an instrument swap after the first readout missed the gate (`+0.1974`). Say both. (Cap. 2, §7.12)
+3. **"That structure is causally load-bearing on at least one model point."** Pythia-160M, subspace ablation to **exact chance** (`78.571% → 3.571%`, `p = 0.03225806451612903`) and sparse neuron covers **112/112 at `p < 10⁻³³`** with bit-exact restoration. (Caps. 13, 14)
+4. **"Drive-local eraser-channel steering shifts generated output against matched controls."** Two architecture families, `p` down to `1.4×10⁻¹⁷`. (Cap. 16)
+5. **SLOT VACATED — MOVED OUT OF `LICENSED` 2026-08-19. See §5.2 item 21.** This slot previously licensed *"the apparatus predicts its own failures before the run."* **Nothing is licensed here now.** Narrowing the wording was not enough: the entire evidence base is **ONE confirmed instance, `n = 1`** — the Pythia-160M Noetic axis classed `Oscillatory` by the fractal classifier, after which Noetic generation steering failed (Cap. 6) — plus a set of lacunarity thresholds, which are a cheap gate and **not a prediction record**. **A general capability may not be licensed from `n = 1`**, in the present tense or any other tense, so the bounded fact is recorded in the weaker bucket at §5.2 item 21 instead of here. The slot number is retained rather than renumbered so that every reference to §5.1 items 6-10 elsewhere in this file and its Change Log still resolves. (Caps. 5, 6)
+6. **"Four blind frontier-LLM readers, matching against a provided colloquial key, agree with each other on how to read a model's output far more than a word-overlap counter does."** `0.8845` (Fleiss `0.88`) vs `0.2841` on clean authored exemplars; on real outputs the counter falls to exactly chance (`0.025`) while readers hold `0.5333`. **Two qualifiers restored 2026-08-19 because Cap. 8 declares them load-bearing and the previous wording dropped both:** (a) readers are given a **provided colloquial key**, so this is **not fully-blind understanding**; (b) all four are frontier LLMs sharing priors, so **this is not four independent minds**. Coverage is `88/120` and `20/36` — both numbers are upper bounds. (Caps. 8, 9)
+7. **"The CAS algebra compiles, detects an injected fault on the named axis, and round-trips."** Symbolic layer only, `exit 0`, real modules, 4 of 7 axes at string level. (Cap. 20)
+8. **"Every audit emits a hash-committed, externally re-verifiable evidence record."** Tamper-**evident**. (Cap. 29)
+9. **"The fleet architecture is engineered for sharded audit above 20B."** Capacity, not result. (Cap. 31)
+10. **"Hidden-content / suppression detection at CAS-class granularity"** — **with caveats, prototype tier, not for production decisions.** (Cap. 24)
+
+### 5.2 NOT LICENSED — do not say these
+
+1. **Any `ACCEPT`.** Stated plainly, in unformatted greppable words so that no search for it can miss it: **there is no ACCEPT anywhere in the harness record. No ACCEPT verdict stands anywhere in the project record, at any scale, on any model, in any packet, on any date.** The only two `ACCEPT`s ever minted were both withdrawn on 2026-06-03 with `accept_revival_allowed: false` (Caps. 29, 30), and the withdrawal registry holds **exactly 2 records**, both `ACCEPT → FLAG_FOR_HUMAN_REVIEW`. Per-customer production `ACCEPT` is `NOT LICENSED`, and a scoped-validation `ACCEPT` would not equal a customer-production `ACCEPT` in any case. **Nothing written into this file later may create one** (§1).
+2. **"CAS-specific cognition at 95.6%."** The detection number is licensed under the narrow reading only.
+3. **"Presence, causal role and conditionability across six models."** Prohibited verbatim. Readout + bridge replicate on six; **causal evidence does not.**
+4. **"Two independent evidence tiers across six models."** Prohibited verbatim — the second tier (weight geometry) exists on **1 of 6**.
+5. **"The 20B chain closes on two axes."** Prohibited verbatim.
+6. **"Every verdict is validated causally."** Prohibited verbatim.
+7. **"Validated at 300B / at frontier scale."** Nothing above 20B is licensed.
+8. **"Immutable" / "court-admissible" / "regulator-grade by construction" / "certified" / "guaranteed" / "100%" / "world-first" / "only."**
+9. **"CAS structure is universal rather than something we invented."** MTC rung 2 is unmet; rung 4 is explicitly disclaimed.
+10. **"Ablation works"** in the tier-1 white-box loop. Steering does; ablation moved the wrong way.
+11. **"We found THE neurons / THE circuit."** The licensed wording is *"causally supports the labeling."* Single-neuron monosemantic localization is `NOT LICENSED`.
+12. **"Pre-speech / pre-output detection."** The 0.9x numbers are the confound, not the capability.
+13. **"Prompt-injection detection."** Licence withdrawn 2026-06-18; the char n-gram control beat the hidden readout.
+14. **"The system corrects the fault."** The scanner **names** the axis. **No auto axis→repair dispatcher exists** — a human caller applied every correction on record.
+15. **"The Component Atlas found the drive rail / the amplifier."** No CAS-PCBA label has ever stuck, at any scale, under any design revision.
+16. **`PASS_BOUNDED_ATLAS_V0`** as shorthand for `PASS_BOUNDED_ATLAS_V0_F5_RAIL_ONLY`. "The suffix names a measurement that was not made."
+17. **Any CAS-Ohm number** as a measurement. Every worked number in that module is fabricated for exposition, and the module has zero callers.
+18. **"Not lab-specific / not corpus-specific / not language-specific."** All six model points used the **same frozen English fixture**, `input_sha256 3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250`.
+19. **Any hidden-beats-surface framing of either 20B row.** Added 2026-08-19. `GATE2_ITEM1_CLAIMS_MATRIX.md:400`: *"no hidden-beats-surface framing of either 20B row is supported."* The 40E row has word-only controls; the F28 row has **no text control at all**. The hidden-beats-surface sentence is licensed on the **two Pythia-160M rows only**.
+20. **The runtime-verification figures** `87.6%` / `99.78%` / `0.22%` **as measurements.** Added 2026-08-19. Prose-only artifact, never re-derived, model scale `unavailable`. (Cap. 23)
+21. **"The apparatus predicts its own failures before the run"** as a present-tense general capability. Added 2026-08-19; **moved here out of the LICENSED list on the same date, and its §5.1 slot 5 is now vacant.** **The bounded fact, which is all that the record supports and which is NOT licensed as a capability:** on **one** recorded occasion — **explicitly `n = 1`** — the fractal classifier classed the **Pythia-160M Noetic axis** as `Oscillatory` before the run, and **Noetic generation steering subsequently failed** (Cap. 6). That is a single instance, not a prediction record. The classifier is a **preflight heuristic, not a causal measurement**, and at 20B it is *"a numeric layer-trace proxy, not the discrete cas-engine CognitiveFractal orbit object"* (Cap. 6's own caveat); the lacunarity thresholds are a cheap gate, not a prediction record either. **Quote the single instance, name `n = 1` alongside it, and do not generalise it into a capability.** (Caps. 5, 6)
+22. **"Multi-layer trace is validated."** Added 2026-08-19. The `95.4%` is reported bare — no matched control, no pre-registered criterion, no null. (Cap. 4)
+23. **The η→ε bridge as `VALIDATED`.** Added 2026-08-19. Its pre-registered matched control was never run, and the 20B F28 pass followed a post-hoc readout swap. `REAL` + `PARTIAL` is the honest pair of words. (Cap. 2, §7.12)
+
+---
+
+## 6. THE COMPONENT ATLAS ARC — rev 0.2 → rev 0.3 → rev 0.4
+
+**Arc in one line:** rev 0.2 (pythia-1b) `NULL_ATLAS_V0`, 4 evaluable / 0 pass → rev 0.3 (pythia-2.8b) `GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE`, 1 evaluable / 0 pass → rev 0.4 (gpt-neox-20b fp32) `GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE`, 1 evaluable / 0 pass. **No CAS-PCBA label has ever stuck, at any scale, under any design revision.**
+
+**The three prior results all stand unamended.** rev 0.3 does not supersede rev 0.2; rev 0.4 supersedes neither. The only amendments ever made were the **D18 / D30 / D45 disclosures**, which corrected **descriptions** and changed **no number**.
+
+### 6.1 The frame
+
+Parts are the model's, names are ours, ablation is the judge. Discover internal parts functionally, attach a CAS-PCBA type name (`DR` drive rail, `AMP` amplifier, `RS` restraint/brake, `CONN` rail-to-amplifier wiring), then knock each out. **A name only sticks if the ablation moves the model in the direction the name predicted, by more than matched control ablations of the same size.** 5 core tests, 2 harness-sanity checks (`MEM`, `CHECK`) held outside the aggregate and the verdict, **58 logged deviations D1-D58**.
+
+Artifacts: `docs/working/gate2_closure/component_atlas_v0/PREREG_COMPONENT_ATLAS_V0.md`; frozen script `component_atlas_v0.py`.
+
+### 6.2 rev 0.2 — pythia-1b — `NULL_ATLAS_V0`
+
+**0 of 4 evaluable labels stuck.** `EleutherAI/pythia-1b` rev `f73d7dcc…`, seed 0, A40, **161.9 s**, 24 frames (12 fit / 12 judge), `C=6` controls, `max_new_tokens 24`, `L*=6` of 16, `L_dr=2`.
+
+- `DR_F5` **FAIL**: `targeted_drop 0.0339` vs max matched-control drop `0.0313` (no better than random), and the **cross-rail cover did MORE, 0.0675**; `sign_test_p 0.891`.
+- `DR_F2` **FAIL**: `targeted_drop` **NEGATIVE** `-0.0268`.
+- `AMP_F5` **FAIL**: `targeted_drop 0.1120`, beat cross-direction `0.0390` but lost to max matched control `0.1792`; `sign_test_p 0.194`; attenuation signature held.
+- `RS_F5` **VACUOUS**: `baseline_mean_hedge 0.00`, `frac_hedged 0.00 < 0.25`.
+- `CONN` **FAIL**: starvation signature absent, `sign_test_p 0.891`.
+- `n_evaluable 4`, `n_pass 0`, `kill_statement_triggered null`.
+
+**Harness sanity — both failed, one informatively, one uninformatively.** `CHECK_SANITY`: gate score **12.766 → 9.207 nats**, drop **3.559** vs best control drop **0.175** — a **~20×** selective margin — but failed the bar "drop ≥ 50% of baseline" (**6.383**). `MEM_SANITY`: `n_judgment_items 6`, `baseline_copy_acc` exactly **0.50**, ablated **0.667**, `targeted_drop` **NEGATIVE `-0.1667`**, max control drop **0.0**. **The MEM result is worse than "failed" — ablating the top-4 copy heads IMPROVED copying.** None of the rev-0.3 MEM changes addressed the **sign**, and the project forced itself to say so (D30).
+
+**Caveat:** explicitly a **weak** null, not a refutation. The sharpest test (`RS`, the increase-sign brake) was never evaluable; judge banks were tiny (12 prompts, 6 sanity items); and both sanity checks failed, so "the labels are wrong" could not yet be separated from "the instrument is not measuring."
+
+Artifacts: `RESULT_ATLAS_V0_20260818.md`; `atlas_v0_FULL_report.json`.
+
+### 6.3 rev 0.3 — pythia-2.8b
+
+**Preflight and the D31 widening — a null that is itself evidence.** Preflight reads no test statistic, so it cannot be tuned toward a pass. Preflight 1 (`cover_k 40/10240 = 0.391%`): DR rate **0.50**, AMP **1.00**, RS **0.833**. Preflight 2 after D31 widened **2.55×** (`cover_k 102/10240 = 0.996%`): DR rate **0.50 — identical to three decimals**, AMP **1.00**, RS **0.833**. **Read the null correctly: a 2.55× wider cut at the same layer moving the rate by exactly 0.00 points at the DR-rail HYPOTHESIS being wrong, not at the intervention being underpowered.** Per D31's pre-declared bound, no second widening was attempted. Also established: **RS redesign vindicated** (83% text change vs the 0.60 bar; `u_rs_legacy_cosine_with_primary 0.0127`, i.e. the new restraint-CONTEXT direction is essentially **orthogonal** to rev 0.2's hedge-VOCABULARY direction). **D21 layer fix held:** `L*=12`, `tie_set_width 1`, `accuracy_saturated_plateau false`; probe acc **0.942** at `L*` vs shuffled floor **0.577**.
+
+**Full run — `GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE`, `n_evaluable 1`, `n_pass 0`.** `EleutherAI/pythia-2.8b` rev `2a259cdd…`, `revision_verified true`, `claim_eligible true`, seed 0, A40, **4565.5 s (76 min)**, 64 frames (32 fit / 32 judge), `C=24`, `max_new_tokens 32`, RS `k=5 @ T=0.7`, `L*=12`, `L_dr=4`, `cover_k 102 (0.996%)`.
+
+- `DR_F5` **VACUOUS_NO_BEHAVIORAL_CHANGE** (**0.46875** of judge prompts changed text, < 0.60; **restated exactly 2026-08-19** from the rounded `0.469`).
+- `DR_F2` **VACUOUS_NO_BEHAVIORAL_CHANGE** (**0.3125**).
+- `AMP_F5` **FAIL** — the only evaluable test.
+- `RS_F5` **VACUOUS_NO_BRAKE** (precondition G1 `p=0.5056`, G2 `p=0.6983` on the fit half).
+- `CONN` **VACUOUS_NO_BEHAVIORAL_CHANGE** (shares DR-F5's condition, **0.46875**).
+- `MEM` **SANITY_FAIL** — exact numbers, **added 2026-08-19** (they were missing, while rev 0.2 and rev 0.4 both carried theirs): 31 heads ablated, `n_discovery_items 20`, `n_judgment_items 20`, `drop_resolution 0.05`, `baseline_copy_acc 0.65` → `ablated_copy_acc 0.5`, `targeted_drop 0.15000000000000002` vs `max_control_drop 0.050000000000000044`, `control_ensemble_p 0.04`. **Read this carefully: rev-0.3 MEM was `p = 0.04` SELECTIVE and still failed, on the absolute bar.** That context matters for the rev-0.4 "both checks pass for the first time" claim — rev-0.3 MEM was not noise, it was a selective effect below an absolute threshold.
+- `CHECK` **SANITY_PASS**.
+- Byte-identical judge pairs: `DR_F5 17`, `DR_F2 22`, `AMP_F5 1`, `RS 1`, `CONN 17`.
+
+**`GREY` is not `NULL`.** With one evaluable test the battery cannot deliver a verdict, which is exactly why it is reported separately from rev 0.2's `NULL_ATLAS_V0`.
+
+**`CHECK_SANITY` — the first `SANITY_PASS` in the project.** 31 induction heads ablated: gate score **12.465 → 5.436 nats**, drop **7.029** vs best of 24 count-matched control head sets **0.821** = **8.6×**, `control_ensemble_p 0.04`. Criterion (rev-0.3 re-anchor D13): `p < 0.05` AND drop ≥ **1.0 nats**. The legacy rev-0.2 50%-of-baseline rule would **also** have passed (reported so the comparison stays auditable). **This is the single result that stops every later null from being waved away as "the apparatus is dead."** Caveat: the 1.0-nat re-anchor **was informed by rev-0.2 results** (which produced 3.559 nats) and the prereg declares that rather than presenting it as independent design. MEM remained `SANITY_FAIL`, so liveness rested on one check, not two.
+
+**`AMP_F5` — a decisive FAIL, and the most informative number in the whole arc.** `targeted_drop` **0.3660**, `wilcoxon_pratt_p` **5.515e-05**, `behavioral_change_rate` **0.96875** (**restated exactly 2026-08-19** from the rounded `0.969`), presence **0.781 → 0.781** with magnitude down (`attenuation_signature_holds true`). **FAILED legs:** `drop > max_matched_control_drop` (**0.3660** vs `max_matched_control_drop` **0.9766559642427914** — **restated exactly 2026-08-19** from the rounded `0.9767` — random directions dropped it **2.7× MORE**) and `control_ensemble_p 0.16` (3 of 24 controls at or above target; target sat at the **87.5th percentile of its own null**). **PASSED legs:** `drop > cross_direction_drop` (**0.3660 > 0.1163**) and `both_arms_hold` (`p_vs_control_mean 5.515e-05`, `p_vs_baseline 0.01664`). **Load-bearing conclusion: "use subspace ablation" was NOT the missing fix — AMP_F5 already IS rank-1 projection removal, the same family as the validated 107× SNR result. It failed on selectivity, not method-power.** Live variables were declared to be SCALE, TARGET, READOUT and NULL CONSTRUCTION.
+
+**`RS_F5` — the brake premise itself failed (a NEW failure mode).** The redesign engaged (`behavioral_change 0.958` vs 0.00 hedge counts in rev 0.2) and moved the failure **down a level**: on this bank, conflict does not measurably restrain the model in the first place, so there is no brake to remove. Precondition FIT half: G1 `p 0.5056` (a coin flip), G2 `p 0.6983`, headroom licensed-minus-conflicted **0.110** on projections of ~**6.0**. Targeted increase **−0.02748984322787429 (WRONG SIGN)** (**restated exactly 2026-08-19** from the rounded `−0.027`), restoration fraction rho **−0.251** against the `(0, 1.5]` window. Dose diagnostic: target magnitude **2.6848** vs control mean **6.7409**, ratio **0.3983**. **Two binding reading rules fire here:** (1) the dose ratio means the controls were **2.5× stronger** perturbations than the target, so under the prereg's own Section 11 rule a FAIL could not distinguish "no brake" from "controls too strong" — this is what D37/D38 were written to fix; (2) `u_RS` is plausibly a prohibition-**vocabulary** direction (char-ngram judge accuracy on that bank **0.75**), disclosed by name because RS is the sign anchor.
+
+**Self-correction D45 — the result document's own headline was wrong, and two failing legs actually passed.** (i) `effect_size_cross_rail 0.4626` is **collateral damage** (the F2 judge bank generated with `u_F5` removed), **not** "the F2 direction moving F5 content". The quantity the sentence described is `cross_direction_drop 0.1163`, **3.1× smaller** than the target's 0.3660 — **and that leg PASSED**. (ii) The two effect sizes had different denominators (`std_F5 1.5060`, `std_F2 1.1758`), overstating the ratio **1.903** by ~**28%**; on a common raw scale **1.486**, range-normalized **1.716**. (iii) **Only the two matched-control-ensemble legs actually failed.** The failure survives every renormalization — the gate needs ≤ 0.5× and even 1.486 is 3× over — **so this is a precision fix, not a rescue.** Numbers unamended; description corrected in place, in public, under the same rule as D18 and D30.
+
+Artifacts: `RESULT_ATLAS_REV03_20260819.md`; `atlas_v0_rev03_report.json`; `atlas_v0_rev03_preflight.json` (pre-D31, committed at `ee90237c` **before** the change) and `atlas_v0_rev03_preflight_postD31.json`.
+
+### 6.4 rev 0.4 — gpt-neox-20b, fp32, H200
+
+**Preflight — DR rail engagement collapsed to ZERO.** `atlas_v0_rev04_preflight_20b.json` (commit `2e05378c`): `DR_F5_behavioral_change_rate` **0.0**; `AMP_F5_behavioral_change_rate` **1.0**; threshold **0.60**; `n_prompts 6`; `go false`. `EleutherAI/gpt-neox-20b` rev `c292233c…`, `revision_verified true`, fp32, H200, preflight runtime **96.4 s**, 44 blocks / 64 heads / hidden 6144 / MLP 24576, `cover_k 246 (1.0009%)`. Discovery at preflight already gave `L*=15` from a full-depth selection window `[2, 33]`, `best_mean_margin 0.8734`, `best_mean_acc 0.9192`, `shuffled_label_floor_max 0.5577`, `dr_offset_realised 11`, `shallow_l_star_surface_caveat false`. **The stop rule was declared in advance: exactly ONE widening step is authorised (D50), no ladder — an open-ended widen-until-it-moves search is fishing and is prohibited.** D58 then took that step **and said IN ADVANCE that it was expected to fail**, so the failure could not be claimed as insight afterwards.
+
+**FINAL run — `GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE`, `n_evaluable 1`, `n_pass 0`, `kill_statement_triggered null`.** rev `c292233c833e336628618a88a648727eb3dff0a7`, `revision_verified true`, `claim_eligible true`, seed 0, fp32, H200, **4035.0 s**, started `2026-08-19T15:51:00Z`, `C=24` drawn / **20 gating**, RS in scope (`--run-rs`), DR-F2 dropped, `cover_k 492 (2.002%)`. Discovery: `L*=15` from a **full-depth** search window `[1,33]` / selection `[2,33]`, `tie_set_width 1`, margin **0.873**, acc **0.919** vs shuffled floor **0.558**, `shallow_l_star_surface_caveat FALSE`, `L_dr 4`, `dr_offset_realised 11`.
+
+- **`AMP_F5` FAIL — on the rebuilt readout and the rebuilt null.** With the fix everyone expected to matter (a bounded held-out probe readout instead of a raw projection, and controls orthogonalized against the target, dose-matched and damage-guarded), the label still did not stick — and **the targeted drop came out NEGATIVE**: removing the F5 direction made the probe slightly **more** confident about F5. `baseline_mean_readout 0.6256063549296669`, target `0.6323332571270824`, `targeted_drop -0.006726902197415563`, `max_matched_control_drop 0.01795127805953367`, `control_ensemble_p 0.16`, `wilcoxon_pratt_p 0.06681947805918753`, `behavioral_change_rate 0.96875`, `effect_size_target -0.020423363056704093`, `attenuation_signature_holds True`, `beats_matched_and_cross_controls False`, `selectivity_gate_holds False`, `cross_direction_drop 0.039160170815904394` (**restated exactly 2026-08-19** from the rounded `0.0392`). Readout probe: 3-way, chance **0.3333**, `held_out_accuracy 0.6458`, per-class sd of P(own class) **0.329 / 0.351 / 0.391**. **D41 pass window computed and NON-empty:** floor **0.0180**, cap **0.2923**, width **0.2743 = 4.64 SE** (min 2.0), `empty false`, `underpowered false`. **This one cannot be blamed on an unwinnable configuration or a broken instrument.** Binding rule (D49): `fit_accuracy_in_sample 1.0` on 96 rows in 6144 dims is a property of the geometry and **may NEVER be cited as evidence the readout works**.
+- **`DR_F5` / `CONN` VACUOUS_NO_BEHAVIORAL_CHANGE — the FOURTH failure at the ENGAGEMENT stage.** (**Corrected 2026-08-19 from "THIRD"** — the source result document `RESULT_ATLAS_REV04_20B_20260819.md:42` says *"Four failures at the ENGAGEMENT stage"*, and the four rates listed two sentences below are four, not three. The undercount understated the negative.) `0.1875` of judge prompts changed text; **26 of 32 byte-identical** (`tie_rate 0.8125`). `targeted_drop -0.8639` (negative), `max_matched_control_drop 3.4627`, `control_ensemble_p 0.72`, `wilcoxon_pratt_p 0.681`. **DR engagement history — FOUR failures: 0.46875 (2.8b @ 1% cover, judge) → 0.500 (2.8b @ 2.55%, preflight — a 2.55× widening that moved the rate by EXACTLY 0.00) → 0.000 (20B @ 1%, preflight) → 0.170 / reported 0.1875 at judge (20B @ 2%). Engagement FELL as scale rose.** Failing at engagement — before any question of selectivity arises — is a **stronger** statement about the rail hypothesis than any selectivity result could be. **`VACUOUS` is not `FAIL`:** under the clean-pass rule an intervention that leaves the text byte-identical scores exactly zero effect, so the label was **never tested** rather than tested and rejected.
+- **`RS_F5` VACUOUS_NO_BRAKE — the increase-sign anchor, back in scope at 20B, still never evaluable.** Precondition FIT half: G1 `p 0.4058`, G2 `p 0.3524`, `holds False`. `behavioral_change_rate 1.0` (fully engaged), `control_ensemble_p 0.44`, `wilcoxon_pratt_p 0.4720`, **0** byte-identical pairs. **Third consecutive revision in which the sign anchor is unevaluable** (VACUOUS at 1b, VACUOUS_NO_BRAKE at 2.8b, VACUOUS_NO_BRAKE at 20B). **Because the anchor has never returned a reading, the battery has never contained a test that generic degradation cannot mimic.** rev-0.2's claim that "the increase sign is what generic damage cannot fake" was **formally WITHDRAWN as stated (D17)**: two random PC-subspace erasers produced increases of **0.528** and **0.547** against the target's **0.107** — generic damage faked the sign **five times over**. The anti-fake property comes from beating matched controls **plus** the licensed-reference ceiling **plus** adequate n and decode-variance control, **never from the sign alone**.
+- **Harness sanity — BOTH checks pass for the first time.** `MEM_SANITY`: 84 heads ablated, copy accuracy **0.70 → 0.40**, `targeted_drop 0.30` vs max control drop **0.20**, `control_ensemble_p 0.04`, `n_judgment_items 20`. `CHECK_SANITY`: 84 heads, gate score **12.911233130038124 → 6.776630655608394**, `targeted_drop 6.134602474429729` vs max control drop **3.9354353478093724**, `control_ensemble_p 0.04`. **There is now no route left for explaining the nulls as instrument failure.** Say the caveat out loud: **CHECK's selective margin narrowed sharply with scale — 20× over controls at 1b, 8.6× at 2.8b, 1.56× at 20B** — and MEM's margin is **1.5×** (0.30 vs 0.20) at `n=20` with 0.05 drop resolution: a pass, but a thin one.
+
+**Honesty condition, disclosed:** rev 0.4 satisfies it with a **new model only** — the banks are **NOT re-drawn** (byte-identical to rev 0.3, same `prompt_bank_sha256`), and rev-0.4 design choices were informed by rev-0.3 statistics computed on those very banks. That is **weaker** than rev 0.3's guarantee and is disclosed as such. Mitigation: no rev-0.4 change touched a bank, a bank threshold, or the fit/judge split — only readout, control construction, dtype, model and battery size.
+
+Artifacts: `atlas_v0_rev04_report_20b.json` (145 KB, written 2026-08-19 10:02) **and `docs/working/gate2_closure/component_atlas_v0/RESULT_ATLAS_REV04_20B_20260819.md` (3,824 bytes, written 2026-08-19 10:02 — the same timestamp).**
+
+> **CORRECTION 2026-08-19.** An earlier revision of this sheet stated in three places that no `RESULT_ATLAS_REV04` write-up existed on disk. **That was factually wrong and all three statements are struck.** The write-up exists and was verified by direct file listing. What it **does** carry: the engagement-failure history and the both-sanity-checks-pass pairing. What it **does not** carry, and what is genuinely outstanding: the **bank-re-use weakness** disclosure (rev 0.4's banks are byte-identical to rev 0.3, same `prompt_bank_sha256`, and rev-0.4 design choices were informed by rev-0.3 statistics computed on those very banks) and the **narrowed-CHECK-margin** disclosure (`20× → 8.6× → 1.56×`). Those two additions are the remaining deliverable — **not** the document itself.
+
+### 6.5 Adversarial review record
+
+**rev 0.1 → rev 0.2: 4 FATAL, 5 MAJOR, 5 MINOR — all FATAL and MAJOR fixed before any execution.**
+FATAL ×4: (1) **hooks-active circularity** — projecting onto the discovery direction with the ablation installed is near-analytic; fixed by the **CLEAN-PASS RULE** (all judgment on hooks-removed re-forwards, enforced by a module-level `_HOOKS_ACTIVE` flag that raises on violation; byte-identical text now scores **exactly zero**). (2) **CONN near-tautology**, redesigned onto clean re-forwards. (3) **no held-out prompts** (discovery data = judgment data), fixed by a seeded fit/judge split disjoint at frame level. (4) **MEM/CHECK inflating the aggregate** with generic transformer phenomena (~1 prior pass probability), **demoted outside the aggregate so `NULL` became reachable**. MAJOR ×5: surface leakage / `u_F5` may be a topic direction (char-ngram control + binding interpretation rule, CAS-specificity stays `GREY`); controls not strength-matched; generic degradation not gated (cross-rail selectivity made **gating**, `|d_xrail| ≤ 0.5 × d_target`); RS auto-doom; invalid binomial aggregate p (**withdrawn**).
+**One severity call was WRONG and the document says so:** "small n" was filed MINOR at rev 0.2 and was actually the binding constraint — at `n=12` the exact test needs **10/12** unanimity, the `C=6` control ensemble had an unreachable alpha floor of **0.143**, and tie deletion silently ran DR-F5 and CONN at `n_effective=6`. Corrected at rev 0.3 by D6/D7/D8/D10.
+
+**rev 0.3 second pass: 12 defect fixes (D19-D30), all caught BEFORE any pod time.** Most important: **D23** — D6's headline property was **not delivered**: ties were inferred from float equality against the **mean** of C controls, and `np.mean` of C identical float64s differs by 1 ulp in ~**22%** of cases, so a genuine zero got an arbitrary ±1e-16 sign and `tie_rate` read ~0 **regardless of how many continuations were unchanged**; ties are now **byte-identity** and a second target-vs-**baseline** arm was added, with **both** arms required. **D29** — every RS condition used a **different sample seed**, so under temperature-0.7 sampling baseline and target differ even under a NULL intervention: `behavioral_change_rate` would have been ~1.0 always, `VACUOUS` could never fire for the anchor test, and byte-identity ties could never occur — **one line that made D9 completely inert**. **D21** — at 32 fit frames probe accuracy saturates, so D10's "deepest tied block" rule would have returned `L*=30 of 32`, parking the erasers two blocks from the unembedding and forcing AMP and RS to near-certain `VACUOUS`. **D22** — RS controls were drawn from the wrong subspace (dominant-variance PCs of the DRIVE banks, not the RS fit residuals) and were systematically **stronger** perturbations than the target. **D20** — `COVER_K` had been exempted from D12's fractional-units rule, weakening the DR cut **20%** at the larger model. Plus: the documented fallback `--controls 19` was **unpassable** (strict `p < 0.05`, and the `C=19` floor is exactly **0.0500**), so the floor became **20** with an `ABORT_CONTROL_FLOOR` guard.
+
+**rev 0.4 second pass: 10 defect fixes (D46-D55), including the worst defect in the arc.** **D49** (named "the draft's worst defect") — the readout probe's viability diagnostics were **computed and consulted by nothing**, so with a 3-class LogisticRegression fit on 96 rows in 6144 dims (separation perfect by construction, in-sample accuracy 1.0, P(own class) saturating at 0/1 with sd ~0) **AMP-F5 could have returned PASS while its own block carried `below_instrument_resolution: true`**; now a gating `VACUOUS_READOUT_NOT_VIABLE` at held-out accuracy ≥ chance + 0.10 **AND** every per-class sd ≥ 0.02. **D46** — D39's damage guard and D40's `C=20` floor were **mutually defeating**: at the hard floor a single degraded draw kills a test, and rev 0.3 observed exactly such a draw (an AMP control whose projection **ROSE by 13.2128**, ~**5.8×** the entire F5-vs-neutral dynamic range) at a ~1-in-24 rate — roughly **57%** chance that at least one of 20 fails, independently per test, i.e. **the most likely mechanical outcome of the draft was `GREY` after hours of pod time for a reason unrelated to the hypothesis**; fixed by drawing 24 and gating on 20 survivors. **D47** — dose matching was reported and gated on nothing, and the direction of risk had **inverted** (rev-0.4 controls risk being **weaker** than the target, which makes a PASS unreadable, the mirror of the rev-0.3 defect); now gating `VACUOUS_DOSE_UNMATCHED` with a symmetric `[0.80, 1.25]` band. **D52** — the measurability floor was misderived from the **raw bf16 quantum**, ignoring that each judged mean averages ~1024 measurements (a ~**32×** reduction), and the wrong number had done real design work: it justified dropping DR-F2 ("48× below the quantum") and pre-labelling RS unmeasurable; **both decisions survive on other grounds, but the stated reason was wrong and was corrected.** **D50** — a preflight NO-GO had no declared remedy, so one bounded step plus a declared single-test fallback were added.
+**Symmetry forced into the binding boundary language:** controls **stronger** than the target make a FAIL unreadable; controls **weaker** make a PASS unreadable; **both now stamp `VACUOUS` rather than a verdict.**
+
+**Late pre-run deviations D56-D58 — logged before the run.** **D56**: full-depth search — `sweep_lo 0.25*depth → 1`, `L_STAR_MIN 0.375*depth → 2` absolute, hard `ABORT_GUARD_LAYER` replaced by an adapting `DR_OFFSET` and a per-test `VACUOUS`. Motivation, verbatim in spirit: the validated Stage-9 40-Element probe on **this exact model** peaks at **layer 2 of 44** with a shoulder only to L7 — entirely below the `[16,33]` window rev 0.4 was about to search; *"pre-excluding the one layer band with prior evidence is not a conservative choice; it is a choice that cannot find the thing."* **D57**: **withdraws** D33 (bf16) and D34 (the bf16-vs-fp32 calibration precondition) — fp32 at 20.554567680B params is **76.6 GiB** vs the A40's **44.99 GiB**, but the H200's **139.8 GiB** fits it with ~**63 GiB** spare, so the relative quantum improved ~**65,000×** from `2^-8` to `2^-24` and the ~0.9 h calibration arm disappeared. **A deviation REDUCTION still had to be logged before the run.** **D58**: spends D50's single step, `COVER_K_FRAC 1% → 2%` (246 → 492 of 24576), and restores RS-F5 to the battery.
+
+**Two catches would have silently invalidated a headline** (D23 tie detection; D49 readout viability). **Two more would have wasted a full run** for reasons unrelated to the hypothesis (D21 accuracy saturation forcing `L*=30 of 32`; D46 damage guard vs control floor, ~57% chance of a mechanical `GREY` per test). **Every one of the 22 second-pass catches was found BEFORE any GPU time was spent.**
+
+### 6.6 CAS-specificity across the arc — untouched by design
+
+Nothing in any of the three runs separates "this direction carries drive semantics" from "this direction carries topic or word-level content." **`GREY` before the Component Atlas started, `GREY` after.** Char-ngram surface-control judge accuracies on the frozen banks: F5 vs neutral **0.6406**, F2 vs neutral **0.7188**, RS conflicted vs licensed **0.7500**. The banks are minimal pairs, so separability is confined to the drive slot **by design** and is expected to be high — the number **bounds the claim** rather than passing or failing anything.
+
+**Binding language discipline, verbatim in every report:** every PASS would be worded *"causally supports the `<TYPE>` labeling"*, **never** "found THE neurons" or "the circuit". **No pass in this experiment may be read as "the model represents drives."**
+
+---
+
+## 7. THE NEGATIVES
+
+**These protect the product.** Every one of them is a place where the machinery was pointed at the project's own favourite hypothesis and the hypothesis lost. **Selectively reporting only the confirmatory results would void the differentiator.** None of these may ever be deleted from this file.
+
+### 7.1 Flat 40-cell CAS detection collapses to chance under leakage control — `FALSIFY` at fixture level
+
+Once the surface giveaways are removed from the prompts, a probe on hidden states lands at chance, and **shuffled labels do about as well as real ones**.
+
+- Condition-3 (`n=1440`, chance **2.5%**): CAS hidden **6.53%** vs its own text baseline **6.25%** (lift **+0.28 pp** against a **+20 pp** gate); scrambled-CAS null **3.47%**.
+- dual_labeled 40E marker-balanced fixture (`n=1000`, chance 2.5%): CAS hidden **5.5%** (best layer 20) vs CAS text **1.5%** (lift **+4.0 pp**) — and **scrambled-label null 5.0%**, statistically indistinguishable from the real result.
+- F28 axis (`n=700`, chance **3.57%**): CAS recovered **3.57% — exactly the chance floor** — while the scrambled null recovered **6.43%**. **Shuffled labels beat real labels. That is the definitive no-signal signature.**
+- Runner flag: `scrambled_cas_near_chance_no_clean_structure = failed`.
+
+**Honest read:** marker-balanced fixtures over-correct — they strip the surface shortcut so hard that the model has no reason to internally represent the distinction, so there is no signal for a matched comparison to interpret. This is a fixture-design null as much as a CAS null. **But after Condition-3 (which passed eligibility and surface gates as ELIGIBLE/PASS and still returned 6.5%), the fixture-design excuse has largely run out.**
+
+Artifacts: `docs/working/mtc_matched_taxonomy_20260530/condition3_mtc_comparator_result_20260531.json`; `RESULT_NOTE_20260531.md`; `surface_gate_condition3_result.json`. Model: GPT-NeoX-20B, 1440 items × 44 layers × 6144 dims, 720/720 split.
+
+**Do not cite:** the "32% CAS text baseline" from the earlier capture runbook — it does **not** reproduce; the authoritative runner reports **1.5%** on the same npz.
+
+### 7.2 Matched-Taxonomy Condition-3 — a rival taxonomy is ~13× more recoverable
+
+On the **same rows and the same activations**: CAS 40-element hidden readout **0.0653**; the cardinality-matched non-CAS control (`topic_40 × frame_40`) scored hidden **0.8472** / text **0.9444**. Against a 28-class matched control: CAS **0.0655** (layer 42) vs NC28 hidden **0.8472**. A no-model lexical k-means-40 baseline scored **0.2264** — also ~**3.5×** CAS.
+
+**This is the single most important mechanistic read in the project: the headline 95.6% 40E detection rode SURFACE/TOPIC structure.** The legacy spec sheet's own "necessary not sufficient" caveat was correct, and Condition-3 confirms it.
+
+**Permanently untestable:** the original v1 95.625% fixture's specificity. Those activations were **lost with the prior pod** and cannot be re-probed.
+
+### 7.3 Involution structure DISCONFIRMED — CAS's opposites are the LEAST opposite pairing available
+
+CAS's sharpest geometric prediction is that `^2 Positive ↔ ^3 Negative`, `^5 Female ↔ ^6 Male`, `^8 Above/Cause ↔ ^9 Below/Effect` sit on opposite sides of representation space. Tested by an exact 15-matching permutation test per layer — is CAS's specific pairing of six operators more antipodal than the other 14 ways of pairing the same six?
+
+- **CAS ranks 14/14 (LAST) on every one of the 43 real layers.** (Layer 0 = embeddings, degenerate.)
+- Involution-pair centroid cosine is **POSITIVE** across all layers, **+0.32 to +0.61** (best-signal layers: L12 **+0.318**, L13 **+0.338**, L14 **+0.337**; L32 **+0.469**). **The pairs are similar, not opposite.**
+- Involution pairs are also **less separable** than random pairs of the same six operators: L13 involution **0.7431** vs all-involved-pair **0.8449**; L12 **0.7269** vs **0.8347**; L32 **0.6667** vs **0.8264**. **Harder to tell apart, not oppositely placed.**
+
+**Honest scope:** "antipodality about the global mean" is one operationalisation of opposition, and a finer subspace could still carry weak directional signal (the pairs *are* roughly 0.67-0.74 separable). **What is decisive is the relative result** — CAS's own pairing is the worst of fifteen on **every** real layer, a fair within-fixture comparison that kills "these are opposites in the model" as stated. Mechanistic read: the model groups `^2`/`^3` by shared topic and valence, not by CAS's claimed directional opposition.
+
+Artifacts: `docs/working/gate2_closure/cas_specificity/RESULT_INVOLUTION_TEST_20260818.md`; `cas_involution_result.json`; `cas_involution_test.py`. Pure numpy on captured activations — no model or GPU, so nothing depends on inference-time randomness.
+
+### 7.4 Domain precedence — PARTIAL, and plausibly generic
+
+The one CAS relation that did **not** fail. P ≻ C ≻ E ≻ O separation is real and the order holds — but the order CAS predicts is the same order a plain abstract-to-concrete gradient predicts, which every language model already carries.
+
+- 4-way nearest-centroid held-out balanced accuracy climbs from **0.250** at the embedding layer (exactly chance) to **0.5165-0.5638 across layers 32-41**, then drops to **0.4501 at layer 42**. **This is the key contrast with the operator/involution collapse — the domain axis is real signal.** **Numbers corrected 2026-08-19:** the previous wording, *"0.52-0.56 in deep layers 32-42"*, excluded two of its own layers — `L35 = 0.51647513026651` sits below `0.52` and `L42 = 0.4501382188394754` sits well below the whole band. Exact `domain_sep4` values, `L32`→`L42`: `0.526927665254082`, `0.541678851836555`, `0.5466191907969111`, `0.51647513026651`, `0.5290198786853538`, `0.5377906316966481`, `0.5500028320718944`, `0.5523746382582272`, `0.5478589312727197`, `0.5637608036399963`, `0.4501382188394754`. (Error inherited verbatim from `RESULT_PRECEDENCE_TEST_20260818.md`; a correction note is appended there.)
+- CAS's order is monotone on the descent axis on **43 of 44** layers; only the final layer 43 breaks it (to P-C-O-E).
+- Strict "distance grows with order-gap" fit: CAS is in the **top-3 of 12** on **20 of 44** layers; at its best layer (32) `r = +0.597`, ranking **2/12** — **one non-CAS ordering fits slightly better even at CAS's best layer.** On layers **13, 14, 15, 16, 17, 18, 19 and 20** the fit **inverts to negative** (and again at layer **43**). **Range corrected 2026-08-19 from "13-18"** — the actual negative `cas_fit` layers in `cas_precedence_result.json` are `[13, 14, 15, 16, 17, 18, 19, 20, 43]`, so the previous text **understated the inversion by two layers and omitted layer 43 entirely.** Same inherited-error note as above.
+
+**The deflation is load-bearing:** finding four domain labels ordered along an abstract-to-concrete gradient is **expected with or without CAS**. Converting this into CAS-specificity requires a **matched non-CAS four-level abstractness taxonomy doing worse** on the same fixtures — an MTC-style control that has **not been run**. Until then this is **presence, not specificity**, and must not be reported as a CAS win.
+
+Artifacts: `docs/working/gate2_closure/cas_specificity/RESULT_PRECEDENCE_TEST_20260818.md`; `cas_precedence_result.json`; `cas_precedence_test.py`. 360 rows per domain, balanced.
+
+### 7.5 RPM prerequisite-chain geometry — NOT TESTABLE, not null
+
+The Condition-3 captures carry **noetic, domain, and element labels only**. **0 RPM-labelled rows** across the 1440-item capture set. **Do not report this as a null or as evidence either way — it is an untested cell.** Reporting "RPM geometry not found" would be an overclaim. Separately, the owner-intended role of RPM is the steering-back mechanism (diagnose → localize → repair), which is a **live-model white-box task, not a static-capture detection test**.
+
+### 7.6 Gate-2 independent scenario bank — REJECTED at G1
+
+Four LLMs that had never seen CAS or TKS wrote the test scenarios. Blindness was confirmed and it fixed one problem — but a plain word-counter can still guess the CAS cell **42-48%** of the time when chance is **2.5%**.
+
+- **G1 surface separability FAIL:** char-ngram TF-IDF **0.478125** (sd **0.053765**) and word-unigram **0.417187** (sd **0.030298**) against a bar of **≤ 0.10**; length control **0.032813 PASS**. This **reproduces the historical bag-of-words deadlock at 0.4851** that killed instruments v1 through v5b. (**Restated exactly 2026-08-19** — a previous revision carried the source document's own rounding, `0.4781` / `0.4172` / `0.0538` / `0.0303` / `0.0328`, which violates this sheet's rule 5.)
+- **G2 vocabulary overlap PASS:** TKS **0.021749**, CAS **0.028179**, asymmetry ratio **1.2956** (**restated exactly 2026-08-19** from the rounded `0.0217` / `0.0282`). **G4 admissibility PASS** (640/640 unique, 0 duplicates, 40 labels). **G5 coverage PASS** (40/40 cells, 16-16 items/cell).
+- Bank: **640 unique scenarios**, exactly **16 per cell** across all 40 cells, **160 per author**.
+
+**Blindness is a PREREQUISITE, not a solution.** It fixed definition-**leakage**; it did not fix scenario **topicality** — the 40 concepts carry vocabulary even blind authors emit (spiritual items say sacred/contemplation, physical items say calloused/tangible, mental items say assumptions/systematically). **Reject-not-repair is binding (README R2/R3): do not patch a failed bank.** The G1 early-kill stopped the run before the labelling stage, so cost was authoring only.
+
+**Do not cite:** the reported **G3 inter-rater 0.0** — labelling never ran, and the gate mis-fires on pre-labelling single-rater rows. It is an artifact, not an inter-rater failure.
+
+Artifacts: `docs/working/gate2_closure/independent_bank/RESULT_TRACK_A_PILOT_G1_REJECTED.md`; `pilot_raw_gate_report.json`; `blindness_summary.json`; `docs/working/gate2_closure/INDEPENDENT_BANK_SPECIFICATION.md`.
+
+### 7.7 Item-4 definition-anchored readout family — CLOSED, killed by a no-model check
+
+An earlier attempt to show original TKS wording carries more meaning than compact CAS wording. **It was killed by a check that used no model at all:** matching each test item to whichever definition shares the most words reproduces the entire arm ranking, and **beats the actual language model by about 3×**.
+
+Pure lexical overlap vs pythia-1b readout (chance **0.025**): A **0.4851** vs **0.1474**; B **0.4804** vs **0.1538**; D **0.1187** vs **0.0374**; E **0.0235** vs **0.0408**; F **0.0051** vs **0.0097**. **39 of 40 classes have a unique giveaway token.** Arm F is the proof: a permutation of Arm A's definitions — byte-identical vocabulary, identical **36.6%** overlap with the bank — but scrambled class assignment, and it scores at chance.
+
+Successor arms, all negative: v2 pythia-1b criteria A2/A3/A5/A7 all failed (A-minus-D margin **0.1087**, CI **[0.0984, 0.1185]** against a **0.15** bar) → `NOT_LICENSED`; v3 composition → `VOID_SAME_DISEASE` (lexical control **0.0530**, not at chance); v4 masked → `NOT_LICENSED` (TKS margin **−0.0149**, permutation `p=0.901`, TKS not above chance); v5 multiplicative → `NOT_LICENSED` (both arms **1.0** — degenerate, margin **0.0**, `p=1.0`); v5b simspace → `VOID_DEGENERATE_METRIC` (**48.4%** of items excluded).
+
+**Cause is benign and structural:** the TKS definitions and the bank glosses were authored by the same project about the same 40 concepts **17 days apart**. **The hard constraint: this bank CANNOT test the owner's question by ANY instrument**, because shared authorship guarantees a per-class giveaway token, and **no independently-authored 40E or F28 bank exists in the repo**. **The owner's actual question — does original TKS wording preserve more semantic signal than compact CAS — remains OPEN and UNTESTED. It is not refuted.** Any future item-4 design must report this lexical baseline alongside its headline and must beat it.
+
+Artifacts: `docs/working/gate2_closure/item4_arms/LEXICAL_OVERLAP_DIAGNOSIS.md`; `item4_v2_results_pythia1b.json`; `item4_v3_results_composition.json`; `item4_v4_results_masked.json`; `item4_v5b_results_simspace.json`.
+
+### 7.8 Global polarity steering — FALSIFIED (see Cap. 17)
+
+Random norm-matched directions moved the refuse rate **more** than the CAS polarity direction (**0.30** vs **0.11**). One-sided, not the symmetric dose-response a causal axis predicts, with a fluency confound at high α. **A true negative, caught by the control rig.**
+
+### 7.9 Component Atlas — three runs, zero labels stuck (see Section 6)
+
+The single strongest scientific finding of that arc is **negative and specific**: at 2.8b the amplifier direction produced a large, highly significant, reproducible causal effect (`wilcoxon_pratt_p = 5.515e-05`, `behavioral_change_rate` **0.96875**) that size-matched random directions **beat by 2.7×** (`0.3660` vs `0.9766559642427914`). **Raw effect size at that layer is easy to obtain and worthless alone; selectivity is the whole game.** Rebuilding the null at 20B (orthogonalized, dose-matched, damage-guarded) did **not** rescue it — the targeted drop went **NEGATIVE (`-0.006726902197415563`)**.
+
+### 7.10 Lacunarity as an injection detector — clean NEGATIVE (see Cap. 5)
+
+Failed the decisive benign-append control in both forms; the faithful variant gave covert-vs-benign `p = 0.37` with **overt in the opposite direction** (`p = 1.3e-5`) and AUC **0.33**.
+
+### 7.11 W0 prompt-injection licence — WITHDRAWN (see Cap. 27)
+
+Hidden readout **89.6875%** lost to a character n-gram text control at **92.5-93.1%**. **Where a character control was run and lost, the claim was withdrawn.** That is why the missing 20B character arm (Cap. 1) is a live risk, not a formality.
+
+### 7.12 The 20B F28 η→ε bridge MISSED its strict gate on the first readout — the pass followed an instrument swap
+
+**Added 2026-08-19. This negative was missing from every prior revision of this sheet, which reported only the passing `+0.596413`.** It is material because it is an instance of this project's own named defect pattern — **changing a criterion or an instrument after an outcome is known** — the same shape as substituting a `107×` SNR guard for a missed absolute gate (Cap. 13, Cap. 30, §10 frontier 11).
+
+The sequence, from `docs/working/cas_harness_original_closure_methodology_20260526.md`:
+
+1. **First readout — nearest-centroid, `:410`.** Probe/readable delta **+0.1974**, **72/112** positive rows, `p = 0.001608` — and, verbatim, it *"miss[es] the original strict full-loop gate by about 0.0026."* Gold/readable on the same readout passed strongly: **+0.6601**, **93/112**. Raw CAS-symbol prefixes stayed near zero (**+0.0035**), matching the original null control.
+2. **Diagnosis, `:411`.** When the probe predicted the Foundation correctly, probe/readable delta was **+0.6517**; when only the Drive was correct, **+0.7185**; when the Foundation was wrong, **−0.0752**. Conclusion recorded at the time: *"the bridge is not the bottleneck; the readout handoff/confidence filter is."*
+3. **First rescue attempt — confidence filtering, `:412`. ALSO MISSED.** Centroid-margin filtering at `q25/q50/q75`: `q75` kept **28/112** rows, raised selected Foundation accuracy to **57.14%** and probe/readable delta to **+0.2775** — but sign-test `p` was **0.017849** rather than the required `≤ 0.01`. Verbatim: *"Simple margin filtering helps but is not enough by itself."*
+4. **Second rescue — the readout swap, `:413`. PASSED.** *"Methodology correction: replacing nearest-centroid with the original balanced logistic linear-probe readout closes the 20B Step 11 bridge."* Result: **+0.596413**, **90/112**, sign-test `p = 3e-11`; gold-readable **+0.660065**, **93/112**; raw-symbol controls **+0.002524** probe raw, **+0.002186** gold raw. Foundation readout **86.8622%** held-out at layer 40; selected bridge-row Foundation accuracy **85.7143%**, Drive accuracy **93.75%**.
+
+**Both sides of the honest read, and both must be given:**
+
+- **In the swap's favour:** it was **disclosed in the source, not hidden**; the balanced-logistic readout is described as *"the original"* methodology, so this is a **restoration** rather than an invention; and no **threshold** was retuned — the gate stayed where it was and the instrument moved to meet it.
+- **Against it:** the instrument was changed **after two failures on the same hypothesis were already known**, and the swap is the thing that converted a miss into the headline. Under this project's own discipline that is a **degree of freedom that was not pre-registered**, and it is not neutralised by having been disclosed.
+
+**Binding reporting rule:** whenever `+0.596413` is quoted, `+0.1974` (`72/112`, `p = 0.001608`, miss by `~0.0026`) is quoted with it. **This is why Cap. 2 reads `REAL` + `PARTIAL` and not `VALIDATED`.**
+
+### 7.13 Cross-cutting structural weaknesses
+
+- **BRANCH SPLIT — no single checkout can reproduce one headline claim row end to end today.** Claims (spec sheets, summaries) live on HEAD (`codex/cascompass-legal-live-source`); raw 20B artifacts live on `master`; every non-160M model revision lives on `experiment/cas-probe-pythia`; the withdrawal tombstone lives on **unmerged commit `846ee041` that GitHub does not have**. **None of these is an ancestor of HEAD. The Gate 2 exit requirement "independently reproducible raw evidence" is NOT SATISFIED by the current tree.**
+- **CONTROL COVERAGE IS THE WEAKEST LINK AT 20B.** No character-level n-gram control was ever run at 20B on either axis; on F28 at 20B **no text control at all** was run against the headline **86.862%**.
+- **THE 20B MODEL REVISION IS UNRECOVERABLE.** `gpt_neox_20b_stage9_original_40e_capture_metadata_20260527.json` records `"model_revision": null`. **It must read `unavailable` and must never be filled in by looking up a plausible HuggingFace commit — that would be fabrication.**
+- **ONE FIXTURE, ONE LANGUAGE.** All six model points used the same frozen English synthetic fixture, `input_sha256 3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250`, verified identical across all five stage manifests. Lab-independence holds only in the weak sense that six checkpoints came from three organisations; **fixture, protocol and labels are ours throughout.**
+- **SINGLE SPLIT, SINGLE SEED.** Every F28 row: one fixed split (train **1344** / val **672** / test **2352**), one seed. No cross-validation, no cross-seed variation anywhere.
+- **BLANKET SIX-MODEL WORDING IS OVERSTATED AND STILL LIVE** on `executive summary :12-17`, `spec sheet :28/:67/:83/:522`, `synopsis :24/:85`, `Amazon review brief :54`. **Gate 2 clause 3 ("remove blanket six-model wording") is UNMET — no live surface has been edited.**
+- **COVERAGE IS A RECURRING, UNFIXED DEFECT** biasing every lens number optimistically: L1 exemplars **73%** (88/120), L1 real outputs **56%** (20/36), L2 presence **92%** (33/36), L2 wide **58%** (21/36), L2 wiring **69%** (25/36). Reasoning models drop the longest and hardest items, so **reported agreement is an upper bound in every case**.
+- **TWO P0 SECURITY REGRESSIONS OPEN AND UNDEPLOYED** (RT-02, RT-05 — see Cap. 29). **The deployed system has ZERO withdrawal regression coverage.**
+- **NO THIRD-PARTY CERTIFICATION.** No SOC 2, no ISO/IEC 42001, nothing. Evidence Packets **support** compliance documentation and do not by themselves satisfy any regulation.
+
+---
+
+## 8. THE TWO CLAIMS
+
+### 8.1 CLAIM A — "the weights are natively CAS" — **DEAD**
+
+**The claim:** CAS structure is latently encoded in activations and recoverable by correlational probing beyond surface. CAS is the shape the model already thinks in.
+
+**Status: DEAD.** Killed by four converging, independently pre-registered negatives on real GPT-NeoX-20B captures, and **formally retired by the owner on 2026-08-18**.
+
+1. Flat 40-cell detection **collapses to chance** under leakage control (**6.5%** vs **2.5%**; scrambled labels ≈ real; on F28 shuffled **beat** real).
+2. MTC Condition-3, the first blind matched comparator, returned **`GREY`** — a cardinality-matched non-CAS taxonomy was **~13× more recoverable** on the same rows and same activations (**0.8472** vs **0.0653**).
+3. Involution relational structure **DISCONFIRMED** — CAS's pairing is the **LEAST antipodal of 15 on all 43 real layers**, centroid cosine **POSITIVE +0.32..+0.61**.
+4. Domain precedence is **present but confounded** with a generic abstract-to-concrete gradient (strict fit ranks CAS **2/12** even at its best layer).
+
+**State the scope precisely so the negative is not over-read.** What is dead is *"CAS is latently encoded in the weights, recoverable by correlational probing beyond surface."* What is **NOT** dead: the harness demonstrably reads structure, that structure is causally load-bearing, and it conditions next-token behaviour — all `LICENSED` up to 20B. **What died is the SPECIFICITY and NATIVENESS of that structure to CAS.** The evidence is trending toward *"CAS structure is not distinctly present in the model beyond generic topical structure."* **Report this plainly. Do not spin it. Do not revive Claim A in any external document.**
+
+### 8.2 CLAIM B — "CAS is a measurement and correction language" — **LIVE**
+
+**The claim:** CAS does not have to be the shape inside the weights. **The ruler need not be inside the table.** It has to be (i) a reliable way to READ what a model produced, and (ii) a working algebra to CORRECT it.
+
+**Status: LIVE THESIS — ratified by the owner 2026-08-18.** Two-part bar; **both parts have positive evidence; neither is closed.**
+
+**Bar part 1 — reliable, non-arbitrary translation.** L1 reader-to-reader **0.8845** (Fleiss **0.88**) vs thesaurus **0.2841** on clean exemplars. On **real** outputs the thesaurus falls to **exactly chance (0.025)** while readers still hold **0.5333**. WIRING agreement runs at **`0.2437 / 0.0525 = 4.642×`** chance (edge Jaccard **0.2437** vs null **0.0525**; **exact, corrected 2026-08-19 from "≈4.7×"**), and main-part agreement **0.6200** (kappa **0.5489**) **beats** single-cell **0.5333** (kappa **0.4479**).
+
+**Bar part 2 — the algebra does real work.** The RPM compiler loop ran end-to-end on real modules (`exit 0`, nothing stubbed): translate → inject → **detect ON THE NAMED AXIS** → correct → round-trip. Axis-A resistance **1.0000 → 0.8571 → 1.0000**; axis-N `flagged_pairs=[(2, 3)]` with a full involutive round trip. Supporting: the behavioural proxy loop shows targeted repair (**7.19**) beats generic repair (**4.59**) with **75%** localization; validated steering levers exist (η→ε realization to **+1.412050** at 20B; drive-local eraser steering **+0.84** at `p < 1e-14`).
+
+**What Claim B rests on, and what it does not.** Its value rests **entirely** on the lens being reliable and non-arbitrary, and **not** on any claim that the number lives in the weights. **Every number in the underlying manuals is a design score or an observed rating, never a voltmeter reading from a model.**
+
+**Outstanding gaps against the bar:**
+1. The sharpest anti-thesaurus discriminator (**L3 matched-surface pairs**) has **not been validly run** — the fixture let the thesaurus split the pairs at **0.857** against readers' **0.893**.
+2. Real-output agreement is **moderate** (**0.5333** single-cell, ~**24%** edge overlap) and its coverage figures are **optimistic**.
+3. The algebra covers **4 of 7** axes at string level, with **no auto-repair dispatcher**.
+4. **THE WELD** — diagnosed axis → corrected notation → live steering lever, run as one machine — **is the remaining build.** The links exist; the weld does not.
+
+**And the honest part:** the discipline here — pre-registered thresholds locked before data runs, matched controls as the primary comparison, scrambled-label and no-model lexical nulls in every fixture, reject-not-repair on gate failure, early-kill to avoid spend, and reserved claim-status language — **is what makes Claim B credible, and it is the same discipline that produced every negative in Section 7.**
+
+### 8.3 The permanent honesty ceiling
+
+Carried from all four source manuals, and binding on every future edit:
+
+> **Every CAS number is a design score or an observed rating, NEVER a voltmeter reading from a brain or a language model. The residual proves flow CONSISTENCY, not semantic CORRECTNESS.**
+
+> **Steering is licensed only to close a measured Δ-I on a DETECTED fault, and stops when closed. "Flexibility becomes manipulation when the knob has no stops."**
+
+> **Aggregate metrics never get to be the audit** — a healthy parent total can mask an overloaded branch and a starved branch that cancel out.
+
+---
+
+## 9. OPERATIONS
+
+### 9.1 Pod identity and current machines
+
+- **Retired:** `w0pjqx3ndaxfkg-644110d9@ssh.runpod.io` (host `9166c3298384`), NVIDIA **A40 46GB**, quota-dead at **52G**, swept and **terminated 2026-08-19**.
+- **The H200 pod that ran the 20B fp32 confirmatory pass has NO ssh address recorded anywhere in the repo** — `RUNBOOK_POD.md` still documents only the A40 address. **If that pod is still alive, capture its address now; if it is gone, a future 20B run needs a fresh bootstrap.**
+
+### 9.2 File transfer through the SSH-proxy PTY — `VALIDATED`
+
+There is no `scp`. You paste the file through the interactive terminal as tagged text and check the fingerprint on both sides.
+
+- **Send:** gzip/tar the file → `base64 -w 64` → prefix **every line with `@@`** → paste inside a heredoc. On the pod: strip the `@@`, `base64 -d`, `gunzip`.
+- **Receive:** same tagging on the pod, then locally extract with **`grep -o '@@[A-Za-z0-9+/=]*'`** — **NOT `grep '^@@'`, because the first line hides behind the shell prompt** — then **drop every fragment shorter than 20 characters** (the PTY injects 1-char fragments), then `base64 -d | gunzip`.
+- **Always verify sha256 on both ends before trusting the copy.**
+- **Track record:** carried a 273 KB script **in** and three artifact sets **out**, with sha256 equality every time. Bridge recovery decoded **23255/23255** bytes.
+- **Second footgun:** local Python cannot read Git-Bash `/tmp/...` paths on this Windows host — **write the reassembled file to a real Windows path.** The helper used for the bridge recovery (`scratchpad/extract_tgz.py`) is scratch, **not in-repo** — re-derive it from the runbook recipe rather than hunting for it.
+- **Artifact:** `docs/working/gate2_closure/component_atlas_v0/RUNBOOK_POD.md:69-75`.
+
+**Treat this as the default, and always sweep a pod for single-copy artifacts BEFORE requesting termination.**
+
+### 9.3 Fresh-pod bootstrap — `bootstrap_20b_pod.sh` — `VALIDATED`
+
+One paste, idempotent, safe to re-run after a disconnect. It encodes every failure already paid for, in order:
+
+0. **Prove the disk is really writable by actually writing 1 GB** — a network filesystem reports a huge "available" figure while a per-pod **quota** still refuses writes. **`df` lies, `dd` does not.** `dd bs=1M count=1024` to `$WS/.quota_probe`, FATAL + `exit 1` on failure.
+1. Build a venv, then run **`python -m ensurepip --upgrade`** — the rented venv had **no pip at all**.
+2. Install `torch`/`transformers`/`numpy`/`scikit-learn`/`huggingface_hub`/`accelerate` — **sklearn was missing too**.
+3. Export **`HF_HUB_CACHE`** (**not `HF_HOME` alone**) — the model cache layout is **flat**, and `HF_HOME` makes the loader look in `$HF_HOME/hub` and miss every cached model.
+4. Download the model detached under `setsid ... </dev/null` with `disown` so it survives the SSH session dying. **`max_workers=3`** with retries — 8 workers against an unauthenticated rate limit wedged the first attempt.
+5. **Print the resolved snapshot commit, which MUST be recorded as the revision pin.**
+
+**Numbers:** sha256 of `bootstrap_20b_pod.sh` = `3e5e2b1e2c7a3b0683ade7f328725f2f97ed1c64a85c345cdec7d1d907b6e026`. `NEED_GB=60`. Downloader: `max_workers=3`, `etag_timeout=60`, `HF_HUB_DOWNLOAD_TIMEOUT=60`, `HF_HUB_ENABLE_HF_TRANSFER=0`, **40** retry attempts with backoff `sleep min(20, 3*attempt)`. Paths: `WS=/workspace`, `CACHE=/workspace/cas-hf-cache`, `VENV=/workspace/atlas-venv`, `RUN=/workspace/cas-atlas-v0`. Env is also written to `~/.bashrc` so it survives reconnects.
+
+**Caveat:** the retired A40 pod used a **different venv path** (`/workspace/cas-jacobian-v1-bootstrap/jacobian_lens_v1/.venv/bin/python`) which `RUNBOOK_POD.md` still documents in its rev-0.3 section — **do not mix them**. The bootstrap installs **latest**, so versions differ per pod: A40 had `torch 2.12.0+cu130` / `transformers 5.9.0`; the H200 pod ran `torch 2.13.0+cu130` / `transformers 5.15.1` / `sklearn 1.9.0`. **Record versions from the run report, never assume.** Commits: `674c591b` (spec + bootstrap), `128ca1d8` (added `accelerate`).
+
+### 9.4 Hardware sizing — the GPU decides whether the bf16 compromise survives
+
+| Card | Memory | fp32 20B verdict |
+|---|---|---|
+| A40 | 46 GB (**44.99 GiB** usable) | **impossible** |
+| A100 / H100 | 80 GiB | **96% of card** — OOM once activations land; **bf16 only** |
+| **H200** | **141 GiB** (**139.8 GiB** observed) | **fp32 fits, ~63 GiB spare** |
+
+- 20B **fp32 = 76.6 GiB** required. **MEASURED on the H200:** `max_memory_allocated_gib 76.57173252105713` after load; peak **76.97243785858154** allocated / **77.224609375** reserved. 20B **bf16 = 38.3 GiB**.
+- **Disk ≥ 120 GB** (20B ~41G + pythia-2.8b 5.4G + blobs + outputs). The A40 pod died at **52G** with ~**15.4G** freeable against ~**18G** required.
+- Model read from a network volume: budget **3-8 min** for 38.4 GiB (~1 min from local NVMe). Full fp32 20B run: **4035.0 s**.
+- The bootstrap prints its own fit verdict: `FITS` only if `gib > 80` for fp32, `gib > 42` for bf16.
+- **Why it mattered:** the H200 let the bf16 deviation **D33** and its calibration precondition **D34** be **withdrawn outright (as D57)** instead of carried forever as a precision caveat on every result.
+
+**Caveat:** **free HOST RAM matters too, not just VRAM** — `accelerate` buffers one shard at a time even with `device_map={"":0}`. And **renting a bigger card is not free of process**: moving bf16 → fp32 is a **deviation reduction** and still had to be logged in the prereg **before** the run, with a dated entry saying the resource constraint no longer applies.
+
+### 9.5 Blind-author LLM bank — `VALIDATED`
+
+Four commercial models were probed with 10 questions each ("what is a Noetic?") to prove they had never seen TKS or CAS vocabulary. **Threshold `< 0.3`**, 10/10 non-empty:
+
+| Author | Blindness score | Endpoint |
+|---|---|---|
+| `gemini-2.5-flash` | **0.0333** | — |
+| `deepseek-v4-pro` | **0.0788** | `https://api.deepseek.com` |
+| `qwen3.8-max` | **0.1006** | `https://dashscope-intl.aliyuncs.com/compatible-mode/v1` |
+| `glm-4.6` | **0.1097** | `https://open.bigmodel.cn/api/paas/v4` |
+
+All verdict **`PASS(blind)`**. Wiring: `providers.py`, `PROVIDERS` dict + `resolve()` / `load_keys_file()`. **Keys live OUTSIDE the repo** in `~/.cas_llm_keys.env`, one `KEY=VALUE` per line; env vars `DEEPSEEK_API_KEY` / `DASHSCOPE_API_KEY` / `ZHIPU_API_KEY` / `GEMINI_API_KEY` / `OPENAI_API_KEY`. **`providers.py` never prints key values, and callers are forbidden from echoing `os.environ`.**
+
+**Two things a future agent must not misread.** (1) **`gpt-4o` is NOT a fifth blind author** — `bp_gpt4o.json` shows `num_completed 0`, error `429 billing_not_active`, and its `1.0` score is the probe's **fail-closed default**, an artifact of a dead key, not a measured result. (2) **Blindness is a prerequisite only** — the bank these four authored was **REJECTED at G1** (see §7.6).
+
+Artifacts: `docs/working/gate2_closure/independent_bank/providers.py`; `blindness_summary.json`; `bp_gemini.json`.
+
+### 9.6 Gate structure — and the standing rule that prompt-injection is GATE 3
+
+The harness advances along a numbered ladder from **0.33 to 1.00**; a score is awarded only when the named exit evidence passes.
+
+`current 0.33` → **Gate 1 +0.05 = 0.38** → **Gate 2 +0.08 = 0.46** → **Gate 3 +0.10 = 0.56** → **Gate 4 +0.09 = 0.65** → **Gate 5 +0.10 = 0.75** → **Gate 6 +0.10 = 0.85** → **Gate 7 +0.10 = 0.95** → **Gate 8 +0.05 = 1.00**.
+
+Dependency: Gate 1 → 2 → 3 → 4; Gate 1 also forks to 6A (→ Gate 5 100B rehearsal / 300B run), 6B, and 7 in parallel; Gates 2-7 → Gate 8.
+
+- **Gate 1 EARNED 2026-07-24** by Attempt 11, receiver-confirmed, commit `f95cc610`, score commit `194fec39`.
+- **Gate 2 OPEN at 0.38**, target 0.46 — small-model semantic authority, matched controls, honest uncertainty, claims reconciliation (8 items).
+- **Gate 3** = the joined Pythia causal/behavioural program, and **this is where prompt-injection validation and steering/ablation live** (items 8 and 9). Base grid: **5 V_ext × 7 Bias × 9 RPM × 7 prompt groups = 2,205 cells per seed** before replicates.
+- **Gate 4** minimum named family coverage: Pythia/GPT-NeoX, Qwen, OLMo, Llama-or-Mistral, plus one small MoE.
+
+> **READ THE GATE TABLE, NEVER A ONE-LINE PARAPHRASE.** The word "injection" appears **ZERO times** in the Gate 2 section. A self-authored paraphrase of Gate 2 once caused four honest prompt-injection experiments to be mis-scoped; they carry **no Gate 2 credit in either direction**. Injection-is-Gate-3 is asserted independently in five places.
+
+**Three naming hazards, each of which has already cost a session:**
+1. **Stale line refs.** `docs/working/cas_harness_production_todo.md:954` (Gate 2) and `:955` (Gate 3) are cited across at least six gate2_closure documents. **The file has grown and those offsets no longer land on the gate text.** The authoritative, stable source is the score-ladder table at `docs/working/CAS_HARNESS_033_TO_100_COMPLETION_ROADMAP_20260722.md:139-149` plus the per-gate sections that follow (`:165-197` Gate 1, `:199-232` Gate 2, `:234-280` Gate 3).
+2. **Misleading directory name.** `project_handoffs/.../GATE2_W0_FAIR_COMPARISON/` — its contents are **Gate-3 scope**.
+3. **At least three unrelated things call themselves "Gate 1/2/3"** — the CAS Forex auditor's Gate 0-4 (compiler/risk/macro/market/execution), the 2026-06-15 MTC F28/GoEmotions confirmatory gates, and the independent-bank acceptance gates G1-G5. **Confirm which ladder before citing.**
+
+**Even a Gate-3 pass is only an exact-Pythia CANDIDATE pass:** injection detection and steering/ablation stay `NOT LICENSED` until the Gate-4 cross-family, adaptive-attack, benign-utility, calibration, and independent-repeat evidence exists.
+
+### 9.7 Atlas run order on a pod — preflight FIRST, preregistered, never reordered
+
+1. **Check the model cache** is real safetensors and **resolve the exact commit to pin.** The script hard-aborts as `ABORT_UNPINNED_REVISION` without one and `ABORT_CACHE_FORMAT` on a bad cache — but the 5-minute manual check is cheaper than discovering it after a model load.
+2. **Smoke** — mechanical validation only. **Smoke numbers are NEVER evidence.** (89.2 s.)
+3. **Behavioural preflight** — reads no test statistic, so it cannot be tuned toward a pass.
+4. **Only if the preflight says go**, launch the confirmatory battery.
+
+Everything runs under `nohup` with the report **flushed at every stage boundary**, so a late crash keeps everything up to that point.
+
+**Required env:** `HF_HUB_CACHE=/workspace/cas-hf-cache`, `HF_HOME` same, `TOKENIZERS_PARALLELISM=false`, `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`.
+
+**Timings:** smoke **89.2 s**; 20B preflight **~0.15 h** (dominated by model load); confirmatory F5-rail default 1,920 units **~2.3 h** (actual 20B fp32 run **4035.0 s**); `--run-rs` adds 1,944 units **~1.7 h**; pythia-2.8b rev-0.3 full pass **~1.9 h**. **Controls: 24 drawn / 20 gating floor, surplus 4. `C=19` is REJECTED by a hard guard. `control_ensemble_p` floor 0.04.**
+
+**TWO STALE-HASH / FLAG TRAPS.**
+1. `POD_SPEC_20B.md:39-40` says to transfer `component_atlas_v0.py` "frozen at repo commit `f5175d96`, sha256 `3aa3259fcbad3c5ce3135b34c1560e144f3e1759046c3196d0ece3efdfe9cc1a`" — **that hash is now STALE.** Commit `128ca1d8` repaired a D56 rename `NameError`; the current HEAD file hashes **`1108a60e31355d10efe6b36840bef332a9f10bec9848c67aef9a3bd829c2d172`** (both verified). **Transfer the HEAD file and verify against the HEAD hash, not the doc's.**
+2. **Flag choice is not free:** `--run-rs` or `--run-dr-f2` **CHANGES THE VERDICT LABEL** (`PASS_BOUNDED_ATLAS_V0` becomes reachable instead of `PASS_BOUNDED_ATLAS_V0_F5_RAIL_ONLY`) and **must be logged as a deviation before the run**.
+3. **A second preflight NO-GO means DO NOT launch the battery** (prereg §8 stop rule). Only **ONE** authorised engagement step (D50) exists and it must be logged in PREREG §10 first.
+
+### 9.8 Artifact preservation — the standing lesson
+
+**Three recoveries in two days.** Twice the single authoritative copy of a flagship result's code was found to exist nowhere but a rented machine.
+
+| Commit | Date | What was recovered | Numbers |
+|---|---|---|---|
+| `6269147d` | 2026-08-18 | Flagship η→ε bridge scripts | `run_stage9_40e_eta_epsilon_bridge.py` **919 lines** sha256 `92e6fd525bb9e247ee04640ad3f2b95f07b7ae29c48784606cf37dc3f32cf8bf`; `run_open_weight_eta_epsilon_bridge.py` **1054 lines** sha256 `f52fbbe33ae28d08eeb932902a2be1d0ce209204ed57dece28b98b6bb5b76faa`; tests 127 and 344 lines. Byte-identical across all 9 `cas-jlcv1-official-*` snapshots and the a10-suite/a10-shadow copies — **one authoritative version.** |
+| `da425f09` | 2026-08-19 | Stage-9 40E **verifier** + scenario-export | `build_stage9_40e_verifier_report.py` **602 lines** sha256 `591faab73a591fed…`; `export_original_stage9_scenarios.py` **138 lines** sha256 `49678a31f8450cad…`; test **220 lines** sha256 `2c5e1283c9ab37dd…`. **Its absence is precisely why the 40E packet sits at `FLAG_FOR_HUMAN_REVIEW` with reason "verifier missing".** |
+| `bfa3ad48` | 2026-08-19 | W0 hidden-prompt-injection bank | **640** scenarios, created 2026-06-18, **1,170,788 bytes**, sha256 `2df5b9ced77d767694ed13829fd9995432fc3e53d27862cd1145c5dd139b2a34`, plus `w0_extract.py` (2,114 B), `w0_extract_v2.py` (3,563 B), `w0.log` (1,249 B). Recovered **immediately before the A40 pod was terminated.** |
+
+**STILL SINGLE-COPY AND OFF-REPO — the live exposure:**
+- The **8,320-scenario 40E fixture JSON**.
+- The **4.16 GB 44-layer NPZ**. A `find` for `*.npz` over 100 MB across the pod's `/workspace` returned nothing, so these live **ONLY on `D:/tksCAS-archive`**. **If that drive is lost, the 40E capture lineage is gone.**
+- Per repo data policy they must **never be git-added** — **the correct mitigation is a second physical copy, not a commit.**
+- Deliberately not recovered: `w0_hidden_pi_v0*.npz` (~60 MB mean-pooled captures) — regenerable from the bank + pinned models + `w0_extract*.py`.
+- Not confirmed present in `api/`: the service-side `cas_harness_evidence_bridge.py` packet module (flagged as follow-up).
+
+### 9.9 Gated build discipline — `IN FORCE`
+
+Nothing downstream is built until its prerequisite passes. **6 of the 8 architecture pieces are explicitly not validated, and 3 are not even in the architecture, by design.**
+
+- Validated: hidden-state probing/ablation on real Pythia; drive-local steering cross-architecture; compiler round-trip ("the asymptote").
+- **Formal only, not empirical:** the 40-simplex, the Fisher-Rao metric, the Noetic Topos. RPM is an **ontology, not a live localizer**.
+- **Neither in-architecture nor validated:** component/topology recognition; CAS-Ohm quantification (Δ-I, R_hidden, ASOM — WORKING DRAFT v0.1); the recursive RPM→steer repair loop.
+- **Gate sequence of 5 stages; the current frontier is stage 1-2** (lens non-arbitrariness and component granularity). Stages 3 (residual measurable), 4 (RPM localization non-arbitrary) and 5 (steering closes the loop) are **unbuilt**.
+
+Artifact: `docs/working/gate2_closure/CAS_LENS_REPAIR_ROADMAP_20260818.md`.
+
+---
+
+## 10. OPEN FRONTIERS — RANKED, WITH WHAT WOULD SETTLE EACH
+
+Ranked by how much each one unblocks. **"Would settle it" means a pre-registered criterion, matched controls, and an artifact path — not an argument.**
+
+**1. CAS-SPECIFICITY — the whole frontier.**
+Every closed tier establishes that the model linearly encodes whatever distinctions the CAS labels track, and that the encoding is causally load-bearing on at least one model point. **None of it distinguishes that from one coherent relabeling of generic semantic structure.** Detection is the licensed core; comparative and probabilistic speciality are `OPEN`; absolute uniqueness is explicitly disclaimed and is not the target.
+**Would settle it:** ONE clean blind matched-comparator **WIN** — a cardinality-matched non-CAS taxonomy doing measurably **worse** than CAS on the same activations, at the pre-registered margin. This has never occurred.
+**The single most available lever:** an **MTC-style matched non-CAS four-level abstractness taxonomy run against the domain axis** on the same fixtures. Domain precedence is the last surviving CAS relation; if a generic abstractness taxonomy does **not** do worse, that relation also folds into the generic explanation. **The machinery exists (`arm_E_non_tks_ontology.json`). It has not been run.**
+
+**2. THE WELD — diagnosed axis → corrected notation → live steering lever, as one machine.**
+This is the whole of Claim B's second half, and it is the difference between "the scanner names the axis" and "the system corrects the fault." **The links exist; the weld does not.** No auto axis→repair dispatcher exists anywhere.
+**Would settle it:** an end-to-end run where a fault is detected on a named axis, the corrected notation is emitted **by code**, and a validated lever (η→ε prefix black-box, or drive-local eraser white-box) closes a measured Δ-I on that fault — with the intervention stopping when the delta is closed.
+
+**3. L3 — matched-surface minimal pairs, built properly.**
+The sharpest anti-thesaurus discriminator has **not been validly run**. Until it is, the L1/L2 positives rest on weaker discriminators than the design intended.
+**Would settle it:** **role-swap pairs scored at the cause/effect level**, where surface is genuinely held constant, with `DECISIVE_readers_split_where_thesaurus_ties = TRUE`.
+
+**4. The missing 20B character-level n-gram control.**
+`control_proof` is PARTIAL at 20B on **both** axes, and on F28 at 20B **no text control at all** was run against the headline 86.862%. **Where a character control was run and lost, the claim was withdrawn** (W0, 2026-06-18). **This is a live risk, not a formality.**
+**Would settle it:** run `tfidf_char_3_5` at 20B on both axes against the existing headlines, and report the McNemar comparison whichever way it falls.
+
+**5. Reproducibility — the branch split.**
+**No single checkout can reproduce one headline claim row end to end today.** Gate 2's exit requirement "independently reproducible raw evidence" is **NOT SATISFIED**.
+**Would settle it:** one checkout from which the claims, the raw 20B artifacts, the non-160M model revisions, and the withdrawal tombstone (`846ee041`, which GitHub does not have) are all reachable.
+
+**6. The two P0 security regressions (RT-02, RT-05).**
+Both established by **code reading, not execution**. **The deployed system has ZERO withdrawal regression coverage**, and the reference audit target on deployed `master` **is the withdrawn trace**.
+**Would settle it:** merge the tombstone registry (24 named tests), fix the RT-02 conditioning so the downgrade does not depend on the **absence** of WORM proof, add withdrawal projection to the anonymous share path, and correct the **9 deployment-verifier tests that currently PASS by asserting the stale ACCEPT expectation**.
+
+**7. The single-copy evidence exposure.**
+The **8,320-scenario 40E fixture** and the **4.16 GB 44-layer NPZ** exist **only** on `D:/tksCAS-archive`.
+**Would settle it:** a second physical copy. **Not a commit** — repo policy keeps large captures off git.
+
+**8. Two missing disclosures in the `RESULT_ATLAS_REV04` write-up.**
+**Corrected 2026-08-19: the write-up EXISTS** — `docs/working/gate2_closure/component_atlas_v0/RESULT_ATLAS_REV04_20B_20260819.md`, 3,824 bytes, written 2026-08-19 10:02, the same timestamp as the JSON. An earlier revision of this sheet claimed three times that it did not, and that claim is struck. It already carries the engagement-failure history and the both-checks-pass sanity pairing.
+**Would settle it:** append the two disclosures it lacks — the **bank re-use weakness** (banks byte-identical to rev 0.3, same `prompt_bank_sha256`; rev-0.4 design choices informed by rev-0.3 statistics computed on those banks) and the **narrowed CHECK margin** (`20× → 8.6× → 1.56×`) — under the D45/D18/D30 disclosure precedent, changing no number.
+
+**9. Gate 2 clause 3 — remove blanket six-model wording.**
+**UNMET. No live surface has been edited.** The prohibited sentences are still on the executive summary, the legacy spec sheet, the synopsis, and the Amazon review brief.
+**Would settle it:** edit those four surfaces.
+
+**10. The owner's original item-4 question.**
+*Does original TKS wording preserve more semantic signal than compact CAS wording?* **UNTESTED, not refuted.** The existing bank cannot test it by any instrument, because shared authorship guarantees a per-class giveaway token.
+**Would settle it:** an **independently-authored** 40E or F28 bank (none exists in the repo — both candidates were generated by this project's own builder scripts on the same date from the same source), plus a headline that beats the pure-lexical baseline.
+
+**11. Subspace-ablation replication at 20B against the pre-registered gate.**
+The 20B 40E gate was **missed on both disjuncts** (28.7277 pp vs ≥30 pp; 66.897% vs ≤65%), and **no dated pre-registration artifact for that gate has been located**.
+**Would settle it:** locate or re-issue the dated pre-registration, and either meet the absolute gate or report the miss as the standing result. **Do not substitute an SNR guard for the absolute criterion — that is the defect that produced the withdrawn ACCEPT.**
+
+**12. Three-family parity for drive-local eraser steering.**
+Validated on Pythia + Qwen; **OLMo replication is `OPEN`**, and it has never been run at 20B.
+**Would settle it:** the OLMo-1B arm at the same pass bar (win-share ≫ 50%, `p < 10⁻¹⁰`).
+
+**13. Pre-speech detection.**
+DATA-BLOCKED. Gated on a **more-refusing model** plus a per-step matched-pair recapture of **≥40 matched pairs** (currently `G_matched = 2`). Lyapunov and activation-lacunarity variants are **KILLED — no canonical estimator exists.**
+
+**14. 40E lacunarity at 20B, and 20B weight-geometry replication.** Both on the roadmap, neither run.
+
+**15. A raw artifact for the runtime verification stack.**
+`87.6%` accept / `99.78%` accepted accuracy / `0.22%` silent error exist **only in a prose section** of `docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md` §5.13. They were never re-derived in the Gate-2 reconciliation pass, and the model scale is `unavailable`. Cap. 23 is therefore `NOT LICENSED`.
+**Would settle it:** a run report on disk carrying seed, split, control arm, mode, and an **attributed model**, from which those three figures reproduce. Until then they may not be quoted as measurements.
+
+**16. The stance-explicitness-matched non-CAS prefix control for the η→ε bridge.**
+This is the **pre-registered control that was never run**, and it is the single reason Cap. 2 reads `REAL` + `PARTIAL` instead of `VALIDATED`. Without it, `+1.412050` is consistent with *"a fluent prefix naming the answer is attended."*
+**Would settle it:** run the bridge with a non-CAS English prefix matched on stance-explicitness against the same frozen fixture, and report the delta whichever way it falls. **Related and separate:** re-run the 20B F28 bridge on the **nearest-centroid** readout with the strict full-loop gate pre-registered in advance, so the `+0.596413` no longer depends on a readout chosen after two misses (§7.12).
+
+### 10.1 Do NOT re-run these — settled negatives
+
+- Coarse **global** activation steering on the `^2−^3` polarity axis (`FALSIFIED`; random directions moved it more).
+- Stage 27H prefix-plus-neuron steering (`NULL_NOT_ESTABLISHED`); Stage 27I prediction-position neuron steering (`NULL`); drive-subspace steering **without** the eraser channel (`NULL`, `p = 1.0`).
+- Stage 6.6 / 7.3 / 7.OA / 7.LA ablation-based generation steering — **structurally impossible under section-retraction** (they try to invert ε).
+- Noetic-axis steering (`NULL`, predicted in advance by the `Oscillatory` fractal class).
+- **"More parts" for the L2 lens** — the 20-part widening was flat (+0.231 vs +0.210) and agreement **fell**.
+- **"Use subspace ablation"** as the fix for Component Atlas AMP-F5 — **AMP-F5 already IS rank-1 projection removal.** It failed on **selectivity, not method-power**.
+- **A second widening step** on the DR rail. One authorised step was spent (D50/D58), the 2.55× widening at 2.8b moved engagement by **exactly 0.00**, and an open-ended widen-until-it-moves search is **fishing and prohibited**.
+- Patching a bank that failed an acceptance gate. **Reject-not-repair is binding.**
+
+---
+
+## 11. CHANGE LOG
+
+| Date | Change | Commit / artifact |
+|---|---|---|
+| 2026-08-19 | **SECOND AUDIT PASS — the seven findings re-checked against the file, and the five that were still incomplete were closed. No number changed and no negative was removed.** (1) **§3 legend hardened:** `HOLDS` now carries the explicit ceiling *"states that an effect is PRESENT, never that it is CAS-SPECIFIC"*; `INCONCLUSIVE BY DESIGN` now says it is recorded so it is **never mistaken for a `NULL`**. (2) **Cap. 2 η→ε bridge** status restated as `REAL` + **`OPEN (missing pre-registered control)`** (claim-level ceiling `PARTIAL`, so existing "`REAL` + `PARTIAL`" cross-references still resolve), with the unhedged sentence added: **the pre-registered stance-matched control was never run, so the beats-a-non-CAS-prefix claim is NOT ESTABLISHED.** (3) **Cap. 4 multi-layer trace:** the bare `95.4%` now names its reference point — **10-way chance = 10.0%** — and states that clearing chance is not evidence of anything CAS-specific. (4) **Cap. 23 runtime verification stack** now carries **`ENGINEERED-NOT-VALIDATED`** alongside `NOT LICENSED`, and states plainly that `87.6%` / `99.78%` / `0.22%` are **quoted from a prose section, not re-derived from a raw artifact, and not scale-attributed.** (5) **§5.1 item 5 MOVED OUT of the LICENSED list** — narrowing was insufficient, because the whole evidence base is **`n = 1`**; the slot is retained (not renumbered) so references to items 6-10 still resolve, and the bounded single instance — Pythia-160M Noetic axis classed `Oscillatory`, Noetic steering then failed — is recorded at **§5.2 item 21** instead. (6) **§5.2 item 1** now states in unformatted, greppable words that **there is no ACCEPT anywhere in the harness record.** Findings 3 (licensed-sentence rescope to the two Pythia-160M `tfidf_char_3_5` rows) and 6 (both Cap. 8 qualifiers restored, the word "Independent" removed) were verified **already correctly applied** in the first pass and were left untouched. | this file |
+| 2026-08-19 | **AUDIT PASS — 7 overclaims corrected, 5 factual errors fixed, 1 missing negative added, all statuses now legend-defined.** Details in the eight rows immediately below. **No number was deleted and no negative was removed; three statuses were DOWNGRADED and none was upgraded.** | this file |
+| 2026-08-19 | **Status downgrades (3).** Cap. 2 η→ε bridge `VALIDATED`/`LICENSED` → **`REAL` + `PARTIAL`/`OPEN`** (its pre-registered matched control — a stance-explicitness-matched non-CAS prefix — was never run, so by this sheet's own legend it cannot carry `VALIDATED`). Cap. 4 multi-layer trace `VALIDATED` → **`REAL`** (no matched control, no pre-registered criterion, no null; the `95.4%` is bare). Cap. 23 runtime verification stack `VALIDATED`/`LICENSED` → **`NOT LICENSED`** (only artifact is a prose section; figures never re-derived; model scale `unavailable` — rule 4). | §4.1, §4.5 |
+| 2026-08-19 | **MISSING NEGATIVE ADDED — §7.12.** The GPT-NeoX-20B F28 η→ε bridge **missed its strict full-loop gate on the first readout**: nearest-centroid **+0.1974**, `72/112`, `p = 0.001608`, *"miss…by about 0.0026"*; a confidence-filter rescue also missed (`q75`, `28/112`, `+0.2775`, sign-test `p = 0.017849` vs required `≤ 0.01`); the reported **+0.596413** came only after **replacing nearest-centroid with the balanced-logistic readout**. Prior revisions reported only the passing figure. Binding rule added: never quote `+0.596413` without `+0.1974`. | `cas_harness_original_closure_methodology_20260526.md:410-413` |
+| 2026-08-19 | **Licensed-list scope corrections (3).** §5.1 item 1 narrowed from "six model points, three families, 160M → 20B" to **the two Pythia-160M rows that carry a `tfidf_char_3_5` arm** (`GATE2_ITEM1_CLAIMS_MATRIX.md:400`: *"no hidden-beats-surface framing of either 20B row is supported"*). §5.1 item 5 narrowed from the general "the apparatus predicts its own failures" to the single recorded instance (`n = 1`). §5.1 item 6 restored the two qualifiers Cap. 8 declares load-bearing — **provided colloquial key** and **four frontier LLMs sharing priors**. Five new `NOT LICENSED` entries added (§5.2 items 19-23). | §5 |
+| 2026-08-19 | **FALSE CLAIM STRUCK, asserted three times:** *"there is no `RESULT_ATLAS_REV04` markdown write-up on disk."* **The file EXISTS** — `docs/working/gate2_closure/component_atlas_v0/RESULT_ATLAS_REV04_20B_20260819.md`, **3,824 bytes**, written **2026-08-19 10:02**, same timestamp as the JSON. It carries the engagement-failure history and the sanity-pass pairing; it does **not** carry the bank-re-use weakness or the narrowed-CHECK-margin disclosure. Frontier 8 rewritten from "write the document" to "append the two missing disclosures". | §4.3, §6.4, §10 |
+| 2026-08-19 | **Wrong numbers corrected (6).** "THIRD independent failure at the ENGAGEMENT stage" → **FOURTH** (source says *"Four failures"*; the sheet's own next sentence listed four rates). `cas_ohm` grep "exactly ONE `.py` hit" → **three `.py` files match**; the surviving true claim is **no importer anywhere**. Precedence negative-fit layers **13-18 → 13, 14, 15, 16, 17, 18, 19, 20 (and 43)**. Precedence `domain_sep4` band **"0.52-0.56 across 32-42" → 0.5165-0.5638 across 32-41, with L42 at 0.4501382188394754**. GoEmotions rival lift **+0.4 pp → +0.429 pp**. Wiring edge ratio **"≈4.7× chance" → `0.2437 / 0.0525 = 4.642×`** (load-bearing in the Claim B bar). | §4.2, §4.4, §6.4, §7.4, §8.2 |
+| 2026-08-19 | **Rule-5 rounding violations restated exactly (11 figures).** G1 `0.478125` / `0.417187`, sd `0.053765` / `0.030298`, length `0.032813`, G2 TKS `0.021749` / CAS `0.028179`; rev-0.3 `behavioral_change 0.46875` and `0.96875`, `max_matched_control_drop 0.9766559642427914`, `targeted_increase −0.02748984322787429`; rev-0.4 `cross_direction_drop 0.039160170815904394`. Each previously carried its source document's own rounding, which rule 5 forbids. | §6.3, §6.4, §7.6 |
+| 2026-08-19 | **Missing exact numbers added — rev-0.3 `MEM_SANITY`.** Was recorded only as `SANITY_FAIL` while rev 0.2 and rev 0.4 both carried theirs. Exact: `baseline_copy_acc 0.65 → 0.5`, `targeted_drop 0.15000000000000002` vs `max_control_drop 0.050000000000000044`, `control_ensemble_p 0.04`, `n_judgment_items 20`, `drop_resolution 0.05`. **This hides nothing good and one thing important: rev-0.3 MEM was `p = 0.04` SELECTIVE and failed on the absolute bar** — context for the rev-0.4 "both pass for the first time" claim. | `atlas_v0_rev03_report.json` |
+| 2026-08-19 | **Broken artifact paths fixed (10) and one attribution corrected.** `api/notation/compiler.py`, `api/notation/inversion.py`, `cas-native/belief/inversion_gate.py`, `cas-engine/src/{inversions/mod.rs, ontology/pathways.rs, ontology/operators.rs}`, `api/cas_ohm/*` all re-prefixed with **`noetic-compass-scaffold/noetic-compass/`**; `research/cas_probe/run_stage27{c,d,e,f,g,p}_*.py` re-prefixed with **`experiment/cas-probe-pythia:`** (not reachable from HEAD). **All line references inside them were verified correct — only the path prefixes were wrong.** Change-Log Condition-3 row re-attributed from the in-repo JSON (which contains none of those values) to the **`D:`-archived 2026-06-03 run**, marked single-copy. Cap. 26's archived/in-repo labels un-swapped. | §4.3, §4.4, §11 |
+| 2026-08-19 | **Legend gap closed.** `PARTIAL`, `HOLDS`, `INCONCLUSIVE BY DESIGN`, `DISCONFIRMED`, `REJECTED`, `NOT TESTABLE`, `DEAD`/`LIVE`, `IN FORCE` were all in use as statuses — three of them on the five rows carrying Claim B — with **no definition and therefore no stated evidential ceiling**. All eight are now defined in §3, `HOLDS` explicitly capped below `VALIDATED`. §2 now states plainly that Claim A is dead. | §2, §3 |
+| 2026-08-19 | **File created at the mandated path.** Resolves the `CLAUDE.md` mandate (commit `fd6ab181`) which pointed at `docs/CAS_HARNESS_SPEC_SHEET.md` — a file that did not exist in the working tree or in git, silently no-opping the "read first, keep current" rule. Superseding scope: this file supersedes `docs/working/CAS_HARNESS_SPEC_SHEET_SCOPE_20260818.md` and `docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md` as the master record; those remain as sources. | this file |
+| 2026-08-19 | Seeded with the full capability inventory: **31 capabilities** across reading internals, the output lens, causal evidence, the symbolic algebra layer, safety detectors, and plumbing. | §4 |
+| 2026-08-19 | **Component Atlas rev 0.4 recorded** — gpt-neox-20b fp32 on H200, `GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE`, `n_evaluable 1`, `n_pass 0`. AMP_F5 FAIL with **negative** targeted drop `-0.006726902197415563`; DR_F5/CONN `VACUOUS_NO_BEHAVIORAL_CHANGE`; RS_F5 `VACUOUS_NO_BRAKE`; **both harness-sanity checks PASS for the first time** (`control_ensemble_p 0.04` each). Bar was NOT relaxed. | `atlas_v0_rev04_report_20b.json` |
+| 2026-08-19 | Recorded the **CHECK margin narrowing with scale** — `20× → 8.6× → 1.56×` — as a standing caveat on "the instrument is alive". | §6.4 |
+| 2026-08-19 | Recorded **three pod recoveries in two days** and the standing sweep-before-termination rule. | `6269147d`, `da425f09`, `bfa3ad48` |
+| 2026-08-19 | Recorded the **stale `component_atlas_v0.py` hash trap** (`POD_SPEC_20B.md` cites `3aa3259f…` for commit `f5175d96`; HEAD is `1108a60e…` after `128ca1d8`) and the **stale `cas_harness_production_todo.md:954/:955` line refs** cited across six gate2_closure docs. | §9.6, §9.7 |
+| 2026-08-19 | Re-verified live, not taken on trust: `rpm_compiler_loop_demo.py` → `EXIT=0`, output matching the 2026-08-18 record line for line (resistance `1.0000 → 0.8571 → 1.0000`, `flagged_pairs=[(2, 3)]`); `test_quantifiers.py` → **PASSED 39/39**; `DeferredAxisError` confirmed raising for each of E, S, A. | §4.4 |
+| 2026-08-18 | **Claim A formally retired** by the owner — "the weights are natively CAS" is DEAD, killed by four converging pre-registered negatives. | §8.1 |
+| 2026-08-18 | **Claim B ratified** as the live thesis — CAS as a measurement + correction language. Both halves of its bar have positive evidence; neither is closed. | §8.2 |
+| 2026-08-18 | Involution test `DISCONFIRMED` (CAS pairing **14/14 LAST** on all 43 real layers) and precedence test `PARTIAL` (strict fit **2/12**) recorded. | `RESULT_INVOLUTION_TEST_20260818.md`, `RESULT_PRECEDENCE_TEST_20260818.md` |
+| 2026-08-18 | RPM compiler loop recorded as `REAL` with its **five disclosed gaps** (4/7 axes, numeric-plane axis A, no auto-repair dispatcher, non-lexable pathway tokens, hardcoded `completeness: 1.0`). | `RESULT_RPM_COMPILER_LOOP_20260818.md` |
+| 2026-08-18 | White-box tier-1 v2 recorded: **steering VALIDATED on Pythia-1B, ablation INCONCLUSIVE**, v1 Pythia-160M numbers marked `VOID`. | `RESULT_A_TIER1_V2_PYTHIA1B_20260818.md` |
+| 2026-08-18 | Component Atlas rev 0.2 (`NULL_ATLAS_V0`) and rev 0.3 (`GREY`) recorded, plus the **D45 self-correction** (description corrected, numbers unamended). | `atlas_v0_FULL_report.json`, `atlas_v0_rev03_report.json` |
+| 2026-08-17 | Gate-2 independent bank pilot **`REJECTED` at G1** (char-ngram **0.478125**, word-unigram **0.417187** vs a ≤0.10 bar, chance **0.025**). Blindness of all four authors stands and is reusable. | `RESULT_TRACK_A_PILOT_G1_REJECTED.md` |
+| 2026-06-18 | **W0 prompt-injection licence WITHDRAWN** — char n-gram control (92.5-93.1%) beat the hidden readout (89.6875%). Char-level surface control is now a permanent gate. | — |
+| 2026-06-11 | Global `^2−^3` polarity steering **FALSIFIED**; structural-break lacunarity as an injection detector **NULL**. | `steering_causal_result_20260611.md`, `structural_break_lacunarity_result_20260611.md` |
+| 2026-06-03 | **Both Stage-9 40E ACCEPTs WITHDRAWN**, `accept_revival_allowed: false`, `reason_code candidate_control_proof_misclassified`. Uniqueness/MTC gate added (`0 → 8` symbol occurrences). | `337d0c29…`, `24e15a9b…` |
+| 2026-06-03 | MTC **Condition-3** blind comparator returned **`GREY`** — matched non-CAS taxonomy **1.0** vs CAS **0.5347222222222222**, margin **−46.52777777777778 pp**. **`SINGLE-COPY / OFF-REPO`.** **Attribution corrected 2026-08-19:** an earlier revision of this row cited `condition3_mtc_comparator_result_20260531.json`, which **contains none of those three values** — that in-repo file reports `cas_element` hidden **0.06527777777777778** vs `matched_control_tf` **0.8472222222222222**. | **`D:/tksCAS-archive/condition3_mtc_comparator_20260603/`** (2026-06-03 H200 run; pointer at `cas_harness_production_todo.md:20711`). **Exists in exactly one place, off-repo, on a single drive — per §1 rule 7.** |
+| 2026-05-28 | Stage-9 40E bridge proof recorded (**+1.412050**), packet remains **`FLAG_FOR_HUMAN_REVIEW`** because the verifier decision layer was missing. | `..._REPRODUCIBILITY_NOTES_20260528.md` |
+
+---
+
+### Provenance note
+
+This sheet was assembled 2026-08-19 from the mined project record: the Gate-2 closure claims matrix and withdrawn-ACCEPT root cause, the original closure methodology, the Component Atlas prereg and all three run reports, the CAS-specificity and output-lens result documents, the operational runbooks and pod specs, and the legacy `CAS_HARNESS_SPEC_SHEET_current.md`. **Where the record disagreed with itself, both readings are recorded** (e.g. the Pythia-160M 40E `89.799%` vs `91.719%` conflict). **Where a fact is unrecoverable, it reads `unavailable`** and was not filled in.

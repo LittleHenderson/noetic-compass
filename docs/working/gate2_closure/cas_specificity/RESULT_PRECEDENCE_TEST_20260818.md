@@ -54,3 +54,34 @@ The one CAS relation that survives is the domain gradient, and even that has a g
 explanation. CAS-specificity remains NOT LICENSED. The honest next lever is an MTC-style
 abstractness control on the domain axis — the only place a positive CAS-specific signal
 could still be won.
+
+---
+
+## CORRECTION appended 2026-08-19 — description corrected, NUMBERS UNAMENDED
+
+Found during the audit of `docs/CAS_HARNESS_SPEC_SHEET.md`. Two descriptions in this
+document do not match `cas_precedence_result.json`, which this correction leaves
+byte-unchanged. Same rule as the D18 / D30 / D45 disclosures in the Component Atlas
+arc: correct the description in place, in public, change no number.
+
+**(i) The negative-fit layer range is understated by two layers, and omits one more.**
+This document says the strict "distance grows with order-gap" fit inverts to negative
+"on layers 13-18". The actual negative `cas_fit` layers in `cas_precedence_result.json`
+are `[13, 14, 15, 16, 17, 18, 19, 20, 43]`. The correct statement is **layers 13 through
+20, and again at layer 43**.
+
+**(ii) The deep-layer separability band excludes two of its own layers.**
+This document says 4-way `domain_sep4` reaches "0.52-0.56 in deep layers 32-42". Two of
+the eleven layers named fall outside the band it states: `L35 = 0.51647513026651` is
+below `0.52`, and `L42 = 0.4501382188394754` is far below the whole range. The correct
+statement is **0.5165-0.5638 across layers 32-41, dropping to 0.4501 at layer 42**.
+
+Exact `domain_sep4`, `L32` through `L42`:
+`0.526927665254082`, `0.541678851836555`, `0.5466191907969111`, `0.51647513026651`,
+`0.5290198786853538`, `0.5377906316966481`, `0.5500028320718944`, `0.5523746382582272`,
+`0.5478589312727197`, `0.5637608036399963`, `0.4501382188394754`.
+
+**Neither correction changes the verdict.** Domain precedence remains `PARTIAL` —
+present, but confounded with a generic abstract-to-concrete gradient, ranking 2/12 on
+the strict fit even at its best layer. If anything (i) mildly strengthens the
+deflationary read, since the fit is negative on more layers than reported.
