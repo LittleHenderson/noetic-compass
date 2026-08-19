@@ -1,0 +1,1961 @@
+{
+  "schema": "cas_gate5_weld_loop.v2",
+  "generated_utc": "2026-08-19T21:43:36.181376+00:00",
+  "loop_status": "MECHANISM_PARTIAL",
+  "injections_passing_every_criterion": [],
+  "criteria_satisfied_by_some_injection": {
+    "a": true,
+    "b": true,
+    "c1": true,
+    "d1": true,
+    "d2": true
+  },
+  "argv": {
+    "entry": "both",
+    "with_readers": false,
+    "with_model": null,
+    "corpus": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\gate2_closure\\independent_bank\\real_outputs.jsonl",
+    "item_id": 0,
+    "drive": "F5",
+    "register": "A",
+    "cells": "^2^P,^6^C,^9^O",
+    "cell_focal_index": 0,
+    "max_length": 256,
+    "stage5_prompt": "The answer weighs the options and then commits to a step.",
+    "out": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\gate5_weld\\weld_run_report.json"
+  },
+  "detection_is_blind": true,
+  "detector_never_sees_ground_truth_axis": true,
+  "detector_input_never_contains_preinjection_object": true,
+  "realizer_provenance": {
+    "40E": {
+      "label_space": "40E",
+      "source_file": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\live-trace-worker\\scripts\\run_stage9_40e_eta_epsilon_bridge.py",
+      "source_sha256": "92e6fd525bb9e247ee04640ad3f2b95f07b7ae29c48784606cf37dc3f32cf8bf",
+      "extracted_symbols": [
+        "DOMAIN_GLOSSES",
+        "OPERATOR_GLOSSES",
+        "canonical_element",
+        "parse_element_label",
+        "raw_prefix",
+        "readable_prefix",
+        "element_phrase",
+        "base_prompt"
+      ],
+      "duplicate_symbols": {},
+      "extraction_reason": "flagship module cannot be imported in this checkout: its transitive import `evaluate_probe_dataset` is absent from live-trace-worker/scripts/",
+      "real": true
+    },
+    "F28": {
+      "label_space": "F28",
+      "source_file": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\live-trace-worker\\scripts\\run_open_weight_eta_epsilon_bridge.py",
+      "source_sha256": "f52fbbe33ae28d08eeb932902a2be1d0ce209204ed57dece28b98b6bb5b76faa",
+      "extracted_symbols": [
+        "REGISTERS",
+        "REGISTER_GLOSSES",
+        "DRIVE_PHRASES",
+        "DRIVE_PREFIX_GLOSSES",
+        "canonical_foundation",
+        "parse_foundation_label",
+        "raw_prefix",
+        "readable_prefix",
+        "base_prompt"
+      ],
+      "duplicate_symbols": {},
+      "extraction_reason": "flagship module cannot be imported in this checkout: its transitive import `evaluate_probe_dataset` is absent from live-trace-worker/scripts/",
+      "real": true
+    }
+  },
+  "leak_audit": {
+    "40E_prefix_contains_scored_continuation": true,
+    "40E_note": "run_stage9_40e_eta_epsilon_bridge.readable_prefix embeds element_phrase(label) verbatim; any margin measured with element_phrase as the continuation is contaminated by string copying. This is inherited from the flagship and bears on how +1.412 is read.",
+    "F28_prefix_contains_scored_continuation": {
+      "F1|A": false,
+      "F2|A": false,
+      "F3|A": false,
+      "F4|A": false,
+      "F5|A": false,
+      "F6|A": false,
+      "F7|A": false
+    },
+    "F28_note": "run_open_weight_eta_epsilon_bridge.readable_prefix uses DRIVE_PREFIX_GLOSSES while the scored continuation is DRIVE_PHRASES; no verbatim containment. Lexical overlap is NOT zero and is not measured here.",
+    "consequence": "stage 5 measures on the F28 (leak-free) arm by default; the 40E arm is available but is preregistered as NOT counting as evidence."
+  },
+  "stage1_reading": {
+    "item_id": 0,
+    "source_text": "This is a classic dilemma, and there's no single \"right\" answer because it depends entirely on your personal values, current life circumstances, and long-term goals. Let's break down how to think about this, considering various angles:\n\n### 1. Deep Self-Reflection: What Matters Most TO YOU?\n\nBefore looking at the jobs, look inward.\n\n*   **What are your core values?** Is it financial security, impa",
+    "path": [
+      "SENSE",
+      "UNPACK",
+      "AMP",
+      "WEIGH",
+      "TRANSLATE"
+    ],
+    "main": "AMP",
+    "reader": "fixture",
+    "real": false,
+    "provenance": {
+      "kind": "authored_fixture",
+      "vocabulary": "l2_wiring.COMPONENTS (12)"
+    }
+  },
+  "arms": [
+    {
+      "arm": "reading",
+      "j1": {
+        "entry": "reading",
+        "focal_index": 2,
+        "focal_expr": "^8^C_{F5}",
+        "focal_valid": true,
+        "cells": [
+          "^1^C",
+          "^6^C",
+          "^8^C",
+          "^6^E",
+          "^9^O"
+        ],
+        "elements": [
+          "^1^C_{F5}",
+          "^6^C_{F5}",
+          "^8^C_{F5}",
+          "^6^E_{F5}",
+          "^9^O_{F5}"
+        ],
+        "transitions": [
+          {
+            "index": 0,
+            "pair": [
+              "SENSE",
+              "UNPACK"
+            ],
+            "expr": "^1^C_{F5} -> ^6^C_{F5}",
+            "valid": true,
+            "domain_descent_ok": true,
+            "admissible": true,
+            "error": null
+          },
+          {
+            "index": 1,
+            "pair": [
+              "UNPACK",
+              "AMP"
+            ],
+            "expr": "^6^C_{F5} -> ^8^C_{F5}",
+            "valid": true,
+            "domain_descent_ok": true,
+            "admissible": true,
+            "error": null
+          },
+          {
+            "index": 2,
+            "pair": [
+              "AMP",
+              "WEIGH"
+            ],
+            "expr": "^8^C_{F5} -> ^6^E_{F5}",
+            "valid": true,
+            "domain_descent_ok": true,
+            "admissible": true,
+            "error": null
+          },
+          {
+            "index": 3,
+            "pair": [
+              "WEIGH",
+              "TRANSLATE"
+            ],
+            "expr": "^6^E_{F5} -> ^9^O_{F5}",
+            "valid": true,
+            "domain_descent_ok": true,
+            "admissible": true,
+            "error": null
+          }
+        ],
+        "n_admissible": 4,
+        "n_rejected": 0,
+        "drive": "F5",
+        "unknown_codes": [],
+        "crosswalk_in_causal_path": true
+      },
+      "as_read_scan": {
+        "expression": "^1^C_{F5} ^6^C_{F5} ^8^C_{F5} ^6^E_{F5} ^9^O_{F5}",
+        "rpm_satisfied_arg": true,
+        "clean": false,
+        "fired_axes": [
+          "N"
+        ],
+        "fired_axes_non_derived": [
+          "N"
+        ],
+        "axes": {
+          "N": {
+            "clean": false,
+            "reason": "expression contains both members of involution pair(s) [(8, 9)] without integrator (+ or \u00d7)",
+            "noetics": [
+              1,
+              6,
+              8,
+              6,
+              9
+            ],
+            "flagged_pairs": [
+              [
+                8,
+                9
+              ]
+            ]
+          },
+          "W": {
+            "clean": true,
+            "reason": "fewer than 2 domain markers; no precedence to violate",
+            "domains": []
+          },
+          "F": {
+            "clean": true,
+            "reason": "no drive imbalance detected",
+            "drives": [
+              5,
+              5,
+              5,
+              5,
+              5
+            ],
+            "flagged_pairs": []
+          },
+          "E": {
+            "clean": true,
+            "reason": "placeholder axis \u2014 entropy machinery not enabled in v1",
+            "placeholder": true
+          },
+          "S": {
+            "clean": true,
+            "reason": "placeholder axis \u2014 sub-drive variance not enabled in v1",
+            "placeholder": true
+          },
+          "A": {
+            "clean": true,
+            "reason": "RPM gate cleared; no pathway chain violation"
+          },
+          "P": {
+            "clean": true,
+            "reason": "no compound inversion (single-axis or fewer flags)",
+            "compound": [
+              "N"
+            ]
+          }
+        },
+        "placeholder_axes": [
+          "E",
+          "S"
+        ],
+        "integrator_guard": {
+          "expression": "^1^C_{F5} ^6^C_{F5} ^8^C_{F5} ^6^E_{F5} ^9^O_{F5}",
+          "integrator_chars_present": [],
+          "flags_suppressed": false
+        }
+      },
+      "injections": [
+        {
+          "name": "[reading] drive-pair fault on one path element",
+          "injected_axis_ground_truth": "F",
+          "preregistered_expectation": "DETECTED. The bundle's drive tag is uniform, so an F-flip on one element makes an F-pair co-present. Realized in F28 because the 40E label does not carry the drive.",
+          "clean_structure": "^1^C_{F5} ^6^C_{F5} ^8^C_{F5} ^6^E_{F5} ^9^O_{F5}",
+          "clean_element": "^8^C_{F5}",
+          "target_index": 2,
+          "perturbed_structure": "^1^C_{F5} ^6^C_{F5} ^8^C_{F3} ^6^E_{F5} ^9^O_{F5}",
+          "perturbed_element": "^8^C_{F3}",
+          "injected_element_compiles": true,
+          "baseline_scan": {
+            "expression": "^1^C_{F5} ^6^C_{F5} ^8^C_{F5} ^6^E_{F5} ^9^O_{F5}",
+            "rpm_satisfied_arg": true,
+            "clean": false,
+            "fired_axes": [
+              "N"
+            ],
+            "fired_axes_non_derived": [
+              "N"
+            ],
+            "axes": {
+              "N": {
+                "clean": false,
+                "reason": "expression contains both members of involution pair(s) [(8, 9)] without integrator (+ or \u00d7)",
+                "noetics": [
+                  1,
+                  6,
+                  8,
+                  6,
+                  9
+                ],
+                "flagged_pairs": [
+                  [
+                    8,
+                    9
+                  ]
+                ]
+              },
+              "W": {
+                "clean": true,
+                "reason": "fewer than 2 domain markers; no precedence to violate",
+                "domains": []
+              },
+              "F": {
+                "clean": true,
+                "reason": "no drive imbalance detected",
+                "drives": [
+                  5,
+                  5,
+                  5,
+                  5,
+                  5
+                ],
+                "flagged_pairs": []
+              },
+              "E": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 entropy machinery not enabled in v1",
+                "placeholder": true
+              },
+              "S": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 sub-drive variance not enabled in v1",
+                "placeholder": true
+              },
+              "A": {
+                "clean": true,
+                "reason": "RPM gate cleared; no pathway chain violation"
+              },
+              "P": {
+                "clean": true,
+                "reason": "no compound inversion (single-axis or fewer flags)",
+                "compound": [
+                  "N"
+                ]
+              }
+            },
+            "placeholder_axes": [
+              "E",
+              "S"
+            ],
+            "integrator_guard": {
+              "expression": "^1^C_{F5} ^6^C_{F5} ^8^C_{F5} ^6^E_{F5} ^9^O_{F5}",
+              "integrator_chars_present": [],
+              "flags_suppressed": false
+            }
+          },
+          "detection": {
+            "detected_axis": "F",
+            "candidate_axes": [
+              "F"
+            ],
+            "ambiguous": false,
+            "votes": [
+              {
+                "detector": "api.notation.compiler (typecheck)",
+                "input": "^1^C_{F5} ^6^C_{F5} ^8^C_{F3} ^6^E_{F5} ^9^O_{F5}",
+                "compiles": true,
+                "diagnostic": null,
+                "decoded_axis": null,
+                "decode_rule": null,
+                "real": true
+              },
+              {
+                "detector": "belief.inversion_gate.run_inversion_scan (isolated)",
+                "input": "^1^C_{F5} ^6^C_{F5} ^8^C_{F3} ^6^E_{F5} ^9^O_{F5}",
+                "fired_axes": [
+                  "N",
+                  "F",
+                  "P"
+                ],
+                "baseline_fired_axes": [
+                  "N"
+                ],
+                "newly_fired_non_derived": [
+                  "F"
+                ],
+                "real": true,
+                "integrator_guard": {
+                  "expression": "^1^C_{F5} ^6^C_{F5} ^8^C_{F3} ^6^E_{F5} ^9^O_{F5}",
+                  "integrator_chars_present": [],
+                  "flags_suppressed": false
+                }
+              }
+            ],
+            "saw_ground_truth_axis": false,
+            "saw_preinjection_object": false
+          },
+          "localization": {
+            "procedure": "leave_one_out_rescan",
+            "authored": true,
+            "axis": "F",
+            "candidate_indices": [
+              2
+            ],
+            "localized_index": 2,
+            "unique": true
+          },
+          "correction": {
+            "axis": "F",
+            "available": true,
+            "plane": "string",
+            "original": "^8^C_{F3}",
+            "corrected": "^8^C_{F5}",
+            "recompiles": true,
+            "note": "Drive pair imbalance (F1\u2194F7, F2\u2194F6, F3\u2194F5; F4 self-dual)"
+          },
+          "corrected_structure": "^1^C_{F5} ^6^C_{F5} ^8^C_{F5} ^6^E_{F5} ^9^O_{F5}",
+          "restored_to_clean": true,
+          "mis_correction_control": {
+            "tested_axes": [
+              "N",
+              "W",
+              "P"
+            ],
+            "rows": [
+              {
+                "axis": "N",
+                "result": "^9^C_{F3}",
+                "restores_clean": false,
+                "recompiles": true
+              },
+              {
+                "axis": "W",
+                "result": "^8^E_{F3}",
+                "restores_clean": false,
+                "recompiles": true
+              },
+              {
+                "axis": "P",
+                "result": "^9^E_{F5}",
+                "restores_clean": false,
+                "recompiles": true
+              }
+            ],
+            "wrong_axes_that_restore": [],
+            "holds": true
+          },
+          "epsilon_uncorrected": {
+            "expression": "^8^C_{F3}",
+            "space": "F28",
+            "element_label": "F3|A",
+            "cell": "F3",
+            "realized_from": "state",
+            "readable": "CAS realization frame for the focused role:\n- Foundation code: F3|A\n- Drive: life-energy, bodily aliveness, health, and active force\n- Register: explicit reasoning and analysis\nUse this realized structure as context for the next sentence.\n\n",
+            "raw": "CAS frame: F3|A.\n",
+            "scored_continuation": "vitality and embodied life",
+            "ok": true,
+            "error": null
+          },
+          "epsilon_corrected": {
+            "expression": "^8^C_{F5}",
+            "space": "F28",
+            "element_label": "F5|A",
+            "cell": "F5",
+            "realized_from": "state",
+            "readable": "CAS realization frame for the focused role:\n- Foundation code: F5|A\n- Drive: ordered form, bounded arrangement, stability, and reliable structure\n- Register: explicit reasoning and analysis\nUse this realized structure as context for the next sentence.\n\n",
+            "raw": "CAS frame: F5|A.\n",
+            "scored_continuation": "structure and stable order",
+            "ok": true,
+            "error": null
+          },
+          "control_d1_wrong_axis": {
+            "tested_axes": [
+              "N",
+              "W",
+              "P"
+            ],
+            "rows": [
+              {
+                "wrong_axis": "N",
+                "result_expression": "^9^C_{F3}",
+                "realizes": true,
+                "label": "F3|A",
+                "reproduces_true_prefix": false
+              },
+              {
+                "wrong_axis": "W",
+                "result_expression": "^8^E_{F3}",
+                "realizes": true,
+                "label": "F3|A",
+                "reproduces_true_prefix": false
+              },
+              {
+                "wrong_axis": "P",
+                "result_expression": "^9^E_{F5}",
+                "realizes": true,
+                "label": "F5|A",
+                "reproduces_true_prefix": true
+              }
+            ],
+            "wrong_axes_reproducing_true_prefix": [
+              "P"
+            ],
+            "holds": false,
+            "subanalysis_excluding_supersets": {
+              "axes_whose_transform_contains_the_detected_one": [
+                "P"
+              ],
+              "firing_after_exclusion": [],
+              "note": "reported as EXPLANATION, not as the criterion. The criterion is the strict version over every other implemented axis."
+            }
+          },
+          "control_d2_identifiability": {
+            "space": "F28",
+            "n_labels_swept": 28,
+            "exhaustive": true,
+            "true_label": "F5|A",
+            "labels_reproducing_true_prefix": [
+              "F5|A"
+            ],
+            "n_reproducing": 1,
+            "positive_control_true_label_reproduces": true,
+            "expected_if_injective": 1,
+            "holds": true,
+            "note": "pool INCLUDES the true label; a hit is possible by construction."
+          },
+          "criteria": {
+            "a_detected_by_name_blind": true,
+            "a2_localized": true,
+            "b_corrected_via_detected_axis": true,
+            "c_distinct_prefix": true,
+            "c_mode": "c1_both_realize_differ",
+            "d1_wrong_axis_control": false,
+            "d2_identifiability_control": true,
+            "d_control_holds": false
+          },
+          "passed": false
+        },
+        {
+          "name": "[reading] NEGATIVE CONTROL: noetic flip on ONE isolated literal",
+          "injected_axis_ground_truth": "N",
+          "preregistered_expectation": "NOT DETECTED, preregistered. Included to demonstrate that criterion (a) can return False.",
+          "clean_structure": "^8^C_{F5}",
+          "clean_element": "^8^C_{F5}",
+          "target_index": 0,
+          "perturbed_structure": "^9^C_{F5}",
+          "perturbed_element": "^9^C_{F5}",
+          "injected_element_compiles": true,
+          "baseline_scan": {
+            "expression": "^8^C_{F5}",
+            "rpm_satisfied_arg": true,
+            "clean": true,
+            "fired_axes": [],
+            "fired_axes_non_derived": [],
+            "axes": {
+              "N": {
+                "clean": true,
+                "reason": "no involution imbalance detected",
+                "noetics": [
+                  8
+                ],
+                "flagged_pairs": []
+              },
+              "W": {
+                "clean": true,
+                "reason": "fewer than 2 domain markers; no precedence to violate",
+                "domains": []
+              },
+              "F": {
+                "clean": true,
+                "reason": "no drive imbalance detected",
+                "drives": [
+                  5
+                ],
+                "flagged_pairs": []
+              },
+              "E": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 entropy machinery not enabled in v1",
+                "placeholder": true
+              },
+              "S": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 sub-drive variance not enabled in v1",
+                "placeholder": true
+              },
+              "A": {
+                "clean": true,
+                "reason": "RPM gate cleared; no pathway chain violation"
+              },
+              "P": {
+                "clean": true,
+                "reason": "no axes flagged",
+                "compound": []
+              }
+            },
+            "placeholder_axes": [
+              "E",
+              "S"
+            ],
+            "integrator_guard": {
+              "expression": "^8^C_{F5}",
+              "integrator_chars_present": [],
+              "flags_suppressed": false
+            }
+          },
+          "detection": {
+            "detected_axis": null,
+            "candidate_axes": [],
+            "ambiguous": false,
+            "votes": [
+              {
+                "detector": "api.notation.compiler (typecheck)",
+                "input": "^9^C_{F5}",
+                "compiles": true,
+                "diagnostic": null,
+                "decoded_axis": null,
+                "decode_rule": null,
+                "real": true
+              },
+              {
+                "detector": "belief.inversion_gate.run_inversion_scan (isolated)",
+                "input": "^9^C_{F5}",
+                "fired_axes": [],
+                "baseline_fired_axes": [],
+                "newly_fired_non_derived": [],
+                "real": true,
+                "integrator_guard": {
+                  "expression": "^9^C_{F5}",
+                  "integrator_chars_present": [],
+                  "flags_suppressed": false
+                }
+              }
+            ],
+            "saw_ground_truth_axis": false,
+            "saw_preinjection_object": false
+          },
+          "localization": null,
+          "correction": null,
+          "corrected_structure": null,
+          "restored_to_clean": false,
+          "mis_correction_control": null,
+          "epsilon_uncorrected": {
+            "expression": "^9^C_{F5}",
+            "space": "40E",
+            "element_label": "^9|C",
+            "cell": "^9^C",
+            "realized_from": "state",
+            "readable": "CAS 40-Element realization frame for the focused role:\n- Element code: ^9|C\n- Operator: Below/Effect - outer sign, lower expression, visible effect, or surface manifestation\n- Domain: Mental - thought, interpretation, memory, analysis, and cognitive framing\n- Readable meaning: mental below/effect: outer sign, lower expression, visible effect, or surface manifestation\nUse this realized structure as context for the next sentence.\n\n",
+            "raw": "CAS 40E frame: ^9|C.\n",
+            "scored_continuation": "mental below/effect: outer sign, lower expression, visible effect, or surface manifestation",
+            "ok": true,
+            "error": null
+          },
+          "epsilon_corrected": {
+            "expression": "",
+            "space": "40E",
+            "element_label": null,
+            "cell": null,
+            "realized_from": null,
+            "readable": null,
+            "raw": null,
+            "scored_continuation": null,
+            "ok": false,
+            "error": "empty expression"
+          },
+          "control_d1_wrong_axis": null,
+          "control_d2_identifiability": null,
+          "criteria": {
+            "a_detected_by_name_blind": false,
+            "a2_localized": null,
+            "b_corrected_via_detected_axis": false,
+            "c_distinct_prefix": false,
+            "c_mode": "c0_corrected_unrealizable",
+            "d1_wrong_axis_control": null,
+            "d2_identifiability_control": null,
+            "d_control_holds": false
+          },
+          "passed": false
+        },
+        {
+          "name": "[reading] domain-precedence fault on a cross-domain transition",
+          "injected_axis_ground_truth": "W",
+          "preregistered_expectation": "DETECTED by the compiler typecheck, decoded to W through the published diagnostic table. The string detector CANNOT fire here (drive-tag \\b bug); that is reported separately.",
+          "clean_structure": "^8^C_{F5} -> ^6^E_{F5}",
+          "clean_element": "^8^C_{F5} -> ^6^E_{F5}",
+          "target_index": 0,
+          "perturbed_structure": "^8^E_{F5} -> ^6^C_{F5}",
+          "perturbed_element": "^8^E_{F5} -> ^6^C_{F5}",
+          "injected_element_compiles": false,
+          "baseline_scan": {
+            "expression": "^8^C_{F5} -> ^6^E_{F5}",
+            "rpm_satisfied_arg": true,
+            "clean": true,
+            "fired_axes": [],
+            "fired_axes_non_derived": [],
+            "axes": {
+              "N": {
+                "clean": true,
+                "reason": "no involution imbalance detected",
+                "noetics": [
+                  8,
+                  6
+                ],
+                "flagged_pairs": []
+              },
+              "W": {
+                "clean": true,
+                "reason": "fewer than 2 domain markers; no precedence to violate",
+                "domains": []
+              },
+              "F": {
+                "clean": true,
+                "reason": "no drive imbalance detected",
+                "drives": [
+                  5,
+                  5
+                ],
+                "flagged_pairs": []
+              },
+              "E": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 entropy machinery not enabled in v1",
+                "placeholder": true
+              },
+              "S": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 sub-drive variance not enabled in v1",
+                "placeholder": true
+              },
+              "A": {
+                "clean": true,
+                "reason": "RPM gate cleared; no pathway chain violation"
+              },
+              "P": {
+                "clean": true,
+                "reason": "no axes flagged",
+                "compound": []
+              }
+            },
+            "placeholder_axes": [
+              "E",
+              "S"
+            ],
+            "integrator_guard": {
+              "expression": "^8^C_{F5} -> ^6^E_{F5}",
+              "integrator_chars_present": [],
+              "flags_suppressed": false
+            }
+          },
+          "detection": {
+            "detected_axis": "W",
+            "candidate_axes": [
+              "W"
+            ],
+            "ambiguous": false,
+            "votes": [
+              {
+                "detector": "api.notation.compiler (typecheck)",
+                "input": "^8^E_{F5} -> ^6^C_{F5}",
+                "compiles": false,
+                "diagnostic": "typecheck: domain descent violated: E cannot descend to C",
+                "decoded_axis": "W",
+                "decode_rule": "domain descent violated",
+                "real": true
+              },
+              {
+                "detector": "belief.inversion_gate.run_inversion_scan (isolated)",
+                "input": "^8^E_{F5} -> ^6^C_{F5}",
+                "fired_axes": [],
+                "baseline_fired_axes": [],
+                "newly_fired_non_derived": [],
+                "real": true,
+                "integrator_guard": {
+                  "expression": "^8^E_{F5} -> ^6^C_{F5}",
+                  "integrator_chars_present": [],
+                  "flags_suppressed": false
+                }
+              },
+              {
+                "detector": "belief.inversion_gate.run_inversion_scan (drive-tag stripped \u2014 DISCLOSED WORKAROUND)",
+                "input": "^8^E -> ^6^C",
+                "fired_axes": [
+                  "W"
+                ],
+                "newly_fired_non_derived": [
+                  "W"
+                ],
+                "real": true,
+                "workaround": "inversion_gate.py:72 _DOMAIN_RE uses \\b after [PCEO]; drive-tagged literals can never match",
+                "counts_toward_detection": false
+              }
+            ],
+            "saw_ground_truth_axis": false,
+            "saw_preinjection_object": false
+          },
+          "localization": null,
+          "correction": {
+            "axis": "W",
+            "available": true,
+            "plane": "string",
+            "original": "^8^E_{F5} -> ^6^C_{F5}",
+            "corrected": "^8^C_{F5} -> ^6^E_{F5}",
+            "recompiles": true,
+            "note": "Domain precedence violation (P\u2194O, C\u2194E reversal of P\u227bC\u227bE\u227bO ordering)"
+          },
+          "corrected_structure": "^8^C_{F5} -> ^6^E_{F5}",
+          "restored_to_clean": true,
+          "mis_correction_control": {
+            "tested_axes": [
+              "N",
+              "F",
+              "P"
+            ],
+            "rows": [
+              {
+                "axis": "N",
+                "result": "^9^E_{F5} -> ^5^C_{F5}",
+                "restores_clean": false,
+                "recompiles": false
+              },
+              {
+                "axis": "F",
+                "result": "^8^E_{F3} -> ^6^C_{F3}",
+                "restores_clean": false,
+                "recompiles": false
+              },
+              {
+                "axis": "P",
+                "result": "^9^C_{F3} -> ^5^E_{F3}",
+                "restores_clean": false,
+                "recompiles": true
+              }
+            ],
+            "wrong_axes_that_restore": [],
+            "holds": true
+          },
+          "epsilon_uncorrected": {
+            "expression": "^8^E_{F5} -> ^6^C_{F5}",
+            "space": "40E",
+            "element_label": null,
+            "cell": null,
+            "realized_from": "none",
+            "readable": null,
+            "raw": null,
+            "scored_continuation": null,
+            "ok": false,
+            "error": "expression does not compile: typecheck: domain descent violated: E cannot descend to C"
+          },
+          "epsilon_corrected": {
+            "expression": "^8^C_{F5} -> ^6^E_{F5}",
+            "space": "40E",
+            "element_label": "^6|E",
+            "cell": "^6^E",
+            "realized_from": "relation.target",
+            "readable": "CAS 40-Element realization frame for the focused role:\n- Element code: ^6|E\n- Operator: Male - transmitting, delivering, testing, projecting, or seed-like force\n- Domain: Emotional - felt meaning, mood, attachment, affect, and emotional movement\n- Readable meaning: emotional male: transmitting, delivering, testing, projecting, or seed-like force\nUse this realized structure as context for the next sentence.\n\n",
+            "raw": "CAS 40E frame: ^6|E.\n",
+            "scored_continuation": "emotional male: transmitting, delivering, testing, projecting, or seed-like force",
+            "ok": true,
+            "error": null
+          },
+          "control_d1_wrong_axis": {
+            "tested_axes": [
+              "N",
+              "F",
+              "P"
+            ],
+            "rows": [
+              {
+                "wrong_axis": "N",
+                "result_expression": "^9^E_{F5} -> ^5^C_{F5}",
+                "realizes": false,
+                "label": null,
+                "reproduces_true_prefix": false
+              },
+              {
+                "wrong_axis": "F",
+                "result_expression": "^8^E_{F3} -> ^6^C_{F3}",
+                "realizes": false,
+                "label": null,
+                "reproduces_true_prefix": false
+              },
+              {
+                "wrong_axis": "P",
+                "result_expression": "^9^C_{F3} -> ^5^E_{F3}",
+                "realizes": true,
+                "label": "^5|E",
+                "reproduces_true_prefix": false
+              }
+            ],
+            "wrong_axes_reproducing_true_prefix": [],
+            "holds": true,
+            "subanalysis_excluding_supersets": {
+              "axes_whose_transform_contains_the_detected_one": [
+                "P"
+              ],
+              "firing_after_exclusion": [],
+              "note": "reported as EXPLANATION, not as the criterion. The criterion is the strict version over every other implemented axis."
+            }
+          },
+          "control_d2_identifiability": {
+            "space": "40E",
+            "n_labels_swept": 40,
+            "exhaustive": true,
+            "true_label": "^6|E",
+            "labels_reproducing_true_prefix": [
+              "^6|E"
+            ],
+            "n_reproducing": 1,
+            "positive_control_true_label_reproduces": true,
+            "expected_if_injective": 1,
+            "holds": true,
+            "note": "pool INCLUDES the true label; a hit is possible by construction."
+          },
+          "criteria": {
+            "a_detected_by_name_blind": true,
+            "a2_localized": null,
+            "b_corrected_via_detected_axis": true,
+            "c_distinct_prefix": true,
+            "c_mode": "c2_uncorrected_unrealizable",
+            "d1_wrong_axis_control": true,
+            "d2_identifiability_control": true,
+            "d_control_holds": true
+          },
+          "passed": false
+        }
+      ],
+      "string_plane_coverage": {
+        "per_axis": {
+          "N": {
+            "can_fire_on": [
+              "whole_object::drive_tagged_bundle",
+              "one_element_of_bundle"
+            ],
+            "can_fire": true
+          },
+          "W": {
+            "can_fire_on": [],
+            "can_fire": false
+          },
+          "F": {
+            "can_fire_on": [
+              "one_element_of_bundle"
+            ],
+            "can_fire": true
+          },
+          "P": {
+            "can_fire_on": [],
+            "can_fire": false
+          },
+          "E": {
+            "can_fire_on": [],
+            "can_fire": false
+          },
+          "S": {
+            "can_fire_on": [],
+            "can_fire": false
+          },
+          "A": {
+            "can_fire_on": [],
+            "can_fire": false
+          }
+        },
+        "effective_axes": [
+          "N",
+          "F"
+        ],
+        "effective_count": 2,
+        "of": 7,
+        "measured": true
+      }
+    },
+    {
+      "arm": "cell",
+      "j1": {
+        "entry": "cell",
+        "focal_index": 0,
+        "focal_expr": "^2^P_{F5}",
+        "focal_valid": true,
+        "cells": [
+          "^2^P",
+          "^6^C",
+          "^9^O"
+        ],
+        "elements": [
+          "^2^P_{F5}",
+          "^6^C_{F5}",
+          "^9^O_{F5}"
+        ],
+        "transitions": [
+          {
+            "index": 0,
+            "pair": [
+              "^2^P",
+              "^6^C"
+            ],
+            "expr": "^2^P_{F5} -> ^6^C_{F5}",
+            "valid": true,
+            "domain_descent_ok": true,
+            "admissible": true,
+            "error": null
+          },
+          {
+            "index": 1,
+            "pair": [
+              "^6^C",
+              "^9^O"
+            ],
+            "expr": "^6^C_{F5} -> ^9^O_{F5}",
+            "valid": true,
+            "domain_descent_ok": true,
+            "admissible": true,
+            "error": null
+          }
+        ],
+        "n_admissible": 2,
+        "n_rejected": 0,
+        "drive": "F5",
+        "unknown_codes": [],
+        "crosswalk_in_causal_path": false
+      },
+      "as_read_scan": {
+        "expression": "^2^P_{F5} ^6^C_{F5} ^9^O_{F5}",
+        "rpm_satisfied_arg": true,
+        "clean": true,
+        "fired_axes": [],
+        "fired_axes_non_derived": [],
+        "axes": {
+          "N": {
+            "clean": true,
+            "reason": "no involution imbalance detected",
+            "noetics": [
+              2,
+              6,
+              9
+            ],
+            "flagged_pairs": []
+          },
+          "W": {
+            "clean": true,
+            "reason": "fewer than 2 domain markers; no precedence to violate",
+            "domains": []
+          },
+          "F": {
+            "clean": true,
+            "reason": "no drive imbalance detected",
+            "drives": [
+              5,
+              5,
+              5
+            ],
+            "flagged_pairs": []
+          },
+          "E": {
+            "clean": true,
+            "reason": "placeholder axis \u2014 entropy machinery not enabled in v1",
+            "placeholder": true
+          },
+          "S": {
+            "clean": true,
+            "reason": "placeholder axis \u2014 sub-drive variance not enabled in v1",
+            "placeholder": true
+          },
+          "A": {
+            "clean": true,
+            "reason": "RPM gate cleared; no pathway chain violation"
+          },
+          "P": {
+            "clean": true,
+            "reason": "no axes flagged",
+            "compound": []
+          }
+        },
+        "placeholder_axes": [
+          "E",
+          "S"
+        ],
+        "integrator_guard": {
+          "expression": "^2^P_{F5} ^6^C_{F5} ^9^O_{F5}",
+          "integrator_chars_present": [],
+          "flags_suppressed": false
+        }
+      },
+      "injections": [
+        {
+          "name": "[cell] drive-pair fault on one path element",
+          "injected_axis_ground_truth": "F",
+          "preregistered_expectation": "DETECTED. The bundle's drive tag is uniform, so an F-flip on one element makes an F-pair co-present. Realized in F28 because the 40E label does not carry the drive.",
+          "clean_structure": "^2^P_{F5} ^6^C_{F5} ^9^O_{F5}",
+          "clean_element": "^2^P_{F5}",
+          "target_index": 0,
+          "perturbed_structure": "^2^P_{F3} ^6^C_{F5} ^9^O_{F5}",
+          "perturbed_element": "^2^P_{F3}",
+          "injected_element_compiles": true,
+          "baseline_scan": {
+            "expression": "^2^P_{F5} ^6^C_{F5} ^9^O_{F5}",
+            "rpm_satisfied_arg": true,
+            "clean": true,
+            "fired_axes": [],
+            "fired_axes_non_derived": [],
+            "axes": {
+              "N": {
+                "clean": true,
+                "reason": "no involution imbalance detected",
+                "noetics": [
+                  2,
+                  6,
+                  9
+                ],
+                "flagged_pairs": []
+              },
+              "W": {
+                "clean": true,
+                "reason": "fewer than 2 domain markers; no precedence to violate",
+                "domains": []
+              },
+              "F": {
+                "clean": true,
+                "reason": "no drive imbalance detected",
+                "drives": [
+                  5,
+                  5,
+                  5
+                ],
+                "flagged_pairs": []
+              },
+              "E": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 entropy machinery not enabled in v1",
+                "placeholder": true
+              },
+              "S": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 sub-drive variance not enabled in v1",
+                "placeholder": true
+              },
+              "A": {
+                "clean": true,
+                "reason": "RPM gate cleared; no pathway chain violation"
+              },
+              "P": {
+                "clean": true,
+                "reason": "no axes flagged",
+                "compound": []
+              }
+            },
+            "placeholder_axes": [
+              "E",
+              "S"
+            ],
+            "integrator_guard": {
+              "expression": "^2^P_{F5} ^6^C_{F5} ^9^O_{F5}",
+              "integrator_chars_present": [],
+              "flags_suppressed": false
+            }
+          },
+          "detection": {
+            "detected_axis": "F",
+            "candidate_axes": [
+              "F"
+            ],
+            "ambiguous": false,
+            "votes": [
+              {
+                "detector": "api.notation.compiler (typecheck)",
+                "input": "^2^P_{F3} ^6^C_{F5} ^9^O_{F5}",
+                "compiles": true,
+                "diagnostic": null,
+                "decoded_axis": null,
+                "decode_rule": null,
+                "real": true
+              },
+              {
+                "detector": "belief.inversion_gate.run_inversion_scan (isolated)",
+                "input": "^2^P_{F3} ^6^C_{F5} ^9^O_{F5}",
+                "fired_axes": [
+                  "F"
+                ],
+                "baseline_fired_axes": [],
+                "newly_fired_non_derived": [
+                  "F"
+                ],
+                "real": true,
+                "integrator_guard": {
+                  "expression": "^2^P_{F3} ^6^C_{F5} ^9^O_{F5}",
+                  "integrator_chars_present": [],
+                  "flags_suppressed": false
+                }
+              }
+            ],
+            "saw_ground_truth_axis": false,
+            "saw_preinjection_object": false
+          },
+          "localization": {
+            "procedure": "leave_one_out_rescan",
+            "authored": true,
+            "axis": "F",
+            "candidate_indices": [
+              0
+            ],
+            "localized_index": 0,
+            "unique": true
+          },
+          "correction": {
+            "axis": "F",
+            "available": true,
+            "plane": "string",
+            "original": "^2^P_{F3}",
+            "corrected": "^2^P_{F5}",
+            "recompiles": true,
+            "note": "Drive pair imbalance (F1\u2194F7, F2\u2194F6, F3\u2194F5; F4 self-dual)"
+          },
+          "corrected_structure": "^2^P_{F5} ^6^C_{F5} ^9^O_{F5}",
+          "restored_to_clean": true,
+          "mis_correction_control": {
+            "tested_axes": [
+              "N",
+              "W",
+              "P"
+            ],
+            "rows": [
+              {
+                "axis": "N",
+                "result": "^3^P_{F3}",
+                "restores_clean": false,
+                "recompiles": true
+              },
+              {
+                "axis": "W",
+                "result": "^2^O_{F3}",
+                "restores_clean": false,
+                "recompiles": true
+              },
+              {
+                "axis": "P",
+                "result": "^3^O_{F5}",
+                "restores_clean": false,
+                "recompiles": true
+              }
+            ],
+            "wrong_axes_that_restore": [],
+            "holds": true
+          },
+          "epsilon_uncorrected": {
+            "expression": "^2^P_{F3}",
+            "space": "F28",
+            "element_label": "F3|A",
+            "cell": "F3",
+            "realized_from": "state",
+            "readable": "CAS realization frame for the focused role:\n- Foundation code: F3|A\n- Drive: life-energy, bodily aliveness, health, and active force\n- Register: explicit reasoning and analysis\nUse this realized structure as context for the next sentence.\n\n",
+            "raw": "CAS frame: F3|A.\n",
+            "scored_continuation": "vitality and embodied life",
+            "ok": true,
+            "error": null
+          },
+          "epsilon_corrected": {
+            "expression": "^2^P_{F5}",
+            "space": "F28",
+            "element_label": "F5|A",
+            "cell": "F5",
+            "realized_from": "state",
+            "readable": "CAS realization frame for the focused role:\n- Foundation code: F5|A\n- Drive: ordered form, bounded arrangement, stability, and reliable structure\n- Register: explicit reasoning and analysis\nUse this realized structure as context for the next sentence.\n\n",
+            "raw": "CAS frame: F5|A.\n",
+            "scored_continuation": "structure and stable order",
+            "ok": true,
+            "error": null
+          },
+          "control_d1_wrong_axis": {
+            "tested_axes": [
+              "N",
+              "W",
+              "P"
+            ],
+            "rows": [
+              {
+                "wrong_axis": "N",
+                "result_expression": "^3^P_{F3}",
+                "realizes": true,
+                "label": "F3|A",
+                "reproduces_true_prefix": false
+              },
+              {
+                "wrong_axis": "W",
+                "result_expression": "^2^O_{F3}",
+                "realizes": true,
+                "label": "F3|A",
+                "reproduces_true_prefix": false
+              },
+              {
+                "wrong_axis": "P",
+                "result_expression": "^3^O_{F5}",
+                "realizes": true,
+                "label": "F5|A",
+                "reproduces_true_prefix": true
+              }
+            ],
+            "wrong_axes_reproducing_true_prefix": [
+              "P"
+            ],
+            "holds": false,
+            "subanalysis_excluding_supersets": {
+              "axes_whose_transform_contains_the_detected_one": [
+                "P"
+              ],
+              "firing_after_exclusion": [],
+              "note": "reported as EXPLANATION, not as the criterion. The criterion is the strict version over every other implemented axis."
+            }
+          },
+          "control_d2_identifiability": {
+            "space": "F28",
+            "n_labels_swept": 28,
+            "exhaustive": true,
+            "true_label": "F5|A",
+            "labels_reproducing_true_prefix": [
+              "F5|A"
+            ],
+            "n_reproducing": 1,
+            "positive_control_true_label_reproduces": true,
+            "expected_if_injective": 1,
+            "holds": true,
+            "note": "pool INCLUDES the true label; a hit is possible by construction."
+          },
+          "criteria": {
+            "a_detected_by_name_blind": true,
+            "a2_localized": true,
+            "b_corrected_via_detected_axis": true,
+            "c_distinct_prefix": true,
+            "c_mode": "c1_both_realize_differ",
+            "d1_wrong_axis_control": false,
+            "d2_identifiability_control": true,
+            "d_control_holds": false
+          },
+          "passed": false
+        },
+        {
+          "name": "[cell] NEGATIVE CONTROL: noetic flip on ONE isolated literal",
+          "injected_axis_ground_truth": "N",
+          "preregistered_expectation": "NOT DETECTED, preregistered. Included to demonstrate that criterion (a) can return False.",
+          "clean_structure": "^2^P_{F5}",
+          "clean_element": "^2^P_{F5}",
+          "target_index": 0,
+          "perturbed_structure": "^3^P_{F5}",
+          "perturbed_element": "^3^P_{F5}",
+          "injected_element_compiles": true,
+          "baseline_scan": {
+            "expression": "^2^P_{F5}",
+            "rpm_satisfied_arg": true,
+            "clean": true,
+            "fired_axes": [],
+            "fired_axes_non_derived": [],
+            "axes": {
+              "N": {
+                "clean": true,
+                "reason": "no involution imbalance detected",
+                "noetics": [
+                  2
+                ],
+                "flagged_pairs": []
+              },
+              "W": {
+                "clean": true,
+                "reason": "fewer than 2 domain markers; no precedence to violate",
+                "domains": []
+              },
+              "F": {
+                "clean": true,
+                "reason": "no drive imbalance detected",
+                "drives": [
+                  5
+                ],
+                "flagged_pairs": []
+              },
+              "E": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 entropy machinery not enabled in v1",
+                "placeholder": true
+              },
+              "S": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 sub-drive variance not enabled in v1",
+                "placeholder": true
+              },
+              "A": {
+                "clean": true,
+                "reason": "RPM gate cleared; no pathway chain violation"
+              },
+              "P": {
+                "clean": true,
+                "reason": "no axes flagged",
+                "compound": []
+              }
+            },
+            "placeholder_axes": [
+              "E",
+              "S"
+            ],
+            "integrator_guard": {
+              "expression": "^2^P_{F5}",
+              "integrator_chars_present": [],
+              "flags_suppressed": false
+            }
+          },
+          "detection": {
+            "detected_axis": null,
+            "candidate_axes": [],
+            "ambiguous": false,
+            "votes": [
+              {
+                "detector": "api.notation.compiler (typecheck)",
+                "input": "^3^P_{F5}",
+                "compiles": true,
+                "diagnostic": null,
+                "decoded_axis": null,
+                "decode_rule": null,
+                "real": true
+              },
+              {
+                "detector": "belief.inversion_gate.run_inversion_scan (isolated)",
+                "input": "^3^P_{F5}",
+                "fired_axes": [],
+                "baseline_fired_axes": [],
+                "newly_fired_non_derived": [],
+                "real": true,
+                "integrator_guard": {
+                  "expression": "^3^P_{F5}",
+                  "integrator_chars_present": [],
+                  "flags_suppressed": false
+                }
+              }
+            ],
+            "saw_ground_truth_axis": false,
+            "saw_preinjection_object": false
+          },
+          "localization": null,
+          "correction": null,
+          "corrected_structure": null,
+          "restored_to_clean": false,
+          "mis_correction_control": null,
+          "epsilon_uncorrected": {
+            "expression": "^3^P_{F5}",
+            "space": "40E",
+            "element_label": "^3|P",
+            "cell": "^3^P",
+            "realized_from": "state",
+            "readable": "CAS 40-Element realization frame for the focused role:\n- Element code: ^3|P\n- Operator: Negative - disturbing, obstructing, harmful, confusing, or undesirable force\n- Domain: Spiritual - soul-level meaning, sacred orientation, and relation to ultimate purpose\n- Readable meaning: spiritual negative: disturbing, obstructing, harmful, confusing, or undesirable force\nUse this realized structure as context for the next sentence.\n\n",
+            "raw": "CAS 40E frame: ^3|P.\n",
+            "scored_continuation": "spiritual negative: disturbing, obstructing, harmful, confusing, or undesirable force",
+            "ok": true,
+            "error": null
+          },
+          "epsilon_corrected": {
+            "expression": "",
+            "space": "40E",
+            "element_label": null,
+            "cell": null,
+            "realized_from": null,
+            "readable": null,
+            "raw": null,
+            "scored_continuation": null,
+            "ok": false,
+            "error": "empty expression"
+          },
+          "control_d1_wrong_axis": null,
+          "control_d2_identifiability": null,
+          "criteria": {
+            "a_detected_by_name_blind": false,
+            "a2_localized": null,
+            "b_corrected_via_detected_axis": false,
+            "c_distinct_prefix": false,
+            "c_mode": "c0_corrected_unrealizable",
+            "d1_wrong_axis_control": null,
+            "d2_identifiability_control": null,
+            "d_control_holds": false
+          },
+          "passed": false
+        },
+        {
+          "name": "[cell] domain-precedence fault on a cross-domain transition",
+          "injected_axis_ground_truth": "W",
+          "preregistered_expectation": "DETECTED by the compiler typecheck, decoded to W through the published diagnostic table. The string detector CANNOT fire here (drive-tag \\b bug); that is reported separately.",
+          "clean_structure": "^2^P_{F5} -> ^6^C_{F5}",
+          "clean_element": "^2^P_{F5} -> ^6^C_{F5}",
+          "target_index": 0,
+          "perturbed_structure": "^2^O_{F5} -> ^6^E_{F5}",
+          "perturbed_element": "^2^O_{F5} -> ^6^E_{F5}",
+          "injected_element_compiles": false,
+          "baseline_scan": {
+            "expression": "^2^P_{F5} -> ^6^C_{F5}",
+            "rpm_satisfied_arg": true,
+            "clean": true,
+            "fired_axes": [],
+            "fired_axes_non_derived": [],
+            "axes": {
+              "N": {
+                "clean": true,
+                "reason": "no involution imbalance detected",
+                "noetics": [
+                  2,
+                  6
+                ],
+                "flagged_pairs": []
+              },
+              "W": {
+                "clean": true,
+                "reason": "fewer than 2 domain markers; no precedence to violate",
+                "domains": []
+              },
+              "F": {
+                "clean": true,
+                "reason": "no drive imbalance detected",
+                "drives": [
+                  5,
+                  5
+                ],
+                "flagged_pairs": []
+              },
+              "E": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 entropy machinery not enabled in v1",
+                "placeholder": true
+              },
+              "S": {
+                "clean": true,
+                "reason": "placeholder axis \u2014 sub-drive variance not enabled in v1",
+                "placeholder": true
+              },
+              "A": {
+                "clean": true,
+                "reason": "RPM gate cleared; no pathway chain violation"
+              },
+              "P": {
+                "clean": true,
+                "reason": "no axes flagged",
+                "compound": []
+              }
+            },
+            "placeholder_axes": [
+              "E",
+              "S"
+            ],
+            "integrator_guard": {
+              "expression": "^2^P_{F5} -> ^6^C_{F5}",
+              "integrator_chars_present": [],
+              "flags_suppressed": false
+            }
+          },
+          "detection": {
+            "detected_axis": "W",
+            "candidate_axes": [
+              "W"
+            ],
+            "ambiguous": false,
+            "votes": [
+              {
+                "detector": "api.notation.compiler (typecheck)",
+                "input": "^2^O_{F5} -> ^6^E_{F5}",
+                "compiles": false,
+                "diagnostic": "typecheck: domain descent violated: O cannot descend to E",
+                "decoded_axis": "W",
+                "decode_rule": "domain descent violated",
+                "real": true
+              },
+              {
+                "detector": "belief.inversion_gate.run_inversion_scan (isolated)",
+                "input": "^2^O_{F5} -> ^6^E_{F5}",
+                "fired_axes": [],
+                "baseline_fired_axes": [],
+                "newly_fired_non_derived": [],
+                "real": true,
+                "integrator_guard": {
+                  "expression": "^2^O_{F5} -> ^6^E_{F5}",
+                  "integrator_chars_present": [],
+                  "flags_suppressed": false
+                }
+              },
+              {
+                "detector": "belief.inversion_gate.run_inversion_scan (drive-tag stripped \u2014 DISCLOSED WORKAROUND)",
+                "input": "^2^O -> ^6^E",
+                "fired_axes": [
+                  "W"
+                ],
+                "newly_fired_non_derived": [
+                  "W"
+                ],
+                "real": true,
+                "workaround": "inversion_gate.py:72 _DOMAIN_RE uses \\b after [PCEO]; drive-tagged literals can never match",
+                "counts_toward_detection": false
+              }
+            ],
+            "saw_ground_truth_axis": false,
+            "saw_preinjection_object": false
+          },
+          "localization": null,
+          "correction": {
+            "axis": "W",
+            "available": true,
+            "plane": "string",
+            "original": "^2^O_{F5} -> ^6^E_{F5}",
+            "corrected": "^2^P_{F5} -> ^6^C_{F5}",
+            "recompiles": true,
+            "note": "Domain precedence violation (P\u2194O, C\u2194E reversal of P\u227bC\u227bE\u227bO ordering)"
+          },
+          "corrected_structure": "^2^P_{F5} -> ^6^C_{F5}",
+          "restored_to_clean": true,
+          "mis_correction_control": {
+            "tested_axes": [
+              "N",
+              "F",
+              "P"
+            ],
+            "rows": [
+              {
+                "axis": "N",
+                "result": "^3^O_{F5} -> ^5^E_{F5}",
+                "restores_clean": false,
+                "recompiles": false
+              },
+              {
+                "axis": "F",
+                "result": "^2^O_{F3} -> ^6^E_{F3}",
+                "restores_clean": false,
+                "recompiles": false
+              },
+              {
+                "axis": "P",
+                "result": "^3^P_{F3} -> ^5^C_{F3}",
+                "restores_clean": false,
+                "recompiles": true
+              }
+            ],
+            "wrong_axes_that_restore": [],
+            "holds": true
+          },
+          "epsilon_uncorrected": {
+            "expression": "^2^O_{F5} -> ^6^E_{F5}",
+            "space": "40E",
+            "element_label": null,
+            "cell": null,
+            "realized_from": "none",
+            "readable": null,
+            "raw": null,
+            "scored_continuation": null,
+            "ok": false,
+            "error": "expression does not compile: typecheck: domain descent violated: O cannot descend to E"
+          },
+          "epsilon_corrected": {
+            "expression": "^2^P_{F5} -> ^6^C_{F5}",
+            "space": "40E",
+            "element_label": "^6|C",
+            "cell": "^6^C",
+            "realized_from": "relation.target",
+            "readable": "CAS 40-Element realization frame for the focused role:\n- Element code: ^6|C\n- Operator: Male - transmitting, delivering, testing, projecting, or seed-like force\n- Domain: Mental - thought, interpretation, memory, analysis, and cognitive framing\n- Readable meaning: mental male: transmitting, delivering, testing, projecting, or seed-like force\nUse this realized structure as context for the next sentence.\n\n",
+            "raw": "CAS 40E frame: ^6|C.\n",
+            "scored_continuation": "mental male: transmitting, delivering, testing, projecting, or seed-like force",
+            "ok": true,
+            "error": null
+          },
+          "control_d1_wrong_axis": {
+            "tested_axes": [
+              "N",
+              "F",
+              "P"
+            ],
+            "rows": [
+              {
+                "wrong_axis": "N",
+                "result_expression": "^3^O_{F5} -> ^5^E_{F5}",
+                "realizes": false,
+                "label": null,
+                "reproduces_true_prefix": false
+              },
+              {
+                "wrong_axis": "F",
+                "result_expression": "^2^O_{F3} -> ^6^E_{F3}",
+                "realizes": false,
+                "label": null,
+                "reproduces_true_prefix": false
+              },
+              {
+                "wrong_axis": "P",
+                "result_expression": "^3^P_{F3} -> ^5^C_{F3}",
+                "realizes": true,
+                "label": "^5|C",
+                "reproduces_true_prefix": false
+              }
+            ],
+            "wrong_axes_reproducing_true_prefix": [],
+            "holds": true,
+            "subanalysis_excluding_supersets": {
+              "axes_whose_transform_contains_the_detected_one": [
+                "P"
+              ],
+              "firing_after_exclusion": [],
+              "note": "reported as EXPLANATION, not as the criterion. The criterion is the strict version over every other implemented axis."
+            }
+          },
+          "control_d2_identifiability": {
+            "space": "40E",
+            "n_labels_swept": 40,
+            "exhaustive": true,
+            "true_label": "^6|C",
+            "labels_reproducing_true_prefix": [
+              "^6|C"
+            ],
+            "n_reproducing": 1,
+            "positive_control_true_label_reproduces": true,
+            "expected_if_injective": 1,
+            "holds": true,
+            "note": "pool INCLUDES the true label; a hit is possible by construction."
+          },
+          "criteria": {
+            "a_detected_by_name_blind": true,
+            "a2_localized": null,
+            "b_corrected_via_detected_axis": true,
+            "c_distinct_prefix": true,
+            "c_mode": "c2_uncorrected_unrealizable",
+            "d1_wrong_axis_control": true,
+            "d2_identifiability_control": true,
+            "d_control_holds": true
+          },
+          "passed": false
+        }
+      ],
+      "string_plane_coverage": {
+        "per_axis": {
+          "N": {
+            "can_fire_on": [],
+            "can_fire": false
+          },
+          "W": {
+            "can_fire_on": [
+              "whole_object::drive_tag_stripped_transition"
+            ],
+            "can_fire": true
+          },
+          "F": {
+            "can_fire_on": [
+              "one_element_of_bundle"
+            ],
+            "can_fire": true
+          },
+          "P": {
+            "can_fire_on": [],
+            "can_fire": false
+          },
+          "E": {
+            "can_fire_on": [],
+            "can_fire": false
+          },
+          "S": {
+            "can_fire_on": [],
+            "can_fire": false
+          },
+          "A": {
+            "can_fire_on": [],
+            "can_fire": false
+          }
+        },
+        "effective_axes": [
+          "W",
+          "F"
+        ],
+        "effective_count": 2,
+        "of": 7,
+        "measured": true
+      }
+    }
+  ],
+  "crosswalk_authored_not_validated": {
+    "DR": {
+      "noetic": "^2",
+      "domain": "P",
+      "anchor": "Appendix_D 'DRIVE RAILS'; ^2 Positive = attraction toward the goal"
+    },
+    "RS": {
+      "noetic": "^3",
+      "domain": "P",
+      "anchor": "Appendix_B Zener< ^3^P, breakdown=0.8 >"
+    },
+    "GND": {
+      "noetic": "^0",
+      "domain": "P",
+      "anchor": "Appendix_B Oscillator Phi< ... ^0^P|T >"
+    },
+    "SENSE": {
+      "noetic": "^1",
+      "domain": "C",
+      "anchor": "Appendix_B Photodiode< stimulus -> ^0^C >; ^1 Mind = registering/attending"
+    },
+    "MEM": {
+      "noetic": "^5",
+      "domain": "C",
+      "anchor": "Appendix_B Capacitor< ^5^E_{F4}|f >, Varactor< ^5^C_{F2}|A >"
+    },
+    "UNPACK": {
+      "noetic": "^6",
+      "domain": "C",
+      "anchor": "^6 Male = decomposition ('unpacking an idea')"
+    },
+    "AMP": {
+      "noetic": "^8",
+      "domain": "C",
+      "anchor": "Appendix_D 'PRE-AMP  ^8^C|A, beta=3.0'"
+    },
+    "CHECK": {
+      "noetic": "^3",
+      "domain": "C",
+      "anchor": "Appendix_B CircuitBreaker< ^3^C_{F2}|A, threshold=0.7 >"
+    },
+    "WEIGH": {
+      "noetic": "^6",
+      "domain": "E",
+      "anchor": "Appendix_B OpAmp< inverting=^6^E_{F6}|A >"
+    },
+    "IF": {
+      "noetic": "^8",
+      "domain": "E",
+      "anchor": "Appendix_B Relay< control=^9^E_{F5}|A >; a conditional TRIGGERS a branch"
+    },
+    "ORDER": {
+      "noetic": "^7",
+      "domain": "O",
+      "anchor": "Appendix_B Inductor< ^7^O_{F6}|E > pattern/timing inertia"
+    },
+    "TRANSLATE": {
+      "noetic": "^9",
+      "domain": "O",
+      "anchor": "Appendix_B DAC< ^9^C_{F5}|A -> ^9^O_{F5}|E >"
+    }
+  },
+  "axis_a_numeric": {
+    "plane": "numeric",
+    "baseline": {
+      "axis_resistance": {
+        "N": 1.0,
+        "W": 1.0,
+        "F": 1.0,
+        "E": 1.0,
+        "S": 1.0,
+        "A": 1.0,
+        "P": 1.0
+      },
+      "axis_severity": {
+        "N": 0.0,
+        "W": 0.0,
+        "F": 0.0,
+        "E": 0.0,
+        "S": 0.0,
+        "A": 0.0,
+        "P": 0.0
+      },
+      "fired_axes": []
+    },
+    "injected": {
+      "axis_resistance": {
+        "N": 1.0,
+        "W": 1.0,
+        "F": 1.0,
+        "E": 1.0,
+        "S": 1.0,
+        "A": 0.857143,
+        "P": 1.0
+      },
+      "axis_severity": {
+        "N": 0.0,
+        "W": 0.0,
+        "F": 0.0,
+        "E": 0.0,
+        "S": 0.0,
+        "A": 0.142857,
+        "P": 0.0
+      },
+      "fired_axes": [
+        "A"
+      ]
+    },
+    "corrected": {
+      "axis_resistance": {
+        "N": 1.0,
+        "W": 1.0,
+        "F": 1.0,
+        "E": 1.0,
+        "S": 1.0,
+        "A": 1.0,
+        "P": 1.0
+      },
+      "axis_severity": {
+        "N": 0.0,
+        "W": 0.0,
+        "F": 0.0,
+        "E": 0.0,
+        "S": 0.0,
+        "A": 0.0,
+        "P": 0.0
+      },
+      "fired_axes": []
+    },
+    "rpm_satisfied_derived_from_rust": false,
+    "detector_is_unaided": true,
+    "corrector_is_hand_written": true,
+    "reaches_j2": false,
+    "criteria": {
+      "a_detected_by_name_blind": true,
+      "b_corrected_via_detected_axis": true,
+      "c_distinct_prefix": null,
+      "d_control_holds": null
+    }
+  },
+  "stage5": {
+    "real": false,
+    "status": "NOT_RUN",
+    "why": "requires --with-model (GPU/pod)"
+  },
+  "stubs": [
+    {
+      "link": "STAGE 1 reader call",
+      "why_stubbed": "default run makes zero API calls; l2_wiring_report.json stores only aggregate statistics, so there is no per-item reading on disk to replay",
+      "how_to_make_real": "run with --with-readers (calls l2_wiring.read_batch against the 4 blind readers), or persist per-item paths from a fresh l2_wiring.py run",
+      "stubbed": true
+    },
+    {
+      "link": "STAGE 4 corrector for axis A (and E, S)",
+      "why_stubbed": "invert_expression(src,'A') raises DeferredAxisError \u2014 there is no string-level corrector for A, E or S, so a corrected EXPRESSION never exists and joint J2 cannot be reached for these axes",
+      "how_to_make_real": "implement an A-axis string corrector (rewrite drive-tagged stage literals so upstream stages dominate), or lift the Rust cas-engine/src/rpm/recursive.rs solver output back into notation",
+      "stubbed": true
+    },
+    {
+      "link": "STAGE 5 likelihood measurement",
+      "why_stubbed": "no model loaded; the symbolic loop is designed to run at zero GPU and zero API cost",
+      "how_to_make_real": "rerun with --with-model <hf_id> on a pod; stage 5 calls the REAL mean_logprob_continuation and measures on the leak-free F28 arm with a stance-matched non-CAS control",
+      "stubbed": true
+    }
+  ],
+  "disclosures": [
+    {
+      "tag": "f28_gloss_table_disagrees_with_CLAUDE_md",
+      "disclosure": "run_open_weight_eta_epsilon_bridge.DRIVE_PREFIX_GLOSSES maps F5 to 'ordered form, bounded arrangement, stability, and reliable structure', while CLAUDE.md names F5 Agency and F6 Structure. The flagship bytes are executed verbatim; this discrepancy is reported, not silently corrected."
+    },
+    {
+      "tag": "authored_fixture_reading",
+      "disclosure": "FIXTURE_READING is AUTHORED, not observed. Its J1 transition-rejection count is a property of the authored path, not a measured outcome."
+    },
+    {
+      "tag": "component_construct_in_causal_path",
+      "disclosure": "under --entry reading a PCBA component code SELECTS the 40E cell that is realized. The alphabet downstream is validated; the CHOICE of cell is not. PCBA component types returned NULL at 1b and GREY at 2.8b/20B."
+    },
+    {
+      "tag": "axis_a_check_is_not_a_detector",
+      "disclosure": "belief.inversion_gate.axis_a_check(rpm_satisfied) is a bare if/else that restates its own argument. The previous revision listed it as an axis-A detector; it is not, and it has been removed from the detector bank. rpm_satisfied is now DERIVED from the Rust scanner's verdict instead."
+    },
+    {
+      "tag": "axis_a_correction_is_hand_written",
+      "disclosure": "the axis-A correction is a hand-written re-scoring of the pathway array ([0.20,0.10,0.10,0.90] -> [0.85,0.80,0.75,0.90]). No solver produced it. The numeric plane has a detector but no corrector."
+    }
+  ],
+  "real_modules_called": [
+    "api.notation.compiler.compile_expression",
+    "api.notation.inversion.invert_expression",
+    "belief.inversion_gate.run_inversion_scan",
+    "cas_engine.InversionScanner.scan",
+    "cas_engine.CognitiveStateVector",
+    "run_stage9_40e_eta_epsilon_bridge.readable_prefix/raw_prefix/element_phrase",
+    "run_open_weight_eta_epsilon_bridge.readable_prefix/raw_prefix"
+  ],
+  "removed_in_v2": [
+    "matched_control() that excluded the true cell from its own pool (zero matches was an algebraic identity, and chance_rate_1_over_39 was never the null)",
+    "detected_axis = axis assignment from the injection parameter",
+    "run_inversion_scan(clean + ' ' + injected) concatenation, which handed the detector the answer",
+    "correct_axis(inj.inverted, axis) driven by ground truth instead of the detected axis",
+    "belief.inversion_gate.axis_a_check listed as an axis-A detector",
+    "the '5 of 7 string-plane coverage' claim, replaced by a measurement"
+  ]
+}

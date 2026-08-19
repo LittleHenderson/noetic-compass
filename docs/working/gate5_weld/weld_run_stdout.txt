@@ -1,0 +1,368 @@
+
+==============================================================================
+CAS GATE-5 WELD — five CAS links driven as ONE machine
+==============================================================================
+MECHANISM DEMONSTRATION, NOT EFFICACY.
+CAS-PCBA component types failed the Component Atlas at pythia-1b (rev 0.2,
+NULL_ATLAS_V0), pythia-2.8b (rev 0.3) and gpt-neox-20b (rev 0.4). Under
+--entry reading a component code SELECTS the 40E cell that is realized;
+the construct-free arm exists so you can see nothing depends on it.
+DETECTION IS BLIND: no detector sees the injected axis, and no detector's
+input contains the pre-injection object.
+
+repo root : C:\Users\wakil\OneDrive\Desktop\tksCAS
+nc root   : C:\Users\wakil\OneDrive\Desktop\tksCAS\noetic-compass-scaffold\noetic-compass
+
+40E realizer  run_stage9_40e_eta_epsilon_bridge.py  sha256 92e6fd525bb9e247ee04640ad3f2b95f07b7ae29c48784606cf37dc3f32cf8bf
+F28 realizer  run_open_weight_eta_epsilon_bridge.py  sha256 f52fbbe33ae28d08eeb932902a2be1d0ce209204ed57dece28b98b6bb5b76faa
+  note: flagship module cannot be imported in this checkout: its transitive import `evaluate_probe_dataset` is absent from live-trace-worker/scripts/
+  leak audit: 40E prefix contains its scored continuation -> True
+              F28 prefix contains its scored continuation -> False
+[DISCLOSE] f28_gloss_table_disagrees_with_CLAUDE_md: run_open_weight_eta_epsilon_bridge.DRIVE_PREFIX_GLOSSES maps F5 to 'ordered form, bounded arrangement, stability, and reliable structure', while CLAUDE.md names F5 Agency and F6 Structure. The flagship bytes are executed verbatim; this discrepancy is reported, not silently corrected.
+
+==============================================================================
+STAGE 1 — READ: model output -> circuit reading (12-part wiring vocabulary)
+==============================================================================
+
+[STUB] STAGE 1 reader call
+[STUB]   why : default run makes zero API calls; l2_wiring_report.json stores only aggregate statistics, so there is no per-item reading on disk to replay
+[STUB]   fix : run with --with-readers (calls l2_wiring.read_batch against the 4 blind readers), or persist per-item paths from a fresh l2_wiring.py run
+[DISCLOSE] authored_fixture_reading: FIXTURE_READING is AUTHORED, not observed. Its J1 transition-rejection count is a property of the authored path, not a measured outcome.
+  fixture path=['SENSE', 'UNPACK', 'AMP', 'WEIGH', 'TRANSLATE']  main=AMP
+
+==============================================================================
+JOINT J1 — circuit reading -> CAS expression (compiler-adjudicated)
+==============================================================================
+  REAL     : emission is adjudicated by api.notation.compiler.compile_expression
+  AUTHORED : the component->40E crosswalk table (book prose, never validated)
+  AUTHORED : drive tag F5 (a reading carries no drive)
+[DISCLOSE] component_construct_in_causal_path: under --entry reading a PCBA component code SELECTS the 40E cell that is realized. The alphabet downstream is validated; the CHOICE of cell is not. PCBA component types returned NULL at 1b and GREY at 2.8b/20B.
+
+  focal (main part AMP, index 2) -> '^8^C_{F5}'  valid=True
+      compiler result: {"kind": "state", "states": {"18": 1.0}, "dominant_state": "C8", "dominant_operator": "CO-8", "dominant_domain": "C", "dominant_drive": "F5"}
+  [OK ] SENSE     -> UNPACK     ^1^C_{F5} -> ^6^C_{F5}             
+  [OK ] UNPACK    -> AMP        ^6^C_{F5} -> ^8^C_{F5}             
+  [OK ] AMP       -> WEIGH      ^8^C_{F5} -> ^6^E_{F5}             
+  [OK ] WEIGH     -> TRANSLATE  ^6^E_{F5} -> ^9^O_{F5}             
+
+  transitions admissible 4/4; 0 rejected by the real typechecker
+
+==============================================================================
+ENTRY (construct-free) — 40E cells named directly, NO PCBA crosswalk
+==============================================================================
+  This arm exists so the reader can see whether any conclusion below
+  depends on the falsified PCBA component vocabulary. It does not.
+  cells    : ['^2^P', '^6^C', '^9^O']
+  focal    : '^2^P_{F5}' valid=True
+  [OK ] ^2^P      -> ^6^C       ^2^P_{F5} -> ^6^C_{F5}             
+  [OK ] ^6^C      -> ^9^O       ^6^C_{F5} -> ^9^O_{F5}             
+
+==============================================================================
+ARM 'reading' — STAGE 2/3: compile the read structure, scan it as read
+==============================================================================
+  as-read bundle : '^1^C_{F5} ^6^C_{F5} ^8^C_{F5} ^6^E_{F5} ^9^O_{F5}'
+  scan.clean=False  fired=['N']
+  NOTE: the structure is flagged AS READ, before any injection. For the reading arm this is a property of the read path itself (it contains an involution pair), not of anything the loop did.
+  placeholder axes (can NEVER fire): ['E', 'S']
+  axes WITH a string corrector    : ['N', 'W', 'F', 'P']
+  axes WITHOUT a string corrector : ['E', 'S', 'A']
+  integrator guard: {'expression': '^1^C_{F5} ^6^C_{F5} ^8^C_{F5} ^6^E_{F5} ^9^O_{F5}', 'integrator_chars_present': [], 'flags_suppressed': False}
+
+==============================================================================
+INJECTED FAULT — axis F  ([reading] drive-pair fault on one path element)
+==============================================================================
+  clean structure : '^1^C_{F5} ^6^C_{F5} ^8^C_{F5} ^6^E_{F5} ^9^O_{F5}'
+  clean element   : '^8^C_{F5}' (index 2)
+  PREREGISTERED EXPECTATION: DETECTED. The bundle's drive tag is uniform, so an F-flip on one element makes an F-pair co-present. Realized in F28 because the 40E label does not carry the drive.
+  baseline scan (as read, pre-injection): fired=['N']
+  INJECT  invert_expression('^8^C_{F5}', 'F') -> '^8^C_{F3}'
+  perturbed structure: '^1^C_{F5} ^6^C_{F5} ^8^C_{F3} ^6^E_{F5} ^9^O_{F5}'
+  DETECT  api.notation.compiler (typecheck)
+          -> decoded=None newly_fired=None diag='None'
+  DETECT  belief.inversion_gate.run_inversion_scan (isolated)
+          -> decoded=None newly_fired=['F'] diag='None'
+  >>> AXIS NAMED (blind): F  candidates=['F'] ambiguous=False
+  LOCALIZE leave-one-out -> index 2 (candidates [2]); correct=True
+  CORRECT dispatcher(axis='F') -> '^8^C_{F5}' recompiles=True
+  restored == clean structure: True
+  MIS-CORRECTION control: wrong axes that also restore -> []  holds=True
+  J2 space=F28  epsilon(uncorrected) label=F3|A ok=True
+  J2 epsilon(corrected)   label=F5|A ok=True
+  prefixes DISTINCT: True   mode=c1_both_realize_differ
+  --- epsilon(corrected) ---
+      CAS realization frame for the focused role:
+      - Foundation code: F5|A
+      - Drive: ordered form, bounded arrangement, stability, and reliable structure
+      - Register: explicit reasoning and analysis
+      Use this realized structure as context for the next sentence.
+  CONTROL d1 wrong-axis: axes reproducing the true prefix -> ['P']  holds=False
+  CONTROL d2 identifiability: 1/28 labels reproduce it (positive control True) holds=True
+  ==> injection verdict: FAIL  {'a_detected_by_name_blind': True, 'a2_localized': True, 'b_corrected_via_detected_axis': True, 'c_distinct_prefix': True, 'c_mode': 'c1_both_realize_differ', 'd1_wrong_axis_control': False, 'd2_identifiability_control': True, 'd_control_holds': False}
+
+==============================================================================
+INJECTED FAULT — axis N  ([reading] NEGATIVE CONTROL: noetic flip on ONE isolated literal)
+==============================================================================
+  clean structure : '^8^C_{F5}'
+  clean element   : '^8^C_{F5}' (index 0)
+  PREREGISTERED EXPECTATION: NOT DETECTED, preregistered. Included to demonstrate that criterion (a) can return False.
+  baseline scan (as read, pre-injection): fired=[]
+  INJECT  invert_expression('^8^C_{F5}', 'N') -> '^9^C_{F5}'
+  perturbed structure: '^9^C_{F5}'
+  DETECT  api.notation.compiler (typecheck)
+          -> decoded=None newly_fired=None diag='None'
+  DETECT  belief.inversion_gate.run_inversion_scan (isolated)
+          -> decoded=None newly_fired=[] diag='None'
+  >>> AXIS NAMED (blind): None  candidates=[] ambiguous=False
+  CORRECT  NOT RUN — no axis was named. The chain stops here by design; feeding the ground-truth axis in would be the defect this revision removes.
+  J2 space=40E  epsilon(uncorrected) label=^9|C ok=True
+  J2 epsilon(corrected)   label=None ok=False  err=empty expression
+  prefixes DISTINCT: False   mode=c0_corrected_unrealizable
+  CONTROLS d1/d2 NOT RUN — no corrected prefix to control against.
+  ==> injection verdict: FAIL  {'a_detected_by_name_blind': False, 'a2_localized': None, 'b_corrected_via_detected_axis': False, 'c_distinct_prefix': False, 'c_mode': 'c0_corrected_unrealizable', 'd1_wrong_axis_control': None, 'd2_identifiability_control': None, 'd_control_holds': False}
+
+  W target selected by RULE (first cross-domain transition, chosen on the reading, not on detectability): '^8^C_{F5} -> ^6^E_{F5}'
+
+==============================================================================
+INJECTED FAULT — axis W  ([reading] domain-precedence fault on a cross-domain transition)
+==============================================================================
+  clean structure : '^8^C_{F5} -> ^6^E_{F5}'
+  clean element   : '^8^C_{F5} -> ^6^E_{F5}' (index 0)
+  PREREGISTERED EXPECTATION: DETECTED by the compiler typecheck, decoded to W through the published diagnostic table. The string detector CANNOT fire here (drive-tag \b bug); that is reported separately.
+  baseline scan (as read, pre-injection): fired=[]
+  INJECT  invert_expression('^8^C_{F5} -> ^6^E_{F5}', 'W') -> '^8^E_{F5} -> ^6^C_{F5}'
+  perturbed structure: '^8^E_{F5} -> ^6^C_{F5}'
+  DETECT  api.notation.compiler (typecheck)
+          -> decoded=W newly_fired=None diag='typecheck: domain descent violated: E cannot descend to C'
+  DETECT  belief.inversion_gate.run_inversion_scan (isolated)
+          -> decoded=None newly_fired=[] diag='None'
+  DETECT  belief.inversion_gate.run_inversion_scan (drive-tag stripped — DISCLOSED WORKAROUND)
+          -> decoded=None newly_fired=['W'] diag='None'
+  >>> AXIS NAMED (blind): W  candidates=['W'] ambiguous=False
+  CORRECT dispatcher(axis='W') -> '^8^C_{F5} -> ^6^E_{F5}' recompiles=True
+  restored == clean structure: True
+  MIS-CORRECTION control: wrong axes that also restore -> []  holds=True
+  J2 space=40E  epsilon(uncorrected) label=None ok=False
+  J2 epsilon(corrected)   label=^6|E ok=True
+  prefixes DISTINCT: True   mode=c2_uncorrected_unrealizable
+  --- epsilon(corrected) ---
+      CAS 40-Element realization frame for the focused role:
+      - Element code: ^6|E
+      - Operator: Male - transmitting, delivering, testing, projecting, or seed-like force
+      - Domain: Emotional - felt meaning, mood, attachment, affect, and emotional movement
+      - Readable meaning: emotional male: transmitting, delivering, testing, projecting, or seed-like force
+      Use this realized structure as context for the next sentence.
+  CONTROL d1 wrong-axis: axes reproducing the true prefix -> []  holds=True
+  CONTROL d2 identifiability: 1/40 labels reproduce it (positive control True) holds=True
+  ==> injection verdict: FAIL  {'a_detected_by_name_blind': True, 'a2_localized': None, 'b_corrected_via_detected_axis': True, 'c_distinct_prefix': True, 'c_mode': 'c2_uncorrected_unrealizable', 'd1_wrong_axis_control': True, 'd2_identifiability_control': True, 'd_control_holds': True}
+
+==============================================================================
+MEASURED string-plane coverage (not asserted)
+==============================================================================
+  axis N: can_fire=True  shapes=['whole_object::drive_tagged_bundle', 'one_element_of_bundle']
+  axis W: can_fire=False  shapes=[]
+  axis F: can_fire=True  shapes=['one_element_of_bundle']
+  axis P: can_fire=False  shapes=[]
+  axis E: can_fire=False  shapes=[]
+  axis S: can_fire=False  shapes=[]
+  axis A: can_fire=False  shapes=[]
+  EFFECTIVE string-plane coverage for this loop's shapes: ['N', 'F']  (2/7)
+  E and S are hardcoded placeholders (can never fire). A is not a string
+  detector at all — it restates the rpm_satisfied argument. W cannot fire
+  on drive-tagged literals (inversion_gate.py:72 _DOMAIN_RE \b bug).
+
+==============================================================================
+ARM 'cell' — STAGE 2/3: compile the read structure, scan it as read
+==============================================================================
+  as-read bundle : '^2^P_{F5} ^6^C_{F5} ^9^O_{F5}'
+  scan.clean=True  fired=[]
+  placeholder axes (can NEVER fire): ['E', 'S']
+  axes WITH a string corrector    : ['N', 'W', 'F', 'P']
+  axes WITHOUT a string corrector : ['E', 'S', 'A']
+  integrator guard: {'expression': '^2^P_{F5} ^6^C_{F5} ^9^O_{F5}', 'integrator_chars_present': [], 'flags_suppressed': False}
+
+==============================================================================
+INJECTED FAULT — axis F  ([cell] drive-pair fault on one path element)
+==============================================================================
+  clean structure : '^2^P_{F5} ^6^C_{F5} ^9^O_{F5}'
+  clean element   : '^2^P_{F5}' (index 0)
+  PREREGISTERED EXPECTATION: DETECTED. The bundle's drive tag is uniform, so an F-flip on one element makes an F-pair co-present. Realized in F28 because the 40E label does not carry the drive.
+  baseline scan (as read, pre-injection): fired=[]
+  INJECT  invert_expression('^2^P_{F5}', 'F') -> '^2^P_{F3}'
+  perturbed structure: '^2^P_{F3} ^6^C_{F5} ^9^O_{F5}'
+  DETECT  api.notation.compiler (typecheck)
+          -> decoded=None newly_fired=None diag='None'
+  DETECT  belief.inversion_gate.run_inversion_scan (isolated)
+          -> decoded=None newly_fired=['F'] diag='None'
+  >>> AXIS NAMED (blind): F  candidates=['F'] ambiguous=False
+  LOCALIZE leave-one-out -> index 0 (candidates [0]); correct=True
+  CORRECT dispatcher(axis='F') -> '^2^P_{F5}' recompiles=True
+  restored == clean structure: True
+  MIS-CORRECTION control: wrong axes that also restore -> []  holds=True
+  J2 space=F28  epsilon(uncorrected) label=F3|A ok=True
+  J2 epsilon(corrected)   label=F5|A ok=True
+  prefixes DISTINCT: True   mode=c1_both_realize_differ
+  --- epsilon(corrected) ---
+      CAS realization frame for the focused role:
+      - Foundation code: F5|A
+      - Drive: ordered form, bounded arrangement, stability, and reliable structure
+      - Register: explicit reasoning and analysis
+      Use this realized structure as context for the next sentence.
+  CONTROL d1 wrong-axis: axes reproducing the true prefix -> ['P']  holds=False
+  CONTROL d2 identifiability: 1/28 labels reproduce it (positive control True) holds=True
+  ==> injection verdict: FAIL  {'a_detected_by_name_blind': True, 'a2_localized': True, 'b_corrected_via_detected_axis': True, 'c_distinct_prefix': True, 'c_mode': 'c1_both_realize_differ', 'd1_wrong_axis_control': False, 'd2_identifiability_control': True, 'd_control_holds': False}
+
+==============================================================================
+INJECTED FAULT — axis N  ([cell] NEGATIVE CONTROL: noetic flip on ONE isolated literal)
+==============================================================================
+  clean structure : '^2^P_{F5}'
+  clean element   : '^2^P_{F5}' (index 0)
+  PREREGISTERED EXPECTATION: NOT DETECTED, preregistered. Included to demonstrate that criterion (a) can return False.
+  baseline scan (as read, pre-injection): fired=[]
+  INJECT  invert_expression('^2^P_{F5}', 'N') -> '^3^P_{F5}'
+  perturbed structure: '^3^P_{F5}'
+  DETECT  api.notation.compiler (typecheck)
+          -> decoded=None newly_fired=None diag='None'
+  DETECT  belief.inversion_gate.run_inversion_scan (isolated)
+          -> decoded=None newly_fired=[] diag='None'
+  >>> AXIS NAMED (blind): None  candidates=[] ambiguous=False
+  CORRECT  NOT RUN — no axis was named. The chain stops here by design; feeding the ground-truth axis in would be the defect this revision removes.
+  J2 space=40E  epsilon(uncorrected) label=^3|P ok=True
+  J2 epsilon(corrected)   label=None ok=False  err=empty expression
+  prefixes DISTINCT: False   mode=c0_corrected_unrealizable
+  CONTROLS d1/d2 NOT RUN — no corrected prefix to control against.
+  ==> injection verdict: FAIL  {'a_detected_by_name_blind': False, 'a2_localized': None, 'b_corrected_via_detected_axis': False, 'c_distinct_prefix': False, 'c_mode': 'c0_corrected_unrealizable', 'd1_wrong_axis_control': None, 'd2_identifiability_control': None, 'd_control_holds': False}
+
+  W target selected by RULE (first cross-domain transition, chosen on the reading, not on detectability): '^2^P_{F5} -> ^6^C_{F5}'
+
+==============================================================================
+INJECTED FAULT — axis W  ([cell] domain-precedence fault on a cross-domain transition)
+==============================================================================
+  clean structure : '^2^P_{F5} -> ^6^C_{F5}'
+  clean element   : '^2^P_{F5} -> ^6^C_{F5}' (index 0)
+  PREREGISTERED EXPECTATION: DETECTED by the compiler typecheck, decoded to W through the published diagnostic table. The string detector CANNOT fire here (drive-tag \b bug); that is reported separately.
+  baseline scan (as read, pre-injection): fired=[]
+  INJECT  invert_expression('^2^P_{F5} -> ^6^C_{F5}', 'W') -> '^2^O_{F5} -> ^6^E_{F5}'
+  perturbed structure: '^2^O_{F5} -> ^6^E_{F5}'
+  DETECT  api.notation.compiler (typecheck)
+          -> decoded=W newly_fired=None diag='typecheck: domain descent violated: O cannot descend to E'
+  DETECT  belief.inversion_gate.run_inversion_scan (isolated)
+          -> decoded=None newly_fired=[] diag='None'
+  DETECT  belief.inversion_gate.run_inversion_scan (drive-tag stripped — DISCLOSED WORKAROUND)
+          -> decoded=None newly_fired=['W'] diag='None'
+  >>> AXIS NAMED (blind): W  candidates=['W'] ambiguous=False
+  CORRECT dispatcher(axis='W') -> '^2^P_{F5} -> ^6^C_{F5}' recompiles=True
+  restored == clean structure: True
+  MIS-CORRECTION control: wrong axes that also restore -> []  holds=True
+  J2 space=40E  epsilon(uncorrected) label=None ok=False
+  J2 epsilon(corrected)   label=^6|C ok=True
+  prefixes DISTINCT: True   mode=c2_uncorrected_unrealizable
+  --- epsilon(corrected) ---
+      CAS 40-Element realization frame for the focused role:
+      - Element code: ^6|C
+      - Operator: Male - transmitting, delivering, testing, projecting, or seed-like force
+      - Domain: Mental - thought, interpretation, memory, analysis, and cognitive framing
+      - Readable meaning: mental male: transmitting, delivering, testing, projecting, or seed-like force
+      Use this realized structure as context for the next sentence.
+  CONTROL d1 wrong-axis: axes reproducing the true prefix -> []  holds=True
+  CONTROL d2 identifiability: 1/40 labels reproduce it (positive control True) holds=True
+  ==> injection verdict: FAIL  {'a_detected_by_name_blind': True, 'a2_localized': None, 'b_corrected_via_detected_axis': True, 'c_distinct_prefix': True, 'c_mode': 'c2_uncorrected_unrealizable', 'd1_wrong_axis_control': True, 'd2_identifiability_control': True, 'd_control_holds': True}
+
+==============================================================================
+MEASURED string-plane coverage (not asserted)
+==============================================================================
+  axis N: can_fire=False  shapes=[]
+  axis W: can_fire=True  shapes=['whole_object::drive_tag_stripped_transition']
+  axis F: can_fire=True  shapes=['one_element_of_bundle']
+  axis P: can_fire=False  shapes=[]
+  axis E: can_fire=False  shapes=[]
+  axis S: can_fire=False  shapes=[]
+  axis A: can_fire=False  shapes=[]
+  EFFECTIVE string-plane coverage for this loop's shapes: ['W', 'F']  (2/7)
+  E and S are hardcoded placeholders (can never fire). A is not a string
+  detector at all — it restates the rpm_satisfied argument. W cannot fire
+  on drive-tagged literals (inversion_gate.py:72 _DOMAIN_RE \b bug).
+
+==============================================================================
+INJECTED FAULT — axis A  (RPM / pathway chain)  [NUMERIC PLANE ONLY]
+==============================================================================
+  baseline axis-A resistance 1.0 fired=[]
+  injected axis-A resistance 0.857143 (severity 0.142857 = 1/7)
+  >>> AXES NAMED, UNAIDED: ['A']
+[DISCLOSE] axis_a_check_is_not_a_detector: belief.inversion_gate.axis_a_check(rpm_satisfied) is a bare if/else that restates its own argument. The previous revision listed it as an axis-A detector; it is not, and it has been removed from the detector bank. rpm_satisfied is now DERIVED from the Rust scanner's verdict instead.
+  rpm_satisfied DERIVED from the Rust verdict: False
+  corrected axis-A resistance 1.0 fired=[]
+[DISCLOSE] axis_a_correction_is_hand_written: the axis-A correction is a hand-written re-scoring of the pathway array ([0.20,0.10,0.10,0.90] -> [0.85,0.80,0.75,0.90]). No solver produced it. The numeric plane has a detector but no corrector.
+
+[STUB] STAGE 4 corrector for axis A (and E, S)
+[STUB]   why : invert_expression(src,'A') raises DeferredAxisError — there is no string-level corrector for A, E or S, so a corrected EXPRESSION never exists and joint J2 cannot be reached for these axes
+[STUB]   fix : implement an A-axis string corrector (rewrite drive-tagged stage literals so upstream stages dominate), or lift the Rust cas-engine/src/rpm/recursive.rs solver output back into notation
+  [STUB consequence] axis A reaches STAGE 3 (detect, genuinely unaided) and a HAND-WRITTEN numeric stage-4 correction, but NOT joint J2.
+
+[STUB] STAGE 5 likelihood measurement
+[STUB]   why : no model loaded; the symbolic loop is designed to run at zero GPU and zero API cost
+[STUB]   fix : rerun with --with-model <hf_id> on a pod; stage 5 calls the REAL mean_logprob_continuation and measures on the leak-free F28 arm with a stance-matched non-CAS control
+
+==============================================================================
+PREREGISTERED SUCCESS CRITERION — verdict
+==============================================================================
+  (a)  a blind detector NAMES the injected axis, unambiguously,
+       without ever seeing the axis or the pre-injection object
+  (a2) blind leave-one-out localizes the perturbed element (bundles)
+  (b)  the dispatcher, driven by the DETECTED axis, restores the
+       structure, it recompiles, and NO wrong axis also restores it
+  (c1) both arms realize through J2 and the prefixes DIFFER
+  (d1) no wrong-axis correction reproduces the true prefix
+  (d2) exhaustive label sweep: exactly one label reproduces it,
+       and it is the true one (pool INCLUDES the true label)
+
+  [FAIL] axis F — [reading] drive-pair fault on one path element
+          (a)  blind detect : True
+          (a2) localize     : True
+          (b)  correct      : True
+          (c)  prefix       : True [c1_both_realize_differ]
+          (d1) wrong-axis   : False
+          (d2) identifiable : True
+  [FAIL] axis N — [reading] NEGATIVE CONTROL: noetic flip on ONE isolated literal
+          (a)  blind detect : False
+          (a2) localize     : None
+          (b)  correct      : False
+          (c)  prefix       : False [c0_corrected_unrealizable]
+          (d1) wrong-axis   : None
+          (d2) identifiable : None
+  [FAIL] axis W — [reading] domain-precedence fault on a cross-domain transition
+          (a)  blind detect : True
+          (a2) localize     : None
+          (b)  correct      : True
+          (c)  prefix       : True [c2_uncorrected_unrealizable]
+          (d1) wrong-axis   : True
+          (d2) identifiable : True
+  [FAIL] axis F — [cell] drive-pair fault on one path element
+          (a)  blind detect : True
+          (a2) localize     : True
+          (b)  correct      : True
+          (c)  prefix       : True [c1_both_realize_differ]
+          (d1) wrong-axis   : False
+          (d2) identifiable : True
+  [FAIL] axis N — [cell] NEGATIVE CONTROL: noetic flip on ONE isolated literal
+          (a)  blind detect : False
+          (a2) localize     : None
+          (b)  correct      : False
+          (c)  prefix       : False [c0_corrected_unrealizable]
+          (d1) wrong-axis   : None
+          (d2) identifiable : None
+  [FAIL] axis W — [cell] domain-precedence fault on a cross-domain transition
+          (a)  blind detect : True
+          (a2) localize     : None
+          (b)  correct      : True
+          (c)  prefix       : True [c2_uncorrected_unrealizable]
+          (d1) wrong-axis   : True
+          (d2) identifiable : True
+
+  injections passing EVERY criterion: NONE
+  criteria satisfied by SOME injection: {'a': True, 'b': True, 'c1': True, 'd1': True, 'd2': True}
+  LOOP STATUS: MECHANISM_PARTIAL
+  This is MECHANISM. Efficacy needs stage 5 (a model) plus the
+  stance-matched non-CAS control at the likelihood level. Stage 5: NOT_RUN.
+
+  wrote C:\Users\wakil\OneDrive\Desktop\tksCAS\docs\working\gate5_weld\weld_run_report.json
+  stubs declared: 3   disclosures: 5
