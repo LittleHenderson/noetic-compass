@@ -754,8 +754,23 @@ RESTRAIN_WORDS = ["waited", "paused", "hesitated", "deferred", "held", "stopped"
 COVER_K_FRAC_REV02_EQUIVALENT = 32.0 / 8192.0
 COVER_K_FRAC = 0.01
 COVER_K_MIN = 8
-LAYER_SWEEP_MIN_FRAC = 0.25     # sweep_lo = round(frac * n_blocks)  (16 -> 4)
-L_STAR_MIN_FRAC = 0.375         # L_STAR_MIN = round(frac * n_blocks) (16 -> 6)
+# rev 0.4 deviation D56 (logged in PREREG Section 10 BEFORE this change and
+# BEFORE the run): the LOWER bounds are widened to the full depth. The
+# validated Stage-9 40E probe on gpt-neox-20b peaked at LAYER 2 OF 44 (shoulder
+# to L7) -- entirely below the [16, 33] window these fractions produced, so the
+# design could not select the one layer band with prior evidence. L_STAR_MIN was
+# a LOWER bound and therefore never protected the downstream-depth property it
+# was introduced for (that is L_STAR_MAX, which is unchanged): shallow layers
+# have the MOST downstream depth, not the least.
+LAYER_SWEEP_MIN_ABS = 1         # D56: sweep the full depth (was round(0.25*d))
+L_STAR_MIN_ABS = 2              # D56: avoid only embedding/first block
+# Retained for provenance; no longer used to derive the lower bounds.
+LAYER_SWEEP_MIN_FRAC_REV03 = 0.25
+L_STAR_MIN_FRAC_REV03 = 0.375
+# D56 interpretation caveat: an L* selected below this fraction of depth is
+# flagged surface-suspect (a layer-2 peak is more consistent with a token/
+# surface feature than with deep semantics).
+SHALLOW_L_STAR_CAVEAT_FRAC = 0.25
 L_STAR_MAX_FRAC = 0.75          # rev 0.3 review fix D21: downstream-depth guard
 DR_OFFSET_FRAC = 0.25           # DR_OFFSET = round(frac * n_blocks) (16 -> 4)
 TOPK_HEADS_FRAC = 0.03          # of ALL heads (16x8=128 -> 4; 32x32=1024 -> 31)
@@ -3349,8 +3364,9 @@ def derive_layer_params(n_blocks, n_heads):
     heads it returns 8 / 12 / 8 / 31, preserving the RELATIVE geometry the
     design was built on (DR sits 25% of depth upstream of AMP, not 12.5%).
     """
-    sweep_lo = max(1, int(round(LAYER_SWEEP_MIN_FRAC * n_blocks)))
-    l_star_min = max(2, int(round(L_STAR_MIN_FRAC * n_blocks)))
+    # D56: lower bounds are now absolute (full-depth sweep), not fractions.
+    sweep_lo = LAYER_SWEEP_MIN_ABS
+    l_star_min = L_STAR_MIN_ABS
     l_star_max = min(n_blocks - 2,
                      max(l_star_min, int(round(L_STAR_MAX_FRAC * n_blocks))))
     dr_offset = max(1, int(round(DR_OFFSET_FRAC * n_blocks)))
@@ -4016,16 +4032,48 @@ def main():
         "floor_statistic": "mean of F5-vs-neutral and F2-vs-neutral (matches best_acc)",
     }
 
-    if l_star < l_star_min:
-        report["aggregate"] = {
-            "status": "ABORT_GUARD_LAYER",
-            "reason": (f"L*={l_star} < {l_star_min}: L_dr = L*-{dr_offset} would "
-                       "not be strictly upstream with margin; preregistered "
-                       "hard abort, no fallback")}
-        write_report(report, report_path)
-        print("[abort] ABORT_GUARD_LAYER")
-        return 0
+    # D56: the hard ABORT_GUARD_LAYER is REPLACED by a per-test VACUOUS. A
+    # shallow L* is now a legitimate selection (the validated 40E peak was at
+    # layer 2 of 44), and AMP-F5 is sited AT L* so it is well-defined at any
+    # depth. Only DR/CONN need an upstream site; when none exists they -- and
+    # only they -- are stamped VACUOUS_NO_UPSTREAM_SITE and the run continues.
+    # D56: DR_OFFSET ADAPTS to a shallow L* instead of the test dying. The
+    # preregistered offset is 0.25*depth, but it cannot exceed L*-1 or the rail
+    # site would be at/above the embedding. Taking the largest VALID upstream
+    # gap keeps DR/CONN evaluable at any selected depth; the realised offset is
+    # reported so a reader sees when it was reduced.
+    dr_offset_preregistered = int(dr_offset)
+    dr_offset = max(1, min(dr_offset_preregistered, l_star - 1))
+    report["discover"]["dr_offset_preregistered"] = dr_offset_preregistered
+    report["discover"]["dr_offset_realised"] = int(dr_offset)
+    report["discover"]["dr_offset_reduced_for_shallow_l_star"] = bool(
+        dr_offset < dr_offset_preregistered)
     l_dr = l_star - dr_offset
+    no_upstream_site = bool(l_dr < 0)
+    shallow_l_star = bool(l_star < SHALLOW_L_STAR_CAVEAT_FRAC * n_blocks)
+    report["discover"]["no_upstream_site"] = no_upstream_site
+    report["discover"]["shallow_l_star_surface_caveat"] = shallow_l_star
+    if shallow_l_star:
+        report["discover"]["shallow_l_star_caveat_text"] = (
+            f"L*={l_star} is below {SHALLOW_L_STAR_CAVEAT_FRAC:.2f} x depth "
+            f"({n_blocks}). A probe peaking this shallow is prima facie more "
+            "consistent with a SURFACE/token-level feature than with deep "
+            "semantics (cf. the standing surface-separability, MTC-GREY and "
+            "involution findings). No PASS in this run may be read as evidence "
+            "of deep semantic structure; it licenses only 'a direction at this "
+            "depth carries the measured content'. (D56)")
+        print(f"[discover] shallow L*={l_star} -> surface caveat stamped (D56)")
+    if no_upstream_site:
+        report["discover"]["no_upstream_site_reason"] = (
+            f"L*={l_star}, DR_OFFSET={dr_offset} -> L_dr={l_dr} < 1: no valid "
+            "upstream rail site exists at this depth. DR_F5 and CONN are "
+            "VACUOUS_NO_UPSTREAM_SITE; AMP_F5 (sited AT L*) proceeds. (D56)")
+        print("[discover] no upstream site -> DR_F5/CONN VACUOUS_NO_UPSTREAM_SITE (D56)")
+        # Clamp to a valid index so nothing downstream can mis-index; the
+        # no_upstream_site FLAG (not this value) drives DR/CONN to VACUOUS, and
+        # the DR cover scoring is skipped entirely.
+        l_dr = 0
+        report["discover"]["L_dr_clamped_unused"] = True
     report["discover"]["L_dr"] = l_dr
     print(f"[discover] L*={l_star} (acc={best_acc:.3f}) L_dr={l_dr} "
           f"floor_max={floor_max:.3f}")
