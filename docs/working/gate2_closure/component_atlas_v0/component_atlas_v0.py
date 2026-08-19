@@ -613,7 +613,17 @@ RESTRAIN_WORDS = ["waited", "paused", "hesitated", "deferred", "held", "stopped"
 # and gives 40 at pythia-2.8b's 10240, so the rail cut keeps its RELATIVE
 # strength across scales -- the same invariant-units argument as D12, which
 # COVER_K was originally (and inconsistently) exempted from.
-COVER_K_FRAC = 32.0 / 8192.0
+# rev 0.3 deviation D31 (logged in PREREG Section 10 BEFORE this change and
+# BEFORE the confirmatory run): raised from 32/8192 = 0.391% to 1.0% after the
+# D28 preflight returned go=false with DR_F5 behavioural-change 0.50 < 0.60
+# (AMP_F5 1.00, RS_F5 0.833 both cleared). D28 explicitly sanctions changing
+# intervention STRENGTH on a NO-GO, and the preflight reads no test statistic,
+# so this cannot be tuned toward a pass. Exactly ONE step is authorised: if the
+# re-run preflight still shows DR_F5 < 0.60, the fallback is to run as-is and
+# accept DR_F5/CONN VACUOUS -- NOT to widen again. The rev-0.2-equivalent
+# fraction (0.391%) is retained below for provenance.
+COVER_K_FRAC_REV02_EQUIVALENT = 32.0 / 8192.0
+COVER_K_FRAC = 0.01
 COVER_K_MIN = 8
 LAYER_SWEEP_MIN_FRAC = 0.25     # sweep_lo = round(frac * n_blocks)  (16 -> 4)
 L_STAR_MIN_FRAC = 0.375         # L_STAR_MIN = round(frac * n_blocks) (16 -> 6)
