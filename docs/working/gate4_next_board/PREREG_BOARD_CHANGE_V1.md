@@ -1068,3 +1068,46 @@ meaningful.
 *(Any change after the first `--stage label` call must be recorded here with a timestamp and a reason.
 Any gate moved after seeing data invalidates this preregistration. Using `--allow-reasoning-only`, or
 any override that relaxes a floor, is a deviation and must be logged here.)*
+
+---
+
+## AMENDMENT A1 — 2026-08-19 — generation token budget 800 -> 4000
+
+**Logged BEFORE the pilot run, as required. Owner-approved.**
+
+**What changes:** `BC_MAXTOK_GEN` 800 -> **4000**. Generation only. No reader budget, no metric,
+no gate, no threshold, no control and no panel design changes.
+
+**Why.** The frozen 800 was set on a MISDIAGNOSIS carried in from the retired next-board run.
+The symptom recorded as "DEFECT 1 -- a 25x generator length gap ... gemini produced ~140-character
+turns" was read as a GENERATOR STYLE confound and remedied with `MIN_TURN_CHARS=200` plus
+regeneration. That remedy cannot work: the true cause is that reasoning/thinking tokens are
+billed against `max_tokens` but never returned, so 800 is a DETERMINISTIC ceiling and every
+regeneration attempt hits the identical wall.
+
+Measured before this amendment (~$1 of diagnostic calls, no pilot labelling):
+
+| generator | at `max_tokens=800` | given room |
+|---|---|---|
+| `gemini-2.5-flash` | `finish='length'`, answer **121-131 chars**, `completion_tokens=30` | 4000 -> `stop`, **3392 chars** |
+| `glm-4.6` | `finish='length'`, answer **0 chars**, reasoning 3252 chars, `completion_tokens=800` | 2000 -> `stop`, **3675 chars** |
+| `deepseek-v4-pro` | passes at turn 0, fails as context grows | fine |
+| `qwen3.8-max` | passes | fine |
+
+End-to-end confirmation: an 8-conversation smoke at 800 produced **2 surviving conversations,
+both `qwen`**. The other three generators produced zero.
+
+**Why it invalidated the pilot rather than merely degrading it.** The pilot's only output is
+`r̂`, which sizes the full run via `K_neutral = clamp(ceil(40/(2.98·r̂)), 60, 120)`. At 800 the
+corpus collapses to a SINGLE generator, so `r̂` would not be the quantity that formula is
+defined on; CONTROL 9 (generator identity) would collapse to one level; and the
+generator != labeller rotation the three-panel design rests on would break.
+
+**Direction of risk, stated in advance.** Longer turns are *a priori* easier for readers to
+label and may raise agreement and coverage. That helps Gate 0 and could flatter the study.
+Mitigation: Gate 0 floors are UNCHANGED by this amendment, and the realised turn-length
+distribution per generator is reported so a reader can see whether length is doing work. This
+amendment does not touch any gate.
+
+**Also unchanged:** the prereg's own honest expectation that `VACUOUS` on Claim 2 remains the
+single likeliest outcome, for want of model-initiated changes.
