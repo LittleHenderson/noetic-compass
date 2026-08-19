@@ -68,3 +68,36 @@ bank, not about the redesign — which did its job and moved the failure one lev
    untested here.
 3. **Selectivity is the whole game.** Any rev 0.4 must be judged on beating size-matched
    controls, because raw effect size is now demonstrably easy to obtain and worthless alone.
+
+## CORRECTION appended 2026-08-19 (PREREG rev 0.4, deviation D45 — disclosure only; no number above changes)
+
+Two statements in this document are wrong as written. The rev-0.3 **numbers** stand unamended;
+what follows corrects their **description**, under the same rule that governs D18 and D30.
+
+1. **The cross-rail sentence above (lines 34–36) misnames its own quantity.** `effect_size_cross_rail
+   = 0.4626` is the **F2 judge bank generated with `u_F5` removed**, measured on `uF2` against
+   `base_f2` — i.e. **COLLATERAL DAMAGE** (removing `u_F5` costs F2 content on F2 prompts). It is
+   **not** "the F2 direction moving F5 content." The quantity that sentence actually describes is
+   `cross_direction_drop = 0.1163`, which is **3.1× SMALLER** than the target's `0.3660`, and the
+   code's own `drop > cross_drop` leg **PASSED**.
+2. **The two effect sizes were standardized by different denominators** (std_F5 = 1.5060,
+   std_F2 = 1.1758), so the reported ratio 1.903 overstates that leg by ~28%. On a common raw scale
+   it is **1.486** (raw cross-rail F2 drop 0.5439 vs 0.3660); normalized by each bank's own dynamic
+   range it is **1.716** (27.4% of the F2 range 1.9820 vs 16.0% of the F5 range 2.2886).
+   **The failure survives every renormalization** — the gate needs ≤ 0.5× — so this is a precision
+   fix, not a rescue.
+3. **Which legs actually failed.** Of the four legs of `beats_matched_and_cross_controls`,
+   `drop > cross_direction_drop` PASSED (0.3660 > 0.1163) and `both_arms_hold` PASSED
+   (`p_vs_control_mean` 5.515e-05, `p_vs_baseline` 0.01664). **Only the two matched-control-ensemble
+   legs failed:** `drop > max_matched_control_drop` (0.3660 vs 0.9767) and `control_ensemble_p`
+   (0.16, from 3 of 24 controls at or above target — the target sat at the 87.5th percentile of its
+   own null). Both run through a control family that was, uniquely in the battery, neither
+   orthogonalized against its target nor dose-matched to it. PREREG rev 0.4 deviations D37–D39
+   rebuild it.
+4. **Point 1 of "What this changes for rev 0.4" is half right.** AMP_F5 is indeed the same
+   INTERVENTION family as the validated 107× SNR result — but an entirely different **READOUT**
+   (mean projection onto the ablated direction on generated text, 78.7% of it bank-invariant offset,
+   vs held-out probe accuracy on a bounded scale with a 0.025 chance floor) and an entirely different
+   **NULL** family (undosed, target-containing PC directions vs random same-rank orthonormal
+   subspaces). **Method — specifically readout and null construction — is very much a live variable,
+   and it is cheaper to change than scale.** PREREG rev 0.4 deviations D35 and D37–D39 act on that.

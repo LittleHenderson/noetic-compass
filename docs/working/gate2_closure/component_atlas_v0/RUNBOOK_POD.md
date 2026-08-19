@@ -11,7 +11,7 @@ Pod `w0pjqx3ndaxfkg-644110d9@ssh.runpod.io` (host `9166c3298384`), **NVIDIA A40 
   NOT under a `hub/` subdir. So export **`HF_HUB_CACHE=/workspace/cas-hf-cache`** (setting only
   `HF_HOME` makes it look in `$HF_HOME/hub` and miss the cache). pythia-160m/1b/2.8b all cached.
 
-## Run
+## Run (rev 0.3)
 ```
 export HF_HUB_CACHE=/workspace/cas-hf-cache HF_HOME=/workspace/cas-hf-cache TOKENIZERS_PARALLELISM=false
 VP=/workspace/cas-jacobian-v1-bootstrap/jacobian_lens_v1/.venv/bin/python
@@ -19,6 +19,52 @@ cd /workspace/cas-atlas-v0
 nohup $VP component_atlas_v0.py --smoke --out smoke_out > smoke.log 2>&1 &   # ~90s
 nohup $VP component_atlas_v0.py        --out full_out  > full.log  2>&1 &   # full pass
 ```
+
+## Run (REV 0.4, gpt-neox-20b bf16) — preregistered order, do not reorder
+Prereq checks before spending pod time:
+- `ls /workspace/cas-hf-cache/models--EleutherAI--gpt-neox-20b/snapshots/*/ | grep safetensors`
+  must show `model-*.safetensors`. The script now also checks this and aborts as
+  `ABORT_CACHE_FORMAT` (deviation D53), but the 5-minute manual check is still cheaper.
+- Resolve the exact commit from that snapshot directory name and pass it as `--revision`.
+  The script hard-aborts as `ABORT_UNPINNED_REVISION` without one (D32).
+- Free host RAM: accelerate buffers one shard at a time even with `device_map={"":0}`.
+- Budget 3–8 min for the 38.4 GiB read from a network volume (~1 min from local NVMe).
+
+```
+export HF_HUB_CACHE=/workspace/cas-hf-cache HF_HOME=/workspace/cas-hf-cache \
+       TOKENIZERS_PARALLELISM=false PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+VP=/workspace/cas-jacobian-v1-bootstrap/jacobian_lens_v1/.venv/bin/python
+cd /workspace/cas-atlas-v0
+REV=<40-hex commit from the snapshot dir>
+
+# 1. D34 bf16-vs-fp32 calibration on the rev-0.3 model. BINDING precondition.
+#    ~0.8-0.95 h. Writes atlas_v0_rev04_report__pythia-2.8b.json (D54), so it
+#    can never clobber the 20B artifact.
+nohup $VP component_atlas_v0.py --model EleutherAI/pythia-2.8b --dtype bfloat16 \
+     --controls 24 --rs-samples 5 --run-dr-f2 --run-rs --out calib_bf16 \
+     > calib.log 2>&1 &
+#    READ IT BEFORE STEP 3. Load-bearing quantities: behavioral_change_rate
+#    (fp32 ref DR-F5 0.469 / DR-F2 0.313 / AMP-F5 0.969 / RS 0.958) and the
+#    BASELINE-arm byte-identity counts (17, 22, 1, 1, 17). Everything else in
+#    that diff is confounded by rev-0.4 code changes (D34, corrected).
+
+# 2. 20B go/no-go preflight. ~0.15 h, dominated by the model load.
+nohup $VP component_atlas_v0.py --preflight --revision $REV --out pf20b \
+     > pf.log 2>&1 &
+#    go == false on DR-F5 -> apply the ONE authorised step (D50), log it in
+#    PREREG section 10 FIRST, then re-run the preflight:
+#      ... --preflight --revision $REV --dr-engagement-step --out pf20b_step2
+#    Second NO-GO -> DO NOT launch the battery. See PREREG section 8 stop rule.
+
+# 3. Confirmatory run. DEFAULT = F5 rail only (DR-F5 + AMP-F5 + CONN),
+#    C=24 drawn / 20 gating survivors, no RS, no DR-F2. 1,920 units, ~2.3 h.
+nohup $VP component_atlas_v0.py --revision $REV --out rev04_out \
+     > rev04.log 2>&1 &
+```
+`--run-rs` adds 1,944 units (~1.7 h) and pushes the run to ~4.0 h on its own;
+using it is a deviation to be logged and it CHANGES THE VERDICT LABEL
+(`PASS_BOUNDED_ATLAS_V0` becomes reachable instead of
+`PASS_BOUNDED_ATLAS_V0_F5_RAIL_ONLY`). Same for `--run-dr-f2`.
 
 ## File transfer through the SSH proxy PTY (the pattern that works)
 - Send: `gzip -c f.py | base64 -w 64 | sed 's/^/@@/'` inside a `<< 'B64EOF'` heredoc; on the pod

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""COMPONENT ATLAS v0 (rev 0.3) -- discover -> label -> ablate -> connect -> report.
+"""COMPONENT ATLAS v0 (rev 0.4) -- discover -> label -> ablate -> connect -> report.
 
 First typed map from a model's internal parts to CAS-PCBA component labels,
 judged by preregistered directional ablation predictions vs matched controls.
@@ -9,6 +9,48 @@ are OURS (CAS-PCBA types), ablation is the JUDGE. A label sticks only if its
 preregistered directional ablation prediction holds vs matched controls.
 Language discipline: "causally supports the labeling", never "found THE
 neurons". This does NOT claim the model encodes CAS.
+
+REV 0.4 CHANGES (all informed by rev-0.2 AND rev-0.3 OUTCOMES; see PREREG
+section 10, deviations D32-D45). rev 0.2 and rev 0.3 results stand UNAMENDED:
+  D32 MODEL -> EleutherAI/gpt-neox-20b. No pin is recorded anywhere for this
+      checkpoint (the validated Stage-9 40E run recorded model_revision: null),
+      so the script FAILS CLOSED: a confirmatory run aborts as
+      ABORT_UNPINNED_REVISION unless --revision <40-hex> is supplied.
+  D33 DTYPE -> bfloat16 weights (fp32 does not fit an A40: 76.74 GiB vs 44.99).
+      PREREG rev 0.3 section 1 said dtype was NOT to be lowered; rev 0.4
+      overrides that under resource pressure and carries the precision risk
+      explicitly, with fp32 ISLANDS over every measurement path.
+  D34 A pythia-2.8b bf16-vs-fp32 CALIBRATION is a declared precondition of the
+      20B confirmatory run (--dtype is a first-class flag for exactly this).
+  D35 AMP READOUT REPLACED. "mean projection onto u_F5" (78.7% bank-invariant
+      offset at rev 0.3) -> a HELD-OUT 3-way readout PROBE on the generated
+      text's activations, P(own class), bounded, chance 1/3. This is the same
+      readout FAMILY as the validated 40-Element result. The projection readout
+      is retained and reported, plus a contrast-normalized version.
+  D36 The 40-ELEMENT fixture itself is NOT reachable from this repo. The
+      substitute readout (D35) is preregistered explicitly; nothing is silently
+      invented. See PREREG section 2.6.
+  D37 AMP CONTROLS ORTHOGONALIZED against the target (rev 0.3 was the ONLY test
+      in the battery whose controls were not) and rebuilt as two families:
+      shuffled-label refits of the SAME estimator + PC-subspace directions.
+  D38 EVERY control ensemble is now DOSE-MATCHED on removed activation mass
+      (mean |h.u|), and the target/control magnitude ratio is ALWAYS reported.
+  D39 CONTROLS ARE DAMAGE-GUARDED: per-control coherence / repetition /
+      behavioural-change are recorded, and controls failing the same guards the
+      target must clear are EXCLUDED from the gating ensemble.
+  D40 BATTERY SIZED TO FINISH: DR-F2 dropped by default, --controls 20,
+      --rs-samples 3. Unit arithmetic is written into the report.
+  D41 PASS WINDOW preregistered and reported; an empty or <2-SE window stamps
+      VACUOUS_NO_PASS_REGION instead of an uninterpretable FAIL.
+  D42 MEASURABILITY FLOOR reported: the bf16 quantum and each test's
+      effect-to-quantum ratio, so a null below the instrument's resolution
+      reads as UNINFORMATIVE rather than as evidence.
+  D43 Peak VRAM and per-stage wall-clock are captured (the single largest gap
+      in the 20B record is that neither was ever measured).
+  D44 Cross-rail selectivity is now computed on the SAME bounded readout for
+      both legs, so the two effect sizes are commensurable.
+  D45 rev-0.3 RESULT document mis-describes its own cross-rail number;
+      disclosed, per the D18/D30 precedent.
 
 REV 0.3 CHANGES (all informed by rev 0.2 OUTCOMES; see PREREG section 10):
   1. RS REDESIGN. The rev-0.2 RS arm was gated on an argmax-thresholded
@@ -61,20 +103,36 @@ char-ngram surface control plus the binding interpretation rule; CAS-specificity
 stays GREY; "causally supports" language discipline; fail-closed unpinned
 revision handling.
 
-Preregistration: PREREG_COMPONENT_ATLAS_V0.md (same directory, rev 0.3). This
+Preregistration: PREREG_COMPONENT_ATLAS_V0.md (same directory, rev 0.4). This
 script is the executable copy of that document; any divergence is a bug against
 prereg.
 
 Target environment: RunPod research venv, HF_HUB_CACHE=/workspace/cas-hf-cache.
-Run:
-  python component_atlas_v0.py                       # full (pythia-2.8b, GPU)
+Set PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True in the LAUNCH COMMAND (the
+module also sets it before importing torch, as a belt to that braces).
+Run, in the preregistered order:
+  # 1. D34 calibration -- a BINDING precondition, on the rev-0.3 model.
+  #    The report filename automatically carries the model tag, so this can
+  #    never overwrite the 20B rev-0.4 artifact even with --out omitted.
+  python component_atlas_v0.py --model EleutherAI/pythia-2.8b \
+      --dtype bfloat16 --controls 24 --rs-samples 5 --run-dr-f2 --run-rs \
+      --out calib_bf16
+  # 2. 20B go/no-go preflight (reads no test statistic).
+  python component_atlas_v0.py --preflight --revision <40-hex>
+  # 3. Confirmatory run. DEFAULT BATTERY = F5 rail only (DR-F5 + AMP-F5 +
+  #    CONN), C=24 drawn / 20 gating survivors, no RS, no DR-F2: 1,920 units,
+  #    ~2.3 h projected at 20B bf16 on one A40.
+  python component_atlas_v0.py --revision <40-hex>
   python component_atlas_v0.py --smoke               # tiny mechanical check
-Output: atlas_v0_rev03_report.json in --out dir (default: script directory).
-The rev-0.2 artifact atlas_v0_report.json is NEVER overwritten.
-No internet beyond the HF cache (--local-files-only supported).
+Output: atlas_v0_rev04_report.json in --out dir (default: script directory);
+non-default models get a "__<model>" suffix. The rev-0.2 artifact
+atlas_v0_report.json and the rev-0.3 artifact atlas_v0_rev03_report.json are
+NEVER overwritten.
+No internet beyond the HF cache (--local-files-only is the default).
 """
 
 import argparse
+import glob
 import hashlib
 import json
 import math
@@ -84,13 +142,21 @@ import sys
 import time
 from contextlib import contextmanager
 
-import numpy as np
-import torch
+# Fragmentation guard (rev 0.4). Thousands of generate() calls with varying
+# sequence lengths against ~5.4 GiB of headroom at 20B is a real
+# fragmentation-OOM risk. This is set BEFORE torch is imported so no import
+# side effect can initialize the CUDA caching allocator first (the rev-0.4
+# first draft set it inside main(), which was correct today but fragile).
+# PREFER setting it in the launch command; this is the belt to that braces.
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 
-SCHEMA_VERSION = "component_atlas_v0.3"
-REPORT_FILENAME = "atlas_v0_rev03_report.json"
-PREFLIGHT_FILENAME = "atlas_v0_rev03_preflight.json"
-DEFAULT_MODEL = "EleutherAI/pythia-2.8b"
+import numpy as np  # noqa: E402
+import torch  # noqa: E402
+
+SCHEMA_VERSION = "component_atlas_v0.4"
+REPORT_FILENAME = "atlas_v0_rev04_report.json"
+PREFLIGHT_FILENAME = "atlas_v0_rev04_preflight.json"
+DEFAULT_MODEL = "EleutherAI/gpt-neox-20b"
 PINNED_REVISIONS = {
     # Stage 27N pinned revision for pythia-1b (rev 0.2 model; kept for reruns).
     "EleutherAI/pythia-1b": "f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
@@ -99,6 +165,14 @@ PINNED_REVISIONS = {
     # experiment/cas-probe-pythia), mirrored at HEAD in
     # docs/working/gate2_closure/GATE2_ITEM1_CLAIMS_MATRIX.md.
     "EleutherAI/pythia-2.8b": "2a259cdd96a4beb1cdf467512e3904197345f6a9",
+    # EleutherAI/gpt-neox-20b: DELIBERATELY ABSENT (rev 0.4, deviation D32).
+    # The validated Stage-9 40E chain (probe 95.625%, ablation 66.897%, bridge
+    # +1.412) recorded model_revision: NULL in every artifact -- the checkpoint
+    # identity was never cryptographically fixed. The standing rule
+    # (GATE2_ITEM1_CLAIMS_MATRIX) forbids filling in a plausible commit, so no
+    # sha is invented here. A confirmatory rev-0.4 run therefore REQUIRES an
+    # explicit --revision <40-hex> resolved from the pod's HF cache, and aborts
+    # as ABORT_UNPINNED_REVISION without one.
 }
 
 FRAME = (
@@ -118,9 +192,14 @@ BOUNDARY = (
     "matched-taxonomy lane); it does not license generation-control claims "
     "(cite Stage 27P for the eraser channel, two families only); it does not "
     "transfer to other models, layers, hook points, or prompt distributions "
-    "without rerunning. Rev 0.3 is judged on a DIFFERENT model (pythia-2.8b) "
-    "with RE-DRAWN banks; it does not amend or supersede the rev-0.2 "
-    "NULL_ATLAS_V0 result on pythia-1b, which stands as reported."
+    "without rerunning. Rev 0.4 is judged on a DIFFERENT model "
+    "(EleutherAI/gpt-neox-20b) from rev 0.3 (pythia-2.8b) and rev 0.2 "
+    "(pythia-1b); it does not amend or supersede the rev-0.2 NULL_ATLAS_V0 or "
+    "the rev-0.3 GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE result, both of which "
+    "stand as reported. Rev 0.4 additionally runs in bfloat16 (deviation D33), "
+    "so any effect whose relative size is at or below the bf16 quantum is "
+    "reported as BELOW THE INSTRUMENT'S RESOLUTION and its null is "
+    "UNINFORMATIVE, not evidence."
 )
 
 AGGREGATE_CAVEAT = (
@@ -139,6 +218,56 @@ REV03_PROVENANCE_NOTE = (
     "reason in PREREG section 10 BEFORE any rev-0.3 run, and (b) rev 0.3 is "
     "judged on a different model with re-drawn banks. The rev-0.2 result is "
     "reported unamended."
+)
+
+REV04_PROVENANCE_NOTE = (
+    "Rev 0.4 is INFORMED BY REV-0.2 AND REV-0.3 OUTCOMES. The AMP readout "
+    "change (D35), the control-construction rebuild (D37-D39), the dropped "
+    "DR-F2 rail (D40) and the CHECK-informed reading of the battery were all "
+    "chosen AFTER seeing rev 0.3's GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE. That "
+    "is legitimate iteration, NOT post-hoc tuning, ONLY because (a) every "
+    "change is logged with date and reason in PREREG section 10 BEFORE any "
+    "rev-0.4 run, and (b) rev 0.4 is judged on a DIFFERENT model "
+    "(EleutherAI/gpt-neox-20b). The rev-0.2 and rev-0.3 results are reported "
+    "unamended. Note explicitly that dropping the DR-F2 rail is justified "
+    "PARTLY BY REV-0.3 OUTCOMES (behavioural change 0.313, targeted drop "
+    "0.00132, 48x below the bf16 quantum) and is declared as such rather than "
+    "presented as independent design. SECOND PASS (2026-08-19, still before "
+    "any rev-0.4 run): an adversarial review of the rev-0.4 draft found that "
+    "several of D32-D45 were not actually delivered by the draft as written -- "
+    "the probe readout had no viability gate and simultaneously disabled the "
+    "D41 pass window, the D39 damage guard and the C=20 floor were mutually "
+    "defeating, the dose match was reported but gated on nothing, the "
+    "measurability floor was misderived, and the battery did not fit the "
+    "window once the calibration and preflight were counted. D46-D55 repair "
+    "the draft; they are defect fixes against the design already logged, not "
+    "new science, and they are logged BEFORE any pod time is spent."
+)
+
+MEASURABILITY_NOTE = (
+    "bfloat16 carries 8 significand bits, i.e. a RAW relative quantum of 2^-8 "
+    "= 3.90625e-3. That raw figure is NOT the binding floor and rev 0.4's "
+    "first draft misused it (deviation D52): every judged quantity here is a "
+    "mean over ~n_prompts x n_continuation_positions measurements, and "
+    "independent quantization noise averages down by sqrt(n), so the EFFECTIVE "
+    "quantization floor is roughly 32x smaller at n ~ 1024. The BINDING floor "
+    "is the statistical standard error (0.2662 on the rev-0.3 AMP projection, "
+    "~25x the quantization scale). An effect at or below the EFFECTIVE "
+    "quantization floor is BELOW THE INSTRUMENT'S RESOLUTION at this dtype: "
+    "its null is UNINFORMATIVE and may not be read as evidence of absence, and "
+    "in rev 0.4's second pass it also blocks a PASS rather than merely "
+    "labelling a null. The statistical floor is reported but is NEVER used to "
+    "reclassify a genuine statistical null as UNINFORMATIVE -- the paired "
+    "p-values already handle it. "
+    "Continuous measurements survive bf16 WEIGHTS only because every "
+    "measurement path is forced to fp32 (see provenance.precision_policy) and "
+    "every comparison is PAIRED, so systematic bf16 bias cancels between "
+    "baseline and condition on the same prompts. The DISCRETE risk does not "
+    "cancel: greedy argmax can resolve differently at near-ties, which "
+    "inflates behavioral_change_rate and destroys byte-identity tie structure. "
+    "That is what the D34 pythia-2.8b bf16-vs-fp32 calibration exists to "
+    "measure, and it must be read before this report's VACUOUS preconditions "
+    "are taken at face value."
 )
 
 # ---------------------------------------------------------------------------
@@ -650,7 +779,7 @@ PC_SUBSPACE_K = 10              # variance-carrying control-direction subspace
 CONN_MIN_EFFECT = 0.0           # CONN targeted effect must be > 0 and beat all
 N_INNER_SPLIT_SEEDS = 5         # rev 0.3: average the sweep over 5 inner splits
 N_FLOOR_TRIALS = 10             # rev 0.3: was 3; candidate set roughly doubled
-RS_N_SAMPLES = 5                # rev 0.3: seeded sampled continuations per prompt
+RS_N_SAMPLES = 3                # rev 0.4 (D40): 5 -> 3 to fit the 20B budget
 RS_TEMPERATURE = 0.7
 RS_RHO_MIN = 0.0                # bounded restoration: rho in (RS_RHO_MIN, MAX]
 RS_RHO_MAX = 1.5
@@ -668,7 +797,99 @@ RS_CTRL_SHUFFLED_FRAC = 0.5     # rev 0.3 review fix D22: half of the RS control
 
 # Smallest control count at which the control-ensemble permutation p can be
 # STRICTLY below alpha=0.05: floor is 1/(C+1), and 1/20 = 0.05 is not < 0.05.
+# This is the GATING floor -- the number of controls that must SURVIVE the D39
+# damage guard, not the number drawn.
 CONTROLS_MIN_STRICT = 20
+
+# REV 0.4 second pass, deviation D46. Rev 0.4's first draft drew exactly
+# CONTROLS_MIN_STRICT controls AND required CONTROLS_MIN_STRICT survivors of the
+# D39 damage guard, so the guard had ZERO slack: one degraded draw stamped
+# VACUOUS_CONTROL_ENSEMBLE_DEGRADED. Rev 0.3 observed exactly such a draw (the
+# AMP control whose projection ROSE by 13.2128) at C=24, i.e. roughly a 1-in-24
+# per-draw rate, which gives ~57% chance that at least one of 20 fails --
+# INDEPENDENTLY for each test. The most likely mechanical outcome of the whole
+# run would then have been GREY for a reason unrelated to the hypothesis.
+# Controls are therefore DRAWN with surplus and GATED on survivors.
+CONTROLS_DRAW_DEFAULT = 24      # draw 24, require 20 survivors
+CONTROL_GUARD_SURPLUS_MIN = 2   # drawn - gating floor must be at least this
+
+# ---------------------------------------------------------------------------
+# REV 0.4 constants (PREREG section 10, deviations D33, D35, D37-D42).
+# ---------------------------------------------------------------------------
+DEFAULT_DTYPE = "bfloat16"      # D33. fp32 at 20B is 76.74 GiB vs 44.99 on A40.
+DTYPE_CHOICES = ("float32", "bfloat16", "float16")
+# bfloat16 has 8 significand bits -> relative spacing 2^-8. Reported alongside
+# every effect so a null below the instrument's resolution is readable as such.
+DTYPE_RELATIVE_QUANTUM = {
+    "float32": 2.0 ** -24,
+    "bfloat16": 2.0 ** -8,
+    "float16": 2.0 ** -11,
+}
+
+# D35: the primary AMP readout is a HELD-OUT 3-way probe on the generated
+# text's activations (F5 / F2 / neutral), read as P(own class). Bounded in
+# [0, 1] with a defined chance floor of 1/3 -- the same readout FAMILY as the
+# validated 40-Element result (held-out probe accuracy, chance 1/40), which is
+# what gives it full dynamic range instead of rev 0.3's 78.7% dead offset.
+READOUT_PROBE_CLASSES = ("f5", "f2", "neutral")
+READOUT_PROBE_CHANCE = 1.0 / len(READOUT_PROBE_CLASSES)
+AMP_PRIMARY_READOUT = "probe_p"     # "probe_p" | "proj"
+DR_PRIMARY_READOUT = "proj"         # DR's signature is presence collapse
+
+# D37: AMP control ensemble composition, mirroring the RS design.
+AMP_CTRL_SHUFFLED_FRAC = 0.5
+
+# D38: dose matching. "Dose" is REMOVED ACTIVATION MASS, mean |h.u| over the
+# judge prompts on the clean model -- NOT vector norm, which is vacuous here
+# because every direction is already a unit vector.
+DOSE_MATCH_TOL = 0.25           # accept a control within +/-25% of target dose
+DOSE_MATCH_TRIES = 64           # numpy-only; costs no GPU generation
+
+# D47 (rev 0.4 second pass): dose matching is now GATING, not merely reported.
+# The rev-0.4 first draft accept/rejected into the band, silently returned the
+# CLOSEST draw on failure with matched=False, and let nothing depend on it. The
+# direction of risk is INVERTED relative to rev 0.3: AMP controls are now
+# orthogonalized against u_F5 and drawn from MEAN-CENTRED bases, while the AMP
+# target's dose is ~78.7% grand-mean offset -- so if the band is unreachable,
+# every control is a systematically WEAKER perturbation than the target and a
+# PASS is uninterpretable. That is the exact mirror of the defect rev 0.4 was
+# created to fix, and PREREG's reading rule previously covered only the FAIL
+# direction.
+DOSE_MATCHED_MIN_FRAC = 0.90    # >= 90% of the GATING controls inside the band
+DOSE_RATIO_LO = 0.80            # target/control-mean magnitude ratio band
+DOSE_RATIO_HI = 1.25
+
+# D41: preregistered pass window on the primary readout.
+PASS_WINDOW_MIN_SE = 2.0        # narrower than this -> VACUOUS_NO_PASS_REGION
+# D48 (rev 0.4 second pass): an SE-only width rule is INERT in exactly the
+# failure mode D41 exists to catch. If the readout saturates (which PREREG 2.6
+# itself predicts for a 3-class probe fit on 96 rows in 6144 dims), the baseline
+# sd goes to ~0, se goes to 0, and `width/se` is never computed -- so
+# VACUOUS_NO_PASS_REGION could never fire. The window must therefore ALSO clear
+# an ABSOLUTE floor expressed as a fraction of the readout's own usable range.
+PASS_WINDOW_MIN_ABS_FRAC = 0.05
+
+# D49 (rev 0.4 second pass): held-out readout-probe VIABILITY gate. Separation
+# on 96 fit rows in 6144 dimensions is perfect by construction, so
+# `fit_accuracy_in_sample_reported_only` is uninformative and P(own class) can
+# saturate near 0/1 with sd ~ 0. In that regime the probe readout is a squashed
+# monotone function of a near-u_F5 projection whose squash REDUCES sensitivity,
+# the size of any drop is uninterpretable (PREREG 2.6 concedes this), and the
+# D41 window is degenerate. The probe must therefore prove it has usable range
+# on the UNABLATED judge banks before it is allowed to be the headline readout.
+PROBE_VIABILITY_MIN_SD = 0.02          # per-class sd of P(own class)
+PROBE_VIABILITY_MIN_ACC_OVER_CHANCE = 0.10   # held-out accuracy minus chance
+
+# D50 (rev 0.4 second pass): ONE bounded, declared DR-engagement step at 20B,
+# usable only after a logged 20B preflight NO-GO. D31's single authorised step
+# was scoped to rev 0.3 / pythia-2.8b and is NOT carried over implicitly.
+COVER_K_FRAC_STEP2 = 0.02
+
+# D51 (rev 0.4 second pass): the D21 tie-break was inert. `abs(v - best) <=
+# 1e-12` on a continuous 5-seed-averaged margin means exact ties essentially
+# never occur, so "shallowest tied block at or above L_STAR_MIN" never ran and
+# ABORT_GUARD_LAYER was the only guard against a shallow argmax.
+MARGIN_TIE_REL_TOL = 1e-4
 
 _HOOKS_ACTIVE = False           # clean-pass runtime guard (see clean_pass)
 
@@ -965,31 +1186,155 @@ def build_banks(smoke, seed):
 # Model loading / hooks
 # ---------------------------------------------------------------------------
 
-def load_model_and_tokenizer(model_id, revision, device, local_files_only):
+_TORCH_DTYPES = {
+    "float32": torch.float32,
+    "bfloat16": torch.bfloat16,
+    "float16": torch.float16,
+}
+
+
+def pin_precision_backends():
+    """Pin every reduced-precision shortcut OFF (rev 0.4, deviation D33).
+
+    `allow_bf16_reduced_precision_reduction` DEFAULTS TO TRUE in PyTorch and
+    permits a bf16 matmul to ACCUMULATE in bf16 rather than fp32. With bf16
+    weights that is the difference between a 6144-dim dot product whose error
+    averages down as eps*||h||/sqrt(12n) (negligible) and one that does not
+    (fatal for a 0.366-sized drop on a 10.7 baseline). tf32 stays pinned off
+    for the same reason it was in rev 0.3: the fp32 islands below depend on it.
+    """
+    applied = {}
+    for path, val in (
+            ("cuda.matmul.allow_tf32", False),
+            ("cudnn.allow_tf32", False),
+            ("cuda.matmul.allow_bf16_reduced_precision_reduction", False),
+            ("cuda.matmul.allow_fp16_reduced_precision_reduction", False)):
+        parts = path.split(".")
+        obj = torch.backends
+        ok = True
+        for a in parts[:-1]:
+            obj = getattr(obj, a, None)
+            if obj is None:
+                ok = False
+                break
+        if not ok or not hasattr(obj, parts[-1]):
+            applied[path] = "unavailable"
+            continue
+        try:
+            setattr(obj, parts[-1], val)
+            applied[path] = bool(getattr(obj, parts[-1]) == val)
+        except Exception:  # pragma: no cover - CPU-only builds
+            applied[path] = "unavailable"
+    return applied
+
+
+def promote_lm_head_fp32(model):
+    """fp32 ISLAND over the final norm + unembedding (rev 0.4, deviation D33).
+
+    Highest-value island in the budget: greedy argmax, the D1 hedge probability
+    MASS and the D13 CHECK gate score in nats ALL read the logits, and bf16
+    logit error near |logit| = 15 is ~0.059 absolute -- a ~6% MULTIPLICATIVE
+    error on each softmax probability. Cost at 20B is +0.58 GiB against ~6.6
+    GiB of headroom.
+
+    These are dtype CASTS, not interventions. They are installed permanently,
+    for generation AND for the clean pass alike, so they cannot introduce an
+    asymmetry between the two; they deliberately do NOT touch _HOOKS_ACTIVE.
+    """
+    info = {"final_norm": None, "lm_head": None, "status": "UNAVAILABLE"}
+    norm = None
+    for path in (("gpt_neox", "final_layer_norm"), ("model", "norm"),
+                 ("transformer", "ln_f")):
+        obj, ok = model, True
+        for a in path:
+            if hasattr(obj, a):
+                obj = getattr(obj, a)
+            else:
+                ok = False
+                break
+        if ok:
+            norm, info["final_norm"] = obj, ".".join(path)
+            break
+    head = None
+    for name in ("embed_out", "lm_head"):
+        h = getattr(model, name, None)
+        if h is not None:
+            head, info["lm_head"] = h, name
+            break
+    if norm is None or head is None:
+        return info
+
+    def _cast_pre(module, args):
+        if args and isinstance(args[0], torch.Tensor) \
+                and args[0].dtype != torch.float32:
+            return (args[0].to(torch.float32),) + tuple(args[1:])
+        return None
+
+    try:
+        norm.float()
+        head.float()
+        norm.register_forward_pre_hook(_cast_pre)
+        head.register_forward_pre_hook(_cast_pre)
+    except Exception as e:  # pragma: no cover
+        info["error"] = str(e)
+        return info
+    info["status"] = "APPLIED"
+    return info
+
+
+def load_model_and_tokenizer(model_id, revision, device, local_files_only,
+                             dtype_name=DEFAULT_DTYPE, use_device_map=True):
+    """Load with the rev-0.4 flags (deviation D33).
+
+    device_map={"": idx} makes accelerate stream shard-by-shard STRAIGHT TO
+    GPU: host-RAM peak drops from ~38.4 GiB (which the rev-0.3
+    low_cpu_mem_usage + model.to(device) path needs to stage at 20B, and which
+    OOMs the container before VRAM is ever touched) to one shard. `.to(device)`
+    must then NOT be called -- it warns or raises on an accelerate-dispatched
+    model. {"": idx} is used rather than "auto" on purpose: "auto" may decide
+    to CPU-offload tail layers on its own, and offloading even one layer costs
+    ~0.47 GB of PCIe traffic per token for memory that is not needed.
+    """
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
+    torch_dtype = _TORCH_DTYPES[dtype_name]
     kwargs = dict(
-        attn_implementation="eager",
+        attn_implementation="eager",   # MANDATORY, not stylistic: the head
+                                       # pre-hook slices the attention
+                                       # out-projection input in concat head
+                                       # layout, which SDPA/flash do not expose
         use_safetensors=True,
         low_cpu_mem_usage=True,
         local_files_only=local_files_only,
     )
     if revision:
         kwargs["revision"] = revision
+    dispatched = False
+    dev_str = str(device)
+    if use_device_map and dev_str.startswith("cuda"):
+        idx = 0
+        if ":" in dev_str:
+            try:
+                idx = int(dev_str.split(":", 1)[1])
+            except ValueError:
+                idx = 0
+        kwargs["device_map"] = {"": idx}
+        dispatched = True
     try:
         model = AutoModelForCausalLM.from_pretrained(
-            model_id, dtype=torch.float32, **kwargs)
+            model_id, dtype=torch_dtype, **kwargs)
     except TypeError:
         # older transformers: dtype kw not accepted yet
         model = AutoModelForCausalLM.from_pretrained(
-            model_id, torch_dtype=torch.float32, **kwargs)
+            model_id, torch_dtype=torch_dtype, **kwargs)
     tok = AutoTokenizer.from_pretrained(
         model_id, revision=revision, local_files_only=local_files_only)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
-    model.to(device)
+    if not dispatched:
+        model.to(device)
     model.eval()
-    return model, tok
+    return model, tok, dispatched
 
 
 _SHA40 = re.compile(r"^[0-9a-f]{40}$")
@@ -1065,13 +1410,22 @@ class ForwardEdit:
 
 
 def make_projection_removal(u_np):
-    """h <- h - (h.u)u at ALL positions (learned-direction removal)."""
-    u = torch.tensor(np.asarray(u_np, dtype=np.float32))
+    """h <- h - (h.u)u at ALL positions (learned-direction removal).
+
+    REV 0.4 (deviation D33): the removal is computed in fp32 and cast back.
+    Rev 0.3 did `uu = u.to(dtype=h.dtype)`, so under bf16 weights the ENTIRE
+    removal -- dot product, scale, subtraction -- would run in bf16 and a small
+    projection component would be rounded away BEFORE it was ever subtracted.
+    This is the INTERVENTION itself; if it is lossy the experiment measures
+    nothing. Cost is one fp32 copy of [1, seq, hidden] per hook call.
+    """
+    u32 = torch.tensor(np.asarray(u_np, dtype=np.float32))
 
     def fn(h):
-        uu = u.to(device=h.device, dtype=h.dtype)
-        proj = torch.matmul(h, uu).unsqueeze(-1) * uu
-        return h - proj
+        uu = u32.to(device=h.device, dtype=torch.float32)
+        h32 = h.to(torch.float32)
+        proj = torch.matmul(h32, uu).unsqueeze(-1) * uu
+        return (h32 - proj).to(h.dtype)
 
     return fn
 
@@ -1299,6 +1653,384 @@ def shuffled_label_dir(rows_a, rows_b, rng, ortho_to=None):
     return unit(v)
 
 
+def fit_readout_probe(rows_by_class, seed):
+    """HELD-OUT 3-way readout probe on generated-text activations (D35).
+
+    THE PROBE CONTRACT IS PINNED to the one that produced the validated 40E
+    numbers (95.625% held-out at layer 2 of 44 on GPT-NeoX-20B):
+    StandardScaler + LogisticRegression(C=0.1, max_iter=1000,
+    class_weight='balanced', solver='lbfgs'), multinomial by lbfgs default.
+    `n_jobs` is deliberately NOT passed (it is a no-op on sklearn >= 1.8 and
+    emits a FutureWarning). lbfgs may hit max_iter without converging; the 40E
+    run's ConvergenceWarning is on the record and the result stood.
+
+    Fit on the FIT half's BASELINE generations only, evaluated on JUDGE-half
+    conditions -- discovery and judgment stay disjoint at the frame level,
+    exactly as the projection readout already required.
+    """
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    classes = [c for c in READOUT_PROBE_CLASSES if len(rows_by_class.get(c, [])) > 0]
+    if len(classes) < 2:
+        return None, {"status": "UNAVAILABLE_TOO_FEW_CLASSES"}
+    X = np.concatenate([np.asarray(rows_by_class[c], dtype=np.float64)
+                        for c in classes], axis=0)
+    y = np.concatenate([[i] * len(rows_by_class[c]) for i, c in enumerate(classes)])
+    pipe = make_pipeline(
+        StandardScaler(),
+        LogisticRegression(C=0.1, max_iter=1000, class_weight="balanced",
+                           solver="lbfgs"))
+    pipe.fit(X, y)
+    meta = {
+        "status": "FITTED",
+        "classes": classes,
+        "chance_level": float(1.0 / len(classes)),
+        "n_fit_rows_per_class": {c: int(len(rows_by_class[c])) for c in classes},
+        "fit_accuracy_in_sample_reported_only": float(pipe.score(X, y)),
+        "contract": ("StandardScaler + LogisticRegression(C=0.1, "
+                     "max_iter=1000, class_weight='balanced', solver='lbfgs') "
+                     "-- pinned to the validated 40-Element probe contract"),
+        "fit_data": ("FIT-half baseline generations only, clean re-forward, "
+                     "block L*, mean over continuation positions"),
+    }
+    return pipe, meta
+
+
+def attach_probe_readout(measure, pipe, classes, class_name):
+    """Write P(class_name) per judge prompt into a measure dict (D35)."""
+    if pipe is None or class_name not in classes:
+        measure["probe_p"] = None
+        return measure
+    V = np.asarray(measure.get("vec"), dtype=np.float64)
+    if V.size == 0:
+        measure["probe_p"] = None
+        return measure
+    idx = list(classes).index(class_name)
+    P = pipe.predict_proba(V)
+    measure["probe_p"] = [float(x) for x in P[:, idx]]
+    return measure
+
+
+def readout_vals(measure, key):
+    """Per-prompt readout array: 'probe_p' (D35) or a projection direction."""
+    if key == "probe_p":
+        v = measure.get("probe_p")
+        if v is None:
+            raise RuntimeError("probe readout requested but not attached")
+        return np.asarray(v, dtype=np.float64)
+    return np.asarray(measure["proj"][key], dtype=np.float64)
+
+
+def dose_matched_draw(draw_fn, rng, mag_fn, target_mag,
+                      tol=DOSE_MATCH_TOL, tries=DOSE_MATCH_TRIES):
+    """Accept/reject a control direction into the TARGET's dose band (D38).
+
+    "Dose" is REMOVED ACTIVATION MASS -- mean |h.u| over the judge prompts on
+    the clean model -- not vector norm, which is vacuous because every
+    direction here is already a unit vector and the removal is h - (h.u)u.
+
+    Rev 0.3 shipped this instrument for RS only and it immediately showed the
+    controls were 2.5x STRONGER perturbations than the target
+    (target_over_control_mean_magnitude_ratio 0.3983). AMP had no magnitude
+    data at all, which made its FAIL unreadable under PREREG's own binding
+    rule. Draws are numpy-only against a precomputed [n_judge, hidden] matrix,
+    so matching costs ZERO GPU generation.
+    """
+    best, best_mag, best_err = None, None, None
+    n = max(1, int(tries))
+    for t in range(n):
+        v = draw_fn(rng)
+        m = float(mag_fn(v))
+        err = (abs(m - target_mag) / target_mag) if target_mag > 0 \
+            else abs(m - target_mag)
+        if best is None or err < best_err:
+            best, best_mag, best_err = v, m, err
+        if err <= tol:
+            return v, m, t + 1, True
+    return best, best_mag, n, False
+
+
+def guard_controls(ctrls, base_texts=None):
+    """Apply the TARGET's own coherence/repetition guards to controls (D39).
+
+    Rev 0.3 guarded only the target condition. One AMP control produced a
+    projection INCREASE of 13.2128 -- about 5.8x the entire F5-vs-neutral
+    dynamic range -- almost certainly a broken-text draw, and it silently
+    poisoned the control mean while the control MAX became the gate the target
+    had to beat. The gating ensemble is now the GUARDED one; the unguarded
+    statistics are still reported so the exclusion is auditable and cannot be
+    used to quietly weaken the null.
+    """
+    kept, kept_idx, dropped = [], [], []
+    stats = []
+    for i, c in enumerate(ctrls):
+        rec = {
+            "index": i,
+            "coherence": float(c.get("coherence", 0.0)),
+            "repetition": float(c.get("repetition", 0.0)),
+        }
+        if base_texts is not None:
+            rec["behavioral_change_rate"] = behavioral_change_rate(
+                base_texts, c["texts"])
+        ok = (rec["coherence"] >= COHERENCE_MIN
+              and rec["repetition"] >= REPETITION_MIN)
+        rec["passes_guards"] = bool(ok)
+        stats.append(rec)
+        if ok:
+            kept.append(c)
+            kept_idx.append(i)
+        else:
+            dropped.append(i)
+    return kept, {
+        "per_control": stats,
+        "kept_indices": kept_idx,
+        "dropped_indices": dropped,
+        "n_kept": len(kept),
+        "n_dropped": len(dropped),
+        "guard_rule": (f"a control is excluded from the GATING ensemble unless "
+                       f"it clears the same guards the target must clear: "
+                       f"distinct-word ratio >= {COHERENCE_MIN} AND "
+                       f"distinct-4gram ratio >= {REPETITION_MIN}"),
+    }
+
+
+def empirical_retention_cap(base_vals, tau, retain_frac):
+    """Largest uniform readout drop that still satisfies the presence rule.
+
+    Computed EMPIRICALLY from the baseline per-prompt values rather than from a
+    Gaussian approximation (PREREG rev 0.4 section 3, deviation D41): the
+    rev-0.3 diagnosis' ~1.5625 cap was a normal-approximation figure and the
+    per-prompt distribution was never checked for normality.
+    """
+    b = np.asarray(base_vals, dtype=np.float64)
+    if b.size == 0:
+        return 0.0
+    need = retain_frac * rate_above(b, tau)
+    lo, hi = 0.0, float(max(1e-9, b.max() - min(tau, b.min()) + 1.0))
+    for _ in range(60):
+        mid = 0.5 * (lo + hi)
+        if rate_above(b - mid, tau) >= need:
+            lo = mid
+        else:
+            hi = mid
+    return float(lo)
+
+
+def pass_window(base_vals, control_drops, cap, readout_range,
+                min_se=PASS_WINDOW_MIN_SE,
+                min_abs_frac=PASS_WINDOW_MIN_ABS_FRAC):
+    """Preregistered pass window on the primary readout (D41, repaired by D48).
+
+    window = (max guarded control drop, cap]. If it is EMPTY, narrower than
+    `min_se` standard errors of the baseline readout, OR narrower than
+    `min_abs_frac` of the readout's own usable range, the test cannot
+    distinguish a true effect from the high-variance nuisance statistic that is
+    the max of C control draws, and the preregistered outcome is
+    VACUOUS_NO_PASS_REGION -- a cheap declared outcome instead of a full-cost
+    FAIL that then gets over-interpreted as evidence against the hypothesis.
+
+    THE ABSOLUTE TERM IS NOT DECORATION (D48). The SE-only rule of the rev-0.4
+    first draft evaluated `se > 0 and (width / se) < min_se`, which is FALSE
+    whenever se == 0 -- i.e. it could NEVER fire in exactly the saturated-probe
+    regime PREREG 2.6 predicts and D41 was created to catch. `readout_range` is
+    the readout's usable span (baseline minus chance for a bounded probe
+    readout; the baseline-vs-other-class contrast range for a projection), so
+    the absolute term stays meaningful when the variance term collapses.
+    """
+    b = np.asarray(base_vals, dtype=np.float64)
+    n = max(1, b.size)
+    se = float(b.std(ddof=1) / math.sqrt(n)) if n > 1 else 0.0
+    floor = float(max(control_drops)) if control_drops else 0.0
+    width = float(cap - floor)
+    rng_ = abs(float(readout_range)) if readout_range else 0.0
+    abs_min = float(min_abs_frac * rng_)
+    too_narrow_se = bool(se > 0 and (width / se) < min_se)
+    # se == 0 is the SATURATION signature, not a pass: treat a collapsed
+    # variance as failing the variance term rather than skipping it.
+    se_degenerate = bool(se <= 0.0)
+    too_narrow_abs = bool(rng_ > 0 and width < abs_min)
+    return {
+        "scale": "primary readout of this test",
+        "control_floor_max_guarded_control_drop": floor,
+        "cap": float(cap),
+        "width": width,
+        "readout_usable_range": rng_,
+        "baseline_standard_error": se,
+        "baseline_se_degenerate": se_degenerate,
+        "width_in_standard_errors": float(width / se) if se > 0 else None,
+        "min_width_standard_errors": float(min_se),
+        "min_width_absolute": abs_min,
+        "min_width_fraction_of_range": float(min_abs_frac),
+        "empty": bool(width <= 0.0),
+        "underpowered": bool(too_narrow_se or too_narrow_abs or se_degenerate),
+        "underpowered_reason": (
+            "empty" if width <= 0.0 else
+            "baseline se is degenerate (saturated readout)" if se_degenerate else
+            "narrower than the standard-error minimum" if too_narrow_se else
+            "narrower than the absolute fraction-of-range minimum"
+            if too_narrow_abs else None),
+        "rule": ("declared BEFORE the run: an empty window, one narrower than "
+                 "the preregistered standard-error minimum, one narrower than "
+                 "the preregistered fraction of the readout's usable range, or "
+                 "one whose baseline standard error has collapsed to zero "
+                 "(saturation), stamps VACUOUS_NO_PASS_REGION rather than FAIL"),
+    }
+
+
+def measurability(effect, baseline, quantum, n_averaged=1, standard_error=None):
+    """Effect size against the instrument's floors (D42, repaired by D52).
+
+    THE REV-0.4 FIRST DRAFT MISDERIVED THIS AND THE MISDERIVATION DID REAL
+    DESIGN WORK. It compared the relative effect against the RAW bf16 relative
+    quantum 2^-8, and that ratio was then used to justify dropping the DR-F2
+    rail ("48x below the bf16 quantum") and to pre-label RS "not measurable".
+    Every judged quantity here is a MEAN over ~32 continuation positions x ~32
+    prompts, and independent quantization noise averages down by sqrt(n): at
+    n ~ 1024 the effective quantization floor is ~32x SMALLER than the raw
+    quantum. The BINDING floor is the STATISTICAL standard error, which on the
+    rev-0.3 AMP projection was 0.2662 -- roughly 25x larger than the
+    quantization scale. Both are now reported, the effective quantization floor
+    is what `below_dtype_quantization_floor` keys on, and the statistical floor
+    is reported separately so a null can be read as "no effect" vs "below the
+    instrument" vs "below the sample's resolving power" without guessing.
+    """
+    if baseline is None or float(baseline) == 0.0:
+        return None
+    rel = abs(float(effect) / float(baseline))
+    n_avg = max(1, int(n_averaged))
+    q_eff = float(quantum) / math.sqrt(n_avg)
+    se = None if standard_error is None else abs(float(standard_error))
+    return {
+        "relative_effect": rel,
+        "dtype_relative_quantum_raw": float(quantum),
+        "n_averaged_measurements": n_avg,
+        "dtype_relative_quantum_effective": q_eff,
+        "effect_over_effective_quantum": (float(rel / q_eff) if q_eff > 0
+                                          else None),
+        "effect_over_raw_quantum": (float(rel / float(quantum))
+                                    if quantum > 0 else None),
+        "below_dtype_quantization_floor": bool(rel <= q_eff),
+        "statistical_standard_error_absolute": se,
+        "effect_over_standard_error": (
+            float(abs(float(effect)) / se) if se and se > 0 else None),
+        "below_statistical_floor": (
+            bool(abs(float(effect)) <= se) if se and se > 0 else None),
+        "binding_floor": ("statistical standard error (the quantization floor "
+                          "is ~sqrt(n_averaged) times smaller and is NOT what "
+                          "binds at these sample sizes)"),
+        "gating_rule": ("only below_dtype_quantization_floor is GATING "
+                        "(VACUOUS_BELOW_INSTRUMENT_RESOLUTION). The statistical "
+                        "floor is already handled by the paired p-values and is "
+                        "reported, never used to reclassify a genuine "
+                        "statistical null as UNINFORMATIVE."),
+    }
+
+
+def probe_viability(diag, chance, min_sd=PROBE_VIABILITY_MIN_SD,
+                    min_acc_over_chance=PROBE_VIABILITY_MIN_ACC_OVER_CHANCE):
+    """Preregistered viability gate for the held-out readout probe (D49).
+
+    Two ways the substitute readout can be unusable, both predicted in advance
+    by PREREG 2.6 and neither caught by the rev-0.4 first draft:
+
+      DEAD       -- held-out accuracy on the UNABLATED judge banks is at or near
+                    chance. The probe carries no class information, so a drop in
+                    P(own class) measures nothing.
+      SATURATED  -- P(own class) sits at 0/1 with sd ~ 0. The probe is then a
+                    squashed monotone function of a projection onto a direction
+                    near u_F5, and under saturation the squash REDUCES
+                    sensitivity rather than increasing it -- the opposite of the
+                    stated rationale for the readout change. The SIZE of any
+                    drop is uninterpretable (PREREG 2.6 concedes this), and the
+                    D41 pass window degenerates because the baseline se is ~0.
+
+    A non-viable probe does NOT silently fall back into a PASS. The projection
+    readout is still computed and reported in full, but the AMP test is stamped
+    VACUOUS_READOUT_NOT_VIABLE: the headline comparison could not have been read
+    either way, which is information about the instrument, not the hypothesis.
+    """
+    per_class = (diag or {}).get("per_class") or {}
+    acc = (diag or {}).get("held_out_accuracy")
+    sds = [float(v.get("sd_p_own_class", 0.0)) for v in per_class.values()]
+    min_observed_sd = float(min(sds)) if sds else 0.0
+    acc_ok = bool(acc is not None and (float(acc) - float(chance))
+                  >= min_acc_over_chance)
+    sd_ok = bool(sds and min_observed_sd >= min_sd)
+    viable = bool(acc_ok and sd_ok)
+    if viable:
+        reason = None
+    elif not acc_ok:
+        reason = ("DEAD: held-out accuracy on the unablated judge banks "
+                  f"({acc}) does not exceed chance ({chance}) by the "
+                  f"preregistered margin {min_acc_over_chance}")
+    else:
+        reason = ("SATURATED: the smallest per-class sd of P(own class) is "
+                  f"{min_observed_sd:.5f}, below the preregistered floor "
+                  f"{min_sd}; P(own class) is pinned near 0/1, the size of any "
+                  "drop is uninterpretable, and the D41 pass window degenerates")
+    return {
+        "viable": viable,
+        "held_out_accuracy": acc,
+        "chance_level": float(chance),
+        "accuracy_over_chance": (None if acc is None
+                                 else float(float(acc) - float(chance))),
+        "min_accuracy_over_chance_required": float(min_acc_over_chance),
+        "min_per_class_sd_observed": min_observed_sd,
+        "min_per_class_sd_required": float(min_sd),
+        "accuracy_leg_holds": acc_ok,
+        "dispersion_leg_holds": sd_ok,
+        "reason": reason,
+        "rule": ("declared BEFORE the run: a probe that is DEAD (at chance) or "
+                 "SATURATED (sd ~ 0) may not serve as the headline readout; the "
+                 "test is stamped VACUOUS_READOUT_NOT_VIABLE and the projection "
+                 "readout is reported descriptively. In-sample fit accuracy is "
+                 "1.0 BY CONSTRUCTION at 96 rows in 6144 dims and is never used "
+                 "as evidence of viability."),
+    }
+
+
+def dose_gate(magnitude_meta, n_gating,
+              min_frac=DOSE_MATCHED_MIN_FRAC,
+              ratio_lo=DOSE_RATIO_LO, ratio_hi=DOSE_RATIO_HI):
+    """Preregistered dose-match gate (D47). Returns (holds, block).
+
+    Rev 0.4's first draft accept/rejected controls into the target's dose band,
+    silently returned the CLOSEST draw on failure, reported `n_dose_matched` and
+    `target_over_control_mean_magnitude_ratio` -- and gated on NEITHER. PREREG's
+    reading rule ("if the target's magnitude is far below the control mean, read
+    a FAIL as 'the comparison was not matched'") covered only the FAIL
+    direction. With the rev-0.4 controls orthogonalized and mean-centred the
+    risk is inverted: controls can be systematically WEAKER than the target, in
+    which case a PASS is uninterpretable for the mirror-image reason.
+    """
+    meta = magnitude_meta or {}
+    matched = meta.get("dose_matched")
+    ratio = meta.get("target_over_control_mean_magnitude_ratio")
+    n_req = max(1, int(round(min_frac * max(1, int(n_gating)))))
+    n_matched = (int(sum(1 for x in matched if x)) if matched is not None
+                 else None)
+    count_ok = True if n_matched is None else bool(n_matched >= n_req)
+    ratio_ok = (True if ratio is None
+                else bool(ratio_lo <= float(ratio) <= ratio_hi))
+    holds = bool(count_ok and ratio_ok)
+    return holds, {
+        "n_dose_matched": n_matched,
+        "n_dose_matched_required": n_req,
+        "count_leg_holds": count_ok,
+        "target_over_control_mean_magnitude_ratio": ratio,
+        "ratio_band": [float(ratio_lo), float(ratio_hi)],
+        "ratio_leg_holds": ratio_ok,
+        "holds": holds,
+        "rule": ("declared BEFORE the run: a control ensemble that could not be "
+                 "brought into the target's dose band is not a matched null in "
+                 "EITHER direction. Controls stronger than the target make a "
+                 "FAIL unreadable; controls weaker than the target make a PASS "
+                 "unreadable. Failure stamps VACUOUS_DOSE_UNMATCHED."),
+    }
+
+
 def slot_verb_audit(frames):
     """Machine-readable audit of PREREG 2.1's slot-filler uniqueness claim.
 
@@ -1439,7 +2171,14 @@ def clean_pass(model, tok, prompts, continuations, device, block, dirs,
         projected onto each unit direction in `dirs`;
       * mean over continuation STEPS of the total next-token probability mass
         assigned to each frozen lexicon in `mass_ids` -- computed on this same
-        clean re-forward, never with hooks active.
+        clean re-forward, never with hooks active;
+      * REV 0.4 (deviation D35): the mean-over-continuation-positions RESIDUAL
+        VECTOR itself, so a held-out readout PROBE can be applied to it. The
+        probe readout is the rev-0.4 primary AMP statistic; it is bounded with
+        a defined chance floor, unlike a raw projection whose baseline is 78.7%
+        bank-invariant offset. The vector comes from the same clean re-forward
+        and the same continuation segment as the projections, so it inherits
+        the clean-pass rule unchanged.
 
     The mass measure obeys the clean-pass rule exactly: byte-identical text
     yields byte-identical mass, i.e. exactly zero effect. Computing it with
@@ -1457,18 +2196,26 @@ def clean_pass(model, tok, prompts, continuations, device, block, dirs,
               for k, v in mass_ids.items() if len(v) > 0}
     out = {n: [] for n in names}
     mout = {k: [] for k in mass_t}
+    vecs = []
     for p, c in zip(prompts, continuations):
         enc = tok(p + c, return_tensors="pt").to(device)
         n_prompt = tok(p, return_tensors="pt")["input_ids"].shape[1]
         with torch.no_grad():
             res = model(**enc, output_hidden_states=True)
-        hs = res.hidden_states[block + 1][0].float().cpu().numpy()
+        # REV 0.4 (D33): explicit .to(torch.float32) rather than a bare
+        # .float(), so the intent survives the dtype change, then float64 in
+        # numpy. The bf16 dot-product error over 6144 dims with fp32
+        # accumulation is 1.44e-5 x ||h||, i.e. negligible -- but only because
+        # the accumulation is forced (see pin_precision_backends).
+        hs = res.hidden_states[block + 1][0].to(torch.float32).cpu().numpy()
         seg = hs[n_prompt:] if hs.shape[0] > n_prompt else hs[-1:]
+        seg = np.asarray(seg, dtype=np.float64)
         mv = (seg @ D.T).mean(axis=0)
         for i, n in enumerate(names):
             out[n].append(float(mv[i]))
+        vecs.append(seg.mean(axis=0))
         if mass_t:
-            logits = res.logits[0].float()
+            logits = res.logits[0].to(torch.float32)
             T = int(logits.shape[0])
             lo = max(n_prompt - 1, 0)
             hi = max(T - 1, lo + 1)
@@ -1478,7 +2225,8 @@ def clean_pass(model, tok, prompts, continuations, device, block, dirs,
                 mout[k].append(float(
                     probs.index_select(1, ids.to(probs.device)).sum(-1).mean()))
     return ({n: np.asarray(v) for n, v in out.items()},
-            {k: np.asarray(v) for k, v in mout.items()})
+            {k: np.asarray(v) for k, v in mout.items()},
+            np.stack(vecs) if vecs else np.zeros((0, D.shape[1])))
 
 
 def measure_condition(model, tok, prompts, texts, device, block, dirs,
@@ -1498,13 +2246,18 @@ def measure_condition(model, tok, prompts, texts, device, block, dirs,
             flat_prompts.append(p)
             flat_texts.append(s)
             gid.append(i)
-    projs, masses = clean_pass(model, tok, flat_prompts, flat_texts, device,
-                               block, dirs, mass_ids)
+    projs, masses, vecs = clean_pass(model, tok, flat_prompts, flat_texts,
+                                     device, block, dirs, mass_ids)
     gid = np.asarray(gid)
     ngroups = len(prompts)
 
     def group_mean(arr):
         return np.asarray([float(np.mean(arr[gid == i])) for i in range(ngroups)])
+
+    def group_mean_rows(arr):
+        if arr.size == 0:
+            return arr
+        return np.stack([arr[gid == i].mean(axis=0) for i in range(ngroups)])
 
     per_hedge = np.asarray([float(hedge_count(s)) for s in flat_texts])
     per_coh = np.asarray([distinct_ratio(s) for s in flat_texts])
@@ -1512,10 +2265,18 @@ def measure_condition(model, tok, prompts, texts, device, block, dirs,
     return {
         "proj": {k: [float(x) for x in group_mean(v)] for k, v in projs.items()},
         "mass": {k: [float(x) for x in group_mean(v)] for k, v in masses.items()},
+        # REV 0.4 (D35): per-prompt readout vectors, kept in memory only (never
+        # serialized into the report -- they are [n_prompts, hidden]).
+        "vec": group_mean_rows(vecs),
         "hedges": [float(x) for x in group_mean(per_hedge)],
         "mean_hedge": float(per_hedge.mean()) if per_hedge.size else 0.0,
         "coherence": float(per_coh.mean()) if per_coh.size else 0.0,
         "repetition": float(per_rep.mean()) if per_rep.size else 0.0,
+        # REV 0.4 (D39): per-prompt damage descriptors, so a control that
+        # "beat" the target can be told apart from a control that simply broke
+        # the text. Rev 0.3 recorded these for the TARGET condition only.
+        "per_coherence": [float(x) for x in group_mean(per_coh)],
+        "per_repetition": [float(x) for x in group_mean(per_rep)],
         "texts": texts,
         "sample_texts": (["|".join(t)[:400] for t in texts[:3]] if grouped
                          else texts[:3]),
@@ -1681,9 +2442,13 @@ def mem_head_scores(model, tok, usable, device, n_layers, n_heads):
             out = model(**enc, output_attentions=True)
         kp = torch.tensor(it["key_pos"], dtype=torch.long)
         for L in range(n_layers):
-            att = out.attentions[L][0]  # [heads, T, T]
+            # fp32 BEFORE the reduction (rev 0.4 second pass, D52). Under bf16
+            # weights `sel.sum(-1).float()` accumulates the sum in bf16 and only
+            # then casts, and 84 of 2,816 heads are selected off this ranking --
+            # while CHECK is the battery's sole liveness evidence.
+            att = out.attentions[L][0].to(torch.float32)  # [heads, T, T]
             sel = att[:, -1, :].index_select(1, kp.to(att.device))
-            scores[L] += sel.sum(-1).float().cpu().numpy()
+            scores[L] += sel.sum(-1).cpu().numpy()
     return scores / max(1, len(usable))
 
 
@@ -1735,9 +2500,11 @@ def induction_head_scores(model, seqs, device, n_layers, n_heads):
             out = model(input_ids=ids, output_attentions=True)
         seg = len(s) // 2
         for L in range(n_layers):
-            att = out.attentions[L][0]  # [heads, T, T]
+            # fp32 BEFORE the mean (rev 0.4 second pass, D52) -- see
+            # mem_head_scores for why this ranking must not accumulate in bf16.
+            att = out.attentions[L][0].to(torch.float32)  # [heads, T, T]
             vals = [att[:, seg + j, j + 1] for j in range(seg - 1)]
-            scores[L] += torch.stack(vals, 0).mean(0).float().cpu().numpy()
+            scores[L] += torch.stack(vals, 0).mean(0).cpu().numpy()
     return scores / max(1, len(seqs))
 
 
@@ -1772,9 +2539,10 @@ def _paired_block(base, tgt, ctrls, key, sign=+1):
     draft and is the honest direction: an effect has to differ from baseline
     AND beat the control ensemble.
     """
-    b = np.asarray(base["proj"][key], dtype=np.float64)
-    t = np.asarray(tgt["proj"][key], dtype=np.float64)
-    ctrl_mean = np.mean([c["proj"][key] for c in ctrls], axis=0) if ctrls else b
+    b = readout_vals(base, key)
+    t = readout_vals(tgt, key)
+    ctrl_mean = np.mean([readout_vals(c, key) for c in ctrls], axis=0) \
+        if ctrls else b
     zm_ctrl = all_identity_mask(tgt["texts"], ctrls)
     zm_base = identity_mask(base["texts"], tgt["texts"])
     diffs_ctrl = [float(sign * (cm - tv)) for cm, tv in zip(ctrl_mean, t)]
@@ -1794,36 +2562,102 @@ def _paired_block(base, tgt, ctrls, key, sign=+1):
     }
 
 
-def eval_dr_test(base, tgt, ctrls, cross, tau, base_other, xrail, key, okey):
-    """DR starvation with gated cross-rail selectivity."""
-    b = np.asarray(base["proj"][key])
-    t = np.asarray(tgt["proj"][key])
-    drop = float(b.mean() - t.mean())
-    ctrl_drops = [float(b.mean() - np.mean(c["proj"][key])) for c in ctrls]
-    cross_drop = float(b.mean() - np.mean(cross["proj"][key]))
-    paired = _paired_block(base, tgt, ctrls, key, sign=+1)
-    p_w = paired["p_vs_control_mean"]
-    w_stats = paired["stats_vs_control_mean"]
+def _resolve_readout(readout, key):
+    """'proj' is a mode name, not a measure key: resolve it to the direction."""
+    return key if readout in (None, "proj") else readout
+
+
+def _drive_common(base, tgt, ctrls, cross, tau, base_other, xrail, key, okey,
+                  readout, min_ctrl, quantum, magnitude_meta, cap_mode,
+                  readout_viability=None, n_averaged=1, strict_gates=True):
+    """Shared rev-0.4 evaluation body for the DR and AMP drive tests.
+
+    Everything that D37-D42 generalize across the battery lives here so that a
+    fix cannot be applied to one test and silently skipped on another -- which
+    is exactly how rev 0.3 ended up with a magnitude instrument wired to RS and
+    absent from AMP, and orthogonalized controls on RS and contaminated ones on
+    AMP.
+
+    `readout` selects the PRIMARY statistic: "probe_p" is the rev-0.4 held-out
+    readout probe (bounded, chance 1/3, full dynamic range) and `key` is the
+    projection direction retained as the reported secondary. Presence, and
+    therefore the starvation-vs-attenuation discriminator, always stays on the
+    PROJECTION, because tau is defined there.
+    """
+    proj_b = readout_vals(base, key)
+    proj_t = readout_vals(tgt, key)
+    base_rate = rate_above(proj_b, tau)
+    tgt_rate = rate_above(proj_t, tau)
+
+    # --- D39: guard the control ensemble the same way the target is guarded.
+    guarded, guard_info = guard_controls(ctrls, base_texts=base["texts"])
+
+    r_b = readout_vals(base, readout)
+    r_t = readout_vals(tgt, readout)
+    drop = float(r_b.mean() - r_t.mean())
+    ctrl_drops_all = [float(r_b.mean() - readout_vals(c, readout).mean())
+                      for c in ctrls]
+    ctrl_drops = [float(r_b.mean() - readout_vals(c, readout).mean())
+                  for c in guarded]
+    cross_drop = float(r_b.mean() - readout_vals(cross, readout).mean())
+    paired = _paired_block(base, tgt, guarded or ctrls, readout, sign=+1)
     p_ctrl = control_ensemble_p(drop, ctrl_drops)
     change = behavioral_change_rate(base["texts"], tgt["texts"])
 
-    base_rate = rate_above(b, tau)
-    tgt_rate = rate_above(t, tau)
-    d_target = effect_size(b, t)
-    d_xrail = effect_size(base_other["proj"][okey], xrail["proj"][okey])
+    # --- D44: cross-rail on the SAME bounded readout for both legs, so the two
+    # effect sizes are commensurable. Rev 0.3 standardized the target leg by
+    # std_F5 = 1.5060 and the cross-rail leg by std_F2 = 1.1758 and then
+    # compared the ratio directly, which overstated that leg by ~28%.
+    xr_b = readout_vals(base_other, readout if readout == "probe_p" else okey)
+    xr_c = readout_vals(xrail, readout if readout == "probe_p" else okey)
+    d_target = effect_size(r_b, r_t)
+    d_xrail = effect_size(xr_b, xr_c)
+    raw_xrail_drop = float(xr_b.mean() - xr_c.mean())
 
+    # Projection-scale numbers, retained verbatim so rev 0.3 stays comparable.
+    proj_drop = float(proj_b.mean() - proj_t.mean())
     res = {
-        "baseline_mean_proj": float(b.mean()),
-        "target_mean_proj": float(t.mean()),
+        "primary_readout": readout,
+        "readout_note": (
+            "PRIMARY = held-out 3-way readout probe P(own class) on the "
+            "generated text's activations: bounded, chance 1/3, full dynamic "
+            "range. Rev 0.3's raw projection readout is retained below as a "
+            "SECONDARY, together with a contrast-normalized version; on the "
+            "rev-0.3 numbers 78.7% of that projection was bank-invariant "
+            "offset, so its noise floor sat at a large fraction of the whole "
+            "signal. NOTE: contrast normalization alone is an AFFINE rescale "
+            "and changes NO p-value and NO ordering against controls -- it "
+            "fixes interpretability, not selectivity. THE READOUT-FAMILY CLAIM "
+            "IS BOUNDED (rev 0.4 second pass): probe_p comes from a regularized "
+            "linear classifier on the SAME L* residuals the projection is read "
+            "from, so it is close to a squashed monotone function of a "
+            "projection onto a direction near u_F5. What actually differs is "
+            "the sigmoid and the 3-way competition -- and under SATURATION the "
+            "squash REDUCES sensitivity rather than increasing it, which is why "
+            "the D49 viability gate must clear before this readout is allowed "
+            "to be the headline."
+            if readout == "probe_p" else
+            "PRIMARY = mean clean projection onto the target direction."),
+        "baseline_mean_readout": float(r_b.mean()),
+        "target_mean_readout": float(r_t.mean()),
+        "readout_chance_level": (READOUT_PROBE_CHANCE
+                                 if readout == "probe_p" else None),
         "targeted_drop": drop,
         "matched_control_drops": ctrl_drops,
-        "max_matched_control_drop": float(max(ctrl_drops)),
-        "cross_cover_drop": cross_drop,
-        "wilcoxon_pratt_p": p_w,
-        "wilcoxon_pratt_stats": w_stats,
-        "paired_arms": paired,
+        "max_matched_control_drop": float(max(ctrl_drops)) if ctrl_drops else None,
+        "matched_control_drops_unguarded_reported_only": ctrl_drops_all,
+        "max_matched_control_drop_unguarded_reported_only": (
+            float(max(ctrl_drops_all)) if ctrl_drops_all else None),
         "control_ensemble_p": p_ctrl,
-        "n_controls": len(ctrls),
+        "control_ensemble_p_unguarded_reported_only": control_ensemble_p(
+            drop, ctrl_drops_all),
+        "control_guard": guard_info,
+        "control_magnitude": magnitude_meta,
+        "n_controls_drawn": len(ctrls),
+        "n_controls_gating": len(guarded),
+        "wilcoxon_pratt_p": paired["p_vs_control_mean"],
+        "wilcoxon_pratt_stats": paired["stats_vs_control_mean"],
+        "paired_arms": paired,
         "legacy_sign_test_p_reported_only": sign_test_p(
             paired["diffs_vs_control_mean"]),
         "behavioral_change_rate": change,
@@ -1831,11 +2665,65 @@ def eval_dr_test(base, tgt, ctrls, cross, tau, base_other, xrail, key, okey):
         "target_presence_rate": float(tgt_rate),
         "effect_size_target": d_target,
         "effect_size_cross_rail": d_xrail,
+        "raw_cross_rail_drop": raw_xrail_drop,
+        "cross_rail_note": (
+            "effect_size_cross_rail measures COLLATERAL damage to the OTHER "
+            "rail's content on the OTHER rail's prompts caused by the SAME "
+            "targeted intervention. It is NOT 'the other rail's direction "
+            "moving this rail's content' -- that quantity is "
+            "cross_direction_drop / cross_cover_drop. Both legs are "
+            "standardized on the same readout in rev 0.4 (deviation D44)."),
         "selectivity_gate": f"|d_cross_rail| <= {SELECTIVITY_MAX_RATIO} x d_target",
         "coherence_target": tgt["coherence"],
         "repetition_target": tgt["repetition"],
         "sample_texts_target": tgt["sample_texts"],
+        # --- rev-0.3-comparable projection-scale block (secondary) ---
+        "secondary_projection": {
+            "baseline_mean_proj": float(proj_b.mean()),
+            "target_mean_proj": float(proj_t.mean()),
+            "targeted_drop": proj_drop,
+            "tau": float(tau),
+            "implied_other_class_mean": float(2.0 * tau - proj_b.mean()),
+            "contrast_dynamic_range": float(2.0 * (proj_b.mean() - tau)),
+            "targeted_drop_contrast_normalized": (
+                float(proj_drop / (2.0 * (proj_b.mean() - tau)))
+                if abs(proj_b.mean() - tau) > 1e-12 else None),
+            "offset_fraction_of_readout": (
+                float(1.0 - (2.0 * (proj_b.mean() - tau)) / proj_b.mean())
+                if abs(proj_b.mean()) > 1e-12 else None),
+            "baseline_coefficient_of_variation": (
+                float(proj_b.std() / proj_b.mean())
+                if abs(proj_b.mean()) > 1e-12 else None),
+            "cv_note": ("a small CV means the direction is dominated by "
+                        "alignment with the residual stream's large mean "
+                        "component rather than by the class contrast; rev 0.4 "
+                        "reports it rather than changing the target, because "
+                        "changing the target, the controls, the readout, the "
+                        "model AND the dtype in one revision would make the "
+                        "result uninterpretable (see PREREG section 10, "
+                        "'What rev 0.4 deliberately did NOT change')"),
+        },
+        "measurability": measurability(
+            drop, r_b.mean(), quantum, n_averaged=n_averaged,
+            standard_error=(float(r_b.std(ddof=1) / math.sqrt(r_b.size))
+                            if r_b.size > 1 else None)),
+        "readout_viability": readout_viability,
+        "dose_gate": None,
     }
+    dose_holds, dose_block = dose_gate(magnitude_meta, len(guarded))
+    res["dose_gate"] = dose_block
+
+    # --- preconditions, in preregistered order ---
+    if (strict_gates and readout_viability is not None
+            and not readout_viability.get('viable', True)):
+        res["status"] = "VACUOUS_READOUT_NOT_VIABLE"
+        res["reason"] = (
+            "the held-out readout probe failed its preregistered viability gate "
+            f"(D49): {readout_viability.get('reason')}. The projection readout "
+            "is reported in full above as a descriptive secondary, but the "
+            "rev-0.4 headline readout change (D35) did NOT take effect and no "
+            "rev-0.4 selectivity claim is licensed from this test")
+        return res
     if base_rate < BASELINE_PRESENCE_MIN:
         res["status"] = "VACUOUS"
         res["reason"] = (f"baseline presence rate {base_rate:.2f} below "
@@ -1855,87 +2743,162 @@ def eval_dr_test(base, tgt, ctrls, cross, tau, base_other, xrail, key, okey):
         res["reason"] = ("target condition failed the coherence and/or "
                          "repetition guard (fluency / degenerate-loop confound)")
         return res
-    beats_controls = (drop > max(ctrl_drops)) and (drop > cross_drop) \
-        and paired["both_arms_hold"] and (p_ctrl < CONTROL_PERM_ALPHA)
-    starves = tgt_rate < DR_PRESENCE_COLLAPSE * base_rate
-    selective = (d_target > 0) and (abs(d_xrail) <= SELECTIVITY_MAX_RATIO * d_target)
-    res["beats_matched_and_cross_controls"] = bool(beats_controls)
-    res["starvation_signature_holds"] = bool(starves)
-    res["selectivity_gate_holds"] = bool(selective)
-    res["status"] = "PASS" if (beats_controls and starves and selective) else "FAIL"
+    if len(guarded) < min_ctrl:
+        res["status"] = "VACUOUS_CONTROL_ENSEMBLE_DEGRADED"
+        res["reason"] = (
+            f"only {len(guarded)} of {len(ctrls)} controls cleared the target's "
+            f"own coherence/repetition guards, below the required "
+            f"{min_ctrl}; the control-ensemble p floor 1/(C+1) is no longer "
+            "strictly below alpha and a gate built on broken-text controls is "
+            "not a null")
+        return res
+    if strict_gates and not dose_holds:
+        res["status"] = "VACUOUS_DOSE_UNMATCHED"
+        res["reason"] = (
+            "the control ensemble could not be brought into the target's dose "
+            f"band (D47): {dose_block}. A null that is not dose-matched cannot "
+            "be read in EITHER direction -- controls stronger than the target "
+            "make a FAIL unreadable, controls weaker than the target make a "
+            "PASS unreadable")
+        return res
+    meas = res.get("measurability")
+    if (strict_gates and meas is not None
+            and meas.get('below_dtype_quantization_floor')):
+        res["status"] = "VACUOUS_BELOW_INSTRUMENT_RESOLUTION"
+        res["reason"] = (
+            "the relative effect "
+            f"{meas['relative_effect']:.3e} is at or below the EFFECTIVE dtype "
+            f"quantization floor {meas['dtype_relative_quantum_effective']:.3e} "
+            f"(raw quantum {meas['dtype_relative_quantum_raw']:.3e} divided by "
+            f"sqrt({meas['n_averaged_measurements']}) averaged measurements). "
+            "D42 is GATING for PASS in rev 0.4's second pass, not only a label "
+            "on nulls: a headline test may not PASS on a readout the artifact "
+            "itself declares unresolvable")
+        return res
+
+    # --- D41: preregistered pass window on the primary readout ---
+    res["presence_retention_cap_projection"] = empirical_retention_cap(
+        proj_b, tau, AMP_PRESENCE_RETAIN)
+    if cap_mode == "none":
+        res["pass_window"] = {
+            "applies": False,
+            "control_floor_max_guarded_control_drop": (
+                float(max(ctrl_drops)) if ctrl_drops else None),
+            "reason": ("this test's signature (starvation) has NO upper ceiling "
+                       "on the drop, so there is no bounded pass window that "
+                       "could be empty; the control floor is reported alone"),
+        }
+    else:
+        cap = (float(r_b.mean() - READOUT_PROBE_CHANCE)
+               if cap_mode == "readout_floor"
+               else empirical_retention_cap(proj_b, tau, AMP_PRESENCE_RETAIN))
+        # D48: the readout's USABLE RANGE, so the window has an absolute floor
+        # that survives a collapsed baseline variance. For the bounded probe
+        # readout that is baseline-minus-chance; for the projection it is the
+        # own-class-vs-other-class contrast range 2*(mean - tau), which is the
+        # exact quantity rev 0.3's diagnosis showed was only 21.3% of the raw
+        # readout (2.2886 of 10.7386).
+        readout_range = (float(r_b.mean() - READOUT_PROBE_CHANCE)
+                         if cap_mode == "readout_floor"
+                         else float(2.0 * (proj_b.mean() - tau)))
+        window = pass_window(r_b, ctrl_drops, cap, readout_range)
+        window["applies"] = True
+        window["cap_definition"] = (
+            "baseline readout minus the probe's chance level (the largest drop "
+            "the bounded readout can express)" if cap_mode == "readout_floor"
+            else "the largest uniform projection drop that still keeps the "
+                 "presence rate at or above the retention fraction, computed "
+                 "EMPIRICALLY from the baseline per-prompt values")
+        res["pass_window"] = window
+        if window["empty"] or window["underpowered"]:
+            res["status"] = "VACUOUS_NO_PASS_REGION"
+            res["reason"] = (
+                "the pass window "
+                f"({window['control_floor_max_guarded_control_drop']:.4f}, "
+                f"{window['cap']:.4f}] is "
+                + str(window.get("underpowered_reason") or "EMPTY")
+                + "; the gate's floor is the maximum of a high-variance "
+                  "nuisance statistic and a true effect would land inside it "
+                  "partly by luck, so the preregistered outcome is a declared "
+                  "VACUOUS rather than an over-readable FAIL")
+            return res
+
+    res["beats_matched_and_cross_controls"] = bool(
+        (drop > max(ctrl_drops)) and (drop > cross_drop)
+        and paired["both_arms_hold"] and (p_ctrl < CONTROL_PERM_ALPHA))
+    res["selectivity_gate_holds"] = bool(
+        (d_target > 0)
+        and (abs(d_xrail) <= SELECTIVITY_MAX_RATIO * d_target))
     return res
 
 
-def eval_amp_test(base, tgt, ctrls, cross, tau, base_other, xrail, key, okey):
-    """AMP attenuation: magnitude shrinks, presence retained, selectivity gated."""
-    b = np.asarray(base["proj"][key])
-    t = np.asarray(tgt["proj"][key])
-    drop = float(b.mean() - t.mean())
-    ctrl_drops = [float(b.mean() - np.mean(c["proj"][key])) for c in ctrls]
-    cross_drop = float(b.mean() - np.mean(cross["proj"][key]))
-    paired = _paired_block(base, tgt, ctrls, key, sign=+1)
-    p_w = paired["p_vs_control_mean"]
-    w_stats = paired["stats_vs_control_mean"]
-    p_ctrl = control_ensemble_p(drop, ctrl_drops)
-    change = behavioral_change_rate(base["texts"], tgt["texts"])
+def eval_dr_test(base, tgt, ctrls, cross, tau, base_other, xrail, key, okey,
+                 readout=DR_PRIMARY_READOUT, min_ctrl=CONTROLS_MIN_STRICT,
+                 quantum=DTYPE_RELATIVE_QUANTUM[DEFAULT_DTYPE],
+                 magnitude_meta=None, n_averaged=1, strict_gates=True):
+    """DR starvation with gated cross-rail selectivity (rev 0.4 controls)."""
+    readout = _resolve_readout(readout, key)
+    res = _drive_common(base, tgt, ctrls, cross, tau, base_other, xrail,
+                        key, okey, readout, min_ctrl, quantum, magnitude_meta,
+                        cap_mode="none", n_averaged=n_averaged,
+                        strict_gates=strict_gates)
+    res["cross_cover_drop"] = float(
+        readout_vals(base, readout).mean() - readout_vals(cross, readout).mean())
+    if "status" in res:
+        return res
+    proj_b = readout_vals(base, key)
+    proj_t = readout_vals(tgt, key)
+    starves = rate_above(proj_t, tau) < DR_PRESENCE_COLLAPSE * rate_above(proj_b, tau)
+    res["starvation_signature_holds"] = bool(starves)
+    res["status"] = "PASS" if (res["beats_matched_and_cross_controls"]
+                               and starves
+                               and res["selectivity_gate_holds"]) else "FAIL"
+    return res
 
-    base_rate = rate_above(b, tau)
-    tgt_rate = rate_above(t, tau)
-    d_target = effect_size(b, t)
-    d_xrail = effect_size(base_other["proj"][okey], xrail["proj"][okey])
 
-    res = {
-        "baseline_mean_proj": float(b.mean()),
-        "target_mean_proj": float(t.mean()),
-        "targeted_drop": drop,
-        "matched_control_drops": ctrl_drops,
-        "max_matched_control_drop": float(max(ctrl_drops)),
-        "cross_direction_drop": cross_drop,
-        "wilcoxon_pratt_p": p_w,
-        "wilcoxon_pratt_stats": w_stats,
-        "paired_arms": paired,
-        "control_ensemble_p": p_ctrl,
-        "n_controls": len(ctrls),
-        "legacy_sign_test_p_reported_only": sign_test_p(
-            paired["diffs_vs_control_mean"]),
-        "behavioral_change_rate": change,
-        "baseline_presence_rate": float(base_rate),
-        "target_presence_rate": float(tgt_rate),
-        "effect_size_target": d_target,
-        "effect_size_cross_rail": d_xrail,
-        "coherence_target": tgt["coherence"],
-        "repetition_target": tgt["repetition"],
-        "sample_texts_target": tgt["sample_texts"],
-    }
-    if base_rate < BASELINE_PRESENCE_MIN:
-        res["status"] = "VACUOUS"
-        res["reason"] = (f"baseline presence rate {base_rate:.2f} below "
-                         f"precondition {BASELINE_PRESENCE_MIN}")
+def eval_amp_test(base, tgt, ctrls, cross, tau, base_other, xrail, key, okey,
+                  readout=AMP_PRIMARY_READOUT, min_ctrl=CONTROLS_MIN_STRICT,
+                  quantum=DTYPE_RELATIVE_QUANTUM[DEFAULT_DTYPE],
+                  magnitude_meta=None, readout_viability=None, n_averaged=1,
+                  strict_gates=True):
+    """AMP attenuation: magnitude shrinks, presence retained, selectivity gated.
+
+    REV 0.4 HEADLINE TEST. Rev 0.3's AMP_F5 FAILED on SELECTIVITY, not power
+    (drop 0.366 at p = 5.5e-05, but max matched-control drop 0.977 and
+    control_ensemble_p 0.16). Both failing legs ran through a control family
+    that was, uniquely in the battery, neither orthogonalized against the
+    target nor dose-matched to it -- and through a readout that was 78.7% dead
+    offset. D35 (readout), D37 (orthogonalization), D38 (dose), D39 (damage
+    guard) and D41 (pass window) all land here.
+    """
+    readout = _resolve_readout(readout, key)
+    res = _drive_common(
+        base, tgt, ctrls, cross, tau, base_other, xrail, key, okey, readout,
+        min_ctrl, quantum, magnitude_meta,
+        cap_mode=("readout_floor" if readout == "probe_p"
+                  else "presence_retention"),
+        readout_viability=readout_viability, n_averaged=n_averaged,
+        strict_gates=strict_gates)
+    res["cross_direction_drop"] = float(
+        readout_vals(base, readout).mean() - readout_vals(cross, readout).mean())
+    if "status" in res:
         return res
-    if change < BEHAVIORAL_CHANGE_MIN:
-        res["status"] = "VACUOUS_NO_BEHAVIORAL_CHANGE"
-        res["reason"] = (f"only {change:.2f} of judge prompts changed text under "
-                         f"the targeted intervention (< {BEHAVIORAL_CHANGE_MIN})")
-        return res
-    if tgt["coherence"] < COHERENCE_MIN or tgt["repetition"] < REPETITION_MIN:
-        res["status"] = "CONFOUNDED"
-        res["reason"] = ("target condition failed the coherence and/or "
-                         "repetition guard (fluency / degenerate-loop confound)")
-        return res
-    beats_controls = (drop > max(ctrl_drops)) and (drop > cross_drop) \
-        and paired["both_arms_hold"] and (p_ctrl < CONTROL_PERM_ALPHA)
-    retains = tgt_rate >= AMP_PRESENCE_RETAIN * base_rate
-    selective = (d_target > 0) and (abs(d_xrail) <= SELECTIVITY_MAX_RATIO * d_target)
-    res["beats_matched_and_cross_controls"] = bool(beats_controls)
+    proj_b = readout_vals(base, key)
+    proj_t = readout_vals(tgt, key)
+    retains = rate_above(proj_t, tau) >= AMP_PRESENCE_RETAIN * rate_above(proj_b, tau)
     res["attenuation_signature_holds"] = bool(retains)
-    res["selectivity_gate_holds"] = bool(selective)
-    res["status"] = "PASS" if (beats_controls and retains and selective) else "FAIL"
+    res["status"] = "PASS" if (res["beats_matched_and_cross_controls"]
+                               and retains
+                               and res["selectivity_gate_holds"]) else "FAIL"
     return res
 
 
 def eval_rs_test(pre, base_con, tgt, ctrls, ref_lic, key,
-                 pre_judge=None, ctrl_meta=None, target_magnitude=None):
-    """RS-F5 rev 0.3: the increase-sign anchor, redesigned.
+                 pre_judge=None, ctrl_meta=None, target_magnitude=None,
+                 min_ctrl=CONTROLS_MIN_STRICT,
+                 quantum=DTYPE_RELATIVE_QUANTUM[DEFAULT_DTYPE],
+                 n_averaged=1, strict_gates=True):
+    """RS-F5 rev 0.3/0.4: the increase-sign anchor, redesigned.
 
     Precondition: the teacher-forced suppression-gap gates G1 AND G2 (`pre`).
     If they do not hold, the model has no measurable brake on this bank and the
@@ -1963,12 +2926,16 @@ def eval_rs_test(pre, base_con, tgt, ctrls, ref_lic, key,
     controls PLUS the licensed-reference ceiling PLUS adequate n and decode
     variance control, never from the sign alone.
     """
+    # REV 0.4 (deviation D39): the GATING ensemble is the damage-guarded one.
+    guarded, guard_info = guard_controls(ctrls, base_texts=base_con["texts"])
+    gate_ctrls = guarded or ctrls
     b = np.asarray(base_con["proj"][key])
     t = np.asarray(tgt["proj"][key])
     r = np.asarray(ref_lic["proj"][key])
     inc = float(t.mean() - b.mean())
-    ctrl_incs = [float(np.mean(c["proj"][key]) - b.mean()) for c in ctrls]
-    paired = _paired_block(base_con, tgt, ctrls, key, sign=-1)
+    ctrl_incs = [float(np.mean(c["proj"][key]) - b.mean()) for c in gate_ctrls]
+    ctrl_incs_all = [float(np.mean(c["proj"][key]) - b.mean()) for c in ctrls]
+    paired = _paired_block(base_con, tgt, gate_ctrls, key, sign=-1)
     p_w = paired["p_vs_control_mean"]
     w_stats = paired["stats_vs_control_mean"]
     p_ctrl = control_ensemble_p(inc, ctrl_incs)
@@ -1993,8 +2960,8 @@ def eval_rs_test(pre, base_con, tgt, ctrls, ref_lic, key,
     hm_t = mean_mass(tgt, "hedge")
     mass_drop = float(hm_b - hm_t)
     mass_lr = _lr(hm_b, hm_t)
-    ctrl_mass_drops = [float(hm_b - mean_mass(c, "hedge")) for c in ctrls]
-    ctrl_mass_lrs = [_lr(hm_b, mean_mass(c, "hedge")) for c in ctrls]
+    ctrl_mass_drops = [float(hm_b - mean_mass(c, "hedge")) for c in gate_ctrls]
+    ctrl_mass_lrs = [_lr(hm_b, mean_mass(c, "hedge")) for c in gate_ctrls]
     lex_b = mean_mass(base_con, "control_lex")
     lex_t = mean_mass(tgt, "control_lex")
     lex_drop = float(lex_b - lex_t)
@@ -2029,6 +2996,19 @@ def eval_rs_test(pre, base_con, tgt, ctrls, ref_lic, key,
         "targeted_increase": inc,
         "matched_control_increases": ctrl_incs,
         "max_matched_control_increase": float(max(ctrl_incs)) if ctrl_incs else 0.0,
+        "matched_control_increases_unguarded_reported_only": ctrl_incs_all,
+        "control_ensemble_p_unguarded_reported_only": control_ensemble_p(
+            inc, ctrl_incs_all),
+        "control_guard": guard_info,
+        "n_controls_drawn": len(ctrls),
+        "n_controls_gating": len(guarded),
+        "measurability": measurability(
+            inc, float(b.mean()), quantum, n_averaged=n_averaged,
+            standard_error=(float(b.std(ddof=1) / math.sqrt(b.size))
+                            if b.size > 1 else None)),
+        "measurability_mass": measurability(mass_drop, hm_b, quantum,
+                                            n_averaged=n_averaged),
+        "dose_gate": dose_gate(ctrl_meta, len(guarded))[1],
         "wilcoxon_pratt_p": p_w,
         "wilcoxon_pratt_stats": w_stats,
         "control_ensemble_p": p_ctrl,
@@ -2071,6 +3051,32 @@ def eval_rs_test(pre, base_con, tgt, ctrls, ref_lic, key,
         res["reason"] = ("target condition failed the coherence and/or "
                          "repetition guard (fluency / degenerate-loop confound)")
         return res
+    if len(guarded) < min_ctrl:
+        res["status"] = "VACUOUS_CONTROL_ENSEMBLE_DEGRADED"
+        res["reason"] = (
+            f"only {len(guarded)} of {len(ctrls)} control directions cleared "
+            f"the target's own coherence/repetition guards, below the required "
+            f"{min_ctrl}")
+        return res
+    if strict_gates and not res["dose_gate"]["holds"]:
+        res["status"] = "VACUOUS_DOSE_UNMATCHED"
+        res["reason"] = (
+            "the RS control ensemble could not be brought into the target's "
+            f"dose band (D47): {res['dose_gate']}. Rev 0.3 measured "
+            "target_over_control_mean_magnitude_ratio 0.3983 here -- the "
+            "controls were 2.5x STRONGER perturbations than the target -- which "
+            "made that FAIL unreadable under PREREG's own binding rule. Rev 0.4 "
+            "stamps the unreadability instead of reporting a verdict")
+        return res
+    if (strict_gates and res["measurability"] is not None
+            and res["measurability"].get('below_dtype_quantization_floor')):
+        res["status"] = "VACUOUS_BELOW_INSTRUMENT_RESOLUTION"
+        res["reason"] = (
+            "the targeted increase is at or below the effective dtype "
+            "quantization floor; D42 is GATING for PASS in rev 0.4's second "
+            "pass, so the anchor test may not PASS on an observable the "
+            "artifact declares unresolvable")
+        return res
     m1 = (inc > 0.0 and (not ctrl_incs or inc > max(ctrl_incs))
           and paired["both_arms_hold"] and p_ctrl < CONTROL_PERM_ALPHA)
     m2 = (headroom > 0.0 and rho == rho
@@ -2086,13 +3092,25 @@ def eval_rs_test(pre, base_con, tgt, ctrls, ref_lic, key,
     return res
 
 
-def eval_conn_test(base, tgt, ctrls, key, okey, rand_keys):
-    """CONN: upstream DR-F5 cut selectively starves the downstream AMP site."""
+def eval_conn_test(base, tgt, ctrls, key, okey, rand_keys,
+                   min_ctrl=CONTROLS_MIN_STRICT,
+                   quantum=DTYPE_RELATIVE_QUANTUM[DEFAULT_DTYPE],
+                   n_averaged=1, strict_gates=True):
+    """CONN: upstream DR-F5 cut selectively starves the downstream AMP site.
+
+    REV 0.4 (deviation D39): the gating cover-control ensemble is the
+    DAMAGE-GUARDED one, exactly as for DR and AMP. The PREREG's own reading
+    rule was scoped to one test in rev 0.3; rev 0.4 generalizes it to the whole
+    battery rather than adding a second per-test exception.
+    """
+    guarded, guard_info = guard_controls(ctrls, base_texts=base["texts"])
     d_target = effect_size(base["proj"][key], tgt["proj"][key])
     d_other = effect_size(base["proj"][okey], tgt["proj"][okey])
     d_rand = [effect_size(base["proj"][rk], tgt["proj"][rk]) for rk in rand_keys]
-    d_ctrl_covers = [effect_size(base["proj"][key], c["proj"][key]) for c in ctrls]
-    paired = _paired_block(base, tgt, ctrls, key, sign=+1)
+    d_ctrl_covers = [effect_size(base["proj"][key], c["proj"][key])
+                     for c in guarded]
+    d_ctrl_all = [effect_size(base["proj"][key], c["proj"][key]) for c in ctrls]
+    paired = _paired_block(base, tgt, guarded or ctrls, key, sign=+1)
     p_w = paired["p_vs_control_mean"]
     w_stats = paired["stats_vs_control_mean"]
     p_ctrl = control_ensemble_p(d_target, d_ctrl_covers)
@@ -2103,14 +3121,29 @@ def eval_conn_test(base, tgt, ctrls, key, okey, rand_keys):
         "effect_sizes_random_dirs_downstream": d_rand,
         "max_random_dir_effect": float(max(d_rand)) if d_rand else 0.0,
         "effect_sizes_matched_cover_controls": d_ctrl_covers,
-        "max_matched_cover_effect": float(max(d_ctrl_covers)) if d_ctrl_covers else 0.0,
+        "max_matched_cover_effect": (float(max(d_ctrl_covers))
+                                     if d_ctrl_covers else 0.0),
+        "effect_sizes_matched_cover_controls_unguarded_reported_only": d_ctrl_all,
+        "control_guard": guard_info,
+        "n_controls_drawn": len(ctrls),
+        "n_controls_gating": len(guarded),
         "wilcoxon_pratt_p": p_w,
         "wilcoxon_pratt_stats": w_stats,
         "control_ensemble_p": p_ctrl,
+        "control_ensemble_p_unguarded_reported_only": control_ensemble_p(
+            d_target, d_ctrl_all),
         "paired_arms": paired,
         "legacy_sign_test_p_reported_only": sign_test_p(
             paired["diffs_vs_control_mean"]),
         "behavioral_change_rate": change,
+        "measurability": measurability(
+            float(np.mean(base["proj"][key]) - np.mean(tgt["proj"][key])),
+            float(np.mean(base["proj"][key])), quantum,
+            n_averaged=n_averaged,
+            standard_error=(
+                float(np.std(base["proj"][key], ddof=1)
+                      / math.sqrt(len(base["proj"][key])))
+                if len(base["proj"][key]) > 1 else None)),
         "note": ("clean-pass only; correlated with DR-F5 (shared bank and "
                  "direction) -- counted with that caveat in the aggregate"),
     }
@@ -2118,6 +3151,19 @@ def eval_conn_test(base, tgt, ctrls, key, okey, rand_keys):
         res["status"] = "VACUOUS_NO_BEHAVIORAL_CHANGE"
         res["reason"] = (f"only {change:.2f} of judge prompts changed text under "
                          f"the upstream cut (< {BEHAVIORAL_CHANGE_MIN})")
+        return res
+    if len(guarded) < min_ctrl:
+        res["status"] = "VACUOUS_CONTROL_ENSEMBLE_DEGRADED"
+        res["reason"] = (
+            f"only {len(guarded)} of {len(ctrls)} cover controls cleared the "
+            f"coherence/repetition guards, below the required {min_ctrl}")
+        return res
+    if (strict_gates and res["measurability"] is not None
+            and res["measurability"].get('below_dtype_quantization_floor')):
+        res["status"] = "VACUOUS_BELOW_INSTRUMENT_RESOLUTION"
+        res["reason"] = ("the downstream effect is at or below the effective "
+                         "dtype quantization floor; D42 is GATING for PASS in "
+                         "rev 0.4's second pass")
         return res
     ok = (d_target > CONN_MIN_EFFECT
           and (not d_rand or d_target > max(d_rand))
@@ -2134,22 +3180,86 @@ def eval_conn_test(base, tgt, ctrls, key, okey, rand_keys):
 # ---------------------------------------------------------------------------
 
 def parse_args():
-    ap = argparse.ArgumentParser(description="COMPONENT ATLAS v0 (rev 0.3)")
+    ap = argparse.ArgumentParser(description="COMPONENT ATLAS v0 (rev 0.4)")
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--revision", default=None,
-                    help="HF revision; defaults to the pinned revision for known models")
+                    help=("HF revision; defaults to the pinned revision for "
+                          "known models. NO pin exists for "
+                          "EleutherAI/gpt-neox-20b (the validated Stage-9 40E "
+                          "chain recorded model_revision: null and the "
+                          "standing rule forbids inventing one), so a "
+                          "confirmatory rev-0.4 run must pass an explicit "
+                          "40-hex commit or abort as ABORT_UNPINNED_REVISION"))
+    ap.add_argument("--allow-unpinned", action="store_true",
+                    help=("opt out of the unpinned-revision hard abort. Stamps "
+                          "claim_eligible=False and is loudly warned; not the "
+                          "preregistered mode"))
+    ap.add_argument("--dtype", choices=list(DTYPE_CHOICES), default=DEFAULT_DTYPE,
+                    help=("weight dtype (rev 0.4 deviation D33). bfloat16 is "
+                          "the declared rev-0.4 default because fp32 at 20B is "
+                          "76.74 GiB against an A40's 44.99 GiB. Measurement "
+                          "math is forced to fp32 regardless. Use "
+                          "--dtype float32 for the D34 pythia-2.8b calibration "
+                          "arm."))
+    ap.add_argument("--no-device-map", dest="device_map", action="store_false",
+                    default=True,
+                    help=("do NOT dispatch with accelerate device_map={'':0}. "
+                          "The default (device_map ON) streams shards straight "
+                          "to GPU; without it a 20B load stages ~38.4 GiB in "
+                          "host RAM first and can OOM the container before "
+                          "VRAM is ever touched."))
+    ap.add_argument("--run-dr-f2", action="store_true",
+                    help=("run the DR-F2 contrast RAIL as a test. OFF by "
+                          "default in rev 0.4 (deviation D40): at rev 0.3 it "
+                          "was the weakest test in the battery (behavioural "
+                          "change 0.313, targeted drop 0.00132) and its "
+                          "relative effect is ~48x BELOW the bf16 quantum, so "
+                          "it cannot be measured at 20B in bf16 no matter how "
+                          "much time it is given. The DR-F2 COVER is still "
+                          "computed, so DR-F5's cross-cover control and both "
+                          "cross-rail selectivity conditions are unaffected."))
     ap.add_argument("--smoke", action="store_true",
                     help="tiny mechanical run; never evidence")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--device", default=None)
     ap.add_argument("--out", default=None, help="output directory")
     ap.add_argument("--max-new-tokens", type=int, default=32)
-    ap.add_argument("--controls", type=int, default=24,
-                    help=("matched control trials per test. The control-ensemble "
-                          "p floor is 1/(C+1) and the criterion is STRICT (< "
-                          f"alpha), so C >= {CONTROLS_MIN_STRICT} is required: "
-                          "C=19 gives exactly 0.0500, which is NOT < 0.05 and "
-                          "makes every core test unpassable. C=24 gives 0.0400."))
+    ap.add_argument("--controls", type=int, default=CONTROLS_DRAW_DEFAULT,
+                    help=("matched control trials DRAWN per test. The "
+                          "control-ensemble p floor is 1/(C+1) and the "
+                          "criterion is STRICT (< alpha), so at least "
+                          f"{CONTROLS_MIN_STRICT} controls must SURVIVE the D39 "
+                          "damage guard (C=19 gives exactly 0.0500, which is "
+                          "NOT < 0.05). Rev 0.4's first draft drew exactly 20 "
+                          "AND required 20 survivors, leaving the guard zero "
+                          "slack: at rev 0.3's observed ~1-in-24 degraded-draw "
+                          "rate that is a ~57% chance of a spurious "
+                          "VACUOUS_CONTROL_ENSEMBLE_DEGRADED per test. Rev 0.4 "
+                          f"therefore DRAWS {CONTROLS_DRAW_DEFAULT} and GATES "
+                          f"on {CONTROLS_MIN_STRICT} survivors (deviation "
+                          "D46)."))
+    ap.add_argument("--run-rs", action="store_true",
+                    help=("run the RS-F5 sign-anchor test. OFF by default in "
+                          "rev 0.4's second pass (deviation D48): RS is 1,944 "
+                          "of 3,864 units (50% of the battery) on an observable "
+                          "whose G2 hedge-mass gate operates at 1.7% relative "
+                          "while bf16 logits inject ~6% multiplicative error "
+                          "per softmax probability (true SNR ~0.28), and which "
+                          "already returned VACUOUS_NO_BRAKE in fp32 at 2.8b. "
+                          "With RS on, the confirmatory run lands at ~4.0 h "
+                          "BEFORE the D34 calibration and the 20B preflight, "
+                          "i.e. over the window. Turning it on is itself a "
+                          "deviation to be logged, and the verdict label "
+                          "changes (see PREREG section 8)."))
+    ap.add_argument("--dr-engagement-step", action="store_true",
+                    help=("apply the ONE bounded, preregistered DR-engagement "
+                          f"step (COVER_K_FRAC {COVER_K_FRAC} -> "
+                          f"{COVER_K_FRAC_STEP2}), authorised in advance by "
+                          "deviation D50 and usable ONLY after a LOGGED 20B "
+                          "--preflight NO-GO on DR-F5. No ladder: exactly one "
+                          "step, and if the re-run preflight still fails, the "
+                          "confirmatory pass is NOT launched as a battery (see "
+                          "PREREG section 8's stop rule)."))
     ap.add_argument("--rs-samples", type=int, default=RS_N_SAMPLES,
                     help="seeded sampled continuations per RS prompt (variance control)")
     # --local-files-only is now the DEFAULT (PREREG section 1 calls it "the
@@ -2178,6 +3288,59 @@ def write_report(report, report_path):
         json.dump(report, f, indent=2, default=_json_default)
 
 
+def _unit_budget(n_judge, n_fit, n_rs_judge, n_controls, rs_samples, run_dr_f2,
+                 run_rs=False):
+    """Closed-form generation-unit arithmetic for the battery (D40).
+
+    One UNIT is one prompt generated once under one condition. The rev-0.3
+    battery was 5,864 units and took 4565.5 s on one A40 at pythia-2.8b fp32
+    (0.7786 s/unit all-in). At 20B in bf16 the batch-1 autoregressive decode is
+    memory-bandwidth-bound, so the correct scalar is the BYTES-READ ratio
+    41.20/11.10 = 3.712x, NOT the parameter ratio 7.42x; that gives ~3.08
+    s/unit, which agrees within 2.6% with a first-principles bandwidth estimate.
+    """
+    baselines_judge = 3 * n_judge          # F5 / F2 / neutral judge banks
+    baselines_fit = 3 * n_fit              # NEW in rev 0.4: readout-probe fit
+    dr_f5 = n_judge * (1 + n_controls)
+    shared_cross = 2 * n_judge             # cross-cover + cross-rail, shared
+    amp_f5 = n_judge * (1 + n_controls + 2)
+    dr_f2 = n_judge * (1 + n_controls) if run_dr_f2 else 0
+    rs = rs_samples * n_rs_judge * (3 + n_controls) if run_rs else 0
+    total = (baselines_judge + baselines_fit + dr_f5 + shared_cross
+             + amp_f5 + dr_f2 + rs)
+    return {
+        "formula": ("3N_judge + 3N_fit + N(1+C) [DR-F5] + 2N [shared cross] + "
+                    "N(3+C) [AMP-F5] + N(1+C) [DR-F2, optional] + "
+                    "K*R*(3+C) [RS, optional]"),
+        "battery": ("F5 rail only (DR-F5 + AMP-F5 + CONN)" if not (run_rs or run_dr_f2)
+                    else "F5 rail + optional arms"),
+        "run_rs": bool(run_rs),
+        "run_dr_f2": bool(run_dr_f2),
+        "baselines_judge": baselines_judge,
+        "baselines_fit_for_readout_probe": baselines_fit,
+        "DR_F5": dr_f5,
+        "shared_cross_conditions": shared_cross,
+        "AMP_F5": amp_f5,
+        "DR_F2": dr_f2,
+        "RS_F5": rs,
+        "total_units": total,
+        "rev03_reference": {
+            "total_units": 5864,
+            "measured_seconds_per_unit_pythia_2_8b_fp32_A40": 0.7786,
+            "measured_runtime_seconds": 4565.5},
+        "projected_seconds_per_unit_20b_bf16_A40": 3.08,
+        "projected_generation_hours": round(total * 3.08 / 3600.0, 2),
+        "projected_fixed_overhead_hours": 0.68,
+        "projected_total_hours": round(total * 3.08 / 3600.0 + 0.68, 2),
+        "scaling_note": ("s/unit is scaled by BYTES READ per forward "
+                         "(20.6e9 x 2 B = 41.20 GB vs 2.775e9 x 4 B = 11.10 "
+                         "GB, ratio 3.712x), not by the parameter ratio "
+                         "7.423x: at batch 1 decode is bandwidth-bound. This "
+                         "estimate carries roughly +/-25% uncertainty; the "
+                         "rev-0.3 prior estimate was 41% pessimistic."),
+    }
+
+
 def derive_layer_params(n_blocks, n_heads):
     """Depth/width-FRACTION resolution of the rev-0.2 absolute constants.
 
@@ -2195,7 +3358,7 @@ def derive_layer_params(n_blocks, n_heads):
     return sweep_lo, l_star_min, l_star_max, dr_offset, topk
 
 
-def derive_cover_k(intermediate):
+def derive_cover_k(intermediate, frac=COVER_K_FRAC):
     """COVER_K as a FRACTION of the MLP intermediate width (rev 0.3, D20).
 
     8192 -> 32 (bit-identical to rev 0.2's literal "Top-32"); 10240 -> 40. The
@@ -2204,23 +3367,95 @@ def derive_cover_k(intermediate):
     20% relative WEAKENING of the one intervention whose rev-0.2 behavioural
     change rate (~0.50) was already below the new 0.60 precondition.
     """
-    return max(COVER_K_MIN, int(round(COVER_K_FRAC * int(intermediate))))
+    return max(COVER_K_MIN, int(round(float(frac) * int(intermediate))))
+
+
+def cache_safetensors_status(model_id, revision, local_files_only):
+    """Codified preflight for the safetensors-vs-.bin cache trap (D53).
+
+    Under --local-files-only (the default) `use_safetensors=True` HARD-FAILS at
+    load if the pod cache holds only the .bin shards. PREREG rev 0.4 called this
+    "a gating step, not code", which costs a full pod session for a 5-minute
+    check the script already codifies comparable versions of. Best-effort and
+    NEVER fatal by itself: if the cache layout cannot be determined the status
+    is 'unavailable' and the run proceeds to the real load, which is still the
+    loud and recoverable failure.
+    """
+    info = {"model": model_id, "revision": revision,
+            "local_files_only": bool(local_files_only),
+            "status": "unavailable", "snapshot_dir": None,
+            "n_safetensors": None, "n_bin": None}
+    try:
+        root = (os.environ.get("HF_HUB_CACHE")
+                or os.path.join(os.environ.get("HF_HOME",
+                                               os.path.expanduser("~/.cache/huggingface")),
+                                "hub"))
+        repo = "models--" + str(model_id).replace("/", "--")
+        snaps = os.path.join(root, repo, "snapshots")
+        if not os.path.isdir(snaps):
+            info["status"] = "NO_SNAPSHOT_DIR"
+            info["searched"] = snaps
+            return info
+        cands = ([os.path.join(snaps, revision)]
+                 if revision and os.path.isdir(os.path.join(snaps, revision))
+                 else sorted(glob.glob(os.path.join(snaps, "*"))))
+        for d in cands:
+            st = glob.glob(os.path.join(d, "*.safetensors"))
+            bn = glob.glob(os.path.join(d, "*.bin"))
+            if st or bn:
+                info.update({"snapshot_dir": d, "n_safetensors": len(st),
+                             "n_bin": len(bn),
+                             "status": ("OK_SAFETENSORS" if st
+                                        else "ONLY_BIN_SHARDS")})
+                break
+    except Exception:  # pragma: no cover - diagnostics must never abort a run
+        info["status"] = "unavailable"
+    return info
 
 
 def main():
     args = parse_args()
     t0 = time.time()
+    stage_times = {}
+
+    def stage_mark(name):
+        stage_times[name] = round(time.time() - t0, 1)
+        if torch.cuda.is_available():
+            try:
+                torch.cuda.empty_cache()
+            except Exception:  # pragma: no cover
+                pass
+
+    def peak_vram_gib():
+        """REV 0.4 (deviation D43). No measured VRAM figure exists anywhere in
+        the 20B record -- only the GPU model. That gap is closed here."""
+        if not torch.cuda.is_available():
+            return None
+        try:
+            return {
+                "max_memory_allocated_gib": float(
+                    torch.cuda.max_memory_allocated() / (1024 ** 3)),
+                "max_memory_reserved_gib": float(
+                    torch.cuda.max_memory_reserved() / (1024 ** 3)),
+            }
+        except Exception:  # pragma: no cover
+            return None
+
+    # PYTORCH_CUDA_ALLOC_CONF is set at MODULE IMPORT time (see the import
+    # block) so that no import side effect can initialize the CUDA caching
+    # allocator ahead of it. Recorded here for the artifact.
+    alloc_conf = os.environ.get("PYTORCH_CUDA_ALLOC_CONF")
+
     device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
-    # Pin the fp32 matmul path explicitly. torch>=2.0 already defaults these to
-    # False, but PREREG section 1's determinism/precision argument ASSUMES it,
-    # and an assumed default is not a pinned one (review MINOR).
-    try:
-        torch.backends.cuda.matmul.allow_tf32 = False
-        torch.backends.cudnn.allow_tf32 = False
-    except Exception:  # pragma: no cover - CPU-only builds
-        pass
+    # Pin every reduced-precision shortcut OFF (rev 0.4, deviation D33). tf32
+    # was already pinned in rev 0.3; bf16/fp16 REDUCED-PRECISION REDUCTION
+    # defaults to TRUE in PyTorch and is the single highest-value one-line
+    # change in the whole bf16 budget -- without it a bf16 matmul may
+    # accumulate in bf16 and a 0.366-sized drop on a 10.7 baseline is gone.
+    precision_flags = pin_precision_backends()
+    quantum = DTYPE_RELATIVE_QUANTUM[args.dtype]
 
     revision = args.revision or PINNED_REVISIONS.get(args.model)
     claim_eligible = bool(revision) and not args.smoke
@@ -2233,32 +3468,113 @@ def main():
 
     out_dir = args.out or os.path.dirname(os.path.abspath(__file__))
     os.makedirs(out_dir, exist_ok=True)
-    report_path = os.path.join(out_dir, REPORT_FILENAME)
+    # D54: the report filename carries the MODEL when it is not the rev-0.4
+    # default. The D34 calibration runs this same script on pythia-2.8b, and the
+    # rev-0.4 first draft's docstring command would have overwritten the 20B
+    # rev-0.4 report if --out was omitted. The "never overwritten" guarantee
+    # previously covered only the rev-0.2 and rev-0.3 filenames.
+    def _named(base):
+        if args.model == DEFAULT_MODEL:
+            return base
+        tag = re.sub(r"[^A-Za-z0-9._-]+", "-", str(args.model).split("/")[-1])
+        stem, ext = os.path.splitext(base)
+        return f"{stem}__{tag}{ext}"
+
+    report_path = os.path.join(out_dir, _named(REPORT_FILENAME))
     if args.preflight:
-        report_path = os.path.join(out_dir, PREFLIGHT_FILENAME)
+        report_path = os.path.join(out_dir, _named(PREFLIGHT_FILENAME))
+    if args.model != DEFAULT_MODEL:
+        print(f"[info] non-default model: writing {os.path.basename(report_path)} "
+              "so the 20B rev-0.4 artifact can never be overwritten")
+
+    # ---- Fail-closed on an unpinned revision (rev 0.4, deviation D32) ----
+    # Rev 0.3 fail-closed only by stamping claim_eligible=False, which still
+    # burned the full run. gpt-neox-20b has NO recorded pin anywhere -- the
+    # validated Stage-9 40E chain recorded model_revision: null -- so a strict
+    # reviewer can challenge the entire 20B chain on checkpoint identity alone.
+    # Rev 0.4 refuses to spend pod time on an unidentifiable checkpoint.
+    if (not revision) and (not args.smoke) and (not args.allow_unpinned):
+        print(f"[abort] no revision pin for {args.model}. Resolve the exact "
+              "commit from the pod HF cache and pass --revision <40-hex>, or "
+              "pass --allow-unpinned to proceed with claim_eligible=False.")
+        write_report({
+            "schema_version": SCHEMA_VERSION,
+            "frame": FRAME, "boundary": BOUNDARY,
+            "rev04_provenance_note": REV04_PROVENANCE_NOTE,
+            "aggregate": {
+                "status": "ABORT_UNPINNED_REVISION",
+                "model": args.model,
+                "reason": ("no pinned revision is recorded for this model and "
+                           "none was supplied; the checkpoint identity would "
+                           "not be cryptographically fixed, which is the one "
+                           "reproducibility gap the validated 20B 40E run "
+                           "already left open (model_revision: null)"),
+                "remedy": "--revision <40-hex commit> (or --allow-unpinned)"}},
+            report_path)
+        return 0
+    if (not revision) and args.allow_unpinned:
+        print("[warn] --allow-unpinned: the checkpoint identity is NOT fixed; "
+              "claim_eligible=False and no claim of any kind is licensed.")
 
     n_controls = 2 if args.smoke else args.controls
     max_new = 10 if args.smoke else args.max_new_tokens
     n_conn_dirs = 3 if args.smoke else max(n_controls, CONTROLS_MIN_STRICT)
     rs_samples = 2 if args.smoke else max(1, args.rs_samples)
+    run_dr_f2 = bool(args.run_dr_f2)
+    run_rs = bool(args.run_rs)
+    # Smoke draws only 2 controls, so the C>=20 guard and the guarded-ensemble
+    # floor must not fire there (smoke can never pass any gate anyway).
+    min_ctrl = 1 if args.smoke else CONTROLS_MIN_STRICT
+    # The D47/D49/D52 gates are GATING for evidence runs and are DISABLED under
+    # --smoke: smoke draws 2 controls and 8 frames, so a dose band, a probe
+    # viability floor and a quantization floor would all fire mechanically and
+    # short-circuit the very code paths smoke exists to exercise. Smoke can
+    # never pass any gate anyway (its control-ensemble p floor is 1/3).
+    strict_gates = not args.smoke
 
-    # Control-ensemble floor guard (review MAJOR). The criterion is a STRICT
-    # inequality against 1/(C+1); at C=19 the floor is EXACTLY 0.0500, so the
-    # documented "reduced fallback --controls 19" would have produced a full-
-    # cost run in which every core test was unpassable by arithmetic. Abort
-    # loudly rather than burn ~2 h on an unpassable configuration.
-    if (not args.smoke) and n_controls < CONTROLS_MIN_STRICT:
-        print(f"[abort] --controls {n_controls} < {CONTROLS_MIN_STRICT}: the "
-              f"control-ensemble p floor 1/(C+1) = {1.0/(n_controls+1):.4f} is "
-              f"not strictly below alpha={CONTROL_PERM_ALPHA}; every core test "
-              "would be unpassable by arithmetic.")
+    # Control-ensemble floor guard (review MAJOR, extended by D46). The
+    # criterion is a STRICT inequality against 1/(C+1); at C=19 the floor is
+    # EXACTLY 0.0500, so the documented "reduced fallback --controls 19" would
+    # have produced a full-cost run in which every core test was unpassable by
+    # arithmetic. D46 adds the SURPLUS requirement: the number DRAWN must exceed
+    # the gating floor, or the D39 damage guard has zero slack and a single
+    # degraded draw stamps VACUOUS_CONTROL_ENSEMBLE_DEGRADED on a test that had
+    # nothing wrong with it. Abort loudly rather than burn hours.
+    required_draw = CONTROLS_MIN_STRICT + CONTROL_GUARD_SURPLUS_MIN
+    if (not args.smoke) and n_controls < required_draw:
+        print(f"[abort] --controls {n_controls} < {required_draw}: the "
+              f"control-ensemble p floor 1/(C+1) = {1.0/(n_controls+1):.4f} "
+              f"must be strictly below alpha={CONTROL_PERM_ALPHA} on the "
+              f"SURVIVING ensemble, which needs >= {CONTROLS_MIN_STRICT} "
+              f"survivors plus >= {CONTROL_GUARD_SURPLUS_MIN} of D39 "
+              "damage-guard slack.")
         write_report({"schema_version": SCHEMA_VERSION,
                       "aggregate": {
                           "status": "ABORT_CONTROL_FLOOR",
-                          "n_controls": n_controls,
+                          "n_controls_drawn": n_controls,
                           "control_ensemble_p_floor": 1.0 / (n_controls + 1),
-                          "required_min_controls": CONTROLS_MIN_STRICT}},
+                          "required_gating_survivors": CONTROLS_MIN_STRICT,
+                          "required_draw": required_draw,
+                          "reason": ("drawing exactly the gating floor leaves "
+                                     "the D39 damage guard zero slack; at rev "
+                                     "0.3's observed ~1-in-24 degraded-draw "
+                                     "rate that is a ~57% per-test chance of a "
+                                     "spurious VACUOUS_CONTROL_ENSEMBLE_"
+                                     "DEGRADED (deviation D46)")}},
                      report_path)
+        return 0
+
+    # D53: codified safetensors-vs-.bin cache preflight.
+    cache_status = cache_safetensors_status(args.model, revision,
+                                            args.local_files_only)
+    if cache_status.get("status") == "ONLY_BIN_SHARDS" and args.local_files_only:
+        print(f"[abort] the cached snapshot {cache_status['snapshot_dir']} holds "
+              f"{cache_status['n_bin']} .bin shards and NO .safetensors; "
+              "use_safetensors=True under --local-files-only will hard-fail at "
+              "load. Fetch the safetensors shards or pass --allow-download.")
+        write_report({"schema_version": SCHEMA_VERSION,
+                      "aggregate": {"status": "ABORT_CACHE_FORMAT",
+                                    "cache": cache_status}}, report_path)
         return 0
 
     banks = build_banks(args.smoke, args.seed)
@@ -2282,9 +3598,20 @@ def main():
                        "seed": args.seed})
     verb_audit = slot_verb_audit(used_frames)
 
-    print(f"[load] {args.model} rev={revision} device={device}")
-    model, tok = load_model_and_tokenizer(
-        args.model, revision, device, args.local_files_only)
+    print(f"[load] {args.model} rev={revision} device={device} "
+          f"dtype={args.dtype} device_map={args.device_map}")
+    if torch.cuda.is_available():
+        try:
+            torch.cuda.reset_peak_memory_stats()
+        except Exception:  # pragma: no cover
+            pass
+    model, tok, dispatched = load_model_and_tokenizer(
+        args.model, revision, device, args.local_files_only,
+        dtype_name=args.dtype, use_device_map=args.device_map)
+    lm_head_fp32 = promote_lm_head_fp32(model) if args.dtype != "float32" else {
+        "status": "NOT_NEEDED_FP32_WEIGHTS"}
+    vram_after_load = peak_vram_gib()
+    stage_mark("load")
     layers = locate_layers(model)
     n_blocks = len(layers)
     n_heads = int(model.config.num_attention_heads)
@@ -2313,8 +3640,10 @@ def main():
             "schema_version": SCHEMA_VERSION,
             "frame": FRAME, "boundary": BOUNDARY,
             "rev03_provenance_note": REV03_PROVENANCE_NOTE,
+            "rev04_provenance_note": REV04_PROVENANCE_NOTE,
             "provenance": {
                 "model": args.model, "revision": revision,
+                "dtype": args.dtype,
                 "resolved_commit_sha": got_sha,
                 "revision_verified": revision_verified,
                 "claim_eligible": False, "seed": args.seed, "device": device,
@@ -2334,8 +3663,35 @@ def main():
         print("[warn] runtime did not report a commit hash; recording null "
               "(never filled in by lookup); revision_verified=unavailable")
 
-    config_sha = sha_of({
-        "schema": SCHEMA_VERSION, "COVER_K_FRAC": COVER_K_FRAC,
+    cover_k_frac = COVER_K_FRAC_STEP2 if args.dr_engagement_step else COVER_K_FRAC
+    if args.dr_engagement_step:
+        print(f"[warn] --dr-engagement-step: COVER_K_FRAC {COVER_K_FRAC} -> "
+              f"{COVER_K_FRAC_STEP2}. This is the ONE step authorised in "
+              "advance by deviation D50 and is legitimate ONLY if a 20B "
+              "--preflight NO-GO on DR-F5 was logged in PREREG section 10 "
+              "BEFORE this run. No further widening is authorised.")
+    config_payload = {
+        "schema": SCHEMA_VERSION, "COVER_K_FRAC": cover_k_frac,
+        "COVER_K_FRAC_BASE": COVER_K_FRAC,
+        "dr_engagement_step": bool(args.dr_engagement_step),
+        "dtype": args.dtype, "device_map": bool(args.device_map),
+        "run_dr_f2": run_dr_f2, "run_rs": run_rs,
+        "CONTROLS_DRAW_DEFAULT": CONTROLS_DRAW_DEFAULT,
+        "CONTROL_GUARD_SURPLUS_MIN": CONTROL_GUARD_SURPLUS_MIN,
+        "DOSE_MATCHED_MIN_FRAC": DOSE_MATCHED_MIN_FRAC,
+        "DOSE_RATIO_LO": DOSE_RATIO_LO, "DOSE_RATIO_HI": DOSE_RATIO_HI,
+        "PASS_WINDOW_MIN_ABS_FRAC": PASS_WINDOW_MIN_ABS_FRAC,
+        "PROBE_VIABILITY_MIN_SD": PROBE_VIABILITY_MIN_SD,
+        "PROBE_VIABILITY_MIN_ACC_OVER_CHANCE":
+            PROBE_VIABILITY_MIN_ACC_OVER_CHANCE,
+        "MARGIN_TIE_REL_TOL": MARGIN_TIE_REL_TOL,
+        "AMP_PRIMARY_READOUT": AMP_PRIMARY_READOUT,
+        "DR_PRIMARY_READOUT": DR_PRIMARY_READOUT,
+        "READOUT_PROBE_CLASSES": list(READOUT_PROBE_CLASSES),
+        "AMP_CTRL_SHUFFLED_FRAC": AMP_CTRL_SHUFFLED_FRAC,
+        "DOSE_MATCH_TOL": DOSE_MATCH_TOL,
+        "DOSE_MATCH_TRIES": DOSE_MATCH_TRIES,
+        "PASS_WINDOW_MIN_SE": PASS_WINDOW_MIN_SE,
         "LAYER_SWEEP_MIN_FRAC": LAYER_SWEEP_MIN_FRAC,
         "L_STAR_MIN_FRAC": L_STAR_MIN_FRAC, "L_STAR_MAX_FRAC": L_STAR_MAX_FRAC,
         "DR_OFFSET_FRAC": DR_OFFSET_FRAC,
@@ -2362,7 +3718,16 @@ def main():
                     "DR_OFFSET": dr_offset, "topk_heads": topk_heads},
         "runtime_args": {"controls": n_controls, "max_new_tokens": max_new,
                          "rs_samples": rs_samples, "n_conn_dirs": n_conn_dirs,
-                         "n_seq": n_seq}})
+                         "n_seq": n_seq}}
+    # D55: the binding config_sha256 must include the DERIVED cover_k, which is
+    # only known after the MLP intermediate width is read from the loaded model.
+    # The rev-0.4 first draft hashed the config BEFORE derive_cover_k ran, so
+    # PREREG line 10's claim that the sha binds "every DERIVED layer/head
+    # parameter actually used" was false for cover_k. The pre-discovery sha is
+    # retained so the abort paths (which fire before cover_k exists) stay
+    # auditable.
+    config_sha_pre = sha_of(config_payload)
+    config_sha = config_sha_pre   # rebound after derive_cover_k, below
 
     hedge_ids, hedge_map = lexicon_token_ids(tok, HEDGE_WORDS)
     ctrl_ids, ctrl_map = lexicon_token_ids(tok, CONTROL_WORDS)
@@ -2376,6 +3741,8 @@ def main():
         "boundary": BOUNDARY,
         "aggregate_caveat": AGGREGATE_CAVEAT,
         "rev03_provenance_note": REV03_PROVENANCE_NOTE,
+        "rev04_provenance_note": REV04_PROVENANCE_NOTE,
+        "measurability_note": MEASURABILITY_NOTE,
         "provenance": {
             "model": args.model,
             "revision": revision,
@@ -2388,7 +3755,47 @@ def main():
             "preflight": bool(args.preflight),
             "local_files_only": bool(args.local_files_only),
             "allow_tf32_matmul_pinned_false": True,
-            "n_controls": n_controls,
+            # ---- rev 0.4 precision + resource block (D33, D42, D43) ----
+            "dtype": args.dtype,
+            "device_map_dispatched": bool(dispatched),
+            "precision_policy": {
+                "weights": args.dtype,
+                "backend_flags_pinned": precision_flags,
+                "projection_removal_in_fp32": True,
+                "clean_pass_read_in_fp32_then_float64": True,
+                "lm_head_fp32_island": lm_head_fp32,
+                "attn_implementation": "eager",
+                "rationale": (
+                    "bf16 WEIGHTS with fp32 measurement math. The bf16 "
+                    "dot-product error over 6144 dims with fp32 accumulation "
+                    "is 1.44e-5 x ||h||, i.e. negligible -- but ONLY if "
+                    "accumulation is forced, which is why "
+                    "allow_bf16_reduced_precision_reduction is pinned False. "
+                    "The lm-head island matters because greedy argmax, the "
+                    "hedge probability MASS and the CHECK gate score in nats "
+                    "all read the logits, where bf16 error near |logit| = 15 "
+                    "is a ~6% multiplicative error per softmax probability."),
+                "residual_discrete_risk": (
+                    "argmax flips at near-ties do NOT cancel under pairing. "
+                    "They inflate behavioral_change_rate and destroy the "
+                    "byte-identity tie structure that D9/D23/D29 depend on, "
+                    "which could flip a VACUOUS precondition to evaluable on "
+                    "numerical noise. This is what the D34 pythia-2.8b "
+                    "bf16-vs-fp32 calibration measures."),
+            },
+            "dtype_relative_quantum": quantum,
+            "vram_after_load": vram_after_load,
+            "n_controls_drawn": n_controls,
+            "n_controls_gating_floor": CONTROLS_MIN_STRICT,
+            "control_guard_surplus": n_controls - CONTROLS_MIN_STRICT,
+            "run_dr_f2": run_dr_f2,
+            "run_rs": run_rs,
+            "battery": ("F5 rail only (DR-F5 + AMP-F5 + CONN)"
+                        if not (run_rs or run_dr_f2)
+                        else "F5 rail plus explicitly enabled optional arms"),
+            "cuda_alloc_conf": alloc_conf,
+            "hf_cache_safetensors_preflight": cache_status,
+            "dr_engagement_step_used": bool(args.dr_engagement_step),
             "n_conn_dirs": n_conn_dirs,
             "max_new_tokens": max_new,
             "rs_samples": rs_samples,
@@ -2419,8 +3826,15 @@ def main():
                               "l_star_max": L_STAR_MAX_FRAC,
                               "dr_offset": DR_OFFSET_FRAC,
                               "topk_heads": TOPK_HEADS_FRAC,
-                              "cover_k": COVER_K_FRAC}},
+                              "cover_k": cover_k_frac}},
             "control_ensemble_p_floor": float(1.0 / (n_controls + 1)),
+            "control_ensemble_p_floor_at_gating_minimum": float(
+                1.0 / (CONTROLS_MIN_STRICT + 1)),
+            # ---- D40: the battery's unit arithmetic, written down ----
+            "generation_unit_budget": _unit_budget(
+                n_judge=len(banks["f5_judge"]), n_fit=len(banks["f5_fit"]),
+                n_rs_judge=len(banks["rs_con_judge"]), n_controls=n_controls,
+                rs_samples=rs_samples, run_dr_f2=run_dr_f2, run_rs=run_rs),
             "lexicon_token_ids": {
                 "hedge_n_ids": len(hedge_ids), "control_lex_n_ids": len(ctrl_ids),
                 "act_n_ids": len(act_ids), "restrain_n_ids": len(res_ids),
@@ -2495,18 +3909,42 @@ def main():
     # exactly 1.000 across a wide plateau; selecting on accuracy would make the
     # tie-break rule -- not the signal -- decide L*, and "deepest tied block"
     # would then return sweep_hi every time.
-    best_margin = float(max(mean_margins))
-    tied_margin = [sweep_blocks[i] for i, v in enumerate(mean_margins)
-                   if abs(v - best_margin) <= 1e-12]
-    best_acc = float(max(mean_accs))
-    tied_acc = [sweep_blocks[i] for i, v in enumerate(mean_accs)
-                if abs(v - best_acc) <= 1e-12]
-    # Preregistered tie-break on an exact margin tie: SHALLOWEST tied block at
-    # or above L_STAR_MIN (safer than "deepest", which degenerates to the
-    # sweep ceiling under saturation).
-    eligible = [L for L in tied_margin if L >= l_star_min] or tied_margin
-    l_star = int(min(eligible))
+    # --- D51 (rev 0.4 second pass): the tie-break was INERT and ABORT_GUARD_
+    # LAYER was doing all the work. Two repairs, both preregistered:
+    #
+    #  (1) TOLERANCE. `abs(v - best) <= 1e-12` on a continuous 5-seed-averaged
+    #      margin means exact ties essentially never occur, so "shallowest tied
+    #      block at or above L_STAR_MIN" never ran. The tolerance is now
+    #      RELATIVE (MARGIN_TIE_REL_TOL), which makes the rule operative.
+    #
+    #  (2) SELECTION WINDOW. sweep_lo (0.25 x depth) is BELOW L_STAR_MIN
+    #      (0.375 x depth), so a unique margin argmax anywhere in [sweep_lo,
+    #      L_STAR_MIN) killed the run after discovery via ABORT_GUARD_LAYER --
+    #      a live ~30% risk at 44 blocks, and one that interacts directly with
+    #      rev 0.4's own recovered evidence: the validated 20B 40-Element probe
+    #      peaked at LAYER 2 OF 44 with a shoulder only to L7, entirely BELOW
+    #      this window. Selection is now restricted to blocks >= L_STAR_MIN,
+    #      while the FULL sweep is still computed and REPORTED, so an early
+    #      peak is disclosed loudly instead of aborting the run.
+    idx_eligible = [i for i, L in enumerate(sweep_blocks) if L >= l_star_min]
+    if not idx_eligible:                       # pragma: no cover - guarded above
+        idx_eligible = list(range(len(sweep_blocks)))
+    sel_margins = [mean_margins[i] for i in idx_eligible]
+    best_margin = float(max(sel_margins))
+    tol = MARGIN_TIE_REL_TOL * max(abs(best_margin), 1e-12)
+    tied_margin = [sweep_blocks[i] for i in idx_eligible
+                   if abs(mean_margins[i] - best_margin) <= tol]
+    best_acc = float(max(mean_accs[i] for i in idx_eligible))
+    tied_acc = [sweep_blocks[i] for i in idx_eligible
+                if abs(mean_accs[i] - best_acc)
+                <= MARGIN_TIE_REL_TOL * max(abs(best_acc), 1e-12)]
+    # Preregistered tie-break: SHALLOWEST tied block at or above L_STAR_MIN
+    # (safer than "deepest", which degenerates to the sweep ceiling under
+    # saturation).
+    l_star = int(min(tied_margin))
     acc_at_l_star = float(mean_accs[sweep_blocks.index(l_star)])
+    full_argmax_block = int(sweep_blocks[int(np.argmax(mean_margins))])
+    full_best_margin = float(max(mean_margins))
 
     rng_floor = np.random.default_rng(args.seed + 555)
     floor, floor_margin = [], []
@@ -2543,7 +3981,30 @@ def main():
         "accuracy_saturated_plateau": bool(best_acc >= 1.0 - 1e-12
                                            and len(tied_acc) > 1),
         "tie_break_rule": ("shallowest tied block at or above L_STAR_MIN "
-                           "(preregistered, rev 0.3 review fix D21)"),
+                           "(preregistered, rev 0.3 review fix D21; the tie "
+                           "tolerance was made RELATIVE in rev 0.4's second "
+                           "pass, deviation D51, because at 1e-12 on a "
+                           "continuous averaged margin the rule never ran)"),
+        "margin_tie_relative_tolerance": MARGIN_TIE_REL_TOL,
+        "selection_window": [l_star_min, sweep_hi],
+        "selection_window_note": (
+            "L* is selected only from blocks at or above L_STAR_MIN (D51). The "
+            "full sweep from sweep_lo is still computed and reported; "
+            "restricting SELECTION removes a live ~30% ABORT_GUARD_LAYER risk "
+            "at 44 blocks without hiding anything."),
+        "full_sweep_argmax_block_reported_only": full_argmax_block,
+        "full_sweep_best_margin_reported_only": full_best_margin,
+        "early_layer_peak_below_selection_window": bool(
+            full_argmax_block < l_star_min),
+        "early_layer_disclosure": (
+            "The validated Stage-9 40-Element probe on THIS model peaked at "
+            "LAYER 2 OF 44 with a shoulder only to L7 -- entirely BELOW this "
+            "selection window. If full_sweep_argmax_block_reported_only is also "
+            "below L_STAR_MIN, the drive signal on these banks peaks shallower "
+            "than the design's downstream-depth guard permits, and the "
+            "configuration actually judged is NOT the peak. That is a disclosed "
+            "design constraint (the clean-pass rule needs downstream depth for "
+            "an internal edit to become different TEXT), not a measurement."),
         "L_star": l_star,
         "best_mean_margin": best_margin,
         "best_mean_acc": best_acc,
@@ -2619,7 +4080,15 @@ def main():
     V_rs = pc_basis(X_rs, PC_SUBSPACE_K)
 
     rng_conn = np.random.default_rng(args.seed + 901)
-    conn_dirs = {f"r{i}": pc_random_dir(V_star, rng_conn)
+    # D52 (rev 0.4 second pass): CONN's downstream random READOUT directions are
+    # orthogonalized against u_F5 too. PREREG 3.0 states the orthogonalization
+    # rule is "binding for every ensemble in the battery", and V_star contains
+    # u_F5 -- so leaving ortho_to=None here reproduced, for CONN, exactly the
+    # contamination class D37 fixes for AMP. The direction of the bias is
+    # conservative (it makes CONN's d_target > max(d_rand) leg HARDER) and these
+    # are readout rather than perturbation directions, but a per-test exception
+    # is precisely what rev 0.4 exists to eliminate.
+    conn_dirs = {f"r{i}": pc_random_dir(V_star, rng_conn, ortho_to=u_f5_star)
                  for i in range(n_conn_dirs)}
     measure_dirs = {"uF5": u_f5_star, "uF2": u_f2_star}
     measure_dirs.update(conn_dirs)
@@ -2633,7 +4102,7 @@ def main():
     acts_f5 = mlp_intermediate_feats(model, tok, banks["f5_fit"], mlp_mod, device)
     acts_f2 = mlp_intermediate_feats(model, tok, banks["f2_fit"], mlp_mod, device)
     acts_nt = mlp_intermediate_feats(model, tok, banks["neu_fit"], mlp_mod, device)
-    cover_k = derive_cover_k(intermediate)
+    cover_k = derive_cover_k(intermediate, cover_k_frac)
     cover_f5, _ = score_dr_cover(acts_f5, acts_nt, w_out, u_f5_dr, cover_k)
     cover_f2, _ = score_dr_cover(acts_f2, acts_nt, w_out, u_f2_dr, cover_k)
     mean_abs_f5 = np.abs(acts_f5).mean(0)
@@ -2645,8 +4114,24 @@ def main():
     report["provenance"]["cover_k_rev02_absolute_equivalent"] = 32
     report["provenance"]["topk_heads_fraction_of_all_heads"] = float(
         topk_heads / (n_blocks * n_heads))
+    # D55: rebind the BINDING config sha now that every derived parameter --
+    # including cover_k and the L* selection window -- is known.
+    config_payload["derived"]["cover_k"] = int(cover_k)
+    config_payload["derived"]["mlp_intermediate"] = int(intermediate)
+    config_payload["derived"]["L_star"] = int(l_star)
+    config_payload["derived"]["L_dr"] = int(l_dr)
+    config_sha = sha_of(config_payload)
+    report["provenance"]["config_sha256"] = config_sha
+    report["provenance"]["config_sha256_pre_discovery"] = config_sha_pre
+    report["provenance"]["config_sha256_note"] = (
+        "the BINDING sha is config_sha256, taken after every derived layer/head/"
+        "cover parameter actually used is known (deviation D55). "
+        "config_sha256_pre_discovery is the sha available on the abort paths "
+        "that fire before discovery and is retained so those aborts stay "
+        "auditable.")
     print(f"[discover] cover_k={cover_k} of {intermediate} intermediate coords "
           f"({100.0 * cover_k / intermediate:.3f}%)")
+    stage_mark("discover")
     write_report(report, report_path)
 
     # ---------------- Stage: LABEL ----------------
@@ -2694,33 +4179,105 @@ def main():
                               eraser_hooks(u_f5_star), max_new)
         pf["DR_F5_behavioral_change_rate"] = behavioral_change_rate(b_f5, t_dr)
         pf["AMP_F5_behavioral_change_rate"] = behavioral_change_rate(b_f5, t_amp)
-        rs_seed = args.seed * 10000 + 7000
-        b_rs = gen_condition(model, tok, pf_con, device, [], max_new,
-                             n_samples=rs_samples, sample_seed=rs_seed)
-        t_rs = gen_condition(model, tok, pf_con, device,
-                             eraser_hooks(u_rs_star), max_new,
-                             n_samples=rs_samples, sample_seed=rs_seed)
-        pf["RS_F5_behavioral_change_rate"] = behavioral_change_rate(b_rs, t_rs)
+        if run_rs:
+            rs_seed = args.seed * 10000 + 7000
+            b_rs = gen_condition(model, tok, pf_con, device, [], max_new,
+                                 n_samples=rs_samples, sample_seed=rs_seed)
+            t_rs = gen_condition(model, tok, pf_con, device,
+                                 eraser_hooks(u_rs_star), max_new,
+                                 n_samples=rs_samples, sample_seed=rs_seed)
+            pf["RS_F5_behavioral_change_rate"] = behavioral_change_rate(b_rs, t_rs)
+        else:
+            pf["RS_F5_behavioral_change_rate"] = None
+            pf["RS_F5_note"] = ("RS is OUT OF SCOPE by default in rev 0.4's "
+                                "second pass (D48) and therefore does not gate "
+                                "the preflight; --run-rs restores both")
+        gating = [pf["DR_F5_behavioral_change_rate"],
+                  pf["AMP_F5_behavioral_change_rate"]]
+        if pf["RS_F5_behavioral_change_rate"] is not None:
+            gating.append(pf["RS_F5_behavioral_change_rate"])
         pf["n_prompts"] = k
         pf["threshold"] = BEHAVIORAL_CHANGE_MIN
-        pf["go"] = bool(min(pf["DR_F5_behavioral_change_rate"],
-                            pf["AMP_F5_behavioral_change_rate"],
-                            pf["RS_F5_behavioral_change_rate"])
-                        >= BEHAVIORAL_CHANGE_MIN)
+        pf["gating_rates"] = gating
+        pf["go"] = bool(min(gating) >= BEHAVIORAL_CHANGE_MIN)
+        pf["cover_k_frac_in_effect"] = cover_k_frac
+        pf["dr_engagement_step_used"] = bool(args.dr_engagement_step)
         pf["note"] = ("PREFLIGHT ONLY -- never evidence, reads no test "
                       "statistic. A NO-GO means the confirmatory run would "
                       "very likely stamp VACUOUS_NO_BEHAVIORAL_CHANGE on the "
                       "affected arms; fix the intervention strength (cover_k, "
                       "L*) or stop, and log whatever is changed as a deviation "
                       "BEFORE the confirmatory run.")
+        # D50: the preregistered STOP RULE. Rev 0.4's first draft predicted its
+        # own verdict could not move ("the DR/CONN engagement problem must be
+        # solved in the same run") while changing nothing that would move it,
+        # and D31's single authorised step was consumed at rev 0.3 and never
+        # re-authorised for 20B -- so a NO-GO had no declared remedy at all.
+        pf["stop_rule"] = {
+            "on_no_go_dr_f5": (
+                "apply --dr-engagement-step ONCE (COVER_K_FRAC "
+                f"{COVER_K_FRAC} -> {COVER_K_FRAC_STEP2}), log it in PREREG "
+                "section 10 with date and reason BEFORE re-running the "
+                "preflight, and re-run the preflight."),
+            "on_second_no_go": (
+                "DO NOT launch the battery. DR-F5 and CONN share the target "
+                "condition and would go VACUOUS together, leaving n_evaluable "
+                "= 1 and a preregistered GREY after ~2.3 h. The declared "
+                "fallback is a SINGLE-TEST AMP-F5 confirmatory run whose "
+                "verdict is capped at GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE and "
+                "which is reported as one test, not a battery."),
+            "no_ladder": ("exactly ONE widening step is authorised at 20B "
+                          "(deviation D50). An open-ended widen-until-it-moves "
+                          "ladder is fishing and is prohibited."),
+        }
         report["preflight"] = pf
         report["aggregate"] = {"status": "PREFLIGHT_ONLY", "go": pf["go"]}
+        stage_mark("preflight")
         report["provenance"]["runtime_seconds"] = round(time.time() - t0, 1)
+        report["provenance"]["stage_elapsed_seconds"] = stage_times
+        report["provenance"]["peak_vram"] = peak_vram_gib()
         write_report(report, report_path)
         print(f"[preflight] go={pf['go']} DR={pf['DR_F5_behavioral_change_rate']:.2f} "
               f"AMP={pf['AMP_F5_behavioral_change_rate']:.2f} "
-              f"RS={pf['RS_F5_behavioral_change_rate']:.2f} -> {report_path}")
+              f"RS={pf['RS_F5_behavioral_change_rate']} -> {report_path}")
         return 0
+
+    # ---------------- Stage: READOUT PROBE (D35) --------------------------
+    # The rev-0.4 PRIMARY drive readout is a HELD-OUT 3-way probe on the
+    # generated text's activations, read as P(own class). It is fit on the FIT
+    # half's BASELINE generations ONLY, so discovery and judgment stay disjoint
+    # at the frame level exactly as the projection readout already required.
+    #
+    # WHY: the validated 40-Element result that motivates rev 0.4 read a
+    # HELD-OUT PROBE ACCURACY (95.625% -> 66.897%, chance 0.025, n_test 4480)
+    # -- a bounded quantity with a defined chance floor and ~30 pp of usable
+    # range -- NOT a projection onto the ablated direction. Rev 0.3's AMP
+    # readout was 78.7% bank-invariant offset, which is why its effects and its
+    # nulls were indistinguishable. This is the closest available analogue: the
+    # 40E fixture itself is NOT reachable from this repo (deviation D36).
+    print("[readout] fit-half baseline generations for the held-out readout probe")
+    probe_rows = {}
+    for cls, bank in (("f5", "f5_fit"), ("f2", "f2_fit"), ("neutral", "neu_fit")):
+        txt_fit = gen_condition(model, tok, banks[bank], device, [], max_new)
+        m_fit = measure_condition(model, tok, banks[bank], txt_fit, device,
+                                  l_star, measure_dirs)
+        probe_rows[cls] = m_fit["vec"]
+    readout_probe, probe_meta = fit_readout_probe(probe_rows, args.seed + 4040)
+    probe_classes = probe_meta.get("classes", [])
+    report["readout_probe"] = probe_meta
+    if readout_probe is None:
+        print("[warn] readout probe unavailable; AMP falls back to the "
+              "projection readout and this is recorded")
+        report["readout_probe"]["fallback"] = (
+            "AMP_PRIMARY_READOUT falls back to the projection direction; the "
+            "rev-0.4 headline readout change (D35) did NOT take effect and no "
+            "rev-0.4 selectivity claim is licensed")
+    amp_readout = AMP_PRIMARY_READOUT if readout_probe is not None else "proj"
+    stage_mark("readout_probe")
+    write_report(report, report_path)
+
+    def _probe(m, cls):
+        return attach_probe_readout(m, readout_probe, probe_classes, cls)
 
     # ---------------- Stage: ABLATE (generate hooked, judge CLEAN) --------
     print("[ablate] baselines (judge banks, no hooks)")
@@ -2728,12 +4285,13 @@ def main():
     txt_base_f2 = gen_condition(model, tok, banks["f2_judge"], device, [], max_new)
     txt_base_neu = gen_condition(model, tok, banks["neu_judge"], device, [], max_new)
 
-    base_f5 = measure_condition(model, tok, banks["f5_judge"], txt_base_f5,
-                                device, l_star, measure_dirs)
-    base_f2 = measure_condition(model, tok, banks["f2_judge"], txt_base_f2,
-                                device, l_star, measure_dirs)
-    base_neu = measure_condition(model, tok, banks["neu_judge"], txt_base_neu,
-                                 device, l_star, measure_dirs)
+    base_f5 = _probe(measure_condition(model, tok, banks["f5_judge"], txt_base_f5,
+                                       device, l_star, measure_dirs), "f5")
+    base_f2 = _probe(measure_condition(model, tok, banks["f2_judge"], txt_base_f2,
+                                       device, l_star, measure_dirs), "f2")
+    base_neu = _probe(measure_condition(model, tok, banks["neu_judge"],
+                                        txt_base_neu, device, l_star,
+                                        measure_dirs), "neutral")
 
     # Presence thresholds from BASELINE conditions only.
     tau_f5 = 0.5 * (float(np.mean(base_f5["proj"]["uF5"]))
@@ -2743,22 +4301,133 @@ def main():
     report["discover"]["tau_F5"] = tau_f5
     report["discover"]["tau_F2"] = tau_f2
 
+    # D35 diagnostic: the DIRECT 40-Element analogue -- held-out probe accuracy
+    # on the three UNABLATED judge banks. This is the number that says whether
+    # the substitute readout has any dynamic range to lose in the first place;
+    # if it is at chance the readout is dead, and if it is saturated at 1.000
+    # with extreme probabilities the readout is compressed and the AMP result
+    # must be read with that caveat. Costs nothing (the vectors already exist).
+    if readout_probe is not None:
+        diag, accs = {}, []
+        i_f5 = probe_classes.index("f5") if "f5" in probe_classes else 0
+        for cls, mm in (("f5", base_f5), ("f2", base_f2), ("neutral", base_neu)):
+            if cls not in probe_classes:
+                continue
+            V = np.asarray(mm["vec"], dtype=np.float64)
+            P = readout_probe.predict_proba(V)
+            pred = P.argmax(axis=1)
+            j = probe_classes.index(cls)
+            diag[cls] = {
+                "mean_p_own_class": float(P[:, j].mean()),
+                "sd_p_own_class": float(P[:, j].std()),
+                "mean_p_f5": float(P[:, i_f5].mean()),
+                "accuracy": float(np.mean(pred == j)),
+                "n_rows": int(V.shape[0]),
+            }
+            accs.append(diag[cls]["accuracy"])
+        report["readout_probe"]["judge_baseline_diagnostics"] = {
+            "per_class": diag,
+            "held_out_accuracy": float(np.mean(accs)) if accs else None,
+            "chance_level": READOUT_PROBE_CHANCE,
+            "note": ("direct analogue of the validated 40-Element held-out "
+                     "probe accuracy (0.95625 at chance 0.025, n_test 4480). "
+                     "Read the per-class sd: probabilities saturated at 0/1 "
+                     "mean the readout is compressed and the AMP drop must be "
+                     "interpreted with that caveat, even though the comparison "
+                     "against controls remains on the same scale and therefore "
+                     "stays fair."),
+        }
+
+    # --- D49: the preregistered probe VIABILITY gate. --------------------
+    # The rev-0.4 first draft COMPUTED the diagnostics above and then consulted
+    # them nowhere: AMP could return PASS on a readout whose own report block
+    # said the drop size was uninterpretable, while D41's se-based window was
+    # simultaneously inert because a saturated readout has se == 0. The gate is
+    # now keyed on those already-computed diagnostics and it is GATING.
+    if readout_probe is not None:
+        viability = probe_viability(
+            report["readout_probe"].get("judge_baseline_diagnostics"),
+            READOUT_PROBE_CHANCE)
+    else:
+        viability = {
+            "viable": False,
+            "reason": ("UNAVAILABLE: the readout probe could not be fitted "
+                       f"({probe_meta.get('status')})"),
+            "rule": "see D49",
+        }
+    report["readout_probe"]["viability"] = viability
+    amp_readout_viability = None
+    if AMP_PRIMARY_READOUT == "probe_p":
+        amp_readout_viability = viability
+        if not viability["viable"]:
+            amp_readout = "proj"
+            report["readout_probe"]["fallback"] = (
+                "AMP falls back to the PROJECTION readout for its descriptive "
+                "numbers, but the test is stamped VACUOUS_READOUT_NOT_VIABLE: "
+                "the rev-0.4 headline readout change (D35) did NOT take effect "
+                "and no rev-0.4 selectivity claim is licensed. A PASS on the "
+                "fallback readout is NOT available -- that readout is the one "
+                "rev 0.3 showed is 78.7% dead offset, which is why D35 exists.")
+            print(f"[warn] readout probe NOT viable: {viability['reason']}")
+    write_report(report, report_path)
+
+    # D42/D52: the number of independent measurements each judged mean averages
+    # over -- prompts x continuation positions. Quantization noise averages down
+    # by sqrt of this, which is why the RAW dtype quantum is NOT the binding
+    # floor and the rev-0.4 first draft's "48x below the bf16 quantum" reasoning
+    # was misderived even though the DR-F2 decision it supported survives on
+    # other grounds (behavioural change 0.313).
+    n_averaged = int(max(1, len(banks["f5_judge"]) * max_new))
+    report["provenance"]["n_averaged_measurements_per_readout_mean"] = n_averaged
+
     tests = {}
 
     # ---- DR-F5 ----
     print("[ablate] DR-F5")
+    # D38: the DR rail's "dose" is the removed activation mass of the zeroed
+    # cover, measured on the JUDGE prompts. Decile-matched covers are dose
+    # matched BY CONSTRUCTION; rev 0.4 reports the realised numbers instead of
+    # asserting it, exactly as PREREG line 206 was faulted for doing.
+    acts_f5_judge = mlp_intermediate_feats(
+        model, tok, banks["f5_judge"], mlp_mod, device)
+
+    def _cover_mag(cov):
+        idx = sorted(int(i) for i in cov)
+        return float(np.mean(np.abs(acts_f5_judge[:, idx]).sum(axis=1)))
+
     txt_tgt = gen_condition(model, tok, banks["f5_judge"], device,
                             dr_hooks(cover_f5), max_new)
-    tgt_dr5 = measure_condition(model, tok, banks["f5_judge"], txt_tgt,
-                                device, l_star, measure_dirs)
-    ctrls_dr5 = []
+    tgt_dr5 = _probe(measure_condition(model, tok, banks["f5_judge"], txt_tgt,
+                                       device, l_star, measure_dirs), "f5")
+    ctrls_dr5, dr5_ctrl_mags = [], []
     for tr in range(n_controls):
         rng = np.random.default_rng(args.seed * 10000 + tr)
         cov = decile_matched_cover(mean_abs_f5, cover_f5, rng)
+        dr5_ctrl_mags.append(_cover_mag(cov))
         txt_c = gen_condition(model, tok, banks["f5_judge"], device,
                               dr_hooks(cov), max_new)
-        ctrls_dr5.append(measure_condition(
-            model, tok, banks["f5_judge"], txt_c, device, l_star, measure_dirs))
+        ctrls_dr5.append(_probe(measure_condition(
+            model, tok, banks["f5_judge"], txt_c, device, l_star,
+            measure_dirs), "f5"))
+    dr5_target_mag = _cover_mag(cover_f5)
+    dr5_mag_meta = {
+        "metric": ("mean over judge prompts of the summed |activation| of the "
+                   "zeroed MLP-intermediate coordinates, clean model, last "
+                   "token -- i.e. the activation mass the cut removes"),
+        "target_perturbation_magnitude": dr5_target_mag,
+        "control_perturbation_magnitudes": dr5_ctrl_mags,
+        "control_magnitude_mean": (float(np.mean(dr5_ctrl_mags))
+                                   if dr5_ctrl_mags else None),
+        "control_magnitude_max": (float(np.max(dr5_ctrl_mags))
+                                  if dr5_ctrl_mags else None),
+        "target_over_control_mean_magnitude_ratio": (
+            float(dr5_target_mag / float(np.mean(dr5_ctrl_mags)))
+            if dr5_ctrl_mags and float(np.mean(dr5_ctrl_mags)) > 0 else None),
+        "dose_matching": "by construction (activation-decile-matched covers)",
+        "reading_rule": ("if the target's magnitude is far below the control "
+                         "mean, the correct reading of a FAIL is 'the "
+                         "comparison was not matched', NOT 'there is no rail'"),
+    }
     # NOTE (review MINOR, deduplicated): the F5-bank-with-F2-cover condition is
     # simultaneously DR-F5's cross-COVER control and DR-F2's cross-RAIL
     # selectivity condition, and the F2-bank-with-F5-cover condition is the
@@ -2767,184 +4436,383 @@ def main():
     # with the full measure_dirs so both consumers can read it.
     txt_f5bank_f2cover = gen_condition(model, tok, banks["f5_judge"], device,
                                        dr_hooks(cover_f2), max_new)
-    cond_f5bank_f2cover = measure_condition(
+    cond_f5bank_f2cover = _probe(measure_condition(
         model, tok, banks["f5_judge"], txt_f5bank_f2cover, device, l_star,
-        measure_dirs)
+        measure_dirs), "f5")
     txt_f2bank_f5cover = gen_condition(model, tok, banks["f2_judge"], device,
                                        dr_hooks(cover_f5), max_new)
-    cond_f2bank_f5cover = measure_condition(
+    cond_f2bank_f5cover = _probe(measure_condition(
         model, tok, banks["f2_judge"], txt_f2bank_f5cover, device, l_star,
-        measure_dirs)
+        measure_dirs), "f2")
     cross_dr5 = cond_f5bank_f2cover     # DR-F5 cross-cover control
     xrail_dr5 = cond_f2bank_f5cover     # DR-F5 cross-rail selectivity
     tests["DR_F5"] = eval_dr_test(base_f5, tgt_dr5, ctrls_dr5, cross_dr5,
-                                  tau_f5, base_f2, xrail_dr5, "uF5", "uF2")
+                                  tau_f5, base_f2, xrail_dr5, "uF5", "uF2",
+                                  readout=DR_PRIMARY_READOUT,
+                                  min_ctrl=min_ctrl, quantum=quantum,
+                                  magnitude_meta=dr5_mag_meta,
+                                  n_averaged=n_averaged,
+                                  strict_gates=strict_gates)
+    stage_mark("DR_F5")
     write_report(report, report_path)
 
-    # ---- DR-F2 ----
-    print("[ablate] DR-F2")
-    txt_tgt2 = gen_condition(model, tok, banks["f2_judge"], device,
-                             dr_hooks(cover_f2), max_new)
-    tgt_dr2 = measure_condition(model, tok, banks["f2_judge"], txt_tgt2,
-                                device, l_star, measure_dirs)
-    ctrls_dr2 = []
-    for tr in range(n_controls):
-        rng = np.random.default_rng(args.seed * 10000 + 100 + tr)
-        cov = decile_matched_cover(mean_abs_f2, cover_f2, rng)
-        txt_c = gen_condition(model, tok, banks["f2_judge"], device,
-                              dr_hooks(cov), max_new)
-        ctrls_dr2.append(measure_condition(
-            model, tok, banks["f2_judge"], txt_c, device, l_star, measure_dirs))
-    cross_dr2 = cond_f2bank_f5cover     # DR-F2 cross-cover control (reused)
-    xrail_dr2 = cond_f5bank_f2cover     # DR-F2 cross-rail selectivity (reused)
-    tests["DR_F2"] = eval_dr_test(base_f2, tgt_dr2, ctrls_dr2, cross_dr2,
-                                  tau_f2, base_f5, xrail_dr2, "uF2", "uF5")
+    # ---- DR-F2 (OPTIONAL in rev 0.4 -- deviation D40) ----
+    # The DR-F2 COVER is still computed above, so DR-F5's cross-cover control
+    # and BOTH cross-rail selectivity conditions are untouched: only the 20
+    # DR-F2 control-cover generations (N(1+C) = 672 units) are saved. Dropping
+    # this TEST is justified partly by rev-0.3 OUTCOMES -- behavioural change
+    # 0.313, targeted drop 0.00132, i.e. ~48x BELOW the bf16 quantum -- and is
+    # declared as such rather than presented as independent design.
+    if run_dr_f2:
+        print("[ablate] DR-F2")
+        acts_f2_judge = mlp_intermediate_feats(
+            model, tok, banks["f2_judge"], mlp_mod, device)
 
-    # ---- AMP-F5 ----
-    print("[ablate] AMP-F5")
+        def _cover_mag_f2(cov):
+            idx = sorted(int(i) for i in cov)
+            return float(np.mean(np.abs(acts_f2_judge[:, idx]).sum(axis=1)))
+
+        txt_tgt2 = gen_condition(model, tok, banks["f2_judge"], device,
+                                 dr_hooks(cover_f2), max_new)
+        tgt_dr2 = _probe(measure_condition(model, tok, banks["f2_judge"],
+                                           txt_tgt2, device, l_star,
+                                           measure_dirs), "f2")
+        ctrls_dr2, dr2_ctrl_mags = [], []
+        for tr in range(n_controls):
+            rng = np.random.default_rng(args.seed * 10000 + 100 + tr)
+            cov = decile_matched_cover(mean_abs_f2, cover_f2, rng)
+            dr2_ctrl_mags.append(_cover_mag_f2(cov))
+            txt_c = gen_condition(model, tok, banks["f2_judge"], device,
+                                  dr_hooks(cov), max_new)
+            ctrls_dr2.append(_probe(measure_condition(
+                model, tok, banks["f2_judge"], txt_c, device, l_star,
+                measure_dirs), "f2"))
+        dr2_target_mag = _cover_mag_f2(cover_f2)
+        dr2_mag_meta = {
+            "metric": dr5_mag_meta["metric"],
+            "target_perturbation_magnitude": dr2_target_mag,
+            "control_perturbation_magnitudes": dr2_ctrl_mags,
+            "control_magnitude_mean": (float(np.mean(dr2_ctrl_mags))
+                                       if dr2_ctrl_mags else None),
+            "target_over_control_mean_magnitude_ratio": (
+                float(dr2_target_mag / float(np.mean(dr2_ctrl_mags)))
+                if dr2_ctrl_mags and float(np.mean(dr2_ctrl_mags)) > 0 else None),
+            "dose_matching": "by construction (activation-decile-matched covers)",
+        }
+        cross_dr2 = cond_f2bank_f5cover     # DR-F2 cross-cover control (reused)
+        xrail_dr2 = cond_f5bank_f2cover     # DR-F2 cross-rail selectivity (reused)
+        tests["DR_F2"] = eval_dr_test(base_f2, tgt_dr2, ctrls_dr2, cross_dr2,
+                                      tau_f2, base_f5, xrail_dr2, "uF2", "uF5",
+                                      readout=DR_PRIMARY_READOUT,
+                                      min_ctrl=min_ctrl, quantum=quantum,
+                                      magnitude_meta=dr2_mag_meta,
+                                      n_averaged=n_averaged,
+                                      strict_gates=strict_gates)
+        stage_mark("DR_F2")
+        write_report(report, report_path)
+
+    # ---- AMP-F5 (rev 0.4 HEADLINE TEST) ----
+    print("[ablate] AMP-F5 (headline: selectivity)")
     txt_amp = gen_condition(model, tok, banks["f5_judge"], device,
                             eraser_hooks(u_f5_star), max_new)
-    tgt_amp = measure_condition(model, tok, banks["f5_judge"], txt_amp,
-                                device, l_star, measure_dirs)
-    ctrls_amp = []
+    tgt_amp = _probe(measure_condition(model, tok, banks["f5_judge"], txt_amp,
+                                       device, l_star, measure_dirs), "f5")
+
+    # --- D37 + D38: the rev-0.4 AMP control ensemble. ---------------------
+    # Rev 0.3 drew AMP controls as pc_random_dir(V_star, rng) with ortho_to
+    # defaulting to None. V_star is the top-10 PC basis of the pooled CENTERED
+    # drive fit rows, and the between-bank mean difference IS u_F5, so u_F5 lay
+    # substantially INSIDE the subspace the "controls" were drawn from: a
+    # random unit vector there has E[cos^2] = 0.1 and the largest of 24 draws
+    # typically reaches |cos| ~ 0.55-0.60. The best "control" was therefore
+    # roughly half the target intervention plus extra generic damage. AMP was
+    # the ONLY test in the battery whose null was contaminated by its own
+    # target: RS passed ortho_to for BOTH its families, DR used decile-matched
+    # covers, CHECK used count-matched head sets.
+    #
+    # Rev 0.4 fixes it in the ranked order the diagnosis gives:
+    #   (1) SHUFFLED-LABEL REFITS of the SAME estimator on permuted F5/neutral
+    #       fit labels -- the family that fixes the estimator, the fit
+    #       distribution and the estimation-noise geometry and varies only the
+    #       LABEL, which is precisely the scientific claim under test;
+    #   (2) DOSE-MATCHED on removed activation mass, not on vector norm;
+    #   (3) ORTHOGONALIZED against u_F5;
+    #   (4) DAMAGE-GUARDED (D39, applied in the evaluator).
+    # u_F2 is kept as the semantic-nearest-neighbour cross-direction control.
+    #
+    # HONEST FRAMING, carried into the report: this ensemble is by construction
+    # a LESS destructive null than rev 0.3's. That is because the rev-0.3 null
+    # was contaminated and undosed -- evidenced by the code asymmetry with RS
+    # -- not because rev 0.4 made the test easier. The magnitude ratio and the
+    # per-control damage statistics are published alongside any pass so a
+    # reader can check that directly instead of taking it on trust.
+    H_f5j = residual_feats(model, tok, banks["f5_judge"], device)[:, l_star + 1]
+
+    def _mag_f5(u):
+        return float(np.mean(np.abs(H_f5j @ np.asarray(u, dtype=np.float64))))
+
+    amp_target_mag = _mag_f5(u_f5_star)
+    f5_rows_fit = feats["f5_fit"][:, l_star + 1]
+    neu_rows_fit = feats["neu_fit"][:, l_star + 1]
+    n_shuf_amp = int(round(AMP_CTRL_SHUFFLED_FRAC * n_controls))
+    n_shuf_amp = (max(1, min(n_controls - 1, n_shuf_amp)) if n_controls > 1
+                  else n_controls)
+    ctrls_amp, amp_ctrl_mags, amp_ctrl_fams = [], [], []
+    amp_ctrl_matched, amp_ctrl_tries, amp_ctrl_cos = [], [], []
     for tr in range(n_controls):
         rng = np.random.default_rng(args.seed * 10000 + 300 + tr)
-        u_rand = pc_random_dir(V_star, rng)
+        if tr < n_shuf_amp:
+            fam = "shuffled_label_refit"
+
+            def draw(r):
+                return shuffled_label_dir(f5_rows_fit, neu_rows_fit, r,
+                                          ortho_to=u_f5_star)
+        else:
+            fam = "pc_subspace_ortho_to_target"
+
+            def draw(r):
+                return pc_random_dir(V_star, r, ortho_to=u_f5_star)
+
+        u_rand, mag, tries, matched = dose_matched_draw(
+            draw, rng, _mag_f5, amp_target_mag)
+        amp_ctrl_fams.append(fam)
+        amp_ctrl_mags.append(mag)
+        amp_ctrl_tries.append(tries)
+        amp_ctrl_matched.append(bool(matched))
+        amp_ctrl_cos.append(float(np.asarray(u_rand) @ np.asarray(u_f5_star)))
         txt_c = gen_condition(model, tok, banks["f5_judge"], device,
                               eraser_hooks(u_rand), max_new)
-        ctrls_amp.append(measure_condition(
-            model, tok, banks["f5_judge"], txt_c, device, l_star, measure_dirs))
+        ctrls_amp.append(_probe(measure_condition(
+            model, tok, banks["f5_judge"], txt_c, device, l_star,
+            measure_dirs), "f5"))
+    amp_ctrl_mean_mag = float(np.mean(amp_ctrl_mags)) if amp_ctrl_mags else 0.0
+    amp_mag_meta = {
+        "n_shuffled_label_refit": n_shuf_amp,
+        "n_pc_subspace_ortho": n_controls - n_shuf_amp,
+        "families": amp_ctrl_fams,
+        "orthogonalized_to_target": True,
+        "control_cosine_with_target": amp_ctrl_cos,
+        "max_abs_cosine_with_target": (float(np.max(np.abs(amp_ctrl_cos)))
+                                       if amp_ctrl_cos else None),
+        "perturbation_magnitude_metric": (
+            "mean |h . u| over the F5 JUDGE prompts, clean model, last token "
+            "-- the activation mass the rank-1 removal takes out"),
+        "target_perturbation_magnitude": amp_target_mag,
+        "control_perturbation_magnitudes": amp_ctrl_mags,
+        "control_magnitude_mean": amp_ctrl_mean_mag,
+        "control_magnitude_max": (float(np.max(amp_ctrl_mags))
+                                  if amp_ctrl_mags else None),
+        "target_over_control_mean_magnitude_ratio": (
+            float(amp_target_mag / amp_ctrl_mean_mag)
+            if amp_ctrl_mean_mag > 0 else None),
+        "dose_match_tolerance": DOSE_MATCH_TOL,
+        "dose_match_tries": amp_ctrl_tries,
+        "dose_matched": amp_ctrl_matched,
+        "n_dose_matched": int(sum(1 for x in amp_ctrl_matched if x)),
+        "rev03_defect_fixed": (
+            "rev 0.3 drew AMP controls inside a PC subspace CONTAINING the "
+            "target and reported no magnitude at all: the string 'magnitude' "
+            "occurs 10 times in atlas_v0_rev03_report.json and none of them "
+            "belong to AMP_F5. Under PREREG's own binding reading rule a FAIL "
+            "with no magnitude data is uninterpretable."),
+        "reading_rule": ("if the target's magnitude is far below the control "
+                         "mean, the correct reading of a FAIL is 'the "
+                         "comparison was not matched', NOT 'there is no "
+                         "amplifier'"),
+    }
+
     txt_amp_cross = gen_condition(model, tok, banks["f5_judge"], device,
                                   eraser_hooks(u_f2_star), max_new)
-    cross_amp = measure_condition(model, tok, banks["f5_judge"], txt_amp_cross,
-                                  device, l_star, measure_dirs)
+    cross_amp = _probe(measure_condition(model, tok, banks["f5_judge"],
+                                         txt_amp_cross, device, l_star,
+                                         measure_dirs), "f5")
     txt_amp_xrail = gen_condition(model, tok, banks["f2_judge"], device,
                                   eraser_hooks(u_f5_star), max_new)
-    xrail_amp = measure_condition(model, tok, banks["f2_judge"], txt_amp_xrail,
-                                  device, l_star, {"uF2": u_f2_star})
+    xrail_amp = _probe(measure_condition(model, tok, banks["f2_judge"],
+                                         txt_amp_xrail, device, l_star,
+                                         measure_dirs), "f2")
     tests["AMP_F5"] = eval_amp_test(base_f5, tgt_amp, ctrls_amp, cross_amp,
-                                    tau_f5, base_f2, xrail_amp, "uF5", "uF2")
+                                    tau_f5, base_f2, xrail_amp, "uF5", "uF2",
+                                    readout=amp_readout, min_ctrl=min_ctrl,
+                                    quantum=quantum,
+                                    magnitude_meta=amp_mag_meta,
+                                    readout_viability=amp_readout_viability,
+                                    n_averaged=n_averaged,
+                                    strict_gates=strict_gates)
+    stage_mark("AMP_F5")
     write_report(report, report_path)
 
-    # ---- RS-F5 (increase-sign anchor; rev 0.3 redesign) ----
-    # GATING precondition on the RS FIT half (rev 0.3 review fix D27): whether
-    # this model+bank shows a suppression gap at all is a feasibility question,
-    # and gating it on the JUDGE half -- the same pairs that supply M2 headroom
-    # denominator -- made "headroom > 0" close to automatic and biased rho
-    # downward into the pass window. The judge half is measured too, and
-    # reported UNCONDITIONED, as a descriptor.
-    print("[ablate] RS-F5 precondition (teacher-forced suppression gap, FIT half)")
-    rs_pre = rs_precondition(model, tok, banks["rs_lic_fit"],
-                             banks["rs_con_fit"], device, l_star, u_f5_star,
-                             hedge_ids, ctrl_ids, act_ids, res_ids)
-    rs_pre["half"] = "fit (GATING)"
-    rs_pre_judge = rs_precondition(model, tok, banks["rs_lic_judge"],
-                                   banks["rs_con_judge"], device, l_star,
-                                   u_f5_star, hedge_ids, ctrl_ids, act_ids,
-                                   res_ids)
-    rs_pre_judge["half"] = "judge (DESCRIPTIVE ONLY, never gating)"
-    print(f"[ablate] RS precondition (fit) holds={rs_pre['holds']} "
-          f"(G1 p={rs_pre['G1_wilcoxon_pratt_p']:.4g}, "
-          f"G2 p={rs_pre['G2_wilcoxon_pratt_p']:.4g})")
+    # ---- RS-F5 (increase-sign anchor) -- OPTIONAL in rev 0.4 (D48) -------
+    # RS is 1,944 of 3,864 units (50% of the battery) on an observable whose
+    # G2 hedge-mass gate operates at 1.7% relative while bf16 logits inject a
+    # ~6% multiplicative error per softmax probability (true SNR ~0.28), and
+    # which already returned VACUOUS_NO_BRAKE in fp32 at pythia-2.8b (G1
+    # p=0.5056, G2 p=0.6983). With RS ON the confirmatory run lands at ~4.0 h
+    # BEFORE the D34 calibration and the 20B preflight, i.e. over the window.
+    # It is OFF by default and --run-rs turns it back on; turning it on is
+    # itself a deviation to be logged, and the verdict LABEL changes because
+    # the sign anchor is then in scope (PREREG section 8).
+    if run_rs:
+        # GATING precondition on the RS FIT half (rev 0.3 review fix D27): whether
+        # this model+bank shows a suppression gap at all is a feasibility question,
+        # and gating it on the JUDGE half -- the same pairs that supply M2 headroom
+        # denominator -- made "headroom > 0" close to automatic and biased rho
+        # downward into the pass window. The judge half is measured too, and
+        # reported UNCONDITIONED, as a descriptor.
+        print("[ablate] RS-F5 precondition (teacher-forced suppression gap, FIT half)")
+        rs_pre = rs_precondition(model, tok, banks["rs_lic_fit"],
+                                 banks["rs_con_fit"], device, l_star, u_f5_star,
+                                 hedge_ids, ctrl_ids, act_ids, res_ids)
+        rs_pre["half"] = "fit (GATING)"
+        rs_pre_judge = rs_precondition(model, tok, banks["rs_lic_judge"],
+                                       banks["rs_con_judge"], device, l_star,
+                                       u_f5_star, hedge_ids, ctrl_ids, act_ids,
+                                       res_ids)
+        rs_pre_judge["half"] = "judge (DESCRIPTIVE ONLY, never gating)"
+        print(f"[ablate] RS precondition (fit) holds={rs_pre['holds']} "
+              f"(G1 p={rs_pre['G1_wilcoxon_pratt_p']:.4g}, "
+              f"G2 p={rs_pre['G2_wilcoxon_pratt_p']:.4g})")
 
-    rs_dirs = {"uF5": u_f5_star}
-    con_j = banks["rs_con_judge"]
-    lic_j = banks["rs_lic_judge"]
+        rs_dirs = {"uF5": u_f5_star}
+        con_j = banks["rs_con_judge"]
+        lic_j = banks["rs_lic_judge"]
 
-    # COMMON RANDOM NUMBERS across every RS condition (rev 0.3 review fix D29).
-    # The rev-0.3 draft passed a DIFFERENT sample_seed to baseline (7000),
-    # licensed reference (7100), target (7200) and each control (7300+100*tr).
-    # With temperature-0.7 sampling that makes baseline and target continuations
-    # differ even under a NULL intervention, so behavioral_change_rate is ~1.0
-    # by construction: VACUOUS_NO_BEHAVIORAL_CHANGE could never fire for the
-    # anchor test, byte-identity ties could never occur, and unpaired decode
-    # noise entered M1 increase and M2 rho -- defeating the entire purpose of
-    # the k=5 averaging. One shared seed makes the draws paired, so a null
-    # intervention reproduces the baseline text exactly.
-    rs_seed = args.seed * 10000 + 7000
-    txt_rs_base = gen_condition(model, tok, con_j, device, [], max_new,
-                                n_samples=rs_samples, sample_seed=rs_seed)
-    base_rs = measure_condition(model, tok, con_j, txt_rs_base, device, l_star,
-                                rs_dirs, mass_ids)
-    txt_rs_ref = gen_condition(model, tok, lic_j, device, [], max_new,
-                               n_samples=rs_samples, sample_seed=rs_seed)
-    ref_rs = measure_condition(model, tok, lic_j, txt_rs_ref, device, l_star,
-                               rs_dirs, mass_ids)
-    txt_rs = gen_condition(model, tok, con_j, device, eraser_hooks(u_rs_star),
-                           max_new, n_samples=rs_samples, sample_seed=rs_seed)
-    tgt_rs = measure_condition(model, tok, con_j, txt_rs, device, l_star,
-                               rs_dirs, mass_ids)
+        # COMMON RANDOM NUMBERS across every RS condition (rev 0.3 review fix D29).
+        # The rev-0.3 draft passed a DIFFERENT sample_seed to baseline (7000),
+        # licensed reference (7100), target (7200) and each control (7300+100*tr).
+        # With temperature-0.7 sampling that makes baseline and target continuations
+        # differ even under a NULL intervention, so behavioral_change_rate is ~1.0
+        # by construction: VACUOUS_NO_BEHAVIORAL_CHANGE could never fire for the
+        # anchor test, byte-identity ties could never occur, and unpaired decode
+        # noise entered M1 increase and M2 rho -- defeating the entire purpose of
+        # the k=5 averaging. One shared seed makes the draws paired, so a null
+        # intervention reproduces the baseline text exactly.
+        rs_seed = args.seed * 10000 + 7000
+        txt_rs_base = gen_condition(model, tok, con_j, device, [], max_new,
+                                    n_samples=rs_samples, sample_seed=rs_seed)
+        base_rs = measure_condition(model, tok, con_j, txt_rs_base, device, l_star,
+                                    rs_dirs, mass_ids)
+        txt_rs_ref = gen_condition(model, tok, lic_j, device, [], max_new,
+                                   n_samples=rs_samples, sample_seed=rs_seed)
+        ref_rs = measure_condition(model, tok, lic_j, txt_rs_ref, device, l_star,
+                                   rs_dirs, mass_ids)
+        txt_rs = gen_condition(model, tok, con_j, device, eraser_hooks(u_rs_star),
+                               max_new, n_samples=rs_samples, sample_seed=rs_seed)
+        tgt_rs = measure_condition(model, tok, con_j, txt_rs, device, l_star,
+                                   rs_dirs, mass_ids)
 
-    # RS control ensemble = TWO families, both fit on the RS distribution
-    # (rev 0.3 review fix D22):
-    #   (i) SHUFFLED-LABEL REFITS of u_RS on the RS fit half -- the identical
-    #       estimator applied to label-permuted data, i.e. the only control
-    #       family that matches the estimation-noise geometry of a 24-vs-24
-    #       diff-of-means;
-    #   (ii) random unit directions inside the PC subspace OF THE RS FIT
-    #       RESIDUALS (not the drive-bank subspace the draft used).
-    # The gating control-ensemble p is the max-statistic over BOTH families
-    # (conservative); per-family composition and magnitudes are reported.
-    n_shuf = int(round(RS_CTRL_SHUFFLED_FRAC * n_controls))
-    n_shuf = max(1, min(n_controls - 1, n_shuf)) if n_controls > 1 else n_controls
-    rs_rows_lic = feats["rs_lic_fit"][:, l_star + 1]
-    rs_rows_con = feats["rs_con_fit"][:, l_star + 1]
-    ctrls_rs, ctrl_dirs_rs, ctrl_family = [], [], []
-    for tr in range(n_controls):
-        rng = np.random.default_rng(args.seed * 10000 + 200 + tr)
-        if tr < n_shuf:
-            u_rand = shuffled_label_dir(rs_rows_con, rs_rows_lic, rng,
-                                        ortho_to=u_f5_star)
-            fam = "shuffled_label_refit"
-        else:
-            u_rand = pc_random_dir(V_rs, rng, ortho_to=u_f5_star)
-            fam = "rs_fit_pc_subspace"
-        ctrl_dirs_rs.append(u_rand)
-        ctrl_family.append(fam)
-        txt_c = gen_condition(model, tok, con_j, device, eraser_hooks(u_rand),
-                              max_new, n_samples=rs_samples,
-                              sample_seed=rs_seed)   # common random numbers
-        ctrls_rs.append(measure_condition(
-            model, tok, con_j, txt_c, device, l_star, rs_dirs, mass_ids))
+        # RS control ensemble = TWO families, both fit on the RS distribution
+        # (rev 0.3 review fix D22):
+        #   (i) SHUFFLED-LABEL REFITS of u_RS on the RS fit half -- the identical
+        #       estimator applied to label-permuted data, i.e. the only control
+        #       family that matches the estimation-noise geometry of a 24-vs-24
+        #       diff-of-means;
+        #   (ii) random unit directions inside the PC subspace OF THE RS FIT
+        #       RESIDUALS (not the drive-bank subspace the draft used).
+        # The gating control-ensemble p is the max-statistic over BOTH families
+        # (conservative); per-family composition and magnitudes are reported.
+        # Perturbation-magnitude matching. Rev 0.3 only REPORTED it, and the report
+        # showed the controls were 2.5x stronger perturbations than the target
+        # (target_over_control_mean_magnitude_ratio 0.3983), which under PREREG's
+        # own binding rule made the RS FAIL unreadable. Rev 0.4 (deviation D38)
+        # ACTS on it: controls are accept/reject sampled into the target's dose
+        # band before they are ever generated. The matrix below is computed once
+        # and reused, so matching costs zero GPU generation.
+        H_con = residual_feats(model, tok, con_j, device)[:, l_star + 1]
 
-    # Perturbation-magnitude matching, reported so the reader can see whether
-    # the target/control comparison was strength-matched AT ALL (review MAJOR):
-    # mean |h . u| over the conflicted judge prompts, clean model, last token.
-    H_con = residual_feats(model, tok, con_j, device)[:, l_star + 1]
+        def _mag(u):
+            return float(np.mean(np.abs(H_con @ np.asarray(u, dtype=np.float64))))
 
-    def _mag(u):
-        return float(np.mean(np.abs(H_con @ np.asarray(u, dtype=np.float64))))
+        target_mag = _mag(u_rs_star)
+        n_shuf = int(round(RS_CTRL_SHUFFLED_FRAC * n_controls))
+        n_shuf = max(1, min(n_controls - 1, n_shuf)) if n_controls > 1 else n_controls
+        rs_rows_lic = feats["rs_lic_fit"][:, l_star + 1]
+        rs_rows_con = feats["rs_con_fit"][:, l_star + 1]
+        ctrls_rs, ctrl_dirs_rs, ctrl_family = [], [], []
+        rs_ctrl_matched, rs_ctrl_tries = [], []
+        for tr in range(n_controls):
+            rng = np.random.default_rng(args.seed * 10000 + 200 + tr)
+            if tr < n_shuf:
+                fam = "shuffled_label_refit"
 
-    target_mag = _mag(u_rs_star)
-    ctrl_mags = [_mag(u) for u in ctrl_dirs_rs]
-    ctrl_mean_mag = float(np.mean(ctrl_mags)) if ctrl_mags else 0.0
-    ctrl_meta = {
-        "n_shuffled_label_refit": n_shuf,
-        "n_rs_fit_pc_subspace": n_controls - n_shuf,
-        "families": ctrl_family,
-        "pc_subspace_fit_on": "RS fit residuals (licensed + conflicted) at L*",
-        "perturbation_magnitude_metric":
-            "mean |h . u| over conflicted JUDGE prompts, clean model, last token",
-        "control_perturbation_magnitudes": ctrl_mags,
-        "control_magnitude_mean": ctrl_mean_mag,
-        "control_magnitude_max": float(max(ctrl_mags)) if ctrl_mags else 0.0,
-        "target_over_control_mean_magnitude_ratio": (
-            float(target_mag / ctrl_mean_mag) if ctrl_mean_mag > 0 else None),
-        "common_random_numbers": True,
-        "note": ("if the magnitude ratio is far below 1 the controls are "
-                 "STRONGER perturbations than the target and a FAIL cannot "
-                 "distinguish 'no brake' from 'controls too strong'"),
-    }
-    tests["RS_F5"] = eval_rs_test(rs_pre, base_rs, tgt_rs, ctrls_rs, ref_rs,
-                                  "uF5", pre_judge=rs_pre_judge,
-                                  ctrl_meta=ctrl_meta,
-                                  target_magnitude=target_mag)
-    write_report(report, report_path)
+                def draw_rs(r):
+                    return shuffled_label_dir(rs_rows_con, rs_rows_lic, r,
+                                              ortho_to=u_f5_star)
+            else:
+                fam = "rs_fit_pc_subspace"
+
+                def draw_rs(r):
+                    return pc_random_dir(V_rs, r, ortho_to=u_f5_star)
+
+            u_rand, _m, tries, matched = dose_matched_draw(
+                draw_rs, rng, _mag, target_mag)
+            ctrl_dirs_rs.append(u_rand)
+            ctrl_family.append(fam)
+            rs_ctrl_tries.append(tries)
+            rs_ctrl_matched.append(bool(matched))
+            txt_c = gen_condition(model, tok, con_j, device, eraser_hooks(u_rand),
+                                  max_new, n_samples=rs_samples,
+                                  sample_seed=rs_seed)   # common random numbers
+            ctrls_rs.append(measure_condition(
+                model, tok, con_j, txt_c, device, l_star, rs_dirs, mass_ids))
+
+        ctrl_mags = [_mag(u) for u in ctrl_dirs_rs]
+        ctrl_mean_mag = float(np.mean(ctrl_mags)) if ctrl_mags else 0.0
+        ctrl_meta = {
+            "n_shuffled_label_refit": n_shuf,
+            "n_rs_fit_pc_subspace": n_controls - n_shuf,
+            "families": ctrl_family,
+            "pc_subspace_fit_on": "RS fit residuals (licensed + conflicted) at L*",
+            "perturbation_magnitude_metric":
+                "mean |h . u| over conflicted JUDGE prompts, clean model, last token",
+            "control_perturbation_magnitudes": ctrl_mags,
+            "control_magnitude_mean": ctrl_mean_mag,
+            "control_magnitude_max": float(max(ctrl_mags)) if ctrl_mags else 0.0,
+            "target_over_control_mean_magnitude_ratio": (
+                float(target_mag / ctrl_mean_mag) if ctrl_mean_mag > 0 else None),
+            "dose_match_tolerance": DOSE_MATCH_TOL,
+            "dose_match_tries": rs_ctrl_tries,
+            "dose_matched": rs_ctrl_matched,
+            "n_dose_matched": int(sum(1 for x in rs_ctrl_matched if x)),
+            "common_random_numbers": True,
+            "note": ("if the magnitude ratio is far below 1 the controls are "
+                     "STRONGER perturbations than the target and a FAIL cannot "
+                     "distinguish 'no brake' from 'controls too strong'"),
+        }
+        tests["RS_F5"] = eval_rs_test(rs_pre, base_rs, tgt_rs, ctrls_rs, ref_rs,
+                                      "uF5", pre_judge=rs_pre_judge,
+                                      ctrl_meta=ctrl_meta,
+                                      target_magnitude=target_mag,
+                                      min_ctrl=min_ctrl, quantum=quantum,
+                                      n_averaged=n_averaged,
+                                      strict_gates=strict_gates)
+        stage_mark("RS_F5")
+        write_report(report, report_path)
+    else:
+        report["rs_out_of_scope"] = {
+            "run": False,
+            "reason": ("RS-F5 is OUT OF SCOPE by default in rev 0.4's second "
+                       "pass (deviation D48), not VACUOUS and not FAIL. It is "
+                       "50% of the battery's units on an observable whose true "
+                       "SNR under bf16 is ~0.28, and it already returned "
+                       "VACUOUS_NO_BRAKE in fp32 at pythia-2.8b. Declaring it "
+                       "out of scope in advance is honest; running a crippled "
+                       "version of the designated sign anchor would not be."),
+            "restore": "--run-rs (itself a deviation to be logged)",
+            "verdict_consequence": (
+                "with RS out of scope the strongest available verdict is "
+                "PASS_BOUNDED_ATLAS_V0_F5_RAIL_ONLY, which is explicitly "
+                "WEAKER than PASS_BOUNDED_ATLAS_V0 because the increase-sign "
+                "anchor -- the only typed signature starvation and attenuation "
+                "cannot produce -- was not measured"),
+        }
 
     # ---------------- Stage: CONNECT ----------------
     print("[connect] DR-F5 (L_dr) -> AMP-F5 site (L*), clean-pass selectivity")
     tests["CONN_DRF5_to_AMPF5"] = eval_conn_test(
-        base_f5, tgt_dr5, ctrls_dr5, "uF5", "uF2", rand_keys)
+        base_f5, tgt_dr5, ctrls_dr5, "uF5", "uF2", rand_keys,
+        min_ctrl=min_ctrl, quantum=quantum, n_averaged=n_averaged,
+        strict_gates=strict_gates)
     tests["CONN_DRF5_to_AMPF5"]["upstream"] = {
         "kind": "mlp_intermediate_cover", "block": l_dr}
     tests["CONN_DRF5_to_AMPF5"]["downstream_site_block"] = l_star
@@ -3071,20 +4939,35 @@ def main():
     write_report(report, report_path)
 
     # ---------------- Stage: REPORT ----------------
-    core_order = ["DR_F5", "DR_F2", "AMP_F5", "RS_F5", "CONN_DRF5_to_AMPF5"]
+    core_order = [n for n in ("DR_F5", "DR_F2", "AMP_F5", "RS_F5",
+                              "CONN_DRF5_to_AMPF5") if n in tests]
     evaluable = [n for n in core_order
                  if tests[n].get("status") in ("PASS", "FAIL", "CONFOUNDED")]
     n_pass = sum(1 for n in evaluable if tests[n]["status"] == "PASS")
     n_eval = len(evaluable)
     fraction = (n_pass / n_eval) if n_eval else 0.0
 
-    rs_status = tests["RS_F5"].get("status")
+    rs_status = (tests["RS_F5"].get("status") if "RS_F5" in tests
+                 else "OUT_OF_SCOPE_NOT_RUN")
     rs_ok_or_vacuous = rs_status in ("PASS", "VACUOUS", "VACUOUS_NO_BRAKE",
-                                     "VACUOUS_NO_BEHAVIORAL_CHANGE")
+                                     "VACUOUS_NO_BEHAVIORAL_CHANGE",
+                                     "VACUOUS_NO_PASS_REGION",
+                                     "VACUOUS_CONTROL_ENSEMBLE_DEGRADED",
+                                     "VACUOUS_DOSE_UNMATCHED",
+                                     "VACUOUS_BELOW_INSTRUMENT_RESOLUTION")
 
     kill = None
     if n_eval < 3:
         status = "GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE"
+    elif (not run_rs) and fraction > 0.5 and (n_eval - n_pass) <= 1:
+        # D48: with the sign anchor OUT OF SCOPE the strongest reachable verdict
+        # is explicitly WEAKER and carries a different label, so nobody can read
+        # an F5-rail result as the full battery's PASS_BOUNDED_ATLAS_V0.
+        status = "PASS_BOUNDED_ATLAS_V0_F5_RAIL_ONLY"
+    elif (not run_rs) and fraction <= 0.5:
+        status = "NULL_ATLAS_V0"
+    elif not run_rs:
+        status = "GREY_ATLAS_V0"
     elif (rs_status == "FAIL") and (fraction <= 0.5):
         status = "NULL_ATLAS_V0"
         kill = ("KILL condition met: the increase-sign anchor (RS) was evaluable "
@@ -3101,8 +4984,8 @@ def main():
         status = "GREY_ATLAS_V0"
 
     dr_amp_separate = (
-        tests["DR_F5"].get("starvation_signature_holds") is True
-        and tests["AMP_F5"].get("attenuation_signature_holds") is True)
+        tests.get("DR_F5", {}).get("starvation_signature_holds") is True
+        and tests.get("AMP_F5", {}).get("attenuation_signature_holds") is True)
     if (rs_status == "FAIL") and (not dr_amp_separate) and n_eval >= 4:
         status = "NULL_ATLAS_V0"
         kill = ("KILL condition met: the increase-sign anchor (RS) failed AND "
@@ -3119,6 +5002,17 @@ def main():
         "fraction_pass_descriptive": float(fraction),
         "non_independence_caveat": AGGREGATE_CAVEAT,
         "rs_sign_anchor_status": rs_status,
+        "rs_sign_anchor_in_scope": bool(run_rs),
+        "verdict_label_note": (
+            "PASS_BOUNDED_ATLAS_V0_F5_RAIL_ONLY is a DELIBERATELY WEAKER label "
+            "than PASS_BOUNDED_ATLAS_V0: with --run-rs off the increase-sign "
+            "anchor -- the only typed signature that starvation and attenuation "
+            "cannot produce -- was never measured, so the battery cannot "
+            "discriminate a typed component atlas from selective localization "
+            "of F5-type content. It licenses nothing the full battery would."
+            if not run_rs else
+            "the sign anchor was in scope; the standard rev-0.2/0.3 verdict "
+            "labels apply unchanged"),
         "harness_sanity_excluded_from_aggregate": True,
         "status": status,
         "kill_statement_triggered": kill,
@@ -3145,6 +5039,37 @@ def main():
                     "p_vs_control_mean"),
                 "vs_baseline": tests[n].get("paired_arms", {}).get(
                     "p_vs_baseline")} for n in core_order},
+        # ---- rev 0.4 additions ----
+        "primary_readout_by_test": {
+            n: tests[n].get("primary_readout") for n in core_order},
+        "measurability_by_test": {
+            n: tests[n].get("measurability") for n in core_order},
+        "measurability_note": MEASURABILITY_NOTE,
+        "control_magnitude_ratio_by_test": {
+            n: (tests[n].get("control_magnitude") or {}).get(
+                "target_over_control_mean_magnitude_ratio")
+            for n in core_order},
+        "control_guard_kept_by_test": {
+            n: (tests[n].get("control_guard") or {}).get("n_kept")
+            for n in core_order},
+        "pass_window_by_test": {
+            n: tests[n].get("pass_window") for n in core_order},
+        "dr_f2_rail": ("RUN" if run_dr_f2 else
+                       "DROPPED by default in rev 0.4 (deviation D40); its "
+                       "COVER is still computed so DR-F5's cross-cover control "
+                       "and both cross-rail selectivity conditions are "
+                       "unaffected. Dropping it is justified partly by rev-0.3 "
+                       "OUTCOMES and declared as such."),
+        "rev04_control_framing": (
+            "The rev-0.4 control ensembles are, by construction, LESS "
+            "destructive nulls than rev 0.3's: they are orthogonalized against "
+            "the target, dose-matched on removed activation mass, and "
+            "damage-guarded. The honest framing is that the rev-0.3 AMP null "
+            "was CONTAMINATED and UNDOSED -- evidenced by the code asymmetry "
+            "with RS, which already passed ortho_to for both its families -- "
+            "not that rev 0.4 made the test easier. Any PASS must be read "
+            "together with control_magnitude_ratio_by_test and the per-control "
+            "damage statistics, or it reads as a control-weakening artifact."),
         "rs_surface_disclosure": (
             "u_RS is plausibly a PROHIBITION-VOCABULARY direction: the RS "
             "licensing/blocking clauses are strongly polar (allows/forbids, "
@@ -3158,7 +5083,10 @@ def main():
         "cas_specificity": ("GREY. Nothing here separates drive semantics from "
                             "topic/lexical semantics; see PREREG section 6."),
     }
+    stage_mark("report")
     report["provenance"]["runtime_seconds"] = round(time.time() - t0, 1)
+    report["provenance"]["stage_elapsed_seconds"] = stage_times
+    report["provenance"]["peak_vram"] = peak_vram_gib()
     if args.smoke:
         report["provenance"]["note"] = ("SMOKE RUN -- mechanical validation only; "
                                         "numbers are never evidence")
