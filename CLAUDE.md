@@ -21,6 +21,18 @@
 - Preserve the authoritative verbs from the definitions ("affinity for," "attracted toward," "adverse to," "repelled by," "resonates with," "impregnated with," "triggers," "brought to Mind"). Do not substitute anthropomorphizing or affective replacements.
 - Only the Noetic definitions are reconciled from the Tootra Math Handbook. The handbook's mathematical framework, notation, and acquisitions are NOT incorporated — CAS retains its own math, compiler, and notation.
 
+## CAS HARNESS SPEC SHEET — READ FIRST, KEEP CURRENT (MANDATORY)
+- **`docs/CAS_HARNESS_SPEC_SHEET.md` is the LIVING master record of the CAS Harness.** It is the single source of truth for what the harness can do, what is proven, what is disproven, and what is still open.
+- **Always** read it before doing ANY CAS Harness work — before designing an experiment, quoting a capability, writing marketing or regulator-facing copy, or answering "can the harness do X". It exists so no agent re-derives, re-runs, or re-claims work that is already settled.
+- **Always** update it **in the same commit as the result**, whenever you: produce a new experimental result (pass, fail, null, GREY, or vacuous), change a capability's claim status, retire or withdraw a claim, add a new capability, or discover a new limit.
+- **Update rules (non-negotiable):**
+  - Use the claim-status vocabulary defined in the sheet's own legend (`REAL` / `VALIDATED` / `LICENSED` / `NOT LICENSED` / `GREY` / `VACUOUS` / `WITHDRAWN` / `ENGINEERED-NOT-VALIDATED` / `FLAG_FOR_HUMAN_REVIEW`). Do not invent new status words.
+  - **Never delete a negative result.** Disconfirmations are load-bearing product assets — they are what keep the claims honest and defensible.
+  - **Never upgrade a status without an artifact path** in the same edit. A status with no checkable artifact is not a status.
+  - Keep every number **exact** — never round, never paraphrase a metric.
+  - Add a dated row to the sheet's Change Log for every edit.
+- Rationale: two flagship artifacts have now been found living ONLY on a retired pod, and multiple experiments have re-attempted already-closed work. This sheet is the defence against both.
+
 ## Progress Tracking
 - **Always** read `CHANGELOG.md` at session start before doing anything
 - **Always** update `CHANGELOG.md` after every meaningful unit of work
