@@ -1,0 +1,2256 @@
+{
+  "schema_version": "component_atlas_v0.3",
+  "frame": "Parts are the MODEL'S (discovered functionally), names are OURS (CAS-PCBA types), ablation is the JUDGE. A label sticks only if its preregistered directional ablation prediction holds vs matched controls. This does NOT claim the model encodes CAS.",
+  "boundary": "Bounded claim only. This run, at best, causally supports assigning CAS-PCBA type labels to specific internal parts of one pinned model under specific prompts, measures, and matched controls. It does not find 'the' neurons or 'the' circuit; it does not show the model encodes CAS; it does not establish that the measured directions carry drive semantics rather than topic/lexical content (CAS-specificity remains GREY per the matched-taxonomy lane); it does not license generation-control claims (cite Stage 27P for the eraser channel, two families only); it does not transfer to other models, layers, hook points, or prompt distributions without rerunning. Rev 0.3 is judged on a DIFFERENT model (pythia-2.8b) with RE-DRAWN banks; it does not amend or supersede the rev-0.2 NULL_ATLAS_V0 result on pythia-1b, which stands as reported.",
+  "aggregate_caveat": "The five core tests are NOT independent: DR-F5, AMP-F5, and CONN share the F5 judge bank and the u_F5 direction; DR-F5 and DR-F2 share method. The pass fraction is DESCRIPTIVE ONLY; no binomial p-value is licensed as a headline. Per-test evidence (each against its own matched controls) is the primary result. Better power in rev 0.3 does not change this: the tests are non-independent BY DESIGN, not by sample size.",
+  "rev03_provenance_note": "Rev 0.3 design changes were made AFTER seeing the rev-0.2 NULL result and are therefore informed by rev-0.2 outcomes. They are legitimate iteration, NOT post-hoc tuning, ONLY because (a) every change is logged with date and reason in PREREG section 10 BEFORE any rev-0.3 run, and (b) rev 0.3 is judged on a different model with re-drawn banks. The rev-0.2 result is reported unamended.",
+  "provenance": {
+    "model": "EleutherAI/pythia-2.8b",
+    "revision": "2a259cdd96a4beb1cdf467512e3904197345f6a9",
+    "resolved_commit_sha": "2a259cdd96a4beb1cdf467512e3904197345f6a9",
+    "revision_verified": true,
+    "claim_eligible": true,
+    "seed": 0,
+    "device": "cuda",
+    "smoke": false,
+    "preflight": false,
+    "local_files_only": true,
+    "allow_tf32_matmul_pinned_false": true,
+    "n_controls": 24,
+    "n_conn_dirs": 24,
+    "max_new_tokens": 32,
+    "rs_samples": 5,
+    "rs_temperature": 0.7,
+    "prompt_bank_sha256": "6a9a856f07ebfda8400c5945cf03d5ad1dadafc550f7b0a38f7debf9bf34474d",
+    "config_sha256": "2434b23bc0f4077609ac5bb8ea3f9f606b03fcf795cf436943e30f56e0ea7d62",
+    "fit_frame_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      7,
+      10,
+      14,
+      15,
+      17,
+      18,
+      19,
+      20,
+      21,
+      23,
+      26,
+      28,
+      30,
+      31,
+      32,
+      34,
+      38,
+      42,
+      43,
+      47,
+      48,
+      52,
+      53,
+      55,
+      56,
+      62,
+      63
+    ],
+    "judge_frame_indices": [
+      5,
+      6,
+      8,
+      9,
+      11,
+      12,
+      13,
+      16,
+      22,
+      24,
+      25,
+      27,
+      29,
+      33,
+      35,
+      36,
+      37,
+      39,
+      40,
+      41,
+      44,
+      45,
+      46,
+      49,
+      50,
+      51,
+      54,
+      57,
+      58,
+      59,
+      60,
+      61
+    ],
+    "rs_fit_pair_indices": [
+      5,
+      8,
+      9,
+      10,
+      11,
+      13,
+      15,
+      18,
+      20,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      30,
+      31,
+      33,
+      41,
+      42,
+      44,
+      45,
+      46,
+      47
+    ],
+    "rs_judge_pair_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      6,
+      7,
+      12,
+      14,
+      16,
+      17,
+      19,
+      21,
+      22,
+      29,
+      32,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      43
+    ],
+    "n_frames_total": 64,
+    "n_judge_per_class": 32,
+    "n_fit_per_class": 32,
+    "n_rs_pairs_total": 48,
+    "n_rs_judge_pairs": 24,
+    "n_rs_fit_pairs": 24,
+    "slot_verb_audit": {
+      "n_frames": 64,
+      "within_class_repeated_head_verbs": {
+        "f5": {
+          "took": [
+            1,
+            11
+          ],
+          "pushed": [
+            8,
+            21
+          ]
+        },
+        "f2": {
+          "listened": [
+            22,
+            24
+          ]
+        },
+        "neutral": {
+          "stood": [
+            1,
+            6
+          ]
+        }
+      },
+      "cross_class_shared_head_verbs": {
+        "f5_vs_f2": [
+          "stepped"
+        ]
+      },
+      "claim_as_stated_in_prereg_2_1": "head verbs are unique within each class and shared across classes ONLY in the rev-0.2 verbatim block (frames 1-24), which is reproduced unaltered by design; the residual overlaps are listed above rather than asserted away"
+    },
+    "architecture": {
+      "n_blocks": 32,
+      "n_heads_per_layer": 32,
+      "hidden": 2560,
+      "head_dim": 80,
+      "total_heads": 1024,
+      "mlp_intermediate": 10240
+    },
+    "derived_layer_params": {
+      "sweep_lo": 8,
+      "L_STAR_MIN": 12,
+      "L_STAR_MAX": 24,
+      "DR_OFFSET": 8,
+      "topk_heads": 31,
+      "fractions": {
+        "sweep": 0.25,
+        "l_star_min": 0.375,
+        "l_star_max": 0.75,
+        "dr_offset": 0.25,
+        "topk_heads": 0.03,
+        "cover_k": 0.01
+      }
+    },
+    "control_ensemble_p_floor": 0.04,
+    "lexicon_token_ids": {
+      "hedge_n_ids": 30,
+      "control_lex_n_ids": 44,
+      "act_n_ids": 25,
+      "restrain_n_ids": 14,
+      "hedge_resolution": {
+        "perhaps": [
+          4931,
+          11243,
+          16830,
+          30875
+        ],
+        "maybe": [
+          5046,
+          8948,
+          11175,
+          28489
+        ],
+        "might": [
+          1537,
+          22732,
+          35284
+        ],
+        "possibly": [
+          6830,
+          38896
+        ],
+        "probably": [
+          3164,
+          27692,
+          31330,
+          37161
+        ],
+        "unsure": [
+          31488
+        ],
+        "uncertain": [
+          8767
+        ],
+        "hesitant": [],
+        "hesitated": [
+          32360
+        ],
+        "hesitate": [
+          32379
+        ],
+        "wonder": [
+          4282,
+          26733
+        ],
+        "wondered": [
+          13876
+        ],
+        "doubt": [
+          5545
+        ],
+        "doubted": [
+          42960
+        ],
+        "cautious": [
+          31798
+        ],
+        "caution": [
+          17458
+        ],
+        "risky": [
+          29198
+        ],
+        "unclear": [
+          12744
+        ]
+      },
+      "control_lex_resolution": {
+        "indeed": [
+          6296,
+          8079,
+          24804
+        ],
+        "later": [
+          1996,
+          14772,
+          24801,
+          31312
+        ],
+        "must": [
+          1364,
+          18265,
+          19680,
+          30519
+        ],
+        "quickly": [
+          4541
+        ],
+        "finally": [
+          4720,
+          6610,
+          10971
+        ],
+        "unable": [
+          7591,
+          43794,
+          48706
+        ],
+        "unknown": [
+          7202,
+          20920,
+          29469,
+          32471
+        ],
+        "distant": [
+          13392
+        ],
+        "returned": [
+          4895
+        ],
+        "return": [
+          1091,
+          2309,
+          15968,
+          16140
+        ],
+        "notice": [
+          4366,
+          17766,
+          30943,
+          37277
+        ],
+        "noticed": [
+          8344,
+          44120
+        ],
+        "note": [
+          3877,
+          5838,
+          8497,
+          9939
+        ],
+        "noted": [
+          4879
+        ],
+        "curious": [
+          14338
+        ],
+        "attention": [
+          4116,
+          42959
+        ],
+        "costly": [
+          19983
+        ],
+        "unusual": [
+          11555
+        ]
+      }
+    },
+    "torch": "2.12.0+cu130",
+    "numpy": "2.4.6",
+    "started_utc": "2026-08-19T06:09:37Z",
+    "transformers": "5.9.0",
+    "sklearn": "1.9.0",
+    "cover_k": 102,
+    "cover_k_fraction_of_intermediate": 0.0099609375,
+    "cover_k_rev02_absolute_equivalent": 32,
+    "topk_heads_fraction_of_all_heads": 0.0302734375,
+    "runtime_seconds": 4565.5
+  },
+  "surface_control": {
+    "f5_vs_neutral": {
+      "status": "OK",
+      "judge_accuracy": 0.640625,
+      "interpretation": "Banks are minimal pairs: separability is confined to the drive slot BY DESIGN and is expected to be high. This descriptor bounds the claim (directions may carry topic/lexical content); the typed directional signatures (sign, presence-vs-magnitude, selectivity, connection) are what the tests judge, and drive-vs-topic semantics is explicitly NOT claimed (see PREREG section 6)."
+    },
+    "f2_vs_neutral": {
+      "status": "OK",
+      "judge_accuracy": 0.71875,
+      "interpretation": "Banks are minimal pairs: separability is confined to the drive slot BY DESIGN and is expected to be high. This descriptor bounds the claim (directions may carry topic/lexical content); the typed directional signatures (sign, presence-vs-magnitude, selectivity, connection) are what the tests judge, and drive-vs-topic semantics is explicitly NOT claimed (see PREREG section 6)."
+    },
+    "rs_conflicted_vs_licensed": {
+      "status": "OK",
+      "judge_accuracy": 0.75,
+      "interpretation": "Banks are minimal pairs: separability is confined to the drive slot BY DESIGN and is expected to be high. This descriptor bounds the claim (directions may carry topic/lexical content); the typed directional signatures (sign, presence-vs-magnitude, selectivity, connection) are what the tests judge, and drive-vs-topic semantics is explicitly NOT claimed (see PREREG section 6)."
+    }
+  },
+  "discover": {
+    "n_blocks": 32,
+    "sweep_blocks": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24
+    ],
+    "sweep_hi": 24,
+    "probe_acc_f5_per_block": [
+      0.8692307692307691,
+      0.876923076923077,
+      0.923076923076923,
+      0.923076923076923,
+      0.9307692307692308,
+      0.9076923076923077,
+      0.9230769230769231,
+      0.9307692307692308,
+      0.9230769230769231,
+      0.8923076923076924,
+      0.8846153846153847,
+      0.8692307692307691,
+      0.8538461538461538,
+      0.8615384615384615,
+      0.8538461538461538,
+      0.8307692307692308,
+      0.8384615384615385
+    ],
+    "probe_acc_f2_per_block": [
+      0.8692307692307694,
+      0.8615384615384617,
+      0.9307692307692308,
+      0.9307692307692307,
+      0.9538461538461538,
+      0.9230769230769231,
+      0.9230769230769231,
+      0.9230769230769231,
+      0.9307692307692308,
+      0.9230769230769231,
+      0.9230769230769231,
+      0.9076923076923078,
+      0.8923076923076924,
+      0.8846153846153847,
+      0.8615384615384615,
+      0.8538461538461538,
+      0.8615384615384615
+    ],
+    "mean_acc_per_block": [
+      0.8692307692307693,
+      0.8692307692307694,
+      0.926923076923077,
+      0.9269230769230768,
+      0.9423076923076923,
+      0.9153846153846155,
+      0.9230769230769231,
+      0.926923076923077,
+      0.926923076923077,
+      0.9076923076923078,
+      0.903846153846154,
+      0.8884615384615384,
+      0.8730769230769231,
+      0.8730769230769231,
+      0.8576923076923076,
+      0.8423076923076923,
+      0.85
+    ],
+    "probe_margin_f5_per_block": [
+      0.8140749335289001,
+      0.8289998292922973,
+      0.8744830012321472,
+      0.8812087655067444,
+      0.8845946311950683,
+      0.8715731978416443,
+      0.8666014313697815,
+      0.8594043493270874,
+      0.8516966104507446,
+      0.8357921123504639,
+      0.8336904168128967,
+      0.8189872622489929,
+      0.8160380244255065,
+      0.8131010413169861,
+      0.8069075226783753,
+      0.8031590104103088,
+      0.803853702545166
+    ],
+    "probe_margin_f2_per_block": [
+      0.8417954444885254,
+      0.8420008540153503,
+      0.8793595671653748,
+      0.8774477481842041,
+      0.8839429497718811,
+      0.8769209265708924,
+      0.877925443649292,
+      0.8721794366836548,
+      0.8694141983985901,
+      0.8469466447830201,
+      0.842280900478363,
+      0.8229070186614991,
+      0.8160741209983826,
+      0.8059654712677002,
+      0.7977798461914063,
+      0.7928200960159302,
+      0.789268684387207
+    ],
+    "mean_margin_per_block": [
+      0.8279351890087128,
+      0.8355003416538238,
+      0.876921284198761,
+      0.8793282568454743,
+      0.8842687904834747,
+      0.8742470622062684,
+      0.8722634375095368,
+      0.8657918930053712,
+      0.8605554044246674,
+      0.841369378566742,
+      0.8379856586456298,
+      0.820947140455246,
+      0.8160560727119446,
+      0.8095332562923432,
+      0.8023436844348908,
+      0.7979895532131195,
+      0.7965611934661865
+    ],
+    "selection_statistic": "mean over the two drives of the inner-test predicted-probability MARGIN (continuous, non-saturating); accuracy is reported only",
+    "n_inner_split_seeds": 5,
+    "tied_blocks_at_max_margin": [
+      12
+    ],
+    "tie_set_width_margin": 1,
+    "tied_blocks_at_max_accuracy": [
+      12
+    ],
+    "tie_set_width_accuracy": 1,
+    "accuracy_saturated_plateau": false,
+    "tie_break_rule": "shallowest tied block at or above L_STAR_MIN (preregistered, rev 0.3 review fix D21)",
+    "L_star": 12,
+    "best_mean_margin": 0.8842687904834747,
+    "best_mean_acc": 0.9423076923076923,
+    "mean_acc_at_L_star": 0.9423076923076923,
+    "shuffled_label_floor": [
+      0.5192307692307692,
+      0.4230769230769231,
+      0.5192307692307692,
+      0.4423076923076923,
+      0.46153846153846156,
+      0.4807692307692308,
+      0.4807692307692308,
+      0.5769230769230769,
+      0.5,
+      0.5576923076923077
+    ],
+    "shuffled_label_floor_max": 0.5769230769230769,
+    "shuffled_label_floor_margin": [
+      0.5130114257335663,
+      0.447987824678421,
+      0.5436566472053528,
+      0.4542938470840454,
+      0.4722452312707901,
+      0.48067648708820343,
+      0.4958374798297882,
+      0.5907971560955048,
+      0.48858462274074554,
+      0.5129188895225525
+    ],
+    "shuffled_label_floor_margin_max": 0.5907971560955048,
+    "floor_statistic": "mean of F5-vs-neutral and F2-vs-neutral (matches best_acc)",
+    "L_dr": 4,
+    "u_rs_primary": "conflicted_minus_licensed on RS fit half, orthogonalized vs u_F5",
+    "u_rs_legacy_cosine_with_primary": 0.012673052595623131,
+    "tau_F5": 9.59434468543845,
+    "tau_F2": 15.382967035497261
+  },
+  "atlas": [
+    {
+      "component_id": "DR-F5",
+      "type_label": "DR",
+      "location": {
+        "kind": "mlp_intermediate_cover",
+        "block": 4,
+        "coords": [
+          9060,
+          6169,
+          1782,
+          6913,
+          5803,
+          9313,
+          855,
+          10033,
+          1223,
+          1480,
+          3692,
+          8808,
+          441,
+          9218,
+          3657,
+          7981,
+          8934,
+          5450,
+          6713,
+          6969,
+          7519,
+          6401,
+          4808,
+          4245,
+          5475,
+          7279,
+          3613,
+          3907,
+          4631,
+          5272,
+          7685,
+          6232,
+          7539,
+          8056,
+          3628,
+          3618,
+          6894,
+          1850,
+          5217,
+          2630,
+          281,
+          904,
+          2621,
+          6838,
+          5864,
+          1208,
+          2853,
+          8842,
+          4591,
+          8044,
+          3273,
+          6044,
+          3708,
+          4709,
+          9233,
+          2472,
+          4064,
+          3632,
+          703,
+          6365,
+          7628,
+          3813,
+          4768,
+          2021,
+          5916,
+          9125,
+          4604,
+          2834,
+          8965,
+          8225,
+          5494,
+          10121,
+          3968,
+          7409,
+          6517,
+          9612,
+          9710,
+          5466,
+          4829,
+          3290,
+          6659,
+          5583,
+          1926,
+          2407,
+          8018,
+          6876,
+          7397,
+          2774,
+          7799,
+          5413,
+          2919,
+          2850,
+          4035,
+          2639,
+          1734,
+          2144,
+          5137,
+          3461,
+          2945,
+          4582,
+          10115,
+          1526
+        ]
+      }
+    },
+    {
+      "component_id": "DR-F2",
+      "type_label": "DR",
+      "location": {
+        "kind": "mlp_intermediate_cover",
+        "block": 4,
+        "coords": [
+          1480,
+          6232,
+          5217,
+          2659,
+          9031,
+          784,
+          7318,
+          9347,
+          5147,
+          6169,
+          5962,
+          8808,
+          8675,
+          6913,
+          1223,
+          3692,
+          6838,
+          441,
+          6517,
+          8934,
+          1782,
+          5803,
+          4245,
+          2714,
+          6894,
+          9765,
+          8056,
+          1589,
+          4566,
+          7519,
+          4670,
+          588,
+          4808,
+          9859,
+          3887,
+          3290,
+          6234,
+          2834,
+          3732,
+          1767,
+          7539,
+          3657,
+          5475,
+          3809,
+          7799,
+          8573,
+          703,
+          4591,
+          9105,
+          4089,
+          5822,
+          9233,
+          6712,
+          4673,
+          5137,
+          4300,
+          8468,
+          8026,
+          3711,
+          5284,
+          4410,
+          10206,
+          215,
+          7685,
+          1993,
+          5663,
+          4035,
+          3074,
+          5467,
+          6329,
+          4765,
+          5958,
+          9369,
+          3813,
+          9439,
+          2612,
+          6746,
+          4607,
+          9567,
+          5428,
+          558,
+          10031,
+          5501,
+          2850,
+          4248,
+          5618,
+          2621,
+          3628,
+          7590,
+          5450,
+          4788,
+          1926,
+          2576,
+          3976,
+          9218,
+          6299,
+          7389,
+          8093,
+          4170,
+          4377,
+          4383,
+          2865
+        ]
+      }
+    },
+    {
+      "component_id": "RS-F5",
+      "type_label": "RS",
+      "location": {
+        "kind": "residual_direction",
+        "block": 12,
+        "note": "restraint-CONTEXT direction (conflicted minus licensed), orthogonalized vs drive direction"
+      }
+    },
+    {
+      "component_id": "AMP-F5",
+      "type_label": "AMP",
+      "location": {
+        "kind": "residual_direction",
+        "block": 12,
+        "note": "drive subspace rank-1"
+      }
+    }
+  ],
+  "tests": {
+    "DR_F5": {
+      "baseline_mean_proj": 10.738620647192818,
+      "target_mean_proj": 10.634439111363578,
+      "targeted_drop": 0.10418153582923928,
+      "matched_control_drops": [
+        0.011552725794809149,
+        0.03827804899293952,
+        0.09020042076553025,
+        0.1272398187820194,
+        0.20435467263725826,
+        -0.07549710205803706,
+        -0.046458291299433796,
+        -0.03495862441634223,
+        0.024212971424919516,
+        0.09780050442220833,
+        0.12151913547181437,
+        0.1103570299358303,
+        0.1424714831076841,
+        0.00030941877618673175,
+        -0.03274352179264639,
+        0.08855066833206138,
+        0.09564913001323916,
+        0.12112624817437201,
+        -0.04753184730590476,
+        0.04029428720072836,
+        -0.03518067947752357,
+        0.02967809672323085,
+        0.006223504339047281,
+        0.01819056156929122
+      ],
+      "max_matched_control_drop": 0.20435467263725826,
+      "cross_cover_drop": -0.005451889585215142,
+      "wilcoxon_pratt_p": 0.3389997167978436,
+      "wilcoxon_pratt_stats": {
+        "n_total": 32,
+        "n_tied": 0,
+        "tie_rate": 0.0,
+        "n_byte_identical_forced_zero": 0,
+        "W_signed_rank_sum": 46.0,
+        "method": "wilcoxon_pratt_exact_permutation",
+        "p": 0.3389997167978436
+      },
+      "paired_arms": {
+        "diffs_vs_control_mean": [
+          -0.15789032800013025,
+          -0.3244373180732545,
+          0.5408483961326063,
+          -0.14058807019850939,
+          -0.3345258891398579,
+          -0.39264436784940315,
+          -0.19748446251044527,
+          -0.14364447923983725,
+          -0.02497921096351341,
+          0.0077131596037780525,
+          0.03507776334379642,
+          0.01978258415210199,
+          0.010444012177282858,
+          -0.18899007501064524,
+          -0.03221672252418273,
+          0.11874671227915456,
+          0.1647691623724068,
+          0.1179179121961269,
+          0.14558975425975618,
+          -0.05704796147735003,
+          -0.06530226558528263,
+          -0.043296510779791575,
+          0.24364224351856656,
+          -0.009156236165722476,
+          0.680842246168825,
+          0.11236790355896886,
+          0.19885363724066174,
+          0.023323356042235233,
+          0.23627893722706794,
+          1.2764151171261666,
+          0.1361851068773614,
+          -0.08363650704100856
+        ],
+        "diffs_vs_baseline": [
+          0.0,
+          0.0,
+          0.8113076539490223,
+          0.0,
+          -0.3537816265579874,
+          0.23565308991347678,
+          -0.3605414583644091,
+          -0.1567030682616366,
+          0.0,
+          0.0,
+          0.0,
+          0.011591557905276773,
+          0.011393467829758919,
+          0.0,
+          0.0,
+          0.768633563344844,
+          0.20812946825988377,
+          0.24300952909183593,
+          0.0,
+          0.0,
+          0.0,
+          -0.1530485773294128,
+          0.0,
+          0.0,
+          0.5782028585756658,
+          0.0,
+          0.0,
+          0.07144137257243344,
+          0.0,
+          1.276415117126172,
+          0.1421061984807288,
+          0.0
+        ],
+        "p_vs_control_mean": 0.3389997167978436,
+        "p_vs_baseline": 0.03948974609375,
+        "stats_vs_control_mean": {
+          "n_total": 32,
+          "n_tied": 0,
+          "tie_rate": 0.0,
+          "n_byte_identical_forced_zero": 0,
+          "W_signed_rank_sum": 46.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.3389997167978436
+        },
+        "stats_vs_baseline": {
+          "n_total": 32,
+          "n_tied": 17,
+          "tie_rate": 0.53125,
+          "n_byte_identical_forced_zero": 17,
+          "W_signed_rank_sum": 175.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.03948974609375
+        },
+        "both_arms_hold": false,
+        "arm_rule": "BOTH the control-mean arm and the baseline arm must be below alpha; zeros are byte-identity ties, kept by Pratt"
+      },
+      "control_ensemble_p": 0.28,
+      "n_controls": 24,
+      "legacy_sign_test_p_reported_only": 0.4300250329542905,
+      "behavioral_change_rate": 0.46875,
+      "baseline_presence_rate": 0.78125,
+      "target_presence_rate": 0.78125,
+      "effect_size_target": 0.06917820281294403,
+      "effect_size_cross_rail": -0.04223551878744754,
+      "selectivity_gate": "|d_cross_rail| <= 0.5 x d_target",
+      "coherence_target": 0.7119776287872599,
+      "repetition_target": 0.9325147152017778,
+      "sample_texts_target": [
+        " the alarm went off again.\n\n\"What the hell?\" the technician said.\n\n\"I don't know,\" the technician's supervisor said. \"",
+        " expanded it to the entire district.\n\n\u201cWe\u2019re really excited about the results,\u201d she said. \u201cWe\u2019re really excited about the results.\u201d",
+        " she tried again.\n\n\"I'm not sure if it's the same recipe, but it's the same method,\" she said. \"I'm not"
+      ],
+      "status": "VACUOUS_NO_BEHAVIORAL_CHANGE",
+      "reason": "only 0.47 of judge prompts changed text under the targeted intervention (< 0.6); under the clean-pass rule the intervention never engaged the behavioural channel, so the label was never actually tested"
+    },
+    "DR_F2": {
+      "baseline_mean_proj": 16.37396193770243,
+      "target_mean_proj": 16.37263914856732,
+      "targeted_drop": 0.0013227891351093035,
+      "matched_control_drops": [
+        -0.028848107454695793,
+        -0.06699152160760846,
+        0.08304525250795436,
+        -0.027943386580240315,
+        -0.04322282599208904,
+        -0.14379281376050912,
+        -0.04299021471644693,
+        0.046748131490492284,
+        -0.12927473731345174,
+        -0.07613788345658534,
+        -0.07583368117695599,
+        -0.08610976985662688,
+        -0.12195282644245609,
+        -0.05586996008584322,
+        -0.07425769180938602,
+        -0.07893657736981652,
+        -0.035848151584115584,
+        -0.003926499301154962,
+        0.113617166565394,
+        0.016309020443049604,
+        0.05091154151267929,
+        0.042234804208963084,
+        0.003285338197667187,
+        -0.17454265689284298
+      ],
+      "max_matched_control_drop": 0.113617166565394,
+      "cross_cover_drop": -0.04965928795265029,
+      "wilcoxon_pratt_p": 0.5477297119796276,
+      "wilcoxon_pratt_stats": {
+        "n_total": 32,
+        "n_tied": 3,
+        "tie_rate": 0.09375,
+        "n_byte_identical_forced_zero": 3,
+        "W_signed_rank_sum": -12.0,
+        "method": "wilcoxon_pratt_exact_permutation",
+        "p": 0.5477297119796276
+      },
+      "paired_arms": {
+        "diffs_vs_control_mean": [
+          0.0507114821579524,
+          1.0228100159973543,
+          0.6106694272089506,
+          0.2916221151505951,
+          3.552713678800501e-15,
+          -0.04763500578033053,
+          -0.46640092631733765,
+          -0.006164077725113515,
+          0.053771104957689886,
+          0.018360727365495322,
+          3.552713678800501e-15,
+          1.7763568394002505e-15,
+          -0.06250314861963346,
+          -0.47181449413080756,
+          -0.02179039878329192,
+          -0.12246849928760817,
+          -0.068611292324821,
+          -0.25416708030598656,
+          0.22900877383328577,
+          -0.05741554194344012,
+          -0.09873090692684272,
+          0.6820179616578272,
+          0.6747714783137617,
+          0.19508785600370793,
+          -0.8543661678959875,
+          0.0941129928580331,
+          -0.02532810159601695,
+          -0.07357758176414464,
+          -0.012842153353988195,
+          0.00429247860228088,
+          0.04767320287611909,
+          -0.07499425393805481
+        ],
+        "diffs_vs_baseline": [
+          0.0,
+          0.0,
+          1.054542749323815,
+          0.4413622794976657,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.6427457686167042,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.1690793406677713,
+          0.0,
+          -0.23214702067867066,
+          0.6516414297511588,
+          0.0,
+          0.19508785600371503,
+          -1.2606743688247235,
+          0.19926799544494145,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.19492655890991273
+        ],
+        "p_vs_control_mean": 0.5477297119796276,
+        "p_vs_baseline": 0.4619140625,
+        "stats_vs_control_mean": {
+          "n_total": 32,
+          "n_tied": 3,
+          "tie_rate": 0.09375,
+          "n_byte_identical_forced_zero": 3,
+          "W_signed_rank_sum": -12.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.5477297119796276
+        },
+        "stats_vs_baseline": {
+          "n_total": 32,
+          "n_tied": 22,
+          "tie_rate": 0.6875,
+          "n_byte_identical_forced_zero": 22,
+          "W_signed_rank_sum": 5.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.4619140625
+        },
+        "both_arms_hold": false,
+        "arm_rule": "BOTH the control-mean arm and the baseline arm must be below alpha; zeros are byte-identity ties, kept by Pratt"
+      },
+      "control_ensemble_p": 0.32,
+      "n_controls": 24,
+      "legacy_sign_test_p_reported_only": 0.5699749670457095,
+      "behavioral_change_rate": 0.3125,
+      "baseline_presence_rate": 0.84375,
+      "target_presence_rate": 0.84375,
+      "effect_size_target": 0.0011250400009966068,
+      "effect_size_cross_rail": -0.003620141711655781,
+      "selectivity_gate": "|d_cross_rail| <= 0.5 x d_target",
+      "coherence_target": 0.7622211619286556,
+      "repetition_target": 0.9735999563302196,
+      "sample_texts_target": [
+        " the alarm went off.\n\n\"What's going on?\"\n\n\"I don't know. I'm going to check the wiring.\"\n\n\"",
+        " she and her husband, a former teacher, decided to take a closer look at the schools themselves.\n\n\u201cWe were looking at the buildings and the grounds",
+        " added it back to the starter. The sourdough starter was then re-inoculated with the same amount of the original starter.\n\nThe sourd"
+      ],
+      "status": "VACUOUS_NO_BEHAVIORAL_CHANGE",
+      "reason": "only 0.31 of judge prompts changed text under the targeted intervention (< 0.6); under the clean-pass rule the intervention never engaged the behavioural channel, so the label was never actually tested"
+    },
+    "AMP_F5": {
+      "baseline_mean_proj": 10.738620647192818,
+      "target_mean_proj": 10.372618553181681,
+      "targeted_drop": 0.3660020940111366,
+      "matched_control_drops": [
+        -0.022299446329830275,
+        -0.014554470962419686,
+        0.24676946437180725,
+        0.10097564080727928,
+        0.1284466582037993,
+        0.5247774597868222,
+        -0.12745454254518407,
+        0.9766559642427914,
+        0.10504253856521828,
+        0.3635503230284467,
+        0.20111604982330178,
+        0.12042037407488237,
+        0.007870531034907202,
+        0.3046072963705022,
+        0.3161676095709325,
+        0.2833002477789641,
+        0.33312431349621185,
+        -0.026312399991081037,
+        0.38911716775053584,
+        -13.212848524188239,
+        0.13468903799541465,
+        0.11594943095176191,
+        0.23704963451960737,
+        -0.857484004193843
+      ],
+      "max_matched_control_drop": 0.9766559642427914,
+      "cross_direction_drop": 0.11630703782800822,
+      "wilcoxon_pratt_p": 5.515199154615402e-05,
+      "wilcoxon_pratt_stats": {
+        "n_total": 32,
+        "n_tied": 0,
+        "tie_rate": 0.0,
+        "n_byte_identical_forced_zero": 0,
+        "W_signed_rank_sum": 390.0,
+        "method": "wilcoxon_pratt_exact_permutation",
+        "p": 5.515199154615402e-05
+      },
+      "paired_arms": {
+        "diffs_vs_control_mean": [
+          2.1843353940844583,
+          0.36995660284045506,
+          1.8988345096800785,
+          -0.31015333750789154,
+          0.12614259838603736,
+          -1.060325568174191,
+          0.6214933401456033,
+          0.6533459290051429,
+          0.30067420694456004,
+          0.5601658699452372,
+          1.848004128760513,
+          2.2376201103539497,
+          0.325752788089428,
+          0.5077002893933287,
+          1.0911302689729254,
+          0.4704028943484868,
+          1.0099519012305116,
+          1.9803343948527328,
+          0.10933974014561088,
+          1.2161722769474057,
+          0.8791021560209202,
+          -0.35162832905699837,
+          2.851384055551554,
+          1.5813506368489456,
+          0.5058442865778279,
+          2.02487904611141,
+          -0.6059220846181521,
+          -1.0298620680201296,
+          1.2312274742966878,
+          0.6840611783262709,
+          0.17999095642652563,
+          0.11585955589698749
+        ],
+        "diffs_vs_baseline": [
+          0.7970899816789796,
+          -0.017089011903129503,
+          1.3551133704141574,
+          0.6871414174424029,
+          -0.13112303393882563,
+          -0.0927471541079008,
+          0.8867782149254548,
+          -1.2618595139970257,
+          0.7902856701124552,
+          0.24255089697279075,
+          0.20540885817858445,
+          -0.9145154158270543,
+          -0.05700870583859974,
+          0.5368487317032162,
+          1.2039157062168613,
+          1.2129138690744092,
+          0.5893914380775378,
+          2.889867902330101,
+          -0.2616375114950529,
+          1.6876461283184199,
+          1.6144880296903885,
+          -0.6106211611187167,
+          1.5280028977125468,
+          0.023654338734786506,
+          0.1018596484717662,
+          0.0,
+          -0.7406691626561095,
+          -1.9284404222791114,
+          0.03415912739522575,
+          0.8985485028972011,
+          0.03307502069821133,
+          0.40903835047238424
+        ],
+        "p_vs_control_mean": 5.515199154615402e-05,
+        "p_vs_baseline": 0.01664375187829137,
+        "stats_vs_control_mean": {
+          "n_total": 32,
+          "n_tied": 0,
+          "tie_rate": 0.0,
+          "n_byte_identical_forced_zero": 0,
+          "W_signed_rank_sum": 390.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 5.515199154615402e-05
+        },
+        "stats_vs_baseline": {
+          "n_total": 32,
+          "n_tied": 1,
+          "tie_rate": 0.03125,
+          "n_byte_identical_forced_zero": 1,
+          "W_signed_rank_sum": 227.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.01664375187829137
+        },
+        "both_arms_hold": true,
+        "arm_rule": "BOTH the control-mean arm and the baseline arm must be below alpha; zeros are byte-identity ties, kept by Pratt"
+      },
+      "control_ensemble_p": 0.16,
+      "n_controls": 24,
+      "legacy_sign_test_p_reported_only": 5.653710104525089e-05,
+      "behavioral_change_rate": 0.96875,
+      "baseline_presence_rate": 0.78125,
+      "target_presence_rate": 0.78125,
+      "effect_size_target": 0.24303123281811476,
+      "effect_size_cross_rail": 0.4626052148678627,
+      "coherence_target": 0.7092509059371079,
+      "repetition_target": 0.9555641729075653,
+      "sample_texts_target": [
+        " the door opened.\n\nThe technician was a young man, and he was wearing a white lab coat. He was carrying a clipboard and a small computer",
+        " the pilot was extended to the entire state.\n\n\u201cWe\u2019re excited to see the results of this pilot,\u201d said Elena. \u201cWe\u2019re excited",
+        " she tried again.\n\n\"I'm not sure if it's the recipe or the fact that I'm not used to making bread,\" she said. \""
+      ],
+      "beats_matched_and_cross_controls": false,
+      "attenuation_signature_holds": true,
+      "selectivity_gate_holds": false,
+      "status": "FAIL"
+    },
+    "RS_F5": {
+      "precondition": {
+        "n_pairs": 24,
+        "G1_proj_gap_licensed_minus_conflicted": -0.0563293848609388,
+        "G1_wilcoxon_pratt_p": 0.5055936574935913,
+        "G1_stats": {
+          "n_total": 24,
+          "n_tied": 0,
+          "tie_rate": 0.0,
+          "n_byte_identical_forced_zero": 0,
+          "W_signed_rank_sum": 0.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.5055936574935913
+        },
+        "G1_holds": false,
+        "G2_hedge_mass_gap_conflicted_minus_licensed": -9.466846798507807e-05,
+        "G2_control_lexicon_gap": 0.0016260102468853195,
+        "G2_wilcoxon_pratt_p": 0.6983442902565002,
+        "G2_stats": {
+          "n_total": 24,
+          "n_tied": 0,
+          "tie_rate": 0.0,
+          "n_byte_identical_forced_zero": 0,
+          "W_signed_rank_sum": -36.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.6983442902565002
+        },
+        "G2_holds": false,
+        "G3_act_vs_restrain_logodds_gap": 0.0446331429654545,
+        "G3_wilcoxon_pratt_p": 0.36287039518356323,
+        "G3_secondary_only": true,
+        "mean_hedge_mass_licensed": 0.005657853398588486,
+        "mean_hedge_mass_conflicted": 0.005563184930603408,
+        "mean_proj_licensed": 4.864281799012134,
+        "mean_proj_conflicted": 4.920611183873072,
+        "holds": false,
+        "rule": "require G1 AND G2; G3 is reported and never gating",
+        "half": "fit (GATING)"
+      },
+      "precondition_scope": "GATING gates G1/G2 are computed on the RS FIT half (rev 0.3 review fix D27). The rev-0.3 draft gated on the JUDGE half, which is the same bank that supplies M2's denominator (licensed minus conflicted), so conditioning on G1 made M2's headroom>0 component close to automatic and biased rho downward into the pass window. Feasibility of the brake is a property of model+bank, so it belongs on the fit half; the judge half is reported unconditioned.",
+      "precondition_judge_half_descriptive_only": {
+        "n_pairs": 24,
+        "G1_proj_gap_licensed_minus_conflicted": 0.2076558648601962,
+        "G1_wilcoxon_pratt_p": 0.060420095920562744,
+        "G1_stats": {
+          "n_total": 24,
+          "n_tied": 0,
+          "tie_rate": 0.0,
+          "n_byte_identical_forced_zero": 0,
+          "W_signed_rank_sum": 110.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.060420095920562744
+        },
+        "G1_holds": false,
+        "G2_hedge_mass_gap_conflicted_minus_licensed": 0.00015389430579186106,
+        "G2_control_lexicon_gap": -0.001372072088997811,
+        "G2_wilcoxon_pratt_p": 0.32157111167907715,
+        "G2_stats": {
+          "n_total": 24,
+          "n_tied": 0,
+          "tie_rate": 0.0,
+          "n_byte_identical_forced_zero": 0,
+          "W_signed_rank_sum": 34.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.32157111167907715
+        },
+        "G2_holds": false,
+        "G3_act_vs_restrain_logodds_gap": 0.2594457121521431,
+        "G3_wilcoxon_pratt_p": 0.05369126796722412,
+        "G3_secondary_only": true,
+        "mean_hedge_mass_licensed": 0.004902424080986141,
+        "mean_hedge_mass_conflicted": 0.005056318386778003,
+        "mean_proj_licensed": 5.169750756403521,
+        "mean_proj_conflicted": 4.962094891543324,
+        "holds": false,
+        "rule": "require G1 AND G2; G3 is reported and never gating",
+        "half": "judge (DESCRIPTIVE ONLY, never gating)"
+      },
+      "control_families": {
+        "n_shuffled_label_refit": 12,
+        "n_rs_fit_pc_subspace": 12,
+        "families": [
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "shuffled_label_refit",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace",
+          "rs_fit_pc_subspace"
+        ],
+        "pc_subspace_fit_on": "RS fit residuals (licensed + conflicted) at L*",
+        "perturbation_magnitude_metric": "mean |h . u| over conflicted JUDGE prompts, clean model, last token",
+        "control_perturbation_magnitudes": [
+          15.478144559507626,
+          5.844176444476656,
+          6.095182006266111,
+          4.419491574500994,
+          3.7593295670070486,
+          8.451669342093496,
+          5.590912158704074,
+          6.047013719025958,
+          3.124120646417184,
+          12.233960297510754,
+          4.824649472257435,
+          9.694157908446373,
+          9.83556215436678,
+          6.046218052746377,
+          8.313213597769364,
+          4.436990602557394,
+          8.937383077318152,
+          6.204293378595899,
+          3.689140682226057,
+          7.592354272322576,
+          3.8924126631011524,
+          5.287872306295713,
+          2.4339984451534424,
+          9.549246741328732
+        ],
+        "control_magnitude_mean": 6.740895569583141,
+        "control_magnitude_max": 15.478144559507626,
+        "target_over_control_mean_magnitude_ratio": 0.3982849348659799,
+        "common_random_numbers": true,
+        "note": "if the magnitude ratio is far below 1 the controls are STRONGER perturbations than the target and a FAIL cannot distinguish 'no brake' from 'controls too strong'"
+      },
+      "target_perturbation_magnitude": 2.6847971528697934,
+      "mass_criterion": "log-ratio log(mass_baseline/mass_target), compared against the same log-ratio on the frequency/POS-matched control lexicon and against the control-direction ensemble",
+      "hedge_mass_log_ratio": -0.0661666970746713,
+      "control_lexicon_mass_log_ratio": 0.049358979819503004,
+      "control_direction_hedge_mass_log_ratios": [
+        0.1746075507700258,
+        0.19076704787741933,
+        0.1467259807382596,
+        0.0096360527839639,
+        -0.03135207448323686,
+        0.11798276844231256,
+        0.11408600373957635,
+        0.38937487646679114,
+        0.011725313945300605,
+        0.27653974010266885,
+        0.11240154098326566,
+        -0.049089574157867175,
+        0.3015124677783017,
+        0.3508840816807669,
+        0.05437351088685237,
+        -0.02776247187146442,
+        0.07811735353744183,
+        0.14840538829137512,
+        0.08526751980144,
+        0.3339536030647999,
+        0.062310341807254456,
+        0.13083211654760707,
+        0.07061563836127721,
+        0.20239408693483996
+      ],
+      "baseline_control_lexicon_mass": 0.0035587874498257104,
+      "paired_arms": {
+        "diffs_vs_control_mean": [
+          0.04646940401959565,
+          0.57782806337043,
+          0.03091835016889144,
+          -0.06404644761728662,
+          -0.2309495212755115,
+          -0.22640810738395434,
+          -0.30245224531084247,
+          -0.0329732596733745,
+          0.3912588730022284,
+          -0.17296717490710467,
+          0.02488772705612341,
+          -0.040913633585226705,
+          -0.10144483255553371,
+          0.3831401983099916,
+          0.10316698338121189,
+          -0.2893875758496538,
+          0.27756571118534,
+          0.09663755799809781,
+          0.06829603304277754,
+          0.26941716104135516,
+          -0.05803741361993886,
+          0.3124628082240646,
+          0.016569793789849463,
+          0.06821255597284548
+        ],
+        "diffs_vs_baseline": [
+          -0.241816437426972,
+          0.2934620481802037,
+          -0.054165533636779895,
+          -0.3888901725595204,
+          -0.3165383607126744,
+          -0.0,
+          -0.10774143379897971,
+          0.04777671269356443,
+          0.05163150121984206,
+          -0.07517749761665282,
+          0.23633022149259464,
+          -0.11758086259270151,
+          0.10734486105441299,
+          -0.049323327750784074,
+          -0.31332350597819136,
+          -0.04026482418057853,
+          0.19835960387806573,
+          -0.12759396712229254,
+          0.003004042175879462,
+          -0.0024772125420913227,
+          -0.24297854778561678,
+          0.17401959621971574,
+          0.1228687366444321,
+          0.1833181226761358
+        ],
+        "p_vs_control_mean": 0.20305603742599487,
+        "p_vs_baseline": 0.7590513229370117,
+        "stats_vs_control_mean": {
+          "n_total": 24,
+          "n_tied": 0,
+          "tie_rate": 0.0,
+          "n_byte_identical_forced_zero": 0,
+          "W_signed_rank_sum": 60.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.20305603742599487
+        },
+        "stats_vs_baseline": {
+          "n_total": 24,
+          "n_tied": 1,
+          "tie_rate": 0.041666666666666664,
+          "n_byte_identical_forced_zero": 1,
+          "W_signed_rank_sum": -49.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.7590513229370117
+        },
+        "both_arms_hold": false,
+        "arm_rule": "BOTH the control-mean arm and the baseline arm must be below alpha; zeros are byte-identity ties, kept by Pratt"
+      },
+      "baseline_conflicted_mean_proj": 6.002794503293846,
+      "licensed_reference_mean_proj": 6.112374404346073,
+      "target_mean_proj": 5.975304660065972,
+      "targeted_increase": -0.02748984322787429,
+      "matched_control_increases": [
+        -0.23165100333957334,
+        -0.010054607730801024,
+        0.1462128755399945,
+        -0.11198702003911087,
+        -0.014090960640936956,
+        -0.34247964781381146,
+        -0.05487688869337326,
+        -0.011485920246897763,
+        -0.0192477508428901,
+        -0.31413397099174833,
+        -0.0792075079871255,
+        -0.0025469719703936633,
+        -0.04832985802573564,
+        0.0812506616973021,
+        0.02949761503891235,
+        -0.03586974134840393,
+        -0.16806718761727968,
+        -0.05197028081721733,
+        -0.07446273409590098,
+        0.002157041484545985,
+        -0.03342154159994237,
+        -0.14429066134140278,
+        -0.12037188678343824,
+        -0.1975792980881277
+      ],
+      "max_matched_control_increase": 0.1462128755399945,
+      "wilcoxon_pratt_p": 0.20305603742599487,
+      "wilcoxon_pratt_stats": {
+        "n_total": 24,
+        "n_tied": 0,
+        "tie_rate": 0.0,
+        "n_byte_identical_forced_zero": 0,
+        "W_signed_rank_sum": 60.0,
+        "method": "wilcoxon_pratt_exact_permutation",
+        "p": 0.20305603742599487
+      },
+      "control_ensemble_p": 0.4,
+      "n_controls": 24,
+      "legacy_sign_test_p_reported_only": 0.27062809467315674,
+      "behavioral_change_rate": 0.9583333333333334,
+      "restoration_headroom_licensed_minus_conflicted": 0.1095799010522267,
+      "restoration_fraction_rho": -0.25086574238438486,
+      "rho_bounds": [
+        0.0,
+        1.5
+      ],
+      "baseline_hedge_mass": 0.00157755657958963,
+      "target_hedge_mass": 0.0016854690255665142,
+      "targeted_hedge_mass_drop": -0.00010791244597688427,
+      "matched_control_hedge_mass_drops": [
+        0.00025274581439589335,
+        0.00027398204462466863,
+        0.00021528824890992794,
+        1.5128412330037838e-05,
+        -5.0243169728977346e-05,
+        0.00017556411633753034,
+        0.00017009022327935412,
+        0.000508793152403086,
+        1.8389325183912732e-05,
+        0.00038113218076129326,
+        0.00016771740071514288,
+        -7.937385629096195e-05,
+        0.0004106401803558881,
+        0.0004668536337097363,
+        8.348698180877037e-05,
+        -4.441049025748168e-05,
+        0.00011854409300819137,
+        0.00021757413263306523,
+        0.00012893906769022518,
+        0.00044788881247465376,
+        9.5298225672498e-05,
+        0.0001934635611784562,
+        0.00010755784054102381,
+        0.0002890509833378015
+      ],
+      "control_lexicon_mass_drop": 0.0001713934199263651,
+      "control_ensemble_p_mass": 1.0,
+      "baseline_mean_hedge_word_count_descriptive": 0.041666666666666664,
+      "target_mean_hedge_word_count_descriptive": 0.05,
+      "coherence_target": 0.8263402151933251,
+      "repetition_target": 0.9927276936026935,
+      "sample_texts_target": [
+        " need to do more. I need to get the committee together and get them to work.\n\nI need to persuade you.\n\n**Me:** I| have to get to know you. We need to be friends. I mean like friends.\"\n\n\"That's too late, Ryan. I've been friends| need more information. I know that we have a good team that can do this. I need to get help from inside the company. I need to come up|'m going to have to be strong. I have",
+        " might proceed with the adaptation.\n\nApart from the music, her shooting was already complete. It only needed to be edited, and then she could start shooting| appeared at the airport, ready to board the plane. But the women's section was full, and the flight was delayed. There was nothing for it but to| began to suspect that the whole thing had been a mistake, and she would have to pay him a second",
+        " watched a line of head-shaped silhouettes in blue jumpsuits pass the door.\n\n\"I've been here for many years,\" said a voice.| could hear them working in the room.\n\n\"Do you know how many people are in there already?\"\n\n\"Eighty-six.\"\n\n| asked her what she was doing. She said she was on a \"non-essential\" task; she was in the lab serving samples for an experiment.\n| expected to hear the whine of a vacuu"
+      ],
+      "note": "hedge WORD COUNT is descriptive only in rev 0.3; the gating observable is hedge probability MASS on the clean re-forward",
+      "status": "VACUOUS_NO_BRAKE",
+      "reason": "teacher-forced suppression-gap precondition not met (G1 False, G2 False): this model shows no measurable agency suppression under conflict on this bank, so there is no brake to remove and its removal predicts no change"
+    },
+    "CONN_DRF5_to_AMPF5": {
+      "effect_size_uF5_downstream": 0.06917820281294403,
+      "effect_size_uF2_downstream": 0.11064308304900024,
+      "effect_sizes_random_dirs_downstream": [
+        0.028242169688634553,
+        -0.013564240792872625,
+        -0.01674768976966798,
+        -0.012979985515405476,
+        -0.07002605076487672,
+        0.02346562901745806,
+        0.04655922815047543,
+        0.05314286952821416,
+        -0.08084115585056657,
+        -0.016194798621730653,
+        -0.06513466286515697,
+        0.033343867503935684,
+        0.042835002170245884,
+        -0.05993956835439918,
+        0.002178775866456512,
+        0.05743112457987967,
+        -0.044829043665416166,
+        0.06491109227637672,
+        -0.007870237706938926,
+        -0.0734853946301356,
+        -0.08941483414987501,
+        -0.06623695978390762,
+        -0.08264254494229205,
+        0.03695731186053498
+      ],
+      "max_random_dir_effect": 0.06491109227637672,
+      "effect_sizes_matched_cover_controls": [
+        0.007671194340862626,
+        0.025417235553693924,
+        0.05989451923379562,
+        0.08448927076686824,
+        0.13569476469078331,
+        -0.05013128090682859,
+        -0.030849047024252643,
+        -0.02321308464773588,
+        0.01607779953141176,
+        0.06494109609995716,
+        0.08069064573113596,
+        0.07327882947750117,
+        0.09460333901814266,
+        0.0002054590065581582,
+        -0.021742221146503943,
+        0.0587990572834101,
+        0.06351254915058038,
+        0.08042976229407812,
+        -0.031561905349440235,
+        0.026756049908343488,
+        -0.023360532752966557,
+        0.019706729967841605,
+        0.004132506225282758,
+        0.012078823253137312
+      ],
+      "max_matched_cover_effect": 0.13569476469078331,
+      "wilcoxon_pratt_p": 0.3389997167978436,
+      "wilcoxon_pratt_stats": {
+        "n_total": 32,
+        "n_tied": 0,
+        "tie_rate": 0.0,
+        "n_byte_identical_forced_zero": 0,
+        "W_signed_rank_sum": 46.0,
+        "method": "wilcoxon_pratt_exact_permutation",
+        "p": 0.3389997167978436
+      },
+      "control_ensemble_p": 0.28,
+      "paired_arms": {
+        "diffs_vs_control_mean": [
+          -0.15789032800013025,
+          -0.3244373180732545,
+          0.5408483961326063,
+          -0.14058807019850939,
+          -0.3345258891398579,
+          -0.39264436784940315,
+          -0.19748446251044527,
+          -0.14364447923983725,
+          -0.02497921096351341,
+          0.0077131596037780525,
+          0.03507776334379642,
+          0.01978258415210199,
+          0.010444012177282858,
+          -0.18899007501064524,
+          -0.03221672252418273,
+          0.11874671227915456,
+          0.1647691623724068,
+          0.1179179121961269,
+          0.14558975425975618,
+          -0.05704796147735003,
+          -0.06530226558528263,
+          -0.043296510779791575,
+          0.24364224351856656,
+          -0.009156236165722476,
+          0.680842246168825,
+          0.11236790355896886,
+          0.19885363724066174,
+          0.023323356042235233,
+          0.23627893722706794,
+          1.2764151171261666,
+          0.1361851068773614,
+          -0.08363650704100856
+        ],
+        "diffs_vs_baseline": [
+          0.0,
+          0.0,
+          0.8113076539490223,
+          0.0,
+          -0.3537816265579874,
+          0.23565308991347678,
+          -0.3605414583644091,
+          -0.1567030682616366,
+          0.0,
+          0.0,
+          0.0,
+          0.011591557905276773,
+          0.011393467829758919,
+          0.0,
+          0.0,
+          0.768633563344844,
+          0.20812946825988377,
+          0.24300952909183593,
+          0.0,
+          0.0,
+          0.0,
+          -0.1530485773294128,
+          0.0,
+          0.0,
+          0.5782028585756658,
+          0.0,
+          0.0,
+          0.07144137257243344,
+          0.0,
+          1.276415117126172,
+          0.1421061984807288,
+          0.0
+        ],
+        "p_vs_control_mean": 0.3389997167978436,
+        "p_vs_baseline": 0.03948974609375,
+        "stats_vs_control_mean": {
+          "n_total": 32,
+          "n_tied": 0,
+          "tie_rate": 0.0,
+          "n_byte_identical_forced_zero": 0,
+          "W_signed_rank_sum": 46.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.3389997167978436
+        },
+        "stats_vs_baseline": {
+          "n_total": 32,
+          "n_tied": 17,
+          "tie_rate": 0.53125,
+          "n_byte_identical_forced_zero": 17,
+          "W_signed_rank_sum": 175.0,
+          "method": "wilcoxon_pratt_exact_permutation",
+          "p": 0.03948974609375
+        },
+        "both_arms_hold": false,
+        "arm_rule": "BOTH the control-mean arm and the baseline arm must be below alpha; zeros are byte-identity ties, kept by Pratt"
+      },
+      "legacy_sign_test_p_reported_only": 0.4300250329542905,
+      "behavioral_change_rate": 0.46875,
+      "note": "clean-pass only; correlated with DR-F5 (shared bank and direction) -- counted with that caveat in the aggregate",
+      "status": "VACUOUS_NO_BEHAVIORAL_CHANGE",
+      "reason": "only 0.47 of judge prompts changed text under the upstream cut (< 0.6)",
+      "upstream": {
+        "kind": "mlp_intermediate_cover",
+        "block": 4
+      },
+      "downstream_site_block": 12
+    }
+  },
+  "harness_sanity": {
+    "MEM_SANITY": {
+      "n_heads_ablated": 31,
+      "control_n_heads_ablated": [
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31
+      ],
+      "control_head_count_matched": true,
+      "heads": [
+        [
+          6,
+          2
+        ],
+        [
+          14,
+          31
+        ],
+        [
+          3,
+          11
+        ],
+        [
+          2,
+          25
+        ],
+        [
+          13,
+          19
+        ],
+        [
+          6,
+          27
+        ],
+        [
+          13,
+          9
+        ],
+        [
+          3,
+          22
+        ],
+        [
+          10,
+          18
+        ],
+        [
+          17,
+          15
+        ],
+        [
+          17,
+          8
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          24,
+          5
+        ],
+        [
+          25,
+          21
+        ],
+        [
+          15,
+          3
+        ],
+        [
+          20,
+          29
+        ],
+        [
+          12,
+          25
+        ],
+        [
+          18,
+          4
+        ],
+        [
+          18,
+          8
+        ],
+        [
+          17,
+          12
+        ],
+        [
+          23,
+          8
+        ],
+        [
+          20,
+          17
+        ],
+        [
+          11,
+          19
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          13,
+          24
+        ],
+        [
+          7,
+          22
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          29
+        ],
+        [
+          15,
+          14
+        ],
+        [
+          2,
+          18
+        ]
+      ],
+      "n_discovery_items": 20,
+      "n_judgment_items": 20,
+      "drop_resolution": 0.05,
+      "baseline_copy_acc": 0.65,
+      "ablated_copy_acc": 0.5,
+      "targeted_drop": 0.15000000000000002,
+      "control_drops": [
+        0.050000000000000044,
+        0.0,
+        0.050000000000000044,
+        0.050000000000000044,
+        0.0,
+        -0.04999999999999993,
+        0.050000000000000044,
+        0.050000000000000044,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.050000000000000044,
+        0.050000000000000044,
+        0.050000000000000044,
+        -0.04999999999999993,
+        0.0,
+        0.0,
+        0.050000000000000044,
+        -0.04999999999999993,
+        0.050000000000000044,
+        -0.04999999999999993,
+        0.050000000000000044,
+        0.0
+      ],
+      "max_control_drop": 0.050000000000000044,
+      "control_ensemble_p": 0.04,
+      "status": "SANITY_FAIL",
+      "rev02_disclosure": "On rev 0.2 the MEM targeted drop was NEGATIVE (-0.1667: ablating the top-4 copy heads IMPROVED copy accuracy) against a max control drop of 0.0, at n_judgment_items = 6 and baseline_copy_acc exactly 0.50. That is a WRONG-SIGNED result from the head-ablation instrument on the most generic phenomenon in the battery, and none of the rev-0.3 MEM changes (higher baseline gate, control-ensemble p, 20/20 split, fractional head budget) address the SIGN. Disclosed here per the same rule that governs deviation D18."
+    },
+    "CHECK_SANITY": {
+      "n_heads_ablated": 31,
+      "control_n_heads_ablated": [
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31,
+        31
+      ],
+      "control_head_count_matched": true,
+      "heads": [
+        [
+          2,
+          25
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          13,
+          24
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          3,
+          11
+        ],
+        [
+          6,
+          27
+        ],
+        [
+          3,
+          22
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          26,
+          9
+        ],
+        [
+          13,
+          9
+        ],
+        [
+          10,
+          18
+        ],
+        [
+          11,
+          28
+        ],
+        [
+          14,
+          31
+        ],
+        [
+          12,
+          24
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          2,
+          18
+        ],
+        [
+          15,
+          30
+        ],
+        [
+          22,
+          21
+        ],
+        [
+          5,
+          10
+        ],
+        [
+          20,
+          17
+        ],
+        [
+          20,
+          25
+        ],
+        [
+          3,
+          17
+        ],
+        [
+          5,
+          22
+        ],
+        [
+          13,
+          14
+        ],
+        [
+          17,
+          12
+        ],
+        [
+          13,
+          19
+        ],
+        [
+          18,
+          23
+        ],
+        [
+          13,
+          18
+        ],
+        [
+          15,
+          3
+        ],
+        [
+          18,
+          4
+        ],
+        [
+          11,
+          30
+        ]
+      ],
+      "n_sequences": 32,
+      "baseline_gate_score_nats": 12.465480225949168,
+      "ablated_gate_score_nats": 5.436119848692959,
+      "targeted_drop": 7.029360377256209,
+      "control_drops": [
+        0.3252702088912809,
+        -0.20653722552180298,
+        -0.23390400584122872,
+        0.2870561807788121,
+        -0.07747672724971366,
+        0.1382042162453736,
+        -0.028312436206430647,
+        0.05878126052861887,
+        0.31057693704695666,
+        -0.25855981696143004,
+        0.00949850044443501,
+        -0.08909374778324164,
+        0.026775426847798656,
+        0.10209982632990133,
+        0.20416784042291525,
+        -0.0414932416209588,
+        -0.03134271049400894,
+        0.8212978213083595,
+        -0.12773554275852206,
+        0.2700945786650273,
+        -0.030774511902231794,
+        -0.08265305877946183,
+        -0.0482454039801361,
+        0.23937828569151876
+      ],
+      "max_control_drop": 0.8212978213083595,
+      "control_ensemble_p": 0.04,
+      "criterion": "control-ensemble p < 0.05 AND absolute drop >= 1.0 nats (rev 0.3 re-anchor)",
+      "legacy_rev02_fraction_criterion": {
+        "rule": "drop >= 0.5 x baseline",
+        "would_pass": true,
+        "note": "reported so the rev-0.2 vs rev-0.3 comparison stays auditable; the re-anchor WAS INFORMED BY REV 0.2 RESULTS (3.559-nat drop vs 0.175 best control, ~20x selective margin, failing only the 50%-of-baseline bar)"
+      },
+      "status": "SANITY_PASS"
+    }
+  },
+  "aggregate": {
+    "core_test_order": [
+      "DR_F5",
+      "DR_F2",
+      "AMP_F5",
+      "RS_F5",
+      "CONN_DRF5_to_AMPF5"
+    ],
+    "n_evaluable": 1,
+    "n_pass": 0,
+    "fraction_pass_descriptive": 0.0,
+    "non_independence_caveat": "The five core tests are NOT independent: DR-F5, AMP-F5, and CONN share the F5 judge bank and the u_F5 direction; DR-F5 and DR-F2 share method. The pass fraction is DESCRIPTIVE ONLY; no binomial p-value is licensed as a headline. Per-test evidence (each against its own matched controls) is the primary result. Better power in rev 0.3 does not change this: the tests are non-independent BY DESIGN, not by sample size.",
+    "rs_sign_anchor_status": "VACUOUS_NO_BRAKE",
+    "harness_sanity_excluded_from_aggregate": true,
+    "status": "GREY_ATLAS_V0_INSUFFICIENT_EVALUABLE",
+    "kill_statement_triggered": null,
+    "tie_rate_by_test_baseline_arm": {
+      "DR_F5": 0.53125,
+      "DR_F2": 0.6875,
+      "AMP_F5": 0.03125,
+      "RS_F5": 0.041666666666666664,
+      "CONN_DRF5_to_AMPF5": 0.53125
+    },
+    "byte_identical_pairs_by_test": {
+      "DR_F5": 17,
+      "DR_F2": 22,
+      "AMP_F5": 1,
+      "RS_F5": 1,
+      "CONN_DRF5_to_AMPF5": 17
+    },
+    "tie_rate_by_test_control_mean_arm": {
+      "DR_F5": 0.0,
+      "DR_F2": 0.09375,
+      "AMP_F5": 0.0,
+      "RS_F5": 0.0,
+      "CONN_DRF5_to_AMPF5": 0.0
+    },
+    "behavioral_change_by_test": {
+      "DR_F5": 0.46875,
+      "DR_F2": 0.3125,
+      "AMP_F5": 0.96875,
+      "RS_F5": 0.9583333333333334,
+      "CONN_DRF5_to_AMPF5": 0.46875
+    },
+    "paired_p_by_test": {
+      "DR_F5": {
+        "vs_control_mean": 0.3389997167978436,
+        "vs_baseline": 0.03948974609375
+      },
+      "DR_F2": {
+        "vs_control_mean": 0.5477297119796276,
+        "vs_baseline": 0.4619140625
+      },
+      "AMP_F5": {
+        "vs_control_mean": 5.515199154615402e-05,
+        "vs_baseline": 0.01664375187829137
+      },
+      "RS_F5": {
+        "vs_control_mean": 0.20305603742599487,
+        "vs_baseline": 0.7590513229370117
+      },
+      "CONN_DRF5_to_AMPF5": {
+        "vs_control_mean": 0.3389997167978436,
+        "vs_baseline": 0.03948974609375
+      }
+    },
+    "rs_surface_disclosure": "u_RS is plausibly a PROHIBITION-VOCABULARY direction: the RS licensing/blocking clauses are strongly polar (allows/forbids, permits/bars, approved/stalled), so the char-ngram control on the RS bank is expected to be near 1.0. Section 6's interpretation rule covers this generically, but it is stated here for RS specifically because RS is the sign anchor and the verdict leans on it. See surface_control.rs_conflicted_vs_licensed.",
+    "language": "Every PASS is worded 'causally supports the <TYPE> labeling'; never 'found THE neurons' or 'the circuit'.",
+    "cas_specificity": "GREY. Nothing here separates drive semantics from topic/lexical semantics; see PREREG section 6."
+  }
+}
