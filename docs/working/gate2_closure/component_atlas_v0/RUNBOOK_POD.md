@@ -39,3 +39,29 @@ Discovery: `L*=6` (acc 0.875) vs `shuffled_label_floor_max 0.5`, `L_dr=2`.
 **Watch for the full run:** RS-F5 is the increase-sign anchor; if 24-token continuations still
 hedge too rarely it goes VACUOUS again and the verdict rests on DR/DR/AMP/CONN only (the prereg
 says headline that condition explicitly).
+
+## Rev 0.3 run order (pythia-2.8b) — PREFLIGHT FIRST
+Everything above describes the rev-0.2 run on pythia-1b and is kept as the record of it.
+Rev 0.3 defaults to `EleutherAI/pythia-2.8b`, writes `atlas_v0_rev03_report.json`
+(the rev-0.2 `atlas_v0_report.json` is never touched), and takes **~1.9 h**, not 30 min.
+
+```
+# 0. cache preflight (gating, do this before anything else)
+ls /workspace/cas-hf-cache/models--EleutherAI--pythia-2.8b/snapshots/
+cat /workspace/cas-hf-cache/models--EleutherAI--pythia-2.8b/refs/main
+# the pinned sha is 2a259cdd96a4beb1cdf467512e3904197345f6a9 and must contain model.safetensors
+
+# 1. smoke (mechanical only, ~2 min)
+nohup $VP component_atlas_v0.py --smoke --out smoke_out_28b > smoke28.log 2>&1 &
+
+# 2. BEHAVIOURAL PREFLIGHT — declared in advance, go/no-go, ~5 min
+nohup $VP component_atlas_v0.py --preflight --out preflight_28b > preflight.log 2>&1 &
+#    -> atlas_v0_rev03_preflight.json; proceed only if "go": true
+#       (all three behavioural-change rates >= 0.60)
+
+# 3. confirmatory run (~1.9 h). --local-files-only is now the DEFAULT.
+nohup $VP component_atlas_v0.py --out full_out_pythia28b > full28.log 2>&1 &
+#    reduced fallback if pod time is short (LOG IT as a deviation first):
+#    ... --controls 20 --rs-samples 3     # ~1.2 h; C=19 is REJECTED by a hard guard
+```
+The report is flushed at every stage boundary, so a late crash keeps everything up to that point.
