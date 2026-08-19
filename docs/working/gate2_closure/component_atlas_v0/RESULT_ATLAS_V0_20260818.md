@@ -43,3 +43,37 @@ Sanity checks exist to tell "the labels are wrong" apart from "the instrument is
 2. **Scale up** — pythia-2.8b is already in the pod cache; 20B is where the η→ε bridge was strongest
    (`+1.412`). Behavioral separation should improve with scale.
 3. **Power** — 12 judge prompts makes the sign test need near-unanimity; raise n before re-judging.
+
+---
+
+# ADDENDUM — rev 0.3 preflight on pythia-2.8b (2026-08-19)
+
+## D31 outcome: widening the DR cut 2.55x changed the behavioural-change rate by EXACTLY 0.00
+| | cover_k | % of MLP | DR rate | AMP | RS |
+|---|---|---|---|---|---|
+| preflight 1 (pre-D31) | 40 / 10240 | 0.391% | **0.50** | 1.00 | 0.833 |
+| preflight 2 (post-D31) | 102 / 10240 | 0.996% | **0.50** | 1.00 | 0.833 |
+
+**This is evidence, not just a failed fix.** A 2.55x wider cut at the same layer moved the
+rate not at all — identical to three decimal places. The natural reading: the DR-F5
+coordinates are not a weak lever on the output, they are **not a lever on the output at all**
+for these prompts. That points at the rail HYPOTHESIS being wrong rather than the
+intervention being underpowered — consistent with rev 0.2, where DR-F5's targeted drop
+(0.0339) was beaten by its own cross-rail cover (0.0675).
+
+Per D31's pre-declared bound, **no second widening was attempted**; the fallback was executed:
+run the confirmatory pass as-is and accept `DR_F5`/`CONN` VACUOUS.
+
+## What the preflight established (all on real hardware, pinned `2a259cdd`, `revision_verified: true`)
+- **RS redesign VINDICATED** — the arm that was VACUOUS twice now changes text on **83%** of
+  judge prompts, well clear of the 0.60 bar. `u_rs_legacy_cosine_with_primary = 0.0127`: the
+  new restraint-CONTEXT direction is essentially ORTHOGONAL to rev 0.2's hedge-VOCABULARY
+  direction, confirming rev 0.2 measured the wrong quantity rather than measuring it badly.
+- **D21 layer-saturation fix HELD** — `L*=12`, `tie_set_width_margin=1`,
+  `accuracy_saturated_plateau=false`. The predicted degenerate `L*=30`-of-32 (which would have
+  parked the erasers two blocks from the unembedding and forced AMP+RS VACUOUS) did not occur.
+- **D20 fractional cover_k HELD** — 0.391% reproduced exactly at the new width before D31.
+- Architecture derived live: 32 blocks / 32 heads / hidden 2560; probe acc `0.942` at L* vs
+  shuffled-label floor `0.577`.
+
+Confirmatory run launched `2026-08-19T06:08:35Z` (PID 187462), expected ~1.9 h.
