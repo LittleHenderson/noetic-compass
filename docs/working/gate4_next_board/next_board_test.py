@@ -111,12 +111,15 @@ MAXTOK_LABEL = 16000   # reasoning models spend the budget on trace before emitt
 
 # ---- Gate 0 -- agreement / viability floor (VACUOUS escape) ----
 # Arithmetic (PREREG 8, shown so the thresholds are JOINTLY satisfiable):
-#   full run 40 conversations x 6 turns = 240 turns, 200 possible (N -> N+1) pairs.
-#   A pair needs a consensus label at BOTH ends, so pairs ~= 200 * c^2 where c is
-#   consensus coverage. c = 0.70 -> 98 pairs. The pair floor is therefore 90, NOT
-#   100, and the coverage floor is 0.70, NOT 0.82. Rev 0.3 demanded c >= 0.82 while
-#   stating 0.70 -- mutually inconsistent, and an automatic VACUOUS on this panel's
-#   measured coverage (l1_real 0.556, l2_wiring 0.694).
+#   full run = 36 conversations (the WHOLE gen_real_outputs prompt bank) x 7 assistant
+#   turns = 252 turns, and 36 x 6 = 216 possible (N -> N+1) pairs.
+#   A pair needs a consensus label at BOTH ends, so pairs ~= 216 * c^2 where c is
+#   consensus coverage:   c=0.70 -> 106 pairs   c=0.65 -> 91   c=0.60 -> 78.
+#   The pair floor is therefore 90 and the consensus floor 0.70, which are jointly
+#   satisfiable with margin. Rev 0.3 set a 100-pair floor on 30x6 = 150 possible pairs,
+#   which silently DEMANDED c >= 0.82 while stating 0.70 in the same table -- mutually
+#   inconsistent, and an automatic VACUOUS at this panel's measured coverage
+#   (l1_real 0.556 complete-case, l2_wiring 0.694).
 G0_FLEISS_MIN = 0.35             # 3 readers, 6 classes, complete cases only
 G0_RAW_AGREE_ABS_MIN = 0.50      # absolute floor; the BINDING floor is derived from
                                  # the observed marginals (see derived_raw_floor)
@@ -367,7 +370,14 @@ def build_conversation_plan(n_convos, n_turns):
     independent of f_{t+1}, so the sampling scheme cannot manufacture a b_N -> b_{N+1}
     dependence.
     """
-    seeds = random.Random(SEED_PROMPT_SAMPLE).sample(list(PROMPTS), min(n_convos, len(PROMPTS)))
+    if n_convos > len(PROMPTS):
+        # Rev 0.3 silently shrank n_convos to len(PROMPTS)=36, which quietly broke the
+        # Gate 0 pair arithmetic. Fail loudly instead: reusing a seed prompt would also
+        # put two topically-correlated conversations in different LOCO folds.
+        raise SystemExit(f"--n-convos {n_convos} exceeds the {len(PROMPTS)}-prompt seed bank "
+                         f"(gen_real_outputs.PROMPTS). Use --n-convos <= {len(PROMPTS)}; the "
+                         f"preregistered full run is {len(PROMPTS)} conversations x 7 turns.")
+    seeds = random.Random(SEED_PROMPT_SAMPLE).sample(list(PROMPTS), n_convos)
     plan = []
     for cid, seed_prompt in enumerate(seeds):
         rng = random.Random(SEED_FOLLOWUP_BASE + cid)
@@ -1494,8 +1504,9 @@ def main():
                     help="'board' = the 5 CCB board types; 'alt' = matched 6-class discourse "
                          "taxonomy (CONTROL 8)")
     ap.add_argument("--smoke", action="store_true", help="tiny n: 4 convos x 3 turns")
-    ap.add_argument("--n-convos", type=int, default=40)
-    ap.add_argument("--n-turns", type=int, default=6)
+    ap.add_argument("--n-convos", type=int, default=36,   # == len(gen_real_outputs.PROMPTS)
+                    help="max 36 -- the size of the reused seed-prompt bank")
+    ap.add_argument("--n-turns", type=int, default=7)
     ap.add_argument("--min-turns", type=int, default=3,
                     help="keep a truncated conversation if it reached this many good turns")
     ap.add_argument("--gen-max-tokens", type=int, default=800)
