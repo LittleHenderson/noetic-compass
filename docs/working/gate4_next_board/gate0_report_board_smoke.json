@@ -1,0 +1,59 @@
+{
+  "stage": "gate0",
+  "taxonomy": "board",
+  "smoke": true,
+  "n_turns": 120,
+  "n_complete": 86,
+  "n_consensus": 94,
+  "n_usable_pairs": 63,
+  "consensus_usage": {
+    "B1": 20,
+    "B0": 18,
+    "B4": 16,
+    "B2": 9,
+    "B3": 13,
+    "B5": 18
+  },
+  "GATE0": {
+    "fleiss_kappa": {
+      "value": 0.5444,
+      "min": 0.35,
+      "n_complete_cases": 86,
+      "pass": true
+    },
+    "raw_pairwise_agreement": {
+      "value": 0.624,
+      "min_absolute": 0.5,
+      "min_derived_from_marginals": 0.4643,
+      "chance_agreement_Pe": 0.1759,
+      "min_binding": 0.5,
+      "pass": true
+    },
+    "complete_case_coverage": {
+      "value": 0.7167,
+      "min": 0.6,
+      "n": 86,
+      "n_min": 60,
+      "pass": true
+    },
+    "consensus_coverage": {
+      "value": 0.7833,
+      "min": 0.7,
+      "note": ">=2 agreeing among >=2 present labels",
+      "pass": true
+    },
+    "none_class_share": {
+      "code": "B0",
+      "value": 0.1915,
+      "max": 0.4,
+      "pass": true
+    },
+    "usable_pairs": {
+      "value": 63,
+      "min": 8,
+      "pass": true
+    }
+  },
+  "GATE0_pass": true,
+  "note": "NO prediction statistic is computed or shown by this stage."
+}
