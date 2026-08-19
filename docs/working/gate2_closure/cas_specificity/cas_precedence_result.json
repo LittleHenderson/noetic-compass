@@ -1,0 +1,354 @@
+[
+  {
+    "layer": 0,
+    "cas_fit": 0.0,
+    "cas_rank": 5,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.25
+  },
+  {
+    "layer": 1,
+    "cas_fit": 0.44859116318003306,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4154649507417998
+  },
+  {
+    "layer": 2,
+    "cas_fit": 0.17015272001202003,
+    "cas_rank": 3,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.3580394913559864
+  },
+  {
+    "layer": 3,
+    "cas_fit": 0.352024033665327,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.34124230446759085
+  },
+  {
+    "layer": 4,
+    "cas_fit": 0.4725923572238778,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.3582182375669118
+  },
+  {
+    "layer": 5,
+    "cas_fit": 0.3452586855693679,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.387595658396494
+  },
+  {
+    "layer": 6,
+    "cas_fit": 0.2904841859786031,
+    "cas_rank": 3,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.37807617625857737
+  },
+  {
+    "layer": 7,
+    "cas_fit": 0.14250281079159755,
+    "cas_rank": 3,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.3456732567915719
+  },
+  {
+    "layer": 8,
+    "cas_fit": 0.2868640608905021,
+    "cas_rank": 3,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.3475430821072203
+  },
+  {
+    "layer": 9,
+    "cas_fit": 0.32855021519716127,
+    "cas_rank": 3,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.36082116101476736
+  },
+  {
+    "layer": 10,
+    "cas_fit": 0.4142821151319897,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.37198403945331454
+  },
+  {
+    "layer": 11,
+    "cas_fit": 0.1819908074613512,
+    "cas_rank": 3,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.39386956682813024
+  },
+  {
+    "layer": 12,
+    "cas_fit": 0.303785738570902,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4028658165598589
+  },
+  {
+    "layer": 13,
+    "cas_fit": -0.29001204068123265,
+    "cas_rank": 7,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4426602505190863
+  },
+  {
+    "layer": 14,
+    "cas_fit": -0.3422982957310912,
+    "cas_rank": 9,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4217302619830777
+  },
+  {
+    "layer": 15,
+    "cas_fit": -0.26312429091086914,
+    "cas_rank": 8,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4513099936058552
+  },
+  {
+    "layer": 16,
+    "cas_fit": -0.21752600157634278,
+    "cas_rank": 7,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4913176007854239
+  },
+  {
+    "layer": 17,
+    "cas_fit": -0.19863763441810264,
+    "cas_rank": 7,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4716414212895372
+  },
+  {
+    "layer": 18,
+    "cas_fit": -0.15587615398142146,
+    "cas_rank": 6,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4544162184360051
+  },
+  {
+    "layer": 19,
+    "cas_fit": -0.005962380498401932,
+    "cas_rank": 4,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4583733365799241
+  },
+  {
+    "layer": 20,
+    "cas_fit": -0.0020282617861486357,
+    "cas_rank": 4,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4551869325032032
+  },
+  {
+    "layer": 21,
+    "cas_fit": 0.038253693944059655,
+    "cas_rank": 4,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4483978208731911
+  },
+  {
+    "layer": 22,
+    "cas_fit": 0.31110304825039525,
+    "cas_rank": 3,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4669244792353537
+  },
+  {
+    "layer": 23,
+    "cas_fit": 0.13650001745437787,
+    "cas_rank": 4,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.48719732152741513
+  },
+  {
+    "layer": 24,
+    "cas_fit": 0.3108355859464793,
+    "cas_rank": 4,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.49530820790697794
+  },
+  {
+    "layer": 25,
+    "cas_fit": 0.4062564394349448,
+    "cas_rank": 3,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.46215124093132676
+  },
+  {
+    "layer": 26,
+    "cas_fit": 0.4077566589504097,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4994584888827801
+  },
+  {
+    "layer": 27,
+    "cas_fit": 0.2255175537673981,
+    "cas_rank": 4,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4984384715943859
+  },
+  {
+    "layer": 28,
+    "cas_fit": 0.4154952898721393,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.49421840334896894
+  },
+  {
+    "layer": 29,
+    "cas_fit": 0.3873967304390211,
+    "cas_rank": 3,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.516288951516306
+  },
+  {
+    "layer": 30,
+    "cas_fit": 0.520843714696017,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.5065506019895928
+  },
+  {
+    "layer": 31,
+    "cas_fit": 0.39419908449446095,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.5308588799515761
+  },
+  {
+    "layer": 32,
+    "cas_fit": 0.5968866167304665,
+    "cas_rank": 1,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.526927665254082
+  },
+  {
+    "layer": 33,
+    "cas_fit": 0.4072961156411833,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.541678851836555
+  },
+  {
+    "layer": 34,
+    "cas_fit": 0.35413791806524497,
+    "cas_rank": 3,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.5466191907969111
+  },
+  {
+    "layer": 35,
+    "cas_fit": 0.515207159145513,
+    "cas_rank": 1,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.51647513026651
+  },
+  {
+    "layer": 36,
+    "cas_fit": 0.5021543776354394,
+    "cas_rank": 1,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.5290198786853538
+  },
+  {
+    "layer": 37,
+    "cas_fit": 0.4459261268547225,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.5377906316966481
+  },
+  {
+    "layer": 38,
+    "cas_fit": 0.4974379043598741,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.5500028320718944
+  },
+  {
+    "layer": 39,
+    "cas_fit": 0.5663015722538626,
+    "cas_rank": 1,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.5523746382582272
+  },
+  {
+    "layer": 40,
+    "cas_fit": 0.459465697977847,
+    "cas_rank": 2,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.5478589312727197
+  },
+  {
+    "layer": 41,
+    "cas_fit": 0.5417452036504395,
+    "cas_rank": 1,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.5637608036399963
+  },
+  {
+    "layer": 42,
+    "cas_fit": 0.5209927451686616,
+    "cas_rank": 1,
+    "monotone": true,
+    "proj_order": "PCEO",
+    "domain_sep4": 0.4501382188394754
+  },
+  {
+    "layer": 43,
+    "cas_fit": -0.3018823538626287,
+    "cas_rank": 8,
+    "monotone": false,
+    "proj_order": "PCOE",
+    "domain_sep4": 0.28964471796732966
+  }
+]
