@@ -831,7 +831,15 @@ CONTROL_GUARD_SURPLUS_MIN = 2   # drawn - gating floor must be at least this
 # ---------------------------------------------------------------------------
 # REV 0.4 constants (PREREG section 10, deviations D33, D35, D37-D42).
 # ---------------------------------------------------------------------------
-DEFAULT_DTYPE = "bfloat16"      # D33. fp32 at 20B is 76.74 GiB vs 44.99 on A40.
+# D57 (logged in PREREG Section 10 BEFORE this change and BEFORE the run):
+# D33 (bf16) and D34 (the bf16-vs-fp32 calibration precondition) are WITHDRAWN.
+# D33 existed solely because fp32 at 20.554567680B params is 76.6 GiB against
+# the A40's 44.99 GiB. The run moved to an H200 with 139.8 GiB MEASURED, where
+# fp32 fits with ~63 GiB spare, so the constraint that forced the precision
+# compromise is gone and the compromise goes with it. Relative quantum improves
+# 2^-8 -> 2^-24 (~65,000x). No gate, threshold, control, bank or statistic
+# changes -- only the numeric substrate.
+DEFAULT_DTYPE = "float32"       # D57 (was "bfloat16" under D33, now withdrawn)
 DTYPE_CHOICES = ("float32", "bfloat16", "float16")
 # bfloat16 has 8 significand bits -> relative spacing 2^-8. Reported alongside
 # every effect so a null below the instrument's resolution is readable as such.
