@@ -102,7 +102,7 @@ The file contains no credential access or HTTP calls.
 `watchdog_armed.ps1` is the local Windows lifecycle implementation for one
 fresh Pod start. It binds the provider-reported `lastStartedAt`, performs one
 exact-target GET before writing the create-once ARMED
-receipt, polls only that ID, starts local STOP 90 seconds before the 30-minute
+receipt, polls only that ID, starts local STOP 90 seconds before the bounded
 hard deadline, and requires an EXITED observation. It also registers a same-user
 Task Scheduler fallback for that same early-stop boundary. The task's exact
 action, arguments, trigger time, principal, settings, and next-run time are
@@ -119,6 +119,7 @@ the independent GitHub-hosted supervisor:
 - `.github/workflows/runpod-canary-stop-supervisor.yml`
 - `tools/runpod_open_weight_canary_v2/github_stop_supervisor.py`
 - `tools/runpod_open_weight_canary_v2/arm_github_supervisor.ps1`
+- `tools/runpod_open_weight_canary_v2/create_provider_launch_receipt.py`
 
 The GitHub job first performs an authenticated provider GET for the exact new
 Pod and uploads its point-in-time arm receipt. It is then intended to remain
@@ -139,14 +140,39 @@ present on the repository's default branch, its exact source commit must be
 checked out, and the temporary `RUNPOD_CANARY_V2_API_KEY` repository secret must
 be removed after terminal evidence is exported.
 
-Both supervisors must be armed immediately after a fresh provider start and
-before any model command. Arm and confirm the independent GitHub supervisor
-first, then arm the local watchdog; that ordering preserves an external STOP
-authority during the local script's credential and Task Scheduler setup. If the
-GitHub arm or the local arm fails, issue an exact-ID provider STOP immediately
-and do not run the model. Their receipts must bind the same Pod ID, deadline,
-and source commit. The runner rejects either missing, stale, noncanonical, or
-cross-mismatched receipt. Do not test either supervisor with a protected Pod.
+Before a create request, an independently running pre-create guardian must
+atomically consume the authorization ID/request hash and return a canonical arm
+receipt binding the exact high-entropy Pod name, creation window, source, OCI
+digest, maximum deadline, provider endpoint, and a full pre-arm inventory
+projection proving that the exact name was absent. After a strict HTTP 201
+supplies the exact Pod ID,
+that guardian must bind its recovery authority to the exact ID first; only then
+may the local watchdog arm. This ordering covers the otherwise unguarded crash
+window between POST and exact-ID discovery. If either post-create arm fails,
+issue an exact-ID provider STOP immediately and do not run the model. Their
+receipts must bind the same Pod ID, deadline, and source commit. The runner
+rejects either missing, stale, noncanonical, or cross-mismatched receipt. Do not
+test either supervisor with a protected Pod.
+
+No production pre-create guardian currently exists in this repository. For
+that reason the launcher's `--mode live` path is structurally
+`LIVE_NO_GO_PRECREATE_GUARDIAN_UNAVAILABLE`: it returns before reading a
+credential, consuming an authorization, writing transaction state, constructing
+the HTTPS transport, or contacting RunPod/GitHub. The injectable transaction
+library and fake transport are offline protocol tests only; they are not live
+launch authority. Do not hand-compose a guardian receipt or treat its local
+self-hash/`guardian_id` string as authentication.
+
+`precreate_guardian_offline.py` is a separate offline reference state machine,
+not that production guardian. Its stronger
+`cas_runpod_precreate_guardian_arm.v1` shape includes pre-arm inventory, exact
+provider endpoint, GitHub repository/run identity, and guardian source hash.
+The launcher's injected local fake receipt is not yet integrated with that
+state machine, has no independently durable worker, and cannot enforce one-use
+consumption across fresh adapter instances or machine restarts. This exact
+integration/hosting gap is the open live blocker recorded by the
+preregistration's NO_GO status.
+
 Before a provider start, separately verify that the local RunPod credential,
 dedicated `runpod_cas.pub` file, new receipt directory, and Task Scheduler APIs
 are reachable; the watchdog cannot stop a running Pod if it cannot read its API
@@ -158,21 +184,57 @@ ceiling. Provider GET currently omits `interruptible` and `locked`; their
 on-demand/unlocked status is never inferred from null.
 
 The runner and local watchdog require a canonical
-`cas_runpod_provider_launch_receipt.v1` file. It must be written create-once by
+`cas_runpod_provider_launch_receipt.v2` file. It must be written create-once by
 the same bounded client transaction that sends `POST /v1/pods`; manual or
 after-the-fact reconstruction is inadmissible. The receipt retains the exact
-canonical request and provider response bodies, their individual SHA-256
-digests, HTTP status, client observation times, exact Pod ID/name, source
-commit, OCI digest, provider `lastStartedAt`, and the deadline exactly 1,800
-seconds later. Its admitted request is Secure Cloud A40 x1, on-demand
+canonical request entity-body bytes and exact provider HTTP 201 entity-body
+bytes as canonical base64, byte counts, individual SHA-256 digests, effective
+URL, identity content encoding, allowlisted content type/request-ID metadata,
+wall-clock observations, monotonic elapsed time, exact Pod ID/name, source
+commit, OCI digest, provider `lastStartedAt`, and the earliest deadline bounded
+by both pre-create window start + 1,800 seconds and provider start + 1,800
+seconds. The full saved raw response is strict-parsed with duplicate keys,
+non-finite numbers, invalid UTF-8, and numeric/boolean substitutions rejected;
+all semantic checks run on that same parsed snapshot. Its admitted request is
+Secure Cloud A40 x1, on-demand
 (`interruptible=false`), unlocked (`locked=false`), encrypted 20-GB Pod volume,
 50-GB container disk, no network volume, `/workspace`, only `22/tcp`, and the
 one dedicated `PUBLIC_KEY`. The retained provider create response itself must
 echo the exact ID/name, `interruptible=false`, `locked=false`,
 `volumeEncrypted=true`, `desiredStatus=RUNNING`, and `lastStartedAt`; otherwise
-validation fails closed. RunPod's create endpoint starts a new Pod, so this v1
+validation fails closed. RunPod's create endpoint starts a new Pod, so this v2
 contract does not fabricate or require a second `/start` request against an
 already-running Pod.
+
+The v2 receipt also cross-links the external authorization file hash and ID,
+durable intent hash, and exact pre-create guardian-receipt byte hash. These are
+traceability links only; they do not turn any local self-hash into a signature.
+
+The exact create request still sends `volumeEncrypted:true`. RunPod's current
+public create-body field list does not document that key even though the live
+backend previously accepted it and the create response exposes encryption. The
+launcher never retries without the key. Only the documented 400 is classified
+as a definitive rejection; it is retained as failure evidence, permits no inventory
+reconciliation or STOP of an older same-name Pod, and never triggers another
+CREATE. An ambiguous transport exchange, 408, unexpected non-201 2xx, 5xx, or
+incomplete 201 may use only the guardian-bound exact-name and creation-window
+inventory recovery path (or a unique weak response ID followed by an exact-name
+GET). Recovery excludes every pre-arm Pod ID and, when both `createdAt` and
+`lastStartedAt` are present, requires both timestamps inside the current
+creation window so a stale Pod restart cannot impersonate a new create. Once a
+strict 201 yields a
+nonprotected ID, containment is ID-authoritative even if the provider normalizes
+the name; weaker salvaged/inventory identity remains exact-name/time gated.
+
+Each attempt also requires a canonical
+`cas_runpod_create_authorization.v1` artifact whose externally supplied file
+hash binds the one exact request. A durable send marker is written before POST,
+and the protocol's provider CREATE limit is one; a marker blocks replay in the
+same state root. A production guardian must enforce the cross-root/restart limit
+with a global atomic consumption ledger keyed by
+authorization ID plus request hash; a caller-selected output directory is not a
+valid one-use ledger. The current offline fake exercises this requirement, but
+the missing production guardian keeps live execution NO_GO.
 
 The receipt self-hash and body hashes are local integrity links, not provider
 authentication. The receipt explicitly says it is not a RunPod signature,
@@ -198,7 +260,9 @@ The armed implementation uses this lifecycle:
 3. Require a Pod volume, not a network volume. RunPod documents network-volume
    Pods as terminate-only, which is incompatible with evidence-preserving STOP.
 4. The local process, its Task Scheduler fallback, and the independent GitHub
-   supervisor all begin STOP 90 seconds before the 30-minute hard deadline.
+   supervisor all begin STOP 90 seconds before the at-most-30-minute hard
+   deadline; a delayed create shortens the provider-start runtime rather than
+   extending the pre-create bound.
    `POST /v1/pods/{podId}/stop` succeeds with HTTP 200.
    Duplicate STOP attempts are accepted as cost-containment retries, not counted
    as model work.

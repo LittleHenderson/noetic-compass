@@ -3,6 +3,7 @@ param(
     [Parameter(Mandatory)][ValidatePattern('^[a-z0-9]{6,32}$')][string]$PodId,
     [Parameter(Mandatory)][ValidatePattern('^cas-open-weight-canary-v2-[a-z0-9-]+$')][string]$PodName,
     [Parameter(Mandatory)][ValidateNotNullOrEmpty()][string]$RunStartedAtUtc,
+    [Parameter(Mandatory)][ValidateNotNullOrEmpty()][string]$HardStopDeadlineUtc,
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{40,64}$')][string]$SourceCommitSha256,
     [Parameter(Mandatory)][ValidatePattern('^sha256:[0-9a-f]{64}$')][string]$OciImageDigest,
     [Parameter(Mandatory)][ValidateNotNullOrEmpty()][string]$ExpectedImageName,
@@ -77,8 +78,200 @@ function Get-ByteSha256Hex {
 
 function Get-CanonicalJsonBytes {
     param([Parameter(Mandatory)][object]$Value)
-    $json = $Value | ConvertTo-Json -Depth 20 -Compress
+    $json = (ConvertTo-CanonicalJsonValue $Value) | ConvertTo-Json -Depth 20 -Compress
     return [Text.UTF8Encoding]::new($false).GetBytes($json + "`n")
+}
+
+function ConvertTo-CanonicalJsonValue {
+    param([AllowNull()][object]$Value)
+    if ($null -eq $Value) { return $null }
+    if ($Value -is [Collections.IDictionary]) {
+        $result = [ordered]@{}
+        foreach ($key in @($Value.Keys | ForEach-Object { [string]$_ } | Sort-Object)) {
+            $result[$key] = ConvertTo-CanonicalJsonValue $Value[$key]
+        }
+        return $result
+    }
+    if ($Value -is [pscustomobject]) {
+        $result = [ordered]@{}
+        foreach ($property in @($Value.PSObject.Properties | Sort-Object Name)) {
+            $result[$property.Name] = ConvertTo-CanonicalJsonValue $property.Value
+        }
+        return $result
+    }
+    if ($Value -is [Collections.IEnumerable] -and $Value -isnot [string]) {
+        $items = @()
+        foreach ($item in $Value) { $items += ,(ConvertTo-CanonicalJsonValue $item) }
+        return ,$items
+    }
+    return $Value
+}
+
+function Skip-StrictJsonWhitespace {
+    param([Parameter(Mandatory)][hashtable]$State)
+    while ($State.Index -lt $State.Text.Length -and
+        " `t`r`n".IndexOf([char]$State.Text[$State.Index]) -ge 0) {
+        $State.Index++
+    }
+}
+
+function Read-StrictJsonStringToken {
+    param([Parameter(Mandatory)][hashtable]$State)
+    if ($State.Index -ge $State.Text.Length -or $State.Text[$State.Index] -cne '"') {
+        throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+    }
+    $State.Index++
+    $builder = [Text.StringBuilder]::new()
+    while ($State.Index -lt $State.Text.Length) {
+        $character = [char]$State.Text[$State.Index]
+        $State.Index++
+        if ($character -ceq '"') { return $builder.ToString() }
+        if ([int]$character -lt 0x20) {
+            throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+        }
+        if ($character -cne '\') {
+            [void]$builder.Append($character)
+            continue
+        }
+        if ($State.Index -ge $State.Text.Length) {
+            throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+        }
+        $escape = [char]$State.Text[$State.Index]
+        $State.Index++
+        switch -CaseSensitive ($escape) {
+            '"' { [void]$builder.Append('"') }
+            '\' { [void]$builder.Append('\') }
+            '/' { [void]$builder.Append('/') }
+            'b' { [void]$builder.Append([char]8) }
+            'f' { [void]$builder.Append([char]12) }
+            'n' { [void]$builder.Append([char]10) }
+            'r' { [void]$builder.Append([char]13) }
+            't' { [void]$builder.Append([char]9) }
+            'u' {
+                if ($State.Index + 4 -gt $State.Text.Length) {
+                    throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+                }
+                $hex = $State.Text.Substring($State.Index, 4)
+                if ($hex -cnotmatch '^[0-9A-Fa-f]{4}$') {
+                    throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+                }
+                [void]$builder.Append([char][Convert]::ToInt32($hex, 16))
+                $State.Index += 4
+            }
+            default { throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID' }
+        }
+    }
+    throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+}
+
+function Read-StrictJsonNumberToken {
+    param([Parameter(Mandatory)][hashtable]$State)
+    $remaining = $State.Text.Substring($State.Index)
+    $match = [regex]::Match($remaining, '^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?')
+    if (-not $match.Success) {
+        throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+    }
+    $State.Index += $match.Length
+}
+
+function Read-StrictJsonValueToken {
+    param(
+        [Parameter(Mandatory)][hashtable]$State,
+        [Parameter(Mandatory)][int]$Depth
+    )
+    if ($Depth -gt 64) { throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID' }
+    Skip-StrictJsonWhitespace $State
+    if ($State.Index -ge $State.Text.Length) {
+        throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+    }
+    $character = [char]$State.Text[$State.Index]
+    if ($character -ceq '"') {
+        $null = Read-StrictJsonStringToken $State
+        return
+    }
+    if ($character -ceq '{') {
+        $State.Index++
+        $keys = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+        Skip-StrictJsonWhitespace $State
+        if ($State.Index -lt $State.Text.Length -and $State.Text[$State.Index] -ceq '}') {
+            $State.Index++
+            return
+        }
+        while ($true) {
+            Skip-StrictJsonWhitespace $State
+            $key = Read-StrictJsonStringToken $State
+            if (-not $keys.Add($key)) {
+                throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_DUPLICATE_KEY'
+            }
+            Skip-StrictJsonWhitespace $State
+            if ($State.Index -ge $State.Text.Length -or $State.Text[$State.Index] -cne ':') {
+                throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+            }
+            $State.Index++
+            Read-StrictJsonValueToken -State $State -Depth ($Depth + 1)
+            Skip-StrictJsonWhitespace $State
+            if ($State.Index -ge $State.Text.Length) {
+                throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+            }
+            $separator = [char]$State.Text[$State.Index]
+            $State.Index++
+            if ($separator -ceq '}') { return }
+            if ($separator -cne ',') {
+                throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+            }
+        }
+    }
+    if ($character -ceq '[') {
+        $State.Index++
+        Skip-StrictJsonWhitespace $State
+        if ($State.Index -lt $State.Text.Length -and $State.Text[$State.Index] -ceq ']') {
+            $State.Index++
+            return
+        }
+        while ($true) {
+            Read-StrictJsonValueToken -State $State -Depth ($Depth + 1)
+            Skip-StrictJsonWhitespace $State
+            if ($State.Index -ge $State.Text.Length) {
+                throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+            }
+            $separator = [char]$State.Text[$State.Index]
+            $State.Index++
+            if ($separator -ceq ']') { return }
+            if ($separator -cne ',') {
+                throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+            }
+        }
+    }
+    foreach ($literal in @('true', 'false', 'null')) {
+        if ($State.Text.Substring($State.Index).StartsWith(
+            $literal, [StringComparison]::Ordinal
+        )) {
+            $State.Index += $literal.Length
+            return
+        }
+    }
+    Read-StrictJsonNumberToken $State
+}
+
+function Assert-StrictJsonText {
+    param([Parameter(Mandatory)][string]$Text)
+    $state = @{ Text = $Text; Index = 0 }
+    Read-StrictJsonValueToken -State $state -Depth 0
+    Skip-StrictJsonWhitespace $state
+    if ($state.Index -ne $state.Text.Length) {
+        throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_JSON_INVALID'
+    }
+}
+
+function ConvertFrom-JsonPreserveStrings {
+    param([Parameter(Mandatory)][string]$Text)
+    $command = Get-Command ConvertFrom-Json -CommandType Cmdlet
+    if ($command.Parameters.ContainsKey('DateKind')) {
+        # PowerShell 7.5 otherwise coerces ISO strings to DateTime and changes
+        # their lexical form on reserialization, breaking exact canonical bytes.
+        return ,($Text | ConvertFrom-Json -DateKind String)
+    }
+    return ,($Text | ConvertFrom-Json)
 }
 
 function Assert-ExactPropertyKeyset {
@@ -223,15 +416,26 @@ function Assert-ProviderTransaction {
         [Parameter(Mandatory)][int[]]$AcceptedHttpStatuses
     )
     Assert-ExactPropertyKeyset -Value $Value -Expected @(
+        'effective_url',
+        'elapsed_milliseconds',
         'request_body',
+        'request_body_base64',
+        'request_body_byte_count',
         'request_body_sha256',
+        'request_accept_encoding',
+        'request_content_type',
         'request_method',
         'request_observed_at_utc',
         'request_path',
         'response_body',
+        'response_body_base64',
+        'response_body_byte_count',
         'response_body_sha256',
+        'response_content_encoding',
+        'response_content_type',
         'response_http_status',
-        'response_observed_at_utc'
+        'response_observed_at_utc',
+        'response_request_id'
     ) -ErrorCode "WATCHDOG_PROVIDER_LAUNCH_${Label}_TRANSACTION_KEYSET_MISMATCH"
     if ((Get-RequiredProperty $Value 'request_method') -cne 'POST') {
         throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_METHOD_MISMATCH"
@@ -239,20 +443,86 @@ function Assert-ProviderTransaction {
     if ((Get-RequiredProperty $Value 'request_path') -cne $ExpectedPath) {
         throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_PATH_MISMATCH"
     }
+    if ((Get-RequiredProperty $Value 'effective_url') -cne "https://rest.runpod.io$ExpectedPath" -or
+        (Get-RequiredProperty $Value 'request_accept_encoding') -cne 'identity' -or
+        (Get-RequiredProperty $Value 'request_content_type') -cne 'application/json') {
+        throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_HTTP_BINDING_MISMATCH"
+    }
     $requestBody = Get-RequiredProperty $Value 'request_body'
     $responseBody = Get-RequiredProperty $Value 'response_body'
     if ($null -eq $requestBody -or $null -eq $responseBody) {
         throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_BODY_MISSING"
     }
+    try {
+        $requestRaw = [Convert]::FromBase64String(
+            [string](Get-RequiredProperty $Value 'request_body_base64')
+        )
+        $responseRaw = [Convert]::FromBase64String(
+            [string](Get-RequiredProperty $Value 'response_body_base64')
+        )
+    }
+    catch {
+        throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_RAW_BASE64_INVALID"
+    }
+    if ([Convert]::ToBase64String($requestRaw) -cne
+            [string](Get-RequiredProperty $Value 'request_body_base64') -or
+        [Convert]::ToBase64String($responseRaw) -cne
+            [string](Get-RequiredProperty $Value 'response_body_base64')) {
+        throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_RAW_BASE64_NONCANONICAL"
+    }
+    if (-not (Test-IsJsonInteger (Get-RequiredProperty $Value 'request_body_byte_count')) -or
+        [int64](Get-RequiredProperty $Value 'request_body_byte_count') -ne $requestRaw.Length -or
+        -not (Test-IsJsonInteger (Get-RequiredProperty $Value 'response_body_byte_count')) -or
+        [int64](Get-RequiredProperty $Value 'response_body_byte_count') -ne $responseRaw.Length) {
+        throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_RAW_BYTE_COUNT_MISMATCH"
+    }
+    $canonicalRequestRaw = Get-CanonicalJsonBytes $requestBody
+    if ($requestRaw.Length -ne $canonicalRequestRaw.Length) {
+        throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_REQUEST_RAW_OBJECT_MISMATCH"
+    }
+    for ($index = 0; $index -lt $requestRaw.Length; $index++) {
+        if ($requestRaw[$index] -ne $canonicalRequestRaw[$index]) {
+            throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_REQUEST_RAW_OBJECT_MISMATCH"
+        }
+    }
+    try {
+        $responseText = [Text.UTF8Encoding]::new($false, $true).GetString($responseRaw)
+        Assert-StrictJsonText $responseText
+        $responseRawObject = ConvertFrom-JsonPreserveStrings $responseText
+    }
+    catch {
+        if ($_.Exception.Message -ceq 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_DUPLICATE_KEY') {
+            throw 'WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_DUPLICATE_KEY'
+        }
+        throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_RESPONSE_RAW_JSON_INVALID"
+    }
+    if ((Get-ByteSha256Hex (Get-CanonicalJsonBytes $responseRawObject)) -cne
+        (Get-ByteSha256Hex (Get-CanonicalJsonBytes $responseBody))) {
+        throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_RESPONSE_RAW_OBJECT_MISMATCH"
+    }
     $requestHash = Get-RequiredProperty $Value 'request_body_sha256'
     $responseHash = Get-RequiredProperty $Value 'response_body_sha256'
     if ($requestHash -isnot [string] -or $requestHash -notmatch '^[0-9A-F]{64}$' -or
-        (Get-ByteSha256Hex (Get-CanonicalJsonBytes $requestBody)) -cne $requestHash) {
+        (Get-ByteSha256Hex $requestRaw) -cne $requestHash) {
         throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_REQUEST_HASH_MISMATCH"
     }
     if ($responseHash -isnot [string] -or $responseHash -notmatch '^[0-9A-F]{64}$' -or
-        (Get-ByteSha256Hex (Get-CanonicalJsonBytes $responseBody)) -cne $responseHash) {
+        (Get-ByteSha256Hex $responseRaw) -cne $responseHash) {
         throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_RESPONSE_HASH_MISMATCH"
+    }
+    $responseContentType = Get-RequiredProperty $Value 'response_content_type'
+    $responseContentEncoding = Get-RequiredProperty $Value 'response_content_encoding'
+    $responseRequestId = Get-RequiredProperty $Value 'response_request_id'
+    if ($responseContentType -isnot [string] -or
+        $responseContentType.Length -gt 256 -or
+        $responseContentType.Split(';')[0].Trim().ToLowerInvariant() -cne 'application/json' -or
+        ($null -ne $responseContentEncoding -and
+            ($responseContentEncoding -isnot [string] -or
+             $responseContentEncoding.Trim().ToLowerInvariant() -cne 'identity')) -or
+        ($null -ne $responseRequestId -and
+            ($responseRequestId -isnot [string] -or
+             $responseRequestId.Length -lt 1 -or $responseRequestId.Length -gt 256))) {
+        throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_RESPONSE_HEADER_MISMATCH"
     }
     $httpStatus = Get-RequiredProperty $Value 'response_http_status'
     if (-not (Test-IsJsonInteger $httpStatus) -or
@@ -263,6 +533,18 @@ function Assert-ProviderTransaction {
     $respondedUtc = Convert-ProviderUtcTimestamp ([string](Get-RequiredProperty $Value 'response_observed_at_utc'))
     if ($respondedUtc -lt $requestedUtc) {
         throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_CHRONOLOGY_MISMATCH"
+    }
+    $elapsedMilliseconds = Get-RequiredProperty $Value 'elapsed_milliseconds'
+    if (-not (Test-IsJsonInteger $elapsedMilliseconds) -or
+        [int64]$elapsedMilliseconds -lt 0 -or [int64]$elapsedMilliseconds -gt 120000) {
+        throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_ELAPSED_MISMATCH"
+    }
+    $wallElapsedMilliseconds = [int64][math]::Round(
+        ($respondedUtc - $requestedUtc).TotalMilliseconds
+    )
+    if ($wallElapsedMilliseconds -gt 120000 -or
+        [math]::Abs($wallElapsedMilliseconds - [int64]$elapsedMilliseconds) -gt 5000) {
+        throw "WATCHDOG_PROVIDER_LAUNCH_${Label}_WALL_MONOTONIC_MISMATCH"
     }
     return [ordered]@{
         request_body = $requestBody
@@ -287,7 +569,7 @@ function Read-ProviderLaunchReceipt {
     $rawBytes = [IO.File]::ReadAllBytes($item.FullName)
     try {
         $rawText = [Text.UTF8Encoding]::new($false, $true).GetString($rawBytes)
-        $value = $rawText | ConvertFrom-Json
+        $value = ConvertFrom-JsonPreserveStrings $rawText
     }
     catch {
         throw 'WATCHDOG_PROVIDER_LAUNCH_RECEIPT_JSON_INVALID'
@@ -302,7 +584,12 @@ function Read-ProviderLaunchReceipt {
         }
     }
     Assert-ExactPropertyKeyset -Value $value -Expected @(
+        'authorization_id',
+        'authorization_sha256',
         'claim_boundary',
+        'create_intent_sha256',
+        'create_send_marker_sha256',
+        'create_send_reserved_at_utc',
         'create_transaction',
         'dedicated_public_key_sha256',
         'hard_stop_deadline_utc',
@@ -313,13 +600,15 @@ function Read-ProviderLaunchReceipt {
         'pod_name',
         'provider',
         'provider_started_at_utc',
+        'precreate_guardian_receipt_sha256',
+        'precreate_maximum_hard_stop_deadline_utc',
         'receipt_sha256',
         'schema_version',
         'source_commit_sha256',
         'status'
     ) -ErrorCode 'WATCHDOG_PROVIDER_LAUNCH_RECEIPT_KEYSET_MISMATCH'
-    $expectedClaim = 'Locally captured canonical RunPod request/response JSON bodies and client timestamps. The receipt is not a RunPod signature, trusted timestamp, or billing settlement; it proves on-demand/unlocked only when those false values are present in the retained provider create response that also reports the Pod RUNNING and supplies lastStartedAt.'
-    if ((Get-RequiredProperty $value 'schema_version') -cne 'cas_runpod_provider_launch_receipt.v1' -or
+    $expectedClaim = 'Locally captured exact RunPod request bytes, exact HTTP 201 response bytes, selected response metadata, and client timestamps. The receipt is not a RunPod signature, trusted timestamp, or billing settlement; it proves on-demand/unlocked only when the retained raw response strictly parses to the full retained object containing those false values, RUNNING, and lastStartedAt.'
+    if ((Get-RequiredProperty $value 'schema_version') -cne 'cas_runpod_provider_launch_receipt.v2' -or
         (Get-RequiredProperty $value 'status') -cne 'EXACT_CREATE_RESPONSE_STARTED_POD_OBSERVED' -or
         (Get-RequiredProperty $value 'launch_mode') -cne 'CREATE_RESPONSE_STARTED_POD' -or
         (Get-RequiredProperty $value 'provider') -cne 'RUNPOD' -or
@@ -336,8 +625,30 @@ function Read-ProviderLaunchReceipt {
         $publicKeySha256 -cne (Get-Utf8Sha256Hex $ExpectedPublicKey)) {
         throw 'WATCHDOG_PROVIDER_LAUNCH_PUBLIC_KEY_HASH_MISMATCH'
     }
+    $authorizationId = Get-RequiredProperty $value 'authorization_id'
+    $authorizationSha256 = Get-RequiredProperty $value 'authorization_sha256'
+    $createIntentSha256 = Get-RequiredProperty $value 'create_intent_sha256'
+    $createSendMarkerSha256 = Get-RequiredProperty $value 'create_send_marker_sha256'
+    $guardianReceiptSha256 = Get-RequiredProperty $value 'precreate_guardian_receipt_sha256'
+    if ($authorizationId -isnot [string] -or
+        $authorizationId -cnotmatch '^[a-z0-9][a-z0-9-]{15,63}$' -or
+        $authorizationSha256 -isnot [string] -or
+        $authorizationSha256 -cnotmatch '^[0-9A-F]{64}$' -or
+        $createIntentSha256 -isnot [string] -or
+        $createIntentSha256 -cnotmatch '^[0-9A-F]{64}$' -or
+        $createSendMarkerSha256 -isnot [string] -or
+        $createSendMarkerSha256 -cnotmatch '^[0-9A-F]{64}$' -or
+        $guardianReceiptSha256 -isnot [string] -or
+        $guardianReceiptSha256 -cnotmatch '^[0-9A-F]{64}$') {
+        throw 'WATCHDOG_PROVIDER_LAUNCH_AUTHORIZATION_BINDING_INVALID'
+    }
     $unsigned = [ordered]@{
+        authorization_id = $authorizationId
+        authorization_sha256 = $authorizationSha256
         claim_boundary = Get-RequiredProperty $value 'claim_boundary'
+        create_intent_sha256 = $createIntentSha256
+        create_send_marker_sha256 = $createSendMarkerSha256
+        create_send_reserved_at_utc = Get-RequiredProperty $value 'create_send_reserved_at_utc'
         create_transaction = Get-RequiredProperty $value 'create_transaction'
         dedicated_public_key_sha256 = $publicKeySha256
         hard_stop_deadline_utc = Get-RequiredProperty $value 'hard_stop_deadline_utc'
@@ -348,6 +659,8 @@ function Read-ProviderLaunchReceipt {
         pod_name = Get-RequiredProperty $value 'pod_name'
         provider = Get-RequiredProperty $value 'provider'
         provider_started_at_utc = Get-RequiredProperty $value 'provider_started_at_utc'
+        precreate_guardian_receipt_sha256 = $guardianReceiptSha256
+        precreate_maximum_hard_stop_deadline_utc = Get-RequiredProperty $value 'precreate_maximum_hard_stop_deadline_utc'
         schema_version = Get-RequiredProperty $value 'schema_version'
         source_commit_sha256 = Get-RequiredProperty $value 'source_commit_sha256'
         status = Get-RequiredProperty $value 'status'
@@ -418,10 +731,22 @@ function Read-ProviderLaunchReceipt {
     $responseStartedUtc = Convert-ProviderUtcTimestamp ([string](Get-RequiredProperty $createResponse 'lastStartedAt'))
     $receiptStartedUtc = Convert-ProviderUtcTimestamp ([string](Get-RequiredProperty $value 'provider_started_at_utc'))
     $receiptDeadlineUtc = Convert-ProviderUtcTimestamp ([string](Get-RequiredProperty $value 'hard_stop_deadline_utc'))
+    $sendReservedUtc = Convert-ProviderUtcTimestamp ([string](Get-RequiredProperty $value 'create_send_reserved_at_utc'))
+    $precreateMaximumDeadlineUtc = Convert-ProviderUtcTimestamp ([string](Get-RequiredProperty $value 'precreate_maximum_hard_stop_deadline_utc'))
+    $boundedDeadlineUtc = $receiptStartedUtc.AddSeconds($MaximumWallSeconds)
+    if ($precreateMaximumDeadlineUtc -lt $boundedDeadlineUtc) {
+        $boundedDeadlineUtc = $precreateMaximumDeadlineUtc
+    }
     if ($responseStartedUtc -ne $receiptStartedUtc -or
         $receiptStartedUtc -ne $ExpectedStartedUtc -or
         $receiptDeadlineUtc -ne $ExpectedDeadlineUtc -or
-        $receiptDeadlineUtc -ne $receiptStartedUtc.AddSeconds($MaximumWallSeconds)) {
+        $receiptDeadlineUtc -ne $boundedDeadlineUtc -or
+        $receiptDeadlineUtc -le $receiptStartedUtc -or
+        $receiptDeadlineUtc -gt $receiptStartedUtc.AddSeconds($MaximumWallSeconds) -or
+        $sendReservedUtc -gt $create.requested_utc -or
+        ($create.requested_utc - $sendReservedUtc).TotalSeconds -gt 30 -or
+        $precreateMaximumDeadlineUtc -le $sendReservedUtc -or
+        $precreateMaximumDeadlineUtc -gt $sendReservedUtc.AddSeconds($MaximumWallSeconds)) {
         throw 'WATCHDOG_PROVIDER_LAUNCH_TIME_BINDING_MISMATCH'
     }
     if ($receiptStartedUtc -lt $create.requested_utc.AddSeconds(-30) -or
@@ -703,7 +1028,11 @@ if ($ValidateProviderLaunchReceiptOnly) {
         throw 'WATCHDOG_PROVIDER_LAUNCH_RECEIPT_PATH_MISSING'
     }
     $validationStartedUtc = Convert-ProviderUtcTimestamp $RunStartedAtUtc
-    $validationDeadlineUtc = $validationStartedUtc.AddSeconds($MaximumWallSeconds)
+    $validationDeadlineUtc = Convert-ProviderUtcTimestamp $HardStopDeadlineUtc
+    if ($validationDeadlineUtc -le $validationStartedUtc -or
+        $validationDeadlineUtc -gt $validationStartedUtc.AddSeconds($MaximumWallSeconds)) {
+        throw 'WATCHDOG_PROVIDER_LAUNCH_DEADLINE_BOUND_INVALID'
+    }
     $validationPublicKey = Read-ExpectedPublicKey -Path $ExpectedPublicKeyPath
     $validatedProviderLaunch = Read-ProviderLaunchReceipt `
         -Path $ProviderLaunchReceiptPath `
@@ -728,7 +1057,11 @@ $taskName = "CAS-OpenWeight-Canary-Stop-$PodId"
 if ($EmergencyStopOnly) {
     try {
         $startedUtc = Convert-ProviderUtcTimestamp $RunStartedAtUtc
-        $deadlineUtc = $startedUtc.AddSeconds($MaximumWallSeconds)
+        $deadlineUtc = Convert-ProviderUtcTimestamp $HardStopDeadlineUtc
+        if ($deadlineUtc -le $startedUtc -or
+            $deadlineUtc -gt $startedUtc.AddSeconds($MaximumWallSeconds)) {
+            throw 'WATCHDOG_EMERGENCY_DEADLINE_BOUND_INVALID'
+        }
         $receiptRoot = [IO.Path]::GetFullPath($ReceiptDirectory)
         $script:EventPath = Join-Path $receiptRoot 'watchdog.events.jsonl'
         $armedReceiptPath = Join-Path $receiptRoot 'external-watchdog.receipt.json'
@@ -874,7 +1207,11 @@ try {
     $armedReceiptPath = Join-Path $receiptRoot 'external-watchdog.receipt.json'
     $terminalReceiptPath = Join-Path $receiptRoot 'watchdog.terminal.json'
     $nowUtc = (Get-Date).ToUniversalTime()
-    $deadlineUtc = $startedUtc.AddSeconds($MaximumWallSeconds)
+    $deadlineUtc = Convert-ProviderUtcTimestamp $HardStopDeadlineUtc
+    if ($deadlineUtc -le $startedUtc -or
+        $deadlineUtc -gt $startedUtc.AddSeconds($MaximumWallSeconds)) {
+        throw 'WATCHDOG_DEADLINE_BOUND_INVALID'
+    }
     if ($startedUtc -gt $nowUtc.AddMinutes(2) -or $startedUtc -lt $nowUtc.AddMinutes(-5)) {
         throw 'WATCHDOG_START_TIME_OUTSIDE_ARM_WINDOW'
     }
@@ -905,6 +1242,7 @@ try {
         '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $PSCommandPath + '"'),
         '-EmergencyStopOnly', '-PodId', $PodId, '-PodName', $PodName,
         '-RunStartedAtUtc', ('"' + $startedUtc.ToString('o') + '"'),
+        '-HardStopDeadlineUtc', ('"' + $deadlineUtc.ToString('o') + '"'),
         '-SourceCommitSha256', $SourceCommitSha256,
         '-OciImageDigest', $OciImageDigest,
         '-ExpectedImageName', $ExpectedImageName,

@@ -20,6 +20,7 @@ against an attacker already executing inside that process.
 from __future__ import annotations
 
 import argparse
+import base64
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 import hashlib
@@ -49,6 +50,12 @@ DEFAULT_DEPENDENCY_LOCK = (
     / "runpod_open_weight_canary_v2"
     / "requirements-canary-py312-cu128.lock.txt"
 )
+DEFAULT_PROVIDER_LAUNCHER_SOURCE = (
+    REPOSITORY_ROOT
+    / "tools"
+    / "runpod_open_weight_canary_v2"
+    / "create_provider_launch_receipt.py"
+)
 FROZEN_SOURCE_RELATIVE_PATHS = (
     "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_interpretability_adapter.py",
     "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/open_weight/__init__.py",
@@ -62,6 +69,7 @@ FROZEN_SOURCE_RELATIVE_PATHS = (
     "tools/runpod_open_weight_canary_v2/requirements-canary-py312-cu128.lock.txt",
     "tools/runpod_open_weight_canary_v2/github_stop_supervisor.py",
     "tools/runpod_open_weight_canary_v2/arm_github_supervisor.ps1",
+    "tools/runpod_open_weight_canary_v2/create_provider_launch_receipt.py",
     "tools/runpod_open_weight_canary_v2/watchdog_armed.ps1",
     ".github/workflows/runpod-canary-stop-supervisor.yml",
 )
@@ -71,7 +79,7 @@ RESULT_SCHEMA = "cas_open_weight_trajectory_canary_result.v2"
 ERROR_SCHEMA = "cas_open_weight_trajectory_canary_error.v2"
 WATCHDOG_SCHEMA = "cas_external_stop_watchdog_receipt.v2"
 GITHUB_SUPERVISOR_SCHEMA = "cas_runpod_github_stop_supervisor.v2"
-PROVIDER_LAUNCH_SCHEMA = "cas_runpod_provider_launch_receipt.v1"
+PROVIDER_LAUNCH_SCHEMA = "cas_runpod_provider_launch_receipt.v2"
 SCENARIO_SCHEMA = "cas_open_weight_capture_scenario.v1"
 RECEIPT_SCHEMA = "cas_open_weight_trajectory_receipt.v1"
 TENSOR_SCHEMA = "cas_open_weight_trajectory_tensors.v1"
@@ -128,16 +136,18 @@ ANCHOR_CLAIM_BOUNDARY = (
     "until an independent immutable external anchor is attached and verified."
 )
 PROVIDER_LAUNCH_CLAIM_BOUNDARY = (
-    "Locally captured canonical RunPod request/response JSON bodies and client "
-    "timestamps. The receipt is not a RunPod signature, trusted timestamp, or "
-    "billing settlement; it proves on-demand/unlocked only when those false "
-    "values are present in the retained provider create response that also "
-    "reports the Pod RUNNING and supplies lastStartedAt."
+    "Locally captured exact RunPod request bytes, exact HTTP 201 response bytes, "
+    "selected response metadata, and client timestamps. The receipt is not a "
+    "RunPod signature, trusted timestamp, or billing settlement; it proves "
+    "on-demand/unlocked only when the retained raw response strictly parses to "
+    "the full retained object containing those false values, RUNNING, and "
+    "lastStartedAt."
 )
 
 _HEX40_64 = re.compile(r"^[0-9a-f]{40,64}$")
 _UPPER_SHA256 = re.compile(r"^[0-9A-F]{64}$")
 _OCI_DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
+_AUTHORIZATION_ID = re.compile(r"^[a-z0-9][a-z0-9-]{15,63}$")
 _CAPTURE_ID = re.compile(r"^[0-9]{2}-(baseline|noop|zero)-r[1-3]$")
 _ARRAY_NAMES = (
     "generated_token_ids",
@@ -739,8 +749,14 @@ def _validate_preregistration(value: Mapping[str, object]) -> None:
         "required_source_file_manifest_sha256",
         "required_watchdog_script_sha256",
         "required_github_supervisor_source_sha256",
+        "required_provider_launcher_source_sha256",
         "provider_launch_receipt_required",
         "required_provider_launch_receipt_schema",
+        "required_provider_create_authorization_schema",
+        "precreate_guardian_required",
+        "required_precreate_guardian_receipt_schema",
+        "provider_launcher_live_status",
+        "maximum_provider_create_attempts",
         "required_image_name",
         "required_cloud_type",
         "required_interruptible",
@@ -760,10 +776,37 @@ def _validate_preregistration(value: Mapping[str, object]) -> None:
     _required_upper_sha256(launch, "required_source_file_manifest_sha256")
     _required_upper_sha256(launch, "required_watchdog_script_sha256")
     _required_upper_sha256(launch, "required_github_supervisor_source_sha256")
+    launcher_sha256 = launch.get("required_provider_launcher_source_sha256")
+    if launch.get("execution_authority") == UNBOUND_EXECUTION_AUTHORITY:
+        if launcher_sha256 is not None:
+            raise ValueError("inert provider launcher hash must remain unbound")
+    elif not isinstance(launcher_sha256, str) or not _UPPER_SHA256.fullmatch(
+        launcher_sha256
+    ):
+        raise ValueError("bound provider launcher hash is invalid")
     if launch.get("provider_launch_receipt_required") is not True:
         raise ValueError("provider launch receipt must remain required")
     if launch.get("required_provider_launch_receipt_schema") != PROVIDER_LAUNCH_SCHEMA:
         raise ValueError("provider launch receipt schema mismatch")
+    if launch.get("required_provider_create_authorization_schema") != (
+        "cas_runpod_create_authorization.v1"
+    ):
+        raise ValueError("provider create authorization schema mismatch")
+    if launch.get("precreate_guardian_required") is not True:
+        raise ValueError("pre-create guardian must remain required")
+    if launch.get("required_precreate_guardian_receipt_schema") != (
+        "cas_runpod_precreate_guardian_arm.v1"
+    ):
+        raise ValueError("pre-create guardian receipt schema mismatch")
+    expected_launcher_status = (
+        "NO_GO_PRECREATE_GUARDIAN_UNAVAILABLE"
+        if launch.get("execution_authority") == UNBOUND_EXECUTION_AUTHORITY
+        else "LIVE_GUARDIAN_FROZEN"
+    )
+    if launch.get("provider_launcher_live_status") != expected_launcher_status:
+        raise ValueError("provider launcher live-status boundary mismatch")
+    if launch.get("maximum_provider_create_attempts") != 1:
+        raise ValueError("provider create attempt limit must be exactly one")
     if launch.get("required_image_name") != (
         "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404"
     ):
@@ -1103,6 +1146,10 @@ def _require_execution_bindings(
         raise RuntimeError(
             "canary is inert: source commit and OCI digest are not frozen for execution"
         )
+    if launch.get("provider_launcher_live_status") != "LIVE_GUARDIAN_FROZEN":
+        raise RuntimeError(
+            "canary is inert: production pre-create guardian is unavailable"
+        )
     expected_commit = launch.get("required_source_commit_sha256")
     expected_image = launch.get("required_oci_image_digest")
     if not isinstance(expected_commit, str) or not _HEX40_64.fullmatch(expected_commit):
@@ -1113,6 +1160,13 @@ def _require_execution_bindings(
         raise RuntimeError("source commit differs from frozen preregistration")
     if oci_image_digest != expected_image:
         raise RuntimeError("OCI image digest differs from frozen preregistration")
+    expected_launcher_sha256 = _required_upper_sha256(
+        launch, "required_provider_launcher_source_sha256"
+    )
+    if sha256_bytes(DEFAULT_PROVIDER_LAUNCHER_SOURCE.read_bytes()) != (
+        expected_launcher_sha256
+    ):
+        raise RuntimeError("provider launcher bytes differ from frozen preregistration")
     runner_sha256 = sha256_bytes(Path(__file__).read_bytes())
     if runner_sha256 != launch["required_runner_source_sha256"]:
         raise RuntimeError("runner source bytes differ from frozen preregistration")
@@ -1143,30 +1197,76 @@ def _validate_provider_transaction(
     accepted_http_statuses: set[int],
 ) -> tuple[Mapping[str, object], Mapping[str, object], datetime, datetime]:
     required = {
+        "effective_url",
+        "elapsed_milliseconds",
         "request_body",
+        "request_body_base64",
+        "request_body_byte_count",
         "request_body_sha256",
+        "request_accept_encoding",
+        "request_content_type",
         "request_method",
         "request_observed_at_utc",
         "request_path",
         "response_body",
+        "response_body_base64",
+        "response_body_byte_count",
         "response_body_sha256",
+        "response_content_encoding",
+        "response_content_type",
         "response_http_status",
         "response_observed_at_utc",
+        "response_request_id",
     }
     if set(value) != required:
         raise ValueError(f"provider {label} transaction keyset mismatch")
     _require_literal(value, "request_method", "POST")
     _require_literal(value, "request_path", expected_path)
+    _require_literal(value, "effective_url", f"https://rest.runpod.io{expected_path}")
+    _require_literal(value, "request_accept_encoding", "identity")
+    _require_literal(value, "request_content_type", "application/json")
     request = _required_mapping(value, "request_body")
     response = _required_mapping(value, "response_body")
-    if sha256_bytes(canonical_json_bytes(request)) != _required_upper_sha256(
+    request_raw = _required_base64_bytes(value, "request_body_base64")
+    response_raw = _required_base64_bytes(value, "response_body_base64")
+    if len(request_raw) != _required_int(value, "request_body_byte_count"):
+        raise ValueError(f"provider {label} request-body byte count mismatch")
+    if len(response_raw) != _required_int(value, "response_body_byte_count"):
+        raise ValueError(f"provider {label} response-body byte count mismatch")
+    if request_raw != canonical_json_bytes(request):
+        raise ValueError(f"provider {label} request raw/object mismatch")
+    parsed_response = strict_json_object(
+        response_raw, f"provider {label} raw response"
+    )
+    if canonical_json_bytes(parsed_response) != canonical_json_bytes(response):
+        raise ValueError(f"provider {label} response raw/object mismatch")
+    if sha256_bytes(request_raw) != _required_upper_sha256(
         value, "request_body_sha256"
     ):
         raise ValueError(f"provider {label} request-body hash mismatch")
-    if sha256_bytes(canonical_json_bytes(response)) != _required_upper_sha256(
+    if sha256_bytes(response_raw) != _required_upper_sha256(
         value, "response_body_sha256"
     ):
         raise ValueError(f"provider {label} response-body hash mismatch")
+    content_type = value.get("response_content_type")
+    if (
+        not isinstance(content_type, str)
+        or not content_type
+        or len(content_type) > 256
+        or content_type.split(";", 1)[0].strip().lower() != "application/json"
+    ):
+        raise ValueError(f"provider {label} response content type mismatch")
+    content_encoding = value.get("response_content_encoding")
+    if content_encoding is not None and (
+        not isinstance(content_encoding, str)
+        or content_encoding.strip().lower() != "identity"
+    ):
+        raise ValueError(f"provider {label} response content encoding mismatch")
+    request_id = value.get("response_request_id")
+    if request_id is not None and (
+        not isinstance(request_id, str) or not request_id or len(request_id) > 256
+    ):
+        raise ValueError(f"provider {label} response request ID is invalid")
     http_status = _required_int(value, "response_http_status")
     if http_status not in accepted_http_statuses:
         raise ValueError(f"provider {label} HTTP status mismatch")
@@ -1174,7 +1274,13 @@ def _validate_provider_transaction(
     responded = _parse_utc(_required_text(value, "response_observed_at_utc"))
     if responded < requested:
         raise ValueError(f"provider {label} response predates request")
-    return request, response, requested, responded
+    elapsed = _required_int(value, "elapsed_milliseconds")
+    if elapsed < 0 or elapsed > 120_000:
+        raise ValueError(f"provider {label} elapsed duration is invalid")
+    wall_elapsed = int((responded - requested).total_seconds() * 1000)
+    if wall_elapsed > 120_000 or abs(wall_elapsed - elapsed) > 5_000:
+        raise ValueError(f"provider {label} wall/monotonic duration mismatch")
+    return request, parsed_response, requested, responded
 
 
 def _validate_provider_launch_receipt(
@@ -1189,7 +1295,12 @@ def _validate_provider_launch_receipt(
     if raw != canonical_json_bytes(value):
         raise ValueError("provider launch receipt is not canonical JSON")
     required = {
+        "authorization_id",
+        "authorization_sha256",
         "claim_boundary",
+        "create_intent_sha256",
+        "create_send_marker_sha256",
+        "create_send_reserved_at_utc",
         "create_transaction",
         "dedicated_public_key_sha256",
         "hard_stop_deadline_utc",
@@ -1200,6 +1311,8 @@ def _validate_provider_launch_receipt(
         "pod_name",
         "provider",
         "provider_started_at_utc",
+        "precreate_guardian_receipt_sha256",
+        "precreate_maximum_hard_stop_deadline_utc",
         "receipt_sha256",
         "schema_version",
         "source_commit_sha256",
@@ -1215,6 +1328,19 @@ def _validate_provider_launch_receipt(
     _require_literal(value, "oci_image_digest", oci_image_digest)
     _require_literal(value, "image_name", expected_image_name)
     _require_literal(value, "claim_boundary", PROVIDER_LAUNCH_CLAIM_BOUNDARY)
+    authorization_id = _required_text(value, "authorization_id")
+    if not _AUTHORIZATION_ID.fullmatch(authorization_id):
+        raise ValueError("provider launch authorization ID is malformed")
+    _required_upper_sha256(value, "authorization_sha256")
+    _required_upper_sha256(value, "create_intent_sha256")
+    _required_upper_sha256(value, "create_send_marker_sha256")
+    _required_upper_sha256(value, "precreate_guardian_receipt_sha256")
+    send_reserved = _parse_utc(
+        _required_text(value, "create_send_reserved_at_utc")
+    )
+    precreate_maximum_deadline = _parse_utc(
+        _required_text(value, "precreate_maximum_hard_stop_deadline_utc")
+    )
     pod_id = _required_text(value, "pod_id")
     if not re.fullmatch(r"[a-z0-9]{6,32}", pod_id):
         raise ValueError("provider launch receipt Pod ID is malformed")
@@ -1314,9 +1440,19 @@ def _validate_provider_launch_receipt(
         provider_started > create_responded + timedelta(seconds=30)
     ):
         raise ValueError("provider start timestamp is outside the create exchange")
+    if send_reserved > create_requested or (
+        create_requested - send_reserved > timedelta(seconds=30)
+    ):
+        raise ValueError("provider create send-reservation chronology mismatch")
+    if precreate_maximum_deadline <= send_reserved or (
+        precreate_maximum_deadline > send_reserved + timedelta(seconds=1800)
+    ):
+        raise ValueError("provider pre-create maximum deadline mismatch")
     deadline = _parse_utc(_required_text(value, "hard_stop_deadline_utc"))
-    if deadline != provider_started + timedelta(seconds=1800):
-        raise ValueError("provider launch deadline is not exactly start plus 1800 seconds")
+    if deadline != min(
+        provider_started + timedelta(seconds=1800), precreate_maximum_deadline
+    ) or not provider_started < deadline <= provider_started + timedelta(seconds=1800):
+        raise ValueError("provider launch deadline exceeds a bound")
     if create_requested > create_responded:
         raise ValueError("provider create chronology mismatch")
     if require_current_time:
@@ -1506,7 +1642,7 @@ def _validate_github_supervisor_receipt(
     provider_started = _parse_utc(
         _required_text(value, "provider_started_at_utc")
     )
-    if deadline != provider_started + timedelta(seconds=1800):
+    if not provider_started < deadline <= provider_started + timedelta(seconds=1800):
         raise ValueError("GitHub stop-supervisor deadline/start binding mismatch")
     written = _parse_utc(_required_text(value, "written_at_utc"))
     if written >= deadline:
@@ -2853,10 +2989,17 @@ def strict_json_object(raw: bytes, label: str) -> dict[str, object]:
     def reject_constant(value: str) -> None:
         raise ValueError(f"non-finite JSON number in {label}: {value}")
 
+    def parse_finite_float(value: str) -> float:
+        parsed = float(value)
+        if not math.isfinite(parsed):
+            raise ValueError(f"non-finite JSON number in {label}: {value}")
+        return parsed
+
     value = json.loads(
         raw.decode("utf-8", errors="strict"),
         object_pairs_hook=pairs_hook,
         parse_constant=reject_constant,
+        parse_float=parse_finite_float,
     )
     if not isinstance(value, dict):
         raise ValueError(f"{label} must be a JSON object")
@@ -2921,6 +3064,19 @@ def _required_upper_sha256(value: Mapping[str, Any], key: str) -> str:
     if not _UPPER_SHA256.fullmatch(item):
         raise ValueError(f"{key} must be uppercase SHA-256")
     return item
+
+
+def _required_base64_bytes(value: Mapping[str, Any], key: str) -> bytes:
+    item = _required_text(value, key)
+    try:
+        raw = base64.b64decode(item.encode("ascii"), validate=True)
+    except (UnicodeEncodeError, ValueError) as exc:
+        raise ValueError(f"{key} must be strict base64") from exc
+    if base64.b64encode(raw).decode("ascii") != item:
+        raise ValueError(f"{key} must use canonical base64")
+    if len(raw) > 2 * 1024 * 1024:
+        raise ValueError(f"{key} exceeds the byte cap")
+    return raw
 
 
 def _require_literal(value: Mapping[str, Any], key: str, expected: object) -> None:

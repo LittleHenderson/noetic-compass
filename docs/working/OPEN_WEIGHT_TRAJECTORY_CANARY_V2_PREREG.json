@@ -139,12 +139,18 @@
     "execution_authority": "NO_GO_UNTIL_EXACT_BINDINGS_ARE_FROZEN",
     "required_source_commit_sha256": null,
     "required_oci_image_digest": "sha256:4d1721e62b56d345c83b4fd6090664be6daf9312caab5b2e76f23d8231941851",
-    "required_runner_source_sha256": "41BF773428AB090A247F8AA483F8F6ACA5D00B62C8B12B807377D116A00A28BF",
-    "required_source_file_manifest_sha256": "3C553B0671DA31E5B21DA0BD2766C1F4D22F8AFE79E4AC470364427FA9769656",
-    "required_watchdog_script_sha256": "12F72E8D4E6233E693373708CFB6E625ADFCF0F76B93A75AF38B2CEF1DC51FCA",
-    "required_github_supervisor_source_sha256": "66A2ADEE1CC63B2571964B5A33DCDF0617DD34C321F7D827FA1739C918F0FA1F",
+    "required_runner_source_sha256": "D94DCD70C5307D86C08C49BF98069F13E27A1746D85186B2282C700B716B38F0",
+    "required_source_file_manifest_sha256": "7E496CB8A008C1AC37C7D6A09570FF90C1D97B4E55405E4AF4D5A965E644BC61",
+    "required_watchdog_script_sha256": "E57BDC1148D3BAA1D46A5AF67D1F7FD65BAC6963F6E09C450EEEA1281FB97F93",
+    "required_github_supervisor_source_sha256": "D5DB5CD6BE9EB38C13BDE016E994696679C0CC92054BF6F50C70BC5590963D7E",
+    "required_provider_launcher_source_sha256": null,
     "provider_launch_receipt_required": true,
-    "required_provider_launch_receipt_schema": "cas_runpod_provider_launch_receipt.v1",
+    "required_provider_launch_receipt_schema": "cas_runpod_provider_launch_receipt.v2",
+    "required_provider_create_authorization_schema": "cas_runpod_create_authorization.v1",
+    "precreate_guardian_required": true,
+    "required_precreate_guardian_receipt_schema": "cas_runpod_precreate_guardian_arm.v1",
+    "provider_launcher_live_status": "NO_GO_PRECREATE_GUARDIAN_UNAVAILABLE",
+    "maximum_provider_create_attempts": 1,
     "required_image_name": "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
     "required_cloud_type": "SECURE",
     "required_interruptible": false,
@@ -160,5 +166,5 @@
     "anchor_receipt_sha256": null,
     "claim_boundary": "The result manifest and all evidence-file hashes are cross-linked, but they remain locally produced and are not durable authenticity evidence until an independent immutable external anchor is attached and verified."
   },
-  "preregistration_sha256": "2B6D2938D294CB0830BA401E13332AF2511204C5883CB55641BDAB0F871CB1EA"
+  "preregistration_sha256": "07C8A4FA1007CA8B7DE0025F91865CF1EBDD81F9BB1B68E03BC648EBF37B55CF"
 }

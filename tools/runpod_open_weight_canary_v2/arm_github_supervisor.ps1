@@ -50,8 +50,8 @@ try {
 catch {
     throw 'PROVIDER_STARTED_AT_UTC_INVALID'
 }
-if ($deadline -ne $providerStarted.AddSeconds(1800)) {
-    throw 'HARD_STOP_DEADLINE_MUST_EQUAL_PROVIDER_START_PLUS_1800_SECONDS'
+if ($deadline -le $providerStarted -or $deadline -gt $providerStarted.AddSeconds(1800)) {
+    throw 'HARD_STOP_DEADLINE_MUST_BE_AFTER_START_AND_AT_MOST_1800_SECONDS'
 }
 $remaining = ($deadline - (Get-Date).ToUniversalTime()).TotalSeconds
 if ($remaining -lt 600 -or $remaining -gt 2100) {

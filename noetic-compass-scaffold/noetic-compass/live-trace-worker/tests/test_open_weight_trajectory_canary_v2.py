@@ -7,6 +7,7 @@ exercise the execution command's CUDA lane.
 
 from __future__ import annotations
 
+import base64
 from datetime import datetime, timedelta, timezone
 import hashlib
 import importlib.util
@@ -67,7 +68,7 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     preregistration, _raw = canary.load_preregistration(PREREGISTRATION_PATH)
 
     assert preregistration["preregistration_sha256"] == (
-        "2B6D2938D294CB0830BA401E13332AF2511204C5883CB55641BDAB0F871CB1EA"
+        "07C8A4FA1007CA8B7DE0025F91865CF1EBDD81F9BB1B68E03BC648EBF37B55CF"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
     assert preregistration["launch_bindings"]["execution_authority"] == (
@@ -84,7 +85,7 @@ def test_github_arm_helper_uses_yaml_when_viewing_feature_ref():
     assert "'workflow', 'view', $Workflow, '--repo', $Repository, '--ref', $RefName, '--yaml'" in helper_text
     assert "[string]$ProviderStartedAtUtc" in helper_text
     assert '"provider_started_at_utc=$ProviderStartedAtUtc"' in helper_text
-    assert "HARD_STOP_DEADLINE_MUST_EQUAL_PROVIDER_START_PLUS_1800_SECONDS" in helper_text
+    assert "HARD_STOP_DEADLINE_MUST_BE_AFTER_START_AND_AT_MOST_1800_SECONDS" in helper_text
 
 
 def test_local_watchdog_binds_live_runpod_schema_and_exact_boundary():
@@ -407,8 +408,15 @@ def test_provider_launch_receipt_rejects_rehashed_semantic_tamper(
     receipt = _provider_launch_receipt()
     transaction = receipt["create_transaction"]
     transaction["response_body"][field] = replacement
+    response_raw = json.dumps(
+        transaction["response_body"], ensure_ascii=False, indent=2
+    ).encode("utf-8")
+    transaction["response_body_base64"] = base64.b64encode(response_raw).decode(
+        "ascii"
+    )
+    transaction["response_body_byte_count"] = len(response_raw)
     transaction["response_body_sha256"] = canary.sha256_bytes(
-        canary.canonical_json_bytes(transaction["response_body"])
+        response_raw
     )
     receipt.pop("receipt_sha256")
     receipt["receipt_sha256"] = canary.sha256_bytes(
@@ -470,9 +478,12 @@ def test_watchdog_crosslink_accepts_same_instant_powershell_utc_lexeme(
 
 
 def _run_powershell_provider_receipt_validation(
-    tmp_path: Path, receipt: dict[str, object]
+    tmp_path: Path,
+    receipt: dict[str, object],
+    *,
+    executable: str | None = None,
 ) -> subprocess.CompletedProcess[str]:
-    executable = shutil.which("pwsh")
+    executable = executable or shutil.which("pwsh")
     if executable is None and sys.platform == "win32":
         candidate = Path(
             r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"
@@ -501,6 +512,8 @@ def _run_powershell_provider_receipt_validation(
             str(receipt["pod_name"]),
             "-RunStartedAtUtc",
             str(receipt["provider_started_at_utc"]),
+            "-HardStopDeadlineUtc",
+            str(receipt["hard_stop_deadline_utc"]),
             "-SourceCommitSha256",
             str(receipt["source_commit_sha256"]),
             "-OciImageDigest",
@@ -531,14 +544,35 @@ def test_powershell_watchdog_accepts_same_canonical_provider_receipt(tmp_path: P
     assert "PROVIDER_LAUNCH_RECEIPT_VALIDATION_PASS_NO_PROVIDER_CALL" in completed.stdout
 
 
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows PowerShell 5 only")
+def test_windows_powershell5_watchdog_accepts_same_v2_raw_receipt(tmp_path: Path):
+    executable = Path(
+        r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"
+    )
+    if not executable.is_file():
+        pytest.skip("Windows PowerShell 5 is unavailable")
+    completed = _run_powershell_provider_receipt_validation(
+        tmp_path, _provider_launch_receipt(), executable=str(executable)
+    )
+    assert completed.returncode == 0, completed.stderr
+    assert "PROVIDER_LAUNCH_RECEIPT_VALIDATION_PASS_NO_PROVIDER_CALL" in completed.stdout
+
+
 def test_powershell_watchdog_rejects_rehashed_interruptible_response(
     tmp_path: Path,
 ):
     receipt = _provider_launch_receipt()
     transaction = receipt["create_transaction"]
     transaction["response_body"]["interruptible"] = True
+    response_raw = json.dumps(
+        transaction["response_body"], ensure_ascii=False, indent=2
+    ).encode("utf-8")
+    transaction["response_body_base64"] = base64.b64encode(response_raw).decode(
+        "ascii"
+    )
+    transaction["response_body_byte_count"] = len(response_raw)
     transaction["response_body_sha256"] = canary.sha256_bytes(
-        canary.canonical_json_bytes(transaction["response_body"])
+        response_raw
     )
     receipt.pop("receipt_sha256")
     receipt["receipt_sha256"] = canary.sha256_bytes(
@@ -575,6 +609,114 @@ def test_provider_launch_receipt_rejects_http_200_in_runner_and_watchdog(
     completed = _run_powershell_provider_receipt_validation(tmp_path, receipt)
     assert completed.returncode != 0
     assert "WATCHDOG_PROVIDER_LAUNCH_CREATE_HTTP_STATUS_MISMATCH" in (
+        completed.stdout + completed.stderr
+    )
+
+
+def test_provider_launch_receipt_rejects_numeric_boolean_raw_substitution(
+    tmp_path: Path,
+):
+    receipt = _provider_launch_receipt()
+    transaction = receipt["create_transaction"]
+    numeric = dict(transaction["response_body"])
+    numeric["interruptible"] = 0
+    numeric["locked"] = 0
+    numeric["volumeEncrypted"] = 1
+    response_raw = json.dumps(numeric, separators=(",", ":")).encode("utf-8")
+    transaction["response_body_base64"] = base64.b64encode(response_raw).decode(
+        "ascii"
+    )
+    transaction["response_body_byte_count"] = len(response_raw)
+    transaction["response_body_sha256"] = canary.sha256_bytes(response_raw)
+    receipt.pop("receipt_sha256")
+    receipt["receipt_sha256"] = canary.sha256_bytes(
+        canary.canonical_json_bytes(receipt)
+    )
+
+    with pytest.raises(ValueError, match="response raw/object mismatch"):
+        canary._validate_provider_launch_receipt(
+            canary.canonical_json_bytes(receipt),
+            source_commit_sha256="1" * 40,
+            oci_image_digest="sha256:" + "2" * 64,
+            expected_image_name=(
+                "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404"
+            ),
+            require_current_time=False,
+        )
+
+    completed = _run_powershell_provider_receipt_validation(tmp_path, receipt)
+    assert completed.returncode != 0
+    assert "WATCHDOG_PROVIDER_LAUNCH_CREATE_RESPONSE_RAW_OBJECT_MISMATCH" in (
+        completed.stdout + completed.stderr
+    )
+
+
+def test_provider_launch_receipt_rejects_duplicate_key_in_raw_response(
+    tmp_path: Path,
+):
+    receipt = _provider_launch_receipt()
+    transaction = receipt["create_transaction"]
+    response_raw = (
+        b'{"desiredStatus":"RUNNING","id":"synthetic123",'
+        b'"interruptible":false,"interruptible":false,'
+        b'"lastStartedAt":"2026-08-20 12:00:00.000 +0000 UTC",'
+        b'"locked":false,"name":"cas-open-weight-canary-v2-synthetic-test",'
+        b'"volumeEncrypted":true}'
+    )
+    transaction["response_body_base64"] = base64.b64encode(response_raw).decode(
+        "ascii"
+    )
+    transaction["response_body_byte_count"] = len(response_raw)
+    transaction["response_body_sha256"] = canary.sha256_bytes(response_raw)
+    receipt.pop("receipt_sha256")
+    receipt["receipt_sha256"] = canary.sha256_bytes(
+        canary.canonical_json_bytes(receipt)
+    )
+
+    with pytest.raises(ValueError, match="duplicate JSON key"):
+        canary._validate_provider_launch_receipt(
+            canary.canonical_json_bytes(receipt),
+            source_commit_sha256="1" * 40,
+            oci_image_digest="sha256:" + "2" * 64,
+            expected_image_name=(
+                "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404"
+            ),
+            require_current_time=False,
+        )
+
+    completed = _run_powershell_provider_receipt_validation(tmp_path, receipt)
+    assert completed.returncode != 0
+    assert "WATCHDOG_PROVIDER_LAUNCH_RESPONSE_RAW_DUPLICATE_KEY" in (
+        completed.stdout + completed.stderr
+    )
+
+
+def test_provider_launch_receipt_rejects_long_wall_zero_monotonic_exchange(
+    tmp_path: Path,
+):
+    receipt = _provider_launch_receipt()
+    transaction = receipt["create_transaction"]
+    transaction["request_observed_at_utc"] = "2026-08-19T12:00:00Z"
+    transaction["elapsed_milliseconds"] = 0
+    receipt.pop("receipt_sha256")
+    receipt["receipt_sha256"] = canary.sha256_bytes(
+        canary.canonical_json_bytes(receipt)
+    )
+
+    with pytest.raises(ValueError, match="wall/monotonic duration mismatch"):
+        canary._validate_provider_launch_receipt(
+            canary.canonical_json_bytes(receipt),
+            source_commit_sha256="1" * 40,
+            oci_image_digest="sha256:" + "2" * 64,
+            expected_image_name=(
+                "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404"
+            ),
+            require_current_time=False,
+        )
+
+    completed = _run_powershell_provider_receipt_validation(tmp_path, receipt)
+    assert completed.returncode != 0
+    assert "WATCHDOG_PROVIDER_LAUNCH_CREATE_WALL_MONOTONIC_MISMATCH" in (
         completed.stdout + completed.stderr
     )
 
@@ -1038,23 +1180,39 @@ def _provider_launch_receipt(
         "name": pod_name,
         "volumeEncrypted": True,
     }
+    request_raw = canary.canonical_json_bytes(create_request)
+    response_raw = json.dumps(
+        create_response, ensure_ascii=False, indent=2
+    ).encode("utf-8")
     create_transaction = {
+        "effective_url": "https://rest.runpod.io/v1/pods",
+        "elapsed_milliseconds": 1000,
+        "request_accept_encoding": "identity",
         "request_body": create_request,
-        "request_body_sha256": canary.sha256_bytes(
-            canary.canonical_json_bytes(create_request)
-        ),
+        "request_body_base64": base64.b64encode(request_raw).decode("ascii"),
+        "request_body_byte_count": len(request_raw),
+        "request_body_sha256": canary.sha256_bytes(request_raw),
+        "request_content_type": "application/json",
         "request_method": "POST",
-        "request_observed_at_utc": "2026-08-20T11:59:59Z",
+        "request_observed_at_utc": "2026-08-20T12:00:00Z",
         "request_path": "/v1/pods",
         "response_body": create_response,
-        "response_body_sha256": canary.sha256_bytes(
-            canary.canonical_json_bytes(create_response)
-        ),
+        "response_body_base64": base64.b64encode(response_raw).decode("ascii"),
+        "response_body_byte_count": len(response_raw),
+        "response_body_sha256": canary.sha256_bytes(response_raw),
+        "response_content_encoding": None,
+        "response_content_type": "application/json; charset=utf-8",
         "response_http_status": 201,
         "response_observed_at_utc": "2026-08-20T12:00:01Z",
+        "response_request_id": "synthetic-request-123",
     }
     unsigned = {
+        "authorization_id": "authorization-0123456789abcdef",
+        "authorization_sha256": "A" * 64,
         "claim_boundary": canary.PROVIDER_LAUNCH_CLAIM_BOUNDARY,
+        "create_intent_sha256": "B" * 64,
+        "create_send_marker_sha256": "D" * 64,
+        "create_send_reserved_at_utc": "2026-08-20T12:00:00Z",
         "create_transaction": create_transaction,
         "dedicated_public_key_sha256": canary.sha256_bytes(
             public_key.encode("utf-8")
@@ -1067,6 +1225,8 @@ def _provider_launch_receipt(
         "pod_name": pod_name,
         "provider": "RUNPOD",
         "provider_started_at_utc": provider_started_at,
+        "precreate_guardian_receipt_sha256": "C" * 64,
+        "precreate_maximum_hard_stop_deadline_utc": hard_stop_deadline,
         "schema_version": canary.PROVIDER_LAUNCH_SCHEMA,
         "source_commit_sha256": source_commit,
         "status": "EXACT_CREATE_RESPONSE_STARTED_POD_OBSERVED",
@@ -1099,6 +1259,10 @@ def _build_synthetic_bundle(
     launch["required_runner_source_sha256"] = canary.sha256_bytes(
         RUNNER_PATH.read_bytes()
     )
+    launch["required_provider_launcher_source_sha256"] = canary.sha256_bytes(
+        canary.DEFAULT_PROVIDER_LAUNCHER_SOURCE.read_bytes()
+    )
+    launch["provider_launcher_live_status"] = "LIVE_GUARDIAN_FROZEN"
     preregistration.pop("preregistration_sha256")
     preregistration["preregistration_sha256"] = canary.sha256_bytes(
         canary.canonical_json_bytes(preregistration)

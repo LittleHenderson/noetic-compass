@@ -52,6 +52,11 @@ def _parse_utc(value: str) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
+def _validate_deadline_bound(deadline: datetime, provider_started: datetime) -> None:
+    if not provider_started < deadline <= provider_started + timedelta(seconds=1800):
+        raise ValueError("hard-stop deadline is outside the provider-start bound")
+
+
 def _parse_provider_utc(value: str) -> datetime:
     legacy = re.fullmatch(
         r"(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}) "
@@ -218,8 +223,7 @@ def arm_check(args: argparse.Namespace) -> int:
         raise ValueError("GitHub runner SHA does not match the bound source commit")
     deadline = _parse_utc(args.deadline)
     provider_started = _parse_utc(args.provider_started_at)
-    if deadline != provider_started + timedelta(seconds=1800):
-        raise ValueError("hard-stop deadline is not exactly provider start plus 1800 seconds")
+    _validate_deadline_bound(deadline, provider_started)
     remaining = (deadline - datetime.now(timezone.utc)).total_seconds()
     if remaining < 600 or remaining > 2_100:
         raise ValueError("hard-stop deadline must be 10 to 35 minutes after arm check")
@@ -250,8 +254,7 @@ def run_supervisor(args: argparse.Namespace) -> int:
         raise ValueError("GitHub runner SHA does not match the bound source commit")
     deadline = _parse_utc(args.deadline)
     provider_started = _parse_utc(args.provider_started_at)
-    if deadline != provider_started + timedelta(seconds=1800):
-        raise ValueError("hard-stop deadline is not exactly provider start plus 1800 seconds")
+    _validate_deadline_bound(deadline, provider_started)
     now = datetime.now(timezone.utc)
     if deadline > now.replace(microsecond=0) and (deadline - now).total_seconds() > 2_100:
         raise ValueError("hard-stop deadline is more than 35 minutes away")
@@ -350,8 +353,7 @@ def emergency_stop(args: argparse.Namespace) -> int:
     arm_written = _parse_utc(str(arm_receipt.get("written_at_utc")))
     arm_deadline = _parse_utc(args.deadline)
     provider_started = _parse_utc(args.provider_started_at)
-    if arm_deadline != provider_started + timedelta(seconds=1800):
-        raise ValueError("emergency STOP deadline/start binding mismatch")
+    _validate_deadline_bound(arm_deadline, provider_started)
     if not arm_deadline - timedelta(minutes=35) <= arm_written < arm_deadline:
         raise ValueError("emergency STOP arm receipt time is outside the bound window")
     api_key = os.environ.get("RUNPOD_API_KEY", "")
