@@ -176,6 +176,24 @@ class WorkerEvidenceSummary(DistributedProtocolModel):
     def _validate_layer_range(self) -> "WorkerEvidenceSummary":
         if self.layer_end < self.layer_start:
             raise ValueError("layer_end must be greater than or equal to layer_start")
+        for name, values in (
+            ("assigned_methods", self.assigned_methods),
+            ("expected_outputs", self.expected_outputs),
+            ("produced_outputs", self.produced_outputs),
+            ("missing_outputs", self.missing_outputs),
+        ):
+            if len(values) != len(set(values)):
+                raise ValueError(f"{name} must contain unique values")
+        if self.worker_status == "completed":
+            if self.error_message is not None:
+                raise ValueError("completed worker summary may not contain error_message")
+            if self.missing_outputs:
+                raise ValueError("completed worker summary may not contain missing_outputs")
+            if set(self.produced_outputs) != set(self.expected_outputs):
+                raise ValueError(
+                    "completed worker summary requires produced_outputs exactly equal "
+                    "to expected_outputs"
+                )
         return self
 
 
@@ -209,6 +227,23 @@ class OrchestratorMergeSummary(DistributedProtocolModel):
         if self.merge_status != "complete":
             return self
 
+        if len(self.expected_outputs) != len(set(self.expected_outputs)):
+            raise ValueError("complete merge expected_outputs must be unique")
+        if self.missing_layers:
+            raise ValueError("complete merge may not contain missing_layers")
+        if self.missing_outputs:
+            raise ValueError("complete merge may not contain missing_outputs")
+        if len(self.merged_shards) != len(set(self.merged_shards)):
+            raise ValueError("complete merge merged_shards must be unique")
+        assignment_ids = [summary.assignment_id for summary in self.worker_summaries]
+        if len(assignment_ids) != len(set(assignment_ids)):
+            raise ValueError("complete merge assignment_id values must be unique")
+        summary_shards = [summary.shard_id for summary in self.worker_summaries]
+        if set(self.merged_shards) != set(summary_shards):
+            raise ValueError(
+                "complete merge merged_shards must exactly match worker summaries"
+            )
+
         expected_layer_start = 0
         for summary in sorted(
             self.worker_summaries,
@@ -216,6 +251,16 @@ class OrchestratorMergeSummary(DistributedProtocolModel):
         ):
             if summary.worker_status != "completed":
                 raise ValueError("complete merge requires completed worker summaries")
+            if summary.plan_id != self.plan_id:
+                raise ValueError("worker summary plan_id must match merge plan_id")
+            if summary.model_weight_ref != self.model_weight_ref:
+                raise ValueError("worker summary model_weight_ref must match merge")
+            if summary.model_weight_hash != self.model_weight_hash:
+                raise ValueError("worker summary model_weight_hash must match merge")
+            if set(summary.expected_outputs) != set(self.expected_outputs):
+                raise ValueError(
+                    "worker summary expected_outputs must match complete merge contract"
+                )
             if summary.layer_start != expected_layer_start:
                 raise ValueError(
                     "complete merge requires contiguous worker summaries from layer 0"

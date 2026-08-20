@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.example/schemas/board-change-v2/audit-attempt-import-v1",
+  "title": "CAS board-change v2 permanently untrusted attempt import",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "sequence", "previous_record_sha256", "record_sha256", "classification", "imported_at_utc", "source_payload_sha256", "payload"],
+  "properties": {
+    "schema_version": {"const": "cas.board_change_v2.audit_attempt_import.v1"},
+    "sequence": {"type": "integer", "minimum": 0},
+    "previous_record_sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+    "record_sha256": {"$ref": "#/$defs/sha256"},
+    "classification": {"const": "AUDIT_ONLY_UNTRUSTED_NEVER_ACCEPTABLE"},
+    "imported_at_utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "source_payload_sha256": {"$ref": "#/$defs/sha256"},
+    "payload": {"type": "object"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

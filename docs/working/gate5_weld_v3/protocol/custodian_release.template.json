@@ -1,0 +1,11 @@
+{
+  "schema_version": "weld-v3-custodian-release/1",
+  "release_status": "RELEASED_AFTER_EXTERNALLY_ANCHORED_ACTOR_RECEIPT",
+  "custodian_id": "REPLACE_WITH_EXTERNAL_CUSTODIAN_ID",
+  "external_commitment_receipt_id": "REPLACE_WITH_EXTERNAL_IMMUTABLE_RECEIPT_ID",
+  "actor_receipt_seal_sha256": "REPLACE_WITH_64_HEX_SHA256",
+  "actor_receipt_sha256": "REPLACE_WITH_64_HEX_SHA256",
+  "hmac_key_hex": "RELEASE_AT_LEAST_32_RANDOM_SECRET_BYTES_ONLY_AFTER_ACTOR_SEAL",
+  "released_utc": "REPLACE_WITH_RFC3339_UTC_TIMESTAMP_AFTER_SEALED_UTC",
+  "external_release_receipt_id": "REPLACE_WITH_EXTERNAL_RELEASE_RECEIPT_ID"
+}

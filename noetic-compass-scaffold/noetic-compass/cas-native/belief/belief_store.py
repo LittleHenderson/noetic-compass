@@ -32,7 +32,7 @@ from pathlib import Path
 from typing import Any
 
 from .belief import Belief
-from .inversion_gate import run_inversion_scan
+from .inversion_gate import INVERSION_SCANNER_VERSION, run_inversion_scan
 from . import persistence
 from .rhythm import MIN_RHYTHM_FOR_LOCK, bump_rhythm
 from .rpm_gate import check_rpm_chain
@@ -87,9 +87,10 @@ class BeliefStore:
         half_life_days: float = DEFAULT_HALF_LIFE_DAYS,
         vibration_lock_threshold: float = VIBRATION_LOCK_THRESHOLD,
     ) -> None:
-        self._conn: sqlite3.Connection = persistence.open_db(db_path)
         self._half_life_days = float(half_life_days)
         self._vibration_lock_threshold = float(vibration_lock_threshold)
+        self._conn: sqlite3.Connection = persistence.open_db(db_path)
+        self._inversion_rows_migrated = self._migrate_stale_inversion_rows()
 
     # ---- context manager -------------------------------------------------
 
@@ -108,6 +109,12 @@ class BeliefStore:
     @property
     def connection(self) -> sqlite3.Connection:
         return self._conn
+
+    @property
+    def inversion_rows_migrated(self) -> int:
+        """Number of stale derived scan rows repaired during this open."""
+
+        return self._inversion_rows_migrated
 
     # ---- write-side ------------------------------------------------------
 
@@ -157,7 +164,11 @@ class BeliefStore:
                 sources=[source],
                 locked=False,
             )
-            persistence.upsert_belief(self._conn, placeholder)
+            persistence.upsert_belief(
+                self._conn,
+                placeholder,
+                inversion_scanner_version="PENDING",
+            )
 
         persistence.insert_observation(
             self._conn, claim_key, when, evidence_strength, source
@@ -331,6 +342,55 @@ class BeliefStore:
         }
 
     # ---- maintenance -----------------------------------------------------
+
+    def _migrate_stale_inversion_rows(self) -> int:
+        """Atomically recompute rows produced by an older scanner.
+
+        The inversion fields are derived evidence. Reusing them after parser or
+        verdict semantics change can leave displayed axes and lock state stale.
+        A version mismatch therefore triggers a full rescan of that exact row,
+        including its contradiction history and cached RPM result.
+        """
+
+        keys = persistence.stale_inversion_claim_keys(
+            self._conn,
+            scanner_version=INVERSION_SCANNER_VERSION,
+        )
+        if not keys:
+            return 0
+        migrated = 0
+        with self._conn:
+            for key in keys:
+                belief = persistence.fetch_belief(self._conn, key)
+                if belief is None:
+                    raise RuntimeError(
+                        f"belief disappeared during inversion migration: {key}"
+                    )
+                history = [
+                    item["reason"]
+                    for item in persistence.fetch_contradictions(self._conn, key)
+                ]
+                scan = run_inversion_scan(
+                    belief.cas_expression,
+                    history=history,
+                    rpm_satisfied=belief.rpm_chain_satisfied,
+                )
+                locked = (
+                    belief.rpm_chain_satisfied
+                    and belief.vibration > self._vibration_lock_threshold
+                    and scan.clean
+                    and belief.rhythm_count >= MIN_RHYTHM_FOR_LOCK
+                )
+                persistence.update_inversion_state_without_commit(
+                    self._conn,
+                    claim_key=key,
+                    clean=scan.clean,
+                    axes=scan.axes,
+                    locked=locked,
+                    scanner_version=INVERSION_SCANNER_VERSION,
+                )
+                migrated += 1
+        return migrated
 
     def decay_all(self, *, now: datetime | None = None) -> int:
         """Recompute vibration for every belief and re-evaluate the lock rule.

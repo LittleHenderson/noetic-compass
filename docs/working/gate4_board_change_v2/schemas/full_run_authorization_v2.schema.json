@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.example/schemas/board-change-v2/full-run-authorization-v1",
+  "title": "CAS board-change v2 one-use full-run authorization",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "protocol_id", "run_id", "scope", "decision",
+    "protocol_lock_sha256", "prompt_plan_sha256", "authorization_id",
+    "authorization_nonce", "authorized_by", "authorized_at_utc", "expires_at_utc",
+    "max_provider_attempts", "max_cost_usd", "authority_proof"
+  ],
+  "properties": {
+    "schema_version": {"const": "cas.board_change_v2.full_run_authorization.v1"},
+    "protocol_id": {"const": "board-change-v2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "scope": {"const": "FULL_72N_20S"},
+    "decision": {"const": "AUTHORIZED"},
+    "protocol_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "prompt_plan_sha256": {"$ref": "#/$defs/sha256"},
+    "authorization_id": {"type": "string", "minLength": 1},
+    "authorization_nonce": {"type": "string", "minLength": 16},
+    "authorized_by": {"type": "string", "minLength": 1},
+    "authorized_at_utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "expires_at_utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "max_provider_attempts": {"type": "integer", "minimum": 1},
+    "max_cost_usd": {"oneOf": [{"type": "number", "exclusiveMinimum": 0}, {"type": "string", "pattern": "^[0-9]+(?:\\.[0-9]{1,8})?$"}]},
+    "authority_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proof_type", "issuer", "key_id", "receipt_id", "algorithm", "issued_at_utc", "signed_payload_sha256", "detached_signature_base64"],
+      "properties": {
+        "proof_type": {"const": "EXTERNAL_DETACHED_SIGNATURE"},
+        "issuer": {"type": "string", "format": "uri", "pattern": "^https://"},
+        "key_id": {"type": "string", "minLength": 1},
+        "receipt_id": {"type": "string", "minLength": 1},
+        "algorithm": {"enum": ["Ed25519", "ECDSA-P256-SHA256"]},
+        "issued_at_utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+        "signed_payload_sha256": {"$ref": "#/$defs/sha256"},
+        "detached_signature_base64": {"type": "string", "minLength": 88}
+      }
+    }
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

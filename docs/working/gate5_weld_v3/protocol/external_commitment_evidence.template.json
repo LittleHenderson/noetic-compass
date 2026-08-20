@@ -1,0 +1,11 @@
+{
+  "schema_version": "weld-v3-external-commitment-evidence/1",
+  "custodian_id": "REPLACE_WITH_EXTERNAL_CUSTODIAN_ID",
+  "external_commitment_receipt_id": "REPLACE_WITH_EXTERNAL_IMMUTABLE_RECEIPT_ID",
+  "created_utc": "REPLACE_WITH_PRE_FREEZE_RFC3339_UTC_TIMESTAMP",
+  "entropy_source": "EXTERNAL_OS_CSPRNG_AT_LEAST_256_BITS",
+  "hmac_key_size_bytes": 32,
+  "salt_size_bytes": 32,
+  "commitment_status": "EXTERNALLY_ANCHORED_BEFORE_FREEZE",
+  "external_anchor_id": "REPLACE_WITH_EXTERNAL_ANCHOR_ID"
+}

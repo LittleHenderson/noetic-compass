@@ -1,0 +1,16 @@
+{
+  "schema_version": "weld-v3-truth-commitment/2",
+  "algorithm": "hmac-sha256",
+  "domain_separator": "WELD-V3-SEALED-TRUTH-V2",
+  "salt_hex": "REPLACE_WITH_AT_LEAST_32_RANDOM_BYTES_AS_LOWERCASE_HEX",
+  "hmac_key_sha256": "REPLACE_WITH_64_HEX_SHA256_OF_AT_LEAST_32_RANDOM_SECRET_BYTES",
+  "sealed_truth_hmac_sha256": "REPLACE_WITH_64_HEX_HMAC_SHA256",
+  "custodian_id": "REPLACE_WITH_EXTERNAL_CUSTODIAN_ID",
+  "external_commitment_receipt_id": "REPLACE_WITH_EXTERNAL_IMMUTABLE_RECEIPT_ID",
+  "external_commitment_receipt_sha256": "REPLACE_WITH_64_HEX_SHA256",
+  "entropy_source": "EXTERNAL_OS_CSPRNG_AT_LEAST_256_BITS",
+  "hmac_key_size_bytes": 32,
+  "salt_size_bytes": 32,
+  "custody": "EXTERNAL_UNAVAILABLE_DURING_ACTOR_PHASE",
+  "commitment_status": "NOT_COMMITTED_EXTERNALLY"
+}

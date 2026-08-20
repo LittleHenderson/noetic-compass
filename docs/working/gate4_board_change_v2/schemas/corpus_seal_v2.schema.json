@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.example/schemas/board-change-v2/corpus-seal-v1",
+  "title": "CAS board-change v2 corpus seal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "protocol_id", "run_id", "sealed_at_utc", "protocol_lock_sha256",
+    "prompt_plan_sha256", "frozen_bundle_sha256", "authorization_sha256",
+    "generation_complete_state_event_sha256", "state_ledger_tip_before_seal_sha256",
+    "attempt_ledger_tip_sha256", "attempt_ledger_sha256", "attempt_ledger_bytes",
+    "corpus_sha256", "corpus_bytes",
+    "conversation_count", "assistant_turn_count", "row_sha256s",
+    "labels_present_before_seal", "execution_class", "production_authorization_status", "seal_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "cas.board_change_v2.corpus_seal.v1"},
+    "protocol_id": {"const": "board-change-v2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "sealed_at_utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "protocol_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "prompt_plan_sha256": {"$ref": "#/$defs/sha256"},
+    "frozen_bundle_sha256": {"$ref": "#/$defs/sha256"},
+    "authorization_sha256": {"$ref": "#/$defs/sha256"},
+    "generation_complete_state_event_sha256": {"$ref": "#/$defs/sha256"},
+    "state_ledger_tip_before_seal_sha256": {"$ref": "#/$defs/sha256"},
+    "attempt_ledger_tip_sha256": {"$ref": "#/$defs/sha256"},
+    "attempt_ledger_sha256": {"$ref": "#/$defs/sha256"},
+    "attempt_ledger_bytes": {"type": "integer", "minimum": 1},
+    "corpus_sha256": {"$ref": "#/$defs/sha256"},
+    "corpus_bytes": {"type": "integer", "minimum": 1},
+    "conversation_count": {"const": 92},
+    "assistant_turn_count": {"const": 920},
+    "row_sha256s": {"type": "array", "minItems": 92, "maxItems": 92, "items": {"$ref": "#/$defs/sha256"}},
+    "labels_present_before_seal": {"const": false},
+    "execution_class": {"const": "MOCK_TEST_ONLY"},
+    "production_authorization_status": {"const": "NOT_AUTHORIZED"},
+    "seal_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "weld-v3-protocol/2",
+  "protocol_id": "WELD-V3-SEALED-FIXED-PIPELINE-2",
+  "experimental_status": "NOT_RUN",
+  "validation_status": "NOT_VALIDATED",
+  "provider_calls": "FORBIDDEN",
+  "fixed_pipeline": [
+    "INGEST_PUBLIC_CARRIER",
+    "J1_CONTRACT_GATE",
+    "COMPILE_OR_VALIDATE_ARTIFACT",
+    "DIAGNOSE",
+    "LOCALIZE",
+    "REPAIR",
+    "VERIFY",
+    "J2_CONTRACT_GATE",
+    "STAGE5_CONTRACT_GATE",
+    "EMIT_DECISION"
+  ],
+  "allowed_decisions": [
+    "REPAIR_ACCEPTED",
+    "NO_REPAIR_NEEDED",
+    "REPAIR_REJECTED",
+    "PIPELINE_ERROR"
+  ],
+  "python_decision_policy": "EXACT_ENUM_EQUALITY_ONLY",
+  "pair_policy": "TARGET_AND_CONTROL_AND_INFORMATION_MATCH_MUST_ALL_PASS",
+  "overall_policy": "ALL_PAIRS_MUST_PASS",
+  "runtime_profile_required_for_real_run": "PRODUCTION_RUST",
+  "truth_phase_policy": "HMAC_COMMITMENT_ONLY_DURING_ACTOR_EXTERNAL_ACTOR_SEAL_BEFORE_KEY_AND_PLAINTEXT_RELEASE",
+  "actor_receipt_policy": "ONE_SUCCESSFUL_INVOCATION_PER_CASE_EXTERNALLY_SEALED_BEFORE_TRUTH_RELEASE",
+  "case_cwd_policy": "FRESH_EMPTY_UNIQUE_CWD_PER_CASE",
+  "production_adjudication_status": "BLOCKED_PENDING_TRUSTED_EXTERNAL_ANCHOR_VERIFIER",
+  "model_adapter_status": {
+    "J1": "NOT_RUN",
+    "J2": "NOT_RUN",
+    "STAGE5": "NOT_RUN"
+  }
+}

@@ -14,17 +14,17 @@ import json
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 
 SCHEMA_VERSION = "cas_harness_stage9_40e_evidence_packet.v1"
-METHOD_LABEL = "S9-40E-ORIGINAL-BASELINE-READOUT"
-DEFAULT_READOUT_REPORT = (
-    Path(__file__).resolve().parents[2]
-    / "docs"
-    / "working"
-    / "gpt_neox_20b_stage9_original_40e_probe_eval_report_20260527.json"
+LEGACY_READOUT_SCHEMA = "cas_harness_40_element_probe_eval.v1"
+CURRENT_READOUT_SCHEMA = "cas_harness_40_element_probe_eval.v3"
+KNOWN_UNADMITTED_READOUT_SCHEMAS = frozenset(
+    {LEGACY_READOUT_SCHEMA, CURRENT_READOUT_SCHEMA}
 )
+ADMITTED_READOUT_SCHEMAS: frozenset[str] = frozenset()
+METHOD_LABEL = "S9-40E-ORIGINAL-BASELINE-READOUT"
 DEFAULT_OUTPUT_JSON = (
     Path(__file__).resolve().parents[2]
     / "docs"
@@ -68,36 +68,77 @@ INPUT_COPY_KEYS = (
 )
 
 
-def _load_json(path: Path) -> dict[str, Any]:
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except FileNotFoundError as exc:
-        raise SystemExit(f"required report does not exist: {path}") from exc
-    except json.JSONDecodeError as exc:
-        raise SystemExit(f"report is not valid JSON: {path}: {exc}") from exc
-    if not isinstance(payload, dict):
-        raise SystemExit(f"report must be a JSON object: {path}")
+def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    payload: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in payload:
+            raise ValueError(f"duplicate JSON key: {key}")
+        payload[key] = value
     return payload
 
 
-def _sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as fh:
-        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+def _reject_nonfinite_constant(value: str) -> None:
+    raise ValueError(f"non-finite JSON number is forbidden: {value}")
 
 
-def _report_artifact(path: Path, artifact_id: str, artifact_type: str) -> dict[str, Any]:
-    stat = path.stat()
+def _load_json_snapshot(
+    path: Path,
+    *,
+    after_read_hook: Callable[[], None] | None = None,
+) -> tuple[dict[str, Any], bytes]:
+    try:
+        raw = path.read_bytes()
+        if after_read_hook is not None:
+            after_read_hook()
+        payload = json.loads(
+            raw.decode("utf-8"),
+            object_pairs_hook=_reject_duplicate_keys,
+            parse_constant=_reject_nonfinite_constant,
+        )
+    except FileNotFoundError as exc:
+        raise SystemExit(f"required report does not exist: {path}") from exc
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
+        raise SystemExit(f"report is not valid JSON: {path}: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise SystemExit(f"report must be a JSON object: {path}")
+    return payload, raw
+
+
+def _load_json(path: Path) -> dict[str, Any]:
+    payload, _raw = _load_json_snapshot(path)
+    return payload
+
+
+def _validate_readout_report(report: dict[str, Any], path: Path) -> None:
+    schema = report.get("schema_version")
+    if schema in KNOWN_UNADMITTED_READOUT_SCHEMAS:
+        raise SystemExit(
+            f"readout schema {schema!r} is known but not admitted in {path}: "
+            "v1 lacks an available canonical artifact/digest binding and the v3 "
+            "producer cannot emit PACKET_ELIGIBLE. A future separately reviewed "
+            "schema and immutable capture receipt are required."
+        )
+    if schema not in ADMITTED_READOUT_SCHEMAS:
+        raise SystemExit(
+            f"unsupported/unadmitted readout schema {schema!r} in {path}; no "
+            "readout schema is currently admitted for packet merge"
+        )
+
+
+def _report_artifact(
+    path: Path,
+    artifact_id: str,
+    artifact_type: str,
+    raw_snapshot: bytes,
+) -> dict[str, Any]:
     return {
         "artifact_id": artifact_id,
         "artifact_type": artifact_type,
-        "content_sha256": _sha256_file(path),
-        "byte_count": int(stat.st_size),
+        "content_sha256": hashlib.sha256(raw_snapshot).hexdigest(),
+        "byte_count": len(raw_snapshot),
         "storage_uri": str(path),
         "redaction_class": "stage9_40e_internal_report",
-        "created_at": datetime.fromtimestamp(stat.st_mtime, UTC).isoformat(),
+        "snapshot_captured_at": datetime.now(UTC).isoformat(),
     }
 
 
@@ -161,6 +202,7 @@ def _observed_baseline_fields(readout: dict[str, Any]) -> dict[str, Any]:
                 ("corrected_baseline", "text_hash_test_acc"),
                 ("baseline", "text_hash_test_acc"),
                 ("baseline_proof", "text_hash_test_acc"),
+                ("controls", "text_hash_logistic_regression", "test_acc"),
                 ("controls", "text_hash_centroid", "test_acc"),
                 ("controls", "text_hash", "test_acc"),
                 ("controls", "text_hash_test_acc"),
@@ -364,21 +406,30 @@ def _make_optional_proof(
             None,
         )
 
-    report = _load_json(report_path)
-    artifact = _report_artifact(report_path, artifact_id, artifact_type)
+    report, raw_snapshot = _load_json_snapshot(report_path)
+    artifact = _report_artifact(
+        report_path,
+        artifact_id,
+        artifact_type,
+        raw_snapshot,
+    )
     return (
         {
-            "status": "present",
+            "status": "unverified",
             "tier": tier_name,
             "required_for_final_verdict": True,
             "source_report": artifact,
-            "source_fields": _copy_known_fields(report),
+            "source_fields": None,
             "summary": {
                 "status": report.get("status"),
                 "method_label": report.get("method_label"),
                 "run_id": report.get("run_id"),
                 "trace_id": report.get("trace_id"),
             },
+            "blocking_reason": (
+                f"{tier_name} was supplied but no distinct strict schema and "
+                "provenance validator is admitted for this tier"
+            ),
         },
         artifact,
     )
@@ -410,12 +461,14 @@ def build_packet(
     bridge_report: Path | None = None,
     generated_at: datetime | None = None,
 ) -> dict[str, Any]:
-    readout = _load_json(readout_report)
+    readout, readout_snapshot = _load_json_snapshot(readout_report)
+    _validate_readout_report(readout, readout_report)
     generated = generated_at or datetime.now(UTC)
     readout_artifact = _report_artifact(
         readout_report,
         "stage9_40e_readout_report",
         "stage9_40e_original_baseline_readout_report",
+        readout_snapshot,
     )
     causal_proof, causal_artifact = _make_optional_proof(
         tier_name="subspace_ablation",
@@ -550,7 +603,7 @@ def write_packet(packet: dict[str, Any], output_json: Path, output_markdown: Pat
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--readout-report", type=Path, default=DEFAULT_READOUT_REPORT)
+    parser.add_argument("--readout-report", type=Path, required=True)
     parser.add_argument("--ablation-report", type=Path)
     parser.add_argument("--cover-report", type=Path)
     parser.add_argument("--bridge-report", type=Path)

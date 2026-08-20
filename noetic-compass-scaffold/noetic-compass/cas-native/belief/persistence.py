@@ -12,6 +12,7 @@ Schema (one belief row per claim_key, append-only observations and contradiction
         rpm_status      TEXT NOT NULL,           -- JSON
         inversion_clean INTEGER NOT NULL,
         inversion_axes  TEXT NOT NULL,           -- JSON
+        inversion_scanner_version TEXT NOT NULL,
         first_seen      TEXT NOT NULL,           -- ISO 8601
         last_reinforced TEXT NOT NULL,
         sources         TEXT NOT NULL,           -- JSON list[str]
@@ -48,6 +49,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from .belief import Belief
+from .inversion_gate import INVERSION_SCANNER_VERSION
 from .vibration import Observation
 
 
@@ -70,6 +72,7 @@ CREATE TABLE IF NOT EXISTS beliefs (
     rpm_status      TEXT NOT NULL,
     inversion_clean INTEGER NOT NULL,
     inversion_axes  TEXT NOT NULL,
+    inversion_scanner_version TEXT NOT NULL DEFAULT '',
     first_seen      TEXT NOT NULL,
     last_reinforced TEXT NOT NULL,
     sources         TEXT NOT NULL,
@@ -129,6 +132,14 @@ def _init_schema(conn: sqlite3.Connection) -> None:
     conn.execute(_BELIEFS_DDL)
     conn.execute(_OBSERVATIONS_DDL)
     conn.execute(_CONTRADICTIONS_DDL)
+    belief_columns = {
+        str(row[1]) for row in conn.execute("PRAGMA table_info(beliefs)").fetchall()
+    }
+    if "inversion_scanner_version" not in belief_columns:
+        conn.execute(
+            "ALTER TABLE beliefs ADD COLUMN "
+            "inversion_scanner_version TEXT NOT NULL DEFAULT ''"
+        )
     for stmt in _INDEXES:
         conn.execute(stmt)
     conn.commit()
@@ -139,15 +150,21 @@ def _init_schema(conn: sqlite3.Connection) -> None:
 # ---------------------------------------------------------------------------
 
 
-def upsert_belief(conn: sqlite3.Connection, belief: Belief) -> None:
+def upsert_belief(
+    conn: sqlite3.Connection,
+    belief: Belief,
+    *,
+    inversion_scanner_version: str = INVERSION_SCANNER_VERSION,
+) -> None:
     """Insert or replace a belief row."""
     conn.execute(
         """
         INSERT OR REPLACE INTO beliefs (
             claim_key, claim_text, cas_expression, vibration, rhythm_count,
             rpm_satisfied, rpm_status, inversion_clean, inversion_axes,
+            inversion_scanner_version,
             first_seen, last_reinforced, sources, locked
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             belief.claim_key,
@@ -159,6 +176,7 @@ def upsert_belief(conn: sqlite3.Connection, belief: Belief) -> None:
             json.dumps(belief.rpm_chain_status, default=str),
             1 if belief.inversion_scan_clean else 0,
             json.dumps(belief.inversion_scan_axes, default=str),
+            inversion_scanner_version,
             belief.first_seen.isoformat(),
             belief.last_reinforced.isoformat(),
             json.dumps(list(belief.sources)),
@@ -166,6 +184,61 @@ def upsert_belief(conn: sqlite3.Connection, belief: Belief) -> None:
         ),
     )
     conn.commit()
+
+
+def stale_inversion_claim_keys(
+    conn: sqlite3.Connection,
+    *,
+    scanner_version: str = INVERSION_SCANNER_VERSION,
+) -> list[str]:
+    """Return rows whose persisted derived scan used another algorithm."""
+
+    rows = conn.execute(
+        "SELECT claim_key FROM beliefs "
+        "WHERE inversion_scanner_version <> ? ORDER BY claim_key",
+        (scanner_version,),
+    ).fetchall()
+    return [str(row["claim_key"]) for row in rows]
+
+
+def update_inversion_state_without_commit(
+    conn: sqlite3.Connection,
+    *,
+    claim_key: str,
+    clean: bool,
+    axes: dict[str, Any],
+    locked: bool,
+    scanner_version: str = INVERSION_SCANNER_VERSION,
+) -> None:
+    """Update derived inversion fields inside the caller's transaction."""
+
+    cursor = conn.execute(
+        """
+        UPDATE beliefs
+        SET inversion_clean = ?, inversion_axes = ?,
+            inversion_scanner_version = ?, locked = ?
+        WHERE claim_key = ?
+        """,
+        (
+            1 if clean else 0,
+            json.dumps(axes, default=str),
+            scanner_version,
+            1 if locked else 0,
+            claim_key,
+        ),
+    )
+    if cursor.rowcount != 1:
+        raise RuntimeError(f"belief disappeared during inversion migration: {claim_key}")
+
+
+def inversion_scanner_version_for_claim(
+    conn: sqlite3.Connection, claim_key: str
+) -> str | None:
+    row = conn.execute(
+        "SELECT inversion_scanner_version FROM beliefs WHERE claim_key = ?",
+        (claim_key,),
+    ).fetchone()
+    return None if row is None else str(row["inversion_scanner_version"])
 
 
 def fetch_belief(

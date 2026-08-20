@@ -1,0 +1,42 @@
+{
+  "schema_version": "weld-v3-model-adapter-contracts/1",
+  "experimental_status": "NOT_RUN",
+  "provider_calls": "FORBIDDEN",
+  "candidate_snapshot_commit": "34442035c69e7feccd6c3b67447568776fe3528f",
+  "contracts": {
+    "J1": {
+      "status": "NOT_RUN",
+      "input_type": "CircuitReading",
+      "output_type": "CASExpression",
+      "acceptance_contract": "CASExpression must be accepted by the frozen CAS compiler and retain source-to-expression provenance.",
+      "candidate_source": "docs/working/gate2_closure/independent_bank/l2_wiring.py",
+      "candidate_source_sha256": "fff7110a4ff8b5eea62885871761769e0b4eb0b21a80bb08b236aab782c783ae",
+      "known_gap": "Existing crosswalk is authored and not independently validated or runtime-bound."
+    },
+    "J2": {
+      "status": "NOT_RUN",
+      "input_type": "CorrectedExpression+CompilationArtifact",
+      "output_type": "EpsilonPrefix",
+      "acceptance_contract": "Realizer must emit a prefix from the frozen corrected artifact without access to the held-out continuation.",
+      "candidate_sources": [
+        {
+          "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_stage9_40e_eta_epsilon_bridge.py",
+          "sha256": "9177c24b56d862c24bb6e328ff4eb4319f507f45f72035c6a988a88e8958ff9a"
+        },
+        {
+          "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py",
+          "sha256": "67d67e2fa3a517f23dcf8c08ef09b827eebf4c932ad1e7a1bd260fb08602ed65"
+        }
+      ],
+      "known_gap": "40E has a continuation-leak concern; F28 still needs a frozen lexical-overlap audit."
+    },
+    "STAGE5": {
+      "status": "NOT_RUN",
+      "input_type": "PairedEpsilonPrefixes+HeldOutContinuations+MatchedControl",
+      "output_type": "PerItemMeanLogprobOutcome+PairedComparison",
+      "acceptance_contract": "Measure target and information-matched control with the same frozen model, tokenizer, decoding-free scoring path, and paired analysis.",
+      "metric_contract": "mean_logprob_continuation per item; aggregate rule must be preregistered outside Python control-plane logic.",
+      "known_gap": "No provider/model execution, paired corpus, model binding, or outcome exists in WELD v3."
+    }
+  }
+}

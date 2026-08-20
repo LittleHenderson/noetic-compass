@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.example/schemas/board-change-v2/state-event-v1",
+  "title": "CAS board-change v2 state event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "sequence", "previous_record_sha256", "record_sha256", "run_id", "execution_class",
+    "event_type", "phase_from", "phase_to", "occurred_at_utc", "evidence"
+  ],
+  "properties": {
+    "schema_version": {"const": "cas.board_change_v2.state_event.v1"},
+    "sequence": {"type": "integer", "minimum": 0},
+    "previous_record_sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+    "record_sha256": {"$ref": "#/$defs/sha256"},
+    "run_id": {"type": "string", "minLength": 1},
+    "execution_class": {"enum": ["PRODUCTION", "MOCK_TEST_ONLY"]},
+    "event_type": {"type": "string", "minLength": 1},
+    "phase_from": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/phase"}]},
+    "phase_to": {"$ref": "#/$defs/phase"},
+    "occurred_at_utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "evidence": {"type": "object"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "phase": {
+      "enum": [
+        "DRAFT", "PROTOCOL_FROZEN", "FULL_RUN_AUTHORIZED", "GENERATING",
+        "GENERATION_COMPLETE", "CORPUS_SEALED", "LABELING", "LABELS_COMPLETE",
+        "GATE0_COMPLETE", "ANALYSIS_COMPLETE", "MOCK_RUN_AUTHORIZED",
+        "MOCK_GENERATING", "MOCK_GENERATION_COMPLETE", "MOCK_CORPUS_SEALED",
+        "MOCK_LABELING", "HALTED"
+      ]
+    }
+  }
+}

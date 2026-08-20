@@ -6,6 +6,8 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pytest
+
 
 SCRIPT_PATH = (
     Path(__file__).resolve().parents[1]
@@ -25,7 +27,7 @@ def _write_json(path: Path, payload: dict) -> Path:
 
 def _readout_fixture() -> dict:
     return {
-        "schema_version": "cas_harness_40_element_probe_eval.v1",
+        "schema_version": "test_only_future_admitted_readout.v1",
         "status": "packet_ready_evaluation_completed",
         "created_at": "2026-05-27T00:00:00+00:00",
         "trace_id": "trace-stage9-40e",
@@ -59,7 +61,16 @@ def _readout_fixture() -> dict:
     }
 
 
-def test_readout_only_packet_is_review_flag_and_never_final_verdict(tmp_path):
+def _admit_test_only_schema(monkeypatch) -> None:
+    monkeypatch.setattr(
+        merge_stage9_40e_evidence_packet,
+        "ADMITTED_READOUT_SCHEMAS",
+        frozenset({"test_only_future_admitted_readout.v1"}),
+    )
+
+
+def test_readout_only_packet_is_review_flag_and_never_final_verdict(tmp_path, monkeypatch):
+    _admit_test_only_schema(monkeypatch)
     readout = _write_json(tmp_path / "readout.json", _readout_fixture())
 
     packet = merge_stage9_40e_evidence_packet.build_packet(
@@ -92,7 +103,8 @@ def test_readout_only_packet_is_review_flag_and_never_final_verdict(tmp_path):
     )
 
 
-def test_packet_includes_exact_corrected_baseline_fields(tmp_path):
+def test_packet_includes_exact_corrected_baseline_fields(tmp_path, monkeypatch):
+    _admit_test_only_schema(monkeypatch)
     readout = _write_json(tmp_path / "readout.json", _readout_fixture())
 
     packet = merge_stage9_40e_evidence_packet.build_packet(readout_report=readout)
@@ -114,7 +126,8 @@ def test_packet_includes_exact_corrected_baseline_fields(tmp_path):
     }
 
 
-def test_packet_preserves_input_hashes_and_provenance(tmp_path):
+def test_packet_preserves_input_hashes_and_provenance(tmp_path, monkeypatch):
+    _admit_test_only_schema(monkeypatch)
     readout_payload = _readout_fixture()
     readout = _write_json(tmp_path / "readout.json", readout_payload)
 
@@ -129,7 +142,8 @@ def test_packet_preserves_input_hashes_and_provenance(tmp_path):
     assert packet["provenance"]["input_count"] == 1
 
 
-def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
+def test_optional_reports_remain_unverified_without_tier_validators(tmp_path, monkeypatch):
+    _admit_test_only_schema(monkeypatch)
     readout = _write_json(tmp_path / "readout.json", _readout_fixture())
     ablation = _write_json(
         tmp_path / "ablation.json",
@@ -170,18 +184,19 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
         bridge_report=bridge,
     )
 
-    assert packet["tier_statuses"]["causal"] == "present"
-    assert packet["tier_statuses"]["control"] == "present"
-    assert packet["tier_statuses"]["output_bridge"] == "present"
+    assert packet["tier_statuses"]["causal"] == "unverified"
+    assert packet["tier_statuses"]["control"] == "unverified"
+    assert packet["tier_statuses"]["output_bridge"] == "unverified"
     assert packet["tier_statuses"]["verifier"] == "missing"
-    assert packet["causal_proof"]["source_fields"]["provenance"] == {"worker": "fixture"}
-    assert packet["control_proof"]["source_fields"]["hashes"] == {"cover_sha": "d" * 64}
+    assert packet["causal_proof"]["source_fields"] is None
+    assert "no distinct strict schema" in packet["control_proof"]["blocking_reason"]
     assert packet["output_bridge_proof"]["summary"]["run_id"] == "bridge-run"
     assert packet["provenance"]["input_count"] == 4
     assert packet["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
 
 
-def test_writes_json_and_markdown_packet(tmp_path):
+def test_writes_json_and_markdown_packet(tmp_path, monkeypatch):
+    _admit_test_only_schema(monkeypatch)
     readout = _write_json(tmp_path / "readout.json", _readout_fixture())
     output_json = tmp_path / "packet.json"
     output_md = tmp_path / "packet.md"
@@ -196,3 +211,102 @@ def test_writes_json_and_markdown_packet(tmp_path):
     assert "| Causal proof | missing |" in markdown
     assert "95.625%" in markdown
     assert "49.241071%" in markdown
+
+
+def test_intermediate_v2_readout_schema_is_rejected(tmp_path):
+    payload = _readout_fixture()
+    payload["schema_version"] = "cas_harness_40_element_probe_eval.v2"
+    readout = _write_json(tmp_path / "readout-v2.json", payload)
+
+    with pytest.raises(SystemExit, match="unsupported/unadmitted readout schema"):
+        merge_stage9_40e_evidence_packet.build_packet(readout_report=readout)
+
+
+def test_v3_readout_must_carry_packet_eligible_binding(tmp_path):
+    payload = _readout_fixture()
+    payload["schema_version"] = "cas_harness_40_element_probe_eval.v3"
+    payload["status"] = "diagnostic_completed_not_packet_ready"
+    payload["readiness_gate"] = {
+        "packet_ready": False,
+        "registered_artifact_binding": {
+            "status": "BLOCKED",
+            "packet_eligibility": "NOT_PACKET_ELIGIBLE",
+        },
+    }
+    readout = _write_json(tmp_path / "readout-v3.json", payload)
+
+    with pytest.raises(SystemExit, match="known but not admitted"):
+        merge_stage9_40e_evidence_packet.build_packet(readout_report=readout)
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {"schema_version": "cas_harness_40_element_probe_eval.v3", "status": "packet_ready_evaluation_completed"},
+        {"schema_version": "cas_harness_40_element_probe_eval.v1"},
+        {},
+    ],
+)
+def test_no_current_or_empty_readout_is_admitted(tmp_path, payload):
+    readout = _write_json(tmp_path / "claimed.json", payload)
+
+    with pytest.raises(SystemExit, match="not admitted|unadmitted"):
+        merge_stage9_40e_evidence_packet.build_packet(readout_report=readout)
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        b'{"schema_version":"x","schema_version":"y"}',
+        b'{"schema_version":"x","metric":NaN}',
+        b'{"schema_version":"x","metric":Infinity}',
+        b'{"schema_version":"x","metric":-Infinity}',
+    ],
+)
+def test_duplicate_keys_and_nonfinite_numbers_are_rejected(tmp_path, raw):
+    report = tmp_path / "invalid.json"
+    report.write_bytes(raw)
+
+    with pytest.raises(SystemExit, match="not valid JSON"):
+        merge_stage9_40e_evidence_packet._load_json_snapshot(report)
+
+
+def test_optional_stub_is_unverified_not_present(tmp_path):
+    stub = _write_json(
+        tmp_path / "optional.json",
+        {"schema_version": "anything", "status": "completed"},
+    )
+
+    proof, artifact = merge_stage9_40e_evidence_packet._make_optional_proof(
+        tier_name="subspace_ablation",
+        report_path=stub,
+        artifact_id="stub",
+        artifact_type="stub",
+    )
+
+    assert proof["status"] == "unverified"
+    assert proof["source_fields"] is None
+    assert artifact is not None
+
+
+def test_json_parse_and_artifact_hash_use_same_immutable_snapshot(tmp_path):
+    report = _write_json(tmp_path / "report.json", {"schema_version": "original"})
+    original = report.read_bytes()
+
+    payload, snapshot = merge_stage9_40e_evidence_packet._load_json_snapshot(
+        report,
+        after_read_hook=lambda: report.write_text(
+            '{"schema_version":"swapped"}', encoding="utf-8"
+        ),
+    )
+    artifact = merge_stage9_40e_evidence_packet._report_artifact(
+        report,
+        "report",
+        "test",
+        snapshot,
+    )
+
+    assert payload["schema_version"] == "original"
+    assert snapshot == original
+    assert artifact["content_sha256"] == hashlib.sha256(original).hexdigest()
+    assert artifact["content_sha256"] != hashlib.sha256(report.read_bytes()).hexdigest()

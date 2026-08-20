@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.example/schemas/board-change-v2/protocol-lock-v1",
+  "title": "CAS board-change v2 claim-bearing protocol lock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "protocol_id", "git_commit_sha", "remote_ref",
+    "remote_commit_observed_at_utc", "network_transport_present",
+    "prompt_plan_relative_path", "prompt_plan_sha256",
+    "v1_seed_fingerprints_relative_path", "claim_bearing_files"
+  ],
+  "properties": {
+    "schema_version": {"const": "cas.board_change_v2.protocol_lock.v1"},
+    "protocol_id": {"const": "board-change-v2"},
+    "git_commit_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "remote_ref": {"type": "string", "minLength": 1},
+    "remote_commit_observed_at_utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "network_transport_present": {"const": false},
+    "prompt_plan_relative_path": {"type": "string", "minLength": 1},
+    "prompt_plan_sha256": {"$ref": "#/$defs/sha256"},
+    "v1_seed_fingerprints_relative_path": {"const": "v1_seed_fingerprints.json"},
+    "claim_bearing_files": {
+      "type": "array",
+      "minItems": 15,
+      "items": {"$ref": "#/$defs/file"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "bytes", "sha256"],
+      "properties": {
+        "relative_path": {"type": "string", "minLength": 1, "pattern": "^[^\\\\]+$"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

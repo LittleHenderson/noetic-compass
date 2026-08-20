@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.example/schemas/board-change-v2/frozen-bundle-v1",
+  "title": "CAS board-change v2 immutable run bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "protocol_id", "run_id", "state_initial_event_sha256", "protocol_lock", "prompt_plan"],
+  "properties": {
+    "schema_version": {"const": "cas.board_change_v2.frozen_bundle.v1"},
+    "protocol_id": {"const": "board-change-v2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "state_initial_event_sha256": {"$ref": "#/$defs/sha256"},
+    "protocol_lock": {"$ref": "#/$defs/artifact"},
+    "prompt_plan": {"$ref": "#/$defs/artifact"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["relative_path", "sha256", "bytes"],
+      "properties": {
+        "relative_path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

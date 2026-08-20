@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from scripts.run_open_weight_eta_epsilon_bridge import (
     apply_readout_filter,
@@ -272,6 +273,51 @@ def test_select_readout_layers_uses_validation_rank_and_optional_anchor(tmp_path
         requested_layer=0,
         ensemble_layers=2,
     ) == [0, 2]
+
+
+def test_select_readout_layers_ignores_test_metrics_and_breaks_ties_by_layer(tmp_path: Path):
+    eval_report = tmp_path / "eval.json"
+    eval_report.write_text(
+        json.dumps(
+            {
+                "axes": {
+                    "foundation": {
+                        "best_layer": {"layer": 9, "test_acc": 1.0},
+                        "per_layer": [
+                            {"layer": 9, "val_acc": 0.8, "test_acc": 1.0},
+                            {"layer": 3, "val_acc": 0.8, "test_acc": 0.1},
+                        ],
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert select_readout_layers(
+        eval_report,
+        "foundation",
+        available_layers=[3, 9],
+        requested_layer=None,
+        ensemble_layers=1,
+    ) == [3]
+
+
+def test_select_readout_layers_requires_validation_rows(tmp_path: Path):
+    eval_report = tmp_path / "eval.json"
+    eval_report.write_text(
+        json.dumps({"axes": {"foundation": {"best_layer": {"layer": 9}}}}),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(RuntimeError, match="validation results are required"):
+        select_readout_layers(
+            eval_report,
+            "foundation",
+            available_layers=[9],
+            requested_layer=None,
+            ensemble_layers=1,
+        )
 
 
 def test_multi_layer_readout_ensemble_predicts_from_layer_stack():

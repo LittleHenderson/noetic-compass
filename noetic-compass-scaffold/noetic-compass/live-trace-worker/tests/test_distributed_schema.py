@@ -192,3 +192,78 @@ def test_worker_evidence_summary_and_complete_merge_round_trip():
         "layers-000-001",
         "layers-002-003",
     ]
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"error_message": "failed despite completed"},
+        {"missing_outputs": [OUTPUTS[0]]},
+        {"produced_outputs": [OUTPUTS[0]]},
+        {"produced_outputs": [OUTPUTS[0], OUTPUTS[0]]},
+    ],
+)
+def test_completed_worker_rejects_error_missing_or_inexact_outputs(overrides):
+    payload = {
+        "plan_id": "audit-merge",
+        "assignment_id": "left",
+        "worker_id": "worker-left",
+        "model_id": MODEL_ID,
+        "model_scale": "70B",
+        "model_weight_hash": "sha256:abc123",
+        "layer_start": 0,
+        "layer_end": 1,
+        "shard_id": "layers-000-001",
+        "assigned_methods": METHODS,
+        "expected_outputs": OUTPUTS,
+        "produced_outputs": OUTPUTS,
+        "worker_status": "completed",
+    }
+    payload.update(overrides)
+
+    with pytest.raises(ValidationError):
+        WorkerEvidenceSummary(**payload)
+
+
+@pytest.mark.parametrize(
+    "merge_overrides",
+    [
+        {"missing_layers": [3]},
+        {"missing_outputs": [OUTPUTS[0]]},
+        {"merged_shards": []},
+        {"plan_id": "wrong-plan"},
+        {"model_weight_hash": "sha256:different"},
+        {"expected_outputs": [OUTPUTS[0]]},
+    ],
+)
+def test_complete_merge_rejects_missing_or_identity_contract_mismatch(merge_overrides):
+    summary = WorkerEvidenceSummary(
+        plan_id="audit-merge",
+        assignment_id="only",
+        worker_id="worker-only",
+        model_id=MODEL_ID,
+        model_scale="70B",
+        model_weight_hash="sha256:abc123",
+        layer_start=0,
+        layer_end=3,
+        shard_id="layers-000-003",
+        assigned_methods=METHODS,
+        expected_outputs=OUTPUTS,
+        produced_outputs=OUTPUTS,
+        worker_status="completed",
+    )
+    payload = {
+        "plan_id": "audit-merge",
+        "model_id": MODEL_ID,
+        "model_scale": "70B",
+        "model_weight_hash": "sha256:abc123",
+        "total_layers": 4,
+        "merge_status": "complete",
+        "expected_outputs": OUTPUTS,
+        "merged_shards": ["layers-000-003"],
+        "worker_summaries": [summary],
+    }
+    payload.update(merge_overrides)
+
+    with pytest.raises(ValidationError):
+        OrchestratorMergeSummary(**payload)

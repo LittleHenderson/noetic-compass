@@ -93,6 +93,11 @@ def test_extract_domains_ignores_a_domain_letter_inside_a_longer_token():
     assert _extract_domains("^Extra") == []
 
 
+@pytest.mark.parametrize("suffix", ["é", "١", "\u0301"])
+def test_extract_domains_rejects_unicode_letter_number_or_mark_suffix(suffix):
+    assert _extract_domains(f"^P{suffix}") == []
+
+
 def test_axis_w_flags_drive_tagged_precedence_violation():
     # E (rank 2) followed by C (rank 1) is a genuine domain-precedence
     # violation. Before the fix this returned clean=True with domains=[].

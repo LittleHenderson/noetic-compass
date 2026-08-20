@@ -1,0 +1,61 @@
+{
+  "schema_version": "weld-v3-runtime-binding/1",
+  "profile": "PRODUCTION_RUST",
+  "binding_status": "NOT_BOUND",
+  "runtime": {
+    "absolute_path": "REPLACE_WITH_ABSOLUTE_RUST_EXECUTABLE_PATH",
+    "sha256": "REPLACE_WITH_64_HEX_SHA256",
+    "size_bytes": 0,
+    "version_argv": ["--version-json"],
+    "version_evidence_sha256": "REPLACE_WITH_64_HEX_SHA256"
+  },
+  "adapter": {
+    "absolute_path": "REPLACE_WITH_SAME_ABSOLUTE_RUST_EXECUTABLE_PATH",
+    "sha256": "REPLACE_WITH_64_HEX_SHA256",
+    "size_bytes": 0,
+    "version_argv": ["--version-json"],
+    "version_evidence_sha256": "REPLACE_WITH_64_HEX_SHA256",
+    "language": "rust",
+    "crate_name": "cas-engine",
+    "crate_version": "0.1.1"
+  },
+  "rust_version_claim": {
+    "schema_version": "weld-v3-rust-version/1",
+    "language": "rust",
+    "binary_kind": "RUST_NATIVE_EXECUTABLE",
+    "crate_name": "cas-engine",
+    "crate_version": "0.1.1",
+    "protocol_id": "WELD-V3-SEALED-FIXED-PIPELINE-2",
+    "rustc_version": "REPLACE_WITH_RUSTC_VERSION",
+    "target_triple": "REPLACE_WITH_TARGET_TRIPLE",
+    "cargo_toml_sha256": "REPLACE_WITH_64_HEX_SHA256",
+    "cargo_lock_sha256": "REPLACE_WITH_64_HEX_SHA256",
+    "scanner_source_sha256": "REPLACE_WITH_64_HEX_SHA256"
+  },
+  "source_bindings": [
+    {
+      "label": "Cargo.toml",
+      "absolute_path": "REPLACE_WITH_ABSOLUTE_PATH",
+      "sha256": "REPLACE_WITH_64_HEX_SHA256",
+      "size_bytes": 0
+    },
+    {
+      "label": "Cargo.lock",
+      "absolute_path": "REPLACE_WITH_ABSOLUTE_PATH",
+      "sha256": "REPLACE_WITH_64_HEX_SHA256",
+      "size_bytes": 0
+    },
+    {
+      "label": "scanner_source",
+      "absolute_path": "REPLACE_WITH_ABSOLUTE_PATH",
+      "sha256": "REPLACE_WITH_64_HEX_SHA256",
+      "size_bytes": 0
+    }
+  ],
+  "isolation_contract": {
+    "truth_availability_during_actor": "COMMITMENT_ONLY",
+    "actor_input_channel": "STDIN_ONLY",
+    "actor_output_channel": "STDOUT_ONLY",
+    "host_truth_custody": "EXTERNAL_NO_PLAINTEXT_ON_ACTOR_HOST"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.example/schemas/board-change-v2/prompt-plan-v1",
+  "title": "CAS board-change v2 frozen prompt plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "protocol_id", "run_shape", "authoring", "conversations"],
+  "properties": {
+    "schema_version": {"const": "cas.board_change_v2.prompt_plan.v1"},
+    "protocol_id": {"const": "board-change-v2"},
+    "run_shape": {
+      "const": {
+        "neutral_conversations": 72,
+        "shifting_conversations": 20,
+        "assistant_turns_per_conversation": 10
+      }
+    },
+    "authoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "author_id", "completed_at_utc", "blind_to_board_taxonomy",
+        "blind_to_board_rubric", "completed_before_first_provider_call"
+      ],
+      "properties": {
+        "author_id": {"type": "string", "minLength": 1},
+        "completed_at_utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+        "blind_to_board_taxonomy": {"const": true},
+        "blind_to_board_rubric": {"const": true},
+        "completed_before_first_provider_call": {"const": true}
+      }
+    },
+    "conversations": {
+      "type": "array",
+      "minItems": 92,
+      "maxItems": 92,
+      "items": {"$ref": "#/$defs/conversation"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slot", "provider", "requested_model"],
+      "properties": {
+        "slot": {"type": "integer", "minimum": 0, "maximum": 3},
+        "provider": {"enum": ["gemini", "deepseek", "qwen", "glm"]},
+        "requested_model": {
+          "enum": ["gemini-2.5-flash", "deepseek-v4-pro", "qwen3.8-max", "glm-4.6"]
+        }
+      }
+    },
+    "followup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["turn_index", "followup_id", "text", "text_sha256"],
+      "properties": {
+        "turn_index": {"type": "integer", "minimum": 1, "maximum": 9},
+        "followup_id": {"enum": ["C1", "C2", "C3", "C4", "C5", "U1", "U2", "U3", "U4", "U5"]},
+        "text": {"type": "string", "minLength": 1},
+        "text_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "conversation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conversation_id", "stratum", "family", "seed_prompt", "seed_prompt_sha256",
+        "generator", "followups"
+      ],
+      "properties": {
+        "conversation_id": {"type": "string", "pattern": "^BCV2-[NS]-[0-9]{3}$"},
+        "stratum": {"enum": ["N", "S"]},
+        "family": {"enum": ["F1", "F2", "F3", "F4", "F5", "F6"]},
+        "seed_prompt": {"type": "string", "minLength": 1},
+        "seed_prompt_sha256": {"$ref": "#/$defs/sha256"},
+        "generator": {"$ref": "#/$defs/generator"},
+        "followups": {
+          "type": "array",
+          "minItems": 9,
+          "maxItems": 9,
+          "items": {"$ref": "#/$defs/followup"}
+        }
+      }
+    }
+  },
+  "x-semantic-invariants": [
+    "core.validate_prompt_plan enforces exactly 72 N and 20 S rows",
+    "seed prompts are unique by exact SHA-256 and normalized text",
+    "N family counts are F1=11,F2=11,F3=11,F4=11,F5=10,F6=18; S is F6=20",
+    "each provider receives exactly 18 N and 5 S conversations",
+    "every S conversation contains the U4 positive-control follow-up"
+  ]
+}

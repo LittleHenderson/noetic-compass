@@ -54,6 +54,10 @@ def test_open_db_creates_schema(db_conn):
     assert "beliefs" in tables
     assert "observations" in tables
     assert "contradictions" in tables
+    belief_columns = {
+        r[1] for r in db_conn.execute("PRAGMA table_info(beliefs)").fetchall()
+    }
+    assert "inversion_scanner_version" in belief_columns
 
 
 def test_upsert_and_fetch(db_conn):
@@ -168,3 +172,14 @@ def test_round_trip_preserves_complex_status(db_conn):
     assert out.rpm_chain_status == status
     assert out.inversion_scan_axes == axes
     assert out.inversion_scan_clean is False
+
+
+def test_upsert_records_current_inversion_scanner_version(db_conn):
+    from cas_native.belief.inversion_gate import INVERSION_SCANNER_VERSION
+
+    persistence.upsert_belief(db_conn, _build())
+
+    assert (
+        persistence.inversion_scanner_version_for_claim(db_conn, "k1")
+        == INVERSION_SCANNER_VERSION
+    )

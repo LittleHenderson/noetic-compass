@@ -36,7 +36,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from evaluate_probe_dataset import accuracy, fit_eval_centroid, macro_f1  # noqa: E402
+from probe_centroid_metrics import accuracy, fit_eval_centroid, macro_f1  # noqa: E402
 from run_open_weight_probe_shard import (  # noqa: E402
     ProbeShardConfig,
     first_real_parameter_device,
@@ -488,15 +488,24 @@ def select_readout_layers(
     if requested_layer is not None:
         ordered.append(int(requested_layer))
 
-    if per_layer:
-        ranked = sorted(
-            per_layer,
-            key=lambda item: (float(item.get("val_acc", 0.0)), float(item.get("test_acc", 0.0))),
-            reverse=True,
+    if not per_layer:
+        raise RuntimeError(
+            f"axes.{axis}.per_layer validation results are required; a stored "
+            "best_layer alone may have been selected on test outcomes"
         )
-        ordered.extend(int(item["layer"]) for item in ranked if int(item["layer"]) in available)
-    else:
-        ordered.append(best_layer_from_eval(eval_report, axis))
+    validated_rows: list[tuple[int, float]] = []
+    for item in per_layer:
+        if not isinstance(item, dict) or "layer" not in item or "val_acc" not in item:
+            raise RuntimeError(
+                f"axes.{axis}.per_layer rows require layer and val_acc"
+            )
+        layer = int(item["layer"])
+        val_acc = float(item["val_acc"])
+        if not np.isfinite(val_acc):
+            raise RuntimeError(f"axes.{axis}.per_layer val_acc must be finite")
+        validated_rows.append((layer, val_acc))
+    ranked = sorted(validated_rows, key=lambda item: (-item[1], item[0]))
+    ordered.extend(layer for layer, _val_acc in ranked if layer in available)
 
     selected: list[int] = []
     for layer in ordered:

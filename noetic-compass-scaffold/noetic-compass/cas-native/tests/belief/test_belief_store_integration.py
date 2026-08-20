@@ -233,6 +233,54 @@ def test_context_manager_closes(tmp_path):
     # No exception means close() ran cleanly.
 
 
+def test_open_migrates_stale_drive_tagged_axis_w_and_lock_state(tmp_path):
+    from cas_native.belief import Belief
+    from cas_native.belief import persistence
+    from cas_native.belief.inversion_gate import INVERSION_SCANNER_VERSION
+
+    path = tmp_path / "legacy.db"
+    conn = persistence.open_db(path)
+    stale = Belief(
+        claim_key="legacy-w",
+        claim_text="legacy precedence",
+        cas_expression="^8^E_{F5} -> ^6^C_{F5}",
+        vibration=0.95,
+        rhythm_count=MIN_RHYTHM_FOR_LOCK,
+        rpm_chain_satisfied=True,
+        rpm_chain_status={"satisfied": True},
+        inversion_scan_clean=True,
+        inversion_scan_axes={"W": {"clean": True, "domains": []}},
+        first_seen=_t(10),
+        last_reinforced=_t(11),
+        sources=["legacy"],
+        locked=True,
+    )
+    persistence.upsert_belief(
+        conn,
+        stale,
+        inversion_scanner_version="inversion_gate.v1.word_boundary",
+    )
+    conn.close()
+
+    with BeliefStore(path) as reopened:
+        migrated = reopened.get_by_key("legacy-w")
+        assert reopened.inversion_rows_migrated == 1
+        assert migrated is not None
+        assert migrated.inversion_scan_axes["W"]["domains"] == ["E", "C"]
+        assert migrated.inversion_scan_axes["W"]["clean"] is False
+        assert migrated.inversion_scan_clean is False
+        assert migrated.locked is False
+        assert (
+            persistence.inversion_scanner_version_for_claim(
+                reopened.connection, "legacy-w"
+            )
+            == INVERSION_SCANNER_VERSION
+        )
+
+    with BeliefStore(path) as second_open:
+        assert second_open.inversion_rows_migrated == 0
+
+
 def test_evidence_strength_affects_lock_speed(store):
     base = _t()
     # Strong evidence: 1 obs at 1.0 -> vibration 1.0 but rhythm only 1 -> not locked.

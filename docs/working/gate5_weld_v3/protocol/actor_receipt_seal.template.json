@@ -1,0 +1,14 @@
+{
+  "schema_version": "weld-v3-actor-receipt-seal/1",
+  "seal_status": "EXTERNALLY_ANCHORED",
+  "freeze_id": "REPLACE_WITH_FREEZE_ID",
+  "actor_receipt_sha256": "REPLACE_WITH_64_HEX_SHA256",
+  "actor_receipt_size_bytes": 0,
+  "actor_invocation_count": 0,
+  "actor_output_count": 0,
+  "custodian_id": "REPLACE_WITH_EXTERNAL_CUSTODIAN_ID",
+  "external_anchor_id": "REPLACE_WITH_EXTERNAL_IMMUTABLE_ANCHOR_ID",
+  "seal_nonce_hex": "REPLACE_WITH_AT_LEAST_32_RANDOM_BYTES_AS_LOWERCASE_HEX",
+  "sealed_utc": "REPLACE_WITH_RFC3339_UTC_TIMESTAMP",
+  "truth_release_status_at_seal": "NOT_RELEASED"
+}

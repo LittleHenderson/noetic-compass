@@ -4,7 +4,42 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
-## 2026-08-19 — WELD v2: a CAS diagnose→correct loop that can actually FAIL (one axis, two criteria)
+## 2026-08-20 — Hostile re-audit: Board/WELD claims corrected; fail-closed successors remain NOT_RUN
+
+The 2026-08-19 handoff contained real work but overclaimed its evidence. A fresh audit
+recomputed the Board pilot statistics from the raw labels, reproduced the WELD v2 run,
+inspected the runtime and persistence paths, and attacked the new successor interfaces.
+
+- Board v1 remains `VACUOUS` on its exact 16-conversation enriched Stratum-N pilot. It does
+  **not** establish that the taxonomy fails on natural conversation, that more data cannot
+  move the result, or that the protocol is dead. The registered `K_neutral=72` decision is
+  not executable by the committed runner: full stages are unreachable, only 60 N seeds
+  exist, failed repair rows are marked done, and Claim 2 does not refit under permutation.
+- WELD v2 is corrected from `VALIDATED` to `REAL / ENGINEERED-NOT-VALIDATED`. The expected
+  outcomes and runner co-landed, NEG-3 changes the localizer, the random comparator is not
+  matched or verdict-bearing, public truth can bypass the advertised blindness, and the
+  imported native scanner is not path/hash/version bound. It is one synthetic numeric-axis
+  unit demonstration, with no model and no efficacy claim.
+- The W regex defect is narrowed to domain markers immediately followed by a drive-tag
+  underscore. Only `belief_store.py` directly consumes `run_inversion_scan`; verifier and
+  Mode-7 use separate parsers. A versioned migration and Unicode-aware boundary are added
+  on the corrective branch. The live default belief database was inspected read-only and
+  was not modified.
+- The interpretability adapter, Stage-9 evaluator and open-weight shard are hardened and
+  tested as model-free engineering. They remain `NOT_RUN / NOT_WIRED` pending exact model,
+  artifact, adapter and worker identity binding and a real provider/model execution.
+- Offline Board-v2 and WELD-v3 packages are successors, not results. Board v2's corrected
+  exact package passed three 35/35 full-suite runs plus an independent 22/22 hostile matrix;
+  its only GO is `DESIGN_ONLY / INERT / NOT_AUTHORIZED / NOT_RUN / NOT_VALIDATED`, with real
+  authorization, provider, labels, Gate 0 and analysis paths structurally absent. WELD v3
+  passed 21/21 and a narrow hostile audit, but production adjudication remains code-blocked
+  pending a trusted external anchor. Neither package licenses a live or scientific run.
+
+Full finding record: `docs/working/agent_exchange/CODEX_REAUDIT_20260820.md`.
+Gate 5 stays `OPEN / KEEP_OPEN`; Stage C stays `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`;
+scientific corpus stays `0 / 960`. No provider, model, GPU, AWS or live-database action ran.
+
+## 2026-08-19 — WELD v2 historical entry (status superseded 2026-08-20)
 
 The Gate-5 WELD build was reviewed at `2be60327` and failed its own review: all four success
 criteria were true by construction. `docs/working/gate5_weld/cas_weld_loop_v2.py` +
@@ -15,11 +50,9 @@ criteria were true by construction. `docs/working/gate5_weld/cas_weld_loop_v2.py
   J1, J2, the epsilon realizers, the PCBA vocabulary and stage 5 are **absent**, not stubbed.
   v1's criteria (c)/(d1)/(d2) were **deleted**, not repaired — they lived on a lossy
   projection and could not be made falsifiable.
-- **Blindness is structural.** `diagnose_blind(obj)` and `localize_blind(obj)` take exactly
-  one parameter, asserted via `inspect.signature`; there is no parameter through which an
-  axis name, a pre-injection object or a fault record could be passed. No concatenation
-  anywhere. Ground truth is read once per case, only to score localization, and every read
-  is logged.
+- **Historical claim, retracted 2026-08-20:** formal-parameter inspection did not make
+  blindness structural. Public mutable fault records, globals/closures and direct
+  `.broken_chains` access bypass the claimed log; NEG-3 also swaps the localizer.
 - **The chain is proved load-bearing, not asserted.** `repair(obj, targets)` is called with
   `targets is localization.indices`. A built-in tamper check reproduces the v1 defect once:
   driven by the localizer NEG-3 reports `axis A cleared = False`; driven by ground truth it
@@ -44,10 +77,10 @@ criteria were true by construction. `docs/working/gate5_weld/cas_weld_loop_v2.py
   only that the chain reports failure when the diagnosis is wrong, never falls back to ground
   truth, never manufactures a correction, and beats a non-zero chance rate a random
   intervention can and does hit. **Nothing here bears on efficacy; no model is loaded.**
-- Separate finding, committed on its own: `inversion_gate._DOMAIN_RE` used `` after
-  `[PCEO]`, which `_` defeats, so **axis W could never fire on any drive-tagged expression
-  in the repo**. Fixed; 7 regression tests (4 fail against the old regex); belief suite
-  135 → 142 passing.
+- Separate finding, corrected 2026-08-20: the old domain regex missed markers immediately
+  followed by `_`, including the canonical all-drive-tagged form. It did not make W
+  impossible in every expression merely containing a drive tag. The direct production
+  consumer is the belief store; persisted rows also needed scanner-version migration.
 
 ## 2026-08-19 — Gate 4 board-CHANGE: 16-conversation pilot RUN. Both claims VACUOUS; kill statistic fires but is not citable.
 

@@ -28,6 +28,7 @@ v1; their advisory state is preserved in the per-axis dict.
 from __future__ import annotations
 
 import re
+import unicodedata
 from dataclasses import dataclass
 from typing import Any, Iterable
 
@@ -47,6 +48,11 @@ DRIVE_SELF_DUALS: frozenset[int] = frozenset({4})
 
 ALL_AXES: tuple[str, ...] = ("N", "W", "F", "E", "S", "A", "P")
 PLACEHOLDER_AXES: tuple[str, ...] = ("E", "S")
+
+# Persisted scan payloads are derived data.  This identity must change whenever
+# extraction or verdict semantics change so BeliefStore can rescan old rows
+# instead of silently reusing evidence produced by a different algorithm.
+INVERSION_SCANNER_VERSION = "inversion_gate.v3.unicode_domain_marker_boundary"
 
 
 @dataclass
@@ -74,10 +80,11 @@ _NOETIC_RE = re.compile(r"\^([0-9])")
 # ``^8^E_{F5} -> ^6^C_{F5}`` — the boundary between ``E`` and ``_`` is NOT a
 # word boundary and ``\b`` never matched. ``_extract_domains`` returned ``[]``
 # and axis W could therefore NEVER fire on a drive-tagged expression. The
-# lookahead below is ``\b`` with ``_`` permitted: reject only a following
-# letter or digit (which would mean the domain marker is part of a longer
-# token), accept ``_``, ``|``, whitespace, punctuation and end-of-string.
-_DOMAIN_RE = re.compile(r"\^([PCEO])(?![A-Za-z0-9])")
+# Candidate matching is followed by a Unicode-aware boundary check in
+# ``_extract_domains``.  ASCII-only ``[A-Za-z0-9]`` incorrectly accepted
+# strings such as ``^Pé`` and ``^P١`` as a domain marker.  Underscore remains
+# explicitly permitted because canonical drive tags begin ``_{F...}``.
+_DOMAIN_RE = re.compile(r"\^([PCEO])")
 _DRIVE_RE = re.compile(r"\bF([1-7])\b|F_?([1-7])")
 
 
@@ -86,7 +93,16 @@ def _extract_noetic_indices(expression: str) -> list[int]:
 
 
 def _extract_domains(expression: str) -> list[str]:
-    return [m.group(1) for m in _DOMAIN_RE.finditer(expression)]
+    domains: list[str] = []
+    for match in _DOMAIN_RE.finditer(expression):
+        next_index = match.end()
+        if next_index < len(expression):
+            following = expression[next_index]
+            category = unicodedata.category(following)
+            if following != "_" and category[:1] in {"L", "M", "N"}:
+                continue
+        domains.append(match.group(1))
+    return domains
 
 
 def _extract_drive_indices(expression: str) -> list[int]:
