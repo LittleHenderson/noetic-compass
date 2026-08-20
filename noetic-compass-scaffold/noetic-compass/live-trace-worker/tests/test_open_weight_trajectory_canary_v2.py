@@ -33,6 +33,12 @@ GITHUB_SUPERVISOR_PATH = (
     / "runpod_open_weight_canary_v2"
     / "github_stop_supervisor.py"
 )
+GITHUB_ARM_HELPER_PATH = (
+    REPOSITORY_ROOT
+    / "tools"
+    / "runpod_open_weight_canary_v2"
+    / "arm_github_supervisor.ps1"
+)
 GITHUB_WORKFLOW_PATH = REPOSITORY_ROOT / ".github" / "workflows" / "runpod-canary-stop-supervisor.yml"
 
 SPEC = importlib.util.spec_from_file_location("open_weight_canary_v2", RUNNER_PATH)
@@ -54,7 +60,7 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     preregistration, _raw = canary.load_preregistration(PREREGISTRATION_PATH)
 
     assert preregistration["preregistration_sha256"] == (
-        "C253F1B74C136E96701C53B131143D90EFFC8AD56E3B234FE808DAEA2F7F912C"
+        "405D44BB559C356CB0B87324F7262494BC7F7C4C58247484D9C3C24D8DE600FC"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
     assert preregistration["launch_bindings"]["execution_authority"] == (
@@ -64,6 +70,11 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     assert preregistration["launch_bindings"]["required_oci_image_digest"] == (
         "sha256:4d1721e62b56d345c83b4fd6090664be6daf9312caab5b2e76f23d8231941851"
     )
+
+
+def test_github_arm_helper_uses_yaml_when_viewing_feature_ref():
+    helper_text = GITHUB_ARM_HELPER_PATH.read_text(encoding="utf-8")
+    assert "'workflow', 'view', $Workflow, '--repo', $Repository, '--ref', $RefName, '--yaml'" in helper_text
 
 
 def test_unbound_execute_fails_before_runtime_or_output(tmp_path: Path, monkeypatch):

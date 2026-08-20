@@ -52,7 +52,7 @@ $remoteHead = (Invoke-GhText -Arguments @(
 )).Trim()
 if ($remoteHead -ne $SourceCommit) { throw 'REMOTE_REF_DOES_NOT_MATCH_SOURCE_COMMIT' }
 Invoke-GhText -Arguments @(
-    'workflow', 'view', $Workflow, '--repo', $Repository, '--ref', $RefName
+    'workflow', 'view', $Workflow, '--repo', $Repository, '--ref', $RefName, '--yaml'
 ) | Out-Null
 
 if (-not $Apply) {
