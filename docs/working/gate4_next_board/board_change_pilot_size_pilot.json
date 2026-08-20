@@ -1,0 +1,15 @@
+{
+  "n_analysable_pairs_claim1": 138,
+  "overall_change_base_rate_analysable": 0.1884,
+  "n_model_initiated_analysable_pairs": 138,
+  "n_model_initiated_changes": 26,
+  "r_hat_model_initiated_change_rate": 0.1884,
+  "planning_value_from_prereg": 0.25,
+  "design_floor": 0.15,
+  "hard_stop_rate": 0.1,
+  "pairs_per_conversation_constant": 2.98,
+  "K_raw_ceil_40_over_2p98_rhat": 72,
+  "K_neutral_clamped_60_120": 72,
+  "DECISION": "PROCEED -- K_neutral = 72",
+  "decision_reason": "r-hat 0.1884 -> ceil(40 / (2.98 * r-hat)) = 72 -> clamped to [60, 120] = 72"
+}

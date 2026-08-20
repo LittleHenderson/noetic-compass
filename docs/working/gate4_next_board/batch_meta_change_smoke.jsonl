@@ -1,0 +1,12 @@
+{"task": "change", "reader": "gemini", "n_items": 12, "n_batches": 3, "conv_spread_swaps": 1, "residual_same_conversation_collisions": 0}
+{"task": "change", "reader": "deepseek", "n_items": 12, "n_batches": 3, "conv_spread_swaps": 1, "residual_same_conversation_collisions": 0}
+{"task": "change", "reader": "qwen", "n_items": 12, "n_batches": 3, "conv_spread_swaps": 2, "residual_same_conversation_collisions": 0}
+{"task": "change", "reader": "glm", "n_items": 12, "n_batches": 3, "conv_spread_swaps": 1, "residual_same_conversation_collisions": 0}
+{"task": "user", "reader": "gemini", "n_items": 12, "n_batches": 2, "conv_spread_swaps": 2, "residual_same_conversation_collisions": 0}
+{"task": "user", "reader": "deepseek", "n_items": 12, "n_batches": 2, "conv_spread_swaps": 1, "residual_same_conversation_collisions": 0}
+{"task": "user", "reader": "qwen", "n_items": 12, "n_batches": 2, "conv_spread_swaps": 1, "residual_same_conversation_collisions": 0}
+{"task": "user", "reader": "glm", "n_items": 12, "n_batches": 2, "conv_spread_swaps": 3, "residual_same_conversation_collisions": 0}
+{"task": "board", "reader": "gemini", "n_items": 18, "n_batches": 3, "conv_spread_swaps": 3, "residual_same_conversation_collisions": 0}
+{"task": "board", "reader": "deepseek", "n_items": 18, "n_batches": 3, "conv_spread_swaps": 2, "residual_same_conversation_collisions": 0}
+{"task": "board", "reader": "qwen", "n_items": 18, "n_batches": 3, "conv_spread_swaps": 2, "residual_same_conversation_collisions": 0}
+{"task": "board", "reader": "glm", "n_items": 18, "n_batches": 3, "conv_spread_swaps": 3, "residual_same_conversation_collisions": 0}

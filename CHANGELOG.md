@@ -4,6 +4,43 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-19 — Gate 4 board-CHANGE: 16-conversation pilot RUN. Both claims VACUOUS; kill statistic fires but is not citable.
+
+The pilot spend gate of `PREREG_BOARD_CHANGE_V1.md` was executed under AMENDMENT A1
+(generation budget 800 → 4000). Prereg and runner sha256 verified unchanged across data
+collection (`immutability_sha256.match = true`). ~429 provider calls; call counts landed
+on §15 (224 main-pass labelling + 160 corpus turns + repairs/retries).
+
+- **A1 works.** All four frozen generators now produce usable turns: per-generator median
+  chars deepseek 6188 / gemini 4906 / glm 4898 / qwen 14935; zero turns under
+  `MIN_TURN_CHARS=200`; zero kept-but-truncated conversations. But
+  `GENERATOR_LENGTH_IMBALANCE_FLAG = true` (max/min median ratio **3.0494** > 3.0), driven
+  by qwen saturating the new 4000 budget — 14 of 40 qwen turns end without terminal
+  punctuation. The length confound flipped direction rather than disappearing.
+- **`r̂ = 0.1884`** on 138 analysable pairs / 26 model-initiated changes. Above the `< 0.10`
+  hard stop, so the preregistered STOP does not fire. `K_neutral = clamp(ceil(40/(2.98·r̂)),
+  60, 120) = 72`.
+- **GATE 0 = FAIL** (6 failed, 1 null) → **CLAIM 1 VACUOUS, CLAIM 2 VACUOUS**. Two failures
+  are pilot-size arithmetic (analysable pairs 138 < 240; T-USER positive control NULL for
+  want of Stratum S). Three are **not**: T-CHANGE Fleiss κ **0.2853** < 0.35 on 142 complete
+  cases (inside the preregistered VACUOUS band, above the 0.20 instrument kill);
+  B0 share of consensus board labels **0.7325** vs a 0.40 ceiling; T-USER κ **−0.0410**,
+  degenerate because Stratum N is continuers-only (P_e = 0.9244).
+- **Kill statistic fires:** `surface_change_f1` 0.4000 (S3 length) ≥ `board_change_f1`
+  0.2647 → `KILLED = true`. Under §10.1 this is **not evidence and may not be cited**,
+  because Gate 0 failed; and §15 forbids reading a pilot VACUOUS as a stop signal.
+  Recorded, not claimed.
+- Instrument health is good: complete-case coverage 0.981 / 0.986 / 1.000, consensus
+  coverage 0.981 / 1.000 / 1.000, residual same-conversation batch collisions **0**,
+  CONTROL 4 generator≠labeller violations **0** (computed, not asserted).
+- Operational finding for any full run: glm-4.6 as a board reader returned
+  `finish_reason=length` on **13 of 40** calls even at `max_tokens=20000`; two repair rounds
+  recovered all but 3 items. Two glm conversations initially fell below `MIN_TURNS=6` and
+  were re-attempted via the runner's own checkpoint-restart path (no labels existed yet).
+
+Evidence backed up to `D:\tksCAS-archive\gate4_board_change_pilot_20260819\`.
+No gate was moved, no threshold relaxed, no prereg file edited.
+
 ## 2026-08-17 — Gate 5 AWS package: durable backup + version-controlled regression guard
 
 Two receipts landed for the Gate 5 staging package, both offline and $0.00.
