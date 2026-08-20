@@ -8,8 +8,8 @@ No capability is both integrated into the current product path and verified by t
 | --- | ---: | --- |
 | `IMPLEMENTED_AND_REAL_MODEL_VERIFIED` | 0 | none |
 | `ENGINEERED_NOT_RUN` | 2 | C06, C14 |
-| `PARTIAL` | 11 | C01–C05, C07–C12 |
-| `STUB` | 1 | C13 |
+| `PARTIAL` | 12 | C01–C05, C07–C13 |
+| `STUB` | 0 | none |
 | `ABSENT` | 0 | none |
 | **Total** | **14** | C01–C14 |
 
@@ -54,8 +54,8 @@ Consequently, the real engine is not the implementation behind `/sessions`, `/se
 | C10 | Bounded causal steering | `PARTIAL` | `InterventionSpec` supports step/layer targeting and norm-bounded additive or patch vectors (`engine.py:60-132`), with the hook applying the vector at the chosen residual state (`:499-524`). The current canary exercises only planned zero/no-op mechanics, not additive steering. Dose schedules, same-norm random controls, stop rules, and collateral-harm rules remain external requirements (`cas_harness_interpretability_adapter.py:315-320`). |
 | C11 | Prompt-injection detection | `PARTIAL` | A deterministic **text-surface** filter checks raw, zero-width-stripped, HTML, URL-decoded, and base64-decoded text (`cas-forex/cas_forex/pcba_prompt_injection.py:58-90`). This is not hidden-state detection or the open-weight engine. The production prevention claim remains `NOT_LICENSED` (`cas-forex/cas_forex/pcba_readiness.py:172-179`), and no current integrated hidden-state detector exists. |
 | C12 | Hallucination detection | `PARTIAL` | The engine supplies residual/logit mechanics needed for a detector but implements no hallucination classifier. Historical leakage-safe KWIK work is real research evidence, not current-path evidence: its best larger-data floor reached `0.7553`, while residual `0.692` and held-out `0.7392` missed their gates; status remains `OPEN / NOT LICENSED` (`docs/working/hallucination_kwik_ceiling_findings_20260619.md:78-91,123-124`). |
-| C13 | Reasoning-break detection | `STUB` | The adapter names the capability and lists residual/generation capture plus independent event labels and matched-difficulty controls (`cas_harness_interpretability_adapter.py:333-338`). Repository code search found no operational reasoning-break scorer, training/evaluation pipeline, or live integration beyond that definition and its adapter tests (`tests/test_cas_harness_interpretability_adapter.py:292`). |
-| C14 | Harness adapter generation | `ENGINEERED_NOT_RUN` | `build_interpretability_adapter_plan` deterministically produces and hashes a 14-row hook/requirements manifest (`cas_harness_interpretability_adapter.py:487-525`), and `verify_serialized_plan` re-derives its structure and `NOT_RUN` statuses (`:534-748`). The module explicitly does **not** generate Python source (`:1-7`); therefore the precise achieved capability is adapter-**manifest** generation, not autonomous executable-adapter synthesis. It was not executed by the current A40 path. |
+| C13 | Reasoning-break detection | `PARTIAL` | Commit `bf0ec2eaafda5a45b579572f3e3b36281f06345e` adds an operational offline evaluator with independent labels, group-disjoint splits, W0/W1/Wk features, validation-only selection/calibration, abstention, surface and shuffled-label controls, preregistered gates, and deterministic provenance verification (`scripts/run_reasoning_break_detector_c13.py`; focused tests `21/21`). It remains synthetic/offline and has not consumed registered real-model captures or produced a scientific detector result. |
+| C14 | Harness adapter generation | `ENGINEERED_NOT_RUN` | Commit `fd90d88e0eb99ee0339fa58830f66b920305786f` upgrades the deterministic 14-row manifest into hash-bound executable Python adapter artifacts with strict profile/config/path/class/API drift checks, side-effect-free capture/intervention attachment points, source reconstruction verification, and hostile-input defenses (`48/48` focused tests; hostile `P0/P1=0/0`). Loaded model bytes remain declared references rather than real-model-byte verified, and the current A40 path has not executed the adapter. |
 
 ## Claim boundary
 
@@ -63,7 +63,7 @@ Allowed claims:
 
 - A local real-model capture/intervention engine is engineered.
 - Architecture discovery and deterministic adapter-manifest generation are engineered but not run in the current A40 experiment.
-- Eleven other capabilities have useful mechanics or bounded historical research evidence.
+- Twelve other capabilities have useful mechanics or bounded historical research evidence.
 - The public live-worker route is still a fake/stub route.
 
 Disallowed claims:
@@ -86,5 +86,5 @@ Disallowed claims:
 
 - This was a read-only static integration review. It did not execute tests, load a model, contact RunPod, or rerun historical experiments.
 - Historical artifacts can demonstrate real earlier research within their own boundaries, but their provenance and schemas are not automatically admissible into the current byte-attested path.
-- The C13 absence finding is based on repository-wide searches for reasoning-break implementations and the known adapter taxonomy. A differently named implementation could require separate semantic review; none was found in the current integrated worker/API path.
+- C13 now has an operational offline evaluator, but its classification remains only `PARTIAL` until registered real-model captures and independent labels drive a prospective run.
 - Line numbers reflect the inspected 2026-08-20 worktree. Ongoing launch-transaction hardening may move lines in the preregistration or canary runner; symbol names and the baseline commit are the durable references.
