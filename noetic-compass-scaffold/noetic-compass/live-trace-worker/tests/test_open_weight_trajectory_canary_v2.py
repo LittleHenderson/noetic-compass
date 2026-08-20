@@ -13,6 +13,7 @@ import importlib.util
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 from types import SimpleNamespace
 
@@ -66,7 +67,7 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     preregistration, _raw = canary.load_preregistration(PREREGISTRATION_PATH)
 
     assert preregistration["preregistration_sha256"] == (
-        "BA06EE7EF2DE6E98F0610738F6996405D319BA613A56313A0B3565532FE9B3D5"
+        "2B6D2938D294CB0830BA401E13332AF2511204C5883CB55641BDAB0F871CB1EA"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
     assert preregistration["launch_bindings"]["execution_authority"] == (
@@ -81,26 +82,87 @@ def test_preregistration_is_exact_self_hashed_and_inert():
 def test_github_arm_helper_uses_yaml_when_viewing_feature_ref():
     helper_text = GITHUB_ARM_HELPER_PATH.read_text(encoding="utf-8")
     assert "'workflow', 'view', $Workflow, '--repo', $Repository, '--ref', $RefName, '--yaml'" in helper_text
+    assert "[string]$ProviderStartedAtUtc" in helper_text
+    assert '"provider_started_at_utc=$ProviderStartedAtUtc"' in helper_text
+    assert "HARD_STOP_DEADLINE_MUST_EQUAL_PROVIDER_START_PLUS_1800_SECONDS" in helper_text
 
 
 def test_local_watchdog_binds_live_runpod_schema_and_exact_boundary():
     helper_text = LOCAL_WATCHDOG_PATH.read_text(encoding="utf-8")
-    assert "[datetime]$RunStartedAtUtc" in helper_text
+    assert "[ValidateNotNullOrEmpty()][string]$RunStartedAtUtc" in helper_text
+    assert "Convert-ProviderUtcTimestamp $RunStartedAtUtc" in helper_text
     assert "Get-OptionalProperty $machine 'gpuTypeId'" in helper_text
     assert "WATCHDOG_PROVIDER_START_TIME_MISMATCH" in helper_text
     assert "WATCHDOG_TARGET_VOLUME_NOT_ENCRYPTED" in helper_text
+    assert "WATCHDOG_TARGET_VOLUME_MOUNT_MISMATCH" in helper_text
     assert "WATCHDOG_TARGET_PORTS_MISMATCH" in helper_text
-    assert "[int]$podVolumeInGb -ne 20" in helper_text
-    assert "[int]$containerDiskInGb -ne 50" in helper_text
-    assert "$target = Assert-StopTargetIdentity (Invoke-PodGet)" in helper_text
+    assert "WATCHDOG_TARGET_PORT_MAPPING_MISMATCH" in helper_text
+    assert "WATCHDOG_TARGET_ENVIRONMENT_KEYSET_MISMATCH" in helper_text
+    assert "WATCHDOG_TARGET_PUBLIC_KEY_MISMATCH" in helper_text
+    assert "WATCHDOG_TARGET_CONFLICTING_GPU_ID" in helper_text
+    assert "WATCHDOG_TARGET_CONFLICTING_GPU_DISPLAY_NAME" in helper_text
+    assert "WATCHDOG_TARGET_INTERRUPTIBLE_TYPE_MISMATCH" in helper_text
+    assert "WATCHDOG_TARGET_LOCKED_TYPE_MISMATCH" in helper_text
+    assert "Read-ProviderLaunchReceipt" in helper_text
+    assert "WATCHDOG_PROVIDER_LAUNCH_CREATE_RESPONSE_PROOF_MISMATCH" in helper_text
+    assert "provider_launch_receipt_sha256" in helper_text
+    assert "cas_external_stop_watchdog_receipt.v2" in helper_text
+    assert "Get-OptionalProperty $Pod 'adjustedCostPerHr'" in helper_text
+    assert "Test-IsJsonInteger $podVolumeInGb" in helper_text
+    assert "Test-IsJsonInteger $containerDiskInGb" in helper_text
+    assert "$target = Assert-StopTargetIdentity $emergencyPod" in helper_text
+    assert "$finalTarget = Assert-StopTargetIdentity (Invoke-PodGet)" in helper_text
     assert "$failTarget = Assert-StopTargetIdentity (Invoke-PodGet)" in helper_text
     assert "Wait-ForExitedByIdentity" in helper_text
     assert "STOPPED_AFTER_WATCHDOG_FAILURE_EXITED_CONFIRMED" in helper_text
     stop_identity_body = helper_text.split(
         "function Assert-StopTargetIdentity {", 1
-    )[1].split("function Wait-ForExitedByIdentity {", 1)[0]
+    )[1].split("function Assert-PreArmTargetIdentity {", 1)[0]
     assert "if ($id -ne $PodId)" in stop_identity_body
     assert "$name -ne $PodName" not in stop_identity_body
+    assert "function Assert-PreArmTargetIdentity" in helper_text
+    assert "WATCHDOG_PREARM_TARGET_IDENTITY_MISMATCH" in helper_text
+    assert "$armIdentityProven = $false" in helper_text
+    assert "$armIdentityProven = $true" in helper_text
+    assert "if ($armIdentityProven -and $null -ne $script:Headers)" in helper_text
+    main_body = helper_text.split("$fallbackTaskRegistered = $false", 1)[1]
+    assert main_body.index("Assert-PreArmTargetIdentity") < main_body.index(
+        "$armIdentityProven = $true"
+    ) < main_body.index("$startedUtc = Convert-ProviderUtcTimestamp $RunStartedAtUtc")
+    assert "WATCHDOG_EMERGENCY_ARMED_RECEIPT_MISSING" in helper_text
+    assert "WATCHDOG_EMERGENCY_ARMED_RECEIPT_BYTES_MISMATCH" in helper_text
+    assert "WATCHDOG_EMERGENCY_STALE_RESTART_MISMATCH" in helper_text
+    assert "if (-not (Test-Path -LiteralPath $emergencyTerminalPath))" not in helper_text
+    assert helper_text.index("$observedArmedBytes = [IO.File]::ReadAllBytes") < (
+        helper_text.index("$apiKey = Read-RunPodApiKey", helper_text.index("if ($EmergencyStopOnly)"))
+    )
+    assert "$LocalStopLeadSeconds = 90" in helper_text
+    assert "$fallbackTriggerUtc = $deadlineUtc.AddSeconds(-$LocalStopLeadSeconds)" in helper_text
+    assert "[math]::Min($PollSeconds, [math]::Floor($remainingSeconds))" in helper_text
+    assert "function Assert-FallbackTaskRegistration" in helper_text
+    for marker in (
+        "WATCHDOG_FALLBACK_TASK_ACTION_REVALIDATION_FAILED",
+        "[string]$registeredTask.State -cne 'Ready'",
+        "WATCHDOG_FALLBACK_TASK_TRIGGER_TIME_REVALIDATION_FAILED",
+        "WATCHDOG_FALLBACK_TASK_PRINCIPAL_REVALIDATION_FAILED",
+        "WATCHDOG_FALLBACK_TASK_SETTINGS_REVALIDATION_FAILED",
+        "WATCHDOG_FALLBACK_TASK_NEXT_RUN_REVALIDATION_FAILED",
+        "WATCHDOG_FALLBACK_TASK_RETIREMENT_FAILED",
+        "WATCHDOG_FAILED_CLOSED_CONTAINMENT_CONFIRMED",
+        "RETAINED_FOR_PENDING_FALLBACK",
+        "RETAINED_FOR_SCHEDULED_RETRY",
+        "$armedReceiptWritten = $false",
+        "$armedReceiptWritten = $true",
+        "elseif ($armedReceiptWritten)",
+        "RETIRED_UNUSABLE_NO_ARM_RECEIPT_",
+        "-RestartCount 3",
+        "-RestartInterval (New-TimeSpan -Minutes 1)",
+        "fail_stop_status = $failStopStatus",
+        "fail_stop_http_status = $failStopHttpStatus",
+        "fail_stop_terminal_status = $failStopTerminalStatus",
+        "fallback_task_cleanup_status = $taskCleanupStatus",
+    ):
+        assert marker in helper_text
 
 
 def test_unbound_execute_fails_before_runtime_or_output(tmp_path: Path, monkeypatch):
@@ -121,6 +183,7 @@ def test_unbound_execute_fails_before_runtime_or_output(tmp_path: Path, monkeypa
             model_storage_root=tmp_path,
             source_commit_sha256="1" * 40,
             oci_image_digest="sha256:" + "2" * 64,
+            provider_launch_receipt_path=tmp_path / "absent-provider.json",
             watchdog_receipt_path=tmp_path / "absent.json",
             github_supervisor_receipt_path=tmp_path / "absent-github.json",
             device="cuda:0",
@@ -202,7 +265,9 @@ def test_tensor_tamper_and_result_overwrite_fail_closed(tmp_path: Path):
         canary.verify_bundle(bundle_root=root)
 
 
-def test_portable_verifier_rejects_capture_outside_watchdog_window(tmp_path: Path):
+def test_portable_verifier_rejects_cross_mismatched_watchdog_deadline(
+    tmp_path: Path,
+):
     root = _build_synthetic_bundle(tmp_path / "watchdog-window")
     watchdog_path = root / "external-watchdog.receipt.json"
     watchdog = canary.strict_json_object(watchdog_path.read_bytes(), "watchdog")
@@ -234,8 +299,28 @@ def test_portable_verifier_rejects_capture_outside_watchdog_window(tmp_path: Pat
     )
     result_path.write_bytes(canary.canonical_json_bytes(result))
 
-    with pytest.raises(ValueError, match="watchdog window"):
+    with pytest.raises(ValueError, match="watchdog/provider deadline mismatch"):
         canary.verify_bundle(bundle_root=root)
+
+
+def test_watchdog_capture_window_rejects_capture_before_arm_time():
+    capture = SimpleNamespace(
+        receipt={
+            "observation": {
+                "execution_record": {
+                    "started_utc": "2026-08-20T12:00:10Z",
+                    "ended_utc": "2026-08-20T12:00:20Z",
+                }
+            }
+        }
+    )
+    with pytest.raises(ValueError, match="watchdog window"):
+        canary._verify_watchdog_capture_window(
+            [capture],
+            deadline=datetime(2026, 8, 20, 12, 30, tzinfo=timezone.utc),
+            arm_written=datetime(2026, 8, 20, 12, 5, tzinfo=timezone.utc),
+            maximum_wall_seconds=1800,
+        )
 
 
 def test_portable_verifier_rejects_github_arm_after_capture_start(tmp_path: Path):
@@ -275,17 +360,261 @@ def test_execute_preflight_rejects_noncanonical_watchdog_receipt(tmp_path: Path)
         root / "preregistration.snapshot.json"
     )
     launch = preregistration["launch_bindings"]
+    provider_path = root / "provider-launch.receipt.json"
+    provider = canary.strict_json_object(provider_path.read_bytes(), "provider")
     with pytest.raises(ValueError, match="not canonical JSON"):
         canary._load_watchdog_receipt(
             watchdog_path,
             source_commit_sha256=launch["required_source_commit_sha256"],
             oci_image_digest=launch["required_oci_image_digest"],
             watchdog_script_sha256=launch["required_watchdog_script_sha256"],
+            provider_launch_receipt_sha256=canary.sha256_bytes(
+                provider_path.read_bytes()
+            ),
+            expected_pod_id=provider["pod_id"],
+            expected_pod_name=provider["pod_name"],
+            expected_provider_started_at=provider["provider_started_at_utc"],
+            expected_deadline=provider["hard_stop_deadline_utc"],
         )
+
+
+def test_provider_launch_receipt_accepts_exact_create_response_proof():
+    receipt = _provider_launch_receipt()
+    raw = canary.canonical_json_bytes(receipt)
+    observed = canary._validate_provider_launch_receipt(
+        raw,
+        source_commit_sha256="1" * 40,
+        oci_image_digest="sha256:" + "2" * 64,
+        expected_image_name="runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
+        require_current_time=False,
+    )
+    assert observed["pod_id"] == "synthetic123"
+    assert observed["status"] == "EXACT_CREATE_RESPONSE_STARTED_POD_OBSERVED"
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement", "message"),
+    (
+        ("interruptible", True, "interruptible=false"),
+        ("locked", True, "locked=false"),
+        ("volumeEncrypted", False, "volumeEncrypted=true"),
+        ("lastStartedAt", "2026-08-20T12:00:02Z", "timestamp mismatch"),
+    ),
+)
+def test_provider_launch_receipt_rejects_rehashed_semantic_tamper(
+    field: str, replacement: object, message: str
+):
+    receipt = _provider_launch_receipt()
+    transaction = receipt["create_transaction"]
+    transaction["response_body"][field] = replacement
+    transaction["response_body_sha256"] = canary.sha256_bytes(
+        canary.canonical_json_bytes(transaction["response_body"])
+    )
+    receipt.pop("receipt_sha256")
+    receipt["receipt_sha256"] = canary.sha256_bytes(
+        canary.canonical_json_bytes(receipt)
+    )
+    with pytest.raises(ValueError, match=message):
+        canary._validate_provider_launch_receipt(
+            canary.canonical_json_bytes(receipt),
+            source_commit_sha256="1" * 40,
+            oci_image_digest="sha256:" + "2" * 64,
+            expected_image_name="runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
+            require_current_time=False,
+        )
+
+
+def test_watchdog_crosslink_accepts_same_instant_powershell_utc_lexeme(
+    tmp_path: Path,
+):
+    deadline = datetime.now(timezone.utc) + timedelta(minutes=20)
+    started = deadline - timedelta(seconds=1800)
+    provider_started_text = started.isoformat().replace("+00:00", "Z")
+    provider_deadline_text = deadline.isoformat().replace("+00:00", "Z")
+
+    def powershell_o(value: datetime) -> str:
+        return value.strftime("%Y-%m-%dT%H:%M:%S.") + f"{value.microsecond:06d}0Z"
+
+    watchdog = {
+        "claim_boundary": "Self-reported external watchdog receipt; provider stop action and billing settlement require separate verification.",
+        "emergency_fallback_status": "REGISTERED_AND_REVALIDATED",
+        "emergency_task_name": "CAS-OpenWeight-Canary-Stop-synthetic123",
+        "hard_stop_deadline_utc": powershell_o(deadline),
+        "maximum_spend_usd": "0.50",
+        "maximum_wall_seconds": 1800,
+        "oci_image_digest": "sha256:" + "2" * 64,
+        "provider": "RUNPOD",
+        "provider_launch_receipt_sha256": "3" * 64,
+        "provider_started_at_utc": powershell_o(started),
+        "schema_version": canary.WATCHDOG_SCHEMA,
+        "source_commit_sha256": "1" * 40,
+        "status": "ARMED",
+        "watchdog_script_sha256": "4" * 64,
+        "workload_id": "synthetic123",
+        "workload_name": "cas-open-weight-canary-v2-synthetic-test",
+    }
+    path = tmp_path / "watchdog.json"
+    path.write_bytes(canary.canonical_json_bytes(watchdog))
+    observed, _raw = canary._load_watchdog_receipt(
+        path,
+        source_commit_sha256="1" * 40,
+        oci_image_digest="sha256:" + "2" * 64,
+        watchdog_script_sha256="4" * 64,
+        provider_launch_receipt_sha256="3" * 64,
+        expected_pod_id="synthetic123",
+        expected_pod_name="cas-open-weight-canary-v2-synthetic-test",
+        expected_provider_started_at=provider_started_text,
+        expected_deadline=provider_deadline_text,
+    )
+    assert observed["provider_started_at_utc"] == powershell_o(started)
+
+
+def _run_powershell_provider_receipt_validation(
+    tmp_path: Path, receipt: dict[str, object]
+) -> subprocess.CompletedProcess[str]:
+    executable = shutil.which("pwsh")
+    if executable is None and sys.platform == "win32":
+        candidate = Path(
+            r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"
+        )
+        if candidate.is_file():
+            executable = str(candidate)
+    if executable is None:
+        pytest.skip("PowerShell is unavailable")
+    receipt_path = tmp_path / "provider-launch.receipt.json"
+    receipt_path.write_bytes(canary.canonical_json_bytes(receipt))
+    public_key = receipt["create_transaction"]["request_body"]["env"]["PUBLIC_KEY"]
+    public_key_path = tmp_path / "runpod_cas.pub"
+    public_key_path.write_text(public_key + "\n", encoding="utf-8", newline="\n")
+    return subprocess.run(
+        [
+            executable,
+            "-NoProfile",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            str(LOCAL_WATCHDOG_PATH),
+            "-ValidateProviderLaunchReceiptOnly",
+            "-PodId",
+            str(receipt["pod_id"]),
+            "-PodName",
+            str(receipt["pod_name"]),
+            "-RunStartedAtUtc",
+            str(receipt["provider_started_at_utc"]),
+            "-SourceCommitSha256",
+            str(receipt["source_commit_sha256"]),
+            "-OciImageDigest",
+            str(receipt["oci_image_digest"]),
+            "-ExpectedImageName",
+            str(receipt["image_name"]),
+            "-ObservedHourlyRate",
+            "0.44",
+            "-ReceiptDirectory",
+            str(tmp_path / "unused-receipt-directory"),
+            "-ProviderLaunchReceiptPath",
+            str(receipt_path),
+            "-ExpectedPublicKeyPath",
+            str(public_key_path),
+        ],
+        text=True,
+        capture_output=True,
+        check=False,
+        timeout=30,
+    )
+
+
+def test_powershell_watchdog_accepts_same_canonical_provider_receipt(tmp_path: Path):
+    completed = _run_powershell_provider_receipt_validation(
+        tmp_path, _provider_launch_receipt()
+    )
+    assert completed.returncode == 0, completed.stderr
+    assert "PROVIDER_LAUNCH_RECEIPT_VALIDATION_PASS_NO_PROVIDER_CALL" in completed.stdout
+
+
+def test_powershell_watchdog_rejects_rehashed_interruptible_response(
+    tmp_path: Path,
+):
+    receipt = _provider_launch_receipt()
+    transaction = receipt["create_transaction"]
+    transaction["response_body"]["interruptible"] = True
+    transaction["response_body_sha256"] = canary.sha256_bytes(
+        canary.canonical_json_bytes(transaction["response_body"])
+    )
+    receipt.pop("receipt_sha256")
+    receipt["receipt_sha256"] = canary.sha256_bytes(
+        canary.canonical_json_bytes(receipt)
+    )
+    completed = _run_powershell_provider_receipt_validation(tmp_path, receipt)
+    assert completed.returncode != 0
+    assert "WATCHDOG_PROVIDER_LAUNCH_CREATE_RESPONSE_PROOF_MISMATCH" in (
+        completed.stdout + completed.stderr
+    )
+
+
+def test_provider_launch_receipt_rejects_http_200_in_runner_and_watchdog(
+    tmp_path: Path,
+):
+    receipt = _provider_launch_receipt()
+    receipt["create_transaction"]["response_http_status"] = 200
+    receipt.pop("receipt_sha256")
+    receipt["receipt_sha256"] = canary.sha256_bytes(
+        canary.canonical_json_bytes(receipt)
+    )
+
+    with pytest.raises(ValueError, match="HTTP status mismatch"):
+        canary._validate_provider_launch_receipt(
+            canary.canonical_json_bytes(receipt),
+            source_commit_sha256="1" * 40,
+            oci_image_digest="sha256:" + "2" * 64,
+            expected_image_name=(
+                "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404"
+            ),
+            require_current_time=False,
+        )
+
+    completed = _run_powershell_provider_receipt_validation(tmp_path, receipt)
+    assert completed.returncode != 0
+    assert "WATCHDOG_PROVIDER_LAUNCH_CREATE_HTTP_STATUS_MISMATCH" in (
+        completed.stdout + completed.stderr
+    )
 
 
 def test_github_supervisor_self_test_makes_no_provider_call():
     assert github_supervisor.self_test() == 0
+    assert github_supervisor.STOP_LEAD_SECONDS == 90
+
+
+def test_runner_accepts_powershell_lexemes_in_github_arm_crosslink():
+    value = {
+        "claim_boundary": "GitHub-hosted operational stop evidence; not a RunPod signature or billing settlement record.",
+        "delete_attempted": False,
+        "github_repository": "LittleHenderson/noetic-compass",
+        "github_run_attempt": "1",
+        "github_run_id": "123",
+        "github_sha": "1" * 40,
+        "hard_stop_deadline_utc": "2026-08-20T12:30:00.0000000Z",
+        "mode": "PRE_DEADLINE_ARM_CHECK",
+        "observed_status": "RUNNING",
+        "pod_id": "synthetic123",
+        "pod_name": "cas-open-weight-canary-v2-synthetic",
+        "provider_started_at_utc": "2026-08-20T12:00:00.0000000Z",
+        "schema_version": canary.GITHUB_SUPERVISOR_SCHEMA,
+        "source_commit_sha": "1" * 40,
+        "status": "ARMED_PROVIDER_GET_SUCCEEDED",
+        "supervisor_source_sha256": "A" * 64,
+        "written_at_utc": "2026-08-20T12:05:00Z",
+    }
+    observed = canary._validate_github_supervisor_receipt(
+        canary.canonical_json_bytes(value),
+        source_commit_sha256="1" * 40,
+        supervisor_source_sha256="A" * 64,
+        expected_pod_id="synthetic123",
+        expected_pod_name="cas-open-weight-canary-v2-synthetic",
+        expected_provider_started_at="2026-08-20T12:00:00Z",
+        expected_deadline="2026-08-20T12:30:00Z",
+        require_current_time=False,
+    )
+    assert observed["hard_stop_deadline_utc"].endswith(".0000000Z")
 
 
 def test_github_supervisor_arm_check_writes_canonical_bound_receipt(
@@ -297,6 +626,15 @@ def test_github_supervisor_arm_check_writes_canonical_bound_receipt(
     monkeypatch.setenv("GITHUB_RUN_ID", "123")
     monkeypatch.setenv("GITHUB_RUN_ATTEMPT", "1")
     monkeypatch.setenv("RUNPOD_API_KEY", "test-key-never-used")
+    receipt_path = tmp_path / "armed.json"
+    deadline = (
+        datetime.now(timezone.utc).replace(microsecond=123456)
+        + timedelta(minutes=20)
+    )
+    deadline_text = deadline.isoformat().replace("+00:00", "Z")
+    provider_started_text = (deadline - timedelta(seconds=1800)).isoformat().replace(
+        "+00:00", "Z"
+    )
     monkeypatch.setattr(
         github_supervisor,
         "_get_pod",
@@ -304,17 +642,14 @@ def test_github_supervisor_arm_check_writes_canonical_bound_receipt(
             "id": "synthetic123",
             "name": "cas-open-weight-canary-v2-synthetic",
             "desiredStatus": "RUNNING",
+            "lastStartedAt": provider_started_text,
         },
     )
-    receipt_path = tmp_path / "armed.json"
-    deadline_text = (
-        datetime.now(timezone.utc).replace(microsecond=123456)
-        + timedelta(minutes=20)
-    ).isoformat().replace("+00:00", "Z")
     args = SimpleNamespace(
         pod_id="synthetic123",
         pod_name="cas-open-weight-canary-v2-synthetic",
         deadline=deadline_text,
+        provider_started_at=provider_started_text,
         source_commit=source_commit,
         receipt=str(receipt_path),
     )
@@ -324,6 +659,7 @@ def test_github_supervisor_arm_check_writes_canonical_bound_receipt(
     assert raw == canary.canonical_json_bytes(value)
     assert value["status"] == "ARMED_PROVIDER_GET_SUCCEEDED"
     assert value["pod_id"] == "synthetic123"
+    assert value["provider_started_at_utc"] == provider_started_text
     assert value["hard_stop_deadline_utc"] == deadline_text
 
 
@@ -338,10 +674,23 @@ def test_github_supervisor_post_arm_stop_uses_immutable_id_not_editable_name(
     monkeypatch.setenv("GITHUB_RUN_ID", "123")
     monkeypatch.setenv("GITHUB_RUN_ATTEMPT", "1")
     monkeypatch.setenv("RUNPOD_API_KEY", "test-key-never-used")
+    deadline = datetime.now(timezone.utc) - timedelta(seconds=1)
+    provider_started = deadline - timedelta(seconds=1800)
+    provider_started_text = provider_started.isoformat()
     observations = iter(
         (
-            {"id": pod_id, "name": "renamed-after-arm", "desiredStatus": "RUNNING"},
-            {"id": pod_id, "name": "renamed-after-arm", "desiredStatus": "EXITED"},
+            {
+                "id": pod_id,
+                "name": "renamed-after-arm",
+                "desiredStatus": "RUNNING",
+                "lastStartedAt": provider_started_text,
+            },
+            {
+                "id": pod_id,
+                "name": "renamed-after-arm",
+                "desiredStatus": "EXITED",
+                "lastStartedAt": provider_started_text,
+            },
         )
     )
     monkeypatch.setattr(
@@ -356,7 +705,8 @@ def test_github_supervisor_post_arm_stop_uses_immutable_id_not_editable_name(
     args = SimpleNamespace(
         pod_id=pod_id,
         pod_name=original_name,
-        deadline=(datetime.now(timezone.utc) - timedelta(seconds=1)).isoformat(),
+        deadline=deadline.isoformat(),
+        provider_started_at=provider_started_text,
         source_commit=source_commit,
         receipt=str(tmp_path / "terminal.json"),
     )
@@ -367,6 +717,72 @@ def test_github_supervisor_post_arm_stop_uses_immutable_id_not_editable_name(
         (tmp_path / "terminal.json").read_bytes(), "terminal receipt"
     )
     assert receipt["observed_terminal_status"] == "EXITED"
+    assert receipt["mode"] == "NORMAL_PRE_DEADLINE_STOP"
+    assert receipt["stop_lead_seconds"] == 90
+
+
+def test_github_supervisor_requests_stop_before_hard_deadline(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    source_commit = "1" * 40
+    pod_id = "synthetic123"
+    start = datetime(2026, 8, 20, 12, 0, tzinfo=timezone.utc)
+    deadline = start + timedelta(minutes=5)
+    provider_started = deadline - timedelta(seconds=1800)
+    provider_started_text = provider_started.isoformat()
+
+    class FakeDateTime(datetime):
+        current = start
+
+        @classmethod
+        def now(cls, tz=None):
+            value = cls.current
+            return value if tz is None else value.astimezone(tz)
+
+    def advance(seconds: float):
+        FakeDateTime.current += timedelta(seconds=seconds)
+
+    observations = iter(
+        (
+            {
+                "id": pod_id,
+                "name": "renamed-after-arm",
+                "desiredStatus": "RUNNING",
+                "lastStartedAt": provider_started_text,
+            },
+            {
+                "id": pod_id,
+                "name": "renamed-after-arm",
+                "desiredStatus": "EXITED",
+                "lastStartedAt": provider_started_text,
+            },
+        )
+    )
+    stop_times: list[datetime] = []
+    monkeypatch.setenv("GITHUB_SHA", source_commit)
+    monkeypatch.setenv("RUNPOD_API_KEY", "test-key-never-used")
+    monkeypatch.setattr(github_supervisor, "datetime", FakeDateTime)
+    monkeypatch.setattr(github_supervisor.time, "sleep", advance)
+    monkeypatch.setattr(
+        github_supervisor, "_get_pod", lambda **_kwargs: next(observations)
+    )
+    monkeypatch.setattr(
+        github_supervisor,
+        "_stop_with_retries",
+        lambda **_kwargs: (stop_times.append(FakeDateTime.current) or 200, 1),
+    )
+    args = SimpleNamespace(
+        pod_id=pod_id,
+        pod_name="cas-open-weight-canary-v2-synthetic",
+        deadline=deadline.isoformat(),
+        provider_started_at=provider_started_text,
+        source_commit=source_commit,
+        receipt=str(tmp_path / "terminal.json"),
+    )
+
+    assert github_supervisor.run_supervisor(args) == 0
+    assert stop_times == [deadline - timedelta(seconds=90)]
+    assert stop_times[0] < deadline
 
 
 def test_github_supervisor_arm_is_name_strict_and_post_arm_is_id_strict():
@@ -408,6 +824,7 @@ def test_github_supervisor_emergency_rejects_protected_pod_before_request(
         pod_id="q2oqlooejhin7s",
         pod_name="cas-open-weight-canary-v2-protected-test",
         deadline=(datetime.now(timezone.utc) + timedelta(minutes=20)).isoformat(),
+        provider_started_at=(datetime.now(timezone.utc) - timedelta(minutes=10)).isoformat(),
         source_commit="1" * 40,
         receipt=str(tmp_path / "never.json"),
     )
@@ -431,6 +848,7 @@ def test_github_supervisor_emergency_requires_successful_arm_receipt(
         pod_id="unrelated123",
         pod_name="cas-open-weight-canary-v2-typo",
         deadline=(datetime.now(timezone.utc) + timedelta(minutes=20)).isoformat(),
+        provider_started_at=(datetime.now(timezone.utc) - timedelta(minutes=10)).isoformat(),
         source_commit="1" * 40,
         receipt=str(tmp_path / "never.json"),
         arm_receipt=str(tmp_path / "absent-arm.json"),
@@ -440,14 +858,113 @@ def test_github_supervisor_emergency_requires_successful_arm_receipt(
     assert called is False
 
 
+def test_github_supervisor_emergency_already_terminal_writes_create_new_receipt(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    source_commit = "1" * 40
+    deadline = datetime.now(timezone.utc) + timedelta(minutes=20)
+    provider_started = deadline - timedelta(seconds=1800)
+    provider_started_text = provider_started.isoformat()
+    monkeypatch.setenv("GITHUB_SHA", source_commit)
+    monkeypatch.setenv("GITHUB_REPOSITORY", "LittleHenderson/noetic-compass")
+    monkeypatch.setenv("GITHUB_RUN_ID", "123")
+    monkeypatch.setenv("GITHUB_RUN_ATTEMPT", "1")
+    monkeypatch.setenv("RUNPOD_API_KEY", "test-key-never-used")
+    arm_path = tmp_path / "arm.json"
+    terminal_path = tmp_path / "terminal.json"
+    args = SimpleNamespace(
+        pod_id="synthetic123",
+        pod_name="cas-open-weight-canary-v2-synthetic",
+        deadline=deadline.isoformat(),
+        provider_started_at=provider_started_text,
+        source_commit=source_commit,
+        receipt=str(arm_path),
+    )
+    monkeypatch.setattr(
+        github_supervisor,
+        "_get_pod",
+        lambda **_kwargs: {
+            "id": args.pod_id,
+            "name": args.pod_name,
+            "desiredStatus": "RUNNING",
+            "lastStartedAt": provider_started_text,
+        },
+    )
+    assert github_supervisor.arm_check(args) == 0
+    args.arm_receipt = str(arm_path)
+    args.receipt = str(terminal_path)
+    monkeypatch.setattr(
+        github_supervisor,
+        "_get_pod",
+        lambda **_kwargs: {
+            "id": args.pod_id,
+            "name": "renamed-after-arm",
+            "desiredStatus": "EXITED",
+            "lastStartedAt": provider_started_text,
+        },
+    )
+    monkeypatch.setattr(
+        github_supervisor,
+        "_stop_with_retries",
+        lambda **_kwargs: (_ for _ in ()).throw(
+            AssertionError("already-terminal emergency must not POST STOP")
+        ),
+    )
+    assert github_supervisor.emergency_stop(args) == 0
+    receipt = canary.strict_json_object(terminal_path.read_bytes(), "emergency")
+    assert receipt["observed_terminal_status"] == "EXITED"
+    assert receipt["stop_attempts"] == 0
+
+
+def test_github_supervisor_emergency_rejects_preexisting_terminal_receipt(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    source_commit = "1" * 40
+    deadline = datetime.now(timezone.utc) + timedelta(minutes=20)
+    provider_started = deadline - timedelta(seconds=1800)
+    provider_started_text = provider_started.isoformat()
+    monkeypatch.setenv("GITHUB_SHA", source_commit)
+    monkeypatch.setenv("GITHUB_REPOSITORY", "LittleHenderson/noetic-compass")
+    monkeypatch.setenv("GITHUB_RUN_ID", "123")
+    monkeypatch.setenv("GITHUB_RUN_ATTEMPT", "1")
+    monkeypatch.setenv("RUNPOD_API_KEY", "test-key-never-used")
+    arm_path = tmp_path / "arm.json"
+    terminal_path = tmp_path / "terminal.json"
+    args = SimpleNamespace(
+        pod_id="synthetic123",
+        pod_name="cas-open-weight-canary-v2-synthetic",
+        deadline=deadline.isoformat(),
+        provider_started_at=provider_started_text,
+        source_commit=source_commit,
+        receipt=str(arm_path),
+    )
+    running = {
+        "id": args.pod_id,
+        "name": args.pod_name,
+        "desiredStatus": "RUNNING",
+        "lastStartedAt": provider_started_text,
+    }
+    monkeypatch.setattr(github_supervisor, "_get_pod", lambda **_kwargs: running)
+    assert github_supervisor.arm_check(args) == 0
+    terminal_path.write_bytes(b"stale\n")
+    args.arm_receipt = str(arm_path)
+    args.receipt = str(terminal_path)
+    exited = dict(running, desiredStatus="EXITED")
+    monkeypatch.setattr(github_supervisor, "_get_pod", lambda **_kwargs: exited)
+    with pytest.raises(FileExistsError):
+        github_supervisor.emergency_stop(args)
+
+
 def test_github_workflow_uses_env_inputs_and_arm_gates_emergency_stop():
     workflow = GITHUB_WORKFLOW_PATH.read_text(encoding="utf-8")
     assert '--pod-id "${{ inputs.pod_id }}"' not in workflow
     assert '--pod-name "${{ inputs.pod_name }}"' not in workflow
     assert '--deadline "${{ inputs.hard_stop_deadline_utc }}"' not in workflow
+    assert '--provider-started-at "${{ inputs.provider_started_at_utc }}"' not in workflow
     assert '--source-commit "${{ inputs.source_commit }}"' not in workflow
     assert "steps.arm_check.outcome == 'success'" in workflow
     assert '--arm-receipt "$ARMED_RECEIPT_PATH"' in workflow
+    assert '--provider-started-at "$PROVIDER_STARTED_AT_UTC"' in workflow
     assert workflow.count("RUNPOD_API_KEY: ${{ secrets.RUNPOD_CANARY_V2_API_KEY }}") == 3
 
 
@@ -480,6 +997,85 @@ def test_rehashed_preregistration_cannot_change_frozen_experiment(tmp_path: Path
 
     with pytest.raises(ValueError, match="frozen design"):
         canary.load_preregistration(path.resolve())
+
+
+def _provider_launch_receipt(
+    *,
+    pod_id: str = "synthetic123",
+    pod_name: str = "cas-open-weight-canary-v2-synthetic-test",
+    source_commit: str = "1" * 40,
+    oci_image_digest: str = "sha256:" + "2" * 64,
+    image_name: str = "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
+    provider_started_at: str = "2026-08-20T12:00:00Z",
+    hard_stop_deadline: str = "2026-08-20T12:30:00Z",
+) -> dict[str, object]:
+    public_key = (
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGYybnRoZXRpY2tleWZvcnRlc3Rz"
+        " synthetic-test"
+    )
+    create_request = {
+        "cloudType": "SECURE",
+        "containerDiskInGb": 50,
+        "env": {"PUBLIC_KEY": public_key},
+        "gpuCount": 1,
+        "gpuTypeIds": ["NVIDIA A40"],
+        "imageName": image_name,
+        "interruptible": False,
+        "locked": False,
+        "name": pod_name,
+        "networkVolumeId": None,
+        "ports": ["22/tcp"],
+        "volumeEncrypted": True,
+        "volumeInGb": 20,
+        "volumeMountPath": "/workspace",
+    }
+    create_response = {
+        "desiredStatus": "RUNNING",
+        "id": pod_id,
+        "interruptible": False,
+        "lastStartedAt": "2026-08-20 12:00:00.000 +0000 UTC",
+        "locked": False,
+        "name": pod_name,
+        "volumeEncrypted": True,
+    }
+    create_transaction = {
+        "request_body": create_request,
+        "request_body_sha256": canary.sha256_bytes(
+            canary.canonical_json_bytes(create_request)
+        ),
+        "request_method": "POST",
+        "request_observed_at_utc": "2026-08-20T11:59:59Z",
+        "request_path": "/v1/pods",
+        "response_body": create_response,
+        "response_body_sha256": canary.sha256_bytes(
+            canary.canonical_json_bytes(create_response)
+        ),
+        "response_http_status": 201,
+        "response_observed_at_utc": "2026-08-20T12:00:01Z",
+    }
+    unsigned = {
+        "claim_boundary": canary.PROVIDER_LAUNCH_CLAIM_BOUNDARY,
+        "create_transaction": create_transaction,
+        "dedicated_public_key_sha256": canary.sha256_bytes(
+            public_key.encode("utf-8")
+        ),
+        "hard_stop_deadline_utc": hard_stop_deadline,
+        "image_name": image_name,
+        "launch_mode": "CREATE_RESPONSE_STARTED_POD",
+        "oci_image_digest": oci_image_digest,
+        "pod_id": pod_id,
+        "pod_name": pod_name,
+        "provider": "RUNPOD",
+        "provider_started_at_utc": provider_started_at,
+        "schema_version": canary.PROVIDER_LAUNCH_SCHEMA,
+        "source_commit_sha256": source_commit,
+        "status": "EXACT_CREATE_RESPONSE_STARTED_POD_OBSERVED",
+    }
+    receipt = dict(unsigned)
+    receipt["receipt_sha256"] = canary.sha256_bytes(
+        canary.canonical_json_bytes(unsigned)
+    )
+    return receipt
 
 
 def _build_synthetic_bundle(
@@ -528,11 +1124,17 @@ def _build_synthetic_bundle(
     )
     scenario_path = root / "scenario.json"
     scenario_path.write_bytes(scenario_raw)
+    provider_launch = _provider_launch_receipt()
+    provider_launch_raw = canary.canonical_json_bytes(provider_launch)
+    (root / "provider-launch.receipt.json").write_bytes(provider_launch_raw)
     watchdog = {
         "schema_version": canary.WATCHDOG_SCHEMA,
         "status": "ARMED",
         "provider": "RUNPOD",
-        "workload_id": "synthetic-offline-test",
+        "provider_launch_receipt_sha256": canary.sha256_bytes(provider_launch_raw),
+        "provider_started_at_utc": "2026-08-20T12:00:00.0000000Z",
+        "workload_id": provider_launch["pod_id"],
+        "workload_name": provider_launch["pod_name"],
         "hard_stop_deadline_utc": "2026-08-20T12:30:00Z",
         "maximum_wall_seconds": 1800,
         "maximum_spend_usd": "0.50",
@@ -541,7 +1143,7 @@ def _build_synthetic_bundle(
         "watchdog_script_sha256": preregistration["launch_bindings"][
             "required_watchdog_script_sha256"
         ],
-        "emergency_task_name": "CAS-OpenWeight-Canary-Stop-synthetic-offline-test",
+        "emergency_task_name": f"CAS-OpenWeight-Canary-Stop-{provider_launch['pod_id']}",
         "emergency_fallback_status": "REGISTERED_AND_REVALIDATED",
         "claim_boundary": "Self-reported external watchdog receipt; provider stop action and billing settlement require separate verification.",
     }
@@ -559,6 +1161,7 @@ def _build_synthetic_bundle(
         "observed_status": "RUNNING",
         "pod_id": watchdog["workload_id"],
         "pod_name": "cas-open-weight-canary-v2-synthetic-test",
+        "provider_started_at_utc": provider_launch["provider_started_at_utc"],
         "schema_version": canary.GITHUB_SUPERVISOR_SCHEMA,
         "source_commit_sha": "1" * 40,
         "status": "ARMED_PROVIDER_GET_SUCCEEDED",
@@ -572,20 +1175,26 @@ def _build_synthetic_bundle(
         github_supervisor_raw
     )
     bindings = {
-        "schema_version": "cas_open_weight_trajectory_canary_execution_bindings.v2",
+        "schema_version": "cas_open_weight_trajectory_canary_execution_bindings.v3",
         "source_commit_sha256": "1" * 40,
         "oci_image_digest": "sha256:" + "2" * 64,
         "device": "cuda:0",
         "deterministic_controls": preregistration["experiment"]["runtime"][
             "deterministic_controls"
         ],
+        "provider_launch_receipt_sha256": canary.sha256_bytes(provider_launch_raw),
+        "provider_launch_status": provider_launch["status"],
+        "provider_pod_id": provider_launch["pod_id"],
+        "provider_pod_name": provider_launch["pod_name"],
+        "provider_started_at_utc": provider_launch["provider_started_at_utc"],
+        "hard_stop_deadline_utc": provider_launch["hard_stop_deadline_utc"],
         "watchdog_receipt_sha256": canary.sha256_bytes(watchdog_raw),
         "watchdog_status": "ARMED",
         "github_supervisor_receipt_sha256": canary.sha256_bytes(
             github_supervisor_raw
         ),
         "github_supervisor_status": "ARMED_PROVIDER_GET_SUCCEEDED",
-        "claim_boundary": "Execution-environment declarations are cross-links, not an independent image attestation or provider receipt.",
+        "claim_boundary": "Execution-environment declarations and locally captured provider request/response bytes are cross-links, not a provider signature, trusted timestamp, image attestation, or billing settlement.",
     }
     (root / "execution-bindings.json").write_bytes(
         canary.canonical_json_bytes(bindings)

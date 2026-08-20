@@ -69,8 +69,9 @@ FROZEN_SOURCE_RELATIVE_PATHS = (
 PREREG_SCHEMA = "cas_open_weight_trajectory_canary_preregistration.v2"
 RESULT_SCHEMA = "cas_open_weight_trajectory_canary_result.v2"
 ERROR_SCHEMA = "cas_open_weight_trajectory_canary_error.v2"
-WATCHDOG_SCHEMA = "cas_external_stop_watchdog_receipt.v1"
-GITHUB_SUPERVISOR_SCHEMA = "cas_runpod_github_stop_supervisor.v1"
+WATCHDOG_SCHEMA = "cas_external_stop_watchdog_receipt.v2"
+GITHUB_SUPERVISOR_SCHEMA = "cas_runpod_github_stop_supervisor.v2"
+PROVIDER_LAUNCH_SCHEMA = "cas_runpod_provider_launch_receipt.v1"
 SCENARIO_SCHEMA = "cas_open_weight_capture_scenario.v1"
 RECEIPT_SCHEMA = "cas_open_weight_trajectory_receipt.v1"
 TENSOR_SCHEMA = "cas_open_weight_trajectory_tensors.v1"
@@ -126,6 +127,13 @@ ANCHOR_CLAIM_BOUNDARY = (
     "they remain locally produced and are not durable authenticity evidence "
     "until an independent immutable external anchor is attached and verified."
 )
+PROVIDER_LAUNCH_CLAIM_BOUNDARY = (
+    "Locally captured canonical RunPod request/response JSON bodies and client "
+    "timestamps. The receipt is not a RunPod signature, trusted timestamp, or "
+    "billing settlement; it proves on-demand/unlocked only when those false "
+    "values are present in the retained provider create response that also "
+    "reports the Pod RUNNING and supplies lastStartedAt."
+)
 
 _HEX40_64 = re.compile(r"^[0-9a-f]{40,64}$")
 _UPPER_SHA256 = re.compile(r"^[0-9A-F]{64}$")
@@ -168,6 +176,7 @@ def main(argv: list[str] | None = None) -> int:
                 model_storage_root=args.model_storage_root,
                 source_commit_sha256=args.source_commit_sha256,
                 oci_image_digest=args.oci_image_digest,
+                provider_launch_receipt_path=args.provider_launch_receipt,
                 watchdog_receipt_path=args.external_watchdog_receipt,
                 github_supervisor_receipt_path=args.github_supervisor_receipt,
                 device=args.device,
@@ -220,6 +229,7 @@ def build_parser() -> argparse.ArgumentParser:
     execute.add_argument("--model-storage-root", required=True, type=Path)
     execute.add_argument("--source-commit-sha256", required=True)
     execute.add_argument("--oci-image-digest", required=True)
+    execute.add_argument("--provider-launch-receipt", required=True, type=Path)
     execute.add_argument("--external-watchdog-receipt", required=True, type=Path)
     execute.add_argument("--github-supervisor-receipt", required=True, type=Path)
     execute.add_argument("--device", default="cuda:0", choices=("cuda:0",))
@@ -240,6 +250,7 @@ def execute_canary(
     model_storage_root: Path,
     source_commit_sha256: str,
     oci_image_digest: str,
+    provider_launch_receipt_path: Path,
     watchdog_receipt_path: Path,
     github_supervisor_receipt_path: Path,
     device: str,
@@ -266,6 +277,16 @@ def execute_canary(
         source_commit_sha256=source_commit_sha256,
         oci_image_digest=oci_image_digest,
     )
+    provider_launch_receipt_path = provider_launch_receipt_path.resolve(strict=True)
+    provider_launch, provider_launch_raw = _load_provider_launch_receipt(
+        provider_launch_receipt_path,
+        source_commit_sha256=source_commit_sha256,
+        oci_image_digest=oci_image_digest,
+        expected_image_name=preregistration["launch_bindings"][
+            "required_image_name"
+        ],
+        require_current_time=True,
+    )
     watchdog_receipt_path = watchdog_receipt_path.resolve(strict=True)
     watchdog, watchdog_raw = _load_watchdog_receipt(
         watchdog_receipt_path,
@@ -274,6 +295,13 @@ def execute_canary(
         watchdog_script_sha256=preregistration["launch_bindings"][
             "required_watchdog_script_sha256"
         ],
+        provider_launch_receipt_sha256=sha256_bytes(provider_launch_raw),
+        expected_pod_id=_required_text(provider_launch, "pod_id"),
+        expected_pod_name=_required_text(provider_launch, "pod_name"),
+        expected_provider_started_at=_required_text(
+            provider_launch, "provider_started_at_utc"
+        ),
+        expected_deadline=_required_text(provider_launch, "hard_stop_deadline_utc"),
     )
     github_supervisor_receipt_path = github_supervisor_receipt_path.resolve(strict=True)
     github_supervisor, github_supervisor_raw = _load_github_supervisor_receipt(
@@ -283,7 +311,9 @@ def execute_canary(
             "required_github_supervisor_source_sha256"
         ],
         expected_pod_id=watchdog["workload_id"],
-        expected_deadline=_required_text(watchdog, "hard_stop_deadline_utc"),
+        expected_pod_name=watchdog["workload_name"],
+        expected_provider_started_at=provider_launch["provider_started_at_utc"],
+        expected_deadline=provider_launch["hard_stop_deadline_utc"],
     )
     _require_watchdog_time_remaining(
         watchdog, phase="pre-runtime-load", minimum_remaining_seconds=600
@@ -303,6 +333,9 @@ def execute_canary(
         _write_create_new(
             output_root / "source-files.manifest.json",
             canonical_json_bytes(source_manifest_document),
+        )
+        _write_create_new(
+            output_root / "provider-launch.receipt.json", provider_launch_raw
         )
         _write_create_new(output_root / "external-watchdog.receipt.json", watchdog_raw)
         _write_create_new(
@@ -328,11 +361,17 @@ def execute_canary(
         }
 
         bindings = {
-            "schema_version": "cas_open_weight_trajectory_canary_execution_bindings.v2",
+            "schema_version": "cas_open_weight_trajectory_canary_execution_bindings.v3",
             "source_commit_sha256": source_commit_sha256,
             "oci_image_digest": oci_image_digest,
             "device": device,
             "deterministic_controls": deterministic_controls,
+            "provider_launch_receipt_sha256": sha256_bytes(provider_launch_raw),
+            "provider_launch_status": provider_launch["status"],
+            "provider_pod_id": provider_launch["pod_id"],
+            "provider_pod_name": provider_launch["pod_name"],
+            "provider_started_at_utc": provider_launch["provider_started_at_utc"],
+            "hard_stop_deadline_utc": provider_launch["hard_stop_deadline_utc"],
             "watchdog_receipt_sha256": sha256_bytes(watchdog_raw),
             "watchdog_status": watchdog["status"],
             "github_supervisor_receipt_sha256": sha256_bytes(
@@ -340,8 +379,9 @@ def execute_canary(
             ),
             "github_supervisor_status": github_supervisor["status"],
             "claim_boundary": (
-                "Execution-environment declarations are cross-links, not an "
-                "independent image attestation or provider receipt."
+                "Execution-environment declarations and locally captured provider "
+                "request/response bytes are cross-links, not a provider signature, "
+                "trusted timestamp, image attestation, or billing settlement."
             ),
         }
         _write_create_new(
@@ -699,6 +739,13 @@ def _validate_preregistration(value: Mapping[str, object]) -> None:
         "required_source_file_manifest_sha256",
         "required_watchdog_script_sha256",
         "required_github_supervisor_source_sha256",
+        "provider_launch_receipt_required",
+        "required_provider_launch_receipt_schema",
+        "required_image_name",
+        "required_cloud_type",
+        "required_interruptible",
+        "required_locked",
+        "required_volume_encrypted",
         "external_stop_watchdog_required",
         "maximum_wall_seconds",
         "maximum_spend_usd",
@@ -713,6 +760,22 @@ def _validate_preregistration(value: Mapping[str, object]) -> None:
     _required_upper_sha256(launch, "required_source_file_manifest_sha256")
     _required_upper_sha256(launch, "required_watchdog_script_sha256")
     _required_upper_sha256(launch, "required_github_supervisor_source_sha256")
+    if launch.get("provider_launch_receipt_required") is not True:
+        raise ValueError("provider launch receipt must remain required")
+    if launch.get("required_provider_launch_receipt_schema") != PROVIDER_LAUNCH_SCHEMA:
+        raise ValueError("provider launch receipt schema mismatch")
+    if launch.get("required_image_name") != (
+        "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404"
+    ):
+        raise ValueError("preregistered provider image name mismatch")
+    if launch.get("required_cloud_type") != "SECURE":
+        raise ValueError("preregistered provider cloud type mismatch")
+    if launch.get("required_interruptible") is not False:
+        raise ValueError("preregistered provider interruptible flag must be false")
+    if launch.get("required_locked") is not False:
+        raise ValueError("preregistered provider locked flag must be false")
+    if launch.get("required_volume_encrypted") is not True:
+        raise ValueError("preregistered provider volume encryption must be true")
     if launch.get("external_stop_watchdog_required") is not True:
         raise ValueError("external stop watchdog must remain required")
     if launch.get("maximum_wall_seconds") != 1800:
@@ -740,6 +803,7 @@ def _require_exact_bundle_topology(
         "source-files.manifest.json",
         "scenario.json",
         "execution-bindings.json",
+        "provider-launch.receipt.json",
         "external-watchdog.receipt.json",
         "github-stop-supervisor.armed.receipt.json",
         "canary.result.json",
@@ -830,6 +894,17 @@ def _verify_bundle_support_files(
     ):
         raise ValueError("bundle scenario bytes differ from preregistration")
 
+    provider_launch_raw = _read_plain_file(
+        bundle_root / "provider-launch.receipt.json", max_bytes=256 * 1024
+    )
+    provider_launch = _validate_provider_launch_receipt(
+        provider_launch_raw,
+        source_commit_sha256=source_commit,
+        oci_image_digest=image_digest,
+        expected_image_name=launch["required_image_name"],
+        require_current_time=False,
+    )
+
     watchdog_raw = _read_plain_file(
         bundle_root / "external-watchdog.receipt.json", max_bytes=64 * 1024
     )
@@ -838,7 +913,10 @@ def _verify_bundle_support_files(
         "schema_version",
         "status",
         "provider",
+        "provider_launch_receipt_sha256",
+        "provider_started_at_utc",
         "workload_id",
+        "workload_name",
         "hard_stop_deadline_utc",
         "maximum_wall_seconds",
         "maximum_spend_usd",
@@ -854,10 +932,24 @@ def _verify_bundle_support_files(
     _require_literal(watchdog, "schema_version", WATCHDOG_SCHEMA)
     _require_literal(watchdog, "status", "ARMED")
     _require_literal(watchdog, "provider", "RUNPOD")
-    _required_text(watchdog, "workload_id")
+    _require_literal(watchdog, "workload_id", provider_launch["pod_id"])
+    _require_literal(watchdog, "workload_name", provider_launch["pod_name"])
+    _require_literal(
+        watchdog,
+        "provider_launch_receipt_sha256",
+        sha256_bytes(provider_launch_raw),
+    )
+    if _parse_utc(_required_text(watchdog, "provider_started_at_utc")) != _parse_utc(
+        _required_text(provider_launch, "provider_started_at_utc")
+    ):
+        raise ValueError("bundled watchdog/provider start timestamp mismatch")
     watchdog_deadline = _parse_utc(
         _required_text(watchdog, "hard_stop_deadline_utc")
     )
+    if watchdog_deadline != _parse_utc(
+        _required_text(provider_launch, "hard_stop_deadline_utc")
+    ):
+        raise ValueError("bundled watchdog/provider deadline mismatch")
     _require_literal(watchdog, "maximum_wall_seconds", 1800)
     _require_literal(watchdog, "maximum_spend_usd", "0.50")
     _require_literal(watchdog, "source_commit_sha256", source_commit)
@@ -894,7 +986,9 @@ def _verify_bundle_support_files(
             "required_github_supervisor_source_sha256"
         ],
         expected_pod_id=watchdog["workload_id"],
-        expected_deadline=_required_text(watchdog, "hard_stop_deadline_utc"),
+        expected_pod_name=watchdog["workload_name"],
+        expected_provider_started_at=provider_launch["provider_started_at_utc"],
+        expected_deadline=provider_launch["hard_stop_deadline_utc"],
         require_current_time=False,
     )
 
@@ -908,6 +1002,12 @@ def _verify_bundle_support_files(
         "oci_image_digest",
         "device",
         "deterministic_controls",
+        "provider_launch_receipt_sha256",
+        "provider_launch_status",
+        "provider_pod_id",
+        "provider_pod_name",
+        "provider_started_at_utc",
+        "hard_stop_deadline_utc",
         "watchdog_receipt_sha256",
         "watchdog_status",
         "github_supervisor_receipt_sha256",
@@ -918,7 +1018,7 @@ def _verify_bundle_support_files(
     _require_literal(
         bindings,
         "schema_version",
-        "cas_open_weight_trajectory_canary_execution_bindings.v2",
+        "cas_open_weight_trajectory_canary_execution_bindings.v3",
     )
     _require_literal(bindings, "source_commit_sha256", source_commit)
     _require_literal(bindings, "oci_image_digest", image_digest)
@@ -931,6 +1031,24 @@ def _verify_bundle_support_files(
         bindings,
         "deterministic_controls",
         preregistration["experiment"]["runtime"]["deterministic_controls"],
+    )
+    _require_literal(
+        bindings,
+        "provider_launch_receipt_sha256",
+        sha256_bytes(provider_launch_raw),
+    )
+    _require_literal(bindings, "provider_launch_status", provider_launch["status"])
+    _require_literal(bindings, "provider_pod_id", provider_launch["pod_id"])
+    _require_literal(bindings, "provider_pod_name", provider_launch["pod_name"])
+    _require_literal(
+        bindings,
+        "provider_started_at_utc",
+        provider_launch["provider_started_at_utc"],
+    )
+    _require_literal(
+        bindings,
+        "hard_stop_deadline_utc",
+        provider_launch["hard_stop_deadline_utc"],
     )
     _require_literal(bindings, "watchdog_receipt_sha256", sha256_bytes(watchdog_raw))
     _require_literal(bindings, "watchdog_status", "ARMED")
@@ -947,7 +1065,7 @@ def _verify_bundle_support_files(
     _require_literal(
         bindings,
         "claim_boundary",
-        "Execution-environment declarations are cross-links, not an independent image attestation or provider receipt.",
+        "Execution-environment declarations and locally captured provider request/response bytes are cross-links, not a provider signature, trusted timestamp, image attestation, or billing settlement.",
     )
     if canonical_json_bytes(bindings) != bindings_raw:
         raise ValueError("execution bindings are not canonical JSON")
@@ -1000,12 +1118,248 @@ def _require_execution_bindings(
         raise RuntimeError("runner source bytes differ from frozen preregistration")
 
 
+def _parse_provider_utc(value: str) -> datetime:
+    legacy = re.fullmatch(
+        r"(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}) "
+        r"(?P<offset>[+-]\d{4}) UTC",
+        value,
+    )
+    if legacy:
+        try:
+            return datetime.strptime(
+                f"{legacy.group('date')} {legacy.group('offset')}",
+                "%Y-%m-%d %H:%M:%S.%f %z",
+            ).astimezone(timezone.utc)
+        except ValueError as exc:
+            raise ValueError("provider UTC timestamp is malformed") from exc
+    return _parse_utc(value)
+
+
+def _validate_provider_transaction(
+    value: Mapping[str, object],
+    *,
+    label: str,
+    expected_path: str,
+    accepted_http_statuses: set[int],
+) -> tuple[Mapping[str, object], Mapping[str, object], datetime, datetime]:
+    required = {
+        "request_body",
+        "request_body_sha256",
+        "request_method",
+        "request_observed_at_utc",
+        "request_path",
+        "response_body",
+        "response_body_sha256",
+        "response_http_status",
+        "response_observed_at_utc",
+    }
+    if set(value) != required:
+        raise ValueError(f"provider {label} transaction keyset mismatch")
+    _require_literal(value, "request_method", "POST")
+    _require_literal(value, "request_path", expected_path)
+    request = _required_mapping(value, "request_body")
+    response = _required_mapping(value, "response_body")
+    if sha256_bytes(canonical_json_bytes(request)) != _required_upper_sha256(
+        value, "request_body_sha256"
+    ):
+        raise ValueError(f"provider {label} request-body hash mismatch")
+    if sha256_bytes(canonical_json_bytes(response)) != _required_upper_sha256(
+        value, "response_body_sha256"
+    ):
+        raise ValueError(f"provider {label} response-body hash mismatch")
+    http_status = _required_int(value, "response_http_status")
+    if http_status not in accepted_http_statuses:
+        raise ValueError(f"provider {label} HTTP status mismatch")
+    requested = _parse_utc(_required_text(value, "request_observed_at_utc"))
+    responded = _parse_utc(_required_text(value, "response_observed_at_utc"))
+    if responded < requested:
+        raise ValueError(f"provider {label} response predates request")
+    return request, response, requested, responded
+
+
+def _validate_provider_launch_receipt(
+    raw: bytes,
+    *,
+    source_commit_sha256: str,
+    oci_image_digest: str,
+    expected_image_name: str,
+    require_current_time: bool,
+) -> dict[str, object]:
+    value = strict_json_object(raw, "provider launch receipt")
+    if raw != canonical_json_bytes(value):
+        raise ValueError("provider launch receipt is not canonical JSON")
+    required = {
+        "claim_boundary",
+        "create_transaction",
+        "dedicated_public_key_sha256",
+        "hard_stop_deadline_utc",
+        "image_name",
+        "launch_mode",
+        "oci_image_digest",
+        "pod_id",
+        "pod_name",
+        "provider",
+        "provider_started_at_utc",
+        "receipt_sha256",
+        "schema_version",
+        "source_commit_sha256",
+        "status",
+    }
+    if set(value) != required:
+        raise ValueError("provider launch receipt keyset mismatch")
+    _require_literal(value, "schema_version", PROVIDER_LAUNCH_SCHEMA)
+    _require_literal(value, "status", "EXACT_CREATE_RESPONSE_STARTED_POD_OBSERVED")
+    _require_literal(value, "launch_mode", "CREATE_RESPONSE_STARTED_POD")
+    _require_literal(value, "provider", "RUNPOD")
+    _require_literal(value, "source_commit_sha256", source_commit_sha256)
+    _require_literal(value, "oci_image_digest", oci_image_digest)
+    _require_literal(value, "image_name", expected_image_name)
+    _require_literal(value, "claim_boundary", PROVIDER_LAUNCH_CLAIM_BOUNDARY)
+    pod_id = _required_text(value, "pod_id")
+    if not re.fullmatch(r"[a-z0-9]{6,32}", pod_id):
+        raise ValueError("provider launch receipt Pod ID is malformed")
+    pod_name = _required_text(value, "pod_name")
+    if not re.fullmatch(r"cas-open-weight-canary-v2-[a-z0-9-]+", pod_name):
+        raise ValueError("provider launch receipt Pod name is malformed")
+    public_key_sha256 = _required_upper_sha256(
+        value, "dedicated_public_key_sha256"
+    )
+
+    unsigned = dict(value)
+    unsigned.pop("receipt_sha256")
+    if sha256_bytes(canonical_json_bytes(unsigned)) != _required_upper_sha256(
+        value, "receipt_sha256"
+    ):
+        raise ValueError("provider launch receipt self-hash mismatch")
+
+    create_request, create_response, create_requested, create_responded = (
+        _validate_provider_transaction(
+            _required_mapping(value, "create_transaction"),
+            label="create",
+            expected_path="/v1/pods",
+            accepted_http_statuses={201},
+        )
+    )
+    required_create_request = {
+        "cloudType",
+        "containerDiskInGb",
+        "env",
+        "gpuCount",
+        "gpuTypeIds",
+        "imageName",
+        "interruptible",
+        "locked",
+        "name",
+        "networkVolumeId",
+        "ports",
+        "volumeEncrypted",
+        "volumeInGb",
+        "volumeMountPath",
+    }
+    if set(create_request) != required_create_request:
+        raise ValueError("provider create request keyset mismatch")
+    expected_create_literals = {
+        "cloudType": "SECURE",
+        "gpuTypeIds": ["NVIDIA A40"],
+        "imageName": expected_image_name,
+        "interruptible": False,
+        "locked": False,
+        "name": pod_name,
+        "networkVolumeId": None,
+        "ports": ["22/tcp"],
+        "volumeEncrypted": True,
+        "volumeMountPath": "/workspace",
+    }
+    for key, expected in {
+        "containerDiskInGb": 50,
+        "gpuCount": 1,
+        "volumeInGb": 20,
+    }.items():
+        if _required_int(create_request, key) != expected:
+            raise ValueError(f"provider create request {key} literal mismatch")
+    for key, expected in expected_create_literals.items():
+        observed = create_request.get(key)
+        if isinstance(expected, bool):
+            if observed is not expected:
+                raise ValueError(f"provider create request {key} literal mismatch")
+        elif observed != expected:
+            raise ValueError(f"provider create request {key} literal mismatch")
+    environment = _required_mapping(create_request, "env")
+    if set(environment) != {"PUBLIC_KEY"}:
+        raise ValueError("provider create request environment keyset mismatch")
+    public_key = _required_text(environment, "PUBLIC_KEY")
+    if sha256_bytes(public_key.encode("utf-8")) != public_key_sha256:
+        raise ValueError("provider create request public-key hash mismatch")
+
+    _require_literal(create_response, "id", pod_id)
+    _require_literal(create_response, "name", pod_name)
+    if create_response.get("interruptible") is not False:
+        raise ValueError(
+            "provider create response does not prove interruptible=false"
+        )
+    if create_response.get("locked") is not False:
+        raise ValueError("provider create response does not prove locked=false")
+    if create_response.get("volumeEncrypted") is not True:
+        raise ValueError("provider create response does not prove volumeEncrypted=true")
+    _require_literal(create_response, "desiredStatus", "RUNNING")
+    response_started = _parse_provider_utc(
+        _required_text(create_response, "lastStartedAt")
+    )
+    provider_started = _parse_utc(
+        _required_text(value, "provider_started_at_utc")
+    )
+    if response_started != provider_started:
+        raise ValueError("provider start response timestamp mismatch")
+    if provider_started < create_requested - timedelta(seconds=30) or (
+        provider_started > create_responded + timedelta(seconds=30)
+    ):
+        raise ValueError("provider start timestamp is outside the create exchange")
+    deadline = _parse_utc(_required_text(value, "hard_stop_deadline_utc"))
+    if deadline != provider_started + timedelta(seconds=1800):
+        raise ValueError("provider launch deadline is not exactly start plus 1800 seconds")
+    if create_requested > create_responded:
+        raise ValueError("provider create chronology mismatch")
+    if require_current_time:
+        now = datetime.now(timezone.utc)
+        if provider_started > now + timedelta(minutes=2) or (
+            provider_started < now - timedelta(minutes=5)
+        ):
+            raise ValueError("provider launch receipt start is outside the arm window")
+        if not 0 < (deadline - now).total_seconds() <= 1800:
+            raise ValueError("provider launch receipt deadline is not currently active")
+    return value
+
+
+def _load_provider_launch_receipt(
+    path: Path,
+    *,
+    source_commit_sha256: str,
+    oci_image_digest: str,
+    expected_image_name: str,
+    require_current_time: bool,
+) -> tuple[dict[str, object], bytes]:
+    raw = _read_plain_file(path, max_bytes=256 * 1024)
+    value = _validate_provider_launch_receipt(
+        raw,
+        source_commit_sha256=source_commit_sha256,
+        oci_image_digest=oci_image_digest,
+        expected_image_name=expected_image_name,
+        require_current_time=require_current_time,
+    )
+    return value, raw
+
+
 def _load_watchdog_receipt(
     path: Path,
     *,
     source_commit_sha256: str,
     oci_image_digest: str,
     watchdog_script_sha256: str,
+    provider_launch_receipt_sha256: str,
+    expected_pod_id: str,
+    expected_pod_name: str,
+    expected_provider_started_at: str,
+    expected_deadline: str,
 ) -> tuple[dict[str, object], bytes]:
     raw = _read_plain_file(path, max_bytes=64 * 1024)
     value = strict_json_object(raw, "external watchdog receipt")
@@ -1015,7 +1369,10 @@ def _load_watchdog_receipt(
         "schema_version",
         "status",
         "provider",
+        "provider_launch_receipt_sha256",
+        "provider_started_at_utc",
         "workload_id",
+        "workload_name",
         "hard_stop_deadline_utc",
         "maximum_wall_seconds",
         "maximum_spend_usd",
@@ -1031,6 +1388,19 @@ def _load_watchdog_receipt(
     _require_literal(value, "schema_version", WATCHDOG_SCHEMA)
     _require_literal(value, "status", "ARMED")
     _require_literal(value, "provider", "RUNPOD")
+    _require_literal(
+        value, "provider_launch_receipt_sha256", provider_launch_receipt_sha256
+    )
+    if _parse_utc(_required_text(value, "provider_started_at_utc")) != _parse_utc(
+        expected_provider_started_at
+    ):
+        raise ValueError("external watchdog/provider start timestamp mismatch")
+    _require_literal(value, "workload_id", expected_pod_id)
+    _require_literal(value, "workload_name", expected_pod_name)
+    if _parse_utc(_required_text(value, "hard_stop_deadline_utc")) != _parse_utc(
+        expected_deadline
+    ):
+        raise ValueError("external watchdog/provider deadline mismatch")
     _require_literal(value, "maximum_wall_seconds", 1800)
     _require_literal(value, "maximum_spend_usd", "0.50")
     _require_literal(value, "source_commit_sha256", source_commit_sha256)
@@ -1068,6 +1438,8 @@ def _validate_github_supervisor_receipt(
     source_commit_sha256: str,
     supervisor_source_sha256: str,
     expected_pod_id: str,
+    expected_pod_name: str,
+    expected_provider_started_at: str,
     expected_deadline: str,
     require_current_time: bool,
 ) -> dict[str, object]:
@@ -1086,6 +1458,7 @@ def _validate_github_supervisor_receipt(
         "observed_status",
         "pod_id",
         "pod_name",
+        "provider_started_at_utc",
         "schema_version",
         "source_commit_sha",
         "status",
@@ -1103,7 +1476,15 @@ def _validate_github_supervisor_receipt(
     _require_literal(value, "github_sha", source_commit_sha256)
     _require_literal(value, "source_commit_sha", source_commit_sha256)
     _require_literal(value, "pod_id", expected_pod_id)
-    _require_literal(value, "hard_stop_deadline_utc", expected_deadline)
+    _require_literal(value, "pod_name", expected_pod_name)
+    if _parse_utc(_required_text(value, "provider_started_at_utc")) != _parse_utc(
+        expected_provider_started_at
+    ):
+        raise ValueError("GitHub stop-supervisor/provider start timestamp mismatch")
+    if _parse_utc(_required_text(value, "hard_stop_deadline_utc")) != _parse_utc(
+        expected_deadline
+    ):
+        raise ValueError("GitHub stop-supervisor/provider deadline mismatch")
     _require_literal(
         value,
         "supervisor_source_sha256",
@@ -1122,6 +1503,11 @@ def _validate_github_supervisor_receipt(
     if not _required_text(value, "github_run_attempt").isdigit():
         raise ValueError("GitHub stop-supervisor run attempt is malformed")
     deadline = _parse_utc(_required_text(value, "hard_stop_deadline_utc"))
+    provider_started = _parse_utc(
+        _required_text(value, "provider_started_at_utc")
+    )
+    if deadline != provider_started + timedelta(seconds=1800):
+        raise ValueError("GitHub stop-supervisor deadline/start binding mismatch")
     written = _parse_utc(_required_text(value, "written_at_utc"))
     if written >= deadline:
         raise ValueError("GitHub stop-supervisor armed after its hard-stop deadline")
@@ -1143,6 +1529,8 @@ def _load_github_supervisor_receipt(
     source_commit_sha256: str,
     supervisor_source_sha256: str,
     expected_pod_id: str,
+    expected_pod_name: str,
+    expected_provider_started_at: str,
     expected_deadline: str,
 ) -> tuple[dict[str, object], bytes]:
     raw = _read_plain_file(path, max_bytes=64 * 1024)
@@ -1151,6 +1539,8 @@ def _load_github_supervisor_receipt(
         source_commit_sha256=source_commit_sha256,
         supervisor_source_sha256=supervisor_source_sha256,
         expected_pod_id=expected_pod_id,
+        expected_pod_name=expected_pod_name,
+        expected_provider_started_at=expected_provider_started_at,
         expected_deadline=expected_deadline,
         require_current_time=True,
     )

@@ -3,6 +3,7 @@ param(
     [Parameter(Mandatory)][ValidatePattern('^[a-z0-9]{6,32}$')][string]$PodId,
     [Parameter(Mandatory)][ValidatePattern('^cas-open-weight-canary-v2-[a-z0-9-]+$')][string]$PodName,
     [Parameter(Mandatory)][datetime]$HardStopDeadlineUtc,
+    [Parameter(Mandatory)][ValidateNotNullOrEmpty()][string]$ProviderStartedAtUtc,
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{40}$')][string]$SourceCommit,
     [Parameter(Mandatory)][ValidateNotNullOrEmpty()][string]$RefName,
     [Parameter(Mandatory)][ValidateNotNullOrEmpty()][string]$ReceiptDirectory,
@@ -39,6 +40,19 @@ function Invoke-GhText {
 
 if ($ExcludedPodIds -contains $PodId) { throw 'PROTECTED_POD_ID_IS_FORBIDDEN' }
 $deadline = $HardStopDeadlineUtc.ToUniversalTime()
+try {
+    $providerStarted = [DateTimeOffset]::Parse(
+        $ProviderStartedAtUtc,
+        [Globalization.CultureInfo]::InvariantCulture,
+        [Globalization.DateTimeStyles]::AssumeUniversal
+    ).UtcDateTime
+}
+catch {
+    throw 'PROVIDER_STARTED_AT_UTC_INVALID'
+}
+if ($deadline -ne $providerStarted.AddSeconds(1800)) {
+    throw 'HARD_STOP_DEADLINE_MUST_EQUAL_PROVIDER_START_PLUS_1800_SECONDS'
+}
 $remaining = ($deadline - (Get-Date).ToUniversalTime()).TotalSeconds
 if ($remaining -lt 600 -or $remaining -gt 2100) {
     throw 'HARD_STOP_DEADLINE_MUST_BE_10_TO_35_MINUTES_AHEAD'
@@ -61,6 +75,7 @@ if (-not $Apply) {
         pod_id = $PodId
         pod_name = $PodName
         hard_stop_deadline_utc = $deadline.ToString('o')
+        provider_started_at_utc = $ProviderStartedAtUtc
         source_commit = $SourceCommit
         repository = $Repository
         ref_name = $RefName
@@ -89,6 +104,7 @@ try {
         '-f', "pod_id=$PodId",
         '-f', "pod_name=$PodName",
         '-f', "hard_stop_deadline_utc=$($deadline.ToString('o'))",
+        '-f', "provider_started_at_utc=$ProviderStartedAtUtc",
         '-f', "source_commit=$SourceCommit"
     ) | Out-Null
 
@@ -137,13 +153,14 @@ try {
     }
     $receiptSha = (Get-FileHash -Algorithm SHA256 -LiteralPath $receiptPath).Hash
     [ordered]@{
-        schema_version = 'cas_github_watchdog_arm_handoff.v1'
+        schema_version = 'cas_github_watchdog_arm_handoff.v2'
         status = 'ARM_ARTIFACT_DOWNLOADED'
         github_run_id = [string]$run.databaseId
         github_run_url = [string]$run.url
         source_commit = $SourceCommit
         pod_id = $PodId
         hard_stop_deadline_utc = $deadline.ToString('o')
+        provider_started_at_utc = $ProviderStartedAtUtc
         armed_receipt_path = $receiptPath
         armed_receipt_sha256 = $receiptSha
         claim_boundary = 'Local download observation; the runner independently validates the canonical GitHub arm receipt.'

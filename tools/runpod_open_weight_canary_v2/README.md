@@ -10,8 +10,11 @@ Pod now has exact `22/tcp`, the dedicated local SSH public key, a 50-GB
 container disk, an encrypted 20-GB Pod volume, and no network volume. A later
 start remains fail-closed until the corrected exact source commit has fresh
 independent audit approval, A40 price/stock is re-observed, and both stop
-supervisors arm against the provider-reported `lastStartedAt`. No second Pod is
-authorized by this recovery note.
+supervisors arm against the provider-reported `lastStartedAt`. The original
+create transaction's exact response bytes were not retained, so this Pod cannot
+satisfy the new provider-launch receipt contract and must not run the model.
+Do not reconstruct that receipt after the fact. No second Pod is authorized by
+this recovery note.
 
 This directory is isolated from every historical Gate 5, Jacobian, whitebox,
 and production-pod wrapper. Nothing in this directory creates a Pod. The armed
@@ -99,8 +102,12 @@ The file contains no credential access or HTTP calls.
 `watchdog_armed.ps1` is the local Windows lifecycle implementation for one
 fresh Pod start. It binds the provider-reported `lastStartedAt`, performs one
 exact-target GET before writing the create-once ARMED
-receipt, polls only that ID, issues STOP at the 30-minute deadline, and requires
-an EXITED observation. It also registers a same-user Task Scheduler fallback.
+receipt, polls only that ID, starts local STOP 90 seconds before the 30-minute
+hard deadline, and requires an EXITED observation. It also registers a same-user
+Task Scheduler fallback for that same early-stop boundary. The task's exact
+action, arguments, trigger time, principal, settings, and next-run time are
+revalidated before the receipt is issued, and the task is retired after every
+confirmed terminal path so it cannot target a later restart of the same Pod ID.
 It never deletes a Pod. Evidence must be exported and independently verified
 before a separate deletion decision.
 
@@ -115,13 +122,16 @@ the independent GitHub-hosted supervisor:
 
 The GitHub job first performs an authenticated provider GET for the exact new
 Pod and uploads its point-in-time arm receipt. It is then intended to remain
-active until the same hard deadline, retries STOP at or after that deadline,
-verifies EXITED/TERMINATED, and uploads a terminal receipt. An `if: always()`
+active and begin its STOP request 90 seconds before the same hard deadline,
+verify EXITED/TERMINATED, and upload a terminal receipt. An `if: always()`
 emergency step retries STOP if the normal step fails after a successful arm
 check. Both supervisors require the exact ID and name at arm time. After arm,
 STOP and terminal-state recovery use the immutable Pod ID (plus the protected-ID
-exclusions), so an editable-name drift cannot block cost containment. The arm
-receipt does not prove that the GitHub job remains live later;
+exclusions), so an editable-name drift cannot block cost containment. ID-only
+recovery is unavailable until a strict ID+name provider check succeeds; the
+scheduled local emergency path also requires the byte-exact canonical ARMED
+receipt before it reads credentials or contacts RunPod. The arm receipt does
+not prove that the GitHub job remains live later;
 the run status must be re-read immediately before the model starts, and manual
 workflow cancellation remains forbidden during the canary.
 It rejects both protected Pod IDs and never deletes a Pod. The workflow must be
@@ -130,9 +140,48 @@ checked out, and the temporary `RUNPOD_CANARY_V2_API_KEY` repository secret must
 be removed after terminal evidence is exported.
 
 Both supervisors must be armed immediately after a fresh provider start and
-before any model command. Their receipts must bind the same Pod ID, deadline,
+before any model command. Arm and confirm the independent GitHub supervisor
+first, then arm the local watchdog; that ordering preserves an external STOP
+authority during the local script's credential and Task Scheduler setup. If the
+GitHub arm or the local arm fails, issue an exact-ID provider STOP immediately
+and do not run the model. Their receipts must bind the same Pod ID, deadline,
 and source commit. The runner rejects either missing, stale, noncanonical, or
 cross-mismatched receipt. Do not test either supervisor with a protected Pod.
+Before a provider start, separately verify that the local RunPod credential,
+dedicated `runpod_cas.pub` file, new receipt directory, and Task Scheduler APIs
+are reachable; the watchdog cannot stop a running Pod if it cannot read its API
+credential. At arm time the local watchdog requires the exact `/workspace`
+mount, one `22/tcp` mapping, encrypted 20-GB Pod volume, 50-GB container disk,
+no network volume, the exact one-key `PUBLIC_KEY` environment, strict A40
+identity, secure-cloud boolean, and every provider-exposed rate at or below the
+ceiling. Provider GET currently omits `interruptible` and `locked`; their
+on-demand/unlocked status is never inferred from null.
+
+The runner and local watchdog require a canonical
+`cas_runpod_provider_launch_receipt.v1` file. It must be written create-once by
+the same bounded client transaction that sends `POST /v1/pods`; manual or
+after-the-fact reconstruction is inadmissible. The receipt retains the exact
+canonical request and provider response bodies, their individual SHA-256
+digests, HTTP status, client observation times, exact Pod ID/name, source
+commit, OCI digest, provider `lastStartedAt`, and the deadline exactly 1,800
+seconds later. Its admitted request is Secure Cloud A40 x1, on-demand
+(`interruptible=false`), unlocked (`locked=false`), encrypted 20-GB Pod volume,
+50-GB container disk, no network volume, `/workspace`, only `22/tcp`, and the
+one dedicated `PUBLIC_KEY`. The retained provider create response itself must
+echo the exact ID/name, `interruptible=false`, `locked=false`,
+`volumeEncrypted=true`, `desiredStatus=RUNNING`, and `lastStartedAt`; otherwise
+validation fails closed. RunPod's create endpoint starts a new Pod, so this v1
+contract does not fabricate or require a second `/start` request against an
+already-running Pod.
+
+The receipt self-hash and body hashes are local integrity links, not provider
+authentication. The receipt explicitly says it is not a RunPod signature,
+trusted timestamp, image attestation, or billing settlement. The local watchdog
+cross-checks the retained `PUBLIC_KEY` against the dedicated local public-key
+file and places the full receipt hash in its ARMED receipt. The GitHub arm
+receipt independently binds and re-observes the same `lastStartedAt`; the model
+runner snapshots all three receipts and rejects any ID, name, timestamp,
+deadline, source, image, or hash mismatch.
 
 The OCI digest and creation time are preregistered/create-receipt inputs. The
 RunPod REST GET independently exposes the image name and Pod lifecycle fields;
@@ -148,9 +197,11 @@ The armed implementation uses this lifecycle:
 2. Reject `q2oqlooejhin7s` and `hilj2rzs54gi06` before any provider mutation.
 3. Require a Pod volume, not a network volume. RunPod documents network-volume
    Pods as terminate-only, which is incompatible with evidence-preserving STOP.
-4. At or immediately after 30 minutes both independent supervisors may call
-   `POST /v1/pods/{podId}/stop`; success is HTTP 200. Duplicate STOP attempts
-   are accepted as cost-containment retries, not counted as model work.
+4. The local process, its Task Scheduler fallback, and the independent GitHub
+   supervisor all begin STOP 90 seconds before the 30-minute hard deadline.
+   `POST /v1/pods/{podId}/stop` succeeds with HTTP 200.
+   Duplicate STOP attempts are accepted as cost-containment retries, not counted
+   as model work.
 5. Poll read-only `GET /v1/pods/{podId}` until `desiredStatus` is `EXITED`.
 6. Export evidence and independently match its byte count and SHA-256 off-pod.
 7. It deliberately does not call DELETE. After export verification, deletion

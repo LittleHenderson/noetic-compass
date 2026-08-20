@@ -1,8 +1,8 @@
 """Independent GitHub-hosted stop supervisor for the RunPod canary.
 
 This module uses only the Python standard library.  It never deletes a Pod.
-The normal path waits until the exact UTC deadline, requests STOP for the
-bound Pod, and then verifies a terminal provider state.  The emergency path
+The normal path begins its STOP request 90 seconds before the exact UTC hard
+deadline and then verifies a terminal provider state.  The emergency path
 is intended for an ``if: always()`` workflow step and retries STOP even when
 the normal supervisor failed.
 
@@ -35,6 +35,7 @@ SOURCE_SHA_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 MAX_RECEIPT_BYTES = 1_000_000
 POLL_SECONDS = 15
 STOP_RETRY_DELAYS = (0, 2, 5, 10, 20, 30)
+STOP_LEAD_SECONDS = 90
 
 
 def _canonical_json_bytes(value: Any) -> bytes:
@@ -49,6 +50,20 @@ def _parse_utc(value: str) -> datetime:
     if parsed.tzinfo is None:
         raise ValueError("UTC timestamp must contain an offset")
     return parsed.astimezone(timezone.utc)
+
+
+def _parse_provider_utc(value: str) -> datetime:
+    legacy = re.fullmatch(
+        r"(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}) "
+        r"(?P<offset>[+-]\d{4}) UTC",
+        value,
+    )
+    if legacy:
+        return datetime.strptime(
+            f"{legacy.group('date')} {legacy.group('offset')}",
+            "%Y-%m-%d %H:%M:%S.%f %z",
+        ).astimezone(timezone.utc)
+    return _parse_utc(value)
 
 
 def _validate_identity(pod_id: str, pod_name: str, source_commit: str) -> None:
@@ -114,6 +129,14 @@ def _require_bound_target(
     if status not in {"RUNNING", "EXITED", "TERMINATED"}:
         raise ValueError("RunPod desiredStatus is not admitted")
     return str(status)
+
+
+def _require_bound_provider_start(value: dict[str, Any], expected: str) -> None:
+    raw = value.get("lastStartedAt")
+    if not isinstance(raw, str):
+        raise ValueError("RunPod GET response omits lastStartedAt")
+    if _parse_provider_utc(raw) != _parse_utc(expected):
+        raise ValueError("RunPod GET response lastStartedAt differs from bound start")
 
 
 def _post_stop_once(*, pod_id: str, api_key: str) -> int:
@@ -182,7 +205,8 @@ def _base_receipt(args: argparse.Namespace, *, mode: str) -> dict[str, Any]:
         "mode": mode,
         "pod_id": args.pod_id,
         "pod_name": args.pod_name,
-        "schema_version": "cas_runpod_github_stop_supervisor.v1",
+        "provider_started_at_utc": args.provider_started_at,
+        "schema_version": "cas_runpod_github_stop_supervisor.v2",
         "source_commit_sha": args.source_commit,
         "supervisor_source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest().upper(),
     }
@@ -193,6 +217,9 @@ def arm_check(args: argparse.Namespace) -> int:
     if os.environ.get("GITHUB_SHA") != args.source_commit:
         raise ValueError("GitHub runner SHA does not match the bound source commit")
     deadline = _parse_utc(args.deadline)
+    provider_started = _parse_utc(args.provider_started_at)
+    if deadline != provider_started + timedelta(seconds=1800):
+        raise ValueError("hard-stop deadline is not exactly provider start plus 1800 seconds")
     remaining = (deadline - datetime.now(timezone.utc)).total_seconds()
     if remaining < 600 or remaining > 2_100:
         raise ValueError("hard-stop deadline must be 10 to 35 minutes after arm check")
@@ -201,6 +228,7 @@ def arm_check(args: argparse.Namespace) -> int:
     observed_status = _require_bound_target(
         observed, pod_id=args.pod_id, pod_name=args.pod_name
     )
+    _require_bound_provider_start(observed, args.provider_started_at)
     if observed_status != "RUNNING":
         raise ValueError("bound Pod is not RUNNING at supervisor arm check")
     receipt = _base_receipt(args, mode="PRE_DEADLINE_ARM_CHECK")
@@ -221,19 +249,24 @@ def run_supervisor(args: argparse.Namespace) -> int:
     if github_sha != args.source_commit:
         raise ValueError("GitHub runner SHA does not match the bound source commit")
     deadline = _parse_utc(args.deadline)
+    provider_started = _parse_utc(args.provider_started_at)
+    if deadline != provider_started + timedelta(seconds=1800):
+        raise ValueError("hard-stop deadline is not exactly provider start plus 1800 seconds")
     now = datetime.now(timezone.utc)
     if deadline > now.replace(microsecond=0) and (deadline - now).total_seconds() > 2_100:
         raise ValueError("hard-stop deadline is more than 35 minutes away")
-    while datetime.now(timezone.utc) < deadline:
-        remaining = (deadline - datetime.now(timezone.utc)).total_seconds()
+    stop_request_boundary = deadline - timedelta(seconds=STOP_LEAD_SECONDS)
+    while datetime.now(timezone.utc) < stop_request_boundary:
+        remaining = (stop_request_boundary - datetime.now(timezone.utc)).total_seconds()
         time.sleep(max(0.1, min(15.0, remaining)))
 
     api_key = os.environ.get("RUNPOD_API_KEY", "")
     before = _get_pod(pod_id=args.pod_id, api_key=api_key)
     # The exact name was provider-verified by the canonical arm receipt.  At
-    # the deadline, STOP recovery is keyed only by the immutable Pod ID so an
-    # editable-name drift cannot defeat cost containment.
+    # the pre-deadline STOP boundary, recovery is keyed only by the immutable
+    # Pod ID so an editable-name drift cannot defeat cost containment.
     before_status = _require_bound_target(before, pod_id=args.pod_id, pod_name=None)
+    _require_bound_provider_start(before, args.provider_started_at)
     stop_http_status: int | None = None
     stop_attempts = 0
     if before_status == "RUNNING":
@@ -243,12 +276,13 @@ def run_supervisor(args: argparse.Namespace) -> int:
     terminal_status, terminal_polls = _wait_for_terminal(
         pod_id=args.pod_id, api_key=api_key
     )
-    receipt = _base_receipt(args, mode="NORMAL_DEADLINE_STOP")
+    receipt = _base_receipt(args, mode="NORMAL_PRE_DEADLINE_STOP")
     receipt.update(
         {
             "observed_before_stop": before_status,
             "observed_terminal_status": terminal_status,
             "status": "STOPPED_OR_ALREADY_TERMINAL_CONFIRMED",
+            "stop_lead_seconds": STOP_LEAD_SECONDS,
             "stop_attempts": stop_attempts,
             "stop_http_status": stop_http_status,
             "terminal_poll_count": terminal_polls,
@@ -280,6 +314,7 @@ def emergency_stop(args: argparse.Namespace) -> int:
         "observed_status",
         "pod_id",
         "pod_name",
+        "provider_started_at_utc",
         "schema_version",
         "source_commit_sha",
         "status",
@@ -303,7 +338,8 @@ def emergency_stop(args: argparse.Namespace) -> int:
         "observed_status": "RUNNING",
         "pod_id": args.pod_id,
         "pod_name": args.pod_name,
-        "schema_version": "cas_runpod_github_stop_supervisor.v1",
+        "provider_started_at_utc": args.provider_started_at,
+        "schema_version": "cas_runpod_github_stop_supervisor.v2",
         "source_commit_sha": args.source_commit,
         "status": "ARMED_PROVIDER_GET_SUCCEEDED",
         "supervisor_source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest().upper(),
@@ -313,24 +349,43 @@ def emergency_stop(args: argparse.Namespace) -> int:
             raise ValueError(f"emergency STOP arm receipt {key} mismatch")
     arm_written = _parse_utc(str(arm_receipt.get("written_at_utc")))
     arm_deadline = _parse_utc(args.deadline)
+    provider_started = _parse_utc(args.provider_started_at)
+    if arm_deadline != provider_started + timedelta(seconds=1800):
+        raise ValueError("emergency STOP deadline/start binding mismatch")
     if not arm_deadline - timedelta(minutes=35) <= arm_written < arm_deadline:
         raise ValueError("emergency STOP arm receipt time is outside the bound window")
     api_key = os.environ.get("RUNPOD_API_KEY", "")
-    stop_http_status, stop_attempts = _stop_with_retries(
-        pod_id=args.pod_id, api_key=api_key
+    emergency_observed = _get_pod(pod_id=args.pod_id, api_key=api_key)
+    emergency_before_status = _require_bound_target(
+        emergency_observed, pod_id=args.pod_id, pod_name=None
     )
+    _require_bound_provider_start(emergency_observed, args.provider_started_at)
+    stop_http_status: int | None = None
+    stop_attempts = 0
+    if emergency_before_status == "RUNNING":
+        stop_http_status, stop_attempts = _stop_with_retries(
+            pod_id=args.pod_id, api_key=api_key
+        )
+        terminal_status, terminal_polls = _wait_for_terminal(
+            pod_id=args.pod_id, api_key=api_key
+        )
+    else:
+        terminal_status = emergency_before_status
+        terminal_polls = 0
     receipt = _base_receipt(args, mode="ALWAYS_RUN_EMERGENCY_STOP")
     receipt.update(
         {
-            "status": "EMERGENCY_STOP_REQUEST_ACCEPTED",
+            "observed_before_stop": emergency_before_status,
+            "observed_terminal_status": terminal_status,
+            "status": "EMERGENCY_STOPPED_OR_ALREADY_TERMINAL_CONFIRMED",
             "stop_attempts": stop_attempts,
             "stop_http_status": stop_http_status,
+            "terminal_poll_count": terminal_polls,
             "written_at_utc": datetime.now(timezone.utc).isoformat(),
         }
     )
     receipt_path = Path(args.receipt)
-    if not receipt_path.exists():
-        _write_receipt_create_new(receipt_path, receipt)
+    _write_receipt_create_new(receipt_path, receipt)
     return 0
 
 
@@ -357,6 +412,7 @@ def _parser() -> argparse.ArgumentParser:
         child.add_argument("--pod-id", required=True)
         child.add_argument("--pod-name", required=True)
         child.add_argument("--deadline", required=True)
+        child.add_argument("--provider-started-at", required=True)
         child.add_argument("--source-commit", required=True)
         child.add_argument("--receipt", required=True)
         if command == "emergency-stop":
