@@ -69,7 +69,15 @@ class InversionScanResult:
 
 
 _NOETIC_RE = re.compile(r"\^([0-9])")
-_DOMAIN_RE = re.compile(r"\^([PCEO])\b")
+# NOTE (bug fix): this pattern previously ended in ``\b``. ``_`` is a word
+# character, so in the drive-tagged literals this project actually emits —
+# ``^8^E_{F5} -> ^6^C_{F5}`` — the boundary between ``E`` and ``_`` is NOT a
+# word boundary and ``\b`` never matched. ``_extract_domains`` returned ``[]``
+# and axis W could therefore NEVER fire on a drive-tagged expression. The
+# lookahead below is ``\b`` with ``_`` permitted: reject only a following
+# letter or digit (which would mean the domain marker is part of a longer
+# token), accept ``_``, ``|``, whitespace, punctuation and end-of-string.
+_DOMAIN_RE = re.compile(r"\^([PCEO])(?![A-Za-z0-9])")
 _DRIVE_RE = re.compile(r"\bF([1-7])\b|F_?([1-7])")
 
 

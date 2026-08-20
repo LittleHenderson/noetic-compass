@@ -10,6 +10,7 @@ from cas_native.belief import (
     run_inversion_scan,
 )
 from cas_native.belief.inversion_gate import (
+    _extract_domains,
     axis_a_check,
     axis_e_check,
     axis_f_check,
@@ -66,6 +67,57 @@ def test_axis_w_flags_for_ascending_o_then_p():
 def test_axis_w_clean_for_p_c_e_descent():
     out = axis_w_check("^4^P -> ^4^C -> ^4^E")
     assert out["clean"] is True
+
+
+# ---------------------------------------------------------------------------
+# Regression: _DOMAIN_RE must match inside DRIVE-TAGGED literals.
+#
+# `_DOMAIN_RE` used to end in `\b`. `_` is a word character, so in the shapes
+# this project actually emits (`^8^E_{F5} -> ^6^C_{F5}`) there is no word
+# boundary between `E` and `_`, `_extract_domains` returned `[]`, and axis W
+# could NEVER fire on a drive-tagged expression. These tests pin the fix.
+# ---------------------------------------------------------------------------
+
+
+def test_extract_domains_sees_through_a_drive_tag():
+    # Before the fix this returned [].
+    assert _extract_domains("^8^E_{F5} -> ^6^C_{F5}") == ["E", "C"]
+
+
+def test_extract_domains_sees_through_a_register_tag():
+    assert _extract_domains("^3^P|A + ^3^P|f") == ["P", "P"]
+
+
+def test_extract_domains_ignores_a_domain_letter_inside_a_longer_token():
+    # `^Ex` is not a domain marker; the lookahead must still reject it.
+    assert _extract_domains("^Extra") == []
+
+
+def test_axis_w_flags_drive_tagged_precedence_violation():
+    # E (rank 2) followed by C (rank 1) is a genuine domain-precedence
+    # violation. Before the fix this returned clean=True with domains=[].
+    out = axis_w_check("^8^E_{F5} -> ^6^C_{F5}")
+    assert out["clean"] is False
+    assert out["domains"] == ["E", "C"]
+    assert "precedence" in out["reason"].lower()
+
+
+def test_axis_w_clean_on_valid_drive_tagged_descent():
+    out = axis_w_check("^8^C_{F5} -> ^6^E_{F5}")
+    assert out["clean"] is True
+    assert out["domains"] == ["C", "E"]
+
+
+def test_run_inversion_scan_axis_w_fires_on_drive_tagged_violation():
+    scan = run_inversion_scan("^8^E_{F5} -> ^6^C_{F5}", rpm_satisfied=True)
+    assert scan.axes["W"]["clean"] is False
+    assert scan.clean is False
+
+
+def test_run_inversion_scan_axis_w_stays_clean_on_valid_drive_tagged_descent():
+    scan = run_inversion_scan("^8^C_{F5} -> ^6^E_{F5}", rpm_satisfied=True)
+    assert scan.axes["W"]["clean"] is True
+    assert scan.clean is True
 
 
 def test_axis_f_clean_for_self_dual():
