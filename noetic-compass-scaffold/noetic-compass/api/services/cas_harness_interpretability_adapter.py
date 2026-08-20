@@ -1,10 +1,10 @@
-"""Fail-closed architecture discovery and interpretability-adapter planning.
+"""Fail-closed architecture discovery and interpretability-adapter generation.
 
 This module is deliberately model-free.  It inspects an *already loaded* local
-model object, verifies a registered decoder-stack layout, and emits a
-deterministic data manifest describing where a later, separately authorised
-worker may attach capture hooks.  It never downloads weights, runs a forward
-pass, generates Python source, or claims that an experiment succeeded.
+model object, verifies a registered decoder-stack layout, and emits either a
+deterministic data manifest or reviewable Python adapter source.  Generation
+does not import or execute the generated module, install hooks, download
+weights, run a forward pass, or claim that an experiment succeeded.
 
 The distinction matters:
 
@@ -23,6 +23,7 @@ causal result.
 
 from __future__ import annotations
 
+import ast
 from dataclasses import dataclass
 import hashlib
 import json
@@ -39,13 +40,28 @@ CapabilityStatus = Literal[
 _SHA256_RE = re.compile(r"^[0-9A-F]{64}$")
 _REVISION_RE = re.compile(r"^[0-9a-f]{40,64}$")
 _NON_ALNUM = re.compile(r"[^a-z0-9]+")
+_SAFE_ATTR_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+_SAFE_HOOK_PATH_RE = re.compile(
+    r"^[A-Za-z_][A-Za-z0-9_]*(?:\.(?:[A-Za-z_][A-Za-z0-9_]*|0|[1-9][0-9]*))*$"
+)
 
 SCHEMA_VERSION = "cas_harness_interpretability_adapter_plan.v1"
+EXECUTABLE_ADAPTER_SCHEMA_VERSION = "cas_harness_executable_adapter.v1"
+ADAPTER_ENGINE_API_VERSION = "cas_harness_interpretability_engine.v1"
+EXECUTABLE_GENERATION_STATUS = "EXECUTABLE_ADAPTER_GENERATED_NOT_RUN"
+MAX_GENERATED_LAYERS = 4096
 CLAIM_BOUNDARY = (
     "STRUCTURE/MECHANICS ONLY. NOT AN EXPERIMENT, DETECTOR, CAUSAL RESULT, "
     "MODEL-SAFETY CLAIM, OR EXECUTION AUTHORITY. DECLARED MODEL IDENTITY IS NOT "
     "LOADED-MODEL BYTE ATTESTATION. ALL CAPABILITY EVIDENCE IS NOT_RUN."
 )
+EXECUTABLE_CLAIM_BOUNDARY = (
+    "GENERATED ATTACHMENT MECHANICS ONLY. NOT A MODEL RUN, CAPTURE RESULT, "
+    "INTERVENTION RESULT, DETECTOR, CAUSAL RESULT, MODEL-SAFETY CLAIM, OR "
+    "EXECUTION AUTHORITY. DECLARED CONFIG/WEIGHT HASHES ARE NOT LOADED-MODEL "
+    "BYTE ATTESTATION. ALL CAPABILITY EVIDENCE IS NOT_RUN."
+)
+MODEL_BYTE_BINDING_STATUS = "DECLARED_REFERENCE_NOT_LOADED_MODEL_BYTE_VERIFIED"
 
 RUNTIME_FEATURES = frozenset(
     {
@@ -133,6 +149,21 @@ _MODEL_TYPE_ALIASES = {
     "gptneox": "gpt_neox",
     "qwen": "qwen2",
 }
+
+_EXECUTABLE_MODEL_TYPE_ALIASES: tuple[tuple[str, str], ...] = (
+    ("commandr", "command_r"),
+    ("deepseekv2", "deepseek_v2"),
+    ("deepseekv3", "deepseek_v3"),
+    ("gptneox", "gpt_neox"),
+    ("qwen", "qwen2"),
+)
+
+_EXECUTABLE_CONFIG_FIELDS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("model_type", ("model_type",)),
+    ("num_hidden_layers", ("num_hidden_layers", "n_layer", "n_layers")),
+    ("hidden_size", ("hidden_size", "n_embd", "d_model")),
+    ("num_attention_heads", ("num_attention_heads", "n_head", "n_heads")),
+)
 
 
 @dataclass(frozen=True)
@@ -336,7 +367,12 @@ CAPABILITY_DEFINITIONS: tuple[CapabilityDefinition, ...] = (
         ("residual_capture", "generation_step_capture"),
         ("independent_reasoning_event_labels", "matched_difficulty_controls"),
     ),
-    CapabilityDefinition("C14", "harness_adapter_generation", ("adapter_manifest",), ()),
+    CapabilityDefinition(
+        "C14",
+        "harness_adapter_generation",
+        ("adapter_manifest", "deterministic_executable_adapter_generation"),
+        (),
+    ),
 )
 
 
@@ -400,6 +436,160 @@ class InterpretabilityAdapterPlan:
             raise ValueError("adapter plan hash mismatch")
 
 
+@dataclass(frozen=True)
+class ExecutableConfigBinding:
+    """One exact loaded-config field used by generated runtime verification."""
+
+    logical_name: str
+    attribute_name: str
+    expected_value: str | int
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "logical_name": self.logical_name,
+            "attribute_name": self.attribute_name,
+            "expected_value": self.expected_value,
+        }
+
+
+@dataclass(frozen=True)
+class ExecutableTypeBinding:
+    """SHA-256 of an observed runtime class module/qualified-name pair."""
+
+    path: str
+    type_fingerprint_sha256: str
+    hook_api_fingerprint_sha256: str | None
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "path": self.path,
+            "type_fingerprint_sha256": self.type_fingerprint_sha256,
+            "hook_api_fingerprint_sha256": self.hook_api_fingerprint_sha256,
+        }
+
+
+@dataclass(frozen=True)
+class ExecutableAdapterSpec:
+    """Closed data needed to deterministically render one executable adapter.
+
+    Deliberately absent are ``model_id`` and every other caller-controlled text
+    field.  The plan digest binds those values without copying them into Python
+    source.  Every text value that *is* rendered is either a fixed protocol
+    constant, a registered profile value/path, or uppercase hexadecimal.
+    """
+
+    schema_version: str
+    engine_api_version: str
+    plan_sha256: str
+    config_sha256: str
+    weights_manifest_sha256: str
+    profile_family: str
+    model_type: str
+    model_type_aliases: tuple[tuple[str, str], ...]
+    layer_stack_attr: str
+    expected_layer_count: int
+    config_bindings: tuple[ExecutableConfigBinding, ...]
+    layer_hooks: tuple[LayerHookPlan, ...]
+    type_bindings: tuple[ExecutableTypeBinding, ...]
+    capability_evidence_statuses: tuple[tuple[str, str], ...]
+    generation_status: str
+    model_byte_binding_status: str
+    claim_boundary: str
+
+    @property
+    def capture_paths(self) -> tuple[str, ...]:
+        paths: list[str] = []
+        for hook in self.layer_hooks:
+            paths.append(hook.residual_module)
+            if hook.attention_module is not None:
+                paths.append(hook.attention_module)
+            if hook.mlp_module is not None:
+                paths.append(hook.mlp_module)
+        return tuple(paths)
+
+    @property
+    def intervention_paths(self) -> tuple[str, ...]:
+        # A forward hook may return a replacement output.  This exposes the
+        # attachment seam only; no intervention has run or been validated.
+        return self.capture_paths
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "schema_version": self.schema_version,
+            "engine_api_version": self.engine_api_version,
+            "plan_sha256": self.plan_sha256,
+            "config_sha256": self.config_sha256,
+            "weights_manifest_sha256": self.weights_manifest_sha256,
+            "profile_family": self.profile_family,
+            "model_type": self.model_type,
+            "model_type_aliases": [list(item) for item in self.model_type_aliases],
+            "layer_stack_attr": self.layer_stack_attr,
+            "expected_layer_count": self.expected_layer_count,
+            "config_bindings": [item.to_dict() for item in self.config_bindings],
+            "layer_hooks": [item.to_dict() for item in self.layer_hooks],
+            "type_bindings": [item.to_dict() for item in self.type_bindings],
+            "capture_paths": list(self.capture_paths),
+            "intervention_paths": list(self.intervention_paths),
+            "capability_evidence_statuses": [
+                {"capability_id": capability_id, "evidence_status": status}
+                for capability_id, status in self.capability_evidence_statuses
+            ],
+            "generation_status": self.generation_status,
+            "model_byte_binding_status": self.model_byte_binding_status,
+            "claim_boundary": self.claim_boundary,
+        }
+
+    @property
+    def spec_sha256(self) -> str:
+        return hashlib.sha256(canonical_json_bytes(self.to_dict())).hexdigest().upper()
+
+    def verify(self) -> None:
+        verify_executable_adapter_spec(self)
+
+
+@dataclass(frozen=True)
+class ExecutableAdapterArtifact:
+    """Canonical generated source plus its closed generation specification."""
+
+    spec: ExecutableAdapterSpec
+    source_bytes: bytes
+    source_sha256: str
+
+    @property
+    def source_filename(self) -> str:
+        return f"cas_generated_adapter_{self.source_sha256.lower()}.py"
+
+    def to_manifest_dict(self) -> dict[str, object]:
+        self.verify()
+        return {
+            "schema_version": self.spec.schema_version,
+            "engine_api_version": self.spec.engine_api_version,
+            "plan_sha256": self.spec.plan_sha256,
+            "spec_sha256": self.spec.spec_sha256,
+            "source_sha256": self.source_sha256,
+            "source_filename": self.source_filename,
+            "profile_family": self.spec.profile_family,
+            "model_type": self.spec.model_type,
+            "model_byte_binding_status": self.spec.model_byte_binding_status,
+            "layer_stack_attr": self.spec.layer_stack_attr,
+            "expected_layer_count": self.spec.expected_layer_count,
+            "capture_paths": list(self.spec.capture_paths),
+            "intervention_paths": list(self.spec.intervention_paths),
+            "capability_evidence_statuses": [
+                {"capability_id": capability_id, "evidence_status": status}
+                for capability_id, status in self.spec.capability_evidence_statuses
+            ],
+            "generation_status": self.spec.generation_status,
+            "claim_boundary": self.spec.claim_boundary,
+        }
+
+    def to_manifest_json_bytes(self) -> bytes:
+        return canonical_json_bytes(self.to_manifest_dict())
+
+    def verify(self) -> None:
+        verify_generated_adapter_artifact(self)
+
+
 def normalize_model_type(value: str) -> str:
     normalized = _NON_ALNUM.sub("_", value.strip().lower()).strip("_")
     return _MODEL_TYPE_ALIASES.get(normalized, normalized)
@@ -411,6 +601,285 @@ def find_profile(model_type: str) -> ArchitectureProfile | None:
         if normalized in profile.model_types:
             return profile
     return None
+
+
+def generate_executable_adapter_artifact(
+    *,
+    model: object,
+    plan: InterpretabilityAdapterPlan,
+) -> ExecutableAdapterArtifact:
+    """Render a deterministic adapter from a re-verified discovery plan.
+
+    Generation is data-only: this function performs attribute inspection,
+    validates the closed specification, renders text, and parses its AST.  It
+    never imports or executes the generated module and never installs a hook.
+    """
+
+    _require_exact_plan_types(plan)
+    plan.verify_hash()
+    serialized = plan.to_dict()
+    verify_serialized_plan(serialized)
+
+    observed = discover_loaded_architecture(model, plan.declaration)
+    if observed.to_dict() != plan.discovery.to_dict():
+        raise ValueError("loaded architecture drifted from verified discovery output")
+    profile = find_profile(observed.model_type)
+    if profile is None:  # pragma: no cover - discovery already enforces this
+        raise ValueError("verified discovery references an unregistered profile")
+
+    try:
+        config = getattr(model, "config")
+    except AttributeError as exc:  # pragma: no cover - discovery already checks
+        raise ValueError("loaded model has no config object to bind") from exc
+    declaration_values: dict[str, str | int] = {
+        "model_type": observed.model_type,
+        "num_hidden_layers": plan.declaration.num_hidden_layers,
+        "hidden_size": plan.declaration.hidden_size,
+        "num_attention_heads": plan.declaration.num_attention_heads,
+    }
+    config_bindings = tuple(
+        _select_executable_config_binding(
+            config=config,
+            logical_name=logical_name,
+            candidates=candidates,
+            expected_value=declaration_values[logical_name],
+        )
+        for logical_name, candidates in _EXECUTABLE_CONFIG_FIELDS
+    )
+
+    stack = _resolve_registered_runtime_path(model, profile.layer_stack_attr)
+    capture_paths = _capture_paths_from_hooks(observed.layer_hooks)
+    if len(capture_paths) != len(set(capture_paths)):
+        raise ValueError("verified discovery contains duplicate hook paths")
+    seen_module_ids: dict[int, str] = {}
+    runtime_modules: list[tuple[str, object]] = []
+    for path in capture_paths:
+        module = _resolve_registered_runtime_path(model, path)
+        if not _has_forward_hook_api(module):
+            raise ValueError(f"verified hook path is no longer hookable: {path}")
+        prior = seen_module_ids.get(id(module))
+        if prior is not None:
+            raise ValueError(
+                "verified discovery aliases one hook module through duplicate paths: "
+                f"{prior} and {path}"
+            )
+        seen_module_ids[id(module)] = path
+        runtime_modules.append((path, module))
+
+    type_bindings = tuple(
+        ExecutableTypeBinding(
+            path=path,
+            type_fingerprint_sha256=_runtime_type_fingerprint(value),
+            hook_api_fingerprint_sha256=(
+                _runtime_callable_fingerprint(getattr(value, "register_forward_hook"))
+                if path in capture_paths
+                else None
+            ),
+        )
+        for path, value in (
+            ("$model", model),
+            ("config", config),
+            (profile.layer_stack_attr, stack),
+            *runtime_modules,
+        )
+    )
+    spec = ExecutableAdapterSpec(
+        schema_version=EXECUTABLE_ADAPTER_SCHEMA_VERSION,
+        engine_api_version=ADAPTER_ENGINE_API_VERSION,
+        plan_sha256=plan.plan_sha256,
+        config_sha256=plan.identity.config_sha256,
+        weights_manifest_sha256=plan.identity.weights_manifest_sha256,
+        profile_family=profile.family,
+        model_type=observed.model_type,
+        model_type_aliases=_EXECUTABLE_MODEL_TYPE_ALIASES,
+        layer_stack_attr=profile.layer_stack_attr,
+        expected_layer_count=observed.observed_layer_count,
+        config_bindings=config_bindings,
+        layer_hooks=observed.layer_hooks,
+        type_bindings=type_bindings,
+        capability_evidence_statuses=tuple(
+            (item.capability_id, item.evidence_status) for item in plan.capabilities
+        ),
+        generation_status=EXECUTABLE_GENERATION_STATUS,
+        model_byte_binding_status=MODEL_BYTE_BINDING_STATUS,
+        claim_boundary=EXECUTABLE_CLAIM_BOUNDARY,
+    )
+    spec.verify()
+    source_text = _render_executable_adapter_source(spec)
+    # AST parsing checks syntax without importing or executing generated code.
+    ast.parse(source_text, filename="<cas-generated-interpretability-adapter>", mode="exec")
+    source_bytes = source_text.encode("utf-8")
+    artifact = ExecutableAdapterArtifact(
+        spec=spec,
+        source_bytes=source_bytes,
+        source_sha256=hashlib.sha256(source_bytes).hexdigest().upper(),
+    )
+    artifact.verify()
+    return artifact
+
+
+def verify_executable_adapter_spec(spec: ExecutableAdapterSpec) -> None:
+    """Enforce the closed, registry-derived executable-adapter specification."""
+
+    if type(spec) is not ExecutableAdapterSpec:
+        raise ValueError("executable adapter spec must use the exact registered dataclass")
+    if spec.schema_version != EXECUTABLE_ADAPTER_SCHEMA_VERSION:
+        raise ValueError("executable adapter schema_version mismatch")
+    if spec.engine_api_version != ADAPTER_ENGINE_API_VERSION:
+        raise ValueError("executable adapter engine_api_version mismatch")
+    if spec.generation_status != EXECUTABLE_GENERATION_STATUS:
+        raise ValueError("executable adapter generation_status mismatch")
+    if spec.model_byte_binding_status != MODEL_BYTE_BINDING_STATUS:
+        raise ValueError("executable adapter model byte-binding status mismatch")
+    if spec.claim_boundary != EXECUTABLE_CLAIM_BOUNDARY:
+        raise ValueError("executable adapter claim_boundary mismatch")
+    _require_sha256(spec.plan_sha256, "executable adapter plan_sha256")
+    _require_sha256(spec.config_sha256, "executable adapter config_sha256")
+    _require_sha256(
+        spec.weights_manifest_sha256,
+        "executable adapter weights_manifest_sha256",
+    )
+
+    if normalize_model_type(spec.model_type) != spec.model_type:
+        raise ValueError("executable adapter model_type must be canonical")
+    if spec.model_type_aliases != _EXECUTABLE_MODEL_TYPE_ALIASES:
+        raise ValueError("executable adapter model-type alias registry mismatch")
+    profile = find_profile(spec.model_type)
+    if profile is None:
+        raise ValueError("executable adapter model_type is not registered")
+    if spec.profile_family != profile.family:
+        raise ValueError("executable adapter profile family drift")
+    if spec.layer_stack_attr != profile.layer_stack_attr:
+        raise ValueError("executable adapter layer stack path drift")
+    if (
+        isinstance(spec.expected_layer_count, bool)
+        or not isinstance(spec.expected_layer_count, int)
+        or not 1 <= spec.expected_layer_count <= MAX_GENERATED_LAYERS
+    ):
+        raise ValueError(
+            f"executable adapter expected_layer_count must be 1..{MAX_GENERATED_LAYERS}"
+        )
+
+    if not isinstance(spec.config_bindings, tuple) or len(spec.config_bindings) != len(
+        _EXECUTABLE_CONFIG_FIELDS
+    ):
+        raise ValueError("executable adapter config bindings are incomplete")
+    for binding, (logical_name, allowed_attributes) in zip(
+        spec.config_bindings, _EXECUTABLE_CONFIG_FIELDS, strict=True
+    ):
+        if type(binding) is not ExecutableConfigBinding:
+            raise ValueError("executable adapter config binding type mismatch")
+        if binding.logical_name != logical_name:
+            raise ValueError("executable adapter config binding order/name mismatch")
+        if binding.attribute_name not in allowed_attributes or not _SAFE_ATTR_RE.fullmatch(
+            binding.attribute_name
+        ):
+            raise ValueError("executable adapter config attribute is not registered")
+        if logical_name == "model_type":
+            if binding.expected_value != spec.model_type:
+                raise ValueError("executable adapter config model_type mismatch")
+        elif (
+            isinstance(binding.expected_value, bool)
+            or not isinstance(binding.expected_value, int)
+            or binding.expected_value <= 0
+        ):
+            raise ValueError("executable adapter numeric config value must be positive")
+    if spec.config_bindings[1].expected_value != spec.expected_layer_count:
+        raise ValueError("executable adapter config/layer count mismatch")
+
+    if not isinstance(spec.layer_hooks, tuple) or len(spec.layer_hooks) != (
+        spec.expected_layer_count
+    ):
+        raise ValueError("executable adapter layer hook count mismatch")
+    for index, hook in enumerate(spec.layer_hooks):
+        if type(hook) is not LayerHookPlan:
+            raise ValueError("executable adapter layer hook type mismatch")
+        residual = f"{profile.layer_stack_attr}.{index}"
+        if hook.layer_index != index or hook.residual_module != residual:
+            raise ValueError("executable adapter residual path/index drift")
+        allowed_attention = {
+            f"{residual}.{candidate}" for candidate in profile.attention_candidates
+        }
+        if hook.attention_module is not None and hook.attention_module not in allowed_attention:
+            raise ValueError("executable adapter attention path is not registered")
+        allowed_mlp = {f"{residual}.{candidate}" for candidate in profile.mlp_candidates}
+        if hook.mlp_module is not None and hook.mlp_module not in allowed_mlp:
+            raise ValueError("executable adapter MLP path is not registered")
+        for path in (
+            hook.residual_module,
+            hook.attention_module,
+            hook.mlp_module,
+        ):
+            if path is not None and not _SAFE_HOOK_PATH_RE.fullmatch(path):
+                raise ValueError("executable adapter contains unsafe/traversal hook path")
+
+    capture_paths = spec.capture_paths
+    if not capture_paths or len(capture_paths) != len(set(capture_paths)):
+        raise ValueError("executable adapter contains duplicate hook paths")
+    if spec.intervention_paths != capture_paths:
+        raise ValueError("executable adapter intervention path derivation mismatch")
+
+    expected_type_paths = (
+        "$model",
+        "config",
+        profile.layer_stack_attr,
+        *capture_paths,
+    )
+    if not isinstance(spec.type_bindings, tuple) or tuple(
+        item.path if type(item) is ExecutableTypeBinding else None
+        for item in spec.type_bindings
+    ) != expected_type_paths:
+        raise ValueError("executable adapter runtime type-binding paths mismatch")
+    for index, binding in enumerate(spec.type_bindings):
+        if type(binding) is not ExecutableTypeBinding:
+            raise ValueError("executable adapter runtime type binding type mismatch")
+        _require_sha256(
+            binding.type_fingerprint_sha256,
+            "executable adapter runtime type fingerprint",
+        )
+        if index < 3:
+            if binding.hook_api_fingerprint_sha256 is not None:
+                raise ValueError("non-hook runtime type has a hook API fingerprint")
+        else:
+            _require_sha256(
+                binding.hook_api_fingerprint_sha256,
+                "executable adapter hook API fingerprint",
+            )
+
+    expected_evidence = tuple(
+        (definition.capability_id, "NOT_RUN") for definition in CAPABILITY_DEFINITIONS
+    )
+    if spec.capability_evidence_statuses != expected_evidence:
+        raise ValueError("executable adapter capability evidence must remain NOT_RUN")
+
+
+def verify_generated_adapter_artifact(artifact: ExecutableAdapterArtifact) -> None:
+    """Verify source bytes by hash *and* exact deterministic reconstruction."""
+
+    if type(artifact) is not ExecutableAdapterArtifact:
+        raise ValueError("generated adapter artifact must use the exact dataclass")
+    artifact.spec.verify()
+    if type(artifact.source_bytes) is not bytes:
+        raise ValueError("generated adapter source must be immutable bytes")
+    if len(artifact.source_bytes) > 4 * 1024 * 1024:
+        raise ValueError("generated adapter source exceeds the closed size limit")
+    _require_sha256(artifact.source_sha256, "generated adapter source_sha256")
+    observed_sha256 = hashlib.sha256(artifact.source_bytes).hexdigest().upper()
+    if observed_sha256 != artifact.source_sha256:
+        raise ValueError("generated adapter source SHA-256 mismatch")
+    expected_source = _render_executable_adapter_source(artifact.spec).encode("utf-8")
+    if artifact.source_bytes != expected_source:
+        raise ValueError("generated adapter source differs from canonical reconstruction")
+    try:
+        source_text = artifact.source_bytes.decode("utf-8", errors="strict")
+    except UnicodeDecodeError as exc:  # pragma: no cover - reconstruction precedes this
+        raise ValueError("generated adapter source is not strict UTF-8") from exc
+    tree = ast.parse(
+        source_text,
+        filename="<cas-generated-interpretability-adapter>",
+        mode="exec",
+    )
+    _verify_generated_source_ast(tree)
 
 
 def discover_loaded_architecture(
@@ -466,7 +935,12 @@ def discover_loaded_architecture(
             "cannot be represented by this adapter"
         )
 
-    mechanics = {"adapter_manifest", "architecture_discovery", "layer_stack"}
+    mechanics = {
+        "adapter_manifest",
+        "architecture_discovery",
+        "deterministic_executable_adapter_generation",
+        "layer_stack",
+    }
     mechanics.add("residual_capture")
     if attention_ready:
         mechanics.add("attention_capture")
@@ -686,6 +1160,7 @@ def verify_serialized_plan(payload: Mapping[str, object]) -> None:
     mechanics = {
         "adapter_manifest",
         "architecture_discovery",
+        "deterministic_executable_adapter_generation",
         "layer_stack",
         "residual_capture",
     }
@@ -854,20 +1329,609 @@ def _has_forward_hook_api(value: object) -> bool:
     return callable(getattr(value, "register_forward_hook", None))
 
 
+def _require_exact_plan_types(plan: InterpretabilityAdapterPlan) -> None:
+    if type(plan) is not InterpretabilityAdapterPlan:
+        raise ValueError("executable generation requires the exact adapter plan type")
+    if type(plan.identity) is not ModelIdentity:
+        raise ValueError("executable generation requires the exact model identity type")
+    if type(plan.declaration) is not ArchitectureDeclaration:
+        raise ValueError("executable generation requires the exact declaration type")
+    if type(plan.discovery) is not ArchitectureDiscovery:
+        raise ValueError("executable generation requires the exact discovery type")
+    if plan.runtime_verification is not None and type(plan.runtime_verification) is not (
+        RuntimeVerification
+    ):
+        raise ValueError("executable generation requires the exact runtime reference type")
+    if not isinstance(plan.capabilities, tuple) or not all(
+        type(item) is CapabilityPlan for item in plan.capabilities
+    ):
+        raise ValueError("executable generation requires exact capability plan rows")
+    if not isinstance(plan.discovery.layer_hooks, tuple) or not all(
+        type(item) is LayerHookPlan for item in plan.discovery.layer_hooks
+    ):
+        raise ValueError("executable generation requires exact layer hook rows")
+
+
+def _select_executable_config_binding(
+    *,
+    config: object,
+    logical_name: str,
+    candidates: tuple[str, ...],
+    expected_value: str | int,
+) -> ExecutableConfigBinding:
+    for attribute_name in candidates:
+        try:
+            observed = getattr(config, attribute_name)
+        except AttributeError:
+            continue
+        if logical_name == "model_type":
+            if not isinstance(observed, str):
+                continue
+            normalized: str | int = normalize_model_type(observed)
+        else:
+            if isinstance(observed, bool) or not isinstance(observed, int) or observed <= 0:
+                continue
+            normalized = observed
+        if normalized == expected_value:
+            return ExecutableConfigBinding(
+                logical_name=logical_name,
+                attribute_name=attribute_name,
+                expected_value=expected_value,
+            )
+    raise ValueError(f"loaded model config cannot be bound exactly for {logical_name}")
+
+
+def _capture_paths_from_hooks(hooks: Iterable[LayerHookPlan]) -> tuple[str, ...]:
+    paths: list[str] = []
+    for hook in hooks:
+        paths.append(hook.residual_module)
+        if hook.attention_module is not None:
+            paths.append(hook.attention_module)
+        if hook.mlp_module is not None:
+            paths.append(hook.mlp_module)
+    return tuple(paths)
+
+
+def _resolve_registered_runtime_path(root: object, dotted_path: str) -> object:
+    if not isinstance(dotted_path, str) or not _SAFE_HOOK_PATH_RE.fullmatch(dotted_path):
+        raise ValueError("runtime path is not a closed registered attribute path")
+    current = root
+    for component in dotted_path.split("."):
+        try:
+            if component.isdigit():
+                current = current[int(component)]  # type: ignore[index]
+            else:
+                current = getattr(current, component)
+        except (AttributeError, IndexError, KeyError, TypeError) as exc:
+            raise ValueError(f"registered runtime path does not resolve: {dotted_path}") from exc
+    return current
+
+
+def _runtime_type_fingerprint(value: object) -> str:
+    runtime_type = type(value)
+    parts: list[str] = []
+    for member in getattr(runtime_type, "__mro__", ()):
+        module_name = getattr(member, "__module__", None)
+        qualified_name = getattr(member, "__qualname__", None)
+        if (
+            not isinstance(module_name, str)
+            or not module_name
+            or not isinstance(qualified_name, str)
+            or not qualified_name
+        ):
+            raise ValueError("runtime class lacks a stable module/qualified-name identity")
+        parts.extend((module_name, qualified_name))
+        namespace = getattr(member, "__dict__", {})
+        for attribute_name in sorted(
+            name for name in namespace if isinstance(name, str)
+        ):
+            attribute = namespace[attribute_name]
+            attribute_type = type(attribute)
+            parts.extend(
+                (
+                    attribute_name,
+                    str(getattr(attribute_type, "__module__", "")),
+                    str(getattr(attribute_type, "__qualname__", "")),
+                )
+            )
+            if callable(attribute):
+                parts.append(_runtime_callable_fingerprint(attribute))
+    if not parts:
+        raise ValueError("runtime class has no stable MRO identity")
+    payload = "\0".join(parts).encode("utf-8", errors="strict")
+    return hashlib.sha256(payload).hexdigest().upper()
+
+
+def _runtime_callable_fingerprint(value: object) -> str:
+    if not callable(value):
+        raise ValueError("hook registration API is not callable")
+    function = getattr(value, "__func__", value)
+    parts = [
+        str(getattr(type(function), "__module__", "")),
+        str(getattr(type(function), "__qualname__", "")),
+        str(getattr(function, "__module__", "")),
+        str(getattr(function, "__qualname__", "")),
+    ]
+    code = getattr(function, "__code__", None)
+    if code is not None:
+        parts.extend(
+            (
+                code.co_code.hex(),
+                str(code.co_argcount),
+                str(code.co_posonlyargcount),
+                str(code.co_kwonlyargcount),
+                "\0".join(code.co_names),
+                "\0".join(code.co_varnames),
+                "\0".join(code.co_freevars),
+                "\0".join(code.co_cellvars),
+                _stable_code_constant(code.co_consts),
+            )
+        )
+    payload = "\x1e".join(parts).encode("utf-8", errors="strict")
+    return hashlib.sha256(payload).hexdigest().upper()
+
+
+def _stable_code_constant(value: object) -> str:
+    if value is None:
+        return "none"
+    if type(value) is bool:
+        return "bool:" + ("1" if value else "0")
+    if type(value) is int:
+        return "int:" + str(value)
+    if type(value) is float:
+        return "float:" + value.hex()  # type: ignore[union-attr]
+    if type(value) is complex:
+        return "complex:" + value.real.hex() + ":" + value.imag.hex()  # type: ignore[union-attr]
+    if type(value) is str:
+        return "str:" + value  # type: ignore[operator]
+    if type(value) is bytes:
+        return "bytes:" + value.hex()  # type: ignore[union-attr]
+    if type(value) is tuple:
+        return "tuple:[" + ",".join(_stable_code_constant(item) for item in value) + "]"  # type: ignore[union-attr]
+    code_bytes = getattr(value, "co_code", None)
+    if isinstance(code_bytes, bytes):
+        return "code:" + code_bytes.hex()
+    runtime_type = type(value)
+    return "object:" + str(getattr(runtime_type, "__module__", "")) + ":" + str(
+        getattr(runtime_type, "__qualname__", "")
+    )
+
+
+def _append_generated_tuple(
+    lines: list[str], name: str, values: Iterable[object]
+) -> None:
+    lines.append(f"{name} = (")
+    for value in values:
+        lines.append(f"    {value!r},")
+    lines.append(")")
+    lines.append("")
+
+
+def _render_executable_adapter_source(spec: ExecutableAdapterSpec) -> str:
+    spec.verify()
+    config_rows = tuple(
+        (item.logical_name, item.attribute_name, item.expected_value)
+        for item in spec.config_bindings
+    )
+    layer_rows = tuple(
+        (
+            item.layer_index,
+            item.residual_module,
+            item.attention_module,
+            item.mlp_module,
+        )
+        for item in spec.layer_hooks
+    )
+    type_rows = tuple(
+        (
+            item.path,
+            item.type_fingerprint_sha256,
+            item.hook_api_fingerprint_sha256,
+        )
+        for item in spec.type_bindings
+    )
+    alias_rows = spec.model_type_aliases
+    lines = [
+        '"""Deterministic CAS Harness attachment adapter; all evidence is NOT_RUN."""',
+        "",
+        "from __future__ import annotations",
+        "",
+        "import hashlib",
+        "",
+        f"SCHEMA_VERSION = {spec.schema_version!r}",
+        f"ENGINE_API_VERSION = {spec.engine_api_version!r}",
+        f"PLAN_SHA256 = {spec.plan_sha256!r}",
+        f"SPEC_SHA256 = {spec.spec_sha256!r}",
+        f"CONFIG_SHA256 = {spec.config_sha256!r}",
+        f"WEIGHTS_MANIFEST_SHA256 = {spec.weights_manifest_sha256!r}",
+        f"PROFILE_FAMILY = {spec.profile_family!r}",
+        f"MODEL_TYPE = {spec.model_type!r}",
+        f"LAYER_STACK_PATH = {spec.layer_stack_attr!r}",
+        f"EXPECTED_LAYER_COUNT = {spec.expected_layer_count!r}",
+        f"GENERATION_STATUS = {spec.generation_status!r}",
+        f"MODEL_BYTE_BINDING_STATUS = {spec.model_byte_binding_status!r}",
+        f"CLAIM_BOUNDARY = {spec.claim_boundary!r}",
+        'SOURCE_SHA256_BINDING = "EXTERNAL_ARTIFACT_MANIFEST"',
+        "",
+    ]
+    _append_generated_tuple(lines, "_MODEL_TYPE_ALIASES", alias_rows)
+    _append_generated_tuple(lines, "CONFIG_BINDINGS", config_rows)
+    _append_generated_tuple(lines, "LAYER_HOOKS", layer_rows)
+    _append_generated_tuple(lines, "CAPTURE_PATHS", spec.capture_paths)
+    _append_generated_tuple(lines, "INTERVENTION_PATHS", spec.intervention_paths)
+    _append_generated_tuple(lines, "TYPE_BINDINGS", type_rows)
+    _append_generated_tuple(
+        lines,
+        "CAPABILITY_EVIDENCE_STATUSES",
+        spec.capability_evidence_statuses,
+    )
+    lines.extend(
+        '''def _normalize_model_type(value):
+    if type(value) is not str:
+        raise RuntimeError("loaded config model_type must be exact text")
+    output = []
+    separator_pending = False
+    for character in value.strip().lower():
+        if ("a" <= character <= "z") or ("0" <= character <= "9"):
+            if separator_pending and output:
+                output.append("_")
+            output.append(character)
+            separator_pending = False
+        else:
+            separator_pending = True
+    normalized = "".join(output).strip("_")
+    for alias, target in _MODEL_TYPE_ALIASES:
+        if normalized == alias:
+            return target
+    return normalized
+
+
+def _resolve_path(root, dotted_path):
+    current = root
+    for component in dotted_path.split("."):
+        try:
+            if component.isdigit():
+                current = current[int(component)]
+            else:
+                current = getattr(current, component)
+        except (AttributeError, IndexError, KeyError, TypeError) as exc:
+            raise RuntimeError(
+                "generated adapter path does not resolve: " + dotted_path
+            ) from exc
+    return current
+
+
+def _type_fingerprint(value):
+    runtime_type = type(value)
+    parts = []
+    for member in getattr(runtime_type, "__mro__", ()):
+        module_name = getattr(member, "__module__", None)
+        qualified_name = getattr(member, "__qualname__", None)
+        if type(module_name) is not str or not module_name:
+            raise RuntimeError("runtime class module identity is unavailable")
+        if type(qualified_name) is not str or not qualified_name:
+            raise RuntimeError("runtime class qualified-name identity is unavailable")
+        parts.extend((module_name, qualified_name))
+        namespace = getattr(member, "__dict__", {})
+        for attribute_name in sorted(
+            name for name in namespace if type(name) is str
+        ):
+            attribute = namespace[attribute_name]
+            attribute_type = type(attribute)
+            parts.extend(
+                (
+                    attribute_name,
+                    str(getattr(attribute_type, "__module__", "")),
+                    str(getattr(attribute_type, "__qualname__", "")),
+                )
+            )
+            if callable(attribute):
+                parts.append(_callable_fingerprint(attribute))
+    if not parts:
+        raise RuntimeError("runtime class MRO identity is unavailable")
+    payload = "\\0".join(parts).encode("utf-8", errors="strict")
+    return hashlib.sha256(payload).hexdigest().upper()
+
+
+def _stable_code_constant(value):
+    if value is None:
+        return "none"
+    if type(value) is bool:
+        return "bool:" + ("1" if value else "0")
+    if type(value) is int:
+        return "int:" + str(value)
+    if type(value) is float:
+        return "float:" + value.hex()
+    if type(value) is complex:
+        return "complex:" + value.real.hex() + ":" + value.imag.hex()
+    if type(value) is str:
+        return "str:" + value
+    if type(value) is bytes:
+        return "bytes:" + value.hex()
+    if type(value) is tuple:
+        return "tuple:[" + ",".join(_stable_code_constant(item) for item in value) + "]"
+    code_bytes = getattr(value, "co_code", None)
+    if type(code_bytes) is bytes:
+        return "code:" + code_bytes.hex()
+    runtime_type = type(value)
+    return (
+        "object:"
+        + str(getattr(runtime_type, "__module__", ""))
+        + ":"
+        + str(getattr(runtime_type, "__qualname__", ""))
+    )
+
+
+def _callable_fingerprint(value):
+    if not callable(value):
+        raise RuntimeError("hook registration API is not callable")
+    function = getattr(value, "__func__", value)
+    parts = [
+        str(getattr(type(function), "__module__", "")),
+        str(getattr(type(function), "__qualname__", "")),
+        str(getattr(function, "__module__", "")),
+        str(getattr(function, "__qualname__", "")),
+    ]
+    code = getattr(function, "__code__", None)
+    if code is not None:
+        parts.extend(
+            (
+                code.co_code.hex(),
+                str(code.co_argcount),
+                str(code.co_posonlyargcount),
+                str(code.co_kwonlyargcount),
+                "\\0".join(code.co_names),
+                "\\0".join(code.co_varnames),
+                "\\0".join(code.co_freevars),
+                "\\0".join(code.co_cellvars),
+                _stable_code_constant(code.co_consts),
+            )
+        )
+    payload = "\\x1e".join(parts).encode("utf-8", errors="strict")
+    return hashlib.sha256(payload).hexdigest().upper()
+
+
+def verify_model(
+    model,
+    *,
+    engine_api_version,
+    profile_family,
+    model_byte_binding_status,
+):
+    if type(engine_api_version) is not str or engine_api_version != ENGINE_API_VERSION:
+        raise RuntimeError("generated adapter engine API version mismatch")
+    if type(profile_family) is not str or profile_family != PROFILE_FAMILY:
+        raise RuntimeError("generated adapter profile family mismatch")
+    if (
+        type(model_byte_binding_status) is not str
+        or model_byte_binding_status != MODEL_BYTE_BINDING_STATUS
+    ):
+        raise RuntimeError("generated adapter model byte-binding boundary mismatch")
+    if len(CAPTURE_PATHS) != len(set(CAPTURE_PATHS)):
+        raise RuntimeError("generated adapter contains duplicate capture paths")
+    if INTERVENTION_PATHS != CAPTURE_PATHS:
+        raise RuntimeError("generated adapter intervention paths drifted")
+    if CAPABILITY_EVIDENCE_STATUSES != tuple(
+        ("C" + str(index).zfill(2), "NOT_RUN") for index in range(1, 15)
+    ):
+        raise RuntimeError("generated adapter evidence status drifted from NOT_RUN")
+
+    config = _resolve_path(model, "config")
+    for logical_name, attribute_name, expected_value in CONFIG_BINDINGS:
+        try:
+            observed = getattr(config, attribute_name)
+        except AttributeError as exc:
+            raise RuntimeError(
+                "generated adapter config field is missing: " + logical_name
+            ) from exc
+        if logical_name == "model_type":
+            observed = _normalize_model_type(observed)
+        elif type(observed) is not int or observed <= 0:
+            raise RuntimeError(
+                "generated adapter config field is not a positive exact integer: "
+                + logical_name
+            )
+        if observed != expected_value:
+            raise RuntimeError("generated adapter config drift: " + logical_name)
+
+    stack = _resolve_path(model, LAYER_STACK_PATH)
+    try:
+        layer_count = len(stack)
+    except (TypeError, AttributeError) as exc:
+        raise RuntimeError("generated adapter layer stack is not sized") from exc
+    if layer_count != EXPECTED_LAYER_COUNT:
+        raise RuntimeError("generated adapter layer-count drift")
+
+    seen_hook_objects = {}
+    for path, expected_fingerprint, expected_hook_api in TYPE_BINDINGS:
+        value = model if path == "$model" else _resolve_path(model, path)
+        if _type_fingerprint(value) != expected_fingerprint:
+            raise RuntimeError("generated adapter runtime class/subclass mismatch: " + path)
+        if expected_hook_api is not None:
+            register = getattr(value, "register_forward_hook", None)
+            if _callable_fingerprint(register) != expected_hook_api:
+                raise RuntimeError("generated adapter hook registration API drift: " + path)
+    for path in CAPTURE_PATHS:
+        module = _resolve_path(model, path)
+        if not callable(getattr(module, "register_forward_hook", None)):
+            raise RuntimeError("generated adapter hook is missing/not hookable: " + path)
+        module_identity = id(module)
+        if module_identity in seen_hook_objects:
+            raise RuntimeError(
+                "generated adapter live hook-module alias drift: "
+                + seen_hook_objects[module_identity]
+                + " and "
+                + path
+            )
+        seen_hook_objects[module_identity] = path
+
+
+def _attachment_point(
+    model,
+    hook_path,
+    *,
+    allowed_paths,
+    engine_api_version,
+    profile_family,
+    model_byte_binding_status,
+):
+    verify_model(
+        model,
+        engine_api_version=engine_api_version,
+        profile_family=profile_family,
+        model_byte_binding_status=model_byte_binding_status,
+    )
+    if type(hook_path) is not str or hook_path not in allowed_paths:
+        raise RuntimeError("generated adapter hook path is not in the closed allowlist")
+    module = _resolve_path(model, hook_path)
+    return module
+
+
+def capture_attachment_point(
+    model,
+    hook_path,
+    *,
+    engine_api_version,
+    profile_family,
+    model_byte_binding_status,
+):
+    """Return one verified capture module without installing or executing a hook."""
+    return _attachment_point(
+        model,
+        hook_path,
+        allowed_paths=CAPTURE_PATHS,
+        engine_api_version=engine_api_version,
+        profile_family=profile_family,
+        model_byte_binding_status=model_byte_binding_status,
+    )
+
+
+def intervention_attachment_point(
+    model,
+    hook_path,
+    *,
+    engine_api_version,
+    profile_family,
+    model_byte_binding_status,
+):
+    """Return one verified intervention module; no intervention is executed."""
+    return _attachment_point(
+        model,
+        hook_path,
+        allowed_paths=INTERVENTION_PATHS,
+        engine_api_version=engine_api_version,
+        profile_family=profile_family,
+        model_byte_binding_status=model_byte_binding_status,
+    )
+
+
+__all__ = (
+    "CAPABILITY_EVIDENCE_STATUSES",
+    "CAPTURE_PATHS",
+    "CLAIM_BOUNDARY",
+    "CONFIG_SHA256",
+    "ENGINE_API_VERSION",
+    "EXPECTED_LAYER_COUNT",
+    "GENERATION_STATUS",
+    "INTERVENTION_PATHS",
+    "LAYER_HOOKS",
+    "LAYER_STACK_PATH",
+    "MODEL_BYTE_BINDING_STATUS",
+    "MODEL_TYPE",
+    "PLAN_SHA256",
+    "PROFILE_FAMILY",
+    "SCHEMA_VERSION",
+    "SOURCE_SHA256_BINDING",
+    "SPEC_SHA256",
+    "TYPE_BINDINGS",
+    "WEIGHTS_MANIFEST_SHA256",
+    "capture_attachment_point",
+    "intervention_attachment_point",
+    "verify_model",
+)
+'''.splitlines()
+    )
+    return "\n".join(lines) + "\n"
+
+
+def _verify_generated_source_ast(tree: ast.Module) -> None:
+    allowed_imports = 0
+    for node in tree.body:
+        if isinstance(node, ast.Expr):
+            if not isinstance(node.value, ast.Constant) or not isinstance(
+                node.value.value, str
+            ):
+                raise ValueError("generated adapter has a non-docstring top-level expression")
+        elif isinstance(node, ast.ImportFrom):
+            if not (
+                node.module == "__future__"
+                and len(node.names) == 1
+                and node.names[0].name == "annotations"
+                and node.names[0].asname is None
+            ):
+                raise ValueError("generated adapter has an unapproved future import")
+            allowed_imports += 1
+        elif isinstance(node, ast.Import):
+            if not (
+                len(node.names) == 1
+                and node.names[0].name == "hashlib"
+                and node.names[0].asname is None
+            ):
+                raise ValueError("generated adapter has an unapproved import")
+            allowed_imports += 1
+        elif isinstance(node, ast.Assign):
+            if any(
+                isinstance(item, ast.Call)
+                for item in _iter_ast_nodes_without_import(node.value)
+            ):
+                raise ValueError("generated adapter has a top-level executable assignment")
+        elif not isinstance(node, ast.FunctionDef):
+            raise ValueError("generated adapter has an unapproved top-level statement")
+    if allowed_imports != 2:
+        raise ValueError("generated adapter import set mismatch")
+    prohibited_calls = {"compile", "eval", "exec", "open", "__import__"}
+    for node in _iter_ast_nodes_without_import(tree):
+        if isinstance(node, (ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
+            raise ValueError("generated adapter contains an unapproved executable construct")
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+            if node.func.id in prohibited_calls:
+                raise ValueError("generated adapter contains a prohibited dynamic call")
+
+
+def _iter_ast_nodes_without_import(root: ast.AST) -> Iterable[ast.AST]:
+    """Depth-first AST walk without ``ast.walk``'s lazy collections import."""
+
+    stack = [root]
+    while stack:
+        node = stack.pop()
+        yield node
+        stack.extend(reversed(tuple(ast.iter_child_nodes(node))))
+
+
 def _require_sha256(value: str, field_name: str) -> None:
     if not isinstance(value, str) or not _SHA256_RE.fullmatch(value):
         raise ValueError(f"{field_name} must be uppercase 64-hex SHA-256")
 
 
 __all__ = [
+    "ADAPTER_ENGINE_API_VERSION",
     "ARCHITECTURE_PROFILES",
     "CAPABILITY_DEFINITIONS",
     "CLAIM_BOUNDARY",
+    "EXECUTABLE_ADAPTER_SCHEMA_VERSION",
+    "EXECUTABLE_CLAIM_BOUNDARY",
+    "EXECUTABLE_GENERATION_STATUS",
+    "MAX_GENERATED_LAYERS",
+    "MODEL_BYTE_BINDING_STATUS",
     "RUNTIME_FEATURES",
     "SCHEMA_VERSION",
     "ArchitectureDeclaration",
     "ArchitectureDiscovery",
     "CapabilityPlan",
+    "ExecutableAdapterArtifact",
+    "ExecutableAdapterSpec",
+    "ExecutableConfigBinding",
+    "ExecutableTypeBinding",
     "InterpretabilityAdapterPlan",
     "LayerHookPlan",
     "ModelIdentity",
@@ -876,6 +1940,9 @@ __all__ = [
     "canonical_json_bytes",
     "discover_loaded_architecture",
     "find_profile",
+    "generate_executable_adapter_artifact",
     "normalize_model_type",
+    "verify_executable_adapter_spec",
+    "verify_generated_adapter_artifact",
     "verify_serialized_plan",
 ]
