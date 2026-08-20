@@ -1,0 +1,185 @@
+{
+  "Comment": "CAS RunPod guardian. Only the pre-provider idempotent claim has bounded Lambda-service retries; provider tasks never retry.",
+  "StartAt": "ClaimAuthorization",
+  "States": {
+    "ClaimAuthorization": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ControlFunctionArn}",
+        "Payload": {
+          "operation": "claim",
+          "execution_arn.$": "$$.Execution.Id",
+          "envelope.$": "$"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Next": "InspectLedger"
+    },
+    "InspectLedger": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ControlFunctionArn}",
+        "Payload": {
+          "operation": "inspect",
+          "envelope.$": "$"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Next": "ChooseNextAction"
+    },
+    "ChooseNextAction": {
+      "Type": "Choice",
+      "Choices": [
+        {"Variable": "$.next_action", "StringEquals": "ARM", "Next": "ArmPrecreate"},
+        {"Variable": "$.next_action", "StringEquals": "RESERVE", "Next": "ReserveCreate"},
+        {"Variable": "$.next_action", "StringEquals": "DISPATCH", "Next": "DispatchCreate"},
+        {"Variable": "$.next_action", "StringEquals": "ADMIT", "Next": "VerifyLaunchAdmission"},
+        {"Variable": "$.next_action", "StringEquals": "RECONCILE", "Next": "ReconcileAmbiguousCreate"},
+        {"Variable": "$.next_action", "StringEquals": "OBSERVE", "Next": "ObserveTerminal"},
+        {"Variable": "$.next_action", "StringEquals": "STOP", "Next": "DispatchStop"},
+        {"Variable": "$.next_action", "StringEquals": "FINALIZE_UNRESOLVED", "Next": "FinalizeUnresolved"},
+        {"Variable": "$.next_action", "StringEquals": "FINALIZE_CONTAINMENT_FAILURE", "Next": "FinalizeContainmentFailure"},
+        {"Variable": "$.next_action", "StringEquals": "FINALIZE_NO_CREATE_SAFE_LOSS", "Next": "FinalizeNoCreateSafeLoss"},
+        {"Variable": "$.next_action", "StringEquals": "WAIT", "Next": "Heartbeat"},
+        {"Variable": "$.next_action", "StringEquals": "DONE", "Next": "GuardianFinished"}
+      ],
+      "Default": "UnknownStateFailClosed"
+    },
+    "ArmPrecreate": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ObserveFunctionArn}",
+        "Payload": {"operation": "arm", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "InspectLedger"
+    },
+    "ReserveCreate": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${CreateFunctionArn}",
+        "Payload": {"operation": "reserve", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "InspectLedger"
+    },
+    "DispatchCreate": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${CreateFunctionArn}",
+        "Payload": {"operation": "dispatch", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "InspectLedger"
+    },
+    "VerifyLaunchAdmission": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ObserveFunctionArn}",
+        "Payload": {"operation": "admit", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "InspectLedger"
+    },
+    "ReconcileAmbiguousCreate": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ObserveFunctionArn}",
+        "Payload": {"operation": "reconcile", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "InspectLedger"
+    },
+    "ObserveTerminal": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ObserveFunctionArn}",
+        "Payload": {"operation": "observe", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "InspectLedger"
+    },
+    "DispatchStop": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${StopFunctionArn}",
+        "Payload": {"operation": "stop", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "InspectLedger"
+    },
+    "FinalizeUnresolved": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ControlFunctionArn}",
+        "Payload": {"operation": "finalize_unresolved", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "InspectLedger"
+    },
+    "FinalizeContainmentFailure": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ControlFunctionArn}",
+        "Payload": {"operation": "finalize_containment_failure", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "InspectLedger"
+    },
+    "FinalizeNoCreateSafeLoss": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ControlFunctionArn}",
+        "Payload": {"operation": "finalize_no_create_safe_loss", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "InspectLedger"
+    },
+    "BoundedWait": {
+      "Type": "Wait",
+      "SecondsPath": "$.wait_seconds",
+      "Next": "InspectLedger"
+    },
+    "Heartbeat": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ControlFunctionArn}",
+        "Payload": {"operation": "heartbeat", "envelope.$": "$"}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "BoundedWait"
+    },
+    "GuardianFinished": {"Type": "Succeed"},
+    "UnknownStateFailClosed": {
+      "Type": "Fail",
+      "Error": "GuardianUnknownState",
+      "Cause": "No provider action is permitted for an unknown ledger state."
+    }
+  }
+}

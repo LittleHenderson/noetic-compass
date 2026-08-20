@@ -1,0 +1,961 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  Inert-by-default, fail-closed AWS RunPod guardian candidate. Standard Step
+  Functions owns orchestration; a fenced DynamoDB ledger owns the one CREATE.
+
+Parameters:
+  ActivationMode:
+    Type: String
+    Default: INERT
+    AllowedValues: [INERT, LIVE]
+  DeploymentBindingSha256:
+    Type: String
+    Default: '0000000000000000000000000000000000000000000000000000000000000000'
+    AllowedPattern: '^[0-9a-f]{64}$'
+    NoEcho: true
+  CoreLockSha256:
+    Type: String
+    Default: '0000000000000000000000000000000000000000000000000000000000000000'
+    AllowedPattern: '^[0-9a-f]{64}$'
+  TimingValidationEvidenceSha256:
+    Type: String
+    Default: '0000000000000000000000000000000000000000000000000000000000000000'
+    AllowedPattern: '^[0-9a-f]{64}$'
+  DeploymentBindingObjectKey:
+    Type: String
+    Description: Exact S3 key for the canonical deployment-binding document.
+  DeploymentBindingObjectVersion:
+    Type: String
+    Default: ''
+  DeploymentBindingObjectSha256:
+    Type: String
+    Default: '0000000000000000000000000000000000000000000000000000000000000000'
+    AllowedPattern: '^[0-9a-f]{64}$'
+  TimingEvidenceObjectKey:
+    Type: String
+    Description: Exact S3 key for the reviewed timing-evidence manifest.
+  TimingEvidenceObjectVersion:
+    Type: String
+    Default: ''
+  ProviderAccountId:
+    Type: String
+    Default: UNBOUND
+    AllowedPattern: '^[A-Za-z0-9_.:@/-]{1,128}$'
+  ProviderSecretArn:
+    Type: String
+    Default: arn:aws:secretsmanager:us-west-2:000000000000:secret:UNBOUND
+    AllowedPattern: '^arn:aws[a-zA-Z-]*:secretsmanager:us-west-2:[0-9]{12}:secret:[A-Za-z0-9/_+=.@-]+$'
+    NoEcho: true
+  RecoveryEnabled:
+    Type: String
+    Default: 'FALSE'
+    AllowedValues: ['FALSE', 'TRUE']
+  RecoveryScheduleState:
+    Type: String
+    Default: DISABLED
+    AllowedValues: [DISABLED, ENABLED]
+  LambdaArtifactBucket:
+    Type: String
+    Description: Existing private S3 bucket containing the hash-locked runtime ZIP.
+  LambdaArtifactKey:
+    Type: String
+    Description: Exact S3 key for guardian-runtime.zip produced by build.ps1.
+  LambdaArtifactVersion:
+    Type: String
+    Default: ''
+    Description: Optional immutable S3 object version. Required by the live runbook.
+  RuntimeZipSha256:
+    Type: String
+    Default: '0000000000000000000000000000000000000000000000000000000000000000'
+    AllowedPattern: '^[0-9a-f]{64}$'
+
+Rules:
+  RegionIsUsWest2:
+    Assertions:
+      - Assert: !Equals [!Ref AWS::Region, us-west-2]
+        AssertDescription: This candidate is frozen to us-west-2.
+  LiveBindingsArePresent:
+    RuleCondition: !Equals [!Ref ActivationMode, LIVE]
+    Assertions:
+      - Assert: !Not
+          - !Equals
+            - !Ref DeploymentBindingSha256
+            - '0000000000000000000000000000000000000000000000000000000000000000'
+        AssertDescription: LIVE requires a non-zero deployment binding.
+      - Assert: !Not
+          - !Equals
+            - !Ref CoreLockSha256
+            - '0000000000000000000000000000000000000000000000000000000000000000'
+        AssertDescription: LIVE requires the exact compiled core-lock document hash.
+      - Assert: !Not
+          - !Equals
+            - !Ref TimingValidationEvidenceSha256
+            - '0000000000000000000000000000000000000000000000000000000000000000'
+        AssertDescription: LIVE requires reviewed empirical recovery/startup/STOP evidence; AWS scheduling is not a hard guarantee.
+      - Assert: !Not [!Equals [!Ref ProviderAccountId, UNBOUND]]
+        AssertDescription: LIVE requires the exact provider account binding.
+      - Assert: !Equals [!Ref RecoveryEnabled, 'TRUE']
+        AssertDescription: LIVE requires the independent recovery supervisor.
+      - Assert: !Equals [!Ref RecoveryScheduleState, ENABLED]
+        AssertDescription: LIVE requires the recovery schedule to be enabled.
+      - Assert: !Not [!Equals [!Ref LambdaArtifactVersion, '']]
+        AssertDescription: LIVE requires an immutable versioned S3 runtime artifact.
+      - Assert: !Not [!Equals [!Ref DeploymentBindingObjectVersion, '']]
+        AssertDescription: LIVE requires an immutable deployment-binding object version.
+      - Assert: !Not
+          - !Equals
+            - !Ref DeploymentBindingObjectSha256
+            - '0000000000000000000000000000000000000000000000000000000000000000'
+        AssertDescription: LIVE requires the exact deployment-binding object SHA-256.
+      - Assert: !Not [!Equals [!Ref TimingEvidenceObjectVersion, '']]
+        AssertDescription: LIVE requires an immutable timing-evidence object version.
+      - Assert: !Not
+          - !Equals
+            - !Ref RuntimeZipSha256
+            - '0000000000000000000000000000000000000000000000000000000000000000'
+        AssertDescription: LIVE requires the exact runtime ZIP SHA-256.
+
+Conditions:
+  HasArtifactVersion: !Not [!Equals [!Ref LambdaArtifactVersion, '']]
+
+Globals:
+  Function:
+    Environment:
+      Variables:
+        AWS_ACCOUNT_ID: !Ref AWS::AccountId
+        AWS_PARTITION: !Ref AWS::Partition
+        STACK_ID: !Ref AWS::StackId
+        STACK_NAME: !Ref AWS::StackName
+        PROVIDER_SECRET_ARN: !Ref ProviderSecretArn
+        BINDING_OBJECT_BUCKET: !Ref LambdaArtifactBucket
+        BINDING_OBJECT_KEY: !Ref DeploymentBindingObjectKey
+        BINDING_OBJECT_VERSION: !Ref DeploymentBindingObjectVersion
+        BINDING_OBJECT_SHA256: !Ref DeploymentBindingObjectSha256
+        TIMING_EVIDENCE_BUCKET: !Ref LambdaArtifactBucket
+        TIMING_EVIDENCE_KEY: !Ref TimingEvidenceObjectKey
+        TIMING_EVIDENCE_VERSION: !Ref TimingEvidenceObjectVersion
+        RUNTIME_ARTIFACT_BUCKET: !Ref LambdaArtifactBucket
+        RUNTIME_ARTIFACT_KEY: !Ref LambdaArtifactKey
+        RUNTIME_ARTIFACT_VERSION: !Ref LambdaArtifactVersion
+        RUNTIME_ZIP_SHA256: !Ref RuntimeZipSha256
+        LEDGER_TABLE_ARN: !Sub arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/cas-runpod-guardian-global-v1-${AWS::AccountId}
+        BOUND_KMS_SIGNING_KEY_ARN: !GetAtt ReceiptSigningKey.Arn
+        BOUND_STATE_MACHINE_ARN: !Sub arn:${AWS::Partition}:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${AWS::StackName}-guardian
+
+Resources:
+  LedgerTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub cas-runpod-guardian-global-v1-${AWS::AccountId}
+      BillingMode: PAY_PER_REQUEST
+      DeletionProtectionEnabled: true
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+      Tags:
+        - Key: system
+          Value: cas-runpod-guardian
+        - Key: data-class
+          Value: signed-safety-ledger
+
+  ReceiptSigningKey:
+    Type: AWS::KMS::Key
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Description: CAS guardian asymmetric receipt signing key; never encrypts data.
+      Enabled: true
+      EnableKeyRotation: false
+      KeySpec: ECC_NIST_P256
+      KeyUsage: SIGN_VERIFY
+      PendingWindowInDays: 30
+      KeyPolicy:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AccountIAMAdministration
+            Effect: Allow
+            Principal:
+              AWS: !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:root
+            Action: kms:*
+            Resource: '*'
+      Tags:
+        - Key: system
+          Value: cas-runpod-guardian
+
+  ReceiptSigningAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub alias/cas-runpod-guardian-${AWS::StackName}
+      TargetKeyId: !Ref ReceiptSigningKey
+
+  ControlRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: &LambdaTrust
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: lambda.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns: &BasicLambda
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: GuardianControl
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:DeleteItem, dynamodb:TransactWriteItems]
+                Resource: !GetAtt LedgerTable.Arn
+              - Effect: Allow
+                Action: [kms:Sign, kms:Verify, kms:GetPublicKey]
+                Resource: !GetAtt ReceiptSigningKey.Arn
+
+  ObserveRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: *LambdaTrust
+      ManagedPolicyArns: *BasicLambda
+      Policies:
+        - PolicyName: GuardianObserve
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:DeleteItem, dynamodb:TransactWriteItems]
+                Resource: !GetAtt LedgerTable.Arn
+              - Effect: Allow
+                Action: [kms:Sign, kms:Verify, kms:GetPublicKey]
+                Resource: !GetAtt ReceiptSigningKey.Arn
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: !GetAtt ObserveProxyFunction.Arn
+
+  CreateRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: *LambdaTrust
+      ManagedPolicyArns: *BasicLambda
+      Policies:
+        - PolicyName: GuardianCreateOnly
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:DeleteItem, dynamodb:TransactWriteItems]
+                Resource: !GetAtt LedgerTable.Arn
+              - Effect: Allow
+                Action: [kms:Sign, kms:Verify, kms:GetPublicKey]
+                Resource: !GetAtt ReceiptSigningKey.Arn
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: !GetAtt CreateProxyFunction.Arn
+
+  StopRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: *LambdaTrust
+      ManagedPolicyArns: *BasicLambda
+      Policies:
+        - PolicyName: GuardianStopOnly
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:DeleteItem, dynamodb:TransactWriteItems]
+                Resource: !GetAtt LedgerTable.Arn
+              - Effect: Allow
+                Action: [kms:Sign, kms:Verify, kms:GetPublicKey]
+                Resource: !GetAtt ReceiptSigningKey.Arn
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource:
+                  - !GetAtt StopProxyFunction.Arn
+                  - !GetAtt ObserveProxyFunction.Arn
+
+  ObserveProxyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: *LambdaTrust
+      ManagedPolicyArns: *BasicLambda
+      Policies:
+        - PolicyName: ObserveProxySecretOnly
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref ProviderSecretArn
+
+  CreateProxyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: *LambdaTrust
+      ManagedPolicyArns: *BasicLambda
+      Policies:
+        - PolicyName: CreateProxySecretOnly
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref ProviderSecretArn
+              - Effect: Allow
+                Action: dynamodb:TransactWriteItems
+                Resource: !GetAtt LedgerTable.Arn
+
+  StopProxyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: *LambdaTrust
+      ManagedPolicyArns: *BasicLambda
+      Policies:
+        - PolicyName: StopProxySecretOnly
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref ProviderSecretArn
+
+  StarterRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: *LambdaTrust
+      ManagedPolicyArns: *BasicLambda
+      Policies:
+        - PolicyName: StartExactGuardianStateMachine
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: states:StartExecution
+                Resource: !Ref GuardianStateMachine
+
+  RecoveryRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: *LambdaTrust
+      ManagedPolicyArns: *BasicLambda
+      Policies:
+        - PolicyName: StartFencedRecoveryOnly
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:DeleteItem, dynamodb:TransactWriteItems]
+                Resource: !GetAtt LedgerTable.Arn
+              - Effect: Allow
+                Action: [kms:Sign, kms:Verify, kms:GetPublicKey]
+                Resource: !GetAtt ReceiptSigningKey.Arn
+              - Effect: Allow
+                Action: [states:StartExecution, states:DescribeExecution]
+                Resource:
+                  - !Ref GuardianStateMachine
+                  - !Sub arn:${AWS::Partition}:states:${AWS::Region}:${AWS::AccountId}:execution:${GuardianStateMachine.Name}:*
+              - Effect: Allow
+                Action: sqs:SendMessage
+                Resource: !GetAtt RecoveryDeadLetterQueue.Arn
+
+  StateMachineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: states.amazonaws.com}
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: InvokeBoundedGuardianFunctions
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource:
+                  - !GetAtt ControlFunction.Arn
+                  - !GetAtt ObserveFunction.Arn
+                  - !GetAtt CreateFunction.Arn
+                  - !GetAtt StopFunction.Arn
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogDelivery
+                  - logs:GetLogDelivery
+                  - logs:UpdateLogDelivery
+                  - logs:DeleteLogDelivery
+                  - logs:ListLogDeliveries
+                  - logs:PutResourcePolicy
+                  - logs:DescribeResourcePolicies
+                  - logs:DescribeLogGroups
+                Resource: '*'
+
+  DeploymentActivationDocumentReadPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Read only the exact versioned binding and timing objects.
+      Roles:
+        - !Ref ObserveRole
+        - !Ref CreateRole
+        - !Ref StarterRole
+        - !Ref CreateProxyRole
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: s3:GetObjectVersion
+            Resource:
+              - !Sub arn:${AWS::Partition}:s3:::${LambdaArtifactBucket}/${DeploymentBindingObjectKey}
+              - !Sub arn:${AWS::Partition}:s3:::${LambdaArtifactBucket}/${TimingEvidenceObjectKey}
+
+  ControlFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: ControlLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-control
+      Runtime: python3.12
+      Architectures: [arm64]
+      CodeUri:
+        Bucket: !Ref LambdaArtifactBucket
+        Key: !Ref LambdaArtifactKey
+        Version: !If [HasArtifactVersion, !Ref LambdaArtifactVersion, !Ref AWS::NoValue]
+      Handler: guardian_runtime.control_handler
+      MemorySize: 256
+      Timeout: 30
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt ControlRole.Arn
+      Environment:
+        Variables:
+          ACTIVATION_MODE: !Ref ActivationMode
+          EXPECTED_AWS_REGION: us-west-2
+          DEPLOYMENT_BINDING_SHA256: !Ref DeploymentBindingSha256
+          CORE_LOCK_SHA256: !Ref CoreLockSha256
+          TIMING_VALIDATION_EVIDENCE_SHA256: !Ref TimingValidationEvidenceSha256
+          PROVIDER_ACCOUNT_ID: !Ref ProviderAccountId
+          LEDGER_TABLE_NAME: !Ref LedgerTable
+          KMS_SIGNING_KEY_ARN: !GetAtt ReceiptSigningKey.Arn
+
+  ObserveFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: ObserveLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-observe
+      Runtime: python3.12
+      Architectures: [arm64]
+      CodeUri:
+        Bucket: !Ref LambdaArtifactBucket
+        Key: !Ref LambdaArtifactKey
+        Version: !If [HasArtifactVersion, !Ref LambdaArtifactVersion, !Ref AWS::NoValue]
+      Handler: guardian_runtime.observe_handler
+      MemorySize: 256
+      Timeout: 30
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt ObserveRole.Arn
+      Environment:
+        Variables:
+          ACTIVATION_MODE: !Ref ActivationMode
+          EXPECTED_AWS_REGION: us-west-2
+          DEPLOYMENT_BINDING_SHA256: !Ref DeploymentBindingSha256
+          CORE_LOCK_SHA256: !Ref CoreLockSha256
+          TIMING_VALIDATION_EVIDENCE_SHA256: !Ref TimingValidationEvidenceSha256
+          PROVIDER_ACCOUNT_ID: !Ref ProviderAccountId
+          PROVIDER_PROXY_FUNCTION_ARN: !GetAtt ObserveProxyFunction.Arn
+          LEDGER_TABLE_NAME: !Ref LedgerTable
+          KMS_SIGNING_KEY_ARN: !GetAtt ReceiptSigningKey.Arn
+
+  CreateFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: CreateLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-create
+      Runtime: python3.12
+      Architectures: [arm64]
+      CodeUri:
+        Bucket: !Ref LambdaArtifactBucket
+        Key: !Ref LambdaArtifactKey
+        Version: !If [HasArtifactVersion, !Ref LambdaArtifactVersion, !Ref AWS::NoValue]
+      Handler: guardian_runtime.create_handler
+      MemorySize: 256
+      Timeout: 30
+      Role: !GetAtt CreateRole.Arn
+      ReservedConcurrentExecutions: 1
+      Environment:
+        Variables:
+          ACTIVATION_MODE: !Ref ActivationMode
+          EXPECTED_AWS_REGION: us-west-2
+          DEPLOYMENT_BINDING_SHA256: !Ref DeploymentBindingSha256
+          CORE_LOCK_SHA256: !Ref CoreLockSha256
+          TIMING_VALIDATION_EVIDENCE_SHA256: !Ref TimingValidationEvidenceSha256
+          PROVIDER_ACCOUNT_ID: !Ref ProviderAccountId
+          PROVIDER_PROXY_FUNCTION_ARN: !GetAtt CreateProxyFunction.Arn
+          LEDGER_TABLE_NAME: !Ref LedgerTable
+          KMS_SIGNING_KEY_ARN: !GetAtt ReceiptSigningKey.Arn
+
+  StopFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: StopLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-stop
+      Runtime: python3.12
+      Architectures: [arm64]
+      CodeUri:
+        Bucket: !Ref LambdaArtifactBucket
+        Key: !Ref LambdaArtifactKey
+        Version: !If [HasArtifactVersion, !Ref LambdaArtifactVersion, !Ref AWS::NoValue]
+      Handler: guardian_runtime.stop_handler
+      MemorySize: 256
+      Timeout: 30
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt StopRole.Arn
+      Environment:
+        Variables:
+          ACTIVATION_MODE: !Ref ActivationMode
+          EXPECTED_AWS_REGION: us-west-2
+          DEPLOYMENT_BINDING_SHA256: !Ref DeploymentBindingSha256
+          CORE_LOCK_SHA256: !Ref CoreLockSha256
+          TIMING_VALIDATION_EVIDENCE_SHA256: !Ref TimingValidationEvidenceSha256
+          PROVIDER_ACCOUNT_ID: !Ref ProviderAccountId
+          STOP_PROXY_FUNCTION_ARN: !GetAtt StopProxyFunction.Arn
+          OBSERVE_PROXY_FUNCTION_ARN: !GetAtt ObserveProxyFunction.Arn
+          LEDGER_TABLE_NAME: !Ref LedgerTable
+          KMS_SIGNING_KEY_ARN: !GetAtt ReceiptSigningKey.Arn
+
+  ObserveProxyFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: ObserveProxyLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-observe-proxy
+      Runtime: python3.12
+      Architectures: [arm64]
+      CodeUri:
+        Bucket: !Ref LambdaArtifactBucket
+        Key: !Ref LambdaArtifactKey
+        Version: !If [HasArtifactVersion, !Ref LambdaArtifactVersion, !Ref AWS::NoValue]
+      Handler: guardian_runtime.observe_proxy_handler
+      MemorySize: 128
+      Timeout: 15
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt ObserveProxyRole.Arn
+      Environment:
+        Variables: &ProxyEnvironment
+          ACTIVATION_MODE: !Ref ActivationMode
+          EXPECTED_AWS_REGION: us-west-2
+          DEPLOYMENT_BINDING_SHA256: !Ref DeploymentBindingSha256
+          CORE_LOCK_SHA256: !Ref CoreLockSha256
+          TIMING_VALIDATION_EVIDENCE_SHA256: !Ref TimingValidationEvidenceSha256
+          PROVIDER_ACCOUNT_ID: !Ref ProviderAccountId
+          PROVIDER_SECRET_ARN: !Ref ProviderSecretArn
+
+  CreateProxyFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: CreateProxyLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-create-proxy
+      Runtime: python3.12
+      Architectures: [arm64]
+      CodeUri:
+        Bucket: !Ref LambdaArtifactBucket
+        Key: !Ref LambdaArtifactKey
+        Version: !If [HasArtifactVersion, !Ref LambdaArtifactVersion, !Ref AWS::NoValue]
+      Handler: guardian_runtime.create_proxy_handler
+      MemorySize: 128
+      Timeout: 15
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt CreateProxyRole.Arn
+      Environment:
+        Variables:
+          <<: *ProxyEnvironment
+          LEDGER_TABLE_NAME: !Ref LedgerTable
+
+  StopProxyFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: StopProxyLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-stop-proxy
+      Runtime: python3.12
+      Architectures: [arm64]
+      CodeUri:
+        Bucket: !Ref LambdaArtifactBucket
+        Key: !Ref LambdaArtifactKey
+        Version: !If [HasArtifactVersion, !Ref LambdaArtifactVersion, !Ref AWS::NoValue]
+      Handler: guardian_runtime.stop_proxy_handler
+      MemorySize: 128
+      Timeout: 8
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt StopProxyRole.Arn
+      Environment:
+        Variables: *ProxyEnvironment
+
+  StarterFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: StarterLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-starter
+      Runtime: python3.12
+      Architectures: [arm64]
+      CodeUri:
+        Bucket: !Ref LambdaArtifactBucket
+        Key: !Ref LambdaArtifactKey
+        Version: !If [HasArtifactVersion, !Ref LambdaArtifactVersion, !Ref AWS::NoValue]
+      Handler: guardian_runtime.starter_handler
+      MemorySize: 128
+      Timeout: 15
+      Role: !GetAtt StarterRole.Arn
+      Environment:
+        Variables:
+          ACTIVATION_MODE: !Ref ActivationMode
+          EXPECTED_AWS_REGION: us-west-2
+          DEPLOYMENT_BINDING_SHA256: !Ref DeploymentBindingSha256
+          CORE_LOCK_SHA256: !Ref CoreLockSha256
+          TIMING_VALIDATION_EVIDENCE_SHA256: !Ref TimingValidationEvidenceSha256
+          PROVIDER_ACCOUNT_ID: !Ref ProviderAccountId
+          STATE_MACHINE_ARN: !Ref GuardianStateMachine
+
+  RecoveryFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: RecoveryLogGroup
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-recovery
+      Runtime: python3.12
+      Architectures: [arm64]
+      CodeUri:
+        Bucket: !Ref LambdaArtifactBucket
+        Key: !Ref LambdaArtifactKey
+        Version: !If [HasArtifactVersion, !Ref LambdaArtifactVersion, !Ref AWS::NoValue]
+      Handler: guardian_runtime.recovery_handler
+      MemorySize: 256
+      Timeout: 30
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt RecoveryRole.Arn
+      Environment:
+        Variables:
+          ACTIVATION_MODE: !Ref ActivationMode
+          EXPECTED_AWS_REGION: us-west-2
+          DEPLOYMENT_BINDING_SHA256: !Ref DeploymentBindingSha256
+          CORE_LOCK_SHA256: !Ref CoreLockSha256
+          TIMING_VALIDATION_EVIDENCE_SHA256: !Ref TimingValidationEvidenceSha256
+          PROVIDER_ACCOUNT_ID: !Ref ProviderAccountId
+          RECOVERY_ENABLED: !Ref RecoveryEnabled
+          LEDGER_TABLE_NAME: !Ref LedgerTable
+          STATE_MACHINE_ARN: !Ref GuardianStateMachine
+          KMS_SIGNING_KEY_ARN: !GetAtt ReceiptSigningKey.Arn
+
+  ControlLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-control
+      RetentionInDays: 90
+  ObserveLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-observe
+      RetentionInDays: 90
+  CreateLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-create
+      RetentionInDays: 90
+  StopLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-stop
+      RetentionInDays: 90
+  ObserveProxyLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-observe-proxy
+      RetentionInDays: 90
+  CreateProxyLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-create-proxy
+      RetentionInDays: 90
+  StopProxyLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-stop-proxy
+      RetentionInDays: 90
+  StarterLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-starter
+      RetentionInDays: 90
+  RecoveryLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AWS::StackName}-recovery
+      RetentionInDays: 90
+  StateMachineLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/vendedlogs/states/${AWS::StackName}-guardian
+      RetentionInDays: 90
+
+  GuardianStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Type: STANDARD
+      Name: !Sub ${AWS::StackName}-guardian
+      Role: !GetAtt StateMachineRole.Arn
+      DefinitionUri: state_machine.asl.json
+      DefinitionSubstitutions:
+        ControlFunctionArn: !GetAtt ControlFunction.Arn
+        ObserveFunctionArn: !GetAtt ObserveFunction.Arn
+        CreateFunctionArn: !GetAtt CreateFunction.Arn
+        StopFunctionArn: !GetAtt StopFunction.Arn
+      Logging:
+        Destinations:
+          - CloudWatchLogsLogGroup:
+              LogGroupArn: !GetAtt StateMachineLogGroup.Arn
+        IncludeExecutionData: false
+        Level: ERROR
+      Tracing:
+        Enabled: false
+
+  GuardianHttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub ${AWS::StackName}-guardian-control
+      ProtocolType: HTTP
+      DisableExecuteApiEndpoint: false
+
+  GuardianStartIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref GuardianHttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt StarterFunction.Arn
+      PayloadFormatVersion: '2.0'
+      TimeoutInMillis: 15000
+
+  GuardianStartRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref GuardianHttpApi
+      AuthorizationType: AWS_IAM
+      RouteKey: POST /guardian/executions
+      Target: !Sub integrations/${GuardianStartIntegration}
+
+  GuardianApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref GuardianHttpApi
+      StageName: v1
+      AutoDeploy: true
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 2
+        ThrottlingRateLimit: 1
+
+  ApiInvokeStarterPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref StarterFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${GuardianHttpApi}/*/POST/guardian/executions
+
+  RecoverySchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Disabled-by-default stale guardian lease recovery tick.
+      ScheduleExpression: rate(1 minute)
+      State: !Ref RecoveryScheduleState
+      Targets:
+        - Arn: !GetAtt RecoveryFunction.Arn
+          Id: GuardianRecovery
+          DeadLetterConfig:
+            Arn: !GetAtt RecoveryDeadLetterQueue.Arn
+          RetryPolicy:
+            MaximumEventAgeInSeconds: 60
+            MaximumRetryAttempts: 2
+
+  RecoveryDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      MessageRetentionPeriod: 1209600
+      SqsManagedSseEnabled: true
+
+  RecoveryDeadLetterQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues: [!Ref RecoveryDeadLetterQueue]
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: events.amazonaws.com}
+            Action: sqs:SendMessage
+            Resource: !GetAtt RecoveryDeadLetterQueue.Arn
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !GetAtt RecoverySchedule.Arn
+          - Effect: Allow
+            Principal:
+              AWS: !GetAtt RecoveryRole.Arn
+            Action: sqs:SendMessage
+            Resource: !GetAtt RecoveryDeadLetterQueue.Arn
+
+  RecoveryEventInvokeConfig:
+    Type: AWS::Lambda::EventInvokeConfig
+    Properties:
+      FunctionName: !Ref RecoveryFunction
+      Qualifier: $LATEST
+      MaximumEventAgeInSeconds: 60
+      MaximumRetryAttempts: 2
+      DestinationConfig:
+        OnFailure:
+          Destination: !GetAtt RecoveryDeadLetterQueue.Arn
+
+  RecoveryFailureAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Recovery supervisor has failed; keep LIVE claims closed.
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref RecoveryFunction
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+
+  RecoveryThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Recovery supervisor was throttled; timing evidence is invalid until reviewed.
+      Namespace: AWS/Lambda
+      MetricName: Throttles
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref RecoveryFunction
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+
+  RecoveryScheduleFailureAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: EventBridge failed to deliver a recovery tick.
+      Namespace: AWS/Events
+      MetricName: FailedInvocations
+      Dimensions:
+        - Name: RuleName
+          Value: !Ref RecoverySchedule
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+
+  RecoveryDeadLetterDepthAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Recovery event delivery or async execution failed.
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !GetAtt RecoveryDeadLetterQueue.QueueName
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+
+  RecoveryInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref RecoveryFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt RecoverySchedule.Arn
+
+Outputs:
+  LedgerTableName:
+    Value: !Ref LedgerTable
+  LedgerTableArn:
+    Value: !GetAtt LedgerTable.Arn
+  ReceiptSigningKeyArn:
+    Value: !GetAtt ReceiptSigningKey.Arn
+  GuardianStateMachineArn:
+    Value: !Ref GuardianStateMachine
+  ControlFunctionArn:
+    Value: !GetAtt ControlFunction.Arn
+  ObserveFunctionArn:
+    Value: !GetAtt ObserveFunction.Arn
+  CreateFunctionArn:
+    Value: !GetAtt CreateFunction.Arn
+  StopFunctionArn:
+    Value: !GetAtt StopFunction.Arn
+  StarterFunctionArn:
+    Value: !GetAtt StarterFunction.Arn
+  RecoveryFunctionArn:
+    Value: !GetAtt RecoveryFunction.Arn
+  ObserveProxyFunctionArn:
+    Value: !GetAtt ObserveProxyFunction.Arn
+  CreateProxyFunctionArn:
+    Value: !GetAtt CreateProxyFunction.Arn
+  StopProxyFunctionArn:
+    Value: !GetAtt StopProxyFunction.Arn
+  StartEndpoint:
+    Value: !Sub https://${GuardianHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/v1/guardian/executions
+  ActivationState:
+    Value: !Ref ActivationMode
+  DeployedCoreLockSha256:
+    Value: !Ref CoreLockSha256
+  DeployedTimingValidationEvidenceSha256:
+    Value: !Ref TimingValidationEvidenceSha256
+  RecoveryState:
+    Value: !Sub ${RecoveryEnabled}/${RecoveryScheduleState}
+  RecoveryDeadLetterQueueArn:
+    Value: !GetAtt RecoveryDeadLetterQueue.Arn
+  RecoveryFailureAlarmName:
+    Value: !Ref RecoveryFailureAlarm
