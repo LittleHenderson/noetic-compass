@@ -138,7 +138,10 @@ function Assert-StopTargetIdentity {
     param([Parameter(Mandatory)][object]$Pod)
     $id = Get-OptionalProperty $Pod 'id'
     $name = Get-OptionalProperty $Pod 'name'
-    if ($id -ne $PodId -or $name -ne $PodName) {
+    # The exact name is required by Assert-ExactTarget at arm time.  After arm,
+    # containment is keyed only by the provider's immutable Pod ID so mutable
+    # configuration drift cannot prevent an emergency STOP.
+    if ($id -ne $PodId) {
         throw 'WATCHDOG_STOP_TARGET_IDENTITY_MISMATCH'
     }
     if ($ExcludedPodIds -contains $id) {

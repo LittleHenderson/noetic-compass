@@ -51,7 +51,7 @@ jobs:
         run: |
           set -euo pipefail
           observed="$(sha256sum tools/runpod_open_weight_canary_v2/github_stop_supervisor.py | cut -d' ' -f1 | tr '[:lower:]' '[:upper:]')"
-          test "$observed" = "F15D70BCBD1DC7F78A1DCB58E52040D5E2D85966798941A37F7CB253664EA82D"
+          test "$observed" = "D145EE36C9AF5C6D881DBBE5D6F48DC485BDDA4AB14BC2C59B703BEDFC405DD0"
 
       - name: Offline supervisor self-test
         run: >-

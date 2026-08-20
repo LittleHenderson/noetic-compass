@@ -118,7 +118,10 @@ Pod and uploads its point-in-time arm receipt. It is then intended to remain
 active until the same hard deadline, retries STOP at or after that deadline,
 verifies EXITED/TERMINATED, and uploads a terminal receipt. An `if: always()`
 emergency step retries STOP if the normal step fails after a successful arm
-check. The arm receipt does not prove that the GitHub job remains live later;
+check. Both supervisors require the exact ID and name at arm time. After arm,
+STOP and terminal-state recovery use the immutable Pod ID (plus the protected-ID
+exclusions), so an editable-name drift cannot block cost containment. The arm
+receipt does not prove that the GitHub job remains live later;
 the run status must be re-read immediately before the model starts, and manual
 workflow cancellation remains forbidden during the canary.
 It rejects both protected Pod IDs and never deletes a Pod. The workflow must be

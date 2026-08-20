@@ -66,7 +66,7 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     preregistration, _raw = canary.load_preregistration(PREREGISTRATION_PATH)
 
     assert preregistration["preregistration_sha256"] == (
-        "072F6A9FA2A90598418361817439E8D1A150ED7962DDA02C3935DBB27A37BBB4"
+        "BA06EE7EF2DE6E98F0610738F6996405D319BA613A56313A0B3565532FE9B3D5"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
     assert preregistration["launch_bindings"]["execution_authority"] == (
@@ -96,6 +96,11 @@ def test_local_watchdog_binds_live_runpod_schema_and_exact_boundary():
     assert "$failTarget = Assert-StopTargetIdentity (Invoke-PodGet)" in helper_text
     assert "Wait-ForExitedByIdentity" in helper_text
     assert "STOPPED_AFTER_WATCHDOG_FAILURE_EXITED_CONFIRMED" in helper_text
+    stop_identity_body = helper_text.split(
+        "function Assert-StopTargetIdentity {", 1
+    )[1].split("function Wait-ForExitedByIdentity {", 1)[0]
+    assert "if ($id -ne $PodId)" in stop_identity_body
+    assert "$name -ne $PodName" not in stop_identity_body
 
 
 def test_unbound_execute_fails_before_runtime_or_output(tmp_path: Path, monkeypatch):
@@ -320,6 +325,72 @@ def test_github_supervisor_arm_check_writes_canonical_bound_receipt(
     assert value["status"] == "ARMED_PROVIDER_GET_SUCCEEDED"
     assert value["pod_id"] == "synthetic123"
     assert value["hard_stop_deadline_utc"] == deadline_text
+
+
+def test_github_supervisor_post_arm_stop_uses_immutable_id_not_editable_name(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    source_commit = "1" * 40
+    pod_id = "synthetic123"
+    original_name = "cas-open-weight-canary-v2-synthetic"
+    monkeypatch.setenv("GITHUB_SHA", source_commit)
+    monkeypatch.setenv("GITHUB_REPOSITORY", "LittleHenderson/noetic-compass")
+    monkeypatch.setenv("GITHUB_RUN_ID", "123")
+    monkeypatch.setenv("GITHUB_RUN_ATTEMPT", "1")
+    monkeypatch.setenv("RUNPOD_API_KEY", "test-key-never-used")
+    observations = iter(
+        (
+            {"id": pod_id, "name": "renamed-after-arm", "desiredStatus": "RUNNING"},
+            {"id": pod_id, "name": "renamed-after-arm", "desiredStatus": "EXITED"},
+        )
+    )
+    monkeypatch.setattr(
+        github_supervisor, "_get_pod", lambda **_kwargs: next(observations)
+    )
+    stopped = []
+    monkeypatch.setattr(
+        github_supervisor,
+        "_stop_with_retries",
+        lambda **kwargs: (stopped.append(kwargs["pod_id"]) or 200, 1),
+    )
+    args = SimpleNamespace(
+        pod_id=pod_id,
+        pod_name=original_name,
+        deadline=(datetime.now(timezone.utc) - timedelta(seconds=1)).isoformat(),
+        source_commit=source_commit,
+        receipt=str(tmp_path / "terminal.json"),
+    )
+
+    assert github_supervisor.run_supervisor(args) == 0
+    assert stopped == [pod_id]
+    receipt = canary.strict_json_object(
+        (tmp_path / "terminal.json").read_bytes(), "terminal receipt"
+    )
+    assert receipt["observed_terminal_status"] == "EXITED"
+
+
+def test_github_supervisor_arm_is_name_strict_and_post_arm_is_id_strict():
+    renamed = {
+        "id": "synthetic123",
+        "name": "renamed-after-arm",
+        "desiredStatus": "RUNNING",
+    }
+    with pytest.raises(ValueError, match="bound Pod name"):
+        github_supervisor._require_bound_target(
+            renamed,
+            pod_id="synthetic123",
+            pod_name="cas-open-weight-canary-v2-synthetic",
+        )
+    assert (
+        github_supervisor._require_bound_target(
+            renamed, pod_id="synthetic123", pod_name=None
+        )
+        == "RUNNING"
+    )
+    with pytest.raises(ValueError, match="bound Pod"):
+        github_supervisor._require_bound_target(
+            renamed, pod_id="wrong123", pod_name=None
+        )
 
 
 def test_github_supervisor_emergency_rejects_protected_pod_before_request(

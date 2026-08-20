@@ -103,9 +103,13 @@ def _get_pod(*, pod_id: str, api_key: str) -> dict[str, Any]:
     return value
 
 
-def _require_bound_target(value: dict[str, Any], *, pod_id: str, pod_name: str) -> str:
-    if value.get("id") != pod_id or value.get("name") != pod_name:
+def _require_bound_target(
+    value: dict[str, Any], *, pod_id: str, pod_name: str | None
+) -> str:
+    if value.get("id") != pod_id:
         raise ValueError("RunPod GET response does not match the bound Pod")
+    if pod_name is not None and value.get("name") != pod_name:
+        raise ValueError("RunPod GET response does not match the bound Pod name")
     status = value.get("desiredStatus")
     if status not in {"RUNNING", "EXITED", "TERMINATED"}:
         raise ValueError("RunPod desiredStatus is not admitted")
@@ -137,7 +141,7 @@ def _stop_with_retries(*, pod_id: str, api_key: str) -> tuple[int, int]:
 
 
 def _wait_for_terminal(
-    *, pod_id: str, pod_name: str, api_key: str, timeout_seconds: int = 600
+    *, pod_id: str, api_key: str, timeout_seconds: int = 600
 ) -> tuple[str, int]:
     started = time.monotonic()
     polls = 0
@@ -145,7 +149,7 @@ def _wait_for_terminal(
         polls += 1
         try:
             value = _get_pod(pod_id=pod_id, api_key=api_key)
-            status = _require_bound_target(value, pod_id=pod_id, pod_name=pod_name)
+            status = _require_bound_target(value, pod_id=pod_id, pod_name=None)
             if status in {"EXITED", "TERMINATED"}:
                 return status, polls
         except Exception:
@@ -226,7 +230,10 @@ def run_supervisor(args: argparse.Namespace) -> int:
 
     api_key = os.environ.get("RUNPOD_API_KEY", "")
     before = _get_pod(pod_id=args.pod_id, api_key=api_key)
-    before_status = _require_bound_target(before, pod_id=args.pod_id, pod_name=args.pod_name)
+    # The exact name was provider-verified by the canonical arm receipt.  At
+    # the deadline, STOP recovery is keyed only by the immutable Pod ID so an
+    # editable-name drift cannot defeat cost containment.
+    before_status = _require_bound_target(before, pod_id=args.pod_id, pod_name=None)
     stop_http_status: int | None = None
     stop_attempts = 0
     if before_status == "RUNNING":
@@ -234,7 +241,7 @@ def run_supervisor(args: argparse.Namespace) -> int:
             pod_id=args.pod_id, api_key=api_key
         )
     terminal_status, terminal_polls = _wait_for_terminal(
-        pod_id=args.pod_id, pod_name=args.pod_name, api_key=api_key
+        pod_id=args.pod_id, api_key=api_key
     )
     receipt = _base_receipt(args, mode="NORMAL_DEADLINE_STOP")
     receipt.update(
