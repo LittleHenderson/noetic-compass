@@ -1,0 +1,231 @@
+
+==============================================================================
+CAS DIAGNOSE -> CORRECT LOOP v2 — ONE AXIS, TWO CRITERIA, ABLE TO FAIL
+==============================================================================
+SCOPE: axis A (Pathway / RPM chain) on the NUMERIC plane. Nothing else.
+This measures MECHANISM ONLY. No model is loaded and no efficacy claim
+is made or implied. Three of the six cases are designed to FAIL.
+Supersedes cas_weld_loop.py (reviewed at 2be60327: four fatal defects).
+[DISCLOSE] single_axis_scope: axes N, W, F, E, S and P are OUT OF SCOPE. E and S are hardcoded placeholders in the string detector; W and N have no numeric-plane corrector here; P is derived from other axes and is never an independent naming. Only axis A has a detector AND a corrector on the same plane, so only axis A is claimed.
+[DISCLOSE] no_pcba_vocabulary: no PCBA component type (DR / AMP / RS / CONN) appears anywhere in this loop. The Component Atlas returned NULL at pythia-1b and GREY at pythia-2.8b and gpt-neox-20b, and the board taxonomy returned VACUOUS on natural conversation, so that vocabulary drives nothing here.
+[DISCLOSE] detector_is_a_transparent_rule: cas_engine's axis-A detector is a deterministic hand-written rule over a numeric array, and the 7 axis detectors read DISJOINT slices of the input. Perturbing the pathway plane can therefore only move axis A. 'The right axis fires' is analytically entailed once the threshold is crossed, so it is reported as a GATE, not scored as an identification result. The scored criteria are localization and correction, which the scalar output does not directly give away.
+[DISCLOSE] mirrored_constants: SEVERITY_THRESHOLD=0.05 and SATISFACTION_FLOOR=0.5 are copied from the Rust source for reporting and as the repair's arithmetic target. Every verdict in this file is produced by calling the Rust scanner; the detection rule is never reimplemented in Python.
+
+==============================================================================
+BLINDNESS AND CHAIN INVARIANTS — asserted mechanically
+==============================================================================
+  diagnose_blind_parameters: ['obj']
+  localize_blind_parameters: ['obj']
+  repair_parameters: ['obj', 'targets']
+  neutral_object_fired_axes: []
+  neutral_object_axis_severity: {'N': 0.0, 'W': 0.0, 'F': 0.0, 'E': 0.0, 'S': 0.0, 'A': 0.0, 'P': 0.0}
+  clean_probe_chain: [0.9, 0.8, 0.7, 0.6]
+  clean_probe_chain_axis_A_severity: 0.0
+  one_broken_chain_axis_A_severity: 0.142857143
+  severity_quantum_is_one_seventh: True
+  RULE A: diagnose_blind and localize_blind take ONE parameter — the
+          object under test. There is no axis parameter, no clean-object
+          parameter and no fault-record parameter to pass an answer through.
+  RULE B: repair(obj, targets) is called with targets bound by `is` to
+          localization.indices, checked at every call site.
+
+==============================================================================
+PREREGISTERED CRITERIA
+==============================================================================
+  GATE (precondition, NOT scored as identification)
+     axis A fires on a blind scan of the perturbed object alone.
+     Falsifiable: NEG-1 injects a real inversion the detector cannot see,
+     the gate fails, and the chain stops.
+     CHANCE NULL: none, and none is claimed. Stated in the disclosures.
+
+  CRITERION 1 — LOCALIZATION
+     The blind leave-one-out procedure names the EXACT set of violated
+     chains, from a detector whose only axis-A output is a scalar count.
+     CHANCE NULL: 1/C(7,k), measured exhaustively AND empirically.
+     Falsifiable: NEG-3 runs a real alternative localizer that gets it wrong.
+
+  CRITERION 2 — CORRECTION VIA THE DETECTED SET
+     The solver, driven by the LOCALIZED set (`is`-checked, never ground
+     truth), clears axis A under a fresh blind scan; the repaired object
+     differs from the pre-injection original (so no f(f(x))==x identity);
+     and the exhaustive same-size control is IDENTIFYING (exactly one).
+     Falsifiable: NEG-3's mislocalization propagates and leaves A fired.
+
+==============================================================================
+CASE — POS-1  one broken RPM chain
+==============================================================================
+  PREREGISTERED EXPECTATION : axis A fires; leave-one-out names the one broken chain; the solver clears it; exactly 1 of 7 same-size interventions clears, so the chance rate is 1/7.
+  PREREGISTERED VERDICT     : PASS
+  injector mechanism : upstream_stage_degradation_seeded_uniform
+    chain 3 (F4) stage  D: 0.8 -> 0.2644
+  perturbed object sha256 : 5890deeb9a7a49fb...
+  GATE  diagnose_blind(perturbed)  -> fired=['A'] (non-derived ['A'])
+        axis-A severity 0.142857  resistance 0.857143
+  LOCALIZE leave_one_out_chain_substitution
+           -> chains [3]   (base axis-A severity 0.142857)
+  REPAIR   repair(perturbed, targets)  targets is localization.indices -> True
+  VERIFY   diagnose_blind(repaired) -> fired=[]  axis-A severity 0.000000
+  repaired == pre-injection original: False  (L1 distance 0.1000)
+    -> the corrector is a solver, not the injector's inverse; f(f(x))==x is NOT available to this loop.
+  CRITERION 1 localization : named [3]  truth [3]  -> True
+  CONTROL exhaustive: 1/7 same-size interventions clear axis A -> chance rate 0.142857
+          positive control (localized subset clears): True   identifying: True
+  CONTROL random    : 298/2000 draws clear -> empirical 0.149000
+  CRITERION 2 correction   : axis A cleared=True  corrector!=injector-inverse=True  control identifying=True  -> True
+  ==> VERDICT PASS
+
+==============================================================================
+CASE — POS-2  two broken RPM chains
+==============================================================================
+  PREREGISTERED EXPECTATION : axis A fires at 2/7; leave-one-out names both chains; exactly 1 of C(7,2)=21 same-size interventions clears, so the chance rate is 1/21.
+  PREREGISTERED VERDICT     : PASS
+  injector mechanism : upstream_stage_degradation_seeded_uniform
+    chain 2 (F3) stage  W: 0.7 -> 0.1985
+    chain 6 (F7) stage  D: 0.8 -> 0.2739
+  perturbed object sha256 : ada299194d9b274f...
+  GATE  diagnose_blind(perturbed)  -> fired=['A'] (non-derived ['A'])
+        axis-A severity 0.285714  resistance 0.714286
+  LOCALIZE leave_one_out_chain_substitution
+           -> chains [2, 6]   (base axis-A severity 0.285714)
+  REPAIR   repair(perturbed, targets)  targets is localization.indices -> True
+  VERIFY   diagnose_blind(repaired) -> fired=[]  axis-A severity 0.000000
+  repaired == pre-injection original: False  (L1 distance 0.2000)
+    -> the corrector is a solver, not the injector's inverse; f(f(x))==x is NOT available to this loop.
+  CRITERION 1 localization : named [2, 6]  truth [2, 6]  -> True
+  CONTROL exhaustive: 1/21 same-size interventions clear axis A -> chance rate 0.047619
+          positive control (localized subset clears): True   identifying: True
+  CONTROL random    : 87/2000 draws clear -> empirical 0.043500
+  CRITERION 2 correction   : axis A cleared=True  corrector!=injector-inverse=True  control identifying=True  -> True
+  ==> VERDICT PASS
+
+==============================================================================
+CASE — NEG-1  sub-threshold ordering inversion (detector blind spot)
+==============================================================================
+  PREREGISTERED EXPECTATION : A REAL prerequisite inversion (A0=0.55 under D=0.80) that the detector cannot see, because its guard requires the earlier stage to fall BELOW 0.5. Axis A does NOT fire, the chain STOPS at the gate, and no correction is manufactured.
+  PREREGISTERED VERDICT     : GATE_FAILED
+  injector mechanism : subthreshold_ordering_inversion_INVISIBLE_TO_DETECTOR
+    chain 2 (F3) stage A0: 0.9 -> 0.55
+  perturbed object sha256 : a40366532e30c34a...
+  GATE  diagnose_blind(perturbed)  -> fired=[] (non-derived [])
+        axis-A severity 0.000000  resistance 1.000000
+  >>> CHAIN STOPS. Axis A did not fire, so there is no detected axis to drive a correction.
+  >>> The loop does NOT fall back to the injected ground truth. That fallback is fatal defect #4 of the superseded build.
+  ==> VERDICT GATE_FAILED  (criterion 1 and 2 NOT EVALUATED — the precondition failed)
+
+==============================================================================
+CASE — NEG-2  no fault at all
+==============================================================================
+  PREREGISTERED EXPECTATION : Nothing is injected. The gate is clean and the loop reports that, rather than inventing a correction to report.
+  PREREGISTERED VERDICT     : NO_FAULT
+  injector mechanism : none
+  perturbed object sha256 : 7a611448823333f4...
+  GATE  diagnose_blind(perturbed)  -> fired=[] (non-derived [])
+        axis-A severity 0.000000  resistance 1.000000
+  >>> CHAIN STOPS. Axis A did not fire, so there is no detected axis to drive a correction.
+  >>> The loop does NOT fall back to the injected ground truth. That fallback is fatal defect #4 of the superseded build.
+  ==> VERDICT NO_FAULT  (criterion 1 and 2 NOT EVALUATED — the precondition failed)
+
+==============================================================================
+CASE — NEG-3  detection failure PROPAGATES to correction failure
+==============================================================================
+  PREREGISTERED EXPECTATION : Identical object, identical corrector, WRONG localizer. It names the weak-but-clean decoy chain, the corrector repairs that chain, and axis A is still fired at VERIFY. Criteria 1 AND 2 both return False. This is the proof that the chain is real.
+  PREREGISTERED VERDICT     : FAIL
+  injector mechanism : one_violated_chain_plus_one_weak_but_clean_decoy_chain
+    chain 5 (F6) stage  D: 0.8 -> 0.3
+    chain 3 (F4) stage whole chain (DECOY, clean): 0.90/0.80/0.70/0.60 -> 0.42/0.35/0.28/0.20
+  perturbed object sha256 : b271230bb5d140c7...
+  GATE  diagnose_blind(perturbed)  -> fired=['A'] (non-derived ['A'])
+        axis-A severity 0.142857  resistance 0.857143
+  LOCALIZE naive_lowest_minimum_stage (ALTERNATIVE IMPLEMENTATION, WRONG)
+           -> chains [3]   (base axis-A severity 0.142857)
+  REPAIR   repair(perturbed, targets)  targets is localization.indices -> True
+  VERIFY   diagnose_blind(repaired) -> fired=['A']  axis-A severity 0.142857
+  repaired == pre-injection original: False  (L1 distance 2.2500)
+    -> the corrector is a solver, not the injector's inverse; f(f(x))==x is NOT available to this loop.
+  CRITERION 1 localization : named [3]  truth [5]  -> False
+  CONTROL exhaustive: 1/7 same-size interventions clear axis A -> chance rate 0.142857
+          positive control (localized subset clears): False   identifying: True
+  CONTROL random    : 263/2000 draws clear -> empirical 0.131500
+  CRITERION 2 correction   : axis A cleared=False  corrector!=injector-inverse=True  control identifying=True  -> False
+  ==> VERDICT FAIL
+
+==============================================================================
+CASE — ROBUST  in-scope fault beside an out-of-scope one
+==============================================================================
+  PREREGISTERED EXPECTATION : A pathway fault AND a domain-precedence fault. Axis A is localized and cleared; axes W and P remain fired and are reported as OUT OF SCOPE and uncorrected. The loop must not report a full clean.
+  PREREGISTERED VERDICT     : PASS
+  injector mechanism : upstream_stage_degradation_seeded_uniform
+    chain 0 (F1) stage A0: 0.9 -> 0.2089
+  perturbed object sha256 : 983f58ee50be992b...
+  GATE  diagnose_blind(perturbed)  -> fired=['W', 'A', 'P'] (non-derived ['W', 'A'])
+        axis-A severity 0.142857  resistance 0.857143
+  LOCALIZE leave_one_out_chain_substitution
+           -> chains [0]   (base axis-A severity 0.142857)
+  REPAIR   repair(perturbed, targets)  targets is localization.indices -> True
+  VERIFY   diagnose_blind(repaired) -> fired=['W']  axis-A severity 0.000000
+  OUT OF SCOPE, NOT CORRECTED: axes ['W'] still fired. This loop corrects axis A only and does not claim otherwise.
+  repaired == pre-injection original: False  (L1 distance 0.1000)
+    -> the corrector is a solver, not the injector's inverse; f(f(x))==x is NOT available to this loop.
+  CRITERION 1 localization : named [0]  truth [0]  -> True
+  CONTROL exhaustive: 1/7 same-size interventions clear axis A -> chance rate 0.142857
+          positive control (localized subset clears): True   identifying: True
+  CONTROL random    : 284/2000 draws clear -> empirical 0.142000
+  CRITERION 2 correction   : axis A cleared=True  corrector!=injector-inverse=True  control identifying=True  -> True
+  ==> VERDICT PASS
+
+==============================================================================
+TAMPER CHECK — deliberately violating rule B, once, to show it matters
+==============================================================================
+  Reproduces fatal defect #4 of the superseded build: the corrector is
+  handed the injected ground truth instead of the localizer's output.
+  chained   : repair(perturbed, localizer -> [3])  axis A cleared = False
+  TAMPERED  : repair(perturbed, ground truth -> [5])  axis A cleared = True
+  >>> the chain is LOAD-BEARING: True
+      (the two disagree, so the reported outcome depends on which one
+       drives the corrector — which is exactly what the review said the
+       superseded build could not demonstrate)
+
+==============================================================================
+VERDICT TABLE
+==============================================================================
+  case                                                       prereg       actual       c1     c2     match
+  POS-1  one broken RPM chain                                PASS         PASS         True   True   True
+  POS-2  two broken RPM chains                               PASS         PASS         True   True   True
+  NEG-1  sub-threshold ordering inversion (detector blind spot) GATE_FAILED  GATE_FAILED  None   None   True
+  NEG-2  no fault at all                                     NO_FAULT     NO_FAULT     None   None   True
+  NEG-3  detection failure PROPAGATES to correction failure  FAIL         FAIL         False  False  True
+  ROBUST  in-scope fault beside an out-of-scope one          PASS         PASS         True   True   True
+
+==============================================================================
+WHAT THE CONTROLS MEASURED
+==============================================================================
+  POS-1  one broken RPM chain
+     chance rate of a random same-size intervention: 1/7 = 0.142857
+     derivation: C(7,1) = 7 same-size subsets of the 7 RPM chains, drawn uniformly; 1 of them clear axis A when repaired. A random pick therefore succeeds 1/7 of the time. The pool INCLUDES the localized subset (positive control).
+     empirical over 2000 seeded draws: 298/2000 = 0.149000
+  POS-2  two broken RPM chains
+     chance rate of a random same-size intervention: 1/21 = 0.047619
+     derivation: C(7,2) = 21 same-size subsets of the 7 RPM chains, drawn uniformly; 1 of them clear axis A when repaired. A random pick therefore succeeds 1/21 of the time. The pool INCLUDES the localized subset (positive control).
+     empirical over 2000 seeded draws: 87/2000 = 0.043500
+  NEG-3  detection failure PROPAGATES to correction failure
+     chance rate of a random same-size intervention: 1/7 = 0.142857
+     derivation: C(7,1) = 7 same-size subsets of the 7 RPM chains, drawn uniformly; 1 of them clear axis A when repaired. A random pick therefore succeeds 1/7 of the time. The pool INCLUDES the localized subset (positive control).
+     empirical over 2000 seeded draws: 263/2000 = 0.131500
+  ROBUST  in-scope fault beside an out-of-scope one
+     chance rate of a random same-size intervention: 1/7 = 0.142857
+     derivation: C(7,1) = 7 same-size subsets of the 7 RPM chains, drawn uniformly; 1 of them clear axis A when repaired. A random pick therefore succeeds 1/7 of the time. The pool INCLUDES the localized subset (positive control).
+     empirical over 2000 seeded draws: 284/2000 = 0.142000
+
+==============================================================================
+STATUS
+==============================================================================
+  cases: 6   PASS 3   reported-failure 2   deviations from prereg: NONE
+  LOOP STATUS: LOOP_FALSIFIABLE_AND_HELD
+  scanner calls made: 18154
+  Every verdict above came from cas_engine.InversionScanner. No stage
+  in this file received the injected axis, the pre-injection object, or
+  the broken-chain indices. Ground truth is read once per case, in the
+  scoring of criterion 1, and every read is logged.
+  This is MECHANISM on one axis. It says NOTHING about efficacy.
+
+  wrote C:\Users\wakil\OneDrive\Desktop\tksCAS\docs\working\gate5_weld\weld_v2_run_report.json

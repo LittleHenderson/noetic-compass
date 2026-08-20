@@ -4,6 +4,51 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-19 — WELD v2: a CAS diagnose→correct loop that can actually FAIL (one axis, two criteria)
+
+The Gate-5 WELD build was reviewed at `2be60327` and failed its own review: all four success
+criteria were true by construction. `docs/working/gate5_weld/cas_weld_loop_v2.py` +
+`WELD_SPEC_V2.md` supersede it (the v1 files are left on disk as the failure record).
+
+- **Scope narrowed on purpose to ONE axis** — `A` (Pathway/RPM chain) on the numeric plane,
+  the single detection the review found genuine. Axes N/W/F/E/S/P are declared out of scope.
+  J1, J2, the epsilon realizers, the PCBA vocabulary and stage 5 are **absent**, not stubbed.
+  v1's criteria (c)/(d1)/(d2) were **deleted**, not repaired — they lived on a lossy
+  projection and could not be made falsifiable.
+- **Blindness is structural.** `diagnose_blind(obj)` and `localize_blind(obj)` take exactly
+  one parameter, asserted via `inspect.signature`; there is no parameter through which an
+  axis name, a pre-injection object or a fault record could be passed. No concatenation
+  anywhere. Ground truth is read once per case, only to score localization, and every read
+  is logged.
+- **The chain is proved load-bearing, not asserted.** `repair(obj, targets)` is called with
+  `targets is localization.indices`. A built-in tamper check reproduces the v1 defect once:
+  driven by the localizer NEG-3 reports `axis A cleared = False`; driven by ground truth it
+  reports `True`. The v1 wiring **manufactures a success where v2 reports a failure**, and
+  the `PREREGISTRATION_VIOLATED` / exit-1 branch is reachable.
+- **The control can match, and its null is stated with its derivation.** Exhaustive sweep of
+  all `C(7,k)` same-size interventions with the localized subset **in** the pool. Chance rate
+  **1/7 = 0.142857** (k=1) and **1/21 = 0.047619** (k=2), cross-checked empirically over 2000
+  seeded random draws (0.1490, 0.0435; all |z| < 1.5). In NEG-3 the same control reports
+  `positive_control = False`.
+- **No involution identity.** The injector overwrites a stage with a seeded `U(0.05,0.45)`
+  draw; the corrector is a constraint solver that never learns the original. `repaired ==
+  pre-injection original` is **measured** and comes out False every run (L1 0.10 / 0.20 / 2.25).
+- **6 cases, 3 designed to fail, all matched preregistration** → `LOOP_FALSIFIABLE_AND_HELD`,
+  exit 0, 18,154 scanner calls, zero GPU/API cost, stable across 5 seeds. NEG-1 surfaces a
+  live gap: `detect_pathway_inversion` misses every prerequisite inversion whose unsatisfied
+  stage stays above 0.5. ROBUST shows the loop reporting a partial repair as partial
+  (`axes ['W'] still fired — OUT OF SCOPE, NOT CORRECTED`).
+- **Honest limit, stated in §9 of the spec:** the detector is a transparent hand-written rule
+  over disjoint input slices, so every value the loop measures is derivable from the Rust
+  source. The gate has **no** chance null and is not scored as identification. The claim is
+  only that the chain reports failure when the diagnosis is wrong, never falls back to ground
+  truth, never manufactures a correction, and beats a non-zero chance rate a random
+  intervention can and does hit. **Nothing here bears on efficacy; no model is loaded.**
+- Separate finding, committed on its own: `inversion_gate._DOMAIN_RE` used `` after
+  `[PCEO]`, which `_` defeats, so **axis W could never fire on any drive-tagged expression
+  in the repo**. Fixed; 7 regression tests (4 fail against the old regex); belief suite
+  135 → 142 passing.
+
 ## 2026-08-19 — Gate 4 board-CHANGE: 16-conversation pilot RUN. Both claims VACUOUS; kill statistic fires but is not citable.
 
 The pilot spend gate of `PREREG_BOARD_CHANGE_V1.md` was executed under AMENDMENT A1

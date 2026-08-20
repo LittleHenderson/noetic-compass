@@ -1,0 +1,622 @@
+{
+  "schema": "cas_weld_loop.v2",
+  "generated_utc": "2026-08-20T03:47:12.615339+00:00",
+  "supersedes": "docs/working/gate5_weld/cas_weld_loop.py (reviewed 2be60327)",
+  "scope": {
+    "axes_in_scope": [
+      "A"
+    ],
+    "plane": "numeric pathway array",
+    "axes_out_of_scope": [
+      "N",
+      "W",
+      "F",
+      "E",
+      "S",
+      "P"
+    ],
+    "model_loaded": false,
+    "efficacy_claim": null
+  },
+  "loop_status": "LOOP_FALSIFIABLE_AND_HELD",
+  "deviations_from_preregistration": [],
+  "argv": {
+    "seed": 20260819,
+    "draws": 2000,
+    "out": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\gate5_weld\\weld_v2_run_report.json"
+  },
+  "invariants": {
+    "diagnose_blind_parameters": [
+      "obj"
+    ],
+    "localize_blind_parameters": [
+      "obj"
+    ],
+    "repair_parameters": [
+      "obj",
+      "targets"
+    ],
+    "neutral_object_fired_axes": [],
+    "neutral_object_axis_severity": {
+      "N": 0.0,
+      "W": 0.0,
+      "F": 0.0,
+      "E": 0.0,
+      "S": 0.0,
+      "A": 0.0,
+      "P": 0.0
+    },
+    "clean_probe_chain": [
+      0.9,
+      0.8,
+      0.7,
+      0.6
+    ],
+    "clean_probe_chain_axis_A_severity": 0.0,
+    "one_broken_chain_axis_A_severity": 0.142857143,
+    "severity_quantum_is_one_seventh": true
+  },
+  "criteria": {
+    "gate": "axis A fires on a blind scan of the perturbed object alone; precondition only; NO chance null claimed",
+    "criterion_1_localization": "blind leave-one-out names the exact violated chain set; chance null 1/C(7,k)",
+    "criterion_2_correction": "solver driven by the localized set clears axis A, repaired != pre-injection original, and the exhaustive same-size control is identifying"
+  },
+  "cases": [
+    {
+      "case": "POS-1  one broken RPM chain",
+      "preregistered_expectation": "axis A fires; leave-one-out names the one broken chain; the solver clears it; exactly 1 of 7 same-size interventions clears, so the chance rate is 1/7.",
+      "preregistered_verdict": "PASS",
+      "injector_mechanism": "upstream_stage_degradation_seeded_uniform",
+      "injector_edits": [
+        {
+          "chain": 3,
+          "drive": "F4",
+          "stage_index": 1,
+          "stage": "D",
+          "from": 0.8,
+          "to": 0.2644
+        }
+      ],
+      "clean_object_sha256": "7a611448823333f47ec9475e8f973e491842e0a83dd6b84c3d6f6b967c3033e2",
+      "perturbed_object_sha256": "5890deeb9a7a49fba169a211a8dc5d1f6dbf03a30989991e2c4dacd1b4f7f4fd",
+      "gate_diagnosis": {
+        "fired_axes": [
+          "A"
+        ],
+        "fired_non_derived": [
+          "A"
+        ],
+        "axis_severity": {
+          "N": 0.0,
+          "W": 0.0,
+          "F": 0.0,
+          "E": 0.0,
+          "S": 0.0,
+          "A": 0.142857143,
+          "P": 0.0
+        },
+        "input_sha256": "5890deeb9a7a49fba169a211a8dc5d1f6dbf03a30989991e2c4dacd1b4f7f4fd"
+      },
+      "gate_axis_A_fired": true,
+      "localizer": "localize_blind",
+      "localization": {
+        "indices": [
+          3
+        ],
+        "procedure": "leave_one_out_chain_substitution",
+        "base_severity": 0.142857143,
+        "per_chain_severity_after_substitution": {
+          "0": 0.142857143,
+          "1": 0.142857143,
+          "2": 0.142857143,
+          "3": 0.0,
+          "4": 0.142857143,
+          "5": 0.142857143,
+          "6": 0.142857143
+        },
+        "uses_real_detector": true
+      },
+      "chain_is_real_corrector_input_is_localizer_output": true,
+      "repaired_object_sha256": "c423bae89deb294c98f3e8439d92ca8844fad4f05cc5e090f39771d70dd1b034",
+      "verify_diagnosis": {
+        "fired_axes": [],
+        "axis_severity": {
+          "N": 0.0,
+          "W": 0.0,
+          "F": 0.0,
+          "E": 0.0,
+          "S": 0.0,
+          "A": 0.0,
+          "P": 0.0
+        }
+      },
+      "axis_A_cleared": true,
+      "residual_out_of_scope_axes": [],
+      "repaired_equals_pre_injection_original": false,
+      "l1_distance_repaired_vs_pre_injection": 0.1,
+      "ground_truth_broken_chains": [
+        3
+      ],
+      "criterion_1_localization": true,
+      "criterion_2_correction": true,
+      "control_exhaustive": {
+        "k": 1,
+        "n_same_size_interventions": 7,
+        "n_that_clear_axis_A": 1,
+        "subsets_that_clear": [
+          [
+            3
+          ]
+        ],
+        "chance_rate_random_same_size_intervention": 0.14285714285714285,
+        "chance_rate_as_fraction": "1/7",
+        "derivation": "C(7,1) = 7 same-size subsets of the 7 RPM chains, drawn uniformly; 1 of them clear axis A when repaired. A random pick therefore succeeds 1/7 of the time. The pool INCLUDES the localized subset (positive control).",
+        "localized_subset_is_among_them": true,
+        "exhaustive": true,
+        "identifying": true
+      },
+      "control_random": {
+        "draws": 2000,
+        "seed": 20261810,
+        "hits": 298,
+        "empirical_rate": 0.149
+      },
+      "verdict": "PASS",
+      "ground_truth_reads": [
+        "scoring criterion 1 (localization accuracy)"
+      ]
+    },
+    {
+      "case": "POS-2  two broken RPM chains",
+      "preregistered_expectation": "axis A fires at 2/7; leave-one-out names both chains; exactly 1 of C(7,2)=21 same-size interventions clears, so the chance rate is 1/21.",
+      "preregistered_verdict": "PASS",
+      "injector_mechanism": "upstream_stage_degradation_seeded_uniform",
+      "injector_edits": [
+        {
+          "chain": 2,
+          "drive": "F3",
+          "stage_index": 2,
+          "stage": "W",
+          "from": 0.7,
+          "to": 0.1985
+        },
+        {
+          "chain": 6,
+          "drive": "F7",
+          "stage_index": 1,
+          "stage": "D",
+          "from": 0.8,
+          "to": 0.2739
+        }
+      ],
+      "clean_object_sha256": "7a611448823333f47ec9475e8f973e491842e0a83dd6b84c3d6f6b967c3033e2",
+      "perturbed_object_sha256": "ada299194d9b274ff3d50ca41b6857418e826b5c70feaa1e5068958db7005091",
+      "gate_diagnosis": {
+        "fired_axes": [
+          "A"
+        ],
+        "fired_non_derived": [
+          "A"
+        ],
+        "axis_severity": {
+          "N": 0.0,
+          "W": 0.0,
+          "F": 0.0,
+          "E": 0.0,
+          "S": 0.0,
+          "A": 0.285714286,
+          "P": 0.0
+        },
+        "input_sha256": "ada299194d9b274ff3d50ca41b6857418e826b5c70feaa1e5068958db7005091"
+      },
+      "gate_axis_A_fired": true,
+      "localizer": "localize_blind",
+      "localization": {
+        "indices": [
+          2,
+          6
+        ],
+        "procedure": "leave_one_out_chain_substitution",
+        "base_severity": 0.285714286,
+        "per_chain_severity_after_substitution": {
+          "0": 0.285714286,
+          "1": 0.285714286,
+          "2": 0.142857143,
+          "3": 0.285714286,
+          "4": 0.285714286,
+          "5": 0.285714286,
+          "6": 0.142857143
+        },
+        "uses_real_detector": true
+      },
+      "chain_is_real_corrector_input_is_localizer_output": true,
+      "repaired_object_sha256": "dd37e5f197f06ebd2dfa4cd89fa5b9d59419f1585506cc5913f02c23dbe2db7a",
+      "verify_diagnosis": {
+        "fired_axes": [],
+        "axis_severity": {
+          "N": 0.0,
+          "W": 0.0,
+          "F": 0.0,
+          "E": 0.0,
+          "S": 0.0,
+          "A": 0.0,
+          "P": 0.0
+        }
+      },
+      "axis_A_cleared": true,
+      "residual_out_of_scope_axes": [],
+      "repaired_equals_pre_injection_original": false,
+      "l1_distance_repaired_vs_pre_injection": 0.2,
+      "ground_truth_broken_chains": [
+        2,
+        6
+      ],
+      "criterion_1_localization": true,
+      "criterion_2_correction": true,
+      "control_exhaustive": {
+        "k": 2,
+        "n_same_size_interventions": 21,
+        "n_that_clear_axis_A": 1,
+        "subsets_that_clear": [
+          [
+            2,
+            6
+          ]
+        ],
+        "chance_rate_random_same_size_intervention": 0.047619047619047616,
+        "chance_rate_as_fraction": "1/21",
+        "derivation": "C(7,2) = 21 same-size subsets of the 7 RPM chains, drawn uniformly; 1 of them clear axis A when repaired. A random pick therefore succeeds 1/21 of the time. The pool INCLUDES the localized subset (positive control).",
+        "localized_subset_is_among_them": true,
+        "exhaustive": true,
+        "identifying": true
+      },
+      "control_random": {
+        "draws": 2000,
+        "seed": 20261827,
+        "hits": 87,
+        "empirical_rate": 0.0435
+      },
+      "verdict": "PASS",
+      "ground_truth_reads": [
+        "scoring criterion 1 (localization accuracy)"
+      ]
+    },
+    {
+      "case": "NEG-1  sub-threshold ordering inversion (detector blind spot)",
+      "preregistered_expectation": "A REAL prerequisite inversion (A0=0.55 under D=0.80) that the detector cannot see, because its guard requires the earlier stage to fall BELOW 0.5. Axis A does NOT fire, the chain STOPS at the gate, and no correction is manufactured.",
+      "preregistered_verdict": "GATE_FAILED",
+      "injector_mechanism": "subthreshold_ordering_inversion_INVISIBLE_TO_DETECTOR",
+      "injector_edits": [
+        {
+          "chain": 2,
+          "drive": "F3",
+          "stage_index": 0,
+          "stage": "A0",
+          "from": 0.9,
+          "to": 0.55
+        }
+      ],
+      "clean_object_sha256": "7a611448823333f47ec9475e8f973e491842e0a83dd6b84c3d6f6b967c3033e2",
+      "perturbed_object_sha256": "a40366532e30c34a12becaccd572e08fec24c17cdaab4035871de7e327974aa4",
+      "gate_diagnosis": {
+        "fired_axes": [],
+        "fired_non_derived": [],
+        "axis_severity": {
+          "N": 0.0,
+          "W": 0.0,
+          "F": 0.0,
+          "E": 0.0,
+          "S": 0.0,
+          "A": 0.0,
+          "P": 0.0
+        },
+        "input_sha256": "a40366532e30c34a12becaccd572e08fec24c17cdaab4035871de7e327974aa4"
+      },
+      "gate_axis_A_fired": false,
+      "localizer": "localize_blind",
+      "criterion_1_localization": null,
+      "criterion_2_correction": null,
+      "verdict": "GATE_FAILED",
+      "chain_stopped_at": "gate",
+      "ground_truth_reads": []
+    },
+    {
+      "case": "NEG-2  no fault at all",
+      "preregistered_expectation": "Nothing is injected. The gate is clean and the loop reports that, rather than inventing a correction to report.",
+      "preregistered_verdict": "NO_FAULT",
+      "injector_mechanism": "none",
+      "injector_edits": [],
+      "clean_object_sha256": "7a611448823333f47ec9475e8f973e491842e0a83dd6b84c3d6f6b967c3033e2",
+      "perturbed_object_sha256": "7a611448823333f47ec9475e8f973e491842e0a83dd6b84c3d6f6b967c3033e2",
+      "gate_diagnosis": {
+        "fired_axes": [],
+        "fired_non_derived": [],
+        "axis_severity": {
+          "N": 0.0,
+          "W": 0.0,
+          "F": 0.0,
+          "E": 0.0,
+          "S": 0.0,
+          "A": 0.0,
+          "P": 0.0
+        },
+        "input_sha256": "7a611448823333f47ec9475e8f973e491842e0a83dd6b84c3d6f6b967c3033e2"
+      },
+      "gate_axis_A_fired": false,
+      "localizer": "localize_blind",
+      "criterion_1_localization": null,
+      "criterion_2_correction": null,
+      "verdict": "NO_FAULT",
+      "chain_stopped_at": "gate",
+      "ground_truth_reads": []
+    },
+    {
+      "case": "NEG-3  detection failure PROPAGATES to correction failure",
+      "preregistered_expectation": "Identical object, identical corrector, WRONG localizer. It names the weak-but-clean decoy chain, the corrector repairs that chain, and axis A is still fired at VERIFY. Criteria 1 AND 2 both return False. This is the proof that the chain is real.",
+      "preregistered_verdict": "FAIL",
+      "injector_mechanism": "one_violated_chain_plus_one_weak_but_clean_decoy_chain",
+      "injector_edits": [
+        {
+          "chain": 5,
+          "drive": "F6",
+          "stage_index": 1,
+          "stage": "D",
+          "from": 0.8,
+          "to": 0.3
+        },
+        {
+          "chain": 3,
+          "drive": "F4",
+          "stage_index": -1,
+          "stage": "whole chain (DECOY, clean)",
+          "from": "0.90/0.80/0.70/0.60",
+          "to": "0.42/0.35/0.28/0.20"
+        }
+      ],
+      "clean_object_sha256": "7a611448823333f47ec9475e8f973e491842e0a83dd6b84c3d6f6b967c3033e2",
+      "perturbed_object_sha256": "b271230bb5d140c76be8c62a3763976790eb4d3fc25a58b25b7c3bf1add8e218",
+      "gate_diagnosis": {
+        "fired_axes": [
+          "A"
+        ],
+        "fired_non_derived": [
+          "A"
+        ],
+        "axis_severity": {
+          "N": 0.0,
+          "W": 0.0,
+          "F": 0.0,
+          "E": 0.0,
+          "S": 0.0,
+          "A": 0.142857143,
+          "P": 0.0
+        },
+        "input_sha256": "b271230bb5d140c76be8c62a3763976790eb4d3fc25a58b25b7c3bf1add8e218"
+      },
+      "gate_axis_A_fired": true,
+      "localizer": "localize_naive_lowest_min",
+      "localization": {
+        "indices": [
+          3
+        ],
+        "procedure": "naive_lowest_minimum_stage (ALTERNATIVE IMPLEMENTATION, WRONG)",
+        "base_severity": 0.142857143,
+        "per_chain_severity_after_substitution": {
+          "0": 0.6,
+          "1": 0.6,
+          "2": 0.6,
+          "3": 0.2,
+          "4": 0.6,
+          "5": 0.3,
+          "6": 0.6
+        },
+        "uses_real_detector": false
+      },
+      "chain_is_real_corrector_input_is_localizer_output": true,
+      "repaired_object_sha256": "b271230bb5d140c76be8c62a3763976790eb4d3fc25a58b25b7c3bf1add8e218",
+      "verify_diagnosis": {
+        "fired_axes": [
+          "A"
+        ],
+        "axis_severity": {
+          "N": 0.0,
+          "W": 0.0,
+          "F": 0.0,
+          "E": 0.0,
+          "S": 0.0,
+          "A": 0.142857143,
+          "P": 0.0
+        }
+      },
+      "axis_A_cleared": false,
+      "residual_out_of_scope_axes": [],
+      "repaired_equals_pre_injection_original": false,
+      "l1_distance_repaired_vs_pre_injection": 2.25,
+      "ground_truth_broken_chains": [
+        5
+      ],
+      "criterion_1_localization": false,
+      "criterion_2_correction": false,
+      "control_exhaustive": {
+        "k": 1,
+        "n_same_size_interventions": 7,
+        "n_that_clear_axis_A": 1,
+        "subsets_that_clear": [
+          [
+            5
+          ]
+        ],
+        "chance_rate_random_same_size_intervention": 0.14285714285714285,
+        "chance_rate_as_fraction": "1/7",
+        "derivation": "C(7,1) = 7 same-size subsets of the 7 RPM chains, drawn uniformly; 1 of them clear axis A when repaired. A random pick therefore succeeds 1/7 of the time. The pool INCLUDES the localized subset (positive control).",
+        "localized_subset_is_among_them": false,
+        "exhaustive": true,
+        "identifying": true
+      },
+      "control_random": {
+        "draws": 2000,
+        "seed": 20261878,
+        "hits": 263,
+        "empirical_rate": 0.1315
+      },
+      "verdict": "FAIL",
+      "ground_truth_reads": [
+        "scoring criterion 1 (localization accuracy)"
+      ]
+    },
+    {
+      "case": "ROBUST  in-scope fault beside an out-of-scope one",
+      "preregistered_expectation": "A pathway fault AND a domain-precedence fault. Axis A is localized and cleared; axes W and P remain fired and are reported as OUT OF SCOPE and uncorrected. The loop must not report a full clean.",
+      "preregistered_verdict": "PASS",
+      "injector_mechanism": "upstream_stage_degradation_seeded_uniform",
+      "injector_edits": [
+        {
+          "chain": 0,
+          "drive": "F1",
+          "stage_index": 0,
+          "stage": "A0",
+          "from": 0.9,
+          "to": 0.2089
+        }
+      ],
+      "clean_object_sha256": "7a611448823333f47ec9475e8f973e491842e0a83dd6b84c3d6f6b967c3033e2",
+      "perturbed_object_sha256": "983f58ee50be992b450c39bcd70bee58508a0c2a1da47ee3532532f7f7dfeda8",
+      "gate_diagnosis": {
+        "fired_axes": [
+          "W",
+          "A",
+          "P"
+        ],
+        "fired_non_derived": [
+          "W",
+          "A"
+        ],
+        "axis_severity": {
+          "N": 0.0,
+          "W": 0.533333333,
+          "F": 0.0,
+          "E": 0.0,
+          "S": 0.0,
+          "A": 0.142857143,
+          "P": 0.076190476
+        },
+        "input_sha256": "983f58ee50be992b450c39bcd70bee58508a0c2a1da47ee3532532f7f7dfeda8"
+      },
+      "gate_axis_A_fired": true,
+      "localizer": "localize_blind",
+      "localization": {
+        "indices": [
+          0
+        ],
+        "procedure": "leave_one_out_chain_substitution",
+        "base_severity": 0.142857143,
+        "per_chain_severity_after_substitution": {
+          "0": 0.0,
+          "1": 0.142857143,
+          "2": 0.142857143,
+          "3": 0.142857143,
+          "4": 0.142857143,
+          "5": 0.142857143,
+          "6": 0.142857143
+        },
+        "uses_real_detector": true
+      },
+      "chain_is_real_corrector_input_is_localizer_output": true,
+      "repaired_object_sha256": "4ada9de1a10874c16b57ce1937f0c24c44d29cfc92636324c80cab0b898d2c65",
+      "verify_diagnosis": {
+        "fired_axes": [
+          "W"
+        ],
+        "axis_severity": {
+          "N": 0.0,
+          "W": 0.533333333,
+          "F": 0.0,
+          "E": 0.0,
+          "S": 0.0,
+          "A": 0.0,
+          "P": 0.0
+        }
+      },
+      "axis_A_cleared": true,
+      "residual_out_of_scope_axes": [
+        "W"
+      ],
+      "repaired_equals_pre_injection_original": false,
+      "l1_distance_repaired_vs_pre_injection": 0.1,
+      "ground_truth_broken_chains": [
+        0
+      ],
+      "criterion_1_localization": true,
+      "criterion_2_correction": true,
+      "control_exhaustive": {
+        "k": 1,
+        "n_same_size_interventions": 7,
+        "n_that_clear_axis_A": 1,
+        "subsets_that_clear": [
+          [
+            0
+          ]
+        ],
+        "chance_rate_random_same_size_intervention": 0.14285714285714285,
+        "chance_rate_as_fraction": "1/7",
+        "derivation": "C(7,1) = 7 same-size subsets of the 7 RPM chains, drawn uniformly; 1 of them clear axis A when repaired. A random pick therefore succeeds 1/7 of the time. The pool INCLUDES the localized subset (positive control).",
+        "localized_subset_is_among_them": true,
+        "exhaustive": true,
+        "identifying": true
+      },
+      "control_random": {
+        "draws": 2000,
+        "seed": 20261895,
+        "hits": 284,
+        "empirical_rate": 0.142
+      },
+      "verdict": "PASS",
+      "ground_truth_reads": [
+        "scoring criterion 1 (localization accuracy)"
+      ]
+    }
+  ],
+  "tamper_check": {
+    "purpose": "prove rule B (real chaining) is load-bearing, not decorative",
+    "case": "NEG-3  detection failure PROPAGATES to correction failure",
+    "localizer_output": [
+      3
+    ],
+    "sealed_ground_truth": [
+      5
+    ],
+    "axis_A_cleared_when_driven_by_localizer": false,
+    "axis_A_cleared_when_driven_by_ground_truth": true,
+    "chain_is_load_bearing": true,
+    "note": "this function reproduces fatal defect #4 on purpose and is never called from the main measurement path"
+  },
+  "disclosures": [
+    {
+      "tag": "single_axis_scope",
+      "disclosure": "axes N, W, F, E, S and P are OUT OF SCOPE. E and S are hardcoded placeholders in the string detector; W and N have no numeric-plane corrector here; P is derived from other axes and is never an independent naming. Only axis A has a detector AND a corrector on the same plane, so only axis A is claimed."
+    },
+    {
+      "tag": "no_pcba_vocabulary",
+      "disclosure": "no PCBA component type (DR / AMP / RS / CONN) appears anywhere in this loop. The Component Atlas returned NULL at pythia-1b and GREY at pythia-2.8b and gpt-neox-20b, and the board taxonomy returned VACUOUS on natural conversation, so that vocabulary drives nothing here."
+    },
+    {
+      "tag": "detector_is_a_transparent_rule",
+      "disclosure": "cas_engine's axis-A detector is a deterministic hand-written rule over a numeric array, and the 7 axis detectors read DISJOINT slices of the input. Perturbing the pathway plane can therefore only move axis A. 'The right axis fires' is analytically entailed once the threshold is crossed, so it is reported as a GATE, not scored as an identification result. The scored criteria are localization and correction, which the scalar output does not directly give away."
+    },
+    {
+      "tag": "mirrored_constants",
+      "disclosure": "SEVERITY_THRESHOLD=0.05 and SATISFACTION_FLOOR=0.5 are copied from the Rust source for reporting and as the repair's arithmetic target. Every verdict in this file is produced by calling the Rust scanner; the detection rule is never reimplemented in Python."
+    }
+  ],
+  "real_modules_called": [
+    "cas_engine.InversionScanner.scan",
+    "cas_engine.CognitiveStateVector"
+  ],
+  "scanner_calls": 18154,
+  "defects_of_the_superseded_build_and_how_v2_avoids_them": {
+    "fatal_1_control_was_an_algebraic_identity": "the exhaustive control's pool is the COMPLETE set of C(7,k) same-size interventions and INCLUDES the localized subset, so a hit is possible and the positive control is observed; the reported chance rate is measured (n_clearing/C(7,k)), not asserted",
+    "fatal_2_detector_handed_the_answer_by_concatenation": "diagnose_blind takes exactly one parameter, asserted via inspect.signature; no concatenation of clean and perturbed objects exists anywhere in this file",
+    "fatal_3_axis_name_hardcoded_from_the_injection_parameter": "no function in this file receives an axis name; the axis set is read off the scanner's own axis_scores",
+    "fatal_4_pipeline_not_chained_and_corrector_was_the_injector": "repair is called with targets bound by `is` to localization.indices; the injector is a seeded random degradation and the corrector is a constraint solver, so repaired != pre-injection original is MEASURED and there is no involution identity"
+  }
+}
