@@ -15,6 +15,10 @@ on:
         description: Exact UTC hard-stop deadline
         required: true
         type: string
+      provider_started_at_utc:
+        description: Exact provider lastStartedAt normalized to UTC
+        required: true
+        type: string
       source_commit:
         description: Exact 40-character commit used by this workflow run
         required: true
@@ -36,6 +40,7 @@ jobs:
       POD_ID: ${{ inputs.pod_id }}
       POD_NAME: ${{ inputs.pod_name }}
       HARD_STOP_DEADLINE_UTC: ${{ inputs.hard_stop_deadline_utc }}
+      PROVIDER_STARTED_AT_UTC: ${{ inputs.provider_started_at_utc }}
       SOURCE_COMMIT: ${{ inputs.source_commit }}
       ARMED_RECEIPT_PATH: /tmp/runpod-stop-supervisor-armed.json
       RECEIPT_PATH: /tmp/runpod-stop-supervisor.json
@@ -51,7 +56,7 @@ jobs:
         run: |
           set -euo pipefail
           observed="$(sha256sum tools/runpod_open_weight_canary_v2/github_stop_supervisor.py | cut -d' ' -f1 | tr '[:lower:]' '[:upper:]')"
-          test "$observed" = "D145EE36C9AF5C6D881DBBE5D6F48DC485BDDA4AB14BC2C59B703BEDFC405DD0"
+          test "$observed" = "66A2ADEE1CC63B2571964B5A33DCDF0617DD34C321F7D827FA1739C918F0FA1F"
 
       - name: Offline supervisor self-test
         run: >-
@@ -70,6 +75,7 @@ jobs:
           --pod-id "$POD_ID"
           --pod-name "$POD_NAME"
           --deadline "$HARD_STOP_DEADLINE_UTC"
+          --provider-started-at "$PROVIDER_STARTED_AT_UTC"
           --source-commit "$SOURCE_COMMIT"
           --receipt "$ARMED_RECEIPT_PATH"
 
@@ -92,6 +98,7 @@ jobs:
           --pod-id "$POD_ID"
           --pod-name "$POD_NAME"
           --deadline "$HARD_STOP_DEADLINE_UTC"
+          --provider-started-at "$PROVIDER_STARTED_AT_UTC"
           --source-commit "$SOURCE_COMMIT"
           --receipt "$RECEIPT_PATH"
 
@@ -106,6 +113,7 @@ jobs:
           --pod-id "$POD_ID"
           --pod-name "$POD_NAME"
           --deadline "$HARD_STOP_DEADLINE_UTC"
+          --provider-started-at "$PROVIDER_STARTED_AT_UTC"
           --source-commit "$SOURCE_COMMIT"
           --arm-receipt "$ARMED_RECEIPT_PATH"
           --receipt "$RECEIPT_PATH"
