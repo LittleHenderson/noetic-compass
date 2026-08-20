@@ -117,6 +117,7 @@ Rules:
         AssertDescription: LIVE requires the exact runtime ZIP SHA-256.
 
 Conditions:
+  LiveMode: !Equals [!Ref ActivationMode, LIVE]
   HasArtifactVersion: !Not [!Equals [!Ref LambdaArtifactVersion, '']]
 
 Globals:
@@ -436,7 +437,7 @@ Resources:
       Handler: guardian_runtime.control_handler
       MemorySize: 256
       Timeout: 30
-      ReservedConcurrentExecutions: 1
+      ReservedConcurrentExecutions: !If [LiveMode, 1, !Ref AWS::NoValue]
       Role: !GetAtt ControlRole.Arn
       Environment:
         Variables:
@@ -463,7 +464,7 @@ Resources:
       Handler: guardian_runtime.observe_handler
       MemorySize: 256
       Timeout: 30
-      ReservedConcurrentExecutions: 1
+      ReservedConcurrentExecutions: !If [LiveMode, 1, !Ref AWS::NoValue]
       Role: !GetAtt ObserveRole.Arn
       Environment:
         Variables:
@@ -492,7 +493,7 @@ Resources:
       MemorySize: 256
       Timeout: 30
       Role: !GetAtt CreateRole.Arn
-      ReservedConcurrentExecutions: 1
+      ReservedConcurrentExecutions: !If [LiveMode, 1, !Ref AWS::NoValue]
       Environment:
         Variables:
           ACTIVATION_MODE: !Ref ActivationMode
@@ -519,7 +520,7 @@ Resources:
       Handler: guardian_runtime.stop_handler
       MemorySize: 256
       Timeout: 30
-      ReservedConcurrentExecutions: 1
+      ReservedConcurrentExecutions: !If [LiveMode, 1, !Ref AWS::NoValue]
       Role: !GetAtt StopRole.Arn
       Environment:
         Variables:
@@ -548,7 +549,7 @@ Resources:
       Handler: guardian_runtime.observe_proxy_handler
       MemorySize: 128
       Timeout: 15
-      ReservedConcurrentExecutions: 1
+      ReservedConcurrentExecutions: !If [LiveMode, 1, !Ref AWS::NoValue]
       Role: !GetAtt ObserveProxyRole.Arn
       Environment:
         Variables: &ProxyEnvironment
@@ -574,7 +575,7 @@ Resources:
       Handler: guardian_runtime.create_proxy_handler
       MemorySize: 128
       Timeout: 15
-      ReservedConcurrentExecutions: 1
+      ReservedConcurrentExecutions: !If [LiveMode, 1, !Ref AWS::NoValue]
       Role: !GetAtt CreateProxyRole.Arn
       Environment:
         Variables:
@@ -595,7 +596,7 @@ Resources:
       Handler: guardian_runtime.stop_proxy_handler
       MemorySize: 128
       Timeout: 8
-      ReservedConcurrentExecutions: 1
+      ReservedConcurrentExecutions: !If [LiveMode, 1, !Ref AWS::NoValue]
       Role: !GetAtt StopProxyRole.Arn
       Environment:
         Variables: *ProxyEnvironment
@@ -639,7 +640,7 @@ Resources:
       Handler: guardian_runtime.recovery_handler
       MemorySize: 256
       Timeout: 30
-      ReservedConcurrentExecutions: 1
+      ReservedConcurrentExecutions: !If [LiveMode, 1, !Ref AWS::NoValue]
       Role: !GetAtt RecoveryRole.Arn
       Environment:
         Variables:

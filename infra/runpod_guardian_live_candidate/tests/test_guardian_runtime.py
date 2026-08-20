@@ -2361,8 +2361,9 @@ def test_template_is_inert_standard_low_idle_and_has_no_vpc_nat_or_endpoint():
     assert "Type: AWS::CloudWatch::Alarm" in raw
     assert "MetricName: Throttles" in raw
     assert "MetricName: FailedInvocations" in raw
-    assert "ReservedConcurrentExecutions: 1" in raw
-    assert raw.count("ReservedConcurrentExecutions: 1") >= 7
+    assert "LiveMode: !Equals [!Ref ActivationMode, LIVE]" in raw
+    assert "ReservedConcurrentExecutions: !If [LiveMode, 1, !Ref AWS::NoValue]" in raw
+    assert raw.count("ReservedConcurrentExecutions: !If [LiveMode, 1, !Ref AWS::NoValue]") >= 7
     resource_block = raw.split("Resources:", 1)[1].split("Outputs:", 1)[0]
     resource_names = [
         line[2:-1]
