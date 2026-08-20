@@ -134,6 +134,34 @@ function Wait-ForExited {
     throw 'WATCHDOG_STOP_DID_NOT_REACH_EXITED'
 }
 
+function Assert-StopTargetIdentity {
+    param([Parameter(Mandatory)][object]$Pod)
+    $id = Get-OptionalProperty $Pod 'id'
+    $name = Get-OptionalProperty $Pod 'name'
+    if ($id -ne $PodId -or $name -ne $PodName) {
+        throw 'WATCHDOG_STOP_TARGET_IDENTITY_MISMATCH'
+    }
+    if ($ExcludedPodIds -contains $id) {
+        throw 'WATCHDOG_STOP_TARGET_IS_EXPLICITLY_EXCLUDED'
+    }
+    return [ordered]@{
+        id = $id
+        name = $name
+        desired_status = Get-OptionalProperty $Pod 'desiredStatus'
+    }
+}
+
+function Wait-ForExitedByIdentity {
+    param([Parameter(Mandatory)][datetime]$DeadlineUtc)
+    do {
+        $observed = Assert-StopTargetIdentity (Invoke-PodGet)
+        Add-Event -Name 'POST_STOP_IDENTITY_STATUS' -Details $observed.desired_status
+        if ($observed.desired_status -eq 'EXITED') { return $observed }
+        Start-Sleep -Seconds $PollSeconds
+    } while ((Get-Date).ToUniversalTime() -lt $DeadlineUtc)
+    throw 'WATCHDOG_IDENTITY_STOP_DID_NOT_REACH_EXITED'
+}
+
 function Assert-ExactTarget {
     param([Parameter(Mandatory)][object]$Pod)
     $id = Get-OptionalProperty $Pod 'id'
@@ -224,11 +252,11 @@ if ($EmergencyStopOnly) {
     try {
         $apiKey = Read-RunPodApiKey -Path $ConfigPath
         $script:Headers = @{ Authorization = 'Bearer ' + $apiKey }
-        $target = Assert-ExactTarget (Invoke-PodGet)
+        $target = Assert-StopTargetIdentity (Invoke-PodGet)
         if ($target.desired_status -eq 'RUNNING') {
             $status = Invoke-PodStop
             Add-Event -Name 'EMERGENCY_STOP_ACCEPTED_HTTP_200' -Details $target
-            $target = Wait-ForExited -DeadlineUtc ((Get-Date).ToUniversalTime().AddMinutes(10))
+            $target = Wait-ForExitedByIdentity -DeadlineUtc ((Get-Date).ToUniversalTime().AddMinutes(10))
             $terminalStatus = 'EMERGENCY_STOPPED_AT_DEADLINE_EXITED_CONFIRMED'
         }
         elseif ($target.desired_status -eq 'EXITED') {
@@ -380,10 +408,11 @@ catch {
     $failStopStatus = 'NOT_ATTEMPTED_NO_PROVIDER_SESSION'
     if ($null -ne $script:Headers) {
         try {
-            $failTarget = Assert-ExactTarget (Invoke-PodGet)
+            $failTarget = Assert-StopTargetIdentity (Invoke-PodGet)
             if ($failTarget.desired_status -eq 'RUNNING') {
                 [void](Invoke-PodStop)
-                $failStopStatus = 'STOP_ACCEPTED_AFTER_WATCHDOG_FAILURE'
+                [void](Wait-ForExitedByIdentity -DeadlineUtc ((Get-Date).ToUniversalTime().AddMinutes(10)))
+                $failStopStatus = 'STOPPED_AFTER_WATCHDOG_FAILURE_EXITED_CONFIRMED'
             }
             elseif ($failTarget.desired_status -eq 'EXITED') {
                 $failStopStatus = 'ALREADY_EXITED_AFTER_WATCHDOG_FAILURE'

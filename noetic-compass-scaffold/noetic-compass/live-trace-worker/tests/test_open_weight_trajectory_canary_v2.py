@@ -66,7 +66,7 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     preregistration, _raw = canary.load_preregistration(PREREGISTRATION_PATH)
 
     assert preregistration["preregistration_sha256"] == (
-        "C3BE44564B705F994B348EC6445A15E69C175ADCA7EF32D2CAF5873F2E31491A"
+        "072F6A9FA2A90598418361817439E8D1A150ED7962DDA02C3935DBB27A37BBB4"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
     assert preregistration["launch_bindings"]["execution_authority"] == (
@@ -92,6 +92,10 @@ def test_local_watchdog_binds_live_runpod_schema_and_exact_boundary():
     assert "WATCHDOG_TARGET_PORTS_MISMATCH" in helper_text
     assert "[int]$podVolumeInGb -ne 20" in helper_text
     assert "[int]$containerDiskInGb -ne 50" in helper_text
+    assert "$target = Assert-StopTargetIdentity (Invoke-PodGet)" in helper_text
+    assert "$failTarget = Assert-StopTargetIdentity (Invoke-PodGet)" in helper_text
+    assert "Wait-ForExitedByIdentity" in helper_text
+    assert "STOPPED_AFTER_WATCHDOG_FAILURE_EXITED_CONFIRMED" in helper_text
 
 
 def test_unbound_execute_fails_before_runtime_or_output(tmp_path: Path, monkeypatch):

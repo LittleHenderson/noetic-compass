@@ -1,6 +1,17 @@
 # RunPod open-weight canary v2: probe, pinned runtime, and watchdog
 
-Status: `PREPARED / NOT LAUNCHED / NO PROVIDER MUTATION`.
+Status: `ONE POD CREATED / FIRST START STOPPED PRE-MODEL / MODEL NOT RUN`.
+
+Provider recovery checkpoint at `2026-08-20T12:58Z`: exact Pod
+`vernmyfb3ck9po` is `EXITED`. The first start was stopped before any model or
+container preflight because the template retained `8888/http` and the original
+watchdog did not accept RunPod's live `machine.gpuTypeId` field. The stopped
+Pod now has exact `22/tcp`, the dedicated local SSH public key, a 50-GB
+container disk, an encrypted 20-GB Pod volume, and no network volume. A later
+start remains fail-closed until the corrected exact source commit has fresh
+independent audit approval, A40 price/stock is re-observed, and both stop
+supervisors arm against the provider-reported `lastStartedAt`. No second Pod is
+authorized by this recovery note.
 
 This directory is isolated from every historical Gate 5, Jacobian, whitebox,
 and production-pod wrapper. Nothing in this directory creates a Pod. The armed
@@ -115,7 +126,7 @@ present on the repository's default branch, its exact source commit must be
 checked out, and the temporary `RUNPOD_CANARY_V2_API_KEY` repository secret must
 be removed after terminal evidence is exported.
 
-Both supervisors must be armed immediately after a future create receipt and
+Both supervisors must be armed immediately after a fresh provider start and
 before any model command. Their receipts must bind the same Pod ID, deadline,
 and source commit. The runner rejects either missing, stale, noncanonical, or
 cross-mismatched receipt. Do not test either supervisor with a protected Pod.
