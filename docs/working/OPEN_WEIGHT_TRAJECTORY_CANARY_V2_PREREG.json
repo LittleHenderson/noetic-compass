@@ -1,0 +1,157 @@
+{
+  "schema_version": "cas_open_weight_trajectory_canary_preregistration.v2",
+  "status": "FROZEN_DESIGN_ONLY_NO_EXECUTION_AUTHORITY",
+  "packet_eligibility": "NOT_PACKET_ELIGIBLE",
+  "scientific_status": "NOT_SCIENTIFIC_RESULT",
+  "claim_boundary": "Nine-capture real-model engineering canary only. A PASS establishes the frozen capture/noop/zero mechanics for this exact bundle under a trusted single-purpose immutable OCI/process with no post-freeze arbitrary code. The drift checks are not a Python sandbox. A PASS does not establish a detector, semantic circuit, safety property, causal science claim, Evidence Packet, product licence, or production readiness.",
+  "source_documents": [
+    {
+      "title": "CAS PCBA Engineer Interior KDP",
+      "byte_count": 2069838,
+      "sha256": "53AE63494DFEDE8F5C9CA36CE387482C02E5005E7A5AACE68398C8053690F494",
+      "use": "Engineering design guidance only: unit/integration/regression/system/fault testing, golden traces, repeated measurements, and decision-time evidence sealing. Not empirical model evidence."
+    },
+    {
+      "title": "CAS Ohm Quantification Guide",
+      "byte_count": 2610388,
+      "sha256": "89AE13C0A5D6208E328E9EDC55F816609BB172076CC13093DCCCCF418145CE64",
+      "use": "Engineering design guidance only: liveness, baseline/noop identity, exact zero intervention, downstream-effect requirement, and three repeats. Not empirical model evidence."
+    }
+  ],
+  "experiment": {
+    "purpose": "Test whether the exact byte-attested Pythia-160m runtime can reproducibly capture two-step internal trajectories and apply one registered zero intervention while a no-op control remains exactly identical to baseline.",
+    "model": {
+      "model_id": "EleutherAI/pythia-160m",
+      "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+      "tree_manifest_sha256": "6373A5C8367B1D33B96921791D28AD29E7851D3B9BC78C6D3C25E94EF342C571",
+      "files": [
+        {
+          "relative_path": "config.json",
+          "byte_count": 569,
+          "sha256": "76EB275107220E450D31258F792A2EFCBEE109D8B62AE0088260057DEC06362F"
+        },
+        {
+          "relative_path": "model.safetensors",
+          "byte_count": 374998696,
+          "sha256": "29D2E457A664E41C12C735F20A36DC0956A665F614A54CE5DB21A32E75965270"
+        },
+        {
+          "relative_path": "special_tokens_map.json",
+          "byte_count": 99,
+          "sha256": "6F50AB5A5A509A1C309D6171F339B196A900DC9C99AD0408FF23BB615FDAE7AD"
+        },
+        {
+          "relative_path": "tokenizer.json",
+          "byte_count": 2113710,
+          "sha256": "C24618A1B3E6A38167BEFF1C72CFFD126C3A66254347304B50547D12C5F25624"
+        },
+        {
+          "relative_path": "tokenizer_config.json",
+          "byte_count": 396,
+          "sha256": "70E38394E494931C6F773BA41E19460DD4436526B852207367F04341B4066D3F"
+        }
+      ]
+    },
+    "scenario": {
+      "scenario_id": "pythia160m-pcba-ohm-v1",
+      "prompt": "In a PCB, Ohm's law states that voltage equals",
+      "prompt_sha256": "F0F0F2F84976611E4DAC0AAC26D65034AB739331C83B5DD6671FB47D3A25F18B"
+    },
+    "generation": {
+      "method": "manual_greedy_argmax",
+      "max_new_tokens": 2,
+      "seed": 1729,
+      "temperature": null,
+      "sampling": false
+    },
+    "intervention": {
+      "target_layer_index": 6,
+      "active_steps": [0],
+      "noop_mode": "noop",
+      "active_mode": "zero",
+      "max_vector_norm": 0.0
+    },
+    "schedule": [
+      {"ordinal": 1, "capture_id": "01-baseline-r1", "condition": "baseline", "repetition": 1},
+      {"ordinal": 2, "capture_id": "02-noop-r1", "condition": "noop", "repetition": 1},
+      {"ordinal": 3, "capture_id": "03-zero-r1", "condition": "zero", "repetition": 1},
+      {"ordinal": 4, "capture_id": "04-baseline-r2", "condition": "baseline", "repetition": 2},
+      {"ordinal": 5, "capture_id": "05-noop-r2", "condition": "noop", "repetition": 2},
+      {"ordinal": 6, "capture_id": "06-zero-r2", "condition": "zero", "repetition": 2},
+      {"ordinal": 7, "capture_id": "07-baseline-r3", "condition": "baseline", "repetition": 3},
+      {"ordinal": 8, "capture_id": "08-noop-r3", "condition": "noop", "repetition": 3},
+      {"ordinal": 9, "capture_id": "09-zero-r3", "condition": "zero", "repetition": 3}
+    ],
+    "runtime": {
+      "required_device": "cuda:0",
+      "required_device_name": "NVIDIA A40",
+      "required_device_capability": [8, 6],
+      "required_python_version": "3.12.3",
+      "required_torch_runtime_version": "2.8.0+cu128",
+      "required_torch_cuda_version": "12.8",
+      "required_dependency_lock_sha256": "9E990C06B907FE117E67D6BB4CCD8B5AF09FFD9E8B1D98D893A727102C33CB9A",
+      "required_dependency_versions": {
+        "numpy": "2.3.5",
+        "safetensors": "0.7.0",
+        "torch": "2.8.0",
+        "transformers": "5.8.1"
+      },
+      "deterministic_controls": {
+        "PYTHONHASHSEED": "1729",
+        "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+        "torch_deterministic_algorithms": true,
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "cuda_matmul_allow_tf32": false,
+        "cudnn_allow_tf32": false,
+        "float32_matmul_precision": "highest"
+      },
+      "minimum_available_memory_bytes": 4294967296,
+      "minimum_capture_available_bytes": 1073741824
+    },
+    "expected_arrays": {
+      "residual_states": [2, 12, 768],
+      "mlp_states": [2, 12, 768],
+      "pre_selection_logits": [2, 50304],
+      "generated_token_ids": [2],
+      "input_lengths": [2]
+    },
+    "decision_rule": {
+      "all_required_criteria_must_pass": true,
+      "generated_text_change_required": false,
+      "later_step_equality_required_after_step0_intervention": false,
+      "required_criteria": [
+        "exact nine-capture schedule",
+        "same input/model/adapter/runtime/seed across all captures",
+        "nine unique execution nonces and serial chronology",
+        "three byte-identical baseline repeats",
+        "three byte-identical noop repeats",
+        "three byte-identical zero repeats",
+        "all baseline and noop saved arrays plus generated text byte-identical",
+        "baseline target vector nonzero at layer 6 step 0",
+        "zero target vector exactly zero at layer 6 step 0",
+        "step-0 upstream residual identity and at least one downstream residual or logit difference in every matched pair",
+        "every residual, MLP, and logit capture finite, nonzero, and nonconstant"
+      ]
+    }
+  },
+  "launch_bindings": {
+    "execution_authority": "NO_GO_UNTIL_EXACT_BINDINGS_ARE_FROZEN",
+    "required_source_commit_sha256": null,
+    "required_oci_image_digest": "sha256:4d1721e62b56d345c83b4fd6090664be6daf9312caab5b2e76f23d8231941851",
+    "required_runner_source_sha256": "BB12E7854A44C4D6FC2E82C9AA7BD4503073C212246F84462709040F17BF345F",
+    "required_source_file_manifest_sha256": "34FA7F25B6C8C4B9E3ACFCAB2E52C5EAD10937ECF5532D53A8D2749262B86723",
+    "required_watchdog_script_sha256": "B11B90879D4C365868193E7560FA171EA7FE85B59F96B0ECB4DBBC67CF87390B",
+    "required_github_supervisor_source_sha256": "F15D70BCBD1DC7F78A1DCB58E52040D5E2D85966798941A37F7CB253664EA82D",
+    "external_stop_watchdog_required": true,
+    "maximum_wall_seconds": 1800,
+    "maximum_spend_usd": "0.50"
+  },
+  "external_anchor": {
+    "status": "EXTERNAL_IMMUTABLE_ANCHOR_REQUIRED",
+    "anchor_uri": null,
+    "anchor_receipt_sha256": null,
+    "claim_boundary": "The result manifest and all evidence-file hashes are cross-linked, but they remain locally produced and are not durable authenticity evidence until an independent immutable external anchor is attached and verified."
+  },
+  "preregistration_sha256": "C8DB1E1223855682B78E73F0AF34989DB7D6A29C690F21DE89A98C62D26AC0F1"
+}

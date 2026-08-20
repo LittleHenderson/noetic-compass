@@ -1,0 +1,120 @@
+name: RunPod canary stop supervisor
+
+on:
+  workflow_dispatch:
+    inputs:
+      pod_id:
+        description: Exact newly created RunPod Pod ID
+        required: true
+        type: string
+      pod_name:
+        description: Exact cas-open-weight-canary-v2 Pod name
+        required: true
+        type: string
+      hard_stop_deadline_utc:
+        description: Exact UTC hard-stop deadline
+        required: true
+        type: string
+      source_commit:
+        description: Exact 40-character commit used by this workflow run
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: runpod-canary-stop-${{ inputs.pod_id }}
+  cancel-in-progress: false
+
+jobs:
+  stop-supervisor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      POD_ID: ${{ inputs.pod_id }}
+      POD_NAME: ${{ inputs.pod_name }}
+      HARD_STOP_DEADLINE_UTC: ${{ inputs.hard_stop_deadline_utc }}
+      SOURCE_COMMIT: ${{ inputs.source_commit }}
+      ARMED_RECEIPT_PATH: ${{ runner.temp }}/runpod-stop-supervisor-armed.json
+      RECEIPT_PATH: ${{ runner.temp }}/runpod-stop-supervisor.json
+    steps:
+      - name: Check out the exact dispatched commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ inputs.source_commit }}
+          persist-credentials: false
+
+      - name: Verify the frozen supervisor source
+        shell: bash
+        run: |
+          set -euo pipefail
+          observed="$(sha256sum tools/runpod_open_weight_canary_v2/github_stop_supervisor.py | cut -d' ' -f1 | tr '[:lower:]' '[:upper:]')"
+          test "$observed" = "F15D70BCBD1DC7F78A1DCB58E52040D5E2D85966798941A37F7CB253664EA82D"
+
+      - name: Offline supervisor self-test
+        run: >-
+          python -I -B
+          tools/runpod_open_weight_canary_v2/github_stop_supervisor.py
+          self-test
+
+      - name: Provider arm check
+        id: arm_check
+        env:
+          RUNPOD_API_KEY: ${{ secrets.RUNPOD_CANARY_V2_API_KEY }}
+        run: >-
+          python -I -B
+          tools/runpod_open_weight_canary_v2/github_stop_supervisor.py
+          arm-check
+          --pod-id "$POD_ID"
+          --pod-name "$POD_NAME"
+          --deadline "$HARD_STOP_DEADLINE_UTC"
+          --source-commit "$SOURCE_COMMIT"
+          --receipt "$ARMED_RECEIPT_PATH"
+
+      - name: Publish arm receipt before the model is allowed to start
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: runpod-stop-supervisor-armed-${{ inputs.pod_id }}
+          path: ${{ env.ARMED_RECEIPT_PATH }}
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Wait, stop, and verify terminal state
+        id: supervisor
+        env:
+          RUNPOD_API_KEY: ${{ secrets.RUNPOD_CANARY_V2_API_KEY }}
+        run: >-
+          python -I -B
+          tools/runpod_open_weight_canary_v2/github_stop_supervisor.py
+          run
+          --pod-id "$POD_ID"
+          --pod-name "$POD_NAME"
+          --deadline "$HARD_STOP_DEADLINE_UTC"
+          --source-commit "$SOURCE_COMMIT"
+          --receipt "$RECEIPT_PATH"
+
+      - name: Emergency stop after any failure
+        if: ${{ always() && steps.arm_check.outcome == 'success' && steps.supervisor.outcome != 'success' }}
+        env:
+          RUNPOD_API_KEY: ${{ secrets.RUNPOD_CANARY_V2_API_KEY }}
+        run: >-
+          python -I -B
+          tools/runpod_open_weight_canary_v2/github_stop_supervisor.py
+          emergency-stop
+          --pod-id "$POD_ID"
+          --pod-name "$POD_NAME"
+          --deadline "$HARD_STOP_DEADLINE_UTC"
+          --source-commit "$SOURCE_COMMIT"
+          --arm-receipt "$ARMED_RECEIPT_PATH"
+          --receipt "$RECEIPT_PATH"
+
+      - name: Upload the operational supervisor receipt
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: runpod-stop-supervisor-${{ inputs.pod_id }}
+          path: ${{ env.RECEIPT_PATH }}
+          if-no-files-found: warn
+          retention-days: 7
