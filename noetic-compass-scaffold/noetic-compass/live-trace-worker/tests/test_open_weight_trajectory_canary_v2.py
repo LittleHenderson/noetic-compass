@@ -39,6 +39,12 @@ GITHUB_ARM_HELPER_PATH = (
     / "runpod_open_weight_canary_v2"
     / "arm_github_supervisor.ps1"
 )
+LOCAL_WATCHDOG_PATH = (
+    REPOSITORY_ROOT
+    / "tools"
+    / "runpod_open_weight_canary_v2"
+    / "watchdog_armed.ps1"
+)
 GITHUB_WORKFLOW_PATH = REPOSITORY_ROOT / ".github" / "workflows" / "runpod-canary-stop-supervisor.yml"
 
 SPEC = importlib.util.spec_from_file_location("open_weight_canary_v2", RUNNER_PATH)
@@ -60,7 +66,7 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     preregistration, _raw = canary.load_preregistration(PREREGISTRATION_PATH)
 
     assert preregistration["preregistration_sha256"] == (
-        "405D44BB559C356CB0B87324F7262494BC7F7C4C58247484D9C3C24D8DE600FC"
+        "C3BE44564B705F994B348EC6445A15E69C175ADCA7EF32D2CAF5873F2E31491A"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
     assert preregistration["launch_bindings"]["execution_authority"] == (
@@ -75,6 +81,17 @@ def test_preregistration_is_exact_self_hashed_and_inert():
 def test_github_arm_helper_uses_yaml_when_viewing_feature_ref():
     helper_text = GITHUB_ARM_HELPER_PATH.read_text(encoding="utf-8")
     assert "'workflow', 'view', $Workflow, '--repo', $Repository, '--ref', $RefName, '--yaml'" in helper_text
+
+
+def test_local_watchdog_binds_live_runpod_schema_and_exact_boundary():
+    helper_text = LOCAL_WATCHDOG_PATH.read_text(encoding="utf-8")
+    assert "[datetime]$RunStartedAtUtc" in helper_text
+    assert "Get-OptionalProperty $machine 'gpuTypeId'" in helper_text
+    assert "WATCHDOG_PROVIDER_START_TIME_MISMATCH" in helper_text
+    assert "WATCHDOG_TARGET_VOLUME_NOT_ENCRYPTED" in helper_text
+    assert "WATCHDOG_TARGET_PORTS_MISMATCH" in helper_text
+    assert "[int]$podVolumeInGb -ne 20" in helper_text
+    assert "[int]$containerDiskInGb -ne 50" in helper_text
 
 
 def test_unbound_execute_fails_before_runtime_or_output(tmp_path: Path, monkeypatch):

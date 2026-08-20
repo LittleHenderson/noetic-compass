@@ -85,8 +85,9 @@ The command exits `3` after printing the plan. That nonzero exit is deliberate:
 it prevents automation from mistaking an unarmed plan for a running watchdog.
 The file contains no credential access or HTTP calls.
 
-`watchdog_armed.ps1` is the local Windows lifecycle implementation for a future
-new Pod. It performs one exact-target GET before writing the create-once ARMED
+`watchdog_armed.ps1` is the local Windows lifecycle implementation for one
+fresh Pod start. It binds the provider-reported `lastStartedAt`, performs one
+exact-target GET before writing the create-once ARMED
 receipt, polls only that ID, issues STOP at the 30-minute deadline, and requires
 an EXITED observation. It also registers a same-user Task Scheduler fallback.
 It never deletes a Pod. Evidence must be exported and independently verified

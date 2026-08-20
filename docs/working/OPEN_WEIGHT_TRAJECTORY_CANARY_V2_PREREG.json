@@ -140,8 +140,8 @@
     "required_source_commit_sha256": null,
     "required_oci_image_digest": "sha256:4d1721e62b56d345c83b4fd6090664be6daf9312caab5b2e76f23d8231941851",
     "required_runner_source_sha256": "BB12E7854A44C4D6FC2E82C9AA7BD4503073C212246F84462709040F17BF345F",
-    "required_source_file_manifest_sha256": "304B1742FE60740AAA4BC1E6188AEB8960B888D7CDCDDD41EB2516E845C20F3F",
-    "required_watchdog_script_sha256": "B11B90879D4C365868193E7560FA171EA7FE85B59F96B0ECB4DBBC67CF87390B",
+    "required_source_file_manifest_sha256": "12FBFDBB7A013AD0E4FC181B5C03CCFE221788C7AAA113ADADB531E8CD94E52F",
+    "required_watchdog_script_sha256": "C5C0445AF0917448F7EA4FDCDF2C34174E40542064063664072364E60F2654EB",
     "required_github_supervisor_source_sha256": "F15D70BCBD1DC7F78A1DCB58E52040D5E2D85966798941A37F7CB253664EA82D",
     "external_stop_watchdog_required": true,
     "maximum_wall_seconds": 1800,
@@ -153,5 +153,5 @@
     "anchor_receipt_sha256": null,
     "claim_boundary": "The result manifest and all evidence-file hashes are cross-linked, but they remain locally produced and are not durable authenticity evidence until an independent immutable external anchor is attached and verified."
   },
-  "preregistration_sha256": "405D44BB559C356CB0B87324F7262494BC7F7C4C58247484D9C3C24D8DE600FC"
+  "preregistration_sha256": "C3BE44564B705F994B348EC6445A15E69C175ADCA7EF32D2CAF5873F2E31491A"
 }

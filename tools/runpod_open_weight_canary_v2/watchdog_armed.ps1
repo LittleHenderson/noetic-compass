@@ -2,7 +2,7 @@
 param(
     [Parameter(Mandatory)][ValidatePattern('^[a-z0-9]{6,32}$')][string]$PodId,
     [Parameter(Mandatory)][ValidatePattern('^cas-open-weight-canary-v2-[a-z0-9-]+$')][string]$PodName,
-    [Parameter(Mandatory)][datetime]$RunCreatedAtUtc,
+    [Parameter(Mandatory)][datetime]$RunStartedAtUtc,
     [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{40,64}$')][string]$SourceCommitSha256,
     [Parameter(Mandatory)][ValidatePattern('^sha256:[0-9a-f]{64}$')][string]$OciImageDigest,
     [Parameter(Mandatory)][ValidateNotNullOrEmpty()][string]$ExpectedImageName,
@@ -95,6 +95,34 @@ function Invoke-PodStop {
     return [int]$response.StatusCode
 }
 
+function Convert-ProviderUtcTimestamp {
+    param([Parameter(Mandatory)][string]$Value)
+    $legacy = [regex]::Match(
+        $Value,
+        '^(?<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}) (?<offset>[+-]\d{4}) UTC$'
+    )
+    if ($legacy.Success) {
+        $offset = $legacy.Groups['offset'].Value
+        $normalized = $legacy.Groups['date'].Value + ' ' +
+            $offset.Substring(0, 3) + ':' + $offset.Substring(3, 2)
+        return [DateTimeOffset]::ParseExact(
+            $normalized,
+            'yyyy-MM-dd HH:mm:ss.fff zzz',
+            [Globalization.CultureInfo]::InvariantCulture
+        ).UtcDateTime
+    }
+    try {
+        return [DateTimeOffset]::Parse(
+            $Value,
+            [Globalization.CultureInfo]::InvariantCulture,
+            [Globalization.DateTimeStyles]::AssumeUniversal
+        ).UtcDateTime
+    }
+    catch {
+        throw 'WATCHDOG_PROVIDER_START_TIME_INVALID'
+    }
+}
+
 function Wait-ForExited {
     param([Parameter(Mandatory)][datetime]$DeadlineUtc)
     do {
@@ -116,20 +144,40 @@ function Assert-ExactTarget {
     $gpu = Get-OptionalProperty $Pod 'gpu'
     $gpuId = Get-OptionalProperty $gpu 'id'
     $gpuDisplay = Get-OptionalProperty $gpu 'displayName'
+    $machine = Get-OptionalProperty $Pod 'machine'
+    $machineGpuTypeId = Get-OptionalProperty $machine 'gpuTypeId'
+    $secureCloud = Get-OptionalProperty $machine 'secureCloud'
     $networkVolume = Get-OptionalProperty $Pod 'networkVolume'
     $podVolumeInGb = Get-OptionalProperty $Pod 'volumeInGb'
+    $containerDiskInGb = Get-OptionalProperty $Pod 'containerDiskInGb'
+    $volumeEncrypted = Get-OptionalProperty $Pod 'volumeEncrypted'
+    $ports = @(Get-OptionalProperty $Pod 'ports')
+    $providerStartedAtRaw = Get-OptionalProperty $Pod 'lastStartedAt'
+    if ($null -eq $providerStartedAtRaw) { throw 'WATCHDOG_PROVIDER_START_TIME_MISSING' }
+    $providerStartedUtc = Convert-ProviderUtcTimestamp ([string]$providerStartedAtRaw)
     $cost = Get-OptionalProperty $Pod 'costPerHr'
     if ($null -eq $cost) { $cost = Get-OptionalProperty $Pod 'adjustedCostPerHr' }
     if ($id -ne $PodId -or $name -ne $PodName) { throw 'WATCHDOG_TARGET_IDENTITY_MISMATCH' }
     if ($ExcludedPodIds -contains $id) { throw 'WATCHDOG_TARGET_IS_EXPLICITLY_EXCLUDED' }
     if ($image -ne $ExpectedImageName) { throw 'WATCHDOG_TARGET_IMAGE_NAME_MISMATCH' }
     if ([int]$gpuCount -ne 1) { throw 'WATCHDOG_TARGET_GPU_COUNT_MISMATCH' }
-    if ($gpuId -ne 'NVIDIA A40' -and $gpuDisplay -ne 'NVIDIA A40') {
+    if (
+        $gpuId -ne 'NVIDIA A40' -and
+        $gpuDisplay -ne 'NVIDIA A40' -and
+        $machineGpuTypeId -ne 'NVIDIA A40'
+    ) {
         throw 'WATCHDOG_TARGET_GPU_TYPE_MISMATCH'
     }
+    if ($secureCloud -ne $true) { throw 'WATCHDOG_TARGET_NOT_SECURE_CLOUD' }
     if ($null -ne $networkVolume) { throw 'WATCHDOG_TARGET_HAS_FORBIDDEN_NETWORK_VOLUME' }
-    if ($null -eq $podVolumeInGb -or [int]$podVolumeInGb -le 0) {
-        throw 'WATCHDOG_TARGET_HAS_NO_POSITIVE_POD_VOLUME'
+    if ([int]$podVolumeInGb -ne 20) { throw 'WATCHDOG_TARGET_POD_VOLUME_MISMATCH' }
+    if ([int]$containerDiskInGb -ne 50) { throw 'WATCHDOG_TARGET_CONTAINER_DISK_MISMATCH' }
+    if ($volumeEncrypted -ne $true) { throw 'WATCHDOG_TARGET_VOLUME_NOT_ENCRYPTED' }
+    if ($ports.Count -ne 1 -or [string]$ports[0] -cne '22/tcp') {
+        throw 'WATCHDOG_TARGET_PORTS_MISMATCH'
+    }
+    if ([math]::Abs(($providerStartedUtc - $startedUtc).TotalSeconds) -gt 2) {
+        throw 'WATCHDOG_PROVIDER_START_TIME_MISMATCH'
     }
     if ($null -eq $cost -or [decimal]$cost -gt $MaximumHourlyRate) {
         throw 'WATCHDOG_TARGET_RATE_EXCEEDS_CEILING'
@@ -145,16 +193,22 @@ function Assert-ExactTarget {
         gpu_count = [int]$gpuCount
         gpu_id = $gpuId
         gpu_display_name = $gpuDisplay
+        machine_gpu_type_id = $machineGpuTypeId
+        secure_cloud = $true
         cost_per_hour = [decimal]$cost
         network_volume_absent = $true
         pod_volume_gb = [int]$podVolumeInGb
+        container_disk_gb = [int]$containerDiskInGb
+        volume_encrypted = $true
+        ports = @($ports)
+        provider_started_at_utc = $providerStartedUtc.ToString('o')
     }
 }
 
 if ($ExcludedPodIds -contains $PodId) { throw 'WATCHDOG_TARGET_IS_EXPLICITLY_EXCLUDED' }
-$createdUtc = $RunCreatedAtUtc.ToUniversalTime()
+$startedUtc = $RunStartedAtUtc.ToUniversalTime()
 $nowUtc = (Get-Date).ToUniversalTime()
-$deadlineUtc = $createdUtc.AddSeconds($MaximumWallSeconds)
+$deadlineUtc = $startedUtc.AddSeconds($MaximumWallSeconds)
 $receiptRoot = [IO.Path]::GetFullPath($ReceiptDirectory)
 $script:EventPath = Join-Path $receiptRoot 'watchdog.events.jsonl'
 $armedReceiptPath = Join-Path $receiptRoot 'external-watchdog.receipt.json'
@@ -210,8 +264,8 @@ if ($EmergencyStopOnly) {
     }
 }
 
-if ($createdUtc -gt $nowUtc.AddMinutes(2) -or $createdUtc -lt $nowUtc.AddMinutes(-5)) {
-    throw 'WATCHDOG_CREATE_TIME_OUTSIDE_ARM_WINDOW'
+if ($startedUtc -gt $nowUtc.AddMinutes(2) -or $startedUtc -lt $nowUtc.AddMinutes(-5)) {
+    throw 'WATCHDOG_START_TIME_OUTSIDE_ARM_WINDOW'
 }
 if ($deadlineUtc -le $nowUtc.AddMinutes(10)) { throw 'WATCHDOG_DEADLINE_TOO_NEAR' }
 if (Test-Path -LiteralPath $receiptRoot) { throw 'WATCHDOG_RECEIPT_DIRECTORY_MUST_BE_NEW' }
@@ -237,7 +291,7 @@ try {
     $taskArguments = @(
         '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $PSCommandPath + '"'),
         '-EmergencyStopOnly', '-PodId', $PodId, '-PodName', $PodName,
-        '-RunCreatedAtUtc', ('"' + $createdUtc.ToString('o') + '"'),
+        '-RunStartedAtUtc', ('"' + $startedUtc.ToString('o') + '"'),
         '-SourceCommitSha256', $SourceCommitSha256,
         '-OciImageDigest', $OciImageDigest,
         '-ExpectedImageName', $ExpectedImageName,
