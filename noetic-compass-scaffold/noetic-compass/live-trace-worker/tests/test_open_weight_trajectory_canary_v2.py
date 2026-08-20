@@ -54,7 +54,7 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     preregistration, _raw = canary.load_preregistration(PREREGISTRATION_PATH)
 
     assert preregistration["preregistration_sha256"] == (
-        "C8DB1E1223855682B78E73F0AF34989DB7D6A29C690F21DE89A98C62D26AC0F1"
+        "C253F1B74C136E96701C53B131143D90EFFC8AD56E3B234FE808DAEA2F7F912C"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
     assert preregistration["launch_bindings"]["execution_authority"] == (

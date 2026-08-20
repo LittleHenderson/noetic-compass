@@ -37,8 +37,8 @@ jobs:
       POD_NAME: ${{ inputs.pod_name }}
       HARD_STOP_DEADLINE_UTC: ${{ inputs.hard_stop_deadline_utc }}
       SOURCE_COMMIT: ${{ inputs.source_commit }}
-      ARMED_RECEIPT_PATH: ${{ runner.temp }}/runpod-stop-supervisor-armed.json
-      RECEIPT_PATH: ${{ runner.temp }}/runpod-stop-supervisor.json
+      ARMED_RECEIPT_PATH: /tmp/runpod-stop-supervisor-armed.json
+      RECEIPT_PATH: /tmp/runpod-stop-supervisor.json
     steps:
       - name: Check out the exact dispatched commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
