@@ -39,7 +39,7 @@ The timing requirement is specific and is **not** satisfied by any artifact that
 
 This is the largest remaining piece of Gate 1 and it is genuine engineering, not a query.
 
-### 2. CloudTrail / WORM export — **CLOSED 2026-08-21 — Option A executed**
+### 2. CloudTrail / WORM export — **CONFIGURED 2026-08-21 — Option A executed; first log delivery NOT YET CONFIRMED**
 
 **RESOLVED. A trail now exists and is logging.** The owner instruction was explicit — *"Get the ... CloudTrail/WORM export ... You can do it now"* — and I had over-deferred by treating it as an unanswered A/B question. Option A was executed **additively**: nothing existing was modified.
 
@@ -56,6 +56,18 @@ This is the largest remaining piece of Gate 1 and it is genuine engineering, not
 | Versioning | `Enabled` |
 | Public access | **all four blocks on** |
 | Encryption | `AES256` |
+
+**PRECISION, because wired is not the same as working.** Immediately after creation the bucket held **2 objects, both zero bytes**: `cloudtrail/AWSLogs/807562639912/CloudTrail/` and `.../CloudTrail-Digest/`. **Those are prefix placeholders CloudTrail writes to prove it can write — they are not log files.** At that moment `LatestDeliveryTime` was **absent** and `LatestDigestDeliveryTime` was **absent**, with `LatestDeliveryError` **none**.
+
+So what is proven right now, exactly: the trail exists, `IsLogging` is `True`, **CloudTrail’s write permission to the bucket is demonstrated**, and **Object Lock is really applying** — the first placeholder came back `ObjectLockMode GOVERNANCE`, `RetainUntilDate 2027-08-21T02:33:00.915000+00:00`, exactly one year out.
+
+**What is NOT yet proven: that a real log file has landed.** CloudTrail normally delivers within about 5 to 15 minutes of first enabling. Until `LatestDeliveryTime` is populated and a non-zero object exists under the `CloudTrail/` prefix, this item is **`CONFIGURED`, not `VERIFIED`**.
+
+One-line check, safe to re-run:
+
+```bash
+aws cloudtrail get-trail-status --name cas-harness-audit-v1 --query "{logging:IsLogging,delivered:LatestDeliveryTime,error:LatestDeliveryError}"
+```
 
 **Design choices worth stating, because both were deliberate:**
 
