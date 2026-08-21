@@ -88,7 +88,7 @@ jobs:
           verify tools/runpod_open_weight_canary_v2/precreate_guardian_runpod_adapter.py \
             A00F984381F58190904D3A262D1DB6AE076E64DB7E8DEB9F871AD8D6DA656D82
           verify tools/runpod_open_weight_canary_v2/run_precreate_guardian.py \
-            418317EF563BFB70B721902979EAF134B4E8DDD10DB006842ADA0CE950ED6638
+            823270E4ED0B53DCA7F94AD1623C393ECBD27667E9AFFFB87F7D9C2BCCFCC8FE
 
       - name: Confirm the checked-out commit equals the guarded commit
         shell: bash

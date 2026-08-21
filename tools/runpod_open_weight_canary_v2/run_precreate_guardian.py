@@ -31,6 +31,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+# On a CI runner, working-directory does not put this file's own directory on
+# sys.path, so its sibling imports must be made resolvable explicitly.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+
 from precreate_guardian_offline import (
     ArmSpec,
     arm_guardian,
