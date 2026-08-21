@@ -101,3 +101,32 @@ The repository is now correct. The deployed stack is not yet. Closing that gap r
 **Practical risk in the meantime: low.** The deployed preprod guardian cannot reach RunPod at all — its provider secret is a refusal payload, so it fails closed before any provider contact. It cannot act on any pod, protected or otherwise. The gap is real but currently unreachable.
 
 **No pod created. No GPU exists. Experiment `NOT RUN`.**
+
+## Runtime REBUILT (not deployed) — 2026-08-21
+
+The guardian runtime was rebuilt so the protected-pod fix is packaged and ready. **Built only. Nothing deployed.**
+
+```
+status                 : BUILT_OFFLINE_NOT_DEPLOYED
+core_sha256            : 525f4e33beb4c472bea1fdfb45aab831ce56e02f5ecbbd323514e5ab3a6549b1
+core_lock_sha256       : 7c14e68f6faea5e06598389a181170643c6e30ffe69374a05d5f61ffb64c9c00
+core_tests_sha256      : 368c0525773f5dcabc24f32257d17dc597ad1a8ff8a0fb40d5c7f0aa371fa329
+zip_sha256             : 9ebc90c2048669a0026dafb046b465c7d5a7405b172d32bcacf55ad80548e16e
+zip_bytes              : 66169
+zip_entries            : aws_production_guardian_core.py, guardian_build_identity.py, guardian_runtime.py
+```
+
+**The build script independently re-verified the lock and accepted it** — `core_sha256` and `core_lock_sha256` in the manifest match the values re-pinned above, which is a second confirmation that the re-lock was done correctly rather than merely written down.
+
+Unchanged, as expected: `runtime_sha256 7df3cb30…`, `state_machine_sha256 70dc66f4…`, `template_sha256 e6a24702…`, `build_script_sha256 32ff3113…`, `binding_tool_sha256 e64f69a2…`, `tests_sha256 e23dc872…`, `precreate_tests_sha256 15699cfb…`.
+
+**Deployed vs built:**
+
+| | deployed (LIVE now) | built (ready) |
+|---|---|---|
+| runtime ZIP | `326f4836…` , `66154` B | `9ebc90c2…` , `66169` B |
+| protects `vernmyfb3ck9po` | **no** | **yes** |
+
+Deploying it is a **separate authorized action**: upload the ZIP as a new artifact version, create a change set, review, execute — the Gate 2 procedure. It is deliberately not done here.
+
+**No pod created. No GPU exists. Experiment `NOT RUN`.**
