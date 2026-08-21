@@ -22,6 +22,10 @@ Exactly **one** new RunPod Pod, and only with **all** of:
 
 Protected resources stay protected: never touch Pod `q2oqlooejhin7s`, keep Pod `vernmyfb3ck9po` stopped, never touch volume `hfelwlp1va`.
 
+## Model re-pin — the reason this plan is now launchable at all
+
+Before 2026-08-21 this plan would have failed at model-load on the pod, **after** the single create attempt was spent: the pinned `model.safetensors` `29D2E457…` carries 184 tensors including 36 legacy buffers, the pinned `transformers 5.8.1` loads 148, and the byte-exact weight verifier demands set equality. The owner approved the re-pin; the **verifier was not weakened** and the model artifact moved instead. The model now **loads and captures through the real engine** on the plan's own frozen prompt. Full account: `MODEL_REPIN_RECORD_20260821.md`. Step 3 below therefore re-verifies against the NEW hashes (tree `BB65650E…`, source manifest `BD4CCE31…`).
+
 ## What still blocks the launch, and who owns it
 
 1. **Gate 2 — AWS quota** `9b482ab5…` (`CASE_OPENED`, applied still `10`). Owner of the wait: AWS.
@@ -35,7 +39,7 @@ When Gate 2 passes, the preregistration gets exactly these three edits (plus its
 | Field | Draft value |
 |---|---|
 | `execution_authority` | `GO_FOR_ONE_ENGINEERING_CANARY_ONLY` |
-| `required_source_commit_sha256` | the final frozen commit at application time — candidate today: `09a30a8a1b917db1fa6a3a0409d0fa41670f7d9a` (freeze verified current at this HEAD; re-verify at application) |
+| `required_source_commit_sha256` | the final frozen commit at application time — candidate now: **`8595f6adfca00a7c9f724aafad00ffabd32b5109`** (superseded candidate `09a30a8a1b917db1fa6a3a0409d0fa41670f7d9a`, invalidated by the owner-approved model re-pin; freeze re-verified current at this HEAD 2026-08-21; re-verify again at application) |
 | `required_provider_launcher_source_sha256` | `C2081C74897D25147F29A57926863FBC5B827E516D3FC22D802051C664832F21` (computed from `create_provider_launch_receipt.py` today; re-verify at application) |
 
 **Applying this draft is the formal grant of canary execution authority.** It is deliberately not applied now, because Gate 2 has not passed and the precreate guardian is not armed.

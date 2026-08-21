@@ -1,4 +1,6 @@
-# Gate 3 — the freeze record — pinned at commit `33a81f52`
+# Gate 3 — the freeze record — RE-PINNED at commit `8595f6ad`
+
+> **RE-PINNED 2026-08-21 after the owner-approved model re-pin.** The previous pin, commit `33a81f52c0bc3b2b6740e9652292370d4541ab71`, is **superseded and retained here** — it froze a model artifact that could never load (see `MODEL_REPIN_RECORD_20260821.md`). A freeze that pins an unloadable artifact is not a valid freeze, so Gate 3 was re-run rather than carried forward. Two hashes below moved with it; everything else is re-verified, not assumed.
 
 **Date: 2026-08-21. Everything on this page was verified at this exact commit, not carried forward.**
 
@@ -11,11 +13,11 @@ Gate 3 asks: *pin the exact commit, image, hardware, and receipts; re-run the fu
 | | |
 |---|---|
 | Repository | `cas_interpretability_successor_20260820`, branch `codex/cas-interpretability-successor-v2` |
-| **Pinned HEAD** | **`33a81f52c0bc3b2b6740e9652292370d4541ab71`** |
+| **Pinned HEAD** | **`8595f6adfca00a7c9f724aafad00ffabd32b5109`** (superseded: `33a81f52c0bc3b2b6740e9652292370d4541ab71`) |
 | Working tree | clean except the preserved untracked `infra/runpod_precreate_guardian_aws/` |
 | Line-ending armour | `.gitattributes` pins `eol=lf` on every hash-locked tree (the freeze survives a clone) |
 
-**The canary freeze is CURRENT at this HEAD**: the live-computed source-file manifest equals the preregistration's pin, `6EC46F9A42A52B6EE13F65EEEE81AB73889BD56B247F828393C84794A4227CCF`, re-verified now rather than assumed from the re-pin two commits ago.
+**The canary freeze is CURRENT at this HEAD**: the live-computed source-file manifest equals the preregistration's pin, `BD4CCE31A351D05AE58F32C4F033B03B6C2F5CFF68AE234030E26CB5B4BB2A31` (superseded: `6EC46F9A42A52B6EE13F65EEEE81AB73889BD56B247F828393C84794A4227CCF`), re-computed live at this commit rather than assumed. The dependency lock `9E990C06B907FE117E67D6BB4CCD8B5AF09FFD9E8B1D98D893A727102C33CB9A` re-verified equal to the preregistration, and `execution_authority` re-verified still `NO_GO_UNTIL_EXACT_BINDINGS_ARE_FROZEN`.
 
 ## The image
 
@@ -31,7 +33,7 @@ Gate 3 asks: *pin the exact commit, image, hardware, and receipts; re-run the fu
 | Device | `NVIDIA A40`, capability `[8, 6]`, `cuda:0` |
 | Runtime | Python `3.12.3`, torch `2.8.0+cu128`, CUDA `12.8` |
 | Dependency lock | `9E990C06B907FE117E67D6BB4CCD8B5AF09FFD9E8B1D98D893A727102C33CB9A` |
-| Model | `EleutherAI/pythia-160m` @ `50f5173d932e8e61f858120bcb800b97af589f46`, tree manifest `6373A5C8…`, 5 files each hashed |
+| Model | `EleutherAI/pythia-160m` @ `50f5173d932e8e61f858120bcb800b97af589f46`, tree manifest **`BB65650EB00AAA36900BBBB57B2C96EF4D34AA395F124E68C801C483D4BB5CDE`** (superseded: `6373A5C8…`), 5 files each hashed. **`model.safetensors` is the owner-approved fp16 re-serialization `D5861D3237C5F8E952B4EBF05179F3BC50D479186FBE96845D22660D96C50D97`, `324662840` B** — the original `29D2E457…` could never pass the byte-exact weight verifier under the pinned `transformers 5.8.1`. `config.json` and all three tokenizer files are byte-identical to the original pin. |
 | Determinism | `PYTHONHASHSEED=1729`, `CUBLAS_WORKSPACE_CONFIG=:4096:8`, memory floors pinned |
 
 ## The receipts
@@ -61,6 +63,8 @@ Schemas pinned in the preregistration; **instances are Gate 4 outputs and cannot
 | Open-weight canary v2 + trajectory runtime (includes the recovered negative tests) | **85 passed, 0 failed** |
 | C14 interpretability adapter, hostile inputs included | **48 passed, 0 failed** |
 | **Total** | **559 passed, 0 failed** |
+
+**Re-run AT the new pin `8595f6ad` on 2026-08-21: 85 + 48 + 426 = 559 passed, 0 failed — identical to the previous pin's total.** Additionally proven at this pin, which the previous freeze could not claim: the model **loads through the real engine** at the pinned identity (observed tree manifest equals the pin; binding `HF_CACHE_MODEL_ID_AND_REVISION_PATH_BOUND`; weight value manifest `AD7CB93367AB338244B79D56A16EF3AF620CD624EE237EAB03D57CE940D2B7BB`; 12 layers / 768 hidden), and a capture **ran on this record's own frozen scenario prompt** — `"In a PCB, Ohm's law states that voltage equals"` → `" current,"`.
 
 Operational notes that keep these numbers reproducible: run with `PYTHONDONTWRITEBYTECODE=1 -p no:cacheprovider`; the canary and adapter suites cannot share one pytest invocation (conftest module-name collision).
 
