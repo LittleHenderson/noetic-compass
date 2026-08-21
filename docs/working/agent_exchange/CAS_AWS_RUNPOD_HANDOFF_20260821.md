@@ -20,7 +20,7 @@
 
 ## AWS work completed
 
-- Active operator is non-root IAM user `cas-g5-operator` in `us-west-2`; MFA is attached and the owner attested MFA login. CloudTrail still has no published matching `ConsoleLogin` event, so independent `MFAUsed=Yes` evidence remains open.
+- Active operator is non-root IAM user `cas-g5-operator` in `us-west-2`; MFA is attached and the owner attested MFA login. **CORRECTED 2026-08-21:** the earlier statement that *"CloudTrail still has no published matching `ConsoleLogin` event"* was **wrong** — it queried `us-west-2`, but IAM console sign-in is recorded in **`us-east-1`**. `us-east-1` returns **10** `ConsoleLogin` events. Both `cas-g5-operator` sign-ins (`2026-08-16T20:43:11-07:00`, `2026-08-17T10:07:56-07:00`) record `"MFAUsed": "No"`, and both **predate** the MFA device enabled at `2026-08-20T23:00:15+00:00`, so they are consistent rather than a violation. All **8** `root` sign-ins record `"MFAUsed": "Yes"`. **Independent operator `MFAUsed=Yes` evidence remains OPEN for a precise reason: `cas-g5-operator` has not signed in since MFA was attached.** One owner console sign-in closes it. **Separately, there is NO CloudTrail trail in this account** (`describe_trails` empty in both regions), so only the expiring 90-day Event history exists and the immutable-export gate cannot close against it. Full evidence and options: `docs/working/aws_gate1_evidence_20260821/GATE1_STATUS.md`.
 - Guardian runtime ZIP SHA-256: `326F483639B8B48EC8718DDF166663A721710E353968CDE59D601BC22858BAF9`, S3 version `0SMfNuuIf0gst0QOe_Oa8O1BOzRYjTFr`.
 - All nine guardian Lambdas report AWS `CodeSha256` `Mm9INjm4tI7IcY3fFmZjpyFxDjU5aM3lnWAbwihYuvk=`.
 - INERT starter probe fails closed with `ACTIVATIONERROR`; recovery EventBridge is disabled.

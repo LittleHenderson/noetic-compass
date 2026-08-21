@@ -1,0 +1,6 @@
+{
+  "consequence": "With zero trails, only the 90-day CloudTrail Event history exists. It is queryable but NOT immutable, NOT exported, and it EXPIRES. No WORM export target is configured.",
+  "trail_count": 0,
+  "us_east_1_trails": [],
+  "us_west_2_trails": []
+}

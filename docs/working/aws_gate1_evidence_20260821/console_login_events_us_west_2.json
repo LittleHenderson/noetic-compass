@@ -1,0 +1,10 @@
+{
+  "event_count": 0,
+  "events": [],
+  "note": "ZERO by design: IAM console sign-in is recorded in us-east-1, not the operating region. A us-west-2 query is NOT evidence of absence.",
+  "query": {
+    "EventName": "ConsoleLogin",
+    "MaxResults": 50,
+    "region": "us-west-2"
+  }
+}

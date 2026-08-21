@@ -1,0 +1,378 @@
+{
+  "event_count": 10,
+  "events": [
+    {
+      "additionalEventData": {
+        "LoginTo": "https://us-east-1.console.aws.amazon.com/iam/home?ca-oauth-flow-id=0ec3&hashArgs=%23%2Fsecurity_credentials%2Faccess-key-wizard&isauthcode=true&oauthStart=1786986469898&region=us-west-2&state=hashArgsFromTB_us-east-1_d2c052c0eddd69f7",
+        "MFAUsed": "No",
+        "MobileVersion": "No"
+      },
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "23973f62-45fd-4a78-af21-c0ba8254aa2c",
+      "eventName": "ConsoleLogin",
+      "eventSource": "signin.amazonaws.com",
+      "eventTime": "2026-08-17T17:07:56Z",
+      "eventType": "AwsConsoleSignIn",
+      "eventVersion": "1.11",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "807562639912",
+      "requestParameters": null,
+      "responseElements": {
+        "ConsoleLogin": "Success"
+      },
+      "sourceIPAddress": "73.53.99.222",
+      "tlsDetails": {
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "us-east-1.signin.aws.amazon.com",
+        "tlsVersion": "TLSv1.3"
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "userIdentity": {
+        "accountId": "807562639912",
+        "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+        "principalId": "AIDA3YBT37IUN7OWL4UMU",
+        "type": "IAMUser",
+        "userName": "cas-g5-operator"
+      }
+    },
+    {
+      "additionalEventData": {
+        "LoginTo": "https://us-east-1.console.aws.amazon.com/iam/home?ca-oauth-flow-id=e07a&hashArgs=%23%2Fusers%2Fdetails%2Fcas-g5-operator%3Fsection%3Dpermissions&isauthcode=true&oauthStart=1786938176498&region=us-east-1&state=hashArgsFromTB_us-east-1_f694947a554aca74",
+        "MFAUsed": "No",
+        "MobileVersion": "No"
+      },
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "7cd20151-0290-483d-90db-c1a2ff13a143",
+      "eventName": "ConsoleLogin",
+      "eventSource": "signin.amazonaws.com",
+      "eventTime": "2026-08-17T03:43:11Z",
+      "eventType": "AwsConsoleSignIn",
+      "eventVersion": "1.11",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "807562639912",
+      "requestParameters": null,
+      "responseElements": {
+        "ConsoleLogin": "Success"
+      },
+      "sourceIPAddress": "73.53.99.222",
+      "tlsDetails": {
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "us-east-1.signin.aws.amazon.com",
+        "tlsVersion": "TLSv1.3"
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "userIdentity": {
+        "accountId": "807562639912",
+        "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+        "principalId": "AIDA3YBT37IUN7OWL4UMU",
+        "type": "IAMUser",
+        "userName": "cas-g5-operator"
+      }
+    },
+    {
+      "additionalEventData": {
+        "LoginTo": "https://us-east-1.console.aws.amazon.com/billing/home?region=us-east-1&state=hashArgs%23%2Fpaymentpreferences&isauthcode=true",
+        "MFAIdentifier": "arn:aws:iam::807562639912:u2f/root/Securitykey-XZ25DBS6DVHGZCEHKAFQD7ER2M",
+        "MFAUsed": "Yes",
+        "MobileVersion": "No"
+      },
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "4b14ac65-030b-4d28-9bba-fd58fa53507f",
+      "eventName": "ConsoleLogin",
+      "eventSource": "signin.amazonaws.com",
+      "eventTime": "2026-08-16T21:43:28Z",
+      "eventType": "AwsConsoleSignIn",
+      "eventVersion": "1.11",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "807562639912",
+      "requestParameters": null,
+      "responseElements": {
+        "ConsoleLogin": "Success"
+      },
+      "sourceIPAddress": "174.227.62.138",
+      "tlsDetails": {
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "signin.aws.amazon.com",
+        "tlsVersion": "TLSv1.3"
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "userIdentity": {
+        "accessKeyId": "",
+        "accountId": "807562639912",
+        "arn": "arn:aws:iam::807562639912:root",
+        "principalId": "807562639912",
+        "type": "Root"
+      }
+    },
+    {
+      "additionalEventData": {
+        "LoginTo": "https://us-east-1.console.aws.amazon.com/billing/home?region=us-east-1&state=hashArgs%23%2Fpaymentpreferences&isauthcode=true",
+        "MFAUsed": "Yes",
+        "MobileVersion": "No"
+      },
+      "awsRegion": "us-east-1",
+      "errorMessage": "Failed authentication",
+      "eventCategory": "Management",
+      "eventID": "e725972e-1b46-4322-a0bf-4510d0c89bb2",
+      "eventName": "ConsoleLogin",
+      "eventSource": "signin.amazonaws.com",
+      "eventTime": "2026-08-16T21:41:41Z",
+      "eventType": "AwsConsoleSignIn",
+      "eventVersion": "1.11",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "807562639912",
+      "requestParameters": null,
+      "responseElements": {
+        "ConsoleLogin": "Failure"
+      },
+      "sourceIPAddress": "174.227.62.138",
+      "tlsDetails": {
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "signin.aws.amazon.com",
+        "tlsVersion": "TLSv1.3"
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.30096.5 Chrome/148.0.7778.280 Electron/42.7.0 Safari/537.36 MSIX",
+      "userIdentity": {
+        "accessKeyId": "",
+        "accountId": "807562639912",
+        "arn": "arn:aws:iam::807562639912:root",
+        "principalId": "807562639912",
+        "type": "Root"
+      }
+    },
+    {
+      "additionalEventData": {
+        "LoginTo": "https://us-east-1.console.aws.amazon.com/iam/home?ca-oauth-flow-id=1ba8&hashArgs=%23%2Fsecurity_credentials&isauthcode=true&oauthStart=1784071187233&region=us-east-1&state=hashArgsFromTB_us-east-1_3e2da834e823e9bd",
+        "MFAIdentifier": "arn:aws:iam::807562639912:u2f/root/Securitykey-XZ25DBS6DVHGZCEHKAFQD7ER2M",
+        "MFAUsed": "Yes",
+        "MobileVersion": "No"
+      },
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "2962f769-7d75-4665-891a-92aa8be6b57c",
+      "eventName": "ConsoleLogin",
+      "eventSource": "signin.amazonaws.com",
+      "eventTime": "2026-07-14T23:23:08Z",
+      "eventType": "AwsConsoleSignIn",
+      "eventVersion": "1.11",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "807562639912",
+      "requestParameters": null,
+      "responseElements": {
+        "ConsoleLogin": "Success"
+      },
+      "sourceIPAddress": "73.53.99.222",
+      "tlsDetails": {
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "signin.aws.amazon.com",
+        "tlsVersion": "TLSv1.3"
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "userIdentity": {
+        "accessKeyId": "",
+        "accountId": "807562639912",
+        "arn": "arn:aws:iam::807562639912:root",
+        "principalId": "807562639912",
+        "type": "Root"
+      }
+    },
+    {
+      "additionalEventData": {
+        "LoginTo": "https://console.aws.amazon.com/ses?ca-oauth-flow-id=0671&hashArgs=%23&isauthcode=true&oauthStart=1780699075170&state=hashArgsFromTB_us-east-2_0859f5841db5f4ab",
+        "MFAIdentifier": "arn:aws:iam::807562639912:u2f/root/Securitykey-XZ25DBS6DVHGZCEHKAFQD7ER2M",
+        "MFAUsed": "Yes",
+        "MobileVersion": "No"
+      },
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "95831a38-1056-40b9-accb-3dedf3f24d44",
+      "eventName": "ConsoleLogin",
+      "eventSource": "signin.amazonaws.com",
+      "eventTime": "2026-06-05T22:38:19Z",
+      "eventType": "AwsConsoleSignIn",
+      "eventVersion": "1.11",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "807562639912",
+      "requestParameters": null,
+      "responseElements": {
+        "ConsoleLogin": "Success"
+      },
+      "sourceIPAddress": "174.227.33.162",
+      "tlsDetails": {
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "signin.aws.amazon.com",
+        "tlsVersion": "TLSv1.3"
+      },
+      "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
+      "userIdentity": {
+        "accessKeyId": "",
+        "accountId": "807562639912",
+        "arn": "arn:aws:iam::807562639912:root",
+        "principalId": "807562639912",
+        "type": "Root"
+      }
+    },
+    {
+      "additionalEventData": {
+        "LoginTo": "https://console.aws.amazon.com/console/home?ca-oauth-flow-id=9bb9&hashArgs=%23&isauthcode=true&oauthStart=1780497502858&state=hashArgsFromTB_us-east-2_ba7e094713830031",
+        "MFAIdentifier": "arn:aws:iam::807562639912:u2f/root/Securitykey-XZ25DBS6DVHGZCEHKAFQD7ER2M",
+        "MFAUsed": "Yes",
+        "MobileVersion": "No"
+      },
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "0630a41c-a97b-4e21-a3c6-ca1ca5fc96d0",
+      "eventName": "ConsoleLogin",
+      "eventSource": "signin.amazonaws.com",
+      "eventTime": "2026-06-03T14:38:55Z",
+      "eventType": "AwsConsoleSignIn",
+      "eventVersion": "1.11",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "807562639912",
+      "requestParameters": null,
+      "responseElements": {
+        "ConsoleLogin": "Success"
+      },
+      "sourceIPAddress": "73.53.99.222",
+      "tlsDetails": {
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "signin.aws.amazon.com",
+        "tlsVersion": "TLSv1.3"
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+      "userIdentity": {
+        "accessKeyId": "",
+        "accountId": "807562639912",
+        "arn": "arn:aws:iam::807562639912:root",
+        "principalId": "807562639912",
+        "type": "Root"
+      }
+    },
+    {
+      "additionalEventData": {
+        "LoginTo": "https://console.aws.amazon.com/console/home?ca-oauth-flow-id=5853&hashArgs=%23&isauthcode=true&oauthStart=1780054889693&state=hashArgsFromTB_us-east-2_f83d116a434fdbff",
+        "MFAIdentifier": "arn:aws:iam::807562639912:u2f/root/Securitykey-XZ25DBS6DVHGZCEHKAFQD7ER2M",
+        "MFAUsed": "Yes",
+        "MobileVersion": "No"
+      },
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "4f51f264-df30-4a19-9a15-5ca1587673ab",
+      "eventName": "ConsoleLogin",
+      "eventSource": "signin.amazonaws.com",
+      "eventTime": "2026-05-29T11:42:25Z",
+      "eventType": "AwsConsoleSignIn",
+      "eventVersion": "1.11",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "807562639912",
+      "requestParameters": null,
+      "responseElements": {
+        "ConsoleLogin": "Success"
+      },
+      "sourceIPAddress": "73.53.99.222",
+      "tlsDetails": {
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "signin.aws.amazon.com",
+        "tlsVersion": "TLSv1.3"
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+      "userIdentity": {
+        "accessKeyId": "",
+        "accountId": "807562639912",
+        "arn": "arn:aws:iam::807562639912:root",
+        "principalId": "807562639912",
+        "type": "Root"
+      }
+    },
+    {
+      "additionalEventData": {
+        "LoginTo": "https://us-west-2.console.aws.amazon.com/s3/buckets/cas-harness-runpod-92754088?ca-oauth-flow-id=08eb&hashArgs=%23&isauthcode=true&oauthStart=1779979997845&region=us-west-2&state=hashArgsFromTB_us-west-2_680b6ba64de3b170&tab=properties",
+        "MFAIdentifier": "arn:aws:iam::807562639912:u2f/root/Securitykey-XZ25DBS6DVHGZCEHKAFQD7ER2M",
+        "MFAUsed": "Yes",
+        "MobileVersion": "No"
+      },
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "971903d0-7e98-4737-8a48-a80bce2faaec",
+      "eventName": "ConsoleLogin",
+      "eventSource": "signin.amazonaws.com",
+      "eventTime": "2026-05-28T14:53:52Z",
+      "eventType": "AwsConsoleSignIn",
+      "eventVersion": "1.11",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "807562639912",
+      "requestParameters": null,
+      "responseElements": {
+        "ConsoleLogin": "Success"
+      },
+      "sourceIPAddress": "73.53.99.222",
+      "tlsDetails": {
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "signin.aws.amazon.com",
+        "tlsVersion": "TLSv1.3"
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+      "userIdentity": {
+        "accessKeyId": "",
+        "accountId": "807562639912",
+        "arn": "arn:aws:iam::807562639912:root",
+        "principalId": "807562639912",
+        "type": "Root"
+      }
+    },
+    {
+      "additionalEventData": {
+        "LoginTo": "https://console.aws.amazon.com/console/home?ca-oauth-flow-id=37b2&hashArgs=%23&isauthcode=true&nc2=h_si&oauthStart=1779912611691&src=header-signin&state=hashArgsFromTB_us-east-2_a9d5a66fcc20c62a",
+        "MFAIdentifier": "arn:aws:iam::807562639912:u2f/root/Securitykey-XZ25DBS6DVHGZCEHKAFQD7ER2M",
+        "MFAUsed": "Yes",
+        "MobileVersion": "No"
+      },
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "1b84ba65-db97-4b01-9f3b-fc7fcd0e1a69",
+      "eventName": "ConsoleLogin",
+      "eventSource": "signin.amazonaws.com",
+      "eventTime": "2026-05-27T20:10:59Z",
+      "eventType": "AwsConsoleSignIn",
+      "eventVersion": "1.11",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "807562639912",
+      "requestParameters": null,
+      "responseElements": {
+        "ConsoleLogin": "Success"
+      },
+      "sourceIPAddress": "73.53.99.222",
+      "tlsDetails": {
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "signin.aws.amazon.com",
+        "tlsVersion": "TLSv1.3"
+      },
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+      "userIdentity": {
+        "accessKeyId": "",
+        "accountId": "807562639912",
+        "arn": "arn:aws:iam::807562639912:root",
+        "principalId": "807562639912",
+        "type": "Root"
+      }
+    }
+  ],
+  "query": {
+    "EventName": "ConsoleLogin",
+    "MaxResults": 50,
+    "region": "us-east-1"
+  }
+}

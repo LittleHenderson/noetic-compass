@@ -1,0 +1,10 @@
+{
+  "devices": [
+    {
+      "EnableDate": "2026-08-20 23:00:15+00:00",
+      "SerialNumber": "arn:aws:iam::807562639912:mfa/cas-g5-operator-authenticator",
+      "UserName": "cas-g5-operator"
+    }
+  ],
+  "user": "cas-g5-operator"
+}
