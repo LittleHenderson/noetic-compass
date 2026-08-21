@@ -1,0 +1,41 @@
+{
+  "best_detector": "D1_mean_difference",
+  "controls": {
+    "C1_label_shuffle_accuracy": {
+      "D1_mean_difference": 0.3,
+      "D2_fisher_lda": 0.3
+    },
+    "C2_random_direction": {
+      "accuracy": 0.8,
+      "auc": 0.9,
+      "margin": 1.9671049125636666
+    }
+  },
+  "detectors": {
+    "D1_mean_difference": {
+      "accuracy": 1.0,
+      "auc": 1.0,
+      "margin": 5.48810448904452
+    },
+    "D2_fisher_lda": {
+      "accuracy": 1.0,
+      "auc": 1.0,
+      "margin": 6.205840639832197
+    }
+  },
+  "hidden": 768,
+  "layer": 6,
+  "model_id": "EleutherAI/pythia-160m",
+  "n_test_per_class": 10,
+  "n_train_per_class": 10,
+  "predictions": {
+    "P1_acc_ge_0.70": true,
+    "P2_beats_random_by_0.15": true,
+    "P3_shuffle_collapses_le_0.60": true,
+    "P4_auc_ge_0.70": true
+  },
+  "reserialized_snapshot_sha256": "d5861d3237c5f8e952b4ebf05179f3bc50d479186fbe96845d22660d96c50d97",
+  "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+  "verdict": "DETECTOR_VALIDATED_ON_REAL_ACTIVATIONS",
+  "weight_value_manifest_sha256": "AD7CB93367AB338244B79D56A16EF3AF620CD624EE237EAB03D57CE940D2B7BB"
+}
