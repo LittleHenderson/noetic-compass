@@ -24,7 +24,9 @@ A Lambda matching the guardian's stop proxy exactly — `python3.12`, `arm64`, `
 
 ---
 
-## Why this number still cannot be written into the timing-evidence document
+## ~~Why this number still cannot be written into the timing-evidence document~~ — SUPERSEDED
+
+> **SUPERSEDED by the CORRECTION below.** The claim in this section — that the schema has no way to mark a substituted value — is **wrong**. It is retained unedited because the reasoning that followed from it is still the right reasoning, and because a wrong step deleted is a wrong step nobody can check.
 
 The field is named `observed_provider_stop_execution_milliseconds`. What was measured is DNS, TLS and an HTTP round trip — **not the guardian executing a STOP.**
 
@@ -74,7 +76,9 @@ Emitting this document is what would authorise `LIVE`. **That is why it has not 
 - **Emit it.** The substitution is cryptographically committed and impossible to miss for anyone who reads the manifest — but a reader of the document *alone* sees a field named `observed_provider_stop_execution_milliseconds` containing a transport measurement, and the runtime will not stop them.
 - **Do not emit it.** Wait for Gate 4, where a real STOP against a real pod becomes possible — accepting that Gate 4 sits behind Gate 2, which sits behind this document.
 
-## The schema limitation is itself a finding
+## ~~The schema limitation is itself a finding~~ — SUPERSEDED
+
+> **SUPERSEDED by the CORRECTION above.** The premise — *"the document has no way to record that a measurement is a proxy"* — is **false**: `source_evidence_manifest_sha256` commits one cryptographically. The three options below are also superseded: option 1 wrongly says the caveat must live outside the artifact, and option 2 wrongly implies a schema change is needed to express substitution. **The live options are the two stated under "The decision, stated plainly" above.** Retained unedited as the superseded record.
 
 **The timing-evidence document has no way to record that a measurement is a proxy.** Every value in it reads as directly observed. That is fine while every value *is* directly observed, and becomes a defect the moment one is not — which is exactly the situation the bootstrap circularity forces.
 
