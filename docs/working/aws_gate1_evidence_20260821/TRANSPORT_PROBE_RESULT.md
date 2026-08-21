@@ -34,6 +34,46 @@ The 18-field schema was checked for any way to mark a value as a substitute. The
 
 **No document has been emitted.** That is the correct outcome, and it is the same principle that refused a zero earlier today: a number that did not come from the thing the field names does not belong in that field.
 
+## CORRECTION — I was wrong twice about the schema
+
+**What I asserted:** *"the schema has no way to express that a value is a proxy"*, and that any caveat would have to "travel separately from the artifact". **Both are wrong.**
+
+The schema has exactly one mechanism for this, and it is the field designed for it: **`source_evidence_manifest_sha256`**. The runtime checks only that the value is a well-formed SHA-256 — it **never fetches or inspects the manifest** (`guardian_runtime.py:2842-2844`). So the manifest's content and shape are entirely ours to define, and **the document commits to it cryptographically**.
+
+That is a materially different situation from the one I described. The caveat does **not** travel separately: it is bound into the document by hash, and a reviewer following the chain cannot reach the numbers without passing it.
+
+**What remains true, and is the real limit:** the runtime never reads the manifest, so the declaration is **committed but not machine-enforced**. A human must read it. That is weaker than a validator refusing a substituted value, and stronger than a note in a separate file.
+
+---
+
+## The draft document — built, NOT emitted, NOT uploaded, NOT bound
+
+To make the decision concrete rather than abstract, the document that *would* result has been constructed and is shown here. **It has not been written to disk, uploaded to any bucket, or attached to any stack parameter.**
+
+| field | value |
+|---|---|
+| `observed_recovery_gap_milliseconds` | **125424** — directly measured |
+| `observed_worker_startup_milliseconds` | **190** — directly measured |
+| `observed_provider_stop_execution_milliseconds` | **908** — **SUBSTITUTED** |
+| `tested_consecutive_missed_ticks` | **1** — directly measured |
+| `measurement_count` | **18** |
+| `source_evidence_manifest_sha256` | `ae3909a3b950901e01cf48434646b749bf0d02b2462dfeedff9e6dcc5d6e8f79` |
+
+The document's own SHA-256, which is what would go into `TimingValidationEvidenceSha256`, is:
+
+```
+0440cf8ecd73a928ce452fb1bec2cb7065ea3f15a0d13ff0a7ff80928deb575e
+```
+
+**The committed manifest's first key is deliberately unmissable:** `DECLARATION_THIS_DOCUMENT_CONTAINS_A_SUBSTITUTED_VALUE`. It names the field, gives the value, states exactly what was measured, states exactly what was **not** measured, explains why substitution was forced, records the probe's safety properties, lists all five samples, and says the worst case was used. It also carries the three discarded procedure artifacts, so the failures travel with the successes.
+
+## The decision, stated plainly
+
+Emitting this document is what would authorise `LIVE`. **That is why it has not been emitted.** The choice is between:
+
+- **Emit it.** The substitution is cryptographically committed and impossible to miss for anyone who reads the manifest — but a reader of the document *alone* sees a field named `observed_provider_stop_execution_milliseconds` containing a transport measurement, and the runtime will not stop them.
+- **Do not emit it.** Wait for Gate 4, where a real STOP against a real pod becomes possible — accepting that Gate 4 sits behind Gate 2, which sits behind this document.
+
 ## The schema limitation is itself a finding
 
 **The timing-evidence document has no way to record that a measurement is a proxy.** Every value in it reads as directly observed. That is fine while every value *is* directly observed, and becomes a defect the moment one is not — which is exactly the situation the bootstrap circularity forces.
