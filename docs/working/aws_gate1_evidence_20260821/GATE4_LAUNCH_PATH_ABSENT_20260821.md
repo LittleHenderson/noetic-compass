@@ -68,3 +68,45 @@ Real, verified progress — this is not a wasted session:
 **Gate 4 cannot complete until the pre-create guardian adapter is built.** That is the honest position, verified from the code and the project's own README rather than inferred.
 
 No pod created. No GPU exists. The A40/Pythia experiment remains **`NOT RUN`** — neither passed nor failed.
+
+---
+
+## PROGRESS 2026-08-21 — the pre-create guardian now exists in three parts
+
+Built after the finding above, in order of increasing capability, and stopping short of the one piece that can spend money.
+
+| piece | commit | can it create or spend? |
+|---|---|---|
+| `precreate_guardian_runpod_adapter.py` — live RunPod transport | `0725f944` | **No.** Only `list_pods` / `get_pod` / `stop_pod` exist |
+| `run_precreate_guardian.py` — arm + supervise driver | `7f56a377` | **No.** Reaches only the bounded adapter |
+| `.github/workflows/runpod-canary-precreate-guardian.yml` | `a0c867d0` | **No.** Contains no launcher call and no `--mode live` |
+
+The adapter was **exercised against the real RunPod API** (read-only): it listed both real pods, bound an exact id, refused all three protected pods, and handled a bogus id cleanly. Fakes alone would not have proved that — the canary defect is the reason.
+
+Writing the driver tests surfaced **three real safety rules**, each of which refused an unrealistic fixture. All three are features; the fixtures were corrected, never the rules:
+
+1. the arm is bound to the exact create bytes, which must actually **name** the guarded Pod;
+2. `GITHUB_SHA` must **equal** the guarded source commit, so a run cannot arm for one commit while executing another;
+3. `armed <= window_start < window_end < deadline` — the guardian must arm **before** the creation window opens, so nothing can be created during a period nothing was watching.
+
+## NEW BLOCKER FOUND — the workflow is not dispatchable yet
+
+**`workflow_dispatch` workflows are only dispatchable from the repository's default branch.** Verified:
+
+| | |
+|---|---|
+| default branch | `master` |
+| current branch | `codex/cas-interpretability-successor-v2` |
+| new guardian workflow on `master` | **404 — absent** |
+| stop supervisor on `master` | present, and it *is* listed as dispatchable |
+
+So the pre-create guardian workflow **cannot be triggered** until it reaches `master`. This would have surfaced at launch time, with a paid machine waiting on a guardian that could not be armed.
+
+**Merging to the default branch is the owner's call**, not an autonomous action.
+
+## Remaining for Gate 4
+
+1. Get the guardian workflow onto `master` so it becomes dispatchable. **Owner decision.**
+2. Write the **live launch driver** — the only remaining piece that creates spending capability, deliberately not written without an explicit go.
+
+**No pod created. No GPU exists. Experiment `NOT RUN`.**
