@@ -66,4 +66,33 @@ The load-bearing test is `test_emitted_document_passes_the_real_runtime_validato
 
 **Operational note:** run the guardian suite with `PYTHONDONTWRITEBYTECODE=1 -p no:cacheprovider`. `test_candidate_tree_contains_no_python_or_pytest_cache_artifacts` asserts the candidate tree is free of `__pycache__`, so a plain `pytest` invocation makes that test fail on its own bytecode. That is the test working, not a regression.
 
+### Verified against REAL AWS data, 2026-08-21 — and it correctly refused
+
+The harness had only ever run against a fake Logs client. It has now been pointed at the **real** guardian log groups in `us-west-2`, read-only.
+
+**The collector works on real data.** It parsed **15** `REPORT` lines across all nine guardian Lambda log groups. That number is an **independent cross-check**: the `AWS/Lambda Invocations` metric over the trailing 24 h, read from a *different* API, is also **15.0**. Two APIs, one number.
+
+| Lambda | invocations | max duration | cold-start init |
+|---|---:|---:|---:|
+| `control` | 3 | 17 ms | 247 ms |
+| `observe` | 2 | 21 ms | 197 ms |
+| `create` | 2 | 13 ms | 194 ms |
+| `stop` | 2 | 4 ms | 196 ms |
+| `observe-proxy` | 1 | 13 ms | 188 ms |
+| `create-proxy` | 1 | 10 ms | 191 ms |
+| `stop-proxy` | 1 | 14 ms | 202 ms |
+| `starter` | 2 | 14 ms | 193 ms |
+| `recovery` | 1 | 4 ms | **186 ms** |
+
+Every cold start is between **186 ms** and **247 ms**, against the `observed_worker_startup_milliseconds` ceiling of **8,000 ms** — roughly a **32×** margin. **That is an observation, not evidence:** it is one cold start per function on a stack that has never run a scheduled recovery, and §6 asks for something quite different.
+
+**The fail-closed path fired on real data, which is the part that mattered.** Two attempts were made against what actually exists:
+
+1. Measure a recovery gap from the real timestamps → **REFUSED**: `RECOVERY_GAP_SAMPLE_INSUFFICIENT: at least two recovery ticks are required to measure a gap; got 1`.
+2. Build an evidence document from everything available → **REFUSED**: `LIVE_NO_GO: section 6 requires at least one consecutive missed-tick scenario; observed 0`.
+
+**No document was produced, and that is the correct outcome.** The refusals are now demonstrated on genuine AWS data rather than only on synthetic inputs — a fail-closed path that has only ever been exercised by its own unit tests is a promise, not a property.
+
+**Status therefore moves from *tested against fakes* to *collection and refusal verified against real AWS data*, while item 1 itself stays `OPEN / NOT RUN`.** The gap is unchanged: the production stack has **one** recovery invocation and a `DISABLED` schedule, so the recovery-gap, missed-tick, and STOP-transport measurements cannot exist here. Those need the preproduction deployment — which **cannot be created in this account** (see `GATE_STATUS_2026_08_21.md`).
+
 **The harness is built and tested. It has measured nothing.** Producing evidence requires a preproduction deployment, which is an owner decision with real cost, and has not been requested or made.
