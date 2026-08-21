@@ -1,5 +1,7 @@
 # How to review the LIVE change set — plain English, step by step
 
+> **VERDICT RECORDED 2026-08-21: the owner said "review passed".** The change set stands as reviewed. Execution remains a separate step: RUNBOOK §7 requires action-time confirmation immediately before executing, and execution is additionally blocked until the Lambda quota resolves.
+
 **The change set now exists.** It is named **`live-activation-for-owner-review`**, on stack **`cas-harness-preprod-guardian`** in account **`063693212118`** (`us-west-2`). It is a **preview only**. Creating it changed nothing; it will keep changing nothing until someone presses Execute.
 
 ---
