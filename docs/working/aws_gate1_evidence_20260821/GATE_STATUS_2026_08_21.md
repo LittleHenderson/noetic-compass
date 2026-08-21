@@ -4,12 +4,12 @@ One page, so the next agent does not re-derive any of it. Every number here was 
 
 ---
 
-## Gate 1 — paper evidence — `OPEN`, all three items need the owner
+## Gate 1 — paper evidence — `OPEN`; item 2 CLOSED, items 1 and 3 need the owner
 
 | Item | State | What is missing |
 |---|---|---|
 | 1. Timing and fault tests | `OPEN / NOT RUN` | Harness built and tested; **it has measured nothing.** Needs a hash-locked **preproduction deployment**, which **cannot exist in this AWS account** — see the section below. **Architectural blocker, not a spend one.** |
-| 2. CloudTrail / WORM export | `OPEN`, stopgap taken | **No trail exists in this account.** Option B seal committed; **only Option A closes the gate**, and it is billable account configuration. |
+| 2. CloudTrail / WORM export | **`CLOSED`** | **Option A executed 2026-08-21.** Trail `cas-harness-audit-v1` is logging, multi-region, log-file validation on, global events included, into a **new dedicated** Object Lock bucket (`GOVERNANCE`, 1 yr). The guardian artifact bucket was **not touched**. |
 | 3. Operator MFA record | `OPEN` | **One owner console sign-in as `cas-g5-operator` with MFA.** An agent must never enter credentials. About one minute. |
 
 Both AWS quota blockers are **cleared** (`ec2/L-DB2E81BA` applied `8.0`; Lambda concurrency `1000`). Reserved-capacity arithmetic **fits**: 8 of 9 Lambdas reserve 1 each, leaving 992 unreserved against an AWS floor of 100.
@@ -91,10 +91,10 @@ Requires Gate 4. **Even a pass proves only the frozen capture/no-op/zero plumbin
 
 1. **Sign in to the AWS console as `cas-g5-operator` using MFA.** ~1 minute. Closes Gate 1 item 3.
 2. **Rotate the access key.** The only `Active` key on that user is the one recorded as exposed on 2026-08-16/17, and it is the sole credential the AWS lane runs on — **create the replacement first, then deactivate the old one.** Deleting first breaks the lane.
-3. **Choose Option A or B** for CloudTrail. Option A closes Gate 1 item 2; Option B does not.
+3. ~~Choose Option A or B for CloudTrail.~~ **DONE — Option A executed; Gate 1 item 2 is CLOSED.** Optionally raise Object Lock from `GOVERNANCE` to `COMPLIANCE` if you want retention that even root cannot lift.
 4. **Decide how to get a preproduction deployment — and note this is an ACCOUNT decision, not a spend decision.** A second guardian cannot coexist in `807562639912` (see above). Option A is a separate AWS account; Option B weakens a safety property and should not be taken to make a gate pass; Option C is accepting `NO_GO`. This is the only path to Gate 2, and therefore to Gates 4 and 5.
 
-Doing 1 after 3-as-Option-A closes two items with one sign-in.
+**The trail is already live, so action 1 now closes item 3 with immutable evidence in one sign-in.**
 
 ## What must not be said
 

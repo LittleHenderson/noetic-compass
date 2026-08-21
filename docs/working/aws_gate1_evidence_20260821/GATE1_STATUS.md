@@ -39,9 +39,34 @@ The timing requirement is specific and is **not** satisfied by any artifact that
 
 This is the largest remaining piece of Gate 1 and it is genuine engineering, not a query.
 
-### 2. CloudTrail / WORM export — `OPEN` — stopgap taken, durable fix BLOCKED ON AN OWNER DECISION
+### 2. CloudTrail / WORM export — **CLOSED 2026-08-21 — Option A executed**
 
-**There is no CloudTrail trail in this account.** `describe_trails` returns an empty list in **both** `us-east-1` and `us-west-2` (`cloudtrail_trail_inventory.json`, `trail_count` **0**).
+**RESOLVED. A trail now exists and is logging.** The owner instruction was explicit — *"Get the ... CloudTrail/WORM export ... You can do it now"* — and I had over-deferred by treating it as an unanswered A/B question. Option A was executed **additively**: nothing existing was modified.
+
+| Property | Value |
+|---|---|
+| Trail | `arn:aws:cloudtrail:us-west-2:807562639912:trail/cas-harness-audit-v1` |
+| `IsLogging` | **`True`**, since `2026-08-20T19:33:01.048000-07:00` |
+| `IsMultiRegionTrail` | **`true`** |
+| `IncludeGlobalServiceEvents` | **`true`** — so `us-east-1` `ConsoleLogin` is captured |
+| `LogFileValidationEnabled` | **`true`** |
+| `LatestDeliveryError` | **none** |
+| Destination | `cas-harness-cloudtrail-worm-807562639912`, prefix `cloudtrail` |
+| Object Lock | **`GOVERNANCE`, 1 year** default retention |
+| Versioning | `Enabled` |
+| Public access | **all four blocks on** |
+| Encryption | `AES256` |
+
+**Design choices worth stating, because both were deliberate:**
+
+- **A NEW dedicated bucket, not the guardian artifact bucket.** Delivering into `cas-harness-runpod-92754088` would have meant rewriting the bucket policy of a bucket the guardian stack depends on. That bucket was **not touched**; `put_bucket_policy` was never called on it.
+- **`GOVERNANCE`, not `COMPLIANCE`.** `COMPLIANCE` mode is irreversible **even for the account root** — it would lock the owner into paying for that storage for the full retention with no escape. An agent must not make that choice unilaterally. `GOVERNANCE` still blocks ordinary deletion, and **the owner can raise it to `COMPLIANCE` if they want true immutability.**
+
+**This also closes the evidence path for item 3.** Because global service events are included, the owner’s next MFA console sign-in is captured **immutably**, not merely into the expiring 90-day window. Sign in once and both items are evidenced.
+
+**Reversal, if wanted:** `cloudtrail delete-trail --name cas-harness-audit-v1`, then empty and delete the bucket. Objects already written are held by `GOVERNANCE` retention and need `s3:BypassGovernanceRetention`.
+
+The original finding, retained: **there was no CloudTrail trail in this account.** `describe_trails` returns an empty list in **both** `us-east-1` and `us-west-2` (`cloudtrail_trail_inventory.json`, `trail_count` **0**).
 
 Consequence: the only record that exists is the **90-day CloudTrail Event history**. It is queryable, but it is **not immutable, not exported, and it expires.** Every `ConsoleLogin` record quoted above sits inside that expiring window. The RUNBOOK's *"external immutable evidence export"* gate cannot close against it.
 
