@@ -66,7 +66,7 @@ def test_management_account_is_refused():
     ev = _FakeEvents()
     with pytest.raises(ind.InductionRefused, match="management/production"):
         ind.induce(account_id=ind.MANAGEMENT_ACCOUNT, rule_name=RULE,
-                   disable_seconds=180, session_factory=factory(ind.MANAGEMENT_ACCOUNT, ev),
+                   disable_seconds=120, session_factory=factory(ind.MANAGEMENT_ACCOUNT, ev),
                    sleep=lambda _s: None)
     assert ev.calls == [], "nothing may be touched when a guard refuses"
 
@@ -83,7 +83,7 @@ def test_malformed_account_is_refused(bad):
 def test_session_landing_elsewhere_is_refused_before_any_change():
     ev = _FakeEvents()
     with pytest.raises(ind.InductionRefused, match="session landed in account"):
-        ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=180,
+        ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=120,
                    session_factory=factory("999999999999", ev), sleep=lambda _s: None)
     assert "disable:" not in " ".join(ev.calls)
 
@@ -114,12 +114,12 @@ def test_preproduction_markers_are_accepted_case_insensitively(name):
 # --- guard 4: the window is bounded on both sides ----------------------------
 
 
-def test_window_below_two_cadences_is_refused():
+def test_window_too_short_to_miss_a_tick_is_refused():
     with pytest.raises(ind.InductionRefused, match="cannot reliably miss"):
-        ind.check_window(119)
+        ind.check_window(ind.MIN_DISABLE_SECONDS - 1)
 
 
-def test_window_above_the_bound_is_refused():
+def test_window_above_the_ceiling_is_refused():
     with pytest.raises(ind.InductionRefused, match="no unbounded mode"):
         ind.check_window(601)
 
@@ -127,6 +127,42 @@ def test_window_above_the_bound_is_refused():
 def test_boundaries_are_accepted():
     ind.check_window(ind.MIN_DISABLE_SECONDS)
     ind.check_window(ind.MAX_DISABLE_SECONDS)
+
+
+# --- the regression that came from a real live failure -----------------------
+#
+# 2026-08-21: a 240 s window produced a 311,788 ms gap against a 180,000 ms
+# bound. The tool manufactured the failure it exists to detect. These tests
+# exist so that cannot recur silently.
+
+
+def test_the_240s_window_that_actually_broke_the_run_is_now_refused():
+    with pytest.raises(ind.InductionRefused, match="no unbounded mode"):
+        ind.check_window(240)
+
+
+def test_ceiling_is_derived_from_the_acceptance_bound_not_picked():
+    assert ind.GAP_ACCEPTANCE_BOUND_MILLISECONDS == 180_000
+    assert ind.MAX_DISABLE_SECONDS == (
+        ind.GAP_ACCEPTANCE_BOUND_MILLISECONDS // 1000 - ind.CADENCE_SECONDS)
+
+
+def test_worst_case_gap_never_exceeds_the_bound_for_any_allowed_window():
+    for seconds in range(ind.MIN_DISABLE_SECONDS, ind.MAX_DISABLE_SECONDS + 1):
+        ind.check_window(seconds)  # must not raise
+        assert ind.worst_case_gap_milliseconds(seconds, aligned=True) <= (
+            ind.GAP_ACCEPTANCE_BOUND_MILLISECONDS)
+
+
+def test_unaligned_windows_are_refused_when_the_slop_would_breach_the_bound():
+    # Unaligned costs two cadences, so the largest allowed window no longer fits.
+    with pytest.raises(ind.InductionRefused, match="manufacture the failure"):
+        ind.check_window(ind.MAX_DISABLE_SECONDS, aligned=False)
+
+
+def test_worst_case_accounts_for_alignment():
+    assert ind.worst_case_gap_milliseconds(120, aligned=True) == 180_000
+    assert ind.worst_case_gap_milliseconds(120, aligned=False) == 240_000
 
 
 def test_bool_is_not_an_int_here():
@@ -146,7 +182,7 @@ def test_expected_missed_ticks_is_stated_up_front():
 def test_already_disabled_rule_is_refused_as_fictional():
     ev = _FakeEvents(state="DISABLED")
     with pytest.raises(ind.InductionRefused, match="fictional"):
-        ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=180,
+        ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=120,
                    session_factory=factory(PREPROD, ev), sleep=lambda _s: None)
 
 
@@ -155,10 +191,12 @@ def test_already_disabled_rule_is_refused_as_fictional():
 
 def test_happy_path_disables_then_re_enables():
     ev = _FakeEvents()
-    rec = ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=180,
+    rec = ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=120,
                      session_factory=factory(PREPROD, ev), sleep=lambda _s: None)
     assert rec["verdict"] == "MISSED_TICK_WINDOW_INDUCED_AND_SCHEDULE_RESTORED"
-    assert rec["expected_missed_ticks"] == 2
+    # 120 s at a 60 s cadence misses exactly one tick -- which is all section 6
+    # asks for, and all the 180,000 ms gap bound leaves room for.
+    assert rec["expected_missed_ticks"] == 1
     assert ev.state == "ENABLED"
     assert f"disable:{RULE}" in ev.calls and f"enable:{RULE}" in ev.calls
 
@@ -170,7 +208,7 @@ def test_schedule_is_re_enabled_even_when_the_wait_raises():
         raise RuntimeError("network died mid-window")
 
     with pytest.raises(RuntimeError, match="network died"):
-        ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=180,
+        ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=120,
                    session_factory=factory(PREPROD, ev), sleep=boom)
     assert ev.state == "ENABLED", "a crash must never leave recovery disabled"
     assert f"enable:{RULE}" in ev.calls
@@ -183,7 +221,7 @@ def test_schedule_is_re_enabled_on_keyboard_interrupt():
         raise KeyboardInterrupt
 
     with pytest.raises(KeyboardInterrupt):
-        ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=180,
+        ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=120,
                    session_factory=factory(PREPROD, ev), sleep=interrupt)
     assert ev.state == "ENABLED"
 
@@ -195,7 +233,7 @@ def test_failure_to_restore_is_raised_as_CRITICAL():
 
     ev = _Stuck()
     with pytest.raises(ind.InductionRefused, match="CRITICAL"):
-        ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=180,
+        ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=120,
                    session_factory=factory(PREPROD, ev), sleep=lambda _s: None)
 
 
