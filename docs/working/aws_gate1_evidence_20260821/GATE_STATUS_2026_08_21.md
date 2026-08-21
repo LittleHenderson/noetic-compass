@@ -8,7 +8,7 @@ One page, so the next agent does not re-derive any of it. Every number here was 
 
 | Item | State | What is missing |
 |---|---|---|
-| 1. Timing and fault tests | `OPEN / NOT RUN` | Harness built and tested; **it has measured nothing.** Needs a hash-locked **preproduction deployment** — real cost, owner decision. |
+| 1. Timing and fault tests | `OPEN / NOT RUN` | Harness built and tested; **it has measured nothing.** Needs a hash-locked **preproduction deployment**, which **cannot exist in this AWS account** — see the section below. **Architectural blocker, not a spend one.** |
 | 2. CloudTrail / WORM export | `OPEN`, stopgap taken | **No trail exists in this account.** Option B seal committed; **only Option A closes the gate**, and it is billable account configuration. |
 | 3. Operator MFA record | `OPEN` | **One owner console sign-in as `cas-g5-operator` with MFA.** An agent must never enter credentials. About one minute. |
 
