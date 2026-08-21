@@ -39,7 +39,7 @@ The timing requirement is specific and is **not** satisfied by any artifact that
 
 This is the largest remaining piece of Gate 1 and it is genuine engineering, not a query.
 
-### 2. CloudTrail / WORM export — **CONFIGURED 2026-08-21 — Option A executed; first log delivery NOT YET CONFIRMED**
+### 2. CloudTrail / WORM export — **CLOSED / VERIFIED 2026-08-21**
 
 **RESOLVED. A trail now exists and is logging.** The owner instruction was explicit — *"Get the ... CloudTrail/WORM export ... You can do it now"* — and I had over-deferred by treating it as an unanswered A/B question. Option A was executed **additively**: nothing existing was modified.
 
@@ -56,6 +56,28 @@ This is the largest remaining piece of Gate 1 and it is genuine engineering, not
 | Versioning | `Enabled` |
 | Public access | **all four blocks on** |
 | Encryption | `AES256` |
+
+**VERIFIED on the fourth check. The item is now genuinely closed, and it was closed by evidence rather than by assertion.**
+
+| Proof | Result |
+|---|---|
+| `LatestDeliveryTime` | **`2026-08-20T19:37:57.900000-07:00`** |
+| `LatestDeliveryError` | **none** |
+| Delivered log file | `cloudtrail/AWSLogs/807562639912/CloudTrail/us-west-2/2026/08/21/807562639912_CloudTrail_us-west-2_20260821T0240Z_qHVif4GAIqgycwEi.json.gz`, **6,274 B** |
+| Object SHA-256 | `78fb32202f3a7810b95a60d4ac74594022c03f250c33c0fb2734cde18613a5b4` |
+| Records inside | **24 real CloudTrail records**, decompressed and parsed |
+| Object Lock on that file | `GOVERNANCE`, retain until **`2027-08-21T02:37:57.875000+00:00`** |
+| **Deletion attempt** | **REFUSED — `AccessDenied`** |
+
+**The last row is the one that matters.** A retention label is metadata; metadata is not protection. A real `DeleteObject` was issued against the delivered log file and **the lock refused it**. That is the difference between a bucket that is *configured* for WORM and one that *is* WORM.
+
+The 24 records include the very API calls that created this bucket — `CreateBucket`, `PutBucketEncryption`, `PutBucketPublicAccessBlock`, `PutBucketObjectLockConfiguration`, `PutBucketPolicy`, `GetBucketAcl` — so the trail is demonstrably capturing real account activity, not emitting an empty shell.
+
+**Consequence for item 3:** the owner’s next MFA console sign-in will land in this same immutable store. One sign-in now produces WORM-held evidence.
+
+---
+
+**The earlier, weaker state is retained below rather than deleted, because the sequence is the point: configured → checked → still pending → checked again → verified. Three checks said "not yet". Reporting the first one as "closed" was wrong, and being wrong three checks early is exactly what the discipline is for.**
 
 **PRECISION, because wired is not the same as working.** Immediately after creation the bucket held **2 objects, both zero bytes**: `cloudtrail/AWSLogs/807562639912/CloudTrail/` and `.../CloudTrail-Digest/`. **Those are prefix placeholders CloudTrail writes to prove it can write — they are not log files.** At that moment `LatestDeliveryTime` was **absent** and `LatestDigestDeliveryTime` was **absent**, with `LatestDeliveryError` **none**.
 

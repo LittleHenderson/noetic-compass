@@ -4,12 +4,12 @@ One page, so the next agent does not re-derive any of it. Every number here was 
 
 ---
 
-## Gate 1 — paper evidence — `OPEN`; item 2 CONFIGURED (delivery unconfirmed), items 1 and 3 need the owner
+## Gate 1 — paper evidence — `OPEN`; **item 2 CLOSED**, items 1 and 3 need the owner
 
 | Item | State | What is missing |
 |---|---|---|
 | 1. Timing and fault tests | `OPEN / NOT RUN` | Harness built and tested; **it has measured nothing.** Needs a hash-locked **preproduction deployment**, which **cannot exist in this AWS account** — see the section below. **Architectural blocker, not a spend one.** |
-| 2. CloudTrail / WORM export | **`CONFIGURED`**, delivery unconfirmed | **Option A executed 2026-08-21.** Trail `cas-harness-audit-v1` is logging, multi-region, log-file validation on, global events included, into a **new dedicated** Object Lock bucket (`GOVERNANCE`, 1 yr). The guardian artifact bucket was **not touched**. **Write access and Object Lock are proven; the first real log file had NOT yet landed at the time of writing — `CONFIGURED`, not `VERIFIED`.** |
+| 2. CloudTrail / WORM export | **`CLOSED` / VERIFIED** | **Option A executed 2026-08-21.** Trail `cas-harness-audit-v1` is logging, multi-region, log-file validation on, global events included, into a **new dedicated** Object Lock bucket (`GOVERNANCE`, 1 yr). The guardian artifact bucket was **not touched**. **VERIFIED:** delivery at `2026-08-20T19:37:57.900000-07:00`, a **6,274 B** log file holding **24 real records**, object SHA-256 `78fb3220…`, locked until `2027-08-21`, and **a real `DeleteObject` was REFUSED with `AccessDenied`** — the lock protects, it does not merely label. |
 | 3. Operator MFA record | `OPEN` | **One owner console sign-in as `cas-g5-operator` with MFA.** An agent must never enter credentials. About one minute. |
 
 Both AWS quota blockers are **cleared** (`ec2/L-DB2E81BA` applied `8.0`; Lambda concurrency `1000`). Reserved-capacity arithmetic **fits**: 8 of 9 Lambdas reserve 1 each, leaving 992 unreserved against an AWS floor of 100.
