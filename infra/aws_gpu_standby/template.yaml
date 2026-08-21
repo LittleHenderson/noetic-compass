@@ -1,0 +1,133 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Inert, launch-ready CAS GPU fallback. This stack creates no EC2 instance and
+  therefore incurs no GPU compute charge.
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+  ImageId:
+    Type: AWS::EC2::Image::Id
+  InstanceType:
+    Type: String
+    Default: g6e.xlarge
+    AllowedValues:
+      - g6e.xlarge
+      - g5.xlarge
+
+Resources:
+  StandbyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub cas-aws-gpu-standby-v1-${AWS::Region}
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Tags:
+        - Key: Project
+          Value: CAS
+        - Key: State
+          Value: INERT_STANDBY
+
+  StandbyInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub cas-aws-gpu-standby-v1-${AWS::Region}
+      Roles:
+        - !Ref StandbyRole
+
+  StandbySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: CAS GPU standby - no ingress, HTTPS egress only
+      GroupName: cas-aws-gpu-standby-v1
+      VpcId: !Ref VpcId
+      SecurityGroupIngress: []
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: SSM and HTTPS image registry access
+      Tags:
+        - Key: Project
+          Value: CAS
+        - Key: State
+          Value: INERT_STANDBY
+
+  StandbyLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub cas-aws-gpu-standby-v1-${AWS::AccountId}-${AWS::Region}
+      VersionDescription: Inert launch-ready GPU fallback; first boot self-stops
+      LaunchTemplateData:
+        ImageId: !Ref ImageId
+        InstanceType: !Ref InstanceType
+        IamInstanceProfile:
+          Name: !Ref StandbyInstanceProfile
+        DisableApiTermination: true
+        InstanceInitiatedShutdownBehavior: stop
+        MetadataOptions:
+          HttpEndpoint: enabled
+          HttpTokens: required
+          HttpPutResponseHopLimit: 1
+          InstanceMetadataTags: enabled
+        Monitoring:
+          Enabled: true
+        NetworkInterfaces:
+          - DeviceIndex: 0
+            AssociatePublicIpAddress: true
+            DeleteOnTermination: true
+            Groups:
+              - !Ref StandbySecurityGroup
+            SubnetId: !Ref SubnetId
+        BlockDeviceMappings:
+          - DeviceName: /dev/sda1
+            Ebs:
+              DeleteOnTermination: true
+              Encrypted: true
+              VolumeSize: 100
+              VolumeType: gp3
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: cas-aws-gpu-standby-v1
+              - Key: Project
+                Value: CAS
+              - Key: State
+                Value: STANDBY_ONLY_NO_MODEL
+          - ResourceType: volume
+            Tags:
+              - Key: Name
+                Value: cas-aws-gpu-standby-v1-root
+              - Key: Project
+                Value: CAS
+        UserData:
+          Fn::Base64: |
+            #!/bin/bash
+            set -euo pipefail
+            install -d -m 0700 /opt/cas
+            printf '%s\n' 'STANDBY_ONLY_NO_MODEL' > /opt/cas/STATE
+            systemctl enable --now amazon-ssm-agent || true
+            shutdown -h now
+
+Outputs:
+  LaunchTemplateId:
+    Value: !Ref StandbyLaunchTemplate
+  LaunchTemplateLatestVersion:
+    Value: !GetAtt StandbyLaunchTemplate.LatestVersionNumber
+  StandbyMode:
+    Value: INERT_NO_INSTANCE_CREATED
+  SelectedInstanceType:
+    Value: !Ref InstanceType
+  SelectedImageId:
+    Value: !Ref ImageId
