@@ -112,11 +112,25 @@ Rules:
       # EXCLUDES the two hash fields. DeploymentBindingObjectSha256 is sha256(raw
       # object bytes), which INCLUDES them. By the construction in
       # create_deployment_binding.py they can never be equal for any binding
-      # document, so equality proves one slot holds the wrong value. Because
-      # DeploymentBindingSha256 is NoEcho it is masked in the console, masked in
-      # describe-change-set, and redacted in CloudTrail -- no human can review it.
-      # This assertion is therefore the ONLY gate capable of catching the mistake.
-      # Added 2026-08-21 after a pre-flight audit.
+      # document, so equality proves one slot holds the wrong value.
+      #
+      # *** DO NOT TRUST THIS ASSERTION AS A GATE. ***
+      # Measured against real CloudFormation on 2026-08-21: the entire Rules section
+      # is NOT enforced by CreateChangeSet/CreateStack. Change sets were accepted
+      # with CoreLockSha256 all-zero, TimingValidationEvidenceSha256 all-zero,
+      # ProviderAccountId=UNBOUND, and RecoveryEnabled=FALSE under LIVE -- every one
+      # of which the assertions above explicitly forbid. Rules are a Service Catalog
+      # feature; direct CloudFormation ignores them. The assertions are retained
+      # because they are correct and do fire under Service Catalog, but they are
+      # DOCUMENTATION OF INTENT, not a control.
+      #
+      # The controls that actually run are:
+      #   1. tools/runpod_open_weight_canary_v2/verify_activation_parameters.py
+      #      -- run it BEFORE create_change_set; it refuses the bad parameter set.
+      #   2. guardian_runtime._verify_local_material_binding at first invocation,
+      #      which fails closed with LOCAL_MATERIAL_BINDING_DIGEST_MISMATCH.
+      # Added 2026-08-21 after a pre-flight audit; corrected the same day after the
+      # assertion was empirically shown not to fire.
       - Assert: !Not
           - !Equals
             - !Ref DeploymentBindingSha256
