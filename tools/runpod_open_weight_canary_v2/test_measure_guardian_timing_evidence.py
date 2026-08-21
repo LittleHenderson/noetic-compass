@@ -232,6 +232,55 @@ def test_unparseable_timestamp_is_no_go():
         _evidence(measured_at_utc="2026-08-21 01:00:00")
 
 
+# --- the timestamp form the runtime actually demands -------------------------
+#
+# FOUND 2026-08-21 on the first real emit. This harness accepted any ISO string
+# ending in "Z" and emitted "2026-08-21T04:12:35Z", which the runtime refused
+# with "UTC timestamp must use canonical microsecond Z form".
+#
+# The round-trip test above never caught it, because it builds timestamps with
+# guardian.iso_utc(), which already produces the canonical form. A test that
+# only ever feeds correct input cannot discover a permissive validator.
+
+
+@pytest.mark.parametrize("almost", [
+    "2026-08-21T04:12:35Z",          # the exact string that was emitted and refused
+    "2026-08-21T04:12:35.000Z",      # milliseconds, not microseconds
+    "2026-08-21T04:12:35.0000000Z",  # too many digits
+    "2026-08-21T04:12:35+00:00",     # offset instead of Z
+    "2026-08-21T04:12:35.000000",    # no Z at all
+])
+def test_near_miss_timestamps_are_refused(almost):
+    with pytest.raises(harness.TimingEvidenceNoGo, match="canonical microsecond"):
+        _evidence(measured_at_utc=almost)
+
+
+def test_canonical_microsecond_form_is_accepted_and_round_trips():
+    stamp = "2026-08-21T04:12:35.000000Z"
+    document, raw, digest = _evidence(measured_at_utc=stamp)
+    assert document["measured_at_utc"] == stamp
+    binding = {
+        "aws_account_id": ACCOUNT, "aws_region": REGION, "stack_id": STACK_ID,
+        "core_lock_sha256": CORE_LOCK, "runtime_zip_sha256": RUNTIME_ZIP,
+    }
+    # the real runtime must accept it -- this is the promise the harness makes
+    runtime._verify_timing_evidence(
+        raw, binding, {"TIMING_VALIDATION_EVIDENCE_SHA256": digest})
+
+
+def test_harness_timestamp_rule_matches_the_runtime_exactly():
+    # Anything one accepts, the other must accept. Checked by construction.
+    for candidate in ("2026-08-21T04:12:35.000000Z", "2026-08-21T04:12:35Z",
+                      "2026-08-21T04:12:35.000Z", "2026-08-21T04:12:35+00:00"):
+        runtime_ok = True
+        try:
+            guardian.parse_utc(candidate)
+        except Exception:
+            runtime_ok = False
+        harness_ok = bool(harness._CANONICAL_UTC_RE.fullmatch(candidate))
+        assert harness_ok == runtime_ok, f"divergence on {candidate!r}"
+
+
 def test_every_failure_is_reported_not_just_the_first():
     with pytest.raises(harness.TimingEvidenceNoGo) as caught:
         _evidence(aws_region="eu-west-1", measurement_count=0)

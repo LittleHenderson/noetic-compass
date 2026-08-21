@@ -369,9 +369,31 @@ def stop_lead_headroom_seconds(
     return REQUIRED_STOP_LEAD_SECONDS - -(-used_ms // 1000)
 
 
+# Mirrored from aws_production_guardian_core._CANONICAL_UTC. The runtime demands
+# canonical MICROSECOND Z form and rejects everything else.
+#
+# FOUND 2026-08-21, on the first real emit. This module previously accepted any
+# ISO-8601 string ending in "Z", so it happily emitted a document carrying
+# "2026-08-21T04:12:35Z" -- which the runtime then refused with
+# "UTC timestamp must use canonical microsecond Z form".
+#
+# That directly contradicted this module's stated purpose: to emit the exact
+# document the runtime will accept. The load-bearing round-trip test never
+# caught it because it builds timestamps with guardian.iso_utc(), which already
+# produces the canonical form -- so the loose path was never exercised. A test
+# that only ever feeds correct input cannot discover a permissive validator.
+_CANONICAL_UTC_RE: Final = re.compile(
+    r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z"
+)
+
+
 def _parse_utc(text: str) -> _dt.datetime:
-    if not text.endswith("Z"):
-        raise ValueError("timestamp must end with Z")
+    if not isinstance(text, str) or not _CANONICAL_UTC_RE.fullmatch(text):
+        raise ValueError(
+            f"{text!r} is not canonical microsecond Z form "
+            "(YYYY-MM-DDTHH:MM:SS.ffffffZ). The runtime rejects anything else, so "
+            "emitting it would produce a document that cannot activate."
+        )
     return _dt.datetime.fromisoformat(text[:-1]).replace(tzinfo=_dt.timezone.utc)
 
 
