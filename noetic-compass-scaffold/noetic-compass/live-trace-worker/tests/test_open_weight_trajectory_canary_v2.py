@@ -67,6 +67,13 @@ SUPERVISOR_SPEC.loader.exec_module(github_supervisor)
 def test_preregistration_is_exact_self_hashed_and_inert():
     preregistration, _raw = canary.load_preregistration(PREREGISTRATION_PATH)
 
+    # Re-pinned TWICE on 2026-08-21. Second re-pin (owner-approved): the model
+    # file set moved to the fp16 re-serialized artifact D5861D32... because the
+    # pinned original (29D2E457..., 184 tensors incl. 36 legacy buffers) can
+    # NEVER pass verify_loaded_weight_values under pinned transformers 5.8.1
+    # (148 state-dict keys) -- the canary would have died at model-load on the
+    # pod. Tree manifest 6373A5C8... -> BB65650E...; method proven by locally
+    # reproducing the OLD tree hash byte-for-byte first.
     # Re-pinned 2026-08-21. The document was re-frozen for ONE reason: the C14
     # adapter (1 of the 15 FROZEN_SOURCE_RELATIVE_PATHS) changed at fd90d88e, so
     # required_source_file_manifest_sha256 moved 7E496CB8... -> 6EC46F9A... and
@@ -74,7 +81,7 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     # the None launcher hash, and the OCI digest were NOT touched -- the
     # assertions below still pin all of them.
     assert preregistration["preregistration_sha256"] == (
-        "30798FA6C04EA0B101161FB37A5D21518E05752B0017129DCAEBBC0F2CD1DDE7"
+        "5EAEE8559B0B39440B41DF8B8346082D5799A2D550FDE24125F521636502CEE8"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
     assert preregistration["launch_bindings"]["execution_authority"] == (

@@ -93,8 +93,18 @@ CAPTURE_SCIENTIFIC_STATUS = "NOT_A_SCIENTIFIC_EXPERIMENT_RESULT"
 EXTERNAL_ANCHOR_STATUS = "EXTERNAL_IMMUTABLE_ANCHOR_REQUIRED"
 BOUND_EXECUTION_AUTHORITY = "GO_FOR_ONE_ENGINEERING_CANARY_ONLY"
 UNBOUND_EXECUTION_AUTHORITY = "NO_GO_UNTIL_EXACT_BINDINGS_ARE_FROZEN"
+# Re-pinned 2026-08-21 (owner-approved, second re-pin of the day). The model
+# file set moved to the fp16 re-serialized artifact D5861D32... The ORIGINAL
+# pinned file 29D2E457... can never pass verify_loaded_weight_values under the
+# pinned transformers 5.8.1: the file carries 184 tensors including 36 legacy
+# GPT-NeoX buffers, the loaded state_dict carries 148, and the verifier demands
+# exact set equality. The canary would have died at model-load on the pod,
+# after the single authorized create attempt was spent. This constant moved
+# B5D00239... -> the value below ONLY because of that model re-pin; the
+# scenario, prompt, layers, seeds, and every other experiment byte are
+# unchanged. The verifier was NOT weakened.
 FROZEN_EXPERIMENT_SHA256 = (
-    "B5D00239E28DCCEC3CD54AF295D2AC525D598D1B371709AA89AE94B743A0C6C8"
+    "0B037433A556A9626C0B5D71D191F29586829A9B6E15F189924FC756E76167D9"
 )
 
 RECEIPT_CLAIM_BOUNDARY = (
