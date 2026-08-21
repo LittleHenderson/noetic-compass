@@ -1,0 +1,30 @@
+{
+  "compression": "gzip -9, mtime=0 for byte-reproducibility; verify with: python -c \"import gzip,hashlib;print(hashlib.sha256(gzip.open(PATH,'rb').read()).hexdigest())\"",
+  "export_kind": "CLOUDTRAIL_EVENT_HISTORY_STOPGAP_SEAL",
+  "files": [
+    {
+      "bytes": 10956808,
+      "event_count": 5700,
+      "file": "us_west_2_all_management_events.json",
+      "note": "sha256/bytes are of the UNCOMPRESSED json; stored_sha256/stored_bytes are of the .gz actually committed",
+      "sha256": "d79908b14ec6abd5cdf5b24fe1d35bfbb3784f64e7a94e2d48c43c89c5cc2c60",
+      "stored_as": "us_west_2_all_management_events.json.gz",
+      "stored_bytes": 1174736,
+      "stored_sha256": "9006d8b072e4a9ee244c9403665294d22d2686b2b2c8d8b99d8d718987b4c19a"
+    },
+    {
+      "bytes": 6035,
+      "event_count": 4,
+      "file": "us_east_1_console_login.json",
+      "note": "sha256/bytes are of the UNCOMPRESSED json; stored_sha256/stored_bytes are of the .gz actually committed",
+      "sha256": "add77868252d400afab9b08cb8faecff6e80ebe81dd5f9913d87d14b520605b2",
+      "stored_as": "us_east_1_console_login.json.gz",
+      "stored_bytes": 1297,
+      "stored_sha256": "13db3083182608906e7a56c4465710c976e1f4b387f814722597454f143fd0c6"
+    }
+  ],
+  "not_a_worm_export": "This is Option B. It seals what already exists. It does NOT close the immutable-export gate and does NOT cover future events. Only a CloudTrail trail does that.",
+  "trail_count_at_export": 0,
+  "window_end_utc": "2026-08-21T02:11:18.602327+00:00",
+  "window_start_utc": "2026-08-16T00:00:00+00:00"
+}

@@ -39,7 +39,7 @@ The timing requirement is specific and is **not** satisfied by any artifact that
 
 This is the largest remaining piece of Gate 1 and it is genuine engineering, not a query.
 
-### 2. CloudTrail / WORM export — `BLOCKED ON AN OWNER DECISION`
+### 2. CloudTrail / WORM export — `OPEN` — stopgap taken, durable fix BLOCKED ON AN OWNER DECISION
 
 **There is no CloudTrail trail in this account.** `describe_trails` returns an empty list in **both** `us-east-1` and `us-west-2` (`cloudtrail_trail_inventory.json`, `trail_count` **0**).
 
@@ -53,6 +53,10 @@ Creating a trail changes account-level logging configuration and adds ongoing co
 - **Option B — export the current 90-day event history to the Object-Lock bucket as a sealed, hashed object.** Cheaper and immediate, but it seals only what already exists and does nothing for future events.
 
 Option A is the correct engineering answer. Option B is a stopgap that does not close the gate.
+
+**Option B was executed on 2026-08-21, because the records expire and waiting costs evidence.** `cloudtrail_seal/` holds the CloudTrail Event history from `2026-08-16` to the export moment: **5,700** management events in `us-west-2` and **4** `ConsoleLogin` events in `us-east-1`, sealed with per-file SHA-256 in `SEAL_MANIFEST.json` (manifest SHA-256 `1ddc8385c4db79b5f06eb27461b59bd3815987ea40b9f5f48d6de72ade68d9a7`). Stored gzip -9 with `mtime=0` so the archive is byte-reproducible; the manifest records the SHA-256 of the **uncompressed** JSON alongside the SHA-256 of the `.gz` actually committed, and the round trip was verified after compression.
+
+**This does not close the gate, and must not be described as if it did.** It seals what already existed on one day, into ordinary git rather than into Object Lock. It gives future events nothing. **Only Option A closes the gate.** The value of doing it anyway is narrow and real: without it, the only copy of these records was an AWS window that deletes itself.
 
 ### 3. One real MFA login record — `OPEN`, one owner action, about one minute
 
