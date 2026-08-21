@@ -81,13 +81,29 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     # the None launcher hash, and the OCI digest were NOT touched -- the
     # assertions below still pin all of them.
     assert preregistration["preregistration_sha256"] == (
-        "6A3E320724F5D326E0A4E3D8B0D60AE18194F1D2CD64591F74274CE6E7F1DECF"
+        "02790E24A0B8A1E869FC3C3EE4D77822D99D22D0DAADD8E1C1475E7D3322A17F"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
+    # BOUND 2026-08-21 by owner authorization ("done" -> the GitHub secret was
+    # placed, unblocking Gate 4). Applying the execution binding is the formal
+    # grant of canary execution authority, so this test now pins the BOUND state.
+    # It pins strictly MORE than before: the authority, the exact source commit,
+    # and the exact launcher source hash -- all previously None.
+    assert preregistration["status"] == "FROZEN_BOUND_SINGLE_ENGINEERING_CANARY"
     assert preregistration["launch_bindings"]["execution_authority"] == (
-        canary.UNBOUND_EXECUTION_AUTHORITY
+        canary.BOUND_EXECUTION_AUTHORITY
     )
-    assert preregistration["launch_bindings"]["required_source_commit_sha256"] is None
+    assert preregistration["launch_bindings"]["provider_launcher_live_status"] == (
+        "LIVE_GUARDIAN_FROZEN"
+    )
+    assert preregistration["launch_bindings"]["required_source_commit_sha256"] == (
+        "7c338f6dfc3446bd3ff55c7565eefc18fd24ae1d"
+    )
+    assert preregistration["launch_bindings"][
+        "required_provider_launcher_source_sha256"
+    ] == (
+        "936E7C7B980E40ADE6C19B789BA75769C99DE406F89AD0A372359160F65D1648"
+    )
     assert preregistration["launch_bindings"]["required_oci_image_digest"] == (
         "sha256:4d1721e62b56d345c83b4fd6090664be6daf9312caab5b2e76f23d8231941851"
     )
@@ -189,7 +205,15 @@ def test_unbound_execute_fails_before_runtime_or_output(tmp_path: Path, monkeypa
 
     monkeypatch.setattr(canary, "_load_runtime_api", forbidden_runtime_api)
     output = tmp_path / "must-not-exist"
-    with pytest.raises(RuntimeError, match="canary is inert"):
+    # BOUND 2026-08-21. This test's PROTECTION is unchanged: an execute carrying
+    # the wrong identity must fail BEFORE the runtime API is touched and BEFORE
+    # any output exists -- both asserted below and both still pass. Only the
+    # refusal REASON moved. While unbound, a bogus commit was refused for
+    # inertness; now bound, the same bogus commit ("1" * 40) is refused for
+    # source-commit mismatch, which is the stricter and more specific check.
+    with pytest.raises(
+        RuntimeError, match="source commit differs from frozen preregistration"
+    ):
         canary.execute_canary(
             preregistration_path=PREREGISTRATION_PATH,
             output_root=output,
@@ -204,7 +228,7 @@ def test_unbound_execute_fails_before_runtime_or_output(tmp_path: Path, monkeypa
         )
     assert runtime_called["value"] is False
     assert not output.exists()
-    assert preregistration["status"] == "FROZEN_DESIGN_ONLY_NO_EXECUTION_AUTHORITY"
+    assert preregistration["status"] == "FROZEN_BOUND_SINGLE_ENGINEERING_CANARY"
 
 
 def test_portable_verifier_recomputes_pass_after_bundle_move(tmp_path: Path):

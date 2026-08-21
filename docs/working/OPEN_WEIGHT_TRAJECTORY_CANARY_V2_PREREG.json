@@ -1,6 +1,6 @@
 {
   "schema_version": "cas_open_weight_trajectory_canary_preregistration.v2",
-  "status": "FROZEN_DESIGN_ONLY_NO_EXECUTION_AUTHORITY",
+  "status": "FROZEN_BOUND_SINGLE_ENGINEERING_CANARY",
   "packet_eligibility": "NOT_PACKET_ELIGIBLE",
   "scientific_status": "NOT_SCIENTIFIC_RESULT",
   "claim_boundary": "Nine-capture real-model engineering canary only. A PASS establishes the frozen capture/noop/zero mechanics for this exact bundle under a trusted single-purpose immutable OCI/process with no post-freeze arbitrary code. The drift checks are not a Python sandbox. A PASS does not establish a detector, semantic circuit, safety property, causal science claim, Evidence Packet, product licence, or production readiness.",
@@ -136,20 +136,20 @@
     }
   },
   "launch_bindings": {
-    "execution_authority": "NO_GO_UNTIL_EXACT_BINDINGS_ARE_FROZEN",
-    "required_source_commit_sha256": null,
+    "execution_authority": "GO_FOR_ONE_ENGINEERING_CANARY_ONLY",
+    "required_source_commit_sha256": "7c338f6dfc3446bd3ff55c7565eefc18fd24ae1d",
     "required_oci_image_digest": "sha256:4d1721e62b56d345c83b4fd6090664be6daf9312caab5b2e76f23d8231941851",
     "required_runner_source_sha256": "D94DCD70C5307D86C08C49BF98069F13E27A1746D85186B2282C700B716B38F0",
     "required_source_file_manifest_sha256": "61D45BF1406F8CD3E11384774DBB2CF1C12FC20E354DEF9F03E249059C16ABB9",
     "required_watchdog_script_sha256": "E57BDC1148D3BAA1D46A5AF67D1F7FD65BAC6963F6E09C450EEEA1281FB97F93",
     "required_github_supervisor_source_sha256": "D5DB5CD6BE9EB38C13BDE016E994696679C0CC92054BF6F50C70BC5590963D7E",
-    "required_provider_launcher_source_sha256": null,
+    "required_provider_launcher_source_sha256": "936E7C7B980E40ADE6C19B789BA75769C99DE406F89AD0A372359160F65D1648",
     "provider_launch_receipt_required": true,
     "required_provider_launch_receipt_schema": "cas_runpod_provider_launch_receipt.v2",
     "required_provider_create_authorization_schema": "cas_runpod_create_authorization.v1",
     "precreate_guardian_required": true,
     "required_precreate_guardian_receipt_schema": "cas_runpod_precreate_guardian_arm.v1",
-    "provider_launcher_live_status": "NO_GO_PRECREATE_GUARDIAN_UNAVAILABLE",
+    "provider_launcher_live_status": "LIVE_GUARDIAN_FROZEN",
     "maximum_provider_create_attempts": 1,
     "required_image_name": "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
     "required_cloud_type": "SECURE",
@@ -166,5 +166,5 @@
     "anchor_receipt_sha256": null,
     "claim_boundary": "The result manifest and all evidence-file hashes are cross-linked, but they remain locally produced and are not durable authenticity evidence until an independent immutable external anchor is attached and verified."
   },
-  "preregistration_sha256": "6A3E320724F5D326E0A4E3D8B0D60AE18194F1D2CD64591F74274CE6E7F1DECF"
+  "preregistration_sha256": "02790E24A0B8A1E869FC3C3EE4D77822D99D22D0DAADD8E1C1475E7D3322A17F"
 }

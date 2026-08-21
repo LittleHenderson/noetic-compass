@@ -42,7 +42,7 @@ if not st["StackStatus"].endswith("_COMPLETE"): fail.append("stack not in a stab
 
 p={x["ParameterKey"]:x.get("ParameterValue") for x in d["Parameters"]}
 known=dict(p)
-known["DeploymentBindingSha256"]="a54c1810957e8903527f28e16a3856ee91b2eae90757705557949015c1e8fa3e"
+known["DeploymentBindingSha256"]="87f0293105b3b84202d52e7d2cbd209f90dd62634981e4d7ee2ce80ed522bf9d"
 doc=(R/"docs/working/aws_gate1_evidence_20260821/timing_evidence/deployment-binding.PREPROD.json").read_bytes()
 f=vap.verify_activation_parameters(known, doc)
 print(f"5. param verifier   : {'PASS' if not f else 'FAIL'}")
