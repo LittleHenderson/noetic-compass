@@ -1,3 +1,6 @@
+> # ⚠️ SUPERSEDED — THIS PAGE'S CONCLUSION IS WRONG
+> **Corrected the same day by `GATE4_CORRECTION_REAL_BLOCKER_20260821.md`.** The findings about the canary hard-requiring an arm receipt are correct. The conclusion — that Gate 4 needs the AWS VPC guardian stack built — is **wrong**. That template is a *reference design*; the implementation the canary actually uses (`precreate_guardian_offline.py` + the GitHub stop supervisor) already exists and is hash-locked. **The real blocker is one missing GitHub secret, `RUNPOD_CANARY_V2_API_KEY`.** Retained undeleted because a wrong call that was caught is part of the record.
+
 # GATE 4 — STRUCTURAL BLOCKER — the canary cannot launch, and the reason is by design
 
 **Date 2026-08-21. Everything below was read from the frozen source, not inferred.**
