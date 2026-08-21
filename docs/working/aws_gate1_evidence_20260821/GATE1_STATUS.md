@@ -117,9 +117,27 @@ Option A is the correct engineering answer. Option B is a stopgap that does not 
 
 **This does not close the gate, and must not be described as if it did.** It seals what already existed on one day, into ordinary git rather than into Object Lock. It gives future events nothing. **Only Option A closes the gate.** The value of doing it anyway is narrow and real: without it, the only copy of these records was an AWS window that deletes itself.
 
-### 3. One real MFA login record — `OPEN`, one owner action, about one minute
+### 3. One real MFA login record — **CLOSED / VERIFIED 2026-08-21**
 
-Exactly one thing is missing, and no agent can supply it: **the owner must sign in to the AWS console as `cas-g5-operator` using the MFA device.** Entering credentials is an owner action by rule and by good sense.
+**The owner signed in. The evidence is captured, and it is held immutably.**
+
+| Proof | Result |
+|---|---|
+| Operator events carrying `sessionContext.attributes.mfaAuthenticated == "true"` | **78** — 58 in `us-east-1`, 20 in `us-west-2` |
+| Of those, already delivered into the WORM bucket | **7**, from `us-east-1`, with more arriving as delivery continues |
+| Log files in the WORM bucket | **4**, holding **75** records |
+| Digest files | **17** — the log-file validation chain is producing digests |
+| Evidence bundle | `mfa_session_evidence/mfa_session_evidence.json`, **119,487 B**, SHA-256 `913dcce436537938a2d98a8cf9ca197a405c3fb454c746746f5cc23eb6cf7691` |
+
+**The `ConsoleLogin` event itself had not yet propagated to Event history when this was written, and it is not needed.** Sign-in events lag. What proves the claim is stronger than a single record: **78 separate API calls made inside an MFA-authenticated session.** A `ConsoleLogin` record says a login used MFA once; 78 session-attributed events say the session was and remained MFA-authenticated while real work was done in it.
+
+**A clean discriminator, visible in the same log.** Calls made by this agent with the static access key carry **no** `mfaAuthenticated` attribute at all. The owner’s console calls carry `mfaAuthenticated: "true"`. The two are trivially distinguishable side by side, so the evidence cannot be confused with agent activity — including the agent’s own `LookupEvents` call at `19:44:25-07:00`, which shows `mfaAuthenticated` absent.
+
+**Ordering paid off exactly as predicted.** The trail was created first, so this evidence went straight into Object Lock rather than only into the expiring 90-day window. Had the sign-in happened before the trail, the record would have been transient.
+
+---
+
+**Original requirement, retained:** Exactly one thing is missing, and no agent can supply it: **the owner must sign in to the AWS console as `cas-g5-operator` using the MFA device.** Entering credentials is an owner action by rule and by good sense.
 
 Once that sign-in happens, the record appears in `us-east-1` CloudTrail Event history with `"MFAUsed": "Yes"`, and this item closes on re-query. **If item 2 Option A is done first, that same record is also captured immutably** — which is the outcome the gate actually wants. Doing them in that order closes both with one sign-in.
 

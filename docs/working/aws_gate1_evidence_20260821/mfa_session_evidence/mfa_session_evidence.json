@@ -1,0 +1,2851 @@
+{
+  "captured_utc": "2026-08-21T02:52:24.340259+00:00",
+  "claim": "Operator console session was established with MFA. Evidence is sessionContext.attributes.mfaAuthenticated == 'true' on real API calls made by cas-g5-operator from the console.",
+  "discriminator": "Agent calls made with the static access key carry NO mfaAuthenticated attribute. Owner console calls carry mfaAuthenticated true. The two are distinguishable in the same log.",
+  "regions": {
+    "us-east-1": {
+      "console_login_events": 0,
+      "console_login_events_detail": [],
+      "mfa_authenticated_events": 58,
+      "mfa_events": [
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "630f840d-0ce5-4672-88f4-618f66c616c3",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T00:54:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "9de60922-487c-46ef-9397-91b24f77ea52",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUKKR6ILEF",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "ec744776-c6e2-45f2-8804-aaa73ff72700",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T00:54:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "825f0f6a-e9c8-404f-a5ec-e187b93ce95e",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUKKR6ILEF",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "bcc263e3-72e4-4494-8f96-86b4419a96e0",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T00:58:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "404609ec-71cd-4ab4-9f74-0ed3fb17fdfd",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUKKR6ILEF",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "e842a0c0-50d8-408f-bfc7-e5bedd95cade",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T00:58:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "a7eeded4-49f9-48dc-8e86-1a8686e30883",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUKKR6ILEF",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "67624faf-b27c-462b-bf2b-4b000e1cd4fd",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:02:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "3d3fcee7-9520-4e19-b2f1-6e0bde02842a",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUBCQWLXNH",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "b4e98710-e0ff-45e2-a91f-95810eb2c19a",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:02:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "83613d17-7c0d-4148-9a40-559c0e0f7e5d",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUBCQWLXNH",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "661339f2-98d4-4fab-9627-7e2cae62e8b4",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:06:40Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "f445bf38-daa9-4f24-b883-acea08194890",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUBCQWLXNH",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "b71679f2-0a96-4522-98fc-dfb4e6f47112",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:06:40Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "c9d23143-14a3-45c2-acbd-c30de2b875ea",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUBCQWLXNH",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "f3d6e06d-d647-4889-85cd-6b83c3499008",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:10:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "3ec2fee8-2b72-4987-8100-66fc9da392cb",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUBCQWLXNH",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "fe87ec8a-9021-4a90-8826-f405a5e0cb9d",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:10:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "ad6f5512-99ff-4de2-bc31-6fb83cf6e207",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUBCQWLXNH",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "158a1a55-8fe6-4497-956c-5f5e76c5f4c6",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:14:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "f069f24f-0033-4290-b3ad-ac21be9df2bd",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUCZKOS7N3",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "e9f5f716-7a42-4888-a30b-01b46305116a",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:14:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "04bebc92-3f4d-40bd-87be-79dacf7d8a08",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUCZKOS7N3",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "11b1b485-87b3-4537-aae4-10c1d237dd42",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:18:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "d854de9c-b664-4643-b61e-3029f3ade20f",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUCZKOS7N3",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "211cd3f7-f255-49c3-9369-8d6e63b90f0e",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:18:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "7f2944df-e85f-4a9b-9129-657f32f0aa79",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUCZKOS7N3",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "94cf6e9b-182e-43cd-a79b-72a77598423d",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:22:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "ac286e86-58e7-40a2-a3ae-7e4bef8f0a50",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUCZKOS7N3",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "f594989b-d043-4967-877f-1d30dca02edd",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:22:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "d798862c-6192-4ff3-a5b6-30c2aefa85bd",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUCZKOS7N3",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "07a19d9b-46e2-473d-ac14-010f2267edac",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:26:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "ff627854-6627-433e-adee-cd08e5650138",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUCZKOS7N3",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "c58c6161-3665-4b11-aca7-8cacbf8d6c91",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:26:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "dba9e4d1-3298-45d8-924a-2cf8357f45bb",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUCZKOS7N3",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "1da03bc3-bba9-4cd0-a6e7-123f5f69b89e",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:30:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "8e4a4a49-5945-4458-9f72-a6428ed32410",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUL7DVXNKO",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "4e381d96-e4a5-4d9f-ae07-0aaa3f217217",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:30:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "aadb08a8-0fc0-4c13-a665-cee507ba2c6d",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUL7DVXNKO",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "43cda12b-0ced-4ad8-b893-f0ab670ee6dc",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:34:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "0925336d-5490-4a87-9dc9-67d9805ff2f7",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUL7DVXNKO",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "cc596c71-0ff9-4a98-b16c-e2334c99cdc3",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:34:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "b17b78d8-0bd4-4945-8f8e-9cfc4cb70472",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUL7DVXNKO",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "0795e644-382f-4883-bc1f-02b57d8187df",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:38:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "58e22e67-3149-4f51-a64c-5a3e74f7d872",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUL7DVXNKO",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "b25e98b4-911b-413f-a524-5cac81c938d9",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:38:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "d67fa879-8ed9-4c8c-90fc-6a784ff665e6",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUL7DVXNKO",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "65a6dd94-fc83-46b0-b953-207accaa03eb",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:42:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "780ea67e-2eff-4729-87d6-1b3a22c87197",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUE4H2CUIW",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "34558937-6ae6-4ed4-a627-7d7cfda1b07e",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:42:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "be3d8db6-b17c-4695-80e9-68952e7b0c6c",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUE4H2CUIW",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "e93fe94c-836c-40d0-8e47-823d4357e153",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:46:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "3a027fec-e605-4fae-b34e-7e39023d9f92",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUE4H2CUIW",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "ed5cdfac-5f05-4a4b-8126-1a1686f0c875",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:46:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "9d0b7b5a-b81f-453e-9a4b-95d5b3e9291a",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUE4H2CUIW",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "3e9ea936-e978-4f39-9781-b32a7b69d765",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:50:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "53d40fed-d557-435f-946f-04065f87792e",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUE4H2CUIW",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "c86daae3-723f-48cc-acdf-76d024e7d974",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:50:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "d0d04fbb-c73d-41fb-8554-0efe32096a88",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUE4H2CUIW",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "2257a022-f902-48e2-8723-2afca06f0708",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:54:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "b385bbc3-c5c0-45dd-b64f-62b8865887e9",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUE4H2CUIW",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "6347d165-2127-4fae-b03c-78d8a3f37d41",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:54:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "004a390f-7865-4a90-8966-346a8812eb24",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUE4H2CUIW",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "017081a6-856d-4807-a238-1a22cf29f36f",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:58:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "be4f3f60-0541-44aa-9a7a-f1674951e2b1",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQOGLMCK",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "908a4874-ddac-4466-95ec-9a7a3c0e11ba",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T01:58:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "ac5167b5-8867-462e-9a9a-42c04e87ee1e",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQOGLMCK",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "5f50dbe5-3166-435a-bac4-d23b048dce2d",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:02:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "3bad9525-4326-4d05-aa4b-028b72a7074f",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQOGLMCK",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "b72e619e-4a8c-472e-b8ea-8072aa736dd0",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:02:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "93c4b103-35bc-450f-8ca7-19adb62ac852",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQOGLMCK",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "66ba99dd-8748-41d4-85b6-8c72fab95468",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:06:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "66343806-3bd4-4f7f-ab96-28e86b69d9b2",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQOGLMCK",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "a8973b98-29c9-4a71-a232-ca9bcbf2891d",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:06:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "50677ff1-3414-4790-8fe5-427757f1f45a",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQOGLMCK",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "1c219541-8c0d-49e3-83ee-cdbc4129bec9",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:10:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "c403e024-ac12-4c97-a2a3-2c159147b8d3",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUF2BPSFTS",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "3876d4de-c86d-4b89-ba84-47ca8f8b0f0d",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:10:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "99fd99ac-d62c-48a4-9ed9-0be04b1ebaa7",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUF2BPSFTS",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "7de519b9-169f-4376-936a-8161e172d699",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:14:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "b8d7c7bb-a286-4fe7-9de4-9b9ef36732ab",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUF2BPSFTS",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "b4f096ce-9521-40a5-8221-4119f45f8659",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:14:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "74b0e085-18b8-48a4-8e08-90d6bf877131",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUF2BPSFTS",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "54267a07-0db6-4c48-8bbc-8e82d446f5ca",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:18:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "46acab93-cc4c-444b-8f34-cfbcce631f16",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUF2BPSFTS",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "20bda772-8d6c-4218-a655-30214b10cf29",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:18:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "cdf52fc9-5a2d-4850-a6c3-f94f519c8a46",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUF2BPSFTS",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "1a2401e1-cc8f-4519-8188-8eb704e34d86",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:22:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "af5819ca-9a4f-4797-9104-9afede8e2834",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUF2BPSFTS",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "861b14a3-e5cb-4555-85f3-70580fff3908",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:22:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "be7b5b91-c6b7-473c-9119-c18f16f43c5e",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUF2BPSFTS",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "71114930-0087-4503-bd88-010e00eb1861",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:26:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "236033af-7a52-4875-a7a9-fffd3687d0c4",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUK77QV4OT",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "e5c7612b-b97d-44df-9de3-b108126f672a",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:26:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "26ca8d22-aac7-4eea-804c-dc24a6b61a78",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUK77QV4OT",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "2b0eef4f-73f3-41a3-b25b-d8ce40c7f1f7",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:30:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "cf50b19c-7b46-4a40-aabc-0e1c3097daff",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUK77QV4OT",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "534f13b3-0382-4417-b719-de5802fefba3",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:30:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "1936a3bb-1a95-4b58-8ba0-46dcb3626abc",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUK77QV4OT",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "35fb9e86-cfe6-4d8a-88c3-3ae64d3f1cef",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:34:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "2b085961-7e32-4657-93ea-2144f3629fb4",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUK77QV4OT",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "89d9e691-6790-4145-9e48-51bc7f9a70c4",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:34:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "e7c0e8c2-12e6-4035-bab9-077ae2d2b91b",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUK77QV4OT",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "b818868b-8c07-4a6a-8cc1-d57fad5a18f6",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:38:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "4d253802-c96c-4a20-9bdd-57baa9a320da",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUHCGFX2EQ",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "c27f7788-a6db-4ec8-be58-67743294038e",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:38:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "b3627109-d044-4774-bda9-1dd354dc2293",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUHCGFX2EQ",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "7daf9604-4f46-4a1f-8b8f-ffb132d51873",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:42:38Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "9d50cb0b-20b5-4295-9344-687287c150f1",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUHCGFX2EQ",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "fbdcddd4-ca42-4c13-809d-bd8b3798da89",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:42:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "2224c763-e742-43c7-8732-b8d0cf07e48c",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUHCGFX2EQ",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "2f06c9a6-11ee-4508-8fc7-2ec875dce8f9",
+          "eventName": "ListManagedNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:46:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "48d402a8-0725-4248-a8ac-3151a663757b",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUHCGFX2EQ",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-east-1",
+          "eventCategory": "Management",
+          "eventID": "9e9ca4cc-c229-452d-bf98-5c13347e7196",
+          "eventName": "ListNotificationEvents",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:46:39Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "774d7fcc-aa00-4ed0-b090-31db9ddb7eef",
+          "requestParameters": {
+            "locale": "en_US",
+            "maxResults": "100"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUHCGFX2EQ",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-20T23:03:45Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        }
+      ],
+      "total_events": 64
+    },
+    "us-west-2": {
+      "console_login_events": 0,
+      "console_login_events_detail": [],
+      "mfa_authenticated_events": 20,
+      "mfa_events": [
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "cd95a368-acc9-4924-9817-cee9171ba7e6",
+          "eventName": "ListNotificationHubs",
+          "eventSource": "notifications.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:24Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "4f282e73-ed15-46d1-805e-2f30f6aab39c",
+          "requestParameters": null,
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUBRBRFFOU",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "dd2ca11f-047e-462e-b3ae-62bc73af5c44",
+          "eventName": "DescribeRegions",
+          "eventSource": "ec2.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:24Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "48c381af-71c7-4f4c-836a-ef513ac3e403",
+          "requestParameters": {
+            "allRegions": true,
+            "regionSet": {}
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "tlsDetails": {
+            "cipherSuite": "TLS_AES_128_GCM_SHA256",
+            "clientProvidedHostHeader": "ec2.us-west-2.amazonaws.com",
+            "tlsVersion": "TLSv1.3"
+          },
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUHCMBJ3EN",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "1c09cbe7-5c72-4388-b447-f7bf24cb9d49",
+          "eventName": "GetEnvironmentStatus",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:25Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "a593a935-da1a-4b11-af52-44a7b4429ac4",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "3f61d973-8e0f-48c4-87c4-70a6b905c3e5",
+          "eventName": "DescribeEnvironments",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:25Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "2b28f446-2fff-40bc-be45-976144e6fa10",
+          "requestParameters": null,
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "errorCode": "InvalidAccessException",
+          "eventCategory": "Management",
+          "eventID": "f968c9db-d219-4cab-bb24-0d77ef38e5f2",
+          "eventName": "DescribeHub",
+          "eventSource": "securityhub.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:25Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "d25db0c7-210c-4c4e-bc3e-a1e30eced514",
+          "requestParameters": null,
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUPTNS7ZC2",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "197e2e46-d43b-4a98-82e7-c46f3998383c",
+          "eventName": "GetEnvironmentStatus",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:26Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "5b55cfb3-5638-44c3-8d95-44ccdfa2bc67",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "401dfd0d-e5d7-49d1-b210-88d579304984",
+          "eventName": "GetEnvironmentStatus",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:26Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "c47041e5-f409-4fd5-9e6d-f1ec6db570c6",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "errorCode": "InvalidStatusException",
+          "eventCategory": "Management",
+          "eventID": "4a3da3e3-6a17-4c12-a4a3-3a25cabbb2d6",
+          "eventName": "DeleteSession",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:26Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": false,
+          "recipientAccountId": "807562639912",
+          "requestID": "d0d929a8-3645-4b0f-9468-def5d0c73e84",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0",
+            "SessionId": "1787268600594573297-7ltqhshon8nk52n8n3no9gzaf8"
+          },
+          "responseElements": {
+            "code": "InvalidStatusException",
+            "message": "Expected the environment status to be in RUNNING."
+          },
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "96d3f407-657f-46f8-8a22-d4e66c40829b",
+          "eventName": "GetEnvironmentStatus",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:26Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "7d6891e9-5478-4ff3-a06d-104974137537",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "e167502a-d807-4dd6-8bb0-12326fc189f4",
+          "eventName": "StartEnvironment",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:26Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": false,
+          "recipientAccountId": "807562639912",
+          "requestID": "f49ff361-9c2e-4120-acb1-8831bf7469e4",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0"
+          },
+          "responseElements": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0"
+          },
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "43dfacec-b441-4ac3-9b8f-7f70fc1ec3fa",
+          "eventName": "GetEnvironmentStatus",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:28Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "3f4a4ae7-3b0f-4d2b-b20d-0b68122fed3f",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "2d6415ff-e82a-4394-8de6-65b5f4707ec0",
+          "eventName": "GetEnvironmentStatus",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:30Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "a828947d-bbba-4c3c-a81e-05e0e00314d4",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "cd2d7e78-355b-40b5-941a-7f115d8f4b30",
+          "eventName": "GetEnvironmentStatus",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:32Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "fd6e6df8-c3ec-4e8a-b811-b257fe451335",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "5c672ff5-7393-4ff3-8162-d22cb5c10412",
+          "eventName": "RedeemCode",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:33Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "410ebe3e-672f-4e95-81d8-d47a6d17d99b",
+          "requestParameters": {
+            "AuthCode": "***",
+            "CodeVerifier": "***",
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0",
+            "KeyBase": "***",
+            "RedirectUri": "https://auth.cloudshell.us-west-2.aws.amazon.com/callback.js?state=79fad1a4-d10e-4289-9a95-8f562dab0a0a"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "5ef2195f-f3f2-4df6-a859-41b4e71a2d5a",
+          "eventName": "GetEnvironmentStatus",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:33Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "97e31868-5fe9-416b-8774-b392f095739d",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "64353c79-7208-4cea-82ad-8878f784637e",
+          "eventName": "CreateSession",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:33Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": false,
+          "recipientAccountId": "807562639912",
+          "requestID": "643a77b0-e76b-4d57-a1a9-bcf442235735",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0",
+            "SessionType": "EXTENSIONS_BRIDGE"
+          },
+          "responseElements": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0",
+            "SessionId": "1787276537369654276-fdp8zqp4xsq82z7iozs9hiigty",
+            "StreamUrl": "wss://ssmmessages.us-west-2.amazonaws.com/v1/data-channel/1787276537369654276-fdp8zqp4xsq82z7iozs9hiigty?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIARVQOA4IDNCGZZSM6%2F20260821%2Fus-west-2%2Fssmmessages%2Faws4_request&X-Amz-Date=20260821T025033Z&X-Amz-Expires=60&X-Amz-Security-Token=IQoJb3JpZ2luX2VjENP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIASHy85Ka5lZBJb15BtAylC%2Fv9nAuC6EfzuKYnSR02I0AiEAuL5wJGLihG7D%2Fq76VomlJn5FadT94XdmXae99AdD03wqmQIInP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwxMTQ5MTk3OTMxNTgiDJdfeb7f1DsDI67aayrtAVwBQOIpwUH9xlhD1bBxNfou4pHUvSiRIBBNu8uYMbGv2suAbC8LvJM%2FKHw6DnTMDJB99RpcpcKJlALRn4GflgjiRc486YMaLXlxt2AYqiUFZQbkT%2BtZeZmq1Oh8uT%2BM6JeaCwayjnKlIR3CcDhSA%2BdjK5Avkqguk0uCS47yJ4txhNVxWN8DeJ5iWZKClZsjru1GmPx%2FDomlji2fnTuGain0sPH7i4nymiYzjJxeruUR%2BBxvt58pxyr4n4o5zyVWh1DOA%2BincSpZfzNWjoof2UOboJDaJH4KuV9PB%2BiAGt81qeyuSwM2Ms4Let8t4DDf%2BZ7UBjqNASoQULc7%2FpsgB1ynPj2S4mPDmFJp%2FsKcXVJqOmO7KMeFVtOG7wspPES%2FxSCHrHGkOBC1ga423CtrBunME6xwAref1lNROWcP5S3eHiw3Lz5J64lURxaoBwsRszrrcEsVI1howGULcgRZNKqidqDuKy6qLNRqshPdGqkDA0WHb9hYTXgDQjBEdIcZ1qV39g%3D%3D&X-Amz-SignedHeaders=host&cell-number=AAEAAbnHNLU3jwxjZkwnn5OJR7ZFjw6wou6yzC5vp85V%2FJ8EAAAAAGqHvPkpj7cJOVaZVzH9iFRg5JrHWjxs3sOvOzZ4mVBAb%2F6yTPqEYQIS&role=publish_subscribe&X-Amz-Signature=b0d023fa50fa1027f9b08e3d0ff2e28a61a03c3c77832193f66288a9d5126c78",
+            "TokenValue": "***"
+          },
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "65ef460f-092d-451a-90c1-3d41cd071e7e",
+          "eventName": "CreateSession",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:33Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": false,
+          "recipientAccountId": "807562639912",
+          "requestID": "9544e5ba-e2c4-4504-887a-d019a3167169",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0",
+            "SessionType": "TMUX",
+            "TabId": "b9c355ba-4271-426e-98b0-8944799c9e23"
+          },
+          "responseElements": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0",
+            "SessionId": "1787279258671845740-ijlyvnejdtqpx5snna8h7862je",
+            "StreamUrl": "wss://ssmmessages.us-west-2.amazonaws.com/v1/data-channel/1787279258671845740-ijlyvnejdtqpx5snna8h7862je?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIARVQOA4IDGNCTA3P3%2F20260821%2Fus-west-2%2Fssmmessages%2Faws4_request&X-Amz-Date=20260821T025033Z&X-Amz-Expires=60&X-Amz-Security-Token=IQoJb3JpZ2luX2VjENP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIBEQYGWgzUYKHOe%2FRNYx4utUczmwrm%2FNzfhIN5u2O6ntAiEAqCS11dvgjC7EAAN6uzYjU47bO55ZudULkqLmJQeuQZQqmQIInP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwxMTQ5MTk3OTMxNTgiDKkvUOA8Bdqj%2FWY%2F5irtAZUhu0aB2zoqNUTJi%2FYliKcK8jHB8t0zRvHFe5%2FEIgWpeQZPbPKdxeA%2Bi801FX%2FB1AhRZoyAf6Gh6ekFrKP%2BwMSMX4osVilNA0QkcCvM%2FqKpGOzUuqk%2BRgyCaGZ7x5hDooipmMvj3D8uLZx%2FEX4sTGyXvglzoHHfsDMKn%2Fecrx%2FLDM3P%2F0MrpNcENK4t4oz%2Bti3A%2BMeDCtQTZlV%2BQhatM7WGCB1Q5vCBShonN1gTREScwcoc%2B1PdethNclsck7apq416jmxzSAMEwavopF2mlaOfpFc8uAr%2B0tprDUJTEcw2JZ40GPP69p9uyQGZLDD5%2BZ7UBjqNAYvQBo6EOc09v9klsuqfcck69n3c0xZneTALjygTpUSR96l2yRX%2Fe17Lcyg%2F3dzj4BEK5fhvsWWyjQwjDGwVxh%2Fni0SPMsIKuwNMRle%2BvGTWA8Igs3staeIh4MOm50zbkySgqObS9XMsyV5uF9c8%2Bkro32X%2BOguRXNQFecIFB7L1pIw%2Btu618Io%2F%2BIaZVw%3D%3D&X-Amz-SignedHeaders=host&cell-number=AAEAATeuhZGK1BXfrEEj7ybfnBLZuX%2FClLaQuuUK1B5J%2FvNDAAAAAGqHvPkkbptHLqZsifR4ilSZ5hO8cjXh3eg6Egf0ppQChkjj8bcgy6Wi&role=publish_subscribe&X-Amz-Signature=68ce639610ae7731efcadaa5482257440b9e95d4f0800f974427d54cbaf671b5",
+            "TokenValue": "***"
+          },
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "e482d4be-13ea-4989-bd8f-8cbae75f2b62",
+          "eventName": "DeleteSession",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:33Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": false,
+          "recipientAccountId": "807562639912",
+          "requestID": "43d7608a-f9ea-4c5c-bb9c-aa809c984899",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0",
+            "SessionId": "1787268419393403459-qkhzblz5rdocnl54qe2uxhrfra"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "additionalEventData": {
+            "ExtendedRequestId": "MTp1cy13ZXN0LTI6UzoxNzg3MjgwNjM0MDkwOlI6MnpObWV4NkM=",
+            "RequestDetails": {
+              "awsServingRegion": "us-west-2",
+              "endpointType": "regional"
+            }
+          },
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "87a212c4-9f59-4141-8d0f-1d8587903c3b",
+          "eventName": "GetCallerIdentity",
+          "eventSource": "sts.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:34Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": true,
+          "recipientAccountId": "807562639912",
+          "requestID": "1ca39d26-8fe3-45b9-873a-1b965be25f26",
+          "requestParameters": null,
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "44.255.117.171",
+          "tlsDetails": {
+            "cipherSuite": "TLS_AES_128_GCM_SHA256",
+            "clientProvidedHostHeader": "sts.us-west-2.amazonaws.com",
+            "keyExchange": "X25519MLKEM768",
+            "tlsVersion": "TLSv1.3"
+          },
+          "userAgent": "aws-sdk-go/1.55.8 (go1.26.5; linux; amd64)",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUNZ3PP55W",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        },
+        {
+          "awsRegion": "us-west-2",
+          "eventCategory": "Management",
+          "eventID": "c782c0c6-385a-4a8e-b0f8-d37ad69dcabf",
+          "eventName": "PutCredentials",
+          "eventSource": "cloudshell.amazonaws.com",
+          "eventTime": "2026-08-21T02:50:34Z",
+          "eventType": "AwsApiCall",
+          "eventVersion": "1.11",
+          "managementEvent": true,
+          "readOnly": false,
+          "recipientAccountId": "807562639912",
+          "requestID": "acb92657-8547-4c9e-8b53-ab345013b903",
+          "requestParameters": {
+            "EnvironmentId": "6133bfd6-54ca-4572-8fe8-3ec298df4cc0",
+            "KeyBase": "***",
+            "RefreshToken": "***"
+          },
+          "responseElements": null,
+          "sessionCredentialFromConsole": "true",
+          "sourceIPAddress": "73.53.99.222",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Claude/1.34493.0 Chrome/148.0.7778.280 Electron/42.9.2 Safari/537.36 MSIX",
+          "userIdentity": {
+            "accessKeyId": "ASIA3YBT37IUIQQ6NTZM",
+            "accountId": "807562639912",
+            "arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+            "principalId": "AIDA3YBT37IUN7OWL4UMU",
+            "sessionContext": {
+              "attributes": {
+                "creationDate": "2026-08-21T02:50:19Z",
+                "mfaAuthenticated": "true"
+              }
+            },
+            "type": "IAMUser",
+            "userName": "cas-g5-operator"
+          }
+        }
+      ],
+      "total_events": 295
+    }
+  },
+  "window_start_utc": "2026-08-21T00:52:24.340259+00:00"
+}
