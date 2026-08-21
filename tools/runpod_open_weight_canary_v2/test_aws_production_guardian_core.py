@@ -2481,7 +2481,9 @@ def test_exact_201_id_and_name_without_birth_time_still_bind_for_immediate_stop(
     assert provider.stop_calls == ["newpod1234"]
 
 
-@pytest.mark.parametrize("unsafe_id", ["q2oqlooejhin7s", "hilj2rzs54gi06"])
+@pytest.mark.parametrize(
+    "unsafe_id", ["q2oqlooejhin7s", "hilj2rzs54gi06", "vernmyfb3ck9po"]
+)
 def test_201_protected_id_is_never_bound_or_stopped(unsafe_id):
     core, _store, provider, _signer, _clock, spec, request, token, _arm = setup_armed()
     response = response_201(spec.pod_name, pod_id=unsafe_id)

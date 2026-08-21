@@ -29,7 +29,7 @@ ARM_SCHEMA = "cas_runpod_precreate_guardian_arm.v1"
 BINDING_SCHEMA = "cas_runpod_precreate_guardian_binding.v1"
 TERMINAL_SCHEMA = "cas_runpod_precreate_guardian_terminal.v1"
 CREATE_ENDPOINT = "https://rest.runpod.io/v1/pods"
-PROTECTED_POD_IDS = frozenset({"q2oqlooejhin7s", "hilj2rzs54gi06"})
+PROTECTED_POD_IDS = frozenset({"q2oqlooejhin7s", "hilj2rzs54gi06", "vernmyfb3ck9po"})
 POD_ID_PATTERN = re.compile(r"^[a-z0-9]{6,32}$")
 POD_NAME_PATTERN = re.compile(
     r"^cas-open-weight-canary-v2-[a-z0-9]+(?:-[a-z0-9]+)*-[0-9a-f]{32}$"

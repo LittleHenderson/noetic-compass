@@ -117,7 +117,7 @@ CREATE_REQUEST_KEYS = frozenset(
     }
 )
 
-REQUIRED_PROTECTED_POD_IDS = frozenset({"q2oqlooejhin7s", "hilj2rzs54gi06"})
+REQUIRED_PROTECTED_POD_IDS = frozenset({"q2oqlooejhin7s", "hilj2rzs54gi06", "vernmyfb3ck9po"})
 TERMINAL_PROVIDER_STATUSES = frozenset({"EXITED", "TERMINATED"})
 CONTAINMENT_RECOVERY_STATES = frozenset(
     {

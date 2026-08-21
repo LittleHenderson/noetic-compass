@@ -28,7 +28,7 @@ from urllib.request import Request, urlopen
 
 
 REST_BASE = "https://rest.runpod.io/v1"
-EXCLUDED_POD_IDS = frozenset({"q2oqlooejhin7s", "hilj2rzs54gi06"})
+EXCLUDED_POD_IDS = frozenset({"q2oqlooejhin7s", "hilj2rzs54gi06", "vernmyfb3ck9po"})
 POD_ID_PATTERN = re.compile(r"^[a-z0-9]{6,32}$")
 POD_NAME_PATTERN = re.compile(r"^cas-open-weight-canary-v2-[a-z0-9-]+$")
 SOURCE_SHA_PATTERN = re.compile(r"^[0-9a-f]{40}$")

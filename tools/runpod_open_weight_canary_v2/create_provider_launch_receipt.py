@@ -54,7 +54,7 @@ CLOCK_SKEW_ALLOWANCE_SECONDS = 10
 PRE_SEND_SAFETY_MARGIN_SECONDS = (
     MAX_ELAPSED_MILLISECONDS // 1_000 + CLOCK_SKEW_ALLOWANCE_SECONDS
 )
-PROTECTED_POD_IDS = frozenset({"q2oqlooejhin7s", "hilj2rzs54gi06"})
+PROTECTED_POD_IDS = frozenset({"q2oqlooejhin7s", "hilj2rzs54gi06", "vernmyfb3ck9po"})
 DEFINITIVE_CREATE_REJECTION_STATUSES = frozenset({400})
 
 AUTHORIZATION_SCHEMA = "cas_runpod_create_authorization.v1"

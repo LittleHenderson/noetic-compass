@@ -140,7 +140,7 @@
     "required_source_commit_sha256": null,
     "required_oci_image_digest": "sha256:4d1721e62b56d345c83b4fd6090664be6daf9312caab5b2e76f23d8231941851",
     "required_runner_source_sha256": "D94DCD70C5307D86C08C49BF98069F13E27A1746D85186B2282C700B716B38F0",
-    "required_source_file_manifest_sha256": "BD4CCE31A351D05AE58F32C4F033B03B6C2F5CFF68AE234030E26CB5B4BB2A31",
+    "required_source_file_manifest_sha256": "61D45BF1406F8CD3E11384774DBB2CF1C12FC20E354DEF9F03E249059C16ABB9",
     "required_watchdog_script_sha256": "E57BDC1148D3BAA1D46A5AF67D1F7FD65BAC6963F6E09C450EEEA1281FB97F93",
     "required_github_supervisor_source_sha256": "D5DB5CD6BE9EB38C13BDE016E994696679C0CC92054BF6F50C70BC5590963D7E",
     "required_provider_launcher_source_sha256": null,
@@ -166,5 +166,5 @@
     "anchor_receipt_sha256": null,
     "claim_boundary": "The result manifest and all evidence-file hashes are cross-linked, but they remain locally produced and are not durable authenticity evidence until an independent immutable external anchor is attached and verified."
   },
-  "preregistration_sha256": "5EAEE8559B0B39440B41DF8B8346082D5799A2D550FDE24125F521636502CEE8"
+  "preregistration_sha256": "6A3E320724F5D326E0A4E3D8B0D60AE18194F1D2CD64591F74274CE6E7F1DECF"
 }

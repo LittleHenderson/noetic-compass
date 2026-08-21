@@ -81,7 +81,7 @@ def test_preregistration_is_exact_self_hashed_and_inert():
     # the None launcher hash, and the OCI digest were NOT touched -- the
     # assertions below still pin all of them.
     assert preregistration["preregistration_sha256"] == (
-        "5EAEE8559B0B39440B41DF8B8346082D5799A2D550FDE24125F521636502CEE8"
+        "6A3E320724F5D326E0A4E3D8B0D60AE18194F1D2CD64591F74274CE6E7F1DECF"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
     assert preregistration["launch_bindings"]["execution_authority"] == (
