@@ -108,6 +108,22 @@ Rules:
             - !Ref DeploymentBindingObjectSha256
             - '0000000000000000000000000000000000000000000000000000000000000000'
         AssertDescription: LIVE requires the exact deployment-binding object SHA-256.
+      # DeploymentBindingSha256 is sha256(DOMAIN + canonical(source)) -- the source
+      # EXCLUDES the two hash fields. DeploymentBindingObjectSha256 is sha256(raw
+      # object bytes), which INCLUDES them. By the construction in
+      # create_deployment_binding.py they can never be equal for any binding
+      # document, so equality proves one slot holds the wrong value. Because
+      # DeploymentBindingSha256 is NoEcho it is masked in the console, masked in
+      # describe-change-set, and redacted in CloudTrail -- no human can review it.
+      # This assertion is therefore the ONLY gate capable of catching the mistake.
+      # Added 2026-08-21 after a pre-flight audit.
+      - Assert: !Not
+          - !Equals
+            - !Ref DeploymentBindingSha256
+            - !Ref DeploymentBindingObjectSha256
+        AssertDescription: >-
+          DeploymentBindingSha256 and DeploymentBindingObjectSha256 hash different
+          byte strings and can never be equal; equality means one is wrong.
       - Assert: !Not [!Equals [!Ref TimingEvidenceObjectVersion, '']]
         AssertDescription: LIVE requires an immutable timing-evidence object version.
       - Assert: !Not
@@ -315,8 +331,20 @@ Resources:
               - Effect: Allow
                 Action: secretsmanager:GetSecretValue
                 Resource: !Ref ProviderSecretArn
+              # DynamoDB authorises TransactWriteItems PER ITEM, by that item's own
+              # action. _consume_create_capability issues one transaction holding an
+              # "Update" item and a "ConditionCheck" item, so both item-level actions
+              # are required here. Granting TransactWriteItems alone yields
+              # AccessDeniedException at the single paid CREATE attempt, AFTER the
+              # non-retryable dispatch marker is durably committed and BEFORE the
+              # provider POST is issued -- i.e. the attempt is spent for nothing.
+              # The predecessor template carried this pairing; the live candidate
+              # dropped it. Restored 2026-08-21 after a pre-flight audit.
               - Effect: Allow
-                Action: dynamodb:TransactWriteItems
+                Action:
+                  - dynamodb:TransactWriteItems
+                  - dynamodb:UpdateItem
+                  - dynamodb:ConditionCheckItem
                 Resource: !GetAtt LedgerTable.Arn
 
   StopProxyRole:

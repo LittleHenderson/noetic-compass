@@ -21,6 +21,8 @@ A change set is AWS's "preview of a settings change." It computes exactly which 
 **23 modifications. Zero deletions. Zero forced replacements.** Every change is the same kind: the nine Lambdas, their roles, the state machine, and the recovery schedule pick up the new environment bindings. Nothing is destroyed and no data is touched.
 
 ## The checklist — compare what you see against these exact values
+> **CORRECTED 2026-08-21 after a pre-flight audit.** The previous version of this table gave BOTH hashes as `e40f3401…` and said "(same value)". That pair is **structurally impossible**: `DeploymentBindingSha256` hashes the document source *excluding* its two hash fields (with a domain prefix); `DeploymentBindingObjectSha256` hashes the raw object bytes *including* them. A reviewer following the old table would have **confirmed** the defect instead of catching it. Because the first value is `NoEcho`, no human review path exists at all — a CloudFormation `Rule` asserting the two are unequal was added to `template.yaml` as the real gate.
+
 
 This is the whole review: the console's Parameters tab must show precisely these, nothing else changed.
 
@@ -29,14 +31,14 @@ This is the whole review: the console's Parameters tab must show precisely these
 | `ActivationMode` | `LIVE` |
 | `CoreLockSha256` | `cfbefb0df13f6b8b3636e7b0fecd2fe20dacdef4754b3505c0ff19eefe95d0f7` |
 | `TimingValidationEvidenceSha256` | `59462f7d469c53ae377052b953582d43663a3288977e20ff7c7c85149d962126` |
-| `DeploymentBindingSha256` | `e40f34010e61098839cde9ea420233b7d50e65a7ece31cba968d326101e157f1` (shows as `****`, NoEcho) |
-| `DeploymentBindingObjectSha256` | `e40f3401…` (same value) |
+| `DeploymentBindingSha256` | **`a54c1810957e8903527f28e16a3856ee91b2eae90757705557949015c1e8fa3e`** — **NOT the same as the row below.** Shown as `****` (NoEcho), so it is **unreviewable in the console, in `describe-change-set`, and in CloudTrail**. Verify it by recomputing locally, never by eye. |
+| `DeploymentBindingObjectSha256` | **`e40f34010e61098839cde9ea420233b7d50e65a7ece31cba968d326101e157f1`** — a **different** value, and it must be. |
 | `DeploymentBindingObjectKey` | `runpod-guardian/activation/PREPROD/deployment-binding.json` |
 | `DeploymentBindingObjectVersion` | `13XIqvsTspxqaqYWG3.sTMxC2XjLM7dx` |
 | `TimingEvidenceObjectKey` | `runpod-guardian/activation/PREPROD/timing-evidence.json` |
 | `TimingEvidenceObjectVersion` | `OsjCHqefUNq6hbeGT2.TurX8ib09vhkw` |
 | `ProviderAccountId` | `user_38E4xHk5H6yjrzEh4KUse08Ia8U` (an identifier, **not** a credential) |
-| `RecoveryEnabled` / `RecoveryScheduleState` | `TRUE` / `ENABLED` (unchanged) |
+| `RecoveryEnabled` / `RecoveryScheduleState` | `TRUE` / `ENABLED` — **verified unchanged, but flagged.** The deployed INERT stack already carries `TRUE`/`ENABLED`, which **contradicts RUNBOOK §4** (INERT requires `FALSE`/`DISABLED`). The `rate(1 minute)` rule `cas-harness-preprod-guardian-RecoverySchedule-EGPlYAmRkvLa` is `ENABLED` and the recovery Lambda logged **165 invocations in 6 hours**, each failing `DEPLOYMENT_IS_INERT`. It fails closed, so nothing is harmed — but the deployment never matched its documented INERT posture. Decide this deliberately before activating. |
 | `LambdaArtifactVersion` / `RuntimeZipSha256` | unchanged — **same artifact version**, exactly as RUNBOOK §7 requires |
 
 RUNBOOK §7's rule is: *same artifact version, only the listed binding changes.* If anything outside this table shows as changing, the review fails — tell me and I delete the change set.

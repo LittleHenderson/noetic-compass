@@ -2788,3 +2788,65 @@ def test_starter_rejects_fabricated_matching_binding_hex_before_start(monkeypatc
     )
     assert response["statusCode"] == 503
     assert starts == []
+
+
+# Added 2026-08-21 after a pre-flight audit found that CreateProxyRole was granted
+# dynamodb:TransactWriteItems alone while its transaction carries "Update" and
+# "ConditionCheck" items. DynamoDB authorises TransactWriteItems PER ITEM, by the
+# item's own action, so the call returns AccessDeniedException. The defect could not
+# surface until the single paid CREATE attempt, after the non-retryable dispatch
+# marker was durably committed and before the provider POST was issued.
+#
+# 426 tests passed over that defect because every transaction test installs a fake
+# DynamoDB client with no policy engine. These two tests read the TEMPLATE, not a
+# fake, which is the only place the grant actually exists.
+_ITEM_ACTION_FOR_VERB = {
+    "Update": "dynamodb:UpdateItem",
+    "ConditionCheck": "dynamodb:ConditionCheckItem",
+    "Put": "dynamodb:PutItem",
+    "Delete": "dynamodb:DeleteItem",
+}
+
+
+def test_create_proxy_role_grants_every_item_level_action_its_transaction_uses():
+    runtime_source = (HERE.parents[1] / "src" / "guardian_runtime.py").read_text("utf-8")
+    consume = runtime_source.split("def _consume_create_capability", 1)[1].split(
+        "\ndef ", 1
+    )[0]
+    verbs = {
+        verb for verb in _ITEM_ACTION_FOR_VERB if f'"{verb}": {{' in consume
+    }
+    # The transaction is expected to carry both an Update and a ConditionCheck item.
+    # If the runtime ever stops using one, this assertion fails loudly rather than
+    # letting the test silently check nothing.
+    assert verbs == {"Update", "ConditionCheck"}, verbs
+
+    raw = (HERE.parents[1] / "template.yaml").read_text("utf-8")
+    section = raw.split("  CreateProxyRole:", 1)[1].split("  StopProxyRole:", 1)[0]
+    assert "dynamodb:TransactWriteItems" in section
+    for verb in sorted(verbs):
+        required = _ITEM_ACTION_FOR_VERB[verb]
+        assert required in section, (
+            f'CreateProxyRole issues a "{verb}" item inside TransactWriteItems but '
+            f"the template does not grant {required}. DynamoDB authorises "
+            "TransactWriteItems per item, so this fails with AccessDeniedException "
+            "at the single paid CREATE attempt."
+        )
+
+
+def test_live_rules_forbid_the_two_binding_hashes_from_being_equal():
+    # DeploymentBindingSha256 hashes the document source EXCLUDING its two hash
+    # fields (domain-prefixed); DeploymentBindingObjectSha256 hashes the raw object
+    # bytes INCLUDING them. They can never be equal for any binding document, so
+    # equality proves one slot holds the wrong value. DeploymentBindingSha256 is
+    # NoEcho -- masked in the console, in describe-change-set, and redacted in
+    # CloudTrail -- so this rule is the ONLY gate that can catch the mistake.
+    raw = (HERE.parents[1] / "template.yaml").read_text("utf-8")
+    rules = raw.split("Rules:", 1)[1].split("\nConditions:", 1)[0]
+    assert "!Ref DeploymentBindingSha256" in rules
+    assert "!Ref DeploymentBindingObjectSha256" in rules
+    normalised = " ".join(rules.split())
+    assert (
+        "- !Ref DeploymentBindingSha256 - !Ref DeploymentBindingObjectSha256"
+        in normalised
+    ), "LIVE rules must assert the two binding hashes are not equal"
