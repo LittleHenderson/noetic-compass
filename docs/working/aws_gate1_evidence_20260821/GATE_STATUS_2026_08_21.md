@@ -14,6 +14,40 @@ One page, so the next agent does not re-derive any of it. Every number here was 
 
 Both AWS quota blockers are **cleared** (`ec2/L-DB2E81BA` applied `8.0`; Lambda concurrency `1000`). Reserved-capacity arithmetic **fits**: 8 of 9 Lambdas reserve 1 each, leaving 992 unreserved against an AWS floor of 100.
 
+### The preproduction blocker is NOT cost — a second guardian CANNOT coexist in this account
+
+This was found on 2026-08-21 and it changes the owner decision, so it is stated before the rest.
+
+`RUNBOOK.md` §6 requires timing evidence from an *"equivalent version- and hash-locked **preproduction** deployment."* **That deployment cannot be created in AWS account `807562639912` as the template stands.**
+
+Every other resource is stack-scoped — `${AWS::StackName}-control`, `-observe`, `-recovery`, the log groups, the KMS alias — so none of them would collide. **The ledger table is not:**
+
+```yaml
+LedgerTable:
+  DeletionPolicy: Retain
+  UpdateReplacePolicy: Retain
+  Properties:
+    TableName: !Sub cas-runpod-guardian-global-v1-${AWS::AccountId}
+    DeletionProtectionEnabled: true
+```
+
+The name is derived from the **account**, with no stack component, and the runtime hardcodes the same derivation: `GLOBAL_LEDGER_TABLE_PREFIX + account`. That table already exists — `cas-runpod-guardian-global-v1-807562639912`, strong-consistent count `0`.
+
+Two consequences:
+
+1. **A second stack fails to deploy.** CloudFormation would attempt to create a table that already exists.
+2. **If it were forced, it would be worse than a failure.** Preproduction would read and write the **production** ledger, including the global single-active pointer `CONTROL#GLOBAL_ACTIVE#v1` / `SINGLETON#v1` — the exact mechanism that guarantees only one live authorization exists per account.
+
+**This is a deliberate safety property, not a bug: the guardian is one-per-account by design.** It is also why the cost framing given earlier was wrong. The guardian stack itself is cheap; the GPU is not part of the timing test at all. **The real blocker is architectural.**
+
+The owner's options, stated honestly:
+
+- **Option A — stand preproduction up in a SEPARATE AWS account.** The only option that gets timing evidence **without weakening anything.** The single-active guarantee stays intact in both accounts.
+- **Option B — parameterize the ledger table name per stack.** Technically easy. **It weakens the account-wide single-active guarantee, which is a safety property, and doing it in order to make a gate pass is exactly what the gate list forbids.** Recorded for completeness, not recommended.
+- **Option C — accept that timing evidence is not obtainable now.** LIVE then stays `NO_GO`, which is the honest resting state rather than a failure.
+
+---
+
 ## Gate 2 — bind the guardian — `BLOCKED`, strictly downstream of Gate 1 item 1
 
 `create_deployment_binding.REQUIRED` includes `timing_validation_evidence_sha256`, `timing_evidence_bucket`, `timing_evidence_key`, `timing_evidence_version`. **The binding document cannot be built before timing evidence exists and is uploaded.** These two gates are not parallel.
@@ -58,7 +92,7 @@ Requires Gate 4. **Even a pass proves only the frozen capture/no-op/zero plumbin
 1. **Sign in to the AWS console as `cas-g5-operator` using MFA.** ~1 minute. Closes Gate 1 item 3.
 2. **Rotate the access key.** The only `Active` key on that user is the one recorded as exposed on 2026-08-16/17, and it is the sole credential the AWS lane runs on — **create the replacement first, then deactivate the old one.** Deleting first breaks the lane.
 3. **Choose Option A or B** for CloudTrail. Option A closes Gate 1 item 2; Option B does not.
-4. **Decide on the preproduction deployment.** This unblocks Gate 1 item 1, which unblocks Gate 2, which is the only path to Gates 4 and 5.
+4. **Decide how to get a preproduction deployment — and note this is an ACCOUNT decision, not a spend decision.** A second guardian cannot coexist in `807562639912` (see above). Option A is a separate AWS account; Option B weakens a safety property and should not be taken to make a gate pass; Option C is accepting `NO_GO`. This is the only path to Gate 2, and therefore to Gates 4 and 5.
 
 Doing 1 after 3-as-Option-A closes two items with one sign-in.
 
