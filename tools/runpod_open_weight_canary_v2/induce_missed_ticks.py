@@ -44,37 +44,43 @@ CADENCE_SECONDS: Final = 60
 # guardian_runtime._verify_timing_evidence.
 GAP_ACCEPTANCE_BOUND_MILLISECONDS: Final = 180_000
 
-# --- why these bounds are what they are -------------------------------------
+# --- why the window is EXACTLY one cadence ----------------------------------
 #
-# FOUND THE HARD WAY, 2026-08-21. The first live induction used a 240 s window
-# and produced a **311,788 ms** gap against a 180,000 ms acceptance bound. The
-# harness refused the measurement, correctly -- but the failure was manufactured
-# by this tool, not observed in the guardian.
+# FOUND THE HARD WAY, TWICE, on live runs 2026-08-21.
 #
-# That is the worst kind of test defect: a procedure that creates the very
-# failure it exists to detect, and would have been read as a property of the
-# system under test.
+# Attempt 1: a 240 s window produced a 311,788 ms gap against a 180,000 ms
+# acceptance bound. Attempt 2, after "fixing" the ceiling to 120 s, produced a
+# 210,900 ms gap -- still over. Measured overhead was 71.8 s then 90.9 s.
 #
-# The window must now satisfy BOTH ends:
-#   * long enough to miss a tick   -> the scenario section 6 asks for
-#   * short enough that the gap stays inside the bound -> or the test fails itself
+# The second failure exposed a worse defect than the first: the code carried an
+# `aligned=True` parameter asserting that the disable lands immediately after a
+# tick. **It does not. The tool never aligns -- it disables the instant it is
+# called.** So the slop is up to TWO cadences, not one: up to a full cadence
+# before the disable lands relative to the previous tick, and up to another
+# before the next tick arrives after re-enable. A parameter that claims a
+# property the code does not implement is worse than no parameter, because it
+# makes the arithmetic look sound.
 #
-# Observed overhead was 71.8 s (240 s window -> 311.8 s gap). Worst case is two
-# cadences: up to one waiting for the disable to land after a tick, up to one
-# waiting for the next tick after re-enable. `align_to_tick` removes the first,
-# which is why the ceiling below assumes only one cadence of slop.
-MIN_DISABLE_SECONDS: Final = 75
-MAX_DISABLE_SECONDS: Final = GAP_ACCEPTANCE_BOUND_MILLISECONDS // 1000 - CADENCE_SECONDS
+# The honest derivation, with two cadences of slop and no alignment claimed:
+#
+#     worst gap = window + 2*CADENCE <= 180_000 ms   =>  window <= 60 s
+#     the window must cover a tick boundary          =>  window >= 60 s
+#     therefore the ONLY admissible window is exactly CADENCE.
+#
+# A 60 s window at a 60 s cadence always spans exactly one tick boundary, so it
+# misses exactly one tick -- which is all section 6 asks for, and all the bound
+# leaves room for. There is no range to tune, and that is the point.
+MIN_DISABLE_SECONDS: Final = CADENCE_SECONDS
+MAX_DISABLE_SECONDS: Final = CADENCE_SECONDS
 
 
-def worst_case_gap_milliseconds(disable_seconds: int, *, aligned: bool) -> int:
-    """Largest gap the window can produce, so it can be checked BEFORE running.
+def worst_case_gap_milliseconds(disable_seconds: int) -> int:
+    """Largest gap the window can produce, checkable BEFORE anything is disabled.
 
-    Unaligned, the disable can land just before a tick and the re-enable just
-    after one, costing two cadences. Aligned, the first cadence is removed.
+    Two cadences of slop, because this tool does not align to a tick. If it ever
+    learns to, this function -- and the bounds above -- must change together.
     """
-    slop = CADENCE_SECONDS if aligned else 2 * CADENCE_SECONDS
-    return (disable_seconds + slop) * 1000
+    return (disable_seconds + 2 * CADENCE_SECONDS) * 1000
 
 
 class InductionRefused(RuntimeError):
@@ -109,35 +115,32 @@ def check_preproduction_rule(rule_name: str) -> None:
         )
 
 
-def check_window(seconds: int, *, aligned: bool = True) -> None:
+def check_window(seconds: int) -> None:
     if type(seconds) is not int:
         raise InductionRefused("REFUSED: window must be an int")
-    if seconds < MIN_DISABLE_SECONDS:
+    if seconds != CADENCE_SECONDS:
         raise InductionRefused(
-            f"REFUSED: {seconds}s is below {MIN_DISABLE_SECONDS}s. At a "
-            f"{CADENCE_SECONDS}s cadence a shorter window cannot reliably miss a "
-            "consecutive tick, so it would produce a scenario that did not happen."
+            f"REFUSED: the window must be exactly {CADENCE_SECONDS}s, not {seconds}s. "
+            "This is derived, not chosen: shorter cannot span a tick boundary, and "
+            f"longer can produce a gap above the {GAP_ACCEPTANCE_BOUND_MILLISECONDS} ms "
+            "acceptance bound once two cadences of slop are counted. Two live runs "
+            "already proved the point -- 240s gave 311788 ms and 120s gave 210900 ms."
         )
-    if seconds > MAX_DISABLE_SECONDS:
-        raise InductionRefused(
-            f"REFUSED: {seconds}s exceeds the {MAX_DISABLE_SECONDS}s ceiling. There is "
-            "no unbounded mode, and the ceiling is not arbitrary: it is the "
-            f"{GAP_ACCEPTANCE_BOUND_MILLISECONDS} ms acceptance bound minus one "
-            f"{CADENCE_SECONDS}s cadence of slop."
-        )
-    worst = worst_case_gap_milliseconds(seconds, aligned=aligned)
+    worst = worst_case_gap_milliseconds(seconds)
     if worst > GAP_ACCEPTANCE_BOUND_MILLISECONDS:
         raise InductionRefused(
             f"REFUSED: a {seconds}s window can produce a gap of up to {worst} ms, "
             f"which exceeds the {GAP_ACCEPTANCE_BOUND_MILLISECONDS} ms acceptance "
-            "bound. The test would manufacture the failure it exists to detect. "
-            f"(aligned={aligned})"
+            "bound. The test would manufacture the failure it exists to detect."
         )
 
 
 def expected_missed_ticks(seconds: int, cadence: int = CADENCE_SECONDS) -> int:
-    """Ticks expected to be missed. Reported so the plan is stated before the run."""
-    return max(0, seconds // cadence - 1)
+    """Ticks expected to be missed. Reported so the plan is stated before the run.
+
+    A window of exactly one cadence always spans exactly one tick boundary.
+    """
+    return max(1, seconds // cadence) if seconds >= cadence else 0
 
 
 def induce(
@@ -212,7 +215,7 @@ def _main(argv: list[str]) -> int:  # pragma: no cover
     parser = argparse.ArgumentParser(description="PREPRODUCTION ONLY. Bounded.")
     parser.add_argument("--account-id", required=True)
     parser.add_argument("--rule-name", required=True)
-    parser.add_argument("--disable-seconds", type=int, default=180)
+    parser.add_argument("--disable-seconds", type=int, default=60)
     args = parser.parse_args(argv)
     record = induce(
         account_id=args.account_id,
