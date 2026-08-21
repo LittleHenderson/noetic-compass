@@ -1,0 +1,91 @@
+{
+  "vector_norm": 6.915400890635067,
+  "prompts": {
+    "T1": {
+      "baseline_top": " a",
+      "baseline_margin": 2.125,
+      "arms": {
+        "+v": {
+          "dM": 2.5,
+          "l2": 138.54677257488882,
+          "top": " a",
+          "top_changed": false,
+          "gen": " a good"
+        },
+        "-v": {
+          "dM": -3.375,
+          "l2": 606.133230287605,
+          "top": " rated",
+          "top_changed": true,
+          "gen": " rated by"
+        },
+        "+r": {
+          "dM": 0.25,
+          "l2": 303.3963453079015,
+          "top": " a",
+          "top_changed": false,
+          "gen": " a good"
+        }
+      }
+    },
+    "T2": {
+      "baseline_top": " great",
+      "baseline_margin": 2.0,
+      "arms": {
+        "+v": {
+          "dM": 3.375,
+          "l2": 144.88954870259687,
+          "top": " great",
+          "top_changed": false,
+          "gen": " great,"
+        },
+        "-v": {
+          "dM": -3.25,
+          "l2": 358.8895652310586,
+          "top": " bad",
+          "top_changed": true,
+          "gen": " bad,"
+        },
+        "+r": {
+          "dM": 0.125,
+          "l2": 150.6915728708057,
+          "top": " like",
+          "top_changed": true,
+          "gen": " like it"
+        }
+      }
+    },
+    "T3": {
+      "baseline_top": " a",
+      "baseline_margin": 1.75,
+      "arms": {
+        "+v": {
+          "dM": 2.5,
+          "l2": 232.7422548966033,
+          "top": " a",
+          "top_changed": false,
+          "gen": " a beautiful"
+        },
+        "-v": {
+          "dM": -2.375,
+          "l2": 227.03910416881348,
+          "top": " a",
+          "top_changed": false,
+          "gen": " a beautiful"
+        },
+        "+r": {
+          "dM": 0.625,
+          "l2": 131.94668126473414,
+          "top": " a",
+          "top_changed": false,
+          "gen": " a beautiful"
+        }
+      }
+    }
+  },
+  "controls": {
+    "noop_max_abs_delta": 0.0,
+    "zero_l2": 1009.8698509737587,
+    "zero_top": " the"
+  }
+}
