@@ -8,6 +8,7 @@
 - AWS GPU standby stack `cas-aws-gpu-standby-v1`: `CREATE_COMPLETE`; no EC2 instance exists and GPU compute cost is zero.
 - RunPod: no new Pod was created during AWS deployment. Preserve the stopped evidence Pods and volume listed below.
 - Gate 5: `OPEN / KEEP_OPEN`. Stage C: `DESIGN_ONLY / NOT_STARTED`. Corpus: `0 / 960`.
+- AWS quota blockers: **both CLEARED as of `2026-08-21T01:19:51Z`** (G/VT applied `0.0` → `8.0`; Lambda concurrency applied `1000.0`). **Re-verified at the same moment and unchanged: guardian `INERT` with recovery `DISABLED`, zero EC2 instances in any non-`terminated` state, ledger count `0`, `0` `RUNNING` Step Functions executions, trailing-24 h `AWS/Lambda Invocations` `15.0`.** No model, GPU, provider, or RunPod activity occurred.
 
 ## Repository truth
 
@@ -30,8 +31,10 @@
 
 ## Open external blockers
 
-1. Lambda regional concurrency remains `10`. Request `20b451c3ad714eeea66ea5fdd11e56a6qTqBf9h7` for `1001` is `CASE_OPENED`. LIVE guardian reserved capacity cannot be enabled before approval.
-2. On-Demand G/VT quota remains `0`. Request `dd221af97df443bfbd06b70b7d5648a7iSTWwQLf` for `8` vCPUs is `CASE_OPENED`. Do not substitute an unreliable Spot launch.
+**Updated 2026-08-21T01:19:51Z: items 1 and 2 are CLEARED. Nothing was launched. Items 3 and 4 stand.** The superseded text is preserved in git history at `bcbc381691403411a0a547a9524d9962884a278d`.
+
+1. **CLEARED — this blocker was never true as written, re-verified read-only at `2026-08-21T01:19:51Z`.** Lambda regional concurrency is **not** `10`. `lambda get-account-settings` in `us-west-2` reports `ConcurrentExecutions 1000` and `UnreservedConcurrentExecutions 1000` across `FunctionCount 9`, and Service Quotas `lambda/L-B99A9384` reports applied **`1000.0`** against an AWS default of **`1000.0`**. **The cause and timing of the change are `unavailable`** and must not be attributed to the request. Request `20b451c3ad714eeea66ea5fdd11e56a6qTqBf9h7` for `1001` is still `CASE_OPENED` (case `178726831900514`, `LastUpdated 2026-08-20T16:25:24.909000-07:00`) and is **not** needed to reserve guardian capacity at `1000` unreserved.
+2. **CLEARED — APPROVED.** Service Quotas `ec2/L-DB2E81BA` "Running On-Demand G and VT instances" now reports applied **`8.0`** against an AWS default of **`0.0`**. Request `dd221af97df443bfbd06b70b7d5648a7iSTWwQLf` for `8` vCPUs moved `CASE_OPENED` → **`CASE_CLOSED`** (case `178727019600672`, `LastUpdated 2026-08-20T17:53:25.162000-07:00`). **`CASE_CLOSED` alone does NOT mean approved — the approval is established by the applied value `8.0`, not by the case status.** `g6e.xlarge` consumes `4` vCPUs, so `8` vCPUs admits at most two such instances. Spot is still not a substitute. **This removes an EXTERNAL precondition only and creates NO execution authority**; every gate in "Next agent sequence" below is unchanged and unmet. **NEW STANDING COST RISK:** an unreviewed or accidental launch is possible **for the first time**, at `$1.861/hour`.
 3. Empirical AWS timing/fault evidence, final versioned deployment-binding and timing documents, remote material attestation, CloudTrail/WORM export, and the independent MFA event remain open.
 4. The AWS L40S fallback is not the frozen RunPod A40 experiment. It needs its own reviewed hardware/source execution binding before model work.
 
@@ -47,7 +50,7 @@
 
 1. Read the canonical tracker at `C:\Users\wakil\OneDrive\Desktop\tksCAS\docs\working\cas_harness_production_todo.md` and recheck both quota request statuses, both CloudFormation stacks, ledger count, and CloudTrail MFA evidence.
 2. While quotas are open, finish only non-provider evidence: empirical AWS recovery/STOP timing and fault tests, WORM/CloudTrail export, and immutable binding/timing artifacts. Keep the stack `INERT`.
-3. After Lambda quota approval, verify reserved concurrency and exact remote artifact/ARN/hash bindings, then review the complete `LIVE` change set before execution. Do not weaken any gate to make it pass.
+3. **The quota precondition is now MET — do NOT keep waiting on the `CASE_OPENED` Lambda request.** Concurrency is already `1000` applied with `1000` unreserved, so reserved capacity can be sized now. Verify reserved concurrency and exact remote artifact/ARN/hash bindings, then review the complete `LIVE` change set before execution. **Do not weaken any gate to make it pass, and do not read quota approval as execution authority** — the four guardian binding/timing SHA-256 stack parameters are still all-zero placeholders and the preregistration still reads `FROZEN_DESIGN_ONLY_NO_EXECUTION_AUTHORITY`.
 4. Freeze the final repository source, repair the canary source manifest/preregistration to the exact commit/image/hardware/receipt set, and rerun the full runtime, canary, guardian, and hostile negative suites.
 5. Immediately before the one allowed RunPod creation, perform a fresh account inventory plus A40 stock/rate check. Use the one-send production launcher and guardian. Any mismatch or arm failure must STOP only the exact new ID and must not run the model.
 
