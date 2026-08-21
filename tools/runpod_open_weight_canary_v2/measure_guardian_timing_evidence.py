@@ -278,8 +278,27 @@ def build_timing_evidence(
         bound = OBSERVED_BOUNDS_MILLISECONDS[name]
         if type(value) is not int:
             failures.append(f"{name} must be an int, got {type(value).__name__}")
-        elif not 0 <= value <= bound:
-            failures.append(f"{name} = {value} ms is outside [0, {bound}] ms")
+        elif value == 0:
+            # FOUND 2026-08-21, and it is the worst defect this harness had.
+            #
+            # The runtime validator accepts `0 <= value <= maximum`, so a
+            # document reporting 0 ms passes every downstream check, hashes
+            # cleanly, and can activate LIVE. But a real measurement of a real
+            # operation is NEVER exactly 0 ms. Zero is not a measurement; it is
+            # the ABSENCE of one, wearing a measurement's clothes.
+            #
+            # This was reached live: with a genuine recovery gap and worker
+            # startup in hand but the STOP path unreachable under INERT, the
+            # harness emitted a fully valid document carrying
+            # observed_provider_stop_execution_milliseconds = 0.
+            failures.append(
+                f"{name} = 0 ms. Zero is not a measurement, it is the absence of "
+                "one. A real operation never takes exactly 0 ms, and the runtime "
+                "would accept this document, hash and all. If the measurement did "
+                "not happen, no document may be produced."
+            )
+        elif not 1 <= value <= bound:
+            failures.append(f"{name} = {value} ms is outside [1, {bound}] ms")
 
     if type(tested_consecutive_missed_ticks) is not int:
         failures.append("tested_consecutive_missed_ticks must be an int")

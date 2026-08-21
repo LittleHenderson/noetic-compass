@@ -174,6 +174,42 @@ def test_negative_observation_is_no_go():
         _evidence(observed_worker_startup_milliseconds=-1)
 
 
+# --- zero is the absence of a measurement, not a measurement -----------------
+#
+# FOUND LIVE 2026-08-21. With a real recovery gap and worker startup in hand but
+# the STOP path unreachable under INERT, the harness emitted a fully valid,
+# hashable document carrying observed_provider_stop_execution_milliseconds = 0.
+# The runtime accepts 0 <= value <= maximum, so that document would have passed
+# every downstream check and could have activated LIVE.
+
+
+@pytest.mark.parametrize("field", [
+    "observed_recovery_gap_milliseconds",
+    "observed_worker_startup_milliseconds",
+    "observed_provider_stop_execution_milliseconds",
+])
+def test_zero_is_refused_for_every_observed_measurement(field):
+    with pytest.raises(harness.TimingEvidenceNoGo, match="not a measurement"):
+        _evidence(**{field: 0})
+
+
+def test_the_exact_live_case_that_slipped_through_is_now_refused():
+    # Real gap, real startup, unmeasured STOP -- the combination that produced a
+    # signable document with a fabricated number in it.
+    with pytest.raises(harness.TimingEvidenceNoGo, match="no document may be produced"):
+        _evidence(
+            observed_recovery_gap_milliseconds=125424,
+            observed_worker_startup_milliseconds=190,
+            observed_provider_stop_execution_milliseconds=0,
+            tested_consecutive_missed_ticks=1,
+            measurement_count=18)
+
+
+def test_one_millisecond_is_accepted_so_the_floor_is_zero_not_a_range():
+    doc, _, _ = _evidence(observed_worker_startup_milliseconds=1)
+    assert doc["observed_worker_startup_milliseconds"] == 1
+
+
 def test_boolean_is_not_accepted_as_an_integer():
     # bool is a subclass of int; the runtime uses `type(x) is not int`, so this
     # harness must reject it the same way rather than emitting True as 1.
