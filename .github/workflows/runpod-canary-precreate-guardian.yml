@@ -1,0 +1,160 @@
+name: RunPod canary pre-create guardian
+
+# Independent pre-create guardian. It arms BEFORE any create request is sent,
+# then supervises from GitHub's infrastructure so a Pod created but never
+# acknowledged can still be found by its exact name and stopped.
+#
+# This workflow cannot create or delete a Pod. The only provider transport it
+# can reach is RunPodGuardianAdapter, whose entire authority is: inventory
+# Pods, GET one Pod, STOP one Pod. Running this can never start billing.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pod_name:
+        description: Exact cas-open-weight-canary-v2 Pod name, ending in 32 hex characters
+        required: true
+        type: string
+      exact_create_request_sha256:
+        description: SHA-256 of the exact create-request bytes the launcher will send
+        required: true
+        type: string
+      exact_create_request_base64:
+        description: Base64 of those exact create-request bytes
+        required: true
+        type: string
+      creation_window_start_utc:
+        description: UTC instant the creation window opens (must be AFTER this arm)
+        required: true
+        type: string
+      creation_window_end_utc:
+        description: UTC instant the creation window closes (at most 5 minutes after start)
+        required: true
+        type: string
+      hard_stop_deadline_utc:
+        description: UTC hard stop (at most 30 minutes after window start)
+        required: true
+        type: string
+      source_commit:
+        description: Exact 40-character commit; must equal the commit this run checks out
+        required: true
+        type: string
+      oci_image_digest:
+        description: "Exact sha256: image digest bound for the run"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: runpod-precreate-guardian-${{ inputs.pod_name }}
+  cancel-in-progress: false
+
+jobs:
+  precreate-guardian:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      POD_NAME: ${{ inputs.pod_name }}
+      CREATE_SHA256: ${{ inputs.exact_create_request_sha256 }}
+      WINDOW_START: ${{ inputs.creation_window_start_utc }}
+      WINDOW_END: ${{ inputs.creation_window_end_utc }}
+      HARD_STOP_DEADLINE_UTC: ${{ inputs.hard_stop_deadline_utc }}
+      SOURCE_COMMIT: ${{ inputs.source_commit }}
+      OCI_IMAGE_DIGEST: ${{ inputs.oci_image_digest }}
+      CREATE_REQUEST_PATH: /tmp/runpod-exact-create-request.json
+      ARM_RECEIPT_PATH: /tmp/runpod-precreate-guardian-arm.json
+      BINDING_RECEIPT_PATH: /tmp/runpod-precreate-guardian-binding.json
+      TERMINAL_RECEIPT_PATH: /tmp/runpod-precreate-guardian-terminal.json
+    steps:
+      - name: Check out the exact dispatched commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ inputs.source_commit }}
+          persist-credentials: false
+
+      - name: Verify the frozen guardian source
+        shell: bash
+        run: |
+          set -euo pipefail
+          verify() {
+            observed="$(sha256sum "$1" | cut -d' ' -f1 | tr '[:lower:]' '[:upper:]')"
+            test "$observed" = "$2" || { echo "FROZEN_SOURCE_MISMATCH $1"; exit 1; }
+          }
+          verify tools/runpod_open_weight_canary_v2/precreate_guardian_offline.py \
+            3B96B78F9BD31E7D815DF07DEA864C7A1E91B6B6B016DA479B549A244FC82241
+          verify tools/runpod_open_weight_canary_v2/precreate_guardian_runpod_adapter.py \
+            A00F984381F58190904D3A262D1DB6AE076E64DB7E8DEB9F871AD8D6DA656D82
+          verify tools/runpod_open_weight_canary_v2/run_precreate_guardian.py \
+            418317EF563BFB70B721902979EAF134B4E8DDD10DB006842ADA0CE950ED6638
+
+      - name: Confirm the checked-out commit equals the guarded commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${GITHUB_SHA}" = "${SOURCE_COMMIT}" || {
+            echo "CHECKED_OUT_COMMIT_DIFFERS_FROM_GUARDED_COMMIT"; exit 1; }
+
+      - name: Materialise the exact create-request bytes and verify their hash
+        shell: bash
+        env:
+          CREATE_REQUEST_BASE64: ${{ inputs.exact_create_request_base64 }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$CREATE_REQUEST_BASE64" | base64 -d > "$CREATE_REQUEST_PATH"
+          observed="$(sha256sum "$CREATE_REQUEST_PATH" | cut -d' ' -f1)"
+          test "$observed" = "$CREATE_SHA256" || {
+            echo "EXACT_CREATE_REQUEST_HASH_MISMATCH"; exit 1; }
+
+      - name: Arm the guardian before the creation window opens
+        id: arm
+        working-directory: tools/runpod_open_weight_canary_v2
+        env:
+          RUNPOD_API_KEY: ${{ secrets.RUNPOD_CANARY_V2_API_KEY }}
+        run: >-
+          python -I -B run_precreate_guardian.py
+          --phase arm
+          --pod-name "$POD_NAME"
+          --exact-create-request "$CREATE_REQUEST_PATH"
+          --exact-create-request-sha256 "$CREATE_SHA256"
+          --source-commit "$SOURCE_COMMIT"
+          --oci-image-digest "$OCI_IMAGE_DIGEST"
+          --creation-window-start-utc "$WINDOW_START"
+          --creation-window-end-utc "$WINDOW_END"
+          --hard-stop-deadline-utc "$HARD_STOP_DEADLINE_UTC"
+          --arm-receipt "$ARM_RECEIPT_PATH"
+
+      # The launcher may not send its create request until this artifact exists.
+      - name: Publish the arm receipt before any create is permitted
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: runpod-precreate-guardian-arm-${{ inputs.pod_name }}
+          path: ${{ env.ARM_RECEIPT_PATH }}
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Supervise, recover the exact target, and stop it at the deadline
+        id: supervise
+        working-directory: tools/runpod_open_weight_canary_v2
+        env:
+          RUNPOD_API_KEY: ${{ secrets.RUNPOD_CANARY_V2_API_KEY }}
+        run: >-
+          python -I -B run_precreate_guardian.py
+          --phase supervise
+          --arm-receipt "$ARM_RECEIPT_PATH"
+          --binding-receipt "$BINDING_RECEIPT_PATH"
+          --terminal-receipt "$TERMINAL_RECEIPT_PATH"
+
+      - name: Publish containment evidence whatever the outcome
+        if: ${{ always() && steps.arm.outcome == 'success' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: runpod-precreate-guardian-evidence-${{ inputs.pod_name }}
+          path: |
+            ${{ env.ARM_RECEIPT_PATH }}
+            ${{ env.BINDING_RECEIPT_PATH }}
+            ${{ env.TERMINAL_RECEIPT_PATH }}
+          if-no-files-found: warn
+          retention-days: 7
