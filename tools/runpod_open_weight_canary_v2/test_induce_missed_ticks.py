@@ -114,58 +114,68 @@ def test_preproduction_markers_are_accepted_case_insensitively(name):
 # --- guard 4: the window is bounded on both sides ----------------------------
 
 
-def test_only_exactly_one_cadence_is_accepted():
-    ind.check_window(ind.CADENCE_SECONDS)          # the one admissible window
-    assert ind.MIN_DISABLE_SECONDS == ind.MAX_DISABLE_SECONDS == ind.CADENCE_SECONDS
+def test_window_range_is_bounded_on_both_sides():
+    ind.check_window(ind.MIN_DISABLE_SECONDS)
+    ind.check_window(ind.MAX_DISABLE_SECONDS)
 
 
-@pytest.mark.parametrize("bad", [59, 61, 75, 119, 120, 240, 600])
-def test_every_other_window_is_refused(bad):
-    with pytest.raises(ind.InductionRefused, match="must be exactly"):
+@pytest.mark.parametrize("bad", [0, 59, 121, 240, 600])
+def test_windows_outside_the_range_are_refused(bad):
+    with pytest.raises(ind.InductionRefused, match="window must be between"):
         ind.check_window(bad)
 
 
-# --- regressions taken from TWO real live failures ---------------------------
+# --- what THREE real live runs proved ----------------------------------------
 #
-# 2026-08-21 attempt 1: a 240 s window produced a 311,788 ms gap.
-# 2026-08-21 attempt 2: a 120 s window produced a 210,900 ms gap.
-# Both breached the 180,000 ms bound. The tool manufactured the failure it
-# exists to detect, and the second attempt exposed a parameter that asserted an
-# alignment the code never performed.
+#     window 240 s -> gap 311,788 ms   over the bound
+#     window 120 s -> gap 210,900 ms   over the bound
+#     window  60 s -> gap  94,900 ms   in bound, but ZERO missed ticks
+#
+# The admissible band is [120_000, 180_000] ms -- 60 s wide -- while measured
+# overhead varied by ~56 s. No fixed window can guarantee it.
 
 
-@pytest.mark.parametrize("window,observed_gap_ms", [(240, 311788), (120, 210900)])
-def test_the_windows_that_actually_broke_live_runs_are_refused(window, observed_gap_ms):
-    assert observed_gap_ms > ind.GAP_ACCEPTANCE_BOUND_MILLISECONDS
-    with pytest.raises(ind.InductionRefused, match="must be exactly"):
-        ind.check_window(window)
+@pytest.mark.parametrize("gap_ms,expected", [
+    (311788, "TOO_LONG_EXCEEDS_ACCEPTANCE_BOUND"),   # live run 1
+    (210900, "TOO_LONG_EXCEEDS_ACCEPTANCE_BOUND"),   # live run 2
+    (94900,  "TOO_SHORT_NO_MISSED_TICK"),            # live run 3
+    (120000, "IN_BAND"),
+    (180000, "IN_BAND"),
+    (119999, "TOO_SHORT_NO_MISSED_TICK"),
+    (180001, "TOO_LONG_EXCEEDS_ACCEPTANCE_BOUND"),
+])
+def test_every_real_observed_gap_is_classified_correctly(gap_ms, expected):
+    assert ind.classify_induced_gap(gap_ms) == expected
 
 
-def test_worst_case_counts_TWO_cadences_because_the_tool_does_not_align():
-    # The tool disables the instant it is called, so slop occurs on both sides.
-    assert ind.worst_case_gap_milliseconds(60) == (60 + 120) * 1000
-    assert ind.worst_case_gap_milliseconds(60) == ind.GAP_ACCEPTANCE_BOUND_MILLISECONDS
+def test_the_admissible_band_matches_the_harness_rules():
+    low, high = ind.ADMISSIBLE_GAP_BAND_MILLISECONDS
+    # low: the smallest gap that registers >=1 missed tick under (gap//cadence)-1
+    assert low == 2 * ind.CADENCE_SECONDS * 1000
+    # high: the acceptance bound itself
+    assert high == ind.GAP_ACCEPTANCE_BOUND_MILLISECONDS
 
 
-def test_no_alignment_parameter_survives_in_the_CODE():
-    # A parameter claiming a property the code does not implement is worse than
-    # no parameter: it makes the arithmetic look sound. It must stay deleted.
-    #
-    # Comments are excluded deliberately: the note recording WHY it was removed
-    # is the most valuable line in the file and must not be tested away.
+# --- the defect that survived three live runs --------------------------------
+
+
+def test_verdict_does_NOT_claim_the_induction_succeeded():
+    ev = _FakeEvents()
+    rec = ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=60,
+                     session_factory=factory(PREPROD, ev), sleep=lambda _s: None)
+    # The tool cannot see the resulting gap, so it must not claim one was induced.
+    assert rec["verdict"] == "SCHEDULE_DISABLED_AND_RESTORED_OUTCOME_UNVERIFIED"
+    assert "INDUCED" not in rec["verdict"].replace("_OUTCOME_UNVERIFIED", "")
+    assert rec["admissible_gap_band_milliseconds"] == [120000, 180000]
+    assert "must be repeated, not reinterpreted" in rec["next_step"]
+
+
+def test_the_old_overclaiming_verdict_string_is_gone():
     src = (TOOLS / "induce_missed_ticks.py").read_text(encoding="utf-8")
     code = chr(10).join(
         line for line in src.splitlines() if not line.lstrip().startswith("#")
     )
-    assert "aligned" not in code, "the alignment parameter came back"
-    # and the explanatory comment must still be there
-    assert "never aligns" in src
-
-
-def test_the_admissible_window_sits_exactly_on_the_bound_not_inside_it():
-    # There is no headroom left. That is why there is no range to tune.
-    assert ind.worst_case_gap_milliseconds(ind.CADENCE_SECONDS) == (
-        ind.GAP_ACCEPTANCE_BOUND_MILLISECONDS)
+    assert "MISSED_TICK_WINDOW_INDUCED_AND_SCHEDULE_RESTORED" not in code
 
 
 def test_bool_is_not_an_int_here():
@@ -173,8 +183,8 @@ def test_bool_is_not_an_int_here():
         ind.check_window(True)
 
 
-def test_expected_missed_ticks_is_stated_up_front():
-    # One cadence always spans exactly one tick boundary.
+def test_expected_missed_ticks_is_only_an_expectation():
+    # Named honestly: three live runs showed the expectation is not the outcome.
     assert ind.expected_missed_ticks(60) == 1
     assert ind.expected_missed_ticks(59) == 0
 
@@ -196,10 +206,7 @@ def test_happy_path_disables_then_re_enables():
     ev = _FakeEvents()
     rec = ind.induce(account_id=PREPROD, rule_name=RULE, disable_seconds=60,
                      session_factory=factory(PREPROD, ev), sleep=lambda _s: None)
-    assert rec["verdict"] == "MISSED_TICK_WINDOW_INDUCED_AND_SCHEDULE_RESTORED"
-    # One cadence spans exactly one tick boundary -- all section 6 asks for,
-    # and all the 180,000 ms gap bound leaves room for.
-    assert rec["expected_missed_ticks"] == 1
+    assert rec["verdict"] == "SCHEDULE_DISABLED_AND_RESTORED_OUTCOME_UNVERIFIED"
     assert ev.state == "ENABLED"
     assert f"disable:{RULE}" in ev.calls and f"enable:{RULE}" in ev.calls
 

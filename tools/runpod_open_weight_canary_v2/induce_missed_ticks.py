@@ -44,43 +44,49 @@ CADENCE_SECONDS: Final = 60
 # guardian_runtime._verify_timing_evidence.
 GAP_ACCEPTANCE_BOUND_MILLISECONDS: Final = 180_000
 
-# --- why the window is EXACTLY one cadence ----------------------------------
+# --- what three live runs actually proved -----------------------------------
 #
-# FOUND THE HARD WAY, TWICE, on live runs 2026-08-21.
+# 2026-08-21, three real inductions against a live preproduction schedule:
 #
-# Attempt 1: a 240 s window produced a 311,788 ms gap against a 180,000 ms
-# acceptance bound. Attempt 2, after "fixing" the ceiling to 120 s, produced a
-# 210,900 ms gap -- still over. Measured overhead was 71.8 s then 90.9 s.
+#     window 240 s -> gap 311,788 ms   (over the 180,000 ms bound)
+#     window 120 s -> gap 210,900 ms   (over the bound)
+#     window  60 s -> gap  94,900 ms   (in bound, but ZERO missed ticks)
 #
-# The second failure exposed a worse defect than the first: the code carried an
-# `aligned=True` parameter asserting that the disable lands immediately after a
-# tick. **It does not. The tool never aligns -- it disables the instant it is
-# called.** So the slop is up to TWO cadences, not one: up to a full cadence
-# before the disable lands relative to the previous tick, and up to another
-# before the next tick arrives after re-enable. A parameter that claims a
-# property the code does not implement is worse than no parameter, because it
-# makes the arithmetic look sound.
+# The admissible outcome is narrower than any of them. A gap must simultaneously
+#   * register at least one missed tick -> `(gap // cadence) - 1 >= 1` -> >= 120 s
+#   * stay inside the acceptance bound                                -> <= 180 s
+# so the target band is [120_000, 180_000] ms -- exactly 60 seconds wide.
 #
-# The honest derivation, with two cadences of slop and no alignment claimed:
+# Measured overhead (gap minus window) was 34.9 s, 90.9 s and 71.8 s: a spread
+# of ~56 s, because the disable lands at an arbitrary point in the cycle and
+# EventBridge re-anchors its cadence on re-enable. **No fixed window can
+# guarantee landing in a 60-second band when the noise is 56 seconds wide.**
 #
-#     worst gap = window + 2*CADENCE <= 180_000 ms   =>  window <= 60 s
-#     the window must cover a tick boundary          =>  window >= 60 s
-#     therefore the ONLY admissible window is exactly CADENCE.
+# THE DEFECT THAT MATTERED MOST was not the window size. This tool returned
+# `MISSED_TICK_WINDOW_INDUCED_AND_SCHEDULE_RESTORED` on all three runs -- while
+# none of them produced an admissible gap. It asserted an outcome it never
+# checked. A tool that reports success it did not verify is worse than one that
+# fails, because the failure is silent and downstream work inherits it.
 #
-# A 60 s window at a 60 s cadence always spans exactly one tick boundary, so it
-# misses exactly one tick -- which is all section 6 asks for, and all the bound
-# leaves room for. There is no range to tune, and that is the point.
+# So the verdict no longer claims the induction worked. It claims only what the
+# tool actually knows: the schedule was disabled and restored. Whether a usable
+# missed-tick window resulted is decided by MEASUREMENT, against the band below.
 MIN_DISABLE_SECONDS: Final = CADENCE_SECONDS
-MAX_DISABLE_SECONDS: Final = CADENCE_SECONDS
+MAX_DISABLE_SECONDS: Final = 2 * CADENCE_SECONDS
+
+# A gap must land inside this band to be usable. Mirrored from the harness.
+ADMISSIBLE_GAP_BAND_MILLISECONDS: Final = (2 * CADENCE_SECONDS * 1000,
+                                           GAP_ACCEPTANCE_BOUND_MILLISECONDS)
 
 
-def worst_case_gap_milliseconds(disable_seconds: int) -> int:
-    """Largest gap the window can produce, checkable BEFORE anything is disabled.
-
-    Two cadences of slop, because this tool does not align to a tick. If it ever
-    learns to, this function -- and the bounds above -- must change together.
-    """
-    return (disable_seconds + 2 * CADENCE_SECONDS) * 1000
+def classify_induced_gap(gap_milliseconds: int) -> str:
+    """Decide whether an observed gap is usable. Measurement calls this, not induce()."""
+    low, high = ADMISSIBLE_GAP_BAND_MILLISECONDS
+    if gap_milliseconds < low:
+        return "TOO_SHORT_NO_MISSED_TICK"
+    if gap_milliseconds > high:
+        return "TOO_LONG_EXCEEDS_ACCEPTANCE_BOUND"
+    return "IN_BAND"
 
 
 class InductionRefused(RuntimeError):
@@ -116,22 +122,22 @@ def check_preproduction_rule(rule_name: str) -> None:
 
 
 def check_window(seconds: int) -> None:
+    """Bound the window. This does NOT promise the outcome will be usable.
+
+    No fixed window can, because the observed overhead varies by ~56 s against a
+    60 s target band. The outcome is decided by measurement, via
+    `classify_induced_gap`.
+    """
     if type(seconds) is not int:
         raise InductionRefused("REFUSED: window must be an int")
-    if seconds != CADENCE_SECONDS:
+    if not MIN_DISABLE_SECONDS <= seconds <= MAX_DISABLE_SECONDS:
         raise InductionRefused(
-            f"REFUSED: the window must be exactly {CADENCE_SECONDS}s, not {seconds}s. "
-            "This is derived, not chosen: shorter cannot span a tick boundary, and "
-            f"longer can produce a gap above the {GAP_ACCEPTANCE_BOUND_MILLISECONDS} ms "
-            "acceptance bound once two cadences of slop are counted. Two live runs "
-            "already proved the point -- 240s gave 311788 ms and 120s gave 210900 ms."
-        )
-    worst = worst_case_gap_milliseconds(seconds)
-    if worst > GAP_ACCEPTANCE_BOUND_MILLISECONDS:
-        raise InductionRefused(
-            f"REFUSED: a {seconds}s window can produce a gap of up to {worst} ms, "
-            f"which exceeds the {GAP_ACCEPTANCE_BOUND_MILLISECONDS} ms acceptance "
-            "bound. The test would manufacture the failure it exists to detect."
+            f"REFUSED: window must be between {MIN_DISABLE_SECONDS}s and "
+            f"{MAX_DISABLE_SECONDS}s, got {seconds}s. Below the floor cannot span a "
+            "tick boundary at all; above the ceiling the gap is very likely to "
+            f"exceed the {GAP_ACCEPTANCE_BOUND_MILLISECONDS} ms acceptance bound. "
+            "Three live runs measured 240s -> 311788 ms, 120s -> 210900 ms and "
+            "60s -> 94900 ms, so neither end is theoretical."
         )
 
 
@@ -193,7 +199,15 @@ def induce(
             f"CRITICAL: rule {rule_name!r} is {record['state_after']!r} after "
             "re-enable. Recovery may still be disabled. Fix this by hand now."
         )
-    record["verdict"] = "MISSED_TICK_WINDOW_INDUCED_AND_SCHEDULE_RESTORED"
+    # NOT "induced successfully" -- this tool cannot see the resulting gap, and
+    # claiming otherwise is exactly the defect that survived three live runs.
+    record["verdict"] = "SCHEDULE_DISABLED_AND_RESTORED_OUTCOME_UNVERIFIED"
+    record["admissible_gap_band_milliseconds"] = list(ADMISSIBLE_GAP_BAND_MILLISECONDS)
+    record["next_step"] = (
+        "Measure the resulting gap and pass it to classify_induced_gap(). Only "
+        "IN_BAND is usable. TOO_SHORT or TOO_LONG means the scenario did not "
+        "happen and the attempt must be repeated, not reinterpreted."
+    )
     return record
 
 
