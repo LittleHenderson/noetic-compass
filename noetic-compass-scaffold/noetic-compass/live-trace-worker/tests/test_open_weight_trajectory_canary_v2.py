@@ -67,8 +67,14 @@ SUPERVISOR_SPEC.loader.exec_module(github_supervisor)
 def test_preregistration_is_exact_self_hashed_and_inert():
     preregistration, _raw = canary.load_preregistration(PREREGISTRATION_PATH)
 
+    # Re-pinned 2026-08-21. The document was re-frozen for ONE reason: the C14
+    # adapter (1 of the 15 FROZEN_SOURCE_RELATIVE_PATHS) changed at fd90d88e, so
+    # required_source_file_manifest_sha256 moved 7E496CB8... -> 6EC46F9A... and
+    # the self-hash moved with it. Execution authority, the None source commit,
+    # the None launcher hash, and the OCI digest were NOT touched -- the
+    # assertions below still pin all of them.
     assert preregistration["preregistration_sha256"] == (
-        "07C8A4FA1007CA8B7DE0025F91865CF1EBDD81F9BB1B68E03BC648EBF37B55CF"
+        "30798FA6C04EA0B101161FB37A5D21518E05752B0017129DCAEBBC0F2CD1DDE7"
     )
     assert preregistration["experiment"]["schedule"] == canary.expected_schedule()
     assert preregistration["launch_bindings"]["execution_authority"] == (
