@@ -18,7 +18,7 @@ from typing import AsyncIterator
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
-from ..runtime import get_manifest, stream_fake_trace
+from ..runtime import get_manifest, resolve_trace_stream
 from ..schemas.requests import CreateSessionRequest, CreateSessionResponse
 
 router = APIRouter()
@@ -56,7 +56,7 @@ def session_manifest(session_id: str) -> dict:
 
 async def _sse_iter(req: CreateSessionRequest) -> AsyncIterator[bytes]:
     """Wrap the typed event stream into the SSE wire format."""
-    async for event in stream_fake_trace(req):
+    async for event in resolve_trace_stream(req):
         payload = event.model_dump_json()
         # Each SSE message: `event: <type>\ndata: <json>\n\n`. The event:
         # line lets consumers filter without parsing the JSON.
@@ -88,6 +88,6 @@ async def dump_session(req: CreateSessionRequest) -> dict:
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     events = []
-    async for event in stream_fake_trace(req):
+    async for event in resolve_trace_stream(req):
         events.append(json.loads(event.model_dump_json()))
     return {"events": events}

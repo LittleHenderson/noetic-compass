@@ -271,3 +271,150 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
         await asyncio.sleep(0.04)
 
     yield CompleteEvent(total_tokens=max_new)
+
+
+# ---------------------------------------------------------------------------
+# Milestone 2: the REAL live route.
+#
+# stream_real_trace replaces the fabricated per-token block of
+# stream_fake_trace with values MEASURED from a real forward pass through the
+# attested open-weight engine (the same load_open_weight_runtime /
+# capture_greedy_trajectory path validated in the detector work). Every field
+# that stream_fake_trace drew from an RNG is now either a real measurement or
+# an explicit absence -- never a fabricated number:
+#
+#   token                 -> the real generated token id, decoded
+#   confidence            -> softmax(pre_selection_logits[step]).max()  (real)
+#   top_activated_neurons -> top-k by |mlp_states[step]|, real (layer,index)
+#   mode7_attribution     -> []   (attention is not captured; not fabricated)
+#   foundation_probe      -> None (CAS probe not measured here; not fabricated)
+#   rpm_gate_check        -> None (not measured here; not fabricated)
+#   verification_stack    -> None (not measured here; not fabricated)
+#
+# The manifest / covers / method-status preamble and the CompleteEvent are
+# identical to the fake stream, so the UI contract is unchanged.
+# ---------------------------------------------------------------------------
+
+from typing import Callable, Optional
+
+# Installed at app startup to point the live route at a loaded real runtime.
+# When None, resolve_trace_stream falls back to the fake stream, so tests and
+# demos with no model present keep working unchanged.
+_REAL_RUNTIME_PROVIDER: Optional[Callable[[], object]] = None
+
+
+def set_real_runtime_provider(provider: Callable[[], object]) -> None:
+    """Install a callable returning a loaded open-weight runtime."""
+    global _REAL_RUNTIME_PROVIDER
+    _REAL_RUNTIME_PROVIDER = provider
+
+
+def clear_real_runtime_provider() -> None:
+    global _REAL_RUNTIME_PROVIDER
+    _REAL_RUNTIME_PROVIDER = None
+
+
+def real_runtime_available() -> bool:
+    return _REAL_RUNTIME_PROVIDER is not None
+
+
+def _confidence_from_logits(logit_row) -> float:
+    import numpy as np
+
+    row = np.asarray(logit_row, dtype=np.float64)
+    row = row - row.max()
+    probs = np.exp(row)
+    probs /= probs.sum()
+    return float(min(1.0, max(0.0, probs.max())))
+
+
+def _real_top_neurons(mlp_step, config: RuntimeProbeConfig) -> list[NeuronActivation]:
+    """Top-k neurons for this token by |activation|, measured from mlp_states.
+
+    mlp_step is (layers, hidden). Layers are optionally restricted to the
+    configured foundation range so the overlay matches the probe config.
+    """
+    import numpy as np
+
+    arr = np.asarray(mlp_step, dtype=np.float64)  # (layers, hidden)
+    layer_range = config.foundation_layer_range
+    if layer_range:
+        mask_layers = list(layer_range)
+    else:
+        mask_layers = list(range(arr.shape[0]))
+    k = max(1, config.foundation_top_k)
+    candidates: list[NeuronActivation] = []
+    for layer in mask_layers:
+        if layer < 0 or layer >= arr.shape[0]:
+            continue
+        row = arr[layer]
+        idx = int(np.argmax(np.abs(row)))
+        candidates.append(
+            NeuronActivation(layer=int(layer), index=idx, activation=float(row[idx]))
+        )
+    candidates.sort(key=lambda n: abs(n.activation), reverse=True)
+    return candidates[:k]
+
+
+async def stream_real_trace(req: CreateSessionRequest, *, runtime) -> AsyncIterator[LiveTraceEvent]:
+    """Emit a REAL, measured trace for the request through the attested engine."""
+    from .open_weight.engine import capture_greedy_trajectory
+
+    manifest = get_manifest(req.model_id)
+    # This IS a real forward pass, so the manifest must say so -- the UI's
+    # is_real_model flag has to tell the truth on the real route.
+    manifest = manifest.model_copy(update={"is_real_model": True})
+    yield ManifestEvent(manifest=manifest)
+
+    _ = resolve_probes(req.probes)
+    runtime_config = resolve_runtime_config(
+        req.method_configs,
+        n_layers=manifest.model_arch.n_layers,
+    )
+    cover_payload = load_default_cover_payload()
+    yield _filter_cover_payload(cover_payload, runtime_config)
+    yield MethodRuntimeStatusEvent(methods=method_runtime_statuses(req.method_configs))
+
+    max_new = min(req.max_new_tokens, 24)
+    capture = await asyncio.to_thread(
+        capture_greedy_trajectory,
+        runtime,
+        scenario_id=f"live-{req.seed if req.seed is not None else 0}",
+        prompt=req.prompt,
+        max_new_tokens=max_new,
+        seed=req.seed if req.seed is not None else 0,
+    )
+    arrays = capture.arrays
+    token_ids = arrays["generated_token_ids"]
+    mlp = arrays["mlp_states"]
+    logits = arrays["pre_selection_logits"]
+    emit_probe = runtime_config.is_active("foundation_probe")
+
+    for i in range(len(token_ids)):
+        token_text = runtime.tokenizer.decode([int(token_ids[i])])
+        yield TokenEvent(
+            token_index=i,
+            token=token_text,
+            top_activated_neurons=(_real_top_neurons(mlp[i], runtime_config) if emit_probe else []),
+            mode7_attribution=[],       # real attention not captured -- not fabricated
+            confidence=_confidence_from_logits(logits[i]),
+            foundation_probe=None,      # CAS probe not measured here -- not fabricated
+            rpm_gate_check=None,        # not measured here -- not fabricated
+            verification_stack=None,    # not measured here -- not fabricated
+        )
+        await asyncio.sleep(0.0)
+
+    yield CompleteEvent(total_tokens=int(len(token_ids)))
+
+
+def resolve_trace_stream(req: CreateSessionRequest) -> AsyncIterator[LiveTraceEvent]:
+    """The live route's entry point: real when a runtime is installed, else fake.
+
+    This is the replacement of the fake live route: production installs a real
+    runtime provider and the live endpoints emit measured traces; with no model
+    present (tests, demos) it transparently falls back to the schema-valid fake
+    stream, so nothing that depended on the fake route breaks.
+    """
+    if _REAL_RUNTIME_PROVIDER is not None:
+        return stream_real_trace(req, runtime=_REAL_RUNTIME_PROVIDER())
+    return stream_fake_trace(req)
