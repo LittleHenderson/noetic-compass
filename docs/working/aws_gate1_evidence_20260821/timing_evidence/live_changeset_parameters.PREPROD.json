@@ -1,0 +1,10 @@
+{
+  "CoreLockSha256": "cfbefb0df13f6b8b3636e7b0fecd2fe20dacdef4754b3505c0ff19eefe95d0f7",
+  "TimingValidationEvidenceSha256": "59462f7d469c53ae377052b953582d43663a3288977e20ff7c7c85149d962126",
+  "DeploymentBindingSha256": "9d6b2b74b3018117c5c7dae273ce673601337f4efad30c21a882cf0d58f258c7",
+  "DeploymentBindingObjectSha256": "9d6b2b74b3018117c5c7dae273ce673601337f4efad30c21a882cf0d58f258c7",
+  "DeploymentBindingObjectKey": "runpod-guardian/activation/PREPROD/deployment-binding.json",
+  "DeploymentBindingObjectVersion": "sFs3f6L4c8FR.1JhZDnE3tIC60U4FcK3",
+  "TimingEvidenceObjectKey": "runpod-guardian/activation/PREPROD/timing-evidence.json",
+  "TimingEvidenceObjectVersion": "OsjCHqefUNq6hbeGT2.TurX8ib09vhkw"
+}
