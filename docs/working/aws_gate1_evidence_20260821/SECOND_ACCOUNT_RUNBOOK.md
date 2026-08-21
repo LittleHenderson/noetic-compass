@@ -6,6 +6,16 @@
 
 ---
 
+## READ FIRST — the account is necessary but NOT sufficient
+
+**Found 2026-08-21, before the account was created.** One of the three required timing measurements — `observed_provider_stop_execution_milliseconds` — **cannot be taken by any deployment that is not already `LIVE`**, because `_activation_gate` raises `DEPLOYMENT_IS_INERT` before any handler reaches the provider. And `LIVE` cannot be reached without that measurement, because the template asserts a non-zero `TimingValidationEvidenceSha256`.
+
+**The account still gets three of the four counted values** — recovery gap, worker startup, and missed ticks are all obtainable in an `INERT` preproduction stack with `RecoveryScheduleState: ENABLED`. **So this work is not wasted.** But it stops one measurement short, and closing that last one is an owner/reviewer decision.
+
+Full analysis and the three options: **`BOOTSTRAP_CIRCULARITY.md`**. Read it before deciding how far to take the preproduction run.
+
+---
+
 ## What the agent must NOT do
 
 **Creating an AWS account is off-limits to the agent.** Not because of permissions — `cas-g5-operator` holds `AdministratorAccess`, and a simulation confirms `organizations:CreateOrganization` and `organizations:CreateAccount` both evaluate to **allowed**. It is off-limits by rule: agents do not create accounts, even when explicitly asked and even when technically able.

@@ -8,7 +8,7 @@ One page, so the next agent does not re-derive any of it. Every number here was 
 
 | Item | State | What is missing |
 |---|---|---|
-| 1. Timing and fault tests | `OPEN / NOT RUN` — **route chosen** | Harness built and tested; **it has measured nothing.** Needs a hash-locked **preproduction deployment**, which **cannot exist in this AWS account** — see the section below. **Architectural blocker, not a spend one.** |
+| 1. Timing and fault tests | `OPEN / NOT RUN` — route chosen, **but a bootstrap circularity blocks the last measurement** | Harness built and tested; **it has measured nothing.** Needs a hash-locked **preproduction deployment**, which **cannot exist in this AWS account** — see the section below. **Architectural blocker, not a spend one.** |
 | 2. CloudTrail / WORM export | **`CLOSED` / VERIFIED** | **Option A executed 2026-08-21.** Trail `cas-harness-audit-v1` is logging, multi-region, log-file validation on, global events included, into a **new dedicated** Object Lock bucket (`GOVERNANCE`, 1 yr). The guardian artifact bucket was **not touched**. **VERIFIED:** delivery at `2026-08-20T19:37:57.900000-07:00`, a **6,274 B** log file holding **24 real records**, object SHA-256 `78fb3220…`, locked until `2027-08-21`, and **a real `DeleteObject` was REFUSED with `AccessDenied`** — the lock protects, it does not merely label. |
 | 3. Operator MFA record | **`CLOSED` / VERIFIED** | Owner signed in 2026-08-21. **78** operator events carry `mfaAuthenticated: "true"`; **7** are already inside the WORM bucket, alongside **17** digest files. Evidence SHA-256 `913dcce4…`. |
 
