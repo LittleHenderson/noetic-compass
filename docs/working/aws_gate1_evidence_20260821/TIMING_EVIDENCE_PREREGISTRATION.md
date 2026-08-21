@@ -1,6 +1,8 @@
 # Preregistration — guardian LIVE timing evidence (Gate 1, item 1)
 
-**Written before any measurement run. Nothing has been measured yet.**
+**Written before any measurement run, and no evidence document has been produced.**
+
+**Precision added 2026-08-21:** the harness has since been run against **real** AWS logs and took real observations there (§6). It produced **no evidence document**, because it refused — correctly — on insufficient data. So "nothing has been measured" is now too loose: **real numbers were observed; no evidence exists**, and those are different claims.
 
 This document fixes what will be measured, the exact bar each measurement must clear, and the decision rule — in advance, so the run cannot be read backwards into a pass. The bars are not copied from prose. They are read out of `infra/runpod_guardian_live_candidate/src/guardian_runtime.py`, and `measure_guardian_timing_evidence.verify_contract_against_runtime()` fails closed if that module and the harness ever disagree.
 
@@ -60,7 +62,7 @@ It does **not** license any of the following, and none may be said:
 
 ## 6. Harness status
 
-`tools/runpod_open_weight_canary_v2/measure_guardian_timing_evidence.py`, with `test_measure_guardian_timing_evidence.py`: **29 focused tests, 29 passing**. Full guardian suite with the harness added: **334 passed, 0 failed.**
+`tools/runpod_open_weight_canary_v2/measure_guardian_timing_evidence.py`, with `test_measure_guardian_timing_evidence.py`: **29 focused tests, 29 passing**. Full suite sweep after the Gate 3 re-pin: **488 passed, 0 failed** — canary 85, guardian + core + timing + precreate 355, C14 adapter incl. hostile 48. (An earlier revision of this line said **334**; that was the count before the canary suite was added to the sweep.)
 
 The load-bearing test is `test_emitted_document_passes_the_real_runtime_validator`. It feeds the harness's own output into the runtime's `_verify_timing_evidence`, so the harness cannot drift into emitting a document only it would accept. Paired negative tests confirm the runtime **rejects** the same document under a wrong declared hash, and that one millisecond over any bound is refused while exactly on the bound is accepted.
 
