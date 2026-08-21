@@ -155,3 +155,40 @@ In short: the launcher was written against a **stateful, authorization-consuming
 **This was found by tracing the contract rather than assuming it — the discipline that the two earlier errors on this page cost me.** Had the driver been written on the assumption that the arm receipt would simply be accepted, it would have failed at `PRECREATE_GUARDIAN_RECEIPT_KEYSET_MISMATCH` — quite possibly with a paid machine already running.
 
 **No pod created. No GPU exists. Experiment `NOT RUN`.**
+
+---
+
+## $0 DRESS REHEARSAL — the guardian chain is PROVEN LIVE — 2026-08-21
+
+The pre-create guardian workflow was dispatched three times against the real RunPod API for a pod name that would never be created. Every failure died before spend, for the right reason; the final run went green end to end.
+
+| dispatch | outcome | what it caught |
+|---|---|---|
+| 1 | refused at "materialise bytes" | CRLF-corrupted dispatch inputs (`EXACT_CREATE_REQUEST_HASH_MISMATCH`) — corrupted bytes die at the door |
+| 2 | failed at "arm" | a real CI-runner import bug (`ModuleNotFoundError`) invisible to local Windows testing — fixed at `671a2927` / PR #215 |
+| 3 (run `32514313886`) | **all 8 steps green** | — |
+
+Run 3, on the fixed commit, exercised the whole chain against the live API:
+
+```
+ARMED status=ARMED_NAME_ABSENT_AND_POLLING_REQUIRED
+ARMED pod_name=cas-open-weight-canary-v2-rehearsal-73e2254f78be0929a24cc20473d7d394
+ARMED receipt_sha256=b92323f8a9b2e0587c061ff1001d39630a3238dda13955c959bc9bad50ca8a84
+ARMED pre_arm_inventory_count=2         <- live inventory saw the two real pods
+BOUND pod_id=NONE_OBSERVED              <- correct: the rehearsal name never appeared
+TERMINAL status=UNRESOLVED_NO_UNIQUE_TARGET_BY_DEADLINE   <- correct: nothing to bind, reported at deadline
+```
+
+**This proves, for `$0`:** the workflow runs on GitHub's infrastructure with the real secret; the guardian arms against the **real** RunPod API (live inventory of the actual account); the arm receipt publishes as an artifact **before** any create is permitted; and supervise polls the real API for the full window and terminates cleanly when its target never appears. The independent stop authority the whole gate exists for is now demonstrated working.
+
+## Gate 4 machinery — status
+
+| piece | status |
+|---|---|
+| stock & price | PASSED — `$0.44/hr` Secure A40 |
+| pre-create guardian (adapter, driver, bridge, workflow) | built, tested, **dress-rehearsed green against the real API** |
+| bridge ↔ launcher schema | reconciled — bridge receipt passes the launcher's own validator |
+| live launch driver | built, tested; refuses without the owner's confirmation + authorization hash |
+| **the one paid create** | **awaits the owner's action-time go — the only remaining step** |
+
+**No pod created. No GPU used. The paid A40 canary remains `NOT RUN`** — every no-spend precondition is now green, and the science (detector validation) is already running on real weights off this critical path.
