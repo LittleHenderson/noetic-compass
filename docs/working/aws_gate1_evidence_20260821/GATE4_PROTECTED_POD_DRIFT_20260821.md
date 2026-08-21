@@ -35,10 +35,26 @@ Net: no known path today reaches `vernmyfb3ck9po` through the guardian. The defe
 
 Both files are inside the canary's hash-locked source manifest, so the change also requires the re-pin procedure already exercised twice today (manifest → prereg self-hash → test literal → full suites).
 
+## SCOPE CORRECTION — it is four runtime files across three freeze systems, not two
+
+A wider search changed the size of this change. The same list is duplicated in **four** runtime files, plus a test:
+
+| file | constant | freeze system |
+|---|---|---|
+| `precreate_guardian_offline.py:32` | `PROTECTED_POD_IDS` | not in the canary manifest |
+| `github_stop_supervisor.py:31` | `EXCLUDED_POD_IDS` | **canary source manifest** |
+| `create_provider_launch_receipt.py:57` | `PROTECTED_POD_IDS` | **canary source manifest** |
+| `aws_production_guardian_core.py:120` | `REQUIRED_PROTECTED_POD_IDS` | **guardian `core-lock.json`** |
+| `test_aws_production_guardian_core.py:2484` | parametrised over both IDs | test |
+
+The name `REQUIRED_PROTECTED_POD_IDS` is the tell: this is a **cross-component contract**. All four copies must agree, and the value is embedded in receipts and validated by exact match. Changing it means editing four files and re-pinning **three separate freeze systems** — the canary source manifest, the preregistration self-hash, and the guardian core lock — then re-running all suites.
+
+**Also identified: `hilj2rzs54gi06` is not junk.** The July handoff records show it as the **production pod** of the Jacobian canary work (`ATTEMPT_05_PRE_ANCHOR_FREEZE_RECORD.json`, `production_pod_instance_id`). It is a deliberate historical protection whose pod is no longer in the account. Keeping it is correct.
+
 ## Recommendation
 
 Add `vernmyfb3ck9po` to both frozensets. Decide separately whether to drop the non-existent `hilj2rzs54gi06` — **recommend keeping it**, since a stale protective entry is harmless and removing it is a change with no safety benefit.
 
-**This is the owner's call**, because it edits hash-locked files and re-pins the freeze. It is not blocking: the launch blocker remains the missing GitHub secret `RUNPOD_CANARY_V2_API_KEY`.
+**This is firmly the owner's call**, and the scope correction above is why I did not simply do it: a four-file cross-component contract spanning three freeze systems is not a safe unilateral edit, and getting it half-applied would be worse than the gap it closes. It is not blocking: the launch blocker remains the missing GitHub secret `RUNPOD_CANARY_V2_API_KEY`.
 
 No pod created. No GPU exists. Experiment **`NOT RUN`**.
