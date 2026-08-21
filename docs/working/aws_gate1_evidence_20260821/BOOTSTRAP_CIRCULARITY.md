@@ -48,6 +48,8 @@ So the account gets us **three of the four counted values** and leaves exactly o
 - **Do not patch the runtime to let `INERT` reach the provider.** `guardian_runtime.py` is hash-locked. Editing it breaks `core-lock.json`, the deployment binding, and the freeze in one move — and it would remove the very gate that makes `INERT` mean something.
 - **Do not lower the 8,000 ms bound or drop the field.** That is weakening a gate to make it pass.
 
+> **SUPERSEDED 2026-08-21 by `STOP_MEASUREMENT_OPTIONS_v2.md`.** Tracing the provider path end to end changed the picture twice over. **Option B is WITHDRAWN**: it needed a provisional document carrying a STOP value, and the harness now refuses any document with a zero there — so B cannot start without fabricating a number or removing that guard. It was the recommendation, and it was wrong. B also silently required copying the real RunPod credential into the preproduction account, which was not visible in this framing. **Option A is replaced by A′**, an unauthenticated, side-effect-free transport timing that needs no credential and cannot touch a pod. The options below are retained unedited as the superseded record.
+
 ## Options for the owner and reviewer — a decision, not an agent's call
 
 **Option A — measure the STOP transport separately, and label it.** Time the real HTTPS STOP call to the provider from a Lambda in preproduction with the same region, runtime, and cold-start profile, outside the guardian. Honest and obtainable, but it is a **proxy** for the guardian's own path and must be declared as one wherever the number appears. It is not the guardian executing STOP.
