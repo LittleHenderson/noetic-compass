@@ -40,6 +40,14 @@ Two consequences:
 
 **This is a deliberate safety property, not a bug: the guardian is one-per-account by design.** It is also why the cost framing given earlier was wrong. The guardian stack itself is cheap; the GPU is not part of the timing test at all. **The real blocker is architectural.**
 
+**A closed avenue, written down so nobody re-derives it.** DynamoDB table names are **per-region**, so the obvious trick is to deploy preproduction to a different region of the same account, where `cas-runpod-guardian-global-v1-807562639912` does not exist. **It does not work, and it should not be attempted.**
+
+`guardian_runtime.py` pins the region in two places: `EXPECTED_REGION = "us-west-2"` (line 61), enforced at line 2894 (`region != EXPECTED_REGION` → `LOCAL_BINDING_STACK_SCOPE_INVALID`) and again at line 3115 (`AWS_REGION_BINDING_MISMATCH`). A guardian outside `us-west-2` **refuses to activate.**
+
+The schedule would still tick and Lambdas would still emit `REPORT` lines, so the trick would *appear* to yield gap and startup numbers. **Those numbers would be worthless** — measured from a runtime failing its own region check on every invocation, with the STOP transport path never exercised at all. That is a fake measurement wearing the costume of a real one, and §6 asks for an *equivalent* deployment.
+
+Changing `EXPECTED_REGION` is not an escape either: it edits a hash-locked source file, so it breaks `core-lock.json`, the deployment binding, and the freeze in one move.
+
 The owner's options, stated honestly:
 
 - **Option A — stand preproduction up in a SEPARATE AWS account.** The only option that gets timing evidence **without weakening anything.** The single-active guarantee stays intact in both accounts.
