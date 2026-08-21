@@ -1,0 +1,29 @@
+# Line endings are load-bearing here, not cosmetic.
+#
+# core-lock.json pins the SHA-256 of the guardian source set, and the runtime
+# refuses to activate when a hash disagrees. Those hashes are computed over the
+# bytes of the files ON DISK. This repository has core.autocrlf=true and, until
+# this file existed, no attribute pinning the checkout. A fresh clone, checkout,
+# reset --hard, or stash pop would therefore rewrite these files to CRLF and
+# change every locked hash at once -- and the resulting failure reads like
+# tampering rather than like line endings.
+#
+# Measured 2026-08-21: core-lock.json is cfbefb0d... as LF and 8be17d98... as
+# CRLF. Every other locked hash moves the same way.
+#
+# Do not remove or weaken these rules. A freeze a checkout can silently alter
+# is not a freeze.
+
+infra/runpod_guardian_live_candidate/** text eol=lf
+tools/runpod_open_weight_canary_v2/** text eol=lf
+infra/runpod_precreate_guardian_aws/** text eol=lf
+
+# The canary preregistration freezes source hashes too, and they are LF-only.
+# Measured 2026-08-21: required_runner_source_sha256 is
+# D94DCD70C5307D86C08C49BF98069F13E27A1746D85186B2282C700B716B38F0 as LF and
+# 91F7574D9094434007AE662D3D65F261C6D72A59D3487C71574F147DBA26BEA0 as CRLF.
+# Without this pin the frozen canary was one `git clone` away from failing its
+# own source check on every future run.
+
+noetic-compass-scaffold/noetic-compass/live-trace-worker/** text eol=lf
+docs/working/OPEN_WEIGHT_TRAJECTORY_CANARY_V2_PREREG.json text eol=lf
