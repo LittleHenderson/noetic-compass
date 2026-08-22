@@ -1,0 +1,30 @@
+{
+  "activation_best": 0.917,
+  "activation_best_layer": 2,
+  "activation_mean_over_layers": 0.813,
+  "activation_per_layer": {
+    "0": 0.75,
+    "1": 0.792,
+    "2": 0.917,
+    "3": 0.875,
+    "4": 0.917,
+    "5": 0.792,
+    "6": 0.917,
+    "7": 0.833,
+    "8": 0.917,
+    "9": 0.75,
+    "10": 0.583,
+    "11": 0.708
+  },
+  "bag_of_words_baseline": 0.5,
+  "chance": 0.5,
+  "char_ngram_baseline": 0.875,
+  "design": "role-swap matched minimal pairs; identical word multisets VERIFIED in code",
+  "gate": "BEYOND-LEXICAL iff best-layer activation >= 0.70 AND beats char-ngram by >= 0.15",
+  "layers": 12,
+  "model": "pythia-160m (reserialized, attested engine)",
+  "n_items": 24,
+  "n_pairs": 12,
+  "protocol": "leave-one-PAIR-out nearest centroid",
+  "verdict": "ABOVE_CHANCE_BUT_UNDER_GATE"
+}
