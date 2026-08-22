@@ -1,0 +1,202 @@
+{
+  "cas_position": {
+    "beaten_by": [
+      "agent_patient",
+      "causal_vs_correlate",
+      "part_whole"
+    ],
+    "beats_with_nonoverlapping_ci": [
+      "speaker_binding"
+    ],
+    "ci_overlaps_with": [
+      "temporal_before_after"
+    ],
+    "rank": 4
+  },
+  "chance": 0.5,
+  "design": "relation legibility profile -- 6 relations, identical pinned-pair construction",
+  "layers": 12,
+  "model": "pythia-160m (reserialized, attested engine)",
+  "preflight_gate": {
+    "agent_patient": {
+      "n_pairs": 60,
+      "ngram_residual_max": 0.0,
+      "passed": true,
+      "word_mismatches": 0
+    },
+    "cas_8_9_trigger_arrival": {
+      "n_pairs": 60,
+      "ngram_residual_max": 0.0,
+      "passed": true,
+      "word_mismatches": 0
+    },
+    "causal_vs_correlate": {
+      "n_pairs": 60,
+      "ngram_residual_max": 0.0,
+      "passed": true,
+      "word_mismatches": 0
+    },
+    "part_whole": {
+      "n_pairs": 60,
+      "ngram_residual_max": 0.0,
+      "passed": true,
+      "word_mismatches": 0
+    },
+    "speaker_binding": {
+      "n_pairs": 60,
+      "ngram_residual_max": 0.0,
+      "passed": true,
+      "word_mismatches": 0
+    },
+    "temporal_before_after": {
+      "n_pairs": 60,
+      "ngram_residual_max": 0.0,
+      "passed": true,
+      "word_mismatches": 0
+    }
+  },
+  "preregistered": "if cas_8_9 tops the profile that supports CAS naming an unusually strongly encoded relation; if it sits mid-pack that is evidence AGAINST specificity. Both outcomes are informative and are recorded before the run.",
+  "ranking": [
+    {
+      "ci": [
+        0.9222,
+        0.9472
+      ],
+      "mean": 0.9347,
+      "relation": "part_whole"
+    },
+    {
+      "ci": [
+        0.9014,
+        0.9368
+      ],
+      "mean": 0.9201,
+      "relation": "causal_vs_correlate"
+    },
+    {
+      "ci": [
+        0.8868,
+        0.9382
+      ],
+      "mean": 0.9146,
+      "relation": "agent_patient"
+    },
+    {
+      "ci": [
+        0.8444,
+        0.8764
+      ],
+      "mean": 0.8604,
+      "relation": "cas_8_9_trigger_arrival"
+    },
+    {
+      "ci": [
+        0.8285,
+        0.8729
+      ],
+      "mean": 0.85,
+      "relation": "temporal_before_after"
+    },
+    {
+      "ci": [
+        0.5417,
+        0.5757
+      ],
+      "mean": 0.5583,
+      "relation": "speaker_binding"
+    }
+  ],
+  "relations": {
+    "agent_patient": {
+      "activation_best": 1.0,
+      "activation_best_layer": 3,
+      "bag_of_words": 0.5,
+      "bootstrap95": [
+        0.8868,
+        0.9382
+      ],
+      "char_ngram": 0.5,
+      "excludes_chance": true,
+      "mean_over_layers": 0.9146,
+      "n_items": 120,
+      "n_pairs": 60,
+      "token_length_mismatches": 0
+    },
+    "cas_8_9_trigger_arrival": {
+      "activation_best": 1.0,
+      "activation_best_layer": 3,
+      "bag_of_words": 0.5,
+      "bootstrap95": [
+        0.8444,
+        0.8764
+      ],
+      "char_ngram": 0.5,
+      "excludes_chance": true,
+      "mean_over_layers": 0.8604,
+      "n_items": 120,
+      "n_pairs": 60,
+      "token_length_mismatches": 0
+    },
+    "causal_vs_correlate": {
+      "activation_best": 1.0,
+      "activation_best_layer": 3,
+      "bag_of_words": 0.5,
+      "bootstrap95": [
+        0.9014,
+        0.9368
+      ],
+      "char_ngram": 0.5,
+      "excludes_chance": true,
+      "mean_over_layers": 0.9201,
+      "n_items": 120,
+      "n_pairs": 60,
+      "token_length_mismatches": 0
+    },
+    "part_whole": {
+      "activation_best": 1.0,
+      "activation_best_layer": 0,
+      "bag_of_words": 0.5,
+      "bootstrap95": [
+        0.9222,
+        0.9472
+      ],
+      "char_ngram": 0.5,
+      "excludes_chance": true,
+      "mean_over_layers": 0.9347,
+      "n_items": 120,
+      "n_pairs": 60,
+      "token_length_mismatches": 0
+    },
+    "speaker_binding": {
+      "activation_best": 0.6917,
+      "activation_best_layer": 3,
+      "bag_of_words": 0.5,
+      "bootstrap95": [
+        0.5417,
+        0.5757
+      ],
+      "char_ngram": 0.5,
+      "excludes_chance": true,
+      "mean_over_layers": 0.5583,
+      "n_items": 120,
+      "n_pairs": 60,
+      "token_length_mismatches": 0
+    },
+    "temporal_before_after": {
+      "activation_best": 1.0,
+      "activation_best_layer": 1,
+      "bag_of_words": 0.5,
+      "bootstrap95": [
+        0.8285,
+        0.8729
+      ],
+      "char_ngram": 0.5,
+      "excludes_chance": true,
+      "mean_over_layers": 0.85,
+      "n_items": 120,
+      "n_pairs": 60,
+      "token_length_mismatches": 0
+    }
+  },
+  "verdict": "CAS_MID_PACK"
+}
