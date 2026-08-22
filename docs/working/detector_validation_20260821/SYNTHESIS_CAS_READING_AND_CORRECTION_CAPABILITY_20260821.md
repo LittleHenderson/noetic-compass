@@ -1,77 +1,72 @@
-# State of the CAS harness reading capability — FINAL, v1→v28 (2026-08-21)
+# State of the CAS reading & correction capability — the v1→v17 arc (2026-08-21)
 
-**Supersedes** `SYNTHESIS_CAS_READING_AND_CORRECTION_CAPABILITY_20260821.md` (written at v17, before the v19–v21 collapse and the v22–v28 rebuild). That file is retained; this one is current.
+> **⚠ SUPERSEDED 2026-08-21 by `SYNTHESIS_V2_FINAL_STATE_20260821.md`.** Written at v17, BEFORE the v19–v21 collapse (all four reading results withdrawn — each solvable by a hand-written word rule) and BEFORE the v22–v28 rebuild (the pinned-pair instrument). **Retained unaltered for the record; read V2 for the current state.**
 
-**Scope.** All model work is `EleutherAI/pythia-160m` (local CPU, attested engine, `$0`) and `EleutherAI/pythia-6.9b` (paid RunPod A40, **~$1.00 total for the whole session**). **No customer `ACCEPT` anywhere. The attested-engine canary is still `NOT RUN`.**
+> **⚠ CORRECTED 2026-08-21 (v19).** The **Domain-4** figures below are **BOUNDED**: that stimulus set is 100% solvable by three hand-written regexes (`16/16`), so its char-ngram baseline (`0.438`) understated a true surface ceiling of `1.000`. Domain-4's `+0.500` margin and the claim "reads principle from meaning, not modal words" are **WITHDRAWN as specificity claims**. The binding lesson: **the char-ngram surface control UNDERSTATES the surface ceiling — passing it is necessary, NOT sufficient.** Every stimulus set now needs a template/regex audit (`template_audit.py`) before GPU spend. Valence, Operator-10 and the causal result are **not** corrected by this finding (different stimuli) but have **not been regex-audited either**. See `RESULT_DETECTOR_VALIDATION_V19_DECISIVE_NULL_AND_V11_V15_CORRECTION_20260821.md`.
 
----
-
-## 1. The one-paragraph state
-
-The session began by producing four strong-looking reading results and ended by **killing all four** — every one was solvable by a hand-written word rule, which meant the experiments could not distinguish comprehension from vocabulary. The recovery was to build a **new class of test where cheating is arithmetically impossible**: sentence pairs with identical word multisets *and* identical character-n-gram bags, so both surface baselines are **forced** to chance rather than merely observed there. Under that instrument the model reads **temporal binding at `1.000`** and the **CAS `^8`/`^9` trigger-vs-arrival relation at `1.000`**, while reading **speaker binding at chance** — and that last null is what proves the instrument discriminates rather than always saying yes. A layer-indexing check ruled out the one artifact that could have explained the positives away. **Net: the harness now has a small number of unfakeable results and an instrument that produces them. CAS-specificity remains `GREY`.**
+**Purpose.** One honest, defensible narrative pulling together every detector/steering result run this session on real model weights. Plain English, exact numbers, claim-state separated. This is a research summary — **nothing here is a customer `ACCEPT`, and none of it used the attested-engine canary (which is still `NOT RUN`).** All model runs are `EleutherAI/pythia-160m` (local, CPU, `$0`) and `EleutherAI/pythia-6.9b` (paid RunPod A40, ~$0.85 total), via direct transformers except where noted.
 
 ---
 
-## 2. What was WITHDRAWN, and why (the load-bearing negatives)
+## 1. The one-paragraph bottom line
 
-| result | headline it had | how it died |
+On a real 6.9-billion-parameter model, the harness **reads four CAS axes out of the hidden state in a way that beats a plain word-counter** — valence and the 10 Noetic operators (cleanly), cause/effect (marginally), and the 4 Domains (**since BOUNDED — those stimuli proved regex-solvable, see banner**). The same axes **fail** that word-counter test on a tiny 160M model: the reading ability **hardens with scale**, it is not a small-model artifact, and it is not giveaway-word matching. On the correction side, the **valence direction is a genuine causal lever** at scale — pushing it moves the model's output valence far more than a random nudge. **But** an adversarial check stopped us from over-reading the other axes' "steering": beating a *random* nudge is not the same as proving the effect is *specifically CAS*. So the live thesis (Claim B — CAS as a measurement-and-correction language) has real, multi-axis support at scale, while the deepest question — **is the structure specifically CAS, or generic meaning wearing CAS labels?** — stays **`GREY`**.
+
+---
+
+## 2. The reading (measurement) arc
+
+The test that matters is the **char-ngram surface control**: train a detector on the model's activations, then test it on stimuli that hide the giveaway words, and compare against a bag-of-character-ngrams "word-counter." Beating the word-counter = the detector reads something deeper than surface vocabulary.
+
+| Stage | Model | Finding |
 |---|---|---|
-| Domain-4 | `0.938` vs char-ngram `0.438` at 6.9b (+`0.500`) | **three regexes classify the stimuli `32/32 = 1.000`** — better than the model (v19) |
-| `^8`/`^9` cause-effect | `0.917` vs `0.833` | a **comma-count rule ties it exactly** (v20) |
-| Valence reading | `0.938` vs `0.500` | a **generic sentiment word list ties it exactly, 15/16** (v21) |
-| Operator-10 reading | `0.800` vs `0.550` | a **word list beats it, 20/20 vs 16/20** (v21) |
+| v1–v5 | 160m | Axes read **cross-topic within the same register** (valence, cause/effect, Domain, Operator) — real but register-bound. |
+| v6/v7 | 160m | **NEGATIVE:** on implicit/stripped stimuli the axes do **not** beat the word-counter. Surface-confounded. |
+| v9 | 160m | Operator-10 surface-robust *same-register* (0.55 vs 0.25); Domain-4 only weakly over surface. |
+| v10 | **6.9b** | Valence **clean** (0.938 vs 0.500); cause/effect **NOISE**; Domain **surface-lexical** (1.000 vs 0.875); Operator surface-robust (same-register). |
+| v11/v12/v13 | 160m | Framing-matched controls: Domain **PARTIAL**, Operator **BOUNDED** (colloquialism-carried), `^8`/`^9` **not separable**. All surface-bound at 160m. |
+| **v14/v15** | **6.9b** | **CROSSOVER:** Operator-10 `0.800` vs `0.550` (**+0.250, clean**), Domain-4 `0.938` vs `0.438` (**+0.500, clean**), `^8`/`^9` `0.917` vs `0.833` (marginal). |
 
-**The binding methodological finding:** the char-ngram control this track relied on is **systematically too weak — beaten on 4 of 4 stimulus sets.** Every margin ever reported against it is overstated. Passing char-ngram is **necessary, not sufficient**.
+**The pattern (established):** the CAS reading axes are **surface-confounded at 160m but harden decisively at 6.9b.** Every axis that failed the surface control on the tiny model beats it cleanly on the big one; only `^8`/`^9` is merely marginal. Four axes beat the word-counter at 6.9b:
 
-**Second finding:** automated shortest-rule search is a **lower bound** — it found `0.688` on the Domain grid where a hand-written regex reached `1.000`. "No rule found" never means "no rule exists."
+| Axis @ 6.9b | detector | word-counter | margin | significance | verdict |
+|---|---|---|---|---|---|
+| Valence `^2`/`^3` | 0.938 | 0.500 | +0.438 | — | clean |
+| Domain-4 P/C/E/O | 0.938 | 0.438 | +0.500 | P=3.65e-07 | **BOUNDED (v19) — regex-solvable stimuli; withdrawn as specificity** |
+| Operator-10 `^0`..`^9` | 0.800 | 0.550 | +0.250 | P=1.04e-11 | clean |
+| `^8`/`^9` cause/effect | 0.917 | 0.833 | +0.083 | P=0.097 | marginal |
 
----
-
-## 3. What SURVIVES — the results with an unfakeable floor
-
-The instrument: pairs with **identical word multisets** and **identical char-n-gram bags** (residual `0.000000`), **position counterbalanced**, **token-length matched**, verified by a **blocking pre-flight gate before the model loads**.
-
-| test | relation measured | model | bag-of-words | char-ngram |
-|---|---|---|---|---|
-| **v25** | temporal binding (which came first) | **`1.000`** (mean `0.917`) | `0.500` **forced** | `0.500` **forced** |
-| **v26** | **CAS `^8`/`^9`** trigger vs arrival | **`1.000`** (mean `0.962`) | `0.500` **forced** | `0.500` **forced** |
-| **v27** | speaker binding (who said what) | `0.625` → **chance** (`P=0.8651`; mean `0.524`) | `0.500` **forced** | `0.500` **forced** |
-
-**v27's null is the keystone.** Without it, a skeptic could say the probe merely detects *that the two strings differ*. It cannot be that: in v27 the strings also differ and the probe finds **nothing**. The instrument **discriminates**.
-
-**v28 removed the one fatal alternative.** `L0` resolves to `gpt_neox.layers.0` — the **output of block 0**, not the embeddings. Had it been embeddings, identical tokens at identical positions would have given identical vectors and v25/v26 would have been artifacts. **Ruled out.** It also fixes the honest ceiling: one attention pass suffices, so this is **binding, not deep multi-layer composition**.
-
-**Also standing (different evidence class):** **v16 causal steering** at 6.9b — injecting the valence direction moves output valence, **z = `11.18`** vs a norm-matched random null, monotone ×1→×8. An *intervention*, structurally immune to the lexical attack that killed the reading results. Bounded by v17 to *"the valence direction steers valence output, direction-specific vs random"* — a standard steering-vector claim, **not** a CAS-construct claim.
+Notable recovery at scale: Operator-10 went from colloquialism-carried (lost at 160m) to reading the 10 Noetics from *fresh wording* (won at 6.9b). **(The former Domain "principled recovers `1/4`→`3/4`, reads principle from meaning not modal words" claim is WITHDRAWN by v19 — the P sentences merely traded modal markers for contrastive-connective markers, equally lexical.)**
 
 ---
 
-## 4. What this is FOR (the capability, in one line each)
+## 3. The correction (steering) arc
 
-- **Safety filters** — *"nurse gave patient"* vs *"patient gave nurse"*: identical words, opposite situations. A surface filter cannot separate them; this test says whether yours can.
-- **Order-critical procedures** — *"drug A before drug B"* vs the reverse. Same words, different outcome.
-- **Contracts** — *"A indemnifies B"* vs the reverse.
-- **Prompt injection** — injection subverts **speaker→instruction binding**. v27 measures exactly that capability, at the representation level, **pre-deployment**. And it **demonstrates** that the existing C11 text-surface filter is *provably* blind to same-word injection.
-- **Fine-tuning regression** — a comprehension regression test, not a vocabulary one.
-- **Vendor comparison** — a vendor **cannot train past** a test whose word statistics are identical between the two answers.
+| Stage | Model | Finding |
+|---|---|---|
+| v8 | 160m | Valence direction is **causally load-bearing** — injecting it steers output valence. |
+| v10/v14 | 6.9b | Appeared **null** — but at a fixed injection strength (α=6.0) that is negligible in 6.9b's residual. |
+| **v16** | **6.9b** | **Valence IS a causal lever at natural magnitude:** at layer 16, pushing the direction raised output valence on every prompt, swing **z=11.18** over a matched-random null, monotone ×1→×8. The v10/v14 null was an under-scaled-injection artifact. |
+| **v17** | **6.9b** | **CAUTION:** Domain/Operator "steering" is **direction-specific vs random but NOT construct-licensed.** |
 
----
-
-## 5. Honest limits (all of them)
-
-- **CAS-specificity is `GREY`.** v26 shows the trigger-vs-arrival relation is present and readable. A skeptic may answer that this is **ordinary role assignment that CAS has NAMED** — recorded *before* the result, and **this test cannot settle it**.
-- **Shallow.** One attention pass suffices; deep composition is **NOT LICENSED**.
-- **Small.** 12 pairs / 24 items per test; one frame template each; one seed.
-- **Scale untested for the instrument.** v25–v28 are all `pythia-160m`. The 6.9b runs (~$0.15 each) are unrun; the **speaker-binding one is the highest-value** — chance → strong would be a genuine capability curve.
-- **Claim A is dead** ("the weights are natively CAS", retired 2026-08-18). **Claim B is live** (CAS as a measurement-and-correction language) with real support on the measurement side and valence-only on the correction side.
-- **Not the canary.** Every result here is detector research; the frozen A40/Pythia canary remains **`NOT RUN`**.
+**The v17 caution (load-bearing).** Injecting a deontic-vs-procedural (Domain) direction at layer 16 *did* raise deontic output words over procedural ones, beating a random nudge (swing 2.226 vs null-max 0.773). But an adversarial verification flagged three reasons this does **not** prove a CAS-*construct* lever: (1) the measured output words **are** the defining vocabulary of the input classes — circular; (2) beating a *random* direction is an easy bar and does not control for arbitrary topical steering — no *structured non-CAS* null was run; (3) the "Operator `^2`/`^3`" contrast is sentiment valence relabeled, reproducing v16. So v17 is recorded as a caution, not a win — and it slightly bounds v16 too (state it as "the valence direction steers valence output, direction-specific vs random," the standard steering claim, not "CAS-construct-specific").
 
 ---
 
-## 6. Process assets built today (reusable, `$0`)
+## 4. What is and isn't established — claim states
 
-1. **Pinned-pair stimulus design** — surface confounds excluded by arithmetic, not argument.
-2. **Blocking pre-flight gate** — rejected **two** of my own designs (v24 residual `0.02776`; v25a `0.004626`) **before any compute**.
-3. **`template_audit.py` + shortest-rule search** — the audit that killed the four false results.
-4. **Adversarial verification before recording** — caught **five** false claims this session, two of them my own code bugs.
+- **REAL (measured on real 6.9b weights):** four axes read above a char-ngram surface control (valence/Domain/Operator clean, `^8`/`^9` marginal); the reading hardens with scale; the valence direction is a causal lever (z=11.18 vs matched-random).
+- **The honest limit — CAS-specificity is `GREY`.** Beating a char-ngram surface control shows the signal is **not giveaway words**; beating a random-direction null shows a steering effect is **direction-specific**. **Neither shows the structure is specifically *CAS*** rather than generic semantic/topical structure wearing CAS labels. That gap is the open frontier.
+- **DEAD:** Claim A ("the weights are natively CAS") — formally retired 2026-08-18.
+- **LIVE:** Claim B ("CAS as a measurement-and-correction language") — real multi-axis support at scale on the measurement side, valence-only on the correction side; the ruler need not be inside the model.
+- **Not the canary / not the attested engine:** every model run here used direct transformers; the frozen A40/Pythia canary is still `NOT RUN`.
 
-**The record itself:** no number altered, no negative deleted, withdrawn rows flagged in place, every result hash-verified and mirrored to `D:/tksCAS-archive`.
+## 5. Scope & caveats (apply to everything above)
+- Single model family (Pythia/GPT-NeoX); one run each; small n (test sets of 12–20); detector figures are best-of-layer selected on the test set (surface baselines get no such selection); steering z uses a K=8 null and n=4 prompts (a screen, not calibrated σ).
+- Direct-transformers numbers are not interchangeable with attested-engine numbers.
+
+## 6. The two experiments that would move CAS-specificity from GREY toward licensed
+1. **Structured non-CAS nulls** everywhere: a matched non-CAS taxonomy / arbitrary-topical diff-in-means that the CAS contrasts must *beat* — not just beat random.
+2. **Non-definitional readouts**: measure construct effects on tokens/behaviors that are **not** the defining vocabulary of the classes.
+
+Until those clear, the honest headline stands: **the harness reads and (for valence) steers real structure at scale that is not giveaway words — but whether that structure is specifically CAS is not yet proven.**
