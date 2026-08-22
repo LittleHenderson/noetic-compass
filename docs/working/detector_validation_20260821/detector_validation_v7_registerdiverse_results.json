@@ -1,0 +1,12 @@
+{
+  "activation_beats_surface": true,
+  "axis": "^2/^3 valence, register-diverse train -> held-out implicit test",
+  "char_ngram_surface_acc": 0.688,
+  "explicit_only_activation_acc_same_test": 0.75,
+  "hardened": false,
+  "improvement_over_explicit_only": 0.0,
+  "layer": 6,
+  "register_diverse_activation_acc": 0.75,
+  "rule": "HARDENED iff register-diverse activation >= 0.70 AND beats char-ngram by >= 0.10",
+  "shuffle_null": 0.5
+}
