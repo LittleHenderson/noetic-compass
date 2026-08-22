@@ -1,0 +1,109 @@
+{
+  "best_accuracy": 0.55,
+  "best_layer": 3,
+  "best_shuffle": 0.05,
+  "chance_level": 0.1,
+  "confusion_at_best_layer": {
+    "^0_Idea->^0_Idea": 2,
+    "^1_Mind->^1_Mind": 2,
+    "^2_Positive->^2_Positive": 1,
+    "^2_Positive->^3_Negative": 1,
+    "^3_Negative->^1_Mind": 1,
+    "^3_Negative->^4_Vibration": 1,
+    "^4_Vibration->^4_Vibration": 1,
+    "^4_Vibration->^7_Rhythm": 1,
+    "^5_Female->^1_Mind": 1,
+    "^5_Female->^5_Female": 1,
+    "^6_Male->^6_Male": 2,
+    "^7_Rhythm->^1_Mind": 1,
+    "^7_Rhythm->^2_Positive": 1,
+    "^8_AboveCause->^0_Idea": 2,
+    "^9_BelowEffect->^9_BelowEffect": 2
+  },
+  "design": "operator10_nearest_centroid_stratified_4train_2test",
+  "layer_sweep": {
+    "0": {
+      "acc": 0.3,
+      "shuffle": 0.05
+    },
+    "1": {
+      "acc": 0.35,
+      "shuffle": 0.05
+    },
+    "10": {
+      "acc": 0.4,
+      "shuffle": 0.05
+    },
+    "11": {
+      "acc": 0.2,
+      "shuffle": 0.1
+    },
+    "2": {
+      "acc": 0.3,
+      "shuffle": 0.1
+    },
+    "3": {
+      "acc": 0.55,
+      "shuffle": 0.05
+    },
+    "4": {
+      "acc": 0.45,
+      "shuffle": 0.1
+    },
+    "5": {
+      "acc": 0.4,
+      "shuffle": 0.1
+    },
+    "6": {
+      "acc": 0.45,
+      "shuffle": 0.15
+    },
+    "7": {
+      "acc": 0.45,
+      "shuffle": 0.05
+    },
+    "8": {
+      "acc": 0.4,
+      "shuffle": 0.1
+    },
+    "9": {
+      "acc": 0.3,
+      "shuffle": 0.05
+    }
+  },
+  "n_test": 20,
+  "operators": [
+    "^0_Idea",
+    "^1_Mind",
+    "^2_Positive",
+    "^3_Negative",
+    "^4_Vibration",
+    "^5_Female",
+    "^6_Male",
+    "^7_Rhythm",
+    "^8_AboveCause",
+    "^9_BelowEffect"
+  ],
+  "operators_separated_ge_0.5": [
+    "^0_Idea",
+    "^1_Mind",
+    "^2_Positive",
+    "^4_Vibration",
+    "^5_Female",
+    "^6_Male",
+    "^9_BelowEffect"
+  ],
+  "per_operator_accuracy_at_best_layer": {
+    "^0_Idea": 1.0,
+    "^1_Mind": 1.0,
+    "^2_Positive": 0.5,
+    "^3_Negative": 0.0,
+    "^4_Vibration": 0.5,
+    "^5_Female": 0.5,
+    "^6_Male": 1.0,
+    "^7_Rhythm": 0.0,
+    "^8_AboveCause": 0.0,
+    "^9_BelowEffect": 1.0
+  },
+  "verdict": "OPERATOR10_PARTIAL_DECODABLE"
+}
