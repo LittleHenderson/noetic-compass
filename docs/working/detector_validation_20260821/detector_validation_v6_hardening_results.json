@@ -1,0 +1,22 @@
+{
+  "axes": [
+    {
+      "activation_acc_on_implicit": 0.562,
+      "activation_beats_surface": true,
+      "axis": "^2/^3 valence (implicit scenario)",
+      "char_ngram_surface_acc": 0.438,
+      "hardened": false,
+      "shuffle_null": 0.312
+    },
+    {
+      "activation_acc_on_implicit": 0.562,
+      "activation_beats_surface": false,
+      "axis": "^8/^9 cause_effect (connective-stripped)",
+      "char_ngram_surface_acc": 0.625,
+      "hardened": false,
+      "shuffle_null": 0.312
+    }
+  ],
+  "layer": 6,
+  "rule": "HARDENED iff activation acc >= 0.70 AND beats char-ngram surface baseline by >= 0.10"
+}
