@@ -1,0 +1,20 @@
+{
+  "alpha": 6.0,
+  "directional_all_positive": true,
+  "k_null": 16,
+  "layer": 6,
+  "n_neutral_prompts": 4,
+  "null_max_abs": 1.1875,
+  "null_mean": 0.1758,
+  "null_std": 0.5878,
+  "p_value_one_sided": 0.0588,
+  "p_value_two_sided_magnitude": 0.0588,
+  "per_prompt_swings": [
+    5.375,
+    5.5,
+    4.875,
+    6.875
+  ],
+  "probe_direction_swing_S_w": 5.6562,
+  "verdict": "CAUSALLY_LOAD_BEARING"
+}
