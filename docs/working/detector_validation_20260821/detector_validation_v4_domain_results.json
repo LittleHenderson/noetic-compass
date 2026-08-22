@@ -1,0 +1,87 @@
+{
+  "at_best_layer": {
+    "acc": 1.0,
+    "layer": 2,
+    "random_subspace": 0.25,
+    "shuffle": 0.25
+  },
+  "best_accuracy": 1.0,
+  "best_layer": 2,
+  "chance_level": 0.25,
+  "design": "domain4_nearest_centroid_cross_topic_train6_test2",
+  "domains": [
+    "P",
+    "C",
+    "E",
+    "O"
+  ],
+  "layer_sweep": {
+    "0": {
+      "random_subspace": 0.25,
+      "real": 0.75,
+      "shuffle": 0.25
+    },
+    "1": {
+      "random_subspace": 0.375,
+      "real": 0.75,
+      "shuffle": 0.25
+    },
+    "10": {
+      "random_subspace": 0.25,
+      "real": 1.0,
+      "shuffle": 0.25
+    },
+    "11": {
+      "random_subspace": 0.5,
+      "real": 0.375,
+      "shuffle": 0.375
+    },
+    "2": {
+      "random_subspace": 0.25,
+      "real": 1.0,
+      "shuffle": 0.25
+    },
+    "3": {
+      "random_subspace": 0.375,
+      "real": 0.875,
+      "shuffle": 0.25
+    },
+    "4": {
+      "random_subspace": 0.0,
+      "real": 1.0,
+      "shuffle": 0.25
+    },
+    "5": {
+      "random_subspace": 0.5,
+      "real": 0.875,
+      "shuffle": 0.25
+    },
+    "6": {
+      "random_subspace": 0.5,
+      "real": 1.0,
+      "shuffle": 0.25
+    },
+    "7": {
+      "random_subspace": 0.25,
+      "real": 1.0,
+      "shuffle": 0.25
+    },
+    "8": {
+      "random_subspace": 0.625,
+      "real": 0.875,
+      "shuffle": 0.25
+    },
+    "9": {
+      "random_subspace": 0.875,
+      "real": 0.875,
+      "shuffle": 0.25
+    }
+  },
+  "n_test_items": 8,
+  "predictions": {
+    "P1_acc_ge_0.50": true,
+    "P2_beats_random_subspace_0.15": true,
+    "P3_shuffle_le_0.45": true
+  },
+  "verdict": "DOMAIN4_DECODABLE_CROSS_TOPIC"
+}
