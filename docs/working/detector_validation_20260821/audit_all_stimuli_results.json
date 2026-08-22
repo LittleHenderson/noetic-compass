@@ -1,0 +1,71 @@
+{
+  "gate_note": "a stimulus set FAILS if a trivial auto-found rule matches or approaches the published activation",
+  "sets": {
+    "Domain-4 framing-stripped (v19 -- KNOWN FAIL, positive control)": {
+      "best_structural_rule_acc": 0.688,
+      "best_word_rule_acc": 0.562,
+      "chance": 0.25,
+      "published_activation": 0.963,
+      "published_char_ngram": 0.688,
+      "shortest_rule_acc": 0.688,
+      "structural_rule": "length-quantile bins (4 bins, majority-mapped)",
+      "verdict": "SURVIVES (rule below surface baseline)",
+      "word_rule": {
+        "C": "english",
+        "E": "looked",
+        "O": "confirm",
+        "P": "rather"
+      }
+    },
+    "Operator-10 fresh (v14 test set)": {
+      "best_structural_rule_acc": 0.5,
+      "best_word_rule_acc": 0.65,
+      "chance": 0.1,
+      "published_activation": 0.8,
+      "published_char_ngram": 0.55,
+      "shortest_rule_acc": 0.65,
+      "structural_rule": "length-quantile bins (10 bins, majority-mapped)",
+      "verdict": "SUSPECT (rule beats char-ngram surface)",
+      "word_rule": {
+        "^0": "place",
+        "^1": "once",
+        "^2": "from",
+        "^3": "pushed",
+        "^4": "him",
+        "^5": "had",
+        "^6": "separated",
+        "^7": "thousandth",
+        "^8": "old",
+        "^9": "its"
+      }
+    },
+    "^8/^9 construct-correct (v14 test)": {
+      "best_structural_rule_acc": 0.917,
+      "best_word_rule_acc": 0.833,
+      "chance": 0.5,
+      "published_activation": 0.917,
+      "published_char_ngram": 0.833,
+      "shortest_rule_acc": 0.917,
+      "structural_rule": "comma-count bins (majority-mapped)",
+      "verdict": "SUSPECT (rule beats char-ngram surface)",
+      "word_rule": {
+        "^8": "of",
+        "^9": "hours"
+      }
+    },
+    "valence ^2/^3 (v10/v16 test set)": {
+      "best_structural_rule_acc": 0.625,
+      "best_word_rule_acc": 0.625,
+      "chance": 0.5,
+      "published_activation": 0.938,
+      "published_char_ngram": 0.5,
+      "shortest_rule_acc": 0.625,
+      "structural_rule": "length-quantile bins (2 bins, majority-mapped)",
+      "verdict": "SUSPECT (rule beats char-ngram surface)",
+      "word_rule": {
+        "neg": "but",
+        "pos": "finally"
+      }
+    }
+  }
+}
