@@ -1,0 +1,16 @@
+{
+  "domain4": {
+    "activation_best": 1.0,
+    "best_layer": 2,
+    "chance": 0.25,
+    "char_ngram_surface": 0.875,
+    "verdict": "BEATS_SURFACE_WEAK"
+  },
+  "operator10": {
+    "activation_best": 0.55,
+    "best_layer": 3,
+    "chance": 0.1,
+    "char_ngram_surface": 0.25,
+    "verdict": "SURFACE_ROBUST"
+  }
+}
