@@ -104,3 +104,61 @@ def test_inert_sets_are_not_second_guessed():
     parameters["ActivationMode"] = "INERT"
     parameters["CoreLockSha256"] = ZERO
     assert vap.verify_activation_parameters(parameters) == []
+
+
+# ---------------------------------------------------------------------------
+# Regression tests for the ABSENT-ActivationMode bypass, fixed 2026-08-22.
+#
+# Before the fix, verify_activation_parameters() began with
+#     if parameters.get("ActivationMode") != "LIVE": return failures
+# so an ABSENT key returned PASS. That is a real bypass, not a theoretical one:
+# CloudFormation UsePreviousValue omits ParameterValue, so a stack that is
+# ALREADY LIVE reaches this check looking INERT and skips every LIVE assertion.
+# It was reproduced against this repo's own archived defective parameter set.
+# ---------------------------------------------------------------------------
+
+ARCHIVED_DEFECTIVE = (
+    HERE.parents[1]
+    / "docs"
+    / "working"
+    / "aws_gate1_evidence_20260821"
+    / "timing_evidence"
+    / "live_changeset_parameters.PREPROD.json"
+)
+
+
+def _load_archived_defective():
+    raw = json.loads(ARCHIVED_DEFECTIVE.read_text(encoding="utf-8"))
+    if isinstance(raw, list):
+        return {p["ParameterKey"]: p.get("ParameterValue", "") for p in raw}
+    return raw
+
+
+def test_absent_activation_mode_is_refused_not_treated_as_inert():
+    """The bypass itself: no ActivationMode key must REFUSE, never pass."""
+    failures = vap.verify_activation_parameters({})
+    assert failures, "an absent ActivationMode must be refused, not silently treated as INERT"
+    assert any("ABSENT" in f for f in failures)
+
+
+def test_archived_defective_parameter_set_is_now_refused():
+    """The exact file that exited 0 before the fix, carrying the duplicated-hash defect."""
+    params = _load_archived_defective()
+    assert "ActivationMode" not in params, "fixture drifted: this file must have no ActivationMode"
+    assert params["DeploymentBindingSha256"] == params["DeploymentBindingObjectSha256"], (
+        "fixture drifted: this file must carry the duplicated-hash defect"
+    )
+    failures = vap.verify_activation_parameters(params)
+    assert failures, "the archived defective set must be refused after the 2026-08-22 fix"
+
+
+def test_explicit_inert_still_skips_live_checks():
+    """INERT sets are legitimately unvalidated; the fix must not break that."""
+    assert vap.verify_activation_parameters({"ActivationMode": "INERT"}) == []
+
+
+def test_unrecognised_activation_mode_is_refused():
+    """Anything that is neither INERT nor LIVE fails closed, including wrong case."""
+    for bad in ("live", "Live", "ENABLED", ""):
+        failures = vap.verify_activation_parameters({"ActivationMode": bad})
+        assert failures, f"ActivationMode {bad!r} must be refused"

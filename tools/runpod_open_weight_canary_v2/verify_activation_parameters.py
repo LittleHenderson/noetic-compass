@@ -104,7 +104,30 @@ def verify_activation_parameters(
     because the runtime refuses to act on it anyway.
     """
     failures: list[str] = []
-    if parameters.get("ActivationMode") != "LIVE":
+
+    # FAIL-CLOSED ON A MISSING MODE (fix 2026-08-22).
+    # The previous form was `if parameters.get("ActivationMode") != "LIVE": return failures`,
+    # which returned PASS for an ABSENT key. That is a real bypass, not a theoretical one:
+    # CloudFormation UsePreviousValue omits ParameterValue, so a stack that is ALREADY LIVE
+    # reaches this check looking INERT and every LIVE assertion below is skipped. It was
+    # reproduced against the repo's own archived defective parameter set, which carries the
+    # duplicated-hash defect this tool exists to catch and nonetheless exited 0.
+    # Absence is now a refusal; only an EXPLICIT "INERT" skips the LIVE checks.
+    mode = parameters.get("ActivationMode")
+    if mode is None:
+        failures.append(
+            "ActivationMode is ABSENT. Refusing to treat an unspecified mode as INERT: "
+            "CloudFormation UsePreviousValue omits ParameterValue, so an already-LIVE stack "
+            "would skip every LIVE check. Supply ActivationMode explicitly (INERT or LIVE), "
+            "resolving UsePreviousValue against the deployed stack first."
+        )
+        return failures
+    if mode == "INERT":
+        return failures
+    if mode != "LIVE":
+        failures.append(
+            f"ActivationMode {mode!r} is not a recognised value; expected 'INERT' or 'LIVE'"
+        )
         return failures
 
     for name in _HASH_PARAMETERS:
