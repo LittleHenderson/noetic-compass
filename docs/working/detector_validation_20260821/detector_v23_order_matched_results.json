@@ -1,0 +1,32 @@
+{
+  "activation_best": 1.0,
+  "activation_best_layer": 3,
+  "activation_mean_over_layers": 0.938,
+  "activation_per_layer": {
+    "0": 0.875,
+    "1": 0.917,
+    "2": 0.958,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 0.917,
+    "6": 1.0,
+    "7": 1.0,
+    "8": 1.0,
+    "9": 0.917,
+    "10": 0.833,
+    "11": 0.833
+  },
+  "bag_of_words_baseline": 0.5,
+  "chance": 0.5,
+  "char_ngram_bag_residual_max": 0.0,
+  "char_ngram_bag_residual_mean": 0.0,
+  "char_ngram_baseline": 0.5,
+  "design": "ORDER-MATCHED role-swap inside a symmetric frame; word multisets AND char-ngram bags matched",
+  "gate": "PASS iff best-layer activation >= 0.70 AND beats BOTH surface baselines by >= 0.15",
+  "layers": 12,
+  "model": "pythia-160m (reserialized, attested engine)",
+  "n_items": 24,
+  "n_pairs": 12,
+  "protocol": "leave-one-PAIR-out nearest centroid",
+  "verdict": "ORDER_STRUCTURE_READ_BEYOND_SURFACE"
+}
