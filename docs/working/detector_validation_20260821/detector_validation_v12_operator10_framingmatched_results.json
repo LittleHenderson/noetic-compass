@@ -1,0 +1,42 @@
+{
+  "activation_beats_surface": false,
+  "activation_best": 0.5,
+  "activation_minus_surface": -0.05,
+  "activation_per_operator": {
+    "^0": "2/2",
+    "^1": "0/2",
+    "^2": "2/2",
+    "^3": "1/2",
+    "^4": "2/2",
+    "^5": "1/2",
+    "^6": "0/2",
+    "^7": "1/2",
+    "^8": "1/2",
+    "^9": "0/2"
+  },
+  "axis": "Operator-10 ^0..^9, framing-matched (train canonical colloquialisms, test FRESH non-colloquial phrasings)",
+  "best_layer_selected_on_test": 5,
+  "caveat": "activation best-of-12-layers selected on the 20-item test set; surface gets no selection; n=2 fresh per operator",
+  "chance": 0.1,
+  "char_ngram_per_operator": {
+    "^0": "2/2",
+    "^1": "0/2",
+    "^2": "1/2",
+    "^3": "0/2",
+    "^4": "1/2",
+    "^5": "1/2",
+    "^6": "2/2",
+    "^7": "1/2",
+    "^8": "2/2",
+    "^9": "1/2"
+  },
+  "char_ngram_surface": 0.55,
+  "label_shuffle_null": 0.2,
+  "layers": 12,
+  "model": "pythia-160m (reserialized, attested engine)",
+  "n_test_per_op": 2,
+  "n_test_total": 20,
+  "n_train_per_op": 6,
+  "rule": "HARDENED iff activation >= 0.40 AND beats char-ngram surface by >= 0.15",
+  "verdict": "COLLOQUIALISM_CONFOUNDED"
+}
