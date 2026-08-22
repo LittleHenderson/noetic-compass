@@ -1,0 +1,27 @@
+{
+  "activation_beats_surface": false,
+  "activation_best": 0.667,
+  "activation_minus_surface": -0.167,
+  "activation_per_class": {
+    "^8": "4/6",
+    "^9": "4/6"
+  },
+  "axis": "^8/^9 canonical ASSOCIATIVE TRIGGERING vs ARRIVAL (construct-correct, giveaway-free)",
+  "best_layer_selected_on_test": 2,
+  "caveat": "activation best-of-12-layers on the 12-item test set; surface gets no selection; n=6 fresh per class; ^8 vs ^9 may be intrinsically two halves of one dynamic",
+  "chance": 0.5,
+  "char_ngram_per_class": {
+    "^8": "6/6",
+    "^9": "4/6"
+  },
+  "char_ngram_surface": 0.833,
+  "label_shuffle_null": 0.333,
+  "layers": 12,
+  "model": "pythia-160m (reserialized, attested engine)",
+  "n_test_per_class": 6,
+  "n_test_total": 12,
+  "n_train_per_class": 6,
+  "note": "prior v3/v6/v10 cause-effect used PHYSICAL causation + connectives (drifted construct); this uses the canonical triggering/arrival construct with giveaways stripped",
+  "rule": "HARDENED iff activation >= 0.70 AND beats char-ngram surface by >= 0.10",
+  "verdict": "NOT_SEPARABLE_GIVEAWAYFREE"
+}
