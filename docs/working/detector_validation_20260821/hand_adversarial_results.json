@@ -1,0 +1,24 @@
+{
+  "attack": "hand-adversarial generic lexicons (written without per-item tuning)",
+  "operator10": {
+    "automated_shortest_rule": 0.65,
+    "hand_semantic_lexicon": 1.0,
+    "misses": [],
+    "n": 20,
+    "published_activation": 0.8,
+    "verdict": "BROKEN -- generic lexicon matches/beats the model"
+  },
+  "valence": {
+    "automated_shortest_rule": 0.625,
+    "hand_sentiment_lexicon": 0.938,
+    "misses": [
+      [
+        "neg",
+        "They stood at the gate but no one came off the plane"
+      ]
+    ],
+    "n": 16,
+    "published_activation": 0.938,
+    "verdict": "WEAKENED -- lexicon beats the automated rule"
+  }
+}
