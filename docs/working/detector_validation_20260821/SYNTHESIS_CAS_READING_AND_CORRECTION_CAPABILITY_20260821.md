@@ -1,5 +1,7 @@
 # State of the CAS reading & correction capability — the v1→v17 arc (2026-08-21)
 
+> **⚠ CORRECTED 2026-08-21 (v19).** The **Domain-4** figures below are **BOUNDED**: that stimulus set is 100% solvable by three hand-written regexes (`16/16`), so its char-ngram baseline (`0.438`) understated a true surface ceiling of `1.000`. Domain-4's `+0.500` margin and the claim "reads principle from meaning, not modal words" are **WITHDRAWN as specificity claims**. The binding lesson: **the char-ngram surface control UNDERSTATES the surface ceiling — passing it is necessary, NOT sufficient.** Every stimulus set now needs a template/regex audit (`template_audit.py`) before GPU spend. Valence, Operator-10 and the causal result are **not** corrected by this finding (different stimuli) but have **not been regex-audited either**. See `RESULT_DETECTOR_VALIDATION_V19_DECISIVE_NULL_AND_V11_V15_CORRECTION_20260821.md`.
+
 **Purpose.** One honest, defensible narrative pulling together every detector/steering result run this session on real model weights. Plain English, exact numbers, claim-state separated. This is a research summary — **nothing here is a customer `ACCEPT`, and none of it used the attested-engine canary (which is still `NOT RUN`).** All model runs are `EleutherAI/pythia-160m` (local, CPU, `$0`) and `EleutherAI/pythia-6.9b` (paid RunPod A40, ~$0.85 total), via direct transformers except where noted.
 
 ---
@@ -28,7 +30,7 @@ The test that matters is the **char-ngram surface control**: train a detector on
 | Axis @ 6.9b | detector | word-counter | margin | significance | verdict |
 |---|---|---|---|---|---|
 | Valence `^2`/`^3` | 0.938 | 0.500 | +0.438 | — | clean |
-| Domain-4 P/C/E/O | 0.938 | 0.438 | +0.500 | P=3.65e-07 | clean |
+| Domain-4 P/C/E/O | 0.938 | 0.438 | +0.500 | P=3.65e-07 | **BOUNDED (v19) — regex-solvable stimuli; withdrawn as specificity** |
 | Operator-10 `^0`..`^9` | 0.800 | 0.550 | +0.250 | P=1.04e-11 | clean |
 | `^8`/`^9` cause/effect | 0.917 | 0.833 | +0.083 | P=0.097 | marginal |
 
