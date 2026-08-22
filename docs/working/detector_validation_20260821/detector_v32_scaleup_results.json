@@ -1,0 +1,205 @@
+{
+  "answers_objections": [
+    "n=12 -> 100 pairs / 200 items",
+    "one frame template -> 5 templates, reported per frame"
+  ],
+  "chance": 0.5,
+  "ci_method": "per-pair LOO scores computed once; bootstrap resamples PAIRS; CI is on the SAME statistic as the point estimate (mean over ALL layers)",
+  "design": "SCALE-UP: 100 pairs per contrast across 5 frame templates (20 pairs each)",
+  "layers": 12,
+  "model": "pythia-160m (reserialized, attested engine)",
+  "preflight_gate": {
+    "cas_8_9_control": {
+      "n_pairs": 100,
+      "ngram_residual_max": 0.0,
+      "word_mismatches": 0
+    },
+    "speaker_binding_INJECTION": {
+      "n_pairs": 100,
+      "ngram_residual_max": 0.0,
+      "word_mismatches": 0
+    },
+    "temporal_binding_control": {
+      "n_pairs": 100,
+      "ngram_residual_max": 0.0,
+      "word_mismatches": 0
+    }
+  },
+  "protocol": "leave-one-PAIR-out nearest centroid; verdicts on mean over ALL layers",
+  "sets": {
+    "cas_8_9_control": {
+      "activation_best": 1.0,
+      "activation_best_layer": 3,
+      "activation_mean_over_layers": 0.8033,
+      "activation_per_layer": {
+        "0": 0.725,
+        "1": 0.715,
+        "2": 0.82,
+        "3": 1.0,
+        "4": 0.99,
+        "5": 0.9,
+        "6": 0.88,
+        "7": 0.885,
+        "8": 0.63,
+        "9": 0.82,
+        "10": 0.685,
+        "11": 0.59
+      },
+      "bag_of_words": 0.5,
+      "baselines_note": "FORCED to 0.500 by construction (gate verified, residual 0.000000)",
+      "bootstrap95_mean_over_layers": [
+        0.7883,
+        0.8183
+      ],
+      "char_ngram": 0.5,
+      "ci_contains_point_estimate": true,
+      "n_frames": 5,
+      "n_items": 200,
+      "n_pairs": 100,
+      "per_frame": {
+        "frame_0": {
+          "best_layer_acc": 1.0,
+          "mean_over_layers": 0.7271,
+          "n_pairs": 20
+        },
+        "frame_1": {
+          "best_layer_acc": 1.0,
+          "mean_over_layers": 0.8292,
+          "n_pairs": 20
+        },
+        "frame_2": {
+          "best_layer_acc": 1.0,
+          "mean_over_layers": 0.7646,
+          "n_pairs": 20
+        },
+        "frame_3": {
+          "best_layer_acc": 1.0,
+          "mean_over_layers": 0.8562,
+          "n_pairs": 20
+        },
+        "frame_4": {
+          "best_layer_acc": 1.0,
+          "mean_over_layers": 0.8396,
+          "n_pairs": 20
+        }
+      },
+      "token_length_mismatches": 0
+    },
+    "speaker_binding_INJECTION": {
+      "activation_best": 0.71,
+      "activation_best_layer": 3,
+      "activation_mean_over_layers": 0.5683,
+      "activation_per_layer": {
+        "0": 0.57,
+        "1": 0.51,
+        "2": 0.52,
+        "3": 0.71,
+        "4": 0.685,
+        "5": 0.565,
+        "6": 0.545,
+        "7": 0.565,
+        "8": 0.54,
+        "9": 0.545,
+        "10": 0.555,
+        "11": 0.51
+      },
+      "bag_of_words": 0.5,
+      "baselines_note": "FORCED to 0.500 by construction (gate verified, residual 0.000000)",
+      "bootstrap95_mean_over_layers": [
+        0.5563,
+        0.5813
+      ],
+      "char_ngram": 0.5,
+      "ci_contains_point_estimate": true,
+      "n_frames": 5,
+      "n_items": 200,
+      "n_pairs": 100,
+      "per_frame": {
+        "frame_0": {
+          "best_layer_acc": 0.725,
+          "mean_over_layers": 0.5687,
+          "n_pairs": 20
+        },
+        "frame_1": {
+          "best_layer_acc": 0.775,
+          "mean_over_layers": 0.5958,
+          "n_pairs": 20
+        },
+        "frame_2": {
+          "best_layer_acc": 0.725,
+          "mean_over_layers": 0.5542,
+          "n_pairs": 20
+        },
+        "frame_3": {
+          "best_layer_acc": 0.7,
+          "mean_over_layers": 0.5708,
+          "n_pairs": 20
+        },
+        "frame_4": {
+          "best_layer_acc": 0.675,
+          "mean_over_layers": 0.5521,
+          "n_pairs": 20
+        }
+      },
+      "token_length_mismatches": 0
+    },
+    "temporal_binding_control": {
+      "activation_best": 0.97,
+      "activation_best_layer": 3,
+      "activation_mean_over_layers": 0.7367,
+      "activation_per_layer": {
+        "0": 0.805,
+        "1": 0.735,
+        "2": 0.765,
+        "3": 0.97,
+        "4": 0.81,
+        "5": 0.715,
+        "6": 0.75,
+        "7": 0.79,
+        "8": 0.64,
+        "9": 0.7,
+        "10": 0.62,
+        "11": 0.54
+      },
+      "bag_of_words": 0.5,
+      "baselines_note": "FORCED to 0.500 by construction (gate verified, residual 0.000000)",
+      "bootstrap95_mean_over_layers": [
+        0.7142,
+        0.7592
+      ],
+      "char_ngram": 0.5,
+      "ci_contains_point_estimate": true,
+      "n_frames": 5,
+      "n_items": 200,
+      "n_pairs": 100,
+      "per_frame": {
+        "frame_0": {
+          "best_layer_acc": 1.0,
+          "mean_over_layers": 0.6354,
+          "n_pairs": 20
+        },
+        "frame_1": {
+          "best_layer_acc": 1.0,
+          "mean_over_layers": 0.7312,
+          "n_pairs": 20
+        },
+        "frame_2": {
+          "best_layer_acc": 1.0,
+          "mean_over_layers": 0.875,
+          "n_pairs": 20
+        },
+        "frame_3": {
+          "best_layer_acc": 1.0,
+          "mean_over_layers": 0.7812,
+          "n_pairs": 20
+        },
+        "frame_4": {
+          "best_layer_acc": 0.95,
+          "mean_over_layers": 0.6604,
+          "n_pairs": 20
+        }
+      },
+      "token_length_mismatches": 0
+    }
+  }
+}
