@@ -1,0 +1,46 @@
+{
+  "R_splits": 20,
+  "cas_act_minus_surface": 0.188,
+  "cas_activation": 0.85,
+  "cas_privileged": false,
+  "chance": 0.25,
+  "layers": 12,
+  "model": "pythia-160m (reserialized, attested engine)",
+  "n_items": 32,
+  "noncas_act_minus_surface_max": 0.3,
+  "noncas_activation_max": 0.419,
+  "noncas_activation_mean": 0.375,
+  "partitions": {
+    "CAS_domain": {
+      "act_minus_surface": 0.188,
+      "activation_mean": 0.85,
+      "activation_std": 0.122,
+      "surface_mean": 0.662
+    },
+    "sentence_length_quartile": {
+      "act_minus_surface": 0.244,
+      "activation_mean": 0.381,
+      "activation_std": 0.115,
+      "surface_mean": 0.138
+    },
+    "topicpair_A": {
+      "act_minus_surface": 0.263,
+      "activation_mean": 0.419,
+      "activation_std": 0.099,
+      "surface_mean": 0.156
+    },
+    "topicpair_B": {
+      "act_minus_surface": 0.3,
+      "activation_mean": 0.369,
+      "activation_std": 0.115,
+      "surface_mean": 0.069
+    },
+    "topicpair_C": {
+      "act_minus_surface": 0.269,
+      "activation_mean": 0.331,
+      "activation_std": 0.127,
+      "surface_mean": 0.062
+    }
+  },
+  "verdict": "CAS_NOT_PRIVILEGED_OVER_NONCAS"
+}
