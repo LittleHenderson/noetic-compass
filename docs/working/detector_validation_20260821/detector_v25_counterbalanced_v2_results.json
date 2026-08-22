@@ -1,0 +1,40 @@
+{
+  "activation_best": 1.0,
+  "activation_best_layer": 0,
+  "activation_mean_over_layers": 0.917,
+  "activation_per_layer": {
+    "0": 1.0,
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 1.0,
+    "6": 0.958,
+    "7": 0.875,
+    "8": 0.833,
+    "9": 0.792,
+    "10": 0.792,
+    "11": 0.75
+  },
+  "bag_of_words_baseline": 0.5,
+  "chance": 0.5,
+  "char_ngram_bag_residual_max": 0.0,
+  "char_ngram_bag_residual_mean": 0.0,
+  "char_ngram_baseline": 0.5,
+  "comparison": {
+    "delta_best_vs_v23": 0.0,
+    "delta_mean_vs_v23": -0.021,
+    "v23_best_positional": 1.0,
+    "v23_mean": 0.938
+  },
+  "design": "COUNTERBALANCED v2 -- position removed AND junction leak closed; only long-range before/after BINDING differs",
+  "layers": 12,
+  "model": "pythia-160m (reserialized, attested engine)",
+  "n_items": 24,
+  "n_pairs": 12,
+  "position_counterbalanced": true,
+  "preflight_gate": "PASSED (word multisets identical AND ngram residual <= 0.001)",
+  "preregistered_expectation": "if v23 was purely positional, accuracy FALLS toward chance here",
+  "protocol": "leave-one-PAIR-out nearest centroid",
+  "verdict": "ROLE_BINDING_READ -- survives position counterbalance AND surface match"
+}
