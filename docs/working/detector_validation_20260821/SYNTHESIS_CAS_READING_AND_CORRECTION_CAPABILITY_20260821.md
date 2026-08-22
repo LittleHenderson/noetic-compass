@@ -8,7 +8,7 @@
 
 ## 1. The one-paragraph bottom line
 
-On a real 6.9-billion-parameter model, the harness **reads four CAS axes out of the hidden state in a way that beats a plain word-counter** — valence, the 10 Noetic operators, the 4 Domains (all cleanly), and cause/effect (marginally). The same axes **fail** that word-counter test on a tiny 160M model: the reading ability **hardens with scale**, it is not a small-model artifact, and it is not giveaway-word matching. On the correction side, the **valence direction is a genuine causal lever** at scale — pushing it moves the model's output valence far more than a random nudge. **But** an adversarial check stopped us from over-reading the other axes' "steering": beating a *random* nudge is not the same as proving the effect is *specifically CAS*. So the live thesis (Claim B — CAS as a measurement-and-correction language) has real, multi-axis support at scale, while the deepest question — **is the structure specifically CAS, or generic meaning wearing CAS labels?** — stays **`GREY`**.
+On a real 6.9-billion-parameter model, the harness **reads four CAS axes out of the hidden state in a way that beats a plain word-counter** — valence and the 10 Noetic operators (cleanly), cause/effect (marginally), and the 4 Domains (**since BOUNDED — those stimuli proved regex-solvable, see banner**). The same axes **fail** that word-counter test on a tiny 160M model: the reading ability **hardens with scale**, it is not a small-model artifact, and it is not giveaway-word matching. On the correction side, the **valence direction is a genuine causal lever** at scale — pushing it moves the model's output valence far more than a random nudge. **But** an adversarial check stopped us from over-reading the other axes' "steering": beating a *random* nudge is not the same as proving the effect is *specifically CAS*. So the live thesis (Claim B — CAS as a measurement-and-correction language) has real, multi-axis support at scale, while the deepest question — **is the structure specifically CAS, or generic meaning wearing CAS labels?** — stays **`GREY`**.
 
 ---
 
@@ -34,7 +34,7 @@ The test that matters is the **char-ngram surface control**: train a detector on
 | Operator-10 `^0`..`^9` | 0.800 | 0.550 | +0.250 | P=1.04e-11 | clean |
 | `^8`/`^9` cause/effect | 0.917 | 0.833 | +0.083 | P=0.097 | marginal |
 
-Notable recoveries at scale: Domain "principled" went from collapsing to `1/4` when modal words were stripped (160m) to `3/4` (6.9b) — the big model reads *principle from meaning, not modal words*. Operator-10 went from colloquialism-carried (lost at 160m) to reading the 10 Noetics from *fresh wording* (won at 6.9b).
+Notable recovery at scale: Operator-10 went from colloquialism-carried (lost at 160m) to reading the 10 Noetics from *fresh wording* (won at 6.9b). **(The former Domain "principled recovers `1/4`→`3/4`, reads principle from meaning not modal words" claim is WITHDRAWN by v19 — the P sentences merely traded modal markers for contrastive-connective markers, equally lexical.)**
 
 ---
 
