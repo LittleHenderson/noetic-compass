@@ -1,0 +1,39 @@
+{
+  "activation_best": 1.0,
+  "activation_best_layer": 0,
+  "activation_mean_over_layers": 0.993,
+  "activation_per_layer": {
+    "0": 1.0,
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 1.0,
+    "6": 1.0,
+    "7": 1.0,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 0.917
+  },
+  "bag_of_words_baseline": 0.5,
+  "chance": 0.5,
+  "char_ngram_bag_residual_max": 0.03077,
+  "char_ngram_bag_residual_mean": 0.02776,
+  "char_ngram_baseline": 1.0,
+  "design": "COUNTERBALANCED role pairs -- sensory phrase in slot 1 in BOTH members; only temporal binding flips",
+  "layers": 12,
+  "model": "pythia-160m (reserialized, attested engine)",
+  "n_items": 24,
+  "n_pairs": 12,
+  "position_counterbalanced": true,
+  "preregistered_expectation": "if v23 was positional, accuracy FALLS toward chance here",
+  "protocol": "leave-one-PAIR-out nearest centroid",
+  "v23_comparison": {
+    "delta_best": 0.0,
+    "delta_mean": 0.055,
+    "v23_activation_best": 1.0,
+    "v23_mean_over_layers": 0.938
+  },
+  "verdict": "ABOVE_CHANCE_BUT_UNDER_GATE"
+}
