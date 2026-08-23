@@ -4,7 +4,7 @@ Written 2026-08-23 ~21:45Z. Everything below is verified fact. Read it all befor
 
 ## 0. Status at handoff
 
-**Attempt 4 is RUNNING RIGHT NOW** on instance `i-0e5cb321655de7875` (g6e.xlarge, us-west-2a), bootstrap v4 (single-session container). Do NOT launch another instance while it runs.
+**Attempt 4 FAILED (accelerate missing — see §6 item 6) and is terminating.** Attempt 5 is YOURS to launch with `bootstrap_userdata.sh` **v5** (adds `accelerate`). The bundle on S3 is already v5.
 
 Live evidence:
 - job log: `s3://cas-harness-runpod-92754088/bridge-control-20260822/logs/job.log`
@@ -65,6 +65,7 @@ All in `docs/working/gate2_closure/bridge_control_20260822/` (successor worktree
 3. Each `docker run --rm` is ephemeral — deps installed in one container are absent in the next. The ENTIRE pipeline (deps → model download → run) must be ONE docker session (v4 does this).
 4. Role credentials take up to ~2 min to propagate after policy attach — bootstrap waits up to 5 min.
 5. Attempts 1–3 produced ZERO experiment data; total infra overhead ≈ $5.85 + attempt 4 in flight. Cap every run at $4 of experiment cost; self-terminate + 2h shutdown failsafe are in the bootstrap.
+6. Attempt 4: NGC 24.10 image ships no `accelerate`; `device_map="auto"` raises. **Add `accelerate` to the container pip line** (v5 does).
 
 ## 7. Never change / never claim
 

@@ -94,3 +94,7 @@ Attempt 2 (instance `i-030d049169a66ea0e`) failed at venv creation: the DL AMI s
 ## 12. AMENDMENT A4 (2026-08-23, third pre-execution retry) — ephemeral-container mistake fixed; single-session container
 
 Attempt 3 (instance `i-0ea63764389961dcf`) reached the container stage (NGC 24.10 pulled, deps installed, versions verified) but died at model download: each `docker run --rm` step is an ephemeral container, so the deps installed in one step were absent in the next. **Zero experiment data again** (overhead ≈ **$0.27**). Bootstrap v4 runs deps → model download → experiment in **one container session** (`set -e` inside), with the same mounted cache, plus the unchanged failsafes. **No criterion, template, condition, or fixture byte changed.**
+
+## 13. AMENDMENT A5 (2026-08-23, fourth pre-execution retry) — NGC image lacks `accelerate`
+
+Attempt 4 (instance `i-0e5cb321655de7875`) reached the container session with the corrected single-session pipeline and failed only because `device_map="auto"` requires the `accelerate` package, which the NGC 24.10 image does not ship by default (deps verified: torch 2.5.0a0+…nv24.10, transformers 5.8.1). **Zero experiment data again** (overhead ≈ **$0.06**; self-terminate fired correctly). Bootstrap v5 adds `accelerate` to the container pip line. **No criterion, template, condition, or fixture byte changed.**
