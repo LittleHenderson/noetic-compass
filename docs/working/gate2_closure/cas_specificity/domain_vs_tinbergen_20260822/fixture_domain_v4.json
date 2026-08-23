@@ -1,0 +1,58 @@
+{
+ "domains": [
+  "P",
+  "C",
+  "E",
+  "O"
+ ],
+ "topics": {
+  "cooking": {
+   "C": "Water boils at one hundred degrees Celsius at sea level",
+   "E": "This risotto is the most delicious dish on the whole menu",
+   "O": "First dice the onion, then fry it slowly until it turns golden",
+   "P": "A cook must never knowingly serve food that is unsafe to eat"
+  },
+  "finance": {
+   "C": "Compound interest grows a balance faster than simple interest does",
+   "E": "This fund is a poor choice with mediocre returns and high fees",
+   "O": "First open the account, then transfer the funds and confirm the balance",
+   "P": "An advisor ought to disclose every conflict of interest honestly"
+  },
+  "gardening": {
+   "C": "Photosynthesis converts sunlight and water into sugars for the plant",
+   "E": "This rose garden is the most breathtaking display in the city",
+   "O": "First loosen the soil, then plant the seed and water it gently",
+   "P": "A gardener ought to avoid pesticides that harm pollinating bees"
+  },
+  "law": {
+   "C": "A contract requires an offer, acceptance, and consideration to be valid",
+   "E": "This ruling is a brilliant and well reasoned piece of jurisprudence",
+   "O": "First file the motion, then serve the notice on the opposing party",
+   "P": "A witness has a duty to tell the whole truth under oath"
+  },
+  "medicine": {
+   "C": "The human heart has four chambers that pump blood through the body",
+   "E": "This new treatment is far superior to the older, harsher one",
+   "O": "First clean the wound, then apply the dressing and secure it",
+   "P": "A doctor is obligated to protect the confidentiality of every patient"
+  },
+  "music": {
+   "C": "An octave spans twelve equal semitones in standard tuning",
+   "E": "This symphony is a sublime and deeply moving masterpiece",
+   "O": "First tune the strings, then set the tempo and begin the piece",
+   "P": "A performer should credit every artist whose work they sample"
+  },
+  "sports": {
+   "C": "A marathon covers a distance of just over forty two kilometres",
+   "E": "That was the greatest comeback victory the sport has ever seen",
+   "O": "First stretch your muscles, then jog a slow lap to warm up",
+   "P": "Athletes should compete fairly and never use banned substances"
+  },
+  "travel": {
+   "C": "The Earth is divided into twenty four standard time zones",
+   "E": "This coastal town is the loveliest place I have ever visited",
+   "O": "First pack your bag, then check in online and print the boarding pass",
+   "P": "A traveller should respect the customs and laws of every host country"
+  }
+ }
+}

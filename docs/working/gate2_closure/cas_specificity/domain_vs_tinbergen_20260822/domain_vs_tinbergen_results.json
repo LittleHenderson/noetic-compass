@@ -1,0 +1,290 @@
+{
+  "arms": {
+    "CAS_DOMAIN": {
+      "best_acc": 1.0,
+      "best_layer": 2,
+      "best_random_subspace": 0.25,
+      "best_shuffle_mean": 0.25875,
+      "layer_mean": 0.875,
+      "layer_sweep": {
+        "0": {
+          "random_subspace": 0.25,
+          "real": 0.75,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2525
+        },
+        "1": {
+          "random_subspace": 0.375,
+          "real": 0.75,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2525
+        },
+        "10": {
+          "random_subspace": 0.25,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "11": {
+          "random_subspace": 0.5,
+          "real": 0.375,
+          "shuffle_max": 0.625,
+          "shuffle_mean": 0.2625
+        },
+        "2": {
+          "random_subspace": 0.25,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "3": {
+          "random_subspace": 0.375,
+          "real": 0.875,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2575
+        },
+        "4": {
+          "random_subspace": 0.0,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "5": {
+          "random_subspace": 0.5,
+          "real": 0.875,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2575
+        },
+        "6": {
+          "random_subspace": 0.5,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "7": {
+          "random_subspace": 0.25,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "8": {
+          "random_subspace": 0.625,
+          "real": 0.875,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25625
+        },
+        "9": {
+          "random_subspace": 0.875,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        }
+      },
+      "name": "CAS_DOMAIN_PCEO"
+    },
+    "TIN_PRIMARY": {
+      "best_acc": 1.0,
+      "best_layer": 2,
+      "best_random_subspace": 0.25,
+      "best_shuffle_mean": 0.25875,
+      "layer_mean": 0.875,
+      "layer_sweep": {
+        "0": {
+          "random_subspace": 0.25,
+          "real": 0.75,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2525
+        },
+        "1": {
+          "random_subspace": 0.375,
+          "real": 0.75,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2525
+        },
+        "10": {
+          "random_subspace": 0.25,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "11": {
+          "random_subspace": 0.5,
+          "real": 0.375,
+          "shuffle_max": 0.625,
+          "shuffle_mean": 0.2625
+        },
+        "2": {
+          "random_subspace": 0.25,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "3": {
+          "random_subspace": 0.375,
+          "real": 0.875,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2575
+        },
+        "4": {
+          "random_subspace": 0.0,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "5": {
+          "random_subspace": 0.5,
+          "real": 0.875,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2575
+        },
+        "6": {
+          "random_subspace": 0.5,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "7": {
+          "random_subspace": 0.25,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "8": {
+          "random_subspace": 0.625,
+          "real": 0.875,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25625
+        },
+        "9": {
+          "random_subspace": 0.875,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        }
+      },
+      "name": "TINBERGEN_ALIGNED_PRIMARY"
+    },
+    "TIN_SENSITIVITY": {
+      "best_acc": 1.0,
+      "best_layer": 2,
+      "best_random_subspace": 0.25,
+      "best_shuffle_mean": 0.25875,
+      "layer_mean": 0.875,
+      "layer_sweep": {
+        "0": {
+          "random_subspace": 0.25,
+          "real": 0.75,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2525
+        },
+        "1": {
+          "random_subspace": 0.375,
+          "real": 0.75,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2525
+        },
+        "10": {
+          "random_subspace": 0.25,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "11": {
+          "random_subspace": 0.5,
+          "real": 0.375,
+          "shuffle_max": 0.625,
+          "shuffle_mean": 0.2625
+        },
+        "2": {
+          "random_subspace": 0.25,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "3": {
+          "random_subspace": 0.375,
+          "real": 0.875,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2575
+        },
+        "4": {
+          "random_subspace": 0.0,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "5": {
+          "random_subspace": 0.5,
+          "real": 0.875,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.2575
+        },
+        "6": {
+          "random_subspace": 0.5,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "7": {
+          "random_subspace": 0.25,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        },
+        "8": {
+          "random_subspace": 0.625,
+          "real": 0.875,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25625
+        },
+        "9": {
+          "random_subspace": 0.875,
+          "real": 1.0,
+          "shuffle_max": 0.75,
+          "shuffle_mean": 0.25875
+        }
+      },
+      "name": "TINBERGEN_POSITIONAL_SENSITIVITY"
+    }
+  },
+  "bijection_primary": {
+    "C": "function / survival value",
+    "E": "ontogeny / development",
+    "O": "mechanism / proximate causation",
+    "P": "phylogeny / evolutionary history"
+  },
+  "bijection_sensitivity": {
+    "C": "ontogeny / development",
+    "E": "function / survival value",
+    "O": "phylogeny / evolutionary history",
+    "P": "mechanism / proximate causation"
+  },
+  "captures_sha256": "f5c93ab4cf2ad08e1b9ff15cdf2fc1e741151d6b470bb40f1a7e7c569a4c7749",
+  "chance": 0.25,
+  "criteria": {
+    "C1_cas_sanity": true,
+    "C2_tin_sanity": true,
+    "C3_cas_minus_tin_ge_010": false,
+    "C4_mcnemar_le_005": false,
+    "delta_layer_mean": 0.0,
+    "mcnemar_p": 1.0
+  },
+  "design": "nearest_centroid_4way_train6topics_test2topics_all12layers",
+  "fixture_sha256": "0fb11c26a17203edfa8d3bb3a8017e80ea1707c99103612151ca0e7454ce0d7b",
+  "mcnemar_at_best_cas_layer": {
+    "cas_right_tin_wrong": 0,
+    "cas_wrong_tin_right": 0,
+    "layer": 2,
+    "p": 1.0
+  },
+  "model": {
+    "layers": 12,
+    "model_id": "pythia-160m-reserialized",
+    "revision": "d5861d3237c5f8e952b4ebf05179f3bc50d479186fbe96845d22660d96c50d97"
+  },
+  "n_test_items": 8,
+  "prereg": "PREREG_DOMAIN_VS_TINBERGEN_20260822.md",
+  "runner_sha256": "75cc73d9301ad23dbd058be2cecec37ef9a9cbb85794cc367c652d626cabf043",
+  "schema": "domain_vs_tinbergen_20260822.v1",
+  "verdict": "DOMAIN_DOES_NOT_BEAT_GENERIC_ABSTRACTNESS"
+}
