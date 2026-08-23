@@ -21,24 +21,15 @@ stage "creds ok"
 nvidia-smi 2>&1 | tee -a $LOG || stage "nvidia-smi warn"
 stage "docker check"
 docker ps >/dev/null 2>&1 || fail "docker not usable"
-stage "pulling NGC pytorch 24.10 (torch 2.5.1 cu124, ~9GB)"
+stage "pulling NGC pytorch 24.10 (torch 2.5.0 nv, ~9GB)"
 docker pull nvcr.io/nvidia/pytorch:24.10-py3 2>&1 | tail -3 | tee -a $LOG || fail "docker pull"
 stage "image pulled"
 mkdir -p /workspace/run && cd /workspace/run
 s3cp_retry s3://$BUCKET/$PREFIX/bundle.zip bundle.zip || fail "bundle download"
 unzip -q bundle.zip
 stage "bundle unpacked"
-docker run --gpus all --rm --ipc=host --shm-size=8g -v /workspace:/workspace -e HF_HOME=/workspace/hf-cache -e TRANSFORMERS_CACHE=/workspace/hf-cache nvcr.io/nvidia/pytorch:24.10-py3 bash -c "pip install --quiet scikit-learn numpy transformers==5.8.1 2>&1 | tail -2; python -c 'import torch, transformers; print(\"versions\", torch.__version__, transformers.__version__)'" 2>&1 | tee -a $LOG || fail "container deps"
-stage "deps installed"
-REV=""
-if [ -d "$HF_HOME/hub/models--EleutherAI--gpt-neox-20b/snapshots" ]; then REV=$(ls "$HF_HOME/hub/models--EleutherAI--gpt-neox-20b/snapshots" | head -1); fi
-if [ -z "$REV" ]; then
-  stage "downloading model 40GB"
-  docker run --gpus all --rm --ipc=host --shm-size=8g -v /workspace:/workspace -e HF_HOME=/workspace/hf-cache -e TRANSFORMERS_CACHE=/workspace/hf-cache nvcr.io/nvidia/pytorch:24.10-py3 bash -c "python -c 'import torch; from transformers import AutoModelForCausalLM, AutoTokenizer; m = AutoModelForCausalLM.from_pretrained(\"EleutherAI/gpt-neox-20b\", torch_dtype=torch.float16, device_map=\"auto\"); t = AutoTokenizer.from_pretrained(\"EleutherAI/gpt-neox-20b\"); print(\"loaded params\", m.num_parameters())'" 2>&1 | tail -4 | tee -a $LOG || fail "model download"
-  REV=$(ls "$HF_HOME/hub/models--EleutherAI--gpt-neox-20b/snapshots" | head -1)
-fi
-stage "model ready revision=$REV"
-docker run --gpus all --rm --ipc=host --shm-size=8g -v /workspace:/workspace -e HF_HOME=/workspace/hf-cache -e TRANSFORMERS_CACHE=/workspace/hf-cache -w /workspace/run/scripts nvcr.io/nvidia/pytorch:24.10-py3 bash -c "timeout 5400 python run_bridge_control_20b.py --fixture /workspace/run/bridge_control/bridge_control_fixture_20260822.json --output /workspace/run/bridge_control_results_20260822.json --model-revision '$REV'" 2>&1 | tee -a $LOG || fail "runner"
+stage "container: deps -> model -> run (single session)"
+docker run --gpus all --rm --ipc=host --shm-size=8g -v /workspace:/workspace -e HF_HOME=/workspace/hf-cache -e TRANSFORMERS_CACHE=/workspace/hf-cache -w /workspace/run/scripts nvcr.io/nvidia/pytorch:24.10-py3 bash -c "set -e; pip install --quiet scikit-learn numpy transformers==5.8.1; python -c 'import torch, transformers; print(\"versions\", torch.__version__, transformers.__version__)'; REV=\$(ls /workspace/hf-cache/hub/models--EleutherAI--gpt-neox-20b/snapshots 2>/dev/null | head -1 || true); if [ -z \"\$REV\" ]; then echo DOWNLOADING_MODEL_40GB; timeout 3600 python -c 'import torch; from transformers import AutoModelForCausalLM, AutoTokenizer; m = AutoModelForCausalLM.from_pretrained(\"EleutherAI/gpt-neox-20b\", torch_dtype=torch.float16, device_map=\"auto\"); t = AutoTokenizer.from_pretrained(\"EleutherAI/gpt-neox-20b\"); print(\"loaded params\", m.num_parameters())'; REV=\$(ls /workspace/hf-cache/hub/models--EleutherAI--gpt-neox-20b/snapshots | head -1); fi; echo MODEL_REV=\$REV; timeout 5400 python run_bridge_control_20b.py --fixture /workspace/run/bridge_control/bridge_control_fixture_20260822.json --output /workspace/run/bridge_control_results_20260822.json --model-revision \"\$REV\"" 2>&1 | tee -a $LOG || fail "container session"
 stage "run complete"
 s3cp_retry /workspace/run/bridge_control_results_20260822.json s3://$BUCKET/$PREFIX/results/bridge_control_results_20260822.json || fail "results upload"
 stage "results uploaded"

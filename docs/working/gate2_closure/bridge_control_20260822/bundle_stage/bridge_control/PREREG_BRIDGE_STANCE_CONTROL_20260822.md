@@ -90,3 +90,7 @@ Attempt 1 (instance `i-07d520cdebaa4d90f`) never reached the experiment: the sys
 ## 11. AMENDMENT A3 (2026-08-23, second pre-execution retry) — AMI lacks python3-venv; switch to NGC container
 
 Attempt 2 (instance `i-030d049169a66ea0e`) failed at venv creation: the DL AMI ships no `python3-venv`, and apt is unreachable because the standby security group allows egress on 443 only. **Zero experiment data again**; the instance was terminated by local control (overhead ≈ **$0.93**). Bootstrap v3 switches to the DL AMI's preinstalled Docker engine — `nvcr.io/nvidia/pytorch:24.10-py3` (torch 2.5.1, CUDA 12.4, pulled over 443) with the model, cache, and results on the mounted `/workspace` volume — plus a 2-hour `shutdown` failsafe independent of any AWS API. **No criterion, template, condition, or fixture byte changed.**
+
+## 12. AMENDMENT A4 (2026-08-23, third pre-execution retry) — ephemeral-container mistake fixed; single-session container
+
+Attempt 3 (instance `i-0ea63764389961dcf`) reached the container stage (NGC 24.10 pulled, deps installed, versions verified) but died at model download: each `docker run --rm` step is an ephemeral container, so the deps installed in one step were absent in the next. **Zero experiment data again** (overhead ≈ **$0.27**). Bootstrap v4 runs deps → model download → experiment in **one container session** (`set -e` inside), with the same mounted cache, plus the unchanged failsafes. **No criterion, template, condition, or fixture byte changed.**
