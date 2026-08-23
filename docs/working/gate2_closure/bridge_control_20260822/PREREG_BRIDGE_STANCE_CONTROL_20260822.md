@@ -78,3 +78,7 @@ A `CAS_FRAMING_ADDS_BEYOND_CONTENT` licenses exactly: *"on the frozen 80-case 40
 - runner `run_bridge_control_20b.py`: `0b15888dd3d655b52c64196a0e535260884ed0bb38fedc3c3993c5538bfcf2b4`
 - builder `build_control_fixture.py`: `a07859e9f2258acf4d43159053968a8f85553490076aa83f4350dd7edc9a0809`
 - fixture: `042ff22bf5b6ce8e9336c02bb7687b8ba75b077bb39e0fb55429cc90ec9c34cb`
+
+## 9. AMENDMENT A1 (2026-08-22, pre-execution) — runner repathed for the Linux host
+
+The runner's platform-path constants were replaced with `__file__`-relative paths so the same script executes on the AWS Ubuntu host. No condition, template, criterion, or fixture byte changed. The §8 runner hash is superseded: new runner sha256 `ec85c0788a67cd40cbbe4cfd3c141c070ea335dbfc0302e42bece294bd17607c`. The execution binding (§6) is unchanged.

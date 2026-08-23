@@ -12,8 +12,7 @@ binding; records model revision + fixture sha256 in the output.
 import argparse, hashlib, json, math, pathlib, sys, datetime
 import numpy as np
 
-R2 = pathlib.Path(r"C:\Users\wakil\Documents\Codex\2026-08-05\referenced-chatgpt-conversation-this-is-an\work\cas_interpretability_successor_20260820")
-SCRIPTS = R2 / "noetic-compass-scaffold" / "noetic-compass" / "live-trace-worker" / "scripts"
+SCRIPTS = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPTS))
 from run_open_weight_eta_epsilon_bridge import mean_logprob_continuation  # noqa: E402
 from run_open_weight_probe_shard import ProbeShardConfig, load_open_weight_model  # noqa: E402
