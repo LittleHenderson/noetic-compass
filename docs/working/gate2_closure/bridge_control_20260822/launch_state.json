@@ -1,6 +1,6 @@
 {
-  "instance_id": "i-0ea63764389961dcf",
-  "launched_at": 1787520613.4497588,
-  "subnet": "subnet-02deacfa16bdaa4f4",
-  "az": "us-west-2b"
+  "instance_id": "i-0e5cb321655de7875",
+  "launched_at": 1787521225.7073479,
+  "subnet": "subnet-0bb8fa82c2a7177b3",
+  "az": "us-west-2a"
 }
