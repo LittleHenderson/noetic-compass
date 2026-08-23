@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import boto3, json, pathlib, time, datetime, sys
+import boto3, json, pathlib, time, datetime
 SP = pathlib.Path(__file__).resolve().parent
 s = boto3.Session(region_name="us-west-2")
 ec2, s3 = s.client("ec2"), s.client("s3")
@@ -13,7 +13,7 @@ def state():
 def log_tail():
     try:
         obj = s3.get_object(Bucket=BUCKET, Key=f"{PREFIX}/logs/job.log")
-        return obj["Body"].read().decode(errors="replace")[-1500:]
+        return obj["Body"].read().decode(errors="replace")[-2000:]
     except Exception:
         return None
 print("monitor start", iid, flush=True)
@@ -21,7 +21,7 @@ while True:
     now = time.time()
     st_ = state()
     log = log_tail()
-    print(f"[{datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M:%SZ')}] state={st_}", flush=True)
+    print(f"[{datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M:%SZ')}] state={st_} log={'yes' if log else 'none-yet'}", flush=True)
     if log:
         print(log, flush=True)
     if st_ == "terminated":
@@ -32,4 +32,4 @@ while True:
         ec2.modify_instance_attribute(InstanceId=iid, DisableApiTermination={"Value": False})
         ec2.terminate_instances(InstanceIds=[iid])
         break
-    time.sleep(60)
+    time.sleep(45)

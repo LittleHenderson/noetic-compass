@@ -82,3 +82,7 @@ A `CAS_FRAMING_ADDS_BEYOND_CONTENT` licenses exactly: *"on the frozen 80-case 40
 ## 9. AMENDMENT A1 (2026-08-22, pre-execution) — runner repathed for the Linux host
 
 The runner's platform-path constants were replaced with `__file__`-relative paths so the same script executes on the AWS Ubuntu host. No condition, template, criterion, or fixture byte changed. The §8 runner hash is superseded: new runner sha256 `ec85c0788a67cd40cbbe4cfd3c141c070ea335dbfc0302e42bece294bd17607c`. The execution binding (§6) is unchanged.
+
+## 10. AMENDMENT A2 (2026-08-23, pre-execution retry) — first bootstrap attempt failed BEFORE the experiment
+
+Attempt 1 (instance `i-07d520cdebaa4d90f`) never reached the experiment: the system pip install raced PEP 668 and the instance-role credential propagation, so no job log ever landed in S3 and the trap's self-terminate could not authenticate. **Zero experiment data was produced or recorded**; the local watchdog force-terminated the instance at the 150-minute bound. Attempt-1 spend ≈ **$4.65** is recorded as infrastructure overhead, not experiment cost. The bootstrap is hardened for the retry (venv installs, a 5-minute credential-wait loop, a retry-hardened fail path) — **no criterion, template, condition, or fixture byte changed.** The retry re-launches under the same §5 criteria and §6 binding; the new instance id is recorded in `launch_state.json`.
