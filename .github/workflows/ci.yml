@@ -71,6 +71,18 @@ jobs:
           -s scripts/tests
           -p 'test_ccb_r1_stage5.py'
 
+      - name: Run the CCB-R1 board-side arm and the B4 construct-validity control
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_ccb_r1_board.py'
+
+      - name: Run the CCB-R1 Wrap Pipeline arm (wrapped vs bare falsifiability)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_ccb_r1_wrap.py'
+
       - name: Lint the CCB-R1 reference boards (Stage 0 conformance)
         run: |
           # The audited board must stay rejected and the rebuild must stay clean.
