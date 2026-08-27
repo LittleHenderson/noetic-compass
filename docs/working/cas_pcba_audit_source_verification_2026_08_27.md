@@ -9,9 +9,10 @@
 | :--- | :--- | :--- |
 | CAS-Ohm Quantification Guide | `docs/reference/pdf/CAS_Ohm_Quantification_Guide.pdf` | `89ae13c0…45ce64` |
 | CAS-Ohm 1.0 Research Paper v0.2 | `docs/reference/pdf/RESEARCH_PAPER_CAS_OHM_1_0_v0.2.pdf` | `21a34501…2d69bf` |
+| CAS PCBA Engineer (supplied as .docx) | `docs/reference/pdf/CAS_PCBA_Engineer.docx` | `018b5c5d…30ed3` |
 
-**Still missing:** `CAS_PCBA_Engineer.pdf`. Everything attributed to it below stays
-unverifiable.
+**All three sources are now in the repository.** Nothing in the CCB-R1 audit remains
+unverifiable for want of a source. See §7.
 
 ---
 
@@ -50,9 +51,15 @@ definition anywhere remains TKS Definition 2.14: `A = {A0} ∪ {Dm} ∪ {Wm} ∪
 conflict. The most probable origin is a misreading of the cardinality `|A| = 22` as a
 symbol name. `A0` is canonical; the Gate 1 item should be struck, not resolved.
 
-*Residual caveat:* `CAS_PCBA_Engineer.pdf` is unread. The artifact attributed the claim to
-a "clean definitions source", which is not an obvious description of an engineering
-handbook, but the possibility cannot be formally closed until that file is supplied.
+**Residual caveat now closed.** `CAS_PCBA_Engineer` has since been supplied (1.1 M
+characters of extracted text). `A22` occurs **zero** times in it. `A0` occurs four times,
+always as the canonical root of the prerequisite chain — e.g. *"A0 → Dₙ → Wₙ → Pₙ →
+Outcome, each stage requiring the one before it."* The handbook even notes its own gap
+here: *"Chapter 8 introduces the RPM chain as A0 → Dₙ → Wₙ → Pₙ → Outcome and never says
+what the letters stand for."*
+
+Final tally of `A22`-as-a-symbol across **all seven** readable sources: **zero.** The
+finding is closed. `A0` is canonical and the Gate 1 item is struck.
 
 ---
 
@@ -157,20 +164,68 @@ does not silently orphan the documents that depend on the archived manual.
 
 ---
 
-## 6. What remains unverifiable
+## 6. Section 6 superseded — the board inventory is CONFIRMED
 
-All of the following are attributed to `CAS_PCBA_Engineer.pdf`, which is still missing.
-Neither available PDF contains any of these strings:
+*The original §6 listed the board inventory as unverifiable. `CAS_PCBA_Engineer` has since
+been supplied and every term is present, most of them heavily.*
 
-`CCDL` · `CDAB` · `CPMB` · `CSB` · `CMB` · `Schmitt` · `diode` · `40-cell`
+| Term | Occurrences | Status |
+| :--- | ---: | :--- |
+| `CCDL` | 196 | ✅ real language |
+| `diode` | 185 | ✅ |
+| `CSB` (Cognitive Safety Board) | 165 | ✅ |
+| `CPMB` (Power Management Board) | 72 | ✅ |
+| `COB` (Oscillator Board) | 48 | ✅ |
+| `CDAB` (Differential Amplifier Board) | 46 | ✅ |
+| `Schmitt` | 45 | ✅ |
+| `CMB` (Cognitive Memory Board) | 33 | ✅ |
+| `unity gain` / `unity-gain` | 16 | ✅ |
+| `40-cell` | 4 | ✅ |
+| `Appendix I` | 13 | ✅ |
+| `board` / `probe` / `feedback` | 552 / 250 / 346 | ✅ netlist vocabulary |
 
-So the artifact's board inventory — the Cognitive Memory Board and its 40-cell capacitor
-bank, the differential amplifier board, the power-management board, the safety board, the
-Schmitt-trigger commit stage, and the diode chain enforcing `P→C→E→O` — remains
-unverifiable, as does CCDL itself and the `board`/`node`/`cjt` netlist syntax.
+**The artifact's source fidelity to the handbook is vindicated.** Specific confirmations:
 
-The paper does confirm that a `PCBA Appendix I` exists and is a locatable source
-(Conflicts 3.4, 3.6, 3.7 cite it by line number), so the document is real and the
-citations are resolvable once supplied.
+- **Unity gain, verbatim:** *"β = 1 — unity gain"*, and the load-bearing gloss
+  *"A unity-gain follower carries the principle across the domain boundary without
+  amplifying or inverting it — it preserves the content and changes only…"* The artifact's
+  truth-firewall reading is faithful to the source.
+- **The 40-cell CMB is real and typed:** *"The Capacitor Bank: A 40-Cell Memory Array"*,
+  with cells declared in CCDL as `Capacitor< ^2^E_{F4}|f, C=120, leakage=… >` and
+  `Capacitor< ^3^P_{F7}|f, C=200, … >`.
+  **This closes audit finding #5 in the source's favour, not the artifact's:** the CMB's
+  40 cells *are* addressed by CAS state literals carrying Domain and Register, so the
+  memory board already maps onto the 40 Cognitive States. The artifact used the CMB
+  without ever making that mapping explicit — the connection to Δ39° it was faulted for
+  omitting is present in its own source.
+- **Correction 2 is engaged by the handbook, not by the artifact:** *"(section-retraction)
+  — Prerequisite satisfaction structured as a one-directional chain (A0 → Dₙ → Wₙ → Pₙ →
+  Outcome)"*, and *"The Domain Descent diode chain (P→C→E→O) and the RPM prerequisite chain
+  are both expressions of the same fact."* The audit faulted the artifact for never
+  engaging section-retraction; the source engages it directly.
+- **The declared-gap claim is verbatim:** *"The stateful and temporal family has syntax and
+  no formalized semantics."* This is the gap the test program's Stage 1 proposes to
+  formalize, confirmed in the source's own words.
 
-**To close:** supply `CAS_PCBA_Engineer.pdf`.
+## 7. Nothing remains unverifiable
+
+All three sources are in the repository. Every claim the original audit marked
+unverifiable has now been checked.
+
+**Net effect on the audit's verdict: unchanged, but the balance shifts.** The artifact's
+*source fidelity* is materially better than the audit could establish — three page
+citations confirmed near-verbatim, the board inventory real, unity gain real, the declared
+semantics gap real, and its restraint on `|A| = 22` correct. Exactly one claim is
+fabricated (`A22`), and it was load-bearing only for a Gate 1 item that should be struck.
+
+The audit's *substantive* findings are untouched, because they never depended on the
+missing sources: the §11 netlist still runs `E → C` against its own diode chain, still
+wires `goal_bias` into inference, still leaves `action` an orphan; §12 still proposes a
+grammar extension for objects the compiler already ships; and the Foundation-to-Drive
+adapter still hand-rolls v7.6 recipe semantics. Those were all verified against this
+repository, not against the PDFs.
+
+Two findings now resolve *against* the artifact more sharply than before, because its own
+source contains what it omitted: the CMB's 40 cells are already CAS-state-typed
+(so the Δ39° mapping existed), and the handbook engages section-retraction explicitly
+(so Correction 2 was available to it).
