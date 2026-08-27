@@ -210,8 +210,8 @@ def b4_trivial_solver(item: DeductionItem) -> bool:
         node = frontier.pop()
         for nxt in graph.get(node, ()):
             if nxt == target:
-                return True is item.entailed
+                return True
             if nxt not in seen:
                 seen.add(nxt)
                 frontier.append(nxt)
-    return False is item.entailed
+    return False

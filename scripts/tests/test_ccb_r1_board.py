@@ -16,6 +16,7 @@ from __future__ import annotations
 import inspect
 import sys
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -133,10 +134,24 @@ class ConstructValidityTests(unittest.TestCase):
         CAS. Any redesign that makes Stage 5 discriminating will break this
         test, and breaking it is the goal.
         """
-        board = sum(score_deduction(i, board_deduction(i)[0]) for i in self.SET.items)
-        trivial = sum(b4_trivial_solver(i) for i in self.SET.items)
-        self.assertEqual(board, trivial)
-        self.assertEqual(trivial, len(self.SET))
+        expected = [item.entailed for item in self.SET.items]
+        board = [board_deduction(item)[0] == "YES" for item in self.SET.items]
+        trivial = [b4_trivial_solver(item) for item in self.SET.items]
+
+        self.assertEqual(board, expected)
+        self.assertEqual(trivial, expected)
+        self.assertEqual(trivial, board)
+        self.assertEqual(set(trivial), {False, True})
+
+    def test_b4_trivial_solver_does_not_read_the_ground_truth_label(self):
+        """Its answer comes from the graph, not from checking the hidden label."""
+        for item in self.SET.items:
+            relabelled = replace(item, entailed=not item.entailed)
+            self.assertEqual(
+                b4_trivial_solver(item),
+                b4_trivial_solver(relabelled),
+                item.item_id,
+            )
 
 
 if __name__ == "__main__":  # pragma: no cover
