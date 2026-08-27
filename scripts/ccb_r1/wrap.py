@@ -216,8 +216,9 @@ def rpm_gate(completion, analysis: Analysis, trace: WrapTrace) -> bool:
     ask = (
         f"{lines}\n"
         f"Question: does {analysis.query[0]} lead to {analysis.query[1]}?"
-        "\nConsidering only the statements listed above, do they determine the answer?"
-        "\nDo NOT answer the question. Reply with one word: SUFFICIENT or INSUFFICIENT."
+        "\nIf a chain from the first to the second can be traced through the listed"
+        "\nstatements, say SUFFICIENT. Otherwise say INSUFFICIENT."
+        "\nReply with one word: SUFFICIENT or INSUFFICIENT."
     )
     trace.calls += 1
     reply = strip_reasoning(completion(ask))
@@ -242,8 +243,10 @@ def dial_adjustment(dials: Dials, trace: WrapTrace) -> str:
     """
     parts = []
     if dials[6] >= 7:
-        parts.append("Show each step of your reasoning as a separate line of the "
-                     "form 'XX leads to YY.' before your final answer.")
+        parts.append("Show each step of your reasoning on its own line, copying each "
+                     "step VERBATIM from the list above exactly as written (for example "
+                     "'XX leads to YY.'). Do not add any step that is not listed. Put "
+                     "your final answer (YES, NO, or UNKNOWN) alone on the last line.")
     if dials[3] >= 7:
         parts.append("If the statements do not settle the question, say so rather "
                      "than guessing.")
