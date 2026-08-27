@@ -80,8 +80,11 @@ PROVIDERS: dict[str, Provider] = {
                     "https://api.x.ai/v1", "grok-2-latest"),
     "qwen": Provider(("NC_QWEN_API_KEY", "QWEN_API_KEY"),
                      "https://dashscope.aliyuncs.com/compatible-mode/v1", "qwen-plus"),
+    # api.anthropic.com is the one model host this environment's network policy
+    # reaches: the proxy answered 403 to CONNECT for api.deepseek.com and
+    # api.openai.com, and returned 401 (reachable, unauthenticated) here.
     "anthropic": Provider(("NC_ANTHROPIC_API_KEY", "ANTHROPIC_API_KEY"),
-                          "https://api.anthropic.com", "claude-sonnet-4-5", anthropic=True),
+                          "https://api.anthropic.com", "claude-opus-5", anthropic=True),
 }
 
 LADDERS = {"default": default_procedure, "hard": hard_procedure}
@@ -124,8 +127,10 @@ def build_completion(provider: Provider, model: str, timeout: float):
     env_name = next(n for n in provider.key_env if os.environ.get(n, "").strip())
     del key  # resolved only to fail fast; the transports read it themselves
     if provider.anthropic:
+        # max_tokens is left at the transport's own default: adaptive thinking
+        # needs room before the answer block, and 16 would return nothing.
         return AnthropicCompletion(model=model, base_url=provider.base_url,
-                                   api_key_env=env_name, max_tokens=16, timeout=timeout)
+                                   api_key_env=env_name, timeout=max(timeout, 120.0))
     return OpenAICompatCompletion(model=model, base_url=provider.base_url,
                                   api_key_env=env_name, max_tokens=16, timeout=timeout)
 

@@ -164,15 +164,36 @@ class OpenAICompatCompletion:
 
 @dataclass
 class AnthropicCompletion:
-    """Anthropic /v1/messages. urllib, no SDK."""
+    """Anthropic /v1/messages. urllib, no SDK.
+
+    Three details of the current API that this transport got wrong at first,
+    each of which would have spoiled a live run:
+
+    * **No `temperature`.** The parameter is removed on Opus 5, Sonnet 5 and
+      the 4.7+ family and returns a 400. Sending `temperature: 0` would have
+      failed on the very first call.
+    * **Thinking is on by default** on Opus 5. A 16-token budget — fine for
+      the OpenAI-compatible transport — is consumed before any answer block is
+      emitted, so every item scores unparseable. Same failure the Ollama
+      transport hit with deepseek-r1, in a different disguise.
+    * **`effort` replaces the old budget knob.** These items are one-word
+      classifications, so `low` is both correct and cheaper.
+
+    **Consequence for M2.** With no temperature control there is genuine
+    run-to-run variance, so the firewall arm cannot assume identical output
+    from identical input. That is precisely why M2 is a 5% movement ceiling
+    rather than the exact equality the software arm uses — a precaution that
+    is now load-bearing rather than theoretical.
+    """
 
     model: str
     base_url: str = "https://api.anthropic.com"
     api_key_env: str = "ANTHROPIC_API_KEY"
     version: str = "2023-06-01"
-    temperature: float = 0.0
-    max_tokens: int = 16
-    timeout: float = 60.0
+    #: Room for adaptive thinking before the answer block. Not a typo for 16.
+    max_tokens: int = 2048
+    effort: str = "low"
+    timeout: float = 120.0
 
     def __call__(self, prompt: str) -> str:  # pragma: no cover - needs a key
         key = os.environ.get(self.api_key_env)
@@ -181,7 +202,7 @@ class AnthropicCompletion:
         body = json.dumps({
             "model": self.model,
             "max_tokens": self.max_tokens,
-            "temperature": self.temperature,
+            "output_config": {"effort": self.effort},
             "messages": [{"role": "user", "content": prompt}],
         }).encode("utf-8")
         req = urllib.request.Request(
@@ -193,7 +214,12 @@ class AnthropicCompletion:
         )
         with urllib.request.urlopen(req, timeout=self.timeout) as resp:
             payload = json.loads(resp.read().decode("utf-8"))
-        return "".join(b.get("text", "") for b in payload.get("content", []))
+        # Only text blocks. Thinking blocks carry `.thinking`, so they drop out
+        # here rather than being parsed as the answer — the same hazard
+        # `strip_reasoning` handles for inline <think> tags.
+        return "".join(
+            b.get("text", "") for b in payload.get("content", []) if b.get("type") == "text"
+        )
 
 
 @dataclass

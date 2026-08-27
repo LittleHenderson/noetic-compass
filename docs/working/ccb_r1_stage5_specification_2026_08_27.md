@@ -370,6 +370,56 @@ Nothing in the harness needs changing to comply. `OpenAICompatCompletion` and
 `NC_*` keys. `OllamaCompletion` and `HFCausalCompletion` remain in the codebase
 for a future GPU host and **must not be pointed at a CPU-only machine**.
 
+### 5.6a Network policy — measured, not assumed
+
+The remote environment's proxy **denies** most model hosts. Measured
+2026-08-27 via `$HTTPS_PROXY/__agentproxy/status`:
+
+```
+connect_rejected  api.deepseek.com:443  gateway answered 403 (policy denial)
+connect_rejected  api.openai.com:443    gateway answered 403 (policy denial)
+```
+
+`api.anthropic.com` is on the proxy's bypass list and answered **401** —
+reachable, merely unauthenticated. So from the remote environment:
+
+| Host | Reachable | Note |
+|---|---|---|
+| `api.anthropic.com` | **yes** | needs `NC_ANTHROPIC_API_KEY` in the environment |
+| `api.deepseek.com` | no | 403 policy denial |
+| `api.openai.com` | no | 403 policy denial |
+
+This is a **network policy**, not a missing key: a second session in the same
+environment hits the same wall, so spawning one does not help. Either add
+`NC_ANTHROPIC_API_KEY` to the environment and run against a Claude model, widen
+the network policy, or run from a host without the restriction.
+
+### 5.6b Anthropic transport — three current-API details
+
+Each of these would spoil a live run, and the first fails on the very first
+call:
+
+- **No `temperature`.** Removed on Opus 5, Sonnet 5 and the 4.7+ family;
+  sending it returns a 400.
+- **Thinking is on by default** on Opus 5. A 16-token budget is consumed before
+  any answer block is emitted, so every item scores unparseable — the same
+  failure the Ollama transport hit with `deepseek-r1`, in a different disguise.
+  The transport budgets 2048.
+- **`effort` replaces the old budget knob.** These items are one-word
+  classifications, so `low` is correct and cheaper.
+
+Model ids carry **no date suffix**: `claude-opus-5`, not
+`claude-opus-5-20260101`. The earlier default `claude-sonnet-4-5` was stale and
+would have 404'd.
+
+**Consequence for M2.** Without temperature control there is genuine run-to-run
+variance on Claude models, so the firewall arm cannot assume identical output
+from identical input. That is exactly why M2 is a **5% movement ceiling** rather
+than the exact equality the software arm uses (P2) — a precaution that is now
+load-bearing rather than theoretical. Read a firewall result with that in mind:
+some movement is decoding noise, and the ceiling is what separates it from
+leakage.
+
 ### 5.7 Environment note
 
 There are no model weights, no `transformers`, no `torch`, and no LLM API keys

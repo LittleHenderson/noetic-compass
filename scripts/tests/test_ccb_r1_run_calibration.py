@@ -193,5 +193,35 @@ class ResultFileTests(unittest.TestCase):
         self.assertNotIn("api_key", text)
 
 
+class AnthropicTransportTests(unittest.TestCase):
+    """Three current-API details, each of which would spoil a live run."""
+
+    def test_no_temperature_parameter_is_sent(self):
+        """Removed on Opus 5 / Sonnet 5 / 4.7+; sending it returns a 400."""
+        from runners import AnthropicCompletion
+        self.assertFalse(hasattr(AnthropicCompletion(model="x"), "temperature"))
+
+    def test_the_token_budget_leaves_room_for_thinking(self):
+        """Thinking is on by default; at 16 tokens no answer block is emitted."""
+        from runners import AnthropicCompletion
+        self.assertGreaterEqual(AnthropicCompletion(model="x").max_tokens, 1024)
+
+    def test_effort_is_set_low_for_one_word_classifications(self):
+        from runners import AnthropicCompletion
+        self.assertEqual(AnthropicCompletion(model="x").effort, "low")
+
+    def test_the_default_model_is_a_current_identifier(self):
+        """`claude-sonnet-4-5` was stale and would 404."""
+        model = rc.PROVIDERS["anthropic"].default_model
+        self.assertEqual(model, "claude-opus-5")
+        self.assertNotRegex(model, r"-\d{8}$")  # no date suffix
+
+    def test_the_builder_does_not_shrink_the_anthropic_budget(self):
+        with mock.patch.dict("os.environ", {"NC_ANTHROPIC_API_KEY": "k"}):
+            built = rc.build_completion(rc.PROVIDERS["anthropic"], "claude-opus-5", 60.0)
+        self.assertGreaterEqual(built.max_tokens, 1024)
+        self.assertGreaterEqual(built.timeout, 120.0)
+
+
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()
