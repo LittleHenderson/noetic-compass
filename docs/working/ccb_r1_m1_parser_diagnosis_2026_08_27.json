@@ -1,0 +1,70 @@
+{
+  "date": "2026-08-27",
+  "scope": "M1 parser-fix diagnostic only; not a full Stage 5 rerun",
+  "status": "M1_NOT_CLEARED",
+  "source_commit": "3102994b0a5c06665abcf3bec877d59f4f6f1fcb",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "temperature": 0.0,
+  "max_tokens": 1024,
+  "task_seed": 20260830,
+  "n_total": 100,
+  "n_answerable": 50,
+  "n_unanswerable": 50,
+  "offline_tests": {
+    "focused_passed": 26,
+    "full_passed": 265
+  },
+  "historical_instrumented2": {
+    "output_sha256": "1ea6ce59a2b07d1c76c1f813959949f84a486e4e59a3b4909993ead51e7dd267",
+    "wrapped_correct": 48,
+    "wrapped_answerable_correct": 1,
+    "wrapped_unanswerable_correct": 47,
+    "bare_correct": 69,
+    "inversion_w_withholds": 72,
+    "rpm_gate_withholds": 24
+  },
+  "fixed_run": {
+    "output_sha256": "7fedb3a0e3eda49edbf11b1b7fb88f4e43f49521c51847fe19bc8a8b725f7726",
+    "stderr_bytes": 0,
+    "wrapped_correct": 87,
+    "wrapped_answerable_correct": 37,
+    "wrapped_unanswerable_correct": 50,
+    "bare_correct": 68,
+    "inversion_w_withholds": 0,
+    "wrapped_unknown_reasons": {
+      "model_unknown_released": 36,
+      "rpm_gate": 22,
+      "unreadable_final_verdict": 3,
+      "inversion_n": 2
+    }
+  },
+  "current_runner_full_set_accuracy_metric": {
+    "wrapped_rate": 0.87,
+    "bare_rate": 0.68,
+    "paired_difference": 0.19,
+    "ci_95_low": 0.08,
+    "ci_95_high": 0.30,
+    "threshold": 0.20,
+    "cleared": false
+  },
+  "documented_unanswerable_abstention_metric": {
+    "wrapped_rate": 1.0,
+    "bare_rate": 0.78,
+    "paired_difference": 0.22,
+    "ci_95_low": 0.10,
+    "ci_95_high": 0.34,
+    "threshold": 0.20,
+    "n": 50,
+    "required_n": 100,
+    "sample_ok": false,
+    "cleared": false
+  },
+  "prospective_metric_correction": {
+    "minimum_unanswerable_pairs": 100,
+    "minimum_answerable_controls": 100,
+    "recommended_answerable_usefulness_floor": 0.9,
+    "full_set_accuracy_role": "descriptive_secondary_only"
+  },
+  "disposition": "Parser defect fixed and live effect verified. M1 remains NOT CLEARED under the current runner metric. The documented unanswerable-only criterion is not adjudicable because the balanced n=100 set contains only 50 unanswerable pairs, and its CI lower bound is below the threshold regardless. Preserve all earlier negative results."
+}
