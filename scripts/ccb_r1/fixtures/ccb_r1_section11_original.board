@@ -1,0 +1,53 @@
+// Verbatim §11 netlist from the audited CCB-R1 artifact, kept as a
+// regression fixture. This board is EXPECTED TO FAIL Stage 0.
+board cognitive_reasoning_processor_v0 {
+    input: cas_problem;
+    output: cas_decision;
+
+    use cognitive_memory_board;
+    use cognitive_differential_amplifier;
+    use cognitive_power_management_board;
+    use cognitive_safety_board;
+
+    // Bias and memory substrate
+    node memory_bias:    ^5^C_{F2}|A;
+    node charter_bias:   ^5^P_{F7}|T;
+    node goal_bias:      ^5^E_{F5}|A;
+
+    // Reasoning spine
+    node interpretation: ^8^C_{F2}|A;
+    node decomposition:  ^6^E_{F6}|A;
+    node conclusion:     ^9^C_{F2}|A;
+    node action:         ^9^O_{F5}|E;
+
+    // Surface candidate meaning
+    cjt intake:
+        CJT< cas_problem | memory_bias => interpretation >
+        [β=..., cutoff=..., sat=..., region=active];
+
+    // Honest decomposition and evaluation
+    cjt analyze:
+        CJT< interpretation | charter_bias => decomposition >
+        [β=1.0, region=active];
+
+    // Land on a structured conclusion
+    cjt infer:
+        CJT< decomposition | goal_bias => conclusion >
+        [β=1.0, region=active];
+
+    // Enforce direction into action
+    diode d_pc: Diode< ^P -> ^C >;
+    diode d_ce: Diode< ^C -> ^E >;
+    diode d_eo: Diode< ^E -> ^O >;
+
+    // Slow learning, not instant self-rewriting
+    feedback learn:
+        action -> memory_bias
+        [β=..., tau=...];
+
+    // Every silent failure gets a test point
+    probe tp_interpretation: interpretation;
+    probe tp_decomposition: decomposition;
+    probe tp_conclusion: conclusion;
+    probe tp_action: action;
+}
