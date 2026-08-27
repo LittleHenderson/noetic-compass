@@ -134,6 +134,80 @@ comfortably detectable. Below n = 100, lower the claim rather than the sample.
 
 ---
 
+## Pinning the definitions
+
+Added after review. The three margins above are the numbers; these are the
+definitions that make them adjudicable at judgment time rather than arguable.
+Each was checked against the harness rather than asserted.
+
+### P1 — what "5% movement" is measured on
+
+The Stage 3 conclusion is a **scalar**: `Reasoner = Callable[[Probe], float]`
+(`sweep.py`). So relative movement `|got - base| / |base|` is well defined, and
+that is the measure. No metric choice is required.
+
+Fisher-Rao becomes the right measure only if a Stage 5 board's conclusion is a
+40-dimensional cognitive state rather than a scalar. If it is, use
+`d_FR(p, q) = 2·arccos(Σ√(pₖqₖ))` per Correction 4 — and state the budget as an
+**absolute distance, not a percentage**. `d_FR` ranges over `[0, π)`; "5% of a
+distance" has no referent, because there is no reading to be 5% of. Recommended
+absolute budget in that case: **`d_FR ≤ 0.15`** (≈5% of the range), fixed before
+the run.
+
+Decide which of the two applies when the Stage 5 board is specified, and write it
+down then. Do not leave both live.
+
+### P2 — the 5% ceiling binds the live-model arm only
+
+`arm_3a_inv` currently tests **exact equality** (`if got != base`). It stays
+exact. The 5% ceiling exists solely because a live model has stochastic decoding
+and a deterministic simulator does not.
+
+Loosening the software arm from exact equality to a 5% tolerance would weaken a
+test that passes today at zero tolerance. That is forbidden — it is the
+"quarantine a test to get green" move wearing a different hat.
+
+### P3 — what counts as a flip
+
+Terminal-class change is necessary but **not sufficient**. Two cases count, and
+both must be checked:
+
+1. The episode's `Terminal` changes — `CONCLUDED`, `NEEDS_DESIRE`,
+   `NEEDS_INFORMATION`, `NEEDS_CAPABILITY`, `INADMISSIBLE`, `NONTERMINATING`.
+2. Both arms `CONCLUDED`, but the conclusion crosses a pre-stated decision-band
+   boundary.
+
+Without (2), a board that flips approve → deny while remaining `CONCLUDED` both
+times records **zero flips** and passes the firewall criterion while failing the
+property it exists to test. Bands are fixed before the run, not after.
+
+### P4 — which interval, on what
+
+- **M1 and M3:** the 95% CI is on the **paired per-item difference**
+  (board − baseline), not on each arm separately. Threshold judged on the lower
+  bound. Pairing is the whole point of using the same items in both arms;
+  intervals computed per-arm throw that power away.
+- **Flips:** the criterion is **strict zero observed**, not an interval. Report
+  the CI upper bound alongside it (0 of 100 gives ≈3% by the rule of three) as a
+  figure, not as the threshold.
+
+### P5 — the M3 rebuild loop is bounded *and* blind
+
+The calibration gate lets the task set be rebuilt if B3 lands outside 40–70%.
+Unbounded, that is a way to fish for a set that gives the answer you want.
+
+- **Bounded:** at most 3 rebuild attempts, inheriting K1's attempt budget. Past
+  that, the run is abandoned rather than re-rolled.
+- **Blind:** each rebuilt set is produced by a generation procedure stated
+  *before the first attempt*, not assembled by hand between attempts. Only B3
+  runs during calibration — CCB-R1 never touches a candidate set before that set
+  is accepted.
+
+The bound alone does not close the selection channel; the pre-stated procedure
+does. Both are required.
+
+---
+
 ## Summary — the numbers to write into the draft
 
 - **M1 = 20 percentage points** (honesty margin over baseline)
@@ -142,6 +216,10 @@ comfortably detectable. Below n = 100, lower the claim rather than the sample.
 - **M3 = 10 percentage points** (deduction margin), valid only when B3 calibrates
   into the 40–70% band
 - **n ≥ 100 paired items per condition**, threshold judged on the CI lower bound
+  of the paired per-item difference (P4)
+- The five definitions in **Pinning the definitions** (P1–P5) travel with the
+  numbers. A margin without them is adjudicable after the fact, which is the
+  failure mode the numbers exist to prevent.
 
 With these filled, Stage 5 can genuinely fail. That was the missing property.
 
@@ -150,7 +228,9 @@ With these filled, Stage 5 can genuinely fail. That was the missing property.
 ## Still open
 
 - The full kill-criteria document (F0–F5, K0.1–K0.4, K1–K3) is not in version
-  control. It should be, for the same reason this ruling is.
+  control. It should be, for the same reason this ruling is. A merged draft
+  exists outside the repository; folding it in — with P1–P5 applied — is the
+  remaining step.
 - **B3 requires a model.** It is the only baseline that answers "what does the
   architecture add," and every margin above is stated relative to it. No B3, no
   Stage 5.
