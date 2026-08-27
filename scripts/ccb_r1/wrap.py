@@ -214,12 +214,10 @@ def rpm_gate(completion, analysis: Analysis, trace: WrapTrace) -> bool:
 
     lines = "\n".join(f"{a} leads to {b}." for a, b in analysis.premises)
     ask = (
-        "The following list of statements is PARTIAL — facts may be missing.\n"
         f"{lines}\n"
-        f"Question under consideration: does {analysis.query[0]} lead to "
-        f"{analysis.query[1]}?\n"
-        "Do NOT answer the question. State only whether the statements above are "
-        "enough to determine it.\nReply with one word: SUFFICIENT or INSUFFICIENT."
+        f"Question: does {analysis.query[0]} lead to {analysis.query[1]}?"
+        "\nConsidering only the statements listed above, do they determine the answer?"
+        "\nDo NOT answer the question. Reply with one word: SUFFICIENT or INSUFFICIENT."
     )
     trace.calls += 1
     reply = strip_reasoning(completion(ask))

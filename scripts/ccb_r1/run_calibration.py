@@ -126,8 +126,12 @@ def build_completion(provider: Provider, model: str, timeout: float):
     if provider.anthropic:
         return AnthropicCompletion(model=model, base_url=provider.base_url,
                                    api_key_env=env_name, max_tokens=16, timeout=timeout)
+    # 1024, not 16: the comparison arms ask the model to show its chain before the
+    # verdict, and 16 truncates mid-step (same failure class the Ollama transport
+    # hit with deepseek-r1). One-word gate probes ignore the surplus, so the larger
+    # budget costs only where reasoning is requested.
     return OpenAICompatCompletion(model=model, base_url=provider.base_url,
-                                  api_key_env=env_name, max_tokens=16, timeout=timeout)
+                                  api_key_env=env_name, max_tokens=1024, timeout=timeout)
 
 
 def fetch_all(completion, prompts: list[str], workers: int, retries: int) -> dict[str, str]:
