@@ -35,6 +35,20 @@ jobs:
           -s scripts/tests
           -p 'test_verify_render_blueprint_control.py'
 
+      - name: Run the CCB-R1 Stage 0 board conformance lint tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_ccb_r1_stage0_lint.py'
+
+      - name: Lint the CCB-R1 reference boards (Stage 0 conformance)
+        run: |
+          # The audited board must stay rejected and the rebuild must stay clean.
+          ! python scripts/ccb_r1/stage0_lint.py \
+              scripts/ccb_r1/fixtures/ccb_r1_section11_original.board
+          python scripts/ccb_r1/stage0_lint.py \
+              scripts/ccb_r1/fixtures/ccb_r1_section11_corrected.board
+
       - name: Validate customer-production contract (OPEN permitted)
         run: python scripts/verify_customer_production_acceptance.py --validate-only
 
