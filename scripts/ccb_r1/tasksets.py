@@ -40,7 +40,7 @@ import hashlib
 import json
 import random
 import string
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 
 from baselines import Syllogism
 
@@ -80,6 +80,13 @@ class Difficulty:
     hops: int = 3
     distractors: int = 4
     entailed_fraction: float = 0.5
+    #: Decoy chains leaving the query source and dead-ending in fresh nodes.
+    #: Longer chains alone stopped buying difficulty once a strong model
+    #: scored 95% at h5-d8: walking a longer path is not harder for a system
+    #: that walks paths reliably. Several *plausible* long routes from the same
+    #: source, only one of which (if any) reaches the target, is a different
+    #: axis — it stresses selection rather than traversal.
+    near_misses: int = 0
 
     def __post_init__(self) -> None:
         if self.hops < 2:
@@ -90,9 +97,30 @@ class Difficulty:
             raise TaskSetError(
                 "E-TS-003", "entailed_fraction must be strictly between 0 and 1"
             )
+        if self.near_misses < 0:
+            raise TaskSetError("E-TS-011", "near_misses must be >= 0")
+
+    def canonical(self) -> dict:
+        """Fingerprint form.
+
+        The three original knobs are always emitted and `near_misses` only when
+        it is set, so adding a difficulty axis does not change the fingerprint
+        of any set generated before it existed. A pre-registration must survive
+        the harness gaining a capability, or every new knob silently voids every
+        registration already on record.
+        """
+        base = {
+            "hops": self.hops,
+            "distractors": self.distractors,
+            "entailed_fraction": self.entailed_fraction,
+        }
+        if self.near_misses:
+            base["near_misses"] = self.near_misses
+        return base
 
     def label(self) -> str:
-        return f"h{self.hops}-d{self.distractors}-e{self.entailed_fraction:g}"
+        tail = f"-n{self.near_misses}" if self.near_misses else ""
+        return f"h{self.hops}-d{self.distractors}-e{self.entailed_fraction:g}{tail}"
 
 
 # ---- items -----------------------------------------------------------------
@@ -221,7 +249,7 @@ class TaskSet:
             "name": self.name,
             "kind": self.kind,
             "seed": self.seed,
-            "difficulty": asdict(self.difficulty) if self.difficulty else None,
+            "difficulty": self.difficulty.canonical() if self.difficulty else None,
             "items": [i.canonical() for i in self.items],
         }
 
@@ -256,16 +284,29 @@ def _deduction_item(item_id: str, rng: random.Random, diff: Difficulty,
                     want_entailed: bool) -> DeductionItem:
     chain_len = diff.hops + 1
     # Chain nodes, plus a disjoint pair to host the unreachable target, plus
-    # room for distractor endpoints.
-    nodes = _names(rng, chain_len + 2 + diff.distractors)
+    # room for distractor endpoints and any decoy chains.
+    decoy_nodes = diff.near_misses * diff.hops
+    nodes = _names(rng, chain_len + 2 + diff.distractors + decoy_nodes)
     chain, spare = nodes[:chain_len], nodes[chain_len:]
 
     edges = [(chain[i], chain[i + 1]) for i in range(diff.hops)]
 
+    # Decoy chains leave the same source and dead-end in fresh nodes, so they
+    # can never reach the target and can never alter the entailment. What they
+    # cost is the reader's certainty about which route to follow.
+    decoys = spare[len(spare) - decoy_nodes:] if decoy_nodes else []
+    for d in range(diff.near_misses):
+        leg = decoys[d * diff.hops:(d + 1) * diff.hops]
+        prev = chain[0]
+        for node in leg:
+            edges.append((prev, node))
+            prev = node
+
     # Distractors leave the answering path intact: they start from spare nodes,
     # so they can never shorten or create the queried route.
+    plain = spare[:len(spare) - decoy_nodes] if decoy_nodes else spare
     for i in range(diff.distractors):
-        src = spare[i % len(spare)]
+        src = plain[i % len(plain)]
         dst = rng.choice([n for n in nodes if n != src])
         if (src, dst) not in edges:
             edges.append((src, dst))

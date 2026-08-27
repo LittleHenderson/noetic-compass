@@ -180,6 +180,63 @@ rather than inflated by a set the baseline cannot engage with at all.
 
 ---
 
+## 4.4 Calibration results on record
+
+### 2026-08-27 — `deepseek-chat`, deduction, `default_procedure` (n=120)
+
+```
+attempt 1 [h3-d4]  85.0%  -> TOO_EASY
+attempt 2 [h4-d6]  95.0%  -> TOO_EASY
+attempt 3 [h5-d8]  95.0%  -> TOO_EASY
+scored=120  unparseable=0 (0.0%)  abstained=0
+```
+
+**Abandoned after 3 attempts, exactly as P5 requires.** Zero parsing failures,
+so the numbers are the model's performance and not a harness artefact.
+
+**The gate did its job.** It refused to hand back a set a run could be scored
+on. A green M3 against an 85–95% baseline would have been uninterpretable: +10
+points is arithmetically impossible above 90%.
+
+**Why more hops did not help.** Measured over the default ladder, the number of
+edges leaving the query source is **exactly 1.0 at every rung**. There is never
+a choice of route — only a longer walk. A model that walks reliably is not
+challenged by walking further, which is why h5-d8 scored no worse than h4-d6.
+
+| Ladder | premises | routes from source |
+|---|---:|---:|
+| default `h3-d4` | 7.0 | **1.00** |
+| default `h4-d6` | 10.0 | **1.00** |
+| default `h5-d8` | 13.0 | **1.00** |
+| hard `h4-d6-n2` | 18.0 | 3.00 |
+| hard `h5-d10-n4` | 35.0 | 5.00 |
+| hard `h6-d14-n6` | 56.0 | 7.00 |
+
+`hard_procedure()` raises `near_misses` — decoy chains leaving the same source
+and dead-ending in fresh nodes — so difficulty sits in **selecting** the route
+rather than traversing it. Whether that is enough is empirical, and the schedule
+exists to answer it.
+
+**If the hard ladder is also abandoned**, the honest reading is that the
+synthetic token-graph family cannot host M3 for a strong model, and the task
+sets need re-deriving as natural-language reasoning rather than tuning further.
+Do not keep adding rungs past that point; it becomes a search for a set that
+flatters the result.
+
+### Not yet measured — baseline honesty
+
+The deduction result says nothing about M1. **Walking chains and abstaining
+from unsupported claims are different capacities**, and the simulated
+`sound_model` in the wrap tests demonstrates the split concretely: 100% on
+deduction, 49.2% on honesty, because it reasons perfectly and then applies a
+closed-world assumption to an open-world premise set.
+
+M1 carries the largest claimed effect of the three criteria and its headroom is
+**unknown**. `honesty_procedure()` now exists and one cheap baseline-only run
+settles it. Run it before anything else.
+
+---
+
 ## 5. The arms
 
 | Arm | What it is | Status |
@@ -273,7 +330,22 @@ with one cloud provider as a cross-check. Two providers agreeing is a
 meaningfully stronger result than one; two providers *disagreeing* is itself a
 finding worth recording rather than resolving by picking the friendlier number.
 
-### 5.6 Environment note
+### 5.6 Transport policy — operating constraint
+
+**Cloud only for LLM inference. No local CPU inference, ever. Local is
+GPU-only if at all.**
+
+Sustained CPU inference on the operator's machine was a suspected crash
+trigger, so the local Ollama fleet is off. This is an operating constraint, not
+a preference: a Stage 5 run that takes the machine down loses the run and the
+machine.
+
+Nothing in the harness needs changing to comply. `OpenAICompatCompletion` and
+`AnthropicCompletion` already speak to cloud endpoints through the existing
+`NC_*` keys. `OllamaCompletion` and `HFCausalCompletion` remain in the codebase
+for a future GPU host and **must not be pointed at a CPU-only machine**.
+
+### 5.7 Environment note
 
 There are no model weights, no `transformers`, no `torch`, and no LLM API keys
 in the CI container or the remote dev environment, and `127.0.0.1:11434` there
@@ -460,6 +532,9 @@ code, so a caught failure names its own cause.
 
 ## 12. Open items
 
+0. **Run `honesty_procedure()` against the chosen baseline.** Cheap,
+   baseline-only, and the one number that decides whether M1 has headroom.
+   Nothing else should be spent until it is known.
 0. **Harder firewall items.** M2 is the weakest criterion on the wrapped arm:
    redaction removes the identity fields it was told about, so it needs items
    carrying implicit identity signals to be a real test.

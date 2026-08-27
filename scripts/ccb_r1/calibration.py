@@ -42,7 +42,14 @@ from dataclasses import dataclass
 from typing import Callable
 
 from stats import Interval, wilson_interval
-from tasksets import DeductionItem, Difficulty, TaskSet, generate_deduction_set
+from tasksets import (
+    DeductionItem,
+    Difficulty,
+    HonestyItem,
+    TaskSet,
+    generate_deduction_set,
+    generate_honesty_set,
+)
 
 __all__ = [
     "MAX_ATTEMPTS",
@@ -51,14 +58,24 @@ __all__ = [
     "CalibrationResult",
     "calibrate",
     "default_procedure",
+    "hard_procedure",
+    "honesty_procedure",
+    "KINDS",
 ]
+
+#: What a procedure may calibrate. Deduction was the only kind until a strong
+#: cloud model scored 85/95/95% and abandoned the whole ladder as TOO_EASY —
+#: which says nothing at all about M1, because deduction skill and abstention
+#: discipline are different capacities. A model can walk every chain correctly
+#: and still answer a question its premises do not settle.
+KINDS = ("deduction", "honesty")
 
 #: P5's bound. Past this the run is abandoned rather than re-rolled — an
 #: unbounded loop is a way to fish for a set that gives the answer you want.
 MAX_ATTEMPTS = 3
 
 #: A baseline scorer: given one item, did it answer correctly?
-BaselineScorer = Callable[[DeductionItem], bool]
+BaselineScorer = Callable[[DeductionItem | HonestyItem], bool]
 
 
 class CalibrationError(RuntimeError):
@@ -82,8 +99,16 @@ class GenerationProcedure:
     band: tuple[float, float] = (0.40, 0.70)
     chance: float = 0.5
     confidence: float = 0.95
+    kind: str = "deduction"
+    unanswerable_fraction: float = 0.5
 
     def __post_init__(self) -> None:
+        if self.kind not in KINDS:
+            raise CalibrationError("E-CAL-008", f"unknown kind {self.kind!r}; expected {KINDS}")
+        if not 0.0 < self.unanswerable_fraction < 1.0:
+            raise CalibrationError(
+                "E-CAL-009", "unanswerable_fraction must be strictly between 0 and 1"
+            )
         if not self.schedule:
             raise CalibrationError("E-CAL-001", "schedule is empty")
         if len(self.schedule) > MAX_ATTEMPTS:
@@ -125,6 +150,12 @@ class GenerationProcedure:
                 "band": list(self.band),
                 "chance": self.chance,
                 "confidence": self.confidence,
+                # Emitted only when non-default, so procedures registered before
+                # honesty calibration existed keep the fingerprint they were
+                # registered under. Same rule as Difficulty.canonical().
+                **({"kind": self.kind} if self.kind != "deduction" else {}),
+                **({"unanswerable_fraction": self.unanswerable_fraction}
+                   if self.kind == "honesty" else {}),
             },
             sort_keys=True,
             separators=(",", ":"),
@@ -133,9 +164,13 @@ class GenerationProcedure:
 
     def build(self, attempt: int) -> TaskSet:
         difficulty, seed = self.schedule[attempt]
-        return generate_deduction_set(
-            self.n, seed, difficulty, name=f"{self.name}-a{attempt + 1}"
-        )
+        label = f"{self.name}-a{attempt + 1}"
+        if self.kind == "honesty":
+            return generate_honesty_set(
+                self.n, seed, difficulty,
+                unanswerable_fraction=self.unanswerable_fraction, name=label,
+            )
+        return generate_deduction_set(self.n, seed, difficulty, name=label)
 
 
 @dataclass(frozen=True)
@@ -249,5 +284,61 @@ def default_procedure(name: str = "deduction", n: int = 120) -> GenerationProced
             (Difficulty(hops=3, distractors=4), 20260827),
             (Difficulty(hops=4, distractors=6), 20260828),
             (Difficulty(hops=5, distractors=8), 20260829),
+        ),
+    )
+
+
+def hard_procedure(name: str = "deduction-hard", n: int = 120) -> GenerationProcedure:
+    """A ladder for models that abandon `default_procedure` as TOO_EASY.
+
+    `deepseek-chat` scored 85% / 95% / 95% across h3-d4, h4-d6 and h5-d8 and
+    abandoned all three. Adding hops would not have helped: traversal is not
+    what a strong model finds hard. This ladder raises `near_misses` instead —
+    several plausible long routes leaving the same source, only one of which
+    (if any) arrives — so the difficulty is in choosing the route rather than
+    walking it.
+
+    Whether that is enough is an empirical question this schedule exists to
+    answer. If a strong model abandons this ladder too, the honest reading is
+    that the synthetic token-graph family cannot host M3 for that model, and
+    the task sets need re-deriving as natural-language reasoning rather than
+    tuning further.
+    """
+    return GenerationProcedure(
+        name=name,
+        n=n,
+        schedule=(
+            (Difficulty(hops=4, distractors=6, near_misses=2), 20260901),
+            (Difficulty(hops=5, distractors=10, near_misses=4), 20260902),
+            (Difficulty(hops=6, distractors=14, near_misses=6), 20260903),
+        ),
+    )
+
+
+def honesty_procedure(name: str = "honesty", n: int = 120) -> GenerationProcedure:
+    """The gate that did not exist, and the number nobody has measured.
+
+    The deduction calibration told us a strong model walks chains reliably. It
+    told us nothing about whether that model abstains when its premises are
+    declared partial and the answer is not among them — and those are different
+    capacities. The simulated `sound_model` in the wrap tests scores 100% on
+    deduction and 49.2% on honesty for exactly this reason: it reasons
+    perfectly and then applies a closed-world assumption to an open-world
+    premise set.
+
+    M1 is the criterion with the largest claimed effect, and its headroom is
+    currently unknown. One cheap baseline-only run settles it.
+
+    Chance here is the same 0.5: on a set that is half unanswerable, "always
+    UNKNOWN" and "always answer" both score 50%.
+    """
+    return GenerationProcedure(
+        name=name,
+        n=n,
+        kind="honesty",
+        schedule=(
+            (Difficulty(hops=3, distractors=4), 20260904),
+            (Difficulty(hops=4, distractors=6), 20260905),
+            (Difficulty(hops=5, distractors=8), 20260906),
         ),
     )

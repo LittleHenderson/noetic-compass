@@ -18,11 +18,14 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "scripts" / "ccb_r1"))
 
 from calibration import (  # noqa: E402
+    KINDS,
     MAX_ATTEMPTS,
     CalibrationError,
     GenerationProcedure,
     calibrate,
     default_procedure,
+    hard_procedure,
+    honesty_procedure,
 )
 from flips import (  # noqa: E402
     DEFAULT_BANDS,
@@ -556,6 +559,120 @@ class Stage5RunTests(unittest.TestCase):
         self.assertNotEqual(
             self._prereg().fingerprint(), self._prereg(m1_honesty=0.25).fingerprint()
         )
+
+
+class HonestyCalibrationTests(unittest.TestCase):
+    """The gate that did not exist until the deduction ladder was abandoned.
+
+    A strong model scoring 95% on deduction says nothing about M1: walking
+    chains and abstaining from unsupported claims are different capacities.
+    """
+
+    def test_both_kinds_are_calibratable(self):
+        self.assertEqual(KINDS, ("deduction", "honesty"))
+
+    def test_an_unknown_kind_is_refused(self):
+        with self.assertRaises(CalibrationError) as ctx:
+            GenerationProcedure(name="x", n=10, schedule=((Difficulty(), 1),), kind="vibes")
+        self.assertEqual(ctx.exception.code, "E-CAL-008")
+
+    def test_an_impossible_unanswerable_fraction_is_refused(self):
+        with self.assertRaises(CalibrationError) as ctx:
+            GenerationProcedure(
+                name="x", n=10, schedule=((Difficulty(), 1),),
+                kind="honesty", unanswerable_fraction=1.0,
+            )
+        self.assertEqual(ctx.exception.code, "E-CAL-009")
+
+    def test_the_honesty_procedure_builds_honesty_items(self):
+        task_set = honesty_procedure(n=40).build(0)
+        self.assertEqual(task_set.kind, "honesty")
+        self.assertTrue(all(hasattr(i, "answerable") for i in task_set.items))
+
+    def test_always_abstaining_is_rejected_as_chance(self):
+        """The degenerate honesty strategy must not calibrate as usable."""
+        result = calibrate(honesty_procedure(n=120), lambda i: not i.answerable)
+        self.assertFalse(result.ok)
+        self.assertEqual(result.status, "AT_CHANCE")
+
+    def test_always_answering_is_rejected_as_chance(self):
+        result = calibrate(honesty_procedure(n=120), lambda i: i.answerable)
+        self.assertFalse(result.ok)
+        self.assertEqual(result.status, "AT_CHANCE")
+
+    def test_a_discriminating_baseline_calibrates(self):
+        def baseline(item):
+            return int(item.item_id[1:]) % 20 < 13  # 65%: mid-band, above chance
+
+        result = calibrate(honesty_procedure(n=120), baseline)
+        self.assertTrue(result.ok)
+        self.assertEqual(result.status, "ACCEPTED")
+
+
+class BackwardCompatibleRegistrationTests(unittest.TestCase):
+    """Adding a capability must not void a registration already on record."""
+
+    #: Recorded before the near-miss axis and the honesty kind existed.
+    LEGACY_PROCEDURE = "f63628a3d69e86013eb4d0036f47018414da381c1d350285acceb6fcac01ae7a"
+    LEGACY_SETS = (
+        "311760bf7a2e9e8ba77c35fb7662c436009bc57aa07d693f46539e5760440963",
+        "b1c3867128ed149318bd08f1a12adaae50a7c2ca32daee3d381b1479b5911071",
+        "b198f5bbcd619b3959b7f68aad977ef16f6ed7bea6a22d13f46b15a9752a2da2",
+    )
+
+    def test_the_default_procedure_fingerprint_is_unchanged(self):
+        self.assertEqual(default_procedure(n=120).fingerprint(), self.LEGACY_PROCEDURE)
+
+    def test_every_recorded_task_set_fingerprint_is_unchanged(self):
+        procedure = default_procedure(n=120)
+        for attempt, expected in enumerate(self.LEGACY_SETS):
+            self.assertEqual(procedure.build(attempt).fingerprint(), expected, f"a{attempt+1}")
+
+    def test_an_unset_difficulty_axis_is_absent_from_the_fingerprint_form(self):
+        self.assertNotIn("near_misses", Difficulty(hops=3).canonical())
+        self.assertEqual(Difficulty(hops=3, near_misses=2).canonical()["near_misses"], 2)
+
+
+class NearMissDifficultyTests(unittest.TestCase):
+    """Why the default ladder was too easy, and what the new axis changes."""
+
+    @staticmethod
+    def _routes_from_source(task_set) -> float:
+        counts = [
+            sum(1 for a, _ in i.syllogism.premises if a == i.syllogism.query[0])
+            for i in task_set.items
+        ]
+        return sum(counts) / len(counts)
+
+    def test_the_default_ladder_offers_no_choice_of_route(self):
+        """One edge leaves the source, so the task is traversal with no selection.
+
+        This is the diagnosis: a strong model scored 95% at h5-d8 because a
+        longer chain is not harder when there was never a decision to make.
+        """
+        for attempt in range(3):
+            self.assertEqual(self._routes_from_source(default_procedure(n=40).build(attempt)), 1.0)
+
+    def test_the_hard_ladder_forces_a_choice(self):
+        previous = 1.0
+        for attempt in range(3):
+            routes = self._routes_from_source(hard_procedure(n=40).build(attempt))
+            self.assertGreater(routes, previous)
+            previous = routes
+
+    def test_decoy_chains_never_alter_the_entailment(self):
+        """Ground truth stays computed, and stays right, with decoys present."""
+        task_set = generate_deduction_set(
+            60, 91, Difficulty(hops=4, distractors=6, near_misses=4)
+        )
+        for item in task_set.items:
+            self.assertEqual(item.entailed, item.syllogism.entailed(), item.item_id)
+        self.assertEqual(sum(i.entailed for i in task_set.items), 30)
+
+    def test_a_negative_near_miss_count_is_refused(self):
+        with self.assertRaises(TaskSetError) as ctx:
+            Difficulty(near_misses=-1)
+        self.assertEqual(ctx.exception.code, "E-TS-011")
 
 
 if __name__ == "__main__":  # pragma: no cover
