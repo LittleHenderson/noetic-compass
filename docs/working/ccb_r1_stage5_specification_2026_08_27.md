@@ -503,6 +503,35 @@ mechanical.
    set is not the pre-registered one.
 7. **Judge.** `run_stage5(...)` returns all three verdicts.
 
+### 9.0 Running it
+
+```
+python scripts/ccb_r1/run_comparison.py --provider deepseek --dry-run
+python scripts/ccb_r1/run_comparison.py --provider deepseek --out result.json
+```
+
+`run_comparison.py` performs steps 1-7 above in that order: builds the sets,
+pre-registers, runs every arm on identical items, verifies the fingerprints,
+and judges all three criteria. Exit status is 0 only when all three pass.
+
+**Run `--dry-run` first.** It reports the call count and spends nothing. At
+n=100 the upper bound is 1,000 calls across seven arms; the wrapped honesty arm
+costs one call rather than two whenever the RPM gate withholds, so the real
+figure is lower.
+
+Concurrency is per item rather than per call, because the wrapped pipeline
+decides its second call based on the first. A permanently failing item is
+scored zero and counted as a transport failure — never dropped, since dropping
+would shorten one arm and void the paired statistics.
+
+`--ladder hard` is the default, because a strong model abandoned the default
+ladder as TOO_EASY at every rung.
+
+**The compute-matched control is always reported.** `bare-CoT` sits beside
+`bare` in the output. The wrapped arm spends an extra call per open-world item,
+so a wrapped win read without CoT could be architecture or simply more
+inference.
+
 ### 9.1 Void conditions
 
 A run is void — not failed, **void** — if any of these hold. Void means it does
