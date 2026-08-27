@@ -156,8 +156,6 @@ class WrapResult:
 
 # ---- stage 1: Input Analyzer ----------------------------------------------
 
-_LINK = re.compile(r"\b([A-Z]{2})\b\s+leads to\s+\b([A-Z]{2})\b", re.I)
-
 #: Premises are whole lines of the form "XX leads to YY."; the query arrives as
 #: "...guarantee that XX leads to YY?" in the same prompt. A loose search would
 #: read the queried link back as a premise, and the wrapper would then certify
@@ -263,15 +261,34 @@ class OperatorProfile:
     verdict: str | None
 
 
+_FINAL_VERDICT_LINE = re.compile(
+    r"^\s*(?:ANSWER\s*:\s*)?(YES|NO|UNKNOWN)\s*[.!]?\s*$",
+    re.I,
+)
+
+
 def operator_scoring(reply: str, trace: WrapTrace) -> OperatorProfile:
     """^6 decomposition present, or a bare ^9 landing?
 
     An answer with no chain behind it is a conclusion that arrived without
     composition. That is recorded here and acted on by the Output Gate.
+
+    Only whole-line step citations count. Explanatory prose can legitimately
+    state a derived link (for example, ``Therefore, AA leads to CC.``); that is
+    a conclusion, not a claimed premise. Treating every embedded ``leads to``
+    phrase as a premise makes Domain Coherence reject correct transitive
+    reasoning as fabricated evidence.
+
+    The dial contract puts the verdict on the last line, so score that line.
+    The generic bare-arm parser intentionally takes the first verdict token,
+    but applying that policy here turns explanatory prose such as ``no direct
+    statement ...`` into NO even when the model's declared verdict is UNKNOWN.
     """
     text = strip_reasoning(reply)
-    steps = tuple((a.upper(), b.upper()) for a, b in _LINK.findall(text))
-    verdict = parse_yes_no_unknown(text)
+    steps = tuple((a.upper(), b.upper()) for a, b in _PREMISE_LINE.findall(text))
+    lines = [line for line in text.splitlines() if line.strip()]
+    match = _FINAL_VERDICT_LINE.fullmatch(lines[-1]) if lines else None
+    verdict = match.group(1).upper() if match else None
     trace.log("operator_scoring", "scored", f"{len(steps)} claimed step(s), verdict={verdict}")
     return OperatorProfile(steps, bool(steps), verdict)
 
