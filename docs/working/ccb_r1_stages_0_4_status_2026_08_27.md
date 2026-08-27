@@ -16,7 +16,8 @@ authenticated evidence — see `ccb_r1_gate_analysis_2026_08_27.md`.
 | **2** Fault injection, axis-mapped | `faults.py` | 15 (shared) |
 | **3** Truth-firewall sweep | `sweep.py` | 15 (shared) |
 | **4** RPM & memory dynamics | `rpm.py`, `cmb.py` | 31 (shared) |
-| | **total** | **69** |
+| **B** Baseline controls B0-B2 | `baselines.py` | 10 |
+| | **total** | **79** |
 
 Every suite runs on every push via `.github/workflows/ci.yml`, plus a
 two-directional fixture guard asserting the audited §11 board stays rejected and
@@ -80,13 +81,30 @@ a docstring.
 - **No experiment has been run.** These are synthetic boards. Per the research
   paper, they "validate software behavior only … cannot establish causal or
   empirical validity."
-- **No baseline comparison yet.** B0 (`^8`-only control), B1 (no-bias), and B2
-  (random-bias) are expressible against this harness; **B3 (unstructured LLM)**
-  requires a model and belongs to Stage 5.
+- **B3 is still absent.** B0-B2 now run (see below); **B3 (unstructured LLM)**
+  requires a model and belongs to Stage 5. It is the only baseline that answers
+  "what does the architecture add", so no capability claim can rest on Stages
+  0-4 alone.
 - **No kill criteria.** Still the owner's to supply. Without them the program
   can always conclude that more stages are needed.
 
 ---
+
+## Baseline separation
+
+Controls are what make a green stage mean anything. Without them, Stages 0-4
+report internal consistency and nothing more.
+
+| Control | Result |
+| :--- | :--- |
+| **B0** `^8`-only association | **fails** the transitive task the full `^6`+`^9` reasoner passes, and still succeeds on the one-hop task — a control, not a strawman |
+| **B1** no-bias ablation | refused at construction with `E-CJT-001`, not answered wrongly |
+| **B2** random-bias control | concludes **60.5%** of the time against the structured board's **100%** |
+
+The B2 gap is the useful number: roughly 40 points of the board's behaviour is
+topology rather than accident. It is also a floor to beat, not a victory — a
+randomly-biased board still concluding 60% of the time says the task set is not
+yet discriminating hard.
 
 ## Stage 5 readiness
 
