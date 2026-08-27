@@ -29,7 +29,13 @@ from flips import DEFAULT_BANDS, DecisionBands, FlipReport, Outcome, flip_report
 from stats import MIN_PAIRED_N, MarginVerdict, judge_margin
 from tasksets import TaskSet
 
-__all__ = ["PreRegistration", "Stage5Report", "verify", "run_stage5"]
+__all__ = [
+    "PreRegistration",
+    "FirewallComparison",
+    "Stage5Report",
+    "verify",
+    "run_stage5",
+]
 
 
 class Stage5Error(RuntimeError):
@@ -116,11 +122,28 @@ def verify(prereg: PreRegistration, deduction: TaskSet, honesty: TaskSet,
 
 
 @dataclass(frozen=True)
+class FirewallComparison:
+    """M2's wrapped criterion and the same-model bare diagnostic control.
+
+    M2 remains the registered absolute ceiling: the wrapped arm must pass on
+    its own. The bare arm is reported to aid diagnosis and is not converted
+    into a post-hoc margin.
+    """
+
+    wrapped: FlipReport
+    bare: FlipReport
+
+    @property
+    def passed(self) -> bool:
+        return self.wrapped.passed
+
+
+@dataclass(frozen=True)
 class Stage5Report:
     prereg_fingerprint: str
     honesty: MarginVerdict
     deduction: MarginVerdict
-    firewall: FlipReport
+    firewall: FirewallComparison
 
     @property
     def passed(self) -> bool:
@@ -132,14 +155,20 @@ class Stage5Report:
             f"{head} (pre-registration {self.prereg_fingerprint[:16]}…)",
             f"  M1 {self.honesty.summary()}",
             f"  M3 {self.deduction.summary()}",
-            f"  M2 {self.firewall.summary()}",
+            f"  M2 wrapped {self.firewall.wrapped.summary()}",
+            f"  M2 bare control {self.firewall.bare.summary()}",
         ])
 
 
 def run_stage5(prereg: PreRegistration, *,
                honesty_board, honesty_baseline,
                deduction_board, deduction_baseline,
-               firewall_results: dict[str, tuple[Outcome, Outcome]]) -> Stage5Report:
+               firewall_wrapped_results: dict[str, tuple[Outcome, Outcome]],
+               firewall_bare_results: dict[str, tuple[Outcome, Outcome]],
+               firewall_wrapped_invalid_ids: tuple[str, ...] = (),
+               firewall_bare_invalid_ids: tuple[str, ...] = (),
+               firewall_wrapped_failure_ids: tuple[str, ...] = (),
+               firewall_bare_failure_ids: tuple[str, ...] = ()) -> Stage5Report:
     """Judge all three criteria. Every one is reported, pass or fail.
 
     The board and baseline sequences are per-item scores in the task set's own
@@ -156,5 +185,20 @@ def run_stage5(prereg: PreRegistration, *,
             "M3 deduction", deduction_board, deduction_baseline, prereg.m3_deduction,
             confidence=prereg.confidence, seed=prereg.bootstrap_seed, min_n=prereg.min_n,
         ),
-        firewall=flip_report(firewall_results, prereg.bands, prereg.m2_ceiling),
+        firewall=FirewallComparison(
+            wrapped=flip_report(
+                firewall_wrapped_results,
+                prereg.bands,
+                prereg.m2_ceiling,
+                invalid_ids=firewall_wrapped_invalid_ids,
+                failure_ids=firewall_wrapped_failure_ids,
+            ),
+            bare=flip_report(
+                firewall_bare_results,
+                prereg.bands,
+                prereg.m2_ceiling,
+                invalid_ids=firewall_bare_invalid_ids,
+                failure_ids=firewall_bare_failure_ids,
+            ),
+        ),
     )

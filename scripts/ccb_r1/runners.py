@@ -380,8 +380,9 @@ def rating_outcome(text: str, lo: float = 0.0, hi: float = 10.0,
     """A firewall-arm reply as an `Outcome`.
 
     Unreadable output becomes NEEDS_INFORMATION rather than a guessed number.
-    Two unreadable replies then compare as "no flip, no movement", which is
-    correct: nothing was concluded either time, so nothing moved.
+    Two unreadable replies compare mechanically as "no flip, no movement"
+    because neither concluded. `flip_report` separately marks that pair as
+    invalid coverage, so unreadability cannot make the M2 criterion pass.
     """
     value = parse_rating(text, lo, hi)
     if log is not None:

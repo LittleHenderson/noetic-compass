@@ -19,6 +19,7 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "scripts" / "ccb_r1"))
@@ -26,6 +27,7 @@ sys.path.insert(0, str(REPO / "scripts" / "ccb_r1"))
 from flips import flip_report  # noqa: E402
 from rpm import Terminal  # noqa: E402
 from runners import score_deduction, score_honesty  # noqa: E402
+import wrap as wrap_module  # noqa: E402
 from tasksets import (  # noqa: E402
     Difficulty,
     HonestyItem,
@@ -103,6 +105,8 @@ def _route(premises, query):
 
 def sound_model(prompt: str) -> str:
     """Finds real routes, shows the chain, and answers the meta-question well."""
+    if "Rate the strength of this case" in prompt:
+        return "5.0"
     if "SUFFICIENT" in prompt:
         route = _route(_premises(prompt), _query(prompt))
         return "SUFFICIENT" if route else "INSUFFICIENT"
@@ -115,6 +119,8 @@ def sound_model(prompt: str) -> str:
 
 def blind_model(prompt: str) -> str:
     """Never finds a route. The wrapper has no way to supply one."""
+    if "Rate the strength of this case" in prompt:
+        return "5.0"
     if "SUFFICIENT" in prompt:
         return "INSUFFICIENT"
     return "Answer: NO"
@@ -127,6 +133,8 @@ def fabricating_model(prompt: str) -> str:
     model that reasons properly where it can and hallucinates rather than
     admitting a gap where it cannot.
     """
+    if "Rate the strength of this case" in prompt:
+        return "5.0"
     if "SUFFICIENT" in prompt:
         route = _route(_premises(prompt), _query(prompt))
         return "SUFFICIENT" if route else "INSUFFICIENT"
@@ -150,6 +158,8 @@ def plausible_model(prompt: str) -> str:
     Kept as a test rather than fixed: it is the honest upper bound on what this
     architecture can catch.
     """
+    if "Rate the strength of this case" in prompt:
+        return "5.0"
     if "SUFFICIENT" in prompt:
         return "SUFFICIENT"
     given = _premises(prompt)
@@ -159,6 +169,8 @@ def plausible_model(prompt: str) -> str:
 
 def brazen_model(prompt: str) -> str:
     """Overconfident at every level, including about its own sufficiency."""
+    if "Rate the strength of this case" in prompt:
+        return "5.0"
     if "SUFFICIENT" in prompt:
         return "SUFFICIENT"
     src, dst = _query(prompt)
@@ -426,6 +438,51 @@ class FirewallArmTests(unittest.TestCase):
             results[pair.pair_id] = (base, variant)
         self.assertTrue(flip_report(results).passed)
 
+    def test_registered_pairs_reach_the_model_as_exact_a_a_prompts(self):
+        """The current explicit-field arm is post-redaction A/A, not A/B."""
+        pairs = generate_firewall_pairs(100, 20260831).items
+        for pair in pairs:
+            outbound_prompts: list[str] = []
+
+            def complete(prompt: str) -> str:
+                outbound_prompts.append(prompt)
+                return "5.0"
+
+            _, _, trace = wrap_firewall_pair(complete, pair)
+            diagnostic = trace.firewall
+            self.assertIsNotNone(diagnostic, pair.pair_id)
+            assert diagnostic is not None
+            self.assertEqual(outbound_prompts[0], outbound_prompts[1], pair.pair_id)
+            self.assertTrue(diagnostic.outbound_prompts_match, pair.pair_id)
+            self.assertEqual(diagnostic.base.outbound_prompt_sha256,
+                             diagnostic.variant.outbound_prompt_sha256)
+            self.assertEqual(diagnostic.base.residual_identity_fields, ())
+            self.assertEqual(diagnostic.variant.residual_identity_fields, ())
+
+    def test_a_a_reply_and_outcome_variability_is_classified_without_causality(self):
+        replies = iter(("5.0", "8.0"))
+        base, variant, trace = wrap_firewall_pair(lambda _: next(replies), self.PAIRS[0])
+        diagnostic = trace.firewall
+        assert diagnostic is not None
+        self.assertTrue(diagnostic.outbound_prompts_match)
+        self.assertFalse(diagnostic.raw_replies_match)
+        self.assertFalse(diagnostic.parsed_outcomes_match)
+        self.assertEqual(
+            diagnostic.classification,
+            "A_A_RAW_REPLY_AND_PARSED_OUTCOME_DIVERGENCE",
+        )
+        self.assertEqual(base.raw, "5.0")
+        self.assertEqual(variant.raw, "8.0")
+
+    def test_a_a_raw_variation_can_parse_to_the_same_outcome(self):
+        replies = iter(("5.0", "Rating: 5.0"))
+        _, _, trace = wrap_firewall_pair(lambda _: next(replies), self.PAIRS[0])
+        diagnostic = trace.firewall
+        assert diagnostic is not None
+        self.assertFalse(diagnostic.raw_replies_match)
+        self.assertTrue(diagnostic.parsed_outcomes_match)
+        self.assertEqual(diagnostic.classification, "A_A_RAW_REPLY_DIVERGENCE_ONLY")
+
     def test_redaction_does_not_remove_a_signal_it_was_never_given(self):
         """The honest limit: exact-span removal, no paraphrase, no inference."""
         pair = self.PAIRS[0]
@@ -438,10 +495,54 @@ class FirewallArmTests(unittest.TestCase):
         self.assertEqual(base.value, variant.value)  # same leak both sides
         self.assertEqual(base.value, 8.0)            # and it was not removed
 
+    def test_differential_unregistered_cue_survives_and_localizes_at_boundary(self):
+        """A cue outside the registered fields makes this a real A/B failure."""
+        pair = self.PAIRS[0]
+        original_renderer = wrap_module.narrative_prompt
+        outbound_prompts: list[str] = []
+
+        def renderer(rendered_pair, identity: dict[str, str]) -> str:
+            cue = (
+                "incumbent-network-cue"
+                if identity == rendered_pair.base_identity
+                else "outsider-network-cue"
+            )
+            return f"{original_renderer(rendered_pair, identity)} Context cue: {cue}."
+
+        def cue_sensitive_rater(prompt: str) -> str:
+            outbound_prompts.append(prompt)
+            return "2.0" if "incumbent-network-cue" in prompt else "8.0"
+
+        with mock.patch.object(wrap_module, "narrative_prompt", side_effect=renderer):
+            base, variant, trace = wrap_module.wrap_firewall_pair(
+                cue_sensitive_rater,
+                pair,
+            )
+
+        diagnostic = trace.firewall
+        assert diagnostic is not None
+        self.assertIn("incumbent-network-cue", outbound_prompts[0])
+        self.assertIn("outsider-network-cue", outbound_prompts[1])
+        self.assertNotEqual(outbound_prompts[0], outbound_prompts[1])
+        self.assertFalse(diagnostic.outbound_prompts_match)
+        self.assertEqual(diagnostic.classification, "OUTBOUND_PROMPT_DIVERGENCE")
+        self.assertEqual(diagnostic.base.residual_identity_fields, ())
+        self.assertEqual(diagnostic.variant.residual_identity_fields, ())
+        self.assertEqual((base.value, variant.value), (2.0, 8.0))
+        report = flip_report({pair.pair_id: (base, variant)})
+        self.assertEqual(report.flipped_ids, (pair.pair_id,))
+        self.assertIn(pair.pair_id, report.over_ceiling)
+
     def test_an_unreadable_rating_concludes_nothing(self):
         base, variant, _ = wrap_firewall_pair(lambda _: "???", self.PAIRS[0])
         self.assertIs(base.terminal, Terminal.NEEDS_INFORMATION)
         self.assertIs(variant.terminal, Terminal.NEEDS_INFORMATION)
+        self.assertEqual(base.raw, "???")
+
+    def test_the_bare_arm_also_preserves_raw_replies(self):
+        replies = iter(("4.0", "7.0"))
+        base, variant = bare_firewall_pair(lambda _: next(replies), self.PAIRS[0])
+        self.assertEqual((base.raw, variant.raw), ("4.0", "7.0"))
 
 
 if __name__ == "__main__":  # pragma: no cover

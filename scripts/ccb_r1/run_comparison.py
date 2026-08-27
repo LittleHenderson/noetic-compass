@@ -46,7 +46,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from flips import DEFAULT_BANDS, Outcome  # noqa: E402
+from flips import DEFAULT_BANDS, FlipReport, Outcome  # noqa: E402
 from rpm import Terminal  # noqa: E402
 from run_calibration import LADDERS, PROVIDERS, build_completion, load_dotenv  # noqa: E402
 from runners import ScoreLog, score_deduction, score_honesty  # noqa: E402
@@ -58,6 +58,8 @@ from tasksets import (  # noqa: E402
 )
 from wrap import (  # noqa: E402
     DEFAULT_DIALS,
+    FirewallCallDiagnostic,
+    FirewallPairDiagnostic,
     bare_cot_deduction,
     bare_deduction,
     bare_firewall_pair,
@@ -91,6 +93,17 @@ class ArmScores:
     @property
     def rate(self) -> float:
         return sum(self.scores) / len(self.scores) if self.scores else 0.0
+
+
+@dataclass
+class FirewallArmRun:
+    """One firewall arm, including coverage holes and optional diagnostics."""
+
+    name: str
+    results: dict[str, tuple[Outcome, Outcome]] = field(default_factory=dict)
+    invalid_ids: tuple[str, ...] = ()
+    failure_ids: tuple[str, ...] = ()
+    diagnostics: dict[str, FirewallPairDiagnostic] = field(default_factory=dict)
 
 
 def _parallel(items, work, workers: int, retries: int):
@@ -163,16 +176,97 @@ def _pair_or_blank(result):
     return result
 
 
+def _firewall_arm(name: str, pairs, runs, *, wrapped: bool) -> FirewallArmRun:
+    results: dict[str, tuple[Outcome, Outcome]] = {}
+    invalid: list[str] = []
+    failures: list[str] = []
+    diagnostics: dict[str, FirewallPairDiagnostic] = {}
+
+    for pair, run in zip(pairs, runs):
+        if run is None:
+            failures.append(pair.pair_id)
+            outcomes = _pair_or_blank(run)
+        else:
+            outcomes = run[:2] if wrapped else run
+            if wrapped:
+                trace = run[2]
+                if trace.firewall is None:
+                    invalid.append(pair.pair_id)
+                else:
+                    diagnostics[pair.pair_id] = trace.firewall
+        results[pair.pair_id] = outcomes
+        if any(outcome.terminal is not Terminal.CONCLUDED for outcome in outcomes):
+            invalid.append(pair.pair_id)
+
+    return FirewallArmRun(
+        name=name,
+        results=results,
+        invalid_ids=tuple(sorted(set(invalid) | set(failures))),
+        failure_ids=tuple(sorted(failures)),
+        diagnostics=diagnostics,
+    )
+
+
 def run_firewall(pairs, workers, retries, counter_wrapped, counter_bare):
+    # Materialize once so generators cannot be consumed by the wrapped arm and
+    # silently leave the bare arm (or the reporting pass) empty.
+    pairs = tuple(pairs)
     wrapped = _parallel(
-        pairs, lambda p: wrap_firewall_pair(counter_wrapped, p, DEFAULT_DIALS)[:2],
+        pairs, lambda p: wrap_firewall_pair(counter_wrapped, p, DEFAULT_DIALS),
         workers, retries,
     )
     bare = _parallel(pairs, lambda p: bare_firewall_pair(counter_bare, p), workers, retries)
     return (
-        {p.pair_id: _pair_or_blank(r) for p, r in zip(pairs, wrapped)},
-        {p.pair_id: _pair_or_blank(r) for p, r in zip(pairs, bare)},
+        _firewall_arm("wrapped", pairs, wrapped, wrapped=True),
+        _firewall_arm("bare", pairs, bare, wrapped=False),
     )
+
+
+def _outcome_payload(outcome: Outcome) -> dict:
+    return {
+        "terminal": outcome.terminal.value,
+        "value": outcome.value,
+        "raw": outcome.raw,
+    }
+
+
+def _firewall_call_payload(call: FirewallCallDiagnostic) -> dict:
+    return {
+        "side": call.side,
+        "source_prompt_sha256": call.source_prompt_sha256,
+        "outbound_prompt_sha256": call.outbound_prompt_sha256,
+        "removed_fields": list(call.removed_fields),
+        "residual_identity_fields": list(call.residual_identity_fields),
+        "outcome": _outcome_payload(call.outcome),
+    }
+
+
+def _firewall_diagnostic_payload(diagnostic: FirewallPairDiagnostic) -> dict:
+    return {
+        "pair_id": diagnostic.pair_id,
+        "classification": diagnostic.classification,
+        "outbound_prompts_match": diagnostic.outbound_prompts_match,
+        "raw_replies_match": diagnostic.raw_replies_match,
+        "parsed_outcomes_match": diagnostic.parsed_outcomes_match,
+        "base": _firewall_call_payload(diagnostic.base),
+        "variant": _firewall_call_payload(diagnostic.variant),
+    }
+
+
+def _flip_payload(report: FlipReport) -> dict:
+    return {
+        "passed": report.passed,
+        "complete": report.complete,
+        "flips": report.flips,
+        "pairs": report.pairs,
+        "flipped_ids": list(report.flipped_ids),
+        "max_movement": report.max_movement,
+        "ceiling": report.ceiling,
+        "over_ceiling": len(report.over_ceiling),
+        "over_ceiling_ids": list(report.over_ceiling),
+        "invalid_ids": list(report.invalid_ids),
+        "failure_ids": list(report.failure_ids),
+    }
 
 
 #: Calls each arm spends per item, for the dry-run estimate. The wrapped
@@ -274,10 +368,23 @@ def main(argv: list[str] | None = None) -> int:
         prereg,
         honesty_board=h_wrapped.scores, honesty_baseline=h_bare.scores,
         deduction_board=d_wrapped.scores, deduction_baseline=d_bare.scores,
-        firewall_results=f_wrapped,
+        firewall_wrapped_results=f_wrapped.results,
+        firewall_bare_results=f_bare.results,
+        firewall_wrapped_invalid_ids=f_wrapped.invalid_ids,
+        firewall_bare_invalid_ids=f_bare.invalid_ids,
+        firewall_wrapped_failure_ids=f_wrapped.failure_ids,
+        firewall_bare_failure_ids=f_bare.failure_ids,
     )
 
     print(report.summary())
+    for label, arm in (
+        ("wrapped", report.firewall.wrapped),
+        ("bare control", report.firewall.bare),
+    ):
+        print(
+            f"  M2 {label} flipped_ids={list(arm.flipped_ids)} "
+            f"over_ceiling_ids={list(arm.over_ceiling)}"
+        )
     print()
     print(f"  deduction  wrapped {d_wrapped.rate:.1%}  bare {d_bare.rate:.1%}  "
           f"bare-CoT {d_cot.rate:.1%}   <- read CoT before crediting the pipeline")
@@ -315,11 +422,14 @@ def main(argv: list[str] | None = None) -> int:
             },
             "m2": {
                 "passed": report.firewall.passed,
-                "flips": report.firewall.flips,
-                "pairs": report.firewall.pairs,
-                "max_movement": report.firewall.max_movement,
-                "ceiling": report.firewall.ceiling,
-                "over_ceiling": len(report.firewall.over_ceiling),
+                "criterion_arm": "wrapped",
+                "causal_interpretation": "NOT_ASSIGNED_BY_DIAGNOSTICS",
+                "wrapped": _flip_payload(report.firewall.wrapped),
+                "bare_control": _flip_payload(report.firewall.bare),
+                "wrapped_diagnostics": {
+                    pair_id: _firewall_diagnostic_payload(diagnostic)
+                    for pair_id, diagnostic in sorted(f_wrapped.diagnostics.items())
+                },
             },
             "m3": {
                 "cleared": report.deduction.cleared,
@@ -337,6 +447,9 @@ def main(argv: list[str] | None = None) -> int:
             "transport_failures": {
                 f"{label}/{arm.name}": arm.failures
                 for label, group in arms.items() for arm in group
+            } | {
+                "firewall/wrapped": len(f_wrapped.failure_ids),
+                "firewall/bare": len(f_bare.failure_ids),
             },
             "calls": {name: c.calls for name, c in counters.items()},
         }

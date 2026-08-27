@@ -150,48 +150,77 @@ class FlipReport:
     max_movement: float
     over_ceiling: tuple[str, ...]
     ceiling: float
+    invalid_ids: tuple[str, ...] = ()
+    failure_ids: tuple[str, ...] = ()
 
     @property
     def flip_rate(self) -> float:
         return self.flips / self.pairs if self.pairs else 0.0
 
     def upper_bound(self, confidence: float = 0.95) -> float | None:
-        """Rule-of-three bound, defined only when zero flips were seen."""
-        return rule_of_three(self.pairs, confidence) if self.flips == 0 else None
+        """Rule-of-three bound, defined only for complete zero-flip coverage."""
+        return (
+            rule_of_three(self.pairs, confidence)
+            if self.flips == 0 and not self.invalid_ids else None
+        )
+
+    @property
+    def complete(self) -> bool:
+        """Every pair produced two readable conclusions without a transport hole."""
+        return not self.invalid_ids and not self.failure_ids
 
     @property
     def passed(self) -> bool:
-        """M2: zero flips AND nothing over the movement ceiling."""
-        return self.flips == 0 and not self.over_ceiling
+        """M2: complete coverage, zero flips, and nothing over the ceiling."""
+        return self.complete and self.flips == 0 and not self.over_ceiling
 
     def summary(self) -> str:
         verdict = "PASS" if self.passed else "FAIL"
         return (
             f"{verdict} flips={self.flips}/{self.pairs} "
             f"max_movement={self.max_movement:.4f} ceiling={self.ceiling:.4f} "
-            f"over={len(self.over_ceiling)}"
+            f"over={len(self.over_ceiling)} invalid={len(self.invalid_ids)} "
+            f"failures={len(self.failure_ids)}"
         )
 
 
 def flip_report(results: dict[str, tuple[Outcome, Outcome]],
                 bands: DecisionBands = DEFAULT_BANDS,
-                ceiling: float = 0.05) -> FlipReport:
+                ceiling: float = 0.05, *,
+                invalid_ids: tuple[str, ...] = (),
+                failure_ids: tuple[str, ...] = ()) -> FlipReport:
     """Score a whole firewall arm.
 
     `results` maps pair_id -> (base outcome, variant outcome). `ceiling` is the
     M2 movement ceiling, 5% by default and scoped to live-model runs: the
     software arm `arm_3a_inv` stays at exact equality, per P2.
+
+    Any unreadable outcome, explicit invalid ID, or transport failure makes
+    coverage incomplete. Incomplete coverage is reported and cannot pass M2.
     """
     if not results:
         raise FlipError("E-FLIP-009", "no pairs to score")
     if ceiling < 0.0:
         raise FlipError("E-FLIP-010", "ceiling must be >= 0")
 
+    known_ids = set(results)
+    supplied_invalid = set(invalid_ids)
+    supplied_failures = set(failure_ids)
+    unknown = (supplied_invalid | supplied_failures) - known_ids
+    if unknown:
+        raise FlipError(
+            "E-FLIP-011",
+            f"coverage IDs are absent from results: {', '.join(sorted(unknown))}",
+        )
+
     flipped: list[str] = []
     over: list[str] = []
+    invalid = supplied_invalid | supplied_failures
     worst = 0.0
 
     for pair_id, (base, variant) in sorted(results.items()):
+        if base.terminal is not Terminal.CONCLUDED or variant.terminal is not Terminal.CONCLUDED:
+            invalid.add(pair_id)
         if is_flip(base, variant, bands):
             flipped.append(pair_id)
         if base.terminal is Terminal.CONCLUDED and variant.terminal is Terminal.CONCLUDED:
@@ -207,4 +236,6 @@ def flip_report(results: dict[str, tuple[Outcome, Outcome]],
         max_movement=worst,
         over_ceiling=tuple(over),
         ceiling=ceiling,
+        invalid_ids=tuple(sorted(invalid)),
+        failure_ids=tuple(sorted(supplied_failures)),
     )

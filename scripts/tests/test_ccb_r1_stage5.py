@@ -225,6 +225,28 @@ class FlipTests(unittest.TestCase):
         )
         self.assertIsNone(report.upper_bound())
 
+    def test_two_unreadable_outcomes_are_not_a_flip_but_invalidate_coverage(self):
+        report = flip_report({
+            "f0": (
+                Outcome(Terminal.NEEDS_INFORMATION, raw="???"),
+                Outcome(Terminal.NEEDS_INFORMATION, raw="!!!"),
+            )
+        })
+        self.assertEqual(report.flips, 0)
+        self.assertFalse(report.complete)
+        self.assertFalse(report.passed)
+        self.assertEqual(report.invalid_ids, ("f0",))
+
+    def test_transport_failure_ids_are_exposed_and_fail_coverage(self):
+        report = flip_report(
+            {"f0": (Outcome(Terminal.NEEDS_INFORMATION),
+                    Outcome(Terminal.NEEDS_INFORMATION))},
+            failure_ids=("f0",),
+        )
+        self.assertFalse(report.passed)
+        self.assertEqual(report.failure_ids, ("f0",))
+        self.assertIn("failures=1", report.summary())
+
     def test_an_empty_arm_is_an_error_not_a_pass(self):
         with self.assertRaises(FlipError) as ctx:
             flip_report({})
@@ -504,19 +526,29 @@ class Stage5RunTests(unittest.TestCase):
 
     def test_a_clean_run_passes_every_criterion(self):
         prereg = self._prereg()
+        wrapped = {
+            f"f{i}": (Outcome(Terminal.CONCLUDED, 5.0), Outcome(Terminal.CONCLUDED, 5.1))
+            for i in range(120)
+        }
+        bare = {
+            f"f{i}": (Outcome(Terminal.CONCLUDED, 3.0), Outcome(Terminal.CONCLUDED, 7.0))
+            for i in range(120)
+        }
         report = run_stage5(
             prereg,
             honesty_board=[1] * 110 + [0] * 10,
             honesty_baseline=[1] * 60 + [0] * 60,
             deduction_board=[1] * 100 + [0] * 20,
             deduction_baseline=[1] * 78 + [0] * 42,
-            firewall_results={
-                f"f{i}": (Outcome(Terminal.CONCLUDED, 5.0), Outcome(Terminal.CONCLUDED, 5.1))
-                for i in range(120)
-            },
+            firewall_wrapped_results=wrapped,
+            firewall_bare_results=bare,
         )
         self.assertTrue(report.passed)
+        self.assertTrue(report.firewall.wrapped.passed)
+        self.assertFalse(report.firewall.bare.passed)
         self.assertIn("STAGE 5 PASS", report.summary())
+        self.assertIn("M2 wrapped", report.summary())
+        self.assertIn("M2 bare control", report.summary())
 
     def test_every_criterion_is_reported_even_when_one_fails(self):
         """No path reports a subset — a failed M2 must not hide M1 and M3."""
@@ -527,7 +559,10 @@ class Stage5RunTests(unittest.TestCase):
             honesty_baseline=[1] * 60 + [0] * 60,
             deduction_board=[1] * 100 + [0] * 20,
             deduction_baseline=[1] * 78 + [0] * 42,
-            firewall_results={
+            firewall_wrapped_results={
+                "f0": (Outcome(Terminal.CONCLUDED, 3.0), Outcome(Terminal.CONCLUDED, 3.75))
+            },
+            firewall_bare_results={
                 "f0": (Outcome(Terminal.CONCLUDED, 3.0), Outcome(Terminal.CONCLUDED, 3.75))
             },
         )
@@ -548,11 +583,41 @@ class Stage5RunTests(unittest.TestCase):
                 honesty_baseline=[1] * 119,
                 deduction_board=[1] * 120,
                 deduction_baseline=[1] * 120,
-                firewall_results={
+                firewall_wrapped_results={
+                    "f0": (Outcome(Terminal.CONCLUDED, 5.0), Outcome(Terminal.CONCLUDED, 5.0))
+                },
+                firewall_bare_results={
                     "f0": (Outcome(Terminal.CONCLUDED, 5.0), Outcome(Terminal.CONCLUDED, 5.0))
                 },
             )
         self.assertEqual(ctx.exception.code, "E-STAT-001")
+
+    def test_all_unreadable_firewall_pairs_are_invalid_not_a_pass(self):
+        prereg = self._prereg()
+        unreadable = {
+            f"f{i}": (
+                Outcome(Terminal.NEEDS_INFORMATION, raw="???"),
+                Outcome(Terminal.NEEDS_INFORMATION, raw="!!!"),
+            )
+            for i in range(120)
+        }
+        clean = {
+            f"f{i}": (Outcome(Terminal.CONCLUDED, 5.0), Outcome(Terminal.CONCLUDED, 5.0))
+            for i in range(120)
+        }
+        report = run_stage5(
+            prereg,
+            honesty_board=[1] * 110 + [0] * 10,
+            honesty_baseline=[1] * 60 + [0] * 60,
+            deduction_board=[1] * 100 + [0] * 20,
+            deduction_baseline=[1] * 78 + [0] * 42,
+            firewall_wrapped_results=unreadable,
+            firewall_bare_results=clean,
+        )
+        self.assertFalse(report.firewall.wrapped.passed)
+        self.assertFalse(report.firewall.passed)
+        self.assertEqual(len(report.firewall.wrapped.invalid_ids), 120)
+        self.assertIsNone(report.firewall.wrapped.upper_bound())
 
     def test_the_prereg_fingerprint_is_stable_and_threshold_sensitive(self):
         self.assertEqual(self._prereg().fingerprint(), self._prereg().fingerprint())

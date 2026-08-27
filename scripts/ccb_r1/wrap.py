@@ -41,12 +41,13 @@ step. Report all three arms or the comparison is not honest.
 
 from __future__ import annotations
 
+import hashlib
 import re
 from dataclasses import dataclass, field
 
 from flips import Outcome
 from rpm import Terminal
-from runners import parse_rating, parse_yes_no_unknown, strip_reasoning
+from runners import parse_yes_no_unknown, rating_outcome, strip_reasoning
 from tasksets import DeductionItem, FirewallPair, HonestyItem
 
 __all__ = [
@@ -59,6 +60,8 @@ __all__ = [
     "StageRecord",
     "WrapTrace",
     "WrapResult",
+    "FirewallCallDiagnostic",
+    "FirewallPairDiagnostic",
     "wrap_deduction",
     "wrap_honesty",
     "wrap_firewall_pair",
@@ -129,12 +132,68 @@ class StageRecord:
     detail: str = ""
 
 
+@dataclass(frozen=True)
+class FirewallCallDiagnostic:
+    """One side of a firewall pair at the exact model boundary.
+
+    The source prompt hash proves which narrative was rendered. The outbound
+    hash proves what the model actually received after redaction. `outcome.raw`
+    preserves the reply that was parsed, so a changed reply can be separated
+    from a changed parsed outcome without claiming why the reply changed.
+    """
+
+    side: str
+    source_prompt_sha256: str
+    outbound_prompt_sha256: str
+    removed_fields: tuple[str, ...]
+    residual_identity_fields: tuple[str, ...]
+    outcome: Outcome
+
+
+@dataclass(frozen=True)
+class FirewallPairDiagnostic:
+    """Non-causal localization facts for one wrapped firewall pair."""
+
+    pair_id: str
+    base: FirewallCallDiagnostic
+    variant: FirewallCallDiagnostic
+
+    @property
+    def outbound_prompts_match(self) -> bool:
+        return self.base.outbound_prompt_sha256 == self.variant.outbound_prompt_sha256
+
+    @property
+    def raw_replies_match(self) -> bool:
+        return self.base.outcome.raw == self.variant.outcome.raw
+
+    @property
+    def parsed_outcomes_match(self) -> bool:
+        return (
+            self.base.outcome.terminal is self.variant.outcome.terminal
+            and self.base.outcome.value == self.variant.outcome.value
+        )
+
+    @property
+    def classification(self) -> str:
+        """Describe the first observable divergence without assigning cause."""
+        if not self.outbound_prompts_match:
+            return "OUTBOUND_PROMPT_DIVERGENCE"
+        if not self.raw_replies_match and not self.parsed_outcomes_match:
+            return "A_A_RAW_REPLY_AND_PARSED_OUTCOME_DIVERGENCE"
+        if not self.raw_replies_match:
+            return "A_A_RAW_REPLY_DIVERGENCE_ONLY"
+        if not self.parsed_outcomes_match:
+            return "PARSED_OUTCOME_DIVERGENCE"
+        return "NO_DIVERGENCE"
+
+
 @dataclass
 class WrapTrace:
     records: list[StageRecord] = field(default_factory=list)
     calls: int = 0
     refused: bool = False
     reason: str = ""
+    firewall: FirewallPairDiagnostic | None = None
 
     def log(self, stage: str, action: str, detail: str = "") -> None:
         self.records.append(StageRecord(stage, action, detail))
@@ -410,6 +469,10 @@ def narrative_prompt(pair: FirewallPair, identity: dict[str, str]) -> str:
 _IDENTITY_HINTS = ("name", "affiliation", "seniority", "stated_ambition")
 
 
+def _text_sha256(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
 def redact_identity(prompt: str, identity: dict[str, str], trace: WrapTrace) -> str:
     """Input Analyzer: strip identity-bearing spans before the model sees them.
 
@@ -431,21 +494,48 @@ def redact_identity(prompt: str, identity: dict[str, str], trace: WrapTrace) -> 
 
 def wrap_firewall_pair(completion, pair: FirewallPair,
                        dials: Dials = DEFAULT_DIALS) -> tuple[Outcome, Outcome, WrapTrace]:
-    """Both halves through the pipeline, on the narrative rendering."""
+    """Both halves through redaction and the model, with boundary diagnostics.
+
+    The diagnostic records observations only. Matching outbound hashes establish
+    an A/A model-boundary comparison; they do not make any causal claim about a
+    later reply difference.
+    """
     trace = WrapTrace()
-    outcomes = []
-    for identity in (pair.base_identity, pair.variant_identity):
-        prompt = redact_identity(narrative_prompt(pair, identity), identity, trace)
+    calls: list[FirewallCallDiagnostic] = []
+    for side, identity in (
+        ("base", pair.base_identity),
+        ("variant", pair.variant_identity),
+    ):
+        source_prompt = narrative_prompt(pair, identity)
+        removed_fields = tuple(
+            field_name for field_name in _IDENTITY_HINTS
+            if identity.get(field_name) and identity[field_name] in source_prompt
+        )
+        prompt = redact_identity(source_prompt, identity, trace)
+        residual_fields = tuple(
+            field_name for field_name in _IDENTITY_HINTS
+            if identity.get(field_name) and identity[field_name] in prompt
+        )
         trace.calls += 1
         reply = completion(prompt)
-        value = parse_rating(reply)
-        trace.log("output_gate", "released" if value is not None else "withheld",
-                  "" if value is not None else "unreadable rating")
-        outcomes.append(
-            Outcome(Terminal.CONCLUDED, value) if value is not None
-            else Outcome(Terminal.NEEDS_INFORMATION)
+        outcome = rating_outcome(reply)
+        trace.log("base_llm_call", "returned", f"{side}: {len(reply)} char(s)")
+        trace.log("output_gate", "released" if outcome.value is not None else "withheld",
+                  side if outcome.value is not None else f"{side}: unreadable rating")
+        calls.append(
+            FirewallCallDiagnostic(
+                side=side,
+                source_prompt_sha256=_text_sha256(source_prompt),
+                outbound_prompt_sha256=_text_sha256(prompt),
+                removed_fields=removed_fields,
+                residual_identity_fields=residual_fields,
+                outcome=outcome,
+            )
         )
-    return outcomes[0], outcomes[1], trace
+    trace.firewall = FirewallPairDiagnostic(pair.pair_id, calls[0], calls[1])
+    trace.log("firewall_diagnostic", trace.firewall.classification,
+              f"outbound_prompts_match={trace.firewall.outbound_prompts_match}")
+    return calls[0].outcome, calls[1].outcome, trace
 
 
 # ---- the bare arm (B3) and the compute-matched control ---------------------
@@ -479,9 +569,6 @@ def bare_firewall_pair(completion, pair: FirewallPair) -> tuple[Outcome, Outcome
     """Bare arm on the same narrative rendering, identity left in."""
     outcomes = []
     for identity in (pair.base_identity, pair.variant_identity):
-        value = parse_rating(completion(narrative_prompt(pair, identity)))
-        outcomes.append(
-            Outcome(Terminal.CONCLUDED, value) if value is not None
-            else Outcome(Terminal.NEEDS_INFORMATION)
-        )
+        reply = completion(narrative_prompt(pair, identity))
+        outcomes.append(rating_outcome(reply))
     return outcomes[0], outcomes[1]
