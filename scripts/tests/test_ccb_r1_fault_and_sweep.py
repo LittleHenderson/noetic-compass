@@ -20,7 +20,7 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "scripts" / "ccb_r1"))
 
 from episode import linear_board  # noqa: E402
-from faults import FAULTS, Axis, detect, run_suite  # noqa: E402
+from faults import FAULTS, Axis, detect, detect_rpm, rpm_chain_fault, run_suite  # noqa: E402
 from sweep import (  # noqa: E402
     arm_3a_inv,
     arm_3a_sens,
@@ -58,6 +58,23 @@ class Stage2FaultLocalization(unittest.TestCase):
         found = detect(compound.apply(linear_board()))
         self.assertIs(found.axis, Axis.P)
         self.assertGreaterEqual(len(found.evidence), 2)
+
+    def test_an_rpm_chain_violation_trips_axis_A(self) -> None:
+        """Axis A was in the enum but exercised by nothing.
+
+        A declared protection that nothing invokes is the exact defect the audit
+        found in the original netlist, so it gets a test rather than a comment.
+        """
+        found = detect_rpm(rpm_chain_fault())
+        self.assertIs(found.axis, Axis.A)
+        self.assertEqual(found.stage, "blocked")
+        self.assertTrue(any("halted at W" in e for e in found.evidence))
+
+    def test_a_healthy_rpm_chain_trips_nothing(self) -> None:
+        from rpm import Goal, PrereqState
+
+        healthy = Goal("ok", PrereqState(9.0), PrereqState(9.0), PrereqState(9.0))
+        self.assertIs(detect_rpm(healthy).axis, Axis.NONE)
 
     def test_detection_carries_evidence_not_just_a_verdict(self) -> None:
         w_fault = next(f for f in FAULTS if f.expected_axis is Axis.W)

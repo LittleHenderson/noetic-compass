@@ -21,7 +21,7 @@ from enum import Enum
 
 from cjt_sim import CjtSpec
 from episode import Stage, check_descent, check_firewall, run_episode
-from rpm import Goal, PrereqState, Terminal
+from rpm import Goal, PrereqState, RpmPlanner, Terminal
 
 
 class Axis(str, Enum):
@@ -188,12 +188,26 @@ def run_suite(reference: list[Stage], *, control_runs: int = 8) -> Scorecard:
     return card
 
 
-def rpm_chain_fault() -> tuple[Goal, Axis]:
-    """An RPM chain that cannot complete. Trips axis A."""
-    goal = Goal(
-        name="blocked",
-        d=PrereqState(9.0),
-        w=PrereqState(1.0),
-        p=PrereqState(9.0),
+def rpm_chain_fault() -> Goal:
+    """An RPM chain that cannot complete: Wisdom is unmet and has no sub-goal.
+
+    Axis A is "Pathway RPM chain violation". This is exercised through
+    `detect_rpm` below rather than left as an unwired declaration — the defect
+    the audit found in the original netlist was exactly a declared protection
+    that nothing invoked.
+    """
+    return Goal(name="blocked", d=PrereqState(9.0), w=PrereqState(1.0), p=PrereqState(9.0))
+
+
+def detect_rpm(goal: Goal) -> Detection:
+    """Localize an RPM chain failure and map it to axis A."""
+    result = RpmPlanner().run(goal)
+    if result.terminal is Terminal.CONCLUDED:
+        return Detection(Axis.NONE, None, result.terminal)
+    blocked = next((r for r in reversed(result.trace) if r.block is not None), None)
+    return Detection(
+        Axis.A,
+        blocked.goal if blocked else None,
+        result.terminal,
+        (f"RPM chain halted at {blocked.block.value if blocked else '?'}",),
     )
-    return goal, Axis.A

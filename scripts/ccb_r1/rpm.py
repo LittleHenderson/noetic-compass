@@ -66,10 +66,6 @@ BLOCK_TERMINAL = {
 DEFAULT_SUFFICIENCY = 5.0
 
 
-class RpmError(RuntimeError):
-    pass
-
-
 @dataclass
 class PrereqState:
     score: float

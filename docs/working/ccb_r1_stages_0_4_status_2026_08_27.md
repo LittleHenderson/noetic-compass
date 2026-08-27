@@ -1,7 +1,7 @@
 # CCB-R1 Stages 0–4 — Complete
 
 **Date:** 2026-08-27
-**Status:** Stages 0–4 built, passing, and enforced in CI. 69 tests.
+**Status:** Stages 0–4 built, passing, and enforced in CI. 81 tests.
 **Evidence class:** bounded software evidence. Not a research packet, not
 authenticated evidence — see `ccb_r1_gate_analysis_2026_08_27.md`.
 
@@ -17,7 +17,7 @@ authenticated evidence — see `ccb_r1_gate_analysis_2026_08_27.md`.
 | **3** Truth-firewall sweep | `sweep.py` | 15 (shared) |
 | **4** RPM & memory dynamics | `rpm.py`, `cmb.py` | 31 (shared) |
 | **B** Baseline controls B0-B2 | `baselines.py` | 10 |
-| | **total** | **79** |
+| | **total** | **81** |
 
 Every suite runs on every push via `.github/workflows/ci.yml`, plus a
 two-directional fixture guard asserting the audited §11 board stays rejected and

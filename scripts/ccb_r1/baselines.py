@@ -22,7 +22,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from cjt_sim import CjtError, CjtSpec, Scale
+from cjt_sim import CjtError, CjtSpec
 from episode import Stage, linear_board, run_episode
 from rpm import Terminal
 
