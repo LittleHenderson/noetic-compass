@@ -223,6 +223,31 @@ sets need re-deriving as natural-language reasoning rather than tuning further.
 Do not keep adding rungs past that point; it becomes a search for a set that
 flatters the result.
 
+### How to run one
+
+```
+python scripts/ccb_r1/run_calibration.py --kind honesty --provider deepseek \
+    --out docs/working/calibration_honesty_deepseek.json
+```
+
+Baseline only — `calibrate()` has no board parameter, and the runner does not
+work around that. Keys are read as `NC_<PROVIDER>_API_KEY` then the bare name,
+matching `api/config.py`; point `--env-file` at the `.env` that holds them if it
+is not at the default path. Nothing about the key is printed or written.
+
+Prompts are fetched concurrently and the gate then scores from that cache;
+because generation is deterministic the gate rebuilds an identical set, and the
+runner asserts the fingerprints match rather than assuming it. A cache miss or
+a fingerprint drift **voids the run** instead of scoring it.
+
+`--out` writes the result as JSON with the procedure fingerprint, every
+attempt's set fingerprint and verdict, the unparseable count, and the pinned
+provider/model/temperature. Exit status is 0 when a set was accepted, 1
+otherwise, so it can gate a script.
+
+**Read `unparseable` before reading the score.** A low rate that is mostly
+unreadable output is a transport or budget problem wearing a result's clothes.
+
 ### Not yet measured — baseline honesty
 
 The deduction result says nothing about M1. **Walking chains and abstaining
@@ -477,6 +502,35 @@ mechanical.
 6. **Verify.** `verify(prereg, deduction, honesty, firewall)` — raises if any
    set is not the pre-registered one.
 7. **Judge.** `run_stage5(...)` returns all three verdicts.
+
+### 9.0 Running it
+
+```
+python scripts/ccb_r1/run_comparison.py --provider deepseek --dry-run
+python scripts/ccb_r1/run_comparison.py --provider deepseek --out result.json
+```
+
+`run_comparison.py` performs steps 1-7 above in that order: builds the sets,
+pre-registers, runs every arm on identical items, verifies the fingerprints,
+and judges all three criteria. Exit status is 0 only when all three pass.
+
+**Run `--dry-run` first.** It reports the call count and spends nothing. At
+n=100 the upper bound is 1,000 calls across seven arms; the wrapped honesty arm
+costs one call rather than two whenever the RPM gate withholds, so the real
+figure is lower.
+
+Concurrency is per item rather than per call, because the wrapped pipeline
+decides its second call based on the first. A permanently failing item is
+scored zero and counted as a transport failure — never dropped, since dropping
+would shorten one arm and void the paired statistics.
+
+`--ladder hard` is the default, because a strong model abandoned the default
+ladder as TOO_EASY at every rung.
+
+**The compute-matched control is always reported.** `bare-CoT` sits beside
+`bare` in the output. The wrapped arm spends an extra call per open-world item,
+so a wrapped win read without CoT could be architecture or simply more
+inference.
 
 ### 9.1 Void conditions
 
