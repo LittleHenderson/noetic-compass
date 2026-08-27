@@ -1,10 +1,12 @@
 # CCB-R1 Stage 5 — test specification
 
-> **⚠ Read `ccb_r1_stage5_construct_validity_2026_08_27.md` first.** With the
-> arms as specified here, CCB-R1 passes all three criteria by construction and a
-> ten-line breadth-first search scores identically. The criteria, generators,
-> gate and statistics below all stand; **the arms do not**. Do not run Stage 5
-> against a live model until Arm A is re-pointed at the Wrap Pipeline.
+> **⚠ Arm A has moved.** The standalone-board arm specified below could not
+> fail — see `ccb_r1_stage5_construct_validity_2026_08_27.md`. Arm A is now the
+> **Wrap Pipeline** (`wrap.py`): the same model inside the pipeline against the
+> same model bare, plus a compute-matched control. See
+> `ccb_r1_wrapped_arm_2026_08_27.md` for the arm and its measured
+> discrimination. The criteria, generators, gate and statistics below stand
+> unchanged.
 
 **Date:** 2026-08-27
 **Status:** buildable, testable, and **unblocked** — models are available.
@@ -458,9 +460,9 @@ code, so a caught failure names its own cause.
 
 ## 12. Open items
 
-0. **Re-point Arm A at the Wrap Pipeline.** Blocking. See the
-   construct-validity finding — the standalone-solver arm cannot produce
-   evidence for the claim Stage 5 exists to test.
+0. **Harder firewall items.** M2 is the weakest criterion on the wrapped arm:
+   redaction removes the identity fields it was told about, so it needs items
+   carrying implicit identity signals to be a real test.
 1. **The full kill-criteria document** (F0–F5, K0.1–K0.4, K1–K3) is still
    outside version control. A pre-registration that can be edited after seeing
    results is not a pre-registration. This is now the last blocker before a run

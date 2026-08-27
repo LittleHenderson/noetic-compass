@@ -1,7 +1,8 @@
 # Stage 5 cannot currently distinguish CCB-R1 from ten lines of graph search
 
 **Date:** 2026-08-27
-**Status:** finding. Read before interpreting any Stage 5 result.
+**Status:** finding — **remedy built**, see `ccb_r1_wrapped_arm_2026_08_27.md`.
+Read before interpreting any Stage 5 result produced with the board arm.
 **Applies to:** `scripts/ccb_r1/board.py`, and the M1/M2/M3 criteria in
 `docs/working/ccb_r1_kill_criteria_margins_2026_08_27.md`
 
