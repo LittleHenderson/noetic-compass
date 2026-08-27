@@ -35,7 +35,7 @@ pub const CAS_GRAMMAR_BNF: &str = r#"<program>          ::= <statement> (";" <st
 <composition>      ::= <primary> (("*" | "/" | "circ") <primary>)* ;
 <primary>          ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <cardinality> | <meta_set> | <meta_symbol> | "∅" | <number> | <call> | <ident> | <string> | "(" <expression> ")" ;
 <cardinality>      ::= "|" <meta_set> "|" ;
-<meta_set>         ::= "Noetics" | "Domains" | "Worlds" | "Drives" | "Registers" | "States" | "Foundations" | "SubFoundations" | "Foundation_1" | ... | "Foundation_7" ;
+<meta_set>         ::= "Noetics" | "Domains" | "Drives" | "Registers" | "States" | "Foundations" | "SubFoundations" | "Foundation_1" | ... | "Foundation_7" ;
 <meta_symbol>      ::= <domain> | "T" | "A" | "f" | "E" ;
 <call>             ::= <ident> "(" <arg_list>? ")" ;
 <arg_list>         ::= <expression> ("," <expression>)* ;
@@ -274,7 +274,7 @@ const VALID_REGISTERS: [&str; 4] = ["T", "A", "f", "E"];
 fn canonical_meta_set_name(name: &str) -> Option<String> {
     match name {
         "Noetics" => Some("Noetics".to_string()),
-        "Domains" | "Worlds" => Some("Domains".to_string()),
+        "Domains" => Some("Domains".to_string()),
         "Drives" => Some("Drives".to_string()),
         "Registers" => Some("Registers".to_string()),
         "States" => Some("States".to_string()),

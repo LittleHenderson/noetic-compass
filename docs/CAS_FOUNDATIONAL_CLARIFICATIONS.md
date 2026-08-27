@@ -958,6 +958,64 @@ Clarification 10 stands on:
 
 ---
 
+## Clarification 11: The 4 Worlds Axis Resolves to Registers, Not Domains
+
+### Section 1: Principle Statement
+
+The TKS 4-Worlds axis maps to the CAS **4 Registers** (`T`, `A`, `f`, `E`). It does **not** map to the 4 Processing Domains (`P`, `C`, `E`, `O`).
+
+Accordingly, the 28 Sub-Foundations ARE the 28 Drive × Register positions:
+
+    SubFoundations = Drives × Registers = { F_k|R : k ∈ 1..7, R ∈ {T, A, f, E} }
+
+A TKS Sub-Foundation written `5b` in legacy notation denotes `F5|A` in CAS notation. The world-letter crosswalk is `a→T`, `b→A`, `c→f`, `d→E`.
+
+### Section 2: Why This Clarification Exists
+
+The corpus carried both readings simultaneously, in the same files:
+
+| Artifact | Asserted |
+| :--- | :--- |
+| `docs/reference/tks_28_foundations_translation_key.md` | Worlds → **Registers** (`\|T` = 1st World) |
+| `api/notation/compiler.py` — `subfoundations` built over `VALID_REGISTERS` | Worlds → **Registers** |
+| `live-trace-worker/scripts/build_foundation28_scenarios.py` — `REGISTER_TO_LEGACY_WORLD` | Worlds → **Registers** |
+| `api/notation/compiler.py` — `META_SET_ALIASES = {"Worlds": "Domains"}` | Worlds → **Domains** |
+| `cas-engine/src/language.rs`, `crates/casc-syntax/src/lib.rs` | Worlds → **Domains** |
+| `cas_forecast_view` teaching prototype | Worlds → **Domains** (`a/P`, `b/C`, `c/E`, `d/O`) |
+
+The contradiction survived undetected because **no test could distinguish the two readings**: the only assertion touching the axis is `|Worlds| = 4`, and `|Domains| = |Registers| = 4`. Cardinality is not identity.
+
+### Section 3: Basis for the Resolution
+
+1. **Position-by-position translation.** The translation key derives the 28 positions from `7 Drives × 4 Registers` and states that Drive naming is position-matched and authoritative.
+2. **The shipped construction.** `SubFoundations` is built by iterating `VALID_REGISTERS`, and `DriveRegisterPositions` is an explicit alias for `SubFoundations`.
+3. **The scenario corpus.** The 280-scenario Foundation-28 library is generated and graded on the Register reading, stamping `legacy_foundation_code` through `REGISTER_TO_LEGACY_WORLD`.
+4. **Cross-validation at both cross-products.** Clarification 8 admits the Register axis on the evidence of two TKS cross-products — `10 Noetics × 4 Worlds = 40` and `7 Foundations × 4 Worlds = 28`. The axis that recurs at both is the Register axis.
+
+The Domain reading appears only in the alias and in a teaching prototype. It is superseded.
+
+### Section 4: Why the Domain Reading Is Not Merely a Naming Variant
+
+Registers and Domains are **orthogonal axes** under Clarification 8. Domain specifies ontological level under the precedence order `P ≻ C ≻ E ≻ O`; Register specifies operational character and carries no precedence. Treating Worlds as Domains collapses two axes the framework keeps independent, and would make `F5|A` and a hypothetical `F5` -in-Cognitive-domain the same object. They are not.
+
+This matters beyond notation: the orthogonality of the four axes (Noetic, Domain, Drive, Register) is load-bearing for the claim that Register is a specification layer over existing primitives rather than a new primitive.
+
+### Section 5: Consequences
+
+- `SubFoundations`, `Foundation_1..7`, and `SubFoundationSet` are correct as shipped; no change.
+- The `Worlds` meta-set alias is **incorrect** and must be corrected in all three implementations (`api/notation/compiler.py`, `cas-engine/src/language.rs`, `cas-engine/crates/casc-syntax/src/lib.rs`).
+- A regression test must assert the identity, not the cardinality: `Worlds == Registers` and `SubFoundations == Drives × Registers`.
+- `docs/reference/tks_28_foundations_translation_key.md` is confirmed correct and unblocked. Its stated prerequisite — "direct access to the TKS 28 Foundations source document" — is satisfied by `_tmp_TKS_v7_4_FULL_CORRECTED.txt` §1.1.1, Table 1.2 "Canonical 28 Sub-Foundations", already in the repository.
+- The `cas_forecast_view` prototype's `a/P, b/C, c/E, d/O` legend is superseded and should be relabelled to `a/T, b/A, c/f, d/E` if that prototype is retained.
+
+### Section 6: Legal Framing
+
+Clarification 11 is a **correction of an internal inconsistency**, not an extension. It introduces no primitives, no notation, and no analytical capacity. The 40 Cognitive States, 7 Drives, 4 Registers, and 5 Generative Operations named in USPTO #64/037,173 and Clarifications 1-10 remain unchanged. It records which of two already-present readings of an existing axis is canonical, and aligns three implementations to it.
+
+Because the resolution *preserves* the declared orthogonality of Register and Domain, it strengthens rather than disturbs the v7.5-v7.7 position that Register is a specification of operational character over existing primitives.
+
+---
+
 ## Scope of This Document
 
 This clarification:

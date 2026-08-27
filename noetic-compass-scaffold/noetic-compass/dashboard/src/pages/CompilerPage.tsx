@@ -541,7 +541,7 @@ export function highlightSyntax(text: string): React.ReactNode[] {
     }
     // Meta-set names and typed cluster constructors (Set Theory layer).
     const metaSetMatch = s.slice(i).match(
-      /^(?:Noetics|Domains|Worlds|Drives|Registers|States|SubFoundations|Foundations|Foundation_[1-7]|EmptySet|NoeticSet|NoeticCluster|Cluster|StateSet|StateCluster|StateVariantSet|StateVariantCluster|RelationSet|RelationCluster|DriveSet|DomainSet|RegisterSet|FoundationSet|SubFoundationSet|Tuple|Coordinate|Product|Pullback|CoverOf|PartitionOf|Union|Intersection|Difference)\b/
+      /^(?:Noetics|Domains|Drives|Registers|States|SubFoundations|Foundations|Foundation_[1-7]|EmptySet|NoeticSet|NoeticCluster|Cluster|StateSet|StateCluster|StateVariantSet|StateVariantCluster|RelationSet|RelationCluster|DriveSet|DomainSet|RegisterSet|FoundationSet|SubFoundationSet|Tuple|Coordinate|Product|Pullback|CoverOf|PartitionOf|Union|Intersection|Difference)\b/
     );
     if (metaSetMatch && (i === 0 || !/[A-Za-z0-9_]/.test(s[i - 1] ?? ''))) {
       parts.push(<span key={i} className="text-violet-300">{metaSetMatch[0]}</span>);

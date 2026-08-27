@@ -1,0 +1,59 @@
+// Stage 0-conformant rebuild of the CCB-R1 §11 netlist.
+// Every change here traces to a finding in
+// docs/working/cas_pcba_reasoning_audit_2026_08_27.md.
+board cognitive_reasoning_processor_v1 {
+    input:  cas_problem;
+    output: cas_decision;
+
+    use cognitive_memory_board;
+    use cognitive_differential_amplifier;
+    use cognitive_power_management_board;
+    use cognitive_safety_board;
+
+    // --- Bias substrate. Registers pinned; charter is Principled so it may
+    //     legitimately govern evaluation (ambition may not).
+    node memory_bias:    ^5^C_{F2}|A;
+    node charter_bias:   ^5^P_{F7}|T;
+
+    // --- Reasoning spine. Domains are monotone non-ascending: C -> E -> E -> O.
+    node interpretation: ^8^C_{F2}|A;
+    node decomposition:  ^6^E_{F6}|A;
+    node conclusion:     ^9^E_{F2}|A;
+    node cas_decision:   ^9^O_{F5}|E;
+
+    // Surface candidate meaning. Generation runs above unity by design.
+    cjt intake:
+        CJT< cas_problem | memory_bias => interpretation >
+        [β=1.6, region=active];
+
+    // Decomposition-and-test, biased by the charter, never by the goal.
+    cjt analyze:
+        CJT< interpretation | charter_bias => decomposition >
+        [β=1.0, region=active];
+
+    // Land the conclusion. FIX: was E->C (Axis W); now E->E.
+    // FIX: was biased by goal_bias (F5); now charter_bias (F7 Principled).
+    cjt infer:
+        CJT< decomposition | charter_bias => conclusion >
+        [β=1.0, region=active];
+
+    // FIX: `action` was an orphan. Commit is the missing edge, and it is
+    //      where |A Analytical converts to |E Embodied -- the DAC boundary.
+    cjt commit:
+        CJT< conclusion | charter_bias => cas_decision >
+        [β=2.4, region=active];
+
+    // Only diodes that gate an edge the board actually has.
+    diode d_ce: Diode< ^C -> ^E >;
+    diode d_eo: Diode< ^E -> ^O >;
+
+    // FIX: was O->C at an unspecified gain. Canonical path is O->P, bounded.
+    feedback constitutional:
+        cas_decision -> charter_bias
+        [β=0.005, tau=very_slow];
+
+    probe tp_interpretation: interpretation;
+    probe tp_decomposition:  decomposition;
+    probe tp_conclusion:     conclusion;
+    probe tp_decision:       cas_decision;
+}
