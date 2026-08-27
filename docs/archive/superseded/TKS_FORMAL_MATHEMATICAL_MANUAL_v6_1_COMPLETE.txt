@@ -1,3 +1,35 @@
+################################################################################
+##  SUPERSEDED — DO NOT USE AS A SOURCE OF CAS CANON
+##
+##  TKS Formal Mathematical Manual v6.1. Retained for provenance only.
+##  Superseded by TKS v7.4 (`_tmp_TKS_v7_4_FULL_CORRECTED.txt`) and by
+##  `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`, which is authoritative.
+##
+##  THIS FILE CONTRADICTS CURRENT CANON IN AT LEAST THREE PLACES:
+##
+##   1. Noetic ^5 / ^6 are INVERTED.
+##      Here (14.2):  5 = Gender (Masculine),  6 = Gender (Feminine)
+##      Canon:        ^5 = Female,             ^6 = Male
+##
+##   2. Noetic ^2 / ^3 mean something else entirely.
+##      Here (14.2):  2 = Correspondence (Above), 3 = Correspondence (Below)
+##      Canon:        ^2 = Positive, ^3 = Negative
+##                    (Above/Cause and Below/Effect are ^8 and ^9)
+##
+##   3. Foundation labels are pre-v7.4.
+##      Here (Table 2.3): 1 Unity, 6 Material, 7 Lust
+##      Canon (v7.4 Table 1.1): 1 Association, 6 Wealth, 7 Continuation
+##
+##  Also note: Definition 2.14 binds `Dm` to Foundation m, while Table 14.1
+##  independently uses D1-D7 for Spirit/Life/Knowledge/Love/Power/Wealth/
+##  Expression. Those two indexings do not agree for m in {1,2,3,7}.
+##
+##  Archived per the CCB-R1 audit
+##  (`docs/working/cas_pcba_reasoning_audit_2026_08_27.md`, corpus fix C3).
+##  The inverted tables in this file misled four of six independent audit
+##  lenses and the lead auditor twice.
+################################################################################
+
 TKS FORMAL MATHEMATICAL
         MANUAL
      Version 6.1  Academic Complete Edition

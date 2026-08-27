@@ -120,7 +120,7 @@ def span(text: object, color: str = "slate_300", *, bold: bool = False) -> str:
 
 
 META_SET_RE = re.compile(
-    r"^(?:Noetics|Domains|Worlds|Drives|Registers|States|SubFoundations|Foundations|Foundation_[1-7]|EmptySet|"
+    r"^(?:Noetics|Domains|Drives|Registers|States|SubFoundations|Foundations|Foundation_[1-7]|EmptySet|"
     r"NoeticSet|NoeticCluster|Cluster|StateSet|StateCluster|StateVariantSet|StateVariantCluster|RelationSet|"
     r"RelationCluster|DriveSet|DomainSet|RegisterSet|FoundationSet|SubFoundationSet|Tuple|Coordinate|Product|"
     r"Pullback|CoverOf|PartitionOf|Union|Intersection|Difference)\b"

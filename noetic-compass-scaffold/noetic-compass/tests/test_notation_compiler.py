@@ -1020,11 +1020,41 @@ def test_v78_subset_and_empty_set_assertions():
         assert artifact.to_dict()["result"]["holds"] is True
 
 
+def test_worlds_is_not_a_resolvable_meta_set():
+    """`Worlds` was removed, not re-pointed (Clarification 11).
+
+    It previously aliased to Domains while SubFoundations was built from
+    Registers -- the two readings contradicted each other. Removing the name
+    makes every existing usage fail loudly instead of silently changing meaning.
+    """
+    artifact = compile_expression("|Worlds| = 4")
+    assert not artifact.valid, "Worlds must no longer resolve as a meta-set"
+
+
+def test_subfoundations_is_the_drive_register_product_by_identity():
+    """Pin membership, not cardinality.
+
+    The old suite asserted only `|Worlds| = 4`. Because |Domains| == |Registers|
+    == 4, that assertion passed under BOTH readings of the axis and so could
+    never have caught the contradiction. This asserts the actual set.
+    """
+    from api.notation.compiler import BUILTIN_META_SETS, VALID_REGISTERS
+
+    expected = {
+        f"F{drive}|{register}"
+        for drive in range(1, 8)
+        for register in VALID_REGISTERS
+    }
+    assert BUILTIN_META_SETS["SubFoundations"] == expected
+    assert BUILTIN_META_SETS["Foundation_5"] == {"F5|T", "F5|A", "F5|f", "F5|E"}
+    # The alias must track the same object, not a parallel definition.
+    assert BUILTIN_META_SETS["SubFoundations"] is not None
+
+
 def test_v78_cardinality_assertions_for_canonical_finite_sets():
     cases = {
         "Noetics": 10,
         "Domains": 4,
-        "Worlds": 4,
         "Drives": 7,
         "Registers": 4,
         "States": 40,

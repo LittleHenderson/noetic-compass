@@ -21,7 +21,7 @@ pub const CAS_GRAMMAR_BNF: &str = r#"<program>          ::= <statement> (";" <st
 <composition>      ::= <primary> (("*" | "/" | "circ") <primary>)* ;
 <primary>          ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <cardinality> | <meta_set> | <meta_symbol> | "∅" | <number> | <call> | <ident> | <string> | "(" <expression> ")" ;
 <cardinality>      ::= "|" <meta_set> "|" ;
-<meta_set>         ::= "Noetics" | "Domains" | "Worlds" | "Drives" | "Registers" | "States" | "Foundations" | "SubFoundations" | "Foundation_1" | ... | "Foundation_7" ;
+<meta_set>         ::= "Noetics" | "Domains" | "Drives" | "Registers" | "States" | "Foundations" | "SubFoundations" | "Foundation_1" | ... | "Foundation_7" ;
 <meta_symbol>      ::= <domain> | "T" | "A" | "f" | "E" ;
 <call>             ::= <ident> "(" <arg_list>? ")" ;
 <arg_list>         ::= <expression> ("," <expression>)* ;
@@ -314,7 +314,7 @@ fn type_keyword_to_kind(name: &str) -> Result<TypeKind, LanguageError> {
 fn canonical_meta_set_name(name: &str) -> Option<&'static str> {
     match name {
         "Noetics" => Some("Noetics"),
-        "Domains" | "Worlds" => Some("Domains"),
+        "Domains" => Some("Domains"),
         "Drives" => Some("Drives"),
         "Registers" => Some("Registers"),
         "States" => Some("States"),

@@ -174,7 +174,7 @@ CAS_GRAMMAR_BNF = """<program>       ::= <statement> (";" <statement>)* ;
 <product>       ::= <primary> (("*" | "/" | "∘" | "×" | "÷") <primary>)* ;
 <primary>       ::= <state> | <state_ref> | <drive_ref> | <rpm_call> | <phi_literal> | <tuple_literal> | <cardinality> | <meta_set> | <typed_meta_set> | <meta_symbol> | "∅" | <number> | <call> | <ident> | <string> | "(" <expression> ")" ;
 <cardinality>   ::= "|" <relation> "|" ;
-<meta_set>      ::= "Noetics" | "Domains" | "Worlds" | "Drives" | "Registers" | "States" | "Foundations" | "SubFoundations" | "Foundation_1" | ... | "Foundation_7" ;
+<meta_set>      ::= "Noetics" | "Domains" | "Drives" | "Registers" | "States" | "Foundations" | "SubFoundations" | "Foundation_1" | ... | "Foundation_7" ;
 <typed_meta_set> ::= "{" <arg_list>? "}" | ("NoeticSet" | "NoeticCluster" | "Cluster" | "StateSet" | "StateCluster" | "StateVariantSet" | "StateVariantCluster" | "RelationSet" | "RelationCluster" | "DriveSet" | "DomainSet" | "RegisterSet" | "FoundationSet" | "SubFoundationSet") "{" <arg_list>? "}" ;
 <tuple_literal> ::= ("Tuple" | "Coordinate") "{" <arg_list>? "}" | ("⟨" | "<") <arg_list>? ("⟩" | ">") ;
 <meta_symbol>   ::= <domain> | "T" | "A" | "f" | "E" ;
@@ -1212,7 +1212,6 @@ def _build_builtin_meta_sets() -> dict[str, frozenset[str]]:
 
 BUILTIN_META_SETS = _build_builtin_meta_sets()
 META_SET_ALIASES = {
-    "Worlds": "Domains",
     "DriveRegisterPositions": "SubFoundations",
     "SubFoundationPositions": "SubFoundations",
 }
