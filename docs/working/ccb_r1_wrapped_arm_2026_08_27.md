@@ -154,9 +154,17 @@ M1, M2, M3 and P1–P5 are unchanged and now point at an arm that can fail.
    results is not one.
 2. **Harder firewall items** carrying implicit identity signals, per the M2
    section above.
-3. **First live calibration.** Cheap and baseline-only: does the chosen model
-   land in the 40–70% band at `h3-d4`? The simulated models above bracket the
-   behaviour but do not substitute for it.
+3. **Baseline honesty calibration.** The first live calibration has now run:
+   `deepseek-chat` scored 85/95/95% on deduction and abandoned the whole
+   ladder as TOO_EASY (see the specification, §4.4). That result says nothing
+   about M1 — and the table above shows why, since `sound` scores 100% on
+   deduction and 49.2% on honesty. `honesty_procedure()` exists for this and
+   has not been run. It is the cheapest remaining measurement and the one that
+   decides whether M1 has headroom.
+4. **M3 headroom.** `hard_procedure()` raises route selection rather than chain
+   length, because the default ladder offers exactly one route from the query
+   source at every rung. If a strong model abandons that ladder too, re-derive
+   the task sets as natural-language reasoning rather than adding rungs.
 
 ## Scope note
 
