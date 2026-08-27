@@ -83,6 +83,12 @@ jobs:
           -s scripts/tests
           -p 'test_ccb_r1_wrap.py'
 
+      - name: Run the CCB-R1 calibration runner tests (keys, prefetch, policy)
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_ccb_r1_run_calibration.py'
+
       - name: Lint the CCB-R1 reference boards (Stage 0 conformance)
         run: |
           # The audited board must stay rejected and the rebuild must stay clean.

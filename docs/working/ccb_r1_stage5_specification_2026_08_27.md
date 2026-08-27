@@ -223,6 +223,31 @@ sets need re-deriving as natural-language reasoning rather than tuning further.
 Do not keep adding rungs past that point; it becomes a search for a set that
 flatters the result.
 
+### How to run one
+
+```
+python scripts/ccb_r1/run_calibration.py --kind honesty --provider deepseek \
+    --out docs/working/calibration_honesty_deepseek.json
+```
+
+Baseline only — `calibrate()` has no board parameter, and the runner does not
+work around that. Keys are read as `NC_<PROVIDER>_API_KEY` then the bare name,
+matching `api/config.py`; point `--env-file` at the `.env` that holds them if it
+is not at the default path. Nothing about the key is printed or written.
+
+Prompts are fetched concurrently and the gate then scores from that cache;
+because generation is deterministic the gate rebuilds an identical set, and the
+runner asserts the fingerprints match rather than assuming it. A cache miss or
+a fingerprint drift **voids the run** instead of scoring it.
+
+`--out` writes the result as JSON with the procedure fingerprint, every
+attempt's set fingerprint and verdict, the unparseable count, and the pinned
+provider/model/temperature. Exit status is 0 when a set was accepted, 1
+otherwise, so it can gate a script.
+
+**Read `unparseable` before reading the score.** A low rate that is mostly
+unreadable output is a transport or budget problem wearing a result's clothes.
+
 ### Not yet measured — baseline honesty
 
 The deduction result says nothing about M1. **Walking chains and abstaining
