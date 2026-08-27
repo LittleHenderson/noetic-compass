@@ -41,6 +41,12 @@ jobs:
           -s scripts/tests
           -p 'test_ccb_r1_stage0_lint.py'
 
+      - name: Run the CCB-R1 Stage 1 CJT simulator golden traces
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_ccb_r1_cjt_sim.py'
+
       - name: Lint the CCB-R1 reference boards (Stage 0 conformance)
         run: |
           # The audited board must stay rejected and the rebuild must stay clean.
