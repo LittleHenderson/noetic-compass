@@ -25,6 +25,14 @@ Severity profile after adversarial verification: **0 critical, 21 major, 49 mino
 
 Six independent audit lenses (canon fidelity, source fidelity, internal consistency, mathematical-corrections compliance, answer quality, IP/governance) each produced findings; a dedicated adversarial verifier then attempted to refute each finding by re-reading the primary sources. Only survivors are reported.
 
+> **AMENDED 2026-08-27** — two of the three PDFs have since been supplied and committed to
+> `docs/reference/pdf/`. The scope limit below is preserved as written for the record; see
+> `docs/working/cas_pcba_audit_source_verification_2026_08_27.md` for what the sources
+> settled. Headline changes: the `A22` finding is upgraded from *unverifiable* to
+> *contradicted*; the page 13/14/15 citations and the paper's disclaimers are **confirmed**,
+> two of them near-verbatim. `CAS_PCBA_Engineer.pdf` is still missing, so the board
+> inventory (CMB/CDAB/CPMB/CSB, Schmitt, diodes) and CCDL remain unverifiable.
+
 ### The three source PDFs were not available
 
 `CAS_PCBA_Engineer.pdf`, `CAS_Ohm_Quantifications_Guide-1.pdf`, and `RESEARCH_PAPER_CAS_OHM_1_0_v0.2.pdf` are **not in the repository** and were **not found in the connected Google Drive** (searched by title and by full text for `CJT`, `CAS-Ohm`, `PCBA`, `Cognitive Junction Transistor`, `Cognitive Memory Board`).
