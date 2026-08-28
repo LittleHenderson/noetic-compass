@@ -235,8 +235,8 @@ def task_recursive_plan():
         [A("executable", "P_launch"), A("executable", "P_defer")],
         goal,
         authored_effects=_plan_effects(),
-        available_actions={"W": "market_research",
-                           "P": "restructure_resources"},
+        available_actions={"market_knowledge": "market_research",
+                           "print_capacity": "restructure_resources"},
         world_actions={
             "market_research": {
                 "add_facts": [A("known", "market_knowledge")],
@@ -263,12 +263,66 @@ def task_needs_capability():
         [A("executable", "P_launch"), A("executable", "P_defer")],
         goal,
         authored_effects=_plan_effects(),
-        available_actions={"W": "market_research"},
+        available_actions={"market_knowledge": "market_research"},
         world_actions={
             "market_research": {
                 "add_facts": [A("known", "market_knowledge")],
                 "acquisition": {"W7": 0.9},
             },
+        })
+
+
+def task_recursive_nested():
+    """Depth-2 recursion: the capability action itself needs knowledge.
+
+    P_launch needs market_knowledge (research1) and print_capacity
+    (build1); but build1 has its own prerequisite market2 (research2).
+    The machine must descend capability -> knowledge and climb back out.
+    """
+    goal = GoalFrame(
+        goal_id="g_nested", foundation_ref="TF7b",
+        desired_outcome=A("executable", "?P"), kind="plan",
+        required_knowledge=("market_knowledge",),
+        required_capability=("print_capacity",))
+    facts = [
+        A("plan_for", "P_launch", "G"),
+        A("requires_knowledge", "P_launch", "market_knowledge"),
+        A("requires_capability", "P_launch", "print_capacity"),
+        A("defer_plan", "P_defer"),
+        A("action_exists", "research1"),
+        A("action_available", "research1"),
+        A("action_exists", "build1"),
+        A("action_available", "build1"),
+        A("action_exists", "research2"),
+        A("action_available", "research2"),
+    ]
+    return Problem(
+        "recursive_nested_01",
+        "Launch, whose production step needs its own market research.",
+        facts, _plan_rules(),
+        [A("executable", "P_launch"), A("executable", "P_defer")],
+        goal,
+        authored_effects=_plan_effects(),
+        available_actions={
+            "market_knowledge": "research1",
+            "print_capacity": "build1",
+            "market2": "research2",
+        },
+        world_actions={
+            "research1": {
+                "add_facts": [A("known", "market_knowledge")],
+                "acquisition": {"W7": 0.9},
+            },
+            "build1": {
+                "add_facts": [A("has_capability", "print_capacity")],
+                "acquisition": {"P7": 0.8},
+            },
+            "research2": {
+                "add_facts": [A("known", "market2")],
+            },
+        },
+        action_prerequisites={
+            "build1": {"knowledge": ["market2"], "capability": []},
         })
 
 
@@ -310,6 +364,7 @@ BATTERY = {
     "fault_missing_reading": task_fault_missing_reading,
     "missing_info": task_missing_info,
     "recursive_plan": task_recursive_plan,
+    "recursive_nested": task_recursive_nested,
     "needs_capability": task_needs_capability,
     "memory": task_memory,
     "contradiction": task_contradiction,
@@ -318,6 +373,7 @@ BATTERY = {
 # Tasks whose constitutions differ from the default.
 CONSTITUTIONS = {
     "recursive_plan": _plan_constitution,
+    "recursive_nested": _plan_constitution,
     "needs_capability": _plan_constitution,
 }
 

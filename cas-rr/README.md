@@ -49,10 +49,13 @@ load-bearing laws, and the CLI/reporting layer.
     python run.py run recursive_plan --trace
     python run.py demo                     the whole battery, one table
     python run.py check                    determinism check on every task
+    python run.py report                   capability ladder (criterion grades)
     python run.py repl                     interactive Python session
     python examples/custom_kinship.py      author a brand-new problem
 
-Full testing and interaction guide: INTERACTION.md.
+Full testing and interaction guide: INTERACTION.md. The capability
+criterion and its live report: docs/cas_rr/REASONING_CAPABILITY_CRITERION.md
+and docs/cas_rr/CAPABILITY_REPORT_V0_1.md.
 
 ## One reasoning episode
 

@@ -101,6 +101,7 @@ class Problem:
     authored_effects: Dict[str, Dict[str, float]] = field(default_factory=dict)
     available_actions: Dict[str, str] = field(default_factory=dict)
     world_actions: Dict[str, Dict] = field(default_factory=dict)
+    action_prerequisites: Dict[str, Dict] = field(default_factory=dict)
 
     def validate(self) -> None:
         if not self.problem_id:
@@ -311,18 +312,25 @@ class CASRuntime:
                           eliminated=tour["eliminated"])
 
         # Phase 9: RPM D -> W -> P scan; recurse on the first unmet.
+        # Recursion is to arbitrary depth: any goal - including a subgoal
+        # whose resolving action has its own prerequisites - may descend.
         proof_complete = bool(winner_id and self.inferences[winner_id].success)
         if goal.goal_id not in self.rpm.cache:
-            d_ok, w_ok, p_ok, unmet = self.rpm.initial_scan(
+            outcome = self.rpm.initial_scan(
                 goal, self.bank, self.world, proof_complete)
         else:
-            d_ok, w_ok, p_ok, unmet = self.rpm.re_measure(
+            outcome = self.rpm.re_measure(
                 goal, self.bank, self.world, proof_complete)
+        unmet = outcome.first_unmet
         self.trace.record(t, "9_RPM", "SCAN", goal=goal.goal_id,
-                          D_ok=d_ok, W_ok=w_ok, P_ok=p_ok, first_unmet=unmet)
+                          D_ok=outcome.D_ok, W_ok=outcome.W_ok,
+                          P_ok=outcome.P_ok, first_unmet=unmet,
+                          missing_token=outcome.missing_token)
 
         if unmet is not None:
-            if goal.kind == "subgoal":
+            action = self.problem.available_actions.get(outcome.missing_token)
+            if goal.kind == "subgoal" and action is None:
+                # A leaf subgoal with no resolving action halts typed.
                 terminal = {
                     "KNOWLEDGE": "NEEDS_INFORMATION",
                     "CAPABILITY": "NEEDS_CAPABILITY",
@@ -334,8 +342,8 @@ class CASRuntime:
                                          f"resolve blocked {unmet}")
                 self.trace.record(t, "HALT", terminal)
                 return
-            action = self.problem.available_actions.get(unmet)
-            sub = self.rpm.descend(goal, unmet, action)
+            prerequisites = self.problem.action_prerequisites.get(action or "", {})
+            sub = self.rpm.descend(goal, unmet, action, prerequisites)
             self.rpm.push(sub)
             self.trace.record(t, "9_RPM", "SUBGOAL_CREATED",
                               **self.rpm.subgoal_events[-1])

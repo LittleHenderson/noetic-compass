@@ -254,7 +254,7 @@ disposition, output. "Show your work, or don't ship it" (book Ch. 25).
 | --- | --- | --- |
 | 0 | Ontology freeze (A_root, TF/DF split, 28 channels, adapter) | DONE (ontology.py) |
 | 1 | CCDL extension + full runtime semantics | SPECIFIED (runtime spec Ch. 4-5); grammar untouched |
-| 2 | Deterministic CAS simulator | DONE (cas-rr/, 25 tests green) |
+| 2 | Deterministic CAS simulator | DONE (cas-rr/, 43 tests green incl. capability ladder) |
 | 3 | CCB-R1 integration + halt gates | DELIVERED IN SOFTWARE FORM (this spec + runtime) |
 | 4 | Ablation and fault tests | PARTIAL (fault tasks, budget tests; full ablation suite open) |
 | 5 | Encoders / external environment | OPEN |

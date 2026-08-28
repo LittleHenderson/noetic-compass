@@ -123,6 +123,22 @@ class EffectReport:
                 "effects": [e.to_dict() for e in self.effects]}
 
 
+@dataclass
+class ScanResult:
+    """One RPM D -> W -> P reading, with the exact missing prerequisite."""
+    D_ok: bool
+    W_ok: bool
+    P_ok: bool
+    first_unmet: Optional[str]
+    missing_token: Optional[str]
+
+    def to_dict(self):
+        return {
+            "D_ok": self.D_ok, "W_ok": self.W_ok, "P_ok": self.P_ok,
+            "first_unmet": self.first_unmet, "missing_token": self.missing_token,
+        }
+
+
 class FoundationEngineBank:
     def __init__(self, g: Dict[str, float], q: Dict[str, Dict[str, float]],
                  acquisition: Dict[str, float]) -> None:
@@ -209,37 +225,47 @@ class FoundationEngineBank:
             priority=goal.priority,
         )
 
-    def scan(self, goal: GoalFrame, world, proof_complete: bool) -> Tuple[bool, bool, bool, Optional[str]]:
-        """RPM D -> W -> P scan. Returns (D_ok, W_ok, P_ok, first_unmet).
+    def scan(self, goal: GoalFrame, world, proof_complete: bool) -> "ScanResult":
+        """RPM D -> W -> P scan.
 
         For question goals, Wisdom sufficiency additionally requires a
-        complete proof for the desired outcome. For plan goals it requires
-        all knowledge prerequisites present in the world, and Power
-        requires all capability prerequisites.
+        complete proof for the desired outcome. For plan and subgoal
+        kinds it requires every knowledge prerequisite present in the
+        world (known(k)) and every capability prerequisite present
+        (has_capability(c)). The first missing prerequisite token is
+        reported so the runtime can route to the exact acquisition action.
         """
+        m = int(goal.foundation_ref[2])
         if goal.kind == "subgoal":
             d_ok = goal.D_state >= SUFFICIENCY_THRESHOLD
-            w_ok = goal.W_state >= SUFFICIENCY_THRESHOLD
-            p_ok = goal.P_state >= SUFFICIENCY_THRESHOLD
+            w_base_ok = goal.W_state >= SUFFICIENCY_THRESHOLD
+            p_base_ok = goal.P_state >= SUFFICIENCY_THRESHOLD
         else:
-            m = int(goal.foundation_ref[2])
             d_ok = self.acquisition.get(f"D{m}", 0.0) >= SUFFICIENCY_THRESHOLD
-            w_base = self.acquisition.get(f"W{m}", 0.0) >= SUFFICIENCY_THRESHOLD
-            if goal.kind == "question":
-                w_ok = w_base and proof_complete
-                p_ok = self.acquisition.get(f"P{m}", 0.0) >= SUFFICIENCY_THRESHOLD
-            else:
-                w_ok = w_base and all(
-                    world.has_fact(Atom("known", (k,))) for k in goal.required_knowledge
-                )
-                p_ok = (self.acquisition.get(f"P{m}", 0.0) >= SUFFICIENCY_THRESHOLD
-                        and all(world.has_fact(Atom("has_capability", (c,)))
-                                for c in goal.required_capability))
+            w_base_ok = self.acquisition.get(f"W{m}", 0.0) >= SUFFICIENCY_THRESHOLD
+            p_base_ok = self.acquisition.get(f"P{m}", 0.0) >= SUFFICIENCY_THRESHOLD
+
+        missing_token = None
+        missing_k = None
+        missing_c = None
+        if goal.kind == "question":
+            w_ok = w_base_ok and proof_complete
+            p_ok = p_base_ok
+        else:
+            missing_k = next((k for k in goal.required_knowledge
+                              if not world.has_fact(Atom("known", (k,)))), None)
+            missing_c = next((c for c in goal.required_capability
+                              if not world.has_fact(Atom("has_capability", (c,)))), None)
+            w_ok = w_base_ok and missing_k is None
+            p_ok = p_base_ok and missing_c is None
+
         first_unmet = None
         if not d_ok:
             first_unmet = "D"
         elif not w_ok:
             first_unmet = "W"
+            missing_token = missing_k
         elif not p_ok:
             first_unmet = "P"
-        return d_ok, w_ok, p_ok, first_unmet
+            missing_token = missing_c
+        return ScanResult(d_ok, w_ok, p_ok, first_unmet, missing_token)

@@ -15,7 +15,7 @@ ambition with self-diagnosis.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from .foundations import GoalFrame
 from .terms import Atom
@@ -28,6 +28,7 @@ class ScanRecord:
     W_ok: bool
     P_ok: bool
     first_unmet: Optional[str]
+    missing_token: Optional[str]
     cached: bool
 
     def to_dict(self):
@@ -37,6 +38,7 @@ class ScanRecord:
             "W_ok": self.W_ok,
             "P_ok": self.P_ok,
             "first_unmet": self.first_unmet,
+            "missing_token": self.missing_token,
             "cached": self.cached,
         }
 
@@ -44,7 +46,7 @@ class ScanRecord:
 class RPMController:
     def __init__(self) -> None:
         self.stack: List[GoalFrame] = []
-        self.cache: Dict[str, Tuple[bool, bool, bool, Optional[str]]] = {}
+        self.cache: Dict[str, Any] = {}
         self.history: List[ScanRecord] = []
         self.subgoal_events: List[Dict] = []
 
@@ -57,23 +59,34 @@ class RPMController:
     def top(self) -> Optional[GoalFrame]:
         return self.stack[-1] if self.stack else None
 
-    def initial_scan(self, goal: GoalFrame, bank, world, proof_complete: bool) -> Tuple[bool, bool, bool, Optional[str]]:
+    def initial_scan(self, goal: GoalFrame, bank, world, proof_complete: bool):
         """Cache the first satisfaction reading before any action occurs."""
         if goal.goal_id not in self.cache:
             self.cache[goal.goal_id] = bank.scan(goal, world, proof_complete)
         result = self.cache[goal.goal_id]
-        self.history.append(ScanRecord(goal.goal_id, *result, cached=True))
+        self.history.append(ScanRecord(goal.goal_id, result.D_ok, result.W_ok,
+                                       result.P_ok, result.first_unmet,
+                                       result.missing_token, cached=True))
         return result
 
-    def re_measure(self, goal: GoalFrame, bank, world, proof_complete: bool) -> Tuple[bool, bool, bool, Optional[str]]:
+    def re_measure(self, goal: GoalFrame, bank, world, proof_complete: bool):
         """Fresh scan - never reuse a pre-action reading after acting."""
         result = bank.scan(goal, world, proof_complete)
-        self.history.append(ScanRecord(goal.goal_id, *result, cached=False))
+        self.history.append(ScanRecord(goal.goal_id, result.D_ok, result.W_ok,
+                                       result.P_ok, result.first_unmet,
+                                       result.missing_token, cached=False))
         return result
 
     def descend(self, goal: GoalFrame, first_unmet: str,
-                action: Optional[str]) -> GoalFrame:
-        """Turn the first insufficient prerequisite into a typed subgoal."""
+                action: Optional[str],
+                prerequisites: Optional[Dict] = None) -> GoalFrame:
+        """Turn the first insufficient prerequisite into a typed subgoal.
+
+        The subgoal carries its own knowledge/capability prerequisites,
+        taken from the action that resolves it - this is what lets a
+        subgoal itself descend further (recursive planning to depth N).
+        """
+        prerequisites = prerequisites or {}
         subgoal_type = {"D": "DESIRE", "W": "KNOWLEDGE", "P": "CAPABILITY"}[first_unmet]
         sub = GoalFrame(
             goal_id=f"{goal.goal_id}.{subgoal_type.lower()}",
@@ -89,6 +102,8 @@ class RPMController:
             blocked_prerequisite=first_unmet,
             subgoal_type=subgoal_type,
             subgoal_action=action,
+            required_knowledge=tuple(prerequisites.get("knowledge", [])),
+            required_capability=tuple(prerequisites.get("capability", [])),
         )
         self.subgoal_events.append({
             "event": "SUBGOAL_CREATED",

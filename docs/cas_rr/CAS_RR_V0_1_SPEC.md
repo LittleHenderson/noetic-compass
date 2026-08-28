@@ -486,7 +486,8 @@ test-point facts, so the localization is derived, not looked up.
 
 ## 17. Conformance Tests
 
-cas-rr/tests/ — 25 tests, all green at spec date.
+cas-rr/tests/ — 43 tests, all green at spec date (includes the
+capability ladder: cas-rr/tests/test_benchmark.py).
 
 | Requirement | Test |
 | --- | --- |

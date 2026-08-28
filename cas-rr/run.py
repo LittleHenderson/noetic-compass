@@ -117,6 +117,14 @@ def cmd_repl(args) -> int:
     return 0
 
 
+def cmd_report(args) -> int:
+    from cas_rr.benchmark import report_text, run_ladder
+    from tasks.levels import LADDER
+
+    print(report_text(run_ladder(LADDER)))
+    return 0
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(prog="run.py", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -132,6 +140,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     sub.add_parser("demo")
     sub.add_parser("check")
     sub.add_parser("repl")
+    sub.add_parser("report")
 
     args = parser.parse_args(argv)
     return {
@@ -140,6 +149,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         "demo": cmd_demo,
         "check": cmd_check,
         "repl": cmd_repl,
+        "report": cmd_report,
     }[args.command](args)
 
 
