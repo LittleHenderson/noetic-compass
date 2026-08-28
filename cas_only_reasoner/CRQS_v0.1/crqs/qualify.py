@@ -164,4 +164,6 @@ def qualify(manifest: Dict) -> Dict:
         "next_target": next_target,
         "estimated_upgrade": upgrade,
         "skill_profile": manifest.get("skill_profile", {}),
+        "replications": manifest.get("evidence", {}).get(
+            "replications", []),
     }

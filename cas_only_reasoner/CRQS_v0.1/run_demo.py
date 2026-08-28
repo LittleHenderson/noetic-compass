@@ -19,7 +19,16 @@ def load(name):
         return json.load(fh)
 
 
+def _utf8_console():
+    import sys
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+
 def main():
+    _utf8_console()
     print("CRQS v0.1 - CAS Reasoning Qualification Standard")
     print("=" * 64)
     for name, label in (

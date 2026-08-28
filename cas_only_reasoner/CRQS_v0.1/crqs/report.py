@@ -73,6 +73,15 @@ def format_report(q: Dict) -> str:
     lines.append(f"Deterministic replay:")
     lines.append(f"    {q['replay']}")
     lines.append("")
+    if q.get("replications"):
+        lines.append("Independent replications (E6 evidence - the evaluator")
+        lines.append("identity is disclosed; the reader judges the independence):")
+        for record in q["replications"]:
+            lines.append(f"    {record['evaluator']}")
+            lines.append(f"        artifact: {record['artifact']}")
+            if record.get("caveat"):
+                lines.append(f"        caveat: {record['caveat']}")
+        lines.append("")
     lines.append(f"Recommended next target:")
     lines.append(f"    {q['next_target']}")
     upgrade = q.get("estimated_upgrade") or         q.get("blocking", {}).get("recommendations", [])

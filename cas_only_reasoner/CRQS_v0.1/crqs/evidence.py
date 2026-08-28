@@ -21,6 +21,18 @@ EVIDENCE_CEILING = {
 }
 
 
+def _valid_replications(evidence: Dict) -> int:
+    """E6 requires INDEPENDENT reproduction: each record must name the
+    evaluator, state reproduced=true, and carry an artifact path. A
+    record missing any of the three does not count."""
+    count = 0
+    for record in evidence.get("replications", []):
+        if (record.get("evaluator") and record.get("reproduced") is True
+                and record.get("artifact")):
+            count += 1
+    return count
+
+
 def tier_from_manifest(manifest: Dict) -> str:
     evidence = manifest.get("evidence", {})
     suites = evidence.get("suites", [])
@@ -29,6 +41,13 @@ def tier_from_manifest(manifest: Dict) -> str:
     if all(s.get("passed", 0) == s.get("tests", 0) for s in suites) \
             and evidence.get("violations"):
         if any(s.get("held_out") for s in suites):
+            # E6: at least two independent replication
+            # records, each with evaluator + reproduced +
+            # artifact. The evaluator identity travels into
+            # the report - the reader judges the
+            # independence, the tier never hides it.
+            if _valid_replications(evidence) >= 2:
+                return "E6"
             return "E5"
         return "E4"
     if manifest.get("topology"):

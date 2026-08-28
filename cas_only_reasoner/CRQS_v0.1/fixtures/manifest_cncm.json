@@ -2,7 +2,7 @@
   "mind_id": "mind-cncm-0001",
   "board_version": "1.0.0",
   "compiler": "not integrated",
-  "runtime": "CAS-RRK 0.1.0 (eight-board assembly)",
+  "runtime": "CAS-RRK 0.1.0 (twelve-board assembly)",
   "topology": {
     "cjt": true, "cascade": true, "inference": true, "branches": true,
     "cdab": true, "commitment_latch": true, "rollback": true,
@@ -13,7 +13,7 @@
     "learning_writeback": true, "procedural_learning": true,
     "self_improvement": true, "language": true, "mathematics": true,
     "tools": true, "adversarial_suite": true,
-    "long_term_goals": false, "self_model": false
+    "long_term_goals": true, "self_model": true
   },
   "evidence": {
     "suites": [
@@ -33,7 +33,12 @@
       {"name": "suite_CAS-G6", "tests": 4, "passed": 4, "held_out": true},
       {"name": "suite_CAS-G7", "tests": 9, "passed": 9, "held_out": false},
       {"name": "suite_CAS-G8", "tests": 9, "passed": 9, "held_out": true},
-      {"name": "suite_CAS-G9", "tests": 13, "passed": 13, "held_out": true}
+      {"name": "suite_CAS-G9", "tests": 13, "passed": 13, "held_out": true},
+      {"name": "ltg", "tests": 10, "passed": 10, "held_out": false},
+      {"name": "self_model", "tests": 8, "passed": 8, "held_out": false},
+      {"name": "cortex_h2h", "tests": 10, "passed": 10, "held_out": false},
+      {"name": "discovery", "tests": 7, "passed": 7, "held_out": false},
+      {"name": "suite_CAS-G10", "tests": 8, "passed": 8, "held_out": false}
     ],
     "precision": 1.0, "coverage": 0.9, "held_out_success": 1.0,
     "trace_completeness": 1.0, "replay_equivalence": 1.0,
@@ -42,6 +47,16 @@
                    "invalid_conclusions": 0, "branch_leakage": 0,
                    "rpm_corruption": 0, "unsealed_transitions": 0,
                    "replay_divergence": 0},
+    "replications": [
+      {"evaluator": "independent 2-agent adversarial audit (separate AI evaluator instances, prompted to refute), 2026-08-28: G8 claim - REFUTED v1, repair verified NOT REFUTED",
+       "reproduced": true,
+       "artifact": "CHANGELOG.md (G8-repair + re-audit rounds, commits 19327ba3/86fbee59) + spec sheet.txt RE-AUDIT VERDICT section",
+       "caveat": "AI evaluators, same codebase, same day; independent human/organizational replication OPEN"},
+      {"evaluator": "independent 2-agent adversarial audit (separate AI evaluator instances, prompted to refute), 2026-08-28: G9 claim - NOT REFUTED incl. auditor-authored novel fault class",
+       "reproduced": true,
+       "artifact": "CHANGELOG.md (G9 re-audit round, commit cb492469) + spec sheet.txt G9 RE-AUDIT VERDICT section",
+       "caveat": "AI evaluators, same codebase, same day; independent human/organizational replication OPEN"}
+    ],
     "adversarial_variants": [
       {"variant": "tool_permission_denied", "outcome": "TOOL_PERMISSION_DENIED, typed board halt, no crash"},
       {"variant": "tool_budget_exhausted", "outcome": "TOOL_BUDGET_EXHAUSTED, typed board halt, no crash"},
@@ -75,7 +90,9 @@
     {"task_id": "adaptive_learning_held_out", "difficulty_grade": "D8", "passed": true, "stable": true,
      "artifact": "CAS_RLP_v0.1/tests/test_g8_suite.py (stability: test_g8_whole_sequence_is_stable)"},
     {"task_id": "self_improvement_cycle", "difficulty_grade": "D9", "passed": true, "stable": true,
-     "artifact": "CAS_RLP_v0.1/tests/test_g9_suite.py (stability: test_g9_whole_cycle_is_stable; loop: rlp/self_improvement.py)"}
+     "artifact": "CAS_RLP_v0.1/tests/test_g9_suite.py (stability: test_g9_whole_cycle_is_stable; loop: rlp/self_improvement.py)"},
+    {"task_id": "multi_domain_long_horizon", "difficulty_grade": "D10", "passed": true, "stable": true,
+     "artifact": "CNCM_G10_v0.1/tests/test_g10_suite.py (stability: test_pipeline_is_stable_run_twice; grading DISCLOSED in integration/grading.py: DI band D8, novel-research floor D10 via the discovery leg - novel to this machine, trivial to human mathematics)"}
   ],
   "authority": "A0",
   "skill_profile": {"English": 3.5, "Mathematics": 4.5, "Coding": 0.0,

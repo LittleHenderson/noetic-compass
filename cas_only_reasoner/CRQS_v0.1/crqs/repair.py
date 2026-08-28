@@ -95,6 +95,12 @@ def upgrade_path(manifest, target, requirements):
     Derived, never asserted: missing topology flags, the missing
     qualification suite, and the demonstration the target still needs.
     """
+    if target not in SUITE_DEMANDS:
+        return [
+            "CAS-GΩ is a research designation, not a qualification "
+            "tier: multi-Mind collaboration, open-ended research, an "
+            "expanding ecosystem - there is no gate to clear and no "
+            "level to award"]
     recommendations = []
     topology = manifest.get("topology", {})
     missing = [flag for flag in requirements.get(target, [])

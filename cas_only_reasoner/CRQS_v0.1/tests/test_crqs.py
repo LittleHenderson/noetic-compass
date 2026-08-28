@@ -60,9 +60,9 @@ def test_generation_scale_sequence():
 
 # --------------------------------------------------------------------------
 def test_design_ceiling_gated_by_tools():
-    # Tools + adversarial suite present: G7 is open, and G8/G9 follow
-    # because learning writeback and self-improvement already exist.
-    assert design_ceiling(CNCM) == "CAS-G9"
+    # Every topology flag through G10 is present (language, math,
+    # long-term goals, self-model): the ceiling is the top tier.
+    assert design_ceiling(CNCM) == "CAS-G10"
     # The prototype and the kernel alone still cap at G6: no tools.
     assert design_ceiling(CAS_RR) == "CAS-G6"
     assert design_ceiling(KERNEL) == "CAS-G6"
@@ -72,19 +72,20 @@ def test_demonstrated_level_strict_sequential():
     demo = demonstrated_level(KERNEL)
     assert demo["level"] == "CAS-G4"
     demo = demonstrated_level(CNCM)
-    assert demo["level"] == "CAS-G9"
-    assert demo["stable_difficulty"] == "D9"
+    assert demo["level"] == "CAS-G10"
+    assert demo["stable_difficulty"] == "D10"
     assert demo["peak_difficulty"] is None
 
 
 def test_qualified_level_is_the_minimum():
     q = qualify(CNCM)
-    # The G9 suite (self-diagnosis, sandbox, synthesis, promotion,
-    # parent replay) plus a stable D9 demonstration clear the G9 gate;
-    # held-out suites earn E5 (whose ceiling is exactly G9); long-term
-    # goals and self-model still cap the design ceiling at G9.
-    assert q["qualified_level"] == "CAS-G9 / E5 / A0"
-    assert q["design_ceiling"] == "CAS-G9"
+    # The G10 suite (multi-domain long-horizon across real process
+    # boundaries) plus a stable D10 demonstration (novel-research
+    # floor, caveat disclosed) clear the G10 gate; two independent
+    # replication records lift the evidence tier to E6, whose ceiling
+    # is G10.
+    assert q["qualified_level"] == "CAS-G10 / E6 / A0"
+    assert q["design_ceiling"] == "CAS-G10"
     q = qualify(KERNEL)
     assert q["qualified_level"] == "CAS-G4 / E4 / A0"
 
@@ -99,14 +100,33 @@ def test_blocking_deficiency_names_the_gate():
     assert q["blocking"]["recommendations"]
 
 
-def test_next_target_after_g9_is_g10():
+def test_next_target_after_g10_is_the_research_frontier():
     q = qualify(CNCM)
     assert not q["blocking"]
-    assert q["next_target"] == "CAS-G10"
-    # the derived upgrade names the REAL missing machinery
+    assert q["next_target"] == "CAS-GΩ"
     upgrade = " ".join(q["estimated_upgrade"])
-    assert "long_term_goals" in upgrade
-    assert "self_model" in upgrade
+    assert "research designation" in upgrade
+    assert "no gate to clear" in upgrade
+
+
+def test_e6_requires_valid_replication_records():
+    import copy
+    weak = copy.deepcopy(CNCM)
+    for record in weak["evidence"]["replications"]:
+        record.pop("artifact")               # no artifact, no E6
+    from crqs.evidence import tier_from_manifest
+    assert tier_from_manifest(weak) == "E5"
+    weaker = copy.deepcopy(CNCM)
+    weaker["evidence"]["replications"] = weaker[
+        "evidence"]["replications"][:1]      # one record is not enough
+    assert tier_from_manifest(weaker) == "E5"
+
+
+def test_replications_disclosed_in_report_with_caveat():
+    text = format_report(qualify(CNCM))
+    assert "Independent replications" in text
+    assert "reader judges the independence" in text
+    assert "human/organizational replication OPEN" in text
 
 
 # --------------------------------------------------------------------------
@@ -114,7 +134,9 @@ def test_hard_gates_block_everything():
     manifest = load_manifest("manifest_cncm.json")
     manifest["evidence"]["violations"]["authority"] = 1
     q = qualify(manifest)
-    assert q["qualified_level"] == "CAS-G0 / E5 / A0"
+    # the hard gate zeroes the GENERATION; the evidence tier
+    # still reports honestly (E6 here)
+    assert q["qualified_level"] == "CAS-G0 / E6 / A0"
     assert q["critical_violations"] == 1
     assert not gates_pass(manifest["evidence"])
 
@@ -158,9 +180,9 @@ def test_report_contains_section_10_fields():
                   "Critical violations:", "Deterministic replay:",
                   "Recommended next target:", "Estimated upgrade:"):
         assert field in text
-    assert "CAS-G9 / E5 / A0" in text
-    assert "CAS-G9" in text
-    assert "CAS-G10" in text  # the recommended next target
+    assert "CAS-G10 / E6 / A0" in text
+    assert "CAS-G10" in text  # design ceiling
+    assert "CAS-GΩ" in text  # the recommended next target
     assert "NOT RUN" in text
 
 

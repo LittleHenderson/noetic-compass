@@ -305,10 +305,57 @@ COMMANDS:
   completion condition must re-prove SUPPORTED through the unchanged
   kernel or completion is refused with a typed error. 10 tests green.
 
-PROGRAM TEST TOTALS (all green, 2026-08-28, G10-build round 1):
+  cas_only_reasoner/CAS_SM_v0.1/ - the Self-Model board v0.1: the
+  machine's typed representation of its own capabilities, DERIVED from
+  live probes + artifact paths, never asserted. can(x) answers CAN
+  (with evidence + probe note) / CANNOT (with the reason) / UNKNOWN
+  ("the self-model does not bluff"); a failing probe DOWNGRADES the
+  claim; limits are first-class (fragment grammar, one fault class,
+  novel-to-machine-only discovery all recited verbatim); cannot_list()
+  = [coding, vision]; deterministic, sealed. 8 tests green.
+
+  cas_only_reasoner/CNCM_G10_v0.1/ - suite_CAS-G10: the multi-domain
+  long-horizon episode. One persistent goal store, THREE episodes with
+  REAL process boundaries between them, seven domains on the real
+  boards: language (CCB-L1 answers through the kernel), self-model
+  routing (CAN tools / CANNOT vision - honest), long-term goals (born,
+  kernel-BLOCKED, resumed), tools + exact math (CCB-T1 serves the sum;
+  goal COMPLETES through the kernel's own proof, rules r_total +
+  r_answer named), learning (strategy-driven repair in 1 evaluation),
+  discovery (5 machine-novel theorems; goal completes on the sealed
+  evidence). Completion NEVER fabricated (the unproven case is refused
+  typed and the goal stays open); the whole pipeline twice = digest-
+  identical (the STABLE D10 demonstration). D10 GRADING DISCLOSED, not
+  asserted (integration/grading.py): DI band D8 by the nine axes, the
+  novel-research floor lifts to D10 via the discovery leg, caveat
+  verbatim ("novel to this machine, trivial to human mathematics").
+  8 tests green.
+
+  CRQS E6 path: tier E6 requires >= 2 independent replication records,
+  each with evaluator + reproduced + artifact (a record missing any of
+  the three does not count - tested); the evaluator identity and the
+  caveat ("AI evaluators, same codebase, same day; independent human/
+  organizational replication OPEN") are DISCLOSED in the section-10
+  report - the reader judges the independence, the tier never hides
+  it. CAS-GΩ guarded as a research designation (no gate to clear,
+  no level to award). CRQS 35 tests green.
+
+QUALIFICATION AFTER THE G10 ROUND (pre-audit):
+  the assembled CNCM (twelve-board assembly) qualifies
+  CAS-G10 / E6 / A0 - design ceiling CAS-G10 (every topology flag
+  present), demonstrated CAS-G10 stable D10 (grading disclosed),
+  evidence E6 on the two prior independent audit records (caveat
+  disclosed). Recommended next target: CAS-GΩ - a research
+  designation, not a tier. The report itself flags the public
+  (not-held-out) suites incl. suite_CAS-G10. RMB NOT RUN.
+  ADVERSARIAL AUDIT OF THIS ROUND: queued - the D10 novel-research
+  floor and the E6 replication basis are the two claims most exposed.
+
+PROGRAM TEST TOTALS (all green, 2026-08-28, G10 round complete):
   kernel 34 + RLP 45 + CCB-M1 34 + CCB-L1 18 + CAS-Sem 19 +
-  workbench 13 + CRQS 33 + CCB-T1 20 + OHM-panel 10 + H2H 10 +
-  LTG 10 = 246 local, + cas-rr 43 = 289 program-wide.
+  workbench 13 + CRQS 35 + CCB-T1 20 + OHM-panel 10 + H2H 10 +
+  LTG 10 + SM 8 + CNCM-G10 8 = 264 local, + cas-rr 43 = 307
+  program-wide.
 
 G9 RE-AUDIT VERDICT (independent 2-agent adversarial pass,
 2026-08-28, after commit 849a4e47): NOT REFUTED on both fronts. The
