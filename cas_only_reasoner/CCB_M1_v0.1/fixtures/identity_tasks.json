@@ -1,0 +1,49 @@
+{
+  "fixture": "identity_tasks",
+  "ruleset": {
+    "axioms": ["commute_add", "associate_add", "distribute", "square_expand"],
+    "procedures": []
+  },
+  "tasks": [
+    {
+      "task_id": "assoc_identity",
+      "kind": "assert_identity",
+      "premise": {"kind": "add", "terms": [
+        {"kind": "add", "terms": [{"kind": "var", "name": "a"},
+                                  {"kind": "var", "name": "b"}]},
+        {"kind": "var", "name": "c"}]},
+      "target": {"kind": "add", "terms": [
+        {"kind": "var", "name": "a"},
+        {"kind": "add", "terms": [{"kind": "var", "name": "b"},
+                                  {"kind": "var", "name": "c"}]}]},
+      "expected": "VERIFIED"
+    },
+    {
+      "task_id": "dist_identity",
+      "kind": "assert_identity",
+      "premise": {"kind": "mul", "factors": [
+        {"kind": "var", "name": "a"},
+        {"kind": "add", "terms": [{"kind": "var", "name": "b"},
+                                  {"kind": "var", "name": "c"}]}]},
+      "target": {"kind": "add", "terms": [
+        {"kind": "mul", "factors": [{"kind": "var", "name": "a"},
+                                    {"kind": "var", "name": "b"}]},
+        {"kind": "mul", "factors": [{"kind": "var", "name": "a"},
+                                    {"kind": "var", "name": "c"}]}]},
+      "expected": "VERIFIED"
+    },
+    {
+      "task_id": "expand_square_proof",
+      "kind": "prove",
+      "require_proof_steps": true,
+      "premise": {"kind": "pow", "exp": 2, "base": {"kind": "add", "terms": [
+        {"kind": "var", "name": "x"}, {"kind": "num", "q": "1"}]}},
+      "target": {"kind": "add", "terms": [
+        {"kind": "pow", "exp": 2, "base": {"kind": "var", "name": "x"}},
+        {"kind": "mul", "factors": [{"kind": "num", "q": "2"},
+                                    {"kind": "var", "name": "x"}]},
+        {"kind": "num", "q": "1"}]},
+      "expected": "VERIFIED"
+    }
+  ]
+}

@@ -38,14 +38,32 @@ BUILT (this phase):
     - run_demo.py: one full improvement cycle (PROMOTED / REJECTED /
       QUARANTINED / REJECTED_AS_PROTECTED / ROLLBACK)
 
+  cas_only_reasoner/CCB_M1_v0.1/ - the Mathematical Learning and
+  Proof Board v0.1, built above the kernel, beside CAS-RLP:
+    - spec/CCB_M1_SPEC_v0.1.md: board contract, CAS-Math IR, the
+      exact-math rule, the eight authority invariants
+    - cas_math/: exact.py (rational arithmetic, never floats),
+      expr.py (exact canonical expansion), rules.py (axioms vs
+      learned procedures), checker.py (sole validity authority,
+      first-invalid-step walk-down), prover.py (bounded search),
+      counterexample.py, lessons.py, curriculum.py, acceptance.py,
+      m1.py (orchestrator)
+    - fixtures/: arithmetic, identities, conjectures, mistake package
+    - tests/: 27 passing - exactness (including no-float conformance),
+      checker authority, proof search, counterexamples, the full
+      mistake recovery cycle (REJECTED at step 0 -> square_sum
+      diagnosed -> square_expand promoted -> corrected proof
+      VERIFIED), authority invariants, curriculum order
+    - run_demo.py: evaluate, prove, refute, learn in one command
+
 STATUS AGAINST THE 24-SECTION CHARTER:
   See CAS_RRK_v0.1/docs/CAPABILITY_CHARTER_STATUS.md for the full
-  mapping. Summary: sections 6-12, 15, 17, and 22 are substantially
+  mapping. Summary: sections 6-12, 14, 15, 17, and 22 are substantially
   demonstrated in code (memory classes, candidates,
   decomposition/inference, fair comparison, recursive planning,
-  uncertainty, commitment, recursive self-evolution via CAS-RLP, the
-  first convincing version); sections 13-14 (English, math) are the
-  declared next organs, with CCB-M1 (math) first.
+  uncertainty, commitment, mathematics via CCB-M1, recursive
+  self-evolution via CAS-RLP, the first convincing version);
+  section 13 (English, CCB-L1) is the declared next organ.
 
 COMMANDS:
   cd cas_only_reasoner/CAS_RRK_v0.1

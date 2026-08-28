@@ -1,0 +1,48 @@
+{
+  "fixture": "conjecture_tasks",
+  "tasks": [
+    {
+      "task_id": "sum_eq_product",
+      "kind": "refute",
+      "statement": {
+        "relation": "equal",
+        "left": {"kind": "add", "terms": [
+          {"kind": "var", "name": "x"}, {"kind": "var", "name": "y"}]},
+        "right": {"kind": "mul", "factors": [
+          {"kind": "var", "name": "x"}, {"kind": "var", "name": "y"}]},
+        "vars": ["x", "y"]
+      },
+      "expect_counterexample": true,
+      "expected_point": {"x": "1", "y": "1"}
+    },
+    {
+      "task_id": "square_gt_self",
+      "kind": "refute",
+      "statement": {
+        "relation": "greater_than",
+        "left": {"kind": "pow", "exp": 2, "base": {"kind": "var", "name": "x"}},
+        "right": {"kind": "var", "name": "x"},
+        "vars": ["x"]
+      },
+      "expect_counterexample": true,
+      "expected_point": {"x": "1"}
+    },
+    {
+      "task_id": "square_identity_no_ce",
+      "kind": "refute",
+      "statement": {
+        "relation": "equal",
+        "left": {"kind": "pow", "exp": 2, "base": {"kind": "add", "terms": [
+          {"kind": "var", "name": "a"}, {"kind": "var", "name": "b"}]}},
+        "right": {"kind": "add", "terms": [
+          {"kind": "pow", "exp": 2, "base": {"kind": "var", "name": "a"}},
+          {"kind": "mul", "factors": [{"kind": "num", "q": "2"},
+                                      {"kind": "var", "name": "a"},
+                                      {"kind": "var", "name": "b"}]},
+          {"kind": "pow", "exp": 2, "base": {"kind": "var", "name": "b"}}]},
+        "vars": ["a", "b"]
+      },
+      "expect_counterexample": false
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "fixture": "mistake_package",
+  "math_package_id": "mp_mistake_01",
+  "revision": 1,
+  "ruleset": {
+    "axioms": ["commute_add", "associate_add", "distribute"],
+    "procedures": ["square_sum"]
+  },
+  "mistake_task": {
+    "task_id": "false_square",
+    "kind": "prove",
+    "allowed_rules": ["square_sum"],
+    "premise": {"kind": "pow", "exp": 2, "base": {"kind": "add", "terms": [
+      {"kind": "var", "name": "x"}, {"kind": "num", "q": "1"}]}},
+    "target": {"kind": "add", "terms": [
+      {"kind": "pow", "exp": 2, "base": {"kind": "var", "name": "x"}},
+      {"kind": "num", "q": "1"}]},
+    "expected": "REJECTED"
+  },
+  "regression": [
+    {
+      "task_id": "reg_assoc",
+      "kind": "assert_identity",
+      "premise": {"kind": "add", "terms": [
+        {"kind": "add", "terms": [{"kind": "var", "name": "a"},
+                                  {"kind": "var", "name": "b"}]},
+        {"kind": "var", "name": "c"}]},
+      "target": {"kind": "add", "terms": [
+        {"kind": "var", "name": "a"},
+        {"kind": "add", "terms": [{"kind": "var", "name": "b"},
+                                  {"kind": "var", "name": "c"}]}]},
+      "expected": "VERIFIED"
+    },
+    {
+      "task_id": "reg_dist",
+      "kind": "assert_identity",
+      "premise": {"kind": "mul", "factors": [
+        {"kind": "var", "name": "a"},
+        {"kind": "add", "terms": [{"kind": "var", "name": "b"},
+                                  {"kind": "var", "name": "c"}]}]},
+      "target": {"kind": "add", "terms": [
+        {"kind": "mul", "factors": [{"kind": "var", "name": "a"},
+                                    {"kind": "var", "name": "b"}]},
+        {"kind": "mul", "factors": [{"kind": "var", "name": "a"},
+                                    {"kind": "var", "name": "c"}]}]},
+      "expected": "VERIFIED"
+    }
+  ],
+  "held_out": [
+    {
+      "task_id": "held_expand",
+      "kind": "prove",
+      "require_proof_steps": true,
+      "allowed_rules": ["square_expand"],
+      "premise": {"kind": "pow", "exp": 2, "base": {"kind": "add", "terms": [
+        {"kind": "var", "name": "x"}, {"kind": "num", "q": "1"}]}},
+      "target": {"kind": "add", "terms": [
+        {"kind": "pow", "exp": 2, "base": {"kind": "var", "name": "x"}},
+        {"kind": "mul", "factors": [{"kind": "num", "q": "2"},
+                                    {"kind": "var", "name": "x"}]},
+        {"kind": "num", "q": "1"}]},
+      "expected": "VERIFIED"
+    }
+  ]
+}

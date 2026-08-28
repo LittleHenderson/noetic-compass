@@ -17,15 +17,20 @@ final state hash, and trace digest.
    evaluation, promotion, rollback. Four rings gated: R0 automatic
    with provenance, R1 held-out promotion, R2 sandbox + regression,
    R3 refused; evaluator tampering rejected.
-2. Procedural learning: strategies and proof patterns behind the
+2. CCB-M1: DONE v0.1 (cas_only_reasoner/CCB_M1_v0.1, 27 tests):
+   exact rational arithmetic (never floats), expression IR with exact
+   canonical expansion, the trusted proof checker as sole validity
+   authority (continuity, structural rules, sample validation of
+   learned procedures, first-invalid-step walk-down), bounded proof
+   search, counterexample generator, mistake recovery promoted under
+   the acceptance law, versioned axioms, curriculum DAG.
+3. Procedural learning: strategies and proof patterns behind the
    Gate-5 controls (RLP ring R1 extended to proof strategies).
-3. CAS-Sem expansion: entities, relations, reference, time, truth,
+4. CAS-Sem expansion: entities, relations, reference, time, truth,
    provenance - beyond propositions and rules.
-4. CCB-L1: the English acquisition board (lexicon, grammar, grounding,
+5. CCB-L1: the English acquisition board (lexicon, grammar, grounding,
    dialogue, decoding) - strictly outside the reasoning loop.
-5. CCB-M1: the mathematical learning and proof board - trusted
-   arithmetic and proof checker, counterexample generator, curriculum.
-   Next organ to build.
+   NEXT organ to build.
 6. Encoders/decoders as peripherals; neural instrumentation and
    CAS-Ohm experiments last, under the paper's own restrictions.
 
