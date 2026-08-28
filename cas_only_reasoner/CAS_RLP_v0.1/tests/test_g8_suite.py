@@ -214,3 +214,51 @@ def test_g8_whole_sequence_is_stable():
                 memory.to_json())
 
     assert one_pass() == one_pass()
+
+
+def test_g8_learned_strategy_cannot_block_a_correct_eq_repair():
+    """Audit finding, closed: a strategy REORDERS the pool, never
+    shrinks it. On a fault whose correct guard is eq - which the
+    learned gt-first strategy did not anticipate - the residual pool
+    still reaches eq, so the repair promotes instead of dead-ending."""
+    import copy as _copy
+    pkg = _copy.deepcopy(load_package("r1_heavier_structural"))
+    # counterfactual same_weight package: crate_a and crate_b weigh the
+    # same (8); crate_c weighs 5. The unguarded rule wrongly concludes
+    # same_weight(crate_a, crate_c); the CORRECT guard is eq.
+    for group in ("regression", "held_out"):
+        for task in pkg["tasks"][group]:
+            task["propositions"] = [
+                prop for prop in task["propositions"]
+                if prop["pred"] not in ("gt",)]
+            for prop in task["propositions"]:
+                if prop["pred"] == "weight" and prop["args"][1] == "2":
+                    prop["args"][1] = "8"
+            task["propositions"].append({"pred": "eq", "args": ["8", "8"]})
+            for rule in task["rules"]:
+                rule["conclusion"]["pred"] = "same_weight"
+    reg = pkg["tasks"]["regression"][0]
+    held = pkg["tasks"]["held_out"][0]
+    reg["goal"]["desired_outcome"] = {"pred": "same_weight",
+                                      "args": ["crate_a", "crate_b"]}
+    reg["alternatives"] = [reg["goal"]["desired_outcome"]]
+    held["goal"]["desired_outcome"] = {"pred": "same_weight",
+                                       "args": ["crate_a", "crate_c"]}
+    held["alternatives"] = [held["goal"]["desired_outcome"]]
+    pkg["expectations"] = {
+        reg["problem_id"]: {"status": "CONCLUDED",
+                            "conclusion": {"pred": "same_weight",
+                                           "args": ["crate_a", "crate_b"]}},
+        held["problem_id"]: {"status": "NEEDS_INFORMATION",
+                             "conclusion": None},
+    }
+
+    memory, _ = _learned_memory()          # gt-first strategy on record
+    cycle = CAS_RLP(pkg).improve(strategy_memory=memory)
+    promoted = [d for d in cycle["decisions"] if d["verdict"] == "PROMOTED"]
+    # gt and lt fail, the RESIDUAL eq candidate still gets its turn
+    assert promoted, [d["verdict"] for d in cycle["decisions"]]
+    assert promoted[0]["mutation"]["mutation_id"].endswith("_eq")
+    rejected = {d["mutation"]["mutation_id"]: d["verdict"]
+                for d in cycle["decisions"]}
+    assert rejected["restrict_r_heavier_gt"] == "REJECTED"

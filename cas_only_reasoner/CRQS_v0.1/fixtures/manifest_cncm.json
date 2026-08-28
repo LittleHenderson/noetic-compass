@@ -32,7 +32,7 @@
       {"name": "suite_CAS-G5", "tests": 4, "passed": 4, "held_out": true},
       {"name": "suite_CAS-G6", "tests": 4, "passed": 4, "held_out": true},
       {"name": "suite_CAS-G7", "tests": 9, "passed": 9, "held_out": false},
-      {"name": "suite_CAS-G8", "tests": 8, "passed": 8, "held_out": true}
+      {"name": "suite_CAS-G8", "tests": 9, "passed": 9, "held_out": true}
     ],
     "precision": 1.0, "coverage": 0.9, "held_out_success": 1.0,
     "trace_completeness": 1.0, "replay_equivalence": 1.0,
@@ -58,13 +58,20 @@
     ]
   },
   "demonstrations": [
-    {"task_id": "modux_ponens", "difficulty_grade": "D3", "passed": true, "stable": true},
-    {"task_id": "candidate_planning", "difficulty_grade": "D4", "passed": true, "stable": true},
-    {"task_id": "memory_dependent", "difficulty_grade": "D5", "passed": true, "stable": true},
-    {"task_id": "recursive_nested", "difficulty_grade": "D6", "passed": true, "stable": true},
-    {"task_id": "tool_use_under_faults", "difficulty_grade": "D7", "passed": true, "stable": true},
-    {"task_id": "adaptive_learning_held_out", "difficulty_grade": "D8", "passed": true, "stable": true},
-    {"task_id": "self_improvement_cycle", "difficulty_grade": "D9", "passed": true, "stable": false}
+    {"task_id": "modux_ponens", "difficulty_grade": "D3", "passed": true, "stable": true,
+     "artifact": "CAS_RRK_v0.1/fixtures/modux_ponens/problem.json"},
+    {"task_id": "candidate_planning", "difficulty_grade": "D4", "passed": true, "stable": true,
+     "artifact": "CAS_RRK_v0.1/fixtures/candidate_planning/problem.json"},
+    {"task_id": "memory_dependent", "difficulty_grade": "D5", "passed": true, "stable": true,
+     "artifact": "CAS_RRK_v0.1/tests/test_conformance.py (memory rows) + CAS_SEM_v0.1/tests/test_store.py"},
+    {"task_id": "recursive_nested", "difficulty_grade": "D6", "passed": true, "stable": true,
+     "artifact": "CAS_RRK_v0.1/fixtures/rpm_recursion/problem.json"},
+    {"task_id": "tool_use_under_faults", "difficulty_grade": "D7", "passed": true, "stable": true,
+     "artifact": "CCB_T1_v0.1/tests/test_toolboard.py + tests/test_adversarial.py"},
+    {"task_id": "adaptive_learning_held_out", "difficulty_grade": "D8", "passed": true, "stable": true,
+     "artifact": "CAS_RLP_v0.1/tests/test_g8_suite.py (stability: test_g8_whole_sequence_is_stable)"},
+    {"task_id": "self_improvement_cycle", "difficulty_grade": "D9", "passed": true, "stable": false,
+     "artifact": "CAS_RLP_v0.1/tests/test_r2_architecture.py + test_r3_protection.py + run_demo.py"}
   ],
   "authority": "A0",
   "skill_profile": {"English": 3.5, "Mathematics": 4.5, "Coding": 0.0,

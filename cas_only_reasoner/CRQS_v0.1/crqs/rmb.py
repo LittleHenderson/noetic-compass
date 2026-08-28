@@ -55,25 +55,27 @@ def validate_rmb(rmb: Dict) -> Dict:
     the full identical-conditions attestation, unknown bands, unknown
     outcomes. An absent or unrun block normalizes to NOT RUN.
     """
+    if rmb and ("equivalence_claim" in rmb or "equivalent_to" in rmb):
+        raise RMBError(
+            "single-number equivalence claims are refused: report per "
+            "dimension against named bands")
+
     if not rmb or rmb.get("status") in (None, "NOT RUN"):
         if rmb and rmb.get("bands"):
             raise RMBError("band results present but status is NOT RUN")
         return {"status": "NOT RUN"}
 
-    if "equivalence_claim" in rmb or "equivalent_to" in rmb:
-        raise RMBError(
-            "single-number equivalence claims are refused: report per "
-            "dimension against named bands")
-
     if rmb.get("status") != "RUN":
         raise RMBError(f"unknown RMB status {rmb.get('status')!r}")
 
     conditions = rmb.get("identical_conditions", {})
-    missing = [c for c in IDENTICAL_CONDITIONS if not conditions.get(c)]
+    # attestation is boolean True, not any truthy placeholder ("TODO")
+    missing = [c for c in IDENTICAL_CONDITIONS
+               if conditions.get(c) is not True]
     if missing:
         raise RMBError(
-            "band verdicts require the identical-conditions attestation; "
-            "missing: " + ", ".join(missing))
+            "band verdicts require the identical-conditions attestation "
+            "(explicit true); missing: " + ", ".join(missing))
 
     bands = rmb.get("bands", [])
     if not bands:
@@ -99,6 +101,9 @@ def validate_rmb(rmb: Dict) -> Dict:
 def band_summary(band: Dict) -> str:
     """One line per band: PASS if all domains pass, PARTIAL otherwise."""
     outcomes = [d["outcome"] for d in band.get("domains", [])]
+    if not outcomes:
+        raise RMBError(f"band {band.get('band')!r} carries no domain "
+                       f"results")
     if all(o in ("PASS", "ABOVE", "CAS_SPECIFIC") for o in outcomes):
         verdict = "PASS"
     elif all(o == "BELOW" for o in outcomes):

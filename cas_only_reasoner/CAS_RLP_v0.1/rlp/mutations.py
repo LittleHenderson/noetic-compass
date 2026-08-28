@@ -40,8 +40,10 @@ class Mutation:
         }
 
 
-# The NEUTRAL candidate pool: every comparison predicate the runtime
-# knows, in alphabetical order. Deliberately free of domain knowledge -
+# The NEUTRAL candidate pool: the comparison predicates this repair
+# layer proposes as guards, in alphabetical order. (The kernel itself
+# has no comparison semantics - a guard is an ordinary premise that
+# only matching facts can satisfy.) Deliberately free of domain knowledge -
 # an unstrategic searcher tries eq first and burns budget. The ORDER
 # that repairs a fault class within budget is exactly what procedural
 # learning must supply; the causal ablation (no strategy -> budget
@@ -88,7 +90,15 @@ def propose_repairs(fault: FaultRecord, package: Dict,
     """
     repairs: List[Mutation] = []
     if fault.classification == "overgeneral_rule":
-        guards = list(guard_order or DEFAULT_GUARD_POOL)
+        # A strategy REORDERS the pool, it never shrinks it: after the
+        # strategy's candidates, the residual pool follows, so a learned
+        # order can never block a correct repair it did not anticipate
+        # (audit finding, G8-repair round).
+        if guard_order:
+            guards = list(guard_order) + [g for g in DEFAULT_GUARD_POOL
+                                          if g not in guard_order]
+        else:
+            guards = list(DEFAULT_GUARD_POOL)
         for i, rule_id in enumerate(sorted(set(fault.guilty_rules)), start=1):
             guard_args = _magnitude_args(package, rule_id)
             for guard in guards:

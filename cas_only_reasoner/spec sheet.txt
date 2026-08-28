@@ -36,7 +36,7 @@ BUILT (this phase):
       procedural (repair strategies under budget)
     - fixtures/: r1 overgeneralized-rule package, r1_bigger_held_out
       (held-out fault case of the same class), r2 parameter sandbox
-    - tests/: 31 passing - R0 experience, R1 rule promotion/rejection,
+    - tests/: 32 passing - R0 experience, R1 rule promotion/rejection,
       R1 procedural strategies (s_gt_first promoted, s_lt_first
       rejected, budget accounting, held-out repair, regression,
       determinism, rollback), R2 reject/quarantine, R3 protection,
@@ -154,10 +154,12 @@ BUILT (this phase):
       report ALWAYS derives an estimated upgrade from the manifest
       itself (missing machinery, missing suite, missing stable
       demonstration, public-not-held-out suites), never asserts one.
-      30 tests (incl. the RMB reference-band module per the Hybrid
+      33 tests (incl. the RMB reference-band module per the Hybrid
       Machine Doctrine: crqs/rmb.py - per-dimension verdicts against
-      GPT-1/2/3 reference bands, identical-conditions gate, refusal of
-      one-number equivalence). RMB NOT RUN for the CNCM.
+      GPT-1/2/3 reference bands, identical-conditions gate requiring
+      explicit boolean attestation, refusal of one-number equivalence
+      wherever the key appears, closed render vocabulary). RMB NOT RUN
+      for the CNCM.
 
   cas_only_reasoner/CCB_T1_v0.1/ - the tool-use board v0.1 (the G7
   gate), typed tool intents strictly under kernel authority:
@@ -231,10 +233,43 @@ COMMANDS:
   python -m pytest     # 34 tests
   python run_demo.py   # six golden fixtures
 
-PROGRAM TEST TOTALS (all green, 2026-08-28, G8-repair round):
-  kernel 34 + RLP 31 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
-  workbench 13 + CRQS 30 + CCB-T1 20 + OHM-panel 10 = 202 local,
-  + cas-rr 43 = 245 program-wide.
+PROGRAM TEST TOTALS (all green, 2026-08-28, re-audit round):
+  kernel 34 + RLP 32 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
+  workbench 13 + CRQS 33 + CCB-T1 20 + OHM-panel 10 = 206 local,
+  + cas-rr 43 = 249 program-wide.
+
+RE-AUDIT VERDICT (independent 2-agent adversarial pass, 2026-08-28,
+after commit 19327ba3): NOT REFUTED on both fronts. The auditor
+reproduced both ablation legs by hand, verified the neutral pool is a
+real general-purpose searcher via a counterfactual eq-class package
+(eq-first WINS when eq is correct), verified the cross-process
+retention leg spawns a genuinely fresh interpreter, and verified no
+manifest double-counting (23+8 matched collection). The RMB honesty
+gates could not be bypassed on the render path. CAS-G8 stands.
+
+RECORDED BOUNDS on the CAS-G8 claim (state them wherever quoted):
+  1. CLOSED in this round: strategy recall originally REPLACED the
+     candidate pool; a learned gt-first strategy could block a correct
+     eq-repair in its own fault class (failed safe - REJECTED, never a
+     wrong promotion). Fixed: a strategy now REORDERS the pool, the
+     residual pool follows; regression test
+     test_g8_learned_strategy_cannot_block_a_correct_eq_repair.
+  2. The strategy hypothesis space is two hand-authored orders; the
+     learned content is one evidence-driven binary choice, not
+     strategy synthesis.
+  3. The causal margin is one guard position under budget=1 (budget 2
+     would let the neutral default succeed) - real but minimal.
+  4. Retention is package-content retention across a process boundary;
+     no cross-machine or long-duration test exists.
+  5. Section 19's hidden-fixture requirement remains aspirational at
+     this scale: held_out groups are hidden from the machine's repair
+     loop, not from developers - flagged by the report itself.
+  6. The G8 evidence exercises RLP + kernel; the adaptive loop has not
+     been run through the full eight-board assembly.
+  7. CLOSED in this round: manifest demonstration rows now carry
+     resolvable artifact paths; RMB hardening (boolean-true
+     attestation, equivalence refusal under NOT RUN, empty-domain
+     guard) tested.
 
 GOVERNING ROADMAP: HYBRID_MACHINE_DOCTRINE.md (owner directive
   2026-08-28) - CAS executive brain + learned neural language cortex;

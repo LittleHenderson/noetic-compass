@@ -96,3 +96,20 @@ def test_cncm_manifest_stays_not_run():
     from conftest import load_manifest
     manifest = load_manifest("manifest_cncm.json")
     assert format_rmb(manifest.get("rmb", {})) == ["    NOT RUN"]
+
+
+def test_equivalence_claim_refused_even_under_not_run():
+    with pytest.raises(RMBError, match="refused"):
+        validate_rmb({"status": "NOT RUN", "equivalence_claim": "GPT-3"})
+
+
+def test_truthy_placeholder_attestation_refused():
+    rmb = _example()
+    rmb["identical_conditions"] = {c: "TODO" for c in IDENTICAL_CONDITIONS}
+    with pytest.raises(RMBError, match="explicit true"):
+        validate_rmb(rmb)
+
+
+def test_band_summary_refuses_empty_domains():
+    with pytest.raises(RMBError, match="no domain"):
+        band_summary({"band": "GPT-1", "domains": []})
