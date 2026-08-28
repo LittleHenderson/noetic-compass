@@ -314,3 +314,14 @@ BATTERY = {
     "memory": task_memory,
     "contradiction": task_contradiction,
 }
+
+# Tasks whose constitutions differ from the default.
+CONSTITUTIONS = {
+    "recursive_plan": _plan_constitution,
+    "needs_capability": _plan_constitution,
+}
+
+
+def constitution_for(name):
+    factory = CONSTITUTIONS.get(name) or default_constitution
+    return factory()

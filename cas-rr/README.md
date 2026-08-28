@@ -38,9 +38,21 @@ library.
     cd cas-rr
     python -m pytest
 
-Expected: 25 passed. The suite covers the six-task native-reasoning
-battery, negative variants exercising all seven halt states, and the five
-load-bearing laws.
+Expected: 37 passed. The suite covers the six-task native-reasoning
+battery, negative variants exercising all seven halt states, the five
+load-bearing laws, and the CLI/reporting layer.
+
+## Command line
+
+    python run.py list                     list every battery task
+    python run.py run transitive           one episode: bench report
+    python run.py run recursive_plan --trace
+    python run.py demo                     the whole battery, one table
+    python run.py check                    determinism check on every task
+    python run.py repl                     interactive Python session
+    python examples/custom_kinship.py      author a brand-new problem
+
+Full testing and interaction guide: INTERACTION.md.
 
 ## One reasoning episode
 
@@ -71,3 +83,4 @@ boundaries are honored in code and in the spec.
 - docs/cas_rr/CCB_R1_BOARD_SPEC.md — the motherboard architecture
 - docs/cas_rr/SOURCE_GROUNDING_NOTES.md — verbatim citations for every
   load-bearing claim
+- INTERACTION.md — how to test, drive, and extend the machine
