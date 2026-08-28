@@ -36,11 +36,19 @@ BUILT (this phase):
       procedural (repair strategies under budget)
     - fixtures/: r1 overgeneralized-rule package, r1_bigger_held_out
       (held-out fault case of the same class), r2 parameter sandbox
-    - tests/: 23 passing - R0 experience, R1 rule promotion/rejection,
+    - tests/: 29 passing - R0 experience, R1 rule promotion/rejection,
       R1 procedural strategies (s_gt_first promoted, s_lt_first
       rejected, budget accounting, held-out repair, regression,
       determinism, rollback), R2 reject/quarantine, R3 protection,
-      evaluator tampering, sealed evidence
+      evaluator tampering, sealed evidence, and the CAS-G8
+      qualification suite: correction retention (fresh re-run of the
+      corrected package), delayed retention (byte-identical learned
+      content across unrelated intervening kernel work), structural
+      transfer (the class-level strategy learned on taller repairs the
+      unseen bigger package in one evaluation; the unstrategic order
+      still exhausts the budget), protected regression (R3 and
+      evaluator tampering still rejected AFTER learning), and the
+      digest-identical double run that earns the STABLE D8 flag
     - run_demo.py: one full improvement cycle (PROMOTED / REJECTED /
       QUARANTINED / REJECTED_AS_PROTECTED / ROLLBACK)
     - run_demo_procedural.py: strategy learning under budget
@@ -128,14 +136,16 @@ BUILT (this phase):
       evidence), hard-gate blocking, vector, skill separation,
       report format, determinism
     - run_demo.py: qualify all three Minds. Honest result (updated
-      after CCB-T1): the assembled CNCM qualifies CAS-G7 / E5 / A0 -
-      tools + the adversarial suite + a stable D7 demonstration clear
-      the strict G7 gate; design ceiling CAS-G9 (long-term goals and
-      self-model still absent); next target CAS-G8. The section-10
-      report now ALWAYS derives an estimated upgrade from the manifest
+      after the G8 round): the assembled CNCM qualifies
+      CAS-G8 / E5 / A0 - the G7 gate cleared by CCB-T1, the G8 gate by
+      the RLP qualification suite (correction retention, delayed
+      retention, structural transfer, protected regression, stable-D8
+      stability run); design ceiling CAS-G9 (long-term goals and
+      self-model still absent); next target CAS-G9. The section-10
+      report ALWAYS derives an estimated upgrade from the manifest
       itself (missing machinery, missing suite, missing stable
       demonstration, public-not-held-out suites), never asserts one.
-      21 tests. No GPT-equivalence claims; RMB NOT RUN.
+      21 tests. RMB NOT RUN.
 
   cas_only_reasoner/CCB_T1_v0.1/ - the tool-use board v0.1 (the G7
   gate), typed tool intents strictly under kernel authority:
@@ -194,24 +204,25 @@ STATUS AGAINST THE 24-SECTION CHARTER:
   via CCB-M1, recursive self-evolution via CAS-RLP, semantic binding
   via CAS-Sem, the qualification standard, the first convincing
   version).
-  Section 19 (tool use) now demonstrated via CCB-T1: typed tool
-  intents under kernel authority with the full typed fault suite and
-  adversarial variants - the strict G7 gate is CLEARED and the CNCM
-  qualifies CAS-G7 / E5 / A0 (next target CAS-G8: correction
-  retention, delayed retention, structural transfer, protected
-  regression as a G8 suite plus a stable D8 demonstration).
-  Remaining: encoders/neural instrumentation (the CAS-Ohm panel
-  exists as OPTIONAL instrumentation under R1-R10, outside the loop).
+  Section 19 (tool use) demonstrated via CCB-T1 (G7 cleared); the
+  G8 gate cleared by the RLP CAS-G8 qualification suite. The CNCM
+  qualifies CAS-G8 / E5 / A0, design ceiling CAS-G9, next target
+  CAS-G9 (the G9 suite: self-diagnosis, sandbox,
+  reject-unauthorized, promote, parent replay - plus a stable D9
+  demonstration; then G10 needs long_term_goals and self_model
+  machinery). Remaining: encoders/neural instrumentation (the
+  CAS-Ohm panel exists as OPTIONAL instrumentation under R1-R10,
+  outside the loop).
 
 COMMANDS:
   cd cas_only_reasoner/CAS_RRK_v0.1
   python -m pytest     # 34 tests
   python run_demo.py   # six golden fixtures
 
-PROGRAM TEST TOTALS (all green, 2026-08-28):
-  kernel 34 + RLP 23 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
-  workbench 13 + CRQS 21 + CCB-T1 20 + OHM-panel 10 = 185 local,
-  + cas-rr 43 = 228 program-wide.
+PROGRAM TEST TOTALS (all green, 2026-08-28, G8 round):
+  kernel 34 + RLP 29 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
+  workbench 13 + CRQS 21 + CCB-T1 20 + OHM-panel 10 = 191 local,
+  + cas-rr 43 = 234 program-wide.
 
 VERSION DECISIONS FROZEN:
   canonical core: ^0-^9, P/C/E/O, F1-F7, T/A/f/E

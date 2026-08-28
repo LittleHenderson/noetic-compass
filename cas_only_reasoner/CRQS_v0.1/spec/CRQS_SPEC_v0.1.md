@@ -55,8 +55,6 @@ research with no known answer -> D10.
     G9 Self-Improving Architect | G10 Integrated Cognitive System
     GΩ Open Frontier (research designation only)
 
-Never call these GPT-1/2/3: those are model generations, not a
-standardized reasoning scale.
 
 ## 6. Capability Vector
 

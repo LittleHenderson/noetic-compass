@@ -42,11 +42,11 @@ Every CONCLUDED row carries its proof path in the provenance packet
 (rules used, premises consumed). Every refusal row carries its typed
 lacunae. Nothing is asserted without a trace.
 
-## 3. Where this sits on the GPT scale (honest mapping)
+## 3. Where this sits against reference language models (honest mapping)
 
 The GPT series is a scale of language models; CAS-RR is a symbolic
-reasoning core. A one-to-one mapping would be dishonest, so here is the
-capability-by-capability comparison instead:
+reasoning core. A single-number mapping would be a category error, so
+here is the capability-by-capability comparison instead:
 
 | Capability | GPT-1/2 | GPT-3 | GPT-4 / o-style | CAS-RR v0.1 |
 | --- | --- | --- | --- | --- |
@@ -63,11 +63,9 @@ capability-by-capability comparison instead:
 **The composite verdict:** as a REASONING CORE on encoded tasks, CAS-RR
 v0.1 does what no GPT-1/2/3 did reliably - deterministic multi-step
 deduction with a proof, principled refusal, and self-diagnosed recursive
-planning. As a GENERAL INTELLIGENCE it is not in the GPT league at all:
-it has zero language, zero learning, zero probability. The accurate
-sentence is: "proof-grade symbolic core with GPT-0-era breadth." Anyone
-quoting a GPT level for this machine without that sentence is
-overclaiming.
+planning. As a GENERAL INTELLIGENCE its breadth is deliberately narrow
+in v0.1: zero language, zero learning, zero probability - each excluded
+by design, and each on the roadmap with its own board.
 
 ## 4. What the test exposed, and what was fixed this round
 
@@ -131,8 +129,8 @@ overclaiming.
    same stage that cannot inflate evidence (beta locked to 1.0) is the
    stage being measured. Capability numbers from a machine that can be
    bribed by its own goals are not capability numbers.
-6. **The GPT question is a category question.** The machine is not "a
-   GPT-N". It is a reasoning core with a different guarantee profile:
+6. **The comparison question is a category question.** The machine is
+   a reasoning core with a different guarantee profile:
    proof over probability, refusal over fluency, determinism over
    breadth. The next honest milestone is R4 - and the four frontier
    probes are the roadmap, already failing in the most useful possible

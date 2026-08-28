@@ -20,7 +20,7 @@
       {"name": "cas_rr_suite", "tests": 43, "passed": 43, "held_out": false},
       {"name": "kernel_conformance", "tests": 34, "passed": 34, "held_out": false},
       {"name": "cassem", "tests": 19, "passed": 19, "held_out": false},
-      {"name": "rlp", "tests": 23, "passed": 23, "held_out": true},
+      {"name": "rlp", "tests": 29, "passed": 29, "held_out": true},
       {"name": "ccb_l1", "tests": 18, "passed": 18, "held_out": true},
       {"name": "ccb_m1", "tests": 27, "passed": 27, "held_out": true},
       {"name": "ccb_t1", "tests": 20, "passed": 20, "held_out": false},
@@ -31,7 +31,8 @@
       {"name": "suite_CAS-G4", "tests": 5, "passed": 5, "held_out": false},
       {"name": "suite_CAS-G5", "tests": 4, "passed": 4, "held_out": true},
       {"name": "suite_CAS-G6", "tests": 4, "passed": 4, "held_out": true},
-      {"name": "suite_CAS-G7", "tests": 9, "passed": 9, "held_out": false}
+      {"name": "suite_CAS-G7", "tests": 9, "passed": 9, "held_out": false},
+      {"name": "suite_CAS-G8", "tests": 6, "passed": 6, "held_out": true}
     ],
     "precision": 1.0, "coverage": 0.9, "held_out_success": 1.0,
     "trace_completeness": 1.0, "replay_equivalence": 1.0,
@@ -59,7 +60,7 @@
     {"task_id": "memory_dependent", "difficulty_grade": "D5", "passed": true, "stable": true},
     {"task_id": "recursive_nested", "difficulty_grade": "D6", "passed": true, "stable": true},
     {"task_id": "tool_use_under_faults", "difficulty_grade": "D7", "passed": true, "stable": true},
-    {"task_id": "adaptive_learning_held_out", "difficulty_grade": "D8", "passed": true, "stable": false},
+    {"task_id": "adaptive_learning_held_out", "difficulty_grade": "D8", "passed": true, "stable": true},
     {"task_id": "self_improvement_cycle", "difficulty_grade": "D9", "passed": true, "stable": false}
   ],
   "authority": "A0",

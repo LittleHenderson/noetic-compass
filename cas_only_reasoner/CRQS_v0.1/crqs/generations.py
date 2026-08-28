@@ -1,7 +1,6 @@
 """CAS-G0 through CAS-G10 capability generations, plus CAS-GΩ.
 
-Never "GPT-1/2/3": those are model generations, not a standardized
-reasoning scale. CAS-GΩ is a research designation, not a tier.
+CAS-GΩ is a research designation, not a tier.
 """
 
 from __future__ import annotations

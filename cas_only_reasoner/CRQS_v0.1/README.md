@@ -22,8 +22,7 @@ from the native grade and is NOT RUN by default.
   below D9, novel research is D10. A beautiful DI cannot mislabel a
   recursive task as simple.
 - CAS-G0..CAS-G10 (+CAS-GΩ, a research designation): strictly
-  sequential - a level requires EVERY lower level. Never "GPT-4
-  level": GPT names are model generations, not reasoning grades.
+  sequential - a level requires EVERY lower level.
 - Three levels, never one average: Design Ceiling (topology),
   Demonstrated Level (tests, stable vs peak), Qualified Level =
   min(ceiling, demonstrated, evidence ceiling).
@@ -41,14 +40,19 @@ from the native grade and is NOT RUN by default.
 
 ## The honest result it produces for OUR machine
 
-The assembled CNCM qualifies at CAS-G6 / E5 / A0. The strict G7 gate
-(tool use under uncertainty) is unmet, so the machine's adaptive
-learning and self-improvement components - real, tested, E5-held-out
-- cannot raise the generation beyond G6. The report says exactly what
-to build next: typed tool intents, fault/adversarial variants,
-resource-exhaustion halting tests, clarification requests. That is
-the standard working as designed: no topology medals, no
-GPT-equivalence claims, and the next upgrade named precisely.
+The assembled CNCM qualifies at CAS-G8 / E5 / A0 (design ceiling
+CAS-G9). The G7 gate was cleared by CCB-T1 (typed tool intents, the
+typed fault suite, adversarial variants); the G8 gate by the RLP
+qualification suite (correction retention, delayed retention across
+intervening work, structural transfer of a learned strategy to an
+unseen fault of the same class, protected regression, and a
+digest-identical stability run that earns the STABLE D8 flag). Peak
+demonstrated D9 remains gated as not stable. The report derives the
+next upgrade from the manifest itself: the CAS-G9 suite
+(self-diagnosis, sandbox, reject-unauthorized, promote, parent
+replay) plus a stable D9 demonstration. That is the standard working
+as designed: no topology medals, and the next upgrade named
+precisely.
 
 ## Layout
 

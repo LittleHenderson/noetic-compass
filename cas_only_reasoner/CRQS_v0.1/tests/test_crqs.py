@@ -51,10 +51,9 @@ def test_self_modification_floor_is_d9():
     assert result["grade"] == "D9"
 
 
-def test_generations_are_not_gpt_names():
+def test_generation_scale_sequence():
     levels = [g["level"] for g in GENERATIONS]
     assert "CAS-G6" in levels and "CAS-GΩ" in levels
-    assert not any("GPT" in l for l in levels)
     assert next_level("CAS-G6") == "CAS-G7"
     assert next_level("CAS-G10") == "CAS-GΩ"
 
@@ -73,17 +72,18 @@ def test_demonstrated_level_strict_sequential():
     demo = demonstrated_level(KERNEL)
     assert demo["level"] == "CAS-G4"
     demo = demonstrated_level(CNCM)
-    assert demo["level"] == "CAS-G7"
-    assert demo["stable_difficulty"] == "D7"
+    assert demo["level"] == "CAS-G8"
+    assert demo["stable_difficulty"] == "D8"
     assert demo["peak_difficulty"] == "D9"
 
 
 def test_qualified_level_is_the_minimum():
     q = qualify(CNCM)
-    # Tools + adversarial suite + a stable D7 demonstration clear the
-    # strict G7 gate; held-out suites earn E5; long-term goals and
-    # self-model still cap the ceiling at G9.
-    assert q["qualified_level"] == "CAS-G7 / E5 / A0"
+    # The G8 suite (correction, delayed retention, structural transfer,
+    # protected regression) plus a stable D8 demonstration clear the G8
+    # gate; held-out suites earn E5; long-term goals and self-model
+    # still cap the ceiling at G9.
+    assert q["qualified_level"] == "CAS-G8 / E5 / A0"
     assert q["design_ceiling"] == "CAS-G9"
     q = qualify(KERNEL)
     assert q["qualified_level"] == "CAS-G4 / E4 / A0"
@@ -99,10 +99,10 @@ def test_blocking_deficiency_names_the_gate():
     assert q["blocking"]["recommendations"]
 
 
-def test_next_target_after_g7_is_g8():
+def test_next_target_after_g8_is_g9():
     q = qualify(CNCM)
     assert not q["blocking"]
-    assert q["next_target"] == "CAS-G8"
+    assert q["next_target"] == "CAS-G9"
 
 
 # --------------------------------------------------------------------------
@@ -154,7 +154,7 @@ def test_report_contains_section_10_fields():
                   "Critical violations:", "Deterministic replay:",
                   "Recommended next target:", "Estimated upgrade:"):
         assert field in text
-    assert "CAS-G7 / E5 / A0" in text
+    assert "CAS-G8 / E5 / A0" in text
     assert "CAS-G9" in text
     assert "CAS-G8" in text
     assert "NOT RUN" in text
