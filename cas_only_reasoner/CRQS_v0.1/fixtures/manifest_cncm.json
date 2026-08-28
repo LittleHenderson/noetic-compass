@@ -32,7 +32,8 @@
       {"name": "suite_CAS-G5", "tests": 4, "passed": 4, "held_out": true},
       {"name": "suite_CAS-G6", "tests": 4, "passed": 4, "held_out": true},
       {"name": "suite_CAS-G7", "tests": 9, "passed": 9, "held_out": false},
-      {"name": "suite_CAS-G8", "tests": 9, "passed": 9, "held_out": true}
+      {"name": "suite_CAS-G8", "tests": 9, "passed": 9, "held_out": true},
+      {"name": "suite_CAS-G9", "tests": 9, "passed": 9, "held_out": true}
     ],
     "precision": 1.0, "coverage": 0.9, "held_out_success": 1.0,
     "trace_completeness": 1.0, "replay_equivalence": 1.0,
@@ -54,7 +55,10 @@
       {"variant": "false_goal", "outcome": "NEEDS_INFORMATION, symmetric lt reported, never fabricated"},
       {"variant": "g8_causal_ablation", "outcome": "strategy removed -> BUDGET_EXHAUSTED, capability genuinely degrades"},
       {"variant": "g8_structural_transfer", "outcome": "machine-driven recall repairs renamed/reordered/distractor variant in 1 evaluation"},
-      {"variant": "g8_process_boundary", "outcome": "corrected package reloaded in a fresh interpreter, digest-identical, all pass"}
+      {"variant": "g8_process_boundary", "outcome": "corrected package reloaded in a fresh interpreter, digest-identical, all pass"},
+      {"variant": "g9_causal_ablation", "outcome": "self-improvement cycle skipped -> budgeted repair fails on training AND held-out; run -> both succeed"},
+      {"variant": "g9_judge_integrity", "outcome": "expectations+protected digest identical before and after the promoted cycle"},
+      {"variant": "g9_no_false_positive", "outcome": "healthy procedure -> NO_PROCEDURAL_FAULT, nothing promoted"}
     ]
   },
   "demonstrations": [
@@ -70,8 +74,8 @@
      "artifact": "CCB_T1_v0.1/tests/test_toolboard.py + tests/test_adversarial.py"},
     {"task_id": "adaptive_learning_held_out", "difficulty_grade": "D8", "passed": true, "stable": true,
      "artifact": "CAS_RLP_v0.1/tests/test_g8_suite.py (stability: test_g8_whole_sequence_is_stable)"},
-    {"task_id": "self_improvement_cycle", "difficulty_grade": "D9", "passed": true, "stable": false,
-     "artifact": "CAS_RLP_v0.1/tests/test_r2_architecture.py + test_r3_protection.py + run_demo.py"}
+    {"task_id": "self_improvement_cycle", "difficulty_grade": "D9", "passed": true, "stable": true,
+     "artifact": "CAS_RLP_v0.1/tests/test_g9_suite.py (stability: test_g9_whole_cycle_is_stable; loop: rlp/self_improvement.py)"}
   ],
   "authority": "A0",
   "skill_profile": {"English": 3.5, "Mathematics": 4.5, "Coding": 0.0,

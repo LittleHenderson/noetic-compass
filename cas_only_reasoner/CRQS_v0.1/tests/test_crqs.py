@@ -72,18 +72,18 @@ def test_demonstrated_level_strict_sequential():
     demo = demonstrated_level(KERNEL)
     assert demo["level"] == "CAS-G4"
     demo = demonstrated_level(CNCM)
-    assert demo["level"] == "CAS-G8"
-    assert demo["stable_difficulty"] == "D8"
-    assert demo["peak_difficulty"] == "D9"
+    assert demo["level"] == "CAS-G9"
+    assert demo["stable_difficulty"] == "D9"
+    assert demo["peak_difficulty"] is None
 
 
 def test_qualified_level_is_the_minimum():
     q = qualify(CNCM)
-    # The G8 suite (correction, delayed retention, structural transfer,
-    # protected regression) plus a stable D8 demonstration clear the G8
-    # gate; held-out suites earn E5; long-term goals and self-model
-    # still cap the ceiling at G9.
-    assert q["qualified_level"] == "CAS-G8 / E5 / A0"
+    # The G9 suite (self-diagnosis, sandbox, synthesis, promotion,
+    # parent replay) plus a stable D9 demonstration clear the G9 gate;
+    # held-out suites earn E5 (whose ceiling is exactly G9); long-term
+    # goals and self-model still cap the design ceiling at G9.
+    assert q["qualified_level"] == "CAS-G9 / E5 / A0"
     assert q["design_ceiling"] == "CAS-G9"
     q = qualify(KERNEL)
     assert q["qualified_level"] == "CAS-G4 / E4 / A0"
@@ -99,10 +99,14 @@ def test_blocking_deficiency_names_the_gate():
     assert q["blocking"]["recommendations"]
 
 
-def test_next_target_after_g8_is_g9():
+def test_next_target_after_g9_is_g10():
     q = qualify(CNCM)
     assert not q["blocking"]
-    assert q["next_target"] == "CAS-G9"
+    assert q["next_target"] == "CAS-G10"
+    # the derived upgrade names the REAL missing machinery
+    upgrade = " ".join(q["estimated_upgrade"])
+    assert "long_term_goals" in upgrade
+    assert "self_model" in upgrade
 
 
 # --------------------------------------------------------------------------
@@ -154,9 +158,9 @@ def test_report_contains_section_10_fields():
                   "Critical violations:", "Deterministic replay:",
                   "Recommended next target:", "Estimated upgrade:"):
         assert field in text
-    assert "CAS-G8 / E5 / A0" in text
+    assert "CAS-G9 / E5 / A0" in text
     assert "CAS-G9" in text
-    assert "CAS-G8" in text
+    assert "CAS-G10" in text  # the recommended next target
     assert "NOT RUN" in text
 
 

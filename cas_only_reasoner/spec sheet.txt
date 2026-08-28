@@ -36,7 +36,21 @@ BUILT (this phase):
       procedural (repair strategies under budget)
     - fixtures/: r1 overgeneralized-rule package, r1_bigger_held_out
       (held-out fault case of the same class), r2 parameter sandbox
-    - tests/: 32 passing - R0 experience, R1 rule promotion/rejection,
+    - rlp/self_improvement.py: the CAS-G9 loop - the machine
+      diagnoses its own PROCEDURE fault from its own sealed evidence
+      (procedure_budget_failure with the starved candidates named),
+      explores in a sandbox (parent packages and memory untouched,
+      digest-checked), SYNTHESIZES the candidate procedure from the
+      sealed exploration (the promoted mutation's guard moves to the
+      front - closes the recorded G8 bound: no hand-authored strategy
+      library in this loop; provenance self_improvement:<digest>),
+      validates under the six-check acceptance law on training AND
+      held-out fault cases, promotes to versioned strategy memory with
+      rollback, and reports NO_PROCEDURAL_FAULT honestly when the
+      current procedure already fits the budget. The judge
+      (expectations + protected set) is digest-checked identical
+      before and after every cycle.
+    - tests/: 41 passing - R0 experience, R1 rule promotion/rejection,
       R1 procedural strategies (s_gt_first promoted, s_lt_first
       rejected, budget accounting, held-out repair, regression,
       determinism, rollback), R2 reject/quarantine, R3 protection,
@@ -57,7 +71,17 @@ BUILT (this phase):
       across a PROCESS BOUNDARY (corrected package persisted, reloaded
       in a fresh interpreter, digest-identical, all pass), protected
       regression after learning, and the digest-identical double run
-      that earns the STABLE D8 flag
+      that earns the STABLE D8 flag; and the CAS-G9 qualification
+      suite (9 tests): self-diagnosis from sealed evidence with no
+      false positives, sandboxed exploration leaving the parent
+      byte-identical, evidence-derived procedure synthesis, promotion
+      under all six acceptance checks with held-out validation and
+      transfer to the structural fixture, unauthorized descendants
+      rejected with the judge digest unchanged, EXACT parent replay
+      after rollback (grades and state hashes equal pre-promotion),
+      the causal ablation (skip the cycle -> budgeted repair fails on
+      training AND held-out; run it -> both succeed), and the
+      digest-identical double run that earns the STABLE D9 flag
     - run_demo.py: one full improvement cycle (PROMOTED / REJECTED /
       QUARANTINED / REJECTED_AS_PROTECTED / ROLLBACK)
     - run_demo_procedural.py: strategy learning under budget
@@ -146,11 +170,15 @@ BUILT (this phase):
       report format, determinism
     - run_demo.py: qualify all three Minds. Honest result (updated
       after the G8 round): the assembled CNCM qualifies
-      CAS-G8 / E5 / A0 - the G7 gate cleared by CCB-T1, the G8 gate by
-      the RLP qualification suite (correction retention, delayed
-      retention, structural transfer, protected regression, stable-D8
-      stability run); design ceiling CAS-G9 (long-term goals and
-      self-model still absent); next target CAS-G9. The section-10
+      CAS-G9 / E5 / A0 - G7 cleared by CCB-T1, G8 by the RLP
+      qualification suite, G9 by the self-improvement suite
+      (self-diagnosis, sandbox, synthesis, promotion, parent replay,
+      stable-D9 stability run); design ceiling CAS-G9 = the qualified
+      level: the machine has reached its own design ceiling. Next
+      target CAS-G10, and the derived upgrade names the REAL gap:
+      build long_term_goals and self_model machinery, then the
+      multi-domain long-horizon G10 suite. E5's evidence ceiling is
+      exactly G9 - G10 will also need E6 (independent replication). The section-10
       report ALWAYS derives an estimated upgrade from the manifest
       itself (missing machinery, missing suite, missing stable
       demonstration, public-not-held-out suites), never asserts one.
@@ -233,10 +261,10 @@ COMMANDS:
   python -m pytest     # 34 tests
   python run_demo.py   # six golden fixtures
 
-PROGRAM TEST TOTALS (all green, 2026-08-28, re-audit round):
-  kernel 34 + RLP 32 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
-  workbench 13 + CRQS 33 + CCB-T1 20 + OHM-panel 10 = 206 local,
-  + cas-rr 43 = 249 program-wide.
+PROGRAM TEST TOTALS (all green, 2026-08-28, G9 round):
+  kernel 34 + RLP 41 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
+  workbench 13 + CRQS 33 + CCB-T1 20 + OHM-panel 10 = 215 local,
+  + cas-rr 43 = 258 program-wide.
 
 RE-AUDIT VERDICT (independent 2-agent adversarial pass, 2026-08-28,
 after commit 19327ba3): NOT REFUTED on both fronts. The auditor
