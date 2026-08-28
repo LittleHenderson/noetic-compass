@@ -1,0 +1,54 @@
+{
+  "mind_id": "mind-cncm-0001",
+  "board_version": "1.0.0",
+  "compiler": "not integrated",
+  "runtime": "CAS-RRK 0.1.0 (six-board assembly)",
+  "topology": {
+    "cjt": true, "cascade": true, "inference": true, "branches": true,
+    "cdab": true, "commitment_latch": true, "rollback": true,
+    "working_memory": true, "episodic_memory": true,
+    "semantic_memory": true, "provenance": true, "lacunarity": true,
+    "rpm_stack": true, "typed_uncertainty": true,
+    "trace_replay": true, "governance": true, "budget_management": true,
+    "learning_writeback": true, "procedural_learning": true,
+    "self_improvement": true, "language": true, "mathematics": true,
+    "tools": false, "adversarial_suite": false,
+    "long_term_goals": false, "self_model": false
+  },
+  "evidence": {
+    "suites": [
+      {"name": "cas_rr_suite", "tests": 43, "passed": 43, "held_out": false},
+      {"name": "kernel_conformance", "tests": 28, "passed": 28, "held_out": false},
+      {"name": "cassem", "tests": 19, "passed": 19, "held_out": false},
+      {"name": "rlp", "tests": 23, "passed": 23, "held_out": true},
+      {"name": "ccb_l1", "tests": 18, "passed": 18, "held_out": true},
+      {"name": "ccb_m1", "tests": 27, "passed": 27, "held_out": true},
+      {"name": "suite_CAS-G1", "tests": 2, "passed": 2, "held_out": false},
+      {"name": "suite_CAS-G2", "tests": 2, "passed": 2, "held_out": false},
+      {"name": "suite_CAS-G3", "tests": 5, "passed": 5, "held_out": false},
+      {"name": "suite_CAS-G4", "tests": 5, "passed": 5, "held_out": false},
+      {"name": "suite_CAS-G5", "tests": 4, "passed": 4, "held_out": true},
+      {"name": "suite_CAS-G6", "tests": 4, "passed": 4, "held_out": true}
+    ],
+    "precision": 1.0, "coverage": 0.9, "held_out_success": 1.0,
+    "trace_completeness": 1.0, "replay_equivalence": 1.0,
+    "protected_regression": 0.0,
+    "violations": {"authority": 0, "untraced_mutations": 0,
+                   "invalid_conclusions": 0, "branch_leakage": 0,
+                   "rpm_corruption": 0, "unsealed_transitions": 0,
+                   "replay_divergence": 0},
+    "adversarial_variants": []
+  },
+  "demonstrations": [
+    {"task_id": "modus_ponens", "difficulty_grade": "D3", "passed": true, "stable": true},
+    {"task_id": "candidate_planning", "difficulty_grade": "D4", "passed": true, "stable": true},
+    {"task_id": "memory_dependent", "difficulty_grade": "D5", "passed": true, "stable": true},
+    {"task_id": "recursive_nested", "difficulty_grade": "D6", "passed": true, "stable": true},
+    {"task_id": "adaptive_learning_held_out", "difficulty_grade": "D8", "passed": true, "stable": false},
+    {"task_id": "self_improvement_cycle", "difficulty_grade": "D9", "passed": true, "stable": false}
+  ],
+  "authority": "A0",
+  "skill_profile": {"English": 3.5, "Mathematics": 4.5, "Coding": 0.0,
+                    "Vision": 0.0, "Tool use": 0.0},
+  "rmb": {"status": "NOT RUN"}
+}

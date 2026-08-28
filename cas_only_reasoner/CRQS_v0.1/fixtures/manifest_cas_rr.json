@@ -1,0 +1,45 @@
+{
+  "mind_id": "mind-cas-rr-0001",
+  "board_version": "0.1.0",
+  "compiler": "not integrated",
+  "runtime": "CAS-RR v0.1",
+  "topology": {
+    "cjt": true, "cascade": true, "inference": true, "branches": true,
+    "cdab": true, "commitment_latch": true, "rollback": true,
+    "working_memory": true, "episodic_memory": true,
+    "semantic_memory": true, "provenance": true, "lacunarity": true,
+    "rpm_stack": true, "typed_uncertainty": true,
+    "trace_replay": true, "governance": true, "budget_management": true,
+    "tools": false, "adversarial_suite": false,
+    "learning_writeback": true, "procedural_learning": false,
+    "self_improvement": false, "language": false, "mathematics": false,
+    "long_term_goals": false, "self_model": false
+  },
+  "evidence": {
+    "suites": [
+      {"name": "cas_rr_suite", "tests": 43, "passed": 43, "held_out": false},
+      {"name": "suite_CAS-G1", "tests": 2, "passed": 2, "held_out": false},
+      {"name": "suite_CAS-G2", "tests": 2, "passed": 2, "held_out": false},
+      {"name": "suite_CAS-G3", "tests": 5, "passed": 5, "held_out": false},
+      {"name": "suite_CAS-G4", "tests": 4, "passed": 4, "held_out": false},
+      {"name": "suite_CAS-G5", "tests": 3, "passed": 3, "held_out": false},
+      {"name": "suite_CAS-G6", "tests": 3, "passed": 3, "held_out": false}
+    ],
+    "precision": 1.0, "coverage": 0.92, "held_out_success": 1.0,
+    "trace_completeness": 1.0, "replay_equivalence": 1.0,
+    "protected_regression": 0.0,
+    "violations": {"authority": 0, "untraced_mutations": 0,
+                   "invalid_conclusions": 0, "branch_leakage": 0,
+                   "rpm_corruption": 0, "unsealed_transitions": 0,
+                   "replay_divergence": 0},
+    "adversarial_variants": []
+  },
+  "demonstrations": [
+    {"task_id": "modus_ponens", "difficulty_grade": "D3", "passed": true, "stable": true},
+    {"task_id": "candidate_planning", "difficulty_grade": "D4", "passed": true, "stable": true},
+    {"task_id": "memory_dependent", "difficulty_grade": "D5", "passed": true, "stable": true},
+    {"task_id": "recursive_plan", "difficulty_grade": "D6", "passed": true, "stable": true}
+  ],
+  "authority": "A0",
+  "rmb": {"status": "NOT RUN"}
+}

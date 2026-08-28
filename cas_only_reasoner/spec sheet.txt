@@ -110,16 +110,38 @@ BUILT (this phase):
       HTML completeness, node syntax check
     - open output/glass_brain.html in any browser
 
+  cas_only_reasoner/CRQS_v0.1/ - the CAS Reasoning Qualification
+  Standard, the qualification bench for any board or Mind:
+    - spec/CRQS_SPEC_v0.1.md: the 20-chapter standard
+    - crqs/: difficulty (nine axes, DI 0-36, D0-D10 banding, hard
+      floors), generations (CAS-G0..G10..GΩ, strictly sequential),
+      the twelve-dimension capability vector, evidence tiers E0-E6,
+      authority levels A0-A5, hard and performance gates, the repair
+      ontology, the qualifier, the section-10 report, the 15-step
+      QUALIFY workflow
+    - fixtures/: manifests for cas-rr, the kernel, and the CNCM
+    - tests/: 19 passing - DI/banding/floors (recursion -> D6,
+      self-modification -> D9, novel research -> D10), strict
+      sequential gating, qualified = min(ceiling, demonstrated,
+      evidence), hard-gate blocking, vector, skill separation,
+      report format, determinism
+    - run_demo.py: qualify all three Minds. Honest result: the
+      assembled CNCM qualifies CAS-G6 / E5 / A0 - the strict G7
+      tool-use gate caps the generation, and the report names the
+      exact upgrade (tool intents, adversarial variants, budgets,
+      clarification requests). No GPT-equivalence claims; RMB NOT RUN.
+
 STATUS AGAINST THE 24-SECTION CHARTER:
   See CAS_RRK_v0.1/docs/CAPABILITY_CHARTER_STATUS.md for the full
-  mapping. Summary: sections 6-15, 17, and 22 are substantially
-  demonstrated in code (memory classes, candidates,
-  decomposition/inference, fair comparison, recursive planning,
-  uncertainty, commitment, English via CCB-L1, mathematics via CCB-M1,
-  recursive self-evolution via CAS-RLP, semantic binding via CAS-Sem,
-  the first convincing version).
-  Next artifacts: procedural learning, the cognitive workbench
-  interface, encoders/neural instrumentation last.
+  mapping. Summary: sections 3, 6-15, 17, and 22 are substantially
+  demonstrated in code (workbench interface, memory classes,
+  candidates, decomposition/inference, fair comparison, recursive
+  planning, uncertainty, commitment, English via CCB-L1, mathematics
+  via CCB-M1, recursive self-evolution via CAS-RLP, semantic binding
+  via CAS-Sem, the qualification standard, the first convincing
+  version).
+  Remaining: tool use (section 19) - the strict G7 gate - and
+  encoders/neural instrumentation last.
 
 COMMANDS:
   cd cas_only_reasoner/CAS_RRK_v0.1
