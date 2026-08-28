@@ -74,10 +74,11 @@ def format_report(q: Dict) -> str:
     lines.append("")
     lines.append(f"Recommended next target:")
     lines.append(f"    {q['next_target']}")
-    if q.get("blocking", {}).get("recommendations"):
+    upgrade = q.get("estimated_upgrade") or         q.get("blocking", {}).get("recommendations", [])
+    if upgrade:
         lines.append("")
         lines.append("Estimated upgrade:")
-        for rec in q["blocking"]["recommendations"]:
+        for rec in upgrade:
             lines.append(f"    {rec}")
     if q.get("skill_profile"):
         lines.append("")

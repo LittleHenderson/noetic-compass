@@ -61,34 +61,48 @@ def test_generations_are_not_gpt_names():
 
 # --------------------------------------------------------------------------
 def test_design_ceiling_gated_by_tools():
-    assert design_ceiling(CNCM) == "CAS-G6"
+    # Tools + adversarial suite present: G7 is open, and G8/G9 follow
+    # because learning writeback and self-improvement already exist.
+    assert design_ceiling(CNCM) == "CAS-G9"
+    # The prototype and the kernel alone still cap at G6: no tools.
     assert design_ceiling(CAS_RR) == "CAS-G6"
+    assert design_ceiling(KERNEL) == "CAS-G6"
 
 
 def test_demonstrated_level_strict_sequential():
     demo = demonstrated_level(KERNEL)
     assert demo["level"] == "CAS-G4"
     demo = demonstrated_level(CNCM)
-    assert demo["level"] == "CAS-G6"
-    assert demo["stable_difficulty"] == "D6"
+    assert demo["level"] == "CAS-G7"
+    assert demo["stable_difficulty"] == "D7"
     assert demo["peak_difficulty"] == "D9"
 
 
 def test_qualified_level_is_the_minimum():
     q = qualify(CNCM)
-    # Held-out suites exist across the boards, so the assembly earns E5;
-    # the strict G7 tool-use gate still caps the generation at G6.
-    assert q["qualified_level"] == "CAS-G6 / E5 / A0"
+    # Tools + adversarial suite + a stable D7 demonstration clear the
+    # strict G7 gate; held-out suites earn E5; long-term goals and
+    # self-model still cap the ceiling at G9.
+    assert q["qualified_level"] == "CAS-G7 / E5 / A0"
+    assert q["design_ceiling"] == "CAS-G9"
     q = qualify(KERNEL)
     assert q["qualified_level"] == "CAS-G4 / E4 / A0"
 
 
 def test_blocking_deficiency_names_the_gate():
-    q = qualify(CNCM)
+    # The assembled machine no longer blocks on tools; the kernel alone
+    # still does.
+    q = qualify(KERNEL)
     assert q["blocking"]["kind"] == "missing prerequisite machinery"
     assert "tool" in q["blocking"]["detail"]
     assert q["next_target"] == "CAS-G7"
     assert q["blocking"]["recommendations"]
+
+
+def test_next_target_after_g7_is_g8():
+    q = qualify(CNCM)
+    assert not q["blocking"]
+    assert q["next_target"] == "CAS-G8"
 
 
 # --------------------------------------------------------------------------
@@ -129,6 +143,7 @@ def test_skill_profile_separate():
     q = qualify(CNCM)
     assert q["skill_profile"]["Mathematics"] == 4.5
     assert q["skill_profile"]["Vision"] == 0.0
+    assert q["skill_profile"]["Tool use"] == 3.0
 
 
 # --------------------------------------------------------------------------
@@ -139,8 +154,17 @@ def test_report_contains_section_10_fields():
                   "Critical violations:", "Deterministic replay:",
                   "Recommended next target:", "Estimated upgrade:"):
         assert field in text
-    assert "CAS-G6 / E5 / A0" in text
+    assert "CAS-G7 / E5 / A0" in text
+    assert "CAS-G9" in text
+    assert "CAS-G8" in text
     assert "NOT RUN" in text
+
+
+def test_kernel_report_still_names_the_upgrade():
+    # The kernel alone stays blocked at the G7 tool gate, so its report
+    # keeps the Estimated upgrade section.
+    text = format_report(qualify(KERNEL))
+    assert "Estimated upgrade:" in text
 
 
 def test_workflow_has_fifteen_steps():

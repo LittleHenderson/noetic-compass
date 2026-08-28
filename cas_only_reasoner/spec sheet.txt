@@ -19,8 +19,10 @@ BUILT (this phase):
       commits separated from decision commits, branch isolation with
       rollback, RPM call stack, governed write-back, typed halting,
       sealed traces, deterministic replay
-    - tests/: 28 passing - the 16-row conformance table, 6 golden
-      fixtures, 6 deterministic replay checks
+    - tests/: 34 passing - the 16-row conformance table, 6 golden
+      fixtures, 6 deterministic replay checks, 6 unification
+      regressions (goal-side variables stay free; two-pass distinct
+      fact selection with reuse fallback)
     - run_demo.py: one-command demonstration
     - docs/: CODEX_GAP_ANALYSIS.md, COMPILER_RUNTIME_BOUNDARY.md,
       ROADMAP_AFTER_v0.1.md, CAPABILITY_CHARTER_STATUS.md
@@ -125,11 +127,63 @@ BUILT (this phase):
       sequential gating, qualified = min(ceiling, demonstrated,
       evidence), hard-gate blocking, vector, skill separation,
       report format, determinism
-    - run_demo.py: qualify all three Minds. Honest result: the
-      assembled CNCM qualifies CAS-G6 / E5 / A0 - the strict G7
-      tool-use gate caps the generation, and the report names the
-      exact upgrade (tool intents, adversarial variants, budgets,
-      clarification requests). No GPT-equivalence claims; RMB NOT RUN.
+    - run_demo.py: qualify all three Minds. Honest result (updated
+      after CCB-T1): the assembled CNCM qualifies CAS-G7 / E5 / A0 -
+      tools + the adversarial suite + a stable D7 demonstration clear
+      the strict G7 gate; design ceiling CAS-G9 (long-term goals and
+      self-model still absent); next target CAS-G8. The section-10
+      report now ALWAYS derives an estimated upgrade from the manifest
+      itself (missing machinery, missing suite, missing stable
+      demonstration, public-not-held-out suites), never asserts one.
+      21 tests. No GPT-equivalence claims; RMB NOT RUN.
+
+  cas_only_reasoner/CCB_T1_v0.1/ - the tool-use board v0.1 (the G7
+  gate), typed tool intents strictly under kernel authority:
+    - spec/CCB_T1_SPEC_v0.1.md: the boundary, the intent contract,
+      the fault suite, non-goals
+    - toolboard/: tools.py (registry; exact calculator reusing CCB-M1
+      rational arithmetic - the sum AND its comparison against 1
+      reported SYMMETRICALLY, gt/eq/lt whichever is true, so the
+      caller's goal never shapes the tool's facts; knowledge query),
+      intent.py (validate-then-execute; every rejection under its OWN
+      type: ToolPermissionDenied, ToolBudgetExhausted,
+      ToolProvenanceViolation, ToolUnknown; contradiction check ->
+      ContraToolResult), toolboard.py (the loop: kernel
+      NEEDS_INFORMATION -> first typed need -> one tool -> kernel
+      re-run; every tool fault is a TYPED terminal status of the
+      board - TOOL_PERMISSION_DENIED / TOOL_BUDGET_EXHAUSTED /
+      TOOL_FAILURE / CONTRA_TOOL_RESULT / AMBIGUOUS_TOOL_NEED /
+      TOOL_PROVENANCE_VIOLATION / NO_TOOL_PROGRESS - never a crash,
+      never a fabricated continuation; a round that adds no new fact
+      halts typed instead of looping), faults.py (the fault cases)
+    - fixtures/: tool_need_problem (2/3 + 3/4 > 1?)
+    - tests/: 20 passing - exact arithmetic, intent provenance
+      (committed + sealed + never from a branch), typed permission /
+      budget / injected-failure / hostile-result / unknown-tool
+      faults, the full loop (halts without tools, concludes with
+      them), determinism, and the G7 adversarial variants: paraphrase
+      (renamed entities), reordered facts and premises, noise and
+      instruction-shaped facts inert as data, the FALSE goal (1/8 +
+      1/8: lt reported symmetrically, NEEDS_INFORMATION, nothing
+      fabricated), board-level typed halts, fault-run determinism
+    - run_demo.py: the tool cycle and the fault suite in one command
+
+  cas_only_reasoner/CAS_OHM_INSTRUMENT_v0.1/ - the CAS-Ohm
+  instrumentation panel v0.1, OPTIONAL instrumentation, never part of
+  the reasoning loop (R10 verified: no board imports it):
+    - spec/CAS_OHM_INSTRUMENT_SPEC_v0.1.md: the paper's restrictions
+      R1-R10 as executable rules, not disclaimers
+    - panel/: protocol.py (manifests; calibration/validation splits
+      enforced DISJOINT (R7); deterministic synthetic source labeled
+      synthetic_mock - no model was measured), calibrate.py (R_eff on
+      the calibration split only; residuals RANK follow-up probes and
+      identify NO causes (R6)), asom.py (Starved / Aligned /
+      Oversaturated / Misaligned from response REGION and semantic
+      OUTCOME independently), report.py (R1-R10 printed verbatim in
+      every report)
+    - tests/: 10 passing - disjointness enforced, synthetic label
+      travels, residual discipline, ASOM independence, determinism
+    - run_demo.py: one panel run
 
 STATUS AGAINST THE 24-SECTION CHARTER:
   See CAS_RRK_v0.1/docs/CAPABILITY_CHARTER_STATUS.md for the full
@@ -140,13 +194,24 @@ STATUS AGAINST THE 24-SECTION CHARTER:
   via CCB-M1, recursive self-evolution via CAS-RLP, semantic binding
   via CAS-Sem, the qualification standard, the first convincing
   version).
-  Remaining: tool use (section 19) - the strict G7 gate - and
-  encoders/neural instrumentation last.
+  Section 19 (tool use) now demonstrated via CCB-T1: typed tool
+  intents under kernel authority with the full typed fault suite and
+  adversarial variants - the strict G7 gate is CLEARED and the CNCM
+  qualifies CAS-G7 / E5 / A0 (next target CAS-G8: correction
+  retention, delayed retention, structural transfer, protected
+  regression as a G8 suite plus a stable D8 demonstration).
+  Remaining: encoders/neural instrumentation (the CAS-Ohm panel
+  exists as OPTIONAL instrumentation under R1-R10, outside the loop).
 
 COMMANDS:
   cd cas_only_reasoner/CAS_RRK_v0.1
-  python -m pytest     # 28 tests
+  python -m pytest     # 34 tests
   python run_demo.py   # six golden fixtures
+
+PROGRAM TEST TOTALS (all green, 2026-08-28):
+  kernel 34 + RLP 23 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
+  workbench 13 + CRQS 21 + CCB-T1 20 + OHM-panel 10 = 185 local,
+  + cas-rr 43 = 228 program-wide.
 
 VERSION DECISIONS FROZEN:
   canonical core: ^0-^9, P/C/E/O, F1-F7, T/A/f/E

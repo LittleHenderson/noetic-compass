@@ -25,7 +25,7 @@ def main():
     for name, label in (
         ("manifest_cas_rr.json", "the cas-rr prototype"),
         ("manifest_kernel.json", "the authority-contract kernel alone"),
-        ("manifest_cncm.json", "the assembled CNCM (six boards)"),
+        ("manifest_cncm.json", "the assembled CNCM (eight boards)"),
     ):
         manifest = load(name)
         report, steps = run_workflow(manifest)

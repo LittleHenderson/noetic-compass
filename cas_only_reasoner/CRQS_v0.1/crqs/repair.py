@@ -67,3 +67,63 @@ MISSING_TOOL_RECOMMENDATIONS = [
     "add resource-exhaustion and budget-management halting tests",
     "add clarification requests for ambiguous or hostile inputs",
 ]
+
+
+# Derived upgrade paths. MISSING_TOOL_RECOMMENDATIONS above stays as the
+# G7 entry; every other target is derived from the manifest itself so the
+# report never prints a recommendation the machine has already met.
+SUITE_DEMANDS = {
+    "CAS-G1": "one controlled cause-bias-effect junction suite",
+    "CAS-G2": "a three-stage cascade suite with fault injection",
+    "CAS-G3": "modus ponens, transitive, contradiction, missing premise",
+    "CAS-G4": "three candidates under one shared bias, with rollback",
+    "CAS-G5": "a memory-dependent before/after suite",
+    "CAS-G6": "parent-child-parent recursion with return addresses",
+    "CAS-G7": "paraphrase, noise, adversarial framing, tool failure, "
+              "resource exhaustion",
+    "CAS-G8": "correction, delayed retention, structural transfer, "
+              "protected regression",
+    "CAS-G9": "self-diagnosis, sandbox, reject-unauthorized, promote, "
+              "parent replay",
+    "CAS-G10": "a multi-domain long-horizon suite",
+}
+
+
+def upgrade_path(manifest, target, requirements):
+    """Concrete steps from the current qualification to `target`.
+
+    Derived, never asserted: missing topology flags, the missing
+    qualification suite, and the demonstration the target still needs.
+    """
+    recommendations = []
+    topology = manifest.get("topology", {})
+    missing = [flag for flag in requirements.get(target, [])
+               if not topology.get(flag)]
+    for flag in missing:
+        recommendations.append(f"build the missing {target} machinery: {flag}")
+    evidence = manifest.get("evidence", {})
+    suites = {s.get("name") for s in evidence.get("suites", [])}
+    if f"suite_{target}" not in suites:
+        recommendations.append(
+            f"run the {target} qualification suite: {SUITE_DEMANDS[target]}")
+    needed = int(target.split("G")[1])
+    stable = 0
+    for demo in manifest.get("demonstrations", []):
+        if demo.get("passed") and demo.get("stable"):
+            stable = max(stable, int(demo["difficulty_grade"][1:]))
+    if stable < needed:
+        recommendations.append(
+            f"demonstrate a STABLE D{needed} task "
+            f"(the stable ceiling today is D{stable})")
+    held_out = [s.get("name") for s in evidence.get("suites", [])
+                if s.get("name", "").startswith("suite_")
+                and not s.get("held_out")]
+    if held_out:
+        recommendations.append(
+            "move these suites to held-out fixtures before the level is "
+            "claimed: " + ", ".join(sorted(held_out)))
+    if not recommendations:
+        recommendations.append(
+            f"no derived gap remains for {target}: seal the evidence and "
+            f"re-qualify")
+    return recommendations

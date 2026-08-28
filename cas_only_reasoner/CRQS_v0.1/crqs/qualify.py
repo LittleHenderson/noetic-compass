@@ -18,7 +18,7 @@ from .evidence import EVIDENCE_CEILING, tier_from_manifest
 from .gates import (gates_pass, hard_gate_violations,
                     performance_gate_failures)
 from .generations import GENERATIONS, generation, index_of, next_level
-from .repair import MISSING_TOOL_RECOMMENDATIONS
+from .repair import MISSING_TOOL_RECOMMENDATIONS, upgrade_path
 from .vector import compute_vector, strongest, weakest
 
 # Required topology flags per generation (strict sequential: G_n needs
@@ -130,6 +130,15 @@ def qualify(manifest: Dict) -> Dict:
             "next_target": "CAS-G7",
         }
 
+    next_target = blocking.get("next_target",
+                               next_level(qualified.split(" /")[0]))
+    # The estimated upgrade is always DERIVED from the manifest, so the
+    # section-10 report names concrete steps even when nothing blocks.
+    if blocking.get("recommendations"):
+        upgrade = blocking["recommendations"]
+    else:
+        upgrade = upgrade_path(manifest, next_target, REQUIREMENTS)
+
     return {
         "mind_id": manifest.get("mind_id"),
         "board_version": manifest.get("board_version"),
@@ -152,7 +161,7 @@ def qualify(manifest: Dict) -> Dict:
         "replay": "PASS" if evidence.get("replay_equivalence", 0.0) >= 1.0
                   else "FAIL",
         "blocking": blocking,
-        "next_target": blocking.get("next_target",
-                                    next_level(qualified.split(" /")[0])),
+        "next_target": next_target,
+        "estimated_upgrade": upgrade,
         "skill_profile": manifest.get("skill_profile", {}),
     }

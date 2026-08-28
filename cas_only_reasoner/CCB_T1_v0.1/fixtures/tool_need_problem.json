@@ -1,0 +1,28 @@
+{
+  "problem_id": "tool_need_01",
+  "description": "is the exact total of the two values greater than one?",
+  "propositions": [
+    {"pred": "value", "args": ["x", "2/3"]},
+    {"pred": "value", "args": ["y", "3/4"]}
+  ],
+  "rules": [
+    {"rule_id": "r_total",
+     "premises": [{"pred": "value", "args": ["?X", "?Nx"]},
+                  {"pred": "value", "args": ["?Y", "?Ny"]},
+                  {"pred": "sum", "args": ["?X", "?Y", "?S"]}],
+     "conclusion": {"pred": "total", "args": ["?S"]},
+     "source": "tool_demo"},
+    {"rule_id": "r_answer",
+     "premises": [{"pred": "total", "args": ["?S"]},
+                  {"pred": "gt", "args": ["?S", "1"]}],
+     "conclusion": {"pred": "greater_than_one", "args": []},
+     "source": "tool_demo"}
+  ],
+  "goal": {"goal_id": "g_tool", "parent_goal_id": null, "kind": "question",
+           "desired_outcome": {"pred": "greater_than_one", "args": []},
+           "requirements": {"knowledge": [], "capability": []},
+           "status": "ACTIVE"},
+  "alternatives": [
+    {"pred": "greater_than_one", "args": []}
+  ]
+}

@@ -50,6 +50,30 @@ def opposite(prop: Proposition) -> Proposition:
     return Proposition("not_" + prop.pred, prop.args)
 
 
+def unify_rule_conclusion(pattern: Proposition,
+                          goal: Proposition) -> Optional[Dict[str, str]]:
+    """Bind a rule conclusion's variables against a goal.
+
+    Goal-side variables stay FREE: they must never bind rule variables
+    to the literal string of a variable (which would later block the
+    real binding during premise proof). Ground goals behave exactly as
+    before.
+    """
+    if pattern.pred != goal.pred or len(pattern.args) != len(goal.args):
+        return None
+    bindings: Dict[str, str] = {}
+    for p_token, g_token in zip(pattern.args, goal.args):
+        if is_var(g_token):
+            continue
+        if is_var(p_token):
+            if p_token in bindings and bindings[p_token] != g_token:
+                return None
+            bindings[p_token] = g_token
+        elif p_token != g_token:
+            return None
+    return bindings
+
+
 def _prove(goal: Proposition, bindings: Dict[str, str],
            props: List[Proposition], rules: List[Rule],
            used_rules: List[str], used_premises: List[Proposition],
@@ -58,13 +82,23 @@ def _prove(goal: Proposition, bindings: Dict[str, str],
     if depth > max_depth:
         return None
     g = instantiate(goal, bindings)
+    # Two-pass fact selection: prefer facts not already consumed by an
+    # earlier premise of the current rule expansion, so distinct
+    # variables bind to distinct entities; reuse only as a fallback.
+    for fact in props:
+        if fact in used_premises:
+            continue
+        b = match(g, fact, bindings)
+        if b is not None:
+            used_premises.append(fact)
+            return b
     for fact in props:
         b = match(g, fact, bindings)
         if b is not None:
             used_premises.append(fact)
             return b
     for rule in rules:
-        b = match(rule.conclusion, g)
+        b = unify_rule_conclusion(rule.conclusion, g)
         if b is None:
             continue
         current = dict(b)
