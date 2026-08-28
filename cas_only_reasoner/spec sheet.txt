@@ -94,6 +94,22 @@ BUILT (this phase):
       ablation, kernel re-proof of DERIVED claims
     - run_demo.py: bind, check, query, lacunae in one command
 
+  cas_only_reasoner/CAS_WORKBENCH_v0.1/ - the cognitive workbench, the
+  glass-brain interface (charter section 3):
+    - spec/CAS_WORKBENCH_SPEC_v0.1.md: ten panes, data contract,
+      conformance, non-goals
+    - workbench/generate.py: runs all six boards once, deterministically,
+      seals the pane bundle with a digest, emits workbench_data.json
+      and the self-contained glass_brain.html
+    - workbench/app.js: the renderer - projection only, never a
+      reasoner; passes node --check
+    - tests/: 13 passing - all panes present, trace hashes chain,
+      branch tree with the winner's proof, RPM push/return, truth pane
+      with VERIFIED and REJECTED, evolution PROMOTED and REJECTED,
+      memory records and lacunae, determinism, organ totals (158),
+      HTML completeness, node syntax check
+    - open output/glass_brain.html in any browser
+
 STATUS AGAINST THE 24-SECTION CHARTER:
   See CAS_RRK_v0.1/docs/CAPABILITY_CHARTER_STATUS.md for the full
   mapping. Summary: sections 6-15, 17, and 22 are substantially

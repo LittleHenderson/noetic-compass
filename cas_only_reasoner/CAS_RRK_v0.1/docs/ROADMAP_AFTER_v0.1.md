@@ -49,9 +49,18 @@ final state hash, and trace digest.
    unbudgeted default behavior intact; rollback preserved.
 6. Encoders/decoders as peripherals; neural instrumentation and
    CAS-Ohm experiments last, under the paper's own restrictions.
-7. The cognitive workbench interface (charter section 3): goal map,
-   live board, branch tree, RPM stack, trace timeline - the glass
-   brain over the now-complete organ stack. NEXT artifact.
+7. The cognitive workbench: DONE (cas_only_reasoner/CAS_WORKBENCH_v0.1,
+   13 tests): ten panes over the organ stack - dialogue, goal map,
+   live board, clickable branch tree with the full candidate WHY,
+   RPM stack, memory explorer with lacunae, truth and evidence,
+   chained trace timeline, learning dashboard, evolution lab. A
+   renderer, never a reasoner: every pane projects real sealed board
+   output; trace hashes chain; regeneration is byte-identical;
+   app.js passes node --check. Single self-contained
+   glass_brain.html - open it in any browser.
+8. Encoders/decoders as peripherals; neural instrumentation and
+   CAS-Ohm experiments last, under the paper's own restrictions.
+   THE ONLY REMAINING ITEM.
 
 ## Standing rules from the charter
 

@@ -1,0 +1,875 @@
+{
+  "digest": "54cad363d359b8ac",
+  "organs": [
+    {
+      "board": "cas-rr",
+      "demo": "python run.py report",
+      "role": "CAS-RR prototype (R3 capability)",
+      "tests": 43
+    },
+    {
+      "board": "CAS_RRK_v0.1",
+      "demo": "python run_demo.py",
+      "role": "authority-contract reasoning kernel",
+      "tests": 28
+    },
+    {
+      "board": "CAS_SEM_v0.1",
+      "demo": "python run_demo.py",
+      "role": "semantic content and binding",
+      "tests": 19
+    },
+    {
+      "board": "CAS_RLP_v0.1",
+      "demo": "python run_demo_procedural.py",
+      "role": "recursive learning, four rings",
+      "tests": 23
+    },
+    {
+      "board": "CCB_M1_v0.1",
+      "demo": "python run_demo.py",
+      "role": "mathematics: checker decides",
+      "tests": 27
+    },
+    {
+      "board": "CCB_L1_v0.1",
+      "demo": "python run_demo.py",
+      "role": "English: acquired interface",
+      "tests": 18
+    }
+  ],
+  "panes": {
+    "branch_tree": {
+      "candidates": [
+        {
+          "amplification": 0.9,
+          "associated_rules": [
+            "r_trans"
+          ],
+          "assumptions": [],
+          "authored_effects": {},
+          "candidate_id": "cand_01",
+          "inference": {
+            "assumptions_used": [],
+            "candidate_id": "cand_01",
+            "conclusion": "precedes(a,c)",
+            "confidence": 1.0,
+            "contradiction_status": "NONE",
+            "premises_used": [
+              "precedes(a,b)",
+              "precedes(b,c)"
+            ],
+            "probe": {
+              "beta": 1.0,
+              "bias": 0.7,
+              "cause": 1.0,
+              "cjt": "^9_inference_bank",
+              "output": 0.7,
+              "parent_probe_id": null,
+              "region": "active",
+              "role": "infer",
+              "tick": 1
+            },
+            "rules_used": [
+              "r_trans"
+            ],
+            "success": true,
+            "unresolved_unknowns": []
+          },
+          "originating_goal": "g_trans",
+          "proposed_path": "surface precedes(a,c); associated rules: ['r_trans']",
+          "region": "active",
+          "retrieved_memories": [
+            "mem_0001",
+            "mem_0002"
+          ],
+          "status": "GENERATED",
+          "target": "precedes(a,c)",
+          "trigger_state": "alternative seed #1 of problem transitive_01"
+        },
+        {
+          "amplification": 0.9,
+          "associated_rules": [
+            "r_trans"
+          ],
+          "assumptions": [],
+          "authored_effects": {},
+          "candidate_id": "cand_02",
+          "inference": {
+            "assumptions_used": [],
+            "candidate_id": "cand_02",
+            "conclusion": "precedes(c,a)",
+            "confidence": 0.0,
+            "contradiction_status": "NONE",
+            "premises_used": [],
+            "probe": {
+              "beta": 1.0,
+              "bias": 0.7,
+              "cause": 0.0,
+              "cjt": "^9_inference_bank",
+              "output": 0.0,
+              "parent_probe_id": null,
+              "region": "cutoff",
+              "role": "infer",
+              "tick": 1
+            },
+            "rules_used": [],
+            "success": false,
+            "unresolved_unknowns": [
+              "precedes(c,?Y)",
+              "precedes(?Y,a)"
+            ]
+          },
+          "originating_goal": "g_trans",
+          "proposed_path": "surface precedes(c,a); associated rules: ['r_trans']",
+          "region": "active",
+          "retrieved_memories": [
+            "mem_0001",
+            "mem_0002"
+          ],
+          "status": "GENERATED",
+          "target": "precedes(c,a)",
+          "trigger_state": "alternative seed #2 of problem transitive_01"
+        }
+      ],
+      "eliminated": {
+        "cand_02": "b ineligible: does not target the goal's desired outcome"
+      },
+      "gates": [
+        {
+          "detail": "tournament winner cand_01",
+          "gate": "COMPARISON_SURVIVED",
+          "passed": true
+        },
+        {
+          "detail": "D/W/P all sufficient",
+          "gate": "PREREQUISITES_SUFFICIENT",
+          "passed": true
+        },
+        {
+          "detail": "winner contradiction status NONE",
+          "gate": "NO_FATAL_CONTRADICTION",
+          "passed": true
+        },
+        {
+          "detail": "clean",
+          "gate": "PRINCIPLED_CONSTRAINTS",
+          "passed": true
+        },
+        {
+          "detail": "O enabled (P, C, E power-good)",
+          "gate": "POWER_GOOD",
+          "passed": true
+        }
+      ],
+      "winner": "precedes(a,c)"
+    },
+    "dialogue": {
+      "questions": [
+        {
+          "answer": "yes, the cat is gray.",
+          "kernel_status": "CONCLUDED",
+          "meaning": {
+            "args": [
+              {
+                "args": [
+                  "cat",
+                  "gray"
+                ],
+                "pred": "property"
+              }
+            ],
+            "pred": "question"
+          },
+          "question": "is the cat gray?"
+        },
+        {
+          "answer": "i do not know whether the dog is gray.",
+          "kernel_status": "NEEDS_INFORMATION",
+          "meaning": {
+            "args": [
+              {
+                "args": [
+                  "dog",
+                  "gray"
+                ],
+                "pred": "property"
+              }
+            ],
+            "pred": "question"
+          },
+          "question": "is the dog gray?"
+        }
+      ]
+    },
+    "evolution": {
+      "budget": 1,
+      "promoted_strategy": "s_gt_first",
+      "regression_ok": true,
+      "strategies": [
+        {
+          "checks": [
+            {
+              "check": "budget_success",
+              "detail": "training repaired within 1 evaluation(s): 1 used",
+              "passed": true
+            },
+            {
+              "check": "held_out_gain",
+              "detail": "held-out fault case repaired within 1 evaluation(s)",
+              "passed": true
+            },
+            {
+              "check": "no_regression",
+              "detail": "unbudgeted default improvement still promotes",
+              "passed": true
+            },
+            {
+              "check": "evaluator_untouched",
+              "detail": "strategy reorders candidates; rules and tests unchanged",
+              "passed": true
+            },
+            {
+              "check": "versioned",
+              "detail": "strategy memory entries are versioned",
+              "passed": true
+            },
+            {
+              "check": "rollback_preserved",
+              "detail": "parent strategy memory retained",
+              "passed": true
+            }
+          ],
+          "strategy": {
+            "fault_class": "overgeneral_rule",
+            "guard_order": [
+              "gt",
+              "lt"
+            ],
+            "note": "try the gt guard first (learned order)",
+            "strategy_id": "s_gt_first"
+          },
+          "verdict": "PROMOTED"
+        },
+        {
+          "checks": [
+            {
+              "check": "budget_success",
+              "detail": "training repaired within 1 evaluation(s): 1 used",
+              "passed": false
+            },
+            {
+              "check": "held_out_gain",
+              "detail": "held-out fault case repaired within 1 evaluation(s)",
+              "passed": false
+            },
+            {
+              "check": "no_regression",
+              "detail": "unbudgeted default improvement still promotes",
+              "passed": true
+            },
+            {
+              "check": "evaluator_untouched",
+              "detail": "strategy reorders candidates; rules and tests unchanged",
+              "passed": true
+            },
+            {
+              "check": "versioned",
+              "detail": "strategy memory entries are versioned",
+              "passed": true
+            },
+            {
+              "check": "rollback_preserved",
+              "detail": "parent strategy memory retained",
+              "passed": true
+            }
+          ],
+          "strategy": {
+            "fault_class": "overgeneral_rule",
+            "guard_order": [
+              "lt",
+              "gt"
+            ],
+            "note": "try the lt guard first (the unstrategic baseline)",
+            "strategy_id": "s_lt_first"
+          },
+          "verdict": "REJECTED"
+        }
+      ]
+    },
+    "goal_map": {
+      "adapter": {
+        "TF2b": {
+          "F2": 1.0
+        }
+      },
+      "desired_outcome": "precedes(a,c)",
+      "foundation_ref": "TF2b",
+      "goal_id": "g_trans",
+      "kind": "question",
+      "scan": {
+        "D_ok": true,
+        "P_ok": true,
+        "W_ok": true,
+        "cached": true,
+        "first_unmet": null,
+        "goal_id": "g_trans",
+        "missing_token": null
+      }
+    },
+    "learning": {
+      "current_revision": 13,
+      "experience_count": 1,
+      "rule_decisions": [
+        {
+          "mutation": {
+            "change": {
+              "guard_args": [
+                "?Hx",
+                "?Hy"
+              ],
+              "guard_pred": "gt",
+              "kind": "restrict_rule"
+            },
+            "mutation_id": "restrict_r_taller_gt",
+            "note": "add gt guard to r_taller (candidate repair 1)",
+            "ring": "R1",
+            "target": "r_taller"
+          },
+          "verdict": "PROMOTED"
+        },
+        {
+          "mutation": {
+            "change": {
+              "guard_args": [
+                "?Hx",
+                "?Hy"
+              ],
+              "guard_pred": "lt",
+              "kind": "restrict_rule"
+            },
+            "mutation_id": "restrict_r_taller_lt",
+            "note": "add lt guard to r_taller (candidate repair 1)",
+            "ring": "R1",
+            "target": "r_taller"
+          },
+          "verdict": "REJECTED"
+        }
+      ]
+    },
+    "live_board": {
+      "components": [
+        "branch_manager",
+        "commitment_latch",
+        "halting_controller",
+        "reasoning",
+        "rpm_stack",
+        "write_back"
+      ],
+      "ticks": [
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 0
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 1
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 2
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 3
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 4
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 5
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 6
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 7
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 8
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 9
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 10
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 11
+        },
+        {
+          "components": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "tick": 12
+        },
+        {
+          "components": [
+            "write_back"
+          ],
+          "tick": 13
+        }
+      ]
+    },
+    "memory": {
+      "lacunae": [
+        {
+          "kind": "EXPERIENCE_MISSING",
+          "query": "precedes(a,c)",
+          "region": "^5^C"
+        },
+        {
+          "kind": "EXPERIENCE_MISSING",
+          "query": "precedes(c,a)",
+          "region": "^5^C"
+        },
+        {
+          "kind": "EXPERIENCE_MISSING",
+          "query": "precedes(c,?Y)",
+          "region": "^5^C"
+        },
+        {
+          "kind": "EXPERIENCE_MISSING",
+          "query": "precedes(?Y,a)",
+          "region": "^5^C"
+        }
+      ],
+      "records": [
+        {
+          "content": "precedes(a,b)",
+          "id": "mem_0001",
+          "layer": "semantic",
+          "source": "problem:transitive_01"
+        },
+        {
+          "content": "precedes(b,c)",
+          "id": "mem_0002",
+          "layer": "semantic",
+          "source": "problem:transitive_01"
+        }
+      ]
+    },
+    "rpm_stack": {
+      "transitions": [
+        {
+          "goal": "g_launch.knowledge",
+          "kind": "push_rpm",
+          "parent": "g_launch",
+          "tick": 0
+        },
+        {
+          "goal": "g_launch.knowledge",
+          "kind": "return_rpm",
+          "parent": null,
+          "tick": 4
+        },
+        {
+          "goal": "g_launch.capability",
+          "kind": "push_rpm",
+          "parent": "g_launch",
+          "tick": 5
+        },
+        {
+          "goal": "g_launch.capability",
+          "kind": "return_rpm",
+          "parent": null,
+          "tick": 9
+        }
+      ]
+    },
+    "trace": {
+      "final_state_hash": "2b964b21f7ffa9c4",
+      "rows": [
+        {
+          "authorized": 10,
+          "post_state_hash": "bba85f879bb0978f",
+          "pre_state_hash": "5c9e4d2295bd8675",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 0
+        },
+        {
+          "authorized": 8,
+          "post_state_hash": "7c08051f541cb160",
+          "pre_state_hash": "bba85f879bb0978f",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 1
+        },
+        {
+          "authorized": 8,
+          "post_state_hash": "e2bfffb962d9b366",
+          "pre_state_hash": "7c08051f541cb160",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 2
+        },
+        {
+          "authorized": 9,
+          "post_state_hash": "634e3a802eb4e693",
+          "pre_state_hash": "e2bfffb962d9b366",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 3
+        },
+        {
+          "authorized": 8,
+          "post_state_hash": "2f5429e9b736ee19",
+          "pre_state_hash": "634e3a802eb4e693",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 4
+        },
+        {
+          "authorized": 10,
+          "post_state_hash": "482664591769b56a",
+          "pre_state_hash": "2f5429e9b736ee19",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 5
+        },
+        {
+          "authorized": 8,
+          "post_state_hash": "7b27facdb03814ec",
+          "pre_state_hash": "482664591769b56a",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 6
+        },
+        {
+          "authorized": 8,
+          "post_state_hash": "e639d144a6a70abb",
+          "pre_state_hash": "7b27facdb03814ec",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 7
+        },
+        {
+          "authorized": 9,
+          "post_state_hash": "1c9e37945a470aef",
+          "pre_state_hash": "e639d144a6a70abb",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 8
+        },
+        {
+          "authorized": 8,
+          "post_state_hash": "36dd94a20df98688",
+          "pre_state_hash": "1c9e37945a470aef",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 9
+        },
+        {
+          "authorized": 9,
+          "post_state_hash": "a0b05159c955a8de",
+          "pre_state_hash": "36dd94a20df98688",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 10
+        },
+        {
+          "authorized": 10,
+          "post_state_hash": "fe8323f8064d5965",
+          "pre_state_hash": "a0b05159c955a8de",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": null,
+          "tick": 11
+        },
+        {
+          "authorized": 8,
+          "post_state_hash": "59326114da16c441",
+          "pre_state_hash": "fe8323f8064d5965",
+          "rejected": 0,
+          "scheduled": [
+            "branch_manager",
+            "reasoning",
+            "rpm_stack",
+            "commitment_latch",
+            "halting_controller"
+          ],
+          "terminal_status": "CONCLUDED",
+          "tick": 12
+        },
+        {
+          "authorized": 1,
+          "post_state_hash": "2b964b21f7ffa9c4",
+          "pre_state_hash": "59326114da16c441",
+          "rejected": 0,
+          "scheduled": [
+            "write_back"
+          ],
+          "terminal_status": "CONCLUDED",
+          "tick": 13
+        }
+      ],
+      "terminal_status": "CONCLUDED",
+      "trace_digest": "2b3ea9cfa9de5bc3"
+    },
+    "truth": {
+      "coherence": {
+        "broken_violations": [
+          {
+            "detail": "idea {'kind': 'property', 'entity': 'cat_1', 'property': 'gray'} is both VERIFIED and CONTRADICTED",
+            "law": "truth_discipline"
+          }
+        ],
+        "good": true
+      },
+      "math": {
+        "attempt": {
+          "first_invalid_step": 0,
+          "reason": "step 0: procedure square_sum is not equality-preserving at {'x': Fraction(1, 1)}: 4 != 2",
+          "sample_witness": {
+            "left": "4",
+            "point": {
+              "x": "1"
+            },
+            "right": "2"
+          },
+          "verdict": "REJECTED"
+        },
+        "corrected_steps": 1,
+        "corrected_verdict": "VERIFIED",
+        "fault": {
+          "classification": "procedure_not_equality_preserving",
+          "detail": "step 0: procedure square_sum is not equality-preserving at {'x': Fraction(1, 1)}: 4 != 2",
+          "first_invalid_step": 0,
+          "guilty_rule": "square_sum"
+        }
+      },
+      "semantic_claims": [
+        {
+          "idea": {
+            "entity": "cat_1",
+            "kind": "property",
+            "property": "gray"
+          },
+          "provenance": {
+            "source": "observation",
+            "when": "t1"
+          },
+          "truth": "VERIFIED"
+        },
+        {
+          "idea": {
+            "entity": "dog_1",
+            "kind": "property",
+            "property": "brown"
+          },
+          "provenance": {
+            "source": "observation",
+            "when": "t1"
+          },
+          "truth": "OBSERVED"
+        },
+        {
+          "idea": {
+            "kind": "relation",
+            "pred": "chase",
+            "roles": {
+              "agent": "dog_1",
+              "patient": "cat_1"
+            }
+          },
+          "provenance": {
+            "source": "teacher"
+          },
+          "truth": "GIVEN"
+        },
+        {
+          "idea": {
+            "entity": "dog_1",
+            "kind": "property",
+            "property": "brown"
+          },
+          "provenance": {
+            "evidence": "kernel",
+            "source": "prior_proof"
+          },
+          "truth": "DERIVED"
+        }
+      ]
+    }
+  },
+  "program_tests": 158,
+  "workbench_version": "0.1.0"
+}
