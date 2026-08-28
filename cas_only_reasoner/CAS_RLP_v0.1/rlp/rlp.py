@@ -53,6 +53,7 @@ class CAS_RLP:
         self.decisions = []
         self.evaluations_used = 0
         self.strategy_recalls: List[Dict] = []
+        self.diagnosed_faults: List[Dict] = []
         parent_results, _ = run_suite(self.current_package)
         parent_grades = grade(self.current_package, parent_results)
         expectations = self.current_package.get("expectations", {})
@@ -66,6 +67,11 @@ class CAS_RLP:
             if fault is None:
                 continue
             self.record_experience(pid, packet, "held_out_failure")
+            self.diagnosed_faults.append({
+                "problem_id": pid,
+                "classification": fault.classification,
+                "guilty_rules": sorted(set(fault.guilty_rules)),
+            })
             effective_order = guard_order
             if effective_order is None and strategy_memory is not None:
                 entry = strategy_memory.lookup(fault.classification)
@@ -140,6 +146,7 @@ class CAS_RLP:
             "experience_count": len(self.experience),
             "evaluations_used": self.evaluations_used,
             "strategy_recalls": getattr(self, "strategy_recalls", []),
+            "diagnosed_faults": getattr(self, "diagnosed_faults", []),
         }
         payload = json.dumps(packet, sort_keys=True, default=str)
         packet["cycle_digest"] = hashlib.sha256(

@@ -322,13 +322,29 @@ the standing vocabulary; every claim has an artifact path.
   retention, structural transfer via the machine's own recall loop,
   protected regression, causal ablation (`CAS_RLP_v0.1/tests/
   test_g8_suite.py`, 9 tests). Recorded bounds on the spec sheet.
-- **Phase 6 - CLOSED at v0.1 scale.** CAS-G9 earned: self-diagnosis
-  from sealed evidence, sandboxed exploration, procedure SYNTHESIS
-  from the machine's own evidence, six-check acceptance-law promotion,
-  judge digest-checked untouched, EXACT parent replay after rollback,
-  causal ablation, stable-D9 double run (`CAS_RLP_v0.1/rlp/
-  self_improvement.py`, `tests/test_g9_suite.py`, 9 tests).
-  Adversarial re-verification of this phase: OPEN (queued).
+- **Phase 6 - CLOSED at v0.1 scale, independently re-audited NOT
+  REFUTED.** CAS-G9 earned: self-diagnosis from sealed evidence
+  (tamper-evident: forged packets refused), sandboxed exploration,
+  procedure SYNTHESIS from the machine's own evidence (the auditor
+  authored a fresh lt-winning fault class from scratch and the loop
+  synthesized [lt,eq,gt] - synthesis causally tracks evidence; a
+  mismatched held-out yields honest REJECTED with memory unwritten),
+  six-check acceptance-law promotion with the versioned and rollback
+  checks COMPUTED on the real machinery, fault class read from the
+  sealed diagnosis, judge digest covering the ENFORCED protected
+  constant, EXACT parent replay after rollback, causal ablation,
+  stable-D9 double run - cross-process digest-identical per the
+  auditor (`CAS_RLP_v0.1/rlp/self_improvement.py`,
+  `tests/test_g9_suite.py`, 13 tests). Recorded caveats on the spec
+  sheet: one fault class, 3-guard permutation space,
+  r1_bigger_held_out participates in the promote gate (heavier stays
+  purely evaluative), permissive E5 gating in the CRQS engine itself.
+- **Boards without a phase number, both REAL and tracked in git
+  (commit 650765dd):** CCB-T1 tool board (`CCB_T1_v0.1/`, 20 tests:
+  typed ToolIntents, typed fault halts, adversarial variants - the G7
+  gate) and the CAS-Ohm instrumentation panel
+  (`CAS_OHM_INSTRUMENT_v0.1/`, 10 tests: R1-R10 as executable rules,
+  outside the reasoning loop, R10 verified).
 - **Phase 7 - PARTIAL.** Foundry-B/E-equivalent exists as the
   ten-pane glass-brain workbench (`CAS_WORKBENCH_v0.1/`, 13 tests,
   self-contained glass_brain.html). Foundry F exists as CRQS

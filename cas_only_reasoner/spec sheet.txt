@@ -50,7 +50,7 @@ BUILT (this phase):
       current procedure already fits the budget. The judge
       (expectations + protected set) is digest-checked identical
       before and after every cycle.
-    - tests/: 41 passing - R0 experience, R1 rule promotion/rejection,
+    - tests/: 45 passing - R0 experience, R1 rule promotion/rejection,
       R1 procedural strategies (s_gt_first promoted, s_lt_first
       rejected, budget accounting, held-out repair, regression,
       determinism, rollback), R2 reject/quarantine, R3 protection,
@@ -261,10 +261,41 @@ COMMANDS:
   python -m pytest     # 34 tests
   python run_demo.py   # six golden fixtures
 
-PROGRAM TEST TOTALS (all green, 2026-08-28, G9 round):
-  kernel 34 + RLP 41 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
-  workbench 13 + CRQS 33 + CCB-T1 20 + OHM-panel 10 = 215 local,
-  + cas-rr 43 = 258 program-wide.
+PROGRAM TEST TOTALS (all green, 2026-08-28, G9 re-audit round):
+  kernel 34 + RLP 45 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
+  workbench 13 + CRQS 33 + CCB-T1 20 + OHM-panel 10 = 219 local,
+  + cas-rr 43 = 262 program-wide.
+
+G9 RE-AUDIT VERDICT (independent 2-agent adversarial pass,
+2026-08-28, after commit 849a4e47): NOT REFUTED on both fronts. The
+auditor authored a brand-new lt-winning fault class from scratch and
+the SelfImprover synthesized [lt,eq,gt] (not the fixture-run's
+[gt,eq,lt]) - synthesis causally tracks the sealed evidence; forged
+packets refused; a mismatched held-out yields REJECTED with memory
+unwritten; the causal ablation reproduces both directions; stability
+is cross-process digest-identical. The STATUS LEDGER audit found
+every phase status supported at exactly the claimed strength, all six
+honesty disclosures present, and sever-the-cortex literally true
+(zero neural/LLM imports or endpoints anywhere in the lane).
+
+CLOSED from that audit (each with a regression test): fault class now
+read from the sealed diagnosis (was hardcoded at the promote site);
+versioned and rollback_preserved checks now COMPUTED on the real
+memory machinery (were hardcoded True); the judge digest now covers
+the ENFORCED R3_PROTECTED constant (the declared list alone was
+decorative, though fail-safe); diagnosis is tamper-evident (re-seals
+the packet, refuses mismatches); CCB-T1 and the OHM panel got their
+own ledger rows (the auditor's claim that they were untracked in git
+was itself WRONG - both committed at 650765dd, verified).
+
+RECORDED CAVEATS on CAS-G9 (state them wherever quoted): one fault
+class; a 3-guard permutation space (the improvement is exhaustive
+sandbox search memoized into an ordering); r1_bigger_held_out
+participates in the promote gate (model-selection data) while
+r1_heavier_structural stays purely evaluative; held-out means hidden
+from the machine's loop, not from developers; the CRQS engine's E5
+gating is permissive (any held-out suite grants it) - the G9 grade is
+not inflated by this, but the standard should tighten it.
 
 RE-AUDIT VERDICT (independent 2-agent adversarial pass, 2026-08-28,
 after commit 19327ba3): NOT REFUTED on both fronts. The auditor

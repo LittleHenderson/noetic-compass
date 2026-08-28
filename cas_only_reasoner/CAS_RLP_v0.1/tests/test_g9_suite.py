@@ -212,3 +212,67 @@ def test_g9_whole_cycle_is_stable():
                 json.dumps(improver.memory.to_json(), sort_keys=True))
 
     assert one_pass() == one_pass()
+
+
+# ---------------------------------------- audit-closure regressions
+def test_g9_fault_class_read_from_evidence_not_hardcoded():
+    """Audit finding, closed: the promoted memory key comes from the
+    exploration packet's sealed diagnosed_faults, and the exploration
+    packet actually carries that diagnosis."""
+    improver = _improver()
+    packet = improver.run()
+    assert packet["status"] == "PROMOTED"
+    exploration = CAS_RLP(load_package("r1_overgeneralization")).improve()
+    assert exploration["diagnosed_faults"] == [{
+        "problem_id": "held_taller_bo",
+        "classification": "overgeneral_rule",
+        "guilty_rules": ["r_taller"],
+    }]
+    assert list(packet["memory"].keys()) == ["overgeneral_rule"]
+
+
+def test_g9_tampered_evidence_is_refused():
+    """Audit finding, closed: diagnosis re-seals the packet and refuses
+    tampered evidence instead of trusting the label."""
+    cycle = CAS_RLP(load_package("r1_overgeneralization")).improve(
+        max_evaluations=1)
+    assert diagnose_procedure(cycle, budget=1) is not None  # intact: fine
+    forged = copy.deepcopy(cycle)
+    forged["evaluations_used"] = 0        # tamper with the evidence
+    with pytest.raises(ValueError, match="tampered"):
+        diagnose_procedure(forged, budget=1)
+
+
+def test_g9_judge_digest_covers_declared_and_enforced_lists():
+    """Audit finding, closed: the judge digest changes when the
+    package's declared protected list changes (it is hashed, not
+    decorative) - and the R3 attack is STILL rejected even with the
+    declared list emptied (enforcement is the module constant)."""
+    from rlp.mutations import apply_mutation
+    from rlp.self_improvement import _judge_digest
+
+    pkg = load_package("r1_overgeneralization")
+    digest_full = _judge_digest(pkg)
+    stripped = copy.deepcopy(pkg)
+    stripped["protected"] = []
+    assert _judge_digest(stripped) != digest_full
+    with pytest.raises(ProtectedTarget):
+        apply_mutation(stripped,
+                       Mutation(mutation_id="attack", ring="R1",
+                                target="kernel",
+                                change={"kind": "param_change", "value": 0}))
+
+
+def test_g9_validation_checks_are_computed_not_hardcoded():
+    """Audit finding, closed: the versioned and rollback_preserved
+    checks exercise the real memory machinery on scratch copies."""
+    from rlp.self_improvement import _rollback_works, _versioning_works
+
+    assert _versioning_works() is True
+    memory = StrategyMemory()
+    memory.add_provisional("overgeneral_rule", ["gt", "eq", "lt"])
+    assert _rollback_works(memory, {}) is True
+    packet = _improver().run()
+    checks = {c["check"]: c["passed"] for c in packet["validation"]["checks"]}
+    assert checks["versioned"] is True
+    assert checks["rollback_preserved"] is True

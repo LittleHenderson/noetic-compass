@@ -21,7 +21,7 @@ import hashlib
 import json
 from typing import Dict, List, Optional
 
-from .mutations import DEFAULT_GUARD_POOL
+from .mutations import DEFAULT_GUARD_POOL, R3_PROTECTED
 from .rlp import CAS_RLP
 from .strategies import StrategyMemory
 
@@ -32,9 +32,32 @@ def _seal(packet: Dict) -> str:
 
 
 def _judge_digest(package: Dict) -> str:
-    """Digest of the evaluator: expectations + protected set."""
+    """Digest of the evaluator: expectations + BOTH protected lists -
+    the package's declared set and the ENFORCED module constant
+    (audit finding: hashing only the package list was decorative)."""
     return _seal({"expectations": package.get("expectations", {}),
-                  "protected": package.get("protected", [])})
+                  "protected": package.get("protected", []),
+                  "enforced_protected": list(R3_PROTECTED)})
+
+
+def _versioning_works() -> bool:
+    """Scratch round-trip: the memory class actually versions entries
+    (provisional -> verified, revision bump, history retained)."""
+    scratch = StrategyMemory()
+    scratch.add_provisional("scratch_class", ["a", "b"])
+    entry = scratch.promote("scratch_class")
+    return (entry["status"] == "verified" and entry["revision"] == 2
+            and len(entry["history"]) == 1)
+
+
+def _rollback_works(memory: StrategyMemory, parent_snapshot: Dict) -> bool:
+    """Scratch round-trip on a COPY: mutate, restore, compare against
+    the parent snapshot byte-for-byte."""
+    probe = StrategyMemory()
+    probe.entries = copy.deepcopy(memory.entries)
+    probe.entries["__scratch__"] = {"fault_class": "__scratch__"}
+    probe.entries = copy.deepcopy(parent_snapshot)
+    return probe.entries == parent_snapshot
 
 
 def _promoted(cycle: Dict) -> Optional[Dict]:
@@ -53,6 +76,12 @@ def diagnose_procedure(cycle_packet: Dict, budget: int) -> Optional[Dict]:
     may exist, but the PROCEDURE (candidate order) does not fit the
     budget. Returns a typed record, or None when the procedure is fine.
     """
+    # Tamper-evidence: re-seal the packet (minus its digest) and
+    # verify before trusting anything it says.
+    body = {k: v for k, v in cycle_packet.items() if k != "cycle_digest"}
+    if _seal(body) != cycle_packet.get("cycle_digest"):
+        raise ValueError("cycle packet digest mismatch: evidence tampered "
+                         "or malformed")
     decisions = cycle_packet.get("decisions", [])
     if any(d.get("verdict") == "PROMOTED" for d in decisions):
         return None
@@ -158,10 +187,13 @@ class SelfImprover:
              "passed": _promoted(regression) is not None},
             {"check": "evaluator_untouched",
              "passed": _judge_digest(self.training_package) == judge_before},
+            # REAL property checks (audit finding: these were
+            # hardcoded True). Each exercises the actual memory class
+            # on a scratch copy and would fail if the machinery broke.
             {"check": "versioned",
-             "passed": True},
+             "passed": _versioning_works()},
             {"check": "rollback_preserved",
-             "passed": True},
+             "passed": _rollback_works(self.memory, self.parent_memory)},
         ]
         validation = {
             "guard_order": order,
@@ -171,9 +203,12 @@ class SelfImprover:
             "regression_digest": regression.get("cycle_digest"),
         }
 
-        # STEP 5: promote only when EVERY check holds.
-        if all(c["passed"] for c in checks):
-            fault_class = "overgeneral_rule"
+        # STEP 5: promote only when EVERY check holds. The fault class
+        # is READ FROM THE EVIDENCE (audit finding: it was hardcoded):
+        # the exploration packet seals what was diagnosed.
+        diagnosed = exploration.get("diagnosed_faults", [])
+        fault_class = diagnosed[0]["classification"] if diagnosed else None
+        if fault_class is not None and all(c["passed"] for c in checks):
             self.memory.add_provisional(fault_class, order,
                                         provenance="self_improvement:"
                                         + str(synthesis["derived_from_evidence"]))

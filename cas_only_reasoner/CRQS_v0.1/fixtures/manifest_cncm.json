@@ -33,7 +33,7 @@
       {"name": "suite_CAS-G6", "tests": 4, "passed": 4, "held_out": true},
       {"name": "suite_CAS-G7", "tests": 9, "passed": 9, "held_out": false},
       {"name": "suite_CAS-G8", "tests": 9, "passed": 9, "held_out": true},
-      {"name": "suite_CAS-G9", "tests": 9, "passed": 9, "held_out": true}
+      {"name": "suite_CAS-G9", "tests": 13, "passed": 13, "held_out": true}
     ],
     "precision": 1.0, "coverage": 0.9, "held_out_success": 1.0,
     "trace_completeness": 1.0, "replay_equivalence": 1.0,
