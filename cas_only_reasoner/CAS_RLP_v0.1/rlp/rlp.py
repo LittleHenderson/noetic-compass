@@ -44,8 +44,9 @@ class CAS_RLP:
 
     # ----------------------------------------------------------------
     # The improvement cycle.
-    def improve(self) -> Dict:
+    def improve(self, guard_order=None, max_evaluations: Optional[int] = None) -> Dict:
         self.decisions = []
+        self.evaluations_used = 0
         parent_results, _ = run_suite(self.current_package)
         parent_grades = grade(self.current_package, parent_results)
         expectations = self.current_package.get("expectations", {})
@@ -60,11 +61,23 @@ class CAS_RLP:
                 continue
             self.record_experience(pid, packet, "held_out_failure")
             promoted_decision = None
-            for mutation in propose_repairs(fault, self.current_package):
+            for mutation in propose_repairs(fault, self.current_package,
+                                            guard_order=guard_order):
+                if max_evaluations is not None and \
+                        self.evaluations_used >= max_evaluations:
+                    self.decisions.append({
+                        "verdict": "BUDGET_EXHAUSTED",
+                        "mutation": mutation.to_json(),
+                        "detail": (f"repair budget {max_evaluations} exhausted "
+                                   f"before {mutation.mutation_id}"),
+                    })
+                    continue
+                self.evaluations_used += 1
                 # Every candidate is evaluated against the ORIGINAL parent
                 # and every decision is recorded as evidence; the first
                 # accepted repair wins.
                 decision = self._evaluate_mutation(mutation, parent_grades)
+                decision["evaluations_used"] = self.evaluations_used
                 self.decisions.append(decision)
                 if decision["verdict"] == "PROMOTED" and promoted_decision is None:
                     promoted_decision = decision
@@ -108,6 +121,7 @@ class CAS_RLP:
             "decisions": self.decisions,
             "version_history": self.history.snapshot_list(),
             "experience_count": len(self.experience),
+            "evaluations_used": self.evaluations_used,
         }
         payload = json.dumps(packet, sort_keys=True, default=str)
         packet["cycle_digest"] = hashlib.sha256(

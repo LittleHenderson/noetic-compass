@@ -40,12 +40,19 @@ class Mutation:
         }
 
 
-def propose_repairs(fault: FaultRecord, package: Dict) -> List[Mutation]:
-    """Turn a classified fault into a bounded set of candidate repairs."""
+def propose_repairs(fault: FaultRecord, package: Dict,
+                     guard_order=None) -> List[Mutation]:
+    """Turn a classified fault into a bounded set of candidate repairs.
+
+    guard_order is the STRATEGY: the order in which candidate guards are
+    tried. Procedural learning (ring R1) learns which order fits the
+    repair budget for a fault class.
+    """
     repairs: List[Mutation] = []
     if fault.classification == "overgeneral_rule":
+        guards = list(guard_order or ("gt", "lt"))
         for i, rule_id in enumerate(sorted(set(fault.guilty_rules)), start=1):
-            for guard in ("gt", "lt"):
+            for guard in guards:
                 repairs.append(Mutation(
                     mutation_id=f"restrict_{rule_id}_{guard}",
                     ring="R1",

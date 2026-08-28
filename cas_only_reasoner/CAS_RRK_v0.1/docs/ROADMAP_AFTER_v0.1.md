@@ -40,14 +40,18 @@ final state hash, and trace digest.
    nine truth statuses with discipline, provenance completeness, and
    the six coherence laws, with DERIVED claims re-proven through the
    unchanged proof kernel; Semantic CMB queries and typed lacunae.
-5. Procedural learning: strategies and proof patterns behind the
-   Gate-5 controls (RLP ring R1 extended to proof strategies).
-   NEXT artifact.
+5. Procedural learning: DONE (cas_only_reasoner/CAS_RLP_v0.1,
+   rlp/procedural.py + rlp/strategies.py, 10 new tests): repair
+   strategies promoted under the acceptance law - s_gt_first repairs
+   the training fault AND a held-out fault case of the same class in
+   ONE sandbox evaluation each (PROMOTED, versioned, provenance
+   prior_proof); s_lt_first exhausts the budget (REJECTED);
+   unbudgeted default behavior intact; rollback preserved.
 6. Encoders/decoders as peripherals; neural instrumentation and
    CAS-Ohm experiments last, under the paper's own restrictions.
 7. The cognitive workbench interface (charter section 3): goal map,
    live board, branch tree, RPM stack, trace timeline - the glass
-   brain over the now-complete organ stack.
+   brain over the now-complete organ stack. NEXT artifact.
 
 ## Standing rules from the charter
 

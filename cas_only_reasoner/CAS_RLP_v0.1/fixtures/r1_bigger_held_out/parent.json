@@ -1,0 +1,66 @@
+{
+  "processor_id": "proc_r1_bigger",
+  "revision": 3,
+  "parameters": {},
+  "protected": ["kernel", "sole_writer", "proof_checker", "trace_integrity",
+                "benchmarks", "expectations", "rollback", "authority"],
+  "tasks": {
+    "regression": [
+      {
+        "problem_id": "reg_bigger_ada",
+        "description": "ada is bigger than bo - must keep working",
+        "propositions": [
+          {"pred": "height", "args": ["ada", "5"]},
+          {"pred": "height", "args": ["bo", "3"]},
+          {"pred": "gt", "args": ["5", "3"]}
+        ],
+        "rules": [
+          {"rule_id": "r_bigger",
+           "premises": [{"pred": "height", "args": ["?X", "?Hx"]},
+                        {"pred": "height", "args": ["?Y", "?Hy"]}],
+           "conclusion": {"pred": "bigger", "args": ["?X", "?Y"]},
+           "source": "learned"}
+        ],
+        "goal": {"goal_id": "g_reg", "parent_goal_id": null, "kind": "question",
+                 "desired_outcome": {"pred": "bigger", "args": ["ada", "bo"]},
+                 "requirements": {"knowledge": [], "capability": []},
+                 "status": "ACTIVE"},
+        "alternatives": [
+          {"pred": "bigger", "args": ["ada", "bo"]},
+          {"pred": "bigger", "args": ["bo", "ada"]}
+        ]
+      }
+    ],
+    "held_out": [
+      {
+        "problem_id": "held_bigger_bo",
+        "description": "is bo bigger than ada? - the rule must not fire",
+        "propositions": [
+          {"pred": "height", "args": ["ada", "5"]},
+          {"pred": "height", "args": ["bo", "3"]},
+          {"pred": "gt", "args": ["5", "3"]}
+        ],
+        "rules": [
+          {"rule_id": "r_bigger",
+           "premises": [{"pred": "height", "args": ["?X", "?Hx"]},
+                        {"pred": "height", "args": ["?Y", "?Hy"]}],
+           "conclusion": {"pred": "bigger", "args": ["?X", "?Y"]},
+           "source": "learned"}
+        ],
+        "goal": {"goal_id": "g_held", "parent_goal_id": null, "kind": "question",
+                 "desired_outcome": {"pred": "bigger", "args": ["bo", "ada"]},
+                 "requirements": {"knowledge": [], "capability": []},
+                 "status": "ACTIVE"},
+        "alternatives": [
+          {"pred": "bigger", "args": ["bo", "ada"]},
+          {"pred": "bigger", "args": ["ada", "bo"]}
+        ]
+      }
+    ]
+  },
+  "expectations": {
+    "reg_bigger_ada": {"status": "CONCLUDED",
+                       "conclusion": {"pred": "bigger", "args": ["ada", "bo"]}},
+    "held_bigger_bo": {"status": "NEEDS_INFORMATION", "conclusion": null}
+  }
+}

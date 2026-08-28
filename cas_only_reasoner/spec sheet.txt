@@ -30,13 +30,18 @@ BUILT (this phase):
     - spec/CAS_RLP_SPEC_v0.1.md: four rings, improvement loop,
       acceptance law, protected set, decision vocabulary, rollback
     - rlp/: versioning, diagnosis, mutations, sandbox, acceptance,
-      orchestrator
-    - fixtures/: r1 overgeneralized-rule package, r2 parameter sandbox
-    - tests/: 13 passing - R0 experience, R1 promotion/rejection,
-      R2 reject/quarantine, R3 protection, evaluator tampering,
-      rollback, sealed evidence, deterministic cycles
+      orchestrator, strategies (versioned strategy memory),
+      procedural (repair strategies under budget)
+    - fixtures/: r1 overgeneralized-rule package, r1_bigger_held_out
+      (held-out fault case of the same class), r2 parameter sandbox
+    - tests/: 23 passing - R0 experience, R1 rule promotion/rejection,
+      R1 procedural strategies (s_gt_first promoted, s_lt_first
+      rejected, budget accounting, held-out repair, regression,
+      determinism, rollback), R2 reject/quarantine, R3 protection,
+      evaluator tampering, sealed evidence
     - run_demo.py: one full improvement cycle (PROMOTED / REJECTED /
       QUARANTINED / REJECTED_AS_PROTECTED / ROLLBACK)
+    - run_demo_procedural.py: strategy learning under budget
 
   cas_only_reasoner/CCB_M1_v0.1/ - the Mathematical Learning and
   Proof Board v0.1, built above the kernel, beside CAS-RLP:
