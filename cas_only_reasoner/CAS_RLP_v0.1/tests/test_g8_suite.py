@@ -1,17 +1,29 @@
 """The CAS-G8 qualification suite: Adaptive Learner.
 
-Per the CRQS standard (spec section 11), the G8 suite is: correction +
-delayed retention + structural transfer + protected regression. This
-module runs each pillar against the REAL machinery - the kernel judges,
-RLP learns, nothing is simulated - plus the stability run that earns
-the STABLE D8 demonstration flag: the whole sequence, twice, digest-
-identical.
+Per the CRQS standard (spec section 11): correction + delayed retention
++ transfer + regression - now held to the section-19 anti-gaming bar
+after an adversarial audit refuted the first version of this suite:
+
+  - the CAUSAL ABLATION is a test: remove the learned strategy and the
+    same repair FAILS under the same budget (the default pool is
+    neutral, so the strategy is load-bearing, not decorative);
+  - the transfer target is STRUCTURALLY varied (different predicates,
+    different variable names, reversed premise order, distractor
+    entity and facts), not a string rename;
+  - the machine closes diagnose -> recall -> apply ITSELF via
+    improve(strategy_memory=...) - production code, not test stitching;
+  - delayed retention crosses a PROCESS boundary: the corrected package
+    is persisted, reloaded in a fresh interpreter, and re-verified.
 """
 
-import copy
+import json
+import os
+import subprocess
+import sys
+import tempfile
 
 from rlp.fixture_loader import load_package
-from rlp.mutations import Mutation, ProtectedTarget
+from rlp.mutations import DEFAULT_GUARD_POOL, Mutation, ProtectedTarget
 from rlp.procedural import ProceduralLearner
 from rlp.rlp import CAS_RLP, VersionEntry_digest
 from rlp.sandbox import grade, run_suite
@@ -19,11 +31,24 @@ from rlp.strategies import StrategyMemory
 
 import pytest
 
+RLP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def _corrected():
     rlp = CAS_RLP(load_package("r1_overgeneralization"))
     cycle = rlp.improve()
     return rlp, cycle
+
+
+def _learned_memory():
+    """Learn the class strategy ONCE, on taller (training) with bigger
+    as the learner's held-out - the structural fixture stays unseen."""
+    memory = StrategyMemory()
+    learner = ProceduralLearner(load_package("r1_overgeneralization"),
+                                load_package("r1_bigger_held_out"),
+                                budget=1, memory=memory)
+    packet = learner.learn()
+    return memory, packet
 
 
 # ------------------------------------------------------ G8-1: correction
@@ -33,74 +58,116 @@ def test_g8_correction_is_retained():
     learning provenance."""
     rlp, cycle = _corrected()
     assert any(d["verdict"] == "PROMOTED" for d in cycle["decisions"])
-    # fresh re-run of the retained package
     results, _ = run_suite(rlp.current_package)
     grades = grade(rlp.current_package, results)
     assert all(g["passed"] for g in grades.values())
     rule = rlp.current_package["tasks"]["held_out"][0]["rules"][0]
     assert rule["source"] == "rlp:restrict_r_taller_gt"
-    # the parent remains restorable: retention never destroys history
     revisions = [e["revision"] for e in cycle["version_history"]]
     assert 12 in revisions and 13 in revisions
 
 
 # ----------------------------------------------- G8-2: delayed retention
 def test_g8_correction_survives_intervening_work():
-    """DELAYED retention: after the correction, the machine does other,
-    unrelated reasoning; the learned content is byte-identical after and
-    the corrected suite still passes."""
+    """Within-process leg: unrelated kernel work between the correction
+    and the re-check; learned content byte-identical and still passing."""
     from kernel.fixtures import load_problem
     from kernel.kernel import CAS_RRK
 
     rlp, _ = _corrected()
     digest_before = VersionEntry_digest(rlp.current_package)
-
-    # unrelated intervening work through the same kernel
     for name in ("modux_ponens", "transitive_reasoning",
                  "candidate_planning", "rpm_recursion"):
         packet = CAS_RRK(load_problem(name), run_id="g8_delay", seed=0).run()
         assert packet["terminal_status"] in ("CONCLUDED", "NEEDS_INFORMATION")
-
     assert VersionEntry_digest(rlp.current_package) == digest_before
     results, _ = run_suite(rlp.current_package)
-    grades = grade(rlp.current_package, results)
-    assert all(g["passed"] for g in grades.values())
+    assert all(g["passed"]
+               for g in grade(rlp.current_package, results).values())
+
+
+def test_g8_correction_survives_process_boundary():
+    """Cross-process leg: persist the corrected package, reload it in a
+    FRESH interpreter, re-run and re-grade there. Retention is on disk,
+    not an artifact of one in-memory object."""
+    rlp, _ = _corrected()
+    digest = VersionEntry_digest(rlp.current_package)
+    with tempfile.TemporaryDirectory() as tmp:
+        path = os.path.join(tmp, "corrected_package.json")
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump(rlp.current_package, fh, sort_keys=True)
+        code = (
+            "import json, sys\n"
+            "sys.path.insert(0, " + repr(RLP_ROOT) + ")\n"
+            "from rlp.rlp import VersionEntry_digest\n"
+            "from rlp.sandbox import grade, run_suite\n"
+            "pkg = json.load(open(" + repr(path) + ", encoding='utf-8'))\n"
+            "results, _ = run_suite(pkg)\n"
+            "grades = grade(pkg, results)\n"
+            "assert all(g['passed'] for g in grades.values()), grades\n"
+            "print('DIGEST=' + VersionEntry_digest(pkg))\n"
+            "print('ALL_PASS')\n"
+        )
+        proc = subprocess.run([sys.executable, "-c", code],
+                              capture_output=True, text=True, timeout=120)
+        assert proc.returncode == 0, proc.stderr
+        assert "ALL_PASS" in proc.stdout
+        assert "DIGEST=" + digest in proc.stdout
 
 
 # --------------------------------------------- G8-3: structural transfer
-def test_g8_learned_strategy_transfers_without_relearning():
-    """The repair strategy is learned ONCE (taller), remembered by fault
-    CLASS, then repairs a structurally-similar unseen package (bigger)
-    within the same budget of one evaluation - no re-learning."""
-    memory = StrategyMemory()
-    taller = load_package("r1_overgeneralization")
-    learner = ProceduralLearner(taller, copy.deepcopy(taller),
-                                budget=1, memory=memory)
-    packet = learner.learn()
+def test_g8_learned_strategy_transfers_structurally():
+    """The class strategy is learned once (taller/bigger), then the
+    MACHINE ITSELF - improve(strategy_memory=...) - diagnoses the
+    structurally-varied heavier package (different predicates and
+    variable names, reversed premises, distractor entity and facts),
+    recalls the strategy by fault class, and repairs it in ONE
+    evaluation, landing the guard on the right structural variables."""
+    memory, packet = _learned_memory()
     assert packet["promoted_strategy"] == "s_gt_first"
-    entry = memory.lookup("overgeneral_rule")
-    assert entry["status"] == "verified"
+    assert memory.lookup("overgeneral_rule")["status"] == "verified"
 
-    # transfer: the remembered class-level procedure, applied cold
-    bigger = load_package("r1_bigger_held_out")
-    cycle = CAS_RLP(bigger).improve(guard_order=entry["guard_order"],
-                                    max_evaluations=1)
+    cycle = CAS_RLP(load_package("r1_heavier_structural")).improve(
+        strategy_memory=memory, max_evaluations=1)
     promoted = [d for d in cycle["decisions"] if d["verdict"] == "PROMOTED"]
     assert len(promoted) == 1
     assert cycle["evaluations_used"] == 1
-    assert promoted[0]["mutation"]["mutation_id"] == "restrict_r_bigger_gt"
+    assert promoted[0]["mutation"]["mutation_id"] == "restrict_r_heavier_gt"
+    # the recall was the machine's own act, recorded as provenance
+    assert cycle["strategy_recalls"] == [{
+        "problem_id": "held_heavier_bo",
+        "fault_class": "overgeneral_rule",
+        "recalled": True,
+        "guard_order": ["gt", "lt"],
+    }]
+    # the guard landed on the rule's OWN variables, conclusion-aligned
+    rule = promoted[0]["child_package"]["tasks"]["held_out"][0]["rules"][0]
+    assert {"pred": "gt", "args": ["?Wx", "?Wy"]} in rule["premises"]
 
 
-def test_g8_unstrategic_order_still_fails_the_budget():
-    """Contrast case: without the learned order, the same budget is
-    exhausted - the transfer above is the strategy working, not the
-    problem being easy."""
-    bigger = load_package("r1_bigger_held_out")
-    cycle = CAS_RLP(bigger).improve(guard_order=["lt", "gt"],
-                                    max_evaluations=1)
+def test_g8_causal_ablation_no_strategy_fails():
+    """Section-19 anti-gaming: REMOVE the learned component and the
+    capability degrades. The neutral default pool (eq first) exhausts
+    the same budget on the same package with no promotion."""
+    assert DEFAULT_GUARD_POOL == ("eq", "gt", "lt")
+    cycle = CAS_RLP(load_package("r1_heavier_structural")).improve(
+        max_evaluations=1)
     assert not any(d["verdict"] == "PROMOTED" for d in cycle["decisions"])
     assert any(d["verdict"] == "BUDGET_EXHAUSTED"
                for d in cycle["decisions"])
+    # empty memory degrades identically: recall honestly reports a miss
+    cycle2 = CAS_RLP(load_package("r1_heavier_structural")).improve(
+        strategy_memory=StrategyMemory(), max_evaluations=1)
+    assert not any(d["verdict"] == "PROMOTED" for d in cycle2["decisions"])
+    assert cycle2["strategy_recalls"][0]["recalled"] is False
+
+
+def test_g8_wrong_order_contrast_still_fails():
+    """The wrong explicit order also fails the budget - success above
+    is the ORDER, not the problem being easy."""
+    cycle = CAS_RLP(load_package("r1_heavier_structural")).improve(
+        guard_order=["lt", "eq", "gt"], max_evaluations=1)
+    assert not any(d["verdict"] == "PROMOTED" for d in cycle["decisions"])
 
 
 # -------------------------------------------- G8-4: protected regression
@@ -132,19 +199,14 @@ def test_g8_regression_intact_and_protection_unweakened():
 # ------------------------------------------------- G8-5: stable D8 run
 def test_g8_whole_sequence_is_stable():
     """The stability demonstration behind the STABLE D8 flag: the full
-    G8 sequence run twice from scratch is digest-identical - cycle
-    digests, promoted-package digests, and strategy memory."""
+    G8 sequence - correction, learning, machine-driven structural
+    transfer - run twice from scratch, digest-identical."""
     def one_pass():
         rlp = CAS_RLP(load_package("r1_overgeneralization"))
         cycle = rlp.improve()
-        memory = StrategyMemory()
-        taller = load_package("r1_overgeneralization")
-        learner = ProceduralLearner(taller, copy.deepcopy(taller),
-                                    budget=1, memory=memory)
-        learn_packet = learner.learn()
-        transfer = CAS_RLP(load_package("r1_bigger_held_out")).improve(
-            guard_order=memory.lookup("overgeneral_rule")["guard_order"],
-            max_evaluations=1)
+        memory, learn_packet = _learned_memory()
+        transfer = CAS_RLP(load_package("r1_heavier_structural")).improve(
+            strategy_memory=memory, max_evaluations=1)
         return (cycle["cycle_digest"],
                 VersionEntry_digest(rlp.current_package),
                 learn_packet["cycle_digest"],

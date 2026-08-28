@@ -50,7 +50,8 @@ def format_report(q: Dict) -> str:
                      f"sequential standard)")
         lines.append("")
     lines.append(f"Reference-model benchmark:")
-    lines.append(f"    {q['rmb'].get('status', 'NOT RUN')}")
+    from .rmb import format_rmb
+    lines.extend(format_rmb(q.get("rmb") or {}))
     lines.append("")
     lines.append("Core capability vector:")
     for dim, value in q["capability_vector"].items():

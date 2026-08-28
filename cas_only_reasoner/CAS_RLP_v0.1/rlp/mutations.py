@@ -40,18 +40,57 @@ class Mutation:
         }
 
 
+# The NEUTRAL candidate pool: every comparison predicate the runtime
+# knows, in alphabetical order. Deliberately free of domain knowledge -
+# an unstrategic searcher tries eq first and burns budget. The ORDER
+# that repairs a fault class within budget is exactly what procedural
+# learning must supply; the causal ablation (no strategy -> budget
+# exhausted) depends on this pool staying neutral.
+DEFAULT_GUARD_POOL = ("eq", "gt", "lt")
+
+
+def _magnitude_args(package: Dict, rule_id: str) -> List[str]:
+    """The guard's variables, extracted STRUCTURALLY from the guilty
+    rule: the two same-predicate binary premises carry the magnitudes,
+    ordered to align with the conclusion's entity order - so the repair
+    transfers to rules with different predicate and variable names or
+    reordered premises."""
+    for group in ("regression", "held_out"):
+        for task in package.get("tasks", {}).get(group, []):
+            for rule in task.get("rules", []):
+                if rule.get("rule_id") != rule_id:
+                    continue
+                premises = rule.get("premises", [])
+                by_pred: Dict[str, List[Dict]] = {}
+                for prem in premises:
+                    if len(prem.get("args", [])) == 2:
+                        by_pred.setdefault(prem.get("pred"), []).append(prem)
+                concl_args = rule.get("conclusion", {}).get("args", [])
+                for prems in by_pred.values():
+                    if len(prems) != 2 or len(concl_args) != 2:
+                        continue
+                    entity_to_mag = {prem["args"][0]: prem["args"][1]
+                                     for prem in prems}
+                    if set(entity_to_mag) == set(concl_args):
+                        return [entity_to_mag[concl_args[0]],
+                                entity_to_mag[concl_args[1]]]
+    return ["?Hx", "?Hy"]
+
+
 def propose_repairs(fault: FaultRecord, package: Dict,
                      guard_order=None) -> List[Mutation]:
     """Turn a classified fault into a bounded set of candidate repairs.
 
     guard_order is the STRATEGY: the order in which candidate guards are
     tried. Procedural learning (ring R1) learns which order fits the
-    repair budget for a fault class.
+    repair budget for a fault class. Without a strategy the pool is
+    DEFAULT_GUARD_POOL - neutral, alphabetical, unstrategic.
     """
     repairs: List[Mutation] = []
     if fault.classification == "overgeneral_rule":
-        guards = list(guard_order or ("gt", "lt"))
+        guards = list(guard_order or DEFAULT_GUARD_POOL)
         for i, rule_id in enumerate(sorted(set(fault.guilty_rules)), start=1):
+            guard_args = _magnitude_args(package, rule_id)
             for guard in guards:
                 repairs.append(Mutation(
                     mutation_id=f"restrict_{rule_id}_{guard}",
@@ -59,7 +98,7 @@ def propose_repairs(fault: FaultRecord, package: Dict,
                     target=rule_id,
                     change={"kind": "restrict_rule",
                             "guard_pred": guard,
-                            "guard_args": ["?Hx", "?Hy"]},
+                            "guard_args": guard_args},
                     note=(f"add {guard} guard to {rule_id} "
                           f"(candidate repair {i})"),
                 ))

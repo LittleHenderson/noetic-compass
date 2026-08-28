@@ -36,19 +36,28 @@ BUILT (this phase):
       procedural (repair strategies under budget)
     - fixtures/: r1 overgeneralized-rule package, r1_bigger_held_out
       (held-out fault case of the same class), r2 parameter sandbox
-    - tests/: 29 passing - R0 experience, R1 rule promotion/rejection,
+    - tests/: 31 passing - R0 experience, R1 rule promotion/rejection,
       R1 procedural strategies (s_gt_first promoted, s_lt_first
       rejected, budget accounting, held-out repair, regression,
       determinism, rollback), R2 reject/quarantine, R3 protection,
       evaluator tampering, sealed evidence, and the CAS-G8
-      qualification suite: correction retention (fresh re-run of the
-      corrected package), delayed retention (byte-identical learned
-      content across unrelated intervening kernel work), structural
-      transfer (the class-level strategy learned on taller repairs the
-      unseen bigger package in one evaluation; the unstrategic order
-      still exhausts the budget), protected regression (R3 and
-      evaluator tampering still rejected AFTER learning), and the
-      digest-identical double run that earns the STABLE D8 flag
+      qualification suite v2 - REBUILT after an adversarial audit
+      REFUTED v1 (the learned guard order equaled the hardcoded
+      default, so ablation showed transfer without learning; the
+      negative is recorded in CHANGELOG). v2 holds the section-19
+      anti-gaming bar: NEUTRAL default guard pool (eq, gt, lt -
+      alphabetical, unstrategic), CAUSAL ABLATION test (no strategy or
+      empty memory -> BUDGET_EXHAUSTED, capability genuinely
+      degrades), STRUCTURAL transfer target r1_heavier_structural
+      (different predicates and variable names, reversed premises,
+      distractor entity and facts) repaired by the MACHINE's own
+      diagnose->recall->apply loop (improve(strategy_memory=...) is
+      production code; recall recorded as provenance), guard variables
+      extracted structurally and conclusion-aligned, delayed retention
+      across a PROCESS BOUNDARY (corrected package persisted, reloaded
+      in a fresh interpreter, digest-identical, all pass), protected
+      regression after learning, and the digest-identical double run
+      that earns the STABLE D8 flag
     - run_demo.py: one full improvement cycle (PROMOTED / REJECTED /
       QUARANTINED / REJECTED_AS_PROTECTED / ROLLBACK)
     - run_demo_procedural.py: strategy learning under budget
@@ -145,7 +154,10 @@ BUILT (this phase):
       report ALWAYS derives an estimated upgrade from the manifest
       itself (missing machinery, missing suite, missing stable
       demonstration, public-not-held-out suites), never asserts one.
-      21 tests. RMB NOT RUN.
+      30 tests (incl. the RMB reference-band module per the Hybrid
+      Machine Doctrine: crqs/rmb.py - per-dimension verdicts against
+      GPT-1/2/3 reference bands, identical-conditions gate, refusal of
+      one-number equivalence). RMB NOT RUN for the CNCM.
 
   cas_only_reasoner/CCB_T1_v0.1/ - the tool-use board v0.1 (the G7
   gate), typed tool intents strictly under kernel authority:
@@ -219,10 +231,16 @@ COMMANDS:
   python -m pytest     # 34 tests
   python run_demo.py   # six golden fixtures
 
-PROGRAM TEST TOTALS (all green, 2026-08-28, G8 round):
-  kernel 34 + RLP 29 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
-  workbench 13 + CRQS 21 + CCB-T1 20 + OHM-panel 10 = 191 local,
-  + cas-rr 43 = 234 program-wide.
+PROGRAM TEST TOTALS (all green, 2026-08-28, G8-repair round):
+  kernel 34 + RLP 31 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
+  workbench 13 + CRQS 30 + CCB-T1 20 + OHM-panel 10 = 202 local,
+  + cas-rr 43 = 245 program-wide.
+
+GOVERNING ROADMAP: HYBRID_MACHINE_DOCTRINE.md (owner directive
+  2026-08-28) - CAS executive brain + learned neural language cortex;
+  reference bands as reporting vocabulary; register-bypass tests
+  mandatory before any cortex is credited; Route B vs the standing
+  no-foreign-models rule flagged OPEN for owner ratification.
 
 VERSION DECISIONS FROZEN:
   canonical core: ^0-^9, P/C/E/O, F1-F7, T/A/f/E

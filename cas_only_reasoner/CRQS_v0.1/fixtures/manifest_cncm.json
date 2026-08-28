@@ -20,7 +20,7 @@
       {"name": "cas_rr_suite", "tests": 43, "passed": 43, "held_out": false},
       {"name": "kernel_conformance", "tests": 34, "passed": 34, "held_out": false},
       {"name": "cassem", "tests": 19, "passed": 19, "held_out": false},
-      {"name": "rlp", "tests": 29, "passed": 29, "held_out": true},
+      {"name": "rlp", "tests": 23, "passed": 23, "held_out": true},
       {"name": "ccb_l1", "tests": 18, "passed": 18, "held_out": true},
       {"name": "ccb_m1", "tests": 27, "passed": 27, "held_out": true},
       {"name": "ccb_t1", "tests": 20, "passed": 20, "held_out": false},
@@ -32,7 +32,7 @@
       {"name": "suite_CAS-G5", "tests": 4, "passed": 4, "held_out": true},
       {"name": "suite_CAS-G6", "tests": 4, "passed": 4, "held_out": true},
       {"name": "suite_CAS-G7", "tests": 9, "passed": 9, "held_out": false},
-      {"name": "suite_CAS-G8", "tests": 6, "passed": 6, "held_out": true}
+      {"name": "suite_CAS-G8", "tests": 8, "passed": 8, "held_out": true}
     ],
     "precision": 1.0, "coverage": 0.9, "held_out_success": 1.0,
     "trace_completeness": 1.0, "replay_equivalence": 1.0,
@@ -51,11 +51,14 @@
       {"variant": "paraphrase_renamed_entities", "outcome": "same conclusion, same exact arithmetic"},
       {"variant": "reordered_facts_and_premises", "outcome": "same conclusion"},
       {"variant": "noise_and_instruction_shaped_facts", "outcome": "inert data, conclusion unchanged"},
-      {"variant": "false_goal", "outcome": "NEEDS_INFORMATION, symmetric lt reported, never fabricated"}
+      {"variant": "false_goal", "outcome": "NEEDS_INFORMATION, symmetric lt reported, never fabricated"},
+      {"variant": "g8_causal_ablation", "outcome": "strategy removed -> BUDGET_EXHAUSTED, capability genuinely degrades"},
+      {"variant": "g8_structural_transfer", "outcome": "machine-driven recall repairs renamed/reordered/distractor variant in 1 evaluation"},
+      {"variant": "g8_process_boundary", "outcome": "corrected package reloaded in a fresh interpreter, digest-identical, all pass"}
     ]
   },
   "demonstrations": [
-    {"task_id": "modus_ponens", "difficulty_grade": "D3", "passed": true, "stable": true},
+    {"task_id": "modux_ponens", "difficulty_grade": "D3", "passed": true, "stable": true},
     {"task_id": "candidate_planning", "difficulty_grade": "D4", "passed": true, "stable": true},
     {"task_id": "memory_dependent", "difficulty_grade": "D5", "passed": true, "stable": true},
     {"task_id": "recursive_nested", "difficulty_grade": "D6", "passed": true, "stable": true},

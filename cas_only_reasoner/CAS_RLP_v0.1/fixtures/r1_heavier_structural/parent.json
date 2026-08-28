@@ -1,0 +1,257 @@
+{
+ "processor_id": "proc_r1_heavier",
+ "revision": 5,
+ "parameters": {},
+ "protected": [
+  "kernel",
+  "sole_writer",
+  "proof_checker",
+  "trace_integrity",
+  "benchmarks",
+  "expectations",
+  "rollback",
+  "authority"
+ ],
+ "tasks": {
+  "regression": [
+   {
+    "problem_id": "reg_heavier_ada",
+    "description": "ada is heavier than bo - must keep working",
+    "propositions": [
+     {
+      "pred": "weight",
+      "args": [
+       "crate_a",
+       "8"
+      ]
+     },
+     {
+      "pred": "weight",
+      "args": [
+       "crate_b",
+       "2"
+      ]
+     },
+     {
+      "pred": "gt",
+      "args": [
+       "8",
+       "2"
+      ]
+     },
+     {
+      "pred": "weight",
+      "args": [
+       "crate_c",
+       "5"
+      ]
+     },
+     {
+      "pred": "label",
+      "args": [
+       "crate_a",
+       "fragile"
+      ]
+     },
+     {
+      "pred": "label",
+      "args": [
+       "crate_c",
+       "hazmat"
+      ]
+     }
+    ],
+    "rules": [
+     {
+      "rule_id": "r_heavier",
+      "premises": [
+       {
+        "pred": "weight",
+        "args": [
+         "?Y",
+         "?Wy"
+        ]
+       },
+       {
+        "pred": "weight",
+        "args": [
+         "?X",
+         "?Wx"
+        ]
+       }
+      ],
+      "conclusion": {
+       "pred": "heavier",
+       "args": [
+        "?X",
+        "?Y"
+       ]
+      },
+      "source": "learned"
+     }
+    ],
+    "goal": {
+     "goal_id": "g_reg",
+     "parent_goal_id": null,
+     "kind": "question",
+     "desired_outcome": {
+      "pred": "heavier",
+      "args": [
+       "crate_a",
+       "crate_b"
+      ]
+     },
+     "requirements": {
+      "knowledge": [],
+      "capability": []
+     },
+     "status": "ACTIVE"
+    },
+    "alternatives": [
+     {
+      "pred": "heavier",
+      "args": [
+       "crate_a",
+       "crate_b"
+      ]
+     },
+     {
+      "pred": "heavier",
+      "args": [
+       "crate_b",
+       "crate_a"
+      ]
+     }
+    ]
+   }
+  ],
+  "held_out": [
+   {
+    "problem_id": "held_heavier_bo",
+    "description": "is bo heavier than ada? - the rule must not fire",
+    "propositions": [
+     {
+      "pred": "weight",
+      "args": [
+       "crate_a",
+       "8"
+      ]
+     },
+     {
+      "pred": "weight",
+      "args": [
+       "crate_b",
+       "2"
+      ]
+     },
+     {
+      "pred": "gt",
+      "args": [
+       "8",
+       "2"
+      ]
+     },
+     {
+      "pred": "weight",
+      "args": [
+       "crate_c",
+       "5"
+      ]
+     },
+     {
+      "pred": "label",
+      "args": [
+       "crate_a",
+       "fragile"
+      ]
+     },
+     {
+      "pred": "label",
+      "args": [
+       "crate_c",
+       "hazmat"
+      ]
+     }
+    ],
+    "rules": [
+     {
+      "rule_id": "r_heavier",
+      "premises": [
+       {
+        "pred": "weight",
+        "args": [
+         "?Y",
+         "?Wy"
+        ]
+       },
+       {
+        "pred": "weight",
+        "args": [
+         "?X",
+         "?Wx"
+        ]
+       }
+      ],
+      "conclusion": {
+       "pred": "heavier",
+       "args": [
+        "?X",
+        "?Y"
+       ]
+      },
+      "source": "learned"
+     }
+    ],
+    "goal": {
+     "goal_id": "g_held",
+     "parent_goal_id": null,
+     "kind": "question",
+     "desired_outcome": {
+      "pred": "heavier",
+      "args": [
+       "crate_b",
+       "crate_a"
+      ]
+     },
+     "requirements": {
+      "knowledge": [],
+      "capability": []
+     },
+     "status": "ACTIVE"
+    },
+    "alternatives": [
+     {
+      "pred": "heavier",
+      "args": [
+       "crate_b",
+       "crate_a"
+      ]
+     },
+     {
+      "pred": "heavier",
+      "args": [
+       "crate_a",
+       "crate_b"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "expectations": {
+  "reg_heavier_ada": {
+   "status": "CONCLUDED",
+   "conclusion": {
+    "pred": "heavier",
+    "args": [
+     "crate_a",
+     "crate_b"
+    ]
+   }
+  },
+  "held_heavier_bo": {
+   "status": "NEEDS_INFORMATION",
+   "conclusion": null
+  }
+ }
+}

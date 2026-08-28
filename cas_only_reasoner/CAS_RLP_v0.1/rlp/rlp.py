@@ -44,9 +44,15 @@ class CAS_RLP:
 
     # ----------------------------------------------------------------
     # The improvement cycle.
-    def improve(self, guard_order=None, max_evaluations: Optional[int] = None) -> Dict:
+    def improve(self, guard_order=None, max_evaluations: Optional[int] = None,
+                strategy_memory=None) -> Dict:
+        """One improvement cycle. If strategy_memory is given and no
+        explicit guard_order, the machine closes the loop ITSELF:
+        diagnose the fault class, recall the remembered strategy for
+        that class, apply its order. Recall is recorded as provenance."""
         self.decisions = []
         self.evaluations_used = 0
+        self.strategy_recalls: List[Dict] = []
         parent_results, _ = run_suite(self.current_package)
         parent_grades = grade(self.current_package, parent_results)
         expectations = self.current_package.get("expectations", {})
@@ -60,9 +66,20 @@ class CAS_RLP:
             if fault is None:
                 continue
             self.record_experience(pid, packet, "held_out_failure")
+            effective_order = guard_order
+            if effective_order is None and strategy_memory is not None:
+                entry = strategy_memory.lookup(fault.classification)
+                if entry is not None:
+                    effective_order = list(entry["guard_order"])
+                self.strategy_recalls.append({
+                    "problem_id": pid,
+                    "fault_class": fault.classification,
+                    "recalled": entry is not None,
+                    "guard_order": effective_order,
+                })
             promoted_decision = None
             for mutation in propose_repairs(fault, self.current_package,
-                                            guard_order=guard_order):
+                                            guard_order=effective_order):
                 if max_evaluations is not None and \
                         self.evaluations_used >= max_evaluations:
                     self.decisions.append({
@@ -122,6 +139,7 @@ class CAS_RLP:
             "version_history": self.history.snapshot_list(),
             "experience_count": len(self.experience),
             "evaluations_used": self.evaluations_used,
+            "strategy_recalls": getattr(self, "strategy_recalls", []),
         }
         payload = json.dumps(packet, sort_keys=True, default=str)
         packet["cycle_digest"] = hashlib.sha256(
