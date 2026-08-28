@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-28
 **Status:** built and tested. Bounded software evidence only.
-**Governs:** `scripts/cas_rpu/{foundations,workspace,banks,runtime,demo}.py`
+**Governs:** `scripts/cas_rpu/{foundations,workspace,banks,runtime,demo,repl}.py`
 **Sources:** `docs/reference/pdf/CAS_Ohm_Quantification_Guide.pdf`,
 `docs/reference/pdf/CAS_PCBA_Engineer.docx`,
 `docs/reference/pdf/RESEARCH_PAPER_CAS_OHM_1_0_v0.2.pdf`
@@ -253,7 +253,7 @@ Plus three honesty tests: it does not answer what the premises cannot settle, an
 associative route alone never becomes a conclusion, and the conclusion never
 rests on a hypothesis.
 
-**99 tests, all green.** The 262 existing CCB-R1 tests are unaffected.
+**128 tests, all green.** The 262 existing CCB-R1 tests are unaffected.
 
 ## What this is not
 
@@ -295,10 +295,73 @@ saturation and the `^8` bank silently truncated its candidate list. That is
 cure is to keep the two normalisations apart rather than to widen `sat`. The
 banks now declare unit scale and use drive values that put `I` near 0.4–0.5.
 
+## How to interact with it
+
+### The console
+
+```
+python scripts/cas_rpu/repl.py
+```
+
+Type premises, ask a question, read the trace. `help` lists everything.
+
+```
+cas> VS -> QS                    a premise
+cas> QS -> IU
+cas> ? VS -> IU                  ask, and get the full phase trace back
+cas> why                         the support tree under the conclusion
+```
+
+The commands worth knowing:
+
+| Command | What it does |
+|---|---|
+| `A -> B` | a premise, using the default `leads_to` relation |
+| `A -reports_to-> B` | the same with a named relation |
+| `A ~> B` | an **associative** link (`co_occurs`) — `^8` follows it, `^6` rejects it |
+| `not A -> B` | an explicit negation; two that disagree make the set `INADMISSIBLE` |
+| `? A -> B` | reason about it |
+| `why` / `trace` / `lacunae` | provenance, phase trace, unanswered questions |
+| `world open\|closed` | whether an unclosable chain is `UNKNOWN` or a legitimate `NO` |
+| `ambition F5\|A 1.0` | change the goal channel and watch the verdict *not* move |
+| `memory 0.6` | pre-charge the `^5` experience cell |
+| `scenario ladder\|gap\|assoc\|contra` | load a worked example |
+
+`~>` is the interesting one. It is how you make the machine backtrack: `^8`
+will happily surface a route through an associative edge, and `^6` will throw
+it out, which is the whole `association is not deduction` law in two keystrokes.
+
+### One-shot, for scripting
+
+```
+python scripts/cas_rpu/repl.py -p "VS->QS, QS->IU" -a "VS->IU" --quiet   # YES
+python scripts/cas_rpu/repl.py -p "VS->QS" -a "VS->IU" --quiet           # UNKNOWN
+python scripts/cas_rpu/repl.py -p "VS->QS" -a "VS->IU" --closed --quiet  # NO
+```
+
+Exit status carries the verdict, so a script can gate on whether the processor
+was **willing to commit**: `0` concluded, `2` withheld (`NEEDS_*`), `3`
+inadmissible. Piped stdin runs as a script.
+
+### Four things worth trying
+
+1. **Watch it backtrack.** `scenario ladder` then `? VS -> NX`. Three routes
+   surfaced, two thrown out, the trace names which constituent was missing.
+2. **Watch it refuse to guess.** `scenario gap` then `? VS -> IU`. It names the
+   frontier — what the source reaches, what reaches the target — and descends
+   into the acquisition that would unblock it. Then `world closed` and ask
+   again: the same premises now yield a legitimate `NO`.
+3. **Try to bribe it.** `scenario gap`, then `ambition F5|A 1.0`, then ask
+   again. The gap stays open. Ambition sets `PRIME` and `COMPARE`; it cannot
+   reach `^6` or `^9`.
+4. **Break it honestly.** `scenario contra`. Two premises that disagree and it
+   refuses the question rather than picking a side.
+
 ## Reproduce
 
 ```
 python scripts/cas_rpu/demo.py                                   # no cost
+python scripts/cas_rpu/repl.py                                   # interactive
 python -m unittest discover -s scripts/tests -p 'test_cas_rpu_*.py'
 ```
 

@@ -131,6 +131,12 @@ jobs:
           -s scripts/tests
           -p 'test_cas_rpu_sever.py'
 
+      - name: Run the CAS reasoning processor console tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cas_rpu_repl.py'
+
       - name: Run the CAS reasoning processor end to end (no model, no network)
         run: python scripts/cas_rpu/demo.py
 
