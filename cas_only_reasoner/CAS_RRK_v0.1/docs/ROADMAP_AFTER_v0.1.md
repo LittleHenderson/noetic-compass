@@ -12,19 +12,20 @@ final state hash, and trace digest.
 
 ## Stage 4 and later (in order)
 
-1. CAS-RLP: recursive learning protocol - fault diagnosis, candidate
-   mutation, sandbox evaluation, promotion, rollback. Four rings:
-   R0 experience (auto), R1 skill (test+promote), R2 architecture
-   (sandbox descendants), R3 kernel/constitution (no autonomous
-   promotion).
+1. CAS-RLP: DONE v0.1 (cas_only_reasoner/CAS_RLP_v0.1, 13 tests):
+   fault diagnosis from sealed traces, candidate mutation, sandbox
+   evaluation, promotion, rollback. Four rings gated: R0 automatic
+   with provenance, R1 held-out promotion, R2 sandbox + regression,
+   R3 refused; evaluator tampering rejected.
 2. Procedural learning: strategies and proof patterns behind the
-   Gate-5 controls.
+   Gate-5 controls (RLP ring R1 extended to proof strategies).
 3. CAS-Sem expansion: entities, relations, reference, time, truth,
    provenance - beyond propositions and rules.
 4. CCB-L1: the English acquisition board (lexicon, grammar, grounding,
    dialogue, decoding) - strictly outside the reasoning loop.
 5. CCB-M1: the mathematical learning and proof board - trusted
    arithmetic and proof checker, counterexample generator, curriculum.
+   Next organ to build.
 6. Encoders/decoders as peripherals; neural instrumentation and
    CAS-Ohm experiments last, under the paper's own restrictions.
 

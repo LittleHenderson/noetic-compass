@@ -25,14 +25,27 @@ BUILT (this phase):
     - docs/: CODEX_GAP_ANALYSIS.md, COMPILER_RUNTIME_BOUNDARY.md,
       ROADMAP_AFTER_v0.1.md, CAPABILITY_CHARTER_STATUS.md
 
+  cas_only_reasoner/CAS_RLP_v0.1/ - the Recursive Learning and
+  Evolution Protocol v0.1, built ABOVE the kernel:
+    - spec/CAS_RLP_SPEC_v0.1.md: four rings, improvement loop,
+      acceptance law, protected set, decision vocabulary, rollback
+    - rlp/: versioning, diagnosis, mutations, sandbox, acceptance,
+      orchestrator
+    - fixtures/: r1 overgeneralized-rule package, r2 parameter sandbox
+    - tests/: 13 passing - R0 experience, R1 promotion/rejection,
+      R2 reject/quarantine, R3 protection, evaluator tampering,
+      rollback, sealed evidence, deterministic cycles
+    - run_demo.py: one full improvement cycle (PROMOTED / REJECTED /
+      QUARANTINED / REJECTED_AS_PROTECTED / ROLLBACK)
+
 STATUS AGAINST THE 24-SECTION CHARTER:
   See CAS_RRK_v0.1/docs/CAPABILITY_CHARTER_STATUS.md for the full
-  mapping. Summary: sections 6-12 and 22 are substantially demonstrated
-  in code (memory classes, candidates, decomposition/inference, fair
-  comparison, recursive planning, uncertainty, commitment, the first
-  convincing version); sections 13-15 (English, math, recursive
-  self-evolution) are roadmap, with the kernel's authority contract
-  already encoding the ring-R3 protections that section 15 demands.
+  mapping. Summary: sections 6-12, 15, 17, and 22 are substantially
+  demonstrated in code (memory classes, candidates,
+  decomposition/inference, fair comparison, recursive planning,
+  uncertainty, commitment, recursive self-evolution via CAS-RLP, the
+  first convincing version); sections 13-14 (English, math) are the
+  declared next organs, with CCB-M1 (math) first.
 
 COMMANDS:
   cd cas_only_reasoner/CAS_RRK_v0.1

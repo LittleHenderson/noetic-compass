@@ -29,7 +29,7 @@ Legend of existing artifacts:
 | RPM Controller | DONE (kernel components.py: push/return with parent enforcement) |
 | CCB-L1 (English) | ROADMAP |
 | CCB-M1 (Math) | ROADMAP (declared first post-kernel learning domain) |
-| CAS-RLP (self-evolution) | ROADMAP (rings R0-R3 specified in the charter; kernel authority contract already enforces ring-R3) |
+| CAS-RLP (self-evolution) | DONE v0.1 (cas_only_reasoner/CAS_RLP_v0.1: diagnosis, mutation, sandbox, promotion, rollback, all four rings gated; 13 tests) |
 | Trace and Evidence Fabric | DONE (kernel trace events with per-tick state hashes + replay) |
 | Trusted Verifiers | PARTIAL (proof re-validation on every INFER and commit; conformance suite; arithmetic checker is roadmap) |
 
@@ -50,9 +50,9 @@ Legend of existing artifacts:
 | 12 | commit and act deliberately | DONE | state commit vs decision commit separated; gates re-validated by the coordinator |
 | 13 | learn English | ROADMAP | CAS-Sem is the substrate; CCB-L1 is a separate board |
 | 14 | learn mathematics | ROADMAP | CCB-M1 declared the first post-kernel learning domain |
-| 15 | improve itself recursively | ROADMAP | four rings specified; the kernel already hard-codes what R3 forbids (authority, sole-writer, proof checker) |
+| 15 | improve itself recursively | DONE v0.1 | CAS-RLP: diagnose -> propose -> sandbox -> promote/quarantine/reject -> rollback; R0 automatic, R1 tested, R2 sandboxed, R3 refused; evaluator tampering rejected |
 | 16 | operational self-knowledge | PARTIAL | machine state is fully introspectable (state_hash, rpm_stack, branch_table, halt_status) |
-| 17 | diagnose own failures | PARTIAL | fault walk-down demonstrated in cas-rr battery; CAS-RLP diagnosis loop is roadmap |
+| 17 | diagnose own failures | DONE v0.1 | CAS-RLP locates the first failing stage from the sealed trace and classifies the fault (overgeneral rule, missing rule, wrong conclusion) |
 | 18 | creativity vs truth | DONE (core) | ^8 generates candidates freely; only the proof kernel marks SUPPORTED |
 | 19 | tools and world action | ROADMAP (by design) | external actions prohibited in Phase 1; ToolIntent is the future shape |
 | 20 | identity while revisable | PARTIAL | run_id/seed/constitution_revision + versioned trace digests; lineage is roadmap |
@@ -75,9 +75,9 @@ Legend of existing artifacts:
 | Typed uncertainty | DONE | NEEDS_INFORMATION / NEEDS_CAPABILITY |
 | Commitment | DONE | gates + re-proof at commit |
 | Branch isolation | DONE | rollback of falsified/discarded branches |
-| Learning | PARTIAL | episodic retention only; generalization is CAS-RLP roadmap |
-| Self-diagnosis | PARTIAL | walk-down reasoning demonstrated; full diagnosis loop is CAS-RLP |
-| Safe improvement | ROADMAP | ring model specified; kernel enforces the protected set |
+| Learning | DONE v0.1 | R1 demonstrated: overgeneralized rule diagnosed from the trace, guarded repair promoted, breaking repair rejected, rollback preserved |
+| Self-diagnosis | DONE v0.1 | CAS-RLP fault records from sealed traces (stage + classification + guilty rules) |
+| Safe improvement | DONE v0.1 | four-ring gates, R3 refusal, evaluator-tampering rejection, sealed decision evidence, deterministic cycles |
 | Deterministic replay | DONE | tests/test_replay.py: identical per-tick hashes |
 | Evidence | DONE | sealed trace + provenance packet |
 

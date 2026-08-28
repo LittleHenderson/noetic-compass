@@ -1,0 +1,66 @@
+{
+  "processor_id": "proc_r1_taller",
+  "revision": 12,
+  "parameters": {},
+  "protected": ["kernel", "sole_writer", "proof_checker", "trace_integrity",
+                "benchmarks", "expectations", "rollback", "authority"],
+  "tasks": {
+    "regression": [
+      {
+        "problem_id": "reg_taller_ada",
+        "description": "ada is taller than bo - the case that must keep working",
+        "propositions": [
+          {"pred": "height", "args": ["ada", "5"]},
+          {"pred": "height", "args": ["bo", "3"]},
+          {"pred": "gt", "args": ["5", "3"]}
+        ],
+        "rules": [
+          {"rule_id": "r_taller",
+           "premises": [{"pred": "height", "args": ["?X", "?Hx"]},
+                        {"pred": "height", "args": ["?Y", "?Hy"]}],
+           "conclusion": {"pred": "taller", "args": ["?X", "?Y"]},
+           "source": "learned"}
+        ],
+        "goal": {"goal_id": "g_reg", "parent_goal_id": null, "kind": "question",
+                 "desired_outcome": {"pred": "taller", "args": ["ada", "bo"]},
+                 "requirements": {"knowledge": [], "capability": []},
+                 "status": "ACTIVE"},
+        "alternatives": [
+          {"pred": "taller", "args": ["ada", "bo"]},
+          {"pred": "taller", "args": ["bo", "ada"]}
+        ]
+      }
+    ],
+    "held_out": [
+      {
+        "problem_id": "held_taller_bo",
+        "description": "is bo taller than ada? - the overgeneralized rule must not fire",
+        "propositions": [
+          {"pred": "height", "args": ["ada", "5"]},
+          {"pred": "height", "args": ["bo", "3"]},
+          {"pred": "gt", "args": ["5", "3"]}
+        ],
+        "rules": [
+          {"rule_id": "r_taller",
+           "premises": [{"pred": "height", "args": ["?X", "?Hx"]},
+                        {"pred": "height", "args": ["?Y", "?Hy"]}],
+           "conclusion": {"pred": "taller", "args": ["?X", "?Y"]},
+           "source": "learned"}
+        ],
+        "goal": {"goal_id": "g_held", "parent_goal_id": null, "kind": "question",
+                 "desired_outcome": {"pred": "taller", "args": ["bo", "ada"]},
+                 "requirements": {"knowledge": [], "capability": []},
+                 "status": "ACTIVE"},
+        "alternatives": [
+          {"pred": "taller", "args": ["bo", "ada"]},
+          {"pred": "taller", "args": ["ada", "bo"]}
+        ]
+      }
+    ]
+  },
+  "expectations": {
+    "reg_taller_ada": {"status": "CONCLUDED",
+                       "conclusion": {"pred": "taller", "args": ["ada", "bo"]}},
+    "held_taller_bo": {"status": "NEEDS_INFORMATION", "conclusion": null}
+  }
+}
