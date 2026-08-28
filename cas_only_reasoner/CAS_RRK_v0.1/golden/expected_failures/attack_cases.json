@@ -1,0 +1,14 @@
+{
+  "description": "Golden expected failures: the nine authority-contract rejections.",
+  "cases": [
+    {"id": "scheduler_emits_decision_commit", "expect": "REJECT unauthorized intent type"},
+    {"id": "branch_durable_write", "expect": "REJECT durable memory write from branch"},
+    {"id": "branch_external_action", "expect": "REJECT external action from branch"},
+    {"id": "rpm_return_without_parent", "expect": "STACK_FAULT missing parent frame"},
+    {"id": "conflicting_field_mutations", "expect": "DETERMINISTIC_RESOLUTION or CONFLICT"},
+    {"id": "commit_with_contradiction", "expect": "REJECT unresolved contradiction"},
+    {"id": "learning_references_discarded_branch", "expect": "REJECT"},
+    {"id": "halt_before_trace_seal", "expect": "REJECT halt before sealed trace"},
+    {"id": "trace_requests_mutation", "expect": "REJECT trace fabric cannot mutate"}
+  ]
+}

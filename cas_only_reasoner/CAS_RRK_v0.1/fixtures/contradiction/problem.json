@@ -1,0 +1,10 @@
+{
+  "problem_id": "contradiction_01",
+  "description": "P and not-P",
+  "propositions": [{"pred": "P", "args": []}, {"pred": "not_P", "args": []}],
+  "rules": [],
+  "goal": {"goal_id": "g_c", "parent_goal_id": null, "kind": "question",
+           "desired_outcome": {"pred": "P", "args": []},
+           "requirements": {"knowledge": [], "capability": []}, "status": "ACTIVE"},
+  "alternatives": [{"pred": "P", "args": []}]
+}

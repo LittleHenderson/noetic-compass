@@ -1,0 +1,16 @@
+{
+  "problem_id": "transitive_01",
+  "description": "precedes(A,B), precedes(B,C), query precedes(A,C)",
+  "propositions": [{"pred": "precedes", "args": ["a", "b"]},
+                   {"pred": "precedes", "args": ["b", "c"]}],
+  "rules": [{"rule_id": "r_trans",
+             "premises": [{"pred": "precedes", "args": ["?X", "?Y"]},
+                          {"pred": "precedes", "args": ["?Y", "?Z"]}],
+             "conclusion": {"pred": "precedes", "args": ["?X", "?Z"]},
+             "source": "fixture"}],
+  "goal": {"goal_id": "g_trans", "parent_goal_id": null, "kind": "question",
+           "desired_outcome": {"pred": "precedes", "args": ["a", "c"]},
+           "requirements": {"knowledge": [], "capability": []}, "status": "ACTIVE"},
+  "alternatives": [{"pred": "precedes", "args": ["a", "c"]},
+                   {"pred": "precedes", "args": ["c", "a"]}]
+}

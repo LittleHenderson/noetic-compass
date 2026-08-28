@@ -1,0 +1,11 @@
+{
+  "problem_id": "missing_information_01",
+  "description": "P -> Q, query Q, P absent",
+  "propositions": [],
+  "rules": [{"rule_id": "r_mp", "premises": [{"pred": "P", "args": []}],
+             "conclusion": {"pred": "Q", "args": []}, "source": "fixture"}],
+  "goal": {"goal_id": "g_m", "parent_goal_id": null, "kind": "question",
+           "desired_outcome": {"pred": "Q", "args": []},
+           "requirements": {"knowledge": [], "capability": []}, "status": "ACTIVE"},
+  "alternatives": [{"pred": "Q", "args": []}, {"pred": "not_Q", "args": []}]
+}

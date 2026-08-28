@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "problem_packet.schema.json",
+  "title": "ProblemPacket",
+  "type": "object",
+  "required": [
+    "problem_id",
+    "description",
+    "propositions",
+    "rules",
+    "goal",
+    "alternatives"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "problem_id": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "propositions": {
+      "type": "array",
+      "items": {
+        "$ref": "proposition.schema.json"
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "rule.schema.json"
+      }
+    },
+    "goal": {
+      "$ref": "rpm_frame.schema.json"
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "$ref": "proposition.schema.json"
+      }
+    },
+    "available_actions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "add_propositions": {
+            "type": "array",
+            "items": {
+              "$ref": "proposition.schema.json"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

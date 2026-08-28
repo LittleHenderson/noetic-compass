@@ -1,0 +1,5 @@
+{
+  "problem_id": "candidate_planning_01",
+  "expected_status": "CONCLUDED",
+  "expected_conclusion": {"pred": "viable", "args": ["P1"]}
+}

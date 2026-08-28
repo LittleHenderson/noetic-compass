@@ -1,0 +1,5 @@
+{
+  "problem_id": "rpm_recursion_01",
+  "expected_status": "CONCLUDED",
+  "expected_conclusion": {"pred": "executable", "args": ["P_launch"]}
+}

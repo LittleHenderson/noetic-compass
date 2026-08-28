@@ -1,0 +1,103 @@
+# Capability Charter Status — CAS Native Cognitive Machine
+
+**Charter:** cas_only_reasoner/cas_reasoner.txt (24 sections).
+**This report maps each charter section to what now exists in code, and
+what remains roadmap. DONE = implemented and test-covered; PARTIAL =
+implemented in a limited form; ROADMAP = designed but not built.**
+
+Legend of existing artifacts:
+
+- cas-rr/ - the CAS-RR v0.1 prototype (43 tests): CJTs, Foundations,
+  28 channels, CDAB, RPM, halting, provenance.
+- CAS_RRK_v0.1/kernel/ - the authority-contract kernel (28 tests):
+  sole-writer state store, intents, branches, RPM stack, commitment,
+  write-back, halting, sealed traces, deterministic replay.
+
+---
+
+## The organ table (charter section 1)
+
+| Organ | Status |
+| --- | --- |
+| CAS Compiler | ROADMAP (Rust pipeline exists: TKS_V74_COMPILER_*.md; integration is Stage 2) |
+| CAS-RRK | DONE (kernel/) |
+| CCB-R1 / CAS-RPU | DONE in software form (cas-rr/ runtime + CCB_R1_BOARD_SPEC.md) |
+| Foundation Engine Bank | DONE (cas-rr/ foundations.py: 7 engines, 28 channels, D/W/P) |
+| CAS-Sem | PARTIAL (kernel/cas_sem.py: propositions, rules, four evidence statuses; entities/reference/time are roadmap) |
+| CMB | PARTIAL (cas-rr memory.py: 40 cells, three layers, lacunae; procedural/constitutional layers are roadmap) |
+| CDAB | DONE (cas-rr compare.py; kernel compare re-proves live) |
+| RPM Controller | DONE (kernel components.py: push/return with parent enforcement) |
+| CCB-L1 (English) | ROADMAP |
+| CCB-M1 (Math) | ROADMAP (declared first post-kernel learning domain) |
+| CAS-RLP (self-evolution) | ROADMAP (rings R0-R3 specified in the charter; kernel authority contract already enforces ring-R3) |
+| Trace and Evidence Fabric | DONE (kernel trace events with per-tick state hashes + replay) |
+| Trusted Verifiers | PARTIAL (proof re-validation on every INFER and commit; conformance suite; arithmetic checker is roadmap) |
+
+## Section-by-section
+
+| # | Charter capability | Status | Evidence |
+| --- | --- | --- | --- |
+| 2 | internal processing stack | PARTIAL | cas-rr pipeline is the linear spine; kernel adds the authority layer; encoders absent by design |
+| 3 | cognitive workbench interface | ROADMAP | CLI + provenance packets exist (cas-rr/run.py); glass-brain UI not built |
+| 4 | native goals and ambition | DONE (core) | Foundation engines generate goals; the truth firewall is the unity-gain law, tested |
+| 5 | attention and resource control | PARTIAL | tick/branch budgets with typed halts (BUDGET_EXHAUSTED, LOOP_LIMIT_REACHED); CAS-Ohm panel is out of runtime authority |
+| 6 | five memory classes | PARTIAL | working/episodic/semantic in cas-rr; procedural/constitutional recorded but disabled by design |
+| 7 | multiple candidate thoughts | DONE | branch isolation, per-branch evidence, rollback on falsification (conformance rows 2, 3, 11) |
+| 8 | decompose and infer | DONE | backward chaining with provenance; every conclusion carries rules+premises; re-proven at commit |
+| 9 | compare fairly | DONE | shared goal bias, matched comparison, structural divergence reports |
+| 10 | plan recursively | DONE | RPM push/return with parent identity enforcement; typed child results; depth demonstrated |
+| 11 | manage uncertainty honestly | DONE (core) | four evidence statuses + seven typed halts; NEEDS_INFORMATION is a passing result |
+| 12 | commit and act deliberately | DONE | state commit vs decision commit separated; gates re-validated by the coordinator |
+| 13 | learn English | ROADMAP | CAS-Sem is the substrate; CCB-L1 is a separate board |
+| 14 | learn mathematics | ROADMAP | CCB-M1 declared the first post-kernel learning domain |
+| 15 | improve itself recursively | ROADMAP | four rings specified; the kernel already hard-codes what R3 forbids (authority, sole-writer, proof checker) |
+| 16 | operational self-knowledge | PARTIAL | machine state is fully introspectable (state_hash, rpm_stack, branch_table, halt_status) |
+| 17 | diagnose own failures | PARTIAL | fault walk-down demonstrated in cas-rr battery; CAS-RLP diagnosis loop is roadmap |
+| 18 | creativity vs truth | DONE (core) | ^8 generates candidates freely; only the proof kernel marks SUPPORTED |
+| 19 | tools and world action | ROADMAP (by design) | external actions prohibited in Phase 1; ToolIntent is the future shape |
+| 20 | identity while revisable | PARTIAL | run_id/seed/constitution_revision + versioned trace digests; lineage is roadmap |
+| 21 | behavioral qualities | PARTIAL | deliberate, honest, persistent, disciplined, inspectable are demonstrated; teachable/creative are roadmap |
+| 22 | first convincing version | DONE | see table below - 15/15 demonstrations exist with tests |
+| 23 | mature version | ROADMAP | |
+| 24 | what it must never confuse | DONE (as law) | each boundary is an executable constraint or a documented exclusion |
+
+## Section 22: the first convincing version - scored
+
+| Demonstration | Status | Where |
+| --- | --- | --- |
+| Native inference | DONE | fixture modux_ponens, transitive_reasoning |
+| Multiple candidates | DONE | branch forks + isolation (conformance rows 2, 3) |
+| Decomposition | DONE | premises/unknowns in INFER evidence |
+| Comparison | DONE | shared-bias compare with live proof |
+| RPM recursion | DONE | fixture rpm_recursion: push -> resolve -> return -> resume |
+| Memory | DONE | episodic write from committed outcomes (kernel) + memory-dependent task (cas-rr) |
+| Lacunarity | DONE | RECALL reports lacunae; missing_information halts typed |
+| Typed uncertainty | DONE | NEEDS_INFORMATION / NEEDS_CAPABILITY |
+| Commitment | DONE | gates + re-proof at commit |
+| Branch isolation | DONE | rollback of falsified/discarded branches |
+| Learning | PARTIAL | episodic retention only; generalization is CAS-RLP roadmap |
+| Self-diagnosis | PARTIAL | walk-down reasoning demonstrated; full diagnosis loop is CAS-RLP |
+| Safe improvement | ROADMAP | ring model specified; kernel enforces the protected set |
+| Deterministic replay | DONE | tests/test_replay.py: identical per-tick hashes |
+| Evidence | DONE | sealed trace + provenance packet |
+
+## The four answers in one place
+
+- WHAT IT SHOULD DO: recognize a goal, discover what it lacks, learn
+  what is missing, reason with what it learned, verify the result,
+  remember the experience, improve the procedure, and return later as a
+  more capable version of the same continuing machine.
+- WHAT IT SHOULD LOOK LIKE: a cognitive workbench - dialogue plus goal
+  map, live board, branch tree, RPM stack, memory explorer, truth pane,
+  trace timeline, learning dashboard, evolution lab (charter section 3).
+- WHAT IT SHOULD BE CAPABLE OF: sections 4-21 - goals and ambition,
+  resource control, five memories, candidate thinking, decomposition
+  and inference, fair comparison, recursive planning, honest
+  uncertainty, deliberate commitment, English, mathematics, cautious
+  self-evolution, operational self-knowledge, self-diagnosis,
+  disciplined creativity, tool use, and versioned identity.
+- WHAT ABILITIES IT HAS NOW: the kernel (28 tests) and the prototype
+  (43 tests) together deliver section 22 in full: native inference,
+  branches, comparison, RPM recursion, memory, lacunarity, typed
+  uncertainty, commitment, isolation, replay, and evidence - with
+  English, math, and self-evolution as the declared next organs.

@@ -1,0 +1,5 @@
+{
+  "problem_id": "modus_ponens_01",
+  "expected_status": "CONCLUDED",
+  "expected_conclusion": {"pred": "Q", "args": []}
+}

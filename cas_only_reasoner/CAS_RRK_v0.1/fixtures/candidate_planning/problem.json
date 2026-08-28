@@ -1,0 +1,40 @@
+{
+  "problem_id": "candidate_planning_01",
+  "description": "Three plans with incompatible constraints; falsified branches must roll back",
+  "propositions": [
+    {"pred": "plan_has", "args": ["P1", "f1"]}, {"pred": "plan_has", "args": ["P1", "f2"]},
+    {"pred": "plan_has", "args": ["P1", "f3"]}, {"pred": "plan_has", "args": ["P1", "f4"]},
+    {"pred": "plan_has", "args": ["P1", "f5"]},
+    {"pred": "plan_has", "args": ["P2", "f1"]}, {"pred": "plan_has", "args": ["P2", "f2"]},
+    {"pred": "plan_has", "args": ["P2", "f4"]}, {"pred": "plan_has", "args": ["P2", "f5"]},
+    {"pred": "missing", "args": ["P2", "f3"]},
+    {"pred": "plan_has", "args": ["P3", "f1"]},
+    {"pred": "missing", "args": ["P3", "f2"]}, {"pred": "missing", "args": ["P3", "f3"]},
+    {"pred": "missing", "args": ["P3", "f4"]}, {"pred": "missing", "args": ["P3", "f5"]}
+  ],
+  "rules": [
+    {"rule_id": "c1", "premises": [{"pred": "plan_has", "args": ["?P", "f1"]}],
+     "conclusion": {"pred": "cond", "args": ["?P", "C1"]}, "source": "fixture"},
+    {"rule_id": "c2", "premises": [{"pred": "plan_has", "args": ["?P", "f2"]}],
+     "conclusion": {"pred": "cond", "args": ["?P", "C2"]}, "source": "fixture"},
+    {"rule_id": "c3", "premises": [{"pred": "plan_has", "args": ["?P", "f3"]}],
+     "conclusion": {"pred": "cond", "args": ["?P", "C3"]}, "source": "fixture"},
+    {"rule_id": "c4", "premises": [{"pred": "plan_has", "args": ["?P", "f4"]}],
+     "conclusion": {"pred": "cond", "args": ["?P", "C4"]}, "source": "fixture"},
+    {"rule_id": "c5", "premises": [{"pred": "plan_has", "args": ["?P", "f5"]}],
+     "conclusion": {"pred": "cond", "args": ["?P", "C5"]}, "source": "fixture"},
+    {"rule_id": "viable",
+     "premises": [{"pred": "cond", "args": ["?P", "C1"]}, {"pred": "cond", "args": ["?P", "C2"]},
+                  {"pred": "cond", "args": ["?P", "C3"]}, {"pred": "cond", "args": ["?P", "C4"]},
+                  {"pred": "cond", "args": ["?P", "C5"]}],
+     "conclusion": {"pred": "viable", "args": ["?P"]}, "source": "fixture"},
+    {"rule_id": "not_viable", "premises": [{"pred": "missing", "args": ["?P", "?F"]}],
+     "conclusion": {"pred": "not_viable", "args": ["?P"]}, "source": "fixture"}
+  ],
+  "goal": {"goal_id": "g_plan", "parent_goal_id": null, "kind": "plan",
+           "desired_outcome": {"pred": "viable", "args": ["?P"]},
+           "requirements": {"knowledge": [], "capability": []}, "status": "ACTIVE"},
+  "alternatives": [{"pred": "viable", "args": ["P1"]},
+                   {"pred": "viable", "args": ["P2"]},
+                   {"pred": "viable", "args": ["P3"]}]
+}

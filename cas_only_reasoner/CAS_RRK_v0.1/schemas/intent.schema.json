@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "intent.schema.json",
+  "title": "Intent",
+  "type": "object",
+  "required": [
+    "intent_id",
+    "intent_type",
+    "issuer_subsystem",
+    "required_capability",
+    "target_scope",
+    "created_at_tick"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "intent_id": {
+      "type": "string"
+    },
+    "intent_type": {
+      "type": "string",
+      "enum": [
+        "FireIntent",
+        "DeriveIntent",
+        "ForkIntent",
+        "DiscardIntent",
+        "PushGoalIntent",
+        "ReturnGoalIntent",
+        "DecisionCommitIntent",
+        "MemoryWriteIntent",
+        "HaltIntent"
+      ]
+    },
+    "issuer_subsystem": {
+      "type": "string",
+      "enum": [
+        "scheduler",
+        "reasoning",
+        "branch_manager",
+        "rpm_stack",
+        "commitment_latch",
+        "write_back",
+        "halting_controller",
+        "trace_fabric"
+      ]
+    },
+    "required_capability": {
+      "type": "string"
+    },
+    "target_scope": {
+      "type": "string"
+    },
+    "branch_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "goal_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "precondition": {
+      "type": "object"
+    },
+    "proposed_mutation": {
+      "type": "object"
+    },
+    "created_at_tick": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "provenance": {
+      "type": "object"
+    }
+  }
+}

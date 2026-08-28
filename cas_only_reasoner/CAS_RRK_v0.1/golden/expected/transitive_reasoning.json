@@ -1,0 +1,5 @@
+{
+  "problem_id": "transitive_01",
+  "expected_status": "CONCLUDED",
+  "expected_conclusion": {"pred": "precedes", "args": ["a", "c"]}
+}

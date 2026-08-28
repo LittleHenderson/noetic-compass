@@ -1,0 +1,42 @@
+{
+  "problem_id": "rpm_recursion_01",
+  "description": "Goal requires missing knowledge; child resolves it; parent resumes",
+  "propositions": [
+    {"pred": "plan_for", "args": ["P_launch", "G"]},
+    {"pred": "requires_knowledge", "args": ["P_launch", "market_knowledge"]},
+    {"pred": "requires_capability", "args": ["P_launch", "print_capacity"]},
+    {"pred": "defer_plan", "args": ["P_defer"]},
+    {"pred": "action_exists", "args": ["market_research"]},
+    {"pred": "action_available", "args": ["market_research"]},
+    {"pred": "action_exists", "args": ["restructure_resources"]},
+    {"pred": "action_available", "args": ["restructure_resources"]}
+  ],
+  "rules": [
+    {"rule_id": "r_exec",
+     "premises": [{"pred": "plan_for", "args": ["?P", "?G"]},
+                  {"pred": "requires_knowledge", "args": ["?P", "?K"]},
+                  {"pred": "requires_capability", "args": ["?P", "?C"]},
+                  {"pred": "known", "args": ["?K"]},
+                  {"pred": "has_capability", "args": ["?C"]}],
+     "conclusion": {"pred": "executable", "args": ["?P"]}, "source": "fixture"},
+    {"rule_id": "r_defer", "premises": [{"pred": "defer_plan", "args": ["?P"]}],
+     "conclusion": {"pred": "executable", "args": ["?P"]}, "source": "fixture"},
+    {"rule_id": "r_action",
+     "premises": [{"pred": "action_exists", "args": ["?A"]},
+                  {"pred": "action_available", "args": ["?A"]}],
+     "conclusion": {"pred": "action_executable", "args": ["?A"]}, "source": "fixture"}
+  ],
+  "goal": {"goal_id": "g_launch", "parent_goal_id": null, "kind": "plan",
+           "desired_outcome": {"pred": "executable", "args": ["?P"]},
+           "requirements": {"knowledge": ["market_knowledge"],
+                            "capability": ["print_capacity"]},
+           "status": "ACTIVE"},
+  "alternatives": [{"pred": "executable", "args": ["P_launch"]},
+                   {"pred": "executable", "args": ["P_defer"]}],
+  "available_actions": {
+    "market_knowledge": {"action": "market_research",
+                         "add_propositions": [{"pred": "known", "args": ["market_knowledge"]}]},
+    "print_capacity": {"action": "restructure_resources",
+                       "add_propositions": [{"pred": "has_capability", "args": ["print_capacity"]}]}
+  }
+}

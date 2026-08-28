@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "proposition.schema.json",
+  "title": "Proposition",
+  "type": "object",
+  "required": [
+    "pred",
+    "args"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "pred": {
+      "type": "string",
+      "minLength": 1
+    },
+    "args": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

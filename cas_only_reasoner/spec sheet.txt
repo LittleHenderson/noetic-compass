@@ -1,0 +1,47 @@
+ALL PROJECT SPECIFICATIONS GO HERE IN THIS FILE:
+
+PROJECT: CAS Native Cognitive Machine (CNCM) - Phase 1 deliverable
+
+MASTER SOURCE:
+  cas_only_reasoner/cas_reasoner.txt - the complete capability charter
+  and design conversation (24-section charter appended at the end).
+
+BUILT (this phase):
+  cas_only_reasoner/CAS_RRK_v0.1/ - the CAS Reasoning Runtime Kernel v0.1
+    - the four frozen handoff artifacts: AUTHORITY_MANIFEST.yaml,
+      CAS-Sem + inference semantics, 9 machine-readable JSON schemas,
+      6 golden conformance fixtures
+    - NON_GOALS.md, OPEN_QUESTIONS.md, README_HANDOFF.md
+    - spec/: CAS_RRK_SPEC, CAS_SEM_MVP, CAS_KERNEL_IR,
+      AUTHORITY_CONTRACT, CONFORMANCE_PLAN
+    - kernel/: the Stage-1 Python reference kernel - single-threaded,
+      deterministic, typed, snapshot-based, intent-driven, atomic state
+      commits separated from decision commits, branch isolation with
+      rollback, RPM call stack, governed write-back, typed halting,
+      sealed traces, deterministic replay
+    - tests/: 28 passing - the 16-row conformance table, 6 golden
+      fixtures, 6 deterministic replay checks
+    - run_demo.py: one-command demonstration
+    - docs/: CODEX_GAP_ANALYSIS.md, COMPILER_RUNTIME_BOUNDARY.md,
+      ROADMAP_AFTER_v0.1.md, CAPABILITY_CHARTER_STATUS.md
+
+STATUS AGAINST THE 24-SECTION CHARTER:
+  See CAS_RRK_v0.1/docs/CAPABILITY_CHARTER_STATUS.md for the full
+  mapping. Summary: sections 6-12 and 22 are substantially demonstrated
+  in code (memory classes, candidates, decomposition/inference, fair
+  comparison, recursive planning, uncertainty, commitment, the first
+  convincing version); sections 13-15 (English, math, recursive
+  self-evolution) are roadmap, with the kernel's authority contract
+  already encoding the ring-R3 protections that section 15 demands.
+
+COMMANDS:
+  cd cas_only_reasoner/CAS_RRK_v0.1
+  python -m pytest     # 28 tests
+  python run_demo.py   # six golden fixtures
+
+VERSION DECISIONS FROZEN:
+  canonical core: ^0-^9, P/C/E/O, F1-F7, T/A/f/E
+  root desire label: A_root (A0/A1 discrepancy recorded; A22 nowhere)
+  CAS-Ohm: excluded from runtime authority
+  external actions / LLM / English / neural model: excluded in Phase 1
+  state commit and decision commit: separate operations, never collapsed

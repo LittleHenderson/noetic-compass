@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "machine_state.schema.json",
+  "title": "MachineState",
+  "type": "object",
+  "required": [
+    "runtime_version",
+    "logical_tick",
+    "run_id",
+    "seed",
+    "constitution_revision",
+    "foundation_state",
+    "drive_state",
+    "domain_power_state",
+    "global_workspace",
+    "working_memory",
+    "episodic_memory_revision",
+    "active_goal_id",
+    "rpm_stack",
+    "branch_table",
+    "pending_intents",
+    "commitment_state",
+    "learning_queue",
+    "halt_status",
+    "trace_head",
+    "state_hash"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "runtime_version": {
+      "type": "string"
+    },
+    "logical_tick": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "constitution_revision": {
+      "type": "integer"
+    },
+    "foundation_state": {
+      "type": "object"
+    },
+    "drive_state": {
+      "type": "object"
+    },
+    "domain_power_state": {
+      "type": "object",
+      "properties": {
+        "P_GOOD": {
+          "type": "boolean"
+        },
+        "C_GOOD": {
+          "type": "boolean"
+        },
+        "E_GOOD": {
+          "type": "boolean"
+        },
+        "O_ENABLED": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "global_workspace": {
+      "type": "object"
+    },
+    "working_memory": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "episodic_memory_revision": {
+      "type": "integer"
+    },
+    "active_goal_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rpm_stack": {
+      "type": "array",
+      "items": {
+        "$ref": "rpm_frame.schema.json"
+      }
+    },
+    "branch_table": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "branch_frame.schema.json"
+      }
+    },
+    "pending_intents": {
+      "type": "array",
+      "items": {
+        "$ref": "intent.schema.json"
+      }
+    },
+    "commitment_state": {
+      "type": "object"
+    },
+    "learning_queue": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "halt_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "trace_head": {
+      "type": "integer"
+    },
+    "state_hash": {
+      "type": "string"
+    }
+  }
+}

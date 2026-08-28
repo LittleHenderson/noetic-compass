@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "evidence_packet.schema.json",
+  "title": "EvidencePacket",
+  "type": "object",
+  "required": [
+    "problem_id",
+    "terminal_status",
+    "conclusion",
+    "trace_digest",
+    "final_state_hash",
+    "trace"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "problem_id": {
+      "type": "string"
+    },
+    "terminal_status": {
+      "type": "string"
+    },
+    "conclusion": {
+      "$ref": "proposition.schema.json"
+    },
+    "trace_digest": {
+      "type": "string"
+    },
+    "final_state_hash": {
+      "type": "string"
+    },
+    "trace": {
+      "type": "array",
+      "items": {
+        "$ref": "trace_event.schema.json"
+      }
+    },
+    "proof": {
+      "type": "object",
+      "properties": {
+        "rules_used": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "premises_used": {
+          "type": "array",
+          "items": {
+            "$ref": "proposition.schema.json"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "trace_event.schema.json",
+  "title": "TraceEvent",
+  "type": "object",
+  "required": [
+    "event_id",
+    "logical_tick",
+    "pre_state_hash",
+    "enabled_components",
+    "scheduled_components",
+    "proposed_intents",
+    "authorized_intents",
+    "rejected_intents",
+    "rejection_reasons",
+    "committed_mutations",
+    "post_state_hash",
+    "terminal_status"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "logical_tick": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "pre_state_hash": {
+      "type": "string"
+    },
+    "enabled_components": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scheduled_components": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "proposed_intents": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "authorized_intents": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "rejected_intents": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "rejection_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "committed_mutations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "post_state_hash": {
+      "type": "string"
+    },
+    "terminal_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

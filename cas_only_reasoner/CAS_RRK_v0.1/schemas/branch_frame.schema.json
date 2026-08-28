@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "branch_frame.schema.json",
+  "title": "BranchFrame",
+  "type": "object",
+  "required": [
+    "branch_id",
+    "parent_branch_id",
+    "created_at_tick",
+    "workspace_snapshot",
+    "candidate_set",
+    "status"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "branch_id": {
+      "type": "string"
+    },
+    "parent_branch_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at_tick": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "workspace_snapshot": {
+      "type": "object"
+    },
+    "candidate_set": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "OPEN",
+        "COMMITTED",
+        "DISCARDED",
+        "ROLLED_BACK"
+      ]
+    }
+  }
+}

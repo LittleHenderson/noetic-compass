@@ -1,0 +1,36 @@
+artifact: CAS-RRK
+version: 0.1
+
+# Which source wins when documents or code disagree.
+source_precedence:
+  - CAS_RRK_v0.1/spec/CAS_RRK_SPEC_v0.1.md
+  - CAS_RRK_v0.1/AUTHORITY_MANIFEST.yaml
+  - CAS_RRK_v0.1/spec/CAS_SEM_MVP_v0.1.md
+  - CAS PCBA Engineer, CAS v7.7 (cas_only_reasoner/CAS_PCBA_Engineer.docx)
+  - frozen TKS Foundation and RPM ontology (cas_only_reasoner/28 fOUNDATIONS 1.0.pdf,
+    cas_only_reasoner/The 28 Foundations (1).pdf)
+  - CAS-Ohm sources (instrumentation plane only; no runtime authority)
+  - existing repository implementations (cas-rr/, TKS v7.4 compiler maps)
+  - conversation notes (cas_only_reasoner/cas_reasoner.txt)
+
+canonical_cas_core:
+  noetics: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  domains: [P, C, E, O]
+  drives: [F1, F2, F3, F4, F5, F6, F7]
+  registers: [T, A, f, E]
+
+phase_1_runtime:
+  language: Python
+  concurrency: deterministic_single_threaded
+  input: typed_problem_packet
+  natural_language: excluded
+  neural_model: excluded
+  online_constitutional_learning: prohibited
+  external_actions: prohibited
+  cas_ohm_runtime_authority: prohibited
+
+go_nogo:
+  authority_manifest: frozen
+  cas_sem_and_inference_semantics: frozen
+  machine_readable_schemas: frozen
+  golden_conformance_fixtures: frozen
