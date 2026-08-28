@@ -24,13 +24,20 @@ final state hash, and trace digest.
    learned procedures, first-invalid-step walk-down), bounded proof
    search, counterexample generator, mistake recovery promoted under
    the acceptance law, versioned axioms, curriculum DAG.
-3. Procedural learning: strategies and proof patterns behind the
+3. CCB-L1: DONE v0.1 (cas_only_reasoner/CCB_L1_v0.1, 18 tests):
+   strict encoder/decoder peripheral - English in at the edges, the
+   unchanged kernel reasons, English out. Round-trip meaning,
+   paraphrase convergence, pronoun reference, located typed parse
+   errors ("I did not understand 'flurpy' at word 4"), word
+   acquisition under the acceptance law (candidate senses, contrast
+   against grounding facts, promotion, versioned corrections), novel
+   composition, ablation, kernel grounding with verdict decoding
+   (CONCLUDED -> "yes, the cat is gray.", NEEDS_INFORMATION ->
+   "i do not know..."). No LLM anywhere.
+4. Procedural learning: strategies and proof patterns behind the
    Gate-5 controls (RLP ring R1 extended to proof strategies).
-4. CAS-Sem expansion: entities, relations, reference, time, truth,
-   provenance - beyond propositions and rules.
-5. CCB-L1: the English acquisition board (lexicon, grammar, grounding,
-   dialogue, decoding) - strictly outside the reasoning loop.
-   NEXT organ to build.
+5. CAS-Sem expansion: entities, relations, reference, time, truth,
+   provenance - beyond propositions and rules. NEXT artifact.
 6. Encoders/decoders as peripherals; neural instrumentation and
    CAS-Ohm experiments last, under the paper's own restrictions.
 

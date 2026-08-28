@@ -56,14 +56,29 @@ BUILT (this phase):
       VERIFIED), authority invariants, curriculum order
     - run_demo.py: evaluate, prove, refute, learn in one command
 
+  cas_only_reasoner/CCB_L1_v0.1/ - the English acquisition board v0.1,
+  strictly outside the reasoning loop:
+    - spec/CCB_L1_SPEC_v0.1.md: the boundary, grammar fragment,
+      learning loop, acceptance law, the eight English tests, non-goals
+    - lang/: versioned lexicon, CAS-Sem meanings, discourse/pronoun
+      state, deterministic grammar with TYPED LOCATED parse errors,
+      acceptance law, the word-learning loop with contrast testing,
+      the one-way kernel grounding bridge, the CCB-L1 orchestrator
+    - fixtures/: seed lexicon + grounding facts, the flurpy teach spec
+    - tests/: 18 passing - round-trip, paraphrase, reference,
+      grounding (kernel answers decoded to English), word acquisition
+      (gray promoted / loud rejected by contrast), novel composition,
+      versioned corrections, ablation, determinism
+    - run_demo.py: parse, learn, ask, answer in one command
+
 STATUS AGAINST THE 24-SECTION CHARTER:
   See CAS_RRK_v0.1/docs/CAPABILITY_CHARTER_STATUS.md for the full
-  mapping. Summary: sections 6-12, 14, 15, 17, and 22 are substantially
+  mapping. Summary: sections 6-15, 17, and 22 are substantially
   demonstrated in code (memory classes, candidates,
   decomposition/inference, fair comparison, recursive planning,
-  uncertainty, commitment, mathematics via CCB-M1, recursive
-  self-evolution via CAS-RLP, the first convincing version);
-  section 13 (English, CCB-L1) is the declared next organ.
+  uncertainty, commitment, English via CCB-L1, mathematics via CCB-M1,
+  recursive self-evolution via CAS-RLP, the first convincing version).
+  Next artifacts: CAS-Sem expansion, procedural learning, encoders.
 
 COMMANDS:
   cd cas_only_reasoner/CAS_RRK_v0.1

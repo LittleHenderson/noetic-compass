@@ -1,0 +1,27 @@
+{
+  "fixture": "teach_flurpy",
+  "word": "flurpy",
+  "pos": "adj",
+  "candidate_senses": ["gray", "loud"],
+  "examples": [
+    {"sentence": "the cat is flurpy.",
+     "expected": {"pred": "property", "args": ["cat", "gray"]}},
+    {"sentence": "the dog is flurpy.",
+     "expected": {"pred": "property", "args": ["dog", "gray"]}}
+  ],
+  "held_out": [
+    {"sentence": "the cat is not flurpy.",
+     "expected": {"pred": "negation", "args": [
+       {"pred": "property", "args": ["cat", "gray"]}]}}
+  ],
+  "regression": [
+    {"sentence": "the cat is gray.",
+     "expected": {"pred": "property", "args": ["cat", "gray"]}},
+    {"sentence": "the dog chases the cat.",
+     "expected": {"pred": "relation", "args": ["chase", "dog", "cat"]}}
+  ],
+  "cmb_facts": [
+    {"pred": "has", "args": ["cat", "quiet"]}
+  ],
+  "antonyms": {"loud": "quiet"}
+}

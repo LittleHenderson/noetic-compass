@@ -27,7 +27,7 @@ Legend of existing artifacts:
 | CMB | PARTIAL (cas-rr memory.py: 40 cells, three layers, lacunae; procedural/constitutional layers are roadmap) |
 | CDAB | DONE (cas-rr compare.py; kernel compare re-proves live) |
 | RPM Controller | DONE (kernel components.py: push/return with parent enforcement) |
-| CCB-L1 (English) | ROADMAP |
+| CCB-L1 (English) | DONE v0.1 (cas_only_reasoner/CCB_L1_v0.1: encode/decode at the edges only, versioned lexicon, located parse errors, word acquisition with contrast + acceptance-law promotion, pronoun reference, kernel grounding with English verdict decoding; 18 tests) |
 | CCB-M1 (Math) | DONE v0.1 (cas_only_reasoner/CCB_M1_v0.1: exact arithmetic, expression IR, trusted proof checker, bounded proof search, counterexample generator, mistake recovery with promotion, curriculum; 27 tests) |
 | CAS-RLP (self-evolution) | DONE v0.1 (cas_only_reasoner/CAS_RLP_v0.1: diagnosis, mutation, sandbox, promotion, rollback, all four rings gated; 13 tests) |
 | Trace and Evidence Fabric | DONE (kernel trace events with per-tick state hashes + replay) |
@@ -48,7 +48,7 @@ Legend of existing artifacts:
 | 10 | plan recursively | DONE | RPM push/return with parent identity enforcement; typed child results; depth demonstrated |
 | 11 | manage uncertainty honestly | DONE (core) | four evidence statuses + seven typed halts; NEEDS_INFORMATION is a passing result |
 | 12 | commit and act deliberately | DONE | state commit vs decision commit separated; gates re-validated by the coordinator |
-| 13 | learn English | ROADMAP | CAS-Sem is the substrate; CCB-L1 is a separate board |
+| 13 | learn English | DONE v0.1 | CCB-L1: English -> CAS-Sem -> kernel -> English; word acquisition (detect -> sense candidates -> held-out -> contrast -> promote), corrections versioned, unknown words reported typed and located; no LLM anywhere |
 | 14 | learn mathematics | DONE v0.1 | CCB-M1: exact math, trusted checker, proof search, counterexamples, mistake recovery with acceptance-law promotion, curriculum |
 | 15 | improve itself recursively | DONE v0.1 | CAS-RLP: diagnose -> propose -> sandbox -> promote/quarantine/reject -> rollback; R0 automatic, R1 tested, R2 sandboxed, R3 refused; evaluator tampering rejected |
 | 16 | operational self-knowledge | PARTIAL | machine state is fully introspectable (state_hash, rpm_stack, branch_table, halt_status) |
