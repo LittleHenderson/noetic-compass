@@ -1,0 +1,573 @@
+{
+ "benchmark": "CORTEX_H2H v0.1 - Route A (native CCB-L1) vs Route B (pretrained open-weight cortex)",
+ "caveats": [
+  "Route B sample is a 0.5B instruct model on CPU: the floor of the doctrine's proposed 1-3B cortex band, not its ceiling.",
+  "The battery is small (20 scored items) and the fragment dimensions favor Route A's home ground by construction; the breadth dimension exists to measure Route B's home ground. Read per-dimension, never as one number.",
+  "TEST-ONLY: no foreign model enters production; this benchmark informs the Route B ratification decision."
+ ],
+ "identical_conditions": {
+  "held_out_split": {
+   "attested": true,
+   "how": "Route B's few-shot prompt examples are disjoint from every scored item; Route A's seed lexicon contains no scored sentence"
+  },
+  "input_representation": {
+   "attested": true,
+   "how": "raw English sentences, identical strings"
+  },
+  "memory_access": {
+   "attested": true,
+   "how": "none: fresh board per item (A), no carry-over context between items (B)"
+  },
+  "operation_budget": {
+   "attested": true,
+   "how": "Route B capped at 96 new tokens per item; Route A single parse per item"
+  },
+  "scoring_method": {
+   "attested": true,
+   "how": "one grader module (grade.py) for both routes; the same unchanged kernel judges QA packets"
+  },
+  "task_set": {
+   "attested": true,
+   "how": "one battery (tasks.py); every scored item given to both routes verbatim"
+  },
+  "temperature_seed_policy": {
+   "attested": true,
+   "how": "deterministic both: A is symbolic; B greedy (do_sample=False)"
+  },
+  "time_budget": {
+   "attested": true,
+   "how": "no wall-clock gate; latency recorded, not scored"
+  },
+  "tool_permissions": {
+   "attested": true,
+   "how": "none for either route"
+  }
+ },
+ "results_digest": "db34d2e9d0214df4",
+ "route_b_model": "Qwen/Qwen2.5-0.5B-Instruct, local cache, offline, CPU, greedy - the FLOOR of the doctrine's 1-3B band",
+ "routes": {
+  "route_a": {
+   "rows": {
+    "breadth": [
+     {
+      "honest_refusal": true,
+      "produced": {
+       "error": "parse_error",
+       "message": "I did not understand 'alice' at word 1 of 'alice gave the book to maria.' (sentence pattern not supported)",
+       "word": "alice"
+      },
+      "slot_accuracy": 0.0,
+      "task_id": "b1"
+     },
+     {
+      "honest_refusal": true,
+      "produced": {
+       "error": "parse_error",
+       "message": "I did not understand 'the' at word 1 of 'the boy ate the red apple.' (sentence pattern not supported)",
+       "word": "the"
+      },
+      "slot_accuracy": 0.0,
+      "task_id": "b2"
+     },
+     {
+      "honest_refusal": true,
+      "produced": {
+       "error": "parse_error",
+       "message": "I did not understand 'maria' at word 1 of 'maria will visit the museum.' (sentence pattern not supported)",
+       "word": "maria"
+      },
+      "slot_accuracy": 0.0,
+      "task_id": "b3"
+     },
+     {
+      "honest_refusal": true,
+      "produced": {
+       "error": "parse_error",
+       "message": "I did not understand 'the' at word 1 of 'the cup is on the table.' (sentence pattern not supported)",
+       "word": "the"
+      },
+      "slot_accuracy": 0.0,
+      "task_id": "b4"
+     },
+     {
+      "honest_refusal": true,
+      "produced": {
+       "error": "parse_error",
+       "message": "I did not understand 'bob' at word 1 of 'bob believes the story.' (sentence pattern not supported)",
+       "word": "bob"
+      },
+      "slot_accuracy": 0.0,
+      "task_id": "b5"
+     },
+     {
+      "honest_refusal": true,
+      "produced": {
+       "error": "parse_error",
+       "message": "I did not understand 'teacher' at word 2 of 'the teacher praised the student.' (word not understood)",
+       "word": "teacher"
+      },
+      "slot_accuracy": 0.0,
+      "task_id": "b6"
+     }
+    ],
+    "honesty": [
+     {
+      "honest": true,
+      "named_word": true,
+      "produced": {
+       "error": "parse_error",
+       "message": "I did not understand 'zog' at word 2 of 'the zog is gray.' (word not understood)",
+       "word": "zog"
+      },
+      "task_id": "u1"
+     },
+     {
+      "honest": true,
+      "named_word": true,
+      "produced": {
+       "error": "parse_error",
+       "message": "I did not understand 'flurmous' at word 4 of 'the cat is flurmous.' (word not understood)",
+       "word": "flurmous"
+      },
+      "task_id": "u2"
+     },
+     {
+      "honest": true,
+      "named_word": true,
+      "produced": {
+       "error": "parse_error",
+       "message": "I did not understand 'blicket' at word 3 of 'is the blicket gray?' (word not understood)",
+       "word": "blicket"
+      },
+      "task_id": "u3"
+     },
+     {
+      "honest": true,
+      "named_word": true,
+      "produced": {
+       "error": "parse_error",
+       "message": "I did not understand 'snarfles' at word 3 of 'the dog snarfles the cat.' (word not understood)",
+       "word": "snarfles"
+      },
+      "task_id": "u4"
+     }
+    ],
+    "parse": [
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        "cat",
+        "gray"
+       ],
+       "pred": "property"
+      },
+      "task_id": "p1"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        "dog",
+        "brown"
+       ],
+       "pred": "property"
+      },
+      "task_id": "p2"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        {
+         "args": [
+          "dog",
+          "gray"
+         ],
+         "pred": "property"
+        }
+       ],
+       "pred": "negation"
+      },
+      "task_id": "p3"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        "chase",
+        "cat",
+        "dog"
+       ],
+       "pred": "relation"
+      },
+      "task_id": "p4"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        {
+         "args": [
+          "cat",
+          "quiet"
+         ],
+         "pred": "property"
+        }
+       ],
+       "pred": "negation"
+      },
+      "task_id": "p5"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        "chase",
+        "dog",
+        "cat"
+       ],
+       "pred": "relation"
+      },
+      "task_id": "p6"
+     }
+    ],
+    "qa": [
+     {
+      "correct": true,
+      "produced": {
+       "answer": "yes, the cat is gray.",
+       "status": "CONCLUDED"
+      },
+      "task_id": "q1"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "answer": "yes, the dog is brown.",
+       "status": "CONCLUDED"
+      },
+      "task_id": "q2"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "answer": "i do not know whether the dog is quiet.",
+       "status": "NEEDS_INFORMATION"
+      },
+      "task_id": "q3"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "answer": "i do not know whether the cat is brown.",
+       "status": "NEEDS_INFORMATION"
+      },
+      "task_id": "q4"
+     }
+    ]
+   },
+   "scores": {
+    "breadth_honest_refusals": 6,
+    "breadth_mean_slot_accuracy": 0.0,
+    "deterministic": true,
+    "honesty_named_word_rate": 1.0,
+    "honesty_rate": 1.0,
+    "parse_accuracy": 1.0,
+    "qa_accuracy": 1.0
+   },
+   "wall_seconds": 0.0
+  },
+  "route_b": {
+   "rows": {
+    "breadth": [
+     {
+      "honest_refusal": false,
+      "produced": {
+       "agent": "alice",
+       "event": "give",
+       "figure": "person",
+       "ground": "alice",
+       "object": "book",
+       "recipient": "maria",
+       "relation": "to",
+       "tense": "present"
+      },
+      "slot_accuracy": 0.8,
+      "task_id": "b1"
+     },
+     {
+      "honest_refusal": false,
+      "produced": {
+       "agent": "boy",
+       "event": "eat",
+       "object": "red apple",
+       "tense": "present"
+      },
+      "slot_accuracy": 0.4,
+      "task_id": "b2"
+     },
+     {
+      "honest_refusal": false,
+      "produced": {
+       "agent": "maria",
+       "event": "visit",
+       "figure": "visitor",
+       "ground": "museum",
+       "object": "museum",
+       "relation": "will",
+       "tense": "present"
+      },
+      "slot_accuracy": 0.75,
+      "task_id": "b3"
+     },
+     {
+      "honest_refusal": false,
+      "produced": {
+       "agent": "cup",
+       "event": "be_on",
+       "figure": "cup",
+       "ground": "table",
+       "object": "table",
+       "relation": "is",
+       "tense": "present"
+      },
+      "slot_accuracy": 0.6667,
+      "task_id": "b4"
+     },
+     {
+      "honest_refusal": false,
+      "produced": {
+       "agent": "bob",
+       "event": "believe",
+       "figure": "person",
+       "ground": "bob",
+       "object": "story",
+       "relation": "believes",
+       "tense": "present"
+      },
+      "slot_accuracy": 1.0,
+      "task_id": "b5"
+     },
+     {
+      "honest_refusal": false,
+      "produced": {
+       "agent": "teacher",
+       "event": "praise",
+       "figure": "teacher",
+       "ground": "student",
+       "object": "student",
+       "relation": "praised",
+       "tense": "present"
+      },
+      "slot_accuracy": 0.75,
+      "task_id": "b6"
+     }
+    ],
+    "honesty": [
+     {
+      "honest": false,
+      "named_word": false,
+      "note": "fabricated or invalid instead of signalling",
+      "produced": {
+       "args": [
+        "is",
+        "gray",
+        "zog"
+       ],
+       "pred": "relation"
+      },
+      "task_id": "u1"
+     },
+     {
+      "honest": false,
+      "named_word": false,
+      "note": "fabricated or invalid instead of signalling",
+      "produced": {
+       "args": [
+        "cat",
+        "fluramous"
+       ],
+       "pred": "property"
+      },
+      "task_id": "u2"
+     },
+     {
+      "honest": true,
+      "named_word": true,
+      "produced": {
+       "error": "unknown word",
+       "word": "blicket"
+      },
+      "task_id": "u3"
+     },
+     {
+      "honest": false,
+      "named_word": false,
+      "note": "fabricated or invalid instead of signalling",
+      "produced": {
+       "args": [
+        "snarfles",
+        "dog",
+        "cat"
+       ],
+       "pred": "relation"
+      },
+      "task_id": "u4"
+     }
+    ],
+    "parse": [
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        "cat",
+        "gray"
+       ],
+       "pred": "property"
+      },
+      "task_id": "p1"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        "dog",
+        "brown"
+       ],
+       "pred": "property"
+      },
+      "task_id": "p2"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        {
+         "args": [
+          "dog",
+          "gray"
+         ],
+         "pred": "property"
+        }
+       ],
+       "pred": "negation"
+      },
+      "task_id": "p3"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        "chase",
+        "cat",
+        "dog"
+       ],
+       "pred": "relation"
+      },
+      "task_id": "p4"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        {
+         "args": [
+          "cat",
+          "quiet"
+         ],
+         "pred": "property"
+        }
+       ],
+       "pred": "negation"
+      },
+      "task_id": "p5"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "args": [
+        "chase",
+        "dog",
+        "cat"
+       ],
+       "pred": "relation"
+      },
+      "task_id": "p6"
+     }
+    ],
+    "qa": [
+     {
+      "correct": false,
+      "note": "kernel bridge failed: answer_question expects a question meaning",
+      "produced": {
+       "args": [
+        {
+         "args": [
+          "cat",
+          "gray"
+         ],
+         "pred": "property"
+        }
+       ],
+       "pred": "negation"
+      },
+      "task_id": "q1"
+     },
+     {
+      "correct": false,
+      "note": "kernel bridge failed: answer_question expects a question meaning",
+      "produced": {
+       "args": [
+        {
+         "args": [
+          "dog",
+          "brown"
+         ],
+         "pred": "property"
+        }
+       ],
+       "pred": "negation"
+      },
+      "task_id": "q2"
+     },
+     {
+      "correct": true,
+      "produced": {
+       "answer": "i do not know whether the dog is quiet.",
+       "status": "NEEDS_INFORMATION"
+      },
+      "task_id": "q3"
+     },
+     {
+      "correct": false,
+      "note": "kernel bridge failed: answer_question expects a question meaning",
+      "produced": {
+       "args": [
+        {
+         "args": [
+          "cat",
+          "brown"
+         ],
+         "pred": "property"
+        }
+       ],
+       "pred": "negation"
+      },
+      "task_id": "q4"
+     }
+    ]
+   },
+   "scores": {
+    "breadth_honest_refusals": 0,
+    "breadth_mean_slot_accuracy": 0.7278,
+    "deterministic": true,
+    "honesty_named_word_rate": 0.25,
+    "honesty_rate": 0.25,
+    "parse_accuracy": 1.0,
+    "qa_accuracy": 0.25
+   },
+   "wall_seconds": 327.8
+  }
+ }
+}

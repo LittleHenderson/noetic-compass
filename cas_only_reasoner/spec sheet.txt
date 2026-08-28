@@ -261,10 +261,54 @@ COMMANDS:
   python -m pytest     # 34 tests
   python run_demo.py   # six golden fixtures
 
-PROGRAM TEST TOTALS (all green, 2026-08-28, G9 re-audit round):
-  kernel 34 + RLP 45 + CCB-M1 27 + CCB-L1 18 + CAS-Sem 19 +
-  workbench 13 + CRQS 33 + CCB-T1 20 + OHM-panel 10 = 219 local,
-  + cas-rr 43 = 262 program-wide.
+  cas_only_reasoner/CORTEX_H2H_v0.1/ - the owner-ordered Route A vs
+  Route B head-to-head under the RMB identical-conditions law:
+    - Route A = native CCB-L1 (no neural weights); Route B =
+      Qwen/Qwen2.5-0.5B-Instruct, LOCAL cache, offline, CPU, greedy -
+      the FLOOR of the doctrine's 1-3B cortex band. TEST-ONLY: no
+      foreign model enters production through this board.
+    - RESULT (sealed: output/h2h_results.json, digest db34d2e9d0214df4,
+      20 scored items, each run twice, both routes deterministic):
+        in-fragment parse    A 100%  B 100%
+        QA through kernel    A 100%  B  25%  (B mislabels questions
+                                              as negation packets)
+        unknown-word honesty A 100%  B  25%  (B FABRICATES packets
+                                              around unknown words
+                                              3/4 times)
+        breadth slot accuracy A  0%  B  73%  (A refuses typed; B
+                                              parses give/eat/visit/
+                                              believe/praise English)
+        wall seconds         A 0.0   B 327.8
+    - READING: the doctrine's core claim is empirically confirmed at
+      the 0.5B floor - the cortex provides real breadth the native
+      board entirely lacks, AND cannot be trusted at the commitment
+      or honesty boundary (fluent error is still error). Neither
+      route wins alone; the result ratifies the HYBRID architecture:
+      cortex proposes, CAS commits. 10 harness tests green (LM-free).
+
+  CCB-M1 discovery v0.1 (cas_math/discovery.py) - the machine
+  generates, tests, and PROVES identities it was never given: 68-expr
+  generic space, 1309 conjectures, ~1272 falsified with exact
+  witnesses, 5 novel theorems incl. x*(y+1) = x*y + x, proved by the
+  trusted canonical checker; novelty gate is variable-name-blind
+  (alpha-normalized - the fixture's (a+b)^2 blocks rediscovery as
+  (x+y)); deterministic. HONESTY LINE travels in the packet: novel to
+  this machine, trivial to human mathematics, discovery-by-exhaustive-
+  search at v0.1 scale. 7 tests (CCB-M1 now 34).
+
+  cas_only_reasoner/CAS_LTG_v0.1/ - the Long-Term Goals board v0.1:
+  goals that outlive episodes and processes; typed transitions with a
+  legal transition graph (terminal states terminal), logical episode
+  clock (never wall time), progress and history with provenance and
+  episodes, digest-checked JSON persistence surviving a process
+  boundary, TAMPERED store files refused, and completion EARNED: the
+  completion condition must re-prove SUPPORTED through the unchanged
+  kernel or completion is refused with a typed error. 10 tests green.
+
+PROGRAM TEST TOTALS (all green, 2026-08-28, G10-build round 1):
+  kernel 34 + RLP 45 + CCB-M1 34 + CCB-L1 18 + CAS-Sem 19 +
+  workbench 13 + CRQS 33 + CCB-T1 20 + OHM-panel 10 + H2H 10 +
+  LTG 10 = 246 local, + cas-rr 43 = 289 program-wide.
 
 G9 RE-AUDIT VERDICT (independent 2-agent adversarial pass,
 2026-08-28, after commit 849a4e47): NOT REFUTED on both fronts. The

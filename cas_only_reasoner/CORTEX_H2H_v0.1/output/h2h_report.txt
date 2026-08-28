@@ -1,0 +1,21 @@
+CORTEX HEAD-TO-HEAD v0.1
+
+Route B model: Qwen/Qwen2.5-0.5B-Instruct, local cache, offline, CPU, greedy - the FLOOR of the doctrine's 1-3B band
+
+dimension                            Route A   Route B
+------------------------------------------------------
+in-fragment parse accuracy              100%      100%
+question answering (kernel)             100%       25%
+unknown-word honesty                    100%       25%
+  ...naming the unknown word            100%       25%
+breadth (mean slot accuracy)              0%       73%
+deterministic (all items x2)            True      True
+
+Route A wall seconds: 0.0
+Route B wall seconds: 327.8
+
+CAVEAT: Route B sample is a 0.5B instruct model on CPU: the floor of the doctrine's proposed 1-3B cortex band, not its ceiling.
+CAVEAT: The battery is small (20 scored items) and the fragment dimensions favor Route A's home ground by construction; the breadth dimension exists to measure Route B's home ground. Read per-dimension, never as one number.
+CAVEAT: TEST-ONLY: no foreign model enters production; this benchmark informs the Route B ratification decision.
+
+results digest: db34d2e9d0214df4
