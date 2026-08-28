@@ -34,12 +34,20 @@ final state hash, and trace digest.
    composition, ablation, kernel grounding with verdict decoding
    (CONCLUDED -> "yes, the cat is gray.", NEEDS_INFORMATION ->
    "i do not know..."). No LLM anywhere.
-4. Procedural learning: strategies and proof patterns behind the
+4. CAS-Sem: DONE v0.1 (cas_only_reasoner/CAS_SEM_v0.1, 19 tests):
+   the semantic content and binding layer - typed entities, role
+   schemas, references with binding, transitive time consistency,
+   nine truth statuses with discipline, provenance completeness, and
+   the six coherence laws, with DERIVED claims re-proven through the
+   unchanged proof kernel; Semantic CMB queries and typed lacunae.
+5. Procedural learning: strategies and proof patterns behind the
    Gate-5 controls (RLP ring R1 extended to proof strategies).
-5. CAS-Sem expansion: entities, relations, reference, time, truth,
-   provenance - beyond propositions and rules. NEXT artifact.
+   NEXT artifact.
 6. Encoders/decoders as peripherals; neural instrumentation and
    CAS-Ohm experiments last, under the paper's own restrictions.
+7. The cognitive workbench interface (charter section 3): goal map,
+   live board, branch tree, RPM stack, trace timeline - the glass
+   brain over the now-complete organ stack.
 
 ## Standing rules from the charter
 

@@ -71,14 +71,34 @@ BUILT (this phase):
       versioned corrections, ablation, determinism
     - run_demo.py: parse, learn, ask, answer in one command
 
+  cas_only_reasoner/CAS_SEM_v0.1/ - the semantic content and binding
+  layer v0.1 (Idea, Entity, Relation, Reference, Time, Truth,
+  Provenance):
+    - spec/CAS_SEM_SPEC_v0.1.md: content model, six coherence laws,
+      boundary
+    - cassem/: idea structures, entity registry, role schemas,
+      references with binding, transitive timeline, nine truth
+      statuses with discipline, provenance, the six-law coherence
+      checker (DERIVED claims re-proven through the kernel), the
+      Semantic CMB with typed lacunae, the proposition lift bridge
+    - fixtures/: the good story (two entities, two events, four claims)
+    - tests/: 19 passing - binding, role arity, timeline
+      contradiction/transitivity, reference resolution, all six
+      coherence laws (each demonstrated by a broken document),
+      deterministic checker, CMB queries, ENTITY_MISSING lacunae,
+      ablation, kernel re-proof of DERIVED claims
+    - run_demo.py: bind, check, query, lacunae in one command
+
 STATUS AGAINST THE 24-SECTION CHARTER:
   See CAS_RRK_v0.1/docs/CAPABILITY_CHARTER_STATUS.md for the full
   mapping. Summary: sections 6-15, 17, and 22 are substantially
   demonstrated in code (memory classes, candidates,
   decomposition/inference, fair comparison, recursive planning,
   uncertainty, commitment, English via CCB-L1, mathematics via CCB-M1,
-  recursive self-evolution via CAS-RLP, the first convincing version).
-  Next artifacts: CAS-Sem expansion, procedural learning, encoders.
+  recursive self-evolution via CAS-RLP, semantic binding via CAS-Sem,
+  the first convincing version).
+  Next artifacts: procedural learning, the cognitive workbench
+  interface, encoders/neural instrumentation last.
 
 COMMANDS:
   cd cas_only_reasoner/CAS_RRK_v0.1

@@ -23,7 +23,7 @@ Legend of existing artifacts:
 | CAS-RRK | DONE (kernel/) |
 | CCB-R1 / CAS-RPU | DONE in software form (cas-rr/ runtime + CCB_R1_BOARD_SPEC.md) |
 | Foundation Engine Bank | DONE (cas-rr/ foundations.py: 7 engines, 28 channels, D/W/P) |
-| CAS-Sem | PARTIAL (kernel/cas_sem.py: propositions, rules, four evidence statuses; entities/reference/time are roadmap) |
+| CAS-Sem | DONE v0.1 (cas_only_reasoner/CAS_SEM_v0.1: Idea/Entity/Relation/Reference/Time/Truth/Provenance content layer with the six coherence laws enforced, derivation validity re-proven through the kernel, Semantic CMB with typed lacunae; 19 tests) |
 | CMB | PARTIAL (cas-rr memory.py: 40 cells, three layers, lacunae; procedural/constitutional layers are roadmap) |
 | CDAB | DONE (cas-rr compare.py; kernel compare re-proves live) |
 | RPM Controller | DONE (kernel components.py: push/return with parent enforcement) |

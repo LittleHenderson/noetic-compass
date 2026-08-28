@@ -1,0 +1,61 @@
+{
+  "story_id": "story_good",
+  "types": ["cat", "dog"],
+  "entities": [
+    {"id": "cat_1", "type": "cat", "properties": {"color": "gray"}},
+    {"id": "dog_1", "type": "dog", "properties": {"color": "brown"}}
+  ],
+  "relation_schemas": {
+    "chase": ["agent", "patient"],
+    "hide": ["agent"]
+  },
+  "property_domain": {"color": ["cat", "dog"]},
+  "references": [
+    {"kind": "name", "id": "cat_1"},
+    {"kind": "pronoun", "word": "it"}
+  ],
+  "claims": [
+    {
+      "idea": {"kind": "property", "entity": "cat_1", "property": "gray"},
+      "truth": "VERIFIED",
+      "provenance": {"source": "observation", "when": "t1"}
+    },
+    {
+      "idea": {"kind": "property", "entity": "dog_1", "property": "brown"},
+      "truth": "OBSERVED",
+      "provenance": {"source": "observation", "when": "t1"}
+    },
+    {
+      "idea": {"kind": "relation", "pred": "chase",
+               "roles": {"agent": "dog_1", "patient": "cat_1"}},
+      "truth": "GIVEN",
+      "provenance": {"source": "teacher"}
+    },
+    {
+      "idea": {"kind": "property", "entity": "dog_1", "property": "brown"},
+      "truth": "DERIVED",
+      "provenance": {"source": "prior_proof", "evidence": "kernel"},
+      "derivation": {
+        "propositions": [{"pred": "has", "args": ["dog_1", "brown"]}],
+        "rules": [
+          {"rule_id": "r_prop",
+           "premises": [{"pred": "has", "args": ["?X", "?Y"]}],
+           "conclusion": {"pred": "property", "args": ["?X", "?Y"]},
+           "source": "l1_grounding"}
+        ],
+        "conclusion": {"pred": "property", "args": ["dog_1", "brown"]}
+      }
+    }
+  ],
+  "events": [
+    {"kind": "event", "pred": "chase",
+     "roles": {"agent": "dog_1", "patient": "cat_1"},
+     "time": "t1", "aspect": "completed"},
+    {"kind": "event", "pred": "hide",
+     "roles": {"agent": "dog_1"},
+     "time": "t2", "aspect": "completed"}
+  ],
+  "time_assertions": [
+    {"earlier": "t1", "later": "t2"}
+  ]
+}
