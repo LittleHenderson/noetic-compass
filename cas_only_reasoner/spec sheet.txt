@@ -305,6 +305,17 @@ GOVERNING ROADMAP: HYBRID_MACHINE_DOCTRINE.md (owner directive
   mandatory before any cortex is credited; Route B vs the standing
   no-foreign-models rule flagged OPEN for owner ratification.
 
+MASTER BUILD PLAN: CAS_MACHINE_TRAJECTORY_v0.1.md (owner directive
+  2026-08-28) - the ten-phase critical path (authority freeze ->
+  kernel -> semantics -> reasoning -> memory/RPM/verifier ->
+  language -> learning -> evolution -> Foundry -> capability bands),
+  the seven decisive experiments, the 20-step integrated v1 episode,
+  and the STATUS LEDGER mapping every phase to this lane's artifacts:
+  Phases 0-2 CLOSED, 3 substantially closed, 4 partial (cortex
+  blocked on Route B decision), 5-6 closed at v0.1 scale, 7 partial
+  (workbench + CRQS exist; editor/composer/chat panes open), 8
+  machinery real / benchmark NOT RUN.
+
 VERSION DECISIONS FROZEN:
   canonical core: ^0-^9, P/C/E/O, F1-F7, T/A/f/E
   root desire label: A_root (A0/A1 discrepancy recorded; A22 nowhere)
