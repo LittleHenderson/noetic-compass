@@ -1,0 +1,134 @@
+{
+ "attempts": [
+  {
+   "attempt": 1,
+   "verdict": "REJECTED_SCHEMA"
+  },
+  {
+   "attempt": 2,
+   "verdict": "REJECTED_SCHEMA"
+  }
+ ],
+ "episode": {
+  "domain": "language_grammar",
+  "episode_digest": "3995140edf48447d",
+  "examiner_identity": "ccb_l1_acceptance_ladder",
+  "lesson_id": "LIVE_L001_negation_present",
+  "outcome": {
+   "episode_digest": "9af71f9160124ff6",
+   "evidence": [
+    {
+     "detail": "typed lesson packet complete",
+     "passed": true,
+     "stage": "PROPOSED"
+    },
+    {
+     "detail": "semantics references unbound slot '@VERB:pred'; semantics references unbound slot '@X'; semantics references unbound slot '@Y'",
+     "passed": false,
+     "stage": "SCHEMA_VALID"
+    }
+   ],
+   "verdict": "REJECTED_SCHEMA"
+  },
+  "post_learning_capability": null,
+  "pre_learning_capability": null,
+  "provenance": "live_teacher_socratic_retry",
+  "rollback_pointer": null,
+  "target": "grammar_store",
+  "teacher_identity": "Qwen/Qwen2.5-3B-Instruct",
+  "teacher_revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+  "teacher_role": "lecturer"
+ },
+ "event": "FIRST_LIVE_TEACHER_LESSON",
+ "held_out_channel": "protected (authored by the student's side, never shown to the teacher)",
+ "parsed_lesson": {
+  "ambiguity_cases": [
+   {
+    "expect": "parsed",
+    "sentence": "the dog does not chase the cat."
+   }
+  ],
+  "construction": {
+   "construction_id": "negated_present_transitive",
+   "semantics": {
+    "agent": "@X",
+    "frame": "event",
+    "patient": "@Y",
+    "polarity": "negative",
+    "predicate": "@VERB:pred",
+    "tense": "present"
+   },
+   "surface_meta": {
+    "voice": "active"
+   },
+   "surface_pattern": [
+    "the",
+    "X",
+    "does not",
+    "VERB:base:pred",
+    "the",
+    "Y"
+   ]
+  },
+  "counterexamples": [
+   {
+    "sentence": "the dog does not chase the cat the hen."
+   },
+   {
+    "sentence": "the hen does not chase the bird the dog."
+   }
+  ],
+  "lesson_id": "LIVE_L001_negation_present",
+  "lesson_type": "grammar_construction",
+  "minimal_pairs": [
+   {
+    "relation": "different_meaning",
+    "sentence_a": "the dog does not chase the cat.",
+    "sentence_b": "the cat chases the dog."
+   },
+   {
+    "relation": "different_meaning",
+    "sentence_a": "the hen does not chase the bird.",
+    "sentence_b": "the bird chases the hen."
+   }
+  ],
+  "morphology": [
+   {
+    "form": "base:pred",
+    "lemma": "chase",
+    "surface": "chase"
+   }
+  ],
+  "positive_examples": [
+   {
+    "expected_core": {
+     "agent": "dog",
+     "frame": "event",
+     "patient": "cat",
+     "polarity": "negative",
+     "predicate": "chase",
+     "tense": "present"
+    },
+    "sentence": "the dog does not chase the cat."
+   },
+   {
+    "expected_core": {
+     "agent": "hen",
+     "frame": "event",
+     "patient": "bird",
+     "polarity": "negative",
+     "predicate": "chase",
+     "tense": "present"
+    },
+    "sentence": "the hen does not chase the bird."
+   }
+  ],
+  "provenance": "live_teacher_socratic_retry",
+  "teacher_confidence": null,
+  "teacher_model": "Qwen/Qwen2.5-3B-Instruct",
+  "teacher_revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1"
+ },
+ "raw_teacher_output": "{\n \"lesson_id\": \"LIVE_L001_negation_present\",\n \"construction\": {\n  \"construction_id\": \"negated_present_transitive\",\n  \"surface_pattern\": [\n   \"the\",\n   \"X\",\n   \"does not\",\n   \"VERB:base:pred\",\n   \"the\",\n   \"Y\"\n  ],\n  \"semantics\": {\n   \"frame\": \"event\",\n   \"predicate\": \"@VERB:pred\",\n   \"agent\": \"@X\",\n   \"patient\": \"@Y\",\n   \"tense\": \"present\",\n   \"polarity\": \"negative\"\n  },\n  \"surface_meta\": {\n   \"voice\": \"active\"\n  }\n },\n \"positive_examples\": [\n  {\n   \"sentence\": \"the dog does not chase the cat.\",\n   \"expected_core\": {\n    \"frame\": \"event\",\n    \"predicate\": \"chase\",\n    \"agent\": \"dog\",\n    \"patient\": \"cat\",\n    \"tense\": \"present\",\n    \"polarity\": \"negative\"\n   }\n  },\n  {\n   \"sentence\": \"the hen does not chase the bird.\",\n   \"expected_core\": {\n    \"frame\": \"event\",\n    \"predicate\": \"chase\",\n    \"agent\": \"hen\",\n    \"patient\": \"bird\",\n    \"tense\": \"present\",\n    \"polarity\": \"negative\"\n   }\n  }\n ],\n \"minimal_pairs\": [\n  {\n   \"sentence_a\": \"the dog does not chase the cat.\",\n   \"sentence_b\": \"the cat chases the dog.\",\n   \"relation\": \"different_meaning\"\n  },\n  {\n   \"sentence_a\": \"the hen does not chase the bird.\",\n   \"sentence_b\": \"the bird chases the hen.\",\n   \"relation\": \"different_meaning\"\n  }\n ],\n \"counterexamples\": [\n  {\n   \"sentence\": \"the dog does not chase the cat the hen.\"\n  },\n  {\n   \"sentence\": \"the hen does not chase the bird the dog.\"\n  }\n ],\n \"ambiguity_cases\": [\n  {\n   \"sentence\": \"the dog does not chase the cat.\",\n   \"expect\": \"parsed\"\n  }\n ],\n \"morphology\": [\n  {\n   \"surface\": \"chase\",\n   \"lemma\": \"chase\",\n   \"form\": \"base:pred\"\n  }\n ]\n}",
+ "teacher": "Qwen/Qwen2.5-3B-Instruct",
+ "teacher_snapshot": "aa8e72537993ba99e69dfaafa59ed015b17504d1"
+}

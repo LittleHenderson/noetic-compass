@@ -160,19 +160,23 @@ def main():
     model.eval()
     print(f"  loaded in {time.time() - start:.0f}s")
 
+    def generate(messages):
+        text = tokenizer.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True)
+        inputs = tokenizer(text, return_tensors="pt").to("cuda")
+        start = time.time()
+        with torch.no_grad():
+            out = model.generate(**inputs, max_new_tokens=1200,
+                                 do_sample=False,
+                                 pad_token_id=tokenizer.eos_token_id)
+        reply = tokenizer.decode(out[0][inputs["input_ids"].shape[1]:],
+                                 skip_special_tokens=True).strip()
+        print(f"  generated in {time.time() - start:.0f}s "
+              f"({len(reply)} chars)")
+        return reply
+
     messages = [{"role": "user", "content": PROMPT}]
-    text = tokenizer.apply_chat_template(messages, tokenize=False,
-                                         add_generation_prompt=True)
-    inputs = tokenizer(text, return_tensors="pt").to("cuda")
-    start = time.time()
-    with torch.no_grad():
-        out = model.generate(**inputs, max_new_tokens=1200,
-                             do_sample=False,
-                             pad_token_id=tokenizer.eos_token_id)
-    raw = tokenizer.decode(out[0][inputs["input_ids"].shape[1]:],
-                           skip_special_tokens=True).strip()
-    print(f"  lesson generated in {time.time() - start:.0f}s "
-          f"({len(raw)} chars)")
+    raw = generate(messages)
 
     # CHECKPOINT the expensive part immediately - a session restart
     # must never orphan the generation again
@@ -233,8 +237,66 @@ def main():
              "provenance": "first_live_teacher_lesson"},
             ladder_channel)
 
+        # THE SOCRATIC RETRY (faculty doctrine: the ladder's typed
+        # defects go back to the teacher ONCE; the examiner is
+        # unchanged; attempt 2 is graded on the same law)
+        attempts = [{"attempt": 1, "raw": raw, "episode": episode}]
+        if str(episode["outcome"]["verdict"]).startswith("REJECTED"):
+            defects = json.dumps(episode["outcome"]["evidence"],
+                                 indent=1, default=str)[:1500]
+            messages.append({"role": "assistant", "content": raw})
+            messages.append({"role": "user", "content":
+                             "Your lesson was REJECTED by the "
+                             "student's acceptance ladder. The typed "
+                             "defects were: " + defects +
+                             " ... Author a CORRECTED lesson packet in "
+                             "the exact same JSON format. Remember: "
+                             "every VERB slot needs BOTH a name and a "
+                             "form, like 'VERB:pred:base', and every "
+                             "'@name' in semantics must reference a "
+                             "declared slot name. Output ONLY the "
+                             "JSON object."})
+            raw2 = generate(messages)
+            packet2 = extract_json(raw2)
+            if packet2 is not None:
+                packet2.setdefault("lesson_id",
+                                   "LIVE_L001_negation_present_r2")
+                packet2["lesson_type"] = "grammar_construction"
+                packet2["teacher_model"] = TEACHER_MODEL
+                packet2["teacher_revision"] = os.path.basename(snapshot)
+                packet2["teacher_confidence"] = None
+                packet2["provenance"] = "live_teacher_socratic_retry"
+                packet2.setdefault("morphology", [])
+                student2 = Apprentice(Lexicon(TEACHING_LEX),
+                                      MorphTable(), GrammarStore())
+
+                def ladder2(meta):
+                    ladder = student2.learn(packet2,
+                                            held_out_cases=HELD_OUT)
+                    return {"verdict": ladder["verdict"],
+                            "evidence": ladder["stages"],
+                            "episode_digest": ladder["episode_digest"]}
+
+                episode = board.teach(
+                    {"lesson_id": packet2["lesson_id"],
+                     "domain": "language_grammar",
+                     "target": "grammar_store",
+                     "teacher_model": TEACHER_MODEL,
+                     "teacher_revision": os.path.basename(snapshot),
+                     "teacher_role": "lecturer",
+                     "examiner_identity": "ccb_l1_acceptance_ladder",
+                     "provenance": "live_teacher_socratic_retry"},
+                    ladder2)
+                lesson_packet = packet2
+                raw = raw2
+            attempts.append({"attempt": 2, "raw": raw2,
+                             "episode": episode})
+
     artifact = {
         "event": "FIRST_LIVE_TEACHER_LESSON",
+        "attempts": [{"attempt": a["attempt"],
+                      "verdict": a["episode"]["outcome"]["verdict"]}
+                     for a in attempts] if lesson_packet else [],
         "teacher": TEACHER_MODEL,
         "teacher_snapshot": os.path.basename(snapshot),
         "raw_teacher_output": raw,

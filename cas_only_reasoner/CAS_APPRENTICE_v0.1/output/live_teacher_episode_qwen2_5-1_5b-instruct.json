@@ -1,11 +1,21 @@
 {
+ "attempts": [
+  {
+   "attempt": 1,
+   "verdict": "REJECTED_SCHEMA"
+  },
+  {
+   "attempt": 2,
+   "verdict": "REJECTED_SCHEMA"
+  }
+ ],
  "episode": {
   "domain": "language_grammar",
-  "episode_digest": "c38a6e6ae53f42a4",
+  "episode_digest": "3bf2f96150eaf1e6",
   "examiner_identity": "ccb_l1_acceptance_ladder",
   "lesson_id": "LIVE_L001_negation_present",
   "outcome": {
-   "episode_digest": "b2e85f81e28b8600",
+   "episode_digest": "8ec8e38c62b784c3",
    "evidence": [
     {
      "detail": "typed lesson packet complete",
@@ -22,7 +32,7 @@
   },
   "post_learning_capability": null,
   "pre_learning_capability": null,
-  "provenance": "first_live_teacher_lesson",
+  "provenance": "live_teacher_socratic_retry",
   "rollback_pointer": null,
   "target": "grammar_store",
   "teacher_identity": "Qwen/Qwen2.5-1.5B-Instruct",
@@ -110,7 +120,7 @@
     "sentence": "the bird does not chase the hen."
    }
   ],
-  "provenance": "first_live_teacher_lesson",
+  "provenance": "live_teacher_socratic_retry",
   "teacher_confidence": null,
   "teacher_model": "Qwen/Qwen2.5-1.5B-Instruct",
   "teacher_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306"

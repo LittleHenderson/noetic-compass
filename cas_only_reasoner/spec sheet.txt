@@ -717,6 +717,32 @@ collides with the tool board; the teaching board is CCB-A1.
       present locally; CUDA venv built separately from main Python);
       the GPU rerun is the pending artifact.
 
+FIRST LIVE TEACHER LESSONS (sealed 2026-08-28, GPU per the standing
+never-CPU order - RTX 4070, CUDA venv ~/venvs/cas-gpu, main Python
+untouched; ~60s per teacher vs the 30+ min CPU run a session restart
+orphaned):
+  - Qwen2.5-1.5B-Instruct: authored a malformed negation lesson
+    (VERB slot missing its name, unbound semantic reference) ->
+    REJECTED_SCHEMA. Socratic retry (the ladder's typed defects
+    returned once, examiner unchanged): the 1.5B repeated its output
+    BYTE-IDENTICAL - it cannot integrate the correction.
+  - Qwen2.5-3B-Instruct: the IDENTICAL first mistake ('VERB:base') ->
+    REJECTED_SCHEMA. Socratic retry: the 3B REPAIRED the named defect
+    and made a new, smaller error ('@VERB:pred' instead of '@pred')
+    -> REJECTED_SCHEMA again. Feedback integration separates the
+    scales even though both fail.
+  - HELD EVERY TIME: no defective lesson entered the grammar store;
+    every attempt sealed (CAS_APPRENTICE_v0.1/output/
+    live_teacher_episode_*.json) with teacher identity, examiner
+    identity, and full stage trails. The ladder itself is passable -
+    the hand-authored seed lessons promoted DURABLY through the same
+    ten stages (commit 71a64c9f).
+  - RECORDED CONTRIBUTING CAUSE: the shared first mistake traces to
+    the teaching PROMPT's own shorthand ('the X does not VERB the Y')
+    - teaching materials are part of the system under test. Next:
+    stricter format spec / schema-constrained decoding / stronger
+    teacher; each attempt stays one sealed episode.
+
 PROGRAM TEST TOTALS (all green, 2026-08-28, post-audit):
   kernel 34 + RLP 45 + CCB-M1 34 + CCB-L1 18 + CAS-Sem 19 +
   workbench 13 + CRQS 35 + CCB-T1 20 + OHM-panel 10 + H2H 10 +
