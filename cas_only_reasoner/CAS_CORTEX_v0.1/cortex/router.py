@@ -29,9 +29,11 @@ for _board in ("CCB_L1_v0.1", "CAS_RRK_v0.1"):
     if _path not in sys.path:
         sys.path.insert(0, _path)
 
+from lang.discourse import DiscourseError  # noqa: E402
 from lang.grammar import ParseError  # noqa: E402
 from lang.kernel_bridge import answer_question, decode_verdict  # noqa: E402
 from lang.l1 import CCB_L1  # noqa: E402
+from lang.lexicon import LexiconError  # noqa: E402
 
 from .firewall import AuthorityFirewall  # noqa: E402
 from .proposal import ProposalRejected, validate_proposal  # noqa: E402
@@ -79,6 +81,14 @@ class HybridRouter:
             return {"status": "UNSUPPORTED_LANGUAGE",
                     "error": {"word": exc.args[0],
                               "message": exc.message()}}
+        except DiscourseError as exc:
+            # battery-found crash (2026-08-28): an unresolved pronoun
+            # raised straight through the router. Typed, never a crash.
+            return {"status": "UNRESOLVED_REFERENCE",
+                    "error": {"word": "it", "message": str(exc)}}
+        except LexiconError as exc:
+            return {"status": "UNSUPPORTED_LANGUAGE",
+                    "error": {"word": "?", "message": str(exc)}}
 
     def _kernel_answer(self, meaning: Dict) -> Dict:
         result = answer_question(meaning, self.seed["cmb_facts"],
@@ -158,6 +168,26 @@ class HybridRouter:
             return self._seal(trace, committed=False)
         trace["validation"]["grounding"] = {"outcome": "GROUNDED"}
 
+        # CONTENT-FAITHFULNESS GATE (battery v1 dev-split finding: the
+        # dominant fabrication genus is a grounded packet that SILENTLY
+        # DROPS content or invents a referent). Two rules:
+        #   R1 no dropped known content - every input token that is a
+        #      known content word must have its sense in the packet;
+        #   R2 entities attested - every entity-slot atom must be the
+        #      sense of some input token (verb/property slots stay
+        #      free: synonym handling is the cortex's legitimate job).
+        mismatch = self._content_mismatch(sentence,
+                                          validation["accepted"])
+        if mismatch:
+            trace["validation"]["faithfulness"] = {
+                "outcome": "CONTENT_MISMATCH", **mismatch}
+            trace["answer"] = {"status": "CONTENT_MISMATCH",
+                               **mismatch,
+                               "detail": "the proposal drops or invents "
+                                         "content; nothing is committed"}
+            return self._seal(trace, committed=False)
+        trace["validation"]["faithfulness"] = {"outcome": "FAITHFUL"}
+
         if self.mode == "CORTEX_DIAGNOSTIC":
             # recorded, but MUST NOT affect commitment
             trace["answer"] = {"status": "UNSUPPORTED_LANGUAGE",
@@ -167,6 +197,47 @@ class HybridRouter:
 
         committed = self._commit(validation["accepted"], trace)
         return self._seal(trace, committed)
+
+    def _content_mismatch(self, sentence: str, packet: Dict):
+        """R1/R2 faithfulness check for cortex packets. Returns None
+        when faithful, else a dict naming the violation."""
+        from lang.grammar import tokenize
+        tokens = [t for t in tokenize(sentence) if t not in (".", "?")]
+        content_pos = ("noun", "adj", "verb")
+        lexicon = self.seed["lexicon"]
+        atoms = set(self._atoms(packet))
+        # R1: known content words may not be dropped
+        dropped = sorted({lexicon[t]["sense"] for t in tokens
+                          if t in lexicon
+                          and lexicon[t]["pos"] in content_pos
+                          and lexicon[t]["sense"] not in atoms})
+        if dropped:
+            return {"rule": "R1_dropped_known_content",
+                    "dropped": dropped}
+        # R2: entity-slot atoms must be attested by input tokens
+        token_senses = {lexicon[t]["sense"] for t in tokens if t in lexicon}
+        unattested = sorted(set(self._entity_atoms(packet))
+                            - token_senses)
+        if unattested:
+            return {"rule": "R2_unattested_entity",
+                    "unattested": unattested}
+        return None
+
+    @staticmethod
+    def _entity_atoms(packet) -> List[str]:
+        """Entity-slot atoms only: property args[0]; relation args[1:]."""
+        entities: List[str] = []
+        if not isinstance(packet, dict):
+            return entities
+        pred = packet.get("pred")
+        args = packet.get("args", [])
+        if pred == "property" and args:
+            entities.append(args[0])
+        elif pred == "relation" and len(args) == 3:
+            entities.extend(args[1:])
+        elif pred in ("negation", "question") and args:
+            entities.extend(HybridRouter._entity_atoms(args[0]))
+        return entities
 
     @staticmethod
     def _atoms(packet) -> List[str]:
@@ -199,6 +270,10 @@ class HybridRouter:
 
     def _seal(self, trace: Dict, committed: bool) -> Dict:
         trace["committed"] = committed
+        # the native CAS-Ohm attention record: COMPUTE-ONLY decoration,
+        # authored AFTER the answer is decided; nothing above reads it
+        from .attention import stage_record
+        trace["cas_ohm"] = stage_record(trace)
         trace["trace_digest"] = _digest(trace)
         self.traces.append(trace)
         return trace

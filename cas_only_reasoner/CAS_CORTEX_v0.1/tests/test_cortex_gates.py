@@ -142,11 +142,14 @@ def test_native_only_mode_gives_typed_no_answer():
 
 
 def test_diagnostic_mode_records_but_never_commits():
+    # NOTE: "the feline is gray." was the original example; the
+    # faithfulness gate now (correctly) refuses feline->cat as an
+    # unattested entity, so the diagnostic example uses an attested one.
     cortex = ScriptedCortex({
-        "the feline is gray.": ({"pred": "property",
-                                 "args": ["cat", "gray"]}, [])})
+        "the cat is rather gray.": ({"pred": "property",
+                                     "args": ["cat", "gray"]}, [])})
     router = HybridRouter(mode="CORTEX_DIAGNOSTIC", cortex=cortex)
-    trace = router.turn("the feline is gray.")
+    trace = router.turn("the cat is rather gray.")
     assert trace["route"] == "cortex"
     assert trace["cortex_proposal"] is not None       # recorded
     assert trace["validation"]["outcome"] == "ACCEPTED"
@@ -258,3 +261,136 @@ def test_grounding_cannot_catch_role_errors_recorded_limit():
     trace = router.turn("the dog is chased by the cat.")
     assert trace["validation"]["grounding"] == {"outcome": "GROUNDED"}
     assert trace["committed"] is True   # the gate cannot see the error
+
+
+def test_unresolved_pronoun_is_typed_never_a_crash():
+    """BATTERY-FOUND CRASH (2026-08-28): 'it is gray.' raised
+    DiscourseError straight through the router. Now a typed native
+    error that routes onward like any other non-parse."""
+    router = HybridRouter(mode="NATIVE_ONLY")
+    trace = router.turn("it is gray.")
+    assert trace["route"] == "no_answer"
+    assert trace["committed"] is False
+    cortex = ScriptedCortex({"it is gray.": (None, [])})
+    hybrid = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
+    trace2 = hybrid.turn("it is gray.")
+    assert trace2["route"] == "cortex"
+    assert trace2["committed"] is False
+
+
+# --------------------------------- content-faithfulness gate (battery v1)
+def test_faithfulness_r1_dropped_clause_refused():
+    """Multi-clause drop: the packet covers only the first clause."""
+    cortex = ScriptedCortex({
+        "the cat is gray and the dog is brown.": (
+            {"pred": "property", "args": ["cat", "gray"]}, [])})
+    router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
+    trace = router.turn("the cat is gray and the dog is brown.")
+    assert trace["answer"]["status"] == "CONTENT_MISMATCH"
+    assert trace["answer"]["rule"] == "R1_dropped_known_content"
+    assert trace["answer"]["dropped"] == ["brown", "dog"]
+    assert trace["committed"] is False
+
+
+def test_faithfulness_r2_typo_corrected_entity_refused():
+    """Silent typo-correction: 'cta' -> cat is an unattested entity."""
+    cortex = ScriptedCortex({
+        "the cta is gray.": (
+            {"pred": "property", "args": ["cat", "gray"]}, [])})
+    router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
+    trace = router.turn("the cta is gray.")
+    assert trace["answer"]["status"] == "CONTENT_MISMATCH"
+    assert trace["answer"]["rule"] == "R2_unattested_entity"
+    assert trace["answer"]["unattested"] == ["cat"]
+
+
+def test_faithfulness_passes_legitimate_paraphrase():
+    """Synonym verbs and filler words are the cortex's legitimate job:
+    R1/R2 must NOT block them."""
+    cortex = ScriptedCortex({
+        "would you say the cat is gray?": (
+            {"pred": "question",
+             "args": [{"pred": "property", "args": ["cat", "gray"]}]},
+            []),
+        "the cat is pursuing the dog.": (
+            {"pred": "relation", "args": ["chase", "cat", "dog"]}, [])})
+    router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
+    q = router.turn("would you say the cat is gray?")
+    assert q["answer"]["status"] == "ANSWERED"
+    s = router.turn("the cat is pursuing the dog.")
+    assert s["validation"]["faithfulness"] == {"outcome": "FAITHFUL"}
+    assert s["answer"]["status"] == "UNDERSTOOD"
+
+
+def test_faithfulness_known_limits_stay_recorded():
+    """HONEST LIMITS the gate cannot catch (recorded, not hidden):
+    verb-slot and property-slot typos, pure tense drops with no known
+    word lost, and role reversals - all pass R1/R2."""
+    cortex = ScriptedCortex({
+        "the cat is graey.": (
+            {"pred": "property", "args": ["cat", "gray"]}, [])})
+    router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
+    trace = router.turn("the cat is graey.")
+    assert trace["committed"] is True    # property-slot typo: uncaught
+
+
+# ------------------------------- native CAS-Ohm attention plane (v0.1)
+def test_attention_plane_is_compute_only():
+    """Protocol section 15 as a test: the attention record decorates
+    the trace and decides NOTHING - answers are identical with the
+    plane's records stripped, and the record is authored after the
+    answer field is final."""
+    cortex = ScriptedCortex({
+        "the zorble is gray.": (
+            {"pred": "property", "args": ["zorble", "gray"]}, [])})
+    router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
+    trace = router.turn("the zorble is gray.")
+    assert trace["cas_ohm"]["authority_note"].startswith("compute-only")
+    # the answer was decided before the record existed
+    assert trace["answer"]["status"] == "UNGROUNDED_TERM"
+
+
+def test_attention_lexical_resistance_rises_for_ungrounded():
+    """Experiment A slice: an invented word activates R_lexical, so
+    I_obs falls far below I_pred - the residual flags the neighborhood
+    the grounding probe then identifies."""
+    cortex = ScriptedCortex({
+        "the zorble is gray.": (
+            {"pred": "property", "args": ["zorble", "gray"]}, [])})
+    router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
+    record = router.turn("the zorble is gray.")["cas_ohm"]
+    assert record["R_lexical"] >= 8.0
+    assert record["I_obs"] < record["I_pred"]
+    assert record["delta_I"] < 0
+    assert record["operating_region"] == "cutoff"
+
+    clean = HybridRouter(mode="NATIVE_ONLY").turn("the cat is gray.")
+    assert clean["cas_ohm"]["R_total"] == 1.0
+    assert clean["cas_ohm"]["I_obs"] == clean["cas_ohm"]["I_pred"]
+    assert clean["cas_ohm"]["operating_region"] == "active"
+
+
+def test_attention_role_binding_healthy_flow_wrong_effect():
+    """Experiment B slice: the passive role error commits with a CLEAN
+    flow profile - the record must show healthy I (active region), and
+    its semantic_outcome field must disclaim: flow never implies a
+    correct effect. Semantic misalignment, not attention starvation."""
+    cortex = ScriptedCortex({
+        "the dog is chased by the cat.": (
+            {"pred": "relation", "args": ["chase", "dog", "cat"]}, [])})
+    router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
+    record = router.turn("the dog is chased by the cat.")["cas_ohm"]
+    assert record["operating_region"] == "active"
+    assert record["R_role_binding"] == 0.0   # nothing resisted
+    assert "healthy flow does not imply a correct effect" in \
+        record["semantic_outcome"]
+
+
+def test_attention_faithfulness_gate_shows_role_binding_resistance():
+    cortex = ScriptedCortex({
+        "the cta is gray.": (
+            {"pred": "property", "args": ["cat", "gray"]}, [])})
+    router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
+    record = router.turn("the cta is gray.")["cas_ohm"]
+    assert record["R_role_binding"] >= 6.0
+    assert record["operating_region"] == "cutoff"

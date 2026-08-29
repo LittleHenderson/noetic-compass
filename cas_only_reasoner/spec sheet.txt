@@ -390,6 +390,89 @@ HONEST QUALIFICATION AFTER THE FULL G10 ROUND:
   The G10 LEVEL was reached for four hours and honestly given back
   when the audit landed. That is the standard doing its job.
 
+PHASE 4.3 COMPLETE (2026-08-28, branch phase4-hybrid-cortex):
+
+  PHASE4_BATTERY_v1 (CAS_CORTEX_v0.1/battery/ + run_battery.py):
+  86 deterministic gold-labeled items, 13 categories, content-hash
+  splits (dev 25 / calibration 20 / held_out 32 / protected 9 -
+  'protected' means excluded from tuning, not hidden; recorded).
+  Grading law: FABRICATION (committing wrong) is the cardinal sin;
+  an honest typed miss is a miss.
+    - The battery's FIRST run crashed the router live: 'it is gray.'
+      raised DiscourseError straight through (unresolved pronoun).
+      Fixed typed (UNRESOLVED_REFERENCE) with a regression test.
+    - v1 RESULT (sealed 03ffeb853752322c): held-out pass 22/32
+      (68.75%), fabrication 9/32 (28.12%). Every fabrication one
+      genus: a grounded well-formed packet that silently DROPS
+      content (second clause, tense, a typo'd token) or invents a
+      referent.
+    - CONTENT-FAITHFULNESS GATE built from dev/calibration-split
+      evidence only (split discipline verified before design): R1 no
+      dropped known content; R2 entity atoms must be attested by
+      input tokens (verb/property slots stay free - synonym handling
+      is the cortex's legitimate job; feline->cat entity inference is
+      correctly refused: the honest path to new entities is CCB-L1
+      acquisition, not cortex guessing).
+    - v2 RESULT (sealed 4a6c21f064272bf7): held-out fabrication
+      HALVED 28.12% -> 15.62% (9 -> 5), pass steady 22/32, honest
+      misses 1 -> 5 (refusals replacing fabrications - the intended
+      trade). Perfect categories both runs: literal 14/14, questions
+      6/6, paraphrase_question 8/8, unknown_word 10/10, INJECTION
+      6/6. Remaining fabrications = verb/property-slot typos, pure
+      tense drops, role reversals - recorded limits the gate cannot
+      see. Determinism TRUE (12 sampled x2). Latency median 4.6s/gen
+      on CPU (resident model).
+    - The 20-item H2H-v0 smoke stays SEALED (db34d2e9d0214df4); the
+      battery supersedes it for capability claims.
+
+  REPLICATION_v0.1/ - the external replication bundle (the path to
+  E6): REPLICATION.md (claim-by-claim form, 16 claims, attestation
+  form with conflicts-of-interest field), run_replication.py (one
+  command; junit-XML suite counting; CNCM qualification extraction;
+  deterministic digest re-derivation), expected_results.json (locked
+  counts, digests, caveats verbatim incl. the withdrawn D10/E6
+  refutation records). SELF-TEST GREEN: all 14 suites match,
+  qualification derives to exactly CAS-G9 / E5 / A0, discovery digest
+  bd4a444406b0833c and G10 store digest 94dcd861a43af7d2 reproduce.
+  Self-test bugs found and fixed: nine boards suppress pytest
+  summaries (junit XML now used); the demo's FIRST qualification
+  block is the cas-rr prototype (last match now taken); the G10
+  store digest changed when the fact-echo guard changed history
+  content (expected value updated with the reason recorded). THE
+  SELF-RUN IS NOT A REPLICATION - the developing party ran it; it
+  only proves the bundle works.
+
+  CAS-OHM ATTENTION INTEGRATION PROTOCOL v0.1 ADOPTED
+  (CAS_OHM_ATTENTION_PROTOCOL_v0.1.md, owner directive): the revised
+  architectural law - CAS-Ohm governs FLOW; CJTs transformation;
+  CAS-Sem meaning; the verifier validity; the commitment latch
+  authority. R10 NARROWS: no CAS-Ohm quantity in truth/validity/
+  meaning/commitment/permission decisions; flow governance (attention
+  allocation, budgets, diagnostics, tuning) is its proper native
+  role. Three substrates (native exact-by-construction / neural
+  calibrated / biological open) with declared bridges only.
+  IMPLEMENTED v0.1 slice: cortex/attention.py - the native attention
+  plane authoring CASOhmStageRecords (V_drive, R decomposition,
+  I_pred/I_obs/delta_I, operating region) onto every TurnTrace,
+  COMPUTE-ONLY (a test proves nothing reads it for decisions), with
+  Experiment A and B slices as tests (R_lexical rises for ungrounded
+  -> I_obs << I_pred, region cutoff; the passive role error shows a
+  HEALTHY flow profile - semantic misalignment, not attention
+  starvation, disclaimed in the record itself). Experiments C-F and
+  the neural calibration mode: OPEN per the protocol's own gates.
+
+  CAS-NATIVE SIMPLEX LOCATED (owner-ordered checkout): the canonical
+  sources at noetic-compass-scaffold/noetic-compass/cas-native/ -
+  model/embedding.py (CognitiveStateEmbedding onto the 40-state OPEN
+  simplex, epsilon floor, Correction 4), model/simplex_encoder.py,
+  model/v1_arch/simplex_state_encoder.py + fisher_rao_loss.py,
+  model/lacunarity_gate.py (simplex-preserving renormalization),
+  belief/geodesic_memory.py (Fisher-Rao geodesic memory - the natural
+  cas_structural_embedding + retrieval-similarity substrate for
+  CAS-GEM capsules). Codex's worktree (ccb-r1-stage5-integration)
+  carries copies - CCB-R1 integration is under way in Codex's lane
+  with these encoders; that lane stays untouched per standing rule.
+
 PHASE 4 RATIFIED (owner directive 2026-08-28, after the falsification
 round was endorsed as the system working): baseline FROZEN at
 2526360b; hybrid work on branch phase4-hybrid-cortex. The owner's

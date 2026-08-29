@@ -1,0 +1,147 @@
+{
+ "all_suites_match": true,
+ "deterministic_digests": {
+  "discovery_digest": {
+   "expected": "bd4a444406b0833c",
+   "match": true,
+   "observed": "bd4a444406b0833c"
+  },
+  "g10_final_store_digest": {
+   "expected": "94dcd861a43af7d2",
+   "match": true,
+   "observed": "94dcd861a43af7d2"
+  }
+ },
+ "environment": {
+  "machine": "AMD64",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.14.0"
+ },
+ "known_caveats": [
+  "qualified level CAS-G9 / E5 / A0: the D10 novel-research floor and the E6 tier were claimed once, REFUTED by internal adversarial audit (2026-08-28), and withdrawn - the refutation records are in tksCAS/CHANGELOG.md and cas_only_reasoner/spec sheet.txt",
+  "held_out means hidden from the machine's learning loop, not from developers; every fixture is visible in this repository",
+  "the two existing replication records are internal AI audits (external:false) and count as E5 supporting evidence only",
+  "the cortex head-to-head (20 items) and PHASE4_BATTERY_v1 (86 items) are directional architecture tests at the 0.5B floor, not broad language benchmarks",
+  "environment-dependent artifacts (wall-clock latencies inside h2h_results.json and phase4_gates.json) are report-only; their digests are not expected to reproduce"
+ ],
+ "qualification": {
+  "expected": "CAS-G9 / E5 / A0",
+  "match": true,
+  "observed": "CAS-G9 / E5 / A0"
+ },
+ "report_digest": "69b57097b6f128ba",
+ "suites": [
+  {
+   "board": "CAS_RRK_v0.1",
+   "exit_code": 0,
+   "expected": 34,
+   "failed": 0,
+   "match": true,
+   "passed": 34
+  },
+  {
+   "board": "CAS_RLP_v0.1",
+   "exit_code": 0,
+   "expected": 45,
+   "failed": 0,
+   "match": true,
+   "passed": 45
+  },
+  {
+   "board": "CCB_M1_v0.1",
+   "exit_code": 0,
+   "expected": 34,
+   "failed": 0,
+   "match": true,
+   "passed": 34
+  },
+  {
+   "board": "CCB_L1_v0.1",
+   "exit_code": 0,
+   "expected": 18,
+   "failed": 0,
+   "match": true,
+   "passed": 18
+  },
+  {
+   "board": "CAS_SEM_v0.1",
+   "exit_code": 0,
+   "expected": 19,
+   "failed": 0,
+   "match": true,
+   "passed": 19
+  },
+  {
+   "board": "CAS_WORKBENCH_v0.1",
+   "exit_code": 0,
+   "expected": 13,
+   "failed": 0,
+   "match": true,
+   "passed": 13
+  },
+  {
+   "board": "CRQS_v0.1",
+   "exit_code": 0,
+   "expected": 35,
+   "failed": 0,
+   "match": true,
+   "passed": 35
+  },
+  {
+   "board": "CCB_T1_v0.1",
+   "exit_code": 0,
+   "expected": 20,
+   "failed": 0,
+   "match": true,
+   "passed": 20
+  },
+  {
+   "board": "CAS_OHM_INSTRUMENT_v0.1",
+   "exit_code": 0,
+   "expected": 10,
+   "failed": 0,
+   "match": true,
+   "passed": 10
+  },
+  {
+   "board": "CORTEX_H2H_v0.1",
+   "exit_code": 0,
+   "expected": 10,
+   "failed": 0,
+   "match": true,
+   "passed": 10
+  },
+  {
+   "board": "CAS_LTG_v0.1",
+   "exit_code": 0,
+   "expected": 11,
+   "failed": 0,
+   "match": true,
+   "passed": 11
+  },
+  {
+   "board": "CAS_SM_v0.1",
+   "exit_code": 0,
+   "expected": 8,
+   "failed": 0,
+   "match": true,
+   "passed": 8
+  },
+  {
+   "board": "CNCM_G10_v0.1",
+   "exit_code": 0,
+   "expected": 8,
+   "failed": 0,
+   "match": true,
+   "passed": 8
+  },
+  {
+   "board": "CAS_CORTEX_v0.1",
+   "exit_code": 0,
+   "expected": 20,
+   "failed": 0,
+   "match": true,
+   "passed": 20
+  }
+ ]
+}

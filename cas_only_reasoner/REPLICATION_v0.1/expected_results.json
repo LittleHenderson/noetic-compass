@@ -1,0 +1,44 @@
+{
+  "bundle": "REPLICATION_v0.1",
+  "baseline_commit": "2526360b",
+  "phase4_branch_commit": "bd54031e",
+  "qualified_level": "CAS-G9 / E5 / A0",
+  "suite_counts": {
+    "CAS_RRK_v0.1": 34,
+    "CAS_RLP_v0.1": 45,
+    "CCB_M1_v0.1": 34,
+    "CCB_L1_v0.1": 18,
+    "CAS_SEM_v0.1": 19,
+    "CAS_WORKBENCH_v0.1": 13,
+    "CRQS_v0.1": 35,
+    "CCB_T1_v0.1": 20,
+    "CAS_OHM_INSTRUMENT_v0.1": 10,
+    "CORTEX_H2H_v0.1": 10,
+    "CAS_LTG_v0.1": 11,
+    "CAS_SM_v0.1": 8,
+    "CNCM_G10_v0.1": 8,
+    "CAS_CORTEX_v0.1": 28
+  },
+  "deterministic_digests": {
+    "discovery_digest": "bd4a444406b0833c",
+    "g10_final_store_digest": "94dcd861a43af7d2"
+  },
+  "cortex": {
+    "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "snapshot_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "weights_digest": "fdf756fa7fcbe740",
+    "note": "the cortex smoke needs the model snapshot in the local HF cache; the deterministic legs need no model"
+  },
+  "environment_used_by_developer": {
+    "python": "3.14",
+    "platform": "Windows 11",
+    "note": "cross-platform digest equality is EXPECTED but was not verified by the developer; a mismatch on another OS is a finding to report, not to hide"
+  },
+  "known_caveats": [
+    "qualified level CAS-G9 / E5 / A0: the D10 novel-research floor and the E6 tier were claimed once, REFUTED by internal adversarial audit (2026-08-28), and withdrawn - the refutation records are in tksCAS/CHANGELOG.md and cas_only_reasoner/spec sheet.txt",
+    "held_out means hidden from the machine's learning loop, not from developers; every fixture is visible in this repository",
+    "the two existing replication records are internal AI audits (external:false) and count as E5 supporting evidence only",
+    "the cortex head-to-head (20 items) and PHASE4_BATTERY_v1 (86 items) are directional architecture tests at the 0.5B floor, not broad language benchmarks",
+    "environment-dependent artifacts (wall-clock latencies inside h2h_results.json and phase4_gates.json) are report-only; their digests are not expected to reproduce"
+  ]
+}
