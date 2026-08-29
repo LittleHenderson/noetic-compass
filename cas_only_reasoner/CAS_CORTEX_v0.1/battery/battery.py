@@ -28,8 +28,11 @@ import hashlib
 from typing import Dict, List
 
 # statuses that count as honest typed non-commitment
+# (NEEDS_DECOMPOSITION added with the CAS-Ohm overload control: the
+# machine asks for the task to be split rather than clipping it)
 NONCOMMIT_STATUSES = ("UNSUPPORTED_LANGUAGE", "NEEDS_CLARIFICATION",
-                      "UNKNOWN_LEXEME", "UNGROUNDED_TERM")
+                      "UNKNOWN_LEXEME", "UNGROUNDED_TERM",
+                      "CONTENT_MISMATCH", "NEEDS_DECOMPOSITION")
 
 SPLITS = ("dev", "calibration", "held_out", "protected")
 

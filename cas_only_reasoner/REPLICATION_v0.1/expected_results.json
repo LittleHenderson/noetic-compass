@@ -17,7 +17,7 @@
     "CAS_LTG_v0.1": 11,
     "CAS_SM_v0.1": 8,
     "CNCM_G10_v0.1": 8,
-    "CAS_CORTEX_v0.1": 28
+    "CAS_CORTEX_v0.1": 42
   },
   "deterministic_digests": {
     "discovery_digest": "bd4a444406b0833c",

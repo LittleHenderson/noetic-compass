@@ -390,6 +390,57 @@ HONEST QUALIFICATION AFTER THE FULL G10 ROUND:
   The G10 LEVEL was reached for four hours and honestly given back
   when the audit landed. That is the standard doing its job.
 
+CAS-OHM NATIVE ATTENTION CONTROL PROTOCOL v0.1 ADOPTED
+(CAS_OHM_NATIVE_CONTROL_PROTOCOL_v0.1.md, owner directive
+2026-08-28): CAS-Ohm upgrades from meter to the CNCM's Attention
+Engineering and Load-Control Plane - MEASURE / DESIGN / DIAGNOSE /
+RECURSE, active before, during, and after reasoning. Division of
+labor unchanged: CAS-Ohm governs FLOW; verifier validity; commitment
+authority; a readiness packet certifies ENERGIZATION, never truth;
+deriving semantic correctness from a flow region stays PROHIBITED.
+
+  IMPLEMENTED (CAS_CORTEX_v0.1/cortex/ohm_control.py + router
+  wiring, 42 tests green):
+    - CASOhmBoardProfile (versioned, digested; the live
+      lang_pipeline_native_v1 profile authored);
+    - the three active equations (measure I=V/R, design V=I*R,
+      diagnose R=V/I);
+    - I_Q quantization: Q1-Q4 bands, exact decimals, trend arrows,
+      budget classes;
+    - lambda overload control WIRED LIVE into the router: clause-
+      connector demand units vs the board's one-proposition capacity;
+      lambda > 1 -> typed NEEDS_DECOMPOSITION BEFORE the cortex is
+      invoked (split-before-clipping; also saves the inference);
+    - branch allocation with a fairness floor + child probes;
+      parallel_health (T5: a healthy parent aggregate NEVER hides a
+      saturated + a starved child);
+    - learning_repair_record (T6: improvement as mechanism - P_cap
+      up, R_cap down, cutoff -> active, effect corrected);
+    - retrieval_decision (T7 + CAS-GEM pre-work: retrieve / ambiguous-
+      ask-for-clue-never-merge / needs-more-clue / anchor-conflict-
+      reject - flow never overrides an anchor);
+    - the two-axis flow-region x semantic-outcome matrix with
+      INDEPENDENT required axes (T8: active + off-axis -> semantic/
+      topology repair, NEVER gain adjustment);
+    - CASOhmReadiness commitment packets (T4: a starved verifier
+      blocks commitment; certifies energization only).
+  Permanent tests T1-T8 all present (T1/T2 from the earlier round).
+
+  BATTERY v3 (sealed b161391a9d9c819f) - the overload gate live:
+    held-out pass 25/32 (78.12%, up from 68.75%), fabrication 4/32
+    (12.50%, from 28.12% in v1 and 15.62% in v2), honest misses 3.
+    multi_clause 6/6 (the machine now ASKS to decompose instead of
+    clipping - the doctrine's five-part-question story, live).
+    Latency median 2.74s (from 4.59s: overload refusals skip the
+    model). GRADING CORRECTION DISCLOSED: v2 under-credited passes -
+    CONTENT_MISMATCH refusals on noncommit items were scored
+    HONEST_MISS instead of PASS (the fabrication halving in v2 was
+    real; its pass rate was understated). NEW RECORDED LIMIT: "if"
+    in indirect questions ("any idea if the cat is brown?") false-
+    triggers the split - an over-refusal (safe direction), 2
+    paraphrase passes became honest misses; refinement queued, not
+    tuned away on battery items.
+
 PHASE 4.3 COMPLETE (2026-08-28, branch phase4-hybrid-cortex):
 
   PHASE4_BATTERY_v1 (CAS_CORTEX_v0.1/battery/ + run_battery.py):

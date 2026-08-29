@@ -279,16 +279,18 @@ def test_unresolved_pronoun_is_typed_never_a_crash():
 
 
 # --------------------------------- content-faithfulness gate (battery v1)
-def test_faithfulness_r1_dropped_clause_refused():
-    """Multi-clause drop: the packet covers only the first clause."""
+def test_faithfulness_r1_dropped_content_refused():
+    """Dropped known content WITHOUT a clause connector (connector
+    sentences are now intercepted upstream by the CAS-Ohm overload
+    gate - see test_t3): the packet ignores two known adjectives."""
     cortex = ScriptedCortex({
-        "the cat is gray and the dog is brown.": (
-            {"pred": "property", "args": ["cat", "gray"]}, [])})
+        "the gray cat chases the quiet dog.": (
+            {"pred": "relation", "args": ["chase", "cat", "dog"]}, [])})
     router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
-    trace = router.turn("the cat is gray and the dog is brown.")
+    trace = router.turn("the gray cat chases the quiet dog.")
     assert trace["answer"]["status"] == "CONTENT_MISMATCH"
     assert trace["answer"]["rule"] == "R1_dropped_known_content"
-    assert trace["answer"]["dropped"] == ["brown", "dog"]
+    assert trace["answer"]["dropped"] == ["gray", "quiet"]
     assert trace["committed"] is False
 
 

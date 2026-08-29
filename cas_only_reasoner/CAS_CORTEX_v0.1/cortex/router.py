@@ -118,6 +118,30 @@ class HybridRouter:
                                "detail": native["error"]["message"]}
             return self._seal(trace, committed=False)
 
+        # CAS-OHM OVERLOAD CONTROL (active, BEFORE the cortex runs):
+        # lambda = proposition demand / board full scale. This board's
+        # capacity is ONE proposition per turn; clause connectors add
+        # demand units. Overload SPLITS the task (typed
+        # NEEDS_DECOMPOSITION) instead of forcing one saturated
+        # junction to clip - and saves the cortex invocation entirely.
+        from .ohm_control import overload_by_demand
+        from lang.grammar import tokenize
+        connectors = {"and", "or", "but", "then", "because", "since",
+                      "after", "if", "while"}
+        tokens = tokenize(sentence)
+        raw_demand = 1.0 + sum(1 for t in tokens if t in connectors)
+        load = overload_by_demand(raw_demand, full_scale_demand=1.0)
+        trace["ohm_load"] = load
+        if load["decision"] == "OVERLOAD_SPLIT_REQUIRED":
+            trace["route"] = "overload_control"
+            trace["answer"] = {
+                "status": "NEEDS_DECOMPOSITION",
+                "lambda": load["lambda"],
+                "detail": "input exceeds the board's full-scale "
+                          "attention; split into parts and ask them "
+                          "one at a time"}
+            return self._seal(trace, committed=False)
+
         # cortex-assisted routing: the cortex PROPOSES
         proposal = self.cortex.propose(sentence)
         self.firewall.submit("cortex", "ProposeSemanticPacket",
