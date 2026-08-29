@@ -1,0 +1,149 @@
+{
+ "history": [
+  {
+   "action": "PROMOTED",
+   "construction_id": "active_past_transitive",
+   "provenance": "lesson:SEED_L001_active_past|teacher:hand_authored_seed_teacher",
+   "revision": 1
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "passive_past",
+   "provenance": "lesson:SEED_L002_passive_past|teacher:hand_authored_seed_teacher",
+   "revision": 2
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "passive_present",
+   "provenance": "lesson:SEED_L003_passive_present|teacher:hand_authored_seed_teacher",
+   "revision": 3
+  }
+ ],
+ "revision": 3,
+ "rules": {
+  "active_past_transitive": {
+   "construction_id": "active_past_transitive",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:SEED_L001_active_past|teacher:hand_authored_seed_teacher",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "past"
+     },
+     "sentence": "the cat chased the dog."
+    },
+    {
+     "expected_core": {
+      "agent": "fox",
+      "frame": "event",
+      "patient": "hen",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "past"
+     },
+     "sentence": "the fox chased the hen."
+    }
+   ],
+   "rule_digest": "2b0bcef04939204d",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "tense": "past"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "voice": "active"
+   },
+   "surface_pattern": [
+    "NP:agent",
+    "VERB:pred:past",
+    "NP:patient"
+   ]
+  },
+  "passive_past": {
+   "construction_id": "passive_past",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:SEED_L002_passive_past|teacher:hand_authored_seed_teacher",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "past"
+     },
+     "sentence": "the dog was chased by the cat."
+    }
+   ],
+   "rule_digest": "a573048e1f1921d7",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "tense": "past"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "voice": "passive"
+   },
+   "surface_pattern": [
+    "NP:patient",
+    "was",
+    "VERB:pred:participle",
+    "by",
+    "NP:agent"
+   ]
+  },
+  "passive_present": {
+   "construction_id": "passive_present",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:SEED_L003_passive_present|teacher:hand_authored_seed_teacher",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "the dog is chased by the cat."
+    }
+   ],
+   "rule_digest": "2559e3799aee574a",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "tense": "present"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "voice": "passive"
+   },
+   "surface_pattern": [
+    "NP:patient",
+    "is",
+    "VERB:pred:participle",
+    "by",
+    "NP:agent"
+   ]
+  }
+ },
+ "store_digest": "703721eb81dfe853"
+}

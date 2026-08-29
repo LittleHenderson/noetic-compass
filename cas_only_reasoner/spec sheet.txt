@@ -390,6 +390,81 @@ HONEST QUALIFICATION AFTER THE FULL G10 ROUND:
   The G10 LEVEL was reached for four hours and honestly given back
   when the audit landed. That is the standard doing its job.
 
+VERIFIED COGNITIVE APPRENTICESHIP ADOPTED AND PHASE L1 BUILT
+(VERIFIED_COGNITIVE_APPRENTICESHIP_v0.1.md, owner directive
+2026-08-28). Principle: foreign proposals are permitted, foreign
+commitments are prohibited - the larger model is a temporary master
+teacher for a student whose acceptance law is stricter than the
+teacher. English is learned as COMPOSABLE CONSTRUCTIONS, never as
+sentence templates.
+
+  TEACHER MODELS DOWNLOADED (owner-approved): Qwen2.5-1.5B-Instruct
+  (2.9G) and Qwen2.5-3B-Instruct (4.1G) now in the local HF cache
+  beside the 0.5B. Scale study unblocked.
+
+  CCB-L1 GRAM (the learnable grammar kernel, Phase L1):
+    - lang/constructions.py: construction schema (typed NP/VERB slot
+      patterns + declarative semantic transformations), semantic
+      FRAMES separating the truth-conditional CORE (predicate, roles,
+      tense, polarity) from SURFACE metadata (voice, construction id)
+      - the minimal-pair law depends on that split; MorphTable
+      (learnable word forms with provenance + regular -ed/-s
+      fallbacks); ConstructionParser (ambiguity REPORTED as distinct
+      cores, never silently resolved); versioned GrammarStore
+      (ACTIVE/QUARANTINED/SUPERSEDED/ROLLED_BACK, digest-checked
+      persistence, tampering refused).
+    - lang/apprentice.py (Phase L2 schema): LanguageLessonPacket +
+      the ten-stage grammar acceptance ladder (PROPOSED ->
+      SCHEMA_VALID -> COMPILED -> POSITIVE_EXAMPLES ->
+      CONTRAST_TESTS -> HELD_OUT_GENERALIZATION (protected channel
+      REQUIRED - no channel, no promotion: the teacher may not
+      examine its own lesson) -> PRIOR_GRAMMAR_REGRESSION ->
+      AMBIGUITY_BEHAVIOR -> DETERMINISTIC_REPLAY ->
+      PROMOTED_PROVISIONALLY), then confirm_retention ->
+      PROMOTED_DURABLY or QUARANTINED. Teacher confidence is
+      informational only (a 0.99-confidence wrong lesson dies
+      identically - tested).
+    - 13 apprenticeship tests; CCB-L1 now 31 green. Proven: the
+      active/passive minimal-pair law (active core == passive core,
+      reversal differs); ONE passive rule covers noun pairs never
+      seen in any lesson; wrong-role lessons die at positive
+      examples; contrast collapse fatal; retention failure
+      quarantines.
+
+  SEED GRAMMAR THROUGH THE LADDER (make_seed_grammar.py): three
+  constructions (active_past_transitive, passive_past,
+  passive_present) taught as lessons, climbed the full ladder incl.
+  protected held-out and delayed retention, all PROMOTED_DURABLY;
+  sealed fixtures/seed_grammar.json digest 703721eb81dfe853 +
+  seed_morphology.json (learned morphology TRAVELS WITH the learned
+  grammar - the "chas" mis-lemmatization bug was found live and fixed
+  by exactly that rule) + seed_grammar_episodes.json (full evidence
+  trail per construction).
+
+  ROUTER PHASE L5 + L6: the native_gram lane - constructions promoted
+  through the acceptance law parse natively, deterministically, with
+  no cortex; ambiguity yields typed AMBIGUOUS_PARSE alternatives;
+  coverage counters (native_l1 / native_gram / cortex / refused) =
+  the teacher-dependence decay metric. THE APPRENTICESHIP PAYOFF,
+  DEMONSTRATED: "the dog is chased by the cat." - the exact sentence
+  the 0.5B cortex read BACKWARDS in the live gates - now parses
+  native_gram with CORRECT roles (relation(chase, cat, dog)), cortex
+  never invoked (a Bomb-cortex test proves it). The role-error limit
+  survives only for UNTAUGHT constructions (got-passive, recorded).
+
+  BATTERY v4 (sealed 08c55cc9206abff0): held-out steady at pass
+  78.12% / fabrication 12.50%; paraphrase_statement fabrication 1 ->
+  0 (the taught passive replaced cortex fabrication with native
+  correctness). Two battery items are covered by the three seed
+  constructions - the aggregate move is small, the MECHANISM is the
+  point: taught grammar retires cortex dependence item by item.
+
+  OPEN (apprenticeship): live teacher lesson generation from the
+  downloaded models (L2 live), CAS-SDG curriculum generation (L3),
+  the shadow-mode comparison harness (L4; CORTEX_DIAGNOSTIC mode is
+  the seed), the 0.5B/1.5B/3B scale study (now unblocked),
+  LANGUAGE_UNDERSTOOD vs KNOWLEDGE_MISSING kernel statuses.
+
 CAS-OHM NATIVE ATTENTION CONTROL PROTOCOL v0.1 ADOPTED
 (CAS_OHM_NATIVE_CONTROL_PROTOCOL_v0.1.md, owner directive
 2026-08-28): CAS-Ohm upgrades from meter to the CNCM's Attention

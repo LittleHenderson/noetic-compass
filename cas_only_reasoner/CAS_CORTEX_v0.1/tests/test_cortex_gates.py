@@ -250,17 +250,30 @@ def test_grounding_gate_passes_fully_grounded_packets():
 
 def test_grounding_cannot_catch_role_errors_recorded_limit():
     """HONEST LIMIT (recorded, not hidden): a fully-grounded packet
-    with the WRONG roles passes grounding - the live 0.5B cortex made
-    exactly this error on passive voice. Grounding checks vocabulary,
-    not semantics; role fidelity is a cortex-quality metric for the
-    expanded battery."""
+    with the WRONG roles passes grounding for UNTAUGHT constructions.
+    NOTE the apprenticeship closure: "the dog is chased by the cat."
+    is now parsed NATIVELY by the learned passive_present construction
+    with CORRECT roles - the limit below survives only for
+    constructions not yet taught (here: got-passive)."""
+    # the taught passive no longer reaches the cortex at all
+    class Bomb:
+        def propose(self, sentence):
+            raise AssertionError("taught construction hit the cortex")
+    taught = HybridRouter(mode="HYBRID_COMMIT", cortex=Bomb())
+    trace = taught.turn("the dog is chased by the cat.")
+    assert trace["route"] == "native_gram"
+    assert trace["answer"]["meaning"] == {
+        "pred": "relation", "args": ["chase", "cat", "dog"]}  # CORRECT
+
+    # an UNTAUGHT passive variant still shows the cortex limit
     cortex = ScriptedCortex({
-        "the dog is chased by the cat.": (
+        "the dog got chased by the cat.": (
             {"pred": "relation", "args": ["chase", "dog", "cat"]}, [])})
     router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
-    trace = router.turn("the dog is chased by the cat.")
-    assert trace["validation"]["grounding"] == {"outcome": "GROUNDED"}
-    assert trace["committed"] is True   # the gate cannot see the error
+    trace2 = router.turn("the dog got chased by the cat.")
+    assert trace2["route"] == "cortex"
+    assert trace2["validation"]["grounding"] == {"outcome": "GROUNDED"}
+    assert trace2["committed"] is True  # the gate cannot see the error
 
 
 def test_unresolved_pronoun_is_typed_never_a_crash():

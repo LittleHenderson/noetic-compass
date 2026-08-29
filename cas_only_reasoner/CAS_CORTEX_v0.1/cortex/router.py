@@ -70,6 +70,31 @@ class HybridRouter:
                          for entry in self.seed["lexicon"].values()}
         for fact in self.seed["cmb_facts"]:
             self.grounded.update(fact.get("args", []))
+        # THE LEARNED GRAMMAR (apprenticeship Phase L5): constructions
+        # promoted through the acceptance law load from the sealed
+        # seed store and parse NATIVELY - taught English never touches
+        # the cortex again. Coverage counters are the Phase L6
+        # teacher-dependence metric.
+        from lang.constructions import (ConstructionParser, GrammarStore,
+                                        MorphTable)
+        from lang.lexicon import Lexicon
+        grammar_path = os.path.join(_CAS_ONLY, "CCB_L1_v0.1",
+                                    "fixtures", "seed_grammar.json")
+        self.grammar = (GrammarStore.load(grammar_path)
+                        if os.path.exists(grammar_path)
+                        else GrammarStore())
+        morph = MorphTable()
+        morph_path = os.path.join(_CAS_ONLY, "CCB_L1_v0.1",
+                                  "fixtures", "seed_morphology.json")
+        if os.path.exists(morph_path):
+            for surface, entry in json.load(
+                    open(morph_path, encoding="utf-8")).items():
+                morph.teach(surface, entry["lemma"], entry["form"],
+                            provenance=entry["provenance"])
+        self.gram_parser = ConstructionParser(
+            Lexicon(self.seed["lexicon"]), morph)
+        self.coverage = {"native_l1": 0, "native_gram": 0,
+                         "cortex": 0, "refused": 0}
 
     # ------------------------------------------------------------------
     def _native(self, sentence: str) -> Dict:
@@ -108,8 +133,36 @@ class HybridRouter:
         native = self._native(sentence)
         if native["status"] == "PARSED":
             trace["route"] = "native"
+            self.coverage["native_l1"] += 1
             committed = self._commit(native["meaning"], trace)
             return self._seal(trace, committed)
+
+        # LEARNED GRAMMAR lane: constructions promoted through the
+        # acceptance law parse here - natively, deterministically,
+        # with no cortex. Ambiguity is reported, never resolved.
+        gram = self.gram_parser.parse(self.grammar.active_rules(),
+                                      sentence)
+        if gram["status"] == "PARSED":
+            trace["route"] = "native_gram"
+            self.coverage["native_gram"] += 1
+            trace["frame"] = gram["frames"][0]
+            packet = self._frame_to_packet(gram["core"])
+            trace["commitment"] = {"by": "cas_learned_grammar",
+                                   "construction": gram["frames"][0]
+                                   ["surface"]["construction_id"]}
+            trace["answer"] = {"status": "UNDERSTOOD",
+                               "meaning": packet,
+                               "frame_core": gram["core"]}
+            return self._seal(trace, committed=True)
+        if gram["status"] == "AMBIGUOUS_PARSE":
+            trace["route"] = "native_gram"
+            self.coverage["refused"] += 1
+            trace["answer"] = {"status": "AMBIGUOUS_PARSE",
+                               "alternatives": gram["alternatives"],
+                               "detail": "multiple distinct readings; "
+                                         "clarification needed - "
+                                         "certainty is never invented"}
+            return self._seal(trace, committed=False)
 
         trace["native_error"] = native["error"]
         if self.mode == "NATIVE_ONLY":
@@ -246,6 +299,18 @@ class HybridRouter:
             return {"rule": "R2_unattested_entity",
                     "unattested": unattested}
         return None
+
+    @staticmethod
+    def _frame_to_packet(core: Dict) -> Dict:
+        """Learned-grammar event frames render to the legacy packet
+        format for downstream compatibility (tense/polarity carried in
+        the frame_core alongside)."""
+        if core.get("frame") == "event":
+            return {"pred": "relation",
+                    "args": [core["predicate"], core["agent"],
+                             core["patient"]]}
+        return {"pred": "property",
+                "args": [core.get("entity"), core.get("property")]}
 
     @staticmethod
     def _entity_atoms(packet) -> List[str]:

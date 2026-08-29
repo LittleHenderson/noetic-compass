@@ -1,0 +1,188 @@
+[
+ {
+  "construction_id": "active_past_transitive",
+  "episode_digest": "9b64a125dcdf6859",
+  "lesson_id": "SEED_L001_active_past",
+  "provenance": "seed_curriculum_v1",
+  "stages": [
+   {
+    "detail": "typed lesson packet complete",
+    "passed": true,
+    "stage": "PROPOSED"
+   },
+   {
+    "detail": "construction schema valid",
+    "passed": true,
+    "stage": "SCHEMA_VALID"
+   },
+   {
+    "detail": "rule matches first positive example: True",
+    "passed": true,
+    "stage": "COMPILED"
+   },
+   {
+    "detail": "2 examples ok",
+    "passed": true,
+    "stage": "POSITIVE_EXAMPLES_PASS"
+   },
+   {
+    "detail": "contrasts held",
+    "passed": true,
+    "stage": "CONTRAST_TESTS_PASS"
+   },
+   {
+    "detail": "2 unseen cases ok",
+    "passed": true,
+    "stage": "HELD_OUT_GENERALIZATION_PASS"
+   },
+   {
+    "detail": "no prior rule regressed",
+    "passed": true,
+    "stage": "PRIOR_GRAMMAR_REGRESSION_PASS"
+   },
+   {
+    "detail": "ambiguity honest",
+    "passed": true,
+    "stage": "AMBIGUITY_BEHAVIOR_PASS"
+   },
+   {
+    "detail": "replay identical",
+    "passed": true,
+    "stage": "DETERMINISTIC_REPLAY"
+   },
+   {
+    "detail": "all gates passed; promoting with rollback preserved",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   }
+  ],
+  "teacher_confidence_informational_only": 0.9,
+  "teacher_model": "hand_authored_seed_teacher",
+  "teacher_revision": "seed-1",
+  "verdict": "PROMOTED_PROVISIONALLY"
+ },
+ {
+  "construction_id": "passive_past",
+  "episode_digest": "64eb9c8b114d9c9d",
+  "lesson_id": "SEED_L002_passive_past",
+  "provenance": "seed_curriculum_v1",
+  "stages": [
+   {
+    "detail": "typed lesson packet complete",
+    "passed": true,
+    "stage": "PROPOSED"
+   },
+   {
+    "detail": "construction schema valid",
+    "passed": true,
+    "stage": "SCHEMA_VALID"
+   },
+   {
+    "detail": "rule matches first positive example: True",
+    "passed": true,
+    "stage": "COMPILED"
+   },
+   {
+    "detail": "1 examples ok",
+    "passed": true,
+    "stage": "POSITIVE_EXAMPLES_PASS"
+   },
+   {
+    "detail": "contrasts held",
+    "passed": true,
+    "stage": "CONTRAST_TESTS_PASS"
+   },
+   {
+    "detail": "1 unseen cases ok",
+    "passed": true,
+    "stage": "HELD_OUT_GENERALIZATION_PASS"
+   },
+   {
+    "detail": "no prior rule regressed",
+    "passed": true,
+    "stage": "PRIOR_GRAMMAR_REGRESSION_PASS"
+   },
+   {
+    "detail": "ambiguity honest",
+    "passed": true,
+    "stage": "AMBIGUITY_BEHAVIOR_PASS"
+   },
+   {
+    "detail": "replay identical",
+    "passed": true,
+    "stage": "DETERMINISTIC_REPLAY"
+   },
+   {
+    "detail": "all gates passed; promoting with rollback preserved",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   }
+  ],
+  "teacher_confidence_informational_only": 0.9,
+  "teacher_model": "hand_authored_seed_teacher",
+  "teacher_revision": "seed-1",
+  "verdict": "PROMOTED_PROVISIONALLY"
+ },
+ {
+  "construction_id": "passive_present",
+  "episode_digest": "6ee2ba08429d19ba",
+  "lesson_id": "SEED_L003_passive_present",
+  "provenance": "seed_curriculum_v1",
+  "stages": [
+   {
+    "detail": "typed lesson packet complete",
+    "passed": true,
+    "stage": "PROPOSED"
+   },
+   {
+    "detail": "construction schema valid",
+    "passed": true,
+    "stage": "SCHEMA_VALID"
+   },
+   {
+    "detail": "rule matches first positive example: True",
+    "passed": true,
+    "stage": "COMPILED"
+   },
+   {
+    "detail": "1 examples ok",
+    "passed": true,
+    "stage": "POSITIVE_EXAMPLES_PASS"
+   },
+   {
+    "detail": "contrasts held",
+    "passed": true,
+    "stage": "CONTRAST_TESTS_PASS"
+   },
+   {
+    "detail": "1 unseen cases ok",
+    "passed": true,
+    "stage": "HELD_OUT_GENERALIZATION_PASS"
+   },
+   {
+    "detail": "no prior rule regressed",
+    "passed": true,
+    "stage": "PRIOR_GRAMMAR_REGRESSION_PASS"
+   },
+   {
+    "detail": "ambiguity honest",
+    "passed": true,
+    "stage": "AMBIGUITY_BEHAVIOR_PASS"
+   },
+   {
+    "detail": "replay identical",
+    "passed": true,
+    "stage": "DETERMINISTIC_REPLAY"
+   },
+   {
+    "detail": "all gates passed; promoting with rollback preserved",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   }
+  ],
+  "teacher_confidence_informational_only": 0.9,
+  "teacher_model": "hand_authored_seed_teacher",
+  "teacher_revision": "seed-1",
+  "verdict": "PROMOTED_PROVISIONALLY"
+ }
+]

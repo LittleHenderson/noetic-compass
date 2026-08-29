@@ -4,7 +4,7 @@
   "sealed_smoke": "H2H-v0 (CORTEX_H2H_v0.1/output/h2h_results.json, digest db34d2e9d0214df4)"
  },
  "battery": "PHASE4_BATTERY_v1",
- "battery_digest": "b161391a9d9c819f",
+ "battery_digest": "08c55cc9206abff0",
  "determinism": {
   "all_identical": true,
   "sampled": 12
@@ -77,11 +77,11 @@
     "total": 8
    },
    "paraphrase_statement": {
-    "fabrication": 1,
-    "fabrication_rate": 0.125,
+    "fabrication": 0,
+    "fabrication_rate": 0.0,
     "honest_miss": 5,
-    "pass": 2,
-    "pass_rate": 0.25,
+    "pass": 3,
+    "pass_rate": 0.375,
     "total": 8
    },
    "pronoun_no_antecedent": {
@@ -127,11 +127,11 @@
     "total": 20
    },
    "dev": {
-    "fabrication": 3,
-    "fabrication_rate": 0.12,
+    "fabrication": 2,
+    "fabrication_rate": 0.08,
     "honest_miss": 2,
-    "pass": 20,
-    "pass_rate": 0.8,
+    "pass": 21,
+    "pass_rate": 0.84,
     "total": 25
    },
    "held_out": {
@@ -154,11 +154,11 @@
  },
  "items": 86,
  "latency": {
-  "count": 78,
-  "max_s": 35.69,
-  "median_s": 2.74,
-  "min_s": 1.79,
-  "total_s": 290.8
+  "count": 77,
+  "max_s": 43.82,
+  "median_s": 3.2,
+  "min_s": 1.69,
+  "total_s": 354.8
  },
  "model_receipt": {
   "device": "cpu",
@@ -197,9 +197,9 @@
    "dev": {
     "fabrication": 0,
     "fabrication_rate": 0.0,
-    "honest_miss": 5,
-    "pass": 20,
-    "pass_rate": 0.8,
+    "honest_miss": 4,
+    "pass": 21,
+    "pass_rate": 0.84,
     "total": 25
    },
    "held_out": {
@@ -514,8 +514,8 @@
     "category": "paraphrase_statement",
     "committed": true,
     "item_id": "paraphrase_statement_33",
-    "outcome": "FABRICATION",
-    "route": "cortex",
+    "outcome": "PASS",
+    "route": "native_gram",
     "split": "dev",
     "status": "UNDERSTOOD"
    },
@@ -1288,12 +1288,12 @@
    },
    {
     "category": "paraphrase_statement",
-    "committed": false,
+    "committed": true,
     "item_id": "paraphrase_statement_33",
-    "outcome": "HONEST_MISS",
-    "route": "no_answer",
+    "outcome": "PASS",
+    "route": "native_gram",
     "split": "dev",
-    "status": "UNSUPPORTED_LANGUAGE"
+    "status": "UNDERSTOOD"
    },
    {
     "category": "paraphrase_statement",
@@ -1775,8 +1775,9 @@
   ]
  },
  "routes": {
-  "cortex": 54,
+  "cortex": 53,
   "native": 20,
+  "native_gram": 1,
   "overload_control": 12
  },
  "split_counts": {
