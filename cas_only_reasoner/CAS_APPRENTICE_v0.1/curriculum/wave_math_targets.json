@@ -1,0 +1,243 @@
+[
+ {
+  "construction_id": "math_query_arithmetic",
+  "lesson_id": "LIVE_M001_what_is_arithmetic",
+  "description": "the ARITHMETIC QUESTION 'what is three plus four?' - pattern order: literal 'what', literal 'is', NUM:x (a NUM slot matches a number word: zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve), OPW:op (matches an operation word: plus, minus, times, over), NUM:y. Meaning: frame 'math' with op @op, x @x, y @y",
+  "shape_hint": "what is three plus four?",
+  "surface_meta": {
+   "mood": "math_query"
+  },
+  "scaffold_semantics": {
+   "frame": "math",
+   "op": "@op",
+   "x": "@x",
+   "y": "@y"
+  },
+  "example_sentence_hint": "shaped 'what is three plus four?' ending with '?'",
+  "expected_core_hint": "{\"frame\": \"math\", \"op\": \"add\", \"x\": \"3\", \"y\": \"4\"}",
+  "lexicon_additions": {
+   "zero": {
+    "pos": "number",
+    "sense": "0"
+   },
+   "one": {
+    "pos": "number",
+    "sense": "1"
+   },
+   "two": {
+    "pos": "number",
+    "sense": "2"
+   },
+   "three": {
+    "pos": "number",
+    "sense": "3"
+   },
+   "four": {
+    "pos": "number",
+    "sense": "4"
+   },
+   "five": {
+    "pos": "number",
+    "sense": "5"
+   },
+   "six": {
+    "pos": "number",
+    "sense": "6"
+   },
+   "seven": {
+    "pos": "number",
+    "sense": "7"
+   },
+   "eight": {
+    "pos": "number",
+    "sense": "8"
+   },
+   "nine": {
+    "pos": "number",
+    "sense": "9"
+   },
+   "ten": {
+    "pos": "number",
+    "sense": "10"
+   },
+   "eleven": {
+    "pos": "number",
+    "sense": "11"
+   },
+   "twelve": {
+    "pos": "number",
+    "sense": "12"
+   },
+   "plus": {
+    "pos": "mathop",
+    "sense": "add"
+   },
+   "minus": {
+    "pos": "mathop",
+    "sense": "sub"
+   },
+   "times": {
+    "pos": "mathop",
+    "sense": "mul"
+   },
+   "over": {
+    "pos": "mathop",
+    "sense": "div"
+   }
+  },
+  "held_out": [
+   {
+    "sentence": "what is five times six?",
+    "expected_core": {
+     "frame": "math",
+     "op": "mul",
+     "x": "5",
+     "y": "6"
+    }
+   },
+   {
+    "sentence": "what is nine minus two?",
+    "expected_core": {
+     "frame": "math",
+     "op": "sub",
+     "x": "9",
+     "y": "2"
+    }
+   },
+   {
+    "sentence": "what plus is three four?",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "what is eight over four?",
+    "expected_core": {
+     "frame": "math",
+     "op": "div",
+     "x": "8",
+     "y": "4"
+    }
+   }
+  ],
+  "probe": "what is three plus four?"
+ },
+ {
+  "construction_id": "math_query_comparison",
+  "lesson_id": "LIVE_M002_greater_than",
+  "description": "the COMPARISON QUESTION 'is three greater than four?' - the pattern is EXACTLY these five elements in order: is, NUM:x, greater, than, NUM:y (the words 'greater' and 'than' are lowercase LITERALS - do not use any ADJ slot or the word bigger). Meaning: frame 'math' with op 'compare', asked 'greater', x @x, y @y. In every expected_core the x and y values are DIGIT STRINGS ('3', not 'three', not 3)",
+  "shape_hint": "is three greater than four?",
+  "surface_meta": {
+   "mood": "math_query"
+  },
+  "scaffold_semantics": {
+   "frame": "math",
+   "op": "compare",
+   "asked": "greater",
+   "x": "@x",
+   "y": "@y"
+  },
+  "example_sentence_hint": "shaped 'is three greater than four?' ending with '?'",
+  "expected_core_hint": "{\"frame\": \"math\", \"op\": \"compare\", \"asked\": \"greater\", \"x\": \"3\", \"y\": \"4\"} for 'is three greater than four?' - digits as strings",
+  "held_out": [
+   {
+    "sentence": "is seven greater than two?",
+    "expected_core": {
+     "frame": "math",
+     "op": "compare",
+     "asked": "greater",
+     "x": "7",
+     "y": "2"
+    }
+   },
+   {
+    "sentence": "is one greater than nine?",
+    "expected_core": {
+     "frame": "math",
+     "op": "compare",
+     "asked": "greater",
+     "x": "1",
+     "y": "9"
+    }
+   },
+   {
+    "sentence": "greater is three than four?",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "is six greater than six?",
+    "expected_core": {
+     "frame": "math",
+     "op": "compare",
+     "asked": "greater",
+     "x": "6",
+     "y": "6"
+    }
+   }
+  ],
+  "probe": "is three greater than four?"
+ },
+ {
+  "construction_id": "math_query_solve",
+  "lesson_id": "LIVE_M003_solve_equation",
+  "description": "the EQUATION-SOLVING REQUEST 'solve x plus three equals seven.' - pattern order: literal 'solve', literal 'x', OPW:op, NUM:b, literal 'equals', NUM:c. Meaning: frame 'math', op 'solve', unknown 'x', opword @op, b @b, c @c. CRITICAL: in every expected_core the opword value is the operation SENSE, not the surface word: plus->'add', minus->'sub', times->'mul', over->'div'; number values are digit strings ('3' not 'three')",
+  "shape_hint": "solve x plus three equals seven.",
+  "surface_meta": {
+   "mood": "math_query"
+  },
+  "scaffold_semantics": {
+   "frame": "math",
+   "op": "solve",
+   "unknown": "x",
+   "opword": "@op",
+   "b": "@b",
+   "c": "@c"
+  },
+  "example_sentence_hint": "shaped 'solve x plus three equals seven.'",
+  "expected_core_hint": "{\"frame\": \"math\", \"op\": \"solve\", \"unknown\": \"x\", \"opword\": \"add\", \"b\": \"3\", \"c\": \"7\"} for 'solve x plus three equals seven.' - note opword 'add' (the sense) even though the sentence says plus",
+  "held_out": [
+   {
+    "sentence": "solve x times two equals ten.",
+    "expected_core": {
+     "frame": "math",
+     "op": "solve",
+     "unknown": "x",
+     "opword": "mul",
+     "b": "2",
+     "c": "10"
+    }
+   },
+   {
+    "sentence": "solve x minus four equals five.",
+    "expected_core": {
+     "frame": "math",
+     "op": "solve",
+     "unknown": "x",
+     "opword": "sub",
+     "b": "4",
+     "c": "5"
+    }
+   },
+   {
+    "sentence": "solve equals x plus three seven.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "solve x plus two equals nine.",
+    "expected_core": {
+     "frame": "math",
+     "op": "solve",
+     "unknown": "x",
+     "opword": "add",
+     "b": "2",
+     "c": "9"
+    }
+   }
+  ],
+  "probe": "solve x plus three equals seven."
+ }
+]

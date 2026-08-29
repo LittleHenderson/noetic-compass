@@ -319,6 +319,107 @@ class HybridRouter:
                            "source_class": source_class}
         return self._seal(trace, committed=True)
 
+    def _math_student(self):
+        if not hasattr(self, "_math_student_cache"):
+            math_board = os.path.join(_CAS_ONLY,
+                                      "CAS_MATH_LADDER_v0.1")
+            m1_board = os.path.join(_CAS_ONLY, "CCB_M1_v0.1")
+            for path in (math_board, m1_board):
+                if path not in sys.path:
+                    sys.path.insert(0, path)
+            from mathschool import SkillStore, Student
+            store_path = os.path.join(math_board, "fixtures",
+                                      "math_skills.json")
+            self._math_student_cache = Student(
+                SkillStore.load(store_path))
+        return self._math_student_cache
+
+    _OP_WORD = {"add": "plus", "sub": "minus", "mul": "times",
+                "div": "over"}
+    _OP_SYMBOL = {"add": "+", "sub": "-", "mul": "*"}
+
+    def _answer_math_query(self, gram: Dict, trace: Dict) -> Dict:
+        from fractions import Fraction
+        core = gram["core"]
+        student = self._math_student()   # sets sys.path first
+        from mathschool.mathir import number_to_words
+        op = core.get("op")
+        trace.setdefault("dialogue", {})["retrieval"] = {
+            "math_op": op}
+
+        def words(text: str) -> str:
+            if "/" in text:
+                p_, q_ = text.split("/")
+                return number_to_words(Fraction(int(p_), int(q_)))
+            return number_to_words(Fraction(int(text)))
+
+        def seal_answer(text, source="exact_computation",
+                        status="ANSWERED", committed=True):
+            trace["answer"] = {"status": status, "text": text,
+                               "frame_core": core,
+                               "source_class": source}
+            return self._seal(trace, committed)
+
+        def cannot(result):
+            return seal_answer(
+                f"i have not learned "
+                f"{result['missing_skill'].replace('_', ' ')} yet.",
+                source=None, status="ANSWERED", committed=False)
+
+        if op in ("add", "sub", "mul", "div"):
+            result = student.solve(
+                {"exercise_id": "bridge", "skill_id": "bridge",
+                 "kind": "arith", "op": op, "a": core["x"],
+                 "b": core["y"], "expected": None})
+            if result["status"] == "CANNOT_MISSING_SKILL":
+                return cannot(result)
+            if result["status"] != "SOLVED":
+                return seal_answer(
+                    f"i cannot compute that: {result['detail']}",
+                    source=None, committed=False)
+            return seal_answer(
+                f"{words(core['x'])} {self._OP_WORD[op]} "
+                f"{words(core['y'])} is {words(result['answer'])}.")
+        if op == "compare":
+            result = student.solve(
+                {"exercise_id": "bridge", "skill_id": "bridge",
+                 "kind": "compare", "a": core["x"], "b": core["y"],
+                 "expected": None})
+            if result["status"] == "CANNOT_MISSING_SKILL":
+                return cannot(result)
+            verdict = result["answer"]
+            asked = core.get("asked", "greater")
+            x_w, y_w = words(core["x"]), words(core["y"])
+            if verdict == asked:
+                text = f"yes, {x_w} is {verdict} than {y_w}."
+            elif verdict == "equal":
+                text = f"no, {x_w} and {y_w} are equal."
+            else:
+                text = f"no, {x_w} is {verdict} than {y_w}."
+            return seal_answer(text)
+        if op == "solve":
+            symbol = self._OP_SYMBOL.get(core.get("opword"))
+            if symbol is None:
+                return seal_answer(
+                    "i cannot solve equations with that operation "
+                    "yet.", source=None, committed=False)
+            equation = (f"x {symbol} {core['b']} = {core['c']}")
+            result = student.solve(
+                {"exercise_id": "bridge", "skill_id": "bridge",
+                 "kind": "solve", "equation": equation,
+                 "variable": "x", "expected": None})
+            if result["status"] == "CANNOT_MISSING_SKILL":
+                return cannot(result)
+            if result["status"] != "SOLVED":
+                return seal_answer(
+                    f"i cannot solve that: {result['detail']}",
+                    source=None, committed=False)
+            return seal_answer(
+                f"x is {words(result['answer'])}. (verified by "
+                f"substitution into the original equation)")
+        return seal_answer(f"i do not know the operation {op!r}.",
+                           source=None, committed=False)
+
     def _answer_wh_question(self, packet: Dict, gram: Dict,
                             trace: Dict) -> Dict:
         """'what'/'who': partial-proposition lookup over ACTIVE
@@ -844,6 +945,13 @@ class HybridRouter:
                                    "construction": gram["frames"][0]
                                    ["surface"]["construction_id"]}
             mood = gram["frames"][0]["surface"].get("mood")
+            if mood == "math_query":
+                # THE MATHEMATICAL LANGUAGE BRIDGE: a taught English
+                # construction linked to a CAS-Math operation. The
+                # answer comes from the GATED math student - exact
+                # computation with promoted skills only; an
+                # unpromoted skill is an honest 'not learned yet'
+                return self._answer_math_query(gram, trace)
             if mood == "interrogative_why":
                 # WHY asks for a cause; the kernel holds no cause
                 # facts - the honest split status, never a fabricated

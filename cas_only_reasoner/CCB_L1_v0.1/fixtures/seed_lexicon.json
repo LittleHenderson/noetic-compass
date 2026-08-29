@@ -119,6 +119,74 @@
   "large": {
    "pos": "adj",
    "sense": "large"
+  },
+  "zero": {
+   "pos": "number",
+   "sense": "0"
+  },
+  "one": {
+   "pos": "number",
+   "sense": "1"
+  },
+  "two": {
+   "pos": "number",
+   "sense": "2"
+  },
+  "three": {
+   "pos": "number",
+   "sense": "3"
+  },
+  "four": {
+   "pos": "number",
+   "sense": "4"
+  },
+  "five": {
+   "pos": "number",
+   "sense": "5"
+  },
+  "six": {
+   "pos": "number",
+   "sense": "6"
+  },
+  "seven": {
+   "pos": "number",
+   "sense": "7"
+  },
+  "eight": {
+   "pos": "number",
+   "sense": "8"
+  },
+  "nine": {
+   "pos": "number",
+   "sense": "9"
+  },
+  "ten": {
+   "pos": "number",
+   "sense": "10"
+  },
+  "eleven": {
+   "pos": "number",
+   "sense": "11"
+  },
+  "twelve": {
+   "pos": "number",
+   "sense": "12"
+  },
+  "plus": {
+   "pos": "mathop",
+   "sense": "add"
+  },
+  "minus": {
+   "pos": "mathop",
+   "sense": "sub"
+  },
+  "times": {
+   "pos": "mathop",
+   "sense": "mul"
+  },
+  "over": {
+   "pos": "mathop",
+   "sense": "div"
   }
  },
  "rules": [

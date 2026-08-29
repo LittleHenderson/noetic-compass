@@ -148,7 +148,9 @@ def validate_construction(rule: Dict) -> List[str]:
                 or element.startswith("PRON:") \
                 or element.startswith("NPOSS:") \
                 or element.startswith("QUANT:") \
-                or element.startswith("ADV:"):
+                or element.startswith("ADV:") \
+                or element.startswith("NUM:") \
+                or element.startswith("OPW:"):
             parts = element.split(":")
             if len(parts) != 2 or not parts[1]:
                 defects.append(f"slot needs exactly one name: "
@@ -171,9 +173,10 @@ def validate_construction(rule: Dict) -> List[str]:
                 slot_names.add(parts[1])
     semantics = rule.get("semantics")
     if not isinstance(semantics, dict) or semantics.get("frame") \
-            not in ("event", "state", "coordination", "disjunction"):
+            not in ("event", "state", "coordination", "disjunction",
+                    "math"):
         defects.append("semantics.frame must be 'event', 'state', "
-                       "'coordination', or 'disjunction'")
+                       "'coordination', 'disjunction', or 'math'")
         return defects
 
     def check_refs(node) -> None:
@@ -210,6 +213,9 @@ def validate_construction(rule: Dict) -> List[str]:
                         if required not in conjunct:
                             defects.append(f"conjunct missing "
                                            f"{required!r}")
+    elif semantics["frame"] == "math":
+        if "op" not in semantics:
+            defects.append("math frame needs an 'op'")
     else:
         for required in ("tense", "polarity"):
             if required not in semantics:
@@ -336,6 +342,20 @@ class ConstructionParser:
                 if noun is None:
                     return None
                 bindings[element.split(":")[1]] = noun[0]
+                i += 1
+            elif element.startswith("NUM:"):
+                entry = (self.lexicon.lookup(tokens[i])
+                         if i < len(tokens) else None)
+                if entry is None or entry.pos != "number":
+                    return None
+                bindings[element.split(":")[1]] = entry.sense
+                i += 1
+            elif element.startswith("OPW:"):
+                entry = (self.lexicon.lookup(tokens[i])
+                         if i < len(tokens) else None)
+                if entry is None or entry.pos != "mathop":
+                    return None
+                bindings[element.split(":")[1]] = entry.sense
                 i += 1
             elif element.startswith("QUANT:"):
                 entry = (self.lexicon.lookup(tokens[i])

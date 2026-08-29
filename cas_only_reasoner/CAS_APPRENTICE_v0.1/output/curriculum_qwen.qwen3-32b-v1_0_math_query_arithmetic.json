@@ -1,0 +1,36 @@
+{
+ "event": "CURRICULUM_ROUND_1",
+ "results": [
+  {
+   "log": [
+    {
+     "attempt": 1,
+     "defect": "missing NP slots: write noun positions as NP:agent / NP:patient, never literal nouns",
+     "field": "surface_pattern",
+     "raw": "```json\n[\"what\", \"is\", \"NUM:x\", \"OPW:op\", \"NUM:y\"]\n```"
+    },
+    {
+     "attempt": 2,
+     "defect": "missing NP slots: write noun positions as NP:agent / NP:patient, never literal nouns",
+     "field": "surface_pattern",
+     "raw": "[\"what\", \"is\", \"NUM:x\", \"OPW:op\", \"NUM:y\"]"
+    },
+    {
+     "attempt": 3,
+     "defect": "missing NP slots: write noun positions as NP:agent / NP:patient, never literal nouns",
+     "field": "surface_pattern",
+     "raw": "[\"what\", \"is\", \"NUM:x\", \"OPW:op\", \"NUM:y\"]"
+    },
+    {
+     "attempt": 4,
+     "defect": "missing NP slots: write noun positions as NP:agent / NP:patient, never literal nouns",
+     "field": "surface_pattern",
+     "raw": "[\"what\", \"is\", \"NUM:x\", \"OPW:op\", \"NUM:y\"]"
+    }
+   ],
+   "target": "math_query_arithmetic",
+   "verdict": "ELICITATION_FAILED_surface_pattern"
+  }
+ ],
+ "teacher": "qwen.qwen3-32b-v1:0"
+}

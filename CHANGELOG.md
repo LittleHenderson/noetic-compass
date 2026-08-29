@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-29 (mathematics) - THE MATHEMATICS SCHOOL: all ten MATH-L0..L4 skills taught live and promoted; the language bridge speaks exact arithmetic; 403 tests green
+
+- New board CAS_MATH_LADDER_v0.1 per the owner's MATH LESSONS.txt: all ten goal components (packet schema, prerequisite graph with RPM selection, language bridge, L0-L4 curriculum, twelve-step exact acceptance law, seeded SDG + counterexample attack, protected battery, retention with rollback, Mathematics Learning Ledger, CAS-Ohm learning profiles).
+- Bedrock qwen3-32B taught the FULL chain live - quantity grounding, counting, comparison, the four operations, fractions, the distribution rule (a metavariable rewrite verified by canonical equality and applied by unification), and linear equations (solutions verified by substitution into the ORIGINAL equation). Every before-probe CANNOT_MISSING_SKILL, every after-probe SOLVED. The student is capability-gated: the exact engine exists, but only promoted skills may be used.
+- The Mathematical Language Bridge: three constructions taught live through the unchanged CCB-L1 ladder (grammar at 33). The machine now answers 'what is three plus four?' with 'three plus four is seven.', handles fraction answers exactly ('x is eleven over two'), refuses honestly when unschooled ('i have not learned addition yet.'), and does it all in the same session as conversation.
+- The counterexample generator earned its seat: a false rule dies with an exact witness, and a declared 'common mistake' that is actually true is itself a typed defect. Six teacher-harness defects found live were OURS, fixed and sealed - including the honest reversal that equation lessons need conditional examples with solutions (the teacher was right; our identity-only contract was wrong).
+- Sweep exact: 403 local tests, 0 failures, 17 lanes (new: MATH-LADDER 15; CORTEX 49).
+
 ## 2026-08-29 (CONV v0.1) - THE MACHINE CONVERSES: provenance-grounded dialogue complete, adversarially audited (10 confirmed findings, all fixed and regression-locked)
 
 - New board CCB-D1 (Dialogue and Common-Ground) under the owner's frozen acceptance law: acknowledge only AFTER atomic commit; answer only with the source preserved ('based on what you told me' vs 'the verified record says'); never launder user assertions into verified knowledge (an intent claiming VERIFIED is refused typed); honest unknown otherwise. Three stores never collapse: verified knowledge / session assertions (truth GIVEN, source USER_ASSERTED) / dialogue state.

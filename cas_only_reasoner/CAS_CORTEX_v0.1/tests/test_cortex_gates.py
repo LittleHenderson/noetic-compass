@@ -496,11 +496,40 @@ def test_runtime_canary_no_construction_forgotten():
         "the cat must not chase the dog.": "UNDERSTOOD",  # prohibition
         "what does the cat chase?": "ANSWERED",          # what-question
         "who chases the dog?": "ANSWERED",               # who-question
+        "what is three plus four?": "ANSWERED",          # math bridge
+        "is three greater than four?": "ANSWERED",       # math compare
+        "solve x plus three equals seven.": "ANSWERED",  # math solve
     }
     for sentence, expected in probes.items():
         trace = HybridRouter(mode="NATIVE_ONLY").turn(sentence)
         assert trace["answer"]["status"] == expected, \
             f"FORGOTTEN: {sentence!r} -> {trace['answer']['status']}"
+
+
+def test_math_bridge_answers_exactly_and_honestly():
+    """The Mathematical Language Bridge: taught English constructions
+    linked to the GATED exact math student - answers are exact
+    computations, equation solutions substitution-verified, and a
+    missing skill is an honest 'not learned yet', never a guess."""
+    router = HybridRouter(mode="NATIVE_ONLY")
+    a = router.turn("what is three plus four?")["answer"]
+    assert a["text"] == "three plus four is seven."
+    assert a["source_class"] == "exact_computation"
+    b = router.turn("is three greater than four?")["answer"]
+    assert b["text"] == "no, three is less than four."
+    c = router.turn("solve x plus three equals seven.")["answer"]
+    assert c["text"].startswith("x is four.")
+    assert "substitution" in c["text"]
+    d = router.turn("what is eight over four?")["answer"]
+    assert d["text"] == "eight over four is two."
+    # capability honesty: an UNSCHOOLED math student refuses
+    import sys as _sys
+    from mathschool import SkillStore as _Store
+    from mathschool import Student as _Student
+    router._math_student_cache = _Student(_Store())
+    e = router.turn("what is three plus four?")["answer"]
+    assert e["text"] == "i have not learned addition yet."
+    assert e["source_class"] is None
 
 
 def test_pronoun_resolves_unique_antecedent_across_sentences():

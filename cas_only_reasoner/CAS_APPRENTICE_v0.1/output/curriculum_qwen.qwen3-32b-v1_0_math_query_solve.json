@@ -1,0 +1,362 @@
+{
+ "event": "CURRICULUM_ROUND_1",
+ "results": [
+  {
+   "after": {
+    "answer": {
+     "frame_core": {
+      "b": "3",
+      "c": "7",
+      "frame": "math",
+      "op": "solve",
+      "opword": "add",
+      "unknown": "x"
+     },
+     "source_class": "exact_computation",
+     "status": "ANSWERED",
+     "text": "x is four. (verified by substitution into the original equation)"
+    },
+    "cas_ohm": {
+     "I_obs": 6.0,
+     "I_pred": 6.0,
+     "R_capability": 0.0,
+     "R_compute": 0.0,
+     "R_context": 0.0,
+     "R_lexical": 0.0,
+     "R_policy": 0.0,
+     "R_role_binding": 0.0,
+     "R_total": 1.0,
+     "V_drive": 6.0,
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "delta_I": 0.0,
+     "effect_type": "ANSWERED",
+     "mode": "native_runtime",
+     "operating_region": "active",
+     "provenance": "cas_ohm_attention_plane_v0.1",
+     "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+     "stage_id": "language_pipeline",
+     "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+    },
+    "commitment": {
+     "by": "cas_learned_grammar",
+     "construction": "math_query_solve"
+    },
+    "committed": true,
+    "conv_flow": {
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "tp_answer": "active",
+     "tp_parse": "active",
+     "tp_retrieval": "active",
+     "tp_semantic_packet": "active",
+     "tp_session_commit": "absent",
+     "tp_write_intent": "absent"
+    },
+    "cortex_proposal": null,
+    "dialogue": {
+     "retrieval": {
+      "math_op": "solve"
+     }
+    },
+    "frame": {
+     "core": {
+      "b": "3",
+      "c": "7",
+      "frame": "math",
+      "op": "solve",
+      "opword": "add",
+      "unknown": "x"
+     },
+     "surface": {
+      "construction_id": "math_query_solve",
+      "mood": "math_query"
+     }
+    },
+    "input": "solve x plus three equals seven.",
+    "mode": "NATIVE_ONLY",
+    "route": "native_gram",
+    "trace_digest": "effa3439badbc86f",
+    "turn_id": "t1",
+    "validation": null
+   },
+   "before": {
+    "answer": {
+     "detail": "I did not understand 'solve' at word 1 of 'solve x plus three equals seven.' (sentence pattern not supported)",
+     "status": "UNSUPPORTED_LANGUAGE"
+    },
+    "cas_ohm": {
+     "I_obs": 2.0,
+     "I_pred": 6.0,
+     "R_capability": 2.0,
+     "R_compute": 0.0,
+     "R_context": 0.0,
+     "R_lexical": 0.0,
+     "R_policy": 0.0,
+     "R_role_binding": 0.0,
+     "R_total": 3.0,
+     "V_drive": 6.0,
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "delta_I": -4.0,
+     "effect_type": "UNSUPPORTED_LANGUAGE",
+     "mode": "native_runtime",
+     "operating_region": "cutoff",
+     "provenance": "cas_ohm_attention_plane_v0.1",
+     "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+     "stage_id": "language_pipeline",
+     "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+    },
+    "commitment": null,
+    "committed": false,
+    "conv_flow": {
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "tp_answer": "cutoff",
+     "tp_parse": "cutoff",
+     "tp_retrieval": "absent",
+     "tp_semantic_packet": "absent",
+     "tp_session_commit": "absent",
+     "tp_write_intent": "absent"
+    },
+    "cortex_proposal": null,
+    "input": "solve x plus three equals seven.",
+    "mode": "NATIVE_ONLY",
+    "native_error": {
+     "message": "I did not understand 'solve' at word 1 of 'solve x plus three equals seven.' (sentence pattern not supported)",
+     "word": "solve"
+    },
+    "route": "no_answer",
+    "trace_digest": "dad4c2c2ef967da8",
+    "turn_id": "t1",
+    "validation": null
+   },
+   "episode": {
+    "domain": "language_grammar",
+    "episode_digest": "6ff47ddc288cdb96",
+    "examiner_identity": "ccb_l1_acceptance_ladder",
+    "lesson_id": "LIVE_M003_solve_equation",
+    "outcome": {
+     "episode_digest": "3b06bce44ab9e867",
+     "evidence": [
+      {
+       "detail": "typed lesson packet complete",
+       "passed": true,
+       "stage": "PROPOSED"
+      },
+      {
+       "detail": "construction schema valid",
+       "passed": true,
+       "stage": "SCHEMA_VALID"
+      },
+      {
+       "detail": "rule matches first positive example: True",
+       "passed": true,
+       "stage": "COMPILED"
+      },
+      {
+       "detail": "2 examples ok",
+       "passed": true,
+       "stage": "POSITIVE_EXAMPLES_PASS"
+      },
+      {
+       "detail": "contrasts held",
+       "passed": true,
+       "stage": "CONTRAST_TESTS_PASS"
+      },
+      {
+       "detail": "3 unseen cases ok",
+       "passed": true,
+       "stage": "HELD_OUT_GENERALIZATION_PASS"
+      },
+      {
+       "detail": "no prior rule regressed",
+       "passed": true,
+       "stage": "PRIOR_GRAMMAR_REGRESSION_PASS"
+      },
+      {
+       "detail": "ambiguity honest",
+       "passed": true,
+       "stage": "AMBIGUITY_BEHAVIOR_PASS"
+      },
+      {
+       "detail": "replay identical",
+       "passed": true,
+       "stage": "DETERMINISTIC_REPLAY"
+      },
+      {
+       "detail": "all gates passed; promoting with rollback preserved",
+       "passed": true,
+       "stage": "PROMOTED_PROVISIONALLY"
+      }
+     ],
+     "verdict": "PROMOTED_PROVISIONALLY"
+    },
+    "post_learning_capability": null,
+    "pre_learning_capability": null,
+    "provenance": "schema_constrained_field_elicitation",
+    "rollback_pointer": null,
+    "target": "grammar_store",
+    "teacher_identity": "qwen.qwen3-32b-v1:0",
+    "teacher_revision": "bedrock:us-west-2",
+    "teacher_role": "lecturer"
+   },
+   "lesson": {
+    "ambiguity_cases": [
+     {
+      "expect": "parsed",
+      "sentence": "solve x plus three equals seven"
+     }
+    ],
+    "construction": {
+     "construction_id": "math_query_solve",
+     "semantics": {
+      "b": "@b",
+      "c": "@c",
+      "frame": "math",
+      "op": "solve",
+      "opword": "@op",
+      "unknown": "x"
+     },
+     "surface_meta": {
+      "mood": "math_query"
+     },
+     "surface_pattern": [
+      "solve",
+      "x",
+      "OPW:op",
+      "NUM:b",
+      "equals",
+      "NUM:c"
+     ]
+    },
+    "counterexamples": [
+     {
+      "sentence": "solve three plus x equals seven"
+     },
+     {
+      "sentence": "solve x plus equals seven three"
+     }
+    ],
+    "lesson_id": "LIVE_M003_solve_equation",
+    "lesson_type": "grammar_construction",
+    "minimal_pairs": [
+     {
+      "relation": "different_meaning",
+      "sentence_a": "The cat chased the dog.",
+      "sentence_b": "The dog chased the cat."
+     },
+     {
+      "relation": "different_meaning",
+      "sentence_a": "The fox chased the hen.",
+      "sentence_b": "The hen chased the fox."
+     }
+    ],
+    "morphology": [
+     {
+      "form": "present_3sg",
+      "lemma": "chase",
+      "surface": "chases"
+     },
+     {
+      "form": "past",
+      "lemma": "chase",
+      "surface": "chased"
+     },
+     {
+      "form": "participle",
+      "lemma": "chase",
+      "surface": "chased"
+     },
+     {
+      "form": "base",
+      "lemma": "chase",
+      "surface": "chase"
+     }
+    ],
+    "positive_examples": [
+     {
+      "expected_core": {
+       "b": "3",
+       "c": "7",
+       "frame": "math",
+       "op": "solve",
+       "opword": "add",
+       "unknown": "x"
+      },
+      "sentence": "solve x plus three equals seven."
+     },
+     {
+      "expected_core": {
+       "b": "2",
+       "c": "8",
+       "frame": "math",
+       "op": "solve",
+       "opword": "mul",
+       "unknown": "x"
+      },
+      "sentence": "solve x times two equals eight."
+     }
+    ],
+    "provenance": "schema_constrained_field_elicitation",
+    "semantics_provenance": "derived_from_teacher_pattern_by_schema_scaffold",
+    "teacher_confidence": null,
+    "teacher_model": "qwen.qwen3-32b-v1:0",
+    "teacher_revision": "bedrock:us-west-2"
+   },
+   "log": [
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "surface_pattern",
+     "raw": "```json\n[\"solve\", \"x\", \"OPW:op\", \"NUM:b\", \"equals\", \"NUM:c\"]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "morphology",
+     "raw": "```json\n[\n  {\"surface\": \"chases\", \"lemma\": \"chase\", \"form\": \"present_3sg\"},\n  {\"surface\": \"chased\", \"lemma\": \"chase\", \"form\": \"past\"},\n  {\"surface\": \"chased\", \"lemma\": \"chase\", \"form\": \"participle\"},\n  {\"surface\": \"chase\", \"lemma\": \"chase\", \"form\": \"base\"}\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "positive_examples",
+     "raw": "```json\n[\n  {\n    \"sentence\": \"solve x plus three equals seven.\",\n    \"expected_core\": {\n      \"frame\": \"math\",\n      \"op\": \"solve\",\n      \"unknown\": \"x\",\n      \"opword\": \"add\",\n      \"b\": \"3\",\n      \"c\": \"7\"\n    }\n  },\n  {\n    \"sentence\": \"solve x times two equals eight.\",\n    \"expected_core\": {\n  "
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "minimal_pairs",
+     "raw": "```json\n[\n  {\n    \"sentence_a\": \"The cat chased the dog.\",\n    \"sentence_b\": \"The dog chased the cat.\",\n    \"relation\": \"different_meaning\"\n  },\n  {\n    \"sentence_a\": \"The fox chased the hen.\",\n    \"sentence_b\": \"The hen chased the fox.\",\n    \"relation\": \"different_meaning\"\n  }\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": "'solve x plus seven equals three' is grammatical under your pattern - a counterexample must be BROKEN so it does NOT match",
+     "field": "counterexamples",
+     "raw": "```json\n[\n  {\"sentence\": \"solve three plus x equals seven\"},\n  {\"sentence\": \"solve x plus seven equals three\"}\n]\n```"
+    },
+    {
+     "attempt": 2,
+     "defect": "each item needs 'sentence'",
+     "field": "counterexamples",
+     "raw": "```json\n[\n  \"solve x plus equals seven three\",\n  \"solve plus x seven equals three\"\n]\n```"
+    },
+    {
+     "attempt": 3,
+     "defect": null,
+     "field": "counterexamples",
+     "raw": "```json\n[\n  {\n    \"sentence\": \"solve three plus x equals seven\"\n  },\n  {\n    \"sentence\": \"solve x plus equals seven three\"\n  }\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "ambiguity_cases",
+     "raw": "```json\n[\n  {\n    \"sentence\": \"solve x plus three equals seven\",\n    \"expect\": \"parsed\"\n  }\n]\n```"
+    }
+   ],
+   "retention": {
+    "construction_id": "math_query_solve",
+    "verdict": "PROMOTED_DURABLY"
+   },
+   "target": "math_query_solve",
+   "verdict": "PROMOTED_PROVISIONALLY"
+  }
+ ],
+ "teacher": "qwen.qwen3-32b-v1:0"
+}

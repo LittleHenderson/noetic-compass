@@ -22,17 +22,17 @@
  "chase": {
   "lemma": "chase",
   "form": "base",
-  "provenance": "lesson:LIVE_L028_committee_prohibition"
+  "provenance": "lesson:LIVE_M003_solve_equation"
  },
  "chased": {
   "lemma": "chase",
   "form": "past_or_participle",
-  "provenance": "lesson:LIVE_L028_committee_prohibition"
+  "provenance": "lesson:LIVE_M003_solve_equation"
  },
  "chases": {
   "lemma": "chase",
   "form": "present_3sg",
-  "provenance": "lesson:LIVE_L028_committee_prohibition"
+  "provenance": "lesson:LIVE_M003_solve_equation"
  },
  "gave": {
   "lemma": "give",
@@ -57,7 +57,7 @@
  "is": {
   "lemma": "be",
   "form": "present_3sg",
-  "provenance": "lesson:LIVE_L021_comparative"
+  "provenance": "lesson:LIVE_M002_greater_than"
  },
  "on": {
   "lemma": "on",

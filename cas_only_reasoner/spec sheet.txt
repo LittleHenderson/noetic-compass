@@ -1096,6 +1096,73 @@ a refuter agent; the first-run-green battery was NOT trusted):
   answer-time session-conflict branch is defense-in-depth behind
   tell-time detection.
 
+CAS MATHEMATICAL APPRENTICESHIP LADDER v0.1 - BUILT, TAUGHT LIVE,
+ALL TEN SKILLS PROMOTED (2026-08-29, owner MATH LESSONS.txt
+directive; new board CAS_MATH_LADDER_v0.1 on the CCB-M1 exact
+engine):
+  ALL TEN goal components delivered:
+  1. MathLessonPacket schema (bilingual: the FORMAL channel is
+     authoritative, parsed by a deterministic infix reader into the
+     CCB-M1 CAS-Math IR; the language channel teaches accessibility;
+     authority fields - verified/promote/checker/protected/threshold
+     - refused typed).
+  2. MATH-L0..L4 prerequisite GRAPH with RPM first-missing-
+     prerequisite selection (teaching addition before counting is
+     REJECTED_PREREQUISITE_MISSING naming quantity_grounding).
+  3. MATHEMATICAL LANGUAGE BRIDGE: NUM/OPW slots + the 'math' frame
+     in CCB-L1; THREE bridge constructions TAUGHT LIVE via Bedrock
+     (math_query_arithmetic 'what is three plus four?',
+     math_query_comparison 'is three greater than four?',
+     math_query_solve 'solve x plus three equals seven.'); the
+     router's math lane answers from the GATED student - live:
+     'three plus four is seven.', 'no, three is less than four.',
+     'x is four. (verified by substitution into the original
+     equation)', fractions exact ('x is eleven over two'); an
+     unschooled student answers 'i have not learned addition yet.'
+  4. MATH-L0..L4 curriculum taught END TO END by qwen.qwen3-32b-v1:0
+     (AWS Bedrock): quantity grounding, counting order, integer
+     comparison, addition, subtraction, multiplication, division,
+     fractions, the distribution rule, linear equations - every
+     BEFORE probe CANNOT_MISSING_SKILL, every AFTER probe SOLVED.
+  5. EXACT ACCEPTANCE LAW (MATH_ACCEPTANCE_LAW_v0.1.md): the twelve
+     steps, verbatim constitutional shape; 100% exact bar, not
+     configurable by any packet field.
+  6. CAS-SDG generator: seeded deterministic exercises (dev /
+     PROTECTED / retention channels, separate seeds) + the
+     counterexample ATTACK (grid evaluation over exact rationals;
+     a rule like a*(b+c)=a*b+c dies with a witness; a declared
+     'common mistake' that is actually TRUE is a typed defect).
+  7. PROTECTED held-out battery: examiner-channel seed, never in any
+     teacher prompt, bar 100%.
+  8. Delayed retention (fresh disk reload) + transfer variations;
+     retention failure ROLLS BACK the store to the parent revision.
+  9. MATHEMATICS LEARNING LEDGER (math_ledger.py): store-derived
+     skills table with provenance/digests, LIVE unseen-exercise
+     checks (10/10 PASS at generation), the capability-honesty
+     demonstration, and the paper trail with CAS-Ohm profiles.
+  10. CAS-OHM LEARNING PROFILE per episode: P_cap 0.0 -> 1.0, flow
+     cutoff -> active, compute-only authority note.
+  THE LEARNABLE SURFACE, honest: the exact engine (CCB-M1) can
+  compute anything in its class; the STUDENT may only use skills the
+  ladder promoted (typed CANNOT otherwise); rewrite rules are DATA
+  (metavariable schemas verified by canonical polynomial equality -
+  sound and complete for the class - and applied by unification);
+  equation methods are licensed step-sets; every equation solution
+  is verified by SUBSTITUTION INTO THE ORIGINAL before it is spoken.
+  Teacher-harness defects found live and fixed (all OURS, sealed):
+  JSON-string prose extraction, over-answering blobs (validator-
+  picked candidates), equation lessons need CONDITIONAL examples
+  with solutions (demanding identities was our defect - the teacher
+  was right), wrong-derivation chains carry the mistake as a
+  segment, math patterns falsely required NP/VERB slots, the solve
+  teacher wrote surface words where senses bind (hint sharpened).
+  GRAMMAR now 33 durable constructions (30 + 3 math-bridge).
+
+PROGRAM TEST TOTALS refresh (2026-08-29, math round): RRK 34 + RLP
+45 + M1 34 + L1 32 + SEM 19 + WB 13 + CRQS 35 + T1 20 + OHM 10 +
+H2H 10 + LTG 11 + SM 8 + G10 8 + CORTEX 49 + A1 11 + D1 49 +
+MATH-LADDER 15 = 403 local, 0 failures, 17 lanes.
+
 PROGRAM TEST TOTALS refresh (2026-08-29, CONV round): RRK 34 + RLP 45
 + M1 34 + L1 32 + SEM 19 + WB 13 + CRQS 35 + T1 20 + OHM 10 + H2H 10
 + LTG 11 + SM 8 + G10 8 + CORTEX 48 + A1 11 + D1 49 = 387 local, 0

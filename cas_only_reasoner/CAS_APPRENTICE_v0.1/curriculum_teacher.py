@@ -87,6 +87,13 @@ def valid_pattern(value):
         elif element.startswith("QUANT:"):
             if element != "QUANT:quantifier":
                 return "the QUANT slot is written QUANT:quantifier"
+        elif element.startswith("NUM:"):
+            if element.split(":")[1] not in ("x", "y", "b", "c"):
+                return ("NUM slots are written NUM:x / NUM:y / "
+                        "NUM:b / NUM:c")
+        elif element.startswith("OPW:"):
+            if element != "OPW:op":
+                return "the OPW slot is written OPW:op"
         elif element.startswith("ADV:"):
             if element != "ADV:time":
                 return "the ADV slot is written ADV:time"
@@ -112,19 +119,25 @@ def valid_pattern(value):
                     f"word - write it as a VERB SLOT instead, for "
                     f"example 'VERB:pred:base' (so it matches ANY "
                     f"verb in that form)")
-        elif element in ("x", "y", "a", "b", "c", "d", "noun"):
+        elif element in ("x", "y", "a", "b", "c", "d", "noun")                 and not any(e.startswith(("NUM:", "OPW:"))
+                            for e in value):
+            # in a MATH pattern the literal 'x' is the unknown, not a
+            # placeholder (bridge finding: the validator rejected the
+            # teacher's correct equation pattern)
             return (f"{element!r} is a placeholder - use an NP slot "
                     f"like 'NP:agent' or 'NP:patient' instead")
         elif not element.islower():
             return f"literal {element!r} must be lowercase"
     # copular constructions ('is the gray cat quiet?') carry the
-    # copula as a literal and legitimately have no VERB slot
+    # copula as a literal and legitimately have no VERB slot; MATH
+    # patterns (NUM/OPW slots) have neither nouns nor verbs
+    is_math = any(e.startswith(("NUM:", "OPW:")) for e in value)
     has_copula = any(e in ("is", "was", "are", "were") for e in value)
-    if not has_verb and not has_copula:
+    if not has_verb and not has_copula and not is_math:
         return ("missing the VERB slot: write the verb position as "
                 "VERB:pred:form (e.g. 'VERB:pred:base'), never the "
                 "literal verb word")
-    if not has_np:
+    if not has_np and not is_math:
         return ("missing NP slots: write noun positions as NP:agent / "
                 "NP:patient, never literal nouns")
     return None

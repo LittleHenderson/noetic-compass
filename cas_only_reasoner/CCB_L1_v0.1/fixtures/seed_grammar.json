@@ -167,9 +167,39 @@
    "construction_id": "prohibited_transitive",
    "provenance": "lesson:LIVE_L028_committee_prohibition|teacher:qwen.qwen3-32b-v1:0",
    "revision": 28
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "interrogative_what",
+   "provenance": "lesson:LIVE_L029_what_question|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 29
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "interrogative_who",
+   "provenance": "lesson:LIVE_L030_who_question|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 30
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "math_query_arithmetic",
+   "provenance": "lesson:LIVE_M001_what_is_arithmetic|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 31
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "math_query_comparison",
+   "provenance": "lesson:LIVE_M002_greater_than|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 32
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "math_query_solve",
+   "provenance": "lesson:LIVE_M003_solve_equation|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 33
   }
  ],
- "revision": 28,
+ "revision": 33,
  "rules": {
   "active_past_transitive": {
    "construction_id": "active_past_transitive",
@@ -1041,6 +1071,103 @@
     "NP:patient"
    ]
   },
+  "interrogative_what": {
+   "construction_id": "interrogative_what",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L029_what_question|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "wh",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "What does the cat chase?"
+    },
+    {
+     "expected_core": {
+      "agent": "dog",
+      "frame": "event",
+      "patient": "wh",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "What does the dog chase?"
+    }
+   ],
+   "rule_digest": "0fdfa3a33e34aba2",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "wh",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "tense": "present"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "interrogative_wh"
+   },
+   "surface_pattern": [
+    "what",
+    "does",
+    "the",
+    "NP:agent",
+    "VERB:pred:base"
+   ]
+  },
+  "interrogative_who": {
+   "construction_id": "interrogative_who",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L030_who_question|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "wh",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "who chases the dog?"
+    },
+    {
+     "expected_core": {
+      "agent": "wh",
+      "frame": "event",
+      "patient": "cat",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "who chases the cat?"
+    }
+   ],
+   "rule_digest": "51253437d3de93d1",
+   "semantics": {
+    "agent": "wh",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "tense": "present"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "interrogative_wh"
+   },
+   "surface_pattern": [
+    "who",
+    "VERB:pred:present_3sg",
+    "the",
+    "NP:patient"
+   ]
+  },
   "interrogative_why_present": {
    "construction_id": "interrogative_why_present",
    "durability": "PROMOTED_DURABLY",
@@ -1135,6 +1262,145 @@
     "is",
     "on",
     "NP:location"
+   ]
+  },
+  "math_query_arithmetic": {
+   "construction_id": "math_query_arithmetic",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_M001_what_is_arithmetic|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "frame": "math",
+      "op": "add",
+      "x": "3",
+      "y": "4"
+     },
+     "sentence": "what is three plus four?"
+    },
+    {
+     "expected_core": {
+      "frame": "math",
+      "op": "add",
+      "x": "2",
+      "y": "5"
+     },
+     "sentence": "what is two plus five?"
+    }
+   ],
+   "rule_digest": "6f052a6c32ad7b5b",
+   "semantics": {
+    "frame": "math",
+    "op": "@op",
+    "x": "@x",
+    "y": "@y"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "math_query"
+   },
+   "surface_pattern": [
+    "what",
+    "is",
+    "NUM:x",
+    "OPW:op",
+    "NUM:y"
+   ]
+  },
+  "math_query_comparison": {
+   "construction_id": "math_query_comparison",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_M002_greater_than|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "asked": "greater",
+      "frame": "math",
+      "op": "compare",
+      "x": "3",
+      "y": "4"
+     },
+     "sentence": "Is three greater than four?"
+    },
+    {
+     "expected_core": {
+      "asked": "greater",
+      "frame": "math",
+      "op": "compare",
+      "x": "2",
+      "y": "5"
+     },
+     "sentence": "Is two greater than five?"
+    }
+   ],
+   "rule_digest": "aaa8afacab3ea7b2",
+   "semantics": {
+    "asked": "greater",
+    "frame": "math",
+    "op": "compare",
+    "x": "@x",
+    "y": "@y"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "math_query"
+   },
+   "surface_pattern": [
+    "is",
+    "NUM:x",
+    "greater",
+    "than",
+    "NUM:y"
+   ]
+  },
+  "math_query_solve": {
+   "construction_id": "math_query_solve",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_M003_solve_equation|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "b": "3",
+      "c": "7",
+      "frame": "math",
+      "op": "solve",
+      "opword": "add",
+      "unknown": "x"
+     },
+     "sentence": "solve x plus three equals seven."
+    },
+    {
+     "expected_core": {
+      "b": "2",
+      "c": "8",
+      "frame": "math",
+      "op": "solve",
+      "opword": "mul",
+      "unknown": "x"
+     },
+     "sentence": "solve x times two equals eight."
+    }
+   ],
+   "rule_digest": "0a595d093c7cf50c",
+   "semantics": {
+    "b": "@b",
+    "c": "@c",
+    "frame": "math",
+    "op": "solve",
+    "opword": "@op",
+    "unknown": "x"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "math_query"
+   },
+   "surface_pattern": [
+    "solve",
+    "x",
+    "OPW:op",
+    "NUM:b",
+    "equals",
+    "NUM:c"
    ]
   },
   "negated_passive_past": {
@@ -1746,5 +2012,5 @@
    ]
   }
  },
- "store_digest": "aa0bf3947b75c51a"
+ "store_digest": "52536461fe43b7ec"
 }
