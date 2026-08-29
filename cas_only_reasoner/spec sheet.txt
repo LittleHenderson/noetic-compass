@@ -672,6 +672,51 @@ DERIVABILITY-GATE SCOPE (owner directive, open item): the novelty
   candidate constructors - not only fixtures + one-step axiom
   application. Recorded as the D10 path's first requirement.
 
+CAS TEACHING ARCHITECTURE v0.1 ADOPTED
+(CAS_TEACHING_ARCHITECTURE_v0.1.md, owner directive 2026-08-28): the
+faculty, not the oracle - fourteen teachable domains (languages,
+world knowledge under the stricter fact protocol, reasoning
+strategies, mathematics, programming, tool use, research methods,
+memory formation, metacognition, social intelligence, creativity,
+board design, self-diagnosis, multimodal), five transfer channels
+(symbolic lessons, demonstration, neural distillation into
+REPLACEABLE subboards, retrieval-linked knowledge, synthetic
+experience), seven teacher roles as a committee, the teaching
+metrics, the never-autonomous list, the seven-stage teaching order,
+and the endgame: teach the machine how to detect what it does not
+know and curriculum itself. NAMING: the directive's "CCB-T1" label
+collides with the tool board; the teaching board is CCB-A1.
+
+  cas_only_reasoner/CAS_APPRENTICE_v0.1/ - CCB-A1, the Cognitive
+  Apprenticeship and Teaching Board v0.1 (8 tests green):
+    - TeachingEpisode sealing for EVERY lesson outcome (promoted,
+      rejected, refused) with teacher identity + revision + role,
+      examiner identity, pre/post capability, provenance, rollback
+      pointer, digest;
+    - the NEVER-AUTONOMOUS guard: nine constitutional targets refuse
+      promotion typed, each refusal itself a sealed episode ("a model
+      can explain why a constitution might change; it cannot vote
+      itself the power to change it");
+    - the FACULTY-COMMITTEE rule: high-impact domains (world
+      knowledge, research method, board design, self-improvement)
+      reject single-examiner lessons - the proposer may not be the
+      only examiner;
+    - the WORLD-KNOWLEDGE channel: model facts enter PROPOSED never
+      VERIFIED; trusted-source attestation upgrades/contradicts;
+      mixed evidence -> CONTESTED; changing facts demand
+      current-retrieval provenance AND a validity window; hard
+      boundaries never enter through teaching; typed destinations per
+      knowledge type;
+    - teaching metrics: learning gain, transfer rate, teaching
+      efficiency, retention, teacher dependence, false-lesson rate;
+    - live_teacher.py: the first-live-teacher-lesson harness (the
+      1.5B authors a negation-construction lesson; the CCB-L1 ladder
+      examines; protected held-out from the student's channel).
+      FIRST RUN LESSON: the CPU float32 run was orphaned by a session
+      restart -> owner order NEVER CPU (GPU/RunPod/AWS; RTX 4070
+      present locally; CUDA venv built separately from main Python);
+      the GPU rerun is the pending artifact.
+
 PROGRAM TEST TOTALS (all green, 2026-08-28, post-audit):
   kernel 34 + RLP 45 + CCB-M1 34 + CCB-L1 18 + CAS-Sem 19 +
   workbench 13 + CRQS 35 + CCB-T1 20 + OHM-panel 10 + H2H 10 +
