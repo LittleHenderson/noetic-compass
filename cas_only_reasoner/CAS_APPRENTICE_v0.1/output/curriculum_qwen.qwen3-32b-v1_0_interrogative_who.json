@@ -1,0 +1,340 @@
+{
+ "event": "CURRICULUM_ROUND_1",
+ "results": [
+  {
+   "after": {
+    "answer": {
+     "frame_core": {
+      "agent": "wh",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "source_class": null,
+     "status": "ANSWERED",
+     "text": "i do not know who chases the dog from the information i have.",
+     "wh_bindings": []
+    },
+    "cas_ohm": {
+     "I_obs": 6.0,
+     "I_pred": 6.0,
+     "R_capability": 0.0,
+     "R_compute": 0.0,
+     "R_context": 0.0,
+     "R_lexical": 0.0,
+     "R_policy": 0.0,
+     "R_role_binding": 0.0,
+     "R_total": 1.0,
+     "V_drive": 6.0,
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "delta_I": 0.0,
+     "effect_type": "ANSWERED",
+     "mode": "native_runtime",
+     "operating_region": "active",
+     "provenance": "cas_ohm_attention_plane_v0.1",
+     "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+     "stage_id": "language_pipeline",
+     "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+    },
+    "commitment": {
+     "by": "cas_learned_grammar",
+     "construction": "interrogative_who"
+    },
+    "committed": true,
+    "conv_flow": {
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "tp_answer": "active",
+     "tp_parse": "active",
+     "tp_retrieval": "active",
+     "tp_semantic_packet": "active",
+     "tp_session_commit": "absent",
+     "tp_write_intent": "absent"
+    },
+    "cortex_proposal": null,
+    "dialogue": {
+     "retrieval": {
+      "wh_bindings": []
+     }
+    },
+    "frame": {
+     "core": {
+      "agent": "wh",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "surface": {
+      "construction_id": "interrogative_who",
+      "mood": "interrogative_wh"
+     }
+    },
+    "input": "who chases the dog?",
+    "mode": "NATIVE_ONLY",
+    "route": "native_gram",
+    "trace_digest": "78c54ee5fe6b53ed",
+    "turn_id": "t1",
+    "validation": null
+   },
+   "before": {
+    "answer": {
+     "detail": "I did not understand 'who' at word 1 of 'who chases the dog?' (question pattern not supported)",
+     "status": "UNSUPPORTED_LANGUAGE"
+    },
+    "cas_ohm": {
+     "I_obs": 2.0,
+     "I_pred": 6.0,
+     "R_capability": 2.0,
+     "R_compute": 0.0,
+     "R_context": 0.0,
+     "R_lexical": 0.0,
+     "R_policy": 0.0,
+     "R_role_binding": 0.0,
+     "R_total": 3.0,
+     "V_drive": 6.0,
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "delta_I": -4.0,
+     "effect_type": "UNSUPPORTED_LANGUAGE",
+     "mode": "native_runtime",
+     "operating_region": "cutoff",
+     "provenance": "cas_ohm_attention_plane_v0.1",
+     "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+     "stage_id": "language_pipeline",
+     "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+    },
+    "commitment": null,
+    "committed": false,
+    "conv_flow": {
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "tp_answer": "cutoff",
+     "tp_parse": "cutoff",
+     "tp_retrieval": "absent",
+     "tp_semantic_packet": "absent",
+     "tp_session_commit": "absent",
+     "tp_write_intent": "absent"
+    },
+    "cortex_proposal": null,
+    "input": "who chases the dog?",
+    "mode": "NATIVE_ONLY",
+    "native_error": {
+     "message": "I did not understand 'who' at word 1 of 'who chases the dog?' (question pattern not supported)",
+     "word": "who"
+    },
+    "route": "no_answer",
+    "trace_digest": "1ec0e48d977f1c3b",
+    "turn_id": "t1",
+    "validation": null
+   },
+   "episode": {
+    "domain": "language_grammar",
+    "episode_digest": "43fb6a97694d596c",
+    "examiner_identity": "ccb_l1_acceptance_ladder",
+    "lesson_id": "LIVE_L030_who_question",
+    "outcome": {
+     "episode_digest": "f191570b880768ad",
+     "evidence": [
+      {
+       "detail": "typed lesson packet complete",
+       "passed": true,
+       "stage": "PROPOSED"
+      },
+      {
+       "detail": "construction schema valid",
+       "passed": true,
+       "stage": "SCHEMA_VALID"
+      },
+      {
+       "detail": "rule matches first positive example: True",
+       "passed": true,
+       "stage": "COMPILED"
+      },
+      {
+       "detail": "2 examples ok",
+       "passed": true,
+       "stage": "POSITIVE_EXAMPLES_PASS"
+      },
+      {
+       "detail": "contrasts held",
+       "passed": true,
+       "stage": "CONTRAST_TESTS_PASS"
+      },
+      {
+       "detail": "3 unseen cases ok",
+       "passed": true,
+       "stage": "HELD_OUT_GENERALIZATION_PASS"
+      },
+      {
+       "detail": "no prior rule regressed",
+       "passed": true,
+       "stage": "PRIOR_GRAMMAR_REGRESSION_PASS"
+      },
+      {
+       "detail": "ambiguity honest",
+       "passed": true,
+       "stage": "AMBIGUITY_BEHAVIOR_PASS"
+      },
+      {
+       "detail": "replay identical",
+       "passed": true,
+       "stage": "DETERMINISTIC_REPLAY"
+      },
+      {
+       "detail": "all gates passed; promoting with rollback preserved",
+       "passed": true,
+       "stage": "PROMOTED_PROVISIONALLY"
+      }
+     ],
+     "verdict": "PROMOTED_PROVISIONALLY"
+    },
+    "post_learning_capability": null,
+    "pre_learning_capability": null,
+    "provenance": "schema_constrained_field_elicitation",
+    "rollback_pointer": null,
+    "target": "grammar_store",
+    "teacher_identity": "qwen.qwen3-32b-v1:0",
+    "teacher_revision": "bedrock:us-west-2",
+    "teacher_role": "lecturer"
+   },
+   "lesson": {
+    "ambiguity_cases": [
+     {
+      "expect": "parsed",
+      "sentence": "who chases the dog?"
+     }
+    ],
+    "construction": {
+     "construction_id": "interrogative_who",
+     "semantics": {
+      "agent": "wh",
+      "frame": "event",
+      "patient": "@patient",
+      "polarity": "positive",
+      "predicate": "@pred",
+      "tense": "present"
+     },
+     "surface_meta": {
+      "mood": "interrogative_wh"
+     },
+     "surface_pattern": [
+      "who",
+      "VERB:pred:present_3sg",
+      "the",
+      "NP:patient"
+     ]
+    },
+    "counterexamples": [
+     {
+      "sentence": "the dog who chased"
+     },
+     {
+      "sentence": "who the chases dog"
+     }
+    ],
+    "lesson_id": "LIVE_L030_who_question",
+    "lesson_type": "grammar_construction",
+    "minimal_pairs": [
+     {
+      "relation": "different_meaning",
+      "sentence_a": "who chases the dog?",
+      "sentence_b": "who chases the cat?"
+     },
+     {
+      "relation": "different_meaning",
+      "sentence_a": "who chases the dog?",
+      "sentence_b": "who is chased by the dog?"
+     }
+    ],
+    "morphology": [
+     {
+      "form": "present_3sg",
+      "lemma": "chase",
+      "surface": "chases"
+     }
+    ],
+    "positive_examples": [
+     {
+      "expected_core": {
+       "agent": "wh",
+       "frame": "event",
+       "patient": "dog",
+       "polarity": "positive",
+       "predicate": "chase",
+       "tense": "present"
+      },
+      "sentence": "who chases the dog?"
+     },
+     {
+      "expected_core": {
+       "agent": "wh",
+       "frame": "event",
+       "patient": "cat",
+       "polarity": "positive",
+       "predicate": "chase",
+       "tense": "present"
+      },
+      "sentence": "who chases the cat?"
+     }
+    ],
+    "provenance": "schema_constrained_field_elicitation",
+    "semantics_provenance": "derived_from_teacher_pattern_by_schema_scaffold",
+    "teacher_confidence": null,
+    "teacher_model": "qwen.qwen3-32b-v1:0",
+    "teacher_revision": "bedrock:us-west-2"
+   },
+   "log": [
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "surface_pattern",
+     "raw": "```json\n[\"who\", \"VERB:pred:present_3sg\", \"the\", \"NP:patient\"]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "morphology",
+     "raw": "```json\n[\n  {\"surface\": \"chases\", \"lemma\": \"chase\", \"form\": \"present_3sg\"}\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "positive_examples",
+     "raw": "```json\n[\n  {\n    \"sentence\": \"who chases the dog?\",\n    \"expected_core\": {\n      \"frame\": \"event\",\n      \"predicate\": \"chase\",\n      \"agent\": \"wh\",\n      \"patient\": \"dog\",\n      \"tense\": \"present\",\n      \"polarity\": \"positive\"\n    }\n  },\n  {\n    \"sentence\": \"who chases the cat?\",\n    \"expected_core"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "minimal_pairs",
+     "raw": "```json\n[\n  {\n    \"sentence_a\": \"who chases the dog?\",\n    \"sentence_b\": \"who chases the cat?\",\n    \"relation\": \"different_meaning\"\n  },\n  {\n    \"sentence_a\": \"who chases the dog?\",\n    \"sentence_b\": \"who is chased by the dog?\",\n    \"relation\": \"different_meaning\"\n  }\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": "each item needs 'sentence'",
+     "field": "counterexamples",
+     "raw": "```json\n[\n  \"the dog who chases\",\n  \"chases who the dog\"\n]\n```"
+    },
+    {
+     "attempt": 2,
+     "defect": null,
+     "field": "counterexamples",
+     "raw": "```json\n[\n  {\n    \"sentence\": \"the dog who chased\"\n  },\n  {\n    \"sentence\": \"who the chases dog\"\n  }\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "ambiguity_cases",
+     "raw": "```json\n[\n  {\n    \"sentence\": \"who chases the dog?\",\n    \"expect\": \"parsed\"\n  }\n]\n```"
+    }
+   ],
+   "retention": {
+    "construction_id": "interrogative_who",
+    "verdict": "PROMOTED_DURABLY"
+   },
+   "target": "interrogative_who",
+   "verdict": "PROMOTED_PROVISIONALLY"
+  }
+ ],
+ "teacher": "qwen.qwen3-32b-v1:0"
+}

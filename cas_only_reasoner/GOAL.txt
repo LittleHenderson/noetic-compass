@@ -1,0 +1,671 @@
+# Start with Gap 1: **tell, store, retrieve, answer**
+
+This is the correct next learning round.
+
+Formally, I would name it:
+
+# **CONV v0.1: Provenance-Grounded Small Talk**
+
+### Implemented through **CCB-D1, the Dialogue and Common-Ground Board**
+
+“Small-talk imitator” is a good description of the behavioral goal, but what you are building is more substantial than imitation. Within its learned vocabulary and constructions, it will be a **bounded, native chatbot** that:
+
+```text
+understands what was said
+remembers what the user asserted
+keeps the source attached
+retrieves it on a later turn
+answers only to the strength of that source
+asks when meaning or knowledge is missing
+```
+
+The project already has the right foundation. CCB-L1 contains a versioned lexicon, CAS-Sem meanings, discourse and pronoun state, deterministic grammar, contrast-tested word learning, and a one-way bridge into the kernel.  CAS-Sem already carries entities, role schemas, reference binding, truth status, provenance, coherence checks, and typed lacunae. 
+
+The language system now has 28 durable constructions, including pronoun resolution, quantification, time, possession, location, relative clauses, conjunction, disjunction, questions, commands, and prohibitions. Pronoun resolution already preserves uncertainty instead of inventing certainty. 
+
+So this is not rebuilding conversation from the ground up. It is closing the missing loop:
+
+```text
+understand
+→ commit a session assertion
+→ remember it
+→ retrieve it
+→ answer from it
+```
+
+# The one crucial correction
+
+What the user says must **not** enter the verified knowledge store as fact.
+
+It should enter a separate:
+
+# **Session Assertion Store**
+
+A statement such as:
+
+> “The cat chases the dog.”
+
+means:
+
+```text
+The user asserted this proposition during this session.
+```
+
+It does not automatically mean:
+
+```text
+The proposition has been independently verified as true.
+```
+
+That distinction is the soul of the chatbot you described.
+
+The machine should respond:
+
+> “Based on what you told me, yes, the cat chases the dog.”
+
+not merely:
+
+> “Yes, the cat chases the dog.”
+
+The first answer preserves epistemic provenance. The second quietly launders conversation into truth.
+
+---
+
+# The three-store conversational architecture
+
+```text
+┌─────────────────────────────────────────────┐
+│ VERIFIED KNOWLEDGE STORE                    │
+│ Independently supported facts and rules     │
+└─────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────┐
+│ SESSION ASSERTION STORE                     │
+│ What this user told the machine this session│
+└─────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────┐
+│ DIALOGUE STATE                              │
+│ Topic, speakers, pronouns, pending questions│
+│ corrections, unresolved references          │
+└─────────────────────────────────────────────┘
+```
+
+They may cooperate, but they may never silently collapse into one store.
+
+A query may retrieve from any of them, but the response must identify the source class.
+
+| Retrieved source             | Appropriate reply                            |
+| ---------------------------- | -------------------------------------------- |
+| Verified knowledge           | “Yes. The verified record says…”             |
+| User assertion               | “Yes, based on what you told me…”            |
+| Derived from user assertions | “Given what you told me, it follows that…”   |
+| Conflicting records          | “I have conflicting information…”            |
+| No matching record           | “I do not know from the information I have.” |
+| Ambiguous reference          | Ask which entity the user means              |
+
+---
+
+# Exact tell-then-ask flow
+
+## Turn 1: Tell
+
+```text
+User:
+    “The cat chases the dog.”
+
+CCB-L1:
+    parses the sentence
+
+CAS-Sem:
+    relation(chase, cat, dog)
+    tense=present
+    polarity=positive
+    source=current user turn
+
+CCB-D1:
+    classifies the utterance as ASSERTION
+
+Dialogue board:
+    emits SessionAssertionWriteIntent
+
+CAS-RRK:
+    validates and atomically commits the record
+
+Machine:
+    “Okay. You told me that the cat chases the dog.”
+```
+
+## Turn 2: Ask
+
+```text
+User:
+    “Does the cat chase the dog?”
+
+CCB-L1:
+    parses the question
+
+CAS-Sem:
+    query relation(chase, cat, dog)
+
+Retriever:
+    searches verified knowledge
+    searches session assertions
+
+Result:
+    matching USER_ASSERTED record found
+
+Machine:
+    “Based on what you told me, yes.”
+```
+
+## Unknown case
+
+```text
+User:
+    “Does the dog chase the cat?”
+
+Result:
+    no supporting record
+
+Machine:
+    “I do not know whether the dog chases the cat.”
+```
+
+It must not infer symmetry merely because the same entities and verb appear.
+
+---
+
+# The record should look approximately like this
+
+```text
+SessionAssertion {
+    assertion_id
+    proposition
+
+    speaker_id
+    session_id
+    turn_id
+    logical_tick
+
+    source_class:
+        USER_ASSERTED
+
+    truth_status:
+        ASSERTED
+
+    lifecycle_status:
+        ACTIVE
+        SUPERSEDED
+        RETRACTED
+        CONTESTED
+
+    polarity
+    tense
+    modality
+    provenance
+
+    supersedes
+    derived_children
+    trace_id
+    record_digest
+}
+```
+
+The exact truth-status names should reuse the existing CAS-Sem ontology where possible. Do not add a duplicate status system merely for conversation.
+
+Most importantly:
+
+```text
+source_class != truth_status
+```
+
+“Who said this?” and “How well established is it?” are different questions.
+
+---
+
+# Keep the atomic authority contract intact
+
+CCB-L1 must not directly modify session memory.
+
+The correct authority path is:
+
+```text
+CCB-L1 parses
+        ↓
+CAS-Sem forms the proposition
+        ↓
+CCB-D1 proposes a SessionAssertionWriteIntent
+        ↓
+CAS-RRK validates the intent
+        ↓
+Transaction coordinator commits it
+        ↓
+Trace is sealed
+```
+
+That preserves the project’s first law:
+
+```text
+No subsystem directly mutates authoritative state.
+
+Every subsystem emits a typed intent.
+
+Only the transaction coordinator applies the mutation.
+```
+
+This also gives the session belief store rollback, replay, and fault isolation for free.
+
+---
+
+# Corrections must be first-class
+
+A real conversation is not only a pile of statements. People revise themselves.
+
+## Explicit correction
+
+```text
+User:
+    “The cat is gray.”
+
+Later:
+    “Actually, the cat is brown.”
+```
+
+The machine should not delete the first record.
+
+It should append a second version:
+
+```text
+assertion_1:
+    property(cat, gray)
+    status=SUPERSEDED
+
+assertion_2:
+    property(cat, brown)
+    status=ACTIVE
+    supersedes=assertion_1
+```
+
+Response:
+
+> “Understood. I will use brown for the cat in this session. You previously said gray.”
+
+## Unmarked contradiction
+
+```text
+User:
+    “The cat is gray.”
+
+Later:
+    “The cat is brown.”
+```
+
+Unless the dialogue construction clearly marks this as a correction, the machine should not silently choose one.
+
+It should say:
+
+> “You told me that the cat is gray and also that it is brown. Is the second statement a correction?”
+
+This creates an RPM clarification subgoal.
+
+## Retraction
+
+```text
+User:
+    “Forget what I said about the cat being gray.”
+```
+
+The record becomes `RETRACTED`. It remains in the audit history but no longer supports answers.
+
+Erasing the trace would make the machine forget that it forgot, a tiny philosophical trapdoor.
+
+---
+
+# Only certain sentences should write to the store
+
+Gap 1 must not turn every declarative-looking string into a committed assertion.
+
+These are different:
+
+```text
+“The cat chases the dog.”
+    direct assertion
+
+“Suppose the cat chases the dog.”
+    hypothetical branch
+
+“John says the cat chases the dog.”
+    attributed assertion
+
+“Does the cat chase the dog?”
+    query
+
+“The phrase ‘the cat chases the dog’ has five words.”
+    quoted language
+
+“I am not sure whether the cat chases the dog.”
+    uncertain proposition
+```
+
+For CONV v0.1, the safest scope is:
+
+```text
+Automatically store:
+    direct, nonquoted, nonhypothetical declarative assertions
+
+Store with special status:
+    attributed or uncertain assertions
+
+Do not store as factual assertions:
+    questions, commands, quotations, greetings,
+    hypothetical examples, or unsupported parser guesses
+```
+
+Anything outside the supported distinction should return a typed refusal or clarification, not a creative guess.
+
+---
+
+# Gap 2 naturally follows: wh-question lookup
+
+Once session assertions exist, “what” and “who” questions become partial proposition queries.
+
+## What question
+
+```text
+Stored:
+    relation(chase, cat, dog)
+
+Question:
+    “What does the cat chase?”
+
+Query:
+    relation(chase, cat, ?x)
+
+Binding:
+    ?x = dog
+
+Answer:
+    “You told me that the cat chases the dog.”
+```
+
+## Who question
+
+```text
+Question:
+    “Who chases the dog?”
+
+Query:
+    relation(chase, ?x, dog)
+
+Binding:
+    ?x = cat
+```
+
+## Multiple answers
+
+```text
+relation(chase, cat, dog)
+relation(chase, cat, fox)
+```
+
+The answer should be:
+
+> “You told me that the cat chases the dog and the fox.”
+
+Or, where the query requires one unique referent:
+
+> “I found two possible answers: the dog and the fox.”
+
+Wh-question handling is therefore mostly:
+
+```text
+learned English construction
++
+variable-bearing CAS-Sem query
++
+kernel unification lookup
++
+provenance-aware rendering
+```
+
+---
+
+# Gap 3: social dialogue acts
+
+Greetings and thanks should not be treated as ordinary facts.
+
+```text
+“Hello.”
+    GREETING
+
+“Thank you.”
+    GRATITUDE
+
+“Goodbye.”
+    CLOSING
+
+“Yes.”
+    POLAR_RESPONSE, but only when a pending question exists
+
+“No.”
+    POLAR_RESPONSE, but only when a pending question exists
+```
+
+They should update dialogue state, not semantic knowledge.
+
+Example:
+
+```text
+User:
+    “Hello.”
+
+Machine:
+    “Hello.”
+
+Trace:
+    dialogue_act=GREETING
+    no proposition stored
+    no verified knowledge changed
+```
+
+A social turn can be real and useful without pretending to convey a world fact.
+
+---
+
+# The correct build sequence
+
+## CONV-1A: Tell-then-ask spine
+
+Build only:
+
+```text
+direct assertion recognition
+SessionAssertionStore
+SessionAssertionWriteIntent
+yes/no retrieval
+provenance-bearing replies
+unknown replies
+```
+
+Do not mix wh questions and greetings into the first patch.
+
+## CONV-1B: Correction and conflict
+
+Add:
+
+```text
+explicit correction
+supersession
+retraction
+contradiction detection
+clarification
+```
+
+## CONV-1C: Wh questions
+
+Add:
+
+```text
+what
+who
+partial proposition lookup
+multiple-result handling
+```
+
+## CONV-1D: Dialogue acts
+
+Add:
+
+```text
+hello
+goodbye
+thank you
+yes
+no
+acknowledgement
+```
+
+## CONV-1E: Entity summary
+
+Then support:
+
+```text
+“Tell me about the cat.”
+```
+
+The machine gathers all active propositions about `cat`, groups them by provenance, and says only what the records support.
+
+---
+
+# Permanent qualification tests
+
+The first CONV battery should include at least these cases:
+
+| Test                       | Required behavior                                |
+| -------------------------- | ------------------------------------------------ |
+| Ask before tell            | Honest unknown                                   |
+| Tell then ask              | Correct answer                                   |
+| Provenance                 | Says the information came from the user          |
+| Negative assertion         | Preserves negation                               |
+| Pronoun assertion          | Resolves against committed discourse state       |
+| Explicit correction        | New record supersedes old                        |
+| Unmarked conflict          | Reports conflict and asks                        |
+| Retraction                 | Stops using retracted assertion                  |
+| Fresh session              | No accidental session leakage                    |
+| Verified/user conflict     | Displays both statuses without laundering either |
+| What question              | Returns the missing object                       |
+| Who question               | Returns the missing agent                        |
+| Multiple bindings          | Lists or clarifies                               |
+| Greeting                   | Responds socially, writes no fact                |
+| Bare yes/no                | Requires a pending question                      |
+| Hypothetical               | Does not enter ordinary session facts            |
+| Quoted sentence            | Does not enter ordinary session facts            |
+| Instruction-shaped content | Remains data and causes no external action       |
+| Deterministic replay       | Same trace and final state                       |
+| Store fault                | Typed failure, no fake acknowledgment            |
+
+The cardinal failure is:
+
+```text
+The machine says it remembered something
+when no committed assertion record exists.
+```
+
+Acknowledgment must occur only after state commit.
+
+---
+
+# CAS-Ohm’s role in this round
+
+CAS-Ohm can instrument the whole path:
+
+```text
+tp_parse
+tp_semantic_packet
+tp_write_intent
+tp_session_commit
+tp_retrieval
+tp_answer
+```
+
+Suppose the statement is understood but not remembered:
+
+```text
+language-flow test point:
+    active
+
+semantic packet:
+    correct
+
+memory-write path:
+    cutoff or absent
+
+later retrieval:
+    no result
+```
+
+That precisely distinguishes:
+
+```text
+language failure
+from
+memory-write failure
+```
+
+Likewise, if the record is retrieved but the reply attributes it to verified knowledge instead of the user, the flow may be healthy while the semantic effect is wrong. That is a provenance-rendering fault, not an attention problem.
+
+CAS-Ohm locates the energized and starved paths. The semantic and provenance checks determine whether the result means the right thing.
+
+---
+
+# What this round earns
+
+Do not pre-award a CONV level. Let the qualification battery decide.
+
+But a successful round would establish:
+
+```text
+bounded native multi-turn conversation
+
+session-level common ground
+
+truth-source separation
+
+honest unknown behavior
+
+provenance-bearing recall
+
+correction and clarification
+
+basic wh retrieval
+
+social dialogue acts
+```
+
+That is a genuine chatbot within a controlled language domain.
+
+One correction to the sentence “growing the vocabulary is now just more lessons”:
+
+> Vocabulary becomes one major expansion path, but the machine will also need additional grammar constructions, dialogue acts, discourse procedures, pragmatic rules, ellipsis handling, and topic-management lessons.
+
+Still, the machinery is now reusable. Each new word no longer demands a new chatbot. Each new construction simply enlarges the territory in which the same conversational engine can operate.
+
+# Final directive
+
+# **Begin CONV v0.1 with Gap 1: tell, commit, remember, retrieve, attribute.**
+
+Freeze this acceptance law:
+
+```text
+The machine may acknowledge a user-told fact only after
+a provenance-bearing session assertion has been atomically committed.
+
+It may answer from that assertion only while preserving its source.
+
+It may never silently promote a user assertion into verified knowledge.
+
+When no admissible record supports the answer, it asks or says it does not know.
+```
+
+That is the spine. Once it holds, wh questions and social turns attach cleanly instead of dangling from conversational fog. 🧠🗣️

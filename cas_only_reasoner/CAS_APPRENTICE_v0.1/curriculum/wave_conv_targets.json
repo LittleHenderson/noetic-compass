@@ -1,0 +1,124 @@
+[
+ {
+  "construction_id": "interrogative_what",
+  "lesson_id": "LIVE_L029_what_question",
+  "description": "the WHAT-QUESTION construction 'what does the cat chase?' - asks for the missing PATIENT of an event. Pattern order: literal 'what', literal 'does', literal 'the', NP:agent, VERB:pred:base (BASE form after 'does') - and NOTHING after the verb (the patient is what is being asked). Meaning: a present positive event whose patient value is EXACTLY the string 'wh' (the unknown being asked for)",
+  "shape_hint": "what does the cat chase?",
+  "surface_meta": {
+   "mood": "interrogative_wh"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "@agent",
+   "patient": "wh",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'what does the X chase?' ending with '?' - expected_core patient is 'wh'",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<X>\", \"patient\": \"wh\", \"tense\": \"present\", \"polarity\": \"positive\"}",
+  "held_out": [
+   {
+    "sentence": "what does the fox chase?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "fox",
+     "patient": "wh",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   },
+   {
+    "sentence": "what does the hen carry?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "carry",
+     "agent": "hen",
+     "patient": "wh",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   },
+   {
+    "sentence": "what the does chase cat?",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "what does the bird chase?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "bird",
+     "patient": "wh",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   }
+  ],
+  "probe": "what does the cat chase?"
+ },
+ {
+  "construction_id": "interrogative_who",
+  "lesson_id": "LIVE_L030_who_question",
+  "description": "the WHO-QUESTION construction 'who chases the dog?' - asks for the missing AGENT of an event. Pattern order: literal 'who', VERB:pred:present_3sg (present_3sg form: 'chases'), literal 'the', NP:patient. Meaning: a present positive event whose agent value is EXACTLY the string 'wh' (the unknown being asked for)",
+  "shape_hint": "who chases the dog?",
+  "surface_meta": {
+   "mood": "interrogative_wh"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "wh",
+   "patient": "@patient",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'who chases the Y?' ending with '?' - expected_core agent is 'wh'",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"wh\", \"patient\": \"<Y>\", \"tense\": \"present\", \"polarity\": \"positive\"}",
+  "held_out": [
+   {
+    "sentence": "who chases the hen?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "wh",
+     "patient": "hen",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   },
+   {
+    "sentence": "who carries the bone?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "carry",
+     "agent": "wh",
+     "patient": "bone",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   },
+   {
+    "sentence": "who the chases dog?",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "who chases the fox?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "wh",
+     "patient": "fox",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   }
+  ],
+  "probe": "who chases the dog?"
+ }
+]

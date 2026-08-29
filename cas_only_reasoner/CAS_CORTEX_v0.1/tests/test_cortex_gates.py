@@ -130,7 +130,8 @@ def test_native_first_never_invokes_cortex_in_fragment():
     trace = router.turn("is the cat gray?")
     assert trace["route"] == "native"
     assert trace["answer"] == {"status": "ANSWERED",
-                               "text": "yes, the cat is gray."}
+                               "text": "yes, the cat is gray.",
+                               "source_class": "VERIFIED"}
     assert trace["commitment"]["by"] == "cas_kernel"
 
 
@@ -169,7 +170,8 @@ def test_hybrid_commit_validated_proposal_reaches_the_kernel():
     assert trace["route"] == "cortex"
     assert trace["commitment"]["by"] == "cas_kernel"
     assert trace["answer"] == {"status": "ANSWERED",
-                               "text": "yes, the cat is gray."}
+                               "text": "yes, the cat is gray.",
+                               "source_class": "VERIFIED"}
 
 
 def test_hybrid_commit_rejected_proposal_yields_clarification():
@@ -206,10 +208,17 @@ def test_cortex_text_is_never_understanding():
 
 
 def test_every_turn_is_sealed_with_a_trace_digest():
+    # determinism is REPLAY determinism: the same turn sequence in a
+    # fresh session reproduces the same sealed trace bit-for-bit
+    # (turn ids are positional, so two turns in ONE session are
+    # different turns with the same answer)
     router = HybridRouter(mode="NATIVE_ONLY")
+    replay = HybridRouter(mode="NATIVE_ONLY")
     a = router.turn("is the cat gray?")
-    b = router.turn("is the cat gray?")
-    assert a["trace_digest"] == b["trace_digest"]     # deterministic
+    b = replay.turn("is the cat gray?")
+    assert a["trace_digest"] == b["trace_digest"]
+    c = router.turn("is the cat gray?")
+    assert c["answer"] == a["answer"]
     assert len(router.traces) == 2
     assert MODES == ("NATIVE_ONLY", "CORTEX_DIAGNOSTIC", "HYBRID_COMMIT")
 
@@ -447,8 +456,11 @@ def test_runtime_canary_no_construction_forgotten():
     """CANARY (save-path clobber bug: the disk write of raw teacher
     morph entries made the runtime FORGET active-past while all suites
     stayed green). One runtime probe per durable construction family -
-    if any stops parsing, knowledge was lost on disk."""
-    router = HybridRouter(mode="NATIVE_ONLY")
+    if any stops parsing, knowledge was lost on disk. Each probe runs
+    in a FRESH session: the canary tests construction knowledge, not
+    conversation flow (in ONE session the dialogue board correctly
+    treats 'the cat chased the dog.' followed by 'the cat did not
+    chase the dog.' as an unmarked contradiction and asks)."""
     probes = {
         "the cat chased the dog.": "UNDERSTOOD",        # active past
         "the dog was chased by the cat.": "UNDERSTOOD",  # passive
@@ -484,7 +496,7 @@ def test_runtime_canary_no_construction_forgotten():
         "the cat must not chase the dog.": "UNDERSTOOD",  # prohibition
     }
     for sentence, expected in probes.items():
-        trace = router.turn(sentence)
+        trace = HybridRouter(mode="NATIVE_ONLY").turn(sentence)
         assert trace["answer"]["status"] == expected, \
             f"FORGOTTEN: {sentence!r} -> {trace['answer']['status']}"
 

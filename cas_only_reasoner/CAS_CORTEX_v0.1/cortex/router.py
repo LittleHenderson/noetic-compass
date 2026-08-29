@@ -122,6 +122,14 @@ class HybridRouter:
             Lexicon(self.seed["lexicon"]), morph)
         self.coverage = {"native_l1": 0, "native_gram": 0,
                          "cortex": 0, "refused": 0}
+        # CCB-D1: the Dialogue and Common-Ground Board (CONV v0.1).
+        # Session-scoped; a fresh router is a fresh session - no
+        # leakage across sessions by construction.
+        d1_path = os.path.join(_CAS_ONLY, "CCB_D1_v0.1")
+        if d1_path not in sys.path:
+            sys.path.insert(0, d1_path)
+        from dialogue import DialogueBoard
+        self.dialogue = DialogueBoard(session_id="session")
 
     # ------------------------------------------------------------------
     def _native(self, sentence: str) -> Dict:
@@ -144,29 +152,467 @@ class HybridRouter:
 
     def _answer_conjunction_question(self, packet: Dict, gram: Dict,
                                      trace: Dict) -> Dict:
-        """Restricted-question answering: ask the kernel about each
-        conjunct separately; 'yes' only if ALL conclude."""
-        try:
-            verdicts = [self._kernel_answer({"pred": "question",
-                                             "args": [part]})
-                        ["kernel_status"]
-                        for part in packet.get("args", [])]
-        except Exception as exc:
-            trace["answer"] = {
-                "status": "LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING",
-                "frame_core": gram["core"],
-                "detail": "the question parsed natively; the kernel "
-                          "holds no facts of this kind to answer it "
-                          f"({type(exc).__name__})"}
-            return self._seal(trace, committed=False)
+        """Restricted-question answering: every conjunct must be
+        settled - by the verified record or by a session assertion -
+        before 'yes'; the reply names its sources (the goal's
+        no-laundering table)."""
+        query_tense = gram["core"].get("tense")
+        sources = []
+        for part in packet.get("args", []):
+            verdict = None
+            try:
+                kernel = self._kernel_answer({"pred": "question",
+                                              "args": [part]})
+                if kernel["kernel_status"] == "CONCLUDED":
+                    verdict = "VERIFIED"
+            except Exception:
+                pass
+            if verdict is None:
+                support = self.dialogue.support_for(part, query_tense)
+                if support and support.get("verdict") == "yes":
+                    verdict = "USER_ASSERTED"
+                elif support and support.get("verdict") == "no":
+                    verdict = "USER_DENIED"
+            sources.append(verdict)
+        trace.setdefault("dialogue", {})["retrieval"] = {
+            "conjunct_sources": sources}
         clause = render_clause(gram["core"])
-        if verdicts and all(v == "CONCLUDED" for v in verdicts):
-            text = f"yes, {clause}."
+        if sources and any(v == "USER_DENIED" for v in sources):
+            text = (f"based on what you told me, no - part of this "
+                    f"is denied by what you said.")
+            source_class = "USER_ASSERTED"
+        elif sources and all(v == "VERIFIED" for v in sources):
+            text = f"yes, the verified record says {clause}."
+            source_class = "VERIFIED"
+        elif sources and all(v is not None for v in sources):
+            if all(v == "USER_ASSERTED" for v in sources):
+                text = f"based on what you told me, yes, {clause}."
+                source_class = "USER_ASSERTED"
+            else:
+                text = (f"based on what you told me and the verified "
+                        f"record, yes, {clause}.")
+                source_class = "MIXED"
         else:
             text = f"i do not know whether {clause}."
+            source_class = None
         trace["answer"] = {"status": "ANSWERED", "text": text,
                            "frame_core": gram["core"],
-                           "conjunct_verdicts": verdicts}
+                           "conjunct_sources": sources,
+                           "source_class": source_class}
+        return self._seal(trace, committed=True)
+
+    def _answer_gram_question(self, packet: Dict, gram: Dict,
+                              trace: Dict) -> Dict:
+        """Yes/no question over the two knowledge stores, sources
+        NEVER collapsed (the frozen CONV acceptance law): verified ->
+        named as the verified record; session -> 'based on what you
+        told me'; both in conflict -> both shown; neither -> honest
+        unknown."""
+        core = gram["core"]
+        query_tense = core.get("tense")
+        support = self.dialogue.support_for(packet, query_tense)
+        conflicts = self.dialogue.conflicting_active(packet,
+                                                     query_tense)
+        kernel_status = None
+        try:
+            kernel = self._kernel_answer(
+                {"pred": "question", "args": [packet]})
+            kernel_status = kernel["kernel_status"]
+        except Exception as exc:
+            trace.setdefault("dialogue", {})["kernel_error"] = \
+                type(exc).__name__
+        trace.setdefault("dialogue", {})["retrieval"] = {
+            "kernel_status": kernel_status,
+            "session_verdict": support and support.get("verdict"),
+            "session_record": (support or {}).get(
+                "record", {}).get("assertion_id"),
+            "conflicting": [r["assertion_id"] for r in conflicts]}
+        clause = render_clause(core)
+        concluded = kernel_status == "CONCLUDED"
+        if concluded and conflicts:
+            told = self.dialogue.packet_to_clause(
+                conflicts[0]["proposition"],
+                conflicts[0].get("tense"))
+            text = (f"i have conflicting information: the verified "
+                    f"record says {clause}; you told me {told}.")
+            source_class = "CONFLICT"
+        elif concluded:
+            text = f"yes, the verified record says {clause}."
+            source_class = "VERIFIED"
+        elif support and support["verdict"] == "yes":
+            text = f"based on what you told me, yes, {clause}."
+            source_class = "USER_ASSERTED"
+        elif support and support["verdict"] == "no":
+            told = self.dialogue.packet_to_clause(
+                support["record"]["proposition"],
+                support["record"].get("tense"))
+            text = (f"based on what you told me, no - you told me "
+                    f"that {told}.")
+            source_class = "USER_ASSERTED"
+        elif support and support["verdict"] == "contested":
+            text = ("you gave me conflicting statements about this - "
+                    "i cannot answer until it is settled.")
+            source_class = "CONTESTED"
+        else:
+            text = f"i do not know whether {clause}."
+            source_class = None
+        self._note_discourse(packet)
+        trace["answer"] = {"status": "ANSWERED", "text": text,
+                           "frame_core": core,
+                           "source_class": source_class}
+        return self._seal(trace, committed=True)
+
+    def _answer_wh_question(self, packet: Dict, gram: Dict,
+                            trace: Dict) -> Dict:
+        """'what'/'who': partial-proposition lookup over ACTIVE
+        session assertions; multiple bindings are LISTED, never
+        collapsed to one invented answer."""
+        core = gram["core"]
+        bindings = self.dialogue.wh_bindings(packet)
+        trace.setdefault("dialogue", {})["retrieval"] = {
+            "wh_bindings": [b for b, _ in bindings]}
+        if core.get("patient") == "wh":
+            question_clause = (f"what the {core.get('agent')} "
+                               f"{core.get('predicate')}s")
+        else:
+            question_clause = (f"who {core.get('predicate')}s the "
+                               f"{core.get('patient')}")
+        if not bindings:
+            text = (f"i do not know {question_clause} from the "
+                    f"information i have.")
+            source_class = None
+        else:
+            values = [b for b, _ in bindings]
+            if core.get("patient") == "wh":
+                filled = (f"the {core.get('agent')} "
+                          f"{core.get('predicate')}s "
+                          + " and ".join(f"the {v}" for v in values))
+            else:
+                filled = (" and ".join(f"the {v}" for v in values)
+                          + (" chase" if len(values) > 1 else
+                             f" {core.get('predicate')}s")
+                          + f" the {core.get('patient')}")
+                if len(values) > 1:
+                    filled = (" and ".join(f"the {v}"
+                                           for v in values)
+                              + f" {core.get('predicate')} the "
+                              + f"{core.get('patient')}")
+            text = f"you told me that {filled}."
+            source_class = "USER_ASSERTED"
+        self._note_discourse(packet)
+        trace["answer"] = {"status": "ANSWERED", "text": text,
+                           "frame_core": core,
+                           "source_class": source_class,
+                           "wh_bindings": [b for b, _ in bindings]}
+        return self._seal(trace, committed=True)
+
+    def _record_assertion(self, trace: Dict, packet: Dict,
+                          core, tense_hint=None) -> tuple:
+        """The tell path. Returns (outcome, payload): ('stored',
+        record) after the ATOMIC commit; ('clarification', None) when
+        the new assertion conflicts unmarked with a prior one -
+        never silently choose; ('fault', info) on a typed store
+        fault - and then NO acknowledgment may be attached (the
+        cardinal law)."""
+        if trace.get("route") not in ("native", "native_gram"):
+            # cortex-proposed readings are model guesses - never
+            # promoted to user assertions
+            return (None, None)
+        tense = core.get("tense") if core else tense_hint
+        polarity = core.get("polarity") if core else None
+        modality = core.get("modality") if core else None
+        # the clause renders from the PACKET - the committed truth -
+        # never from the pretty frame core (smoke-found drop: the
+        # acknowledgment for 'the cat does not chase the bird.' lost
+        # its negation because render_clause ignores polarity)
+        clause = self.dialogue.packet_to_clause(packet, tense)
+        conflicts = self.dialogue.conflicting_active(packet, tense)
+        dlg = trace.setdefault("dialogue", {})
+        if conflicts:
+            old_clause = conflicts[0]["clause"]
+            self.dialogue.pending_question = {
+                "type": "correction_confirmation",
+                "candidate": {"proposition": packet, "clause": clause,
+                              "tense": tense, "polarity": polarity,
+                              "modality": modality},
+                "conflicting_ids": [r["assertion_id"]
+                                    for r in conflicts]}
+            dlg["pending"] = "correction_confirmation"
+            trace["answer"] = {
+                "status": "CLARIFICATION_REQUESTED",
+                "text": (f"you told me that {old_clause} and also "
+                         f"that {clause}. is the second statement a "
+                         f"correction?"),
+                "frame_core": core}
+            return ("clarification", None)
+        try:
+            record = self.dialogue.record_assertion(
+                packet, clause, tense, polarity, modality,
+                trace.get("turn_id", "t?"),
+                provenance=f"user_turn:{trace.get('turn_id', 't?')}")
+        except Exception as exc:
+            dlg["assertion_fault"] = {"fault": type(exc).__name__,
+                                      "detail": str(exc)[:200]}
+            return ("fault", dlg["assertion_fault"])
+        dlg["assertion"] = {"assertion_id": record["assertion_id"],
+                            "record_digest": record["record_digest"],
+                            "clause": record["clause"]}
+        return ("stored", record)
+
+    @staticmethod
+    def _attach_assertion_result(trace: Dict, outcome, payload):
+        """Acknowledgment ONLY after commit; a store fault yields the
+        typed status and no acknowledgment at all."""
+        if outcome == "stored":
+            trace["answer"]["acknowledgment"] = \
+                f"okay. you told me that {payload['clause']}."
+            trace["answer"]["session_assertion"] = {
+                "assertion_id": payload["assertion_id"],
+                "record_digest": payload["record_digest"]}
+        elif outcome == "fault":
+            trace["answer"]["status"] = "ASSERTION_NOT_RECORDED"
+            trace["answer"]["detail"] = (
+                "i understood the sentence, but recording it failed "
+                f"({payload['fault']}) - so i have NOT remembered it")
+
+    def _dialogue_act_turn(self, act: Dict, sentence: str,
+                           trace: Dict) -> Dict:
+        """Social and dialogue-layer turns: no proposition stored, no
+        verified knowledge changed - except through the typed intent
+        path (retraction, correction, confirmed supersession)."""
+        trace["route"] = "dialogue"
+        dlg = trace.setdefault("dialogue", {})
+        dlg["act"] = act["act"]
+        kind = act["act"]
+        if kind in ("GREETING", "CLOSING", "GRATITUDE"):
+            trace["answer"] = {"status": "ANSWERED",
+                               "text": act["reply"],
+                               "dialogue_act": kind}
+            return self._seal(trace, committed=True)
+        if kind == "POLAR_RESPONSE":
+            return self._polar_response_turn(act, trace)
+        if kind == "RETRACTION":
+            return self._retraction_turn(act, trace)
+        if kind == "ENTITY_SUMMARY":
+            return self._entity_summary_turn(act, trace)
+        if kind == "CORRECTION":
+            return self._correction_turn(act, sentence, trace)
+        trace["answer"] = {"status": "UNSUPPORTED_LANGUAGE",
+                           "detail": f"unhandled dialogue act {kind}"}
+        return self._seal(trace, committed=False)
+
+    def _polar_response_turn(self, act: Dict, trace: Dict) -> Dict:
+        pending = self.dialogue.pending_question
+        word = act["polarity"]
+        if pending is None:
+            trace["answer"] = {
+                "status": "NO_PENDING_QUESTION",
+                "text": (f"there is no pending question for "
+                         f"'{word}' to answer.")}
+            return self._seal(trace, committed=False)
+        if pending["type"] == "correction_confirmation":
+            candidate = pending["candidate"]
+            conflicting = pending["conflicting_ids"]
+            turn_id = trace.get("turn_id", "t?")
+            self.dialogue.pending_question = None
+            if word == "yes":
+                old_clauses = []
+                record = self.dialogue.record_assertion(
+                    candidate["proposition"], candidate["clause"],
+                    candidate["tense"], candidate["polarity"],
+                    candidate["modality"], turn_id,
+                    provenance=f"user_turn:{turn_id}"
+                               f"+confirmed_correction",
+                    supersedes=conflicting)
+                for aid in conflicting:
+                    old = self.dialogue.store.get(aid)
+                    old_clauses.append(old["clause"])
+                    self.dialogue.apply_lifecycle(
+                        aid, "SUPERSEDED",
+                        f"corrected by {record['assertion_id']}",
+                        turn_id)
+                trace.setdefault("dialogue", {})["assertion"] = {
+                    "assertion_id": record["assertion_id"],
+                    "record_digest": record["record_digest"],
+                    "clause": record["clause"]}
+                trace["answer"] = {
+                    "status": "ANSWERED",
+                    "text": (f"understood. i will use "
+                             f"'{candidate['clause']}' in this "
+                             f"session. you previously said "
+                             f"'{'; '.join(old_clauses)}'."),
+                    "session_assertion": {
+                        "assertion_id": record["assertion_id"]}}
+                return self._seal(trace, committed=True)
+            # 'no' - both statements stand, CONTESTED: neither
+            # supports answers until settled
+            record = self.dialogue.record_assertion(
+                candidate["proposition"], candidate["clause"],
+                candidate["tense"], candidate["polarity"],
+                candidate["modality"], turn_id,
+                provenance=f"user_turn:{turn_id}+not_a_correction")
+            turn = trace.get("turn_id", "t?")
+            self.dialogue.apply_lifecycle(
+                record["assertion_id"], "CONTESTED",
+                "user affirmed both conflicting statements", turn)
+            for aid in conflicting:
+                self.dialogue.apply_lifecycle(
+                    aid, "CONTESTED",
+                    "user affirmed both conflicting statements",
+                    turn)
+            trace["answer"] = {
+                "status": "ANSWERED",
+                "text": ("understood. both statements stand as "
+                         "contested - i will not answer from either "
+                         "until it is settled.")}
+            return self._seal(trace, committed=True)
+        trace["answer"] = {"status": "NO_PENDING_QUESTION",
+                           "text": f"i cannot apply '{word}' to the "
+                                   f"pending item."}
+        return self._seal(trace, committed=False)
+
+    def _resolve_noun(self, word: str):
+        entry = self.seed["lexicon"].get(word)
+        if entry and entry.get("pos") == "noun":
+            return entry["sense"]
+        return None
+
+    def _retraction_turn(self, act: Dict, trace: Dict) -> Dict:
+        entity = self._resolve_noun(act["entity_word"])
+        if entity is None:
+            trace["answer"] = {
+                "status": "UNSUPPORTED_LANGUAGE",
+                "detail": f"i do not know the word "
+                          f"{act['entity_word']!r}"}
+            return self._seal(trace, committed=False)
+        records = self.dialogue.about(entity)
+        if not records:
+            trace["answer"] = {
+                "status": "ANSWERED",
+                "text": (f"you have not told me anything about the "
+                         f"{entity} this session.")}
+            return self._seal(trace, committed=True)
+        turn_id = trace.get("turn_id", "t?")
+        clauses = []
+        for record in records:
+            self.dialogue.apply_lifecycle(
+                record["assertion_id"], "RETRACTED",
+                "user retraction", turn_id)
+            clauses.append(record["clause"])
+        trace.setdefault("dialogue", {})["retracted"] = [
+            r["assertion_id"] for r in records]
+        trace["answer"] = {
+            "status": "ANSWERED",
+            "text": (f"understood. i will no longer use what you "
+                     f"told me about the {entity}: "
+                     + "; ".join(clauses) + ". the record of the "
+                     "retraction is kept.")}
+        return self._seal(trace, committed=True)
+
+    def _entity_summary_turn(self, act: Dict, trace: Dict) -> Dict:
+        entity = self._resolve_noun(act["entity_word"])
+        if entity is None:
+            trace["answer"] = {
+                "status": "UNSUPPORTED_LANGUAGE",
+                "detail": f"i do not know the word "
+                          f"{act['entity_word']!r}"}
+            return self._seal(trace, committed=False)
+        verified_clauses = []
+        for fact in self.seed["cmb_facts"]:
+            args = fact.get("args", [])
+            if fact.get("pred") == "has" and args \
+                    and args[0] == entity:
+                verified_clauses.append(f"the {args[0]} is {args[1]}")
+        session_records = self.dialogue.about(entity)
+        session_clauses = [r["clause"] for r in session_records]
+        parts = []
+        if verified_clauses:
+            parts.append("the verified record says "
+                         + " and ".join(verified_clauses) + ".")
+        if session_clauses:
+            parts.append("you told me that "
+                         + "; ".join(session_clauses) + ".")
+        if not parts:
+            parts.append(f"i have no information about the "
+                         f"{entity}.")
+        trace.setdefault("dialogue", {})["retrieval"] = {
+            "verified_count": len(verified_clauses),
+            "session_count": len(session_clauses)}
+        trace["answer"] = {"status": "ANSWERED",
+                           "text": " ".join(parts),
+                           "source_classes": {
+                               "verified": len(verified_clauses),
+                               "user_asserted": len(session_clauses)}}
+        return self._seal(trace, committed=True)
+
+    def _correction_turn(self, act: Dict, sentence: str,
+                         trace: Dict) -> Dict:
+        """'actually, X.' - parse X, supersede what it corrects,
+        commit the new record. Supersession is explicit and audited;
+        the old record stays in history."""
+        body = sentence.split(" ", 1)[1] if " " in sentence else ""
+        packet = core = None
+        native = self._native(body)
+        if native["status"] == "PARSED":
+            packet = native["meaning"]
+        else:
+            gram = self.gram_parser.parse(self.grammar.active_rules(),
+                                          body)
+            if gram["status"] == "PARSED":
+                mood = gram["frames"][0]["surface"].get("mood")
+                if mood in (None, "declarative"):
+                    core = gram["core"]
+                    refused = self._resolve_pronouns(core, trace)
+                    if refused is not None:
+                        return refused
+                    packet = self._frame_to_packet(core)
+        if packet is None:
+            trace["answer"] = {
+                "status": "UNSUPPORTED_LANGUAGE",
+                "detail": "i did not understand the corrected "
+                          "statement after 'actually,'"}
+            return self._seal(trace, committed=False)
+        tense = core.get("tense") if core else "present"
+        clause = (render_clause(core)
+                  if core and core.get("frame") in ("event", "state")
+                  else self.dialogue.packet_to_clause(packet, tense))
+        conflicts = self.dialogue.conflicting_active(packet, tense)
+        turn_id = trace.get("turn_id", "t?")
+        try:
+            record = self.dialogue.record_assertion(
+                packet, clause, tense,
+                core.get("polarity") if core else None,
+                core.get("modality") if core else None,
+                turn_id, provenance=f"user_turn:{turn_id}+correction",
+                supersedes=[r["assertion_id"] for r in conflicts])
+        except Exception as exc:
+            trace.setdefault("dialogue", {})["assertion_fault"] = {
+                "fault": type(exc).__name__}
+            trace["answer"] = {
+                "status": "ASSERTION_NOT_RECORDED",
+                "detail": "recording the correction failed - "
+                          "nothing was remembered or superseded"}
+            return self._seal(trace, committed=False)
+        old_clauses = []
+        for prior in conflicts:
+            old_clauses.append(prior["clause"])
+            self.dialogue.apply_lifecycle(
+                prior["assertion_id"], "SUPERSEDED",
+                f"corrected by {record['assertion_id']}", turn_id)
+        trace.setdefault("dialogue", {})["assertion"] = {
+            "assertion_id": record["assertion_id"],
+            "record_digest": record["record_digest"],
+            "clause": record["clause"]}
+        self._note_discourse(packet)
+        if old_clauses:
+            text = (f"understood. i will use '{clause}' in this "
+                    f"session. you previously said "
+                    f"'{'; '.join(old_clauses)}'.")
+        else:
+            text = f"okay. you told me that {clause}."
+        trace["answer"] = {"status": "ANSWERED", "text": text,
+                           "session_assertion": {
+                               "assertion_id": record["assertion_id"]}}
         return self._seal(trace, committed=True)
 
     def _note_discourse(self, packet) -> None:
@@ -227,6 +673,19 @@ class HybridRouter:
                        "validation": None, "commitment": None,
                        "answer": None}
 
+        from lang.grammar import tokenize as _tokenize
+        turn_id, _tick = self.dialogue.begin_turn()
+        trace["turn_id"] = turn_id
+
+        # CCB-D1 SURFACE ACTS: greetings, thanks, closings, bare
+        # yes/no, retraction, entity summary, and the 'actually,'
+        # correction prefix are DIALOGUE-layer forms - they update
+        # dialogue state, never semantic knowledge, and only through
+        # the typed intent path.
+        act = self.dialogue.classify_surface(_tokenize(sentence))
+        if act is not None:
+            return self._dialogue_act_turn(act, sentence, trace)
+
         native = self._native(sentence)
         if native["status"] == "PARSED":
             trace["route"] = "native"
@@ -262,71 +721,37 @@ class HybridRouter:
                     "detail": "the question asks WHY; the kernel "
                               "holds no cause facts to answer it"}
                 return self._seal(trace, committed=False)
+            if mood == "interrogative_wh":
+                # a taught wh-question: partial-proposition lookup
+                # over the session store; provenance-aware rendering
+                return self._answer_wh_question(packet, gram, trace)
             if mood == "interrogative":
                 if packet.get("pred") == "conjunction":
                     # a RESTRICTED question ('is the gray cat quiet?')
                     # projects as a conjunction: EVERY conjunct must be
-                    # kernel-verified before 'yes' - one unknown and
-                    # the honest answer is unknown. Nothing is dropped
-                    # to make the question easier.
+                    # settled before 'yes' - one unknown and the
+                    # honest answer is unknown. Nothing is dropped to
+                    # make the question easier.
                     return self._answer_conjunction_question(
                         packet, gram, trace)
-                # a learned QUESTION construction: language understood;
-                # the kernel decides whether knowledge exists. If it
-                # cannot answer, the honest split status applies -
-                # never a fabricated answer, never blamed grammar.
-                try:
-                    kernel = self._kernel_answer(
-                        {"pred": "question", "args": [packet]})
-                    text = kernel["answer"]
-                    if packet.get("pred") == "property" \
-                            and core_state_renderable(gram["core"]):
-                        core = gram["core"]
-                        clause = (f"the {core.get('entity')} is "
-                                  f"{core.get('property')}")
-                        if kernel["kernel_status"] == "CONCLUDED":
-                            text = f"yes, {clause}."
-                        else:
-                            text = (f"i do not know whether "
-                                    f"{clause}.")
-                    if packet.get("pred") == "relation":
-                        # the legacy decoder only speaks property
-                        # questions; relation questions render from
-                        # the frame (ledger finding: 'whether the
-                        # chase is cat' was mangled English over a
-                        # CORRECT kernel verdict)
-                        core = gram["core"]
-                        # naive regular rendering: present -> +s,
-                        # past -> +d (chase -> chased); the REALIZE
-                        # subboard owns proper rendering later
-                        suffix = "d" if core.get("tense") == "past" \
-                            else "s"
-                        clause = (f"the {core['agent']} "
-                                  f"{core['predicate']}{suffix} the "
-                                  f"{core['patient']}")
-                        if core.get("recipient"):
-                            clause += f" to the {core['recipient']}"
-                        if kernel["kernel_status"] == "CONCLUDED":
-                            text = f"yes, {clause}."
-                        else:
-                            text = f"i do not know whether {clause}."
-                    self._note_discourse(packet)
-                    trace["answer"] = {"status": "ANSWERED",
-                                       "text": text,
-                                       "frame_core": gram["core"]}
-                    return self._seal(trace, committed=True)
-                except Exception as exc:
-                    trace["answer"] = {
-                        "status": "LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING",
-                        "frame_core": gram["core"],
-                        "detail": "the question parsed natively; the "
-                                  "kernel holds no facts of this kind "
-                                  f"to answer it ({type(exc).__name__})"}
-                    return self._seal(trace, committed=False)
+                return self._answer_gram_question(packet, gram, trace)
             self._note_discourse(packet)
+            if mood == "imperative":
+                # instruction-shaped content is DATA: understood,
+                # never stored as a fact, never an external action
+                trace.setdefault("dialogue", {})["act"] = "COMMAND"
+                trace["answer"] = {"status": "UNDERSTOOD",
+                                   "meaning": packet,
+                                   "frame_core": gram["core"]}
+                return self._seal(trace, committed=True)
+            outcome, payload = self._record_assertion(
+                trace, packet, gram["core"])
+            if outcome == "clarification":
+                return self._seal(trace, committed=False)
             trace["answer"] = {"status": "UNDERSTOOD",
                                "meaning": packet,
                                "frame_core": gram["core"]}
+            self._attach_assertion_result(trace, outcome, payload)
             return self._seal(trace, committed=True)
         if gram["status"] == "AMBIGUOUS_PARSE":
             trace["route"] = "native_gram"
@@ -612,24 +1037,115 @@ class HybridRouter:
 
     # ------------------------------------------------------------------
     def _commit(self, meaning: Dict, trace: Dict) -> bool:
-        """Commitment stays with CAS: questions go through the kernel;
-        statements are acknowledged as parsed content (no durable
-        write in v0.1)."""
+        """Commitment stays with CAS. Questions consult the verified
+        kernel FIRST, then the session assertion store - sources never
+        collapsed. Statements on native routes become session
+        assertions through the typed intent path (CONV v0.1);
+        acknowledgment attaches only AFTER the atomic commit."""
         if meaning.get("pred") == "question":
             kernel = self._kernel_answer(meaning)
             trace["commitment"] = {"by": "cas_kernel",
                                    "kernel_status": kernel["kernel_status"]}
-            trace["answer"] = {"status": "ANSWERED",
-                               "text": kernel["answer"]}
+            inner = (meaning.get("args") or [{}])[0]
+            support = self.dialogue.support_for(inner, None)
+            conflicts = self.dialogue.conflicting_active(inner)
+            trace.setdefault("dialogue", {})["retrieval"] = {
+                "kernel_status": kernel["kernel_status"],
+                "session_verdict": support and support.get("verdict"),
+                "conflicting": [r["assertion_id"]
+                                for r in conflicts]}
+            concluded = kernel["kernel_status"] == "CONCLUDED"
+            if concluded and conflicts:
+                clause = self.dialogue.packet_to_clause(inner)
+                told = self.dialogue.packet_to_clause(
+                    conflicts[0]["proposition"],
+                    conflicts[0].get("tense"))
+                trace["answer"] = {
+                    "status": "ANSWERED",
+                    "text": (f"i have conflicting information: the "
+                             f"verified record says {clause}; you "
+                             f"told me {told}."),
+                    "source_class": "CONFLICT"}
+            elif concluded:
+                trace["answer"] = {"status": "ANSWERED",
+                                   "text": kernel["answer"],
+                                   "source_class": "VERIFIED"}
+            elif support and support["verdict"] == "yes":
+                clause = self.dialogue.packet_to_clause(
+                    inner, support["record"].get("tense"))
+                trace["answer"] = {
+                    "status": "ANSWERED",
+                    "text": (f"based on what you told me, yes, "
+                             f"{clause}."),
+                    "source_class": "USER_ASSERTED"}
+            elif support and support["verdict"] == "no":
+                told = self.dialogue.packet_to_clause(
+                    support["record"]["proposition"],
+                    support["record"].get("tense"))
+                trace["answer"] = {
+                    "status": "ANSWERED",
+                    "text": (f"based on what you told me, no - you "
+                             f"told me that {told}."),
+                    "source_class": "USER_ASSERTED"}
+            elif support and support["verdict"] == "contested":
+                trace["answer"] = {
+                    "status": "ANSWERED",
+                    "text": ("you gave me conflicting statements "
+                             "about this - i cannot answer until it "
+                             "is settled."),
+                    "source_class": "CONTESTED"}
+            else:
+                trace["answer"] = {"status": "ANSWERED",
+                                   "text": kernel["answer"],
+                                   "source_class": None}
         else:
             trace["commitment"] = {"by": "cas_parse_acknowledgement"}
+            # the legacy native grammar covers PRESENT forms only,
+            # so its statements carry tense 'present' (disclosed
+            # annotation - conflict detection is tense-strict)
+            outcome, payload = self._record_assertion(
+                trace, meaning, core=None, tense_hint="present")
+            if outcome == "clarification":
+                self._note_discourse(meaning)
+                return False
             trace["answer"] = {"status": "UNDERSTOOD",
                                "meaning": meaning}
+            self._attach_assertion_result(trace, outcome, payload)
         self._note_discourse(meaning)
         return True
 
     def _seal(self, trace: Dict, committed: bool) -> Dict:
         trace["committed"] = committed
+        # CAS-OHM test points for the CONV path: compute-only flow
+        # decoration - it locates energized vs starved stations
+        # (language failure vs memory-write failure vs
+        # provenance-rendering fault); it never decides truth
+        answer = trace.get("answer") or {}
+        dlg = trace.get("dialogue") or {}
+        parsed = trace.get("route") in ("native", "native_gram",
+                                        "dialogue", "cortex")
+        trace["conv_flow"] = {
+            "tp_parse": "active" if parsed else "cutoff",
+            "tp_semantic_packet": "active"
+            if (answer.get("meaning") or answer.get("frame_core")
+                or trace.get("frame") or dlg.get("act"))
+            else "absent",
+            "tp_write_intent": "active"
+            if (dlg.get("assertion") or dlg.get("assertion_fault")
+                or dlg.get("pending")) else "absent",
+            "tp_session_commit": "active" if dlg.get("assertion")
+            else ("cutoff" if dlg.get("assertion_fault")
+                  else "absent"),
+            "tp_retrieval": "active" if "retrieval" in dlg
+            else "absent",
+            "tp_answer": "active"
+            if (answer.get("text") or answer.get("acknowledgment")
+                or answer.get("status") == "UNDERSTOOD")
+            else "cutoff",
+            "authority_note": "compute-only: no truth, validity, "
+                              "meaning, commitment, or permission "
+                              "decision may read this record",
+        }
         # the native CAS-Ohm attention record: COMPUTE-ONLY decoration,
         # authored AFTER the answer is decided; nothing above reads it
         from .attention import stage_record
