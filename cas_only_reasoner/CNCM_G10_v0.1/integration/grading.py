@@ -1,11 +1,13 @@
 """The task-difficulty grading for the multi-domain long-horizon
-episode - every axis DISCLOSED with its justification, the raw band
-disclosed next to the floor, and the novel-research caveat verbatim.
+episode - every axis DISCLOSED with its justification.
 
-The D10 grade rests on the NOVEL-RESEARCH floor (the discovery leg:
-machine-generated, machine-proved theorems absent from every fixture),
-not on the DI band (which is honestly D8). Anyone quoting the D10 must
-quote the caveat with it.
+AUDIT RECORD (2026-08-28, adversarial, REFUTED): the v1 grading
+claimed the D10 novel-research floor via the discovery leg. The audit
+found the flagship theorem was a disguised input (both sides
+hand-authored into the space; the underlying law taught to the machine
+as an executable axiom the novelty gate never read) and that CRQS
+section 4 reserves the floor for research WITH NO KNOWN ANSWER. The
+floor claim is WITHDRAWN. The honest grade is the DI band: D8.
 """
 
 from __future__ import annotations
@@ -38,15 +40,16 @@ AXES: Dict[str, int] = {
     "adversarial": 2,  # tamper-refusal legs; modest within-episode
 }
 
-NOVEL_RESEARCH_CAVEAT = (
-    "the novel-research floor rests on the discovery leg: theorems "
-    "novel TO THIS MACHINE (absent from every fixture, "
-    "machine-generated, proved by the trusted checker) and trivial to "
-    "human mathematics - discovery-by-exhaustive-search at v0.1 scale. "
-    "The DI band without the floor is D8 and is disclosed alongside.")
+WITHDRAWN_FLOOR_RECORD = (
+    "the v1 D10 novel-research floor claim was REFUTED by adversarial "
+    "audit (2026-08-28): the discovery leg is verified identity search "
+    "over a partly hand-authored space, with the flagship identity a "
+    "one-step instance of a taught axiom - not research with no known "
+    "answer (CRQS section 4). The floor is WITHDRAWN; the grade is the "
+    "DI band, D8. The negative stays on the record.")
 
 
 def grading() -> Dict:
-    graded = grade_task(AXES, novel_research=True)
-    graded["caveat"] = NOVEL_RESEARCH_CAVEAT
+    graded = grade_task(AXES, novel_research=False)
+    graded["caveat"] = WITHDRAWN_FLOOR_RECORD
     return graded

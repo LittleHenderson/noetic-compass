@@ -340,21 +340,60 @@ COMMANDS:
   it. CAS-GΩ guarded as a research designation (no gate to clear,
   no level to award). CRQS 35 tests green.
 
-QUALIFICATION AFTER THE G10 ROUND (pre-audit):
-  the assembled CNCM (twelve-board assembly) qualifies
-  CAS-G10 / E6 / A0 - design ceiling CAS-G10 (every topology flag
-  present), demonstrated CAS-G10 stable D10 (grading disclosed),
-  evidence E6 on the two prior independent audit records (caveat
-  disclosed). Recommended next target: CAS-GΩ - a research
-  designation, not a tier. The report itself flags the public
-  (not-held-out) suites incl. suite_CAS-G10. RMB NOT RUN.
-  ADVERSARIAL AUDIT OF THIS ROUND: queued - the D10 novel-research
-  floor and the E6 replication basis are the two claims most exposed.
+G10 ROUND ADVERSARIAL AUDIT (3-agent, 2026-08-28) - THE STANDARD
+HELD. Verdicts, on the record forever:
+  - D10 novel-research floor: REFUTED. The discovery flagship
+    x*(y+1)=x*y+x was a disguised input - both sides hand-authored
+    into the 68-expression space, and the distributive law was TAUGHT
+    to the machine (fixture dist_identity + the executable
+    'distribute' axiom the novelty gate never read). CRQS section 4
+    (FROZEN) reserves the floor for research WITH NO KNOWN ANSWER.
+    Same genus as the refuted G8 v1 disguised constant.
+  - E6 evidence tier: REFUTED. Self-commissioned same-session AI
+    audit agents are inside the developing party's control boundary;
+    the records' own caveat ('human/organizational replication OPEN')
+    names the unmet requirement. Honest tier: E5 with the two audits
+    as strong supporting evidence.
+  - The integration machinery: NOT REFUTED (real process boundaries,
+    zero mocks, honest self-model downgrade verified by breaking a
+    probe, twelve-board count verified, determinism across six fresh
+    processes). One boundary recorded: goal completion proves against
+    CALLER-OFFERED facts - a fact-echo (rules_used=[]) could complete
+    a goal.
 
-PROGRAM TEST TOTALS (all green, 2026-08-28, G10 round complete):
+CLOSURES (each with a test, same-day):
+  - discovery.py -> verified identity search v0.2: the false 'generic
+    space' wording replaced with the disclosed truth (hand-authored
+    composite layer), the one-step taught-axiom derivability gate
+    added (the planted distributivity pair is now CAUGHT and marked
+    derived, never novel - theorems drop 5 -> 2), the honesty line
+    says 'NOT novel research' verbatim.
+  - grading.py -> D8, novel_research=False, the WITHDRAWN_FLOOR_RECORD
+    travels in the caveat.
+  - evidence.py E6 bar raised: external=true (evaluator outside the
+    developing party's session/provenance) + claim linkage + artifact
+    + non-blank evaluator, all required; the CNCM's records carry
+    external:false and honestly stay E5.
+  - LTG fact-echo guard: a no-rules proof is REFUSED by default;
+    allow_direct_fact=True is reserved for evidence-backed direct
+    facts and disclosed in the completion record (the g_discover leg
+    uses exactly that disclosed path).
+  - CNCM_G10 spec written (was empty - audit minor finding).
+
+HONEST QUALIFICATION AFTER THE FULL G10 ROUND:
+  CAS-G9 / E5 / A0 - design ceiling CAS-G10 (all twelve boards
+  exist; the machinery through G10 is real and NOT REFUTED),
+  demonstrated CAS-G9 stable D9, next target CAS-G10 with the true
+  gap derived by the report itself: (1) a STABLE D10 demonstration
+  under CRQS section 4's own reading - genuine research with no known
+  answer; (2) E6 via genuinely external replication. RMB NOT RUN.
+  The G10 LEVEL was reached for four hours and honestly given back
+  when the audit landed. That is the standard doing its job.
+
+PROGRAM TEST TOTALS (all green, 2026-08-28, post-audit):
   kernel 34 + RLP 45 + CCB-M1 34 + CCB-L1 18 + CAS-Sem 19 +
   workbench 13 + CRQS 35 + CCB-T1 20 + OHM-panel 10 + H2H 10 +
-  LTG 10 + SM 8 + CNCM-G10 8 = 264 local, + cas-rr 43 = 307
+  LTG 11 + SM 8 + CNCM-G10 8 = 265 local, + cas-rr 43 = 308
   program-wide.
 
 G9 RE-AUDIT VERDICT (independent 2-agent adversarial pass,

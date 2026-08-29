@@ -148,9 +148,29 @@ def test_parent_goal_linkage_and_open_goals():
     assert store.goals["g1.1"]["parent_goal_id"] == "g1"
     assert {g["goal_id"] for g in store.open_goals()} == {"g1", "g1.1"}
     store.start("g1.1", provenance="p")
-    store.complete("g1.1", FACTS, [], provenance="fact_present")
+    store.complete("g1.1", FACTS, [], provenance="fact_present",
+                   allow_direct_fact=True)
     assert {g["goal_id"] for g in store.open_goals()} == {"g1"}
 
 
 def test_store_determinism():
     assert _store().store_digest() == _store().store_digest()
+
+
+def test_fact_echo_completion_refused_by_default():
+    """AUDIT CLOSURE (2026-08-28): asserting the bare conclusion as a
+    fact must NOT complete a goal unless the caller explicitly claims
+    an evidence-backed direct fact - and the record discloses it."""
+    store = _store()
+    store.start("g1", provenance="p")
+    echo = [{"pred": "greater_than_one", "args": []}]
+    with pytest.raises(UnprovenCompletion, match="FACT-ECHO"):
+        store.complete("g1", echo, [], provenance="cheat")
+    assert store.goals["g1"]["status"] == "IN_PROGRESS"
+    result = store.complete("g1", echo, [], provenance="evidence_backed",
+                            allow_direct_fact=True)
+    assert result["direct_fact"] is True
+    store2 = _store()
+    store2.start("g1", provenance="p")
+    derived = store2.complete("g1", FACTS, RULES, provenance="proof")
+    assert derived["direct_fact"] is False

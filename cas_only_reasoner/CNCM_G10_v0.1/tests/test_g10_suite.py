@@ -12,7 +12,7 @@ import sys
 import tempfile
 
 from integration.episodes import episode1
-from integration.grading import AXES, NOVEL_RESEARCH_CAVEAT, grading
+from integration.grading import AXES, WITHDRAWN_FLOOR_RECORD, grading
 
 import pytest
 
@@ -137,17 +137,20 @@ def test_self_model_routing_is_honest():
 
 
 # ------------------------------------------------------------- grading
-def test_d10_grading_is_disclosed_not_asserted():
+def test_grading_is_the_honest_d8_band_floor_withdrawn():
+    """AUDIT RECORD: the v1 D10 novel-research floor was REFUTED
+    (planted pairs; taught-axiom instantiation); the grade is the DI
+    band D8 and the refutation travels in the caveat."""
     graded = grading()
-    assert graded["grade"] == "D10"
-    assert graded["raw_grade"] == "D8"        # the DI band, disclosed
-    assert graded["hard_floor"] == "D10"      # the novel-research floor
-    assert graded["novel_research"] is True
+    assert graded["grade"] == "D8"
+    assert graded["raw_grade"] == "D8"
+    assert graded["novel_research"] is False
     assert graded["axes"] == AXES
-    assert "trivial to human mathematics" in graded["caveat"]
-    assert "D8" in graded["caveat"]
+    assert "REFUTED" in graded["caveat"]
+    assert "WITHDRAWN" in graded["caveat"]
 
 
-def test_grading_caveat_names_the_floor_source():
-    assert "discovery" in NOVEL_RESEARCH_CAVEAT
-    assert "exhaustive-search" in NOVEL_RESEARCH_CAVEAT
+def test_withdrawn_floor_record_names_the_reasons():
+    assert "hand-authored" in WITHDRAWN_FLOOR_RECORD
+    assert "taught axiom" in WITHDRAWN_FLOOR_RECORD
+    assert "no known" in WITHDRAWN_FLOOR_RECORD

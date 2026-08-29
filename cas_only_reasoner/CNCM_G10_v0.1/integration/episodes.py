@@ -170,11 +170,16 @@ def episode3(workdir: str) -> Dict:
     # DISCOVERY: machine-novel theorems proved by the trusted checker
     packet = discover()
     assert packet["theorems"], "no theorems discovered"
+    # DIRECT FACT, disclosed (audit boundary): the theorem_proved
+    # fact is constructed here from the sealed discovery packet - the
+    # kernel check is a fact-echo; the EVIDENCE is the discovery
+    # digest; allow_direct_fact=True acknowledges exactly that.
     completion = store.complete(
         "g_discover",
         facts=[{"pred": "theorem_proved",
                 "args": [packet["discovery_digest"]]}],
-        rules=[], provenance="discovery_sealed_evidence")
+        rules=[], provenance="discovery_sealed_evidence",
+        allow_direct_fact=True)
 
     digest = store.save(os.path.join(workdir, STORE))
     payload = {"repair_promoted": True,

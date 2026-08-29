@@ -1,8 +1,11 @@
-"""Discovery: conjecture -> test -> prove -> novelty gate.
+"""Verified identity search (audit-corrected v0.2).
 
-The honesty bar: theorems are machine-generated, machine-verified by
-the TRUSTED checker, absent from every fixture (variable-name-blind),
-and the packet says exactly what 'novel' means here.
+The 2026-08-28 adversarial audit REFUTED v1's novel-research framing:
+the composite layer was hand-authored (both sides of the showcase pair
+in the space), and the machine had been TAUGHT distributivity as an
+executable axiom the novelty gate never read. v0.2 records those facts
+in the module itself, adds the one-step-derivability gate, and claims
+only what survives: verified identity search, never novel research.
 """
 
 from fractions import Fraction
@@ -39,15 +42,20 @@ def test_theorems_are_proved_by_the_trusted_checker():
         assert theorem["novel_to_machine"] is True
 
 
-def test_distributivity_instance_discovered():
-    """x*(y+1) = x*y + x - a genuine algebraic law instance the
-    machine was never given."""
-    packet = discover()
+def test_planted_distributivity_is_caught_not_celebrated():
+    """AUDIT CLOSURE: x*(y+1) = x*y + x is a one-step instance of the
+    TAUGHT distribute axiom, and both its sides were hand-authored
+    into the space. The gate must mark it derived, never novel."""
+    from cas_math.discovery import _derivable_from_taught_axiom
     x, y, one = Var("x"), Var("y"), Num(Fraction(1))
-    target = _pair_key(Mul((x, Add((y, one)))), Add((Mul((x, y)), x)))
+    left = Mul((x, Add((y, one))))
+    right = Add((Mul((x, y)), x))
+    assert _derivable_from_taught_axiom(left, right) is True
+    packet = discover()
+    target = _pair_key(left, right)
     keys = {_pair_key(from_json(t["left"]), from_json(t["right"]))
             for t in packet["theorems"]}
-    assert target in keys
+    assert target not in keys      # not in the NOVEL list
 
 
 def test_novelty_gate_is_variable_name_blind():
@@ -66,9 +74,9 @@ def test_novelty_gate_is_variable_name_blind():
 
 def test_honesty_line_travels_with_the_packet():
     packet = discover()
-    assert "novel to this machine" in packet["honesty"]
+    assert "not novel research" in packet["honesty"].lower()
+    assert "hand-authored" in packet["honesty"]
     assert "trivial to human mathematics" in packet["honesty"]
-    assert "exhaustive-search" in packet["honesty"]
 
 
 def test_discovery_is_deterministic():

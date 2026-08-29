@@ -2,23 +2,30 @@
 was never given.
 
 The loop shape is conjecture -> counterexample-test -> proof:
-  1. ENUMERATE candidate expressions over a generic grammar
-     (vars x,y; constants 0,1,2; add, mul, neg, square) - the space is
-     generic, not seeded with planted truths;
+  1. ENUMERATE candidate expressions: atoms and one-operation
+     combinations, PLUS a hand-authored composite layer (an audit
+     found the original "generic space" wording false: the composite
+     layer contains both sides of showcase identities by construction
+     - that fact is now disclosed here and in the packet);
   2. CONJECTURE candidate identities (syntactically distinct pairs);
   3. TEST each conjecture at exact sample points - falsified
      conjectures die with a witness;
   4. PROVE survivors through the TRUSTED checker (canonical polynomial
      expansion - sound and complete for this class; the prover is
      independent of the generator);
-  5. NOVELTY-GATE: any theorem already present in the board's fixtures
-     or rules is discarded as known.
+  5. KNOWN-CONTENT GATES: (a) fixture identities are excluded
+     (alpha-normalized, variable-name-blind); (b) any identity
+     derivable in ONE application of a taught executable axiom
+     (rules.py) is marked derived_from_taught_axiom and NOT counted
+     novel - closing the instantiation hole the audit found.
 
-HONESTY LINE (state it wherever this capability is quoted): the
-discovered theorems are novel TO THIS MACHINE - absent from every
-fixture and rule, machine-generated and machine-verified - and
-trivial to human mathematics. This is discovery-by-exhaustive-search
-at v0.1 scale, not open-ended research.
+HONESTY LINE (state it wherever this capability is quoted): this is
+VERIFIED IDENTITY SEARCH over a small, partly hand-authored space -
+NOT novel research under CRQS section 4 (every result has an answer
+known to mathematics). Surviving "novel_to_machine" items are merely
+absent from fixtures and not one-step-derivable from taught axioms.
+The CAS-G10 D10 novel-research floor claim built on v1 of this module
+was REFUTED by adversarial audit (2026-08-28) and is withdrawn.
 """
 
 from __future__ import annotations
@@ -66,8 +73,10 @@ def enumerate_expressions() -> List[object]:
         exprs.append(Neg(atom))
     exprs.append(Pow(Var("x"), 2))
     exprs.append(Pow(Var("y"), 2))
-    # a second layer of structured composites so distributivity-shaped
-    # identities exist in the space
+    # HAND-AUTHORED composite layer - DISCLOSED: these six expressions
+    # include both sides of showcase identities by construction; any
+    # theorem formed from them is search-confirmation of an authored
+    # pair, not discovery
     x, y = Var("x"), Var("y")
     one = Num(Fraction(1))
     exprs += [
@@ -149,6 +158,26 @@ def _is_interesting(left: object, right: object) -> bool:
     return has_var
 
 
+def _derivable_from_taught_axiom(left: object, right: object) -> bool:
+    """The instantiation gate (audit-closure): if ONE application of a
+    taught executable axiom to either side yields the other, the
+    identity is an instance of taught content, not machine-novel.
+    Bound disclosed: one step, either direction."""
+    try:
+        from .rules import AXIOM_IDS, apply_rule
+    except Exception:
+        return False
+    for axiom_id in AXIOM_IDS:
+        for source, target in ((left, right), (right, left)):
+            try:
+                produced = apply_rule(axiom_id, source, ())
+            except Exception:
+                continue
+            if produced is not None and equal(produced, target):
+                return True
+    return False
+
+
 def discover(max_theorems: int = 8) -> Dict:
     """The full discovery cycle: sealed, deterministic."""
     space = enumerate_expressions()
@@ -192,26 +221,33 @@ def discover(max_theorems: int = 8) -> Dict:
         if pair in seen_pairs:
             continue
         seen_pairs.add(pair)
-        novel = pair not in known
+        derived = _derivable_from_taught_axiom(left, right)
+        novel = (pair not in known) and not derived
         theorem = {
             "left": to_json(left),
             "right": to_json(right),
             "certificate": "canonical polynomial forms identical",
             "novel_to_machine": novel,
+            "derived_from_taught_axiom": derived,
         }
         if novel and len(proven) < max_theorems:
             proven.append(theorem)
 
     packet = {
-        "capability": "discovery v0.1",
+        "capability": "verified identity search v0.2 "
+                      "(audit-corrected; not novel research)",
         "space_size": len(space),
         "conjectures_tested": conjectures,
         "falsified": falsified,
         "sample_witnesses": witnesses,
         "theorems": proven,
-        "honesty": ("novel to this machine (absent from every fixture "
-                    "and rule), trivial to human mathematics; "
-                    "discovery-by-exhaustive-search at v0.1 scale"),
+        "honesty": ("VERIFIED IDENTITY SEARCH, not novel research "
+                    "(CRQS section 4: no unknown answers here); the "
+                    "composite layer of the space is hand-authored and "
+                    "contains showcase pairs by construction; "
+                    "novel_to_machine means only: absent from fixtures "
+                    "AND not one-step-derivable from taught axioms; "
+                    "trivial to human mathematics"),
     }
     packet["discovery_digest"] = _digest(packet)
     return packet

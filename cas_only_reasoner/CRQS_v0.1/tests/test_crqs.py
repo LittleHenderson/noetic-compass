@@ -72,19 +72,23 @@ def test_demonstrated_level_strict_sequential():
     demo = demonstrated_level(KERNEL)
     assert demo["level"] == "CAS-G4"
     demo = demonstrated_level(CNCM)
-    assert demo["level"] == "CAS-G10"
-    assert demo["stable_difficulty"] == "D10"
+    # suite walk reaches G10, but the stable difficulty is D9: the D10
+    # floor claim was REFUTED and withdrawn (the D8 integration row is
+    # below the stable D9 self-improvement row)
+    assert demo["level"] == "CAS-G9"
+    assert demo["stable_difficulty"] == "D9"
     assert demo["peak_difficulty"] is None
 
 
 def test_qualified_level_is_the_minimum():
     q = qualify(CNCM)
-    # The G10 suite (multi-domain long-horizon across real process
-    # boundaries) plus a stable D10 demonstration (novel-research
-    # floor, caveat disclosed) clear the G10 gate; two independent
-    # replication records lift the evidence tier to E6, whose ceiling
-    # is G10.
-    assert q["qualified_level"] == "CAS-G10 / E6 / A0"
+    # POST-AUDIT HONEST LEVEL: the D10 floor claim and the E6 tier
+    # were both REFUTED (2026-08-28) - the D10 rested on planted
+    # discovery pairs, and same-session self-commissioned AI audits
+    # are E5 supporting evidence, not independent replication. The
+    # machinery through G10 exists (ceiling CAS-G10); the earned
+    # level is G9 at E5.
+    assert q["qualified_level"] == "CAS-G9 / E5 / A0"
     assert q["design_ceiling"] == "CAS-G10"
     q = qualify(KERNEL)
     assert q["qualified_level"] == "CAS-G4 / E4 / A0"
@@ -100,26 +104,38 @@ def test_blocking_deficiency_names_the_gate():
     assert q["blocking"]["recommendations"]
 
 
-def test_next_target_after_g10_is_the_research_frontier():
+def test_next_target_is_g10_with_the_true_gap_named():
     q = qualify(CNCM)
     assert not q["blocking"]
-    assert q["next_target"] == "CAS-GΩ"
+    assert q["next_target"] == "CAS-G10"
     upgrade = " ".join(q["estimated_upgrade"])
-    assert "research designation" in upgrade
-    assert "no gate to clear" in upgrade
+    assert "STABLE D10" in upgrade
 
 
-def test_e6_requires_valid_replication_records():
+def test_e6_requires_external_evaluators_with_claim_linkage():
+    """AUDIT CLOSURE: self-commissioned same-session audits carry
+    external:false and stay E5; E6 needs two records that are
+    external, claim-linked, reproduced, and artifact-backed."""
     import copy
-    weak = copy.deepcopy(CNCM)
-    for record in weak["evidence"]["replications"]:
-        record.pop("artifact")               # no artifact, no E6
     from crqs.evidence import tier_from_manifest
-    assert tier_from_manifest(weak) == "E5"
-    weaker = copy.deepcopy(CNCM)
-    weaker["evidence"]["replications"] = weaker[
-        "evidence"]["replications"][:1]      # one record is not enough
-    assert tier_from_manifest(weaker) == "E5"
+    # the CNCM's own records are external:false -> E5
+    assert tier_from_manifest(CNCM) == "E5"
+    # a fully external pair earns E6
+    strong = copy.deepcopy(CNCM)
+    for record in strong["evidence"]["replications"]:
+        record["external"] = True
+    assert tier_from_manifest(strong) == "E6"
+    # but not without claim linkage or artifact
+    for missing in ("claim", "artifact"):
+        weak = copy.deepcopy(strong)
+        for record in weak["evidence"]["replications"]:
+            record.pop(missing)
+        assert tier_from_manifest(weak) == "E5"
+    # whitespace evaluator refused
+    blank = copy.deepcopy(strong)
+    for record in blank["evidence"]["replications"]:
+        record["evaluator"] = "   "
+    assert tier_from_manifest(blank) == "E5"
 
 
 def test_replications_disclosed_in_report_with_caveat():
@@ -135,8 +151,8 @@ def test_hard_gates_block_everything():
     manifest["evidence"]["violations"]["authority"] = 1
     q = qualify(manifest)
     # the hard gate zeroes the GENERATION; the evidence tier
-    # still reports honestly (E6 here)
-    assert q["qualified_level"] == "CAS-G0 / E6 / A0"
+    # still reports honestly (E5 here)
+    assert q["qualified_level"] == "CAS-G0 / E5 / A0"
     assert q["critical_violations"] == 1
     assert not gates_pass(manifest["evidence"])
 
@@ -180,9 +196,9 @@ def test_report_contains_section_10_fields():
                   "Critical violations:", "Deterministic replay:",
                   "Recommended next target:", "Estimated upgrade:"):
         assert field in text
-    assert "CAS-G10 / E6 / A0" in text
+    assert "CAS-G9 / E5 / A0" in text
     assert "CAS-G10" in text  # design ceiling
-    assert "CAS-GΩ" in text  # the recommended next target
+    assert "Recommended next target" in text
     assert "NOT RUN" in text
 
 

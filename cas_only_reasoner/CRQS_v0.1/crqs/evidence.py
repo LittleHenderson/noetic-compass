@@ -22,13 +22,21 @@ EVIDENCE_CEILING = {
 
 
 def _valid_replications(evidence: Dict) -> int:
-    """E6 requires INDEPENDENT reproduction: each record must name the
-    evaluator, state reproduced=true, and carry an artifact path. A
-    record missing any of the three does not count."""
+    """E6 requires INDEPENDENT reproduction (audit-corrected bar):
+    each record must name the evaluator, state reproduced=true, carry
+    an artifact path, name the CLAIM it reproduces, and attest
+    external=true - an evaluator OUTSIDE the developing party's
+    session and provenance. Self-commissioned same-session audits are
+    strong E5 supporting evidence, never E6 (2026-08-28 audit: 'a
+    subagent whose charter the judged party wrote is the developing
+    party's own tooling')."""
     count = 0
     for record in evidence.get("replications", []):
-        if (record.get("evaluator") and record.get("reproduced") is True
-                and record.get("artifact")):
+        if (str(record.get("evaluator", "")).strip()
+                and record.get("reproduced") is True
+                and record.get("artifact")
+                and record.get("claim")
+                and record.get("external") is True):
             count += 1
     return count
 

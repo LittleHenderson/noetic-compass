@@ -147,10 +147,16 @@ class GoalStore:
 
     # ------------------------------------------------------------------
     def complete(self, goal_id: str, facts: List[Dict], rules: List[Dict],
-                 provenance: str) -> Dict:
+                 provenance: str, allow_direct_fact: bool = False) -> Dict:
         """Completion is EARNED: the completion condition must prove
         SUPPORTED through the unchanged kernel against the offered
-        facts and rules; otherwise a typed refusal."""
+        facts and rules; otherwise a typed refusal.
+
+        AUDIT BOUNDARY (2026-08-28): the kernel proves relative to
+        CALLER-OFFERED facts, so a caller could assert the bare
+        conclusion as a fact (rules_used=[], a fact-echo). By default
+        that is now REFUSED; allow_direct_fact=True is reserved for
+        evidence-backed direct facts and is disclosed in the record."""
         goal = self.goals.get(goal_id)
         if goal is None:
             raise GoalError(f"unknown goal '{goal_id}'")
@@ -174,12 +180,20 @@ class GoalStore:
             raise UnprovenCompletion(
                 f"goal '{goal_id}': completion condition is {status}, "
                 f"not SUPPORTED - completion refused")
+        direct_fact = not proof.rules_used
+        if direct_fact and not allow_direct_fact:
+            raise UnprovenCompletion(
+                f"goal '{goal_id}': the proof is a FACT-ECHO (no rules "
+                f"used - the conclusion was offered as a fact); "
+                f"completion refused unless allow_direct_fact=True is "
+                f"passed for an evidence-backed direct fact")
         self._transition(goal_id, "COMPLETED", provenance,
                          f"kernel evidence: SUPPORTED; rules used: "
-                         f"{proof.rules_used}")
+                         f"{proof.rules_used}; direct_fact={direct_fact}")
         return {"goal_id": goal_id, "status": "COMPLETED",
                 "evidence_status": status,
-                "rules_used": list(proof.rules_used)}
+                "rules_used": list(proof.rules_used),
+                "direct_fact": direct_fact}
 
     # ------------------------------------------------------------------
     def open_goals(self) -> List[Dict]:
