@@ -1297,6 +1297,38 @@ class_inheritance, full premise chain; two-hop chaining; NO symmetry
 or free transitivity; derived never becomes verified (all GIVEN,
 cmb_facts untouched).
 
+AUDIT MANIFEST v0.1 INDEPENDENTLY AUDITED - SUBSTANCE VERIFIED,
+FOUR PAPERWORK CORRECTIONS (2026-08-29): AUDIT_MANIFEST_v0.1.md
+(commit a43df77b; 20 claims, 5 per accomplishment type, each mapped
+to machinery/sealed-evidence/test-lock/store files) was audited
+claim-by-claim by an independent pass over the repo. VERIFIED and
+REPRODUCED: 38/38 referenced files exist; 15/15 named tests exist
+verbatim and every named function/symbol is present in the named
+file; stores exact (seed_grammar.json 36 rules revision 36,
+math_skills.json 24 skills revision 24, code_procedures.json 7
+procedures revision 7); typed digest refusal confirmed by reading
+all three loaders (ConstructionError / SkillStoreError /
+ProcedureStoreError on store_digest mismatch); sealed episodes 7
+code + 24 math, committee episode contains deepseek.v3-v1:0; math
+24/24 and code 7/7 episodes carry teacher_model
+qwen.qwen3-32b-v1:0 on bedrock:us-west-2; the full sweep was
+RE-RUN during the audit and reproduced EXACTLY: 18 lanes, 440
+tests, 0 failures, 0 errors (242 junit-counted + 198 sweep-counted;
+per-lane counts match this sheet). FOUR CONFIRMED FINDINGS, all
+paperwork (none changes a capability claim), all FIXED in commit
+741e9cec: (1) English teacher provenance overclaimed - only 27/36
+constructions were live-model-taught (26 Bedrock 32B, 1 local
+Qwen/Qwen2.5-3B-Instruct negated_present_transitive), 9 from
+seed/curriculum episodes; math and code attribution was airtight;
+(2) A2 said 10 sealed episodes for the qwen glob - 9 match, the
+tenth is curriculum_round1.json; (3) A3 pointed REJECTED_* verdicts
+at the wrong files - they live in
+reconstruction_curriculum_overwrite_20260828.json
+(REJECTED_POSITIVE_EXAMPLES, REJECTED_REGRESSION) and
+live_teacher_episode_qwen2_5-*.json (REJECTED_SCHEMA x6); (4) the
+runtime canary count was stale - 33 family probes, not 28 (grammar
+at 36 constructions). The negative findings stay in this record.
+
 PROGRAM TEST TOTALS refresh (2026-08-29, programming round): 440
 local, 0 failures, 18 lanes (new: CCB-P1 22; D1 61 with v0.2 +
 correction regressions; CORTEX 49). CODE procedure store 7/7
