@@ -1,0 +1,128 @@
+{
+ "after": {
+  "answer_expr": "((2 * x) + (2 * 3))",
+  "canonical_equal_to_input": true,
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned algebra_distribute yet",
+  "missing_skill": "algebra_distribute",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "0e16a2199eed01c3",
+  "episode_digest": "3d4d543aef11ac7a",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_algebra_distribute",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "c483f93b196dba8e",
+   "parent_revision": 8
+  },
+  "skill_id": "algebra_distribute",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "4 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "canonical schema equality holds - the rule is sound for this class",
+    "passed": true,
+    "stage": "RULE_SURVIVES_ATTACK"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '14', 'right': '10'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 9",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "Multiplication distributes over addition means that multiplying a number by a sum is the same as multiplying the number by each term in the sum and then adding the results. In symbols: a * (b + c) = a"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "formal_rule",
+   "raw": "a * (b + c) = a * b + a * c"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "```json\n[\"a * (b + c) = a*b + a*c\", \"2 * (3 + 4) = 2*3 + 2*4\", \"x * (y + z) = x*y + x*z\", \"5 * (1/2 + 3/4) = 5*(1/2) + 5*(3/4)\"]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "```json\n{\n  \"equation\": \"2 * (3 + 4) = 2 * 3 + 4\"\n}\n```"
+  }
+ ],
+ "packet": {
+  "common_mistake": "2 * (3 + 4) = 2 * 3 + 4",
+  "explanation": "Multiplication distributes over addition means that multiplying a number by a sum is the same as multiplying the number by each term in the sum and then adding the results. In symbols: a * (b + c) = a*b + a*c.",
+  "formal_rule": "a * (b + c) = a * b + a * c",
+  "lesson_id": "MATH_algebra_distribute",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "algebra_distribute",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "a * (b + c) = a*b + a*c",
+   "2 * (3 + 4) = 2*3 + 2*4",
+   "x * (y + z) = x*y + x*z",
+   "5 * (1/2 + 3/4) = 5*(1/2) + 5*(3/4)"
+  ]
+ },
+ "skill_id": "algebra_distribute"
+}

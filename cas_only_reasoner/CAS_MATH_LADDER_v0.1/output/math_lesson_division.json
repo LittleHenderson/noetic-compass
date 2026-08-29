@@ -1,0 +1,115 @@
+{
+ "after": {
+  "answer": "3",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned division yet",
+  "missing_skill": "division",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "0e16a2199eed01c3",
+  "episode_digest": "872e1b5cd8a541b1",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_division",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "9053f7a56caae617",
+   "parent_revision": 6
+  },
+  "skill_id": "division",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "4 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '12', 'right': '7'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 7",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "DIVISION is the inverse of multiplication. For example, if 12 = 4 * 3, then 12 / 4 = 3 and 12 / 3 = 4. We can also write division using fractions, like 10 * 1/2 = 5."
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "```json\n[\"12 = 4 * 3\", \"10 * 1/2 = 5\", \"20 * 1/4 = 5\", \"9 = 3 * 3\"]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "```json\n\"12 = 4 + 3\"\n```"
+  }
+ ],
+ "packet": {
+  "common_mistake": "12 = 4 + 3",
+  "explanation": "DIVISION is the inverse of multiplication. For example, if 12 = 4 * 3, then 12 / 4 = 3 and 12 / 3 = 4. We can also write division using fractions, like 10 * 1/2 = 5.",
+  "lesson_id": "MATH_division",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "division",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "12 = 4 * 3",
+   "10 * 1/2 = 5",
+   "20 * 1/4 = 5",
+   "9 = 3 * 3"
+  ]
+ },
+ "skill_id": "division"
+}

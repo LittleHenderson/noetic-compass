@@ -1,0 +1,138 @@
+{
+ "after": {
+  "answer": "4",
+  "status": "SOLVED",
+  "verified_by": "substitution_into_original"
+ },
+ "before": {
+  "detail": "i have not learned linear_equations yet",
+  "missing_skill": "linear_equations",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "0e16a2199eed01c3",
+  "episode_digest": "634ab1de1c5ff279",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_linear_equations",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "06e0ddd28d46c434",
+   "parent_revision": 9
+  },
+  "skill_id": "linear_equations",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "3 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "refutation witness: {'point': {'x': '0'}, 'left': '6', 'right': '14'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 10",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "```json\n{\n  \"concept\": \"Solving linear equations involves simplifying both sides and then isolating the variable to find its value.\",\n  \"example\": \"2 * (x + 3) = 14\",\n  \"steps\": [\n    \"2 * x + 2 * 3 ="
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "method",
+   "raw": "```json\n[\"expand\", \"collect\", \"isolate\"]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "```json\n[\n  {\n    \"equation\": \"2 * (x + 3) = 14\",\n    \"variable\": \"x\",\n    \"solution\": \"4\"\n  },\n  {\n    \"equation\": \"3 * (x - 2) = 9\",\n    \"variable\": \"x\",\n    \"solution\": \"5\"\n  },\n  {\n    \"equation\":"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "\"2 * (x + 3) = 14\"  \n\"x + 3 = 14\""
+  }
+ ],
+ "packet": {
+  "common_mistake": "2 * (x + 3) = 14",
+  "explanation": "{\n  \"concept\": \"Solving linear equations involves simplifying both sides and then isolating the variable to find its value.\",\n  \"example\": \"2 * (x + 3) = 14\",\n  \"steps\": [\n    \"2 * x + 2 * 3 = 14\",\n    \"2x + 6 = 14\",\n    \"2x = 14 - 6\",\n    \"2x = 8\",\n    \"x = 8 / 2\",\n    \"x = 4\"\n  ],\n  \"common_mistake\": \"x + 3 = 14\"\n}",
+  "lesson_id": "MATH_linear_equations",
+  "method": [
+   "expand",
+   "collect",
+   "isolate"
+  ],
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "linear_equations",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   {
+    "equation": "2 * (x + 3) = 14",
+    "solution": "4",
+    "variable": "x"
+   },
+   {
+    "equation": "3 * (x - 2) = 9",
+    "solution": "5",
+    "variable": "x"
+   },
+   {
+    "equation": "5 * (x + 1) = 20",
+    "solution": "3",
+    "variable": "x"
+   }
+  ]
+ },
+ "skill_id": "linear_equations"
+}

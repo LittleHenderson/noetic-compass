@@ -1,0 +1,114 @@
+{
+ "after": {
+  "answer": "7",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned addition yet",
+  "missing_skill": "addition",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "0e16a2199eed01c3",
+  "episode_digest": "434ed5162b463094",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_addition",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "70d0862b2ec89cd2",
+   "parent_revision": 3
+  },
+  "skill_id": "addition",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "3 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '7', 'right': '12'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 4",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "```json\n{\n  \"equation\": \"3 + 4 = 7\",\n  \"explanation\": \"Addition combines two numbers to find their total. For example, adding 3 and 4 gives 7.\"\n}\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "```json\n[\"2 + 3 = 5\", \"7 + 1 = 8\", \"10 + 5 = 15\"]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "```json\n{\n  \"true_equation\": \"3 + 4 = 7\",\n  \"false_equation\": \"3 + 4 = 12\"\n}\n```"
+  }
+ ],
+ "packet": {
+  "common_mistake": "3 + 4 = 12",
+  "explanation": "{\n  \"equation\": \"3 + 4 = 7\",\n  \"explanation\": \"Addition combines two numbers to find their total. For example, adding 3 and 4 gives 7.\"\n}",
+  "lesson_id": "MATH_addition",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "addition",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "2 + 3 = 5",
+   "7 + 1 = 8",
+   "10 + 5 = 15"
+  ]
+ },
+ "skill_id": "addition"
+}

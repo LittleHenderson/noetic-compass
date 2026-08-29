@@ -1,0 +1,523 @@
+{
+ "history": [
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_quantity_grounding|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 1,
+   "skill_id": "quantity_grounding"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_counting_order|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 2,
+   "skill_id": "counting_order"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_integer_comparison|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 3,
+   "skill_id": "integer_comparison"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_addition|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 4,
+   "skill_id": "addition"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_subtraction|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 5,
+   "skill_id": "subtraction"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_multiplication|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 6,
+   "skill_id": "multiplication"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_division|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 7,
+   "skill_id": "division"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_fractions|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 8,
+   "skill_id": "fractions"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_algebra_distribute|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 9,
+   "skill_id": "algebra_distribute"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_linear_equations|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 10,
+   "skill_id": "linear_equations"
+  }
+ ],
+ "revision": 10,
+ "skills": {
+  "addition": {
+   "formal": {
+    "definition_examples": [
+     "2 + 3 = 5",
+     "7 + 1 = 8",
+     "10 + 5 = 15"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L2",
+   "packet_digest": "3a7d507b9eff679e",
+   "provenance": "lesson:MATH_addition|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "2af5a78b89889aaf",
+   "regression_guard": [
+    {
+     "a": "12",
+     "b": "8",
+     "exercise_id": "addition:90210:0",
+     "expected": "20",
+     "kind": "arith",
+     "op": "add",
+     "skill_id": "addition"
+    },
+    {
+     "a": "12",
+     "b": "8",
+     "exercise_id": "addition:90210:1",
+     "expected": "20",
+     "kind": "arith",
+     "op": "add",
+     "skill_id": "addition"
+    },
+    {
+     "a": "8",
+     "b": "8",
+     "exercise_id": "addition:90210:2",
+     "expected": "16",
+     "kind": "arith",
+     "op": "add",
+     "skill_id": "addition"
+    }
+   ],
+   "skill_id": "addition"
+  },
+  "algebra_distribute": {
+   "formal": {
+    "lhs": "a * (b + c)",
+    "rhs": "a * b + a * c"
+   },
+   "kind": "rewrite_rule",
+   "level": "MATH-L4",
+   "packet_digest": "385ccd6f97dd75f3",
+   "provenance": "lesson:MATH_algebra_distribute|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "00bf0a7d14d103d7",
+   "regression_guard": [
+    {
+     "exercise_id": "algebra_distribute:90210:0",
+     "expected_equal_to": "7 * x + 63",
+     "expr": "7 * (x + 9)",
+     "kind": "expand",
+     "skill_id": "algebra_distribute"
+    },
+    {
+     "exercise_id": "algebra_distribute:90210:1",
+     "expected_equal_to": "7 * x + 49",
+     "expr": "7 * (x + 7)",
+     "kind": "expand",
+     "skill_id": "algebra_distribute"
+    },
+    {
+     "exercise_id": "algebra_distribute:90210:2",
+     "expected_equal_to": "4 * z + 36",
+     "expr": "4 * (z + 9)",
+     "kind": "expand",
+     "skill_id": "algebra_distribute"
+    }
+   ],
+   "skill_id": "algebra_distribute"
+  },
+  "counting_order": {
+   "formal": {
+    "definition_examples": [
+     "1 + 1 = 2",
+     "2 + 1 = 3",
+     "3 + 1 = 4",
+     "4 + 1 = 5"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L1",
+   "packet_digest": "9f263c1d625fe8b2",
+   "provenance": "lesson:MATH_counting_order|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "d517779fdffb74ee",
+   "regression_guard": [
+    {
+     "exercise_id": "counting_order:90210:0",
+     "expected": "10",
+     "kind": "successor",
+     "n": 9,
+     "skill_id": "counting_order"
+    },
+    {
+     "exercise_id": "counting_order:90210:1",
+     "expected": "11",
+     "kind": "predecessor",
+     "n": 12,
+     "skill_id": "counting_order"
+    },
+    {
+     "exercise_id": "counting_order:90210:2",
+     "expected": "4",
+     "kind": "successor",
+     "n": 3,
+     "skill_id": "counting_order"
+    }
+   ],
+   "skill_id": "counting_order"
+  },
+  "division": {
+   "formal": {
+    "definition_examples": [
+     "12 = 4 * 3",
+     "10 * 1/2 = 5",
+     "20 * 1/4 = 5",
+     "9 = 3 * 3"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L2",
+   "packet_digest": "485c9fa2a4e71da2",
+   "provenance": "lesson:MATH_division|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "dd7fb19bec5c5060",
+   "regression_guard": [
+    {
+     "a": "5",
+     "b": "9",
+     "exercise_id": "division:90210:0",
+     "expected": "5/9",
+     "kind": "arith",
+     "op": "div",
+     "skill_id": "division"
+    },
+    {
+     "a": "12",
+     "b": "9",
+     "exercise_id": "division:90210:1",
+     "expected": "4/3",
+     "kind": "arith",
+     "op": "div",
+     "skill_id": "division"
+    },
+    {
+     "a": "12",
+     "b": "2",
+     "exercise_id": "division:90210:2",
+     "expected": "6",
+     "kind": "arith",
+     "op": "div",
+     "skill_id": "division"
+    }
+   ],
+   "skill_id": "division"
+  },
+  "fractions": {
+   "formal": {
+    "definition_examples": [
+     "1/2 + 1/4 = 3/4",
+     "3/5 - 1/10 = 1/2",
+     "2/3 * 3/4 = 1/2",
+     "1/2 + 1/3 + 1/6 = 1"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L3",
+   "packet_digest": "e11e985da9e4fe5d",
+   "provenance": "lesson:MATH_fractions|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "9560d76f9680d46b",
+   "regression_guard": [
+    {
+     "a": "3/2",
+     "b": "1/2",
+     "exercise_id": "fractions:90210:0",
+     "expected": "2",
+     "kind": "arith",
+     "op": "add",
+     "skill_id": "fractions"
+    },
+    {
+     "a": "3/5",
+     "b": "1/2",
+     "exercise_id": "fractions:90210:1",
+     "expected": "greater",
+     "kind": "compare",
+     "skill_id": "fractions"
+    },
+    {
+     "a": "8/7",
+     "b": "1/1",
+     "exercise_id": "fractions:90210:2",
+     "expected": "15/7",
+     "kind": "arith",
+     "op": "add",
+     "skill_id": "fractions"
+    }
+   ],
+   "skill_id": "fractions"
+  },
+  "integer_comparison": {
+   "formal": {
+    "definition_examples": [
+     "3 + 4 = 7",
+     "5 * 2 = 10",
+     "0 - 2 = -2",
+     "1/2 + 1/2 = 1"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L1",
+   "packet_digest": "6206d043111512d5",
+   "provenance": "lesson:MATH_integer_comparison|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "1457bcd5e798436f",
+   "regression_guard": [
+    {
+     "a": "-4",
+     "b": "-12",
+     "exercise_id": "integer_comparison:90210:0",
+     "expected": "greater",
+     "kind": "compare",
+     "skill_id": "integer_comparison"
+    },
+    {
+     "a": "7",
+     "b": "2",
+     "exercise_id": "integer_comparison:90210:1",
+     "expected": "greater",
+     "kind": "compare",
+     "skill_id": "integer_comparison"
+    },
+    {
+     "a": "2",
+     "b": "3",
+     "exercise_id": "integer_comparison:90210:2",
+     "expected": "less",
+     "kind": "compare",
+     "skill_id": "integer_comparison"
+    }
+   ],
+   "skill_id": "integer_comparison"
+  },
+  "linear_equations": {
+   "formal": {
+    "method": [
+     "expand",
+     "collect",
+     "isolate"
+    ]
+   },
+   "kind": "equation_solving",
+   "level": "MATH-L4",
+   "packet_digest": "ec5bd55f84b89291",
+   "provenance": "lesson:MATH_linear_equations|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "512689db40e60f45",
+   "regression_guard": [
+    {
+     "equation": "9 * (x + 2) = 81",
+     "exercise_id": "linear_equations:90210:0",
+     "expected": "7",
+     "kind": "solve",
+     "skill_id": "linear_equations",
+     "variable": "x"
+    },
+    {
+     "equation": "4 * z + 2 = 30",
+     "exercise_id": "linear_equations:90210:1",
+     "expected": "7",
+     "kind": "solve",
+     "skill_id": "linear_equations",
+     "variable": "z"
+    },
+    {
+     "equation": "4 * (x + 6) = 12",
+     "exercise_id": "linear_equations:90210:2",
+     "expected": "-3",
+     "kind": "solve",
+     "skill_id": "linear_equations",
+     "variable": "x"
+    }
+   ],
+   "skill_id": "linear_equations"
+  },
+  "multiplication": {
+   "formal": {
+    "definition_examples": [
+     "3 * 4 = 12",
+     "5 * 2 = 10",
+     "7 * 6 = 42"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L2",
+   "packet_digest": "f114f305a03a1a1d",
+   "provenance": "lesson:MATH_multiplication|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "17ecf2fdbb51cf1e",
+   "regression_guard": [
+    {
+     "a": "12",
+     "b": "5",
+     "exercise_id": "multiplication:90210:0",
+     "expected": "60",
+     "kind": "arith",
+     "op": "mul",
+     "skill_id": "multiplication"
+    },
+    {
+     "a": "8",
+     "b": "5",
+     "exercise_id": "multiplication:90210:1",
+     "expected": "40",
+     "kind": "arith",
+     "op": "mul",
+     "skill_id": "multiplication"
+    },
+    {
+     "a": "12",
+     "b": "3",
+     "exercise_id": "multiplication:90210:2",
+     "expected": "36",
+     "kind": "arith",
+     "op": "mul",
+     "skill_id": "multiplication"
+    }
+   ],
+   "skill_id": "multiplication"
+  },
+  "quantity_grounding": {
+   "formal": {
+    "definition_examples": [
+     "1 + 1 = 2",
+     "2 + 3 = 5",
+     "1/2 + 1/2 = 1",
+     "4 * 2 = 8"
+    ]
+   },
+   "kind": "grounding",
+   "level": "MATH-L0",
+   "packet_digest": "60598c46319330c2",
+   "provenance": "lesson:MATH_quantity_grounding|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "62d8d8da005f3e41",
+   "regression_guard": [
+    {
+     "exercise_id": "quantity_grounding:90210:0",
+     "expected": "11",
+     "kind": "scene_count",
+     "scene": [
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block"
+     ],
+     "skill_id": "quantity_grounding"
+    },
+    {
+     "exercise_id": "quantity_grounding:90210:1",
+     "expected": "6",
+     "kind": "scene_count",
+     "scene": [
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block"
+     ],
+     "skill_id": "quantity_grounding"
+    },
+    {
+     "exercise_id": "quantity_grounding:90210:2",
+     "expected": "more",
+     "kind": "scene_compare",
+     "scene_a": [
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block"
+     ],
+     "scene_b": [
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block",
+      "block"
+     ],
+     "skill_id": "quantity_grounding"
+    }
+   ],
+   "skill_id": "quantity_grounding"
+  },
+  "subtraction": {
+   "formal": {
+    "definition_examples": [
+     "9 - 4 = 5",
+     "12 - 7 = 5",
+     "20 - 15 = 5",
+     "100 - 50 = 50"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L2",
+   "packet_digest": "7f75838a5edbdca8",
+   "provenance": "lesson:MATH_subtraction|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "fca715f2380a77c9",
+   "regression_guard": [
+    {
+     "a": "8",
+     "b": "1",
+     "exercise_id": "subtraction:90210:0",
+     "expected": "7",
+     "kind": "arith",
+     "op": "sub",
+     "skill_id": "subtraction"
+    },
+    {
+     "a": "5",
+     "b": "2",
+     "exercise_id": "subtraction:90210:1",
+     "expected": "3",
+     "kind": "arith",
+     "op": "sub",
+     "skill_id": "subtraction"
+    },
+    {
+     "a": "12",
+     "b": "12",
+     "exercise_id": "subtraction:90210:2",
+     "expected": "0",
+     "kind": "arith",
+     "op": "sub",
+     "skill_id": "subtraction"
+    }
+   ],
+   "skill_id": "subtraction"
+  }
+ },
+ "store_digest": "0a8226100ec05f61"
+}
