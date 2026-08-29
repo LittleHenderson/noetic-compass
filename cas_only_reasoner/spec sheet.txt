@@ -390,6 +390,79 @@ HONEST QUALIFICATION AFTER THE FULL G10 ROUND:
   The G10 LEVEL was reached for four hours and honestly given back
   when the audit landed. That is the standard doing its job.
 
+PHASE 4 RATIFIED (owner directive 2026-08-28, after the falsification
+round was endorsed as the system working): baseline FROZEN at
+2526360b; hybrid work on branch phase4-hybrid-cortex. The owner's
+external-facing wording ADOPTED verbatim: "Internally held-out
+validated under the current CRQS specification, with no independent
+external replication and no autonomous deployment authority."
+
+  cas_only_reasoner/CAS_CORTEX_v0.1/ (phase4-hybrid-cortex branch) -
+  Phase 4.1 + 4.2 built and live-gated:
+    - cortex/adapter.py: resident Qwen2.5-0.5B-Instruct loaded from
+      the immutable snapshot (refs/main repair), full identity receipt
+      (weights fdf756fa7fcbe740 + tokenizer/config/runtime digests,
+      versions, dtype, generation params), greedy, CortexProposal-only
+      output with raw text always preserved.
+    - cortex/proposal.py + firewall.py: the FROZEN authority contract
+      executable - eight forbidden intent classes raise typed before
+      state; effect/authority fields smuggled in packets, impersonated
+      provenance, concealed raw output, illegal shapes all rejected
+      fail-closed.
+    - cortex/router.py: native-first routing, three modes
+      (NATIVE_ONLY / CORTEX_DIAGNOSTIC / HYBRID_COMMIT), typed
+      no-answers, sealed TurnTraces, and the LEXICAL GROUNDING GATE.
+    - LIVE GATE RESULTS (output/phase4_gates.json, digest
+      9a6c22282bab0d33): Gate 1 receipt sealed; Gate 3 semantic
+      equivalence 2/2 (hybrid == direct-gold through the same
+      kernel); Gate 4 FAILED FIRST (the live cortex fabricated
+      property(glimmerfor, gray) -> UNDERSTOOD), CLOSED by the
+      grounding gate (UNGROUNDED_TERM, nothing committed - the
+      cortex self-report is never trusted alone); Gate 5
+      role-reversal diverges correctly AND the passive-voice
+      paraphrase FAILED live at the 0.5B floor (relation(chase, dog,
+      cat) - role error; recorded, not hidden; grounding cannot catch
+      role errors); Gate 8 scrambled packets + direct-output bypass
+      both rejected. 19 harness tests green.
+    - OPEN (Phase 4.3): expanded held-out battery with protected
+      splits; external replication bundle for E6; CONV qualification;
+      latency (~6s/parse CPU, model resident).
+
+CAS-GEM DOCTRINE ADOPTED (CAS_GEM_DOCTRINE_v0.1.md): reconstructive
+  episodic memory (CMB-R1) - capsules with CAS structure + CAS-Sem
+  content + exact anchors, cue-based retrieval as competing memory
+  hypotheses, evidence labels on every reconstructed sentence
+  (EXACT/DERIVED/RECONSTRUCTED/IMAGINED/UNKNOWN/CONTRADICTED), the
+  two anti-confabulation invariants (a reconstruction never
+  overwrites its capsule; repetition is not evidence), three-tier
+  storage, the never-compress-verbatim list, seven SDG curriculum
+  levels, seven build gates. SEQUENCED AFTER Phase 4 (the
+  reconstruction engine is the cortex under CAS authority).
+
+LOCAL CAS-SDG FOUND (owner-ordered search, 2026-08-28):
+  cas-synthetic/ (twelve generator modules incl. v74_baseline through
+  v77_omega, conversational, meta_logic; schemas, scoring,
+  validation, mix_controller, llm_interface; Path D Wave 2.5 = 5,268
+  SFE-certified records), docs/working/level3_conversational_sdg_spec
+  .md (provenance-linked conversational record shape), docs/working/
+  gate4_next_board/ (SDG conversation batches). The GEM curriculum is
+  a NEW generation task for this EXISTING factory.
+
+LOCAL CAS COMPILER CONFIRMED (owner note, 2026-08-28):
+  noetic-compass-scaffold/noetic-compass/api/notation/ - compiler.py,
+  parser.py, cli.py, renderer.py, inversion.py, turn_admissibility.py
+  - plus the PROVEN rpm_compiler_loop_demo.py (commit 81147091: axis
+  detected by name and corrected, round-tripped). The CNCM manifest's
+  "compiler: not integrated" now has a concrete integration target
+  for the Foundry/CCDL work.
+
+DERIVABILITY-GATE SCOPE (owner directive, open item): the novelty
+  gate must eventually inspect ALL knowledge entry points - seed
+  axioms, training fixtures, generated search templates,
+  normalization rules, theorem libraries, source-code constants,
+  candidate constructors - not only fixtures + one-step axiom
+  application. Recorded as the D10 path's first requirement.
+
 PROGRAM TEST TOTALS (all green, 2026-08-28, post-audit):
   kernel 34 + RLP 45 + CCB-M1 34 + CCB-L1 18 + CAS-Sem 19 +
   workbench 13 + CRQS 35 + CCB-T1 20 + OHM-panel 10 + H2H 10 +
