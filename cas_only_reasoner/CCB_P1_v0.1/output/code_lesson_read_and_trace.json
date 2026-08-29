@@ -1,0 +1,103 @@
+{
+ "after": {
+  "detail": "capability gate open",
+  "status": "SOLVED"
+ },
+ "before": {
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "cas_ohm_flow": {
+   "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+   "tp_candidate_generation": "absent",
+   "tp_compile": "cutoff",
+   "tp_regression": "active",
+   "tp_spec_understanding": "active",
+   "tp_test_execution": "active"
+  },
+  "episode_digest": "02bcbdbf54f88821",
+  "examiner_digest": "2677205a5ac0d866",
+  "examiner_identity": "ccb_p1_compiler_and_tests",
+  "lesson_id": "CODE_read_and_trace",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "c119797fc8065183",
+   "parent_revision": 0
+  },
+  "skill_id": "read_and_trace",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; no authority fields; forbidden effects blocked statically",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "tracing lesson - the exam corpus is the examiner's",
+    "passed": true,
+    "stage": "SPEC_TYPED"
+   },
+   {
+    "detail": "{\"detail\": \"all traces predicted exactly\"}",
+    "passed": true,
+    "stage": "EXAM_DEV"
+   },
+   {
+    "detail": "{\"detail\": \"all traces predicted exactly\"}",
+    "passed": true,
+    "stage": "EXAM_PROTECTED"
+   },
+   {
+    "detail": "every promoted skill still passes",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "identical exam -> identical outcome digest",
+    "passed": true,
+    "stage": "DETERMINISTIC_REPLAY"
+   },
+   {
+    "detail": "committed at revision 1",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "fresh reload passes the retention-seed exam",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "Reading and tracing code means going through a program line by line, like a detective, to see exactly how each part works and how variables change step by step. It helps you understand what the code i"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "strategy",
+   "raw": "To trace code by hand, start by writing down all variable names and their initial values. Then go through each line of the code one at a time, in order, and update the variables as the code would. Aft"
+  }
+ ],
+ "packet": {
+  "explanation": "Reading and tracing code means going through a program line by line, like a detective, to see exactly how each part works and how variables change step by step. It helps you understand what the code is doing without running it.",
+  "lesson_id": "CODE_read_and_trace",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "read_and_trace",
+  "strategy": "To trace code by hand, start by writing down all variable names and their initial values. Then go through each line of the code one at a time, in order, and update the variables as the code would. After each line, note any changes in variable values or program flow (like entering a loop or condition). Keep track of the current line and any output the code would produce. This helps understand how the program behaves step by step.",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2"
+ },
+ "skill_id": "read_and_trace"
+}

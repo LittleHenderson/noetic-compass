@@ -1,0 +1,128 @@
+{
+ "after": {
+  "adapted_from": "sum_list",
+  "code": "def sum_list(xs):\n    return sum(xs)",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned sum list yet",
+  "missing_skill": "sum_list",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "cas_ohm_flow": {
+   "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+   "tp_candidate_generation": "active",
+   "tp_compile": "active",
+   "tp_regression": "active",
+   "tp_spec_understanding": "active",
+   "tp_test_execution": "active"
+  },
+  "episode_digest": "93d20faf917dccb6",
+  "examiner_digest": "2677205a5ac0d866",
+  "examiner_identity": "ccb_p1_compiler_and_tests",
+  "lesson_id": "CODE_sum_list",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "64534dc645bf0ab2",
+   "parent_revision": 1
+  },
+  "skill_id": "sum_list",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; no authority fields; forbidden effects blocked statically",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "typed contract S_sum_list",
+    "passed": true,
+    "stage": "SPEC_TYPED"
+   },
+   {
+    "detail": "1 candidate(s) parse; forbidden effects blocked before execution",
+    "passed": true,
+    "stage": "CANDIDATES_COMPILE"
+   },
+   {
+    "detail": "bug fails at public - a real defect exemplar",
+    "passed": true,
+    "stage": "BUG_IS_A_BUG"
+   },
+   {
+    "detail": "[{\"candidate\": 0, \"passed\": true, \"detail\": \"{'stage': 'all', 'detail': 'battery green'}\"}]",
+    "passed": true,
+    "stage": "CANDIDATE_BATTERY"
+   },
+   {
+    "detail": "{\"detail\": \"battery + structural transfer green\"}",
+    "passed": true,
+    "stage": "EXAM_DEV"
+   },
+   {
+    "detail": "{\"detail\": \"battery + structural transfer green\"}",
+    "passed": true,
+    "stage": "EXAM_PROTECTED"
+   },
+   {
+    "detail": "every promoted skill still passes",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "identical exam -> identical outcome digest",
+    "passed": true,
+    "stage": "DETERMINISTIC_REPLAY"
+   },
+   {
+    "detail": "committed at revision 2",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "fresh reload passes the retention-seed exam",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "The function `sum_list(xs)` adds up all the numbers in the list `xs` and returns the total, returning 0 if the list is empty."
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "implementation",
+   "raw": "def sum_list(xs):\n    return sum(xs)"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_bug",
+   "raw": "```python\ndef sum_list(xs):\n    total = 1\n    for x in xs:\n        total += x\n    return total\n```"
+  }
+ ],
+ "packet": {
+  "common_bug": "def sum_list(xs):\n    total = 1\n    for x in xs:\n        total += x\n    return total",
+  "explanation": "The function `sum_list(xs)` adds up all the numbers in the list `xs` and returns the total, returning 0 if the list is empty.",
+  "implementation": "def sum_list(xs):\n    return sum(xs)",
+  "lesson_id": "CODE_sum_list",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "sum_list",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2"
+ },
+ "skill_id": "sum_list"
+}

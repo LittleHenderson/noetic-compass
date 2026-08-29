@@ -200,17 +200,22 @@ def _exam_testing(student: CodeStudent,
 
 def _exam_repair(student: CodeStudent,
                  seed: int) -> Tuple[bool, Dict]:
-    for skill_id in ("sum_list", "count_matching"):
+    repaired = 0
+    corpus = [skill_id for skill_id in student.store.promoted_ids()
+              if SKILLS.get(skill_id, {}).get("kind") == "algorithm"]
+    if not corpus:
+        return False, {"stage": "prereq",
+                       "detail": "no promoted algorithms to "
+                                 "practice repair on"}
+    for skill_id in corpus:
         record = student.store.get(skill_id)
-        if record is None:
-            return False, {"stage": "prereq",
-                           "detail": f"{skill_id} not promoted"}
         code = record["formal"]["code"]
         spec = SPECS[skill_id]
+        # a one-line builtin implementation (e.g. 'return sum(xs)')
+        # can yield NO mutable nodes - skip it, but demand real
+        # repairs happened somewhere (live finding: the teacher's
+        # perfectly correct sum(xs) starved the mutant factory)
         mutants = make_mutants(skill_id, code, count=2)
-        if not mutants:
-            return False, {"stage": "mutant_factory",
-                           "detail": "no mutants produced"}
         for mutant in mutants:
             failing_args = None
             reference = REFERENCES[skill_id]
@@ -251,8 +256,14 @@ def _exam_repair(student: CodeStudent,
                 return False, {"stage": "diagnosis",
                                "detail": "no first-bad-state was "
                                          "produced"}
-    return True, {"detail": "faults localized, minimal patches, "
-                            "references restored"}
+            repaired += 1
+    if repaired < 2:
+        return False, {"stage": "mutant_factory",
+                       "detail": f"only {repaired} repair(s) "
+                                 f"exercised - the exam requires "
+                                 f"at least 2 across the corpus"}
+    return True, {"detail": f"{repaired} faults localized, minimal "
+                            f"patches, references restored"}
 
 
 def examine(student: CodeStudent, skill_id: str,

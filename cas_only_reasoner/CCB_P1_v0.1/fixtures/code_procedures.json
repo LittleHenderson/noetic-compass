@@ -1,0 +1,144 @@
+{
+ "history": [
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:CODE_read_and_trace|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 1,
+   "skill_id": "read_and_trace"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:CODE_sum_list|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 2,
+   "skill_id": "sum_list"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:CODE_reverse_string|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 3,
+   "skill_id": "reverse_string"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:CODE_max_list|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 4,
+   "skill_id": "max_list"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:CODE_count_matching|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 5,
+   "skill_id": "count_matching"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:CODE_contracts_testing|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 6,
+   "skill_id": "contracts_testing"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:CODE_debug_repair|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 7,
+   "skill_id": "debug_repair"
+  }
+ ],
+ "procedures": {
+  "contracts_testing": {
+   "formal": {
+    "strategy": "Testing discipline involves systematically checking a program's correctness beyond a single passing example. It includes testing boundary cases (like minimum/maximum values), negative tests (invalid inputs), and verifying general properties (like input-output relationships). This ensures the code behaves correctly under all expected and edge scenarios."
+   },
+   "kind": "testing",
+   "level": "CODE-L3",
+   "packet_digest": "ffc6c2e553acaac6",
+   "provenance": "lesson:CODE_contracts_testing|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "50d5d8a29d1f5bfb",
+   "skill_id": "contracts_testing"
+  },
+  "count_matching": {
+   "formal": {
+    "code": "def count_matching(xs, predicate_name):  \n    count = 0  \n    for x in xs:  \n        if predicate_name == 'positive' and x > 0:  \n            count += 1  \n        elif predicate_name == 'negative' and x < 0:  \n            count += 1  \n        elif predicate_name == 'even' and x % 2 == 0:  \n            count += 1  \n        elif predicate_name == 'odd' and x % 2 != 0:  \n            count += 1  \n    return count",
+    "function_name": "count_matching",
+    "params": [
+     "xs",
+     "predicate_name"
+    ]
+   },
+   "kind": "algorithm",
+   "level": "CODE-L2",
+   "packet_digest": "812f2771181dd4da",
+   "provenance": "lesson:CODE_count_matching|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "6cacc67f2de72a68",
+   "skill_id": "count_matching"
+  },
+  "debug_repair": {
+   "formal": {
+    "strategy": "Debugging by reproduction involves first reproducing the issue with the same input and environment. Then, trace through the program's execution to identify where the behavior diverges from a known-good run. Locate the first state or line where the difference occurs, isolate and fix the specific cause of the discrepancy. Apply only the necessary patch, then rerun the entire process to confirm the issue is resolved and no new problems are introduced."
+   },
+   "kind": "repair",
+   "level": "CODE-L4",
+   "packet_digest": "93d6aa8b905b510d",
+   "provenance": "lesson:CODE_debug_repair|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "682cc2cf917a5ef1",
+   "skill_id": "debug_repair"
+  },
+  "max_list": {
+   "formal": {
+    "code": "def max_list(xs):\n    if len(xs) == 0:\n        return None\n    return max(xs)",
+    "function_name": "max_list",
+    "params": [
+     "xs"
+    ]
+   },
+   "kind": "algorithm",
+   "level": "CODE-L2",
+   "packet_digest": "ed42a3b729b6803d",
+   "provenance": "lesson:CODE_max_list|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "7c1cee7c29abe1c9",
+   "skill_id": "max_list"
+  },
+  "read_and_trace": {
+   "formal": {
+    "strategy": "To trace code by hand, start by writing down all variable names and their initial values. Then go through each line of the code one at a time, in order, and update the variables as the code would. After each line, note any changes in variable values or program flow (like entering a loop or condition). Keep track of the current line and any output the code would produce. This helps understand how the program behaves step by step."
+   },
+   "kind": "tracing",
+   "level": "CODE-L0",
+   "packet_digest": "388f41575d1f09c3",
+   "provenance": "lesson:CODE_read_and_trace|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "155aa0be6881905f",
+   "skill_id": "read_and_trace"
+  },
+  "reverse_string": {
+   "formal": {
+    "code": "def reverse_string(s): return ''.join(reversed(s))",
+    "function_name": "reverse_string",
+    "params": [
+     "s"
+    ]
+   },
+   "kind": "algorithm",
+   "level": "CODE-L1",
+   "packet_digest": "80f0a3093a26e1af",
+   "provenance": "lesson:CODE_reverse_string|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "002d5c13b2b683a5",
+   "skill_id": "reverse_string"
+  },
+  "sum_list": {
+   "formal": {
+    "code": "def sum_list(xs):\n    return sum(xs)",
+    "function_name": "sum_list",
+    "params": [
+     "xs"
+    ]
+   },
+   "kind": "algorithm",
+   "level": "CODE-L1",
+   "packet_digest": "03d4c378aae5fbb5",
+   "provenance": "lesson:CODE_sum_list|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "472b93c6a9fde675",
+   "skill_id": "sum_list"
+  }
+ },
+ "revision": 7,
+ "store_digest": "849d6de32ced9dfc"
+}

@@ -1,0 +1,109 @@
+{
+ "after": {
+  "detail": "capability gate open",
+  "status": "SOLVED"
+ },
+ "before": {
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "cas_ohm_flow": {
+   "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+   "tp_candidate_generation": "absent",
+   "tp_compile": "cutoff",
+   "tp_regression": "active",
+   "tp_spec_understanding": "active",
+   "tp_test_execution": "active"
+  },
+  "episode_digest": "1b4379fcd22247a7",
+  "examiner_digest": "2677205a5ac0d866",
+  "examiner_identity": "ccb_p1_compiler_and_tests",
+  "lesson_id": "CODE_contracts_testing",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "87bc065bcd954b5b",
+   "parent_revision": 5
+  },
+  "skill_id": "contracts_testing",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; no authority fields; forbidden effects blocked statically",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "testing lesson - the exam corpus is the examiner's",
+    "passed": true,
+    "stage": "SPEC_TYPED"
+   },
+   {
+    "detail": "{\"detail\": \"suites verify references and kill mutants\"}",
+    "passed": true,
+    "stage": "EXAM_DEV"
+   },
+   {
+    "detail": "{\"detail\": \"suites verify references and kill mutants\"}",
+    "passed": true,
+    "stage": "EXAM_PROTECTED"
+   },
+   {
+    "detail": "every promoted skill still passes",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "identical exam -> identical outcome digest",
+    "passed": true,
+    "stage": "DETERMINISTIC_REPLAY"
+   },
+   {
+    "detail": "committed at revision 6",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "fresh reload passes the retention-seed exam",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "Testing discipline means that passing one test doesn't prove a program works for all cases\u2014you must also test edge cases, invalid inputs, and general properties to ensure true correctness."
+  },
+  {
+   "attempt": 1,
+   "defect": "keep it under 500 characters",
+   "field": "strategy",
+   "raw": "Testing discipline involves systematically verifying that a program behaves correctly under a wide range of conditions. It starts by recognizing that a single passing test case is insufficient to prov"
+  },
+  {
+   "attempt": 2,
+   "defect": null,
+   "field": "strategy",
+   "raw": "Testing discipline involves systematically checking a program's correctness beyond a single passing example. It includes testing boundary cases (like minimum/maximum values), negative tests (invalid i"
+  }
+ ],
+ "packet": {
+  "explanation": "Testing discipline means that passing one test doesn't prove a program works for all cases\u2014you must also test edge cases, invalid inputs, and general properties to ensure true correctness.",
+  "lesson_id": "CODE_contracts_testing",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "contracts_testing",
+  "strategy": "Testing discipline involves systematically checking a program's correctness beyond a single passing example. It includes testing boundary cases (like minimum/maximum values), negative tests (invalid inputs), and verifying general properties (like input-output relationships). This ensures the code behaves correctly under all expected and edge scenarios.",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2"
+ },
+ "skill_id": "contracts_testing"
+}

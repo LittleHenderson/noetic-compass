@@ -1,0 +1,103 @@
+{
+ "after": {
+  "detail": "capability gate open",
+  "status": "SOLVED"
+ },
+ "before": {
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "cas_ohm_flow": {
+   "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+   "tp_candidate_generation": "absent",
+   "tp_compile": "cutoff",
+   "tp_regression": "active",
+   "tp_spec_understanding": "active",
+   "tp_test_execution": "active"
+  },
+  "episode_digest": "cd2d608b56d61815",
+  "examiner_digest": "6735865ea3e600d8",
+  "examiner_identity": "ccb_p1_compiler_and_tests",
+  "lesson_id": "CODE_debug_repair",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "851651938b71d8de",
+   "parent_revision": 6
+  },
+  "skill_id": "debug_repair",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; no authority fields; forbidden effects blocked statically",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "repair lesson - the exam corpus is the examiner's",
+    "passed": true,
+    "stage": "SPEC_TYPED"
+   },
+   {
+    "detail": "{\"detail\": \"4 faults localized, minimal patches, references restored\"}",
+    "passed": true,
+    "stage": "EXAM_DEV"
+   },
+   {
+    "detail": "{\"detail\": \"4 faults localized, minimal patches, references restored\"}",
+    "passed": true,
+    "stage": "EXAM_PROTECTED"
+   },
+   {
+    "detail": "every promoted skill still passes",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "identical exam -> identical outcome digest",
+    "passed": true,
+    "stage": "DETERMINISTIC_REPLAY"
+   },
+   {
+    "detail": "committed at revision 7",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "fresh reload passes the retention-seed exam",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "Debugging is like finding a mistake in a recipe: you try to make the problem happen again (reproduce), follow each step to see where it goes wrong (trace), find the first place it's different from whe"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "strategy",
+   "raw": "Debugging by reproduction involves first reproducing the issue with the same input and environment. Then, trace through the program's execution to identify where the behavior diverges from a known-goo"
+  }
+ ],
+ "packet": {
+  "explanation": "Debugging is like finding a mistake in a recipe: you try to make the problem happen again (reproduce), follow each step to see where it goes wrong (trace), find the first place it's different from when it worked (find the first bad state), fix only that part (patch), and try the whole recipe again to see if it works now.",
+  "lesson_id": "CODE_debug_repair",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "debug_repair",
+  "strategy": "Debugging by reproduction involves first reproducing the issue with the same input and environment. Then, trace through the program's execution to identify where the behavior diverges from a known-good run. Locate the first state or line where the difference occurs, isolate and fix the specific cause of the discrepancy. Apply only the necessary patch, then rerun the entire process to confirm the issue is resolved and no new problems are introduced.",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2"
+ },
+ "skill_id": "debug_repair"
+}

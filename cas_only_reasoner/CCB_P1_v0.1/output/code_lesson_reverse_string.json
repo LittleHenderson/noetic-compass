@@ -1,0 +1,128 @@
+{
+ "after": {
+  "adapted_from": "reverse_string",
+  "code": "def reverse_string(s):\n    return ''.join(reversed(s))",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned reverse string yet",
+  "missing_skill": "reverse_string",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "cas_ohm_flow": {
+   "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+   "tp_candidate_generation": "active",
+   "tp_compile": "active",
+   "tp_regression": "active",
+   "tp_spec_understanding": "active",
+   "tp_test_execution": "active"
+  },
+  "episode_digest": "b88349e8c6806b87",
+  "examiner_digest": "2677205a5ac0d866",
+  "examiner_identity": "ccb_p1_compiler_and_tests",
+  "lesson_id": "CODE_reverse_string",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "7bdc9a4f602a8c01",
+   "parent_revision": 2
+  },
+  "skill_id": "reverse_string",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; no authority fields; forbidden effects blocked statically",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "typed contract S_reverse_string",
+    "passed": true,
+    "stage": "SPEC_TYPED"
+   },
+   {
+    "detail": "1 candidate(s) parse; forbidden effects blocked before execution",
+    "passed": true,
+    "stage": "CANDIDATES_COMPILE"
+   },
+   {
+    "detail": "bug fails at public - a real defect exemplar",
+    "passed": true,
+    "stage": "BUG_IS_A_BUG"
+   },
+   {
+    "detail": "[{\"candidate\": 0, \"passed\": true, \"detail\": \"{'stage': 'all', 'detail': 'battery green'}\"}]",
+    "passed": true,
+    "stage": "CANDIDATE_BATTERY"
+   },
+   {
+    "detail": "{\"detail\": \"battery + structural transfer green\"}",
+    "passed": true,
+    "stage": "EXAM_DEV"
+   },
+   {
+    "detail": "{\"detail\": \"battery + structural transfer green\"}",
+    "passed": true,
+    "stage": "EXAM_PROTECTED"
+   },
+   {
+    "detail": "every promoted skill still passes",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "identical exam -> identical outcome digest",
+    "passed": true,
+    "stage": "DETERMINISTIC_REPLAY"
+   },
+   {
+    "detail": "committed at revision 3",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "fresh reload passes the retention-seed exam",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "The function `reverse_string(s)` takes a string `s` as input and returns a new string where the characters are in the opposite order of the original. For example, if the input is \"hello\", the output w"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "implementation",
+   "raw": "def reverse_string(s): return ''.join(reversed(s))"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_bug",
+   "raw": "def reverse_string(s):\n    result = \"\"\n    for i in range(len(s) - 1, -1, -1):\n        result += s[i]\n    return result[:-1]"
+  }
+ ],
+ "packet": {
+  "common_bug": "def reverse_string(s):\n    result = \"\"\n    for i in range(len(s) - 1, -1, -1):\n        result += s[i]\n    return result[:-1]",
+  "explanation": "The function `reverse_string(s)` takes a string `s` as input and returns a new string where the characters are in the opposite order of the original. For example, if the input is \"hello\", the output would be \"olleh\".",
+  "implementation": "def reverse_string(s): return ''.join(reversed(s))",
+  "lesson_id": "CODE_reverse_string",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "reverse_string",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2"
+ },
+ "skill_id": "reverse_string"
+}

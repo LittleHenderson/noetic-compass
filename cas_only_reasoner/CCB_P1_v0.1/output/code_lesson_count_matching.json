@@ -1,0 +1,128 @@
+{
+ "after": {
+  "adapted_from": "count_matching",
+  "code": "def count_matching(xs, predicate_name):\n    count = 0\n    for x in xs:\n        if predicate_name == 'positive' and x > 0:\n            count += 1\n        elif predicate_name == 'negative' and x < 0:\n            count += 1\n        elif predicate_name == 'even' and x % 2 == 0:\n            count += 1\n        elif predicate_name == 'odd' and x % 2 != 0:\n            count += 1\n    return count",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned count matching yet",
+  "missing_skill": "count_matching",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "cas_ohm_flow": {
+   "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+   "tp_candidate_generation": "active",
+   "tp_compile": "active",
+   "tp_regression": "active",
+   "tp_spec_understanding": "active",
+   "tp_test_execution": "active"
+  },
+  "episode_digest": "23e14064c81ddd9d",
+  "examiner_digest": "2677205a5ac0d866",
+  "examiner_identity": "ccb_p1_compiler_and_tests",
+  "lesson_id": "CODE_count_matching",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "0bef4864ea2a2606",
+   "parent_revision": 4
+  },
+  "skill_id": "count_matching",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; no authority fields; forbidden effects blocked statically",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "typed contract S_count_matching",
+    "passed": true,
+    "stage": "SPEC_TYPED"
+   },
+   {
+    "detail": "1 candidate(s) parse; forbidden effects blocked before execution",
+    "passed": true,
+    "stage": "CANDIDATES_COMPILE"
+   },
+   {
+    "detail": "bug fails at boundary - a real defect exemplar",
+    "passed": true,
+    "stage": "BUG_IS_A_BUG"
+   },
+   {
+    "detail": "[{\"candidate\": 0, \"passed\": true, \"detail\": \"{'stage': 'all', 'detail': 'battery green'}\"}]",
+    "passed": true,
+    "stage": "CANDIDATE_BATTERY"
+   },
+   {
+    "detail": "{\"detail\": \"battery + structural transfer green\"}",
+    "passed": true,
+    "stage": "EXAM_DEV"
+   },
+   {
+    "detail": "{\"detail\": \"battery + structural transfer green\"}",
+    "passed": true,
+    "stage": "EXAM_PROTECTED"
+   },
+   {
+    "detail": "every promoted skill still passes",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "identical exam -> identical outcome digest",
+    "passed": true,
+    "stage": "DETERMINISTIC_REPLAY"
+   },
+   {
+    "detail": "committed at revision 5",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "fresh reload passes the retention-seed exam",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "The function `count_matching(xs, predicate_name)` counts how many numbers in the list `xs` meet a certain condition (like being positive, negative, even, or odd), based on the name of the condition gi"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "implementation",
+   "raw": "def count_matching(xs, predicate_name):  \n    count = 0  \n    for x in xs:  \n        if predicate_name == 'positive' and x > 0:  \n            count += 1  \n        elif predicate_name == 'negative' and"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_bug",
+   "raw": "def count_matching(xs, predicate_name):\n    count = 0\n    for x in xs:\n        if predicate_name == 'positive' and x >= 0:\n            count += 1\n        elif predicate_name == 'negative' and x < 0:\n "
+  }
+ ],
+ "packet": {
+  "common_bug": "def count_matching(xs, predicate_name):\n    count = 0\n    for x in xs:\n        if predicate_name == 'positive' and x >= 0:\n            count += 1\n        elif predicate_name == 'negative' and x < 0:\n            count += 1\n        elif predicate_name == 'even' and x % 2 == 0:\n            count += 1\n        elif predicate_name == 'odd' and x % 2 != 0:\n            count += 1\n    return count",
+  "explanation": "The function `count_matching(xs, predicate_name)` counts how many numbers in the list `xs` meet a certain condition (like being positive, negative, even, or odd), based on the name of the condition given.",
+  "implementation": "def count_matching(xs, predicate_name):  \n    count = 0  \n    for x in xs:  \n        if predicate_name == 'positive' and x > 0:  \n            count += 1  \n        elif predicate_name == 'negative' and x < 0:  \n            count += 1  \n        elif predicate_name == 'even' and x % 2 == 0:  \n            count += 1  \n        elif predicate_name == 'odd' and x % 2 != 0:  \n            count += 1  \n    return count",
+  "lesson_id": "CODE_count_matching",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "count_matching",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2"
+ },
+ "skill_id": "count_matching"
+}

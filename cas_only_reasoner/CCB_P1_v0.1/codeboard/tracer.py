@@ -101,6 +101,25 @@ def first_divergence(buggy_events: List[Dict],
                 "reference": reference["locals"][variable],
                 "last_good_step": last_good,
             }
+        if buggy["line"] != reference["line"]:
+            # CONTROL-FLOW divergence: same variables, different
+            # path - this IS the first bad state (walk-down
+            # completeness fix: locals alone missed it)
+            return {"first_bad_step": index,
+                    "line": buggy["line"],
+                    "variable": None,
+                    "detail": f"control flow diverges: buggy takes "
+                              f"line {buggy['line']}, reference "
+                              f"takes line {reference['line']}",
+                    "last_good_step": last_good}
+        if buggy.get("returned") != reference.get("returned"):
+            # RETURN-VALUE divergence with identical locals/path
+            return {"first_bad_step": index,
+                    "line": buggy["line"],
+                    "variable": "return value",
+                    "got": buggy.get("returned"),
+                    "reference": reference.get("returned"),
+                    "last_good_step": last_good}
         last_good = index
     if len(buggy_events) != len(reference_events):
         return {"first_bad_step": steps,
