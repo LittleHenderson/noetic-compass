@@ -165,6 +165,31 @@ def build_ledger():
                      f"(route {trace['route']}), core = `{core}`")
     lines.append("")
 
+    # ---------------- CONV: live dialogue proof ----------------------
+    lines.append("**Live conversation check (CONV v0.1 - run at "
+                 "ledger generation; every reply from the real "
+                 "router, provenance never laundered):**")
+    lines.append("")
+    conv = HybridRouter(mode="NATIVE_ONLY")
+    for user_turn in ["hello.",
+                      "does the cat chase the dog?",
+                      "the cat chases the dog.",
+                      "does the cat chase the dog?",
+                      "what does the cat chase?",
+                      "the bird is gray.",
+                      "actually, the bird is brown.",
+                      "is the bird brown?",
+                      "forget what i said about the cat.",
+                      "does the cat chase the dog?",
+                      "thank you."]:
+        reply_answer = conv.turn(user_turn)["answer"]
+        machine = (reply_answer.get("text")
+                   or reply_answer.get("acknowledgment")
+                   or reply_answer.get("status"))
+        lines.append(f"- U: `{user_turn}`  M: "
+                     f"[{reply_answer['status']}] `{machine}`")
+    lines.append("")
+
     # ---------------- 4. HOW IT LEARNED (the paper trail) ------------
     lines.append("## 4. The paper trail")
     lines.append("")

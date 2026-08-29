@@ -53,11 +53,17 @@ def render_clause(core) -> str:
         mod = core.get("modifier")
         return ("the " + (f"{mod} " if mod else "")
                 + f"{core.get('entity')} is {core.get('property')}")
-    suffix = "d" if core.get("tense") == "past" else "s"
+    verb = core.get("predicate") or ""
+    if verb.endswith("y") and len(verb) > 1 and verb[-2] not in "aeiou":
+        inflected = verb[:-1] + ("ied" if core.get("tense") == "past"
+                                 else "ies")
+    else:
+        inflected = verb + ("d" if core.get("tense") == "past"
+                            else "s")
     agent_mod = core.get("agent_mod")
     patient_mod = core.get("patient_mod")
     clause = ("the " + (f"{agent_mod} " if agent_mod else "")
-              + f"{core.get('agent')} {core.get('predicate')}{suffix} "
+              + f"{core.get('agent')} {inflected} "
               + "the " + (f"{patient_mod} " if patient_mod else "")
               + f"{core.get('patient')}")
     if core.get("recipient"):
@@ -158,8 +164,11 @@ class HybridRouter:
         no-laundering table)."""
         query_tense = gram["core"].get("tense")
         sources = []
+        conflicted = []
         for part in packet.get("args", []):
             verdict = None
+            part_conflicts = self.dialogue.conflicting_active(
+                part, query_tense)
             try:
                 kernel = self._kernel_answer({"pred": "question",
                                               "args": [part]})
@@ -173,10 +182,38 @@ class HybridRouter:
                     verdict = "USER_ASSERTED"
                 elif support and support.get("verdict") == "no":
                     verdict = "USER_DENIED"
+            if part_conflicts:
+                # a conjunct someone contests is NEVER affirmed
+                # silently (audit finding: the restricted question
+                # suppressed a verified/user conflict)
+                conflicted.append(
+                    (part, verdict, part_conflicts[0]))
             sources.append(verdict)
         trace.setdefault("dialogue", {})["retrieval"] = {
-            "conjunct_sources": sources}
+            "conjunct_sources": sources,
+            "conjunct_conflicts": [
+                r["assertion_id"] for _, _, r in conflicted]}
         clause = render_clause(gram["core"])
+        if conflicted:
+            part, verdict, conflict_record = conflicted[0]
+            part_clause = self.dialogue.packet_to_clause(part)
+            told = self.dialogue.packet_to_clause(
+                conflict_record["proposition"],
+                conflict_record.get("tense"))
+            if verdict == "VERIFIED":
+                text = (f"i have conflicting information: the "
+                        f"verified record says {part_clause}; you "
+                        f"told me {told}.")
+            else:
+                text = (f"i have conflicting information about "
+                        f"whether {part_clause}: you told me "
+                        f"{told}. i cannot answer until it is "
+                        f"settled.")
+            trace["answer"] = {"status": "ANSWERED", "text": text,
+                               "frame_core": gram["core"],
+                               "conjunct_sources": sources,
+                               "source_class": "CONFLICT"}
+            return self._seal(trace, committed=True)
         if sources and any(v == "USER_DENIED" for v in sources):
             text = (f"based on what you told me, no - part of this "
                     f"is denied by what you said.")
@@ -229,6 +266,11 @@ class HybridRouter:
             "conflicting": [r["assertion_id"] for r in conflicts]}
         clause = render_clause(core)
         concluded = kernel_status == "CONCLUDED"
+        support_record = (support or {}).get("record")
+        session_conflict = [r for r in conflicts
+                            if support_record is None
+                            or r["assertion_id"]
+                            != support_record["assertion_id"]]
         if concluded and conflicts:
             told = self.dialogue.packet_to_clause(
                 conflicts[0]["proposition"],
@@ -236,6 +278,21 @@ class HybridRouter:
             text = (f"i have conflicting information: the verified "
                     f"record says {clause}; you told me {told}.")
             source_class = "CONFLICT"
+        elif support and support.get("verdict") in ("yes", "no") \
+                and session_conflict:
+            # the session itself holds BOTH sides (audit finding: the
+            # answer flipped with insertion order while the trace
+            # listed the denial) - never affirm either
+            first = self.dialogue.packet_to_clause(
+                support_record["proposition"],
+                support_record.get("tense"))
+            second = self.dialogue.packet_to_clause(
+                session_conflict[0]["proposition"],
+                session_conflict[0].get("tense"))
+            text = (f"i have conflicting information from you: you "
+                    f"told me {first} and also {second} - i cannot "
+                    f"answer until it is settled.")
+            source_class = "CONTESTED"
         elif concluded:
             text = f"yes, the verified record says {clause}."
             source_class = "VERIFIED"
@@ -319,6 +376,17 @@ class HybridRouter:
             # promoted to user assertions
             return (None, None)
         tense = core.get("tense") if core else tense_hint
+        if core and core.get("frame") in ("coordination",
+                                          "disjunction"):
+            # the record's tense derives from the conjuncts: uniform
+            # -> that tense; disagreeing -> 'mixed', which matches NO
+            # query (audit finding: a dropped tense became a
+            # wildcard and affirmed a past claim never asserted)
+            conjunct_tenses = {c.get("tense")
+                               for c in core.get("conjuncts", [])
+                               if isinstance(c, dict)}
+            tense = (conjunct_tenses.pop()
+                     if len(conjunct_tenses) == 1 else "mixed")
         polarity = core.get("polarity") if core else None
         modality = core.get("modality") if core else None
         # the clause renders from the PACKET - the committed truth -
@@ -415,57 +483,89 @@ class HybridRouter:
             conflicting = pending["conflicting_ids"]
             turn_id = trace.get("turn_id", "t?")
             self.dialogue.pending_question = None
-            if word == "yes":
-                old_clauses = []
+            # STALENESS GUARD (audit finding, cardinal): every record
+            # the confirmation would touch must STILL be ACTIVE -
+            # a retraction in between makes the confirmation moot
+            stale = [aid for aid in conflicting
+                     if (self.dialogue.store.get(aid) or {}).get(
+                         "lifecycle_status") != "ACTIVE"]
+            if stale:
+                trace["answer"] = {
+                    "status": "NO_PENDING_QUESTION",
+                    "text": ("the earlier statement this would "
+                             "correct is no longer active - there is "
+                             "nothing to confirm. tell me the "
+                             "statement again if you want it "
+                             "recorded.")}
+                return self._seal(trace, committed=False)
+            # every mutation below is TYPED-GUARDED: a store fault
+            # yields the honest split status, never a crash, never a
+            # claim (the cardinal law)
+            try:
+                if word == "yes":
+                    old_clauses = []
+                    record = self.dialogue.record_assertion(
+                        candidate["proposition"], candidate["clause"],
+                        candidate["tense"], candidate["polarity"],
+                        candidate["modality"], turn_id,
+                        provenance=f"user_turn:{turn_id}"
+                                   f"+confirmed_correction",
+                        supersedes=conflicting)
+                    for aid in conflicting:
+                        old = self.dialogue.store.get(aid)
+                        old_clauses.append(old["clause"])
+                        self.dialogue.apply_lifecycle(
+                            aid, "SUPERSEDED",
+                            f"corrected by {record['assertion_id']}",
+                            turn_id)
+                    trace.setdefault("dialogue", {})["assertion"] = {
+                        "assertion_id": record["assertion_id"],
+                        "record_digest": record["record_digest"],
+                        "clause": record["clause"]}
+                    trace["answer"] = {
+                        "status": "ANSWERED",
+                        "text": (f"understood. i will use "
+                                 f"'{candidate['clause']}' in this "
+                                 f"session. you previously said "
+                                 f"'{'; '.join(old_clauses)}'."),
+                        "session_assertion": {
+                            "assertion_id": record["assertion_id"]}}
+                    return self._seal(trace, committed=True)
+                # 'no' - both statements stand, CONTESTED: neither
+                # supports answers until settled
                 record = self.dialogue.record_assertion(
                     candidate["proposition"], candidate["clause"],
                     candidate["tense"], candidate["polarity"],
                     candidate["modality"], turn_id,
-                    provenance=f"user_turn:{turn_id}"
-                               f"+confirmed_correction",
-                    supersedes=conflicting)
+                    provenance=f"user_turn:{turn_id}+not_a_correction")
+                self.dialogue.apply_lifecycle(
+                    record["assertion_id"], "CONTESTED",
+                    "user affirmed both conflicting statements",
+                    turn_id)
                 for aid in conflicting:
-                    old = self.dialogue.store.get(aid)
-                    old_clauses.append(old["clause"])
                     self.dialogue.apply_lifecycle(
-                        aid, "SUPERSEDED",
-                        f"corrected by {record['assertion_id']}",
+                        aid, "CONTESTED",
+                        "user affirmed both conflicting statements",
                         turn_id)
-                trace.setdefault("dialogue", {})["assertion"] = {
-                    "assertion_id": record["assertion_id"],
-                    "record_digest": record["record_digest"],
-                    "clause": record["clause"]}
                 trace["answer"] = {
                     "status": "ANSWERED",
-                    "text": (f"understood. i will use "
-                             f"'{candidate['clause']}' in this "
-                             f"session. you previously said "
-                             f"'{'; '.join(old_clauses)}'."),
-                    "session_assertion": {
-                        "assertion_id": record["assertion_id"]}}
+                    "text": ("understood. both statements stand as "
+                             "contested - i will not answer from "
+                             "either until it is settled.")}
                 return self._seal(trace, committed=True)
-            # 'no' - both statements stand, CONTESTED: neither
-            # supports answers until settled
-            record = self.dialogue.record_assertion(
-                candidate["proposition"], candidate["clause"],
-                candidate["tense"], candidate["polarity"],
-                candidate["modality"], turn_id,
-                provenance=f"user_turn:{turn_id}+not_a_correction")
-            turn = trace.get("turn_id", "t?")
-            self.dialogue.apply_lifecycle(
-                record["assertion_id"], "CONTESTED",
-                "user affirmed both conflicting statements", turn)
-            for aid in conflicting:
-                self.dialogue.apply_lifecycle(
-                    aid, "CONTESTED",
-                    "user affirmed both conflicting statements",
-                    turn)
-            trace["answer"] = {
-                "status": "ANSWERED",
-                "text": ("understood. both statements stand as "
-                         "contested - i will not answer from either "
-                         "until it is settled.")}
-            return self._seal(trace, committed=True)
+            except Exception as exc:
+                trace.setdefault("dialogue", {})["assertion_fault"] = {
+                    "fault": type(exc).__name__,
+                    "detail": str(exc)[:200]}
+                trace["answer"] = {
+                    "status": "ASSERTION_NOT_RECORDED",
+                    "detail": ("recording your confirmation failed "
+                               f"({type(exc).__name__}) - the "
+                               "correction was NOT completed; the "
+                               "session record may hold the new "
+                               "statement without the supersession, "
+                               "and both versions stay visible")}
+                return self._seal(trace, committed=False)
         trace["answer"] = {"status": "NO_PENDING_QUESTION",
                            "text": f"i cannot apply '{word}' to the "
                                    f"pending item."}
@@ -485,7 +585,8 @@ class HybridRouter:
                 "detail": f"i do not know the word "
                           f"{act['entity_word']!r}"}
             return self._seal(trace, committed=False)
-        records = self.dialogue.about(entity)
+        records = (self.dialogue.about(entity)
+                   + self.dialogue.about_contested(entity))
         if not records:
             trace["answer"] = {
                 "status": "ANSWERED",
@@ -494,11 +595,22 @@ class HybridRouter:
             return self._seal(trace, committed=True)
         turn_id = trace.get("turn_id", "t?")
         clauses = []
-        for record in records:
-            self.dialogue.apply_lifecycle(
-                record["assertion_id"], "RETRACTED",
-                "user retraction", turn_id)
-            clauses.append(record["clause"])
+        try:
+            for record in records:
+                self.dialogue.apply_lifecycle(
+                    record["assertion_id"], "RETRACTED",
+                    "user retraction", turn_id)
+                clauses.append(record["clause"])
+        except Exception as exc:
+            trace.setdefault("dialogue", {})["assertion_fault"] = {
+                "fault": type(exc).__name__}
+            trace["answer"] = {
+                "status": "ASSERTION_NOT_RECORDED",
+                "detail": (f"the retraction failed partway "
+                           f"({type(exc).__name__}) - retracted so "
+                           f"far: {'; '.join(clauses) or 'nothing'}; "
+                           "the rest still stands")}
+            return self._seal(trace, committed=False)
         trace.setdefault("dialogue", {})["retracted"] = [
             r["assertion_id"] for r in records]
         trace["answer"] = {
@@ -525,6 +637,8 @@ class HybridRouter:
                 verified_clauses.append(f"the {args[0]} is {args[1]}")
         session_records = self.dialogue.about(entity)
         session_clauses = [r["clause"] for r in session_records]
+        contested_clauses = [r["clause"] for r in
+                             self.dialogue.about_contested(entity)]
         parts = []
         if verified_clauses:
             parts.append("the verified record says "
@@ -532,6 +646,10 @@ class HybridRouter:
         if session_clauses:
             parts.append("you told me that "
                          + "; ".join(session_clauses) + ".")
+        if contested_clauses:
+            parts.append("you gave me conflicting statements that "
+                         "are still unsettled: "
+                         + "; ".join(contested_clauses) + ".")
         if not parts:
             parts.append(f"i have no information about the "
                          f"{entity}.")
@@ -609,7 +727,14 @@ class HybridRouter:
                     f"session. you previously said "
                     f"'{'; '.join(old_clauses)}'.")
         else:
-            text = f"okay. you told me that {clause}."
+            # the user MARKED this a correction but nothing on the
+            # record conflicts with it - say so, never silently
+            # downgrade to a plain tell (audit finding)
+            trace.setdefault("dialogue", {})[
+                "correction_without_target"] = True
+            text = (f"okay. you told me that {clause}. nothing i "
+                    f"previously recorded conflicts with it, so "
+                    f"nothing was superseded.")
         trace["answer"] = {"status": "ANSWERED", "text": text,
                            "session_assertion": {
                                "assertion_id": record["assertion_id"]}}
@@ -683,6 +808,15 @@ class HybridRouter:
         # dialogue state, never semantic knowledge, and only through
         # the typed intent path.
         act = self.dialogue.classify_surface(_tokenize(sentence))
+        if self.dialogue.pending_question is not None \
+                and (act is None or act["act"] != "POLAR_RESPONSE"):
+            # the user moved on: a pending clarification is DROPPED
+            # (recorded) rather than left armed - a stale bare 'yes.'
+            # turns later superseded records it was never about
+            # (audit finding, cardinal lens)
+            trace.setdefault("dialogue", {})["pending_dropped"] = \
+                self.dialogue.pending_question["type"]
+            self.dialogue.pending_question = None
         if act is not None:
             return self._dialogue_act_turn(act, sentence, trace)
 

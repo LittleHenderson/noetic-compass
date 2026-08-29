@@ -494,6 +494,8 @@ def test_runtime_canary_no_construction_forgotten():
         "the cat carries the bone to the dog.": "UNDERSTOOD",  # carry
         "the small cat chases the large dog.": "UNDERSTOOD",  # sm/lg
         "the cat must not chase the dog.": "UNDERSTOOD",  # prohibition
+        "what does the cat chase?": "ANSWERED",          # what-question
+        "who chases the dog?": "ANSWERED",               # who-question
     }
     for sentence, expected in probes.items():
         trace = HybridRouter(mode="NATIVE_ONLY").turn(sentence)
@@ -518,11 +520,14 @@ def test_pronoun_resolves_unique_antecedent_across_sentences():
 def test_norm_quantifier_and_disjunction_meanings_never_collapse():
     """The non-collapse law across the new families: 'must not' /
     'does not' / plain assertion are three meanings; every/some/no
-    are three meanings; and/or are two meanings."""
-    router = HybridRouter(mode="NATIVE_ONLY")
+    are three meanings; and/or are two meanings. Fresh session per
+    sentence: this tests PROJECTION distinctness - in one session the
+    dialogue board now correctly flags these very sentences as
+    contradicting each other (wrapper-aware conflict detection)."""
 
     def meaning(sentence):
-        return router.turn(sentence)["answer"]["meaning"]
+        return HybridRouter(
+            mode="NATIVE_ONLY").turn(sentence)["answer"]["meaning"]
 
     prohibited = meaning("the cat must not chase the dog.")
     negated = meaning("the cat does not chase the dog.")

@@ -2,7 +2,7 @@
 
 ## 1. What the machine KNOWS right now
 
-**Grammar constructions: 28 durable** (of 28 in the store)
+**Grammar constructions: 30 durable** (of 30 in the store)
 
 | construction | state | taught by | evidence |
 |---|---|---|---|
@@ -20,6 +20,8 @@
 | interrogative_ditransitive | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L014_ditransitive_question|teacher:qwen.qwen3-32 |
 | interrogative_past_transitive | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L008_past_question|teacher:qwen.qwen3-32b-v1:0 |
 | interrogative_present_transitive | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L003_question|teacher:qwen.qwen3-32b-v1:0 |
+| interrogative_what | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L029_what_question|teacher:qwen.qwen3-32b-v1:0 |
+| interrogative_who | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L030_who_question|teacher:qwen.qwen3-32b-v1:0 |
 | interrogative_why_present | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L024_why_question|teacher:qwen.qwen3-32b-v1:0 |
 | locative_state | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L020_locative|teacher:qwen.qwen3-32b-v1:0 |
 | negated_passive_past | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L012_passive_negation|teacher:qwen.qwen3-32b-v1: |
@@ -53,6 +55,8 @@
 - **interrogative_ditransitive** - provenance `lesson:LIVE_L014_ditransitive_question|teacher:qwen.qwen3-32b-v1:0`
 - **interrogative_past_transitive** - provenance `lesson:LIVE_L008_past_question|teacher:qwen.qwen3-32b-v1:0`
 - **interrogative_present_transitive** - provenance `lesson:LIVE_L003_question|teacher:qwen.qwen3-32b-v1:0`
+- **interrogative_what** - provenance `lesson:LIVE_L029_what_question|teacher:qwen.qwen3-32b-v1:0`
+- **interrogative_who** - provenance `lesson:LIVE_L030_who_question|teacher:qwen.qwen3-32b-v1:0`
 - **interrogative_why_present** - provenance `lesson:LIVE_L024_why_question|teacher:qwen.qwen3-32b-v1:0`
 - **locative_state** - provenance `lesson:LIVE_L020_locative|teacher:qwen.qwen3-32b-v1:0`
 - **negated_passive_past** - provenance `lesson:LIVE_L012_passive_negation|teacher:qwen.qwen3-32b-v1:0`
@@ -74,6 +78,10 @@ Teacher **Qwen/Qwen2.5-3B-Instruct**, probe `the cat does not chase the dog.`:
 
 curriculum lesson **imperative_ditransitive**, probe `give the bone to the dog.`: **UNSUPPORTED_LANGUAGE** -> **UNDERSTOOD**
 
+curriculum lesson **interrogative_what**, probe `what does the cat chase?`: **UNSUPPORTED_LANGUAGE** -> **ANSWERED**
+
+curriculum lesson **interrogative_who**, probe `who chases the dog?`: **UNSUPPORTED_LANGUAGE** -> **ANSWERED**
+
 
 vocabulary lesson **LIVE_L027_new_adjectives**, probe `the small cat chases the large dog.`: **UNSUPPORTED_LANGUAGE** -> **UNDERSTOOD**
 
@@ -89,19 +97,33 @@ committee lesson **None**, probe `the cat must not chase the dog.`: **UNSUPPORTE
 - `is the brown fox quiet?` -> **ANSWERED** (route native_gram), core = `None`
 - `the hen was not chased by the fox.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'negation', 'args': [{'pred': 'relation', 'args': ['chase', 'fox', 'hen']}]}`
 - `the fox gave the bone to the hen.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'relation', 'args': ['give', 'fox', 'bone', 'hen']}`
-- `the dog chases the cat and the hen chases the fox and the bird chases the dog.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'conjunction', 'args': [{'pred': 'relation', 'args': ['chase', 'dog', 'cat']}, {'pred': 'relation', 'args': ['chase', 'hen', 'fox']}, {'pred': 'relation', 'args': ['chase', 'bird', 'dog']}]}`
+- `the dog chases the cat and the hen chases the fox and the bird chases the dog.` -> **CLARIFICATION_REQUESTED** (route native_gram), core = `None`
 - `the dog chases the cat or the hen chases the fox.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'disjunction', 'args': [{'pred': 'relation', 'args': ['chase', 'dog', 'cat']}, {'pred': 'relation', 'args': ['chase', 'hen', 'fox']}]}`
 - `the fox that chases the hen is brown.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'conjunction', 'args': [{'pred': 'property', 'args': ['fox', 'brown']}, {'pred': 'relation', 'args': ['chase', 'fox', 'hen']}]}`
 - `the hen's bone is brown.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'conjunction', 'args': [{'pred': 'property', 'args': ['bone', 'brown']}, {'pred': 'possession', 'args': ['hen', 'bone']}]}`
 - `the fox is on the table.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'location', 'args': ['fox', 'table']}`
 - `the hen is smaller than the dog.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'relation', 'args': ['smaller', 'hen', 'dog']}`
 - `some fox chases the hen.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'quantified', 'args': ['some', {'pred': 'relation', 'args': ['chase', 'fox', 'hen']}]}`
-- `the fox chased the hen today.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'conjunction', 'args': [{'pred': 'relation', 'args': ['chase', 'fox', 'hen']}, {'pred': 'time', 'args': ['today']}]}`
+- `the fox chased the hen today.` -> **CLARIFICATION_REQUESTED** (route native_gram), core = `None`
 - `why does the fox chase the hen?` -> **LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING** (route native_gram), core = `None`
 - `give the bone to the hen.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'relation', 'args': ['give', 'addressee', 'bone', 'hen']}`
 - `the fox carries the bone to the hen.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'relation', 'args': ['carry', 'fox', 'bone', 'hen']}`
 - `the large fox chases the small hen.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'conjunction', 'args': [{'pred': 'relation', 'args': ['chase', 'fox', 'hen']}, {'pred': 'property', 'args': ['fox', 'large']}, {'pred': 'property', 'args': ['hen', 'small']}]}`
 - `the fox must not chase the hen.` -> **UNDERSTOOD** (route native_gram), core = `{'pred': 'prohibition', 'args': [{'pred': 'relation', 'args': ['chase', 'fox', 'hen']}]}`
+
+**Live conversation check (CONV v0.1 - run at ledger generation; every reply from the real router, provenance never laundered):**
+
+- U: `hello.`  M: [ANSWERED] `hello.`
+- U: `does the cat chase the dog?`  M: [ANSWERED] `i do not know whether the cat chases the dog.`
+- U: `the cat chases the dog.`  M: [UNDERSTOOD] `okay. you told me that the cat chases the dog.`
+- U: `does the cat chase the dog?`  M: [ANSWERED] `based on what you told me, yes, the cat chases the dog.`
+- U: `what does the cat chase?`  M: [ANSWERED] `you told me that the cat chases the dog.`
+- U: `the bird is gray.`  M: [UNDERSTOOD] `okay. you told me that the bird is gray.`
+- U: `actually, the bird is brown.`  M: [ANSWERED] `understood. i will use 'the bird is brown' in this session. you previously said 'the bird is gray'.`
+- U: `is the bird brown?`  M: [ANSWERED] `based on what you told me, yes, the bird is brown.`
+- U: `forget what i said about the cat.`  M: [ANSWERED] `understood. i will no longer use what you told me about the cat: the cat chases the dog. the record of the retraction is kept.`
+- U: `does the cat chase the dog?`  M: [ANSWERED] `i do not know whether the cat chases the dog.`
+- U: `thank you.`  M: [ANSWERED] `you are welcome.`
 
 ## 4. The paper trail
 
@@ -110,7 +132,7 @@ committee lesson **None**, probe `the cat must not chase the dog.`: **UNSUPPORTE
   - Qwen/Qwen2.5-1.5B-Instruct: REJECTED_SCHEMA, REJECTED_SCHEMA
   - Qwen/Qwen2.5-3B-Instruct: REJECTED_SCHEMA, REJECTED_SCHEMA
 - Constrained-teaching artifacts: 1
-- Curriculum artifacts: 2 file(s), 4 sealed lesson result(s)
+- Curriculum artifacts: 4 file(s), 6 sealed lesson result(s)
 - Vocabulary artifacts: 1 file(s), 1 sealed lesson result(s)
 - Committee artifacts: 1 file(s), 1 sealed lesson result(s)
 

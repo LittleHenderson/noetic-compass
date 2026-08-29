@@ -1008,6 +1008,99 @@ TWO MORE DEFECT CLASSES FOUND LIVE AND FIXED (waves B+C 2026-08-28):
   ladder examined them with - synced; teacher misled by its own
   probe once (lesson packet fields) - sealed and rerun.
 
+CONV v0.1 - PROVENANCE-GROUNDED CONVERSATION, COMPLETE AND
+ADVERSARIALLY AUDITED (2026-08-29, owner GOAL.txt directive; new
+board CCB_D1_v0.1 'Dialogue and Common-Ground'):
+  THE FROZEN ACCEPTANCE LAW (CCB_D1_v0.1/CONV_ACCEPTANCE_LAW_v0.1.md,
+  owner-verbatim): acknowledge a user-told fact only AFTER a
+  provenance-bearing session assertion is atomically committed;
+  answer from it only with the source preserved; never silently
+  promote a user assertion into verified knowledge; with no
+  admissible record, ask or say i-do-not-know. Cardinal failure =
+  claiming memory with no committed record.
+  BUILT (all five stages of the goal's sequence):
+  - CONV-1A tell-then-ask: SessionAssertionStore (append-only,
+    session-scoped, deterministic ids; truth_status GIVEN per the
+    CAS-Sem vocabulary - the goal sketch's ASSERTED maps onto GIVEN
+    rather than duplicating the status system; source_class
+    USER_ASSERTED separate from truth_status), typed
+    SessionAssertionWriteIntent -> validation station (an intent
+    claiming VERIFIED is REFUSED typed - the anti-laundering law) ->
+    TransactionCoordinator sole writer. Replies by source: verified
+    -> 'yes, the verified record says ...' (gram lane; the legacy
+    native lane keeps its test-frozen wording, disclosed), session ->
+    'based on what you told me, ...', both-in-conflict -> both shown,
+    neither -> honest unknown. Sound entailment only: equality,
+    negation, conjunction membership, tense-strict; disjunction /
+    quantifier / prohibition support nothing singular; symmetry never
+    inferred.
+  - CONV-1B corrections: 'actually,' supersedes (never deletes);
+    unmarked contradictions ask ('is the second statement a
+    correction?'), 'yes.' supersedes / 'no.' contests both;
+    'forget what i said about the X.' retracts with the audit record
+    kept.
+  - CONV-1C wh-questions: interrogative_what + interrogative_who
+    TAUGHT LIVE via Bedrock 32B through the unchanged ladder (both
+    PROMOTED_DURABLY; grammar now 30 durable constructions); partial-
+    proposition unification over ACTIVE assertions; multiple bindings
+    LISTED ('the cat chases the dog and the fox'), never collapsed.
+  - CONV-1D dialogue acts: hello/thanks/goodbye social-only (no fact
+    written); bare yes/no requires a pending question, typed refusal
+    otherwise.
+  - CONV-1E entity summary: 'tell me about the X.' groups by
+    provenance (verified record vs told-by-you vs unsettled).
+  CAS-Ohm conv_flow test points on every sealed turn (tp_parse,
+  tp_semantic_packet, tp_write_intent, tp_session_commit,
+  tp_retrieval, tp_answer; compute-only) - a statement understood but
+  not remembered shows tp_session_commit cutoff: language failure and
+  memory-write failure are DISTINGUISHABLE, per the goal.
+  Owner terminal: CCB_D1_v0.1/chat.py (python chat.py [--trace]).
+  Ledger: a LIVE 11-turn conversation transcript now regenerates
+  inside LEARNING_LEDGER.md on every run.
+
+CONV ADVERSARIAL AUDIT - 10 CONFIRMED FINDINGS, ALL FIXED, ALL
+REGRESSION-LOCKED (2026-08-29, 16-agent workflow wf_b6ba36b7: six
+hostile lenses, every surviving finding independently reproduced by
+a refuter agent; the first-run-green battery was NOT trusted):
+  1. CARDINAL: retraction between clarification and 'yes.' crashed
+     the turn AFTER committing a ghost record (no trace, no ack, yet
+     answers issued from it). 2. CARDINAL: wrapper-masked
+     contradictions (adjective/quantifier-wrapped vs bare denial)
+     both stood ACTIVE; the answer flipped with insertion order while
+     the trace itself listed the denial. 3. CARDINAL: same crash via
+     the state lens. 4. CONTESTED records invisible to retraction and
+     entity summary. 5. pending clarification never expired - a stale
+     'yes.' superseded records turns later. 6+7. store faults on the
+     confirmation/retraction lanes were untyped crashes. 8.
+     restricted (conjunction) questions never ran conflict detection.
+     9. 'actually,' with a non-exclusive proposition (relations)
+     silently masqueraded as a plain tell. 10. coordination
+     statements committed tense=None which matched ANY query tense -
+     a present statement affirmed a past claim never asserted (+
+     'carrys' inflection).
+  FIXES: pending clarifications DROP (recorded) when the user moves
+  on; staleness pre-check + typed guards on every multi-step
+  mutation; wrapper-aware conflict detection (conjunction members,
+  quantified-'no'); per-conjunct conflict surfacing in restricted
+  questions; correction-without-target disclosed ('nothing was
+  superseded'); coordination tense derived from conjuncts (uniform ->
+  that tense, disagreeing -> 'mixed' which matches NOTHING);
+  CONTESTED visible to retraction/summary; consonant-y inflection.
+  Each finding has a named regression test
+  (CCB_D1_v0.1/tests/test_conv_audit_regressions.py).
+  DISCLOSED LIMITS (open, honest): relation corrections supersede
+  nothing automatically (no exclusivity assumption - now disclosed in
+  the reply); derived inference ('given what you told me, it
+  follows') not implemented; attribute-exclusivity map is board
+  machinery (color, size) pending the taught-knowledge protocol;
+  answer-time session-conflict branch is defense-in-depth behind
+  tell-time detection.
+
+PROGRAM TEST TOTALS refresh (2026-08-29, CONV round): RRK 34 + RLP 45
++ M1 34 + L1 32 + SEM 19 + WB 13 + CRQS 35 + T1 20 + OHM 10 + H2H 10
++ LTG 11 + SM 8 + G10 8 + CORTEX 48 + A1 11 + D1 49 = 387 local, 0
+failures, 16 lanes. Grammar: 30 durable constructions.
+
 PROGRAM TEST TOTALS refresh (2026-08-28, waves B+C): RRK 34 + RLP 45
 + M1 34 + L1 32 + SEM 19 + WB 13 + CRQS 35 + T1 20 + OHM 10 + H2H 10
 + LTG 11 + SM 8 + G10 8 + CORTEX 48 + A1 11 = 338 local, 0 failures.

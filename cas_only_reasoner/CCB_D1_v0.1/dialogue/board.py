@@ -45,9 +45,22 @@ def _attribute_class(value: str) -> Optional[str]:
     return None
 
 
+def _inflect(verb: str, tense) -> str:
+    """Naive regular inflection, consonant-y aware (carry -> carries
+    / carried; audit-adjacent rendering fix: 'carrys')."""
+    if verb.endswith("y") and len(verb) > 1 \
+            and verb[-2] not in "aeiou":
+        return verb[:-1] + ("ied" if tense == "past" else "ies")
+    return verb + ("d" if tense == "past" else "s")
+
+
 def _tense_compatible(query_tense, stored_tense) -> bool:
     """Both known -> must match. Either unknown (the legacy native
-    lane carries no tense) -> compatible, disclosed weakest reading."""
+    lane carries no tense) -> compatible, disclosed weakest reading.
+    'mixed' (a coordination whose conjuncts disagree) matches NOTHING
+    - audit finding: a dropped tense became a tense wildcard."""
+    if "mixed" in (query_tense, stored_tense):
+        return False
     if query_tense is None or stored_tense is None:
         return True
     return query_tense == stored_tense
@@ -150,8 +163,9 @@ class DialogueBoard:
             return "no"
         if stored.get("pred") == "conjunction":
             for part in stored.get("args", []):
-                inner = DialogueBoard._entails(part, query, None,
-                                               None)
+                inner = DialogueBoard._entails(part, query,
+                                               stored_tense,
+                                               query_tense)
                 if inner is not None:
                     return inner
         return None
@@ -182,6 +196,25 @@ class DialogueBoard:
                 cls_a, cls_b = _attribute_class(va), _attribute_class(vb)
                 if cls_a is not None and cls_a == cls_b:
                     return True
+        # WRAPPER-AWARE (audit finding): a conjunction member
+        # conflicting with the other side IS a conflict, and
+        # quantified('no', X) stands against X
+        if a.get("pred") == "conjunction" and any(
+                isinstance(part, dict) and DialogueBoard._conflicts(
+                    part, b, tense_a, tense_b)
+                for part in a.get("args", [])):
+            return True
+        if b.get("pred") == "conjunction" and any(
+                isinstance(part, dict) and DialogueBoard._conflicts(
+                    a, part, tense_a, tense_b)
+                for part in b.get("args", [])):
+            return True
+        for wrapped, other in ((a, b), (b, a)):
+            if wrapped.get("pred") == "quantified" \
+                    and len(wrapped.get("args", [])) == 2 \
+                    and wrapped["args"][0] == "no" \
+                    and wrapped["args"][1] == other:
+                return True
         return False
 
     def conflicting_active(self, proposition: Dict,
@@ -228,6 +261,13 @@ class DialogueBoard:
         return [r for r in self.store.active()
                 if entity in self._atoms(r["proposition"])]
 
+    def about_contested(self, entity: str) -> List[Dict]:
+        """CONTESTED records still gate answers, so retraction and
+        summaries must SEE them (audit finding: the machine denied
+        records that were blocking its own answers)."""
+        return [r for r in self.store.contested()
+                if entity in self._atoms(r["proposition"])]
+
     @staticmethod
     def _atoms(packet) -> List[str]:
         atoms: List[str] = []
@@ -249,8 +289,8 @@ class DialogueBoard:
         if pred == "property" and len(args) >= 2:
             return f"the {args[0]} is {args[1]}"
         if pred == "relation" and len(args) >= 3:
-            suffix = "d" if tense == "past" else "s"
-            clause = (f"the {args[1]} {args[0]}{suffix} the "
+            clause = (f"the {args[1]} "
+                      f"{_inflect(args[0], tense)} the "
                       f"{args[2]}")
             if len(args) >= 4:
                 clause += f" to the {args[3]}"
