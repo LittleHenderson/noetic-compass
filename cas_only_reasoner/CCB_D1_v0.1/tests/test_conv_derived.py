@@ -77,3 +77,73 @@ def test_direct_membership_answers_without_derivation():
     assert trace["answer"]["text"] \
         == "based on what you told me, yes, milo is a cat."
     assert trace["answer"]["source_class"] == "USER_ASSERTED"
+
+
+# ---------------- CONV correction-path audit regressions
+def test_correction_preserves_negation_in_clause_and_store():
+    router = fresh()
+    answer(router, "the cat chases the dog.")
+    corrected = answer(router,
+                       "actually, the cat does not chase the dog.")
+    text = corrected["answer"]["text"]
+    assert "does not chase" in text
+    active = [r for r in router.dialogue.store.records
+              if r["lifecycle_status"] == "ACTIVE"]
+    assert len(active) == 1
+    assert "does not chase" in active[0]["clause"]
+    summary = answer(router, "tell me about the dog.")
+    assert "does not chase" in summary["answer"]["text"]
+
+
+def test_correction_preserves_prohibition():
+    router = fresh()
+    answer(router, "the cat chases the dog.")
+    corrected = answer(router,
+                       "actually, the cat must not chase the dog.")
+    assert "must not chase" in corrected["answer"]["text"]
+
+
+def test_coordination_correction_does_not_wildcard_tense():
+    router = fresh()
+    answer(router, "the cat chases the bird.")
+    answer(router, "actually, the cat chases the dog and the fox "
+                   "chases the hen.")
+    record = [r for r in router.dialogue.store.records
+              if r["lifecycle_status"] == "ACTIVE"][0]
+    assert record["tense"] == "present"
+    past = answer(router, "did the cat chase the dog?")
+    assert "i do not know" in past["answer"]["text"]
+
+
+def test_question_after_actually_is_not_committed():
+    router = fresh()
+    result = answer(router, "actually, is the dog brown?")
+    assert result["answer"]["status"] == "UNSUPPORTED_LANGUAGE"
+    assert router.dialogue.store.records == []
+
+
+def test_relation_correction_supersedes_matching_relation():
+    router = fresh()
+    answer(router, "the cat chases the dog.")
+    answer(router, "actually, the cat chases the fox.")
+    states = {r["clause"]: r["lifecycle_status"]
+              for r in router.dialogue.store.records}
+    assert states["the cat chases the dog"] == "SUPERSEDED"
+    assert states["the cat chases the fox"] == "ACTIVE"
+
+
+def test_class_correction_supersedes_and_derivation_follows():
+    router = fresh()
+    answer(router, "milo is a cat.")
+    answer(router, "every cat is an animal.")
+    answer(router, "actually, milo is a dog.")
+    # the corrected-away membership must not drive a derivation
+    states = {}
+    for r in router.dialogue.store.records:
+        if r["proposition"].get("pred") == "is_a":
+            states[r["proposition"]["args"][1]] = r["lifecycle_status"]
+    assert states.get("cat") == "SUPERSEDED"
+    assert states.get("dog") == "ACTIVE"
+    trace = answer(router, "is milo an animal?")
+    # milo is now a dog, and no rule says dogs are animals
+    assert "i do not know" in trace["answer"]["text"]

@@ -26,6 +26,7 @@ import sys
 from typing import Dict, List, Optional
 
 STEP_BUDGET_DEFAULT = 200_000
+_MAX_INT_LITERAL = 1_000_000
 
 _SAFE_BUILTIN_NAMES = (
     "len", "range", "abs", "min", "max", "sum", "sorted",
@@ -76,14 +77,62 @@ def static_gate(code: str) -> List[str]:
                 and node.id in FORBIDDEN_NAMES:
             defects.append(f"FORBIDDEN_EFFECT: {node.id!r} is "
                            f"blocked (line {node.lineno})")
-        elif isinstance(node, ast.Attribute) \
-                and node.attr.startswith("_"):
-            defects.append(f"FORBIDDEN_EFFECT: dunder/underscore "
-                           f"attribute {node.attr!r} is blocked "
-                           f"(line {node.lineno})")
+        elif isinstance(node, ast.Name) and node.id.startswith("__"):
+            # __builtins__, __import__ etc. reached as bare names
+            defects.append(f"FORBIDDEN_EFFECT: dunder name "
+                           f"{node.id!r} is blocked (line "
+                           f"{node.lineno})")
+        elif isinstance(node, ast.Attribute):
+            # ATTRIBUTE ACCESS IS BLOCKED ENTIRELY (audit finding: a
+            # generator's non-underscore gi_frame / f_back /
+            # f_builtins walked to the real __import__; str.format
+            # traversed __class__ hidden in a string literal). The
+            # taught pure functions use NO attribute access at all, so
+            # the whole class of frame/introspection/format escapes
+            # dies here. This is the crown-jewel security fix.
+            defects.append(f"FORBIDDEN_EFFECT: attribute access "
+                           f"{node.attr!r} is not permitted in the "
+                           f"sandbox (line {node.lineno})")
+        elif isinstance(node, ast.Constant) \
+                and isinstance(node.value, str) \
+                and node.value.startswith("__") \
+                and node.value.endswith("__"):
+            # a dunder name hidden in a string LITERAL (reached later
+            # by subscript, format, or getattr-equivalent)
+            defects.append(f"FORBIDDEN_EFFECT: dunder string literal "
+                           f"{node.value!r} is blocked (line "
+                           f"{node.lineno})")
         elif isinstance(node, (ast.Global, ast.Nonlocal)):
             defects.append("FORBIDDEN_EFFECT: global/nonlocal "
                            f"state reach (line {node.lineno})")
+        elif isinstance(node, (ast.Yield, ast.YieldFrom,
+                               ast.Lambda)):
+            # generators/lambdas are the frame-capture primitives of
+            # the escape and are not needed by the taught functions
+            defects.append("FORBIDDEN_EFFECT: yield/lambda is not "
+                           f"permitted in the sandbox (line "
+                           f"{node.lineno})")
+        elif isinstance(node, ast.Constant) \
+                and isinstance(node.value, int) \
+                and not isinstance(node.value, bool) \
+                and abs(node.value) > _MAX_INT_LITERAL:
+            # a memory/CPU bomb needs a big literal count/exponent -
+            # 5,000,000 in [0]*5000000, 10**8 in 2**(10**8) (audit
+            # finding: the step budget counts lines, not work).
+            # OS-level memory/CPU isolation is a documented residual
+            # limit for a fully in-process sandbox; this cap kills the
+            # single-line bombs the exam corpus and taught functions
+            # never need.
+            defects.append(f"FORBIDDEN_EFFECT: integer literal "
+                           f"{node.value} exceeds the sandbox cap "
+                           f"{_MAX_INT_LITERAL} (line {node.lineno})")
+        elif isinstance(node, ast.BinOp) \
+                and isinstance(node.op, ast.Pow):
+            # exponentiation is a compute bomb primitive and is not
+            # needed by the taught functions (the math board owns
+            # powers) - blocked
+            defects.append("FORBIDDEN_EFFECT: '**' is not permitted "
+                           f"in the sandbox (line {node.lineno})")
     return defects
 
 

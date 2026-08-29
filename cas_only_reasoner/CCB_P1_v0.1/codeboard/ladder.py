@@ -34,7 +34,8 @@ def examiner_digest() -> str:
     episode - the teacher cannot alter the examiner unseen."""
     sources = [os.path.join(_HERE, name)
                for name in ("sandbox.py", "tracer.py", "repair.py",
-                            "spec.py", "ladder.py")]
+                            "spec.py", "ladder.py", "packets.py",
+                            "student.py")]
     blob = b"".join(open(p, "rb").read() for p in sources)
     return hashlib.sha256(blob).hexdigest()[:16]
 
@@ -400,9 +401,16 @@ def teach(packet: Dict, store_path: str) -> Dict:
                      else f"bug fails at {bug_detail['stage']} - "
                           f"a real defect exemplar"):
             return seal("REJECTED_BUG_NOT_A_BUG")
+        from .spec import memorization_defects
         surviving = None
         candidate_outcomes = []
         for index, candidate in enumerate(candidates):
+            memo = memorization_defects(candidate)
+            if memo:
+                candidate_outcomes.append(
+                    {"candidate": index, "passed": False,
+                     "detail": memo[0]})
+                continue
             ok, detail = algorithm_battery(skill_id, candidate,
                                            spec)
             candidate_outcomes.append(

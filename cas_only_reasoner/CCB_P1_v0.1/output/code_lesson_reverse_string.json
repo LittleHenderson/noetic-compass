@@ -1,7 +1,7 @@
 {
  "after": {
   "adapted_from": "reverse_string",
-  "code": "def reverse_string(s):\n    return ''.join(reversed(s))",
+  "code": "def reverse_string(s):\n    result = ''\n    for i in range(len(s) - 1, -1, -1):\n        result += s[i]\n    return result",
   "status": "SOLVED"
  },
  "before": {
@@ -18,13 +18,13 @@
    "tp_spec_understanding": "active",
    "tp_test_execution": "active"
   },
-  "episode_digest": "b88349e8c6806b87",
-  "examiner_digest": "2677205a5ac0d866",
+  "episode_digest": "96ccedf0822383b1",
+  "examiner_digest": "3bf36a819eebf081",
   "examiner_identity": "ccb_p1_compiler_and_tests",
   "lesson_id": "CODE_reverse_string",
   "provenance": "schema_constrained_field_elicitation",
   "rollback_pointer": {
-   "parent_digest": "7bdc9a4f602a8c01",
+   "parent_digest": "5a445dc0d43df4b8",
    "parent_revision": 2
   },
   "skill_id": "reverse_string",
@@ -99,25 +99,25 @@
    "attempt": 1,
    "defect": null,
    "field": "explanation",
-   "raw": "The function `reverse_string(s)` takes a string `s` as input and returns a new string where the characters are in the opposite order of the original. For example, if the input is \"hello\", the output w"
+   "raw": "The function `reverse_string(s)` takes a string `s` as input and returns a new string with the characters in the opposite order, from last to first. For example, if the input is \"hello\", the output wo"
   },
   {
    "attempt": 1,
    "defect": null,
    "field": "implementation",
-   "raw": "def reverse_string(s): return ''.join(reversed(s))"
+   "raw": "def reverse_string(s):\n    result = ''\n    for i in range(len(s) - 1, -1, -1):\n        result += s[i]\n    return result"
   },
   {
    "attempt": 1,
    "defect": null,
    "field": "common_bug",
-   "raw": "def reverse_string(s):\n    result = \"\"\n    for i in range(len(s) - 1, -1, -1):\n        result += s[i]\n    return result[:-1]"
+   "raw": "def reverse_string(s):\n    reversed_s = \"\"\n    for i in range(len(s) - 1):\n        reversed_s += s[i]\n    return reversed_s"
   }
  ],
  "packet": {
-  "common_bug": "def reverse_string(s):\n    result = \"\"\n    for i in range(len(s) - 1, -1, -1):\n        result += s[i]\n    return result[:-1]",
-  "explanation": "The function `reverse_string(s)` takes a string `s` as input and returns a new string where the characters are in the opposite order of the original. For example, if the input is \"hello\", the output would be \"olleh\".",
-  "implementation": "def reverse_string(s): return ''.join(reversed(s))",
+  "common_bug": "def reverse_string(s):\n    reversed_s = \"\"\n    for i in range(len(s) - 1):\n        reversed_s += s[i]\n    return reversed_s",
+  "explanation": "The function `reverse_string(s)` takes a string `s` as input and returns a new string with the characters in the opposite order, from last to first. For example, if the input is \"hello\", the output would be \"olleh\".",
+  "implementation": "def reverse_string(s):\n    result = ''\n    for i in range(len(s) - 1, -1, -1):\n        result += s[i]\n    return result",
   "lesson_id": "CODE_reverse_string",
   "provenance": "schema_constrained_field_elicitation",
   "skill_id": "reverse_string",

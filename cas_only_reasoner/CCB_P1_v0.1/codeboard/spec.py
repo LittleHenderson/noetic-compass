@@ -198,6 +198,35 @@ def _rng(seed: int, skill_id: str) -> random.Random:
     return random.Random(f"{seed}:{skill_id}")
 
 
+def memorization_defects(code: str) -> List[str]:
+    """Structural anti-memorization: a genuine small algorithm has few
+    constants and no equality against list/tuple literals. A lookup
+    table has many constants and/or literal-data comparisons (audit
+    finding: a fully-public examiner seed lets a repo-reading teacher
+    hardcode the exam inputs). DISCLOSED RESIDUAL: a cleverly
+    compressed table could still evade a constant-count heuristic;
+    true defense needs an unpredictable external held-out oracle."""
+    import ast as _ast
+    defects = []
+    tree = _ast.parse(code)
+    constants = [n for n in _ast.walk(tree)
+                 if isinstance(n, _ast.Constant)
+                 and not isinstance(n.value, bool)]
+    if len(constants) > 20:
+        defects.append(f"anti-memorization: {len(constants)} literal "
+                       f"constants - a small algorithm needs few; "
+                       f"this looks like a lookup table")
+    for node in _ast.walk(tree):
+        if isinstance(node, _ast.Compare):
+            operands = [node.left] + list(node.comparators)
+            for operand in operands:
+                if isinstance(operand, (_ast.List, _ast.Tuple))                         and len(operand.elts) > 2:
+                    defects.append("anti-memorization: equality "
+                                   "against a list/tuple literal - "
+                                   "memorized data, not an algorithm")
+    return defects
+
+
 def exam_inputs(skill_id: str, seed: int,
                 count: int) -> List[List]:
     rng = _rng(seed, skill_id)

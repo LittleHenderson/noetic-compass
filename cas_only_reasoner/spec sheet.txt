@@ -1217,6 +1217,91 @@ SKILLS TAUGHT LIVE AND PROMOTED (2026-08-29, owner directive
   prefers a PARSEABLE candidate so 'your mistake is actually TRUE'
   reaches the teacher instead of a parse error.
 
+CCB-P1 PROGRAMMING BOARD - BUILT, TAUGHT LIVE, ADVERSARIALLY
+AUDITED (2026-08-29, owner PROGRAMMING LESSON.txt directive; new
+board CCB_P1_v0.1):
+  The CNCM learns to CONSTRUCT AND DEBUG. All CODE-L0..L4 skills
+  taught live by qwen.qwen3-32b-v1:0 and PROMOTED under
+  COMPILER-AND-TEST authority (read/trace, sum_list, reverse_string,
+  max_list, count_matching, contracts_testing, debug_repair); every
+  BEFORE probe CANNOT_MISSING_SKILL, every AFTER SOLVED. The teacher
+  proposes code; the compiler and tests decide; the ladder promotes.
+  MACHINERY: a SANDBOX (static effect gate refusing forbidden
+  effects BEFORE execution, whitelisted builtins, typed
+  SANDBOX_EXECUTE ToolIntents, step-budget kill); a line-level TRACER
+  + the PCBA WALK-DOWN (first_divergence names the last-good and
+  first-bad state, the variable, and both values - control-flow and
+  return-value divergences included); bounded single-edit MINIMAL
+  REPAIR (one AST node changes by construction, verified against the
+  WHOLE battery - a patch fixing only the reproducing case is
+  refused); the capability-gated CodeStudent (unpromoted skill ->
+  typed CANNOT; structural transfer = deterministic AST rename to a
+  renamed contract); the twelve-step acceptance law (compile all
+  candidates, bug-is-a-bug check, dev + PROTECTED exams, prior-skill
+  regression, deterministic-replay stage, delayed retention with
+  rollback, sealed episodes carrying the examiner digest + CAS-Ohm
+  tp flow). Permanent battery covers the goal's fifteen rows and
+  the exit gate.
+
+CCB-P1 / CONV v0.2 ADVERSARIAL AUDIT - 10 CONFIRMED FINDINGS (7
+CARDINAL), ALL FIXED AND REGRESSION-LOCKED (2026-08-29, 16-agent
+workflow wf_feca63ef, six hostile lenses, EVERY finding independently
+reproduced by a refuter, ZERO refuted):
+  1. CARDINAL SANDBOX ESCAPE: a generator's non-underscore gi_frame /
+     f_back / f_builtins walked to the real __import__ (reached via a
+     '__import__' STRING LITERAL invisible to the Name check) and
+     wrote a file on the host - reproduced through the full teach()
+     pipeline. FIX: the static gate now refuses ALL attribute access,
+     dunder names, dunder string literals, yield/lambda; the taught
+     pure functions need none. THE CROWN-JEWEL FIX.
+  2-5. CARDINAL CONV correction defects (all on the _correction_turn
+     path that duplicated logic instead of reusing the fixed tell
+     path): dropped negation/prohibition from the clause AND the
+     stored record; coordination corrections wildcarded tense (a
+     present correction affirmed a past claim); a question after
+     'actually,' was committed as an assertion. FIX: render the
+     clause from the PACKET, derive coordination tense (uniform or
+     'mixed' = matches nothing), mood-guard the native lane.
+  6. CARDINAL: a memorizing lookup table promoted through the full
+     ladder (the examiner seeds are public in-repo). FIX: a
+     structural anti-memorization gate (constant-count + no
+     equality-against-list-literal); DISCLOSED RESIDUAL - true
+     defense needs an unpredictable external held-out oracle.
+  7. CARDINAL: explicit corrections never superseded is_a/class_rule,
+     so a derivation still fired from the corrected-away premise.
+     FIX: matching_class_facts supersedes the matching is_a (same
+     instance) / class_rule (same sub); derive_is_a reads active()
+     only, so a superseded premise is excluded (tested: 'actually,
+     milo is a dog.' -> 'is milo an animal?' -> i do not know).
+  8. str.format reached __class__ hidden in a string literal - closed
+     by the same attribute/dunder-literal block.
+  9. the step budget counted LINES not work: single-line memory/CPU
+     bombs ([0]*5000000, 2**10**8) passed. FIX: int-literal cap +
+     '**' block; OS-level memory/CPU hard isolation DISCLOSED as the
+     residual limit of a fully in-process sandbox.
+  10. tracer.trace_run was a weaker sandbox (helper frames unbudgeted,
+     no recursion management). FIX: the step budget fires on every
+     student line in ANY frame; recursion limit managed and restored.
+  Every finding has a named regression test
+  (CCB_P1_v0.1/tests/test_code_audit_regressions.py,
+  CCB_D1_v0.1/tests/test_conv_derived.py). The whole CODE-L0..L4
+  chain was RE-TAUGHT live under the hardened gate (the earlier
+  reverse_string used ''.join, now blocked) and re-promoted.
+
+CONV v0.2 DERIVED COMMON GROUND (2026-08-29): three class
+constructions taught live (every-X-is-a-Y, X-is-a-Y, is-X-a-Y;
+grammar at 36 durable constructions); the Milo derivation works
+per the goal - 'given the two things you told me, yes, milo is an
+animal.' status DERIVED, source USER_ASSERTED_PREMISES, rule
+class_inheritance, full premise chain; two-hop chaining; NO symmetry
+or free transitivity; derived never becomes verified (all GIVEN,
+cmb_facts untouched).
+
+PROGRAM TEST TOTALS refresh (2026-08-29, programming round): 440
+local, 0 failures, 18 lanes (new: CCB-P1 22; D1 61 with v0.2 +
+correction regressions; CORTEX 49). CODE procedure store 7/7
+promoted; grammar 36 durable constructions.
+
 PROGRAM TEST TOTALS refresh (2026-08-29, full-ladder round): 406
 local, 0 failures, 17 lanes (MATH-LADDER 18). MATH SKILL STORE:
 24/24 promoted, revision 24, ledger live-checks 24/24 PASS.

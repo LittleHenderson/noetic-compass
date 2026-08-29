@@ -18,13 +18,13 @@
    "tp_spec_understanding": "active",
    "tp_test_execution": "active"
   },
-  "episode_digest": "edf121b180f72d85",
-  "examiner_digest": "2677205a5ac0d866",
+  "episode_digest": "d5a7dfaaa14b165a",
+  "examiner_digest": "3bf36a819eebf081",
   "examiner_identity": "ccb_p1_compiler_and_tests",
   "lesson_id": "CODE_max_list",
   "provenance": "schema_constrained_field_elicitation",
   "rollback_pointer": {
-   "parent_digest": "8a8b52e6baf58514",
+   "parent_digest": "70d3a3c2e21cb75a",
    "parent_revision": 3
   },
   "skill_id": "max_list",
@@ -99,7 +99,7 @@
    "attempt": 1,
    "defect": null,
    "field": "explanation",
-   "raw": "The function `max_list(xs)` finds the largest number in a list of integers `xs`; if the list is empty, it returns `None`. It checks each number in the list to determine which is the biggest."
+   "raw": "The function `max_list(xs)` finds and returns the largest number in a list of integers `xs`; if the list is empty, it returns `None`. It's like looking through a group of numbers and picking the bigge"
   },
   {
    "attempt": 1,
@@ -116,7 +116,7 @@
  ],
  "packet": {
   "common_bug": "def max_list(xs):\n    if not xs:\n        return None\n    max_val = xs[0]\n    for i in range(1, len(xs) - 1):\n        if xs[i] > max_val:\n            max_val = xs[i]\n    return max_val",
-  "explanation": "The function `max_list(xs)` finds the largest number in a list of integers `xs`; if the list is empty, it returns `None`. It checks each number in the list to determine which is the biggest.",
+  "explanation": "The function `max_list(xs)` finds and returns the largest number in a list of integers `xs`; if the list is empty, it returns `None`. It's like looking through a group of numbers and picking the biggest one.",
   "implementation": "def max_list(xs):\n    if len(xs) == 0:\n        return None\n    return max(xs)",
   "lesson_id": "CODE_max_list",
   "provenance": "schema_constrained_field_elicitation",

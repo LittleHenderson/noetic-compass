@@ -15,13 +15,13 @@
    "tp_spec_understanding": "active",
    "tp_test_execution": "active"
   },
-  "episode_digest": "cd2d608b56d61815",
-  "examiner_digest": "6735865ea3e600d8",
+  "episode_digest": "92e414def06ef216",
+  "examiner_digest": "3bf36a819eebf081",
   "examiner_identity": "ccb_p1_compiler_and_tests",
   "lesson_id": "CODE_debug_repair",
   "provenance": "schema_constrained_field_elicitation",
   "rollback_pointer": {
-   "parent_digest": "851651938b71d8de",
+   "parent_digest": "3ca385e3c936032f",
    "parent_revision": 6
   },
   "skill_id": "debug_repair",
@@ -42,12 +42,12 @@
     "stage": "SPEC_TYPED"
    },
    {
-    "detail": "{\"detail\": \"4 faults localized, minimal patches, references restored\"}",
+    "detail": "{\"detail\": \"6 faults localized, minimal patches, references restored\"}",
     "passed": true,
     "stage": "EXAM_DEV"
    },
    {
-    "detail": "{\"detail\": \"4 faults localized, minimal patches, references restored\"}",
+    "detail": "{\"detail\": \"6 faults localized, minimal patches, references restored\"}",
     "passed": true,
     "stage": "EXAM_PROTECTED"
    },
@@ -81,21 +81,21 @@
    "attempt": 1,
    "defect": null,
    "field": "explanation",
-   "raw": "Debugging is like finding a mistake in a recipe: you try to make the problem happen again (reproduce), follow each step to see where it goes wrong (trace), find the first place it's different from whe"
+   "raw": "Debugging is like finding a mistake in a recipe: you repeat the steps, track where things go wrong, fix the first mistake you find, and try the whole recipe again to see if it works."
   },
   {
    "attempt": 1,
    "defect": null,
    "field": "strategy",
-   "raw": "Debugging by reproduction involves first reproducing the issue with the same input and environment. Then, trace through the program's execution to identify where the behavior diverges from a known-goo"
+   "raw": "Debugging involves reproducing the issue, tracing the program's execution to identify the first point where the state differs from a known-good run, isolating and fixing the cause at that point, and t"
   }
  ],
  "packet": {
-  "explanation": "Debugging is like finding a mistake in a recipe: you try to make the problem happen again (reproduce), follow each step to see where it goes wrong (trace), find the first place it's different from when it worked (find the first bad state), fix only that part (patch), and try the whole recipe again to see if it works now.",
+  "explanation": "Debugging is like finding a mistake in a recipe: you repeat the steps, track where things go wrong, fix the first mistake you find, and try the whole recipe again to see if it works.",
   "lesson_id": "CODE_debug_repair",
   "provenance": "schema_constrained_field_elicitation",
   "skill_id": "debug_repair",
-  "strategy": "Debugging by reproduction involves first reproducing the issue with the same input and environment. Then, trace through the program's execution to identify where the behavior diverges from a known-good run. Locate the first state or line where the difference occurs, isolate and fix the specific cause of the discrepancy. Apply only the necessary patch, then rerun the entire process to confirm the issue is resolved and no new problems are introduced.",
+  "strategy": "Debugging involves reproducing the issue, tracing the program's execution to identify the first point where the state differs from a known-good run, isolating and fixing the cause at that point, and then rerunning the entire process to verify the fix.",
   "teacher_model": "qwen.qwen3-32b-v1:0",
   "teacher_revision": "bedrock:us-west-2"
  },

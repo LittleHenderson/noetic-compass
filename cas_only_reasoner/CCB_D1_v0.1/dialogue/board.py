@@ -250,6 +250,26 @@ class DialogueBoard:
                 out.append(record)
         return out
 
+    def matching_class_facts(self, proposition: Dict) -> List[Dict]:
+        """ACTIVE is_a with the same instance but a different class,
+        or class_rule with the same sub but a different sup - what an
+        EXPLICIT correction of a class fact replaces (audit finding:
+        corrections never superseded is_a/class_rule, so derivations
+        still fired from the corrected-away premise)."""
+        pred = proposition.get("pred")
+        args = proposition.get("args", [])
+        if pred not in ("is_a", "class_rule") or len(args) < 2:
+            return []
+        out = []
+        for record in self.store.active():
+            stored = record["proposition"]
+            if stored.get("pred") == pred \
+                    and len(stored.get("args", [])) >= 2 \
+                    and stored["args"][0] == args[0] \
+                    and stored["args"][1] != args[1]:
+                out.append(record)
+        return out
+
     def derive_is_a(self, instance: str,
                     cls: str, depth: int = 4) -> Optional[Dict]:
         """The derivation engine: is_a(instance, C0) plus a chain of

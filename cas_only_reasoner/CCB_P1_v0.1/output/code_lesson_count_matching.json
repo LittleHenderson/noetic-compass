@@ -18,13 +18,13 @@
    "tp_spec_understanding": "active",
    "tp_test_execution": "active"
   },
-  "episode_digest": "23e14064c81ddd9d",
-  "examiner_digest": "2677205a5ac0d866",
+  "episode_digest": "6f3f0a78a3f1507d",
+  "examiner_digest": "3bf36a819eebf081",
   "examiner_identity": "ccb_p1_compiler_and_tests",
   "lesson_id": "CODE_count_matching",
   "provenance": "schema_constrained_field_elicitation",
   "rollback_pointer": {
-   "parent_digest": "0bef4864ea2a2606",
+   "parent_digest": "363c459aefbf24c0",
    "parent_revision": 4
   },
   "skill_id": "count_matching",
@@ -116,7 +116,7 @@
  ],
  "packet": {
   "common_bug": "def count_matching(xs, predicate_name):\n    count = 0\n    for x in xs:\n        if predicate_name == 'positive' and x >= 0:\n            count += 1\n        elif predicate_name == 'negative' and x < 0:\n            count += 1\n        elif predicate_name == 'even' and x % 2 == 0:\n            count += 1\n        elif predicate_name == 'odd' and x % 2 != 0:\n            count += 1\n    return count",
-  "explanation": "The function `count_matching(xs, predicate_name)` counts how many numbers in the list `xs` meet a certain condition (like being positive, negative, even, or odd), based on the name of the condition given.",
+  "explanation": "The function `count_matching(xs, predicate_name)` counts how many numbers in the list `xs` meet a certain condition (like being positive, negative, even, or odd), based on the name of the condition given. For example, if the predicate is 'even', it counts how many even numbers are in the list.",
   "implementation": "def count_matching(xs, predicate_name):  \n    count = 0  \n    for x in xs:  \n        if predicate_name == 'positive' and x > 0:  \n            count += 1  \n        elif predicate_name == 'negative' and x < 0:  \n            count += 1  \n        elif predicate_name == 'even' and x % 2 == 0:  \n            count += 1  \n        elif predicate_name == 'odd' and x % 2 != 0:  \n            count += 1  \n    return count",
   "lesson_id": "CODE_count_matching",
   "provenance": "schema_constrained_field_elicitation",

@@ -15,13 +15,13 @@
    "tp_spec_understanding": "active",
    "tp_test_execution": "active"
   },
-  "episode_digest": "1b4379fcd22247a7",
-  "examiner_digest": "2677205a5ac0d866",
+  "episode_digest": "ffbb22757396da82",
+  "examiner_digest": "3bf36a819eebf081",
   "examiner_identity": "ccb_p1_compiler_and_tests",
   "lesson_id": "CODE_contracts_testing",
   "provenance": "schema_constrained_field_elicitation",
   "rollback_pointer": {
-   "parent_digest": "87bc065bcd954b5b",
+   "parent_digest": "4dacb16682583a09",
    "parent_revision": 5
   },
   "skill_id": "contracts_testing",
@@ -81,27 +81,27 @@
    "attempt": 1,
    "defect": null,
    "field": "explanation",
-   "raw": "Testing discipline means that passing one test doesn't prove a program works for all cases\u2014you must also test edge cases, invalid inputs, and general properties to ensure true correctness."
+   "raw": "Testing discipline means making sure your code works not just for the examples you expect, but also for edge cases, invalid inputs, and all possible scenarios\u2014because one passing test doesn't prove yo"
   },
   {
    "attempt": 1,
    "defect": "keep it under 500 characters",
    "field": "strategy",
-   "raw": "Testing discipline involves systematically verifying that a program behaves correctly under a wide range of conditions. It starts by recognizing that a single passing test case is insufficient to prov"
+   "raw": "Testing discipline involves systematically verifying a program's correctness by going beyond a single passing example. First, identify and test boundary cases\u2014inputs at the extreme ends of valid range"
   },
   {
    "attempt": 2,
    "defect": null,
    "field": "strategy",
-   "raw": "Testing discipline involves systematically checking a program's correctness beyond a single passing example. It includes testing boundary cases (like minimum/maximum values), negative tests (invalid i"
+   "raw": "Testing discipline ensures reliable software by systematically verifying correctness. First, write multiple test cases, not just one, to avoid overconfidence from a single success. Check boundary case"
   }
  ],
  "packet": {
-  "explanation": "Testing discipline means that passing one test doesn't prove a program works for all cases\u2014you must also test edge cases, invalid inputs, and general properties to ensure true correctness.",
+  "explanation": "Testing discipline means making sure your code works not just for the examples you expect, but also for edge cases, invalid inputs, and all possible scenarios\u2014because one passing test doesn't prove your code is correct.",
   "lesson_id": "CODE_contracts_testing",
   "provenance": "schema_constrained_field_elicitation",
   "skill_id": "contracts_testing",
-  "strategy": "Testing discipline involves systematically checking a program's correctness beyond a single passing example. It includes testing boundary cases (like minimum/maximum values), negative tests (invalid inputs), and verifying general properties (like input-output relationships). This ensures the code behaves correctly under all expected and edge scenarios.",
+  "strategy": "Testing discipline ensures reliable software by systematically verifying correctness. First, write multiple test cases, not just one, to avoid overconfidence from a single success. Check boundary cases (like minimum/maximum values) where bugs are most likely. Include negative tests to confirm the system handles invalid input safely. Finally, use property checks to validate general behaviors across many inputs, ensuring consistency beyond specific examples.",
   "teacher_model": "qwen.qwen3-32b-v1:0",
   "teacher_revision": "bedrock:us-west-2"
  },

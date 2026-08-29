@@ -46,13 +46,13 @@
  "procedures": {
   "contracts_testing": {
    "formal": {
-    "strategy": "Testing discipline involves systematically checking a program's correctness beyond a single passing example. It includes testing boundary cases (like minimum/maximum values), negative tests (invalid inputs), and verifying general properties (like input-output relationships). This ensures the code behaves correctly under all expected and edge scenarios."
+    "strategy": "Testing discipline ensures reliable software by systematically verifying correctness. First, write multiple test cases, not just one, to avoid overconfidence from a single success. Check boundary cases (like minimum/maximum values) where bugs are most likely. Include negative tests to confirm the system handles invalid input safely. Finally, use property checks to validate general behaviors across many inputs, ensuring consistency beyond specific examples."
    },
    "kind": "testing",
    "level": "CODE-L3",
-   "packet_digest": "ffc6c2e553acaac6",
+   "packet_digest": "7ec1f1b573f4dad0",
    "provenance": "lesson:CODE_contracts_testing|teacher:qwen.qwen3-32b-v1:0",
-   "record_digest": "50d5d8a29d1f5bfb",
+   "record_digest": "e907915ff89e8a25",
    "skill_id": "contracts_testing"
   },
   "count_matching": {
@@ -66,20 +66,20 @@
    },
    "kind": "algorithm",
    "level": "CODE-L2",
-   "packet_digest": "812f2771181dd4da",
+   "packet_digest": "ca75a828a5311f69",
    "provenance": "lesson:CODE_count_matching|teacher:qwen.qwen3-32b-v1:0",
-   "record_digest": "6cacc67f2de72a68",
+   "record_digest": "31605d514794842c",
    "skill_id": "count_matching"
   },
   "debug_repair": {
    "formal": {
-    "strategy": "Debugging by reproduction involves first reproducing the issue with the same input and environment. Then, trace through the program's execution to identify where the behavior diverges from a known-good run. Locate the first state or line where the difference occurs, isolate and fix the specific cause of the discrepancy. Apply only the necessary patch, then rerun the entire process to confirm the issue is resolved and no new problems are introduced."
+    "strategy": "Debugging involves reproducing the issue, tracing the program's execution to identify the first point where the state differs from a known-good run, isolating and fixing the cause at that point, and then rerunning the entire process to verify the fix."
    },
    "kind": "repair",
    "level": "CODE-L4",
-   "packet_digest": "93d6aa8b905b510d",
+   "packet_digest": "29ffdf411d1bd531",
    "provenance": "lesson:CODE_debug_repair|teacher:qwen.qwen3-32b-v1:0",
-   "record_digest": "682cc2cf917a5ef1",
+   "record_digest": "11459d00c7e4ef90",
    "skill_id": "debug_repair"
   },
   "max_list": {
@@ -92,25 +92,25 @@
    },
    "kind": "algorithm",
    "level": "CODE-L2",
-   "packet_digest": "ed42a3b729b6803d",
+   "packet_digest": "eddd1ef38064265c",
    "provenance": "lesson:CODE_max_list|teacher:qwen.qwen3-32b-v1:0",
-   "record_digest": "7c1cee7c29abe1c9",
+   "record_digest": "5b96892d509c7502",
    "skill_id": "max_list"
   },
   "read_and_trace": {
    "formal": {
-    "strategy": "To trace code by hand, start by writing down all variable names and their initial values. Then go through each line of the code one at a time, in order, and update the variables as the code would. After each line, note any changes in variable values or program flow (like entering a loop or condition). Keep track of the current line and any output the code would produce. This helps understand how the program behaves step by step."
+    "strategy": "Read each line of code in order. Before each line, note the current value of every variable. After each line, update the variables based on the operation. Keep a running list of changes to track how values evolve step by step."
    },
    "kind": "tracing",
    "level": "CODE-L0",
-   "packet_digest": "388f41575d1f09c3",
+   "packet_digest": "cda4535da937dfab",
    "provenance": "lesson:CODE_read_and_trace|teacher:qwen.qwen3-32b-v1:0",
-   "record_digest": "155aa0be6881905f",
+   "record_digest": "a1085ed8c682b6d1",
    "skill_id": "read_and_trace"
   },
   "reverse_string": {
    "formal": {
-    "code": "def reverse_string(s): return ''.join(reversed(s))",
+    "code": "def reverse_string(s):\n    result = ''\n    for i in range(len(s) - 1, -1, -1):\n        result += s[i]\n    return result",
     "function_name": "reverse_string",
     "params": [
      "s"
@@ -118,9 +118,9 @@
    },
    "kind": "algorithm",
    "level": "CODE-L1",
-   "packet_digest": "80f0a3093a26e1af",
+   "packet_digest": "7082c7147e97e7d7",
    "provenance": "lesson:CODE_reverse_string|teacher:qwen.qwen3-32b-v1:0",
-   "record_digest": "002d5c13b2b683a5",
+   "record_digest": "213843f8e8ffaabf",
    "skill_id": "reverse_string"
   },
   "sum_list": {
@@ -140,5 +140,5 @@
   }
  },
  "revision": 7,
- "store_digest": "849d6de32ced9dfc"
+ "store_digest": "6e28c76f276240dc"
 }

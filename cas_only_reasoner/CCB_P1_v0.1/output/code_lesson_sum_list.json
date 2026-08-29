@@ -18,13 +18,13 @@
    "tp_spec_understanding": "active",
    "tp_test_execution": "active"
   },
-  "episode_digest": "93d20faf917dccb6",
-  "examiner_digest": "2677205a5ac0d866",
+  "episode_digest": "53aa9c771292e167",
+  "examiner_digest": "3bf36a819eebf081",
   "examiner_identity": "ccb_p1_compiler_and_tests",
   "lesson_id": "CODE_sum_list",
   "provenance": "schema_constrained_field_elicitation",
   "rollback_pointer": {
-   "parent_digest": "64534dc645bf0ab2",
+   "parent_digest": "2dcc6946f8e9c63e",
    "parent_revision": 1
   },
   "skill_id": "sum_list",

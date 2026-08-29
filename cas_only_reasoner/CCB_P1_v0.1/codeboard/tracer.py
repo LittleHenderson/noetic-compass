@@ -17,14 +17,18 @@ from .sandbox import (SAFE_BUILTINS, STUDENT_FILE, static_gate)
 
 
 def trace_run(code: str, function_name: str, args: List,
-              max_events: int = 4000) -> Dict:
-    """Execute in the sandbox discipline while recording a per-line
-    snapshot of local variables inside the student frame."""
+              max_events: int = 4000,
+              step_budget: int = 200_000) -> Dict:
+    """Execute in the FULL sandbox discipline (audit finding: the
+    tracer was a weaker sandbox than run()). The static gate refuses
+    forbidden effects; the STEP BUDGET fires on every student-file
+    line in ANY frame; the recursion limit is managed and restored.
+    Snapshots are recorded only inside the target function."""
     gate = static_gate(code)
     if gate:
         return {"status": "REFUSED", "defects": gate, "events": []}
     events: List[Dict] = []
-    state = {"overflow": False}
+    state = {"overflow": False, "budget": step_budget}
 
     def snapshot(frame):
         out = {}
@@ -35,12 +39,21 @@ def trace_run(code: str, function_name: str, args: List,
         return out
 
     def tracer(frame, event, arg):
-        # only frames INSIDE the target function: the module-level
-        # exec frame holds the function OBJECT, whose repr carries a
-        # memory address - a false, nondeterministic divergence
-        # (battery-found)
-        if frame.f_code.co_filename != STUDENT_FILE                 or frame.f_code.co_name != function_name:
+        if frame.f_code.co_filename != STUDENT_FILE:
             return None
+        if event == "line":
+            # the STEP BUDGET counts every student line in EVERY frame
+            # (audit finding: a helper's runaway loop escaped the
+            # per-target-function scoping and hung the tracer)
+            state["budget"] -= 1
+            if state["budget"] <= 0:
+                raise TimeoutError("step budget exceeded")
+        # snapshots (for the walk-down) only inside the TARGET
+        # function - the module frame holds the function OBJECT whose
+        # repr carries a memory address (false, nondeterministic
+        # divergence)
+        if frame.f_code.co_name != function_name:
+            return tracer
         if event == "line":
             if len(events) >= max_events:
                 state["overflow"] = True
@@ -55,8 +68,10 @@ def trace_run(code: str, function_name: str, args: List,
 
     import copy as _copy
     namespace: Dict = {"__builtins__": dict(SAFE_BUILTINS)}
+    old_limit = sys.getrecursionlimit()
     try:
         compiled = compile(code, STUDENT_FILE, "exec")
+        sys.setrecursionlimit(2000)
         sys.settrace(tracer)
         try:
             exec(compiled, namespace)  # noqa: S102
@@ -68,8 +83,12 @@ def trace_run(code: str, function_name: str, args: List,
             value = fn(*_copy.deepcopy(args))
         finally:
             sys.settrace(None)
+            sys.setrecursionlimit(old_limit)
     except TimeoutError:
         return {"status": "TRACE_BUDGET", "events": events}
+    except RecursionError:
+        return {"status": "RUNTIME_ERROR",
+                "error": "recursion limit exceeded", "events": events}
     except Exception as exc:
         return {"status": "RUNTIME_ERROR",
                 "error": f"{type(exc).__name__}: {exc}",

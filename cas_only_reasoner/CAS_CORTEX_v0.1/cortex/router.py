@@ -811,6 +811,16 @@ class HybridRouter:
         packet = core = None
         native = self._native(body)
         if native["status"] == "PARSED":
+            # MOOD GUARD on the native lane too (audit finding: a
+            # question after 'actually,' was committed as an
+            # assertion). The legacy native meaning is a statement
+            # only when it is not a question packet.
+            if native["meaning"].get("pred") == "question":
+                trace["answer"] = {
+                    "status": "UNSUPPORTED_LANGUAGE",
+                    "detail": "a correction must be a statement, not "
+                              "a question"}
+                return self._seal(trace, committed=False)
             packet = native["meaning"]
         else:
             gram = self.gram_parser.parse(self.grammar.active_rules(),
@@ -829,16 +839,32 @@ class HybridRouter:
                 "detail": "i did not understand the corrected "
                           "statement after 'actually,'"}
             return self._seal(trace, committed=False)
-        tense = core.get("tense") if core else "present"
-        clause = (render_clause(core)
-                  if core and core.get("frame") in ("event", "state")
-                  else self.dialogue.packet_to_clause(packet, tense))
+        # TENSE derives the same way the tell path does (audit
+        # finding: coordination corrections carried tense=None, a
+        # wildcard): uniform conjunct tense, else 'mixed' (matches
+        # nothing), else the native present annotation.
+        if core and core.get("frame") in ("coordination",
+                                          "disjunction"):
+            conjunct_tenses = {c.get("tense")
+                               for c in core.get("conjuncts", [])
+                               if isinstance(c, dict)}
+            tense = (conjunct_tenses.pop()
+                     if len(conjunct_tenses) == 1 else "mixed")
+        elif core:
+            tense = core.get("tense")
+        else:
+            tense = "present"
+        # the clause renders from the PACKET - the committed truth -
+        # never the pretty frame core (audit finding: render_clause
+        # dropped negation/prohibition on the correction path)
+        clause = self.dialogue.packet_to_clause(packet, tense)
         conflicts = self.dialogue.conflicting_active(packet, tense)
         # CONV v0.2: an EXPLICIT correction also supersedes the
-        # MATCHING prior relation (same predicate, same subject,
-        # different object) - the audit-disclosed relation gap closes
-        # on the explicit path only; plain tells never auto-supersede
-        matching = self.dialogue.matching_relations(packet, tense)
+        # MATCHING prior assertion - a relation (same predicate +
+        # subject), an is_a (same instance), or a class_rule (same
+        # sub); plain tells never auto-supersede
+        matching = self.dialogue.matching_relations(packet, tense) \
+            + self.dialogue.matching_class_facts(packet)
         conflicts = conflicts + [r for r in matching
                                  if r not in conflicts]
         turn_id = trace.get("turn_id", "t?")
