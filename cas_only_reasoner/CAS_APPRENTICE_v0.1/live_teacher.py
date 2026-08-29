@@ -32,7 +32,9 @@ from lang.apprentice import Apprentice  # noqa: E402
 from lang.constructions import GrammarStore, MorphTable  # noqa: E402
 from lang.lexicon import Lexicon  # noqa: E402
 
-TEACHER_MODEL = "Qwen/Qwen2.5-1.5B-Instruct"
+TEACHER_MODEL = os.environ.get("CAS_TEACHER_MODEL",
+                               "Qwen/Qwen2.5-1.5B-Instruct")
+_SLUG = TEACHER_MODEL.split("/")[-1].lower().replace(".", "_")
 
 TEACHING_LEX = {
     "the": {"pos": "article", "sense": "the"},
@@ -140,20 +142,28 @@ def main():
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
+    # STANDING OWNER ORDER (2026-08-28): never CPU for model
+    # inference - GPU, RunPod, or AWS only.
+    if not torch.cuda.is_available():
+        raise SystemExit(
+            "REFUSING to run on CPU (standing owner order). Run this "
+            "under the CUDA venv (~/venvs/cas-gpu) or on RunPod/AWS.")
+
     snapshot = find_snapshot(TEACHER_MODEL)
-    print(f"loading teacher {TEACHER_MODEL}")
+    print(f"loading teacher {TEACHER_MODEL} on "
+          f"{torch.cuda.get_device_name(0)}")
     print(f"  snapshot: {os.path.basename(snapshot)}")
     start = time.time()
     tokenizer = AutoTokenizer.from_pretrained(snapshot)
-    model = AutoModelForCausalLM.from_pretrained(snapshot,
-                                                dtype=torch.float32)
+    model = AutoModelForCausalLM.from_pretrained(
+        snapshot, dtype=torch.float16, device_map="cuda")
     model.eval()
     print(f"  loaded in {time.time() - start:.0f}s")
 
     messages = [{"role": "user", "content": PROMPT}]
     text = tokenizer.apply_chat_template(messages, tokenize=False,
                                          add_generation_prompt=True)
-    inputs = tokenizer(text, return_tensors="pt")
+    inputs = tokenizer(text, return_tensors="pt").to("cuda")
     start = time.time()
     with torch.no_grad():
         out = model.generate(**inputs, max_new_tokens=1200,
@@ -163,6 +173,16 @@ def main():
                            skip_special_tokens=True).strip()
     print(f"  lesson generated in {time.time() - start:.0f}s "
           f"({len(raw)} chars)")
+
+    # CHECKPOINT the expensive part immediately - a session restart
+    # must never orphan the generation again
+    ckpt = os.path.join(HERE, "output", f"live_teacher_raw_{_SLUG}.json")
+    os.makedirs(os.path.dirname(ckpt), exist_ok=True)
+    with open(ckpt, "w", encoding="utf-8") as fh:
+        json.dump({"teacher": TEACHER_MODEL,
+                   "snapshot": os.path.basename(snapshot),
+                   "device": torch.cuda.get_device_name(0),
+                   "raw_teacher_output": raw}, fh, indent=1)
 
     lesson_packet = extract_json(raw)
     board = ApprenticeshipBoard()
@@ -223,7 +243,8 @@ def main():
         "held_out_channel": "protected (authored by the student's "
                             "side, never shown to the teacher)",
     }
-    out_path = os.path.join(HERE, "output", "live_teacher_episode.json")
+    out_path = os.path.join(HERE, "output",
+                            f"live_teacher_episode_{_SLUG}.json")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
         json.dump(artifact, fh, indent=1, sort_keys=True)
