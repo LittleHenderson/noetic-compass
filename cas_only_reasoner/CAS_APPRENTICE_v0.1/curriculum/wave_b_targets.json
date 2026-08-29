@@ -1,0 +1,897 @@
+[
+ {
+  "construction_id": "pronoun_transitive_present",
+  "lesson_id": "LIVE_L015_pronoun",
+  "description": "the PRONOUN SUBJECT construction 'it chases the dog.' - the agent position is the pronoun 'it', written as the slot PRON:agent (a PRON slot matches a pronoun and binds it UNRESOLVED as 'pron:it' - resolving which noun 'it' means is the runtime's job, never the grammar's). Pattern order: PRON:agent, VERB:pred:present_3sg, literal 'the', NP:patient. Meaning: present positive event; in every expected_core the agent value is EXACTLY the string 'pron:it'",
+  "shape_hint": "it chases the dog.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "@agent",
+   "patient": "@patient",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'it chases the dog.' - the agent in expected_core is 'pron:it'",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"pron:it\", \"patient\": \"<Y>\", \"tense\": \"present\", \"polarity\": \"positive\"}",
+  "held_out": [
+   {
+    "sentence": "it chases the hen.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "pron:it",
+     "patient": "hen",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   },
+   {
+    "sentence": "it chases the cat.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "pron:it",
+     "patient": "cat",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   },
+   {
+    "sentence": "chases it the dog.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "it chases the fox.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "pron:it",
+     "patient": "fox",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   }
+  ],
+  "probe": "it chases the dog."
+ },
+ {
+  "construction_id": "coordination_three_present",
+  "lesson_id": "LIVE_L016_three_clause",
+  "description": "the THREE-CLAUSE COORDINATION 'the A chases the B and the C chases the D and the E chases the F.' - THREE full clauses joined by two 'and's. Pattern order: NP:agent, VERB:pred:present_3sg, the, NP:patient, and, the, NP:agent2, VERB:pred2:present_3sg, NP:patient2, and, the, NP:agent3, VERB:pred3:present_3sg, NP:patient3. Meaning: frame 'coordination' with a conjuncts list of THREE event objects (each with its own predicate, agent, patient, tense present, polarity positive) - ALL THREE clauses stay in the meaning",
+  "shape_hint": "the cat chases the dog and the fox chases the hen and the bird chases the cat.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "coordination",
+   "conjuncts": [
+    {
+     "frame": "event",
+     "predicate": "@pred",
+     "agent": "@agent",
+     "patient": "@patient",
+     "tense": "present",
+     "polarity": "positive"
+    },
+    {
+     "frame": "event",
+     "predicate": "@pred2",
+     "agent": "@agent2",
+     "patient": "@patient2",
+     "tense": "present",
+     "polarity": "positive"
+    },
+    {
+     "frame": "event",
+     "predicate": "@pred3",
+     "agent": "@agent3",
+     "patient": "@patient3",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   ]
+  },
+  "example_sentence_hint": "three clauses joined by two 'and's, ending with '.'",
+  "expected_core_hint": "{\"frame\": \"coordination\", \"conjuncts\": [{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<A>\", \"patient\": \"<B>\", \"tense\": \"present\", \"polarity\": \"positive\"}, {\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<C>\", \"patient\": \"<D>\", \"tense\": \"present\", \"polarity\": \"positive\"}, {\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<E>\", \"patient\": \"<F>\", \"tense\": \"present\", \"polarity\": \"positive\"}]}",
+  "held_out": [
+   {
+    "sentence": "the dog chases the cat and the hen chases the fox and the bird chases the dog.",
+    "expected_core": {
+     "frame": "coordination",
+     "conjuncts": [
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "dog",
+       "patient": "cat",
+       "tense": "present",
+       "polarity": "positive"
+      },
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "hen",
+       "patient": "fox",
+       "tense": "present",
+       "polarity": "positive"
+      },
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "bird",
+       "patient": "dog",
+       "tense": "present",
+       "polarity": "positive"
+      }
+     ]
+    }
+   },
+   {
+    "sentence": "the fox chases the bird and the cat chases the hen and the dog chases the fox.",
+    "expected_core": {
+     "frame": "coordination",
+     "conjuncts": [
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "fox",
+       "patient": "bird",
+       "tense": "present",
+       "polarity": "positive"
+      },
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "cat",
+       "patient": "hen",
+       "tense": "present",
+       "polarity": "positive"
+      },
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "dog",
+       "patient": "fox",
+       "tense": "present",
+       "polarity": "positive"
+      }
+     ]
+    }
+   },
+   {
+    "sentence": "and the cat chases and the dog and.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the hen chases the bird and the dog chases the cat and the fox chases the hen.",
+    "expected_core": {
+     "frame": "coordination",
+     "conjuncts": [
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "hen",
+       "patient": "bird",
+       "tense": "present",
+       "polarity": "positive"
+      },
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "dog",
+       "patient": "cat",
+       "tense": "present",
+       "polarity": "positive"
+      },
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "fox",
+       "patient": "hen",
+       "tense": "present",
+       "polarity": "positive"
+      }
+     ]
+    }
+   }
+  ],
+  "probe": "the cat chases the dog and the fox chases the hen and the bird chases the cat."
+ },
+ {
+  "construction_id": "disjunction_present_transitive",
+  "lesson_id": "LIVE_L017_disjunction",
+  "description": "the DISJUNCTION construction 'the A chases the B or the C chases the D.' - two clauses joined by 'or'. Pattern order: NP:agent, VERB:pred:present_3sg, the, NP:patient, or, the, NP:agent2, VERB:pred2:present_3sg, NP:patient2. Meaning: frame 'disjunction' (NOT 'coordination' - or-meaning is DISTINCT from and-meaning) with a conjuncts list of TWO event objects, both kept",
+  "shape_hint": "the cat chases the dog or the fox chases the hen.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "disjunction",
+   "conjuncts": [
+    {
+     "frame": "event",
+     "predicate": "@pred",
+     "agent": "@agent",
+     "patient": "@patient",
+     "tense": "present",
+     "polarity": "positive"
+    },
+    {
+     "frame": "event",
+     "predicate": "@pred2",
+     "agent": "@agent2",
+     "patient": "@patient2",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   ]
+  },
+  "example_sentence_hint": "two clauses joined by 'or', ending with '.'",
+  "expected_core_hint": "{\"frame\": \"disjunction\", \"conjuncts\": [{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<A>\", \"patient\": \"<B>\", \"tense\": \"present\", \"polarity\": \"positive\"}, {\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<C>\", \"patient\": \"<D>\", \"tense\": \"present\", \"polarity\": \"positive\"}]}",
+  "held_out": [
+   {
+    "sentence": "the dog chases the cat or the hen chases the fox.",
+    "expected_core": {
+     "frame": "disjunction",
+     "conjuncts": [
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "dog",
+       "patient": "cat",
+       "tense": "present",
+       "polarity": "positive"
+      },
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "hen",
+       "patient": "fox",
+       "tense": "present",
+       "polarity": "positive"
+      }
+     ]
+    }
+   },
+   {
+    "sentence": "the bird chases the hen or the cat chases the dog.",
+    "expected_core": {
+     "frame": "disjunction",
+     "conjuncts": [
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "bird",
+       "patient": "hen",
+       "tense": "present",
+       "polarity": "positive"
+      },
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "cat",
+       "patient": "dog",
+       "tense": "present",
+       "polarity": "positive"
+      }
+     ]
+    }
+   },
+   {
+    "sentence": "or the cat chases or the dog.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the fox chases the cat or the dog chases the bird.",
+    "expected_core": {
+     "frame": "disjunction",
+     "conjuncts": [
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "fox",
+       "patient": "cat",
+       "tense": "present",
+       "polarity": "positive"
+      },
+      {
+       "frame": "event",
+       "predicate": "chase",
+       "agent": "dog",
+       "patient": "bird",
+       "tense": "present",
+       "polarity": "positive"
+      }
+     ]
+    }
+   }
+  ],
+  "probe": "the cat chases the dog or the fox chases the hen."
+ },
+ {
+  "construction_id": "relative_clause_state",
+  "lesson_id": "LIVE_L018_relative",
+  "description": "the RELATIVE CLAUSE construction 'the cat that chases the dog is gray.' - a state about an entity, restricted by an embedded event. Pattern order: the, NP:agent, that, VERB:pred:present_3sg, the, NP:patient, is, ADJ:prop. Meaning: frame 'state' with entity @agent, property @prop, tense present, polarity positive, AND a 'relative' key holding the embedded event object {frame event, predicate @pred, agent @agent, patient @patient, tense present, polarity positive}",
+  "shape_hint": "the cat that chases the dog is gray.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "state",
+   "entity": "@agent",
+   "property": "@prop",
+   "relative": {
+    "frame": "event",
+    "predicate": "@pred",
+    "agent": "@agent",
+    "patient": "@patient",
+    "tense": "present",
+    "polarity": "positive"
+   },
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'the X that chases the Y is gray.' (adjectives: gray, brown, quiet)",
+  "expected_core_hint": "{\"frame\": \"state\", \"entity\": \"<X>\", \"tense\": \"present\", \"polarity\": \"positive\", \"property\": \"<ADJ>\", \"relative\": {\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<X>\", \"patient\": \"<Y>\", \"tense\": \"present\", \"polarity\": \"positive\"}}",
+  "held_out": [
+   {
+    "sentence": "the fox that chases the hen is brown.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "fox",
+     "tense": "present",
+     "polarity": "positive",
+     "property": "brown",
+     "relative": {
+      "frame": "event",
+      "predicate": "chase",
+      "agent": "fox",
+      "patient": "hen",
+      "tense": "present",
+      "polarity": "positive"
+     }
+    }
+   },
+   {
+    "sentence": "the dog that chases the cat is quiet.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "dog",
+     "tense": "present",
+     "polarity": "positive",
+     "property": "quiet",
+     "relative": {
+      "frame": "event",
+      "predicate": "chase",
+      "agent": "dog",
+      "patient": "cat",
+      "tense": "present",
+      "polarity": "positive"
+     }
+    }
+   },
+   {
+    "sentence": "that the cat chases is the dog gray.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the hen that chases the bird is gray.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "hen",
+     "tense": "present",
+     "polarity": "positive",
+     "property": "gray",
+     "relative": {
+      "frame": "event",
+      "predicate": "chase",
+      "agent": "hen",
+      "patient": "bird",
+      "tense": "present",
+      "polarity": "positive"
+     }
+    }
+   }
+  ],
+  "probe": "the cat that chases the dog is gray."
+ },
+ {
+  "construction_id": "possessive_state",
+  "lesson_id": "LIVE_L019_possessive",
+  "description": "the POSSESSIVE construction 'the cat's bone is gray.' - a state about a possessed thing. The possessor is written as the slot NPOSS:possessor (an NPOSS slot matches a noun with 's attached, like cat's, and binds the bare noun cat). Pattern order: the, NPOSS:possessor, NP:patient, is, ADJ:prop. Meaning: frame 'state' with entity @patient, possessor @possessor, property @prop, tense present, polarity positive",
+  "shape_hint": "the cat's bone is gray.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "state",
+   "entity": "@patient",
+   "possessor": "@possessor",
+   "property": "@prop",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped \"the cat's bone is gray.\" (nouns include bone; adjectives: gray, brown, quiet)",
+  "expected_core_hint": "{\"frame\": \"state\", \"entity\": \"bone\", \"tense\": \"present\", \"polarity\": \"positive\", \"possessor\": \"<X>\", \"property\": \"<ADJ>\"}",
+  "held_out": [
+   {
+    "sentence": "the fox's bone is brown.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "bone",
+     "tense": "present",
+     "polarity": "positive",
+     "possessor": "fox",
+     "property": "brown"
+    }
+   },
+   {
+    "sentence": "the dog's bone is quiet.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "bone",
+     "tense": "present",
+     "polarity": "positive",
+     "possessor": "dog",
+     "property": "quiet"
+    }
+   },
+   {
+    "sentence": "the 's cat bone gray is.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the hen's bone is gray.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "bone",
+     "tense": "present",
+     "polarity": "positive",
+     "possessor": "hen",
+     "property": "gray"
+    }
+   }
+  ],
+  "probe": "the cat's bone is gray."
+ },
+ {
+  "construction_id": "locative_state",
+  "lesson_id": "LIVE_L020_locative",
+  "description": "the LOCATIVE construction 'the cat is on the table.' - a state placing an entity at a location. Pattern order: NP:agent, literal 'is', literal 'on', NP:location (an NP slot consumes 'the NOUN' by itself). Meaning: frame 'state' with entity @agent, location @location, tense present, polarity positive. New noun: table",
+  "shape_hint": "the cat is on the table.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "state",
+   "entity": "@agent",
+   "location": "@location",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'the X is on the table.' (nouns: cat, dog, bird, fox, hen, bone, table)",
+  "expected_core_hint": "{\"frame\": \"state\", \"entity\": \"<X>\", \"tense\": \"present\", \"polarity\": \"positive\", \"location\": \"table\"}",
+  "lexicon_additions": {
+   "table": {
+    "pos": "noun",
+    "sense": "table"
+   }
+  },
+  "held_out": [
+   {
+    "sentence": "the fox is on the table.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "fox",
+     "tense": "present",
+     "polarity": "positive",
+     "location": "table"
+    }
+   },
+   {
+    "sentence": "the bone is on the table.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "bone",
+     "tense": "present",
+     "polarity": "positive",
+     "location": "table"
+    }
+   },
+   {
+    "sentence": "on the is cat table the.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the hen is on the table.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "hen",
+     "tense": "present",
+     "polarity": "positive",
+     "location": "table"
+    }
+   }
+  ],
+  "probe": "the cat is on the table."
+ },
+ {
+  "construction_id": "comparative_state",
+  "lesson_id": "LIVE_L021_comparative",
+  "description": "the COMPARATIVE construction 'the cat is bigger than the dog.' - pattern order: NP:agent, literal 'is', ADJ:comp (the comparative adjective - bigger or smaller), literal 'than', NP:patient. Meaning: frame 'state' with entity @agent, comparison @comp, than @patient, tense present, polarity positive. New adjectives: bigger, smaller",
+  "shape_hint": "the cat is bigger than the dog.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "state",
+   "entity": "@agent",
+   "comparison": "@comp",
+   "than": "@patient",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'the X is bigger than the Y.' (comparatives: bigger, smaller)",
+  "expected_core_hint": "{\"frame\": \"state\", \"entity\": \"<X>\", \"tense\": \"present\", \"polarity\": \"positive\", \"comparison\": \"bigger\", \"than\": \"<Y>\"}",
+  "lexicon_additions": {
+   "bigger": {
+    "pos": "adj",
+    "sense": "bigger"
+   },
+   "smaller": {
+    "pos": "adj",
+    "sense": "smaller"
+   }
+  },
+  "held_out": [
+   {
+    "sentence": "the fox is smaller than the hen.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "fox",
+     "tense": "present",
+     "polarity": "positive",
+     "comparison": "smaller",
+     "than": "hen"
+    }
+   },
+   {
+    "sentence": "the dog is bigger than the bird.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "dog",
+     "tense": "present",
+     "polarity": "positive",
+     "comparison": "bigger",
+     "than": "bird"
+    }
+   },
+   {
+    "sentence": "bigger the cat than is the dog.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the hen is smaller than the dog.",
+    "expected_core": {
+     "frame": "state",
+     "entity": "hen",
+     "tense": "present",
+     "polarity": "positive",
+     "comparison": "smaller",
+     "than": "dog"
+    }
+   }
+  ],
+  "probe": "the cat is bigger than the dog."
+ },
+ {
+  "construction_id": "quantified_transitive_present",
+  "lesson_id": "LIVE_L022_quantifiers",
+  "description": "the QUANTIFIED SUBJECT construction 'every cat chases the dog.' - the subject carries a quantifier: every, some, or no. The quantifier is written as the slot QUANT:quantifier (matches exactly one of: every, some, no) with NO 'the' before it. Pattern order: QUANT:quantifier, NP:agent (bare noun), VERB:pred:present_3sg, the, NP:patient. Meaning: present positive event PLUS a 'quantifier' key holding the quantifier word - 'every cat chases the dog', 'some cat chases the dog' and 'no cat chases the dog' are THREE DIFFERENT meanings",
+  "shape_hint": "every cat chases the dog.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "@agent",
+   "patient": "@patient",
+   "quantifier": "@quantifier",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'every cat chases the dog.' (quantifiers: every, some, no)",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<X>\", \"patient\": \"<Y>\", \"tense\": \"present\", \"polarity\": \"positive\", \"quantifier\": \"every\"}",
+  "lexicon_additions": {
+   "every": {
+    "pos": "quant",
+    "sense": "every"
+   },
+   "some": {
+    "pos": "quant",
+    "sense": "some"
+   },
+   "no": {
+    "pos": "quant",
+    "sense": "no"
+   }
+  },
+  "held_out": [
+   {
+    "sentence": "every fox chases the hen.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "fox",
+     "patient": "hen",
+     "tense": "present",
+     "polarity": "positive",
+     "quantifier": "every"
+    }
+   },
+   {
+    "sentence": "some dog chases the cat.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "dog",
+     "patient": "cat",
+     "tense": "present",
+     "polarity": "positive",
+     "quantifier": "some"
+    }
+   },
+   {
+    "sentence": "no bird chases the fox.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "bird",
+     "patient": "fox",
+     "tense": "present",
+     "polarity": "positive",
+     "quantifier": "no"
+    }
+   },
+   {
+    "sentence": "every the cat chases dog.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "no hen chases the dog.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "hen",
+     "patient": "dog",
+     "tense": "present",
+     "polarity": "positive",
+     "quantifier": "no"
+    }
+   }
+  ],
+  "probe": "every cat chases the dog."
+ },
+ {
+  "construction_id": "temporal_past_transitive",
+  "lesson_id": "LIVE_L023_temporal",
+  "description": "the TEMPORAL ADVERB construction 'the cat chased the dog yesterday.' - a past event stamped with a time word. The time word is written as the slot ADV:time (matches: yesterday, today), placed LAST. Pattern order: NP:agent, VERB:pred:past, the, NP:patient, ADV:time. Meaning: past positive event PLUS a 'time' key holding the time word",
+  "shape_hint": "the cat chased the dog yesterday.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "@agent",
+   "patient": "@patient",
+   "time": "@time",
+   "tense": "past",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'the X chased the Y yesterday.' (time words: yesterday, today)",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<X>\", \"patient\": \"<Y>\", \"tense\": \"past\", \"polarity\": \"positive\", \"time\": \"yesterday\"}",
+  "lexicon_additions": {
+   "yesterday": {
+    "pos": "adv",
+    "sense": "yesterday"
+   },
+   "today": {
+    "pos": "adv",
+    "sense": "today"
+   }
+  },
+  "held_out": [
+   {
+    "sentence": "the fox chased the hen yesterday.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "fox",
+     "patient": "hen",
+     "tense": "past",
+     "polarity": "positive",
+     "time": "yesterday"
+    }
+   },
+   {
+    "sentence": "the dog chased the cat today.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "dog",
+     "patient": "cat",
+     "tense": "past",
+     "polarity": "positive",
+     "time": "today"
+    }
+   },
+   {
+    "sentence": "yesterday the chased cat dog the.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the bird chased the fox today.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "bird",
+     "patient": "fox",
+     "tense": "past",
+     "polarity": "positive",
+     "time": "today"
+    }
+   }
+  ],
+  "probe": "the cat chased the dog yesterday."
+ },
+ {
+  "construction_id": "interrogative_why_present",
+  "lesson_id": "LIVE_L024_why_question",
+  "description": "the WHY-QUESTION construction 'why does the cat chase the dog?' - pattern order: literal 'why', literal 'does', literal 'the', NP:agent, VERB:pred:base (BASE form after 'does'), literal 'the', NP:patient. Meaning: present positive event; this question asks for a CAUSE",
+  "shape_hint": "why does the cat chase the dog?",
+  "surface_meta": {
+   "mood": "interrogative_why"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "@agent",
+   "patient": "@patient",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'why does the X chase the Y?' ending with '?'",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<X>\", \"patient\": \"<Y>\", \"tense\": \"present\", \"polarity\": \"positive\"}",
+  "held_out": [
+   {
+    "sentence": "why does the fox chase the hen?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "fox",
+     "patient": "hen",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   },
+   {
+    "sentence": "why does the dog chase the cat?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "dog",
+     "patient": "cat",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   },
+   {
+    "sentence": "why the does chase cat the dog?",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "why does the hen chase the bird?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "hen",
+     "patient": "bird",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   }
+  ],
+  "probe": "why does the cat chase the dog?"
+ },
+ {
+  "construction_id": "imperative_ditransitive",
+  "lesson_id": "LIVE_L025_command_recipient",
+  "description": "the COMMAND WITH RECIPIENT construction 'give the bone to the dog.' - an order naming who receives. Pattern order: VERB:pred:base (first word), literal 'the', NP:patient, literal 'to', NP:recipient. Meaning: event with agent EXACTLY the literal string 'addressee' (the one being ordered), patient @patient, recipient @recipient, tense present, polarity positive",
+  "shape_hint": "give the bone to the dog.",
+  "surface_meta": {
+   "mood": "imperative"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "addressee",
+   "patient": "@patient",
+   "recipient": "@recipient",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'give the bone to the Z.' - agent in expected_core is 'addressee'",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"give\", \"agent\": \"addressee\", \"patient\": \"bone\", \"tense\": \"present\", \"polarity\": \"positive\", \"recipient\": \"<Z>\"}",
+  "held_out": [
+   {
+    "sentence": "give the bone to the hen.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "give",
+     "agent": "addressee",
+     "patient": "bone",
+     "tense": "present",
+     "polarity": "positive",
+     "recipient": "hen"
+    }
+   },
+   {
+    "sentence": "give the bone to the cat.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "give",
+     "agent": "addressee",
+     "patient": "bone",
+     "tense": "present",
+     "polarity": "positive",
+     "recipient": "cat"
+    }
+   },
+   {
+    "sentence": "give to the bone the.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "give the bone to the bird.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "give",
+     "agent": "addressee",
+     "patient": "bone",
+     "tense": "present",
+     "polarity": "positive",
+     "recipient": "bird"
+    }
+   }
+  ],
+  "probe": "give the bone to the dog."
+ }
+]

@@ -33,7 +33,8 @@ NEVER_AUTONOMOUS = (
 
 # Domains whose lessons demand a second, distinct examiner identity.
 HIGH_IMPACT_DOMAINS = ("world_knowledge", "research_method",
-                       "board_design", "self_improvement")
+                       "board_design", "self_improvement",
+                       "behavioral_norms")
 
 TEACHER_ROLES = ("lecturer", "demonstrator", "socratic_tutor",
                  "curriculum_designer", "adversary", "critic",
@@ -92,6 +93,40 @@ class ApprenticeshipBoard:
                                 "(the student must never confuse the "
                                 "teacher's consistency with "
                                 "correctness)"},
+                    pre_capability, post_capability)
+
+        # THE FACULTY-COMMITTEE RECORD: when a lesson carries a
+        # committee, the board VALIDATES it - at least two DISTINCT
+        # model identities, an explicit vote from every member, and
+        # any reject vote blocks promotion typed. Committee approval
+        # grants NOTHING by itself: the domain's frozen examiner still
+        # runs and still decides.
+        committee = lesson.get("committee")
+        if committee is not None:
+            identities = {member.get("model") for member in committee}
+            if len(committee) < 2 or len(identities) < 2:
+                return self._seal(lesson, {
+                    "verdict": "REJECTED_COMMITTEE_COMPOSITION",
+                    "evidence": "a faculty committee needs at least "
+                                "two DISTINCT model identities"},
+                    pre_capability, post_capability)
+            unvoted = [member for member in committee
+                       if member.get("vote") not in ("approve",
+                                                     "reject")]
+            if unvoted:
+                return self._seal(lesson, {
+                    "verdict": "REJECTED_COMMITTEE_COMPOSITION",
+                    "evidence": "every committee member must record "
+                                "an explicit approve/reject vote"},
+                    pre_capability, post_capability)
+            rejects = [member for member in committee
+                       if member["vote"] == "reject"]
+            if rejects:
+                return self._seal(lesson, {
+                    "verdict": "REJECTED_BY_COMMITTEE",
+                    "evidence": [{"model": member.get("model"),
+                                  "reasons": member.get("reasons")}
+                                 for member in rejects]},
                     pre_capability, post_capability)
 
         outcome = verifier_channel(lesson)

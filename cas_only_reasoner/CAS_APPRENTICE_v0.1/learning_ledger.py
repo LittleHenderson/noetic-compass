@@ -105,12 +105,51 @@ def build_ledger():
                          f"(route {after['route']}), core = `{core}`")
             lines.append("")
 
+    # curriculum + vocabulary + committee before/after proofs
+    for pattern, label in (("curriculum_*.json", "curriculum"),
+                           ("vocabulary_*.json", "vocabulary"),
+                           ("committee_*.json", "committee")):
+        for path in sorted(glob.glob(os.path.join(HERE, "output",
+                                                  pattern))):
+            payload = json.load(open(path, encoding="utf-8"))
+            rows = payload.get("results", [payload])
+            for row in rows:
+                before, after = row.get("before"), row.get("after")
+                if not (before and after):
+                    continue
+                lines.append(
+                    f"{label} lesson "
+                    f"**{row.get('target') or row.get('lesson_id')}"
+                    f"**, probe `{before['input']}`: "
+                    f"**{before['answer']['status']}** -> "
+                    f"**{after['answer']['status']}**")
+            lines.append("")
+
     # live unseen-generalization check, run NOW against the real router
     from cortex.router import HybridRouter
     router = HybridRouter(mode="NATIVE_ONLY")
     unseen = ["the dog does not chase the cat.",
               "the dog was chased by the cat.",
-              "the cat chases the dog."]
+              "the cat chases the dog.",
+              "the hens chase the bird.",
+              "the fox did not chase the hen.",
+              "is the brown fox quiet?",
+              "the hen was not chased by the fox.",
+              "the fox gave the bone to the hen.",
+              "the dog chases the cat and the hen chases the fox "
+              "and the bird chases the dog.",
+              "the dog chases the cat or the hen chases the fox.",
+              "the fox that chases the hen is brown.",
+              "the hen's bone is brown.",
+              "the fox is on the table.",
+              "the hen is smaller than the dog.",
+              "some fox chases the hen.",
+              "the fox chased the hen today.",
+              "why does the fox chase the hen?",
+              "give the bone to the hen.",
+              "the fox carries the bone to the hen.",
+              "the large fox chases the small hen.",
+              "the fox must not chase the hen."]
     lines.append("**Unseen-sentence check (run live at ledger "
                  "generation, NATIVE only - no model anywhere):**")
     lines.append("")
@@ -144,6 +183,16 @@ def build_ledger():
                 "outcome", {}).get("verdict", "?")
         lines.append(f"  - {artifact.get('teacher')}: {verdicts}")
     lines.append(f"- Constrained-teaching artifacts: {len(artifacts)}")
+    for pattern, label in (
+            ("curriculum_*.json", "Curriculum artifacts"),
+            ("vocabulary_*.json", "Vocabulary artifacts"),
+            ("committee_*.json", "Committee artifacts")):
+        found = sorted(glob.glob(os.path.join(HERE, "output",
+                                              pattern)))
+        total = sum(len(json.load(open(p, encoding="utf-8"))
+                        .get("results", [1])) for p in found)
+        lines.append(f"- {label}: {len(found)} file(s), "
+                     f"{total} sealed lesson result(s)")
     lines.append("")
     lines.append("Every durable rule carries provenance, its "
                  "regression guard, and a rollback path; every lesson "

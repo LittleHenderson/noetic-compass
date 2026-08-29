@@ -1,0 +1,166 @@
+{
+ "event": "RECONSTRUCTION_AFTER_OVERWRITE_BUG",
+ "provenance": "session_transcript_reconstruction_2026-08-28",
+ "disclosure": "The curriculum/vocabulary teachers wrote every run to ONE fixed filename, so each single-target run OVERWROTE the previous run's sealed episode file. The grammar store's history, regression guards, and provenance strings retain the promotion evidence for every construction; the per-lesson elicitation transcripts for the overwritten runs are LOST and this file is a reconstruction from the session's observed run output - it is NOT a sealed episode. The filename bug is fixed (per-run filenames); this cannot recur.",
+ "teacher": "qwen.qwen3-32b-v1:0 (AWS Bedrock us-west-2)",
+ "lessons": [
+  {
+   "lesson_id": "LIVE_L009_plural",
+   "target": "plural_transitive_present",
+   "attempts": [
+    "REJECTED_POSITIVE_EXAMPLES (teacher wrote surface plurals 'cats'/'hens' as agent values instead of lemmas)",
+    "REJECTED_REGRESSION (harness defect: student lexicon missing runtime-promoted 'bone')",
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L010_past_negation",
+   "target": "negated_past_transitive",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L011_copular_question",
+   "target": "copular_adjective_interrogative",
+   "attempts": [
+    "ELICITATION_FAILED_surface_pattern (harness defect: validator demanded a VERB slot; copular patterns carry the copula literal)",
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "ANSWERED"
+  },
+  {
+   "lesson_id": "LIVE_L012_passive_negation",
+   "target": "negated_passive_past",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L013_ditransitive_past",
+   "target": "ditransitive_past",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L014_ditransitive_question",
+   "target": "interrogative_ditransitive",
+   "attempts": [
+    "ELICITATION_FAILED_ambiguity_cases (harness defect: 'to' misreported as unknown word)",
+    "ELICITATION_FAILED_positive_examples (harness defect: field-check morphology missing persisted 'give')",
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "ANSWERED"
+  },
+  {
+   "lesson_id": "LIVE_L015_pronoun",
+   "target": "pronoun_transitive_present",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNRESOLVED_PRONOUN (honest standalone refusal; cross-sentence resolution proven in test_pronoun_resolves_unique_antecedent_across_sentences)"
+  },
+  {
+   "lesson_id": "LIVE_L016_three_clause",
+   "target": "coordination_three_present",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L017_disjunction",
+   "target": "disjunction_present_transitive",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L018_relative",
+   "target": "relative_clause_state",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L019_possessive",
+   "target": "possessive_state",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L020_locative",
+   "target": "locative_state",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L021_comparative",
+   "target": "comparative_state",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L022_quantifiers",
+   "target": "quantified_transitive_present",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L023_temporal",
+   "target": "temporal_past_transitive",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "UNDERSTOOD"
+  },
+  {
+   "lesson_id": "LIVE_L024_why_question",
+   "target": "interrogative_why_present",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNSUPPORTED_LANGUAGE",
+   "after": "LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING (honest: the kernel holds no cause facts)"
+  },
+  {
+   "lesson_id": "LIVE_L026_new_verb",
+   "target": "morph_table (carry)",
+   "attempts": [
+    "PROMOTED_PROVISIONALLY -> PROMOTED_DURABLY"
+   ],
+   "before": "UNDERSTOOD with WRONG lemma 'carrie' (productive -s rule invented the lemma; defect fixed: productive rules now require a KNOWN base)",
+   "after": "UNDERSTOOD with correct lemma 'carry'"
+  }
+ ]
+}

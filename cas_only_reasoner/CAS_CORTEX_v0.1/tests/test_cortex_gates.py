@@ -6,6 +6,7 @@ in run_demo.py and seal their artifact into output/.
 """
 
 import copy
+import json
 
 from cortex.firewall import (ALLOWED_ACTS, FORBIDDEN_INTENTS,
                              AuthorityFirewall, CortexAuthorityViolation)
@@ -465,8 +466,80 @@ def test_runtime_canary_no_construction_forgotten():
         "the dog was not chased by the cat.": "UNDERSTOOD",  # neg pass
         "the cat gave the bone to the dog.": "UNDERSTOOD",  # ditr past
         "does the cat give the bone to the dog?": "ANSWERED",  # ditr q
+        "the cat chases the dog and the fox chases the hen and "
+        "the bird chases the cat.": "UNDERSTOOD",        # 3-clause and
+        "the cat chases the dog or the fox chases the hen.":
+            "UNDERSTOOD",                                # disjunction
+        "the cat that chases the dog is gray.": "UNDERSTOOD",  # rel cl
+        "the cat's bone is gray.": "UNDERSTOOD",         # possessive
+        "the cat is on the table.": "UNDERSTOOD",        # locative
+        "the cat is bigger than the dog.": "UNDERSTOOD",  # comparative
+        "every cat chases the dog.": "UNDERSTOOD",       # quantifier
+        "the cat chased the dog yesterday.": "UNDERSTOOD",  # temporal
+        "why does the cat chase the dog?":
+            "LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING",     # why (honest)
+        "give the bone to the dog.": "UNDERSTOOD",       # command+rcpt
+        "the cat carries the bone to the dog.": "UNDERSTOOD",  # carry
+        "the small cat chases the large dog.": "UNDERSTOOD",  # sm/lg
+        "the cat must not chase the dog.": "UNDERSTOOD",  # prohibition
     }
     for sentence, expected in probes.items():
         trace = router.turn(sentence)
         assert trace["answer"]["status"] == expected, \
             f"FORGOTTEN: {sentence!r} -> {trace['answer']['status']}"
+
+
+def test_pronoun_resolves_unique_antecedent_across_sentences():
+    """Lesson L015: 'it' resolves against the PREVIOUS committed turn
+    when exactly one entity is on offer - and the resolution is
+    recorded, never silent."""
+    router = HybridRouter(mode="NATIVE_ONLY")
+    assert router.turn("the cat is quiet.")["answer"]["status"] \
+        == "UNDERSTOOD"
+    trace = router.turn("it chases the dog.")
+    assert trace["answer"]["status"] == "UNDERSTOOD"
+    assert trace["answer"]["meaning"] == {
+        "pred": "relation", "args": ["chase", "cat", "dog"]}
+    assert trace["pronoun_resolution"]["resolved"] == {"agent": "cat"}
+
+
+def test_norm_quantifier_and_disjunction_meanings_never_collapse():
+    """The non-collapse law across the new families: 'must not' /
+    'does not' / plain assertion are three meanings; every/some/no
+    are three meanings; and/or are two meanings."""
+    router = HybridRouter(mode="NATIVE_ONLY")
+
+    def meaning(sentence):
+        return router.turn(sentence)["answer"]["meaning"]
+
+    prohibited = meaning("the cat must not chase the dog.")
+    negated = meaning("the cat does not chase the dog.")
+    assert prohibited["pred"] == "prohibition"
+    assert negated["pred"] == "negation"
+    assert prohibited != negated
+
+    quants = {q: meaning(f"{q} cat chases the dog.")
+              for q in ("every", "some", "no")}
+    assert len({json.dumps(m, sort_keys=True)
+                for m in quants.values()}) == 3
+    assert all(m["pred"] == "quantified" for m in quants.values())
+
+    conj = meaning("the cat chases the dog and the fox chases "
+                   "the hen.")
+    disj = meaning("the cat chases the dog or the fox chases "
+                   "the hen.")
+    assert (conj["pred"], disj["pred"]) == ("conjunction",
+                                            "disjunction")
+
+
+def test_pronoun_ambiguous_antecedent_asks_never_guesses():
+    """Two candidate antecedents -> the honest clarification request;
+    a guess is never invented. No prior sentence -> honest refusal."""
+    router = HybridRouter(mode="NATIVE_ONLY")
+    router.turn("the cat chases the dog.")
+    trace = router.turn("it chases the hen.")
+    assert trace["answer"]["status"] == "AMBIGUOUS_ANTECEDENT"
+    assert trace["answer"]["candidates"] == ["cat", "dog"]
+    fresh = HybridRouter(mode="NATIVE_ONLY")
+    assert fresh.turn("it chases the dog.")["answer"]["status"] \
+        == "UNRESOLVED_PRONOUN"

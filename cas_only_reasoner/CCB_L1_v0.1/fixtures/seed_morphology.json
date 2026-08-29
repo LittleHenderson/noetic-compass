@@ -1,18 +1,38 @@
 {
+ "bigger": {
+  "lemma": "big",
+  "form": "comparative",
+  "provenance": "lesson:LIVE_L021_comparative"
+ },
+ "carried": {
+  "lemma": "carry",
+  "form": "past_or_participle",
+  "provenance": "lesson:qwen.qwen3-32b-v1:0"
+ },
+ "carries": {
+  "lemma": "carry",
+  "form": "present_3sg",
+  "provenance": "lesson:qwen.qwen3-32b-v1:0"
+ },
+ "carry": {
+  "lemma": "carry",
+  "form": "base",
+  "provenance": "lesson:qwen.qwen3-32b-v1:0"
+ },
  "chase": {
   "lemma": "chase",
   "form": "base",
-  "provenance": "lesson:LIVE_L014_ditransitive_question"
+  "provenance": "lesson:LIVE_L028_committee_prohibition"
  },
  "chased": {
   "lemma": "chase",
   "form": "past_or_participle",
-  "provenance": "lesson:LIVE_L012_passive_negation"
+  "provenance": "lesson:LIVE_L028_committee_prohibition"
  },
  "chases": {
   "lemma": "chase",
   "form": "present_3sg",
-  "provenance": "lesson:LIVE_L007_adjectives"
+  "provenance": "lesson:LIVE_L028_committee_prohibition"
  },
  "gave": {
   "lemma": "give",
@@ -37,6 +57,16 @@
  "is": {
   "lemma": "be",
   "form": "present_3sg",
-  "provenance": "lesson:LIVE_L011_copular_question"
+  "provenance": "lesson:LIVE_L021_comparative"
+ },
+ "on": {
+  "lemma": "on",
+  "form": "base",
+  "provenance": "lesson:LIVE_L020_locative"
+ },
+ "smaller": {
+  "lemma": "small",
+  "form": "comparative",
+  "provenance": "lesson:LIVE_L021_comparative"
  }
 }

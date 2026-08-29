@@ -5,7 +5,7 @@
    "after": {
     "answer": {
      "frame_core": {
-      "agent": "cat",
+      "agent": "addressee",
       "frame": "event",
       "patient": "bone",
       "polarity": "positive",
@@ -13,8 +13,16 @@
       "recipient": "dog",
       "tense": "present"
      },
-     "status": "ANSWERED",
-     "text": "i do not know whether the cat gives the bone to the dog."
+     "meaning": {
+      "args": [
+       "give",
+       "addressee",
+       "bone",
+       "dog"
+      ],
+      "pred": "relation"
+     },
+     "status": "UNDERSTOOD"
     },
     "cas_ohm": {
      "I_obs": 6.0,
@@ -29,7 +37,7 @@
      "V_drive": 6.0,
      "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
      "delta_I": 0.0,
-     "effect_type": "ANSWERED",
+     "effect_type": "UNDERSTOOD",
      "mode": "native_runtime",
      "operating_region": "active",
      "provenance": "cas_ohm_attention_plane_v0.1",
@@ -39,13 +47,13 @@
     },
     "commitment": {
      "by": "cas_learned_grammar",
-     "construction": "interrogative_ditransitive"
+     "construction": "imperative_ditransitive"
     },
     "committed": true,
     "cortex_proposal": null,
     "frame": {
      "core": {
-      "agent": "cat",
+      "agent": "addressee",
       "frame": "event",
       "patient": "bone",
       "polarity": "positive",
@@ -54,19 +62,19 @@
       "tense": "present"
      },
      "surface": {
-      "construction_id": "interrogative_ditransitive",
-      "mood": "interrogative"
+      "construction_id": "imperative_ditransitive",
+      "mood": "imperative"
      }
     },
-    "input": "does the cat give the bone to the dog?",
+    "input": "give the bone to the dog.",
     "mode": "NATIVE_ONLY",
     "route": "native_gram",
-    "trace_digest": "381212c8c9b1648b",
+    "trace_digest": "f1773a578c18ecf5",
     "validation": null
    },
    "before": {
     "answer": {
-     "detail": "I did not understand 'does' at word 1 of 'does the cat give the bone to the dog?' (question pattern not supported)",
+     "detail": "I did not understand 'give' at word 1 of 'give the bone to the dog.' (sentence pattern not supported)",
      "status": "UNSUPPORTED_LANGUAGE"
     },
     "cas_ohm": {
@@ -93,23 +101,23 @@
     "commitment": null,
     "committed": false,
     "cortex_proposal": null,
-    "input": "does the cat give the bone to the dog?",
+    "input": "give the bone to the dog.",
     "mode": "NATIVE_ONLY",
     "native_error": {
-     "message": "I did not understand 'does' at word 1 of 'does the cat give the bone to the dog?' (question pattern not supported)",
-     "word": "does"
+     "message": "I did not understand 'give' at word 1 of 'give the bone to the dog.' (sentence pattern not supported)",
+     "word": "give"
     },
     "route": "no_answer",
-    "trace_digest": "afeb4041e9c1fca4",
+    "trace_digest": "540538b421de0a22",
     "validation": null
    },
    "episode": {
     "domain": "language_grammar",
-    "episode_digest": "be12e60a14253779",
+    "episode_digest": "431c6d4cd5fdb6cc",
     "examiner_identity": "ccb_l1_acceptance_ladder",
-    "lesson_id": "LIVE_L014_ditransitive_question",
+    "lesson_id": "LIVE_L025_command_recipient",
     "outcome": {
-     "episode_digest": "8b08ea811184ba73",
+     "episode_digest": "ec06511730a7ae0e",
      "evidence": [
       {
        "detail": "typed lesson packet complete",
@@ -177,13 +185,13 @@
     "ambiguity_cases": [
      {
       "expect": "parsed",
-      "sentence": "does the cat give the dog to the bird"
+      "sentence": "Give the bone to the dog."
      }
     ],
     "construction": {
-     "construction_id": "interrogative_ditransitive",
+     "construction_id": "imperative_ditransitive",
      "semantics": {
-      "agent": "@agent",
+      "agent": "addressee",
       "frame": "event",
       "patient": "@patient",
       "polarity": "positive",
@@ -192,12 +200,9 @@
       "tense": "present"
      },
      "surface_meta": {
-      "mood": "interrogative"
+      "mood": "imperative"
      },
      "surface_pattern": [
-      "does",
-      "the",
-      "NP:agent",
       "VERB:pred:base",
       "the",
       "NP:patient",
@@ -207,24 +212,24 @@
     },
     "counterexamples": [
      {
-      "sentence": "the cat to the dog gives the ball"
+      "sentence": "the dog to the bone give"
      },
      {
-      "sentence": "does the dog the ball give to the cat"
+      "sentence": "give bone the to dog"
      }
     ],
-    "lesson_id": "LIVE_L014_ditransitive_question",
+    "lesson_id": "LIVE_L025_command_recipient",
     "lesson_type": "grammar_construction",
     "minimal_pairs": [
      {
       "relation": "different_meaning",
-      "sentence_a": "does the cat give the dog to the bird?",
-      "sentence_b": "does the dog give the cat to the bird?"
+      "sentence_a": "Give the bone to the dog.",
+      "sentence_b": "Give the dog to the bone."
      },
      {
       "relation": "different_meaning",
-      "sentence_a": "does the fox give the hen to the cat?",
-      "sentence_b": "does the hen give the fox to the cat?"
+      "sentence_a": "Give the cat to the fox.",
+      "sentence_b": "Give the fox to the cat."
      }
     ],
     "morphology": [
@@ -232,32 +237,47 @@
       "form": "base",
       "lemma": "chase",
       "surface": "chase"
+     },
+     {
+      "form": "past",
+      "lemma": "chase",
+      "surface": "chased"
+     },
+     {
+      "form": "participle",
+      "lemma": "chase",
+      "surface": "chased"
+     },
+     {
+      "form": "present_3sg",
+      "lemma": "chase",
+      "surface": "chases"
      }
     ],
     "positive_examples": [
      {
       "expected_core": {
-       "agent": "cat",
+       "agent": "addressee",
        "frame": "event",
-       "patient": "bird",
+       "patient": "bone",
        "polarity": "positive",
        "predicate": "give",
        "recipient": "dog",
        "tense": "present"
       },
-      "sentence": "Does the cat give the bird to the dog?"
+      "sentence": "Give the bone to the dog."
      },
      {
       "expected_core": {
-       "agent": "fox",
+       "agent": "addressee",
        "frame": "event",
-       "patient": "hen",
+       "patient": "cat",
        "polarity": "positive",
        "predicate": "give",
-       "recipient": "cat",
+       "recipient": "fox",
        "tense": "present"
       },
-      "sentence": "Does the fox give the hen to the cat?"
+      "sentence": "Give the cat to the fox."
      }
     ],
     "provenance": "schema_constrained_field_elicitation",
@@ -271,44 +291,44 @@
      "attempt": 1,
      "defect": null,
      "field": "surface_pattern",
-     "raw": "```json\n[\"does\", \"the\", \"NP:agent\", \"VERB:pred:base\", \"the\", \"NP:patient\", \"to\", \"NP:recipient\"]\n```"
+     "raw": "```json\n[\"VERB:pred:base\", \"the\", \"NP:patient\", \"to\", \"NP:recipient\"]\n```"
     },
     {
      "attempt": 1,
      "defect": null,
      "field": "morphology",
-     "raw": "[{\"surface\": \"chase\", \"lemma\": \"chase\", \"form\": \"base\"}]"
+     "raw": "```json\n[\n  {\"surface\": \"chase\", \"lemma\": \"chase\", \"form\": \"base\"},\n  {\"surface\": \"chased\", \"lemma\": \"chase\", \"form\": \"past\"},\n  {\"surface\": \"chased\", \"lemma\": \"chase\", \"form\": \"participle\"},\n  {\"surface\": \"chases\", \"lemma\": \"chase\", \"form\": \"present_3sg\"}\n]\n```"
     },
     {
      "attempt": 1,
      "defect": null,
      "field": "positive_examples",
-     "raw": "```json\n[\n  {\n    \"sentence\": \"Does the cat give the bird to the dog?\",\n    \"expected_core\": {\n      \"frame\": \"event\",\n      \"predicate\": \"give\",\n      \"agent\": \"cat\",\n      \"patient\": \"bird\",\n      \"tense\": \"present\",\n      \"polarity\": \"positive\",\n      \"recipient\": \"dog\"\n    }\n  },\n  {\n    \"senten"
+     "raw": "```json\n[\n  {\n    \"sentence\": \"Give the bone to the dog.\",\n    \"expected_core\": {\n      \"frame\": \"event\",\n      \"predicate\": \"give\",\n      \"agent\": \"addressee\",\n      \"patient\": \"bone\",\n      \"tense\": \"present\",\n      \"polarity\": \"positive\",\n      \"recipient\": \"dog\"\n    }\n  },\n  {\n    \"sentence\": \"G"
     },
     {
      "attempt": 1,
      "defect": null,
      "field": "minimal_pairs",
-     "raw": "```json\n[\n  {\n    \"sentence_a\": \"does the cat give the dog to the bird?\",\n    \"sentence_b\": \"does the dog give the cat to the bird?\",\n    \"relation\": \"different_meaning\"\n  },\n  {\n    \"sentence_a\": \"does the fox give the hen to the cat?\",\n    \"sentence_b\": \"does the hen give the fox to the cat?\",\n   "
+     "raw": "```json\n[\n  {\n    \"sentence_a\": \"Give the bone to the dog.\",\n    \"sentence_b\": \"Give the dog to the bone.\",\n    \"relation\": \"different_meaning\"\n  },\n  {\n    \"sentence_a\": \"Give the cat to the fox.\",\n    \"sentence_b\": \"Give the fox to the cat.\",\n    \"relation\": \"different_meaning\"\n  }\n]\n```"
     },
     {
      "attempt": 1,
      "defect": null,
      "field": "counterexamples",
-     "raw": "```json\n[\n  {\"sentence\": \"the cat to the dog gives the ball\"},\n  {\"sentence\": \"does the dog the ball give to the cat\"}\n]\n```"
+     "raw": "```json\n[\n  {\"sentence\": \"the dog to the bone give\"},\n  {\"sentence\": \"give bone the to dog\"}\n]\n```"
     },
     {
      "attempt": 1,
      "defect": null,
      "field": "ambiguity_cases",
-     "raw": "```json\n[\n  {\n    \"sentence\": \"does the cat give the dog to the bird\",\n    \"expect\": \"parsed\"\n  }\n]\n```"
+     "raw": "```json\n[\n  {\n    \"sentence\": \"Give the bone to the dog.\",\n    \"expect\": \"parsed\"\n  }\n]\n```"
     }
    ],
    "retention": {
-    "construction_id": "interrogative_ditransitive",
+    "construction_id": "imperative_ditransitive",
     "verdict": "PROMOTED_DURABLY"
    },
-   "target": "interrogative_ditransitive",
+   "target": "imperative_ditransitive",
    "verdict": "PROMOTED_PROVISIONALLY"
   }
  ],

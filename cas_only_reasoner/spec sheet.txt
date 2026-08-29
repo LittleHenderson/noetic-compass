@@ -934,6 +934,85 @@ THREE HARNESS DEFECTS FOUND LIVE AND FIXED (wave A, 2026-08-28) - all
   Runtime canary extended: one probe per family, now 15 sentences
   (all 16 constructions' families covered).
 
+CURRICULUM WAVES B+C - THE 20-LESSON GOAL QUEUE IS COMPLETE (sealed
+2026-08-28, AWS Bedrock qwen.qwen3-32b-v1:0; critic for lesson 20:
+deepseek.v3-v1:0):
+  ALL 20 LESSONS PROMOTED_DURABLY. Wave B (7-17), each first-attempt:
+  - L7 pronoun_transitive_present: 'it chases the dog.' parses with
+    agent bound UNRESOLVED ('pron:it'); the ROUTER resolves against
+    the previous committed turn - one candidate resolves ('the cat is
+    quiet.' then 'it chases the dog.' -> relation(chase,cat,dog),
+    resolution recorded), several candidates -> AMBIGUOUS_ANTECEDENT
+    naming the pool, none -> UNRESOLVED_PRONOUN. Certainty never
+    invented. Two regression tests hold this.
+  - L8 coordination_three_present (3 clauses, all survive),
+    L9 disjunction_present_transitive (frame 'disjunction'; and/or
+    project as conjunction vs disjunction - non-collapse tested),
+    L10 relative_clause_state (embedded event survives projection),
+    L11 possessive_state (NPOSS slot; possession(cat,bone) conjoined),
+    L12 locative_state (location packet; noun 'table' via LEX),
+    L13 comparative_state (relation(bigger,cat,dog); bigger/smaller),
+    L14 quantified_transitive_present (QUANT slot; every/some/no are
+    THREE distinct projections - non-collapse tested),
+    L15 temporal_past_transitive (ADV slot; time survives),
+    L16 interrogative_why_present ('why does the cat chase the dog?'
+    -> LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING: the kernel holds no
+    cause facts - the honest split),
+    L17 imperative_ditransitive ('give the bone to the dog.').
+  Wave C:
+  - L18 (LIVE_L026 new verb 'carry', PURE MORPHOLOGY): the examiner is
+    generalization through EXISTING constructions - carries/carry/
+    carried parse through ditransitive, plural, past-question, and
+    passive shapes with exact expected cores. HONEST DISCLOSURE: the
+    BEFORE probe was NOT unsupported - the productive -s rule had
+    invented lemma 'carrie' and the runtime committed
+    relation('carrie',...) as UNDERSTOOD. The lesson corrected the
+    analysis (wrong -> right, not unknown -> known).
+  - L19 (LIVE_L027 new adjectives small/large, PURE LEXICON): clean
+    UNSUPPORTED -> UNDERSTOOD; generalizes through the adjective and
+    copular-question constructions.
+  - L20 (LIVE_L028 committee prohibition): FIRST LIVE MULTI-TEACHER
+    COMMITTEE LESSON. Proposer qwen.qwen3-32b-v1:0 (lecturer) +
+    critic deepseek.v3-v1:0 (different model family) reviewing the
+    assembled packet with an explicit vote; the board VALIDATES the
+    committee (>=2 distinct identities, explicit votes, any reject
+    blocks typed - 3 new A1 tests); committee approval grants
+    NOTHING - the ten-stage ladder remained the examiner. Content:
+    'the cat must not chase the dog.' = prohibition modality under
+    the new high-impact domain behavioral_norms; must-not / does-not
+    / plain assertion are THREE distinct projections (tested).
+    First run REJECTED_MALFORMED_LESSON (missing packet fields) -
+    sealed; second run durable.
+  GRAMMAR: 28 DURABLE CONSTRUCTIONS (3 seed + 25 live-taught), 24
+  words, 14 morph entries - all store-derived in the LEARNING LEDGER.
+
+TWO MORE DEFECT CLASSES FOUND LIVE AND FIXED (waves B+C 2026-08-28):
+  1. INVENTED LEMMAS: the productive -s/-ed morphology rules created
+     lemmas for UNKNOWN verbs ('carries'->'carrie',
+     'carried'->'carri') and the runtime committed them. Fix:
+     productive rules now require the derived lemma to be a KNOWN
+     base ('jumps' now honestly refuses instead of fabricating
+     lemma 'jump'); -ies->-y and -es handled.
+  2. SEALED-OUTPUT OVERWRITE: the curriculum/vocabulary teachers
+     wrote every run to ONE fixed filename, so each single-target run
+     clobbered the previous run's sealed episode file - after the
+     20-lesson queue only the LAST run per script survived on disk.
+     The grammar store's history/guards/provenance retain promotion
+     evidence for every construction; the lost elicitation
+     transcripts are reconstructed from the session record in
+     output/reconstruction_curriculum_overwrite_20260828.json,
+     LABELED as reconstruction, never as sealed originals. All three
+     teacher scripts now write per-run filenames.
+  Also fixed: runtime lexicon lacked teaching vocabulary
+  (bird/fox/hen) so learned rules failed at runtime on words the
+  ladder examined them with - synced; teacher misled by its own
+  probe once (lesson packet fields) - sealed and rerun.
+
+PROGRAM TEST TOTALS refresh (2026-08-28, waves B+C): RRK 34 + RLP 45
++ M1 34 + L1 32 + SEM 19 + WB 13 + CRQS 35 + T1 20 + OHM 10 + H2H 10
++ LTG 11 + SM 8 + G10 8 + CORTEX 48 + A1 11 = 338 local, 0 failures.
+Runtime canary: 28 family probes, one per construction.
+
 PROGRAM TEST TOTALS (all green, exact, junit-counted 2026-08-28,
 curriculum round 2): RRK 34 + RLP 45 + M1 34 + L1 32 + SEM 19 +
 WB 13 + CRQS 35 + T1 20 + OHM 10 + H2H 10 + LTG 11 + SM 8 + G10 8 +

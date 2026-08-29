@@ -115,6 +115,9 @@ class HybridRouter:
                     open(morph_path, encoding="utf-8")).items():
                 morph.teach(surface, entry["lemma"], entry["form"],
                             provenance=entry["provenance"])
+        # cross-sentence discourse state: the entities of the LAST
+        # committed turn - the pronoun lesson's antecedent pool
+        self.discourse_entities = []
         self.gram_parser = ConstructionParser(
             Lexicon(self.seed["lexicon"]), morph)
         self.coverage = {"native_l1": 0, "native_gram": 0,
@@ -166,6 +169,49 @@ class HybridRouter:
                            "conjunct_verdicts": verdicts}
         return self._seal(trace, committed=True)
 
+    def _note_discourse(self, packet) -> None:
+        entities = HybridRouter._entity_atoms(packet)
+        if entities:
+            self.discourse_entities = entities
+
+    def _resolve_pronouns(self, core: Dict,
+                          trace: Dict) -> Optional[Dict]:
+        """Resolve 'pron:*' bindings against the previous committed
+        turn. One candidate -> resolve; several -> honest
+        clarification; none -> honest refusal. Returns a sealed trace
+        on refusal, None when the turn may proceed."""
+        pron_slots = [(key, value) for key, value in core.items()
+                      if isinstance(value, str)
+                      and value.startswith("pron:")]
+        if not pron_slots:
+            return None
+        candidates = list(dict.fromkeys(self.discourse_entities))
+        if len(candidates) == 1:
+            for key, value in pron_slots:
+                core[key] = candidates[0]
+            trace["pronoun_resolution"] = {
+                "resolved": {key: candidates[0]
+                             for key, _ in pron_slots},
+                "antecedent_pool": candidates}
+            return None
+        if not candidates:
+            trace["answer"] = {
+                "status": "UNRESOLVED_PRONOUN",
+                "frame_core": core,
+                "detail": "the pronoun has no antecedent - no prior "
+                          "sentence names an entity; say the noun "
+                          "first. A guess is never invented"}
+            return self._seal(trace, committed=False)
+        trace["answer"] = {
+            "status": "AMBIGUOUS_ANTECEDENT",
+            "frame_core": core,
+            "candidates": candidates,
+            "detail": "the pronoun could name any of "
+                      f"{candidates} from the previous sentence - "
+                      "clarification needed, certainty is never "
+                      "invented"}
+        return self._seal(trace, committed=False)
+
     def _kernel_answer(self, meaning: Dict) -> Dict:
         result = answer_question(meaning, self.seed["cmb_facts"],
                                  self.seed["rules"])
@@ -197,11 +243,25 @@ class HybridRouter:
             trace["route"] = "native_gram"
             self.coverage["native_gram"] += 1
             trace["frame"] = gram["frames"][0]
+            refused = self._resolve_pronouns(gram["core"], trace)
+            if refused is not None:
+                return refused
             packet = self._frame_to_packet(gram["core"])
             trace["commitment"] = {"by": "cas_learned_grammar",
                                    "construction": gram["frames"][0]
                                    ["surface"]["construction_id"]}
             mood = gram["frames"][0]["surface"].get("mood")
+            if mood == "interrogative_why":
+                # WHY asks for a cause; the kernel holds no cause
+                # facts - the honest split status, never a fabricated
+                # cause
+                self._note_discourse(packet)
+                trace["answer"] = {
+                    "status": "LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING",
+                    "frame_core": gram["core"],
+                    "detail": "the question asks WHY; the kernel "
+                              "holds no cause facts to answer it"}
+                return self._seal(trace, committed=False)
             if mood == "interrogative":
                 if packet.get("pred") == "conjunction":
                     # a RESTRICTED question ('is the gray cat quiet?')
@@ -250,6 +310,7 @@ class HybridRouter:
                             text = f"yes, {clause}."
                         else:
                             text = f"i do not know whether {clause}."
+                    self._note_discourse(packet)
                     trace["answer"] = {"status": "ANSWERED",
                                        "text": text,
                                        "frame_core": gram["core"]}
@@ -262,6 +323,7 @@ class HybridRouter:
                                   "kernel holds no facts of this kind "
                                   f"to answer it ({type(exc).__name__})"}
                     return self._seal(trace, committed=False)
+            self._note_discourse(packet)
             trace["answer"] = {"status": "UNDERSTOOD",
                                "meaning": packet,
                                "frame_core": gram["core"]}
@@ -430,6 +492,7 @@ class HybridRouter:
                              for conjunct in core["conjuncts"]]}
         if core.get("frame") == "event":
             args = [core["predicate"], core["agent"], core["patient"]]
+            quantifier = core.get("quantifier")
             if core.get("recipient"):
                 # ditransitive: the recipient role SURVIVES (4-arg
                 # relation) - dropping a role is the content-drop genus
@@ -451,23 +514,63 @@ class HybridRouter:
                 if core.get(role + "_number") == "plural":
                     modifiers.append({"pred": "number",
                                       "args": [core[role], "plural"]})
+            if core.get("time"):
+                # the temporal adverb SURVIVES projection
+                modifiers.append({"pred": "time",
+                                  "args": [core["time"]]})
             if modifiers:
                 # attributive adjectives project as conjoined property
                 # assertions - every modifier survives
                 inner = {"pred": "conjunction",
                          "args": [inner] + modifiers}
+            if quantifier:
+                # the quantifier SURVIVES projection - 'every cat',
+                # 'some cat', 'no cat' are THREE distinct meanings
+                # (the non-collapse law)
+                inner = {"pred": "quantified",
+                         "args": [quantifier, inner]}
+            if core.get("modality") == "prohibition":
+                # 'must not' SURVIVES as a norm: a PROHIBITED chase is
+                # not an absent chase ('does not' = polarity negative)
+                # and not an asserted chase - three distinct meanings
+                inner = {"pred": "prohibition", "args": [inner]}
         else:
-            inner = {"pred": "property",
-                     "args": [core.get("entity"), core.get("property")]}
+            if core.get("location"):
+                inner = {"pred": "location",
+                         "args": [core.get("entity"),
+                                  core.get("location")]}
+            elif core.get("comparison"):
+                # a comparative IS a two-place relation:
+                # relation(bigger, cat, dog)
+                inner = {"pred": "relation",
+                         "args": [core.get("comparison"),
+                                  core.get("entity"),
+                                  core.get("than")]}
+            else:
+                inner = {"pred": "property",
+                         "args": [core.get("entity"),
+                                  core.get("property")]}
+            state_mods = []
             if core.get("modifier"):
                 # the restricting adjective SURVIVES projection -
                 # 'is the gray cat quiet?' may not project identically
                 # to 'is the cat quiet?'
-                inner = {"pred": "conjunction",
-                         "args": [inner,
-                                  {"pred": "property",
+                state_mods.append({"pred": "property",
                                    "args": [core.get("entity"),
-                                            core.get("modifier")]}]}
+                                            core.get("modifier")]})
+            if core.get("possessor"):
+                # possession SURVIVES: "the cat's bone" asserts
+                # possession(cat, bone)
+                state_mods.append({"pred": "possession",
+                                   "args": [core.get("possessor"),
+                                            core.get("entity")]})
+            if core.get("relative"):
+                # the relative clause SURVIVES as its own event packet
+                state_mods.append(
+                    HybridRouter._frame_to_packet(core["relative"]))
+            if state_mods:
+                inner = {"pred": "conjunction",
+                         "args": [inner] + state_mods}
         if core.get("polarity") == "negative":
             return {"pred": "negation", "args": [inner]}
         return inner
@@ -482,10 +585,17 @@ class HybridRouter:
         args = packet.get("args", [])
         if pred == "property" and args:
             entities.append(args[0])
-        elif pred == "relation" and len(args) == 3:
+        elif pred == "relation" and len(args) >= 3:
             entities.extend(args[1:])
         elif pred in ("negation", "question") and args:
             entities.extend(HybridRouter._entity_atoms(args[0]))
+        elif pred in ("conjunction", "disjunction"):
+            for part in args:
+                entities.extend(HybridRouter._entity_atoms(part))
+        elif pred == "quantified" and len(args) == 2:
+            entities.extend(HybridRouter._entity_atoms(args[1]))
+        elif pred in ("location", "possession") and len(args) == 2:
+            entities.extend(a for a in args if isinstance(a, str))
         return entities
 
     @staticmethod
@@ -515,6 +625,7 @@ class HybridRouter:
             trace["commitment"] = {"by": "cas_parse_acknowledgement"}
             trace["answer"] = {"status": "UNDERSTOOD",
                                "meaning": meaning}
+        self._note_discourse(meaning)
         return True
 
     def _seal(self, trace: Dict, committed: bool) -> Dict:

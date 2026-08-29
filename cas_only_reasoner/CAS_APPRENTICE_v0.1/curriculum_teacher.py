@@ -76,12 +76,20 @@ def valid_pattern(value):
     for element in value:
         if not isinstance(element, str):
             return f"element {element!r} is not a string"
-        if element.startswith("NP:") or element.startswith("NPPL:"):
+        if element.startswith("NP:") or element.startswith("NPPL:") \
+                or element.startswith("PRON:") \
+                or element.startswith("NPOSS:"):
             parts = element.split(":")
             if len(parts) != 2 or parts[1] not in ROLES:
                 return (f"NP slot {element!r} must name a role from "
                         f"{ROLES}")
             has_np = True
+        elif element.startswith("QUANT:"):
+            if element != "QUANT:quantifier":
+                return "the QUANT slot is written QUANT:quantifier"
+        elif element.startswith("ADV:"):
+            if element != "ADV:time":
+                return "the ADV slot is written ADV:time"
         elif element.startswith("VERB:"):
             parts = element.split(":")
             if len(parts) != 3 or parts[1] not in VERB_NAMES \
@@ -839,8 +847,12 @@ def main():
                         "log": log})
 
     slug = TEACHER_MODEL.replace("/", "_").replace(":", "_")
+    # PER-RUN filenames - a fixed name OVERWROTE the previous run's
+    # sealed episodes (found live after the 20-lesson queue: only the
+    # LAST single-target run's episode file survived)
+    run_tag = "+".join(r["target"] for r in results)[:80]         or time.strftime("%Y%m%d_%H%M%S")
     out_path = os.path.join(HERE, "output",
-                            f"curriculum_{slug}.json")
+                            f"curriculum_{slug}_{run_tag}.json")
     with open(out_path, "w", encoding="utf-8") as fh:
         json.dump({"event": "CURRICULUM_ROUND_1",
                    "teacher": TEACHER_MODEL,

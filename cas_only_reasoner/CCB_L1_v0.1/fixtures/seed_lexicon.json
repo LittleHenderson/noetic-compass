@@ -1,93 +1,145 @@
 {
+ "cmb_facts": [
+  {
+   "args": [
+    "cat",
+    "gray"
+   ],
+   "pred": "has"
+  },
+  {
+   "args": [
+    "cat",
+    "quiet"
+   ],
+   "pred": "has"
+  },
+  {
+   "args": [
+    "dog",
+    "brown"
+   ],
+   "pred": "has"
+  }
+ ],
  "fixture": "seed_lexicon",
  "lexicon": {
-  "the": {
-   "pos": "article",
-   "sense": "the"
-  },
-  "is": {
-   "pos": "copula",
-   "sense": "is"
-  },
-  "not": {
-   "pos": "negation",
-   "sense": "not"
-  },
-  "it": {
-   "pos": "pronoun",
-   "sense": "it"
-  },
-  "cat": {
+  "bird": {
    "pos": "noun",
-   "sense": "cat"
+   "sense": "bird"
   },
-  "dog": {
+  "bone": {
    "pos": "noun",
-   "sense": "dog"
-  },
-  "gray": {
-   "pos": "adj",
-   "sense": "gray"
+   "sense": "bone"
   },
   "brown": {
    "pos": "adj",
    "sense": "brown"
   },
-  "quiet": {
-   "pos": "adj",
-   "sense": "quiet"
+  "cat": {
+   "pos": "noun",
+   "sense": "cat"
   },
   "chases": {
    "pos": "verb",
    "sense": "chase"
   },
-  "bone": {
+  "dog": {
    "pos": "noun",
-   "sense": "bone"
+   "sense": "dog"
+  },
+  "fox": {
+   "pos": "noun",
+   "sense": "fox"
+  },
+  "gray": {
+   "pos": "adj",
+   "sense": "gray"
+  },
+  "hen": {
+   "pos": "noun",
+   "sense": "hen"
+  },
+  "is": {
+   "pos": "copula",
+   "sense": "is"
+  },
+  "it": {
+   "pos": "pronoun",
+   "sense": "it"
+  },
+  "not": {
+   "pos": "negation",
+   "sense": "not"
+  },
+  "quiet": {
+   "pos": "adj",
+   "sense": "quiet"
+  },
+  "the": {
+   "pos": "article",
+   "sense": "the"
+  },
+  "table": {
+   "pos": "noun",
+   "sense": "table"
+  },
+  "bigger": {
+   "pos": "adj",
+   "sense": "bigger"
+  },
+  "smaller": {
+   "pos": "adj",
+   "sense": "smaller"
+  },
+  "every": {
+   "pos": "quant",
+   "sense": "every"
+  },
+  "some": {
+   "pos": "quant",
+   "sense": "some"
+  },
+  "no": {
+   "pos": "quant",
+   "sense": "no"
+  },
+  "yesterday": {
+   "pos": "adv",
+   "sense": "yesterday"
+  },
+  "today": {
+   "pos": "adv",
+   "sense": "today"
+  },
+  "small": {
+   "pos": "adj",
+   "sense": "small"
+  },
+  "large": {
+   "pos": "adj",
+   "sense": "large"
   }
  },
- "cmb_facts": [
-  {
-   "pred": "has",
-   "args": [
-    "cat",
-    "gray"
-   ]
-  },
-  {
-   "pred": "has",
-   "args": [
-    "cat",
-    "quiet"
-   ]
-  },
-  {
-   "pred": "has",
-   "args": [
-    "dog",
-    "brown"
-   ]
-  }
- ],
  "rules": [
   {
-   "rule_id": "r_prop",
-   "premises": [
-    {
-     "pred": "has",
-     "args": [
-      "?X",
-      "?Y"
-     ]
-    }
-   ],
    "conclusion": {
-    "pred": "property",
     "args": [
      "?X",
      "?Y"
-    ]
+    ],
+    "pred": "property"
    },
+   "premises": [
+    {
+     "args": [
+      "?X",
+      "?Y"
+     ],
+     "pred": "has"
+    }
+   ],
+   "rule_id": "r_prop",
    "source": "l1_grounding"
   }
  ]

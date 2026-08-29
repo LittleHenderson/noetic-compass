@@ -88,22 +88,42 @@ class MorphTable:
     def analyze(self, surface: str) -> Optional[Dict]:
         if surface in self.entries:
             return self.entries[surface]
+
+        # PRODUCTIVE RULES ARE CONSERVATIVE: the derived lemma must
+        # already be a KNOWN base in this table - an invented lemma is
+        # an invented certainty (found live: 'carries' analyzed as
+        # lemma 'carrie' and the runtime committed relation('carrie',
+        # ...) as UNDERSTOOD; lesson L026's explicit entries corrected
+        # carry, this rule change closes the genus).
+        def known_base(lemma: str) -> bool:
+            entry = self.entries.get(lemma)
+            return entry is not None and entry["form"] == "base"
+
         # regular past/participle: VERBed
         if surface.endswith("ed") and len(surface) > 3:
             stem = surface[:-2]
             candidates = [stem, stem + "e"]
+            if surface.endswith("ied"):
+                candidates.append(surface[:-3] + "y")  # carried->carry
             if len(stem) > 2 and stem[-1] == stem[-2]:
                 candidates.append(stem[:-1])          # chopped -> chop
             for lemma in candidates:
-                yield_entry = {"surface": surface, "lemma": lemma,
-                               "form": "past_or_participle",
-                               "provenance": "regular_-ed_rule"}
-                return yield_entry
+                if known_base(lemma):
+                    return {"surface": surface, "lemma": lemma,
+                            "form": "past_or_participle",
+                            "provenance": "regular_-ed_rule"}
         # regular 3sg present: VERBs
         if surface.endswith("s") and len(surface) > 2:
-            return {"surface": surface, "lemma": surface[:-1],
-                    "form": "present_3sg",
-                    "provenance": "regular_-s_rule"}
+            candidates = [surface[:-1]]
+            if surface.endswith("ies"):
+                candidates.append(surface[:-3] + "y")  # carries->carry
+            if surface.endswith("es"):
+                candidates.append(surface[:-2])
+            for lemma in candidates:
+                if known_base(lemma):
+                    return {"surface": surface, "lemma": lemma,
+                            "form": "present_3sg",
+                            "provenance": "regular_-s_rule"}
         return None
 
     def to_json(self) -> Dict:
@@ -124,8 +144,17 @@ def validate_construction(rule: Dict) -> List[str]:
     for element in pattern:
         if not isinstance(element, str) or not element:
             defects.append(f"bad pattern element {element!r}")
-        elif element.startswith("NP:") or element.startswith("NPPL:"):
-            slot_names.add(element.split(":")[1])
+        elif element.startswith("NP:") or element.startswith("NPPL:") \
+                or element.startswith("PRON:") \
+                or element.startswith("NPOSS:") \
+                or element.startswith("QUANT:") \
+                or element.startswith("ADV:"):
+            parts = element.split(":")
+            if len(parts) != 2 or not parts[1]:
+                defects.append(f"slot needs exactly one name: "
+                               f"{element!r}")
+            else:
+                slot_names.add(parts[1])
         elif element.startswith("VERB:"):
             parts = element.split(":")
             if len(parts) != 3:
@@ -289,6 +318,39 @@ class ConstructionParser:
                 if matched is None:
                     return None
                 bindings[element.split(":")[1]], i = matched
+            elif element.startswith("PRON:"):
+                entry = (self.lexicon.lookup(tokens[i])
+                         if i < len(tokens) else None)
+                if entry is None or entry.pos != "pronoun":
+                    return None
+                # pronouns bind UNRESOLVED ('pron:it') - antecedent
+                # resolution is the router's discourse job, never the
+                # grammar's (certainty is never invented at parse time)
+                bindings[element.split(":")[1]] = "pron:" + entry.sense
+                i += 1
+            elif element.startswith("NPOSS:"):
+                word = tokens[i] if i < len(tokens) else ""
+                if not word.endswith("'s"):
+                    return None
+                noun = self._noun_entry(word[:-2])
+                if noun is None:
+                    return None
+                bindings[element.split(":")[1]] = noun[0]
+                i += 1
+            elif element.startswith("QUANT:"):
+                entry = (self.lexicon.lookup(tokens[i])
+                         if i < len(tokens) else None)
+                if entry is None or entry.pos != "quant":
+                    return None
+                bindings[element.split(":")[1]] = entry.sense
+                i += 1
+            elif element.startswith("ADV:"):
+                entry = (self.lexicon.lookup(tokens[i])
+                         if i < len(tokens) else None)
+                if entry is None or entry.pos != "adv":
+                    return None
+                bindings[element.split(":")[1]] = entry.sense
+                i += 1
             else:
                 if i >= len(tokens) or tokens[i] != element:
                     return None

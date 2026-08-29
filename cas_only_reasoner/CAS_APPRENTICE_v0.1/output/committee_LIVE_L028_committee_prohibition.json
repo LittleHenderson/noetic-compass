@@ -1,0 +1,361 @@
+{
+ "after": {
+  "answer": {
+   "frame_core": {
+    "agent": "cat",
+    "frame": "event",
+    "modality": "prohibition",
+    "patient": "dog",
+    "polarity": "positive",
+    "predicate": "chase",
+    "tense": "present"
+   },
+   "meaning": {
+    "args": [
+     {
+      "args": [
+       "chase",
+       "cat",
+       "dog"
+      ],
+      "pred": "relation"
+     }
+    ],
+    "pred": "prohibition"
+   },
+   "status": "UNDERSTOOD"
+  },
+  "cas_ohm": {
+   "I_obs": 6.0,
+   "I_pred": 6.0,
+   "R_capability": 0.0,
+   "R_compute": 0.0,
+   "R_context": 0.0,
+   "R_lexical": 0.0,
+   "R_policy": 0.0,
+   "R_role_binding": 0.0,
+   "R_total": 1.0,
+   "V_drive": 6.0,
+   "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+   "delta_I": 0.0,
+   "effect_type": "UNDERSTOOD",
+   "mode": "native_runtime",
+   "operating_region": "active",
+   "provenance": "cas_ohm_attention_plane_v0.1",
+   "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+   "stage_id": "language_pipeline",
+   "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+  },
+  "commitment": {
+   "by": "cas_learned_grammar",
+   "construction": "prohibited_transitive"
+  },
+  "committed": true,
+  "cortex_proposal": null,
+  "frame": {
+   "core": {
+    "agent": "cat",
+    "frame": "event",
+    "modality": "prohibition",
+    "patient": "dog",
+    "polarity": "positive",
+    "predicate": "chase",
+    "tense": "present"
+   },
+   "surface": {
+    "construction_id": "prohibited_transitive",
+    "modality_marker": "must_not",
+    "mood": "declarative"
+   }
+  },
+  "input": "the cat must not chase the dog.",
+  "mode": "NATIVE_ONLY",
+  "route": "native_gram",
+  "trace_digest": "6ecaa83f0f33c1fa",
+  "validation": null
+ },
+ "before": {
+  "answer": {
+   "detail": "I did not understand 'the' at word 1 of 'the cat must not chase the dog.' (sentence pattern not supported)",
+   "status": "UNSUPPORTED_LANGUAGE"
+  },
+  "cas_ohm": {
+   "I_obs": 2.0,
+   "I_pred": 6.0,
+   "R_capability": 2.0,
+   "R_compute": 0.0,
+   "R_context": 0.0,
+   "R_lexical": 0.0,
+   "R_policy": 0.0,
+   "R_role_binding": 0.0,
+   "R_total": 3.0,
+   "V_drive": 6.0,
+   "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+   "delta_I": -4.0,
+   "effect_type": "UNSUPPORTED_LANGUAGE",
+   "mode": "native_runtime",
+   "operating_region": "cutoff",
+   "provenance": "cas_ohm_attention_plane_v0.1",
+   "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+   "stage_id": "language_pipeline",
+   "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+  },
+  "commitment": null,
+  "committed": false,
+  "cortex_proposal": null,
+  "input": "the cat must not chase the dog.",
+  "mode": "NATIVE_ONLY",
+  "native_error": {
+   "message": "I did not understand 'the' at word 1 of 'the cat must not chase the dog.' (sentence pattern not supported)",
+   "word": "the"
+  },
+  "route": "no_answer",
+  "trace_digest": "06ee059ddc9e7ebc",
+  "validation": null
+ },
+ "critic": "deepseek.v3-v1:0",
+ "episode": {
+  "domain": "behavioral_norms",
+  "episode_digest": "05d134f27926eb3f",
+  "examiner_identity": "ccb_l1_acceptance_ladder",
+  "lesson_id": "LIVE_L028_committee_prohibition",
+  "outcome": {
+   "episode_digest": "072b917f6d165911",
+   "evidence": [
+    {
+     "detail": "typed lesson packet complete",
+     "passed": true,
+     "stage": "PROPOSED"
+    },
+    {
+     "detail": "construction schema valid",
+     "passed": true,
+     "stage": "SCHEMA_VALID"
+    },
+    {
+     "detail": "rule matches first positive example: True",
+     "passed": true,
+     "stage": "COMPILED"
+    },
+    {
+     "detail": "2 examples ok",
+     "passed": true,
+     "stage": "POSITIVE_EXAMPLES_PASS"
+    },
+    {
+     "detail": "contrasts held",
+     "passed": true,
+     "stage": "CONTRAST_TESTS_PASS"
+    },
+    {
+     "detail": "3 unseen cases ok",
+     "passed": true,
+     "stage": "HELD_OUT_GENERALIZATION_PASS"
+    },
+    {
+     "detail": "no prior rule regressed",
+     "passed": true,
+     "stage": "PRIOR_GRAMMAR_REGRESSION_PASS"
+    },
+    {
+     "detail": "ambiguity honest",
+     "passed": true,
+     "stage": "AMBIGUITY_BEHAVIOR_PASS"
+    },
+    {
+     "detail": "replay identical",
+     "passed": true,
+     "stage": "DETERMINISTIC_REPLAY"
+    },
+    {
+     "detail": "all gates passed; promoting with rollback preserved",
+     "passed": true,
+     "stage": "PROMOTED_PROVISIONALLY"
+    }
+   ],
+   "verdict": "PROMOTED_PROVISIONALLY"
+  },
+  "post_learning_capability": null,
+  "pre_learning_capability": null,
+  "provenance": "schema_constrained_field_elicitation+two_model_committee",
+  "rollback_pointer": null,
+  "target": "grammar_store",
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer"
+ },
+ "event": "COMMITTEE_LESSON",
+ "lesson": {
+  "ambiguity_cases": [
+   {
+    "expect": "parsed",
+    "sentence": "The cat must not chase the dog."
+   }
+  ],
+  "committee": [
+   {
+    "model": "qwen.qwen3-32b-v1:0",
+    "reasons": [
+     "author of the lesson"
+    ],
+    "role": "lecturer",
+    "vote": "approve"
+   },
+   {
+    "model": "deepseek.v3-v1:0",
+    "reasons": [],
+    "role": "critic",
+    "vote": "approve"
+   }
+  ],
+  "construction": {
+   "construction_id": "prohibited_transitive",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "modality": "prohibition",
+    "patient": "@patient",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "tense": "present"
+   },
+   "surface_meta": {
+    "modality_marker": "must_not",
+    "mood": "declarative"
+   },
+   "surface_pattern": [
+    "NP:agent",
+    "must",
+    "not",
+    "VERB:pred:base",
+    "the",
+    "NP:patient"
+   ]
+  },
+  "counterexamples": [
+   {
+    "sentence": "the dog must not the cat chase"
+   },
+   {
+    "sentence": "must not the cat chase dog the"
+   }
+  ],
+  "lesson_id": "LIVE_L028_committee_prohibition",
+  "lesson_type": "grammar_construction",
+  "minimal_pairs": [
+   {
+    "relation": "different_meaning",
+    "sentence_a": "the cat must not chase the dog",
+    "sentence_b": "the dog must not chase the cat"
+   },
+   {
+    "relation": "different_meaning",
+    "sentence_a": "the fox must not eat the hen",
+    "sentence_b": "the hen must not eat the fox"
+   }
+  ],
+  "morphology": [
+   {
+    "form": "base",
+    "lemma": "chase",
+    "surface": "chase"
+   },
+   {
+    "form": "past",
+    "lemma": "chase",
+    "surface": "chased"
+   },
+   {
+    "form": "participle",
+    "lemma": "chase",
+    "surface": "chased"
+   },
+   {
+    "form": "present_3sg",
+    "lemma": "chase",
+    "surface": "chases"
+   }
+  ],
+  "positive_examples": [
+   {
+    "expected_core": {
+     "agent": "cat",
+     "frame": "event",
+     "modality": "prohibition",
+     "patient": "dog",
+     "polarity": "positive",
+     "predicate": "chase",
+     "tense": "present"
+    },
+    "sentence": "the cat must not chase the dog."
+   },
+   {
+    "expected_core": {
+     "agent": "fox",
+     "frame": "event",
+     "modality": "prohibition",
+     "patient": "hen",
+     "polarity": "positive",
+     "predicate": "chase",
+     "tense": "present"
+    },
+    "sentence": "the fox must not chase the hen."
+   }
+  ],
+  "provenance": "schema_constrained_field_elicitation+two_model_committee",
+  "semantics_provenance": "derived_from_teacher_pattern_by_schema_scaffold",
+  "teacher_confidence": null,
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "surface_pattern",
+   "raw": "```json\n[\"NP:agent\", \"must\", \"not\", \"VERB:pred:base\", \"the\", \"NP:patient\"]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "morphology",
+   "raw": "[{\"surface\": \"chase\", \"lemma\": \"chase\", \"form\": \"base\"}, {\"surface\": \"chased\", \"lemma\": \"chase\", \"form\": \"past\"}, {\"surface\": \"chased\", \"lemma\": \"chase\", \"form\": \"participle\"}, {\"surface\": \"chases\", \"lemma\": \"chase\", \"form\": \"present_3sg\"}]"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "positive_examples",
+   "raw": "```json\n[\n  {\n    \"sentence\": \"the cat must not chase the dog.\",\n    \"expected_core\": {\n      \"frame\": \"event\",\n      \"predicate\": \"chase\",\n      \"agent\": \"cat\",\n      \"patient\": \"dog\",\n      \"tense\": \"present\",\n      \"polarity\": \"positive\",\n      \"modality\": \"prohibition\"\n    }\n  },\n  {\n    \"senten"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "minimal_pairs",
+   "raw": "```json\n[\n  {\n    \"sentence_a\": \"the cat must not chase the dog\",\n    \"sentence_b\": \"the dog must not chase the cat\",\n    \"relation\": \"different_meaning\"\n  },\n  {\n    \"sentence_a\": \"the fox must not eat the hen\",\n    \"sentence_b\": \"the hen must not eat the fox\",\n    \"relation\": \"different_meaning\"\n "
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "counterexamples",
+   "raw": "```json\n[\n  { \"sentence\": \"the dog must not the cat chase\" },\n  { \"sentence\": \"must not the cat chase dog the\" }\n]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "ambiguity_cases",
+   "raw": "```json\n[\n  {\n    \"sentence\": \"The cat must not chase the dog.\",\n    \"expect\": \"parsed\"\n  }\n]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "committee_review",
+   "raw": "{\"vote\": \"approve\"}"
+  }
+ ],
+ "proposer": "qwen.qwen3-32b-v1:0",
+ "retention": {
+  "construction_id": "prohibited_transitive",
+  "verdict": "PROMOTED_DURABLY"
+ },
+ "verdict": "PROMOTED_PROVISIONALLY"
+}

@@ -1,0 +1,205 @@
+{
+ "event": "VOCABULARY_LESSONS",
+ "results": [
+  {
+   "after": {
+    "answer": {
+     "frame_core": {
+      "agent": "cat",
+      "agent_mod": "small",
+      "frame": "event",
+      "patient": "dog",
+      "patient_mod": "large",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "meaning": {
+      "args": [
+       {
+        "args": [
+         "chase",
+         "cat",
+         "dog"
+        ],
+        "pred": "relation"
+       },
+       {
+        "args": [
+         "cat",
+         "small"
+        ],
+        "pred": "property"
+       },
+       {
+        "args": [
+         "dog",
+         "large"
+        ],
+        "pred": "property"
+       }
+      ],
+      "pred": "conjunction"
+     },
+     "status": "UNDERSTOOD"
+    },
+    "cas_ohm": {
+     "I_obs": 6.0,
+     "I_pred": 6.0,
+     "R_capability": 0.0,
+     "R_compute": 0.0,
+     "R_context": 0.0,
+     "R_lexical": 0.0,
+     "R_policy": 0.0,
+     "R_role_binding": 0.0,
+     "R_total": 1.0,
+     "V_drive": 6.0,
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "delta_I": 0.0,
+     "effect_type": "UNDERSTOOD",
+     "mode": "native_runtime",
+     "operating_region": "active",
+     "provenance": "cas_ohm_attention_plane_v0.1",
+     "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+     "stage_id": "language_pipeline",
+     "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+    },
+    "commitment": {
+     "by": "cas_learned_grammar",
+     "construction": "attributive_adjective_transitive"
+    },
+    "committed": true,
+    "cortex_proposal": null,
+    "frame": {
+     "core": {
+      "agent": "cat",
+      "agent_mod": "small",
+      "frame": "event",
+      "patient": "dog",
+      "patient_mod": "large",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "surface": {
+      "construction_id": "attributive_adjective_transitive",
+      "mood": "declarative"
+     }
+    },
+    "input": "the small cat chases the large dog.",
+    "mode": "NATIVE_ONLY",
+    "route": "native_gram",
+    "trace_digest": "ed2aa11880a6b419",
+    "validation": null
+   },
+   "before": {
+    "answer": {
+     "detail": "I did not understand 'the' at word 1 of 'the small cat chases the large dog.' (sentence pattern not supported)",
+     "status": "UNSUPPORTED_LANGUAGE"
+    },
+    "cas_ohm": {
+     "I_obs": 2.0,
+     "I_pred": 6.0,
+     "R_capability": 2.0,
+     "R_compute": 0.0,
+     "R_context": 0.0,
+     "R_lexical": 0.0,
+     "R_policy": 0.0,
+     "R_role_binding": 0.0,
+     "R_total": 3.0,
+     "V_drive": 6.0,
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "delta_I": -4.0,
+     "effect_type": "UNSUPPORTED_LANGUAGE",
+     "mode": "native_runtime",
+     "operating_region": "cutoff",
+     "provenance": "cas_ohm_attention_plane_v0.1",
+     "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+     "stage_id": "language_pipeline",
+     "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+    },
+    "commitment": null,
+    "committed": false,
+    "cortex_proposal": null,
+    "input": "the small cat chases the large dog.",
+    "mode": "NATIVE_ONLY",
+    "native_error": {
+     "message": "I did not understand 'the' at word 1 of 'the small cat chases the large dog.' (sentence pattern not supported)",
+     "word": "the"
+    },
+    "route": "no_answer",
+    "trace_digest": "2ac0bcc9cb42f0a1",
+    "validation": null
+   },
+   "episode": {
+    "domain": "language_vocabulary",
+    "episode_digest": "f5a280be1b924ff7",
+    "examiner_identity": "vocabulary_generalization_examiner",
+    "lesson_id": "LIVE_L027_new_adjectives",
+    "outcome": {
+     "episode_digest": "",
+     "evidence": [
+      {
+       "detail": "typed vocabulary proposal complete",
+       "passed": true,
+       "stage": "PROPOSED"
+      },
+      {
+       "detail": "entries validated field-wise",
+       "passed": true,
+       "stage": "SCHEMA_VALID"
+      },
+      {
+       "detail": "merge law held - no prior knowledge overwritten",
+       "passed": true,
+       "stage": "MERGE_SAFE"
+      },
+      {
+       "detail": "4 unseen cases parse through EXISTING constructions",
+       "passed": true,
+       "stage": "HELD_OUT_GENERALIZATION_PASS"
+      },
+      {
+       "detail": "every prior regression guard still holds",
+       "passed": true,
+       "stage": "PRIOR_KNOWLEDGE_REGRESSION_PASS"
+      }
+     ],
+     "verdict": "PROMOTED_PROVISIONALLY"
+    },
+    "post_learning_capability": null,
+    "pre_learning_capability": null,
+    "provenance": "schema_constrained_field_elicitation",
+    "rollback_pointer": null,
+    "target": "morph_table+lexicon",
+    "teacher_identity": "qwen.qwen3-32b-v1:0",
+    "teacher_revision": "bedrock:us-west-2",
+    "teacher_role": "lecturer"
+   },
+   "lesson_id": "LIVE_L027_new_adjectives",
+   "log": [
+    {
+     "attempt": 1,
+     "defect": null,
+     "raw": "{\"small\": {\"pos\": \"adj\", \"sense\": \"small\"}, \"large\": {\"pos\": \"adj\", \"sense\": \"large\"}}"
+    }
+   ],
+   "proposal": {
+    "large": {
+     "pos": "adj",
+     "sense": "large"
+    },
+    "small": {
+     "pos": "adj",
+     "sense": "small"
+    }
+   },
+   "retention": {
+    "failures": [],
+    "verdict": "PROMOTED_DURABLY"
+   },
+   "verdict": "PROMOTED_PROVISIONALLY"
+  }
+ ],
+ "teacher": "qwen.qwen3-32b-v1:0"
+}

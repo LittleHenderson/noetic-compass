@@ -149,3 +149,46 @@ def test_teaching_metrics():
     assert metrics["teacher_dependence"] == 0.2
     assert metrics["retention"] == 0.96
     assert metrics["false_lesson_rate"] == 0.0
+
+
+# --------------------------------------------- the committee record
+def _committee_lesson(committee):
+    lesson = _fact_lesson("water boils at 100 C at sea level")
+    lesson["committee"] = committee
+    return lesson
+
+
+def test_committee_needs_two_distinct_identities():
+    board = ApprenticeshipBoard()
+    episode = board.teach(
+        _committee_lesson([{"model": "m1", "vote": "approve"}]),
+        KnowledgeChannel(_trusted()))
+    assert episode["outcome"]["verdict"]         == "REJECTED_COMMITTEE_COMPOSITION"
+    episode = board.teach(
+        _committee_lesson([{"model": "m1", "vote": "approve"},
+                           {"model": "m1", "vote": "approve"}]),
+        KnowledgeChannel(_trusted()))
+    assert episode["outcome"]["verdict"]         == "REJECTED_COMMITTEE_COMPOSITION"
+
+
+def test_committee_reject_vote_blocks_promotion_typed():
+    board = ApprenticeshipBoard()
+    episode = board.teach(
+        _committee_lesson([
+            {"model": "m1", "vote": "approve"},
+            {"model": "m2", "vote": "reject",
+             "reasons": ["the pattern does not match the shape"]}]),
+        KnowledgeChannel(_trusted()))
+    assert episode["outcome"]["verdict"] == "REJECTED_BY_COMMITTEE"
+    assert episode["outcome"]["evidence"][0]["model"] == "m2"
+
+
+def test_committee_approval_grants_nothing_examiner_still_runs():
+    board = ApprenticeshipBoard()
+    episode = board.teach(
+        _committee_lesson([{"model": "m1", "vote": "approve"},
+                           {"model": "m2", "vote": "approve"}]),
+        KnowledgeChannel(_trusted()))
+    # the frozen examiner ran and produced ITS verdict - committee
+    # approval only unlocked the door to it
+    assert episode["outcome"]["verdict"] == "PROMOTED_VERIFIED"
