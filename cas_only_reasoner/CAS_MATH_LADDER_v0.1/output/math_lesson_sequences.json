@@ -1,0 +1,133 @@
+{
+ "after": {
+  "answer": "14",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned sequences yet",
+  "missing_skill": "sequences",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "5ce82fbe31ade2f0",
+  "episode_digest": "bf5ef3f287a0b145",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_sequences",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "1b7efb5d032613bd",
+   "parent_revision": 14
+  },
+  "skill_id": "sequences",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "4 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '14', 'right': '20'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 15",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "```json\n{\n  \"equations\": [\n    \"2 + 4 * 3 = 14\",\n    \"a + (n - 1) * d = t(n)\",\n    \"S(n) = n / 2 * (2 * a + (n - 1) * d)\",\n    \"a * r^(n - 1) = t(n)\",\n    \"S(n) = a * (1 - r^n) / (1 - r)\"\n  ]\n}\n```\n\nA"
+  },
+  {
+   "attempt": 1,
+   "defect": "'5 * 2^(3) = 40' does not parse: '^' needs an integer exponent. Use only integers, fractions like 1/2, + - * ^ ( ) and one '='",
+   "field": "worked_examples",
+   "raw": "[\n  \"2 + 3*(5-1) = 14\",\n  \"5 * 2^(3) = 40\",\n  \"10 + 2*(4-1) = 16\",\n  \"3 * (1/2)^(2) = 3/4\"\n]"
+  },
+  {
+   "attempt": 2,
+   "defect": "'4 * (2 + 5/2) = 26/1' is FALSE - the exact checker refutes it (witness: {'point': {}, 'left': '18', 'right': '26'}). Every worked example must be exactly true",
+   "field": "worked_examples",
+   "raw": "[\"2 + 4 * 3 = 14\", \"5 * 2^3 = 40\", \"3 * (1 + 2 + 4 + 8) = 45\", \"4 * (2 + 5/2) = 26/1\"]"
+  },
+  {
+   "attempt": 3,
+   "defect": "'2*(3^2 + 4) = 22' is FALSE - the exact checker refutes it (witness: {'point': {}, 'left': '26', 'right': '22'}). Every worked example must be exactly true",
+   "field": "worked_examples",
+   "raw": "[\"2 + 3*(5-1) = 14\", \"4*(1/2 + 3) = 14/1\", \"2*(3^2 + 4) = 22\", \"3/2 + 2*(5-1) = 9/2 + 2\"]"
+  },
+  {
+   "attempt": 4,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "[\"2 + 3*(5 - 1) = 14\", \"2*3^2 = 18\", \"4 + 2*(5 - 1) = 12\", \"2 + 3*(4 - 1) = 11\"]"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "```json\n{\n  \"true_equation\": \"2 + 4 * 3 = 14\",\n  \"false_equation\": \"2 + 3 * 4 = 20\"\n}\n```"
+  }
+ ],
+ "packet": {
+  "common_mistake": "2 + 3 * 4 = 20",
+  "explanation": "{\n  \"equations\": [\n    \"2 + 4 * 3 = 14\",\n    \"a + (n - 1) * d = t(n)\",\n    \"S(n) = n / 2 * (2 * a + (n - 1) * d)\",\n    \"a * r^(n - 1) = t(n)\",\n    \"S(n) = a * (1 - r^n) / (1 - r)\"\n  ]\n}\n\n\nArithmetic sequences have a constant difference between terms, while geometric sequences have a constant ratio. The nth term and sum formulas help find any term or total of the first n terms.",
+  "lesson_id": "MATH_sequences",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "sequences",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "2 + 3*(5 - 1) = 14",
+   "2*3^2 = 18",
+   "4 + 2*(5 - 1) = 12",
+   "2 + 3*(4 - 1) = 11"
+  ]
+ },
+ "skill_id": "sequences"
+}

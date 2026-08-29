@@ -59,9 +59,93 @@
    "provenance": "lesson:MATH_linear_equations|teacher:qwen.qwen3-32b-v1:0",
    "revision": 10,
    "skill_id": "linear_equations"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_functions_evaluation|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 11,
+   "skill_id": "functions_evaluation"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_coordinate_slope|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 12,
+   "skill_id": "coordinate_slope"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_geometry_points|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 13,
+   "skill_id": "geometry_points"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_geometry_shapes|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 14,
+   "skill_id": "geometry_shapes"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_sequences|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 15,
+   "skill_id": "sequences"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_derivatives_polynomial|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 16,
+   "skill_id": "derivatives_polynomial"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_integrals_polynomial|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 17,
+   "skill_id": "integrals_polynomial"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_matrices_2x2|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 18,
+   "skill_id": "matrices_2x2"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_probability_finite|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 19,
+   "skill_id": "probability_finite"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_statistics_basic|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 20,
+   "skill_id": "statistics_basic"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_axiom_commutativity|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 21,
+   "skill_id": "axiom_commutativity"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_axiom_square_expand|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 22,
+   "skill_id": "axiom_square_expand"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_formal_proofs|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 23,
+   "skill_id": "formal_proofs"
+  },
+  {
+   "action": "PROMOTED",
+   "provenance": "lesson:MATH_conjecture_discovery|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 24,
+   "skill_id": "conjecture_discovery"
   }
  ],
- "revision": 10,
+ "revision": 24,
  "skills": {
   "addition": {
    "formal": {
@@ -142,6 +226,190 @@
    ],
    "skill_id": "algebra_distribute"
   },
+  "axiom_commutativity": {
+   "formal": {
+    "lhs": "a + b",
+    "rhs": "b + a"
+   },
+   "kind": "rewrite_rule",
+   "level": "MATH-L9",
+   "packet_digest": "e3001f39d7d19946",
+   "provenance": "lesson:MATH_axiom_commutativity|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "864687de31146a6b",
+   "regression_guard": [
+    {
+     "exercise_id": "axiom_commutativity:90210:0",
+     "expected_equal_to": "y + 2",
+     "expr": "2 + y",
+     "kind": "rewrite",
+     "rule_skill": "axiom_commutativity",
+     "skill_id": "axiom_commutativity"
+    },
+    {
+     "exercise_id": "axiom_commutativity:90210:1",
+     "expected_equal_to": "y + 2",
+     "expr": "2 + y",
+     "kind": "rewrite",
+     "rule_skill": "axiom_commutativity",
+     "skill_id": "axiom_commutativity"
+    },
+    {
+     "exercise_id": "axiom_commutativity:90210:2",
+     "expected_equal_to": "7 + 5",
+     "expr": "5 + 7",
+     "kind": "rewrite",
+     "rule_skill": "axiom_commutativity",
+     "skill_id": "axiom_commutativity"
+    }
+   ],
+   "skill_id": "axiom_commutativity"
+  },
+  "axiom_square_expand": {
+   "formal": {
+    "lhs": "(a + b)^2",
+    "rhs": "a^2 + 2*a*b + b^2"
+   },
+   "kind": "rewrite_rule",
+   "level": "MATH-L9",
+   "packet_digest": "ac800c00d0a65f32",
+   "provenance": "lesson:MATH_axiom_square_expand|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "3fe126354c8c7f22",
+   "regression_guard": [
+    {
+     "exercise_id": "axiom_square_expand:90210:0",
+     "expected_equal_to": "z^2 + 10 * z + 25",
+     "expr": "(z + 5)^2",
+     "kind": "rewrite",
+     "rule_skill": "axiom_square_expand",
+     "skill_id": "axiom_square_expand"
+    },
+    {
+     "exercise_id": "axiom_square_expand:90210:1",
+     "expected_equal_to": "y^2 + 6 * y + 9",
+     "expr": "(y + 3)^2",
+     "kind": "rewrite",
+     "rule_skill": "axiom_square_expand",
+     "skill_id": "axiom_square_expand"
+    },
+    {
+     "exercise_id": "axiom_square_expand:90210:2",
+     "expected_equal_to": "y^2 + 6 * y + 9",
+     "expr": "(y + 3)^2",
+     "kind": "rewrite",
+     "rule_skill": "axiom_square_expand",
+     "skill_id": "axiom_square_expand"
+    }
+   ],
+   "skill_id": "axiom_square_expand"
+  },
+  "conjecture_discovery": {
+   "formal": {
+    "definition_examples": [
+     "2^2 - 3^2 = -5",
+     "1/2 + 1/3 = 5/6",
+     "4 * (5 - 2) = 12",
+     "3^3 / 9 = 3"
+    ]
+   },
+   "kind": "discovery",
+   "level": "MATH-L10",
+   "packet_digest": "d431cfb0b8178e51",
+   "provenance": "lesson:MATH_conjecture_discovery|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "d119957e5cbcdba9",
+   "regression_guard": [
+    {
+     "budget": 30,
+     "exercise_id": "conjecture_discovery:90210:0",
+     "expected": "discovery_verified",
+     "kind": "discovery_round",
+     "min_proved": 1,
+     "min_refuted": 2,
+     "seed": 321011,
+     "skill_id": "conjecture_discovery"
+    },
+    {
+     "budget": 30,
+     "exercise_id": "conjecture_discovery:90210:1",
+     "expected": "discovery_verified",
+     "kind": "discovery_round",
+     "min_proved": 1,
+     "min_refuted": 2,
+     "seed": 263748,
+     "skill_id": "conjecture_discovery"
+    },
+    {
+     "budget": 30,
+     "exercise_id": "conjecture_discovery:90210:2",
+     "expected": "discovery_verified",
+     "kind": "discovery_round",
+     "min_proved": 1,
+     "min_refuted": 2,
+     "seed": 732623,
+     "skill_id": "conjecture_discovery"
+    }
+   ],
+   "skill_id": "conjecture_discovery"
+  },
+  "coordinate_slope": {
+   "formal": {
+    "definition_examples": [
+     "(8 - 3) * 1/5 = 1",
+     "(10 - 6) * 1/2 = 2",
+     "(9 - 1) * 1/4 = 2",
+     "(7 - 4) * 2/3 = 2"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L5",
+   "packet_digest": "5ee4384bace74442",
+   "provenance": "lesson:MATH_coordinate_slope|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "77d323efad956ed3",
+   "regression_guard": [
+    {
+     "exercise_id": "coordinate_slope:90210:0",
+     "expected": "3/2",
+     "kind": "slope",
+     "p1": [
+      "1",
+      "-5"
+     ],
+     "p2": [
+      "5",
+      "1"
+     ],
+     "skill_id": "coordinate_slope"
+    },
+    {
+     "exercise_id": "coordinate_slope:90210:1",
+     "expected": "1",
+     "kind": "slope",
+     "p1": [
+      "-1",
+      "-2"
+     ],
+     "p2": [
+      "4",
+      "3"
+     ],
+     "skill_id": "coordinate_slope"
+    },
+    {
+     "exercise_id": "coordinate_slope:90210:2",
+     "expected": "-6",
+     "kind": "slope",
+     "p1": [
+      "-4",
+      "1"
+     ],
+     "p2": [
+      "-3",
+      "-5"
+     ],
+     "skill_id": "coordinate_slope"
+    }
+   ],
+   "skill_id": "coordinate_slope"
+  },
   "counting_order": {
    "formal": {
     "definition_examples": [
@@ -180,6 +448,48 @@
     }
    ],
    "skill_id": "counting_order"
+  },
+  "derivatives_polynomial": {
+   "formal": {
+    "definition_examples": [
+     "2 * 3 = 6",
+     "3 * 4^2 = 48",
+     "1/2 * 6^1 = 3",
+     "4 * 2^3 = 32"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L7",
+   "packet_digest": "ca9a62a670f15bc4",
+   "provenance": "lesson:MATH_derivatives_polynomial|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "08f7356a03d4e8c3",
+   "regression_guard": [
+    {
+     "exercise_id": "derivatives_polynomial:90210:0",
+     "expected_equal_to": "(4 + (12 * x) + (12 * x^2))",
+     "expr": "4 * x^3 + 6 * x^2 + 4 * x",
+     "kind": "derivative",
+     "skill_id": "derivatives_polynomial",
+     "variable": "x"
+    },
+    {
+     "exercise_id": "derivatives_polynomial:90210:1",
+     "expected_equal_to": "(8 + (2 * x))",
+     "expr": "1 * x^2 + 8 * x + 1",
+     "kind": "derivative",
+     "skill_id": "derivatives_polynomial",
+     "variable": "x"
+    },
+    {
+     "exercise_id": "derivatives_polynomial:90210:2",
+     "expected_equal_to": "(6 + (18 * x) + (18 * x^2))",
+     "expr": "6 * x^3 + 9 * x^2 + 6 * x",
+     "kind": "derivative",
+     "skill_id": "derivatives_polynomial",
+     "variable": "x"
+    }
+   ],
+   "skill_id": "derivatives_polynomial"
   },
   "division": {
    "formal": {
@@ -226,6 +536,48 @@
    ],
    "skill_id": "division"
   },
+  "formal_proofs": {
+   "formal": {
+    "definition_examples": [
+     "(2 + 1)^2 = 9",
+     "3 * (4 + 5) = 27",
+     "1/2 + 1/2 = 1",
+     "5 - (3 + 1) = 1"
+    ]
+   },
+   "kind": "proof_search",
+   "level": "MATH-L9",
+   "packet_digest": "d1a7841dac74834f",
+   "provenance": "lesson:MATH_formal_proofs|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "fb2e6e821408b282",
+   "regression_guard": [
+    {
+     "exercise_id": "formal_proofs:90210:0",
+     "expected": "proved",
+     "kind": "prove",
+     "lhs_text": "(y + 1)^2",
+     "rhs_text": "y^2 + 2 * y + 1",
+     "skill_id": "formal_proofs"
+    },
+    {
+     "exercise_id": "formal_proofs:90210:1",
+     "expected": "proved",
+     "kind": "prove",
+     "lhs_text": "(x + 2)^2",
+     "rhs_text": "x^2 + 4 * x + 4",
+     "skill_id": "formal_proofs"
+    },
+    {
+     "exercise_id": "formal_proofs:90210:2",
+     "expected": "proved",
+     "kind": "prove",
+     "lhs_text": "3 * (y + 1)",
+     "rhs_text": "3 + 3 * y",
+     "skill_id": "formal_proofs"
+    }
+   ],
+   "skill_id": "formal_proofs"
+  },
   "fractions": {
    "formal": {
     "definition_examples": [
@@ -270,6 +622,179 @@
    ],
    "skill_id": "fractions"
   },
+  "functions_evaluation": {
+   "formal": {
+    "definition_examples": [
+     "2 * 3 + 1 = 7",
+     "5 + 6 = 11",
+     "4 + 5/2 = 13/2"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L5",
+   "packet_digest": "a5b91ba52e46bdfb",
+   "provenance": "lesson:MATH_functions_evaluation|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "375d7d5e18772a2c",
+   "regression_guard": [
+    {
+     "at": "3",
+     "exercise_id": "functions_evaluation:90210:0",
+     "expected": "13",
+     "fn": "4 * x + 1",
+     "kind": "func_eval",
+     "skill_id": "functions_evaluation"
+    },
+    {
+     "at": "-4",
+     "exercise_id": "functions_evaluation:90210:1",
+     "expected": "45",
+     "fn": "3 * x^2 + 1 * x + 1",
+     "kind": "func_eval",
+     "skill_id": "functions_evaluation"
+    },
+    {
+     "at": "2",
+     "exercise_id": "functions_evaluation:90210:2",
+     "expected": "24",
+     "fn": "9 * x + 6",
+     "kind": "func_eval",
+     "skill_id": "functions_evaluation"
+    }
+   ],
+   "skill_id": "functions_evaluation"
+  },
+  "geometry_points": {
+   "formal": {
+    "definition_examples": [
+     "(1 + 3)/2 = 2",
+     "(2 + 4)/2 = 3",
+     "(3 - 1)^2 + (4 - 2)^2 = 8",
+     "(5 - 2)^2 + (6 - 3)^2 = 18"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L6",
+   "packet_digest": "95e4877dadff5db6",
+   "provenance": "lesson:MATH_geometry_points|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "80b313fefeff8b49",
+   "regression_guard": [
+    {
+     "exercise_id": "geometry_points:90210:0",
+     "expected": "1,-3",
+     "kind": "midpoint",
+     "p1": [
+      "2",
+      "-1"
+     ],
+     "p2": [
+      "0",
+      "-5"
+     ],
+     "skill_id": "geometry_points"
+    },
+    {
+     "exercise_id": "geometry_points:90210:1",
+     "expected": "82",
+     "kind": "distance_squared",
+     "p1": [
+      "-4",
+      "2"
+     ],
+     "p2": [
+      "5",
+      "3"
+     ],
+     "skill_id": "geometry_points"
+    },
+    {
+     "exercise_id": "geometry_points:90210:2",
+     "expected": "-4,1/2",
+     "kind": "midpoint",
+     "p1": [
+      "-4",
+      "-2"
+     ],
+     "p2": [
+      "-4",
+      "3"
+     ],
+     "skill_id": "geometry_points"
+    }
+   ],
+   "skill_id": "geometry_points"
+  },
+  "geometry_shapes": {
+   "formal": {
+    "definition_examples": [
+     "5 * 5 * 1/2 = 25/2",
+     "3 * 4 * 1/2 = 6",
+     "7 * 2 * 1/2 = 7",
+     "10 * 3 * 1/2 = 15"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L6",
+   "packet_digest": "4c61a9461ea4e341",
+   "provenance": "lesson:MATH_geometry_shapes|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "e9b3a3710f7b9a1a",
+   "regression_guard": [
+    {
+     "a": [
+      "-4",
+      "-4"
+     ],
+     "b": [
+      "-2",
+      "-4"
+     ],
+     "c": [
+      "-4",
+      "2"
+     ],
+     "exercise_id": "geometry_shapes:90210:0",
+     "expected": "6",
+     "kind": "tri_area",
+     "skill_id": "geometry_shapes"
+    },
+    {
+     "exercise_id": "geometry_shapes:90210:1",
+     "expected": "yes",
+     "kind": "right_angle",
+     "p1": [
+      "6",
+      "5"
+     ],
+     "p2": [
+      "-2",
+      "5"
+     ],
+     "skill_id": "geometry_shapes",
+     "vertex": [
+      "2",
+      "1"
+     ]
+    },
+    {
+     "a": [
+      "0",
+      "0"
+     ],
+     "b": [
+      "4",
+      "0"
+     ],
+     "c": [
+      "0",
+      "5"
+     ],
+     "exercise_id": "geometry_shapes:90210:2",
+     "expected": "10",
+     "kind": "tri_area",
+     "skill_id": "geometry_shapes"
+    }
+   ],
+   "skill_id": "geometry_shapes"
+  },
   "integer_comparison": {
    "formal": {
     "definition_examples": [
@@ -312,6 +837,52 @@
    ],
    "skill_id": "integer_comparison"
   },
+  "integrals_polynomial": {
+   "formal": {
+    "definition_examples": [
+     "3^2 - 0^2 = 9",
+     "(2/3)*3^3 - (2/3)*0^3 = 18"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L7",
+   "packet_digest": "d975496778c64627",
+   "provenance": "lesson:MATH_integrals_polynomial|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "3f2e8c024430173e",
+   "regression_guard": [
+    {
+     "a": "-2",
+     "b": "2",
+     "exercise_id": "integrals_polynomial:90210:0",
+     "expected": "16",
+     "expr": "1 * x + 4",
+     "kind": "integral",
+     "skill_id": "integrals_polynomial",
+     "variable": "x"
+    },
+    {
+     "a": "-2",
+     "b": "-1",
+     "exercise_id": "integrals_polynomial:90210:1",
+     "expected": "12",
+     "expr": "3 * x^2 + 5",
+     "kind": "integral",
+     "skill_id": "integrals_polynomial",
+     "variable": "x"
+    },
+    {
+     "a": "-2",
+     "b": "1",
+     "exercise_id": "integrals_polynomial:90210:2",
+     "expected": "6",
+     "expr": "4 * x + 4",
+     "kind": "integral",
+     "skill_id": "integrals_polynomial",
+     "variable": "x"
+    }
+   ],
+   "skill_id": "integrals_polynomial"
+  },
   "linear_equations": {
    "formal": {
     "method": [
@@ -352,6 +923,82 @@
     }
    ],
    "skill_id": "linear_equations"
+  },
+  "matrices_2x2": {
+   "formal": {
+    "definition_examples": [
+     "1 * 4 - 2 * 3 = -2",
+     "3 * 2 - 1 * 4 = 2",
+     "2 * (-1) - 3 * 0 = -2",
+     "5 * 5 - 6 * 4 = 1"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L8",
+   "packet_digest": "493dd251bdba0f60",
+   "provenance": "lesson:MATH_matrices_2x2|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "0f360eb4f0a88930",
+   "regression_guard": [
+    {
+     "exercise_id": "matrices_2x2:90210:0",
+     "expected": "4",
+     "kind": "mat_det",
+     "m": [
+      [
+       "-3",
+       "1"
+      ],
+      [
+       "-1",
+       "-1"
+      ]
+     ],
+     "skill_id": "matrices_2x2"
+    },
+    {
+     "exercise_id": "matrices_2x2:90210:1",
+     "expected": "-1,-17;13,-21",
+     "kind": "mat_mul",
+     "m": [
+      [
+       "-4",
+       "3"
+      ],
+      [
+       "-3",
+       "5"
+      ]
+     ],
+     "n": [
+      [
+       "4",
+       "2"
+      ],
+      [
+       "5",
+       "-3"
+      ]
+     ],
+     "skill_id": "matrices_2x2"
+    },
+    {
+     "exercise_id": "matrices_2x2:90210:2",
+     "expected": "-18",
+     "kind": "mat_det",
+     "m": [
+      [
+       "6",
+       "5"
+      ],
+      [
+       "0",
+       "-3"
+      ]
+     ],
+     "skill_id": "matrices_2x2"
+    }
+   ],
+   "skill_id": "matrices_2x2"
   },
   "multiplication": {
    "formal": {
@@ -396,6 +1043,47 @@
     }
    ],
    "skill_id": "multiplication"
+  },
+  "probability_finite": {
+   "formal": {
+    "definition_examples": [
+     "1 - 1/6 = 5/6",
+     "1/2 * 1/3 = 1/6",
+     "1 - 1/4 = 3/4",
+     "1/2 + 1/3 = 5/6"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L8",
+   "packet_digest": "581e5a91af372c77",
+   "provenance": "lesson:MATH_probability_finite|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "f6e8e3f14fc566e2",
+   "regression_guard": [
+    {
+     "exercise_id": "probability_finite:90210:0",
+     "expected": "1/3",
+     "favorable": "2",
+     "kind": "prob",
+     "skill_id": "probability_finite",
+     "total": "6"
+    },
+    {
+     "exercise_id": "probability_finite:90210:1",
+     "expected": "1/10",
+     "kind": "prob_and",
+     "p1": "1/2",
+     "p2": "1/5",
+     "skill_id": "probability_finite"
+    },
+    {
+     "exercise_id": "probability_finite:90210:2",
+     "expected": "1/2",
+     "kind": "prob_complement",
+     "p": "1/2",
+     "skill_id": "probability_finite"
+    }
+   ],
+   "skill_id": "probability_finite"
   },
   "quantity_grounding": {
    "formal": {
@@ -473,6 +1161,109 @@
    ],
    "skill_id": "quantity_grounding"
   },
+  "sequences": {
+   "formal": {
+    "definition_examples": [
+     "2 + 3*(5 - 1) = 14",
+     "2*3^2 = 18",
+     "4 + 2*(5 - 1) = 12",
+     "2 + 3*(4 - 1) = 11"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L7",
+   "packet_digest": "7445064321e4a9c0",
+   "provenance": "lesson:MATH_sequences|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "e4d5bb1a2ef27d9d",
+   "regression_guard": [
+    {
+     "a1": "-2",
+     "d": "2",
+     "exercise_id": "sequences:90210:0",
+     "expected": "2",
+     "kind": "seq_term",
+     "n": "3",
+     "skill_id": "sequences",
+     "type": "arith"
+    },
+    {
+     "a1": "4",
+     "exercise_id": "sequences:90210:1",
+     "expected": "32",
+     "kind": "seq_term",
+     "n": "4",
+     "r": "2",
+     "skill_id": "sequences",
+     "type": "geom"
+    },
+    {
+     "a1": "3",
+     "d": "5",
+     "exercise_id": "sequences:90210:2",
+     "expected": "93",
+     "kind": "seq_sum",
+     "n": "6",
+     "skill_id": "sequences",
+     "type": "arith"
+    }
+   ],
+   "skill_id": "sequences"
+  },
+  "statistics_basic": {
+   "formal": {
+    "definition_examples": [
+     "(1 + 2 + 6) / 3 = 3",
+     "(3 + 7) / 2 = 5",
+     "2 + 4 + 8 = 14",
+     "(14) / 3 = 14/3"
+    ]
+   },
+   "kind": "computation",
+   "level": "MATH-L8",
+   "packet_digest": "5bee9da814ff4584",
+   "provenance": "lesson:MATH_statistics_basic|teacher:qwen.qwen3-32b-v1:0",
+   "record_digest": "1c1ec0f8e9657372",
+   "regression_guard": [
+    {
+     "exercise_id": "statistics_basic:90210:0",
+     "expected": "2/5",
+     "kind": "stat_mean",
+     "skill_id": "statistics_basic",
+     "values": [
+      "-1",
+      "-3",
+      "-4",
+      "12",
+      "-2"
+     ]
+    },
+    {
+     "exercise_id": "statistics_basic:90210:1",
+     "expected": "4",
+     "kind": "stat_median",
+     "skill_id": "statistics_basic",
+     "values": [
+      "4",
+      "-1",
+      "4"
+     ]
+    },
+    {
+     "exercise_id": "statistics_basic:90210:2",
+     "expected": "21/5",
+     "kind": "stat_mean",
+     "skill_id": "statistics_basic",
+     "values": [
+      "-1",
+      "1",
+      "5",
+      "5",
+      "11"
+     ]
+    }
+   ],
+   "skill_id": "statistics_basic"
+  },
   "subtraction": {
    "formal": {
     "definition_examples": [
@@ -519,5 +1310,5 @@
    "skill_id": "subtraction"
   }
  },
- "store_digest": "0a8226100ec05f61"
+ "store_digest": "77d51b93aa4f8f36"
 }

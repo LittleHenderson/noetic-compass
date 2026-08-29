@@ -1158,6 +1158,69 @@ engine):
   teacher wrote surface words where senses bind (hint sharpened).
   GRAMMAR now 33 durable constructions (30 + 3 math-bridge).
 
+THE FULL MATHEMATICS LADDER - MATH-L0 THROUGH MATH-L10, ALL 24
+SKILLS TAUGHT LIVE AND PROMOTED (2026-08-29, owner directive
+'CONTINUE TO L10. ALL OF THE GOAL'):
+  New levels, each entering ONLY where CAS-Math represents the
+  concept and the checker verifies it EXACTLY (the goal's own
+  bottleneck rule; scope disclosures on each):
+  - L5 functions_evaluation + coordinate_slope (polynomial functions,
+    rise-over-run - exact).
+  - L6 geometry_points + geometry_shapes (midpoint, SQUARED distance,
+    shoelace triangle area, right angles by dot product - exact
+    rational analytic geometry; transcendental trigonometry OUT OF
+    SCOPE, disclosed).
+  - L7 sequences + derivatives_polynomial + integrals_polynomial
+    (exact closed forms; the derivative is graded against an
+    INDEPENDENT re-derivation on canonical monomials; every definite
+    integral DIFFERENTIATES BACK to its integrand or the solver
+    refuses).
+  - L8 matrices_2x2 + probability_finite + statistics_basic (exact
+    determinants/products, favorable-over-total with exact
+    fractions, exact mean/median).
+  - L9 axiom_commutativity + axiom_square_expand (formal identities
+    over metavariables, canonically verified) + formal_proofs: a
+    bounded PROOF SEARCH over the student's OWN promoted rule
+    schemas, forward and backward, where every found proof is
+    re-verified by an INDEPENDENT examiner walk that also refuses
+    steps justified by FALSE schemas (tested: an evil
+    a*(b+c)=a*b+c step is rejected even with matching endpoints).
+  - L10 conjecture_discovery: enumerate candidate identities ->
+    ATTACK on the exact grid -> PROVE survivors by canonical
+    equality -> NOVELTY-check (alpha-normalized) against the
+    student's own library; a survivor without proof stays
+    CONJECTURE, never verified. LIVE RESULT (seed 12345, budget 60):
+    the machine DISCOVERED AND PROVED nine identities novel to its
+    library - including the difference of squares
+    (a+b)*(a-b) = a^2 - b^2, both binomial squares,
+    (a+b)^2 + (a-b)^2 = 2a^2 + 2b^2, and
+    (a+b)^2 - (a-b)^2 = 4ab - and refuted 22 perturbed candidates
+    with exact witnesses. SCOPE, exact: novelty is relative to the
+    machine's OWN library within the polynomial fragment (the same
+    honest scoping as the G10 'verified identity search' precedent)
+    - these are rediscoveries of known mathematics, novel to the
+    student, and every claim is independently machine-verified.
+  IR EXTENDED per the goal ('extend CAS-Math IR and the verifier
+  level by level'): the '/' division operator (constant divisors
+  become exact reciprocal multiplication; variable divisors are a
+  TYPED refusal - outside the polynomial class).
+  All 14 new lessons taught live by qwen.qwen3-32b-v1:0 (AWS
+  Bedrock), every BEFORE probe CANNOT_MISSING_SKILL, every AFTER
+  probe SOLVED; anti-smuggling examiners regression-locked
+  (false-schema proof steps, non-novel discovery claims, false
+  'proved' claims, broken refutation witnesses all rejected -
+  tested). Teacher-harness findings this round (all OURS, fixed):
+  the tokenizer's fraction-literal greed broke '3^2/2'; integral
+  and statistics prompts needed plain-arithmetic constraints (the
+  teacher reached for the integral sign and sorted() - reasonable
+  notation outside the surface); the defect-message fallback now
+  prefers a PARSEABLE candidate so 'your mistake is actually TRUE'
+  reaches the teacher instead of a parse error.
+
+PROGRAM TEST TOTALS refresh (2026-08-29, full-ladder round): 406
+local, 0 failures, 17 lanes (MATH-LADDER 18). MATH SKILL STORE:
+24/24 promoted, revision 24, ledger live-checks 24/24 PASS.
+
 PROGRAM TEST TOTALS refresh (2026-08-29, math round): RRK 34 + RLP
 45 + M1 34 + L1 32 + SEM 19 + WB 13 + CRQS 35 + T1 20 + OHM 10 +
 H2H 10 + LTG 11 + SM 8 + G10 8 + CORTEX 49 + A1 11 + D1 49 +

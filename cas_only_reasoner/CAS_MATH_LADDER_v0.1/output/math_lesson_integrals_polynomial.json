@@ -1,0 +1,126 @@
+{
+ "after": {
+  "answer": "9",
+  "status": "SOLVED",
+  "verified_by": "differentiate_back_check"
+ },
+ "before": {
+  "detail": "i have not learned integrals_polynomial yet",
+  "missing_skill": "integrals_polynomial",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "5ce82fbe31ade2f0",
+  "episode_digest": "c4953acc80f516bf",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_integrals_polynomial",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "492ff9e88d55ad01",
+   "parent_revision": 16
+  },
+  "skill_id": "integrals_polynomial",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "2 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '18', 'right': '36'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 17",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "The definite integral of a polynomial calculates the area under the curve between two points by finding the antiderivative and subtracting its value at the lower bound from its value at the upper boun"
+  },
+  {
+   "attempt": 1,
+   "defect": "'2 * (4^3 / 3 - 1^3 / 3) = 32' is FALSE - the exact checker refutes it (witness: {'point': {}, 'left': '42', 'right': '32'}). Every worked example must be exactly true",
+   "field": "worked_examples",
+   "raw": "[\"3^2 - 0^2 = 9\", \"2 * (4^3 / 3 - 1^3 / 3) = 32\", \"(5^4 / 4 - 2^4 / 4) = 609/4\", \"1/2 * (6^2 - 0^2) = 18\"]"
+  },
+  {
+   "attempt": 2,
+   "defect": "must be a JSON list of at least 2 equation strings",
+   "field": "worked_examples",
+   "raw": "```json\n[\"2 * (4^3 / 3 - 1^3 / 3) = 42\"]\n```"
+  },
+  {
+   "attempt": 3,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "[\"3^2 - 0^2 = 9\", \"(2/3)*3^3 - (2/3)*0^3 = 18\"]"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "{\"false_equation\": \"2 * 3^2 - 0 = 6^2\"}"
+  }
+ ],
+ "packet": {
+  "common_mistake": "2 * 3^2 - 0 = 6^2",
+  "explanation": "The definite integral of a polynomial calculates the area under the curve between two points by finding the antiderivative and subtracting its value at the lower bound from its value at the upper bound.\n\n\n{\n  \"concept\": \"THE DEFINITE INTEGRAL of a polynomial\",\n  \"example\": \"3^2 - 0^2 = 9\",\n  \"equation\": \"x^2 - 0^2 = 9\"\n}",
+  "lesson_id": "MATH_integrals_polynomial",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "integrals_polynomial",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "3^2 - 0^2 = 9",
+   "(2/3)*3^3 - (2/3)*0^3 = 18"
+  ]
+ },
+ "skill_id": "integrals_polynomial"
+}

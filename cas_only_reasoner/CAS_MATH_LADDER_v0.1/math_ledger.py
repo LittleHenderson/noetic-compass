@@ -31,7 +31,7 @@ def build() -> str:
     lines.append("## 1. What the machine can COMPUTE right now")
     lines.append("")
     lines.append(f"**Promoted skills: {len(store.skills)}** of "
-                 f"{len(SKILLS)} in the MATH-L0..L4 ladder "
+                 f"{len(SKILLS)} in the MATH-L0..L10 ladder "
                  f"(store revision {store.revision})")
     lines.append("")
     lines.append("| skill | level | kind | taught by | evidence |")

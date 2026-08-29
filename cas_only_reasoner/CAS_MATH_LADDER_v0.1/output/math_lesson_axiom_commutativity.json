@@ -1,0 +1,127 @@
+{
+ "after": {
+  "answer_expr": "(3 + x)",
+  "canonical_equal_to_input": true,
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned axiom_commutativity yet",
+  "missing_skill": "axiom_commutativity",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "5ce82fbe31ade2f0",
+  "episode_digest": "2289a1d405b55055",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_axiom_commutativity",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "47bd910497b6b79a",
+   "parent_revision": 20
+  },
+  "skill_id": "axiom_commutativity",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "3 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "canonical schema equality holds - the rule is sound for this class",
+    "passed": true,
+    "stage": "RULE_SURVIVES_ATTACK"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '-1', 'right': '1'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 21",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "The commutativity of addition means that when you add two numbers, the order doesn't change the result \u2014 so a + b is always the same as b + a. This is not true for subtraction, where a - b is usually "
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "formal_rule",
+   "raw": "{\"identity\": \"a + b = b + a\"}"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "```json\n[\"a + b = b + a\", \"2 + 3 = 3 + 2\", \"1/2 + 5 = 5 + 1/2\"]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "```json\n{\n  \"equation\": \"2 - 3 = 3 - 2\"\n}\n```"
+  }
+ ],
+ "packet": {
+  "common_mistake": "2 - 3 = 3 - 2",
+  "explanation": "The commutativity of addition means that when you add two numbers, the order doesn't change the result \u2014 so a + b is always the same as b + a. This is not true for subtraction, where a - b is usually different from b - a.",
+  "formal_rule": "a + b = b + a",
+  "lesson_id": "MATH_axiom_commutativity",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "axiom_commutativity",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "a + b = b + a",
+   "2 + 3 = 3 + 2",
+   "1/2 + 5 = 5 + 1/2"
+  ]
+ },
+ "skill_id": "axiom_commutativity"
+}

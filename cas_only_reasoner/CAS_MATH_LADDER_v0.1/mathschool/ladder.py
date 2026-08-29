@@ -44,12 +44,43 @@ def grade(exercise: Dict, result: Dict) -> Dict:
     if result.get("status") != "SOLVED":
         return {"passed": False, "result": result,
                 "exercise_id": exercise["exercise_id"]}
-    if exercise["kind"] == "expand":
+    kind = exercise["kind"]
+    if kind in ("expand", "rewrite"):
         expected = canonical(parse_expr(exercise["expected_equal_to"]))
         got = canonical(parse_expr(result["answer_expr"]))
         original = canonical(parse_expr(exercise["expr"]))
         passed = (got == expected and got == original
                   and result.get("canonical_equal_to_input") is True)
+    elif kind == "derivative":
+        from .advanced import derivative_canonical
+        expected = canonical(parse_expr(exercise["expected_equal_to"]))
+        got = canonical(parse_expr(result["answer_expr"]))
+        independent = derivative_canonical(
+            parse_expr(exercise["expr"]),
+            exercise.get("variable", "x"))
+        passed = got == expected == independent
+    elif kind == "prove":
+        from .advanced import examiner_verify_proof
+        passed = (result.get("answer") == "proved"
+                  and examiner_verify_proof(exercise["lhs_text"],
+                                            exercise["rhs_text"],
+                                            result.get("steps", [])))
+    elif kind == "discovery_round":
+        from .advanced import examiner_verify_discovery
+        ok, detail = examiner_verify_discovery(
+            result, result.get("library_used", []),
+            int(exercise["min_proved"]),
+            int(exercise["min_refuted"]))
+        passed = ok and result.get("answer") == "discovery_verified"
+        return {"passed": passed, "result": {
+                    "status": result.get("status"),
+                    "answer": result.get("answer"),
+                    "examiner_detail": detail,
+                    "proved": len(result.get("proved", [])),
+                    "refuted": len(result.get("refuted", [])),
+                    "conjectures": len(result.get("conjectures",
+                                                  []))},
+                "exercise_id": exercise["exercise_id"]}
     else:
         passed = result.get("answer") == exercise["expected"]
     return {"passed": passed, "result": result,

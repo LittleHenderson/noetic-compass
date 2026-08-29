@@ -42,6 +42,53 @@ SKILLS: Dict[str, Dict] = {
         "level": "MATH-L4", "kind": "equation_solving",
         "prerequisites": ["algebra_distribute", "division",
                           "subtraction"]},
+    "functions_evaluation": {
+        "level": "MATH-L5", "kind": "computation",
+        "prerequisites": ["multiplication", "addition"]},
+    "coordinate_slope": {
+        "level": "MATH-L5", "kind": "computation",
+        "prerequisites": ["division", "subtraction", "fractions"]},
+    "geometry_points": {
+        "level": "MATH-L6", "kind": "computation",
+        "prerequisites": ["subtraction", "multiplication",
+                          "fractions"]},
+    "geometry_shapes": {
+        "level": "MATH-L6", "kind": "computation",
+        "prerequisites": ["geometry_points"]},
+    "sequences": {
+        "level": "MATH-L7", "kind": "computation",
+        "prerequisites": ["multiplication", "addition"]},
+    "derivatives_polynomial": {
+        "level": "MATH-L7", "kind": "computation",
+        "prerequisites": ["functions_evaluation",
+                          "algebra_distribute"]},
+    "integrals_polynomial": {
+        "level": "MATH-L7", "kind": "computation",
+        "prerequisites": ["derivatives_polynomial", "fractions"]},
+    "matrices_2x2": {
+        "level": "MATH-L8", "kind": "computation",
+        "prerequisites": ["multiplication", "addition"]},
+    "probability_finite": {
+        "level": "MATH-L8", "kind": "computation",
+        "prerequisites": ["fractions"]},
+    "statistics_basic": {
+        "level": "MATH-L8", "kind": "computation",
+        "prerequisites": ["fractions", "division"]},
+    "axiom_commutativity": {
+        "level": "MATH-L9", "kind": "rewrite_rule",
+        "prerequisites": ["addition"]},
+    "axiom_square_expand": {
+        "level": "MATH-L9", "kind": "rewrite_rule",
+        "prerequisites": ["algebra_distribute", "multiplication"]},
+    "formal_proofs": {
+        "level": "MATH-L9", "kind": "proof_search",
+        "prerequisites": ["axiom_commutativity",
+                          "axiom_square_expand",
+                          "algebra_distribute"]},
+    "conjecture_discovery": {
+        "level": "MATH-L10", "kind": "discovery",
+        "prerequisites": ["formal_proofs",
+                          "integrals_polynomial"]},
 }
 
 

@@ -48,6 +48,49 @@ PROBES = {
     "linear_equations": {"kind": "solve",
                          "equation": "2 * (x + 3) = 14",
                          "variable": "x", "expected": "4"},
+    "functions_evaluation": {"kind": "func_eval",
+                             "fn": "2 * x + 1", "at": "3",
+                             "expected": "7"},
+    "coordinate_slope": {"kind": "slope", "p1": ["1", "1"],
+                         "p2": ["3", "5"], "expected": "2"},
+    "geometry_points": {"kind": "midpoint", "p1": ["0", "0"],
+                        "p2": ["4", "6"], "expected": "2,3"},
+    "geometry_shapes": {"kind": "tri_area", "a": ["0", "0"],
+                        "b": ["4", "0"], "c": ["0", "6"],
+                        "expected": "12"},
+    "sequences": {"kind": "seq_term", "type": "arith", "a1": "2",
+                  "d": "3", "n": "5", "expected": "14"},
+    "derivatives_polynomial": {"kind": "derivative",
+                               "expr": "x^2 + 3 * x",
+                               "variable": "x",
+                               "expected_equal_to": "2 * x + 3"},
+    "integrals_polynomial": {"kind": "integral", "expr": "2 * x",
+                             "variable": "x", "a": "0", "b": "3",
+                             "expected": "9"},
+    "matrices_2x2": {"kind": "mat_det",
+                     "m": [["1", "2"], ["3", "4"]],
+                     "expected": "-2"},
+    "probability_finite": {"kind": "prob", "favorable": "3",
+                           "total": "10", "expected": "3/10"},
+    "statistics_basic": {"kind": "stat_mean",
+                         "values": ["1", "2", "3", "6"],
+                         "expected": "3"},
+    "axiom_commutativity": {"kind": "rewrite",
+                            "rule_skill": "axiom_commutativity",
+                            "expr": "x + 3",
+                            "expected_equal_to": "3 + x"},
+    "axiom_square_expand": {"kind": "rewrite",
+                            "rule_skill": "axiom_square_expand",
+                            "expr": "(x + 2)^2",
+                            "expected_equal_to":
+                                "x^2 + 4 * x + 4"},
+    "formal_proofs": {"kind": "prove", "lhs_text": "(x + 2)^2",
+                      "rhs_text": "x^2 + 4 * x + 4",
+                      "expected": "proved"},
+    "conjecture_discovery": {"kind": "discovery_round", "seed": 5,
+                             "budget": 40, "min_proved": 1,
+                             "min_refuted": 2,
+                             "expected": "discovery_verified"},
 }
 
 DESCRIPTIONS = {
@@ -88,6 +131,75 @@ DESCRIPTIONS = {
         "mistake, give ONE single false equation with ONE '=' sign "
         "(for example the wrong intermediate 'x + 3 = 14' from "
         "dividing only one side) - never a chain with '=>'"),
+    "functions_evaluation": (
+        "EVALUATING A FUNCTION at a point: substituting a number "
+        "for x. Give TRUE numeric equations that show a "
+        "substitution result, like '2 * 3 + 1 = 7'"),
+    "coordinate_slope": (
+        "THE SLOPE between two points: rise over run. Give TRUE "
+        "numeric equations about slope arithmetic like "
+        "'(6 - 2) * 1/2 = 2' (rise 4, run 2, slope 2)"),
+    "geometry_points": (
+        "COORDINATE POINTS: midpoints and squared distances (we "
+        "stay exact - squared distance avoids square roots). Give "
+        "TRUE numeric equations like '2^2 + 3^2 = 13'"),
+    "geometry_shapes": (
+        "TRIANGLE AREA (half base times height) and right angles "
+        "(by perpendicular directions). Give TRUE numeric "
+        "equations like '4 * 6 * 1/2 = 12'"),
+    "sequences": (
+        "ARITHMETIC AND GEOMETRIC SEQUENCES: the nth term and "
+        "partial sums. Give TRUE numeric equations like "
+        "'2 + 4 * 3 = 14' (first term 2, difference 3, fifth "
+        "term)"),
+    "derivatives_polynomial": (
+        "THE DERIVATIVE of a polynomial by the power rule: the "
+        "derivative of x^n is n * x^(n-1). Give TRUE numeric "
+        "equations evaluating a derivative at a point, like "
+        "'2 * 3 = 6' (the derivative of x^2 at 3)"),
+    "integrals_polynomial": (
+        "THE DEFINITE INTEGRAL of a polynomial: antidifferentiate "
+        "and take the difference at the bounds. IMPORTANT: use NO "
+        "integral signs and no special symbols - only plain "
+        "arithmetic equations with digits and + - * / ^ ( ). For "
+        "example the integral of 2x from 0 to 3 is written as the "
+        "TRUE equation '3^2 - 0^2 = 9'"),
+    "matrices_2x2": (
+        "2x2 MATRICES: the determinant a*d - b*c and matrix "
+        "multiplication. Give TRUE numeric equations like "
+        "'1 * 4 - 2 * 3 = -2'"),
+    "probability_finite": (
+        "PROBABILITY with equally likely outcomes: favorable over "
+        "total, products for independent events, one minus for the "
+        "complement. Give TRUE equations with exact fractions like "
+        "'1 - 1/6 = 5/6'"),
+    "statistics_basic": (
+        "THE MEAN (sum divided by count) and MEDIAN (middle value) "
+        "of a list. IMPORTANT: every example must be a PLAIN "
+        "arithmetic equation - no function syntax like sorted(...), "
+        "no brackets. Mean example: '(1 + 2 + 6) / 3 = 3'. Median "
+        "of an even list example: '(3 + 7) / 2 = 5'"),
+    "axiom_commutativity": (
+        "THE COMMUTATIVITY OF ADDITION as a formal axiom over "
+        "metavariables a and b: order does not matter for "
+        "addition (it DOES matter for subtraction - a good common "
+        "mistake is '2 - 3 = 3 - 2')"),
+    "axiom_square_expand": (
+        "THE BINOMIAL SQUARE as a formal identity over "
+        "metavariables: (a + b)^2 expands with the CROSS TERM "
+        "2ab. The classic common mistake omits the cross term: "
+        "'(a + b)^2 = a^2 + b^2'"),
+    "formal_proofs": (
+        "FORMAL PROOF: deriving one expression from another by "
+        "applying named verified rules step by step, each step "
+        "checked. Give TRUE numeric equations like "
+        "'(2 + 1)^2 = 9'"),
+    "conjecture_discovery": (
+        "MATHEMATICAL DISCOVERY discipline: generate candidate "
+        "identities, ATTACK them with numeric counterexamples, "
+        "PROVE the survivors, and keep unproved survivors labeled "
+        "as conjectures - never verified. Give TRUE numeric "
+        "equations like '2^2 - 3^2 = -5'"),
 }
 
 
@@ -264,14 +376,26 @@ def _string_candidates(reply):
 
 
 def _best_string_candidate(reply, validator):
-    """The first candidate the VALIDATOR accepts; else the cleaned
-    whole reply (so the defect message shows what was received)."""
+    """The first candidate the VALIDATOR accepts. Failing that, the
+    fallback is the first candidate that at least PARSES as an
+    equation - so the defect message names the REAL defect (live
+    finding: a true-equation-offered-as-mistake was hidden behind a
+    parse error on the whole blob)."""
     fallback = None
+    parseable = None
     for candidate in _string_candidates(reply):
         if fallback is None:
             fallback = candidate
         if validator(candidate) is None:
             return candidate
+        if parseable is None and candidate.count("=") == 1:
+            try:
+                parse_equation(candidate)
+                parseable = candidate
+            except MathParseError:
+                pass
+    if parseable is not None:
+        return parseable
     return fallback if fallback is not None else reply.strip()
 
 
@@ -321,7 +445,14 @@ def main():
                          "integer_comparison", "addition",
                          "subtraction", "multiplication", "division",
                          "fractions", "algebra_distribute",
-                         "linear_equations")
+                         "linear_equations", "functions_evaluation",
+                         "coordinate_slope", "geometry_points",
+                         "geometry_shapes", "sequences",
+                         "derivatives_polynomial",
+                         "integrals_polynomial", "matrices_2x2",
+                         "probability_finite", "statistics_basic",
+                         "axiom_commutativity", "axiom_square_expand",
+                         "formal_proofs", "conjecture_discovery")
              if not only or s in only.split(",")]
 
     for skill_id in order:

@@ -1,0 +1,126 @@
+{
+ "after": {
+  "answer": "7",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned functions_evaluation yet",
+  "missing_skill": "functions_evaluation",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "5ce82fbe31ade2f0",
+  "episode_digest": "60f0c901aa61ea95",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_functions_evaluation",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "0a8226100ec05f61",
+   "parent_revision": 10
+  },
+  "skill_id": "functions_evaluation",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "3 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '7', 'right': '12'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 11",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "```json\n{\n  \"equations\": [\n    \"2 * 3 + 1 = 7\",\n    \"f(2) = 2^2 + 3 = 7\",\n    \"g(1/2) = 4 * (1/2) - 1 = 1\",\n    \"h(-1) = (-1)^3 + 2 * (-1) = -3\"\n  ],\n  \"explanation\": \"Evaluating a function at a point"
+  },
+  {
+   "attempt": 1,
+   "defect": "'f(2) = 2^2 + 3 = 7' does not parse: an equation needs exactly one '='. Use only integers, fractions like 1/2, + - * ^ ( ) and one '='",
+   "field": "worked_examples",
+   "raw": "[\"f(2) = 2^2 + 3 = 7\", \"f(1/2) = 4 * (1/2) - 1 = 1\", \"f(-1) = 3 * (-1) + 5 = 2\", \"f(0) = 0 + 7 = 7\"]"
+  },
+  {
+   "attempt": 2,
+   "defect": "'4 + 5/2 = 6.5' does not parse: cannot read '.5'. Use only integers, fractions like 1/2, + - * ^ ( ) and one '='",
+   "field": "worked_examples",
+   "raw": "[\"2 * 3 + 1 = 7\", \"4 + 5/2 = 6.5\", \"(3 - 1) * 2 = 4\", \"1/2 * 8 = 4\"]"
+  },
+  {
+   "attempt": 3,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "[\n  \"2 * 3 + 1 = 7\",\n  \"5 + 6 = 11\",\n  \"4 + 5/2 = 13/2\"\n]"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "```json\n{\n  \"true_equations\": [\n    \"2 * 3 + 1 = 7\",\n    \"5 - (2 + 1) = 2\",\n    \"(1/2) * 4 = 2\",\n    \"3^2 - 2^2 = 5\",\n    \"2 * (3 + 4) = 14\"\n  ],\n  \"false_equation\": \"3 + 4 = 12\"\n}\n```"
+  }
+ ],
+ "packet": {
+  "common_mistake": "3 + 4 = 12",
+  "explanation": "{\n  \"equations\": [\n    \"2 * 3 + 1 = 7\",\n    \"f(2) = 2^2 + 3 = 7\",\n    \"g(1/2) = 4 * (1/2) - 1 = 1\",\n    \"h(-1) = (-1)^3 + 2 * (-1) = -3\"\n  ],\n  \"explanation\": \"Evaluating a function at a point means replacing the variable (like x) with a specific number and then calculating the result using the function's rule.\"\n}",
+  "lesson_id": "MATH_functions_evaluation",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "functions_evaluation",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "2 * 3 + 1 = 7",
+   "5 + 6 = 11",
+   "4 + 5/2 = 13/2"
+  ]
+ },
+ "skill_id": "functions_evaluation"
+}

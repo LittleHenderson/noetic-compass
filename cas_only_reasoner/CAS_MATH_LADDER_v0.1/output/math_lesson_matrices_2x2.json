@@ -1,0 +1,115 @@
+{
+ "after": {
+  "answer": "-2",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned matrices_2x2 yet",
+  "missing_skill": "matrices_2x2",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "5ce82fbe31ade2f0",
+  "episode_digest": "4bb5e9b95d833e1a",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_matrices_2x2",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "176d5cb434785518",
+   "parent_revision": 17
+  },
+  "skill_id": "matrices_2x2",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "4 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '10', 'right': '-2'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 18",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "```json\n{\n  \"equations\": [\n    \"1 * 4 - 2 * 3 = -2\",\n    \"5 * 7 - 6 * 4 = 11\",\n    \"(-1) * 2 - 3 * 0 = -2\",\n    \"2/3 * 9 - 4 * 1/2 = 6 - 2 = 4\"\n  ],\n  \"explanation\": \"A 2x2 matrix has four numbers arr"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "```json\n[\"1 * 4 - 2 * 3 = -2\", \"3 * 2 - 1 * 4 = 2\", \"2 * (-1) - 3 * 0 = -2\", \"5 * 5 - 6 * 4 = 1\"]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "```json\n{\n  \"true_equation\": \"1 * 4 - 2 * 3 = -2\",\n  \"false_equation\": \"1 * 4 + 2 * 3 = -2\"\n}\n```"
+  }
+ ],
+ "packet": {
+  "common_mistake": "1 * 4 + 2 * 3 = -2",
+  "explanation": "{\n  \"equations\": [\n    \"1 * 4 - 2 * 3 = -2\",\n    \"5 * 7 - 6 * 4 = 11\",\n    \"(-1) * 2 - 3 * 0 = -2\",\n    \"2/3 * 9 - 4 * 1/2 = 6 - 2 = 4\"\n  ],\n  \"explanation\": \"A 2x2 matrix has four numbers arranged in two rows and two columns. The determinant is calculated as (top-left * bottom-right) minus (top-right * bottom-left). This value helps determine properties like invertibility of the matrix.\"\n}",
+  "lesson_id": "MATH_matrices_2x2",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "matrices_2x2",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "1 * 4 - 2 * 3 = -2",
+   "3 * 2 - 1 * 4 = 2",
+   "2 * (-1) - 3 * 0 = -2",
+   "5 * 5 - 6 * 4 = 1"
+  ]
+ },
+ "skill_id": "matrices_2x2"
+}

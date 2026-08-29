@@ -40,7 +40,7 @@ class MathParseError(Exception):
     pass
 
 
-_TOKEN = re.compile(r"\s*(\d+/\d+|\d+|[a-zA-Z]\w*|[-+*^()=])")
+_TOKEN = re.compile(r"\s*(\d+|[a-zA-Z]\w*|[-+*/^()=])")
 
 
 def _tokenize(text: str) -> List[str]:
@@ -83,10 +83,29 @@ class _Reader:
         return parts[0] if len(parts) == 1 else Add(tuple(parts))
 
     def term(self):
-        factors = [self.factor()]
-        while self.peek() == "*":
-            self.take()
-            factors.append(self.factor())
+        result = self.factor()
+        factors = [result]
+        while self.peek() in ("*", "/"):
+            operator = self.take()
+            operand = self.factor()
+            if operator == "*":
+                factors.append(operand)
+                continue
+            # '/' - division by a CONSTANT divisor becomes exact
+            # multiplication by the reciprocal (live teacher finding:
+            # '(1 + 3)/2' is correct mathematics; the polynomial IR
+            # supports it as * 1/2). A variable divisor is outside
+            # the polynomial class - typed refusal, never coercion.
+            try:
+                value = eval_at(operand, {})
+            except Exception:
+                raise MathParseError(
+                    "division by a variable expression is outside "
+                    "the polynomial class - divide by constants "
+                    "only")
+            if value == 0:
+                raise MathParseError("division by zero")
+            factors.append(Num(Fraction(1, 1) / value))
         return factors[0] if len(factors) == 1 else Mul(tuple(factors))
 
     def factor(self):
@@ -110,11 +129,6 @@ class _Reader:
             if self.take() != ")":
                 raise MathParseError("missing ')'")
             return inner
-        if re.fullmatch(r"\d+/\d+", token):
-            p, q = token.split("/")
-            if int(q) == 0:
-                raise MathParseError("division by zero in a literal")
-            return Num(Fraction(int(p), int(q)))
         if token.isdigit():
             return Num(Fraction(int(token)))
         if re.fullmatch(r"[a-zA-Z]\w*", token):

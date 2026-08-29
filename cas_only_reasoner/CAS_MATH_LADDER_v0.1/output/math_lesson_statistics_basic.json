@@ -1,0 +1,133 @@
+{
+ "after": {
+  "answer": "3",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned statistics_basic yet",
+  "missing_skill": "statistics_basic",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "5ce82fbe31ade2f0",
+  "episode_digest": "8bc781a8e58144c3",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_statistics_basic",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "22e433797e5d5d14",
+   "parent_revision": 19
+  },
+  "skill_id": "statistics_basic",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "4 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '11/2', 'right': '9'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 20",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "The mean is the average of a list of numbers, found by adding all the numbers and dividing by how many there are. The median is the middle number when the numbers are in order, or the average of the t"
+  },
+  {
+   "attempt": 1,
+   "defect": "'(2 + 4 + 8) / 3 = 4 + 4/3' is FALSE - the exact checker refutes it (witness: {'point': {}, 'left': '14/3', 'right': '16/3'}). Every worked example must be exactly true",
+   "field": "worked_examples",
+   "raw": "[\"(2 + 4 + 8) / 3 = 4 + 4/3\", \"(5 + 9) / 2 = 7\", \"(1 + 2 + 3 + 4 + 5) / 5 = 3\", \"(10 + 20 + 30) / 3 = 20\"]"
+  },
+  {
+   "attempt": 2,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "[\"(1 + 2 + 6) / 3 = 3\", \"(3 + 7) / 2 = 5\", \"2 + 4 + 8 = 14\", \"(14) / 3 = 14/3\"]"
+  },
+  {
+   "attempt": 1,
+   "defect": "\"'(2 + 4 + 9) / 3 = 9'\" does not parse: cannot read \"'(2 + 4 + \"",
+   "field": "common_mistake",
+   "raw": "'(2 + 4 + 9) / 3 = 9'"
+  },
+  {
+   "attempt": 2,
+   "defect": "'{\"false_median_equation\":\"2 + 9 / 2 = 5.5\"}' does not parse: cannot read '{\"false_me'",
+   "field": "common_mistake",
+   "raw": "{\"false_median_equation\":\"2 + 9 / 2 = 5.5\"}"
+  },
+  {
+   "attempt": 3,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "{\"false_median_equation\":\"(2 + 9) / 2 = 9\"}"
+  }
+ ],
+ "packet": {
+  "common_mistake": "(2 + 9) / 2 = 9",
+  "explanation": "The mean is the average of a list of numbers, found by adding all the numbers and dividing by how many there are. The median is the middle number when the numbers are in order, or the average of the two middle numbers if there is an even count.  \n\n\n{\n  \"mean\": \"(1 + 2 + 6) / 3 = 3\",\n  \"median_odd\": \"3 = 3\",\n  \"median_even\": \"(3 + 7) / 2 = 5\"\n}",
+  "lesson_id": "MATH_statistics_basic",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "statistics_basic",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "(1 + 2 + 6) / 3 = 3",
+   "(3 + 7) / 2 = 5",
+   "2 + 4 + 8 = 14",
+   "(14) / 3 = 14/3"
+  ]
+ },
+ "skill_id": "statistics_basic"
+}

@@ -1,0 +1,115 @@
+{
+ "after": {
+  "answer": "3/10",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned probability_finite yet",
+  "missing_skill": "probability_finite",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "5ce82fbe31ade2f0",
+  "episode_digest": "021d435120e91cc8",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_probability_finite",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "43d483a7fe165e80",
+   "parent_revision": 18
+  },
+  "skill_id": "probability_finite",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "4 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '1', 'right': '1/2'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 19",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "```json\n{\n  \"equations\": [\n    \"1/6 + 1/6 = 1/3\",\n    \"1/2 * 1/3 = 1/6\",\n    \"1 - 1/4 = 3/4\"\n  ]\n}\n```\n\nProbability is the chance of something happening. You find it by dividing the number of good out"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "[\"1 - 1/6 = 5/6\", \"1/2 * 1/3 = 1/6\", \"1 - 1/4 = 3/4\", \"1/2 + 1/3 = 5/6\"]"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "```json\n{\n  \"true_equations\": [\n    \"1/6 + 1/6 = 1/3\",\n    \"1/2 * 1/3 = 1/6\",\n    \"1 - 1/4 = 3/4\",\n    \"2/5 * 3/4 = 3/10\",\n    \"1 - (1/6 + 1/6) = 2/3\"\n  ],\n  \"false_equation\": \"1/2 + 1/2 = 1/2\"\n}\n```"
+  }
+ ],
+ "packet": {
+  "common_mistake": "1/2 + 1/2 = 1/2",
+  "explanation": "{\n  \"equations\": [\n    \"1/6 + 1/6 = 1/3\",\n    \"1/2 * 1/3 = 1/6\",\n    \"1 - 1/4 = 3/4\"\n  ]\n}\n\n\nProbability is the chance of something happening. You find it by dividing the number of good outcomes by the total outcomes. For multiple independent events, multiply their probabilities. To find the chance of something *not* happening, subtract the probability from 1.",
+  "lesson_id": "MATH_probability_finite",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "probability_finite",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "1 - 1/6 = 5/6",
+   "1/2 * 1/3 = 1/6",
+   "1 - 1/4 = 3/4",
+   "1/2 + 1/3 = 5/6"
+  ]
+ },
+ "skill_id": "probability_finite"
+}

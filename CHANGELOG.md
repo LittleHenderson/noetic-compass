@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-29 (full math ladder) - MATH-L0 THROUGH L10 COMPLETE: 24 skills taught live; the machine PROVES theorems and DISCOVERS identities under independent verification
+
+- The remaining six levels built and taught live per the owner's continue-to-L10 directive, each entering only where the checker verifies exactly: L5 functions/slope, L6 exact analytic geometry (trig disclosed out of scope), L7 sequences/derivatives/integrals (derivatives graded against independent re-derivation; integrals differentiate back or refuse), L8 matrices/probability/statistics, L9 formal axioms + proof search over the student's own promoted schemas with an independent examiner walk that rejects false-schema steps, L10 conjecture discovery (enumerate -> attack -> prove -> novelty-check; unproved survivors stay CONJECTURE).
+- LIVE L10 RESULT: the machine discovered and proved NINE identities novel to its own library - difference of squares, both binomial squares, (a+b)^2+(a-b)^2=2a^2+2b^2, (a+b)^2-(a-b)^2=4ab - and refuted 22 perturbed candidates with exact witnesses. Scope stated exactly: rediscoveries of known mathematics, novel to the student, every claim independently machine-verified.
+- CAS-Math IR extended per the goal: the '/' operator (constant divisors exact; variable divisors typed refusal). Anti-smuggling examiners regression-locked. All Bedrock lessons first-attempt after harness fixes; every harness defect this round was ours and is sealed.
+- Sweep exact: 406 local tests, 0 failures, 17 lanes. Math skill store 24/24 promoted; Mathematics Learning Ledger live-checks 24/24 PASS.
+
 ## 2026-08-29 (mathematics) - THE MATHEMATICS SCHOOL: all ten MATH-L0..L4 skills taught live and promoted; the language bridge speaks exact arithmetic; 403 tests green
 
 - New board CAS_MATH_LADDER_v0.1 per the owner's MATH LESSONS.txt: all ten goal components (packet schema, prerequisite graph with RPM selection, language bridge, L0-L4 curriculum, twelve-step exact acceptance law, seeded SDG + counterexample attack, protected battery, retention with rollback, Mathematics Learning Ledger, CAS-Ohm learning profiles).

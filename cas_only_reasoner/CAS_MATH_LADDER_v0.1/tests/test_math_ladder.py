@@ -66,6 +66,56 @@ def _packet(skill_id, **overrides):
                 {"equation": "3 * y + 2 = 17", "variable": "y",
                  "solution": "5"}],
             "common_mistake": "2 * 4 = 11"},
+        "functions_evaluation": {
+            "worked_examples": ["2 * 3 + 1 = 7", "3 * 2^2 = 12"],
+            "common_mistake": "2 * 3 + 1 = 8"},
+        "coordinate_slope": {
+            "worked_examples": ["(6 - 2) * 1/2 = 2", "4 * 1/2 = 2"],
+            "common_mistake": "4 * 1/2 = 4"},
+        "geometry_points": {
+            "worked_examples": ["2^2 + 3^2 = 13", "(4 - 1)^2 = 9"],
+            "common_mistake": "2^2 + 3^2 = 10"},
+        "geometry_shapes": {
+            "worked_examples": ["4 * 6 * 1/2 = 12",
+                                "3 * 4 * 1/2 = 6"],
+            "common_mistake": "4 * 6 * 1/2 = 24"},
+        "sequences": {
+            "worked_examples": ["2 + 4 * 3 = 14", "3 * 2^3 = 24"],
+            "common_mistake": "2 + 4 * 3 = 18"},
+        "derivatives_polynomial": {
+            "worked_examples": ["2 * 3 = 6", "3 * 2^2 = 12"],
+            "common_mistake": "2 * 3 = 5"},
+        "integrals_polynomial": {
+            "worked_examples": ["3^2 - 1 = 8", "1/2 * 4 = 2"],
+            "common_mistake": "3^2 - 1 = 7"},
+        "matrices_2x2": {
+            "worked_examples": ["1 * 4 - 2 * 3 = -2",
+                                "2 * 5 - 1 * 3 = 7"],
+            "common_mistake": "1 * 4 - 2 * 3 = 2"},
+        "probability_finite": {
+            "worked_examples": ["3 * 1/6 = 1/2", "1 - 1/6 = 5/6"],
+            "common_mistake": "1 - 1/6 = 1/6"},
+        "statistics_basic": {
+            "worked_examples": ["(1 + 2 + 6) * 1/3 = 3",
+                                "(2 + 4) * 1/2 = 3"],
+            "common_mistake": "(1 + 2 + 6) * 1/3 = 4"},
+        "axiom_commutativity": {
+            "formal_rule": "a + b = b + a",
+            "worked_examples": ["2 + 3 = 3 + 2", "5 + 1 = 1 + 5"],
+            "common_mistake": "2 - 3 = 3 - 2"},
+        "axiom_square_expand": {
+            "formal_rule": "(a + b)^2 = a^2 + 2 * a * b + b^2",
+            "worked_examples": [
+                "(2 + 3)^2 = 2^2 + 2 * 2 * 3 + 3^2",
+                "(1 + 4)^2 = 25"],
+            "common_mistake": "(a + b)^2 = a^2 + b^2"},
+        "formal_proofs": {
+            "worked_examples": ["(2 + 1)^2 = 9", "2 * (3 + 4) = 14"],
+            "common_mistake": "(2 + 1)^2 = 5"},
+        "conjecture_discovery": {
+            "worked_examples": ["(2 + 3) * (2 - 3) = -5",
+                                "2^2 - 3^2 = -5"],
+            "common_mistake": "(2 + 3) * (2 - 3) = 5"},
     }[skill_id]
     base.update(content)
     base.update(overrides)
@@ -76,9 +126,17 @@ CHAIN = ["quantity_grounding", "counting_order", "integer_comparison",
          "addition", "subtraction", "multiplication", "division",
          "fractions", "algebra_distribute", "linear_equations"]
 
+CHAIN_FULL = CHAIN + [
+    "functions_evaluation", "coordinate_slope", "geometry_points",
+    "geometry_shapes", "sequences", "derivatives_polynomial",
+    "integrals_polynomial", "matrices_2x2", "probability_finite",
+    "statistics_basic", "axiom_commutativity", "axiom_square_expand",
+    "formal_proofs", "conjecture_discovery"]
 
-def _teach_chain(path, upto):
-    for skill_id in CHAIN[:CHAIN.index(upto) + 1]:
+
+def _teach_chain(path, upto, chain=None):
+    chain = chain or CHAIN
+    for skill_id in chain[:chain.index(upto) + 1]:
         episode = teach(_packet(skill_id), path)
         assert episode["verdict"] == "PROMOTED", \
             f"{skill_id}: {episode['verdict']} " \
@@ -107,7 +165,8 @@ def test_rpm_names_the_first_missing_prerequisite():
     assert next_missing("addition", ["quantity_grounding"]) \
         == "counting_order"
     assert teachable_now([]) == ["quantity_grounding"]
-    assert set(SKILLS) == set(CHAIN)
+    assert set(CHAIN_FULL) == set(SKILLS)
+    assert len(SKILLS) == 24
 
 
 # ------------------------------------------------------------- schema
@@ -242,3 +301,83 @@ def test_episode_is_deterministic_and_carries_the_authority_seals(
     assert profile["flow_after"] == "active"
     assert profile["P_cap_before"] == 0.0
     assert profile["P_cap_after"] == 1.0
+
+
+# ------------------------------------------------- the FULL ladder
+def test_full_ladder_promotes_l0_through_l10(tmp_path):
+    """Every level of the goal ladder, end to end: 24 skills, the
+    prover producing independently-verified proofs, and the L10
+    discovery round proving NOVEL identities and refuting perturbed
+    ones with exact witnesses."""
+    path = os.path.join(tmp_path, "skills.json")
+    _teach_chain(path, "conjecture_discovery", chain=CHAIN_FULL)
+    store = SkillStore.load(path)
+    assert len(store.promoted_ids()) == 24
+
+    student = Student(store)
+    from mathschool.mathir import canonical, parse_expr
+    d = student.solve({"exercise_id": "d", "skill_id": "x",
+                       "kind": "derivative",
+                       "expr": "3 * x^2 + 5 * x", "variable": "x",
+                       "expected_equal_to": "6 * x + 5"})
+    assert canonical(parse_expr(d["answer_expr"])) \
+        == canonical(parse_expr("6 * x + 5"))
+    i = student.solve({"exercise_id": "i", "skill_id": "x",
+                       "kind": "integral", "expr": "2 * x",
+                       "variable": "x", "a": "0", "b": "3",
+                       "expected": "9"})
+    assert i["answer"] == "9"
+    assert i["verified_by"] == "differentiate_back_check"
+
+    from mathschool.advanced import examiner_verify_proof
+    proof = student.solve({"exercise_id": "p", "skill_id": "x",
+                           "kind": "prove",
+                           "lhs_text": "(x + 2)^2",
+                           "rhs_text": "4 * x + 4 + x^2",
+                           "expected": "proved"})
+    assert proof["status"] == "SOLVED"
+    assert examiner_verify_proof("(x + 2)^2", "4 * x + 4 + x^2",
+                                 proof["steps"])
+
+    from mathschool.advanced import examiner_verify_discovery
+    round_result = student.solve({"exercise_id": "r",
+                                  "skill_id": "x",
+                                  "kind": "discovery_round",
+                                  "seed": 7, "budget": 40,
+                                  "min_proved": 1,
+                                  "min_refuted": 2,
+                                  "expected": "discovery_verified"})
+    ok, detail = examiner_verify_discovery(
+        round_result, round_result["library_used"], 1, 2)
+    assert ok, detail
+    for item in round_result.get("conjectures", []):
+        assert "CONJECTURE" in item["status"]
+
+
+def test_proof_steps_cannot_smuggle_false_schemas():
+    """The independent proof examiner refuses a step justified by a
+    FALSE schema, even if the endpoints happen to look right."""
+    from mathschool.advanced import examiner_verify_proof
+    fake_steps = [{"rule": "evil", "direction": "forward",
+                   "lhs_schema": "a * (b + c)",
+                   "rhs_schema": "a * b + c",
+                   "from": "(2 * (x + 3))",
+                   "to": "((2 * x) + 3)"}]
+    assert not examiner_verify_proof("2 * (x + 3)", "2 * x + 3",
+                                     fake_steps)
+
+
+def test_discovery_examiner_rejects_non_novel_and_false_claims():
+    from mathschool.advanced import examiner_verify_discovery
+    library = [("a * (b + c)", "a * b + a * c")]
+    fake = {"proved": [{"claim": "a * (b + c) = a * b + a * c"}],
+            "refuted": [{"claim": "1 + 1 = 3",
+                         "witness": {"point": {}}},
+                        {"claim": "2 + 2 = 5",
+                         "witness": {"point": {}}}]}
+    ok, detail = examiner_verify_discovery(fake, library, 1, 2)
+    assert not ok and "not novel" in detail
+    false_claim = {"proved": [{"claim": "a + b = a * b"}],
+                   "refuted": []}
+    ok, detail = examiner_verify_discovery(false_claim, library, 1, 0)
+    assert not ok and "NOT true" in detail

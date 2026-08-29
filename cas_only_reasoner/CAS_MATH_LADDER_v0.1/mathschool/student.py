@@ -262,6 +262,178 @@ class Student:
             return self._solve_expand(exercise)
         if kind == "solve":
             return self._solve_equation(exercise)
+        return self._solve_advanced(exercise)
+
+    # ------------------------------------------------- L5..L10 kinds
+    def _promoted_schemas(self):
+        """Every promoted rewrite-rule schema (plus the candidate if
+        it is one) - the student's own proof library."""
+        schemas = []
+        for skill_id in list(self.store.promoted_ids()):
+            record = self.store.get(skill_id)
+            if record.get("kind") == "rewrite_rule":
+                schemas.append((skill_id, record["formal"]["lhs"],
+                                record["formal"]["rhs"]))
+        if self.candidate is not None \
+                and self.candidate.get("kind") == "rewrite_rule":
+            schemas.append((self.candidate["skill_id"],
+                            self.candidate["formal"]["lhs"],
+                            self.candidate["formal"]["rhs"]))
+        return schemas
+
+    def _solve_advanced(self, exercise: Dict) -> Dict:
+        from fractions import Fraction
+
+        from . import advanced as adv
+        from .mathir import parse_expr, render_expr
+        kind = exercise["kind"]
+        if kind == "func_eval":
+            if not self._has("functions_evaluation"):
+                return self._cannot("functions_evaluation")
+            value = adv.eval_at(parse_expr(exercise["fn"]),
+                                {"x": adv.q(exercise["at"])})
+            return {"status": "SOLVED", "answer": adv.q_str(value)}
+        if kind == "slope":
+            if not self._has("coordinate_slope"):
+                return self._cannot("coordinate_slope")
+            m = adv.slope(exercise["p1"], exercise["p2"])
+            if m is None:
+                return {"status": "ERROR",
+                        "detail": "a vertical line has no slope"}
+            return {"status": "SOLVED", "answer": adv.q_str(m)}
+        if kind in ("midpoint", "distance_squared"):
+            if not self._has("geometry_points"):
+                return self._cannot("geometry_points")
+            if kind == "midpoint":
+                mx, my = adv.midpoint(exercise["p1"], exercise["p2"])
+                return {"status": "SOLVED",
+                        "answer": f"{adv.q_str(mx)},{adv.q_str(my)}"}
+            d2 = adv.distance_squared(exercise["p1"], exercise["p2"])
+            return {"status": "SOLVED", "answer": adv.q_str(d2)}
+        if kind in ("tri_area", "right_angle"):
+            if not self._has("geometry_shapes"):
+                return self._cannot("geometry_shapes")
+            if kind == "tri_area":
+                area = adv.triangle_area(exercise["a"], exercise["b"],
+                                         exercise["c"])
+                return {"status": "SOLVED", "answer": adv.q_str(area)}
+            right = adv.is_right_angle_at(exercise["vertex"],
+                                          exercise["p1"],
+                                          exercise["p2"])
+            return {"status": "SOLVED",
+                    "answer": "yes" if right else "no"}
+        if kind in ("seq_term", "seq_sum"):
+            if not self._has("sequences"):
+                return self._cannot("sequences")
+            a1 = adv.q(exercise["a1"])
+            n = int(exercise["n"])
+            if kind == "seq_term" and exercise["type"] == "arith":
+                value = a1 + (n - 1) * adv.q(exercise["d"])
+            elif kind == "seq_term":
+                value = a1 * adv.q(exercise["r"]) ** (n - 1)
+            else:
+                d = adv.q(exercise["d"])
+                value = Fraction(n, 2) * (2 * a1 + (n - 1) * d)
+            return {"status": "SOLVED", "answer": adv.q_str(value)}
+        if kind == "derivative":
+            if not self._has("derivatives_polynomial"):
+                return self._cannot("derivatives_polynomial")
+            derived = adv.derivative_canonical(
+                parse_expr(exercise["expr"]),
+                exercise.get("variable", "x"))
+            return {"status": "SOLVED",
+                    "answer_expr": render_expr(
+                        adv.canonical_to_expr(derived))}
+        if kind == "integral":
+            if not self._has("integrals_polynomial"):
+                return self._cannot("integrals_polynomial")
+            value = adv.definite_integral(
+                parse_expr(exercise["expr"]),
+                exercise.get("variable", "x"),
+                adv.q(exercise["a"]), adv.q(exercise["b"]))
+            return {"status": "SOLVED", "answer": adv.q_str(value),
+                    "verified_by": "differentiate_back_check"}
+        if kind == "mat_det":
+            if not self._has("matrices_2x2"):
+                return self._cannot("matrices_2x2")
+            return {"status": "SOLVED",
+                    "answer": adv.q_str(adv.mat_det(exercise["m"]))}
+        if kind == "mat_mul":
+            if not self._has("matrices_2x2"):
+                return self._cannot("matrices_2x2")
+            return {"status": "SOLVED",
+                    "answer": adv.mat_str(adv.mat_mul(
+                        exercise["m"], exercise["n"]))}
+        if kind in ("prob", "prob_and", "prob_complement"):
+            if not self._has("probability_finite"):
+                return self._cannot("probability_finite")
+            if kind == "prob":
+                value = Fraction(int(exercise["favorable"]),
+                                 int(exercise["total"]))
+            elif kind == "prob_and":
+                value = adv.q(exercise["p1"]) * adv.q(exercise["p2"])
+            else:
+                value = 1 - adv.q(exercise["p"])
+            return {"status": "SOLVED", "answer": adv.q_str(value)}
+        if kind in ("stat_mean", "stat_median"):
+            if not self._has("statistics_basic"):
+                return self._cannot("statistics_basic")
+            values = sorted(adv.q(v) for v in exercise["values"])
+            if kind == "stat_mean":
+                value = sum(values, Fraction(0)) / len(values)
+            elif len(values) % 2 == 1:
+                value = values[len(values) // 2]
+            else:
+                middle = len(values) // 2
+                value = (values[middle - 1] + values[middle]) / 2
+            return {"status": "SOLVED", "answer": adv.q_str(value)}
+        if kind == "rewrite":
+            skill = self._skill(exercise["rule_skill"])
+            if skill is None:
+                return self._cannot(exercise["rule_skill"])
+            expr = parse_expr(exercise["expr"])
+            rewritten = self._apply_rule(skill, expr)
+            if rewritten is None:
+                results = adv.rewrite_everywhere(
+                    expr, skill["formal"]["lhs"],
+                    skill["formal"]["rhs"])
+                if not results:
+                    return {"status": "ERROR",
+                            "detail": "my learned rule does not "
+                                      "match this expression"}
+                rewritten = results[0]
+            return {"status": "SOLVED",
+                    "answer_expr": render_expr(rewritten),
+                    "canonical_equal_to_input":
+                        adv.canonical(rewritten)
+                        == adv.canonical(expr)}
+        if kind == "prove":
+            if not self._has("formal_proofs"):
+                return self._cannot("formal_proofs")
+            schemas = self._promoted_schemas()
+            steps = adv.prove_equal(
+                parse_expr(exercise["lhs_text"]),
+                parse_expr(exercise["rhs_text"]), schemas)
+            if steps is None:
+                return {"status": "ERROR",
+                        "detail": "no proof found within my rule "
+                                  "library and search bound - i "
+                                  "cannot prove this"}
+            return {"status": "SOLVED", "answer": "proved",
+                    "steps": steps,
+                    "verified_by": "independent_step_replay"}
+        if kind == "discovery_round":
+            if not self._has("conjecture_discovery"):
+                return self._cannot("conjecture_discovery")
+            library = [(l, r) for _, l, r
+                       in self._promoted_schemas()]
+            result = adv.discovery_round(int(exercise["seed"]),
+                                         int(exercise["budget"]),
+                                         library)
+            result["status"] = "SOLVED"
+            result["answer"] = "discovery_verified"
+            result["library_used"] = library
+            return result
         return {"status": "ERROR", "detail": f"unknown kind {kind}"}
 
     # -- learned rewrite application ----------------------------------

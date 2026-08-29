@@ -1,0 +1,121 @@
+{
+ "after": {
+  "answer": "12",
+  "status": "SOLVED"
+ },
+ "before": {
+  "detail": "i have not learned geometry_shapes yet",
+  "missing_skill": "geometry_shapes",
+  "status": "CANNOT_MISSING_SKILL"
+ },
+ "episode": {
+  "checker_digest": "5ce82fbe31ade2f0",
+  "episode_digest": "456bd565006a36f5",
+  "examiner_identity": "cas_math_exact_examiner",
+  "lesson_id": "MATH_geometry_shapes",
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": {
+   "parent_digest": "83e3dd0fdab1efa0",
+   "parent_revision": 13
+  },
+  "skill_id": "geometry_shapes",
+  "stages": [
+   {
+    "detail": "prerequisite path clear",
+    "passed": true,
+    "stage": "RPM_PREREQUISITES"
+   },
+   {
+    "detail": "typed packet complete; formal channel parsed into CAS-Math IR",
+    "passed": true,
+    "stage": "PACKET_VALID"
+   },
+   {
+    "detail": "4 examples verified by the exact engine",
+    "passed": true,
+    "stage": "EXAMPLES_EXACT"
+   },
+   {
+    "detail": "refutation witness: {'point': {}, 'left': '7', 'right': '12'}",
+    "passed": true,
+    "stage": "MISTAKE_IS_A_MISTAKE"
+   },
+   {
+    "detail": "8 independent variations solved",
+    "passed": true,
+    "stage": "DEV_EXERCISES"
+   },
+   {
+    "detail": "6 protected exercises solved (100% exact)",
+    "passed": true,
+    "stage": "PROTECTED_HELD_OUT"
+   },
+   {
+    "detail": "every mastered skill still solves its guards",
+    "passed": true,
+    "stage": "PRIOR_SKILLS_REGRESSION"
+   },
+   {
+    "detail": "committed at revision 14",
+    "passed": true,
+    "stage": "PROMOTED_PROVISIONALLY"
+   },
+   {
+    "detail": "4 unseen exercises after a fresh reload",
+    "passed": true,
+    "stage": "DELAYED_RETENTION"
+   },
+   {
+    "detail": "{\"P_cap_after\": 1.0, \"P_cap_before\": 0.0, \"R_cap_after\": 0.0, \"R_cap_before\": 1.0, \"authority_note\": \"compute-only: no truth, validity, meaning, commitment, or permission decision may read this record\", \"flow_after\": \"active\", \"flow_before\": \"cutoff\"}",
+    "passed": true,
+    "stage": "CAS_OHM_PROFILE"
+   }
+  ],
+  "teacher_identity": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "teacher_role": "lecturer",
+  "verdict": "PROMOTED"
+ },
+ "log": [
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "explanation",
+   "raw": "```json\n{\n  \"equations\": [\n    \"4 * 6 * 1/2 = 12\",\n    \"5 * 3 * 1/2 = 7.5\",\n    \"a * b * 1/2 = area\",\n    \"10 * 10 * 1/2 = 50\",\n    \"x * y * 1/2 = 15\"\n  ],\n  \"explanation\": \"The area of a triangle is "
+  },
+  {
+   "attempt": 1,
+   "defect": "'5 * 5 * 1/2 = 12.5' does not parse: cannot read '.5'. Use only integers, fractions like 1/2, + - * ^ ( ) and one '='",
+   "field": "worked_examples",
+   "raw": "```json\n[\"4 * 6 * 1/2 = 12\", \"3 * 8 * 1/2 = 12\", \"5 * 5 * 1/2 = 12.5\", \"a * b * 1/2 = area\"]\n```"
+  },
+  {
+   "attempt": 2,
+   "defect": null,
+   "field": "worked_examples",
+   "raw": "```json\n[\"5 * 5 * 1/2 = 25/2\", \"3 * 4 * 1/2 = 6\", \"7 * 2 * 1/2 = 7\", \"10 * 3 * 1/2 = 15\"]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "common_mistake",
+   "raw": "```json\n{\n  \"true_equations\": [\n    \"4 * 6 * 1/2 = 12\",\n    \"3 * 5/2 = 7.5\",\n    \"10 * 3/2 = 15\",\n    \"7 * 2 * 1/2 = 7\",\n    \"9 * 4/2 = 18\"\n  ],\n  \"false_equation\": \"3 + 4 = 12\"\n}\n```"
+  }
+ ],
+ "packet": {
+  "common_mistake": "3 + 4 = 12",
+  "explanation": "{\n  \"equations\": [\n    \"4 * 6 * 1/2 = 12\",\n    \"5 * 3 * 1/2 = 7.5\",\n    \"a * b * 1/2 = area\",\n    \"10 * 10 * 1/2 = 50\",\n    \"x * y * 1/2 = 15\"\n  ],\n  \"explanation\": \"The area of a triangle is half the base times the height. A right angle means two sides meet at 90 degrees, like the corner of a square.\"\n}",
+  "lesson_id": "MATH_geometry_shapes",
+  "provenance": "schema_constrained_field_elicitation",
+  "skill_id": "geometry_shapes",
+  "teacher_model": "qwen.qwen3-32b-v1:0",
+  "teacher_revision": "bedrock:us-west-2",
+  "worked_examples": [
+   "5 * 5 * 1/2 = 25/2",
+   "3 * 4 * 1/2 = 6",
+   "7 * 2 * 1/2 = 7",
+   "10 * 3 * 1/2 = 15"
+  ]
+ },
+ "skill_id": "geometry_shapes"
+}
