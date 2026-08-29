@@ -150,6 +150,27 @@ class HybridRouter:
             trace["commitment"] = {"by": "cas_learned_grammar",
                                    "construction": gram["frames"][0]
                                    ["surface"]["construction_id"]}
+            mood = gram["frames"][0]["surface"].get("mood")
+            if mood == "interrogative":
+                # a learned QUESTION construction: language understood;
+                # the kernel decides whether knowledge exists. If it
+                # cannot answer, the honest split status applies -
+                # never a fabricated answer, never blamed grammar.
+                try:
+                    kernel = self._kernel_answer(
+                        {"pred": "question", "args": [packet]})
+                    trace["answer"] = {"status": "ANSWERED",
+                                       "text": kernel["answer"],
+                                       "frame_core": gram["core"]}
+                    return self._seal(trace, committed=True)
+                except Exception as exc:
+                    trace["answer"] = {
+                        "status": "LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING",
+                        "frame_core": gram["core"],
+                        "detail": "the question parsed natively; the "
+                                  "kernel holds no facts of this kind "
+                                  f"to answer it ({type(exc).__name__})"}
+                    return self._seal(trace, committed=False)
             trace["answer"] = {"status": "UNDERSTOOD",
                                "meaning": packet,
                                "frame_core": gram["core"]}
@@ -307,6 +328,12 @@ class HybridRouter:
         frame used to project identically to its positive - the exact
         silently-dropped-content fabrication genus): negative frames
         wrap in the legacy negation packet."""
+        if core.get("frame") == "coordination":
+            # BOTH clauses survive - dropping one is the fabrication
+            # genus the faithfulness gate exists to catch
+            return {"pred": "conjunction",
+                    "args": [HybridRouter._frame_to_packet(conjunct)
+                             for conjunct in core["conjuncts"]]}
         if core.get("frame") == "event":
             inner = {"pred": "relation",
                      "args": [core["predicate"], core["agent"],

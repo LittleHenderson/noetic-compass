@@ -1,0 +1,108 @@
+{
+ "event": "CURRICULUM_ROUND_1",
+ "results": [
+  {
+   "log": [
+    {
+     "attempt": 1,
+     "defect": "not parseable as JSON",
+     "field": "surface_pattern",
+     "raw": "['NP:agent', 'does', 'the', 'NP:agent', 'chase', 'the', 'NP:patient']"
+    },
+    {
+     "attempt": 2,
+     "defect": "you wrote the verb 'chase' as a literal word - write it as a VERB SLOT instead, for example 'VERB:pred:base' (so it matches ANY verb in that form)",
+     "field": "surface_pattern",
+     "raw": "[\"does\", \"the\", \"NP:agent\", \"chase\", \"the\", \"NP:patient\"]"
+    },
+    {
+     "attempt": 3,
+     "defect": "not parseable as JSON",
+     "field": "surface_pattern",
+     "raw": "['does', 'the', 'NP:agent', 'VERB:pred:base', 'the', 'NP:patient']"
+    },
+    {
+     "attempt": 4,
+     "defect": "not parseable as JSON",
+     "field": "surface_pattern",
+     "raw": "['does', 'the', 'NP:agent', 'chase', 'the', 'NP:patient']"
+    }
+   ],
+   "target": "interrogative_present_transitive",
+   "verdict": "ELICITATION_FAILED_surface_pattern"
+  },
+  {
+   "log": [
+    {
+     "attempt": 1,
+     "defect": "element 'Y.' contains punctuation - patterns hold only slots and bare lowercase words",
+     "field": "surface_pattern",
+     "raw": "[\"addressee\", \"VERB:pred:base\", \"the\", \"Y.\"]"
+    },
+    {
+     "attempt": 2,
+     "defect": "VERB slot 'VERB:pred:base the Y.' must be VERB:pred:form (or VERB:pred2:form) with form in ('base', 'past', 'participle', 'present_3sg')",
+     "field": "surface_pattern",
+     "raw": "[\"VERB:pred:base the Y.\"]"
+    },
+    {
+     "attempt": 3,
+     "defect": "VERB slot 'VERB:pred:form' must be VERB:pred:form (or VERB:pred2:form) with form in ('base', 'past', 'participle', 'present_3sg')",
+     "field": "surface_pattern",
+     "raw": "[\"addressee\", \"VERB:pred:form\", \"the\", \"Y.\", \".\"]"
+    },
+    {
+     "attempt": 4,
+     "defect": "element 'Y.' contains punctuation - patterns hold only slots and bare lowercase words",
+     "field": "surface_pattern",
+     "raw": "[\"addressee\", \"VERB:pred:base\", \"the\", \"Y.\", \".\"]"
+    }
+   ],
+   "target": "imperative_transitive",
+   "verdict": "ELICITATION_FAILED_surface_pattern"
+  },
+  {
+   "log": [
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "surface_pattern",
+     "raw": "[\"NP:agent\", \"VERB:pred:base\", \"NP:patient\", \"and\", \"NP:agent2\", \"VERB:pred2:base\", \"NP:patient2\"]"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "morphology",
+     "raw": "[\n  {\n    \"surface\": \"chase\",\n    \"lemma\": \"chase\",\n    \"form\": \"base\"\n  },\n  {\n    \"surface\": \"chased\",\n    \"lemma\": \"chase\",\n    \"form\": \"past\"\n  },\n  {\n    \"surface\": \"chasing\",\n    \"lemma\": \"chase\",\n    \"form\": \"participle\"\n  },\n  {\n    \"surface\": \"chases\",\n    \"lemma\": \"chase\",\n    \"form\": \"pre"
+    },
+    {
+     "attempt": 1,
+     "defect": "FORM MISMATCH: your pattern's VERB form is ['base', 'base'] (matches 'chase') but 'the cat chases the dog and the bird chases the fox.' uses 'chases' (present_3sg). Either answer with sentences using the form your pattern declares, or note the pattern needs VERB:...:present_3sg",
+     "field": "positive_examples",
+     "raw": "[\n    {\n        \"sentence\": \"the cat chases the dog and the bird chases the fox.\",\n        \"expected_core\": {\n            \"frame\": \"coordination\",\n            \"conjuncts\": [\n                {\n                    \"frame\": \"event\",\n                    \"predicate\": \"chase\",\n                    \"agent\":"
+    },
+    {
+     "attempt": 2,
+     "defect": "FORM MISMATCH: your pattern's VERB form is ['base', 'base'] (matches 'chase') but 'the cat chases the dog and the bird chases the fox.' uses 'chases' (present_3sg). Either answer with sentences using the form your pattern declares, or note the pattern needs VERB:...:present_3sg",
+     "field": "positive_examples",
+     "raw": "[\n    {\n        \"sentence\": \"the cat chases the dog and the bird chases the fox.\",\n        \"expected_core\": {\n            \"frame\": \"coordination\",\n            \"conjuncts\": [\n                {\n                    \"frame\": \"event\",\n                    \"predicate\": \"chase\",\n                    \"agent\":"
+    },
+    {
+     "attempt": 3,
+     "defect": "FORM MISMATCH: your pattern's VERB form is ['base', 'base'] (matches 'chase') but 'the cat chases the dog and the bird chases the fox.' uses 'chases' (present_3sg). Either answer with sentences using the form your pattern declares, or note the pattern needs VERB:...:present_3sg",
+     "field": "positive_examples",
+     "raw": "[\n    {\n        \"sentence\": \"the cat chases the dog and the bird chases the fox.\",\n        \"expected_core\": {\n            \"frame\": \"coordination\",\n            \"conjuncts\": [\n                {\n                    \"frame\": \"event\",\n                    \"predicate\": \"chase\",\n                    \"agent\":"
+    },
+    {
+     "attempt": 4,
+     "defect": "FORM MISMATCH: your pattern's VERB form is ['base', 'base'] (matches 'chase') but 'the cat chases the dog and the bird chases the fox.' uses 'chases' (present_3sg). Either answer with sentences using the form your pattern declares, or note the pattern needs VERB:...:present_3sg",
+     "field": "positive_examples",
+     "raw": "[\n    {\n        \"sentence\": \"the cat chases the dog and the bird chases the fox.\",\n        \"expected_core\": {\n            \"frame\": \"coordination\",\n            \"conjuncts\": [\n                {\n                    \"frame\": \"event\",\n                    \"predicate\": \"chase\",\n                    \"agent\":"
+    }
+   ],
+   "target": "coordination_present_transitive",
+   "verdict": "ELICITATION_FAILED_positive_examples"
+  }
+ ],
+ "teacher": "Qwen/Qwen2.5-3B-Instruct"
+}

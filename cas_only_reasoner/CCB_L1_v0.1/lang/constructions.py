@@ -112,17 +112,45 @@ def validate_construction(rule: Dict) -> List[str]:
                 slot_names.add(parts[1])
     semantics = rule.get("semantics")
     if not isinstance(semantics, dict) or semantics.get("frame") \
-            not in ("event", "state"):
-        defects.append("semantics.frame must be 'event' or 'state'")
+            not in ("event", "state", "coordination"):
+        defects.append("semantics.frame must be 'event', 'state', or "
+                       "'coordination'")
         return defects
-    for key, value in semantics.items():
-        if isinstance(value, str) and value.startswith("@"):
-            if value[1:] not in slot_names:
+
+    def check_refs(node) -> None:
+        if isinstance(node, dict):
+            for value in node.values():
+                check_refs(value)
+        elif isinstance(node, list):
+            for item in node:
+                check_refs(item)
+        elif isinstance(node, str) and node.startswith("@"):
+            if node[1:] not in slot_names:
                 defects.append(f"semantics references unbound slot "
-                               f"{value!r}")
-    for required in ("tense", "polarity"):
-        if required not in semantics:
-            defects.append(f"semantics missing {required!r}")
+                               f"{node!r}")
+
+    check_refs(semantics)
+    if semantics["frame"] == "coordination":
+        conjuncts = semantics.get("conjuncts")
+        if not isinstance(conjuncts, list) or len(conjuncts) < 2:
+            defects.append("coordination frame needs a 'conjuncts' "
+                           "list of at least 2 event objects")
+        else:
+            for conjunct in conjuncts:
+                if not isinstance(conjunct, dict) \
+                        or conjunct.get("frame") not in ("event",
+                                                         "state"):
+                    defects.append("each conjunct must be an event or "
+                                   "state object")
+                else:
+                    for required in ("tense", "polarity"):
+                        if required not in conjunct:
+                            defects.append(f"conjunct missing "
+                                           f"{required!r}")
+    else:
+        for required in ("tense", "polarity"):
+            if required not in semantics:
+                defects.append(f"semantics missing {required!r}")
     return defects
 
 
@@ -164,6 +192,8 @@ class ConstructionParser:
             return None
         if form == "base" and analysis["form"] != "base":
             return None
+        if form == "present_3sg" and analysis["form"] != "present_3sg":
+            return None
         return analysis["lemma"], i + 1
 
     # ------------------------------------------------------------------
@@ -194,14 +224,20 @@ class ConstructionParser:
 
     def realize(self, rule: Dict, bindings: Dict[str, str]) -> Dict:
         """Apply the semantic transformation -> a frame with separated
-        CORE (truth-conditional) and SURFACE metadata."""
-        core = {}
-        for key, value in rule["semantics"].items():
-            if isinstance(value, str) and value.startswith("@"):
-                core[key] = bindings[value[1:]]
-            else:
-                core[key] = value
-        return {"core": core,
+        CORE (truth-conditional) and SURFACE metadata. Resolution is
+        RECURSIVE so coordination frames (nested conjunct events)
+        realize their @references too."""
+        def resolve(node):
+            if isinstance(node, dict):
+                return {key: resolve(value)
+                        for key, value in node.items()}
+            if isinstance(node, list):
+                return [resolve(item) for item in node]
+            if isinstance(node, str) and node.startswith("@"):
+                return bindings[node[1:]]
+            return node
+
+        return {"core": resolve(rule["semantics"]),
                 "surface": {**rule.get("surface_meta", {}),
                             "construction_id": rule["construction_id"]}}
 

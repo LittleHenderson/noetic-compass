@@ -778,6 +778,39 @@ THE LEARNING LEDGER (CAS_APPRENTICE_v0.1/learning_ledger.py ->
   Current: 4 durable constructions (3 seed + 1 live-model-taught),
   10 words, 2 verb forms.
 
+CURRICULUM ROUND 1 (sealed 2026-08-28,
+CAS_APPRENTICE_v0.1/output/curriculum_round1.json): three more
+constructions attempted with the 3B teacher through the same
+schema-constrained pipeline - questions, commands, coordination.
+HONEST RESULT: 0 of 3 promoted; the 3B hit its TEACHER CEILING on the
+pattern meta-syntax. Evidence in the sealed elicitation logs: it
+writes the verb literally instead of as a slot, copies placeholders
+verbatim (VERB:pred:form), and - most tellingly - given the exact
+form-conflict fix FOUR times (pattern says base, its sentences say
+'chases'), it repeats the identical wrong answer; seeded-sampling
+retries did not move it. Materials-improvement rounds (worked
+examples from previously learned constructions, targeted defect
+messages, punctuation/placeholder guards) are all in the harness and
+sealed. Escalation per doctrine + standing owner authorization: a
+20B-class teacher on cloud GPU (AWS quota may still be 0.0 per the
+harness-lane record - RunPod is the likely faster door); the
+curriculum harness is teacher-agnostic (CAS_TEACHER_MODEL env var).
+
+  MACHINERY EXTENSIONS shipped with the round (all green: L1 31,
+  CORTEX 43, A1 8): strict present_3sg verb-form matching; recursive
+  semantics realization + coordination frames (two-event conjuncts)
+  in the construction schema; learned QUESTION constructions route to
+  the kernel with the doctrine's honest split status
+  LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING when no facts exist;
+  coordination frames project to conjunction packets with BOTH
+  clauses preserved.
+
+STANDING ORDERS ADDED TO CLAUDE.md (owner, 2026-08-28): PLAIN
+  ENGLISH - PERMANENT, EVERY OUTPUT (a button turned on; the owner
+  caught repeated late-dialogue drift); the COMPUTE ESCALATION LADDER
+  (never CPU; local RTX 4070 to ~3B fp16; 20B+ on AWS/RunPod,
+  credentials local).
+
 PROGRAM TEST TOTALS (all green, 2026-08-28, post-audit):
   kernel 34 + RLP 45 + CCB-M1 34 + CCB-L1 18 + CAS-Sem 19 +
   workbench 13 + CRQS 35 + CCB-T1 20 + OHM-panel 10 + H2H 10 +

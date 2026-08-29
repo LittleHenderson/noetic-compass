@@ -6,6 +6,28 @@
 - **Framework**: Cognitive Architecture System (CAS) v7.7 — Register Multiplicity and Operator Discipline Extension (prior: v7.6 Stoichiometric Production Semantics Extension; prior: v7.5 Phenomenological Register Extension; prior: v7.4 Corrected Edition)
 - **Classification**: Confidential
 
+## PLAIN ENGLISH — PERMANENT, EVERY OUTPUT (owner order 2026-08-28)
+
+- **This is a button turned ON, not a mode to drift out of.** Every
+  reply to the owner — status updates, results, errors, plans — uses
+  plain English per `~/.claude/skills/plain-english-explanations`:
+  meaning first, then the precise term; define jargon on first use;
+  keep every literal exact (paths, commands, digests, numbers,
+  claim-status words); separate claim states (real / simulated /
+  accepted / open / not-licensed / flagged) for any audit or proof
+  claim; metaphor maps only with point-for-point correspondence.
+- The owner has caught the drift repeatedly: the skill gets used early
+  in a dialogue and abandoned later. Re-read this before EVERY final
+  report. Short sentences. One idea per sentence. No conference
+  vocabulary.
+
+## COMPUTE ESCALATION LADDER (owner order 2026-08-28)
+
+- **Never CPU for model inference.** Local RTX 4070 (8GB, CUDA venv
+  `~/venvs/cas-gpu`) handles up to ~3B fp16. **20B-class or bigger
+  teachers/models run on AWS** (or RunPod); credentials are local
+  (`~/.aws/`, `~/.cas_llm_keys.env`).
+
 ## Patent / IP Filing Status (CONFIRMED)
 - **Application No. 64/037,173** — Utility—Provisional, filed **04/13/2026** (Conf# **1346**, Patent Center# **75259715**), status: received by USPTO.
 - `64/037,173` is the **REAL, valid** number: US provisional series codes advance over time (60→61→62→63→**64**); by 2026 provisionals are **series 64**. **Never flag it as suspect** anywhere (repo, docs, marketing, memory).
