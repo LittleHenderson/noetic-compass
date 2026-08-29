@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-28 (curriculum round 2) - recipients, adjectives, past questions ALL DURABLE; grammar at 10 constructions; a forgetting bug caught and canaried
+
+- AWS Bedrock 32B taught three more constructions through the unchanged ladder, all PROMOTED_DURABLY: past-tense questions ('did the cat chase the dog?' now ANSWERED), ditransitives with recipients ('the cat gives the bone to the dog.' - the recipient role survives projection; 'bone' entered the runtime lexicon via LEX persistence), and attributive adjectives ('the gray cat chases the brown dog.' - new ADJ slot type; modifiers project as conjoined property assertions, nothing dropped). Grammar: 10 durable constructions (3 seed + 7 live-taught).
+- FORGETTING BUG caught before teaching: the round-1 save path wrote raw teacher morph entries over the merged table - on disk 'chased' lost its past reading and the runtime FORGOT active-past while all suites stayed green. Repaired, both save paths fixed to dump the MERGED table, and a runtime CANARY test now probes one sentence per construction family so silent knowledge loss trips CI.
+- One test OUTGROWN by learning, updated honestly: the adjective-drop faithfulness case now parses natively, so the cortex-lane test moved to a single-adjective shape outside the native grammar. Elicitation feedback now names unknown words exactly (the 32B burned four retries on 'quick' before this).
+- Lane sweep, exact: RRK 34 + RLP 45 + M1 34 + L1 32 + SEM 19 + WB 13 + CRQS 35 + T1 20 + OHM 10 + H2H 10 + LTG 11 + SM 8 + G10 8 + CORTEX 45 + A1 8 = 332 local tests, 0 failures.
+
 ## 2026-08-28 (AWS teacher round) - all three lessons DURABLE via Bedrock; the grammar reaches 7 constructions; the ladder caught morphology clobbering
 
 - Per the owner's AWS-first order: the 20B-class teacher escalation used AWS Bedrock (qwen.qwen3-32b-v1:0, us-west-2, pay-per-token; the EC2 quota door was unnecessary). The curriculum harness gained a bedrock backend (CAS_TEACHER_BACKEND=bedrock) - same fields, same validators, same examiner.

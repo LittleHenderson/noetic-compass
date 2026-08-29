@@ -38,9 +38,20 @@ SEED_GRAMMAR = os.path.join(LANE, "CCB_L1_v0.1", "fixtures",
 SEED_MORPH = os.path.join(LANE, "CCB_L1_v0.1", "fixtures",
                           "seed_morphology.json")
 
+CURRICULUM_LEX = dict(TEACHING_LEX)
+CURRICULUM_LEX.update({
+    "gray": {"pos": "adj", "sense": "gray"},
+    "brown": {"pos": "adj", "sense": "brown"},
+    "quiet": {"pos": "adj", "sense": "quiet"},
+})
+
+SEED_LEXICON = os.path.join(LANE, "CCB_L1_v0.1", "fixtures",
+                            "seed_lexicon.json")
+
 ROLES = ("agent", "patient", "agent2", "patient2", "recipient",
          "experiencer", "instrument", "source", "destination",
          "location")
+ADJ_SLOTS = ("agent_mod", "patient_mod", "mod")
 VERB_NAMES = ("pred", "pred2")
 VERB_FORMS = ("base", "past", "participle", "present_3sg")
 
@@ -66,6 +77,11 @@ def valid_pattern(value):
                         f"VERB:pred:form (or VERB:pred2:form) with "
                         f"form in {VERB_FORMS}")
             has_verb = True
+        elif element.startswith("ADJ:"):
+            parts = element.split(":")
+            if len(parts) != 2 or parts[1] not in ADJ_SLOTS:
+                return (f"ADJ slot {element!r} must be ADJ:name with "
+                        f"name in {ADJ_SLOTS}")
         elif "." in element or "?" in element:
             return (f"element {element!r} contains punctuation - "
                     f"patterns hold only slots and bare lowercase "
@@ -113,6 +129,21 @@ def structural_check(sentences, pattern, morphology, must_match):
                 return (f"FORM MISMATCH: {sentence!r} uses base "
                         f"'chase' but your pattern's VERB form is "
                         f"{verb_forms}")
+            # name the exact unknown words - vague feedback wastes
+            # teacher retries (round-2 finding: 'quick' used 4x)
+            from lang.grammar import tokenize
+            known = set(CURRICULUM_LEX)
+            unknown = [t for t in tokenize(sentence)
+                       if t not in known and t not in (".", "?", ",")
+                       and _parser(morphology).morph.analyze(t) is None]
+            if unknown:
+                adjectives = sorted(w for w, e in CURRICULUM_LEX.items()
+                                    if e["pos"] == "adj")
+                nouns = sorted(w for w, e in CURRICULUM_LEX.items()
+                               if e["pos"] == "noun")
+                return (f"unknown word(s) {unknown} in {sentence!r} - "
+                        f"known adjectives: {adjectives}; known "
+                        f"nouns: {nouns}. Use ONLY these")
             return (f"{sentence!r} does not match YOUR pattern "
                     f"{pattern}; NP slots consume 'the NOUN' and only "
                     f"lexicon nouns (cat, dog, bird, fox, hen) fit")
@@ -128,7 +159,7 @@ def _parser(morphology):
     for entry in morphology or []:
         morph.teach(entry["surface"], entry["lemma"], entry["form"],
                     provenance="field_check")
-    return ConstructionParser(Lexicon(TEACHING_LEX), morph)
+    return ConstructionParser(Lexicon(CURRICULUM_LEX), morph)
 
 
 # ----------------------------------------------------------------------
@@ -249,6 +280,207 @@ TARGETS = [
                  _core_event("chase", "cat", "hen")]}},
         ],
         "probe": "the cat chases the dog and the dog chases the cat.",
+    },
+    {
+        "construction_id": "ditransitive_present",
+        "lesson_id": "LIVE_L006_recipient",
+        "description": "the DITRANSITIVE construction 'the X gives the Y to the Z.' - an event where the verb is the predicate, X the agent, Y the patient (thing transferred), Z the RECIPIENT (slot NP:recipient); tense present, polarity positive. Verb: give (present_3sg 'gives'). Extra noun: bone",
+        "shape_hint": "the X gives the bone to the Z.",
+        "surface_meta": {
+            "mood": "declarative"
+        },
+        "scaffold_semantics": {
+            "frame": "event",
+            "predicate": "@pred",
+            "agent": "@agent",
+            "patient": "@patient",
+            "recipient": "@recipient",
+            "tense": "present",
+            "polarity": "positive"
+        },
+        "example_sentence_hint": "shaped 'the X gives the bone to the Z.'",
+        "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"give\", \"agent\": \"<X>\", \"patient\": \"bone\", \"tense\": \"present\", \"polarity\": \"positive\", \"recipient\": \"<Z>\"}",
+        "lexicon_additions": {
+            "bone": {
+                "pos": "noun",
+                "sense": "bone"
+            }
+        },
+        "held_out": [
+            {
+                "sentence": "the fox gives the bone to the hen.",
+                "expected_core": {
+                    "frame": "event",
+                    "predicate": "give",
+                    "agent": "fox",
+                    "patient": "bone",
+                    "tense": "present",
+                    "polarity": "positive",
+                    "recipient": "hen"
+                }
+            },
+            {
+                "sentence": "the dog gives the bone to the cat.",
+                "expected_core": {
+                    "frame": "event",
+                    "predicate": "give",
+                    "agent": "dog",
+                    "patient": "bone",
+                    "tense": "present",
+                    "polarity": "positive",
+                    "recipient": "cat"
+                }
+            },
+            {
+                "sentence": "the gives bone to dog the.",
+                "expect": "no_parse"
+            }
+        ],
+        "retention": [
+            {
+                "sentence": "the hen gives the bone to the bird.",
+                "expected_core": {
+                    "frame": "event",
+                    "predicate": "give",
+                    "agent": "hen",
+                    "patient": "bone",
+                    "tense": "present",
+                    "polarity": "positive",
+                    "recipient": "bird"
+                }
+            }
+        ],
+        "probe": "the cat gives the bone to the dog."
+    },
+    {
+        "construction_id": "attributive_adjective_transitive",
+        "lesson_id": "LIVE_L007_adjectives",
+        "description": "the ATTRIBUTIVE ADJECTIVE construction 'the ADJ X chases the ADJ Y.' - each noun carries an adjective. Use ADJ slots: ADJ:agent_mod before NP:agent, ADJ:patient_mod before NP:patient (an ADJ slot matches adjectives gray, brown, quiet). IMPORTANT: write the literal 'the' before each ADJ slot, then the bare NP after it: the, ADJ:agent_mod, NP:agent. Meaning: the chase event PLUS agent_mod and patient_mod properties; tense present, polarity positive; verb form present_3sg ('chases')",
+        "shape_hint": "the gray cat chases the brown dog.",
+        "surface_meta": {
+            "mood": "declarative"
+        },
+        "scaffold_semantics": {
+            "frame": "event",
+            "predicate": "@pred",
+            "agent": "@agent",
+            "patient": "@patient",
+            "agent_mod": "@agent_mod",
+            "patient_mod": "@patient_mod",
+            "tense": "present",
+            "polarity": "positive"
+        },
+        "example_sentence_hint": "shaped 'the gray cat chases the brown dog.' (adjectives: gray, brown, quiet)",
+        "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<X>\", \"patient\": \"<Y>\", \"tense\": \"present\", \"polarity\": \"positive\", \"agent_mod\": \"<ADJ1>\", \"patient_mod\": \"<ADJ2>\"}",
+        "held_out": [
+            {
+                "sentence": "the brown fox chases the quiet hen.",
+                "expected_core": {
+                    "frame": "event",
+                    "predicate": "chase",
+                    "agent": "fox",
+                    "patient": "hen",
+                    "tense": "present",
+                    "polarity": "positive",
+                    "agent_mod": "brown",
+                    "patient_mod": "quiet"
+                }
+            },
+            {
+                "sentence": "the quiet dog chases the gray cat.",
+                "expected_core": {
+                    "frame": "event",
+                    "predicate": "chase",
+                    "agent": "dog",
+                    "patient": "cat",
+                    "tense": "present",
+                    "polarity": "positive",
+                    "agent_mod": "quiet",
+                    "patient_mod": "gray"
+                }
+            },
+            {
+                "sentence": "the gray chases cat the dog brown.",
+                "expect": "no_parse"
+            }
+        ],
+        "retention": [
+            {
+                "sentence": "the gray bird chases the brown hen.",
+                "expected_core": {
+                    "frame": "event",
+                    "predicate": "chase",
+                    "agent": "bird",
+                    "patient": "hen",
+                    "tense": "present",
+                    "polarity": "positive",
+                    "agent_mod": "gray",
+                    "patient_mod": "brown"
+                }
+            }
+        ],
+        "probe": "the gray cat chases the brown dog."
+    },
+    {
+        "construction_id": "interrogative_past_transitive",
+        "lesson_id": "LIVE_L008_past_question",
+        "description": "the PAST-TENSE yes/no QUESTION construction 'did the X VERB the Y?' - a question about an event with the verb as predicate (BASE form after 'did'), X as agent, Y as patient, tense PAST, polarity positive",
+        "shape_hint": "did the X chase the Y?",
+        "surface_meta": {
+            "mood": "interrogative"
+        },
+        "scaffold_semantics": {
+            "frame": "event",
+            "predicate": "@pred",
+            "agent": "@agent",
+            "patient": "@patient",
+            "tense": "past",
+            "polarity": "positive"
+        },
+        "example_sentence_hint": "shaped 'did the X chase the Y?' ending with '?'",
+        "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<X>\", \"patient\": \"<Y>\", \"tense\": \"past\", \"polarity\": \"positive\"}",
+        "held_out": [
+            {
+                "sentence": "did the fox chase the hen?",
+                "expected_core": {
+                    "frame": "event",
+                    "predicate": "chase",
+                    "agent": "fox",
+                    "patient": "hen",
+                    "tense": "past",
+                    "polarity": "positive"
+                }
+            },
+            {
+                "sentence": "did the bird chase the cat?",
+                "expected_core": {
+                    "frame": "event",
+                    "predicate": "chase",
+                    "agent": "bird",
+                    "patient": "cat",
+                    "tense": "past",
+                    "polarity": "positive"
+                }
+            },
+            {
+                "sentence": "did chase the fox the?",
+                "expect": "no_parse"
+            }
+        ],
+        "retention": [
+            {
+                "sentence": "did the hen chase the dog?",
+                "expected_core": {
+                    "frame": "event",
+                    "predicate": "chase",
+                    "agent": "hen",
+                    "patient": "dog",
+                    "tense": "past",
+                    "polarity": "positive"
+                }
+            }
+        ],
+        "probe": "did the cat chase the dog?"
     },
 ]
 
@@ -410,6 +642,11 @@ def main():
     results = []
     for target in targets:
         print(f"\n=== TEACHING {target['construction_id']} ===")
+        # LEX subboard: lesson-scoped vocabulary enters the teaching
+        # lexicon now; it persists to the runtime lexicon only on
+        # durable promotion
+        for word, entry in target.get("lexicon_additions", {}).items():
+            CURRICULUM_LEX[word] = entry
         context = (
             "You are a grammar teacher for a symbolic language "
             "machine. Pattern slots: NP:agent / NP:patient (and "
@@ -489,7 +726,7 @@ def main():
                 open(SEED_MORPH, encoding="utf-8")).items():
             morph.teach(surface, entry["lemma"], entry["form"],
                         provenance=entry["provenance"])
-        student = Apprentice(Lexicon(TEACHING_LEX), morph, store)
+        student = Apprentice(Lexicon(CURRICULUM_LEX), morph, store)
         board = ApprenticeshipBoard()
 
         def ladder(meta, _student=student, _lesson=lesson,
@@ -519,16 +756,28 @@ def main():
             print(f"  RETENTION: {retention['verdict']}")
             if retention["verdict"] == "PROMOTED_DURABLY":
                 store.save(SEED_GRAMMAR)
-                morph_payload = json.load(open(SEED_MORPH,
-                                               encoding="utf-8"))
-                for entry in lesson.get("morphology", []):
-                    morph_payload[entry["surface"]] = {
-                        "lemma": entry["lemma"],
-                        "form": entry["form"],
-                        "provenance": f"lesson:{lesson['lesson_id']}"}
-                json.dump(morph_payload,
+                # save the student's MERGED morph table - NEVER the
+                # raw lesson entries (save-path clobber bug: raw
+                # 'chased: participle' overwrote the merged
+                # past_or_participle on disk and the runtime FORGOT
+                # active-past)
+                merged = {surface: {"lemma": e["lemma"],
+                                    "form": e["form"],
+                                    "provenance": e["provenance"]}
+                          for surface, e in
+                          sorted(student.morph.to_json().items())}
+                json.dump(merged,
                           open(SEED_MORPH, "w", encoding="utf-8"),
                           indent=1)
+                if target.get("lexicon_additions"):
+                    seed_payload = json.load(open(SEED_LEXICON,
+                                                  encoding="utf-8"))
+                    for word, entry in target[
+                            "lexicon_additions"].items():
+                        seed_payload["lexicon"].setdefault(word, entry)
+                    json.dump(seed_payload,
+                              open(SEED_LEXICON, "w",
+                                   encoding="utf-8"), indent=1)
                 after = HybridRouter(mode="NATIVE_ONLY").turn(
                     target["probe"])
                 print(f"  AFTER:  {target['probe']!r} -> "

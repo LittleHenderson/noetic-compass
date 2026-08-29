@@ -451,14 +451,14 @@ def main():
         if retention["verdict"] == "PROMOTED_DURABLY":
             # the machine KEEPS what it learned: save the runtime store
             store.save(SEED_GRAMMAR)
-            morph_payload = json.load(open(SEED_MORPH,
-                                           encoding="utf-8"))
-            for entry in lesson.get("morphology", []):
-                morph_payload[entry["surface"]] = {
-                    "lemma": entry["lemma"], "form": entry["form"],
-                    "provenance": f"lesson:{lesson['lesson_id']}"}
-            json.dump(morph_payload, open(SEED_MORPH, "w",
-                                          encoding="utf-8"), indent=1)
+            # save the student's MERGED table, never raw lesson
+            # entries (save-path clobber bug, fixed 2026-08-28)
+            merged = {surface: {"lemma": e["lemma"], "form": e["form"],
+                                "provenance": e["provenance"]}
+                      for surface, e in
+                      sorted(student.morph.to_json().items())}
+            json.dump(merged, open(SEED_MORPH, "w",
+                                   encoding="utf-8"), indent=1)
             # ---------------- AFTER transcript (fresh runtime)
             after_router = HybridRouter(mode="NATIVE_ONLY")
             after = after_router.turn(probe)

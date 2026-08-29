@@ -1,17 +1,37 @@
 {
- "chased": {
-  "lemma": "chase",
-  "form": "participle",
-  "provenance": "lesson:LIVE_L003_question"
- },
  "chase": {
   "lemma": "chase",
   "form": "base",
-  "provenance": "lesson:LIVE_L003_question"
+  "provenance": "lesson:LIVE_L008_past_question"
+ },
+ "chased": {
+  "lemma": "chase",
+  "form": "past_or_participle",
+  "provenance": "repair:save-path-clobber-2026-08-28"
  },
  "chases": {
   "lemma": "chase",
   "form": "present_3sg",
-  "provenance": "lesson:LIVE_L003_question"
+  "provenance": "lesson:LIVE_L007_adjectives"
+ },
+ "gave": {
+  "lemma": "give",
+  "form": "past",
+  "provenance": "lesson:LIVE_L006_recipient"
+ },
+ "give": {
+  "lemma": "give",
+  "form": "base",
+  "provenance": "lesson:LIVE_L006_recipient"
+ },
+ "given": {
+  "lemma": "give",
+  "form": "participle",
+  "provenance": "lesson:LIVE_L006_recipient"
+ },
+ "gives": {
+  "lemma": "give",
+  "form": "present_3sg",
+  "provenance": "lesson:LIVE_L006_recipient"
  }
 }

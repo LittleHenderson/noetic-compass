@@ -851,11 +851,42 @@ injects the plain-English reminder into model context on EVERY
 prompt - harness-enforced, not discipline-dependent. Pipe-tested;
 CLAUDE.md carries the standing order as backup.
 
-PROGRAM TEST TOTALS (all green, 2026-08-28, post-audit):
-  kernel 34 + RLP 45 + CCB-M1 34 + CCB-L1 18 + CAS-Sem 19 +
-  workbench 13 + CRQS 35 + CCB-T1 20 + OHM-panel 10 + H2H 10 +
-  LTG 11 + SM 8 + CNCM-G10 8 = 265 local, + cas-rr 43 = 308
-  program-wide.
+CURRICULUM ROUND 2 (sealed 2026-08-28, AWS Bedrock
+qwen.qwen3-32b-v1:0): three more lessons, ALL PROMOTED_DURABLY -
+  - interrogative_past_transitive: 'did the cat chase the dog?'
+    UNSUPPORTED -> ANSWERED ("i do not know whether the cat chased
+    the dog." - past-tense rendering added)
+  - ditransitive_present: 'the cat gives the bone to the dog.'
+    UNSUPPORTED -> UNDERSTOOD; the RECIPIENT role survives projection
+    (4-arg relation), and 'bone' entered the runtime lexicon through
+    the LEX persistence path (lesson-scoped vocabulary promotes with
+    its construction)
+  - attributive_adjective_transitive: 'the gray cat chases the brown
+    dog.' UNSUPPORTED -> UNDERSTOOD; NEW ADJ slot type in the
+    construction language; modifiers project as conjoined property
+    assertions - relation(chase,cat,dog) + property(cat,gray) +
+    property(dog,brown) - nothing dropped
+  THE GRAMMAR NOW HOLDS 10 DURABLE CONSTRUCTIONS: 3 hand-authored
+  seed + 7 live-model-taught (1 local 3B + 6 AWS 32B). One test was
+  OUTGROWN by learning and updated honestly: the R1-faithfulness case
+  'the gray cat chases the quiet dog.' now parses NATIVELY (the
+  cortex never runs), so the cortex-lane test moved to a
+  single-adjective shape the native grammar does not cover.
+
+SAVE-PATH CLOBBER BUG - CAUGHT, REPAIRED, CANARIED (2026-08-28): the
+  round-1 morph save wrote the teacher's RAW entries over the
+  student's MERGED table; on disk 'chased' became participle-only and
+  the runtime FORGOT active-past ('the cat chased the dog.' ->
+  UNSUPPORTED) while every suite stayed green. Repaired
+  (past_or_participle restored), both teacher save paths now dump the
+  MERGED MorphTable, and a RUNTIME CANARY test probes one sentence
+  per construction family so silent knowledge loss trips CI
+  (test_runtime_canary_no_construction_forgotten).
+
+PROGRAM TEST TOTALS (all green, exact, junit-counted 2026-08-28,
+curriculum round 2): RRK 34 + RLP 45 + M1 34 + L1 32 + SEM 19 +
+WB 13 + CRQS 35 + T1 20 + OHM 10 + H2H 10 + LTG 11 + SM 8 + G10 8 +
+CORTEX 45 + A1 8 = 332 local, + cas-rr 43 = 375 program-wide.
 
 G9 RE-AUDIT VERDICT (independent 2-agent adversarial pass,
 2026-08-28, after commit 849a4e47): NOT REFUTED on both fronts. The

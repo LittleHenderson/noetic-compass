@@ -133,6 +133,13 @@ def validate_construction(rule: Dict) -> List[str]:
                                f"{element!r}")
             else:
                 slot_names.add(parts[1])
+        elif element.startswith("ADJ:"):
+            parts = element.split(":")
+            if len(parts) != 2 or not parts[1]:
+                defects.append(f"ADJ slot needs exactly one name: "
+                               f"{element!r}")
+            else:
+                slot_names.add(parts[1])
     semantics = rule.get("semantics")
     if not isinstance(semantics, dict) or semantics.get("frame") \
             not in ("event", "state", "coordination"):
@@ -200,6 +207,15 @@ class ConstructionParser:
                 return entry.sense, i + 1
         return None
 
+    def _match_adj(self, tokens: List[str],
+                   i: int) -> Optional[Tuple[str, int]]:
+        """A lexicon adjective -> (sense, next index)."""
+        if i < len(tokens):
+            entry = self.lexicon.lookup(tokens[i])
+            if entry is not None and entry.pos == "adj":
+                return entry.sense, i + 1
+        return None
+
     def _match_verb(self, tokens: List[str], i: int,
                     form: str) -> Optional[Tuple[str, int]]:
         if i >= len(tokens):
@@ -237,6 +253,11 @@ class ConstructionParser:
                 if matched is None:
                     return None
                 bindings[name], i = matched
+            elif element.startswith("ADJ:"):
+                matched = self._match_adj(tokens, i)
+                if matched is None:
+                    return None
+                bindings[element.split(":")[1]], i = matched
             else:
                 if i >= len(tokens) or tokens[i] != element:
                     return None

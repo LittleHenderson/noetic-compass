@@ -167,8 +167,13 @@ class HybridRouter:
                         # chase is cat' was mangled English over a
                         # CORRECT kernel verdict)
                         core = gram["core"]
+                        # naive regular rendering: present -> +s,
+                        # past -> +d (chase -> chased); the REALIZE
+                        # subboard owns proper rendering later
+                        suffix = "d" if core.get("tense") == "past" \
+                            else "s"
                         clause = (f"the {core['agent']} "
-                                  f"{core['predicate']}s the "
+                                  f"{core['predicate']}{suffix} the "
                                   f"{core['patient']}")
                         if kernel["kernel_status"] == "CONCLUDED":
                             text = f"yes, {clause}."
@@ -350,9 +355,26 @@ class HybridRouter:
                     "args": [HybridRouter._frame_to_packet(conjunct)
                              for conjunct in core["conjuncts"]]}
         if core.get("frame") == "event":
-            inner = {"pred": "relation",
-                     "args": [core["predicate"], core["agent"],
-                              core["patient"]]}
+            args = [core["predicate"], core["agent"], core["patient"]]
+            if core.get("recipient"):
+                # ditransitive: the recipient role SURVIVES (4-arg
+                # relation) - dropping a role is the content-drop genus
+                args.append(core["recipient"])
+            inner = {"pred": "relation", "args": args}
+            modifiers = []
+            if core.get("agent_mod"):
+                modifiers.append({"pred": "property",
+                                  "args": [core["agent"],
+                                           core["agent_mod"]]})
+            if core.get("patient_mod"):
+                modifiers.append({"pred": "property",
+                                  "args": [core["patient"],
+                                           core["patient_mod"]]})
+            if modifiers:
+                # attributive adjectives project as conjoined property
+                # assertions - every modifier survives
+                inner = {"pred": "conjunction",
+                         "args": [inner] + modifiers}
         else:
             inner = {"pred": "property",
                      "args": [core.get("entity"), core.get("property")]}

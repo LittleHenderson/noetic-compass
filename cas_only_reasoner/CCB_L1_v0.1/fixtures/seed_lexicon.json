@@ -1,26 +1,94 @@
 {
-  "fixture": "seed_lexicon",
-  "lexicon": {
-    "the":    {"pos": "article",  "sense": "the"},
-    "is":     {"pos": "copula",   "sense": "is"},
-    "not":    {"pos": "negation", "sense": "not"},
-    "it":     {"pos": "pronoun",  "sense": "it"},
-    "cat":    {"pos": "noun", "sense": "cat"},
-    "dog":    {"pos": "noun", "sense": "dog"},
-    "gray":   {"pos": "adj",  "sense": "gray"},
-    "brown":  {"pos": "adj",  "sense": "brown"},
-    "quiet":  {"pos": "adj",  "sense": "quiet"},
-    "chases": {"pos": "verb", "sense": "chase"}
+ "fixture": "seed_lexicon",
+ "lexicon": {
+  "the": {
+   "pos": "article",
+   "sense": "the"
   },
-  "cmb_facts": [
-    {"pred": "has", "args": ["cat", "gray"]},
-    {"pred": "has", "args": ["cat", "quiet"]},
-    {"pred": "has", "args": ["dog", "brown"]}
-  ],
-  "rules": [
-    {"rule_id": "r_prop",
-     "premises": [{"pred": "has", "args": ["?X", "?Y"]}],
-     "conclusion": {"pred": "property", "args": ["?X", "?Y"]},
-     "source": "l1_grounding"}
-  ]
+  "is": {
+   "pos": "copula",
+   "sense": "is"
+  },
+  "not": {
+   "pos": "negation",
+   "sense": "not"
+  },
+  "it": {
+   "pos": "pronoun",
+   "sense": "it"
+  },
+  "cat": {
+   "pos": "noun",
+   "sense": "cat"
+  },
+  "dog": {
+   "pos": "noun",
+   "sense": "dog"
+  },
+  "gray": {
+   "pos": "adj",
+   "sense": "gray"
+  },
+  "brown": {
+   "pos": "adj",
+   "sense": "brown"
+  },
+  "quiet": {
+   "pos": "adj",
+   "sense": "quiet"
+  },
+  "chases": {
+   "pos": "verb",
+   "sense": "chase"
+  },
+  "bone": {
+   "pos": "noun",
+   "sense": "bone"
+  }
+ },
+ "cmb_facts": [
+  {
+   "pred": "has",
+   "args": [
+    "cat",
+    "gray"
+   ]
+  },
+  {
+   "pred": "has",
+   "args": [
+    "cat",
+    "quiet"
+   ]
+  },
+  {
+   "pred": "has",
+   "args": [
+    "dog",
+    "brown"
+   ]
+  }
+ ],
+ "rules": [
+  {
+   "rule_id": "r_prop",
+   "premises": [
+    {
+     "pred": "has",
+     "args": [
+      "?X",
+      "?Y"
+     ]
+    }
+   ],
+   "conclusion": {
+    "pred": "property",
+    "args": [
+     "?X",
+     "?Y"
+    ]
+   },
+   "source": "l1_grounding"
+  }
+ ]
 }

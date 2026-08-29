@@ -297,13 +297,13 @@ def test_faithfulness_r1_dropped_content_refused():
     sentences are now intercepted upstream by the CAS-Ohm overload
     gate - see test_t3): the packet ignores two known adjectives."""
     cortex = ScriptedCortex({
-        "the gray cat chases the quiet dog.": (
+        "the cat chases the quiet dog.": (
             {"pred": "relation", "args": ["chase", "cat", "dog"]}, [])})
     router = HybridRouter(mode="HYBRID_COMMIT", cortex=cortex)
-    trace = router.turn("the gray cat chases the quiet dog.")
+    trace = router.turn("the cat chases the quiet dog.")
     assert trace["answer"]["status"] == "CONTENT_MISMATCH"
     assert trace["answer"]["rule"] == "R1_dropped_known_content"
-    assert trace["answer"]["dropped"] == ["gray", "quiet"]
+    assert trace["answer"]["dropped"] == ["quiet"]
     assert trace["committed"] is False
 
 
@@ -440,3 +440,24 @@ def test_learned_question_answers_in_plain_english():
     assert trace["answer"]["status"] == "ANSWERED"
     assert trace["answer"]["text"] == \
         "i do not know whether the cat chases the dog."
+
+
+def test_runtime_canary_no_construction_forgotten():
+    """CANARY (save-path clobber bug: the disk write of raw teacher
+    morph entries made the runtime FORGET active-past while all suites
+    stayed green). One runtime probe per durable construction family -
+    if any stops parsing, knowledge was lost on disk."""
+    router = HybridRouter(mode="NATIVE_ONLY")
+    probes = {
+        "the cat chased the dog.": "UNDERSTOOD",        # active past
+        "the dog was chased by the cat.": "UNDERSTOOD",  # passive
+        "the cat does not chase the dog.": "UNDERSTOOD",  # negation
+        "chase the dog.": "UNDERSTOOD",                  # imperative
+        "the cat chases the dog and the dog chases the cat.":
+            "UNDERSTOOD",                                # coordination
+        "does the cat chase the dog?": "ANSWERED",       # question
+    }
+    for sentence, expected in probes.items():
+        trace = router.turn(sentence)
+        assert trace["answer"]["status"] == expected, \
+            f"FORGOTTEN: {sentence!r} -> {trace['answer']['status']}"
