@@ -38,6 +38,10 @@ GREETING_REPLIES = {
 }
 
 
+def _indefinite(noun: str) -> str:
+    return "an" if noun[:1] in "aeiou" else "a"
+
+
 def _attribute_class(value: str) -> Optional[str]:
     for name, members in ATTRIBUTE_CLASSES.items():
         if value in members:
@@ -223,6 +227,78 @@ class DialogueBoard:
                 if self._conflicts(r["proposition"], proposition,
                                    r.get("tense"), tense)]
 
+    # ------------------------------------- CONV v0.2 derivation
+    def matching_relations(self, proposition: Dict,
+                           tense=None) -> List[Dict]:
+        """ACTIVE relations with the same predicate and subject but a
+        different object - what an EXPLICIT correction replaces."""
+        if proposition.get("pred") != "relation" \
+                or len(proposition.get("args", [])) < 3:
+            return []
+        pred, agent = proposition["args"][0], proposition["args"][1]
+        out = []
+        for record in self.store.active():
+            stored = record["proposition"]
+            if stored.get("pred") == "relation" \
+                    and len(stored.get("args", [])) >= 3 \
+                    and stored["args"][0] == pred \
+                    and stored["args"][1] == agent \
+                    and stored["args"][2:] != \
+                    proposition["args"][2:] \
+                    and _tense_compatible(record.get("tense"),
+                                          tense):
+                out.append(record)
+        return out
+
+    def derive_is_a(self, instance: str,
+                    cls: str, depth: int = 4) -> Optional[Dict]:
+        """The derivation engine: is_a(instance, C0) plus a chain of
+        class_rule(Ci, Ci+1) edges reaching cls. ONLY the explicit
+        class_inheritance rule - no relation is treated as
+        transitive, symmetric, or causal unless a rule says so. The
+        FULL premise chain (assertion ids) travels with the answer;
+        the result is DERIVED from USER_ASSERTED_PREMISES and never
+        becomes verified knowledge."""
+        memberships = []
+        rules = []
+        for record in self.store.active():
+            proposition = record["proposition"]
+            if proposition.get("pred") == "is_a" \
+                    and proposition["args"][0] == instance:
+                memberships.append((proposition["args"][1],
+                                    record["assertion_id"]))
+            elif proposition.get("pred") == "class_rule":
+                rules.append((proposition["args"][0],
+                              proposition["args"][1],
+                              record["assertion_id"]))
+        for start_cls, membership_id in memberships:
+            frontier = [(start_cls, [membership_id])]
+            seen = {start_cls}
+            for _ in range(depth):
+                next_frontier = []
+                for current, premises in frontier:
+                    if current == cls:
+                        return {"verdict": "yes",
+                                "status": "DERIVED",
+                                "source_class":
+                                    "USER_ASSERTED_PREMISES",
+                                "rule": "class_inheritance",
+                                "premises": premises}
+                    for sub, sup, rule_id in rules:
+                        if sub == current and sup not in seen:
+                            seen.add(sup)
+                            next_frontier.append(
+                                (sup, premises + [rule_id]))
+                frontier = next_frontier
+                if not frontier:
+                    break
+            if start_cls == cls:
+                return {"verdict": "yes", "status": "DERIVED",
+                        "source_class": "USER_ASSERTED_PREMISES",
+                        "rule": "class_inheritance",
+                        "premises": [membership_id]}
+        return None
+
     # ---------------------------------------------- wh unification
     def wh_bindings(self, template: Dict) -> List[Tuple[str, Dict]]:
         """Match a proposition template containing the marker 'wh'
@@ -335,6 +411,12 @@ class DialogueBoard:
             return f"the {args[0]} is on the {args[1]}"
         if pred == "possession" and len(args) >= 2:
             return f"the {args[0]} has the {args[1]}"
+        if pred == "class_rule" and len(args) >= 2:
+            return (f"every {args[0]} is "
+                    f"{_indefinite(args[1])} {args[1]}")
+        if pred == "is_a" and len(args) >= 2:
+            return (f"{args[0]} is "
+                    f"{_indefinite(args[1])} {args[1]}")
         return json_clause(packet)
 
 

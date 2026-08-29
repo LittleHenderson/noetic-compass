@@ -145,6 +145,7 @@ def validate_construction(rule: Dict) -> List[str]:
         if not isinstance(element, str) or not element:
             defects.append(f"bad pattern element {element!r}")
         elif element.startswith("NP:") or element.startswith("NPPL:") \
+                or element.startswith("NPIND:") \
                 or element.startswith("PRON:") \
                 or element.startswith("NPOSS:") \
                 or element.startswith("QUANT:") \
@@ -174,9 +175,10 @@ def validate_construction(rule: Dict) -> List[str]:
     semantics = rule.get("semantics")
     if not isinstance(semantics, dict) or semantics.get("frame") \
             not in ("event", "state", "coordination", "disjunction",
-                    "math"):
+                    "math", "class_rule", "is_a"):
         defects.append("semantics.frame must be 'event', 'state', "
-                       "'coordination', 'disjunction', or 'math'")
+                       "'coordination', 'disjunction', 'math', "
+                       "'class_rule', or 'is_a'")
         return defects
 
     def check_refs(node) -> None:
@@ -216,6 +218,14 @@ def validate_construction(rule: Dict) -> List[str]:
     elif semantics["frame"] == "math":
         if "op" not in semantics:
             defects.append("math frame needs an 'op'")
+    elif semantics["frame"] == "class_rule":
+        for required in ("sub", "sup"):
+            if required not in semantics:
+                defects.append(f"class_rule frame needs {required!r}")
+    elif semantics["frame"] == "is_a":
+        for required in ("instance", "cls"):
+            if required not in semantics:
+                defects.append(f"is_a frame needs {required!r}")
     else:
         for required in ("tense", "polarity"):
             if required not in semantics:
@@ -324,6 +334,18 @@ class ConstructionParser:
                 if matched is None:
                     return None
                 bindings[element.split(":")[1]], i = matched
+            elif element.startswith("NPIND:"):
+                # INDEFINITE noun phrase: 'a NOUN' / 'an NOUN' - the
+                # class-reading slot ('is a cat' is a class claim;
+                # 'is the cat' would be identity, a different thing)
+                if i + 1 >= len(tokens) \
+                        or tokens[i] not in ("a", "an"):
+                    return None
+                noun = self._noun_entry(tokens[i + 1])
+                if noun is None:
+                    return None
+                bindings[element.split(":")[1]] = noun[0]
+                i += 2
             elif element.startswith("PRON:"):
                 entry = (self.lexicon.lookup(tokens[i])
                          if i < len(tokens) else None)

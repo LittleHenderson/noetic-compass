@@ -420,6 +420,44 @@ class HybridRouter:
         return seal_answer(f"i do not know the operation {op!r}.",
                            source=None, committed=False)
 
+    def _answer_class_question(self, packet: Dict, gram: Dict,
+                               trace: Dict) -> Dict:
+        core = gram["core"]
+        from dialogue.board import _indefinite
+        instance = core.get("instance")
+        cls = core.get("cls")
+        clause = f"{instance} is {_indefinite(cls)} {cls}"
+        direct = self.dialogue.support_for(packet, None)
+        derived = None
+        if not (direct and direct.get("verdict") == "yes"):
+            derived = self.dialogue.derive_is_a(instance, cls)
+        trace.setdefault("dialogue", {})["retrieval"] = {
+            "direct": bool(direct),
+            "derived": derived and {
+                "rule": derived["rule"],
+                "premises": derived["premises"],
+                "status": derived["status"],
+                "source_class": derived["source_class"]}}
+        if direct and direct.get("verdict") == "yes":
+            text = f"based on what you told me, yes, {clause}."
+            source_class = "USER_ASSERTED"
+        elif derived:
+            count = len(derived["premises"])
+            counted = {2: "two", 3: "three", 4: "four"}.get(
+                count, str(count))
+            text = (f"given the {counted} things you told me, yes, "
+                    f"{clause}.")
+            source_class = derived["source_class"]
+            trace["answer_derivation"] = derived
+        else:
+            text = f"i do not know whether {clause}."
+            source_class = None
+        self._note_discourse(packet)
+        trace["answer"] = {"status": "ANSWERED", "text": text,
+                           "frame_core": core,
+                           "source_class": source_class}
+        return self._seal(trace, committed=True)
+
     def _answer_wh_question(self, packet: Dict, gram: Dict,
                             trace: Dict) -> Dict:
         """'what'/'who': partial-proposition lookup over ACTIVE
@@ -796,6 +834,13 @@ class HybridRouter:
                   if core and core.get("frame") in ("event", "state")
                   else self.dialogue.packet_to_clause(packet, tense))
         conflicts = self.dialogue.conflicting_active(packet, tense)
+        # CONV v0.2: an EXPLICIT correction also supersedes the
+        # MATCHING prior relation (same predicate, same subject,
+        # different object) - the audit-disclosed relation gap closes
+        # on the explicit path only; plain tells never auto-supersede
+        matching = self.dialogue.matching_relations(packet, tense)
+        conflicts = conflicts + [r for r in matching
+                                 if r not in conflicts]
         turn_id = trace.get("turn_id", "t?")
         try:
             record = self.dialogue.record_assertion(
@@ -963,6 +1008,12 @@ class HybridRouter:
                     "detail": "the question asks WHY; the kernel "
                               "holds no cause facts to answer it"}
                 return self._seal(trace, committed=False)
+            if mood == "interrogative_class":
+                # CONV v0.2: derived common ground - the answer may
+                # follow from the user's own premises through an
+                # EXPLICIT rule, with the whole source chain shown
+                return self._answer_class_question(packet, gram,
+                                                   trace)
             if mood == "interrogative_wh":
                 # a taught wh-question: partial-proposition lookup
                 # over the session store; provenance-aware rendering
@@ -1157,6 +1208,15 @@ class HybridRouter:
             return {"pred": pred,
                     "args": [HybridRouter._frame_to_packet(conjunct)
                              for conjunct in core["conjuncts"]]}
+        if core.get("frame") == "class_rule":
+            # 'every X is a Y' - an explicit inference RULE the user
+            # asserted; usable only by the derivation engine, never
+            # silently generalized
+            return {"pred": "class_rule",
+                    "args": [core.get("sub"), core.get("sup")]}
+        if core.get("frame") == "is_a":
+            return {"pred": "is_a",
+                    "args": [core.get("instance"), core.get("cls")]}
         if core.get("frame") == "event":
             args = [core["predicate"], core["agent"], core["patient"]]
             quantifier = core.get("quantifier")

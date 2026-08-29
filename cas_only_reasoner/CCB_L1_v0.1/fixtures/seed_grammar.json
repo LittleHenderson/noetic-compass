@@ -197,9 +197,27 @@
    "construction_id": "math_query_solve",
    "provenance": "lesson:LIVE_M003_solve_equation|teacher:qwen.qwen3-32b-v1:0",
    "revision": 33
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "class_rule_every",
+   "provenance": "lesson:LIVE_C201_class_rule|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 34
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "is_a_statement",
+   "provenance": "lesson:LIVE_C202_is_a|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 35
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "is_a_question",
+   "provenance": "lesson:LIVE_C203_is_a_question|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 36
   }
  ],
- "revision": 33,
+ "revision": 36,
  "rules": {
   "active_past_transitive": {
    "construction_id": "active_past_transitive",
@@ -303,6 +321,45 @@
     "the",
     "ADJ:patient_mod",
     "NP:patient"
+   ]
+  },
+  "class_rule_every": {
+   "construction_id": "class_rule_every",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_C201_class_rule|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "frame": "class_rule",
+      "sub": "cat",
+      "sup": "animal"
+     },
+     "sentence": "every cat is an animal."
+    },
+    {
+     "expected_core": {
+      "frame": "class_rule",
+      "sub": "bird",
+      "sup": "creature"
+     },
+     "sentence": "every bird is a creature."
+    }
+   ],
+   "rule_digest": "3383e5a63b10c4bc",
+   "semantics": {
+    "frame": "class_rule",
+    "sub": "@sub",
+    "sup": "@sup"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "declarative"
+   },
+   "surface_pattern": [
+    "every",
+    "NP:sub",
+    "is",
+    "NPIND:sup"
    ]
   },
   "comparative_state": {
@@ -1219,6 +1276,82 @@
     "NP:patient"
    ]
   },
+  "is_a_question": {
+   "construction_id": "is_a_question",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_C203_is_a_question|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "cls": "cat",
+      "frame": "is_a",
+      "instance": "milo"
+     },
+     "sentence": "Is milo a cat?"
+    },
+    {
+     "expected_core": {
+      "cls": "dog",
+      "frame": "is_a",
+      "instance": "milo"
+     },
+     "sentence": "Is milo a dog?"
+    }
+   ],
+   "rule_digest": "10ee5db4bf54df53",
+   "semantics": {
+    "cls": "@cls",
+    "frame": "is_a",
+    "instance": "@inst"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "interrogative_class"
+   },
+   "surface_pattern": [
+    "is",
+    "NP:inst",
+    "NPIND:cls"
+   ]
+  },
+  "is_a_statement": {
+   "construction_id": "is_a_statement",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_C202_is_a|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "cls": "cat",
+      "frame": "is_a",
+      "instance": "milo"
+     },
+     "sentence": "milo is a cat."
+    },
+    {
+     "expected_core": {
+      "cls": "bird",
+      "frame": "is_a",
+      "instance": "hen"
+     },
+     "sentence": "hen is a bird."
+    }
+   ],
+   "rule_digest": "4156785ce4f23374",
+   "semantics": {
+    "cls": "@cls",
+    "frame": "is_a",
+    "instance": "@inst"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "declarative"
+   },
+   "surface_pattern": [
+    "NP:inst",
+    "is",
+    "NPIND:cls"
+   ]
+  },
   "locative_state": {
    "construction_id": "locative_state",
    "durability": "PROMOTED_DURABLY",
@@ -2012,5 +2145,5 @@
    ]
   }
  },
- "store_digest": "52536461fe43b7ec"
+ "store_digest": "04d0e459ce5c46ba"
 }

@@ -1,4 +1,14 @@
 {
+ "a": {
+  "lemma": "a",
+  "form": "base",
+  "provenance": "lesson:LIVE_C202_is_a"
+ },
+ "an": {
+  "lemma": "a",
+  "form": "base",
+  "provenance": "lesson:LIVE_C201_class_rule"
+ },
  "bigger": {
   "lemma": "big",
   "form": "comparative",
@@ -19,20 +29,25 @@
   "form": "base",
   "provenance": "lesson:qwen.qwen3-32b-v1:0"
  },
+ "cat": {
+  "lemma": "cat",
+  "form": "base",
+  "provenance": "lesson:LIVE_C202_is_a"
+ },
  "chase": {
   "lemma": "chase",
   "form": "base",
-  "provenance": "lesson:LIVE_M003_solve_equation"
+  "provenance": "lesson:LIVE_C203_is_a_question"
  },
  "chased": {
   "lemma": "chase",
   "form": "past_or_participle",
-  "provenance": "lesson:LIVE_M003_solve_equation"
+  "provenance": "lesson:LIVE_C203_is_a_question"
  },
  "chases": {
   "lemma": "chase",
   "form": "present_3sg",
-  "provenance": "lesson:LIVE_M003_solve_equation"
+  "provenance": "lesson:LIVE_C203_is_a_question"
  },
  "gave": {
   "lemma": "give",
@@ -57,7 +72,7 @@
  "is": {
   "lemma": "be",
   "form": "present_3sg",
-  "provenance": "lesson:LIVE_M002_greater_than"
+  "provenance": "lesson:LIVE_C202_is_a"
  },
  "on": {
   "lemma": "on",

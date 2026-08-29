@@ -1,0 +1,191 @@
+[
+ {
+  "construction_id": "class_rule_every",
+  "lesson_id": "LIVE_C201_class_rule",
+  "description": "the CLASS RULE construction 'every cat is an animal.' - an explicit rule that one class is contained in another. Pattern order: literal 'every', NP:sub (bare noun), literal 'is', NPIND:sup (an NPIND slot matches 'a NOUN' or 'an NOUN' - the indefinite article plus a noun, as ONE slot; do NOT write 'a' or 'an' as separate literals). Meaning: frame 'class_rule' with sub @sub and sup @sup - no tense, no polarity. For counterexamples give word-ORDER-scrambled strings like 'every is cat an animal.' - note that plural nouns like cats still parse, so changing a noun is NOT a broken string",
+  "shape_hint": "every cat is an animal.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "class_rule",
+   "sub": "@sub",
+   "sup": "@sup"
+  },
+  "example_sentence_hint": "shaped 'every cat is an animal.' (nouns include: cat, dog, animal, creature, milo)",
+  "expected_core_hint": "{\"frame\": \"class_rule\", \"sub\": \"cat\", \"sup\": \"animal\"}",
+  "lexicon_additions": {
+   "milo": {
+    "pos": "noun",
+    "sense": "milo"
+   },
+   "animal": {
+    "pos": "noun",
+    "sense": "animal"
+   },
+   "creature": {
+    "pos": "noun",
+    "sense": "creature"
+   }
+  },
+  "held_out": [
+   {
+    "sentence": "every dog is an animal.",
+    "expected_core": {
+     "frame": "class_rule",
+     "sub": "dog",
+     "sup": "animal"
+    }
+   },
+   {
+    "sentence": "every animal is a creature.",
+    "expected_core": {
+     "frame": "class_rule",
+     "sub": "animal",
+     "sup": "creature"
+    }
+   },
+   {
+    "sentence": "every is cat an animal.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "every hen is a creature.",
+    "expected_core": {
+     "frame": "class_rule",
+     "sub": "hen",
+     "sup": "creature"
+    }
+   }
+  ],
+  "probe": "every cat is an animal."
+ },
+ {
+  "construction_id": "is_a_statement",
+  "lesson_id": "LIVE_C202_is_a",
+  "description": "the CLASS MEMBERSHIP statement 'milo is a cat.' - an individual belongs to a class. Pattern order: NP:inst (the individual), literal 'is', NPIND:cls (the indefinite article plus the class noun as ONE NPIND slot). Meaning: frame 'is_a' with instance @inst and cls @cls - no tense, no polarity",
+  "shape_hint": "milo is a cat.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "is_a",
+   "instance": "@inst",
+   "cls": "@cls"
+  },
+  "example_sentence_hint": "shaped 'milo is a cat.' (nouns include: milo, cat, dog, animal, creature)",
+  "expected_core_hint": "{\"frame\": \"is_a\", \"instance\": \"milo\", \"cls\": \"cat\"}",
+  "held_out": [
+   {
+    "sentence": "milo is an animal.",
+    "expected_core": {
+     "frame": "is_a",
+     "instance": "milo",
+     "cls": "animal"
+    }
+   },
+   {
+    "sentence": "the dog is a creature.",
+    "expected_core": {
+     "frame": "is_a",
+     "instance": "dog",
+     "cls": "creature"
+    }
+   },
+   {
+    "sentence": "is a milo cat.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the hen is an animal.",
+    "expected_core": {
+     "frame": "is_a",
+     "instance": "hen",
+     "cls": "animal"
+    }
+   }
+  ],
+  "probe": "milo is a cat.",
+  "lexicon_additions": {
+   "milo": {
+    "pos": "noun",
+    "sense": "milo"
+   },
+   "animal": {
+    "pos": "noun",
+    "sense": "animal"
+   },
+   "creature": {
+    "pos": "noun",
+    "sense": "creature"
+   }
+  }
+ },
+ {
+  "construction_id": "is_a_question",
+  "lesson_id": "LIVE_C203_is_a_question",
+  "description": "the CLASS MEMBERSHIP question 'is milo an animal?' - pattern order: literal 'is', NP:inst, NPIND:cls (the indefinite article plus the class noun as ONE NPIND slot). Meaning: frame 'is_a' with instance @inst and cls @cls; this is a QUESTION",
+  "shape_hint": "is milo an animal?",
+  "surface_meta": {
+   "mood": "interrogative_class"
+  },
+  "scaffold_semantics": {
+   "frame": "is_a",
+   "instance": "@inst",
+   "cls": "@cls"
+  },
+  "example_sentence_hint": "shaped 'is milo an animal?' ending with '?'",
+  "expected_core_hint": "{\"frame\": \"is_a\", \"instance\": \"milo\", \"cls\": \"animal\"}",
+  "held_out": [
+   {
+    "sentence": "is milo a creature?",
+    "expected_core": {
+     "frame": "is_a",
+     "instance": "milo",
+     "cls": "creature"
+    }
+   },
+   {
+    "sentence": "is the dog an animal?",
+    "expected_core": {
+     "frame": "is_a",
+     "instance": "dog",
+     "cls": "animal"
+    }
+   },
+   {
+    "sentence": "milo an is animal?",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "is the hen a creature?",
+    "expected_core": {
+     "frame": "is_a",
+     "instance": "hen",
+     "cls": "creature"
+    }
+   }
+  ],
+  "probe": "is milo an animal?",
+  "lexicon_additions": {
+   "milo": {
+    "pos": "noun",
+    "sense": "milo"
+   },
+   "animal": {
+    "pos": "noun",
+    "sense": "animal"
+   },
+   "creature": {
+    "pos": "noun",
+    "sense": "creature"
+   }
+  }
+ }
+]

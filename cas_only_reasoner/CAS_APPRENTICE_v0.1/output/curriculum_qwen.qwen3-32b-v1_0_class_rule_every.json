@@ -1,0 +1,340 @@
+{
+ "event": "CURRICULUM_ROUND_1",
+ "results": [
+  {
+   "after": {
+    "answer": {
+     "acknowledgment": "okay. you told me that every cat is a animal.",
+     "frame_core": {
+      "frame": "class_rule",
+      "sub": "cat",
+      "sup": "animal"
+     },
+     "meaning": {
+      "args": [
+       "cat",
+       "animal"
+      ],
+      "pred": "class_rule"
+     },
+     "session_assertion": {
+      "assertion_id": "a1",
+      "record_digest": "30a24901dfe5252c"
+     },
+     "status": "UNDERSTOOD"
+    },
+    "cas_ohm": {
+     "I_obs": 6.0,
+     "I_pred": 6.0,
+     "R_capability": 0.0,
+     "R_compute": 0.0,
+     "R_context": 0.0,
+     "R_lexical": 0.0,
+     "R_policy": 0.0,
+     "R_role_binding": 0.0,
+     "R_total": 1.0,
+     "V_drive": 6.0,
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "delta_I": 0.0,
+     "effect_type": "UNDERSTOOD",
+     "mode": "native_runtime",
+     "operating_region": "active",
+     "provenance": "cas_ohm_attention_plane_v0.1",
+     "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+     "stage_id": "language_pipeline",
+     "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+    },
+    "commitment": {
+     "by": "cas_learned_grammar",
+     "construction": "class_rule_every"
+    },
+    "committed": true,
+    "conv_flow": {
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "tp_answer": "active",
+     "tp_parse": "active",
+     "tp_retrieval": "absent",
+     "tp_semantic_packet": "active",
+     "tp_session_commit": "active",
+     "tp_write_intent": "active"
+    },
+    "cortex_proposal": null,
+    "dialogue": {
+     "assertion": {
+      "assertion_id": "a1",
+      "clause": "every cat is a animal",
+      "record_digest": "30a24901dfe5252c"
+     }
+    },
+    "frame": {
+     "core": {
+      "frame": "class_rule",
+      "sub": "cat",
+      "sup": "animal"
+     },
+     "surface": {
+      "construction_id": "class_rule_every",
+      "mood": "declarative"
+     }
+    },
+    "input": "every cat is an animal.",
+    "mode": "NATIVE_ONLY",
+    "route": "native_gram",
+    "trace_digest": "7d1c7c7dab89a9ae",
+    "turn_id": "t1",
+    "validation": null
+   },
+   "before": {
+    "answer": {
+     "detail": "I did not understand 'every' at word 1 of 'every cat is an animal.' (sentence pattern not supported)",
+     "status": "UNSUPPORTED_LANGUAGE"
+    },
+    "cas_ohm": {
+     "I_obs": 2.0,
+     "I_pred": 6.0,
+     "R_capability": 2.0,
+     "R_compute": 0.0,
+     "R_context": 0.0,
+     "R_lexical": 0.0,
+     "R_policy": 0.0,
+     "R_role_binding": 0.0,
+     "R_total": 3.0,
+     "V_drive": 6.0,
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "delta_I": -4.0,
+     "effect_type": "UNSUPPORTED_LANGUAGE",
+     "mode": "native_runtime",
+     "operating_region": "cutoff",
+     "provenance": "cas_ohm_attention_plane_v0.1",
+     "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+     "stage_id": "language_pipeline",
+     "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+    },
+    "commitment": null,
+    "committed": false,
+    "conv_flow": {
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "tp_answer": "cutoff",
+     "tp_parse": "cutoff",
+     "tp_retrieval": "absent",
+     "tp_semantic_packet": "absent",
+     "tp_session_commit": "absent",
+     "tp_write_intent": "absent"
+    },
+    "cortex_proposal": null,
+    "input": "every cat is an animal.",
+    "mode": "NATIVE_ONLY",
+    "native_error": {
+     "message": "I did not understand 'every' at word 1 of 'every cat is an animal.' (sentence pattern not supported)",
+     "word": "every"
+    },
+    "route": "no_answer",
+    "trace_digest": "b039d1272438cab4",
+    "turn_id": "t1",
+    "validation": null
+   },
+   "episode": {
+    "domain": "language_grammar",
+    "episode_digest": "36b0f36f1bb1a17c",
+    "examiner_identity": "ccb_l1_acceptance_ladder",
+    "lesson_id": "LIVE_C201_class_rule",
+    "outcome": {
+     "episode_digest": "07819ff6147d7876",
+     "evidence": [
+      {
+       "detail": "typed lesson packet complete",
+       "passed": true,
+       "stage": "PROPOSED"
+      },
+      {
+       "detail": "construction schema valid",
+       "passed": true,
+       "stage": "SCHEMA_VALID"
+      },
+      {
+       "detail": "rule matches first positive example: True",
+       "passed": true,
+       "stage": "COMPILED"
+      },
+      {
+       "detail": "2 examples ok",
+       "passed": true,
+       "stage": "POSITIVE_EXAMPLES_PASS"
+      },
+      {
+       "detail": "contrasts held",
+       "passed": true,
+       "stage": "CONTRAST_TESTS_PASS"
+      },
+      {
+       "detail": "3 unseen cases ok",
+       "passed": true,
+       "stage": "HELD_OUT_GENERALIZATION_PASS"
+      },
+      {
+       "detail": "no prior rule regressed",
+       "passed": true,
+       "stage": "PRIOR_GRAMMAR_REGRESSION_PASS"
+      },
+      {
+       "detail": "ambiguity honest",
+       "passed": true,
+       "stage": "AMBIGUITY_BEHAVIOR_PASS"
+      },
+      {
+       "detail": "replay identical",
+       "passed": true,
+       "stage": "DETERMINISTIC_REPLAY"
+      },
+      {
+       "detail": "all gates passed; promoting with rollback preserved",
+       "passed": true,
+       "stage": "PROMOTED_PROVISIONALLY"
+      }
+     ],
+     "verdict": "PROMOTED_PROVISIONALLY"
+    },
+    "post_learning_capability": null,
+    "pre_learning_capability": null,
+    "provenance": "schema_constrained_field_elicitation",
+    "rollback_pointer": null,
+    "target": "grammar_store",
+    "teacher_identity": "qwen.qwen3-32b-v1:0",
+    "teacher_revision": "bedrock:us-west-2",
+    "teacher_role": "lecturer"
+   },
+   "lesson": {
+    "ambiguity_cases": [
+     {
+      "expect": "parsed",
+      "sentence": "every cat is an animal."
+     }
+    ],
+    "construction": {
+     "construction_id": "class_rule_every",
+     "semantics": {
+      "frame": "class_rule",
+      "sub": "@sub",
+      "sup": "@sup"
+     },
+     "surface_meta": {
+      "mood": "declarative"
+     },
+     "surface_pattern": [
+      "every",
+      "NP:sub",
+      "is",
+      "NPIND:sup"
+     ]
+    },
+    "counterexamples": [
+     {
+      "sentence": "every cat an is animal."
+     },
+     {
+      "sentence": "is every cat an animal."
+     }
+    ],
+    "lesson_id": "LIVE_C201_class_rule",
+    "lesson_type": "grammar_construction",
+    "minimal_pairs": [
+     {
+      "relation": "different_meaning",
+      "sentence_a": "every cat is an animal.",
+      "sentence_b": "every animal is a cat."
+     },
+     {
+      "relation": "different_meaning",
+      "sentence_a": "every dog is an animal.",
+      "sentence_b": "every animal is a dog."
+     }
+    ],
+    "morphology": [
+     {
+      "form": "present_3sg",
+      "lemma": "be",
+      "surface": "is"
+     },
+     {
+      "form": "base",
+      "lemma": "a",
+      "surface": "an"
+     },
+     {
+      "form": "base",
+      "lemma": "a",
+      "surface": "a"
+     }
+    ],
+    "positive_examples": [
+     {
+      "expected_core": {
+       "frame": "class_rule",
+       "sub": "cat",
+       "sup": "animal"
+      },
+      "sentence": "every cat is an animal."
+     },
+     {
+      "expected_core": {
+       "frame": "class_rule",
+       "sub": "bird",
+       "sup": "creature"
+      },
+      "sentence": "every bird is a creature."
+     }
+    ],
+    "provenance": "schema_constrained_field_elicitation",
+    "semantics_provenance": "derived_from_teacher_pattern_by_schema_scaffold",
+    "teacher_confidence": null,
+    "teacher_model": "qwen.qwen3-32b-v1:0",
+    "teacher_revision": "bedrock:us-west-2"
+   },
+   "log": [
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "surface_pattern",
+     "raw": "```json\n[\"every\", \"NP:sub\", \"is\", \"NPIND:sup\"]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "morphology",
+     "raw": "```json\n[\n  {\"surface\": \"is\", \"lemma\": \"be\", \"form\": \"present_3sg\"},\n  {\"surface\": \"an\", \"lemma\": \"a\", \"form\": \"base\"},\n  {\"surface\": \"a\", \"lemma\": \"a\", \"form\": \"base\"}\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "positive_examples",
+     "raw": "```json\n[\n  {\n    \"sentence\": \"every cat is an animal.\",\n    \"expected_core\": {\n      \"frame\": \"class_rule\",\n      \"sub\": \"cat\",\n      \"sup\": \"animal\"\n    }\n  },\n  {\n    \"sentence\": \"every bird is a creature.\",\n    \"expected_core\": {\n      \"frame\": \"class_rule\",\n      \"sub\": \"bird\",\n      \"sup\": \"cr"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "minimal_pairs",
+     "raw": "```json\n[\n  {\n    \"sentence_a\": \"every cat is an animal.\",\n    \"sentence_b\": \"every animal is a cat.\",\n    \"relation\": \"different_meaning\"\n  },\n  {\n    \"sentence_a\": \"every dog is an animal.\",\n    \"sentence_b\": \"every animal is a dog.\",\n    \"relation\": \"different_meaning\"\n  }\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "counterexamples",
+     "raw": "```json\n[\n  { \"sentence\": \"every cat an is animal.\" },\n  { \"sentence\": \"is every cat an animal.\" }\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "ambiguity_cases",
+     "raw": "```json\n[\n  {\n    \"sentence\": \"every cat is an animal.\",\n    \"expect\": \"parsed\"\n  }\n]\n```"
+    }
+   ],
+   "retention": {
+    "construction_id": "class_rule_every",
+    "verdict": "PROMOTED_DURABLY"
+   },
+   "target": "class_rule_every",
+   "verdict": "PROMOTED_PROVISIONALLY"
+  }
+ ],
+ "teacher": "qwen.qwen3-32b-v1:0"
+}

@@ -187,6 +187,18 @@
   "over": {
    "pos": "mathop",
    "sense": "div"
+  },
+  "milo": {
+   "pos": "noun",
+   "sense": "milo"
+  },
+  "animal": {
+   "pos": "noun",
+   "sense": "animal"
+  },
+  "creature": {
+   "pos": "noun",
+   "sense": "creature"
   }
  },
  "rules": [

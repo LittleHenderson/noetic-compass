@@ -62,7 +62,7 @@ except (FileNotFoundError, KeyError):
 ROLES = ("agent", "patient", "agent2", "patient2",
          "agent3", "patient3", "possessor", "recipient",
          "experiencer", "instrument", "source", "destination",
-         "location")
+         "location", "sub", "sup", "inst", "cls")
 ADJ_SLOTS = ("agent_mod", "patient_mod", "mod", "prop",
              "comp")
 VERB_NAMES = ("pred", "pred2", "pred3")
@@ -78,6 +78,7 @@ def valid_pattern(value):
             return f"element {element!r} is not a string"
         if element.startswith("NP:") or element.startswith("NPPL:") \
                 or element.startswith("PRON:") \
+                or element.startswith("NPIND:") \
                 or element.startswith("NPOSS:"):
             parts = element.split(":")
             if len(parts) != 2 or parts[1] not in ROLES:

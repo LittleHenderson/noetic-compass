@@ -78,10 +78,26 @@ def test_conjunction_question_surfaces_verified_user_conflict():
     assert "you told me the cat is brown" in asked["text"]
 
 
-# audit 9: a correction with nothing to supersede is DISCLOSED
-def test_correction_without_target_is_disclosed_never_masqueraded():
+# audit 9, CLOSED BY CONV v0.2: an explicit relation correction now
+# SUPERSEDES the matching prior relation (same predicate + subject,
+# different object); with truly nothing to supersede, the disclosure
+# stands
+def test_relation_correction_supersedes_the_matching_relation():
     router = fresh()
     answer(router, "the cat chases the dog.")
+    corrected = answer(router, "actually, the cat chases the fox.")
+    assert "you previously said 'the cat chases the dog'" \
+        in corrected["text"]
+    states = {r["clause"]: r["lifecycle_status"]
+              for r in router.dialogue.store.records}
+    assert states["the cat chases the dog"] == "SUPERSEDED"
+    assert states["the cat chases the fox"] == "ACTIVE"
+    asked = answer(router, "what does the cat chase?")
+    assert asked["text"] == "you told me that the cat chases the fox."
+
+
+def test_correction_without_target_is_still_disclosed():
+    router = fresh()
     corrected = answer(router, "actually, the cat chases the fox.")
     assert "nothing was superseded" in corrected["text"]
     trace = router.traces[-1]
