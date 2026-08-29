@@ -124,7 +124,7 @@ def validate_construction(rule: Dict) -> List[str]:
     for element in pattern:
         if not isinstance(element, str) or not element:
             defects.append(f"bad pattern element {element!r}")
-        elif element.startswith("NP:"):
+        elif element.startswith("NP:") or element.startswith("NPPL:"):
             slot_names.add(element.split(":")[1])
         elif element.startswith("VERB:"):
             parts = element.split(":")
@@ -142,9 +142,9 @@ def validate_construction(rule: Dict) -> List[str]:
                 slot_names.add(parts[1])
     semantics = rule.get("semantics")
     if not isinstance(semantics, dict) or semantics.get("frame") \
-            not in ("event", "state", "coordination"):
-        defects.append("semantics.frame must be 'event', 'state', or "
-                       "'coordination'")
+            not in ("event", "state", "coordination", "disjunction"):
+        defects.append("semantics.frame must be 'event', 'state', "
+                       "'coordination', or 'disjunction'")
         return defects
 
     def check_refs(node) -> None:
@@ -155,16 +155,20 @@ def validate_construction(rule: Dict) -> List[str]:
             for item in node:
                 check_refs(item)
         elif isinstance(node, str) and node.startswith("@"):
-            if node[1:] not in slot_names:
+            name = node[1:]
+            implicit = (name.endswith("_number")
+                        and name[:-7] in slot_names)
+            if name not in slot_names and not implicit:
                 defects.append(f"semantics references unbound slot "
                                f"{node!r}")
 
     check_refs(semantics)
-    if semantics["frame"] == "coordination":
+    if semantics["frame"] in ("coordination", "disjunction"):
         conjuncts = semantics.get("conjuncts")
         if not isinstance(conjuncts, list) or len(conjuncts) < 2:
-            defects.append("coordination frame needs a 'conjuncts' "
-                           "list of at least 2 event objects")
+            defects.append(f"{semantics['frame']} frame needs a "
+                           f"'conjuncts' list of at least 2 event "
+                           f"objects")
         else:
             for conjunct in conjuncts:
                 if not isinstance(conjunct, dict) \
@@ -194,17 +198,33 @@ class ConstructionParser:
         self.morph = morph
 
     # ------------------------------------------------------------------
-    def _match_np(self, tokens: List[str], i: int) -> Optional[Tuple[str, int]]:
-        """'the NOUN' or bare known NOUN -> (entity sense, next index)."""
-        if i < len(tokens) and tokens[i] == "the" and i + 1 < len(tokens):
-            entry = self.lexicon.lookup(tokens[i + 1])
+    def _noun_entry(self, word: str):
+        """Lexicon noun, or regular plural of one -> (sense, number)."""
+        entry = self.lexicon.lookup(word)
+        if entry is not None and entry.pos == "noun":
+            return entry.sense, "singular"
+        if word.endswith("s") and len(word) > 2:
+            entry = self.lexicon.lookup(word[:-1])
             if entry is not None and entry.pos == "noun":
-                return entry.sense, i + 2
+                return entry.sense, "plural"
+        if word.endswith("es") and len(word) > 3:
+            entry = self.lexicon.lookup(word[:-2])
+            if entry is not None and entry.pos == "noun":
+                return entry.sense, "plural"
+        return None
+
+    def _match_np(self, tokens: List[str], i: int) -> Optional[Tuple[str, str, int]]:
+        """'the NOUN(s)' or bare known NOUN(s) ->
+        (entity sense, number, next index)."""
+        if i < len(tokens) and tokens[i] == "the" and i + 1 < len(tokens):
+            noun = self._noun_entry(tokens[i + 1])
+            if noun is not None:
+                return noun[0], noun[1], i + 2
             return None
         if i < len(tokens):
-            entry = self.lexicon.lookup(tokens[i])
-            if entry is not None and entry.pos == "noun":
-                return entry.sense, i + 1
+            noun = self._noun_entry(tokens[i])
+            if noun is not None:
+                return noun[0], noun[1], i + 1
         return None
 
     def _match_adj(self, tokens: List[str],
@@ -242,11 +262,22 @@ class ConstructionParser:
         bindings: Dict[str, str] = {}
         i = 0
         for element in rule["surface_pattern"]:
-            if element.startswith("NP:"):
+            if element.startswith("NP:") \
+                    or element.startswith("NPPL:"):
                 matched = self._match_np(tokens, i)
                 if matched is None:
                     return None
-                bindings[element.split(":")[1]], i = matched
+                name = element.split(":")[1]
+                sense, number, nxt = matched
+                # NPPL requires a PLURAL noun - this is the agreement
+                # law: 'the cat chase the dog' must NOT parse as the
+                # plural construction
+                if element.startswith("NPPL:") and number != "plural":
+                    return None
+                bindings[name], i = sense, nxt
+                # implicit number binding: semantics may reference
+                # @<slot>_number (plural lesson machinery)
+                bindings[name + "_number"] = number
             elif element.startswith("VERB:"):
                 _, name, form = element.split(":")
                 matched = self._match_verb(tokens, i, form)

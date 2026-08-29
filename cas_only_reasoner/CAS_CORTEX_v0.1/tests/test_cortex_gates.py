@@ -456,6 +456,15 @@ def test_runtime_canary_no_construction_forgotten():
         "the cat chases the dog and the dog chases the cat.":
             "UNDERSTOOD",                                # coordination
         "does the cat chase the dog?": "ANSWERED",       # question
+        "did the cat chase the dog?": "ANSWERED",        # past question
+        "the cat gives the bone to the dog.": "UNDERSTOOD",  # ditrans
+        "the gray cat chases the brown dog.": "UNDERSTOOD",  # adjectives
+        "the cats chase the dog.": "UNDERSTOOD",         # plural
+        "the cat did not chase the dog.": "UNDERSTOOD",  # past negation
+        "is the gray cat quiet?": "ANSWERED",            # copular quest
+        "the dog was not chased by the cat.": "UNDERSTOOD",  # neg pass
+        "the cat gave the bone to the dog.": "UNDERSTOOD",  # ditr past
+        "does the cat give the bone to the dog?": "ANSWERED",  # ditr q
     }
     for sentence, expected in probes.items():
         trace = router.turn(sentence)

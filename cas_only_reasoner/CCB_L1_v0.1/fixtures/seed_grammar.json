@@ -59,9 +59,45 @@
    "construction_id": "attributive_adjective_transitive",
    "provenance": "lesson:LIVE_L007_adjectives|teacher:qwen.qwen3-32b-v1:0",
    "revision": 10
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "plural_transitive_present",
+   "provenance": "lesson:LIVE_L009_plural|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 11
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "negated_past_transitive",
+   "provenance": "lesson:LIVE_L010_past_negation|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 12
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "copular_adjective_interrogative",
+   "provenance": "lesson:LIVE_L011_copular_question|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 13
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "negated_passive_past",
+   "provenance": "lesson:LIVE_L012_passive_negation|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 14
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "ditransitive_past",
+   "provenance": "lesson:LIVE_L013_ditransitive_past|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 15
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "interrogative_ditransitive",
+   "provenance": "lesson:LIVE_L014_ditransitive_question|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 16
   }
  ],
- "revision": 10,
+ "revision": 16,
  "rules": {
   "active_past_transitive": {
    "construction_id": "active_past_transitive",
@@ -259,6 +295,108 @@
     "NP:patient2"
    ]
   },
+  "copular_adjective_interrogative": {
+   "construction_id": "copular_adjective_interrogative",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L011_copular_question|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "entity": "cat",
+      "frame": "state",
+      "modifier": "gray",
+      "polarity": "positive",
+      "property": "quiet",
+      "tense": "present"
+     },
+     "sentence": "is the gray cat quiet?"
+    },
+    {
+     "expected_core": {
+      "entity": "dog",
+      "frame": "state",
+      "modifier": "brown",
+      "polarity": "positive",
+      "property": "quiet",
+      "tense": "present"
+     },
+     "sentence": "is the brown dog quiet?"
+    }
+   ],
+   "rule_digest": "d781583a04f70849",
+   "semantics": {
+    "entity": "@agent",
+    "frame": "state",
+    "modifier": "@agent_mod",
+    "polarity": "positive",
+    "property": "@prop",
+    "tense": "present"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "interrogative"
+   },
+   "surface_pattern": [
+    "is",
+    "the",
+    "ADJ:agent_mod",
+    "NP:agent",
+    "ADJ:prop"
+   ]
+  },
+  "ditransitive_past": {
+   "construction_id": "ditransitive_past",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L013_ditransitive_past|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "bone",
+      "polarity": "positive",
+      "predicate": "give",
+      "recipient": "dog",
+      "tense": "past"
+     },
+     "sentence": "The cat gave the bone to the dog."
+    },
+    {
+     "expected_core": {
+      "agent": "fox",
+      "frame": "event",
+      "patient": "bone",
+      "polarity": "positive",
+      "predicate": "give",
+      "recipient": "hen",
+      "tense": "past"
+     },
+     "sentence": "The fox gave the bone to the hen."
+    }
+   ],
+   "rule_digest": "052857b401ddfdb3",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "recipient": "@recipient",
+    "tense": "past"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "declarative"
+   },
+   "surface_pattern": [
+    "NP:agent",
+    "VERB:pred:past",
+    "the",
+    "NP:patient",
+    "to",
+    "NP:recipient"
+   ]
+  },
   "ditransitive_present": {
    "construction_id": "ditransitive_present",
    "durability": "PROMOTED_DURABLY",
@@ -359,6 +497,61 @@
     "NP:patient"
    ]
   },
+  "interrogative_ditransitive": {
+   "construction_id": "interrogative_ditransitive",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L014_ditransitive_question|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "bird",
+      "polarity": "positive",
+      "predicate": "give",
+      "recipient": "dog",
+      "tense": "present"
+     },
+     "sentence": "Does the cat give the bird to the dog?"
+    },
+    {
+     "expected_core": {
+      "agent": "fox",
+      "frame": "event",
+      "patient": "hen",
+      "polarity": "positive",
+      "predicate": "give",
+      "recipient": "cat",
+      "tense": "present"
+     },
+     "sentence": "Does the fox give the hen to the cat?"
+    }
+   ],
+   "rule_digest": "1f7caeebf8c5fd51",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "recipient": "@recipient",
+    "tense": "present"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "interrogative"
+   },
+   "surface_pattern": [
+    "does",
+    "the",
+    "NP:agent",
+    "VERB:pred:base",
+    "the",
+    "NP:patient",
+    "to",
+    "NP:recipient"
+   ]
+  },
   "interrogative_past_transitive": {
    "construction_id": "interrogative_past_transitive",
    "durability": "PROMOTED_DURABLY",
@@ -454,6 +647,108 @@
     "does",
     "the",
     "NP:agent",
+    "VERB:pred:base",
+    "the",
+    "NP:patient"
+   ]
+  },
+  "negated_passive_past": {
+   "construction_id": "negated_passive_past",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L012_passive_negation|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "dog",
+      "frame": "event",
+      "patient": "cat",
+      "polarity": "negative",
+      "predicate": "chase",
+      "tense": "past"
+     },
+     "sentence": "The cat was not chased by the dog."
+    },
+    {
+     "expected_core": {
+      "agent": "fox",
+      "frame": "event",
+      "patient": "bird",
+      "polarity": "negative",
+      "predicate": "chase",
+      "tense": "past"
+     },
+     "sentence": "The bird was not chased by the fox."
+    }
+   ],
+   "rule_digest": "ee3658fa417defb5",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "negative",
+    "predicate": "@pred",
+    "tense": "past"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "polarity_marker": "was_not",
+    "voice": "passive"
+   },
+   "surface_pattern": [
+    "NP:patient",
+    "was",
+    "not",
+    "VERB:pred:participle",
+    "by",
+    "NP:agent"
+   ]
+  },
+  "negated_past_transitive": {
+   "construction_id": "negated_past_transitive",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L010_past_negation|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "bird",
+      "polarity": "negative",
+      "predicate": "chase",
+      "tense": "past"
+     },
+     "sentence": "The cat did not chase the bird."
+    },
+    {
+     "expected_core": {
+      "agent": "fox",
+      "frame": "event",
+      "patient": "hen",
+      "polarity": "negative",
+      "predicate": "chase",
+      "tense": "past"
+     },
+     "sentence": "The fox did not chase the hen."
+    }
+   ],
+   "rule_digest": "c9c138fc3f74bc42",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "negative",
+    "predicate": "@pred",
+    "tense": "past"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "declarative",
+    "polarity_marker": "did_not"
+   },
+   "surface_pattern": [
+    "NP:agent",
+    "did",
+    "not",
     "VERB:pred:base",
     "the",
     "NP:patient"
@@ -584,7 +879,59 @@
     "by",
     "NP:agent"
    ]
+  },
+  "plural_transitive_present": {
+   "construction_id": "plural_transitive_present",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L009_plural|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "cat",
+      "agent_number": "plural",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "the cats chase the dog."
+    },
+    {
+     "expected_core": {
+      "agent": "hen",
+      "agent_number": "plural",
+      "frame": "event",
+      "patient": "fox",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "the hens chase the fox."
+    }
+   ],
+   "rule_digest": "edaf623de5bf0905",
+   "semantics": {
+    "agent": "@agent",
+    "agent_number": "plural",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "tense": "present"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "declarative"
+   },
+   "surface_pattern": [
+    "the",
+    "NPPL:agent",
+    "VERB:pred:base",
+    "the",
+    "NP:patient"
+   ]
   }
  },
- "store_digest": "a6238edce3b41cf4"
+ "store_digest": "51a81c990a918243"
 }

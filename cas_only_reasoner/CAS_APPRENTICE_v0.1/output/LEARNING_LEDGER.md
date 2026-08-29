@@ -2,33 +2,45 @@
 
 ## 1. What the machine KNOWS right now
 
-**Grammar constructions: 10 durable** (of 10 in the store)
+**Grammar constructions: 16 durable** (of 16 in the store)
 
 | construction | state | taught by | evidence |
 |---|---|---|---|
 | active_past_transitive | ACTIVE/PROMOTED_DURABLY | hand_authored_seed_teacher | lesson:SEED_L001_active_past|teacher:hand_authored_seed_teac |
 | attributive_adjective_transitive | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L007_adjectives|teacher:qwen.qwen3-32b-v1:0 |
 | coordination_present_transitive | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L005_coordination|teacher:qwen.qwen3-32b-v1:0 |
+| copular_adjective_interrogative | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L011_copular_question|teacher:qwen.qwen3-32b-v1: |
+| ditransitive_past | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L013_ditransitive_past|teacher:qwen.qwen3-32b-v1 |
 | ditransitive_present | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L006_recipient|teacher:qwen.qwen3-32b-v1:0 |
 | imperative_transitive | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L004_command|teacher:qwen.qwen3-32b-v1:0 |
+| interrogative_ditransitive | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L014_ditransitive_question|teacher:qwen.qwen3-32 |
 | interrogative_past_transitive | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L008_past_question|teacher:qwen.qwen3-32b-v1:0 |
 | interrogative_present_transitive | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L003_question|teacher:qwen.qwen3-32b-v1:0 |
+| negated_passive_past | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L012_passive_negation|teacher:qwen.qwen3-32b-v1: |
+| negated_past_transitive | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L010_past_negation|teacher:qwen.qwen3-32b-v1:0 |
 | negated_present_transitive | ACTIVE/PROMOTED_DURABLY | Qwen/Qwen2.5-3B-Instruct | lesson:LIVE_L002_negation_constrained|teacher:Qwen/Qwen2.5-3 |
 | passive_past | ACTIVE/PROMOTED_DURABLY | hand_authored_seed_teacher | lesson:SEED_L002_passive_past|teacher:hand_authored_seed_tea |
 | passive_present | ACTIVE/PROMOTED_DURABLY | hand_authored_seed_teacher | lesson:SEED_L003_passive_present|teacher:hand_authored_seed_ |
+| plural_transitive_present | ACTIVE/PROMOTED_DURABLY | qwen.qwen3-32b-v1:0 | lesson:LIVE_L009_plural|teacher:qwen.qwen3-32b-v1:0 |
 
 **Words: 11** (bone, brown, cat, chases, dog, gray, is, it, not, quiet, the)
-**Verb forms (morphology): 7** (chase, chased, chases, gave, give, given, gives)
+**Verb forms (morphology): 8** (chase, chased, chases, gave, give, given, gives, is)
 
 ## 2. Learned from a LIVE MODEL TEACHER
 
 - **attributive_adjective_transitive** - provenance `lesson:LIVE_L007_adjectives|teacher:qwen.qwen3-32b-v1:0`
 - **coordination_present_transitive** - provenance `lesson:LIVE_L005_coordination|teacher:qwen.qwen3-32b-v1:0`
+- **copular_adjective_interrogative** - provenance `lesson:LIVE_L011_copular_question|teacher:qwen.qwen3-32b-v1:0`
+- **ditransitive_past** - provenance `lesson:LIVE_L013_ditransitive_past|teacher:qwen.qwen3-32b-v1:0`
 - **ditransitive_present** - provenance `lesson:LIVE_L006_recipient|teacher:qwen.qwen3-32b-v1:0`
 - **imperative_transitive** - provenance `lesson:LIVE_L004_command|teacher:qwen.qwen3-32b-v1:0`
+- **interrogative_ditransitive** - provenance `lesson:LIVE_L014_ditransitive_question|teacher:qwen.qwen3-32b-v1:0`
 - **interrogative_past_transitive** - provenance `lesson:LIVE_L008_past_question|teacher:qwen.qwen3-32b-v1:0`
 - **interrogative_present_transitive** - provenance `lesson:LIVE_L003_question|teacher:qwen.qwen3-32b-v1:0`
+- **negated_passive_past** - provenance `lesson:LIVE_L012_passive_negation|teacher:qwen.qwen3-32b-v1:0`
+- **negated_past_transitive** - provenance `lesson:LIVE_L010_past_negation|teacher:qwen.qwen3-32b-v1:0`
 - **negated_present_transitive** - provenance `lesson:LIVE_L002_negation_constrained|teacher:Qwen/Qwen2.5-3B-Instruct`
+- **plural_transitive_present** - provenance `lesson:LIVE_L009_plural|teacher:qwen.qwen3-32b-v1:0`
 
 ## 3. PROOF the learning is real (before vs after)
 

@@ -1,0 +1,382 @@
+[
+ {
+  "construction_id": "plural_transitive_present",
+  "lesson_id": "LIVE_L009_plural",
+  "description": "the PLURAL SUBJECT construction 'the cats chase the dog.' - the agent noun is PLURAL. Write the agent slot as NPPL:agent (NPPL matches ONLY plural nouns: cats, dogs, birds, hens, foxes) and put the literal 'the' before it. The verb is BASE form ('chase', NOT 'chases'). Then 'the' and NP:patient (singular). Pattern order: the, NPPL:agent, VERB:pred:base, the, NP:patient. Meaning: a present positive event whose agent number is plural",
+  "shape_hint": "the cats chase the dog.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "@agent",
+   "agent_number": "plural",
+   "patient": "@patient",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'the cats chase the dog.' - plural agent, base verb. CRITICAL: in every expected_core the agent value is the SINGULAR LEMMA ('cat' for the sentence word 'cats', 'hen' for 'hens') - plurality lives ONLY in agent_number, NEVER in the agent value itself",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"cat\", \"patient\": \"dog\", \"tense\": \"present\", \"polarity\": \"positive\", \"agent_number\": \"plural\"} for the sentence 'the cats chase the dog.' - note agent is 'cat' (singular lemma) even though the sentence says 'cats'",
+  "held_out": [
+   {
+    "sentence": "the foxes chase the hen.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "fox",
+     "patient": "hen",
+     "tense": "present",
+     "polarity": "positive",
+     "agent_number": "plural"
+    }
+   },
+   {
+    "sentence": "the birds chase the cat.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "bird",
+     "patient": "cat",
+     "tense": "present",
+     "polarity": "positive",
+     "agent_number": "plural"
+    }
+   },
+   {
+    "sentence": "the cat chase the dog.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the hens chase the bird.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "hen",
+     "patient": "bird",
+     "tense": "present",
+     "polarity": "positive",
+     "agent_number": "plural"
+    }
+   }
+  ],
+  "probe": "the cats chase the dog."
+ },
+ {
+  "construction_id": "negated_past_transitive",
+  "lesson_id": "LIVE_L010_past_negation",
+  "description": "the PAST-TENSE NEGATION construction 'the X did not chase the Y.' - pattern order: NP:agent, literal 'did', literal 'not', VERB:pred:base (BASE form after 'did'), literal 'the', NP:patient. Meaning: an event with tense PAST and polarity NEGATIVE (the chase did NOT happen)",
+  "shape_hint": "the cat did not chase the dog.",
+  "surface_meta": {
+   "mood": "declarative",
+   "polarity_marker": "did_not"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "@agent",
+   "patient": "@patient",
+   "tense": "past",
+   "polarity": "negative"
+  },
+  "example_sentence_hint": "shaped 'the X did not chase the Y.'",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<X>\", \"patient\": \"<Y>\", \"tense\": \"past\", \"polarity\": \"negative\"}",
+  "held_out": [
+   {
+    "sentence": "the fox did not chase the hen.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "fox",
+     "patient": "hen",
+     "tense": "past",
+     "polarity": "negative"
+    }
+   },
+   {
+    "sentence": "the dog did not chase the cat.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "dog",
+     "patient": "cat",
+     "tense": "past",
+     "polarity": "negative"
+    }
+   },
+   {
+    "sentence": "did not the cat chase dog the.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the hen did not chase the fox.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "hen",
+     "patient": "fox",
+     "tense": "past",
+     "polarity": "negative"
+    }
+   }
+  ],
+  "probe": "the cat did not chase the dog."
+ },
+ {
+  "construction_id": "copular_adjective_interrogative",
+  "lesson_id": "LIVE_L011_copular_question",
+  "description": "the COPULAR ADJECTIVE QUESTION 'is the gray cat quiet?' - pattern order: literal 'is', literal 'the', ADJ:agent_mod (the restricting adjective before the noun), NP:agent (the bare noun), ADJ:prop (the questioned property, last). Adjectives: gray, brown, quiet. Meaning: a STATE frame - frame 'state', entity @agent, modifier @agent_mod, property @prop, tense present, polarity positive",
+  "shape_hint": "is the gray cat quiet?",
+  "surface_meta": {
+   "mood": "interrogative"
+  },
+  "scaffold_semantics": {
+   "frame": "state",
+   "entity": "@agent",
+   "modifier": "@agent_mod",
+   "property": "@prop",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'is the gray cat quiet?' ending with '?'",
+  "expected_core_hint": "{\"frame\": \"state\", \"entity\": \"<X>\", \"modifier\": \"<ADJ1>\", \"property\": \"<ADJ2>\", \"tense\": \"present\", \"polarity\": \"positive\"}",
+  "held_out": [
+   {
+    "sentence": "is the brown fox quiet?",
+    "expected_core": {
+     "frame": "state",
+     "entity": "fox",
+     "modifier": "brown",
+     "property": "quiet",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   },
+   {
+    "sentence": "is the quiet dog gray?",
+    "expected_core": {
+     "frame": "state",
+     "entity": "dog",
+     "modifier": "quiet",
+     "property": "gray",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   },
+   {
+    "sentence": "is gray the cat quiet?",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "is the gray hen brown?",
+    "expected_core": {
+     "frame": "state",
+     "entity": "hen",
+     "modifier": "gray",
+     "property": "brown",
+     "tense": "present",
+     "polarity": "positive"
+    }
+   }
+  ],
+  "probe": "is the gray cat quiet?"
+ },
+ {
+  "construction_id": "negated_passive_past",
+  "lesson_id": "LIVE_L012_passive_negation",
+  "description": "the NEGATED PASSIVE construction 'the Y was not chased by the X.' - pattern order: NP:patient, literal 'was', literal 'not', VERB:pred:participle, literal 'by', NP:agent. NOTE: the patient comes FIRST on the surface but stays the PATIENT in meaning; the agent after 'by' stays the AGENT. Meaning: event, tense PAST, polarity NEGATIVE",
+  "shape_hint": "the dog was not chased by the cat.",
+  "surface_meta": {
+   "voice": "passive",
+   "polarity_marker": "was_not"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "@agent",
+   "patient": "@patient",
+   "tense": "past",
+   "polarity": "negative"
+  },
+  "example_sentence_hint": "shaped 'the Y was not chased by the X.'",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"<X>\", \"patient\": \"<Y>\", \"tense\": \"past\", \"polarity\": \"negative\"}",
+  "held_out": [
+   {
+    "sentence": "the hen was not chased by the fox.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "fox",
+     "patient": "hen",
+     "tense": "past",
+     "polarity": "negative"
+    }
+   },
+   {
+    "sentence": "the cat was not chased by the dog.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "dog",
+     "patient": "cat",
+     "tense": "past",
+     "polarity": "negative"
+    }
+   },
+   {
+    "sentence": "was not the hen chased by fox the.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the bird was not chased by the cat.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "chase",
+     "agent": "cat",
+     "patient": "bird",
+     "tense": "past",
+     "polarity": "negative"
+    }
+   }
+  ],
+  "probe": "the dog was not chased by the cat."
+ },
+ {
+  "construction_id": "ditransitive_past",
+  "lesson_id": "LIVE_L013_ditransitive_past",
+  "description": "the PAST DITRANSITIVE construction 'the X gave the Y to the Z.' - pattern order: NP:agent, VERB:pred:past, literal 'the', NP:patient, literal 'to', NP:recipient. Meaning: a give event, tense PAST, polarity positive, with the recipient role. MORPHOLOGY REQUIRED: 'gave' is the IRREGULAR past form of 'give' - your morphology list must contain {\"surface\": \"gave\", \"lemma\": \"give\", \"form\": \"past\"}",
+  "shape_hint": "the cat gave the bone to the dog.",
+  "surface_meta": {
+   "mood": "declarative"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "@agent",
+   "patient": "@patient",
+   "recipient": "@recipient",
+   "tense": "past",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'the X gave the bone to the Z.'",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"give\", \"agent\": \"<X>\", \"patient\": \"bone\", \"tense\": \"past\", \"polarity\": \"positive\", \"recipient\": \"<Z>\"}",
+  "held_out": [
+   {
+    "sentence": "the fox gave the bone to the hen.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "give",
+     "agent": "fox",
+     "patient": "bone",
+     "tense": "past",
+     "polarity": "positive",
+     "recipient": "hen"
+    }
+   },
+   {
+    "sentence": "the dog gave the bone to the cat.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "give",
+     "agent": "dog",
+     "patient": "bone",
+     "tense": "past",
+     "polarity": "positive",
+     "recipient": "cat"
+    }
+   },
+   {
+    "sentence": "gave the to bone fox the.",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "the hen gave the bone to the bird.",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "give",
+     "agent": "hen",
+     "patient": "bone",
+     "tense": "past",
+     "polarity": "positive",
+     "recipient": "bird"
+    }
+   }
+  ],
+  "probe": "the cat gave the bone to the dog."
+ },
+ {
+  "construction_id": "interrogative_ditransitive",
+  "lesson_id": "LIVE_L014_ditransitive_question",
+  "description": "the DITRANSITIVE QUESTION 'does the X give the Y to the Z?' - pattern order: literal 'does', literal 'the', NP:agent, VERB:pred:base (BASE form after 'does'), literal 'the', NP:patient, literal 'to', NP:recipient. Meaning: a give event with the recipient role, tense present, polarity positive; this is a QUESTION",
+  "shape_hint": "does the cat give the bone to the dog?",
+  "surface_meta": {
+   "mood": "interrogative"
+  },
+  "scaffold_semantics": {
+   "frame": "event",
+   "predicate": "@pred",
+   "agent": "@agent",
+   "patient": "@patient",
+   "recipient": "@recipient",
+   "tense": "present",
+   "polarity": "positive"
+  },
+  "example_sentence_hint": "shaped 'does the X give the bone to the Z?' ending with '?'",
+  "expected_core_hint": "{\"frame\": \"event\", \"predicate\": \"give\", \"agent\": \"<X>\", \"patient\": \"bone\", \"tense\": \"present\", \"polarity\": \"positive\", \"recipient\": \"<Z>\"}",
+  "held_out": [
+   {
+    "sentence": "does the fox give the bone to the hen?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "give",
+     "agent": "fox",
+     "patient": "bone",
+     "tense": "present",
+     "polarity": "positive",
+     "recipient": "hen"
+    }
+   },
+   {
+    "sentence": "does the dog give the bone to the cat?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "give",
+     "agent": "dog",
+     "patient": "bone",
+     "tense": "present",
+     "polarity": "positive",
+     "recipient": "cat"
+    }
+   },
+   {
+    "sentence": "does give the fox bone to the?",
+    "expect": "no_parse"
+   }
+  ],
+  "retention": [
+   {
+    "sentence": "does the hen give the bone to the bird?",
+    "expected_core": {
+     "frame": "event",
+     "predicate": "give",
+     "agent": "hen",
+     "patient": "bone",
+     "tense": "present",
+     "polarity": "positive",
+     "recipient": "bird"
+    }
+   }
+  ],
+  "probe": "does the cat give the bone to the dog?"
+ }
+]

@@ -40,6 +40,30 @@ from .proposal import ProposalRejected, validate_proposal  # noqa: E402
 
 MODES = ("NATIVE_ONLY", "CORTEX_DIAGNOSTIC", "HYBRID_COMMIT")
 
+
+def core_state_renderable(core) -> bool:
+    return (isinstance(core, dict) and core.get("frame") == "state"
+            and core.get("entity") and core.get("property"))
+
+
+def render_clause(core) -> str:
+    """Naive regular English for a frame core (the REALIZE subboard
+    owns proper rendering later)."""
+    if core.get("frame") == "state":
+        mod = core.get("modifier")
+        return ("the " + (f"{mod} " if mod else "")
+                + f"{core.get('entity')} is {core.get('property')}")
+    suffix = "d" if core.get("tense") == "past" else "s"
+    agent_mod = core.get("agent_mod")
+    patient_mod = core.get("patient_mod")
+    clause = ("the " + (f"{agent_mod} " if agent_mod else "")
+              + f"{core.get('agent')} {core.get('predicate')}{suffix} "
+              + "the " + (f"{patient_mod} " if patient_mod else "")
+              + f"{core.get('patient')}")
+    if core.get("recipient"):
+        clause += f" to the {core.get('recipient')}"
+    return clause
+
 SEED_PATH = os.path.join(_CAS_ONLY, "CCB_L1_v0.1", "fixtures",
                          "seed_lexicon.json")
 
@@ -115,6 +139,33 @@ class HybridRouter:
             return {"status": "UNSUPPORTED_LANGUAGE",
                     "error": {"word": "?", "message": str(exc)}}
 
+    def _answer_conjunction_question(self, packet: Dict, gram: Dict,
+                                     trace: Dict) -> Dict:
+        """Restricted-question answering: ask the kernel about each
+        conjunct separately; 'yes' only if ALL conclude."""
+        try:
+            verdicts = [self._kernel_answer({"pred": "question",
+                                             "args": [part]})
+                        ["kernel_status"]
+                        for part in packet.get("args", [])]
+        except Exception as exc:
+            trace["answer"] = {
+                "status": "LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING",
+                "frame_core": gram["core"],
+                "detail": "the question parsed natively; the kernel "
+                          "holds no facts of this kind to answer it "
+                          f"({type(exc).__name__})"}
+            return self._seal(trace, committed=False)
+        clause = render_clause(gram["core"])
+        if verdicts and all(v == "CONCLUDED" for v in verdicts):
+            text = f"yes, {clause}."
+        else:
+            text = f"i do not know whether {clause}."
+        trace["answer"] = {"status": "ANSWERED", "text": text,
+                           "frame_core": gram["core"],
+                           "conjunct_verdicts": verdicts}
+        return self._seal(trace, committed=True)
+
     def _kernel_answer(self, meaning: Dict) -> Dict:
         result = answer_question(meaning, self.seed["cmb_facts"],
                                  self.seed["rules"])
@@ -152,6 +203,14 @@ class HybridRouter:
                                    ["surface"]["construction_id"]}
             mood = gram["frames"][0]["surface"].get("mood")
             if mood == "interrogative":
+                if packet.get("pred") == "conjunction":
+                    # a RESTRICTED question ('is the gray cat quiet?')
+                    # projects as a conjunction: EVERY conjunct must be
+                    # kernel-verified before 'yes' - one unknown and
+                    # the honest answer is unknown. Nothing is dropped
+                    # to make the question easier.
+                    return self._answer_conjunction_question(
+                        packet, gram, trace)
                 # a learned QUESTION construction: language understood;
                 # the kernel decides whether knowledge exists. If it
                 # cannot answer, the honest split status applies -
@@ -160,6 +219,16 @@ class HybridRouter:
                     kernel = self._kernel_answer(
                         {"pred": "question", "args": [packet]})
                     text = kernel["answer"]
+                    if packet.get("pred") == "property" \
+                            and core_state_renderable(gram["core"]):
+                        core = gram["core"]
+                        clause = (f"the {core.get('entity')} is "
+                                  f"{core.get('property')}")
+                        if kernel["kernel_status"] == "CONCLUDED":
+                            text = f"yes, {clause}."
+                        else:
+                            text = (f"i do not know whether "
+                                    f"{clause}.")
                     if packet.get("pred") == "relation":
                         # the legacy decoder only speaks property
                         # questions; relation questions render from
@@ -175,6 +244,8 @@ class HybridRouter:
                         clause = (f"the {core['agent']} "
                                   f"{core['predicate']}{suffix} the "
                                   f"{core['patient']}")
+                        if core.get("recipient"):
+                            clause += f" to the {core['recipient']}"
                         if kernel["kernel_status"] == "CONCLUDED":
                             text = f"yes, {clause}."
                         else:
@@ -348,10 +419,13 @@ class HybridRouter:
         frame used to project identically to its positive - the exact
         silently-dropped-content fabrication genus): negative frames
         wrap in the legacy negation packet."""
-        if core.get("frame") == "coordination":
-            # BOTH clauses survive - dropping one is the fabrication
-            # genus the faithfulness gate exists to catch
-            return {"pred": "conjunction",
+        if core.get("frame") in ("coordination", "disjunction"):
+            # EVERY clause survives - dropping one is the fabrication
+            # genus the faithfulness gate exists to catch; and/or stay
+            # DISTINCT packets (the non-collapse law)
+            pred = ("conjunction" if core["frame"] == "coordination"
+                    else "disjunction")
+            return {"pred": pred,
                     "args": [HybridRouter._frame_to_packet(conjunct)
                              for conjunct in core["conjuncts"]]}
         if core.get("frame") == "event":
@@ -370,6 +444,13 @@ class HybridRouter:
                 modifiers.append({"pred": "property",
                                   "args": [core["patient"],
                                            core["patient_mod"]]})
+            for role in ("agent", "patient", "recipient"):
+                # PLURALITY IS NEVER DROPPED (same law as polarity):
+                # 'the cats chase the dog' may not project identically
+                # to 'the cat chases the dog'
+                if core.get(role + "_number") == "plural":
+                    modifiers.append({"pred": "number",
+                                      "args": [core[role], "plural"]})
             if modifiers:
                 # attributive adjectives project as conjoined property
                 # assertions - every modifier survives
@@ -378,6 +459,15 @@ class HybridRouter:
         else:
             inner = {"pred": "property",
                      "args": [core.get("entity"), core.get("property")]}
+            if core.get("modifier"):
+                # the restricting adjective SURVIVES projection -
+                # 'is the gray cat quiet?' may not project identically
+                # to 'is the cat quiet?'
+                inner = {"pred": "conjunction",
+                         "args": [inner,
+                                  {"pred": "property",
+                                   "args": [core.get("entity"),
+                                            core.get("modifier")]}]}
         if core.get("polarity") == "negative":
             return {"pred": "negation", "args": [inner]}
         return inner

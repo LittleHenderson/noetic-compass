@@ -2,12 +2,12 @@
  "chase": {
   "lemma": "chase",
   "form": "base",
-  "provenance": "lesson:LIVE_L008_past_question"
+  "provenance": "lesson:LIVE_L014_ditransitive_question"
  },
  "chased": {
   "lemma": "chase",
   "form": "past_or_participle",
-  "provenance": "repair:save-path-clobber-2026-08-28"
+  "provenance": "lesson:LIVE_L012_passive_negation"
  },
  "chases": {
   "lemma": "chase",
@@ -17,21 +17,26 @@
  "gave": {
   "lemma": "give",
   "form": "past",
-  "provenance": "lesson:LIVE_L006_recipient"
+  "provenance": "lesson:LIVE_L013_ditransitive_past"
  },
  "give": {
   "lemma": "give",
   "form": "base",
-  "provenance": "lesson:LIVE_L006_recipient"
+  "provenance": "lesson:LIVE_L013_ditransitive_past"
  },
  "given": {
   "lemma": "give",
   "form": "participle",
-  "provenance": "lesson:LIVE_L006_recipient"
+  "provenance": "lesson:LIVE_L013_ditransitive_past"
  },
  "gives": {
   "lemma": "give",
   "form": "present_3sg",
   "provenance": "lesson:LIVE_L006_recipient"
+ },
+ "is": {
+  "lemma": "be",
+  "form": "present_3sg",
+  "provenance": "lesson:LIVE_L011_copular_question"
  }
 }

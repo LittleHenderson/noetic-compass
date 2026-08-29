@@ -883,6 +883,57 @@ SAVE-PATH CLOBBER BUG - CAUGHT, REPAIRED, CANARIED (2026-08-28): the
   per construction family so silent knowledge loss trips CI
   (test_runtime_canary_no_construction_forgotten).
 
+CURRICULUM WAVE A - GOAL LESSONS 1-6 ALL DURABLE (sealed
+2026-08-28, AWS Bedrock qwen.qwen3-32b-v1:0; 20-lesson goal queue):
+  - L1 plural_transitive_present: 'the cats chase the dog.'
+    UNSUPPORTED -> UNDERSTOOD. New NPPL slot = plural agreement law
+    ('the cat chase the dog.' refuses to parse); plurality binds as
+    agent_number and SURVIVES projection (same never-drop law as
+    polarity). Attempt 1 REJECTED_POSITIVE_EXAMPLES (teacher wrote
+    surface 'cats' as agent instead of lemma 'cat' - hint sharpened);
+    attempt 2 REJECTED_REGRESSION (harness defect, below); attempt 3
+    durable.
+  - L2 negated_past_transitive: 'the cat did not chase the dog.'
+    UNSUPPORTED -> UNDERSTOOD, first attempt.
+  - L3 copular_adjective_interrogative: 'is the gray cat quiet?'
+    UNSUPPORTED -> ANSWERED 'yes, the gray cat is quiet.' - the
+    restricted question projects as a conjunction and EVERY conjunct
+    is kernel-verified before 'yes' (one unknown -> honest unknown).
+    First attempt failed on a HARNESS defect: the field validator
+    demanded a VERB slot in every pattern; copular constructions carry
+    the copula as a literal and have none. Validator fixed, teacher's
+    correct answer accepted on rerun.
+  - L4 negated_passive_past: 'the dog was not chased by the cat.'
+    UNSUPPORTED -> UNDERSTOOD, first attempt.
+  - L5 ditransitive_past: 'the cat gave the bone to the dog.'
+    UNSUPPORTED -> UNDERSTOOD; irregular 'gave' entered the merged
+    MorphTable through the lesson morphology field, first attempt.
+  - L6 interrogative_ditransitive: 'does the cat give the bone to the
+    dog?' UNSUPPORTED -> ANSWERED ('i do not know whether the cat
+    gives the bone to the dog.' - 4-arg relation, kernel honestly
+    lacks the fact), after two harness fixes.
+  GRAMMAR NOW HOLDS 16 DURABLE CONSTRUCTIONS (3 seed + 13
+  live-taught). Every rejected attempt is a sealed episode in
+  output/curriculum_qwen.qwen3-32b-v1_0.json.
+
+THREE HARNESS DEFECTS FOUND LIVE AND FIXED (wave A, 2026-08-28) - all
+  the same genus: the examining harness lagging the machine's own
+  accumulated knowledge:
+  1. Student lexicon was the STATIC teaching set: 'bone' (promoted by
+     LEX persistence in round 2) was missing, so the ditransitive
+     regression guard falsely failed lesson L009. Fix: CURRICULUM_LEX
+     now merges the persisted seed_lexicon.json.
+  2. Field-check MorphTable was built from ONLY the lesson's entries:
+     'give' (known to the runtime) was flagged an unknown word. Fix:
+     _parser starts from the persisted seed_morphology.json and merges
+     lesson entries (conflicts still refused typed by the ladder).
+  3. Misleading defect feedback: function words and pattern literals
+     ('to') were reported as unknown words when the real defect was a
+     shape mismatch; the mismatch message now names the true defect
+     and tells the teacher to reuse a positive example.
+  Runtime canary extended: one probe per family, now 15 sentences
+  (all 16 constructions' families covered).
+
 PROGRAM TEST TOTALS (all green, exact, junit-counted 2026-08-28,
 curriculum round 2): RRK 34 + RLP 45 + M1 34 + L1 32 + SEM 19 +
 WB 13 + CRQS 35 + T1 20 + OHM 10 + H2H 10 + LTG 11 + SM 8 + G10 8 +

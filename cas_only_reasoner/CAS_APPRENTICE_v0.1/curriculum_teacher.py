@@ -48,11 +48,24 @@ CURRICULUM_LEX.update({
 SEED_LEXICON = os.path.join(LANE, "CCB_L1_v0.1", "fixtures",
                             "seed_lexicon.json")
 
-ROLES = ("agent", "patient", "agent2", "patient2", "recipient",
+# The student's vocabulary is the RUNTIME's accumulated lexicon: every
+# word an earlier lesson promoted (LEX persistence) must be present,
+# or prior-grammar regression guards that use those words falsely
+# fail (found live: lesson L009 tripped the ditransitive guard
+# because 'bone' was missing from the static teaching set).
+try:
+    with open(SEED_LEXICON, encoding="utf-8") as _fh:
+        CURRICULUM_LEX.update(json.load(_fh)["lexicon"])
+except (FileNotFoundError, KeyError):
+    pass
+
+ROLES = ("agent", "patient", "agent2", "patient2",
+         "agent3", "patient3", "possessor", "recipient",
          "experiencer", "instrument", "source", "destination",
          "location")
-ADJ_SLOTS = ("agent_mod", "patient_mod", "mod")
-VERB_NAMES = ("pred", "pred2")
+ADJ_SLOTS = ("agent_mod", "patient_mod", "mod", "prop",
+             "comp")
+VERB_NAMES = ("pred", "pred2", "pred3")
 VERB_FORMS = ("base", "past", "participle", "present_3sg")
 
 
@@ -63,7 +76,7 @@ def valid_pattern(value):
     for element in value:
         if not isinstance(element, str):
             return f"element {element!r} is not a string"
-        if element.startswith("NP:"):
+        if element.startswith("NP:") or element.startswith("NPPL:"):
             parts = element.split(":")
             if len(parts) != 2 or parts[1] not in ROLES:
                 return (f"NP slot {element!r} must name a role from "
@@ -96,7 +109,10 @@ def valid_pattern(value):
                     f"like 'NP:agent' or 'NP:patient' instead")
         elif not element.islower():
             return f"literal {element!r} must be lowercase"
-    if not has_verb:
+    # copular constructions ('is the gray cat quiet?') carry the
+    # copula as a literal and legitimately have no VERB slot
+    has_copula = any(e in ("is", "was", "are", "were") for e in value)
+    if not has_verb and not has_copula:
         return ("missing the VERB slot: write the verb position as "
                 "VERB:pred:form (e.g. 'VERB:pred:base'), never the "
                 "literal verb word")
@@ -133,8 +149,17 @@ def structural_check(sentences, pattern, morphology, must_match):
             # teacher retries (round-2 finding: 'quick' used 4x)
             from lang.grammar import tokenize
             known = set(CURRICULUM_LEX)
+            # function words and the pattern's own literals are not
+            # 'unknown' - flagging 'to' when the real defect is a
+            # shape mismatch sent the teacher chasing the wrong fix
+            function_words = {"the", "a", "to", "by", "did", "does",
+                              "was", "were", "is", "are", "not",
+                              "and", "or"}
+            literals = {e for e in pattern if ":" not in e}
             unknown = [t for t in tokenize(sentence)
                        if t not in known and t not in (".", "?", ",")
+                       and t not in function_words
+                       and t not in literals
                        and _parser(morphology).morph.analyze(t) is None]
             if unknown:
                 adjectives = sorted(w for w, e in CURRICULUM_LEX.items()
@@ -145,8 +170,11 @@ def structural_check(sentences, pattern, morphology, must_match):
                         f"known adjectives: {adjectives}; known "
                         f"nouns: {nouns}. Use ONLY these")
             return (f"{sentence!r} does not match YOUR pattern "
-                    f"{pattern}; NP slots consume 'the NOUN' and only "
-                    f"lexicon nouns (cat, dog, bird, fox, hen) fit")
+                    f"{pattern}; the sentence must have EXACTLY that "
+                    f"token shape (same literals in the same places - "
+                    f"a question pattern needs a question sentence). "
+                    f"Simplest correct answer: reuse a sentence from "
+                    f"your positive_examples")
         if not must_match and matched:
             return (f"{sentence!r} is grammatical under your pattern "
                     f"- a counterexample must be BROKEN so it does "
@@ -156,9 +184,25 @@ def structural_check(sentences, pattern, morphology, must_match):
 
 def _parser(morphology):
     morph = MorphTable()
+    # start from the machine's PERSISTED morphology - the field check
+    # must know every verb form earlier lessons promoted (found live:
+    # 'give' flagged unknown while the runtime knew it perfectly)
+    try:
+        for surface, entry in json.load(
+                open(SEED_MORPH, encoding="utf-8")).items():
+            morph.teach(surface, entry["lemma"], entry["form"],
+                        provenance=entry["provenance"])
+    except FileNotFoundError:
+        pass
     for entry in morphology or []:
-        morph.teach(entry["surface"], entry["lemma"], entry["form"],
-                    provenance="field_check")
+        try:
+            morph.teach(entry["surface"], entry["lemma"],
+                        entry["form"], provenance="field_check")
+        except Exception:
+            # a lesson entry conflicting with prior knowledge is NOT
+            # silently accepted - the ladder refuses it typed; the
+            # field check just declines to crash on it
+            pass
     return ConstructionParser(Lexicon(CURRICULUM_LEX), morph)
 
 
@@ -635,6 +679,10 @@ def main():
                 skip_special_tokens=True).strip()
 
     from cortex.router import HybridRouter
+    targets_file = os.environ.get("CAS_TARGETS_FILE")
+    if targets_file:
+        TARGETS.extend(json.load(open(targets_file,
+                                      encoding="utf-8")))
     only = os.environ.get("CAS_TARGETS")
     targets = [t for t in TARGETS
                if only is None

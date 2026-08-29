@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-28 (curriculum wave A) - goal lessons 1-6 ALL DURABLE via Bedrock 32B; grammar at 16 constructions; three harness defects found live and fixed
+
+- The 20-lesson goal queue is underway. Lessons 1-6 all PROMOTED_DURABLY, one sealed episode each (rejections sealed too): plural subjects (NEW plural agreement law - 'the cat chase the dog.' refuses to parse; plurality survives projection under the polarity never-drop law), past-tense negation, copular adjective questions ('is the gray cat quiet?' -> 'yes, the gray cat is quiet.' with EVERY conjunct kernel-verified before yes), passive negation, past ditransitives (irregular 'gave' taught through the lesson morphology field), and ditransitive questions (honest 'i do not know' on the 4-arg fact the kernel lacks).
+- Three harness defects found live, all one genus - the examiner lagging the machine's own accumulated knowledge: the student lexicon missed runtime-promoted words ('bone' broke a regression guard falsely), the field-check morphology missed persisted verb forms ('give' flagged unknown), and defect feedback blamed function words for shape mismatches. All fixed; the ladder's authority unchanged.
+- One genuine teacher error caught and corrected by the ladder: surface plural 'cats' written as the agent value instead of the lemma 'cat' - REJECTED_POSITIVE_EXAMPLES, hint sharpened, clean pass after.
+- Machinery this wave: NPPL plural slot (+-es plurals), number/modifier projection survival, restricted-question per-conjunct verification, disjunction frame type (for lesson 9), third-clause roles (for lesson 8), targets-file loader. Runtime canary extended to 15 probes covering all 16 construction families.
+- Suites: L1 32 + CORTEX 45 + A1 8 green (program totals unchanged at 332 local).
+
 ## 2026-08-28 (curriculum round 2) - recipients, adjectives, past questions ALL DURABLE; grammar at 10 constructions; a forgetting bug caught and canaried
 
 - AWS Bedrock 32B taught three more constructions through the unchanged ladder, all PROMOTED_DURABLY: past-tense questions ('did the cat chase the dog?' now ANSWERED), ditransitives with recipients ('the cat gives the bone to the dog.' - the recipient role survives projection; 'bone' entered the runtime lexicon via LEX persistence), and attributive adjectives ('the gray cat chases the brown dog.' - new ADJ slot type; modifiers project as conjoined property assertions, nothing dropped). Grammar: 10 durable constructions (3 seed + 7 live-taught).
