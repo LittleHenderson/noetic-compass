@@ -23,8 +23,15 @@ store, and is demonstrable live. In this machine the two are the
 same set by construction: nothing is "learned" (promoted) that did
 not survive the frozen examiner.
 
-Three languages, taught by AWS Bedrock `qwen.qwen3-32b-v1:0` (with a
-`deepseek.v3-v1:0` critic on one committee lesson):
+Three languages. Mathematics (24/24 episodes) and Python (7/7
+episodes) were taught entirely by AWS Bedrock `qwen.qwen3-32b-v1:0`
+on `bedrock:us-west-2` (with a `deepseek.v3-v1:0` critic on one
+committee lesson). English is mixed provenance: 27 of the 36
+constructions were taught by a live model teacher (26 by the Bedrock
+32B; 1, `negated_present_transitive`, by local
+`Qwen/Qwen2.5-3B-Instruct`); the other 9 came from seed/curriculum
+teaching episodes, not a live model (see
+`CAS_APPRENTICE_v0.1/output/LEARNING_LEDGER.md` §2 and §4):
 
 | Language | What, exactly | Scope (honest) | Durable count |
 |---|---|---|---|
@@ -54,14 +61,14 @@ provenance and a rollback path.**
 
 **A2. Learning is real: unseen sentences parse to the exact meaning
 (before UNSUPPORTED → after UNDERSTOOD), never memorized.**
-- [E] `CAS_APPRENTICE_v0.1/output/curriculum_qwen.qwen3-32b-v1_0_*.json` (10 sealed episodes: before/after transcripts, held-out cases)
-- [T] `CAS_CORTEX_v0.1/tests/test_cortex_gates.py::test_runtime_canary_no_construction_forgotten` (28 family probes)
+- [E] `CAS_APPRENTICE_v0.1/output/curriculum_qwen.qwen3-32b-v1_0_*.json` (9 sealed episodes: before/after transcripts, held-out cases) plus `CAS_APPRENTICE_v0.1/output/curriculum_round1.json` (the round-1 curriculum episode)
+- [T] `CAS_CORTEX_v0.1/tests/test_cortex_gates.py::test_runtime_canary_no_construction_forgotten` (33 family probes)
 - [S] `CAS_APPRENTICE_v0.1/output/LEARNING_LEDGER.md` §3 (live unseen-sentence check at generation)
 
 **A3. A live model teacher's defective lessons are REJECTED by the
 ten-stage acceptance ladder (teacher confidence grants nothing).**
 - [M] `CCB_L1_v0.1/lang/apprentice.py` (`learn()` ten stages)
-- [E] the `REJECTED_*` verdicts inside the sealed episodes above (e.g. plural attempt 1 `REJECTED_POSITIVE_EXAMPLES`, attempt 2 `REJECTED_REGRESSION`)
+- [E] `CAS_APPRENTICE_v0.1/output/reconstruction_curriculum_overwrite_20260828.json` (`REJECTED_POSITIVE_EXAMPLES`, `REJECTED_REGRESSION`) and `CAS_APPRENTICE_v0.1/output/live_teacher_episode_qwen2_5-*.json` (`REJECTED_SCHEMA` x6, sealed pass-or-fail)
 - [T] `CAS_APPRENTICE_v0.1/tests/test_apprentice_board.py`
 
 **A4. The first LIVE MULTI-TEACHER COMMITTEE lesson: a second model
