@@ -23,9 +23,27 @@
    "construction_id": "negated_present_transitive",
    "provenance": "lesson:LIVE_L002_negation_constrained|teacher:Qwen/Qwen2.5-3B-Instruct",
    "revision": 4
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "imperative_transitive",
+   "provenance": "lesson:LIVE_L004_command|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 5
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "coordination_present_transitive",
+   "provenance": "lesson:LIVE_L005_coordination|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 6
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "interrogative_present_transitive",
+   "provenance": "lesson:LIVE_L003_question|teacher:qwen.qwen3-32b-v1:0",
+   "revision": 7
   }
  ],
- "revision": 4,
+ "revision": 7,
  "rules": {
   "active_past_transitive": {
    "construction_id": "active_past_transitive",
@@ -71,6 +89,195 @@
    "surface_pattern": [
     "NP:agent",
     "VERB:pred:past",
+    "NP:patient"
+   ]
+  },
+  "coordination_present_transitive": {
+   "construction_id": "coordination_present_transitive",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L005_coordination|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "conjuncts": [
+       {
+        "agent": "cat",
+        "frame": "event",
+        "patient": "dog",
+        "polarity": "positive",
+        "predicate": "chase",
+        "tense": "present"
+       },
+       {
+        "agent": "fox",
+        "frame": "event",
+        "patient": "hen",
+        "polarity": "positive",
+        "predicate": "chase",
+        "tense": "present"
+       }
+      ],
+      "frame": "coordination"
+     },
+     "sentence": "The cat chases the dog and the fox chases the hen."
+    },
+    {
+     "expected_core": {
+      "conjuncts": [
+       {
+        "agent": "bird",
+        "frame": "event",
+        "patient": "hen",
+        "polarity": "positive",
+        "predicate": "chase",
+        "tense": "present"
+       },
+       {
+        "agent": "dog",
+        "frame": "event",
+        "patient": "cat",
+        "polarity": "positive",
+        "predicate": "chase",
+        "tense": "present"
+       }
+      ],
+      "frame": "coordination"
+     },
+     "sentence": "The bird chases the hen and the dog chases the cat."
+    }
+   ],
+   "rule_digest": "c2edd1c937481be0",
+   "semantics": {
+    "conjuncts": [
+     {
+      "agent": "@agent",
+      "frame": "event",
+      "patient": "@patient",
+      "polarity": "positive",
+      "predicate": "@pred",
+      "tense": "present"
+     },
+     {
+      "agent": "@agent2",
+      "frame": "event",
+      "patient": "@patient2",
+      "polarity": "positive",
+      "predicate": "@pred2",
+      "tense": "present"
+     }
+    ],
+    "frame": "coordination"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "declarative"
+   },
+   "surface_pattern": [
+    "NP:agent",
+    "VERB:pred:present_3sg",
+    "the",
+    "NP:patient",
+    "and",
+    "the",
+    "NP:agent2",
+    "VERB:pred2:present_3sg",
+    "NP:patient2"
+   ]
+  },
+  "imperative_transitive": {
+   "construction_id": "imperative_transitive",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L004_command|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "addressee",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "chase the dog."
+    },
+    {
+     "expected_core": {
+      "agent": "addressee",
+      "frame": "event",
+      "patient": "cat",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "chase the cat."
+    }
+   ],
+   "rule_digest": "8b5a9f6f805555df",
+   "semantics": {
+    "agent": "addressee",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "tense": "present"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "imperative"
+   },
+   "surface_pattern": [
+    "VERB:pred:base",
+    "the",
+    "NP:patient"
+   ]
+  },
+  "interrogative_present_transitive": {
+   "construction_id": "interrogative_present_transitive",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L003_question|teacher:qwen.qwen3-32b-v1:0",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "bird",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "does the cat chase the bird?"
+    },
+    {
+     "expected_core": {
+      "agent": "dog",
+      "frame": "event",
+      "patient": "fox",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "does the dog chase the fox?"
+    }
+   ],
+   "rule_digest": "054b78daf27349f2",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "positive",
+    "predicate": "@pred",
+    "tense": "present"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "mood": "interrogative"
+   },
+   "surface_pattern": [
+    "does",
+    "the",
+    "NP:agent",
+    "VERB:pred:base",
+    "the",
     "NP:patient"
    ]
   },
@@ -201,5 +408,5 @@
    ]
   }
  },
- "store_digest": "251eac536b5c6369"
+ "store_digest": "a071336c9ebfe32c"
 }

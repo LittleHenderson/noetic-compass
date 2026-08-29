@@ -317,9 +317,14 @@ def make_fields(target):
          valid_counters),
         ("ambiguity_cases",
          "Give ONLY the ambiguity_cases JSON list: 1 item {sentence, "
-         "expect: 'parsed'} using a clearly well-formed sentence of "
-         "YOUR construction.",
-         lambda v, p=None, m=None: valid_ambiguity(v)),
+         "expect: 'parsed'}. The sentence MUST be one of YOUR OWN "
+         "construction's sentences - simplest correct answer: reuse "
+         "the first sentence from your positive_examples.",
+         lambda v, p=None, m=None: (
+             valid_ambiguity(v)
+             or structural_check([i["sentence"] for i in v
+                                  if i.get("expect") == "parsed"],
+                                 p, m, must_match=True))),
     ]
 
 
@@ -329,48 +334,81 @@ def main():
     except Exception:
         pass
 
-    import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-    if not torch.cuda.is_available():
-        raise SystemExit("REFUSING to run on CPU (standing owner "
-                         "order). Use the CUDA venv or RunPod/AWS.")
+    backend = os.environ.get("CAS_TEACHER_BACKEND", "local_gpu")
 
-    base = os.path.expanduser(
-        "~/.cache/huggingface/hub/models--"
-        + TEACHER_MODEL.replace("/", "--") + "/snapshots")
-    snapshot = sorted(glob.glob(os.path.join(base, "*")))[-1]
-    print(f"teacher {TEACHER_MODEL} on {torch.cuda.get_device_name(0)}")
-    tokenizer = AutoTokenizer.from_pretrained(snapshot)
-    model = AutoModelForCausalLM.from_pretrained(
-        snapshot, dtype=torch.float16, device_map="cuda")
-    model.eval()
+    if backend == "bedrock":
+        # AWS door (standing owner order: 20B-class teachers on AWS).
+        # Cloud GPU inference via the Bedrock converse API - no local
+        # compute at all. Retries use temperature (the API has no
+        # seed); every attempt is still logged and the ladder that
+        # judges the result stays fully deterministic.
+        import boto3
+        region = os.environ.get("AWS_REGION", "us-west-2")
+        runtime = boto3.Session().client("bedrock-runtime",
+                                         region_name=region)
+        snapshot = f"bedrock:{region}"
+        print(f"teacher {TEACHER_MODEL} via AWS Bedrock ({region})")
 
-    def ask(context, question, seed=None):
-        """Attempt 1 is greedy (deterministic). Later attempts use
-        SEEDED sampling to escape a greedy rut - the seed is recorded,
-        and the acceptance ladder that judges the result stays fully
-        deterministic either way."""
-        messages = [{"role": "system", "content": context},
-                    {"role": "user", "content": question}]
-        text = tokenizer.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=True)
-        inputs = tokenizer(text, return_tensors="pt").to("cuda")
-        kwargs = {"max_new_tokens": 450,
-                  "pad_token_id": tokenizer.eos_token_id}
-        if seed is None:
-            kwargs["do_sample"] = False
-        else:
-            torch.manual_seed(seed)
-            kwargs.update({"do_sample": True, "temperature": 0.7,
-                           "top_p": 0.9})
-        with torch.no_grad():
-            out = model.generate(**inputs, **kwargs)
-        return tokenizer.decode(out[0][inputs["input_ids"].shape[1]:],
-                                skip_special_tokens=True).strip()
+        def ask(context, question, seed=None):
+            response = runtime.converse(
+                modelId=TEACHER_MODEL,
+                system=[{"text": context}],
+                messages=[{"role": "user",
+                           "content": [{"text": question}]}],
+                inferenceConfig={
+                    "maxTokens": 900,
+                    "temperature": 0.0 if seed is None else 0.7})
+            text = response["output"]["message"]["content"][-1]["text"]
+            # strip any reasoning block defensively
+            text = re.sub(r"<think>.*?</think>", "", text,
+                          flags=re.DOTALL)
+            return text.strip()
+    else:
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        if not torch.cuda.is_available():
+            raise SystemExit("REFUSING to run on CPU (standing owner "
+                             "order). Use the CUDA venv or "
+                             "RunPod/AWS.")
+
+        base = os.path.expanduser(
+            "~/.cache/huggingface/hub/models--"
+            + TEACHER_MODEL.replace("/", "--") + "/snapshots")
+        snapshot = sorted(glob.glob(os.path.join(base, "*")))[-1]
+        print(f"teacher {TEACHER_MODEL} on "
+              f"{torch.cuda.get_device_name(0)}")
+        tokenizer = AutoTokenizer.from_pretrained(snapshot)
+        model = AutoModelForCausalLM.from_pretrained(
+            snapshot, dtype=torch.float16, device_map="cuda")
+        model.eval()
+
+        def ask(context, question, seed=None):
+            messages = [{"role": "system", "content": context},
+                        {"role": "user", "content": question}]
+            text = tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True)
+            inputs = tokenizer(text, return_tensors="pt").to("cuda")
+            kwargs = {"max_new_tokens": 450,
+                      "pad_token_id": tokenizer.eos_token_id}
+            if seed is None:
+                kwargs["do_sample"] = False
+            else:
+                torch.manual_seed(seed)
+                kwargs.update({"do_sample": True, "temperature": 0.7,
+                               "top_p": 0.9})
+            with torch.no_grad():
+                out = model.generate(**inputs, **kwargs)
+            return tokenizer.decode(
+                out[0][inputs["input_ids"].shape[1]:],
+                skip_special_tokens=True).strip()
 
     from cortex.router import HybridRouter
+    only = os.environ.get("CAS_TARGETS")
+    targets = [t for t in TARGETS
+               if only is None
+               or t["construction_id"] in only.split(",")]
     results = []
-    for target in TARGETS:
+    for target in targets:
         print(f"\n=== TEACHING {target['construction_id']} ===")
         context = (
             "You are a grammar teacher for a symbolic language "
@@ -385,7 +423,7 @@ def main():
         lesson = {"lesson_id": target["lesson_id"],
                   "lesson_type": "grammar_construction",
                   "teacher_model": TEACHER_MODEL,
-                  "teacher_revision": os.path.basename(snapshot),
+                  "teacher_revision": os.path.basename(snapshot) if backend != "bedrock" else snapshot,
                   "teacher_confidence": None,
                   "provenance":
                       "schema_constrained_field_elicitation"}
@@ -465,7 +503,7 @@ def main():
             {"lesson_id": lesson["lesson_id"],
              "domain": "language_grammar", "target": "grammar_store",
              "teacher_model": TEACHER_MODEL,
-             "teacher_revision": os.path.basename(snapshot),
+             "teacher_revision": os.path.basename(snapshot) if backend != "bedrock" else snapshot,
              "teacher_role": "lecturer",
              "examiner_identity": "ccb_l1_acceptance_ladder",
              "provenance": "schema_constrained_field_elicitation"},
@@ -503,7 +541,9 @@ def main():
                         "before": before, "after": after,
                         "log": log})
 
-    out_path = os.path.join(HERE, "output", "curriculum_round1.json")
+    slug = TEACHER_MODEL.replace("/", "_").replace(":", "_")
+    out_path = os.path.join(HERE, "output",
+                            f"curriculum_{slug}.json")
     with open(out_path, "w", encoding="utf-8") as fh:
         json.dump({"event": "CURRICULUM_ROUND_1",
                    "teacher": TEACHER_MODEL,

@@ -329,3 +329,21 @@ def test_ambiguity_is_reported_never_resolved_silently():
                                   "the cat chased the dog.")
     assert result["status"] == "AMBIGUOUS_PARSE"
     assert len(result["alternatives"]) == 2
+
+
+def test_morphology_merges_never_clobbers():
+    """Regression-rung finding, closed: teaching 'chased' as past then
+    as participle merges to past_or_participle (both rules keep
+    working); a genuine conflict is a typed refusal."""
+    from lang.constructions import ConstructionError
+
+    morph = MorphTable()
+    morph.teach("chased", "chase", "past", provenance="lesson_a")
+    morph.teach("chased", "chase", "participle", provenance="lesson_b")
+    assert morph.analyze("chased")["form"] == "past_or_participle"
+    # identical re-teach: no-op, no error
+    morph.teach("chased", "chase", "past_or_participle",
+                provenance="lesson_c")
+    # conflicting lemma: refused, prior knowledge protected
+    with pytest.raises(ConstructionError, match="refusing"):
+        morph.teach("chased", "chastise", "past", provenance="attack")

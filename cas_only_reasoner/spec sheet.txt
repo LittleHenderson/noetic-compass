@@ -811,6 +811,46 @@ STANDING ORDERS ADDED TO CLAUDE.md (owner, 2026-08-28): PLAIN
   (never CPU; local RTX 4070 to ~3B fp16; 20B+ on AWS/RunPod,
   credentials local).
 
+THE AWS TEACHER ROUND (sealed 2026-08-28,
+CAS_APPRENTICE_v0.1/output/curriculum_qwen.qwen3-32b-v1_0.json):
+per the owner's go-ahead, the 20B-class escalation went through AWS
+BEDROCK (qwen.qwen3-32b-v1:0, us-west-2, pay-per-token, no servers -
+account verified via ~/.aws credentials; the EC2 GPU-quota door was
+not needed). RESULT: ALL THREE CURRICULUM LESSONS PROMOTED_DURABLY -
+questions, commands, coordination - nearly every field passing on
+attempt 1 (the local 3B could not pass one field). The runtime
+grammar now holds 7 DURABLE constructions: 3 hand-authored seed + 4
+live-model-taught (negation from the local 3B; question, command,
+coordination from the AWS 32B). Before/after per lesson:
+  'does the cat chase the dog?'  UNSUPPORTED -> ANSWERED
+     ("i do not know whether the cat chases the dog." - honest:
+      language understood, no chase-facts in the CMB)
+  'chase the dog.'               UNSUPPORTED -> UNDERSTOOD
+  'the cat chases the dog and the dog chases the cat.'
+                                 UNSUPPORTED -> UNDERSTOOD (both
+      clauses kept; the sentence that previously hit the CAS-Ohm
+      overload split now parses in ONE frame - learning raised the
+      board's capacity, R_cap fell, exactly the doctrine's story)
+
+THE LADDER CAUGHT TWO REAL DEFECTS DURING THE ROUND (both fixed with
+regression tests):
+  1. REJECTED_REGRESSION exposed morphology CLOBBERING: the thorough
+     32B taught 'chased' as past AND as participle; the student's
+     MorphTable was last-write-wins, silently overwriting prior
+     knowledge and breaking the active-past rule. Fixed: teach() now
+     MERGES (past+participle -> past_or_participle), no-ops identical
+     re-teaching, and REFUSES conflicting overwrites typed - prior
+     knowledge is protected (CCB-L1 32 tests).
+  2. The legacy decoder mangled relation-question English ("whether
+     the chase is cat") over a CORRECT kernel verdict; the router now
+     renders relation questions from the frame (CORTEX 44 tests).
+
+THE PLAIN-ENGLISH BUTTON IS NOW MECHANICAL (owner correction: no UI
+toggle exists): a UserPromptSubmit hook in .claude/settings.json
+injects the plain-English reminder into model context on EVERY
+prompt - harness-enforced, not discipline-dependent. Pipe-tested;
+CLAUDE.md carries the standing order as backup.
+
 PROGRAM TEST TOTALS (all green, 2026-08-28, post-audit):
   kernel 34 + RLP 45 + CCB-M1 34 + CCB-L1 18 + CAS-Sem 19 +
   workbench 13 + CRQS 35 + CCB-T1 20 + OHM-panel 10 + H2H 10 +

@@ -1,13 +1,17 @@
 {
  "chased": {
-  "form": "past_or_participle",
   "lemma": "chase",
-  "provenance": "lesson:SEED_L001_active_past",
-  "surface": "chased"
+  "form": "participle",
+  "provenance": "lesson:LIVE_L003_question"
  },
  "chase": {
   "lemma": "chase",
   "form": "base",
-  "provenance": "lesson:LIVE_L002_negation_constrained"
+  "provenance": "lesson:LIVE_L003_question"
+ },
+ "chases": {
+  "lemma": "chase",
+  "form": "present_3sg",
+  "provenance": "lesson:LIVE_L003_question"
  }
 }

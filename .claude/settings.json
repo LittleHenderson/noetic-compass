@@ -25,5 +25,17 @@
       "mcp__Claude_Preview__preview_logs",
       "mcp__visualize__read_me"
     ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"PLAIN ENGLISH BUTTON (owner order, permanent): reply in plain English per the plain-english-explanations skill - meaning first then the precise term, define jargon on first use, short sentences, exact literals in backticks, claim-state separation for any audit/proof claim. This applies to THIS reply and every reply.\"}}'"
+          }
+        ]
+      }
+    ]
   }
 }

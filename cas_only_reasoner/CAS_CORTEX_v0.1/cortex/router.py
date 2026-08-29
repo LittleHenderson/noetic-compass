@@ -159,8 +159,23 @@ class HybridRouter:
                 try:
                     kernel = self._kernel_answer(
                         {"pred": "question", "args": [packet]})
+                    text = kernel["answer"]
+                    if packet.get("pred") == "relation":
+                        # the legacy decoder only speaks property
+                        # questions; relation questions render from
+                        # the frame (ledger finding: 'whether the
+                        # chase is cat' was mangled English over a
+                        # CORRECT kernel verdict)
+                        core = gram["core"]
+                        clause = (f"the {core['agent']} "
+                                  f"{core['predicate']}s the "
+                                  f"{core['patient']}")
+                        if kernel["kernel_status"] == "CONCLUDED":
+                            text = f"yes, {clause}."
+                        else:
+                            text = f"i do not know whether {clause}."
                     trace["answer"] = {"status": "ANSWERED",
-                                       "text": kernel["answer"],
+                                       "text": text,
                                        "frame_core": gram["core"]}
                     return self._seal(trace, committed=True)
                 except Exception as exc:

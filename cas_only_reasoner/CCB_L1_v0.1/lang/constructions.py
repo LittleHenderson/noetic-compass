@@ -57,6 +57,29 @@ class MorphTable:
 
     def teach(self, surface: str, lemma: str, form: str,
               provenance: str) -> Dict:
+        """MERGE, never clobber (regression-rung finding: a lesson
+        teaching 'chased'=past then 'chased'=participle silently
+        overwrote the first and broke the active-past rule). The same
+        surface+lemma with past AND participle becomes
+        past_or_participle; an identical re-teach is a no-op; a
+        conflicting overwrite is a typed refusal - prior knowledge is
+        protected."""
+        existing = self.entries.get(surface)
+        if existing is not None and existing["lemma"] == lemma:
+            forms = {existing["form"], form}
+            if forms <= {"past", "participle", "past_or_participle"} \
+                    and len(forms) > 1:
+                form = "past_or_participle"
+            elif existing["form"] != form:
+                raise ConstructionError(
+                    f"morphology conflict for {surface!r}: already "
+                    f"{existing['form']} (from "
+                    f"{existing['provenance']}), refusing overwrite "
+                    f"to {form!r}")
+        elif existing is not None:
+            raise ConstructionError(
+                f"morphology conflict for {surface!r}: already lemma "
+                f"{existing['lemma']!r}, refusing {lemma!r}")
         entry = {"surface": surface, "lemma": lemma, "form": form,
                  "provenance": provenance}
         self.entries[surface] = entry

@@ -428,3 +428,15 @@ def test_negation_polarity_never_dropped_in_projection():
     assert positive == {"pred": "relation",
                         "args": ["chase", "cat", "dog"]}
     assert negative != positive
+
+
+def test_learned_question_answers_in_plain_english():
+    """The learned interrogative construction routes through the
+    kernel and renders honest English for relation questions (ledger
+    finding: the legacy decoder mangled them)."""
+    router = HybridRouter(mode="NATIVE_ONLY")
+    trace = router.turn("does the cat chase the dog?")
+    assert trace["route"] == "native_gram"
+    assert trace["answer"]["status"] == "ANSWERED"
+    assert trace["answer"]["text"] == \
+        "i do not know whether the cat chases the dog."

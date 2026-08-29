@@ -1,0 +1,324 @@
+{
+ "event": "CURRICULUM_ROUND_1",
+ "results": [
+  {
+   "after": {
+    "answer": {
+     "frame_core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "status": "ANSWERED",
+     "text": "i do not know whether the chase is cat."
+    },
+    "cas_ohm": {
+     "I_obs": 6.0,
+     "I_pred": 6.0,
+     "R_capability": 0.0,
+     "R_compute": 0.0,
+     "R_context": 0.0,
+     "R_lexical": 0.0,
+     "R_policy": 0.0,
+     "R_role_binding": 0.0,
+     "R_total": 1.0,
+     "V_drive": 6.0,
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "delta_I": 0.0,
+     "effect_type": "ANSWERED",
+     "mode": "native_runtime",
+     "operating_region": "active",
+     "provenance": "cas_ohm_attention_plane_v0.1",
+     "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+     "stage_id": "language_pipeline",
+     "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+    },
+    "commitment": {
+     "by": "cas_learned_grammar",
+     "construction": "interrogative_present_transitive"
+    },
+    "committed": true,
+    "cortex_proposal": null,
+    "frame": {
+     "core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "positive",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "surface": {
+      "construction_id": "interrogative_present_transitive",
+      "mood": "interrogative"
+     }
+    },
+    "input": "does the cat chase the dog?",
+    "mode": "NATIVE_ONLY",
+    "route": "native_gram",
+    "trace_digest": "82b4cb74c15df89d",
+    "validation": null
+   },
+   "before": {
+    "answer": {
+     "detail": "I did not understand 'does' at word 1 of 'does the cat chase the dog?' (question pattern not supported)",
+     "status": "UNSUPPORTED_LANGUAGE"
+    },
+    "cas_ohm": {
+     "I_obs": 2.0,
+     "I_pred": 6.0,
+     "R_capability": 2.0,
+     "R_compute": 0.0,
+     "R_context": 0.0,
+     "R_lexical": 0.0,
+     "R_policy": 0.0,
+     "R_role_binding": 0.0,
+     "R_total": 3.0,
+     "V_drive": 6.0,
+     "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+     "delta_I": -4.0,
+     "effect_type": "UNSUPPORTED_LANGUAGE",
+     "mode": "native_runtime",
+     "operating_region": "cutoff",
+     "provenance": "cas_ohm_attention_plane_v0.1",
+     "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+     "stage_id": "language_pipeline",
+     "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+    },
+    "commitment": null,
+    "committed": false,
+    "cortex_proposal": null,
+    "input": "does the cat chase the dog?",
+    "mode": "NATIVE_ONLY",
+    "native_error": {
+     "message": "I did not understand 'does' at word 1 of 'does the cat chase the dog?' (question pattern not supported)",
+     "word": "does"
+    },
+    "route": "no_answer",
+    "trace_digest": "b522f308c9e48eee",
+    "validation": null
+   },
+   "episode": {
+    "domain": "language_grammar",
+    "episode_digest": "f007767a578a641d",
+    "examiner_identity": "ccb_l1_acceptance_ladder",
+    "lesson_id": "LIVE_L003_question",
+    "outcome": {
+     "episode_digest": "065003e3b3d34543",
+     "evidence": [
+      {
+       "detail": "typed lesson packet complete",
+       "passed": true,
+       "stage": "PROPOSED"
+      },
+      {
+       "detail": "construction schema valid",
+       "passed": true,
+       "stage": "SCHEMA_VALID"
+      },
+      {
+       "detail": "rule matches first positive example: True",
+       "passed": true,
+       "stage": "COMPILED"
+      },
+      {
+       "detail": "2 examples ok",
+       "passed": true,
+       "stage": "POSITIVE_EXAMPLES_PASS"
+      },
+      {
+       "detail": "contrasts held",
+       "passed": true,
+       "stage": "CONTRAST_TESTS_PASS"
+      },
+      {
+       "detail": "3 unseen cases ok",
+       "passed": true,
+       "stage": "HELD_OUT_GENERALIZATION_PASS"
+      },
+      {
+       "detail": "no prior rule regressed",
+       "passed": true,
+       "stage": "PRIOR_GRAMMAR_REGRESSION_PASS"
+      },
+      {
+       "detail": "ambiguity honest",
+       "passed": true,
+       "stage": "AMBIGUITY_BEHAVIOR_PASS"
+      },
+      {
+       "detail": "replay identical",
+       "passed": true,
+       "stage": "DETERMINISTIC_REPLAY"
+      },
+      {
+       "detail": "all gates passed; promoting with rollback preserved",
+       "passed": true,
+       "stage": "PROMOTED_PROVISIONALLY"
+      }
+     ],
+     "verdict": "PROMOTED_PROVISIONALLY"
+    },
+    "post_learning_capability": null,
+    "pre_learning_capability": null,
+    "provenance": "schema_constrained_field_elicitation",
+    "rollback_pointer": null,
+    "target": "grammar_store",
+    "teacher_identity": "qwen.qwen3-32b-v1:0",
+    "teacher_revision": "bedrock:us-west-2",
+    "teacher_role": "lecturer"
+   },
+   "lesson": {
+    "ambiguity_cases": [
+     {
+      "expect": "parsed",
+      "sentence": "does the cat chase the dog?"
+     }
+    ],
+    "construction": {
+     "construction_id": "interrogative_present_transitive",
+     "semantics": {
+      "agent": "@agent",
+      "frame": "event",
+      "patient": "@patient",
+      "polarity": "positive",
+      "predicate": "@pred",
+      "tense": "present"
+     },
+     "surface_meta": {
+      "mood": "interrogative"
+     },
+     "surface_pattern": [
+      "does",
+      "the",
+      "NP:agent",
+      "VERB:pred:base",
+      "the",
+      "NP:patient"
+     ]
+    },
+    "counterexamples": [
+     {
+      "sentence": "the cat chases the dog"
+     },
+     {
+      "sentence": "the dog was chased by the cat"
+     }
+    ],
+    "lesson_id": "LIVE_L003_question",
+    "lesson_type": "grammar_construction",
+    "minimal_pairs": [
+     {
+      "relation": "different_meaning",
+      "sentence_a": "does the cat chase the dog?",
+      "sentence_b": "does the dog chase the cat?"
+     },
+     {
+      "relation": "different_meaning",
+      "sentence_a": "does the fox chase the hen?",
+      "sentence_b": "does the hen chase the fox?"
+     }
+    ],
+    "morphology": [
+     {
+      "form": "base",
+      "lemma": "chase",
+      "surface": "chase"
+     },
+     {
+      "form": "present_3sg",
+      "lemma": "chase",
+      "surface": "chases"
+     },
+     {
+      "form": "past",
+      "lemma": "chase",
+      "surface": "chased"
+     },
+     {
+      "form": "participle",
+      "lemma": "chase",
+      "surface": "chased"
+     }
+    ],
+    "positive_examples": [
+     {
+      "expected_core": {
+       "agent": "cat",
+       "frame": "event",
+       "patient": "bird",
+       "polarity": "positive",
+       "predicate": "chase",
+       "tense": "present"
+      },
+      "sentence": "does the cat chase the bird?"
+     },
+     {
+      "expected_core": {
+       "agent": "dog",
+       "frame": "event",
+       "patient": "fox",
+       "polarity": "positive",
+       "predicate": "chase",
+       "tense": "present"
+      },
+      "sentence": "does the dog chase the fox?"
+     }
+    ],
+    "provenance": "schema_constrained_field_elicitation",
+    "semantics_provenance": "derived_from_teacher_pattern_by_schema_scaffold",
+    "teacher_confidence": null,
+    "teacher_model": "qwen.qwen3-32b-v1:0",
+    "teacher_revision": "bedrock:us-west-2"
+   },
+   "log": [
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "surface_pattern",
+     "raw": "```json\n[\"does\", \"the\", \"NP:agent\", \"VERB:pred:base\", \"the\", \"NP:patient\"]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "morphology",
+     "raw": "```json\n[\n  {\"surface\": \"chase\", \"lemma\": \"chase\", \"form\": \"base\"},\n  {\"surface\": \"chases\", \"lemma\": \"chase\", \"form\": \"present_3sg\"},\n  {\"surface\": \"chased\", \"lemma\": \"chase\", \"form\": \"past\"},\n  {\"surface\": \"chased\", \"lemma\": \"chase\", \"form\": \"participle\"}\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "positive_examples",
+     "raw": "```json\n[\n  {\n    \"sentence\": \"does the cat chase the bird?\",\n    \"expected_core\": {\n      \"frame\": \"event\",\n      \"predicate\": \"chase\",\n      \"agent\": \"cat\",\n      \"patient\": \"bird\",\n      \"tense\": \"present\",\n      \"polarity\": \"positive\"\n    }\n  },\n  {\n    \"sentence\": \"does the dog chase the fox?\","
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "minimal_pairs",
+     "raw": "```json\n[\n  {\n    \"sentence_a\": \"does the cat chase the dog?\",\n    \"sentence_b\": \"does the dog chase the cat?\",\n    \"relation\": \"different_meaning\"\n  },\n  {\n    \"sentence_a\": \"does the fox chase the hen?\",\n    \"sentence_b\": \"does the hen chase the fox?\",\n    \"relation\": \"different_meaning\"\n  }\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "counterexamples",
+     "raw": "```json\n[\n  {\"sentence\": \"the cat chases the dog\"},\n  {\"sentence\": \"the dog was chased by the cat\"}\n]\n```"
+    },
+    {
+     "attempt": 1,
+     "defect": null,
+     "field": "ambiguity_cases",
+     "raw": "```json\n[\n  {\n    \"sentence\": \"does the cat chase the dog?\",\n    \"expect\": \"parsed\"\n  }\n]\n```"
+    }
+   ],
+   "retention": {
+    "construction_id": "interrogative_present_transitive",
+    "verdict": "PROMOTED_DURABLY"
+   },
+   "target": "interrogative_present_transitive",
+   "verdict": "PROMOTED_PROVISIONALLY"
+  }
+ ],
+ "teacher": "qwen.qwen3-32b-v1:0"
+}
