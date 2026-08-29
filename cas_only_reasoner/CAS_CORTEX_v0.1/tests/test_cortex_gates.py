@@ -409,3 +409,22 @@ def test_attention_faithfulness_gate_shows_role_binding_resistance():
     record = router.turn("the cta is gray.")["cas_ohm"]
     assert record["R_role_binding"] >= 6.0
     assert record["operating_region"] == "cutoff"
+
+
+def test_negation_polarity_never_dropped_in_projection():
+    """Ledger-round regression: a NEGATIVE learned-grammar frame must
+    project to the legacy negation packet - never to the same packet
+    as its positive counterpart."""
+    router = HybridRouter(mode="NATIVE_ONLY")
+    negative = router._frame_to_packet(
+        {"frame": "event", "predicate": "chase", "agent": "cat",
+         "patient": "dog", "tense": "present", "polarity": "negative"})
+    positive = router._frame_to_packet(
+        {"frame": "event", "predicate": "chase", "agent": "cat",
+         "patient": "dog", "tense": "present", "polarity": "positive"})
+    assert negative == {"pred": "negation",
+                        "args": [{"pred": "relation",
+                                  "args": ["chase", "cat", "dog"]}]}
+    assert positive == {"pred": "relation",
+                        "args": ["chase", "cat", "dog"]}
+    assert negative != positive

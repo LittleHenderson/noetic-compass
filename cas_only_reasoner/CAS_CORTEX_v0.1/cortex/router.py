@@ -302,15 +302,21 @@ class HybridRouter:
 
     @staticmethod
     def _frame_to_packet(core: Dict) -> Dict:
-        """Learned-grammar event frames render to the legacy packet
-        format for downstream compatibility (tense/polarity carried in
-        the frame_core alongside)."""
+        """Learned-grammar frames render to the legacy packet format.
+        POLARITY IS NEVER DROPPED (ledger-round fix: a negative event
+        frame used to project identically to its positive - the exact
+        silently-dropped-content fabrication genus): negative frames
+        wrap in the legacy negation packet."""
         if core.get("frame") == "event":
-            return {"pred": "relation",
-                    "args": [core["predicate"], core["agent"],
-                             core["patient"]]}
-        return {"pred": "property",
-                "args": [core.get("entity"), core.get("property")]}
+            inner = {"pred": "relation",
+                     "args": [core["predicate"], core["agent"],
+                              core["patient"]]}
+        else:
+            inner = {"pred": "property",
+                     "args": [core.get("entity"), core.get("property")]}
+        if core.get("polarity") == "negative":
+            return {"pred": "negation", "args": [inner]}
+        return inner
 
     @staticmethod
     def _entity_atoms(packet) -> List[str]:

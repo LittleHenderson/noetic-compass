@@ -17,9 +17,15 @@
    "construction_id": "passive_present",
    "provenance": "lesson:SEED_L003_passive_present|teacher:hand_authored_seed_teacher",
    "revision": 3
+  },
+  {
+   "action": "PROMOTED",
+   "construction_id": "negated_present_transitive",
+   "provenance": "lesson:LIVE_L002_negation_constrained|teacher:Qwen/Qwen2.5-3B-Instruct",
+   "revision": 4
   }
  ],
- "revision": 3,
+ "revision": 4,
  "rules": {
   "active_past_transitive": {
    "construction_id": "active_past_transitive",
@@ -65,6 +71,56 @@
    "surface_pattern": [
     "NP:agent",
     "VERB:pred:past",
+    "NP:patient"
+   ]
+  },
+  "negated_present_transitive": {
+   "construction_id": "negated_present_transitive",
+   "durability": "PROMOTED_DURABLY",
+   "provenance": "lesson:LIVE_L002_negation_constrained|teacher:Qwen/Qwen2.5-3B-Instruct",
+   "regression_guard": [
+    {
+     "expected_core": {
+      "agent": "cat",
+      "frame": "event",
+      "patient": "dog",
+      "polarity": "negative",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "the cat does not chase the dog."
+    },
+    {
+     "expected_core": {
+      "agent": "hen",
+      "frame": "event",
+      "patient": "fox",
+      "polarity": "negative",
+      "predicate": "chase",
+      "tense": "present"
+     },
+     "sentence": "the hen does not chase the fox."
+    }
+   ],
+   "rule_digest": "f053712b8dd35d3c",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "negative",
+    "predicate": "@pred",
+    "tense": "present"
+   },
+   "state": "ACTIVE",
+   "surface_meta": {
+    "polarity_marker": "does_not"
+   },
+   "surface_pattern": [
+    "NP:agent",
+    "does",
+    "not",
+    "VERB:pred:base",
+    "the",
     "NP:patient"
    ]
   },
@@ -145,5 +201,5 @@
    ]
   }
  },
- "store_digest": "703721eb81dfe853"
+ "store_digest": "251eac536b5c6369"
 }

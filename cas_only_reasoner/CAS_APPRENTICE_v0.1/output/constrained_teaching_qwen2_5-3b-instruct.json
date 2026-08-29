@@ -1,0 +1,347 @@
+{
+ "after_transcript": {
+  "answer": {
+   "frame_core": {
+    "agent": "cat",
+    "frame": "event",
+    "patient": "dog",
+    "polarity": "negative",
+    "predicate": "chase",
+    "tense": "present"
+   },
+   "meaning": {
+    "args": [
+     "chase",
+     "cat",
+     "dog"
+    ],
+    "pred": "relation"
+   },
+   "status": "UNDERSTOOD"
+  },
+  "cas_ohm": {
+   "I_obs": 6.0,
+   "I_pred": 6.0,
+   "R_capability": 0.0,
+   "R_compute": 0.0,
+   "R_context": 0.0,
+   "R_lexical": 0.0,
+   "R_policy": 0.0,
+   "R_role_binding": 0.0,
+   "R_total": 1.0,
+   "V_drive": 6.0,
+   "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+   "delta_I": 0.0,
+   "effect_type": "UNDERSTOOD",
+   "mode": "native_runtime",
+   "operating_region": "active",
+   "provenance": "cas_ohm_attention_plane_v0.1",
+   "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+   "stage_id": "language_pipeline",
+   "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+  },
+  "commitment": {
+   "by": "cas_learned_grammar",
+   "construction": "negated_present_transitive"
+  },
+  "committed": true,
+  "cortex_proposal": null,
+  "frame": {
+   "core": {
+    "agent": "cat",
+    "frame": "event",
+    "patient": "dog",
+    "polarity": "negative",
+    "predicate": "chase",
+    "tense": "present"
+   },
+   "surface": {
+    "construction_id": "negated_present_transitive",
+    "polarity_marker": "does_not"
+   }
+  },
+  "input": "the cat does not chase the dog.",
+  "mode": "NATIVE_ONLY",
+  "route": "native_gram",
+  "trace_digest": "2dcc0ec7b0931320",
+  "validation": null
+ },
+ "assembled_lesson": {
+  "ambiguity_cases": [
+   {
+    "expect": "parsed",
+    "sentence": "the cat does not chase the dog"
+   }
+  ],
+  "construction": {
+   "construction_id": "negated_present_transitive",
+   "semantics": {
+    "agent": "@agent",
+    "frame": "event",
+    "patient": "@patient",
+    "polarity": "negative",
+    "predicate": "@pred",
+    "tense": "present"
+   },
+   "surface_meta": {
+    "polarity_marker": "does_not"
+   },
+   "surface_pattern": [
+    "NP:agent",
+    "does",
+    "not",
+    "VERB:pred:base",
+    "the",
+    "NP:patient"
+   ]
+  },
+  "counterexamples": [
+   {
+    "sentence": "does not chase the dog the cat"
+   },
+   {
+    "sentence": "does not chase the cat does the dog"
+   }
+  ],
+  "lesson_id": "LIVE_L002_negation_constrained",
+  "lesson_type": "grammar_construction",
+  "minimal_pairs": [
+   {
+    "relation": "different_meaning",
+    "sentence_a": "the cat does not chase the dog",
+    "sentence_b": "the cat chases the dog"
+   },
+   {
+    "relation": "different_meaning",
+    "sentence_a": "the cat does not chase the dog",
+    "sentence_b": "the dog does not chase the cat"
+   }
+  ],
+  "morphology": [
+   {
+    "form": "base",
+    "lemma": "chase",
+    "surface": "chase"
+   }
+  ],
+  "positive_examples": [
+   {
+    "expected_core": {
+     "agent": "cat",
+     "frame": "event",
+     "patient": "dog",
+     "polarity": "negative",
+     "predicate": "chase",
+     "tense": "present"
+    },
+    "sentence": "the cat does not chase the dog."
+   },
+   {
+    "expected_core": {
+     "agent": "hen",
+     "frame": "event",
+     "patient": "fox",
+     "polarity": "negative",
+     "predicate": "chase",
+     "tense": "present"
+    },
+    "sentence": "the hen does not chase the fox."
+   }
+  ],
+  "provenance": "schema_constrained_field_elicitation",
+  "semantics_provenance": "derived_from_teacher_pattern_by_schema_scaffold",
+  "teacher_confidence": null,
+  "teacher_model": "Qwen/Qwen2.5-3B-Instruct",
+  "teacher_revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1"
+ },
+ "before_transcript": {
+  "answer": {
+   "detail": "I did not understand 'the' at word 1 of 'the cat does not chase the dog.' (sentence pattern not supported)",
+   "status": "UNSUPPORTED_LANGUAGE"
+  },
+  "cas_ohm": {
+   "I_obs": 2.0,
+   "I_pred": 6.0,
+   "R_capability": 2.0,
+   "R_compute": 0.0,
+   "R_context": 0.0,
+   "R_lexical": 0.0,
+   "R_policy": 0.0,
+   "R_role_binding": 0.0,
+   "R_total": 3.0,
+   "V_drive": 6.0,
+   "authority_note": "compute-only: no truth, validity, meaning, commitment, or permission decision may read this record",
+   "delta_I": -4.0,
+   "effect_type": "UNSUPPORTED_LANGUAGE",
+   "mode": "native_runtime",
+   "operating_region": "cutoff",
+   "provenance": "cas_ohm_attention_plane_v0.1",
+   "semantic_outcome": "not classified here - external grading only; healthy flow does not imply a correct effect",
+   "stage_id": "language_pipeline",
+   "uncertainty": "authored quantities, exact by construction; no empirical claim about any neural substrate"
+  },
+  "commitment": null,
+  "committed": false,
+  "cortex_proposal": null,
+  "input": "the cat does not chase the dog.",
+  "mode": "NATIVE_ONLY",
+  "native_error": {
+   "message": "I did not understand 'the' at word 1 of 'the cat does not chase the dog.' (sentence pattern not supported)",
+   "word": "the"
+  },
+  "route": "no_answer",
+  "trace_digest": "c5138ea2dc3bef98",
+  "validation": null
+ },
+ "elicitation_log": [
+  {
+   "attempt": 1,
+   "defect": "VERB slot 'VERB:name:base' must be exactly VERB:pred:form with form in base/past/participle",
+   "field": "surface_pattern",
+   "raw": "[\"NP:agent\", \"does\", \"not\", \"VERB:name:base\", \"the\", \"NP:patient\"]"
+  },
+  {
+   "attempt": 2,
+   "defect": null,
+   "field": "surface_pattern",
+   "raw": "[\"NP:agent\", \"does\", \"not\", \"VERB:pred:base\", \"the\", \"NP:patient\"]"
+  },
+  {
+   "attempt": 1,
+   "defect": "'@agent:NP' references no declared slot; declared slots are ['agent', 'patient', 'pred']",
+   "field": "semantics",
+   "raw": "{\"frame\": \"event\", \"predicate\": \"@pred\", \"agent\": \"@agent:NP\", \"patient\": \"@patient:NP\", \"tense\": \"present\", \"polarity\": \"negative\"}"
+  },
+  {
+   "attempt": 2,
+   "defect": "missing required key 'frame'",
+   "field": "semantics",
+   "raw": "{\"predicate\": \"@pred\", \"agent\": \"NP:agent\", \"patient\": \"NP:patient\", \"tense\": \"present\", \"polarity\": \"negative\"}"
+  },
+  {
+   "attempt": 3,
+   "defect": "'@agent:NP' references no declared slot; declared slots are ['agent', 'patient', 'pred']",
+   "field": "semantics",
+   "raw": "{\"frame\": \"event\", \"predicate\": \"@pred\", \"agent\": \"@agent:NP\", \"patient\": \"@patient:NP\", \"tense\": \"present\", \"polarity\": \"negative\"}"
+  },
+  {
+   "attempt": "scaffold",
+   "defect": null,
+   "field": "semantics",
+   "raw": "derived mechanically from declared slots"
+  },
+  {
+   "attempt": 1,
+   "defect": "must be a non-empty JSON list",
+   "field": "morphology",
+   "raw": "[]"
+  },
+  {
+   "attempt": 2,
+   "defect": null,
+   "field": "morphology",
+   "raw": "[{\"surface\": \"chase\", \"lemma\": \"chase\", \"form\": \"base\"}]"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "positive_examples",
+   "raw": "[\n    {\"sentence\": \"the cat does not chase the dog.\", \"expected_core\": {\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"cat\", \"patient\": \"dog\", \"tense\": \"present\", \"polarity\": \"negative\"}},\n    {\"sentence\": \"the hen does not chase the fox.\", \"expected_core\": {\"frame\": \"event\", \"predicate\": \"chase\", \"agent\": \"hen\", \"patient\": \"fox\", \"tense\": \"present\", \"polarity\": \"negative\"}}\n]"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "minimal_pairs",
+   "raw": "```json\n[\n    {\"sentence_a\": \"the cat does not chase the dog\", \"sentence_b\": \"the cat chases the dog\", \"relation\": \"different_meaning\"},\n    {\"sentence_a\": \"the cat does not chase the dog\", \"sentence_b\": \"the dog does not chase the cat\", \"relation\": \"different_meaning\"}\n]\n```"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "counterexamples",
+   "raw": "[\n    { \"sentence\": \"does not chase the dog the cat\" },\n    { \"sentence\": \"does not chase the cat does the dog\" }\n]"
+  },
+  {
+   "attempt": 1,
+   "defect": null,
+   "field": "ambiguity_cases",
+   "raw": "[{\"sentence\": \"the cat does not chase the dog\", \"expect\": \"parsed\"}]"
+  }
+ ],
+ "event": "SCHEMA_CONSTRAINED_LIVE_TEACHING",
+ "ladder_episode": {
+  "domain": "language_grammar",
+  "episode_digest": "fd74fcb3db3758b3",
+  "examiner_identity": "ccb_l1_acceptance_ladder",
+  "lesson_id": "LIVE_L002_negation_constrained",
+  "outcome": {
+   "episode_digest": "d2da5a1094931276",
+   "evidence": [
+    {
+     "detail": "typed lesson packet complete",
+     "passed": true,
+     "stage": "PROPOSED"
+    },
+    {
+     "detail": "construction schema valid",
+     "passed": true,
+     "stage": "SCHEMA_VALID"
+    },
+    {
+     "detail": "rule matches first positive example: True",
+     "passed": true,
+     "stage": "COMPILED"
+    },
+    {
+     "detail": "2 examples ok",
+     "passed": true,
+     "stage": "POSITIVE_EXAMPLES_PASS"
+    },
+    {
+     "detail": "contrasts held",
+     "passed": true,
+     "stage": "CONTRAST_TESTS_PASS"
+    },
+    {
+     "detail": "3 unseen cases ok",
+     "passed": true,
+     "stage": "HELD_OUT_GENERALIZATION_PASS"
+    },
+    {
+     "detail": "no prior rule regressed",
+     "passed": true,
+     "stage": "PRIOR_GRAMMAR_REGRESSION_PASS"
+    },
+    {
+     "detail": "ambiguity honest",
+     "passed": true,
+     "stage": "AMBIGUITY_BEHAVIOR_PASS"
+    },
+    {
+     "detail": "replay identical",
+     "passed": true,
+     "stage": "DETERMINISTIC_REPLAY"
+    },
+    {
+     "detail": "all gates passed; promoting with rollback preserved",
+     "passed": true,
+     "stage": "PROMOTED_PROVISIONALLY"
+    }
+   ],
+   "verdict": "PROMOTED_PROVISIONALLY"
+  },
+  "post_learning_capability": null,
+  "pre_learning_capability": null,
+  "provenance": "schema_constrained_field_elicitation",
+  "rollback_pointer": null,
+  "target": "grammar_store",
+  "teacher_identity": "Qwen/Qwen2.5-3B-Instruct",
+  "teacher_revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+  "teacher_role": "lecturer"
+ },
+ "retention": {
+  "construction_id": "negated_present_transitive",
+  "verdict": "PROMOTED_DURABLY"
+ },
+ "teacher": "Qwen/Qwen2.5-3B-Instruct",
+ "teacher_snapshot": "aa8e72537993ba99e69dfaafa59ed015b17504d1"
+}

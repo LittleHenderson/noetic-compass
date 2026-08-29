@@ -743,6 +743,41 @@ orphaned):
     stricter format spec / schema-constrained decoding / stronger
     teacher; each attempt stays one sealed episode.
 
+THE MACHINE LEARNED FROM A LIVE MODEL TEACHER (sealed 2026-08-28):
+  negated_present_transitive is the FIRST construction taught by a
+  live model (Qwen2.5-3B-Instruct) to reach PROMOTED_DURABLY - full
+  ten-stage ladder with OUR protected held-out channel, then delayed
+  retention, then saved into the RUNTIME grammar store. PROOF:
+  BEFORE the lesson 'the cat does not chase the dog.' ->
+  UNSUPPORTED_LANGUAGE; AFTER -> UNDERSTOOD via native_gram; unseen
+  role-swapped sentences parse with correct negation-wrapped cores.
+  Method: SCHEMA-CONSTRAINED FIELD ELICITATION
+  (CAS_APPRENTICE_v0.1/constrained_teacher.py) - one small validated
+  question per field, three attempts each with typed feedback; the
+  packet SYNTAX cannot end up malformed while the CONTENT (pattern,
+  examples, contrasts) stays the teacher's. DISCLOSED SCAFFOLD: the
+  semantics field (fully determined by the declared slots) was
+  derived mechanically after the 3B garbled @-syntax three times -
+  provenance derived_from_teacher_pattern_by_schema_scaffold. The
+  elicitation log records every attempt and defect. The examiner
+  never changed.
+  LEDGER-ROUND FIX (found by reading the ledger's own output): the
+  router's frame projection DROPPED POLARITY - a negative event
+  rendered identically to its positive (the silently-dropped-content
+  fabrication genus, caught internally). Fixed: negative frames wrap
+  in the legacy negation packet; regression test added (CORTEX 43).
+
+THE LEARNING LEDGER (CAS_APPRENTICE_v0.1/learning_ledger.py ->
+  output/LEARNING_LEDGER.md): the standing clear indicator of
+  learning - derived ENTIRELY from the persistent stores and sealed
+  artifacts, never hardcoded. Sections: what the machine KNOWS
+  (constructions with state/durability/teacher/provenance, words,
+  morphology), what came from a LIVE teacher, PROOF before-vs-after
+  transcripts plus a live unseen-sentence check run at generation
+  time, and the paper trail (every lesson attempt incl. rejections).
+  Current: 4 durable constructions (3 seed + 1 live-model-taught),
+  10 words, 2 verb forms.
+
 PROGRAM TEST TOTALS (all green, 2026-08-28, post-audit):
   kernel 34 + RLP 45 + CCB-M1 34 + CCB-L1 18 + CAS-Sem 19 +
   workbench 13 + CRQS 35 + CCB-T1 20 + OHM-panel 10 + H2H 10 +

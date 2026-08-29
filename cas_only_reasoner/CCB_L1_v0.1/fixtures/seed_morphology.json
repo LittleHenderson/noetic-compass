@@ -4,5 +4,10 @@
   "lemma": "chase",
   "provenance": "lesson:SEED_L001_active_past",
   "surface": "chased"
+ },
+ "chase": {
+  "lemma": "chase",
+  "form": "base",
+  "provenance": "lesson:LIVE_L002_negation_constrained"
  }
 }
