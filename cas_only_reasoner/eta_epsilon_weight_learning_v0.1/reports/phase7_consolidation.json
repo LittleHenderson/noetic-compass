@@ -1,0 +1,24 @@
+{
+  "schema": "eta_epsilon_weight_learning.phase7_consolidation.v0.1",
+  "status": "V0_2_generic_consolidation",
+  "N": 16,
+  "steps": 50,
+  "baseline_active": 0.9933,
+  "results": {
+    "FORGET": {
+      "passive": 0.995,
+      "active": 0.0
+    },
+    "REPLAY": {
+      "passive": 0.985,
+      "active": 0.94375
+    },
+    "EWC": {
+      "passive": 0.99,
+      "active": 0.58125
+    }
+  },
+  "stability_plasticity_winner": "REPLAY",
+  "forgetting_fixed": true,
+  "honest_note": "generic (B1); small sweep; REPLAY = interleave old-skill examples."
+}

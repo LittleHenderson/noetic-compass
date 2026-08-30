@@ -145,3 +145,10 @@ never hits 0.90. 4c retention REFUTED: BOTH conditions catastrophically
 forgot active voice (0.99 -> ~0.006). 4b/4d INCONCLUSIVE (not isolated).
 lr 5e-3 x 50 steps is destructive -> Phase 7 consolidation is the test.
 reports/phase6_learning_benefit.json.
+
+### 2026-08-30 — Phase 7 consolidation
+
+Forgetting is fixable. FORGET passive 0.995 / active 0.000; REPLAY passive
+0.985 / active 0.944 (winner - good balance); EWC passive 0.990 / active
+0.581 (partial). REPLAY (rehearsal) recovers retention (+94pp) - the
+standard continual-learning result, NOT CAS-specific. reports/phase7_consolidation.json.

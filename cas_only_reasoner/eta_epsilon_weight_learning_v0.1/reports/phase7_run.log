@@ -1,0 +1,7 @@
+[transformers] The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<02:07,  2.26it/s]Loading weights:  30%|###       | 87/290 [00:00<00:01, 183.53it/s]Loading weights:  41%|####1     | 119/290 [00:00<00:01, 135.67it/s]Loading weights:  49%|####8     | 141/290 [00:01<00:01, 104.94it/s]Loading weights:  54%|#####4    | 157/290 [00:02<00:02, 48.98it/s] Loading weights:  63%|######3   | 183/290 [00:02<00:01, 64.21it/s]Loading weights:  76%|#######5  | 219/290 [00:02<00:00, 90.71it/s]Loading weights:  86%|########6 | 250/290 [00:02<00:00, 117.64it/s]Loading weights:  96%|#########6| 279/290 [00:03<00:00, 94.89it/s] Loading weights: 100%|##########| 290/290 [00:03<00:00, 92.70it/s]
+FORGET   passive=0.995  active=0.000
+REPLAY   passive=0.985  active=0.944
+EWC      passive=0.990  active=0.581
+winner: REPLAY | forgetting_fixed: True
+saved C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\eta_epsilon_weight_learning_v0.1\reports\phase7_consolidation.json
