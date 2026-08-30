@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-30 (ops) - DSH UI EXPLAINER BUTTON FIXED: helper server was dying on DeepSeek 402 (empty balance); explainer bridge switched to Zhipu glm-4.5-flash with DeepSeek kept as automatic fallback
+
+- Symptom: the bulb "Explain selection" button (Alt+E) in the DSH web GUI did nothing useful. Diagnosis: its helper server `C:\Users\wakil\DSH-Voice-Tools\explainer_server.py` (127.0.0.1:8766) returned HTTP 500 `HTTP Error 402: Payment Required` on every call — the `DEEPSEEK_API_KEY` in `C:\Users\wakil\.cas_llm_keys.env` has no balance. Second, separate defect: explain mode silently required read-aloud mode (Alt+V) to also be switched on, so highlighting with only the bulb lit did nothing.
+- Fix 1 (server): provider chain — Zhipu `glm-4.5-flash` (`ZHIPU_API_KEY`, `thinking: disabled`) primary, `deepseek-chat` fallback that revives automatically if the DeepSeek balance is topped up. Note recorded: `glm-5.3-flash` always thinks and burned the entire 1200-token budget on hidden reasoning (finish=length, 1199 reasoning tokens, empty content), so it is not usable for this bridge. All provider errors are now chained into the 500 body for future diagnosis.
+- Fix 2 (client): the voice-tools script was patched in BOTH copies — dev source `deepseek-harness/apps/web/index.html` and the served runtime copy `runtime/app/node_modules/@deepseek-ai/dsh-web-frontend/dist/index.html` — so explain mode works without read-aloud. Version bumped to v9 (load toast confirms the new script). A page refresh picks it up.
+- Verified (real, this session): two end-to-end `POST /explain` calls returned HTTP 200 with plain-English explanations, each with one example and one metaphor.
+- Repo hygiene: `C:\Users\wakil\DSH-Voice-Tools\` is not a git repo; the deepseek-harness checkout is the upstream vendor clone (origin deepseek-ai/deepseek-harness) and its voice-tools patch was already an uncommitted local modification — deliberately left uncommitted rather than pushed to the vendor repo.
+
 ## 2026-08-29 (programming) - CCB-P1: the machine CONSTRUCTS AND DEBUGS; a cardinal sandbox escape and six more findings caught by audit and fixed; 440 tests green
 
 - New board CCB-P1 per PROGRAMMING LESSON.txt: sandbox + tracer + walk-down + minimal repair + typed specs + capability-gated student + the twelve-step compiler-and-test acceptance law. All seven CODE-L0..L4 skills TAUGHT LIVE by Bedrock 32B and promoted (read/trace through debug/repair); the compiler remained unmoved by teacher confidence. Live loop demonstrated: renamed-contract synthesis passes the battery; injected defects are localized to step/line/variable and repaired with single-line patches.
