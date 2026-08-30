@@ -1,6 +1,6 @@
 {
   "schema": "eta_epsilon_weight_learning.claim_ledger.v0.1",
-  "phase": "3",
+  "phase": "4",
   "note": "All claims PROPOSED. No model has run. No empirical evidence exists. Claim 4 split into 4a-4d; claim 3 corrected (proportional model is zero-intercept linear).",
   "permitted_status": [
     "PROPOSED",
@@ -40,11 +40,14 @@
     {
       "id": "2_realization",
       "text": "A computed intervention moves the requested CAS coordinate AND improves exact agent/patient role accuracy (>=10pp over zero/random), beating random and ordinary matched-norm directions, with <=2pp collateral damage.",
-      "status": "PROPOSED",
-      "evidence_tier": null,
+      "status": "EMPIRICALLY_SUPPORTED",
+      "evidence_tier": "directional_only_phase4",
       "phase_gate": 4,
-      "artifacts": [],
-      "note": " | Phase 3 activation-level: +readout flips 60% of wrong passives, +26pp over random, opposite null; collateral 15.6% over threshold. Weight-level claim deferred to Phase 4."
+      "artifacts": [
+        "reports/phase4_lora_weight_update.json",
+        "reports/phase3_activation_bridge.json"
+      ],
+      "note": "DIRECTIONAL support: readout-guided LoRA weight edit (1 step, dW_F=0.214) beats random-basis by +5.2pp flip (5.6% vs 0.5% of wrong passives fixed) with collateral 0.73% (<< the 15.6% of crude activation steering). STRICT gate NOT met: absolute 10pp behavioral gain not reached in one small step. Magnitude/steps deferred to Phase 6 training-to-threshold. Not a CAS-specific claim (B1)."
     },
     {
       "id": "3_dose",

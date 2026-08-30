@@ -1,0 +1,30 @@
+{
+  "schema": "eta_epsilon_weight_learning.phase4_lora_weight_update.v0.1",
+  "status": "V0_2_generic_weight_update",
+  "adapt_layer": 11,
+  "read_layer": 12,
+  "rank": 4,
+  "wrong_set": 213,
+  "right_set": 411,
+  "guided": {
+    "dW_fro": 0.21355487406253815,
+    "wrong_to_correct": 0.056338028169014086,
+    "right_still_correct": 0.9927007299270073,
+    "collateral_pp": 0.73
+  },
+  "random_basis": {
+    "dW_fro": 0.21355488896369934,
+    "wrong_to_correct": 0.004694835680751174,
+    "right_still_correct": 0.9951338199513382,
+    "collateral_pp": 0.49
+  },
+  "guided_minus_random_flip": 0.051643192488262914,
+  "prereg": {
+    "behavioral_gain_min_pp": 10,
+    "collateral_max_pp": 2
+  },
+  "beats_random": true,
+  "behavioral_gain_ok": false,
+  "collateral_ok": true,
+  "honest_note": "generic (B1); readout-gradient = scalar eta-hat step; base frozen except LoRA."
+}

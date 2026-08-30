@@ -119,3 +119,12 @@ correct passives break at alpha=0.5 - FAR over the 2pp target - and only
 alpha=0.5 works (alpha>=1 destroys output). Crude activation steering is
 blunt. Motivates the targeted LoRA weight update (Phase 4). Generic (B1),
 activation-only, no weight change. reports/phase3_activation_bridge.json.
+
+### 2026-08-30 — Phase 4 LoRA weight update (directional support)
+
+Readout-gradient LoRA step on layer-11 q_proj+v_proj (rank 4, dW_F 0.214):
+flips 5.6% of wrong passives vs random-basis 0.5% (+5.2pp), collateral
+0.73% (vs 15.6% for activation steering). Direction confirmed and clean.
+STRICT 10pp behavioral bar NOT met by one small step (this is expected;
+magnitude is Phase 6's job, not to be cranked here per the negative-result
+law). reports/phase4_lora_weight_update.json.
