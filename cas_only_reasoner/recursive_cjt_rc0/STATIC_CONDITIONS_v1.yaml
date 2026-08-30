@@ -1,0 +1,25 @@
+# STATIC_CONDITIONS_v1 — the static coupling stage (Gate 1). Status: PROPOSED_UNTESTED.
+# Retires the Static Coupling Baseline's A–G lettering and the v0.1 spec's A–J lettering
+# FOR THIS STUDY. Cross-document references must name the document with the letter.
+# All arms: same base model (frozen), same trainable parameter count (±1%), same data,
+# seeds, compute, optimizer, and evaluation sets. Labels from construction-gold CAS
+# traces (CAS_TRACE_GOLD_SPEC_v1.md); model votes never create ground truth.
+version: STATIC_CONDITIONS_v1
+stage: static_coupling   # runs FIRST, after the RC-0 deterministic simulator gate
+compute_unit: CJT_EXPERT_EVALUATION   # budget bookkeeping unit (frozen)
+arms:
+  S0: {name: plain_task_head,          desc: "Frozen hidden states -> trainable readout head. No structure."}
+  S1: {name: attention_pooling_only,   desc: "Gold clause segmentation; learned cross-attention pooler emits alpha; readout sees the alpha-mixed content only."}
+  S2: {name: cas_profiles_only,        desc: "Constructed p_i injected via learned projection, UNIFORM alpha; no learned routing."}
+  S3: {name: coupled_attention_x_cas,  desc: "The SAME alpha mixes content AND computes q = alpha^T P; joint features + gating. The coupling under test."}
+  S4: {name: shuffled_cas,             desc: "S3 with profile-to-clause assignment permuted (seed-frozen); marginals preserved, correspondence destroyed."}
+  S5: {name: random_matched_profiles,  desc: "S3 with p_i drawn once (frozen) from a Dirichlet fit to the real profile population (matched entropy/sparsity)."}
+  S6: {name: constant_profile_capacity, desc: "S3 with every p_i frozen to uniform 1/40: identical architecture/params, zero item-specific information (matched-capacity control)."}
+  S7: {name: matched_non_cas_semantic, desc: "S3 with profiles from a matched NON-CAS semantic taxonomy built from the same traces (SCMPE-style). REQUIRED for any 'CAS-specific' language."}
+gates:
+  - "S3 must beat S0, S1, S2 (coupling adds value)."
+  - "S3 must beat S4 and S5 (CAS information, not noise-vs-signal artifact)."
+  - "S3 must beat S6 (not a pure capacity effect)."
+  - "S3 must beat S7 — ONLY this licenses the phrase CAS-specific (LABEL_CLAIM_BOUNDARY section 6)."
+  - "Advantage must survive held-out template families and vocabulary."
+kill_rule: "If S3 fails any gate, the CAS-specific claim STOPS here; the recursive stage does not launch on CAS grounds."

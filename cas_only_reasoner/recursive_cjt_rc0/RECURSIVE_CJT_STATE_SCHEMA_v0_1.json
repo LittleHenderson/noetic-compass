@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "recursive_cjt_rc0/RECURSIVE_CJT_STATE_SCHEMA_v0_1.json",
+  "title": "RECURSIVE_CJT_STATE_SCHEMA_v0_1",
+  "description": "Typed Bias state for the RC-0 controller. B_{j,t} = (S, M, P_RPM, Z, Theta, G). P_RPM is the RPM prerequisite state (NEVER resistance; lower-case r is reserved for CAS-Ohm resistance). The transition function is named CJTStep, never J (J is reserved for Jacobians in the eta-epsilon lane). BiasState is immutable; the only path to B_{j,t+1} is a BiasUpdateIntent committed atomically by the TransactionCoordinator. Status: PROPOSED_UNTESTED design schema; reference implementation sim/rc0_types.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["substrate", "memory", "rpm_state", "operating_record", "theta", "governance"],
+  "properties": {
+    "substrate": {"type": "array", "description": "S: stable substrate descriptors (declared)."},
+    "memory": {"type": "array", "description": "M: bounded recent history entries."},
+    "rpm_state": {
+      "type": "object",
+      "description": "P_RPM: prerequisite state. D/W/P are independent raw values - never one simplex; only the DEFICIT vector may normalize for bottleneck attribution.",
+      "additionalProperties": false,
+      "required": ["desire", "wisdom", "power"],
+      "properties": {
+        "desire": {"type": "number", "minimum": 0},
+        "wisdom": {"type": "number", "minimum": 0},
+        "power": {"type": "number", "minimum": 0},
+        "open_subgoals": {"type": "array", "items": {"type": "object", "required": ["expert_id", "prereq", "depth"], "properties": {"expert_id": {"type": "string"}, "prereq": {"enum": ["DESIRE", "WISDOM", "POWER"]}, "depth": {"type": "integer", "minimum": 0}}}},
+        "return_addresses": {"type": "array"},
+        "acquired": {"type": "array", "description": "cached satisfied prerequisites (one-directional, Correction 2); invalidated only by explicit events"}
+      }
+    },
+    "operating_record": {
+      "type": "object",
+      "description": "Z: factorized two-axis operating record. region_posterior is Delta^3 over EXACTLY the four source-defined regions. non_ohmic/unstable are separate statuses, NOT regions. ASOM is a DERIVED dashboard letter, never stored as authority.",
+      "additionalProperties": false,
+      "required": ["region_posterior", "committed_region", "response_model_status", "stability_status", "semantic_outcome"],
+      "properties": {
+        "region_posterior": {
+          "type": "array", "minItems": 4, "maxItems": 4,
+          "items": {"type": "number", "minimum": 0, "maximum": 1},
+          "description": "POSTERIOR over (cutoff, active, saturation, breakdown); sums to 1."
+        },
+        "committed_region": {"enum": ["cutoff", "active", "saturation", "breakdown", "unassessed"]},
+        "response_model_status": {"enum": ["ohmic", "non_ohmic", "unassessed"]},
+        "stability_status": {"enum": ["stable", "unstable", "unassessed"]},
+        "semantic_outcome": {"enum": ["intended", "opposite", "off_axis", "unassessed"], "description": "Written ONLY by the verifier. Region arithmetic never writes this."}
+      }
+    },
+    "theta": {"type": "array", "description": "Theta: transformation parameters (declared)."},
+    "governance": {
+      "type": "object",
+      "description": "G: hard typed permissions. Owner-only; BiasUpdateIntents may not touch it.",
+      "additionalProperties": false,
+      "required": ["hard_mask"],
+      "properties": {
+        "hard_mask": {"enum": [0, 1], "description": "Absolute permission. NEVER a resistance; a large V cannot outvote it."},
+        "quarantined": {"type": "boolean"},
+        "max_depth": {"type": "integer", "minimum": 0},
+        "max_branches": {"type": "integer", "minimum": 1}
+      }
+    }
+  },
+  "compute_budget": {
+    "compute_unit": "CJT_EXPERT_EVALUATION",
+    "note": "Frozen single unit for the first experiment. B_t = maximum CJT expert executions permitted this episode; B_{j,t} = B_t * g_{j,t}. Repairs cost 1 unit each. Tokens, FLOPs, tool calls, and milliseconds are NOT interchangeable with this unit; each later unit requires its own registered calibration profile."
+  },
+  "route_equation": {
+    "score": "score_j,t = hard_mask(G_j,t) * rpm_ready_j,t * route_multiplier(region_j,t-1) * V_j,t / (r_j,t + epsilon)",
+    "route_multiplier": "scalar in [0,1], pure function of the LAST COMMITTED region Z_{t-1}",
+    "control_action": "separate typed enum {RUN, CAP, SPLIT, REPAIR, QUARANTINE, HALT}; never enters arithmetic",
+    "all_zero": "sum of scores == 0 -> NO_READY_CJT (never divide by zero); RPM opens a repair subgoal or the kernel halts"
+  },
+  "measurement_contract": {
+    "D": {
+      "source": "declared per-expert Desire value (first experiment: scenario-declared; later: Drive/goal state readout)",
+      "scale": "nonnegative real", "units": "drive_points", "kind": "declared",
+      "used_in": ["readiness", "routing"],
+      "dual_role_registered": true,
+      "dual_role": "hard relevance threshold (readiness, tau_D) AND above-threshold surplus supplies V = max(0, D - tau_D) (routing). The same deficiency is never counted twice: below threshold the gate closes and V contributes nothing further."
+    },
+    "W": {
+      "source": "declared per-expert Wisdom value (first experiment: scenario-declared; later: applicability assessment)",
+      "scale": "nonnegative real", "units": "wisdom_points", "kind": "declared",
+      "used_in": ["readiness"],
+      "note": "Readiness-only. Wisdom is NOT a resistance component in RC-0 (non-duplication contract)."
+    },
+    "P": {
+      "source": "declared per-expert Power value (first experiment: scenario-declared; later: capability assessment)",
+      "scale": "nonnegative real", "units": "power_points", "kind": "declared",
+      "used_in": ["readiness", "routing"],
+      "dual_role_registered": true,
+      "dual_role": "hard minimum-capability threshold (readiness, tau_P) AND above-threshold value MAY modulate r_cap (routing). RC-0 simulator keeps r_cap fixed; the modulation hook is registered, not active."
+    },
+    "V": {
+      "source": "derived: V = max(0, D - tau_D)", "scale": "nonnegative real",
+      "units": "drive_points", "kind": "derived", "used_in": ["routing"]
+    },
+    "r_cap": {
+      "source": "declared capacity constraint (later: measured capability resistance)",
+      "scale": "nonnegative real", "units": "resistance_points", "kind": "declared",
+      "used_in": ["routing"]
+    },
+    "r_context": {
+      "source": "declared contextual constraint", "scale": "nonnegative real",
+      "units": "resistance_points", "kind": "declared", "used_in": ["routing"]
+    },
+    "r_resource": {
+      "source": "declared resource constraint", "scale": "nonnegative real",
+      "units": "resistance_points", "kind": "declared", "used_in": ["routing"]
+    },
+    "hard_policy_mask": {
+      "source": "owner-declared governance (G.hard_mask, quarantine)", "scale": "binary {0,1}",
+      "units": "none", "kind": "declared", "used_in": ["routing"],
+      "note": "Policy is a hard mask, NEVER a resistance. Quarantine zeroes the effective mask."
+    },
+    "region_evidence": {
+      "source": "observed usage/readiness during EXECUTE-OBSERVE (consecutive-use counter, readiness at execution)",
+      "scale": "posterior on Delta^3", "units": "probability", "kind": "observed",
+      "used_in": ["diagnosis"],
+      "note": "Region evidence NEVER includes the semantic outcome (two-axis discipline)."
+    },
+    "semantic_outcome": {
+      "source": "verifier's registered exact-outcome table (pure lookup)",
+      "scale": "enum", "units": "none", "kind": "observed", "used_in": ["diagnosis"]
+    }
+  }
+}

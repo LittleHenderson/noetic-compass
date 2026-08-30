@@ -1,0 +1,44 @@
+{
+  "receipt_id": "RC0_SIMULATOR_RECEIPT",
+  "phase": "RC-0 (type, temporal, and authority repair)",
+  "status": "DETERMINISTIC_SIMULATOR_GATE0_PASS",
+  "claim_bearing": false,
+  "neural_network": "NONE (no model, no GPU, CPU-only deterministic simulation)",
+  "compute_unit": "CJT_EXPERT_EVALUATION",
+  "scenario": {
+    "tasks": 14,
+    "budget_total": 60,
+    "budget_left": 46,
+    "metrics": {
+      "executions": 14,
+      "typed_abstentions": 0,
+      "forced_answers": 0,
+      "saturation_events": 1,
+      "repairs_opened": 0,
+      "repairs_completed": 0,
+      "no_ready_events": 0,
+      "halts": 0,
+      "cycle_detected": 0,
+      "depth_limit_hits": 0,
+      "budget_exhausted": 0
+    }
+  },
+  "replay": {
+    "digest_run1": "9eceb4bc0fa4839b993c8965dab39675d5151cc57669d5442ee94a0f35391113",
+    "digest_run2": "9eceb4bc0fa4839b993c8965dab39675d5151cc57669d5442ee94a0f35391113",
+    "identical": true
+  },
+  "tests": {
+    "suite": "tests/test_rc0.py",
+    "result": "17/17 passed",
+    "exit_code": 0
+  },
+  "artifact_hash_comparison": {
+    "file": "docs/research/RECURSIVE_CJT_BIAS_CONTROLLER_v0_1.md",
+    "blob_at_commit_7bf2a3b9": "bef7ff92ebf9b6a796f41ae847f03c6b6bcb9527",
+    "blob_at_HEAD": "bef7ff92ebf9b6a796f41ae847f03c6b6bcb9527",
+    "working_tree_sha256": "a1c40086756da592db2cd971727b61c60b7f6e5399b5666f390257c9b41174db",
+    "identical": true,
+    "finding": "The committed file CONTAINS arms I and J (lines 418-419). The owner's reviewed copy was the pre-audit intermediate draft. No version was overwritten. A-J lettering retired regardless; see STATIC_CONDITIONS_v1 / RECURSIVE_CONDITIONS_v1."
+  }
+}

@@ -1,0 +1,31 @@
+# RECURSIVE_CONDITIONS_v1 — the recursive controller stage (Gate 2+). Status: PROPOSED_UNTESTED.
+# Launches ONLY if the static stage's gates pass and the owner signs the phase record.
+# Same matching discipline as the static stage. Retires A–J lettering for this study.
+version: RECURSIVE_CONDITIONS_v1
+stage: recursive_controller
+compute_unit: CJT_EXPERT_EVALUATION
+arms:
+  R0: {name: anonymous_matched_moe,      desc: "Matched ordinary mixture-of-experts (incl. hash-routing sub-baseline)."}
+  R1: {name: cas_labeled_softmax,        desc: "CAS-labeled CJT experts, ordinary softmax routing. No RPM/ASOM/Ohm."}
+  R2: {name: plus_rpm,                   desc: "R1 + RPM readiness gating (typed FIRST_BLOCK, repair subgoals)."}
+  R3: {name: plus_asom,                  desc: "R1 + ASOM regulation (route_multiplier from last committed region)."}
+  R4: {name: plus_cas_ohm,               desc: "R1 + CAS-Ohm routing (V/(r+eps) scores, hard masks)."}
+  R5: {name: full_controller,            desc: "Full RPM + ASOM + CAS-Ohm recursive controller (the RC design)."}
+  R6: {name: shuffled_cas_meanings,      desc: "R5 with shuffled CAS meanings (labels permuted, machinery intact)."}
+  R7: {name: matched_generic_hierarchical, desc: "Matched generic hierarchical controller: same knob count, same adaptive machinery, NO CAS ontology. THE killer control."}
+  R8: {name: random_matched_state_stream, desc: "R5 with the state stream replaced by frozen random-matched draws."}
+  R9: {name: cas_stream_disconnected,    desc: "R5 with the CAS stream physically disconnected (frozen uniform): pure capacity/machinery control."}
+gates_double_dissociations:
+  - "Remove RPM (R5 vs R5-minus-RPM): prerequisite recovery deteriorates; typed abstentions collapse."
+  - "Remove ASOM: saturation events and collateral damage increase."
+  - "Remove CAS-Ohm: compute efficiency worsens; semantic verification unchanged."
+  - "Disconnect CAS stream (R9): operation-level generalization deteriorates."
+falsifiers:
+  - "R1 <= R0  -> CAS expert meanings add no demonstrated value."
+  - "R4 <= R1  -> CAS-Ohm routing adds no demonstrated value."
+  - "R6 >= R5  -> CAS label semantics are not load-bearing."
+  - "R5 <= R7  -> the win is generic hierarchical control, not CAS."
+  - "R8 >= R5  -> the benefit is the extra state stream, not CAS structure."
+  - "R9 >= R5  -> the CAS stream is decorative."
+  - "controller overhead > compute saved -> no efficiency claim."
+sequencing: "Gate 0 simulator (DONE, this commit) -> Gate 1 static (S0-S7) -> Gate 2 recursive additions one at a time -> Gate 3 selective plasticity -> Gate 4 full CJT Transformer. Each gate needs an owner-signed phase record."
