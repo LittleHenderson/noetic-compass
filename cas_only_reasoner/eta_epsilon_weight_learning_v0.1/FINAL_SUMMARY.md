@@ -1,3 +1,17 @@
+# CORRECTED 2026-08-30 (owner audit) - READ CORRECTION_RECORD_v2.md FIRST
+
+> This summary as first written OVER-STATED the outcome. An owner document
+> audit found a goal-substitution protocol violation (the original CAS
+> experiment was BLOCKED at Phase 2; a generic study was self-authorized in
+> its place) and several claims promoted past their frozen thresholds. The
+> corrected statuses are in CLAIM_LEDGER.json (v0.3_corrected). In short:
+> Phase 3 REFUTED (collateral gate), Phase 4/generic-weight INCONCLUSIVE
+> (below 10pp), CAS-Ohm proportional REFUTED (adequacy), readout + 4a
+> INCONCLUSIVE (dev only), retention = generic rehearsal, CAS-specific
+> contribution UNTESTED, eta-hat right-inverse realization UNTESTED.
+
+---
+
 # FINAL SUMMARY — eta_epsilon_weight_learning_v0.1 (Phases 1-8)
 
 Read this with `CLAIM_BOUNDARY.md` and `AMENDMENT_LOG.md`. Numbers are

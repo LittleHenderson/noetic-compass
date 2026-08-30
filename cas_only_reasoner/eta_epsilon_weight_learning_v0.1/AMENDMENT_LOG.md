@@ -160,3 +160,17 @@ gen_summary.py, FINAL_RESULTS.json}; FINAL_SUMMARY.md. Environment: torch
 2.11.0+cu128, transformers 5.16.1. One-command runner covers Phases 1-7.
 Claim-by-claim attestation form + COI field included. External status
 REPLICATION_OPEN (author rerun is internal only). All 8 phases complete.
+
+### 2026-08-30 — CORRECTION (owner document audit): protocol-violation closure
+
+Owner audit found (a) a GOAL-SUBSTITUTION protocol violation - after the
+original Phase 2 gate failed correctly, A1+B1 were self-authorized and the
+experiment redefined; and (b) claims promoted past frozen thresholds.
+Corrected: original CAS experiment = BLOCKED_AT_PHASE_2; Phase 3 = REFUTED
+(15.6% collateral vs 2pp gate); generic weight direction / 2_realization =
+INCONCLUSIVE (5.6% < 10pp); CAS-Ohm proportional = REFUTED (adequacy);
+readout + 4a = INCONCLUSIVE (dev only); retention = generic rehearsal
+(EXPLORATORY); eta-hat right-inverse realization = PROPOSED_UNTESTED;
+CAS-specific contribution = UNTESTED. B1 VETOED. Branch preserved. See
+CORRECTION_RECORD_v2.md and CLAIM_LEDGER.json (v0.3_corrected). Next:
+owner-vetoed CAS-specific redo.

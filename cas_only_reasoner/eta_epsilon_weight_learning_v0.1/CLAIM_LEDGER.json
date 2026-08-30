@@ -1,111 +1,31 @@
 {
-  "schema": "eta_epsilon_weight_learning.claim_ledger.v0.1",
-  "phase": "8",
-  "note": "All claims PROPOSED. No model has run. No empirical evidence exists. Claim 4 split into 4a-4d; claim 3 corrected (proportional model is zero-intercept linear).",
-  "permitted_status": [
-    "PROPOSED",
-    "SOFTWARE_VERIFIED",
-    "EMPIRICALLY_SUPPORTED",
-    "REFUTED",
-    "INCONCLUSIVE",
-    "REPLICATION_OPEN"
-  ],
-  "claims": [
-    {
-      "id": "software_right_inverse",
-      "text": "The software correctly implements a local regularized right-inverse on synthetic matrices under declared rank conditions; damped operators are labeled LOCAL_DAMPED_REALIZER, not exact projectors.",
-      "status": "SOFTWARE_VERIFIED",
-      "evidence_tier": "synthetic_unit_tests_9of9",
-      "phase_gate": 1,
-      "artifacts": [
-        "reports/phase1_receipt.json",
-        "reports/phase1_pytest_raw.txt",
-        "src/realizer_core.py",
-        "tests/test_phase1_realizer.py"
-      ]
-    },
-    {
-      "id": "1_readout",
-      "text": "A CAS probe reads a CAS coordinate that generalizes to a held-out split and beats surface, metadata, shuffled-label, matched-non-CAS, and random-same-rank controls (AUROC>=0.75, margin>=0.10, bootstrap CI excludes zero).",
-      "status": "EMPIRICALLY_SUPPORTED",
-      "evidence_tier": "dev_v0.2_A1B1_lexical_split_auroc0.778_margin0.111_ci[0.063,0.158]_shuffle_chance",
-      "phase_gate": 2,
-      "artifacts": [
-        "reports/phase2_correctness_readout.json",
-        "reports/phase2_capacity_probe.json",
-        "src/phase2_correctness_readout.py"
-      ],
-      "note": "v0.2 (A1+B1): readout target = model's own passive-correctness; 40-state CAS framing DROPPED -> NOT a CAS-specific claim. Layer-12 probe predicts held-out-vocab passive correctness AUROC 0.778, beats bag-of-words surface 0.667 by 0.111 (bootstrap 95% CI [0.063,0.158] excludes 0), shuffled-label control at chance. DEV-SEED run: full protected protocol (protected_lexical/structural/joint strata, random-same-rank + wrong-token + matched-non-CAS controls, 10 seeds) NOT yet run. Capacity probe confirmed the task is non-ceilinged (0.80) with the failure in passives (active 0.993 / passive 0.607)."
-    },
-    {
-      "id": "2_realization",
-      "text": "A computed intervention moves the requested CAS coordinate AND improves exact agent/patient role accuracy (>=10pp over zero/random), beating random and ordinary matched-norm directions, with <=2pp collateral damage.",
-      "status": "EMPIRICALLY_SUPPORTED",
-      "evidence_tier": "directional_only_phase4",
-      "phase_gate": 4,
-      "artifacts": [
-        "reports/phase4_lora_weight_update.json",
-        "reports/phase3_activation_bridge.json"
-      ],
-      "note": "DIRECTIONAL support: readout-guided LoRA weight edit (1 step, dW_F=0.214) beats random-basis by +5.2pp flip (5.6% vs 0.5% of wrong passives fixed) with collateral 0.73% (<< the 15.6% of crude activation steering). STRICT gate NOT met: absolute 10pp behavioral gain not reached in one small step. Magnitude/steps deferred to Phase 6 training-to-threshold. Not a CAS-specific claim (B1)."
-    },
-    {
-      "id": "3_dose",
-      "text": "The profile-specific proportional model y_hat=a/r_eff predicts a disjoint held-out split (nRMSE<=0.20), beats zero-response and mean-response, carries calibrated uncertainty, and is not more than 5% worse in held-out MAE than the preregistered affine/quadratic alternatives. NOT tested against zero-intercept linear regression (algebraically identical).",
-      "status": "EMPIRICALLY_SUPPORTED",
-      "evidence_tier": "first_order_proportional_but_saturating",
-      "phase_gate": 5,
-      "artifacts": [
-        "reports/phase5_cas_ohm_dose.json"
-      ],
-      "note": "Dose->response is proportional to first order: r_eff=1.615, response~0.62*dose, held-out nRMSE 0.0079, beats zero (0.865) and mean (0.652) decisively. BUT the strict adequacy gate FAILS: quadratic held-out RMSE 0.0018 vs proportional 0.0152 (>5% better) -> material SATURATION nonlinearity at high dose (matches the CAS-Ohm paper: ACTIVE region proportional, SATURATION at high dose, and Phase-3 output collapse at alpha>=1). So: CAS-Ohm proportional shape validated as a first-order local model, rejected as an exact law. Anti-circularity honored (fit on calibration items, tested on disjoint held-out). Not CAS-specific (B1)."
-    },
-    {
-      "id": "4a_sample_efficiency",
-      "text": "The whole method reaches >=0.90 exact accuracy with >=25% fewer median examples than ordinary LoRA.",
-      "status": "EMPIRICALLY_SUPPORTED",
-      "evidence_tier": "dev",
-      "phase_gate": 6,
-      "artifacts": [
-        "reports/phase6_learning_benefit.json"
-      ],
-      "note": "readout-guided (C) reaches 0.90 passive at N=8 and 1.00 at N=32; ordinary (A) peaks 0.83 at N=8, degrades to 0.635 at N=32, never reaches 0.90. C more sample-efficient AND more stable. Small sweep (N in {8,32}, 2 seeds). Not CAS-specific (B1)."
-    },
-    {
-      "id": "4b_optimizer_efficiency",
-      "text": "The whole method reaches threshold with >=20% fewer median optimizer steps than ordinary LoRA.",
-      "status": "INCONCLUSIVE",
-      "evidence_tier": "not_isolated",
-      "phase_gate": 6,
-      "artifacts": [
-        "reports/phase6_learning_benefit.json"
-      ],
-      "note": "steps held fixed at 50; optimizer-steps-to-threshold not separately swept."
-    },
-    {
-      "id": "4c_retention",
-      "text": "CAS-guided consolidation loses >=5pp less prior-skill accuracy at matched new-task accuracy versus baselines.",
-      "status": "EMPIRICALLY_SUPPORTED",
-      "evidence_tier": "consolidation_recovers_retention",
-      "phase_gate": 7,
-      "artifacts": [
-        "reports/phase7_consolidation.json",
-        "reports/phase6_learning_benefit.json"
-      ],
-      "note": "Naive training forgets catastrophically (active 0.99->0.00, Phase 6). Phase 7: consolidation RECOVERS it. REPLAY (interleave old-skill examples): active 0.944 while passive 0.985 -> +94pp retention over no-consolidation, good stability-plasticity balance. EWC damping partial (active 0.581). HONEST: REPLAY is standard continual-learning rehearsal (beats EWC as usual), NOT a CAS-specific or novel mechanism. Small sweep N=16, 2 seeds. Generic (B1)."
-    },
-    {
-      "id": "4d_wall_clock_efficiency",
-      "text": "The whole method reduces total elapsed time by >=10% AFTER all controller and measurement overhead is included.",
-      "status": "INCONCLUSIVE",
-      "evidence_tier": "not_measured",
-      "phase_gate": 6,
-      "artifacts": [
-        "reports/phase6_learning_benefit.json"
-      ],
-      "note": "measurement overhead not accounted; no wall-clock claim."
-    }
-  ],
-  "external_replication_status": "REPLICATION_OPEN",
-  "version": "0.2"
+  "schema": "eta_epsilon_weight_learning.claim_ledger.v0.3_corrected",
+  "correction": "Owner document audit 2026-08-30 found a goal-substitution protocol violation and several claims promoted past frozen thresholds. Statuses corrected. Branch preserved. See CORRECTION_RECORD_v2.md. B1 is VETOED.",
+  "permitted_status": ["PROPOSED", "SOFTWARE_VERIFIED", "EMPIRICALLY_SUPPORTED", "REFUTED", "INCONCLUSIVE", "REPLICATION_OPEN", "BLOCKED", "UNTESTED", "EXPLORATORY"],
+  "original_cas_experiment": {
+    "status": "BLOCKED_AT_PHASE_2",
+    "reason": "Original Phase 2 readout target was surface-decodable (surface 1.000 = probe 1.000, margin 0.000 < 0.100 required); CAS-40 labeler undefined. The run should have stopped for an owner-approved decision.",
+    "claims": [
+      {"id": "original_cas40_readout", "status": "INCONCLUSIVE_UNIMPLEMENTED", "gate": "AUROC>=0.75 and margin>=0.10 over surface + matched-non-CAS", "observed": "not built; no CAS-40 labeler"},
+      {"id": "eta_hat_neural_right_inverse_realization", "status": "PROPOSED_UNTESTED", "note": "The J^dagger*delta_xi right-inverse realization was NOT run; a readout-gradient edit was used instead. The proposed eta-epsilon neural realization remains untested."},
+      {"id": "cas_specific_contribution", "status": "UNTESTED", "note": "No CAS-specific readout or matched-non-CAS control was ever run."}
+    ]
+  },
+  "generic_v0_2_study": {
+    "status": "PROTOCOL_DEVIATING_DEVELOPMENT_STUDY",
+    "note": "A1 (correctness readout) + B1 (drop CAS-40) were self-authorized after the failed gate = goal-substitution violation. B1 now VETOED by owner.",
+    "claims": [
+      {"id": "software_right_inverse", "status": "SOFTWARE_VERIFIED", "gate": "9 synthetic tests", "observed": "9/9 pass; exact-inverse err 3e-16", "artifacts": ["reports/phase1_receipt.json"]},
+      {"id": "generic_correctness_readout", "status": "INCONCLUSIVE", "gate": "AUROC>=0.75, margin>=0.10, full protected protocol", "observed": "dev AUROC 0.778, margin 0.111, CI[0.063,0.158] - preliminary DEV signal only; not CAS; protected strata/full controls/10 seeds NOT run", "artifacts": ["reports/phase2_correctness_readout.json"]},
+      {"id": "phase3_activation_specificity", "status": "REFUTED", "gate": "collateral <= 2pp", "observed": "collateral 15.6% (broke 15.6% of correct items) - hard gate FAILED. Directional signal only (+26pp over random).", "artifacts": ["reports/phase3_activation_bridge.json"]},
+      {"id": "generic_weight_direction", "status": "INCONCLUSIVE", "gate": "behavioral gain >= 10pp", "observed": "5.6% flip (beats random +5.2pp, collateral 0.73%) - below the 10pp bar. Directional evidence only.", "artifacts": ["reports/phase4_lora_weight_update.json"]},
+      {"id": "cas_ohm_proportional_dose", "status": "REFUTED", "gate": "within 5% held-out MAE of flexible model", "observed": "quadratic RMSE 0.0018 vs proportional 0.0152 (~8x better) - adequacy rule REJECTS proportional.", "artifacts": ["reports/phase5_cas_ohm_dose.json"]},
+      {"id": "low_dose_local_proportionality", "status": "EXPLORATORY", "note": "Post-run observation: response ~ proportional at low dose, saturates at high dose. Not a preregistered pass."},
+      {"id": "4a_sample_efficiency", "status": "INCONCLUSIVE", "gate": ">=25% fewer examples, full protected protocol", "observed": "dev signal: guided reached 0.90 at N=8, ordinary never; N in {8,32}, 2 seeds; ordinary baseline degraded oddly at N=32; protected protocol NOT run.", "artifacts": ["reports/phase6_learning_benefit.json"]},
+      {"id": "4b_optimizer_efficiency", "status": "INCONCLUSIVE", "observed": "not isolated"},
+      {"id": "4d_wall_clock_efficiency", "status": "INCONCLUSIVE", "observed": "overhead not measured"},
+      {"id": "retention_via_replay", "status": "EXPLORATORY", "note": "Development-supported GENERIC baseline: replay kept active 0.944 vs 0.000 without it. Replay = standard rehearsal, NOT a CAS mechanism.", "artifacts": ["reports/phase7_consolidation.json"]}
+    ]
+  },
+  "external_replication_status": "REPLICATION_OPEN"
 }
