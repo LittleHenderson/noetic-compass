@@ -1,0 +1,55 @@
+{
+  "schema": "eta_epsilon_weight_learning.phase5_cas_ohm_dose.v0.1",
+  "status": "V0_2_generic_dose_calibration",
+  "doses_targeted": [
+    0.05,
+    0.1,
+    0.2,
+    0.4,
+    0.8,
+    1.6,
+    3.2
+  ],
+  "dose_actual_cal": [
+    0.05000000074505806,
+    0.10000000149011612,
+    0.20000000298023224,
+    0.4000000059604645,
+    0.800000011920929,
+    1.600000023841858,
+    3.200000047683716
+  ],
+  "response_cal": [
+    0.0317857563495636,
+    0.06369621306657791,
+    0.1280473917722702,
+    0.2573390603065491,
+    0.515105664730072,
+    1.0171798467636108,
+    1.9613674879074097
+  ],
+  "response_ho": [
+    0.03182736784219742,
+    0.06373129785060883,
+    0.1280209869146347,
+    0.257407009601593,
+    0.5151423215866089,
+    1.0170999765396118,
+    1.9609934091567993
+  ],
+  "r_eff": 1.615211749711596,
+  "beta": 0.6191138717128295,
+  "holdout_rmse": {
+    "proportional": 0.015218012466352517,
+    "affine": 0.012844240694292035,
+    "quadratic": 0.0018366690740342876,
+    "zero": 0.8646288655400108,
+    "mean": 0.6521100340415518
+  },
+  "holdout_nrmse_proportional": 0.007888389148703046,
+  "beats_zero_and_mean": true,
+  "within_5pct_of_flexible": false,
+  "prereg_nrmse_max": 0.2,
+  "dose_claim_supported": false,
+  "honest_note": "proportional vs flexible tells if response saturates; not CAS-specific (B1)."
+}

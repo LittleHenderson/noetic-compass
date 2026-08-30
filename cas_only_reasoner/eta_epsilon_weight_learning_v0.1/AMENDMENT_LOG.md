@@ -128,3 +128,11 @@ flips 5.6% of wrong passives vs random-basis 0.5% (+5.2pp), collateral
 STRICT 10pp behavioral bar NOT met by one small step (this is expected;
 magnitude is Phase 6's job, not to be cranked here per the negative-result
 law). reports/phase4_lora_weight_update.json.
+
+### 2026-08-30 — Phase 5 CAS-Ohm dose calibration
+
+dose->response nearly proportional: r_eff=1.615, held-out nRMSE 0.0079,
+beats zero/mean decisively. Strict adequacy FAILS: quadratic RMSE 0.0018
+<< proportional 0.0152 -> saturation nonlinearity at high dose. Verdict:
+proportional valid first-order, rejected as exact law. Anti-circularity
+honored (calibration-fit, disjoint-holdout eval). reports/phase5_cas_ohm_dose.json.
