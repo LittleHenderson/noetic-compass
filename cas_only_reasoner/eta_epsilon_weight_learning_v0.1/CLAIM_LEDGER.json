@@ -1,6 +1,6 @@
 {
   "schema": "eta_epsilon_weight_learning.claim_ledger.v0.1",
-  "phase": "5",
+  "phase": "6",
   "note": "All claims PROPOSED. No model has run. No empirical evidence exists. Claim 4 split into 4a-4d; claim 3 corrected (proportional model is zero-intercept linear).",
   "permitted_status": [
     "PROPOSED",
@@ -63,34 +63,46 @@
     {
       "id": "4a_sample_efficiency",
       "text": "The whole method reaches >=0.90 exact accuracy with >=25% fewer median examples than ordinary LoRA.",
-      "status": "PROPOSED",
-      "evidence_tier": null,
+      "status": "EMPIRICALLY_SUPPORTED",
+      "evidence_tier": "dev",
       "phase_gate": 6,
-      "artifacts": []
+      "artifacts": [
+        "reports/phase6_learning_benefit.json"
+      ],
+      "note": "readout-guided (C) reaches 0.90 passive at N=8 and 1.00 at N=32; ordinary (A) peaks 0.83 at N=8, degrades to 0.635 at N=32, never reaches 0.90. C more sample-efficient AND more stable. Small sweep (N in {8,32}, 2 seeds). Not CAS-specific (B1)."
     },
     {
       "id": "4b_optimizer_efficiency",
       "text": "The whole method reaches threshold with >=20% fewer median optimizer steps than ordinary LoRA.",
-      "status": "PROPOSED",
-      "evidence_tier": null,
+      "status": "INCONCLUSIVE",
+      "evidence_tier": "not_isolated",
       "phase_gate": 6,
-      "artifacts": []
+      "artifacts": [
+        "reports/phase6_learning_benefit.json"
+      ],
+      "note": "steps held fixed at 50; optimizer-steps-to-threshold not separately swept."
     },
     {
       "id": "4c_retention",
       "text": "CAS-guided consolidation loses >=5pp less prior-skill accuracy at matched new-task accuracy versus baselines.",
-      "status": "PROPOSED",
-      "evidence_tier": null,
+      "status": "REFUTED",
+      "evidence_tier": "catastrophic_forgetting",
       "phase_gate": 7,
-      "artifacts": []
+      "artifacts": [
+        "reports/phase6_learning_benefit.json"
+      ],
+      "note": "BOTH A and C destroyed active-voice accuracy (0.99 -> ~0.006) while learning passives. lr 5e-3 x 50 steps is destructive; guidance did not help retention. Motivates Phase 7 consolidation."
     },
     {
       "id": "4d_wall_clock_efficiency",
       "text": "The whole method reduces total elapsed time by >=10% AFTER all controller and measurement overhead is included.",
-      "status": "PROPOSED",
-      "evidence_tier": null,
+      "status": "INCONCLUSIVE",
+      "evidence_tier": "not_measured",
       "phase_gate": 6,
-      "artifacts": []
+      "artifacts": [
+        "reports/phase6_learning_benefit.json"
+      ],
+      "note": "measurement overhead not accounted; no wall-clock claim."
     }
   ],
   "external_replication_status": "REPLICATION_OPEN",

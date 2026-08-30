@@ -1,0 +1,62 @@
+{
+  "schema": "eta_epsilon_weight_learning.phase6_learning_benefit.v0.1",
+  "status": "V0_2_generic_learning_benefit",
+  "steps": 50,
+  "threshold": 0.9,
+  "N_sweep": [
+    8,
+    32
+  ],
+  "seeds": [
+    0,
+    1
+  ],
+  "results": {
+    "A_ordinary": {
+      "8": {
+        "passive_acc_mean": 0.83,
+        "passive_acc_seeds": [
+          0.84,
+          0.82
+        ],
+        "active_acc_mean": 0.025
+      },
+      "32": {
+        "passive_acc_mean": 0.635,
+        "passive_acc_seeds": [
+          0.27,
+          1.0
+        ],
+        "active_acc_mean": 0.00625
+      }
+    },
+    "C_guided": {
+      "8": {
+        "passive_acc_mean": 0.9099999999999999,
+        "passive_acc_seeds": [
+          1.0,
+          0.82
+        ],
+        "active_acc_mean": 0.0
+      },
+      "32": {
+        "passive_acc_mean": 1.0,
+        "passive_acc_seeds": [
+          1.0,
+          1.0
+        ],
+        "active_acc_mean": 0.00625
+      }
+    }
+  },
+  "examples_to_threshold": {
+    "A_ordinary": null,
+    "C_guided": 8
+  },
+  "4a_sample_efficiency": "C_better",
+  "retention_active_acc_at_maxN": {
+    "A": 0.00625,
+    "C": 0.00625
+  },
+  "honest_note": "generic (B1); small sweep; not CAS-specific."
+}

@@ -136,3 +136,12 @@ beats zero/mean decisively. Strict adequacy FAILS: quadratic RMSE 0.0018
 << proportional 0.0152 -> saturation nonlinearity at high dose. Verdict:
 proportional valid first-order, rejected as exact law. Anti-circularity
 honored (calibration-fit, disjoint-holdout eval). reports/phase5_cas_ohm_dose.json.
+
+### 2026-08-30 — Phase 6 learning benefit
+
+4a sample-efficiency SUPPORTED: readout-guided (C) reaches 0.90 passive at
+N=8, 1.00 at N=32; ordinary (A) peaks 0.83 (N=8), degrades to 0.635 (N=32),
+never hits 0.90. 4c retention REFUTED: BOTH conditions catastrophically
+forgot active voice (0.99 -> ~0.006). 4b/4d INCONCLUSIVE (not isolated).
+lr 5e-3 x 50 steps is destructive -> Phase 7 consolidation is the test.
+reports/phase6_learning_benefit.json.

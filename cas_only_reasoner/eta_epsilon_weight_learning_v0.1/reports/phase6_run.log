@@ -1,0 +1,16 @@
+[transformers] The following generation flags are not valid and may be ignored: ['output_hidden_states']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<02:32,  1.89it/s]Loading weights:  58%|#####8    | 169/290 [00:00<00:00, 358.53it/s]Loading weights:  92%|#########2| 268/290 [00:00<00:00, 312.74it/s]Loading weights: 100%|##########| 290/290 [00:01<00:00, 268.93it/s]
+{
+  "examples_to_threshold": {
+    "A_ordinary": null,
+    "C_guided": 8
+  },
+  "4a": "C_better",
+  "retention": {
+    "A": 0.00625,
+    "C": 0.00625
+  }
+}
+N= 8  A pass=0.830 act=0.025  |  C pass=0.910 act=0.000
+N=32  A pass=0.635 act=0.006  |  C pass=1.000 act=0.006
+saved C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\eta_epsilon_weight_learning_v0.1\reports\phase6_learning_benefit.json
