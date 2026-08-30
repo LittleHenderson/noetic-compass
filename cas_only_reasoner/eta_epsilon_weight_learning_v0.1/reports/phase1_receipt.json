@@ -1,0 +1,45 @@
+{
+  "schema": "eta_epsilon_weight_learning.phase_receipt.v0.1",
+  "phase": 1,
+  "title": "synthetic local right-inverse maths (CPU, no model)",
+  "runner": "python 3.14.0 + numpy 2.3.5 + pytest 9.0.2",
+  "tests": {
+    "file": "tests/test_phase1_realizer.py",
+    "passed": 9,
+    "failed": 0,
+    "raw": "reports/phase1_pytest_raw.txt"
+  },
+  "demonstration": {
+    "exact_right_inverse": {
+      "J_shape": [
+        3,
+        7
+      ],
+      "label": "EXACT_RIGHT_INVERSE",
+      "norm_J_eta_minus_I": 3.2437049760571943e-16,
+      "full_row_rank": true
+    },
+    "damped_operator": {
+      "lambda": 0.25,
+      "label": "LOCAL_DAMPED_REALIZER",
+      "J_eta_is_idempotent": false
+    },
+    "rank_deficient_reachable_fraction": {
+      "J_shape": [
+        2,
+        3
+      ],
+      "target": [
+        1.0,
+        0.0
+      ],
+      "reachable_fraction": 0.4472135954999578,
+      "status": "TARGET_PARTIALLY_UNREACHABLE"
+    }
+  },
+  "claim_licensed": "software_right_inverse -> SOFTWARE_VERIFIED",
+  "claims_still_prohibited": "all Transformer/empirical claims (1,2,3,4a-4d)",
+  "authorization": "proceeding under owner /goal directive (Phase 1-8); treated as sign-off past the lock-candidate gate",
+  "no_model_run": true,
+  "no_gpu_run": true
+}
