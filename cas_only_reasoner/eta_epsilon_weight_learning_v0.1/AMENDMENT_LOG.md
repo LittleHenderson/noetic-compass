@@ -152,3 +152,11 @@ Forgetting is fixable. FORGET passive 0.995 / active 0.000; REPLAY passive
 0.985 / active 0.944 (winner - good balance); EWC passive 0.990 / active
 0.581 (partial). REPLAY (rehearsal) recovers retention (+94pp) - the
 standard continual-learning result, NOT CAS-specific. reports/phase7_consolidation.json.
+
+### 2026-08-30 — Phase 8 replication bundle
+
+Bundle written: replication/{REPLICATION.md, run_all.sh, environment_lock.txt,
+gen_summary.py, FINAL_RESULTS.json}; FINAL_SUMMARY.md. Environment: torch
+2.11.0+cu128, transformers 5.16.1. One-command runner covers Phases 1-7.
+Claim-by-claim attestation form + COI field included. External status
+REPLICATION_OPEN (author rerun is internal only). All 8 phases complete.

@@ -1,0 +1,504 @@
+{
+  "schema": "eta_epsilon_weight_learning.final_results.v0.1",
+  "study_scope": "GENERIC interpretability-guided training (B1: 40-state CAS framing dropped). NOT a test of CAS-specific value.",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct @ 7ae557604adf...",
+  "claims": {
+    "software_right_inverse": {
+      "status": "SOFTWARE_VERIFIED",
+      "evidence_tier": "synthetic_unit_tests_9of9"
+    },
+    "1_readout": {
+      "status": "EMPIRICALLY_SUPPORTED",
+      "evidence_tier": "dev_v0.2_A1B1_lexical_split_auroc0.778_margin0.111_ci[0.063,0.158]_shuffle_chance"
+    },
+    "2_realization": {
+      "status": "EMPIRICALLY_SUPPORTED",
+      "evidence_tier": "directional_only_phase4"
+    },
+    "3_dose": {
+      "status": "EMPIRICALLY_SUPPORTED",
+      "evidence_tier": "first_order_proportional_but_saturating"
+    },
+    "4a_sample_efficiency": {
+      "status": "EMPIRICALLY_SUPPORTED",
+      "evidence_tier": "dev"
+    },
+    "4b_optimizer_efficiency": {
+      "status": "INCONCLUSIVE",
+      "evidence_tier": "not_isolated"
+    },
+    "4c_retention": {
+      "status": "EMPIRICALLY_SUPPORTED",
+      "evidence_tier": "consolidation_recovers_retention"
+    },
+    "4d_wall_clock_efficiency": {
+      "status": "INCONCLUSIVE",
+      "evidence_tier": "not_measured"
+    }
+  },
+  "external_replication_status": "REPLICATION_OPEN",
+  "report_files": {
+    "phase1_receipt.json": "040b9a9e959789bb4a9418d9cfd0ae32778e2f4ee4d575cf521daeb1cd3b567d",
+    "phase2_capacity_probe.json": "fc5f2b1d1c925093bb6bcab156d2d10b4f18868d49747e6c54ecaa77d0088c99",
+    "phase2_correctness_readout.json": "efd0c9f8321295de124ffb49341b86f6a04c713c7e2f1e9af9aec0011a73b81a",
+    "phase2_dev_smoke.json": "bece3c68486dfc31a7f4d586ef50ec899c57cb126cb98b6069da6e9dde3446bd",
+    "phase3_activation_bridge.json": "a2bc63350e4cc675a05d82e2196bf77f9ad5df98b3984b2f043026268c717bc7",
+    "phase4_lora_weight_update.json": "7dcfb58e5056c0afe1338e0ea5f41292c5b797e336d44648c9bd8a2d4a575ae2",
+    "phase5_cas_ohm_dose.json": "6384e38ccdd50ddb6fb97afc77c5d8f9e976e6573819ec460bb4906800fd1952",
+    "phase6_learning_benefit.json": "b3ed93af1e4ecd38a1e7871c0a1993f7aaf08244e6bae80206131bb6ad887ee6",
+    "phase7_consolidation.json": "762cac09847cd0e19d994b6bee9ffc09e1385b8c52d7cf148853a7269b7a85b1"
+  },
+  "reports": {
+    "phase1_receipt.json": {
+      "sha256": "040b9a9e959789bb4a9418d9cfd0ae32778e2f4ee4d575cf521daeb1cd3b567d",
+      "content": {
+        "schema": "eta_epsilon_weight_learning.phase_receipt.v0.1",
+        "phase": 1,
+        "title": "synthetic local right-inverse maths (CPU, no model)",
+        "runner": "python 3.14.0 + numpy 2.3.5 + pytest 9.0.2",
+        "tests": {
+          "file": "tests/test_phase1_realizer.py",
+          "passed": 9,
+          "failed": 0,
+          "raw": "reports/phase1_pytest_raw.txt"
+        },
+        "demonstration": {
+          "exact_right_inverse": {
+            "J_shape": [
+              3,
+              7
+            ],
+            "label": "EXACT_RIGHT_INVERSE",
+            "norm_J_eta_minus_I": 3.2437049760571943e-16,
+            "full_row_rank": true
+          },
+          "damped_operator": {
+            "lambda": 0.25,
+            "label": "LOCAL_DAMPED_REALIZER",
+            "J_eta_is_idempotent": false
+          },
+          "rank_deficient_reachable_fraction": {
+            "J_shape": [
+              2,
+              3
+            ],
+            "target": [
+              1.0,
+              0.0
+            ],
+            "reachable_fraction": 0.4472135954999578,
+            "status": "TARGET_PARTIALLY_UNREACHABLE"
+          }
+        },
+        "claim_licensed": "software_right_inverse -> SOFTWARE_VERIFIED",
+        "claims_still_prohibited": "all Transformer/empirical claims (1,2,3,4a-4d)",
+        "authorization": "proceeding under owner /goal directive (Phase 1-8); treated as sign-off past the lock-candidate gate",
+        "no_model_run": true,
+        "no_gpu_run": true
+      }
+    },
+    "phase2_capacity_probe.json": {
+      "sha256": "fc5f2b1d1c925093bb6bcab156d2d10b4f18868d49747e6c54ecaa77d0088c99",
+      "content": {
+        "schema": "eta_epsilon_weight_learning.phase2_capacity_probe.v0.1",
+        "status": "PREREGISTERED_CAPACITY_GATE",
+        "model": "Qwen/Qwen2.5-0.5B-Instruct",
+        "device": "cuda",
+        "n_active": 150,
+        "n_passive": 150,
+        "overall_zero_shot_accuracy": 0.8,
+        "active_accuracy": 0.9933,
+        "passive_accuracy": 0.6067,
+        "counts": {
+          "active": {
+            "correct": 149,
+            "wrong": 0,
+            "abstain": 1
+          },
+          "passive": {
+            "correct": 91,
+            "wrong": 37,
+            "abstain": 22
+          }
+        },
+        "capacity_threshold": 0.85,
+        "task_ceilinged": false,
+        "samples": [
+          {
+            "text": "the dog kicked the fox.",
+            "gold_agent": "dog",
+            "answer": "The dog.",
+            "verdict": "correct"
+          },
+          {
+            "text": "the lion kicked the hen.",
+            "gold_agent": "lion",
+            "answer": "Lion",
+            "verdict": "correct"
+          },
+          {
+            "text": "the hen watched the wolf.",
+            "gold_agent": "hen",
+            "answer": "The hen.",
+            "verdict": "correct"
+          },
+          {
+            "text": "the bear watched the wolf.",
+            "gold_agent": "bear",
+            "answer": "Bear",
+            "verdict": "correct"
+          },
+          {
+            "text": "the bear caught the mouse.",
+            "gold_agent": "bear",
+            "answer": "Bear",
+            "verdict": "correct"
+          },
+          {
+            "text": "the hen kicked the fox.",
+            "gold_agent": "hen",
+            "answer": "The hen.",
+            "verdict": "correct"
+          },
+          {
+            "text": "the cat kicked the dog.",
+            "gold_agent": "cat",
+            "answer": "The cat.",
+            "verdict": "correct"
+          },
+          {
+            "text": "the lion kicked the mouse.",
+            "gold_agent": "lion",
+            "answer": "The lion.",
+            "verdict": "correct"
+          },
+          {
+            "text": "the wolf bit the hen.",
+            "gold_agent": "wolf",
+            "answer": "Wolf",
+            "verdict": "correct"
+          },
+          {
+            "text": "the lion watched the mouse.",
+            "gold_agent": "lion",
+            "answer": "Lion",
+            "verdict": "correct"
+          },
+          {
+            "text": "the mouse chased the hen.",
+            "gold_agent": "mouse",
+            "answer": "The mouse.",
+            "verdict": "correct"
+          },
+          {
+            "text": "the mouse caught the bird.",
+            "gold_agent": "mouse",
+            "answer": "The mouse.",
+            "verdict": "correct"
+          }
+        ]
+      }
+    },
+    "phase2_correctness_readout.json": {
+      "sha256": "efd0c9f8321295de124ffb49341b86f6a04c713c7e2f1e9af9aec0011a73b81a",
+      "content": {
+        "schema": "eta_epsilon_weight_learning.phase2_correctness_readout.v0.1",
+        "status": "V0_2_AMENDMENT_A1_B1_generic_not_cas_specific",
+        "model": "Qwen/Qwen2.5-0.5B-Instruct",
+        "device": "cuda",
+        "readout_target": "model's own passive role-binding correctness",
+        "lexical_split": {
+          "train_passives": 432,
+          "test_passives": 624,
+          "test_uses_held_out_vocab": true
+        },
+        "label_balance_test_correct_rate": 0.6586538461538461,
+        "majority_baseline": 0.6586538461538461,
+        "bag_of_words_surface_auroc": 0.6666438207509453,
+        "probe_auroc_by_layer": {
+          "4": 0.7301668894143449,
+          "8": 0.7207772180528426,
+          "12": 0.7775950104520064,
+          "16": 0.7661035148441337,
+          "20": 0.7238842625909553
+        },
+        "shuffled_label_control_auroc_by_layer": {
+          "4": 0.5189335526541242,
+          "8": 0.5396547982134494,
+          "12": 0.5396091063820065,
+          "16": 0.482151628342643,
+          "20": 0.4427424237231989
+        },
+        "best_probe_layer": 12,
+        "best_probe_auroc": 0.7775950104520064,
+        "probe_minus_surface_auroc": 0.1109511897010611,
+        "margin_bootstrap_95ci": [
+          0.0628963189942046,
+          0.15822915254242076
+        ],
+        "margin_ci_excludes_zero": true,
+        "prereg_gate": {
+          "auroc_min": 0.75,
+          "margin_min": 0.1,
+          "bootstrap_ci_excludes_zero": true
+        },
+        "readout_clears_gate": true,
+        "honest_note": "B1 adopted: not a CAS-specific claim. Surface baseline is weak on held-out vocab by construction; the real question is whether the probe reads vocab-general role-binding structure."
+      }
+    },
+    "phase2_dev_smoke.json": {
+      "sha256": "bece3c68486dfc31a7f4d586ef50ec899c57cb126cb98b6069da6e9dde3446bd",
+      "content": {
+        "schema": "eta_epsilon_weight_learning.phase2_dev_smoke.v0.1",
+        "status": "DEV_SMOKE_NON_CLAIM_BEARING",
+        "model": "Qwen/Qwen2.5-0.5B-Instruct",
+        "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+        "device": "cuda",
+        "label": "agent_is_surface_first (active=1, passive=0)",
+        "n_train": 864,
+        "n_test": 600,
+        "test_uses_held_out_vocab": true,
+        "majority_baseline": 0.505,
+        "bag_of_words_surface_baseline_acc": 1.0,
+        "probe_acc_by_layer": {
+          "4": 1.0,
+          "8": 1.0,
+          "12": 1.0,
+          "16": 1.0,
+          "20": 1.0
+        },
+        "best_probe_layer": 4,
+        "best_probe_acc": 1.0,
+        "probe_minus_surface": 0.0,
+        "prereg_margin_required": 0.1,
+        "beats_surface_by_margin": false,
+        "honest_reading": "If probe ~ surface (both near ceiling), the role label is surface-decodable and the readout does NOT beat surface -> the same Gate-2 surface-decodability wall. This dev smoke does not license claim 1_readout under any outcome."
+      }
+    },
+    "phase3_activation_bridge.json": {
+      "sha256": "a2bc63350e4cc675a05d82e2196bf77f9ad5df98b3984b2f043026268c717bc7",
+      "content": {
+        "schema": "eta_epsilon_weight_learning.phase3_activation_bridge.v0.1",
+        "status": "V0_2_generic_activation_steering",
+        "layer": 12,
+        "mean_hidden_norm": 15.104372024536133,
+        "baseline": {
+          "wrong_set_size": 213,
+          "right_set_size": 411,
+          "wrong_baseline_correct": 0.0,
+          "right_baseline_correct": 1.0
+        },
+        "by_alpha": {
+          "alpha_0.5": {
+            "wrong_to_correct_plus_readout": 0.6009389671361502,
+            "wrong_to_correct_random": 0.3380281690140845,
+            "wrong_to_correct_opposite": 0.0,
+            "collateral_right_still_correct_plus": 0.8442822384428224
+          },
+          "alpha_1.0": {
+            "wrong_to_correct_plus_readout": 0.0,
+            "wrong_to_correct_random": 0.19718309859154928,
+            "wrong_to_correct_opposite": 0.023474178403755867,
+            "collateral_right_still_correct_plus": 0.0
+          },
+          "alpha_2.0": {
+            "wrong_to_correct_plus_readout": 0.0,
+            "wrong_to_correct_random": 0.0,
+            "wrong_to_correct_opposite": 0.0,
+            "collateral_right_still_correct_plus": 0.0
+          }
+        },
+        "best_alpha": 0.5,
+        "behavioral_gain_wrong_to_correct": 0.6009389671361502,
+        "gain_over_random_control": 0.26291079812206575,
+        "prereg_behavioral_gain_min_pp": 0.1,
+        "kill_rule_tripped": false,
+        "verdict": "STEERING_IMPROVES_BEHAVIOR",
+        "honest_note": "generic (B1); activation-only; no weight change."
+      }
+    },
+    "phase4_lora_weight_update.json": {
+      "sha256": "7dcfb58e5056c0afe1338e0ea5f41292c5b797e336d44648c9bd8a2d4a575ae2",
+      "content": {
+        "schema": "eta_epsilon_weight_learning.phase4_lora_weight_update.v0.1",
+        "status": "V0_2_generic_weight_update",
+        "adapt_layer": 11,
+        "read_layer": 12,
+        "rank": 4,
+        "wrong_set": 213,
+        "right_set": 411,
+        "guided": {
+          "dW_fro": 0.21355487406253815,
+          "wrong_to_correct": 0.056338028169014086,
+          "right_still_correct": 0.9927007299270073,
+          "collateral_pp": 0.73
+        },
+        "random_basis": {
+          "dW_fro": 0.21355488896369934,
+          "wrong_to_correct": 0.004694835680751174,
+          "right_still_correct": 0.9951338199513382,
+          "collateral_pp": 0.49
+        },
+        "guided_minus_random_flip": 0.051643192488262914,
+        "prereg": {
+          "behavioral_gain_min_pp": 10,
+          "collateral_max_pp": 2
+        },
+        "beats_random": true,
+        "behavioral_gain_ok": false,
+        "collateral_ok": true,
+        "honest_note": "generic (B1); readout-gradient = scalar eta-hat step; base frozen except LoRA."
+      }
+    },
+    "phase5_cas_ohm_dose.json": {
+      "sha256": "6384e38ccdd50ddb6fb97afc77c5d8f9e976e6573819ec460bb4906800fd1952",
+      "content": {
+        "schema": "eta_epsilon_weight_learning.phase5_cas_ohm_dose.v0.1",
+        "status": "V0_2_generic_dose_calibration",
+        "doses_targeted": [
+          0.05,
+          0.1,
+          0.2,
+          0.4,
+          0.8,
+          1.6,
+          3.2
+        ],
+        "dose_actual_cal": [
+          0.05000000074505806,
+          0.10000000149011612,
+          0.20000000298023224,
+          0.4000000059604645,
+          0.800000011920929,
+          1.600000023841858,
+          3.200000047683716
+        ],
+        "response_cal": [
+          0.0317857563495636,
+          0.06369621306657791,
+          0.1280473917722702,
+          0.2573390603065491,
+          0.515105664730072,
+          1.0171798467636108,
+          1.9613674879074097
+        ],
+        "response_ho": [
+          0.03182736784219742,
+          0.06373129785060883,
+          0.1280209869146347,
+          0.257407009601593,
+          0.5151423215866089,
+          1.0170999765396118,
+          1.9609934091567993
+        ],
+        "r_eff": 1.615211749711596,
+        "beta": 0.6191138717128295,
+        "holdout_rmse": {
+          "proportional": 0.015218012466352517,
+          "affine": 0.012844240694292035,
+          "quadratic": 0.0018366690740342876,
+          "zero": 0.8646288655400108,
+          "mean": 0.6521100340415518
+        },
+        "holdout_nrmse_proportional": 0.007888389148703046,
+        "beats_zero_and_mean": true,
+        "within_5pct_of_flexible": false,
+        "prereg_nrmse_max": 0.2,
+        "dose_claim_supported": false,
+        "honest_note": "proportional vs flexible tells if response saturates; not CAS-specific (B1)."
+      }
+    },
+    "phase6_learning_benefit.json": {
+      "sha256": "b3ed93af1e4ecd38a1e7871c0a1993f7aaf08244e6bae80206131bb6ad887ee6",
+      "content": {
+        "schema": "eta_epsilon_weight_learning.phase6_learning_benefit.v0.1",
+        "status": "V0_2_generic_learning_benefit",
+        "steps": 50,
+        "threshold": 0.9,
+        "N_sweep": [
+          8,
+          32
+        ],
+        "seeds": [
+          0,
+          1
+        ],
+        "results": {
+          "A_ordinary": {
+            "8": {
+              "passive_acc_mean": 0.83,
+              "passive_acc_seeds": [
+                0.84,
+                0.82
+              ],
+              "active_acc_mean": 0.025
+            },
+            "32": {
+              "passive_acc_mean": 0.635,
+              "passive_acc_seeds": [
+                0.27,
+                1.0
+              ],
+              "active_acc_mean": 0.00625
+            }
+          },
+          "C_guided": {
+            "8": {
+              "passive_acc_mean": 0.9099999999999999,
+              "passive_acc_seeds": [
+                1.0,
+                0.82
+              ],
+              "active_acc_mean": 0.0
+            },
+            "32": {
+              "passive_acc_mean": 1.0,
+              "passive_acc_seeds": [
+                1.0,
+                1.0
+              ],
+              "active_acc_mean": 0.00625
+            }
+          }
+        },
+        "examples_to_threshold": {
+          "A_ordinary": null,
+          "C_guided": 8
+        },
+        "4a_sample_efficiency": "C_better",
+        "retention_active_acc_at_maxN": {
+          "A": 0.00625,
+          "C": 0.00625
+        },
+        "honest_note": "generic (B1); small sweep; not CAS-specific."
+      }
+    },
+    "phase7_consolidation.json": {
+      "sha256": "762cac09847cd0e19d994b6bee9ffc09e1385b8c52d7cf148853a7269b7a85b1",
+      "content": {
+        "schema": "eta_epsilon_weight_learning.phase7_consolidation.v0.1",
+        "status": "V0_2_generic_consolidation",
+        "N": 16,
+        "steps": 50,
+        "baseline_active": 0.9933,
+        "results": {
+          "FORGET": {
+            "passive": 0.995,
+            "active": 0.0
+          },
+          "REPLAY": {
+            "passive": 0.985,
+            "active": 0.94375
+          },
+          "EWC": {
+            "passive": 0.99,
+            "active": 0.58125
+          }
+        },
+        "stability_plasticity_winner": "REPLAY",
+        "forgetting_fixed": true,
+        "honest_note": "generic (B1); small sweep; REPLAY = interleave old-skill examples."
+      }
+    }
+  }
+}
