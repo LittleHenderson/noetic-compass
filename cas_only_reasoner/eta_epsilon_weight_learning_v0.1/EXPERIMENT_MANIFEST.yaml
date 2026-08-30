@@ -1,0 +1,95 @@
+schema: eta_epsilon_weight_learning.v0.1
+status: PHASE_0_PLAN_CANDIDATE_NOT_HASH_LOCKED
+no_model_run: true
+no_gpu_run: true
+
+research_question: >
+  Can a CAS-aligned local readout, a right-inverse neural intervention,
+  and a profile-specific CAS-Ohm dose controller reduce the examples,
+  optimizer steps, or collateral forgetting needed to teach one narrow
+  skill to a small Transformer, compared with matched ordinary LoRA and
+  consolidation baselines?
+
+task:
+  name: active_passive_semantic_role_binding
+  gold_output: {verb: lemma, agent: entity, patient: entity}
+  truth_authority: exact_match_to_frozen_gold_role_record
+
+claims:
+  - id: 1_readout
+    status: PROPOSED
+  - id: 2_realization
+    status: PROPOSED
+  - id: 3_dose
+    status: PROPOSED
+  - id: 4_learning
+    status: PROPOSED
+
+coordinate:
+  space: open_40_state_simplex
+  independent_directions: 39
+  tangent_chart: OPEN            # CLR / ILR / orthonormal basis
+  controlled_directions_v0_1: 1
+
+model:
+  policy: smallest_existing_local_open_weight_checkpoint
+  checkpoint: OPEN
+  checkpoint_hash: OPEN
+  tokenizer_hash: OPEN
+  base_frozen: true
+  escalation: only_if_plain_lora_fails_capacity_floor_applies_to_all
+
+intervention_space:
+  type: fixed_low_rank_lora
+  dose_definition: effective_delta_W_frobenius_norm_or_fixed_basis_coeffs
+  do_not_use_raw_lora_factor_norms_as_dose: true
+  locations_rank_basis: OPEN
+
+realizer:
+  formula: delta_c_pred = J_c^T (J_c J_c^T + lambda I)^-1 delta_xi_target
+  report: [shape, numerical_rank, singular_values, condition_number,
+           lambda, reachable_fraction, predicted_update_norm,
+           effective_delta_W_norm]
+  unreachable_target: return_TARGET_PARTIALLY_UNREACHABLE
+
+cas_ohm:
+  response: y_hat = a / r_eff
+  fit_split: calibration_only
+  test_split: disjoint_held_out
+  reject_circular: [r_equals_a_over_y_same_sample]
+  compare_against: [zero_response, mean_response, zero_intercept_linear,
+                    affine_linear, local_quadratic]
+
+splits: [readout_fit, controller_calibration, task_train, validation,
+         protected]
+split_axes: [noun, verb, voice, surface_construction]
+protected_read: once_after_freeze
+
+controls: [zero, random_same_norm, opposite_sign, orthogonal, wrong_layer,
+           wrong_token, shuffled_cas_labels, matched_non_cas_taxonomy,
+           ordinary_lora, ordinary_matched_norm_gradient,
+           consolidation_baseline, no_consolidation_ablation]
+
+metrics: [exact_role_accuracy, examples_to_threshold,
+          optimizer_steps_to_threshold, wall_clock_with_overhead,
+          backward_compute, old_task_retention, held_out_transfer,
+          target_cas_movement, off_target_cas_movement, bridge_error,
+          dose_response_error, reachable_fraction, false_freeze_count,
+          reopened_group_count]
+primary_metric: examples_to_threshold
+
+falsifiers_count: 10
+
+claim_vocabulary_permitted: [PROPOSED, SOFTWARE_VERIFIED,
+  EMPIRICALLY_SUPPORTED, REFUTED, INCONCLUSIVE, REPLICATION_OPEN]
+claim_vocabulary_forbidden_bare: [CONFIRMED, PROVEN, VALIDATED,
+  DISCOVERED, FAST_LEARNING]
+
+compute_boundary:
+  paid_api: forbidden
+  cloud_gpu: forbidden_in_phase_0
+  phase_0_gpu: none
+
+unresolved_decisions: [model_checkpoint_hash, tokenizer_hash,
+  target_layers, lora_locations_rank_basis, tangent_chart,
+  target_direction, numeric_thresholds, seed_set]
