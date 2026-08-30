@@ -1,0 +1,26 @@
+{
+  "schema": "eta_epsilon_weight_learning.phase2_dev_smoke.v0.1",
+  "status": "DEV_SMOKE_NON_CLAIM_BEARING",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "device": "cuda",
+  "label": "agent_is_surface_first (active=1, passive=0)",
+  "n_train": 864,
+  "n_test": 600,
+  "test_uses_held_out_vocab": true,
+  "majority_baseline": 0.505,
+  "bag_of_words_surface_baseline_acc": 1.0,
+  "probe_acc_by_layer": {
+    "4": 1.0,
+    "8": 1.0,
+    "12": 1.0,
+    "16": 1.0,
+    "20": 1.0
+  },
+  "best_probe_layer": 4,
+  "best_probe_acc": 1.0,
+  "probe_minus_surface": 0.0,
+  "prereg_margin_required": 0.1,
+  "beats_surface_by_margin": false,
+  "honest_reading": "If probe ~ surface (both near ceiling), the role label is surface-decodable and the readout does NOT beat surface -> the same Gate-2 surface-decodability wall. This dev smoke does not license claim 1_readout under any outcome."
+}

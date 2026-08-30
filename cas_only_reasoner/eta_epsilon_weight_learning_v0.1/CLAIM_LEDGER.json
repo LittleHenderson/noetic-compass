@@ -1,6 +1,6 @@
 {
   "schema": "eta_epsilon_weight_learning.claim_ledger.v0.1",
-  "phase": "1",
+  "phase": "2",
   "note": "All claims PROPOSED. No model has run. No empirical evidence exists. Claim 4 split into 4a-4d; claim 3 corrected (proportional model is zero-intercept linear).",
   "permitted_status": [
     "PROPOSED",
@@ -28,9 +28,14 @@
       "id": "1_readout",
       "text": "A CAS probe reads a CAS coordinate that generalizes to a held-out split and beats surface, metadata, shuffled-label, matched-non-CAS, and random-same-rank controls (AUROC>=0.75, margin>=0.10, bootstrap CI excludes zero).",
       "status": "PROPOSED",
-      "evidence_tier": null,
+      "evidence_tier": "dev_smoke_negative_surface_decodable",
       "phase_gate": 2,
-      "artifacts": []
+      "artifacts": [
+        "reports/phase2_dev_smoke.json",
+        "src/data_gen.py",
+        "src/phase2_readout_smoke.py"
+      ],
+      "note": "DEV SMOKE (dev seed, non-protocol): preregistered readout label 'agent_is_surface_first' is SURFACE-DECODABLE. Bag-of-words surface baseline = 1.000; best hidden-state probe = 1.000 (layer 4); probe-minus-surface = 0.000, does NOT meet the >=0.10 margin. This is the Gate-2 surface-decodability wall. Under the frozen prereg this is a Falsifier-1 outcome for this label: CAS-specificity-beyond-surface NOT established. Status stays PROPOSED because the full protected protocol was not run; but a claim-bearing Phase 2 is BLOCKED pending a v0.2 owner decision. Per the NEGATIVE-RESULT LAW, the label/metric may NOT be improvised mid-flight to rescue it."
     },
     {
       "id": "2_realization",

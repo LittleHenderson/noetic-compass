@@ -57,3 +57,32 @@ Reason: owner review found real defects. Corrections applied:
    `AWAITING_OWNER_APPROVAL`.
 
 State: no model run, no GPU, no training code, protected split NOT read.
+
+### 2026-08-30 — Phase 2 dev smoke (negative) + BLOCKER
+
+Ran a DEV SMOKE (not the protected protocol) on the real
+`Qwen/Qwen2.5-0.5B-Instruct`: does a linear readout of hidden states beat
+a surface baseline at the role-binding label? Result (reports/phase2_dev_smoke.json):
+- majority 0.505; bag-of-words SURFACE baseline **1.000**; best hidden-state
+  probe **1.000** (layer 4); probe-minus-surface **0.000** (need >= 0.10).
+
+Finding: the preregistered readout label `agent_is_surface_first` is
+SURFACE-DECODABLE. Both surface and probe sit at ceiling, so the readout
+does NOT beat surface. This is the same Gate-2 surface-decodability wall
+recorded elsewhere in this project.
+
+BLOCKER (needs a v0.2 owner decision; NOT improvised here, per the
+negative-result law):
+1. Readout target must be SURFACE-RESISTANT (e.g. surface-matched minimal
+   pairs, or a behavioral-correctness label on genuinely ambiguous items).
+   The current label cannot satisfy the "beat surface by >= 0.10" gate.
+2. CAS-40 labeling for this task is UNDEFINED. No CAS-40 labeler exists,
+   so the "40-state CAS simplex readout" as preregistered cannot be built
+   without a labeling decision. The Fisher-Rao 40-chart and the
+   matched-non-CAS-taxonomy control are deferred until this is decided.
+
+Consequence: Phases 3-8 build on a readout that beats surface. Since Phase
+2 did not clear that bar, those phases cannot honestly proceed to
+claim-bearing results until v0.2 resolves items 1-2. Recording and
+stopping the auto-advance, exactly as the negative-result law requires.
+State: no protected split read; no steering; no weight change.
