@@ -1,8 +1,29 @@
 # R&D Report: the Attention × CAS-Simplex × CAS-Ohm Coupling Architecture
 
+## Designation: STATIC COUPLING BASELINE v1 (owner decision, 2026-08-30)
+
 Status: **R&D ANALYSIS — documentation only.** No model, no GPU, no neural run, no claim
 promotion. The architecture under review keeps its own declared status: PROPOSED, not
 established. This report exists so the owner can decide what to build.
+
+> **Scope note (append-only, 2026-08-30).** The owner designated this report the
+> **Static Coupling Baseline v1**. Its architectural scope — Bias treated as static — is
+> superseded by `RECURSIVE_CJT_BIAS_CONTROLLER_v0_1.md` (RPM-gated, ASOM-regulated,
+> CAS-Ohm-routed recursive Bias). Nothing in this report is erased: it remains the clean
+> static control the recursive design must beat. Four owner calibrations on this
+> report's conclusions are recorded and accepted:
+> 1. The `I_total := 1` verdict (§5.2) governs the fixed dense-forward-pass experiment
+>    ONLY. It is not a permanent ban: in an adaptive architecture, compute genuinely
+>    varies (active experts, RPM branches, reasoning ticks, retrievals, tool calls), and
+>    total flow gets a measured referent (`B_t`) — see the recursive spec, Ch. 7.
+> 2. The construction-gold restriction on `p_i` (§5.1) binds the FIRST claim-bearing
+>    experiment, not all future ones. A later activation-decoded `p_i` is admissible
+>    only after beating surface, matched-semantic, shuffled, and random controls.
+> 3. The 28-cell Worlds↔Registers unification (§4) is held as a declared, frozen,
+>    VERSIONED translation key — not asserted as ontological identity. The genuine
+>    naming hazard (Drives×Domains vs Drives×Registers) stands as found.
+> 4. The 15-agent process (§10) is internal review, not external scientific
+>    verification. Model agreement changes audit priority only; it creates no authority.
 
 How this was produced: a 15-agent workflow (run `wf_c7e419cf-c50`, 2026-08-30) — two
 independent math verifiers (one instructed to refute), three literature lanes with live
