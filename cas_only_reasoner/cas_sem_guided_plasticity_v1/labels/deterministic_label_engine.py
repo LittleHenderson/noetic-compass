@@ -1,12 +1,21 @@
-"""deterministic_label_engine.py -- the ONLY issuer of RESOURCE_GOLD labels.
+"""deterministic_label_engine.py -- issuer of RESOURCE_RULE_DERIVED candidate labels.
 
-Given a frozen sense record and the owner-approved CAS_MAPPING_RULES_v1.yaml, this program
-re-derives rule firing from the frozen gloss (and frame, if present) and emits exactly one of:
+PHASE 0C: this engine is a deterministic CANDIDATE FILTER, not a label authority.
+Determinism freezes a judgment; it does not validate the judgment. Keyword matching over a
+gloss cannot reliably handle negation, irony, scope, argument roles, polysemy, metaphor, or
+whether the gloss describes doing an act versus refusing it. Therefore the engine's accept
+outcome is RESOURCE_RULE_DERIVED -- NEVER claim-bearing, NEVER gold. Only the owner-gated
+promotion program (owner_gated_promotion.py: owner audit receipt + signed phase approval +
+matching digests) can turn RESOURCE_RULE_DERIVED into RESOURCE_GOLD.
 
-    RESOURCE_GOLD(class)     -- exactly one rule fired
-    ABSTAIN(no_rule)         -- zero rules fired (incl. include matched but exclude blocked)
-    ABSTAIN(multiple_rules)  -- two or more rules fired
-    ABSTAIN(source_conflict) -- caller flagged a source disagreement for this sense
+Given a frozen sense record and the CANDIDATE rule table CAS_MAPPING_RULES_v1_CANDIDATE.yaml
+(status AWAITING_OWNER_APPROVAL), this program re-derives rule firing from the frozen gloss
+(and frame, if present) and emits exactly one of:
+
+    RESOURCE_RULE_DERIVED(class)  -- exactly one rule fired (candidate only)
+    ABSTAIN(no_rule)              -- zero rules fired (incl. include matched but exclude blocked)
+    ABSTAIN(multiple_rules)       -- two or more rules fired
+    ABSTAIN(source_conflict)      -- caller flagged a source disagreement for this sense
 
 A model's proposed rule id (if any) is accepted only as advisory `evidence` and is NEVER
 used to decide firing. The engine always recomputes firing from the frozen text. Model
@@ -92,7 +101,7 @@ def label_sense(sense: dict, rule_table: RuleTable, frozen_resource_digest: str,
 
     if len(fired) == 1:
         rule_id, cas_label = fired[0]
-        return LC.make_packet(packet_id, "RESOURCE_GOLD", cas_label, provenance, sense=sense_view,
+        return LC.make_packet(packet_id, "RESOURCE_RULE_DERIVED", cas_label, provenance, sense=sense_view,
                               fired_rules=fired_ids, blocked_rules=blocked,
                               abstain_reason=None, evidence=evidence)
     if len(fired) == 0:
@@ -120,7 +129,7 @@ def label_resource(resource: dict, rule_table: RuleTable, frozen_resource_digest
     labels_by_id = defaultdict(set)
     for p in first:
         sid = p["sense"]["sense_id"]
-        if p["authority"] == "RESOURCE_GOLD":
+        if p["authority"] == "RESOURCE_RULE_DERIVED":
             labels_by_id[sid].add(p["cas_label"])
     conflict_ids = {sid for sid, labs in labels_by_id.items() if len(labs) > 1}
 
@@ -137,15 +146,15 @@ def label_resource(resource: dict, rule_table: RuleTable, frozen_resource_digest
 
 
 def load_rule_table(path=None) -> RuleTable:
-    return RuleTable(path or (HERE / "CAS_MAPPING_RULES_v1.yaml"))
+    return RuleTable(path or (HERE / "CAS_MAPPING_RULES_v1_CANDIDATE.yaml"))
 
 
 if __name__ == "__main__":
     import argparse
 
-    ap = argparse.ArgumentParser(description="Deterministic CAS label engine (RESOURCE_GOLD/ABSTAIN).")
+    ap = argparse.ArgumentParser(description="Deterministic CAS candidate-label engine (RESOURCE_RULE_DERIVED/ABSTAIN; never gold).")
     ap.add_argument("--resource", default=str(HERE / "dev_resource" / "DEV_SENSE_RESOURCE_v1.yaml"))
-    ap.add_argument("--rules", default=str(HERE / "CAS_MAPPING_RULES_v1.yaml"))
+    ap.add_argument("--rules", default=str(HERE / "CAS_MAPPING_RULES_v1_CANDIDATE.yaml"))
     ap.add_argument("--out", default=str(HERE / "reports" / "engine_packets.json"))
     args = ap.parse_args()
 

@@ -2,16 +2,18 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "cas_sem_guided_plasticity_v1/labels/LABEL_PACKET.schema.json",
   "title": "LABEL_PACKET",
-  "description": "One record emitted by the label pipeline. The label AUTHORITY, not any model, decides whether the packet is claim-bearing. claim_bearing MUST equal (authority in CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED). MODEL_PROPOSED, WEAK_LABEL, and ABSTAIN are never claim-bearing.",
+  "description": "One record emitted by the label pipeline (Phase 0C authority model). claim_bearing is DERIVED, never free: it is true ONLY when authority is a gold authority (CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED) AND audit_state == OWNER_APPROVED AND the required approval digests are present AND phase_approval_valid is true. Candidate authorities (RESOURCE_RULE_DERIVED, CONSTRUCTION_CANDIDATE), fixtures (CONTROLLED_TEMPLATE_FIXTURE), MODEL_PROPOSED, WEAK_LABEL, and ABSTAIN are NEVER claim-bearing. Gold packets exist only as output of owner_gated_promotion.py; schema-level if/then blocks below encode the coupling so external validators enforce it too.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["packet_id", "authority", "cas_label", "claim_bearing", "provenance"],
+  "required": ["packet_id", "authority", "cas_label", "claim_bearing", "audit_state", "provenance"],
   "properties": {
     "packet_id": {"type": "string", "description": "Stable id for this packet."},
     "authority": {
       "type": "string",
-      "enum": ["CONSTRUCTION_GOLD", "RESOURCE_GOLD", "MODEL_PROPOSED", "WEAK_LABEL", "ABSTAIN", "OWNER_CORRECTED"],
-      "description": "Who/what established the label. Only CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED are claim-bearing."
+      "enum": ["CONSTRUCTION_GOLD", "RESOURCE_GOLD", "OWNER_CORRECTED",
+               "CONSTRUCTION_CANDIDATE", "RESOURCE_RULE_DERIVED",
+               "CONTROLLED_TEMPLATE_FIXTURE", "MODEL_PROPOSED", "WEAK_LABEL", "ABSTAIN"],
+      "description": "Who/what established the label. Gold (first three) only via owner-gated promotion."
     },
     "cas_label": {
       "type": ["string", "null"],
@@ -20,11 +22,21 @@
     },
     "claim_bearing": {
       "type": "boolean",
-      "description": "Derived, never free: true iff authority in {CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED}."
+      "description": "Derived, never free. See the top-level description for the four required conditions."
     },
+    "audit_state": {
+      "type": "string",
+      "enum": ["UNAUDITED", "GENERATOR_APPROVED", "OWNER_APPROVED"],
+      "description": "Audit progress. Only OWNER_APPROVED can support claim_bearing."
+    },
+    "approval_manifest_digest": {"type": ["string", "null"], "description": "sha256 of the approved source manifest; set by promotion."},
+    "owner_approval_digest": {"type": ["string", "null"], "description": "sha256 of the owner-signed approval record; set by promotion."},
+    "resource_manifest_digest": {"type": ["string", "null"], "description": "Required non-null for RESOURCE_GOLD."},
+    "generator_manifest_digest": {"type": ["string", "null"], "description": "Required non-null for CONSTRUCTION_GOLD."},
+    "phase_approval_valid": {"type": "boolean", "description": "True only after the promotion program verified the owner-signed phase approval."},
     "sense": {
       "type": ["object", "null"],
-      "description": "Present for RESOURCE_GOLD / WEAK_LABEL / ABSTAIN over a frozen sense.",
+      "description": "Present for RESOURCE_RULE_DERIVED / RESOURCE_GOLD / WEAK_LABEL / ABSTAIN over a frozen sense.",
       "additionalProperties": true,
       "properties": {
         "sense_id": {"type": "string"},
@@ -37,7 +49,7 @@
     },
     "construction": {
       "type": ["object", "null"],
-      "description": "Present for CONSTRUCTION_GOLD: the label existed BEFORE surface realization.",
+      "description": "Present for CONSTRUCTION_CANDIDATE / CONSTRUCTION_GOLD / CONTROLLED_TEMPLATE_FIXTURE: the label existed BEFORE surface realization.",
       "additionalProperties": true,
       "properties": {
         "construction_seed": {"type": ["integer", "string"]},
@@ -54,15 +66,23 @@
     },
     "evidence": {
       "type": ["object", "null"],
-      "description": "Model-assembled, NON-authoritative. Advisory only. Never sets the label.",
-      "additionalProperties": true,
+      "description": "Model-assembled, NON-authoritative. Advisory only. Never sets the label. Phase 0C schema: source_frame_id and proposed_cas_class are SEPARATE fields (the old frame_or_class overload is retired); sense_id and the model identity receipt are required inside the block.",
+      "additionalProperties": false,
+      "required": ["sense_id", "source_locator", "exact_gloss", "source_frame_id",
+                   "proposed_cas_class", "proposed_rule_id", "model_id", "model_revision",
+                   "model_role", "evidence_timestamp", "resource_digest"],
       "properties": {
+        "sense_id": {"type": "string"},
+        "source_locator": {"type": "string", "description": "\"<resource_id>#<sense_id>\"; must resolve to the cited sense."},
+        "exact_gloss": {"type": "string", "description": "Byte-identical quote of the frozen gloss."},
+        "source_frame_id": {"type": ["string", "null"], "description": "The resource's frame id; null only if the record has none."},
+        "proposed_cas_class": {"type": "string", "enum": ["^2", "^3", "^6", "^8", "NONE"], "description": "Advisory only."},
+        "proposed_rule_id": {"type": "string", "description": "A rule id existing in the rule table, or \"NONE\". Advisory only."},
         "model_id": {"type": "string"},
+        "model_revision": {"type": "string"},
         "model_role": {"type": "string", "enum": ["source_locator", "adversarial_critic", "counterexample_generator"]},
-        "source_locator": {"type": "string"},
-        "exact_gloss": {"type": "string"},
-        "frame_or_class": {"type": ["string", "null"]},
-        "proposed_rule_id": {"type": ["string", "null"]}
+        "evidence_timestamp": {"type": "string"},
+        "resource_digest": {"type": "string"}
       }
     },
     "surface": {
@@ -82,8 +102,33 @@
         "rule_table_digest": {"type": "string"},
         "engine_version": {"type": "string"},
         "created_by": {"type": "string"},
+        "preservation_check": {"type": ["string", "null"], "description": "\"shared_verb_lookup\" marks the retired circular fixture generator; promotion refuses it."},
         "seed": {"type": ["integer", "string", "null"]}
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"authority": {"enum": ["CONSTRUCTION_CANDIDATE", "RESOURCE_RULE_DERIVED", "CONTROLLED_TEMPLATE_FIXTURE", "MODEL_PROPOSED", "WEAK_LABEL", "ABSTAIN"]}}},
+      "then": {"properties": {"claim_bearing": {"const": false}}}
+    },
+    {
+      "if": {"properties": {"claim_bearing": {"const": true}}},
+      "then": {
+        "required": ["authority", "audit_state", "phase_approval_valid",
+                     "approval_manifest_digest", "owner_approval_digest"],
+        "properties": {
+          "authority": {"enum": ["CONSTRUCTION_GOLD", "RESOURCE_GOLD", "OWNER_CORRECTED"]},
+          "audit_state": {"const": "OWNER_APPROVED"},
+          "phase_approval_valid": {"const": true},
+          "approval_manifest_digest": {"type": "string"},
+          "owner_approval_digest": {"type": "string"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"authority": {"const": "ABSTAIN"}}},
+      "then": {"properties": {"cas_label": {"const": null}}}
+    }
+  ]
 }

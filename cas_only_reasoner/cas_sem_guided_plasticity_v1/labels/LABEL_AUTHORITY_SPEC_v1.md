@@ -1,6 +1,12 @@
 # Label Authority Spec v1
 
-Status: Part of LABEL PHASE 0B. Documentation only; not claim-bearing.
+Status: Part of LABEL PHASE 0B, **amended by PHASE 0C (owner directive 2026-08-30)**.
+Documentation only; not claim-bearing.
+
+> PHASE 0C REPAIR: the Phase 0B version of this spec said "claim-bearing after audit" but
+> the code made the engine's output claim-bearing IMMEDIATELY. That confusion of
+> deterministic derivation with audited authority is fixed. The engine now emits
+> CANDIDATE labels only; gold exists only through the owner-gated promotion program.
 
 ## 1. What this document is
 
@@ -31,41 +37,66 @@ directly write final claim-bearing labels.
 
 A claim-bearing label is EITHER:
 - (A) CONSTRUCTION_GOLD, or
-- (B) RESOURCE_GOLD (deterministic).
+- (B) RESOURCE_GOLD
 
-The change is narrow. The old rule required a human to hand-label every sense.
-The new rule allows AI assistance in gathering evidence, but keeps the act of
-issuing a claim-bearing label in the hands of a deterministic engine that the
-owner approves and audits. This is a single-owner, AI-assisted label authority.
+— and (Phase 0C) BOTH exist only as the output of the owner-gated promotion program.
+A deterministic pipeline produces the CANDIDATE (CONSTRUCTION_CANDIDATE or
+RESOURCE_RULE_DERIVED); the owner's audit and signed approval produce the gold.
 
-## 3. Label authority hierarchy (6 classes)
+The change is narrow. The old rule required a human to hand-label every sense. The new
+rule allows AI assistance in gathering evidence, keeps candidate issuance deterministic,
+and keeps claim-bearing authority behind the owner's audit and signature. This is a
+single-owner, AI-assisted label authority.
 
-There are six authority classes. Only three of them are claim-bearing.
+## 3. Label authority hierarchy (Phase 0C: candidates before gold)
+
+The authority flow is now two-stage. Deterministic pipelines emit CANDIDATES. Gold exists
+only as the output of the promotion program.
+
+```
+RESOURCE_RULE_DERIVED   --owner audit + signed promotion-->   RESOURCE_GOLD
+CONSTRUCTION_CANDIDATE  --generator audit + signed promotion--> CONSTRUCTION_GOLD
+```
 
 | Label | How it is created | Claim-bearing? |
 |---|---|---|
-| CONSTRUCTION_GOLD | The CAS state/trace exists BEFORE the sentence is generated. We build the sentence from a known CAS operation, then check the parser recovers it. | Yes |
-| RESOURCE_GOLD | A frozen external sense id, mapped by an owner-approved deterministic rule. | Yes (after audit) |
+| CONSTRUCTION_GOLD | Only via owner-gated promotion of a CONSTRUCTION_CANDIDATE (generator audit + owner-signed approval + matching digests). | Yes, as promoted |
+| RESOURCE_GOLD | Only via owner-gated promotion of a RESOURCE_RULE_DERIVED item (owner audit + owner-signed approval + matching digests). | Yes, as promoted |
+| OWNER_CORRECTED | The owner corrects a verified pipeline error, with provenance. Currently defined but NOT yet creatable by any implemented program (fail-closed: make_packet refuses it and PROMOTION_MAP has no entry); a correction path must be added to owner_gated_promotion.py before use. | Yes, as promoted (once a path exists) |
+| CONSTRUCTION_CANDIDATE | A CAS-trace generator's output (label known before the sentence; see `CAS_TRACE_GOLD_SPEC_v1.md`), before audit. | Never |
+| RESOURCE_RULE_DERIVED | The deterministic keyword engine's output (exactly one rule fired), before audit. A deterministic filter, not semantic ground truth. | Never |
+| CONTROLLED_TEMPLATE_FIXTURE | The retired Phase 0B template generator (its checker shared the generator's verb table — circular). Pipeline tests only; promotion refuses it. | Never |
 | MODEL_PROPOSED | One or more models suggest a label. | Never |
-| WEAK_LABEL | Models plus heuristics agree, but no exact rule establishes it. | No. Training only; never used in protected evaluation. |
-| ABSTAIN | Ambiguous, conflicting, unsupported, or multi-label. The item is excluded; cas_label = null. | No |
-| OWNER_CORRECTED | The owner corrects a verified pipeline error, with provenance recorded. | Yes |
+| WEAK_LABEL | Models plus heuristics agree, but no exact rule establishes it. Training only; never protected evaluation. | Never |
+| ABSTAIN | Ambiguous, conflicting, unsupported, or multi-label. Excluded; cas_label = null. | Never |
 
 ## 4. The enforced invariant (derived in code)
 
-There is one hard rule, and it is computed in code, in
-`label_common.make_packet`:
+There is one hard rule, computed in `label_common.derive_claim_bearing` and enforced by
+`make_packet`, the ingest guard `validate_packet`/`load_packets`, and the promotion
+program. FOUR conditions, all required:
 
 ```
-claim_bearing == (authority in {CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED})
+claim_bearing == (
+    authority in {CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED}
+    AND audit_state == OWNER_APPROVED
+    AND the required approval digests are present
+        (approval_manifest_digest, owner_approval_digest, plus
+         resource_manifest_digest for RESOURCE_GOLD /
+         generator_manifest_digest for CONSTRUCTION_GOLD)
+    AND phase_approval_valid == True
+)
 ```
 
 Key points:
-- `claim_bearing` is DERIVED. It is never passed in by a caller. The engine
-  computes it from the authority class. This stops anyone hand-setting a flag.
-- A gold authority (CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED) requires
-  a non-null `cas_label`.
-- ABSTAIN requires a null `cas_label`.
+- `claim_bearing` is DERIVED. It is never passed in by a caller and never by a model.
+- `make_packet` REFUSES to construct gold authorities at all. Only
+  `owner_gated_promotion.py` creates them, and only after verifying an owner-signed
+  approval record, an audit receipt (sequential gate), and matching digests. No
+  deterministic labeling engine may promote its own output to gold.
+- A gold or candidate authority requires a non-null `cas_label`. ABSTAIN requires null.
+- Determinism freezes a judgment; it does not validate the judgment. A fired keyword rule
+  is a reproducible judgment, not semantic ground truth.
 
 ## 5. Model consensus grants NO authority
 
@@ -81,9 +112,10 @@ ambiguity, or criticize a candidate. None of that writes a claim-bearing label.
 
 ## 6. Deterministic firing mechanism
 
-The engine that issues RESOURCE_GOLD and ABSTAIN labels is
-`deterministic_label_engine.py`, driven by the frozen rule table
-`CAS_MAPPING_RULES_v1.yaml`.
+The engine that issues RESOURCE_RULE_DERIVED candidates and ABSTAIN labels is
+`deterministic_label_engine.py`, driven by the CANDIDATE rule table
+`CAS_MAPPING_RULES_v1_CANDIDATE.yaml` (status: AWAITING_OWNER_APPROVAL — the owner has
+not yet approved these rules).
 
 Step 1 — Normalize the gloss (plus the frame if one is present):
 - lowercase the text,
@@ -100,13 +132,19 @@ Step 2 — Test each rule. A rule fires for its class if and only if:
 - none of its exclude terms match.
 
 Step 3 — Decide across the 4 rules:
-- exactly one rule fires -> RESOURCE_GOLD for that class,
+- exactly one rule fires -> RESOURCE_RULE_DERIVED for that class (candidate, NOT claim-bearing),
 - zero rules fire -> ABSTAIN with reason `no_rule`,
 - two or more rules fire -> ABSTAIN with reason `multiple_rules`,
 - a caller-flagged source disagreement -> ABSTAIN with reason `source_conflict`.
 
 A model's proposed rule id is advisory "evidence" ONLY. The engine ALWAYS
 recomputes firing from the frozen text. It never trusts the model's answer.
+
+Honest limit of this mechanism: keyword matching over a gloss cannot reliably handle
+negation ("to refuse to analyze the issue" contains `analyze` but the central act is
+refusal), irony, scope, argument roles, polysemy, metaphor, or which event is central
+("to trigger a device" is generic physical causation, not `^8`'s one-Idea-triggers-
+another-Idea). That is WHY its output is a candidate and the owner audit exists.
 
 ## 7. The 4 CAS classes and rule ids
 
@@ -169,18 +207,24 @@ Every labeled item is stored as a LABEL_PACKET. The schema is in
 - `authority`
 - `cas_label`
 - `claim_bearing` (derived — see Section 4)
+- `audit_state` (`UNAUDITED` | `GENERATOR_APPROVED` | `OWNER_APPROVED`)
+- `approval_manifest_digest`, `owner_approval_digest`, `resource_manifest_digest`,
+  `generator_manifest_digest`, `phase_approval_valid` (set only by the promotion program)
 - `sense{ sense_id, lemma, pos, gloss, source, frame }`
 - `construction{ construction_seed, noetic, semantic_graph, template_id }`
 - `fired_rules[]`
 - `blocked_rules[]`
 - `abstain_reason` (one of: `no_rule` | `multiple_rules` | `source_conflict`
   | `unverifiable_source` | `ambiguous` | null)
-- `evidence{ model_id, model_role, source_locator, exact_gloss, frame_or_class,
-  proposed_rule_id }` (NON-authoritative)
+- `evidence{ sense_id, source_locator, exact_gloss, source_frame_id,
+  proposed_cas_class, proposed_rule_id, model_id, model_revision, model_role,
+  evidence_timestamp, resource_digest }` (NON-authoritative; Phase 0C schema —
+  `source_frame_id` and `proposed_cas_class` are SEPARATE fields; the old
+  `frame_or_class` overload is retired)
 - `surface{ sentence, realization_lane (deterministic | ai_paraphrase),
   roundtrip_ok }`
 - `provenance{ frozen_resource_digest, rule_table_digest, engine_version,
-  created_by, seed }`
+  created_by, preservation_check, seed }`
 
 ## 11. Source verifier
 
@@ -197,32 +241,36 @@ The source verifier is `label_source_verifier.py`. It rejects:
   gate),
 - a resource digest that does not equal the manifest-frozen digest.
 
-## 12. Construction gold
+## 12. Construction path (Phase 0C: the old generator is retired)
 
-The generator is `construction_gold_generator.py`. The flow:
+The Phase 0B generator `construction_gold_generator.py` is RETIRED from evaluation. Its
+round-trip checker used the same VERB_TO_CLASS table the generator selected verbs from —
+a circular check that proves the lookup table agrees with itself. Its output authority is
+now CONTROLLED_TEMPLATE_FIXTURE: pipeline/unit tests only, refused by the promotion
+program (`FIXTURE_NOT_PROMOTABLE`, also via its provenance marker
+`preservation_check = "shared_verb_lookup"`).
 
-1. The formal CAS operation is known FIRST.
-2. A deterministic template plus a frozen synonym table builds a sentence.
-3. A round-trip parser tries to recover the seed operation.
-4. The `roundtrip_ok` gate decides the outcome.
+The replacement Tier A design is `CAS_TRACE_GOLD_SPEC_v1.md`: formal CAS state or CNCM
+trace -> CAS-Sem graph -> surface realization -> an INDEPENDENTLY IMPLEMENTED preservation
+check that shares no verb-to-class lookup with the generator. Its output is
+CONSTRUCTION_CANDIDATE, promotable to CONSTRUCTION_GOLD only through the owner-gated
+promotion path. It is a specification only in this phase — not implemented, not run.
 
-Only round-trip-OK items become CONSTRUCTION_GOLD. A round-trip failure is
-EXCLUDED, never relabeled.
+## 13. Owner audit (Phase 0C: risk-based; the dev queue is a fixture)
 
-The primary claim-bearing set uses deterministic realizations. AI paraphrases
-are an OPTIONAL, harder transfer stratum. They must pass round-trip plus
-semantic-preservation, and they are never the primary set.
+The current 70-item queue built from the dev pilot is DEV_AUDIT_FIXTURE_ONLY — it mixes
+synthetic decoys (`adoredissect`, `dreadevoke`) with fixtures and must NOT consume owner
+time. The PRODUCTION audit (see `OWNER_AUDIT_PROTOCOL.md`) is risk-based:
 
-CLASS_OPS: ^2 attract, ^3 averse, ^6 decompose, ^8 trigger.
+- every mapping rule reviewed once,
+- 8 randomly selected real RESOURCE_RULE_DERIVED items per class (32 items),
+- ALL high-risk model disagreements,
+- 8 ABSTAIN boundary cases,
+- 8 HIDDEN DUPLICATES (the same item under a second blinded id) to measure
+  within-owner consistency — about 48 visible judgments plus high-risk items.
 
-## 13. Owner audit
-
-The queue builder is `owner_audit_queue.py`. The blinded queue holds:
-
-- up to 15 accepted items per class,
-- an abstain sample,
-- HIDDEN DUPLICATES (the same item under a second blinded id) to measure
-  within-owner consistency.
+Sequential gate: 0 major errors -> the rule table may proceed to the controlled pilot;
+1–2 -> repair the rule, regenerate, audit a fresh sample; 3+ -> reject the rule table.
 
 Two files:
 - `audit_queue.blinded.json` — the owner sees this. It carries NO label and an
@@ -294,36 +342,41 @@ protected evaluation items.
 - No model-written claim status.
 - Claude is NOT the research governor.
 
-## 18. Pilot result (development-only, not claim-bearing)
+## 18. Pilot result — SYNTHETIC_PIPELINE_FIXTURE_PASS (not claim-bearing)
 
-This is a development run. It proves nothing scientific. It only shows the
-pipeline runs and the numbers are internally consistent.
+This is a software-behavior fixture run. The 46 dev senses were authored by the same
+agent that wrote the keyword rules, specifically to exercise them; agreement between the
+fixtures and the rules validates the SOFTWARE, not the rules' semantics. Agreement with
+the author of synthetic fixtures is not an independent validity measure and is excluded
+from scientific reporting.
 
-- 46 dev senses -> 40 RESOURCE_GOLD + 6 ABSTAIN.
+- claim-bearing packet count: **0** (asserted by the pilot; enforced by the ingest guard).
+- 46 dev senses -> 40 RESOURCE_RULE_DERIVED (candidates) + 6 ABSTAIN.
 - coverage 0.8696, abstention 0.1304.
-- source-verification failure rate 0.0.
+- source-verification failure rate 0.0 (over the checks the verifier implements).
 - cross-class integrity OK.
-- 0 mismatch vs author intent.
-- per-rule 10/10/10/10.
-- 40 construction-gold.
-- 86 total packets.
-- owner audit queue: 70 items + 4 rules + 4 hidden duplicates.
-- tests: 19/19 pass.
-- rule table sha256:
-  `5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86`
+- 40 CONTROLLED_TEMPLATE_FIXTURE items (retired generator; not evaluation data).
+- 86 total packets, all non-claim-bearing.
+- dev audit queue: DEV_AUDIT_FIXTURE_ONLY — the owner is NOT asked to judge it.
+- tests: 45/45 pass.
+- rule table (CANDIDATE) sha256:
+  `f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07`
 - dev resource sha256:
-  `740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24`
+  `38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc`
 
 ## 19. Cross-references
 
-- `CAS_MAPPING_RULES_v1.yaml` — the frozen rule table the engine fires from.
-- `RESOURCE_GOLD_SPEC.md` — the RESOURCE_GOLD path in full.
-- `CONSTRUCTION_GOLD_SPEC.md` — the CONSTRUCTION_GOLD path in full.
+- `CAS_MAPPING_RULES_v1_CANDIDATE.yaml` — the CANDIDATE rule table (awaiting owner approval).
+- `owner_gated_promotion.py` — the ONLY path from candidate to gold.
+- `RESOURCE_GOLD_SPEC.md` — the RESOURCE_RULE_DERIVED -> RESOURCE_GOLD path in full.
+- `CONSTRUCTION_GOLD_SPEC.md` — the (retired) template path + pointer to the replacement.
+- `CAS_TRACE_GOLD_SPEC_v1.md` — the non-circular Tier A design (spec only).
 - `AI_LABELER_ROLE_PROMPTS.md` — the non-authoritative model roles.
-- `OWNER_AUDIT_PROTOCOL.md` — the blinded owner audit procedure.
-- `SCMPE_GENERATION_SPEC.md` — the control generation procedure.
+- `OWNER_AUDIT_PROTOCOL.md` — the blinded owner audit procedure (production, risk-based).
+- `SCMPE_GENERATION_SPEC.md` — the control generation procedure + exact parameters.
 - `LABEL_CLAIM_BOUNDARY.md` — what is and is not claim-bearing.
-- `LABEL_PACKET.schema.json` — the LABEL_PACKET field schema.
+- `LABEL_PACKET.schema.json` — the LABEL_PACKET field schema (Phase 0C).
+- `../PREREGISTRATION_v0_3B_CANDIDATE.md` — the append-only preregistration amendment.
 
 ## 20. Honest scope
 

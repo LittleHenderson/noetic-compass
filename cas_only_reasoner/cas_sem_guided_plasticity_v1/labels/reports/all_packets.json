@@ -1,9 +1,14 @@
 [
   {
     "packet_id": "pkt::dev.v.2.001",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.2.001",
       "lemma": "adore",
@@ -21,18 +26,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.2.002",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.2.002",
       "lemma": "cherish",
@@ -50,18 +61,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.2.003",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.2.003",
       "lemma": "crave",
@@ -79,18 +96,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.2.004",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.2.004",
       "lemma": "prefer",
@@ -108,18 +131,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.2.005",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.2.005",
       "lemma": "favor",
@@ -137,18 +166,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.2.006",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.2.006",
       "lemma": "embrace",
@@ -166,18 +201,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.2.007",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.2.007",
       "lemma": "relish",
@@ -195,18 +236,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.2.008",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.2.008",
       "lemma": "love",
@@ -224,18 +271,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.2.009",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.2.009",
       "lemma": "yearn",
@@ -253,18 +306,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.2.010",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.2.010",
       "lemma": "desire",
@@ -282,18 +341,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.3.001",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.3.001",
       "lemma": "detest",
@@ -311,18 +376,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.3.002",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.3.002",
       "lemma": "loathe",
@@ -340,18 +411,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.3.003",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.3.003",
       "lemma": "abhor",
@@ -369,18 +446,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.3.004",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.3.004",
       "lemma": "despise",
@@ -398,18 +481,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.3.005",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.3.005",
       "lemma": "dread",
@@ -427,18 +516,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.3.006",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.3.006",
       "lemma": "shun",
@@ -456,18 +551,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.3.007",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.3.007",
       "lemma": "recoil",
@@ -485,18 +586,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.3.008",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.3.008",
       "lemma": "avoid",
@@ -514,18 +621,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.3.009",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.3.009",
       "lemma": "flinch",
@@ -543,18 +656,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.3.010",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.3.010",
       "lemma": "hate",
@@ -572,18 +691,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.6.001",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.6.001",
       "lemma": "analyze",
@@ -601,18 +726,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.6.002",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.6.002",
       "lemma": "dissect",
@@ -630,18 +761,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.6.003",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.6.003",
       "lemma": "decompose",
@@ -659,18 +796,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.6.004",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.6.004",
       "lemma": "deconstruct",
@@ -688,18 +831,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.6.005",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.6.005",
       "lemma": "dismantle",
@@ -717,18 +866,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.6.006",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.6.006",
       "lemma": "disassemble",
@@ -746,18 +901,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.6.007",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.6.007",
       "lemma": "parse",
@@ -775,18 +936,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.6.008",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.6.008",
       "lemma": "breakdown",
@@ -804,18 +971,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.6.009",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.6.009",
       "lemma": "takeapart",
@@ -833,18 +1006,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.6.010",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.6.010",
       "lemma": "separate",
@@ -862,18 +1041,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.8.001",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.8.001",
       "lemma": "trigger",
@@ -891,18 +1076,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.8.002",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.8.002",
       "lemma": "remind",
@@ -920,18 +1111,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.8.003",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.8.003",
       "lemma": "evoke",
@@ -949,18 +1146,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.8.004",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.8.004",
       "lemma": "elicit",
@@ -978,18 +1181,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.8.005",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.8.005",
       "lemma": "prompt",
@@ -1007,18 +1216,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.8.006",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.8.006",
       "lemma": "provoke",
@@ -1036,18 +1251,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.8.007",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.8.007",
       "lemma": "conjure",
@@ -1065,18 +1286,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.8.008",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.8.008",
       "lemma": "bringtomind",
@@ -1094,18 +1321,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.8.009",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.8.009",
       "lemma": "calltomind",
@@ -1123,18 +1356,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.v.8.010",
-    "authority": "RESOURCE_GOLD",
+    "authority": "RESOURCE_RULE_DERIVED",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.v.8.010",
       "lemma": "spark",
@@ -1152,18 +1391,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.decoy.101",
     "authority": "ABSTAIN",
     "cas_label": null,
-    "claim_bearing": false,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.decoy.101",
       "lemma": "adoredissect",
@@ -1182,18 +1427,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.decoy.102",
     "authority": "ABSTAIN",
     "cas_label": null,
-    "claim_bearing": false,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.decoy.102",
       "lemma": "walk",
@@ -1209,18 +1460,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.decoy.103",
     "authority": "ABSTAIN",
     "cas_label": null,
-    "claim_bearing": false,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.decoy.103",
       "lemma": "gauge",
@@ -1236,18 +1493,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.decoy.104",
     "authority": "ABSTAIN",
     "cas_label": null,
-    "claim_bearing": false,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.decoy.104",
       "lemma": "interrogate",
@@ -1265,18 +1528,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.decoy.105",
     "authority": "ABSTAIN",
     "cas_label": null,
-    "claim_bearing": false,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.decoy.105",
       "lemma": "dreadevoke",
@@ -1295,18 +1564,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "pkt::dev.decoy.106",
     "authority": "ABSTAIN",
     "cas_label": null,
-    "claim_bearing": false,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": {
       "sense_id": "dev.decoy.106",
       "lemma": "utter",
@@ -1322,18 +1597,24 @@
     "evidence": null,
     "surface": null,
     "provenance": {
-      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-      "engine_version": "label_phase0b.v1",
+      "frozen_resource_digest": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "engine_version": "label_phase0c.v1",
       "created_by": "deterministic_label_engine",
       "seed": null
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::000",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:argument",
@@ -1357,16 +1638,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::001",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:device",
@@ -1390,16 +1678,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::002",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:memory",
@@ -1423,16 +1718,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::003",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:signal",
@@ -1456,16 +1758,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::004",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:picture",
@@ -1489,16 +1798,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::005",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:problem",
@@ -1522,16 +1838,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::006",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:cherished:argument",
@@ -1555,16 +1878,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::007",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:cherished:device",
@@ -1588,16 +1918,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::008",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:cherished:memory",
@@ -1621,16 +1958,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::009",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:cherished:signal",
@@ -1654,16 +1998,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::000",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:argument",
@@ -1687,16 +2038,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::001",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:device",
@@ -1720,16 +2078,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::002",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:memory",
@@ -1753,16 +2118,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::003",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:signal",
@@ -1786,16 +2158,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::004",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:picture",
@@ -1819,16 +2198,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::005",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:problem",
@@ -1852,16 +2238,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::006",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:loathed:argument",
@@ -1885,16 +2278,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::007",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:loathed:device",
@@ -1918,16 +2318,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::008",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:loathed:memory",
@@ -1951,16 +2358,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::009",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:loathed:signal",
@@ -1984,16 +2398,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::000",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:argument",
@@ -2017,16 +2438,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::001",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:device",
@@ -2050,16 +2478,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::002",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:memory",
@@ -2083,16 +2518,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::003",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:signal",
@@ -2116,16 +2558,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::004",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:picture",
@@ -2149,16 +2598,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::005",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:problem",
@@ -2182,16 +2638,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::006",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:decomposed:argument",
@@ -2215,16 +2678,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::007",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:decomposed:device",
@@ -2248,16 +2718,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::008",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:decomposed:memory",
@@ -2281,16 +2758,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::009",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:decomposed:signal",
@@ -2314,16 +2798,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::000",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:argument",
@@ -2347,16 +2838,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::001",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:device",
@@ -2380,16 +2878,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::002",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:memory",
@@ -2413,16 +2918,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::003",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:signal",
@@ -2446,16 +2958,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::004",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:picture",
@@ -2479,16 +2998,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::005",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:problem",
@@ -2512,16 +3038,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::006",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:evoked:argument",
@@ -2545,16 +3078,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::007",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:evoked:device",
@@ -2578,16 +3118,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::008",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:evoked:memory",
@@ -2611,16 +3158,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::009",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:evoked:signal",
@@ -2644,9 +3198,11 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   }
 ]

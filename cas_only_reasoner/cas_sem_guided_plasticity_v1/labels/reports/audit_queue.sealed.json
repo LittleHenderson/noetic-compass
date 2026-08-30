@@ -1,24 +1,24 @@
 {
   "q0000": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": 1
   },
   "q0001": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0002": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0003": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
@@ -36,37 +36,37 @@
     "dup_group": null
   },
   "q0006": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": 4
   },
   "q0007": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0008": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0009": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0010": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": 3
   },
   "q0011": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
@@ -78,37 +78,37 @@
     "dup_group": null
   },
   "q0013": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0014": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0015": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0016": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0017": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0018": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
@@ -120,217 +120,217 @@
     "dup_group": null
   },
   "q0020": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0021": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0022": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0023": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0024": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0025": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0026": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0027": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0028": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0029": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0030": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0031": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0032": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0033": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0034": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0035": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0036": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0037": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0038": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0039": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": 4
   },
   "q0040": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0041": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0042": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0043": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0044": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0045": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": 2
   },
   "q0046": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": 3
   },
   "q0047": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0048": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0049": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0050": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0051": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0052": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": 2
   },
   "q0053": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0054": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0055": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
@@ -342,19 +342,19 @@
     "dup_group": null
   },
   "q0057": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0058": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0059": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": null
@@ -366,55 +366,55 @@
     "dup_group": null
   },
   "q0061": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0062": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0063": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0064": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^2",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0065": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^3",
     "abstain_reason": null,
     "dup_group": 1
   },
   "q0066": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^6",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0067": {
-    "engine_authority": "RESOURCE_GOLD",
+    "engine_authority": "RESOURCE_RULE_DERIVED",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0068": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null
   },
   "q0069": {
-    "engine_authority": "CONSTRUCTION_GOLD",
+    "engine_authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "engine_label": "^8",
     "abstain_reason": null,
     "dup_group": null

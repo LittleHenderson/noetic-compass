@@ -1,19 +1,26 @@
-"""construction_gold_generator.py -- Tier A: labels known BY CONSTRUCTION.
+"""construction_gold_generator.py -- PIPELINE_FIXTURE_ONLY (retired from evaluation, Phase 0C).
 
-The strongest label authority: build the formal CAS record FIRST, then realize a sentence
-from it. The label is the construction seed. The sentence never gets to vote on the label.
+OWNER FINDING (2026-08-30): this generator is CIRCULAR. Each class selects verbs from its
+own list, and the round-trip checker uses the SAME VERB_TO_CLASS lookup to recover the
+class. The loop (class selects verb -> sentence contains verb -> same table reads class
+back -> round trip passes) proves the lookup table agrees with itself. It does NOT prove
+the sentence expresses the intended Noetic, that a Transformer represents it, that the
+class generalizes beyond the chosen verbs, or that the label is CAS-specific. Some ^8
+outputs ("The analyst triggered the device.") are generic physical causation, not one Idea
+bringing another Idea to Mind.
 
-Pipeline per item:
-    formal CAS op (class known)  ->  deterministic surface template + frozen synonym table
-    ->  sentence  ->  round-trip parser recovers the seed op  ->  roundtrip_ok gate
+Therefore this generator's output authority is CONTROLLED_TEMPLATE_FIXTURE:
+    - NEVER claim-bearing;
+    - REFUSED by owner_gated_promotion (FIXTURE_NOT_PROMOTABLE), both by authority and by
+      its provenance marker preservation_check = "shared_verb_lookup";
+    - permitted ONLY in unit tests and pipeline plumbing checks.
 
-Only items whose round-trip recovers the exact seed class are emitted as CONSTRUCTION_GOLD
-(claim-bearing). A round-trip failure is excluded, never relabeled.
+The real Tier A design (label known by construction from a formal CAS trace, with an
+INDEPENDENTLY IMPLEMENTED preservation check that shares no verb-to-class lookup with the
+generator) is specified in CAS_TRACE_GOLD_SPEC_v1.md and is NOT implemented here.
 
 Deterministic: no randomness -- examples are enumerated in a fixed order from frozen tables.
-CPU-only, no model calls. (An OPTIONAL ai_paraphrase lane is specified but disabled here;
-paraphrases would still have to pass the same round-trip + semantic-preservation checks and
-would form a separate, harder transfer stratum -- never the primary claim-bearing set.)
+CPU-only, no model calls.
 """
 from __future__ import annotations
 
@@ -72,12 +79,13 @@ def roundtrip_recover(sentence: str, template: str):
 
 def generate(n_per_class: int = 10, seed: int = 20260830) -> list[dict]:
     """Deterministically enumerate construction-gold items (fixed order, no RNG)."""
-    rule_digest = "n/a-construction"  # construction gold does not depend on the mapping rules
+    rule_digest = "n/a-construction"  # template fixtures do not depend on the mapping rules
     provenance_base = {
         "frozen_resource_digest": "construction",
         "rule_table_digest": rule_digest,
         "engine_version": LC.ENGINE_VERSION,
         "created_by": "construction_gold_generator",
+        "preservation_check": "shared_verb_lookup",  # the circularity marker: promotion refuses this
         "seed": seed,
     }
     packets = []
@@ -106,7 +114,7 @@ def generate(n_per_class: int = 10, seed: int = 20260830) -> list[dict]:
             }
             packet = LC.make_packet(
                 packet_id=f"cg::{cls}::{made:03d}",
-                authority="CONSTRUCTION_GOLD",
+                authority="CONTROLLED_TEMPLATE_FIXTURE",
                 cas_label=cls,
                 provenance=dict(provenance_base),
                 construction=construction,
@@ -124,11 +132,11 @@ def generate(n_per_class: int = 10, seed: int = 20260830) -> list[dict]:
 if __name__ == "__main__":
     import argparse
 
-    ap = argparse.ArgumentParser(description="Construction-gold (Tier A) generator.")
+    ap = argparse.ArgumentParser(description="CONTROLLED_TEMPLATE_FIXTURE generator (pipeline fixture only; retired from evaluation).")
     ap.add_argument("--n", type=int, default=10)
     ap.add_argument("--out", default=str(HERE / "reports" / "construction_gold.json"))
     args = ap.parse_args()
     packets = generate(args.n)
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     LC.write_json(args.out, packets)
-    print(f"generated {len(packets)} construction-gold items -> {args.out}")
+    print(f"generated {len(packets)} controlled-template FIXTURES (not evaluation data) -> {args.out}")

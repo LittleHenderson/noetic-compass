@@ -1,16 +1,18 @@
 {
-  "pilot_id": "LABEL_PHASE_0B_DEV_PILOT",
+  "pilot_id": "LABEL_PHASE_0C_DEV_PILOT",
+  "status": "SYNTHETIC_PIPELINE_FIXTURE_PASS",
   "claim_bearing": false,
-  "status": "DEVELOPMENT_ONLY",
+  "claim_bearing_packet_count": 0,
+  "scope_note": "Software-behavior fixture run ONLY. The dev senses were authored to exercise the candidate keyword rules; agreement with them is not semantic validation.",
   "digests": {
-    "rule_table": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
-    "dev_resource": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24"
+    "rule_table": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+    "dev_resource": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc"
   },
   "counts": {
     "resource_senses": 46,
-    "resource_accepted_resource_gold": 40,
+    "resource_rule_derived": 40,
     "resource_abstained": 6,
-    "construction_gold": 40,
+    "controlled_template_fixtures": 40,
     "all_packets": 86
   },
   "metrics": {
@@ -18,16 +20,16 @@
     "abstention_rate_resource": 0.1304,
     "source_verification_failure_rate": 0.0,
     "cross_class_integrity_ok": true,
-    "model_committee_disagreement_rate": "not_exercised_in_dev_pilot (no live model committee; engine is authority)",
-    "owner_audit_disagreement_rate": "pending_owner_judgment",
-    "duplicate_item_consistency": "pending_owner_judgment"
+    "model_committee_disagreement_rate": "not_exercised_in_dev_pilot (no live model committee; engine emits candidates only)",
+    "owner_audit_disagreement_rate": "not_applicable (queue is DEV_AUDIT_FIXTURE_ONLY; owner not asked to judge it)",
+    "duplicate_item_consistency": "not_applicable (queue is DEV_AUDIT_FIXTURE_ONLY)"
   },
-  "self_consistency_vs_author_intent": {
-    "note": "compares engine output to the resource's expected_* annotations; a sanity check only, NOT label authority",
+  "development_fixture_checks": {
+    "note": "Development-fixture check ONLY. Agreement with the author of synthetic fixtures is NOT independent validity evidence and is EXCLUDED from scientific reporting.",
     "accepted_class_mismatch": 0,
     "decoy_should_abstain_but_accepted": 0,
     "abstain_reason_mismatch": 0,
-    "per_rule_error_counts": {
+    "per_rule_counts": {
       "CAS-N2": {
         "accepted": 10,
         "class_mismatch": 0
@@ -47,40 +49,42 @@
     }
   },
   "projected_human_workload": {
-    "owner_audit_queue_items": 70,
+    "note": "production audit is risk-based (~48 visible judgments + high-risk items), per OWNER_AUDIT_PROTOCOL.md; the dev queue below is a fixture, not owner work",
+    "dev_fixture_queue_items": 70,
     "mapping_rules_to_approve": 4,
-    "hidden_duplicates": 4,
-    "note": "single-owner audit; NOT independent human inter-rater validation"
+    "disclaimer": "single-owner audit; NOT independent human inter-rater validation"
   },
   "manifest": {
     "manifest_id": "SOURCE_RESOURCE_MANIFEST_v1",
     "note": "Frozen-resource provenance for the label pipeline. Production entries must be frozen by the owner before any claim-bearing run; the dev surrogate is pilot-only.",
     "rule_table": {
-      "path": "labels/CAS_MAPPING_RULES_v1.yaml",
-      "sha256": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86"
+      "path": "labels/CAS_MAPPING_RULES_v1_CANDIDATE.yaml",
+      "sha256": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+      "status": "AWAITING_OWNER_APPROVAL"
     },
     "resources": {
       "development_surrogate": {
         "resource_id": "DEV_SURROGATE_v1",
         "path": "labels/dev_resource/DEV_SENSE_RESOURCE_v1.yaml",
-        "sha256": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-        "claim_bearing": false
+        "sha256": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+        "claim_bearing_eligible": false
       },
       "production": {
+        "note": "claim_bearing_eligible means eligible ONCE the owner freezes a real digest; promotion refuses any entry whose sha256 is still OWNER_TO_FREEZE.",
         "wordnet": {
           "version": "3.1",
           "sha256": "OWNER_TO_FREEZE",
-          "claim_bearing": true
+          "claim_bearing_eligible": true
         },
         "verbnet": {
           "version": "3.4",
           "sha256": "OWNER_TO_FREEZE",
-          "claim_bearing": true
+          "claim_bearing_eligible": true
         },
         "framenet": {
           "version": "1.7",
           "sha256": "OWNER_TO_FREEZE",
-          "claim_bearing": true
+          "claim_bearing_eligible": true
         }
       }
     },

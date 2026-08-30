@@ -1,6 +1,9 @@
 {
+  "queue_status": "DEV_AUDIT_FIXTURE_ONLY",
+  "owner_action_required": false,
+  "note": "development-pipeline fixture queue; do NOT ask the owner to judge it",
   "seed": 20260830,
-  "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+  "rule_table_digest": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
   "counts": {
     "accepted_available": 80,
     "abstain_available": 6,

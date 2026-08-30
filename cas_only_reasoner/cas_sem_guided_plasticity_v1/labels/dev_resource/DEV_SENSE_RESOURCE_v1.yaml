@@ -7,12 +7,12 @@
 # VerbNet 3.4, FrameNet 1.7) named with exact version + file digest in
 # SOURCE_RESOURCE_MANIFEST.json. This DEV surrogate stands in for that resource for the
 # pilot only. Every gloss here is authored to be dictionary-like and to contain exactly
-# one CAS class's owner-approved include term (or, for the decoys, to deliberately ABSTAIN).
+# one CAS class's candidate include term (or, for the decoys, to deliberately ABSTAIN).
 #
 # Each record: sense_id (stable), lemma, pos, gloss (the exact frozen text the verifier
 # checks quotes against), source, and optional frame. The `expected_*` fields are the
 # author's intent recorded for the pilot audit; the engine ignores them and re-derives the
-# label from the gloss against CAS_MAPPING_RULES_v1.yaml.
+# label from the gloss against CAS_MAPPING_RULES_v1_CANDIDATE.yaml.
 
 resource_id: DEV_SURROGATE_v1
 resource_kind: development_surrogate
@@ -21,52 +21,52 @@ note: "Pilot-only. Replace with WordNet/VerbNet/FrameNet frozen digests for any 
 
 senses:
   # ---------------- ^2 Positive : 10 clean ----------------
-  - {sense_id: dev.v.2.001, lemma: adore,    pos: v, gloss: "to love and regard someone or something with deep affection",  source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.2.002, lemma: cherish,  pos: v, gloss: "to hold something dear and cherish it over time",              source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.2.003, lemma: crave,    pos: v, gloss: "to crave and strongly desire a thing",                        source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.2.004, lemma: prefer,   pos: v, gloss: "to prefer one option because of affinity for it",              source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.2.005, lemma: favor,    pos: v, gloss: "to favor and support a chosen side",                          source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.2.006, lemma: embrace,  pos: v, gloss: "to embrace an idea and hold it warmly",                       source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.2.007, lemma: relish,   pos: v, gloss: "to relish an experience with great enjoyment",                source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.2.008, lemma: love,     pos: v, gloss: "to love a person or thing deeply",                            source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.2.009, lemma: yearn,    pos: v, gloss: "to yearn for something one hopes to have",                    source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.2.010, lemma: desire,   pos: v, gloss: "to desire and be attracted to a goal",                        source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_GOLD}
+  - {sense_id: dev.v.2.001, lemma: adore,    pos: v, gloss: "to love and regard someone or something with deep affection",  source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.2.002, lemma: cherish,  pos: v, gloss: "to hold something dear and cherish it over time",              source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.2.003, lemma: crave,    pos: v, gloss: "to crave and strongly desire a thing",                        source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.2.004, lemma: prefer,   pos: v, gloss: "to prefer one option because of affinity for it",              source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.2.005, lemma: favor,    pos: v, gloss: "to favor and support a chosen side",                          source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.2.006, lemma: embrace,  pos: v, gloss: "to embrace an idea and hold it warmly",                       source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.2.007, lemma: relish,   pos: v, gloss: "to relish an experience with great enjoyment",                source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.2.008, lemma: love,     pos: v, gloss: "to love a person or thing deeply",                            source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.2.009, lemma: yearn,    pos: v, gloss: "to yearn for something one hopes to have",                    source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.2.010, lemma: desire,   pos: v, gloss: "to desire and be attracted to a goal",                        source: DEV_SURROGATE_v1, frame: null, expected_class: "^2", expected_authority: RESOURCE_RULE_DERIVED}
 
   # ---------------- ^3 Negative : 10 clean ----------------
-  - {sense_id: dev.v.3.001, lemma: detest,   pos: v, gloss: "to detest and strongly dislike something",                    source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.3.002, lemma: loathe,   pos: v, gloss: "to loathe something one finds repugnant",                     source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.3.003, lemma: abhor,    pos: v, gloss: "to abhor a thing one finds intolerable",                      source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.3.004, lemma: despise,  pos: v, gloss: "to despise and look down on someone",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.3.005, lemma: dread,    pos: v, gloss: "to dread an outcome one is unwilling to face",                source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.3.006, lemma: shun,     pos: v, gloss: "to shun and keep away from a group",                          source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.3.007, lemma: recoil,   pos: v, gloss: "to recoil from something unpleasant",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.3.008, lemma: avoid,    pos: v, gloss: "to avoid and stay clear of a hazard",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.3.009, lemma: flinch,   pos: v, gloss: "to flinch and pull back from a threat",                       source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.3.010, lemma: hate,     pos: v, gloss: "to hate something intensely",                                 source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_GOLD}
+  - {sense_id: dev.v.3.001, lemma: detest,   pos: v, gloss: "to detest and strongly dislike something",                    source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.3.002, lemma: loathe,   pos: v, gloss: "to loathe something one finds repugnant",                     source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.3.003, lemma: abhor,    pos: v, gloss: "to abhor a thing one finds intolerable",                      source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.3.004, lemma: despise,  pos: v, gloss: "to despise and look down on someone",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.3.005, lemma: dread,    pos: v, gloss: "to dread an outcome one is unwilling to face",                source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.3.006, lemma: shun,     pos: v, gloss: "to shun and keep away from a group",                          source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.3.007, lemma: recoil,   pos: v, gloss: "to recoil from something unpleasant",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.3.008, lemma: avoid,    pos: v, gloss: "to avoid and stay clear of a hazard",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.3.009, lemma: flinch,   pos: v, gloss: "to flinch and pull back from a threat",                       source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.3.010, lemma: hate,     pos: v, gloss: "to hate something intensely",                                 source: DEV_SURROGATE_v1, frame: null, expected_class: "^3", expected_authority: RESOURCE_RULE_DERIVED}
 
   # ---------------- ^6 Male (decomposition) : 10 clean ----------------
-  - {sense_id: dev.v.6.001, lemma: analyze,     pos: v, gloss: "to analyze a system by studying its components",           source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.6.002, lemma: dissect,     pos: v, gloss: "to dissect an argument into its parts",                    source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.6.003, lemma: decompose,   pos: v, gloss: "to decompose a problem into smaller pieces",               source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.6.004, lemma: deconstruct, pos: v, gloss: "to deconstruct a text and expose its inner structure",     source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.6.005, lemma: dismantle,   pos: v, gloss: "to dismantle a machine piece by piece",                    source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.6.006, lemma: disassemble, pos: v, gloss: "to disassemble a device into modules",                     source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.6.007, lemma: parse,       pos: v, gloss: "to parse a sentence into grammatical units",               source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.6.008, lemma: breakdown,   pos: v, gloss: "to break down a total into its parts",                     source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.6.009, lemma: takeapart,   pos: v, gloss: "to take apart a mechanism to reveal its workings",         source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.6.010, lemma: separate,    pos: v, gloss: "to separate into distinct constituent elements",           source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_GOLD}
+  - {sense_id: dev.v.6.001, lemma: analyze,     pos: v, gloss: "to analyze a system by studying its components",           source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.6.002, lemma: dissect,     pos: v, gloss: "to dissect an argument into its parts",                    source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.6.003, lemma: decompose,   pos: v, gloss: "to decompose a problem into smaller pieces",               source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.6.004, lemma: deconstruct, pos: v, gloss: "to deconstruct a text and expose its inner structure",     source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.6.005, lemma: dismantle,   pos: v, gloss: "to dismantle a machine piece by piece",                    source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.6.006, lemma: disassemble, pos: v, gloss: "to disassemble a device into modules",                     source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.6.007, lemma: parse,       pos: v, gloss: "to parse a sentence into grammatical units",               source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.6.008, lemma: breakdown,   pos: v, gloss: "to break down a total into its parts",                     source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.6.009, lemma: takeapart,   pos: v, gloss: "to take apart a mechanism to reveal its workings",         source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.6.010, lemma: separate,    pos: v, gloss: "to separate into distinct constituent elements",           source: DEV_SURROGATE_v1, frame: null, expected_class: "^6", expected_authority: RESOURCE_RULE_DERIVED}
 
   # ---------------- ^8 Above/Cause (triggering) : 10 clean ----------------
-  - {sense_id: dev.v.8.001, lemma: trigger,  pos: v, gloss: "to trigger a memory that then arises",                        source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.8.002, lemma: remind,   pos: v, gloss: "to remind a person of an earlier event",                      source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.8.003, lemma: evoke,    pos: v, gloss: "to evoke a feeling in an audience",                           source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.8.004, lemma: elicit,   pos: v, gloss: "to elicit a response from a listener",                        source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.8.005, lemma: prompt,   pos: v, gloss: "to prompt a thought to come forward",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.8.006, lemma: provoke,  pos: v, gloss: "to provoke a reaction in a crowd",                            source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.8.007, lemma: conjure,  pos: v, gloss: "to conjure an image before the mind",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.8.008, lemma: bringtomind, pos: v, gloss: "to bring to mind a distant recollection",                  source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.8.009, lemma: calltomind,  pos: v, gloss: "to call to mind a forgotten name",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_GOLD}
-  - {sense_id: dev.v.8.010, lemma: spark,    pos: v, gloss: "to spark a memory of childhood",                              source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_GOLD}
+  - {sense_id: dev.v.8.001, lemma: trigger,  pos: v, gloss: "to trigger a memory that then arises",                        source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.8.002, lemma: remind,   pos: v, gloss: "to remind a person of an earlier event",                      source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.8.003, lemma: evoke,    pos: v, gloss: "to evoke a feeling in an audience",                           source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.8.004, lemma: elicit,   pos: v, gloss: "to elicit a response from a listener",                        source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.8.005, lemma: prompt,   pos: v, gloss: "to prompt a thought to come forward",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.8.006, lemma: provoke,  pos: v, gloss: "to provoke a reaction in a crowd",                            source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.8.007, lemma: conjure,  pos: v, gloss: "to conjure an image before the mind",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.8.008, lemma: bringtomind, pos: v, gloss: "to bring to mind a distant recollection",                  source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.8.009, lemma: calltomind,  pos: v, gloss: "to call to mind a forgotten name",                         source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_RULE_DERIVED}
+  - {sense_id: dev.v.8.010, lemma: spark,    pos: v, gloss: "to spark a memory of childhood",                              source: DEV_SURROGATE_v1, frame: null, expected_class: "^8", expected_authority: RESOURCE_RULE_DERIVED}
 
   # ---------------- decoys : must ABSTAIN (exercise every abstain path) ----------------
   - {sense_id: dev.decoy.101, lemma: adoredissect, pos: v, gloss: "to adore and dissect the topic",            source: DEV_SURROGATE_v1, frame: null, expected_class: null, expected_authority: ABSTAIN, expected_reason: multiple_rules}

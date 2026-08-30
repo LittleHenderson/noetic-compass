@@ -1,6 +1,6 @@
 # SCMPE-v1 Generation Spec
 
-Status: Part of LABEL PHASE 0B. Documentation only; not claim-bearing.
+Status: Part of LABEL PHASE 0B, amended by PHASE 0C (owner directive 2026-08-30). Documentation only; not claim-bearing.
 
 ## 1. What this document is
 
@@ -107,6 +107,45 @@ No human looks at the outcome and then picks the "best" opponent. The >= 1000 op
 tolerances, and the surviving matched pool are all fixed while the hidden-state numbers are still
 sealed. Choosing an opponent after seeing results is forbidden. This rule is what makes the
 percentile in Step 6 meaningful.
+
+## 6b. Exact parameters (Phase 0C completion — CANDIDATE values, owner to freeze)
+
+Before any claim-bearing run, every slot below must hold an exact frozen value. The
+values marked PROPOSED are candidates I am putting forward for the owner's decision;
+none is frozen until the owner signs it. None of these may change after hidden-state
+results exist.
+
+1. **Independent lexical resource:** PROPOSED — WordNet 3.1 (glosses + lexical
+   relations). Never the target Qwen model in any form.
+2. **Resource version and digest:** WordNet 3.1; sha256 = OWNER_TO_FREEZE in
+   `SOURCE_RESOURCE_MANIFEST.json` before generation.
+3. **Feature representation per sense:** PROPOSED — TF-IDF over lemmatized gloss terms
+   + one-hot source frame + multi-hot thematic roles + log word frequency + token length
+   + morphological complexity (character length and affix count under a frozen rule
+   list). All from the frozen resource + frozen frequency source; nothing from Qwen.
+4. **Similarity metric:** PROPOSED — cosine similarity on the Step-3 vectors.
+   Cohesion = mean pairwise within-class cosine; separation = mean between-class
+   centroid distance.
+5. **Frequency source:** PROPOSED — a pinned release of the `wordfreq` package (exact
+   version + digest recorded at freeze), log10 Zipf scale.
+6. **Morphology representation:** PROPOSED — character length + counted affixes from a
+   frozen affix list; no learned morphology model.
+7. **Matching tolerances (per property, opponent vs CAS partition):** PROPOSED —
+   |Δ within-class cohesion| <= 0.05; |Δ between-class separation| <= 0.05;
+   |Δ mean log-frequency per class| <= 0.25; |Δ mean token length per class| <= 1.0;
+   |Δ mean morphological complexity per class| <= 0.5. Frozen before generation; never
+   widened after results.
+8. **Partition-generation algorithm:** PROPOSED — seeded uniform balanced 4-way
+   assignments (each sense assigned once, mapping preserved across occurrences and
+   splits), search budget 200,000 candidate partitions, fixed seed list recorded.
+9. **Minimum surviving matched partitions:** **200.** Fewer than 200 survivors from the
+   preregistered search budget returns **`SCMPE_MATCHING_FAILED`**. Do not loosen
+   tolerances after seeing model results — the study stops and the failure is recorded.
+10. **CAS percentile gate (Claim B support):** PROPOSED — CAS must place at or above the
+    **95th percentile** of the surviving matched-opponent distribution for the
+    matched-semantic-control leg of Claim B. The exact percentile is an owner decision.
+11. **Failure condition:** `SCMPE_MATCHING_FAILED` (see item 9) is a recorded negative
+    outcome, never a license to re-tune.
 
 ## 7. Where SCMPE-v1 sits among the claims (context)
 

@@ -1,0 +1,6 @@
+{
+  "note": "TRUST ROOT for owner-gated promotion. The owner generates a signing key OUTSIDE the agent environment, computes its SHA-256, and replaces OWNER_TO_SET below. The promotion program refuses to promote while this is the placeholder (KEY_NOT_PINNED) and refuses any key file whose SHA-256 does not equal the pinned value. This file is committed: changing it is a visible git diff the owner reviews - that visibility, plus the owner holding the key, IS the trust model. No program can conjure a trust root the owner has not set.",
+  "owner_key_sha256": "OWNER_TO_SET",
+  "set_by": null,
+  "set_date": null
+}

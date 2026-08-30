@@ -2,31 +2,33 @@
   "manifest_id": "SOURCE_RESOURCE_MANIFEST_v1",
   "note": "Frozen-resource provenance for the label pipeline. Production entries must be frozen by the owner before any claim-bearing run; the dev surrogate is pilot-only.",
   "rule_table": {
-    "path": "labels/CAS_MAPPING_RULES_v1.yaml",
-    "sha256": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86"
+    "path": "labels/CAS_MAPPING_RULES_v1_CANDIDATE.yaml",
+    "sha256": "f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07",
+    "status": "AWAITING_OWNER_APPROVAL"
   },
   "resources": {
     "development_surrogate": {
       "resource_id": "DEV_SURROGATE_v1",
       "path": "labels/dev_resource/DEV_SENSE_RESOURCE_v1.yaml",
-      "sha256": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
-      "claim_bearing": false
+      "sha256": "38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc",
+      "claim_bearing_eligible": false
     },
     "production": {
+      "note": "claim_bearing_eligible means eligible ONCE the owner freezes a real digest; promotion refuses any entry whose sha256 is still OWNER_TO_FREEZE.",
       "wordnet": {
         "version": "3.1",
         "sha256": "OWNER_TO_FREEZE",
-        "claim_bearing": true
+        "claim_bearing_eligible": true
       },
       "verbnet": {
         "version": "3.4",
         "sha256": "OWNER_TO_FREEZE",
-        "claim_bearing": true
+        "claim_bearing_eligible": true
       },
       "framenet": {
         "version": "1.7",
         "sha256": "OWNER_TO_FREEZE",
-        "claim_bearing": true
+        "claim_bearing_eligible": true
       }
     }
   },

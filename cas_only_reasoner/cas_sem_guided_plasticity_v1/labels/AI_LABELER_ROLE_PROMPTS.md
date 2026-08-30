@@ -1,6 +1,6 @@
 # AI Labeler Role Prompts
 
-Part of LABEL PHASE 0B. Documentation only; not claim-bearing.
+Part of LABEL PHASE 0B, amended by PHASE 0C (owner directive 2026-08-30). Documentation only; not claim-bearing.
 
 ## What this document is
 
@@ -25,10 +25,15 @@ final label is set by a deterministic program, or by the owner correcting a veri
 pipeline error. "Deterministic" means the same input always gives the same output, with no
 model in the loop.
 
-A claim-bearing label is one of exactly two kinds:
-- CONSTRUCTION_GOLD — the CAS state and trace existed BEFORE the sentence was generated.
-- RESOURCE_GOLD — a frozen external sense id mapped to a CAS class by an owner-approved
-  deterministic rule (claim-bearing only after audit).
+A claim-bearing label is one of exactly two kinds — and (Phase 0C) BOTH exist only as
+output of the owner-gated promotion program (`owner_gated_promotion.py`):
+- CONSTRUCTION_GOLD — promoted from a CONSTRUCTION_CANDIDATE (the CAS state/trace existed
+  BEFORE the sentence was generated) after generator audit + owner-signed approval.
+- RESOURCE_GOLD — promoted from a RESOURCE_RULE_DERIVED candidate (a frozen external sense
+  id mapped by a deterministic rule) after owner audit + owner-signed approval.
+
+The deterministic engine itself emits only RESOURCE_RULE_DERIVED — a candidate, never
+claim-bearing. No engine may promote its own output to gold.
 
 Everything a model produces is, at most, MODEL_PROPOSED. MODEL_PROPOSED is NEVER
 claim-bearing.
@@ -68,25 +73,43 @@ Model votes never become human evidence.
    (gloss, and frame if present) and recomputes which rule fires. It ignores any rule id a
    model proposed, except as a note in the evidence record.
 
-## The evidence schema every role must fill
+## The evidence schema every role must fill (Phase 0C — matches the verifier exactly)
 
-Every role output must match `packet["evidence"]` exactly. Fields:
+Phase 0B overloaded one field (`frame_or_class`) with two meanings and omitted `sense_id`
+from the block even though the verifier read it. FIXED. Every role output must match
+`packet["evidence"]` exactly — ALL ELEVEN fields required, verified by
+`label_source_verifier.verify_evidence_claim`:
 
+- `sense_id` — the frozen sense identifier this evidence is about.
+- `source_locator` — `"<resource_id>#<sense_id>"`; the verifier checks it RESOLVES to the
+  cited sense, not merely that it looks plausible.
+- `exact_gloss` — the gloss text, quoted byte-for-byte from the frozen resource.
+- `source_frame_id` — the resource's frame id (null only if the record has none). This is
+  the SOURCE's identifier — never a CAS class.
+- `proposed_cas_class` — the CAS class the model proposes: `^2` / `^3` / `^6` / `^8` /
+  `NONE`. Advisory only. This is the model's OPINION — never a source identifier.
+- `proposed_rule_id` — a rule id that EXISTS in the rule table, or `NONE`. Advisory only.
 - `model_id` — the exact remote model identifier.
-- `model_role` — one of: `source_locator`, `adversarial_critic`, `counterexample_generator`.
-- `source_locator` — the resource/sense pointer the model used or proposes.
-- `exact_gloss` — the gloss text, quoted verbatim from the frozen resource.
-- `frame_or_class` — the frame id (if any) or the CAS class the model proposes.
-- `proposed_rule_id` — the mapping rule id the model suggests (advisory only).
+- `model_revision` — the exact model revision/version string.
+- `model_role` — one of: `source_locator`, `adversarial_critic`, `counterexample_generator`
+  (allow-list enforced).
+- `evidence_timestamp` — when the evidence was produced.
+- `resource_digest` — the frozen resource digest the model was shown.
+
+The verifier rejects: missing fields; a locator that does not resolve; a non-verbatim
+quote; a frame mismatch; a nonexistent proposed rule id; a disallowed role; an incomplete
+model identity receipt (`model_id`/`model_revision`/`evidence_timestamp`).
 
 The full LABEL_PACKET around this evidence block also carries: `packet_id`, `authority`,
-`cas_label`, `claim_bearing` (derived, never passed in), `sense{...}`, `construction{...}`,
-`fired_rules[]`, `blocked_rules[]`, `abstain_reason`, `surface{...}`, and `provenance{...}`.
-The evidence block is one NON-authoritative part of that packet.
+`cas_label`, `claim_bearing` (derived, never passed in), `audit_state`, the approval
+digest fields, `sense{...}`, `construction{...}`, `fired_rules[]`, `blocked_rules[]`,
+`abstain_reason`, `surface{...}`, and `provenance{...}`. The evidence block is one
+NON-authoritative part of that packet.
 
-Reminder on the derived invariant (enforced in `label_common.make_packet`):
-`claim_bearing == (authority in {CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED})`.
-It is computed, never supplied by a caller and never supplied by a model.
+Reminder on the derived invariant (enforced in `label_common.derive_claim_bearing`):
+`claim_bearing` is true ONLY when the authority is gold AND `audit_state == OWNER_APPROVED`
+AND the approval digests are present AND `phase_approval_valid` is true. It is computed,
+never supplied by a caller and never supplied by a model.
 
 ## The 4 CAS classes and rule ids
 
@@ -120,13 +143,13 @@ A rule fires for its class if and only if: at least one include term matches on 
 word or whole phrase, AND no exclude term matches.
 
 Across the 4 rules:
-- exactly one fires -> RESOURCE_GOLD for that class.
+- exactly one fires -> RESOURCE_RULE_DERIVED (candidate; gold only via owner-gated promotion) for that class.
 - zero fire -> ABSTAIN with `abstain_reason = no_rule`.
 - two or more fire -> ABSTAIN with `abstain_reason = multiple_rules`.
 - caller-flagged source disagreement -> ABSTAIN with `abstain_reason = source_conflict`.
 
 A model's `proposed_rule_id` is advisory evidence ONLY. The engine ALWAYS recomputes firing
-from the frozen text. The rule table lives in `CAS_MAPPING_RULES_v1.yaml`.
+from the frozen text. The rule table lives in `CAS_MAPPING_RULES_v1_CANDIDATE.yaml`.
 
 ---
 
@@ -156,21 +179,24 @@ TASK:
      present, say NOT_FOUND and stop.
   2. Quote the gloss VERBATIM. Do not paraphrase. Do not fix spelling. Copy the
      bytes as they appear. This goes in exact_gloss.
-  3. If a frame id is present, report it exactly. Do not invent a frame id.
-  4. Propose which ONE of the 4 CAS classes the sense-in-context best matches:
-     CAS-N2 ^2 Positive, CAS-N3 ^3 Negative, CAS-N6 ^6 Male, CAS-N8 ^8 Above/Cause.
-     Apply the ANTI-DRIFT exclusions. If none fits, propose NONE.
-  5. Propose the matching rule id from CAS_MAPPING_RULES_v1.yaml, or NONE.
+  3. If a frame id is present, report it exactly in source_frame_id. Do not invent
+     a frame id. source_frame_id is the SOURCE's identifier, never a CAS class.
+  4. Propose which ONE of the 4 CAS classes the sense-in-context best matches, in
+     proposed_cas_class: ^2 / ^3 / ^6 / ^8. Apply the ANTI-DRIFT exclusions. If
+     none fits, propose NONE. This is your opinion, never a source identifier.
+  5. Propose the matching rule id from CAS_MAPPING_RULES_v1_CANDIDATE.yaml in
+     proposed_rule_id, or NONE.
 
 RULES:
   - You label the SENSE-IN-CONTEXT, never the bare spelling.
   - You may not consult any source that is not the frozen resource above.
-  - Your proposed_rule_id is advisory. A deterministic engine recomputes the real
-    firing from the frozen text and can overrule you.
+  - Your proposed_rule_id and proposed_cas_class are advisory. A deterministic
+    engine recomputes the real firing from the frozen text and can overrule you.
 
-OUTPUT (match packet["evidence"] exactly):
-  model_id, model_role="source_locator", source_locator, exact_gloss,
-  frame_or_class, proposed_rule_id
+OUTPUT (match packet["evidence"] exactly -- all eleven fields):
+  sense_id, source_locator, exact_gloss, source_frame_id, proposed_cas_class,
+  proposed_rule_id, model_id, model_revision, model_role="source_locator",
+  evidence_timestamp, resource_digest
 ```
 
 ---
@@ -215,9 +241,11 @@ RULES:
     only changes audit priority.
   - You may not consult sources outside the frozen resource.
 
-OUTPUT (match packet["evidence"] exactly):
-  model_id, model_role="adversarial_critic", source_locator, exact_gloss,
-  frame_or_class (competing class or AMBIGUOUS), proposed_rule_id (or NONE)
+OUTPUT (match packet["evidence"] exactly -- all eleven fields):
+  sense_id, source_locator, exact_gloss, source_frame_id,
+  proposed_cas_class (your competing class, or NONE if you find the item AMBIGUOUS),
+  proposed_rule_id (or NONE), model_id, model_revision,
+  model_role="adversarial_critic", evidence_timestamp, resource_digest
 ```
 
 ---
@@ -259,9 +287,10 @@ RULES:
   - The counterexamples are illustrative evidence. They set no label.
   - Apply the ANTI-DRIFT exclusions when you assign classes to your examples.
 
-OUTPUT (match packet["evidence"] exactly):
-  model_id, model_role="counterexample_generator", source_locator,
-  exact_gloss, frame_or_class, proposed_rule_id (or NONE)
+OUTPUT (match packet["evidence"] exactly -- all eleven fields):
+  sense_id, source_locator, exact_gloss, source_frame_id, proposed_cas_class,
+  proposed_rule_id (or NONE), model_id, model_revision,
+  model_role="counterexample_generator", evidence_timestamp, resource_digest
 ```
 
 ---
@@ -277,8 +306,8 @@ Sense under label:
 - gloss (frozen, verbatim): `to analyze something closely and critically`
 
 Model A (source_locator) proposes:
-- `frame_or_class`: CAS-N3 `^3` Negative
-- `proposed_rule_id`: the `^3` rule
+- `proposed_cas_class`: `^3` Negative
+- `proposed_rule_id`: CAS-N3
 - reasoning the model gave: "critical" sounds negative, so this is aversion.
 
 Why the model is WRONG:
@@ -295,13 +324,15 @@ What the deterministic engine does (verified by running the engine on this gloss
   analytical wording `analyze` is exactly the kind the `^3` exclude side is built to reject.
 - The `^6` rule fires: the include term `analyze` matches (a decomposition / analysis
   term), and no `^6` exclude term (ask / question / inquire / query / wonder) is present.
-- Exactly one rule fires -> the engine returns RESOURCE_GOLD for CAS-N6 `^6` Male.
+- Exactly one rule fires -> the engine returns RESOURCE_RULE_DERIVED for CAS-N6 `^6` Male.
 - (Note: a gloss with bare `examine` instead of `analyze` would ABSTAIN with `no_rule`,
   because `examine` alone is NOT a `^6` include term — only phrases like `examine the
   parts` are. The include set is deliberately narrow; the engine never stretches it.)
 
 Result:
-- Final `cas_label` = `^6` (CAS-N6), authority = RESOURCE_GOLD (claim-bearing after audit).
+- `cas_label` = `^6` (CAS-N6), authority = RESOURCE_RULE_DERIVED — a CANDIDATE. It is NOT
+  claim-bearing. It becomes RESOURCE_GOLD only if the owner's audit passes and the owner
+  signs the promotion (`owner_gated_promotion.py`).
 - The model's `^3` proposal is kept in `packet["evidence"]` as a NON-authoritative record.
   It did not change the label. It only tells the auditor "a model disagreed here — look at
   this item sooner." That is triage, not authority.
@@ -323,11 +354,12 @@ study.
 - It sets no CAS scientific claim. It is a deterministic label backbone plus the prompts
   that feed it.
 - No model role here can set a claim-bearing label. Ever.
-- The development pilot (46 dev senses -> 40 RESOURCE_GOLD + 6 ABSTAIN; coverage 0.8696;
+- The development pilot (46 dev senses -> 40 RESOURCE_RULE_DERIVED (candidates, non-claim-bearing) + 6 ABSTAIN; coverage 0.8696;
   abstention 0.1304; source-verification failure rate 0.0; per-rule 10/10/10/10; 40
-  construction-gold; 86 total packets; tests 19/19 pass; rule table sha256
-  `5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86`; dev resource sha256
-  `740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24`) is development-only.
+  controlled-template fixtures (retired generator; CONTROLLED_TEMPLATE_FIXTURE, never
+  evaluation data); 86 total packets (0 claim-bearing); tests 45/45 pass; rule table sha256
+  `f6db8a8c1d6148491ffbd976d461a794b02d86e3daa17c803863ec6e3b586d07`; dev resource sha256
+  `38649fe0acf4c17e0229750291534c04cc75970135abda1c516d6fe9bf36b8bc`) is development-only.
   It proved nothing scientific. It shows the plumbing runs, not that a CAS claim holds.
 
 ## Governance

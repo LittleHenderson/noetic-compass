@@ -1,9 +1,14 @@
 [
   {
     "packet_id": "cg::^2::000",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:argument",
@@ -27,16 +32,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::001",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:device",
@@ -60,16 +72,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::002",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:memory",
@@ -93,16 +112,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::003",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:signal",
@@ -126,16 +152,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::004",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:picture",
@@ -159,16 +192,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::005",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:adored:problem",
@@ -192,16 +232,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::006",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:cherished:argument",
@@ -225,16 +272,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::007",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:cherished:device",
@@ -258,16 +312,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::008",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:cherished:memory",
@@ -291,16 +352,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^2::009",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^2",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^2:analyst:cherished:signal",
@@ -324,16 +392,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::000",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:argument",
@@ -357,16 +432,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::001",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:device",
@@ -390,16 +472,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::002",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:memory",
@@ -423,16 +512,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::003",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:signal",
@@ -456,16 +552,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::004",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:picture",
@@ -489,16 +592,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::005",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:detested:problem",
@@ -522,16 +632,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::006",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:loathed:argument",
@@ -555,16 +672,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::007",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:loathed:device",
@@ -588,16 +712,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::008",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:loathed:memory",
@@ -621,16 +752,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^3::009",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^3",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^3:analyst:loathed:signal",
@@ -654,16 +792,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::000",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:argument",
@@ -687,16 +832,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::001",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:device",
@@ -720,16 +872,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::002",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:memory",
@@ -753,16 +912,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::003",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:signal",
@@ -786,16 +952,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::004",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:picture",
@@ -819,16 +992,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::005",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:dissected:problem",
@@ -852,16 +1032,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::006",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:decomposed:argument",
@@ -885,16 +1072,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::007",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:decomposed:device",
@@ -918,16 +1112,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::008",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:decomposed:memory",
@@ -951,16 +1152,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^6::009",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^6",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^6:analyst:decomposed:signal",
@@ -984,16 +1192,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::000",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:argument",
@@ -1017,16 +1232,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::001",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:device",
@@ -1050,16 +1272,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::002",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:memory",
@@ -1083,16 +1312,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::003",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:signal",
@@ -1116,16 +1352,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::004",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:picture",
@@ -1149,16 +1392,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::005",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:triggered:problem",
@@ -1182,16 +1432,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::006",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:evoked:argument",
@@ -1215,16 +1472,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::007",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:evoked:device",
@@ -1248,16 +1512,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::008",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:evoked:memory",
@@ -1281,16 +1552,23 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   },
   {
     "packet_id": "cg::^8::009",
-    "authority": "CONSTRUCTION_GOLD",
+    "authority": "CONTROLLED_TEMPLATE_FIXTURE",
     "cas_label": "^8",
-    "claim_bearing": true,
+    "audit_state": "UNAUDITED",
+    "approval_manifest_digest": null,
+    "owner_approval_digest": null,
+    "resource_manifest_digest": null,
+    "generator_manifest_digest": null,
+    "phase_approval_valid": false,
     "sense": null,
     "construction": {
       "construction_seed": "^8:analyst:evoked:signal",
@@ -1314,9 +1592,11 @@
     "provenance": {
       "frozen_resource_digest": "construction",
       "rule_table_digest": "n/a-construction",
-      "engine_version": "label_phase0b.v1",
+      "engine_version": "label_phase0c.v1",
       "created_by": "construction_gold_generator",
+      "preservation_check": "shared_verb_lookup",
       "seed": 20260830
-    }
+    },
+    "claim_bearing": false
   }
 ]

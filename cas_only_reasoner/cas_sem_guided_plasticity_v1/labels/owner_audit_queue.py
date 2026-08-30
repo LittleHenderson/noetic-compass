@@ -1,13 +1,24 @@
 """owner_audit_queue.py -- build a BLINDED owner audit queue.
 
-The owner does not label the whole inventory. The owner audits a small blinded sample and
-approves the rules. This builds:
+PHASE 0C STATUS: the queue built from the current DEV pilot is DEV_AUDIT_FIXTURE_ONLY.
+It mixes synthetic decoys (adoredissect, dreadevoke), dev-surrogate senses authored to
+exercise the keyword rules, and circular template fixtures. The owner must NOT be asked to
+judge it -- it tests the development pipeline, not a production dataset.
 
-  - up to N (default 15) randomly-selected ACCEPTED items per CAS class
-  - a sample of ABSTAIN items (so the owner sees what the engine refused)
-  - hidden DUPLICATE items (the same item under a second blinded id) to measure whether the
-    owner's own judgments are internally consistent -- NOT independent inter-rater validation
-  - the full mapping-rule table id/digest for the owner to approve once
+The PRODUCTION audit (specified in OWNER_AUDIT_PROTOCOL.md, built by build_production_queue
+once a real frozen resource exists) is risk-based:
+
+  - every mapping rule reviewed once;
+  - 8 randomly selected real RESOURCE_RULE_DERIVED items per class (32 items);
+  - ALL high-risk model disagreements (variable count);
+  - 8 ABSTAIN boundary cases;
+  - 8 hidden duplicates (within-owner consistency);
+  - labels hidden until the judgment is committed.
+
+Sequential gate on the audited sample (owner_gated_promotion.audit_gate_outcome):
+  0 major errors -> PASS (rule table may proceed to the controlled pilot);
+  1-2            -> REPAIR_AND_RESAMPLE (repair rules, regenerate, audit a fresh sample);
+  3+             -> REJECT (rule table redesigned).
 
 Two files are written:
   audit_queue.blinded.json  -- what the owner sees: shuffled, NO programmatic label, an empty
@@ -16,7 +27,8 @@ Two files are written:
                                ONLY to score after the owner has recorded judgments
 
 score_owner_judgments() joins the two and reports owner-vs-engine disagreement and
-within-owner duplicate consistency. Deterministic given the seed. CPU-only.
+within-owner duplicate consistency. Every report carries the disclaimer: single-owner audit;
+NOT independent human inter-rater validation. Deterministic given the seed. CPU-only.
 """
 from __future__ import annotations
 
@@ -28,11 +40,18 @@ import label_common as LC
 HERE = Path(__file__).resolve().parent
 
 
+ACCEPTED_AUTHORITIES = (
+    "RESOURCE_RULE_DERIVED", "CONSTRUCTION_CANDIDATE", "CONTROLLED_TEMPLATE_FIXTURE",
+    "RESOURCE_GOLD", "CONSTRUCTION_GOLD",
+)
+
+
 def build_queue(packets: list[dict], rule_table_digest: str, per_class: int = 15,
-                abstain_sample: int = 6, duplicates: int = 4, seed: int = 20260830):
+                abstain_sample: int = 6, duplicates: int = 4, seed: int = 20260830,
+                queue_status: str = "DEV_AUDIT_FIXTURE_ONLY"):
     rng = random.Random(seed)
 
-    accepted = [p for p in packets if p.get("authority") in ("RESOURCE_GOLD", "CONSTRUCTION_GOLD")]
+    accepted = [p for p in packets if p.get("authority") in ACCEPTED_AUTHORITIES]
     abstains = [p for p in packets if p.get("authority") == "ABSTAIN"]
 
     # sample accepted per class
@@ -99,6 +118,11 @@ def build_queue(packets: list[dict], rule_table_digest: str, per_class: int = 15
         }
 
     meta = {
+        "queue_status": queue_status,
+        "owner_action_required": (queue_status != "DEV_AUDIT_FIXTURE_ONLY"),
+        "note": ("development-pipeline fixture queue; do NOT ask the owner to judge it"
+                 if queue_status == "DEV_AUDIT_FIXTURE_ONLY" else
+                 "production risk-based audit queue"),
         "seed": seed,
         "rule_table_digest": rule_table_digest,
         "counts": {
@@ -110,6 +134,46 @@ def build_queue(packets: list[dict], rule_table_digest: str, per_class: int = 15
         },
         "disclaimer": "single-owner audit; NOT independent human inter-rater validation",
     }
+    return blinded, sealed, meta
+
+
+def build_production_queue(packets: list[dict], rule_table_digest: str,
+                           high_risk_packets: list[dict] | None = None,
+                           seed: int = 20260830):
+    """The PRODUCTION risk-based audit: 8 accepted/class + all high-risk model disagreements
+    + 8 ABSTAIN boundary cases + 8 hidden duplicates. ~48 visible judgments plus high-risk.
+
+    high_risk_packets: items flagged by model disagreement or source-verification concern;
+    ALL of them enter the queue (never sampled away).
+    """
+    blinded, sealed, meta = build_queue(
+        packets, rule_table_digest, per_class=8, abstain_sample=8, duplicates=8,
+        seed=seed, queue_status="PRODUCTION_RISK_BASED")
+    if high_risk_packets:
+        start = len(blinded)
+        for j, p in enumerate(high_risk_packets):
+            qid = f"hr{start + j:04d}"
+            display_text = None
+            if p.get("surface"):
+                display_text = p["surface"]["sentence"]
+            elif p.get("sense"):
+                display_text = p["sense"]["gloss"]
+            blinded.append({
+                "queue_id": qid,
+                "lemma": (p.get("sense") or {}).get("lemma"),
+                "text": display_text,
+                "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+                "owner_judgment": None,
+            })
+            sealed[qid] = {
+                "engine_authority": p.get("authority"),
+                "engine_label": p.get("cas_label"),
+                "abstain_reason": p.get("abstain_reason"),
+                "dup_group": None,
+                "high_risk": True,
+            }
+        meta["counts"]["high_risk_items"] = len(high_risk_packets)
+        meta["counts"]["queue_size"] = len(blinded)
     return blinded, sealed, meta
 
 

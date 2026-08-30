@@ -1,9 +1,11 @@
-# CAS_MAPPING_RULES_v1
-# Owner-approved deterministic mapping rules from a frozen sense record to ONE CAS class.
-# These rules are the ONLY authority that turns a frozen external sense into a RESOURCE_GOLD
-# label. No language model may write, edit, or override them. A model may PROPOSE which rule
-# it thinks applies; the engine ignores that proposal and re-derives firing from the frozen
-# gloss/frame text against these owner-approved term sets.
+# CAS_MAPPING_RULES_v1_CANDIDATE
+# STATUS: AWAITING_OWNER_APPROVAL. These rules are a CANDIDATE deterministic filter, NOT an
+# approved label authority. The owner has not approved them. Until the owner approves this
+# table (signed, digest-recorded), the engine's output is RESOURCE_RULE_DERIVED — a
+# candidate label that is NEVER claim-bearing. Determinism freezes a judgment; it does not
+# validate the judgment. No language model may write, edit, or override these rules. A model
+# may PROPOSE which rule it thinks applies; the engine ignores that proposal and re-derives
+# firing from the frozen gloss/frame text against these term sets.
 #
 # Firing mechanism (deterministic, reproducible, no model judgment):
 #   1. Normalize the sense gloss (and frame name, if present): lowercase, Unicode NFKD,
@@ -12,10 +14,13 @@
 #        (a) at least one of its `include` terms matches as a whole word / whole phrase, AND
 #        (b) none of its `exclude` terms matches as a whole word / whole phrase.
 #   3. Across all four rules:
-#        exactly one fires  -> RESOURCE_GOLD candidate for that class
+#        exactly one fires  -> RESOURCE_RULE_DERIVED for that class (candidate; NOT claim-bearing)
 #        zero fire          -> ABSTAIN(no_rule)
 #        two or more fire   -> ABSTAIN(multiple_rules)
 #        source conflict    -> ABSTAIN(source_conflict)   (set elsewhere, e.g. duplicate class)
+#   4. RESOURCE_RULE_DERIVED becomes RESOURCE_GOLD ONLY through the owner-gated promotion
+#      program (owner_gated_promotion.py): owner audit receipt + signed phase approval +
+#      matching digests. The engine can never promote its own output to gold.
 #
 # The `exclude` sets encode the load-bearing CAS anti-drift boundaries from CLAUDE.md /
 # CAS_FOUNDATIONAL_CLARIFICATIONS.md Clarification 6:
@@ -26,7 +31,8 @@
 #
 # Labels apply to a SENSE-IN-CONTEXT or a typed CAS event, never to a bare word spelling.
 
-version: CAS_MAPPING_RULES_v1
+version: CAS_MAPPING_RULES_v1_CANDIDATE
+status: AWAITING_OWNER_APPROVAL
 classes: ["^2", "^3", "^6", "^8"]
 
 tokenization:
