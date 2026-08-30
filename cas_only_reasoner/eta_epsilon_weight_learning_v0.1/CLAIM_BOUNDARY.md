@@ -20,10 +20,15 @@ Passing an earlier claim does not imply a later one.
 - CLAIM 1 READOUT: the CAS probe generalizes on a held-out split.
 - CLAIM 2 REALIZATION: a computed intervention moves the requested CAS
   coordinate AND improves exact role-binding behavior.
-- CLAIM 3 DOSE: a profile-specific CAS-Ohm fit predicts held-out
-  movement within tolerance.
-- CLAIM 4 LEARNING: the whole method reduces examples, optimizer steps,
-  compute, or forgetting versus matched baselines.
+- CLAIM 3 DOSE: the proportional CAS-Ohm model predicts held-out movement
+  within tolerance, beats zero/mean, and is within 5% MAE of
+  affine/quadratic (it is NOT tested against zero-intercept linear, which
+  is the same model).
+- CLAIM 4A SAMPLE EFFICIENCY: fewer examples-to-threshold.
+- CLAIM 4B OPTIMIZER EFFICIENCY: fewer optimizer steps-to-threshold.
+- CLAIM 4C RETENTION: less loss of previously learned skills.
+- CLAIM 4D WALL-CLOCK EFFICIENCY: less total time incl. overhead.
+No "or" joins 4A-4D; each has its own status and evidence.
 
 ## Claim vocabulary
 

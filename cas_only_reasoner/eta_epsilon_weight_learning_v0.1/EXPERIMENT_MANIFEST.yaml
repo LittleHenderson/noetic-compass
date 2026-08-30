@@ -1,5 +1,5 @@
 schema: eta_epsilon_weight_learning.v0.1
-status: PHASE_0_PLAN_CANDIDATE_NOT_HASH_LOCKED
+status: PHASE_0A_LOCK_CANDIDATE_AWAITING_OWNER_APPROVAL
 no_model_run: true
 no_gpu_run: true
 
@@ -13,83 +13,131 @@ research_question: >
 task:
   name: active_passive_semantic_role_binding
   gold_output: {verb: lemma, agent: entity, patient: entity}
+  gold_generation: mechanical_template_grammar_no_llm_labels
+  pre_hash_before_any_model_run: true
   truth_authority: exact_match_to_frozen_gold_role_record
 
 claims:
-  - id: 1_readout
-    status: PROPOSED
-  - id: 2_realization
-    status: PROPOSED
-  - id: 3_dose
-    status: PROPOSED
-  - id: 4_learning
-    status: PROPOSED
+  - {id: 1_readout, status: PROPOSED}
+  - {id: 2_realization, status: PROPOSED}
+  - {id: 3_dose, status: PROPOSED,
+     note: "proportional model = zero-intercept linear; not tested vs zero-intercept linear; tested vs zero/mean and vs affine/quadratic (reject if affine/quadratic MAE >5% better)"}
+  - {id: 4a_sample_efficiency, status: PROPOSED}
+  - {id: 4b_optimizer_efficiency, status: PROPOSED}
+  - {id: 4c_retention, status: PROPOSED}
+  - {id: 4d_wall_clock_efficiency, status: PROPOSED}
+  - {id: software_right_inverse, status: PROPOSED}
+
+model:
+  id: Qwen/Qwen2.5-0.5B-Instruct
+  revision: 7ae557604adf67be50417f59c2c2f167def9a775
+  hashes: MODEL_IDENTITY.json
+  architecture: {layers: 24, hidden: 896, heads: 14, kv_heads: 2}
+  base_frozen: true
+  fallback: {id: Qwen/Qwen2.5-1.5B-Instruct, trigger: capacity_floor_failure_only, scope: all_arms}
 
 coordinate:
   space: open_40_state_simplex
   independent_directions: 39
-  tangent_chart: OPEN            # CLR / ILR / orthonormal basis
+  tangent_chart: FISHER_RAO_LOG_MAP_UNIFORM_HELMERT_V1
+  reference_point: uniform_40_state
+  embedding: sqrt_probability
+  basis: fixed_deterministic_40x39_helmert_orthonormal
+  aitchison_clr_ilr: not_used
   controlled_directions_v0_1: 1
+  target_direction:
+    name: EMPIRICAL_ROLE_BINDING_DIRECTION_IN_CAS_COORDINATES
+    rule: normalize(mean(xi_correct) - mean(xi_reversed)) on readout_fit only
+    frozen_and_hashed_before: phase_3
+    sign: positive_equals_toward_correct_role
 
-model:
-  policy: smallest_existing_local_open_weight_checkpoint
-  checkpoint: OPEN
-  checkpoint_hash: OPEN
-  tokenizer_hash: OPEN
-  base_frozen: true
-  escalation: only_if_plain_lora_fails_capacity_floor_applies_to_all
+layer_selection:
+  procedure: fit_readout_at_all_24_layers_on_readout_fit_select_on_readout_select_by_cas_macro_f1
+  tie_break: earliest_within_one_standard_error
+  freeze_before: validation
 
 intervention_space:
-  type: fixed_low_rank_lora
-  dose_definition: effective_delta_W_frobenius_norm_or_fixed_basis_coeffs
-  do_not_use_raw_lora_factor_norms_as_dose: true
-  locations_rank_basis: OPEN
+  modules: [q_proj, v_proj]  # selected layer only
+  basis: 32_fixed_frobenius_orthonormal_rank1  # 16 per module
+  coefficients: 32_scalars
+  basis_seed: 271828
+  dose_definition: effective_delta_W_frobenius_norm_or_fixed_basis_coeff_norm
+  do_not_use_raw_lora_factor_norms: true
+  inadequate_if: reachable_fraction < 0.50 -> INTERVENTION_SPACE_INADEQUATE
+  baselines:
+    standard_lora: {rank: 4, alpha: 8, dropout: 0, bias: none, same_layer_modules: true}
+    matched_random_basis: {coefficient_count: 32}
+    ordinary_task_gradient: {same_fixed_basis: true, same_effective_norm: true}
 
 realizer:
   formula: delta_c_pred = J_c^T (J_c J_c^T + lambda I)^-1 delta_xi_target
-  report: [shape, numerical_rank, singular_values, condition_number,
-           lambda, reachable_fraction, predicted_update_norm,
-           effective_delta_W_norm]
-  unreachable_target: return_TARGET_PARTIALLY_UNREACHABLE
+  damped_operator_label: LOCAL_DAMPED_REALIZER
+  report: [shape, numerical_rank, singular_values, condition_number, lambda,
+           reachable_fraction, predicted_update_norm, effective_delta_W_norm]
 
 cas_ohm:
   response: y_hat = a / r_eff
-  fit_split: calibration_only
+  identity_note: equals_zero_intercept_linear_beta_equals_1_over_r_eff
+  fit_split: controller_calibration_only
   test_split: disjoint_held_out
   reject_circular: [r_equals_a_over_y_same_sample]
-  compare_against: [zero_response, mean_response, zero_intercept_linear,
-                    affine_linear, local_quadratic]
+  compare_against: [zero_response, mean_response, affine_linear, local_quadratic]
+  do_not_compare_against: [zero_intercept_linear]  # algebraically identical
+  reject_if: affine_or_quadratic_holdout_MAE_more_than_5pct_better
 
-splits: [readout_fit, controller_calibration, task_train, validation,
-         protected]
+splits: [capacity_probe, readout_fit, readout_select, controller_calibration,
+         task_train, validation, protected_lexical, protected_structural,
+         protected_joint]
 split_axes: [noun, verb, voice, surface_construction]
+protected_min_per_stratum: 200
 protected_read: once_after_freeze
 
 controls: [zero, random_same_norm, opposite_sign, orthogonal, wrong_layer,
            wrong_token, shuffled_cas_labels, matched_non_cas_taxonomy,
-           ordinary_lora, ordinary_matched_norm_gradient,
-           consolidation_baseline, no_consolidation_ablation]
+           ordinary_lora, ordinary_matched_norm_gradient, consolidation_baseline,
+           no_consolidation_ablation]
 
-metrics: [exact_role_accuracy, examples_to_threshold,
-          optimizer_steps_to_threshold, wall_clock_with_overhead,
-          backward_compute, old_task_retention, held_out_transfer,
-          target_cas_movement, off_target_cas_movement, bridge_error,
-          dose_response_error, reachable_fraction, false_freeze_count,
-          reopened_group_count]
-primary_metric: examples_to_threshold
+metrics_primary: examples_to_threshold
+metrics: [exact_role_accuracy, examples_to_threshold, optimizer_steps_to_threshold,
+          wall_clock_with_overhead, backward_compute, old_task_retention,
+          held_out_transfer, target_cas_movement, off_target_cas_movement,
+          bridge_error, dose_response_error, reachable_fraction,
+          false_freeze_count, reopened_group_count]
+
+thresholds:
+  capacity_probe_zero_shot_below: 0.85
+  plain_lora_capacity_floor: {accuracy: 0.85, examples: 32, steps: 500}
+  final_task: 0.90
+  readout_auroc: 0.75
+  readout_margin_over_control: 0.10
+  realization_sign_rate: 0.80
+  behavioral_realization_pp: 10
+  collateral_damage_max_pp: 2
+  dose_holdout_nrmse_max: 0.20
+  dose_adequacy_max_pct_worse_than_flexible: 5
+  sample_efficiency_pct: 25
+  step_efficiency_pct: 20
+  wall_clock_pct: 10
+  retention_pp: 5
+
+seeds:
+  data_generation: 20260830
+  data_split: 161803
+  intervention_basis: 271828
+  bootstrap: 314159
+  claim_bearing_training: [0,1,2,3,4,5,6,7,8,9]
 
 falsifiers_count: 10
 
-claim_vocabulary_permitted: [PROPOSED, SOFTWARE_VERIFIED,
-  EMPIRICALLY_SUPPORTED, REFUTED, INCONCLUSIVE, REPLICATION_OPEN]
-claim_vocabulary_forbidden_bare: [CONFIRMED, PROVEN, VALIDATED,
-  DISCOVERED, FAST_LEARNING]
+claim_vocabulary_permitted: [PROPOSED, SOFTWARE_VERIFIED, EMPIRICALLY_SUPPORTED,
+  REFUTED, INCONCLUSIVE, REPLICATION_OPEN]
+claim_vocabulary_forbidden_bare: [CONFIRMED, PROVEN, VALIDATED, DISCOVERED,
+  FAST_LEARNING]
 
 compute_boundary:
   paid_api: forbidden
   cloud_gpu: forbidden_in_phase_0
   phase_0_gpu: none
+  model_download_needed: false  # local snapshot confirmed
 
-unresolved_decisions: [model_checkpoint_hash, tokenizer_hash,
-  target_layers, lora_locations_rank_basis, tangent_chart,
-  target_direction, numeric_thresholds, seed_set]
+unresolved_decisions: []  # all eight closed in Phase 0A

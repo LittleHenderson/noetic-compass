@@ -25,12 +25,16 @@ was chased by the cat" must give verb=chase, agent=cat, patient=dog.
 Success = the exact role record improves. A CAS coordinate moving is
 NOT success on its own.
 
-## The four claims (each must pass before the next gets credit)
+## The claims (each must pass before the next gets credit)
 
 1. READOUT — can the CAS probe read a CAS coordinate that generalizes?
 2. REALIZATION — can a computed intervention move it AND fix behavior?
-3. DOSE — can CAS-Ohm predict how much movement a dose produces?
-4. LEARNING — does the whole method beat matched baselines?
+3. DOSE — can the proportional CAS-Ohm model predict movement on a
+   disjoint split (it is zero-intercept linear, so it is tested against
+   zero/mean and affine/quadratic, NOT against zero-intercept linear)?
+4. LEARNING — split into four separate claims: 4A sample efficiency,
+   4B optimizer efficiency, 4C retention, 4D wall-clock efficiency.
+   No "or" join; each has its own status.
 
 ## The files here
 
@@ -46,8 +50,11 @@ NOT success on its own.
 
 ## Phase status
 
-- Phase 0 (this commit): plan written. NOT yet reviewed.
-- Phases 1-8: NOT started. Do not begin without owner review of Phase 0.
+- Phase 0A (this commit): plan corrected after owner review; eight owner
+  decisions frozen; model `Qwen/Qwen2.5-0.5B-Instruct` hashed. Lock
+  candidate status `AWAITING_OWNER_APPROVAL`.
+- Phases 1-8: NOT started. Do not begin without owner sign-off of the
+  lock candidate.
 
 ## The one rule above all
 

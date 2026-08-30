@@ -1,49 +1,17 @@
 {
   "schema": "eta_epsilon_weight_learning.claim_ledger.v0.1",
-  "phase": 0,
-  "note": "All claims PROPOSED. No model has run. No empirical evidence exists yet.",
+  "phase": "0A",
+  "note": "All claims PROPOSED. No model has run. No empirical evidence exists. Claim 4 split into 4a-4d; claim 3 corrected (proportional model is zero-intercept linear).",
   "permitted_status": ["PROPOSED", "SOFTWARE_VERIFIED", "EMPIRICALLY_SUPPORTED", "REFUTED", "INCONCLUSIVE", "REPLICATION_OPEN"],
   "claims": [
-    {
-      "id": "1_readout",
-      "text": "A CAS probe reads a CAS coordinate from the model that generalizes to a held-out split and beats surface, metadata, shuffled-label, matched-non-CAS, and random-same-rank controls.",
-      "status": "PROPOSED",
-      "evidence_tier": null,
-      "phase_gate": 2,
-      "artifacts": []
-    },
-    {
-      "id": "2_realization",
-      "text": "A computed intervention moves the requested CAS coordinate AND improves exact agent/patient role accuracy, beating random and ordinary matched-norm directions.",
-      "status": "PROPOSED",
-      "evidence_tier": null,
-      "phase_gate": 4,
-      "artifacts": []
-    },
-    {
-      "id": "3_dose",
-      "text": "A profile-specific CAS-Ohm response fit predicts held-out movement within the preregistered tolerance and beats zero/mean/linear/affine/quadratic baselines on a disjoint split.",
-      "status": "PROPOSED",
-      "evidence_tier": null,
-      "phase_gate": 5,
-      "artifacts": []
-    },
-    {
-      "id": "4_learning",
-      "text": "The whole method reduces examples-to-threshold, optimizer steps, compute, or forgetting versus matched ordinary LoRA and consolidation baselines.",
-      "status": "PROPOSED",
-      "evidence_tier": null,
-      "phase_gate": 6,
-      "artifacts": []
-    },
-    {
-      "id": "software_right_inverse",
-      "text": "The software correctly implements a local regularized right-inverse on synthetic matrices under declared rank conditions.",
-      "status": "PROPOSED",
-      "evidence_tier": null,
-      "phase_gate": 1,
-      "artifacts": []
-    }
+    {"id": "software_right_inverse", "text": "The software correctly implements a local regularized right-inverse on synthetic matrices under declared rank conditions; damped operators are labeled LOCAL_DAMPED_REALIZER, not exact projectors.", "status": "PROPOSED", "evidence_tier": null, "phase_gate": 1, "artifacts": []},
+    {"id": "1_readout", "text": "A CAS probe reads a CAS coordinate that generalizes to a held-out split and beats surface, metadata, shuffled-label, matched-non-CAS, and random-same-rank controls (AUROC>=0.75, margin>=0.10, bootstrap CI excludes zero).", "status": "PROPOSED", "evidence_tier": null, "phase_gate": 2, "artifacts": []},
+    {"id": "2_realization", "text": "A computed intervention moves the requested CAS coordinate AND improves exact agent/patient role accuracy (>=10pp over zero/random), beating random and ordinary matched-norm directions, with <=2pp collateral damage.", "status": "PROPOSED", "evidence_tier": null, "phase_gate": 4, "artifacts": []},
+    {"id": "3_dose", "text": "The profile-specific proportional model y_hat=a/r_eff predicts a disjoint held-out split (nRMSE<=0.20), beats zero-response and mean-response, carries calibrated uncertainty, and is not more than 5% worse in held-out MAE than the preregistered affine/quadratic alternatives. NOT tested against zero-intercept linear regression (algebraically identical).", "status": "PROPOSED", "evidence_tier": null, "phase_gate": 5, "artifacts": []},
+    {"id": "4a_sample_efficiency", "text": "The whole method reaches >=0.90 exact accuracy with >=25% fewer median examples than ordinary LoRA.", "status": "PROPOSED", "evidence_tier": null, "phase_gate": 6, "artifacts": []},
+    {"id": "4b_optimizer_efficiency", "text": "The whole method reaches threshold with >=20% fewer median optimizer steps than ordinary LoRA.", "status": "PROPOSED", "evidence_tier": null, "phase_gate": 6, "artifacts": []},
+    {"id": "4c_retention", "text": "CAS-guided consolidation loses >=5pp less prior-skill accuracy at matched new-task accuracy versus baselines.", "status": "PROPOSED", "evidence_tier": null, "phase_gate": 7, "artifacts": []},
+    {"id": "4d_wall_clock_efficiency", "text": "The whole method reduces total elapsed time by >=10% AFTER all controller and measurement overhead is included.", "status": "PROPOSED", "evidence_tier": null, "phase_gate": 6, "artifacts": []}
   ],
   "external_replication_status": "REPLICATION_OPEN"
 }

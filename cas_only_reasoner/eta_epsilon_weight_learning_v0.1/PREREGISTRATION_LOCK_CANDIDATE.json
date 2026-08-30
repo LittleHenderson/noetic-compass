@@ -1,0 +1,55 @@
+{
+  "schema": "eta_epsilon_weight_learning.lock_candidate.v0.1",
+  "status": "AWAITING_OWNER_APPROVAL",
+  "created": "2026-08-30",
+  "branch": "research/eta-epsilon-weight-learning-v0.1",
+  "note": "Full SHA-256 of every Phase 0 artifact (excluding this file). Not approved. No hash-lock, no Phase 1, until the owner signs.",
+  "model": {
+    "id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "weights_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe"
+  },
+  "artifacts": [
+    {
+      "name": "AMENDMENT_LOG.md",
+      "sha256": "63907195272dbac200373f870c20d06e541f68a88caed51009f9f9e8ffec947e"
+    },
+    {
+      "name": "CLAIM_BOUNDARY.md",
+      "sha256": "fc0ce64dac9f655f616068d461a8b4e68ec440a91a88f8c276454e94438d4a06"
+    },
+    {
+      "name": "CLAIM_LEDGER.json",
+      "sha256": "9fc6859c096124ceee992e1c53ef229ad4c38d3ecb2e78eef6420989fa6882fe"
+    },
+    {
+      "name": "COST_ESTIMATE.md",
+      "sha256": "456a5fe4e27a5734fe614949ac74b19e94eff79ade58da89e7c64b164075ac76"
+    },
+    {
+      "name": "EXPERIMENT_MANIFEST.yaml",
+      "sha256": "520bae75e508da89aced50d98eed575208fdb5f3982d2d32e03f0b55dabf40a7"
+    },
+    {
+      "name": "MODEL_IDENTITY.json",
+      "sha256": "725d330fea63016c7d2b8e7138de2beea64acfd0ed35c03542ed6a352a5e7800"
+    },
+    {
+      "name": "PREREGISTRATION.md",
+      "sha256": "705beb92dd404477a4b5ca39dfed1a4fe747dd6074925c9a5bb48a007083b77d"
+    },
+    {
+      "name": "README.md",
+      "sha256": "e436693e4d305117373557da4fc6dbf6f5617ff981f080d2a14def323492f887"
+    },
+    {
+      "name": "SOURCE_AUDIT.md",
+      "sha256": "4f088d5fb0c353c18af74eb4d26f34a85c1d6bf428b2e037a35b67c60767526c"
+    },
+    {
+      "name": "TYPE_CONTRACT.md",
+      "sha256": "5a69d6c22b6735b8c74e6b1ed36a0c3afcdd770704c18214c64e61dca1af4a2e"
+    }
+  ],
+  "lock_candidate_digest": "45e8c4571e75453aab789a388a85c5d6b4f9ce2a2ee540469ad28a69d04ee762"
+}
