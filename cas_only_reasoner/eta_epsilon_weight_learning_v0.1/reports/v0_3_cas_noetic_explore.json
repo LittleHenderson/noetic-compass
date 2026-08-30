@@ -1,0 +1,19 @@
+{
+  "schema": "eta_epsilon_weight_learning.v0_3_cas_noetic_explore.v0.1",
+  "status": "EXPLORATORY_NON_CLAIM_BEARING",
+  "classes": [
+    "^2_attraction",
+    "^3_aversion",
+    "^6_decomposition",
+    "^8_triggering"
+  ],
+  "n_train": 160,
+  "n_test_heldout_verbs": 80,
+  "chance": 0.25,
+  "cas_noetic_probe_heldout_acc": 0.775,
+  "surface_bow_heldout_acc": 0.25,
+  "shuffled_label_control_acc": 0.05,
+  "probe_minus_surface": 0.525,
+  "reads_beyond_surface_on_heldout_verbs": true,
+  "honest_note": "Held-out VERBS: surface bow cannot use unseen verbs. If the hidden-state Noetic probe beats surface here, the model encodes the Noetic semantically and generalizes. This does NOT yet show CAS-SPECIFICITY - that needs the matched-non-CAS-SEMANTIC control (deferred to the approved v0.3 run). Non-claim-bearing preview."
+}
