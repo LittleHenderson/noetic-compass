@@ -1,0 +1,1332 @@
+[
+  {
+    "packet_id": "pkt::dev.v.2.001",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.2.001",
+      "lemma": "adore",
+      "pos": "v",
+      "gloss": "to love and regard someone or something with deep affection",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.2.002",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.2.002",
+      "lemma": "cherish",
+      "pos": "v",
+      "gloss": "to hold something dear and cherish it over time",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.2.003",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.2.003",
+      "lemma": "crave",
+      "pos": "v",
+      "gloss": "to crave and strongly desire a thing",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.2.004",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.2.004",
+      "lemma": "prefer",
+      "pos": "v",
+      "gloss": "to prefer one option because of affinity for it",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.2.005",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.2.005",
+      "lemma": "favor",
+      "pos": "v",
+      "gloss": "to favor and support a chosen side",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.2.006",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.2.006",
+      "lemma": "embrace",
+      "pos": "v",
+      "gloss": "to embrace an idea and hold it warmly",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.2.007",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.2.007",
+      "lemma": "relish",
+      "pos": "v",
+      "gloss": "to relish an experience with great enjoyment",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.2.008",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.2.008",
+      "lemma": "love",
+      "pos": "v",
+      "gloss": "to love a person or thing deeply",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.2.009",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.2.009",
+      "lemma": "yearn",
+      "pos": "v",
+      "gloss": "to yearn for something one hopes to have",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.2.010",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.2.010",
+      "lemma": "desire",
+      "pos": "v",
+      "gloss": "to desire and be attracted to a goal",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.3.001",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.3.001",
+      "lemma": "detest",
+      "pos": "v",
+      "gloss": "to detest and strongly dislike something",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.3.002",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.3.002",
+      "lemma": "loathe",
+      "pos": "v",
+      "gloss": "to loathe something one finds repugnant",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.3.003",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.3.003",
+      "lemma": "abhor",
+      "pos": "v",
+      "gloss": "to abhor a thing one finds intolerable",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.3.004",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.3.004",
+      "lemma": "despise",
+      "pos": "v",
+      "gloss": "to despise and look down on someone",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.3.005",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.3.005",
+      "lemma": "dread",
+      "pos": "v",
+      "gloss": "to dread an outcome one is unwilling to face",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.3.006",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.3.006",
+      "lemma": "shun",
+      "pos": "v",
+      "gloss": "to shun and keep away from a group",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.3.007",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.3.007",
+      "lemma": "recoil",
+      "pos": "v",
+      "gloss": "to recoil from something unpleasant",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.3.008",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.3.008",
+      "lemma": "avoid",
+      "pos": "v",
+      "gloss": "to avoid and stay clear of a hazard",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.3.009",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.3.009",
+      "lemma": "flinch",
+      "pos": "v",
+      "gloss": "to flinch and pull back from a threat",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.3.010",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.3.010",
+      "lemma": "hate",
+      "pos": "v",
+      "gloss": "to hate something intensely",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.6.001",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.6.001",
+      "lemma": "analyze",
+      "pos": "v",
+      "gloss": "to analyze a system by studying its components",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.6.002",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.6.002",
+      "lemma": "dissect",
+      "pos": "v",
+      "gloss": "to dissect an argument into its parts",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.6.003",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.6.003",
+      "lemma": "decompose",
+      "pos": "v",
+      "gloss": "to decompose a problem into smaller pieces",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.6.004",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.6.004",
+      "lemma": "deconstruct",
+      "pos": "v",
+      "gloss": "to deconstruct a text and expose its inner structure",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.6.005",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.6.005",
+      "lemma": "dismantle",
+      "pos": "v",
+      "gloss": "to dismantle a machine piece by piece",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.6.006",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.6.006",
+      "lemma": "disassemble",
+      "pos": "v",
+      "gloss": "to disassemble a device into modules",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.6.007",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.6.007",
+      "lemma": "parse",
+      "pos": "v",
+      "gloss": "to parse a sentence into grammatical units",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.6.008",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.6.008",
+      "lemma": "breakdown",
+      "pos": "v",
+      "gloss": "to break down a total into its parts",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.6.009",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.6.009",
+      "lemma": "takeapart",
+      "pos": "v",
+      "gloss": "to take apart a mechanism to reveal its workings",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.6.010",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.6.010",
+      "lemma": "separate",
+      "pos": "v",
+      "gloss": "to separate into distinct constituent elements",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.8.001",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.8.001",
+      "lemma": "trigger",
+      "pos": "v",
+      "gloss": "to trigger a memory that then arises",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.8.002",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.8.002",
+      "lemma": "remind",
+      "pos": "v",
+      "gloss": "to remind a person of an earlier event",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.8.003",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.8.003",
+      "lemma": "evoke",
+      "pos": "v",
+      "gloss": "to evoke a feeling in an audience",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.8.004",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.8.004",
+      "lemma": "elicit",
+      "pos": "v",
+      "gloss": "to elicit a response from a listener",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.8.005",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.8.005",
+      "lemma": "prompt",
+      "pos": "v",
+      "gloss": "to prompt a thought to come forward",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.8.006",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.8.006",
+      "lemma": "provoke",
+      "pos": "v",
+      "gloss": "to provoke a reaction in a crowd",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.8.007",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.8.007",
+      "lemma": "conjure",
+      "pos": "v",
+      "gloss": "to conjure an image before the mind",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.8.008",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.8.008",
+      "lemma": "bringtomind",
+      "pos": "v",
+      "gloss": "to bring to mind a distant recollection",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.8.009",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.8.009",
+      "lemma": "calltomind",
+      "pos": "v",
+      "gloss": "to call to mind a forgotten name",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.v.8.010",
+    "authority": "RESOURCE_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": {
+      "sense_id": "dev.v.8.010",
+      "lemma": "spark",
+      "pos": "v",
+      "gloss": "to spark a memory of childhood",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.decoy.101",
+    "authority": "ABSTAIN",
+    "cas_label": null,
+    "claim_bearing": false,
+    "sense": {
+      "sense_id": "dev.decoy.101",
+      "lemma": "adoredissect",
+      "pos": "v",
+      "gloss": "to adore and dissect the topic",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N2",
+      "CAS-N6"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": "multiple_rules",
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.decoy.102",
+    "authority": "ABSTAIN",
+    "cas_label": null,
+    "claim_bearing": false,
+    "sense": {
+      "sense_id": "dev.decoy.102",
+      "lemma": "walk",
+      "pos": "v",
+      "gloss": "to move along on foot at a steady pace",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": "no_rule",
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.decoy.103",
+    "authority": "ABSTAIN",
+    "cas_label": null,
+    "claim_bearing": false,
+    "sense": {
+      "sense_id": "dev.decoy.103",
+      "lemma": "gauge",
+      "pos": "v",
+      "gloss": "to determine the size of an object",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": "no_rule",
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.decoy.104",
+    "authority": "ABSTAIN",
+    "cas_label": null,
+    "claim_bearing": false,
+    "sense": {
+      "sense_id": "dev.decoy.104",
+      "lemma": "interrogate",
+      "pos": "v",
+      "gloss": "to question and analyze a claim",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [],
+    "blocked_rules": [
+      "CAS-N6"
+    ],
+    "abstain_reason": "no_rule",
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.decoy.105",
+    "authority": "ABSTAIN",
+    "cas_label": null,
+    "claim_bearing": false,
+    "sense": {
+      "sense_id": "dev.decoy.105",
+      "lemma": "dreadevoke",
+      "pos": "v",
+      "gloss": "to detest something that evokes fear",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [
+      "CAS-N3",
+      "CAS-N8"
+    ],
+    "blocked_rules": [],
+    "abstain_reason": "multiple_rules",
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  },
+  {
+    "packet_id": "pkt::dev.decoy.106",
+    "authority": "ABSTAIN",
+    "cas_label": null,
+    "claim_bearing": false,
+    "sense": {
+      "sense_id": "dev.decoy.106",
+      "lemma": "utter",
+      "pos": "v",
+      "gloss": "to say words aloud to a group",
+      "source": "DEV_SURROGATE_v1",
+      "frame": null
+    },
+    "construction": null,
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": "no_rule",
+    "evidence": null,
+    "surface": null,
+    "provenance": {
+      "frozen_resource_digest": "740d72da8a6f5cca347ef816b40abcb3952e4a11c09b0c6896497c3d78dc5c24",
+      "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "deterministic_label_engine",
+      "seed": null
+    }
+  }
+]

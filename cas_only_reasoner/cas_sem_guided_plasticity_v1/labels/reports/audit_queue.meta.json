@@ -1,0 +1,12 @@
+{
+  "seed": 20260830,
+  "rule_table_digest": "5599780d2c1e3ffcb0cc71289f0a475d3a712465fdafa37147b8b0ebc256eb86",
+  "counts": {
+    "accepted_available": 80,
+    "abstain_available": 6,
+    "per_class_target": 15,
+    "queue_size": 70,
+    "hidden_duplicates": 4
+  },
+  "disclaimer": "single-owner audit; NOT independent human inter-rater validation"
+}

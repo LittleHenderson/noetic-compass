@@ -1,0 +1,304 @@
+# CAS_MAPPING_RULES_v1
+# Owner-approved deterministic mapping rules from a frozen sense record to ONE CAS class.
+# These rules are the ONLY authority that turns a frozen external sense into a RESOURCE_GOLD
+# label. No language model may write, edit, or override them. A model may PROPOSE which rule
+# it thinks applies; the engine ignores that proposal and re-derives firing from the frozen
+# gloss/frame text against these owner-approved term sets.
+#
+# Firing mechanism (deterministic, reproducible, no model judgment):
+#   1. Normalize the sense gloss (and frame name, if present): lowercase, Unicode NFKD,
+#      replace every non-alphanumeric run with a single space, collapse spaces.
+#   2. A rule "fires" for its class iff:
+#        (a) at least one of its `include` terms matches as a whole word / whole phrase, AND
+#        (b) none of its `exclude` terms matches as a whole word / whole phrase.
+#   3. Across all four rules:
+#        exactly one fires  -> RESOURCE_GOLD candidate for that class
+#        zero fire          -> ABSTAIN(no_rule)
+#        two or more fire   -> ABSTAIN(multiple_rules)
+#        source conflict    -> ABSTAIN(source_conflict)   (set elsewhere, e.g. duplicate class)
+#
+# The `exclude` sets encode the load-bearing CAS anti-drift boundaries from CLAUDE.md /
+# CAS_FOUNDATIONAL_CLARIFICATIONS.md Clarification 6:
+#   - ^3 Negative is VISCERAL (aversion/repulsion), NOT analytical. Analytical critique is ^6.
+#   - ^8 Above/Cause is ASSOCIATIVE TRIGGERING, NOT deductive reasoning; mere temporal
+#     sequence and ordinary communication do not qualify.
+#   - ^6 Male is DECOMPOSITION; merely asking a question does not qualify.
+#
+# Labels apply to a SENSE-IN-CONTEXT or a typed CAS event, never to a bare word spelling.
+
+version: CAS_MAPPING_RULES_v1
+classes: ["^2", "^3", "^6", "^8"]
+
+tokenization:
+  lowercase: true
+  unicode_norm: NFKD
+  nonalnum_to_space: true
+  collapse_spaces: true
+  match: whole_word_or_phrase   # regex \bTERM\b on the normalized string
+
+rules:
+  - id: CAS-N2
+    cas_label: "^2"
+    name: Positive
+    source_definition: "An Idea the Mind has an affinity for and is attracted toward."
+    source_ref: "CLAUDE.md 10-Noetics / cas_reasoner.txt master charter"
+    intent: "Affinity, attraction, preference, desire, or approach TOWARD the semantic object."
+    include:
+      - love
+      - loves
+      - loved
+      - loving
+      - adore
+      - adores
+      - adored
+      - cherish
+      - cherishes
+      - cherished
+      - desire
+      - desires
+      - desired
+      - crave
+      - craves
+      - craved
+      - prefer
+      - prefers
+      - preferred
+      - favor
+      - favors
+      - favored
+      - favour
+      - favours
+      - favoured
+      - embrace
+      - embraces
+      - embraced
+      - attracted to
+      - drawn to
+      - long for
+      - yearn for
+      - yearns for
+      - relish
+      - relishes
+      - relished
+    exclude:
+      - avoid
+      - avoids
+      - avoided
+      - hate
+      - hates
+      - hated
+      - detest
+      - loathe
+      - reject
+      - rejects
+      - analyze
+      - analyse
+      - decompose
+      - trigger
+      - triggers
+      - reminds
+      - remind
+
+  - id: CAS-N3
+    cas_label: "^3"
+    name: Negative
+    source_definition: "An Idea the Mind is adverse to and repelled by."
+    source_ref: "CLAUDE.md 10-Noetics / cas_reasoner.txt master charter"
+    intent: "Aversion, repulsion, avoidance, dread, rejection, or withdrawal FROM the object."
+    anti_drift: "^3 is VISCERAL, not analytical. Critique/scrutiny/assessment are ^6, excluded here."
+    include:
+      - hate
+      - hates
+      - hated
+      - detest
+      - detests
+      - detested
+      - loathe
+      - loathes
+      - loathed
+      - abhor
+      - abhors
+      - abhorred
+      - despise
+      - despises
+      - despised
+      - dread
+      - dreads
+      - dreaded
+      - shun
+      - shuns
+      - shunned
+      - recoil
+      - recoils
+      - recoiled
+      - repelled by
+      - repulsed by
+      - avoid
+      - avoids
+      - avoided
+      - shrink from
+      - shrinks from
+      - flinch
+      - flinches
+      - flinched
+    exclude:
+      - analyze
+      - analyse
+      - analyzes
+      - analyses
+      - criticize
+      - criticise
+      - critique
+      - scrutinize
+      - scrutinise
+      - evaluate
+      - assess
+      - examine
+      - inspect
+      - audit
+      - decompose
+      - trigger
+      - triggers
+      - remind
+      - reminds
+
+  - id: CAS-N6
+    cas_label: "^6"
+    name: Male
+    source_definition: "An Idea impregnated with another Idea, the Ideas an Idea is composed of."
+    source_ref: "CLAUDE.md 10-Noetics + Clarification 6 (decomposition); cas_reasoner.txt (deduction = ^6+^9)"
+    intent: "Decomposition, analysis, separation into parts, structural inspection, or testing."
+    anti_drift: "Merely asking a question does not qualify. Communication/inquiry are excluded."
+    include:
+      - analyze
+      - analyse
+      - analyzes
+      - analyses
+      - analyzed
+      - analysed
+      - decompose
+      - decomposes
+      - decomposed
+      - dissect
+      - dissects
+      - dissected
+      - deconstruct
+      - deconstructs
+      - deconstructed
+      - dismantle
+      - dismantles
+      - dismantled
+      - disassemble
+      - disassembles
+      - disassembled
+      - break down
+      - breaks down
+      - broke down
+      - take apart
+      - takes apart
+      - took apart
+      - separate into
+      - separates into
+      - parse
+      - parses
+      - parsed
+      - examine the parts
+      - inspect the structure
+    exclude:
+      - ask
+      - asks
+      - asked
+      - question
+      - questions
+      - questioned
+      - inquire
+      - inquires
+      - inquired
+      - query
+      - queries
+      - wonder
+      - wonders
+      - wondered
+      - love
+      - loves
+      - hate
+      - hates
+      - trigger
+      - triggers
+      - remind
+      - reminds
+
+  - id: CAS-N8
+    cas_label: "^8"
+    name: Above/Cause
+    source_definition: "An Idea that triggers a different Idea than itself to come to Mind."
+    source_ref: "CLAUDE.md 10-Noetics + Clarification 6 (associative triggering, not reasoning)"
+    intent: "One cue, event, or Idea TRIGGERS another Idea or response to arise."
+    anti_drift: "Not deduction. Mere temporal sequence does not qualify. Ordinary communication does not automatically qualify."
+    include:
+      - trigger
+      - triggers
+      - triggered
+      - remind
+      - reminds
+      - reminded
+      - evoke
+      - evokes
+      - evoked
+      - elicit
+      - elicits
+      - elicited
+      - prompt
+      - prompts
+      - prompted
+      - provoke
+      - provokes
+      - provoked
+      - conjure
+      - conjures
+      - conjured
+      - bring to mind
+      - brings to mind
+      - brought to mind
+      - call to mind
+      - calls to mind
+      - stir a memory
+      - stirs a memory
+      - spark a memory
+      - sparks a memory
+    exclude:
+      - deduce
+      - deduces
+      - deduced
+      - infer
+      - infers
+      - inferred
+      - conclude
+      - concludes
+      - concluded
+      - prove
+      - proves
+      - proved
+      - say
+      - says
+      - said
+      - tell
+      - tells
+      - told
+      - announce
+      - announces
+      - state
+      - states
+      - analyze
+      - analyse
+      - decompose
+
+exclusion_reasons:
+  no_rule: "Zero rules fired: no include term matched, or an exclude term blocked the only candidate."
+  multiple_rules: "Two or more rules fired: the sense is not cleanly one CAS class."
+  source_conflict: "The same sense was mapped to more than one class, or the frozen source disagrees."
+  unverifiable_source: "The sense id or exact gloss could not be verified against the frozen resource."
+
+policy:
+  quota_rescue: FORBIDDEN   # never broaden include sets to hit a round-number sample size
+  model_override: FORBIDDEN # a model proposal never changes firing; the engine re-derives it

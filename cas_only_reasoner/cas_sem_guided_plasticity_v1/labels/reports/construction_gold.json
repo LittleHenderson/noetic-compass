@@ -1,0 +1,1322 @@
+[
+  {
+    "packet_id": "cg::^2::000",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^2:analyst:adored:argument",
+      "noetic": "^2",
+      "semantic_graph": {
+        "op": "attract",
+        "experiencer": "analyst",
+        "object": "argument"
+      },
+      "template_id": "tmpl::^2"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst adored the argument.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^2::001",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^2:analyst:adored:device",
+      "noetic": "^2",
+      "semantic_graph": {
+        "op": "attract",
+        "experiencer": "analyst",
+        "object": "device"
+      },
+      "template_id": "tmpl::^2"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst adored the device.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^2::002",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^2:analyst:adored:memory",
+      "noetic": "^2",
+      "semantic_graph": {
+        "op": "attract",
+        "experiencer": "analyst",
+        "object": "memory"
+      },
+      "template_id": "tmpl::^2"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst adored the memory.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^2::003",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^2:analyst:adored:signal",
+      "noetic": "^2",
+      "semantic_graph": {
+        "op": "attract",
+        "experiencer": "analyst",
+        "object": "signal"
+      },
+      "template_id": "tmpl::^2"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst adored the signal.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^2::004",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^2:analyst:adored:picture",
+      "noetic": "^2",
+      "semantic_graph": {
+        "op": "attract",
+        "experiencer": "analyst",
+        "object": "picture"
+      },
+      "template_id": "tmpl::^2"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst adored the picture.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^2::005",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^2:analyst:adored:problem",
+      "noetic": "^2",
+      "semantic_graph": {
+        "op": "attract",
+        "experiencer": "analyst",
+        "object": "problem"
+      },
+      "template_id": "tmpl::^2"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst adored the problem.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^2::006",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^2:analyst:cherished:argument",
+      "noetic": "^2",
+      "semantic_graph": {
+        "op": "attract",
+        "experiencer": "analyst",
+        "object": "argument"
+      },
+      "template_id": "tmpl::^2"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst cherished the argument.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^2::007",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^2:analyst:cherished:device",
+      "noetic": "^2",
+      "semantic_graph": {
+        "op": "attract",
+        "experiencer": "analyst",
+        "object": "device"
+      },
+      "template_id": "tmpl::^2"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst cherished the device.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^2::008",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^2:analyst:cherished:memory",
+      "noetic": "^2",
+      "semantic_graph": {
+        "op": "attract",
+        "experiencer": "analyst",
+        "object": "memory"
+      },
+      "template_id": "tmpl::^2"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst cherished the memory.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^2::009",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^2",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^2:analyst:cherished:signal",
+      "noetic": "^2",
+      "semantic_graph": {
+        "op": "attract",
+        "experiencer": "analyst",
+        "object": "signal"
+      },
+      "template_id": "tmpl::^2"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst cherished the signal.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^3::000",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^3:analyst:detested:argument",
+      "noetic": "^3",
+      "semantic_graph": {
+        "op": "averse",
+        "experiencer": "analyst",
+        "object": "argument"
+      },
+      "template_id": "tmpl::^3"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst detested the argument.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^3::001",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^3:analyst:detested:device",
+      "noetic": "^3",
+      "semantic_graph": {
+        "op": "averse",
+        "experiencer": "analyst",
+        "object": "device"
+      },
+      "template_id": "tmpl::^3"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst detested the device.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^3::002",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^3:analyst:detested:memory",
+      "noetic": "^3",
+      "semantic_graph": {
+        "op": "averse",
+        "experiencer": "analyst",
+        "object": "memory"
+      },
+      "template_id": "tmpl::^3"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst detested the memory.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^3::003",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^3:analyst:detested:signal",
+      "noetic": "^3",
+      "semantic_graph": {
+        "op": "averse",
+        "experiencer": "analyst",
+        "object": "signal"
+      },
+      "template_id": "tmpl::^3"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst detested the signal.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^3::004",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^3:analyst:detested:picture",
+      "noetic": "^3",
+      "semantic_graph": {
+        "op": "averse",
+        "experiencer": "analyst",
+        "object": "picture"
+      },
+      "template_id": "tmpl::^3"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst detested the picture.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^3::005",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^3:analyst:detested:problem",
+      "noetic": "^3",
+      "semantic_graph": {
+        "op": "averse",
+        "experiencer": "analyst",
+        "object": "problem"
+      },
+      "template_id": "tmpl::^3"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst detested the problem.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^3::006",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^3:analyst:loathed:argument",
+      "noetic": "^3",
+      "semantic_graph": {
+        "op": "averse",
+        "experiencer": "analyst",
+        "object": "argument"
+      },
+      "template_id": "tmpl::^3"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst loathed the argument.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^3::007",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^3:analyst:loathed:device",
+      "noetic": "^3",
+      "semantic_graph": {
+        "op": "averse",
+        "experiencer": "analyst",
+        "object": "device"
+      },
+      "template_id": "tmpl::^3"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst loathed the device.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^3::008",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^3:analyst:loathed:memory",
+      "noetic": "^3",
+      "semantic_graph": {
+        "op": "averse",
+        "experiencer": "analyst",
+        "object": "memory"
+      },
+      "template_id": "tmpl::^3"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst loathed the memory.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^3::009",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^3",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^3:analyst:loathed:signal",
+      "noetic": "^3",
+      "semantic_graph": {
+        "op": "averse",
+        "experiencer": "analyst",
+        "object": "signal"
+      },
+      "template_id": "tmpl::^3"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst loathed the signal.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^6::000",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^6:analyst:dissected:argument",
+      "noetic": "^6",
+      "semantic_graph": {
+        "op": "decompose",
+        "agent": "analyst",
+        "object": "argument"
+      },
+      "template_id": "tmpl::^6"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst dissected the argument into its parts.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^6::001",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^6:analyst:dissected:device",
+      "noetic": "^6",
+      "semantic_graph": {
+        "op": "decompose",
+        "agent": "analyst",
+        "object": "device"
+      },
+      "template_id": "tmpl::^6"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst dissected the device into its parts.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^6::002",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^6:analyst:dissected:memory",
+      "noetic": "^6",
+      "semantic_graph": {
+        "op": "decompose",
+        "agent": "analyst",
+        "object": "memory"
+      },
+      "template_id": "tmpl::^6"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst dissected the memory into its parts.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^6::003",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^6:analyst:dissected:signal",
+      "noetic": "^6",
+      "semantic_graph": {
+        "op": "decompose",
+        "agent": "analyst",
+        "object": "signal"
+      },
+      "template_id": "tmpl::^6"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst dissected the signal into its parts.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^6::004",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^6:analyst:dissected:picture",
+      "noetic": "^6",
+      "semantic_graph": {
+        "op": "decompose",
+        "agent": "analyst",
+        "object": "picture"
+      },
+      "template_id": "tmpl::^6"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst dissected the picture into its parts.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^6::005",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^6:analyst:dissected:problem",
+      "noetic": "^6",
+      "semantic_graph": {
+        "op": "decompose",
+        "agent": "analyst",
+        "object": "problem"
+      },
+      "template_id": "tmpl::^6"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst dissected the problem into its parts.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^6::006",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^6:analyst:decomposed:argument",
+      "noetic": "^6",
+      "semantic_graph": {
+        "op": "decompose",
+        "agent": "analyst",
+        "object": "argument"
+      },
+      "template_id": "tmpl::^6"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst decomposed the argument into its parts.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^6::007",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^6:analyst:decomposed:device",
+      "noetic": "^6",
+      "semantic_graph": {
+        "op": "decompose",
+        "agent": "analyst",
+        "object": "device"
+      },
+      "template_id": "tmpl::^6"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst decomposed the device into its parts.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^6::008",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^6:analyst:decomposed:memory",
+      "noetic": "^6",
+      "semantic_graph": {
+        "op": "decompose",
+        "agent": "analyst",
+        "object": "memory"
+      },
+      "template_id": "tmpl::^6"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst decomposed the memory into its parts.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^6::009",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^6",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^6:analyst:decomposed:signal",
+      "noetic": "^6",
+      "semantic_graph": {
+        "op": "decompose",
+        "agent": "analyst",
+        "object": "signal"
+      },
+      "template_id": "tmpl::^6"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst decomposed the signal into its parts.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^8::000",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^8:analyst:triggered:argument",
+      "noetic": "^8",
+      "semantic_graph": {
+        "op": "trigger",
+        "cue": "analyst",
+        "effect": "argument"
+      },
+      "template_id": "tmpl::^8"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst triggered the argument.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^8::001",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^8:analyst:triggered:device",
+      "noetic": "^8",
+      "semantic_graph": {
+        "op": "trigger",
+        "cue": "analyst",
+        "effect": "device"
+      },
+      "template_id": "tmpl::^8"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst triggered the device.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^8::002",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^8:analyst:triggered:memory",
+      "noetic": "^8",
+      "semantic_graph": {
+        "op": "trigger",
+        "cue": "analyst",
+        "effect": "memory"
+      },
+      "template_id": "tmpl::^8"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst triggered the memory.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^8::003",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^8:analyst:triggered:signal",
+      "noetic": "^8",
+      "semantic_graph": {
+        "op": "trigger",
+        "cue": "analyst",
+        "effect": "signal"
+      },
+      "template_id": "tmpl::^8"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst triggered the signal.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^8::004",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^8:analyst:triggered:picture",
+      "noetic": "^8",
+      "semantic_graph": {
+        "op": "trigger",
+        "cue": "analyst",
+        "effect": "picture"
+      },
+      "template_id": "tmpl::^8"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst triggered the picture.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^8::005",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^8:analyst:triggered:problem",
+      "noetic": "^8",
+      "semantic_graph": {
+        "op": "trigger",
+        "cue": "analyst",
+        "effect": "problem"
+      },
+      "template_id": "tmpl::^8"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst triggered the problem.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^8::006",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^8:analyst:evoked:argument",
+      "noetic": "^8",
+      "semantic_graph": {
+        "op": "trigger",
+        "cue": "analyst",
+        "effect": "argument"
+      },
+      "template_id": "tmpl::^8"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst evoked the argument.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^8::007",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^8:analyst:evoked:device",
+      "noetic": "^8",
+      "semantic_graph": {
+        "op": "trigger",
+        "cue": "analyst",
+        "effect": "device"
+      },
+      "template_id": "tmpl::^8"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst evoked the device.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^8::008",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^8:analyst:evoked:memory",
+      "noetic": "^8",
+      "semantic_graph": {
+        "op": "trigger",
+        "cue": "analyst",
+        "effect": "memory"
+      },
+      "template_id": "tmpl::^8"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst evoked the memory.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  },
+  {
+    "packet_id": "cg::^8::009",
+    "authority": "CONSTRUCTION_GOLD",
+    "cas_label": "^8",
+    "claim_bearing": true,
+    "sense": null,
+    "construction": {
+      "construction_seed": "^8:analyst:evoked:signal",
+      "noetic": "^8",
+      "semantic_graph": {
+        "op": "trigger",
+        "cue": "analyst",
+        "effect": "signal"
+      },
+      "template_id": "tmpl::^8"
+    },
+    "fired_rules": [],
+    "blocked_rules": [],
+    "abstain_reason": null,
+    "evidence": null,
+    "surface": {
+      "sentence": "The analyst evoked the signal.",
+      "realization_lane": "deterministic",
+      "roundtrip_ok": true
+    },
+    "provenance": {
+      "frozen_resource_digest": "construction",
+      "rule_table_digest": "n/a-construction",
+      "engine_version": "label_phase0b.v1",
+      "created_by": "construction_gold_generator",
+      "seed": 20260830
+    }
+  }
+]

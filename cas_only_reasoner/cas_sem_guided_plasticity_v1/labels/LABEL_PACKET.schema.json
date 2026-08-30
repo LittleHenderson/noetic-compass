@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "cas_sem_guided_plasticity_v1/labels/LABEL_PACKET.schema.json",
+  "title": "LABEL_PACKET",
+  "description": "One record emitted by the label pipeline. The label AUTHORITY, not any model, decides whether the packet is claim-bearing. claim_bearing MUST equal (authority in CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED). MODEL_PROPOSED, WEAK_LABEL, and ABSTAIN are never claim-bearing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["packet_id", "authority", "cas_label", "claim_bearing", "provenance"],
+  "properties": {
+    "packet_id": {"type": "string", "description": "Stable id for this packet."},
+    "authority": {
+      "type": "string",
+      "enum": ["CONSTRUCTION_GOLD", "RESOURCE_GOLD", "MODEL_PROPOSED", "WEAK_LABEL", "ABSTAIN", "OWNER_CORRECTED"],
+      "description": "Who/what established the label. Only CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED are claim-bearing."
+    },
+    "cas_label": {
+      "type": ["string", "null"],
+      "enum": ["^2", "^3", "^6", "^8", null],
+      "description": "The CAS class, or null for ABSTAIN / evidence-only packets."
+    },
+    "claim_bearing": {
+      "type": "boolean",
+      "description": "Derived, never free: true iff authority in {CONSTRUCTION_GOLD, RESOURCE_GOLD, OWNER_CORRECTED}."
+    },
+    "sense": {
+      "type": ["object", "null"],
+      "description": "Present for RESOURCE_GOLD / WEAK_LABEL / ABSTAIN over a frozen sense.",
+      "additionalProperties": true,
+      "properties": {
+        "sense_id": {"type": "string"},
+        "lemma": {"type": "string"},
+        "pos": {"type": "string"},
+        "gloss": {"type": "string"},
+        "source": {"type": "string"},
+        "frame": {"type": ["string", "null"]}
+      }
+    },
+    "construction": {
+      "type": ["object", "null"],
+      "description": "Present for CONSTRUCTION_GOLD: the label existed BEFORE surface realization.",
+      "additionalProperties": true,
+      "properties": {
+        "construction_seed": {"type": ["integer", "string"]},
+        "noetic": {"type": "string"},
+        "semantic_graph": {"type": "object"},
+        "template_id": {"type": "string"}
+      }
+    },
+    "fired_rules": {"type": "array", "items": {"type": "string"}, "description": "Rule ids that fired on the frozen text."},
+    "blocked_rules": {"type": "array", "items": {"type": "string"}, "description": "Rule ids whose include matched but an exclude term blocked them."},
+    "abstain_reason": {
+      "type": ["string", "null"],
+      "enum": ["no_rule", "multiple_rules", "source_conflict", "unverifiable_source", "ambiguous", null]
+    },
+    "evidence": {
+      "type": ["object", "null"],
+      "description": "Model-assembled, NON-authoritative. Advisory only. Never sets the label.",
+      "additionalProperties": true,
+      "properties": {
+        "model_id": {"type": "string"},
+        "model_role": {"type": "string", "enum": ["source_locator", "adversarial_critic", "counterexample_generator"]},
+        "source_locator": {"type": "string"},
+        "exact_gloss": {"type": "string"},
+        "frame_or_class": {"type": ["string", "null"]},
+        "proposed_rule_id": {"type": ["string", "null"]}
+      }
+    },
+    "surface": {
+      "type": ["object", "null"],
+      "properties": {
+        "sentence": {"type": "string"},
+        "realization_lane": {"type": "string", "enum": ["deterministic", "ai_paraphrase"]},
+        "roundtrip_ok": {"type": "boolean"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["frozen_resource_digest", "rule_table_digest", "engine_version"],
+      "properties": {
+        "frozen_resource_digest": {"type": "string"},
+        "rule_table_digest": {"type": "string"},
+        "engine_version": {"type": "string"},
+        "created_by": {"type": "string"},
+        "seed": {"type": ["integer", "string", "null"]}
+      }
+    }
+  }
+}

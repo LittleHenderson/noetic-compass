@@ -1,0 +1,492 @@
+[
+  {
+    "queue_id": "q0000",
+    "lemma": "avoid",
+    "text": "to avoid and stay clear of a hazard",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0001",
+    "lemma": "embrace",
+    "text": "to embrace an idea and hold it warmly",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0002",
+    "lemma": "yearn",
+    "text": "to yearn for something one hopes to have",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0003",
+    "lemma": "trigger",
+    "text": "to trigger a memory that then arises",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0004",
+    "lemma": "walk",
+    "text": "to move along on foot at a steady pace",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0005",
+    "lemma": "adoredissect",
+    "text": "to adore and dissect the topic",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0006",
+    "lemma": null,
+    "text": "The analyst cherished the device.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0007",
+    "lemma": "loathe",
+    "text": "to loathe something one finds repugnant",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0008",
+    "lemma": null,
+    "text": "The analyst adored the memory.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0009",
+    "lemma": null,
+    "text": "The analyst cherished the argument.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0010",
+    "lemma": "detest",
+    "text": "to detest and strongly dislike something",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0011",
+    "lemma": null,
+    "text": "The analyst decomposed the argument into its parts.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0012",
+    "lemma": "gauge",
+    "text": "to determine the size of an object",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0013",
+    "lemma": null,
+    "text": "The analyst detested the picture.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0014",
+    "lemma": null,
+    "text": "The analyst triggered the device.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0015",
+    "lemma": "evoke",
+    "text": "to evoke a feeling in an audience",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0016",
+    "lemma": null,
+    "text": "The analyst triggered the problem.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0017",
+    "lemma": null,
+    "text": "The analyst adored the device.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0018",
+    "lemma": "favor",
+    "text": "to favor and support a chosen side",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0019",
+    "lemma": "utter",
+    "text": "to say words aloud to a group",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0020",
+    "lemma": null,
+    "text": "The analyst detested the memory.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0021",
+    "lemma": "decompose",
+    "text": "to decompose a problem into smaller pieces",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0022",
+    "lemma": "bringtomind",
+    "text": "to bring to mind a distant recollection",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0023",
+    "lemma": null,
+    "text": "The analyst evoked the signal.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0024",
+    "lemma": null,
+    "text": "The analyst detested the signal.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0025",
+    "lemma": null,
+    "text": "The analyst loathed the argument.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0026",
+    "lemma": "adore",
+    "text": "to love and regard someone or something with deep affection",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0027",
+    "lemma": null,
+    "text": "The analyst decomposed the device into its parts.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0028",
+    "lemma": "deconstruct",
+    "text": "to deconstruct a text and expose its inner structure",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0029",
+    "lemma": null,
+    "text": "The analyst triggered the argument.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0030",
+    "lemma": null,
+    "text": "The analyst cherished the memory.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0031",
+    "lemma": "recoil",
+    "text": "to recoil from something unpleasant",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0032",
+    "lemma": null,
+    "text": "The analyst dissected the argument into its parts.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0033",
+    "lemma": null,
+    "text": "The analyst adored the signal.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0034",
+    "lemma": null,
+    "text": "The analyst loathed the memory.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0035",
+    "lemma": null,
+    "text": "The analyst decomposed the signal into its parts.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0036",
+    "lemma": "remind",
+    "text": "to remind a person of an earlier event",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0037",
+    "lemma": "parse",
+    "text": "to parse a sentence into grammatical units",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0038",
+    "lemma": "crave",
+    "text": "to crave and strongly desire a thing",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0039",
+    "lemma": null,
+    "text": "The analyst cherished the device.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0040",
+    "lemma": null,
+    "text": "The analyst detested the device.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0041",
+    "lemma": null,
+    "text": "The analyst triggered the signal.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0042",
+    "lemma": "flinch",
+    "text": "to flinch and pull back from a threat",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0043",
+    "lemma": "desire",
+    "text": "to desire and be attracted to a goal",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0044",
+    "lemma": null,
+    "text": "The analyst triggered the memory.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0045",
+    "lemma": "analyze",
+    "text": "to analyze a system by studying its components",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0046",
+    "lemma": "detest",
+    "text": "to detest and strongly dislike something",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0047",
+    "lemma": "separate",
+    "text": "to separate into distinct constituent elements",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0048",
+    "lemma": "abhor",
+    "text": "to abhor a thing one finds intolerable",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0049",
+    "lemma": null,
+    "text": "The analyst adored the argument.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0050",
+    "lemma": null,
+    "text": "The analyst detested the problem.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0051",
+    "lemma": null,
+    "text": "The analyst detested the argument.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0052",
+    "lemma": "analyze",
+    "text": "to analyze a system by studying its components",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0053",
+    "lemma": null,
+    "text": "The analyst dissected the signal into its parts.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0054",
+    "lemma": null,
+    "text": "The analyst dissected the device into its parts.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0055",
+    "lemma": null,
+    "text": "The analyst decomposed the memory into its parts.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0056",
+    "lemma": "interrogate",
+    "text": "to question and analyze a claim",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0057",
+    "lemma": "elicit",
+    "text": "to elicit a response from a listener",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0058",
+    "lemma": "relish",
+    "text": "to relish an experience with great enjoyment",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0059",
+    "lemma": "despise",
+    "text": "to despise and look down on someone",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0060",
+    "lemma": "dreadevoke",
+    "text": "to detest something that evokes fear",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0061",
+    "lemma": "dismantle",
+    "text": "to dismantle a machine piece by piece",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0062",
+    "lemma": null,
+    "text": "The analyst dissected the picture into its parts.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0063",
+    "lemma": null,
+    "text": "The analyst triggered the picture.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0064",
+    "lemma": null,
+    "text": "The analyst adored the problem.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0065",
+    "lemma": "avoid",
+    "text": "to avoid and stay clear of a hazard",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0066",
+    "lemma": "dissect",
+    "text": "to dissect an argument into its parts",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0067",
+    "lemma": "prompt",
+    "text": "to prompt a thought to come forward",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0068",
+    "lemma": null,
+    "text": "The analyst evoked the argument.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  },
+  {
+    "queue_id": "q0069",
+    "lemma": null,
+    "text": "The analyst evoked the memory.",
+    "question": "Which CAS class fits this sense-in-context? one of ^2 / ^3 / ^6 / ^8 / ABSTAIN",
+    "owner_judgment": null
+  }
+]
