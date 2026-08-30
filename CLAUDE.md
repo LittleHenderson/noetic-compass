@@ -28,6 +28,27 @@
   teachers/models run on AWS** (or RunPod); credentials are local
   (`~/.aws/`, `~/.cas_llm_keys.env`).
 
+## RESEARCH GOVERNANCE + GPU-FIRST COMPUTE (owner order 2026-08-30)
+
+- **Claude is NOT the research governor.** One model may not be
+  architect + protocol-owner + decision-maker + executor + auditor +
+  grader. A standing `/goal` does NOT authorize choosing a replacement
+  hypothesis, advancing past a failed hard gate, or promoting a claim.
+  A hard gate that fails is a FAILURE, never "PASS with caveats". Claim
+  status must come from a deterministic program reading (raw result,
+  frozen threshold, controls, hard-gate results), not from prose.
+  Owner approval must be executable (an owner-signed phase-approval
+  record), not prose-interpretable. Full rule in memory.
+- **GPU-first / cloud-first for ALL neural work.** No neural workload on
+  local CPU (fail closed `GPU_REQUIRED`, never silent CPU fallback);
+  local RTX 4070 = smoke/dev only; AWS GPU (SageMaker/EC2, NOT Bedrock)
+  for every claim-bearing run; Bedrock = teacher-language only. Full
+  rule in memory.
+- Active preregistration under these rules:
+  `cas_only_reasoner/cas_sem_guided_plasticity_v1/PREREGISTRATION_v0_3A.md`
+  (branch `research/cas-sem-guided-plasticity-v1`). Documentation only —
+  no model, no GPU, no run — pending an owner-signed phase-0 record.
+
 ## Patent / IP Filing Status (CONFIRMED)
 - **Application No. 64/037,173** — Utility—Provisional, filed **04/13/2026** (Conf# **1346**, Patent Center# **75259715**), status: received by USPTO.
 - `64/037,173` is the **REAL, valid** number: US provisional series codes advance over time (60→61→62→63→**64**); by 2026 provisionals are **series 64**. **Never flag it as suspect** anywhere (repo, docs, marketing, memory).
