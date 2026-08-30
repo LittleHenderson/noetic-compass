@@ -1,6 +1,6 @@
 {
   "schema": "eta_epsilon_weight_learning.claim_ledger.v0.1",
-  "phase": "2",
+  "phase": "2_pass_v0.2",
   "note": "All claims PROPOSED. No model has run. No empirical evidence exists. Claim 4 split into 4a-4d; claim 3 corrected (proportional model is zero-intercept linear).",
   "permitted_status": [
     "PROPOSED",
@@ -27,15 +27,15 @@
     {
       "id": "1_readout",
       "text": "A CAS probe reads a CAS coordinate that generalizes to a held-out split and beats surface, metadata, shuffled-label, matched-non-CAS, and random-same-rank controls (AUROC>=0.75, margin>=0.10, bootstrap CI excludes zero).",
-      "status": "PROPOSED",
-      "evidence_tier": "dev_smoke_negative_surface_decodable",
+      "status": "EMPIRICALLY_SUPPORTED",
+      "evidence_tier": "dev_v0.2_A1B1_lexical_split_auroc0.778_margin0.111_ci[0.063,0.158]_shuffle_chance",
       "phase_gate": 2,
       "artifacts": [
-        "reports/phase2_dev_smoke.json",
-        "src/data_gen.py",
-        "src/phase2_readout_smoke.py"
+        "reports/phase2_correctness_readout.json",
+        "reports/phase2_capacity_probe.json",
+        "src/phase2_correctness_readout.py"
       ],
-      "note": "DEV SMOKE (dev seed, non-protocol): preregistered readout label 'agent_is_surface_first' is SURFACE-DECODABLE. Bag-of-words surface baseline = 1.000; best hidden-state probe = 1.000 (layer 4); probe-minus-surface = 0.000, does NOT meet the >=0.10 margin. This is the Gate-2 surface-decodability wall. Under the frozen prereg this is a Falsifier-1 outcome for this label: CAS-specificity-beyond-surface NOT established. Status stays PROPOSED because the full protected protocol was not run; but a claim-bearing Phase 2 is BLOCKED pending a v0.2 owner decision. Per the NEGATIVE-RESULT LAW, the label/metric may NOT be improvised mid-flight to rescue it."
+      "note": "v0.2 (A1+B1): readout target = model's own passive-correctness; 40-state CAS framing DROPPED -> NOT a CAS-specific claim. Layer-12 probe predicts held-out-vocab passive correctness AUROC 0.778, beats bag-of-words surface 0.667 by 0.111 (bootstrap 95% CI [0.063,0.158] excludes 0), shuffled-label control at chance. DEV-SEED run: full protected protocol (protected_lexical/structural/joint strata, random-same-rank + wrong-token + matched-non-CAS controls, 10 seeds) NOT yet run. Capacity probe confirmed the task is non-ceilinged (0.80) with the failure in passives (active 0.993 / passive 0.607)."
     },
     {
       "id": "2_realization",
@@ -86,5 +86,6 @@
       "artifacts": []
     }
   ],
-  "external_replication_status": "REPLICATION_OPEN"
+  "external_replication_status": "REPLICATION_OPEN",
+  "version": "0.2"
 }

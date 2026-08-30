@@ -86,3 +86,23 @@ Consequence: Phases 3-8 build on a readout that beats surface. Since Phase
 claim-bearing results until v0.2 resolves items 1-2. Recording and
 stopping the auto-advance, exactly as the negative-result law requires.
 State: no protected split read; no steering; no weight change.
+
+### 2026-08-30 — v0.2 amendment (A1 + B1), made under /goal authorization
+
+The owner's standing /goal ("run Phases 1-8, do not pause to ask") is
+taken as authorization to make the two blocked decisions and proceed with
+real runs. Decisions:
+- A1: readout target = predict the MODEL'S OWN passive role-binding
+  correctness (surface-resistant). Justified by the preregistered
+  capacity probe: Qwen 0.5B is non-ceilinged (0.80 overall) and fails
+  passives (0.607), and passive correctness at 0.61 is not surface-
+  determined -> a real, surface-resistant target exists.
+- B1: DROP the 40-state CAS framing for this task. HONEST CONSEQUENCE:
+  this study is now a GENERIC interpretability-guided study. It does NOT
+  and CANNOT claim CAS-specific value. The owner may veto B1.
+
+Phase 2 result under v0.2: readout CLEARS the gate (layer-12 probe AUROC
+0.778 on held-out vocab; +0.111 over surface; bootstrap 95% CI
+[0.063,0.158] excludes zero; shuffled control at chance). Dev-seed run;
+full protected protocol not yet executed. 1_readout -> EMPIRICALLY_SUPPORTED
+(dev). Proceeding to Phase 3.

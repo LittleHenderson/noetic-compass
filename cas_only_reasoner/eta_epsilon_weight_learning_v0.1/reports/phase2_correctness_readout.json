@@ -1,0 +1,44 @@
+{
+  "schema": "eta_epsilon_weight_learning.phase2_correctness_readout.v0.1",
+  "status": "V0_2_AMENDMENT_A1_B1_generic_not_cas_specific",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "device": "cuda",
+  "readout_target": "model's own passive role-binding correctness",
+  "lexical_split": {
+    "train_passives": 432,
+    "test_passives": 624,
+    "test_uses_held_out_vocab": true
+  },
+  "label_balance_test_correct_rate": 0.6586538461538461,
+  "majority_baseline": 0.6586538461538461,
+  "bag_of_words_surface_auroc": 0.6666438207509453,
+  "probe_auroc_by_layer": {
+    "4": 0.7301668894143449,
+    "8": 0.7207772180528426,
+    "12": 0.7775950104520064,
+    "16": 0.7661035148441337,
+    "20": 0.7238842625909553
+  },
+  "shuffled_label_control_auroc_by_layer": {
+    "4": 0.5189335526541242,
+    "8": 0.5396547982134494,
+    "12": 0.5396091063820065,
+    "16": 0.482151628342643,
+    "20": 0.4427424237231989
+  },
+  "best_probe_layer": 12,
+  "best_probe_auroc": 0.7775950104520064,
+  "probe_minus_surface_auroc": 0.1109511897010611,
+  "margin_bootstrap_95ci": [
+    0.0628963189942046,
+    0.15822915254242076
+  ],
+  "margin_ci_excludes_zero": true,
+  "prereg_gate": {
+    "auroc_min": 0.75,
+    "margin_min": 0.1,
+    "bootstrap_ci_excludes_zero": true
+  },
+  "readout_clears_gate": true,
+  "honest_note": "B1 adopted: not a CAS-specific claim. Surface baseline is weak on held-out vocab by construction; the real question is whether the probe reads vocab-general role-binding structure."
+}
