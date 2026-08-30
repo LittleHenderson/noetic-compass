@@ -106,3 +106,16 @@ Phase 2 result under v0.2: readout CLEARS the gate (layer-12 probe AUROC
 [0.063,0.158] excludes zero; shuffled control at chance). Dev-seed run;
 full protected protocol not yet executed. 1_readout -> EMPIRICALLY_SUPPORTED
 (dev). Proceeding to Phase 3.
+
+### 2026-08-30 — Phase 3 activation bridge (PASS with caveats)
+
+Steered layer-12 residual along the readout direction (d = w/sd unit).
+On 213 wrong passives: +readout flips 60.1% to correct; random 33.8%;
+opposite 0.0%. Verdict STEERING_IMPROVES_BEHAVIOR (gain 0.601 >= 0.10;
++26.3pp over random; opposite null). Kill rule NOT tripped.
+CAVEATS (honest): (1) random alone flips 34% (base is 0% -> easy to
+jostle), so the readout-SPECIFIC gain is +26pp; (2) collateral 15.6% of
+correct passives break at alpha=0.5 - FAR over the 2pp target - and only
+alpha=0.5 works (alpha>=1 destroys output). Crude activation steering is
+blunt. Motivates the targeted LoRA weight update (Phase 4). Generic (B1),
+activation-only, no weight change. reports/phase3_activation_bridge.json.

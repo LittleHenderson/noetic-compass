@@ -1,0 +1,39 @@
+{
+  "schema": "eta_epsilon_weight_learning.phase3_activation_bridge.v0.1",
+  "status": "V0_2_generic_activation_steering",
+  "layer": 12,
+  "mean_hidden_norm": 15.104372024536133,
+  "baseline": {
+    "wrong_set_size": 213,
+    "right_set_size": 411,
+    "wrong_baseline_correct": 0.0,
+    "right_baseline_correct": 1.0
+  },
+  "by_alpha": {
+    "alpha_0.5": {
+      "wrong_to_correct_plus_readout": 0.6009389671361502,
+      "wrong_to_correct_random": 0.3380281690140845,
+      "wrong_to_correct_opposite": 0.0,
+      "collateral_right_still_correct_plus": 0.8442822384428224
+    },
+    "alpha_1.0": {
+      "wrong_to_correct_plus_readout": 0.0,
+      "wrong_to_correct_random": 0.19718309859154928,
+      "wrong_to_correct_opposite": 0.023474178403755867,
+      "collateral_right_still_correct_plus": 0.0
+    },
+    "alpha_2.0": {
+      "wrong_to_correct_plus_readout": 0.0,
+      "wrong_to_correct_random": 0.0,
+      "wrong_to_correct_opposite": 0.0,
+      "collateral_right_still_correct_plus": 0.0
+    }
+  },
+  "best_alpha": 0.5,
+  "behavioral_gain_wrong_to_correct": 0.6009389671361502,
+  "gain_over_random_control": 0.26291079812206575,
+  "prereg_behavioral_gain_min_pp": 0.1,
+  "kill_rule_tripped": false,
+  "verdict": "STEERING_IMPROVES_BEHAVIOR",
+  "honest_note": "generic (B1); activation-only; no weight change."
+}
