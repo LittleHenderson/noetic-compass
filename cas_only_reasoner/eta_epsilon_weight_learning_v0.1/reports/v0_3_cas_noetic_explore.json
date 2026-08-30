@@ -1,6 +1,6 @@
 {
   "schema": "eta_epsilon_weight_learning.v0_3_cas_noetic_explore.v0.1",
-  "status": "EXPLORATORY_NON_CLAIM_BEARING",
+  "status": "DEVELOPMENT_ONLY_NOT_CLAIM_BEARING",
   "classes": [
     "^2_attraction",
     "^3_aversion",
@@ -14,6 +14,24 @@
   "surface_bow_heldout_acc": 0.25,
   "shuffled_label_control_acc": 0.05,
   "probe_minus_surface": 0.525,
-  "reads_beyond_surface_on_heldout_verbs": true,
-  "honest_note": "Held-out VERBS: surface bow cannot use unseen verbs. If the hidden-state Noetic probe beats surface here, the model encodes the Noetic semantically and generalizes. This does NOT yet show CAS-SPECIFICITY - that needs the matched-non-CAS-SEMANTIC control (deferred to the approved v0.3 run). Non-claim-bearing preview."
+  "honest_note": "Held-out VERBS: surface bow cannot use unseen verbs. If the hidden-state Noetic probe beats surface here, the model encodes the Noetic semantically and generalizes. This does NOT yet show CAS-SPECIFICITY - that needs the matched-non-CAS-SEMANTIC control (deferred to the approved v0.3 run). Non-claim-bearing preview.",
+  "OWNER_CORRECTION_2026_08_30": {
+    "only_permitted_interpretation": "On one development split, a layer-12 linear probe classified eight held-out verb lemmas into four author-assigned semantic groups with 77.5% sentence-level accuracy.",
+    "forbidden_wording": [
+      "reads beyond surface",
+      "model encodes Noetics",
+      "CAS-specific signal",
+      "Qwen contains CAS cognitive states",
+      "reads a CAS-40 coordinate"
+    ],
+    "defects": [
+      "1. Surface baseline blinded by construction: bag-of-words vocab built from TRAIN sentences only, so it had NO features for the held-out test verbs. The comparison is pretrained hidden states vs a word-counter with the test verbs erased. Not evidence beyond surface.",
+      "2. The 'random-partition' control was a per-example label shuffle (rng.permutation of train labels), NOT a fixed balanced verb-sense->class partition. 0.05 is far below the 0.25 four-way chance -> the control is broken, not 'at chance'.",
+      "3. Unit-of-analysis error: only 8 independent held-out verbs (2 per class), each repeated x10 with different nouns. Not 80 independent tests. CIs must group-bootstrap by verb SENSE.",
+      "4. Labels are bare verb spellings, not verified verb SENSES in context (e.g. 'questions','warns' are sense-ambiguous).",
+      "5. Layer 12 was inherited from the prior generic study, not independently selected on a readout_select split."
+    ],
+    "disposition": "DEVELOPMENT_ONLY. Not upgraded, not rerun, not used in any claim-bearing protected dataset. Its 24 verbs are excluded from v0.3A protected evaluation."
+  },
+  "reads_beyond_surface": "RETRACTED - unfair baseline (see OWNER_CORRECTION)"
 }
