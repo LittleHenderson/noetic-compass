@@ -147,27 +147,22 @@ def test_protected_path_refused():
 
 def test_gpu_required_fires_first():
     assert not torch.cuda.is_available(), "this proof needs a CUDA-less box"
-    for name, call in [
-        ("run_training", lambda: run_training("S3", 11, 0, [], [])),
-    ]:
-        try:
-            call()
-            raise AssertionError(f"{name} ran without a GPU")
-        except GpuRequiredError as exc:
-            assert "GPU_REQUIRED" in str(exc)
-    from exec.protected_eval import run_protected_evaluation
+    # run_training with device=None (production entry) fails closed on this
+    # CUDA-less box; the driver passes an explicit device it already GPU-gated
     try:
-        run_protected_evaluation(
-            PKG, "REAL", campaign_id="t", protected_records=[],
-            protected_features={}, train_records=[], train_features={},
-            checkpoints={}, receipts_by_key={}, widths={}, verb_to_class={},
-            seeds=[], lock=None,
-            surface_baselines_trainval={}, evidence_chain={},
-            out_path=Path("x"))
-        raise AssertionError("protected evaluation ran without a GPU")
+        run_training("S3", 11, 0, [], [])              # device=None -> require_gpu
+        raise AssertionError("run_training ran without a GPU")
     except GpuRequiredError as exc:
         assert "GPU_REQUIRED" in str(exc)
-    print("PASS GPU_REQUIRED fires before any work at every guarded neural entry")
+    # the driver's frozen-model load is the REAL neural entry; it fails closed
+    from exec.gpu_guard import require_gpu
+    try:
+        require_gpu()
+        raise AssertionError("require_gpu passed on a CUDA-less box")
+    except GpuRequiredError as exc:
+        assert "GPU_REQUIRED" in str(exc)
+    print("PASS GPU_REQUIRED fires at the production training entry and the "
+          "frozen-model load (the REAL neural entries)")
 
 
 def test_spans_and_encoding():

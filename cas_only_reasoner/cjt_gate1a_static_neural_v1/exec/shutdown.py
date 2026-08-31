@@ -28,9 +28,14 @@ class ShutdownPath:
             self.actions.append({"action": "UPLOAD", "path": str(path),
                                  "dest": dest_label})
             return
+        if not dest_label.startswith("s3://"):
+            raise RuntimeError(f"UPLOAD_DEST_INVALID: {dest_label} is not an s3 URI")
         import boto3                                  # real mode: S3 put
-        bucket_key = dest_label[len("s3://"):].split("/", 1)
-        boto3.client("s3").upload_file(str(path), bucket_key[0], bucket_key[1])
+        rest = dest_label[len("s3://"):]
+        if "/" not in rest:
+            raise RuntimeError(f"UPLOAD_DEST_INVALID: {dest_label} has no key")
+        bucket, key = rest.split("/", 1)
+        boto3.client("s3").upload_file(str(path), bucket, key)
         self.actions.append({"action": "UPLOAD", "path": str(path),
                              "dest": dest_label})
 
@@ -69,11 +74,27 @@ class ShutdownPath:
 
     def finalize(self, receipt: dict, receipt_path: Path, uploads,
                  dest_label: str, reason: str) -> None:
-        """The ONE registered end path: receipt -> uploads -> termination."""
+        """The ONE registered end path: receipt -> uploads -> termination.
+        Uploads are BEST-EFFORT (each wrapped): an upload failure (e.g. an S3
+        error, or boto3 absent on a dev box) must NEVER prevent termination.
+        Every attempt and outcome is recorded so the evidence names what was
+        uploaded and what was not."""
         receipt_path = Path(receipt_path)
         receipt_path.parent.mkdir(parents=True, exist_ok=True)
         with receipt_path.open("w", encoding="utf-8", newline="\n") as fh:
             fh.write(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
+        # preserve the file's path RELATIVE to the evidence root in the S3 key so
+        # two files that share a basename in different subdirs do not collide
+        # (audit fix); fall back to the basename if a file is outside the root
         for p in uploads:
-            self.upload(Path(p), f"{dest_label}/{Path(p).name}")
+            p = Path(p)
+            try:
+                rel = p.relative_to(self.evidence_dir).as_posix()
+            except ValueError:
+                rel = p.name
+            try:
+                self.upload(p, f"{dest_label}/{rel}")
+            except Exception as exc:                   # noqa: BLE001 -- best effort
+                self.actions.append({"action": "UPLOAD_FAILED", "path": str(p),
+                                     "error": f"{type(exc).__name__}"})
         self.request_termination(reason)

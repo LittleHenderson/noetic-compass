@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-31 (gate 1a.2r real-path executability) - the REAL Gate-1B branch made executable per the owner's independent source audit of fc7ceb48 (verdict: REAL_GATE1B_EXECUTION_PATH_REFUTED — synthetic fixtures hid 14 branch defects), on branch research/cjt-gate1a2r-real-path-v1
+
+- The audit's diagnosis was exact: synthetic conformance substituted working fakes precisely where the REAL branches were broken stubs. ALL 14 findings closed (amendment A13):
+  - REAL candidate encoding WIRED (was `cand=None` → `.shape` crash): `extract_split` now returns h/g/cand (context-free frozen input embeddings) in ONE forward pass for all 4 layers; no passage reaches training/scoring with cand=None.
+  - Container bootable: `aws` CLI calls (image never installed it) replaced by committed boto3 `exec/stage_main.py`; watchdog no longer terminates before the first heartbeat (startup grace), shares the REAL epoch clock, reads the SIGNED per-job cap from `watchdog_config.json`.
+  - AWS protected-lock unified with local (both return `lock_receipt_sha256`, same schema; the REAL success path no longer KeyErrors after burn); ONE outer burn boundary wraps every post-claim step; the watchdog burns an abandoned AWS lock.
+  - REAL training implements the frozen schedule: `exec/batching.build_batches` (batch-32, seeded full-corpus, 3000 updates, seed governs data order); the duplicate run is ACTUALLY compared and REFUTES on mismatch; all 29 runs emit complete receipts.
+  - Container-prep driver (`exec/container_prep.py`); S7 staged + built; REAL monotonic cost (no invented 0.01h) + whole-remaining-schedule gate; live model allow-list + live PIP_FREEZE hash; salted-manifest digest enforced; status supports 3 OR 5 seeds (read from evidence); evidence chain validated SEMANTICALLY (checkpoint/cache bytes recomputed, receipts parsed, protected-eval receipt written AFTER evaluation); complete failure-evidence upload + S3 path join; CAS mapping-rules + PATH-A binding in the execution approval.
+  - NEW `tools/test_real_branch_conformance.py` exercises EVERY REAL adapter with fakes (fake tokenizer/model/embeddings, fake DynamoDB, fake S3, fake clock) — no model, GPU, or AWS; the branches synthetic mode bypassed are now tested directly.
+- Full battery green: 12 unit/attack suites + the end-to-end synthetic campaign (13 sabotages, replay-identical, SOFTWARE_CONFORMANCE_ONLY) + byte-domain. Scope held: NO model, NO GPU, NO AWS, NO protected read, NO key, NO signature. Neural evidence: 0.
+
 ## 2026-08-31 (gate 1a.2 campaign-authority freeze) - END-TO-END CAMPAIGN AUTHORITY, PROTECTED EVIDENCE, AND SYNTHETIC CONFORMANCE frozen per the owner's Gate 1A.2 directive, on branch research/cjt-gate1a2-execution-authority-v1 from the verified byte-freeze anchor a6140e0c
 
 - CAMPAIGN LIFECYCLE (§1): one typed 18-state machine (`exec/campaign_state.py` + 3 schemas) — every transition binds campaign id, package commit, authorizing approval/receipt digest, and input/output digests in an append-only sha256-chained log; skips/repeats/wrong-campaign refused; failure inside the protected phase must burn before shutdown; synthetic replay is chain-digest-identical.

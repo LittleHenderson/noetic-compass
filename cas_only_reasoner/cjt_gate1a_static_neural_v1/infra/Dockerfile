@@ -6,6 +6,11 @@
 # the only entry point.
 FROM python:3.11-slim
 
+# REQUIRED for torch.use_deterministic_algorithms(True) with cuBLAS GEMMs on
+# CUDA >= 10.2 (audit fix): must be set in the ENVIRONMENT before the process
+# starts, else the first CUDA matmul raises. Deterministic training depends on it.
+ENV CUBLAS_WORKSPACE_CONFIG=:4096:8
+
 # system deps: git for commit verification on-instance
 RUN apt-get update && apt-get install -y --no-install-recommends git \
     && rm -rf /var/lib/apt/lists/*

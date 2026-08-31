@@ -1,24 +1,31 @@
 """activation_extraction.py -- frozen-model hidden-state extraction + cache I/O.
 
-Gate 1B jobs only: require_gpu() is the first statement of the extraction entry.
-Activations are extracted ONCE per split at the candidate layers (train/val in
-step 4; protected only inside step 7's single pass), cached fp16, digest-pinned,
-and reused by every arm and seed (cache-once law).
+Gate 1B jobs only. Activations are extracted ONCE per split for ALL candidate
+layers in a SINGLE forward pass per passage (not one pass per layer), cached
+fp16, digest-pinned, and reused by every arm and seed (cache-once law). The
+context-free CANDIDATE encodings are produced in the same pass from the frozen
+INPUT embeddings (layer-independent), so no passage ever reaches training,
+validation, or protected scoring with cand=None.
 
-The model identity is verified BEFORE extraction: the resolved HuggingFace
-revision SHA and weight-file digests must equal the owner-signed approval's
-values, else MODEL_IDENTITY_MISMATCH and abort.
+require_gpu() is enforced at the DRIVER entry (exec/campaign_driver
+_load_frozen_model); extract_split itself takes an explicit `device` so the
+REAL extraction logic is exercisable with fake tokenizers/embeddings on CPU in
+the REAL-branch conformance tests without a model, GPU, or AWS -- while the real
+campaign still fails closed on a CUDA-less box at the driver.
+
+Model identity is verified BEFORE extraction (exec/identity.verify_model_identity)
+against the signed approval; a model file outside the signed allow-list aborts.
 """
 from __future__ import annotations
 
 import hashlib
 
 try:
-    from exec.gpu_guard import require_gpu
     from exec.spans import build_input_text, clause_char_spans, token_spans
+    from exec.candidate_encoding import encode_candidates
 except ImportError:
-    from gpu_guard import require_gpu
     from spans import build_input_text, clause_char_spans, token_spans
+    from candidate_encoding import encode_candidates
 
 MODEL_ID = "Qwen/Qwen2.5-0.5B-Instruct"
 
@@ -40,13 +47,24 @@ def read_cache(path, expected_sha256: str = None):
     return torch.load(path, map_location="cpu", weights_only=True)
 
 
-def extract_split(records, tokenizer, model, layers, batch_size: int = 16):
-    """{passage_id: {"layers": {L: (h_ideas (N,896) fp16, g (896,) fp16)}}}
-    -- mean-pooled per-Idea and question hidden states at each candidate layer.
-    Caller has already verified model identity against the signed approval."""
-    device = require_gpu()                              # FIRST -- fail closed
+def extract_split(records, tokenizer, model, layers, device="cpu"):
+    """{passage_id: {"layers": {L: (h_ideas (N,896) fp16, g (896,) fp16)},
+                     "cand": (C, 896) fp16}}
+
+    ONE forward pass per passage yields every candidate layer's per-Idea and
+    question hidden states; `cand` is the context-free frozen-input-embedding
+    encoding of the passage's closed candidate set (layer-independent). Caller
+    has already verified model identity and (for the real path) the GPU."""
     import torch
     model = model.to(device).eval()
+    embed = model.get_input_embeddings()
+
+    def tokenize_ids(text):                             # standalone, no specials
+        return tokenizer(text, add_special_tokens=False)["input_ids"]
+
+    def embedding_rows(ids):
+        return embed(torch.tensor(ids, device=device)).detach()
+
     out = {}
     with torch.no_grad():
         for rec in records:
@@ -62,9 +80,11 @@ def extract_split(records, tokenizer, model, layers, batch_size: int = 16):
             for L in layers:                            # 1-indexed block OUTPUT
                 h_all = hs[L][0].float()
                 h_ideas = torch.stack(
-                    [h_all[t].mean(dim=0) for t in
-                     [torch.tensor(ix) for ix in idea_toks]]).half()
-                g = h_all[torch.tensor(q_toks)].mean(dim=0).half()
+                    [h_all[torch.tensor(ix, device=h_all.device)].mean(dim=0)
+                     for ix in idea_toks]).half()
+                g = h_all[torch.tensor(q_toks, device=h_all.device)].mean(dim=0).half()
                 per_layer[L] = (h_ideas.cpu(), g.cpu())
-            out[rec["passage_id"]] = {"layers": per_layer}
+            cand = encode_candidates(rec["candidates"], tokenize_ids,
+                                     embedding_rows).half().cpu()
+            out[rec["passage_id"]] = {"layers": per_layer, "cand": cand}
     return out

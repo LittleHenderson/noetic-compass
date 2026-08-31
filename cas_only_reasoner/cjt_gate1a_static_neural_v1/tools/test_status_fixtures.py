@@ -22,12 +22,14 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent))
-from emit_gate1_status import (ARMS, LICENSED, SEEDS, EvidenceUnbound,  # noqa: E402
+from emit_gate1_status import (ARMS, LICENSED, EvidenceUnbound,  # noqa: E402
                                StatusInputInvalid, emit)
 from exec.prng import HashPRNG  # noqa: E402
 
 N = 1000
 BOOT_N_TEST = 500
+SEEDS = ("11", "23", "47")     # the fixture seed set (3-seed package default)
+SELECTED_LAYER = 12
 IDS = [f"p{i:06d}" for i in range(N)]
 ORDER_DIGEST = hashlib.sha256(
     json.dumps(IDS, separators=(",", ":")).encode("utf-8")).hexdigest()
@@ -43,11 +45,26 @@ def _sha_write(path: Path, obj) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def make_evidence(owner_key_id="TEST-GATE1A2-CONFORMANCE-KEY-v1"):
-    """A complete, file-backed evidence chain fixture. Returns (chain, root)."""
+def _sha_bytes(path: Path, data: bytes) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(data)
+    return hashlib.sha256(data).hexdigest()
+
+
+def make_evidence(owner_key_id="TEST-GATE1A2-CONFORMANCE-KEY-v1", seeds=SEEDS):
+    """A complete, file-backed evidence chain fixture with REAL checkpoint/cache
+    bytes and semantically-consistent job receipts (audit-fix: the status
+    program now recomputes those hashes and parses the receipts). Returns
+    (chain, root)."""
     global _EVIDENCE_ROOT
     root = Path(tempfile.mkdtemp(prefix="status_evidence_"))
     _EVIDENCE_ROOT = root
+    # cache files (real bytes)
+    cache_shas = {}
+    for split in ("train", "val"):
+        cache_shas[split] = _sha_bytes(
+            root / "caches" / f"{split}_features.pt",
+            f"CACHE|{split}".encode("utf-8"))
     chain = {"package_commit_sha": "ab" * 20,
              "owner_key_id": owner_key_id,
              "model_revision_sha": "cd" * 20,
@@ -56,36 +73,43 @@ def make_evidence(owner_key_id="TEST-GATE1A2-CONFORMANCE-KEY-v1"):
              "tokenizer_manifest_sha256": "56" * 32,
              "dependency_lock_sha256": "78" * 32,
              "s7_control_table_sha256": "9a" * 32,
-             "cache_manifest_sha256s": {"train": "bc" * 32, "val": "de" * 32},
+             "cache_manifest_sha256s": cache_shas,
              "protected_campaign_id": "fixture-campaign"}
+    _sha_write(root / "selected_layer_receipt.json",
+               {"selected_layer": SELECTED_LAYER})       # written below w/ digest
     files = {"execution_approval_sha256": "execution_approval.json",
              "container_prep_receipt_sha256": "container_prep_receipt.json",
              "dataset_manifest_sha256": "dataset_manifest.json",
              "run_schedule_sha256": "run_schedule.json",
-             "selected_layer_receipt_sha256": "selected_layer_receipt.json",
              "protected_lock_receipt_sha256": "protected_lock_receipt.json",
              "protected_evaluation_receipt_sha256": "protected_evaluation_receipt.json",
              "surface_baseline_receipt_sha256": "surface_baseline_receipt.json",
              "campaign_receipt_sha256": "campaign_pre_receipt.json"}
     for field, fname in files.items():
         chain[field] = _sha_write(root / fname, {"fixture": fname})
+    chain["selected_layer_receipt_sha256"] = _sha_write(
+        root / "selected_layer_receipt.json", {"selected_layer": SELECTED_LAYER})
     ck, jr = {}, {}
     for a in ARMS:
-        for s in SEEDS:
+        for s in seeds:
             key = f"{a}_seed{s}"
-            ck[key] = hashlib.sha256(f"ckpt|{key}".encode()).hexdigest()
-            jr[key] = _sha_write(root / "receipts" / f"run_{key}.json",
-                                 {"fixture_job": key})
+            ck[key] = _sha_bytes(
+                root / "checkpoints" / f"{a}_seed{s}_L{SELECTED_LAYER}.pt",
+                f"CKPT|{key}".encode("utf-8"))
+            jr[key] = _sha_write(
+                root / "receipts" / f"run_{key}.json",
+                {"arm": a, "seed": int(s), "status": "SUCCESS",
+                 "checkpoint_sha256": ck[key]})
     chain["checkpoint_sha256s"] = ck
     chain["job_receipt_sha256s"] = jr
     return chain, root
 
 
-def make_arm(domain, acc):
+def make_arm(domain, acc, seeds=SEEDS):
     rng = HashPRNG(domain)
     return {"per_seed_correct":
             {s: [1 if rng.random() < acc else 0 for _ in range(N)]
-             for s in SEEDS},
+             for s in seeds},
             "passage_order_digest": ORDER_DIGEST}
 
 
@@ -101,14 +125,16 @@ def make_baseline(target):
 
 
 def fixture(a0=0.60, a1=0.60, a2=0.60, a3=0.85, a4=0.50, a5=0.50,
-            a6=0.60, a7=0.60, owner_key_id="TEST-GATE1A2-CONFORMANCE-KEY-v1"):
+            a6=0.60, a7=0.60, owner_key_id="TEST-GATE1A2-CONFORMANCE-KEY-v1",
+            seeds=SEEDS):
     accs = {"S0": a0, "S1": a1, "S2": a2, "S3": a3,
             "S4": a4, "S5": a5, "S6": a6, "S7": a7}
-    chain, root = make_evidence(owner_key_id)
+    chain, root = make_evidence(owner_key_id, seeds=seeds)
     return {"schema": "RAW_GATE1_RESULTS_v2",
             "evidence_chain": chain,
             "protected_passage_ids": list(IDS),
-            "arms": {k: make_arm(f"FIX|{k}|{v}", v) for k, v in accs.items()},
+            "arms": {k: make_arm(f"FIX|{k}|{v}", v, seeds)
+                     for k, v in accs.items()},
             "claim_a": {"probe_protected_accuracy": 0.9,
                         "shuffled_control_accuracy": 0.3},
             "surface_baselines": {
@@ -174,6 +200,22 @@ def main():
         raise AssertionError("conformance accepted a non-TEST key")
     except EvidenceUnbound:
         print("PASS conformance mode requires a TEST- key")
+
+    # 5-seed law (audit fix): the package supports the 3-vs-5 owner choice; the
+    # seed set is read from the evidence, so a well-formed 5-seed result licenses
+    five = ("11", "23", "47", "59", "71")
+    r5 = fixture(seeds=five)
+    r5["evidence_chain"]["owner_key_id"] = "FIXTURE-NONTEST-KEY"
+    assert emit(r5, boot_n=BOOT_N_TEST, evidence_root=_EVIDENCE_ROOT,
+                conformance=False)["claim_b_status"] == LICENSED
+    # and a 4-seed set is refused (must be exactly 3 or 5)
+    four = fixture(seeds=("11", "23", "47", "59"))
+    try:
+        emit(four, boot_n=BOOT_N_TEST, evidence_root=_EVIDENCE_ROOT,
+             conformance=True)
+        raise AssertionError("4-seed set accepted")
+    except StatusInputInvalid:
+        print("PASS seed law: 5 seeds licensed, 4 seeds refused")
 
     # claim A + baselines + determinism
     r = fixture(); r["evidence_chain"]["owner_key_id"] = "FIXTURE-NONTEST-KEY"

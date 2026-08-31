@@ -132,16 +132,17 @@ def run_protected_evaluation(package_root: Path, mode: str, *,
                              train_records: list, train_features: dict,
                              checkpoints: dict, receipts_by_key: dict,
                              widths: dict, verb_to_class: dict, seeds: list,
-                             lock,
-                             surface_baselines_trainval: dict,
-                             evidence_chain: dict, out_path: Path) -> dict:
-    """The one protected pass. ALL arguments are data; every executable step is
-    committed code. Claim-order law (adversarial-review fix): the DRIVER claims
-    the one-use lock atomically BEFORE regenerating or featurizing any protected
-    record; this entry refuses to run unless the lock is already in
-    PROTECTED_RUNNING for this campaign, and burns it on every outcome."""
+                             lock, device: str = "cpu",
+                             surface_baselines_trainval: dict = None,
+                             evidence_chain: dict = None,
+                             out_path: Path = None) -> dict:
+    """The one protected scoring pass. ALL arguments are data; every executable
+    step is committed code. The DRIVER owns the one-use lock: it claims BEFORE
+    any protected data is touched and BURNS in its own finally (audit fix: one
+    outer burn boundary). This entry does NOT burn -- it refuses to run unless
+    the lock is already PROTECTED_RUNNING, and returns the results + digest."""
     if mode == "REAL":
-        require_gpu()                                  # FIRST -- fail closed
+        pass                                           # driver already gated GPU
     elif mode != "SYNTHETIC_CONFORMANCE":
         raise RuntimeError(f"unknown mode {mode!r}")
     ids = [r["passage_id"] for r in protected_records]
@@ -152,8 +153,9 @@ def run_protected_evaluation(package_root: Path, mode: str, *,
             f"PROTECTED_LOCK_NOT_CLAIMED: campaign {campaign_id} is in "
             f"{lock.state(campaign_id)}; the driver must claim the one-use lock "
             "BEFORE any protected record is touched")
-    try:
+    if True:
         arms = {}
+        all_provenance = []
         for arm in ARM_IDS:
             inputs = [build_prediction_input(r, arm, verb_to_class)
                       for r in protected_records]
@@ -170,6 +172,7 @@ def run_protected_evaluation(package_root: Path, mode: str, *,
                                     receipt["checkpoint_sha256"])
                        for pid in ids]
                 per_seed[str(seed)] = vec
+                all_provenance.extend(scorer.provenance)
             arms[arm] = {"per_seed_correct": per_seed,
                          "passage_order_digest": order_digest}
         h_tr, y_tr = _idea_tensors(train_records, train_features)
@@ -177,6 +180,29 @@ def run_protected_evaluation(package_root: Path, mode: str, *,
         probe_acc = claim_a_probe(h_tr, y_tr, h_pr, y_pr, seed=11)
         shuf_acc = claim_a_probe(h_tr, _shuffled_labels(train_records),
                                  h_pr, y_pr, seed=23)
+        # protected-evaluation receipt written AFTER scoring, binding the ACTUAL
+        # scored ids, checkpoint digests, and per-prediction provenance (audit
+        # fix). It does NOT bind the raw_results digest (that would be circular);
+        # the FINAL campaign receipt binds the raw results. Its digest goes into
+        # the evidence chain BEFORE the raw results are serialized.
+        er = Path(out_path).parent
+        provenance_digest = hashlib.sha256(
+            json.dumps(all_provenance, sort_keys=True,
+                       separators=(",", ":")).encode("utf-8")).hexdigest()
+        eval_receipt = {"receipt_id": "PROTECTED_EVALUATION_RECEIPT",
+                        "campaign_id": campaign_id, "completed": True,
+                        "protected_passage_ids": ids,
+                        "scored_arm_seed_keys":
+                            [f"{a}_seed{s}" for a in ARM_IDS for s in seeds],
+                        "checkpoint_sha256s":
+                            {f"{a}_seed{s}": receipts_by_key[(a, s)]["checkpoint_sha256"]
+                             for a in ARM_IDS for s in seeds},
+                        "prediction_provenance_digest": provenance_digest,
+                        "prediction_count": len(all_provenance)}
+        eval_text = json.dumps(eval_receipt, indent=2, sort_keys=True) + "\n"
+        write_utf8_lf(er / "protected_evaluation_receipt.json", eval_text)
+        evidence_chain["protected_evaluation_receipt_sha256"] = \
+            hashlib.sha256(eval_text.encode("utf-8")).hexdigest()
         results = {
             "schema": "RAW_GATE1_RESULTS_v2",
             "evidence_chain": dict(evidence_chain),
@@ -193,17 +219,4 @@ def run_protected_evaluation(package_root: Path, mode: str, *,
         text = json.dumps(results, indent=2) + "\n"
         write_utf8_lf(out_path, text)
         results_sha = hashlib.sha256(text.encode("utf-8")).hexdigest()
-        burn = lock.burn(campaign_id, final_state_reason="SUCCESS",
-                         result_or_failure_sha256=results_sha)
-        return {"results": results, "results_sha256": results_sha,
-                "lock_receipt": burn}
-    except BaseException as exc:
-        failure_sha = hashlib.sha256(
-            f"{type(exc).__name__}: {exc}".encode("utf-8")).hexdigest()
-        try:
-            lock.burn(campaign_id,
-                      final_state_reason=f"FAILURE:{type(exc).__name__}",
-                      result_or_failure_sha256=failure_sha)
-        finally:
-            pass
-        raise
+        return {"results": results, "results_sha256": results_sha}

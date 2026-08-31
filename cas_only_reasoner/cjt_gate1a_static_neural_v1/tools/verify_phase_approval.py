@@ -71,6 +71,7 @@ EXEC_KEYS = frozenset([
     "container_image_digest", "dataset_manifest_sha256", "s7_control_table_sha256",
     "status_program_sha256", "run_schedule_sha256", "claim_bearing_seeds",
     "protected_derivation_commitment", "salted_protected_manifest_sha256",
+    "cas_mapping_rules_sha256", "cas_mapping_rules_status", "s7_path_a_ratified",
     "aws_account_id", "region", "instance_type", "required_gpu_type", "s3_prefix",
     "max_hourly_rate_usd", "cost_ceiling_usd", "per_job_wall_clock_cap_hours",
     "owner_key_id", "signed_utc", "ed25519_signature"])
@@ -324,6 +325,17 @@ def verify_execution(record: dict, package_root, expected_commit: str,
             _fail(f"{field} must be 64 hex chars, got {record[field]!r}")
     if not CONTAINER_RX.match(str(record["container_image_digest"])):
         _fail("container_image_digest must match sha256:<64 hex>")
+    # CAS mapping-rules binding (audit fix): a CANDIDATE dataset may not enter a
+    # claim-bearing campaign until the owner has approved and digest-bound its
+    # label mapping law and ratified the S7 PATH-A disposition
+    if not HEX64.match(str(record["cas_mapping_rules_sha256"])):
+        _fail("cas_mapping_rules_sha256 must be the 64-hex digest of the "
+              "owner-approved CAS_MAPPING_RULES file")
+    if record["cas_mapping_rules_status"] != "OWNER_APPROVED":
+        _fail("cas_mapping_rules_status must be OWNER_APPROVED (the dataset is "
+              "CANDIDATE/non-claim-bearing until the owner promotes the rules)")
+    if record["s7_path_a_ratified"] is not True:
+        _fail("s7_path_a_ratified must be true (owner PATH-A disposition)")
     pdc = str(record["protected_derivation_commitment"])
     if not PROTECTED_RX.match(pdc):
         _fail("protected_derivation_commitment must be PUBLIC_SEED_20260831 or "

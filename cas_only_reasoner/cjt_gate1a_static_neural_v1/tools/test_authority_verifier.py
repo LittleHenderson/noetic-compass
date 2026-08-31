@@ -106,6 +106,9 @@ def valid_execution():
                  "claim_bearing_seeds": [11, 23, 47],
                  "protected_derivation_commitment": "PUBLIC_SEED_20260831",
                  "salted_protected_manifest_sha256": "NOT_APPLICABLE_PUBLIC_SEED",
+                 "cas_mapping_rules_sha256": "ab" * 32,
+                 "cas_mapping_rules_status": "OWNER_APPROVED",
+                 "s7_path_a_ratified": True,
                  "instance_type": "g5.xlarge",
                  "required_gpu_type": "NVIDIA A10G",
                  "s3_prefix": "s3://example-bucket/gate1b/",
@@ -218,6 +221,9 @@ def main():
         "extra_field": {"bonus": 1},
         "empty_artifact_digests": {"artifact_digests": {}},
         "wrong_owner_key_id": {"owner_key_id": "TEST-SOME-OTHER-KEY"},
+        "mapping_rules_not_approved": {"cas_mapping_rules_status": "CANDIDATE"},
+        "mapping_rules_digest_malformed": {"cas_mapping_rules_sha256": "short"},
+        "path_a_not_ratified": {"s7_path_a_ratified": False},
     }
     for name, change in tampers.items():
         e = copy.deepcopy(valid_execution())

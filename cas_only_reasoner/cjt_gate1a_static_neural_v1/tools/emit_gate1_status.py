@@ -48,7 +48,6 @@ import json
 import math
 import sys
 
-SEEDS = ("11", "23", "47")
 ARMS = ("S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7")
 CONTROLS = ("S0", "S1", "S2", "S4", "S5", "S6", "S7")   # ALL of them (v3 law)
 N_PROTECTED = 1000
@@ -124,6 +123,25 @@ def _is_hex(s, n):
         all(c in "0123456789abcdef" for c in s)
 
 
+def seeds_of(results):
+    """Derive the claim-bearing seed set from the results themselves and require
+    it to be exactly 3 OR 5 distinct positive-integer seeds, identical across
+    all arms (audit fix: the package supports the 3-vs-5 owner choice; the seed
+    set is read from the evidence, not hardcoded)."""
+    arms = results.get("arms")
+    if not isinstance(arms, dict) or "S0" not in arms:
+        _fail("cannot derive seeds: arms missing")
+    seeds = tuple(arms["S0"].get("per_seed_correct", {}).keys())
+    if len(seeds) not in (3, 5) or len(set(seeds)) != len(seeds) \
+            or not all(s.isdigit() and int(s) > 0 for s in seeds):
+        _fail(f"seed set must be exactly 3 or 5 distinct positive integers, "
+              f"got {seeds}")
+    for a in ARMS:
+        if set(arms.get(a, {}).get("per_seed_correct", {})) != set(seeds):
+            _fail(f"arm {a} seed set differs from S0")
+    return tuple(sorted(seeds, key=int))
+
+
 def validate_evidence(results, evidence_root, conformance: bool):
     """The provenance gate: runs BEFORE any metric is read. Raises
     EvidenceUnbound on any missing, malformed, or mismatched binding."""
@@ -155,7 +173,8 @@ def validate_evidence(results, evidence_root, conformance: bool):
     if not conformance and key_id.startswith("TEST-"):
         _efail("a TEST- key id can never receive a scientific status; "
                "run --conformance or use an owner-pinned key")
-    expected_keys = {f"{a}_seed{s}" for a in ARMS for s in SEEDS}
+    seeds = seeds_of(results)
+    expected_keys = {f"{a}_seed{s}" for a in ARMS for s in seeds}
     for map_field in ("checkpoint_sha256s", "job_receipt_sha256s"):
         m = ec[map_field]
         if not isinstance(m, dict) or set(m) != expected_keys:
@@ -179,14 +198,43 @@ def validate_evidence(results, evidence_root, conformance: bool):
         got = hashlib.sha256(f.read_bytes()).hexdigest()
         if got != ec[field]:
             _efail(f"{fname} sha {got[:16]}... != chain {ec[field][:16]}...")
+    # SEMANTIC receipt + byte verification (audit fix): recompute every
+    # checkpoint and cache file hash from ACTUAL bytes, and parse each job
+    # receipt, requiring its checkpoint_sha256 field to equal the chain entry
+    selected_layer = _selected_layer(root)
     for k, want in sorted(ec["job_receipt_sha256s"].items()):
         f = root / "receipts" / f"run_{k}.json"
         if not f.is_file():
             _efail(f"job receipt missing: receipts/run_{k}.json")
-        got = hashlib.sha256(f.read_bytes()).hexdigest()
-        if got != want:
+        if hashlib.sha256(f.read_bytes()).hexdigest() != want:
             _efail(f"job receipt run_{k}.json digest mismatch")
+        receipt = json.loads(f.read_text(encoding="utf-8"))
+        arm, seed = k.rsplit("_seed", 1)
+        if receipt.get("arm") != arm or str(receipt.get("seed")) != seed:
+            _efail(f"job receipt run_{k}.json arm/seed mismatch")
+        if receipt.get("status") != "SUCCESS":
+            _efail(f"job receipt run_{k}.json status {receipt.get('status')!r}")
+        if receipt.get("checkpoint_sha256") != ec["checkpoint_sha256s"][k]:
+            _efail(f"job receipt run_{k}.json checkpoint digest != chain")
+        ckpt = root / "checkpoints" / f"{arm}_seed{seed}_L{selected_layer}.pt"
+        if not ckpt.is_file():
+            _efail(f"checkpoint missing: {ckpt.name}")
+        if hashlib.sha256(ckpt.read_bytes()).hexdigest() != ec["checkpoint_sha256s"][k]:
+            _efail(f"checkpoint {ckpt.name} bytes != chain digest")
+    for split, want in sorted(cm.items()):
+        cache = root / "caches" / f"{split}_features.pt"
+        if not cache.is_file():
+            _efail(f"cache missing: {cache.name}")
+        if hashlib.sha256(cache.read_bytes()).hexdigest() != want:
+            _efail(f"cache {cache.name} bytes != chain digest")
     return True
+
+
+def _selected_layer(root):
+    p = root / "selected_layer_receipt.json"
+    if not p.is_file():
+        _efail("selected_layer_receipt.json missing under the evidence root")
+    return json.loads(p.read_text(encoding="utf-8"))["selected_layer"]
 
 
 def _is_binary_int(x):
@@ -228,7 +276,7 @@ def _check_baseline(node, path):
         _fail(f"{path} per-question totals do not sum to the split totals")
 
 
-def validate(results):
+def validate(results, seeds):
     """The executable form of RAW_GATE1_RESULTS.schema.json. Raises on ANY defect."""
     if not isinstance(results, dict):
         _fail("top level is not an object")
@@ -260,9 +308,9 @@ def validate(results):
         if node["passage_order_digest"] != order_digest:
             _fail(f"arm {a} passage_order_digest does not bind the frozen id order")
         psc = node["per_seed_correct"]
-        if not isinstance(psc, dict) or set(psc) != set(SEEDS):
-            _fail(f"arm {a} seeds must be exactly {SEEDS}")
-        for s in SEEDS:
+        if not isinstance(psc, dict) or set(psc) != set(seeds):
+            _fail(f"arm {a} seeds must be exactly {seeds}")
+        for s in seeds:
             vec = psc[s]
             if not isinstance(vec, list) or len(vec) != N_PROTECTED:
                 _fail(f"arm {a} seed {s} vector must have exactly {N_PROTECTED} entries")
@@ -308,19 +356,20 @@ class _BootStream:
                 return v % N_PROTECTED
 
 
-def per_passage_scores(arm):
-    vecs = [arm["per_seed_correct"][s] for s in SEEDS]
+def per_passage_scores(arm, seeds):
+    vecs = [arm["per_seed_correct"][s] for s in seeds]
     n = len(vecs[0])
-    return [(vecs[0][i] + vecs[1][i] + vecs[2][i]) / 3.0 for i in range(n)]
+    k = len(vecs)
+    return [sum(vecs[j][i] for j in range(k)) / k for i in range(n)]
 
 
 def mean(xs):
     return sum(xs) / len(xs)
 
 
-def gate(s3, ctrl, ctrl_name, boot_n):
-    """One hard gate: margin + bootstrap CI + per-seed 3/3 consistency."""
-    a, b = per_passage_scores(s3), per_passage_scores(ctrl)
+def gate(s3, ctrl, ctrl_name, boot_n, seeds):
+    """One hard gate: margin + bootstrap CI + per-seed all-positive consistency."""
+    a, b = per_passage_scores(s3, seeds), per_passage_scores(ctrl, seeds)
     n = len(a)
     diff = [a[i] - b[i] for i in range(n)]
     md = mean(diff)
@@ -336,9 +385,10 @@ def gate(s3, ctrl, ctrl_name, boot_n):
     hi = boots[int(0.975 * boot_n) - 1]
     per_seed = all(
         mean(s3["per_seed_correct"][s]) > mean(ctrl["per_seed_correct"][s])
-        for s in SEEDS)
+        for s in seeds)
     passed = (md >= MARGIN) and (lo > 0.0) and per_seed
-    return {"mean_diff": md, "ci95": [lo, hi], "per_seed_positive_3of3": per_seed,
+    return {"mean_diff": md, "ci95": [lo, hi],
+            "per_seed_positive_all": per_seed, "n_seeds": len(seeds),
             "margin_met": md >= MARGIN, "passed": passed}
 
 
@@ -349,9 +399,11 @@ def emit(results, boot_n: int = BOOT_N, evidence_root=None,
     the EVIDENCE CHAIN is validated before any accuracy or correctness vector
     is read; unbound results are refused (EVIDENCE_UNBOUND)."""
     validate_evidence(results, evidence_root, conformance)   # provenance FIRST
-    validate(results)                                    # then evidence shape
+    seeds = seeds_of(results)
+    validate(results, seeds)                             # then evidence shape
     arms = results["arms"]
-    gates = {f"S3_vs_{c}": gate(arms["S3"], arms[c], c, boot_n) for c in CONTROLS}
+    gates = {f"S3_vs_{c}": gate(arms["S3"], arms[c], c, boot_n, seeds)
+             for c in CONTROLS}
     simpler_fail = [c for c in ("S0", "S1", "S2") if not gates[f"S3_vs_{c}"]["passed"]]
     g6, g7 = gates["S3_vs_S6"], gates["S3_vs_S7"]
     if all(gates[f"S3_vs_{c}"]["passed"] for c in CONTROLS):
@@ -395,7 +447,8 @@ def emit(results, boot_n: int = BOOT_N, evidence_root=None,
             "task-aligned non-CAS control exists here)",
         "gates": gates,
         "simpler_arm_failures": simpler_fail,
-        "arm_means": {k: mean(per_passage_scores(v)) for k, v in sorted(arms.items())},
+        "arm_means": {k: mean(per_passage_scores(v, seeds))
+                      for k, v in sorted(arms.items())},
         "surface_floor_B0_protected": prot["B0"]["overall"],
         "task_ceiling_B1_protected": prot["B1"]["overall"],
         "b0_near_ceiling_question_types": near_ceiling,

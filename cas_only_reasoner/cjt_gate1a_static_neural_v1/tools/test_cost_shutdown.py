@@ -76,16 +76,43 @@ def test_all_paths_request_termination():
 
 def test_watchdog_terminates_abandoned_campaign():
     with tempfile.TemporaryDirectory() as tmp:
-        wd = Watchdog(Path(tmp) / "hb.json", Path(tmp), stale_limit_seconds=100)
+        wd = Watchdog(Path(tmp) / "hb.json", Path(tmp), stale_limit_seconds=100,
+                      startup_grace_seconds=300, launched_at=1000.0)
         wd.beat(1000.0)
         assert wd.poll_once(1050.0) is True              # fresh
         assert wd.poll_once(1200.0) is False             # stale -> terminate
         marker = json.loads((Path(tmp) / "WATCHDOG_TERMINATION.json")
                             .read_text(encoding="utf-8"))
         assert marker["reason"] == "WATCHDOG_STALE_HEARTBEAT"
-        wd2 = Watchdog(Path(tmp) / "never.json", Path(tmp), 100)
-        assert wd2.poll_once(5000.0) is False            # no heartbeat at all
     print("PASS test_watchdog_terminates_abandoned_campaign")
+
+
+def test_watchdog_does_not_terminate_before_first_heartbeat():
+    with tempfile.TemporaryDirectory() as tmp:
+        wd = Watchdog(Path(tmp) / "none.json", Path(tmp), stale_limit_seconds=100,
+                      startup_grace_seconds=300, launched_at=1000.0)
+        # no heartbeat file yet, but within the startup grace -> alive
+        assert wd.poll_once(1200.0) is True
+        assert not (Path(tmp) / "WATCHDOG_TERMINATION.json").is_file()
+        # past the grace with still no heartbeat -> terminate
+        assert wd.poll_once(1400.0) is False
+        marker = json.loads((Path(tmp) / "WATCHDOG_TERMINATION.json")
+                            .read_text(encoding="utf-8"))
+        assert marker["reason"] == "WATCHDOG_NO_HEARTBEAT_AFTER_GRACE"
+    print("PASS test_watchdog_does_not_terminate_before_first_heartbeat")
+
+
+def test_watchdog_receives_signed_cap():
+    # the driver writes watchdog_config.json with the signed stale limit; the
+    # separate watchdog reads it rather than its CLI default
+    from exec.watchdog_main import _read_signed_cap
+    with tempfile.TemporaryDirectory() as tmp:
+        cfg = Path(tmp) / "watchdog_config.json"
+        cfg.write_text(json.dumps({"stale_limit_seconds": 7920.0}),
+                       encoding="utf-8")
+        assert _read_signed_cap(cfg, default=9000.0) == 7920.0
+        assert _read_signed_cap(Path(tmp) / "absent.json", default=9000.0) == 9000.0
+    print("PASS test_watchdog_receives_signed_cap")
 
 
 def test_terminate_on_shutdown_is_frozen():
@@ -103,6 +130,8 @@ def main():
     test_actual_cost_overrun_marks_campaign_failed()
     test_all_paths_request_termination()
     test_watchdog_terminates_abandoned_campaign()
+    test_watchdog_does_not_terminate_before_first_heartbeat()
+    test_watchdog_receives_signed_cap()
     test_terminate_on_shutdown_is_frozen()
     print("ALL COST/SHUTDOWN TESTS PASS")
     return 0

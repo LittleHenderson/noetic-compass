@@ -45,9 +45,16 @@ def verify_file_map(root: Path, expected: dict, what: str):
     return True
 
 
+MODEL_DIR_META_FILES = frozenset(["REVISION_SHA"])
+
+
 def verify_model_identity(model_dir: Path, approval: dict):
-    """Resolved revision + every weight file + every tokenizer file."""
-    rev_file = Path(model_dir) / "REVISION_SHA"
+    """Resolved revision + every weight file + every tokenizer file, AND a
+    complete ALLOW-LIST: any file in the model dir NOT in the signed maps
+    (except the REVISION_SHA meta file) is refused -- a config or index file
+    omitted from the signed list could still alter from_pretrained (audit fix)."""
+    model_dir = Path(model_dir)
+    rev_file = model_dir / "REVISION_SHA"
     if not rev_file.is_file():
         _fail("model revision record missing (REVISION_SHA)")
     resolved = rev_file.read_text(encoding="utf-8").strip()
@@ -56,6 +63,28 @@ def verify_model_identity(model_dir: Path, approval: dict):
               f"signed {approval['model_revision_sha']}")
     verify_file_map(model_dir, approval["model_weight_sha256s"], "model weights")
     verify_file_map(model_dir, approval["tokenizer_file_sha256s"], "tokenizer")
+    allowed = set(approval["model_weight_sha256s"]) \
+        | set(approval["tokenizer_file_sha256s"]) | MODEL_DIR_META_FILES
+    for f in sorted(model_dir.rglob("*")):
+        if f.is_file():
+            rel = f.relative_to(model_dir).as_posix()
+            if rel not in allowed:
+                _fail(f"MODEL_ALLOWLIST_VIOLATION: unexpected model file {rel} "
+                      "not in the signed weight/tokenizer maps")
+    return True
+
+
+def verify_dependency_lock(freeze_path: Path, approval: dict):
+    """Hash the LIVE pip freeze the running container produced and compare with
+    the signed dependency_lock_sha256 (audit fix: measure the running set, not
+    merely compare two documents)."""
+    p = Path(freeze_path)
+    if not p.is_file():
+        _fail(f"live dependency freeze missing: {freeze_path}")
+    got = sha256_file(p)
+    if got != approval["dependency_lock_sha256"]:
+        _fail(f"DEPENDENCY_LOCK_MISMATCH: live freeze {got} != signed "
+              f"{approval['dependency_lock_sha256']}")
     return True
 
 

@@ -11,6 +11,16 @@ dataset_assembly refuses them, and this entry re-refuses by split field.
 """
 from __future__ import annotations
 
+import os
+
+# REQUIRED before the first CUDA cuBLAS GEMM for
+# torch.use_deterministic_algorithms(True) on CUDA >= 10.2 (audit fix). The
+# authoritative place is the container ENV (infra/Dockerfile) + bootstrap
+# export, set before the process; this module-import setdefault is
+# belt-and-suspenders for any REAL entry that imports train_loop before its
+# first CUDA context. Harmless on CPU.
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+
 try:
     from exec.gpu_guard import require_gpu
     from exec.arms import build_arm_head
@@ -39,12 +49,21 @@ def set_determinism(seed: int):
 
 
 def run_training(arm_id: str, seed: int, widen_w: int, train_batches,
-                 monitor_batches, log_every: int = 20):
-    """Train one arm/seed head for exactly UPDATES steps. train_batches is a
-    deterministic iterable of pre-assembled tensor batches from the TRAIN split
-    (each batch dict carries split='train'); monitor_batches is validation, read
-    for curve logging only. Returns (state_dict, curve)."""
-    device = require_gpu()                              # FIRST -- fail closed
+                 monitor_batches, log_every: int = 20, device=None,
+                 updates: int = UPDATES):
+    """Train one arm/seed head for exactly `updates` steps. train_batches is a
+    deterministic iterable of pre-assembled batch-32 tensor batches from the
+    TRAIN split (each batch dict carries split='train'); monitor_batches is
+    validation, read for curve logging only. Returns (state_dict, curve).
+
+    device=None means PRODUCTION: require_gpu() fires FIRST and fails closed on a
+    CUDA-less box. An explicit device (the driver passes the one it already
+    GPU-gated; conformance tests pass 'cpu') means the caller has already
+    gated -- so the REAL training loop is exercisable with fake features on CPU
+    without a model/GPU, while the standalone production entry still fails
+    closed (test_exec_shapes calls it with device=None)."""
+    if device is None:
+        device = require_gpu()                          # FIRST -- fail closed
     import torch
     set_determinism(seed)
     head = build_arm_head(arm_id, widen_w).float().to(device)
@@ -52,7 +71,7 @@ def run_training(arm_id: str, seed: int, widen_w: int, train_batches,
     sched = torch.optim.lr_scheduler.LambdaLR(opt, lr_lambda)
     loss_fn = torch.nn.CrossEntropyLoss()
     curve, it = [], iter(train_batches)
-    for step in range(UPDATES):                         # exactly 3000; NO early stop
+    for step in range(updates):                         # exactly `updates`; no early stop
         try:
             batch = next(it)
         except StopIteration:
