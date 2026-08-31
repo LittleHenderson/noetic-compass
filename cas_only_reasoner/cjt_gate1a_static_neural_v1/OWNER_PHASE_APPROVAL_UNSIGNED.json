@@ -16,8 +16,8 @@
     "gate0_anchor_sha": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
     "package_commit_sha": "TO_BE_SET_AT_SIGNING(the_gate1a1r_freeze_commit)",
     "execution_code_commit_sha": "TO_BE_SET_AT_SIGNING(equals_package_commit_sha)",
-    "package_manifest_sha256": "25b415e6741803a6b517d0f4a5d862963b634caeff3b8e88438b29ccb48667c7",
-    "gate1b_code_manifest_sha256": "a3c4be71e1961666be6516df75869bdbc1b56eb56294bf59c7ffb783fd8da9ae",
+    "package_manifest_sha256": "834b09a2d2c5b4636f3591cc6df53b83737cb1ab8bc9d2fad9824155f75dc9d2",
+    "gate1b_code_manifest_sha256": "16e62d7be51cb8e91079ce35c5ffb775bb8f331aec52b36d555a83b3b1a64e44",
     "artifact_digests": {
       ".gitattributes": "5dbff294fc9be6a1b1f0fda3a9329b14278fb516debac8d514556ea3b9854dae",
       ".gitignore": "fb4af504a552b0335db1f72ca93badebf25f5fffb2cf929ec3cf2667e23451ef",
@@ -32,7 +32,7 @@
       "DATASET_MANIFEST_CANDIDATE.json": "b7782978aef09d6cce136d2720fd7e1866881e24e79fc0859a793ff13f34c868",
       "GATE0_FREEZE_RECORD.json": "c5a468c6c524328db38e95aacfc623d491829964674832c34b9e7a8630e3022e",
       "GATE1A_SCOPE_AND_CLAIM_BOUNDARY.md": "a34c357dd0ed407e3ee3c4bcf105917a834ebd322eefa4687e17f4683f6d684d",
-      "GATE1B_CODE_MANIFEST.json": "a3c4be71e1961666be6516df75869bdbc1b56eb56294bf59c7ffb783fd8da9ae",
+      "GATE1B_CODE_MANIFEST.json": "16e62d7be51cb8e91079ce35c5ffb775bb8f331aec52b36d555a83b3b1a64e44",
       "INDEPENDENT_PRESERVATION_CHECKER_SPEC.md": "5197376c2a28bef11fea419678fb537f40a5de6e9161d62338ee5900ec99f3ec",
       "LAYER_SELECTION_AND_CACHING_SPEC.md": "39246a623b5898ec9349f01e6797e304b5b400565ba3b2e02467a13bc8d5aceb",
       "OWNER_CONTAINER_PREP_APPROVAL.schema.json": "dccdcc4e926463cdfdc0ecf298f99ea9452c24860f201bcc3e0f4838c14d1b87",
@@ -68,7 +68,7 @@
       "tools/independent_roundtrip_checker.py": "543460e6c7312a7549df10a5db194689c4da98c63fd3667587d9b976c2501b3d",
       "tools/run_surface_baselines.py": "2f2d250065843534e7b010230bd4d7feaa52bcffac9a8d86fd4b6042398fcb8f",
       "tools/test_authority_verifier.py": "8501506ebaa1838bf6f808a9839914ac4453c4c7958c7742adb502ab7230f2a1",
-      "tools/test_byte_domain.py": "152d544d144fb377c45c7a2843848f76a979a4ba142858d49885bd818240772c",
+      "tools/test_byte_domain.py": "856c07f31f652cbcf43de3ec6d0b508a208227039be0c745c63eada61dd27791",
       "tools/test_exec_shapes.py": "3ff1343908074a9d0f5dfb0c7e7e5bd321852017df88e388bfcadd06693d6b04",
       "tools/test_status_fixtures.py": "a56ce2c8b66010e7ccb31dd28fac7ec5308d629b83c33b461fc7638c986179e5",
       "tools/verify_phase_approval.py": "bc52aa7af606ac87d0b8d594cf818efd1bc2bbe62f091d45e2eef7181b7eae02"

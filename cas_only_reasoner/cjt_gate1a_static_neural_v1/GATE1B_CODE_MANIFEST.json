@@ -26,7 +26,7 @@
     "tools/independent_roundtrip_checker.py": "543460e6c7312a7549df10a5db194689c4da98c63fd3667587d9b976c2501b3d",
     "tools/run_surface_baselines.py": "2f2d250065843534e7b010230bd4d7feaa52bcffac9a8d86fd4b6042398fcb8f",
     "tools/test_authority_verifier.py": "8501506ebaa1838bf6f808a9839914ac4453c4c7958c7742adb502ab7230f2a1",
-    "tools/test_byte_domain.py": "152d544d144fb377c45c7a2843848f76a979a4ba142858d49885bd818240772c",
+    "tools/test_byte_domain.py": "856c07f31f652cbcf43de3ec6d0b508a208227039be0c745c63eada61dd27791",
     "tools/test_exec_shapes.py": "3ff1343908074a9d0f5dfb0c7e7e5bd321852017df88e388bfcadd06693d6b04",
     "tools/test_status_fixtures.py": "a56ce2c8b66010e7ccb31dd28fac7ec5308d629b83c33b461fc7638c986179e5",
     "tools/verify_phase_approval.py": "bc52aa7af606ac87d0b8d594cf818efd1bc2bbe62f091d45e2eef7181b7eae02"

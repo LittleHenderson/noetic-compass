@@ -185,7 +185,9 @@ def fresh_worktree():
     sh(["git", "worktree", "add", "--detach", "--no-checkout", str(wt), "HEAD"])
     sh(["git", "-C", str(wt), "sparse-checkout", "set",
         "cas_only_reasoner/cjt_gate1a_static_neural_v1"])
-    sh(["git", "-C", str(wt), "checkout", "--", "."])
+    # --no-checkout leaves the worktree index empty, so a pathspec checkout has
+    # nothing to match; reset --hard populates index + files per the sparse cone
+    sh(["git", "-C", str(wt), "reset", "--hard", "HEAD"])
     return wt, wt / "cas_only_reasoner" / "cjt_gate1a_static_neural_v1"
 
 
