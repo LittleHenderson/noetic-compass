@@ -25,11 +25,13 @@ try:
     from exec.arms import ARM_IDS, build_arm_head
     from exec.dataset_assembly import assemble_examples
     from exec.baselines import score_split
+    from exec.fsio import write_utf8_lf
 except ImportError:
     from gpu_guard import require_gpu
     from arms import ARM_IDS, build_arm_head
     from dataset_assembly import assemble_examples
     from baselines import score_split
+    from fsio import write_utf8_lf
 
 SEEDS = (11, 23, 47)
 PROBE_STEPS, PROBE_LR, PROBE_WD = 1000, 1.0e-3, 0.01
@@ -142,6 +144,5 @@ def run_protected_evaluation(package_root: Path, run_receipts: list,
             "protected": {"B0": score_split(records, "B0"),
                           "B1": score_split(records, "B1")}},
     }
-    out_path.write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8",
-                        newline="\n")
+    write_utf8_lf(out_path, json.dumps(results, indent=2) + "\n")
     return results

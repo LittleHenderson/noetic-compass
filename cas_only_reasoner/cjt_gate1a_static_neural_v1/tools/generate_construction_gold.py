@@ -6,12 +6,27 @@ deterministic template renders the sentence; the INDEPENDENT checker must recove
 the seed operation exactly; failed round trips are EXCLUDED, never relabeled.
 
 Deterministic: single frozen seed 20260831 driving exec/prng.HashPRNG -- a pure
-SHA-256 counter stream, so regeneration is BYTE-IDENTICAL on every CPython >= 3.8
-(owner audit 2026-08-31 section 8: random.Random's sample/shuffle/choice have
-version-dependent implementations; the 3.14-laptop-vs-3.11-container regeneration
-dependency is removed at the root, not papered over). No wall-clock, no OS entropy.
-Local execution is permitted in Gate 1A (deterministic dataset generation and
-round-trip verification are in the allowed set). NO model, NO GPU, NO network.
+SHA-256 counter stream, so regeneration is BYTE-IDENTICAL on every CPython >= 3.8.
+No wall-clock, no OS entropy. Local execution is permitted in Gate 1A. NO model,
+NO GPU, NO network.
+
+BYTE LAW (GATE 1A.1R sections 1-2): every authoritative output is written through
+exec/fsio.write_utf8_lf (UTF-8, LF, canonical on every platform), and the frozen
+DATASET_MANIFEST contains ONLY environment-invariant facts (algorithm name, code
+digests, seed/salt commitment, sizes, content digests, counts). The interpreter
+that happened to run the generation is recorded ONLY in the separate runtime
+receipt results/generation_runtime_receipt.json (excluded from the frozen tree).
+The 3.14-vs-3.11 manifest drift defect is thereby removed structurally.
+
+Modes (GATE 1A.1R sections 3-4):
+  (default)                  write train/val + DATASET_MANIFEST to --output-root
+                             (default: the package itself -- Gate 1A freeze use)
+  --output-root <path>       write to a non-frozen destination; Gate 1B MUST use
+                             this (results/<campaign>/regenerated_dataset/) and
+                             never mutates the frozen tree
+  --check                    WRITE-FREE: regenerate in memory, byte-compare
+                             train/val/manifest against the frozen package files,
+                             print every mismatch, exit nonzero on any
 
 The PROTECTED split is generated in-memory, checked, counted, and DIGESTED --
 never written to disk in Gate 1A (SPLIT_AND_PROTECTED_EVAL_SPEC.md).
@@ -22,10 +37,7 @@ Protected-derivation options (owner decision, audit section 9):
   --protected-salt-hex XX..  -- protected drawn from a FRESH stream domain
                          "CONSTRUCTION_GOLD_PROTECTED|<seed>|<salt-hex>"; the
                          manifest records ONLY sha256(salt-hex utf-8) as the
-                         commitment. The salt stays with the owner; the split is
-                         then unreconstructible without it, while the recorded
-                         content digest still gives integrity. The owner supplies
-                         the salt to the Gate 1B job at the protected step only.
+                         commitment. The salt stays with the owner.
 """
 from __future__ import annotations
 
@@ -42,6 +54,7 @@ sys.path.insert(0, str(PKG))
 
 from independent_roundtrip_checker import check_record  # checker imports NOTHING from here
 from exec.prng import HashPRNG
+from exec.fsio import write_utf8_lf
 
 GATE1A_SEED = 20260831
 SIZES = {"train": 6000, "val": 1000, "protected": 1000}
@@ -219,42 +232,49 @@ def canonical_line(rec):
     return json.dumps(rec, sort_keys=True, ensure_ascii=True, separators=(",", ":"))
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--protected-salt-hex", default=None,
-                    help="OWNER-HELD salt (hex). Protected split derives from a "
-                         "fresh salted stream; only sha256(salt) is recorded.")
-    args = ap.parse_args()
+def generate_all(protected_salt_hex=None):
+    """Pure in-memory generation. Returns (bodies, manifest_obj) where bodies maps
+    split -> canonical LF bytes. NOTHING is written here; the manifest contains
+    ONLY environment-invariant facts (GATE 1A.1R section 2)."""
     rng = HashPRNG(f"CONSTRUCTION_GOLD|{GATE1A_SEED}")
-    if args.protected_salt_hex is not None:
-        salt = args.protected_salt_hex.strip().lower()
+    if protected_salt_hex is not None:
+        salt = protected_salt_hex.strip().lower()
         if not salt or any(c not in "0123456789abcdef" for c in salt):
-            print("REFUSED: --protected-salt-hex must be nonempty lowercase hex")
-            return 1
+            raise ValueError("--protected-salt-hex must be nonempty lowercase hex")
         protected_rng = HashPRNG(f"CONSTRUCTION_GOLD_PROTECTED|{GATE1A_SEED}|{salt}")
         derivation = ("SALT_SHA256:"
                       + hashlib.sha256(salt.encode("utf-8")).hexdigest())
     else:
         protected_rng = rng                       # status quo: one public stream
         derivation = f"PUBLIC_SEED_{GATE1A_SEED}"
-    out_dir = PKG / "data" / "candidate"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    manifest = {"manifest_id": "DATASET_MANIFEST_CANDIDATE",
-                "claim_bearing": False,
-                "generation_interpreter": sys.version.split()[0],
-                "interpreter_law": ("generation uses exec/prng.HashPRNG (pure "
-                                    "SHA-256 integer arithmetic), so regeneration "
-                                    "is Python-version-independent BY CONSTRUCTION; "
-                                    "the Gate 1B container still regenerates all "
-                                    "splits and MUST reproduce every content_sha256 "
-                                    "exactly (DATASET_INTEGRITY_FAILURE on any "
-                                    "mismatch, never silent)"),
-                "protected_derivation": derivation,
-                "status": "CANDIDATE (CAS_MAPPING_RULES_v1_CANDIDATE still awaits "
-                          "owner approval; nothing here is claim-bearing)",
-                "generator_seed": GATE1A_SEED,
-                "sizes_requested": dict(SIZES), "splits": {}, "files": {},
-                "excluded_roundtrip": {}, "protected_materialized": False}
+    manifest = {
+        "manifest_id": "DATASET_MANIFEST_CANDIDATE",
+        "claim_bearing": False,
+        "generator_algorithm": "HashPRNG_SHA256_COUNTER_V1",
+        "generator_code_sha256": hashlib.sha256(
+            (HERE / "generate_construction_gold.py").read_bytes()).hexdigest(),
+        "checker_code_sha256": hashlib.sha256(
+            (HERE / "independent_roundtrip_checker.py").read_bytes()).hexdigest(),
+        "compatibility_claim": ("the generation algorithm is defined independently "
+                                "of CPython helper RNGs (pure SHA-256 counter "
+                                "stream + rejection sampling); regeneration is "
+                                "byte-identical on every CPython >= 3.8"),
+        "byte_law": ("all authoritative outputs are written via "
+                     "exec/fsio.write_utf8_lf (UTF-8, LF, canonical on every "
+                     "platform); the runtime interpreter is recorded ONLY in the "
+                     "separate runtime receipt, never in this frozen manifest"),
+        "regeneration_law": ("Gate 1B regenerates all splits to a NON-FROZEN "
+                             "--output-root and every content_sha256 MUST equal "
+                             "this manifest exactly (DATASET_INTEGRITY_FAILURE "
+                             "otherwise, never silent); the frozen package tree "
+                             "is never mutated during execution"),
+        "protected_derivation": derivation,
+        "status": "CANDIDATE (CAS_MAPPING_RULES_v1_CANDIDATE still awaits "
+                  "owner approval; nothing here is claim-bearing)",
+        "generator_seed": GATE1A_SEED,
+        "sizes_requested": dict(SIZES), "splits": {}, "files": {},
+        "excluded_roundtrip": {}, "protected_materialized": False}
+    bodies = {}
     for split in ("train", "val", "protected"):
         srng = protected_rng if split == "protected" else rng
         records, excluded, idx = [], [], 0
@@ -277,7 +297,8 @@ def main():
             for lbl in r["idea_labels"]:
                 ops_count[lbl] += 1
         body = "\n".join(canonical_line(r) for r in records) + "\n"
-        digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
+        bodies[split] = body.encode("utf-8")
+        digest = hashlib.sha256(bodies[split]).hexdigest()
         manifest["splits"][split] = {
             "passages": len(records), "content_sha256": digest,
             "op_class_counts": ops_count, "question_type_counts": q_count,
@@ -285,25 +306,109 @@ def main():
             "vocab_bundle": SPLIT_BUNDLE[split]}
         manifest["excluded_roundtrip"][split] = excluded
         if split != "protected":                       # protected is NEVER written
-            p = out_dir / f"{split}.jsonl"
-            # RC review fix (CRLF split-brain): LF pinned, so the on-disk bytes hash
-            # to EXACTLY the content digest on every platform -- one digest per file
-            p.write_text(body, encoding="utf-8", newline="\n")
             manifest["files"][f"data/candidate/{split}.jsonl"] = digest
-    for tool in ("generate_construction_gold.py", "independent_roundtrip_checker.py"):
-        manifest["files"][f"tools/{tool}"] = hashlib.sha256(
-            (HERE / tool).read_bytes()).hexdigest()
     manifest["protected_law"] = (
         "the protected split was generated in-memory, independently round-trip "
-        "checked, digested, and NOT written; Gate 1B regenerates it from the same "
-        "seed on AWS and must reproduce content_sha256 before any evaluation")
-    (PKG / "DATASET_MANIFEST_CANDIDATE.json").write_text(
-        json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        "checked, digested, and NOT written; Gate 1B regenerates it (same seed, "
+        "or the owner-held salt) to a non-frozen destination and must reproduce "
+        "content_sha256 before any evaluation")
+    return bodies, manifest
+
+
+def manifest_bytes(manifest) -> bytes:
+    return (json.dumps(manifest, indent=2) + "\n").encode("utf-8")
+
+
+def run_check(bodies, manifest) -> int:
+    """WRITE-FREE check mode: byte-compare regenerated content against the frozen
+    package files; print every mismatch; exit nonzero on any (GATE 1A.1R s.4)."""
+    mismatches = []
+    for split in ("train", "val"):
+        frozen = PKG / "data" / "candidate" / f"{split}.jsonl"
+        if not frozen.is_file():
+            mismatches.append(f"{frozen.name}: MISSING from the package")
+        elif frozen.read_bytes() != bodies[split]:
+            mismatches.append(
+                f"data/candidate/{split}.jsonl: bytes differ (frozen sha "
+                f"{hashlib.sha256(frozen.read_bytes()).hexdigest()[:16]}..., "
+                f"regenerated sha "
+                f"{hashlib.sha256(bodies[split]).hexdigest()[:16]}...)")
+    frozen_manifest = PKG / "DATASET_MANIFEST_CANDIDATE.json"
+    if not frozen_manifest.is_file():
+        mismatches.append("DATASET_MANIFEST_CANDIDATE.json: MISSING")
+    elif frozen_manifest.read_bytes() != manifest_bytes(manifest):
+        mismatches.append(
+            "DATASET_MANIFEST_CANDIDATE.json: bytes differ (frozen sha "
+            f"{hashlib.sha256(frozen_manifest.read_bytes()).hexdigest()[:16]}..., "
+            f"regenerated sha "
+            f"{hashlib.sha256(manifest_bytes(manifest)).hexdigest()[:16]}...)")
+    if mismatches:
+        for m in mismatches:
+            print(f"CHECK_FAIL: {m}")
+        return 1
+    print("GENERATOR_CHECK_PASS: train/val/manifest byte-identical; protected "
+          f"digest {manifest['splits']['protected']['content_sha256']}")
+    return 0
+
+
+def write_outputs(bodies, manifest, output_root: Path):
+    """Write mode: authoritative files via the canonical writer; the runtime
+    receipt (environment-OBSERVED facts) goes to results/, never the frozen set."""
+    import platform
+    out_dir = output_root / "data" / "candidate"
+    for split in ("train", "val"):
+        write_utf8_lf(out_dir / f"{split}.jsonl", bodies[split].decode("utf-8"))
+    write_utf8_lf(output_root / "DATASET_MANIFEST_CANDIDATE.json",
+                  manifest_bytes(manifest).decode("utf-8"))
+    receipt = {
+        "receipt_id": "GENERATION_RUNTIME_RECEIPT",
+        "law": ("environment-OBSERVED facts live HERE, never in the frozen "
+                "dataset manifest (GATE 1A.1R section 2)"),
+        "python_version": sys.version.split()[0],
+        "implementation": platform.python_implementation(),
+        "os": platform.platform(),
+        "container_digest": "not_applicable_local_generation",
+        "dependency_lock_sha256": "not_applicable_local_generation",
+        "invocation": sys.argv,
+        "generated_output_digests": {
+            "data/candidate/train.jsonl": manifest["splits"]["train"]["content_sha256"],
+            "data/candidate/val.jsonl": manifest["splits"]["val"]["content_sha256"],
+            "protected (in-memory only)": manifest["splits"]["protected"]["content_sha256"],
+            "DATASET_MANIFEST_CANDIDATE.json": hashlib.sha256(
+                manifest_bytes(manifest)).hexdigest()}}
+    write_utf8_lf(output_root / "results" / "generation_runtime_receipt.json",
+                  json.dumps(receipt, indent=2) + "\n")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--protected-salt-hex", default=None,
+                    help="OWNER-HELD salt (hex). Protected split derives from a "
+                         "fresh salted stream; only sha256(salt) is recorded.")
+    ap.add_argument("--output-root", default=None,
+                    help="destination root (default: the package -- Gate 1A "
+                         "freeze use only; Gate 1B MUST pass a non-frozen root)")
+    ap.add_argument("--check", action="store_true",
+                    help="write-free: regenerate in memory and byte-compare "
+                         "against the frozen package files; nonzero on mismatch")
+    args = ap.parse_args()
+    try:
+        bodies, manifest = generate_all(args.protected_salt_hex)
+    except ValueError as exc:
+        print(f"REFUSED: {exc}")
+        return 1
+    if args.check:
+        if args.output_root is not None:
+            print("REFUSED: --check writes nothing; --output-root is meaningless")
+            return 1
+        return run_check(bodies, manifest)
+    output_root = Path(args.output_root) if args.output_root else PKG
+    write_outputs(bodies, manifest, output_root)
     total_excluded = sum(len(v) for v in manifest["excluded_roundtrip"].values())
     print(f"train={manifest['splits']['train']['passages']} "
           f"val={manifest['splits']['val']['passages']} "
           f"protected={manifest['splits']['protected']['passages']} "
-          f"(not written) excluded={total_excluded}")
+          f"(not written) excluded={total_excluded} -> {output_root}")
     print("protected sha256:", manifest["splits"]["protected"]["content_sha256"])
     return 0
 

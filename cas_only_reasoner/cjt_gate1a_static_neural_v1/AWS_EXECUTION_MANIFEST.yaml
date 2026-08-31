@@ -51,11 +51,17 @@ job_sequence:
      the pinned key, commit equality, manifest-key-set equality, every digest
      recomputed, untracked scan); ANY defect refuses the whole campaign
   1: dataset regeneration on-instance from seed 20260831 via exec/prng.HashPRNG
-     (Python-version-independent BY CONSTRUCTION); ALL split content digests MUST
-     equal the pre-registration; protected MUST equal
+     (Python-version-independent BY CONSTRUCTION), written to the NON-FROZEN
+     destination results/<campaign_id>/regenerated_dataset/ via
+     --output-root (GATE 1A.1R section 3 -- the frozen package tree is NEVER
+     mutated during execution; the job also runs generate_construction_gold.py
+     --check, which is write-free, against the frozen artifacts); ALL split
+     content digests MUST equal the pre-registration; protected MUST equal
      0c0c2842b90b8220782b0ce992ff58dfa035f87228b3dfb63808d9f29bd46321
      under the public-seed derivation (or the owner-side recorded digest under
-     the salt derivation) -- else DATASET_INTEGRITY_FAILURE, abort
+     the salt derivation) -- else DATASET_INTEGRITY_FAILURE, abort. The runtime
+     interpreter/OS/container facts go into the job's runtime receipt, never
+     into any frozen manifest
   2: independent round-trip checker re-run over all splits (pinned digest)
   2b: BOTH registered surface baselines recomputed on train/val and REQUIRED to
       equal SURFACE_BASELINES_CANDIDATE.json exactly (B0 floor, B1 ceiling)
@@ -73,8 +79,11 @@ job_sequence:
      Claim-A probe + protected B0/B1, all inside the same pass
      (exec/protected_eval.py; refuses unless all 25 receipts exist)
   8: deterministic status emission via the COMMITTED tools/emit_gate1_status.py
-     (strict evidence validation; boot_n frozen at 10000) + execution receipt +
-     cost report
+     with --out results/<campaign_id>/GATE1_STATUS.json (strict evidence
+     validation; boot_n frozen at 10000; the status file is written through the
+     canonical writer exec/fsio.write_utf8_lf and THAT file's digest is pinned
+     in the receipt -- NEVER a shell redirect, whose bytes are
+     platform-dependent) + execution receipt + cost report
 
 receipt_fields_per_job:
   [model_revision_sha, weight_file_sha256s, code_commit_sha, dataset_digests,

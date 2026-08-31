@@ -262,8 +262,36 @@ def emit(results, boot_n: int = BOOT_N):
 
 
 def main():
-    results = json.loads(open(sys.argv[1], encoding="utf-8").read())
-    print(json.dumps(emit(results), indent=2))
+    """CLI: emit_gate1_status.py <results.json> [--out STATUS.json]
+
+    Adversarial-review fix (same defect class that refuted the ff6f40f9
+    freeze): the status output is receipt-pinned authority material, and shell
+    redirection of stdout is platform-dependent (cmd yields CRLF, Windows
+    PowerShell 5.1 yields UTF-16LE+BOM). --out persists the status through the
+    ONE canonical writer (exec/fsio.write_utf8_lf: UTF-8, LF, every platform);
+    Gate 1B step 8 MUST use --out and pin THAT file's digest, never a redirect.
+    """
+    args = [a for a in sys.argv[1:]]
+    out_path = None
+    if "--out" in args:
+        i = args.index("--out")
+        try:
+            out_path = args[i + 1]
+        except IndexError:
+            print("usage: emit_gate1_status.py <results.json> [--out STATUS.json]")
+            return 2
+        del args[i:i + 2]
+    if len(args) != 1:
+        print("usage: emit_gate1_status.py <results.json> [--out STATUS.json]")
+        return 2
+    results = json.loads(open(args[0], encoding="utf-8").read())
+    text = json.dumps(emit(results), indent=2) + "\n"
+    if out_path is not None:
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+        from exec.fsio import write_utf8_lf
+        write_utf8_lf(out_path, text)
+    sys.stdout.write(text)
     return 0
 
 

@@ -15,7 +15,9 @@ from pathlib import Path
 
 PKG = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PKG / "exec"))
+sys.path.insert(0, str(PKG))
 from baselines import score_split  # noqa: E402
+from exec.fsio import write_utf8_lf  # noqa: E402 -- the ONE canonical writer
 
 
 def main():
@@ -36,8 +38,8 @@ def main():
               f"B1 {b1['correct']}/{b1['total']} = {b1['overall']:.4f}")
         for qt, q in b0["per_question_type"].items():
             print(f"    B0 {qt}: {q['correct']}/{q['total']} = {q['accuracy']:.4f}")
-    (PKG / "SURFACE_BASELINES_CANDIDATE.json").write_text(
-        json.dumps(out, indent=2) + "\n", encoding="utf-8", newline="\n")
+    write_utf8_lf(PKG / "SURFACE_BASELINES_CANDIDATE.json",
+                  json.dumps(out, indent=2) + "\n")
     return 0
 
 

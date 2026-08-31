@@ -1,8 +1,12 @@
 {
   "manifest_id": "DATASET_MANIFEST_CANDIDATE",
   "claim_bearing": false,
-  "generation_interpreter": "3.14.0",
-  "interpreter_law": "generation uses exec/prng.HashPRNG (pure SHA-256 integer arithmetic), so regeneration is Python-version-independent BY CONSTRUCTION; the Gate 1B container still regenerates all splits and MUST reproduce every content_sha256 exactly (DATASET_INTEGRITY_FAILURE on any mismatch, never silent)",
+  "generator_algorithm": "HashPRNG_SHA256_COUNTER_V1",
+  "generator_code_sha256": "a528af454caa1c6c1c5c33fce08ade57d201955eb955d0080cd3f0334f083e68",
+  "checker_code_sha256": "543460e6c7312a7549df10a5db194689c4da98c63fd3667587d9b976c2501b3d",
+  "compatibility_claim": "the generation algorithm is defined independently of CPython helper RNGs (pure SHA-256 counter stream + rejection sampling); regeneration is byte-identical on every CPython >= 3.8",
+  "byte_law": "all authoritative outputs are written via exec/fsio.write_utf8_lf (UTF-8, LF, canonical on every platform); the runtime interpreter is recorded ONLY in the separate runtime receipt, never in this frozen manifest",
+  "regeneration_law": "Gate 1B regenerates all splits to a NON-FROZEN --output-root and every content_sha256 MUST equal this manifest exactly (DATASET_INTEGRITY_FAILURE otherwise, never silent); the frozen package tree is never mutated during execution",
   "protected_derivation": "PUBLIC_SEED_20260831",
   "status": "CANDIDATE (CAS_MAPPING_RULES_v1_CANDIDATE still awaits owner approval; nothing here is claim-bearing)",
   "generator_seed": 20260831,
@@ -76,9 +80,7 @@
   },
   "files": {
     "data/candidate/train.jsonl": "8d567a07ff8990f8c40f190ed98ca1706b6ac920d6c9c53e818e7307d90de4a9",
-    "data/candidate/val.jsonl": "ae009357f34b8916aa166c98e4f9de33ed7870fde656e65e432eb7981688e616",
-    "tools/generate_construction_gold.py": "aa3a3fb398341e36d665112149e8c7d45e1ea967bbb82c1584b266c13ba6ea40",
-    "tools/independent_roundtrip_checker.py": "543460e6c7312a7549df10a5db194689c4da98c63fd3667587d9b976c2501b3d"
+    "data/candidate/val.jsonl": "ae009357f34b8916aa166c98e4f9de33ed7870fde656e65e432eb7981688e616"
   },
   "excluded_roundtrip": {
     "train": [],
@@ -86,5 +88,5 @@
     "protected": []
   },
   "protected_materialized": false,
-  "protected_law": "the protected split was generated in-memory, independently round-trip checked, digested, and NOT written; Gate 1B regenerates it from the same seed on AWS and must reproduce content_sha256 before any evaluation"
+  "protected_law": "the protected split was generated in-memory, independently round-trip checked, digested, and NOT written; Gate 1B regenerates it (same seed, or the owner-held salt) to a non-frozen destination and must reproduce content_sha256 before any evaluation"
 }

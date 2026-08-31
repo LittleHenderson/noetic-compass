@@ -17,6 +17,8 @@ import sys
 from pathlib import Path
 
 PKG = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PKG))
+from exec.fsio import write_utf8_lf  # noqa: E402 -- the ONE canonical writer
 
 QOP = {"Q_ATTRACT": "^2", "Q_AVERT": "^3", "Q_PART": "^6", "Q_TRIGGER": "^8"}
 
@@ -70,8 +72,8 @@ def main():
                    "encoding change"),
            "splits": {"train": audit_split(PKG / "data" / "candidate" / "train.jsonl"),
                       "val": audit_split(PKG / "data" / "candidate" / "val.jsonl")}}
-    (PKG / "CANDIDATE_OCCURRENCE_AUDIT.json").write_text(
-        json.dumps(out, indent=2) + "\n", encoding="utf-8", newline="\n")
+    write_utf8_lf(PKG / "CANDIDATE_OCCURRENCE_AUDIT.json",
+                  json.dumps(out, indent=2) + "\n")
     for split, v in out["splits"].items():
         print(f"{split}: {v['answer_first_occurrence_outside_target_clause']}"
               f"/{v['passages']} = {v['fraction']:.3f} first-occur outside target clause")
