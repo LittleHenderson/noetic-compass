@@ -20,6 +20,7 @@ The repairs this module enforces (owner directive RC-0):
 from __future__ import annotations
 
 import enum
+import math
 from dataclasses import dataclass, field
 
 # ---------------------------------------------------------------- enums / vocabularies
@@ -90,6 +91,8 @@ class RPMState:
             v = getattr(self, name)
             if not isinstance(v, (int, float)) or isinstance(v, bool):
                 raise TypeError(f"RPMState.{name} must be a raw number, got {type(v).__name__}")
+            if math.isnan(v) or math.isinf(v):
+                raise ValueError(f"RPMState.{name} must be finite, got {v!r}")
             if v < 0:
                 raise ValueError(f"RPMState.{name} must be >= 0")
 
@@ -120,6 +123,8 @@ class Resistance:
             v = getattr(self, name)
             if not isinstance(v, (int, float)) or isinstance(v, bool):
                 raise TypeError(f"Resistance.{name} must be a number, got {type(v).__name__}")
+            if math.isnan(v) or math.isinf(v):
+                raise ValueError(f"Resistance.{name} must be finite, got {v!r}")
             if v < 0:
                 raise ValueError(f"Resistance.{name} must be >= 0")
 

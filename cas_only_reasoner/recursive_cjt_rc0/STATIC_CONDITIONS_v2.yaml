@@ -1,0 +1,28 @@
+# STATIC_CONDITIONS_v2 — supersedes v1's COMPUTE CONTRACT (documentation only; not executed).
+# Status: PROPOSED_UNTESTED. Arms S0–S7 unchanged from STATIC_CONDITIONS_v1.yaml.
+#
+# CHANGE (owner directive RC-0.1 item 11): several static arms contain no CJT expert at
+# all, so CJT_EXPERT_EVALUATION CANNOT be the static stage's matching unit. It remains
+# the deterministic simulator's internal unit and, later, one recursive-controller
+# accounting unit. The static stage matches and reports the quantities below directly.
+version: STATIC_CONDITIONS_v2
+supersedes: STATIC_CONDITIONS_v1 (compute contract only; arms and gates unchanged)
+stage: static_coupling
+arms_reference: STATIC_CONDITIONS_v1.yaml   # S0..S7 definitions and gates carry forward
+compute_matching_contract:
+  matched_across_all_arms:
+    - training_examples
+    - trainable_parameters          # measured on the actual modules, ±1%
+    - optimizer_steps
+    - forward_FLOPs                 # measured, not estimated from slot counts
+    - backward_FLOPs
+    - GPU_seconds
+    - peak_VRAM
+  reported_per_arm: [all of the above, plus wall_clock, container_digest, seed_list]
+  prohibited: "CJT_EXPERT_EVALUATION as the sole static matching unit; dictionary
+    slot-count equality presented as parameter matching (that check is
+    SIMULATOR_CONFIG_COUNT_MATCH only)"
+notes:
+  - "No matched-parameter claim exists until the neural modules exist and these
+    quantities are measured. The RC-0 config-slot test proves nothing about them."
+  - "Owner-signed phase record (Gate 1A freeze) required before any run."

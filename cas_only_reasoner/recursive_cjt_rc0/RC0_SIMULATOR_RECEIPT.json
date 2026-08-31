@@ -40,5 +40,11 @@
     "working_tree_sha256": "a1c40086756da592db2cd971727b61c60b7f6e5399b5666f390257c9b41174db",
     "identical": true,
     "finding": "The committed file CONTAINS arms I and J (lines 418-419). The owner's reviewed copy was the pre-audit intermediate draft. No version was overwritten. A-J lettering retired regardless; see STATIC_CONDITIONS_v1 / RECURSIVE_CONDITIONS_v1."
+  },
+  "owner_review_2026_08_30": {
+    "accepted_as": "RC0_CONTROLLER_SHELL_PASS (RC0_CORE_SOFTWARE_CONFORMANCE_PASS)",
+    "not_accepted_as": "DETERMINISTIC_SIMULATOR_GATE0_PASS",
+    "reason": "The registered 14-task scenario exercised only the happy path (zero repairs/no-ready/cycles/limits); routing did not read the Cause; actions were largely labels; the RPM ablation metric was structurally blind; replay was same-process only. Closed by PHASE RC-0.1: see RC01_FEEDBACK_CLOSURE_RECEIPT.json.",
+    "original_status_field_preserved_above": true
   }
 }

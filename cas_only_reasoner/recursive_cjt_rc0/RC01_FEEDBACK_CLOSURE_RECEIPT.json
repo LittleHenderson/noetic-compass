@@ -1,0 +1,175 @@
+{
+  "receipt_id": "RC01_FEEDBACK_CLOSURE_RECEIPT",
+  "phase": "RC-0.1 (feedback, action, and evidence closure)",
+  "status": "DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS",
+  "status_law": "emitted only when all tests pass, every scenario path is exercised, rejected Effects cannot publish, verifier rejection alters the next tick, RPM ablation shows a strict causal signature, and replays are digest-identical; otherwise GATE0_INCONCLUSIVE/GATE0_REFUTED. Never 'pass with caveats'.",
+  "claim_bearing": false,
+  "neural_network": "NONE (deterministic CPU simulation only)",
+  "environment": {
+    "python": "3.14.0",
+    "os": "Windows-11-10.0.26200-SP0",
+    "branch": "research/cas-sem-guided-plasticity-v1",
+    "parent_commit_sha": "c6eb3f4e89c7c19e685e6c643c9425f592c73c26",
+    "commit_sha": "the commit containing this receipt (see git log: cjt(rc-0.1))"
+  },
+  "commands": [
+    "python tests/test_rc0.py",
+    "python tests/test_rc01.py",
+    "python sim/rc01_scenarios.py",
+    "python sim/rc01_replay_entry.py normal_intended [--mutate]"
+  ],
+  "duration_seconds": 1.39,
+  "tests": {
+    "rc0_suite": "17/17 passed",
+    "rc01_suite": "28/28 passed",
+    "rc0_exit": 0,
+    "rc01_exit": 0
+  },
+  "scenario_matrix": {
+    "total": 22,
+    "passed": 22,
+    "all_passed": true,
+    "counts": {
+      "intended": 12,
+      "opposite": 2,
+      "off_axis": 5,
+      "unassessed": 1,
+      "published": 12,
+      "refused": 7,
+      "abstained": 1,
+      "repaired": 6,
+      "quarantined": 2,
+      "halted": 3,
+      "correct_expert_selections": 12,
+      "incorrect_expert_selections": 8
+    },
+    "per_scenario": [
+      {
+        "id": "normal_intended",
+        "passed": true
+      },
+      {
+        "id": "desire_block",
+        "passed": true
+      },
+      {
+        "id": "wisdom_block_repair_return",
+        "passed": true
+      },
+      {
+        "id": "power_block_repair",
+        "passed": true
+      },
+      {
+        "id": "hard_mask_extreme_V",
+        "passed": true
+      },
+      {
+        "id": "all_unavailable",
+        "passed": true
+      },
+      {
+        "id": "opposite_refused_quarantined",
+        "passed": true
+      },
+      {
+        "id": "off_axis_refused_repair",
+        "passed": true
+      },
+      {
+        "id": "unassessed_abstains",
+        "passed": true
+      },
+      {
+        "id": "saturation_cap",
+        "passed": true
+      },
+      {
+        "id": "split_children",
+        "passed": true
+      },
+      {
+        "id": "quarantine_reopen",
+        "passed": true
+      },
+      {
+        "id": "halt_budget",
+        "passed": true
+      },
+      {
+        "id": "cycle_detected",
+        "passed": true
+      },
+      {
+        "id": "depth_limit",
+        "passed": true
+      },
+      {
+        "id": "active_branch_limit",
+        "passed": true
+      },
+      {
+        "id": "total_branch_limit",
+        "passed": true
+      },
+      {
+        "id": "cached_acquisition",
+        "passed": true
+      },
+      {
+        "id": "invalidation_reopens",
+        "passed": true
+      },
+      {
+        "id": "stale_intent_rejected",
+        "passed": true
+      },
+      {
+        "id": "duplicate_conflicting_rejected",
+        "passed": true
+      },
+      {
+        "id": "atomic_rollback_byte_identical",
+        "passed": true
+      }
+    ],
+    "matrix_digest": "78917a05c7d35f2e7870ae93a7bfca2db82340552a3ceb71b692288aed3325c3"
+  },
+  "fresh_process_replay": {
+    "digest_run1": "16e2f5f2c83606cf38e0e158184fd0eb8efe37b91f52920e6edb063e1804b2f4",
+    "digest_run2": "16e2f5f2c83606cf38e0e158184fd0eb8efe37b91f52920e6edb063e1804b2f4",
+    "identical": true,
+    "mutated_digest": "cbd4710146cca6f151a87c7b3193d731040f88aa6165c0b72a0e714bf78c240c",
+    "mutation_changes_digest": true
+  },
+  "artifact_digests": {
+    ".gitignore": "6f4ff2992c4e2558837e2e09c39ed2bba140658755b22d046aab810ea2c90ca0",
+    "RC01_SCENARIO_MATRIX.json": "78917a05c7d35f2e7870ae93a7bfca2db82340552a3ceb71b692288aed3325c3",
+    "RC0_SIMULATOR_RECEIPT.json": "0584064553d3ef6d83129ba3d10b23b071e2a0b9adcc83ee12cf3d8b14ca259f",
+    "RECURSIVE_CJT_STATE_SCHEMA_v0_1.json": "3c509f09ce7806eecc143134acba388c00035a2a7adc467725011c9317623144",
+    "RECURSIVE_CJT_STATE_SCHEMA_v0_2.json": "3a23db76c18c6acfe03b23d983483350064e4638279748a3153b3e2a41046450",
+    "RECURSIVE_CJT_TICK_SEMANTICS_v0_1.md": "4ba1192f912755eaa6f3e6a2fddfdfecde6e6bfb36b32f35b89abc04fd09a30a",
+    "RECURSIVE_CJT_TICK_SEMANTICS_v0_2.md": "11ba2e19d6f84e3e3898d6fb65f5b3fbe541282f0373a4fc4c63c82574b43784",
+    "RECURSIVE_CONDITIONS_v1.yaml": "dae87c6ff72556df749f2485b70487c51971adcf7120ebc7db9e59a3e4180f40",
+    "RECURSIVE_CONDITIONS_v2.yaml": "e0e86d1d0447533d81aab4cadc786452ccbde87d7888c3d70cf30b5851550710",
+    "sim/rc01_coordinator.py": "ebab018171ad32ca9916ba311a4201e1adfe78ac9957321a6e4cecf5d62667c3",
+    "sim/rc01_engine.py": "1072799f369a25a4dda0f1e98b3695080d7da3ca49383fb3f26ee11b88bcd28c",
+    "sim/rc01_experts.py": "c44d2de5f6554511e0322b7a0633df79af97b5925051926fcf8632d3b8d1daf3",
+    "sim/rc01_replay_entry.py": "3102ebd7be660219294f59b22bba1ee2002e8dfff6bc7562664d72ed785c938b",
+    "sim/rc01_scenarios.py": "ace579c55d26589b88afd41ea07aede387450e8f00d2365eb569d07e1206eff4",
+    "sim/rc01_types.py": "a1c77394a9e4984d771f855b4ee7fbd39966ab69d4727f7f7cf5adbc959066d5",
+    "sim/rc0_coordinator.py": "81542ff5de2b0864a72c75fcccea5bd93cd72224a315be87c1fb257e220680db",
+    "sim/rc0_routing.py": "21635eaad8699c31bdfaa94f31d2c7a261077bbffd8084805009ce18ec81e746",
+    "sim/rc0_simulator.py": "71b951a25b8ea8f869d3210d787af9769e6303dd540965307d1cafee6cdb8015",
+    "sim/rc0_types.py": "2bfbd4f05a8963d45fefaf960fde02af5a5e95047756d7126c19698ed52646a8",
+    "STATIC_CONDITIONS_v1.yaml": "2807cdb7ca4fa5d5eed414519a1859cc8ce0d864aab3e8869b64278e5b285573",
+    "STATIC_CONDITIONS_v2.yaml": "b629c857c62a06654b6151cf90a2e354b19899be2cc8aee7d3a30fefb1c4d0f5",
+    "tests/test_rc0.py": "3fe483d7e02422c7195de9e47b75319bdf945b668f0c93366a55e336a63cec42",
+    "tests/test_rc01.py": "5f9e7ed2947cdcf1897c09cf5ab9345b06d4631d5ed0aab12fadeef77c097b23"
+  },
+  "test_file_digests": {
+    "tests/test_rc0.py": "3fe483d7e02422c7195de9e47b75319bdf945b668f0c93366a55e336a63cec42",
+    "tests/test_rc01.py": "5f9e7ed2947cdcf1897c09cf5ab9345b06d4631d5ed0aab12fadeef77c097b23"
+  },
+  "code_tree_digest": "0b0dc51005398343154511e9c0cdea2092eff3b8715d1c359e9a00811220dc59"
+}

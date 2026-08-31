@@ -1,0 +1,40 @@
+# RECURSIVE_CONDITIONS_v2 — supersedes v1's ABLATION DESIGN (documentation only; not executed).
+# Status: PROPOSED_UNTESTED.
+#
+# CHANGE (owner directive RC-0.1 item 11): the v1 double-dissociation section compared
+# against R2/R3/R4 (R1 PLUS one component). Those are NOT equivalent to FULL MINUS one
+# component — interactions matter: RPM may behave differently with ASOM and CAS-Ohm
+# present than alone. v2 adds explicit full-minus-one arms; the double-dissociation
+# tests compare R5 against THESE, never against R2/R3/R4 as substitutes.
+version: RECURSIVE_CONDITIONS_v2
+supersedes: RECURSIVE_CONDITIONS_v1 (ablation design; R0-R9 retained)
+stage: recursive_controller
+arms:
+  # R0-R9 carried forward verbatim from RECURSIVE_CONDITIONS_v1.yaml
+  R0: {ref: v1, name: anonymous_matched_moe}
+  R1: {ref: v1, name: cas_labeled_softmax}
+  R2: {ref: v1, name: plus_rpm, note: "R1+RPM: an ADDITION arm, not a subtraction arm"}
+  R3: {ref: v1, name: plus_asom, note: "addition arm"}
+  R4: {ref: v1, name: plus_cas_ohm, note: "addition arm"}
+  R5: {ref: v1, name: full_controller}
+  R6: {ref: v1, name: shuffled_cas_meanings}
+  R7: {ref: v1, name: matched_generic_hierarchical}
+  R8: {ref: v1, name: random_matched_state_stream}
+  R9: {ref: v1, name: cas_stream_disconnected}
+  # NEW full-minus-one arms (the true ablation set)
+  R5_MINUS_RPM:    {desc: "R5 with RPM enforcement removed (latent readiness kept as truth, per the RC-0.1 engine law); everything else identical."}
+  R5_MINUS_ASOM:   {desc: "R5 with operating-region regulation removed (route_multiplier forced to 1); everything else identical."}
+  R5_MINUS_CAS_OHM: {desc: "R5 with V/(r+eps) routing replaced by uniform-over-ready; everything else identical."}
+gates_double_dissociations:
+  - "R5 vs R5_MINUS_RPM: unready executions / forced publications strictly increase; prerequisite recovery deteriorates."
+  - "R5 vs R5_MINUS_ASOM: saturation events and collateral damage increase."
+  - "R5 vs R5_MINUS_CAS_OHM: compute efficiency worsens; verifier truth function unchanged (behavioral outcome distribution MAY change and is reported separately, not claimed invariant)."
+  - "R5 vs R9: operation-level generalization deteriorates."
+falsifiers_reference: RECURSIVE_CONDITIONS_v1.yaml   # all v1 falsifiers retained
+additional_falsifiers:
+  - "R5 <= R5_MINUS_RPM on primary metric -> RPM adds no demonstrated value in context."
+  - "R5 <= R5_MINUS_ASOM -> ASOM adds no demonstrated value in context."
+  - "R5 <= R5_MINUS_CAS_OHM -> CAS-Ohm routing adds no demonstrated value in context."
+sequencing: "RC-0.1 (DONE this commit) -> Gate 1A protocol freeze -> Gate 1B static
+  S0-S7 on AWS -> Gate 2 recursive (only if static CAS coupling wins) -> Gate 3
+  plasticity -> Gate 4 CJT Transformer. Owner-signed phase record per gate."

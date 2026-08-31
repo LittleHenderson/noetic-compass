@@ -110,7 +110,14 @@ def test_05_policy_mask_cannot_be_overridden_by_large_V():
 
 
 # 6 ---------------------------------------------------------------- verdict != route
-def test_06_current_semantic_outcome_cannot_alter_the_route_that_produced_it():
+def test_06_same_tick_route_independent_of_current_verdict():
+    """AMENDED per OWNER DIRECTIVE RC-0.1 item 3: the original assertion (the ENTIRE
+    multi-tick allocation sequence identical under flipped verdicts) enforced a SEVERED
+    feedback wire. The correct law is same-tick independence only; the delayed
+    next-tick feedback wire is implemented and tested in the RC-0.1 engine
+    (tests/test_rc01.py::test_committed_rejection_changes_next_tick_state_or_route).
+    The RC-0 shell has no feedback wire at all, so this narrowed check is all it can
+    honestly demonstrate."""
     tasks = S.default_tasks()
     base_table = S.build_outcome_table(tasks)
     flipped = dict(base_table)
@@ -118,9 +125,9 @@ def test_06_current_semantic_outcome_cannot_alter_the_route_that_produced_it():
         flipped[key] = "opposite" if flipped[key] != "opposite" else "off_axis"
     out_a = S.RC0Kernel(tasks, outcome_table=base_table).run()
     out_b = S.RC0Kernel(tasks, outcome_table=flipped).run()
-    # region evidence is usage/readiness-only (two-axis discipline), so ALLOCATIONS are
-    # identical even though verdicts differ -- routing never reads the verdict
-    assert out_a["allocations"] == out_b["allocations"]
+    # SAME-TICK law only: tick 0's allocation (produced before any verdict existed)
+    # is identical; later ticks are NOT asserted (a feedback-closed engine may differ)
+    assert out_a["allocations"][0] == out_b["allocations"][0]
     verdicts_a = [e["outcome"] for e in out_a["events"] if e["event"] == "EXECUTED"]
     verdicts_b = [e["outcome"] for e in out_b["events"] if e["event"] == "EXECUTED"]
     assert verdicts_a != verdicts_b, "test setup failed to change any verdict"
@@ -221,16 +228,21 @@ def test_11_healthy_parent_aggregate_cannot_hide_a_failed_child():
 
 
 # 12 --------------------------------------------------------------- RPM ablation
-def test_12_removing_rpm_produces_the_prerequisite_failure_signature():
+def test_12_rpm_ablation_collapses_typed_abstentions_shell_scope_only():
+    """AMENDED per OWNER DIRECTIVE RC-0.1 item 4. WHAT THIS TEST PROVES: disabling RPM
+    in the RC-0 shell collapses typed abstentions to zero. WHAT IT CANNOT PROVE: a
+    strict increase in forced answers -- the shell's ablation forces readiness to 1,
+    and its forced-answer counter fires only on readiness 0, so that metric is
+    structurally blind here (the trap the owner identified). The STRICT causal
+    signature (latent readiness kept as truth; unready executions / forced
+    publications strictly increase under ablation) is implemented and enforced in
+    tests/test_rc01.py::test_no_rpm_strictly_increases_unready_execution_or_forced_publication."""
     states = lambda: S.default_states({"^6_decompose": {"wisdom": 0.0}})  # noqa: E731
     tasks = [{"id": f"t{i:02d}", "required_op": "^6_decompose"} for i in range(6)]
     with_rpm = S.RC0Kernel(tasks, states=states(), enable_rpm=True).run()
     no_rpm = S.RC0Kernel(tasks, states=states(), enable_rpm=False).run()
-    # signature: typed abstentions collapse to zero; forced answers rise
     assert with_rpm["metrics"]["typed_abstentions"] >= 1
     assert no_rpm["metrics"]["typed_abstentions"] == 0
-    assert no_rpm["metrics"]["forced_answers"] >= with_rpm["metrics"]["forced_answers"]
-    # and the typed reason is present when RPM is on
     blocks = [e for e in with_rpm["events"] if e["event"] == "TYPED_ABSTENTION"]
     assert blocks and all(e["FIRST_BLOCK"] in T.FIRST_BLOCK_POLICY for e in blocks)
 
@@ -267,7 +279,12 @@ def test_14_removing_cas_ohm_changes_allocation_but_not_verifier_truth():
 
 
 # 15 --------------------------------------------------------------- matched budgets
-def test_15_generic_and_cas_controller_parameter_budgets_match():
+def test_15_controller_configuration_slot_count_matches():
+    """SIMULATOR_CONFIG_COUNT_MATCH only (renamed per OWNER DIRECTIVE RC-0.1 item 10):
+    the two config dictionaries have the same number of scalar slots. This is NOT a
+    neural parameter-count match. No matched neural parameter claim is permitted until
+    actual neural modules exist and trainable parameters / optimizer state / FLOPs /
+    memory are measured directly (see STATIC_CONDITIONS_v2.yaml compute contract)."""
     cas = S.cas_controller_config()
     gen = S.generic_controller_config()
     assert len(cas) == len(gen), (len(cas), len(gen))

@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "recursive_cjt_rc0/RECURSIVE_CJT_STATE_SCHEMA_v0_2.json",
+  "title": "RECURSIVE_CJT_STATE_SCHEMA_v0_2",
+  "description": "RC-0.1 schema. Supersedes v0_1 (preserved). Adds the typed CJT transformation interface (Cause/EffectCandidate/CJTStepResult), the versioned-intent envelope, the effect-publication authority, latent-vs-enforced readiness, and the kernel-level branch ceilings. Everything in v0_1 not overridden here carries forward, including the measurement_contract, the route equation, and the compute unit. Reference implementation: sim/rc01_types.py, sim/rc01_engine.py, sim/rc01_coordinator.py.",
+  "carries_forward_from_v0_1": ["bias_state (S, M, P_RPM, Z, Theta, G)", "measurement_contract", "route_equation", "compute_budget (CJT_EXPERT_EVALUATION)"],
+  "definitions": {
+    "cause": {
+      "type": "object",
+      "description": "The routed object. GOLD WALL: no field for required_op / expected outcome exists; construction rejects gold-shaped evidence markers. The verifier's gold table is sealed and inaccessible to routing code.",
+      "required": ["cause_id", "evidence"],
+      "properties": {
+        "cause_id": {"type": "string"},
+        "evidence": {"type": "array", "items": {"type": "string"}, "description": "NON-gold structural markers only"},
+        "payload": {"type": "string"}
+      }
+    },
+    "effect_candidate": {
+      "type": "object",
+      "required": ["producer_expert_id", "cause_id", "op_kind", "payload"],
+      "description": "Typed Effect produced by CJTStep. NOT published until the latch authorizes it."
+    },
+    "cjt_step_result": {
+      "type": "object",
+      "required": ["effect_candidate", "observations", "intents", "actual_compute_used",
+                   "producer_expert_id", "originating_tick", "authoritative_bias_version"],
+      "description": "(E_t, B-hat_{t+1}) = CJTStep(C_t, B_t): the Effect plus PROPOSED updates; nothing becomes B_{t+1} until the coordinator commits."
+    },
+    "versioned_intent": {
+      "type": "object",
+      "required": ["episode_id", "tick", "producer_id", "expert_id", "fld", "new_value",
+                   "base_state_version", "base_state_digest"],
+      "properties": {
+        "verifier_receipt_digest": {"type": "string", "description": "Required for publication-consequence intents; must match a receipt the coordinator has sealed."}
+      },
+      "rejection_laws": ["LAW_TYPED_INTENT", "LAW_EPISODE_IDENTITY", "LAW_TICK_IDENTITY",
+                         "LAW_KNOWN_EXPERT", "LAW_GOVERNANCE_OWNER_ONLY", "LAW_ALLOWED_FIELD",
+                         "LAW_VALUE_TYPE", "LAW_STALE_VERSION", "LAW_STALE_DIGEST",
+                         "LAW_VERIFIER_RECEIPT", "LAW_NO_CONFLICTING_WRITES"],
+      "atomicity": "one invalid intent rejects the whole batch; rejections are sealed in the trace naming the FIRST failed law; state remains byte-identical"
+    },
+    "publication_law": {
+      "intended": "PUBLISHED",
+      "opposite": "REFUSED + QUARANTINE consequence path",
+      "off_axis": "REFUSED + REPAIR consequence path",
+      "unassessed": "ABSTAINED (typed)",
+      "note": "A refused Effect may update diagnostic state; it never receives publication authority. Consequences run ONLY after the diagnostic commit succeeds (the delayed wire)."
+    },
+    "readiness": {
+      "latent_readiness": "truth, computed from D/W/P against frozen thresholds; ALWAYS computed",
+      "rpm_enforcement_enabled": "whether the gate blocks; ablation removes enforcement only",
+      "unready_execution": "executed while latent readiness false",
+      "forced_publication": "published while a required prerequisite was false",
+      "desire_law": "a Desire block DEPRIORITIZES (DESIRE_DEPRIORITIZED); the kernel never repairs Desire to invent relevance"
+    },
+    "recursion_gates": {
+      "max_depth": "per-expert governance chain-depth ceiling (DEPTH_LIMIT)",
+      "max_active_branches": "kernel-level concurrent subgoal ceiling (ACTIVE_BRANCH_LIMIT), in addition to per-expert governance max_branches",
+      "max_total_branches": "kernel-level lifetime ceiling (TOTAL_BRANCH_LIMIT)",
+      "budget": "CJT_EXPERT_EVALUATION units; exhaustion -> sealed HALT",
+      "acquisition_cache": "one-directional (Correction 2); CACHE_HIT prevents duplicate repair; an explicit invalidation event (INVALIDATION_REOPEN) reopens"
+    },
+    "quarantine": {
+      "registry": "kernel-owned (Governance stays owner-only); sealed QUARANTINE / REOPEN transitions",
+      "reopen": "only by an owner-authorized reopen event",
+      "routing": "quarantined experts score exactly 0; a quarantined-only route skips the cause (ROUTE_UNAVAILABLE_QUARANTINED) so a later reopen can restore it"
+    }
+  }
+}
