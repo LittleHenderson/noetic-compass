@@ -1,0 +1,10 @@
+{
+  "TEMPLATE": true,
+  "status": "OWNER_KEY_NOT_YET_PINNED",
+  "law": "This template is DELIBERATELY INVALID under trust/OWNER_PUBLIC_KEY_PIN.schema.json. The production verifier reads only trust/OWNER_PUBLIC_KEY_PIN.json; while that file is absent or carries status OWNER_KEY_NOT_YET_PINNED, every production verification fails closed with OWNER_KEY_NOT_PINNED. To pin: the owner generates an Ed25519 keypair OFFLINE (the private key never enters this repository or any machine Claude operates), copies this template to trust/OWNER_PUBLIC_KEY_PIN.json, fills key_id (must NOT start with TEST-), owner_ed25519_public_key_hex, and pinned_by, deletes the TEMPLATE and status fields, and commits that pin in an owner-controlled commit.",
+  "pin_id": "OWNER_PUBLIC_KEY_PIN",
+  "key_id": "OWNER_TO_SET",
+  "owner_ed25519_public_key_hex": "OWNER_TO_SET_64_HEX",
+  "pinned_by": "OWNER_TO_SET",
+  "non_claim_bearing": false
+}

@@ -45,7 +45,10 @@ def assemble_examples(records, arm_id, *, verb_to_class=None, allow_protected=Fa
               "candidates": list(rec["candidates"]),
               "answer_index": rec["candidates"].index(rec["answer"]),
               "profiles": profiles, "n_ideas": len(rec["clauses"])}
-        assert set(ex) <= ALLOWED_EXAMPLE_KEYS
-        assert "idea_labels" not in ex and "seed_trace" not in ex
+        # typed raise, not a bare assert (asserts vanish under python -O)
+        if not set(ex) <= ALLOWED_EXAMPLE_KEYS or "idea_labels" in ex \
+                or "seed_trace" in ex:
+            raise ProtectedPathError(
+                "GOLD_LEAK_REFUSED: assembled example carries unregistered keys")
         out.append(ex)
     return out

@@ -1,0 +1,8 @@
+{
+  "pin_id": "OWNER_PUBLIC_KEY_PIN",
+  "key_id": "TEST-GATE1A2-CONFORMANCE-KEY-v1",
+  "owner_ed25519_public_key_hex": "a0f1d745a3a8aa23dac98f318561deee776cdfa1eb07d99f0bb18430f0793fe0",
+  "pinned_by": "SYNTHETIC_CONFORMANCE fixture -- NOT the owner",
+  "non_claim_bearing": true,
+  "fixture_law": "TEST ONLY. The private half is DERIVED from the public, non-secret seed string 'CJT_GATE1A2_TEST_OWNER_KEY_v1_NOT_A_SECRET' (sha256 -> Ed25519 private bytes), so anyone can sign with it -- which is exactly why production mode refuses this pin: key_id starts with TEST- and non_claim_bearing is true. Nothing verified under this key can ever be claim-bearing; synthetic status is always SOFTWARE_CONFORMANCE_ONLY."
+}

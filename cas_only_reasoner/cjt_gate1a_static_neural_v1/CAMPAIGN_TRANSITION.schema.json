@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAMPAIGN_TRANSITION -- one append-only, digest-chained lifecycle step",
+  "description": "Every transition names the prior and next state, binds the campaign id and package commit, binds the authorizing approval or receipt digest, carries its input/output digests, and chains to the previous transition's sha256. transition_sha256 = sha256 over the canonical record bytes (sort_keys, ensure_ascii, compact separators) with transition_sha256 set to the empty string. The first record's prev_transition_sha256 is 64 zeros. Verified independently by exec/campaign_state.verify_transition_chain.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["campaign_id", "index", "from_state", "to_state", "reason",
+               "package_commit_sha", "binding_kind", "binding_sha256",
+               "input_digests", "output_digests", "prev_transition_sha256",
+               "utc", "transition_sha256"],
+  "properties": {
+    "campaign_id": {"type": "string", "minLength": 1},
+    "index": {"type": "integer", "minimum": 0},
+    "from_state": {"$ref": "CAMPAIGN_STATE.schema.json"},
+    "to_state": {"$ref": "CAMPAIGN_STATE.schema.json"},
+    "reason": {"enum": ["FORWARD", "FAILURE"]},
+    "package_commit_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "binding_kind": {"type": "string", "minLength": 1,
+      "description": "what authorizes this step: e.g. execution_approval, container_prep_receipt, dataset_manifest, selected_layer_receipt, protected_lock_receipt, campaign_receipt"},
+    "binding_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "input_digests": {"type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "output_digests": {"type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "prev_transition_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "utc": {"type": "string",
+      "description": "SYNTHETIC in conformance mode (replay-identical chains); ISO-8601 in real mode"},
+    "transition_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

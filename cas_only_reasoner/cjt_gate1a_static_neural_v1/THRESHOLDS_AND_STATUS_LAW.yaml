@@ -14,9 +14,27 @@
 #     malformed/contradictory evidence is REFUSED (STATUS_INPUT_INVALID)
 #   - B0 AND B1 are consumed by the program (floor + task ceiling), not merely cited
 #   - the bootstrap is redefined on the version-independent hash stream (below)
-version: GATE1_THRESHOLDS_v3
+version: GATE1_THRESHOLDS_v4
 primary_metric: protected exact-match accuracy, a fraction in [0, 1]
-evidence_schema: RAW_GATE1_RESULTS.schema.json   # strict; program-enforced
+evidence_schema: RAW_GATE1_RESULTS.schema.json   # strict; program-enforced (v2)
+
+evidence_chain_law:               # v4 (GATE 1A.2 section 10, amendment A11)
+  rule: >
+    the status program validates the COMPLETE evidence chain -- field formats,
+    the checkpoint/job key sets against the frozen arm x seed grid, receipt-file
+    digests under --evidence-root, and baseline arithmetic (overall ==
+    correct/total, per-question sums, the exact question-type set) -- BEFORE
+    reading any accuracy or correctness vector. A well-shaped but unbound
+    result file is refused (EVIDENCE_UNBOUND), never scored.
+  mode_law: >
+    --conformance requires a TEST- owner key id and replaces every claim status
+    with SOFTWARE_CONFORMANCE_ONLY (mode SYNTHETIC_CONFORMANCE, permanently
+    non-claim-bearing); WITHOUT --conformance a TEST- key id is refused
+    outright, so a synthetic campaign can never receive a scientific status.
+  gate_semantics_unchanged: >
+    the margins, bootstrap, seed-consistency law, decision tree, licensed and
+    prohibited words are UNCHANGED from v3 -- v4 adds the provenance and mode
+    gates in front of them, nothing else.
 
 surface_baselines:
   B0: >

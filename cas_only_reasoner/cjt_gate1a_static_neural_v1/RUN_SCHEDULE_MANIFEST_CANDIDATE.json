@@ -1,0 +1,27 @@
+{
+  "manifest_id": "RUN_SCHEDULE_MANIFEST_CANDIDATE",
+  "law": "GATE 1A.2 section 5: the run schedule is a FROZEN OBJECT. The expected receipt set is DERIVED from this signed manifest (the execution approval binds its sha256 as run_schedule_sha256); it is never hardcoded as a bare count. For each required (arm, seed) exactly one successful receipt is demanded; None, duplicate, missing, extra, failed, wrong-update-count, wrong-layer, wrong-checkpoint-digest, wrong-cache-digest, wrong-identity, and wrong-commit receipts are refused (exec/schedule.py).",
+  "arms": ["S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7"],
+  "claim_bearing_seeds": [11, 23, 47],
+  "seed_options_note": "the code supports either 3 or 5 claim-bearing seeds; the OWNER decides (open decision); the execution approval binds exactly one frozen list, which must equal this manifest's claim_bearing_seeds at signing",
+  "duplicate_run_policy": {
+    "arm": "S0", "seed": 11, "count": 1,
+    "purpose": "determinism-tolerance measurement on training curves and VALIDATION only; performs NO protected read"},
+  "layer_selection_runs": {
+    "arm": "S0", "seed": 11, "candidate_layers": [6, 12, 18, 24],
+    "purpose": "S0-only law: L* chosen once on validation; every other run reuses it"},
+  "expected_run_counts": {
+    "layer_selection": 4,
+    "claim_bearing": "len(arms) * len(claim_bearing_seeds) = 24",
+    "duplicate": 1,
+    "total": 29},
+  "optimizer": {"name": "AdamW", "learning_rate": 0.001, "betas": [0.9, 0.999],
+                "weight_decay": 0.01, "schedule": "cosine decay, 5% linear warmup",
+                "batch_size": 32, "gradient_clip_norm": 1.0},
+  "updates_per_run": 3000,
+  "early_stop": "NONE",
+  "parameter_count_tolerance": 0.01,
+  "cache_version": "CJT_T1_CACHE_V1",
+  "checkpoint_naming_rule": "checkpoints/{arm}_seed{seed}_L{layer}.pt",
+  "receipt_naming_rule": "receipts/run_{arm}_seed{seed}.json (layer-selection: receipts/layersel_L{layer}.json; duplicate: receipts/dup_{arm}_seed{seed}.json)"
+}

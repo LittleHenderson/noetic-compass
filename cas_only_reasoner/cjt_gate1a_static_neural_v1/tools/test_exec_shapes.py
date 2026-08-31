@@ -40,7 +40,7 @@ from exec.spans import (SpanMappingFailure, build_input_text,  # noqa: E402
                         clause_char_spans, token_spans)
 from exec.candidate_encoding import encode_candidates  # noqa: E402
 from exec.train_loop import lr_lambda, run_training  # noqa: E402
-from exec.launcher import campaign_budget_gate  # noqa: E402
+from exec.cost import CostAuthority, CostViolation  # noqa: E402
 from exec.receipts import build_receipt  # noqa: E402
 
 REGISTERED_VERBS = ["drawn", "pulled", "felt", "captured", "withdrew", "repelled",
@@ -157,7 +157,13 @@ def test_gpu_required_fires_first():
             assert "GPU_REQUIRED" in str(exc)
     from exec.protected_eval import run_protected_evaluation
     try:
-        run_protected_evaluation(PKG, [], None, None, None, Path("x"))
+        run_protected_evaluation(
+            PKG, "REAL", campaign_id="t", protected_records=[],
+            protected_features={}, train_records=[], train_features={},
+            checkpoints={}, receipts_by_key={}, widths={}, verb_to_class={},
+            seeds=[], lock=None,
+            surface_baselines_trainval={}, evidence_chain={},
+            out_path=Path("x"))
         raise AssertionError("protected evaluation ran without a GPU")
     except GpuRequiredError as exc:
         assert "GPU_REQUIRED" in str(exc)
@@ -200,12 +206,16 @@ def test_schedule_and_selection_and_policy():
         raise AssertionError("wrong layer set must fail")
     except ValueError:
         pass
+    cost = CostAuthority({"max_hourly_rate_usd": 5.0, "cost_ceiling_usd": 120.0,
+                          "per_job_wall_clock_cap_hours": 2.0})
+    cost.spent_usd = 115.0
     try:
-        campaign_budget_gate(115.0, 2.0, 5.0, 120.0)
+        cost.gate_job("over")
         raise AssertionError("budget gate must refuse")
-    except RuntimeError as exc:
+    except CostViolation as exc:
         assert "COST_CEILING_REFUSAL" in str(exc)
-    campaign_budget_gate(100.0, 2.0, 5.0, 120.0)         # 110 <= 120: allowed
+    cost.spent_usd = 100.0
+    cost.gate_job("ok")                                  # 110 <= 120: allowed
     try:
         build_receipt(job_id="x")
         raise AssertionError("thin receipt must fail")

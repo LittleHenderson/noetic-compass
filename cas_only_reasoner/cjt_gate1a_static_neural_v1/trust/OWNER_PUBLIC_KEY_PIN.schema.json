@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OWNER_PUBLIC_KEY_PIN -- the owner trust root (GATE 1A.2 section 3)",
+  "description": "The production verifier reads the owner public key from EXACTLY ONE fixed path: trust/OWNER_PUBLIC_KEY_PIN.json. It accepts no --pinned-pubkey-hex argument, no caller-supplied key bytes, no key embedded only in the approval under verification, and no environment-variable substitute. Until the owner replaces the deliberately-invalid template (status OWNER_KEY_NOT_YET_PINNED) in a later owner-controlled pin commit, every production verification returns OWNER_KEY_NOT_PINNED. Test fixtures live only under tests/fixtures/ with key ids prefixed TEST- and are refused in production mode by key id. The owner PRIVATE key never exists in this repository or any machine Claude operates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["pin_id", "key_id", "owner_ed25519_public_key_hex", "pinned_by",
+               "non_claim_bearing"],
+  "properties": {
+    "pin_id": {"const": "OWNER_PUBLIC_KEY_PIN"},
+    "key_id": {"type": "string", "minLength": 4,
+      "description": "owner-chosen key identifier; MUST NOT start with 'TEST-' (that prefix is reserved for non-claim-bearing fixtures and is refused in production)"},
+    "owner_ed25519_public_key_hex": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "pinned_by": {"type": "string", "minLength": 1,
+      "description": "the owner's name/handle; the pin commit itself is the authorization record"},
+    "non_claim_bearing": {"const": false,
+      "description": "production pins are claim-bearing infrastructure; fixtures set true and are refused in production"}
+  }
+}

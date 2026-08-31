@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CAMPAIGN_STATE -- the eighteen typed lifecycle states (GATE 1A.2 section 1)",
+  "description": "The one campaign lifecycle. Forward edges advance exactly one position along the frozen order; failure edges go to SHUTDOWN_REQUESTED (or PROTECTED_BURNED first, when failing inside the protected phase). exec/campaign_state.py is the executable law; no standalone component may self-authorize a transition.",
+  "type": "string",
+  "enum": ["CREATED", "DESIGN_VERIFIED", "CONTAINER_PREP_AUTHORIZED",
+           "IDENTITIES_RESOLVED", "EXECUTION_AUTHORIZED", "AWS_IDENTITY_VERIFIED",
+           "DATA_VERIFIED", "MODEL_VERIFIED", "ACTIVATIONS_CACHED", "LAYER_FROZEN",
+           "TRAINING_COMPLETE", "PROTECTED_UNOPENED", "PROTECTED_RUNNING",
+           "PROTECTED_BURNED", "RESULTS_SEALED", "STATUS_EMITTED",
+           "SHUTDOWN_REQUESTED", "TERMINATED"]
+}

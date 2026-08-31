@@ -1,0 +1,19 @@
+{
+  "launch_id": "GATE1B_INSTANCE_LAUNCH_TEMPLATE",
+  "law": "FROZEN RECIPE (GATE 1A.2 sections 4 and 9). InstanceInitiatedShutdownBehavior is terminate, so an OS shutdown IS termination; IMDSv2 is required so instance identity is verifiable; the instance type is the signed g5.xlarge. Launched only under a verified EXECUTION approval; never in Gate 1A.2.",
+  "RunInstances": {
+    "InstanceType": "g5.xlarge",
+    "MinCount": 1,
+    "MaxCount": 1,
+    "InstanceInitiatedShutdownBehavior": "terminate",
+    "MetadataOptions": {"HttpTokens": "required", "HttpEndpoint": "enabled"},
+    "TagSpecifications": [{"ResourceType": "instance",
+      "Tags": [{"Key": "campaign", "Value": "SET_FROM_CAMPAIGN_ID"},
+               {"Key": "gate", "Value": "GATE_1B"}]}],
+    "BlockDeviceMappings": [{"DeviceName": "/dev/xvda",
+      "Ebs": {"VolumeSize": 100, "VolumeType": "gp3",
+              "DeleteOnTermination": true}}]
+  },
+  "region": "us-east-1",
+  "note": "AMI id, key pair, security group, and IAM instance profile are owner-account values resolved at launch under the signed approval; they are identity-checked on-instance (exec/identity.py) and recorded in the campaign receipt."
+}

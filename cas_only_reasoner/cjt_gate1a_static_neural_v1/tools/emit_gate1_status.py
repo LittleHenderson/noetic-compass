@@ -21,6 +21,18 @@ GATE1_THRESHOLDS_v3 (owner audit 2026-08-31 section 4). Three repairs over v2:
    parser -- the TASK CEILING) are required inputs; the program labels question
    types where B0 is near ceiling and always reports B1 as the ceiling row.
 
+v4 (GATE 1A.2 section 10) adds the EVIDENCE-CHAIN GATE: the raw results must
+carry the complete evidence chain (schema RAW_GATE1_RESULTS_v2), and this
+program validates it -- field formats, checkpoint/job key sets against the
+frozen arm x seed grid, receipt-file digests under --evidence-root, baseline
+arithmetic (overall == correct/total; per-question sums; the exact question-
+type set) -- BEFORE reading any accuracy or correctness vector. A well-shaped
+but unbound result file is refused (EVIDENCE_UNBOUND), never scored. Mode law:
+--conformance requires a TEST- owner key id and replaces every claim status
+with SOFTWARE_CONFORMANCE_ONLY; WITHOUT --conformance a TEST- key id is
+refused outright, so a synthetic campaign can never receive a scientific
+status.
+
 Deterministic bootstrap (frozen procedure): indices come from the SHA-256
 counter stream domain "GATE1_BOOT|<seed>|<control-arm>", read as consecutive
 big-endian 16-bit integers v, REJECTING v >= 65000 and mapping accepted v to
@@ -64,12 +76,117 @@ HONEST_CEILING_DISCLOSURES = [
 ]
 
 
+QTYPE_SET = {"Q_ATTRACT", "Q_AVERT", "Q_PART", "Q_TRIGGER"}
+
+EVIDENCE_HEX64 = ("execution_approval_sha256", "container_prep_receipt_sha256",
+                  "model_weight_manifest_sha256", "tokenizer_manifest_sha256",
+                  "dependency_lock_sha256", "dataset_manifest_sha256",
+                  "s7_control_table_sha256", "run_schedule_sha256",
+                  "selected_layer_receipt_sha256", "protected_lock_receipt_sha256",
+                  "protected_evaluation_receipt_sha256",
+                  "surface_baseline_receipt_sha256", "campaign_receipt_sha256")
+EVIDENCE_KEYS = frozenset(list(EVIDENCE_HEX64) + [
+    "package_commit_sha", "owner_key_id", "model_revision_sha",
+    "container_image_digest", "cache_manifest_sha256s", "checkpoint_sha256s",
+    "job_receipt_sha256s", "protected_campaign_id"])
+
+# receipt files hashed against the chain when --evidence-root is given
+EVIDENCE_FILES = (("execution_approval_sha256", "execution_approval.json"),
+                  ("container_prep_receipt_sha256", "container_prep_receipt.json"),
+                  ("dataset_manifest_sha256", "dataset_manifest.json"),
+                  ("run_schedule_sha256", "run_schedule.json"),
+                  ("selected_layer_receipt_sha256", "selected_layer_receipt.json"),
+                  ("protected_lock_receipt_sha256", "protected_lock_receipt.json"),
+                  ("protected_evaluation_receipt_sha256",
+                   "protected_evaluation_receipt.json"),
+                  ("surface_baseline_receipt_sha256", "surface_baseline_receipt.json"),
+                  ("campaign_receipt_sha256", "campaign_pre_receipt.json"))
+
+
 class StatusInputInvalid(ValueError):
+    pass
+
+
+class EvidenceUnbound(ValueError):
     pass
 
 
 def _fail(msg):
     raise StatusInputInvalid(f"STATUS_INPUT_INVALID: {msg}")
+
+
+def _efail(msg):
+    raise EvidenceUnbound(f"EVIDENCE_UNBOUND: {msg}")
+
+
+def _is_hex(s, n):
+    return isinstance(s, str) and len(s) == n and \
+        all(c in "0123456789abcdef" for c in s)
+
+
+def validate_evidence(results, evidence_root, conformance: bool):
+    """The provenance gate: runs BEFORE any metric is read. Raises
+    EvidenceUnbound on any missing, malformed, or mismatched binding."""
+    import hashlib
+    from pathlib import Path
+    if not isinstance(results, dict) or "evidence_chain" not in results:
+        _efail("results carry no evidence_chain; a well-shaped but unbound "
+               "result file never receives a scientific status")
+    ec = results["evidence_chain"]
+    if not isinstance(ec, dict) or set(ec) != EVIDENCE_KEYS:
+        missing = sorted(EVIDENCE_KEYS - set(ec)) if isinstance(ec, dict) else "-"
+        _efail(f"evidence_chain key set mismatch (missing {missing})")
+    if not _is_hex(ec["package_commit_sha"], 40):
+        _efail("package_commit_sha malformed")
+    if not _is_hex(ec["model_revision_sha"], 40):
+        _efail("model_revision_sha malformed")
+    for f in EVIDENCE_HEX64:
+        if not _is_hex(ec[f], 64):
+            _efail(f"{f} malformed or placeholder: {ec[f]!r}")
+    if not (isinstance(ec["container_image_digest"], str)
+            and ec["container_image_digest"].startswith("sha256:")
+            and _is_hex(ec["container_image_digest"][7:], 64)):
+        _efail("container_image_digest malformed")
+    key_id = ec["owner_key_id"]
+    if not isinstance(key_id, str) or len(key_id) < 4:
+        _efail("owner_key_id malformed")
+    if conformance and not key_id.startswith("TEST-"):
+        _efail("conformance mode requires a TEST- key id")
+    if not conformance and key_id.startswith("TEST-"):
+        _efail("a TEST- key id can never receive a scientific status; "
+               "run --conformance or use an owner-pinned key")
+    expected_keys = {f"{a}_seed{s}" for a in ARMS for s in SEEDS}
+    for map_field in ("checkpoint_sha256s", "job_receipt_sha256s"):
+        m = ec[map_field]
+        if not isinstance(m, dict) or set(m) != expected_keys:
+            _efail(f"{map_field} keys must be exactly the scheduled arm x seed "
+                   f"grid ({len(expected_keys)} keys)")
+        for k, v in m.items():
+            if not _is_hex(v, 64):
+                _efail(f"{map_field}[{k}] malformed")
+    cm = ec["cache_manifest_sha256s"]
+    if not isinstance(cm, dict) or not cm \
+            or not all(_is_hex(v, 64) for v in cm.values()):
+        _efail("cache_manifest_sha256s malformed")
+    if evidence_root is None:
+        _efail("no --evidence-root given: receipt files cannot be verified, "
+               "so the results are UNBOUND")
+    root = Path(evidence_root)
+    for field, fname in EVIDENCE_FILES:
+        f = root / fname
+        if not f.is_file():
+            _efail(f"receipt file missing: {fname}")
+        got = hashlib.sha256(f.read_bytes()).hexdigest()
+        if got != ec[field]:
+            _efail(f"{fname} sha {got[:16]}... != chain {ec[field][:16]}...")
+    for k, want in sorted(ec["job_receipt_sha256s"].items()):
+        f = root / "receipts" / f"run_{k}.json"
+        if not f.is_file():
+            _efail(f"job receipt missing: receipts/run_{k}.json")
+        got = hashlib.sha256(f.read_bytes()).hexdigest()
+        if got != want:
+            _efail(f"job receipt run_{k}.json digest mismatch")
+    return True
 
 
 def _is_binary_int(x):
@@ -90,29 +207,46 @@ def _check_baseline(node, path):
     if type(node["correct"]) is not int or type(node["total"]) is not int \
             or node["total"] < 1 or not 0 <= node["correct"] <= node["total"]:
         _fail(f"{path} correct/total invalid")
+    # ARITHMETIC LAW (v4): the stated fractions must EQUAL correct/total, the
+    # per-question rows must sum to the split totals, and the question-type set
+    # must be exactly the four registered types -- inconsistent arithmetic is
+    # fabricated evidence, refused
+    if node["overall"] != node["correct"] / node["total"]:
+        _fail(f"{path}.overall != correct/total (inconsistent arithmetic)")
+    if set(node["per_question_type"]) != QTYPE_SET:
+        _fail(f"{path} question-type set != the four registered types")
+    qc = qn = 0
     for qt, q in node["per_question_type"].items():
         if not isinstance(q, dict) or set(q) != {"accuracy", "correct", "total"} \
                 or not _is_fraction(q["accuracy"]):
             _fail(f"{path}.per_question_type[{qt}] invalid")
+        if type(q["correct"]) is not int or type(q["total"]) is not int \
+                or q["total"] < 1 or q["accuracy"] != q["correct"] / q["total"]:
+            _fail(f"{path}.per_question_type[{qt}] inconsistent arithmetic")
+        qc += q["correct"]; qn += q["total"]
+    if qc != node["correct"] or qn != node["total"]:
+        _fail(f"{path} per-question totals do not sum to the split totals")
 
 
 def validate(results):
     """The executable form of RAW_GATE1_RESULTS.schema.json. Raises on ANY defect."""
     if not isinstance(results, dict):
         _fail("top level is not an object")
-    if set(results) != {"schema", "protected_passage_ids", "arms", "claim_a",
-                        "surface_baselines"}:
-        _fail(f"top-level keys must be exactly the five registered ones; got "
+    if set(results) != {"schema", "evidence_chain", "protected_passage_ids",
+                        "arms", "claim_a", "surface_baselines"}:
+        _fail(f"top-level keys must be exactly the six registered ones; got "
               f"{sorted(results) if isinstance(results, dict) else type(results)}")
-    if results["schema"] != "RAW_GATE1_RESULTS_v1":
+    if results["schema"] != "RAW_GATE1_RESULTS_v2":
         _fail("schema field mismatch")
     ids = results["protected_passage_ids"]
     if not isinstance(ids, list) or len(ids) != N_PROTECTED:
         _fail(f"protected_passage_ids must be exactly {N_PROTECTED} ids")
-    expected = [f"p{i:06d}" for i in range(N_PROTECTED)]
-    if ids != expected:
-        _fail("protected ids must be unique and in the frozen generation order "
-              "p000000..p000999")
+    import re as _re
+    if len(set(ids)) != N_PROTECTED or ids != sorted(ids) \
+            or not all(isinstance(i, str) and _re.match(r"^p[0-9]{6}$", i)
+                       for i in ids):
+        _fail("protected ids must be unique, pattern p######, and in strictly "
+              "ascending (frozen generation) order")
     order_digest = hashlib.sha256(
         json.dumps(ids, separators=(",", ":")).encode("utf-8")).hexdigest()
     arms = results["arms"]
@@ -208,10 +342,14 @@ def gate(s3, ctrl, ctrl_name, boot_n):
             "margin_met": md >= MARGIN, "passed": passed}
 
 
-def emit(results, boot_n: int = BOOT_N):
+def emit(results, boot_n: int = BOOT_N, evidence_root=None,
+         conformance: bool = False):
     """The only claim-status authority. boot_n != BOOT_N is permitted ONLY inside
-    test fixtures; the CLI always uses the frozen default."""
-    validate(results)                                    # refuse bad evidence FIRST
+    test fixtures; the CLI always uses the frozen default. Order is law:
+    the EVIDENCE CHAIN is validated before any accuracy or correctness vector
+    is read; unbound results are refused (EVIDENCE_UNBOUND)."""
+    validate_evidence(results, evidence_root, conformance)   # provenance FIRST
+    validate(results)                                    # then evidence shape
     arms = results["arms"]
     gates = {f"S3_vs_{c}": gate(arms["S3"], arms[c], c, boot_n) for c in CONTROLS}
     simpler_fail = [c for c in ("S0", "S1", "S2") if not gates[f"S3_vs_{c}"]["passed"]]
@@ -237,10 +375,20 @@ def emit(results, boot_n: int = BOOT_N):
     near_ceiling = sorted(
         qt for qt, q in prot["B0"]["per_question_type"].items()
         if q["accuracy"] >= B0_NEAR_CEILING)
+    if conformance:
+        # SYNTHETIC_CONFORMANCE law (GATE 1A.2 section 12): the machinery runs
+        # end to end, but the ONLY status it can ever emit is software
+        # conformance -- never a neural or auxiliary-value claim
+        a_status = b_status = "SOFTWARE_CONFORMANCE_ONLY"
+    else:
+        a_status = "CLAIM_A_LICENSED" if a_ok else "CLAIM_A_NOT_LICENSED"
+        b_status = b
     return {
-        "status_law": "GATE1_THRESHOLDS_v3",
-        "claim_a_status": "CLAIM_A_LICENSED" if a_ok else "CLAIM_A_NOT_LICENSED",
-        "claim_b_status": b,
+        "status_law": "GATE1_THRESHOLDS_v4",
+        "mode": "SYNTHETIC_CONFORMANCE" if conformance else "REAL",
+        "non_claim_bearing": bool(conformance),
+        "claim_a_status": a_status,
+        "claim_b_status": b_status,
         "cas_specific_language":
             "PROHIBITED_ON_THIS_DATASET_REGARDLESS_OF_RESULT (owner PATH A; the "
             "answer function is defined over the CAS classes, so no equally "
@@ -272,20 +420,36 @@ def main():
     Gate 1B step 8 MUST use --out and pin THAT file's digest, never a redirect.
     """
     args = [a for a in sys.argv[1:]]
-    out_path = None
-    if "--out" in args:
-        i = args.index("--out")
-        try:
-            out_path = args[i + 1]
-        except IndexError:
-            print("usage: emit_gate1_status.py <results.json> [--out STATUS.json]")
-            return 2
-        del args[i:i + 2]
+    out_path = evidence_root = None
+    conformance = False
+    if "--conformance" in args:
+        conformance = True
+        args.remove("--conformance")
+    for flag in ("--out", "--evidence-root"):
+        if flag in args:
+            i = args.index(flag)
+            try:
+                value = args[i + 1]
+            except IndexError:
+                print("usage: emit_gate1_status.py <results.json> "
+                      "--evidence-root DIR [--out STATUS.json] [--conformance]")
+                return 2
+            if flag == "--out":
+                out_path = value
+            else:
+                evidence_root = value
+            del args[i:i + 2]
     if len(args) != 1:
-        print("usage: emit_gate1_status.py <results.json> [--out STATUS.json]")
+        print("usage: emit_gate1_status.py <results.json> "
+              "--evidence-root DIR [--out STATUS.json] [--conformance]")
         return 2
     results = json.loads(open(args[0], encoding="utf-8").read())
-    text = json.dumps(emit(results), indent=2) + "\n"
+    try:
+        out = emit(results, evidence_root=evidence_root, conformance=conformance)
+    except (EvidenceUnbound, StatusInputInvalid) as exc:
+        print(f"REFUSED: {exc}")
+        return 1
+    text = json.dumps(out, indent=2) + "\n"
     if out_path is not None:
         from pathlib import Path
         sys.path.insert(0, str(Path(__file__).resolve().parent.parent))

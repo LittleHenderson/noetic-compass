@@ -1,0 +1,11 @@
+# FROZEN dependency recipe (GATE 1A.2). The container build resolves these
+# exact pins; the resulting `pip freeze` digest becomes dependency_lock_sha256
+# in the CONTAINER_PREP receipt and the EXECUTION approval. Any drift between
+# this recipe and the resolved freeze is a CONTAINER_IDENTITY_MISMATCH.
+torch==2.5.1
+transformers==4.46.3
+tokenizers==0.20.3
+safetensors==0.4.5
+cryptography==43.0.3
+boto3==1.35.76
+numpy==2.1.3
