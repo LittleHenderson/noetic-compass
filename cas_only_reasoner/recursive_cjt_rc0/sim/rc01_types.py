@@ -21,12 +21,11 @@ state-bearing paths.
 from __future__ import annotations
 
 import enum
-import hashlib
-import json
 import math
 from dataclasses import dataclass
 
 from rc0_types import BiasState  # frozen Bias shell (hardened in rc0_types)
+from rc_canonical import canonical, digest  # RC-0.4 exact-type encoder (noqa: F401)
 
 
 # ---------------------------------------------------------------- guards
@@ -105,12 +104,9 @@ def validate_allocation(alloc: dict, tol: float = 1e-9) -> dict:
     return alloc
 
 
-def canonical(obj) -> str:
-    return json.dumps(obj, sort_keys=True, ensure_ascii=True, separators=(",", ":"), default=str)
-
-
-def digest(obj) -> str:
-    return hashlib.sha256(canonical(obj).encode("utf-8")).hexdigest()
+# canonical()/digest() come from rc_canonical (RC-0.4 section 3): exact-type-tagged
+# encoding, allow_nan=False, no default=str fallback. The RC-0.3 encoder collided
+# bytes with lookalike strings and gave frozensets hashseed-dependent bytes.
 
 
 # ---------------------------------------------------------------- cause (gold wall)
@@ -286,6 +282,29 @@ class VersionedIntent:
                        "new_value_digest": self.new_value_digest,
                        "base_v": self.base_state_version, "base_d": self.base_state_digest,
                        "vr": self.verifier_receipt_digest, "reason": self.reason})
+
+
+@dataclass(frozen=True)
+class EffectCommitContext:
+    """RC-0.4 (owner audit critical 1): the ONLY instrument by which a caller may ask
+    the state coordinator for a DiagnosticCommitReceipt. Carries the typed Effect
+    envelope and the verifier-receipt digest; the coordinator derives EVERY identity
+    (cause, effect digest, producer, embedded Bias snapshot) from these two, validates
+    them against the REGISTERED verifier receipt, and requires the committed batch to
+    contain the matching semantic RegionRecord mutation. Disconnected string arguments
+    can no longer christen an arbitrary memory/substrate/RPM commit 'diagnostic'."""
+
+    effect: EffectCandidate
+    verifier_receipt_digest: str
+
+    def __post_init__(self):
+        if not isinstance(self.effect, EffectCandidate):
+            raise TypeError("EffectCommitContext.effect must be an EffectCandidate, got "
+                            + type(self.effect).__name__)
+        require_str("EffectCommitContext.verifier_receipt_digest",
+                    self.verifier_receipt_digest)
+        if not self.verifier_receipt_digest:
+            raise ValueError("EffectCommitContext requires a non-empty verifier receipt digest")
 
 
 @dataclass(frozen=True)

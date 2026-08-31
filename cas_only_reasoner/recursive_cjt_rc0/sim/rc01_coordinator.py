@@ -1,25 +1,28 @@
-"""rc01_coordinator.py -- RC-0.3 transaction + publication authorities.
+"""rc01_coordinator.py -- RC-0.4 transaction + publication authorities.
 
-Repairs per the owner audit of c8f350df:
+RC-0.4 repair (owner audit critical 1 of 846f323f): in RC-0.3, ANY successful state
+commit could mint a DiagnosticCommitReceipt -- the caller passed optional strings
+(cause_id, effect_digest, verifier_receipt_digest, producer_expert_id) and a
+memory-only commit was christened "diagnostic". Closed:
 
-STATE COORDINATOR
-  - Emits a typed DiagnosticCommitReceipt after every SUCCESSFUL Effect-bearing commit
-    (episode, tick, cause, effect digest, verifier-receipt digest, expert, pre/post
-    state version+digest, committed intent digests). Held in a PRIVATE registry.
-  - Verifier receipts are validated by ISSUANCE-REGISTRY membership through the
-    verifier-provided capability -- NOT by recomputing a seal derived from public
-    strings (the RC-0.2 "secret" was sha256 of public identifiers; forgeable; dead).
-  - Commit trace carries pre/post versions AND digests; intent digests include
-    new_value digests; rejections sealed naming the first failed law; atomic rollback.
+  - The ONLY way to request a DiagnosticCommitReceipt is a typed EffectCommitContext
+    (the Effect envelope itself + the verifier-receipt digest). All Effect identity is
+    DERIVED from that envelope and the REGISTERED verifier receipt -- never from
+    disconnected method arguments.
+  - Eligibility law: the committed batch MUST contain a semantic RegionRecord mutation
+    that targets the Effect producer, cites the same verifier receipt, and records the
+    same verdict (LAW_DCR_REQUIRES_SEMANTIC_RECORD). The commit's pre-state for the
+    producer MUST equal the Effect's embedded Bias snapshot
+    (LAW_DCR_PRE_STATE_MISMATCH). A memory/substrate/RPM-only commit can never return
+    a DiagnosticCommitReceipt: without context it returns 'COMMITTED'; with context it
+    is REJECTED whole (fail closed, atomic).
 
-PUBLICATION COORDINATOR
-  - Publication now PROVES a state commit occurred: the intent must name a
-    DiagnosticCommitReceipt from the private registry; the receipt's episode/tick/
-    cause/effect/verifier-receipt/expert must match the intent; the intent's
-    base_state_version/digest must equal the commit's PRE state; the commit's POST
-    state must equal the CURRENT authoritative state (publication follows THAT commit,
-    with no intervening change). Both the verifier receipt and the commit receipt are
-    consumed exactly once. base_state fields are load-bearing, not decorative.
+PUBLICATION COORDINATOR (RC-0.3, kept)
+  - Publication PROVES a state commit occurred via a matching DiagnosticCommitReceipt
+    with base/post state validation; both receipts consumed exactly once. The whole
+    proof lives in _require_diagnostic_commit() so a single bypass is a testable,
+    OPERATIONAL mutation (owner audit major 2: the old mutant crashed on a None
+    dereference instead of demonstrating unauthorized publication).
 
 Deterministic, CPU-only.
 """
@@ -28,8 +31,9 @@ from __future__ import annotations
 import dataclasses
 
 from rc0_types import BiasState, RegionRecord, RPMState
-from rc01_types import (DiagnosticCommitReceipt, EffectPublicationIntent,
-                        VerifierReceipt, VersionedIntent, canonical, digest)
+from rc01_types import (DiagnosticCommitReceipt, EffectCommitContext,
+                        EffectPublicationIntent, VerifierReceipt, VersionedIntent,
+                        canonical, digest)
 
 ALLOWED_FIELDS = ("rpm", "record", "memory", "substrate")
 FIELD_TYPES = {"rpm": RPMState, "record": RegionRecord, "memory": tuple, "substrate": tuple}
@@ -124,13 +128,62 @@ class HardenedCoordinator:
     def get_commit_receipt(self, commit_digest: str):
         return self.__commit_receipts.get(commit_digest)
 
+    def _require_dcr_eligibility(self, intents, tick: int,
+                                 ctx: EffectCommitContext, pre: dict):
+        """RC-0.4 eligibility law: a DiagnosticCommitReceipt may be minted ONLY for a
+        batch that actually commits the diagnosis. Raises RejectedBatch (the WHOLE
+        batch is rejected -- fail closed) unless:
+          - the named verifier receipt is REGISTERED and binds this exact Effect
+            (digest, cause, producer) at this commit tick;
+          - the batch contains a semantic RegionRecord mutation targeting the Effect
+            producer, citing the same receipt, recording the same verdict;
+          - the producer's pre-state equals the Effect's embedded Bias snapshot."""
+        eff = ctx.effect
+        receipt = self._receipts.get(ctx.verifier_receipt_digest)
+        if receipt is None:
+            raise RejectedBatch("LAW_DCR_RECEIPT_NOT_REGISTERED",
+                                "effect context cites a verifier receipt that was "
+                                "never registered")
+        if receipt.effect_digest != eff.effect_digest:
+            raise RejectedBatch("LAW_DCR_RECEIPT_EFFECT_MISMATCH",
+                                "the registered receipt binds a different Effect")
+        if (receipt.cause_id != eff.cause_id
+                or receipt.producer_expert_id != eff.producer_expert_id):
+            raise RejectedBatch("LAW_DCR_RECEIPT_BINDING",
+                                "receipt cause/producer do not match the Effect envelope")
+        if receipt.tick != tick:
+            raise RejectedBatch("LAW_DCR_RECEIPT_TICK",
+                                f"receipt tick {receipt.tick} != commit tick {tick}")
+        semantic = [it for it in intents
+                    if it.fld == "record" and isinstance(it.new_value, RegionRecord)
+                    and it.expert_id == eff.producer_expert_id
+                    and it.verifier_receipt_digest == ctx.verifier_receipt_digest
+                    and it.new_value.semantic_outcome == receipt.verdict]
+        if not semantic:
+            raise RejectedBatch("LAW_DCR_REQUIRES_SEMANTIC_RECORD",
+                                "no semantic RegionRecord mutation targets the Effect "
+                                "producer with the named receipt and verdict; a "
+                                "memory/substrate/RPM-only commit is not a diagnostic "
+                                "commit")
+        p = pre.get(eff.producer_expert_id)
+        if (p is None or p["version"] != eff.base_bias_version
+                or p["digest"] != eff.base_bias_digest):
+            raise RejectedBatch("LAW_DCR_PRE_STATE_MISMATCH",
+                                "the Effect's embedded Bias snapshot does not equal "
+                                "the commit's pre-state for the producer")
+
     # ---- the one state-write path ----
-    def commit(self, intents, tick: int, cause_id: str = "", effect_digest: str = "",
-               verifier_receipt_digest: str = "", producer_expert_id: str = ""):
-        """Atomic batch commit. On success with Effect context, emits and privately
-        registers a DiagnosticCommitReceipt and RETURNS it; otherwise returns
-        'COMMITTED'. Raises RejectedBatch (state untouched, rejection sealed)."""
+    def commit(self, intents, tick: int, effect_context: EffectCommitContext = None):
+        """Atomic batch commit. RC-0.4: a DiagnosticCommitReceipt is emitted ONLY when
+        `effect_context` (a typed EffectCommitContext) passes the eligibility law --
+        the batch must CONTAIN the diagnosis. Without context: returns 'COMMITTED'.
+        Raises RejectedBatch (state untouched, rejection sealed)."""
         try:
+            if effect_context is not None and not isinstance(effect_context,
+                                                             EffectCommitContext):
+                raise RejectedBatch("LAW_TYPED_EFFECT_CONTEXT",
+                                    f"effect_context must be an EffectCommitContext, "
+                                    f"got {type(effect_context).__name__}")
             staged = {}
             pre = {}
             seen_writes = {}
@@ -190,6 +243,12 @@ class HardenedCoordinator:
                                          "digest": state_digest(self._states[it.expert_id])}
                 cur = staged.get(it.expert_id, self._states[it.expert_id])
                 staged[it.expert_id] = dataclasses.replace(cur, **{it.fld: it.new_value})
+            # RC-0.4: eligibility is validated BEFORE anything is applied -- an
+            # ineligible diagnostic claim rejects the WHOLE batch, atomically.
+            # MUTATION-TARGET: diagnostic-eligibility -- bypassing this call lets any
+            # state commit mint a DiagnosticCommitReceipt (owner audit critical 1)
+            if effect_context is not None:
+                self._require_dcr_eligibility(intents, tick, effect_context, pre)
             post = {}
             for eid, st in staged.items():
                 self._states[eid] = st
@@ -204,17 +263,19 @@ class HardenedCoordinator:
                 "pre": {e: pre[e] for e in sorted(pre)},
                 "post": {e: post[e] for e in sorted(post)},
             })
-            # RC-0.3: emit the DiagnosticCommitReceipt for Effect-bearing commits
-            if effect_digest and producer_expert_id and producer_expert_id in pre:
+            # RC-0.4: mint the DiagnosticCommitReceipt ONLY from the validated typed
+            # context -- every identity field is derived from the Effect envelope
+            if effect_context is not None:
+                eff = effect_context.effect
                 dcr = DiagnosticCommitReceipt(
-                    episode_id=self.episode_id, tick=tick, cause_id=cause_id,
-                    effect_digest=effect_digest,
-                    verifier_receipt_digest=verifier_receipt_digest,
-                    expert_id=producer_expert_id,
-                    pre_state_version=pre[producer_expert_id]["version"],
-                    pre_state_digest=pre[producer_expert_id]["digest"],
-                    post_state_version=post[producer_expert_id]["version"],
-                    post_state_digest=post[producer_expert_id]["digest"],
+                    episode_id=self.episode_id, tick=tick, cause_id=eff.cause_id,
+                    effect_digest=eff.effect_digest,
+                    verifier_receipt_digest=effect_context.verifier_receipt_digest,
+                    expert_id=eff.producer_expert_id,
+                    pre_state_version=pre[eff.producer_expert_id]["version"],
+                    pre_state_digest=pre[eff.producer_expert_id]["digest"],
+                    post_state_version=post[eff.producer_expert_id]["version"],
+                    post_state_digest=post[eff.producer_expert_id]["digest"],
                     committed_intent_digests=tuple(sorted(i.intent_digest for i in intents)))
                 self.__commit_receipts[dcr.commit_digest] = dcr
                 return dcr
@@ -248,6 +309,39 @@ class PublicationCoordinator:
         return digest({"vr": sorted(self._consumed),
                        "dc": sorted(self._consumed_commits)})
 
+    def _require_diagnostic_commit(self, intent: EffectPublicationIntent):
+        """The complete publication-commit proof (RC-0.3, restructured RC-0.4 so a
+        bypass is ONE operational mutation). Raises PublicationRefused unless the
+        intent names an unconsumed DiagnosticCommitReceipt that binds this exact
+        Effect, whose pre-state equals the intent's base state and whose post-state
+        equals the CURRENT authoritative state."""
+        dcr = self._state_coord.get_commit_receipt(intent.diagnostic_commit_digest)
+        if dcr is None:
+            raise PublicationRefused("PUB_LAW_NO_DIAGNOSTIC_COMMIT",
+                                     "no DiagnosticCommitReceipt matches this intent")
+        if intent.diagnostic_commit_digest in self._consumed_commits:
+            raise PublicationRefused("PUB_LAW_COMMIT_RECEIPT_CONSUMED",
+                                     "commit receipt already consumed")
+        if (dcr.episode_id != intent.episode_id or dcr.tick != intent.tick
+                or dcr.cause_id != intent.cause_id
+                or dcr.effect_digest != intent.effect_digest
+                or dcr.verifier_receipt_digest != intent.verifier_receipt_digest
+                or dcr.expert_id != intent.producer_expert_id):
+            raise PublicationRefused("PUB_LAW_COMMIT_MISMATCH",
+                                     "commit receipt does not bind this exact Effect")
+        # MUTATION-TARGET: base-state-validation
+        if (intent.base_state_version != dcr.pre_state_version
+                or intent.base_state_digest != dcr.pre_state_digest):
+            raise PublicationRefused("PUB_LAW_STALE_STATE",
+                                     f"intent base v{intent.base_state_version} does not "
+                                     f"match the commit's pre-state v{dcr.pre_state_version}")
+        cur_v = self._state_coord.version(intent.producer_expert_id)
+        cur_d = self._state_coord.get_digest(intent.producer_expert_id)
+        if cur_v != dcr.post_state_version or cur_d != dcr.post_state_digest:
+            raise PublicationRefused("PUB_LAW_STATE_MOVED",
+                                     "authoritative state changed after the commit; "
+                                     "publication must follow the specific commit")
+
     def commit_publication(self, intent: EffectPublicationIntent) -> str:
         try:
             if not isinstance(intent, EffectPublicationIntent):
@@ -275,34 +369,10 @@ class PublicationCoordinator:
                 raise PublicationRefused("PUB_LAW_RECEIPT_VERDICT", receipt.verdict)
             if intent.verdict != "intended":
                 raise PublicationRefused("PUB_LAW_ONLY_INTENDED_PUBLISHES", intent.verdict)
-            # ---- RC-0.3: publication must PROVE the diagnostic commit occurred ----
-            # MUTATION-TARGET: diagnostic-commit-requirement
-            dcr = self._state_coord.get_commit_receipt(intent.diagnostic_commit_digest)
-            if dcr is None:
-                raise PublicationRefused("PUB_LAW_NO_DIAGNOSTIC_COMMIT",
-                                         "no DiagnosticCommitReceipt matches this intent")
-            if intent.diagnostic_commit_digest in self._consumed_commits:
-                raise PublicationRefused("PUB_LAW_COMMIT_RECEIPT_CONSUMED",
-                                         "commit receipt already consumed")
-            if (dcr.episode_id != intent.episode_id or dcr.tick != intent.tick
-                    or dcr.cause_id != intent.cause_id
-                    or dcr.effect_digest != intent.effect_digest
-                    or dcr.verifier_receipt_digest != intent.verifier_receipt_digest
-                    or dcr.expert_id != intent.producer_expert_id):
-                raise PublicationRefused("PUB_LAW_COMMIT_MISMATCH",
-                                         "commit receipt does not bind this exact Effect")
-            # MUTATION-TARGET: base-state-validation
-            if (intent.base_state_version != dcr.pre_state_version
-                    or intent.base_state_digest != dcr.pre_state_digest):
-                raise PublicationRefused("PUB_LAW_STALE_STATE",
-                                         f"intent base v{intent.base_state_version} does not "
-                                         f"match the commit's pre-state v{dcr.pre_state_version}")
-            cur_v = self._state_coord.version(intent.producer_expert_id)
-            cur_d = self._state_coord.get_digest(intent.producer_expert_id)
-            if cur_v != dcr.post_state_version or cur_d != dcr.post_state_digest:
-                raise PublicationRefused("PUB_LAW_STATE_MOVED",
-                                         "authoritative state changed after the commit; "
-                                         "publication must follow the specific commit")
+            # ---- publication must PROVE the diagnostic commit occurred ----
+            # MUTATION-TARGET: diagnostic-commit-requirement -- bypassing this call
+            # publishes with NO proof that any diagnostic state commit happened
+            self._require_diagnostic_commit(intent)
             # authority granted: consume BOTH receipts exactly once
             self._consumed.add(intent.verifier_receipt_digest)
             self._consumed_commits.add(intent.diagnostic_commit_digest)

@@ -1,28 +1,47 @@
 {
-  "report_id": "rc03_mutation_report",
-  "mechanism": "disposable working copy per mutation (scratch tree; original package never modified; pristine digest verified before/after)",
-  "pristine_tree_digest_before": "30e91b215f45a9307086fb5c08b46f3e30c3d460ac2c38b9fb2b63fc943881c6",
-  "pristine_tree_digest_after": "30e91b215f45a9307086fb5c08b46f3e30c3d460ac2c38b9fb2b63fc943881c6",
+  "report_id": "rc04_mutation_report",
+  "phase": "RC-0.4",
+  "mechanism": "disposable working copy per mutation (scratch tree; original package never modified; pristine digests verified before/after); CAUGHT requires the named test to fail with an AssertionError -- the semantic law's own assertion -- not an incidental crash",
+  "source_tree_digest": "6402242e8a414e382ddfbb57668ad02d45f6bf308b8ca71163929c97606a82b7",
+  "test_tree_digest": "08f602e3d7b08c6d04c577c5e61d205338657dd50e5c10768759632a36e7452b",
+  "pristine_tree_digest_before": "6402242e8a414e382ddfbb57668ad02d45f6bf308b8ca71163929c97606a82b7",
+  "pristine_tree_digest_after": "6402242e8a414e382ddfbb57668ad02d45f6bf308b8ca71163929c97606a82b7",
   "pristine_unchanged": true,
   "mutations": [
     {
       "name": "publication_without_diagnostic_commit",
       "file": "sim/rc01_coordinator.py",
-      "guard": "if the commit-receipt requirement is removed, an intended receipt with no state commit publishes",
-      "mutated_lines": "            dcr = self._state_coord.get_commit_receipt(intent.diagnostic_commit_digest)\n            if dcr is None:",
+      "guard": "if the commit-proof call is removed, an intended receipt with NO state commit publishes; the program stays operational and the named test must fail on the unauthorized publication itself",
+      "mutated_lines": "            self._require_diagnostic_commit(intent)",
       "expected_test": "test_rc03::test_publication_requires_diagnostic_commit_receipt",
       "applied": true,
       "caught": true,
-      "actual_failing_output": "AttributeError: 'NoneType' object has no attribute 'episode_id'"
+      "test_failed": true,
+      "semantic_failure": true,
+      "actual_failing_output": "AssertionError: published without any diagnostic commit"
+    },
+    {
+      "name": "diagnostic_eligibility_bypassed",
+      "file": "sim/rc01_coordinator.py",
+      "guard": "if the eligibility law is bypassed, a memory-only commit mints a DiagnosticCommitReceipt and the Effect publishes; the named test must fail on the unauthorized publication",
+      "mutated_lines": "            if effect_context is not None:\n                self._require_dcr_eligibility(intents, tick, effect_context, pre)",
+      "expected_test": "test_rc04::test_memory_only_commit_cannot_mint_diagnostic_receipt",
+      "applied": true,
+      "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
+      "actual_failing_output": "AssertionError: published without diagnostic commit: a memory-only commit minted a DiagnosticCommitReceipt and it published"
     },
     {
       "name": "publication_base_state_check_removed",
       "file": "sim/rc01_coordinator.py",
       "guard": "if base-state validation is removed, stale-state intents publish",
-      "mutated_lines": "            if (intent.base_state_version != dcr.pre_state_version\n                    or intent.base_state_digest != dcr.pre_state_digest):",
+      "mutated_lines": "        if (intent.base_state_version != dcr.pre_state_version\n                or intent.base_state_digest != dcr.pre_state_digest):",
       "expected_test": "test_rc03::test_pub_law_stale_state",
       "applied": true,
       "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
       "actual_failing_output": "AssertionError: stale base state accepted"
     },
     {
@@ -33,6 +52,8 @@
       "expected_test": "test_rc03::test_old_public_seal_formula_rejected",
       "applied": true,
       "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
       "actual_failing_output": "AssertionError: old public-formula seal accepted"
     },
     {
@@ -43,6 +64,8 @@
       "expected_test": "test_rc03::test_wrong_op_kind_refused",
       "applied": true,
       "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
       "actual_failing_output": "AssertionError: correct payload with wrong op_kind accepted"
     },
     {
@@ -53,6 +76,8 @@
       "expected_test": "test_rc03::test_stale_effect_tick_refused",
       "applied": true,
       "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
       "actual_failing_output": "AssertionError: stale Effect earned a fresh receipt"
     },
     {
@@ -63,6 +88,8 @@
       "expected_test": "test_rc03::test_seal_binds_consumed_receipts",
       "applied": true,
       "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
       "actual_failing_output": "AssertionError: seal blind to the consumed-receipt registry"
     },
     {
@@ -73,16 +100,20 @@
       "expected_test": "test_rc03::test_split_child_failure_no_orphan_publication",
       "applied": true,
       "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
       "actual_failing_output": "AssertionError"
     },
     {
       "name": "cjtstep_snapshot_validation_removed",
       "file": "sim/rc01_engine.py",
-      "guard": "if snapshot validation is removed, a stale step result is laundered into fresh intents",
-      "mutated_lines": "        if (step.originating_tick != t or step.producer_expert_id != chosen\n                or effect.producer_expert_id != chosen\n                or step.base_state_version != snap_version\n                or step.base_state_digest != snap_digest):",
+      "guard": "if snapshot validation is removed, a stale step result is laundered into fresh intents and an Effect can carry false Bias provenance",
+      "mutated_lines": "        if (step.originating_tick != t or step.producer_expert_id != chosen\n                or effect.producer_expert_id != chosen\n                or step.base_state_version != snap_version\n                or step.base_state_digest != snap_digest\n                or effect.originating_tick != step.originating_tick\n                or effect.base_bias_version != step.base_state_version\n                or effect.base_bias_digest != step.base_state_digest\n                or step.authoritative_bias_version != step.base_state_version):",
       "expected_test": "test_rc03::test_stale_cjtstep_result_rejected",
       "applied": true,
       "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
       "actual_failing_output": "AssertionError: stale step laundered"
     }
   ],

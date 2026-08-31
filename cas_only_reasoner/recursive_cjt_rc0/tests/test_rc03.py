@@ -59,9 +59,9 @@ def _committed_flow(v, coord):
                            coord.version("^6_decompose"),
                            coord.get_digest("^6_decompose"),
                            verifier_receipt_digest=receipt.receipt_digest)
-    dcr = coord.commit([it], 0, cause_id="x0", effect_digest=eff.effect_digest,
-                       verifier_receipt_digest=receipt.receipt_digest,
-                       producer_expert_id="^6_decompose")
+    ctx = T.EffectCommitContext(effect=eff,
+                                verifier_receipt_digest=receipt.receipt_digest)
+    dcr = coord.commit([it], 0, effect_context=ctx)
     return eff, receipt, dcr
 
 
@@ -117,7 +117,7 @@ def test_pub_law_state_moved_after_commit():
         base_state_digest=dcr.pre_state_digest, diagnostic_commit_digest=dcr.commit_digest)
     try:
         pub.commit_publication(intent)
-        raise AssertionError("publication跳过 intervening state change")
+        raise AssertionError("publication skipped past an intervening state change")
     except PublicationRefused as pr:
         assert pr.law == "PUB_LAW_STATE_MOVED"
 

@@ -34,9 +34,10 @@ import hashlib
 
 from rc0_types import (BiasState, ControlAction, Governance, RegionRecord, Resistance)
 from rc0_routing import rpm_ready, drive_potential
-from rc01_types import (Cause, ComputeBudget, EffectCandidate, EffectPublicationIntent,
-                        PublicationStatus, VerifierReceipt, VersionedIntent, canonical,
-                        digest, require_finite_nonneg, validate_allocation)
+from rc01_types import (Cause, ComputeBudget, EffectCandidate, EffectCommitContext,
+                        EffectPublicationIntent, PublicationStatus, VerifierReceipt,
+                        VersionedIntent, canonical, digest, require_finite_nonneg,
+                        validate_allocation)
 from rc01_coordinator import (HardenedCoordinator, PublicationCoordinator,
                               PublicationRefused, RejectedBatch, state_digest)
 from rc01_types import DiagnosticCommitReceipt
@@ -82,6 +83,15 @@ class SealedVerifier:
 
     def issued_registry_digest(self) -> str:
         return digest(sorted(self.__issued.keys()))
+
+    def gold_table_digest(self) -> str:
+        """RC-0.4: the gold verdict table is CONFIGURATION that changes future
+        behavior -- the runtime seal binds it."""
+        return digest(sorted(self.__gold.items()))
+
+    def expected_payloads_digest(self) -> str:
+        """RC-0.4: the expected-Effect oracle is CONFIGURATION -- seal-bound."""
+        return digest(sorted(self.__expected.items()))
 
     def validator(self):
         """Capability handed to the coordinator. Answers exactly one question: did THIS
@@ -241,6 +251,7 @@ class RC01Engine:
         self.allocations = []
         self.publications = []
         self.halted = False
+        self.halt_requested = False     # RC-0.4: request flag; halted set at FINALIZE
         self.seal_digest = None
         self._latent_ok = {}
         m = ("executions", "typed_abstentions", "unready_executions", "forced_publications",
@@ -268,14 +279,15 @@ class RC01Engine:
             base_state_digest=self.coord.get_digest(expert_id),
             verifier_receipt_digest=receipt, reason=reason)
 
-    def _commit_effectful(self, intents, tick, cause_id, effect, receipt):
-        """Commit with Effect context; returns the DiagnosticCommitReceipt on success,
-        None on rejection. Publication requires this receipt -- never a Boolean."""
+    def _commit_effectful(self, intents, tick, effect, receipt):
+        """Commit with a TYPED EffectCommitContext (RC-0.4); returns the
+        DiagnosticCommitReceipt on success, None on rejection. The coordinator derives
+        all Effect identity from the envelope + the registered receipt and enforces the
+        eligibility law (the batch must contain the matching semantic RegionRecord)."""
         try:
-            dcr = self.coord.commit(intents, tick, cause_id=cause_id,
-                                    effect_digest=effect.effect_digest,
-                                    verifier_receipt_digest=receipt.receipt_digest,
-                                    producer_expert_id=effect.producer_expert_id)
+            ctx = EffectCommitContext(effect=effect,
+                                      verifier_receipt_digest=receipt.receipt_digest)
+            dcr = self.coord.commit(intents, tick, effect_context=ctx)
             return dcr if isinstance(dcr, DiagnosticCommitReceipt) else None
         except RejectedBatch as rb:
             self.metrics["atomic_rollbacks"] += 1
@@ -296,10 +308,15 @@ class RC01Engine:
             return False
 
     def _seal_and_halt(self, tick, why):
+        """RC-0.4 (owner audit critical 4): HALT is only REQUESTED here. The old code
+        computed the seal inside a nested control path, so trailing mutations (e.g. the
+        allocations append after _handle_no_ready) happened AFTER the seal -- the
+        returned digest described the controller one mutation short of its final state.
+        Now: HALT_REQUESTED -> the current atomic transition finishes -> run()'s
+        FINALIZE step sets the final halted value and computes the seal exactly once."""
         self.metrics["action_halt"] += 1
         self.events.append({"tick": tick, "event": "HALT", "why": why})
-        self.halted = True                       # RC-0.3: halted reaches its final
-        self.seal_digest = self.seal()           # value BEFORE the seal is computed
+        self.halt_requested = True
 
     def _quarantine(self, expert_id, tick, authorized_by):
         if expert_id not in self.quarantine_registry:
@@ -464,11 +481,19 @@ class RC01Engine:
                             for e in self.consecutive}
         effect = step.effect_candidate
         # MUTATION-TARGET: cjtstep-snapshot-validation -- a stale or mismatched step
-        # result may not be laundered into fresh-looking intents
+        # result may not be laundered into fresh-looking intents. RC-0.4 (owner audit
+        # critical 2): the Effect's OWN embedded snapshot fields are load-bearing --
+        # effect tick/bias-version/bias-digest must equal the step snapshot, which must
+        # equal the captured snapshot; a false embedded provenance is REFUSED, not
+        # hashed into the digest and waved through.
         if (step.originating_tick != t or step.producer_expert_id != chosen
                 or effect.producer_expert_id != chosen
                 or step.base_state_version != snap_version
-                or step.base_state_digest != snap_digest):
+                or step.base_state_digest != snap_digest
+                or effect.originating_tick != step.originating_tick
+                or effect.base_bias_version != step.base_state_version
+                or effect.base_bias_digest != step.base_state_digest
+                or step.authoritative_bias_version != step.base_state_version):
             self.metrics["step_metadata_rejects"] += 1
             self.events.append({"tick": t, "event": "STEP_METADATA_REJECTED",
                                 "expert": chosen})
@@ -503,12 +528,12 @@ class RC01Engine:
             intents.append(snap_intent(fld, value, reason))
         dcr = None
         if self.commit_verdicts:
-            dcr = self._commit_effectful(intents, t, cause.cause_id, effect, receipt)
+            dcr = self._commit_effectful(intents, t, effect, receipt)
         return effect, receipt, dcr
 
     # ---------------- one tick ----------------
     def tick(self, t, cause: Cause):
-        if self.halted:
+        if self.halted or self.halt_requested:
             return
         if cause.cause_id in self.cancelled_causes:
             # MUTATION-TARGET: split-sibling-cancellation -- a cancelled child may
@@ -774,32 +799,47 @@ class RC01Engine:
                        reason="split parent history")]
         dcr = None
         if self.commit_verdicts:
-            dcr = self._commit_effectful(intents, t, frame.parent_cause.cause_id,
-                                         combined, receipt)
+            dcr = self._commit_effectful(intents, t, combined, receipt)
         self._publish_or_refuse(t, frame.parent_cause, combined, receipt, dcr)
 
     # ---------------- run + seal ----------------
     def run(self):
         t = 0
         queue = list(self.causes)
-        while queue and not self.halted:
+        while queue and not self.halt_requested:
             cause = queue.pop(0)
-            self.remaining_queue = [c.cause_id for c in queue]
+            self.remaining_queue = list(queue)   # full Cause envelopes (RC-0.4)
             self.tick(t, cause)
             if self.child_queue:
                 queue = self.child_queue + queue
                 self.child_queue = []
             t += 1
-            if self.budget.left <= 0 and queue and not self.halted:
+            if self.budget.left <= 0 and queue and not self.halt_requested:
                 self.metrics["budget_exhausted"] += 1
                 self._seal_and_halt(t, "budget")
-        if self.seal_digest is None:
-            self.seal_digest = self.seal()
+        # ---- FINALIZE (RC-0.4, owner audit critical 4): every mutation of state,
+        # queues, events, and evidence is complete. Set the final halted value, then
+        # compute the seal EXACTLY ONCE. Nothing mutates after this line; at every
+        # return, result()["trace_digest"] == self.seal() recomputed.
+        self.remaining_queue = list(queue)
+        self.halted = bool(self.halt_requested)
+        self.seal_digest = self.seal()
         return self.result()
 
     def runtime_snapshot(self) -> dict:
-        """RC-0.3 COMPLETE RuntimeSnapshot: full values (not identifiers or counts) for
-        every field that can change future behavior. The seal is its digest."""
+        """RC-0.4 COMPLETE RuntimeSnapshot: full canonical values (never identifiers,
+        counts, or partial projections) for every field that can change either future
+        behavior or the externally returned audit evidence. The seal is its digest.
+
+        Owner audit critical 5 closures: queues carry FULL Cause envelopes (two queued
+        Causes with the same id but different payload/evidence now seal differently);
+        the returned publication evidence list is bound; taus / rpm_enforcement /
+        ohm_enabled / commit_verdicts and every behavior-bearing configuration value
+        are bound; the verifier's gold table, expected-Effect oracle, and the
+        candidate-evidence map are digest-bound."""
+        def cause_env(c):
+            return {"id": c.cause_id, "evidence": c.evidence, "payload": c.payload}
+
         def frame_full(f):
             return {"parent": f.parent_cause.cause_id,
                     "parent_payload": f.parent_cause.payload,
@@ -812,10 +852,13 @@ class RC01Engine:
                     "combination_rule": f.combination_rule,
                     "status": f.status, "failed_child": f.failed_child}
         return {
-            "causes": [{"id": c.cause_id, "evidence": c.evidence, "payload": c.payload}
-                       for c in self.causes],
-            "remaining_queue": list(self.remaining_queue),
-            "child_queue": [c.cause_id for c in self.child_queue],
+            # internal audit of RC-0.4: episode_id gates LAW_EPISODE_IDENTITY and
+            # receipt registration -- bind it DIRECTLY, not only transitively via
+            # commits (a zero-commit run's seal was episode-blind)
+            "episode_id": self.episode_id,
+            "causes": [cause_env(c) for c in self.causes],
+            "remaining_queue": [cause_env(c) for c in self.remaining_queue],
+            "child_queue": [cause_env(c) for c in self.child_queue],
             "child_to_frame": dict(sorted(self.child_to_frame.items())),
             "cancelled_causes": sorted(self.cancelled_causes),
             "split_frames": {k: frame_full(v) for k, v in sorted(self.split_frames.items())},
@@ -842,6 +885,28 @@ class RC01Engine:
             "consecutive": dict(sorted(self.consecutive.items())),
             "exec_counts": dict(sorted(self.exec_counts.items())),
             "halted": self.halted,
+            "halt_requested": self.halt_requested,
+            # RC-0.4: the RETURNED publication evidence is itself seal-bound -- a
+            # tampered result["publications"] entry changes the trace digest
+            "publications_evidence": self.publications,
+            # RC-0.4: behavior-bearing configuration, all of it
+            "configuration": {
+                "taus": self.taus,
+                "rpm_enforcement_enabled": self.rpm_enforcement_enabled,
+                "ohm_enabled": self.ohm_enabled,
+                "commit_verdicts": self.commit_verdicts,
+                "budget_total": self.budget.total,
+                "max_total_branches": self.max_total_branches,
+                "max_active_branches": self.max_active_branches,
+                "cap_allocation_limit": CAP_ALLOCATION_LIMIT,
+                "sat_consecutive": SAT_CONSECUTIVE,
+                "split_cost": SPLIT_COST,
+                "max_repair_attempts": MAX_REPAIR_ATTEMPTS_PER_CAUSE,
+                "epsilon": EPSILON,
+            },
+            "candidate_evidence_map": digest(sorted(EVIDENCE_MARKERS.items())),
+            "verifier_gold_table": self.verifier.gold_table_digest(),
+            "verifier_expected_payloads": self.verifier.expected_payloads_digest(),
             "final_states": self.coord.final_state_manifest(),
             "acquisitions": {e: self.coord.get(e).rpm.acquired
                              for e in self.coord.expert_ids()},

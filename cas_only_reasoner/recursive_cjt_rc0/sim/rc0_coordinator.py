@@ -13,16 +13,12 @@ from __future__ import annotations
 
 import dataclasses
 import hashlib
-import json
 
 from rc0_types import (BiasState, BiasUpdateIntent, Governance, RegionRecord, RPMState)
+from rc_canonical import canonical  # RC-0.4: exact-type encoder; default=str is dead
 
 ALLOWED_FIELDS = ("rpm", "record", "memory", "substrate")
 FIELD_TYPES = {"rpm": RPMState, "record": RegionRecord, "memory": tuple, "substrate": tuple}
-
-
-def canonical(obj) -> str:
-    return json.dumps(obj, sort_keys=True, ensure_ascii=True, separators=(",", ":"), default=str)
 
 
 class TransactionCoordinator:

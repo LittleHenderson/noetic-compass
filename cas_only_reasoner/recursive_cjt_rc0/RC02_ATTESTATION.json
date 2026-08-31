@@ -10,5 +10,14 @@
   "status_emission": "programmatic via generate_rc02_receipt.py; run 'python generate_rc02_receipt.py --check-only' from the evidence commit to reproduce",
   "attested_by": "Prof. Hermes M. Thoth (repo git user); Co-Authored-By Claude Opus 4.8",
   "scope": "This attestation binds the SHA only. It does not upgrade any claim: neural, CAS-specific, learning, and efficiency claims remain PROHIBITED until Gate 1+.",
-  "language_correction_2026_08_30": "OWNER AUDIT: this file is an UNSIGNED Git-history binding record. It is not a signed attestation and not independent verification. The attested_by field is plain JSON text (the repo git user), not a cryptographic signature. A real owner signature requires a signed git tag/commit or an owner-signed detached record."
+  "language_correction_2026_08_30": "OWNER AUDIT: this file is an UNSIGNED Git-history binding record. It is not a signed attestation and not independent verification. The attested_by field is plain JSON text (the repo git user), not a cryptographic signature. A real owner signature requires a signed git tag/commit or an owner-signed detached record.",
+  "rc03_binding_2026_08_30": {
+    "note": "APPEND-ONLY (RC-0.4 doc-defect correction): binds the RC-0.3 evidence commit, which the prior version of this record did not cover. Same self-reference law: the RC-0.4 commit that contains this edit cannot bind its own SHA; a follow-up binding record (or the owner's audit of the pushed history) covers it.",
+    "rc03_evidence_commit_sha": "846f323fc5305e9135de4b516ca66f65a5010953",
+    "rc03_commit_message_prefix": "cjt(rc-0.3): publication-commit binding, verifier capability, and full snapshot closure",
+    "parent_of_rc03_commit": "f651dcc3 (RC-0.2 attestation commit)",
+    "owner_verdict_on_rc03": "RC03_DETERMINISTIC_CONTROLLER_PARTIAL_PASS; GATE0_REFUTED for that implementation (owner independent audit, 2026-08-30)",
+    "rc04_commit_sha": "UNBOUND_UNTIL_FOLLOW_UP -- the RC-0.4 commit contains this file and cannot hash itself",
+    "record_kind": "UNSIGNED Git-history binding record (same limit as above; not a signature, not independent verification)"
+  }
 }
