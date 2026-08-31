@@ -105,6 +105,14 @@ def engine(causes, reg: Reg, **kw):
 PAY = "alpha beta gamma delta"
 
 
+def _is_real_seal(d) -> bool:
+    """RC-0.4C internal audit: the UNSEALED_TERMINAL_FAULT marker (or anything that is
+    not a 64-hex digest) must never be accepted as a seal, and two markers must never
+    read as an identical replay."""
+    return (isinstance(d, str) and len(d) == 64
+            and all(c in "0123456789abcdef" for c in d))
+
+
 def _s(id_, build, expect, prohibit=(), checks=None, kind="engine", description=""):
     return {"id": id_, "build": build, "expect": tuple(expect),
             "prohibit": tuple(prohibit), "checks": checks, "kind": kind,
@@ -250,7 +258,7 @@ def SCENARIOS():
         lambda: engine([cause("h0", C6, PAY), cause("h1", C6, PAY)],
                        Reg().add("h0", "^6_decompose", "intended", PAY), budget=1),
         expect=["HALT"],
-        checks=lambda r: r["metrics"]["action_halt"] == 1 and r["trace_digest"] is not None,
+        checks=lambda r: r["metrics"]["action_halt"] == 1 and _is_real_seal(r["trace_digest"]),
         description="Budget exhaustion -> HALT with state and trace sealed."))
     S.append(_s("cycle_detected",
         lambda: engine([cause("cy0", C6, PAY)], Reg(),
@@ -377,7 +385,8 @@ def run_matrix():
         missing = [x for x in sc["expect"] if x not in names]
         present_bad = [x for x in sc["prohibit"] if x in names]
         checks_ok = sc["checks"](res) if sc["checks"] else True
-        replay_ok = res["trace_digest"] == res2["trace_digest"]
+        replay_ok = (_is_real_seal(res["trace_digest"])
+                     and res["trace_digest"] == res2["trace_digest"])
         passed = not missing and not present_bad and checks_ok and replay_ok
         m = res["metrics"]
         counts["intended"] += m["intended_effects"]; counts["opposite"] += m["opposite_effects"]

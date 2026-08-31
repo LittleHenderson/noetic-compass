@@ -98,6 +98,25 @@ MUTATIONS = [
      "new": "            pass",
      "guard": "if cancellation is removed, an orphan sibling can run and publish top-level",
      "expected_test": ("test_rc03", "test_split_child_failure_no_orphan_publication")},
+    {"name": "verifier_finalization_gate_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "        if self.__gate is not None:\n"
+            "            self.__gate.require_open(\"verifier.verify\")",
+     "new": "        if self.__gate is not None:\n"
+            "            pass  # MUTATED: verifier gate removed",
+     "guard": "if the verifier gate is removed, verify() issues receipts after "
+              "finalization -- the receipt press keeps running in the sealed room "
+              "(owner audit RC-0.4C finding 1)",
+     "expected_test": ("test_rc04c", "test_verifier_verify_refused_after_finalization")},
+    {"name": "verifier_configuration_preflight_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "        self.__gold_digest, self.__expected_digest = self._preflight()",
+     "new": "        self.__gold_digest, self.__expected_digest = "
+            "\"PREFLIGHT_SKIPPED\", \"PREFLIGHT_SKIPPED\"",
+     "guard": "if configuration preflight is removed, an unused poison entry is "
+              "accepted and the engine can work -- and publish -- before a delayed "
+              "seal failure (owner audit RC-0.4C finding 2)",
+     "expected_test": ("test_rc04c", "test_unused_poison_gold_entry_rejected_before_first_tick")},
     {"name": "cjtstep_snapshot_validation_removed",
      "file": "sim/rc01_engine.py",
      "old": "        if (step.originating_tick != t or step.producer_expert_id != chosen\n"

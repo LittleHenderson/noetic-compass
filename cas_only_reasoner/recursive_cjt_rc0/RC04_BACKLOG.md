@@ -9,8 +9,63 @@ Status words follow the spec-sheet legend. Date: 2026-08-30.
 Updated same day under OWNER DIRECTIVE RC-0.4A: items resolved by the RC-0.4A patch
 are marked FIXED below; the stale "110 tests" figure is corrected (the RC-0.4 commit
 recorded 17+28+23+14+30 = 112 internal tests; RC-0.4A adds test_rc04a (22) and, after
-its internal pre-commit adversarial audit, test_rc04b (16) → 150 internal tests —
-internal results, NOT an independent reproduction).
+its internal pre-commit adversarial audit, test_rc04b (16) → 150; RC-0.4C adds
+test_rc04c (25 after its own internal-audit round 2) → 175 internal tests — internal
+results, NOT an independent reproduction).
+
+## RC-0.4C closures (2026-08-30, owner independent audit of 80d2f70e)
+The owner's independent audit found TWO Gate-0 blockers that the internal 5-lens
+workflow had UNDER-TRIAGED (its finalization probe actually listed
+`verifier.verify -> coord.register_verifier_receipt` among the unguarded paths, and I
+wrongly treated registration-refusal as sufficient — recorded here as an honest
+internal-audit miss). Both FIXED and test-locked (tests/test_rc04c.py, 18 tests):
+- **Verifier finalization gate (finding 1).** `SealedVerifier.verify()` could still
+  issue receipts and mutate its seal-bound issuance registry after finalization —
+  "the receipt press kept running in the sealed room." FIXED: the shared `SealGate`
+  is passed into the verifier; `verify()` refuses with `FinalizedControllerError`
+  BEFORE issuing anything. The rc04b test that had itself exercised the hole is
+  repaired. Frozen mutation `verifier_finalization_gate_removed` added.
+- **Configuration preflight (finding 2).** The verifier accepted arbitrary dicts, so
+  an unused unsealable poison entry let the engine work — and publish — before a
+  delayed final-seal failure. FIXED: `_preflight()` validates the frozen schemas
+  (2-tuple str keys naming registered experts; verdict vocabulary; exact-str
+  payloads) and PRECOMPUTES both configuration digests at construction; no deferred
+  first-time canonicalization at sealing. Frozen mutation
+  `verifier_configuration_preflight_removed` added.
+- **Fault-only hash retired (finding 3).** A final-seal failure now yields the marker
+  `UNSEALED_TERMINAL_FAULT` — plainly not a digest, never presented as a trace seal;
+  nothing is appended to evidence after the failure; the underlying exception is
+  preserved separately in the fault record; publication eligibility is prohibited
+  (gate tripped). Reachable only by out-of-API injection now that preflight +
+  construction validation close every public path.
+- Mutation inventory frozen as `RC04_REQUIRED_MUTATIONS_v2.json` (11 laws — the nine
+  v1 entries verbatim plus the two above; v1 preserved on disk unchanged; new pinned
+  digest in the generator).
+
+### RC-0.4C internal adversarial round 2 (same commit)
+A second 3-lens internal workflow attacked the patched tree before commit and found
+1 CRITICAL + 3 MAJOR + residuals; all fixed and test-locked (test_rc04c grew to 25):
+- **CRITICAL:** non-finite/non-numeric `max_total_branches`/`max_active_branches` were
+  accepted and reproduced the owner's publish-then-unsealable attack through a
+  different constructor argument. FIXED: `require_nonneg_int` on both; plus
+  `require_str(episode_id)`, str-keyed states (coordinator), and registered-expert
+  states keys (engine) — every constructor argument that reaches the seal is now
+  validated at construction.
+- **MAJOR:** an unsealed terminal run with a PUBLISHING cause still emitted
+  `published=1` and a PUBLISHED ledger through `result()`. FIXED: `result()` raises
+  the typed `ControllerFault` for an `UNSEALED_TERMINAL_FAULT` run — an unsealed run
+  has no result; forensic state stays on the engine object. The scenario runner now
+  rejects the marker as a seal (`_is_real_seal`: 64-hex only) and two markers never
+  read as an identical replay.
+- **MAJOR:** `_finalize_failed_frame` was the one split helper without the
+  finalization guard (mutate-then-refuse). FIXED: guarded first-line like its
+  siblings.
+- Hardenings: `runtime_snapshot()` returns detached copies of every live collection;
+  the tamper tripwire keys on `seal_digest` alone, so flipping `finalized` is no
+  longer a silent kill-switch.
+- Residual recorded, not fixed: raw attribute rewrites (e.g. `e.seal_digest = ...`)
+  remain outside the same-process API capability boundary, per the recorded trust
+  boundary.
 
 ## RC-0.4A internal pre-commit adversarial audit (2026-08-30) — CLOSURES
 A 5-lens adversarial workflow (internal review, NO authority) attacked the RC-0.4A
@@ -46,10 +101,10 @@ Residuals recorded, not fixed:
 - `run()` re-entrancy TOCTOU: the entry guard and the finalized latch are not atomic;
   the deterministic controller is single-threaded and no overlapping double-execution
   was reproducible. Recorded (low).
-- The 9-mutation frozen battery does not delete-line-cover the RC-0.4B laws (gate,
-  non-finite rejection, result-tamper); those are proven by direct sensitivity tests in
-  test_rc04b. Extending the frozen inventory stays OPEN (low) to keep the pinned
-  manifest digest stable.
+- The frozen battery (11 laws as of RC-0.4C's manifest v2) delete-line-covers the two
+  RC-0.4C laws but still not the RC-0.4B laws (coordinator/pubcoord/budget gates,
+  non-finite rejection, result-tamper); those are proven by direct sensitivity tests
+  in test_rc04b. Extending further stays OPEN (low).
 
 ## 1. Per-Cause operation contract (owner scorecard: "Partial")
 The verifier's op_kind check is PRODUCER-level (`EXPECTED_OPS[producer]`), not a
@@ -75,7 +130,7 @@ lands in a scenario row, its bytes could vary across processes; the matrix diges
 recorded per-generation, not replay-compared. OPEN (cosmetic).
 
 ## 4. No CI runner
-The internal tests (150 as of RC-0.4A/B) + 26 scenarios + 8 injections + 9 mutations
+The internal tests (175 as of RC-0.4C) + 26 scenarios + 8 injections + 11 mutations
 run locally and via the committed generator; there is no GitHub Actions workflow
 re-running them on push. The owner noted this in the RC-0.3 and RC-0.4 audits, and
 ruled that CI is recommended but does not by itself decide Gate 0. OPEN.

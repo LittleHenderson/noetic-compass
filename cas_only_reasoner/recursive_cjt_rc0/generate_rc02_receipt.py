@@ -50,15 +50,17 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE / "sim"))
 
 SUITES = ("test_rc0", "test_rc01", "test_rc02", "test_rc03", "test_rc04",
-          "test_rc04a", "test_rc04b")
+          "test_rc04a", "test_rc04b", "test_rc04c")
 
-# RC-0.4A section 4: the FROZEN mutation inventory. The manifest file's
+# RC-0.4A section 4 / RC-0.4C section 4: the FROZEN mutation inventory. v2 = the nine
+# v1 entries verbatim plus the two RC-0.4C laws (verifier finalization gate,
+# configuration preflight); v1 is preserved on disk unchanged. The manifest file's
 # canonical-content digest is pinned HERE so neither the file nor this constant can
 # change without the other showing in the diff. Newline-normalization-proof: the
 # digest is over json.dumps(parsed content, sort_keys, compact), not raw bytes.
-MANIFEST_PATH_NAME = "RC04_REQUIRED_MUTATIONS_v1.json"
+MANIFEST_PATH_NAME = "RC04_REQUIRED_MUTATIONS_v2.json"
 REQUIRED_MUTATION_MANIFEST_DIGEST = \
-    "877ff938a680e40830d4111f34d9fb17d510ad68d8b546dfb842f8c8ee76c852"
+    "fbcba0285e01e31fc1014c5f8ca552dd7d4a41136cf913a3bf6d27efaaac83fb"
 
 
 def sha(p):
@@ -379,11 +381,10 @@ def main():
 
     receipt = {
         "receipt_id": "RC01_FEEDBACK_CLOSURE_RECEIPT",
-        "phase": "RC-0.4B (finalization GOVERNS the write paths via a shared seal gate; "
-                 "self-verifying result(); storable==sealable non-finite rejection; "
-                 "exact typed runtime snapshot; sealed fault paths; frozen mutation "
-                 "inventory) -- RC-0.4A directive plus its internal pre-commit "
-                 "adversarial-audit closures",
+        "phase": "RC-0.4C (verifier issuance gated after finalization; complete "
+                 "verifier-configuration preflight with precomputed digests; "
+                 "UNSEALED_TERMINAL_FAULT marker replaces the fault-only hash; frozen "
+                 "mutation inventory v2 = 11 laws) -- on top of RC-0.4A/B",
         "status": status,
         "status_emitted_by": "generate_rc02_receipt.py (deterministic; never hand-written)",
         "independent_confirmation": "PENDING BY CONSTRUCTION -- the strongest "

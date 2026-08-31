@@ -2,10 +2,10 @@
   "report_id": "rc04_mutation_report",
   "phase": "RC-0.4",
   "mechanism": "disposable working copy per mutation (scratch tree; original package never modified; pristine digests verified before/after); CAUGHT requires the named test to fail with an AssertionError -- the semantic law's own assertion -- not an incidental crash",
-  "source_tree_digest": "1d153db34dcd149b11c57fbebfe7558d318b6426c2e7ba8ef964ae1a1c862d47",
-  "test_tree_digest": "e944eef4f675e438fd6d25313d7c4f879495de204d1b7bb7259e7cc34db70035",
-  "pristine_tree_digest_before": "1d153db34dcd149b11c57fbebfe7558d318b6426c2e7ba8ef964ae1a1c862d47",
-  "pristine_tree_digest_after": "1d153db34dcd149b11c57fbebfe7558d318b6426c2e7ba8ef964ae1a1c862d47",
+  "source_tree_digest": "b82836e7409df13e8b7919496e95fffdd450a4aa3f9e978ffa7f7385259f1956",
+  "test_tree_digest": "d305c0de15a763d105a4536602de45c1d6fdc1b416fc9455d6a011fa2ec85951",
+  "pristine_tree_digest_before": "b82836e7409df13e8b7919496e95fffdd450a4aa3f9e978ffa7f7385259f1956",
+  "pristine_tree_digest_after": "b82836e7409df13e8b7919496e95fffdd450a4aa3f9e978ffa7f7385259f1956",
   "pristine_unchanged": true,
   "mutations": [
     {
@@ -103,6 +103,30 @@
       "test_failed": true,
       "semantic_failure": true,
       "actual_failing_output": "AssertionError"
+    },
+    {
+      "name": "verifier_finalization_gate_removed",
+      "file": "sim/rc01_engine.py",
+      "guard": "if the verifier gate is removed, verify() issues receipts after finalization -- the receipt press keeps running in the sealed room (owner audit RC-0.4C finding 1)",
+      "mutated_lines": "        if self.__gate is not None:\n            self.__gate.require_open(\"verifier.verify\")",
+      "expected_test": "test_rc04c::test_verifier_verify_refused_after_finalization",
+      "applied": true,
+      "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
+      "actual_failing_output": "AssertionError: verifier.verify issued a receipt after finalization"
+    },
+    {
+      "name": "verifier_configuration_preflight_removed",
+      "file": "sim/rc01_engine.py",
+      "guard": "if configuration preflight is removed, an unused poison entry is accepted and the engine can work -- and publish -- before a delayed seal failure (owner audit RC-0.4C finding 2)",
+      "mutated_lines": "        self.__gold_digest, self.__expected_digest = self._preflight()",
+      "expected_test": "test_rc04c::test_unused_poison_gold_entry_rejected_before_first_tick",
+      "applied": true,
+      "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
+      "actual_failing_output": "AssertionError: unused poison gold entry accepted at construction"
     },
     {
       "name": "cjtstep_snapshot_validation_removed",

@@ -60,13 +60,23 @@ def test_coordinator_commit_refused_after_finalization():
 
 
 def test_register_receipt_refused_after_finalization():
+    # RC-0.4C repair (owner audit finding 1): the old version of this test let
+    # verifier.verify() run after finalization -- mutating the seal-bound issuance
+    # registry -- and only proved that REGISTRATION was refused. Now verify() itself
+    # must refuse before issuing anything; registration is proven refused with a
+    # receipt issued legitimately BEFORE finalization.
     e = eng("g1")
+    causeX = SC.cause("g1x", C6, PAY)
+    eff = T.EffectCandidate("^6_decompose", "g1x", "decompose", PAY, originating_tick=0)
+    pre_receipt = e.verifier.verify(causeX, eff, 0)     # issued pre-finalization
     e.run()
-    causeX = SC.cause("g1", C6, PAY)
-    eff = T.EffectCandidate("^6_decompose", "g1", "decompose", PAY, originating_tick=0)
-    receipt = e.verifier.verify(causeX, eff, 0)
     try:
-        e.coord.register_verifier_receipt(receipt)
+        e.verifier.verify(causeX, eff, 0)
+        raise AssertionError("verifier.verify issued a receipt after finalization")
+    except E.FinalizedControllerError:
+        pass
+    try:
+        e.coord.register_verifier_receipt(pre_receipt)
         raise AssertionError("receipt registration succeeded after finalization")
     except E.FinalizedControllerError:
         pass

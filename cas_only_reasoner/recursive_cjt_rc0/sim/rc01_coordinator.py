@@ -75,6 +75,9 @@ class HardenedCoordinator:
         self._states = {}
         self._versions = {}
         for k, v in initial.items():
+            if not isinstance(k, str) or isinstance(k, bool) or not k:
+                raise TypeError(f"expert id key must be a non-empty str, got {k!r} "
+                                f"({type(k).__name__})")   # RC-0.4C: keys are seal-bound
             if not isinstance(v, BiasState):
                 raise TypeError(f"initial state for {k!r} must be a BiasState")
             self._states[k] = v

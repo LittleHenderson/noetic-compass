@@ -38,7 +38,8 @@ from rc0_routing import rpm_ready, drive_potential
 from rc01_types import (Cause, ComputeBudget, EffectCandidate, EffectCommitContext,
                         EffectPublicationIntent, FinalizedControllerError, PublicationStatus,
                         SealGate, VerifierReceipt, VersionedIntent, canonical, digest,
-                        require_finite_nonneg, validate_allocation)
+                        require_finite_nonneg, require_nonneg_int, require_str,
+                        validate_allocation)
 from rc01_coordinator import (HardenedCoordinator, PublicationCoordinator,
                               PublicationRefused, RejectedBatch, state_digest)
 from rc01_types import DiagnosticCommitReceipt
@@ -75,24 +76,62 @@ class SealedVerifier:
     is dead). Honest limit: same-process capability isolation, not OS isolation."""
 
     EXAMINER_ID = "sealed_examiner_v1"
+    VERDICTS = ("intended", "opposite", "off_axis", "unassessed")
 
-    def __init__(self, gold_table: dict, expected_payloads: dict, episode_id: str):
+    def __init__(self, gold_table: dict, expected_payloads: dict, episode_id: str,
+                 seal_gate=None):
         self.__gold = dict(gold_table)
         self.__expected = dict(expected_payloads)   # (cause_id, producer) -> exact payload
         self.__issued = {}                          # receipt_digest -> canonical content
+        self.__gate = seal_gate                     # RC-0.4C: shared seal gate (or None)
         self.episode_id = episode_id
+        # RC-0.4C (owner audit finding 2): the COMPLETE configuration is validated AND
+        # canonicalized here, at construction -- before one tick can execute -- so every
+        # ACCEPTED configuration is sealable by construction, and an unused poison entry
+        # can never let work (or a publication) happen ahead of a delayed seal failure.
+        # MUTATION-TARGET: verifier-configuration-preflight
+        self.__gold_digest, self.__expected_digest = self._preflight()
+
+    def _preflight(self):
+        """Frozen configuration schemas (RC-0.4C section 2):
+          gold_table:        (str cause_id, str expert_id) -> verdict in VERDICTS
+          expected_payloads: (str cause_id, str expert_id) -> exact str
+        Keys must be 2-tuples of non-bool strs naming a REGISTERED expert; anything
+        else -- unknown objects, malformed keys, unknown verdicts, non-str payloads --
+        is rejected before any budget, state, receipt, or publication can exist.
+        Returns the PRECOMPUTED (gold_digest, expected_digest); there is no deferred
+        first-time canonicalization at final sealing."""
+        for label, table in (("gold_table", self.__gold),
+                             ("expected_payloads", self.__expected)):
+            for k, v in table.items():
+                if (not isinstance(k, tuple) or len(k) != 2
+                        or any(isinstance(x, bool) or not isinstance(x, str)
+                               for x in k)):
+                    raise TypeError(f"{label} key must be a (cause_id str, expert_id "
+                                    f"str) tuple, got {k!r}")
+                if k[1] not in EVIDENCE_MARKERS:
+                    raise ValueError(f"{label} names unregistered expert {k[1]!r}")
+                if label == "gold_table":
+                    if v not in self.VERDICTS:      # rejects object(), ints, bools too
+                        raise ValueError(f"gold_table verdict must be one of "
+                                         f"{self.VERDICTS}, got {v!r}")
+                elif isinstance(v, bool) or not isinstance(v, str):
+                    raise TypeError(f"expected_payloads value must be an exact str, "
+                                    f"got {type(v).__name__}")
+        return (digest(sorted(self.__gold.items())),
+                digest(sorted(self.__expected.items())))
 
     def issued_registry_digest(self) -> str:
         return digest(sorted(self.__issued.keys()))
 
     def gold_table_digest(self) -> str:
-        """RC-0.4: the gold verdict table is CONFIGURATION that changes future
-        behavior -- the runtime seal binds it."""
-        return digest(sorted(self.__gold.items()))
+        """PRECOMPUTED at construction (RC-0.4C): configuration that changes future
+        behavior, sealable by construction, seal-bound."""
+        return self.__gold_digest
 
     def expected_payloads_digest(self) -> str:
-        """RC-0.4: the expected-Effect oracle is CONFIGURATION -- seal-bound."""
-        return digest(sorted(self.__expected.items()))
+        """PRECOMPUTED at construction (RC-0.4C) -- seal-bound."""
+        return self.__expected_digest
 
     def validator(self):
         """Capability handed to the coordinator. Answers exactly one question: did THIS
@@ -114,6 +153,12 @@ class SealedVerifier:
         - table verdict by (cause_id, producer); 'intended' REQUIRES a registered
           expected payload AND an exact match; corrupted payload -> off_axis; missing
           registration fails closed to unassessed."""
+        # RC-0.4C (owner audit finding 1): the receipt press stops when the room is
+        # sealed -- after finalization, verify() refuses BEFORE issuing anything or
+        # touching the issuance registry (whose digest the runtime seal binds).
+        # MUTATION-TARGET: verifier-finalization-gate
+        if self.__gate is not None:
+            self.__gate.require_open("verifier.verify")
         if effect.cause_id != cause.cause_id:
             verdict = "off_axis"
         elif effect.op_kind not in EXPECTED_OPS.get(effect.producer_expert_id, ()):
@@ -245,7 +290,10 @@ class RC01Engine:
         # the coordinator, publication coordinator, and budget all refuse writes once it
         # is sealed, so finalization governs the ACTUAL write paths, not just 5 methods.
         self._gate = SealGate()
-        self.verifier = SealedVerifier(gold_table, expected_payloads or {}, episode_id)
+        # RC-0.4C: the verifier gets the SAME gate -- its issuance registry is
+        # seal-bound state, so its receipt press must stop at finalization too.
+        self.verifier = SealedVerifier(gold_table, expected_payloads or {}, episode_id,
+                                       seal_gate=self._gate)
         self.coord = HardenedCoordinator(states or _ds(), episode_id,
                                          receipt_validator=self.verifier.validator(),
                                          seal_gate=self._gate)
@@ -256,6 +304,18 @@ class RC01Engine:
         for i, tau in enumerate(taus):
             require_finite_nonneg(f"taus[{i}]", tau)
         self.taus = taus
+        # RC-0.4C internal audit (critical): EVERY constructor argument that reaches
+        # the seal is validated HERE -- accepted must mean sealable. Branch limits go
+        # verbatim into the snapshot (a NaN limit let the engine publish and then fail
+        # to seal); episode_id is directly seal-bound; the states dict may name only
+        # registered experts with str keys.
+        require_nonneg_int("max_total_branches", max_total_branches)
+        require_nonneg_int("max_active_branches", max_active_branches)
+        require_str("episode_id", episode_id)
+        for eid in self.coord.expert_ids():
+            if eid not in EVIDENCE_MARKERS:
+                raise ValueError(f"states names unregistered expert {eid!r}; the "
+                                 f"registered experts are {tuple(sorted(EVIDENCE_MARKERS))}")
         self.episode_id = episode_id
         self.rpm_enforcement_enabled = rpm_enforcement_enabled
         self.ohm_enabled = ohm_enabled
@@ -369,25 +429,27 @@ class RC01Engine:
             self.events.append({"tick": tick, "event": "BATCH_REJECTED", "law": rb.law})
             return False
 
+    UNSEALED_TERMINAL_FAULT = "UNSEALED_TERMINAL_FAULT"
+
     def _compute_final_seal(self):
-        """RC-0.4B (owner audit critical 2, belt-and-suspenders): compute the final
-        seal without ever letting a bare encoder exception escape. If seal() throws --
-        a value legal to store but illegal to seal -- record a typed SEAL_FAILED fault
-        (without clobbering any primary fault) and return a degraded but stable digest,
-        so run() always finishes with a typed, sealed terminal state. (After the
-        construction-time non-finite-float rejection, this path is unreachable for
-        stored state; it defends against any future storable-but-unsealable value.)"""
+        """RC-0.4C (owner audit finding 3): if the final seal cannot be computed, the
+        terminal status is the MARKER string UNSEALED_TERMINAL_FAULT -- never a digest.
+        The prior fallback hashed only repr(fault) and returned it where a trace seal
+        belongs; a fault-only hash binds none of the run's state and is no longer
+        presented as a seal. With configuration preflight (RC-0.4C section 2) and
+        construction-time state validation (RC-0.4B), this path is unreachable through
+        the public API; it defends against out-of-API injection of an unsealable value.
+        The underlying exception is preserved separately in self.fault, and NOTHING is
+        appended to the evidence after the failure (no state may mutate that the
+        marker cannot bind)."""
         try:
             return self.seal()
         except Exception as seal_exc:  # noqa: BLE001
-            seal_fault = {"phase": "seal", "exception_class": type(seal_exc).__name__,
-                          "detail": str(seal_exc)[:200], "seal_failed": True}
             if self.fault is None:
-                self.fault = seal_fault
-            self.metrics["faults"] += 1
-            self.events.append({"tick": -1, "event": "SEAL_FAILED", **seal_fault})
-            return "SEAL_FAILED:" + hashlib.sha256(
-                repr(seal_fault).encode("utf-8")).hexdigest()
+                self.fault = {"phase": "seal",
+                              "exception_class": type(seal_exc).__name__,
+                              "detail": str(seal_exc)[:200], "seal_failed": True}
+            return self.UNSEALED_TERMINAL_FAULT
 
     def _seal_and_halt(self, tick, why):
         """RC-0.4 (owner audit critical 4): HALT is only REQUESTED here. The old code
@@ -814,6 +876,7 @@ class RC01Engine:
     def _finalize_failed_frame(self, t, frame):
         """Every sibling settled (FAILED/CANCELLED/collected): seal the refusal.
         No parent Effect publishes from a failed frame."""
+        self._refuse_if_finalized("_finalize_failed_frame")
         del self.split_frames[frame.parent_cause.cause_id]
         for cid in frame.child_ids:
             self.child_to_frame.pop(cid, None)
@@ -1003,7 +1066,10 @@ class RC01Engine:
             "coordinator_receipt_registry": self.coord.receipt_registry_digest(),
             "commit_receipt_registry": self.coord.commit_receipt_registry_digest(),
             "publication_consumed": self.pubcoord.consumed_registry_digest(),
-            "publication_ledger": self.pubcoord.ledger,
+            # RC-0.4C internal audit (minor): the snapshot returns DETACHED copies of
+            # every live mutable collection -- a caller mutating the returned dict
+            # can no longer reach authoritative engine state through it
+            "publication_ledger": copy.deepcopy(self.pubcoord.ledger),
             "budget": {"unit": self.budget.unit, "total": self.budget.total,
                        "left": self.budget.left},
             "branches": {"total_opened": self.total_branches_opened,
@@ -1024,7 +1090,7 @@ class RC01Engine:
             "fault": self.fault,             # RC-0.4A: typed fault record or None
             # RC-0.4: the RETURNED publication evidence is itself seal-bound -- a
             # tampered result["publications"] entry changes the trace digest
-            "publications_evidence": self.publications,
+            "publications_evidence": copy.deepcopy(self.publications),
             # RC-0.4: behavior-bearing configuration, all of it
             "configuration": {
                 "taus": self.taus,
@@ -1046,10 +1112,10 @@ class RC01Engine:
             "final_states": self.coord.final_state_manifest(),
             "acquisitions": {e: self.coord.get(e).rpm.acquired
                              for e in self.coord.expert_ids()},
-            "commits": self.coord.trace,
-            "events": self.events,
-            "alloc": self.allocations,
-            "metrics": self.metrics,
+            "commits": copy.deepcopy(self.coord.trace),
+            "events": copy.deepcopy(self.events),
+            "alloc": copy.deepcopy(self.allocations),
+            "metrics": dict(self.metrics),
         }
 
     def seal(self):
@@ -1060,13 +1126,23 @@ class RC01Engine:
     def result(self):
         """RC-0.4A defect 1 + RC-0.4B major 2: returns a DETACHED deep copy (a caller
         mutating the returned evidence cannot reach engine state), and is SELF-VERIFYING
-        -- for a finalized engine it recomputes the live seal and refuses to hand out
+        -- for a sealed engine it recomputes the live seal and refuses to hand out
         evidence under a stale seal (ControllerTampered), so a post-finalization mutation
         that slipped past the API (a raw attribute/collection write) cannot masquerade
         as sealed. Within the API boundary the gate makes such a mutation impossible, so
-        this recompute always matches; the check is the tripwire for out-of-API writes."""
-        if self.finalized and self.seal_digest is not None \
-                and not str(self.seal_digest).startswith("SEAL_FAILED"):
+        this recompute always matches; the check is the tripwire for out-of-API writes.
+        RC-0.4C internal audit hardenings: the tripwire keys on seal_digest alone (so
+        flipping the finalized flag is not a silent kill-switch), and an
+        UNSEALED_TERMINAL_FAULT run has NO result -- result() raises the typed
+        ControllerFault rather than emit pass-shaped evidence (published counts, a
+        PUBLISHED ledger) from a run whose state could not be sealed; the partial
+        evidence stays on the engine object for forensics."""
+        if self.seal_digest == self.UNSEALED_TERMINAL_FAULT:
+            raise ControllerFault(self.fault or {"phase": "seal",
+                                                 "exception_class": "unknown",
+                                                 "seal_failed": True},
+                                  self.UNSEALED_TERMINAL_FAULT)
+        if self.seal_digest is not None:
             try:
                 live = self.seal()
             except Exception as exc:  # noqa: BLE001
