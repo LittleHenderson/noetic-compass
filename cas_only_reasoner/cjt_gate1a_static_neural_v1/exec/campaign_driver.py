@@ -169,7 +169,12 @@ class CampaignDriver:
     # ---- phase helpers -------------------------------------------------------
 
     def _beat(self):
-        self.watchdog.beat(self._clock())
+        # CLOCK IMMUTABILITY (GATE 1A.2R.2A): REAL reads time.time() DIRECTLY, so
+        # a post-construction reassignment of self._clock is inert in a
+        # claim-bearing campaign (mirrors _hook() making _real_hooks mutation
+        # inert). Only the conformance postures use the stored clock.
+        now = time.time() if self._is_claim_bearing() else self._clock()
+        self.watchdog.beat(now)
 
     def _design_verified(self):
         verify_git_state(self.pkg, self.expected_commit, ".")

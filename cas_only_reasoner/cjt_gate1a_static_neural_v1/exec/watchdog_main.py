@@ -21,6 +21,14 @@ from exec.watchdog import Watchdog                      # noqa: E402
 from exec.shutdown import ShutdownPath                  # noqa: E402
 
 
+def _write_internal_error_marker(evidence_dir: Path, exc) -> None:
+    marker = evidence_dir / "WATCHDOG_TERMINATION.json"
+    marker.parent.mkdir(parents=True, exist_ok=True)
+    with marker.open("w", encoding="utf-8", newline="\n") as fh:
+        fh.write(json.dumps({"reason": "WATCHDOG_INTERNAL_ERROR",
+                             "error_type": type(exc).__name__}, indent=2) + "\n")
+
+
 def _read_signed_cap(config_path: Path, default: float) -> float:
     try:
         cfg = json.loads(config_path.read_text(encoding="utf-8"))
@@ -66,10 +74,20 @@ def main():
     launched_at = time.time()
     while True:
         stale = _read_signed_cap(config_path, default=2.5 * 3600)
-        wd = Watchdog(Path(args.heartbeat), Path(args.evidence), stale,
-                      startup_grace_seconds=args.startup_grace_seconds,
-                      launched_at=launched_at)
-        if not wd.poll_once(time.time()):
+        # FAIL CLOSED (GATE 1A.2R.2A): any unexpected error while polling MUST
+        # still request termination -- the watchdog process may never vanish
+        # silently and leave a hung campaign without a timeout.
+        try:
+            wd = Watchdog(Path(args.heartbeat), Path(args.evidence), stale,
+                          startup_grace_seconds=args.startup_grace_seconds,
+                          launched_at=launched_at)
+            alive = wd.poll_once(time.time())
+        except Exception as exc:                        # noqa: BLE001
+            _write_internal_error_marker(Path(args.evidence), exc)
+            _burn_abandoned_protected(config_path)
+            shutdown.request_termination("WATCHDOG_INTERNAL_ERROR")
+            return 2
+        if not alive:
             _burn_abandoned_protected(config_path)
             shutdown.request_termination("WATCHDOG_TERMINATION")
             return 1

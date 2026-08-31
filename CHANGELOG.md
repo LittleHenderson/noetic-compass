@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-31 (gate 1a.2r.2a heartbeat fail-closed) - make the REAL heartbeat clock immutable and malformed timestamps fail closed per the third-party recheck of 7e69f8a2 (numeric-future attack CLOSED; surviving MAJOR: mutable _clock + a non-numeric heartbeat crashes the watchdog), on branch research/cjt-gate1a2r2a-heartbeat-failclosed-v1
+
+- The watchdog assumed anything JSON-decodable is a number: `driver._clock = lambda: "not-a-number"` wrote a valid-JSON string heartbeat that the watchdog parsed then compared numerically -> raw TypeError escaped, and watchdog_main didn't catch it, so the timeout process could vanish. Fixed (amendment A16):
+  - CLOCK IMMUTABILITY: CampaignDriver._beat() reads time.time() directly in REAL, so post-construction _clock mutation is inert (mirrors _hook()).
+  - FAIL-CLOSED VALIDATION: is_valid_timestamp requires a finite, non-bool, non-negative number; beat() refuses invalid values; poll_once validates observed-now + the parsed heartbeat; json.loads rejects NaN/Infinity; a malformed heartbeat (string/list/dict/bool/NaN/inf/negative, or an unparseable non-empty file) emits WATCHDOG_INVALID_HEARTBEAT + terminates + returns False -- no raw TypeError, never fresh.
+  - watchdog_main wraps poll in try/except -> WATCHDOG_INTERNAL_ERROR marker + termination request + exit 2 on any error.
+  - 12 named heartbeat fail-closed tests pass; all suites + synthetic campaign + byte-domain green.
+- SCOPE per the owner's directive: heartbeat fail-closed ONLY. S7 and the GATE 1A.2S evidence findings remain OPEN. Package NOT owner-signable; owner key stays on HOLD. Neural evidence: 0.
+
 ## 2026-08-31 (gate 1a.2r.2 production clock isolation) - remove production clock injection and reject future heartbeats per the third-party recheck of e3fcfda0 (hook isolation VERIFIED_CLOSED; surviving MAJOR: injectable production clock), on branch research/cjt-gate1a2r2-clock-isolation-v1
 
 - The clock was the last injectable production adapter: a caller could pass clock=lambda: time.time()+1e9 to REAL, and the separate watchdog read the negative heartbeat age as fresh, suppressing the signed timeout. Fixed (amendment A15):

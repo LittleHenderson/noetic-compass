@@ -1,24 +1,45 @@
 """watchdog.py -- termination must not depend on the training process reaching
-`finally` (GATE 1A.2 section 9 + 1A.2R section 3).
+`finally` (GATE 1A.2 s.9 + 1A.2R s.3 + 1A.2R.2 + 1A.2R.2A).
 
 The driver writes a heartbeat file with REAL epoch time every step; this SEPARATE
-process polls it. Fixes (audit): (1) it does NOT terminate before the first
-heartbeat exists -- a startup grace covers the window between watchdog launch and
-the driver's first beat; (2) the heartbeat clock domain is REAL epoch on both
-sides (the driver's REAL clock is time.time); (3) the stale limit is the SIGNED
-per-job cap, read from watchdog_config.json (written by the driver after the
-execution approval is verified), not a hardcoded constant.
+process polls it. Fail-closed laws:
+- no termination before the first heartbeat during a startup grace;
+- one REAL epoch clock domain on both sides;
+- the stale limit is the SIGNED per-job cap (watchdog_config.json);
+- an IMPOSSIBLE FUTURE heartbeat (beyond now + MAX_FUTURE_HEARTBEAT_SKEW_SECONDS)
+  is refused, so a future-valued clock cannot extend the ceiling (1A.2R.2);
+- a MALFORMED heartbeat value (non-numeric, bool, NaN, infinity, negative) is
+  refused as WATCHDOG_INVALID_HEARTBEAT rather than escaping as a raw TypeError
+  from the numeric comparison (1A.2R.2A). The parser rejects NaN/infinity too.
+Every refusal writes a termination marker, requests termination via the caller,
+and returns False -- the watchdog process never disappears silently.
 """
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
-# GATE 1A.2R.2: a heartbeat stamped more than this far in the FUTURE is
-# impossible on a shared real-epoch clock and is treated as an attempt to
-# suppress timeout detection (a future-valued heartbeat has a negative age and
-# would otherwise pass the freshness check). Frozen tolerance.
 MAX_FUTURE_HEARTBEAT_SKEW_SECONDS = 5.0
+
+
+class WatchdogError(RuntimeError):
+    pass
+
+
+def is_valid_timestamp(v) -> bool:
+    """A heartbeat/observed-now value must be a finite, NON-BOOL, NON-NEGATIVE
+    int/float. NaN/infinity/strings/lists/dicts/bools/negatives are invalid --
+    so the numeric comparison in poll_once can never raise a TypeError and a
+    non-numeric heartbeat can never read as fresh. (An impossible FUTURE numeric
+    heartbeat is still caught separately by the future-skew rule.)"""
+    if isinstance(v, bool) or type(v) not in (int, float):
+        return False
+    return math.isfinite(v) and float(v) >= 0.0
+
+
+def _reject_non_finite(x):
+    raise WatchdogError(f"INVALID_HEARTBEAT_JSON_CONSTANT: {x}")
 
 
 class Watchdog:
@@ -27,6 +48,11 @@ class Watchdog:
                  launched_at: float = None):
         self.heartbeat_path = Path(heartbeat_path)
         self.evidence_dir = Path(evidence_dir)
+        for name, val in (("stale_limit_seconds", stale_limit_seconds),
+                          ("startup_grace_seconds", startup_grace_seconds)):
+            if isinstance(val, bool) or type(val) not in (int, float) \
+                    or not math.isfinite(val) or val < 0:
+                raise WatchdogError(f"INVALID_{name.upper()}: {val!r}")
         self.stale_limit_seconds = float(stale_limit_seconds)
         self.startup_grace_seconds = float(startup_grace_seconds)
         self._launched_at = launched_at
@@ -34,38 +60,15 @@ class Watchdog:
         self.terminated = False
 
     def beat(self, now: float) -> None:
+        # a heartbeat is written only with a VALID timestamp; a bad clock is
+        # caught here (defense in depth) rather than poisoning the file
+        if not is_valid_timestamp(now):
+            raise WatchdogError(f"INVALID_HEARTBEAT_VALUE: {now!r}")
         self.heartbeat_path.parent.mkdir(parents=True, exist_ok=True)
         with self.heartbeat_path.open("w", encoding="utf-8", newline="\n") as fh:
             fh.write(json.dumps({"t": now}) + "\n")
 
-    def poll_once(self, now: float) -> bool:
-        """True if the campaign is alive; on staleness, request termination.
-        Cases distinguished (GATE 1A.2R.2): no heartbeat yet (alive during the
-        startup grace), a valid FRESH heartbeat, a valid STALE heartbeat, and an
-        IMPOSSIBLE FUTURE heartbeat -- a heartbeat stamped beyond
-        now + MAX_FUTURE_HEARTBEAT_SKEW_SECONDS can never extend the signed
-        ceiling and is refused, so a future-valued clock cannot disable the
-        timeout."""
-        if self._launched_at is None:
-            self._launched_at = now
-        try:
-            last = json.loads(
-                self.heartbeat_path.read_text(encoding="utf-8"))["t"]
-            self._seen_heartbeat = True
-        except (OSError, ValueError, KeyError):
-            last = None
-        if last is None:
-            # no heartbeat yet: alive until the startup grace elapses
-            if (now - self._launched_at) <= self.startup_grace_seconds:
-                return True
-            reason, detail = "WATCHDOG_NO_HEARTBEAT_AFTER_GRACE", None
-        elif last > now + MAX_FUTURE_HEARTBEAT_SKEW_SECONDS:
-            # impossible future heartbeat: never fresh, always refused
-            reason, detail = "WATCHDOG_FUTURE_HEARTBEAT", last
-        elif (now - last) <= self.stale_limit_seconds:
-            return True
-        else:
-            reason, detail = "WATCHDOG_STALE_HEARTBEAT", last
+    def _terminate(self, reason, detail, now):
         marker = self.evidence_dir / "WATCHDOG_TERMINATION.json"
         marker.parent.mkdir(parents=True, exist_ok=True)
         with marker.open("w", encoding="utf-8", newline="\n") as fh:
@@ -77,3 +80,56 @@ class Watchdog:
                 indent=2) + "\n")
         self.terminated = True
         return False
+
+    def poll_once(self, now: float) -> bool:
+        """True if the campaign is alive; on any refusal, request termination.
+        Cases: invalid observed-now, no heartbeat yet (startup grace), fresh,
+        stale, impossible-future, and MALFORMED heartbeat -- the last four all
+        fail closed with a marker; nothing escapes as a raw exception."""
+        if not is_valid_timestamp(now):
+            return self._terminate("WATCHDOG_INVALID_OBSERVED_NOW", None, None)
+        if self._launched_at is None:
+            self._launched_at = now
+        raw = None
+        try:
+            raw = json.loads(
+                self.heartbeat_path.read_text(encoding="utf-8"),
+                parse_constant=_reject_non_finite)      # NaN/Infinity -> refuse
+            last = raw["t"]
+            self._seen_heartbeat = True
+        except (OSError, ValueError, KeyError, WatchdogError):
+            last = None
+            # a heartbeat FILE that exists but is malformed/non-finite is an
+            # attack, not "no heartbeat yet": if the file exists, fail closed
+            if self.heartbeat_path.is_file() and not _empty(self.heartbeat_path):
+                return self._terminate("WATCHDOG_INVALID_HEARTBEAT",
+                                       "<unparseable>", now)
+        if last is None:
+            if (now - self._launched_at) <= self.startup_grace_seconds:
+                return True
+            return self._terminate("WATCHDOG_NO_HEARTBEAT_AFTER_GRACE", None, now)
+        if not is_valid_timestamp(last):
+            # parsed but non-numeric / bool / out-of-domain: never fresh
+            return self._terminate("WATCHDOG_INVALID_HEARTBEAT",
+                                   _safe(last), now)
+        if last > now + MAX_FUTURE_HEARTBEAT_SKEW_SECONDS:
+            return self._terminate("WATCHDOG_FUTURE_HEARTBEAT", last, now)
+        if (now - last) <= self.stale_limit_seconds:
+            return True
+        return self._terminate("WATCHDOG_STALE_HEARTBEAT", last, now)
+
+
+def _empty(path: Path) -> bool:
+    try:
+        return path.stat().st_size == 0
+    except OSError:
+        return True
+
+
+def _safe(v):
+    """A JSON-serializable, size-bounded representation of an invalid value."""
+    try:
+        return json.loads(json.dumps(v))[:200] if isinstance(v, str) else \
+            (v if type(v) in (int, float, bool) or v is None else str(type(v)))
+    except Exception:
+        return "<unrepresentable>"
