@@ -14,6 +14,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+# GATE 1A.2R.2: a heartbeat stamped more than this far in the FUTURE is
+# impossible on a shared real-epoch clock and is treated as an attempt to
+# suppress timeout detection (a future-valued heartbeat has a negative age and
+# would otherwise pass the freshness check). Frozen tolerance.
+MAX_FUTURE_HEARTBEAT_SKEW_SECONDS = 5.0
+
 
 class Watchdog:
     def __init__(self, heartbeat_path: Path, evidence_dir: Path,
@@ -34,8 +40,12 @@ class Watchdog:
 
     def poll_once(self, now: float) -> bool:
         """True if the campaign is alive; on staleness, request termination.
-        Before the first heartbeat is seen, staleness fires ONLY after the
-        startup grace elapses (audit fix: no immediate pre-heartbeat kill)."""
+        Cases distinguished (GATE 1A.2R.2): no heartbeat yet (alive during the
+        startup grace), a valid FRESH heartbeat, a valid STALE heartbeat, and an
+        IMPOSSIBLE FUTURE heartbeat -- a heartbeat stamped beyond
+        now + MAX_FUTURE_HEARTBEAT_SKEW_SECONDS can never extend the signed
+        ceiling and is refused, so a future-valued clock cannot disable the
+        timeout."""
         if self._launched_at is None:
             self._launched_at = now
         try:
@@ -49,6 +59,9 @@ class Watchdog:
             if (now - self._launched_at) <= self.startup_grace_seconds:
                 return True
             reason, detail = "WATCHDOG_NO_HEARTBEAT_AFTER_GRACE", None
+        elif last > now + MAX_FUTURE_HEARTBEAT_SKEW_SECONDS:
+            # impossible future heartbeat: never fresh, always refused
+            reason, detail = "WATCHDOG_FUTURE_HEARTBEAT", last
         elif (now - last) <= self.stale_limit_seconds:
             return True
         else:
@@ -56,8 +69,11 @@ class Watchdog:
         marker = self.evidence_dir / "WATCHDOG_TERMINATION.json"
         marker.parent.mkdir(parents=True, exist_ok=True)
         with marker.open("w", encoding="utf-8", newline="\n") as fh:
-            fh.write(json.dumps({"reason": reason, "last_beat": detail, "now": now,
-                                 "stale_limit_seconds": self.stale_limit_seconds},
-                                indent=2) + "\n")
+            fh.write(json.dumps(
+                {"reason": reason, "heartbeat_timestamp": detail,
+                 "observed_now": now,
+                 "allowed_future_skew_seconds": MAX_FUTURE_HEARTBEAT_SKEW_SECONDS,
+                 "stale_limit_seconds": self.stale_limit_seconds},
+                indent=2) + "\n")
         self.terminated = True
         return False

@@ -84,7 +84,8 @@ class CampaignDriver:
     def __init__(self, *, mode: str, package_root: Path, campaign_id: str,
                  execution_approval_path: Path, prep_approval_path: Path,
                  prep_receipt_path: Path, evidence_root: Path,
-                 synthetic_root: Path = None, clock=None, _real_hooks: dict = None):
+                 synthetic_root: Path = None, _real_hooks: dict = None,
+                 _conformance_clock=None):
         if mode not in self._ALLOWED_MODES:
             raise ValueError(f"unknown mode {mode!r}")
         # hooks are permitted ONLY in REAL_BRANCH_CONFORMANCE (the subclass sets
@@ -95,6 +96,15 @@ class CampaignDriver:
             raise ValueError(
                 "HOOK_ISOLATION_VIOLATION: real_hooks are permitted only in "
                 "REAL_BRANCH_CONFORMANCE, never in REAL or SYNTHETIC_CONFORMANCE")
+        # CLOCK ISOLATION LAW (GATE 1A.2R.2): the production driver has NO public
+        # clock parameter. REAL ALWAYS uses real epoch time (the one clock domain
+        # the separate watchdog compares against) -- a caller cannot inject a
+        # future-valued clock to suppress timeout detection. A fake conformance
+        # clock is permitted ONLY in REAL_BRANCH_CONFORMANCE (via the subclass).
+        if _conformance_clock is not None and mode != "REAL_BRANCH_CONFORMANCE":
+            raise ValueError(
+                "CLOCK_ISOLATION_VIOLATION: a caller-supplied clock is permitted "
+                "only in REAL_BRANCH_CONFORMANCE; REAL uses real epoch time only")
         self._real_hooks = dict(_real_hooks) \
             if mode == "REAL_BRANCH_CONFORMANCE" else {}
         self.mode = mode
@@ -105,11 +115,13 @@ class CampaignDriver:
         self.prep_receipt_path = Path(prep_receipt_path)
         self.er = Path(evidence_root)
         self.synthetic_root = Path(synthetic_root) if synthetic_root else None
-        # heartbeat clock: only the claim-bearing REAL posture uses real epoch
-        # (one clock domain shared with the separate watchdog); both conformance
-        # postures use a fixed clock for replay determinism
-        self._clock = clock or (time.time if self._is_claim_bearing()
-                                else (lambda: 0.0))
+        # heartbeat clock: the claim-bearing REAL posture ALWAYS uses real epoch
+        # (never injectable); SYNTHETIC_CONFORMANCE uses a fixed replay clock;
+        # REAL_BRANCH_CONFORMANCE may use the subclass-supplied fake clock.
+        if self._is_claim_bearing():
+            self._clock = time.time
+        else:
+            self._clock = _conformance_clock or (lambda: 0.0)
         self.shutdown = ShutdownPath(self._shutdown_mode(), self.er)
         self.watchdog = Watchdog(self.er / "heartbeat.json", self.er,
                                  stale_limit_seconds=2.5 * 3600)
@@ -883,9 +895,10 @@ class RealBranchConformanceDriver(CampaignDriver):
     """
     _ALLOWED_MODES = ("REAL", "SYNTHETIC_CONFORMANCE", "REAL_BRANCH_CONFORMANCE")
 
-    def __init__(self, *, real_hooks: dict, **kwargs):
+    def __init__(self, *, real_hooks: dict, conformance_clock=None, **kwargs):
         if not real_hooks:
             raise ValueError("RealBranchConformanceDriver requires real_hooks")
         kwargs.pop("mode", None)
         super().__init__(mode="REAL_BRANCH_CONFORMANCE",
-                         _real_hooks=dict(real_hooks), **kwargs)
+                         _real_hooks=dict(real_hooks),
+                         _conformance_clock=conformance_clock, **kwargs)

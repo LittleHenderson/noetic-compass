@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-31 (gate 1a.2r.2 production clock isolation) - remove production clock injection and reject future heartbeats per the third-party recheck of e3fcfda0 (hook isolation VERIFIED_CLOSED; surviving MAJOR: injectable production clock), on branch research/cjt-gate1a2r2-clock-isolation-v1
+
+- The clock was the last injectable production adapter: a caller could pass clock=lambda: time.time()+1e9 to REAL, and the separate watchdog read the negative heartbeat age as fresh, suppressing the signed timeout. Fixed (amendment A15):
+  - The production CampaignDriver has NO clock parameter. REAL ALWAYS uses time.time; SYNTHETIC_CONFORMANCE uses a fixed replay clock; a fake clock is permitted ONLY in REAL_BRANCH_CONFORMANCE via the subclass. A clock in REAL/SYNTHETIC is a hard CLOCK_ISOLATION_VIOLATION.
+  - Watchdog.poll_once distinguishes no-heartbeat / fresh / stale / IMPOSSIBLE-FUTURE: a heartbeat beyond now+5s emits WATCHDOG_FUTURE_HEARTBEAT and terminates, so a future clock can never extend the ceiling.
+  - The conformance status proof now EXECUTES the real emit_gate1_status program: REAL_BRANCH_CONFORMANCE → SOFTWARE_CONFORMANCE_ONLY / non_claim_bearing=true; a production-looking owner key under --conformance is refused.
+  - 9 named clock-isolation tests pass; hook-isolation, REAL-branch, synthetic-campaign, byte-domain all green.
+- SCOPE per the owner's directive: clock isolation ONLY. S7 (i//4 ≡ CAS class order) and the GATE 1A.2S evidence findings remain OPEN. Package NOT owner-signable; owner key stays on HOLD. Neural evidence: 0.
+
 ## 2026-08-31 (gate 1a.2r.1 production hook isolation) - structural isolation of production from conformance hooks per the third-party audit of a6d17c63 (F-G1A2R-1: REAL mode accepted fake AWS/GPU/model/lock adapters), on branch research/cjt-gate1a2r1-hook-isolation-v1
 
 - The audit was right that a one-line constructor guard is insufficient: the driver also exposed set_real_feature_backend and a mutable _real_hooks dict. Fixed structurally (amendment A14):
