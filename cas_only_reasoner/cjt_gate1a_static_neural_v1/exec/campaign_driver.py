@@ -72,19 +72,31 @@ def _write_json(path: Path, obj) -> str:
 
 
 class CampaignDriver:
+    # HOOK ISOLATION LAW (GATE 1A.2R.1): the production CampaignDriver admits
+    # only REAL and SYNTHETIC_CONFORMANCE and has NO injectable adapters -- no
+    # real_hooks parameter, no setter, no mutable hook registry consulted in a
+    # claim-bearing mode. Fake AWS/GPU/model/lock adapters live ONLY in the
+    # separate RealBranchConformanceDriver subclass, which runs the permanently
+    # non-claim-bearing REAL_BRANCH_CONFORMANCE posture (TEST trust root,
+    # SOFTWARE_CONFORMANCE_ONLY status, production owner keys refused).
+    _ALLOWED_MODES = ("REAL", "SYNTHETIC_CONFORMANCE")
+
     def __init__(self, *, mode: str, package_root: Path, campaign_id: str,
                  execution_approval_path: Path, prep_approval_path: Path,
                  prep_receipt_path: Path, evidence_root: Path,
-                 synthetic_root: Path = None, clock=None, real_hooks: dict = None):
-        if mode not in ("REAL", "SYNTHETIC_CONFORMANCE"):
+                 synthetic_root: Path = None, clock=None, _real_hooks: dict = None):
+        if mode not in self._ALLOWED_MODES:
             raise ValueError(f"unknown mode {mode!r}")
-        # real_hooks (REAL-branch conformance ONLY): fake replacements for the
-        # external REAL dependencies -- aws_identity, verify_gpu, model_dir,
-        # freeze_path, protected_lock, feature_backend -- so the REAL adapter
-        # code is exercised on CPU with fakes, no model/GPU/AWS. None => the
-        # production implementation. Every hook is a NON-claim-bearing test
-        # injection; a real campaign passes real_hooks=None.
-        self._real_hooks = real_hooks or {}
+        # hooks are permitted ONLY in REAL_BRANCH_CONFORMANCE (the subclass sets
+        # this). In REAL or SYNTHETIC_CONFORMANCE a non-empty hook map is a hard
+        # HOOK_ISOLATION_VIOLATION -- a caller cannot substitute fakes into a
+        # claim-bearing campaign.
+        if _real_hooks and mode != "REAL_BRANCH_CONFORMANCE":
+            raise ValueError(
+                "HOOK_ISOLATION_VIOLATION: real_hooks are permitted only in "
+                "REAL_BRANCH_CONFORMANCE, never in REAL or SYNTHETIC_CONFORMANCE")
+        self._real_hooks = dict(_real_hooks) \
+            if mode == "REAL_BRANCH_CONFORMANCE" else {}
         self.mode = mode
         self.pkg = Path(package_root).resolve()
         self.campaign_id = campaign_id
@@ -93,10 +105,12 @@ class CampaignDriver:
         self.prep_receipt_path = Path(prep_receipt_path)
         self.er = Path(evidence_root)
         self.synthetic_root = Path(synthetic_root) if synthetic_root else None
-        # heartbeat clock: REAL uses real epoch (one clock domain shared with the
-        # separate watchdog process); an explicit clock (conformance tests) wins
-        self._clock = clock or (time.time if mode == "REAL" else (lambda: 0.0))
-        self.shutdown = ShutdownPath(mode, self.er)
+        # heartbeat clock: only the claim-bearing REAL posture uses real epoch
+        # (one clock domain shared with the separate watchdog); both conformance
+        # postures use a fixed clock for replay determinism
+        self._clock = clock or (time.time if self._is_claim_bearing()
+                                else (lambda: 0.0))
+        self.shutdown = ShutdownPath(self._shutdown_mode(), self.er)
         self.watchdog = Watchdog(self.er / "heartbeat.json", self.er,
                                  stale_limit_seconds=2.5 * 3600)
         self.expected_commit = subprocess.run(
@@ -105,13 +119,40 @@ class CampaignDriver:
         self.sm = CampaignStateMachine(
             campaign_id, self.expected_commit,
             self.er / "campaign" / "transitions.jsonl",
-            utc_source=(lambda: "SYNTHETIC")
-            if mode == "SYNTHETIC_CONFORMANCE" else None)
+            utc_source=None if self._is_claim_bearing()
+            else (lambda: "SYNTHETIC"))
         self.approval = None
         self.prep_receipt = None
         self.cost = None
         self.evidence = {}
         self.final = {}
+
+    # ---- mode posture (GATE 1A.2R.1) ----------------------------------------
+
+    def _is_claim_bearing(self) -> bool:
+        """Only the REAL posture can ever produce a scientific status."""
+        return self.mode == "REAL"
+
+    def _uses_real_branches(self) -> bool:
+        """REAL and REAL_BRANCH_CONFORMANCE both run the REAL code paths (frozen
+        model extraction, AWS lock, live identity); only the latter uses fakes."""
+        return self.mode in ("REAL", "REAL_BRANCH_CONFORMANCE")
+
+    def _trust_mode(self) -> str:
+        """The trust posture handed to the approval verifier and identity checks:
+        REAL -> PRODUCTION owner key; every conformance posture -> the TEST key."""
+        return "REAL" if self.mode == "REAL" else "SYNTHETIC_CONFORMANCE"
+
+    def _shutdown_mode(self) -> str:
+        return "REAL" if self._is_claim_bearing() else "SYNTHETIC_CONFORMANCE"
+
+    def _hook(self, name, default):
+        """Adapter hooks are consulted ONLY in REAL_BRANCH_CONFORMANCE. In REAL
+        (or SYNTHETIC) this returns the default regardless of any mutation of
+        self._real_hooks, so there is no functional production hook registry."""
+        if self.mode == "REAL_BRANCH_CONFORMANCE":
+            return self._real_hooks.get(name, default)
+        return default
 
     # ---- phase helpers -------------------------------------------------------
 
@@ -129,7 +170,8 @@ class CampaignDriver:
 
     def _authority(self):
         prep = json.loads(self.prep_approval_path.read_text(encoding="utf-8"))
-        verify_container_prep(prep, self.pkg, self.expected_commit, self.mode,
+        verify_container_prep(prep, self.pkg, self.expected_commit,
+                              self._trust_mode(),
                               approval_path=self.prep_approval_path)
         self.sm.transition("CONTAINER_PREP_AUTHORIZED",
                            binding_kind="container_prep_approval",
@@ -143,7 +185,8 @@ class CampaignDriver:
                            binding_sha256=sha256_file(self.prep_receipt_path))
         record = json.loads(
             self.execution_approval_path.read_text(encoding="utf-8"))
-        verify_execution(record, self.pkg, self.expected_commit, self.mode,
+        verify_execution(record, self.pkg, self.expected_commit,
+                         self._trust_mode(),
                          approval_path=self.execution_approval_path,
                          prep_receipt_path=self.prep_receipt_path)
         self.approval = record
@@ -183,14 +226,16 @@ class CampaignDriver:
                            binding_sha256=approval_sha)
 
     def _aws_identity(self):
-        if self.mode == "REAL":
-            ident = self._real_hooks.get("aws_identity", fetch_real_aws_identity)()
+        if self._is_claim_bearing():
+            ident = fetch_real_aws_identity()          # no hook seam in REAL
+        elif self.mode == "REAL_BRANCH_CONFORMANCE":
+            ident = self._hook("aws_identity", fetch_real_aws_identity)()
         else:
             from exec.synthetic import synthetic_aws_identity
             ident = synthetic_aws_identity(self.approval["aws_account_id"])
-        verify_aws_identity(ident, self.approval, self.mode)
-        self._real_hooks.get("verify_gpu", verify_gpu)(
-            self.approval, self.mode, aws_identity_verified=True)
+        verify_aws_identity(ident, self.approval, self._trust_mode())
+        self._hook("verify_gpu", verify_gpu)(
+            self.approval, self._trust_mode(), aws_identity_verified=True)
         # kept OUT of self.evidence (the evidence_chain has a frozen key set the
         # status program checks); stored for the protected-lock claimant field
         self._aws_instance_id = ident.get("instance_id")
@@ -252,21 +297,20 @@ class CampaignDriver:
                            binding_sha256=dm_sha)
 
     def _model(self):
-        if self.mode == "REAL":
-            model_dir = self._real_hooks.get("model_dir", Path("/campaign/model"))
-        else:
-            model_dir = self.synthetic_root / "model"
-        verify_model_identity(Path(model_dir), self.approval)  # allow-list enforced
-        verify_container_identity(self.prep_receipt, self.approval)
-        if self.mode == "REAL":                             # live dependency set
+        if self._uses_real_branches():                  # REAL + REAL_BRANCH: real
+            model_dir = self._hook("model_dir", Path("/campaign/model"))
             from exec.identity import verify_dependency_lock
+            verify_model_identity(Path(model_dir), self.approval)   # allow-list
+            verify_container_identity(self.prep_receipt, self.approval)
             verify_dependency_lock(
-                self._real_hooks.get("freeze_path",
-                                     Path("/campaign/PIP_FREEZE_RESOLVED.txt")),
+                self._hook("freeze_path", Path("/campaign/PIP_FREEZE_RESOLVED.txt")),
                 self.approval)
-        s7 = (self.synthetic_root / "derived" / "alternative_taxonomy_table.json"
-              if self.mode != "REAL"
-              else self.pkg / "derived" / "alternative_taxonomy_table.json")
+            s7 = self._hook("s7_table_path",
+                            self.pkg / "derived" / "alternative_taxonomy_table.json")
+        else:
+            verify_model_identity(self.synthetic_root / "model", self.approval)
+            verify_container_identity(self.prep_receipt, self.approval)
+            s7 = self.synthetic_root / "derived" / "alternative_taxonomy_table.json"
         verify_s7_table(s7, self.approval)
         table = json.loads(Path(s7).read_text(encoding="utf-8"))
         self.verb_to_class = table["verb_to_class"]
@@ -274,14 +318,6 @@ class CampaignDriver:
                       Path(s7).read_text(encoding="utf-8"))
         self.sm.transition("MODEL_VERIFIED", binding_kind="model_identity",
                            binding_sha256=self.approval["s7_control_table_sha256"])
-
-    # feature-provider hooks: REAL uses the committed frozen-model extractor;
-    # SYNTHETIC uses committed synthetic features. REAL-branch conformance tests
-    # inject a fake (model, tokenizer, device) via set_real_feature_backend so
-    # the REAL extraction+candidate-encoding logic is exercised with fakes --
-    # no model, GPU, or AWS -- while the production path fails closed.
-    def set_real_feature_backend(self, backend):
-        self._real_feature_backend = backend
 
     def _load_frozen_model(self):
         """REAL-only frozen-model load, GPU-guarded. Prohibited in Gate 1A.2 (no
@@ -291,7 +327,7 @@ class CampaignDriver:
         device = require_gpu()                         # FIRST -- fail closed
         if getattr(self, "_frozen_model", None) is None:
             from transformers import AutoModel, AutoTokenizer   # noqa: F401
-            model_dir = self._real_hooks.get("model_dir", Path("/campaign/model"))
+            model_dir = self._hook("model_dir", Path("/campaign/model"))
             self._frozen_tokenizer = AutoTokenizer.from_pretrained(str(model_dir))
             self._frozen_model = AutoModel.from_pretrained(str(model_dir))
         return self._frozen_model, self._frozen_tokenizer, device
@@ -300,12 +336,11 @@ class CampaignDriver:
         """REAL extraction ONCE for all four candidate layers + candidate
         encodings, in a single forward pass per passage (committed extractor)."""
         from exec.activation_extraction import extract_split
-        backend = self._real_hooks.get("feature_backend") \
-            or getattr(self, "_real_feature_backend", None)
-        if backend is not None:                        # conformance-test injection
+        backend = self._hook("feature_backend", None)  # REAL_BRANCH-only injection
+        if backend is not None:
             model, tok, device = backend
         else:
-            model, tok, device = self._load_frozen_model()   # GPU-guarded
+            model, tok, device = self._load_frozen_model()   # GPU-guarded (REAL)
         self._real_device = device
         return extract_split(records, tok, model, list(CANDIDATE_LAYERS), device)
 
@@ -321,11 +356,11 @@ class CampaignDriver:
         return out
 
     def _extract_split_cache(self, records):
-        """Unified one-pass cache {pid: {"layers": {L: (h,g)}, "cand": tensor}}
-        for BOTH modes -- REAL from the committed extractor, SYNTHETIC from the
-        committed synthetic features (assembled into the same shape). Every
+        """Unified one-pass cache {pid: {"layers": {L: (h,g)}, "cand": tensor}}.
+        REAL + REAL_BRANCH use the committed frozen-model extractor (REAL_BRANCH
+        via a fake backend); SYNTHETIC uses committed synthetic features. Every
         passage carries a real candidate tensor."""
-        if self.mode == "REAL":
+        if self._uses_real_branches():
             return self._extract_all_layers(records)
         from exec.synthetic import synthetic_features
         cache = {}
@@ -383,7 +418,10 @@ class CampaignDriver:
         return self._width_map
 
     def _train_device(self):
-        return getattr(self, "_real_device", "cpu") if self.mode == "REAL" else "cpu"
+        # REAL: the GPU device gated at extraction; REAL_BRANCH: the fake
+        # backend's device; SYNTHETIC: CPU. Never an injectable CPU device in a
+        # claim-bearing campaign (hooks are refused in REAL).
+        return getattr(self, "_real_device", "cpu")
 
     def _updates_per_run(self):
         return self.schedule.updates_per_run
@@ -425,8 +463,8 @@ class CampaignDriver:
         self._beat()
         t0 = time.monotonic()
         out = fn()
-        hours = ((time.monotonic() - t0) / 3600.0 if self.mode == "REAL"
-                 else 0.0)
+        hours = ((time.monotonic() - t0) / 3600.0 if self._is_claim_bearing()
+                 else 0.0)                             # conformance: replay-stable
         self.cost.record_job(job_id, hours)
         return out
 
@@ -592,15 +630,14 @@ class CampaignDriver:
         # REAL mode uses the DURABLE cross-instance DynamoDB backend (a
         # relaunched instance for the same campaign id then sees a BURNED lock);
         # SYNTHETIC_CONFORMANCE uses the local file backend.
-        if self.mode == "REAL":
-            factory = self._real_hooks.get("protected_lock")
-            if factory is not None:                    # conformance: fake DynamoDB
-                lock = factory()
-            else:
-                from exec.protected_lock import AwsProtectedLock
-                lock = AwsProtectedLock(
-                    table_name=f"cjt-protected-lock-{self.approval['aws_account_id']}",
-                    region=self.approval["region"])
+        if self._is_claim_bearing():
+            from exec.protected_lock import AwsProtectedLock
+            lock = AwsProtectedLock(                    # no hook seam in REAL
+                table_name=f"cjt-protected-lock-{self.approval['aws_account_id']}",
+                region=self.approval["region"])
+        elif self.mode == "REAL_BRANCH_CONFORMANCE" \
+                and self._hook("protected_lock", None) is not None:
+            lock = self._hook("protected_lock", None)()  # fake DynamoDB
         else:
             lock = LocalProtectedLock(self.er / "protected_lock")
         salt = self._protected_salt()
@@ -609,15 +646,14 @@ class CampaignDriver:
             "package_commit_sha": self.expected_commit,
             "protected_derivation":
                 self.approval["protected_derivation_commitment"],
-            "claimant_identity": ("SYNTHETIC_CONFORMANCE"
-                                  if self.mode != "REAL"
-                                  else getattr(self, "_aws_instance_id",
-                                               "EC2_INSTANCE")),
-            "claim_utc": ("SYNTHETIC" if self.mode != "REAL"
-                          else __import__("datetime").datetime.now(
-                              __import__("datetime").timezone.utc).isoformat())}
+            "claimant_identity": (getattr(self, "_aws_instance_id", "EC2_INSTANCE")
+                                  if self._is_claim_bearing()
+                                  else "SYNTHETIC_CONFORMANCE"),
+            "claim_utc": (__import__("datetime").datetime.now(
+                              __import__("datetime").timezone.utc).isoformat()
+                          if self._is_claim_bearing() else "SYNTHETIC")}
         claim_receipt = lock.claim(self.campaign_id, **lock_bindings)
-        if self.mode == "REAL":                        # let the watchdog burn it
+        if self._is_claim_bearing():                   # let the watchdog burn it
             write_utf8_lf(self.er / "watchdog_config.json", json.dumps(
                 {"stale_limit_seconds": getattr(self, "_stale_limit", 2.5 * 3600),
                  "aws_protected_lock": {
@@ -648,7 +684,7 @@ class CampaignDriver:
                                    "chain_digest": self.sm.chain_digest(),
                                    "cost_so_far": self.cost.report()})
             self.evidence["campaign_receipt_sha256"] = pre_sha
-            if self.mode == "REAL":
+            if self.mode == "REAL":                    # real protected regen
                 records, prot_digest = \
                     __import__("exec.protected_eval", fromlist=["x"]) \
                     .regenerate_protected(self.pkg, salt)
@@ -706,8 +742,8 @@ class CampaignDriver:
                str(self.er / "RAW_GATE1_RESULTS.json"),
                "--evidence-root", str(self.er),
                "--out", str(self.er / "GATE1_STATUS.json")]
-        if self.mode == "SYNTHETIC_CONFORMANCE":
-            cmd.append("--conformance")
+        if not self._is_claim_bearing():               # both conformance postures
+            cmd.append("--conformance")                # SOFTWARE_CONFORMANCE_ONLY
         r = subprocess.run(cmd, capture_output=True, text=True, cwd=self.pkg)
         if r.returncode != 0:
             raise RuntimeError(f"STATUS_PROGRAM_REFUSED: {r.stdout}{r.stderr}")
@@ -835,3 +871,21 @@ class CampaignDriver:
             self.sm.transition("TERMINATED", binding_kind="termination",
                                binding_sha256=chain)
         return self.sm.chain_digest()
+
+
+class RealBranchConformanceDriver(CampaignDriver):
+    """The ONLY driver that admits fake adapters (GATE 1A.2R.1). It runs the
+    permanently non-claim-bearing REAL_BRANCH_CONFORMANCE posture: the REAL code
+    paths (frozen-model extraction, AWS lock, live identity) are exercised with
+    injected fakes, under the TEST trust root, and can NEVER produce a scientific
+    status (the status program is always called with --conformance and refuses a
+    production owner-key id). Test-only: production code never constructs it.
+    """
+    _ALLOWED_MODES = ("REAL", "SYNTHETIC_CONFORMANCE", "REAL_BRANCH_CONFORMANCE")
+
+    def __init__(self, *, real_hooks: dict, **kwargs):
+        if not real_hooks:
+            raise ValueError("RealBranchConformanceDriver requires real_hooks")
+        kwargs.pop("mode", None)
+        super().__init__(mode="REAL_BRANCH_CONFORMANCE",
+                         _real_hooks=dict(real_hooks), **kwargs)

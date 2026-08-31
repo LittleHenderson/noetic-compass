@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-31 (gate 1a.2r.1 production hook isolation) - structural isolation of production from conformance hooks per the third-party audit of a6d17c63 (F-G1A2R-1: REAL mode accepted fake AWS/GPU/model/lock adapters), on branch research/cjt-gate1a2r1-hook-isolation-v1
+
+- The audit was right that a one-line constructor guard is insufficient: the driver also exposed set_real_feature_backend and a mutable _real_hooks dict. Fixed structurally (amendment A14):
+  - The production CampaignDriver admits ONLY REAL + SYNTHETIC_CONFORMANCE, has NO public real_hooks parameter, NO set_real_feature_backend, and its _hook() helper reads the registry ONLY in REAL_BRANCH_CONFORMANCE — so mutating _real_hooks in REAL is inert.
+  - A non-empty hook map in REAL or SYNTHETIC_CONFORMANCE is a hard HOOK_ISOLATION_VIOLATION.
+  - New third posture REAL_BRANCH_CONFORMANCE, owned by a separate RealBranchConformanceDriver subclass (the only class that admits hooks): runs the REAL code paths with fakes but is PERMANENTLY non-claim-bearing — TEST trust root, SYNTHETIC clock, status --conformance (SOFTWARE_CONFORMANCE_ONLY; production owner keys refused).
+  - Mode posture expressed by _is_claim_bearing()/_uses_real_branches()/_trust_mode().
+  - 11 named hook-isolation attacks pass; the REAL-branch adapter suite still executes under the new posture.
+- SCOPE per the owner's directive: hook isolation ONLY. The S7 independent-taxonomy control defect (the i//4 builder reproduces the CAS class order) and the other GATE 1A.2S findings (complete receipts, final-status finalization, in-status signature verification, burn-receipt binding, provenance replay, salted-manifest typing, complete container prep, verify-before-stage, failed-job cost) remain OPEN. The package is NOT owner-signable. Owner key stays on HOLD. Neural evidence: 0.
+
 ## 2026-08-31 (gate 1a.2r real-path executability) - the REAL Gate-1B branch made executable per the owner's independent source audit of fc7ceb48 (verdict: REAL_GATE1B_EXECUTION_PATH_REFUTED — synthetic fixtures hid 14 branch defects), on branch research/cjt-gate1a2r-real-path-v1
 
 - The audit's diagnosis was exact: synthetic conformance substituted working fakes precisely where the REAL branches were broken stubs. ALL 14 findings closed (amendment A13):
