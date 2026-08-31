@@ -33,7 +33,7 @@ import dataclasses
 from rc0_types import BiasState, RegionRecord, RPMState
 from rc01_types import (DiagnosticCommitReceipt, EffectCommitContext,
                         EffectPublicationIntent, VerifierReceipt, VersionedIntent,
-                        canonical, digest)
+                        canonical, digest)  # noqa: F401
 
 ALLOWED_FIELDS = ("rpm", "record", "memory", "substrate")
 FIELD_TYPES = {"rpm": RPMState, "record": RegionRecord, "memory": tuple, "substrate": tuple}
@@ -68,8 +68,10 @@ class PublicationRefused(Exception):
 class HardenedCoordinator:
     """Owns the authoritative expert_id -> BiasState map. The ONLY state-write path."""
 
-    def __init__(self, initial: dict, episode_id: str, receipt_validator=None):
+    def __init__(self, initial: dict, episode_id: str, receipt_validator=None,
+                 seal_gate=None):
         self.episode_id = episode_id
+        self._gate = seal_gate           # RC-0.4B: shared seal gate (or None)
         self._states = {}
         self._versions = {}
         for k, v in initial.items():
@@ -108,6 +110,8 @@ class HardenedCoordinator:
 
     # ---- receipts (typed, registry-validated) ----
     def register_verifier_receipt(self, receipt) -> str:
+        if self._gate is not None:                  # RC-0.4B: refuse after finalization
+            self._gate.require_open("coordinator.register_verifier_receipt")
         if not isinstance(receipt, VerifierReceipt):
             raise RejectedBatch("LAW_TYPED_RECEIPT",
                                 f"receipts must be VerifierReceipt objects, got {type(receipt).__name__}")
@@ -179,6 +183,8 @@ class HardenedCoordinator:
         the batch must CONTAIN the diagnosis. Without context: returns 'COMMITTED'.
         Raises RejectedBatch (state untouched, rejection sealed)."""
         try:
+            if self._gate is not None:              # RC-0.4B: refuse after finalization
+                self._gate.require_open("coordinator.commit")
             if effect_context is not None and not isinstance(effect_context,
                                                              EffectCommitContext):
                 raise RejectedBatch("LAW_TYPED_EFFECT_CONTEXT",
@@ -298,9 +304,11 @@ class PublicationCoordinator:
     DiagnosticCommitReceipt, with base/post state validation. Both receipts consumed
     exactly once."""
 
-    def __init__(self, episode_id: str, state_coord: HardenedCoordinator):
+    def __init__(self, episode_id: str, state_coord: HardenedCoordinator,
+                 seal_gate=None):
         self.episode_id = episode_id
         self._state_coord = state_coord
+        self._gate = seal_gate             # RC-0.4B: shared seal gate (or None)
         self._consumed = set()             # verifier receipt digests consumed
         self._consumed_commits = set()     # commit receipt digests consumed
         self.ledger = []
@@ -344,6 +352,8 @@ class PublicationCoordinator:
 
     def commit_publication(self, intent: EffectPublicationIntent) -> str:
         try:
+            if self._gate is not None:              # RC-0.4B: refuse after finalization
+                self._gate.require_open("publication.commit_publication")
             if not isinstance(intent, EffectPublicationIntent):
                 raise PublicationRefused("PUB_LAW_TYPED_INTENT", type(intent).__name__)
             if intent.episode_id != self.episode_id:
@@ -392,11 +402,15 @@ class PublicationCoordinator:
             raise
 
     def refuse(self, tick, cause_id, producer, effect_digest, reason: str):
+        if self._gate is not None:                  # RC-0.4B: no ledger forgery post-seal
+            self._gate.require_open("publication.refuse")
         self.ledger.append({"decision": "REFUSED", "law": reason, "tick": tick,
                             "cause": cause_id, "producer": producer,
                             "effect_digest": effect_digest})
 
     def abstain(self, tick, cause_id, producer, effect_digest):
+        if self._gate is not None:                  # RC-0.4B: no ledger forgery post-seal
+            self._gate.require_open("publication.abstain")
         self.ledger.append({"decision": "ABSTAINED", "law": "PUB_LAW_UNASSESSED",
                             "tick": tick, "cause": cause_id, "producer": producer,
                             "effect_digest": effect_digest})

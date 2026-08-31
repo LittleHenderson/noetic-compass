@@ -57,23 +57,56 @@ def test_failed_state_commit_cannot_leave_publication():
 
 
 def test_publication_intent_is_actually_consumed():
+    # the engine consumes the receipt during its run (proven by published==1). After
+    # run() the engine's pubcoord is FINALIZED (RC-0.4B gate), so consumption itself is
+    # proven on a STANDALONE, non-finalized coordinator to keep the two laws separable.
     e = eng([c6("p0")], SC.Reg().add("p0", "^6_decompose", "intended", PAY))
     r = e.run()
     assert r["metrics"]["published"] == 1
+    # the engine's own pubcoord now refuses any further publication (finalized gate)
+    from rc01_types import FinalizedControllerError
     pub = [d for d in e.pubcoord.ledger if d["decision"] == "PUBLISHED"][0]
-    # replaying the SAME publication intent must be refused: receipt consumed
-    receipt = e.coord.get_receipt(pub["receipt"])
-    intent = T.EffectPublicationIntent(
+    replay = T.EffectPublicationIntent(
         episode_id="ep0", tick=pub["tick"], cause_id=pub["cause"],
         effect_digest=pub["effect_digest"], producer_expert_id=pub["producer"],
         verdict="intended", verifier_receipt_digest=pub["receipt"],
         base_state_version=0, base_state_digest="d")
     try:
-        e.pubcoord.commit_publication(intent)
+        e.pubcoord.commit_publication(replay)
+        raise AssertionError("finalized pubcoord accepted a publication")
+    except FinalizedControllerError:
+        pass
+    # consumption law, proven on a fresh standalone stack (no engine finalization)
+    from rc01_coordinator import HardenedCoordinator, PublicationCoordinator
+    v = E.SealedVerifier({("s0", "^6_decompose"): "intended"},
+                         {("s0", "^6_decompose"): "parts[alpha|beta|gamma|delta]"}, "ep0")
+    coord = HardenedCoordinator({"^6_decompose": SC.bias()}, "ep0",
+                                receipt_validator=v.validator())
+    pubc = PublicationCoordinator("ep0", coord)
+    causeS = SC.cause("s0", C6, PAY)
+    eff = T.EffectCandidate("^6_decompose", "s0", "decompose",
+                            "parts[alpha|beta|gamma|delta]", originating_tick=0,
+                            base_bias_version=coord.version("^6_decompose"),
+                            base_bias_digest=coord.get_digest("^6_decompose"))
+    receipt = v.verify(causeS, eff, 0)
+    coord.register_verifier_receipt(receipt)
+    rec = T0.RegionRecord(region_posterior=(0.05, 0.85, 0.05, 0.05),
+                          committed_region="active", semantic_outcome="intended")
+    it = T.VersionedIntent("ep0", 0, "kernel", "^6_decompose", "record", rec,
+                           coord.version("^6_decompose"), coord.get_digest("^6_decompose"),
+                           verifier_receipt_digest=receipt.receipt_digest)
+    dcr = coord.commit([it], 0, effect_context=T.EffectCommitContext(
+        effect=eff, verifier_receipt_digest=receipt.receipt_digest))
+    intent = T.EffectPublicationIntent(
+        "ep0", 0, "s0", eff.effect_digest, "^6_decompose", "intended",
+        receipt.receipt_digest, base_state_version=dcr.pre_state_version,
+        base_state_digest=dcr.pre_state_digest, diagnostic_commit_digest=dcr.commit_digest)
+    assert pubc.commit_publication(intent) == "PUBLISHED"
+    try:
+        pubc.commit_publication(intent)
         raise AssertionError("consumed receipt allowed a second publication")
     except PublicationRefused as pr:
-        assert pr.law == "PUB_LAW_RECEIPT_CONSUMED"
-    assert receipt is not None
+        assert pr.law in ("PUB_LAW_RECEIPT_CONSUMED", "PUB_LAW_COMMIT_RECEIPT_CONSUMED")
 
 
 # ------------------------------------------------- 2. semantic verification
@@ -361,8 +394,9 @@ def test_receipt_generator_reproduces_raw_status():
     lines = out.stdout.strip().splitlines()
     assert any(line.startswith("STATUS:") for line in lines), "generator emits no status"
     status = [line for line in lines if line.startswith("STATUS:")][-1].split(":", 1)[1].strip()
-    assert status in ("DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS",
-                      "GATE0_INCONCLUSIVE", "GATE0_REFUTED")
+    assert status in (
+        "DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS_PENDING_INDEPENDENT_AUDIT",
+        "GATE0_INCONCLUSIVE", "GATE0_REFUTED")
 
 
 ALL_TESTS = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]

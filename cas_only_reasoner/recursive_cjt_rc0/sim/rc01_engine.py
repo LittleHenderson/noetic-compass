@@ -29,15 +29,16 @@ Deterministic, CPU-only, no neural network, no randomness, no wall-clock.
 """
 from __future__ import annotations
 
+import copy
 import dataclasses
 import hashlib
 
 from rc0_types import (BiasState, ControlAction, Governance, RegionRecord, Resistance)
 from rc0_routing import rpm_ready, drive_potential
 from rc01_types import (Cause, ComputeBudget, EffectCandidate, EffectCommitContext,
-                        EffectPublicationIntent, PublicationStatus, VerifierReceipt,
-                        VersionedIntent, canonical, digest, require_finite_nonneg,
-                        validate_allocation)
+                        EffectPublicationIntent, FinalizedControllerError, PublicationStatus,
+                        SealGate, VerifierReceipt, VersionedIntent, canonical, digest,
+                        require_finite_nonneg, validate_allocation)
 from rc01_coordinator import (HardenedCoordinator, PublicationCoordinator,
                               PublicationRefused, RejectedBatch, state_digest)
 from rc01_types import DiagnosticCommitReceipt
@@ -136,6 +137,27 @@ class SealedVerifier:
         return receipt
 
 
+class ControllerTampered(Exception):
+    """RC-0.4B (owner audit major 2): raised by result() when the engine's live seal
+    no longer matches the seal captured at finalization -- i.e. state was mutated after
+    finalization by out-of-API access (raw attribute/collection writes past the gate).
+    result() is self-verifying: it never hands out evidence under a stale seal."""
+
+    code = "CONTROLLER_TAMPERED"
+
+
+class ControllerFault(Exception):
+    """RC-0.4A (owner audit blocking defect 3): a typed, SEALED terminal fault. Raised
+    by run()'s fault boundary after the fault event is recorded, the engine is
+    finalized, and the final seal is computed. Carries the fault record and the seal."""
+
+    def __init__(self, fault: dict, seal_digest: str):
+        self.fault = fault
+        self.seal_digest = seal_digest
+        super().__init__(f"FAULT[{fault.get('exception_class')}] at phase "
+                         f"{fault.get('phase')} -- state sealed {seal_digest[:12]}")
+
+
 def publication_consequence(verdict: str):
     return {"intended": None, "opposite": "QUARANTINE", "off_axis": "REPAIR",
             "unassessed": None}[verdict]
@@ -219,11 +241,20 @@ class RC01Engine:
                  expected_payloads=None):
         from rc0_simulator import default_states as _ds
         self.causes = list(causes)
+        # RC-0.4B (owner audit critical 1): one shared seal gate tripped at finalization;
+        # the coordinator, publication coordinator, and budget all refuse writes once it
+        # is sealed, so finalization governs the ACTUAL write paths, not just 5 methods.
+        self._gate = SealGate()
         self.verifier = SealedVerifier(gold_table, expected_payloads or {}, episode_id)
         self.coord = HardenedCoordinator(states or _ds(), episode_id,
-                                         receipt_validator=self.verifier.validator())
-        self.pubcoord = PublicationCoordinator(episode_id, self.coord)
-        self.budget = ComputeBudget.make(budget)
+                                         receipt_validator=self.verifier.validator(),
+                                         seal_gate=self._gate)
+        self.pubcoord = PublicationCoordinator(episode_id, self.coord, seal_gate=self._gate)
+        self.budget = ComputeBudget.make(budget, gate=self._gate)
+        # RC-0.4B (owner audit critical 2): taus is placed verbatim into the seal; a
+        # non-finite tau would make seal() throw -- validate finiteness at construction.
+        for i, tau in enumerate(taus):
+            require_finite_nonneg(f"taus[{i}]", tau)
         self.taus = taus
         self.episode_id = episode_id
         self.rpm_enforcement_enabled = rpm_enforcement_enabled
@@ -232,6 +263,28 @@ class RC01Engine:
         self.repair_requires = repair_requires or {}
         self.reopen_events = dict(reopen_events)
         self.invalidation_events = set(invalidation_events)
+        # RC-0.4A (owner audit blocking defect 2): typed validation at construction --
+        # these structures are seal-bound with EXACT types, so lookalike strings must
+        # be impossible, not merely distinguishable.
+        known = set(self.coord.expert_ids())
+        prereqs = ("DESIRE", "WISDOM", "POWER")
+        for k, v in self.reopen_events.items():
+            if isinstance(k, bool) or not isinstance(k, int) or k < 0:
+                raise TypeError(f"reopen_events key must be a nonnegative int tick, "
+                                f"got {k!r} ({type(k).__name__})")
+            if v not in known:
+                raise ValueError(f"reopen_events value {v!r} is not a registered expert")
+        for entry in self.invalidation_events:
+            if (not isinstance(entry, tuple) or len(entry) != 2
+                    or entry[0] not in known or entry[1] not in prereqs):
+                raise TypeError(f"invalidation_events entry must be a typed "
+                                f"(expert_id, prereq) tuple, got {entry!r}")
+        for k, v in self.repair_requires.items():
+            for side, val in (("key", k), ("value", v)):
+                if (not isinstance(val, tuple) or len(val) != 2
+                        or val[0] not in known or val[1] not in prereqs):
+                    raise TypeError(f"repair_requires {side} must be a typed "
+                                    f"(expert_id, prereq) tuple, got {val!r}")
         self.invalidations_consumed = set()
         self.quarantine_registry = {}
         self.child_queue = []
@@ -252,6 +305,8 @@ class RC01Engine:
         self.publications = []
         self.halted = False
         self.halt_requested = False     # RC-0.4: request flag; halted set at FINALIZE
+        self.finalized = False          # RC-0.4A: the END of the state machine
+        self.fault = None               # RC-0.4A: typed fault record, seal-bound
         self.seal_digest = None
         self._latent_ok = {}
         m = ("executions", "typed_abstentions", "unready_executions", "forced_publications",
@@ -267,8 +322,15 @@ class RC01Engine:
              "split_frames_failed", "retry_limit_hits",
              "cap_events", "splits_created", "quarantines", "reopens",
              "cache_hits", "invalidations_honored", "children_cancelled",
-             "step_metadata_rejects")
+             "step_metadata_rejects", "faults")
         self.metrics = {k: 0 for k in m}
+
+    # ---------------- finalization latch (RC-0.4A) ----------------
+    def _refuse_if_finalized(self, entry_point: str):
+        if self.finalized:
+            raise FinalizedControllerError(
+                f"{entry_point} refused: the controller is FINALIZED and sealed "
+                f"({(self.seal_digest or '')[:12]}); no further mutation is possible")
 
     # ---------------- helpers ----------------
     def _intent(self, expert_id, fld, value, tick, reason, receipt=""):
@@ -307,6 +369,26 @@ class RC01Engine:
             self.events.append({"tick": tick, "event": "BATCH_REJECTED", "law": rb.law})
             return False
 
+    def _compute_final_seal(self):
+        """RC-0.4B (owner audit critical 2, belt-and-suspenders): compute the final
+        seal without ever letting a bare encoder exception escape. If seal() throws --
+        a value legal to store but illegal to seal -- record a typed SEAL_FAILED fault
+        (without clobbering any primary fault) and return a degraded but stable digest,
+        so run() always finishes with a typed, sealed terminal state. (After the
+        construction-time non-finite-float rejection, this path is unreachable for
+        stored state; it defends against any future storable-but-unsealable value.)"""
+        try:
+            return self.seal()
+        except Exception as seal_exc:  # noqa: BLE001
+            seal_fault = {"phase": "seal", "exception_class": type(seal_exc).__name__,
+                          "detail": str(seal_exc)[:200], "seal_failed": True}
+            if self.fault is None:
+                self.fault = seal_fault
+            self.metrics["faults"] += 1
+            self.events.append({"tick": -1, "event": "SEAL_FAILED", **seal_fault})
+            return "SEAL_FAILED:" + hashlib.sha256(
+                repr(seal_fault).encode("utf-8")).hexdigest()
+
     def _seal_and_halt(self, tick, why):
         """RC-0.4 (owner audit critical 4): HALT is only REQUESTED here. The old code
         computed the seal inside a nested control path, so trailing mutations (e.g. the
@@ -314,11 +396,13 @@ class RC01Engine:
         returned digest described the controller one mutation short of its final state.
         Now: HALT_REQUESTED -> the current atomic transition finishes -> run()'s
         FINALIZE step sets the final halted value and computes the seal exactly once."""
+        self._refuse_if_finalized("_seal_and_halt")
         self.metrics["action_halt"] += 1
         self.events.append({"tick": tick, "event": "HALT", "why": why})
         self.halt_requested = True
 
     def _quarantine(self, expert_id, tick, authorized_by):
+        self._refuse_if_finalized("_quarantine")
         if expert_id not in self.quarantine_registry:
             self.quarantine_registry[expert_id] = tick
             self.metrics["quarantines"] += 1
@@ -327,6 +411,7 @@ class RC01Engine:
                                 "expert": expert_id, "authorized_by": authorized_by})
 
     def _reopen(self, expert_id, tick):
+        self._refuse_if_finalized("_reopen")
         if expert_id in self.quarantine_registry:
             del self.quarantine_registry[expert_id]
             self.metrics["reopens"] += 1
@@ -335,6 +420,7 @@ class RC01Engine:
 
     def _record_publication(self, tick, cause_id, producer, effect, status, verdict,
                             receipt_digest, law=""):
+        self._refuse_if_finalized("_record_publication")
         self.metrics[{PublicationStatus.PUBLISHED: "published",
                       PublicationStatus.REFUSED: "refused",
                       PublicationStatus.ABSTAINED: "abstained"}[status]] += 1
@@ -346,6 +432,7 @@ class RC01Engine:
 
     # ---------------- RPM repair (typed, cached, caged) ----------------
     def _repair(self, expert_id, prereq, tick, depth=0):
+        self._refuse_if_finalized("_repair")
         gov = self.coord.get(expert_id).governance
         if depth > gov.max_depth:
             self.metrics["depth_limit_hits"] += 1
@@ -415,6 +502,7 @@ class RC01Engine:
     # ---------------- publication (the ONLY path to PUBLISHED) ----------------
     def _publish_or_refuse(self, tick, cause, effect, receipt, dcr):
         """dcr: the DiagnosticCommitReceipt proving the state commit, or None."""
+        self._refuse_if_finalized("_publish_or_refuse")
         verdict = receipt.verdict
         committed = isinstance(dcr, DiagnosticCommitReceipt)
         if not committed:
@@ -463,12 +551,17 @@ class RC01Engine:
 
     # ---------------- execute one expert on one cause ----------------
     def _execute_verify_commit(self, t, cause, chosen, alloc_value, latent):
+        self._refuse_if_finalized("_execute_verify_commit")
         snap_version = self.coord.version(chosen)
         snap_digest = self.coord.get_digest(chosen)
         try:
             step = cjt_step(chosen, cause, self.coord.get(chosen), alloc_value,
                             self.budget, t, snap_version, bias_digest=snap_digest)
-        except RuntimeError:
+        except RuntimeError as re_exc:
+            # RC-0.4A: ONLY the typed budget signal is a registered halt; any other
+            # RuntimeError is an execution fault and goes to run()'s fault boundary
+            if str(re_exc) != "BUDGET_EXHAUSTED":
+                raise
             self.metrics["budget_exhausted"] += 1
             self._seal_and_halt(t, "budget")
             return None
@@ -533,6 +626,7 @@ class RC01Engine:
 
     # ---------------- one tick ----------------
     def tick(self, t, cause: Cause):
+        self._refuse_if_finalized("tick")
         if self.halted or self.halt_requested:
             return
         if cause.cause_id in self.cancelled_causes:
@@ -648,6 +742,7 @@ class RC01Engine:
 
     # ---------------- NO_READY handling with typed repair frames ----------------
     def _handle_no_ready(self, t, cause, candidates, latent):
+        self._refuse_if_finalized("_handle_no_ready")
         self.metrics["no_ready_events"] += 1
         self.events.append({"tick": t, "event": "NO_READY_CJT"})
         blocked = [(e, latent[e][1]) for e in candidates if latent[e][1]]
@@ -677,6 +772,7 @@ class RC01Engine:
 
     # ---------------- SPLIT with a real return path ----------------
     def _do_split(self, t, cause, chosen):
+        self._refuse_if_finalized("_do_split")
         if self.total_branches_opened >= self.max_total_branches or \
            not self.budget.spend(SPLIT_COST):
             self.metrics["deferred_causes"] += 1
@@ -704,6 +800,7 @@ class RC01Engine:
                             "return_address": cause.cause_id})
 
     def _settle_cancelled_child(self, t, child_id):
+        self._refuse_if_finalized("_settle_cancelled_child")
         parent_id = self.child_to_frame.get(child_id)
         if parent_id is None:
             return
@@ -732,6 +829,7 @@ class RC01Engine:
                              "n/a", "PUB_LAW_SPLIT_CHILD_FAILED")
 
     def _collect_child(self, t, parent_id, child_cause, effect, receipt, committed):
+        self._refuse_if_finalized("_collect_child")
         frame = self.split_frames[parent_id]
         if receipt.verdict != "intended" or not committed:
             frame.status = "FAILED"
@@ -755,6 +853,7 @@ class RC01Engine:
         """Resume EXACTLY ONCE: combine verified child Effects -> verify -> a REAL
         parent diagnostic commit -> publication latch. A configuration flag is never
         a commit receipt (RC-0.3)."""
+        self._refuse_if_finalized("_resume_parent")
         del self.split_frames[frame.parent_cause.cause_id]
         for cid in frame.child_ids:
             self.child_to_frame.pop(cid, None)
@@ -804,26 +903,58 @@ class RC01Engine:
 
     # ---------------- run + seal ----------------
     def run(self):
+        self._refuse_if_finalized("run")
         t = 0
         queue = list(self.causes)
-        while queue and not self.halt_requested:
-            cause = queue.pop(0)
-            self.remaining_queue = list(queue)   # full Cause envelopes (RC-0.4)
-            self.tick(t, cause)
-            if self.child_queue:
-                queue = self.child_queue + queue
-                self.child_queue = []
-            t += 1
-            if self.budget.left <= 0 and queue and not self.halt_requested:
-                self.metrics["budget_exhausted"] += 1
-                self._seal_and_halt(t, "budget")
-        # ---- FINALIZE (RC-0.4, owner audit critical 4): every mutation of state,
-        # queues, events, and evidence is complete. Set the final halted value, then
-        # compute the seal EXACTLY ONCE. Nothing mutates after this line; at every
-        # return, result()["trace_digest"] == self.seal() recomputed.
+        try:
+            while queue and not self.halt_requested:
+                cause = queue.pop(0)
+                self.remaining_queue = list(queue)   # full Cause envelopes (RC-0.4)
+                self.tick(t, cause)
+                if self.child_queue:
+                    queue = self.child_queue + queue
+                    self.child_queue = []
+                t += 1
+                if self.budget.left <= 0 and queue and not self.halt_requested:
+                    self.metrics["budget_exhausted"] += 1
+                    self._seal_and_halt(t, "budget")
+        except FinalizedControllerError:
+            raise                                    # already sealed; never re-wrap
+        except Exception as exc:  # noqa: BLE001
+            # ---- FAULT BOUNDARY (RC-0.4A defect 3, hardened RC-0.4B): NO execution
+            # exception may escape with a partially mutated, UNSEALED run. State commits
+            # are atomic (nothing partial persists in Bias state); the fault is recorded
+            # as a typed event, the controller FINALIZES, the gate is tripped, the final
+            # seal is computed via _compute_final_seal (which never itself throws), and
+            # the typed ControllerFault -- carrying that seal -- is re-raised. Nothing
+            # is silently swallowed; nothing publishes here. finalized/gate/seal are
+            # ordered so the engine can never be observed finalized-but-unsealed.
+            if self.fault is None:
+                self.fault = {"phase": "tick", "tick": t,
+                              "exception_class": type(exc).__name__,
+                              "detail": str(exc)[:200]}
+                self.metrics["faults"] += 1
+                self.events.append({"tick": t, "event": "FAULT", **self.fault})
+            self.remaining_queue = list(queue)
+            self.halted = True
+            self.finalized = True
+            self._gate.trip()
+            self.seal_digest = self._compute_final_seal()
+            raise ControllerFault(self.fault, self.seal_digest) from exc
+        # ---- FINALIZE (RC-0.4 critical 4 + RC-0.4A defect 1 + RC-0.4B critical 1):
+        # every mutation of state, queues, events, and evidence is complete. Set the
+        # final halted value, LATCH finalized, TRIP the shared gate (so coordinator,
+        # publication coordinator, and budget all refuse further writes), then compute
+        # the seal EXACTLY ONCE. If the seal step recorded a fault (a storable-but-
+        # unsealable value slipped past construction), raise a typed ControllerFault
+        # rather than returning a "successful" result.
         self.remaining_queue = list(queue)
         self.halted = bool(self.halt_requested)
-        self.seal_digest = self.seal()
+        self.finalized = True
+        self._gate.trip()
+        self.seal_digest = self._compute_final_seal()
+        if self.fault is not None:
+            raise ControllerFault(self.fault, self.seal_digest)
         return self.result()
 
     def runtime_snapshot(self) -> dict:
@@ -843,6 +974,7 @@ class RC01Engine:
         def frame_full(f):
             return {"parent": f.parent_cause.cause_id,
                     "parent_payload": f.parent_cause.payload,
+                    "parent_evidence": list(f.parent_cause.evidence),  # RC-0.4B: full envelope
                     "chosen": f.chosen_expert,
                     "child_ids": list(f.child_ids),
                     "pending": {cid: (v if isinstance(v, str) or v is None
@@ -877,15 +1009,19 @@ class RC01Engine:
             "branches": {"total_opened": self.total_branches_opened,
                          "max_total": self.max_total_branches,
                          "max_active": self.max_active_branches},
-            "invalidation_events": sorted(map(str, self.invalidation_events)),
-            "invalidations_consumed": sorted(map(str, self.invalidations_consumed)),
-            "reopen_schedule": {str(k): v for k, v in sorted(self.reopen_events.items())},
-            "repair_dependency_graph": {str(k): str(v)
-                                        for k, v in sorted(self.repair_requires.items())},
+            # RC-0.4A (owner audit blocking defect 2): NO pre-canonicalization type
+            # erasure -- exact typed keys/values go to rc_canonical, which encodes
+            # int vs str vs tuple distinctly. str()/map(str) projections are dead.
+            "invalidation_events": sorted(self.invalidation_events),
+            "invalidations_consumed": sorted(self.invalidations_consumed),
+            "reopen_schedule": sorted(self.reopen_events.items()),
+            "repair_dependency_graph": sorted(self.repair_requires.items()),
             "consecutive": dict(sorted(self.consecutive.items())),
             "exec_counts": dict(sorted(self.exec_counts.items())),
             "halted": self.halted,
             "halt_requested": self.halt_requested,
+            "finalized": self.finalized,     # RC-0.4A: the latch is seal-bound
+            "fault": self.fault,             # RC-0.4A: typed fault record or None
             # RC-0.4: the RETURNED publication evidence is itself seal-bound -- a
             # tampered result["publications"] entry changes the trace digest
             "publications_evidence": self.publications,
@@ -922,11 +1058,32 @@ class RC01Engine:
         return digest(self.runtime_snapshot())
 
     def result(self):
-        return {"compute_unit": self.budget.unit, "budget_total": self.budget.total,
-                "budget_left": self.budget.left, "metrics": dict(self.metrics),
-                "events": self.events, "allocations": self.allocations,
-                "publications": self.publications,
-                "publication_ledger": list(self.pubcoord.ledger),
-                "final_states": self.coord.final_state_manifest(),
-                "trace_digest": self.seal_digest,
-                "quarantined": sorted(self.quarantine_registry)}
+        """RC-0.4A defect 1 + RC-0.4B major 2: returns a DETACHED deep copy (a caller
+        mutating the returned evidence cannot reach engine state), and is SELF-VERIFYING
+        -- for a finalized engine it recomputes the live seal and refuses to hand out
+        evidence under a stale seal (ControllerTampered), so a post-finalization mutation
+        that slipped past the API (a raw attribute/collection write) cannot masquerade
+        as sealed. Within the API boundary the gate makes such a mutation impossible, so
+        this recompute always matches; the check is the tripwire for out-of-API writes."""
+        if self.finalized and self.seal_digest is not None \
+                and not str(self.seal_digest).startswith("SEAL_FAILED"):
+            try:
+                live = self.seal()
+            except Exception as exc:  # noqa: BLE001
+                raise ControllerTampered(
+                    f"result() could not recompute the seal: {type(exc).__name__}") from exc
+            if live != self.seal_digest:
+                raise ControllerTampered(
+                    "engine state changed after finalization (out-of-API write past "
+                    "the seal gate); result() will not emit evidence under a stale seal")
+        return copy.deepcopy(
+            {"compute_unit": self.budget.unit, "budget_total": self.budget.total,
+             "budget_left": self.budget.left, "metrics": dict(self.metrics),
+             "events": self.events, "allocations": self.allocations,
+             "publications": self.publications,
+             "publication_ledger": list(self.pubcoord.ledger),
+             "final_states": self.coord.final_state_manifest(),
+             "trace_digest": self.seal_digest,
+             "finalized": self.finalized,
+             "fault": self.fault,
+             "quarantined": sorted(self.quarantine_registry)})

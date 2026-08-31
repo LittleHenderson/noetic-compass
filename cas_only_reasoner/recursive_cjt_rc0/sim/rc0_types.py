@@ -49,6 +49,12 @@ def _deeply_immutable(name, v):
         for x in v:
             _deeply_immutable(name + "{}", x)
         return v
+    # RC-0.4B (owner audit critical 2): a value legal to STORE must be legal to SEAL.
+    # A non-finite float passed this allow-list but the canonical encoder rejects it,
+    # so seal() threw -- reject NaN/inf here, matching RPMState/RegionRecord.
+    if isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
+        raise ValueError(f"{name} must be finite, got {v!r} "
+                         "(NaN/inf cannot enter authoritative state)")
     if isinstance(v, bool) or isinstance(v, _IMMUTABLE_LEAVES):
         return v
     if isinstance(v, enum.Enum):

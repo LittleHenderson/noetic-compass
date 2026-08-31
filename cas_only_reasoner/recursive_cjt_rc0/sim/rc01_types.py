@@ -72,6 +72,45 @@ def require_str(name: str, v) -> str:
 IMMUTABLE_LEAF_TYPES = (str, int, float, bool, bytes, type(None))
 
 
+class FinalizedControllerError(Exception):
+    """RC-0.4B: raised by EVERY mutating path -- engine methods AND the sub-objects
+    (coordinator, publication coordinator, budget) -- once the controller is FINALIZED
+    and sealed. A sealed controller is the end of the state machine; it does not rely
+    on callers politely not calling a public method."""
+
+    code = "ENGINE_FINALIZED"
+
+
+class SealGate:
+    """RC-0.4B: a shared one-way seal gate (owner audit critical 1). The engine trips
+    it at finalization; every write path that holds a reference -- coordinator commit
+    and receipt registration, publication ledger mutators, budget spend -- then refuses
+    with FinalizedControllerError. One-way: once tripped it stays tripped.
+
+    Honest limit (recorded trust boundary): same-process API capability discipline.
+    A caller reaching PAST the API to rewrite the private _sealed field directly -- like
+    rewriting any engine attribute (e.g. e.seal_digest) -- is outside this boundary; it
+    is not defended here and is not claimed to be. What IS closed: no engine-provided
+    METHOD mutates sealed state after finalization."""
+
+    __slots__ = ("_sealed",)
+
+    def __init__(self):
+        object.__setattr__(self, "_sealed", False)
+
+    @property
+    def sealed(self) -> bool:
+        return self._sealed
+
+    def trip(self):
+        object.__setattr__(self, "_sealed", True)
+
+    def require_open(self, who: str):
+        if self._sealed:
+            raise FinalizedControllerError(
+                f"{who} refused: the controller is FINALIZED and sealed")
+
+
 def require_deeply_immutable(name: str, v):
     """RC-0.3 allow-list: a state-bearing value may contain ONLY canonical immutable
     leaves (str/int/float/bool/bytes/None), tuples/frozensets of them, or enum members.
@@ -86,6 +125,11 @@ def require_deeply_immutable(name: str, v):
         for x in v:
             require_deeply_immutable(name + "{}", x)
         return v
+    # RC-0.4B (owner audit critical 2): non-finite floats are storable-but-unsealable;
+    # reject at construction so seal() can never throw on stored state.
+    if isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
+        raise ValueError(f"{name} must be finite, got {v!r} "
+                         "(NaN/inf cannot enter authoritative state)")
     if isinstance(v, bool) or isinstance(v, IMMUTABLE_LEAF_TYPES):
         return v
     if isinstance(v, _enum.Enum):
@@ -377,9 +421,9 @@ class ComputeBudget:
     validated (no negative totals, no arbitrary units), attributes are read-only
     properties, and spend() is the ONLY mutator (positive non-bool int only)."""
 
-    __slots__ = ("_unit", "_total", "_left", "_sealed")
+    __slots__ = ("_unit", "_total", "_left", "_sealed", "_gate")
 
-    def __init__(self, unit: str, total: int, left: int):
+    def __init__(self, unit: str, total: int, left: int, gate=None):
         if unit != "CJT_EXPERT_EVALUATION":
             raise ValueError("budget unit is frozen to CJT_EXPERT_EVALUATION")
         require_nonneg_int("budget total", total)
@@ -389,6 +433,7 @@ class ComputeBudget:
         object.__setattr__(self, "_unit", unit)
         object.__setattr__(self, "_total", total)
         object.__setattr__(self, "_left", left)
+        object.__setattr__(self, "_gate", gate)     # RC-0.4B: shared seal gate or None
         object.__setattr__(self, "_sealed", True)
 
     def __setattr__(self, name, value):
@@ -409,11 +454,13 @@ class ComputeBudget:
         return self._left
 
     @classmethod
-    def make(cls, total: int):
+    def make(cls, total: int, gate=None):
         require_nonneg_int("budget total", total)
-        return cls(unit="CJT_EXPERT_EVALUATION", total=total, left=total)
+        return cls(unit="CJT_EXPERT_EVALUATION", total=total, left=total, gate=gate)
 
     def spend(self, n: int = 1) -> bool:
+        if self._gate is not None:                  # RC-0.4B: refuse after finalization
+            self._gate.require_open("budget.spend")
         require_pos_int("budget spend amount", n)
         if self._left < n:
             return False

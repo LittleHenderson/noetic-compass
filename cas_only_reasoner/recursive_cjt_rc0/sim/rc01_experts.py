@@ -66,9 +66,15 @@ def cjt_step(expert_id: str, cause: Cause, bias: BiasState, allocation: float,
         raise TypeError("cjt_step requires a typed Cause")
     if not isinstance(bias, BiasState):
         raise TypeError("cjt_step requires a BiasState")
+    # RC-0.4A (owner audit blocking defect 3): the transformation mode is validated
+    # BEFORE any budget is spent -- an unknown mode may not consume compute and then
+    # escape as an unsealed exception.
+    mode = bias.theta[0] if bias.theta else "K_identity"
+    if mode not in MODES:
+        raise ValueError(f"unknown transformation mode {mode!r} (validated before "
+                         f"budget spend; registered modes: {MODES})")
     if not budget.spend(1):
         raise RuntimeError("BUDGET_EXHAUSTED")
-    mode = bias.theta[0] if bias.theta else "K_identity"
     op_kind, out = registered_transform(expert_id, cause.payload, mode)
     # RC-0.3: the Effect is an ENVELOPE carrying its originating tick and the Bias
     # snapshot it was computed from -- stale Effects cannot be re-presented later.

@@ -10,8 +10,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "bc96337135401558bf9d6f6b6119acdfa3ca35b25d19447af63491901c1dc520",
-      "second_run_digest": "bc96337135401558bf9d6f6b6119acdfa3ca35b25d19447af63491901c1dc520",
+      "trace_digest": "2c42037dcd3db2efe1fc93bbbf9adc1618072012c60494166b0b34835656fa20",
+      "second_run_digest": "2c42037dcd3db2efe1fc93bbbf9adc1618072012c60494166b0b34835656fa20",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 0,
@@ -53,7 +53,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 59
     },
@@ -65,8 +66,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "8e41b67ced3c5562d29bc3f01d82e52a6244226dee2c6e328301d56162e1a2f6",
-      "second_run_digest": "8e41b67ced3c5562d29bc3f01d82e52a6244226dee2c6e328301d56162e1a2f6",
+      "trace_digest": "d54c71ca98a44b60284e3d4665e8ad70547055b0f609bc31397a12a16508ef7c",
+      "second_run_digest": "d54c71ca98a44b60284e3d4665e8ad70547055b0f609bc31397a12a16508ef7c",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 0,
@@ -108,7 +109,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 58
     },
@@ -120,8 +122,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "1618d1d632b0400b1a7423ee1d2ac89a3df796d4acead8c268d7e9658a524023",
-      "second_run_digest": "1618d1d632b0400b1a7423ee1d2ac89a3df796d4acead8c268d7e9658a524023",
+      "trace_digest": "8328a6f93e203592bc1a91c57749c1318bb59b4f9c4bafcbf924dbdceba62a0e",
+      "second_run_digest": "8328a6f93e203592bc1a91c57749c1318bb59b4f9c4bafcbf924dbdceba62a0e",
       "metrics": {
         "executions": 0,
         "typed_abstentions": 1,
@@ -163,7 +165,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 60
     },
@@ -175,8 +178,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "b9286b359c26cae3670de5a24af051badc64dbe3c32234a934b2f598a6c5a1e0",
-      "second_run_digest": "b9286b359c26cae3670de5a24af051badc64dbe3c32234a934b2f598a6c5a1e0",
+      "trace_digest": "5ede9408f213273f17f8b9e57d9e0432a318a8d483902a2771ae0027e323c783",
+      "second_run_digest": "5ede9408f213273f17f8b9e57d9e0432a318a8d483902a2771ae0027e323c783",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 1,
@@ -218,7 +221,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 58
     },
@@ -230,8 +234,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "3aa22ab428861f6e055a5352bf6c621e99b3f1cf2028b9c900414aa4f11fbe0f",
-      "second_run_digest": "3aa22ab428861f6e055a5352bf6c621e99b3f1cf2028b9c900414aa4f11fbe0f",
+      "trace_digest": "0e90f4c884eb2e5effac892f95f6e201bfa80f35af13f79c12dcfc63c8eaf963",
+      "second_run_digest": "0e90f4c884eb2e5effac892f95f6e201bfa80f35af13f79c12dcfc63c8eaf963",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 1,
@@ -273,7 +277,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 58
     },
@@ -285,8 +290,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "af5fa306bfa10314cecd9475840fbadbb45c1444ecbb096c58988738b81b0db6",
-      "second_run_digest": "af5fa306bfa10314cecd9475840fbadbb45c1444ecbb096c58988738b81b0db6",
+      "trace_digest": "e112efa1654b33f0711a9c5ad1c784dfd24c4eae6d10769e12051b2ecdc4e6f3",
+      "second_run_digest": "e112efa1654b33f0711a9c5ad1c784dfd24c4eae6d10769e12051b2ecdc4e6f3",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 2,
@@ -328,7 +333,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 57
     },
@@ -340,8 +346,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "533e2692637ee8ddb4e933a9f04ffab2d1e40659837bb89039ac68b5a77563a2",
-      "second_run_digest": "533e2692637ee8ddb4e933a9f04ffab2d1e40659837bb89039ac68b5a77563a2",
+      "trace_digest": "ac6f1a47d556f023d298fc46b7eada48c5724f542fd0c91212f7e9d2623f01eb",
+      "second_run_digest": "ac6f1a47d556f023d298fc46b7eada48c5724f542fd0c91212f7e9d2623f01eb",
       "metrics": {
         "executions": 0,
         "typed_abstentions": 0,
@@ -383,7 +389,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 60
     },
@@ -395,8 +402,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "34fbb1b6b5df93785e526942061813ff251c754a23913b50dbc0e23249fec617",
-      "second_run_digest": "34fbb1b6b5df93785e526942061813ff251c754a23913b50dbc0e23249fec617",
+      "trace_digest": "b81710105a31c1111d4105f5d8b9651fc3353fd57e4f909672326e83622a8274",
+      "second_run_digest": "b81710105a31c1111d4105f5d8b9651fc3353fd57e4f909672326e83622a8274",
       "metrics": {
         "executions": 0,
         "typed_abstentions": 0,
@@ -438,7 +445,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 60
     },
@@ -450,8 +458,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "93c6e90a4a1f4d8e2d4b3981754fab344c05f775dda466f08521e57a3c07d93a",
-      "second_run_digest": "93c6e90a4a1f4d8e2d4b3981754fab344c05f775dda466f08521e57a3c07d93a",
+      "trace_digest": "00b20230a252152e4a0e26b13cae9388c3cb2f20d523976a24103d5faf1fe936",
+      "second_run_digest": "00b20230a252152e4a0e26b13cae9388c3cb2f20d523976a24103d5faf1fe936",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 0,
@@ -493,7 +501,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 59
     },
@@ -505,8 +514,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "9a9ba718836be7d71d912b394102688c4c8aa2d64c4557412b2b170d0fc26ff2",
-      "second_run_digest": "9a9ba718836be7d71d912b394102688c4c8aa2d64c4557412b2b170d0fc26ff2",
+      "trace_digest": "e7471ace2240afaadf9a7be614ce1c4aaa6781d4e90f642776675bfe36f4ac13",
+      "second_run_digest": "e7471ace2240afaadf9a7be614ce1c4aaa6781d4e90f642776675bfe36f4ac13",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 0,
@@ -548,7 +557,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 58
     },
@@ -560,8 +570,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "40df4632e34dd8129b733912ac272bbe3d8de802d8fb8d838fb0ae7d88e0ea61",
-      "second_run_digest": "40df4632e34dd8129b733912ac272bbe3d8de802d8fb8d838fb0ae7d88e0ea61",
+      "trace_digest": "354d3bd4c9728e3eb2d69144f753c4c3545a3c0e60b498248d6dde5e4f4030f6",
+      "second_run_digest": "354d3bd4c9728e3eb2d69144f753c4c3545a3c0e60b498248d6dde5e4f4030f6",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 0,
@@ -603,7 +613,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 59
     },
@@ -615,8 +626,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "a00670bddda8f87ac0d84e23145ad75388d2274b62897dbfe434de8a3143ab40",
-      "second_run_digest": "a00670bddda8f87ac0d84e23145ad75388d2274b62897dbfe434de8a3143ab40",
+      "trace_digest": "9924a676c26270b2ac742697dffafb4e3a48700202918142bf0a385c13d689e8",
+      "second_run_digest": "9924a676c26270b2ac742697dffafb4e3a48700202918142bf0a385c13d689e8",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 0,
@@ -658,7 +669,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 59
     },
@@ -670,8 +682,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "6b443bc3bfe18dfddf54cd3beb420b1b8b8b34285a09a1905cade5191f53c75a",
-      "second_run_digest": "6b443bc3bfe18dfddf54cd3beb420b1b8b8b34285a09a1905cade5191f53c75a",
+      "trace_digest": "d29574eba2763eff50585252f25f12e207f9d4377bdb1c1ffab2711be8448637",
+      "second_run_digest": "d29574eba2763eff50585252f25f12e207f9d4377bdb1c1ffab2711be8448637",
       "metrics": {
         "executions": 0,
         "typed_abstentions": 0,
@@ -713,7 +725,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 60
     },
@@ -725,8 +738,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "90c5f60d3d08bd3550786049af6a4df91f435c73f166f61da622b6f3bd559533",
-      "second_run_digest": "90c5f60d3d08bd3550786049af6a4df91f435c73f166f61da622b6f3bd559533",
+      "trace_digest": "706e0cf51d6ff6c447d51445a41be3dac7bee680c9145d7c164734c281976e76",
+      "second_run_digest": "706e0cf51d6ff6c447d51445a41be3dac7bee680c9145d7c164734c281976e76",
       "metrics": {
         "executions": 2,
         "typed_abstentions": 0,
@@ -768,7 +781,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 57
     },
@@ -780,8 +794,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "5cfa080e6eea07ff71adcd17a06877ab8cf225b684cf0de6d56b63e2a494766d",
-      "second_run_digest": "5cfa080e6eea07ff71adcd17a06877ab8cf225b684cf0de6d56b63e2a494766d",
+      "trace_digest": "5c853cd191445c9ebe79ef1a244c5162a24ca05194c115a020dc807653c01a97",
+      "second_run_digest": "5c853cd191445c9ebe79ef1a244c5162a24ca05194c115a020dc807653c01a97",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 0,
@@ -823,7 +837,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 1,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 58
     },
@@ -835,8 +850,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "ad252b00b262790eabb48144fa028108aea9880446ba1957090c94486cf76312",
-      "second_run_digest": "ad252b00b262790eabb48144fa028108aea9880446ba1957090c94486cf76312",
+      "trace_digest": "58ecf44ea12e6750d75a9a343ddc4d1a11ebc8a5902365b9c02b86f2f867f4b7",
+      "second_run_digest": "58ecf44ea12e6750d75a9a343ddc4d1a11ebc8a5902365b9c02b86f2f867f4b7",
       "metrics": {
         "executions": 2,
         "typed_abstentions": 0,
@@ -878,7 +893,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 58
     },
@@ -890,8 +906,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "7b7bd7060c52315f70da5e49fc6fe12461bc69eaa12fa72aa655296844dddd7f",
-      "second_run_digest": "7b7bd7060c52315f70da5e49fc6fe12461bc69eaa12fa72aa655296844dddd7f",
+      "trace_digest": "5f6c4ebf44faedc9fb950decccd455c456c4ec5adeb7df68cf44dc5e089bf499",
+      "second_run_digest": "5f6c4ebf44faedc9fb950decccd455c456c4ec5adeb7df68cf44dc5e089bf499",
       "metrics": {
         "executions": 1,
         "typed_abstentions": 0,
@@ -933,7 +949,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 0
     },
@@ -945,8 +962,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "6b8bf10f56cc9cca48827fa4bd4acb0df93dbdd2ef1ffda25bf4319cb8aa3abd",
-      "second_run_digest": "6b8bf10f56cc9cca48827fa4bd4acb0df93dbdd2ef1ffda25bf4319cb8aa3abd",
+      "trace_digest": "80b12a200a333db2437035da7d9e230ea9f5a63038346f98ca0396d55a1b2fc4",
+      "second_run_digest": "80b12a200a333db2437035da7d9e230ea9f5a63038346f98ca0396d55a1b2fc4",
       "metrics": {
         "executions": 0,
         "typed_abstentions": 1,
@@ -988,7 +1005,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 60
     },
@@ -1000,8 +1018,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "9bb42a80bdea7ebdd183461e5fe47326a77707235ca6c2d39b27401969711a36",
-      "second_run_digest": "9bb42a80bdea7ebdd183461e5fe47326a77707235ca6c2d39b27401969711a36",
+      "trace_digest": "11f80d167b2dd77ea982923b311c619d4ff456dce3df93ad2a6cd69954447e0f",
+      "second_run_digest": "11f80d167b2dd77ea982923b311c619d4ff456dce3df93ad2a6cd69954447e0f",
       "metrics": {
         "executions": 0,
         "typed_abstentions": 1,
@@ -1043,7 +1061,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 60
     },
@@ -1055,8 +1074,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "4f238f9f33e5ac9e70953abd843401bb143a51920445a7a56f3156867288a332",
-      "second_run_digest": "4f238f9f33e5ac9e70953abd843401bb143a51920445a7a56f3156867288a332",
+      "trace_digest": "ba93541bfe1973b78f388cb9cf6870fbf658dbc8bef05c39f9649735b778b2d8",
+      "second_run_digest": "ba93541bfe1973b78f388cb9cf6870fbf658dbc8bef05c39f9649735b778b2d8",
       "metrics": {
         "executions": 0,
         "typed_abstentions": 1,
@@ -1098,7 +1117,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 60
     },
@@ -1110,8 +1130,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "09d980dcbe82b63fa6344d345f0c550475a47a020562fe52f22e5cc833c342f3",
-      "second_run_digest": "09d980dcbe82b63fa6344d345f0c550475a47a020562fe52f22e5cc833c342f3",
+      "trace_digest": "2654fa0e8e9fbbc62d78d34e1061b106028401a9d91e1000d9cf72d66b4bc46a",
+      "second_run_digest": "2654fa0e8e9fbbc62d78d34e1061b106028401a9d91e1000d9cf72d66b4bc46a",
       "metrics": {
         "executions": 0,
         "typed_abstentions": 1,
@@ -1153,7 +1173,8 @@
         "cache_hits": 0,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 60
     },
@@ -1165,8 +1186,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "3ef63cfa9a142cd82b2956d6f977e16aee790ae9a097957d1a2870d0f8b54cc6",
-      "second_run_digest": "3ef63cfa9a142cd82b2956d6f977e16aee790ae9a097957d1a2870d0f8b54cc6",
+      "trace_digest": "504cf341e9e698868ced5dbb3a25b7e58d4bf9b7a27209b738b25fbc6360f051",
+      "second_run_digest": "504cf341e9e698868ced5dbb3a25b7e58d4bf9b7a27209b738b25fbc6360f051",
       "metrics": {
         "executions": 2,
         "typed_abstentions": 0,
@@ -1208,7 +1229,8 @@
         "cache_hits": 1,
         "invalidations_honored": 0,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 57
     },
@@ -1220,8 +1242,8 @@
       "prohibited_present": [],
       "checks_ok": true,
       "replay_identical": true,
-      "trace_digest": "2f07a34de5b81676695b24d6e38f3fb1fd92ff5b05fdc53760259c9c2419932e",
-      "second_run_digest": "2f07a34de5b81676695b24d6e38f3fb1fd92ff5b05fdc53760259c9c2419932e",
+      "trace_digest": "21f5b24b7df723244f9c44c570a48378338f20edca6c21f46fba61b0d04ad44f",
+      "second_run_digest": "21f5b24b7df723244f9c44c570a48378338f20edca6c21f46fba61b0d04ad44f",
       "metrics": {
         "executions": 2,
         "typed_abstentions": 0,
@@ -1263,7 +1285,8 @@
         "cache_hits": 0,
         "invalidations_honored": 1,
         "children_cancelled": 0,
-        "step_metadata_rejects": 0
+        "step_metadata_rejects": 0,
+        "faults": 0
       },
       "budget_left": 56
     },

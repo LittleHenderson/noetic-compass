@@ -5,13 +5,17 @@ matrix, runs the raw test suites (stdout captured to committed report files), ex
 the FAULT-INJECTION BATTERY, runs the REAL mutation audit under the RC-0.4 status law,
 and emits the status deterministically from the raw results:
 
-    DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS
-        iff all suites pass AND all scenarios pass AND all injections are detected
-        AND fresh-process replay is identical AND a mutated input changes the digest
-        AND the mutation audit satisfies the RC-0.4 law below
+    DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS_PENDING_INDEPENDENT_AUDIT
+        (the STRONGEST internally emittable status, RC-0.4A section 6) iff all suites
+        pass AND all scenarios pass AND all injections are detected AND fresh-process
+        replay is identical AND a mutated input changes the digest AND the mutation
+        audit satisfies the freshness law AND the fresh report matches the FROZEN
+        mutation manifest exactly. Full Gate 0 freezes only after an independent
+        auditor reruns the exact committed evidence.
     GATE0_REFUTED
-        iff any injection goes UNDETECTED, or any applied mutation SURVIVES or fails
-        only via a non-semantic crash (a live authority hole)
+        iff any injection goes UNDETECTED, any applied mutation SURVIVES or fails
+        only via a non-semantic crash, or the fresh report does not match the frozen
+        mutation manifest (missing/extra/renamed/re-targeted mutations)
     GATE0_INCONCLUSIVE
         otherwise (environment/test failure, or a mutation audit that cannot be
         trusted: crashed, stale, or generated from a different tree)
@@ -45,11 +49,84 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE / "sim"))
 
-SUITES = ("test_rc0", "test_rc01", "test_rc02", "test_rc03", "test_rc04")
+SUITES = ("test_rc0", "test_rc01", "test_rc02", "test_rc03", "test_rc04",
+          "test_rc04a", "test_rc04b")
+
+# RC-0.4A section 4: the FROZEN mutation inventory. The manifest file's
+# canonical-content digest is pinned HERE so neither the file nor this constant can
+# change without the other showing in the diff. Newline-normalization-proof: the
+# digest is over json.dumps(parsed content, sort_keys, compact), not raw bytes.
+MANIFEST_PATH_NAME = "RC04_REQUIRED_MUTATIONS_v1.json"
+REQUIRED_MUTATION_MANIFEST_DIGEST = \
+    "877ff938a680e40830d4111f34d9fb17d510ad68d8b546dfb842f8c8ee76c852"
 
 
 def sha(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+
+def load_required_manifest(path=None):
+    """Load + integrity-check the frozen mutation manifest. Returns (manifest, reason)."""
+    p = Path(path) if path else (HERE / MANIFEST_PATH_NAME)
+    if not p.exists():
+        return None, "MUTATION_MANIFEST_FILE_MISSING"
+    data = json.loads(p.read_text(encoding="utf-8"))
+    canon = json.dumps(data, sort_keys=True, separators=(",", ":")).encode()
+    if hashlib.sha256(canon).hexdigest() != REQUIRED_MUTATION_MANIFEST_DIGEST:
+        return None, "MUTATION_MANIFEST_TAMPERED"
+    return data, "OK"
+
+
+def mutation_manifest_law(fresh_report, manifest):
+    """RC-0.4A section 4: the fresh report must contain EXACTLY the frozen mutation
+    set -- same names, same count, same file/test pairs. Proves 'every REQUIRED
+    mutation was present and caught', not merely 'every present mutation was caught'.
+    Returns (ok, reason); any failure REFUTES the status."""
+    if manifest is None:
+        return False, "MUTATION_MANIFEST_UNAVAILABLE"
+    req = {m["name"]: m for m in manifest.get("mutations", [])}
+    report_muts = (fresh_report or {}).get("mutations", [])
+    # RC-0.4B (internal audit MINOR): validate the report entries BEFORE set math --
+    # a malformed name would crash join()/sorted(), and a duplicate name would collapse
+    # in a dict comprehension and defeat the count check.
+    names = [m.get("name") for m in report_muts]
+    if any((not isinstance(n, str)) or not n for n in names):
+        return False, "MUTATION_MANIFEST_MALFORMED_ENTRY"
+    if len(names) != len(set(names)):
+        return False, "MUTATION_MANIFEST_DUPLICATE_ENTRY"
+    got = {m["name"]: m for m in report_muts}
+    missing = sorted(set(req) - set(got))
+    if missing:
+        return False, "MUTATION_MANIFEST_MISSING_REQUIRED:" + ",".join(missing)
+    extra = sorted(set(got) - set(req))
+    if extra:
+        return False, "MUTATION_MANIFEST_EXTRA_UNREGISTERED:" + ",".join(extra)
+    if len(names) != manifest.get("required_count"):
+        return False, "MUTATION_MANIFEST_COUNT_MISMATCH"
+    for name, r in req.items():
+        g = got[name]
+        if g.get("file") != r["file"] or g.get("expected_test") != r["expected_test"]:
+            return False, f"MUTATION_MANIFEST_PAIR_MISMATCH:{name}"
+    return True, "OK"
+
+
+def emit_status(all_detected, mutation_survived, report_exists, manifest_ok,
+                mutations_ok, suites_ok, scenarios_ok, replay_ok):
+    """The deterministic status law, as one pure testable function (RC-0.4A).
+    Strongest emittable status is PASS_PENDING_INDEPENDENT_AUDIT -- full Gate 0
+    freezes only after an independent auditor reruns the exact committed evidence."""
+    if not all_detected or mutation_survived:
+        return "GATE0_REFUTED"           # undetected attack or surviving mutation
+    if report_exists and not manifest_ok:
+        return "GATE0_REFUTED"           # wrong INVENTORY: a required law is unproven
+    if not mutations_ok:
+        return "GATE0_INCONCLUSIVE"      # audit crashed/stale/wrong-tree: no pass claim
+    # RC-0.4B (internal audit MINOR): the PASS path consults manifest_ok UNCONDITIONALLY
+    # so this pure function is independently sound -- it never relies on a caller
+    # invariant coupling report_exists to mutations_ok.
+    if manifest_ok and suites_ok and scenarios_ok and replay_ok:
+        return "DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS_PENDING_INDEPENDENT_AUDIT"
+    return "GATE0_INCONCLUSIVE"
 
 
 # ------------------------------------------------------------ RC-0.4 mutation-status law
@@ -235,17 +312,18 @@ def main():
         m.get("applied") and not (m.get("caught") and m.get("semantic_failure"))
         for m in mutation_report.get("mutations", []))
 
+    # ---- RC-0.4A: the FROZEN mutation inventory must match exactly ----
+    manifest, manifest_load_reason = load_required_manifest()
+    manifest_ok, manifest_reason = mutation_manifest_law(mutation_report, manifest)
+    if manifest is None:
+        manifest_reason = manifest_load_reason
+
     # ---- deterministic status emission (never hand-written) ----
     suites_ok = all(s["exit"] == 0 for s in suites.values())
     replay_ok = (d1 == d2) and (d1 != d3)
-    if not all_detected or mutation_survived:
-        status = "GATE0_REFUTED"          # an undetected attack or a surviving mutation
-    elif not mutations_ok:
-        status = "GATE0_INCONCLUSIVE"     # audit crashed/stale/wrong-tree: no pass claim
-    elif suites_ok and all_scenarios_pass and replay_ok:
-        status = "DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS"
-    else:
-        status = "GATE0_INCONCLUSIVE"
+    status = emit_status(all_detected, mutation_survived,
+                         mutation_report is not None, manifest_ok,
+                         mutations_ok, suites_ok, all_scenarios_pass, replay_ok)
 
     print(f"suites: {[s['result'] for s in suites.values()]}")
     print(f"scenarios: {sum(1 for r in rows if r['passed'])}/{len(rows)}")
@@ -255,11 +333,14 @@ def main():
               f"{sum(1 for m in mutation_report['mutations'] if m['caught'])}"
               f"/{len(mutation_report['mutations'])}")
     print(f"mutation status law: {mutation_law_reason}")
+    print(f"mutation manifest law: {manifest_reason}")
     print(f"replay identical: {d1 == d2} | mutation changes digest: {d1 != d3}")
     print(f"STATUS: {status}")
     if check_only:
         # --check-only writes NOTHING (RC-0.4 section 7)
-        return 0 if status == "DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS" else 1
+        return (0 if status ==
+                "DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS_PENDING_INDEPENDENT_AUDIT"
+                else 1)
 
     # ---- git context + environment ----
     def git(*a):
@@ -298,16 +379,20 @@ def main():
 
     receipt = {
         "receipt_id": "RC01_FEEDBACK_CLOSURE_RECEIPT",
-        "phase": "RC-0.4 (diagnostic-commit eligibility, load-bearing Effect snapshot, "
-                 "exact-type canonicalization, finalize-then-seal, complete runtime "
-                 "snapshot, hardened mutation-status law)",
+        "phase": "RC-0.4B (finalization GOVERNS the write paths via a shared seal gate; "
+                 "self-verifying result(); storable==sealable non-finite rejection; "
+                 "exact typed runtime snapshot; sealed fault paths; frozen mutation "
+                 "inventory) -- RC-0.4A directive plus its internal pre-commit "
+                 "adversarial-audit closures",
         "status": status,
         "status_emitted_by": "generate_rc02_receipt.py (deterministic; never hand-written)",
-        "independent_confirmation": "PENDING -- per the RC-0.4 status law (section 8) "
-                                    "the strongest status is accepted only after an "
-                                    "independent auditing agent verifies the exact "
-                                    "committed code; this program cannot certify its "
-                                    "own independence",
+        "independent_confirmation": "PENDING BY CONSTRUCTION -- the strongest "
+                                    "emittable status name itself says "
+                                    "PENDING_INDEPENDENT_AUDIT (RC-0.4A section 6); "
+                                    "full Gate 0 freezes only after an independent "
+                                    "auditor checks out the exact commit, reruns all "
+                                    "suites/scenarios/the frozen mutation inventory, "
+                                    "and reproduces the repaired attacks",
         "claim_bearing": False,
         "neural_network": "NONE (deterministic CPU simulation only)",
         "trust_boundary": "the verifier issuance registry and all private registries "
@@ -355,6 +440,13 @@ def main():
                    "current tree with exit 0 and every mutation applied AND caught by "
                    "a semantic AssertionError is accepted; a crash never falls back to "
                    "prior evidence"},
+        "mutation_manifest_law": {
+            "accepted": manifest_ok, "reason": manifest_reason,
+            "manifest_file": MANIFEST_PATH_NAME,
+            "pinned_manifest_digest": REQUIRED_MUTATION_MANIFEST_DIGEST,
+            "law": "the fresh report must contain EXACTLY the frozen mutation set "
+                   "(names, count, file/test pairs); a missing, extra, renamed, or "
+                   "re-targeted mutation REFUTES the status (RC-0.4A section 4)"},
         "digest_domain": "all artifact digests are SHA-256 over RAW FILE BYTES exactly as "
                          "stored on disk (no newline normalization, no encoding transform); "
                          "trace/seal digests are SHA-256 over canonical JSON "

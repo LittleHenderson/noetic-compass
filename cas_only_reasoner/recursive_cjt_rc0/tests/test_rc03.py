@@ -237,7 +237,9 @@ def test_seal_binds_each_runtime_family():
         "halted": lambda e: setattr(e, "halted", not e.halted),
         "branch_count": lambda e: setattr(e, "total_branches_opened",
                                           e.total_branches_opened + 1),
-        "budget": lambda e: e.budget.spend(1),
+        # budget.spend() is gated after finalization (RC-0.4B); this is a raw
+        # seal-sensitivity probe, so reach past the API to move budget.left
+        "budget": lambda e: object.__setattr__(e.budget, "_left", e.budget.left - 1),
         "reopen_schedule": lambda e: e.reopen_events.update({99: "^2_attract"}),
         "consecutive": lambda e: e.consecutive.update({"^8_trigger": 7}),
         "invalidation_events": lambda e: e.invalidation_events.add(("^8_trigger", "POWER")),

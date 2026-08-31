@@ -2,10 +2,10 @@
   "report_id": "rc04_mutation_report",
   "phase": "RC-0.4",
   "mechanism": "disposable working copy per mutation (scratch tree; original package never modified; pristine digests verified before/after); CAUGHT requires the named test to fail with an AssertionError -- the semantic law's own assertion -- not an incidental crash",
-  "source_tree_digest": "6402242e8a414e382ddfbb57668ad02d45f6bf308b8ca71163929c97606a82b7",
-  "test_tree_digest": "08f602e3d7b08c6d04c577c5e61d205338657dd50e5c10768759632a36e7452b",
-  "pristine_tree_digest_before": "6402242e8a414e382ddfbb57668ad02d45f6bf308b8ca71163929c97606a82b7",
-  "pristine_tree_digest_after": "6402242e8a414e382ddfbb57668ad02d45f6bf308b8ca71163929c97606a82b7",
+  "source_tree_digest": "1d153db34dcd149b11c57fbebfe7558d318b6426c2e7ba8ef964ae1a1c862d47",
+  "test_tree_digest": "e944eef4f675e438fd6d25313d7c4f879495de204d1b7bb7259e7cc34db70035",
+  "pristine_tree_digest_before": "1d153db34dcd149b11c57fbebfe7558d318b6426c2e7ba8ef964ae1a1c862d47",
+  "pristine_tree_digest_after": "1d153db34dcd149b11c57fbebfe7558d318b6426c2e7ba8ef964ae1a1c862d47",
   "pristine_unchanged": true,
   "mutations": [
     {

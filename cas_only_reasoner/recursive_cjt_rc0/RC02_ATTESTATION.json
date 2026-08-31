@@ -19,5 +19,13 @@
     "owner_verdict_on_rc03": "RC03_DETERMINISTIC_CONTROLLER_PARTIAL_PASS; GATE0_REFUTED for that implementation (owner independent audit, 2026-08-30)",
     "rc04_commit_sha": "UNBOUND_UNTIL_FOLLOW_UP -- the RC-0.4 commit contains this file and cannot hash itself",
     "record_kind": "UNSIGNED Git-history binding record (same limit as above; not a signature, not independent verification)"
+  },
+  "rc04_binding_2026_08_30": {
+    "note": "APPEND-ONLY (RC-0.4A section 5): binds the RC-0.4 evidence commit, which the previous entry could not hash. Same self-reference law: the RC-0.4A commit that contains this edit cannot bind its own SHA.",
+    "rc04_evidence_commit_sha": "6e3267d2100552d8ba94e8882f8f85c094ef3876",
+    "rc04_commit_message_prefix": "cjt(rc-0.4): close diagnostic eligibility, typed canonicalization, and final-state sealing",
+    "owner_verdict_on_rc04": "RC04_NAMED_DEFECTS_CLOSED; GATE0_FINALITY_AND_SEAL_INTEGRITY_OPEN (owner independent audit, 2026-08-30)",
+    "rc04a_commit_sha": "UNBOUND_UNTIL_FOLLOW_UP -- the RC-0.4A commit contains this file and cannot hash itself",
+    "record_kind": "UNSIGNED Git-history binding record; not a signature, not independent verification"
   }
 }
