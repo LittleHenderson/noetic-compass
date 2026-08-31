@@ -381,8 +381,14 @@ def test_episode_id_is_directly_seal_bound():
 
 # ================================================ 4. seal after the transition
 def test_no_ready_halt_seal_equals_recomputed_seal():
+    # RC-0.4D: a cutoff region now dispatches REPAIR (no halt), so the no-ready halt
+    # fixture uses a governance-quarantined route instead (no registry entry, no
+    # repairable block, no dispatchable ASOM action -> HALT)
+    import dataclasses as _dc
+    from rc0_types import Governance
+    b = _dc.replace(SC.bias(), governance=Governance(hard_mask=1, quarantined=True))
     e = SC.engine([c6("h0")], SC.Reg().add("h0", "^6_decompose", "intended", PAY),
-                  states=SC.states(**{"^6_decompose": {"region": "cutoff"}}))
+                  states={**SC.states(), "^6_decompose": b})
     r = e.run()
     assert e.halted and any(ev["event"] == "HALT" for ev in r["events"])
     assert r["trace_digest"] == e.seal(), \

@@ -2,10 +2,10 @@
   "report_id": "rc04_mutation_report",
   "phase": "RC-0.4",
   "mechanism": "disposable working copy per mutation (scratch tree; original package never modified; pristine digests verified before/after); CAUGHT requires the named test to fail with an AssertionError -- the semantic law's own assertion -- not an incidental crash",
-  "source_tree_digest": "b82836e7409df13e8b7919496e95fffdd450a4aa3f9e978ffa7f7385259f1956",
-  "test_tree_digest": "d305c0de15a763d105a4536602de45c1d6fdc1b416fc9455d6a011fa2ec85951",
-  "pristine_tree_digest_before": "b82836e7409df13e8b7919496e95fffdd450a4aa3f9e978ffa7f7385259f1956",
-  "pristine_tree_digest_after": "b82836e7409df13e8b7919496e95fffdd450a4aa3f9e978ffa7f7385259f1956",
+  "source_tree_digest": "0ff283233c85b3d39fbc857c56e22a529b1d125d0878a513efc4ee1cc8a37a04",
+  "test_tree_digest": "72f583b0d1cb0f36921a3b9878e8a265ecc0a1dd05d15bfed504e88ad908950e",
+  "pristine_tree_digest_before": "0ff283233c85b3d39fbc857c56e22a529b1d125d0878a513efc4ee1cc8a37a04",
+  "pristine_tree_digest_after": "0ff283233c85b3d39fbc857c56e22a529b1d125d0878a513efc4ee1cc8a37a04",
   "pristine_unchanged": true,
   "mutations": [
     {
@@ -30,7 +30,7 @@
       "caught": true,
       "test_failed": true,
       "semantic_failure": true,
-      "actual_failing_output": "AssertionError: published without diagnostic commit: a memory-only commit minted a DiagnosticCommitReceipt and it published"
+      "actual_failing_output": "AssertionError: memory-only commit returned something other than a rejection: DiagnosticCommitReceipt(episode_id='ep0', tick=0, cause_id='x0', effect_digest='3779be95dade94800bbaf2801b50153f88258c1db232d769ecf994b59ed91004', verifier_receipt_digest='7dfca1faeba87d1473b1b5db604a6133ec0fbc53cbb4f815a2"
     },
     {
       "name": "publication_base_state_check_removed",
@@ -127,6 +127,54 @@
       "test_failed": true,
       "semantic_failure": true,
       "actual_failing_output": "AssertionError: unused poison gold entry accepted at construction"
+    },
+    {
+      "name": "constructor_schema_bypassed",
+      "file": "sim/rc01_engine.py",
+      "guard": "if the one-schema call is bypassed, a sealable-but-illegal value (int 1 as commit_verdicts) constructs an engine; the named test must fail on the accepted poison (owner audit RC-0.4D critical 1)",
+      "mutated_lines": "        cfg = _validated_constructor_config(\n            causes=causes, gold_table=gold_table, states=states, budget=budget,\n            taus=taus, episode_id=episode_id,\n            rpm_enforcement_enabled=rpm_enforcement_enabled, ohm_enabled=ohm_enabled,\n            commit_verdicts=commit_verdicts, repair_requires=repair_requires,\n            max_total_branches=max_total_branches,\n            max_active_branches=max_active_branches, reopen_events=reopen_events,\n            invalidation_events=invalidation_events,\n            expected_payloads=expected_payloads)",
+      "expected_test": "test_rc04d::test_nonbool_commit_flag_rejected",
+      "applied": true,
+      "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
+      "actual_failing_output": "AssertionError: non-bool commit_verdicts accepted: 1"
+    },
+    {
+      "name": "final_publication_barrier_removed",
+      "file": "sim/rc01_engine.py",
+      "guard": "if the final-seal barrier is removed, an unsealed run promotes its provisional publication and holds published=1 under the marker (owner audit RC-0.4D critical 2)",
+      "mutated_lines": "        # MUTATION-TARGET: final-publication-barrier\n        if self._prospective_seal_probe():\n            self._promote_provisional_publications()\n        else:\n            self._void_provisional_publications()",
+      "expected_test": "test_rc04d::test_unsealed_run_has_zero_published",
+      "applied": true,
+      "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
+      "actual_failing_output": "AssertionError: an unsealed terminal run holds a published count"
+    },
+    {
+      "name": "asom_zero_score_action_dispatch_removed",
+      "file": "sim/rc01_engine.py",
+      "guard": "if the zero-score dispatch is removed, cutoff and breakdown fall back to silent HALT and the ASOM actions are decorative again (owner audit RC-0.4D critical 3)",
+      "mutated_lines": "            acted = self._dispatch_zero_score_actions(t, cause, candidates, actions,\n                                                      states, latent)",
+      "expected_test": "test_rc04d::test_cutoff_region_dispatches_repair_not_halt",
+      "applied": true,
+      "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
+      "actual_failing_output": "AssertionError: cutoff region silently HALTED instead of repairing"
+    },
+    {
+      "name": "snapshot_whole_object_detach_removed",
+      "file": "sim/rc01_engine.py",
+      "guard": "if whole-object detachment is removed, the snapshot aliases live engine state (the fault record, events, metrics) (owner audit RC-0.4D major 4)",
+      "mutated_lines": "        # MUTATION-TARGET: snapshot-whole-object-detach\n        return copy.deepcopy(snap)",
+      "expected_test": "test_rc04d::test_fault_record_is_detached_from_runtime_snapshot",
+      "applied": true,
+      "caught": true,
+      "test_failed": true,
+      "semantic_failure": true,
+      "actual_failing_output": "AssertionError: runtime_snapshot aliases the live fault record"
     },
     {
       "name": "cjtstep_snapshot_validation_removed",

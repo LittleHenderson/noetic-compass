@@ -32,6 +32,7 @@ from __future__ import annotations
 import copy
 import dataclasses
 import hashlib
+import inspect
 
 from rc0_types import (BiasState, ControlAction, Governance, RegionRecord, Resistance)
 from rc0_routing import rpm_ready, drive_potential
@@ -275,6 +276,142 @@ class RepairFrame:
     max_attempts: int = MAX_REPAIR_ATTEMPTS_PER_CAUSE
 
 
+# ------------------------------------------------------ constructor schema (RC-0.4D)
+CONSTRUCTOR_SCHEMA_PARAMS = frozenset((
+    "causes", "gold_table", "states", "budget", "taus", "episode_id",
+    "rpm_enforcement_enabled", "ohm_enabled", "commit_verdicts", "repair_requires",
+    "max_total_branches", "max_active_branches", "reopen_events",
+    "invalidation_events", "expected_payloads"))
+
+_PREREQS = ("DESIRE", "WISDOM", "POWER")
+_HEX = set("0123456789abcdef")
+
+
+def _is_hex_seal(d) -> bool:
+    return isinstance(d, str) and len(d) == 64 and set(d) <= _HEX
+
+
+def _require_exact_bool(name, v):
+    if not isinstance(v, bool):
+        raise TypeError(f"{name} must be an exact bool, got {type(v).__name__}")
+    return v
+
+
+def _validated_constructor_config(**params):
+    """RC-0.4D section 1 (owner audit critical 1): ONE frozen schema governs EVERY
+    RC01Engine.__init__ parameter -- no more enumerated field-by-field patches that
+    leave the twelfth object blinking in the dark. Every value is validated, COPIED
+    into owned state (no caller-owned mutable alias survives), and required to be
+    canonicalizable; coverage is enforced at import time against inspect.signature
+    and by the signature-coverage test."""
+    unknown = set(params) - set(CONSTRUCTOR_SCHEMA_PARAMS)
+    if unknown:
+        raise TypeError(f"unregistered constructor parameters: {sorted(unknown)}")
+    missing = set(CONSTRUCTOR_SCHEMA_PARAMS) - set(params)
+    if missing:
+        raise TypeError(f"schema call missing parameters: {sorted(missing)}")
+    cfg = {}
+    # causes: immutable tuple of typed Cause objects; duplicate cause-id policy is
+    # explicit: REJECT (one authoritative envelope per cause id at construction)
+    causes = tuple(params["causes"])
+    seen_ids = set()
+    for c in causes:
+        if not isinstance(c, Cause):
+            raise TypeError(f"causes must contain only typed Cause objects, got "
+                            f"{type(c).__name__}")
+        if c.cause_id in seen_ids:
+            raise ValueError(f"duplicate cause_id at construction: {c.cause_id!r}")
+        seen_ids.add(c.cause_id)
+    cfg["causes"] = causes
+    # verifier tables: owned dict copies; CONTENT schema enforced by
+    # SealedVerifier._preflight (frozen key/verdict/payload schemas, RC-0.4C)
+    if not isinstance(params["gold_table"], dict):
+        raise TypeError(f"gold_table must be a dict, got "
+                        f"{type(params['gold_table']).__name__}")
+    cfg["gold_table"] = dict(params["gold_table"])
+    ep = params["expected_payloads"]
+    if ep is not None and not isinstance(ep, dict):
+        raise TypeError(f"expected_payloads must be a dict or None, got "
+                        f"{type(ep).__name__}")
+    cfg["expected_payloads"] = dict(ep) if ep else {}
+    # states: None (registered defaults) or an owned dict covering EXACTLY the
+    # registered expert set. Internal audit RC-0.4D round 2: a SUBSET dict was
+    # accepted and deferred failure to a raw KeyError mid-run -- past budget spend,
+    # commits, and a provisional publication. Coverage is a construction law now,
+    # which also removes the states={} vs states=None ambiguity ({} fails coverage).
+    st = params["states"]
+    if st is not None:
+        if not isinstance(st, dict):
+            raise TypeError(f"states must be a dict or None, got {type(st).__name__}")
+        for k in st:
+            if not isinstance(k, str) or not k:
+                raise TypeError(f"states key must be a non-empty str, got {k!r}")
+            if k not in EVIDENCE_MARKERS:
+                raise ValueError(f"states names unregistered expert {k!r}; registered "
+                                 f"experts: {tuple(sorted(EVIDENCE_MARKERS))}")
+        if set(st) != set(EVIDENCE_MARKERS):
+            raise ValueError(
+                f"states must cover EXACTLY the registered expert set "
+                f"{tuple(sorted(EVIDENCE_MARKERS))}; missing "
+                f"{tuple(sorted(set(EVIDENCE_MARKERS) - set(st)))}")
+        st = dict(st)     # owned copy; values re-validated as BiasState by the coordinator
+    cfg["states"] = st
+    cfg["budget"] = require_nonneg_int("budget", params["budget"])
+    # taus: owned immutable 3-tuple of finite nonnegative numbers
+    taus = params["taus"]
+    if not isinstance(taus, (tuple, list)) or len(taus) != 3:
+        raise TypeError("taus must be a sequence of exactly 3 finite nonnegative values")
+    for i, tau in enumerate(taus):
+        require_finite_nonneg(f"taus[{i}]", tau)
+    cfg["taus"] = tuple(taus)
+    cfg["episode_id"] = require_str("episode_id", params["episode_id"])
+    if not cfg["episode_id"]:
+        raise ValueError("episode_id must be a non-empty str (identity strings are "
+                         "non-empty everywhere else in the controller)")
+    for flag in ("rpm_enforcement_enabled", "ohm_enabled", "commit_verdicts"):
+        cfg[flag] = _require_exact_bool(flag, params[flag])
+    require_nonneg_int("max_total_branches", params["max_total_branches"])
+    require_nonneg_int("max_active_branches", params["max_active_branches"])
+    cfg["max_total_branches"] = params["max_total_branches"]
+    cfg["max_active_branches"] = params["max_active_branches"]
+    known = set(st.keys()) if st is not None else set(EVIDENCE_MARKERS)
+    rr = params["repair_requires"]
+    if rr is not None and not isinstance(rr, dict):
+        raise TypeError(f"repair_requires must be a dict or None, got {type(rr).__name__}")
+    rr = dict(rr) if rr else {}
+    for k, v in rr.items():
+        for side, val in (("key", k), ("value", v)):
+            if (not isinstance(val, tuple) or len(val) != 2
+                    or val[0] not in known or val[1] not in _PREREQS):
+                raise TypeError(f"repair_requires {side} must be a typed "
+                                f"(expert_id, prereq) tuple, got {val!r}")
+    cfg["repair_requires"] = rr
+    try:
+        ro = dict(params["reopen_events"])
+    except (TypeError, ValueError) as exc:
+        raise TypeError(f"reopen_events must be a mapping or pair sequence "
+                        f"({type(exc).__name__})") from exc
+    for k, v in ro.items():
+        if isinstance(k, bool) or not isinstance(k, int) or k < 0:
+            raise TypeError(f"reopen_events key must be a nonnegative int tick, "
+                            f"got {k!r} ({type(k).__name__})")
+        if v not in known:
+            raise ValueError(f"reopen_events value {v!r} is not a registered expert")
+    cfg["reopen_events"] = ro
+    try:
+        inv = set(params["invalidation_events"])
+    except TypeError as exc:
+        raise TypeError(f"invalidation_events must be an iterable of typed tuples "
+                        f"({type(exc).__name__})") from exc
+    for entry in inv:
+        if (not isinstance(entry, tuple) or len(entry) != 2
+                or entry[0] not in known or entry[1] not in _PREREQS):
+            raise TypeError(f"invalidation_events entry must be a typed "
+                            f"(expert_id, prereq) tuple, got {entry!r}")
+    cfg["invalidation_events"] = inv
+    return cfg
+
+
 # ------------------------------------------------------------------ engine
 class RC01Engine:
     def __init__(self, causes, gold_table, states=None, budget=60,
@@ -285,66 +422,39 @@ class RC01Engine:
                  reopen_events=(), invalidation_events=(),
                  expected_payloads=None):
         from rc0_simulator import default_states as _ds
-        self.causes = list(causes)
+        # RC-0.4D section 1: the ONE schema call -- every parameter validated, copied,
+        # owned. MUTATION-TARGET: constructor-schema
+        cfg = _validated_constructor_config(
+            causes=causes, gold_table=gold_table, states=states, budget=budget,
+            taus=taus, episode_id=episode_id,
+            rpm_enforcement_enabled=rpm_enforcement_enabled, ohm_enabled=ohm_enabled,
+            commit_verdicts=commit_verdicts, repair_requires=repair_requires,
+            max_total_branches=max_total_branches,
+            max_active_branches=max_active_branches, reopen_events=reopen_events,
+            invalidation_events=invalidation_events,
+            expected_payloads=expected_payloads)
+        self.causes = cfg["causes"]
         # RC-0.4B (owner audit critical 1): one shared seal gate tripped at finalization;
-        # the coordinator, publication coordinator, and budget all refuse writes once it
-        # is sealed, so finalization governs the ACTUAL write paths, not just 5 methods.
+        # coordinator, publication coordinator, budget, and verifier all refuse writes
+        # once it is sealed, so finalization governs the ACTUAL write paths.
         self._gate = SealGate()
-        # RC-0.4C: the verifier gets the SAME gate -- its issuance registry is
-        # seal-bound state, so its receipt press must stop at finalization too.
-        self.verifier = SealedVerifier(gold_table, expected_payloads or {}, episode_id,
-                                       seal_gate=self._gate)
-        self.coord = HardenedCoordinator(states or _ds(), episode_id,
+        self.verifier = SealedVerifier(cfg["gold_table"], cfg["expected_payloads"],
+                                       cfg["episode_id"], seal_gate=self._gate)
+        self.coord = HardenedCoordinator(
+            _ds() if cfg["states"] is None else cfg["states"], cfg["episode_id"],
                                          receipt_validator=self.verifier.validator(),
                                          seal_gate=self._gate)
-        self.pubcoord = PublicationCoordinator(episode_id, self.coord, seal_gate=self._gate)
-        self.budget = ComputeBudget.make(budget, gate=self._gate)
-        # RC-0.4B (owner audit critical 2): taus is placed verbatim into the seal; a
-        # non-finite tau would make seal() throw -- validate finiteness at construction.
-        for i, tau in enumerate(taus):
-            require_finite_nonneg(f"taus[{i}]", tau)
-        self.taus = taus
-        # RC-0.4C internal audit (critical): EVERY constructor argument that reaches
-        # the seal is validated HERE -- accepted must mean sealable. Branch limits go
-        # verbatim into the snapshot (a NaN limit let the engine publish and then fail
-        # to seal); episode_id is directly seal-bound; the states dict may name only
-        # registered experts with str keys.
-        require_nonneg_int("max_total_branches", max_total_branches)
-        require_nonneg_int("max_active_branches", max_active_branches)
-        require_str("episode_id", episode_id)
-        for eid in self.coord.expert_ids():
-            if eid not in EVIDENCE_MARKERS:
-                raise ValueError(f"states names unregistered expert {eid!r}; the "
-                                 f"registered experts are {tuple(sorted(EVIDENCE_MARKERS))}")
-        self.episode_id = episode_id
-        self.rpm_enforcement_enabled = rpm_enforcement_enabled
-        self.ohm_enabled = ohm_enabled
-        self.commit_verdicts = commit_verdicts
-        self.repair_requires = repair_requires or {}
-        self.reopen_events = dict(reopen_events)
-        self.invalidation_events = set(invalidation_events)
-        # RC-0.4A (owner audit blocking defect 2): typed validation at construction --
-        # these structures are seal-bound with EXACT types, so lookalike strings must
-        # be impossible, not merely distinguishable.
-        known = set(self.coord.expert_ids())
-        prereqs = ("DESIRE", "WISDOM", "POWER")
-        for k, v in self.reopen_events.items():
-            if isinstance(k, bool) or not isinstance(k, int) or k < 0:
-                raise TypeError(f"reopen_events key must be a nonnegative int tick, "
-                                f"got {k!r} ({type(k).__name__})")
-            if v not in known:
-                raise ValueError(f"reopen_events value {v!r} is not a registered expert")
-        for entry in self.invalidation_events:
-            if (not isinstance(entry, tuple) or len(entry) != 2
-                    or entry[0] not in known or entry[1] not in prereqs):
-                raise TypeError(f"invalidation_events entry must be a typed "
-                                f"(expert_id, prereq) tuple, got {entry!r}")
-        for k, v in self.repair_requires.items():
-            for side, val in (("key", k), ("value", v)):
-                if (not isinstance(val, tuple) or len(val) != 2
-                        or val[0] not in known or val[1] not in prereqs):
-                    raise TypeError(f"repair_requires {side} must be a typed "
-                                    f"(expert_id, prereq) tuple, got {val!r}")
+        self.pubcoord = PublicationCoordinator(cfg["episode_id"], self.coord,
+                                               seal_gate=self._gate)
+        self.budget = ComputeBudget.make(cfg["budget"], gate=self._gate)
+        self.taus = cfg["taus"]
+        self.episode_id = cfg["episode_id"]
+        self.rpm_enforcement_enabled = cfg["rpm_enforcement_enabled"]
+        self.ohm_enabled = cfg["ohm_enabled"]
+        self.commit_verdicts = cfg["commit_verdicts"]
+        self.repair_requires = cfg["repair_requires"]
+        self.reopen_events = cfg["reopen_events"]
+        self.invalidation_events = cfg["invalidation_events"]
         self.invalidations_consumed = set()
         self.quarantine_registry = {}
         self.child_queue = []
@@ -354,8 +464,8 @@ class RC01Engine:
         self.return_addresses = []
         self.active_subgoals = []
         self.total_branches_opened = 0
-        self.max_total_branches = max_total_branches
-        self.max_active_branches = max_active_branches
+        self.max_total_branches = cfg["max_total_branches"]
+        self.max_active_branches = cfg["max_active_branches"]
         self.cancelled_causes = set()
         self.remaining_queue = []
         self.exec_counts = {e: 0 for e in EVIDENCE_MARKERS}
@@ -382,8 +492,22 @@ class RC01Engine:
              "split_frames_failed", "retry_limit_hits",
              "cap_events", "splits_created", "quarantines", "reopens",
              "cache_hits", "invalidations_honored", "children_cancelled",
-             "step_metadata_rejects", "faults")
+             "step_metadata_rejects", "faults", "provisional_publications",
+             "voided_publications")
         self.metrics = {k: 0 for k in m}
+        self._provisional_pub_indices = []   # RC-0.4D: engine publication rows awaiting
+        #                                      promotion at the final-seal barrier
+        # ---- RC-0.4D INITIAL SEALABILITY PROBE: the engine is not returned to the
+        # caller unless its ENTIRE initial authoritative state canonicalizes to a real
+        # 64-hex seal. Nothing (budget, commit, receipt, publication) exists yet.
+        try:
+            initial_seal = self.seal()
+        except Exception as exc:  # noqa: BLE001
+            raise ValueError("engine initial state is not sealable; construction "
+                             f"refused ({type(exc).__name__}: {str(exc)[:120]})") from exc
+        if not _is_hex_seal(initial_seal):
+            raise ValueError("engine initial seal is not a 64-hex digest; "
+                             "construction refused")
 
     # ---------------- finalization latch (RC-0.4A) ----------------
     def _refuse_if_finalized(self, entry_point: str):
@@ -482,15 +606,70 @@ class RC01Engine:
 
     def _record_publication(self, tick, cause_id, producer, effect, status, verdict,
                             receipt_digest, law=""):
+        """RC-0.4D section 2: a PUBLISHED status is recorded as PROVISIONAL here --
+        the `published` metric and the PUBLISHED row are written ONLY at the
+        final-seal barrier (promotion), so an unsealed run can never contain an
+        authoritative publication."""
         self._refuse_if_finalized("_record_publication")
-        self.metrics[{PublicationStatus.PUBLISHED: "published",
-                      PublicationStatus.REFUSED: "refused",
+        if status is PublicationStatus.PUBLISHED:
+            self.metrics["provisional_publications"] += 1
+            self.publications.append({"tick": tick, "cause": cause_id,
+                                      "producer": producer,
+                                      "status": "PROVISIONAL_PUBLICATION",
+                                      "verdict": verdict,
+                                      "effect_payload": effect.payload if effect else None,
+                                      "effect_digest": effect.effect_digest if effect else None,
+                                      "law": law, "receipt": receipt_digest})
+            self._provisional_pub_indices.append(len(self.publications) - 1)
+            return
+        self.metrics[{PublicationStatus.REFUSED: "refused",
                       PublicationStatus.ABSTAINED: "abstained"}[status]] += 1
         self.publications.append({"tick": tick, "cause": cause_id, "producer": producer,
                                   "status": status.value, "verdict": verdict,
                                   "effect_payload": effect.payload if effect else None,
                                   "effect_digest": effect.effect_digest if effect else None,
                                   "law": law, "receipt": receipt_digest})
+
+    def _prospective_seal_probe(self):
+        """RC-0.4D section 2: prove the CURRENT final state canonicalizes before any
+        provisional publication is promoted. Read-only; returns True/False. Only the
+        canonical encoder's own rejection types are treated as un-sealability; an
+        environmental error (MemoryError, RecursionError, ...) propagates to run()'s
+        fault boundary as a typed FAULT instead of silently voiding a legitimately
+        sealable run's publications (internal audit RC-0.4D round 2)."""
+        try:
+            self.seal()
+            return True
+        except (TypeError, ValueError):
+            return False
+
+    def _promote_provisional_publications(self):
+        """Promote every provisional publication to PUBLISHED -- only after the
+        prospective seal probe succeeded. Promotion adds only known-canonicalizable
+        strings/ints, so it cannot un-seal a probed state."""
+        self._refuse_if_finalized("_promote_provisional_publications")
+        for idx in self._provisional_pub_indices:
+            if self.publications[idx]["status"] == "PROVISIONAL_PUBLICATION":
+                self.publications[idx]["status"] = "PUBLISHED"
+                self.metrics["published"] += 1
+        self._provisional_pub_indices = []
+        self.pubcoord.promote_provisionals()
+
+    def _void_provisional_publications(self):
+        """Terminally void every provisional (and, defensively, any prematurely
+        PUBLISHED) publication: an unsealed or faulted run holds ZERO publications.
+        published stays/returns to 0; consumed receipts stay consumed (terminal)."""
+        self._refuse_if_finalized("_void_provisional_publications")
+        n = 0
+        for row in self.publications:
+            if row["status"] in ("PROVISIONAL_PUBLICATION", "PUBLISHED"):
+                row["voided_from"] = row["status"]
+                row["status"] = "VOIDED_UNSEALED"
+                n += 1
+        self._provisional_pub_indices = []
+        self.metrics["published"] = 0
+        self.metrics["voided_publications"] += n
+        self.pubcoord.void_unfinalized()
 
     # ---------------- RPM repair (typed, cached, caged) ----------------
     def _repair(self, expert_id, prereq, tick, depth=0):
@@ -741,7 +920,13 @@ class RC01Engine:
             scores[e] = require_finite_nonneg(f"score[{e}]", s)
         total = sum(scores.values())
         if total <= 0.0:
-            self._handle_no_ready(t, cause, candidates, latent)
+            # RC-0.4D section 3: the computed ASOM actions dispatch FIRST -- cutoff
+            # repairs, breakdown quarantines; only if no action fires does the
+            # no-ready fallback run. MUTATION-TARGET: asom-zero-score-dispatch
+            acted = self._dispatch_zero_score_actions(t, cause, candidates, actions,
+                                                      states, latent)
+            if not acted:
+                self._handle_no_ready(t, cause, candidates, latent)
             self.allocations.append({})
             return
         cap_routes = {e for e in candidates if actions.get(e) == ControlAction.CAP
@@ -801,6 +986,74 @@ class RC01Engine:
         self.events.append({"tick": t, "event": "EXECUTED", "expert": chosen,
                             "action": actions[chosen].name,
                             "verdict": receipt.verdict})
+
+    # ---------------- ASOM zero-score dispatch (RC-0.4D section 3) ----------------
+    def _dispatch_zero_score_actions(self, t, cause, candidates, actions, states, latent):
+        """RC-0.4D (owner audit critical 3): cutoff and breakdown are LOAD-BEARING,
+        not decorative. When every route score is zero, the computed ASOM actions
+        dispatch BEFORE the no-ready fallback:
+          breakdown -> quarantine transition (excluded from future routing);
+          cutoff    -> typed repair of the ACTUAL blocker: the real RPM prerequisite
+                       when one exists (never invented -- RPM FIRST_BLOCK stays an
+                       independent axis), a Desire-law deprioritization when only
+                       DESIRE blocks, else a committed region re-assessment that
+                       un-starves the route; bounded by the per-cause RepairFrame.
+        A hard-masked expert is NEVER mutated. The cause is requeued AT MOST ONCE per
+        dispatch call (internal audit RC-0.4D round 2: a per-expert requeue let one
+        Cause with K ready cutoff candidates execute and PUBLISH K times -- one
+        authoritative envelope per cause id is the law). Returns True when an action
+        consumed this tick."""
+        self._refuse_if_finalized("_dispatch_zero_score_actions")
+        acted = False
+        requeue = False
+        for e in sorted(candidates):
+            b = states[e]
+            if b.governance.effective_mask == 0:
+                continue                       # masked: no unauthorized mutation
+            region = b.record.committed_region
+            if (actions.get(e) == ControlAction.QUARANTINE and region == "breakdown"
+                    and e not in self.quarantine_registry
+                    and not b.governance.quarantined):
+                self._quarantine(e, t, authorized_by="asom_region:breakdown")
+                acted = True
+            elif actions.get(e) == ControlAction.REPAIR and region == "cutoff":
+                frame = self.repair_frames.setdefault(
+                    cause.cause_id, RepairFrame(cause_id=cause.cause_id))
+                if frame.attempts >= frame.max_attempts:
+                    self.metrics["retry_limit_hits"] += 1
+                    self.events.append({"tick": t, "event": "RETRY_LIMIT",
+                                        "cause": cause.cause_id})
+                    continue
+                frame.attempts += 1
+                first_block = latent[e][1]
+                if first_block in ("WISDOM", "POWER"):
+                    ok = self._repair(e, first_block, t)   # the REAL RPM blocker
+                elif first_block == "DESIRE":
+                    self.metrics["desire_deprioritized"] += 1
+                    self.events.append({"tick": t, "event": "DESIRE_DEPRIORITIZED",
+                                        "experts": [e]})
+                    continue                   # Desire law: never invent relevance
+                else:
+                    # RPM fully ready: the starved ROUTE is the defect -- repair it
+                    # with a committed diagnostic re-assessment (region -> unassessed)
+                    reassessed = RegionRecord(
+                        region_posterior=UNIFORM4, committed_region="unassessed",
+                        response_model_status="unassessed", stability_status="stable",
+                        semantic_outcome="unassessed")
+                    ok = self._commit(
+                        [self._intent(e, "record", reassessed, t,
+                                      "ASOM cutoff repair: region re-assessment")], t)
+                    if ok:
+                        self.metrics["repairs_completed"] += 1
+                        self.metrics["action_repair"] += 1
+                        self.events.append({"tick": t, "event": "ASOM_CUTOFF_REPAIR",
+                                            "expert": e})
+                if ok:
+                    requeue = True                         # bounded repair-and-return
+                    acted = True
+        if requeue:
+            self.child_queue.insert(0, cause)              # exactly ONCE per dispatch
+        return acted
 
     # ---------------- NO_READY handling with typed repair frames ----------------
     def _handle_no_ready(self, t, cause, candidates, latent):
@@ -998,21 +1251,29 @@ class RC01Engine:
                               "detail": str(exc)[:200]}
                 self.metrics["faults"] += 1
                 self.events.append({"tick": t, "event": "FAULT", **self.fault})
+            # RC-0.4D section 2: a faulted run holds ZERO publications -- every
+            # provisional is terminally voided before sealing
+            self._void_provisional_publications()
             self.remaining_queue = list(queue)
             self.halted = True
             self.finalized = True
             self._gate.trip()
             self.seal_digest = self._compute_final_seal()
             raise ControllerFault(self.fault, self.seal_digest) from exc
-        # ---- FINALIZE (RC-0.4 critical 4 + RC-0.4A defect 1 + RC-0.4B critical 1):
-        # every mutation of state, queues, events, and evidence is complete. Set the
-        # final halted value, LATCH finalized, TRIP the shared gate (so coordinator,
-        # publication coordinator, and budget all refuse further writes), then compute
-        # the seal EXACTLY ONCE. If the seal step recorded a fault (a storable-but-
-        # unsealable value slipped past construction), raise a typed ControllerFault
-        # rather than returning a "successful" result.
+        # ---- FINALIZE (RC-0.4 critical 4 + RC-0.4A defect 1 + RC-0.4B critical 1 +
+        # RC-0.4D section 2): every run mutation is complete. Sequence: set the final
+        # halted value -> PROSPECTIVE seal probe -> promote provisional publications
+        # to PUBLISHED only if the probe succeeded (else terminally void them) ->
+        # LATCH finalized, TRIP the shared gate, compute the seal EXACTLY ONCE.
+        # Promotion adds only known-canonicalizable values, so a passed probe cannot
+        # be unsealed by the promotion itself.
         self.remaining_queue = list(queue)
         self.halted = bool(self.halt_requested)
+        # MUTATION-TARGET: final-publication-barrier
+        if self._prospective_seal_probe():
+            self._promote_provisional_publications()
+        else:
+            self._void_provisional_publications()
         self.finalized = True
         self._gate.trip()
         self.seal_digest = self._compute_final_seal()
@@ -1033,6 +1294,9 @@ class RC01Engine:
         candidate-evidence map are digest-bound."""
         def cause_env(c):
             return {"id": c.cause_id, "evidence": c.evidence, "payload": c.payload}
+        # RC-0.4D section 4: build the COMPLETE snapshot, then detach it as ONE whole
+        # object -- no more selectively deep-copying a guessed list of fields ("five
+        # collections copied, sixth collection missed" is the failure mode this ends).
 
         def frame_full(f):
             return {"parent": f.parent_cause.cause_id,
@@ -1046,7 +1310,7 @@ class RC01Engine:
                     "return_address": f.return_address,
                     "combination_rule": f.combination_rule,
                     "status": f.status, "failed_child": f.failed_child}
-        return {
+        snap = {
             # internal audit of RC-0.4: episode_id gates LAW_EPISODE_IDENTITY and
             # receipt registration -- bind it DIRECTLY, not only transitively via
             # commits (a zero-commit run's seal was episode-blind)
@@ -1066,10 +1330,7 @@ class RC01Engine:
             "coordinator_receipt_registry": self.coord.receipt_registry_digest(),
             "commit_receipt_registry": self.coord.commit_receipt_registry_digest(),
             "publication_consumed": self.pubcoord.consumed_registry_digest(),
-            # RC-0.4C internal audit (minor): the snapshot returns DETACHED copies of
-            # every live mutable collection -- a caller mutating the returned dict
-            # can no longer reach authoritative engine state through it
-            "publication_ledger": copy.deepcopy(self.pubcoord.ledger),
+            "publication_ledger": self.pubcoord.ledger,
             "budget": {"unit": self.budget.unit, "total": self.budget.total,
                        "left": self.budget.left},
             "branches": {"total_opened": self.total_branches_opened,
@@ -1090,7 +1351,7 @@ class RC01Engine:
             "fault": self.fault,             # RC-0.4A: typed fault record or None
             # RC-0.4: the RETURNED publication evidence is itself seal-bound -- a
             # tampered result["publications"] entry changes the trace digest
-            "publications_evidence": copy.deepcopy(self.publications),
+            "publications_evidence": self.publications,
             # RC-0.4: behavior-bearing configuration, all of it
             "configuration": {
                 "taus": self.taus,
@@ -1112,11 +1373,13 @@ class RC01Engine:
             "final_states": self.coord.final_state_manifest(),
             "acquisitions": {e: self.coord.get(e).rpm.acquired
                              for e in self.coord.expert_ids()},
-            "commits": copy.deepcopy(self.coord.trace),
-            "events": copy.deepcopy(self.events),
-            "alloc": copy.deepcopy(self.allocations),
-            "metrics": dict(self.metrics),
+            "commits": self.coord.trace,
+            "events": self.events,
+            "alloc": self.allocations,
+            "metrics": self.metrics,
         }
+        # MUTATION-TARGET: snapshot-whole-object-detach
+        return copy.deepcopy(snap)
 
     def seal(self):
         # MUTATION-TARGET: consumed-receipt-seal -- the snapshot binds the consumed
@@ -1163,3 +1426,14 @@ class RC01Engine:
              "finalized": self.finalized,
              "fault": self.fault,
              "quarantined": sorted(self.quarantine_registry)})
+
+
+# RC-0.4D section 1: IMPORT-TIME signature-coverage law -- adding a constructor
+# parameter without registering it in the schema fails at import, before any test
+# can even run. The signature-coverage test asserts the same equality.
+_CTOR_PARAMS = frozenset(inspect.signature(RC01Engine.__init__).parameters) - {"self"}
+if _CTOR_PARAMS != CONSTRUCTOR_SCHEMA_PARAMS:
+    raise RuntimeError(
+        "RC01Engine constructor parameters do not match CONSTRUCTOR_SCHEMA_PARAMS: "
+        f"signature-only={sorted(_CTOR_PARAMS - CONSTRUCTOR_SCHEMA_PARAMS)}, "
+        f"schema-only={sorted(CONSTRUCTOR_SCHEMA_PARAMS - _CTOR_PARAMS)}")

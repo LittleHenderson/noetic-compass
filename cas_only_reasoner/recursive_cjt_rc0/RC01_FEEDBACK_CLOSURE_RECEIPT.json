@@ -1,6 +1,6 @@
 {
   "receipt_id": "RC01_FEEDBACK_CLOSURE_RECEIPT",
-  "phase": "RC-0.4C (verifier issuance gated after finalization; complete verifier-configuration preflight with precomputed digests; UNSEALED_TERMINAL_FAULT marker replaces the fault-only hash; frozen mutation inventory v2 = 11 laws) -- on top of RC-0.4A/B",
+  "phase": "RC-0.4D (schema-complete construction with initial sealability probe; publication PROVISIONAL until the final-seal barrier -- an unsealed run holds zero publications; ASOM cutoff/breakdown dispatch load-bearing; whole-object snapshot detachment; frozen mutation inventory v3 = 15 laws) -- on top of RC-0.4A/B/C",
   "status": "DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS_PENDING_INDEPENDENT_AUDIT",
   "status_emitted_by": "generate_rc02_receipt.py (deterministic; never hand-written)",
   "independent_confirmation": "PENDING BY CONSTRUCTION -- the strongest emittable status name itself says PENDING_INDEPENDENT_AUDIT (RC-0.4A section 6); full Gate 0 freezes only after an independent auditor checks out the exact commit, reruns all suites/scenarios/the frozen mutation inventory, and reproduces the repaired attacks",
@@ -11,7 +11,7 @@
     "python": "3.14.0",
     "os": "Windows-11-10.0.26200-SP0",
     "branch": "research/cas-sem-guided-plasticity-v1",
-    "parent_commit_sha": "80d2f70e4492a60184a4c49967c633d342226755",
+    "parent_commit_sha": "386359862e384f5eb52577c66f4bd253a85b4a47",
     "working_tree_dirty_at_generation": true,
     "dependencies": {
       "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
@@ -36,12 +36,13 @@
     "python tests/test_rc04a.py",
     "python tests/test_rc04b.py",
     "python tests/test_rc04c.py",
+    "python tests/test_rc04d.py",
     "python sim/rc01_scenarios.py",
     "python sim/rc01_replay_entry.py normal_intended [--mutate]"
   ],
-  "started": "2026-08-30T23:16:25",
-  "finished": "2026-08-30T23:16:31",
-  "duration_seconds": 6.28,
+  "started": "2026-08-31T00:12:27",
+  "finished": "2026-08-31T00:12:35",
+  "duration_seconds": 8.06,
   "tests": {
     "test_rc0": {
       "result": "17/17 passed",
@@ -74,6 +75,10 @@
     "test_rc04c": {
       "result": "25/25 passed",
       "exit": 0
+    },
+    "test_rc04d": {
+      "result": "30/30 passed",
+      "exit": 0
     }
   },
   "raw_report_paths": {
@@ -84,7 +89,8 @@
     "test_rc04": "rc02_raw_reports/test_rc04.stdout.txt",
     "test_rc04a": "rc02_raw_reports/test_rc04a.stdout.txt",
     "test_rc04b": "rc02_raw_reports/test_rc04b.stdout.txt",
-    "test_rc04c": "rc02_raw_reports/test_rc04c.stdout.txt"
+    "test_rc04c": "rc02_raw_reports/test_rc04c.stdout.txt",
+    "test_rc04d": "rc02_raw_reports/test_rc04d.stdout.txt"
   },
   "scenario_matrix": {
     "total": 26,
@@ -211,7 +217,7 @@
         "passed": true
       }
     ],
-    "matrix_digest": "b95fd416003b18d67d722f2e89431c37ea43286ba115ea4cf0a0d1a47f1d3b9d"
+    "matrix_digest": "f8eb00290946f720183dcb7fa099d1e34fb37fe3aed45f2a7cc98c7312e3d13e"
   },
   "fault_injections": [
     {
@@ -259,10 +265,10 @@
     "report_id": "rc04_mutation_report",
     "phase": "RC-0.4",
     "mechanism": "disposable working copy per mutation (scratch tree; original package never modified; pristine digests verified before/after); CAUGHT requires the named test to fail with an AssertionError -- the semantic law's own assertion -- not an incidental crash",
-    "source_tree_digest": "b82836e7409df13e8b7919496e95fffdd450a4aa3f9e978ffa7f7385259f1956",
-    "test_tree_digest": "d305c0de15a763d105a4536602de45c1d6fdc1b416fc9455d6a011fa2ec85951",
-    "pristine_tree_digest_before": "b82836e7409df13e8b7919496e95fffdd450a4aa3f9e978ffa7f7385259f1956",
-    "pristine_tree_digest_after": "b82836e7409df13e8b7919496e95fffdd450a4aa3f9e978ffa7f7385259f1956",
+    "source_tree_digest": "0ff283233c85b3d39fbc857c56e22a529b1d125d0878a513efc4ee1cc8a37a04",
+    "test_tree_digest": "72f583b0d1cb0f36921a3b9878e8a265ecc0a1dd05d15bfed504e88ad908950e",
+    "pristine_tree_digest_before": "0ff283233c85b3d39fbc857c56e22a529b1d125d0878a513efc4ee1cc8a37a04",
+    "pristine_tree_digest_after": "0ff283233c85b3d39fbc857c56e22a529b1d125d0878a513efc4ee1cc8a37a04",
     "pristine_unchanged": true,
     "mutations": [
       {
@@ -287,7 +293,7 @@
         "caught": true,
         "test_failed": true,
         "semantic_failure": true,
-        "actual_failing_output": "AssertionError: published without diagnostic commit: a memory-only commit minted a DiagnosticCommitReceipt and it published"
+        "actual_failing_output": "AssertionError: memory-only commit returned something other than a rejection: DiagnosticCommitReceipt(episode_id='ep0', tick=0, cause_id='x0', effect_digest='3779be95dade94800bbaf2801b50153f88258c1db232d769ecf994b59ed91004', verifier_receipt_digest='7dfca1faeba87d1473b1b5db604a6133ec0fbc53cbb4f815a2"
       },
       {
         "name": "publication_base_state_check_removed",
@@ -386,6 +392,54 @@
         "actual_failing_output": "AssertionError: unused poison gold entry accepted at construction"
       },
       {
+        "name": "constructor_schema_bypassed",
+        "file": "sim/rc01_engine.py",
+        "guard": "if the one-schema call is bypassed, a sealable-but-illegal value (int 1 as commit_verdicts) constructs an engine; the named test must fail on the accepted poison (owner audit RC-0.4D critical 1)",
+        "mutated_lines": "        cfg = _validated_constructor_config(\n            causes=causes, gold_table=gold_table, states=states, budget=budget,\n            taus=taus, episode_id=episode_id,\n            rpm_enforcement_enabled=rpm_enforcement_enabled, ohm_enabled=ohm_enabled,\n            commit_verdicts=commit_verdicts, repair_requires=repair_requires,\n            max_total_branches=max_total_branches,\n            max_active_branches=max_active_branches, reopen_events=reopen_events,\n            invalidation_events=invalidation_events,\n            expected_payloads=expected_payloads)",
+        "expected_test": "test_rc04d::test_nonbool_commit_flag_rejected",
+        "applied": true,
+        "caught": true,
+        "test_failed": true,
+        "semantic_failure": true,
+        "actual_failing_output": "AssertionError: non-bool commit_verdicts accepted: 1"
+      },
+      {
+        "name": "final_publication_barrier_removed",
+        "file": "sim/rc01_engine.py",
+        "guard": "if the final-seal barrier is removed, an unsealed run promotes its provisional publication and holds published=1 under the marker (owner audit RC-0.4D critical 2)",
+        "mutated_lines": "        # MUTATION-TARGET: final-publication-barrier\n        if self._prospective_seal_probe():\n            self._promote_provisional_publications()\n        else:\n            self._void_provisional_publications()",
+        "expected_test": "test_rc04d::test_unsealed_run_has_zero_published",
+        "applied": true,
+        "caught": true,
+        "test_failed": true,
+        "semantic_failure": true,
+        "actual_failing_output": "AssertionError: an unsealed terminal run holds a published count"
+      },
+      {
+        "name": "asom_zero_score_action_dispatch_removed",
+        "file": "sim/rc01_engine.py",
+        "guard": "if the zero-score dispatch is removed, cutoff and breakdown fall back to silent HALT and the ASOM actions are decorative again (owner audit RC-0.4D critical 3)",
+        "mutated_lines": "            acted = self._dispatch_zero_score_actions(t, cause, candidates, actions,\n                                                      states, latent)",
+        "expected_test": "test_rc04d::test_cutoff_region_dispatches_repair_not_halt",
+        "applied": true,
+        "caught": true,
+        "test_failed": true,
+        "semantic_failure": true,
+        "actual_failing_output": "AssertionError: cutoff region silently HALTED instead of repairing"
+      },
+      {
+        "name": "snapshot_whole_object_detach_removed",
+        "file": "sim/rc01_engine.py",
+        "guard": "if whole-object detachment is removed, the snapshot aliases live engine state (the fault record, events, metrics) (owner audit RC-0.4D major 4)",
+        "mutated_lines": "        # MUTATION-TARGET: snapshot-whole-object-detach\n        return copy.deepcopy(snap)",
+        "expected_test": "test_rc04d::test_fault_record_is_detached_from_runtime_snapshot",
+        "applied": true,
+        "caught": true,
+        "test_failed": true,
+        "semantic_failure": true,
+        "actual_failing_output": "AssertionError: runtime_snapshot aliases the live fault record"
+      },
+      {
         "name": "cjtstep_snapshot_validation_removed",
         "file": "sim/rc01_engine.py",
         "guard": "if snapshot validation is removed, a stale step result is laundered into fresh intents and an Effect can carry false Bias provenance",
@@ -404,30 +458,30 @@
     "accepted": true,
     "reason": "OK",
     "subprocess_returncode": 0,
-    "current_source_tree_digest": "b82836e7409df13e8b7919496e95fffdd450a4aa3f9e978ffa7f7385259f1956",
-    "current_test_tree_digest": "d305c0de15a763d105a4536602de45c1d6fdc1b416fc9455d6a011fa2ec85951",
+    "current_source_tree_digest": "0ff283233c85b3d39fbc857c56e22a529b1d125d0878a513efc4ee1cc8a37a04",
+    "current_test_tree_digest": "72f583b0d1cb0f36921a3b9878e8a265ecc0a1dd05d15bfed504e88ad908950e",
     "law": "stale report deleted before launch; only a fresh report from the current tree with exit 0 and every mutation applied AND caught by a semantic AssertionError is accepted; a crash never falls back to prior evidence"
   },
   "mutation_manifest_law": {
     "accepted": true,
     "reason": "OK",
-    "manifest_file": "RC04_REQUIRED_MUTATIONS_v2.json",
-    "pinned_manifest_digest": "fbcba0285e01e31fc1014c5f8ca552dd7d4a41136cf913a3bf6d27efaaac83fb",
+    "manifest_file": "RC04_REQUIRED_MUTATIONS_v3.json",
+    "pinned_manifest_digest": "8c7bbd489646c70f84bbfd564ffdb8f16f53944a5de709cfc5b1f85f5bbb36d8",
     "law": "the fresh report must contain EXACTLY the frozen mutation set (names, count, file/test pairs); a missing, extra, renamed, or re-targeted mutation REFUTES the status (RC-0.4A section 4)"
   },
   "digest_domain": "all artifact digests are SHA-256 over RAW FILE BYTES exactly as stored on disk (no newline normalization, no encoding transform); trace/seal digests are SHA-256 over canonical JSON (sorted keys, ensure_ascii, compact separators)",
   "fresh_process_replay": {
-    "digest_run1": "2c42037dcd3db2efe1fc93bbbf9adc1618072012c60494166b0b34835656fa20",
-    "digest_run2": "2c42037dcd3db2efe1fc93bbbf9adc1618072012c60494166b0b34835656fa20",
+    "digest_run1": "324a18553e02910aca6e3ebfb028c82555ec19565fcaccf90d3882777c7eb5a3",
+    "digest_run2": "324a18553e02910aca6e3ebfb028c82555ec19565fcaccf90d3882777c7eb5a3",
     "identical": true,
-    "mutated_digest": "c3333891b4e7318a36d96cd7f9235f45fcbfc40e3d3e62c013393d60d83e064c",
+    "mutated_digest": "f98e384af719e7f9cd519b295a161dcb24d27e98713475c95e93e6b5ae6173ce",
     "mutation_changes_digest": true
   },
   "artifact_digests": {
     ".gitignore": "6f4ff2992c4e2558837e2e09c39ed2bba140658755b22d046aab810ea2c90ca0",
-    "generate_rc02_receipt.py": "b994025c46be6c203fd9c64e838303a8131147541be87bcb62096f1cfa8b704c",
-    "RC01_SCENARIO_MATRIX.json": "b95fd416003b18d67d722f2e89431c37ea43286ba115ea4cf0a0d1a47f1d3b9d",
-    "RC02_ATTESTATION.json": "11de3c99e33723455b6c4812149b38537f20bf09af420e0ca7487a149b70b7af",
+    "generate_rc02_receipt.py": "aefc07998455b6d2a4f99ecebc3d01cc09105f8c0fd53697d513f53aa8a82e65",
+    "RC01_SCENARIO_MATRIX.json": "f8eb00290946f720183dcb7fa099d1e34fb37fe3aed45f2a7cc98c7312e3d13e",
+    "RC02_ATTESTATION.json": "7b4ef60fe4070597d993b2800a723c8b3b1e060000daf4c040310b017f2da7ea",
     "rc02_raw_reports/test_rc0.stdout.txt": "b4f32295669911684f72cb5376858b4077c42642521fc940ffd311273d978eff",
     "rc02_raw_reports/test_rc01.stdout.txt": "1b6caf944502c3c35e346f29329ed886f5cf7141bd174bd1499a5a41bb8c0ab6",
     "rc02_raw_reports/test_rc02.stdout.txt": "832ee4a1ddad9e48a2aa9215e0fd2c0eaaa162c448389430a590e8bbe67a1cf1",
@@ -436,10 +490,12 @@
     "rc02_raw_reports/test_rc04a.stdout.txt": "85f38ba3fda0a973cb05886dab540dfd58243a6db016fefcc2525bccc7b567d9",
     "rc02_raw_reports/test_rc04b.stdout.txt": "70b56235e91f7efbd451e055977023adfd88e49fd0a403db42e9a69d89e9ad26",
     "rc02_raw_reports/test_rc04c.stdout.txt": "5cfd9b35ff1a6d8002cf73ea3598e1f26946a8c0272fc193056a9b7425a38a2e",
-    "rc03_mutation_report.json": "92080f1adf1d3c83ef78b905a4de416b181fd02f0d4a61c2a2afa3075e84d55e",
-    "RC04_BACKLOG.md": "7a7a5f9f4e2d2c60820b5565f811483ceb84ca6bb5e5ce1242fb0e326da424ab",
+    "rc02_raw_reports/test_rc04d.stdout.txt": "479c00c091ae6c8ce8e41a96a9e491e62af5b252640d6eeee8766b43e932137f",
+    "rc03_mutation_report.json": "3397a828fdd7607e755e3def078fc8825054c4e4dbe9fa6045a086e833a29852",
+    "RC04_BACKLOG.md": "67bf4cf55735c0a2c1de383cc726f938d0707e4c5a5364203a086c8ecc8a46ad",
     "RC04_REQUIRED_MUTATIONS_v1.json": "bdfef6175cfa4222428fa54d5fc7f585d7c6959e804b0f413f13c8c271a482c9",
     "RC04_REQUIRED_MUTATIONS_v2.json": "dd00522a02ca0588380c51564163bb901d196b34d1f8fc9c7b694cc2b6c541af",
+    "RC04_REQUIRED_MUTATIONS_v3.json": "35126dcb7d2c1d46e534b7a18259236827ca3edb1d08401353ad602dbf2fb358",
     "RC0_SIMULATOR_RECEIPT.json": "cc03aabd55877c33a99d374b162c51777e145a6243349f5d51bf7fdcbf1ea4d0",
     "RECURSIVE_CJT_STATE_SCHEMA_v0_1.json": "3c509f09ce7806eecc143134acba388c00035a2a7adc467725011c9317623144",
     "RECURSIVE_CJT_STATE_SCHEMA_v0_2.json": "3a23db76c18c6acfe03b23d983483350064e4638279748a3153b3e2a41046450",
@@ -447,11 +503,11 @@
     "RECURSIVE_CJT_TICK_SEMANTICS_v0_2.md": "11ba2e19d6f84e3e3898d6fb65f5b3fbe541282f0373a4fc4c63c82574b43784",
     "RECURSIVE_CONDITIONS_v1.yaml": "dae87c6ff72556df749f2485b70487c51971adcf7120ebc7db9e59a3e4180f40",
     "RECURSIVE_CONDITIONS_v2.yaml": "e0e86d1d0447533d81aab4cadc786452ccbde87d7888c3d70cf30b5851550710",
-    "run_mutation_audit.py": "145249001b7db63bf77de0e731f333e7dff5533b269180e18f6c0ecd28b8c2cb",
-    "sim/rc01_coordinator.py": "e26f32f0b36093923315269ce9b9b91442abbc9ee0acdb7f1cf40a06a327a40f",
-    "sim/rc01_engine.py": "4094469e30f4cfbbaf3a5ac3014a18c4ca21c7c9c51bc3e064021e00e9f4fb00",
+    "run_mutation_audit.py": "ffea44ca5d1c516ceae3c1924cc532c1ec02174652b4556db80f5908004c256b",
+    "sim/rc01_coordinator.py": "376da1219acb109ba8e3ebad9349f75dad0615fda4ee659f376995a984cc2fba",
+    "sim/rc01_engine.py": "84826151833770dc0e61ae28a4ee679077b37da9773cd3c48005c301211323d6",
     "sim/rc01_experts.py": "c1f5b571e5e0eb5bd29d84cbd20a2aea41d0239fd8781e4719d487d794269290",
-    "sim/rc01_replay_entry.py": "3102ebd7be660219294f59b22bba1ee2002e8dfff6bc7562664d72ed785c938b",
+    "sim/rc01_replay_entry.py": "29fc415e46b3a15c4d2c5fa3af0390ce99fe37c155475518a96788f49a97a24b",
     "sim/rc01_scenarios.py": "33a1d1b51857604d83d3a65d6523d42190ed0e98e2013a0fcfbb9f8c062e8348",
     "sim/rc01_types.py": "047712cec02c494a016d940ebf5114deb2027d60201ca11191ae81d6df4297a9",
     "sim/rc0_coordinator.py": "c0f12534a8d3d23859f01c9a0c2c16bb4e15bee8d9fb2a5cab7699a39eeeca9f",
@@ -463,25 +519,27 @@
     "STATIC_CONDITIONS_v2.yaml": "b629c857c62a06654b6151cf90a2e354b19899be2cc8aee7d3a30fefb1c4d0f5",
     "tests/test_rc0.py": "3fe483d7e02422c7195de9e47b75319bdf945b668f0c93366a55e336a63cec42",
     "tests/test_rc01.py": "8588488b98d460d4acffafc03f6e3d5a132224600291e3950e77cad812d3d728",
-    "tests/test_rc02.py": "31485addfc1b6e46d72b30c45c3aa3fbfed3f7f907e41558d044a778b7527287",
-    "tests/test_rc03.py": "21ba7f8da7c96404aee4ad46d74b01d4b3353b2910b719ec0df8b1f3960e8243",
-    "tests/test_rc04.py": "5edc30410908a2cad2ffc01ffcff6e8c99289778937e2ffa80262eda90df862d",
+    "tests/test_rc02.py": "1df4e225b6a41733d1b2ae97316fca2bb6aac630f6522a30c65c8a02ab672459",
+    "tests/test_rc03.py": "bbd5dbb669513e24b7eb70b0e95abc9eae7532ffde027baabcbf3c0b63c003c4",
+    "tests/test_rc04.py": "66645164222e5d78e2786cd472aa78414f6ac52b3a9c76b5e3d8faf4d05f09c9",
     "tests/test_rc04a.py": "909ff05baab6788536932e9fcac18dd9b76d6b87ba8263532addade971e31f96",
     "tests/test_rc04b.py": "24293a9a25542c39f4f15a4d78ef2870e3cf37d4fcd2d58c7b4951a03e0084f6",
-    "tests/test_rc04c.py": "10675a445ab052c759e46e1385665e890cdcf854d1c3393747eed543b5959072"
+    "tests/test_rc04c.py": "59edb91bbeb1142e56e1f0f45e5c61363bba50cd5522c61f52e1288772070f46",
+    "tests/test_rc04d.py": "5412c72ffa5cf57d208ba987a390a842c81ed3853220704589f3919b4dffaa82"
   },
   "test_file_digests": {
     "tests/test_rc0.py": "3fe483d7e02422c7195de9e47b75319bdf945b668f0c93366a55e336a63cec42",
     "tests/test_rc01.py": "8588488b98d460d4acffafc03f6e3d5a132224600291e3950e77cad812d3d728",
-    "tests/test_rc02.py": "31485addfc1b6e46d72b30c45c3aa3fbfed3f7f907e41558d044a778b7527287",
-    "tests/test_rc03.py": "21ba7f8da7c96404aee4ad46d74b01d4b3353b2910b719ec0df8b1f3960e8243",
-    "tests/test_rc04.py": "5edc30410908a2cad2ffc01ffcff6e8c99289778937e2ffa80262eda90df862d",
+    "tests/test_rc02.py": "1df4e225b6a41733d1b2ae97316fca2bb6aac630f6522a30c65c8a02ab672459",
+    "tests/test_rc03.py": "bbd5dbb669513e24b7eb70b0e95abc9eae7532ffde027baabcbf3c0b63c003c4",
+    "tests/test_rc04.py": "66645164222e5d78e2786cd472aa78414f6ac52b3a9c76b5e3d8faf4d05f09c9",
     "tests/test_rc04a.py": "909ff05baab6788536932e9fcac18dd9b76d6b87ba8263532addade971e31f96",
     "tests/test_rc04b.py": "24293a9a25542c39f4f15a4d78ef2870e3cf37d4fcd2d58c7b4951a03e0084f6",
-    "tests/test_rc04c.py": "10675a445ab052c759e46e1385665e890cdcf854d1c3393747eed543b5959072",
-    "run_mutation_audit.py": "145249001b7db63bf77de0e731f333e7dff5533b269180e18f6c0ecd28b8c2cb"
+    "tests/test_rc04c.py": "59edb91bbeb1142e56e1f0f45e5c61363bba50cd5522c61f52e1288772070f46",
+    "tests/test_rc04d.py": "5412c72ffa5cf57d208ba987a390a842c81ed3853220704589f3919b4dffaa82",
+    "run_mutation_audit.py": "ffea44ca5d1c516ceae3c1924cc532c1ec02174652b4556db80f5908004c256b"
   },
-  "code_tree_digest": "ede7d579842c47c0ca68f95e5099248e638a672bca95caae63b567648df976b7",
+  "code_tree_digest": "d00f77a8b5ef6c20bada97f604c10de61e5f6b928e055e070f2767b1a7983958",
   "claims_permitted": [
     "the deterministic reference controller enforces its typed authority, verification, and seal semantics across every registered path, and detects all eight injected attacks"
   ],

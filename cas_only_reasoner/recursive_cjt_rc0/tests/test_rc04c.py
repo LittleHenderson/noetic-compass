@@ -333,9 +333,10 @@ def test_episode_id_validated_at_construction():
 
 
 def test_unsealed_run_cannot_emit_published_evidence():
-    """Internal audit MAJOR: with a PUBLISHING cause, an unsealed terminal run held
-    published=1 and a PUBLISHED ledger readable through result(). Now result() raises
-    for an unsealed run, and the scenario runner rejects the marker as a seal."""
+    """OWNER AUDIT RC-0.4D critical 2 (repairing this test's own prior assertion of
+    published==1): an unsealed terminal run holds ZERO publications. The publication
+    was PROVISIONAL; the failed final-seal barrier terminally VOIDED it -- published
+    stays 0, no ledger row says PUBLISHED, and result() raises."""
     e = eng("pub0")
     e.invalidation_events = {("x", object())}       # out-of-API poison past the gate
     try:
@@ -343,10 +344,19 @@ def test_unsealed_run_cannot_emit_published_evidence():
         raise AssertionError("unsealable publishing run escaped without a typed fault")
     except E.ControllerFault:
         pass
-    assert e.metrics["published"] == 1              # internal forensic fact, not evidence
+    # THE INVARIANT: marker implies zero publications
+    assert e.seal_digest == "UNSEALED_TERMINAL_FAULT"
+    assert e.metrics["published"] == 0, \
+        "an unsealed run holds a published count"
+    assert all(d["decision"] != "PUBLISHED" for d in e.pubcoord.ledger), \
+        "an unsealed run holds an authoritative PUBLISHED ledger entry"
+    assert all(p["status"] != "PUBLISHED" for p in e.publications)
+    # the provisional was terminally voided, not hidden
+    assert any(d["decision"] == "VOIDED_UNSEALED" for d in e.pubcoord.ledger)
+    assert e.metrics["voided_publications"] >= 1
     try:
         e.result()
-        raise AssertionError("published evidence emitted from an unsealed run")
+        raise AssertionError("evidence emitted from an unsealed run")
     except E.ControllerFault:
         pass
     assert not SC._is_real_seal("UNSEALED_TERMINAL_FAULT"), \

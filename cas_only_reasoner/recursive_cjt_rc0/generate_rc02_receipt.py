@@ -50,17 +50,17 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE / "sim"))
 
 SUITES = ("test_rc0", "test_rc01", "test_rc02", "test_rc03", "test_rc04",
-          "test_rc04a", "test_rc04b", "test_rc04c")
+          "test_rc04a", "test_rc04b", "test_rc04c", "test_rc04d")
 
-# RC-0.4A section 4 / RC-0.4C section 4: the FROZEN mutation inventory. v2 = the nine
-# v1 entries verbatim plus the two RC-0.4C laws (verifier finalization gate,
-# configuration preflight); v1 is preserved on disk unchanged. The manifest file's
-# canonical-content digest is pinned HERE so neither the file nor this constant can
-# change without the other showing in the diff. Newline-normalization-proof: the
-# digest is over json.dumps(parsed content, sort_keys, compact), not raw bytes.
-MANIFEST_PATH_NAME = "RC04_REQUIRED_MUTATIONS_v2.json"
+# RC-0.4A/C/D: the FROZEN mutation inventory. v3 = the eleven v2 entries verbatim plus
+# the four RC-0.4D laws (constructor schema, final-publication barrier, ASOM dispatch,
+# whole-object snapshot detach); v1 and v2 are preserved on disk unchanged. The
+# manifest file's canonical-content digest is pinned HERE so neither the file nor this
+# constant can change without the other showing in the diff. Newline-normalization-
+# proof: the digest is over json.dumps(parsed content, sort_keys, compact), not bytes.
+MANIFEST_PATH_NAME = "RC04_REQUIRED_MUTATIONS_v3.json"
 REQUIRED_MUTATION_MANIFEST_DIGEST = \
-    "fbcba0285e01e31fc1014c5f8ca552dd7d4a41136cf913a3bf6d27efaaac83fb"
+    "8c7bbd489646c70f84bbfd564ffdb8f16f53944a5de709cfc5b1f85f5bbb36d8"
 
 
 def sha(p):
@@ -381,10 +381,11 @@ def main():
 
     receipt = {
         "receipt_id": "RC01_FEEDBACK_CLOSURE_RECEIPT",
-        "phase": "RC-0.4C (verifier issuance gated after finalization; complete "
-                 "verifier-configuration preflight with precomputed digests; "
-                 "UNSEALED_TERMINAL_FAULT marker replaces the fault-only hash; frozen "
-                 "mutation inventory v2 = 11 laws) -- on top of RC-0.4A/B",
+        "phase": "RC-0.4D (schema-complete construction with initial sealability "
+                 "probe; publication PROVISIONAL until the final-seal barrier -- an "
+                 "unsealed run holds zero publications; ASOM cutoff/breakdown "
+                 "dispatch load-bearing; whole-object snapshot detachment; frozen "
+                 "mutation inventory v3 = 15 laws) -- on top of RC-0.4A/B/C",
         "status": status,
         "status_emitted_by": "generate_rc02_receipt.py (deterministic; never hand-written)",
         "independent_confirmation": "PENDING BY CONSTRUCTION -- the strongest "

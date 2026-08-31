@@ -101,7 +101,10 @@ def test_publication_intent_is_actually_consumed():
         "ep0", 0, "s0", eff.effect_digest, "^6_decompose", "intended",
         receipt.receipt_digest, base_state_version=dcr.pre_state_version,
         base_state_digest=dcr.pre_state_digest, diagnostic_commit_digest=dcr.commit_digest)
-    assert pubc.commit_publication(intent) == "PUBLISHED"
+    # RC-0.4D: provisional until promoted at the final-seal barrier
+    assert pubc.commit_publication(intent) == "PROVISIONAL_PUBLICATION"
+    assert pubc.promote_provisionals() == 1
+    assert pubc.ledger[-1]["decision"] == "PUBLISHED"
     try:
         pubc.commit_publication(intent)
         raise AssertionError("consumed receipt allowed a second publication")

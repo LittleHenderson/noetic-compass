@@ -146,8 +146,11 @@ def test_happy_path_publication_with_commit_receipt():
         "ep0", 0, "x0", eff.effect_digest, "^6_decompose", "intended",
         receipt.receipt_digest, base_state_version=dcr.pre_state_version,
         base_state_digest=dcr.pre_state_digest, diagnostic_commit_digest=dcr.commit_digest)
-    assert pub.commit_publication(intent) == "PUBLISHED"
-    # both receipts consumed exactly once
+    # RC-0.4D: publication is PROVISIONAL until the final-seal barrier promotes it
+    assert pub.commit_publication(intent) == "PROVISIONAL_PUBLICATION"
+    assert pub.promote_provisionals() == 1
+    assert pub.ledger[-1]["decision"] == "PUBLISHED"
+    # both receipts consumed exactly once (consumed at the provisional stage)
     try:
         pub.commit_publication(intent)
         raise AssertionError("receipts reusable")

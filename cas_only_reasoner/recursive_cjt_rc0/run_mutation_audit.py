@@ -117,6 +117,64 @@ MUTATIONS = [
               "accepted and the engine can work -- and publish -- before a delayed "
               "seal failure (owner audit RC-0.4C finding 2)",
      "expected_test": ("test_rc04c", "test_unused_poison_gold_entry_rejected_before_first_tick")},
+    {"name": "constructor_schema_bypassed",
+     "file": "sim/rc01_engine.py",
+     "old": "        cfg = _validated_constructor_config(\n"
+            "            causes=causes, gold_table=gold_table, states=states, budget=budget,\n"
+            "            taus=taus, episode_id=episode_id,\n"
+            "            rpm_enforcement_enabled=rpm_enforcement_enabled, ohm_enabled=ohm_enabled,\n"
+            "            commit_verdicts=commit_verdicts, repair_requires=repair_requires,\n"
+            "            max_total_branches=max_total_branches,\n"
+            "            max_active_branches=max_active_branches, reopen_events=reopen_events,\n"
+            "            invalidation_events=invalidation_events,\n"
+            "            expected_payloads=expected_payloads)",
+     "new": "        cfg = dict(\n"
+            "            causes=tuple(causes), gold_table=dict(gold_table), states=states,\n"
+            "            budget=budget, taus=tuple(taus), episode_id=episode_id,\n"
+            "            rpm_enforcement_enabled=rpm_enforcement_enabled, ohm_enabled=ohm_enabled,\n"
+            "            commit_verdicts=commit_verdicts,\n"
+            "            repair_requires=dict(repair_requires) if repair_requires else {},\n"
+            "            max_total_branches=max_total_branches,\n"
+            "            max_active_branches=max_active_branches,\n"
+            "            reopen_events=dict(reopen_events),\n"
+            "            invalidation_events=set(invalidation_events),\n"
+            "            expected_payloads=dict(expected_payloads) if expected_payloads else {})",
+     "guard": "if the one-schema call is bypassed, a sealable-but-illegal value (int 1 "
+              "as commit_verdicts) constructs an engine; the named test must fail on "
+              "the accepted poison (owner audit RC-0.4D critical 1)",
+     "expected_test": ("test_rc04d", "test_nonbool_commit_flag_rejected")},
+    {"name": "final_publication_barrier_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "        # MUTATION-TARGET: final-publication-barrier\n"
+            "        if self._prospective_seal_probe():\n"
+            "            self._promote_provisional_publications()\n"
+            "        else:\n"
+            "            self._void_provisional_publications()",
+     "new": "        # MUTATION-TARGET: final-publication-barrier\n"
+            "        self._promote_provisional_publications()",
+     "guard": "if the final-seal barrier is removed, an unsealed run promotes its "
+              "provisional publication and holds published=1 under the marker (owner "
+              "audit RC-0.4D critical 2)",
+     "expected_test": ("test_rc04d", "test_unsealed_run_has_zero_published")},
+    {"name": "asom_zero_score_action_dispatch_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "            acted = self._dispatch_zero_score_actions(t, cause, candidates, actions,\n"
+            "                                                      states, latent)",
+     "new": "            acted = False",
+     "guard": "if the zero-score dispatch is removed, cutoff and breakdown fall back "
+              "to silent HALT and the ASOM actions are decorative again (owner audit "
+              "RC-0.4D critical 3)",
+     "expected_test": ("test_rc04d", "test_cutoff_region_dispatches_repair_not_halt")},
+    {"name": "snapshot_whole_object_detach_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "        # MUTATION-TARGET: snapshot-whole-object-detach\n"
+            "        return copy.deepcopy(snap)",
+     "new": "        # MUTATION-TARGET: snapshot-whole-object-detach\n"
+            "        return snap",
+     "guard": "if whole-object detachment is removed, the snapshot aliases live "
+              "engine state (the fault record, events, metrics) (owner audit "
+              "RC-0.4D major 4)",
+     "expected_test": ("test_rc04d", "test_fault_record_is_detached_from_runtime_snapshot")},
     {"name": "cjtstep_snapshot_validation_removed",
      "file": "sim/rc01_engine.py",
      "old": "        if (step.originating_tick != t or step.producer_expert_id != chosen\n"

@@ -24,9 +24,11 @@ def main():
     sc = next(s for s in SC.SCENARIOS() if s["id"] == scenario_id)
     eng = sc["build"]()
     if mutate:
+        # causes is an OWNED immutable tuple (RC-0.4D schema); the sensitivity probe
+        # rebuilds it with one mutated input field
         c0 = eng.causes[0]
-        eng.causes[0] = Cause(cause_id=c0.cause_id, evidence=c0.evidence,
-                              payload=c0.payload + " MUTATED")
+        eng.causes = (Cause(cause_id=c0.cause_id, evidence=c0.evidence,
+                            payload=c0.payload + " MUTATED"),) + tuple(eng.causes[1:])
     res = eng.run()
     print(res["trace_digest"])
 

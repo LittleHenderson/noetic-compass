@@ -315,6 +315,7 @@ class PublicationCoordinator:
         self._consumed = set()             # verifier receipt digests consumed
         self._consumed_commits = set()     # commit receipt digests consumed
         self.ledger = []
+        self._provisional_rows = []        # RC-0.4D: ledger indices awaiting promotion
 
     def consumed_registry_digest(self) -> str:
         return digest({"vr": sorted(self._consumed),
@@ -386,16 +387,22 @@ class PublicationCoordinator:
             # MUTATION-TARGET: diagnostic-commit-requirement -- bypassing this call
             # publishes with NO proof that any diagnostic state commit happened
             self._require_diagnostic_commit(intent)
-            # authority granted: consume BOTH receipts exactly once
+            # authority granted: consume BOTH receipts exactly once (a later void is a
+            # TERMINAL void -- the receipts are never released back)
             self._consumed.add(intent.verifier_receipt_digest)
             self._consumed_commits.add(intent.diagnostic_commit_digest)
-            self.ledger.append({"decision": "PUBLISHED", "tick": intent.tick,
+            # RC-0.4D section 2 (owner audit critical 2): publication is PROVISIONAL
+            # until the run's final state proves canonically sealable. PUBLISHED is
+            # written ONLY by promote_provisionals() at the final-seal barrier.
+            self.ledger.append({"decision": "PROVISIONAL_PUBLICATION",
+                                "tick": intent.tick,
                                 "cause": intent.cause_id, "producer": intent.producer_expert_id,
                                 "effect_digest": intent.effect_digest,
                                 "receipt": intent.verifier_receipt_digest,
                                 "diagnostic_commit": intent.diagnostic_commit_digest,
                                 "intent": intent.intent_digest})
-            return "PUBLISHED"
+            self._provisional_rows.append(len(self.ledger) - 1)
+            return "PROVISIONAL_PUBLICATION"
         except PublicationRefused as pr:
             self.ledger.append({"decision": "REFUSED", "law": pr.law,
                                 "tick": getattr(intent, "tick", None),
@@ -403,6 +410,35 @@ class PublicationCoordinator:
                                 "producer": getattr(intent, "producer_expert_id", None),
                                 "effect_digest": getattr(intent, "effect_digest", None)})
             raise
+
+    def promote_provisionals(self) -> int:
+        """RC-0.4D: promote every provisional row to PUBLISHED. Called ONLY at the
+        engine's final-seal barrier, after the prospective canonicalization of the
+        final state succeeded. Idempotent (the provisional list is cleared)."""
+        if self._gate is not None:
+            self._gate.require_open("publication.promote_provisionals")
+        n = 0
+        for idx in self._provisional_rows:
+            if self.ledger[idx]["decision"] == "PROVISIONAL_PUBLICATION":
+                self.ledger[idx]["decision"] = "PUBLISHED"
+                n += 1
+        self._provisional_rows = []
+        return n
+
+    def void_unfinalized(self, reason: str = "VOIDED_UNSEALED") -> int:
+        """RC-0.4D: terminally void every provisional (and, defensively, any
+        prematurely-promoted PUBLISHED) row. Called on finalization/seal failure.
+        The consumed receipts stay consumed -- a terminal void, never a release."""
+        if self._gate is not None:
+            self._gate.require_open("publication.void_unfinalized")
+        n = 0
+        for row in self.ledger:
+            if row["decision"] in ("PROVISIONAL_PUBLICATION", "PUBLISHED"):
+                row["voided_from"] = row["decision"]
+                row["decision"] = reason
+                n += 1
+        self._provisional_rows = []
+        return n
 
     def refuse(self, tick, cause_id, producer, effect_digest, reason: str):
         if self._gate is not None:                  # RC-0.4B: no ledger forgery post-seal

@@ -10,8 +10,53 @@ Updated same day under OWNER DIRECTIVE RC-0.4A: items resolved by the RC-0.4A pa
 are marked FIXED below; the stale "110 tests" figure is corrected (the RC-0.4 commit
 recorded 17+28+23+14+30 = 112 internal tests; RC-0.4A adds test_rc04a (22) and, after
 its internal pre-commit adversarial audit, test_rc04b (16) → 150; RC-0.4C adds
-test_rc04c (25 after its own internal-audit round 2) → 175 internal tests — internal
-results, NOT an independent reproduction).
+test_rc04c (25 after its own internal-audit round 2) → 175; RC-0.4D adds test_rc04d
+(30 after its internal round) → 205 internal tests — internal results, NOT an
+independent reproduction).
+
+## RC-0.4D closures (2026-08-31, owner independent audit of 38635986)
+The owner's audit ended the enumerated-patch era: verifier fixes CLOSED, but the
+CONTROLLER configuration was not preflighted, an unsealed run could still hold
+`published == 1`, and the ASOM cutoff/breakdown actions were decorative. Closed by
+OWNER DIRECTIVE RC-0.4D (correction-only, no new architecture):
+- **One input schema** (`_validated_constructor_config` + `CONSTRUCTOR_SCHEMA_PARAMS`):
+  every constructor parameter validated, COPIED into owned state, and covered by an
+  import-time signature law; the engine is not returned unless its entire initial
+  state seals to a real 64-hex digest. The owner's `commit_verdicts=object()` and
+  `[valid_cause, object()]` attacks are rejected at construction.
+- **Publication atomicity**: publication is `PROVISIONAL_PUBLICATION` until the
+  final-seal barrier's prospective probe passes; only then is it promoted to
+  `PUBLISHED` and counted. THE INVARIANT — marker ⇒ `published == 0` and no ledger
+  row `PUBLISHED` — holds; failed/faulted runs terminally VOID their provisionals
+  (receipts stay consumed: a terminal void, never a release).
+- **ASOM dispatch load-bearing**: at zero total score, breakdown quarantines
+  (`asom_region:breakdown`, excluded from routing) and cutoff repairs the ACTUAL
+  blocker (real RPM prereq / Desire-law deprioritization / committed region
+  re-assessment), bounded by the per-cause RepairFrame; hard-masked experts are never
+  mutated; RPM blocks remain a separate axis.
+- **Whole-object detachment**: `runtime_snapshot()` returns one `copy.deepcopy` of the
+  complete snapshot (the fault record included); taus/repair_requires and every other
+  mutable constructor input are owned copies.
+- **Frozen inventory v3** = the eleven v2 laws verbatim + 4 new (constructor schema,
+  final-publication barrier, ASOM dispatch, whole-object detach); v1 and v2 preserved
+  on disk; new pinned digest.
+
+### RC-0.4D internal adversarial round (same commit, 3 lenses)
+Found 2 MAJOR + 1 MINOR + 3 SUSPICIONs; fixed or recorded:
+- **MAJOR (fixed):** one Cause naming K ready cutoff experts was requeued K times and
+  PUBLISHED K times — the dispatch now requeues AT MOST ONCE per call (test-locked);
+  this also closes the split-child double-publication corollary (suspicion).
+- **MAJOR (fixed):** a SUBSET `states` dict was accepted and deferred failure to a raw
+  mid-run KeyError — past budget, commits, and a provisional publication. A provided
+  states dict must now cover EXACTLY the registered expert set (also resolves the
+  `states={}` vs `states=None` ambiguity — `{}` fails coverage; test-locked).
+- Fixed: `episode_id` must be non-empty; the prospective probe catches only the
+  encoder's own (TypeError, ValueError) so an environmental error becomes a typed
+  FAULT instead of silently voiding a sealable run's publications.
+- Residual recorded, not fixed: `_compute_final_seal` still catches all Exception (it
+  must never throw); a non-deterministic environmental error striking BETWEEN a
+  passed probe and the final seal could in principle yield the marker after
+  promotion — outside the deterministic model, no runnable trigger exists.
 
 ## RC-0.4C closures (2026-08-30, owner independent audit of 80d2f70e)
 The owner's independent audit found TWO Gate-0 blockers that the internal 5-lens
@@ -130,7 +175,7 @@ lands in a scenario row, its bytes could vary across processes; the matrix diges
 recorded per-generation, not replay-compared. OPEN (cosmetic).
 
 ## 4. No CI runner
-The internal tests (175 as of RC-0.4C) + 26 scenarios + 8 injections + 11 mutations
+The internal tests (205 as of RC-0.4D) + 26 scenarios + 8 injections + 15 mutations
 run locally and via the committed generator; there is no GitHub Actions workflow
 re-running them on push. The owner noted this in the RC-0.3 and RC-0.4 audits, and
 ruled that CI is recommended but does not by itself decide Gate 0. OPEN.

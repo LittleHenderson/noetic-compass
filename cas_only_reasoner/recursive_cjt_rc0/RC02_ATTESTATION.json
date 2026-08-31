@@ -35,5 +35,12 @@
     "owner_verdict_on_rc04a": "RC04A_INTERNAL_CONFORMANCE_RECORDED; GATE0_FINALIZATION_AND_SEALABILITY_OPEN -- two blockers: verifier issuance ungated after finalization; accepted configuration not preflight-sealable (owner independent audit, 2026-08-30)",
     "rc04c_commit_sha": "UNBOUND_UNTIL_FOLLOW_UP -- the RC-0.4C commit contains this file and cannot hash itself",
     "record_kind": "UNSIGNED Git-history binding record; not a signature, not independent verification"
+  },
+  "rc04c_binding_2026_08_31": {
+    "note": "APPEND-ONLY: binds the RC-0.4C evidence commit. The RC-0.4D commit that contains this edit cannot bind its own SHA.",
+    "rc04c_evidence_commit_sha": "386359862e384f5eb52577c66f4bd253a85b4a47",
+    "owner_verdict_on_rc04c": "RC04C_VERIFIER_FIXES_CLOSED; GATE0_SCHEMA_PUBLICATION_AND_ACTION_SEMANTICS_OPEN -- three criticals: controller configuration not preflighted; unsealed run held published==1; ASOM cutoff/breakdown decorative (owner independent audit, 2026-08-31)",
+    "rc04d_commit_sha": "UNBOUND_UNTIL_FOLLOW_UP -- the RC-0.4D commit contains this file and cannot hash itself",
+    "record_kind": "UNSIGNED Git-history binding record; not a signature, not independent verification"
   }
 }
