@@ -1,0 +1,65 @@
+# AWS_EXECUTION_MANIFEST -- Gate 1B execution environment (CANDIDATE until the
+# owner signs the phase-approval record; NO job may be launched from this file
+# without that signature).
+version: GATE1B_AWS_v1
+compute_law:
+  rule: "ALL claim-bearing neural work on AWS GPU; NO silent local CPU fallback --
+    a job that cannot obtain a GPU fails closed with GPU_REQUIRED"
+  bedrock: PROHIBITED for claim-bearing runs (teacher-language only, not used here)
+  local_rtx4070: smoke/dev only; never claim-bearing
+
+environment:
+  provider: AWS
+  preferred: EC2 g5.xlarge (1x A10G 24GB) via a single spot-or-on-demand instance
+  fallback: SageMaker training jobs (ml.g5.xlarge) if EC2 G-family quota is 0
+  region: us-east-1
+  owner_action_required: >
+    verify the EC2 G/VT-family vCPU quota (it was 0.0 in a prior campaign) or
+    pre-approve the SageMaker fallback; recorded as an unresolved owner decision
+
+container:
+  base: python 3.11, torch >= 2.3 (CUDA), transformers pinned at build
+  pinning_law: >
+    at container build (before any training): record the image digest, the exact
+    HuggingFace revision SHA of Qwen/Qwen2.5-0.5B-Instruct, the SHA-256 of every
+    weight file, the tokenizer digest, and the pip freeze; the owner-signed
+    approval binds to these digests and every job refuses on mismatch
+  image_digest: TO_BE_PINNED_AT_BUILD
+
+job_definition: >
+  a "job" is one atomic entry below; step 6 comprises 25 SEPARATE jobs (one per
+  run, ~10 min each) -- the 2-hour per-job wall-clock cap applies to each job as
+  defined here, not to a whole step group
+job_sequence:
+  1: dataset regeneration on-instance from seed 20260831; ALL split content digests
+     MUST equal the pre-registration; protected MUST equal
+     c1e19462823d2210bc44addaa9aad36e04aa28bf9e68a6529104cd6a507d70b8
+     (else DATASET_INTEGRITY_FAILURE, abort). This digest-equality gate makes any
+     Python-RNG version drift fail closed, never silently.
+  2: independent round-trip checker re-run over all splits (pinned digest)
+  2b: registered SURFACE BASELINE (B0) computed on all splits and recorded
+  3: SCMPE table construction + pinning (SCMPE_CONTROL_MANIFEST_CANDIDATE law),
+     BEFORE any extraction, training, or result exists
+  3b: the complete Gate 1B training/eval code commit digest recorded in the receipt
+      (code-pinning law) BEFORE any training job starts
+  4: activation extraction, 4 candidate layers, train+val, cached to S3 (fp16)
+  5: layer selection (S0-only law, seed 11; 4 selection runs)
+  6: 25 head-training jobs (8 arms x 3 seeds + the mandated S0/seed-11 duplicate;
+     the duplicate performs NO protected read)
+  7: protected extraction + single protected evaluation pass per arm/seed +
+     Claim-A probe evaluation inside the same pass
+  8: deterministic status emission via the COMMITTED tools/emit_gate1_status.py +
+     execution receipt + cost report
+
+receipt_fields_per_job:
+  [model_revision_sha, weight_file_sha256s, code_commit_sha, dataset_digests,
+   container_image_digest, seed, instance_type, region, start, end,
+   wall_clock_seconds, output_digests, cost_usd, quota_and_spot_details]
+
+storage:
+  s3_prefix: TO_BE_SET_BY_OWNER (bucket + prefix; requires owner account action)
+  retention: full receipts and caches retained until the owner archives them
+
+credentials_note: >
+  AWS credentials are the owner's (~/.aws/); Claude launches nothing under Gate 1A
+  and nothing under Gate 1B until the signed approval exists.

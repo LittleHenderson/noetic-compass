@@ -1,0 +1,81 @@
+# THRESHOLDS_AND_STATUS_LAW -- frozen BEFORE any neural result exists.
+# The status is emitted by the COMMITTED deterministic program
+# tools/emit_gate1_status.py reading raw results and THIS file; prose never assigns
+# status; a failed hard gate is a FAILURE, never "pass with caveats".
+version: GATE1_THRESHOLDS_v2
+primary_metric: protected exact-match accuracy, a fraction in [0, 1]
+
+surface_baseline_floor:
+  law: >
+    a REGISTERED deterministic class-blind surface heuristic (entity co-occurrence
+    with the question's named entities + surface ordinal for Q_PART; no learning, no
+    CAS stream) is computed on every split at Gate 1B step 2b and REPORTED as the
+    floor row B0 next to every arm result, overall and per question type. Any arm
+    difference must be read against this floor; differences living entirely in
+    question types where B0 is near ceiling are so labeled by the status program.
+
+uncertainty_procedure:            # pinned exactly (review fix)
+  per_passage_score: for each arm, average the 3 per-seed correctness indicators of
+    each protected passage -> one value in {0, 1/3, 2/3, 1} per passage
+  difference_vector: per protected passage, (S3 score - control score)
+  bootstrap: resample the 1000 protected passages with replacement 10000 times using
+    random.Random(20260831); CI = the 2.5th and 97.5th percentiles of the resampled
+    mean difference
+  per_seed_consistency: the per-seed protected accuracy difference (same seed, both
+    arms) must be > 0 in 3 of 3 seeds
+
+claim_A_readable_structure:
+  registered_probe: >
+    a 4-way multinomial logistic regression on the cached h_i at L*, trained on the
+    train split's Idea labels (seed 11, 1000 full-batch L-BFGS-free AdamW steps,
+    lr 1.0e-3, no regularizer beyond weight_decay 0.01), evaluated ON THE PROTECTED
+    split's Ideas inside the single protected pass (no extra protected read)
+  shuffled_control: the same probe trained on per-Idea labels shuffled by
+    sha256-formula S5 (seed 23) and evaluated identically
+  hard_gates:
+    - probe protected Idea-classification accuracy >= 0.80
+    - probe accuracy - shuffled-control accuracy >= 0.15
+  status_values: [CLAIM_A_LICENSED, CLAIM_A_NOT_LICENSED]
+  licensed_words: "the four construction-gold CAS operation classes are decodable on held-out templates and vocabulary"
+  prohibited_words: ["CAS-specific", "understands CAS", "full CAS-40"]
+
+claim_B_incremental_value:
+  license_test: S3 versus EVERY control on PROTECTED data
+  hard_gates:
+    - "mean(S3) - mean(S6) >= 0.03 AND bootstrap CI lower bound > 0 AND 3/3 seeds positive"
+    - "mean(S3) - mean(S7) >= 0.03 AND bootstrap CI lower bound > 0 AND 3/3 seeds positive"
+  status_decision_tree:            # numeric definitions (review fix); evaluated in order
+    - "CLAIM_B_LICENSED: both hard gates pass"
+    - "GENERIC_SEMANTIC_STRUCTURE_DETECTED: S6 gate passes AND S7 gate fails"
+    - "CAPACITY_EFFECT_DETECTED: S7 gate passes AND S6 gate fails"
+    - "SIDE_CHANNEL_ONLY: both gates fail AND (mean(S3)-mean(S4) >= 0.03 with CI lower bound > 0 OR mean(S3)-mean(S5) >= 0.03 with CI lower bound > 0)"
+    - "STATIC_CAS_COUPLING_NOT_SUPPORTED: otherwise"
+  licensed_words_on_pass: >
+    "first evidence that task-aligned construction-gold process labels add
+    incremental value beyond matched-capacity and alternative-taxonomy controls, in
+    the four-Noetic restricted slice, static dense setting"
+  honest_ceiling_disclosures:      # REQUIRED verbatim next to any Claim B report
+    - "the CAS stream is informationally redundant given the text by construction
+      (the labels are regex-recoverable from the clauses); any S3 gain is an
+      optimization/bottleneck effect of the frozen encoder, never new information"
+    - "no task-aligned non-CAS taxonomy exists on this dataset because the answer
+      function is defined over the CAS classes; S7 is necessarily a misaligned
+      taxonomy, so an unqualified 'CAS-specific' reading is NOT licensed -- see
+      GATE1A_SCOPE_AND_CLAIM_BOUNDARY.md"
+  never_licensed_by_gate1: ["CAS-specific (unqualified)", "learning speed", "retention",
+                            "steering", "recursive advantage", "ASOM advantage",
+                            "CAS-Ohm efficiency", "reasoning", "CAS-40"]
+
+anti_rescue_laws:
+  - metrics, thresholds, seeds, and arms are immutable after this freeze; changes
+    require AMENDMENT_LOG.md entries BEFORE Gate 1B execution
+  - after the first protected read, NO amendment of any kind
+  - a losing or tying S3 is RECORDED as STATIC_CAS_COUPLING_NOT_SUPPORTED; no metric
+    substitution, no subset analysis presented as primary, no seed shopping
+  - the committed status program's output is the ONLY claim-status authority
+
+status_program:
+  path: tools/emit_gate1_status.py     # COMMITTED IN THIS PACKAGE (review fix: not
+  #                                      deferred to Gate 1B); digest in
+  #                                      PACKAGE_MANIFEST.json; self-tested on
+  #                                      synthetic fixtures by tools/test_status_fixtures.py

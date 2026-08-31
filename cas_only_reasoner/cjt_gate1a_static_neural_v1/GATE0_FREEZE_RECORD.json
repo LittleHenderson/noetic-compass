@@ -1,0 +1,44 @@
+{
+  "record_id": "GATE0_FREEZE_RECORD",
+  "date": "2026-08-31",
+  "status": "VERIFIED_PASS",
+  "state": "FROZEN_PERMANENTLY",
+  "anchor_commit_sha": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+  "anchor_commit_subject": "cjt(rc-0.4e): enforce lifecycle authority, atomic final publication, and split caging",
+  "anchor_branch": "research/cas-sem-guided-plasticity-v1",
+  "independent_audit": {
+    "type": "cross-model software audit in a fresh environment (independent AI agent; NOT external scientific replication, NOT human/organizational replication)",
+    "reproduced": {
+      "tests": "246/246",
+      "scenarios": "26/26",
+      "fault_injections": "8/8",
+      "semantic_source_mutations": "22/22",
+      "deterministic_replay": true,
+      "independent_target_probes": "9/9"
+    },
+    "critical_findings_surviving": 0,
+    "major_findings_surviving": 0,
+    "minor_findings": 2,
+    "minor_disposition": "recorded in cas_only_reasoner/recursive_cjt_rc0/POST_GATE0_BACKLOG.md as F-04 and F-05; NONBLOCKING; may not delay Gate 1A, reopen Gate 0, or justify new controller architecture"
+  },
+  "verified_claim": "The deterministic reference controller implements its registered typed state, routing, RPM repair, ASOM regulation, CAS-Ohm allocation, verification, atomic commitment, publication, branching, fault, sealing, and replay semantics within its declared same-process software boundary.",
+  "explicitly_not_established": [
+    "that a neural CJT works",
+    "that CAS improves a Transformer",
+    "that CAS-Ohm improves learning",
+    "that the machine reasons intelligently",
+    "that it learns faster",
+    "that it saves GPU compute",
+    "that it beats an ordinary MoE",
+    "that the 40-simplex is useful inside a model"
+  ],
+  "freeze_law": "No RC-0.4F/G/... patch carousel. The frozen controller is the reference machine. Maintenance fixes (F-04/F-05) may land later on an explicitly labeled maintenance branch; the immutable Gate-0 qualification anchor remains 83f57d6f724505f2c2c68593b2625c36c3e07a4d and maintenance work must not quietly redefine what passed.",
+  "gates": {
+    "GATE_0": "VERIFIED_PASS / FROZEN_PERMANENTLY",
+    "GATE_1A": "AUTHORIZED (documentation and experiment freezing ONLY)",
+    "GATE_1B": "NOT_AUTHORIZED (requires the owner-signed phase-approval record)",
+    "neural_cjt_evidence": 0,
+    "cas_specific_neural_advantage": 0
+  },
+  "recorded_by": "Claude (Gate 1A documentation freeze), under the owner's freeze declaration of 2026-08-31; this record is an UNSIGNED project record, not a signature"
+}

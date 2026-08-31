@@ -1,0 +1,31 @@
+{
+  "ledger_id": "CLAIM_LEDGER_GATE1",
+  "gate0_anchor": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+  "scope": "CJT-T1 static dual-stream coupler; four-Noetic restricted slice (^2, ^3, ^6, ^8); I_total := 1",
+  "claims": [
+    {"id": "CLAIM_A", "name": "readable CAS structure",
+     "statement": "A registered neural representation or adapter can use the four construction-gold CAS operation classes on held-out templates and vocabulary.",
+     "establishes": "decodability/usability ONLY",
+     "status": "UNTESTED",
+     "license_law": "THRESHOLDS_AND_STATUS_LAW.yaml#claim_A_readable_structure"},
+    {"id": "CLAIM_B", "name": "incremental CAS value",
+     "statement": "The coupled CAS architecture improves held-out task performance beyond lexical, attention-only, matched-capacity, shuffled, random, and matched-semantic controls.",
+     "establishes": "the ONLY license for the words 'CAS-specific'",
+     "status": "UNTESTED",
+     "license_law": "THRESHOLDS_AND_STATUS_LAW.yaml#claim_B_incremental_cas_value"},
+    {"id": "CLAIM_C", "name": "causal steering / intervention utility",
+     "status": "NOT_ACTIVE_IN_GATE_1"},
+    {"id": "CLAIM_D", "name": "learning speed, retention, selective plasticity",
+     "status": "NOT_ACTIVE_IN_GATE_1"}
+  ],
+  "not_active_in_gate_1": ["recursive RPM advantage", "ASOM regulation advantage",
+                            "CAS-Ohm compute efficiency", "full CJT-Transformer capability"],
+  "prohibited_language_until_licensed": [
+    "CAS-specific (requires CLAIM_B licensed)",
+    "CAS-40 / full simplex (requires construction-gold Domain labels; out of scope)",
+    "learns faster / saves compute / reasons (Claims C/D and later gates)",
+    "neural CJT works (no gate licenses this sentence as-is)"
+  ],
+  "status_authority": "the deterministic status program only (THRESHOLDS_AND_STATUS_LAW.yaml); prose never assigns status",
+  "current_totals": {"neural_cjt_evidence": 0, "cas_specific_neural_advantage": 0}
+}

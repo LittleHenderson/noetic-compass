@@ -1,0 +1,102 @@
+# STATIC_CONDITIONS_v3 -- the FROZEN S0-S7 arm table for CJT-T1 (Gate 1B).
+# Supersedes STATIC/RECURSIVE_CONDITIONS v1/v2 (deterministic-simulator tables) for
+# the NEURAL experiment only; those files remain the frozen Gate-0 records.
+version: STATIC_CONDITIONS_v3
+experiment: CJT-T1 static dual-stream coupler, four-Noetic restricted slice
+base_model: Qwen/Qwen2.5-0.5B-Instruct (frozen; pinning law in CJT_T1_STATIC_NEURAL_ARCHITECTURE.md)
+i_total_law: "I_total := 1 for every arm (static dense; no adaptive-compute claim)"
+
+arms:
+  S0:
+    name: plain matched head
+    description: frozen Transformer + ordinary matched classification head over [c=mean(H); g]
+    isolates: base performance
+    cas_profiles: absent
+    idea_attention: absent (uniform mean over Ideas)
+  S1:
+    name: attention-only
+    description: S0 + the learned Idea-attention pooler (alpha over h_i); NO profile stream
+    isolates: benefit from selecting the right Idea
+    cas_profiles: absent
+    idea_attention: learned
+  S2:
+    name: profile-only
+    description: CAS profiles present, Idea weighting FIXED UNIFORM (alpha_i = 1/N)
+    isolates: benefit from process profiles without learned attention
+    cas_profiles: construction-gold one-hot
+    idea_attention: uniform
+  S3:
+    name: coupled CJT candidate
+    description: full coupler q = alpha^T P with learned attention AND gold CAS profiles
+    isolates: the static CJT coupling candidate
+    cas_profiles: construction-gold one-hot
+    idea_attention: learned
+  S4:
+    name: corrupted clause-label assignment
+    description: >
+      S3 with each Idea's label replaced by a DIFFERENT class chosen deterministically:
+      label'(passage_id, idea_index) = other_classes[ sha256(f"S4|{passage_id}|{idea_index}|11") mod 3 ]
+      where other_classes are the 3 classes != the gold class in the frozen order
+      (^2, ^3, ^6, ^8). This breaks the clause-label correspondence for EVERY Idea.
+      (Review fix: a GLOBAL permutation of one-hot inputs is absorbed exactly by
+      permuting W_p's input columns and is a vacuous control -- replaced.)
+    isolates: whether the clause-to-label correspondence matters
+    protected_labeling: the same pure hash formula labels ANY split at Gate 1B without pre-reading it
+  S5:
+    name: balanced random fixed labels
+    description: >
+      S3 with each Idea's label replaced independently of the clause entirely:
+      label'(passage_id, idea_index) = classes[ sha256(f"S5|{passage_id}|{idea_index}|23") mod 4 ]
+      (frozen order ^2, ^3, ^6, ^8). Stable across epochs; approximately balanced by
+      the hash; realized counts recorded in the execution receipt.
+    isolates: whether any stable per-Idea side channel helps
+    protected_labeling: same pure hash formula; no pre-reading required
+  S6:
+    name: uniform-profile matched-capacity control
+    description: EXACT S3 architecture with every p_i = (0.25, 0.25, 0.25, 0.25)
+    isolates: matched-capacity control (architecture without information)
+  S7:
+    name: SCMPE matched-semantic control
+    description: S3 with p_i replaced by the 4-class matched NON-CAS semantic taxonomy (SCMPE_CONTROL_MANIFEST_CANDIDATE.json)
+    isolates: whether CAS beats an equally meaningful alternative carving
+
+matched_everything_law:
+  same_base_checkpoint: true
+  same_tokenizer: true
+  same_passages: true
+  same_train_eval_splits: true
+  same_trainable_parameter_count: "within +/-1% of S3 (capacity-matching MLP widening recorded per arm)"
+  same_optimizer: true
+  same_number_of_updates: true
+  same_seeds: true
+  same_layer_selection_law: "L* selected ONCE via S0 on validation only; reused by all arms"
+  same_compute_budget: true
+  same_protected_evaluation: true
+
+training:
+  optimizer: AdamW
+  learning_rate: 1.0e-3
+  betas: [0.9, 0.999]
+  weight_decay: 0.01
+  schedule: cosine decay, 5% linear warmup
+  batch_size: 32
+  updates: 3000
+  precision: fp32 heads over cached fp16 activations
+  gradient_clip_norm: 1.0
+
+seeds: [11, 23, 47]          # 3 seeds per arm; 8 arms x 3 seeds = 24 runs
+duplicate_run: one mandated S0/seed-11 duplicate (determinism-tolerance measurement
+  on training curves and VALIDATION only; it performs NO protected read, preserving
+  protected-exactly-once)
+runs_total: 25               # 24 + the mandated duplicate
+
+layer_index_convention: decoder blocks 1-indexed; "layer L" = the hidden state OUTPUT
+  of block L; candidates {6, 12, 18, 24} of Qwen2.5-0.5B's 24 blocks
+early_stop: NONE -- every run trains exactly 3000 updates (no validation early stop)
+
+primary_metric: exact-match accuracy on the PROTECTED split (closed candidate set),
+  expressed as a fraction in [0, 1]
+secondary_metrics: [validation exact-match accuracy, per-question-type accuracy,
+  the registered SURFACE BASELINE floor (THRESHOLDS_AND_STATUS_LAW.yaml)]
+
+status_law_pointer: THRESHOLDS_AND_STATUS_LAW.yaml

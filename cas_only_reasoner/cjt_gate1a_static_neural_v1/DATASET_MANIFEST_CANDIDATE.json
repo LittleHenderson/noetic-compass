@@ -1,0 +1,89 @@
+{
+  "manifest_id": "DATASET_MANIFEST_CANDIDATE",
+  "claim_bearing": false,
+  "generation_interpreter": "3.14.0",
+  "interpreter_law": "the Gate 1B container regenerates all splits and MUST reproduce every content_sha256 exactly; a Python-version RNG drift therefore fails closed as DATASET_INTEGRITY_FAILURE, never silently",
+  "status": "CANDIDATE (CAS_MAPPING_RULES_v1_CANDIDATE still awaits owner approval; nothing here is claim-bearing)",
+  "generator_seed": 20260831,
+  "sizes_requested": {
+    "train": 6000,
+    "val": 1000,
+    "protected": 1000
+  },
+  "splits": {
+    "train": {
+      "passages": 6000,
+      "content_sha256": "8a9d31f5e8ca527a982701a661290b5945f61d3ebadb66e225de6d479958493c",
+      "op_class_counts": {
+        "^2": 7763,
+        "^3": 7779,
+        "^6": 5695,
+        "^8": 5712
+      },
+      "question_type_counts": {
+        "Q_ATTRACT": 2000,
+        "Q_AVERT": 2000,
+        "Q_PART": 1000,
+        "Q_TRIGGER": 1000
+      },
+      "template_families": [
+        "A",
+        "B"
+      ],
+      "vocab_bundle": "T"
+    },
+    "val": {
+      "passages": 1000,
+      "content_sha256": "47a6d2255e5953422f9f925f8ca1c8c348fc6e8ad477eb32f8eb39662c3b0de5",
+      "op_class_counts": {
+        "^2": 1282,
+        "^3": 1286,
+        "^6": 987,
+        "^8": 963
+      },
+      "question_type_counts": {
+        "Q_ATTRACT": 334,
+        "Q_AVERT": 333,
+        "Q_PART": 167,
+        "Q_TRIGGER": 166
+      },
+      "template_families": [
+        "C"
+      ],
+      "vocab_bundle": "V"
+    },
+    "protected": {
+      "passages": 1000,
+      "content_sha256": "c1e19462823d2210bc44addaa9aad36e04aa28bf9e68a6529104cd6a507d70b8",
+      "op_class_counts": {
+        "^2": 1245,
+        "^3": 1314,
+        "^6": 980,
+        "^8": 1005
+      },
+      "question_type_counts": {
+        "Q_ATTRACT": 334,
+        "Q_AVERT": 333,
+        "Q_PART": 167,
+        "Q_TRIGGER": 166
+      },
+      "template_families": [
+        "D"
+      ],
+      "vocab_bundle": "P"
+    }
+  },
+  "files": {
+    "data/candidate/train.jsonl": "8a9d31f5e8ca527a982701a661290b5945f61d3ebadb66e225de6d479958493c",
+    "data/candidate/val.jsonl": "47a6d2255e5953422f9f925f8ca1c8c348fc6e8ad477eb32f8eb39662c3b0de5",
+    "tools/generate_construction_gold.py": "9ec4998dded286c6e14fe191cdf6e83c7d77cac97c0ab1327311e8d8049b6205",
+    "tools/independent_roundtrip_checker.py": "543460e6c7312a7549df10a5db194689c4da98c63fd3667587d9b976c2501b3d"
+  },
+  "excluded_roundtrip": {
+    "train": [],
+    "val": [],
+    "protected": []
+  },
+  "protected_materialized": false,
+  "protected_law": "the protected split was generated in-memory, independently round-trip checked, digested, and NOT written; Gate 1B regenerates it from the same seed on AWS and must reproduce content_sha256 before any evaluation"
+}
