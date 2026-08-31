@@ -75,7 +75,7 @@ lands in a scenario row, its bytes could vary across processes; the matrix diges
 recorded per-generation, not replay-compared. OPEN (cosmetic).
 
 ## 4. No CI runner
-The internal tests (134 as of RC-0.4A) + 26 scenarios + 8 injections + 9 mutations
+The internal tests (150 as of RC-0.4A/B) + 26 scenarios + 8 injections + 9 mutations
 run locally and via the committed generator; there is no GitHub Actions workflow
 re-running them on push. The owner noted this in the RC-0.3 and RC-0.4 audits, and
 ruled that CI is recommended but does not by itself decide Gate 0. OPEN.

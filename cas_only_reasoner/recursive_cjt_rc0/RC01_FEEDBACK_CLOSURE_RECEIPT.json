@@ -11,7 +11,7 @@
     "python": "3.14.0",
     "os": "Windows-11-10.0.26200-SP0",
     "branch": "research/cas-sem-guided-plasticity-v1",
-    "parent_commit_sha": "6e3267d2100552d8ba94e8882f8f85c094ef3876",
+    "parent_commit_sha": "e43275122f2a6d3e689a0e3dc69ba81a49497745",
     "working_tree_dirty_at_generation": true,
     "dependencies": {
       "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
@@ -38,9 +38,9 @@
     "python sim/rc01_scenarios.py",
     "python sim/rc01_replay_entry.py normal_intended [--mutate]"
   ],
-  "started": "2026-08-30T21:59:45",
-  "finished": "2026-08-30T21:59:51",
-  "duration_seconds": 5.86,
+  "started": "2026-08-30T22:28:41",
+  "finished": "2026-08-30T22:28:47",
+  "duration_seconds": 5.57,
   "tests": {
     "test_rc0": {
       "result": "17/17 passed",
@@ -406,7 +406,7 @@
     "rc02_raw_reports/test_rc04a.stdout.txt": "85f38ba3fda0a973cb05886dab540dfd58243a6db016fefcc2525bccc7b567d9",
     "rc02_raw_reports/test_rc04b.stdout.txt": "70b56235e91f7efbd451e055977023adfd88e49fd0a403db42e9a69d89e9ad26",
     "rc03_mutation_report.json": "6ee769c5b330b3a7319329557b608112460d632f71d7b7f2e0a04b3e9239d146",
-    "RC04_BACKLOG.md": "785ac2ab4a7573ef633b7d875175bcd060b119cce10e890e0ec64da41c5b75a6",
+    "RC04_BACKLOG.md": "f5703d1297e242aa0253964b6d4ce8a2f50a0b0f6e47d4a66febd45cd0e2c7f1",
     "RC04_REQUIRED_MUTATIONS_v1.json": "bdfef6175cfa4222428fa54d5fc7f585d7c6959e804b0f413f13c8c271a482c9",
     "RC0_SIMULATOR_RECEIPT.json": "cc03aabd55877c33a99d374b162c51777e145a6243349f5d51bf7fdcbf1ea4d0",
     "RECURSIVE_CJT_STATE_SCHEMA_v0_1.json": "3c509f09ce7806eecc143134acba388c00035a2a7adc467725011c9317623144",
@@ -447,7 +447,7 @@
     "tests/test_rc04b.py": "8de7256e79192d6aeb6aaa267008f1e25666c435906e57577f98ad1bd661c8c8",
     "run_mutation_audit.py": "930c3b05e0a6c995ba3d9275466837df0de0612adc04bbff7715f0a276ed070d"
   },
-  "code_tree_digest": "0a501e78eb9c0a4c7e1ef9ee998ddf54af9a25b9679de93e689d3a606835f41e",
+  "code_tree_digest": "d04ea38c6da0f6d972b178a4bee07c110eba60a1ce6f0267f8d7eaa5fc48e031",
   "claims_permitted": [
     "the deterministic reference controller enforces its typed authority, verification, and seal semantics across every registered path, and detects all eight injected attacks"
   ],
