@@ -28,16 +28,26 @@ content vocabulary with anything trained on.
   arms and seeds is complete (exactly 3000 updates each; NO early stopping) and the
   layer choice L* is frozen in the receipt. The mandated S0/seed-11 duplicate run
   performs NO protected read (its determinism tolerance is measured on validation).
-- **Honest limit (review finding, recorded):** the protected split is a pure
-  function of the committed generator and public seed, so its secrecy is
-  procedural, not technical — anyone running the public generator can reconstruct
-  it. The pre-registered digest guarantees INTEGRITY (Gate 1B cannot substitute a
-  different set), not secrecy. Registered mitigation: the complete Gate 1B
-  training/evaluation code must be committed and digest-pinned BEFORE the protected
-  step executes, and the independent audit verifies that ordering from git history.
-  Strengthening options (owner decision, recorded in the freeze return): an
-  owner-held salt folded into the protected generation seed (gains secrecy, loses
-  the public pre-registered digest) versus the status quo.
+- **Honest limit (recorded; language law):** under the default public-seed
+  derivation the protected split is a pure function of the committed generator
+  and public seed — anyone can reconstruct it, and it is NEVER called secret.
+  The pre-registered digest guarantees INTEGRITY (Gate 1B cannot substitute a
+  different set), not secrecy. Mitigation (STRENGTHENED at Gate 1A.1): the
+  complete Gate 1B implementation is already committed and digest-pinned in
+  `GATE1B_CODE_MANIFEST.json`, and the owner-signed approval binds it BEFORE any
+  signature exists.
+- **Commit-and-reveal salt option (owner decision, formalized per audit section
+  9):** (1) the owner generates a random secret salt offline; (2) only
+  `sha256(salt)` is committed pre-execution (the signed approval carries
+  `protected_derivation_commitment: SALT_SHA256:<digest>`); (3) the generator
+  derives the protected stream from
+  `"CONSTRUCTION_GOLD_PROTECTED|20260831|<salt>"` (`--protected-salt-hex`,
+  implemented); (4) the salt stays outside Claude's environment until the
+  protected step of the sealed campaign; (5) after sealing, the owner reveals the
+  salt for public reproduction. This keeps preregistration (the commitment),
+  real secrecy during development, an integrity digest (recorded at owner-side
+  generation), and eventual reproducibility. Default remains the public seed
+  until the owner chooses.
 - **Burned-split law:** the protected split is burned after ONE campaign. Any v2
   experiment must register a NEW protected derivation (new seed or salt) — reusing
   a read protected split is prohibited outright.

@@ -1,7 +1,10 @@
 # STATIC_CONDITIONS_v3 -- the FROZEN S0-S7 arm table for CJT-T1 (Gate 1B).
 # Supersedes STATIC/RECURSIVE_CONDITIONS v1/v2 (deterministic-simulator tables) for
 # the NEURAL experiment only; those files remain the frozen Gate-0 records.
-version: STATIC_CONDITIONS_v3
+# v3.1 (Gate 1A.1, amendment A2): S7 renamed under owner PATH A -- it is ONE
+# alternative taxonomy (SINGLE_ALTERNATIVE_TAXONOMY), NOT SCMPE-v1 and NOT an
+# equally task-aligned control; implementations are frozen in exec/ (amendment A7).
+version: STATIC_CONDITIONS_v3.1
 experiment: CJT-T1 static dual-stream coupler, four-Noetic restricted slice
 base_model: Qwen/Qwen2.5-0.5B-Instruct (frozen; pinning law in CJT_T1_STATIC_NEURAL_ARCHITECTURE.md)
 i_total_law: "I_total := 1 for every arm (static dense; no adaptive-compute claim)"
@@ -56,9 +59,17 @@ arms:
     description: EXACT S3 architecture with every p_i = (0.25, 0.25, 0.25, 0.25)
     isolates: matched-capacity control (architecture without information)
   S7:
-    name: SCMPE matched-semantic control
-    description: S3 with p_i replaced by the 4-class matched NON-CAS semantic taxonomy (SCMPE_CONTROL_MANIFEST_CANDIDATE.json)
-    isolates: whether CAS beats an equally meaningful alternative carving
+    name: single-alternative-taxonomy control (SINGLE_ALTERNATIVE_TAXONOMY)
+    description: >
+      S3 with p_i replaced by ONE alternative 4-class taxonomy derived from the
+      clause's surface head verb via WordNet lexnames
+      (ALTERNATIVE_TAXONOMY_MANIFEST_CANDIDATE.json). Owner PATH A (amendment
+      A2): this is NOT SCMPE-v1 (no >=1000-partition matched ensemble, no
+      cohesion/separation/frequency matching) and NOT an equally task-aligned
+      control -- the head verbs change completely across template families
+      A/B/C/D, so the taxonomy's class behavior is unstable across splits, a
+      recorded misalignment. Beating S7 licenses nothing about CAS specificity.
+    isolates: whether the coupler benefit survives replacing the task-aligned labels with one alternative structured annotation
 
 matched_everything_law:
   same_base_checkpoint: true
@@ -97,6 +108,8 @@ early_stop: NONE -- every run trains exactly 3000 updates (no validation early s
 primary_metric: exact-match accuracy on the PROTECTED split (closed candidate set),
   expressed as a fraction in [0, 1]
 secondary_metrics: [validation exact-match accuracy, per-question-type accuracy,
-  the registered SURFACE BASELINE floor (THRESHOLDS_AND_STATUS_LAW.yaml)]
+  the registered B0 surface floor AND the B1 surface-parser TASK CEILING
+  (THRESHOLDS_AND_STATUS_LAW.yaml v3; frozen candidate values in
+  SURFACE_BASELINES_CANDIDATE.json -- B1 is 1.0000 on train and val)]
 
 status_law_pointer: THRESHOLDS_AND_STATUS_LAW.yaml

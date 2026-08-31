@@ -2,34 +2,68 @@
 # The status is emitted by the COMMITTED deterministic program
 # tools/emit_gate1_status.py reading raw results and THIS file; prose never assigns
 # status; a failed hard gate is a FAILURE, never "pass with caveats".
-version: GATE1_THRESHOLDS_v2
+#
+# v3 (owner audit 2026-08-31, amendments A3/A4/A6 in AMENDMENT_LOG.md):
+#   - the auxiliary-value license now requires S3 to clear the hard gate against
+#     EVERY control (S0, S1, S2, S4, S5, S6, S7) -- the v2 law could license
+#     while S3 lost to the plain/attention-only/profile-only arms; that exact
+#     counterexample is a permanent failing fixture
+#   - the claim is RENAMED (owner PATH A): TASK_ALIGNED_LABEL_AUXILIARY_VALUE;
+#     the words "CAS-specific" are PROHIBITED on this dataset regardless of result
+#   - raw evidence is validated against RAW_GATE1_RESULTS.schema.json and
+#     malformed/contradictory evidence is REFUSED (STATUS_INPUT_INVALID)
+#   - B0 AND B1 are consumed by the program (floor + task ceiling), not merely cited
+#   - the bootstrap is redefined on the version-independent hash stream (below)
+version: GATE1_THRESHOLDS_v3
 primary_metric: protected exact-match accuracy, a fraction in [0, 1]
+evidence_schema: RAW_GATE1_RESULTS.schema.json   # strict; program-enforced
 
-surface_baseline_floor:
-  law: >
-    a REGISTERED deterministic class-blind surface heuristic (entity co-occurrence
-    with the question's named entities + surface ordinal for Q_PART; no learning, no
-    CAS stream) is computed on every split at Gate 1B step 2b and REPORTED as the
-    floor row B0 next to every arm result, overall and per question type. Any arm
-    difference must be read against this floor; differences living entirely in
-    question types where B0 is near ceiling are so labeled by the status program.
+surface_baselines:
+  B0: >
+    the REGISTERED deterministic class-blind surface heuristic (entity
+    co-occurrence with the question's named entities + surface ordinal for
+    Q_PART; no learning, no clause classification, no CAS stream) -- the FLOOR
+    row, reported next to every arm result, overall and per question type.
+    Frozen candidate values (exec/baselines.py, SURFACE_BASELINES_CANDIDATE.json):
+    train 3867/6000 = 0.6445, val 668/1000 = 0.6680; attract/avert sit at the
+    distractor-forced coin flip (0.4805-0.5269), Q_PART/Q_TRIGGER near ceiling.
+  B1: >
+    the full deterministic surface-grammar parser reading ONLY passage text and
+    question text -- the TASK CEILING. Frozen candidate values: train 6000/6000
+    = 1.0000, val 1000/1000 = 1.0000. The task is exactly surface-solvable BY
+    CONSTRUCTION; every neural reading is bounded by this fact.
+  consumption_law: >
+    the status program REQUIRES B0/B1 for train, val, and protected in the raw
+    evidence, reports B0 as the floor and B1 as the ceiling, and labels any
+    question type where protected B0 >= 0.95 as near-ceiling (differences living
+    entirely there are so labeled).
 
-uncertainty_procedure:            # pinned exactly (review fix)
+uncertainty_procedure:            # pinned exactly (v3: version-independent stream)
   per_passage_score: for each arm, average the 3 per-seed correctness indicators of
     each protected passage -> one value in {0, 1/3, 2/3, 1} per passage
   difference_vector: per protected passage, (S3 score - control score)
-  bootstrap: resample the 1000 protected passages with replacement 10000 times using
-    random.Random(20260831); CI = the 2.5th and 97.5th percentiles of the resampled
-    mean difference
+  bootstrap: >
+    resample the 1000 protected passages with replacement 10000 times; indices
+    come from the SHA-256 counter stream with domain "GATE1_BOOT|20260831|<control
+    arm>", read as consecutive big-endian 16-bit integers v, REJECTING v >= 65000
+    and mapping accepted v to v % 1000 (65000 = (2^16 // 1000) * 1000, exactly
+    uniform, no modulo bias); CI = the 2.5th and 97.5th percentiles of the
+    resampled mean difference. Pure integer arithmetic -- identical on every
+    CPython >= 3.8 (replaces the version-dependent random.Random procedure).
   per_seed_consistency: the per-seed protected accuracy difference (same seed, both
     arms) must be > 0 in 3 of 3 seeds
+  seed_count_limit: >
+    HONEST LIMIT (owner audit, secondary): 3 training seeds measure passage
+    uncertainty well and training-run uncertainty thinly; the 3/3 requirement
+    mitigates but does not remove this. Widening to 5 seeds is an owner option
+    (cost: +16 runs) recorded as an open decision, not silently adopted.
 
 claim_A_readable_structure:
   registered_probe: >
     a 4-way multinomial logistic regression on the cached h_i at L*, trained on the
-    train split's Idea labels (seed 11, 1000 full-batch L-BFGS-free AdamW steps,
-    lr 1.0e-3, no regularizer beyond weight_decay 0.01), evaluated ON THE PROTECTED
-    split's Ideas inside the single protected pass (no extra protected read)
+    train split's Idea labels (seed 11, 1000 full-batch AdamW steps, lr 1.0e-3,
+    weight_decay 0.01), evaluated ON THE PROTECTED split's Ideas inside the single
+    protected pass (no extra protected read)
   shuffled_control: the same probe trained on per-Idea labels shuffled by
     sha256-formula S5 (seed 23) and evaluated identically
   hard_gates:
@@ -39,22 +73,33 @@ claim_A_readable_structure:
   licensed_words: "the four construction-gold CAS operation classes are decodable on held-out templates and vocabulary"
   prohibited_words: ["CAS-specific", "understands CAS", "full CAS-40"]
 
-claim_B_incremental_value:
+claim_B_task_aligned_label_auxiliary_value:   # RENAMED (owner PATH A, amendment A4)
+  former_name: "Claim B / incremental CAS value -- the rename is load-bearing: this
+    dataset cannot license CAS-specificity (circularity law), so the claim is named
+    for what it can actually establish"
   license_test: S3 versus EVERY control on PROTECTED data
-  hard_gates:
-    - "mean(S3) - mean(S6) >= 0.03 AND bootstrap CI lower bound > 0 AND 3/3 seeds positive"
-    - "mean(S3) - mean(S7) >= 0.03 AND bootstrap CI lower bound > 0 AND 3/3 seeds positive"
-  status_decision_tree:            # numeric definitions (review fix); evaluated in order
-    - "CLAIM_B_LICENSED: both hard gates pass"
-    - "GENERIC_SEMANTIC_STRUCTURE_DETECTED: S6 gate passes AND S7 gate fails"
-    - "CAPACITY_EFFECT_DETECTED: S7 gate passes AND S6 gate fails"
-    - "SIDE_CHANNEL_ONLY: both gates fail AND (mean(S3)-mean(S4) >= 0.03 with CI lower bound > 0 OR mean(S3)-mean(S5) >= 0.03 with CI lower bound > 0)"
+  hard_gate_per_control: "mean(S3) - mean(ctrl) >= 0.03 AND bootstrap CI lower bound > 0 AND 3/3 seeds positive"
+  controls_required_for_license: [S0, S1, S2, S4, S5, S6, S7]   # ALL of them
+  status_decision_tree:            # evaluated in order by the committed program
+    - "TASK_ALIGNED_LABEL_AUXILIARY_VALUE_LICENSED: the hard gate passes against ALL seven controls"
+    - "COUPLER_NOT_SUPERIOR_TO_SIMPLER_ARMS: the gate fails against any of S0/S1/S2 (the plain, attention-only, or profile-only arm matched or beat the coupler)"
+    - "GENERIC_SEMANTIC_STRUCTURE_DETECTED: S6 gate passes AND S7 gate fails (simpler arms all beaten)"
+    - "CAPACITY_EFFECT_DETECTED: S7 gate passes AND S6 gate fails (simpler arms all beaten)"
+    - "SIDE_CHANNEL_ONLY: S6 and S7 gates fail AND (the S4 gate or the S5 gate passes)"
     - "STATIC_CAS_COUPLING_NOT_SUPPORTED: otherwise"
   licensed_words_on_pass: >
-    "first evidence that task-aligned construction-gold process labels add
-    incremental value beyond matched-capacity and alternative-taxonomy controls, in
-    the four-Noetic restricted slice, static dense setting"
-  honest_ceiling_disclosures:      # REQUIRED verbatim next to any Claim B report
+    "task-aligned construction-gold process labels add incremental value beyond
+    plain, attention-only, profile-only, corrupted-label, random-label,
+    matched-capacity, and single-alternative-taxonomy controls, in the
+    four-Noetic restricted slice, static dense setting, on a task whose surface
+    ceiling B1 = 1.00"
+  cas_specific_language: >
+    PROHIBITED ON THIS DATASET REGARDLESS OF RESULT (owner PATH A): the answer
+    function is defined over the CAS classes, so no equally task-aligned non-CAS
+    control can exist here; S7 is ONE alternative taxonomy, not SCMPE-v1 and not
+    an equal task-aligned control. A genuine CAS-specificity test requires a v2
+    dataset whose answer function is not class-bijective.
+  honest_ceiling_disclosures:      # REQUIRED verbatim next to any result report
     - "the CAS stream is informationally redundant given the text by construction
       (the labels are regex-recoverable from the clauses); any S3 gain is an
       optimization/bottleneck effect of the frozen encoder, never new information"
@@ -62,20 +107,27 @@ claim_B_incremental_value:
       function is defined over the CAS classes; S7 is necessarily a misaligned
       taxonomy, so an unqualified 'CAS-specific' reading is NOT licensed -- see
       GATE1A_SCOPE_AND_CLAIM_BOUNDARY.md"
-  never_licensed_by_gate1: ["CAS-specific (unqualified)", "learning speed", "retention",
-                            "steering", "recursive advantage", "ASOM advantage",
+    - "the task is exactly surface-solvable (B1 = 1.00): a positive result means
+      task-aligned labels helped a frozen encoder reach a surface-computable
+      function -- never that CAS supplied information absent from the language"
+  never_licensed_by_gate1: ["CAS-specific (in any form, on this dataset)",
+                            "learning speed", "retention", "steering",
+                            "recursive advantage", "ASOM advantage",
                             "CAS-Ohm efficiency", "reasoning", "CAS-40"]
 
 anti_rescue_laws:
   - metrics, thresholds, seeds, and arms are immutable after this freeze; changes
     require AMENDMENT_LOG.md entries BEFORE Gate 1B execution
   - after the first protected read, NO amendment of any kind
-  - a losing or tying S3 is RECORDED as STATIC_CAS_COUPLING_NOT_SUPPORTED; no metric
+  - a losing or tying S3 is RECORDED under the decision tree above; no metric
     substitution, no subset analysis presented as primary, no seed shopping
   - the committed status program's output is the ONLY claim-status authority
+  - the program REFUSES malformed evidence (STATUS_INPUT_INVALID); no status is
+    ever emitted from evidence that fails the strict schema
 
 status_program:
-  path: tools/emit_gate1_status.py     # COMMITTED IN THIS PACKAGE (review fix: not
-  #                                      deferred to Gate 1B); digest in
-  #                                      PACKAGE_MANIFEST.json; self-tested on
-  #                                      synthetic fixtures by tools/test_status_fixtures.py
+  path: tools/emit_gate1_status.py     # COMMITTED; digest in PACKAGE_MANIFEST.json
+  #  and bound by the signed approval's status_program_sha256; self-tested by
+  #  tools/test_status_fixtures.py (all branches + the owner counterexample +
+  #  16 malformed-evidence rejections); boot_n is overridable ONLY inside test
+  #  fixtures -- the CLI always runs the frozen default 10000

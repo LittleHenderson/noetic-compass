@@ -58,10 +58,13 @@ in every arm; nothing else varies except the registered arm difference.
 
 ## What each arm isolates
 
-See STATIC_CONDITIONS_v3.yaml (frozen S0–S7 table). S6 is the identical S3
-architecture with constant uniform profiles (capacity control); S7 replaces the CAS
-profiles with the SCMPE matched-semantic taxonomy (meaning control). Only beating
-BOTH licenses "CAS-specific".
+See STATIC_CONDITIONS_v3.yaml (frozen S0–S7 table, v3.1). S6 is the identical S3
+architecture with constant uniform profiles (capacity control); S7 replaces the
+CAS profiles with ONE alternative surface-verb taxonomy
+(ALTERNATIVE_TAXONOMY_MANIFEST_CANDIDATE.json — owner PATH A: not SCMPE-v1, not
+an equal task-aligned control). The license law is THRESHOLDS_AND_STATUS_LAW.yaml
+v3: the auxiliary-value claim requires beating ALL SEVEN controls; the words
+"CAS-specific" are prohibited on this dataset regardless of result.
 
 ## Gate 1B implementation bindings (frozen; no improvisation room)
 
@@ -72,9 +75,15 @@ BOTH licenses "CAS-specific".
   frozen `clauses`/`question` fields; token spans come from the tokenizer's
   `offset_mapping`; a token belongs to a clause iff its character span overlaps the
   clause's. A clause with zero tokens aborts (`SPAN_MAPPING_FAILURE`).
-- **Candidate encoding:** each candidate entity is encoded as the mean of the token
-  hidden states (at L*) of its FIRST occurrence in the passage text; the answer
-  score for candidate e is `dot(W_o z, W_c enc(e))` with `W_c`: 896→256.
+- **Candidate encoding (amended A5 — owner audit section 7):** each candidate
+  entity is encoded CONTEXT-FREE: `enc(e)` = the mean of the frozen model's
+  INPUT-EMBEDDING rows for e's tokens, tokenized standalone with no special
+  tokens (`exec/candidate_encoding.py`); the answer score for candidate e is
+  `dot(W_o z, W_c enc(e))` with `W_c`: 896→256. The former rule (mean contextual
+  hidden states at the FIRST occurrence) encoded 17.4% of train and 17.9% of val
+  answers (regenerated corpus; `CANDIDATE_OCCURRENCE_AUDIT.json`) from a clause
+  other than the target — an avoidable architecture interaction, withdrawn. One
+  rule, identical for every arm.
 - **Capacity-matching algorithm (deterministic):** compute S3's trainable parameter
   count; for each other arm, add a widening linear pair (256→w→256, GELU) after the
   MLP and choose the smallest integer w such that the arm's count is within ±1% of
@@ -82,10 +91,16 @@ BOTH licenses "CAS-specific".
 - **Layer convention:** decoder blocks 1-indexed; "layer L" = the hidden-state
   OUTPUT of block L; candidates {6, 12, 18, 24}.
 - **Training length:** exactly 3000 updates per run; NO early stopping.
-- **Code-pinning law (protected-secrecy mitigation):** the complete Gate 1B
-  training/evaluation implementation must be committed and its digest recorded in
-  the execution receipt BEFORE the protected-evaluation step executes; the
-  independent audit verifies that ordering from git history.
+- **Code-pinning law (STRENGTHENED at Gate 1A.1 — owner audit section 2):** the
+  complete Gate 1B implementation is COMMITTED NOW in `exec/` (arms, capacity
+  matcher, labels, assembly, spans, candidate encoding, activation extraction +
+  cache I/O, training loop, layer selection, protected evaluator, B0/B1
+  baselines, launcher, receipts), hashed in `GATE1B_CODE_MANIFEST.json`, and
+  bound by the owner-signed approval BEFORE any signature exists — not merely
+  before the protected step. CPU shape proofs: `tools/test_exec_shapes.py`
+  (declared shapes; ±1% capacity; S4–S7 structurally identical to S3; corrupted
+  arms cannot read gold at runtime; candidate masks; protected-path refusal;
+  GPU_REQUIRED fires first at every guarded entry).
 
 ## Explicit non-claims
 

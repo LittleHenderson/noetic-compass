@@ -2,7 +2,8 @@
   "manifest_id": "DATASET_MANIFEST_CANDIDATE",
   "claim_bearing": false,
   "generation_interpreter": "3.14.0",
-  "interpreter_law": "the Gate 1B container regenerates all splits and MUST reproduce every content_sha256 exactly; a Python-version RNG drift therefore fails closed as DATASET_INTEGRITY_FAILURE, never silently",
+  "interpreter_law": "generation uses exec/prng.HashPRNG (pure SHA-256 integer arithmetic), so regeneration is Python-version-independent BY CONSTRUCTION; the Gate 1B container still regenerates all splits and MUST reproduce every content_sha256 exactly (DATASET_INTEGRITY_FAILURE on any mismatch, never silent)",
+  "protected_derivation": "PUBLIC_SEED_20260831",
   "status": "CANDIDATE (CAS_MAPPING_RULES_v1_CANDIDATE still awaits owner approval; nothing here is claim-bearing)",
   "generator_seed": 20260831,
   "sizes_requested": {
@@ -13,12 +14,12 @@
   "splits": {
     "train": {
       "passages": 6000,
-      "content_sha256": "8a9d31f5e8ca527a982701a661290b5945f61d3ebadb66e225de6d479958493c",
+      "content_sha256": "8d567a07ff8990f8c40f190ed98ca1706b6ac920d6c9c53e818e7307d90de4a9",
       "op_class_counts": {
-        "^2": 7763,
-        "^3": 7779,
-        "^6": 5695,
-        "^8": 5712
+        "^2": 7748,
+        "^3": 7801,
+        "^6": 5822,
+        "^8": 5843
       },
       "question_type_counts": {
         "Q_ATTRACT": 2000,
@@ -34,12 +35,12 @@
     },
     "val": {
       "passages": 1000,
-      "content_sha256": "47a6d2255e5953422f9f925f8ca1c8c348fc6e8ad477eb32f8eb39662c3b0de5",
+      "content_sha256": "ae009357f34b8916aa166c98e4f9de33ed7870fde656e65e432eb7981688e616",
       "op_class_counts": {
-        "^2": 1282,
-        "^3": 1286,
-        "^6": 987,
-        "^8": 963
+        "^2": 1279,
+        "^3": 1313,
+        "^6": 912,
+        "^8": 972
       },
       "question_type_counts": {
         "Q_ATTRACT": 334,
@@ -54,12 +55,12 @@
     },
     "protected": {
       "passages": 1000,
-      "content_sha256": "c1e19462823d2210bc44addaa9aad36e04aa28bf9e68a6529104cd6a507d70b8",
+      "content_sha256": "0c0c2842b90b8220782b0ce992ff58dfa035f87228b3dfb63808d9f29bd46321",
       "op_class_counts": {
-        "^2": 1245,
-        "^3": 1314,
-        "^6": 980,
-        "^8": 1005
+        "^2": 1268,
+        "^3": 1288,
+        "^6": 991,
+        "^8": 966
       },
       "question_type_counts": {
         "Q_ATTRACT": 334,
@@ -74,9 +75,9 @@
     }
   },
   "files": {
-    "data/candidate/train.jsonl": "8a9d31f5e8ca527a982701a661290b5945f61d3ebadb66e225de6d479958493c",
-    "data/candidate/val.jsonl": "47a6d2255e5953422f9f925f8ca1c8c348fc6e8ad477eb32f8eb39662c3b0de5",
-    "tools/generate_construction_gold.py": "9ec4998dded286c6e14fe191cdf6e83c7d77cac97c0ab1327311e8d8049b6205",
+    "data/candidate/train.jsonl": "8d567a07ff8990f8c40f190ed98ca1706b6ac920d6c9c53e818e7307d90de4a9",
+    "data/candidate/val.jsonl": "ae009357f34b8916aa166c98e4f9de33ed7870fde656e65e432eb7981688e616",
+    "tools/generate_construction_gold.py": "aa3a3fb398341e36d665112149e8c7d45e1ea967bbb82c1584b266c13ba6ea40",
     "tools/independent_roundtrip_checker.py": "543460e6c7312a7549df10a5db194689c4da98c63fd3667587d9b976c2501b3d"
   },
   "excluded_roundtrip": {

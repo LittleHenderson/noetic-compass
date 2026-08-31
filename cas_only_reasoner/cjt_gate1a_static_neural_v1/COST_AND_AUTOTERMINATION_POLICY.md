@@ -4,7 +4,7 @@
 
 | Step | Estimate |
 |---|---|
-| Dataset regen + checker + SCMPE table (CPU-side of the GPU box) | < 0.2 h |
+| Dataset regen + checker + taxonomy-table re-verification (CPU-side of the GPU box) | < 0.2 h |
 | Activation extraction, 4 layers × (6k train + 1k val) passages, fp16 cache | ~1.0 h |
 | Layer selection (4 × S0 head runs) | ~0.5 h |
 | 25 head-training jobs from cache (24 arm-runs + the mandated S0/seed-11 duplicate) | ~2.6 h |

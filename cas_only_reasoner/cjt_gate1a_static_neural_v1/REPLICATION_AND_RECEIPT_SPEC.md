@@ -10,7 +10,7 @@ the results) records, per job and in campaign totals:
 - dataset digests (train/val/protected content SHA-256; the protected digest must
   equal the pre-registration `c911c1…a09563`)
 - container image digest; pip freeze digest
-- SCMPE table digest, balance counts, orthogonality statistic (pre-result)
+- alternative-taxonomy table digest, balance counts, orthogonality statistic (pre-result; PATH A rename)
 - selected layer L* with the four selection accuracies and tie-break
 - per run: arm, seed, instance type, region, start/end UTC, wall-clock seconds,
   training-curve digest, raw result-file digest, cost USD

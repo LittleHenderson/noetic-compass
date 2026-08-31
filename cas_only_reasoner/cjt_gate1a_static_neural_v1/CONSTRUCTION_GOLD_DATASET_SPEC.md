@@ -74,12 +74,32 @@ therefore means BOTH unseen surface syntax AND unseen content vocabulary
   SPLIT_AND_PROTECTED_EVAL_SPEC.md; content digest pre-registered in
   DATASET_MANIFEST_CANDIDATE.json)
 
-## Determinism
+## Determinism (Gate 1A.1 — amendment A1)
 
-- Single frozen seed: `20260831` (`random.Random`, no wall-clock, no OS entropy).
-- Regenerating with the same seed reproduces byte-identical passages; the Gate 1B
-  AWS job regenerates the protected split from this seed and MUST match the
-  pre-registered digest before any evaluation.
+- Single frozen seed: `20260831` driving `exec/prng.HashPRNG` — a pure SHA-256
+  counter stream with unbiased rejection sampling (no `random.Random` anywhere in
+  claim-bearing generation). Regeneration is **byte-identical on every CPython
+  ≥ 3.8 by construction**, which removes the owner-flagged cross-version
+  dependency (candidate corpus generated under 3.14, training container under
+  3.11) at the root. No wall-clock, no OS entropy.
+- The Gate 1B AWS job regenerates all splits and MUST match every pre-registered
+  digest before any evaluation (`DATASET_INTEGRITY_FAILURE` otherwise) — the
+  digest gate remains as belt-and-suspenders.
+- Protected derivation is either the public stream (integrity-only; the split is
+  publicly reconstructible and is never called secret) or the owner-held salt
+  path (`--protected-salt-hex`; commit-and-reveal — see
+  SPLIT_AND_PROTECTED_EVAL_SPEC.md). Owner decision, open.
+
+## Surface solvability (recorded fact, not a flaw)
+
+The task is EXACTLY surface-solvable: the registered B1 parser (passage text +
+question text only) scores `6000/6000` on train and `1000/1000` on val
+(`SURFACE_BASELINES_CANDIDATE.json`). B1 is the task ceiling; B0 is the
+class-blind floor (`0.6445` train / `0.6680` val). Any neural reading is bounded
+by these two rows. The corpus occurrence audit
+(`CANDIDATE_OCCURRENCE_AUDIT.json`) records that 17.4% (train) / 17.9% (val) of
+answers first occur outside their target clause — the fact that forced the
+context-free candidate-encoding rule.
 
 ## Record schema (JSONL, one passage per line)
 

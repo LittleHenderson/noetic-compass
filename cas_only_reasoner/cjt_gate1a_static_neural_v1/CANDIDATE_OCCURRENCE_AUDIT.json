@@ -1,0 +1,16 @@
+{
+  "audit_id": "CANDIDATE_OCCURRENCE_AUDIT",
+  "law": "recorded per owner audit 2026-08-31 section 7; candidate encoding is CONTEXT-FREE (frozen input embeddings), so no arm ever encodes a candidate from a contextual occurrence -- this measures the dataset characteristic that motivated the encoding change",
+  "splits": {
+    "train": {
+      "passages": 6000,
+      "answer_first_occurrence_outside_target_clause": 1043,
+      "fraction": 0.17383333333333334
+    },
+    "val": {
+      "passages": 1000,
+      "answer_first_occurrence_outside_target_clause": 179,
+      "fraction": 0.179
+    }
+  }
+}

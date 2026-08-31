@@ -1,0 +1,4 @@
+# Byte-pin the frozen package: no CRLF conversion on any platform, ever.
+# The approval verifier recomputes SHA-256 digests from the WORKING TREE; an
+# autocrlf checkout would silently rewrite every text file and void the freeze.
+* -text

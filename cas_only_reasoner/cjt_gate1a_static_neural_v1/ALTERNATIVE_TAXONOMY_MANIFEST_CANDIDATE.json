@@ -1,0 +1,32 @@
+{
+  "manifest_id": "ALTERNATIVE_TAXONOMY_MANIFEST_CANDIDATE",
+  "former_id": "SCMPE_CONTROL_MANIFEST_CANDIDATE -- renamed under owner PATH A (audit 2026-08-31 section 5, amendment A2): the construction below yields ONE alternative taxonomy, not a Semantic-Cohesion-Matched Partition Ensemble; SCMPE-v1 (>=1000 balanced partitions, cohesion/separation/frequency/length/morphology matching, percentile reporting) is NOT implemented here and this control may never be called SCMPE",
+  "purpose": "S7 (SINGLE_ALTERNATIVE_TAXONOMY): replace the task-aligned labels with one structured alternative annotation. Beating S7 shows the coupler benefit is not satisfied by this one alternative carving; it licenses NOTHING about CAS specificity.",
+  "status": "CANDIDATE -- the frozen table MUST be constructed, balance-checked, and digest-pinned under the CONTAINER_PREP approval, BEFORE any activation extraction, training, or result exists; its digest enters the signed EXECUTION approval as s7_control_table_sha256 and the launcher re-verifies the constructed table on-instance",
+  "circularity_disclosure": "the dataset's answer function is defined over the CAS classes, so every taxonomy admissible under the orthogonality rule is necessarily MISALIGNED with the answer function; no equally task-aligned non-CAS control can exist on this dataset (GATE1A_SCOPE_AND_CLAIM_BOUNDARY.md, honest ceilings)",
+  "cross_family_instability_disclosure": "the head verbs change completely across template families (^2: drawn/pulled/felt/captured across A/B/C/D, etc.), so the taxonomy class of the SAME formal operation changes between train (A,B), validation (C), and protected (D) surfaces; S7's labels are therefore unstable across splits while S3's are stable -- a recorded structural handicap of this control (owner audit section 4 of the S7 finding). This is why S7 is a diagnostic control, never an equal comparison.",
+  "construction_law": {
+    "resource": "an INDEPENDENT FROZEN lexical resource -- WordNet 3.1 verb lexicographer files (lexnames) -- NOT the target Transformer's activations, NOT any model output",
+    "resource_pinning": "the WordNet 3.1 archive SHA-256 is recorded in this manifest before construction (slot below); the mapping table derived from it is frozen as derived/alternative_taxonomy_table.json with its own digest",
+    "head_verb_table": {
+      "comment": "the REGISTERED head verb per (class, family) -- complete 16-row table",
+      "^2": {"A": "drawn", "B": "pulled", "C": "felt", "D": "captured"},
+      "^3": {"A": "withdrew", "B": "repelled", "C": "recoiled", "D": "backed"},
+      "^6": {"A": "broke", "B": "lay", "C": "split", "D": "made"},
+      "^8": {"A": "brought", "B": "thought", "C": "reminded", "D": "summoned"}
+    },
+    "runtime_law": "at training/eval time the label is read from the CLAUSE SURFACE (exec/labels.py s7_taxonomy_label finds the one registered verb in the clause text and maps verb -> class); the gold class is never consulted",
+    "mapping_rule": "each registered verb maps to its WordNet 3.1 primary-sense lexname; the four taxonomy classes are the four most populous distinct lexname groups over the 16 registered verbs; verbs in smaller groups join the lexname group of their nearest hypernym-path group, ties broken alphabetically by lexname (executable, no judgment calls)",
+    "cardinality": 4,
+    "balance_tolerance": "each taxonomy class covers 25% +/- 10% of clauses per split; if the tolerance fails, apply the registered EXECUTABLE fallback: repeatedly move the alphabetically-first verb of the largest class to the smallest class until the tolerance holds or 16 moves occur (then reject the taxonomy and use the registered noun-domain alternative); every move is recorded -- never hand-edited per clause",
+    "orthogonality_check": "the taxonomy class must NOT be a relabeling of the CAS class: Cramer's V between taxonomy and CAS labels over train must be <= 0.35, computed and recorded before Gate 1B training; if exceeded, the taxonomy is rejected and an alternative registered carving (noun-domain lexnames) is used and recorded"
+  },
+  "frozen_before_results_law": "the final derived/alternative_taxonomy_table.json digest, the balance counts, and the orthogonality statistic are appended to this manifest and to the execution receipt BEFORE any arm result is computed; after the first protected read, this manifest is immutable",
+  "to_be_filled_under_container_prep_approval": {
+    "wordnet_31_archive_sha256": "TO_BE_PINNED",
+    "alternative_taxonomy_table_sha256": "TO_BE_PINNED",
+    "per_split_balance_counts": "TO_BE_RECORDED",
+    "cramers_v_taxonomy_vs_cas": "TO_BE_RECORDED"
+  },
+  "claim_language_law": "S3 > S7 contributes ONE of the seven control gates required for TASK_ALIGNED_LABEL_AUXILIARY_VALUE_LICENSED (THRESHOLDS_AND_STATUS_LAW.yaml v3); the words 'CAS-specific' are PROHIBITED on this dataset regardless of result; a real specificity test requires SCMPE-v1 on a v2 dataset whose answer function is not class-bijective (owner PATH B, deferred)"
+}

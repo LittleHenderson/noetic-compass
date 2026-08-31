@@ -1,7 +1,12 @@
 # AWS_EXECUTION_MANIFEST -- Gate 1B execution environment (CANDIDATE until the
 # owner signs the phase-approval record; NO job may be launched from this file
 # without that signature).
-version: GATE1B_AWS_v1
+# v2 (Gate 1A.1): two-signature gate (CONTAINER_PREP then EXECUTION); every
+# identity digest resolved BEFORE the execution signature; generation determinism
+# is Python-version-independent (exec/prng.HashPRNG), so the 3.11 container
+# regenerates the 3.14-generated candidate corpus byte-identically by
+# construction; the launcher's first act is full approval verification.
+version: GATE1B_AWS_v2
 compute_law:
   rule: "ALL claim-bearing neural work on AWS GPU; NO silent local CPU fallback --
     a job that cannot obtain a GPU fails closed with GPU_REQUIRED"
@@ -20,36 +25,56 @@ environment:
 container:
   base: python 3.11, torch >= 2.3 (CUDA), transformers pinned at build
   pinning_law: >
-    at container build (before any training): record the image digest, the exact
-    HuggingFace revision SHA of Qwen/Qwen2.5-0.5B-Instruct, the SHA-256 of every
-    weight file, the tokenizer digest, and the pip freeze; the owner-signed
-    approval binds to these digests and every job refuses on mismatch
-  image_digest: TO_BE_PINNED_AT_BUILD
+    TWO-SIGNATURE GATE (owner audit 2026-08-31 section 3). First the owner signs
+    a CONTAINER_PREP approval (OWNER_CONTAINER_PREP_APPROVAL.schema.json), which
+    authorizes ONLY: downloading + pinning the model (revision SHA, every weight
+    file SHA-256, tokenizer digest), building the container (image digest, pip
+    freeze/dependency-lock digest), and constructing + pinning the alternative-
+    taxonomy table. Those resolved identities are then written INTO the
+    GATE_1B_EXECUTION approval record, which the owner signs SECOND -- so the
+    execution signature binds the actual model, container, code, data, controls,
+    budget, and destination, with NOTHING deferred past it. The launcher
+    re-verifies every identity on-instance and refuses on any mismatch.
+  image_digest: RESOLVED_UNDER_CONTAINER_PREP_APPROVAL
+  price_note: >
+    every $/hour figure in this package is an ESTIMATE, never a signed fact; the
+    owner verifies the current instance price and quota in their account at
+    approval time, and the launcher takes the verified rate as --hourly-rate-usd
 
 job_definition: >
   a "job" is one atomic entry below; step 6 comprises 25 SEPARATE jobs (one per
   run, ~10 min each) -- the 2-hour per-job wall-clock cap applies to each job as
   defined here, not to a whole step group
 job_sequence:
-  1: dataset regeneration on-instance from seed 20260831; ALL split content digests
-     MUST equal the pre-registration; protected MUST equal
-     c1e19462823d2210bc44addaa9aad36e04aa28bf9e68a6529104cd6a507d70b8
-     (else DATASET_INTEGRITY_FAILURE, abort). This digest-equality gate makes any
-     Python-RNG version drift fail closed, never silently.
+  0: launcher verifies the SIGNED execution approval against the checked-out tree
+     (tools/verify_phase_approval.py verify_full -- fields, Ed25519 signature vs
+     the pinned key, commit equality, manifest-key-set equality, every digest
+     recomputed, untracked scan); ANY defect refuses the whole campaign
+  1: dataset regeneration on-instance from seed 20260831 via exec/prng.HashPRNG
+     (Python-version-independent BY CONSTRUCTION); ALL split content digests MUST
+     equal the pre-registration; protected MUST equal
+     0c0c2842b90b8220782b0ce992ff58dfa035f87228b3dfb63808d9f29bd46321
+     under the public-seed derivation (or the owner-side recorded digest under
+     the salt derivation) -- else DATASET_INTEGRITY_FAILURE, abort
   2: independent round-trip checker re-run over all splits (pinned digest)
-  2b: registered SURFACE BASELINE (B0) computed on all splits and recorded
-  3: SCMPE table construction + pinning (SCMPE_CONTROL_MANIFEST_CANDIDATE law),
-     BEFORE any extraction, training, or result exists
-  3b: the complete Gate 1B training/eval code commit digest recorded in the receipt
-      (code-pinning law) BEFORE any training job starts
-  4: activation extraction, 4 candidate layers, train+val, cached to S3 (fp16)
+  2b: BOTH registered surface baselines recomputed on train/val and REQUIRED to
+      equal SURFACE_BASELINES_CANDIDATE.json exactly (B0 floor, B1 ceiling)
+  3: alternative-taxonomy table digest re-verified on-instance against the signed
+     s7_control_table_sha256 (the table was constructed and pinned under the
+     CONTAINER_PREP approval, BEFORE the execution signature)
+  3b: model/container/dependency identities re-verified against the signed record
+      (MODEL_IDENTITY_MISMATCH / CONTAINER_IDENTITY_MISMATCH on any difference)
+  4: activation extraction, 4 candidate layers, train+val, cached to S3 (fp16,
+     digest-pinned; cache-once law)
   5: layer selection (S0-only law, seed 11; 4 selection runs)
   6: 25 head-training jobs (8 arms x 3 seeds + the mandated S0/seed-11 duplicate;
      the duplicate performs NO protected read)
-  7: protected extraction + single protected evaluation pass per arm/seed +
-     Claim-A probe evaluation inside the same pass
-  8: deterministic status emission via the COMMITTED tools/emit_gate1_status.py +
-     execution receipt + cost report
+  7: protected regeneration + single protected evaluation pass per arm/seed +
+     Claim-A probe + protected B0/B1, all inside the same pass
+     (exec/protected_eval.py; refuses unless all 25 receipts exist)
+  8: deterministic status emission via the COMMITTED tools/emit_gate1_status.py
+     (strict evidence validation; boot_n frozen at 10000) + execution receipt +
+     cost report
 
 receipt_fields_per_job:
   [model_revision_sha, weight_file_sha256s, code_commit_sha, dataset_digests,

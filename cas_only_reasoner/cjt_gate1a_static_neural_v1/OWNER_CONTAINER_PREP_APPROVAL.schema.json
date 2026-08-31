@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OWNER_CONTAINER_PREP_APPROVAL -- the first signature of the two-signature gate",
+  "description": "Owner audit 2026-08-31 section 3 (two-signature gate). This record authorizes ONLY: downloading and identity-pinning the frozen base model (revision SHA, weight digests, tokenizer digest), building the execution container (image digest, dependency lock), and constructing + digest-pinning the alternative-taxonomy table. It authorizes NO training, NO activation extraction, NO protected read, NO claim-bearing run. The identities it produces are then written into the GATE_1B_EXECUTION record (OWNER_PHASE_APPROVAL.schema.json v2), which the owner signs SECOND -- so nothing is deferred past the execution signature. Verified by tools/verify_phase_approval.py verify_container_prep(): same canonical signing bytes, same pinned-public-key law, same commit and tree binding.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["record_id", "phase", "decision", "gate0_anchor_sha", "package_commit_sha",
+               "package_manifest_sha256", "gate1b_code_manifest_sha256",
+               "prep_cost_ceiling_usd", "aws_path", "region", "s3_prefix",
+               "owner_ed25519_public_key_hex", "signed_utc", "ed25519_signature"],
+  "properties": {
+    "record_id": {"const": "OWNER_CONTAINER_PREP_APPROVAL_GATE1B"},
+    "phase": {"const": "GATE_1B_CONTAINER_PREP"},
+    "decision": {"enum": ["APPROVED", "REFUSED"]},
+    "gate0_anchor_sha": {"const": "83f57d6f724505f2c2c68593b2625c36c3e07a4d"},
+    "package_commit_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "package_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gate1b_code_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "prep_cost_ceiling_usd": {"type": "number", "exclusiveMinimum": 0,
+      "description": "small CPU/build budget; no GPU training is authorized by this record"},
+    "aws_path": {"enum": ["EC2_G5", "SAGEMAKER_G5"]},
+    "region": {"const": "us-east-1"},
+    "s3_prefix": {"type": "string", "pattern": "^s3://[a-z0-9][a-z0-9.-]{1,61}[a-z0-9](/.*)?$"},
+    "owner_ed25519_public_key_hex": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signed_utc": {"type": "string", "minLength": 20, "format": "date-time"},
+    "ed25519_signature": {"type": "string", "pattern": "^[0-9a-f]{128}$"}
+  }
+}

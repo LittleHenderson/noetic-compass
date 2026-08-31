@@ -12,19 +12,22 @@ question — **CJT-T1, the Static Dual-Stream CJT Coupler** — before any GPU i
 touched. Every architectural, data, control, threshold, and cost decision is frozen
 here so that Gate 1B cannot drift, rescue, or retrofit.
 
-## The one question Gate 1B will answer
+## The one question Gate 1B will answer (v3 license law — Gate 1A.1)
 
-> Does S3 (the coupled CAS arm) beat S7 (the matched-semantic control) AND S6 (the
-> matched-capacity control) on protected data under identical conditions?
+> Does S3 (the coupled arm) beat **EVERY** control — S0 plain, S1 attention-only,
+> S2 profile-only, S4 corrupted-label, S5 random-label, S6 matched-capacity, S7
+> single-alternative-taxonomy — on protected data under identical conditions?
 
-Interpretation table (frozen; no post-hoc rescue):
+Interpretation table (frozen; no post-hoc rescue; the executable form is
+THRESHOLDS_AND_STATUS_LAW.yaml v3's decision tree):
 
 | Outcome | Reading |
 |---|---|
-| S3 beats S0–S6 but ties S7 | Generic semantic structure helped. CAS-specific value NOT established. |
-| S3 beats S7 but ties S6 | Extra architecture/capacity helped. CAS-specific value NOT established. |
-| S3 beats shuffled/random only | A stable side channel may help. CAS-specific value NOT established. |
-| S3 beats S6 AND S7 on protected data | Claim B licensed — first evidence that task-aligned construction-gold process labels add incremental value beyond matched-capacity and alternative-taxonomy controls (see the S7 circularity limit below; NOT unqualified "CAS-specific"). |
+| S3 fails the gate vs any of S0/S1/S2 | The plain, attention-only, or profile-only arm matched or beat the coupler. `COUPLER_NOT_SUPERIOR_TO_SIMPLER_ARMS`. Nothing licensed. |
+| S3 beats simpler arms + S6, ties S7 | Generic semantic structure helped. Nothing licensed. |
+| S3 beats simpler arms + S7, ties S6 | Extra architecture/capacity helped. Nothing licensed. |
+| S3 beats shuffled/random only | A stable side channel may help. Nothing licensed. |
+| S3 beats ALL SEVEN controls | `TASK_ALIGNED_LABEL_AUXILIARY_VALUE_LICENSED` — task-aligned construction-gold process labels added value beyond every registered control, in the four-Noetic restricted slice, static dense setting, on a task whose surface ceiling B1 = 1.00. NOT "CAS-specific" (prohibited on this dataset regardless of result). |
 | S3 loses or ties broadly | Static CAS coupling NOT supported. Record it. Do not rescue it by changing metrics. |
 
 ## Restricted-slice law (naming discipline)
@@ -41,35 +44,47 @@ owner-approved rules.
 Two structural facts bound what this experiment can ever show, disclosed here so no
 result can outgrow them:
 
-1. **Informational redundancy.** The CAS stream `p_i` is a deterministic function of
-   the clause text (the package's own independent checker recovers every label by
-   regex, 100%, zero exclusions). `p_i` therefore adds ZERO information beyond the
-   text; any S3 gain over S1/S6 can only be an optimization/bottleneck effect of the
-   frozen encoder — never new information. A registered class-blind SURFACE BASELINE
-   (B0) is reported as a floor next to every arm result; the generator's distractor
-   law forces the discriminating question types (attract/avert, two thirds of items)
-   to be unanswerable by bare entity co-occurrence, but Q_PART/Q_TRIGGER remain
-   largely surface-solvable and are reported per-type.
-2. **S7 circularity limit.** The dataset's answer function is DEFINED over the CAS
-   classes, so any task-aligned 4-class taxonomy is necessarily a near-relabeling of
-   CAS (and is rejected by the SCMPE orthogonality rule); every admissible S7
-   taxonomy is misaligned with the answer function by construction. Beating S7 on
-   THIS dataset therefore cannot license unqualified "CAS-specific". The licensed
-   Claim-B words are exactly: *"task-aligned construction-gold process labels add
-   incremental value beyond matched-capacity and alternative-taxonomy controls, in
-   the four-Noetic restricted slice, static dense setting."* Whether to accept this
-   bounded claim or order a v2 dataset whose answer function is not class-bijective
-   is an OWNER DECISION recorded in the freeze return.
+1. **Informational redundancy AND an exact surface ceiling.** The CAS stream `p_i`
+   is a deterministic function of the clause text (the package's own independent
+   checker recovers every label by regex, 100%, zero exclusions). `p_i` therefore
+   adds ZERO information beyond the text; any S3 gain can only be an
+   optimization/bottleneck effect of the frozen encoder — never new information.
+   TWO registered surface baselines make this exact (owner audit section 6):
+   **B0**, the class-blind co-occurrence floor (train `3867/6000 = 0.6445`, val
+   `668/1000 = 0.6680`; attract/avert at the distractor-forced coin flip
+   0.4805–0.5269; Q_PART/Q_TRIGGER near ceiling), and **B1**, the full
+   deterministic surface-grammar parser reading only passage + question text —
+   the TASK CEILING, measured at exactly `6000/6000 = 1.0000` on train and
+   `1000/1000 = 1.0000` on val (`SURFACE_BASELINES_CANDIDATE.json`). The task is
+   exactly surface-solvable BY CONSTRUCTION. A positive S3 result therefore means
+   *task-aligned labels helped a frozen encoder reach a surface-computable
+   function* — never that CAS supplied information absent from the language.
+2. **S7 circularity limit — owner PATH A taken (Gate 1A.1).** The dataset's answer
+   function is DEFINED over the CAS classes, so any task-aligned 4-class taxonomy
+   is necessarily a near-relabeling of CAS (rejected by the orthogonality rule);
+   every admissible S7 taxonomy is misaligned with the answer function by
+   construction — and the registered S7's head verbs change across template
+   families, making its labels unstable across splits (a recorded handicap).
+   Consequently: S7 is renamed SINGLE_ALTERNATIVE_TAXONOMY (never "SCMPE-v1");
+   the claim is renamed **TASK_ALIGNED_LABEL_AUXILIARY_VALUE**; and the words
+   **"CAS-specific" are PROHIBITED on this dataset regardless of result**. A
+   genuine CAS-specificity test requires PATH B — real SCMPE-v1 (≥1000 matched
+   partitions) on a v2 dataset whose answer function is not class-bijective —
+   deferred to a separate registration. PATH A is recorded as the working
+   disposition consistent with the owner's audit framing of v1 as a bounded
+   optimization/mechanism experiment; owner ratification is requested at signing.
 
 ## Claims frozen for Gate 1
 
 - **Claim A (readable CAS structure):** a registered neural representation or
   adapter can use the four construction-gold CAS operation classes on held-out
   templates and vocabulary. Establishes decodability/usability ONLY.
-- **Claim B (incremental CAS value):** the coupled CAS architecture improves
-  held-out task performance beyond lexical, attention-only, matched-capacity,
-  shuffled, random, AND matched-semantic controls. ONLY Claim B can license the
-  words **"CAS-specific"**.
+- **Claim B — renamed TASK_ALIGNED_LABEL_AUXILIARY_VALUE (Gate 1A.1, owner PATH
+  A):** the coupled architecture improves held-out task performance beyond the
+  plain, attention-only, profile-only, corrupted-label, random-label,
+  matched-capacity, AND single-alternative-taxonomy controls — all seven gates
+  required (THRESHOLDS_AND_STATUS_LAW.yaml v3). It can NEVER license the words
+  "CAS-specific" on this dataset, whatever the numbers.
 - **Not active in Gate 1:** Claim C (causal steering/intervention utility), Claim D
   (learning speed, retention, selective plasticity), recursive RPM advantage, ASOM
   regulation advantage, CAS-Ohm compute efficiency, full CJT-Transformer capability.

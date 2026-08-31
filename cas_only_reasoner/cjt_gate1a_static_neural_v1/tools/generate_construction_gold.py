@@ -5,26 +5,43 @@ Law (CONSTRUCTION_GOLD_DATASET_SPEC.md): the formal operation exists FIRST; a
 deterministic template renders the sentence; the INDEPENDENT checker must recover
 the seed operation exactly; failed round trips are EXCLUDED, never relabeled.
 
-Deterministic: single frozen seed 20260831, random.Random only, no wall-clock.
+Deterministic: single frozen seed 20260831 driving exec/prng.HashPRNG -- a pure
+SHA-256 counter stream, so regeneration is BYTE-IDENTICAL on every CPython >= 3.8
+(owner audit 2026-08-31 section 8: random.Random's sample/shuffle/choice have
+version-dependent implementations; the 3.14-laptop-vs-3.11-container regeneration
+dependency is removed at the root, not papered over). No wall-clock, no OS entropy.
 Local execution is permitted in Gate 1A (deterministic dataset generation and
 round-trip verification are in the allowed set). NO model, NO GPU, NO network.
 
 The PROTECTED split is generated in-memory, checked, counted, and DIGESTED --
 never written to disk in Gate 1A (SPLIT_AND_PROTECTED_EVAL_SPEC.md).
+
+Protected-derivation options (owner decision, audit section 9):
+  default             -- protected drawn from the same public stream: reconstructible
+                         by anyone (INTEGRITY-ONLY; never called secret).
+  --protected-salt-hex XX..  -- protected drawn from a FRESH stream domain
+                         "CONSTRUCTION_GOLD_PROTECTED|<seed>|<salt-hex>"; the
+                         manifest records ONLY sha256(salt-hex utf-8) as the
+                         commitment. The salt stays with the owner; the split is
+                         then unreconstructible without it, while the recorded
+                         content digest still gives integrity. The owner supplies
+                         the salt to the Gate 1B job at the protected step only.
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
-import random
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 PKG = HERE.parent
 sys.path.insert(0, str(HERE))
+sys.path.insert(0, str(PKG))
 
 from independent_roundtrip_checker import check_record  # checker imports NOTHING from here
+from exec.prng import HashPRNG
 
 GATE1A_SEED = 20260831
 SIZES = {"train": 6000, "val": 1000, "protected": 1000}
@@ -203,26 +220,47 @@ def canonical_line(rec):
 
 
 def main():
-    rng = random.Random(GATE1A_SEED)
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--protected-salt-hex", default=None,
+                    help="OWNER-HELD salt (hex). Protected split derives from a "
+                         "fresh salted stream; only sha256(salt) is recorded.")
+    args = ap.parse_args()
+    rng = HashPRNG(f"CONSTRUCTION_GOLD|{GATE1A_SEED}")
+    if args.protected_salt_hex is not None:
+        salt = args.protected_salt_hex.strip().lower()
+        if not salt or any(c not in "0123456789abcdef" for c in salt):
+            print("REFUSED: --protected-salt-hex must be nonempty lowercase hex")
+            return 1
+        protected_rng = HashPRNG(f"CONSTRUCTION_GOLD_PROTECTED|{GATE1A_SEED}|{salt}")
+        derivation = ("SALT_SHA256:"
+                      + hashlib.sha256(salt.encode("utf-8")).hexdigest())
+    else:
+        protected_rng = rng                       # status quo: one public stream
+        derivation = f"PUBLIC_SEED_{GATE1A_SEED}"
     out_dir = PKG / "data" / "candidate"
     out_dir.mkdir(parents=True, exist_ok=True)
     manifest = {"manifest_id": "DATASET_MANIFEST_CANDIDATE",
                 "claim_bearing": False,
                 "generation_interpreter": sys.version.split()[0],
-                "interpreter_law": ("the Gate 1B container regenerates all splits and "
-                                    "MUST reproduce every content_sha256 exactly; a "
-                                    "Python-version RNG drift therefore fails closed "
-                                    "as DATASET_INTEGRITY_FAILURE, never silently"),
+                "interpreter_law": ("generation uses exec/prng.HashPRNG (pure "
+                                    "SHA-256 integer arithmetic), so regeneration "
+                                    "is Python-version-independent BY CONSTRUCTION; "
+                                    "the Gate 1B container still regenerates all "
+                                    "splits and MUST reproduce every content_sha256 "
+                                    "exactly (DATASET_INTEGRITY_FAILURE on any "
+                                    "mismatch, never silent)"),
+                "protected_derivation": derivation,
                 "status": "CANDIDATE (CAS_MAPPING_RULES_v1_CANDIDATE still awaits "
                           "owner approval; nothing here is claim-bearing)",
                 "generator_seed": GATE1A_SEED,
                 "sizes_requested": dict(SIZES), "splits": {}, "files": {},
                 "excluded_roundtrip": {}, "protected_materialized": False}
     for split in ("train", "val", "protected"):
+        srng = protected_rng if split == "protected" else rng
         records, excluded, idx = [], [], 0
         qcycle = 0
         while len(records) < SIZES[split]:
-            rec = build_passage(rng, split, idx, QTYPES[qcycle % len(QTYPES)])
+            rec = build_passage(srng, split, idx, QTYPES[qcycle % len(QTYPES)])
             idx += 1
             if rec is None:
                 continue
