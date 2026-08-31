@@ -1,0 +1,13 @@
+{
+  "attestation_id": "RC02_ATTESTATION",
+  "note": "Binds the evidence commit SHA that the RC-0.2 receipt itself could not contain (a file cannot hash its own commit id). This attestation is committed SEPARATELY, immediately after the evidence commit.",
+  "evidence_commit_sha": "c8f350df79ee22578155f325faa92a9693c0a45f",
+  "evidence_commit_message": "cjt(rc-0.2): effect authority, semantic verification, and complete state-seal closure",
+  "parent_of_evidence_commit": "60b36e063e93d5bff60d2fad01d7cce06f1675ae",
+  "receipt_file": "cas_only_reasoner/recursive_cjt_rc0/RC01_FEEDBACK_CLOSURE_RECEIPT.json",
+  "receipt_sha256_at_evidence_commit": "684dd64c17c5003ae2af1af92a7fb7ad8ba05d67d3992308a68e6d86eb177bad",
+  "status_in_receipt": "DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS",
+  "status_emission": "programmatic via generate_rc02_receipt.py; run 'python generate_rc02_receipt.py --check-only' from the evidence commit to reproduce",
+  "attested_by": "Prof. Hermes M. Thoth (repo git user); Co-Authored-By Claude Opus 4.8",
+  "scope": "This attestation binds the SHA only. It does not upgrade any claim: neural, CAS-specific, learning, and efficiency claims remain PROHIBITED until Gate 1+."
+}
