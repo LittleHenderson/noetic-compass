@@ -352,6 +352,34 @@ class EffectCommitContext:
 
 
 @dataclass(frozen=True)
+class FinalizationPermit:
+    """RC-0.4E section 2 (owner audit critical 1): the one-use capability that makes
+    publication promotion an AUTHORITY OPERATION. Issued only through the publication
+    coordinator's lifecycle authority (claimed exactly once, by the engine at
+    construction); bound to the episode, the planned final phase, the exact planned
+    final snapshot digest, the exact provisional ledger digest and index sets, the
+    current state digest, and the finalization sequence. Consumed on promotion."""
+
+    episode_id: str
+    planned_phase: str
+    planned_snapshot_digest: str
+    provisional_ledger_digest: str
+    provisional_indices: tuple
+    engine_provisional_indices: tuple
+    state_digest: str
+    sequence: int
+
+    @property
+    def permit_digest(self) -> str:
+        return digest({"ep": self.episode_id, "phase": self.planned_phase,
+                       "planned": self.planned_snapshot_digest,
+                       "ledger": self.provisional_ledger_digest,
+                       "rows": self.provisional_indices,
+                       "engine_rows": self.engine_provisional_indices,
+                       "state": self.state_digest, "seq": self.sequence})
+
+
+@dataclass(frozen=True)
 class DiagnosticCommitReceipt:
     """Emitted ONLY by the state coordinator after a SUCCESSFUL atomic commit (RC-0.3).
     Publication requires this receipt: a Boolean named committed is not authority."""

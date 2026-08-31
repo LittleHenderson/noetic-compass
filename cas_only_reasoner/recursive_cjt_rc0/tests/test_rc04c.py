@@ -252,7 +252,9 @@ def test_seal_failure_cannot_leave_published_effect():
 def test_seal_failure_status_is_not_gate0_pass():
     e, cf = _unsealable_run("u2")
     assert e.finalized and e.fault is not None
-    assert cf.fault["phase"] == "seal" and cf.fault.get("seal_failed") is True
+    # RC-0.4E: the whole finalization is one guarded transaction; the typed fault
+    # phase is "finalize" and the run ends FAULTED
+    assert cf.fault["phase"] == "finalize" and e.phase == "FAULTED"
     # RC-0.4C internal-audit hardening: an unsealed run HAS no result -- result()
     # raises the typed ControllerFault instead of emitting pass-shaped evidence;
     # the partial evidence stays on the engine object for forensics

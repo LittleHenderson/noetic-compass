@@ -42,5 +42,12 @@
     "owner_verdict_on_rc04c": "RC04C_VERIFIER_FIXES_CLOSED; GATE0_SCHEMA_PUBLICATION_AND_ACTION_SEMANTICS_OPEN -- three criticals: controller configuration not preflighted; unsealed run held published==1; ASOM cutoff/breakdown decorative (owner independent audit, 2026-08-31)",
     "rc04d_commit_sha": "UNBOUND_UNTIL_FOLLOW_UP -- the RC-0.4D commit contains this file and cannot hash itself",
     "record_kind": "UNSIGNED Git-history binding record; not a signature, not independent verification"
+  },
+  "rc04d_binding_2026_08_31": {
+    "note": "APPEND-ONLY: binds the RC-0.4D evidence commit. The RC-0.4E commit that contains this edit cannot bind its own SHA.",
+    "rc04d_evidence_commit_sha": "ad46418fea1ba9260361440698523e76f3abafdc",
+    "owner_verdict_on_rc04d": "RC04D_SCHEMA_AND_STAGING_PARTIAL_PASS; GATE0_LIFECYCLE_BRANCH_AND_ACTION_SEMANTICS_OPEN (owner independent audit, 2026-08-31); separately RC04D_INDEPENDENT_AI_AUDIT_PARTIAL_PASS -- a third-party AI agent independently reproduced the full battery (205 tests, 26 scenarios, 8 injections, 15 mutations, replay, manifest integrity) in a fresh environment and found the F-01 finalization fault-path defect (an independent cross-model software audit, NOT external scientific replication)",
+    "rc04e_commit_sha": "UNBOUND_UNTIL_FOLLOW_UP -- the RC-0.4E commit contains this file and cannot hash itself",
+    "record_kind": "UNSIGNED Git-history binding record; not a signature, not independent verification"
   }
 }

@@ -1,0 +1,140 @@
+{
+  "manifest_id": "RC04_REQUIRED_MUTATIONS_v4",
+  "supersedes": "RC04_REQUIRED_MUTATIONS_v3 (preserved on disk unchanged; v4 = the same fifteen entries verbatim plus the seven RC-0.4E laws -- nothing replaced or deleted)",
+  "law": "The receipt status law must find EXACTLY this mutation set in the fresh mutation report: same names, same count, same file/test pairs, every one applied and caught by a semantic AssertionError. A missing, extra, renamed, or re-targeted mutation REFUTES the status. This file's canonical-content digest is pinned in generate_rc02_receipt.py; editing either without the other is detected as tampering.",
+  "required_count": 22,
+  "mutations": [
+    {
+      "name": "publication_without_diagnostic_commit",
+      "file": "sim/rc01_coordinator.py",
+      "target_law": "PUB_LAW_NO_DIAGNOSTIC_COMMIT",
+      "expected_test": "test_rc03::test_publication_requires_diagnostic_commit_receipt"
+    },
+    {
+      "name": "diagnostic_eligibility_bypassed",
+      "file": "sim/rc01_coordinator.py",
+      "target_law": "LAW_DCR_REQUIRES_SEMANTIC_RECORD",
+      "expected_test": "test_rc04::test_memory_only_commit_cannot_mint_diagnostic_receipt"
+    },
+    {
+      "name": "publication_base_state_check_removed",
+      "file": "sim/rc01_coordinator.py",
+      "target_law": "PUB_LAW_STALE_STATE",
+      "expected_test": "test_rc03::test_pub_law_stale_state"
+    },
+    {
+      "name": "any_examiner_receipt_accepted",
+      "file": "sim/rc01_engine.py",
+      "target_law": "LAW_RECEIPT_NOT_ISSUED",
+      "expected_test": "test_rc03::test_old_public_seal_formula_rejected"
+    },
+    {
+      "name": "op_kind_verification_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "verifier envelope: wrong op_kind -> off_axis",
+      "expected_test": "test_rc03::test_wrong_op_kind_refused"
+    },
+    {
+      "name": "stale_effect_tick_accepted",
+      "file": "sim/rc01_engine.py",
+      "target_law": "verifier envelope: stale originating_tick -> off_axis",
+      "expected_test": "test_rc03::test_stale_effect_tick_refused"
+    },
+    {
+      "name": "consumed_receipts_omitted_from_seal",
+      "file": "sim/rc01_engine.py",
+      "target_law": "seal binds the consumed-receipt registries",
+      "expected_test": "test_rc03::test_seal_binds_consumed_receipts"
+    },
+    {
+      "name": "split_sibling_cancellation_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "split failure cancels unsettled siblings; no orphan publication",
+      "expected_test": "test_rc03::test_split_child_failure_no_orphan_publication"
+    },
+    {
+      "name": "cjtstep_snapshot_validation_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "STEP_METADATA_REJECTED: no snapshot laundering, no false Effect provenance",
+      "expected_test": "test_rc03::test_stale_cjtstep_result_rejected"
+    },
+    {
+      "name": "verifier_finalization_gate_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "verifier.verify refuses after finalization (issuance registry is seal-bound state)",
+      "expected_test": "test_rc04c::test_verifier_verify_refused_after_finalization"
+    },
+    {
+      "name": "verifier_configuration_preflight_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "every ACCEPTED verifier configuration is preflight-validated and sealable before the first tick",
+      "expected_test": "test_rc04c::test_unused_poison_gold_entry_rejected_before_first_tick"
+    },
+    {
+      "name": "constructor_schema_bypassed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "ONE schema governs every constructor parameter; a sealable-but-illegal value is rejected at construction",
+      "expected_test": "test_rc04d::test_nonbool_commit_flag_rejected"
+    },
+    {
+      "name": "final_publication_barrier_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "publication is PROVISIONAL until the final-seal barrier; an unsealed run holds zero publications",
+      "expected_test": "test_rc04d::test_unsealed_run_has_zero_published"
+    },
+    {
+      "name": "asom_zero_score_action_dispatch_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "cutoff dispatches repair and breakdown dispatches quarantine; ASOM actions are load-bearing",
+      "expected_test": "test_rc04d::test_cutoff_region_dispatches_repair_not_halt"
+    },
+    {
+      "name": "snapshot_whole_object_detach_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "runtime_snapshot returns one fully detached object; no member aliases live state",
+      "expected_test": "test_rc04d::test_fault_record_is_detached_from_runtime_snapshot"
+    },
+    {
+      "name": "scheduler_tick_capability_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "run() owns execution: the lifecycle phase guard on every execution internal (plus the tick scheduler token as defense-in-depth)",
+      "expected_test": "test_rc04e::test_prerun_internal_execution_refused"
+    },
+    {
+      "name": "publication_finalization_permit_removed",
+      "file": "sim/rc01_coordinator.py",
+      "target_law": "promotion requires a one-use FinalizationPermit bound to the exact provisional sets",
+      "expected_test": "test_rc04e::test_public_promotion_without_finalization_permit_refused"
+    },
+    {
+      "name": "result_finalization_requirement_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "result() exists only in a terminal phase (FINALIZED or FAULTED)",
+      "expected_test": "test_rc04e::test_result_before_finalization_is_refused"
+    },
+    {
+      "name": "finalization_fault_boundary_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "the whole finalization is one guarded transaction; any exception yields a typed, voided, FAULTED terminal state",
+      "expected_test": "test_rc04e::test_finalization_runtimeerror_is_typed"
+    },
+    {
+      "name": "split_active_branch_check_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "SPLIT obeys every branch ceiling; the branch-count unit is the child branch",
+      "expected_test": "test_rc04e::test_split_refused_when_max_active_branches_zero"
+    },
+    {
+      "name": "global_cause_id_check_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "cause ids are globally unique; generated child ids are reserved with deterministic collision handling",
+      "expected_test": "test_rc04e::test_top_level_id_cannot_collide_with_generated_child"
+    },
+    {
+      "name": "cutoff_self_clear_guard_removed",
+      "file": "sim/rc01_engine.py",
+      "target_law": "a ready-but-cutoff route cannot clear itself by relabeling; typed CUTOFF_CAUSE_UNRESOLVED, non-conducting",
+      "expected_test": "test_rc04e::test_ready_cutoff_cannot_self_clear_without_new_evidence"
+    }
+  ]
+}

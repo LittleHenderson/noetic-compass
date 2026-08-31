@@ -183,6 +183,15 @@ class SealedVerifier:
         return receipt
 
 
+class ControllerLifecycleError(Exception):
+    """RC-0.4E section 1: raised when the execution lifecycle is violated -- a direct
+    tick() without the run()-owned scheduler capability, run() outside phase NEW, or
+    result() before a terminal phase. Refusal happens BEFORE any budget, event,
+    receipt, commit, provisional publication, or allocation changes."""
+
+    code = "LIFECYCLE_VIOLATION"
+
+
 class ControllerTampered(Exception):
     """RC-0.4B (owner audit major 2): raised by result() when the engine's live seal
     no longer matches the seal captured at finalization -- i.e. state was mutated after
@@ -434,6 +443,16 @@ class RC01Engine:
             invalidation_events=invalidation_events,
             expected_payloads=expected_payloads)
         self.causes = cfg["causes"]
+        # RC-0.4E section 1: run() OWNS the execution lifecycle. The typed phase moves
+        # NEW -> RUNNING -> FINALIZING -> FINALIZED|FAULTED; tick() requires the
+        # private scheduler capability issued here and held only by run()'s loop.
+        self.phase = "NEW"
+        self.__scheduler_token = object()
+        # RC-0.4E section 5: ONE global registry of every cause id ever seen --
+        # initial, generated, completed, cancelled. Child ids are reserved before
+        # queue insertion; collisions get a deterministic collision-free id + a typed
+        # ID_COLLISION event. Seal-bound.
+        self.used_cause_ids = set(c.cause_id for c in cfg["causes"])
         # RC-0.4B (owner audit critical 1): one shared seal gate tripped at finalization;
         # coordinator, publication coordinator, budget, and verifier all refuse writes
         # once it is sealed, so finalization governs the ACTUAL write paths.
@@ -446,6 +465,10 @@ class RC01Engine:
                                          seal_gate=self._gate)
         self.pubcoord = PublicationCoordinator(cfg["episode_id"], self.coord,
                                                seal_gate=self._gate)
+        # RC-0.4E section 2: the engine claims the ONE-TIME lifecycle authority; every
+        # later claim (an outside caller) refuses, so promotion/voiding of this
+        # coordinator's publications is exclusively the engine's finalization path.
+        self.__pub_authority = self.pubcoord.claim_lifecycle_authority()
         self.budget = ComputeBudget.make(cfg["budget"], gate=self._gate)
         self.taus = cfg["taus"]
         self.episode_id = cfg["episode_id"]
@@ -493,7 +516,7 @@ class RC01Engine:
              "cap_events", "splits_created", "quarantines", "reopens",
              "cache_hits", "invalidations_honored", "children_cancelled",
              "step_metadata_rejects", "faults", "provisional_publications",
-             "voided_publications")
+             "voided_publications", "cutoff_unresolved", "dropped_causes")
         self.metrics = {k: 0 for k in m}
         self._provisional_pub_indices = []   # RC-0.4D: engine publication rows awaiting
         #                                      promotion at the final-seal barrier
@@ -509,12 +532,22 @@ class RC01Engine:
             raise ValueError("engine initial seal is not a 64-hex digest; "
                              "construction refused")
 
-    # ---------------- finalization latch (RC-0.4A) ----------------
+    # ---------------- lifecycle guard (RC-0.4A latch + RC-0.4E round-2 phases) ----
     def _refuse_if_finalized(self, entry_point: str):
+        """Refuses when the controller is FINALIZED (the RC-0.4A latch) OR when the
+        lifecycle phase is not an executing phase (RC-0.4E internal-audit MAJOR: the
+        execution internals carried only the finalization latch, so pre-run direct
+        calls could execute, commit, and provisionally publish outside run() -- and a
+        later run() sealed the injected work as authoritative). Execution internals
+        run ONLY inside run()'s RUNNING/FINALIZING lifecycle."""
         if self.finalized:
             raise FinalizedControllerError(
                 f"{entry_point} refused: the controller is FINALIZED and sealed "
                 f"({(self.seal_digest or '')[:12]}); no further mutation is possible")
+        if self.phase not in ("RUNNING", "FINALIZING"):
+            raise ControllerLifecycleError(
+                f"{entry_point} refused: phase is {self.phase}; execution internals "
+                "run only inside run()'s lifecycle")
 
     # ---------------- helpers ----------------
     def _intent(self, expert_id, fld, value, tick, reason, receipt=""):
@@ -587,6 +620,15 @@ class RC01Engine:
         self.events.append({"tick": tick, "event": "HALT", "why": why})
         self.halt_requested = True
 
+    def _drop_cause(self, t, cause_id, why):
+        """RC-0.4E round-2 (internal audit MAJOR): every dropped cause gets an
+        EXPLICIT typed terminal disposition -- a CAUSE_DROPPED event carrying the
+        cause id and a counted metric -- so events, metrics, and ledgers reconcile
+        per cause; nothing is stranded between worlds silently."""
+        self.metrics["dropped_causes"] += 1
+        self.events.append({"tick": t, "event": "CAUSE_DROPPED",
+                            "cause": cause_id, "why": why})
+
     def _quarantine(self, expert_id, tick, authorized_by):
         self._refuse_if_finalized("_quarantine")
         if expert_id not in self.quarantine_registry:
@@ -643,23 +685,27 @@ class RC01Engine:
         except (TypeError, ValueError):
             return False
 
-    def _promote_provisional_publications(self):
-        """Promote every provisional publication to PUBLISHED -- only after the
-        prospective seal probe succeeded. Promotion adds only known-canonicalizable
-        strings/ints, so it cannot un-seal a probed state."""
+    def _promote_provisional_publications(self, permit):
+        """Promote every provisional publication to PUBLISHED. RC-0.4E: requires the
+        one-use FinalizationPermit; the LEDGER (the authority record) is promoted
+        first -- an invalid permit refuses before any engine row flips. Promotion
+        adds only known-canonicalizable strings/ints."""
         self._refuse_if_finalized("_promote_provisional_publications")
+        self.pubcoord.promote_provisionals(permit)
         for idx in self._provisional_pub_indices:
             if self.publications[idx]["status"] == "PROVISIONAL_PUBLICATION":
                 self.publications[idx]["status"] = "PUBLISHED"
                 self.metrics["published"] += 1
         self._provisional_pub_indices = []
-        self.pubcoord.promote_provisionals()
 
-    def _void_provisional_publications(self):
+    def _void_provisional_publications(self, force=False):
         """Terminally void every provisional (and, defensively, any prematurely
         PUBLISHED) publication: an unsealed or faulted run holds ZERO publications.
-        published stays/returns to 0; consumed receipts stay consumed (terminal)."""
-        self._refuse_if_finalized("_void_provisional_publications")
+        published stays/returns to 0; consumed receipts stay consumed (terminal).
+        force=True is used ONLY by the engine's own terminal-fault path, which may
+        run after the finalized latch was set mid-transaction."""
+        if not force:
+            self._refuse_if_finalized("_void_provisional_publications")
         n = 0
         for row in self.publications:
             if row["status"] in ("PROVISIONAL_PUBLICATION", "PUBLISHED"):
@@ -669,7 +715,7 @@ class RC01Engine:
         self._provisional_pub_indices = []
         self.metrics["published"] = 0
         self.metrics["voided_publications"] += n
-        self.pubcoord.void_unfinalized()
+        self.pubcoord.void_unfinalized(self.__pub_authority)
 
     # ---------------- RPM repair (typed, cached, caged) ----------------
     def _repair(self, expert_id, prereq, tick, depth=0):
@@ -866,8 +912,15 @@ class RC01Engine:
         return effect, receipt, dcr
 
     # ---------------- one tick ----------------
-    def tick(self, t, cause: Cause):
+    def tick(self, t, cause: Cause, scheduler=None):
         self._refuse_if_finalized("tick")
+        # RC-0.4E section 1 MUTATION-TARGET: scheduler-tick-capability -- only run()'s
+        # loop holds the private scheduler token; a direct engine.tick(...) refuses
+        # BEFORE any budget, event, receipt, commit, publication, or allocation moves
+        if scheduler is not self.__scheduler_token:
+            raise ControllerLifecycleError(
+                "tick() refused: only run()'s scheduler may invoke tick "
+                f"(phase={self.phase}); direct calls are not an execution entry point")
         if self.halted or self.halt_requested:
             return
         if cause.cause_id in self.cancelled_causes:
@@ -1015,6 +1068,7 @@ class RC01Engine:
                     and e not in self.quarantine_registry
                     and not b.governance.quarantined):
                 self._quarantine(e, t, authorized_by="asom_region:breakdown")
+                self._drop_cause(t, cause.cause_id, "breakdown_route_quarantined")
                 acted = True
             elif actions.get(e) == ControlAction.REPAIR and region == "cutoff":
                 frame = self.repair_frames.setdefault(
@@ -1023,33 +1077,43 @@ class RC01Engine:
                     self.metrics["retry_limit_hits"] += 1
                     self.events.append({"tick": t, "event": "RETRY_LIMIT",
                                         "cause": cause.cause_id})
+                    self._drop_cause(t, cause.cause_id, "retry_limit")
                     continue
                 frame.attempts += 1
                 first_block = latent[e][1]
                 if first_block in ("WISDOM", "POWER"):
-                    ok = self._repair(e, first_block, t)   # the REAL RPM blocker
+                    # the REAL RPM blocker. acted latches on the ATTEMPT (success or
+                    # failure), so a failed ASOM repair can never fall through to a
+                    # SECOND repair attempt via the no-ready path in the same tick
+                    # (RC-0.4E section 6)
+                    acted = True
+                    if self._repair(e, first_block, t):
+                        requeue = True                     # bounded repair-and-return
+                    else:
+                        self.events.append({"tick": t, "event": "ASOM_REPAIR_FAILED",
+                                            "expert": e, "prereq": first_block,
+                                            "cause": cause.cause_id})
+                        self._drop_cause(t, cause.cause_id, "asom_repair_failed")
                 elif first_block == "DESIRE":
+                    # Desire law: never invent relevance -- deprioritized EXACTLY once
+                    # (acted latches, so the no-ready path cannot re-emit it)
                     self.metrics["desire_deprioritized"] += 1
                     self.events.append({"tick": t, "event": "DESIRE_DEPRIORITIZED",
                                         "experts": [e]})
-                    continue                   # Desire law: never invent relevance
+                    self._drop_cause(t, cause.cause_id, "desire_deprioritized")
+                    acted = True
                 else:
-                    # RPM fully ready: the starved ROUTE is the defect -- repair it
-                    # with a committed diagnostic re-assessment (region -> unassessed)
-                    reassessed = RegionRecord(
-                        region_posterior=UNIFORM4, committed_region="unassessed",
-                        response_model_status="unassessed", stability_status="stable",
-                        semantic_outcome="unassessed")
-                    ok = self._commit(
-                        [self._intent(e, "record", reassessed, t,
-                                      "ASOM cutoff repair: region re-assessment")], t)
-                    if ok:
-                        self.metrics["repairs_completed"] += 1
-                        self.metrics["action_repair"] += 1
-                        self.events.append({"tick": t, "event": "ASOM_CUTOFF_REPAIR",
-                                            "expert": e})
-                if ok:
-                    requeue = True                         # bounded repair-and-return
+                    # RC-0.4E section 6 MUTATION-TARGET: cutoff-self-clear-guard --
+                    # a fully-ready but cutoff route may NOT clear itself by
+                    # relabeling the region (that repainted the gauge needle, owner
+                    # audit). Without NEW evidence changing a real prerequisite,
+                    # constraint, substrate, or measured operating state, the route
+                    # stays NON-CONDUCTING under a typed unresolved status; no
+                    # repairs_completed is counted; nothing executes.
+                    self.metrics["cutoff_unresolved"] += 1
+                    self.events.append({"tick": t, "event": "CUTOFF_CAUSE_UNRESOLVED",
+                                        "expert": e, "cause": cause.cause_id})
+                    self._drop_cause(t, cause.cause_id, "cutoff_unresolved")
                     acted = True
         if requeue:
             self.child_queue.insert(0, cause)              # exactly ONCE per dispatch
@@ -1070,34 +1134,86 @@ class RC01Engine:
                 self.metrics["retry_limit_hits"] += 1
                 self.events.append({"tick": t, "event": "RETRY_LIMIT",
                                     "cause": cause.cause_id})
+                self._drop_cause(t, cause.cause_id, "retry_limit")
                 return
             frame.attempts += 1
             if self._repair(repairable[0][0], repairable[0][1], t):
                 self.child_queue.insert(0, cause)   # repair-and-RETURN: bounded retries
+            else:
+                self._drop_cause(t, cause.cause_id, "repair_failed")
         elif desire_only:
             self.metrics["desire_deprioritized"] += 1
             self.events.append({"tick": t, "event": "DESIRE_DEPRIORITIZED",
                                 "experts": sorted(e for e, _ in blocked)})
+            self._drop_cause(t, cause.cause_id, "desire_deprioritized")
         elif any(e in self.quarantine_registry for e in candidates):
             self.events.append({"tick": t, "event": "ROUTE_UNAVAILABLE_QUARANTINED",
                                 "experts": sorted(e for e in candidates
                                                    if e in self.quarantine_registry)})
+            self._drop_cause(t, cause.cause_id, "route_quarantined")
         else:
             self._seal_and_halt(t, "no_ready_no_repair")
 
     # ---------------- SPLIT with a real return path ----------------
+    SPLIT_ARITY = 2          # registered split arity; the branch-count UNIT is
+    #                          explicitly the CHILD BRANCH (RC-0.4E section 4)
+    COMBINED_OPS = {"^6_decompose": "combined_decompose"}   # registered combined ops
+
     def _do_split(self, t, cause, chosen):
         self._refuse_if_finalized("_do_split")
-        if self.total_branches_opened >= self.max_total_branches or \
-           not self.budget.spend(SPLIT_COST):
+        # RC-0.4E round-2 (internal audit): the split overload policy is REGISTERED
+        # only for experts with a combined operation -- for any other route the resume
+        # could never verify 'intended' (wrong op_kind), silently condemning the
+        # mitigation. Fail closed with a typed deferral instead.
+        if chosen not in self.COMBINED_OPS:
             self.metrics["deferred_causes"] += 1
-            self.events.append({"tick": t, "event": "CAUSE_DEFERRED", "why": "split_unavailable"})
+            self.events.append({"tick": t, "event": "CAUSE_DEFERRED",
+                                "why": "split_no_combined_op", "expert": chosen})
+            self._drop_cause(t, cause.cause_id, "split_no_combined_op")
+            return
+        n_children = self.SPLIT_ARITY
+        gov = self.coord.get(chosen).governance
+        active_children = len(self.child_to_frame)     # GLOBAL open split children
+        # the chosen expert's OWN open children (per-expert Governance cage --
+        # RC-0.4E round-2: the global count must not cross-block other experts)
+        own_open = sum(1 for f in self.split_frames.values()
+                       if f.chosen_expert == chosen
+                       for v in f.pending.values() if v is None)
+        # RC-0.4E section 4 MUTATION-TARGET: split-branch-caging -- creating
+        # n_children consumes n_children branch slots against EVERY ceiling: the
+        # total-branch cage, the GLOBAL active-branch cage, and the chosen expert's
+        # OWN Governance cage. Limits are checked BEFORE any budget is spent.
+        if (self.total_branches_opened + n_children > self.max_total_branches
+                or active_children + n_children > self.max_active_branches
+                or own_open + n_children > gov.max_branches):
+            self.metrics["deferred_causes"] += 1
+            self.events.append({"tick": t, "event": "CAUSE_DEFERRED",
+                                "why": "split_branch_limit"})
+            return
+        if not self.budget.spend(SPLIT_COST):
+            self.metrics["deferred_causes"] += 1
+            self.events.append({"tick": t, "event": "CAUSE_DEFERRED",
+                                "why": "split_unavailable"})
             return
         parts = cause.payload.split()
         half = max(1, len(parts) // 2)
         children = []
         for i, chunk in enumerate((parts[:half], parts[half:])):
-            child = Cause(cause_id=f"{cause.cause_id}.c{i}",
+            # RC-0.4E section 5 MUTATION-TARGET: global-cause-id-uniqueness -- a
+            # generated child id is RESERVED against the global registry before queue
+            # insertion; a collision with any existing id (e.g. a top-level Cause
+            # named '<parent>.c1') gets a deterministic collision-free id and a typed
+            # ID_COLLISION event -- never an ambiguous child mapping
+            base_id = f"{cause.cause_id}.c{i}"
+            child_id, k = base_id, 0
+            while child_id in self.used_cause_ids:
+                k += 1
+                child_id = f"{base_id}.g{k}"
+            if child_id != base_id:
+                self.events.append({"tick": t, "event": "ID_COLLISION",
+                                    "requested": base_id, "allocated": child_id})
+            self.used_cause_ids.add(child_id)
+            child = Cause(cause_id=child_id,
                           evidence=tuple(m for m in cause.evidence if m != "overload_cue"),
                           payload=" ".join(chunk))
             children.append(child)
@@ -1108,7 +1224,7 @@ class RC01Engine:
                            return_address=cause.cause_id)
         self.split_frames[cause.cause_id] = frame
         self.child_queue = children + self.child_queue
-        self.total_branches_opened += 1
+        self.total_branches_opened += n_children       # unit = child branch
         self.metrics["splits_created"] += len(children)
         self.metrics["action_split"] += 1
         self.events.append({"tick": t, "event": "SPLIT", "children": len(children),
@@ -1141,6 +1257,14 @@ class RC01Engine:
                             "failed_child": frame.failed_child,
                             "cancelled": sorted(cid for cid, v in frame.pending.items()
                                                   if v == "CANCELLED")})
+        # RC-0.4E round-2 (internal audit): the refusal appears in BOTH evidence
+        # surfaces -- the pubcoord ledger AND the engine publications -- so metrics,
+        # ledger, and publications reconcile per cause
+        self.publications.append({"tick": t, "cause": frame.parent_cause.cause_id,
+                                  "producer": frame.chosen_expert, "status": "REFUSED",
+                                  "verdict": "n/a", "effect_payload": None,
+                                  "effect_digest": None,
+                                  "law": "PUB_LAW_SPLIT_CHILD_FAILED", "receipt": ""})
         self.pubcoord.refuse(t, frame.parent_cause.cause_id, frame.chosen_expert,
                              "n/a", "PUB_LAW_SPLIT_CHILD_FAILED")
 
@@ -1151,6 +1275,16 @@ class RC01Engine:
             frame.status = "FAILED"
             frame.failed_child = child_cause.cause_id
             frame.pending[child_cause.cause_id] = "FAILED"
+            # RC-0.4E round-2 (internal audit CRITICAL): a COMMITTED non-intended
+            # child verdict carries the same registered publication-law consequence
+            # as a top-level one -- it is not swallowed by the frame failure
+            if committed:
+                cons = publication_consequence(receipt.verdict)
+                if cons == "QUARANTINE":
+                    self._quarantine(effect.producer_expert_id, t,
+                                     authorized_by="publication_law:opposite")
+                elif cons == "REPAIR":
+                    self._repair(effect.producer_expert_id, "WISDOM", t)
             for cid, v in frame.pending.items():           # cancel unsettled siblings
                 if v is None:
                     self.cancelled_causes.add(cid)
@@ -1181,7 +1315,7 @@ class RC01Engine:
                                       for cid in sorted(frame.child_ids))
         combined = EffectCandidate(producer_expert_id=frame.chosen_expert,
                                    cause_id=frame.parent_cause.cause_id,
-                                   op_kind="combined_decompose",
+                                   op_kind=self.COMBINED_OPS[frame.chosen_expert],
                                    payload=combined_payload,
                                    originating_tick=t,
                                    base_bias_version=snap_version,
@@ -1215,18 +1349,47 @@ class RC01Engine:
         dcr = None
         if self.commit_verdicts:
             dcr = self._commit_effectful(intents, t, combined, receipt)
-        self._publish_or_refuse(t, frame.parent_cause, combined, receipt, dcr)
+        consequence = self._publish_or_refuse(t, frame.parent_cause, combined,
+                                              receipt, dcr)
+        # RC-0.4E round-2 (internal audit CRITICAL): the registered publication-law
+        # consequences fire on the RESUME path exactly as on the direct path -- a
+        # verifier-confirmed 'opposite' combined Effect quarantines its producer
+        if dcr is not None and consequence == "QUARANTINE":
+            self._quarantine(frame.chosen_expert, t,
+                             authorized_by="publication_law:opposite")
+        elif dcr is not None and consequence == "REPAIR":
+            self._repair(frame.chosen_expert, "WISDOM", t)
 
     # ---------------- run + seal ----------------
     def run(self):
-        self._refuse_if_finalized("run")
+        # run() is the ONE entry point allowed from phase NEW -- it carries its own
+        # entry checks instead of the internals' RUNNING/FINALIZING guard
+        if self.finalized:
+            raise FinalizedControllerError(
+                f"run refused: the controller is FINALIZED and sealed "
+                f"({(self.seal_digest or '')[:12]}); no further execution is possible")
+        # RC-0.4E section 1: run() owns the lifecycle. NEW -> RUNNING happens here
+        # and ONLY here; a second run (or any other phase) refuses.
+        if self.phase != "NEW":
+            raise ControllerLifecycleError(
+                f"run() refused: phase is {self.phase}; run() is the only execution "
+                "entry point and executes exactly once")
+        # RC-0.4E round-2: injected pre-run work cannot be laundered into a fresh run
+        # -- the engine must be PRISTINE (defense-in-depth behind the phase guard)
+        if (self.events or self.publications or self.coord.trace
+                or self.pubcoord.ledger or self.budget.left != self.budget.total):
+            raise ControllerLifecycleError(
+                "run() refused: the engine state is not pristine (events, "
+                "publications, commits, ledger, or spent budget exist before run); "
+                "out-of-lifecycle work is not sealable evidence")
+        self.phase = "RUNNING"
         t = 0
         queue = list(self.causes)
         try:
             while queue and not self.halt_requested:
                 cause = queue.pop(0)
                 self.remaining_queue = list(queue)   # full Cause envelopes (RC-0.4)
-                self.tick(t, cause)
+                self.tick(t, cause, scheduler=self.__scheduler_token)
                 if self.child_queue:
                     queue = self.child_queue + queue
                     self.child_queue = []
@@ -1237,48 +1400,122 @@ class RC01Engine:
         except FinalizedControllerError:
             raise                                    # already sealed; never re-wrap
         except Exception as exc:  # noqa: BLE001
-            # ---- FAULT BOUNDARY (RC-0.4A defect 3, hardened RC-0.4B): NO execution
-            # exception may escape with a partially mutated, UNSEALED run. State commits
-            # are atomic (nothing partial persists in Bias state); the fault is recorded
-            # as a typed event, the controller FINALIZES, the gate is tripped, the final
-            # seal is computed via _compute_final_seal (which never itself throws), and
-            # the typed ControllerFault -- carrying that seal -- is re-raised. Nothing
-            # is silently swallowed; nothing publishes here. finalized/gate/seal are
-            # ordered so the engine can never be observed finalized-but-unsealed.
-            if self.fault is None:
-                self.fault = {"phase": "tick", "tick": t,
-                              "exception_class": type(exc).__name__,
-                              "detail": str(exc)[:200]}
-                self.metrics["faults"] += 1
-                self.events.append({"tick": t, "event": "FAULT", **self.fault})
-            # RC-0.4D section 2: a faulted run holds ZERO publications -- every
-            # provisional is terminally voided before sealing
-            self._void_provisional_publications()
+            # ---- TICK FAULT BOUNDARY (RC-0.4A defect 3 + RC-0.4D section 2): NO
+            # execution exception escapes with a partially mutated, UNSEALED run.
             self.remaining_queue = list(queue)
             self.halted = True
-            self.finalized = True
-            self._gate.trip()
-            self.seal_digest = self._compute_final_seal()
+            self._terminal_fault("tick", t, exc)
             raise ControllerFault(self.fault, self.seal_digest) from exc
-        # ---- FINALIZE (RC-0.4 critical 4 + RC-0.4A defect 1 + RC-0.4B critical 1 +
-        # RC-0.4D section 2): every run mutation is complete. Sequence: set the final
-        # halted value -> PROSPECTIVE seal probe -> promote provisional publications
-        # to PUBLISHED only if the probe succeeded (else terminally void them) ->
-        # LATCH finalized, TRIP the shared gate, compute the seal EXACTLY ONCE.
-        # Promotion adds only known-canonicalizable values, so a passed probe cannot
-        # be unsealed by the promotion itself.
+        # ---- FINALIZING: ONE GUARDED TRANSACTION (RC-0.4E section 3, owner audit
+        # critical 2 + third-party F-01). The ENTIRE finalization -- planned-final-
+        # snapshot construction, permit issuance, promotion, gate trip, final seal,
+        # planned==installed equality, result construction -- sits inside this fault
+        # boundary. ANY exception (RuntimeError, MemoryError, anything) yields a
+        # typed, voided, terminal FAULTED state; nothing is ever stranded provisional.
         self.remaining_queue = list(queue)
         self.halted = bool(self.halt_requested)
-        # MUTATION-TARGET: final-publication-barrier
-        if self._prospective_seal_probe():
-            self._promote_provisional_publications()
-        else:
-            self._void_provisional_publications()
+        # RC-0.4E round-2 (internal audit): a run may not finalize with a frame stuck
+        # SUSPENDED -- every unsettled split parent is swept into the failed-frame
+        # refusal path (typed terminal disposition, child slots released) BEFORE the
+        # planned final snapshot is computed
+        self._sweep_suspended_frames(t)
+        self.phase = "FINALIZING"
+        # MUTATION-TARGET: finalization-fault-boundary
+        # (no exception carve-outs -- RC-0.4E round-2: ANY exception in FINALIZING,
+        # domain-typed included, must void and terminate FAULTED)
+        try:
+            return self._finalize_and_result()
+        except BaseException as exc:  # noqa: BLE001
+            self._terminal_fault("finalize", t, exc)
+            raise ControllerFault(self.fault, self.seal_digest) from exc
+
+    def _sweep_suspended_frames(self, t):
+        """RC-0.4E round-2: every still-SUSPENDED split frame at finalization is
+        settled through the failed-frame path -- the parent gets a recorded terminal
+        refusal (PUB_LAW_SPLIT_CHILD_FAILED), unsettled children are marked HALTED,
+        and the child mappings are released before sealing."""
+        for pid in sorted(list(self.split_frames.keys())):
+            frame = self.split_frames[pid]
+            frame.status = "FAILED"
+            for cid, v in list(frame.pending.items()):
+                if v is None:
+                    frame.pending[cid] = "HALTED"
+            self._finalize_failed_frame(t, frame)
+            self._drop_cause(t, pid, "split_suspended_at_finalize")
+
+    def _terminal_fault(self, phase_name, t, exc):
+        """The single terminal-fault path: record the typed FAULT, terminally void
+        every provisional publication, move to phase FAULTED, latch, trip the gate,
+        and compute the final seal (or the UNSEALED_TERMINAL_FAULT marker). Never
+        raises; never leaves a provisional stranded."""
+        if self.fault is None:
+            self.fault = {"phase": phase_name, "tick": t,
+                          "exception_class": type(exc).__name__,
+                          "detail": str(exc)[:200]}
+            self.metrics["faults"] += 1
+            self.events.append({"tick": t, "event": "FAULT", **self.fault})
+        try:
+            self._void_provisional_publications(force=True)
+        except FinalizedControllerError:
+            # unreachable in practice (the gate trips only after the installed==
+            # planned check); pure terminal defense -- flip the rows directly so no
+            # provisional or premature PUBLISHED row can ever survive a fault
+            for row in self.publications:
+                if row["status"] in ("PROVISIONAL_PUBLICATION", "PUBLISHED"):
+                    row["voided_from"] = row["status"]
+                    row["status"] = "VOIDED_UNSEALED"
+            for row in self.pubcoord.ledger:
+                if row["decision"] in ("PROVISIONAL_PUBLICATION", "PUBLISHED"):
+                    row["voided_from"] = row["decision"]
+                    row["decision"] = "VOIDED_UNSEALED"
+            self._provisional_pub_indices = []
+            self.metrics["published"] = 0
+        self.phase = "FAULTED"
         self.finalized = True
         self._gate.trip()
         self.seal_digest = self._compute_final_seal()
-        if self.fault is not None:
-            raise ControllerFault(self.fault, self.seal_digest)
+
+    def _planned_final_snapshot_digest(self):
+        """RC-0.4E section 3: build a DETACHED planned final snapshot -- the current
+        snapshot with the proposed PUBLISHED rows, final published metric, finalized
+        latch, and terminal phase applied to the COPY -- and canonicalize THAT exact
+        object. The installed final seal must equal this digest."""
+        snap = self.runtime_snapshot()               # already one detached deepcopy
+        promoted = 0
+        for row in snap["publications_evidence"]:
+            if row["status"] == "PROVISIONAL_PUBLICATION":
+                row["status"] = "PUBLISHED"
+                promoted += 1
+        for row in snap["publication_ledger"]:
+            if row["decision"] == "PROVISIONAL_PUBLICATION":
+                row["decision"] = "PUBLISHED"
+        snap["metrics"]["published"] = snap["metrics"].get("published", 0) + promoted
+        snap["finalized"] = True
+        snap["phase"] = "FINALIZED"
+        return digest(snap)
+
+    def _finalize_and_result(self):
+        """The finalization transaction body (always entered through run()'s
+        finalization fault boundary): planned digest -> one-use FinalizationPermit
+        bound to the exact provisional sets -> atomic promotion -> latch + gate +
+        final seal -> planned == installed equality -> result."""
+        planned = self._planned_final_snapshot_digest()
+        permit = self.pubcoord.issue_finalization_permit(
+            self.__pub_authority, planned_snapshot_digest=planned,
+            engine_provisional_indices=tuple(self._provisional_pub_indices),
+            state_digest=digest(self.coord.final_state_manifest()),
+            sequence=len(self.allocations))
+        self._promote_provisional_publications(permit)
+        self.finalized = True
+        self.phase = "FINALIZED"
+        installed = self.seal()
+        if installed != planned:
+            raise RuntimeError("planned final digest != installed final digest "
+                               "(finalization is not atomic)")
+        # the gate trips ONLY after planned==installed holds, so a failure anywhere
+        # in this transaction can still void through the authority path
+        self._gate.trip()
+        self.seal_digest = installed
         return self.result()
 
     def runtime_snapshot(self) -> dict:
@@ -1291,7 +1528,14 @@ class RC01Engine:
         the returned publication evidence list is bound; taus / rpm_enforcement /
         ohm_enabled / commit_verdicts and every behavior-bearing configuration value
         are bound; the verifier's gold table, expected-Effect oracle, and the
-        candidate-evidence map are digest-bound."""
+        candidate-evidence map are digest-bound.
+
+        DELIBERATE EXCLUSION (RC-0.4E, recorded): the finalization-PERMIT registry is
+        NOT seal-bound -- the permit's content includes the planned final snapshot
+        digest, so binding the registry into the snapshot would be circular by
+        construction. A sealed PUBLISHED row already implies a valid one-use permit
+        was consumed before any row flipped; permit authority is enforced at runtime,
+        not attested by the seal."""
         def cause_env(c):
             return {"id": c.cause_id, "evidence": c.evidence, "payload": c.payload}
         # RC-0.4D section 4: build the COMPLETE snapshot, then detach it as ONE whole
@@ -1348,6 +1592,8 @@ class RC01Engine:
             "halted": self.halted,
             "halt_requested": self.halt_requested,
             "finalized": self.finalized,     # RC-0.4A: the latch is seal-bound
+            "phase": self.phase,             # RC-0.4E: the lifecycle phase is seal-bound
+            "used_cause_ids": sorted(self.used_cause_ids),   # RC-0.4E: id registry
             "fault": self.fault,             # RC-0.4A: typed fault record or None
             # RC-0.4: the RETURNED publication evidence is itself seal-bound -- a
             # tampered result["publications"] entry changes the trace digest
@@ -1400,6 +1646,20 @@ class RC01Engine:
         ControllerFault rather than emit pass-shaped evidence (published counts, a
         PUBLISHED ledger) from a run whose state could not be sealed; the partial
         evidence stays on the engine object for forensics."""
+        # RC-0.4E section 1 MUTATION-TARGET: result-finalization-requirement -- there
+        # is no result before a terminal phase; pre-final evidence is not evidence
+        if self.phase not in ("FINALIZED", "FAULTED"):
+            raise ControllerLifecycleError(
+                f"result() refused: phase is {self.phase}; a result exists only in a "
+                "terminal phase (FINALIZED or FAULTED)")
+        # RC-0.4E round-2 (internal audit MINOR): a terminal phase with NO computed
+        # seal is itself proof of out-of-API tampering -- a missing seal refuses, it
+        # does not skip verification
+        if not (_is_hex_seal(self.seal_digest)
+                or self.seal_digest == self.UNSEALED_TERMINAL_FAULT):
+            raise ControllerTampered(
+                "terminal phase with no computed seal; result() will not emit "
+                "unsealed evidence")
         if self.seal_digest == self.UNSEALED_TERMINAL_FAULT:
             raise ControllerFault(self.fault or {"phase": "seal",
                                                  "exception_class": "unknown",

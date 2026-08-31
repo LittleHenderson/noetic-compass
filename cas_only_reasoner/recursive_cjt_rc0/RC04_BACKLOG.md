@@ -11,8 +11,54 @@ are marked FIXED below; the stale "110 tests" figure is corrected (the RC-0.4 co
 recorded 17+28+23+14+30 = 112 internal tests; RC-0.4A adds test_rc04a (22) and, after
 its internal pre-commit adversarial audit, test_rc04b (16) → 150; RC-0.4C adds
 test_rc04c (25 after its own internal-audit round 2) → 175; RC-0.4D adds test_rc04d
-(30 after its internal round) → 205 internal tests — internal results, NOT an
-independent reproduction).
+(30 after its internal round) → 205; RC-0.4E adds test_rc04e (41 after its internal
+round) → 246 internal tests. The RC-0.4D battery (205/26/8/15 + replay + manifest)
+was INDEPENDENTLY REPRODUCED by a third-party AI agent in a fresh environment
+(2026-08-31, owner-relayed) — an independent cross-model software audit, NOT external
+scientific replication; RC-0.4E's additions are internal results pending the same.)
+
+## RC-0.4E closures (2026-08-31, owner independent audit of ad46418f + third-party AI audit)
+The owner's audit (merged with the third-party agent's independent reproduction of the
+full battery and its F-01 finding) ordered the lifecycle-authority patch. Closed:
+- **Run owns the lifecycle**: typed phases NEW→RUNNING→FINALIZING→FINALIZED|FAULTED;
+  tick() requires run()'s private scheduler capability; result() exists only in a
+  terminal phase; run() refuses non-pristine engines.
+- **Promotion is an authority operation**: one-time-claimable lifecycle authority +
+  one-use `FinalizationPermit` bound to the exact provisional sets; voiding needs the
+  authority token. The owner's verbatim `tick → promote → result` bypass refuses at
+  all three doors.
+- **Finalization is ONE guarded transaction** (third-party F-01 exact): planned final
+  snapshot → permit → atomic promotion → planned==installed digest equality; ANY
+  exception (RuntimeError, MemoryError, mid-promotion) yields a typed, voided,
+  FAULTED terminal state — nothing stranded provisional.
+- **Split caging** (unit = child branch): total/active/governance ceilings checked
+  before budget; **global cause-id registry** with deterministic collision handling
+  (ID_COLLISION event), seal-bound; **honest cutoff**: CUTOFF_CAUSE_UNRESOLVED, no
+  relabel self-clear, no repairs_completed, Desire emitted once, no same-tick retry.
+- Mutation inventory frozen as v4 (22 laws; v1–v3 preserved on disk).
+
+### RC-0.4E internal adversarial round (same commit, 3 lenses)
+Found 1 CRITICAL + 2 MAJOR + hardenings; all fixed and test-locked (test_rc04e → 41):
+- **CRITICAL:** both split paths silently dropped the registered publication-law
+  consequences — a verifier-confirmed `opposite` combined Effect (or committed child
+  verdict) kept its producer unquarantined. FIXED: consequences fire on resume and
+  child-collection exactly as on the direct path.
+- **MAJOR:** the execution internals carried only the finalization latch — pre-run
+  direct calls executed/committed/provisionally-published and a later run() sealed
+  the injected work. FIXED: the lifecycle guard (phase RUNNING/FINALIZING) on every
+  execution internal + a pristine-state check at run() entry.
+- **MAJOR:** dropped causes had no terminal disposition. FIXED: typed CAUSE_DROPPED
+  events (cause id + why) and a `dropped_causes` metric on every drop path.
+- Hardenings: terminal phase without a computed seal refuses (ControllerTampered);
+  the finalization boundary has NO exception carve-outs; splits are registered only
+  for experts with a combined op (fail-closed `split_no_combined_op`); suspended
+  frames are swept into the failed-frame refusal at FINALIZE; the failed-frame
+  refusal appears in BOTH evidence surfaces; the governance split cage counts the
+  chosen expert's OWN open children.
+- Residuals recorded, not fixed: the finalization-permit registry is deliberately NOT
+  seal-bound (circular: the permit contains the planned snapshot digest — documented
+  in the snapshot docstring); `_compute_final_seal` still swallows all exceptions by
+  design (it must never throw).
 
 ## RC-0.4D closures (2026-08-31, owner independent audit of 38635986)
 The owner's audit ended the enumerated-patch era: verifier fixes CLOSED, but the
@@ -175,7 +221,7 @@ lands in a scenario row, its bytes could vary across processes; the matrix diges
 recorded per-generation, not replay-compared. OPEN (cosmetic).
 
 ## 4. No CI runner
-The internal tests (205 as of RC-0.4D) + 26 scenarios + 8 injections + 15 mutations
+The internal tests (246 as of RC-0.4E) + 26 scenarios + 8 injections + 22 mutations
 run locally and via the committed generator; there is no GitHub Actions workflow
 re-running them on push. The owner noted this in the RC-0.3 and RC-0.4 audits, and
 ruled that CI is recommended but does not by itself decide Gate 0. OPEN.

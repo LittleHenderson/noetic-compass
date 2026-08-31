@@ -50,17 +50,17 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE / "sim"))
 
 SUITES = ("test_rc0", "test_rc01", "test_rc02", "test_rc03", "test_rc04",
-          "test_rc04a", "test_rc04b", "test_rc04c", "test_rc04d")
+          "test_rc04a", "test_rc04b", "test_rc04c", "test_rc04d", "test_rc04e")
 
-# RC-0.4A/C/D: the FROZEN mutation inventory. v3 = the eleven v2 entries verbatim plus
-# the four RC-0.4D laws (constructor schema, final-publication barrier, ASOM dispatch,
-# whole-object snapshot detach); v1 and v2 are preserved on disk unchanged. The
-# manifest file's canonical-content digest is pinned HERE so neither the file nor this
-# constant can change without the other showing in the diff. Newline-normalization-
-# proof: the digest is over json.dumps(parsed content, sort_keys, compact), not bytes.
-MANIFEST_PATH_NAME = "RC04_REQUIRED_MUTATIONS_v3.json"
+# RC-0.4A/C/D/E: the FROZEN mutation inventory. v4 = the fifteen v3 entries verbatim
+# plus the seven RC-0.4E laws (scheduler capability, finalization permit, result
+# terminal-phase requirement, finalization fault boundary, split caging, global
+# cause-id uniqueness, cutoff self-clear guard); v1-v3 preserved on disk unchanged.
+# The manifest file's canonical-content digest is pinned HERE so neither the file nor
+# this constant can change without the other showing in the diff.
+MANIFEST_PATH_NAME = "RC04_REQUIRED_MUTATIONS_v4.json"
 REQUIRED_MUTATION_MANIFEST_DIGEST = \
-    "8c7bbd489646c70f84bbfd564ffdb8f16f53944a5de709cfc5b1f85f5bbb36d8"
+    "5b8eee3cde6a20e9993a1c23ea82966f9b456f3df7fc40cd41fee455958926fc"
 
 
 def sha(p):
@@ -381,11 +381,13 @@ def main():
 
     receipt = {
         "receipt_id": "RC01_FEEDBACK_CLOSURE_RECEIPT",
-        "phase": "RC-0.4D (schema-complete construction with initial sealability "
-                 "probe; publication PROVISIONAL until the final-seal barrier -- an "
-                 "unsealed run holds zero publications; ASOM cutoff/breakdown "
-                 "dispatch load-bearing; whole-object snapshot detachment; frozen "
-                 "mutation inventory v3 = 15 laws) -- on top of RC-0.4A/B/C",
+        "phase": "RC-0.4E (execution-lifecycle authority: typed phases, run()-owned "
+                 "scheduler capability, terminal-phase result; one-use "
+                 "FinalizationPermit for promotion; finalization as ONE guarded "
+                 "transaction with planned==installed digest equality; split branch "
+                 "caging (unit = child branch); global cause-id uniqueness; honest "
+                 "cutoff semantics (CUTOFF_CAUSE_UNRESOLVED, no relabel self-clear); "
+                 "frozen mutation inventory v4 = 22 laws) -- on top of RC-0.4A/B/C/D",
         "status": status,
         "status_emitted_by": "generate_rc02_receipt.py (deterministic; never hand-written)",
         "independent_confirmation": "PENDING BY CONSTRUCTION -- the strongest "

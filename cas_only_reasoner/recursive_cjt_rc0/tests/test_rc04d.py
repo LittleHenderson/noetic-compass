@@ -229,20 +229,25 @@ def test_subset_states_rejected_at_construction():
 
 
 def test_multi_cutoff_dispatch_requeues_once():
-    """Internal audit round 2 (MAJOR): one Cause naming K ready cutoff experts was
-    requeued K times and PUBLISHED K times. The law: one authoritative envelope per
-    cause id -- the dispatch requeues at most once, and exactly one publication."""
+    """Internal audit round 2 (MAJOR): one Cause naming K acting cutoff experts was
+    requeued K times (and, before RC-0.4E, PUBLISHED K times). The law: one
+    authoritative envelope per cause id -- at most ONE requeue per dispatch call."""
     both = ("structure_cue", "association_cue")     # names ^6_decompose AND ^8_trigger
     e = SC.engine([SC.cause("mc1", both, PAY)],
                   SC.Reg().add("mc1", "^6_decompose", "intended", PAY),
-                  states=SC.states(**{"^6_decompose": {"region": "cutoff"},
-                                      "^8_trigger": {"region": "cutoff"}}))
+                  states=SC.states(**{"^6_decompose": {"region": "cutoff",
+                                                       "wisdom": 0.0},
+                                      "^8_trigger": {"region": "cutoff",
+                                                     "wisdom": 0.0}}))
     r = e.run()
-    assert r["metrics"]["executions"] == 1, \
-        f"one Cause executed {r['metrics']['executions']} times"
-    assert r["metrics"]["published"] == 1, \
-        f"one Cause published {r['metrics']['published']} times"
-    assert sum(1 for d in e.pubcoord.ledger if d["decision"] == "PUBLISHED") == 1
+    # tick 0: BOTH experts' real WISDOM blockers repaired, but the cause requeues ONCE
+    # -> exactly one extra tick, no duplicate execution, no duplicate publication
+    assert len(r["allocations"]) == 2, \
+        f"one dispatch produced {len(r['allocations']) - 1} requeues"
+    assert r["metrics"]["executions"] == 0 and r["metrics"]["published"] == 0
+    assert sum(1 for d in e.pubcoord.ledger if d["decision"] == "PUBLISHED") == 0
+    names = [ev["event"] for ev in r["events"]]
+    assert names.count("REPAIR_DONE") == 2 and "CUTOFF_CAUSE_UNRESOLVED" in names
 
 
 # ================================================ 2. publication atomicity
@@ -281,7 +286,11 @@ def test_publication_is_provisional_before_final_seal():
     assert pubc.commit_publication(intent) == "PROVISIONAL_PUBLICATION"
     assert pubc.ledger[-1]["decision"] == "PROVISIONAL_PUBLICATION", \
         "PUBLISHED was written before the final-seal barrier"
-    assert pubc.promote_provisionals() == 1
+    auth = pubc.claim_lifecycle_authority()
+    permit = pubc.issue_finalization_permit(auth, planned_snapshot_digest="standalone",
+                                            engine_provisional_indices=(),
+                                            state_digest="d", sequence=0)
+    assert pubc.promote_provisionals(permit) == 1
     assert pubc.ledger[-1]["decision"] == "PUBLISHED"
     # and in a full engine run, every published Effect passed through provisional
     e = eng("pv0")
@@ -304,6 +313,15 @@ def test_unsealed_run_has_zero_published():
     assert e.seal_digest == "UNSEALED_TERMINAL_FAULT"
     assert e.metrics["published"] == 0, \
         "an unsealed terminal run holds a published count"
+    # RC-0.4E (third-party F-01): nothing may be left STRANDED provisional either --
+    # every former provisional row is terminally voided with provenance
+    assert all(d["decision"] != "PROVISIONAL_PUBLICATION" for d in e.pubcoord.ledger), \
+        "a provisional publication was left stranded in an unsealed run"
+    assert all(p["status"] != "PROVISIONAL_PUBLICATION" for p in e.publications)
+    for d in e.pubcoord.ledger:
+        if d["decision"] == "VOIDED_UNSEALED":
+            assert d.get("voided_from") in ("PROVISIONAL_PUBLICATION", "PUBLISHED"), \
+                "a voided row lacks its voided_from provenance"
 
 
 def test_unsealed_run_has_no_published_ledger_entry():
@@ -350,13 +368,20 @@ def test_valid_run_still_publishes_exactly_once():
 
 # ================================================ 3. ASOM actions load-bearing
 def test_cutoff_region_dispatches_repair_not_halt():
+    # RC-0.4E section 6: a cutoff route with a REAL RPM blocker repairs that real
+    # prerequisite (not a silent HALT); a fully-ready cutoff route becomes typed
+    # CUTOFF_CAUSE_UNRESOLVED and stays non-conducting (no relabel self-clear)
     e = SC.engine([c6("cu0")], SC.Reg().add("cu0", "^6_decompose", "intended", PAY),
-                  states=SC.states(**{"^6_decompose": {"region": "cutoff"}}))
+                  states=SC.states(**{"^6_decompose": {"region": "cutoff",
+                                                       "wisdom": 0.0}}))
     r = e.run()
     names = [ev["event"] for ev in r["events"]]
     assert "HALT" not in names, "cutoff region silently HALTED instead of repairing"
-    assert "ASOM_CUTOFF_REPAIR" in names, "no typed cutoff repair dispatched"
-    assert r["metrics"]["published"] == 1, "the repaired route did not run"
+    assert "REPAIR_DONE" in names, "the real WISDOM blocker was not repaired"
+    assert "CUTOFF_CAUSE_UNRESOLVED" in names, \
+        "the still-cutoff route did not report unresolved"
+    assert r["metrics"]["published"] == 0, \
+        "a cutoff route executed without new region evidence"
 
 
 def test_breakdown_region_dispatches_quarantine_not_halt():
@@ -373,21 +398,24 @@ def test_breakdown_region_dispatches_quarantine_not_halt():
 
 
 def test_cutoff_and_rpm_block_remain_separate_reasons():
-    # (a) cutoff + fully-ready RPM: ASOM repair, no invented prerequisite
+    # (a) cutoff + fully-ready RPM: typed UNRESOLVED -- no invented prerequisite, no
+    # execution, no repairs counted (RC-0.4E section 6)
     e1 = SC.engine([c6("sep0")], SC.Reg().add("sep0", "^6_decompose", "intended", PAY),
                    states=SC.states(**{"^6_decompose": {"region": "cutoff"}}))
     r1 = e1.run()
     n1 = [ev["event"] for ev in r1["events"]]
-    assert "ASOM_CUTOFF_REPAIR" in n1 and "NO_READY_CJT" not in n1
+    assert "CUTOFF_CAUSE_UNRESOLVED" in n1 and "NO_READY_CJT" not in n1
     assert r1["metrics"]["repairs_opened"] == 0, \
         "cutoff dispatch INVENTED an RPM prerequisite repair"
+    assert r1["metrics"]["repairs_completed"] == 0
     # (b) active region + real WISDOM block: the RPM path, no ASOM cutoff event
     e2 = SC.engine([c6("sep1")], SC.Reg().add("sep1", "^6_decompose", "intended", PAY),
                    states=SC.states(**{"^6_decompose": {"wisdom": 0.0}}))
     r2 = e2.run()
     n2 = [ev["event"] for ev in r2["events"]]
     assert "NO_READY_CJT" in n2 and "REPAIR_DONE" in n2
-    assert "ASOM_CUTOFF_REPAIR" not in n2, "an RPM block was relabeled as ASOM cutoff"
+    assert "CUTOFF_CAUSE_UNRESOLVED" not in n2, \
+        "an RPM block was relabeled as ASOM cutoff"
 
 
 def test_masked_cutoff_does_not_open_repair():
@@ -411,14 +439,20 @@ def test_masked_breakdown_does_not_mutate_quarantine():
 
 
 def test_asom_action_changes_next_tick_behavior():
+    # RC-0.4E: the dispatched action changes the typed next-tick outcome -- tick 0
+    # repairs the real WISDOM blocker and requeues; tick 1 reaches the DIFFERENT
+    # typed state CUTOFF_CAUSE_UNRESOLVED (not a repeat repair, not a silent HALT)
     e = SC.engine([c6("nx0")], SC.Reg().add("nx0", "^6_decompose", "intended", PAY),
-                  states=SC.states(**{"^6_decompose": {"region": "cutoff"}}))
+                  states=SC.states(**{"^6_decompose": {"region": "cutoff",
+                                                       "wisdom": 0.0}}))
     r = e.run()
     ev = r["events"]
-    repair_tick = next(x["tick"] for x in ev if x["event"] == "ASOM_CUTOFF_REPAIR")
-    exec_tick = next(x["tick"] for x in ev if x["event"] == "EXECUTED")
-    assert exec_tick > repair_tick, \
+    repair_tick = next(x["tick"] for x in ev if x["event"] == "REPAIR_DONE")
+    unresolved_tick = next(x["tick"] for x in ev
+                           if x["event"] == "CUTOFF_CAUSE_UNRESOLVED")
+    assert unresolved_tick > repair_tick, \
         "the dispatched ASOM action did not change next-tick behavior"
+    assert "HALT" not in [x["event"] for x in ev]
 
 
 # ================================================ 4. fully owned snapshots/config

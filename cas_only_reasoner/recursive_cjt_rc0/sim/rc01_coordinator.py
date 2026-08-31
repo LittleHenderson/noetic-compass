@@ -32,8 +32,8 @@ import dataclasses
 
 from rc0_types import BiasState, RegionRecord, RPMState
 from rc01_types import (DiagnosticCommitReceipt, EffectCommitContext,
-                        EffectPublicationIntent, VerifierReceipt, VersionedIntent,
-                        canonical, digest)  # noqa: F401
+                        EffectPublicationIntent, FinalizationPermit, VerifierReceipt,
+                        VersionedIntent, canonical, digest)  # noqa: F401
 
 ALLOWED_FIELDS = ("rpm", "record", "memory", "substrate")
 FIELD_TYPES = {"rpm": RPMState, "record": RegionRecord, "memory": tuple, "substrate": tuple}
@@ -316,6 +316,50 @@ class PublicationCoordinator:
         self._consumed_commits = set()     # commit receipt digests consumed
         self.ledger = []
         self._provisional_rows = []        # RC-0.4D: ledger indices awaiting promotion
+        # RC-0.4E section 2: the lifecycle authority is CLAIMABLE EXACTLY ONCE (the
+        # engine claims it at construction; a standalone harness that builds its own
+        # coordinator claims it itself). Promotion requires a one-use
+        # FinalizationPermit issued through that authority; voiding requires the
+        # authority token. An ordinary caller holding the engine can do neither.
+        self.__lifecycle_authority = object()
+        self.__authority_claimed = False
+        self.__issued_permits = {}         # permit_digest -> FinalizationPermit
+        self.__consumed_permits = set()
+
+    def claim_lifecycle_authority(self):
+        """One-time capability extraction: the FIRST caller receives the opaque
+        lifecycle-authority token; every later call refuses. Same-process API
+        capability discipline (the recorded trust boundary)."""
+        if self.__authority_claimed:
+            raise PublicationRefused("PUB_LAW_AUTHORITY_ALREADY_CLAIMED",
+                                     "the lifecycle authority was already claimed")
+        self.__authority_claimed = True
+        return self.__lifecycle_authority
+
+    def provisional_ledger_digest(self) -> str:
+        return digest([self.ledger[i] for i in self._provisional_rows])
+
+    def issue_finalization_permit(self, authority, *, planned_snapshot_digest: str,
+                                  engine_provisional_indices: tuple,
+                                  state_digest: str, sequence: int,
+                                  planned_phase: str = "FINALIZED") -> FinalizationPermit:
+        """RC-0.4E: issue the one-use promotion permit. Requires the claimed
+        lifecycle-authority token; binds the EXACT current provisional sets."""
+        if self._gate is not None:
+            self._gate.require_open("publication.issue_finalization_permit")
+        if authority is not self.__lifecycle_authority:
+            raise PublicationRefused("PUB_LAW_NOT_LIFECYCLE_AUTHORITY",
+                                     "permit issuance requires the claimed lifecycle "
+                                     "authority token")
+        permit = FinalizationPermit(
+            episode_id=self.episode_id, planned_phase=planned_phase,
+            planned_snapshot_digest=planned_snapshot_digest,
+            provisional_ledger_digest=self.provisional_ledger_digest(),
+            provisional_indices=tuple(self._provisional_rows),
+            engine_provisional_indices=tuple(engine_provisional_indices),
+            state_digest=state_digest, sequence=sequence)
+        self.__issued_permits[permit.permit_digest] = permit
+        return permit
 
     def consumed_registry_digest(self) -> str:
         return digest({"vr": sorted(self._consumed),
@@ -411,12 +455,16 @@ class PublicationCoordinator:
                                 "effect_digest": getattr(intent, "effect_digest", None)})
             raise
 
-    def promote_provisionals(self) -> int:
-        """RC-0.4D: promote every provisional row to PUBLISHED. Called ONLY at the
-        engine's final-seal barrier, after the prospective canonicalization of the
-        final state succeeded. Idempotent (the provisional list is cleared)."""
+    def promote_provisionals(self, permit: FinalizationPermit = None) -> int:
+        """RC-0.4E section 2 (owner audit critical 1): promotion is an AUTHORITY
+        OPERATION. The button labeled PROMOTE no longer works for anyone holding the
+        engine: it requires a one-use FinalizationPermit issued through the claimed
+        lifecycle authority and bound to the EXACT current provisional sets."""
         if self._gate is not None:
             self._gate.require_open("publication.promote_provisionals")
+        # MUTATION-TARGET: publication-finalization-permit
+        self._require_finalization_permit(permit)
+        self.__consumed_permits.add(permit.permit_digest)
         n = 0
         for idx in self._provisional_rows:
             if self.ledger[idx]["decision"] == "PROVISIONAL_PUBLICATION":
@@ -425,12 +473,36 @@ class PublicationCoordinator:
         self._provisional_rows = []
         return n
 
-    def void_unfinalized(self, reason: str = "VOIDED_UNSEALED") -> int:
-        """RC-0.4D: terminally void every provisional (and, defensively, any
-        prematurely-promoted PUBLISHED) row. Called on finalization/seal failure.
+    def _require_finalization_permit(self, permit):
+        if not isinstance(permit, FinalizationPermit):
+            raise PublicationRefused("PUB_LAW_PROMOTION_REQUIRES_PERMIT",
+                                     "promotion without a FinalizationPermit")
+        issued = self.__issued_permits.get(permit.permit_digest)
+        if issued is None or issued != permit:
+            raise PublicationRefused("PUB_LAW_PERMIT_NOT_ISSUED",
+                                     "permit is not in the issuance registry")
+        if permit.permit_digest in self.__consumed_permits:
+            raise PublicationRefused("PUB_LAW_PERMIT_CONSUMED",
+                                     "the finalization permit is one-use")
+        if permit.episode_id != self.episode_id:
+            raise PublicationRefused("PUB_LAW_PERMIT_EPISODE", permit.episode_id)
+        if permit.provisional_indices != tuple(self._provisional_rows):
+            raise PublicationRefused("PUB_LAW_PERMIT_STALE_PROVISIONALS",
+                                     "the provisional index set changed after issuance")
+        if permit.provisional_ledger_digest != self.provisional_ledger_digest():
+            raise PublicationRefused("PUB_LAW_PERMIT_STALE_LEDGER",
+                                     "the provisional ledger changed after issuance")
+
+    def void_unfinalized(self, authority=None, reason: str = "VOIDED_UNSEALED") -> int:
+        """RC-0.4D/E: terminally void every provisional (and, defensively, any
+        prematurely-promoted PUBLISHED) row. Requires the claimed lifecycle-authority
+        token -- an ordinary caller cannot deny publication by voiding either.
         The consumed receipts stay consumed -- a terminal void, never a release."""
         if self._gate is not None:
             self._gate.require_open("publication.void_unfinalized")
+        if authority is not self.__lifecycle_authority:
+            raise PublicationRefused("PUB_LAW_NOT_LIFECYCLE_AUTHORITY",
+                                     "voiding requires the claimed lifecycle authority")
         n = 0
         for row in self.ledger:
             if row["decision"] in ("PROVISIONAL_PUBLICATION", "PUBLISHED"):

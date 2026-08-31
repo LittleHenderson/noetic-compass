@@ -145,16 +145,26 @@ MUTATIONS = [
      "expected_test": ("test_rc04d", "test_nonbool_commit_flag_rejected")},
     {"name": "final_publication_barrier_removed",
      "file": "sim/rc01_engine.py",
-     "old": "        # MUTATION-TARGET: final-publication-barrier\n"
-            "        if self._prospective_seal_probe():\n"
-            "            self._promote_provisional_publications()\n"
-            "        else:\n"
-            "            self._void_provisional_publications()",
-     "new": "        # MUTATION-TARGET: final-publication-barrier\n"
-            "        self._promote_provisional_publications()",
-     "guard": "if the final-seal barrier is removed, an unsealed run promotes its "
-              "provisional publication and holds published=1 under the marker (owner "
-              "audit RC-0.4D critical 2)",
+     "old": "        try:\n"
+            "            self._void_provisional_publications(force=True)\n"
+            "        except FinalizedControllerError:\n"
+            "            # unreachable in practice (the gate trips only after the installed==\n"
+            "            # planned check); pure terminal defense -- flip the rows directly so no\n"
+            "            # provisional or premature PUBLISHED row can ever survive a fault\n"
+            "            for row in self.publications:\n"
+            "                if row[\"status\"] in (\"PROVISIONAL_PUBLICATION\", \"PUBLISHED\"):\n"
+            "                    row[\"voided_from\"] = row[\"status\"]\n"
+            "                    row[\"status\"] = \"VOIDED_UNSEALED\"\n"
+            "            for row in self.pubcoord.ledger:\n"
+            "                if row[\"decision\"] in (\"PROVISIONAL_PUBLICATION\", \"PUBLISHED\"):\n"
+            "                    row[\"voided_from\"] = row[\"decision\"]\n"
+            "                    row[\"decision\"] = \"VOIDED_UNSEALED\"\n"
+            "            self._provisional_pub_indices = []\n"
+            "            self.metrics[\"published\"] = 0",
+     "new": "        pass  # MUTATED: terminal void removed",
+     "guard": "if the terminal void is removed, an unsealed/faulted run leaves its "
+              "provisional publication STRANDED (owner audit RC-0.4D critical 2 + "
+              "third-party F-01)",
      "expected_test": ("test_rc04d", "test_unsealed_run_has_zero_published")},
     {"name": "asom_zero_score_action_dispatch_removed",
      "file": "sim/rc01_engine.py",
@@ -175,6 +185,104 @@ MUTATIONS = [
               "engine state (the fault record, events, metrics) (owner audit "
               "RC-0.4D major 4)",
      "expected_test": ("test_rc04d", "test_fault_record_is_detached_from_runtime_snapshot")},
+    {"name": "scheduler_tick_capability_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "        if self.phase not in (\"RUNNING\", \"FINALIZING\"):\n"
+            "            raise ControllerLifecycleError(\n"
+            "                f\"{entry_point} refused: phase is {self.phase}; execution internals \"\n"
+            "                \"run only inside run()'s lifecycle\")",
+     "new": "        if False:\n"
+            "            raise ControllerLifecycleError(\n"
+            "                f\"{entry_point} refused: phase is {self.phase}; execution internals \"\n"
+            "                \"run only inside run()'s lifecycle\")",
+     "guard": "run()'s ownership of execution is enforced by the lifecycle phase "
+              "guard on EVERY execution internal plus the tick() scheduler token "
+              "(defense-in-depth). Removing the phase guard lets the token-free "
+              "internals (_repair, _execute_verify_commit, _do_split, "
+              "_publish_or_refuse) run outside run(); the named test attacks exactly "
+              "those (owner audit RC-0.4E section 1 + internal round-2 MAJOR)",
+     "expected_test": ("test_rc04e", "test_prerun_internal_execution_refused")},
+    {"name": "publication_finalization_permit_removed",
+     "file": "sim/rc01_coordinator.py",
+     "old": "        # MUTATION-TARGET: publication-finalization-permit\n"
+            "        self._require_finalization_permit(permit)\n"
+            "        self.__consumed_permits.add(permit.permit_digest)",
+     "new": "        # MUTATION-TARGET: publication-finalization-permit\n"
+            "        pass  # MUTATED: permit requirement removed",
+     "guard": "if the permit requirement is removed, the PROMOTE button works for "
+              "anyone holding the engine (owner audit RC-0.4E section 2)",
+     "expected_test": ("test_rc04e",
+                       "test_public_promotion_without_finalization_permit_refused")},
+    {"name": "result_finalization_requirement_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "        if self.phase not in (\"FINALIZED\", \"FAULTED\"):\n"
+            "            raise ControllerLifecycleError(\n"
+            "                f\"result() refused: phase is {self.phase}; a result exists only in a \"\n"
+            "                \"terminal phase (FINALIZED or FAULTED)\")",
+     "new": "        if False:\n"
+            "            raise ControllerLifecycleError(\n"
+            "                f\"result() refused: phase is {self.phase}; a result exists only in a \"\n"
+            "                \"terminal phase (FINALIZED or FAULTED)\")",
+     "guard": "if the terminal-phase requirement is removed, pre-final evidence is "
+              "emitted as a result (owner audit RC-0.4E section 1)",
+     "expected_test": ("test_rc04e", "test_result_before_finalization_is_refused")},
+    {"name": "finalization_fault_boundary_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "        # MUTATION-TARGET: finalization-fault-boundary\n"
+            "        # (no exception carve-outs -- RC-0.4E round-2: ANY exception in FINALIZING,\n"
+            "        # domain-typed included, must void and terminate FAULTED)\n"
+            "        try:\n"
+            "            return self._finalize_and_result()\n"
+            "        except BaseException as exc:  # noqa: BLE001\n"
+            "            self._terminal_fault(\"finalize\", t, exc)\n"
+            "            raise ControllerFault(self.fault, self.seal_digest) from exc",
+     "new": "        # MUTATION-TARGET: finalization-fault-boundary\n"
+            "        return self._finalize_and_result()",
+     "guard": "if the finalization fault boundary is removed, an environmental error "
+              "escapes UNTYPED with a stranded provisional (third-party F-01)",
+     "expected_test": ("test_rc04e", "test_finalization_runtimeerror_is_typed")},
+    {"name": "split_active_branch_check_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "        if (self.total_branches_opened + n_children > self.max_total_branches\n"
+            "                or active_children + n_children > self.max_active_branches\n"
+            "                or own_open + n_children > gov.max_branches):",
+     "new": "        if False and (self.total_branches_opened + n_children > self.max_total_branches\n"
+            "                or active_children + n_children > self.max_active_branches\n"
+            "                or own_open + n_children > gov.max_branches):",
+     "guard": "if the split branch cages are removed, an overload Cause opens children "
+              "past every ceiling (owner audit RC-0.4E section 4)",
+     "expected_test": ("test_rc04e", "test_split_refused_when_max_active_branches_zero")},
+    {"name": "global_cause_id_check_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "            child_id, k = base_id, 0\n"
+            "            while child_id in self.used_cause_ids:\n"
+            "                k += 1\n"
+            "                child_id = f\"{base_id}.g{k}\"",
+     "new": "            child_id, k = base_id, 0",
+     "guard": "if the id reservation is removed, a generated child id collides with "
+              "an unrelated top-level Cause (owner audit RC-0.4E section 5)",
+     "expected_test": ("test_rc04e",
+                       "test_top_level_id_cannot_collide_with_generated_child")},
+    {"name": "cutoff_self_clear_guard_removed",
+     "file": "sim/rc01_engine.py",
+     "old": "                    self.metrics[\"cutoff_unresolved\"] += 1\n"
+            "                    self.events.append({\"tick\": t, \"event\": \"CUTOFF_CAUSE_UNRESOLVED\",\n"
+            "                                        \"expert\": e, \"cause\": cause.cause_id})\n"
+            "                    self._drop_cause(t, cause.cause_id, \"cutoff_unresolved\")\n"
+            "                    acted = True",
+     "new": "                    reassessed = RegionRecord(\n"
+            "                        region_posterior=UNIFORM4, committed_region=\"unassessed\",\n"
+            "                        response_model_status=\"unassessed\", stability_status=\"stable\",\n"
+            "                        semantic_outcome=\"unassessed\")\n"
+            "                    if self._commit([self._intent(e, \"record\", reassessed, t,\n"
+            "                                                  \"MUTATED: self-clear\")], t):\n"
+            "                        self.metrics[\"repairs_completed\"] += 1\n"
+            "                        requeue = True\n"
+            "                    acted = True",
+     "guard": "if the self-clear guard is removed, a ready-but-cutoff route repaints "
+              "its own gauge needle and conducts (owner audit RC-0.4E section 6)",
+     "expected_test": ("test_rc04e",
+                       "test_ready_cutoff_cannot_self_clear_without_new_evidence")},
     {"name": "cjtstep_snapshot_validation_removed",
      "file": "sim/rc01_engine.py",
      "old": "        if (step.originating_tick != t or step.producer_expert_id != chosen\n"
