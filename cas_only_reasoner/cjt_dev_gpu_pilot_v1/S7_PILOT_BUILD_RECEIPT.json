@@ -1,0 +1,395 @@
+{
+  "receipt_id": "S7_PILOT_BUILD_RECEIPT",
+  "pilot": "CJT-DEV-P1",
+  "non_claim_bearing": true,
+  "verdict": "S7_PILOT_CONSTRUCTION_FAILED",
+  "orthogonality_threshold_cramers_v": 0.35,
+  "wordnet": {
+    "version": "3.0",
+    "lemmatization": "morphy-direct (no judgment)",
+    "wordnet_zip_sha256": "cbda5ea6eef7f36a97a43d4a75f85e07fccbb4f23657d27b4ccbc93e2646ab59",
+    "wordnet_zip_bytes": 10775600,
+    "license": "WordNet Release 3.0 License (Princeton University)",
+    "source": "Princeton WordNet 3.0 (obtained via nltk 'wordnet' corpus)"
+  },
+  "registered_verbs": [
+    "drawn",
+    "pulled",
+    "felt",
+    "captured",
+    "withdrew",
+    "repelled",
+    "recoiled",
+    "backed",
+    "broke",
+    "lay",
+    "split",
+    "made",
+    "brought",
+    "thought",
+    "reminded",
+    "summoned"
+  ],
+  "cas_class_order": [
+    "^2",
+    "^3",
+    "^6",
+    "^8"
+  ],
+  "cas_mapping_verb_to_classindex": {
+    "drawn": 0,
+    "pulled": 0,
+    "felt": 0,
+    "captured": 0,
+    "withdrew": 1,
+    "repelled": 1,
+    "recoiled": 1,
+    "backed": 1,
+    "broke": 2,
+    "lay": 2,
+    "split": 2,
+    "made": 2,
+    "brought": 3,
+    "thought": 3,
+    "reminded": 3,
+    "summoned": 3
+  },
+  "per_verb_wordnet_features": {
+    "drawn": {
+      "lemma": "draw",
+      "primary_lexname": "verb.contact",
+      "primary_synset": "pull.v.01",
+      "primary_synset_offset": 1448100,
+      "n_verb_senses": 36,
+      "sense1_hypernym_lexname": "verb.motion",
+      "sense1_n_lemmas": 3
+    },
+    "pulled": {
+      "lemma": "pull",
+      "primary_lexname": "verb.contact",
+      "primary_synset": "pull.v.01",
+      "primary_synset_offset": 1448100,
+      "n_verb_senses": 17,
+      "sense1_hypernym_lexname": "verb.motion",
+      "sense1_n_lemmas": 3
+    },
+    "felt": {
+      "lemma": "felt",
+      "primary_lexname": "verb.contact",
+      "primary_synset": "felt.v.01",
+      "primary_synset_offset": 1463212,
+      "n_verb_senses": 16,
+      "sense1_hypernym_lexname": "verb.contact",
+      "sense1_n_lemmas": 1
+    },
+    "captured": {
+      "lemma": "capture",
+      "primary_lexname": "verb.creation",
+      "primary_synset": "capture.v.01",
+      "primary_synset_offset": 1686626,
+      "n_verb_senses": 6,
+      "sense1_hypernym_lexname": "verb.creation",
+      "sense1_n_lemmas": 1
+    },
+    "withdrew": {
+      "lemma": "withdraw",
+      "primary_lexname": "verb.motion",
+      "primary_synset": "withdraw.v.01",
+      "primary_synset_offset": 1994442,
+      "n_verb_senses": 12,
+      "sense1_hypernym_lexname": "verb.motion",
+      "sense1_n_lemmas": 8
+    },
+    "repelled": {
+      "lemma": "repel",
+      "primary_lexname": "verb.contact",
+      "primary_synset": "repel.v.01",
+      "primary_synset_offset": 1506157,
+      "n_verb_senses": 5,
+      "sense1_hypernym_lexname": "verb.motion",
+      "sense1_n_lemmas": 6
+    },
+    "recoiled": {
+      "lemma": "recoil",
+      "primary_lexname": "verb.motion",
+      "primary_synset": "flinch.v.01",
+      "primary_synset_offset": 2061069,
+      "n_verb_senses": 4,
+      "sense1_hypernym_lexname": "verb.motion",
+      "sense1_n_lemmas": 8
+    },
+    "backed": {
+      "lemma": "back",
+      "primary_lexname": "verb.social",
+      "primary_synset": "back.v.01",
+      "primary_synset_offset": 2453889,
+      "n_verb_senses": 10,
+      "sense1_hypernym_lexname": "verb.communication",
+      "sense1_n_lemmas": 6
+    },
+    "broke": {
+      "lemma": "break",
+      "primary_lexname": "verb.change",
+      "primary_synset": "interrupt.v.04",
+      "primary_synset_offset": 364064,
+      "n_verb_senses": 59,
+      "sense1_hypernym_lexname": "verb.change",
+      "sense1_n_lemmas": 2
+    },
+    "lay": {
+      "lemma": "lay",
+      "primary_lexname": "verb.contact",
+      "primary_synset": "put.v.01",
+      "primary_synset_offset": 1494310,
+      "n_verb_senses": 12,
+      "sense1_hypernym_lexname": "verb.motion",
+      "sense1_n_lemmas": 6
+    },
+    "split": {
+      "lemma": "split",
+      "primary_lexname": "verb.social",
+      "primary_synset": "divide.v.01",
+      "primary_synset_offset": 2467662,
+      "n_verb_senses": 5,
+      "sense1_hypernym_lexname": "verb.change",
+      "sense1_n_lemmas": 6
+    },
+    "made": {
+      "lemma": "make",
+      "primary_lexname": "verb.social",
+      "primary_synset": "make.v.01",
+      "primary_synset_offset": 2560585,
+      "n_verb_senses": 49,
+      "sense1_hypernym_lexname": "verb.social",
+      "sense1_n_lemmas": 2
+    },
+    "brought": {
+      "lemma": "bring",
+      "primary_lexname": "verb.motion",
+      "primary_synset": "bring.v.01",
+      "primary_synset_offset": 2077656,
+      "n_verb_senses": 11,
+      "sense1_hypernym_lexname": "verb.contact",
+      "sense1_n_lemmas": 3
+    },
+    "thought": {
+      "lemma": "think",
+      "primary_lexname": "verb.cognition",
+      "primary_synset": "think.v.01",
+      "primary_synset_offset": 689344,
+      "n_verb_senses": 13,
+      "sense1_hypernym_lexname": "verb.cognition",
+      "sense1_n_lemmas": 4
+    },
+    "reminded": {
+      "lemma": "remind",
+      "primary_lexname": "verb.cognition",
+      "primary_synset": "remind.v.01",
+      "primary_synset_offset": 610538,
+      "n_verb_senses": 2,
+      "sense1_hypernym_lexname": "verb.cognition",
+      "sense1_n_lemmas": 1
+    },
+    "summoned": {
+      "lemma": "summon",
+      "primary_lexname": "verb.communication",
+      "primary_synset": "summon.v.01",
+      "primary_synset_offset": 791134,
+      "n_verb_senses": 4,
+      "sense1_hypernym_lexname": "verb.communication",
+      "sense1_n_lemmas": 3
+    }
+  },
+  "pre_declared_primary_rule": {
+    "name": "verb primary-sense lexname, most-populous-4 + merge + rebalance (ALTERNATIVE_TAXONOMY_MANIFEST_CANDIDATE.construction_law)",
+    "assignment_verb_to_classindex": {
+      "lay": 0,
+      "pulled": 0,
+      "repelled": 0,
+      "summoned": 0,
+      "brought": 1,
+      "recoiled": 1,
+      "withdrew": 1,
+      "captured": 1,
+      "backed": 2,
+      "made": 2,
+      "split": 2,
+      "drawn": 2,
+      "reminded": 3,
+      "thought": 3,
+      "broke": 3,
+      "felt": 3
+    },
+    "balanced": true,
+    "class_sizes": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "cramers_v": 0.353553,
+    "chi2": 6.0,
+    "equals_S3": false,
+    "is_permutation_of_S3": false,
+    "contingency_S7rows_x_CAScols": [
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        2,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        2,
+        0
+      ],
+      [
+        1,
+        0,
+        1,
+        2
+      ]
+    ],
+    "gate_pass": false
+  },
+  "pre_declared_fallback_rule": {
+    "name": "sense-1 hypernym lexname, sorted contiguous-block balanced",
+    "assignment_verb_to_classindex": {
+      "broke": 0,
+      "split": 0,
+      "reminded": 0,
+      "thought": 0,
+      "backed": 1,
+      "summoned": 1,
+      "brought": 1,
+      "felt": 1,
+      "captured": 2,
+      "drawn": 2,
+      "lay": 2,
+      "pulled": 2,
+      "recoiled": 3,
+      "repelled": 3,
+      "withdrew": 3,
+      "made": 3
+    },
+    "balanced": true,
+    "class_sizes": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "cramers_v": 0.612372,
+    "chi2": 18.0,
+    "equals_S3": false,
+    "is_permutation_of_S3": false,
+    "contingency_S7rows_x_CAScols": [
+      [
+        0,
+        0,
+        2,
+        2
+      ],
+      [
+        1,
+        1,
+        0,
+        2
+      ],
+      [
+        3,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        3,
+        1,
+        0
+      ]
+    ],
+    "gate_pass": false
+  },
+  "diagnostic_landscape": [
+    {
+      "construction": "primary_lexname[block]",
+      "semantic_feature": true,
+      "cramers_v": 0.612372,
+      "gate_pass": false,
+      "note": ""
+    },
+    {
+      "construction": "primary_lexname[rr]",
+      "semantic_feature": true,
+      "cramers_v": 0.408248,
+      "gate_pass": false,
+      "note": ""
+    },
+    {
+      "construction": "sense1_hypernym_lexname[block]",
+      "semantic_feature": true,
+      "cramers_v": 0.612372,
+      "gate_pass": false,
+      "note": ""
+    },
+    {
+      "construction": "sense1_hypernym_lexname[rr]",
+      "semantic_feature": true,
+      "cramers_v": 0.353553,
+      "gate_pass": false,
+      "note": ""
+    },
+    {
+      "construction": "n_verb_senses[block]",
+      "semantic_feature": false,
+      "cramers_v": 0.408248,
+      "gate_pass": false,
+      "note": ""
+    },
+    {
+      "construction": "n_verb_senses[rr]",
+      "semantic_feature": false,
+      "cramers_v": 0.408248,
+      "gate_pass": false,
+      "note": ""
+    },
+    {
+      "construction": "primary_synset_offset[block]",
+      "semantic_feature": false,
+      "cramers_v": 0.645497,
+      "gate_pass": false,
+      "note": ""
+    },
+    {
+      "construction": "primary_synset_offset[rr]",
+      "semantic_feature": false,
+      "cramers_v": 0.288675,
+      "gate_pass": true,
+      "note": "EXCLUDED: not a semantic organization (arbitrary WordNet identifier / count); selecting it because it passes the orthogonality test is manufacturing a convenient control"
+    },
+    {
+      "construction": "sense1_n_lemmas[block]",
+      "semantic_feature": false,
+      "cramers_v": 0.5,
+      "gate_pass": false,
+      "note": ""
+    },
+    {
+      "construction": "sense1_n_lemmas[rr]",
+      "semantic_feature": false,
+      "cramers_v": 0.353553,
+      "gate_pass": false,
+      "note": ""
+    }
+  ],
+  "conclusion": "No PRE-DECLARED, CAS-blind, semantic WordNet partition of the 16 registered verbs reaches Cramer's V <= 0.35 against the CAS classes. The pre-declared primary rule (the repository's own frozen construction_law) yields V=0.3536 (fails by 0.0036). Every no-judgment semantic feature fails. The only constructions that pass are non-semantic identifier/lemmatization shuffles selected BECAUSE they pass -- i.e. manufacturing, which the directive forbids. This confirms the manifest's own circularity_disclosure: the answer function is defined over the CAS classes, so a genuinely task-relevant non-CAS control cannot exist on this vocabulary. Emitting S7_PILOT_CONSTRUCTION_FAILED and stopping BEFORE any GPU use, per the directive.",
+  "chosen_rule": null
+}
