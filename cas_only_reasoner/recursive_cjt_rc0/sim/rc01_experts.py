@@ -56,7 +56,8 @@ def registered_transform(expert_id: str, payload: str, mode: str) -> tuple:
 
 
 def cjt_step(expert_id: str, cause: Cause, bias: BiasState, allocation: float,
-             budget: ComputeBudget, tick: int, bias_version: int) -> CJTStepResult:
+             budget: ComputeBudget, tick: int, bias_version: int,
+             bias_digest: str = "") -> CJTStepResult:
     """The typed, Bias-conditioned CJT transformation. Spends exactly 1 unit.
 
     Reads the Bias: theta[0] selects the transformation mode; memory is read to build
@@ -69,8 +70,13 @@ def cjt_step(expert_id: str, cause: Cause, bias: BiasState, allocation: float,
         raise RuntimeError("BUDGET_EXHAUSTED")
     mode = bias.theta[0] if bias.theta else "K_identity"
     op_kind, out = registered_transform(expert_id, cause.payload, mode)
+    # RC-0.3: the Effect is an ENVELOPE carrying its originating tick and the Bias
+    # snapshot it was computed from -- stale Effects cannot be re-presented later.
     effect = EffectCandidate(producer_expert_id=expert_id, cause_id=cause.cause_id,
-                             op_kind=op_kind, payload=out)
+                             op_kind=op_kind, payload=out,
+                             originating_tick=tick,
+                             base_bias_version=bias_version,
+                             base_bias_digest=bias_digest)
     # a REAL proposed update, built from the Bias this step read
     proposed_memory = (bias.memory + ((cause.cause_id, "executed", mode),))[-8:]
     return CJTStepResult(
@@ -80,4 +86,6 @@ def cjt_step(expert_id: str, cause: Cause, bias: BiasState, allocation: float,
         actual_compute_used=1,
         producer_expert_id=expert_id,
         originating_tick=tick,
-        authoritative_bias_version=bias_version)
+        authoritative_bias_version=bias_version,
+        base_state_version=bias_version,     # snapshot AT STEP TIME (RC-0.3)
+        base_state_digest=bias_digest)

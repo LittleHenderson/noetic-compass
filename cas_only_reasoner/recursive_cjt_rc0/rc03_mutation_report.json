@@ -1,0 +1,90 @@
+{
+  "report_id": "rc03_mutation_report",
+  "mechanism": "disposable working copy per mutation (scratch tree; original package never modified; pristine digest verified before/after)",
+  "pristine_tree_digest_before": "30e91b215f45a9307086fb5c08b46f3e30c3d460ac2c38b9fb2b63fc943881c6",
+  "pristine_tree_digest_after": "30e91b215f45a9307086fb5c08b46f3e30c3d460ac2c38b9fb2b63fc943881c6",
+  "pristine_unchanged": true,
+  "mutations": [
+    {
+      "name": "publication_without_diagnostic_commit",
+      "file": "sim/rc01_coordinator.py",
+      "guard": "if the commit-receipt requirement is removed, an intended receipt with no state commit publishes",
+      "mutated_lines": "            dcr = self._state_coord.get_commit_receipt(intent.diagnostic_commit_digest)\n            if dcr is None:",
+      "expected_test": "test_rc03::test_publication_requires_diagnostic_commit_receipt",
+      "applied": true,
+      "caught": true,
+      "actual_failing_output": "AttributeError: 'NoneType' object has no attribute 'episode_id'"
+    },
+    {
+      "name": "publication_base_state_check_removed",
+      "file": "sim/rc01_coordinator.py",
+      "guard": "if base-state validation is removed, stale-state intents publish",
+      "mutated_lines": "            if (intent.base_state_version != dcr.pre_state_version\n                    or intent.base_state_digest != dcr.pre_state_digest):",
+      "expected_test": "test_rc03::test_pub_law_stale_state",
+      "applied": true,
+      "caught": true,
+      "actual_failing_output": "AssertionError: stale base state accepted"
+    },
+    {
+      "name": "any_examiner_receipt_accepted",
+      "file": "sim/rc01_engine.py",
+      "guard": "if registry membership is dropped, a self-built receipt with the right examiner name registers",
+      "mutated_lines": "            return (receipt.examiner_id == self.EXAMINER_ID\n                    and issued.get(receipt.receipt_digest) == canonical(receipt.content))",
+      "expected_test": "test_rc03::test_old_public_seal_formula_rejected",
+      "applied": true,
+      "caught": true,
+      "actual_failing_output": "AssertionError: old public-formula seal accepted"
+    },
+    {
+      "name": "op_kind_verification_removed",
+      "file": "sim/rc01_engine.py",
+      "guard": "if the op check is removed, a wrong-operation Effect with the right payload passes",
+      "mutated_lines": "        elif effect.op_kind not in EXPECTED_OPS.get(effect.producer_expert_id, ()):",
+      "expected_test": "test_rc03::test_wrong_op_kind_refused",
+      "applied": true,
+      "caught": true,
+      "actual_failing_output": "AssertionError: correct payload with wrong op_kind accepted"
+    },
+    {
+      "name": "stale_effect_tick_accepted",
+      "file": "sim/rc01_engine.py",
+      "guard": "if the tick check is removed, an old Effect earns a fresh receipt",
+      "mutated_lines": "        elif effect.originating_tick != tick:",
+      "expected_test": "test_rc03::test_stale_effect_tick_refused",
+      "applied": true,
+      "caught": true,
+      "actual_failing_output": "AssertionError: stale Effect earned a fresh receipt"
+    },
+    {
+      "name": "consumed_receipts_omitted_from_seal",
+      "file": "sim/rc01_engine.py",
+      "guard": "if the consumed registry leaves the snapshot, the seal goes blind to it",
+      "mutated_lines": "            \"publication_consumed\": self.pubcoord.consumed_registry_digest(),",
+      "expected_test": "test_rc03::test_seal_binds_consumed_receipts",
+      "applied": true,
+      "caught": true,
+      "actual_failing_output": "AssertionError: seal blind to the consumed-receipt registry"
+    },
+    {
+      "name": "split_sibling_cancellation_removed",
+      "file": "sim/rc01_engine.py",
+      "guard": "if cancellation is removed, an orphan sibling can run and publish top-level",
+      "mutated_lines": "            for cid, v in frame.pending.items():           # cancel unsettled siblings\n                if v is None:\n                    self.cancelled_causes.add(cid)",
+      "expected_test": "test_rc03::test_split_child_failure_no_orphan_publication",
+      "applied": true,
+      "caught": true,
+      "actual_failing_output": "AssertionError"
+    },
+    {
+      "name": "cjtstep_snapshot_validation_removed",
+      "file": "sim/rc01_engine.py",
+      "guard": "if snapshot validation is removed, a stale step result is laundered into fresh intents",
+      "mutated_lines": "        if (step.originating_tick != t or step.producer_expert_id != chosen\n                or effect.producer_expert_id != chosen\n                or step.base_state_version != snap_version\n                or step.base_state_digest != snap_digest):",
+      "expected_test": "test_rc03::test_stale_cjtstep_result_rejected",
+      "applied": true,
+      "caught": true,
+      "actual_failing_output": "AssertionError: stale step laundered"
+    }
+  ],
+  "all_caught": true
+}

@@ -47,7 +47,7 @@ def test_failed_state_commit_cannot_leave_publication():
     e = eng([c6("f0")], SC.Reg().add("f0", "^6_decompose", "intended", PAY))
     original = e.coord.commit
 
-    def sabotage(intents, tick):     # the diagnostic commit fails
+    def sabotage(intents, tick, **kw):   # the diagnostic commit fails (RC-0.3 signature)
         raise RejectedBatch("LAW_INJECTED_FAILURE", "audit sabotage")
     e.coord.commit = sabotage
     r = e.run()
@@ -139,7 +139,7 @@ def test_registered_fake_receipt_rejected():
         coord.register_verifier_receipt(fake)
         raise AssertionError("forged-seal receipt registered")
     except RejectedBatch as rb:
-        assert rb.law == "LAW_RECEIPT_SEAL"
+        assert rb.law == "LAW_RECEIPT_NOT_ISSUED"
 
 
 def test_receipt_cannot_be_reused():

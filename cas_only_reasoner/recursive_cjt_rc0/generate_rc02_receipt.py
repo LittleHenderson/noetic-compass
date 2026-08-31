@@ -133,7 +133,7 @@ def main():
     raw_reports = {}
     import os
     child_env = dict(os.environ, RC02_IN_GENERATOR="1")
-    for name in ("test_rc0", "test_rc01", "test_rc02"):
+    for name in ("test_rc0", "test_rc01", "test_rc02", "test_rc03"):
         proc = subprocess.run([sys.executable, f"tests/{name}.py"],
                               capture_output=True, text=True, cwd=str(HERE),
                               env=child_env)
@@ -156,16 +156,27 @@ def main():
     d1, d2, d3 = rp(["normal_intended"]), rp(["normal_intended"]), \
         rp(["normal_intended", "--mutate"])
 
-    # ---- fault-injection battery ----
+    # ---- fault-injection battery (adversarial input fixtures) ----
     injections = run_injections()
     all_detected = all(i["detected"] for i in injections)
+
+    # ---- REAL mutation audit (RC-0.3): deliberate implementation breaks must be
+    # caught by named tests; a surviving mutation is a live authority hole ----
+    mut_proc = subprocess.run([sys.executable, "run_mutation_audit.py"],
+                              capture_output=True, text=True, cwd=str(HERE))
+    mut_path = HERE / "rc03_mutation_report.json"
+    mutation_report = json.loads(mut_path.read_text(encoding="utf-8"))         if mut_path.exists() else None
+    mutations_ok = bool(mutation_report and mutation_report.get("all_caught")
+                        and mutation_report.get("pristine_unchanged"))
 
     # ---- deterministic status emission (never hand-written) ----
     suites_ok = all(s["exit"] == 0 for s in suites.values())
     replay_ok = (d1 == d2) and (d1 != d3)
-    if not all_detected:
-        status = "GATE0_REFUTED"
-    elif suites_ok and all_scenarios_pass and replay_ok:
+    if not all_detected or (mutation_report is not None and not mutations_ok):
+        status = "GATE0_REFUTED"          # an undetected attack or a surviving mutation
+    elif mutation_report is None:
+        status = "GATE0_INCONCLUSIVE"     # mutation audit missing: cannot claim the pass
+    elif suites_ok and all_scenarios_pass and replay_ok and mutations_ok:
         status = "DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS"
     else:
         status = "GATE0_INCONCLUSIVE"
@@ -173,6 +184,9 @@ def main():
     print(f"suites: {[s['result'] for s in suites.values()]}")
     print(f"scenarios: {sum(1 for r in rows if r['passed'])}/{len(rows)}")
     print(f"injections detected: {sum(1 for i in injections if i['detected'])}/{len(injections)}")
+    if mutation_report:
+        print(f"mutations caught: {sum(1 for m in mutation_report['mutations'] if m['caught'])}"
+              f"/{len(mutation_report['mutations'])}")
     print(f"replay identical: {d1 == d2} | mutation changes digest: {d1 != d3}")
     print(f"STATUS: {status}")
     if check_only:
@@ -225,9 +239,11 @@ def main():
                         "working_tree_dirty_at_generation": dirty,
                         "dependencies": deps},
         "self_reference_law": "This receipt records the PARENT commit and the code-tree "
-                              "digest; the commit SHA that contains this receipt is bound "
-                              "by the follow-up attestation commit "
-                              "(RC02_ATTESTATION.json), never by a prose placeholder.",
+                              "digest; the commit SHA that contains this receipt can only "
+                              "be bound by a follow-up commit. Any such binding record is "
+                              "an UNSIGNED Git-history binding, not a signed or "
+                              "independently verified attestation, until the owner signs "
+                              "with a real key.",
         "commands": ["python generate_rc02_receipt.py",
                      "python tests/test_rc0.py", "python tests/test_rc01.py",
                      "python tests/test_rc02.py", "python sim/rc01_scenarios.py",
@@ -244,6 +260,11 @@ def main():
                                              for r in rows],
                             "matrix_digest": sha(HERE / "RC01_SCENARIO_MATRIX.json")},
         "fault_injections": injections,
+        "mutation_audit": mutation_report,
+        "digest_domain": "all artifact digests are SHA-256 over RAW FILE BYTES exactly as "
+                         "stored on disk (no newline normalization, no encoding transform); "
+                         "trace/seal digests are SHA-256 over canonical JSON "
+                         "(sorted keys, ensure_ascii, compact separators)",
         "fresh_process_replay": {"digest_run1": d1, "digest_run2": d2,
                                  "identical": d1 == d2, "mutated_digest": d3,
                                  "mutation_changes_digest": d1 != d3},

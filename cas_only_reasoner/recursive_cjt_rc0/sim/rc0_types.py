@@ -33,14 +33,28 @@ FIRST_BLOCK_POLICY = ("DESIRE", "WISDOM", "POWER")  # frozen D -> W -> P check o
 COMPUTE_UNIT = "CJT_EXPERT_EVALUATION"  # frozen single unit for the first experiment
 
 
+_IMMUTABLE_LEAVES = (str, int, float, bool, bytes, type(None))
+
+
 def _deeply_immutable(name, v):
-    """RC-0.2: reject mutable containers anywhere inside state-bearing values."""
-    if isinstance(v, (list, dict, set, bytearray)):
-        raise TypeError(f"{name} contains a mutable {type(v).__name__}; deep immutability required")
+    """RC-0.3 ALLOW-LIST: state-bearing values may contain ONLY canonical immutable
+    leaves, tuples/frozensets of them, or enum members. Arbitrary custom objects are
+    rejected even inside tuples (a frozen wrapper around a mutable object is still
+    mutable through that object)."""
     if isinstance(v, tuple):
         for i, x in enumerate(v):
             _deeply_immutable(f"{name}[{i}]", x)
-    return v
+        return v
+    if isinstance(v, frozenset):
+        for x in v:
+            _deeply_immutable(name + "{}", x)
+        return v
+    if isinstance(v, bool) or isinstance(v, _IMMUTABLE_LEAVES):
+        return v
+    if isinstance(v, enum.Enum):
+        return v
+    raise TypeError(f"{name} contains {type(v).__name__}, not on the canonical "
+                    "immutable allow-list (str/int/float/bool/bytes/None/tuple/frozenset/enum)")
 
 
 class ControlAction(enum.Enum):

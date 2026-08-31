@@ -9,5 +9,6 @@
   "status_in_receipt": "DETERMINISTIC_CONTROLLER_FEEDBACK_GATE0_PASS",
   "status_emission": "programmatic via generate_rc02_receipt.py; run 'python generate_rc02_receipt.py --check-only' from the evidence commit to reproduce",
   "attested_by": "Prof. Hermes M. Thoth (repo git user); Co-Authored-By Claude Opus 4.8",
-  "scope": "This attestation binds the SHA only. It does not upgrade any claim: neural, CAS-specific, learning, and efficiency claims remain PROHIBITED until Gate 1+."
+  "scope": "This attestation binds the SHA only. It does not upgrade any claim: neural, CAS-specific, learning, and efficiency claims remain PROHIBITED until Gate 1+.",
+  "language_correction_2026_08_30": "OWNER AUDIT: this file is an UNSIGNED Git-history binding record. It is not a signed attestation and not independent verification. The attested_by field is plain JSON text (the repo git user), not a cryptographic signature. A real owner signature requires a signed git tag/commit or an owner-signed detached record."
 }

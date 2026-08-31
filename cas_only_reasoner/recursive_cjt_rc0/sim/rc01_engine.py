@@ -39,6 +39,7 @@ from rc01_types import (Cause, ComputeBudget, EffectCandidate, EffectPublication
                         digest, require_finite_nonneg, validate_allocation)
 from rc01_coordinator import (HardenedCoordinator, PublicationCoordinator,
                               PublicationRefused, RejectedBatch, state_digest)
+from rc01_types import DiagnosticCommitReceipt
 from rc01_experts import EVIDENCE_MARKERS, cjt_step
 
 EPSILON = 1e-9
@@ -58,40 +59,56 @@ ROUTE_MULTIPLIER = {"cutoff": 0.0, "active": 1.0, "saturation": 0.5,
 
 
 # ------------------------------------------------------------------ the verifier wall
+EXPECTED_OPS = {"^2_attract": ("attract",), "^3_averse": ("avert",),
+                "^6_decompose": ("decompose", "combined_decompose"),
+                "^8_trigger": ("trigger",)}
+
+
 class SealedVerifier:
-    """Holds gold verdicts AND independently registered expected payloads. Verifies the
-    FULL Effect (cause binding, producer, expected payload, tick). Issues typed,
-    sealed VerifierReceipts; provides the seal validator capability. Honest limit:
-    this is same-process capability isolation, not OS-level isolation."""
+    """Holds gold verdicts AND independently registered expected payloads. RC-0.3:
+    verifies the COMPLETE Effect envelope (cause binding, producer, op_kind against the
+    registered operation table, originating tick, expected payload). Receipt authority
+    is a PRIVATE ISSUANCE REGISTRY -- a receipt is valid only if the verifier itself
+    issued it; there is no recomputable seal formula (the RC-0.2 public-string 'secret'
+    is dead). Honest limit: same-process capability isolation, not OS isolation."""
 
     EXAMINER_ID = "sealed_examiner_v1"
 
     def __init__(self, gold_table: dict, expected_payloads: dict, episode_id: str):
         self.__gold = dict(gold_table)
         self.__expected = dict(expected_payloads)   # (cause_id, producer) -> exact payload
-        self.__secret = hashlib.sha256(
-            f"examiner::{episode_id}::{self.EXAMINER_ID}".encode()).hexdigest()
+        self.__issued = {}                          # receipt_digest -> canonical content
         self.episode_id = episode_id
 
-    def _seal(self, content: dict) -> str:
-        return hashlib.sha256((self.__secret + canonical(content)).encode()).hexdigest()
+    def issued_registry_digest(self) -> str:
+        return digest(sorted(self.__issued.keys()))
 
     def validator(self):
-        """Capability handed to the coordinator: validates a receipt's seal."""
+        """Capability handed to the coordinator. Answers exactly one question: did THIS
+        verifier issue THIS receipt? Registry membership + content equality; nothing an
+        outside caller can recompute."""
+        issued = self.__issued
         def _validate(receipt: VerifierReceipt) -> bool:
             return (receipt.examiner_id == self.EXAMINER_ID
-                    and receipt.seal == self._seal(receipt.content))
+                    and issued.get(receipt.receipt_digest) == canonical(receipt.content))
         return _validate
 
     def verify(self, cause: Cause, effect, tick: int) -> VerifierReceipt:
-        """Full-Effect verification. Verdict rules:
+        """Complete-envelope verification. Verdict rules:
         - effect.cause_id must equal the cause under verification, else off_axis;
-        - table verdict looked up by (cause_id, producer);
-        - a table verdict of 'intended' REQUIRES a registered expected payload AND an
-          exact payload match; a corrupted payload downgrades to off_axis; a missing
+        - MUTATION-TARGET: op-kind-check -- op_kind must be a registered operation of
+          the producer, else off_axis;
+        - MUTATION-TARGET: stale-tick-check -- effect.originating_tick must equal the
+          verification tick, else off_axis (an old Effect cannot earn a new receipt);
+        - table verdict by (cause_id, producer); 'intended' REQUIRES a registered
+          expected payload AND an exact match; corrupted payload -> off_axis; missing
           registration fails closed to unassessed."""
         if effect.cause_id != cause.cause_id:
             verdict = "off_axis"
+        elif effect.op_kind not in EXPECTED_OPS.get(effect.producer_expert_id, ()):
+            verdict = "off_axis"                    # wrong operation, even with right payload
+        elif effect.originating_tick != tick:
+            verdict = "off_axis"                    # stale Effect re-presented later
         else:
             verdict = self.__gold.get((cause.cause_id, effect.producer_expert_id), "unassessed")
             if verdict == "intended":
@@ -104,8 +121,9 @@ class SealedVerifier:
             episode_id=self.episode_id, tick=tick, cause_id=cause.cause_id,
             effect_digest=effect.effect_digest,
             producer_expert_id=effect.producer_expert_id, verdict=verdict,
-            examiner_id=self.EXAMINER_ID, receipt_version=1)
-        return dataclasses.replace(receipt, seal=self._seal(receipt.content))
+            examiner_id=self.EXAMINER_ID, receipt_version=1, seal="")
+        self.__issued[receipt.receipt_digest] = canonical(receipt.content)
+        return receipt
 
 
 def publication_consequence(verdict: str):
@@ -215,6 +233,8 @@ class RC01Engine:
         self.total_branches_opened = 0
         self.max_total_branches = max_total_branches
         self.max_active_branches = max_active_branches
+        self.cancelled_causes = set()
+        self.remaining_queue = []
         self.exec_counts = {e: 0 for e in EVIDENCE_MARKERS}
         self.consecutive = {e: 0 for e in EVIDENCE_MARKERS}
         self.events = []
@@ -235,7 +255,8 @@ class RC01Engine:
              "desire_deprioritized", "deferred_causes", "split_frames_resumed",
              "split_frames_failed", "retry_limit_hits",
              "cap_events", "splits_created", "quarantines", "reopens",
-             "cache_hits", "invalidations_honored")
+             "cache_hits", "invalidations_honored", "children_cancelled",
+             "step_metadata_rejects")
         self.metrics = {k: 0 for k in m}
 
     # ---------------- helpers ----------------
@@ -246,6 +267,22 @@ class RC01Engine:
             base_state_version=self.coord.version(expert_id),
             base_state_digest=self.coord.get_digest(expert_id),
             verifier_receipt_digest=receipt, reason=reason)
+
+    def _commit_effectful(self, intents, tick, cause_id, effect, receipt):
+        """Commit with Effect context; returns the DiagnosticCommitReceipt on success,
+        None on rejection. Publication requires this receipt -- never a Boolean."""
+        try:
+            dcr = self.coord.commit(intents, tick, cause_id=cause_id,
+                                    effect_digest=effect.effect_digest,
+                                    verifier_receipt_digest=receipt.receipt_digest,
+                                    producer_expert_id=effect.producer_expert_id)
+            return dcr if isinstance(dcr, DiagnosticCommitReceipt) else None
+        except RejectedBatch as rb:
+            self.metrics["atomic_rollbacks"] += 1
+            if rb.law == "LAW_STALE_VERSION":
+                self.metrics["stale_intent_rejections"] += 1
+            self.events.append({"tick": tick, "event": "BATCH_REJECTED", "law": rb.law})
+            return None
 
     def _commit(self, intents, tick):
         try:
@@ -261,8 +298,8 @@ class RC01Engine:
     def _seal_and_halt(self, tick, why):
         self.metrics["action_halt"] += 1
         self.events.append({"tick": tick, "event": "HALT", "why": why})
-        self.seal_digest = self.seal()
-        self.halted = True
+        self.halted = True                       # RC-0.3: halted reaches its final
+        self.seal_digest = self.seal()           # value BEFORE the seal is computed
 
     def _quarantine(self, expert_id, tick, authorized_by):
         if expert_id not in self.quarantine_registry:
@@ -359,8 +396,10 @@ class RC01Engine:
             self.return_addresses.pop()
 
     # ---------------- publication (the ONLY path to PUBLISHED) ----------------
-    def _publish_or_refuse(self, tick, cause, effect, receipt, committed):
+    def _publish_or_refuse(self, tick, cause, effect, receipt, dcr):
+        """dcr: the DiagnosticCommitReceipt proving the state commit, or None."""
         verdict = receipt.verdict
+        committed = isinstance(dcr, DiagnosticCommitReceipt)
         if not committed:
             self._record_publication(tick, cause.cause_id, effect.producer_expert_id,
                                      effect, PublicationStatus.REFUSED, verdict,
@@ -389,8 +428,9 @@ class RC01Engine:
             effect_digest=effect.effect_digest,
             producer_expert_id=effect.producer_expert_id, verdict=verdict,
             verifier_receipt_digest=receipt.receipt_digest,
-            base_state_version=self.coord.version(effect.producer_expert_id),
-            base_state_digest=self.coord.get_digest(effect.producer_expert_id))
+            base_state_version=dcr.pre_state_version,
+            base_state_digest=dcr.pre_state_digest,
+            diagnostic_commit_digest=dcr.commit_digest)
         try:
             self.pubcoord.commit_publication(intent)
             self._record_publication(tick, cause.cause_id, effect.producer_expert_id,
@@ -406,9 +446,11 @@ class RC01Engine:
 
     # ---------------- execute one expert on one cause ----------------
     def _execute_verify_commit(self, t, cause, chosen, alloc_value, latent):
+        snap_version = self.coord.version(chosen)
+        snap_digest = self.coord.get_digest(chosen)
         try:
             step = cjt_step(chosen, cause, self.coord.get(chosen), alloc_value,
-                            self.budget, t, self.coord.version(chosen))
+                            self.budget, t, snap_version, bias_digest=snap_digest)
         except RuntimeError:
             self.metrics["budget_exhausted"] += 1
             self._seal_and_halt(t, "budget")
@@ -421,6 +463,16 @@ class RC01Engine:
         self.consecutive = {e: (self.consecutive[e] + 1 if e == chosen else 0)
                             for e in self.consecutive}
         effect = step.effect_candidate
+        # MUTATION-TARGET: cjtstep-snapshot-validation -- a stale or mismatched step
+        # result may not be laundered into fresh-looking intents
+        if (step.originating_tick != t or step.producer_expert_id != chosen
+                or effect.producer_expert_id != chosen
+                or step.base_state_version != snap_version
+                or step.base_state_digest != snap_digest):
+            self.metrics["step_metadata_rejects"] += 1
+            self.events.append({"tick": t, "event": "STEP_METADATA_REJECTED",
+                                "expert": chosen})
+            return None
         receipt = self.verifier.verify(cause, effect, t)
         self.coord.register_verifier_receipt(receipt)
         self.metrics[{"intended": "intended_effects", "opposite": "opposite_effects",
@@ -436,18 +488,36 @@ class RC01Engine:
                                   response_model_status="unassessed",
                                   stability_status="stable",
                                   semantic_outcome=receipt.verdict)
-        intents = [self._intent(chosen, "record", new_record, t, "post-exec diagnose",
-                                receipt=receipt.receipt_digest)]
+        # intents are built from the SNAPSHOT captured at step time; if the state
+        # changed since, the coordinator rejects with LAW_STALE_VERSION
+        def snap_intent(fld, value, reason, rcpt=""):
+            return VersionedIntent(
+                episode_id=self.episode_id, tick=t, producer_id="kernel",
+                expert_id=chosen, fld=fld, new_value=value,
+                base_state_version=step.base_state_version,
+                base_state_digest=step.base_state_digest,
+                verifier_receipt_digest=rcpt, reason=reason)
+        intents = [snap_intent("record", new_record, "post-exec diagnose",
+                               rcpt=receipt.receipt_digest)]
         for fld, value, reason in step.proposed_updates:   # the CJT's OWN proposals
-            intents.append(self._intent(chosen, fld, value, t, reason))
-        committed = False
+            intents.append(snap_intent(fld, value, reason))
+        dcr = None
         if self.commit_verdicts:
-            committed = self._commit(intents, t)
-        return effect, receipt, committed
+            dcr = self._commit_effectful(intents, t, cause.cause_id, effect, receipt)
+        return effect, receipt, dcr
 
     # ---------------- one tick ----------------
     def tick(self, t, cause: Cause):
         if self.halted:
+            return
+        if cause.cause_id in self.cancelled_causes:
+            # MUTATION-TARGET: split-sibling-cancellation -- a cancelled child may
+            # never run or publish as a top-level Cause
+            self.metrics["children_cancelled"] += 1
+            self.events.append({"tick": t, "event": "CHILD_CANCELLED",
+                                "cause": cause.cause_id})
+            self._settle_cancelled_child(t, cause.cause_id)
+            self.allocations.append({})
             return
         if t in self.reopen_events:
             self._reopen(self.reopen_events[t], t)
@@ -535,12 +605,13 @@ class RC01Engine:
         out = self._execute_verify_commit(t, cause, chosen, alloc[chosen], latent)
         if out is None:
             return
-        effect, receipt, committed = out
+        effect, receipt, dcr = out
+        committed = dcr is not None
         parent_id = self.child_to_frame.get(cause.cause_id)
         if parent_id is not None:
             self._collect_child(t, parent_id, cause, effect, receipt, committed)
         else:
-            consequence = self._publish_or_refuse(t, cause, effect, receipt, committed)
+            consequence = self._publish_or_refuse(t, cause, effect, receipt, dcr)
             if committed and consequence == "QUARANTINE":
                 self._quarantine(effect.producer_expert_id, t,
                                  authorized_by="publication_law:opposite")
@@ -607,50 +678,105 @@ class RC01Engine:
         self.events.append({"tick": t, "event": "SPLIT", "children": len(children),
                             "return_address": cause.cause_id})
 
+    def _settle_cancelled_child(self, t, child_id):
+        parent_id = self.child_to_frame.get(child_id)
+        if parent_id is None:
+            return
+        frame = self.split_frames.get(parent_id)
+        if frame is None:
+            return
+        frame.pending[child_id] = "CANCELLED"
+        if all(v is not None for v in frame.pending.values()):
+            self._finalize_failed_frame(t, frame)
+
+    def _finalize_failed_frame(self, t, frame):
+        """Every sibling settled (FAILED/CANCELLED/collected): seal the refusal.
+        No parent Effect publishes from a failed frame."""
+        del self.split_frames[frame.parent_cause.cause_id]
+        for cid in frame.child_ids:
+            self.child_to_frame.pop(cid, None)
+            self.cancelled_causes.discard(cid)
+        self.metrics["split_frames_failed"] += 1
+        self.metrics["refused"] += 1
+        self.events.append({"tick": t, "event": "SPLIT_FAILED",
+                            "parent": frame.parent_cause.cause_id,
+                            "failed_child": frame.failed_child,
+                            "cancelled": sorted(cid for cid, v in frame.pending.items()
+                                                  if v == "CANCELLED")})
+        self.pubcoord.refuse(t, frame.parent_cause.cause_id, frame.chosen_expert,
+                             "n/a", "PUB_LAW_SPLIT_CHILD_FAILED")
+
     def _collect_child(self, t, parent_id, child_cause, effect, receipt, committed):
         frame = self.split_frames[parent_id]
         if receipt.verdict != "intended" or not committed:
             frame.status = "FAILED"
             frame.failed_child = child_cause.cause_id
+            frame.pending[child_cause.cause_id] = "FAILED"
+            for cid, v in frame.pending.items():           # cancel unsettled siblings
+                if v is None:
+                    self.cancelled_causes.add(cid)
         else:
             frame.pending[child_cause.cause_id] = effect
         self.events.append({"tick": t, "event": "CHILD_COLLECTED",
                             "parent": parent_id, "child": child_cause.cause_id,
                             "verdict": receipt.verdict})
-        if all(v is not None for v in frame.pending.values()) or frame.status == "FAILED":
-            self._resume_parent(t, frame)
+        if all(v is not None for v in frame.pending.values()):
+            if frame.status == "FAILED":
+                self._finalize_failed_frame(t, frame)
+            else:
+                self._resume_parent(t, frame)
 
     def _resume_parent(self, t, frame):
-        """Resume EXACTLY ONCE: combine child Effects -> verify -> publication latch,
-        or a typed refusal when any child failed. The return address is consumed here."""
+        """Resume EXACTLY ONCE: combine verified child Effects -> verify -> a REAL
+        parent diagnostic commit -> publication latch. A configuration flag is never
+        a commit receipt (RC-0.3)."""
         del self.split_frames[frame.parent_cause.cause_id]
         for cid in frame.child_ids:
             self.child_to_frame.pop(cid, None)
-        if frame.status == "FAILED":
-            self.metrics["split_frames_failed"] += 1
-            self.metrics["refused"] += 1
-            self.events.append({"tick": t, "event": "SPLIT_FAILED",
-                                "parent": frame.parent_cause.cause_id,
-                                "failed_child": frame.failed_child})
-            self.pubcoord.refuse(t, frame.parent_cause.cause_id, frame.chosen_expert,
-                                 "n/a", "PUB_LAW_SPLIT_CHILD_FAILED")
-            return
         frame.status = "RESUMED"
         self.metrics["split_frames_resumed"] += 1
+        snap_version = self.coord.version(frame.chosen_expert)
+        snap_digest = self.coord.get_digest(frame.chosen_expert)
         combined_payload = " + ".join(frame.pending[cid].payload
                                       for cid in sorted(frame.child_ids))
         combined = EffectCandidate(producer_expert_id=frame.chosen_expert,
                                    cause_id=frame.parent_cause.cause_id,
                                    op_kind="combined_decompose",
-                                   payload=combined_payload)
+                                   payload=combined_payload,
+                                   originating_tick=t,
+                                   base_bias_version=snap_version,
+                                   base_bias_digest=snap_digest)
         receipt = self.verifier.verify(frame.parent_cause, combined, t)
         self.coord.register_verifier_receipt(receipt)
         self.events.append({"tick": t, "event": "SPLIT_RESUMED",
                             "parent": frame.parent_cause.cause_id,
                             "verdict": receipt.verdict})
         self._latent_ok.setdefault(frame.chosen_expert, 1)
-        self._publish_or_refuse(t, frame.parent_cause, combined, receipt,
-                                committed=self.commit_verdicts)
+        # the PARENT gets its own diagnostic commit; publication requires its receipt
+        b = self.coord.get(frame.chosen_expert)
+        parent_record = RegionRecord(region_posterior=ACTIVE4, committed_region="active",
+                                     response_model_status="unassessed",
+                                     stability_status="stable",
+                                     semantic_outcome=receipt.verdict)
+        parent_memory = (b.memory + ((frame.parent_cause.cause_id, receipt.verdict),))[-8:]
+        intents = [VersionedIntent(
+                       episode_id=self.episode_id, tick=t, producer_id="kernel",
+                       expert_id=frame.chosen_expert, fld="record",
+                       new_value=parent_record,
+                       base_state_version=snap_version, base_state_digest=snap_digest,
+                       verifier_receipt_digest=receipt.receipt_digest,
+                       reason="split parent diagnose"),
+                   VersionedIntent(
+                       episode_id=self.episode_id, tick=t, producer_id="kernel",
+                       expert_id=frame.chosen_expert, fld="memory",
+                       new_value=parent_memory,
+                       base_state_version=snap_version, base_state_digest=snap_digest,
+                       reason="split parent history")]
+        dcr = None
+        if self.commit_verdicts:
+            dcr = self._commit_effectful(intents, t, frame.parent_cause.cause_id,
+                                         combined, receipt)
+        self._publish_or_refuse(t, frame.parent_cause, combined, receipt, dcr)
 
     # ---------------- run + seal ----------------
     def run(self):
@@ -658,6 +784,7 @@ class RC01Engine:
         queue = list(self.causes)
         while queue and not self.halted:
             cause = queue.pop(0)
+            self.remaining_queue = [c.cause_id for c in queue]
             self.tick(t, cause)
             if self.child_queue:
                 queue = self.child_queue + queue
@@ -670,31 +797,64 @@ class RC01Engine:
             self.seal_digest = self.seal()
         return self.result()
 
-    def seal(self):
-        """COMPLETE state seal (RC-0.2): binds inputs, final authoritative states,
-        budget, quarantine, branch state, frames, cache, publications, rejections,
-        events, allocations, metrics. Changing ANY authoritative field changes this."""
-        return digest({
+    def runtime_snapshot(self) -> dict:
+        """RC-0.3 COMPLETE RuntimeSnapshot: full values (not identifiers or counts) for
+        every field that can change future behavior. The seal is its digest."""
+        def frame_full(f):
+            return {"parent": f.parent_cause.cause_id,
+                    "parent_payload": f.parent_cause.payload,
+                    "chosen": f.chosen_expert,
+                    "child_ids": list(f.child_ids),
+                    "pending": {cid: (v if isinstance(v, str) or v is None
+                                      else v.effect_digest)
+                                for cid, v in sorted(f.pending.items())},
+                    "return_address": f.return_address,
+                    "combination_rule": f.combination_rule,
+                    "status": f.status, "failed_child": f.failed_child}
+        return {
             "causes": [{"id": c.cause_id, "evidence": c.evidence, "payload": c.payload}
                        for c in self.causes],
-            "final_states": self.coord.final_state_manifest(),
+            "remaining_queue": list(self.remaining_queue),
+            "child_queue": [c.cause_id for c in self.child_queue],
+            "child_to_frame": dict(sorted(self.child_to_frame.items())),
+            "cancelled_causes": sorted(self.cancelled_causes),
+            "split_frames": {k: frame_full(v) for k, v in sorted(self.split_frames.items())},
+            "repair_frames": {k: {"attempts": v.attempts, "max": v.max_attempts}
+                              for k, v in sorted(self.repair_frames.items())},
+            "active_subgoals": list(self.active_subgoals),
+            "return_addresses": list(self.return_addresses),
+            "quarantine": dict(sorted(self.quarantine_registry.items())),
+            "verifier_issued_registry": self.verifier.issued_registry_digest(),
+            "coordinator_receipt_registry": self.coord.receipt_registry_digest(),
+            "commit_receipt_registry": self.coord.commit_receipt_registry_digest(),
+            "publication_consumed": self.pubcoord.consumed_registry_digest(),
+            "publication_ledger": self.pubcoord.ledger,
             "budget": {"unit": self.budget.unit, "total": self.budget.total,
                        "left": self.budget.left},
-            "quarantine": dict(sorted(self.quarantine_registry.items())),
             "branches": {"total_opened": self.total_branches_opened,
-                         "active": list(self.active_subgoals),
-                         "return_addresses": list(self.return_addresses)},
-            "split_frames_open": sorted(self.split_frames.keys()),
-            "repair_frames": {k: v.attempts for k, v in sorted(self.repair_frames.items())},
+                         "max_total": self.max_total_branches,
+                         "max_active": self.max_active_branches},
+            "invalidation_events": sorted(map(str, self.invalidation_events)),
+            "invalidations_consumed": sorted(map(str, self.invalidations_consumed)),
+            "reopen_schedule": {str(k): v for k, v in sorted(self.reopen_events.items())},
+            "repair_dependency_graph": {str(k): str(v)
+                                        for k, v in sorted(self.repair_requires.items())},
+            "consecutive": dict(sorted(self.consecutive.items())),
+            "exec_counts": dict(sorted(self.exec_counts.items())),
+            "halted": self.halted,
+            "final_states": self.coord.final_state_manifest(),
             "acquisitions": {e: self.coord.get(e).rpm.acquired
                              for e in self.coord.expert_ids()},
-            "invalidations_consumed": sorted(map(str, self.invalidations_consumed)),
-            "publication_ledger": self.pubcoord.ledger,
             "commits": self.coord.trace,
             "events": self.events,
             "alloc": self.allocations,
             "metrics": self.metrics,
-        })
+        }
+
+    def seal(self):
+        # MUTATION-TARGET: consumed-receipt-seal -- the snapshot binds the consumed
+        # receipt registries; omitting them must be caught by the seal tests
+        return digest(self.runtime_snapshot())
 
     def result(self):
         return {"compute_unit": self.budget.unit, "budget_total": self.budget.total,

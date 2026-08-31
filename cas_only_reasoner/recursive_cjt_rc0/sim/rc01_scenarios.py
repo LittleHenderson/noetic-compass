@@ -226,6 +226,18 @@ def SCENARIOS():
                          and any(p["status"] == "PUBLISHED"
                                  and p["cause"] == "sp0" for p in r["publications"]),
         description="SPLIT suspends the parent, collects verified children, resumes ONCE, publishes the combined Effect."))
+    S.append(_s("split_child_failure_no_orphan",
+        lambda: engine([cause("sf0", ("structure_cue", "overload_cue"), "a b c d e f")],
+                       Reg().add("sf0.c0", "^6_decompose", "off_axis")
+                            .add("sf0.c1", "^6_decompose", "intended", "d e f"),
+                       states=states(**{"^6_decompose": {"region": "saturation"}})),
+        expect=["SPLIT", "CHILD_COLLECTED", "SPLIT_FAILED"],
+        prohibit=["SPLIT_RESUMED"],
+        checks=lambda r: r["metrics"]["published"] == 0
+                         and r["metrics"]["split_frames_failed"] == 1
+                         and r["metrics"]["children_cancelled"] >= 1
+                         and not any(p["status"] == "PUBLISHED" for p in r["publications"]),
+        description="Child 0 fails: sibling with an intended oracle is CANCELLED, cannot escape and publish; no parent Effect."))
     S.append(_s("quarantine_reopen",
         lambda: engine([cause("qr0", C2, PAY), cause("qr1", C2, PAY), cause("qr2", C2, PAY)],
                        Reg().add("qr0", "^2_attract", "opposite")
@@ -398,7 +410,8 @@ if __name__ == "__main__":
     print(json.dumps({"scenarios": len(rows),
                       "passed": sum(1 for r in rows if r["passed"]),
                       "counts": counts}, indent=2))
-    for r in rows:
-        if not r["passed"]:
-            print("FAILED:", r["id"], r.get("missing_expected"), r.get("prohibited_present"),
-                  r.get("detail"), "checks_ok=", r.get("checks_ok"))
+    failed = [r for r in rows if not r["passed"]]
+    for r in failed:
+        print("FAILED:", r["id"], r.get("missing_expected"), r.get("prohibited_present"),
+              r.get("detail"), "checks_ok=", r.get("checks_ok"))
+    raise SystemExit(1 if failed else 0)
