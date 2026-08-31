@@ -103,15 +103,18 @@ def test_watchdog_does_not_terminate_before_first_heartbeat():
 
 
 def test_watchdog_receives_signed_cap():
-    # the driver writes watchdog_config.json with the signed stale limit; the
-    # separate watchdog reads it rather than its CLI default
-    from exec.watchdog_main import _read_signed_cap
+    # the driver writes a BOUND watchdog_config.json; the config authority
+    # derives the stale limit from the signed per-job cap (GATE 1A.2R.2B)
+    from exec.watchdog_config import load_config, stale_limit_of
     with tempfile.TemporaryDirectory() as tmp:
         cfg = Path(tmp) / "watchdog_config.json"
-        cfg.write_text(json.dumps({"stale_limit_seconds": 7920.0}),
-                       encoding="utf-8")
-        assert _read_signed_cap(cfg, default=9000.0) == 7920.0
-        assert _read_signed_cap(Path(tmp) / "absent.json", default=9000.0) == 9000.0
+        bound = {"config_id": "WATCHDOG_CONFIG", "campaign_id": "c",
+                 "package_commit_sha": "ab" * 20,
+                 "execution_approval_sha256": "cd" * 32,
+                 "owner_key_id": "OWNER-KEY", "signed_per_job_cap_hours": 2.0,
+                 "stale_limit_seconds": 2.0 * 3600 * 1.1}
+        cfg.write_text(json.dumps(bound), encoding="utf-8")
+        assert stale_limit_of(load_config(cfg, "REAL")) == 2.0 * 3600 * 1.1
     print("PASS test_watchdog_receives_signed_cap")
 
 

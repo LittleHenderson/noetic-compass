@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-31 (gate 1a.2r.2b watchdog config authority) - config read moved inside the fail-closed boundary + no unsigned REAL default per the third-party recheck of 3ce84531 (R.2A VERIFIED_PASS; surviving MAJOR: malformable config envelope + unsigned-default fallback), on branch research/cjt-gate1a2r2b-config-authority-v1
+
+- Two defects the recheck isolated: (a) `_read_signed_cap` ran OUTSIDE the try/except, so a top-level `[]`/`null`/scalar config raised before the boundary and the watchdog vanished with no marker/burn/termination; (b) a missing/malformed config fell back to an unsigned 2.5h default, loosening the owner-signed 2h cap. Fixed (amendment A17):
+  - New exec/watchdog_config.py: dictionary-ONLY exact schema bound to campaign id / package commit / approval digest / owner key id / signed cap; the stale limit MUST equal signed_cap*3600*1.1; arrays/null/scalars/wrong-keys/list-valued-limits/bool/zero/negative/NaN/infinity all refused.
+  - REAL mode has NO unsigned default: a missing/malformed config fails closed; only non-claim-bearing conformance modes may use a documented default when the file is absent.
+  - watchdog_main reads+validates the config INSIDE the boundary → any failure yields WATCHDOG_INTERNAL_ERROR marker + protected-lock burn + termination request + exit 2.
+  - Heartbeat writes are atomic (temp + os.replace); a top-level non-dict heartbeat envelope is WATCHDOG_INVALID_HEARTBEAT (no escaping TypeError).
+  - The driver writes the bound config; 9 config-authority + 12 heartbeat + 9 clock tests pass; all suites + synthetic campaign + byte-domain green.
+- SCOPE per the owner's directive: config authority ONLY. S7 and the GATE 1A.2S evidence findings remain OPEN. Package NOT owner-signable; owner key stays on HOLD. Neural evidence: 0.
+
 ## 2026-08-31 (gate 1a.2r.2a heartbeat fail-closed) - make the REAL heartbeat clock immutable and malformed timestamps fail closed per the third-party recheck of 7e69f8a2 (numeric-future attack CLOSED; surviving MAJOR: mutable _clock + a non-numeric heartbeat crashes the watchdog), on branch research/cjt-gate1a2r2a-heartbeat-failclosed-v1
 
 - The watchdog assumed anything JSON-decodable is a number: `driver._clock = lambda: "not-a-number"` wrote a valid-JSON string heartbeat that the watchdog parsed then compared numerically -> raw TypeError escaped, and watchdog_main didn't catch it, so the timeout process could vanish. Fixed (amendment A16):

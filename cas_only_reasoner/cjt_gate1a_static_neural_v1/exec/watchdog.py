@@ -18,6 +18,8 @@ from __future__ import annotations
 
 import json
 import math
+import os
+import tempfile
 from pathlib import Path
 
 MAX_FUTURE_HEARTBEAT_SKEW_SECONDS = 5.0
@@ -61,12 +63,25 @@ class Watchdog:
 
     def beat(self, now: float) -> None:
         # a heartbeat is written only with a VALID timestamp; a bad clock is
-        # caught here (defense in depth) rather than poisoning the file
+        # caught here (defense in depth) rather than poisoning the file. The
+        # write is ATOMIC (temp file + os.replace, GATE 1A.2R.2B), so a reader
+        # never observes a partially written envelope.
         if not is_valid_timestamp(now):
             raise WatchdogError(f"INVALID_HEARTBEAT_VALUE: {now!r}")
         self.heartbeat_path.parent.mkdir(parents=True, exist_ok=True)
-        with self.heartbeat_path.open("w", encoding="utf-8", newline="\n") as fh:
-            fh.write(json.dumps({"t": now}) + "\n")
+        body = json.dumps({"t": now}) + "\n"
+        fd, tmp = tempfile.mkstemp(dir=str(self.heartbeat_path.parent),
+                                   prefix=".hb-", suffix=".tmp")
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as fh:
+                fh.write(body)
+            os.replace(tmp, self.heartbeat_path)       # atomic on the same fs
+        except BaseException:
+            try:
+                os.unlink(tmp)
+            except OSError:
+                pass
+            raise
 
     def _terminate(self, reason, detail, now):
         marker = self.evidence_dir / "WATCHDOG_TERMINATION.json"
@@ -95,12 +110,17 @@ class Watchdog:
             raw = json.loads(
                 self.heartbeat_path.read_text(encoding="utf-8"),
                 parse_constant=_reject_non_finite)      # NaN/Infinity -> refuse
+            # ENVELOPE TOTALITY (GATE 1A.2R.2B): the top level must be a dict
+            # with a "t" key; a top-level array/null/scalar is a malformed
+            # envelope, not "no heartbeat yet"
+            if not isinstance(raw, dict) or "t" not in raw:
+                raise WatchdogError("MALFORMED_HEARTBEAT_ENVELOPE")
             last = raw["t"]
             self._seen_heartbeat = True
-        except (OSError, ValueError, KeyError, WatchdogError):
+        except (OSError, ValueError, KeyError, TypeError, WatchdogError):
             last = None
-            # a heartbeat FILE that exists but is malformed/non-finite is an
-            # attack, not "no heartbeat yet": if the file exists, fail closed
+            # a heartbeat FILE that exists but is malformed/non-finite/wrong
+            # envelope is an attack, not "no heartbeat yet": fail closed
             if self.heartbeat_path.is_file() and not _empty(self.heartbeat_path):
                 return self._terminate("WATCHDOG_INVALID_HEARTBEAT",
                                        "<unparseable>", now)
