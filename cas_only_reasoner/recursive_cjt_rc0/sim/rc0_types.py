@@ -33,6 +33,16 @@ FIRST_BLOCK_POLICY = ("DESIRE", "WISDOM", "POWER")  # frozen D -> W -> P check o
 COMPUTE_UNIT = "CJT_EXPERT_EVALUATION"  # frozen single unit for the first experiment
 
 
+def _deeply_immutable(name, v):
+    """RC-0.2: reject mutable containers anywhere inside state-bearing values."""
+    if isinstance(v, (list, dict, set, bytearray)):
+        raise TypeError(f"{name} contains a mutable {type(v).__name__}; deep immutability required")
+    if isinstance(v, tuple):
+        for i, x in enumerate(v):
+            _deeply_immutable(f"{name}[{i}]", x)
+    return v
+
+
 class ControlAction(enum.Enum):
     """Typed control action. NEVER a number. Any arithmetic use raises."""
 
@@ -95,6 +105,11 @@ class RPMState:
                 raise ValueError(f"RPMState.{name} must be finite, got {v!r}")
             if v < 0:
                 raise ValueError(f"RPMState.{name} must be >= 0")
+        for name in ("open_subgoals", "return_addresses", "acquired"):
+            v = getattr(self, name)
+            if not isinstance(v, tuple):
+                raise TypeError(f"RPMState.{name} must be a tuple")
+            _deeply_immutable(f"RPMState.{name}", v)
 
     def _refuse(self, *_a, **_k):
         raise TypeError("RPMState is a prerequisite record, not a resistance: "
@@ -157,9 +172,14 @@ class RegionRecord:
                 f"region_posterior must have exactly {len(REGIONS)} entries "
                 f"(the four source-defined regions {REGIONS}), got "
                 f"{len(rp) if isinstance(rp, tuple) else type(rp).__name__}")
-        if any((not isinstance(x, (int, float))) or x < 0 for x in rp):
-            raise ValueError("region_posterior entries must be nonnegative numbers")
-        if abs(sum(rp) - 1.0) > 1e-9:
+        for x in rp:
+            if isinstance(x, bool) or not isinstance(x, (int, float)):
+                raise ValueError("region_posterior entries must be non-bool numbers")
+            if math.isnan(x) or math.isinf(x):
+                raise ValueError(f"region_posterior entries must be finite, got {x!r}")
+            if x < 0:
+                raise ValueError("region_posterior entries must be nonnegative")
+        if not (abs(sum(rp) - 1.0) <= 1e-9):   # NaN-safe: NaN comparison is False -> reject
             raise ValueError(f"region_posterior must sum to 1, got {sum(rp)}")
         if self.committed_region not in REGIONS + ("unassessed",):
             raise ValueError(f"unknown committed_region {self.committed_region!r}")
@@ -188,8 +208,16 @@ class Governance:
     max_branches: int = 8
 
     def __post_init__(self):
-        if self.hard_mask not in (0, 1):
-            raise ValueError("hard_mask must be exactly 0 or 1 (a hard permission, not a weight)")
+        if isinstance(self.hard_mask, bool) or self.hard_mask not in (0, 1):
+            raise ValueError("hard_mask must be exactly int 0 or 1 (bool and weights rejected)")
+        if not isinstance(self.quarantined, bool):
+            raise TypeError("quarantined must be a bool")
+        for name in ("max_depth", "max_branches"):
+            v = getattr(self, name)
+            if isinstance(v, bool) or not isinstance(v, int):
+                raise TypeError(f"Governance.{name} must be an int (bool rejected)")
+            if v < 0:
+                raise ValueError(f"Governance.{name} must be >= 0")
 
     @property
     def effective_mask(self) -> int:
@@ -220,6 +248,11 @@ class BiasState:
             raise TypeError("BiasState.record must be a RegionRecord")
         if not isinstance(self.governance, Governance):
             raise TypeError("BiasState.governance must be a Governance")
+        for name in ("substrate", "memory", "theta"):
+            v = getattr(self, name)
+            if not isinstance(v, tuple):
+                raise TypeError(f"BiasState.{name} must be a tuple")
+            _deeply_immutable(f"BiasState.{name}", v)
 
 
 # ---------------------------------------------------------------- update intents

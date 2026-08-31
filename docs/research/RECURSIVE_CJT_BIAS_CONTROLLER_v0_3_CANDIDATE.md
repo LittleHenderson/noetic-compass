@@ -78,3 +78,25 @@ Gate 1A (documentation + freezing only): exact static neural modules, constructi
 dataset, independent preservation checker, S0–S7 matching per the v2 compute contract,
 effect-size and uncertainty thresholds, AWS environment + container digest, cost
 ceiling, owner-signed execution record. Gate 1B (AWS GPU) only after 1A is signed.
+
+---
+
+## OWNER AUDIT (2026-08-30, append-only) — several claims above were REFUTED at 60b36e06
+
+The owner's independent audit of commit `60b36e06` rejected this document's closure
+claims as then-implemented: the publication intent was created but never exercised
+authority (EFFECT_PUBLICATION_AUTHORITY = REFUTED); the verifier checked the producer id,
+not the Effect (SEMANTIC_EFFECT_VERIFICATION = REFUTED); the intent digest omitted
+new_value and the seal did not bind authoritative state (COMPLETE_STATE_REPLAY =
+REFUTED); receipts were unbound raw strings (VERIFIER_RECEIPT_BINDING = REFUTED); CJTStep
+ignored the Bias and returned empty intents; CAP faked enforcement on single routes;
+SPLIT had no return path; a one-shot retry set could strand a repaired Cause; numeric
+holes remained (spend(-1) increased budget; bool/NaN in RegionRecord/Governance);
+immutability was shallow; the receipt was not reproducibly generated. Correct status of
+60b36e06: **RC01_TYPED_CONTROLLER_PARTIAL_PASS / FULL_GATE0_FAILED.**
+
+Every item above is repaired in PHASE RC-0.2 (see the commit tagged `cjt(rc-0.2)`, the
+committed `generate_rc02_receipt.py`, its fault-injection battery, and
+`RC01_FEEDBACK_CLOSURE_RECEIPT.json` whose status is emitted programmatically). This
+document's Section headings remain as a record of what was CLAIMED at v0.3; the receipt
+and tests, not this prose, are the authority on what holds now.

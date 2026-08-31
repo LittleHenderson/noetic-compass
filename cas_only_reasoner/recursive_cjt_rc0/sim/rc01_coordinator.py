@@ -1,19 +1,25 @@
-"""rc01_coordinator.py -- RC-0.1 hardened transaction coordinator.
+"""rc01_coordinator.py -- RC-0.2 hardened transaction + publication authorities.
 
-Beyond RC-0's atomic allowed-field batch update, this coordinator enforces the full
-transactional authority contract:
+Repairs per the owner audit of 60b36e06:
 
-  - every intent is a VersionedIntent carrying episode id, tick, producer,
-    base_state_version, base_state_digest, and its own intent digest;
-  - REJECTED: stale base version; wrong tick; wrong episode; base-digest mismatch;
-    duplicate conflicting writes to the same (expert, field) within one batch;
-    governance writes; unknown fields; wrong value types; publication-consequence
-    intents without a matching verifier receipt digest;
-  - one invalid intent rejects the WHOLE batch atomically (state byte-identical);
-  - BOTH successful and rejected batches are sealed into the trace; a rejection names
-    the FIRST failed law and reveals no partial mutation;
-  - per-expert state VERSION increments on every commit; digests are canonical-JSON
-    SHA-256 of the state.
+STATE COORDINATOR
+  - receipts are typed VerifierReceipt objects, validated through the verifier-provided
+    seal validator (raw-string self-registration is dead);
+  - a `record` intent that carries a semantic_outcome other than "unassessed" MUST cite
+    a valid receipt whose tick, cause-independence, and producer match
+    (LAW_VERIFIER_RECEIPT_REQUIRED);
+  - receipt reuse across ticks rejected (receipt.tick must equal the commit tick);
+  - commit trace entries carry PRE and POST state versions AND digests per expert,
+    plus full intent digests (which now include new_value digests);
+  - rejected batches sealed naming the first failed law; state byte-identical.
+
+PUBLICATION COORDINATOR (new -- the real authority latch)
+  - nothing is PUBLISHED without a validated, committed EffectPublicationIntent;
+  - the intent must cite a valid, UNCONSUMED receipt whose episode/tick/cause/effect
+    digest/producer/verdict all match the intent;
+  - only verdict == intended can publish; a receipt is CONSUMED exactly once;
+  - refusals and abstentions are sealed with typed reasons;
+  - the publication trace is part of the engine seal.
 
 Deterministic, CPU-only.
 """
@@ -22,7 +28,8 @@ from __future__ import annotations
 import dataclasses
 
 from rc0_types import BiasState, RegionRecord, RPMState
-from rc01_types import VersionedIntent, canonical, digest
+from rc01_types import (EffectPublicationIntent, VerifierReceipt, VersionedIntent,
+                        canonical, digest)
 
 ALLOWED_FIELDS = ("rpm", "record", "memory", "substrate")
 FIELD_TYPES = {"rpm": RPMState, "record": RegionRecord, "memory": tuple, "substrate": tuple}
@@ -43,15 +50,21 @@ def state_digest(b: BiasState) -> str:
 
 
 class RejectedBatch(Exception):
-    """Carries the FIRST failed law. State is guaranteed unchanged."""
+    def __init__(self, law: str, detail: str = ""):
+        self.law = law
+        super().__init__(f"{law}: {detail}" if detail else law)
 
+
+class PublicationRefused(Exception):
     def __init__(self, law: str, detail: str = ""):
         self.law = law
         super().__init__(f"{law}: {detail}" if detail else law)
 
 
 class HardenedCoordinator:
-    def __init__(self, initial: dict, episode_id: str):
+    """Owns the authoritative expert_id -> BiasState map. The ONLY state-write path."""
+
+    def __init__(self, initial: dict, episode_id: str, receipt_validator=None):
         self.episode_id = episode_id
         self._states = {}
         self._versions = {}
@@ -61,7 +74,8 @@ class HardenedCoordinator:
             self._states[k] = v
             self._versions[k] = 0
         self.trace = []
-        self.verifier_receipts = set()   # digests of receipts this episode has sealed
+        self._receipts = {}            # receipt_digest -> VerifierReceipt
+        self._receipt_validator = receipt_validator  # callable(VerifierReceipt) -> bool
 
     # ---- reads ----
     def get(self, expert_id: str) -> BiasState:
@@ -76,15 +90,32 @@ class HardenedCoordinator:
     def expert_ids(self):
         return tuple(sorted(self._states.keys()))
 
-    def register_verifier_receipt(self, receipt_digest: str):
-        self.verifier_receipts.add(receipt_digest)
+    def final_state_manifest(self) -> dict:
+        """Per-expert (version, digest) -- bound into the engine seal."""
+        return {e: {"version": self._versions[e], "digest": state_digest(self._states[e])}
+                for e in self.expert_ids()}
 
-    # ---- the one write path ----
+    # ---- receipts (typed, sealed, validated) ----
+    def register_verifier_receipt(self, receipt) -> str:
+        if not isinstance(receipt, VerifierReceipt):
+            raise RejectedBatch("LAW_TYPED_RECEIPT",
+                                f"receipts must be VerifierReceipt objects, got {type(receipt).__name__}")
+        if receipt.episode_id != self.episode_id:
+            raise RejectedBatch("LAW_RECEIPT_EPISODE", receipt.episode_id)
+        if self._receipt_validator is None or not self._receipt_validator(receipt):
+            raise RejectedBatch("LAW_RECEIPT_SEAL",
+                                "receipt seal does not validate against the examiner capability")
+        self._receipts[receipt.receipt_digest] = receipt
+        return receipt.receipt_digest
+
+    def get_receipt(self, receipt_digest: str):
+        return self._receipts.get(receipt_digest)
+
+    # ---- the one state-write path ----
     def commit(self, intents, tick: int) -> str:
-        """Atomic batch commit of VersionedIntents. Raises RejectedBatch (state
-        untouched, rejection sealed) or returns 'COMMITTED' (commit sealed)."""
         try:
             staged = {}
+            pre = {}
             seen_writes = {}
             for it in intents:
                 if not isinstance(it, VersionedIntent):
@@ -110,27 +141,57 @@ class HardenedCoordinator:
                                         f"authoritative v{self._versions[it.expert_id]}")
                 if it.base_state_digest != state_digest(self._states[it.expert_id]):
                     raise RejectedBatch("LAW_STALE_DIGEST", it.expert_id)
+                # receipt laws
+                receipt = None
                 if it.verifier_receipt_digest:
-                    if it.verifier_receipt_digest not in self.verifier_receipts:
+                    receipt = self._receipts.get(it.verifier_receipt_digest)
+                    if receipt is None:
                         raise RejectedBatch("LAW_VERIFIER_RECEIPT",
                                             "intent cites an unknown verifier receipt")
+                    if receipt.tick != tick:
+                        raise RejectedBatch("LAW_RECEIPT_TICK",
+                                            f"receipt tick {receipt.tick} != commit tick {tick}")
+                # a semantic-outcome write REQUIRES a matching receipt
+                if (it.fld == "record" and isinstance(it.new_value, RegionRecord)
+                        and it.new_value.semantic_outcome != "unassessed"):
+                    if receipt is None:
+                        raise RejectedBatch("LAW_VERIFIER_RECEIPT_REQUIRED",
+                                            "semantic_outcome update carries no verifier receipt")
+                    if receipt.verdict != it.new_value.semantic_outcome:
+                        raise RejectedBatch("LAW_RECEIPT_VERDICT_MISMATCH",
+                                            f"receipt says {receipt.verdict!r}, record says "
+                                            f"{it.new_value.semantic_outcome!r}")
+                    if receipt.producer_expert_id != it.expert_id:
+                        raise RejectedBatch("LAW_RECEIPT_EXPERT_MISMATCH",
+                                            f"receipt producer {receipt.producer_expert_id!r} != "
+                                            f"target expert {it.expert_id!r}")
                 key = (it.expert_id, it.fld)
                 if key in seen_writes and canonical(seen_writes[key]) != canonical(it.new_value):
                     raise RejectedBatch("LAW_NO_CONFLICTING_WRITES",
                                         f"duplicate conflicting writes to {key}")
                 seen_writes[key] = it.new_value
+                if it.expert_id not in pre:
+                    pre[it.expert_id] = {"version": self._versions[it.expert_id],
+                                         "digest": state_digest(self._states[it.expert_id])}
                 cur = staged.get(it.expert_id, self._states[it.expert_id])
                 staged[it.expert_id] = dataclasses.replace(cur, **{it.fld: it.new_value})
             # atomic apply + version bump
+            post = {}
             for eid, st in staged.items():
                 self._states[eid] = st
                 self._versions[eid] += 1
-            self.trace.append({"tick": tick, "event": "COMMIT",
-                               "intents": sorted(i.intent_digest for i in intents),
-                               "versions": {e: self._versions[e] for e in sorted(staged)}})
+                post[eid] = {"version": self._versions[eid], "digest": state_digest(st)}
+            self.trace.append({
+                "tick": tick, "event": "COMMIT",
+                "intents": sorted(i.intent_digest for i in intents),
+                "new_value_digests": sorted(i.new_value_digest for i in intents),
+                "receipts": sorted({i.verifier_receipt_digest for i in intents
+                                    if i.verifier_receipt_digest}),
+                "pre": {e: pre[e] for e in sorted(pre)},
+                "post": {e: post[e] for e in sorted(post)},
+            })
             return "COMMITTED"
         except RejectedBatch as rb:
-            # seal the rejection with the FIRST failed law; no partial mutation exists
             self.trace.append({"tick": tick, "event": "REJECTED",
                                "first_failed_law": rb.law,
                                "intents": sorted(getattr(i, "intent_digest", "untyped")
@@ -140,3 +201,74 @@ class HardenedCoordinator:
 
     def seal(self) -> str:
         return digest(self.trace)
+
+
+class PublicationCoordinator:
+    """The publication authority latch. Nothing becomes PUBLISHED except through
+    commit_publication() with a validated, unconsumed, fully-matching receipt."""
+
+    def __init__(self, episode_id: str, state_coord: HardenedCoordinator):
+        self.episode_id = episode_id
+        self._state_coord = state_coord
+        self._consumed = set()      # receipt digests consumed by a publication
+        self.ledger = []            # sealed publication decisions
+
+    def commit_publication(self, intent: EffectPublicationIntent) -> str:
+        """Validate + commit ONE publication. Returns 'PUBLISHED' or raises
+        PublicationRefused (the refusal is sealed either way by refuse())."""
+        try:
+            if not isinstance(intent, EffectPublicationIntent):
+                raise PublicationRefused("PUB_LAW_TYPED_INTENT", type(intent).__name__)
+            if intent.episode_id != self.episode_id:
+                raise PublicationRefused("PUB_LAW_EPISODE", intent.episode_id)
+            receipt = self._state_coord.get_receipt(intent.verifier_receipt_digest)
+            if receipt is None:
+                raise PublicationRefused("PUB_LAW_UNKNOWN_RECEIPT",
+                                         intent.verifier_receipt_digest[:12])
+            if intent.verifier_receipt_digest in self._consumed:
+                raise PublicationRefused("PUB_LAW_RECEIPT_CONSUMED",
+                                         "receipt already consumed by a prior publication")
+            # the receipt must bind THIS exact effect, tick, cause, producer, verdict
+            if receipt.tick != intent.tick:
+                raise PublicationRefused("PUB_LAW_RECEIPT_TICK",
+                                         f"{receipt.tick} != {intent.tick}")
+            if receipt.cause_id != intent.cause_id:
+                raise PublicationRefused("PUB_LAW_RECEIPT_CAUSE", receipt.cause_id)
+            if receipt.effect_digest != intent.effect_digest:
+                raise PublicationRefused("PUB_LAW_RECEIPT_EFFECT",
+                                         "receipt binds a different Effect payload")
+            if receipt.producer_expert_id != intent.producer_expert_id:
+                raise PublicationRefused("PUB_LAW_RECEIPT_PRODUCER", receipt.producer_expert_id)
+            if receipt.verdict != intent.verdict:
+                raise PublicationRefused("PUB_LAW_RECEIPT_VERDICT", receipt.verdict)
+            if intent.verdict != "intended":
+                raise PublicationRefused("PUB_LAW_ONLY_INTENDED_PUBLISHES", intent.verdict)
+            # authority granted: consume the receipt exactly once, seal the publication
+            self._consumed.add(intent.verifier_receipt_digest)
+            self.ledger.append({"decision": "PUBLISHED", "tick": intent.tick,
+                                "cause": intent.cause_id, "producer": intent.producer_expert_id,
+                                "effect_digest": intent.effect_digest,
+                                "receipt": intent.verifier_receipt_digest,
+                                "intent": intent.intent_digest})
+            return "PUBLISHED"
+        except PublicationRefused as pr:
+            self.ledger.append({"decision": "REFUSED", "law": pr.law,
+                                "tick": getattr(intent, "tick", None),
+                                "cause": getattr(intent, "cause_id", None),
+                                "producer": getattr(intent, "producer_expert_id", None),
+                                "effect_digest": getattr(intent, "effect_digest", None)})
+            raise
+
+    def refuse(self, tick, cause_id, producer, effect_digest, reason: str):
+        """Seal a policy refusal (opposite/off_axis/uncommitted/abstained paths)."""
+        self.ledger.append({"decision": "REFUSED", "law": reason, "tick": tick,
+                            "cause": cause_id, "producer": producer,
+                            "effect_digest": effect_digest})
+
+    def abstain(self, tick, cause_id, producer, effect_digest):
+        self.ledger.append({"decision": "ABSTAINED", "law": "PUB_LAW_UNASSESSED",
+                            "tick": tick, "cause": cause_id, "producer": producer,
+                            "effect_digest": effect_digest})
+
+    def seal(self) -> str:
+        return digest(self.ledger)

@@ -1,19 +1,22 @@
-"""rc01_types.py -- RC-0.1 typed objects: Cause, EffectCandidate, CJTStepResult,
-publication intents, and numeric fail-closed guards.
+"""rc01_types.py -- RC-0.1/0.2 typed objects, HARDENED per OWNER DIRECTIVE RC-0.2.
 
-PHASE RC-0.1 (feedback, action, and evidence closure). Deterministic CPU only. No
-neural network. No randomness, no wall-clock in state-bearing paths.
+Repairs in this revision (owner audit of 60b36e06):
+  - VersionedIntent.intent_digest now INCLUDES a canonical digest of new_value
+    (the owner reproduced a collision: two intents differing only in new_value had
+    identical digests -- fixed and test-locked).
+  - ComputeBudget.spend accepts ONLY a positive non-bool int (spend(-1) previously
+    INCREASED the budget; spend(True) was accepted -- both reproduced by the owner).
+  - EffectPublicationIntent upgraded to a real authority object (episode, tick,
+    cause_id, effect_digest, producer, verdict, verifier receipt digest, base state
+    version+digest, its own intent digest).
+  - VerifierReceipt is a typed, sealed object issued only by the verifier capability;
+    raw-string receipt registration is dead.
+  - Deep immutability: Cause/EffectCandidate/CJTStepResult/BiasState-nested containers
+    must be deeply immutable (validated recursively); numeric fields validated
+    fail-closed (bool/NaN/inf/negative rejected).
 
-Key laws enforced here:
-  - NUMERIC FAIL-CLOSED: bool, NaN, +/-inf, and negatives are rejected wherever a
-    nonnegative finite number is required. Allocations must be a valid simplex.
-  - GOLD WALL: the Cause carries only NON-gold structural evidence. Gold fields
-    (required_op / expected outcomes) exist ONLY inside the verifier's sealed table;
-    no routing object has a field for them.
-  - LATENT vs ENFORCED readiness: latent prerequisite truth is a property of the
-    Bias; whether the controller ENFORCES it is a separate engine flag. Disabling RPM
-    removes enforcement; it never rewrites the truth.
-  - Effect publication is a SEPARATE authority from diagnostic state commitment.
+Deterministic CPU only. No neural network. No randomness, no wall-clock in
+state-bearing paths.
 """
 from __future__ import annotations
 
@@ -21,14 +24,13 @@ import enum
 import hashlib
 import json
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
-from rc0_types import BiasState  # reuse the frozen Bias shell from RC-0
+from rc0_types import BiasState  # frozen Bias shell (hardened in rc0_types)
 
 
-# ---------------------------------------------------------------- numeric guards
+# ---------------------------------------------------------------- guards
 def require_finite_nonneg(name: str, v) -> float:
-    """Fail-closed scalar guard: number, not bool, finite, >= 0."""
     if isinstance(v, bool) or not isinstance(v, (int, float)):
         raise TypeError(f"{name} must be a real number (bool rejected), got {type(v).__name__}")
     fv = float(v)
@@ -46,8 +48,39 @@ def require_positive(name: str, v) -> float:
     return fv
 
 
+def require_pos_int(name: str, v) -> int:
+    if isinstance(v, bool) or not isinstance(v, int):
+        raise TypeError(f"{name} must be an int (bool rejected), got {type(v).__name__}")
+    if v <= 0:
+        raise ValueError(f"{name} must be a positive int, got {v!r}")
+    return v
+
+
+def require_nonneg_int(name: str, v) -> int:
+    if isinstance(v, bool) or not isinstance(v, int):
+        raise TypeError(f"{name} must be an int (bool rejected), got {type(v).__name__}")
+    if v < 0:
+        raise ValueError(f"{name} must be >= 0, got {v!r}")
+    return v
+
+
+def require_str(name: str, v) -> str:
+    if not isinstance(v, str):
+        raise TypeError(f"{name} must be a str, got {type(v).__name__}")
+    return v
+
+
+def require_deeply_immutable(name: str, v):
+    """Reject mutable containers anywhere inside a state-bearing value."""
+    if isinstance(v, (list, dict, set, bytearray)):
+        raise TypeError(f"{name} contains a mutable {type(v).__name__}; deep immutability required")
+    if isinstance(v, tuple):
+        for i, x in enumerate(v):
+            require_deeply_immutable(f"{name}[{i}]", x)
+    return v
+
+
 def validate_allocation(alloc: dict, tol: float = 1e-9) -> dict:
-    """Postcondition on every normalized allocation: finite, nonnegative, sums to 1."""
     total = 0.0
     for k, v in alloc.items():
         fv = require_finite_nonneg(f"allocation[{k}]", v)
@@ -68,24 +101,20 @@ def digest(obj) -> str:
 # ---------------------------------------------------------------- cause (gold wall)
 @dataclass(frozen=True)
 class Cause:
-    """The routed object. Carries ONLY non-gold structural evidence.
-
-    evidence: sorted tuple of structural markers derivable from the input itself
-    (e.g. surface cues produced by a deterministic feature pass). There is NO field
-    for the required operation or the expected outcome -- those live behind the
-    verifier wall and this class cannot represent them.
-    """
+    """The routed object. Carries ONLY non-gold structural evidence; the TYPE has no
+    slot for required operations or expected outcomes."""
 
     cause_id: str
     evidence: tuple
     payload: str = ""
 
     def __post_init__(self):
+        require_str("Cause.cause_id", self.cause_id)
+        require_str("Cause.payload", self.payload)
         if not isinstance(self.evidence, tuple):
             raise TypeError("Cause.evidence must be a tuple of markers")
         for m in self.evidence:
-            if not isinstance(m, str):
-                raise TypeError("Cause.evidence markers must be strings")
+            require_str("Cause.evidence[]", m)
         forbidden = {"required_op", "expected_expert", "expected_outcome", "gold"}
         if any(any(f in m for f in forbidden) for m in self.evidence):
             raise ValueError("Cause.evidence may not carry gold verifier fields")
@@ -94,12 +123,22 @@ class Cause:
 # ---------------------------------------------------------------- effects
 @dataclass(frozen=True)
 class EffectCandidate:
-    """A candidate Effect produced by CJTStep. NOT published until the latch says so."""
+    """A candidate Effect produced by CJTStep. NOT published until the publication
+    coordinator commits it."""
 
     producer_expert_id: str
     cause_id: str
-    op_kind: str          # the transformation the expert actually performed
-    payload: str          # the transformed content (deterministic)
+    op_kind: str
+    payload: str
+
+    def __post_init__(self):
+        for f in ("producer_expert_id", "cause_id", "op_kind", "payload"):
+            require_str(f"EffectCandidate.{f}", getattr(self, f))
+
+    @property
+    def effect_digest(self) -> str:
+        return digest({"producer": self.producer_expert_id, "cause": self.cause_id,
+                       "op": self.op_kind, "payload": self.payload})
 
 
 class PublicationStatus(enum.Enum):
@@ -115,23 +154,76 @@ class PublicationStatus(enum.Enum):
 
 @dataclass(frozen=True)
 class CJTStepResult:
-    """Return type of CJTStep(cause, bias, allocation, budget)."""
+    """(E_t, proposed updates) = CJTStep(C_t, B_t). Proposed updates are (field, value,
+    reason) tuples the ENGINE wraps into VersionedIntents -- they are real proposals,
+    not decoration."""
 
     effect_candidate: EffectCandidate
     observations: tuple
-    intents: tuple                 # BiasUpdateIntents PROPOSED (committed only by coordinator)
+    proposed_updates: tuple            # ((fld, value, reason), ...)
     actual_compute_used: int
     producer_expert_id: str
     originating_tick: int
     authoritative_bias_version: int
 
+    def __post_init__(self):
+        if not isinstance(self.effect_candidate, EffectCandidate):
+            raise TypeError("CJTStepResult.effect_candidate must be an EffectCandidate")
+        require_deeply_immutable("CJTStepResult.observations", self.observations)
+        require_deeply_immutable("CJTStepResult.proposed_updates", self.proposed_updates)
+        require_pos_int("CJTStepResult.actual_compute_used", self.actual_compute_used)
+        require_nonneg_int("CJTStepResult.originating_tick", self.originating_tick)
+        require_nonneg_int("CJTStepResult.authoritative_bias_version",
+                           self.authoritative_bias_version)
 
-# ---------------------------------------------------------------- authority-bearing intents
+
+# ---------------------------------------------------------------- verifier receipts
+@dataclass(frozen=True)
+class VerifierReceipt:
+    """Typed, sealed verifier receipt. Issued ONLY by the verifier capability (which
+    seals it with a private token); the coordinator validates the seal through the
+    verifier-provided validator, so raw strings and self-built receipts are rejected.
+    Bound to episode, tick, cause, the FULL Effect digest, producer, verdict, and
+    examiner identity. Consumed exactly once per publication."""
+
+    episode_id: str
+    tick: int
+    cause_id: str
+    effect_digest: str
+    producer_expert_id: str
+    verdict: str
+    examiner_id: str
+    receipt_version: int
+    seal: str = ""    # set by the verifier at issue time
+
+    def __post_init__(self):
+        require_str("VerifierReceipt.episode_id", self.episode_id)
+        require_nonneg_int("VerifierReceipt.tick", self.tick)
+        require_str("VerifierReceipt.cause_id", self.cause_id)
+        require_str("VerifierReceipt.effect_digest", self.effect_digest)
+        require_str("VerifierReceipt.producer_expert_id", self.producer_expert_id)
+        if self.verdict not in ("intended", "opposite", "off_axis", "unassessed"):
+            raise ValueError(f"unknown verdict {self.verdict!r}")
+        require_str("VerifierReceipt.examiner_id", self.examiner_id)
+        require_pos_int("VerifierReceipt.receipt_version", self.receipt_version)
+
+    @property
+    def content(self) -> dict:
+        return {"ep": self.episode_id, "tick": self.tick, "cause": self.cause_id,
+                "effect": self.effect_digest, "producer": self.producer_expert_id,
+                "verdict": self.verdict, "examiner": self.examiner_id,
+                "version": self.receipt_version}
+
+    @property
+    def receipt_digest(self) -> str:
+        return digest(self.content)
+
+
+# ---------------------------------------------------------------- versioned intents
 @dataclass(frozen=True)
 class VersionedIntent:
-    """RC-0.1 hardened intent envelope: every intent binds to the exact state it was
-    computed from, the episode/tick it belongs to, and (for publication) the verifier
-    receipt that authorizes it."""
+    """Hardened intent envelope. intent_digest INCLUDES the canonical digest of
+    new_value (RC-0.2 repair of the owner-reproduced collision)."""
 
     episode_id: str
     tick: int
@@ -141,33 +233,69 @@ class VersionedIntent:
     new_value: object
     base_state_version: int
     base_state_digest: str
-    verifier_receipt_digest: str = ""   # required for publication-consequence intents
+    verifier_receipt_digest: str = ""
     reason: str = ""
+
+    def __post_init__(self):
+        require_str("VersionedIntent.episode_id", self.episode_id)
+        require_nonneg_int("VersionedIntent.tick", self.tick)
+        require_str("VersionedIntent.producer_id", self.producer_id)
+        require_str("VersionedIntent.expert_id", self.expert_id)
+        require_str("VersionedIntent.fld", self.fld)
+        require_nonneg_int("VersionedIntent.base_state_version", self.base_state_version)
+        require_str("VersionedIntent.base_state_digest", self.base_state_digest)
+
+    @property
+    def new_value_digest(self) -> str:
+        return digest(self.new_value)
 
     @property
     def intent_digest(self) -> str:
         return digest({"ep": self.episode_id, "tick": self.tick, "producer": self.producer_id,
                        "expert": self.expert_id, "fld": self.fld,
+                       "new_value_digest": self.new_value_digest,
                        "base_v": self.base_state_version, "base_d": self.base_state_digest,
                        "vr": self.verifier_receipt_digest, "reason": self.reason})
 
 
 @dataclass(frozen=True)
 class EffectPublicationIntent:
-    """Requests permission to publish an Effect. Distinct authority path from
-    DiagnosticStateCommit. Must carry the verifier receipt digest."""
+    """The REAL publication authority object (RC-0.2). Validated and committed by the
+    PublicationCoordinator; nothing is PUBLISHED without it."""
 
     episode_id: str
     tick: int
-    effect: EffectCandidate
+    cause_id: str
+    effect_digest: str
+    producer_expert_id: str
+    verdict: str
     verifier_receipt_digest: str
+    base_state_version: int
+    base_state_digest: str
+
+    def __post_init__(self):
+        require_str("EffectPublicationIntent.episode_id", self.episode_id)
+        require_nonneg_int("EffectPublicationIntent.tick", self.tick)
+        require_str("EffectPublicationIntent.cause_id", self.cause_id)
+        require_str("EffectPublicationIntent.effect_digest", self.effect_digest)
+        require_str("EffectPublicationIntent.producer_expert_id", self.producer_expert_id)
+        require_str("EffectPublicationIntent.verifier_receipt_digest", self.verifier_receipt_digest)
+        require_nonneg_int("EffectPublicationIntent.base_state_version", self.base_state_version)
+        require_str("EffectPublicationIntent.base_state_digest", self.base_state_digest)
+
+    @property
+    def intent_digest(self) -> str:
+        return digest({"ep": self.episode_id, "tick": self.tick, "cause": self.cause_id,
+                       "effect": self.effect_digest, "producer": self.producer_expert_id,
+                       "verdict": self.verdict, "vr": self.verifier_receipt_digest,
+                       "base_v": self.base_state_version, "base_d": self.base_state_digest})
 
 
 # ---------------------------------------------------------------- compute budget
 @dataclass
 class ComputeBudget:
-    """Single frozen unit: CJT_EXPERT_EVALUATION. Vector budgets need registered
-    conversion profiles and are out of scope for RC-0.1."""
+    """Single frozen unit: CJT_EXPERT_EVALUATION. spend() accepts ONLY a positive
+    non-bool int (RC-0.2 repair: spend(-1) previously increased the budget)."""
 
     unit: str
     total: int
@@ -175,11 +303,11 @@ class ComputeBudget:
 
     @classmethod
     def make(cls, total: int):
-        if isinstance(total, bool) or not isinstance(total, int) or total < 0:
-            raise TypeError("budget total must be a nonnegative int")
+        require_nonneg_int("budget total", total)
         return cls(unit="CJT_EXPERT_EVALUATION", total=total, left=total)
 
     def spend(self, n: int = 1) -> bool:
+        require_pos_int("budget spend amount", n)
         if self.left < n:
             return False
         self.left -= n
