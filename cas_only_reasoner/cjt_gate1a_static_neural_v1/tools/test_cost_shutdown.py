@@ -102,20 +102,24 @@ def test_watchdog_does_not_terminate_before_first_heartbeat():
     print("PASS test_watchdog_does_not_terminate_before_first_heartbeat")
 
 
-def test_watchdog_receives_signed_cap():
-    # the driver writes a BOUND watchdog_config.json; the config authority
-    # derives the stale limit from the signed per-job cap (GATE 1A.2R.2B)
-    from exec.watchdog_config import load_config, stale_limit_of
-    with tempfile.TemporaryDirectory() as tmp:
-        cfg = Path(tmp) / "watchdog_config.json"
-        bound = {"config_id": "WATCHDOG_CONFIG", "campaign_id": "c",
-                 "package_commit_sha": "ab" * 20,
-                 "execution_approval_sha256": "cd" * 32,
-                 "owner_key_id": "OWNER-KEY", "signed_per_job_cap_hours": 2.0,
-                 "stale_limit_seconds": 2.0 * 3600 * 1.1}
-        cfg.write_text(json.dumps(bound), encoding="utf-8")
-        assert stale_limit_of(load_config(cfg, "REAL")) == 2.0 * 3600 * 1.1
-    print("PASS test_watchdog_receives_signed_cap")
+def test_watchdog_stale_limit_is_derived_not_trusted():
+    # GATE 1A.2R.2C: the recheck found that a self-consistent config with the
+    # right SHAPE (ab*20 / cd*32 / OWNER-KEY / a big cap + matching stale) is NOT
+    # a signed-authority proof. The watchdog stale limit is now DERIVED from the
+    # SIGNED per-job cap of the signature-VERIFIED approval, and in REAL the grace
+    # and poll are FROZEN constants (not caller-controlled). The full signed proof
+    # (deriving from a verified TEST approval, and refusing a forged file) lives in
+    # tools/test_watchdog_bootstrap_authority.py.
+    from exec.watchdog_authority import (STALE_LIMIT_MULTIPLIER, POLL_SECONDS,
+                                         STARTUP_GRACE_SECONDS, resolve_timers)
+    assert abs(2.0 * 3600 * STALE_LIMIT_MULTIPLIER - 7920.0) < 1e-6
+    assert resolve_timers("REAL", 1e12, 1e12) == (STARTUP_GRACE_SECONDS,
+                                                  POLL_SECONDS)
+    src = (PKG / "exec" / "watchdog_main.py").read_text(encoding="utf-8")
+    assert "load_config" not in src and "watchdog_config" not in src, \
+        "watchdog_main still trusts the untrusted config file for its cap"
+    assert "load_verified_authority" in src
+    print("PASS test_watchdog_stale_limit_is_derived_not_trusted")
 
 
 def test_terminate_on_shutdown_is_frozen():
@@ -134,7 +138,7 @@ def main():
     test_all_paths_request_termination()
     test_watchdog_terminates_abandoned_campaign()
     test_watchdog_does_not_terminate_before_first_heartbeat()
-    test_watchdog_receives_signed_cap()
+    test_watchdog_stale_limit_is_derived_not_trusted()
     test_terminate_on_shutdown_is_frozen()
     print("ALL COST/SHUTDOWN TESTS PASS")
     return 0

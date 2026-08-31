@@ -5,7 +5,8 @@ The driver writes a heartbeat file with REAL epoch time every step; this SEPARAT
 process polls it. Fail-closed laws:
 - no termination before the first heartbeat during a startup grace;
 - one REAL epoch clock domain on both sides;
-- the stale limit is the SIGNED per-job cap (watchdog_config.json);
+- the stale limit is DERIVED from the SIGNED per-job cap of the signature-
+  verified execution approval (exec/watchdog_authority.py, GATE 1A.2R.2C);
 - an IMPOSSIBLE FUTURE heartbeat (beyond now + MAX_FUTURE_HEARTBEAT_SKEW_SECONDS)
   is refused, so a future-valued clock cannot extend the ceiling (1A.2R.2);
 - a MALFORMED heartbeat value (non-numeric, bool, NaN, infinity, negative) is

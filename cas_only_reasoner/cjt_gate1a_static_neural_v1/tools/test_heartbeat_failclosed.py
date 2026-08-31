@@ -131,21 +131,26 @@ def test_invalid_heartbeat_never_counts_as_fresh():
 
 
 def test_watchdog_main_exception_requests_termination():
-    # a watchdog_config.json with an invalid (negative) stale limit makes
-    # Watchdog.__init__ raise WatchdogError INSIDE the poll loop: watchdog_main
-    # must catch it, request termination, and exit nonzero -- never vanish
+    # GATE 1A.2R.2C: the watchdog derives its authority from the VERIFIED approval
+    # at startup (inside the fail-closed boundary). An unverifiable approval (here
+    # an empty record under REAL, which cannot resolve the trust root) raises
+    # inside the startup boundary; watchdog_main must catch it, request
+    # termination, and exit nonzero -- never vanish. (The malformed-authority-
+    # envelope fail-closed proof lives in test_watchdog_bootstrap_authority.)
     with tempfile.TemporaryDirectory() as tmp:
         evidence = Path(tmp) / "ev"; evidence.mkdir()
-        (evidence / "watchdog_config.json").write_text(
-            json.dumps({"stale_limit_seconds": -1.0}), encoding="utf-8")
+        dummy_approval = Path(tmp) / "approval.json"      # detached, unverifiable
+        dummy_approval.write_text("{}\n", encoding="utf-8")
         r = subprocess.run(
             [sys.executable, str(PKG / "exec" / "watchdog_main.py"),
-             "--mode", "SYNTHETIC_CONFORMANCE",
+             "--mode", "REAL",
              "--heartbeat", str(evidence / "heartbeat.json"),
              "--evidence", str(evidence),
-             "--config", str(evidence / "watchdog_config.json"),
-             "--poll-seconds", "0"],
-            capture_output=True, text=True, timeout=30)
+             "--approval", str(dummy_approval),
+             "--prep-receipt", str(Path(tmp) / "prep.json"),
+             "--package-root", str(PKG), "--campaign-id", "c",
+             "--authority", str(evidence / "watchdog_authority.json")],
+            capture_output=True, text=True, timeout=60)
         assert r.returncode == 2, f"watchdog_main did not fail closed: rc={r.returncode}"
         marker = json.loads((evidence / "WATCHDOG_TERMINATION.json")
                             .read_text(encoding="utf-8"))

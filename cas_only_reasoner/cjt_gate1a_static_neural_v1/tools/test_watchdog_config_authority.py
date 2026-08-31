@@ -12,7 +12,6 @@ longer kill the watchdog before it activates the emergency path).
 from __future__ import annotations
 
 import json
-import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -118,31 +117,19 @@ def test_real_mode_nan_config_refused():
     print("PASS test_real_mode_nan_config_refused")
 
 
-def _run_watchdog_main(evidence, config_text, mode="REAL"):
-    (evidence).mkdir(parents=True, exist_ok=True)
-    cfg = evidence / "watchdog_config.json"
-    cfg.write_text(config_text, encoding="utf-8")
-    return subprocess.run(
-        [sys.executable, str(PKG / "exec" / "watchdog_main.py"),
-         "--mode", mode, "--heartbeat", str(evidence / "heartbeat.json"),
-         "--evidence", str(evidence), "--config", str(cfg), "--poll-seconds", "0"],
-        capture_output=True, text=True, timeout=30)
-
-
 def test_watchdog_main_toplevel_array_config_fails_closed():
-    # the exact case the recheck flagged: a top-level `[]` config raised BEFORE
-    # the boundary. It now fails closed WITH a termination request.
-    for label, text in [("array", "[]"), ("null", "null"), ("scalar", "5")]:
-        with tempfile.TemporaryDirectory() as tmp:
-            ev = Path(tmp) / "ev"
-            r = _run_watchdog_main(ev, text, mode="REAL")
-            assert r.returncode == 2, f"{label}: rc={r.returncode}"
-            marker = json.loads((ev / "WATCHDOG_TERMINATION.json")
-                                .read_text(encoding="utf-8"))
-            assert marker["reason"] == "WATCHDOG_INTERNAL_ERROR"
-            assert (ev / "TERMINATION_UNAVAILABLE_NOT_ON_EC2.json").is_file() \
-                or (ev / "TERMINATION_REQUESTED.json").is_file()
-            print(f"PASS watchdog_main_config_{label}_fails_closed")
+    # GATE 1A.2R.2B earned envelope totality on the configuration validator: a
+    # top-level array / null / scalar is refused. That module-level proof is
+    # FROZEN and preserved here (validate_config below). GATE 1A.2R.2C retired
+    # watchdog_config.json as the watchdog's authority surface -- the watchdog now
+    # derives its timeout from the VERIFIED approval and binds an immutable
+    # watchdog_authority.json. The SAME envelope-totality property on that live
+    # authority surface (a top-level [] / null / 5 authority file fails closed via
+    # watchdog_main with a termination marker) is proven in
+    # tools/test_watchdog_bootstrap_authority.test_end_to_end_registered_bootstrap_order.
+    for label, obj in [("array", [1, 2, 3]), ("null", None), ("scalar", 5)]:
+        _expect_config_error(f"toplevel_{label}", obj)
+        print(f"PASS watchdog_config_{label}_envelope_refused")
 
 
 def main():

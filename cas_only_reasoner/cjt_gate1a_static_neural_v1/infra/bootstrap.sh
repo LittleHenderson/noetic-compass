@@ -40,16 +40,36 @@ python "$PKG/exec/stage_main.py" \
     --detached-dir /campaign/detached \
     --package-root "$PKG"
 
+# DETERMINISTIC STARTUP ORDER (GATE 1A.2R.2C section 1): the watchdog must NOT
+# start before a VERIFIED authority exists. First DERIVE the timing authority
+# from the signature-verified execution approval and write it ATOMICALLY; only
+# then start the watchdog. If verification refuses, `set -e` aborts here and the
+# instance terminates (InstanceInitiatedShutdownBehavior=terminate) -- no watchdog
+# and no driver ever start against an unverified authority.
+python "$PKG/exec/watchdog_authority.py" \
+    --mode REAL \
+    --approval /campaign/detached/execution_approval.json \
+    --prep-receipt /campaign/detached/container_prep_receipt.json \
+    --package-root "$PKG" \
+    --campaign-id "$CAMPAIGN_ID" \
+    --expected-commit "$CAMPAIGN_COMMIT" \
+    --authority-out "/campaign/results/$CAMPAIGN_ID/watchdog_authority.json"
+
 # the watchdog runs as a SEPARATE process so termination never depends on the
-# driver reaching its own finally block. It reads the SIGNED per-job cap from
-# watchdog_config.json (written by the driver after approval verification) and
+# driver reaching its own finally block. It INDEPENDENTLY re-verifies the detached
+# approval, binds the immutable watchdog_authority.json written above, derives its
+# stale limit from the SIGNED per-job cap, uses FROZEN grace/poll constants, and
 # will not terminate before the first heartbeat during the startup grace.
 python "$PKG/exec/watchdog_main.py" \
     --mode REAL \
     --heartbeat "/campaign/results/$CAMPAIGN_ID/heartbeat.json" \
     --evidence "/campaign/results/$CAMPAIGN_ID" \
-    --config "/campaign/results/$CAMPAIGN_ID/watchdog_config.json" \
-    --startup-grace-seconds 900 &
+    --approval /campaign/detached/execution_approval.json \
+    --prep-receipt /campaign/detached/container_prep_receipt.json \
+    --package-root "$PKG" \
+    --campaign-id "$CAMPAIGN_ID" \
+    --authority "/campaign/results/$CAMPAIGN_ID/watchdog_authority.json" \
+    --expected-commit "$CAMPAIGN_COMMIT" &
 
 exec python "$PKG/exec/launcher.py" \
     --mode REAL \

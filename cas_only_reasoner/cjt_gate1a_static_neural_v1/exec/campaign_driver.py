@@ -210,9 +210,11 @@ class CampaignDriver:
         self.cost = CostAuthority(record)          # signed values ONLY
         # the watchdog stale limit is DERIVED from the SIGNED per-job cap (plus
         # 10% grace) per exec/watchdog_config.STALE_LIMIT_MULTIPLIER; never a
-        # local constant
-        from exec.watchdog_config import (CONFIG_ID,  # noqa: E402
-                                          STALE_LIMIT_MULTIPLIER)
+        # local constant. GATE 1A.2R.2C: the SEPARATE watchdog process does NOT
+        # trust a driver-written config file for this -- it independently verifies
+        # the detached approval and derives the same limit (exec/watchdog_authority).
+        # The driver keeps its own derived value only for its heartbeat bookkeeping.
+        from exec.watchdog_config import STALE_LIMIT_MULTIPLIER  # noqa: E402
         signed_cap_hours = record["per_job_wall_clock_cap_hours"]
         self._stale_limit = signed_cap_hours * 3600 * STALE_LIMIT_MULTIPLIER
         self.watchdog.stale_limit_seconds = self._stale_limit
@@ -222,18 +224,11 @@ class CampaignDriver:
                       json.dumps(record, indent=2) + "\n")
         write_utf8_lf(self.er / "container_prep_receipt.json",
                       json.dumps(self.prep_receipt, indent=2) + "\n")
-        # the watchdog config is now the BOUND signed authority (GATE 1A.2R.2B):
-        # dict-only, exact schema, stale limit DERIVED from the signed cap, bound
-        # to the campaign, commit, approval digest, and owner key id
-        write_utf8_lf(self.er / "watchdog_config.json", json.dumps({
-            "config_id": CONFIG_ID,
-            "campaign_id": self.campaign_id,
-            "package_commit_sha": self.expected_commit,
-            "execution_approval_sha256": sha256_file(
-                self.er / "execution_approval.json"),
-            "owner_key_id": record["owner_key_id"],
-            "signed_per_job_cap_hours": signed_cap_hours,
-            "stale_limit_seconds": self._stale_limit}, indent=2) + "\n")
+        # NOTE (GATE 1A.2R.2C): the driver no longer writes watchdog_config.json.
+        # The immutable watchdog_authority.json is derived from the VERIFIED
+        # approval and written by the pre-watchdog step BEFORE the watchdog starts
+        # (infra/bootstrap.sh + exec/watchdog_authority.py); the driver must never
+        # rewrite the timing authority.
         self.evidence.update({
             "package_commit_sha": self.expected_commit,
             "execution_approval_sha256": sha256_file(
@@ -682,22 +677,23 @@ class CampaignDriver:
                           if self._is_claim_bearing() else "SYNTHETIC")}
         claim_receipt = lock.claim(self.campaign_id, **lock_bindings)
         if self._is_claim_bearing():                   # let the watchdog burn it
-            # rewrite the BOUND config, now including the AWS lock coordinates,
-            # keeping the exact schema (GATE 1A.2R.2B)
-            from exec.watchdog_config import CONFIG_ID  # noqa: E402
-            write_utf8_lf(self.er / "watchdog_config.json", json.dumps({
-                "config_id": CONFIG_ID,
-                "campaign_id": self.campaign_id,
-                "package_commit_sha": self.expected_commit,
-                "execution_approval_sha256": self.evidence["execution_approval_sha256"],
-                "owner_key_id": self.evidence["owner_key_id"],
-                "signed_per_job_cap_hours":
-                    self.approval["per_job_wall_clock_cap_hours"],
-                "stale_limit_seconds": self._stale_limit,
-                "aws_protected_lock": {
-                    "table_name": f"cjt-protected-lock-{self.approval['aws_account_id']}",
-                    "region": self.approval["region"],
-                    "campaign_id": self.campaign_id}}, indent=2) + "\n")
+            # GATE 1A.2R.2C section 3: write the SEPARATE protected-lock locator
+            # ATOMICALLY, distinct from the immutable timing authority. The
+            # locator only tells the watchdog a protected claim is active; the
+            # watchdog validates it against, and can fall back to, the coordinates
+            # DERIVED from the verified approval -- so it can never be forged into
+            # burning the wrong campaign, and a corrupted locator cannot erase the
+            # burn.
+            from exec.fsio import write_utf8_lf_atomic  # noqa: E402
+            from exec.watchdog_authority import LOCK_LOCATOR_ID  # noqa: E402
+            write_utf8_lf_atomic(self.er / "protected_lock_locator.json",
+                                 json.dumps({
+                                     "locator_id": LOCK_LOCATOR_ID,
+                                     "table_name":
+                                         f"cjt-protected-lock-{self.approval['aws_account_id']}",
+                                     "region": self.approval["region"],
+                                     "campaign_id": self.campaign_id},
+                                     indent=2, sort_keys=True) + "\n")
         self.evidence["protected_lock_receipt_sha256"] = _write_json(
             self.er / "protected_lock_receipt.json", claim_receipt)
         self.sm.transition("PROTECTED_RUNNING", binding_kind="protected_lock",
