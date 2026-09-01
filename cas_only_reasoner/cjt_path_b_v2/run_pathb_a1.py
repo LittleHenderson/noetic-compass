@@ -52,9 +52,25 @@ sys.path.insert(0, str(PKG))
 sys.path.insert(0, str(HERE))
 
 from exec.activation_extraction import MODEL_ID, extract_split  # noqa: E402
-from run_pilot import lr_lambda, seeded_order  # noqa: E402
 from pathb_core import CLASSES, alt50_class  # noqa: E402
 from pathb_a0_probe import extract_clause_local, gold_path  # noqa: E402
+
+
+def seeded_order(n, seed):
+    import torch
+    return torch.randperm(n, generator=torch.Generator()
+                          .manual_seed(seed)).tolist()
+
+
+def lr_lambda(updates):
+    warm = max(1, int(updates * 0.05))
+
+    def f(step):
+        if step < warm:
+            return (step + 1) / warm
+        t = (step - warm) / max(1, updates - warm)
+        return 0.5 * (1.0 + math.cos(math.pi * min(1.0, t)))
+    return f
 
 L_FROZEN = 6                      # A0 earliest passing layer (frozen rule)
 FAMS = ("QB_REL", "QB_COMP", "QB_INT")
