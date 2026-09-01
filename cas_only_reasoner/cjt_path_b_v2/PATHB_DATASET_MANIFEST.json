@@ -1,0 +1,41 @@
+{
+  "files": {
+    "data/train.jsonl": "6e86da385f80fbe848a8214f664fd0228dfd89da5e28e7b2acb38f7f891aecfe",
+    "data/val.jsonl": "ca08c0f5881ba7df2cd6b3a7dd6d4a60fe4e9fd07f07ecb232c3dba352f9c1b3"
+  },
+  "manifest_id": "PATHB_DATASET_MANIFEST_v0_3",
+  "non_claim_bearing": true,
+  "protected_derivation": {
+    "mode": "TEST_SALT_NON_CLAIM_BEARING",
+    "owner_salt_commitment": "TO_BE_REGISTERED (owner D5); the dev protected split is NON-claim-bearing",
+    "test_salt_sha256": "7753854c6013255606d0ef623c4ad00fa2af0d26e8ccb5d8bf338627cf1259da"
+  },
+  "seed_stream": "PATHB_V03_20260831",
+  "splits": {
+    "protected": {
+      "content_sha256": "5aca176aef36928d985e983215fbec0d0a4b424abe8ed9c5a0d28e49dcb42502",
+      "excluded": 0,
+      "families": [
+        "D"
+      ],
+      "passages": 1500
+    },
+    "train": {
+      "content_sha256": "6e86da385f80fbe848a8214f664fd0228dfd89da5e28e7b2acb38f7f891aecfe",
+      "excluded": 0,
+      "families": [
+        "A",
+        "B"
+      ],
+      "passages": 12000
+    },
+    "val": {
+      "content_sha256": "ca08c0f5881ba7df2cd6b3a7dd6d4a60fe4e9fd07f07ecb232c3dba352f9c1b3",
+      "excluded": 0,
+      "families": [
+        "C"
+      ],
+      "passages": 1500
+    }
+  }
+}

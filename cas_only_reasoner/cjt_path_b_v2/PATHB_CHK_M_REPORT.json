@@ -1,0 +1,158 @@
+{
+  "battery_id": "PATHB_CHK_M",
+  "non_claim_bearing": true,
+  "mutants": [
+    {
+      "id": "M1_BIJECTIVE_REL",
+      "target": "CHK1",
+      "failed_gates": [
+        "train/QB_REL/CHK1",
+        "val/QB_REL/CHK1"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    },
+    {
+      "id": "M2_NO_XOP_OVERLAP",
+      "target": "CHK2",
+      "failed_gates": [
+        "train/CHK2",
+        "train/QB_COMP/CHK1",
+        "val/CHK2",
+        "val/QB_COMP/CHK1"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    },
+    {
+      "id": "M3_SINGLE_EDGE_TRACE",
+      "target": "CHK3",
+      "failed_gates": [
+        "train/QB_COMP/CHK3",
+        "train/QB_INT/CHK3",
+        "train/QB_ORD/CHK3",
+        "train/QB_REL/CHK3",
+        "val/QB_COMP/CHK3",
+        "val/QB_INT/CHK3",
+        "val/QB_ORD/CHK3",
+        "val/QB_REL/CHK3"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    },
+    {
+      "id": "M4_MATCHER_LEAKS",
+      "target": "CHK4",
+      "failed_gates": [
+        "train/QB_INT/CHK4",
+        "val/QB_INT/CHK4"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    },
+    {
+      "id": "M5_VERB_FAMILY_LEAK",
+      "target": "CHK5",
+      "failed_gates": [
+        "CHK5"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    },
+    {
+      "id": "M6_VOCAB_LEAK",
+      "target": "CHK5",
+      "failed_gates": [
+        "CHK5"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    },
+    {
+      "id": "M7_ORDER_BLIND",
+      "target": "CHK8",
+      "failed_gates": [
+        "train/CHK8",
+        "val/CHK8"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    },
+    {
+      "id": "M8_TEMPLATE_DRIFT",
+      "target": "B1_GRAPH",
+      "failed_gates": [
+        "val/B1_GRAPH"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    },
+    {
+      "id": "M9_CANDIDATE_ORDER",
+      "target": "CHK10",
+      "failed_gates": [
+        "train/CHK10",
+        "val/CHK10"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    },
+    {
+      "id": "M10_PROFILE_ANSWER_KEY",
+      "target": "CHK7_BKEY",
+      "failed_gates": [
+        "CHK7_BKEY(paired-delta)"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    },
+    {
+      "id": "M11_INT_COUNTING",
+      "target": "CHK9INT",
+      "failed_gates": [
+        "train/CHK9INT",
+        "train/QB_INT/CHK4",
+        "val/CHK9INT",
+        "val/QB_INT/CHK4"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
+    }
+  ],
+  "clean_before": {
+    "failed_gates": []
+  },
+  "clean_after": {
+    "failed_gates": []
+  },
+  "clean_authority": "the FULL-dataset battery (PATHB_CHECKS_REPORT.json) is the authoritative clean CHK-7 reference; small-set CHK-7 is judged by PAIRED increment deltas only (small-n MLP instability)",
+  "clean_small_bkey_increments": {
+    "QB_REL": 0.0,
+    "QB_COMP": 0.0,
+    "QB_INT": 0.2,
+    "QB_ORD": -0.05
+  },
+  "verdict": "CHK_M_PASS"
+}

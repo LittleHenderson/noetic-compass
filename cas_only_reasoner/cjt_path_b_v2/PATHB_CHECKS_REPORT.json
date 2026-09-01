@@ -1,0 +1,233 @@
+{
+  "train": {
+    "per_family": {
+      "QB_REL": {
+        "CHK1": {
+          "violations": 0,
+          "pass": true
+        },
+        "CHK3": {
+          "multi_edge_fraction": 1.0,
+          "pass": true
+        },
+        "CHK4": {
+          "matcher_best": 0.4183,
+          "bound_uniform_sameclass_plus_005": 0.4662,
+          "pass": true
+        }
+      },
+      "QB_COMP": {
+        "CHK1": {
+          "violations": 0,
+          "pass": true
+        },
+        "CHK3": {
+          "multi_edge_fraction": 1.0,
+          "pass": true
+        },
+        "CHK4": {
+          "matcher_best": 0.5083,
+          "bound_uniform_sameclass_plus_005": 0.55,
+          "pass": true
+        }
+      },
+      "QB_INT": {
+        "CHK1": {
+          "violations": 0,
+          "pass": true
+        },
+        "CHK3": {
+          "multi_edge_fraction": 1.0,
+          "pass": true
+        },
+        "CHK4": {
+          "matcher_best": 0.2353,
+          "bound_uniform_sameclass_plus_005": 0.2722,
+          "pass": true
+        }
+      },
+      "QB_ORD": {
+        "CHK1": {
+          "violations": 0,
+          "pass": true
+        },
+        "CHK3": {
+          "multi_edge_fraction": 1.0,
+          "pass": true
+        },
+        "CHK4": {
+          "matcher_best": 0.0,
+          "bound_uniform_sameclass_plus_005": 0.3,
+          "pass": true
+        }
+      }
+    },
+    "CHK2": {
+      "distinct_idea_answers": 16,
+      "under_both_classes": 16,
+      "fraction": 1.0,
+      "pass": true
+    },
+    "CHK8": {
+      "ord_items": 3000,
+      "violations": 0,
+      "pass": true
+    },
+    "CHK9INT": {
+      "int_items": 3000,
+      "violations": 0,
+      "pass": true
+    },
+    "CHK10": {
+      "entity_set_violations": 0,
+      "first_mention_order_fraction": 0.0002,
+      "pass": true
+    },
+    "B1_GRAPH": {
+      "accuracy": 1.0,
+      "pass": true
+    },
+    "B_MEMBER": {
+      "expected_accuracy": 0.875
+    },
+    "H_INT_REPEATED": {
+      "accuracy": 0.3227
+    }
+  },
+  "val": {
+    "per_family": {
+      "QB_REL": {
+        "CHK1": {
+          "violations": 0,
+          "pass": true
+        },
+        "CHK3": {
+          "multi_edge_fraction": 1.0,
+          "pass": true
+        },
+        "CHK4": {
+          "matcher_best": 0.44,
+          "bound_uniform_sameclass_plus_005": 0.4656,
+          "pass": true
+        }
+      },
+      "QB_COMP": {
+        "CHK1": {
+          "violations": 0,
+          "pass": true
+        },
+        "CHK3": {
+          "multi_edge_fraction": 1.0,
+          "pass": true
+        },
+        "CHK4": {
+          "matcher_best": 0.5147,
+          "bound_uniform_sameclass_plus_005": 0.55,
+          "pass": true
+        }
+      },
+      "QB_INT": {
+        "CHK1": {
+          "violations": 0,
+          "pass": true
+        },
+        "CHK3": {
+          "multi_edge_fraction": 1.0,
+          "pass": true
+        },
+        "CHK4": {
+          "matcher_best": 0.224,
+          "bound_uniform_sameclass_plus_005": 0.2722,
+          "pass": true
+        }
+      },
+      "QB_ORD": {
+        "CHK1": {
+          "violations": 0,
+          "pass": true
+        },
+        "CHK3": {
+          "multi_edge_fraction": 1.0,
+          "pass": true
+        },
+        "CHK4": {
+          "matcher_best": 0.0,
+          "bound_uniform_sameclass_plus_005": 0.3,
+          "pass": true
+        }
+      }
+    },
+    "CHK2": {
+      "distinct_idea_answers": 10,
+      "under_both_classes": 10,
+      "fraction": 1.0,
+      "pass": true
+    },
+    "CHK8": {
+      "ord_items": 375,
+      "violations": 0,
+      "pass": true
+    },
+    "CHK9INT": {
+      "int_items": 375,
+      "violations": 0,
+      "pass": true
+    },
+    "CHK10": {
+      "entity_set_violations": 0,
+      "first_mention_order_fraction": 0.0,
+      "pass": true
+    },
+    "B1_GRAPH": {
+      "accuracy": 1.0,
+      "pass": true
+    },
+    "B_MEMBER": {
+      "expected_accuracy": 0.875
+    },
+    "H_INT_REPEATED": {
+      "accuracy": 0.3387
+    }
+  },
+  "CHK5": {
+    "verb_overlap_train_vs_other": [],
+    "v1_retired_verbs_used": [],
+    "train_verbs_within_allocation": true,
+    "other_verbs_within_allocation": true,
+    "entity_vocab_overlap": [],
+    "pass": true
+  },
+  "CHK7_BKEY": {
+    "QB_REL": {
+      "acc_with_profiles": 1.0,
+      "acc_without_profiles": 1.0,
+      "profile_increment": 0.0,
+      "candidate_uniform": 0.1111,
+      "pass": true
+    },
+    "QB_COMP": {
+      "acc_with_profiles": 1.0,
+      "acc_without_profiles": 1.0,
+      "profile_increment": 0.0,
+      "candidate_uniform": 0.1111,
+      "pass": true
+    },
+    "QB_INT": {
+      "acc_with_profiles": 0.36,
+      "acc_without_profiles": 0.328,
+      "profile_increment": 0.032,
+      "candidate_uniform": 0.0909,
+      "pass": true
+    },
+    "QB_ORD": {
+      "acc_with_profiles": 0.5147,
+      "acc_without_profiles": 0.4907,
+      "profile_increment": 0.024,
+      "candidate_uniform": 0.1429,
+      "pass": true
+    },
+    "pass": true
+  },
+  "failed_gates": [],
+  "verdict": "PATHB_GATES_PASS"
+}
