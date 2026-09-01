@@ -1,0 +1,28 @@
++ /root/venv/bin/python -c 'import torch;print('\''TORch'\'',torch.__version__,'\''CUDA'\'',torch.cuda.is_available(),(torch.cuda.get_device_name(0) if torch.cuda.is_available() else '\''NONE'\''))'
+TORch 2.5.1+cu121 CUDA True Tesla T4
+[extract] train 9000 recs 709s
+[extract] val 1125 recs 88s
+[capacity] ref=3581582 counts={'S0': 3574404, 'S3': 3581582, 'SALT50': 3581582, 'S6': 3581582} widen={'S0': 0, 'S3': 0, 'SALT50': 0, 'S6': 0}
+[P0] S0      acc=0.5333 bridge=0.408 swapD=None
+[P0] S3      acc=0.7698 bridge=0.358 swapD=5.328
+[P0] SALT50  acc=0.5636 bridge=0.375 swapD=0.3813
+[P0] S6      acc=0.5920 bridge=0.410 swapD=0.0
+A1 P0 STATUS: P0_SMOKE_OK failed=[]
++ echo A1_P0_EXIT=0
+A1_P0_EXIT=0
+[capacity] ref=3581582 counts={'S0': 3574404, 'S3': 3581582, 'SALT50': 3581582, 'S6': 3581582} widen={'S0': 0, 'S3': 0, 'SALT50': 0, 'S6': 0}
+[P1] S0      s11 acc=0.7404 bridge=0.420
+[P1] S0      s23 acc=0.7618 bridge=0.508
+[P1] S0      s47 acc=0.7636 bridge=0.548
+[P1] S3      s11 acc=0.7849 bridge=0.325
+[P1] S3      s23 acc=0.7947 bridge=0.342
+[P1] S3      s47 acc=0.7822 bridge=0.324
+[P1] SALT50  s11 acc=0.7422 bridge=0.508
+[P1] SALT50  s23 acc=0.7476 bridge=0.466
+[P1] SALT50  s47 acc=0.7387 bridge=0.359
+[P1] S6      s11 acc=0.7458 bridge=0.556
+[P1] S6      s23 acc=0.7511 bridge=0.612
+[P1] S6      s47 acc=0.7413 bridge=0.483
+A1 P1 STATUS: NO_PATH_B_OPERATION_SIGNAL
++ echo A1_P1_EXIT=0
+A1_P1_EXIT=0

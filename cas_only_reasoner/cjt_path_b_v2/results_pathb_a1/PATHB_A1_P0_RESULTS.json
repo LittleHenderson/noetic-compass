@@ -1,0 +1,100 @@
+{
+  "pilot": "PATH-B-A1 P0",
+  "non_claim_bearing": true,
+  "is_real_model": true,
+  "layer_frozen": 6,
+  "memorization": {
+    "accuracy": 1.0,
+    "gold_path": {
+      "accuracy": 1.0,
+      "mean_abs_logit_delta": 0.7725
+    },
+    "shuffled_path": {
+      "accuracy": 0.124,
+      "mean_abs_logit_delta": 5.813
+    },
+    "rewired": {
+      "accuracy": 0.1783,
+      "mean_abs_logit_delta": 6.7161
+    },
+    "bridge_top1_mem": 0.9224806201550387
+  },
+  "arms_100u": {
+    "S0": {
+      "val_accuracy": 0.5333333333333333,
+      "bridge_top1": 0.408,
+      "profile_sensitivity": null,
+      "params": 3574404
+    },
+    "S3": {
+      "val_accuracy": 0.7697777777777778,
+      "bridge_top1": 0.3582222222222222,
+      "profile_sensitivity": {
+        "true": {
+          "accuracy": 0.7698,
+          "mean_abs_logit_delta": 0.0
+        },
+        "permuted": {
+          "accuracy": 0.1404,
+          "mean_abs_logit_delta": 5.328
+        },
+        "uniform": {
+          "accuracy": 0.3067,
+          "mean_abs_logit_delta": 3.0849
+        }
+      },
+      "params": 3581582
+    },
+    "SALT50": {
+      "val_accuracy": 0.5635555555555556,
+      "bridge_top1": 0.3751111111111111,
+      "profile_sensitivity": {
+        "true": {
+          "accuracy": 0.5636,
+          "mean_abs_logit_delta": 0.0
+        },
+        "permuted": {
+          "accuracy": 0.4978,
+          "mean_abs_logit_delta": 0.3813
+        },
+        "uniform": {
+          "accuracy": 0.5262,
+          "mean_abs_logit_delta": 0.1939
+        }
+      },
+      "params": 3581582
+    },
+    "S6": {
+      "val_accuracy": 0.592,
+      "bridge_top1": 0.4097777777777778,
+      "profile_sensitivity": {
+        "true": {
+          "accuracy": 0.592,
+          "mean_abs_logit_delta": 0.0
+        },
+        "permuted": {
+          "accuracy": 0.592,
+          "mean_abs_logit_delta": 0.0
+        },
+        "uniform": {
+          "accuracy": 0.592,
+          "mean_abs_logit_delta": 0.0
+        }
+      },
+      "params": 3581582
+    }
+  },
+  "p0_gates": {
+    "gate_memorize_ge_95": true,
+    "gate_goldpath_ge_95": true,
+    "gate_gold_minus_shuffled_ge_30": true,
+    "gate_rewire_drop_ge_30": true,
+    "gate_s3_profile_grads": true,
+    "gate_s3_swap_moves_logits": true,
+    "gate_s6_invariant": true,
+    "gate_params_matched": true
+  },
+  "failed_gates": [],
+  "development_status": "P0_SMOKE_OK",
+  "total_wall_clock_seconds": 850.0
+}
