@@ -1024,3 +1024,10 @@ warnings. PDFs in docs/whitepapers/pdf/ refreshed.
 - **Gate 2 remains OPEN at `0.38`.** Next: `TKS_672_V3` lock under the motive-repaired
   instrument, then the small-model readout ladder on the frozen corpus under
   `GATE_2_SUCCESSOR_CLOSURE_CONTRACT` — final equivalence decision is the owner's.
+
+## CMB-R1 / RGM-0 (branch research/cmb-r1-rgm0-v1, worktree-isolated; $0, no GPU)
+- Deterministic resonant-geometric-memory simulator: dual-key (semantic + static CAS) and trajectory retrieval, bounded root-aware resonance, provenance verifier, matched-generic and corrupted controls, echo-chamber adversarial family, 8 arms x 7 benchmark families, paired permutation statistics.
+- PRIMARY STATUS: RGM0_RESONANT_MEMORY_SIGNAL (triple-run byte-deterministic). KL1 B>A +0.0578 (p<0.001); KL2 C>B traj +0.0340 (p=0.0159); KL3 D>C +0.0600 (p=0.0077, quality leg); KL4 generic insufficient (D-E +0.5781); KL5 corruption devastating (D-F +0.7988, corrupted arm 0.0087); KL6 echo: D safe / G unsafe / E unsafe -> provenance controls load-bearing and CAS-specific; KL7 residuals pass; novelty detection 1.0.
+- First run FAILED (STATIC_CAS_GEOMETRY_REDUNDANT) — preserved as RGM0_FIRST_RUN_FAILED_KL1.json; cause was generator under-implementing the F1 spec contract (same-topic vs semantic twins), fixed as spec compliance (A1) with the failed run kept.
+- CHK-M battery: every kill-law gate demonstrated to fire on its registered mutant (M1-M6). Deviations D1-D5 and amendments A1-A4 declared in the spec.
+- Builder-of-lane may not self-verify: third-party independent audit required before any RGM-1 (neural) step. No merge into the EX1 lane; no claim promotion.
