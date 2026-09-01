@@ -1,0 +1,42 @@
+{
+  "authority": "RESOURCE_DERIVED_CONTROL",
+  "cas_class_order": [
+    "^2",
+    "^3",
+    "^6",
+    "^8"
+  ],
+  "construction": "verb primary-sense lexname, most-populous-4 + merge + rebalance (ALTERNATIVE_TAXONOMY_MANIFEST_CANDIDATE.construction_law)",
+  "control_name": "Hard WordNet Primary-Lexname Control",
+  "non_claim_bearing": true,
+  "profile_semantics": "EXCLUSIVE_LEXICAL_CATEGORY",
+  "provenance": {
+    "frozen_in": "S7_PILOT_BUILD_RECEIPT.json (commit 19d9e843)",
+    "lemmatization": "morphy-direct (no judgment)",
+    "license": "WordNet Release 3.0 License (Princeton University)",
+    "registered_under": "CJT-DEV-P1-S7Delta.1",
+    "source": "Princeton WordNet 3.0 (obtained via nltk 'wordnet' corpus)",
+    "version": "3.0",
+    "wordnet_zip_bytes": 10775600,
+    "wordnet_zip_sha256": "cbda5ea6eef7f36a97a43d4a75f85e07fccbb4f23657d27b4ccbc93e2646ab59"
+  },
+  "table_id": "S7_H_WN1",
+  "verb_to_class": {
+    "backed": 2,
+    "broke": 3,
+    "brought": 1,
+    "captured": 1,
+    "drawn": 2,
+    "felt": 3,
+    "lay": 0,
+    "made": 2,
+    "pulled": 0,
+    "recoiled": 1,
+    "reminded": 3,
+    "repelled": 0,
+    "split": 2,
+    "summoned": 0,
+    "thought": 3,
+    "withdrew": 1
+  }
+}

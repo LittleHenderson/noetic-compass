@@ -1,0 +1,35 @@
+{
+  "record_id": "STATISTICAL_CORRECTION_S7",
+  "amendment": "CJT-DEV-P1-S7Delta.1",
+  "non_claim_bearing": true,
+  "executes_ruling_points": [1, 2, 3],
+  "preserved_negative_result": {
+    "verdict": "S7_PILOT_CONSTRUCTION_FAILED",
+    "commit": "19d9e843",
+    "status": "PRESERVED -- valid result of the original hard V<=0.35 protocol; not rewritten"
+  },
+  "interpretation_amendment": {
+    "SUPPORTED": "The original hard-partition protocol failed its preregistered Cramer's V <= 0.35 gate.",
+    "NOT_SUPPORTED": "That no honest independent semantic control can exist for these verbs."
+  },
+  "retired_language": "'missed by only 0.0036'",
+  "frozen_replacement_statement": "The hard WordNet partition produced chi-square=6 and V=0.353553. Under the exact uniformly random balanced four-way permutation null: P(V >= observed) = 0.9000405 and P(V <= 0.35) = 0.0999595. The old threshold admitted only about 10% of random balanced partitions and was miscalibrated for n=16.",
+  "exact_null_calibration": {
+    "null_space": "all 16!/(4!)^4 = 63,063,000 balanced labelled four-way partitions of the 16 registered verbs",
+    "P_V_ge_0p353553": 0.9000405,
+    "P_V_le_0p35": 0.0999595,
+    "P_bestperm_argmax_le_8_of_16": 0.81205,
+    "P_bestperm_argmax_le_9_of_16": 0.94555,
+    "attainable_V_lattice_near_threshold": [0.288675, 0.353553, 0.408248],
+    "lattice_note": "no attainable balanced-partition value exists between 0.288675 and 0.353553; the old 0.35 threshold sat inside that empty gap"
+  },
+  "independent_verification": {
+    "who": "this session, before freezing any Delta.1 artifact",
+    "method": "exact enumeration of all 4x4 contingency tables with margins (4,4,4,4)x(4,4,4,4), weighted by per-column multinomial counts; total verified = 63,063,000",
+    "result": "all five null probabilities and the attainable-V lattice matched the owner's ruling exactly"
+  },
+  "consequences": {
+    "S7_H": "the honest primary-lexname hard partition (V=0.353553, p=0.90 under the exact null) is REGISTERED as hard control S7-H (see S7_H_BUILD_RECEIPT.json); its own permutation-invariant agreement is A_hard*=7/16, within the 9/16 anti-copy bound",
+    "epistemic_note": "a high permutation p-value does not prove WordNet and CAS are independent; it means the observed association gives no evidence against the random-balanced null"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "receipt_id": "S7_H_BUILD_RECEIPT",
+  "pilot": "CJT-DEV-P1",
+  "amendment": "CJT-DEV-P1-S7Delta.1",
+  "non_claim_bearing": true,
+  "verdict": "S7_H_REGISTERED",
+  "s7_h_table_sha256": "a93a516ccdcf8c9181851fdfd0ca59e4ea92595b529b5e11aecc63a47782cfee",
+  "preserves": {
+    "hard_partition_verdict": "S7_PILOT_CONSTRUCTION_FAILED",
+    "interpretation_amendment": {
+      "SUPPORTED": "the original hard-partition protocol failed its preregistered V<=0.35 gate",
+      "NOT_SUPPORTED": "that no honest independent semantic control can exist for these verbs",
+      "retired_language": "'missed by only 0.0036' -- replaced by the frozen exact-null statement below"
+    }
+  },
+  "frozen_replacement_statement": "The hard WordNet partition produced chi-square=6 and V=0.353553. Under the exact uniformly random balanced four-way permutation null: P(V >= observed) = 0.9000405 and P(V <= 0.35) = 0.0999595. The old threshold admitted only about 10% of random balanced partitions and was miscalibrated for n=16.",
+  "verified_statistics": {
+    "class_sizes": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "balanced": true,
+    "chi2": 6.0,
+    "cramers_v": 0.353553,
+    "equals_S3": false,
+    "is_permutation_of_S3": false,
+    "best_permutation_argmax_agreement_of_16": 7,
+    "contingency_S7H_rows_x_CAS_cols": [
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        2,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        2,
+        0
+      ],
+      [
+        1,
+        0,
+        1,
+        2
+      ]
+    ]
+  },
+  "exact_null_calibration": {
+    "space": "all 16!/(4!)^4 = 63,063,000 balanced labelled 4-way partitions",
+    "P_V_ge_0p353553": 0.9000405,
+    "P_V_le_0p35": 0.0999595,
+    "P_bestperm_argmax_le_8_of_16": 0.81205,
+    "P_bestperm_argmax_le_9_of_16": 0.94555,
+    "attainable_V_near_threshold": [
+      0.288675,
+      0.353553,
+      0.408248
+    ],
+    "verification": "re-enumerated independently in-session; all five values matched the owner's ruling exactly"
+  },
+  "compatibility_conclusion": "V=0.353553 gives NO evidence against the random-balanced null (p=0.90). This does not prove WordNet and CAS are independent; it means the observed association is fully compatible with an independent balanced partition. S7-H is registered as a valid hard control."
+}

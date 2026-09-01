@@ -140,3 +140,56 @@ no claim promoted.
 No claim-status vocabulary is used; the only labels are the development triage
 statuses. Prohibited terms (`CAS-specific`, `EMPIRICALLY_SUPPORTED`, `GATE1B_PASS`,
 `CJT_TRANSFORMER_VALIDATED`) are not used.
+
+## Δ.1 round (owner ruling CJT-DEV-P1-S7Δ.1, 2026-08-31) — statistical correction + five-arm rebuild, STOPPED at a failed control gate
+
+The owner's exact permutation analysis (independently re-verified in-session by
+full enumeration of all 63,063,000 balanced partitions — all five null
+probabilities matched exactly) established that the old **V ≤ 0.35 gate was
+miscalibrated for n=16**: it admitted only ~10% of genuinely random balanced
+partitions, and 0.35 sits in an empty gap of the attainable-V lattice
+(0.288675 → 0.353553). The "missed by 0.0036" framing is **retired**
+(`STATISTICAL_CORRECTION_S7.json`); the `S7_PILOT_CONSTRUCTION_FAILED` verdict
+is preserved with a narrowed interpretation (the *protocol* failed its gate; it
+did **not** establish that no honest semantic control can exist).
+
+**S7-H registered** (`build_s7_h.py` → `S7_H_WN1.json`): the honest
+primary-lexname hard partition (V=0.353553, exact-null p=0.90 — fully compatible
+with independence) is rehabilitated as a valid hard control. Its own
+permutation-invariant agreement is A\* = 7/16, comfortably inside the 9/16
+anti-copy bound. `profile_semantics=EXCLUSIVE_LEXICAL_CATEGORY`,
+`authority=RESOURCE_DERIVED_CONTROL`.
+
+**S7-Δ v2 FAILED its frozen anti-copy gates** (`build_s7_delta_v2.py` →
+`S7_DELTA_V2_BUILD_RECEIPT.json`, verdict `S7_DELTA_V2_CONSTRUCTION_FAILED`).
+Rebuilt under all Δ.1 laws — background fit **excluding** the 16 target senses,
+factor-stability gate (median mean-row JS = 0.0000: perfectly stable),
+background-frozen anti-uniform gates (all four pass), raw+balanced profiles
+preserved. But the permutation-invariant near-copy diagnostics fail:
+
+- **A_hard\* = 11/16** (> the 9/16 structural bound; shuffle-null p95 = 10, p = 0.0109)
+- **A_soft\* = 0.5239** (> shuffle-null p95 = 0.4532, p = 0.0016)
+- Robust to the null: the owner-literal entropy-matched row-value-permutation
+  null (`diag_s7_delta_v2_nulls.py`) gives A_hard\* p = 0.00688, A_soft\* p = 0.00121.
+
+Plain reading: after optimally renaming factors, 11 of 16 verbs' dominant
+WordNet factor coincides with their CAS class — the honest soft semantic
+representation of this vocabulary is significantly CAS-aligned beyond the
+ruling's near-copy boundary. This is the same structural circumstance as the
+S7-P episode, now visible at the soft level: the 16 verbs were *chosen* to
+instantiate the 4 CAS operations, so a faithful semantic representation echoes
+that grouping (the hard partition survives the same standard only because hard
+categorization discards most of the alignment information — correction 1
+catching exactly the loophole it was designed for; the v1 table has the same
+0.52 soft alignment). This shows the vocabulary's semantic coherence; it is NOT
+evidence of CAS specificity.
+
+**Consequence (blocker law class A, scientific-comparison integrity):** the
+five-arm pilot ordered by the ruling requires S7-Δ to pass its
+construction-integrity checks first ("GPU PILOT: PROCEED AFTER THESE BOUNDED
+CONTROL-INTEGRITY CHECKS"). It did not. No GPU was launched in this round ($0).
+Whether to (a) run four arms (S0/S3/S6/S7-H) without S7-Δ, (b) recalibrate the
+near-copy gate to test copy *magnitude* rather than alignment *significance*
+(the current gate rejects any detectable semantic alignment, which sits in
+tension with the ruling's own "correlation should be reported, not treated as
+contamination"), or (c) close the S7-Δ line, is an **owner decision**.
