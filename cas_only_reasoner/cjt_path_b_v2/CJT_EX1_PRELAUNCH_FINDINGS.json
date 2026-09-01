@@ -1,0 +1,89 @@
+{
+  "record_id": "CJT_EX1_PRELAUNCH_FINDINGS",
+  "non_claim_bearing": true,
+  "cost": "$0.00 -- CPU only. NO GPU SPEND HAS OCCURRED.",
+  "review": "56-agent adversarial pre-launch review of run_cjt_ex1.py (5 attack dimensions + 51 skeptical verifiers), 2026-09-01",
+  "verdict_tally": {"CONFIRMED": 18, "REFUTED": 5, "DOWNGRADED_MINOR": 28},
+  "recommendation": "DO NOT LAUNCH YET. Two of the owner's seven success conditions are compromised by properties of the DATASET, not of the architectures under test. Both are verified with exact counts below. Running as specified would spend money on a near-certain negative that says nothing about the hypothesis -- the same empty-comparison trap the owner praised avoiding when C2 was retired. These are owner decisions, not mine.",
+  "structural_blockers_requiring_owner_ruling": [
+    {
+      "id": "BLOCK-1_CONDITION_3_NEAR_UNSATISFIABLE",
+      "owner_condition": "3. The advantage spans more than one operation family (>= 0.02 on >= 2 of 3 families).",
+      "measured_on_the_exact_eval_split": {
+        "source": "results_tier_c_c1/TIERC_C1_RESULTS.json, arm T0, same 597-record C1_TRANSFORM_SELECT half",
+        "QB_COMP": {"baseline": 1.0, "headroom": 0.0, "verdict": "a +0.02 margin is ARITHMETICALLY IMPOSSIBLE"},
+        "QB_REL": {"baseline": 0.97449, "headroom": 0.0255, "verdict": "+0.02 requires capturing 78.4% of ALL remaining errors"},
+        "QB_INT": {"baseline": 0.377668, "headroom": 0.6223, "verdict": "+0.02 requires 3.2% of remaining errors -- achievable"}
+      },
+      "consequence": "condition 3 reduces to 'QB_REL AND QB_INT must BOTH clear +0.02', with QB_REL needing four fifths of its remaining errors. Since the overall status is a seven-way conjunction, the headline verdict is close to decided before the first update runs.",
+      "note": "this is the SAME saturation that C1 hit. C1 carried a family_saturation detector and a report-only excluding-saturated field; I did not carry them into EX1. That regression is fixed regardless of the ruling.",
+      "options_for_the_owner": [
+        "(a) run as written and accept that the headline status is near-certain to be NO_CJT_EXPERT_SPECIALIZATION_SIGNAL, treating the per-condition detail as the real output",
+        "(b) rule that condition 3 reads '>= 2 of the families with measurable headroom' (which is QB_REL and QB_INT -- still stringent, but not arithmetically blocked by a saturated family)",
+        "(c) add ERROR REDUCTION alongside raw accuracy delta as the per-family statistic, so a family at 0.974 is not penalised for having little room",
+        "(d) defer EX1 until a task with headroom in more than one family exists"
+      ],
+      "claude_recommendation": "(b) plus (c) as a REPORT-ONLY addition. Neither weakens the substance: (b) removes a family that cannot move in any arm, and (c) adds a statistic rather than lowering a threshold. But the choice is the owner's -- changing a registered success condition is not mine to make."
+    },
+    {
+      "id": "BLOCK-2_CONDITION_6_DECIDED_BY_THE_GENERATOR",
+      "owner_condition": "6. CAS experts retain old skills better during sequential learning.",
+      "measured": {
+        "QB_REL clauses per record": {"^2": 2.5, "^3": 1.5, "^6": 1.0, "^8": 1.0},
+        "QB_COMP clauses per record": {"^2": 3.0, "^3": 0.0, "^6": 1.0, "^8": 2.0},
+        "QB_INT clauses per record": {"^2": 3.0, "^3": 0.0, "^6": 3.0, "^8": 0.0},
+        "key_fact": "QB_COMP contains ZERO ^3 clauses in all 3000 training records, and NO family other than QB_REL uses ^3 at all"
+      },
+      "consequence": "retention phase 1 trains QB_REL (^3 and ^2); phase 2 trains QB_COMP. Under hard class routing E2/E3's ^3 expert receives NO GRADIENT in phase 2 and therefore CANNOT be overwritten. E2/E3 are structurally protected on condition 6 by the data generator's clause template, not by expert organization. E0 (one shared expert) and E1 (dense mixture, all four experts fire on every clause) have no such protection. The comparison is decided before it runs.",
+      "no_trivial_fix": "there is no alternative phase-2 family that exercises ^3 -- only QB_REL does.",
+      "options_for_the_owner": [
+        "(a) change the protocol to phase 1 = QB_INT (^2, ^6) then phase 2 = QB_COMP (^2, ^6, ^8), so BOTH the ^2 and ^6 experts are genuinely exercised in both phases and every condition can actually interfere; E2's advantage would then have to come from ^8 arriving at a FRESH expert rather than from a class simply being absent",
+        "(b) run as written and report condition 6 as STRUCTURALLY CONFOUNDED, excluded from the headline verdict",
+        "(c) drop condition 6 from this pilot and test retention on a later task with overlapping operations"
+      ],
+      "claude_recommendation": "(a). It is a one-line change to the retention phase, costs nothing extra, and converts a foregone result into a real test of the owner's actual hypothesis (that a new operation landing on a fresh expert reduces interference)."
+    }
+  ],
+  "mechanical_defects_already_fixed": [
+    {
+      "id": "FIX-1_CAPACITY_MATCH_BIASED_TOWARD_THE_HYPOTHESIS",
+      "defect": "match_capacity returned the FIRST hidden width inside the +-1% band while scanning upward. Parameter count is monotone in width, so every CONTROL landed on the low edge of the tolerance while the hypothesis arms hit the target exactly: E1 came out 0.908% BELOW E2, losing both parameters and expert width. The bias ran toward the hypothesis -- the dangerous direction.",
+      "fix": "exact binary search for the CLOSEST width (monotonicity makes this exact and fast). Spread fell from 0.974% to 0.206%, and E1 now sits +0.138% ABOVE target rather than 0.908% below. Widths 464/128/128/169/128; counts E0 5,186,926 / E1 5,195,932 / E2 5,188,756 / E3 5,197,658 / E4 5,188,756."
+    },
+    {
+      "id": "FIX-2_E3_DID_NOT_IMPLEMENT_ITS_REGISTERED_MECHANISM",
+      "defect": "both docstrings stated that the ^2 and ^3 experts 'share a body' with readouts tied v3 = -v2. The code allocated four fully independent bodies (w1/b1/w2/b2 with a leading n_experts dimension) for EVERY mode including E3, and tied only the readout vector. The registered mechanism was not the implemented mechanism.",
+      "fix": "E3 now stores n_experts-1 bodies and expands index 1 from index 0, so expert 1 (aversion ^3) IS expert 0 (attraction ^2) with a negated readout and bias. Verified: expert1 body == expert0 body True; expert1 readout == -expert0 True; experts 2,3 independent True. Capacity matching absorbed the freed parameters by widening E3 to hidden 169."
+    },
+    {
+      "id": "FIX-3_FALSE_DOCSTRING_CLAIMS_ABOUT_LABEL_BLINDNESS",
+      "defect": "the header claimed E1 has 'No CAS identities anywhere' and E4's routing 'carries NO operation information'. In fact pack() writes the exact one-hot operation class into `p` for EVERY condition and hop() adds lam*<W_r q, p> to the clause-attention score in every condition, so no arm is label-blind.",
+      "fix": "docstrings corrected to say the arms are EXPERT-ORGANIZATION-blind, not label-blind, with the rationale recorded (stripping labels from E1/E4 would confound expert organization with label availability, and the owner's question is about organization). The preregistration already carried this disclosure in section 2c; the code did not."
+    },
+    {
+      "id": "FIX-4_KILLER_COMPARISON_CONFOUND_NOW_DISCLOSED",
+      "defect": "E1 is a DENSE mixture (all four experts fire on every clause, 1,442,816 active body parameters per clause) while E2/E3/E4 select exactly one (360,704). So E2-vs-E1 differs in TWO ways at once: routing IDENTITY and routing SPARSITY.",
+      "status": "DISCLOSED in the code header, not eliminated. The asymmetry favours E1 and therefore makes the E2-E1 gate HARDER, never easier -- the safe direction under the owner's rule that a failed hard gate yields no claim. A clean fix would add a sixth arm (learned router, hard argmax routing) to isolate identity from sparsity; that is an owner decision because it changes the registered arm list and adds ~6 runs."
+    }
+  ],
+  "refuted_findings_worth_recording": [
+    {
+      "claim": "E2/E3 are starved because hard routing leaves half the bank inert on QB_INT while E1 and E4 use all four experts",
+      "verdict": "REFUTED",
+      "why": "E4 is ALSO one-expert-per-clause (identical sparse regime to E2/E3) -- the reviewer's own per-clause measurement showed E2 = E3 = E4 = 1 live expert / 360,704 active params. And the direction is inverted for E2-vs-E4: the E2 expert serving a ^2 clause saw 25,509 same-class training clauses versus 6,377 for the E4 expert serving that clause, a 4.0x E2 advantage. The one genuine asymmetry is E1's density, which biases toward the null."
+    }
+  ],
+  "remaining_confirmed_defects_not_yet_fixed": [
+    "condition 6 has no margin (bare strict inequality) while conditions 1/3/4/5 all require 0.02",
+    "retention reports the ratio a2/a1 without aggregating a1, so a condition that learned less in phase 1 can score a better ratio unseen",
+    "retention phases record no learning curve and no floor gate -- nothing asserts phase 1 actually learned QB_REL or that phase 2 changed the model",
+    "condition 5's key says 'removing the registered relationship damages transfer' but the code computes E3-E2 >= 0.02, i.e. ADDING the tie must improve accuracy; nothing is removed anywhere",
+    "the P0 liveness gate reads only bank1.w1.grad, leaving bank2, the E1 router and E3's shared body ungated",
+    "expert_usage_by_class -- the headline specialization diagnostic -- is computed on vb[0], a single 32-record batch that is entirely QB_REL because load_records preserves file order",
+    "no competence floor or chance baseline anywhere in the harness",
+    "the reported approx_se (0.0289, independent-samples formula) exceeds the 0.02 MARGIN it decides; arms are evaluated on the SAME records, so a PAIRED statistic is both correct and much tighter, and should replace it",
+    "no score-magnitude diagnostics; E1's clause scores start 2.04x quieter than E2's (the 1/sqrt(4) variance reduction from averaging four experts)",
+    "vb (the per-expert readout bias) receives ~1e-9 gradient because a constant shift is softmax-invariant across candidates -- non-identifiable dead weight"
+  ],
+  "next_action": "These remaining items are all fixable at $0 and will be fixed before any launch. But the two STRUCTURAL blockers need an owner ruling first, because they concern registered success conditions and I am not the research governor."
+}
