@@ -1,0 +1,223 @@
+{
+  "cost": "$0.00 local CPU",
+  "findings": [
+    {
+      "checks": {
+        "J_corrupted_wrong": true,
+        "J_removed_ambiguous_or_changed": true,
+        "full_M_C_J_resolves_both": true,
+        "twins_differ": true,
+        "unrelated_J_cell_no_effect": true
+      },
+      "pair": [
+        "^8",
+        "^9"
+      ],
+      "twins": [
+        {
+          "answer_J_corrupted": null,
+          "answer_J_removed": null,
+          "answer_full_M_C_J": "chess",
+          "answer_unrelated_J_cell": "chess",
+          "candidates": [
+            "algebra",
+            "botany",
+            "chess"
+          ],
+          "clauses": [
+            [
+              "^8",
+              [
+                "algebra",
+                "botany",
+                "mira"
+              ]
+            ],
+            [
+              "^9",
+              [
+                "chess",
+                "botany",
+                "mira"
+              ]
+            ]
+          ],
+          "surface": "algebra evoked botany for mira. chess was evoked by botany for mira.",
+          "twin": "1"
+        },
+        {
+          "answer_J_corrupted": null,
+          "answer_J_removed": null,
+          "answer_full_M_C_J": "algebra",
+          "answer_unrelated_J_cell": "algebra",
+          "candidates": [
+            "algebra",
+            "botany",
+            "chess"
+          ],
+          "clauses": [
+            [
+              "^9",
+              [
+                "algebra",
+                "botany",
+                "mira"
+              ]
+            ],
+            [
+              "^8",
+              [
+                "chess",
+                "botany",
+                "mira"
+              ]
+            ]
+          ],
+          "surface": "algebra was evoked by botany for mira. chess evoked botany for mira.",
+          "twin": "2"
+        }
+      ],
+      "twins_have_different_answers": true,
+      "valid_J_dependent_case": true
+    }
+  ],
+  "flat_label_gate": [
+    {
+      "answers": {
+        "1": "chess",
+        "2": "algebra"
+      },
+      "flat_label_function_exists": true,
+      "owner_condition_flat_labels_do_not_reveal": false,
+      "pair": [
+        "^8",
+        "^9"
+      ],
+      "signatures_distinct": true,
+      "twin_label_signatures": {
+        "1": [
+          [
+            "^8",
+            [
+              "algebra",
+              "botany",
+              "mira"
+            ]
+          ],
+          [
+            "^9",
+            [
+              "chess",
+              "botany",
+              "mira"
+            ]
+          ]
+        ],
+        "2": [
+          [
+            "^9",
+            [
+              "algebra",
+              "botany",
+              "mira"
+            ]
+          ],
+          [
+            "^8",
+            [
+              "chess",
+              "botany",
+              "mira"
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "full_vocabulary_m_symmetric_pairs": [
+    [
+      "^6",
+      "^8"
+    ],
+    [
+      "^6",
+      "^9"
+    ],
+    [
+      "^8",
+      "^9"
+    ]
+  ],
+  "gate_note": "J0 establishes only the FIRST condition (M must stop giving the answer away) plus the twin-level deterministic checks. The remaining owner conditions are properties of a full dataset and are NOT established here.",
+  "n_valid_cases": 1,
+  "non_claim_bearing": true,
+  "owner_gate_not_yet_satisfied": [
+    "C does not reveal the answer",
+    "clause order does not reveal it",
+    "flat operation labels do not reveal it",
+    "surface wording does not reveal it",
+    "candidate position does not reveal it",
+    "removing J actually changes the correct answer",
+    "at least two families depend on J",
+    "the baseline has real headroom"
+  ],
+  "record_id": "TIER_C_J0_BENCH",
+  "source_grounding": {
+    "converse_pairs": [
+      [
+        "^8",
+        "^9"
+      ]
+    ],
+    "involution_pairs": [
+      [
+        "^2",
+        "^3"
+      ],
+      [
+        "^5",
+        "^6"
+      ],
+      [
+        "^8",
+        "^9"
+      ]
+    ],
+    "noetic_definitions_used": {
+      "^2": "An Idea the Mind has an affinity for and is attracted toward.",
+      "^3": "An Idea the Mind is adverse to and repelled by.",
+      "^5": "A Mind impregnated with an Idea, the Ideas a Mind is composed of.",
+      "^6": "An Idea impregnated with another Idea, the Ideas an Idea is composed of.",
+      "^8": "An Idea that triggers a different Idea than itself to come to Mind.",
+      "^9": "The Idea brought to Mind by an Above/Cause trigger."
+    },
+    "note": "^2/^3 are opposites of VALENCE (two different edges), not converse readings of one edge, so they cannot create the ambiguity a converse pair creates"
+  },
+  "status": "J0_GENUINE_J_DEPENDENT_CASES_EXIST",
+  "structural_caveat": "R = (M, C, J) is a function of the class labels, so no part of R can be INFORMATIONALLY necessary to a learner that already receives exact class labels -- the lookup is learnable from data. A J-requiring task can therefore test only whether the correct lookup supplied as a FROZEN PRIOR beats learning it (sample efficiency, OOD transfer). That is a claim about inductive bias, not about information, and it must not be promoted into one.",
+  "why_current_task_could_not_test_J": {
+    "complete_involution_pairs_in_task": [
+      [
+        "^2",
+        "^3"
+      ]
+    ],
+    "explanation": "a half-pair cannot express a converse relation, so every composition had exactly one admissible direction and M's asymmetry fixed the order",
+    "m_symmetric_chainable_pairs_in_task": [
+      [
+        "^6",
+        "^8"
+      ]
+    ],
+    "missing_partners": {
+      "^6": "^5 absent",
+      "^8": "^9 absent"
+    },
+    "task_vocabulary": [
+      "^2",
+      "^3",
+      "^6",
+      "^8"
+    ]
+  }
+}

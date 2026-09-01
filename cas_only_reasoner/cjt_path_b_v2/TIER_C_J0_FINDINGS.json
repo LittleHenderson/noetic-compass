@@ -1,0 +1,57 @@
+{
+  "record_id": "TIER_C_J0_FINDINGS",
+  "non_claim_bearing": true,
+  "owner_ruling": "J0: Source-Grounded J Identifiability Bench -- one very small CPU stage (2026-09-01)",
+  "cost": "$0.00 -- local CPU, no GPU, no cloud",
+  "status": "J0_GENUINE_J_DEPENDENT_CASES_EXIST",
+  "but_the_owner_gate_fails": true,
+  "headline": "Authentic J-dependent cases DO exist in the canonical CAS rules -- the ^8/^9 Above-Cause / Below-Effect converse pair produces configurations where M and C leave the direction ambiguous and only the DUAL relation determines the answer, and all four deterministic checks pass. HOWEVER the owner's condition 'flat operation labels do not reveal it' FAILS on that very case, and a structural argument shows it cannot be satisfied by ANY table-based task. So the answer to 'is a valid J track constructible?' is: not as an IDENTIFIABILITY test. It is constructible only as a PRIOR-VERSUS-LEARNED test.",
+  "finding_1_the_authentic_case": {
+    "pair": ["^8", "^9"],
+    "grounding": "^8 Above/Cause: 'An Idea that triggers a different Idea than itself to come to Mind.' ^9 Below/Effect: 'The Idea brought to Mind by an Above/Cause trigger.' Structural invariant: involution pair CO-8<->CO-9. These are the SAME edge read in opposite directions -- a genuine converse pair.",
+    "twin_1": {"surface": "algebra evoked botany for mira. chess was evoked by botany for mira.", "chain": "algebra -> botany -> chess", "answer": "chess"},
+    "twin_2": {"surface": "algebra was evoked by botany for mira. chess evoked botany for mira.", "chain": "chess -> botany -> algebra", "answer": "algebra"},
+    "matched": "same entities, same class multiset {^8,^9}, same M/C, same candidate set [algebra, botany, chess], same wording template; the ONLY difference is which clause carries which member of the converse pair",
+    "deterministic_checks": {
+      "full_M_C_J_resolves_both": true,
+      "twins_have_different_answers": true,
+      "J_removed_ambiguous_or_changed": "true -- both twins become UNRESOLVED (no unique source; the solver cannot know ^9 reverses its edge)",
+      "J_corrupted_wrong": true,
+      "unrelated_J_cell_no_effect": true
+    },
+    "why_M_and_C_cannot_do_it": "M says both (^8,^9) and (^9,^8) chain; C says both yield IDEA via IDEA. Neither encodes that ^9's edge points BACKWARD relative to its surface argument order. That is J's DUAL content."
+  },
+  "finding_2_precise_diagnosis_of_the_old_task": {
+    "vocabulary_used_by_PATH_B": ["^2", "^3", "^6", "^8"],
+    "complete_involution_pairs_present": [["^2", "^3"]],
+    "half_pairs": {"^6": "its dual ^5 is absent", "^8": "its dual ^9 is absent"},
+    "consequence": "a half-pair cannot express a converse relation, so no composition had two admissible directions and M's asymmetry fixed every order",
+    "sharper_bonus_diagnosis": "under canonical edge semantics the TASK vocabulary DID already contain one M-symmetric chainable pair, (^6, ^8) -- but none of the three question families ever queried it (QB_REL asks {^2,^3}, QB_COMP {^8,^2}, QB_INT {^2,^6}). So it was the QUESTION DESIGN, not the algebra, that left J with nothing to do. That is a more actionable diagnosis than 'M was asymmetric'.",
+    "note_on_two_different_M_tables": "the J-necessity test derived M from the frozen task solver (4 cells); J0 derives M from canonical edge semantics. They answer different questions and must not be conflated."
+  },
+  "finding_3_the_blocking_result": {
+    "owner_condition": "flat operation labels do not reveal it",
+    "measured": "FAILS. The two twins have DISTINCT (label-sequence, entity-slot) signatures -- twin 1 is [^8(algebra,botany), ^9(chess,botany)], twin 2 is [^9(algebra,botany), ^8(chess,botany)] -- so a function from flat labels to the correct answer provably EXISTS, and a learner can recover it from data with no table at all.",
+    "structural_generalization": "this is not a fixable accident of my construction. R = (M, C, J) is a FUNCTION OF THE CLASS LABELS: M[a,b], C[a,b], sign(a) and dual(a) are all table lookups keyed by class. Therefore no part of R -- J included -- can ever be INFORMATIONALLY necessary to a learner that already receives exact class labels. Any task built on R will fail the 'flat labels do not reveal it' condition by construction.",
+    "what_survives": "the legitimate remaining question is whether supplying the correct lookup as a FROZEN PRIOR beats LEARNING it -- sample efficiency, data efficiency, out-of-distribution transfer, robustness. That is real, testable, and is exactly the R-CAS vs R-LEARNED contrast. It is a claim about inductive bias and must never be promoted into a claim about information or specificity."
+  },
+  "consequences": {
+    "owner_outcome_B_as_written": "NOT fully satisfiable. Seven of the owner's eight conditions could be engineered; 'flat operation labels do not reveal it' cannot, for any R-based task.",
+    "if_the_owner_reframes": "a J benchmark is constructible as a PRIOR-VS-LEARNED test: complete the involution pairs (restore ^5 and ^9), query converse pairs so M cannot fix direction, and compare R-CAS (frozen correct table) against R-LEARNED (same shape, learned) on sample efficiency and OOD transfer -- with T2 as the diagnostic socket, since C1 proved T2 genuinely consumes relational structure (authority ratio 3.28, bridge agreement 0.5717 vs 0.3272, corruption collapse to 0.299).",
+    "if_the_owner_closes": "close the J-prior lane; the owner's stated next best CJT function is expert specialization, then memory addressing.",
+    "not_a_recommendation_to_build": "J0 was authorized as a bench, not as a construction go-ahead. Nothing further is built without an owner ruling."
+  },
+  "owner_gate_status": {
+    "M_must_stop_giving_the_answer_away": "SATISFIED by the ^8/^9 converse pair",
+    "C_does_not_reveal_the_answer": "SATISFIED (C is identical in both directions)",
+    "clause_order_does_not_reveal_it": "SATISFIED in the twins (the answer sits in clause 2 in twin 1 and clause 1 in twin 2)",
+    "candidate_position_does_not_reveal_it": "SATISFIED in the twins (answer at index 2 vs index 0 of the same candidate list)",
+    "surface_wording_does_not_reveal_it": "PARTIAL -- the twins use one template, but the operation verb necessarily differs; that verb IS the label",
+    "removing_J_changes_the_answer": "SATISFIED (both twins become unresolved)",
+    "flat_operation_labels_do_not_reveal_it": "FAILS -- and unsatisfiable for any R-based task (see finding 3)",
+    "at_least_two_families_depend_on_J": "NOT ESTABLISHED -- only one converse pair exists in the canonical inventory (^8/^9); ^2/^3 is valence not converse, and ^5/^6 relate different entity types",
+    "baseline_has_real_headroom": "NOT ESTABLISHED -- a dataset property, out of J0's scope"
+  },
+  "prohibited_and_not_used": ["CAS-specific", "specific", "EMPIRICALLY_SUPPORTED", "GATE1B_PASS", "CJT_TRANSFORMER_VALIDATED"],
+  "artifact": "tier_c/J0_BENCH_REPORT.json"
+}
