@@ -1,0 +1,48 @@
+{
+  "record_id": "PATHB_A1_COMPONENT_FINDINGS",
+  "non_claim_bearing": true,
+  "owner_ruling": "PATH-B-A1 CLOSURE AND TIER-C TRANSITION (2026-09-01)",
+  "official_compound_status": {
+    "value": "NO_PATH_B_OPERATION_SIGNAL",
+    "source": "the frozen deterministic status law at commit 3bbcd2c1",
+    "preservation": "NOT rewritten; the monotone exact>partial>none clause failed (S-ALT50 0.7428 < S6 0.7461, 0/3 families) and the compound verdict stands"
+  },
+  "separated_component_findings": {
+    "COMPOSITIONAL_GRAPH_EXECUTOR": {
+      "status": "SUPPORTED_IN_DEVELOPMENT",
+      "evidence": "P0: memorization 1.000; gold-path oracle 1.000; gold-minus-shuffled +0.876; rewired-membership drop 0.822; bridge top-1 0.922 (results_pathb_a1/PATHB_A1_P0_RESULTS.json)"
+    },
+    "EXACT_OPERATION_PROFILE_ADVANTAGE": {
+      "status": "SUPPORTED_IN_DEVELOPMENT",
+      "evidence": "P1: S3 0.7873 vs S0 0.7553 (+0.0320), S6 0.7461 (+0.0412), S-ALT50 0.7428 (+0.0445); all margins above registered thresholds and above the 0.019 B-KEY shortcut increment",
+      "scope_limitation": "the advantage is CONCENTRATED in QB_REL (S3-S0 +0.093; vs S6 +0.111); QB_COMP is at ceiling for every arm (1.000); QB_INT remains weak for every arm (~0.38). Accurate wording: exact operation profiles substantially improved RELATIONAL SELECTION within the compositional graph task -- not all multistep reasoning"
+    },
+    "PROFILE_CONTENT_CAUSAL_DEPENDENCE": {
+      "status": "SUPPORTED_IN_DEVELOPMENT",
+      "evidence": "evaluation-time ablation of trained S3: true 0.787 -> permuted 0.118 -> uniform 0.394; S6 exactly invariant under the same ablations"
+    },
+    "MONOTONIC_50_PERCENT_WRONG_LABEL_DOSE": {
+      "status": "REFUTED",
+      "evidence": "S-ALT50 0.7428 vs S6 0.7461 -- no usable advantage from 50%-corrupted labels",
+      "interpretation_correction": "the -0.0033 gap is within the displayed seed variation and is read as NO USEFUL DIFFERENCE, not decisive harm. The strong evidence that wrong routing information damages performance is the FULL PERMUTATION ablation (0.787 -> 0.118), not this gap. What is refuted: 'performance must increase monotonically with the fraction of correct-but-otherwise-wrong labels'. What is NOT refuted: 'performance increases with the amount of reliable operation information'.",
+      "design_lesson": "S-ALT50 mixed signal WITH misinformation; a clean future dose series attenuates toward uniform (p_lambda = lambda*p_exact + (1-lambda)*p_uniform) and keeps misinformation as a SEPARATE axis. Recorded for the next stage; PATH B is NOT rerun to change its status."
+    },
+    "FORMAL_PATH_FAITHFULNESS": {
+      "status": "UNESTABLISHED",
+      "evidence": "S3's formal-bridge top-1 (0.330) is BELOW S6's (0.550) despite S3 winning final accuracy: the trained executor either found a useful distributed route different from the symbolic solver's designated path, or exploits another regularity. Path/rewire destructions prove the GRAPH matters; they do not prove the learned route matches the formal CAS derivation. A central Tier C target."
+    }
+  },
+  "audit_flag_RESOLVED": "independent audit (PATHB_A1_INDEPENDENT_AUDIT.json, 2026-09-01) recomputed the flagged clause: as coded it required only strict positivity vs S6; removing QB_REL leaves residual margins 0.006222 vs S6 (~7 of 1125 answers), 0.001333 vs S0 (~1.5 answers), 0.008000 vs SALT50 — all would fail a 0.02 criterion. The clause passed honestly as written but was weak; Tier C tightens it to residual >= 0.01 vs ALL arms. Zero numerical discrepancies anywhere else; the emitted status was the only reachable one.",
+  "cjt_capability_ledger": {
+    "routing_signal": "SUPPORTED_IN_DEVELOPMENT (P1.3 arc)",
+    "multistep_recurrent_state": "SUPPORTED_IN_DEVELOPMENT (carried bridge pointer, A1)",
+    "graph_local_answer_binding": "SUPPORTED_IN_DEVELOPMENT (A1)",
+    "transformation_operator": "PARTIAL -- not isolated",
+    "dedicated_expert_module": "PARTIAL -- not tested as a CJT expert bank",
+    "memory_addressing": "NOT YET NEURALLY TESTED",
+    "plasticity_controller": "NOT YET TESTED IN THIS LINE",
+    "verifier_controlled_neural_transition": "deterministic controller exists; neural integration untested"
+  },
+  "prohibited": ["PATH B readout repair", "lowering the monotonic-dose criterion", "rewriting the negative status", "protected read", "CAS-specific claims"],
+  "next": "one independent raw-result audit of 3bbcd2c1; then Tier C (fixed nonpermutable relational structure; PROOF_OF_NON_EQUIVARIANCE; matched generic relational control; faithfulness measurements; attenuation vs misinformation axes; bounded Transform Tournament T0-T4 inside)"
+}

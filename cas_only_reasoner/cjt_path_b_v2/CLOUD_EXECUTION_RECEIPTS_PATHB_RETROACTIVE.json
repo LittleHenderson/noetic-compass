@@ -1,0 +1,58 @@
+{
+  "record_id": "CLOUD_EXECUTION_RECEIPTS_PATHB_RETROACTIVE",
+  "non_claim_bearing": true,
+  "RETROACTIVE": true,
+  "why_retroactive": "the independent audit of commit 3bbcd2c1 (finding F4_RECEIPT_FORM_GAP) found four PATH B cloud runs whose costs were recorded only in commit messages and the contamination notice, with no standalone receipt file. This file repairs the FORM with facts that have named sources; anything without a source is marked NOT_RECOVERABLE, never reconstructed from memory.",
+  "filed_utc": "2026-09-01T09:35:00Z",
+  "common": {
+    "region": "us-west-2",
+    "instance_type": "g4dn.xlarge",
+    "rate_per_hour_usd": 0.526,
+    "ami": "ami-0c779ec711a581954",
+    "bucket": "cas-harness-runpod-92754088",
+    "launch_pattern": "self-terminating user-data (presigned S3 in/out, EXIT-trap shutdown, 90-min in-instance kill timer), InstanceInitiatedShutdownBehavior=terminate, client-side watchdog with 55-min force-terminate deadline (monitor_pilot.py); identical launcher family used for all receipted prior runs",
+    "cost_method": "instance_runtime_estimate (watchdog wall-clock x hourly rate) — the program's authoritative spend proxy; no billed values pulled"
+  },
+  "runs": [
+    {
+      "run": "PATH-B-A0 crashed probe (IndexError that exposed the pid collision)",
+      "instance_id": "NOT_RECOVERABLE (launch_record.json is overwritten per launch; no surviving artifact holds it)",
+      "runtime_minutes": 9.2,
+      "cost_usd_estimate": 0.081,
+      "arithmetic_check": "9.2/60 x 0.526 = 0.0807",
+      "sources": ["P0_CONTAMINATION_NOTICE.json (committed, contemporaneous)"]
+    },
+    {
+      "run": "PATH-B-A0 rerun (GRAPH_EXECUTOR_EARNED)",
+      "instance_id": "i-0eb0aa5379dc76b68",
+      "runtime_minutes": 28.1,
+      "cost_usd_estimate": 0.246,
+      "arithmetic_check": "28.1/60 x 0.526 = 0.2463",
+      "sources": ["commit 0b4cf2f3 message (contemporaneous)"]
+    },
+    {
+      "run": "PATH-B-A1 crashed launch (ModuleNotFoundError import fault)",
+      "instance_id": "NOT_RECOVERABLE",
+      "runtime_minutes": "not recorded (cost/rate implies ~8.4)",
+      "cost_usd_estimate": 0.074,
+      "sources": ["commit 56f22d85 and 3bbcd2c1 messages (contemporaneous)"]
+    },
+    {
+      "run": "PATH-B-A1 final run (P0 + P1, NO_PATH_B_OPERATION_SIGNAL)",
+      "instance_id": "i-0b479d3ea577e98a7",
+      "run_id": "cjt-t2-pathb-a1b-1788249923",
+      "launched_unix": 1788249926,
+      "runtime_minutes": "not separately recorded (cost/rate implies ~26.6; harness-internal wall 219.0 s is the P1 training slice only, a lower bound, never the spend)",
+      "cost_usd_estimate": 0.233,
+      "sources": ["scratchpad launch/launch_record.json (contemporaneous, written by the launcher at launch time)", "commit 3bbcd2c1 message (contemporaneous)"]
+    }
+  ],
+  "termination_evidence": {
+    "per_run_statement": "NOT RECORDED at run time for these four runs (the form gap this file cannot un-lose)",
+    "current_state_sweep": "read-only ec2 describe-instances, us-west-2, 2026-09-01T09:28:07Z, states pending/running/stopping/stopped/shutting-down: the ONLY non-terminated instance is i-0c3028734c8885542 (g6e.xlarge, stopped — the owner's standby, not part of this program). Every experiment instance is terminated. Terminated instances leave the listing; the absence of any running or stuck instance is the strongest currently obtainable evidence.",
+    "mechanism": "all four launches used the same self-terminate + watchdog launcher family as the five fully-receipted prior runs"
+  },
+  "cumulative_after_these_runs_usd": 1.708,
+  "cumulative_source": "PATHB_A1_INDEPENDENT_AUDIT.json governance.cost_arithmetic (independent recomputation of all 10 runs)",
+  "forward_law": "every future cloud run files a standalone CLOUD_EXECUTION_RECEIPT file (instance id, runtime, termination statement, cost + method) in the SAME commit as its results — TIER_C_DESIGN_v0_1.md section 11"
+}

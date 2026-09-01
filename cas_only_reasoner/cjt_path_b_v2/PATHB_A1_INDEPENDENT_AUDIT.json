@@ -1,0 +1,76 @@
+{
+  "record_id": "PATHB_A1_INDEPENDENT_AUDIT",
+  "non_claim_bearing": true,
+  "audited_commit": "3bbcd2c1e9afc98b93fec61df90b9ac045fd7f53",
+  "audit_date": "2026-09-01",
+  "method": "three independent auditor agents (numeric recomputation / data construction / governance+receipts), each recomputing from committed raw artifacts only; no protected-split record materialized, read, or printed by any auditor; read-only except this report",
+  "headline": "ZERO numerical discrepancies. The raw committed data fully support the emitted status NO_PATH_B_OPERATION_SIGNAL; no other status was reachable. Governance clean (no protected read, no prohibited claim-use, status not rewritten, spend arithmetic verified). Findings short of discrepancy: one unverifiable P0 gate, a weak-as-coded best-family-removal clause (owner concern SUBSTANTIATED with exact residual margins), two cache-robustness gaps, and receipt-form gaps on four runs (retroactive receipt filed).",
+  "numeric_recomputation": {
+    "arm_means_and_stds": "PASS — all 8 values reproduce exactly from the 12 unrounded run finals (population std, n=3, round-6): S0 0.7552592592592592/0.010500767494322567, S3 0.7872592592592592/0.005349768914153395, SALT50 0.7428148148148148/0.0036529860758334454, S6 0.7460740740740741/0.003997255574290973",
+    "margins": "PASS — S3-S0 0.03200000000000003 (>=0.02, >0.019 B-KEY), S3-S6 0.0411851851851851 (>=0.02), S3-SALT50 0.0444444444444444 (>=0.01)",
+    "eval_set_weighting": "PASS — val 1500 records, QB_ORD (375) dropped, 375/375/375 retained = 1125; overall accuracy = correct/1125 exactly; equal family counts make count-weighting and equal-weighting identical",
+    "dose_ordering": "PASS (confirmed FALSE/0-of-3) — SALT50 0.742815 < S6 0.746074 by 0.003259259259259295; per-family SALT50 < S6 in QB_REL (0.8578<0.864), QB_COMP (0.9964<0.9982), QB_INT (0.3742<0.376)",
+    "best_family_removal_FLAGGED_ITEM": {
+      "verdict": "PASS as coded; owner concern SUBSTANTIATED",
+      "code_criterion": "strict positivity only, against S6 only, over the two non-best families (run_pathb_a1.py lines 589-594); no threshold",
+      "family_removed": "QB_REL (largest per-family S3-S6 margin, 0.1111)",
+      "residual_margins_unrounded": {
+        "vs_S6": 0.00622222222222224,
+        "vs_S0": 0.001333333333333409,
+        "vs_SALT50": 0.008000000000000007
+      },
+      "plain_english": "after removing QB_REL, S3's remaining edge is about 7 answers of 1125 vs S6 and about 1.5 answers vs S0; every residual would FAIL a 0.02-margin criterion. The clause passed honestly as written, but the clause was weak. Nearly all of S3's measurable advantage lives in QB_REL (QB_COMP at ceiling 1.000 for all arms; QB_INT flat ~0.38).",
+      "tier_c_correction": "TIER_C_DESIGN_v0_1.md section 8 requires residual margin >= 0.01 against ALL comparison arms; the A1 record itself is preserved unchanged"
+    },
+    "corruption_reduction": "PASS — S3 sensitivity true 0.7873 > permuted 0.1182 and > uniform 0.3944 (the coded clause); SALT50 near-invariant (0.7428/0.7384/0.7389) and S6 exactly invariant (0.7461 x3) match stored (report-only)",
+    "competence_floor": "PASS — candidate-uniform recomputed from val.jsonl: overall 0.10437710437710437 (per-family 0.1111/0.1111/0.0909; 750 records with 9 candidates, 375 with 11); floor 0.25437710437710437; S3 0.787259 clears; all arms clear (report-only)",
+    "status_law_replay": "PASS — clause vector: margins T/T/T, ordering_all F, fam_order 0 (F), B-KEY T, corruption T, floor T, survives T; win=False on exactly the two dose-ordering clauses, both driven by the single raw fact SALT50 < S6; NO_PATH_B_OPERATION_SIGNAL is the only emittable status",
+    "p0_gates": "7 of 8 PASS exactly (memorization 1.0, gold-path 1.0, gold-shuffled 0.876, rewire 0.8217, S3 swap-delta 5.328, S6 invariance 0.0, params within 0.2004% of 1%); gate_s3_profile_grads UNVERIFIABLE — see findings"
+  },
+  "data_construction": {
+    "alt50_determinism": "PASS — pure SHA-256 counter HashPRNG keyed by (passage_id, clause_idx); called twice on all 81,000 committed clause labels, 0 mismatches",
+    "alt50_corruption_rate": "PASS — train 35981/72000 = 0.499736, val 4494/9000 = 0.499333; per-class 0.490-0.513 (binomial jitter); QB_ORD-dropped subset actually seen by SALT50: train 0.497481, val 0.498222",
+    "alt50_substitution_spread": "PASS — corrupted labels spread ~1/3 across the three wrong classes (e.g. ^2: 33.48/33.74/32.78%); no learnable fixed substitute class",
+    "pid_uniqueness": "PASS — train 12000/12000 unique, val 1500/1500 unique, intersection 0 (split-prefixed pids)",
+    "dataset_hashes": "PASS — recomputed sha256 match PATHB_DATASET_MANIFEST.json byte-for-byte: train e49c7e99902f830eca99a464fc5450cd98a7519759bc1bad58ae561d7b94e830, val 7cbbe5fa6ec7cfcf58b84f1ed3f118b98c30fd8119de08da37c44d861043b4e1",
+    "ablation_implementation": "PASS — permuted = fixed class-dimension derangement [2,3,0,1] applied identically everywhere; uniform = 0.25 flat; both under eval()+no_grad, evaluation only; S6's exact three-way invariance is the mathematically forced signature of a constant profile",
+    "candidate_order_law": "PASS — per-record Fisher-Yates via dedicated HashPRNG stream (pathb_core.py build_record lines 320-324); position cannot leak the answer"
+  },
+  "governance": {
+    "protected_read_scan": "PASS, zero VIOLATION — protected split built in memory only, counted and SHA-256 digested, never written (guard at generate_pathb.py line 100); run_pathb_a1.py and pathb_a0_probe.py load only data/train.jsonl and data/val.jsonl; no protected file exists on disk",
+    "prohibited_terms_scan": "PASS, zero CLAIM-USE — every occurrence of the four banned strings sits inside prohibition lists or negations",
+    "status_word_integrity": "PASS — development_status NO_PATH_B_OPERATION_SIGNAL at PATHB_A1_P1_RESULTS.json line 2644; no file asserts a different A1 P1 status; PATH_B_COMPOSITIONAL_EXECUTOR_FAILED never asserted",
+    "cost_arithmetic": "PASS — 10 runs itemized and recomputed: 0.133+0.154+0.173+0.18+0.187+0.247 = 1.074 (matches COST_RECONCILIATION.json exactly) + 0.081+0.246+0.074+0.233 = TOTAL 1.708 USD; stated ~1.71 consistent; 5.7% of the 30 USD ceiling; the retracted wrong ~1.26 remains retracted in writing; minor labeled 0.002 EBS/IPv4 delta on run 1 (0.133 vs 0.135) documented in the same receipt",
+    "git_integrity": "PASS — HEAD 3bbcd2c1; zero tracked-file modifications in either experiment dir; untracked additions this closure round only (PATHB_A1_COMPONENT_FINDINGS.json, TIER_C_DESIGN_v0_1.md, this file, the retroactive receipt)"
+  },
+  "findings_short_of_discrepancy": [
+    {
+      "id": "F1_GRAD_GATE_UNVERIFIABLE",
+      "finding": "P0 gate_s3_profile_grads=true cannot be recomputed from any committed artifact: the in-memory grad log (wr1_grad at steps 50/100) was never persisted (grad_log null in all P1 runs). Indirect support only: S3 swap-ablation delta 5.328 is impossible with zero gradient flow.",
+      "correction": "Tier C harness law: persist every gate's raw inputs in the results JSON (TIER_C_DESIGN_v0_1.md section 11)"
+    },
+    {
+      "id": "F2_WEAK_SURVIVES_CLAUSE",
+      "finding": "survives_best_family_removal as coded = strict positivity vs S6 only; residual 0.006222 vs S6 / 0.001333 vs S0 / 0.008000 vs SALT50 — all would fail 0.02. Honest as coded; weak as designed. No status change (status already negative on the ordering clauses).",
+      "correction": "Tier C law: residual margin >= 0.01 against all comparison arms (section 8)"
+    },
+    {
+      "id": "F3_CACHE_ROBUSTNESS",
+      "finding": "cache integrity assertion is split-level count only (PID_COLLISION, run_pathb_a1.py line 425), no per-record candidate-count/shape assertion; caches keyed by split name, not bound to dataset content hash (a regenerated dataset with unchanged pids would silently reuse stale activations). Neither triggered in the frozen run (hashes match manifest, single generation).",
+      "correction": "Tier C harness law: per-record shape assertions + cache files stamped with the dataset content sha and checked on load (section 11)"
+    },
+    {
+      "id": "F4_RECEIPT_FORM_GAP",
+      "finding": "four PATH B runs (A0 crash ~0.081, A0 rerun 0.246, A1 crashed launch 0.074, A1 run 0.233; ~0.63 combined) had costs recorded only in commit messages / the contamination notice — no standalone receipt file, no recorded self-termination statement, and (for three) no instance ID. Substance intact: no lower bound ever presented as spend; live sweep clean.",
+      "correction": "retroactive receipt filed with per-field source attribution (CLOUD_EXECUTION_RECEIPTS_PATHB_RETROACTIVE.json); Tier C law: standalone receipt file per run, same commit as results (section 11)"
+    }
+  ],
+  "post_audit_live_sweep": {
+    "sweep_utc": "2026-09-01T09:28:07Z",
+    "region": "us-west-2",
+    "non_terminated_instances": [
+      {"instance_id": "i-0c3028734c8885542", "type": "g6e.xlarge", "state": "stopped", "note": "owner standby, DO NOT TERMINATE, EBS-only cost — not part of this program's spend"}
+    ],
+    "experiment_instances_live": "NONE"
+  }
+}
