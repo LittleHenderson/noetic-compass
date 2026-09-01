@@ -1,0 +1,40 @@
++ /root/venv/bin/python -c 'import torch;print('\''TORch'\'',torch.__version__,'\''CUDA'\'',torch.cuda.is_available(),(torch.cuda.get_device_name(0) if torch.cuda.is_available() else '\''NONE'\''))'
+TORch 2.5.1+cu121 CUDA True Tesla T4
+[layer-select] L=6 S0 val_acc=0.2360
+[layer-select] L=12 S0 val_acc=0.2300
+[layer-select] L=18 S0 val_acc=0.2330
+[layer-select] L=24 S0 val_acc=0.2000
+[layer-select] L*=6
+[P0] S0   seed=11 acc=0.2360 loss=1.9705 lam=None params=946069 0.59s
+[P0] S3   seed=11 acc=0.2330 loss=1.9959 lam=-0.01588379591703415 params=955333 0.63s
+[P0] S6   seed=11 acc=0.2280 loss=2.0527 lam=-6.7050691541226115e-06 params=955333 0.63s
+[P0] S7H  seed=11 acc=0.2030 loss=2.1826 lam=0.002054791199043393 params=955333 0.63s
+[P0] S7D  seed=11 acc=0.2220 loss=2.0002 lam=-9.679192589828745e-05 params=955333 0.63s
+DEVELOPMENT STATUS: P0_SMOKE_OK
++ echo P0_EXIT=0
+P0_EXIT=0
+[layer-select] L=6 S0 val_acc=0.2400
+[layer-select] L=12 S0 val_acc=0.3650
+[layer-select] L=18 S0 val_acc=0.3700
+[layer-select] L=24 S0 val_acc=0.2440
+[layer-select] L*=18
+[P1] S0   seed=11 acc=0.3700 loss=2.0812 lam=None params=946069 4.39s
+[P1] S0   seed=23 acc=0.3780 loss=2.1727 lam=None params=946069 4.38s
+[P1] S0   seed=47 acc=0.3730 loss=2.0301 lam=None params=946069 4.38s
+[P1] S3   seed=11 acc=0.4160 loss=2.0565 lam=-0.010045383125543594 params=955333 4.6s
+[P1] S3   seed=23 acc=0.3890 loss=2.3506 lam=0.05522726848721504 params=955333 4.6s
+[P1] S3   seed=47 acc=0.3780 loss=2.5659 lam=0.050612371414899826 params=955333 4.6s
+[P1] S6   seed=11 acc=0.4070 loss=2.2048 lam=-0.00011749925033655018 params=955333 4.61s
+[P1] S6   seed=23 acc=0.4300 loss=2.1895 lam=-0.0004189012397546321 params=955333 4.62s
+[P1] S6   seed=47 acc=0.3600 loss=2.4640 lam=-6.709408626193181e-05 params=955333 4.62s
+[P1] S7H  seed=11 acc=0.3660 loss=2.1940 lam=7.080270006554201e-05 params=955333 4.6s
+[P1] S7H  seed=23 acc=0.3680 loss=2.4107 lam=-0.008497346192598343 params=955333 4.62s
+[P1] S7H  seed=47 acc=0.4090 loss=2.2148 lam=-0.006013568956404924 params=955333 4.68s
+[P1] S7D  seed=11 acc=0.3490 loss=2.6208 lam=0.008051223121583462 params=955333 4.62s
+[P1] S7D  seed=23 acc=0.4050 loss=2.2898 lam=0.005518731195479631 params=955333 4.61s
+[P1] S7D  seed=47 acc=0.3720 loss=2.2241 lam=0.017268752679228783 params=955333 4.62s
+DEVELOPMENT STATUS: NO_DEV_SIGNAL
++ echo P1_EXIT=0
+P1_EXIT=0
++ echo PILOT_V2_COMPLETE
+PILOT_V2_COMPLETE

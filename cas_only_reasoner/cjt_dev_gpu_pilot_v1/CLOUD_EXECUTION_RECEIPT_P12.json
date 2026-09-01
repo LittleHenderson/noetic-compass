@@ -1,0 +1,58 @@
+{
+  "receipt_id": "CJT_DEV_P12_CLOUD_EXECUTION_RECEIPT",
+  "pilot": "CJT-DEV-P1.1 (diagnostics) + CJT-DEV-P1.2 (five-arm relaunch)",
+  "non_claim_bearing": true,
+  "runs": [
+    {
+      "run_id": "cjt-dev-p11-diag-1788228800",
+      "purpose": "CJT-DEV-P1.1 readout diagnostics A-G",
+      "instance_id": "i-0a7840fe7f1e41f59",
+      "instance_type": "g4dn.xlarge (Tesla T4)",
+      "region": "us-west-2",
+      "torch": "2.5.1+cu121",
+      "compute_wall_seconds": 562.8,
+      "instance_runtime_minutes": 17.5,
+      "est_cost_usd": 0.154,
+      "termination": "self-terminated; confirmed by client watchdog; no force-terminate",
+      "outputs": "results_diag/ (DIAGNOSTIC_RESULTS.json, DIAGNOSTIC_FINDINGS.md, diag_execution.log)"
+    },
+    {
+      "run_id": "cjt-dev-p12-fivearm-1788229928",
+      "purpose": "five-arm pilot S0/S3/S6/S7-H/S7-Delta-V3, RoutedHead + contextual candidates, P0 then P1",
+      "instance_id": "i-07a77393bfa2c7a27",
+      "instance_type": "g4dn.xlarge (Tesla T4)",
+      "region": "us-west-2",
+      "torch": "2.5.1+cu121",
+      "instance_runtime_minutes": 19.8,
+      "est_cost_usd": 0.173,
+      "termination": "self-terminated; confirmed by client watchdog; no force-terminate",
+      "bundle_sha256": "4c7a254413139d7430b2229f378402632c0661bd92ff42e552f753f6bacc3abe",
+      "outputs": "results_v2_p0/, results_v2_p1/"
+    }
+  ],
+  "cumulative_project_gpu_cost_usd_estimate": 0.462,
+  "cost_note": "run1 pilot $0.135 (9229d8b4) + diagnostics $0.154 + five-arm $0.173; owner ceiling $30 / 2h per job",
+  "is_real_model": true,
+  "model": "Qwen/Qwen2.5-0.5B-Instruct (frozen)",
+  "protected_split_touched": false,
+  "claim_promoted": false,
+  "p1_headline": {
+    "development_status": "NO_DEV_SIGNAL",
+    "selected_layer": 18,
+    "candidates_mode": "contextual",
+    "final_val_accuracy_mean": {"S0": 0.3737, "S3": 0.3943, "S6": 0.3990, "S7H": 0.3810, "S7D": 0.3753},
+    "arm_comparison": {"S3_minus_S0": 0.020666, "S3_minus_S6": -0.004667, "S3_minus_S7H": 0.013333, "S3_minus_S7D": 0.019},
+    "seed_ranges_overlap": "all five arms' 3-seed ranges overlap (S0 .370-.378, S3 .378-.416, S6 .360-.430, S7H .366-.409, S7D .349-.405) -- differences are inside seed noise",
+    "vs_baselines": "all arms ~3x candidate-uniform (0.12284) and far below B0 0.668 / B1 1.000",
+    "readout_repair_effect": "the P1.1-licensed repairs (contextual candidates; retrain at L*=18) lifted EVERY arm from ~0.21 to 0.37-0.40 -- the biggest single improvement in the project's neural record, and it is profile-independent"
+  },
+  "lambda_finding": {
+    "observation": "the routing gate lambda stayed near 0 in every arm (S6 exactly ~0.000 as designed for uniform; S7H/S7D within +-0.017; S3 escaped to 0.055/0.051 in 2 of 3 seeds).",
+    "mechanical_cause": "DESIGN LIMITATION of this harness iteration: lambda was initialized at exactly 0 and the routing-query gradient is proportional to lambda (ds/dW_r ~ lambda), so W_r receives zero gradient until lambda escapes 0 -- a chicken-and-egg lock. Profile-aware ROUTING therefore never substantively engaged; the accuracy gains came from the candidate-grounding repair.",
+    "disposition": "recorded as a limitation, NOT relaunched in this round (stop law: no result-driven changes after P1 began). A lambda>0 initialization (or no gating scalar) is the documented fix for a future owner-authorized iteration.",
+    "descriptive_note": "S3 being the only arm whose lambda escaped zero in 2/3 seeds is directionally consistent with the CAS profile carrying some routing signal; the accuracy effect is inside seed noise and licenses nothing."
+  },
+  "development_verdict": "NO_DEV_SIGNAL",
+  "verdict_plain": "Under the repaired readout (contextual candidates, layer 18), all five arms are statistically indistinguishable at 3 seeds (0.374-0.399 mean). S6 (uniform) is nominally highest; S3's +0.021 over S0 sits at the threshold but S3 does not clear S6/S7-H/S7-Delta. The profile channel remains not load-bearing -- now with the routing pathway present but locked near lambda=0 by the initialization flaw above.",
+  "prohibited_language_not_used": ["CAS-specific", "EMPIRICALLY_SUPPORTED", "GATE1B_PASS", "CJT_TRANSFORMER_VALIDATED"]
+}

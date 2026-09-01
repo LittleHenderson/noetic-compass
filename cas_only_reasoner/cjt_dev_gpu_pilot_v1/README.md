@@ -243,3 +243,42 @@ prior FAILED verdicts stay preserved under their own gates. Executed:
   `UNIFORM_CONTROL`/`EXPERIMENTAL_CONTROL`; S7-H
   `EXCLUSIVE_LEXICAL_CATEGORY`/`RESOURCE_DERIVED_CONTROL`; S7-Δ
   `WORDNET_LEXICAL_FACTOR_COMPOSITION`/`RESOURCE_DERIVED_CONTROL`.
+
+## P1.1 diagnostics + P1.2 five-arm relaunch — RAN (2026-08-31); verdict `NO_DEV_SIGNAL` again, at a much higher readout level
+
+**Diagnostics** (`results_diag/`, T4, 562.8s, ~$0.154): machinery healthy
+(128-example memorization → 1.000); v1 attention collapsed and dead (entropy
+0.0, gold-clause top-1 23.7%, `w_q` grad ~1e-17); profile channel provably
+inert (true=uniform=permuted=zeroed); gold-clause oracle +0.036; contextual
+candidates +0.031; in-distribution holdout 0.278 (S3) vs cross-family 0.210 —
+binding-readout generalization is the primary bottleneck. Full causal analysis
+in `results_diag/DIAGNOSTIC_FINDINGS.md`.
+
+**Five-arm relaunch** (`run_pilot_v2.py` → `results_v2_p1/`, T4, 19.8 min,
+~$0.173): RoutedHead (profile-aware routing, λ learned from 0) + contextual
+candidates for all arms; P0 `P0_SMOKE_OK`; P1 selected layer 18. The repairs
+lifted **every** arm from ~0.21 to 0.37–0.40 — and the arms remain
+statistically indistinguishable:
+
+| arm | mean val acc | std | by-seed range | λ by seed |
+|---|---|---|---|---|
+| S0 plain | 0.3737 | 0.0033 | .370–.378 | — |
+| S3 CAS | 0.3943 | 0.0160 | .378–.416 | −0.010 / **0.055** / **0.051** |
+| S6 uniform | **0.3990** | 0.0291 | .360–.430 | ~0.000 |
+| S7-H hard WN | 0.3810 | 0.0198 | .366–.409 | ≤|0.008| |
+| S7-Δ soft WN | 0.3753 | 0.0230 | .349–.405 | ≤0.017 |
+
+S3−S0 = +0.0207, S3−S6 = **−0.0047**, S3−S7-H = +0.0133, S3−S7-Δ = +0.0190 →
+**`NO_DEV_SIGNAL`** (all seed ranges overlap; S6 nominally highest). All arms
+~3× candidate-uniform (0.123) and far below B0 = 0.668.
+
+**λ-initialization finding (recorded, not relaunched):** λ was initialized at
+exactly 0, and the routing-query gradient is proportional to λ — so `W_r`
+received zero gradient until λ escaped 0, a chicken-and-egg lock. Routing never
+substantively engaged; the accuracy jump came from the candidate-grounding
+repair, which is profile-independent. S3 was the only arm whose λ escaped zero
+(2/3 seeds) — directionally consistent with the CAS profile carrying some
+routing signal, but the accuracy effect is inside seed noise and licenses
+nothing. Per the stop law, no post-hoc redesign was run; a λ>0 initialization
+is the documented fix for a future owner-authorized iteration. See
+`CLOUD_EXECUTION_RECEIPT_P12.json`.
