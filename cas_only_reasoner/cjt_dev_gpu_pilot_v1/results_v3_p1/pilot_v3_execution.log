@@ -1,0 +1,38 @@
++ /root/venv/bin/python -c 'import torch;print('\''TORch'\'',torch.__version__,'\''CUDA'\'',torch.cuda.is_available(),(torch.cuda.get_device_name(0) if torch.cuda.is_available() else '\''NONE'\''))'
+TORch 2.5.1+cu121 CUDA True Tesla T4
+[loc-extract] train 226s
+[loc-extract] val 37s
+[sanity] answers with no clause-local occurrence: 0
+[capacity] ref=807301 counts={'S0': 803712, 'S3': 807301, 'S6': 807301, 'S7H': 807301, 'S7D': 807301} widen={'S0': 0, 'S3': 0, 'S6': 0, 'S7H': 0, 'S7D': 0}
+[smoke] {"memorization_128_train_accuracy": 1.0, "gold_routed_accuracy": 0.984375, "shuffled_routed_accuracy": 0.265625, "gold_minus_shuffled": 0.71875, "binding_shuffle_accuracy": 0.21875, "binding_shuffle_drop": 0.78125, "gate1_memorize_ge_95": true, "gate2_gold_beats_shuffled_by_10": true, "gate3_binding_shuffle_damages_5": true}
+[P0] S0   seed=11 acc=0.5430 loss=1.2809 lam=None trainacc=0.675 goldhit=0.578 bindshuf=0.252 1.62s
+[P0] S3   seed=11 acc=0.6420 loss=1.0221 lam=1.036277413368225 trainacc=0.682 goldhit=0.715 bindshuf=0.257 2.51s
+[P0] S6   seed=11 acc=0.5450 loss=1.2761 lam=0.9995484948158264 trainacc=0.668 goldhit=0.568 bindshuf=0.247 2.52s
+[P0] S7H  seed=11 acc=0.5640 loss=1.2971 lam=1.0215141773223877 trainacc=0.674 goldhit=0.606 bindshuf=0.246 2.52s
+[P0] S7D  seed=11 acc=0.5390 loss=1.3045 lam=1.0348892211914062 trainacc=0.683 goldhit=0.583 bindshuf=0.265 2.53s
+DEVELOPMENT STATUS: P0_SMOKE_OK
++ echo P0_V3_EXIT=0
+P0_V3_EXIT=0
++ grep -q '"development_status": "P0_SMOKE_OK"' /root/out/results_v3_p0/DEV_PILOT_V3_RAW_RESULTS.json
+[sanity] answers with no clause-local occurrence: 0
+[capacity] ref=807301 counts={'S0': 803712, 'S3': 807301, 'S6': 807301, 'S7H': 807301, 'S7D': 807301} widen={'S0': 0, 'S3': 0, 'S6': 0, 'S7H': 0, 'S7D': 0}
+[P1] S0   seed=11 acc=0.7350 loss=1.7393 lam=None trainacc=0.982 goldhit=0.807 bindshuf=0.245 7.83s
+[P1] S0   seed=23 acc=0.6670 loss=2.7440 lam=None trainacc=0.978 goldhit=0.768 bindshuf=0.239 7.53s
+[P1] S0   seed=47 acc=0.6970 loss=1.1564 lam=None trainacc=0.906 goldhit=0.657 bindshuf=0.310 7.49s
+[P1] S3   seed=11 acc=0.7410 loss=2.4896 lam=1.1289795637130737 trainacc=0.988 goldhit=0.860 bindshuf=0.252 8.76s
+[P1] S3   seed=23 acc=0.7390 loss=2.8783 lam=1.1476153135299683 trainacc=0.991 goldhit=0.878 bindshuf=0.237 8.73s
+[P1] S3   seed=47 acc=0.7220 loss=3.0114 lam=1.1354305744171143 trainacc=0.984 goldhit=0.869 bindshuf=0.234 8.75s
+[P1] S6   seed=11 acc=0.6720 loss=1.2124 lam=1.0139884948730469 trainacc=0.904 goldhit=0.650 bindshuf=0.293 8.75s
+[P1] S6   seed=23 acc=0.6780 loss=2.9593 lam=1.0073411464691162 trainacc=0.984 goldhit=0.790 bindshuf=0.237 8.74s
+[P1] S6   seed=47 acc=0.7030 loss=2.3444 lam=1.0093716382980347 trainacc=0.969 goldhit=0.800 bindshuf=0.244 8.75s
+[P1] S7H  seed=11 acc=0.6790 loss=2.9476 lam=1.1241129636764526 trainacc=0.983 goldhit=0.788 bindshuf=0.244 8.78s
+[P1] S7H  seed=23 acc=0.6800 loss=2.9261 lam=1.1352641582489014 trainacc=0.988 goldhit=0.806 bindshuf=0.251 8.75s
+[P1] S7H  seed=47 acc=0.6900 loss=2.8993 lam=1.1311684846878052 trainacc=0.978 goldhit=0.821 bindshuf=0.248 8.75s
+[P1] S7D  seed=11 acc=0.6430 loss=2.9882 lam=1.1078070402145386 trainacc=0.979 goldhit=0.735 bindshuf=0.251 8.73s
+[P1] S7D  seed=23 acc=0.6500 loss=3.0962 lam=1.126442313194275 trainacc=0.989 goldhit=0.768 bindshuf=0.246 8.74s
+[P1] S7D  seed=47 acc=0.6680 loss=2.9810 lam=1.1149322986602783 trainacc=0.977 goldhit=0.778 bindshuf=0.244 8.77s
+DEVELOPMENT STATUS: PROMISING_DEV_SIGNAL
++ echo P1_V3_EXIT=0
+P1_V3_EXIT=0
++ echo PILOT_V3_COMPLETE
+PILOT_V3_COMPLETE

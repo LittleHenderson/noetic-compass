@@ -323,3 +323,46 @@ Diagnostic D. The deterministic status is `NO_DEV_SIGNAL`; the mechanistic
 pattern matches the owner's `READOUT_STILL_UNDERPOWERED` description
 (recorded as an observation, not the emitted status). Train-subset ~0.78 vs
 val ~0.37 shows the cross-family generalization gap on top.
+
+
+## P1.3 — the FINAL binding-conversion round (owner ruling): **`PROMISING_DEV_SIGNAL`** — the first positive development verdict of the arc
+
+Frozen per the ruling (only the binder changed): layer 18, router design
+(λ init 1.0 learnable), all profile tables, data, seeds, optimizer, schedule.
+The pooled binder became **clause-local answer experts**:
+`P(c|x) = Σᵢ αᵢ·softmax_c(ℓᵢ,c)` with each candidate represented by its
+occurrences *inside* clause i (question text excluded); no gold clause in
+training or evaluation. One T4, 21.3 min, ~$0.187
+(`CLOUD_EXECUTION_RECEIPT_P13.json`; cumulative arc GPU ≈ $0.83).
+
+**Smoke gates (P0): all 9 passed** — memorization 1.000; gold-routed 0.984 vs
+shuffled-routed 0.266 (the binder exploits routing by +71.9pp, vs the old
+binder's +3.6pp oracle gain); per-example live-prefix binding-shuffle drop
+0.781; S3 swap-sensitive; S6 exactly invariant; 0 answers without a
+clause-local occurrence.
+
+**P1 (5 arms × 3 seeds × 1000 updates):**
+
+| arm | val acc ± std | gold-clause hit | true → permuted → uniform acc |
+|---|---|---|---|
+| S0 | 0.6997 ± 0.028 | 0.744 | — |
+| **S3 CAS** | **0.7340 ± 0.009** | **0.869** | **.734 → .414 → .642** |
+| S6 uniform | 0.6843 ± 0.013 | 0.747 | exactly invariant |
+| S7-H | 0.6830 ± 0.005 | 0.805 | .683 → .584 → .676 |
+| S7-Δ | 0.6537 ± 0.011 | 0.760 | .654 → .634 → **.681** (soft profiles hurt) |
+
+S3 − S0 = **+0.034** · S3 − S6 = **+0.050** · S3 − S7-H = **+0.051** ·
+S3 − S7-Δ = **+0.080** — every control cleared by ≥0.02, per-seed margins
+2/3, 2/3, 3/3, 3/3, no question-type collapse (S3 0.70–0.80 on all four),
+and profile corruption devastates S3 (permuted −0.32, uniform −0.09) →
+**`PROMISING_DEV_SIGNAL`** by the deterministic status law. Both S3 and S0
+exceed the **B0 surface heuristic (0.668)** for the first time in the arc.
+
+Bounded reading (per the ruling): on this controlled construction-gold task,
+the exact operation profile is a functioning, load-bearing neural routing
+signal that now converts into the best final accuracy against every matched
+control. It does NOT license "CAS-specific" or any scientific claim — the
+task is deliberately operation-built and surface-solvable, and this is a
+development triage status. Calibration caveat recorded: S3's NLL (2.79) is
+worse than S0's (1.88) despite higher accuracy. The protected split remains
+untouched; per the ruling this was the FINAL static binder test.

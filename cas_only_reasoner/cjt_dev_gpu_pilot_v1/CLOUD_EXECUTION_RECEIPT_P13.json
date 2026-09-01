@@ -1,0 +1,56 @@
+{
+  "receipt_id": "CJT_DEV_P13_CLOUD_EXECUTION_RECEIPT",
+  "pilot": "CJT-DEV-P1.3 (the FINAL binding-conversion round, owner ruling 'one final binder test')",
+  "non_claim_bearing": true,
+  "run": {
+    "run_id": "cjt-dev-p13-binder-1788236059",
+    "instance_id": "i-03930a7a062250516",
+    "instance_type": "g4dn.xlarge (Tesla T4)",
+    "region": "us-west-2",
+    "torch": "2.5.1+cu121",
+    "instance_runtime_minutes": 21.3,
+    "est_cost_usd": 0.187,
+    "termination": "self-terminated; confirmed by client watchdog; no force-terminate",
+    "bundle_sha256": "d488237e22848fbb3fd1274a3aa4bcb0e35cbcbb9fe80c85c5b21816169b8b54",
+    "harness_commit": "15b79aea",
+    "peak_gpu_mem_mb": 60.9
+  },
+  "cumulative_project_gpu_cost_usd_estimate": 0.829,
+  "frozen_per_owner_order": ["Qwen2.5-0.5B checkpoint", "layer 18", "contextual candidate mode (now clause-local)", "all four profile tables", "router design + lambda init 1.0 learnable", "datasets", "seeds 11/23/47", "AdamW settings", "1000-update schedule"],
+  "replaced": "the pooled binder -> clause-local answer experts: P(c|x) = sum_i alpha_i softmax_c(l_ic) over candidates PRESENT in clause i; e_ic = candidate c's mean layer-18 token states INSIDE clause i's span (question text excluded); no gold clause in training or evaluation",
+  "smoke_gates_P0": {
+    "status": "P0_SMOKE_OK -- all 9 gates passed",
+    "memorization_128": 1.0,
+    "gold_routed_vs_shuffled_routed": "0.984 vs 0.266 (gap 0.719, gate needed 0.10) -- the new binder massively exploits routing (old binder's oracle gain was 0.036)",
+    "binding_shuffle_drop": "0.781 (gate needed 0.05; per-example live-prefix permutation per the pre-launch review fix)",
+    "s3_swap_changes_logits": true,
+    "s6_exact_invariance": true,
+    "answers_without_clause_occurrence": 0
+  },
+  "P1_final_five_arm": {
+    "development_status": "PROMISING_DEV_SIGNAL",
+    "status_source": "deterministic program (run_pilot_v3.py status law, owner win conditions 1-6)",
+    "final_val_accuracy_mean": {"S0": 0.6997, "S3": 0.7340, "S6": 0.6843, "S7H": 0.6830, "S7D": 0.6537},
+    "final_val_accuracy_std": {"S0": 0.0278, "S3": 0.0085, "S6": 0.0134, "S7H": 0.0050, "S7D": 0.0105},
+    "arm_comparison": {"S3_minus_S0": 0.034333, "S3_minus_S6": 0.049667, "S3_minus_S7H": 0.051, "S3_minus_S7D": 0.080333},
+    "per_seed_margin_check": {"vs_S0": "2/3 seeds >=0.02 (+0.006/+0.072/+0.025)", "vs_S6": "2/3 (+0.069/+0.061/+0.019)", "vs_S7H": "3/3", "vs_S7D": "3/3"},
+    "profile_corruption_reduction_S3": {"true": 0.7340, "permuted": 0.4140, "uniform": 0.6423, "zeroed": 0.6423, "note": "wrong labels actively mislead (-0.32); removing them costs -0.092 -- the content is load-bearing"},
+    "controls_sensitivity": {"S6": "EXACTLY invariant (0.6843 all variants) -- clean control", "S7H": "true 0.683 vs permuted 0.584 (some content use), vs uniform 0.676 (+0.007 only)", "S7D": "true 0.654 vs uniform 0.681 -- its soft profiles HURT vs uniform"},
+    "attention_gold_top1_rate": {"S0": 0.744, "S3": 0.869, "S6": 0.747, "S7H": 0.805, "S7D": 0.760},
+    "learned_lambda": {"S3": "1.13-1.15", "S7H": "1.12-1.14", "S7D": "1.11-1.13", "S6": "~1.01 (drift; routing term inert by design)"},
+    "per_question_type_mean_S3": {"Q_ATTRACT": 0.745, "Q_AVERT": 0.701, "Q_PART": 0.800, "Q_TRIGGER": 0.713},
+    "no_question_type_collapse": true,
+    "vs_references": "S3 0.7340 and S0 0.6997 EXCEED the B0 surface heuristic (0.668) for the first time in the arc; B1 ceiling 1.000; candidate-uniform 0.12284",
+    "train_subset_accuracy": {"S0": 0.955, "S3": 0.988, "S6": 0.952, "S7H": 0.983, "S7D": 0.981},
+    "calibration_caveat": "S3's val NLL (2.79) is higher than S0's (1.88) despite higher accuracy -- the mixture is over-confident when wrong; reported, not gated"
+  },
+  "bounded_interpretation": {
+    "supported": "On this controlled construction-gold development task, the exact CAS operation profile is a functioning neural routing signal whose content is load-bearing: it improves correct-clause routing (0.869 vs 0.744-0.805), converts through the clause-local binder into the best final accuracy (0.734, beating every matched control by 0.034-0.080), and corrupting it reduces performance (0.734 -> 0.414 permuted / 0.642 uniform).",
+    "not_supported": "Any CAS-specific scientific claim. The task was constructed around the four operations, is exactly surface-solvable (B1=1.000), and the controls are matched but not exhaustive. The status is a DEVELOPMENT triage label.",
+    "prohibited_language_not_used": ["CAS-specific", "EMPIRICALLY_SUPPORTED", "GATE1B_PASS", "CJT_TRANSFORMER_VALIDATED"]
+  },
+  "is_real_model": true,
+  "protected_split_touched": false,
+  "claim_promoted": false,
+  "owner_line": "per the ruling, this was the FINAL static binder test; no further static redesign is authorized"
+}

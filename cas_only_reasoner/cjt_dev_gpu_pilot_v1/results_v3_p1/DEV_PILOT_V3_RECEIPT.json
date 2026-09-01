@@ -1,0 +1,12 @@
+{
+  "receipt_id": "DEV_PILOT_V3_RECEIPT",
+  "stage": "P1",
+  "non_claim_bearing": true,
+  "is_real_model": true,
+  "raw_results_sha256": "c38e430f1e136cbfd38b1abfc2135486a71bdb9443b1bf861c4bcf7ba8cc0509",
+  "s7_h_table_sha256": "1d46176c0810eb3dec5581cf58b4c1732a2488eacfd2ee90e8bd927d26a81812",
+  "s7_delta_v3_table_sha256": "7878da689ad9c3327b1de92765b3d8318ab2b64eb9938f087e635cdf6a047dbb",
+  "layer_frozen": 18,
+  "development_status": "PROMISING_DEV_SIGNAL",
+  "total_wall_clock_seconds": 175.6
+}
