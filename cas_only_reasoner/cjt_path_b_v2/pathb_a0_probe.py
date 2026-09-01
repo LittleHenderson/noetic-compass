@@ -306,8 +306,32 @@ def main():
     print(f"[extract] {len(subset)} records, {time.time()-te:.0f}s")
     del model
     torch.cuda.empty_cache()
+    # cache-integrity guard (post-collision law): one cache entry per record
+    assert len(acts) == len(subset) and len(loc) == len(subset), \
+        "PID_COLLISION: cache entries != records"
+
+    # CLEAN PRB-POS measurement (REPORT-ONLY -- for the owner's QB-ORD
+    # re-adjudication; the contaminated 0.8883 P0 value is void)
+    import numpy as np
+    from sklearn.linear_model import LogisticRegression
+    prb = {}
+    for L in LAYERS:
+        X, y = [], []
+        for r in train_sub:
+            h = acts[r["passage_id"]]["layers"][L][0].float().numpy()
+            for i in range(h.shape[0]):
+                X.append(h[i]); y.append(i)
+        Xh, yh = [], []
+        for r in hold_sub:
+            h = acts[r["passage_id"]]["layers"][L][0].float().numpy()
+            for i in range(h.shape[0]):
+                Xh.append(h[i]); yh.append(i)
+        pr = LogisticRegression(max_iter=1000).fit(np.array(X), np.array(y))
+        prb[str(L)] = round(float(pr.score(np.array(Xh), np.array(yh))), 4)
+    print(f"[PRB-POS clean] {prb}")
 
     report = {"probe": "PATH-B-A0", "non_claim_bearing": True,
+              "prb_pos_clean_by_layer_report_only": prb,
               "qb_ord": "QB_ORD_REJECTED_POSITION_SHORTCUT (frozen PRB-POS "
               "gate 0.8883 < 0.90)",
               "families": list(FAMS), "layers": {},

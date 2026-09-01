@@ -12,7 +12,8 @@
         },
         "CHK4": {
           "matcher_best": 0.4183,
-          "bound_uniform_sameclass_plus_005": 0.4662,
+          "bound_uniform_sameclass_plus_margin": 0.4662,
+          "n": 3000,
           "pass": true
         }
       },
@@ -27,7 +28,8 @@
         },
         "CHK4": {
           "matcher_best": 0.5083,
-          "bound_uniform_sameclass_plus_005": 0.55,
+          "bound_uniform_sameclass_plus_margin": 0.55,
+          "n": 3000,
           "pass": true
         }
       },
@@ -42,7 +44,8 @@
         },
         "CHK4": {
           "matcher_best": 0.2353,
-          "bound_uniform_sameclass_plus_005": 0.2722,
+          "bound_uniform_sameclass_plus_margin": 0.2722,
+          "n": 3000,
           "pass": true
         }
       },
@@ -57,7 +60,8 @@
         },
         "CHK4": {
           "matcher_best": 0.0,
-          "bound_uniform_sameclass_plus_005": 0.3,
+          "bound_uniform_sameclass_plus_margin": 0.3,
+          "n": 3000,
           "pass": true
         }
       }
@@ -81,6 +85,12 @@
     "CHK10": {
       "entity_set_violations": 0,
       "first_mention_order_fraction": 0.0002,
+      "pass": true
+    },
+    "CHK11": {
+      "records": 12000,
+      "unique_pids": 12000,
+      "duplicated_pids": 0,
       "pass": true
     },
     "B1_GRAPH": {
@@ -107,7 +117,8 @@
         },
         "CHK4": {
           "matcher_best": 0.44,
-          "bound_uniform_sameclass_plus_005": 0.4656,
+          "bound_uniform_sameclass_plus_margin": 0.4665,
+          "n": 375,
           "pass": true
         }
       },
@@ -122,7 +133,8 @@
         },
         "CHK4": {
           "matcher_best": 0.5147,
-          "bound_uniform_sameclass_plus_005": 0.55,
+          "bound_uniform_sameclass_plus_margin": 0.5516,
+          "n": 375,
           "pass": true
         }
       },
@@ -137,7 +149,8 @@
         },
         "CHK4": {
           "matcher_best": 0.224,
-          "bound_uniform_sameclass_plus_005": 0.2722,
+          "bound_uniform_sameclass_plus_margin": 0.2722,
+          "n": 375,
           "pass": true
         }
       },
@@ -152,7 +165,8 @@
         },
         "CHK4": {
           "matcher_best": 0.0,
-          "bound_uniform_sameclass_plus_005": 0.3,
+          "bound_uniform_sameclass_plus_margin": 0.3,
+          "n": 375,
           "pass": true
         }
       }
@@ -176,6 +190,12 @@
     "CHK10": {
       "entity_set_violations": 0,
       "first_mention_order_fraction": 0.0,
+      "pass": true
+    },
+    "CHK11": {
+      "records": 1500,
+      "unique_pids": 1500,
+      "duplicated_pids": 0,
       "pass": true
     },
     "B1_GRAPH": {
@@ -202,6 +222,7 @@
       "acc_with_profiles": 1.0,
       "acc_without_profiles": 1.0,
       "profile_increment": 0.0,
+      "margin": 0.0516,
       "candidate_uniform": 0.1111,
       "pass": true
     },
@@ -209,6 +230,7 @@
       "acc_with_profiles": 1.0,
       "acc_without_profiles": 1.0,
       "profile_increment": 0.0,
+      "margin": 0.0516,
       "candidate_uniform": 0.1111,
       "pass": true
     },
@@ -216,6 +238,7 @@
       "acc_with_profiles": 0.36,
       "acc_without_profiles": 0.328,
       "profile_increment": 0.032,
+      "margin": 0.0516,
       "candidate_uniform": 0.0909,
       "pass": true
     },
@@ -223,6 +246,7 @@
       "acc_with_profiles": 0.5147,
       "acc_without_profiles": 0.4907,
       "profile_increment": 0.024,
+      "margin": 0.0516,
       "candidate_uniform": 0.1429,
       "pass": true
     },

@@ -1,0 +1,24 @@
+{
+  "notice_id": "PATHB_P0_CONTAMINATION_NOTICE",
+  "non_claim_bearing": true,
+  "severity": "CRITICAL (blocker classes: neural execution correctness + scientific comparison integrity)",
+  "defect": "generate_pathb.build_split numbered passage_ids per (family, question-family), so EVERY pid occurred exactly 4x (once per question family; train 12,000 records -> 3,000 unique pids). The P0 run's activation and clause-local caches were keyed by pid, so each pid held only the LAST-generated record's features: ~75% of records were trained and evaluated against ANOTHER passage's activations.",
+  "how_found": "the PATH-B-A0 probe crashed on an IndexError (a colliding record with a different candidate count), 9.2 min / ~$0.081 into its run -- the fast-fail guards worked.",
+  "invalidated_as_evidence": {
+    "PATHB_P0_RAW_RESULTS.json (commit 5d1acec3)": "PRESERVED but VOID as evidence about the binder: memorization 0.711, the gold-routing inversion 0.133-vs-0.258, PRB-POS 0.8883, the transfer floor, and all four arm accuracies were measured through cross-assigned features.",
+    "QB_ORD interpretation": "the claim that QB_ORD's 0.784 reflected a position shortcut is WITHDRAWN: QB_ORD was generated LAST per family, so its records were the ONLY ones whose cache entries were correct -- it was the only uncorrupted family, which fully explains it being the only family that learned.",
+    "PRB-POS 0.8883 and the QB-ORD drop": "the PRB-POS gate fired on a contaminated measurement. The frozen-gate law was honored at the time; whether QB-ORD re-enters after a CLEAN PRB-POS measurement is an OWNER decision. The A0 rerun reports a clean PRB-POS value for that adjudication; QB-ORD stays out of A0 itself pending the owner's ruling.",
+    "architectural mismatch argument": "the DESIGN-level argument (a single alpha-weighted mixture of clause-local answer distributions cannot preserve a selector-dependent intermediate entity) is architectural analysis and stands on its own -- but it is now UNMEASURED. P0's numbers neither support nor refute it."
+  },
+  "repair": {
+    "pid_law": "unique_pid(split, family, qfam, index) -- unique across the whole split (generate_pathb.py)",
+    "new_gate": "CHK-11 passage-id uniqueness (battery), verified green on the regenerated dataset (12,000/12,000 and 1,500/1,500 unique)",
+    "new_mutant": "M12_DUPLICATE_PIDS reproduces the original defect and CHK-11 catches it (CHK_M_PASS 12/12)",
+    "dataset": "regenerated: train sha e49c7e99..., val sha 7cbbe5fa..., protected (in-memory) sha 0fd9419b...; 0 exclusions; full battery PATHB_GATES_PASS"
+  },
+  "why_gates_missed_it": "every registered check was per-record or aggregate-over-records; none asserted key uniqueness across records. CHK-M had no duplicate-key mutant. Both holes are now closed -- and this is a textbook instance of the owner's CHK-M principle: the defect class that escaped is the one no mutant covered.",
+  "owner_decision_points": [
+    "whether to re-run P0 (the binder measurement) on the clean dataset before or after A0's verdict, or accept the architectural argument and proceed on A0 alone",
+    "whether QB-ORD re-enters if the CLEAN PRB-POS measurement passes 0.90"
+  ]
+}

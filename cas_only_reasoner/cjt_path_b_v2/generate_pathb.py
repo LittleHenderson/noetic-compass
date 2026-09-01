@@ -25,6 +25,13 @@ sys.path.insert(0, str(PKG))
 from exec.fsio import write_utf8_lf  # noqa: E402
 
 from pathb_core import QFAMS, SPLIT_FAMILY, build_record  # noqa: E402
+
+def unique_pid(split, fam, qf, got):
+    """PID LAW (post-collision fix): unique across the WHOLE split --
+    encodes family AND question-family. The original per-(fam,qfam)
+    numbering duplicated every pid x4 and cross-assigned feature caches."""
+    return f"{split[0]}{fam}{QFAMS.index(qf)}{got:05d}"
+
 from pathb_roundtrip import check_record  # noqa: E402
 
 SIZES = {"train": 12000, "val": 1500, "protected": 1500}
@@ -62,7 +69,7 @@ def build_split(split, mutation=None):
                 if not ok:
                     excluded += 1
                     continue
-                rec["passage_id"] = f"{split[0]}{fam}{got:06d}"
+                rec["passage_id"] = unique_pid(split, fam, qf, got)
                 records.append(rec)
                 got += 1
     return records, excluded

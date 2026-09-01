@@ -45,9 +45,10 @@ def gen_small(mutate_record=None):
                     idx += 1
                     if r is None:
                         continue
+                    from generate_pathb import unique_pid
+                    r["passage_id"] = unique_pid(split, fam, qf, got)
                     if mutate_record is not None:
                         r = mutate_record(r)
-                    r["passage_id"] = f"{split[0]}{fam}{got:06d}"
                     recs.append(r)
                     got += 1
         out[split] = recs
@@ -279,6 +280,21 @@ def m11():
         return ops, spec
     core.build_graph = patched
     return lambda: setattr(core, "build_graph", orig)
+
+
+# ---- M12: duplicate passage-ids across question families --------------------
+@mutant("M12_DUPLICATE_PIDS", "CHK11")
+def m12():
+    seen = {}
+
+    def mut(rec):
+        # renumber per (family, qfam) -- the ORIGINAL collision defect
+        key = (rec["split"], rec["family"], rec["question_type"])
+        k = seen.get(key, 0)
+        seen[key] = k + 1
+        rec["passage_id"] = f"{rec['split'][0]}{rec['family']}{k:06d}"
+        return rec
+    return _record_mutation(mut)
 
 
 # ---- machinery --------------------------------------------------------------

@@ -139,6 +139,18 @@
       "prerequisites_passed": true,
       "crash_only": false,
       "pass": true
+    },
+    {
+      "id": "M12_DUPLICATE_PIDS",
+      "target": "CHK11",
+      "failed_gates": [
+        "train/CHK11",
+        "val/CHK11"
+      ],
+      "target_caught_semantically": true,
+      "prerequisites_passed": true,
+      "crash_only": false,
+      "pass": true
     }
   ],
   "clean_before": {

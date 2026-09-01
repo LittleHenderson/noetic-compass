@@ -1,7 +1,7 @@
 {
   "files": {
-    "data/train.jsonl": "6e86da385f80fbe848a8214f664fd0228dfd89da5e28e7b2acb38f7f891aecfe",
-    "data/val.jsonl": "ca08c0f5881ba7df2cd6b3a7dd6d4a60fe4e9fd07f07ecb232c3dba352f9c1b3"
+    "data/train.jsonl": "e49c7e99902f830eca99a464fc5450cd98a7519759bc1bad58ae561d7b94e830",
+    "data/val.jsonl": "7cbbe5fa6ec7cfcf58b84f1ed3f118b98c30fd8119de08da37c44d861043b4e1"
   },
   "manifest_id": "PATHB_DATASET_MANIFEST_v0_3",
   "non_claim_bearing": true,
@@ -13,7 +13,7 @@
   "seed_stream": "PATHB_V03_20260831",
   "splits": {
     "protected": {
-      "content_sha256": "5aca176aef36928d985e983215fbec0d0a4b424abe8ed9c5a0d28e49dcb42502",
+      "content_sha256": "0fd9419bf8dd5efd637c2c250c0289cd9b16e6a244f2c6b534b05f009148bcab",
       "excluded": 0,
       "families": [
         "D"
@@ -21,7 +21,7 @@
       "passages": 1500
     },
     "train": {
-      "content_sha256": "6e86da385f80fbe848a8214f664fd0228dfd89da5e28e7b2acb38f7f891aecfe",
+      "content_sha256": "e49c7e99902f830eca99a464fc5450cd98a7519759bc1bad58ae561d7b94e830",
       "excluded": 0,
       "families": [
         "A",
@@ -30,7 +30,7 @@
       "passages": 12000
     },
     "val": {
-      "content_sha256": "ca08c0f5881ba7df2cd6b3a7dd6d4a60fe4e9fd07f07ecb232c3dba352f9c1b3",
+      "content_sha256": "7cbbe5fa6ec7cfcf58b84f1ed3f118b98c30fd8119de08da37c44d861043b4e1",
       "excluded": 0,
       "families": [
         "C"

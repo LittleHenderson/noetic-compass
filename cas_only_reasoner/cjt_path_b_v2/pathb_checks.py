@@ -419,6 +419,15 @@ def chk10(records, seed_stream="PATHB_V03_20260831"):
             "pass": bad == 0 and frac_fm <= 0.10}
 
 
+# ---------------- CHK-11: passage-id uniqueness (post-collision law) ---------
+def chk11(records):
+    from collections import Counter
+    c = Counter(r["passage_id"] for r in records)
+    dups = {k: v for k, v in c.items() if v > 1}
+    return {"records": len(records), "unique_pids": len(c),
+            "duplicated_pids": len(dups), "pass": not dups}
+
+
 # ---------------- battery runner --------------------------------------------
 def run_battery(train_recs, val_recs, include_bkey=True):
     res = {}
@@ -431,6 +440,7 @@ def run_battery(train_recs, val_recs, include_bkey=True):
         res[name] = {"per_family": per_fam,
                      "CHK2": chk2(recs), "CHK8": chk8(recs),
                      "CHK9INT": chk9(recs), "CHK10": chk10(recs),
+                     "CHK11": chk11(recs),
                      "B1_GRAPH": b1_graph(recs),
                      "B_MEMBER": b_member(recs),
                      "H_INT_REPEATED": h_int_repeated(recs)}
@@ -443,7 +453,7 @@ def run_battery(train_recs, val_recs, include_bkey=True):
             for k in ("CHK1", "CHK3", "CHK4"):
                 if not d[k]["pass"]:
                     fails.append(f"{split}/{q}/{k}")
-        for k in ("CHK2", "CHK8", "CHK9INT", "CHK10", "B1_GRAPH"):
+        for k in ("CHK2", "CHK8", "CHK9INT", "CHK10", "CHK11", "B1_GRAPH"):
             if not res[split][k]["pass"]:
                 fails.append(f"{split}/{k}")
     if not res["CHK5"]["pass"]:
