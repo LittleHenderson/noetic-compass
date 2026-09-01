@@ -1,0 +1,55 @@
+{
+  "record_id": "TIER_C_C1_REVIEW_FINDINGS",
+  "non_claim_bearing": true,
+  "review": "35-agent adversarial pre-launch review of run_tier_c_c1.py (5 attack dimensions + 30 skeptical verifiers), run BEFORE any GPU spend, 2026-09-01",
+  "verdict_tally": {"CONFIRMED": 13, "REFUTED": 3, "DOWNGRADED_MINOR": 14},
+  "headline": "The single most important finding was against a 'fix' I had added myself: a frozen per-transform structure scalar, introduced to equalize init magnitude, would have decided the tournament. It is removed. 13 confirmed findings were all fixed before spend; 9 wasted runs were eliminated; owner law 4 went from intended to verified.",
+  "critical_confirmed": [
+    {
+      "id": "C1-CRIT-1_STRUCTURE_SCALE_CONFOUND",
+      "finding": "The frozen per-transform structure-channel scalar (T1 1.172 / T2 27.342 / T3 33.746 / T4 1.296) equalized the structure term only at step 0 and made the between-transform imbalance far WORSE during training. It is a pure output multiplier on a channel whose parameters are then trained by AdamW, whose per-parameter step is ~lr regardless of gradient size -- so the scalar multiplies the entire trajectory. Measured with the harness's own optimizer: |s_str| at step 50 = T1 0.276 / T2 8.62 / T3 8.33 / T4 0.287 (~30x spread), PLATEAUING rather than decaying (T3 held ~5x the base attention score from step 50 through step 400). Without any scaling the spread is 61.9x at step 0 but 2.0x by step 50 -- AdamW erases the init imbalance unaided within ~50 of 1000 updates. So the calibration cured a transient by installing a permanent confound.",
+      "my_error": "I introduced this. The premise ('a transform could lose for starting quiet') was empirically false under AdamW, and my registered neutrality argument -- 'applied identically to the CAS and NULL variants, so it cannot bias the comparison' -- is a non sequitur: it is neutral WITHIN a transform, but the tournament is an argmax BETWEEN transforms of each transform's own margin, and the scalar sets how far each transform's structure channel can travel. Secondary error: the scales were derived at CAL_SEED while training uses seeds 11/23/47, so the claimed init equalization did not even hold at the seeds used (0.057-0.372, a 6.5x spread).",
+      "fix": "REMOVED ENTIRELY. No scaling of any kind. The structure-term magnitude and its ratio to the base attention score are logged at every checkpoint and reported per arm; the ratio is FLAGGED but does not gate qualification (the owner's nine laws contain no loudness criterion, an invented cap could disqualify the true winner -- T4 carries two structure terms and starts above 1.0 by architecture -- and loudness cancels in C2, which swaps rulebooks through the frozen winning transform)."
+    },
+    {
+      "id": "C1-CRIT-2_QB_COMP_SATURATION",
+      "finding": "The frozen '>= 0.02 margin on >= 2 of 3 families' clause cannot fire on QB_COMP, which scored 1.000 for every arm in the predecessor A1 result (375/375 in 10 of 12 runs). A family at ceiling cannot show a margin for ANY arm, so the clause silently means 'QB_REL and QB_INT must BOTH move' -- and QB_INT sat near 0.38.",
+      "fix": "The clause is applied UNCHANGED -- not weakened, re-scoped, or reinterpreted (owner prohibition on lowering criteria). What was added is transparency, registered BEFORE the run so it cannot be offered afterwards as an excuse: per-family saturation flags plus a REPORT-ONLY families_at_margin_excluding_saturated field, so a NO_TRANSFORM_CONSUMES_STRUCTURE outcome caused by a ceiling is visible as such."
+    },
+    {
+      "id": "C1-CRIT-3_NO_INCREMENTAL_PERSISTENCE",
+      "finding": "All tournament runs accumulated in memory and the results file was written once, after the last run. A single mid-tournament failure (NONFINITE_LOSS, OOM, spot reclaim) would destroy every completed run's evidence and the entire one-shot budget.",
+      "fix": "Partial results flushed to TIERC_C1_PARTIAL_RUNS.json after EVERY run; the tournament loop wrapped so a failure writes TIERC_C1_ABORTED.json with completed runs, traceback, and cost-so-far."
+    },
+    {
+      "id": "C1-CRIT-4_SPLIT_NEVER_VERIFIED",
+      "finding": "The C1/C2 boundary -- the one owner laws 3 and 4 declare inviolable -- was recomputed at runtime from c1_side() and never checked against its own frozen manifest. Owner law 4 was enforced only by the code path happening to be correct; nothing verified it.",
+      "fix": "Fail-closed preflight recomputes BOTH pid-set digests and compares them to C1_SPLIT_MANIFEST.json (c1_pids_sha256 and c2_pids_sha256), from pids ONLY -- law 4 is now verified without reading a single C2 record. The dataset files are likewise verified against the digests declared in PATHB_DATASET_MANIFEST.json, and R_CAS/R_RANDOM against the digests sealed in TIER_C_C0_RECEIPT.json."
+    }
+  ],
+  "major_confirmed_fixed": [
+    "Owner law 6 under-implemented: removal_fall tested only the 'remove' half while the corruption controls (permuted, R-RANDOM) were computed and then ignored. The qualification law now ALSO requires max corrupt-table fall >= 0.02 -- strictly stronger, never looser.",
+    "gain_fraction_by_family clamped negative gains to 0.0 before normalizing, so a family that LOST answers was byte-identical to one that did not move. Now reports signed raw answer gains and signed fractions of the net gain.",
+    "No uncertainty on any decision quantity while the thresholds sit at ~1 standard error. Now reports per-seed margins, seeds-with-positive-margin, and an approximate standard error on the overall margin.",
+    "No cost recorded anywhere despite the spec requiring it. Now records estimated_cost_usd labelled explicitly as the compute_wall_estimate LOWER BOUND, with the watchdog's instance_runtime_estimate named as the authoritative proxy -- methods never mixed.",
+    "gate_cache_binding was a hardcoded literal True with the verifier's return summary discarded -- exactly the Boolean-only gate the spec's section 6 forbids after the A1 gate_s3_profile_grads incident. Now persists verified-record counts per split.",
+    "'+-1% capacity match' was measured on total parameters (3.58M shared base) which swamps the structure channel (T1 21 vs T2 16,385). Both counts are now reported so nominal matching cannot be mistaken for equal structure capacity.",
+    "The four NULL siblings were bit-identical models (verified: max |logp difference| 0.000e+00 after 25 AdamW steps), so 9 of 24 runs were pure waste. Replaced by ONE shared T0 baseline per seed -- exact, not an approximation, and it restores the owner's literal 'T0 no relational structure' arm.",
+    "The structure-gradient gate used any() over a transform's structure parameters, so a transform passed if only its scalar nu was live while its main tensor was dead. Now requires EVERY structure parameter to have a nonzero gradient.",
+    "C0's PROOF_OF_NON_EQUIVARIANCE ran on tier_c_transforms.ConformanceModel (d=32 synthetic scorer) while C1 re-implements T1-T4 inline, so the proof never covered the code that will run. Closed by tier_c_c1_nonequivariance_check.py against the REAL executor."
+  ],
+  "refuted": [
+    "3 findings were refuted by their verifiers and no change was made on their account."
+  ],
+  "nonequivariance_recheck_on_real_executor": {
+    "why": "the C0 proof covered a different implementation",
+    "what_was_found": "T3 and T4 initially FAILED Test A against the C0 tolerance TOL_A=1e-6. Investigation showed this is NOT a structural asymmetry: the step-0 forward difference is EXACTLY 0.000e+00 for every transform, and the Test-A residual collapses by 8-9 orders of magnitude in float64 (T1 1.19e-07 -> 1.22e-15; T3 1.15e-04 -> 2.74e-13). The residual is AdamW-amplified float32 accumulation-order rounding, and deeper structure tensors (T3's B has 12,288 entries) accumulate more. The absolute constant from a d=32 model does not transfer to the d=896 executor.",
+    "registered_criterion": "Test A must collapse to <= 1e-9 in float64 (a precision witness that renaming is exactly equivariant in exact arithmetic); the fp32 Test-A residual must be <= 1e-3 of the Test-B divergence; Test B must diverge >= 1e-3 for every non-identity permutation. Measured fp64 A/B separation on a representative permutation: 1e13 to 1.9e14.",
+    "artifact": "tier_c/C1_EXECUTOR_NONEQUIVARIANCE.json"
+  },
+  "compute_budget_recheck": {
+    "estimate": "~25 min of a 91-min cap (~$0.22 of $0.80) after removing 9 redundant runs and repacking per seed instead of per run",
+    "packing": "pack() rebuilt the 9,000-record tensor pack 28 times though only 3 distinct orders exist; seed is now the OUTER loop so exactly 3 packs are built and only one is live at a time (~2.1 GB each on a 16 GB box)"
+  },
+  "prohibitions_honored": ["no threshold lowered", "no protected read", "no C2_STRUCTURE_EVAL read", "no CAS-specific or 'specific' claim", "no C2 auto-launch", "no status rewrite"]
+}

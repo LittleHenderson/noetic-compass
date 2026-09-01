@@ -1,0 +1,24 @@
+{
+  "c1_pids_sha256": "0ff62d49f72d858b6f38024811260e81bd5987e6c914a6e49095aa6bf7d4cbd5",
+  "c2_enforcement": "the C1 harness materializes activations ONLY for C1 pids; C2 pids are never extracted, evaluated, or inspected during C1",
+  "c2_pids_sha256": "d961a98eb574ca73f76b75b6f0c1d22ed0a7f57720b5ca6d6f097d3e54c37459",
+  "family_counts": {
+    "C1": {
+      "QB_COMP": 198,
+      "QB_INT": 203,
+      "QB_REL": 196
+    },
+    "C2": {
+      "QB_COMP": 177,
+      "QB_INT": 172,
+      "QB_REL": 179
+    }
+  },
+  "law": "HashPRNG('TIERC_SPLIT|<pid>').randbelow(2)==0 -> C1",
+  "manifest_id": "TIERC_C1_SPLIT_MANIFEST",
+  "n_c1_transform_select": 597,
+  "n_c2_structure_eval": 528,
+  "n_val_primary": 1125,
+  "noise_disclosure": "per-family C1 counts ~185; single-seed family-accuracy sd ~ sqrt(.25/185) = .0367; 3-seed mean se ~ .021 -- the 0.02 family margin is ~1 se and is applied by the deterministic law regardless",
+  "non_claim_bearing": true
+}
