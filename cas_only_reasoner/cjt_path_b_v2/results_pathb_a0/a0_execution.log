@@ -1,0 +1,12 @@
++ /root/venv/bin/python -c 'import torch;print('\''TORch'\'',torch.__version__,'\''CUDA'\'',torch.cuda.is_available(),(torch.cuda.get_device_name(0) if torch.cuda.is_available() else '\''NONE'\''))'
+TORch 2.5.1+cu121 CUDA True Tesla T4
+[data] train 129, holdout 150 (families ('QB_REL', 'QB_COMP', 'QB_INT'); QB_ORD dropped: QB_ORD_REJECTED_POSITION_SHORTCUT)
+[extract] 279 records, 22s
+[PRB-POS clean] {'6': 0.7889, '12': 0.8456, '18': 0.8478, '24': 0.7922}
+[L=6] A=1.000/0.973 B=1.000/0.673 C=1.000/0.687 (unif 0.104) shufD=0.295 rewD=0.287 pass=True
+[L=12] A=1.000/0.973 B=1.000/0.807 C=1.000/0.767 (unif 0.104) shufD=0.310 rewD=0.295 pass=True
+[L=18] A=1.000/0.947 B=1.000/0.700 C=1.000/0.713 (unif 0.104) shufD=0.295 rewD=0.302 pass=True
+[L=24] A=1.000/0.753 B=1.000/0.720 C=1.000/0.713 (unif 0.104) shufD=0.310 rewD=0.310 pass=True
+A0 STATUS: GRAPH_EXECUTOR_EARNED (earned layer: 6)
++ echo PATHB_A0_EXIT=0
+PATHB_A0_EXIT=0
