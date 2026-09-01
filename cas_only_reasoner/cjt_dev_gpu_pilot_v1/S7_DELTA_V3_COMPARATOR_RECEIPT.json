@@ -1,0 +1,58 @@
+{
+  "receipt_id": "S7_DELTA_V3_COMPARATOR_RECEIPT",
+  "amendment": "CJT-DEV-P1.2 / S7Delta.2",
+  "non_claim_bearing": true,
+  "verdict": "S7_DELTA_V3_ADMITTED",
+  "admission_gates": {
+    "builder_pass_and_wordnet_pin": true,
+    "v3_profiles_equal_frozen_v2_byte_for_byte": true,
+    "equals_S3": false,
+    "permutation_equals_S3": false,
+    "A_soft_star": 0.523915,
+    "A_soft_gate_lt_0p75": true,
+    "D_copy": 0.476085,
+    "A_hard_star_of_16": 11,
+    "A_hard_gate_lt_14_of_16": true
+  },
+  "descriptive_association_diagnostics": {
+    "law": "DESCRIPTIVE ONLY -- never admission gates. Association with CAS is expected for two semantic descriptions of verbs selected to instantiate the CAS operations; association is not copying.",
+    "null_name": "CONDITIONAL_BALANCED_PERMUTATION_MONTE_CARLO",
+    "draws": 200000,
+    "seed": 20260831,
+    "A_hard_null_p95": 10.0,
+    "A_hard_p_value": 0.01088,
+    "A_hard_p_value_mc_se": 0.000232,
+    "A_soft_null_p95": 0.453218,
+    "A_soft_p_value": 0.001625,
+    "A_soft_p_value_mc_se": 9e-05
+  },
+  "per_verb_aligned_cas_mass_under_best_soft_permutation": {
+    "drawn": 0.647337,
+    "pulled": 0.647337,
+    "felt": 0.093936,
+    "captured": 0.390226,
+    "withdrew": 0.999974,
+    "repelled": 3.2e-05,
+    "recoiled": 0.838441,
+    "backed": 0.999975,
+    "broke": 0.703093,
+    "lay": 0.144895,
+    "split": 0.401114,
+    "made": 0.32116,
+    "brought": 0.244681,
+    "thought": 0.753371,
+    "reminded": 0.471173,
+    "summoned": 0.725898
+  },
+  "best_soft_permutation_factor_for_each_cas_class": {
+    "^2": "WN-F3",
+    "^3": "WN-F1",
+    "^6": "WN-F0",
+    "^8": "WN-F2"
+  },
+  "history": {
+    "v2_verdict_preserved": "S7_DELTA_V2_CONSTRUCTION_FAILED (7b6f2560, under its own frozen significance gates)",
+    "hard_verdict_preserved": "S7_PILOT_CONSTRUCTION_FAILED (19d9e843)"
+  },
+  "s7_delta_v3_table_sha256": "7878da689ad9c3327b1de92765b3d8318ab2b64eb9938f087e635cdf6a047dbb"
+}

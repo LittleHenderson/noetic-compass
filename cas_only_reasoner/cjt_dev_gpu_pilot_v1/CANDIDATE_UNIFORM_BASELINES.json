@@ -1,0 +1,38 @@
+{
+  "record_id": "CANDIDATE_UNIFORM_BASELINES",
+  "amendment": "CJT-DEV-P1.2 (Diagnostic A)",
+  "non_claim_bearing": true,
+  "law": "the task is NOT four-class classification: the head selects one answer from the passage's closed, variable-size candidate set. Chance baselines are candidate-uniform, NEVER 0.25 or ln(4).",
+  "computed_from": {
+    "train": "cjt_gate1a_static_neural_v1/data/candidate/train.jsonl (6000 rows)",
+    "val": "cjt_gate1a_static_neural_v1/data/candidate/val.jsonl (1000 rows)"
+  },
+  "val": {
+    "n": 1000,
+    "candidate_count_range": [4, 18],
+    "mean_candidate_count": 9.067,
+    "uniform_accuracy": 0.12284,
+    "uniform_cross_entropy": 2.15307
+  },
+  "train": {
+    "n": 6000,
+    "candidate_count_range": [4, 18],
+    "mean_candidate_count": 9.286,
+    "uniform_accuracy": 0.12007,
+    "uniform_cross_entropy": 2.17666
+  },
+  "precision_note": "the owner ruling cited uniform accuracy 0.11993 / loss 2.17669 with mean count 9.284 as 'validation' values; those figures match the TRAIN split (0.12007 / 2.17666 / 9.286) to within rounding, not the val split. The qualitative conclusion is unchanged and the ruling's correction stands.",
+  "interpretation_of_the_ran_pilot_9229d8b4": {
+    "neural_val_accuracy_range": [0.2113, 0.2140],
+    "neural_val_loss_range": [2.009, 2.018],
+    "vs_val_uniform": "accuracy ~1.7x above uniform 0.12284; loss below uniform CE 2.15307",
+    "regime": "ABOVE_UNIFORM_LOW_COMPETENCE_READOUT",
+    "retired_reading": "BELOW_CHANCE_NO_LEARNING (incorrect: it confused the 4 profile dimensions with the number of answer choices)"
+  },
+  "structural_transfer_fact": {
+    "train_clause_verbs": ["drawn", "pulled", "withdrew", "repelled", "broke", "lay", "brought", "thought"],
+    "val_clause_verbs": ["felt", "recoiled", "split", "reminded"],
+    "overlap": [],
+    "note": "train (families A,B) and val (family C) share ZERO clause head verbs; validation demands cross-family surface transfer from frozen embeddings. Diagnostic C (in-distribution holdout) isolates how much of the val plateau is this transfer gap."
+  }
+}

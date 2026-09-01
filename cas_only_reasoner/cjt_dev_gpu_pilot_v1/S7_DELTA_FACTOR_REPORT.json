@@ -1,0 +1,1134 @@
+{
+  "report_id": "S7_DELTA_FACTOR_REPORT",
+  "non_claim_bearing": true,
+  "naming_law": "components stay anonymous WN-F0..WN-F3 unless later evidence supports a human-readable semantic name",
+  "factors": {
+    "WN-F0": {
+      "top_weighted_features": [
+        {
+          "feature": "HYP::change",
+          "weight": 2.038172
+        },
+        {
+          "feature": "LEX::verb.change",
+          "weight": 1.827313
+        },
+        {
+          "feature": "HYP::modify",
+          "weight": 1.791583
+        },
+        {
+          "feature": "HYP::alter",
+          "weight": 1.787346
+        },
+        {
+          "feature": "FRM::11",
+          "weight": 0.940404
+        },
+        {
+          "feature": "GLO::make",
+          "weight": 0.815196
+        },
+        {
+          "feature": "FRM::01",
+          "weight": 0.513478
+        },
+        {
+          "feature": "GLO::become",
+          "weight": 0.415681
+        },
+        {
+          "feature": "FRM::10",
+          "weight": 0.332616
+        },
+        {
+          "feature": "GLO::cause",
+          "weight": 0.306232
+        },
+        {
+          "feature": "HYP::increase",
+          "weight": 0.234024
+        },
+        {
+          "feature": "FRM::09",
+          "weight": 0.224186
+        },
+        {
+          "feature": "HYP::convert",
+          "weight": 0.22234
+        },
+        {
+          "feature": "HYP::turn",
+          "weight": 0.206968
+        },
+        {
+          "feature": "GLO::convert",
+          "weight": 0.202042
+        },
+        {
+          "feature": "HYP::change_magnitude",
+          "weight": 0.195332
+        },
+        {
+          "feature": "LEX::verb.body",
+          "weight": 0.190175
+        },
+        {
+          "feature": "HYP::change_state",
+          "weight": 0.189514
+        },
+        {
+          "feature": "HYP::affect",
+          "weight": 0.169939
+        },
+        {
+          "feature": "GLO::change",
+          "weight": 0.167354
+        },
+        {
+          "feature": "HYP::improve",
+          "weight": 0.16692
+        },
+        {
+          "feature": "HYP::meliorate",
+          "weight": 0.16692
+        },
+        {
+          "feature": "HYP::ameliorate",
+          "weight": 0.16692
+        },
+        {
+          "feature": "HYP::better",
+          "weight": 0.166772
+        },
+        {
+          "feature": "GLO::more",
+          "weight": 0.16317
+        },
+        {
+          "feature": "HYP::change_integrity",
+          "weight": 0.162941
+        },
+        {
+          "feature": "LEX::verb.creation",
+          "weight": 0.158645
+        },
+        {
+          "feature": "HYP::touch_on",
+          "weight": 0.158615
+        },
+        {
+          "feature": "HYP::amend",
+          "weight": 0.157545
+        },
+        {
+          "feature": "HYP::bear_upon",
+          "weight": 0.144378
+        }
+      ],
+      "top_background_synsets": [
+        {
+          "synset": "etherealize.v.01",
+          "loading": 0.204686
+        },
+        {
+          "synset": "dinge.v.02",
+          "loading": 0.204686
+        },
+        {
+          "synset": "opalize.v.01",
+          "loading": 0.204686
+        },
+        {
+          "synset": "classicize.v.01",
+          "loading": 0.199678
+        },
+        {
+          "synset": "embrittle.v.01",
+          "loading": 0.199678
+        },
+        {
+          "synset": "demulsify.v.01",
+          "loading": 0.183031
+        },
+        {
+          "synset": "angulate.v.01",
+          "loading": 0.17626
+        },
+        {
+          "synset": "emulsify.v.01",
+          "loading": 0.173877
+        },
+        {
+          "synset": "unsanctify.v.01",
+          "loading": 0.171603
+        },
+        {
+          "synset": "muddy.v.03",
+          "loading": 0.170191
+        },
+        {
+          "synset": "mythologize.v.02",
+          "loading": 0.166706
+        },
+        {
+          "synset": "isomerize.v.01",
+          "loading": 0.152814
+        },
+        {
+          "synset": "destabilize.v.02",
+          "loading": 0.149772
+        },
+        {
+          "synset": "automatize.v.01",
+          "loading": 0.149748
+        },
+        {
+          "synset": "vascularize.v.02",
+          "loading": 0.147501
+        },
+        {
+          "synset": "symmetrize.v.01",
+          "loading": 0.144761
+        },
+        {
+          "synset": "slenderize.v.01",
+          "loading": 0.142617
+        },
+        {
+          "synset": "solvate.v.01",
+          "loading": 0.140162
+        },
+        {
+          "synset": "immaterialize.v.01",
+          "loading": 0.139528
+        },
+        {
+          "synset": "semi-automatize.v.01",
+          "loading": 0.136954
+        },
+        {
+          "synset": "sporulate.v.02",
+          "loading": 0.134107
+        },
+        {
+          "synset": "keratinize.v.01",
+          "loading": 0.134107
+        },
+        {
+          "synset": "oxygenize.v.02",
+          "loading": 0.133538
+        },
+        {
+          "synset": "achromatize.v.01",
+          "loading": 0.132861
+        },
+        {
+          "synset": "sober.v.01",
+          "loading": 0.132379
+        },
+        {
+          "synset": "alcoholize.v.03",
+          "loading": 0.132213
+        },
+        {
+          "synset": "uglify.v.01",
+          "loading": 0.132208
+        },
+        {
+          "synset": "louden.v.02",
+          "loading": 0.131201
+        },
+        {
+          "synset": "depolarize.v.01",
+          "loading": 0.131199
+        },
+        {
+          "synset": "bestialize.v.01",
+          "loading": 0.130347
+        }
+      ],
+      "lexname_distribution_of_dominant_synsets": {
+        "verb.change": 2110,
+        "verb.body": 280,
+        "verb.creation": 247,
+        "verb.contact": 220,
+        "verb.stative": 191,
+        "verb.perception": 120,
+        "verb.social": 106,
+        "verb.possession": 59,
+        "verb.cognition": 42,
+        "verb.communication": 40,
+        "verb.emotion": 40,
+        "verb.weather": 34,
+        "verb.competition": 25,
+        "verb.consumption": 22,
+        "verb.motion": 6
+      },
+      "frame_distribution_of_dominant_synsets": {
+        "08": 2109,
+        "11": 1208,
+        "01": 718,
+        "09": 355,
+        "10": 335,
+        "02": 304,
+        "04": 65,
+        "21": 51,
+        "22": 42,
+        "20": 26,
+        "31": 20,
+        "23": 9,
+        "07": 9,
+        "06": 8,
+        "05": 6
+      },
+      "background_component_mass": 191.6914,
+      "dominant_background_synset_count": 3542
+    },
+    "WN-F1": {
+      "top_weighted_features": [
+        {
+          "feature": "LEX::verb.motion",
+          "weight": 1.516568
+        },
+        {
+          "feature": "HYP::go",
+          "weight": 1.233254
+        },
+        {
+          "feature": "HYP::travel",
+          "weight": 1.193635
+        },
+        {
+          "feature": "HYP::locomote",
+          "weight": 1.180269
+        },
+        {
+          "feature": "HYP::move",
+          "weight": 1.076463
+        },
+        {
+          "feature": "FRM::02",
+          "weight": 1.031862
+        },
+        {
+          "feature": "FRM::01",
+          "weight": 0.751759
+        },
+        {
+          "feature": "FRM::22",
+          "weight": 0.715015
+        },
+        {
+          "feature": "GLO::move",
+          "weight": 0.550604
+        },
+        {
+          "feature": "FRM::04",
+          "weight": 0.474876
+        },
+        {
+          "feature": "HYP::walk",
+          "weight": 0.259988
+        },
+        {
+          "feature": "GLO::travel",
+          "weight": 0.247559
+        },
+        {
+          "feature": "HYP::ride",
+          "weight": 0.242328
+        },
+        {
+          "feature": "GLO::walk",
+          "weight": 0.208156
+        },
+        {
+          "feature": "GLO::ride",
+          "weight": 0.176293
+        },
+        {
+          "feature": "GLO::down",
+          "weight": 0.176252
+        },
+        {
+          "feature": "LEX::verb.stative",
+          "weight": 0.153188
+        },
+        {
+          "feature": "HYP::turn",
+          "weight": 0.147646
+        },
+        {
+          "feature": "HYP::displace",
+          "weight": 0.142006
+        },
+        {
+          "feature": "LEX::verb.perception",
+          "weight": 0.141728
+        },
+        {
+          "feature": "GLO::around",
+          "weight": 0.141237
+        },
+        {
+          "feature": "GLO::sound",
+          "weight": 0.136698
+        },
+        {
+          "feature": "GLO::through",
+          "weight": 0.134851
+        },
+        {
+          "feature": "HYP::sound",
+          "weight": 0.130707
+        },
+        {
+          "feature": "HYP::fall",
+          "weight": 0.128475
+        },
+        {
+          "feature": "HYP::cause_to_be_perceived",
+          "weight": 0.128168
+        },
+        {
+          "feature": "GLO::along",
+          "weight": 0.125829
+        },
+        {
+          "feature": "HYP::dance",
+          "weight": 0.121417
+        },
+        {
+          "feature": "HYP::be",
+          "weight": 0.120625
+        },
+        {
+          "feature": "HYP::go_down",
+          "weight": 0.11996
+        }
+      ],
+      "top_background_synsets": [
+        {
+          "synset": "automobile.v.01",
+          "loading": 0.220202
+        },
+        {
+          "synset": "caravan.v.01",
+          "loading": 0.212094
+        },
+        {
+          "synset": "tram.v.01",
+          "loading": 0.212094
+        },
+        {
+          "synset": "hiss.v.02",
+          "loading": 0.208034
+        },
+        {
+          "synset": "ferry.v.03",
+          "loading": 0.205556
+        },
+        {
+          "synset": "slouch.v.02",
+          "loading": 0.199468
+        },
+        {
+          "synset": "stalk.v.01",
+          "loading": 0.199468
+        },
+        {
+          "synset": "snowmobile.v.01",
+          "loading": 0.195903
+        },
+        {
+          "synset": "dogsled.v.01",
+          "loading": 0.193157
+        },
+        {
+          "synset": "toboggan.v.01",
+          "loading": 0.19164
+        },
+        {
+          "synset": "flounce.v.01",
+          "loading": 0.190257
+        },
+        {
+          "synset": "chariot.v.02",
+          "loading": 0.186566
+        },
+        {
+          "synset": "taxi.v.02",
+          "loading": 0.186566
+        },
+        {
+          "synset": "sled.v.01",
+          "loading": 0.186566
+        },
+        {
+          "synset": "amble.v.01",
+          "loading": 0.185717
+        },
+        {
+          "synset": "whisk.v.02",
+          "loading": 0.185017
+        },
+        {
+          "synset": "foot.v.02",
+          "loading": 0.182665
+        },
+        {
+          "synset": "whish.v.02",
+          "loading": 0.18066
+        },
+        {
+          "synset": "taxi.v.01",
+          "loading": 0.180156
+        },
+        {
+          "synset": "itinerate.v.01",
+          "loading": 0.179015
+        },
+        {
+          "synset": "schuss.v.01",
+          "loading": 0.177459
+        },
+        {
+          "synset": "coast.v.01",
+          "loading": 0.17639
+        },
+        {
+          "synset": "trundle.v.01",
+          "loading": 0.175506
+        },
+        {
+          "synset": "sleepwalk.v.01",
+          "loading": 0.17383
+        },
+        {
+          "synset": "traipse.v.01",
+          "loading": 0.173514
+        },
+        {
+          "synset": "yacht.v.01",
+          "loading": 0.170033
+        },
+        {
+          "synset": "betake_oneself.v.01",
+          "loading": 0.168154
+        },
+        {
+          "synset": "motorboat.v.01",
+          "loading": 0.165242
+        },
+        {
+          "synset": "spacewalk.v.01",
+          "loading": 0.161983
+        },
+        {
+          "synset": "mince.v.02",
+          "loading": 0.161947
+        }
+      ],
+      "lexname_distribution_of_dominant_synsets": {
+        "verb.motion": 1292,
+        "verb.stative": 397,
+        "verb.perception": 237,
+        "verb.competition": 216,
+        "verb.social": 199,
+        "verb.body": 143,
+        "verb.emotion": 80,
+        "verb.consumption": 75,
+        "verb.change": 72,
+        "verb.possession": 72,
+        "verb.creation": 63,
+        "verb.cognition": 56,
+        "verb.weather": 42,
+        "verb.contact": 36,
+        "verb.communication": 29
+      },
+      "frame_distribution_of_dominant_synsets": {
+        "02": 1476,
+        "01": 993,
+        "22": 692,
+        "08": 637,
+        "04": 437,
+        "11": 176,
+        "09": 134,
+        "21": 42,
+        "10": 37,
+        "06": 25,
+        "07": 23,
+        "20": 23,
+        "03": 17,
+        "28": 16,
+        "34": 10
+      },
+      "background_component_mass": 163.1275,
+      "dominant_background_synset_count": 3009
+    },
+    "WN-F2": {
+      "top_weighted_features": [
+        {
+          "feature": "HYP::act",
+          "weight": 1.0814
+        },
+        {
+          "feature": "LEX::verb.communication",
+          "weight": 1.059055
+        },
+        {
+          "feature": "HYP::interact",
+          "weight": 1.03669
+        },
+        {
+          "feature": "HYP::communicate",
+          "weight": 1.031267
+        },
+        {
+          "feature": "HYP::intercommunicate",
+          "weight": 0.977905
+        },
+        {
+          "feature": "HYP::move",
+          "weight": 0.762912
+        },
+        {
+          "feature": "HYP::utter",
+          "weight": 0.538253
+        },
+        {
+          "feature": "HYP::verbalize",
+          "weight": 0.487505
+        },
+        {
+          "feature": "HYP::verbalise",
+          "weight": 0.487505
+        },
+        {
+          "feature": "HYP::inform",
+          "weight": 0.480985
+        },
+        {
+          "feature": "HYP::talk",
+          "weight": 0.460292
+        },
+        {
+          "feature": "HYP::speak",
+          "weight": 0.456654
+        },
+        {
+          "feature": "FRM::02",
+          "weight": 0.420082
+        },
+        {
+          "feature": "FRM::09",
+          "weight": 0.390533
+        },
+        {
+          "feature": "HYP::tell",
+          "weight": 0.372486
+        },
+        {
+          "feature": "HYP::mouth",
+          "weight": 0.354534
+        },
+        {
+          "feature": "HYP::express",
+          "weight": 0.281839
+        },
+        {
+          "feature": "HYP::convey",
+          "weight": 0.245251
+        },
+        {
+          "feature": "HYP::pass_on",
+          "weight": 0.225738
+        },
+        {
+          "feature": "FRM::26",
+          "weight": 0.225582
+        },
+        {
+          "feature": "LEX::verb.social",
+          "weight": 0.224166
+        },
+        {
+          "feature": "HYP::say",
+          "weight": 0.215778
+        },
+        {
+          "feature": "HYP::give_tongue_to",
+          "weight": 0.212318
+        },
+        {
+          "feature": "HYP::state",
+          "weight": 0.177667
+        },
+        {
+          "feature": "HYP::transfer",
+          "weight": 0.169128
+        },
+        {
+          "feature": "HYP::give",
+          "weight": 0.169009
+        },
+        {
+          "feature": "HYP::transmit",
+          "weight": 0.145737
+        },
+        {
+          "feature": "HYP::bespeak",
+          "weight": 0.144752
+        },
+        {
+          "feature": "GLO::make",
+          "weight": 0.137148
+        },
+        {
+          "feature": "HYP::pass_along",
+          "weight": 0.135538
+        }
+      ],
+      "top_background_synsets": [
+        {
+          "synset": "bloviate.v.01",
+          "loading": 0.235403
+        },
+        {
+          "synset": "singsong.v.01",
+          "loading": 0.214062
+        },
+        {
+          "synset": "snivel.v.01",
+          "loading": 0.213512
+        },
+        {
+          "synset": "cheek.v.01",
+          "loading": 0.212466
+        },
+        {
+          "synset": "dogmatize.v.02",
+          "loading": 0.21234
+        },
+        {
+          "synset": "rasp.v.02",
+          "loading": 0.211969
+        },
+        {
+          "synset": "treble.v.01",
+          "loading": 0.210498
+        },
+        {
+          "synset": "orate.v.01",
+          "loading": 0.210241
+        },
+        {
+          "synset": "propagandize.v.01",
+          "loading": 0.208551
+        },
+        {
+          "synset": "undeceive.v.01",
+          "loading": 0.208055
+        },
+        {
+          "synset": "yack.v.01",
+          "loading": 0.205654
+        },
+        {
+          "synset": "enthuse.v.02",
+          "loading": 0.200737
+        },
+        {
+          "synset": "verbalize.v.01",
+          "loading": 0.197327
+        },
+        {
+          "synset": "monologuize.v.01",
+          "loading": 0.193638
+        },
+        {
+          "synset": "hiss.v.03",
+          "loading": 0.192845
+        },
+        {
+          "synset": "descant.v.01",
+          "loading": 0.1925
+        },
+        {
+          "synset": "choir.v.01",
+          "loading": 0.1925
+        },
+        {
+          "synset": "croon.v.01",
+          "loading": 0.192131
+        },
+        {
+          "synset": "speak_in_tongues.v.01",
+          "loading": 0.190843
+        },
+        {
+          "synset": "slang.v.01",
+          "loading": 0.190701
+        },
+        {
+          "synset": "blubber.v.02",
+          "loading": 0.190531
+        },
+        {
+          "synset": "drone.v.02",
+          "loading": 0.190086
+        },
+        {
+          "synset": "blaspheme.v.02",
+          "loading": 0.189415
+        },
+        {
+          "synset": "apostrophize.v.01",
+          "loading": 0.188973
+        },
+        {
+          "synset": "tweedle.v.01",
+          "loading": 0.188591
+        },
+        {
+          "synset": "blurt_out.v.01",
+          "loading": 0.188465
+        },
+        {
+          "synset": "aphorize.v.01",
+          "loading": 0.185849
+        },
+        {
+          "synset": "susurrate.v.01",
+          "loading": 0.18449
+        },
+        {
+          "synset": "rhapsodize.v.02",
+          "loading": 0.182911
+        },
+        {
+          "synset": "whisper.v.01",
+          "loading": 0.18273
+        }
+      ],
+      "lexname_distribution_of_dominant_synsets": {
+        "verb.communication": 1447,
+        "verb.social": 592,
+        "verb.cognition": 477,
+        "verb.creation": 278,
+        "verb.emotion": 108,
+        "verb.possession": 105,
+        "verb.body": 92,
+        "verb.perception": 61,
+        "verb.competition": 43,
+        "verb.stative": 39,
+        "verb.change": 28,
+        "verb.consumption": 12,
+        "verb.motion": 12,
+        "verb.contact": 4
+      },
+      "frame_distribution_of_dominant_synsets": {
+        "08": 1749,
+        "09": 987,
+        "02": 687,
+        "11": 270,
+        "26": 260,
+        "22": 212,
+        "10": 200,
+        "15": 107,
+        "01": 80,
+        "24": 70,
+        "14": 68,
+        "28": 58,
+        "20": 44,
+        "33": 36,
+        "21": 31
+      },
+      "background_component_mass": 181.7365,
+      "dominant_background_synset_count": 3298
+    },
+    "WN-F3": {
+      "top_weighted_features": [
+        {
+          "feature": "LEX::verb.contact",
+          "weight": 1.436901
+        },
+        {
+          "feature": "HYP::displace",
+          "weight": 0.934673
+        },
+        {
+          "feature": "HYP::move",
+          "weight": 0.558753
+        },
+        {
+          "feature": "HYP::connect",
+          "weight": 0.532697
+        },
+        {
+          "feature": "HYP::link",
+          "weight": 0.531672
+        },
+        {
+          "feature": "HYP::link_up",
+          "weight": 0.531672
+        },
+        {
+          "feature": "HYP::tie",
+          "weight": 0.526148
+        },
+        {
+          "feature": "HYP::place",
+          "weight": 0.48094
+        },
+        {
+          "feature": "HYP::put",
+          "weight": 0.479151
+        },
+        {
+          "feature": "HYP::position",
+          "weight": 0.47705
+        },
+        {
+          "feature": "HYP::lay",
+          "weight": 0.476809
+        },
+        {
+          "feature": "HYP::pose",
+          "weight": 0.473615
+        },
+        {
+          "feature": "HYP::set",
+          "weight": 0.467766
+        },
+        {
+          "feature": "HYP::attach",
+          "weight": 0.424208
+        },
+        {
+          "feature": "FRM::21",
+          "weight": 0.390166
+        },
+        {
+          "feature": "FRM::09",
+          "weight": 0.369109
+        },
+        {
+          "feature": "HYP::separate",
+          "weight": 0.342394
+        },
+        {
+          "feature": "FRM::11",
+          "weight": 0.342205
+        },
+        {
+          "feature": "HYP::cover",
+          "weight": 0.337428
+        },
+        {
+          "feature": "HYP::divide",
+          "weight": 0.335907
+        },
+        {
+          "feature": "HYP::part",
+          "weight": 0.329461
+        },
+        {
+          "feature": "HYP::disunite",
+          "weight": 0.305826
+        },
+        {
+          "feature": "HYP::fasten",
+          "weight": 0.294406
+        },
+        {
+          "feature": "HYP::secure",
+          "weight": 0.281761
+        },
+        {
+          "feature": "HYP::fix",
+          "weight": 0.281146
+        },
+        {
+          "feature": "HYP::cut",
+          "weight": 0.260794
+        },
+        {
+          "feature": "HYP::transfer",
+          "weight": 0.243
+        },
+        {
+          "feature": "GLO::cover",
+          "weight": 0.24127
+        },
+        {
+          "feature": "HYP::take",
+          "weight": 0.218421
+        },
+        {
+          "feature": "GLO::cut",
+          "weight": 0.212432
+        }
+      ],
+      "top_background_synsets": [
+        {
+          "synset": "bucket.v.01",
+          "loading": 0.192856
+        },
+        {
+          "synset": "coffin.v.01",
+          "loading": 0.185346
+        },
+        {
+          "synset": "emplace.v.01",
+          "loading": 0.180651
+        },
+        {
+          "synset": "pigeonhole.v.01",
+          "loading": 0.177844
+        },
+        {
+          "synset": "reposition.v.02",
+          "loading": 0.173303
+        },
+        {
+          "synset": "middle.v.01",
+          "loading": 0.170561
+        },
+        {
+          "synset": "recess.v.01",
+          "loading": 0.168481
+        },
+        {
+          "synset": "corral.v.02",
+          "loading": 0.166128
+        },
+        {
+          "synset": "barrel.v.01",
+          "loading": 0.165288
+        },
+        {
+          "synset": "picket.v.02",
+          "loading": 0.16331
+        },
+        {
+          "synset": "checkrow.v.01",
+          "loading": 0.162936
+        },
+        {
+          "synset": "appose.v.01",
+          "loading": 0.162369
+        },
+        {
+          "synset": "parallelize.v.01",
+          "loading": 0.161239
+        },
+        {
+          "synset": "poise.v.03",
+          "loading": 0.157165
+        },
+        {
+          "synset": "brad.v.01",
+          "loading": 0.157125
+        },
+        {
+          "synset": "toggle.v.02",
+          "loading": 0.157125
+        },
+        {
+          "synset": "garter.v.01",
+          "loading": 0.157125
+        },
+        {
+          "synset": "bight.v.01",
+          "loading": 0.157125
+        },
+        {
+          "synset": "interconnect.v.02",
+          "loading": 0.15695
+        },
+        {
+          "synset": "glycerolize.v.01",
+          "loading": 0.15474
+        },
+        {
+          "synset": "misplace.v.02",
+          "loading": 0.154483
+        },
+        {
+          "synset": "noose.v.02",
+          "loading": 0.153243
+        },
+        {
+          "synset": "chock.v.01",
+          "loading": 0.153243
+        },
+        {
+          "synset": "hinge.v.01",
+          "loading": 0.153046
+        },
+        {
+          "synset": "tee.v.01",
+          "loading": 0.153019
+        },
+        {
+          "synset": "superpose.v.01",
+          "loading": 0.152637
+        },
+        {
+          "synset": "cable.v.02",
+          "loading": 0.151588
+        },
+        {
+          "synset": "perch.v.03",
+          "loading": 0.151154
+        },
+        {
+          "synset": "drape.v.01",
+          "loading": 0.150575
+        },
+        {
+          "synset": "padlock.v.01",
+          "loading": 0.149673
+        }
+      ],
+      "lexname_distribution_of_dominant_synsets": {
+        "verb.contact": 1935,
+        "verb.possession": 611,
+        "verb.social": 208,
+        "verb.competition": 175,
+        "verb.change": 172,
+        "verb.consumption": 134,
+        "verb.stative": 127,
+        "verb.cognition": 118,
+        "verb.emotion": 112,
+        "verb.creation": 105,
+        "verb.motion": 95,
+        "verb.perception": 43,
+        "verb.body": 32,
+        "verb.communication": 31,
+        "verb.weather": 5
+      },
+      "frame_distribution_of_dominant_synsets": {
+        "08": 2779,
+        "09": 977,
+        "11": 798,
+        "10": 384,
+        "21": 372,
+        "02": 178,
+        "20": 131,
+        "01": 127,
+        "22": 78,
+        "15": 59,
+        "04": 49,
+        "16": 41,
+        "17": 28,
+        "14": 27,
+        "31": 20
+      },
+      "background_component_mass": 198.2774,
+      "dominant_background_synset_count": 3903
+    }
+  }
+}

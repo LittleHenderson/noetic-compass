@@ -1,0 +1,1173 @@
+{
+  "audit_id": "S7_SENSE_AUDIT",
+  "amendment": "CJT-DEV-P1.2",
+  "non_claim_bearing": true,
+  "verdict": "AUDIT_PASS_NO_SENSE_CORRECTIONS",
+  "law": "only a genuine ERROR forces a rebuilt v3 profile table; DEFENSIBLE/BEST_AVAILABLE stand with recorded alternatives. Result: V3 reuses the v2 profiles byte-for-byte.",
+  "sense_policy_disclosure": "S7-H uses each SURFACE lemma's PRIMARY WordNet sense (bare-form/default lexical-category control; e.g. pull.v.01 for drawn/pulled, put.v.01 for lay); S7-DELTA uses these frozen CONSTRUCTION-CONTEXT senses (e.g. attract.v.01, lie.v.01). Their contrast is NOT a pure hard-vs-soft ablation unless the sense inventories are harmonized.",
+  "particle_verb_checks": {
+    "back_away_verb_synsets": [
+      "retreat.v.04"
+    ],
+    "break_down_verb_synsets": [
+      "break_down.v.01",
+      "analyze.v.02",
+      "break_down.v.03",
+      "fail.v.04",
+      "crumble.v.01",
+      "break_down.v.06",
+      "decompose.v.01",
+      "break_down.v.08"
+    ]
+  },
+  "rows": {
+    "drawn": {
+      "surface_verb": "drawn",
+      "construction_clause_template": "{m} was drawn to {i}.",
+      "frozen_sense": "attract.v.01",
+      "gloss": "direct toward itself or oneself by means of some psychological power or physical attributes",
+      "context_base_lemma": "draw",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "attract",
+        "pull",
+        "pull_in",
+        "draw",
+        "draw_in"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "pull.v.01",
+          "gloss": "cause to move by pulling"
+        },
+        {
+          "synset": "reap.v.02",
+          "gloss": "get or derive"
+        },
+        {
+          "synset": "trace.v.02",
+          "gloss": "make a mark or lines on a surface"
+        },
+        {
+          "synset": "draw.v.04",
+          "gloss": "make, formulate, or derive in the mind"
+        },
+        {
+          "synset": "draw.v.05",
+          "gloss": "bring, take, or pull out of a container or from under a cover"
+        },
+        {
+          "synset": "draw.v.06",
+          "gloss": "represent by making a drawing of, as with a pencil, chalk, etc. on a surface"
+        },
+        {
+          "synset": "draw.v.07",
+          "gloss": "take liquid out of a container or well"
+        },
+        {
+          "synset": "describe.v.01",
+          "gloss": "give a description of"
+        },
+        {
+          "synset": "draw.v.09",
+          "gloss": "select or take in from a given group or region"
+        },
+        {
+          "synset": "draw.v.10",
+          "gloss": "elicit responses, such as objections, criticism, applause, etc."
+        },
+        {
+          "synset": "puff.v.02",
+          "gloss": "suck in or take (air)"
+        },
+        {
+          "synset": "draw.v.12",
+          "gloss": "move or go steadily or gradually"
+        },
+        {
+          "synset": "withdraw.v.09",
+          "gloss": "remove (a commodity) from (a supply source)"
+        },
+        {
+          "synset": "draw.v.14",
+          "gloss": "choose at random"
+        },
+        {
+          "synset": "draw.v.15",
+          "gloss": "earn or achieve a base by being walked by the pitcher"
+        },
+        {
+          "synset": "draw.v.16",
+          "gloss": "bring or lead someone to a certain action or condition"
+        },
+        {
+          "synset": "draw.v.17",
+          "gloss": "cause to flow"
+        },
+        {
+          "synset": "draw.v.18",
+          "gloss": "write a legal document or paper"
+        },
+        {
+          "synset": "draw.v.19",
+          "gloss": "engage in drawing"
+        },
+        {
+          "synset": "draw.v.20",
+          "gloss": "move or pull so as to cover or uncover something"
+        },
+        {
+          "synset": "draw.v.21",
+          "gloss": "allow a draft"
+        },
+        {
+          "synset": "draw.v.22",
+          "gloss": "require a specified depth for floating"
+        },
+        {
+          "synset": "draw.v.23",
+          "gloss": "pull (a person) apart with four horses tied to his extremities, so as to execute him"
+        },
+        {
+          "synset": "pull.v.09",
+          "gloss": "cause to move in a certain direction by exerting a force upon, either physically or in an abstract sense"
+        },
+        {
+          "synset": "absorb.v.04",
+          "gloss": "take in, also metaphorically"
+        },
+        {
+          "synset": "attract.v.01",
+          "gloss": "direct toward itself or oneself by means of some psychological power or physical attributes"
+        },
+        {
+          "synset": "string.v.01",
+          "gloss": "thread on or as if on a string"
+        },
+        {
+          "synset": "pull_back.v.04",
+          "gloss": "stretch back a bowstring (on an archer's bow)"
+        },
+        {
+          "synset": "guide.v.05",
+          "gloss": "pass over, across, or through"
+        },
+        {
+          "synset": "tie.v.02",
+          "gloss": "finish a game with an equal number of points, goals, etc."
+        },
+        {
+          "synset": "draw.v.31",
+          "gloss": "contract"
+        },
+        {
+          "synset": "draw.v.32",
+          "gloss": "reduce the diameter of (a wire or metal rod) by pulling it through a die"
+        },
+        {
+          "synset": "draw.v.33",
+          "gloss": "steep; pass through a strainer"
+        },
+        {
+          "synset": "disembowel.v.01",
+          "gloss": "remove the entrails of"
+        },
+        {
+          "synset": "draw.v.35",
+          "gloss": "flatten, stretch, or mold metal or glass, by rolling or by pulling it through a die or by stretching"
+        },
+        {
+          "synset": "draw.v.36",
+          "gloss": "cause to localize at one point"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "passive 'was drawn to' = attracted toward; attract.v.01 lemmas include draw; gloss 'direct toward itself by psychological power' is the exact clause meaning"
+    },
+    "pulled": {
+      "surface_verb": "pulled",
+      "construction_clause_template": "{i} pulled {m} toward it.",
+      "frozen_sense": "attract.v.01",
+      "gloss": "direct toward itself or oneself by means of some psychological power or physical attributes",
+      "context_base_lemma": "pull",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "attract",
+        "pull",
+        "pull_in",
+        "draw",
+        "draw_in"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "pull.v.01",
+          "gloss": "cause to move by pulling"
+        },
+        {
+          "synset": "attract.v.01",
+          "gloss": "direct toward itself or oneself by means of some psychological power or physical attributes"
+        },
+        {
+          "synset": "pull.v.03",
+          "gloss": "move into a certain direction"
+        },
+        {
+          "synset": "pull.v.04",
+          "gloss": "apply force so as to cause motion towards the source of the motion"
+        },
+        {
+          "synset": "perpetrate.v.01",
+          "gloss": "perform an act, usually with a negative connotation"
+        },
+        {
+          "synset": "draw.v.05",
+          "gloss": "bring, take, or pull out of a container or from under a cover"
+        },
+        {
+          "synset": "pull.v.07",
+          "gloss": "steer into a certain direction"
+        },
+        {
+          "synset": "pull.v.08",
+          "gloss": "strain abnormally"
+        },
+        {
+          "synset": "pull.v.09",
+          "gloss": "cause to move in a certain direction by exerting a force upon, either physically or in an abstract sense"
+        },
+        {
+          "synset": "pull.v.10",
+          "gloss": "operate when rowing a boat"
+        },
+        {
+          "synset": "pull.v.11",
+          "gloss": "rein in to keep from winning a race"
+        },
+        {
+          "synset": "rend.v.01",
+          "gloss": "tear or be torn violently"
+        },
+        {
+          "synset": "pull.v.13",
+          "gloss": "hit in the direction that the player is facing when carrying through the swing"
+        },
+        {
+          "synset": "pluck.v.05",
+          "gloss": "strip of feathers"
+        },
+        {
+          "synset": "extract.v.01",
+          "gloss": "remove, usually with some force or effort; also used in an abstract sense"
+        },
+        {
+          "synset": "pull.v.16",
+          "gloss": "take sides with; align oneself with; show strong sympathy for"
+        },
+        {
+          "synset": "pull.v.17",
+          "gloss": "take away"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "figurative pull-toward; attract.v.01 lemmas include pull; same attraction dynamic from the idea's side"
+    },
+    "felt": {
+      "surface_verb": "felt",
+      "construction_clause_template": "{m} felt an unmistakable pull toward {i}.",
+      "frozen_sense": "feel.v.01",
+      "gloss": "undergo an emotional sensation or be in a particular state of mind",
+      "context_base_lemma": "feel",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "feel",
+        "experience"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "feel.v.01",
+          "gloss": "undergo an emotional sensation or be in a particular state of mind"
+        },
+        {
+          "synset": "find.v.05",
+          "gloss": "come to believe on the basis of emotion, intuitions, or indefinite grounds"
+        },
+        {
+          "synset": "feel.v.03",
+          "gloss": "perceive by a physical sensation, e.g., coming from the skin or muscles"
+        },
+        {
+          "synset": "feel.v.04",
+          "gloss": "be conscious of a physical, mental, or emotional state"
+        },
+        {
+          "synset": "feel.v.05",
+          "gloss": "have a feeling or perception about oneself in reaction to someone's behavior or attitude"
+        },
+        {
+          "synset": "feel.v.06",
+          "gloss": "undergo passive experience of:"
+        },
+        {
+          "synset": "feel.v.07",
+          "gloss": "be felt or perceived in a certain way"
+        },
+        {
+          "synset": "feel.v.08",
+          "gloss": "grope or feel in search of something"
+        },
+        {
+          "synset": "feel.v.09",
+          "gloss": "examine by touch"
+        },
+        {
+          "synset": "palpate.v.01",
+          "gloss": "examine (a body part) by palpation"
+        },
+        {
+          "synset": "feel.v.11",
+          "gloss": "find by testing or cautious exploration"
+        },
+        {
+          "synset": "feel.v.12",
+          "gloss": "produce a certain impression"
+        },
+        {
+          "synset": "feel.v.13",
+          "gloss": "pass one's hands over the sexual organs of"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "undergo an emotional sensation -- the mind experiences the pull; matches exactly"
+    },
+    "captured": {
+      "surface_verb": "captured",
+      "construction_clause_template": "the appeal of {i} captured {m} completely.",
+      "frozen_sense": "capture.v.02",
+      "gloss": "attract; cause to be enamored",
+      "context_base_lemma": "capture",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "capture",
+        "enamour",
+        "trance",
+        "catch",
+        "becharm",
+        "enamor",
+        "captivate",
+        "beguile",
+        "charm",
+        "fascinate",
+        "bewitch",
+        "entrance",
+        "enchant"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "capture.v.01",
+          "gloss": "succeed in representing or expressing something intangible"
+        },
+        {
+          "synset": "capture.v.02",
+          "gloss": "attract; cause to be enamored"
+        },
+        {
+          "synset": "get.v.11",
+          "gloss": "succeed in catching or seizing, especially after a chase"
+        },
+        {
+          "synset": "capture.v.04",
+          "gloss": "bring about the capture of an elementary particle or celestial body and causing it enter a new orbit"
+        },
+        {
+          "synset": "appropriate.v.02",
+          "gloss": "take possession of by force, as after an invasion"
+        },
+        {
+          "synset": "capture.v.06",
+          "gloss": "capture as if by hunting, snaring, or trapping"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "gloss IS 'attract; cause to be enamored' (captivate); the clause subject is 'the appeal of {i}'"
+    },
+    "withdrew": {
+      "surface_verb": "withdrew",
+      "construction_clause_template": "{m} withdrew from {i}.",
+      "frozen_sense": "withdraw.v.01",
+      "gloss": "pull back or move away or backward",
+      "context_base_lemma": "withdraw",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "withdraw",
+        "retreat",
+        "pull_away",
+        "draw_back",
+        "recede",
+        "pull_back",
+        "retire",
+        "move_back"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "withdraw.v.01",
+          "gloss": "pull back or move away or backward"
+        },
+        {
+          "synset": "retire.v.02",
+          "gloss": "withdraw from active participation"
+        },
+        {
+          "synset": "disengage.v.01",
+          "gloss": "release from something that holds fast, connects, or entangles"
+        },
+        {
+          "synset": "recall.v.07",
+          "gloss": "cause to be returned"
+        },
+        {
+          "synset": "swallow.v.05",
+          "gloss": "take back what one has said"
+        },
+        {
+          "synset": "seclude.v.01",
+          "gloss": "keep away from others"
+        },
+        {
+          "synset": "adjourn.v.02",
+          "gloss": "break from a meeting or gathering"
+        },
+        {
+          "synset": "bow_out.v.02",
+          "gloss": "retire gracefully"
+        },
+        {
+          "synset": "withdraw.v.09",
+          "gloss": "remove (a commodity) from (a supply source)"
+        },
+        {
+          "synset": "retire.v.08",
+          "gloss": "lose interest"
+        },
+        {
+          "synset": "retreat.v.04",
+          "gloss": "make a retreat from an earlier commitment or activity"
+        },
+        {
+          "synset": "remove.v.01",
+          "gloss": "remove something concrete, as by lifting, pushing, or taking off, or remove something abstract"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "'pull back or move away or backward' -- the figurative move-away from the idea"
+    },
+    "repelled": {
+      "surface_verb": "repelled",
+      "construction_clause_template": "{i} repelled {m} from the start.",
+      "frozen_sense": "repel.v.02",
+      "gloss": "be repellent to; cause aversion in",
+      "context_base_lemma": "repel",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "repel",
+        "repulse"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "repel.v.01",
+          "gloss": "cause to move back by force or influence"
+        },
+        {
+          "synset": "repel.v.02",
+          "gloss": "be repellent to; cause aversion in"
+        },
+        {
+          "synset": "repel.v.03",
+          "gloss": "force or drive back"
+        },
+        {
+          "synset": "rebuff.v.01",
+          "gloss": "reject outright and bluntly"
+        },
+        {
+          "synset": "disgust.v.01",
+          "gloss": "fill with distaste"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "'be repellent to; cause aversion in' -- the idea causes aversion in the mind; exact"
+    },
+    "recoiled": {
+      "surface_verb": "recoiled",
+      "construction_clause_template": "{m} recoiled whenever {i} came up.",
+      "frozen_sense": "flinch.v.01",
+      "gloss": "draw back, as with fear or pain",
+      "context_base_lemma": "recoil",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "flinch",
+        "squinch",
+        "funk",
+        "cringe",
+        "shrink",
+        "wince",
+        "recoil",
+        "quail"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "flinch.v.01",
+          "gloss": "draw back, as with fear or pain"
+        },
+        {
+          "synset": "backfire.v.01",
+          "gloss": "come back to the originator of an action with an undesired effect"
+        },
+        {
+          "synset": "bounce.v.01",
+          "gloss": "spring back; spring away from an impact"
+        },
+        {
+          "synset": "kick_back.v.02",
+          "gloss": "spring back, as from a forceful thrust"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "'draw back, as with fear or pain' -- exact"
+    },
+    "backed": {
+      "surface_verb": "backed",
+      "construction_clause_template": "faced with {i}, {m} backed away.",
+      "frozen_sense": "back.v.02",
+      "gloss": "travel backward",
+      "context_base_lemma": "back",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "back"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "back.v.01",
+          "gloss": "be behind; approve of"
+        },
+        {
+          "synset": "back.v.02",
+          "gloss": "travel backward"
+        },
+        {
+          "synset": "second.v.01",
+          "gloss": "give support or one's approval to"
+        },
+        {
+          "synset": "back.v.04",
+          "gloss": "cause to travel backward"
+        },
+        {
+          "synset": "back.v.05",
+          "gloss": "support financial backing for"
+        },
+        {
+          "synset": "back.v.06",
+          "gloss": "be in back of"
+        },
+        {
+          "synset": "bet_on.v.01",
+          "gloss": "place a bet on"
+        },
+        {
+          "synset": "back.v.08",
+          "gloss": "shift to a counterclockwise direction"
+        },
+        {
+          "synset": "back.v.09",
+          "gloss": "establish as valid or genuine"
+        },
+        {
+          "synset": "back.v.10",
+          "gloss": "strengthen by providing with a back or backing"
+        }
+      ],
+      "verdict": "DEFENSIBLE",
+      "rationale": "back.v.02 'travel backward' (verb.motion) is the physical-metaphor reading of the retreat. Particle alternative recorded: back_away IS a WordNet lemma, in retreat.v.04 'make a retreat from an earlier commitment or activity' (verb.communication) -- the commitment-abandonment reading. The frozen motion sense is register-consistent with the family's other frozen aversion senses (withdraw.v.01, flinch.v.01, both verb.motion); back.v.04 is transitive-causative and does not fit"
+    },
+    "broke": {
+      "surface_verb": "broke",
+      "construction_clause_template": "{i} broke down into {p1}, {p2}, and {p3}.",
+      "frozen_sense": "break.v.02",
+      "gloss": "become separated into pieces or fragments",
+      "context_base_lemma": "break",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "break",
+        "separate",
+        "split_up",
+        "fall_apart",
+        "come_apart"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "interrupt.v.04",
+          "gloss": "terminate"
+        },
+        {
+          "synset": "break.v.02",
+          "gloss": "become separated into pieces or fragments"
+        },
+        {
+          "synset": "break.v.03",
+          "gloss": "render inoperable or ineffective"
+        },
+        {
+          "synset": "break.v.04",
+          "gloss": "ruin completely"
+        },
+        {
+          "synset": "break.v.05",
+          "gloss": "destroy the integrity of; usually by force; cause to separate into pieces or fragments"
+        },
+        {
+          "synset": "transgress.v.01",
+          "gloss": "act in disregard of laws, rules, contracts, or promises"
+        },
+        {
+          "synset": "break.v.07",
+          "gloss": "move away or escape suddenly"
+        },
+        {
+          "synset": "break.v.08",
+          "gloss": "scatter or part"
+        },
+        {
+          "synset": "break.v.09",
+          "gloss": "force out or release suddenly and often violently something pent up"
+        },
+        {
+          "synset": "break.v.10",
+          "gloss": "prevent completion"
+        },
+        {
+          "synset": "break_in.v.01",
+          "gloss": "enter someone's (virtual or real) property in an unauthorized manner, usually with the intent to steal or commit a violent act"
+        },
+        {
+          "synset": "break_in.v.06",
+          "gloss": "make submissive, obedient, or useful"
+        },
+        {
+          "synset": "violate.v.01",
+          "gloss": "fail to agree with; be in violation of; as of rules or patterns"
+        },
+        {
+          "synset": "better.v.01",
+          "gloss": "surpass in excellence"
+        },
+        {
+          "synset": "unwrap.v.02",
+          "gloss": "make known to the public information that was previously known only to a few people or that was meant to be kept a secret"
+        },
+        {
+          "synset": "break.v.16",
+          "gloss": "come into being"
+        },
+        {
+          "synset": "fail.v.04",
+          "gloss": "stop operating or functioning"
+        },
+        {
+          "synset": "break.v.18",
+          "gloss": "interrupt a continued activity"
+        },
+        {
+          "synset": "break.v.19",
+          "gloss": "make a rupture in the ranks of the enemy or one's own by quitting or fleeing"
+        },
+        {
+          "synset": "break.v.20",
+          "gloss": "curl over and fall apart in surf or foam, of waves"
+        },
+        {
+          "synset": "dampen.v.07",
+          "gloss": "lessen in force or effect"
+        },
+        {
+          "synset": "break.v.22",
+          "gloss": "be broken in"
+        },
+        {
+          "synset": "break.v.23",
+          "gloss": "come to an end"
+        },
+        {
+          "synset": "break.v.24",
+          "gloss": "vary or interrupt a uniformity or continuity"
+        },
+        {
+          "synset": "break.v.25",
+          "gloss": "cause to give up a habit"
+        },
+        {
+          "synset": "break.v.26",
+          "gloss": "give up"
+        },
+        {
+          "synset": "break.v.27",
+          "gloss": "come forth or begin from a state of latency"
+        },
+        {
+          "synset": "break.v.28",
+          "gloss": "happen or take place"
+        },
+        {
+          "synset": "break.v.29",
+          "gloss": "cause the failure or ruin of"
+        },
+        {
+          "synset": "break.v.30",
+          "gloss": "invalidate by judicial action"
+        },
+        {
+          "synset": "separate.v.08",
+          "gloss": "discontinue an association or relation; go different ways"
+        },
+        {
+          "synset": "demote.v.01",
+          "gloss": "assign to a lower position; reduce in rank"
+        },
+        {
+          "synset": "bankrupt.v.01",
+          "gloss": "reduce to bankruptcy"
+        },
+        {
+          "synset": "break.v.34",
+          "gloss": "change directions suddenly"
+        },
+        {
+          "synset": "break.v.35",
+          "gloss": "emerge from the surface of a body of water"
+        },
+        {
+          "synset": "collapse.v.01",
+          "gloss": "break down, literally or metaphorically"
+        },
+        {
+          "synset": "break_dance.v.01",
+          "gloss": "do a break dance"
+        },
+        {
+          "synset": "break.v.38",
+          "gloss": "exchange for smaller units of money"
+        },
+        {
+          "synset": "break.v.39",
+          "gloss": "destroy the completeness of a set of related items"
+        },
+        {
+          "synset": "break.v.40",
+          "gloss": "make the opening shot that scatters the balls"
+        },
+        {
+          "synset": "break.v.41",
+          "gloss": "separate from a clinch, in boxing"
+        },
+        {
+          "synset": "break.v.42",
+          "gloss": "go to pieces"
+        },
+        {
+          "synset": "break.v.43",
+          "gloss": "break a piece from a whole"
+        },
+        {
+          "synset": "break.v.44",
+          "gloss": "become punctured or penetrated"
+        },
+        {
+          "synset": "break.v.45",
+          "gloss": "pierce or penetrate"
+        },
+        {
+          "synset": "break.v.46",
+          "gloss": "be released or become known; of news"
+        },
+        {
+          "synset": "pause.v.02",
+          "gloss": "cease an action temporarily"
+        },
+        {
+          "synset": "break.v.48",
+          "gloss": "interrupt the flow of current in"
+        },
+        {
+          "synset": "break.v.49",
+          "gloss": "undergo breaking"
+        },
+        {
+          "synset": "break.v.50",
+          "gloss": "find a flaw in"
+        },
+        {
+          "synset": "break.v.51",
+          "gloss": "find the solution or key to"
+        },
+        {
+          "synset": "break.v.52",
+          "gloss": "change suddenly from one tone quality or register to another"
+        },
+        {
+          "synset": "break.v.53",
+          "gloss": "happen"
+        },
+        {
+          "synset": "crack.v.01",
+          "gloss": "become fractured; break or crack on the surface only"
+        },
+        {
+          "synset": "break.v.55",
+          "gloss": "crack; of the male voice in puberty"
+        },
+        {
+          "synset": "break.v.56",
+          "gloss": "fall sharply"
+        },
+        {
+          "synset": "fracture.v.06",
+          "gloss": "fracture a bone of"
+        },
+        {
+          "synset": "break.v.58",
+          "gloss": "diminish or discontinue abruptly"
+        },
+        {
+          "synset": "break.v.59",
+          "gloss": "weaken or destroy in spirit or body"
+        }
+      ],
+      "verdict": "DEFENSIBLE",
+      "rationale": "break.v.02 'become separated into pieces or fragments' is the decomposition-into-parts meaning. Particle alternative recorded: break_down appears in decompose.v.01 'separate (substances) into constituent elements or parts' -- near-synonymous gloss, an equally fitting anchor; also in analyze.v.02 (agentive analysis) and several failure/collapse senses that do not fit. The frozen v.02 and decompose.v.01 share the same core meaning, so this is not a sense ERROR"
+    },
+    "lay": {
+      "surface_verb": "lay",
+      "construction_clause_template": "inside {i} lay {p1}, {p2}, and {p3}.",
+      "frozen_sense": "lie.v.01",
+      "gloss": "be located or situated somewhere; occupy a certain position",
+      "context_base_lemma": "lie",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "lie"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "lie.v.01",
+          "gloss": "be located or situated somewhere; occupy a certain position"
+        },
+        {
+          "synset": "lie.v.02",
+          "gloss": "be lying, be prostrate; be in a horizontal position"
+        },
+        {
+          "synset": "dwell.v.02",
+          "gloss": "originate (in)"
+        },
+        {
+          "synset": "lie.v.04",
+          "gloss": "be and remain in a particular state or condition"
+        },
+        {
+          "synset": "lie.v.05",
+          "gloss": "tell an untruth; pretend with intent to deceive"
+        },
+        {
+          "synset": "lie.v.06",
+          "gloss": "have a place in relation to something else"
+        },
+        {
+          "synset": "lie_down.v.01",
+          "gloss": "assume a reclining position"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "'inside X lay parts' = the parts were located/situated inside; the surface 'lay' is the PAST TENSE OF LIE (be situated), not the transitive lay/put -- exactly why the context-sense policy differs from S7-H's primary-sense-of-surface-lemma policy (which anchored on put.v.01)"
+    },
+    "split": {
+      "surface_verb": "split",
+      "construction_clause_template": "{i} could be split into {p1}, {p2}, and {p3}.",
+      "frozen_sense": "divide.v.01",
+      "gloss": "separate into parts or portions",
+      "context_base_lemma": "split",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "divide",
+        "split",
+        "split_up",
+        "separate",
+        "dissever",
+        "carve_up"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "divide.v.01",
+          "gloss": "separate into parts or portions"
+        },
+        {
+          "synset": "cleave.v.01",
+          "gloss": "separate or cut with a tool, such as a sharp instrument"
+        },
+        {
+          "synset": "separate.v.08",
+          "gloss": "discontinue an association or relation; go different ways"
+        },
+        {
+          "synset": "separate.v.09",
+          "gloss": "go one's own way; move apart"
+        },
+        {
+          "synset": "burst.v.01",
+          "gloss": "come open suddenly and violently, as if from internal pressure"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "'separate into parts or portions' -- exact; cleave.v.01 is tool-cutting, not abstract partition"
+    },
+    "made": {
+      "surface_verb": "made",
+      "construction_clause_template": "three strands made up {i}: {p1}, {p2}, and {p3}.",
+      "frozen_sense": "constitute.v.01",
+      "gloss": "form or compose",
+      "context_base_lemma": "make_up",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "constitute",
+        "represent",
+        "make_up",
+        "comprise",
+        "be"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "constitute.v.01",
+          "gloss": "form or compose"
+        },
+        {
+          "synset": "make_up.v.02",
+          "gloss": "devise or compose"
+        },
+        {
+          "synset": "pay.v.05",
+          "gloss": "do or give something to somebody in return"
+        },
+        {
+          "synset": "make_up.v.04",
+          "gloss": "make up work that was missed due to absence at a later point"
+        },
+        {
+          "synset": "fabricate.v.02",
+          "gloss": "make up something artificial or untrue"
+        },
+        {
+          "synset": "make.v.27",
+          "gloss": "put in order or neaten"
+        },
+        {
+          "synset": "compensate.v.01",
+          "gloss": "adjust for"
+        },
+        {
+          "synset": "reconcile.v.03",
+          "gloss": "come to terms"
+        },
+        {
+          "synset": "make_up.v.09",
+          "gloss": "apply make-up or cosmetics to one's face to appear prettier"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "the surface is the particle verb 'made up' = compose/constitute; constitute.v.01 lemmas include make_up; gloss 'form or compose' is exact"
+    },
+    "brought": {
+      "surface_verb": "brought",
+      "construction_clause_template": "{a} brought {b} to {m}'s mind.",
+      "frozen_sense": "bring.v.03",
+      "gloss": "cause to happen or to occur as a consequence",
+      "context_base_lemma": "bring",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "bring",
+        "work",
+        "play",
+        "wreak",
+        "make_for"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "bring.v.01",
+          "gloss": "take something or somebody with oneself somewhere"
+        },
+        {
+          "synset": "bring.v.02",
+          "gloss": "cause to come into a particular state or condition"
+        },
+        {
+          "synset": "bring.v.03",
+          "gloss": "cause to happen or to occur as a consequence"
+        },
+        {
+          "synset": "bring.v.04",
+          "gloss": "go or come after and bring or take back"
+        },
+        {
+          "synset": "bring.v.05",
+          "gloss": "bring into a different state"
+        },
+        {
+          "synset": "bring.v.06",
+          "gloss": "be accompanied by"
+        },
+        {
+          "synset": "institute.v.02",
+          "gloss": "advance or set forth in court; ,"
+        },
+        {
+          "synset": "lend.v.01",
+          "gloss": "bestow a quality on"
+        },
+        {
+          "synset": "fetch.v.02",
+          "gloss": "be sold for a certain price"
+        },
+        {
+          "synset": "bring.v.10",
+          "gloss": "attract the attention of"
+        },
+        {
+          "synset": "bring.v.11",
+          "gloss": "induce or persuade"
+        }
+      ],
+      "verdict": "DEFENSIBLE",
+      "rationale": "bring.v.03 'cause to happen or to occur as a consequence' captures the trigger-effect semantics ({b} surfaces as a consequence of {a}); bring.v.01 (take somewhere) and bring.v.02 (cause to come into a state) are the recorded alternatives under the location-metaphor reading"
+    },
+    "thought": {
+      "surface_verb": "thought",
+      "construction_clause_template": "whenever {m} thought of {a}, {b} surfaced.",
+      "frozen_sense": "think.v.01",
+      "gloss": "judge or regard; look upon; judge",
+      "context_base_lemma": "think",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "think",
+        "believe",
+        "consider",
+        "conceive"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "think.v.01",
+          "gloss": "judge or regard; look upon; judge"
+        },
+        {
+          "synset": "think.v.02",
+          "gloss": "expect, believe, or suppose"
+        },
+        {
+          "synset": "think.v.03",
+          "gloss": "use or exercise the mind or one's power of reason in order to make inferences, decisions, or arrive at a solution or judgments"
+        },
+        {
+          "synset": "remember.v.01",
+          "gloss": "recall knowledge from memory; have a recollection"
+        },
+        {
+          "synset": "think.v.05",
+          "gloss": "imagine or visualize"
+        },
+        {
+          "synset": "think.v.06",
+          "gloss": "focus one's attention on a certain state"
+        },
+        {
+          "synset": "intend.v.01",
+          "gloss": "have in mind as a purpose"
+        },
+        {
+          "synset": "think.v.08",
+          "gloss": "decide by pondering, reasoning, or reflecting"
+        },
+        {
+          "synset": "think.v.09",
+          "gloss": "ponder; reflect on, or reason about"
+        },
+        {
+          "synset": "think.v.10",
+          "gloss": "dispose the mind in a certain way"
+        },
+        {
+          "synset": "think.v.11",
+          "gloss": "have or formulate in the mind"
+        },
+        {
+          "synset": "think.v.12",
+          "gloss": "be capable of conscious thought"
+        },
+        {
+          "synset": "think.v.13",
+          "gloss": "bring into a given condition by mental preoccupation"
+        }
+      ],
+      "verdict": "DEFENSIBLE",
+      "rationale": "'thought of {a}' = regarded/considered {a} (think.v.01 'judge or regard; look upon'); remember.v.01 (recall from memory) and think.v.05 (imagine or visualize) are recorded alternatives; the template does not force recall-from-memory, so v.01's consider/regard reading stands"
+    },
+    "reminded": {
+      "surface_verb": "reminded",
+      "construction_clause_template": "{a} reminded {m} of {b}.",
+      "frozen_sense": "remind.v.01",
+      "gloss": "put in the mind of someone",
+      "context_base_lemma": "remind",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "remind"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "remind.v.01",
+          "gloss": "put in the mind of someone"
+        },
+        {
+          "synset": "prompt.v.03",
+          "gloss": "assist (somebody acting or reciting) by suggesting the next words of something forgotten or imperfectly learned"
+        }
+      ],
+      "verdict": "CORRECT",
+      "rationale": "'put in the mind of someone' -- the exact associative-trigger meaning"
+    },
+    "summoned": {
+      "surface_verb": "summoned",
+      "construction_clause_template": "for {m}, {a} always summoned {b}.",
+      "frozen_sense": "summon.v.02",
+      "gloss": "ask to come",
+      "context_base_lemma": "summon",
+      "lemma_membership": true,
+      "synset_lemmas": [
+        "summon"
+      ],
+      "alternative_senses_of_base_lemma": [
+        {
+          "synset": "summon.v.01",
+          "gloss": "call in an official matter, such as to attend court"
+        },
+        {
+          "synset": "summon.v.02",
+          "gloss": "ask to come"
+        },
+        {
+          "synset": "muster.v.01",
+          "gloss": "gather or bring together"
+        },
+        {
+          "synset": "mobilize.v.01",
+          "gloss": "make ready for action or use"
+        }
+      ],
+      "verdict": "BEST_AVAILABLE",
+      "rationale": "the clause means {a} calls {b} forth to mind. Lemma summon has four verb senses: v.01 official citation, v.02 'ask to come', muster.v.01 gather, mobilize.v.01 ready-for-action. No evoke-type synset carries the lemma summon (evoke.v lemmas: raise/conjure/invoke/call_forth...). v.02 'ask to come' (figuratively, asking the idea to come) is the closest available sense for this lemma"
+    }
+  }
+}

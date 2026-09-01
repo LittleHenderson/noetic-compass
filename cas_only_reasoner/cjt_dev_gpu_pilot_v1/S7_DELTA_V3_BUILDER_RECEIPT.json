@@ -1,0 +1,382 @@
+{
+  "receipt_id": "S7_DELTA_V3_BUILDER_RECEIPT",
+  "amendment": "CJT-DEV-P1.2 / S7Delta.2",
+  "non_claim_bearing": true,
+  "verdict": "S7_DELTA_V3_BUILT",
+  "structural_independence": "this builder holds no CAS mapping; CAS-relative diagnostics live ONLY in compare_s7_to_cas.py, run after sealing",
+  "s7_delta_v3_table_sha256": "e2b8c9ee547af3b1479969272c6371ae5836bff7539d02ebb135bf4530a07f8f",
+  "builder_gates": {
+    "wordnet_pin_matched": true,
+    "reproduces_frozen_v2_profiles": true,
+    "max_reproduction_drift": 4.86233703300698e-09,
+    "rows_finite": true,
+    "rows_nonnegative": true,
+    "rows_sum_to_one": true,
+    "stability_median_mean_row_js_nats": 1.4e-05,
+    "stability_pass": true,
+    "antiuniform_U1_mean_tv_ge_bgP25": true,
+    "antiuniform_U2_mean_entropy_le_bgP90": true,
+    "antiuniform_U3_rank4_and_effrank_ge_2": true,
+    "antiuniform_U4_min_component_share_ge_5pct": true,
+    "matrix_rank": 4,
+    "centered_affine_rank": 3,
+    "effective_rank_participation": 2.6316
+  },
+  "builder_pass": true,
+  "stability_fits": [
+    {
+      "seed": 1,
+      "mean_row_js_vs_primary_nats": 1.2e-05
+    },
+    {
+      "seed": 2,
+      "mean_row_js_vs_primary_nats": 1.2e-05
+    },
+    {
+      "seed": 3,
+      "mean_row_js_vs_primary_nats": 0.040591
+    },
+    {
+      "seed": 4,
+      "mean_row_js_vs_primary_nats": 0.040588
+    },
+    {
+      "seed": 5,
+      "mean_row_js_vs_primary_nats": 1.4e-05
+    }
+  ],
+  "component_target_mass_share": [
+    0.199188,
+    0.299731,
+    0.235663,
+    0.265418
+  ],
+  "antiuniform_background_thresholds": {
+    "bg_tv_P25": 0.390095,
+    "target_mean_tv": 0.408365,
+    "bg_entropy_P90": 0.841637,
+    "target_mean_entropy": 0.606077
+  },
+  "per_verb": {
+    "backed": {
+      "sense": "back.v.02",
+      "profile": [
+        8.17e-06,
+        0.99997548,
+        8.17e-06,
+        8.17e-06
+      ],
+      "raw_profile_pre_balancing": [
+        9.21e-06,
+        0.99997238,
+        9.21e-06,
+        9.21e-06
+      ],
+      "balancing_row_L1_change": 6e-06,
+      "dominant_component": "WN-F1",
+      "dominance_max": 0.999975,
+      "dominance_margin_top1_top2": 0.999967,
+      "normalized_entropy": 0.000225
+    },
+    "broke": {
+      "sense": "break.v.02",
+      "profile": [
+        0.70309288,
+        0.16579653,
+        2.091e-05,
+        0.13108967
+      ],
+      "raw_profile_pre_balancing": [
+        0.71758914,
+        0.14400267,
+        2.045e-05,
+        0.13838774
+      ],
+      "balancing_row_L1_change": 0.043589,
+      "dominant_component": "WN-F0",
+      "dominance_max": 0.703093,
+      "dominance_margin_top1_top2": 0.537296,
+      "normalized_entropy": 0.585874
+    },
+    "brought": {
+      "sense": "bring.v.03",
+      "profile": [
+        0.35440078,
+        0.11759114,
+        0.24468086,
+        0.28332721
+      ],
+      "raw_profile_pre_balancing": [
+        0.36181464,
+        0.10216641,
+        0.23682816,
+        0.29919078
+      ],
+      "balancing_row_L1_change": 0.046555,
+      "dominant_component": "WN-F0",
+      "dominance_max": 0.354401,
+      "dominance_margin_top1_top2": 0.071074,
+      "normalized_entropy": 0.952986
+    },
+    "captured": {
+      "sense": "capture.v.02",
+      "profile": [
+        0.25300487,
+        0.06087313,
+        0.29589645,
+        0.39022555
+      ],
+      "raw_profile_pre_balancing": [
+        0.25582473,
+        0.05238521,
+        0.28365923,
+        0.40813084
+      ],
+      "balancing_row_L1_change": 0.04145,
+      "dominant_component": "WN-F3",
+      "dominance_max": 0.390226,
+      "dominance_margin_top1_top2": 0.094329,
+      "normalized_entropy": 0.898538
+    },
+    "drawn": {
+      "sense": "attract.v.01",
+      "profile": [
+        0.08357413,
+        0.12935403,
+        0.1397344,
+        0.64733745
+      ],
+      "raw_profile_pre_balancing": [
+        0.08393357,
+        0.11055522,
+        0.1330488,
+        0.6724624
+      ],
+      "balancing_row_L1_change": 0.050969,
+      "dominant_component": "WN-F3",
+      "dominance_max": 0.647337,
+      "dominance_margin_top1_top2": 0.507603,
+      "normalized_entropy": 0.74191
+    },
+    "felt": {
+      "sense": "feel.v.01",
+      "profile": [
+        0.31741891,
+        0.30482172,
+        0.28382355,
+        0.09393582
+      ],
+      "raw_profile_pre_balancing": [
+        0.3365772,
+        0.27507213,
+        0.28532994,
+        0.10302074
+      ],
+      "balancing_row_L1_change": 0.059499,
+      "dominant_component": "WN-F0",
+      "dominance_max": 0.317419,
+      "dominance_margin_top1_top2": 0.012597,
+      "normalized_entropy": 0.942084
+    },
+    "lay": {
+      "sense": "lie.v.01",
+      "profile": [
+        0.14489538,
+        0.83707135,
+        2.963e-05,
+        0.01800365
+      ],
+      "raw_profile_pre_balancing": [
+        0.16542598,
+        0.81328316,
+        3.242e-05,
+        0.02125844
+      ],
+      "balancing_row_L1_change": 0.047576,
+      "dominant_component": "WN-F1",
+      "dominance_max": 0.837071,
+      "dominance_margin_top1_top2": 0.692176,
+      "normalized_entropy": 0.361686
+    },
+    "made": {
+      "sense": "constitute.v.01",
+      "profile": [
+        0.32115999,
+        0.2123142,
+        0.16661697,
+        0.29990884
+      ],
+      "raw_profile_pre_balancing": [
+        0.33108581,
+        0.18626778,
+        0.1628478,
+        0.3197986
+      ],
+      "balancing_row_L1_change": 0.059631,
+      "dominant_component": "WN-F0",
+      "dominance_max": 0.32116,
+      "dominance_margin_top1_top2": 0.021251,
+      "normalized_entropy": 0.976387
+    },
+    "pulled": {
+      "sense": "attract.v.01",
+      "profile": [
+        0.08357413,
+        0.12935403,
+        0.1397344,
+        0.64733745
+      ],
+      "raw_profile_pre_balancing": [
+        0.08393357,
+        0.11055522,
+        0.1330488,
+        0.6724624
+      ],
+      "balancing_row_L1_change": 0.050969,
+      "dominant_component": "WN-F3",
+      "dominance_max": 0.647337,
+      "dominance_margin_top1_top2": 0.507603,
+      "normalized_entropy": 0.74191
+    },
+    "recoiled": {
+      "sense": "flinch.v.01",
+      "profile": [
+        1.317e-05,
+        0.83844128,
+        0.14045938,
+        0.02108617
+      ],
+      "raw_profile_pre_balancing": [
+        1.453e-05,
+        0.82154463,
+        0.15332883,
+        0.02511201
+      ],
+      "balancing_row_L1_change": 0.033793,
+      "dominant_component": "WN-F1",
+      "dominance_max": 0.838441,
+      "dominance_margin_top1_top2": 0.697982,
+      "normalized_entropy": 0.364254
+    },
+    "reminded": {
+      "sense": "remind.v.01",
+      "profile": [
+        0.13928966,
+        2.7e-05,
+        0.4711731,
+        0.38951024
+      ],
+      "raw_profile_pre_balancing": [
+        0.14085064,
+        2.616e-05,
+        0.45171414,
+        0.40740905
+      ],
+      "balancing_row_L1_change": 0.03892,
+      "dominant_component": "WN-F2",
+      "dominance_max": 0.471173,
+      "dominance_margin_top1_top2": 0.081663,
+      "normalized_entropy": 0.718952
+    },
+    "repelled": {
+      "sense": "repel.v.02",
+      "profile": [
+        0.31305215,
+        3.153e-05,
+        0.30179686,
+        0.38511946
+      ],
+      "raw_profile_pre_balancing": [
+        0.31381843,
+        3.03e-05,
+        0.28682584,
+        0.39932544
+      ],
+      "balancing_row_L1_change": 0.029945,
+      "dominant_component": "WN-F3",
+      "dominance_max": 0.385119,
+      "dominance_margin_top1_top2": 0.072067,
+      "normalized_entropy": 0.788386
+    },
+    "split": {
+      "sense": "divide.v.01",
+      "profile": [
+        0.40111445,
+        1.983e-05,
+        0.10735799,
+        0.49150773
+      ],
+      "raw_profile_pre_balancing": [
+        0.39662833,
+        1.879e-05,
+        0.10064473,
+        0.50270815
+      ],
+      "balancing_row_L1_change": 0.022401,
+      "dominant_component": "WN-F3",
+      "dominance_max": 0.491508,
+      "dominance_margin_top1_top2": 0.090393,
+      "normalized_entropy": 0.689119
+    },
+    "summoned": {
+      "sense": "summon.v.02",
+      "profile": [
+        8.8e-06,
+        8.8e-06,
+        0.72589836,
+        0.27408404
+      ],
+      "raw_profile_pre_balancing": [
+        8.68e-06,
+        8.68e-06,
+        0.70823122,
+        0.29175142
+      ],
+      "balancing_row_L1_change": 0.035335,
+      "dominant_component": "WN-F2",
+      "dominance_max": 0.725898,
+      "dominance_margin_top1_top2": 0.451814,
+      "normalized_entropy": 0.423788
+    },
+    "thought": {
+      "sense": "think.v.01",
+      "profile": [
+        0.07239022,
+        3.816e-05,
+        0.75337125,
+        0.17420037
+      ],
+      "raw_profile_pre_balancing": [
+        0.07487019,
+        3.783e-05,
+        0.73873265,
+        0.18635934
+      ],
+      "balancing_row_L1_change": 0.029278,
+      "dominant_component": "WN-F2",
+      "dominance_max": 0.753371,
+      "dominance_margin_top1_top2": 0.579171,
+      "normalized_entropy": 0.510886
+    },
+    "withdrew": {
+      "sense": "withdraw.v.01",
+      "profile": [
+        8.77e-06,
+        0.99997369,
+        8.77e-06,
+        8.77e-06
+      ],
+      "raw_profile_pre_balancing": [
+        9.88e-06,
+        0.99997037,
+        9.88e-06,
+        9.88e-06
+      ],
+      "balancing_row_L1_change": 7e-06,
+      "dominant_component": "WN-F1",
+      "dominance_max": 0.999974,
+      "dominance_margin_top1_top2": 0.999965,
+      "normalized_entropy": 0.00024
+    }
+  }
+}
