@@ -1,0 +1,75 @@
+{
+  "record_id": "TIER_C_C1_FINDINGS",
+  "non_claim_bearing": true,
+  "run": "TIER C C1 transform tournament, commit 36951d2a, instance i-07dfc2821c7032c44",
+  "official_status": {
+    "value": "NO_TRANSFORM_CONSUMES_STRUCTURE",
+    "emitted_by": "the frozen deterministic selection law in run_tier_c_c1.py",
+    "winner": null,
+    "qualifying_transforms": []
+  },
+  "headline": "No transform beat the no-structure baseline. All four are slightly NEGATIVE. T0 (exact operation labels, no relational table) scored 0.7800; T1 0.7744, T2 0.7783, T3 0.7772, T4 0.7521. Because T0 already carries the exact one-hot operation labels, the question C1 actually answered is: does a relational TABLE add anything ON TOP OF exact operation labels on this task? On this task, at this scale, in this executor: no.",
+  "robustness_of_the_negative": {
+    "not_an_artifact_of_the_family_law": "the frozen '>=2 of 3 families' clause is stringent under saturation (registered in advance), but that is NOT what produced the negative: every transform's OVERALL margin is also negative (-0.0056 / -0.0017 / -0.0028 / -0.0279), and no transform reached the 0.02 overall threshold from any direction. The outcome does not depend on the saturation-constrained clause.",
+    "seed_consistency": "seeds with a positive margin: T1 0/3, T2 1/3, T3 1/3, T4 0/3",
+    "approximate_se_on_overall_margin": 0.024,
+    "reading": "T1/T2/T3 are statistically indistinguishable from T0 (all well inside one standard error). T4 is more clearly worse (-0.0279, 0/3 seeds positive, driven by QB_INT -0.0755)."
+  },
+  "principal_mechanistic_finding": {
+    "title": "T2 CONSUMES the structure heavily and GAINS nothing from it",
+    "evidence": {
+      "structure_to_base_authority_ratio": 3.28193,
+      "formal_bridge_top1": "0.5717 vs T0's 0.3272 -- T2 nearly DOUBLES agreement with the symbolic solver's designated bridge",
+      "eval_time_ablations_of_the_trained_model": {
+        "trained_accuracy": 0.7783,
+        "table_removed": 0.671692,
+        "table_permuted": 0.424344,
+        "r_random_table": 0.298716
+      },
+      "falls": {"removal": 0.1066, "permutation": 0.35399, "r_random": 0.47962},
+      "task_margin_over_T0": -0.0017
+    },
+    "interpretation": "T2 became massively dependent on the relational table -- corrupting it collapses accuracy from 0.778 to 0.299 -- and its internal routing moved much closer to the formal derivation path. Yet none of that produced any net task benefit over having no table at all. This is a clean dissociation: STRUCTURE CONSUMPTION and FORMAL-PATH AGREEMENT both improved while TASK ACCURACY did not. It rhymes with the PATH-B-A1 finding that a better-routing arm need not answer better; there the profile-equipped executor won accuracy with WORSE bridge agreement, here a transform wins bridge agreement with no accuracy gain. Twice now, on this task family, the formal path and the answer have come apart.",
+    "caution": "This is a development observation about one executor on one synthetic task. It is not evidence about transformers in general and licenses no claim."
+  },
+  "headroom_analysis": {
+    "T0_per_family": {"QB_REL": 0.97449, "QB_COMP": 1.0, "QB_INT": 0.377668},
+    "saturation_flags": {"QB_REL": false, "QB_COMP": true, "QB_INT": false},
+    "finding_beyond_the_registered_disclosure": "the pre-registered disclosure flagged QB_COMP at ceiling. The run shows the situation is tighter than that: QB_REL is ALSO effectively saturated at 0.9745 for the baseline (2.5 points of headroom, so a 0.02 margin would require capturing four fifths of the remaining error). Real headroom exists only in QB_INT (0.378), and NO transform improved QB_INT: T1 -0.0246, T2 -0.0099, T3 exactly 0.0000, T4 -0.0755.",
+    "consequence": "on this dataset the tournament had one genuinely open family, and the relational table did not help it. Any future round intending to test relational structure on this task should first establish that the task has headroom the structure could plausibly fill."
+  },
+  "per_transform": {
+    "T1_additive": {"mean": 0.7744, "margin": -0.0056, "ratio": 0.095, "ablation_falls": "0.0000 on ALL three (removal, permutation, R-RANDOM) -- T1's structure channel ended up carrying no decision weight at all"},
+    "T2_op_conditioned_matrix": {"mean": 0.7783, "margin": -0.0017, "ratio": 3.28, "high_authority_flag": true, "note": "the consume-without-benefit case above"},
+    "T3_bilinear": {"mean": 0.7772, "margin": -0.0028, "ratio": 0.202, "ablation_falls": {"removal": 0.0022, "permutation": 0.096, "r_random": 0.0826}, "note": "mild but real corruption sensitivity with no removal sensitivity: the trained model tolerates losing the table but not being lied to by it"},
+    "T4_recurrent": {"mean": 0.7521, "margin": -0.0279, "ratio": 0.099, "note": "the only clearly harmful transform; its hop-1 recurrent refinement cost QB_INT 15.3 answers per seed"}
+  },
+  "gates_and_integrity": {
+    "p0_status": "C1_P0_SMOKE_OK (no failures)",
+    "preflight": "all dataset digests, both C1 and C2 pid-set digests, and the R_CAS/R_RANDOM digests verified fail-closed before any GPU work",
+    "cache_binding_verified_records": {"tierc_train": 9000, "tierc_valc1": 597},
+    "every_structure_parameter_live": true,
+    "t0_structure_term_exactly_zero": true,
+    "param_counts_total_matched_within_1pct": true,
+    "param_counts_structure_channel_disclosed": {"T0": 0, "T1": 21, "T2": 16385, "T3": 12289, "T4": 42}
+  },
+  "scope_and_prohibitions": {
+    "what_c1_can_say": "which transform can USE R -- and the answer is that none of them converts R into task benefit over exact labels on this task",
+    "what_c1_cannot_say": "nothing about whether CAS relational CONTENT beats learned (R-LEARNED) or data-derived (R-EMPIRICAL) alternatives. That is C2, which does NOT auto-launch.",
+    "prohibited_and_not_used": ["CAS-specific", "specific", "EMPIRICALLY_SUPPORTED", "GATE1B_PASS", "CJT_TRANSFORMER_VALIDATED"],
+    "no_second_tournament": "per the preregistration, a NO_TRANSFORM_CONSUMES_STRUCTURE outcome is a finding, recorded and kept -- not a prompt to retune and re-run"
+  },
+  "consequence_for_c2": {
+    "problem": "C2 was designed to freeze the C1 winner and swap rulebooks through it. There is no winner, so C2 as specified has no socket to run in.",
+    "additional_blocker_already_standing": "the owner's J-necessity requirement -- C0 measured R-CAS and R-EMPIRICAL as identical on M and C and differing only on J, so C2's flagship contrast is empty unless a primary family provably needs the J plane. C1 does not resolve that.",
+    "status": "C2 REMAINS UNAUTHORIZED and is now additionally BLOCKED ON A DESIGN QUESTION, not merely on owner sign-off. This is an owner decision, not Claude's."
+  },
+  "cost": {
+    "authoritative_instance_runtime_estimate_usd": 0.1808,
+    "harness_compute_wall_estimate_usd_lower_bound": 0.1429,
+    "cap_usd": 0.80,
+    "fraction_of_cap_used": 0.226,
+    "cumulative_program_usd": 1.889,
+    "receipt": "CLOUD_EXECUTION_RECEIPT_TIERC_C1.json"
+  }
+}

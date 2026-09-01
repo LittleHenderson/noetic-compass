@@ -1,0 +1,114 @@
+{
+  "pilot": "TIER-C C1 P0",
+  "non_claim_bearing": true,
+  "is_real_model": true,
+  "preflight_checks": {
+    "dataset:data/train.jsonl": {
+      "expected": "e49c7e99902f830eca99a464fc5450cd98a7519759bc1bad58ae561d7b94e830",
+      "got": "e49c7e99902f830eca99a464fc5450cd98a7519759bc1bad58ae561d7b94e830",
+      "ok": true
+    },
+    "dataset:data/val.jsonl": {
+      "expected": "7cbbe5fa6ec7cfcf58b84f1ed3f118b98c30fd8119de08da37c44d861043b4e1",
+      "got": "7cbbe5fa6ec7cfcf58b84f1ed3f118b98c30fd8119de08da37c44d861043b4e1",
+      "ok": true
+    },
+    "split:c1_pids_sha256": {
+      "expected": "0ff62d49f72d858b6f38024811260e81bd5987e6c914a6e49095aa6bf7d4cbd5",
+      "got": "0ff62d49f72d858b6f38024811260e81bd5987e6c914a6e49095aa6bf7d4cbd5",
+      "ok": true
+    },
+    "split:c2_pids_sha256_unopened": {
+      "expected": "d961a98eb574ca73f76b75b6f0c1d22ed0a7f57720b5ca6d6f097d3e54c37459",
+      "got": "d961a98eb574ca73f76b75b6f0c1d22ed0a7f57720b5ca6d6f097d3e54c37459",
+      "ok": true,
+      "note": "recomputed from pids ONLY -- no C2 record content is read, extracted, or evaluated anywhere in this harness"
+    },
+    "structure:R_CAS.json": {
+      "expected": "edae7c1864188c6e53af851c0b2020db02dafc2478e724d509be737caeb79425",
+      "got": "edae7c1864188c6e53af851c0b2020db02dafc2478e724d509be737caeb79425",
+      "ok": true
+    },
+    "structure:R_RANDOM.json": {
+      "expected": "c14e3e97e3124443996840e0b066e7fa4670d33cc1257ac2adb2aee468d2079d",
+      "got": "c14e3e97e3124443996840e0b066e7fa4670d33cc1257ac2adb2aee468d2079d",
+      "ok": true
+    }
+  },
+  "cache_binding": {
+    "tierc_train": {
+      "verified_records": 9000,
+      "expected_records": 9000,
+      "pass": true
+    },
+    "tierc_valc1": {
+      "verified_records": 597,
+      "expected_records": 597,
+      "pass": true
+    }
+  },
+  "param_counts_total": {
+    "T0": 3581582,
+    "T1": 3581603,
+    "T2": 3597967,
+    "T3": 3593871,
+    "T4": 3581624
+  },
+  "param_counts_structure_channel": {
+    "T0": 0,
+    "T1": 21,
+    "T2": 16385,
+    "T3": 12289,
+    "T4": 42
+  },
+  "gate_params_matched_1pct": true,
+  "t0_structure_term_abs_mean": 0.0,
+  "gate_t0_term_zero": true,
+  "per_kind": {
+    "T1": {
+      "struct_grads_step50": {
+        "w_phi_grad_norm": 0.03783596307039261,
+        "nu_grad_norm": 0.0012614907464012504
+      },
+      "all_structure_params_live": true,
+      "null_swap_logit_delta": 0.067998,
+      "swap_moves_logits": true,
+      "struct_to_base_ratio_at_100u": 0.210137
+    },
+    "T2": {
+      "struct_grads_step50": {
+        "A_grad_norm": 0.0026440289802849293,
+        "nu_grad_norm": 0.002190487924963236
+      },
+      "all_structure_params_live": true,
+      "null_swap_logit_delta": 1.044392,
+      "swap_moves_logits": true,
+      "struct_to_base_ratio_at_100u": 1.130972
+    },
+    "T3": {
+      "struct_grads_step50": {
+        "B_grad_norm": 0.1828886866569519,
+        "nu_grad_norm": 0.0018474264070391655
+      },
+      "all_structure_params_live": true,
+      "null_swap_logit_delta": 0.407091,
+      "swap_moves_logits": true,
+      "struct_to_base_ratio_at_100u": 0.282437
+    },
+    "T4": {
+      "struct_grads_step50": {
+        "w_phi1_grad_norm": 0.08181866258382797,
+        "w_phi2_grad_norm": 0.008361770771443844,
+        "nu_a_grad_norm": 0.004919684026390314,
+        "nu_b_grad_norm": 0.0014008339494466782
+      },
+      "all_structure_params_live": true,
+      "null_swap_logit_delta": 0.123018,
+      "swap_moves_logits": true,
+      "struct_to_base_ratio_at_100u": 0.082627
+    }
+  },
+  "failed": [],
+  "status": "C1_P0_SMOKE_OK",
+  "estimated_cost_usd_so_far": 0.1134
+}

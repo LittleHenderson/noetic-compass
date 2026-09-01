@@ -1,0 +1,56 @@
+{
+  "receipt_id": "CLOUD_EXECUTION_RECEIPT_TIERC_C1",
+  "non_claim_bearing": true,
+  "run": "TIER C C1 transform tournament",
+  "run_id": "tier-c-c1-1788271051",
+  "instance_id": "i-07dfc2821c7032c44",
+  "instance_type": "g4dn.xlarge",
+  "gpu": "NVIDIA Tesla T4",
+  "region": "us-west-2",
+  "ami": "ami-0c779ec711a581954",
+  "account": "807562639912",
+  "launched_unix": 1788271056,
+  "wall_minutes_instance": 20.6,
+  "termination": "self-terminated (InstanceInitiatedShutdownBehavior=terminate + EXIT-trap shutdown); observed transitioning 'shutting-down' at 20.6 min by the client watchdog, which issued a confirming terminate; post-run sweep 2026-09-01T14:19:31Z shows no running experiment instance (the only other non-terminated instance is i-0c3028734c8885542, the owner's stopped g6e standby, untouched)",
+  "cost": {
+    "authoritative_method": "instance_runtime_estimate",
+    "instance_runtime_estimate_usd": 0.1808,
+    "rate_per_hour_usd": 0.526,
+    "arithmetic": "20.6/60 x 0.526 = 0.1806 (watchdog reported 0.1808)",
+    "harness_compute_wall_estimate_usd": 0.1429,
+    "note": "the harness figure is a LOWER BOUND (compute wall only, excludes boot, dependency install, model download); it is never presented as the spend. Methods are not mixed."
+  },
+  "budget": {
+    "hard_cap_usd": 0.80,
+    "cap_minutes": 91.3,
+    "used_fraction_of_cap": 0.226,
+    "in_instance_hard_timer_min": 75,
+    "watchdog_force_terminate_min": 80,
+    "unused_budget_transferred_to_c2": "NONE (owner condition: no transfer)"
+  },
+  "compute_facts": {
+    "gpu_max_memory_allocated_bytes": 1021214208,
+    "harness_wall_seconds": 978.1,
+    "runs": 15,
+    "arms": "T0 + T1..T4 x seeds 11/23/47",
+    "updates_per_run": 1000,
+    "eval_split": "C1_TRANSFORM_SELECT (597 records)"
+  },
+  "integrity": {
+    "preflight_all_pass": true,
+    "dataset_digests_verified": ["data/train.jsonl e49c7e99...", "data/val.jsonl 7cbbe5fa..."],
+    "c1_pid_sha_verified": true,
+    "c2_pid_sha_verified_without_reading_records": true,
+    "r_cas_and_r_random_digests_verified": true,
+    "cache_binding_verified_records": {"tierc_train": 9000, "tierc_valc1": 597},
+    "protected_splits": "UNTOUCHED",
+    "c2_structure_eval": "NEVER extracted, evaluated, or inspected"
+  },
+  "result": {
+    "development_status": "NO_TRANSFORM_CONSUMES_STRUCTURE",
+    "winner": null,
+    "p0_status": "C1_P0_SMOKE_OK"
+  },
+  "cumulative_program_spend_usd": 1.889,
+  "cumulative_note": "prior independently-recomputed total 1.708 + this run 0.1808 = 1.889 of the 30.00 ceiling (6.3%)"
+}
