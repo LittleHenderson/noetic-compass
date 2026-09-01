@@ -1,4 +1,11 @@
-# CJT-EX1 PREREGISTRATION — Expert Specialization and Transfer Pilot
+# CJT-EX1 PREREGISTRATION v2 (AMENDED) — Expert Specialization and Transfer Pilot
+
+> **AMENDED 2026-09-01 by owner ruling after the pre-launch stop.** The original
+> protocol was NOT launched. Six changes are frozen below: (1) headroom-aware breadth
+> (option B + C); (2) retention protocol replaced (phase 1 QB_INT, phase 2 QB_COMP) with a
+> real-interference gate; (3) **E1S anonymous sparse top-1 MoE added as THE killer
+> control**; (4) E3 demoted to exploratory with a bounded claim; (5) the result vocabulary
+> fixed in advance; (6) E4 must be PROVEN class-independent. Cap $1.20, projected ~$0.72.
 
 **Frozen before any GPU spend. Development-only, non-claim-bearing.**
 
@@ -33,19 +40,26 @@ Everything is held identical: executor, frozen activations, data, seeds, optimiz
 schedule, update count, total trainable parameters, and (measured) per-step compute.
 **Only the expert organization differs.**
 
-## 2. The five conditions
+## 2. The six conditions
 
-| Condition | Organization |
-|---|---|
-| **E0 SHARED** | one expert handles every clause |
-| **E1 ANON_MOE** | 4 experts, **soft-routed by a learned router** over clause content; no CAS identities |
-| **E2 CAS_EXPERT** | 4 experts, **hard-routed by the true operation class** (^2/^3/^6/^8 → expert 0/1/2/3) |
-| **E3 CAS_STRUCT** | E2 **plus a registered computational constraint** encoding the canonical ^2↔^3 involution |
-| **E4 SHUFFLED** | 4 experts, hard-routed by a **frozen per-clause hash** carrying no operation information |
+| Condition | Organization | Active experts / clause |
+|---|---|---|
+| **E0 SHARED** | one expert handles every clause | 1 |
+| **E1 ANON_MOE** | 4 experts, **dense soft mixture** by a learned content router | 4 |
+| **E1S ANON_SPARSE** | 4 experts, learned content router, **top-1 straight-through** | **1** |
+| **E2 CAS_EXPERT** | 4 experts, **hard-routed by the true operation class** | 1 |
+| **E3 CAS_STRUCT** | E2 + the canonical ^2↔^3 involution as a computational rule | 1 |
+| **E4 SHUFFLED** | 4 experts, frozen per-clause hash routing | 1 |
 
-**The killer comparison is E2 vs E1** — same expert count, same parameters, same router
-inputs; one routes by CAS operation identity, one learns its own routing. **E4** then asks
-whether any E2 advantage is about CAS identity or merely about having four experts.
+**THE KILLER COMPARISON IS E2 vs E1S** (owner ruling). Both select exactly **one** expert
+per clause with matched parameters, width and active-expert count — one selects by CAS
+operation identity, the other by a learned content router. Without E1S an E2 win could not
+be separated from "using one expert instead of mixing four." **E1 (dense)** is retained to
+tell us whether sparsity itself helps; **E4** tells us whether the stable
+operation-to-expert *assignment* matters.
+
+Measured capacity match across all six: widths 464/128/128/128/169/128, counts
+5,186,926 / 5,195,932 / 5,195,932 / 5,188,756 / 5,197,658 / 5,188,756 — **spread 0.206%**.
 
 ### 2a. E3's constraint — J carried forward as computation, not lookup
 
@@ -84,24 +98,31 @@ Disclosed reuse: those 597 records were the C1 evaluation set. C1 selected no tr
 (`NO_TRANSFORM_CONSUMES_STRUCTURE`), so no selection carries into EX1; the reuse is mild
 and is recorded rather than hidden.
 
-## 4. Retention (sequential learning)
+## 4. Retention (sequential learning) — AMENDED
 
-Phase 1: train on **QB_REL only** for 500 updates. Phase 2: train on **QB_COMP only** for
-500 updates, carrying the same optimizer (AdamW moments persist — the realistic continual
-setting) while each phase gets its own warmup+cosine schedule. Measure how much QB_REL
-survives.
+**Phase 1 = QB_INT (^2, ^6). Phase 2 = QB_COMP (^2, ^6, and ^8 NEWLY INTRODUCED).**
 
-Verified before launch: the schedule restarts cleanly across phases — both phases warm up
-to an identical 1e-3 peak and decay to 1.09e-08, with `initial_lr` preserved. No
-compounding or collapse.
+The original protocol (QB_REL then QB_COMP) was rejected before spend: QB_COMP contains
+**zero ^3 clauses** in all 3,000 records, so a hard-routed ^3 expert received no phase-2
+gradient and *could not forget*. CAS arms were shielded by the clause template rather than
+by expert organization.
 
-Hypothesis under test: operation-routed experts interfere less, because a newly exercised
-operation (^8, entering with QB_COMP) lands on a **different expert** than the ones QB_REL
-trained (^3 and ^2).
+**Precise claim (owner correction, adopted):** not "every expert is exercised in both
+phases" — ^2 and ^6 are, ^8 is new in phase 2, and **^3 appears in neither**. The accurate
+statement is: *every expert relevant to the retained phase-1 skill (^2 and ^6) remains
+exposed to phase-2 learning, while ^8 enters as a new specialist.*
 
-Both statistics are reported: the **retention ratio** (a₂/a₁) and **absolute forgetting**
-(a₁−a₂). Registered caveat: a ratio flatters a condition that learned less in phase 1 and
-therefore had less to lose, so the phase-1 level is reported alongside it.
+Measured and reported, never a bare ratio: retained accuracy **before and after** phase 2,
+absolute **forgetting** (before − after), new-task **acquisition**, per-expert **gradient**
+and **parameter movement**, and the count of nonzero-gradient updates in each phase.
+
+A retention advantage requires **all** of:
+- E2 forgets at least **0.02 less** than E1S, positive in **≥ 2 of 3 seeds**;
+- E2's phase-2 acquisition is within **0.02** of the best matched control (so a model
+  cannot "retain" by refusing to learn);
+- **real interference pressure**: every condition gains ≥ 0.05 on the new task and shows
+  nonzero parameter movement in its experts. If not, the run emits
+  `RETENTION_STRESS_INSUFFICIENT` and **no retention claim is made**.
 
 ## 5. Gates before the main spend (P0)
 
@@ -110,9 +131,16 @@ therefore had less to lose, so the phase-1 level is reported alongside it.
   is never read);
 - cache binding verified fail-closed (per-record content hashes, manifest, model,
   tokenizer, extraction-code digest, layer, pid-set equality) with **raw counts persisted**;
-- total trainable parameters matched within **1%** (measured spread 0.974%: E0 5,138,194 /
-  E1 5,141,644 / E2 5,188,756 / E3 5,188,500 / E4 5,188,756 at hidden widths
-  458/126/128/128/128);
+- total trainable parameters matched within **1%** (measured spread **0.206%** after the
+  capacity-matching fix; widths 464/128/128/128/169/128);
+- **E4 proven class-independent**: mutual information between its routing and the CAS class
+  must be ≤ 0.01 bits. Measured on the real data before launch: **0.000084 bits** over
+  54,000 training clauses and 0.002978 over 3,582 eval clauses (finite-sample bias alone is
+  0.0018), against E2's 2.000 bits. Every class spreads ≈25% across all four experts, so it
+  is not a global permutation;
+- **every** bank tensor in both banks receives a nonzero gradient (the readout bias `vb` is
+  exempt and disclosed: a constant shift is softmax-invariant across candidates, so it is
+  non-identifiable by construction);
 - **bijection-is-relabeling confirmed** (see 2b);
 - every condition's expert bank receives a nonzero gradient at step 50;
 - routing behaves as specified per condition (E2/E3 one-hot by class; E4 uncorrelated with
@@ -120,25 +148,42 @@ therefore had less to lose, so the phase-1 level is reported alongside it.
 
 Any failure → `CJT_EX1_SMOKE_FAILED`, no main spend.
 
-## 6. The seven registered success conditions (owner's list, all must hold)
+## 6. The registered success conditions (amended)
 
-1. **E2 − E1 ≥ 0.02** (CAS experts beat the anonymous matched MoE) — the killer comparison
+1. **E2 − E1S ≥ 0.02** — the killer comparison, against the *sparse* anonymous control
 2. advantage on **unseen verbs and templates** — true by construction (§3)
-3. advantage spans **≥ 2 operation families**
+3. **breadth over ELIGIBLE families**: ≥ 2 eligible families improved, where a family is
+   **saturated** (and excluded from this gate, though still fully reported) when baseline
+   ≥ 0.99 **or** headroom < 0.01, and an eligible family counts as improved when its
+   **mean paired gain ≥ 0.005** and the gain is **positive in ≥ 2 of 3 seeds**.
+   Frozen for this evaluation: **QB_COMP = saturated; QB_REL and QB_INT = eligible.**
+   No post-result family substitution is permitted.
 4. **E2 − E4 ≥ 0.02** (shuffling removes the advantage)
-5. **E3 − E2 ≥ 0.02** (removing the registered relationship damages transfer)
-6. **E2 retention ratio > E1 retention ratio** (better retention under sequential learning)
+5. **E3 − E2 ≥ 0.02** — *exploratory only*
+6. **retention** per §4 (forgetting margin + acquisition tolerance + interference gate)
 7. matched parameters, compute, seeds
+8. **E4 proven class-independent** (MI ≤ 0.01 bits)
+9. **competence floor**: every arm ≥ candidate-uniform chance + 0.15
 
-Status: `CJT_EX1_EXPERT_SPECIALIZATION_DEV_SIGNAL` if **all seven** hold, else
-`NO_CJT_EXPERT_SPECIALIZATION_SIGNAL`.
+Per family the run reports absolute accuracy, absolute gain, **remaining-error reduction**,
+raw additional correct answers, and **paired** uncertainty — every arm sees the same
+records, so paired statistics are used throughout rather than the independent-samples
+formula that made the earlier standard error larger than the margin it decided.
 
-**Registered stringency disclosure:** this is a seven-way conjunction, and with 597
-evaluation records a margin's standard error is ≈ 0.029, so the 0.02 thresholds sit *below*
-one standard error. These are decision thresholds, not significance claims. Per-seed
-margins, seed sign-consistency, and the approximate standard error are reported alongside
-every decision quantity so the reader can see how thin any margin is. This is stated in
-advance so no post-hoc reinterpretation is possible in either direction.
+### Frozen result vocabulary
+
+| Outcome | Status |
+|---|---|
+| E2 beats E1 (dense) but **not** E1S | `SPARSITY_ADVANTAGE_ONLY` |
+| E2 beats E1S **and** clears breadth, shuffle and retention | `CJT_EXPERT_SPECIALIZATION_SIGNAL` |
+| E4 ≥ E2 (with E4 a valid control) | `CAS_EXPERT_MEANINGS_NOT_LOAD_BEARING` |
+| no CAS arm beats E1S | `NO_CJT_EXPERT_SPECIALIZATION_SIGNAL` |
+| E3 − E2 ≥ 0.02 | secondary: `STRUCTURED_WEIGHT_SHARING_SIGNAL` |
+| insufficient phase-2 learning or parameter movement | appended: `RETENTION_STRESS_INSUFFICIENT` |
+
+An E3 advantage is **never** reported as an involution-specific CAS advantage: this run has
+no matched generic pair-sharing control, so constrained sharing and the *specific* CAS
+involution are not separated. **No CAS-specific claim is licensed by any outcome.**
 
 ## 7. Permitted and prohibited conclusions
 

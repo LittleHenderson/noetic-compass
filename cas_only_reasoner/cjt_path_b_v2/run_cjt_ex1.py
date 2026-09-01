@@ -15,10 +15,13 @@ inputs, data, seeds, optimizer, schedule, updates, total expert capacity --
 and ONLY the expert ORGANIZATION differs:
 
   E0 SHARED     one expert handles every clause.
-  E1 ANON_MOE   4 experts, soft-routed by a LEARNED router over clause
-                content. No CAS identities IN THE EXPERT ROUTING (see the
-                disclosure below -- the class profile still reaches every
-                arm through the attention path, deliberately).
+  E1 ANON_MOE   4 experts, DENSE soft mixture by a LEARNED router over
+                clause content. Retained as the dense-MoE comparator.
+  E1S ANON_SPARSE 4 experts, LEARNED content router, TOP-1 straight-through
+                -- exactly ONE expert active per clause, no CAS labels in
+                the routing. THE KILLER CONTROL (owner ruling): it gives the
+                generic architecture the same sparse machinery as E2, so an
+                E2 win cannot be explained by sparsity alone.
   E2 CAS_EXPERT 4 experts, hard-routed by the TRUE operation class
                 (^2/^3/^6/^8 -> expert 0/1/2/3).
   E3 CAS_STRUCT E2 plus a REGISTERED COMPUTATIONAL CONSTRAINT expressing the
@@ -57,20 +60,34 @@ and ONLY the expert ORGANIZATION differs:
   per-clause, not per-class, and the bijection-is-identity claim is verified
   in the P0 smoke gates rather than assumed.
 
-THE KILLER COMPARISON is E2 vs E1: same expert count, same parameters, same
-router inputs, same everything -- one routes by CAS operation identity, one
-learns its own routing. E4 then asks whether any E2 advantage is about CAS
-identity or merely about having four experts.
+THE KILLER COMPARISON is E2 vs E1S (owner ruling): both select exactly ONE
+expert per clause with matched parameters, width and active-expert count --
+one selects by CAS operation identity, the other by a learned content
+router. E1 (dense) then tells us whether sparsity itself helps, and E4 tells
+us whether the stable operation-to-expert ASSIGNMENT matters.
 
 TRANSFER is built into the data, not bolted on: train families A,B use verbs
 0-5 and forms 0-3; the evaluation family C uses verbs 6-7 and form 4, which
 the model never sees in training. Every reported accuracy is therefore
 already an unseen-verb, unseen-template number.
 
-RETENTION (sequential learning) is a second phase: train QB_REL only, freeze
-nothing, then train QB_COMP only, and measure how much QB_REL survives. The
-hypothesis under test is that operation-routed experts interfere less
-because a newly-exercised operation lands on a different expert.
+RETENTION (sequential learning), AMENDED per owner ruling. Phase 1 =
+QB_INT (^2, ^6); phase 2 = QB_COMP (^2, ^6, and ^8 NEWLY INTRODUCED). The
+original protocol (QB_REL then QB_COMP) was rejected before spend because
+QB_COMP contains ZERO ^3 clauses, so a hard-routed ^3 expert received no
+phase-2 gradient and could not forget -- CAS arms were shielded by the
+clause template rather than by expert organization.
+
+Precise claim (owner correction, adopted): NOT "every expert is exercised in
+both phases" -- ^2 and ^6 are, ^8 is new in phase 2, and ^3 appears in
+NEITHER. The accurate statement is: every expert relevant to the RETAINED
+phase-1 skill (^2 and ^6) remains EXPOSED to phase-2 learning, while ^8
+enters as a new specialist.
+
+A retention advantage additionally requires REAL INTERFERENCE PRESSURE: if
+phase 2 produces almost no learning or no parameter movement in the shared
+experts, the run emits RETENTION_STRESS_INSUFFICIENT and no retention claim
+is made.
 """
 from __future__ import annotations
 
@@ -104,10 +121,23 @@ LR, BETAS, WD, CLIP = 1.0e-3, (0.9, 0.999), 0.01, 1.0
 D, D_ATT = 896, 64
 N_EXPERTS = 4
 EPS_P = 1e-9
-CONDITIONS = ("E0", "E1", "E2", "E3", "E4")
-COND_NAME = {"E0": "SHARED", "E1": "ANON_MOE", "E2": "CAS_EXPERT",
-             "E3": "CAS_STRUCT", "E4": "SHUFFLED"}
-MARGIN = 0.02
+CONDITIONS = ("E0", "E1", "E1S", "E2", "E3", "E4")
+COND_NAME = {"E0": "SHARED", "E1": "ANON_MOE", "E1S": "ANON_SPARSE",
+             "E2": "CAS_EXPERT", "E3": "CAS_STRUCT", "E4": "SHUFFLED"}
+KILLER_CONTROL = "E1S"            # owner ruling: the fair race is E2 vs E1S
+CAS_ARMS = ("E2", "E3")
+MARGIN = 0.02                     # overall primary effect (unchanged)
+FAMILY_GAIN = 0.005               # eligible-family improvement threshold
+FAMILY_SEEDS = 2                  # of 3 seeds must be positive
+SATURATED_ACC = 0.99              # family saturated at/above this baseline
+SATURATED_HEADROOM = 0.01         # ...or with less headroom than this
+RETENTION_MARGIN = 0.02           # CAS must forget this much LESS than E1S
+ACQUISITION_TOL = 0.02            # ...while learning phase 2 within this
+STRESS_MIN_GAIN = 0.05            # phase-2 learning needed for a valid test
+COMPETENCE_FLOOR_MARGIN = 0.15    # over candidate-uniform chance
+E4_MAX_MUTUAL_INFO_BITS = 0.01    # E4 routing must be class-independent
+RETENTION_PHASE1 = "QB_INT"       # owner ruling: ^2, ^6
+RETENTION_PHASE2 = "QB_COMP"      # owner ruling: ^2, ^6, + NEW ^8
 RETENTION_UPDATES = 500
 RATE_PER_HOUR = 0.526
 
@@ -240,7 +270,7 @@ def build_executor(cond, hidden, involution_hidden=None):
             self.b2 = nn.Parameter(torch.zeros(n_body, hid))
             self.v = nn.Parameter(torch.randn(n_body, hid) * (hid ** -0.5))
             self.vb = nn.Parameter(torch.zeros(n_body))
-            if mode == "E1":
+            if mode in ("E1", "E1S"):
                 self.router = nn.Linear(D, n_experts)
 
         def _expand(self, t):
@@ -280,10 +310,20 @@ def build_executor(cond, hidden, involution_hidden=None):
                 + vb.view(1, 1, 1, self.n_e)               # (B,N,C,E)
             if self.mode == "E0":
                 return s[..., 0], None
-            if self.mode == "E1":
+            if self.mode == "E1":                       # DENSE mixture
                 w = torch.softmax(self.router(hclause), dim=-1)  # (B,N,E)
                 w = w * imask.unsqueeze(-1)
                 return torch.einsum("bnce,bne->bnc", s, w), w
+            if self.mode == "E1S":                      # SPARSE top-1
+                # Straight-through: the forward pass uses an exact one-hot
+                # (so exactly ONE expert is active, matching E2/E3/E4's
+                # regime and output magnitude) while the backward pass sees
+                # the soft router probabilities, so the router still learns.
+                soft = torch.softmax(self.router(hclause), dim=-1)
+                hard = F.one_hot(soft.argmax(-1), self.n_e).to(soft.dtype)
+                w = hard + soft - soft.detach()
+                w = w * imask.unsqueeze(-1)
+                return torch.einsum("bnce,bne->bnc", s, w), hard
             idx = cls if self.mode in ("E2", "E3") else scr
             oh = F.one_hot(idx, self.n_e).to(s.dtype)        # (B,N,E)
             return torch.einsum("bnce,bne->bnc", s, oh), oh
@@ -306,28 +346,60 @@ def build_executor(cond, hidden, involution_hidden=None):
             self.bank1 = Bank(3 * D, h1, n_e, cond)
             self.bank2 = Bank(4 * D, h1, n_e, cond)
 
-        def expert_usage(self, bt, device):
-            """Per-class expert distribution -- the specialization readout."""
+        def _routing_weights(self, bt, device):
             import torch
+            h = bt["h"].to(device)
+            mode = self.bank1.mode
+            if mode == "E0":
+                return torch.ones(h.shape[0], h.shape[1], 1, device=device)
+            if mode == "E1":
+                return torch.softmax(self.bank1.router(h), dim=-1)
+            if mode == "E1S":
+                soft = torch.softmax(self.bank1.router(h), dim=-1)
+                return torch.nn.functional.one_hot(
+                    soft.argmax(-1), self.bank1.n_e).float()
+            idx = bt["cls"].to(device) if mode in ("E2", "E3")                 else bt["scr"].to(device)
+            return torch.nn.functional.one_hot(
+                idx, self.bank1.n_e).float()
+
+        def expert_usage(self, batches, device):
+            """Per-class expert distribution over the FULL evaluation
+            surface (C0-review fix: previously computed on a single
+            32-record batch that happened to be entirely QB_REL), plus the
+            class-by-expert contingency table and the mutual information in
+            bits -- which is how E4's class-independence is PROVEN rather
+            than asserted (owner ruling section 7)."""
+            import torch
+            if isinstance(batches, dict):
+                batches = [batches]
+            n_e = self.bank1.n_e
+            table = torch.zeros(4, n_e)
             with torch.no_grad():
-                cls = bt["cls"].to(device)
-                imask = bt["imask"].to(device)
-                h = bt["h"].to(device)
-                if self.bank1.mode == "E1":
-                    w = torch.softmax(self.bank1.router(h), dim=-1)
-                elif self.bank1.mode == "E0":
-                    w = torch.ones(h.shape[0], h.shape[1], 1, device=device)
-                else:
-                    idx = cls if self.bank1.mode in ("E2", "E3") \
-                        else bt["scr"].to(device)
-                    w = torch.nn.functional.one_hot(
-                        idx, self.bank1.n_e).float()
-                out = {}
-                for k in range(4):
-                    sel = (cls == k) & imask
-                    if sel.any():
-                        out[CLASSES[k]] = w[sel].mean(0).tolist()
-                return out
+                for bt in batches:
+                    cls = bt["cls"].to(device)
+                    imask = bt["imask"].to(device)
+                    w = self._routing_weights(bt, device)
+                    for k in range(4):
+                        sel = (cls == k) & imask
+                        if sel.any():
+                            table[k] += w[sel].sum(0).cpu()
+            tot = table.sum()
+            usage = {}
+            for k in range(4):
+                rs = table[k].sum()
+                if rs > 0:
+                    usage[CLASSES[k]] = (table[k] / rs).tolist()
+            mi = 0.0
+            if tot > 0:
+                pj = table / tot
+                pc = pj.sum(1, keepdim=True).expand_as(pj)
+                pe = pj.sum(0, keepdim=True).expand_as(pj)
+                nz = pj > 0
+                mi = float((pj[nz] * torch.log2(
+                    pj[nz] / (pc[nz] * pe[nz]))).sum())
+            return {"usage_by_class": usage,
+                    "contingency_class_by_expert": table.tolist(),
+                    "mutual_information_bits": round(mi, 6)}
 
         def forward(self, bt, device, return_diag=False):
             import torch
@@ -414,31 +486,47 @@ def match_capacity(cond, target, lo=8, hi=1024):
     return best
 
 
-def evaluate(mdl, batches, device):
+def evaluate(mdl, batches, device, keep_per_record=True):
+    """Adds (C0 review + owner ruling): a PER-RECORD correctness vector so
+    every arm-vs-arm comparison can use PAIRED statistics -- all arms are
+    evaluated on the same records, so the independent-samples standard error
+    is an overestimate -- plus per-family loss."""
     import torch
     mdl.eval()
     cor = tot = 0
     ls = 0.0
     per = {}
+    per_loss = {}
     br = 0
+    rec_ok, rec_fam = [], []
     with torch.no_grad():
         for bt in batches:
             logp, diag = mdl(bt, device, return_diag=True)
             tgt = bt["ans"].to(device)
-            ls += float(torch.nn.functional.nll_loss(
-                logp, tgt, reduction="sum").item())
+            li = torch.nn.functional.nll_loss(logp, tgt, reduction="none")
+            ls += float(li.sum().item())
             ok = logp.argmax(1) == tgt
             cor += int(ok.sum()); tot += len(tgt)
             b = diag["r1"].argmax(1)
             for j, q in enumerate(bt["qt"]):
                 a, c = per.get(q, (0, 0))
                 per[q] = (a + int(ok[j].item()), c + 1)
+                sl, sc = per_loss.get(q, (0.0, 0))
+                per_loss[q] = (sl + float(li[j].item()), sc + 1)
                 br += int(int(b[j]) == bt["bridge"][j])
+                if keep_per_record:
+                    rec_ok.append(int(ok[j].item()))
+                    rec_fam.append(q)
     mdl.train()
-    return {"accuracy": cor / tot, "loss": ls / tot, "bridge_top1": br / tot,
-            "per_question_type": {k: {"accuracy": a / c, "correct": a,
-                                      "total": c}
-                                  for k, (a, c) in sorted(per.items())}}
+    out = {"accuracy": cor / tot, "loss": ls / tot, "bridge_top1": br / tot,
+           "per_question_type": {k: {"accuracy": a / c, "correct": a,
+                                     "total": c,
+                                     "loss": per_loss[k][0] / per_loss[k][1]}
+                                 for k, (a, c) in sorted(per.items())}}
+    if keep_per_record:
+        out["per_record_correct"] = rec_ok
+        out["per_record_family"] = rec_fam
+    return out
 
 
 def train(mdl, tb, vb, updates, device, seed, checkpoints=True, opt=None):
@@ -449,6 +537,7 @@ def train(mdl, tb, vb, updates, device, seed, checkpoints=True, opt=None):
                                 weight_decay=WD)
     sched = torch.optim.lr_scheduler.LambdaLR(opt, lr_lambda(updates))
     curve, glog = [], []
+    nonzero_updates = [0]
     cps = set(CHECKPOINTS) if checkpoints else set()
     pos = 0
     for step in range(updates):
@@ -458,9 +547,18 @@ def train(mdl, tb, vb, updates, device, seed, checkpoints=True, opt=None):
         opt.zero_grad(set_to_none=True)
         loss.backward()
         if (step + 1) in GRAD_STEPS:
-            glog.append({"step": step + 1,
-                         "bank1_w1_grad": float(mdl.bank1.w1.grad.norm())
-                         if mdl.bank1.w1.grad is not None else 0.0})
+            ent = {"step": step + 1}
+            for bname in ("bank1", "bank2"):
+                bank = getattr(mdl, bname)
+                for pn, pp in bank.named_parameters():
+                    ent[f"{bname}.{pn}"] = (float(pp.grad.norm())
+                                            if pp.grad is not None else 0.0)
+                if bank.w1.grad is not None:      # PER-EXPERT gradient
+                    ent[f"{bname}.per_expert_w1"] = [
+                        float(g.norm()) for g in bank.w1.grad]
+            glog.append(ent)
+        if mdl.bank1.w1.grad is not None                 and float(mdl.bank1.w1.grad.norm()) > 0:
+            nonzero_updates[0] += 1
         torch.nn.utils.clip_grad_norm_(mdl.parameters(), CLIP)
         opt.step(); sched.step()
         if not math.isfinite(float(loss.item())):
@@ -469,7 +567,7 @@ def train(mdl, tb, vb, updates, device, seed, checkpoints=True, opt=None):
             curve.append({"step": step + 1,
                           "train_loss": float(loss.item()),
                           **evaluate(mdl, vb, device)})
-    return opt, curve, glog
+    return opt, curve, glog, nonzero_updates[0]
 
 
 def main():
@@ -589,6 +687,12 @@ def main():
           f"matched_1pct={params_ok}")
 
     vb = pack(val_c1, acts, loc, list(range(len(val_c1))))
+    chance = float(sum(1.0 / len(r["candidates"]) for r in val_c1)
+                   / len(val_c1))
+    ACTIVE_EXPERTS = {"E0": 1, "E1": N_EXPERTS, "E1S": 1, "E2": 1,
+                      "E3": 1, "E4": 1}
+    print(f"[floor] candidate-uniform chance {chance:.4f}; competence floor "
+          f"{chance + COMPETENCE_FLOOR_MARGIN:.4f}")
 
     # ---- P0 smoke gates ---------------------------------------------------
     p0 = {"pilot": "CJT-EX1 P0", "non_claim_bearing": True,
@@ -622,26 +726,52 @@ def main():
     torch.cuda.empty_cache()
     # every condition trains and routes
     smoke = {}
+    step_ms = {}
     for c in CONDITIONS:
         torch.manual_seed(11)
         mdl = build_executor(c, hid[c]).float().to(device)
-        _o, _cv, gl = train(mdl, tb_s, vb, 60, device, 11, checkpoints=False)
-        use = mdl.expert_usage(vb[0], device)
-        ev = evaluate(mdl, vb[:4], device)
-        smoke[c] = {"bank_grad_step50": gl[0] if gl else None,
-                    "expert_usage_by_class": use,
-                    "smoke_accuracy": ev["accuracy"]}
-        print(f"[P0] {c} {COND_NAME[c]:10} grad="
-              f"{gl[0]['bank1_w1_grad'] if gl else 0:.4g} usage={use}")
+        t_s = time.time()
+        _o, _cv, gl, _nz = train(mdl, tb_s, vb, 60, device, 11,
+                                 checkpoints=False)
+        if device.startswith("cuda"):
+            torch.cuda.synchronize()
+        step_ms[c] = round((time.time() - t_s) / 60 * 1000, 3)
+        use = mdl.expert_usage(vb, device)          # FULL eval surface
+        ev = evaluate(mdl, vb, device, keep_per_record=False)
+        g50 = gl[0] if gl else {}
+        norms = {k: v for k, v in g50.items()
+                 if isinstance(v, float) and k != "step"}
+        smoke[c] = {"bank_grads_step50": g50,
+                    "all_bank_tensors_live": bool(norms)
+                    and all(v > 1e-9 for k, v in norms.items()
+                            if not k.endswith(".vb")),
+                    "expert_usage": use,
+                    "smoke_accuracy": ev["accuracy"],
+                    "ms_per_step": step_ms[c],
+                    "active_experts_per_clause": ACTIVE_EXPERTS[c]}
+        print(f"[P0] {c} {COND_NAME[c]:12} live="
+              f"{smoke[c]['all_bank_tensors_live']} "
+              f"{step_ms[c]:.1f}ms/step MI="
+              f"{use['mutual_information_bits']:.4f} bits acc="
+              f"{ev['accuracy']:.4f}")
         del mdl
         torch.cuda.empty_cache()
     p0["per_condition"] = smoke
+    p0["measured_ms_per_step"] = step_ms
+    p0["candidate_uniform_chance"] = chance
+    p0["active_experts_per_clause"] = ACTIVE_EXPERTS
+    e4_mi_p0 = smoke["E4"]["expert_usage"]["mutual_information_bits"]
+    p0["e4_class_independence_bits"] = e4_mi_p0
+    p0["gate_e4_class_independent"] = e4_mi_p0 <= E4_MAX_MUTUAL_INFO_BITS
+    print(f"[P0] E4 routing/class mutual information {e4_mi_p0:.5f} bits "
+          f"(max {E4_MAX_MUTUAL_INFO_BITS}) -> "
+          f"{'VALID CONTROL' if p0['gate_e4_class_independent'] else 'INVALID'}")
     p0_fail = ([] if params_ok else ["gate_params_matched_1pct"]) + \
         ([] if p0["bijection_is_relabeling_confirmed"]
          else ["gate_bijection_relabeling"]) + \
-        [f"{c}:dead_bank_grad" for c in CONDITIONS
-         if not smoke[c]["bank_grad_step50"]
-         or smoke[c]["bank_grad_step50"]["bank1_w1_grad"] <= 1e-9]
+        ([] if p0["gate_e4_class_independent"]
+         else ["gate_e4_class_independent"]) +         [f"{c}:dead_bank_tensor" for c in CONDITIONS
+         if not smoke[c]["all_bank_tensors_live"]]
     p0["failed"] = p0_fail
     p0["status"] = "CJT_EX1_P0_SMOKE_OK" if not p0_fail else \
         "CJT_EX1_SMOKE_FAILED"
@@ -670,13 +800,13 @@ def main():
                 torch.manual_seed(seed)
                 torch.cuda.manual_seed_all(seed)
                 mdl = build_executor(c, hid[c]).float().to(device)
-                _o, curve, gl = train(mdl, tb, vb, args.updates, device, seed)
+                _o, curve, gl, _nz = train(mdl, tb, vb, args.updates, device,
+                                           seed)
                 fin = evaluate(mdl, vb, device)
                 runs.append({"phase": "main", "cond": c, "seed": seed,
                              "params": param_count(mdl), "hidden": hid[c],
                              "final": fin, "curve": curve, "grad_log": gl,
-                             "expert_usage_by_class":
-                                 mdl.expert_usage(vb[0], device)})
+                             "expert_usage": mdl.expert_usage(vb, device)})
                 flush()
                 print(f"[MAIN] {c} {COND_NAME[c]:10} s{seed} "
                       f"acc={fin['accuracy']:.4f} "
@@ -685,39 +815,80 @@ def main():
                 torch.cuda.empty_cache()
             del tb
 
-        # ---- RETENTION: sequential learning ------------------------------
-        rel = [r for r in train_recs if r["question_type"] == "QB_REL"]
-        comp = [r for r in train_recs if r["question_type"] == "QB_COMP"]
+        # ---- RETENTION: sequential learning (AMENDED per owner ruling) --
+        # phase 1 = QB_INT (^2, ^6); phase 2 = QB_COMP (^2, ^6, + NEW ^8).
+        # Every expert relevant to the RETAINED phase-1 skill stays EXPOSED
+        # to phase-2 learning; ^8 enters as a new specialist. (^3 appears in
+        # neither phase -- stated, not glossed.)
+        ph1 = [r for r in train_recs
+               if r["question_type"] == RETENTION_PHASE1]
+        ph2 = [r for r in train_recs
+               if r["question_type"] == RETENTION_PHASE2]
+        print(f"[RET ] phase1={RETENTION_PHASE1} (n={len(ph1)}) "
+              f"phase2={RETENTION_PHASE2} (n={len(ph2)})")
         for seed in SEEDS:
-            tb_rel = pack(rel, acts, loc, seeded_order(len(rel), seed))
-            tb_comp = pack(comp, acts, loc, seeded_order(len(comp), seed))
+            tb1 = pack(ph1, acts, loc, seeded_order(len(ph1), seed))
+            tb2 = pack(ph2, acts, loc, seeded_order(len(ph2), seed))
             for c in CONDITIONS:
                 torch.manual_seed(seed)
                 torch.cuda.manual_seed_all(seed)
                 mdl = build_executor(c, hid[c]).float().to(device)
-                opt, _c1, _g = train(mdl, tb_rel, vb, RETENTION_UPDATES,
-                                     device, seed, checkpoints=False)
+                opt, _c1, g1, nz1 = train(mdl, tb1, vb, RETENTION_UPDATES,
+                                          device, seed, checkpoints=False)
                 after1 = evaluate(mdl, vb, device)
-                train(mdl, tb_comp, vb, RETENTION_UPDATES, device, seed,
-                      checkpoints=False, opt=opt)
+                # snapshot the SHARED experts before phase 2
+                snap = {n_: pp.detach().clone()
+                        for n_, pp in mdl.bank1.named_parameters()}
+                _o, _c2, g2, nz2 = train(mdl, tb2, vb, RETENTION_UPDATES,
+                                         device, seed, checkpoints=False,
+                                         opt=opt)
                 after2 = evaluate(mdl, vb, device)
+                move = {n_: float((pp.detach() - snap[n_]).norm())
+                        for n_, pp in mdl.bank1.named_parameters()}
+                w1_now = mdl.bank1.w1.detach()
+                per_expert_move = [
+                    float((w1_now[k] - snap["w1"][k]).norm())
+                    for k in range(w1_now.shape[0])]
                 a1 = after1["per_question_type"].get(
-                    "QB_REL", {"accuracy": 0.0})["accuracy"]
+                    RETENTION_PHASE1, {"accuracy": 0.0})["accuracy"]
                 a2 = after2["per_question_type"].get(
-                    "QB_REL", {"accuracy": 0.0})["accuracy"]
-                runs.append({"phase": "retention", "cond": c, "seed": seed,
-                             "after_phase1": after1, "after_phase2": after2,
-                             "qb_rel_after_phase1": a1,
-                             "qb_rel_after_phase2": a2,
-                             "retention_ratio": (a2 / a1) if a1 > 0 else None,
-                             "forgetting": a1 - a2})
+                    RETENTION_PHASE1, {"accuracy": 0.0})["accuracy"]
+                q1 = after1["per_question_type"].get(
+                    RETENTION_PHASE2, {"accuracy": 0.0})["accuracy"]
+                q2 = after2["per_question_type"].get(
+                    RETENTION_PHASE2, {"accuracy": 0.0})["accuracy"]
+                l1 = after1["per_question_type"].get(
+                    RETENTION_PHASE2, {"loss": None}).get("loss")
+                l2 = after2["per_question_type"].get(
+                    RETENTION_PHASE2, {"loss": None}).get("loss")
+                runs.append({
+                    "phase": "retention", "cond": c, "seed": seed,
+                    "phase1_family": RETENTION_PHASE1,
+                    "phase2_family": RETENTION_PHASE2,
+                    "retained_acc_before": a1,       # NUMERATOR + DENOMINATOR
+                    "retained_acc_after": a2,        # both, never ratio-only
+                    "forgetting": a1 - a2,
+                    "retention_ratio": (a2 / a1) if a1 > 0 else None,
+                    "newtask_acc_before": q1, "newtask_acc_after": q2,
+                    "newtask_gain": q2 - q1,
+                    "newtask_loss_before": l1, "newtask_loss_after": l2,
+                    "nonzero_grad_updates": {"phase1": nz1, "phase2": nz2},
+                    "bank1_param_movement_phase2": move,
+                    "bank1_per_expert_w1_movement": per_expert_move,
+                    "grad_log_phase1": g1, "grad_log_phase2": g2,
+                    "after_phase1": {k: v for k, v in after1.items()
+                                     if not k.startswith("per_record")},
+                    "after_phase2": {k: v for k, v in after2.items()
+                                     if not k.startswith("per_record")}})
                 flush()
-                print(f"[RET ] {c} {COND_NAME[c]:10} s{seed} "
-                      f"QB_REL {a1:.4f} -> {a2:.4f} "
-                      f"(forgot {a1-a2:+.4f})")
+                print(f"[RET ] {c} {COND_NAME[c]:12} s{seed} "
+                      f"{RETENTION_PHASE1} {a1:.4f}->{a2:.4f} "
+                      f"(forgot {a1-a2:+.4f}) | {RETENTION_PHASE2} "
+                      f"{q1:.4f}->{q2:.4f} (gain {q2-q1:+.4f}) "
+                      f"nz2={nz2}")
                 del mdl
                 torch.cuda.empty_cache()
-            del tb_rel, tb_comp
+            del tb1, tb2
     except Exception as exc:
         flush()
         (out / "CJT_EX1_ABORTED.json").write_text(json.dumps(
@@ -727,26 +898,51 @@ def main():
         print(f"ABORTED after {len(runs)} runs: {exc!r}")
         return 1
 
+    usage = {}
+    for c in CONDITIONS:
+        m_ = next((r for r in runs if r["phase"] == "main"
+                   and r["cond"] == c), None)
+        usage[c] = m_["expert_usage"] if m_ else None
     res = summarize(runs, counts, hid, checks, bind_report, is_real,
-                    len(val_c1), est_cost, time.time() - t0, torch)
+                    len(val_c1), est_cost, time.time() - t0, torch,
+                    chance, usage, ACTIVE_EXPERTS, step_ms)
     (out / "CJT_EX1_RESULTS.json").write_text(
         json.dumps(res, indent=2) + "\n", encoding="utf-8")
     print(f"\nCJT-EX1 STATUS: {res['development_status']}")
+    print(f"  secondary: {res['secondary_status']}")
     for c in CONDITIONS:
         a = res["arms"][c]
-        print(f"  {c} {COND_NAME[c]:10} acc {a['mean']:.4f}+-{a['std']:.4f} "
-              f"retention {a['retention_ratio_mean']}")
+        print(f"  {c} {COND_NAME[c]:12} acc {a['mean']:.4f}+-{a['std']:.4f} "
+              f"| forget {a['forgetting_mean']} "
+              f"| newtask {a['newtask_acc_after_mean']}")
+    km = res["key_margins"]
+    print(f"  E2-E1S (KILLER) {km['E2_minus_E1S_KILLER']:+.4f} | "
+          f"E2-E1 {km['E2_minus_E1_dense']:+.4f} | "
+          f"E2-E4 {km['E2_minus_E4_shuffle']:+.4f} | "
+          f"E3-E2 {km['E3_minus_E2_structure']:+.4f}")
+    print(f"  eligible families {res['eligible_families_frozen']} improved "
+          f"{res['families_improved']}")
     print(f"  wall {round(time.time()-t0,1)}s  est_cost ${est_cost()}")
     return 0
 
 
 def summarize(runs, counts, hid, checks, bind_report, is_real, n_eval,
-              est_cost, wall, torch):
-    """Frozen aggregation + the seven registered success conditions."""
+              est_cost, wall, torch, chance, usage, active_experts,
+              step_ms):
+    """Frozen aggregation and the AMENDED status law (owner ruling
+    2026-09-01). Every threshold, the eligible-family set, and the result
+    vocabulary are fixed here BEFORE the run."""
+    KC = KILLER_CONTROL
+
+    def mains(c):
+        return [r for r in runs if r["phase"] == "main" and r["cond"] == c]
+
+    def rets(c):
+        return [r for r in runs if r["phase"] == "retention"
+                and r["cond"] == c]
+
     def agg(c):
-        ms = [r for r in runs if r["phase"] == "main" and r["cond"] == c]
-        rs = [r for r in runs if r["phase"] == "retention"
-              and r["cond"] == c]
+        ms, rs = mains(c), rets(c)
         accs = [r["final"]["accuracy"] for r in ms]
         mean = sum(accs) / len(accs)
         sd = math.sqrt(sum((x - mean) ** 2 for x in accs) / len(accs))
@@ -755,102 +951,282 @@ def summarize(runs, counts, hid, checks, bind_report, is_real, n_eval,
             v = [r["final"]["per_question_type"][q]["accuracy"] for r in ms
                  if q in r["final"]["per_question_type"]]
             fam[q] = round(sum(v) / len(v), 6) if v else None
-        rr = [r["retention_ratio"] for r in rs
-              if r["retention_ratio"] is not None]
-        fg = [r["forgetting"] for r in rs]
+        mv_rows = [r["bank1_per_expert_w1_movement"] for r in rs]
         return {"mean": round(mean, 6), "std": round(sd, 6),
                 "by_seed": {r["seed"]: round(r["final"]["accuracy"], 6)
                             for r in ms},
                 "per_family": fam,
+                "per_family_by_seed": {
+                    q: {r["seed"]: round(
+                        r["final"]["per_question_type"][q]["accuracy"], 6)
+                        for r in ms if q in r["final"]["per_question_type"]}
+                    for q in FAMS},
                 "bridge_top1_mean": round(sum(r["final"]["bridge_top1"]
                                               for r in ms) / len(ms), 4),
-                "retention_ratio_mean": (round(sum(rr) / len(rr), 4)
-                                         if rr else None),
-                "forgetting_mean": (round(sum(fg) / len(fg), 4)
-                                    if fg else None),
-                "expert_usage_by_class": ms[0].get("expert_usage_by_class"),
+                "retained_acc_before_mean": round(sum(
+                    r["retained_acc_before"] for r in rs) / len(rs), 6)
+                if rs else None,
+                "retained_acc_after_mean": round(sum(
+                    r["retained_acc_after"] for r in rs) / len(rs), 6)
+                if rs else None,
+                "forgetting_mean": round(sum(r["forgetting"] for r in rs)
+                                         / len(rs), 6) if rs else None,
+                "newtask_gain_mean": round(sum(r["newtask_gain"] for r in rs)
+                                           / len(rs), 6) if rs else None,
+                "newtask_acc_after_mean": round(sum(
+                    r["newtask_acc_after"] for r in rs) / len(rs), 6)
+                if rs else None,
+                "nonzero_grad_updates_phase2_mean": round(sum(
+                    r["nonzero_grad_updates"]["phase2"] for r in rs)
+                    / len(rs), 1) if rs else None,
+                "bank1_per_expert_w1_movement_mean": (
+                    [round(sum(row[k] for row in mv_rows) / len(mv_rows), 6)
+                     for k in range(len(mv_rows[0]))] if mv_rows else None),
+                "expert_usage": usage.get(c),
+                "active_experts_per_clause": active_experts[c],
+                "measured_ms_per_step": step_ms.get(c),
                 "params": counts[c], "hidden": hid[c]}
 
     arms = {c: agg(c) for c in CONDITIONS}
-    se = round(math.sqrt(0.25 / n_eval) * math.sqrt(2), 6)
 
-    def margin(a, b):
-        return round(arms[a]["mean"] - arms[b]["mean"], 6)
+    # ---- PAIRED statistics: every arm sees the SAME records -------------
+    def paired(a, b):
+        das = []
+        for sd_ in SEEDS:
+            ra = next((r for r in mains(a) if r["seed"] == sd_), None)
+            rb = next((r for r in mains(b) if r["seed"] == sd_), None)
+            if not ra or not rb:
+                continue
+            va = ra["final"].get("per_record_correct")
+            vb_ = rb["final"].get("per_record_correct")
+            if not va or not vb_ or len(va) != len(vb_):
+                continue
+            das.append([x - y for x, y in zip(va, vb_)])
+        if not das:
+            return None
+        flat = [d for row in das for d in row]
+        n = len(flat)
+        m = sum(flat) / n
+        var = sum((d - m) ** 2 for d in flat) / max(1, n - 1)
+        seed_means = [sum(row) / len(row) for row in das]
+        return {"paired_mean_diff": round(m, 6),
+                "paired_se_over_records": round(math.sqrt(var / n), 6),
+                "per_seed_mean_diff": [round(x, 6) for x in seed_means],
+                "seeds_positive": sum(1 for x in seed_means if x > 0),
+                "n_paired_records": n}
 
-    def fam_margin(a, b):
-        return {q: (round(arms[a]["per_family"][q]
-                          - arms[b]["per_family"][q], 6)
-                    if arms[a]["per_family"][q] is not None
-                    and arms[b]["per_family"][q] is not None else None)
-                for q in FAMS}
+    def paired_family(a, b, q):
+        das = []
+        for sd_ in SEEDS:
+            ra = next((r for r in mains(a) if r["seed"] == sd_), None)
+            rb = next((r for r in mains(b) if r["seed"] == sd_), None)
+            if not ra or not rb:
+                continue
+            fa = ra["final"].get("per_record_family") or []
+            va = ra["final"].get("per_record_correct") or []
+            vb_ = rb["final"].get("per_record_correct") or []
+            d = [x - y for x, y, f in zip(va, vb_, fa) if f == q]
+            if d:
+                das.append(sum(d) / len(d))
+        if not das:
+            return None
+        return {"mean_paired_gain": round(sum(das) / len(das), 6),
+                "per_seed": [round(x, 6) for x in das],
+                "seeds_positive": sum(1 for x in das if x > 0)}
 
-    m_e2_e1 = margin("E2", "E1")
-    m_e2_e4 = margin("E2", "E4")
-    m_e2_e0 = margin("E2", "E0")
-    m_e3_e2 = margin("E3", "E2")
-    fam_e2_e1 = fam_margin("E2", "E1")
-    fams_over = sum(1 for q in FAMS
-                    if fam_e2_e1[q] is not None and fam_e2_e1[q] >= MARGIN)
-    ret = {c: arms[c]["retention_ratio_mean"] for c in CONDITIONS}
-    ret_better = (ret["E2"] is not None and ret["E1"] is not None
-                  and ret["E2"] > ret["E1"])
+    # ---- family eligibility, FROZEN before the run ----------------------
+    base = arms[KC]["per_family"]
+    saturation = {}
+    for q in FAMS:
+        b = base[q] if base[q] is not None else 0.0
+        sat = (b >= SATURATED_ACC) or ((1.0 - b) < SATURATED_HEADROOM)
+        saturation[q] = {"killer_control_baseline": b,
+                         "headroom": round(1.0 - b, 6), "saturated": sat,
+                         "eligible_for_breadth_gate": not sat}
+    eligible = [q for q in FAMS if not saturation[q]["saturated"]]
+
+    families = {}
+    for q in FAMS:
+        pf = paired_family("E2", KC, q)
+        b = base[q] if base[q] is not None else 0.0
+        e2 = arms["E2"]["per_family"][q]
+        gain = (e2 - b) if e2 is not None else None
+        headroom = 1.0 - b
+        n_fam = n_eval / len(FAMS)
+        families[q] = {
+            "killer_control_accuracy": b, "E2_accuracy": e2,
+            "absolute_gain": round(gain, 6) if gain is not None else None,
+            "remaining_error_reduction": (round(gain / headroom, 6)
+                                          if gain is not None
+                                          and headroom > 1e-9 else None),
+            "raw_additional_correct_answers": (round(gain * n_fam, 2)
+                                               if gain is not None else None),
+            "paired": pf, "saturated": saturation[q]["saturated"],
+            "counts_as_improved": bool(
+                not saturation[q]["saturated"] and pf
+                and pf["mean_paired_gain"] >= FAMILY_GAIN
+                and pf["seeds_positive"] >= FAMILY_SEEDS)}
+    fams_improved = [q for q in eligible if families[q]["counts_as_improved"]]
+
+    # ---- retention: numerator AND denominator, never a bare ratio -------
+    ret_seed_delta = []
+    for sd_ in SEEDS:
+        rc = next((r for r in rets("E2") if r["seed"] == sd_), None)
+        rk = next((r for r in rets(KC) if r["seed"] == sd_), None)
+        if rc and rk:
+            ret_seed_delta.append(rk["forgetting"] - rc["forgetting"])
+    ret_advantage = (sum(ret_seed_delta) / len(ret_seed_delta)
+                     if ret_seed_delta else None)
+    ret_seeds_pos = sum(1 for x in ret_seed_delta if x > 0)
+    acq_ok = None
+    if arms["E2"]["newtask_acc_after_mean"] is not None:
+        others = [arms[c]["newtask_acc_after_mean"] for c in CONDITIONS
+                  if c != "E2"
+                  and arms[c]["newtask_acc_after_mean"] is not None]
+        if others:
+            acq_ok = bool(arms["E2"]["newtask_acc_after_mean"]
+                          >= max(others) - ACQUISITION_TOL)
+    # REAL INTERFERENCE PRESSURE gate (owner ruling, check A)
+    stress = {}
+    for c in CONDITIONS:
+        mv = arms[c]["bank1_per_expert_w1_movement_mean"]
+        stress[c] = {"newtask_gain": arms[c]["newtask_gain_mean"],
+                     "max_expert_param_movement": (max(mv) if mv else None),
+                     "nonzero_grad_updates_phase2":
+                         arms[c]["nonzero_grad_updates_phase2_mean"]}
+    stress_ok = all(
+        (stress[c]["newtask_gain"] is not None
+         and stress[c]["newtask_gain"] >= STRESS_MIN_GAIN
+         and (stress[c]["max_expert_param_movement"] or 0) > 1e-6)
+        for c in CONDITIONS)
+    retention_ok = bool(stress_ok and ret_advantage is not None
+                        and ret_advantage >= RETENTION_MARGIN
+                        and ret_seeds_pos >= FAMILY_SEEDS and acq_ok)
+
+    # ---- E4 must be PROVEN class-independent ----------------------------
+    e4_mi = (usage.get("E4") or {}).get("mutual_information_bits")
+    e4_valid = bool(e4_mi is not None and e4_mi <= E4_MAX_MUTUAL_INFO_BITS)
+
+    floor = chance + COMPETENCE_FLOOR_MARGIN
+    floor_ok = {c: bool(arms[c]["mean"] >= floor) for c in CONDITIONS}
+
+    p_e2_kc = paired("E2", KC)
+    p_e2_e1 = paired("E2", "E1")
+    p_e2_e4 = paired("E2", "E4")
+    p_e3_e2 = paired("E3", "E2")
+    m_e2_kc = round(arms["E2"]["mean"] - arms[KC]["mean"], 6)
+    m_e2_e1 = round(arms["E2"]["mean"] - arms["E1"]["mean"], 6)
+    m_e2_e4 = round(arms["E2"]["mean"] - arms["E4"]["mean"], 6)
+    m_e3_e2 = round(arms["E3"]["mean"] - arms["E2"]["mean"], 6)
+
     conds = {
-        "1_CAS_experts_beat_anonymous_moe": m_e2_e1 >= MARGIN,
-        "2_advantage_on_unseen_verbs_and_templates":
-            "BY CONSTRUCTION -- every reported accuracy is on family C "
-            "(verbs 6-7, form 4), never seen in training",
-        "3_advantage_spans_more_than_one_family": fams_over >= 2,
+        "1_beats_killer_control_E1S": m_e2_kc >= MARGIN,
+        "2_unseen_verbs_and_templates":
+            "BY CONSTRUCTION -- every accuracy is on family C (verbs 6-7, "
+            "form 4), disjoint from training",
+        "3_breadth_over_eligible_families": len(fams_improved) >= 2,
         "4_shuffling_removes_the_advantage": m_e2_e4 >= MARGIN,
-        "5_removing_the_registered_relationship_damages_transfer":
-            m_e3_e2 >= MARGIN,
-        "6_better_retention_under_sequential_learning": ret_better,
+        "5_structured_sharing_helps_EXPLORATORY": m_e3_e2 >= MARGIN,
+        "6_better_retention_than_E1S": retention_ok,
         "7_matched_params_compute_seeds":
             max(counts.values()) - min(counts.values())
-            <= 0.01 * max(counts.values())}
-    hard = [k for k, v in conds.items() if v is False]
-    win = not hard
-    status = ("CJT_EX1_EXPERT_SPECIALIZATION_DEV_SIGNAL" if win
-              else "NO_CJT_EXPERT_SPECIALIZATION_SIGNAL")
-    return {"pilot": "CJT-EX1 EXPERT SPECIALIZATION AND TRANSFER",
-            "non_claim_bearing": True, "is_real_model": is_real,
-            "layer_frozen": L_FROZEN,
-            "scope": "asks whether operation-organized expert modules do "
-                     "ARCHITECTURAL work (specialization, transfer, "
-                     "retention) versus a matched generic expert bank. "
-                     "Permitted conclusion at most: 'CJT-organized expert "
-                     "modules improved specialization, transfer, or "
-                     "retention relative to a matched generic expert "
-                     "architecture in a controlled development task.' "
-                     "'CAS-specific' remains PROHIBITED -- it is reserved "
-                     "for incremental value over serious matched controls "
-                     "under protected evaluation.",
-            "eval_split": f"family C, {n_eval} records (C1_TRANSFORM_SELECT "
-                          "half; the C2_STRUCTURE_EVAL half stays sealed). "
-                          "Verbs and clause forms are DISJOINT from "
-                          "training, so all accuracies are transfer numbers.",
-            "preflight_checks": checks, "cache_binding": bind_report,
-            "arms": arms,
-            "approx_se_on_a_margin": se,
-            "key_margins": {"E2_minus_E1_killer": m_e2_e1,
-                            "E2_minus_E4_shuffle": m_e2_e4,
-                            "E2_minus_E0_shared": m_e2_e0,
-                            "E3_minus_E2_structure": m_e3_e2,
-                            "E2_minus_E1_per_family": fam_e2_e1,
-                            "families_at_margin": fams_over},
-            "retention_ratio_by_condition": ret,
+            <= 0.01 * max(counts.values()),
+        "8_E4_proven_class_independent": e4_valid,
+        "9_competence_floor": all(floor_ok.values())}
+
+    # ---- the RULED result vocabulary ------------------------------------
+    beats_kc = m_e2_kc >= MARGIN
+    beats_e1 = m_e2_e1 >= MARGIN
+    e4_ge_e2 = arms["E4"]["mean"] >= arms["E2"]["mean"]
+    if e4_ge_e2 and e4_valid:
+        status = "CAS_EXPERT_MEANINGS_NOT_LOAD_BEARING"
+    elif not beats_kc and beats_e1:
+        status = "SPARSITY_ADVANTAGE_ONLY"
+    elif (beats_kc and conds["3_breadth_over_eligible_families"]
+          and conds["4_shuffling_removes_the_advantage"]
+          and conds["6_better_retention_than_E1S"]):
+        status = "CJT_EXPERT_SPECIALIZATION_SIGNAL"
+    else:
+        status = "NO_CJT_EXPERT_SPECIALIZATION_SIGNAL"
+    secondary = ("STRUCTURED_WEIGHT_SHARING_SIGNAL"
+                 if m_e3_e2 >= MARGIN else None)
+    if not stress_ok:
+        status = status + " | RETENTION_STRESS_INSUFFICIENT"
+
+    return {
+        "pilot": "CJT-EX1 EXPERT SPECIALIZATION AND TRANSFER (AMENDED)",
+        "non_claim_bearing": True, "is_real_model": is_real,
+        "layer_frozen": L_FROZEN,
+        "owner_ruling": "amended 2026-09-01: headroom-aware breadth; "
+                        "retention phase1=QB_INT phase2=QB_COMP with a "
+                        "real-interference gate; E1S anonymous sparse top-1 "
+                        "added as THE killer control; E3 exploratory only; "
+                        "E4 must be proven class-independent",
+        "scope": "Permitted at most: 'CJT-organized expert modules improved "
+                 "specialization, transfer, or retention relative to a "
+                 "matched generic SPARSE expert architecture in a controlled "
+                 "development task.' An E3 advantage is reported as "
+                 "STRUCTURED_WEIGHT_SHARING_SIGNAL, never as an "
+                 "involution-specific CAS advantage (this run has no matched "
+                 "generic pair-sharing control). 'CAS-specific' and "
+                 "'specific' remain PROHIBITED.",
+        "eval_split": f"family C, {n_eval} records (C1_TRANSFORM_SELECT "
+                      "half; C2_STRUCTURE_EVAL sealed). Verbs and forms are "
+                      "disjoint from training: all accuracies are transfer.",
+        "killer_control": KC,
+        "preflight_checks": checks, "cache_binding": bind_report,
+        "arms": arms,
+        "candidate_uniform_chance": chance,
+        "competence_floor": floor, "competence_floor_ok": floor_ok,
+        "family_saturation": saturation,
+        "eligible_families_frozen": eligible,
+        "families": families, "families_improved": fams_improved,
+        "key_margins": {
+            "E2_minus_E1S_KILLER": m_e2_kc, "paired_E2_vs_E1S": p_e2_kc,
+            "E2_minus_E1_dense": m_e2_e1, "paired_E2_vs_E1": p_e2_e1,
+            "E2_minus_E4_shuffle": m_e2_e4, "paired_E2_vs_E4": p_e2_e4,
+            "E3_minus_E2_structure": m_e3_e2, "paired_E3_vs_E2": p_e3_e2},
+        "retention": {
+            "phase1_family": RETENTION_PHASE1,
+            "phase2_family": RETENTION_PHASE2,
+            "note": "^2 and ^6 are exposed in BOTH phases; ^8 enters as a "
+                    "NEW specialist in phase 2; ^3 appears in NEITHER phase "
+                    "(stated, not glossed)",
             "forgetting_by_condition": {c: arms[c]["forgetting_mean"]
                                         for c in CONDITIONS},
-            "success_conditions": conds, "failed_conditions": hard,
-            "development_status": status,
-            "param_counts": counts, "hidden_widths": hid,
-            "gpu_max_memory_allocated_bytes":
-                int(torch.cuda.max_memory_allocated()),
-            "runs": runs, "total_wall_clock_seconds": round(wall, 1),
-            "cost": {"method": "compute_wall_estimate (LOWER BOUND); the "
-                               "authoritative spend proxy is the watchdog's "
-                               "instance_runtime_estimate in the receipt",
-                     "rate_per_hour_usd": RATE_PER_HOUR,
-                     "estimated_cost_usd": est_cost()}}
+            "retained_before_by_condition": {
+                c: arms[c]["retained_acc_before_mean"] for c in CONDITIONS},
+            "retained_after_by_condition": {
+                c: arms[c]["retained_acc_after_mean"] for c in CONDITIONS},
+            "newtask_after_by_condition": {
+                c: arms[c]["newtask_acc_after_mean"] for c in CONDITIONS},
+            "E2_forgets_less_than_E1S_by": ret_advantage,
+            "per_seed_advantage": [round(x, 6) for x in ret_seed_delta],
+            "seeds_positive": ret_seeds_pos,
+            "acquisition_within_tolerance": acq_ok,
+            "interference_pressure": stress,
+            "interference_pressure_sufficient": stress_ok,
+            "retention_advantage_established": retention_ok},
+        "e4_class_independence": {
+            "mutual_information_bits": e4_mi,
+            "max_allowed_bits": E4_MAX_MUTUAL_INFO_BITS,
+            "valid_control": e4_valid,
+            "contingency": (usage.get("E4") or {}).get(
+                "contingency_class_by_expert")},
+        "success_conditions": conds,
+        "failed_conditions": [k for k, v in conds.items() if v is False],
+        "development_status": status, "secondary_status": secondary,
+        "param_counts": counts, "hidden_widths": hid,
+        "active_experts_per_clause": active_experts,
+        "measured_ms_per_step": step_ms,
+        "gpu_max_memory_allocated_bytes":
+            int(torch.cuda.max_memory_allocated()),
+        "runs": runs, "total_wall_clock_seconds": round(wall, 1),
+        "cost": {"method": "compute_wall_estimate (LOWER BOUND); the "
+                           "authoritative spend proxy is the watchdog's "
+                           "instance_runtime_estimate in the receipt",
+                 "rate_per_hour_usd": RATE_PER_HOUR,
+                 "estimated_cost_usd": est_cost()}}
 
 
 if __name__ == "__main__":
