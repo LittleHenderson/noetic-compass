@@ -1,0 +1,145 @@
+{
+  "cas_class_order": [
+    "^2",
+    "^3",
+    "^6",
+    "^8"
+  ],
+  "control_name": "WordNet Soft Semantic Simplex Control",
+  "non_claim_bearing": true,
+  "provenance": {
+    "background_verb_synsets": 13767,
+    "balancing": "global_factor_scale_equalization",
+    "epsilon": 1e-06,
+    "feature_weighting": "tfidf_sublinear_l2",
+    "n_factors": 4,
+    "n_features": 8106,
+    "nmf_init": "nndsvda",
+    "nmf_max_iter": 2000,
+    "nmf_random_state": 0,
+    "numpy_version": "2.3.5",
+    "sklearn_version": "1.8.0",
+    "wordnet_license": "WordNet Release 3.0 License (Princeton University)",
+    "wordnet_version": "3.0",
+    "wordnet_zip_bytes": 10775600,
+    "wordnet_zip_sha256": "cbda5ea6eef7f36a97a43d4a75f85e07fccbb4f23657d27b4ccbc93e2646ab59"
+  },
+  "simplex_semantics": "SEMANTIC_COMPOSITION",
+  "table_id": "S7_DELTA_WN1",
+  "verb_to_profile": {
+    "backed": [
+      8.59e-06,
+      0.99997423,
+      8.59e-06,
+      8.59e-06
+    ],
+    "broke": [
+      0.70691385,
+      0.16433583,
+      2.078e-05,
+      0.12872954
+    ],
+    "brought": [
+      0.35476541,
+      0.11657523,
+      0.24349656,
+      0.2851628
+    ],
+    "captured": [
+      0.25527725,
+      0.06128407,
+      0.29234575,
+      0.39109293
+    ],
+    "drawn": [
+      0.08268774,
+      0.12836084,
+      0.13866509,
+      0.65028632
+    ],
+    "felt": [
+      0.32108053,
+      0.30168621,
+      0.28286177,
+      0.09437148
+    ],
+    "lay": [
+      0.14469701,
+      0.8391447,
+      2.929e-05,
+      0.016129
+    ],
+    "made": [
+      0.32225929,
+      0.21172523,
+      0.16449249,
+      0.30152299
+    ],
+    "pulled": [
+      0.08268774,
+      0.12836084,
+      0.13866509,
+      0.65028632
+    ],
+    "recoiled": [
+      1.419e-05,
+      0.84207582,
+      0.13856593,
+      0.01934407
+    ],
+    "reminded": [
+      0.13817402,
+      2.671e-05,
+      0.47074056,
+      0.3910587
+    ],
+    "repelled": [
+      0.30988332,
+      3.522e-05,
+      0.30226986,
+      0.3878116
+    ],
+    "split": [
+      0.40025243,
+      2.199e-05,
+      0.10527497,
+      0.49445061
+    ],
+    "summoned": [
+      8.71e-06,
+      8.71e-06,
+      0.72757169,
+      0.27241088
+    ],
+    "thought": [
+      0.07194001,
+      4.26e-05,
+      0.75343742,
+      0.17457997
+    ],
+    "withdrew": [
+      1.008e-05,
+      0.99996977,
+      1.008e-05,
+      1.008e-05
+    ]
+  },
+  "verb_to_sense": {
+    "backed": "back.v.02",
+    "broke": "break.v.02",
+    "brought": "bring.v.03",
+    "captured": "capture.v.02",
+    "drawn": "attract.v.01",
+    "felt": "feel.v.01",
+    "lay": "lie.v.01",
+    "made": "constitute.v.01",
+    "pulled": "attract.v.01",
+    "recoiled": "flinch.v.01",
+    "reminded": "remind.v.01",
+    "repelled": "repel.v.02",
+    "split": "divide.v.01",
+    "summoned": "summon.v.02",
+    "thought": "think.v.01",
+    "withdrew": "withdraw.v.01"
+  }
+}

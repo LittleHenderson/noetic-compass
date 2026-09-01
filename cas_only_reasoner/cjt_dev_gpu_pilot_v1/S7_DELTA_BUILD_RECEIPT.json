@@ -1,0 +1,439 @@
+{
+  "receipt_id": "S7_DELTA_BUILD_RECEIPT",
+  "pilot": "CJT-DEV-P1",
+  "amendment": "CJT-DEV-P1-S7Delta",
+  "non_claim_bearing": true,
+  "verdict": "S7_DELTA_CONSTRUCTED",
+  "preserves": {
+    "hard_partition_verdict": "S7_PILOT_CONSTRUCTION_FAILED",
+    "note": "the hard S7-P negative result (commit 19d9e843) remains valid and is not rewritten"
+  },
+  "s7_delta_table_sha256": "efe61cc1320587470a1815412b7af713fadd39f699fc87ecdd393c268d7c178e",
+  "sense_assignment": {
+    "drawn": {
+      "synset": "attract.v.01",
+      "gloss": "direct toward itself or oneself by means of some psychological power or physical attributes",
+      "clause": "{m} was drawn to {i}",
+      "rationale": "attract: direct toward itself by psychological/physical power",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "pulled": {
+      "synset": "attract.v.01",
+      "gloss": "direct toward itself or oneself by means of some psychological power or physical attributes",
+      "clause": "{i} pulled {m} toward it",
+      "rationale": "attract/draw toward (figurative pull)",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "felt": {
+      "synset": "feel.v.01",
+      "gloss": "undergo an emotional sensation or be in a particular state of mind",
+      "clause": "{m} felt an unmistakable pull toward {i}",
+      "rationale": "feel/experience an emotional sensation or state of mind",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "captured": {
+      "synset": "capture.v.02",
+      "gloss": "attract; cause to be enamored",
+      "clause": "the appeal of {i} captured {m} completely",
+      "rationale": "attract; cause to be enamored (captivate/fascinate)",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "withdrew": {
+      "synset": "withdraw.v.01",
+      "gloss": "pull back or move away or backward",
+      "clause": "{m} withdrew from {i}",
+      "rationale": "pull back or move away or backward",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "repelled": {
+      "synset": "repel.v.02",
+      "gloss": "be repellent to; cause aversion in",
+      "clause": "{i} repelled {m} from the start",
+      "rationale": "be repellent to; cause aversion in",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "recoiled": {
+      "synset": "flinch.v.01",
+      "gloss": "draw back, as with fear or pain",
+      "clause": "{m} recoiled whenever {i} came up",
+      "rationale": "draw back, as with fear or pain",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "backed": {
+      "synset": "back.v.02",
+      "gloss": "travel backward",
+      "clause": "faced with {i}, {m} backed away",
+      "rationale": "travel backward / move back",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "broke": {
+      "synset": "break.v.02",
+      "gloss": "become separated into pieces or fragments",
+      "clause": "{i} broke down into parts",
+      "rationale": "become separated into pieces or fragments",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "lay": {
+      "synset": "lie.v.01",
+      "gloss": "be located or situated somewhere; occupy a certain position",
+      "clause": "inside {i} lay parts",
+      "rationale": "be located or situated somewhere",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "split": {
+      "synset": "divide.v.01",
+      "gloss": "separate into parts or portions",
+      "clause": "{i} could be split into parts",
+      "rationale": "separate into parts or portions",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "made": {
+      "synset": "constitute.v.01",
+      "gloss": "form or compose",
+      "clause": "three strands made up {i}",
+      "rationale": "form or compose (make up / constitute)",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "brought": {
+      "synset": "bring.v.03",
+      "gloss": "cause to happen or to occur as a consequence",
+      "clause": "{a} brought {b} to {m}'s mind",
+      "rationale": "cause to happen or occur as a consequence (evoke)",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "thought": {
+      "synset": "think.v.01",
+      "gloss": "judge or regard; look upon; judge",
+      "clause": "whenever {m} thought of {a}, {b} surfaced",
+      "rationale": "judge or regard; consider / call to mind",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "reminded": {
+      "synset": "remind.v.01",
+      "gloss": "put in the mind of someone",
+      "clause": "{a} reminded {m} of {b}",
+      "rationale": "put in the mind of someone",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    },
+    "summoned": {
+      "synset": "summon.v.02",
+      "gloss": "ask to come",
+      "clause": "{a} always summoned {b}",
+      "rationale": "ask to come / call forth (to mind)",
+      "chosen_by": "clause MEANING (CAS never consulted)"
+    }
+  },
+  "integrity_gates": {
+    "rows_finite": true,
+    "rows_nonnegative": true,
+    "rows_sum_to_one": true,
+    "profile_matrix_rank": 4,
+    "rank_is_full_4": true,
+    "equals_S3": false,
+    "permutation_equals_S3": false,
+    "hardened_argmax_is_cas_permutation": false,
+    "no_cas_or_qwen_input": true,
+    "four_dim_interface": true
+  },
+  "integrity_pass": true,
+  "per_verb_profile": {
+    "drawn": {
+      "cas_class": "^2",
+      "sense": "attract.v.01",
+      "sense_gloss": "direct toward itself or oneself by means of some psychological power or physical attributes",
+      "profile": [
+        0.08268774,
+        0.12836084,
+        0.13866509,
+        0.65028632
+      ],
+      "dominant_factor": 3,
+      "dominance_max": 0.650286,
+      "dominance_margin_top1_top2": 0.511621,
+      "normalized_entropy": 0.738251
+    },
+    "pulled": {
+      "cas_class": "^2",
+      "sense": "attract.v.01",
+      "sense_gloss": "direct toward itself or oneself by means of some psychological power or physical attributes",
+      "profile": [
+        0.08268774,
+        0.12836084,
+        0.13866509,
+        0.65028632
+      ],
+      "dominant_factor": 3,
+      "dominance_max": 0.650286,
+      "dominance_margin_top1_top2": 0.511621,
+      "normalized_entropy": 0.738251
+    },
+    "felt": {
+      "cas_class": "^2",
+      "sense": "feel.v.01",
+      "sense_gloss": "undergo an emotional sensation or be in a particular state of mind",
+      "profile": [
+        0.32108053,
+        0.30168621,
+        0.28286177,
+        0.09437148
+      ],
+      "dominant_factor": 0,
+      "dominance_max": 0.321081,
+      "dominance_margin_top1_top2": 0.019394,
+      "normalized_entropy": 0.942268
+    },
+    "captured": {
+      "cas_class": "^2",
+      "sense": "capture.v.02",
+      "sense_gloss": "attract; cause to be enamored",
+      "profile": [
+        0.25527725,
+        0.06128407,
+        0.29234575,
+        0.39109293
+      ],
+      "dominant_factor": 3,
+      "dominance_max": 0.391093,
+      "dominance_margin_top1_top2": 0.098747,
+      "normalized_entropy": 0.899066
+    },
+    "withdrew": {
+      "cas_class": "^3",
+      "sense": "withdraw.v.01",
+      "sense_gloss": "pull back or move away or backward",
+      "profile": [
+        1.008e-05,
+        0.99996977,
+        1.008e-05,
+        1.008e-05
+      ],
+      "dominant_factor": 1,
+      "dominance_max": 0.99997,
+      "dominance_margin_top1_top2": 0.99996,
+      "normalized_entropy": 0.000273
+    },
+    "repelled": {
+      "cas_class": "^3",
+      "sense": "repel.v.02",
+      "sense_gloss": "be repellent to; cause aversion in",
+      "profile": [
+        0.30988332,
+        3.522e-05,
+        0.30226986,
+        0.3878116
+      ],
+      "dominant_factor": 3,
+      "dominance_max": 0.387812,
+      "dominance_margin_top1_top2": 0.077928,
+      "normalized_entropy": 0.788002
+    },
+    "recoiled": {
+      "cas_class": "^3",
+      "sense": "flinch.v.01",
+      "sense_gloss": "draw back, as with fear or pain",
+      "profile": [
+        1.419e-05,
+        0.84207582,
+        0.13856593,
+        0.01934407
+      ],
+      "dominant_factor": 1,
+      "dominance_max": 0.842076,
+      "dominance_margin_top1_top2": 0.70351,
+      "normalized_entropy": 0.357126
+    },
+    "backed": {
+      "cas_class": "^3",
+      "sense": "back.v.02",
+      "sense_gloss": "travel backward",
+      "profile": [
+        8.59e-06,
+        0.99997423,
+        8.59e-06,
+        8.59e-06
+      ],
+      "dominant_factor": 1,
+      "dominance_max": 0.999974,
+      "dominance_margin_top1_top2": 0.999966,
+      "normalized_entropy": 0.000235
+    },
+    "broke": {
+      "cas_class": "^6",
+      "sense": "break.v.02",
+      "sense_gloss": "become separated into pieces or fragments",
+      "profile": [
+        0.70691385,
+        0.16433583,
+        2.078e-05,
+        0.12872954
+      ],
+      "dominant_factor": 0,
+      "dominance_max": 0.706914,
+      "dominance_margin_top1_top2": 0.542578,
+      "normalized_entropy": 0.581464
+    },
+    "lay": {
+      "cas_class": "^6",
+      "sense": "lie.v.01",
+      "sense_gloss": "be located or situated somewhere; occupy a certain position",
+      "profile": [
+        0.14469701,
+        0.8391447,
+        2.929e-05,
+        0.016129
+      ],
+      "dominant_factor": 1,
+      "dominance_max": 0.839145,
+      "dominance_margin_top1_top2": 0.694448,
+      "normalized_entropy": 0.356166
+    },
+    "split": {
+      "cas_class": "^6",
+      "sense": "divide.v.01",
+      "sense_gloss": "separate into parts or portions",
+      "profile": [
+        0.40025243,
+        2.199e-05,
+        0.10527497,
+        0.49445061
+      ],
+      "dominant_factor": 3,
+      "dominance_max": 0.494451,
+      "dominance_margin_top1_top2": 0.094198,
+      "normalized_entropy": 0.686701
+    },
+    "made": {
+      "cas_class": "^6",
+      "sense": "constitute.v.01",
+      "sense_gloss": "form or compose",
+      "profile": [
+        0.32225929,
+        0.21172523,
+        0.16449249,
+        0.30152299
+      ],
+      "dominant_factor": 0,
+      "dominance_max": 0.322259,
+      "dominance_margin_top1_top2": 0.020736,
+      "normalized_entropy": 0.97527
+    },
+    "brought": {
+      "cas_class": "^8",
+      "sense": "bring.v.03",
+      "sense_gloss": "cause to happen or to occur as a consequence",
+      "profile": [
+        0.35476541,
+        0.11657523,
+        0.24349656,
+        0.2851628
+      ],
+      "dominant_factor": 0,
+      "dominance_max": 0.354765,
+      "dominance_margin_top1_top2": 0.069603,
+      "normalized_entropy": 0.952148
+    },
+    "thought": {
+      "cas_class": "^8",
+      "sense": "think.v.01",
+      "sense_gloss": "judge or regard; look upon; judge",
+      "profile": [
+        0.07194001,
+        4.26e-05,
+        0.75343742,
+        0.17457997
+      ],
+      "dominant_factor": 2,
+      "dominance_max": 0.753437,
+      "dominance_margin_top1_top2": 0.578857,
+      "normalized_entropy": 0.510556
+    },
+    "reminded": {
+      "cas_class": "^8",
+      "sense": "remind.v.01",
+      "sense_gloss": "put in the mind of someone",
+      "profile": [
+        0.13817402,
+        2.671e-05,
+        0.47074056,
+        0.3910587
+      ],
+      "dominant_factor": 2,
+      "dominance_max": 0.470741,
+      "dominance_margin_top1_top2": 0.079682,
+      "normalized_entropy": 0.718176
+    },
+    "summoned": {
+      "cas_class": "^8",
+      "sense": "summon.v.02",
+      "sense_gloss": "ask to come",
+      "profile": [
+        8.71e-06,
+        8.71e-06,
+        0.72757169,
+        0.27241088
+      ],
+      "dominant_factor": 2,
+      "dominance_max": 0.727572,
+      "dominance_margin_top1_top2": 0.455161,
+      "normalized_entropy": 0.422606
+    }
+  },
+  "soft_cas_alignment_reporting": {
+    "note": "REPORTED AFTER the table was frozen; NOT a gate and NOT optimized. Correlation with CAS is expected when both capture real semantics.",
+    "soft_contingency_CAS_rows_x_factor_cols": [
+      [
+        0.7417,
+        0.6197,
+        0.8525,
+        1.786
+      ],
+      [
+        0.3099,
+        2.8421,
+        0.4409,
+        0.4072
+      ],
+      [
+        1.5741,
+        1.2152,
+        0.2698,
+        0.9408
+      ],
+      [
+        0.5649,
+        0.1167,
+        2.1952,
+        1.1232
+      ]
+    ],
+    "best_permutation_alignment_mass_of_16": 8.3975,
+    "soft_mutual_information_nats": 0.244148,
+    "mean_pairwise_JS_of_class_means": 0.156309,
+    "component_total_mass": [
+      3.1907,
+      4.7936,
+      3.7585,
+      4.2573
+    ],
+    "component_mass_balance_maxdev_from_4": 0.8093,
+    "mean_normalized_entropy": 0.60416,
+    "mean_dominance_max": 0.619491
+  },
+  "provenance": {
+    "wordnet_version": "3.0",
+    "wordnet_zip_sha256": "cbda5ea6eef7f36a97a43d4a75f85e07fccbb4f23657d27b4ccbc93e2646ab59",
+    "wordnet_zip_bytes": 10775600,
+    "wordnet_license": "WordNet Release 3.0 License (Princeton University)",
+    "sklearn_version": "1.8.0",
+    "numpy_version": "2.3.5",
+    "n_factors": 4,
+    "nmf_init": "nndsvda",
+    "nmf_max_iter": 2000,
+    "nmf_random_state": 0,
+    "feature_weighting": "tfidf_sublinear_l2",
+    "balancing": "global_factor_scale_equalization",
+    "epsilon": 1e-06,
+    "background_verb_synsets": 13767,
+    "n_features": 8106
+  }
+}

@@ -1,7 +1,9 @@
 # CJT-DEV-P1 — Static Dual-Stream Neural Coupling Development Pilot
 
-**Status:** blocked at the first hard gate (S7-P construction). No GPU launched.
-No model loaded. No AWS call. No money spent. Protected split never touched.
+**Status:** S7-P (hard partition) construction FAILED and is preserved as a
+negative result; the owner amendment **CJT-DEV-P1-S7Δ** replaced it with a SOFT
+WordNet semantic simplex control (`S7_DELTA_WN1`), which is built and passes all
+construction-integrity gates. Pilot arms are now S0 / S3 / S6 / **S7-Δ**.
 
 **Branch:** `research/cjt-dev-gpu-pilot-v1` (from anchor `3182e0623`).
 **Classification:** development-only, **non-claim-bearing** (owner directive
@@ -57,15 +59,40 @@ This confirms the taxonomy manifest's own `circularity_disclosure`: the dataset'
 answer function is defined over the CAS classes, so no genuinely task-relevant
 non-CAS control can exist on this 16-verb vocabulary.
 
-## This is an owner governance decision, not a workaround
+## The owner's resolution: a SOFT simplex control (S7-Δ-WN1)
 
-Resolving it (redefining S7-P as an explicitly-declared structured-random
-control, changing the threshold, changing the vocabulary/resource, or dropping
-the S3-vs-S7 comparison) is the owner's call — see the session report. Claude is
-not the research governor and will not pick one to get past the gate.
+The owner ruled (amendment **CJT-DEV-P1-S7Δ**) that the real defect was the
+hard-partition assumption — that a meaning belongs to exactly one box. Overlapping
+meaning is *information*, not contamination. So the hard S7-P is **replaced** (the
+FAILED verdict above is **preserved, not rewritten**) by a soft control:
+
+`build_s7_delta.py` gives each registered verb sense a 4-component profile in the
+simplex Δ³ (`simplex_semantics = SEMANTIC_COMPOSITION` — not a probability):
+1. one **sense-in-context** synset per verb, frozen by clause meaning (documented;
+   CAS never consulted);
+2. TF-IDF WordNet features (lexname, gloss words, hypernym lemmas, verb frames)
+   over the **complete** ~13.7k verb-sense inventory — four factors learned from a
+   real population, not from 16 points;
+3. a deterministic 4-factor **NMF** (nndsvda init) → per-sense factor loadings;
+4. **gentle global factor-scale equalization** → ~equal component mass *without
+   forcing any word to a corner* (an aggressive Sinkhorn was rejected because it
+   fabricated pure-corner profiles — e.g. flipped `summoned` from a genuine 58/42
+   mix to 100/0).
+
+The Cramér's-V ≤ 0.35 rule does **not** govern this soft control. Soft
+CAS-alignment is **reported** after the table is frozen, never optimized against.
+Construction-integrity gates (finite / nonnegative / rows sum to 1; rank 4; fixed
+per sense; no CAS/Qwen input; ≠ S3; no permutation = S3; same 4-dim interface and
+capacity) all pass. Result: mean per-verb entropy ≈ 0.58 (genuinely soft), balanced
+component mass ≈ [2.98, 4.79, 3.54, 4.69]. See `S7_DELTA_BUILD_RECEIPT.json`.
 
 ## Files
-- `build_s7_pilot.py` — deterministic, WordNet-only S7-P construction + gates.
-- `S7_PILOT_BUILD_RECEIPT.json` — the frozen negative result (verdict, full
-  landscape, per-verb WordNet features, pinned snapshot). A negative result is a
-  load-bearing artifact and is kept, not deleted.
+- `build_s7_pilot.py` — deterministic, WordNet-only hard S7-P construction + gates.
+- `S7_PILOT_BUILD_RECEIPT.json` — the frozen **negative** result (verdict, full
+  landscape, per-verb WordNet features, pinned snapshot). Kept, not deleted.
+- `build_s7_delta.py` — the soft S7-Δ construction (NMF simplex + integrity gates
+  + soft-alignment reporting).
+- `S7_DELTA_WN1.json` — the frozen 16×4 soft profile table (the control the pilot
+  actually uses for its S7-Δ arm).
+- `S7_DELTA_BUILD_RECEIPT.json` — sense assignments, integrity gates, per-verb
+  dominance/entropy, soft CAS-alignment reporting, provenance.
