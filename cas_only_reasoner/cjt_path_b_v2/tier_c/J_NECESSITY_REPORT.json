@@ -1,0 +1,184 @@
+{
+  "conditions": {
+    "1_full_M_C_J": {
+      "j_first": {
+        "answers_changed_vs_full": 0,
+        "answers_wrong_vs_gold": 0,
+        "failure_reasons": {},
+        "order_decided_by": {
+          "J": 9597
+        },
+        "resolved": 9597,
+        "unresolved": 0
+      },
+      "m_first_control": {
+        "answers_changed_vs_full": 0,
+        "answers_wrong_vs_gold": 0,
+        "resolved": 9597,
+        "unresolved": 0
+      }
+    },
+    "2_J_removed": {
+      "j_first": {
+        "answers_changed_vs_full": 0,
+        "answers_wrong_vs_gold": 0,
+        "failure_reasons": {},
+        "order_decided_by": {
+          "M": 9597
+        },
+        "resolved": 9597,
+        "unresolved": 0
+      },
+      "m_first_control": {
+        "answers_changed_vs_full": 0,
+        "answers_wrong_vs_gold": 0,
+        "resolved": 9597,
+        "unresolved": 0
+      }
+    },
+    "3_J_sign_flipped": {
+      "j_first": {
+        "answers_changed_vs_full": 3196,
+        "answers_wrong_vs_gold": 3196,
+        "failure_reasons": {
+          "COMPOSITION_NOT_LICENSED:^2->^3": 3196
+        },
+        "order_decided_by": {
+          "J": 6401
+        },
+        "resolved": 6401,
+        "unresolved": 3196
+      },
+      "m_first_control": {
+        "answers_changed_vs_full": 0,
+        "answers_wrong_vs_gold": 0,
+        "resolved": 9597,
+        "unresolved": 0
+      }
+    },
+    "4_dual_relation_swapped": {
+      "j_first": {
+        "answers_changed_vs_full": 6401,
+        "answers_wrong_vs_gold": 6401,
+        "failure_reasons": {
+          "COMPOSITION_NOT_LICENSED:^6->^2": 3203,
+          "COMPOSITION_NOT_LICENSED:^8->^2": 3198
+        },
+        "order_decided_by": {
+          "M": 3196
+        },
+        "resolved": 3196,
+        "unresolved": 6401
+      },
+      "m_first_control": {
+        "answers_changed_vs_full": 0,
+        "answers_wrong_vs_gold": 0,
+        "resolved": 9597,
+        "unresolved": 0
+      }
+    },
+    "5_wrong_J_inserted": {
+      "j_first": {
+        "answers_changed_vs_full": 3196,
+        "answers_wrong_vs_gold": 3196,
+        "failure_reasons": {
+          "COMPOSITION_NOT_LICENSED:^2->^3": 3196
+        },
+        "order_decided_by": {
+          "J": 6401
+        },
+        "resolved": 6401,
+        "unresolved": 3196
+      },
+      "m_first_control": {
+        "answers_changed_vs_full": 0,
+        "answers_wrong_vs_gold": 0,
+        "resolved": 9597,
+        "unresolved": 0
+      }
+    },
+    "6_unrelated_J_cell_changed": {
+      "j_first": {
+        "answers_changed_vs_full": 0,
+        "answers_wrong_vs_gold": 0,
+        "failure_reasons": {},
+        "order_decided_by": {
+          "J": 9597
+        },
+        "resolved": 9597,
+        "unresolved": 0
+      },
+      "m_first_control": {
+        "answers_changed_vs_full": 0,
+        "answers_wrong_vs_gold": 0,
+        "resolved": 9597,
+        "unresolved": 0
+      }
+    }
+  },
+  "data_scope": "train + C1 val half; C2_STRUCTURE_EVAL not read",
+  "j_capable_but_redundant": true,
+  "n_records": 9597,
+  "non_claim_bearing": true,
+  "per_family_n": {
+    "QB_COMP": 3198,
+    "QB_INT": 3203,
+    "QB_REL": 3196
+  },
+  "record_id": "TIER_C_J_NECESSITY",
+  "status": "TIER_C_J_NOT_IDENTIFIABLE_ON_CURRENT_TASK",
+  "status_law": "identifiable iff a solver that already has M still needs J: (M-first control changes under any J perturbation) OR (removing J changes an answer) OR (M-intact/J-suppressed is not perfect). Changes seen ONLY under the J-first instrument are excluded by construction -- they measure the cost of trusting a wrong J, not the task's need for J.",
+  "supplementary": {
+    "M_intact_J_suppressed": {
+      "correct": 9597,
+      "n": 9597,
+      "stats": {
+        "failure_reasons": {},
+        "order_decided_by": {
+          "M": 9597
+        },
+        "resolved": 9597,
+        "unresolved": 0
+      }
+    },
+    "M_symmetrized_J_available": {
+      "correct": 9597,
+      "n": 9597,
+      "stats": {
+        "failure_reasons": {},
+        "order_decided_by": {
+          "J": 9597
+        },
+        "resolved": 9597,
+        "unresolved": 0
+      }
+    },
+    "M_symmetrized_J_suppressed": {
+      "correct": 0,
+      "n": 9597,
+      "stats": {
+        "failure_reasons": {
+          "ORDER_UNDETERMINED": 9597
+        },
+        "order_decided_by": {},
+        "resolved": 0,
+        "unresolved": 9597
+      }
+    },
+    "reading": "if M-intact/J-suppressed is already perfect, J is not needed; if M-symmetrized/J-available is far better than M-symmetrized/J-suppressed, J is CAPABLE of the disambiguation job and is merely REDUNDANT given M's asymmetry -- a different finding from J being useless"
+  },
+  "total_answers_changed_by_J_perturbation": {
+    "j_first_instrument": 12793,
+    "j_removal_alone": 0,
+    "m_first_control": 0
+  },
+  "validity_gate": {
+    "agreement_with_gold": 9597,
+    "failure_reasons": {},
+    "n": 9597,
+    "order_decided_by": {
+      "J": 9597
+    },
+    "valid": true
+  }
+}

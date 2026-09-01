@@ -1,0 +1,56 @@
+{
+  "record_id": "TIER_C_J_NECESSITY_FINDINGS",
+  "non_claim_bearing": true,
+  "owner_ruling": "after C1: run ONE CPU-only, $0 J-necessity test before any further spend (2026-09-01)",
+  "cost": "$0.00 -- local CPU, no GPU, no cloud",
+  "data_scope": "9,597 records = 9,000 train (families A,B) + 597 C1 val half (family C). The C2_STRUCTURE_EVAL half was NOT read. Protected splits untouched.",
+  "status": "TIER_C_J_NOT_IDENTIFIABLE_ON_CURRENT_TASK",
+  "owner_outcome": "OUTCOME A -- J is not being tested at all by this task",
+  "headline": "Removing the entire J plane changes ZERO answers. A solver that consults M before J is invariant across all six registered J conditions (0 answers changed in every one). M's directional asymmetry already decides every case the task asks. J is CAPABLE of the same job -- it scores 9,597/9,597 when M's asymmetry is destroyed -- but it is REDUNDANT: the exam never asks a question that requires it.",
+  "instrument": {
+    "problem": "the frozen pathb_core.solve() never consults R at all, so 'perturb J and see if the gold changes' is degenerate -- the gold would not change under perturbations of M or C either. The non-degenerate question is IDENTIFIABILITY: does J carry information an R-driven reasoner needs, over and above M, C, and the surface?",
+    "construction": "an R-DRIVEN solver that computes the answer FROM the table (tier_c_j_necessity.py), plus two clause-grammar rules that are observable surface structure and NOT table content (R is a relation algebra over CLASSES and legitimately says nothing about argument slots): (g1) the selecting anchor is the anchor whose entity type differs from the composition's mediator type; (g2) when several arguments carry the result type, the result is the last in clause-argument order.",
+    "validity_gate": "under the full frozen R the R-driven solver reproduces pathb_core.solve()'s gold on 9,597/9,597 records (1.0000). The instrument is valid; had it not been, the test would have been declared void.",
+    "fairness": "J is given EVERY chance: the solver asks J FIRST, before M's asymmetry, at the one decision point where J could bind (assigning which named operation class is the selector and which is the final step). If J were ever informative this design would find it.",
+    "first_attempt_failed_honestly": "the initial instrument reproduced gold on only 3,196/9,597 and was reported INSTRUMENT_BROKEN rather than used. The defect was real and diagnostic: result_type IDEA cannot pick between the two idea slots of a ^8 trigger clause. Fixed with the clause-grammar rules above, which are surface-derived, not smuggled from the hardcoded solver."
+  },
+  "six_registered_conditions": {
+    "note": "only the J plane is touched; M and C are byte-identical across every variant. Two solver precedences are reported: J-FIRST is the deliberately J-favouring instrument; M-FIRST is the DECISIVE control.",
+    "1_full_M_C_J": {"j_first_changed": 0, "m_first_changed": 0},
+    "2_J_removed": {"j_first_changed": 0, "m_first_changed": 0, "note": "THE DIRECT ANSWER: deleting J entirely changes nothing; M silently takes over and still scores 100%"},
+    "3_J_sign_flipped": {"j_first_changed": 3196, "m_first_changed": 0},
+    "4_dual_relation_swapped": {"j_first_changed": 6401, "m_first_changed": 0},
+    "5_wrong_J_inserted": {"j_first_changed": 3196, "m_first_changed": 0},
+    "6_unrelated_J_cell_changed": {"j_first_changed": 0, "m_first_changed": 0},
+    "totals": {"j_first_instrument": 12793, "m_first_control": 0, "j_removal_alone": 0}
+  },
+  "why_the_j_first_changes_are_NOT_evidence_for_J": "conditions 3, 4 and 5 changed 12,793 answers under the J-FIRST instrument. Those are NOT evidence that J carries task-necessary information -- they are the cost of a solver that TRUSTS J when J has been made wrong, and they are entirely an artifact of the J-first precedence I built in to give J its best chance. The M-FIRST control changes 0 answers under every one of the same six conditions. The registered status law therefore decides identifiability from the M-FIRST control and from J-removal, explicitly excluding J-first-only changes.",
+  "supplementary_capable_vs_useless": {
+    "M_intact_J_suppressed": "9,597/9,597 correct -- J is not needed",
+    "M_symmetrized_J_available": "9,597/9,597 correct -- J CAN do the ordering job alone",
+    "M_symmetrized_J_suppressed": "0/9,597 -- with neither, nothing resolves",
+    "conclusion": "J is CAPABLE BUT REDUNDANT. This is a materially different finding from 'J is useless': the duality/sign plane is a genuine, sufficient alternative route to the execution order. It is simply never the only route on this task."
+  },
+  "root_cause": "M has exactly four DERIVED cells and every class pair the three question families name is ASYMMETRIC in M: (^3,^2) is licensed while (^2,^3) is not; (^2,^8) while (^8,^2) is not; (^2,^6) while (^6,^2) is not. The direction of composition is therefore pinned by M alone in every case, and the distinctive CAS content of J -- involution, sign, missing duals -- is never consulted to reach an answer.",
+  "consequences_per_owner_ruling": {
+    "C2": "must NOT run. Its flagship contrast R-CAS vs R-EMPIRICAL was already known to differ ONLY on J (C0 measured M and C converging 16/16); this test shows J is not identifiable on the task, so that contrast is empty by construction.",
+    "tier_c_task": "the present Tier C task closes. Two families were saturated (QB_COMP 1.000, QB_REL 0.9745 at baseline), the one open family was not helped, and the distinctive CAS plane is not even asked about.",
+    "blame": "NOT the neural network. C1's transforms had no distinctive relational information to exploit, because the exam never asked a question requiring it. T2 demonstrably READ the table (authority ratio 3.28, formal-bridge agreement 0.5717 vs 0.3272, corruption collapse to 0.299) -- there was simply nothing in it the task rewarded.",
+    "C1_reinterpretation_prohibited": "this does not convert C1 into a win. C1 remains genuine negative evidence for this table, these transforms, and this task."
+  },
+  "design_requirements_if_the_owner_chooses_outcome_B": {
+    "note": "recorded as a specification, NOT as a proposal to build -- the owner decides whether a newly versioned task is warranted.",
+    "necessary_and_sufficient_condition": "for J to be identifiable, at least one question family must name a class pair that is SYMMETRIC in M (both directions licensed, or neither), so that the execution order CANNOT be recovered from M and must come from sign, duality, or opposition.",
+    "additional_requirements_from_the_owner_ruling": [
+      "changing J changes the correct answer",
+      "the no-table baseline is not already at 97-100%",
+      "at least two question families require J",
+      "the answer cannot be recovered from flat operation labels alone",
+      "the answer requires direction or duality"
+    ],
+    "additional_requirement_learned_from_C1": "the task must have genuine headroom in more than one family; C1's tournament had exactly one open family out of three."
+  },
+  "retained_assets_unaffected": ["the language model", "the recurrent graph executor", "the operation profiles", "the clause-entity binder", "the M/C/J algebra", "the T0-T4 transform implementations", "the control machinery"],
+  "prohibited_and_not_used": ["CAS-specific", "specific", "EMPIRICALLY_SUPPORTED", "GATE1B_PASS", "CJT_TRANSFORMER_VALIDATED"],
+  "artifact": "tier_c/J_NECESSITY_REPORT.json (full per-condition raw counts, failure reasons, and order-decision tallies)"
+}
