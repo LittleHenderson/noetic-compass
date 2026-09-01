@@ -1,0 +1,22 @@
+{
+  "record_id": "PATHB_COST_RECONCILIATION",
+  "non_claim_bearing": true,
+  "owner_order": "PATH-B-A0 ruling section 1: resolve $0.1738 vs $0.247; record value types separately; do not silently retain conflicting totals",
+  "resolution": {
+    "0.247_usd": "INSTANCE-RUNTIME ESTIMATE from the client watchdog: 28.1 min x $0.526/hr on-demand. Covers the FULL instance life (boot, installs, model download, both extractions, probes, upload, shutdown). This is the authoritative SPEND proxy.",
+    "0.1738_usd": "COMPUTE-WALL ESTIMATE from inside the harness: 1189.8 s x $0.526/hr. Covers only run_pathb_pilot.py's own wall clock (excludes boot/install/download/upload). A lower bound, not the spend.",
+    "actual_billed_cost": "NOT RETRIEVED -- no Cost Explorer / billing API read was performed for any run in this arc. Every per-run dollar figure in the receipts is an estimate of one of the two types above. EBS (100GB gp3, ~30 min prorated ~$0.003/run) and public-IPv4 (~$0.003/run) are additional small unbilled-estimate items.",
+    "rule_going_forward": "receipts name the type explicitly: instance_runtime_estimate_usd (authoritative spend proxy) and compute_wall_estimate_usd (harness-internal lower bound)"
+  },
+  "per_run_instance_runtime_estimates_usd": {
+    "cjt-dev-p1 v1 pilot (i-086065faef554ac7d)": 0.133,
+    "P1.1 diagnostics (i-0a7840fe7f1e41f59)": 0.154,
+    "P1.2 five-arm (i-07a77393bfa2c7a27)": 0.173,
+    "P1.2b lambda-fix (i-0e3bfa3a929f5d6cd)": 0.18,
+    "P1.3 binder round (i-03930a7a062250516)": 0.187,
+    "PATH B P0 (i-06806594ed90c7648)": 0.247
+  },
+  "cumulative_instance_runtime_estimate_usd": 1.074,
+  "correction": "an earlier owner-facing message stated cumulative ~$1.26 -- that figure was WRONG (arithmetic slip). The correct cumulative instance-runtime estimate across all six cloud runs is ~$1.07. The prior in-report values $0.46/$0.64/$0.83 at their respective points were correct.",
+  "ceiling": "$30 per-job owner ceiling; largest single run $0.247"
+}
