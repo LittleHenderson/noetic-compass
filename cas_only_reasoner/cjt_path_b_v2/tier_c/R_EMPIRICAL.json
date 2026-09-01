@@ -1,0 +1,174 @@
+{
+  "J": {
+    "dual_present": {
+      "^2": false,
+      "^3": false,
+      "^6": false,
+      "^8": false
+    },
+    "pair": {
+      "^2|^2": "SAME",
+      "^2|^3": "UNDEFINED",
+      "^2|^6": "UNDEFINED",
+      "^2|^8": "UNDEFINED",
+      "^3|^2": "UNDEFINED",
+      "^3|^3": "SAME",
+      "^3|^6": "UNDEFINED",
+      "^3|^8": "UNDEFINED",
+      "^6|^2": "UNDEFINED",
+      "^6|^3": "UNDEFINED",
+      "^6|^6": "SAME",
+      "^6|^8": "UNDEFINED",
+      "^8|^2": "UNDEFINED",
+      "^8|^3": "UNDEFINED",
+      "^8|^6": "UNDEFINED",
+      "^8|^8": "SAME"
+    },
+    "sign": {
+      "^2": "NEUTRAL",
+      "^3": "NEUTRAL",
+      "^6": "NEUTRAL",
+      "^8": "NEUTRAL"
+    },
+    "source_rule": "TRACE-DERIVED ONLY: duality and sign are not observable in edge traces; J carries no information by construction"
+  },
+  "cells": {
+    "^2|^2": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^2|^3": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^2|^6": {
+      "M": 1,
+      "derivation": "estimated from train edge traces; mediator = shared entity typed by surface pool, result = answer/list product typed by pool (estimator law); CAS table never imported",
+      "mediator_type": "IDEA",
+      "result_type": "PART_SET",
+      "source_rule": "TRAIN_TRACE_COUNT (n=3000, result_hist={'PART_SET': 3000}, mediator_hist={'IDEA': 3000})",
+      "status": "DERIVED"
+    },
+    "^2|^8": {
+      "M": 1,
+      "derivation": "estimated from train edge traces; mediator = shared entity typed by surface pool, result = answer/list product typed by pool (estimator law); CAS table never imported",
+      "mediator_type": "MIND",
+      "result_type": "IDEA",
+      "source_rule": "TRAIN_TRACE_COUNT (n=3000, result_hist={'IDEA': 3000}, mediator_hist={'MIND': 3000})",
+      "status": "DERIVED"
+    },
+    "^3|^2": {
+      "M": 1,
+      "derivation": "estimated from train edge traces; mediator = shared entity typed by surface pool, result = answer/list product typed by pool (estimator law); CAS table never imported",
+      "mediator_type": "MIND",
+      "result_type": "IDEA",
+      "source_rule": "TRAIN_TRACE_COUNT (n=3000, result_hist={'IDEA': 3000}, mediator_hist={'MIND': 3000})",
+      "status": "DERIVED"
+    },
+    "^3|^3": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^3|^6": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^3|^8": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^6|^2": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^6|^3": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^6|^6": {
+      "M": 1,
+      "derivation": "estimated from train edge traces; mediator = shared entity typed by surface pool, result = answer/list product typed by pool (estimator law); CAS table never imported",
+      "mediator_type": "PART",
+      "result_type": "PART",
+      "source_rule": "TRAIN_TRACE_COUNT (n=3000, result_hist={'PART': 3000}, mediator_hist={'PART': 3000})",
+      "status": "DERIVED"
+    },
+    "^6|^8": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^8|^2": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^8|^3": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^8|^6": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    },
+    "^8|^8": {
+      "M": 0,
+      "derivation": "no train trace realizes this ordered pair",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NOT_OBSERVED_IN_TRACES",
+      "status": "UNDEFINED"
+    }
+  },
+  "classes": [
+    "^2",
+    "^3",
+    "^6",
+    "^8"
+  ],
+  "n_trace_records_used": 9000,
+  "non_claim_bearing": true,
+  "structure_id": "R_EMPIRICAL_v1"
+}

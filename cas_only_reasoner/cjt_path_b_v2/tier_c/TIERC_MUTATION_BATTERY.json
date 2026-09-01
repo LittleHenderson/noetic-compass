@@ -1,0 +1,219 @@
+{
+  "battery_id": "TIERC_CHK_M_EXTENSION_v2",
+  "honesty_law": "every 7-point entry carries basis MEASURED or BY_CONSTRUCTION; no silent hardcoding",
+  "mutants": [
+    {
+      "detail": "mutant automorphism group size 24 vs gate requirement 1",
+      "detected": true,
+      "mutant": "M13_PERMUTATION_SYMMETRIC_R",
+      "points": {
+        "1_minimal_targeted": {
+          "basis": "BY_CONSTRUCTION",
+          "note": "one defect: constant table",
+          "value": true
+        },
+        "2_clean_passes": {
+          "basis": "MEASURED",
+          "note": "clean group size 1",
+          "value": true
+        },
+        "3_mutant_fails": {
+          "basis": "MEASURED",
+          "note": "mutant group size 24",
+          "value": true
+        },
+        "4_at_registered_gate": {
+          "basis": "MEASURED",
+          "note": "the G-C0-2 predicate (group size == 1) is what fails",
+          "value": true
+        },
+        "5_names_defect": {
+          "basis": "MEASURED",
+          "note": "report lists all 24 automorphisms -- the defect is visible in the persisted evidence",
+          "value": true
+        },
+        "6_no_unrelated_crash": {
+          "basis": "MEASURED",
+          "note": "automorphism_report returned normally on the mutant",
+          "value": true
+        },
+        "7_restore_passes": {
+          "basis": "MEASURED",
+          "note": "restored group size 1",
+          "value": true
+        }
+      }
+    },
+    {
+      "detail": "clean min 0.260183 vs mutant max 0 (floor 0.001)",
+      "detected": true,
+      "mutant": "M14_STRUCTURE_ZEROED",
+      "points": {
+        "1_minimal_targeted": {
+          "basis": "BY_CONSTRUCTION",
+          "note": "one defect: all cells UNDEFINED",
+          "value": true
+        },
+        "2_clean_passes": {
+          "basis": "MEASURED",
+          "note": "clean divergences [0.3527703285217285, 0.26018261909484863, 0.2835376262664795]",
+          "value": true
+        },
+        "3_mutant_fails": {
+          "basis": "MEASURED",
+          "note": "mutant divergences [0.0, 0.0, 0.0]",
+          "value": true
+        },
+        "4_at_registered_gate": {
+          "basis": "MEASURED",
+          "note": "the registered predicate min(div) >= FLOOR_B is what fails",
+          "value": true
+        },
+        "5_names_defect": {
+          "basis": "MEASURED",
+          "note": "divergence collapse (all perms conform) is the persisted signature of a dead table",
+          "value": true
+        },
+        "6_no_unrelated_crash": {
+          "basis": "MEASURED",
+          "note": "all pair runs returned normally",
+          "value": true
+        },
+        "7_restore_passes": {
+          "basis": "MEASURED",
+          "note": "restored divergences [0.3527703285217285, 0.26018261909484863, 0.2835376262664795]",
+          "value": true
+        }
+      }
+    },
+    {
+      "detail": "pid-only binding rejected: CACHE_BINDING_VIOLATION: 3 record content hashes differ (stale or regenerated da",
+      "detected": true,
+      "mutant": "M15_CACHE_UNBOUND",
+      "points": {
+        "1_minimal_targeted": {
+          "basis": "BY_CONSTRUCTION",
+          "note": "one defect: content hashes blanked",
+          "value": true
+        },
+        "2_clean_passes": {
+          "basis": "MEASURED",
+          "note": "unit-test clean case verifies",
+          "value": true
+        },
+        "3_mutant_fails": {
+          "basis": "MEASURED",
+          "note": "CACHE_BINDING_VIOLATION: 3 record content hashes differ (stale or regenerated dataset)",
+          "value": true
+        },
+        "4_at_registered_gate": {
+          "basis": "MEASURED",
+          "note": "the registered exception type/prefix",
+          "value": true
+        },
+        "5_names_defect": {
+          "basis": "MEASURED",
+          "note": "message names the hash-mismatch class",
+          "value": true
+        },
+        "6_no_unrelated_crash": {
+          "basis": "MEASURED",
+          "note": "only CacheBindingViolation raised",
+          "value": true
+        },
+        "7_restore_passes": {
+          "basis": "MEASURED",
+          "note": "rebuilt binding verifies",
+          "value": true
+        }
+      }
+    },
+    {
+      "detail": "re-rendered twin caught (1 pair failures)",
+      "detected": true,
+      "mutant": "M16_QC_UNPAIRED",
+      "points": {
+        "1_minimal_targeted": {
+          "basis": "MEASURED",
+          "note": "one verb replaced (gripped -> spurned); note a cross-class replacement also trips round-trip -- disclosed, the pair gate is still checked independently at point 4",
+          "value": true
+        },
+        "2_clean_passes": {
+          "basis": "MEASURED",
+          "note": "",
+          "value": true
+        },
+        "3_mutant_fails": {
+          "basis": "MEASURED",
+          "note": "",
+          "value": true
+        },
+        "4_at_registered_gate": {
+          "basis": "MEASURED",
+          "note": "pair-integrity failure message present",
+          "value": true
+        },
+        "5_names_defect": {
+          "basis": "MEASURED",
+          "note": "'twin is not an exact string swap'",
+          "value": true
+        },
+        "6_no_unrelated_crash": {
+          "basis": "MEASURED",
+          "note": "qc_gates returned normally",
+          "value": true
+        },
+        "7_restore_passes": {
+          "basis": "MEASURED",
+          "note": "",
+          "value": true
+        }
+      }
+    },
+    {
+      "detail": "isomorphic_to_cas 24 -> 25, pool size unchanged (3455)",
+      "detected": true,
+      "mutant": "M17_CONTROL_ISOMORPH",
+      "points": {
+        "1_minimal_targeted": {
+          "basis": "BY_CONSTRUCTION",
+          "note": "one injected renamed R_CAS",
+          "value": true
+        },
+        "2_clean_passes": {
+          "basis": "MEASURED",
+          "note": "clean pool 3455, 24 own-orbit rejections",
+          "value": true
+        },
+        "3_mutant_fails": {
+          "basis": "MEASURED",
+          "note": "the injected structure was rejected as isomorphic",
+          "value": true
+        },
+        "4_at_registered_gate": {
+          "basis": "MEASURED",
+          "note": "rejection counted at the isomorphic_to_cas filter",
+          "value": true
+        },
+        "5_names_defect": {
+          "basis": "MEASURED",
+          "note": "the rejected-category counter names the class",
+          "value": true
+        },
+        "6_no_unrelated_crash": {
+          "basis": "MEASURED",
+          "note": "pool contents unaffected by the injection",
+          "value": true
+        },
+        "7_restore_passes": {
+          "basis": "MEASURED",
+          "note": "clean build already re-verified",
+          "value": true
+        }
+      }
+    }
+  ],
+  "n_detected": 5,
+  "non_claim_bearing": true,
+  "pass": true
+}

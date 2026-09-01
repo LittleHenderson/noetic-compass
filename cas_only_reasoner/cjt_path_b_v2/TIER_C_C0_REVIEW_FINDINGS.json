@@ -1,0 +1,51 @@
+{
+  "record_id": "TIER_C_C0_REVIEW_FINDINGS",
+  "non_claim_bearing": true,
+  "review": "14-agent adversarial workflow (5 dimension reviewers + per-finding skeptical verifiers), run on the C0 build BEFORE the owner's focused review, 2026-09-01",
+  "headline": "1 CRITICAL claim REFUTED (its hardening adopted anyway); 7 distinct CONFIRMED non-minor defects, ALL FIXED and the battery rerun; the estimator, corruption law, cache verifier, mutation honesty, QC surface wording, pid tags, and receipt determinism all strengthened before freeze",
+  "critical_refuted": {
+    "claim": "Test B's 5-batch-mean-loss criterion can be curve-fit: an init search matched the base's mean losses to 1e-4 with R held fixed, so PROOF_OF_NON_EQUIVARIANCE fails at its own criterion",
+    "verdict": "REFUTED",
+    "why": "the fitted twin is not an absorption: along the same trajectory its max PER-EXAMPLE loss difference is 1.681 (signal-scale divergence) and it differs 1.084e-2 on held-out data (10x the floor); the identical attack also 'absorbs' the non-isomorphic R_RANDOM under IDENTITY labels, so the attack criterion is vacuous; and the recorded claim is recipe-scoped (spec section 3), which the attack does not address",
+    "hardening_adopted_anyway": "criterion upgraded from 5 batch means to per-example loss trajectories (steps x n residuals; the verifier measured the attack stalling at 3.5e-2 against per-example residuals, 35x above floor) + a second data seed on Test B + explicit scope law in spec and docstrings"
+  },
+  "confirmed_fixed": [
+    {
+      "finding": "R_EMPIRICAL's C plane was transcribed, not estimated: result/mediator types were hard-coded family-keyed literals duplicating the CAS cell content, so the 16/16 C-overlap was convergence by construction presented as measurement (one verifier CONFIRMED; a duplicate filing DOWNGRADED_MINOR after showing a genuine estimator reproduces the identical structure)",
+      "fix": "genuine slot/pool-typed estimator implemented (mediator = literal shared entity typed by surface pool; result = answer/list product typed by pool; no family->type table); cell provenance now records the measured histograms; spec section 4 rewritten; overlap is now a genuine measurement"
+    },
+    {
+      "finding": "QC_VALID's 'identical surface statistics by construction' over-claimed: string-swap twins cancel only ORDER-INSENSITIVE statistics, and gold is a function of order, so order-sensitive shallow cues (e.g. clause length order) correlate with gold (verifier reproduced the effect)",
+      "fix": "registered char-level surface adversary (HashingVectorizer char 3-5 + LogisticRegression) + length-order rule, both persisted as the QC surface ceiling (disclosure); spec and docstring wording corrected; interpretation law re-stated: the QC readout is the CONTRAST between R-variants at matched surface exposure"
+    },
+    {
+      "finding": "QC passage_id suffix (v/x) encoded gold with 100% fidelity",
+      "fix": "per-pair HashPRNG tag scramble (a/b) + a pid-tag/gold decorrelation gate inside qc_gates"
+    },
+    {
+      "finding": "cache-binding verifier missed duplicate-pid classes (set() collapse; last-wins dict) and never verified the bound model/tokenizer/extraction shas (both verifiers CONFIRMED with reproductions)",
+      "fix": "cardinality checks on cache pids AND dataset record pids; expected_model_sha / expected_tokenizer_sha / expected_extraction_code_sha verification kwargs; 5 new unit-test violation classes, all rejected fail-closed"
+    },
+    {
+      "finding": "mutation battery hardcoded several 7-point-law entries (points 4/5/6 literal True in M13/M14/M15/M16/M17 to varying degrees); M14 never invoked the registered G-C0-4 predicate",
+      "fix": "battery v2 honesty law: every point carries {value, basis: MEASURED|BY_CONSTRUCTION, note}; M14 judges via the registered predicate min(divergence) >= FLOOR_B; M16's cross-class side effect disclosed in its point 1 note"
+    },
+    {
+      "finding": "R_CORRUPTED50 v1 always flipped M on corruption (defined density 11/16 vs R_CAS 4/16 -- wrongness confounded with ~3x density inflation) and never corrupted J sign/dual planes (8/20 phi dims stayed faithful CAS, contradicting its own docstring)",
+      "fix": "v2 CELL-TRANSPLANT law: corrupted cells receive the full typed content of a uniformly drawn different R_CAS cell (expected density preserved, always-legal phi vectors); J pair/sign/dual corrupted per-entry by the same p=1/2 HashPRNG law; per-plane corruption counts persisted. Re-frozen before any neural consumption (C2 not yet authorized -- nothing had consumed v1)"
+    },
+    {
+      "finding": "runner robustness/honesty gaps: G-C0-1 checked only M's int-ness (bool passes isinstance int; other fields unchecked); G-C0-5 conflated pool sufficiency with R_EMPIRICAL integrity under one fail status and could crash on an empty pool (None[:16]); receipt carried wall_seconds making it non-byte-reproducible; sklearn-dependent gate numbers lacked version scoping",
+      "fix": "full vocabulary/type schema check incl. M int-not-bool and M/status coupling; G-C0-5 split into 5a (pool, CONTROL_POOL_INSUFFICIENT) and 5b (R_EMPIRICAL, TIER_C_CONSTRUCTION_FAILED) with a None guard; wall clock moved to stdout, receipt byte-deterministic; library versions recorded in receipt and probe artifact"
+    }
+  ],
+  "minor_recorded_not_all_coded": [
+    "spec wording 'family-disjoint verb regexes' corrected to class-disjoint inventory regexes (the parser pools the full registered inventory; classes are disjoint across it)",
+    "(^6,^6) join-cell dependency of M-only triviality disclosed in spec section 2 + persisted counterfactual (join_cell_counterfactual) in the proof artifact",
+    "R-RANDOM manifest wording clarified: the selection law pins the isomorphism CLASS via the fast tuple encoding's canonical code; the labelled representative is the deterministic first-enumerated assembly",
+    "_mask_candidates cell count now taken from stats, not hardcoded",
+    "G-C0-4 thinness (single draw/seed) addressed by the per-example criterion + second data seed"
+  ],
+  "unfixed_none": "no confirmed finding was left unaddressed",
+  "workflow_stats": {"agents": 14, "reviewer_dimensions": 5, "verifier_agents": 9, "verdicts": {"CONFIRMED": 7, "REFUTED": 1, "DOWNGRADED_MINOR": 1}}
+}

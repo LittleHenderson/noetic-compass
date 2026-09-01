@@ -1,0 +1,40 @@
+{
+  "surface_ceiling": {
+    "adversary": "HashingVectorizer char (3,5) 2^14 + LogisticRegression(seed 0), train-fit val-eval",
+    "char_ngram_val_accuracy": 0.49333333333333335,
+    "length_order_rule_val_accuracy_best_side": 0.835,
+    "reading": "disclosure only; the QC readout is the contrast between R-variants at matched surface exposure"
+  },
+  "train": {
+    "balance_valid_fraction": 0.5,
+    "gold_candidate_first_fraction": 0.5158333333333334,
+    "n_pairs": 600,
+    "n_records": 1200,
+    "pair_integrity_failures": [],
+    "pass": true,
+    "pid_tag_decorrelated": true,
+    "pid_tag_gold_rates": {
+      "a": 0.48333333333333334,
+      "b": 0.5166666666666667
+    },
+    "r_only_oracle_accuracy": 1.0,
+    "roundtrip_failures": [],
+    "roundtrip_pass_rate": 1.0
+  },
+  "val": {
+    "balance_valid_fraction": 0.5,
+    "gold_candidate_first_fraction": 0.5083333333333333,
+    "n_pairs": 300,
+    "n_records": 600,
+    "pair_integrity_failures": [],
+    "pass": true,
+    "pid_tag_decorrelated": true,
+    "pid_tag_gold_rates": {
+      "a": 0.48333333333333334,
+      "b": 0.5166666666666667
+    },
+    "r_only_oracle_accuracy": 1.0,
+    "roundtrip_failures": [],
+    "roundtrip_pass_rate": 1.0
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "J": {
+    "dual_present": {
+      "^2": false,
+      "^3": false,
+      "^6": true,
+      "^8": true
+    },
+    "pair": {
+      "^2|^2": "SAME",
+      "^2|^3": "UNDEFINED",
+      "^2|^6": "UNDEFINED",
+      "^2|^8": "UNDEFINED",
+      "^3|^2": "UNDEFINED",
+      "^3|^3": "SAME",
+      "^3|^6": "UNDEFINED",
+      "^3|^8": "UNDEFINED",
+      "^6|^2": "UNDEFINED",
+      "^6|^3": "UNDEFINED",
+      "^6|^6": "SAME",
+      "^6|^8": "DUAL",
+      "^8|^2": "UNDEFINED",
+      "^8|^3": "UNDEFINED",
+      "^8|^6": "DUAL",
+      "^8|^8": "SAME"
+    },
+    "sign": {
+      "^2": "NEUTRAL",
+      "^3": "NEUTRAL",
+      "^6": "NEG",
+      "^8": "POS"
+    },
+    "source_rule": "CONTROL_POOL_GENERATED"
+  },
+  "cells": {
+    "^2|^2": {
+      "M": 1,
+      "derivation": "matched control; no CAS content",
+      "mediator_type": "IDEA",
+      "result_type": "IDEA",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "CONTROL"
+    },
+    "^2|^3": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^2|^6": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^2|^8": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^3|^2": {
+      "M": 1,
+      "derivation": "matched control; no CAS content",
+      "mediator_type": "PART",
+      "result_type": "PART",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "CONTROL"
+    },
+    "^3|^3": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^3|^6": {
+      "M": 1,
+      "derivation": "matched control; no CAS content",
+      "mediator_type": "MIND",
+      "result_type": "IDEA",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "CONTROL"
+    },
+    "^3|^8": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^6|^2": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^6|^3": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^6|^6": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^6|^8": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^8|^2": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^8|^3": {
+      "M": 1,
+      "derivation": "matched control; no CAS content",
+      "mediator_type": "MIND",
+      "result_type": "PART_SET",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "CONTROL"
+    },
+    "^8|^6": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    },
+    "^8|^8": {
+      "M": 0,
+      "derivation": "undefined cell",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "CONTROL_POOL_GENERATED",
+      "status": "UNDEFINED"
+    }
+  },
+  "classes": [
+    "^2",
+    "^3",
+    "^6",
+    "^8"
+  ],
+  "non_claim_bearing": true,
+  "structure_id": "R_RANDOM_v1"
+}

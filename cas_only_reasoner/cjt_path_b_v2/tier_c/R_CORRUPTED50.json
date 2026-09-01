@@ -1,0 +1,185 @@
+{
+  "J": {
+    "dual_present": {
+      "^2": true,
+      "^3": true,
+      "^6": true,
+      "^8": false
+    },
+    "pair": {
+      "^2|^2": "SAME",
+      "^2|^3": "UNDEFINED",
+      "^2|^6": "SAME",
+      "^2|^8": "UNDEFINED",
+      "^3|^2": "SAME",
+      "^3|^3": "DUAL",
+      "^3|^6": "UNDEFINED",
+      "^3|^8": "SAME",
+      "^6|^2": "DUAL",
+      "^6|^3": "UNDEFINED",
+      "^6|^6": "SAME",
+      "^6|^8": "SAME",
+      "^8|^2": "DUAL",
+      "^8|^3": "DUAL",
+      "^8|^6": "DUAL",
+      "^8|^8": "SAME"
+    },
+    "sign": {
+      "^2": "POS",
+      "^3": "NEG",
+      "^6": "NEUTRAL",
+      "^8": "NEUTRAL"
+    },
+    "source_rule": "CAS structural invariants (canonical layer): involution pair CO-2<->CO-3; duals of ^6 (CO-5) and ^8 (CO-9) absent from the 4-class operation vocabulary; signs from the canonical definitions of ^2 (affinity for / attracted toward) and ^3 (adverse to / repelled by)."
+  },
+  "cells": {
+    "^2|^2": {
+      "M": 1,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "PART",
+      "result_type": "PART",
+      "source_rule": "TIERC_CORRUPT50V2_CELL_TRANSPLANT",
+      "status": "CORRUPTED"
+    },
+    "^2|^3": {
+      "M": 0,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NO_SOLVER_RULE",
+      "status": "UNDEFINED"
+    },
+    "^2|^6": {
+      "M": 1,
+      "derivation": "INT: the unique ^2(i2,m1) clause with object m1 yields idea i2; the ^6(i2,parts) clause headed by i2 yields its part set. Ordered composition ^2-then-^6 bridged by the IDEA; result is a PART_SET.",
+      "mediator_type": "IDEA",
+      "result_type": "PART_SET",
+      "source_rule": "SOLVE_QB_INT step 1-2 (pathb_core.py:260-267)",
+      "status": "DERIVED"
+    },
+    "^2|^8": {
+      "M": 1,
+      "derivation": "COMP: the unique ^2(x,m1) clause with subject-idea x selects mind m1 via its object slot; the unique ^8(a,b,m1) clause with mind m1 yields answer idea b. Ordered composition ^2-then-^8 bridged by the MIND; result is an IDEA.",
+      "mediator_type": "MIND",
+      "result_type": "IDEA",
+      "source_rule": "SOLVE_QB_COMP (pathb_core.py:252-259)",
+      "status": "DERIVED"
+    },
+    "^3|^2": {
+      "M": 1,
+      "derivation": "REL: the unique ^3(m1,x) clause selects mind m1 via its idea-object x; the unique ^2(iA,m1) clause with object m1 yields answer idea iA. Ordered composition ^3-then-^2 bridged by the MIND; result is an IDEA.",
+      "mediator_type": "MIND",
+      "result_type": "IDEA",
+      "source_rule": "SOLVE_QB_REL (pathb_core.py:244-251)",
+      "status": "DERIVED"
+    },
+    "^3|^3": {
+      "M": 0,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NO_SOLVER_RULE",
+      "status": "UNDEFINED"
+    },
+    "^3|^6": {
+      "M": 0,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NO_SOLVER_RULE",
+      "status": "UNDEFINED"
+    },
+    "^3|^8": {
+      "M": 0,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NO_SOLVER_RULE",
+      "status": "UNDEFINED"
+    },
+    "^6|^2": {
+      "M": 1,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "MIND",
+      "result_type": "IDEA",
+      "source_rule": "TIERC_CORRUPT50V2_CELL_TRANSPLANT",
+      "status": "CORRUPTED"
+    },
+    "^6|^3": {
+      "M": 0,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NO_SOLVER_RULE",
+      "status": "UNDEFINED"
+    },
+    "^6|^6": {
+      "M": 1,
+      "derivation": "INT join: two ^6 part sets intersect to the unique shared PART (six[i1] & six[i2]). The join is order-symmetric and sits on the diagonal cell.",
+      "mediator_type": "PART",
+      "result_type": "PART",
+      "source_rule": "SOLVE_QB_INT step 3 (pathb_core.py:268-270)",
+      "status": "DERIVED"
+    },
+    "^6|^8": {
+      "M": 0,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NO_SOLVER_RULE",
+      "status": "UNDEFINED"
+    },
+    "^8|^2": {
+      "M": 1,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "MIND",
+      "result_type": "IDEA",
+      "source_rule": "TIERC_CORRUPT50V2_CELL_TRANSPLANT",
+      "status": "CORRUPTED"
+    },
+    "^8|^3": {
+      "M": 0,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "TIERC_CORRUPT50V2_CELL_TRANSPLANT",
+      "status": "CORRUPTED"
+    },
+    "^8|^6": {
+      "M": 0,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NO_SOLVER_RULE",
+      "status": "UNDEFINED"
+    },
+    "^8|^8": {
+      "M": 0,
+      "derivation": "no solver rule composes this ordered pair; typed UNDEFINED, not a silent numerical zero",
+      "mediator_type": "UNDEFINED",
+      "result_type": "UNDEFINED",
+      "source_rule": "NO_SOLVER_RULE",
+      "status": "UNDEFINED"
+    }
+  },
+  "classes": [
+    "^2",
+    "^3",
+    "^6",
+    "^8"
+  ],
+  "corruption_counts": {
+    "cells_of_16": 4,
+    "dual_of_4": 1,
+    "j_pair_of_16": 10,
+    "sign_of_4": 0
+  },
+  "defined_cell_density": 7,
+  "derivation_sources": [
+    "pathb_core.solve() retained families",
+    "CAS structural invariants (canonical)"
+  ],
+  "non_claim_bearing": true,
+  "qb_ord_exclusion": "QB_ORD's solver rule (pathb_core.py:271-282) is EXCLUDED: the family is dropped (final for this dataset version, owner ruling 2026-09-01 section 7) and its side condition is discourse order, which is not relational-algebra content.",
+  "structure_id": "R_CORRUPTED50_v2"
+}

@@ -1,0 +1,91 @@
+{
+  "artifact_sha256": {
+    "CACHE_BINDING_TESTS.json": "a02cff13f210cbfee9d3fb5b57b1c150cf3536e11a235b492dda7fd12f150f66",
+    "CONTROL_POOL_MANIFEST.json": "128ed0cb85659c8bbe2d9a06cf47abef19426754cd8d7860406f430c0e8ba6d2",
+    "PROOF_OF_NON_EQUIVARIANCE.json": "2436589575eb297b13455e4b4e932d39b76b76a6b0ff9d712c584db122468da1",
+    "QC_VALID_GATES.json": "6c7a93c8340c2dcfa9eae69e3b4a53727b7ff9b030f00ab38867e70be5704340",
+    "RONLY_PROBE.json": "8728ec7dfb4be94cee3668ae710d9d8d8d43eaa12a9dca9da2da8f3190f46561",
+    "R_CAS.json": "edae7c1864188c6e53af851c0b2020db02dafc2478e724d509be737caeb79425",
+    "R_CORRUPTED50.json": "75d2264003640fd92066f01f8e38038680f60dd0f90c2da0af9adff2c1ed2b2e",
+    "R_EMPIRICAL.json": "9b57e49e1303d8f1ff5b20d8fd3cac4d4ed08149a8f96a5a1d53494cedd42d47",
+    "R_EMPIRICAL_OVERLAP.json": "dc50e64fdd5ff9eb8d196c2879b226f4662312e40826928661ceedd1290271c1",
+    "R_RANDOM.json": "c14e3e97e3124443996840e0b066e7fa4670d33cc1257ac2adb2aee468d2079d",
+    "TIERC_MUTATION_BATTERY.json": "ad87b74e879c1894d5492b059ecd929beb8e17f188f89255fbfd9a903cb28369",
+    "qc_valid_train.jsonl": "b02e189e871f8153d0466607980568f8a141e5f21dd21dd53fe46f5653e03a42",
+    "qc_valid_val.jsonl": "5caefe4ead7c50015fd340ff7d9079f1982a501352d66cbe7b68dc82d9fedfa6"
+  },
+  "compute": "local CPU only, $0; no GPU; no protected read; no claim promotion",
+  "gates": [
+    {
+      "detail": "4/16 cells DERIVED with source rules; all typed fields vocabulary-checked; M int 0/1 with status coupling; no continuous strengths",
+      "fail_status": "TIER_C_CONSTRUCTION_FAILED",
+      "gate": "G-C0-1",
+      "pass": true
+    },
+    {
+      "detail": "Aut(R_CAS) = [[0, 1, 2, 3]] (size 1); join-cell counterfactual disclosed: M-only without (^6,^6) -> [[0, 1, 2, 3], [0, 1, 3, 2]], full R without it trivial: True",
+      "fail_status": "TIER_C_CONSTRUCTION_FAILED",
+      "gate": "G-C0-2",
+      "pass": true
+    },
+    {
+      "detail": "Test A max per-example divergence per transform {'T1': 0.0, 'T2': 0.0, 'T3': 0.0, 'T4': 0.0} (tol 1e-06); no-structure recipe validity max 0",
+      "fail_status": "TIER_C_CONSTRUCTION_FAILED",
+      "gate": "G-C0-3",
+      "pass": true
+    },
+    {
+      "detail": "Test B min per-example divergence (non-automorphism, min over 2 data seeds) per transform {'T1': 0.15108537673950195, 'T2': 0.9227244853973389, 'T3': 1.16006338596344, 'T4': 0.11446213722229004} (floor 0.001); view groups all trivial: True",
+      "fail_status": "TIER_C_CONSTRUCTION_FAILED",
+      "gate": "G-C0-4",
+      "pass": true
+    },
+    {
+      "detail": "pool 3455 matched non-isomorphic controls (target 1000); R_RANDOM sha 00116bf311dcd349... [RELATIONAL_MISINFORMATION_CONTROL]",
+      "fail_status": "CONTROL_POOL_INSUFFICIENT",
+      "gate": "G-C0-5a",
+      "pass": true
+    },
+    {
+      "detail": "R_EMPIRICAL from 9000 traces (slot/pool-typed estimator law), M/C overlap 16/16 cells (MEASURED, estimator has no family->type table), J planes equal: False, Aut trivial: True; R_CORRUPTED50 v2 cell-transplant law: corruption counts {'cells_of_16': 4, 'j_pair_of_16': 10, 'sign_of_4': 0, 'dual_of_4': 1}, defined density 7/16 (R_CAS 4/16)",
+      "fail_status": "TIER_C_CONSTRUCTION_FAILED",
+      "gate": "G-C0-5b",
+      "pass": true
+    },
+    {
+      "detail": "train 1200 recs rt=1.000 balance=0.500 oracle=1.000 gold-first=0.516 pid-decorrelated=True; val 600 recs rt=1.000 gold-first=0.508; surface ceiling (disclosure): char-ngram 0.4933, length-order rule 0.8350; diagnostic-only, contrast readout",
+      "fail_status": "TIER_C_CONSTRUCTION_FAILED",
+      "gate": "G-C0-6",
+      "pass": true
+    },
+    {
+      "detail": "per-family: {'QB_REL': '0.1013 (chance 0.1111, bound 0.1611)', 'QB_COMP': '0.1227 (chance 0.1111, bound 0.1611)', 'QB_INT': '0.1173 (chance 0.0909, bound 0.1409)'}",
+      "fail_status": "RONLY_SHORTCUT_DETECTED",
+      "gate": "G-C0-7",
+      "pass": true
+    },
+    {
+      "detail": "clean verify + 11 violation classes each rejected fail-closed (incl. duplicate pids and model/tokenizer/extraction sha checks)",
+      "fail_status": "TIER_C_CONSTRUCTION_FAILED",
+      "gate": "G-C0-8",
+      "pass": true
+    },
+    {
+      "detail": "5/5 mutants detected under the 7-point law with per-point MEASURED/BY_CONSTRUCTION basis (M13_PERMUTATION_SYMMETRIC_R, M14_STRUCTURE_ZEROED, M15_CACHE_UNBOUND, M16_QC_UNPAIRED, M17_CONTROL_ISOMORPH)",
+      "fail_status": "TIER_C_CONSTRUCTION_FAILED",
+      "gate": "G-C0-9",
+      "pass": true
+    }
+  ],
+  "library_versions": {
+    "numpy": "2.5.2",
+    "python": "3.14.0",
+    "sklearn": "1.9.0",
+    "torch": "2.11.0+cu128"
+  },
+  "non_claim_bearing": true,
+  "owner_authorization": "TIER C v0.2 -- C0 CONSTRUCTION AUTHORIZED (2026-09-01); C1/C2 GPU NOT YET AUTHORIZED",
+  "receipt_id": "TIER_C_C0_RECEIPT",
+  "spec": "TIER_C_SPEC_v0_2.md",
+  "verdict": "TIER_C_C0_READY_FOR_FOCUSED_REVIEW"
+}

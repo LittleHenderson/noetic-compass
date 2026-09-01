@@ -1,0 +1,8 @@
+{
+  "j_planes_equal": false,
+  "m_cells_equal": 16,
+  "mc_diff_cells": [],
+  "mediator_cells_equal": 16,
+  "reading": "R_CAS vs R_EMPIRICAL differs exactly where the J plane (duality/sign prior) and any non-trace-visible C detail live -- the C2 contrast isolates that.",
+  "result_type_cells_equal": 16
+}
