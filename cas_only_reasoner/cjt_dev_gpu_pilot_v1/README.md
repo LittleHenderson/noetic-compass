@@ -282,3 +282,44 @@ routing signal, but the accuracy effect is inside seed noise and licenses
 nothing. Per the stop law, no post-hoc redesign was run; a λ>0 initialization
 is the documented fix for a future owner-authorized iteration. See
 `CLOUD_EXECUTION_RECEIPT_P12.json`.
+
+## P1.2b — the λ-fix rerun (owner P1.1-closure directive): routing finally engaged; verdict still `NO_DEV_SIGNAL`; first mechanistic arm separation
+
+Single repair (λ init 1.0) + the directive's **executable P0 gates** +
+adversarial pre-launch review (which proved S6's routing gradient is
+mathematically zero by design — uniform profiles are a softmax-invariant
+shift — and exempted it from the routing-gradient gate). One self-terminating
+T4, 20.5 min, ~$0.18 (`CLOUD_EXECUTION_RECEIPT_P12B.json`; cumulative project
+GPU ≈ $0.64).
+
+- **PRIMARY (frozen candidates): `PILOT_PIPELINE_FAILURE` at P0 — a real
+  catch, not noise.** S3's `w_r` grad at step 50 was 1.3e-14 (early softmax
+  saturation at L\*=24 still starves routing in frozen mode); the boot script
+  skipped P1-frozen exactly per protocol.
+- **SECONDARY (contextual): P0 passed ALL gates** (S3 routing grads real:
+  7.9 → 2.2 → 0.08; profile-swap moves logits, mean|Δlogit| 0.52). P1
+  (5 arms × 3 seeds × 1000 updates, L\*=18):
+
+| arm | val acc | std | gold-clause hit | true→permuted→uniform→zeroed acc | λ |
+|---|---|---|---|---|---|
+| S0 | 0.3737 | 0.0033 | 0.365 | — | — |
+| **S3** | **0.3780** | 0.0222 | **0.472** | **.378 → .365 → .355 → .356** | ~0.99 |
+| S6 | 0.3630 | 0.0062 | 0.423 | .363 → .363 → .363 → .361 (exact invariance, Δlogit 0.0000) | ~1.00 |
+| S7-H | 0.3590 | 0.0265 | 0.346 | .359 → .362 → .361 → .359 | ~0.92 |
+| S7-Δ | 0.3617 | 0.0131 | 0.248 | .362 → .365 → .367 → .365 | ~0.94 |
+
+S3−S0 = +0.004, S3−S6 = +0.015, S3−S7-H = +0.019, S3−S7-Δ = +0.016 →
+**`NO_DEV_SIGNAL`** (nothing clears +0.02; seed ranges overlap).
+
+**What is genuinely new:** (1) the routing branch provably trained for the
+first time; (2) **S3's exact operation profile routes attention to the gold
+clause better than every control** (47.2% vs 24.8–42.3%); (3) **S3 is the
+only arm whose accuracy declines when its profiles are shuffled or
+replaced** — the owner's condition-6 content-dependence test fires for S3
+alone (S6 exactly invariant, verifying the math in vivo; S7-H/S7-Δ get no
+benefit from their true profiles); (4) **the binding ceiling is confirmed**:
+an +11pp routing advantage converts to only +0.4pp accuracy — matching
+Diagnostic D. The deterministic status is `NO_DEV_SIGNAL`; the mechanistic
+pattern matches the owner's `READOUT_STILL_UNDERPOWERED` description
+(recorded as an observation, not the emitted status). Train-subset ~0.78 vs
+val ~0.37 shows the cross-family generalization gap on top.

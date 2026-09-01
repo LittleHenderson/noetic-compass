@@ -1,0 +1,55 @@
++ /root/venv/bin/python -c 'import torch;print('\''TORch'\'',torch.__version__,'\''CUDA'\'',torch.cuda.is_available(),(torch.cuda.get_device_name(0) if torch.cuda.is_available() else '\''NONE'\''))'
+TORch 2.5.1+cu121 CUDA True Tesla T4
+[layer-select] L=6 S0 val_acc=0.2220
+[layer-select] L=12 S0 val_acc=0.2200
+[layer-select] L=18 S0 val_acc=0.2210
+[layer-select] L=24 S0 val_acc=0.2330
+[layer-select] L*=24
+[P0] S0   seed=11 acc=0.2330 loss=1.9422 lam=None trainacc=0.247 goldhit=0.241 swapDlogit=None 0.72s
+[P0] S3   seed=11 acc=0.2070 loss=1.9746 lam=0.9920307397842407 trainacc=0.274 goldhit=0.242 swapDlogit=0.003693 1.21s
+[P0] S6   seed=11 acc=0.2120 loss=1.9607 lam=0.9990711212158203 trainacc=0.271 goldhit=0.241 swapDlogit=0.0 1.21s
+[P0] S7H  seed=11 acc=0.2160 loss=1.9533 lam=1.0027856826782227 trainacc=0.291 goldhit=0.188 swapDlogit=0.003908 1.21s
+[P0] S7D  seed=11 acc=0.2160 loss=1.9713 lam=0.9971385598182678 trainacc=0.273 goldhit=0.213 swapDlogit=0.002081 1.2s
+DEVELOPMENT STATUS: PILOT_PIPELINE_FAILURE
++ echo P0_FROZEN_EXIT=0
+P0_FROZEN_EXIT=0
++ echo P1_FROZEN_SKIPPED_P0_GATE_FAILED
+P1_FROZEN_SKIPPED_P0_GATE_FAILED
+[layer-select] L=6 S0 val_acc=0.2360
+[layer-select] L=12 S0 val_acc=0.2300
+[layer-select] L=18 S0 val_acc=0.2330
+[layer-select] L=24 S0 val_acc=0.2000
+[layer-select] L*=6
+[P0] S0   seed=11 acc=0.2360 loss=1.9705 lam=None trainacc=0.332 goldhit=0.263 swapDlogit=None 0.73s
+[P0] S3   seed=11 acc=0.2190 loss=2.0172 lam=0.9973546266555786 trainacc=0.363 goldhit=0.224 swapDlogit=0.075582 1.22s
+[P0] S6   seed=11 acc=0.2280 loss=2.0526 lam=0.9994969964027405 trainacc=0.318 goldhit=0.235 swapDlogit=0.0 1.21s
+[P0] S7H  seed=11 acc=0.2010 loss=2.1977 lam=0.9926636219024658 trainacc=0.327 goldhit=0.301 swapDlogit=0.077806 1.21s
+[P0] S7D  seed=11 acc=0.2070 loss=2.1016 lam=1.0042716264724731 trainacc=0.338 goldhit=0.177 swapDlogit=0.055905 1.21s
+DEVELOPMENT STATUS: P0_SMOKE_OK
++ echo P0_CTX_EXIT=0
+P0_CTX_EXIT=0
+[layer-select] L=6 S0 val_acc=0.2400
+[layer-select] L=12 S0 val_acc=0.3650
+[layer-select] L=18 S0 val_acc=0.3700
+[layer-select] L=24 S0 val_acc=0.2440
+[layer-select] L*=18
+[P1] S0   seed=11 acc=0.3700 loss=2.0812 lam=None trainacc=0.684 goldhit=0.279 swapDlogit=None 4.49s
+[P1] S0   seed=23 acc=0.3780 loss=2.1727 lam=None trainacc=0.721 goldhit=0.441 swapDlogit=None 4.43s
+[P1] S0   seed=47 acc=0.3730 loss=2.0301 lam=None trainacc=0.729 goldhit=0.374 swapDlogit=None 4.43s
+[P1] S3   seed=11 acc=0.4030 loss=2.0453 lam=0.9851300716400146 trainacc=0.782 goldhit=0.582 swapDlogit=0.747917 5.2s
+[P1] S3   seed=23 acc=0.3820 loss=2.3355 lam=0.9792945981025696 trainacc=0.811 goldhit=0.544 swapDlogit=0.492726 5.16s
+[P1] S3   seed=47 acc=0.3490 loss=2.3450 lam=1.0014004707336426 trainacc=0.744 goldhit=0.290 swapDlogit=0.312785 5.13s
+[P1] S6   seed=11 acc=0.3550 loss=2.6032 lam=0.9949687123298645 trainacc=0.780 goldhit=0.442 swapDlogit=0.0 5.21s
+[P1] S6   seed=23 acc=0.3640 loss=2.7913 lam=0.9950190782546997 trainacc=0.786 goldhit=0.407 swapDlogit=0.0 5.15s
+[P1] S6   seed=47 acc=0.3700 loss=2.3636 lam=0.9950214624404907 trainacc=0.770 goldhit=0.421 swapDlogit=0.0 5.14s
+[P1] S7H  seed=11 acc=0.3680 loss=2.4914 lam=0.9268823862075806 trainacc=0.781 goldhit=0.315 swapDlogit=0.284278 5.16s
+[P1] S7H  seed=23 acc=0.3860 loss=2.2329 lam=0.9013465642929077 trainacc=0.800 goldhit=0.335 swapDlogit=0.303883 5.19s
+[P1] S7H  seed=47 acc=0.3230 loss=2.6808 lam=0.9406402111053467 trainacc=0.763 goldhit=0.389 swapDlogit=0.316326 5.19s
+[P1] S7D  seed=11 acc=0.3780 loss=2.1378 lam=0.9003117680549622 trainacc=0.828 goldhit=0.340 swapDlogit=0.161996 5.21s
+[P1] S7D  seed=23 acc=0.3610 loss=2.6114 lam=0.964637041091919 trainacc=0.815 goldhit=0.167 swapDlogit=0.268717 5.24s
+[P1] S7D  seed=47 acc=0.3460 loss=2.1077 lam=0.9672173857688904 trainacc=0.674 goldhit=0.237 swapDlogit=0.057159 5.18s
+DEVELOPMENT STATUS: NO_DEV_SIGNAL
++ echo P1_CTX_EXIT=0
+P1_CTX_EXIT=0
++ echo PILOT_V2B_COMPLETE
+PILOT_V2B_COMPLETE

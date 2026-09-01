@@ -1,0 +1,55 @@
+{
+  "receipt_id": "CJT_DEV_P12B_CLOUD_EXECUTION_RECEIPT",
+  "pilot": "CJT-DEV-P1.2b (lambda-fix rerun under the owner P1.1-closure directive)",
+  "non_claim_bearing": true,
+  "run": {
+    "run_id": "cjt-dev-p12b-lamfix-1788232437",
+    "instance_id": "i-0e3bfa3a929f5d6cd",
+    "instance_type": "g4dn.xlarge (Tesla T4)",
+    "region": "us-west-2",
+    "torch": "2.5.1+cu121",
+    "instance_runtime_minutes": 20.5,
+    "est_cost_usd": 0.18,
+    "termination": "self-terminated; confirmed by client watchdog; no force-terminate",
+    "bundle_sha256": "72537415e5ec1941571db07ceb5e54045c7c90b0625e501081c44263ec4ab2d9",
+    "harness_commit": "f19111e6"
+  },
+  "cumulative_project_gpu_cost_usd_estimate": 0.642,
+  "repair_under_test": "lambda init 1.0 (the single P0-failure repair); executable P0 gates live",
+  "primary_frozen_configuration": {
+    "status": "PILOT_PIPELINE_FAILURE at P0 (real, not spurious)",
+    "failed_gate": "profile_branch_receives_gradients",
+    "evidence": "S3 w_r_grad_norm = 1.3e-14 at logged step 50 (L*=24, frozen candidates) -- early softmax saturation still starves the routing branch in this configuration; the boot script therefore SKIPPED P1 frozen exactly per protocol",
+    "disposition": "recorded; no post-hoc retry (stop law)"
+  },
+  "secondary_contextual_configuration": {
+    "p0": "P0_SMOKE_OK -- ALL executable gates passed (losses finite; profile-arm params identical; S0 capacity within 1%; profile-branch gradients real: S3 w_r grads 7.9 -> 2.2 -> 0.08 at steps 50/100/250; S3 profile-swap moves logits, mean|dlogit| 0.52)",
+    "p1": {
+      "development_status": "NO_DEV_SIGNAL",
+      "selected_layer": 18,
+      "final_val_accuracy_mean": {"S0": 0.3737, "S3": 0.3780, "S6": 0.3630, "S7H": 0.3590, "S7D": 0.3617},
+      "final_val_accuracy_std": {"S0": 0.0033, "S3": 0.0222, "S6": 0.0062, "S7H": 0.0265, "S7D": 0.0131},
+      "arm_comparison": {"S3_minus_S0": 0.004333, "S3_minus_S6": 0.015, "S3_minus_S7H": 0.019, "S3_minus_S7D": 0.016333},
+      "learned_lambda": "all profile arms kept lambda ~0.90-1.00 (routing retained, not suppressed)",
+      "train_subset_accuracy_mean": {"S0": 0.711, "S3": 0.779, "S6": 0.779, "S7H": 0.781, "S7D": 0.772},
+      "attention_gold_top1_rate_mean": {"S0": 0.365, "S3": 0.472, "S6": 0.423, "S7H": 0.346, "S7D": 0.248},
+      "profile_sensitivity_accuracy_mean": {
+        "S3": {"true": 0.3780, "permuted": 0.3650, "uniform": 0.3553, "zeroed": 0.3563},
+        "S6": {"true": 0.3630, "permuted": 0.3630, "uniform": 0.3630, "zeroed": 0.3610},
+        "S7H": {"true": 0.3590, "permuted": 0.3620, "uniform": 0.3607, "zeroed": 0.3590},
+        "S7D": {"true": 0.3617, "permuted": 0.3650, "uniform": 0.3667, "zeroed": 0.3653}
+      }
+    }
+  },
+  "mechanistic_findings": {
+    "routing_engaged": "first run in the project where the profile-routing branch provably trains (P0 gradient gate passed on real values, not noise)",
+    "cas_profile_routes_best": "S3's attention finds the gold clause 47.2% vs S0 36.5%, S6 42.3%, S7-H 34.6%, S7-Delta 24.8% -- the exact operation profile demonstrably improves clause routing over every control",
+    "cas_content_is_load_bearing_for_S3_only": "S3 is the ONLY arm whose accuracy declines when its profiles are shuffled (0.378 -> 0.365) or replaced with uniform (0.3553) / zeros (0.3563); S6 is exactly invariant (the softmax-shift math verified in vivo, perm dlogit 0.0000); S7-H and S7-Delta show no benefit from their true profiles",
+    "binding_ceiling_confirmed": "an +11pp gold-clause routing advantage converts to only +0.4pp final accuracy vs S0 -- consistent with Diagnostic D (oracle routing bought only +3.6pp): the clause->answer BINDING readout, not routing, caps this task; train-subset 0.77-0.78 vs val 0.36-0.38 shows the cross-family generalization gap on top",
+    "verdict_vocabulary_note": "the deterministic program emitted NO_DEV_SIGNAL (S3 clears no control by >=0.02; seed ranges overlap). The mechanistic pattern -- routing works, content matters for S3, conversion capped by the binding readout -- matches the owner's READOUT_STILL_UNDERPOWERED description, recorded here as an observation, not as the emitted status."
+  },
+  "is_real_model": true,
+  "protected_split_touched": false,
+  "claim_promoted": false,
+  "prohibited_language_not_used": ["CAS-specific", "EMPIRICALLY_SUPPORTED", "GATE1B_PASS", "CJT_TRANSFORMER_VALIDATED"]
+}
