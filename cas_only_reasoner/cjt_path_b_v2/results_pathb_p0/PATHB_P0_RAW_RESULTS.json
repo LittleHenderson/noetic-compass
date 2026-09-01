@@ -1,0 +1,255 @@
+{
+  "pilot": "CJT-T2 PATH B P0",
+  "non_claim_bearing": true,
+  "is_real_model": true,
+  "device": "cuda",
+  "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "updates": 100,
+  "selected_layer": 12,
+  "layer_selection_val_accuracy": {
+    "6": 0.093333,
+    "12": 0.269333,
+    "18": 0.256,
+    "24": 0.12
+  },
+  "arms": {
+    "S0": {
+      "final_val_accuracy": 0.269333,
+      "final_val_loss": 5.955003,
+      "learned_lambda": null,
+      "train_subset_accuracy": 0.322266,
+      "gold_top1_rate": 0.334667,
+      "per_question_type": {
+        "QB_COMP": {
+          "accuracy": 0.10933333333333334,
+          "correct": 41,
+          "total": 375
+        },
+        "QB_INT": {
+          "accuracy": 0.06666666666666667,
+          "correct": 25,
+          "total": 375
+        },
+        "QB_ORD": {
+          "accuracy": 0.784,
+          "correct": 294,
+          "total": 375
+        },
+        "QB_REL": {
+          "accuracy": 0.11733333333333333,
+          "correct": 44,
+          "total": 375
+        }
+      },
+      "profile_sensitivity": null,
+      "trainable_params": 803712,
+      "profile_semantics": "NONE",
+      "authority": "PLAIN_BASELINE"
+    },
+    "S3": {
+      "final_val_accuracy": 0.262,
+      "final_val_loss": 5.937742,
+      "learned_lambda": 0.9823283553123474,
+      "train_subset_accuracy": 0.311523,
+      "gold_top1_rate": 0.314,
+      "per_question_type": {
+        "QB_COMP": {
+          "accuracy": 0.09066666666666667,
+          "correct": 34,
+          "total": 375
+        },
+        "QB_INT": {
+          "accuracy": 0.058666666666666666,
+          "correct": 22,
+          "total": 375
+        },
+        "QB_ORD": {
+          "accuracy": 0.784,
+          "correct": 294,
+          "total": 375
+        },
+        "QB_REL": {
+          "accuracy": 0.11466666666666667,
+          "correct": 43,
+          "total": 375
+        }
+      },
+      "profile_sensitivity": {
+        "true": {
+          "accuracy": 0.262,
+          "mean_abs_logit_delta_vs_true": 0.0
+        },
+        "permuted": {
+          "accuracy": 0.263333,
+          "mean_abs_logit_delta_vs_true": 0.128044
+        },
+        "uniform": {
+          "accuracy": 0.228667,
+          "mean_abs_logit_delta_vs_true": 0.152631
+        },
+        "zeroed": {
+          "accuracy": 0.228667,
+          "mean_abs_logit_delta_vs_true": 0.152631
+        }
+      },
+      "trainable_params": 807301,
+      "profile_semantics": "EXACT_OPERATION_IDENTITY",
+      "authority": "CONSTRUCTION_GOLD"
+    },
+    "SALT50": {
+      "final_val_accuracy": 0.226667,
+      "final_val_loss": 5.969582,
+      "learned_lambda": 0.9752073884010315,
+      "train_subset_accuracy": 0.308594,
+      "gold_top1_rate": 0.292667,
+      "per_question_type": {
+        "QB_COMP": {
+          "accuracy": 0.09333333333333334,
+          "correct": 35,
+          "total": 375
+        },
+        "QB_INT": {
+          "accuracy": 0.064,
+          "correct": 24,
+          "total": 375
+        },
+        "QB_ORD": {
+          "accuracy": 0.64,
+          "correct": 240,
+          "total": 375
+        },
+        "QB_REL": {
+          "accuracy": 0.10933333333333334,
+          "correct": 41,
+          "total": 375
+        }
+      },
+      "profile_sensitivity": {
+        "true": {
+          "accuracy": 0.226667,
+          "mean_abs_logit_delta_vs_true": 0.0
+        },
+        "permuted": {
+          "accuracy": 0.230667,
+          "mean_abs_logit_delta_vs_true": 0.102063
+        },
+        "uniform": {
+          "accuracy": 0.242667,
+          "mean_abs_logit_delta_vs_true": 0.051708
+        },
+        "zeroed": {
+          "accuracy": 0.242667,
+          "mean_abs_logit_delta_vs_true": 0.051708
+        }
+      },
+      "trainable_params": 807301,
+      "profile_semantics": "HALF_CORRUPTED_OPERATION_IDENTITY",
+      "authority": "EXPERIMENTAL_CONTROL"
+    },
+    "S6": {
+      "final_val_accuracy": 0.246,
+      "final_val_loss": 5.969931,
+      "learned_lambda": 1.0007838010787964,
+      "train_subset_accuracy": 0.305664,
+      "gold_top1_rate": 0.316,
+      "per_question_type": {
+        "QB_COMP": {
+          "accuracy": 0.104,
+          "correct": 39,
+          "total": 375
+        },
+        "QB_INT": {
+          "accuracy": 0.064,
+          "correct": 24,
+          "total": 375
+        },
+        "QB_ORD": {
+          "accuracy": 0.688,
+          "correct": 258,
+          "total": 375
+        },
+        "QB_REL": {
+          "accuracy": 0.128,
+          "correct": 48,
+          "total": 375
+        }
+      },
+      "profile_sensitivity": {
+        "true": {
+          "accuracy": 0.246,
+          "mean_abs_logit_delta_vs_true": 0.0
+        },
+        "permuted": {
+          "accuracy": 0.246,
+          "mean_abs_logit_delta_vs_true": 0.0
+        },
+        "uniform": {
+          "accuracy": 0.246,
+          "mean_abs_logit_delta_vs_true": 0.0
+        },
+        "zeroed": {
+          "accuracy": 0.246,
+          "mean_abs_logit_delta_vs_true": 0.0
+        }
+      },
+      "trainable_params": 807301,
+      "profile_semantics": "UNIFORM_CONTROL",
+      "authority": "EXPERIMENTAL_CONTROL"
+    }
+  },
+  "smoke_gates": {
+    "memorization_128": 0.7109,
+    "gold_routed": 0.1328,
+    "shuffled_routed": 0.2578,
+    "binding_shuffle_drop": 0.5,
+    "gate1_memorize_ge_95": false,
+    "gate2_gold_beats_shuffled_by_10": false,
+    "gate3_binding_shuffle_damages_5": true
+  },
+  "prb_pos": 0.8883,
+  "qb_ord_rule": "DROP_QB_ORD (PRB-POS below 0.90; owner D3 auto-drop rule)",
+  "transfer_floor_guard": {
+    "QB_COMP": {
+      "s0_acc": 0.1093,
+      "uniform": 0.1111,
+      "above": false
+    },
+    "QB_INT": {
+      "s0_acc": 0.0667,
+      "uniform": 0.0909,
+      "above": false
+    },
+    "QB_ORD": {
+      "s0_acc": 0.784,
+      "uniform": 0.1429,
+      "above": true
+    },
+    "QB_REL": {
+      "s0_acc": 0.1173,
+      "uniform": 0.1111,
+      "above": false
+    }
+  },
+  "p0_gates": {
+    "losses_finite": true,
+    "profile_arm_params_identical": true,
+    "s0_capacity_within_1pct": true,
+    "profile_branch_receives_gradients": true,
+    "s3_profile_swap_changes_logits": true,
+    "s6_exactly_invariant": true,
+    "gate1_memorize_ge_95": false,
+    "gate2_gold_beats_shuffled_by_10": false,
+    "gate3_binding_shuffle_damages_5": true,
+    "prb_pos_ge_90": false,
+    "transfer_floor_2_of_4_families": false
+  },
+  "failed_gates": [
+    "gate1_memorize_ge_95",
+    "gate2_gold_beats_shuffled_by_10",
+    "prb_pos_ge_90",
+    "transfer_floor_2_of_4_families"
+  ],
+  "development_status": "BINDING_REPAIR_FAILED",
+  "total_wall_clock_seconds": 1189.8,
+  "total_cost_usd": 0.1738
+}

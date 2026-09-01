@@ -1,0 +1,24 @@
++ /root/venv/bin/python -c 'import torch;print('\''TORch'\'',torch.__version__,'\''CUDA'\'',torch.cuda.is_available(),(torch.cuda.get_device_name(0) if torch.cuda.is_available() else '\''NONE'\''))'
+TORch 2.5.1+cu121 CUDA True Tesla T4
+[extract] train 488s
+[loc-extract] train 495s
+[extract] val 59s
+[loc-extract] val 62s
+[PRB-POS] clause-position probe val acc = 0.8883
+[layer-select] L=6 S0 val_acc=0.0933
+[layer-select] L=12 S0 val_acc=0.2693
+[layer-select] L=18 S0 val_acc=0.2560
+[layer-select] L=24 S0 val_acc=0.1200
+[layer-select] L*=12
+[smoke] {"memorization_128": 0.7109, "gold_routed": 0.1328, "shuffled_routed": 0.2578, "binding_shuffle_drop": 0.5, "gate1_memorize_ge_95": false, "gate2_gold_beats_shuffled_by_10": false, "gate3_binding_shuffle_damages_5": true}
+[P0] S0      acc=0.2693 loss=5.9550 lam=None goldhit=0.335 swapDlogit=None
+[P0] S3      acc=0.2620 loss=5.9377 lam=0.9823283553123474 goldhit=0.314 swapDlogit=0.128044
+[P0] SALT50  acc=0.2267 loss=5.9696 lam=0.9752073884010315 goldhit=0.293 swapDlogit=0.102063
+[P0] S6      acc=0.2460 loss=5.9699 lam=1.0007838010787964 goldhit=0.316 swapDlogit=0.0
+P0 STATUS: BINDING_REPAIR_FAILED
+  failed=['gate1_memorize_ge_95', 'gate2_gold_beats_shuffled_by_10', 'prb_pos_ge_90', 'transfer_floor_2_of_4_families']
+  qb_ord=DROP_QB_ORD (PRB-POS below 0.90; owner D3 auto-drop rule)
++ echo PATHB_P0_EXIT=0
+PATHB_P0_EXIT=0
++ echo PATHB_P0_COMPLETE
+PATHB_P0_COMPLETE
