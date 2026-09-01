@@ -1,0 +1,81 @@
+++ date -u +%s
+Fetched 52.9 MB in 7s (7423 kB/s)
+Reading package lists...
+Reading package lists...
+  isc-dhcp-common libntfs-3g89
+The following additional packages will be installed:
+  libpython3.10 libpython3.10-dev libpython3.10-minimal libpython3.10-stdlib
+  python3-pip-whl python3-setuptools-whl python3.10 python3.10-dev
+  python3.10-minimal python3.10-venv
+Suggested packages:
+The following NEW packages will be installed:
+  python3-pip-whl python3-setuptools-whl python3-venv python3.10-venv
+  libpython3.10 libpython3.10-dev libpython3.10-minimal libpython3.10-stdlib
+  python3.10 python3.10-dev python3.10-minimal
+Fetched 15.2 MB in 0s (91.9 MB/s)
+Unpacking python3-pip-whl (22.0.2+dfsg-1ubuntu0.7) ...
+Unpacking python3-setuptools-whl (59.6.0-1.2ubuntu0.22.04.3) ...
+Unpacking python3.10-venv (3.10.12-1~22.04.17) ...
+Unpacking python3-venv (3.10.6-1~22.04.1) ...
+Setting up python3-setuptools-whl (59.6.0-1.2ubuntu0.22.04.3) ...
+Setting up python3-pip-whl (22.0.2+dfsg-1ubuntu0.7) ...
+Setting up libpython3.10-minimal:amd64 (3.10.12-1~22.04.17) ...
+Setting up python3.10-minimal (3.10.12-1~22.04.17) ...
+Setting up libpython3.10-stdlib:amd64 (3.10.12-1~22.04.17) ...
+Setting up libpython3.10:amd64 (3.10.12-1~22.04.17) ...
+Setting up python3.10 (3.10.12-1~22.04.17) ...
+Setting up libpython3.10-dev:amd64 (3.10.12-1~22.04.17) ...
+Setting up python3.10-dev (3.10.12-1~22.04.17) ...
+Setting up python3.10-venv (3.10.12-1~22.04.17) ...
+Setting up python3-venv (3.10.6-1~22.04.1) ...
+
+
+
+
+
+
+
+DEVELOPMENT STATUS: P0_SMOKE_OK
+P0_EXIT=0
+
+DEVELOPMENT STATUS: NO_DEV_SIGNAL
+P1_EXIT=0
+++ date -u +%s
+PILOT_COMPLETE elapsed=575s
+TORCH 2.5.1+cu121 CUDA True Tesla T4
+[extract] train: 6000 passages, 248.2s -> train_acts.pt
+[extract] val: 1000 passages, 41.3s -> val_acts.pt
+[layer-select] L=6 S0 val_acc=0.2310
+[layer-select] L=12 S0 val_acc=0.2260
+[layer-select] L=18 S0 val_acc=0.2210
+[layer-select] L=24 S0 val_acc=0.2130
+[layer-select] L*=6
+[P0] arm=S0   seed=11 L*=6 final_val_acc=0.2310 val_loss=1.9218 params=942574 0.53s 37.5MB
+[P0] arm=S3   seed=11 L*=6 final_val_acc=0.2140 val_loss=1.9991 params=951744 0.6s 37.5MB
+[P0] arm=S6   seed=11 L*=6 final_val_acc=0.2130 val_loss=1.9967 params=951744 0.59s 37.5MB
+[P0] arm=S7D  seed=11 L*=6 final_val_acc=0.2140 val_loss=1.9990 params=951744 0.6s 37.5MB
+DEVELOPMENT STATUS: P0_SMOKE_OK
++ echo P0_EXIT=0
+P0_EXIT=0
+[layer-select] L=6 S0 val_acc=0.2100
+[layer-select] L=12 S0 val_acc=0.2080
+[layer-select] L=18 S0 val_acc=0.2120
+[layer-select] L=24 S0 val_acc=0.2140
+[layer-select] L*=24
+[P1] arm=S0   seed=11 L*=24 final_val_acc=0.2140 val_loss=2.0158 params=942574 3.78s 37.2MB
+[P1] arm=S0   seed=23 L*=24 final_val_acc=0.2040 val_loss=2.0260 params=942574 3.73s 37.2MB
+[P1] arm=S0   seed=47 L*=24 final_val_acc=0.2170 val_loss=2.0121 params=942574 3.8s 37.2MB
+[P1] arm=S3   seed=11 L*=24 final_val_acc=0.2120 val_loss=2.0116 params=951744 4.35s 38.4MB
+[P1] arm=S3   seed=23 L*=24 final_val_acc=0.2130 val_loss=2.0266 params=951744 4.34s 38.4MB
+[P1] arm=S3   seed=47 L*=24 final_val_acc=0.2120 val_loss=2.0008 params=951744 4.34s 38.4MB
+[P1] arm=S6   seed=11 L*=24 final_val_acc=0.2090 val_loss=2.0155 params=951744 4.35s 38.4MB
+[P1] arm=S6   seed=23 L*=24 final_val_acc=0.2150 val_loss=2.0099 params=951744 4.35s 38.4MB
+[P1] arm=S6   seed=47 L*=24 final_val_acc=0.2180 val_loss=2.0016 params=951744 4.37s 38.4MB
+[P1] arm=S7D  seed=11 L*=24 final_val_acc=0.2100 val_loss=2.0153 params=951744 4.43s 38.4MB
+[P1] arm=S7D  seed=23 L*=24 final_val_acc=0.2110 val_loss=2.0221 params=951744 4.47s 38.4MB
+[P1] arm=S7D  seed=47 L*=24 final_val_acc=0.2130 val_loss=2.0062 params=951744 4.49s 38.4MB
+DEVELOPMENT STATUS: NO_DEV_SIGNAL
++ echo P1_EXIT=0
+P1_EXIT=0
++ echo 'PILOT_COMPLETE elapsed=575s'
+PILOT_COMPLETE elapsed=575s

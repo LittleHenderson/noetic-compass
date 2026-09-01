@@ -1,0 +1,66 @@
+{
+  "receipt_id": "CJT_DEV_P1_CLOUD_EXECUTION_RECEIPT",
+  "pilot": "CJT-DEV-P1",
+  "amendment": "CJT-DEV-P1-S7Delta",
+  "non_claim_bearing": true,
+  "owner_directive": "no local use cloud aws or runpod (2026-08-31)",
+  "cloud": {
+    "provider": "AWS EC2",
+    "run_id": "cjt-dev-p1-1788222737",
+    "instance_id": "i-086065faef554ac7d",
+    "account_id": "807562639912",
+    "region": "us-west-2",
+    "availability_zone": "us-west-2a",
+    "instance_type": "g4dn.xlarge",
+    "gpu": "Tesla T4 (16GB)",
+    "ami": "ami-0c779ec711a581954 (Deep Learning Base OSS Nvidia Driver GPU Ubuntu 22.04)",
+    "torch": "2.5.1+cu121",
+    "cuda_available": true,
+    "one_instance_only": true,
+    "termination": "self-terminated (InstanceInitiatedShutdownBehavior=terminate + EXIT-trap shutdown); confirmed terminated by client watchdog at 15.1 min; force-terminate NOT triggered",
+    "money_safety": "triple: terminate-on-shutdown, 90-min in-instance kill timer, 55-min client-side force-terminate watchdog",
+    "instance_runtime_minutes": 15.1,
+    "on_demand_rate_usd_per_hour": 0.526,
+    "authoritative_billed_cost_usd_estimate": 0.135,
+    "cost_note": "15.1 min instance runtime * $0.526/hr = $0.133 compute; + ~$0.002 EBS(100GB gp3, prorated)/public-IPv4. Far under the $30 owner ceiling.",
+    "s3_bucket": "cas-harness-runpod-92754088",
+    "bundle_key": "cjt-dev-p1/cjt-dev-p1-1788222737/bundle.tar.gz",
+    "results_key": "cjt-dev-p1/cjt-dev-p1-1788222737/results.tar.gz"
+  },
+  "model": "Qwen/Qwen2.5-0.5B-Instruct (frozen base weights)",
+  "is_real_model": true,
+  "protected_split_touched": false,
+  "claim_promoted": false,
+  "provenance": {
+    "bundle_sha256": "95b0b1cca5738df5980ddf5700bc5dcfc845ac3efa735d472d8fca1dd831bb54",
+    "s7_delta_table_sha256_loaded_on_instance": "c216da05a04afa708d07ffb9ff4fb583d74249e6925df4a0928bfa9c7a8a6ea5",
+    "s7_delta_table_sha256_canonical_committed_LF": "efe61cc1320587470a1815412b7af713fadd39f699fc87ecdd393c268d7c178e",
+    "eol_note": "the two digests differ ONLY by line endings: the S3 bundle carried the CRLF working-tree checkout (Windows core.autocrlf=true); it is byte-content-identical to the LF-canonical committed table. json.loads/splitlines strip the CR, so every record and profile loaded identically -- the science is unaffected. A .gitattributes now pins the pilot dir to eol=lf."
+  },
+  "stages": {
+    "P0_smoke": {
+      "arms": ["S0", "S3", "S6", "S7D"],
+      "seed": 11,
+      "updates": 100,
+      "selected_layer": 6,
+      "development_status": "P0_SMOKE_OK",
+      "note": "all four arms trained, candidate tensors present, losses finite, no CPU fallback, parameter counts matched"
+    },
+    "P1_pilot": {
+      "arms": ["S0", "S3", "S6", "S7D"],
+      "seeds": [11, 23, 47],
+      "updates": 1000,
+      "checkpoints": [0, 50, 100, 250, 500, 750, 1000],
+      "selected_layer": 24,
+      "development_status": "NO_DEV_SIGNAL",
+      "final_val_accuracy_mean": {"S0": 0.2117, "S3": 0.2123, "S6": 0.2140, "S7D": 0.2113},
+      "arm_comparison": {"S3_minus_S0": 0.000666, "S3_minus_S6": -0.001667, "S3_minus_S7D": 0.001},
+      "trainable_params": {"S0": 942574, "S3": 951744, "S6": 951744, "S7D": 951744},
+      "surface_references": {"B0_floor_val": 0.668, "B1_ceiling_val": 1.0}
+    }
+  },
+  "development_verdict": "NO_DEV_SIGNAL",
+  "verdict_plain": "The CAS-coupled head (S3) gave no measurable advantage over the plain head (S0), the uniform-profile control (S6), or the WordNet soft-simplex control (S7-Delta). All four arms tie at ~0.21 validation accuracy (within 0.002). S3 == S6, so in this configuration the profile CONTENT is not load-bearing.",
+  "honest_caveat": "All four neural arms (~0.21) fall far below the surface baselines (B0 class-blind floor 0.668; B1 surface ceiling 1.000). The comparison is FAIR -- every arm shares the same readout handicap -- but the low absolute ceiling makes this a WEAK/underpowered test: a small profile benefit could be masked near the readout floor. Whether to run a stronger-readout follow-up is an OWNER research-design decision, not taken here.",
+  "prohibited_language_not_used": ["CAS-specific", "EMPIRICALLY_SUPPORTED", "GATE1B_PASS", "CJT_TRANSFORMER_VALIDATED", "learning advantage"]
+}

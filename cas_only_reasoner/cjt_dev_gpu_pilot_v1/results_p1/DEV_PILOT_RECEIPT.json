@@ -1,0 +1,12 @@
+{
+  "receipt_id": "DEV_PILOT_RECEIPT",
+  "stage": "P1",
+  "non_claim_bearing": true,
+  "is_real_model": true,
+  "raw_results_sha256": "3754b55ddb9b03a56f004d84f58dcaf620151718c810a1262b719184136c16b6",
+  "s7_delta_table_sha256": "c216da05a04afa708d07ffb9ff4fb583d74249e6925df4a0928bfa9c7a8a6ea5",
+  "selected_layer": 24,
+  "development_status": "NO_DEV_SIGNAL",
+  "total_wall_clock_seconds": 86.3,
+  "total_cost_usd": 0.0
+}

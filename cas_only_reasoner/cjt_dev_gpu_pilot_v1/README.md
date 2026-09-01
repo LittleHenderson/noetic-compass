@@ -1,9 +1,13 @@
 # CJT-DEV-P1 — Static Dual-Stream Neural Coupling Development Pilot
 
-**Status:** S7-P (hard partition) construction FAILED and is preserved as a
-negative result; the owner amendment **CJT-DEV-P1-S7Δ** replaced it with a SOFT
-WordNet semantic simplex control (`S7_DELTA_WN1`), which is built and passes all
-construction-integrity gates. Pilot arms are now S0 / S3 / S6 / **S7-Δ**.
+**Status:** COMPLETE. S7-P (hard partition) construction FAILED and is preserved
+as a negative result; the owner amendment **CJT-DEV-P1-S7Δ** replaced it with a
+SOFT WordNet semantic simplex control (`S7_DELTA_WN1`), which passes all
+construction-integrity gates. The four-arm pilot (S0 / S3 / S6 / **S7-Δ**) **ran
+on a real AWS GPU** (Qwen2.5-0.5B on a Tesla T4, us-west-2, $0.133). Development
+verdict: **`NO_DEV_SIGNAL`** — the CAS profile gave no advantage over the plain,
+uniform, or WordNet-soft controls (all four arms ~0.21 val accuracy, within
+0.002). See `CLOUD_EXECUTION_RECEIPT.json` and `results_p1/`.
 
 **Branch:** `research/cjt-dev-gpu-pilot-v1` (from anchor `3182e0623`).
 **Classification:** development-only, **non-claim-bearing** (owner directive
@@ -96,3 +100,43 @@ component mass ≈ [2.98, 4.79, 3.54, 4.69]. See `S7_DELTA_BUILD_RECEIPT.json`.
   actually uses for its S7-Δ arm).
 - `S7_DELTA_BUILD_RECEIPT.json` — sense assignments, integrity gates, per-verb
   dominance/entropy, soft CAS-alignment reporting, provenance.
+- `run_pilot.py` — the pilot harness (reuses the frozen Gate 1B blocks; extracts
+  Qwen activations once, trains the four heads, writes all dev outputs).
+- `CLOUD_EXECUTION_RECEIPT.json` — the authoritative cloud run receipt (instance,
+  GPU, cost, digests, termination proof, both stage verdicts).
+- `results_p0/`, `results_p1/` — the run outputs (raw results, arm comparison,
+  learning-curve CSV, receipt, summary; P1 also has the trimmed execution log).
+
+## Pilot execution — cloud GPU (2026-08-31)
+
+Owner directive: **"no local, use cloud aws or runpod."** Run on **one
+self-terminating AWS `g4dn.xlarge`** (Tesla T4 16GB, us-west-2, torch 2.5.1+cu121),
+booted → installed → downloaded Qwen → P0 smoke → P1 → uploaded results →
+**self-terminated in 15.1 min for ~$0.133** (triple-guarded termination; far under
+the $30 / 2-hour owner ceiling). `is_real_model: true`. No protected split touched;
+no claim promoted.
+
+- **P0 smoke:** `P0_SMOKE_OK` — all four arms trained, candidate tensors present,
+  losses finite, no CPU fallback, parameter counts matched.
+- **P1 pilot** (4 arms × seeds 11/23/47 × 1000 updates, L\*=24):
+
+| arm | mean val acc | std | val loss | params |
+|---|---|---|---|---|
+| S0 plain | 0.2117 | 0.0056 | 2.018 | 942,574 |
+| S3 CAS (one-hot) | 0.2123 | 0.0005 | 2.013 | 951,744 |
+| S6 uniform | 0.2140 | 0.0037 | 2.009 | 951,744 |
+| S7-Δ WordNet soft | 0.2113 | 0.0012 | 2.015 | 951,744 |
+
+- **S3 − S0 = +0.0007, S3 − S6 = −0.0017, S3 − S7-Δ = +0.0010** — none clears the
+  +0.02 signal threshold. Verdict **`NO_DEV_SIGNAL`**. S3 ties S6, so the profile
+  *content* is not load-bearing in this configuration.
+- Surface references: B0 class-blind floor (val) **0.668**, B1 surface ceiling
+  (val) **1.000**. **All four neural arms (~0.21) fall far below the floor.** The
+  comparison is fair (every arm shares the readout handicap), but the low absolute
+  ceiling makes this a **weak / underpowered test** — a small profile benefit could
+  be masked near the readout floor. A stronger-readout follow-up is an **owner**
+  research-design decision, not taken here (per the stop law).
+
+No claim-status vocabulary is used; the only labels are the development triage
+statuses. Prohibited terms (`CAS-specific`, `EMPIRICALLY_SUPPORTED`, `GATE1B_PASS`,
+`CJT_TRANSFORMER_VALIDATED`) are not used.

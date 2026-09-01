@@ -1,0 +1,3039 @@
+{
+  "pilot": "CJT-DEV-P1",
+  "amendment": "CJT-DEV-P1-S7Delta",
+  "stage": "P1",
+  "non_claim_bearing": true,
+  "is_real_model": true,
+  "device": "cuda",
+  "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "updates": 1000,
+  "batch_size": 32,
+  "seeds": [
+    11,
+    23,
+    47
+  ],
+  "checkpoints": [
+    0,
+    50,
+    100,
+    250,
+    500,
+    750,
+    1000
+  ],
+  "selected_layer": 24,
+  "layer_selection_val_accuracy": {
+    "6": 0.21,
+    "12": 0.208,
+    "18": 0.212,
+    "24": 0.214
+  },
+  "s7_delta_table_sha256": "c216da05a04afa708d07ffb9ff4fb583d74249e6925df4a0928bfa9c7a8a6ea5",
+  "baselines": {
+    "B0_floor_train": {
+      "overall": 0.6445,
+      "correct": 3867,
+      "total": 6000,
+      "per_question_type": {
+        "Q_ATTRACT": {
+          "accuracy": 0.4805,
+          "correct": 961,
+          "total": 2000
+        },
+        "Q_AVERT": {
+          "accuracy": 0.496,
+          "correct": 992,
+          "total": 2000
+        },
+        "Q_PART": {
+          "accuracy": 0.922,
+          "correct": 922,
+          "total": 1000
+        },
+        "Q_TRIGGER": {
+          "accuracy": 0.992,
+          "correct": 992,
+          "total": 1000
+        }
+      }
+    },
+    "B0_floor_val": {
+      "overall": 0.668,
+      "correct": 668,
+      "total": 1000,
+      "per_question_type": {
+        "Q_ATTRACT": {
+          "accuracy": 0.5269461077844312,
+          "correct": 176,
+          "total": 334
+        },
+        "Q_AVERT": {
+          "accuracy": 0.5105105105105106,
+          "correct": 170,
+          "total": 333
+        },
+        "Q_PART": {
+          "accuracy": 0.9341317365269461,
+          "correct": 156,
+          "total": 167
+        },
+        "Q_TRIGGER": {
+          "accuracy": 1.0,
+          "correct": 166,
+          "total": 166
+        }
+      }
+    },
+    "B1_ceiling_train": {
+      "overall": 1.0,
+      "correct": 6000,
+      "total": 6000,
+      "per_question_type": {
+        "Q_ATTRACT": {
+          "accuracy": 1.0,
+          "correct": 2000,
+          "total": 2000
+        },
+        "Q_AVERT": {
+          "accuracy": 1.0,
+          "correct": 2000,
+          "total": 2000
+        },
+        "Q_PART": {
+          "accuracy": 1.0,
+          "correct": 1000,
+          "total": 1000
+        },
+        "Q_TRIGGER": {
+          "accuracy": 1.0,
+          "correct": 1000,
+          "total": 1000
+        }
+      }
+    },
+    "B1_ceiling_val": {
+      "overall": 1.0,
+      "correct": 1000,
+      "total": 1000,
+      "per_question_type": {
+        "Q_ATTRACT": {
+          "accuracy": 1.0,
+          "correct": 334,
+          "total": 334
+        },
+        "Q_AVERT": {
+          "accuracy": 1.0,
+          "correct": 333,
+          "total": 333
+        },
+        "Q_PART": {
+          "accuracy": 1.0,
+          "correct": 167,
+          "total": 167
+        },
+        "Q_TRIGGER": {
+          "accuracy": 1.0,
+          "correct": 166,
+          "total": 166
+        }
+      }
+    }
+  },
+  "arms": {
+    "S0": {
+      "final_val_accuracy_mean": 0.211667,
+      "final_val_accuracy_std": 0.005558,
+      "final_val_accuracy_by_seed": {
+        "11": 0.214,
+        "23": 0.204,
+        "47": 0.217
+      },
+      "final_val_loss_mean": 2.017937,
+      "trainable_params": 942574
+    },
+    "S3": {
+      "final_val_accuracy_mean": 0.212333,
+      "final_val_accuracy_std": 0.000471,
+      "final_val_accuracy_by_seed": {
+        "11": 0.212,
+        "23": 0.213,
+        "47": 0.212
+      },
+      "final_val_loss_mean": 2.013022,
+      "trainable_params": 951744
+    },
+    "S6": {
+      "final_val_accuracy_mean": 0.214,
+      "final_val_accuracy_std": 0.003742,
+      "final_val_accuracy_by_seed": {
+        "11": 0.209,
+        "23": 0.215,
+        "47": 0.218
+      },
+      "final_val_loss_mean": 2.009031,
+      "trainable_params": 951744
+    },
+    "S7D": {
+      "final_val_accuracy_mean": 0.211333,
+      "final_val_accuracy_std": 0.001247,
+      "final_val_accuracy_by_seed": {
+        "11": 0.21,
+        "23": 0.211,
+        "47": 0.213
+      },
+      "final_val_loss_mean": 2.014507,
+      "trainable_params": 951744
+    }
+  },
+  "arm_comparison": {
+    "S3_minus_S0": 0.000666,
+    "S3_minus_S6": -0.001667,
+    "S3_minus_S7D": 0.001,
+    "updates_to_0.80": {
+      "S0": null,
+      "S3": null,
+      "S6": null,
+      "S7D": null
+    },
+    "updates_to_0.90": {
+      "S0": null,
+      "S3": null,
+      "S6": null,
+      "S7D": null
+    },
+    "updates_to_0.95": {
+      "S0": null,
+      "S3": null,
+      "S6": null,
+      "S7D": null
+    }
+  },
+  "runs": [
+    {
+      "arm": "S0",
+      "seed": 11,
+      "widen_w": 238,
+      "trainable_params": 942574,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.131,
+          "val_loss": 2.1543109455108644,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.16167664670658682,
+              "correct": 54,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.12612612612612611,
+              "correct": 42,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1317365269461078,
+              "correct": 22,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.0783132530120482,
+              "correct": 13,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.585083246231079,
+          "val_accuracy": 0.224,
+          "val_loss": 1.9780850067138671,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23353293413173654,
+              "correct": 78,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2852852852852853,
+              "correct": 95,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1437125748502994,
+              "correct": 24,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.16265060240963855,
+              "correct": 27,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.5342638492584229,
+          "val_accuracy": 0.207,
+          "val_loss": 2.009241346359253,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23652694610778444,
+              "correct": 79,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.27927927927927926,
+              "correct": 93,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.059880239520958084,
+              "correct": 10,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.6210763454437256,
+          "val_accuracy": 0.216,
+          "val_loss": 1.99355588722229,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23652694610778444,
+              "correct": 79,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2822822822822823,
+              "correct": 94,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.10778443113772455,
+              "correct": 18,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.56688392162323,
+          "val_accuracy": 0.211,
+          "val_loss": 1.9945206604003907,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.27927927927927926,
+              "correct": 93,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.09580838323353294,
+              "correct": 16,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.5100932121276855,
+          "val_accuracy": 0.208,
+          "val_loss": 1.982498296737671,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2245508982035928,
+              "correct": 75,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2822822822822823,
+              "correct": 94,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.0718562874251497,
+              "correct": 12,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.16265060240963855,
+              "correct": 27,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.3885166645050049,
+          "val_accuracy": 0.214,
+          "val_loss": 2.0157802295684815,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23353293413173654,
+              "correct": 78,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2882882882882883,
+              "correct": 96,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.08383233532934131,
+              "correct": 14,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.1566265060240964,
+              "correct": 26,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.3885166645050049,
+        "val_accuracy": 0.214,
+        "val_loss": 2.0157802295684815,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.23353293413173654,
+            "correct": 78,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.2882882882882883,
+            "correct": 96,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.08383233532934131,
+            "correct": 14,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.1566265060240964,
+            "correct": 26,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 3.78,
+      "peak_gpu_mem_mb": 37.2,
+      "layer": 24
+    },
+    {
+      "arm": "S0",
+      "seed": 23,
+      "widen_w": 238,
+      "trainable_params": 942574,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.069,
+          "val_loss": 2.1588316345214844,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.05389221556886228,
+              "correct": 18,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.04804804804804805,
+              "correct": 16,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16766467065868262,
+              "correct": 28,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.04216867469879518,
+              "correct": 7,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.6576963663101196,
+          "val_accuracy": 0.197,
+          "val_loss": 2.04441135597229,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.20359281437125748,
+              "correct": 68,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2882882882882883,
+              "correct": 96,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.04790419161676647,
+              "correct": 8,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.6653276681900024,
+          "val_accuracy": 0.22,
+          "val_loss": 2.0018612995147707,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.218562874251497,
+              "correct": 73,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.3033033033033033,
+              "correct": 101,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.11976047904191617,
+              "correct": 20,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.1566265060240964,
+              "correct": 26,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.7595081329345703,
+          "val_accuracy": 0.194,
+          "val_loss": 2.040131940841675,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.20658682634730538,
+              "correct": 69,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.26126126126126126,
+              "correct": 87,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.07784431137724551,
+              "correct": 13,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.4873895645141602,
+          "val_accuracy": 0.211,
+          "val_loss": 2.027472589492798,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.218562874251497,
+              "correct": 73,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.26126126126126126,
+              "correct": 87,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.15568862275449102,
+              "correct": 26,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.558432698249817,
+          "val_accuracy": 0.213,
+          "val_loss": 1.9966240234375,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23353293413173654,
+              "correct": 78,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.27927927927927926,
+              "correct": 93,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.10179640718562874,
+              "correct": 17,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.55941903591156,
+          "val_accuracy": 0.204,
+          "val_loss": 2.025968210220337,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2245508982035928,
+              "correct": 75,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.07784431137724551,
+              "correct": 13,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.55941903591156,
+        "val_accuracy": 0.204,
+        "val_loss": 2.025968210220337,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.2245508982035928,
+            "correct": 75,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.2732732732732733,
+            "correct": 91,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.07784431137724551,
+            "correct": 13,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 3.73,
+      "peak_gpu_mem_mb": 37.2,
+      "layer": 24
+    },
+    {
+      "arm": "S0",
+      "seed": 47,
+      "widen_w": 238,
+      "trainable_params": 942574,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.063,
+          "val_loss": 2.156269826889038,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.0748502994011976,
+              "correct": 25,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.03903903903903904,
+              "correct": 13,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.0718562874251497,
+              "correct": 12,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.0783132530120482,
+              "correct": 13,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.593614101409912,
+          "val_accuracy": 0.208,
+          "val_loss": 1.970544797897339,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.20658682634730538,
+              "correct": 69,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.25225225225225223,
+              "correct": 84,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16766467065868262,
+              "correct": 28,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.16265060240963855,
+              "correct": 27,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.6826934814453125,
+          "val_accuracy": 0.22,
+          "val_loss": 2.0158718957901,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2245508982035928,
+              "correct": 75,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.17365269461077845,
+              "correct": 29,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.530361294746399,
+          "val_accuracy": 0.223,
+          "val_loss": 1.974938346862793,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23353293413173654,
+              "correct": 78,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16766467065868262,
+              "correct": 28,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.1566265060240964,
+              "correct": 26,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.421459436416626,
+          "val_accuracy": 0.219,
+          "val_loss": 1.9815988636016846,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2275449101796407,
+              "correct": 76,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16167664670658682,
+              "correct": 27,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.4622145891189575,
+          "val_accuracy": 0.213,
+          "val_loss": 1.9993328838348388,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23353293413173654,
+              "correct": 78,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2672672672672673,
+              "correct": 89,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.12574850299401197,
+              "correct": 21,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.5102179050445557,
+          "val_accuracy": 0.217,
+          "val_loss": 2.012061294555664,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23353293413173654,
+              "correct": 78,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1377245508982036,
+              "correct": 23,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.5102179050445557,
+        "val_accuracy": 0.217,
+        "val_loss": 2.012061294555664,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.23353293413173654,
+            "correct": 78,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.2732732732732733,
+            "correct": 91,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.1377245508982036,
+            "correct": 23,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 3.8,
+      "peak_gpu_mem_mb": 37.2,
+      "layer": 24
+    },
+    {
+      "arm": "S3",
+      "seed": 11,
+      "widen_w": 0,
+      "trainable_params": 951744,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.031,
+          "val_loss": 2.204477304458618,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.008982035928143712,
+              "correct": 3,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.003003003003003003,
+              "correct": 1,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1497005988023952,
+              "correct": 25,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.012048192771084338,
+              "correct": 2,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.61696457862854,
+          "val_accuracy": 0.215,
+          "val_loss": 2.0090292072296143,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.26126126126126126,
+              "correct": 87,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.15568862275449102,
+              "correct": 26,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.5712188482284546,
+          "val_accuracy": 0.207,
+          "val_loss": 2.041885803222656,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2245508982035928,
+              "correct": 75,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.26426426426426425,
+              "correct": 88,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.11377245508982035,
+              "correct": 19,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.6074802875518799,
+          "val_accuracy": 0.209,
+          "val_loss": 2.012943859100342,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2275449101796407,
+              "correct": 76,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.10179640718562874,
+              "correct": 17,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.5884042978286743,
+          "val_accuracy": 0.204,
+          "val_loss": 2.0137213706970214,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2215568862275449,
+              "correct": 74,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.08383233532934131,
+              "correct": 14,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.489382266998291,
+          "val_accuracy": 0.212,
+          "val_loss": 1.9973550510406495,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.27627627627627627,
+              "correct": 92,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.10778443113772455,
+              "correct": 18,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.3964104652404785,
+          "val_accuracy": 0.212,
+          "val_loss": 2.0116088695526124,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.11377245508982035,
+              "correct": 19,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.3964104652404785,
+        "val_accuracy": 0.212,
+        "val_loss": 2.0116088695526124,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.23053892215568864,
+            "correct": 77,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.2732732732732733,
+            "correct": 91,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.11377245508982035,
+            "correct": 19,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 4.35,
+      "peak_gpu_mem_mb": 38.4,
+      "layer": 24
+    },
+    {
+      "arm": "S3",
+      "seed": 23,
+      "widen_w": 0,
+      "trainable_params": 951744,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.143,
+          "val_loss": 2.148002983093262,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.1437125748502994,
+              "correct": 48,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.18618618618618618,
+              "correct": 62,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.07784431137724551,
+              "correct": 13,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.12048192771084337,
+              "correct": 20,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.6305660009384155,
+          "val_accuracy": 0.17,
+          "val_loss": 2.0490871086120603,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.19161676646706588,
+              "correct": 64,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2012012012012012,
+              "correct": 67,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.08982035928143713,
+              "correct": 15,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.14457831325301204,
+              "correct": 24,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.6924190521240234,
+          "val_accuracy": 0.197,
+          "val_loss": 1.989763370513916,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.20958083832335328,
+              "correct": 70,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2552552552552553,
+              "correct": 85,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.0718562874251497,
+              "correct": 12,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.18072289156626506,
+              "correct": 30,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.8312631845474243,
+          "val_accuracy": 0.203,
+          "val_loss": 2.034052740097046,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2215568862275449,
+              "correct": 74,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2552552552552553,
+              "correct": 85,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.11377245508982035,
+              "correct": 19,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.4722918272018433,
+          "val_accuracy": 0.212,
+          "val_loss": 2.019893744468689,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.218562874251497,
+              "correct": 73,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.26126126126126126,
+              "correct": 87,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16167664670658682,
+              "correct": 27,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.5446276664733887,
+          "val_accuracy": 0.208,
+          "val_loss": 2.007920680999756,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2245508982035928,
+              "correct": 75,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2672672672672673,
+              "correct": 89,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.10778443113772455,
+              "correct": 18,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.1566265060240964,
+              "correct": 26,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.574711561203003,
+          "val_accuracy": 0.213,
+          "val_loss": 2.0266287231445315,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2245508982035928,
+              "correct": 75,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.26426426426426425,
+              "correct": 88,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1497005988023952,
+              "correct": 25,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.574711561203003,
+        "val_accuracy": 0.213,
+        "val_loss": 2.0266287231445315,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.2245508982035928,
+            "correct": 75,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.26426426426426425,
+            "correct": 88,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.1497005988023952,
+            "correct": 25,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 4.34,
+      "peak_gpu_mem_mb": 38.4,
+      "layer": 24
+    },
+    {
+      "arm": "S3",
+      "seed": 47,
+      "widen_w": 0,
+      "trainable_params": 951744,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.137,
+          "val_loss": 2.1462823390960692,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.1437125748502994,
+              "correct": 48,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.16516516516516516,
+              "correct": 55,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.0718562874251497,
+              "correct": 12,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.13253012048192772,
+              "correct": 22,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.5614856481552124,
+          "val_accuracy": 0.201,
+          "val_loss": 2.0267677993774416,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2125748502994012,
+              "correct": 71,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.18618618618618618,
+              "correct": 62,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.20359281437125748,
+              "correct": 34,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.20481927710843373,
+              "correct": 34,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.7037370204925537,
+          "val_accuracy": 0.216,
+          "val_loss": 1.966050874710083,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.20658682634730538,
+              "correct": 69,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16766467065868262,
+              "correct": 28,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.1686746987951807,
+              "correct": 28,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.586736798286438,
+          "val_accuracy": 0.208,
+          "val_loss": 1.992645694732666,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2702702702702703,
+              "correct": 90,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.09580838323353294,
+              "correct": 16,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.4078478813171387,
+          "val_accuracy": 0.219,
+          "val_loss": 1.9884360504150391,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2215568862275449,
+              "correct": 74,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.27627627627627627,
+              "correct": 92,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16766467065868262,
+              "correct": 28,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.4643045663833618,
+          "val_accuracy": 0.211,
+          "val_loss": 1.9976654090881347,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2215568862275449,
+              "correct": 74,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2672672672672673,
+              "correct": 89,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1377245508982036,
+              "correct": 23,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.5045771598815918,
+          "val_accuracy": 0.212,
+          "val_loss": 2.0008297691345214,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.218562874251497,
+              "correct": 73,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2702702702702703,
+              "correct": 90,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1437125748502994,
+              "correct": 24,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.5045771598815918,
+        "val_accuracy": 0.212,
+        "val_loss": 2.0008297691345214,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.218562874251497,
+            "correct": 73,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.2702702702702703,
+            "correct": 90,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.1437125748502994,
+            "correct": 24,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 4.34,
+      "peak_gpu_mem_mb": 38.4,
+      "layer": 24
+    },
+    {
+      "arm": "S6",
+      "seed": 11,
+      "widen_w": 0,
+      "trainable_params": 951744,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.031,
+          "val_loss": 2.2044992866516115,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.008982035928143712,
+              "correct": 3,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.003003003003003003,
+              "correct": 1,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1497005988023952,
+              "correct": 25,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.012048192771084338,
+              "correct": 2,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.6162225008010864,
+          "val_accuracy": 0.215,
+          "val_loss": 2.00658020401001,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.26126126126126126,
+              "correct": 87,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.15568862275449102,
+              "correct": 26,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.5625146627426147,
+          "val_accuracy": 0.204,
+          "val_loss": 2.052230260848999,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2215568862275449,
+              "correct": 74,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.25825825825825827,
+              "correct": 86,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.11377245508982035,
+              "correct": 19,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.6349273920059204,
+          "val_accuracy": 0.204,
+          "val_loss": 2.0383016586303713,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2125748502994012,
+              "correct": 71,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.25225225225225223,
+              "correct": 84,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1437125748502994,
+              "correct": 24,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.5806597471237183,
+          "val_accuracy": 0.207,
+          "val_loss": 2.0171112022399904,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.08383233532934131,
+              "correct": 14,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.4897900819778442,
+          "val_accuracy": 0.209,
+          "val_loss": 1.9973408203125,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2275449101796407,
+              "correct": 76,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.10179640718562874,
+              "correct": 17,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.4160176515579224,
+          "val_accuracy": 0.209,
+          "val_loss": 2.0155292835235596,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.09580838323353294,
+              "correct": 16,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.4160176515579224,
+        "val_accuracy": 0.209,
+        "val_loss": 2.0155292835235596,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.23053892215568864,
+            "correct": 77,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.2732732732732733,
+            "correct": 91,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.09580838323353294,
+            "correct": 16,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 4.35,
+      "peak_gpu_mem_mb": 38.4,
+      "layer": 24
+    },
+    {
+      "arm": "S6",
+      "seed": 23,
+      "widen_w": 0,
+      "trainable_params": 951744,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.144,
+          "val_loss": 2.148028318405151,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.1437125748502994,
+              "correct": 48,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.18618618618618618,
+              "correct": 62,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.07784431137724551,
+              "correct": 13,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.12650602409638553,
+              "correct": 21,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.6372473239898682,
+          "val_accuracy": 0.178,
+          "val_loss": 2.051441888809204,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.19760479041916168,
+              "correct": 66,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.21021021021021022,
+              "correct": 70,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.10778443113772455,
+              "correct": 18,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.14457831325301204,
+              "correct": 24,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.7264920473098755,
+          "val_accuracy": 0.186,
+          "val_loss": 2.0112925329208373,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.19461077844311378,
+              "correct": 65,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.24324324324324326,
+              "correct": 81,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.07784431137724551,
+              "correct": 13,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.16265060240963855,
+              "correct": 27,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.875910997390747,
+          "val_accuracy": 0.186,
+          "val_loss": 2.0562219886779785,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.19161676646706588,
+              "correct": 64,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2552552552552553,
+              "correct": 85,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.059880239520958084,
+              "correct": 10,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.16265060240963855,
+              "correct": 27,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.4768933057785034,
+          "val_accuracy": 0.215,
+          "val_loss": 1.99782110786438,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2275449101796407,
+              "correct": 76,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2672672672672673,
+              "correct": 89,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1497005988023952,
+              "correct": 25,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.5311977863311768,
+          "val_accuracy": 0.213,
+          "val_loss": 1.9996891651153565,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.11976047904191617,
+              "correct": 20,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.5273712873458862,
+          "val_accuracy": 0.215,
+          "val_loss": 2.009934143066406,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1317365269461078,
+              "correct": 22,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.5273712873458862,
+        "val_accuracy": 0.215,
+        "val_loss": 2.009934143066406,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.23053892215568864,
+            "correct": 77,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.2732732732732733,
+            "correct": 91,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.1317365269461078,
+            "correct": 22,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 4.35,
+      "peak_gpu_mem_mb": 38.4,
+      "layer": 24
+    },
+    {
+      "arm": "S6",
+      "seed": 47,
+      "widen_w": 0,
+      "trainable_params": 951744,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.136,
+          "val_loss": 2.1462586402893065,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.1407185628742515,
+              "correct": 47,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.16516516516516516,
+              "correct": 55,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.0718562874251497,
+              "correct": 12,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.13253012048192772,
+              "correct": 22,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.5731345415115356,
+          "val_accuracy": 0.202,
+          "val_loss": 2.019590229034424,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2155688622754491,
+              "correct": 72,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.1831831831831832,
+              "correct": 61,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.20359281437125748,
+              "correct": 34,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.21084337349397592,
+              "correct": 35,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.7301034927368164,
+          "val_accuracy": 0.23,
+          "val_loss": 2.0085257568359376,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.20359281437125748,
+              "correct": 68,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.29429429429429427,
+              "correct": 98,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.17964071856287425,
+              "correct": 30,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.20481927710843373,
+              "correct": 34,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.565858006477356,
+          "val_accuracy": 0.215,
+          "val_loss": 1.9917690963745118,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2215568862275449,
+              "correct": 74,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2672672672672673,
+              "correct": 89,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16167664670658682,
+              "correct": 27,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.409420371055603,
+          "val_accuracy": 0.223,
+          "val_loss": 1.9769628829956054,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.27927927927927926,
+              "correct": 93,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16766467065868262,
+              "correct": 28,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.4652011394500732,
+          "val_accuracy": 0.222,
+          "val_loss": 1.995752082824707,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.27927927927927926,
+              "correct": 93,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16167664670658682,
+              "correct": 27,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.5237051248550415,
+          "val_accuracy": 0.218,
+          "val_loss": 2.001629234313965,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.27927927927927926,
+              "correct": 93,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1377245508982036,
+              "correct": 23,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.5237051248550415,
+        "val_accuracy": 0.218,
+        "val_loss": 2.001629234313965,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.23053892215568864,
+            "correct": 77,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.27927927927927926,
+            "correct": 93,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.1377245508982036,
+            "correct": 23,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 4.37,
+      "peak_gpu_mem_mb": 38.4,
+      "layer": 24
+    },
+    {
+      "arm": "S7D",
+      "seed": 11,
+      "widen_w": 0,
+      "trainable_params": 951744,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.031,
+          "val_loss": 2.204528831481934,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.008982035928143712,
+              "correct": 3,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.003003003003003003,
+              "correct": 1,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1497005988023952,
+              "correct": 25,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.012048192771084338,
+              "correct": 2,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.6083149909973145,
+          "val_accuracy": 0.216,
+          "val_loss": 2.003946105957031,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.26426426426426425,
+              "correct": 88,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.15568862275449102,
+              "correct": 26,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.5535426139831543,
+          "val_accuracy": 0.198,
+          "val_loss": 2.0689451351165773,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.19760479041916168,
+              "correct": 66,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.24324324324324326,
+              "correct": 81,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.15568862275449102,
+              "correct": 26,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.623998761177063,
+          "val_accuracy": 0.211,
+          "val_loss": 2.0056140842437746,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2275449101796407,
+              "correct": 76,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2702702702702703,
+              "correct": 90,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.11976047904191617,
+              "correct": 20,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.5895205736160278,
+          "val_accuracy": 0.204,
+          "val_loss": 2.0209928512573243,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2215568862275449,
+              "correct": 74,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.08383233532934131,
+              "correct": 14,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.4734820127487183,
+          "val_accuracy": 0.211,
+          "val_loss": 2.0021401081085206,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2275449101796407,
+              "correct": 76,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.27927927927927926,
+              "correct": 93,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.10179640718562874,
+              "correct": 17,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.3930306434631348,
+          "val_accuracy": 0.21,
+          "val_loss": 2.0152592678070067,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2275449101796407,
+              "correct": 76,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.27927927927927926,
+              "correct": 93,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.09580838323353294,
+              "correct": 16,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.3930306434631348,
+        "val_accuracy": 0.21,
+        "val_loss": 2.0152592678070067,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.2275449101796407,
+            "correct": 76,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.27927927927927926,
+            "correct": 93,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.09580838323353294,
+            "correct": 16,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 4.43,
+      "peak_gpu_mem_mb": 38.4,
+      "layer": 24
+    },
+    {
+      "arm": "S7D",
+      "seed": 23,
+      "widen_w": 0,
+      "trainable_params": 951744,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.144,
+          "val_loss": 2.1480032501220703,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.1437125748502994,
+              "correct": 48,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.18618618618618618,
+              "correct": 62,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.07784431137724551,
+              "correct": 13,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.12650602409638553,
+              "correct": 21,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.6444313526153564,
+          "val_accuracy": 0.176,
+          "val_loss": 2.0540496807098387,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.20359281437125748,
+              "correct": 68,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2012012012012012,
+              "correct": 67,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.10778443113772455,
+              "correct": 18,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.13855421686746988,
+              "correct": 23,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.662124752998352,
+          "val_accuracy": 0.187,
+          "val_loss": 1.9943717584609986,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.19760479041916168,
+              "correct": 66,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.24624624624624625,
+              "correct": 82,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.0718562874251497,
+              "correct": 12,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.16265060240963855,
+              "correct": 27,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.7915667295455933,
+          "val_accuracy": 0.21,
+          "val_loss": 2.0460874366760256,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.19161676646706588,
+              "correct": 64,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.17365269461077845,
+              "correct": 29,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.1566265060240964,
+              "correct": 26,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.4665504693984985,
+          "val_accuracy": 0.209,
+          "val_loss": 2.020643445968628,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2155688622754491,
+              "correct": 72,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.25825825825825827,
+              "correct": 86,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16167664670658682,
+              "correct": 27,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.14457831325301204,
+              "correct": 24,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.555773377418518,
+          "val_accuracy": 0.207,
+          "val_loss": 2.005500326156616,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.218562874251497,
+              "correct": 73,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2672672672672673,
+              "correct": 89,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.11976047904191617,
+              "correct": 20,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.5731496810913086,
+          "val_accuracy": 0.211,
+          "val_loss": 2.0221083812713623,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2215568862275449,
+              "correct": 74,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2702702702702703,
+              "correct": 90,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1317365269461078,
+              "correct": 22,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.5731496810913086,
+        "val_accuracy": 0.211,
+        "val_loss": 2.0221083812713623,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.2215568862275449,
+            "correct": 74,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.2702702702702703,
+            "correct": 90,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.1317365269461078,
+            "correct": 22,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 4.47,
+      "peak_gpu_mem_mb": 38.4,
+      "layer": 24
+    },
+    {
+      "arm": "S7D",
+      "seed": 47,
+      "widen_w": 0,
+      "trainable_params": 951744,
+      "curve": [
+        {
+          "step": 0,
+          "train_loss": null,
+          "val_accuracy": 0.136,
+          "val_loss": 2.1462799911499024,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.1407185628742515,
+              "correct": 47,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.16516516516516516,
+              "correct": 55,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.0718562874251497,
+              "correct": 12,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.13253012048192772,
+              "correct": 22,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 50,
+          "train_loss": 1.5690205097198486,
+          "val_accuracy": 0.2,
+          "val_loss": 2.0138845233917237,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2155688622754491,
+              "correct": 72,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.1831831831831832,
+              "correct": 61,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.19161676646706588,
+              "correct": 32,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.21084337349397592,
+              "correct": 35,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 100,
+          "train_loss": 1.8345792293548584,
+          "val_accuracy": 0.223,
+          "val_loss": 2.0495298805236817,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2275449101796407,
+              "correct": 76,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2912912912912913,
+              "correct": 97,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1377245508982036,
+              "correct": 23,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.16265060240963855,
+              "correct": 27,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 250,
+          "train_loss": 1.5487797260284424,
+          "val_accuracy": 0.217,
+          "val_loss": 1.9998669452667237,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2275449101796407,
+              "correct": 76,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2672672672672673,
+              "correct": 89,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16167664670658682,
+              "correct": 27,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 500,
+          "train_loss": 1.412571907043457,
+          "val_accuracy": 0.221,
+          "val_loss": 1.9847556190490723,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.16766467065868262,
+              "correct": 28,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 750,
+          "train_loss": 1.463125228881836,
+          "val_accuracy": 0.218,
+          "val_loss": 2.000612979888916,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.23053892215568864,
+              "correct": 77,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2732732732732733,
+              "correct": 91,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1497005988023952,
+              "correct": 25,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        },
+        {
+          "step": 1000,
+          "train_loss": 1.5152125358581543,
+          "val_accuracy": 0.213,
+          "val_loss": 2.0061538219451904,
+          "per_question_type": {
+            "Q_ATTRACT": {
+              "accuracy": 0.2245508982035928,
+              "correct": 75,
+              "total": 334
+            },
+            "Q_AVERT": {
+              "accuracy": 0.2672672672672673,
+              "correct": 89,
+              "total": 333
+            },
+            "Q_PART": {
+              "accuracy": 0.1437125748502994,
+              "correct": 24,
+              "total": 167
+            },
+            "Q_TRIGGER": {
+              "accuracy": 0.15060240963855423,
+              "correct": 25,
+              "total": 166
+            }
+          }
+        }
+      ],
+      "final": {
+        "step": 1000,
+        "train_loss": 1.5152125358581543,
+        "val_accuracy": 0.213,
+        "val_loss": 2.0061538219451904,
+        "per_question_type": {
+          "Q_ATTRACT": {
+            "accuracy": 0.2245508982035928,
+            "correct": 75,
+            "total": 334
+          },
+          "Q_AVERT": {
+            "accuracy": 0.2672672672672673,
+            "correct": 89,
+            "total": 333
+          },
+          "Q_PART": {
+            "accuracy": 0.1437125748502994,
+            "correct": 24,
+            "total": 167
+          },
+          "Q_TRIGGER": {
+            "accuracy": 0.15060240963855423,
+            "correct": 25,
+            "total": 166
+          }
+        }
+      },
+      "wall_clock_seconds": 4.49,
+      "peak_gpu_mem_mb": 38.4,
+      "layer": 24
+    }
+  ],
+  "total_wall_clock_seconds": 86.3,
+  "total_cost_usd": 0.0126,
+  "cost_note": "AWS g4dn.xlarge T4 us-west-2; compute-wall cost estimate at $0.5260/hr (authoritative billed cost = instance-runtime * rate, in DEV_PILOT_RECEIPT)",
+  "development_status": "NO_DEV_SIGNAL",
+  "development_status_reason": "S3 does not clear all three controls by >=0.02: S3-S0=0.000666 S3-S6=-0.001667 S3-S7D=0.001"
+}

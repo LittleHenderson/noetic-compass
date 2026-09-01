@@ -1,0 +1,7 @@
+# Pin all pilot text artifacts to LF on checkout, so the working tree, the
+# committed blob, and the digests recorded in the build/execution receipts stay
+# byte-consistent on every platform (Windows core.autocrlf must not rewrite the
+# JSON tables to CRLF -- that is what made the S3-bundled S7_DELTA_WN1.json hash
+# to c216da05 instead of the LF-canonical efe61cc1).
+* text=auto eol=lf
+*.pt binary
