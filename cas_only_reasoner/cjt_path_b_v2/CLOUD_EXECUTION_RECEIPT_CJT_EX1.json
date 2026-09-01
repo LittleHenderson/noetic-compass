@@ -1,0 +1,55 @@
+{
+  "receipt_id": "CLOUD_EXECUTION_RECEIPT_CJT_EX1",
+  "non_claim_bearing": true,
+  "run": "CJT-EX1 Expert Specialization and Transfer Pilot (amended)",
+  "run_id": "cjt-ex1-1788292312",
+  "instance_id": "i-090962eb9f5dc5129",
+  "instance_type": "g4dn.xlarge",
+  "gpu": "NVIDIA Tesla T4",
+  "region": "us-west-2",
+  "ami": "ami-0c779ec711a581954",
+  "account": "807562639912",
+  "launched_unix": 1788292315,
+  "wall_minutes_instance": 27.4,
+  "termination": "self-terminated (InstanceInitiatedShutdownBehavior=terminate + EXIT-trap shutdown); observed 'shutting-down' at 27.4 min by the client watchdog, which issued a confirming terminate; post-run sweep 2026-09-01T20:21:22Z shows no running experiment instance (the only other non-terminated instance is i-0c3028734c8885542, the owner's stopped g6e standby, untouched)",
+  "cost": {
+    "authoritative_method": "instance_runtime_estimate",
+    "instance_runtime_estimate_usd": 0.2404,
+    "rate_per_hour_usd": 0.526,
+    "arithmetic": "27.4/60 x 0.526 = 0.2402 (watchdog reported 0.2404)",
+    "harness_compute_wall_estimate_usd": 0.2032,
+    "note": "the harness figure is a LOWER BOUND (compute wall only); never presented as the spend. Methods are not mixed."
+  },
+  "budget": {
+    "hard_cap_usd": 1.20,
+    "cap_minutes": 136.9,
+    "used_fraction_of_cap": 0.2003,
+    "in_instance_hard_timer_min": 125,
+    "watchdog_force_terminate_min": 130,
+    "projection_note": "projected 98 min / $0.861 from CPU timing; the GPU ran the batched expert einsums far faster and finished in 27.4 min"
+  },
+  "compute_facts": {
+    "runs": 36,
+    "arms": "E0/E1/E1S/E2/E3/E4 x seeds 11/23/47, main (1000 updates) + retention (500+500)",
+    "gpu_max_memory_allocated_bytes": 1059200000,
+    "harness_wall_seconds": 1390.6,
+    "eval_split": "C1_TRANSFORM_SELECT (597 records, family C)",
+    "measured_ms_per_step": {"E0": 14.647, "E1": 13.721, "E1S": 13.764,
+                             "E2": 13.309, "E3": 17.092, "E4": 13.438}
+  },
+  "integrity": {
+    "preflight_all_pass": true,
+    "cache_binding_verified_records": {"ex1_train": 9000, "ex1_eval": 597},
+    "param_spread_pct": 0.206,
+    "protected_splits": "UNTOUCHED",
+    "c2_structure_eval": "SEALED -- never extracted, evaluated, or inspected"
+  },
+  "result": {
+    "development_status": "NO_CJT_EXPERT_SPECIALIZATION_SIGNAL",
+    "secondary_status": null,
+    "p0_status": "CJT_EX1_P0_SMOKE_OK",
+    "material_caveat": "the designated killer control E1S suffered router collapse (99.9% of clauses to a single expert), so that comparison is VOID. The valid comparison is E2 vs E4 = +0.0006."
+  },
+  "cumulative_program_spend_usd": 2.129,
+  "cumulative_note": "prior 1.889 + this run 0.2404 = 2.129 of the 30.00 ceiling (7.1%)"
+}

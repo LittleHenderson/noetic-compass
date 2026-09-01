@@ -1,0 +1,246 @@
++ GET_URL='https://cas-harness-runpod-92754088.s3.amazonaws.com/cjt-dev-p1/cjt-ex1-1788292312/bundle.tar.gz?AWSAccessKeyId=AKIA3YBT37IUBNNNUFWH&Signature=LJbYJTUBl7yrbxQj90jAucnJQH4%3D&Expires=1788303113'
++ PUT_URL='https://cas-harness-runpod-92754088.s3.amazonaws.com/cjt-dev-p1/cjt-ex1-1788292312/results.tar.gz?AWSAccessKeyId=AKIA3YBT37IUBNNNUFWH&Signature=fyF6khbXUYVNNSJL0bVwnlzVbK4%3D&Expires=1788303113'
++ mkdir -p /root/out
++ trap finish EXIT
++ trap 'exit 42' TERM
++ cd /root
++ for i in 1 2 3 4 5 6
++ curl -fsSL 'https://cas-harness-runpod-92754088.s3.amazonaws.com/cjt-dev-p1/cjt-ex1-1788292312/bundle.tar.gz?AWSAccessKeyId=AKIA3YBT37IUBNNNUFWH&Signature=LJbYJTUBl7yrbxQj90jAucnJQH4%3D&Expires=1788303113' -o bundle.tar.gz
++ sleep 7500
++ break
++ mkdir -p pilot
++ tar --force-local -xzf bundle.tar.gz -C pilot
++ export DEBIAN_FRONTEND=noninteractive
++ DEBIAN_FRONTEND=noninteractive
++ apt-get update -y
+Get:1 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy InRelease [270 kB]
+Get:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+Hit:4 https://nvidia.github.io/libnvidia-container/stable/deb/amd64  InRelease
+Get:5 https://download.docker.com/linux/ubuntu jammy InRelease [48.5 kB]
+Hit:6 https://apt.corretto.aws stable InRelease
+Get:7 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64  InRelease [1578 B]
+Get:8 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/main amd64 Packages [1395 kB]
+Hit:9 https://fsx-lustre-client-repo.s3.amazonaws.com/ubuntu jammy InRelease
+Get:10 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/main Translation-en [510 kB]
+Get:11 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/main amd64 c-n-f Metadata [30.3 kB]
+Get:12 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/restricted amd64 Packages [129 kB]
+Get:13 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/restricted Translation-en [18.6 kB]
+Get:14 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/restricted amd64 c-n-f Metadata [488 B]
+Get:15 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [14.1 MB]
+Get:16 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+Get:17 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/universe Translation-en [5652 kB]
+Get:18 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/universe amd64 c-n-f Metadata [286 kB]
+Get:19 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [217 kB]
+Get:20 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/multiverse Translation-en [112 kB]
+Get:21 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy/multiverse amd64 c-n-f Metadata [8372 B]
+Get:22 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [3775 kB]
+Get:23 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [561 kB]
+Get:24 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 c-n-f Metadata [20.1 kB]
+Get:25 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [6510 kB]
+Get:26 https://download.docker.com/linux/ubuntu jammy/stable amd64 Packages [85.8 kB]
+Get:27 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/restricted Translation-en [1249 kB]
+Get:28 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 c-n-f Metadata [584 B]
+Get:29 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1282 kB]
+Get:30 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe Translation-en [323 kB]
+Get:31 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 c-n-f Metadata [30.8 kB]
+Get:32 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [76.5 kB]
+Get:33 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/multiverse Translation-en [15.9 kB]
+Get:34 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 c-n-f Metadata [756 B]
+Get:35 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [70.2 kB]
+Get:36 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-backports/main Translation-en [11.4 kB]
+Get:37 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-backports/main amd64 c-n-f Metadata [412 B]
+Get:38 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-backports/restricted amd64 c-n-f Metadata [116 B]
+Get:39 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [30.8 kB]
+Get:40 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-backports/universe Translation-en [16.9 kB]
+Get:41 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-backports/universe amd64 c-n-f Metadata [676 B]
+Get:42 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-backports/multiverse amd64 c-n-f Metadata [116 B]
+Get:43 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64  Packages [2915 kB]
+Get:44 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [3506 kB]
+Get:45 http://security.ubuntu.com/ubuntu jammy-security/main Translation-en [492 kB]
+Get:46 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [6273 kB]
+Get:47 http://security.ubuntu.com/ubuntu jammy-security/restricted Translation-en [1206 kB]
+Get:48 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1048 kB]
+Get:49 http://security.ubuntu.com/ubuntu jammy-security/universe Translation-en [235 kB]
+Fetched 52.9 MB in 7s (7552 kB/s)
+Reading package lists...
+W: Target Packages (Packages) is configured multiple times in /etc/apt/sources.list.d/archive_uri-https_developer_download_nvidia_com_compute_cuda_repos_ubuntu2204_x86_64_-jammy.list:1 and /etc/apt/sources.list.d/cuda-ubuntu2204-x86_64.list:1
+W: Target Translations (en) is configured multiple times in /etc/apt/sources.list.d/archive_uri-https_developer_download_nvidia_com_compute_cuda_repos_ubuntu2204_x86_64_-jammy.list:1 and /etc/apt/sources.list.d/cuda-ubuntu2204-x86_64.list:1
+W: Target Packages (Packages) is configured multiple times in /etc/apt/sources.list.d/archive_uri-https_developer_download_nvidia_com_compute_cuda_repos_ubuntu2204_x86_64_-jammy.list:1 and /etc/apt/sources.list.d/cuda-ubuntu2204-x86_64.list:1
+W: Target Translations (en) is configured multiple times in /etc/apt/sources.list.d/archive_uri-https_developer_download_nvidia_com_compute_cuda_repos_ubuntu2204_x86_64_-jammy.list:1 and /etc/apt/sources.list.d/cuda-ubuntu2204-x86_64.list:1
++ apt-get install -y python3-venv python3-pip
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python3-pip is already the newest version (22.0.2+dfsg-1ubuntu0.7).
+The following packages were automatically installed and are no longer required:
+  isc-dhcp-common libntfs-3g89
+Use 'apt autoremove' to remove them.
+The following additional packages will be installed:
+  libpython3.10 libpython3.10-dev libpython3.10-minimal libpython3.10-stdlib
+  python3-pip-whl python3-setuptools-whl python3.10 python3.10-dev
+  python3.10-minimal python3.10-venv
+Suggested packages:
+  python3.10-doc binfmt-support
+The following NEW packages will be installed:
+  python3-pip-whl python3-setuptools-whl python3-venv python3.10-venv
+The following packages will be upgraded:
+  libpython3.10 libpython3.10-dev libpython3.10-minimal libpython3.10-stdlib
+  python3.10 python3.10-dev python3.10-minimal
+7 upgraded, 4 newly installed, 0 to remove and 61 not upgraded.
+Need to get 15.2 MB of archives.
+After this operation, 2908 kB of additional disk space will be used.
+Get:1 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3.10-dev amd64 3.10.12-1~22.04.17 [508 kB]
+Get:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10-dev amd64 3.10.12-1~22.04.17 [4765 kB]
+Get:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10 amd64 3.10.12-1~22.04.17 [1950 kB]
+Get:4 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3.10 amd64 3.10.12-1~22.04.17 [508 kB]
+Get:5 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10-stdlib amd64 3.10.12-1~22.04.17 [1850 kB]
+Get:6 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 python3.10-minimal amd64 3.10.12-1~22.04.17 [2279 kB]
+Get:7 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpython3.10-minimal amd64 3.10.12-1~22.04.17 [817 kB]
+Get:8 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3-pip-whl all 22.0.2+dfsg-1ubuntu0.7 [1683 kB]
+Get:9 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3-setuptools-whl all 59.6.0-1.2ubuntu0.22.04.3 [789 kB]
+Get:10 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3.10-venv amd64 3.10.12-1~22.04.17 [5720 B]
+Get:11 http://us-west-2.ec2.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 python3-venv amd64 3.10.6-1~22.04.1 [1042 B]
+Fetched 15.2 MB in 0s (97.7 MB/s)
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 127160 files and directories currently installed.)
+Preparing to unpack .../00-python3.10-dev_3.10.12-1~22.04.17_amd64.deb ...
+Unpacking python3.10-dev (3.10.12-1~22.04.17) over (3.10.12-1~22.04.16) ...
+Preparing to unpack .../01-libpython3.10-dev_3.10.12-1~22.04.17_amd64.deb ...
+Unpacking libpython3.10-dev:amd64 (3.10.12-1~22.04.17) over (3.10.12-1~22.04.16) ...
+Preparing to unpack .../02-libpython3.10_3.10.12-1~22.04.17_amd64.deb ...
+Unpacking libpython3.10:amd64 (3.10.12-1~22.04.17) over (3.10.12-1~22.04.16) ...
+Preparing to unpack .../03-python3.10_3.10.12-1~22.04.17_amd64.deb ...
+Unpacking python3.10 (3.10.12-1~22.04.17) over (3.10.12-1~22.04.16) ...
+Preparing to unpack .../04-libpython3.10-stdlib_3.10.12-1~22.04.17_amd64.deb ...
+Unpacking libpython3.10-stdlib:amd64 (3.10.12-1~22.04.17) over (3.10.12-1~22.04.16) ...
+Preparing to unpack .../05-python3.10-minimal_3.10.12-1~22.04.17_amd64.deb ...
+Unpacking python3.10-minimal (3.10.12-1~22.04.17) over (3.10.12-1~22.04.16) ...
+Preparing to unpack .../06-libpython3.10-minimal_3.10.12-1~22.04.17_amd64.deb ...
+Unpacking libpython3.10-minimal:amd64 (3.10.12-1~22.04.17) over (3.10.12-1~22.04.16) ...
+Selecting previously unselected package python3-pip-whl.
+Preparing to unpack .../07-python3-pip-whl_22.0.2+dfsg-1ubuntu0.7_all.deb ...
+Unpacking python3-pip-whl (22.0.2+dfsg-1ubuntu0.7) ...
+Selecting previously unselected package python3-setuptools-whl.
+Preparing to unpack .../08-python3-setuptools-whl_59.6.0-1.2ubuntu0.22.04.3_all.deb ...
+Unpacking python3-setuptools-whl (59.6.0-1.2ubuntu0.22.04.3) ...
+Selecting previously unselected package python3.10-venv.
+Preparing to unpack .../09-python3.10-venv_3.10.12-1~22.04.17_amd64.deb ...
+Unpacking python3.10-venv (3.10.12-1~22.04.17) ...
+Selecting previously unselected package python3-venv.
+Preparing to unpack .../10-python3-venv_3.10.6-1~22.04.1_amd64.deb ...
+Unpacking python3-venv (3.10.6-1~22.04.1) ...
+Setting up python3-setuptools-whl (59.6.0-1.2ubuntu0.22.04.3) ...
+Setting up python3-pip-whl (22.0.2+dfsg-1ubuntu0.7) ...
+Setting up libpython3.10-minimal:amd64 (3.10.12-1~22.04.17) ...
+Setting up python3.10-minimal (3.10.12-1~22.04.17) ...
+Setting up libpython3.10-stdlib:amd64 (3.10.12-1~22.04.17) ...
+Setting up libpython3.10:amd64 (3.10.12-1~22.04.17) ...
+Setting up python3.10 (3.10.12-1~22.04.17) ...
+Setting up libpython3.10-dev:amd64 (3.10.12-1~22.04.17) ...
+Setting up python3.10-dev (3.10.12-1~22.04.17) ...
+Setting up python3.10-venv (3.10.12-1~22.04.17) ...
+Setting up python3-venv (3.10.6-1~22.04.1) ...
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.14) ...
+
+Running kernel seems to be up-to-date.
+
+Services to be restarted:
+ systemctl restart cloud-final.service
+
+Service restarts being deferred:
+ systemctl restart networkd-dispatcher.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
++ python3 -m venv /root/venv
++ /root/venv/bin/pip install -q --upgrade pip
++ /root/venv/bin/pip install -q torch --index-url https://download.pytorch.org/whl/cu121
++ /root/venv/bin/pip install -q 'transformers>=4.44,<5' 'numpy<3' accelerate scikit-learn
++ PY=/root/venv/bin/python
++ /root/venv/bin/python -c 'import torch;print('\''TORCH'\'',torch.__version__,'\''CUDA'\'',torch.cuda.is_available(),(torch.cuda.get_device_name(0) if torch.cuda.is_available() else '\''NONE'\''))'
+TORCH 2.5.1+cu121 CUDA True Tesla T4
++ export HF_HOME=/root/hf
++ HF_HOME=/root/hf
++ cd /root/pilot
++ set +e
++ /root/venv/bin/python cjt_path_b_v2/run_cjt_ex1.py --device cuda --out-dir /root/out/results_cjt_ex1
+`torch_dtype` is deprecated! Use `dtype` instead!
+[preflight] 4 integrity checks PASS
+[split] train=9000 (families A,B; verbs 0-5, forms 0-3) eval=597 (family C; verbs 6-7, form 4 -- UNSEEN); C2 half sealed=528
+[extract] ex1_train 9000 recs 699s
+[cache] ex1_train binding verified: 9000 records
+[extract] ex1_eval 597 recs 46s
+[cache] ex1_eval binding verified: 597 records
+[capacity] target=5188756 hidden={'E0': 464, 'E1': 128, 'E1S': 128, 'E2': 128, 'E3': 169, 'E4': 128} counts={'E0': 5186926, 'E1': 5195932, 'E1S': 5195932, 'E2': 5188756, 'E3': 5197658, 'E4': 5188756} matched_1pct=True
+[floor] candidate-uniform chance 0.1042; competence floor 0.2542
+[P0] a fixed class->expert BIJECTION is a pure relabeling: max|logit diff| = 0.000e+00 -> CONFIRMED (this is why E4 scrambles PER CLAUSE)
+[P0] E0 SHARED       live=True 14.6ms/step MI=0.0000 bits acc=0.3769
+[P0] E1 ANON_MOE     live=True 13.7ms/step MI=0.0045 bits acc=0.3568
+[P0] E1S ANON_SPARSE  live=True 13.8ms/step MI=0.0445 bits acc=0.3635
+[P0] E2 CAS_EXPERT   live=True 13.3ms/step MI=1.7477 bits acc=0.1943
+[P0] E3 CAS_STRUCT   live=True 17.1ms/step MI=1.7477 bits acc=0.3300
+[P0] E4 SHUFFLED     live=True 13.4ms/step MI=0.0030 bits acc=0.1826
+[P0] E4 routing/class mutual information 0.00298 bits (max 0.01) -> VALID CONTROL
+[MAIN] E0 SHARED     s11 acc=0.7772 fam={'QB_COMP': 1.0, 'QB_INT': 0.369, 'QB_REL': 0.974}
+[MAIN] E1 ANON_MOE   s11 acc=0.7722 fam={'QB_COMP': 1.0, 'QB_INT': 0.35, 'QB_REL': 0.98}
+[MAIN] E1S ANON_SPARSE s11 acc=0.7638 fam={'QB_COMP': 1.0, 'QB_INT': 0.35, 'QB_REL': 0.954}
+[MAIN] E2 CAS_EXPERT s11 acc=0.7873 fam={'QB_COMP': 0.99, 'QB_INT': 0.404, 'QB_REL': 0.98}
+[MAIN] E3 CAS_STRUCT s11 acc=0.7873 fam={'QB_COMP': 0.995, 'QB_INT': 0.394, 'QB_REL': 0.985}
+[MAIN] E4 SHUFFLED   s11 acc=0.7672 fam={'QB_COMP': 1.0, 'QB_INT': 0.369, 'QB_REL': 0.944}
+[MAIN] E0 SHARED     s23 acc=0.7755 fam={'QB_COMP': 1.0, 'QB_INT': 0.36, 'QB_REL': 0.98}
+[MAIN] E1 ANON_MOE   s23 acc=0.7739 fam={'QB_COMP': 1.0, 'QB_INT': 0.374, 'QB_REL': 0.959}
+[MAIN] E1S ANON_SPARSE s23 acc=0.7655 fam={'QB_COMP': 1.0, 'QB_INT': 0.345, 'QB_REL': 0.964}
+[MAIN] E2 CAS_EXPERT s23 acc=0.7889 fam={'QB_COMP': 0.99, 'QB_INT': 0.409, 'QB_REL': 0.98}
+[MAIN] E3 CAS_STRUCT s23 acc=0.7655 fam={'QB_COMP': 0.98, 'QB_INT': 0.374, 'QB_REL': 0.954}
+[MAIN] E4 SHUFFLED   s23 acc=0.7873 fam={'QB_COMP': 1.0, 'QB_INT': 0.389, 'QB_REL': 0.985}
+[MAIN] E0 SHARED     s47 acc=0.7672 fam={'QB_COMP': 1.0, 'QB_INT': 0.335, 'QB_REL': 0.98}
+[MAIN] E1 ANON_MOE   s47 acc=0.7839 fam={'QB_COMP': 1.0, 'QB_INT': 0.379, 'QB_REL': 0.985}
+[MAIN] E1S ANON_SPARSE s47 acc=0.7672 fam={'QB_COMP': 1.0, 'QB_INT': 0.35, 'QB_REL': 0.964}
+[MAIN] E2 CAS_EXPERT s47 acc=0.7655 fam={'QB_COMP': 0.929, 'QB_INT': 0.394, 'QB_REL': 0.985}
+[MAIN] E3 CAS_STRUCT s47 acc=0.7839 fam={'QB_COMP': 0.99, 'QB_INT': 0.409, 'QB_REL': 0.964}
+[MAIN] E4 SHUFFLED   s47 acc=0.7856 fam={'QB_COMP': 0.995, 'QB_INT': 0.399, 'QB_REL': 0.974}
+[RET ] phase1=QB_INT (n=3000) phase2=QB_COMP (n=3000)
+[RET ] E0 SHARED       s11 QB_INT 0.3892->0.0049 (forgot +0.3842) | QB_COMP 0.5354->0.9949 (gain +0.4596) nz2=500
+[RET ] E1 ANON_MOE     s11 QB_INT 0.3892->0.0197 (forgot +0.3695) | QB_COMP 0.5202->0.9899 (gain +0.4697) nz2=500
+[RET ] E1S ANON_SPARSE  s11 QB_INT 0.3695->0.0148 (forgot +0.3547) | QB_COMP 0.5404->0.9848 (gain +0.4444) nz2=500
+[RET ] E2 CAS_EXPERT   s11 QB_INT 0.3300->0.0049 (forgot +0.3251) | QB_COMP 0.5606->0.9848 (gain +0.4242) nz2=500
+[RET ] E3 CAS_STRUCT   s11 QB_INT 0.3695->0.0049 (forgot +0.3645) | QB_COMP 0.5404->1.0000 (gain +0.4596) nz2=500
+[RET ] E4 SHUFFLED     s11 QB_INT 0.3596->0.0197 (forgot +0.3399) | QB_COMP 0.5859->0.9848 (gain +0.3990) nz2=500
+[RET ] E0 SHARED       s23 QB_INT 0.3842->0.1182 (forgot +0.2660) | QB_COMP 0.5253->0.9798 (gain +0.4545) nz2=500
+[RET ] E1 ANON_MOE     s23 QB_INT 0.3793->0.0099 (forgot +0.3695) | QB_COMP 0.5253->0.9949 (gain +0.4697) nz2=500
+[RET ] E1S ANON_SPARSE  s23 QB_INT 0.3941->0.0296 (forgot +0.3645) | QB_COMP 0.5253->0.9949 (gain +0.4697) nz2=500
+[RET ] E2 CAS_EXPERT   s23 QB_INT 0.3744->0.0246 (forgot +0.3498) | QB_COMP 0.5303->0.9848 (gain +0.4545) nz2=500
+[RET ] E3 CAS_STRUCT   s23 QB_INT 0.3744->0.0049 (forgot +0.3695) | QB_COMP 0.5000->0.9949 (gain +0.4949) nz2=500
+[RET ] E4 SHUFFLED     s23 QB_INT 0.4039->0.0788 (forgot +0.3251) | QB_COMP 0.5808->0.9848 (gain +0.4040) nz2=500
+[RET ] E0 SHARED       s47 QB_INT 0.3793->0.0000 (forgot +0.3793) | QB_COMP 0.5202->1.0000 (gain +0.4798) nz2=500
+[RET ] E1 ANON_MOE     s47 QB_INT 0.3645->0.0000 (forgot +0.3645) | QB_COMP 0.5404->0.9949 (gain +0.4545) nz2=500
+[RET ] E1S ANON_SPARSE  s47 QB_INT 0.3744->0.0049 (forgot +0.3695) | QB_COMP 0.5657->1.0000 (gain +0.4343) nz2=500
+[RET ] E2 CAS_EXPERT   s47 QB_INT 0.3842->0.0148 (forgot +0.3695) | QB_COMP 0.5556->0.9848 (gain +0.4293) nz2=500
+[RET ] E3 CAS_STRUCT   s47 QB_INT 0.3645->0.0049 (forgot +0.3596) | QB_COMP 0.5051->0.9899 (gain +0.4848) nz2=500
+[RET ] E4 SHUFFLED     s47 QB_INT 0.3892->0.0246 (forgot +0.3645) | QB_COMP 0.5808->0.9899 (gain +0.4091) nz2=500
+
+CJT-EX1 STATUS: NO_CJT_EXPERT_SPECIALIZATION_SIGNAL
+  secondary: None
+  E0 SHARED       acc 0.7733+-0.0044 | forget 0.343186 | newtask 0.991582
+  E1 ANON_MOE     acc 0.7767+-0.0052 | forget 0.367816 | newtask 0.993266
+  E1S ANON_SPARSE  acc 0.7655+-0.0014 | forget 0.36289 | newtask 0.993266
+  E2 CAS_EXPERT   acc 0.7806+-0.0107 | forget 0.348112 | newtask 0.984848
+  E3 CAS_STRUCT   acc 0.7789+-0.0096 | forget 0.364532 | newtask 0.994949
+  E4 SHUFFLED     acc 0.7800+-0.0091 | forget 0.343186 | newtask 0.986532
+  E2-E1S (KILLER) +0.0151 | E2-E1 +0.0039 | E2-E4 +0.0006 | E3-E2 -0.0017
+  eligible families ['QB_REL', 'QB_INT'] improved ['QB_REL', 'QB_INT']
+  wall 1390.7s  est_cost $0.2032
++ echo EX1_EXIT=0
+EX1_EXIT=0
++ set -e
++ echo CJT_EX1_COMPLETE
+CJT_EX1_COMPLETE
++ exit 0
++ finish
++ set +e
++ cp /var/log/pilot.log /root/out/pilot.log
