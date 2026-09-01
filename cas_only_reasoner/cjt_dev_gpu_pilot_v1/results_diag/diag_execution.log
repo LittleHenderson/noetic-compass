@@ -1,0 +1,15 @@
++ /root/venv/bin/python -c 'import torch;print('\''TORCH'\'',torch.__version__,'\''CUDA'\'',torch.cuda.is_available(),(torch.cuda.get_device_name(0) if torch.cuda.is_available() else '\''NONE'\''))'
+TORCH 2.5.1+cu121 CUDA True Tesla T4
+[extract] train 227s
+[extract] val 39s
+[ctx-extract] train 217s
+[ctx-extract] val 36s
+[B] memorize-128 train acc = 1.0
+[C] S1_style_no_profile: holdout=0.236667 val=0.211
+[C] S3_cas_profile: holdout=0.278333 val=0.21
+[D] oracle-alpha val acc = 0.248 vs learned 0.212
+[E] contextual-cand val acc = 0.243; D+E = 0.239
+[F] true=0.212 unif=0.212 perm=0.211 zero=0.212
+[G] val attention: {'mean_normalized_entropy': 0.0, 'gold_top1_rate': 0.237, 'mean_gold_mass': 0.237, 'n_gold_resolved': 1000}
++ echo DIAG_EXIT=0
+DIAG_EXIT=0

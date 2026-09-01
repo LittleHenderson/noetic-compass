@@ -193,3 +193,53 @@ near-copy gate to test copy *magnitude* rather than alignment *significance*
 (the current gate rejects any detectable semantic alignment, which sits in
 tension with the ruling's own "correlation should be reported, not treated as
 contamination"), or (c) close the S7-Δ line, is an **owner decision**.
+
+## Δ.2 / P1.2 round (owner rulings "association is not copying" + "correct the power analysis") — V3 ADMITTED, readout diagnostics ordered
+
+The owner chose **option (b), modified**: magnitude gates replace the
+significance veto ("The v2 soft control failed an association-significance
+gate. It did not demonstrate that the WordNet control copied CAS."). Both
+prior FAILED verdicts stay preserved under their own gates. Executed:
+
+- **16-sense audit** (`audit_s7_senses.py` → `S7_SENSE_AUDIT.json`):
+  `AUDIT_PASS_NO_SENSE_CORRECTIONS` — 11 CORRECT, 4 DEFENSIBLE,
+  1 BEST_AVAILABLE, 0 ERROR. Particle-verb alternatives recorded
+  (back_away = retreat.v.04, commitment-retreat register; break_down ∈
+  decompose.v.01, near-synonymous). Sense-policy disclosure: S7-H uses
+  primary-of-surface-lemma senses, S7-Δ uses construction-context senses —
+  their contrast is NOT a pure hard-vs-soft ablation.
+- **Structural independence** (`wordnet_profile_builder.py`): the builder
+  holds NO CAS mapping (alphabetical verbs, anonymous columns WN-F0..F3, no
+  cas_class_order field); WordNet 3.0 pin FAIL-CLOSED; deterministic
+  recomputation reproduces the frozen v2 profiles (max drift 4.86e-09) →
+  `S7_DELTA_WN1_V3.json` reuses them byte-for-byte. Stability reported
+  per-fit (median mean-row JS 0.000014; fits 1.2e-05…0.0406 — "passed
+  strongly", not "perfect"). Centered affine rank 3. Factor report emitted
+  (`S7_DELTA_FACTOR_REPORT.json`), components stay anonymous.
+- **Comparator** (`compare_s7_to_cas.py`, runs only after sealing):
+  **`S7_DELTA_V3_ADMITTED`** — A_soft\* = 0.523915 < 0.75
+  (D_copy = 0.476085 > 0.25), A_hard\* = 11/16 < 14/16, ≠ S3 under all 24
+  permutations. The Monte Carlo nulls are renamed
+  `CONDITIONAL_BALANCED_PERMUTATION_MONTE_CARLO` and are **descriptive only**
+  (p_hard = 0.01088 ± 0.00023, p_soft = 0.00162 ± 0.00009): WordNet's factors
+  align with CAS more than shuffled labels — expected for two semantic
+  descriptions of verbs selected to instantiate the CAS operations.
+- **Corrected chance baselines** (`CANDIDATE_UNIFORM_BASELINES.json`): the
+  task selects from a variable candidate set (val: 4–18, mean 9.067), so
+  chance is candidate-uniform — val uniform accuracy **0.12284**, uniform CE
+  **2.15307** (never 0.25 / ln 4). The ran pilot's ~0.21 / 2.01 is therefore
+  **`ABOVE_UNIFORM_LOW_COMPETENCE_READOUT`** — above uniform, far below the
+  surface references. Structural fact: train (families A,B) and val (family
+  C) share **zero** clause head verbs — validation demands total cross-family
+  surface transfer.
+- **Next per the ruling:** `run_diagnostics.py` (CJT-DEV-P1.1) runs
+  Diagnostics A–G (memorization, in-distribution holdout vs cross-family
+  transfer, gold-clause oracle, contextual-candidate oracle, profile
+  sensitivity, attention inspection) on a cloud GPU; then the readout is
+  repaired (profile-aware routing: the profile enters Idea *selection*, not
+  just the post-attention dashboard) and the five-arm pilot
+  (S0/S3/S6/S7-H/S7-Δ-V3) relaunches. Arm type tags: S3
+  `EXACT_OPERATION_IDENTITY`/`CONSTRUCTION_GOLD`; S6
+  `UNIFORM_CONTROL`/`EXPERIMENTAL_CONTROL`; S7-H
+  `EXCLUSIVE_LEXICAL_CATEGORY`/`RESOURCE_DERIVED_CONTROL`; S7-Δ
+  `WORDNET_LEXICAL_FACTOR_COMPOSITION`/`RESOURCE_DERIVED_CONTROL`.
