@@ -4,6 +4,35 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - External spec-only conformance suite: one real bug, three spec defects
+
+Closes GLM audit finding 1 - the existing suite was the checker validating itself. Eight parties
+read only the specification, never the implementation or the existing suite, and predicted state
+and exit for 75 fixtures before anything ran. **64 matched, 11 diverged.**
+
+**The real bug:** an unrecognised `--expected-scope` made argparse exit `2` - a code the frozen
+ladder does not define, in the same commit whose contract says a launcher must not meet an
+undocumented code. Fixed; every invocation error is now `REFUSED`/`10`.
+
+**The finding an author-written suite cannot produce:** three divergences shared one root cause -
+`T1`'s similarity metric was never defined. All three authors assumed cosine similarity; the code
+uses edit distance. My own fixtures would have used my own metric and never noticed. Now
+normative.
+
+**The acknowledgement format was undocumented** - and it is the only path from a blocking state
+to exit 0. Now normative, with proof that an ack cannot clear `NECESSARY` or `URGENT`.
+
+**The ladder had no resolution rule.** `T5` true with `T1` fired and `T2` unknown satisfied two
+rows at once. Now ordered: `REFUSED` is a precondition gate, not a ladder row; a fired defence
+beats an unknown one; `T5` false is `DORMANT` regardless.
+
+**Empty evidence is UNKNOWN, not clear.** Zero measurements is not a measurement of zero.
+
+Three divergences were fixture errors and are recorded as such, including one the author
+disclosed unprompted before submitting.
+
+Both suites now run. A future change must keep both green.
+
 ## 2026-09-02 - Trigger v0.3: the wiring gap closed, manifests bound to scope and job
 
 The owner found that the `DORMANT` result could not clear CMB-RP1, and was right. A

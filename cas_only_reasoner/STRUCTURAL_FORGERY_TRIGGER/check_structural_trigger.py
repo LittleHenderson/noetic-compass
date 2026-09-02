@@ -349,12 +349,33 @@ MESSAGE = {
 }
 
 
+class _LadderParser(argparse.ArgumentParser):
+    """Any CLI misuse must BLOCK with a ladder code, never argparse's exit 2.
+
+    Found by an EXTERNAL spec-only fixture (SB06): an illegal --expected-scope value made
+    argparse exit 2, a code the frozen contract does not define -- in the same commit where
+    that contract says a launcher "must not be able to reinterpret an exit code". A caller
+    doing `rc == 0 or block` is safe either way, but a caller switching on the documented
+    codes would meet an undocumented one. Every parse failure is now REFUSED / 10.
+    """
+
+    def error(self, message):
+        print("STRUCTURAL FORGERY DEFENCE -- TRIGGER CHECK")
+        print("TRIGGER STATE: REFUSED    EXIT 10   (BLOCKS LAUNCH)")
+        print(f"  The launcher invoked the checker incorrectly: {message}")
+        print("  A malformed invocation cannot authorize anything.")
+        sys.exit(EXIT["REFUSED"])
+
+
 def main():
-    ap = argparse.ArgumentParser()
+    ap = _LadderParser()
     ap.add_argument("--corpus")
     ap.add_argument("--manifest", default=MANIFEST_DEFAULT)
-    ap.add_argument("--expected-scope", choices=sorted(SCOPES),
-                    help="scope the LAUNCHER declares; a mismatch is REFUSED")
+    # NOT argparse `choices=`: an unknown scope is a governance refusal with a ladder code,
+    # not a usage error with argparse's undocumented exit 2.
+    ap.add_argument("--expected-scope",
+                    help=f"scope the LAUNCHER declares, one of {sorted(SCOPES)}; "
+                         f"a mismatch or an unknown value is REFUSED")
     ap.add_argument("--job-id", help="job id the LAUNCHER declares; a mismatch is REFUSED")
     ap.add_argument("--pipeline-config",
                     help="config emitted by the pipeline; memory_feeds_training is DERIVED "
@@ -364,6 +385,18 @@ def main():
     ap.add_argument("--receipt-out", help="write a machine-readable trigger receipt here, to "
                                           "be bound into the run receipt")
     a = ap.parse_args()
+
+    if a.expected_scope is not None and a.expected_scope not in SCOPES:
+        print("STRUCTURAL FORGERY DEFENCE -- TRIGGER CHECK")
+        print()
+        print("  REFUSED -- the launcher declared an unrecognised scope:")
+        print(f"    - --expected-scope {a.expected_scope!r} is not one of {sorted(SCOPES)}")
+        print()
+        print(f"TRIGGER STATE: REFUSED    EXIT {EXIT['REFUSED']}   (BLOCKS LAUNCH)")
+        print()
+        for line in MESSAGE["REFUSED"]:
+            print("  " + line)
+        return EXIT["REFUSED"]
 
     corpus = load_json(a.corpus) if a.corpus else None
     pipeline_cfg = load_json(a.pipeline_config) if a.pipeline_config else None
