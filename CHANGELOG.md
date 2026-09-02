@@ -4,6 +4,35 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - CMB-P1 phase repair bench: PHASE_MEMORY_UNSAFE, no repair survives ($0.1135)
+
+Owner-authorized repair bench (R4). Three repairs tested separately: signed coupling,
+frequency heterogeneity, and a trajectory readout. **None survives.**
+
+The sharpest result: **at convergence the phase engine is numerically identical to the scalar
+engine** - 0.503/0.343/0.251 at K=2/3/4, matching P0 to three decimals, with merge fraction
+1.000 at every K. The CMB-P0 numbers were a transient; this is the destination.
+
+P7 genuinely fixes synchronisation (global order 0.218 vs 1.000) but buys attribution by
+destroying retrieval. P8 came closest, failing one criterion narrowly. P9 has a global order
+parameter identical to P4, confirming it repairs the readout and not the dynamics.
+
+P8's structural claim is NOT supported: shuffling the frequency values across nodes costs only
+~0.05, so the benefit is desynchronisation rather than structural coding. The controls carried
+for exactly this purpose caught it.
+
+The exploratory P8+P9 combination reaches 90/84/77 percent of oracle accuracy with near-zero
+merging, beating the tag arm on both axes - but it carries no verdict by construction, and it
+has no shuffle control in this run, so it is an unverified number rather than a result.
+
+A first launch cost $0.14 and returned nothing: it finished all GPU work then crashed writing
+the receipt, and the partial-receipt guard was scoped too narrowly to save it. Root cause was
+testing run_world() but never main(). Fixed, with an end-to-end test added.
+
+Not licensed: any resonance or CAS-specific claim, any P8P9 claim, anything beyond these
+synthetic worlds, or any merge into CMB-R1. Next step is a third-party audit.
+
+
 ## 2026-09-01 - CMB-P0 multi-chain phase bench: PHASE_MEMORY_UNSAFE (AWS GPU, $0.0241)
 
 Owner-authorized side bench. Asked whether phase-coded two-state memory separates
