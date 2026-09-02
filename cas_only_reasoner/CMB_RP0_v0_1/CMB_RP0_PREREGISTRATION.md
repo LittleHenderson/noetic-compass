@@ -666,3 +666,74 @@ Enforced: `require_cuda()` raises `GPU_REQUIRED` and **no CPU fallback branch ex
 harness**. The launcher additionally aborts before any harness work if CUDA is unavailable on
 the instance. Binding cost stop is the in-instance timer at 40 min = **`$0.351`**, inside the
 frozen `$0.40`.
+
+---
+
+# AMENDMENT A5 — the A3.3 repair handed one arm a SAFETY ORACLE (2026-09-02, pre-launch)
+
+Found in the end-to-end pre-flight on dev worlds 750-751, before spending anything.
+
+## What the pre-flight showed
+
+```
+arm                  poison ingested (dev worlds 750-751, POISONED)
+CLASS_BALANCED                 0.00      <-- every other arm: 4.6 to 9.5
+SEMANTIC_DIVERSE               9.50
+RANDOM                         7.90
+DEGREE_FILTER                  6.30
+CMB_RETRIEVED                  6.50
+CMB_AUTHORIZED                 6.00
+```
+
+**Zero is not a property of class-balanced replay. It is a privilege I handed the arm.**
+
+## Why it happened
+
+The A3.3 repair moved `CLASS_BALANCED` off the replay pool and onto the true past
+**training stream**, to stop the "ceiling" arm ingesting 16 of 32 forgeries. The training
+stream excludes forgeries by construction. So the repair silently gave that one arm a
+**poison-free pool that no other arm gets** — a safety oracle.
+
+A deployable label-balanced replay method cannot tell a forgery from a memory. It reads the
+label stored on each item and balances. Forgeries carry a *wrong* label, so a real
+label-balanced method **would** be fooled — which is exactly what the reviewer's original
+`16/32` measurement was showing. That number was a **finding**, not a defect.
+
+**The repair for A3.3 manufactured the next problem.** That is how three of the four earlier
+shortcuts in this lane were born, and it is the specific failure mode the design review warned
+to expect a fifth instance of.
+
+## Scope of the damage, measured honestly
+
+The **gating conditions were not corrupted**, and this is worth stating precisely rather than
+overstating the error:
+
+- The capability status compares arms on **CLEAN** worlds only, where there is no poison, and
+  in CLEAN worlds the training stream and the replay pool are the **identical index set**. So
+  the owner's `beats_CLASS_BALANCED` condition was always a fair comparison.
+- `CLASS_BALANCED` was never in `MECHANISM_FREE`, so its zero never gated the safety status.
+
+What *was* wrong is the **reporting**: the POISONED table carried a row reading
+`CLASS_BALANCED 0.00 poison`, which an auditor would reasonably read as *"simple class-balanced
+replay is immune to poisoning."* That is false, and it is false in the direction that makes the
+mechanism look worse than a competitor it was never actually beaten by.
+
+## The fix — two arms, because one cannot honestly play both roles
+
+| arm | pool | role |
+|---|---|---|
+| `CLASS_BALANCED` | true past **training stream** (poison-free) | **capability** competitor only, per the owner's ruling. Its POISONED row is **not** a safety result. |
+| `CLASS_BALANCED_POOL` | the **same replay pool as every other arm**, balanced on the label **stored** on each memory | the **fair safety competitor**. Forgeries carry a wrong label, are eligible, and it gets fooled — as a deployable method would. |
+
+`CLASS_BALANCED_POOL` is added to `MECHANISM_FREE`, so it now gates **both** the safety status
+and the builder's capability status. The owner's `REQUIRED_BEAT` is unchanged — it names
+`CLASS_BALANCED`, and that comparison was and remains fair.
+
+Cost: two extra training runs per world-condition, roughly 14 s per world.
+
+## Registered consequence
+
+The bench now answers the owner's question — *"can CMB select a small replay set that preserves
+old learning better than simple balanced replay, while admitting fewer forged memories?"* —
+against a label-balanced competitor that is **exposed to the same forgeries the mechanism is**.
+Without this arm, the safety half had no fair balanced comparison at all.

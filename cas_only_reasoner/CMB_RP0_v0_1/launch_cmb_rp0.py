@@ -34,7 +34,7 @@ RATE_PER_HOUR = 0.526
 
 HARD_CAP_USD = 0.40
 CAP_MIN = HARD_CAP_USD / RATE_PER_HOUR * 60          # 91.3 min of billable runtime
-IN_INSTANCE_HARD_MIN = 40                            # stop 3
+IN_INSTANCE_HARD_MIN = 43                            # stop 3
 WATCHDOG_MIN = 45                                    # stop 4
 RUN_ID = None                                        # set from argv or clock at launch
 FILES = ("run_cmb_rp0.py", "cmb_r1_core.py", "cmb_r1_v02_core.py")
@@ -77,6 +77,10 @@ def user_data(run_id):
 exec > >(tee -a /var/log/cmbrp0.log) 2>&1
 trap 'aws s3 cp /var/log/cmbrp0.log s3://{BUCKET}/{PREFIX}/{run_id}/console.log --region {REGION} || true; shutdown -h now' EXIT
 ( sleep {IN_INSTANCE_HARD_MIN * 60}; echo "IN_INSTANCE_HARD_TIMER"; shutdown -h now ) &
+# The raw file was previously uploaded only AFTER the harness returned, so any timeout or
+# crash destroyed every world that had already finished. The harness flushes it after each
+# world; this syncs that flush to S3 every 3 minutes, so a kill costs at most one world.
+( while true; do sleep 180;     aws s3 cp /opt/cmbrp0/CMB_RP0_RAW.json s3://{BUCKET}/{PREFIX}/{run_id}/CMB_RP0_RAW.json --region {REGION} 2>/dev/null || true;   done ) &
 
 set -x
 mkdir -p /opt/cmbrp0 && cd /opt/cmbrp0

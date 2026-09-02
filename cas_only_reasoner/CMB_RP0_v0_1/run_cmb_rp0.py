@@ -53,7 +53,14 @@ VERSION = "cmb_rp0_v0.2"
 WORLDS = tuple(range(700, 709))
 LEGACY = {20260901 + 1000 * w for w in list(range(0, 20)) + list(range(500, 512))}
 SEEDS = (0, 1)              # within-world seed sd 0.007-0.033 vs between-world 0.108 (A3.5)
-N_DRAWS = 5                 # replay draws per stochastic arm per world (B4)
+N_DRAWS = 3                 # replay draws per stochastic arm per world (B4)
+# 3, not the reviewer's 5, and the reason is measured rather than asserted. A world pair costs
+# 194.2 s at 5 draws, 161.5 s at 3, 130.4 s at 2 on the 4070; times the 1.4x T4 host penalty,
+# nine worlds plus boot come to 45.8 / 38.9 / 32.4 min, i.e. $0.401 / $0.341 / $0.284. Five
+# draws BREACHES the frozen $0.40 ceiling. Three is defensible on the review's own variance
+# decomposition: within-world sd is 0.0066-0.0328 against a between-world sd of 0.108, so
+# averaging 3 draws x 2 seeds already puts the within-world residual far below the term that
+# actually limits the test. Worlds buy power here; draws do not.
 N_TASKS = 3
 REPLAY_K = 32
 STEPS = 300
@@ -75,13 +82,17 @@ QUERIES_PER = 8
 # ID_ORDER is registered permanently: it is the zero-information rule that reproduced the
 # "ceiling" exactly before the A3.1 repair (32/32 set overlap at both task steps).
 ARMS = ("NO_REPLAY", "ID_ORDER", "RANDOM", "SEMANTIC_DIVERSE", "SEMANTIC_TO_NEW",
-        "DEGREE_FILTER", "CMB_AUTHORIZED", "CMB_RETRIEVED", "CLASS_BALANCED")
+        "DEGREE_FILTER", "CMB_AUTHORIZED", "CMB_RETRIEVED",
+        "CLASS_BALANCED", "CLASS_BALANCED_POOL")
 STOCHASTIC = ("RANDOM", "DEGREE_FILTER")
-MECHANISM_FREE = ("ID_ORDER", "RANDOM", "SEMANTIC_DIVERSE", "SEMANTIC_TO_NEW", "DEGREE_FILTER")
+# CLASS_BALANCED_POOL is mechanism-free (it reads only the label stored on each memory) and
+# is the FAIR safety competitor -- see A5.
+MECHANISM_FREE = ("ID_ORDER", "RANDOM", "SEMANTIC_DIVERSE", "SEMANTIC_TO_NEW", "DEGREE_FILTER",
+                  "CLASS_BALANCED_POOL")
 ARM_SEED = {a: i for i, a in enumerate(ARMS)}       # NOT hash(): hash() is per-process (B7)
 FROZEN_NAMES = ("N_TASKS", "REPLAY_K", "STEPS", "BATCH", "HIDDEN", "LR", "MARGIN",
                 "POISON_MARGIN", "PRESERVE_FRAC", "LEARN_FLOOR", "WIN_FRACTION",
-                "N_PERM", "N_DRAWS",
+                "N_PERM", "N_DRAWS", "REQUIRED_BEAT", "MECHANISM_FREE", "STOCHASTIC",
                 "POISON_PER_PAST_TOPIC", "QUERIES_PER")
 
 DEV = None
@@ -262,7 +273,7 @@ def _select(arm, W, t, past, draw):
                         pool.append(j)
         sel = torch.tensor(pool[:REPLAY_K], dtype=torch.long, device=DEV)
 
-    elif arm == "CLASS_BALANCED":
+    elif arm in ("CLASS_BALANCED", "CLASS_BALANCED_POOL"):
         # RENAMED from ORACLE_BALANCED (A3.1). It uses only labels already stored on the
         # memories, so it is a DEPLOYABLE ONE-LINE METHOD, not an oracle, and the mechanism is
         # required to beat it. A3.3: built from the TRUE past training indices only -- drawing
@@ -273,10 +284,26 @@ def _select(arm, W, t, past, draw):
         # first left this arm 21-25 of 32 identical to ID_ORDER even after the order shuffle,
         # because both then prefer early-in-order items. Class BALANCE is the mechanism; WHICH
         # member is drawn must not be an order artefact.
+        # A5. TWO arms, because one cannot honestly play both roles:
+        #   CLASS_BALANCED       draws from the true past TRAINING stream -- poison-free by
+        #                        construction. CAPABILITY competitor only. In CLEAN worlds this
+        #                        pool is IDENTICAL to everyone else's, so the capability
+        #                        comparison the owner requires is fair. Its POISONED row is NOT
+        #                        a safety result and must never be read as one.
+        #   CLASS_BALANCED_POOL  draws from the SAME replay pool as every other arm, balancing
+        #                        on the label STORED on each memory. Forgeries carry a wrong
+        #                        label, so they are eligible and it gets fooled -- which is what
+        #                        a deployable label-balanced method actually does. This is the
+        #                        FAIR safety competitor.
+        # The A3.3 repair moved this arm to the training stream to stop the "ceiling" ingesting
+        # 16 of 32 forgeries. That fixed the reference row and quietly handed the arm a
+        # poison-free pool, i.e. a safety oracle -- the repair manufacturing the next problem,
+        # which is how three of the four earlier shortcuts in this lane were born.
+        source = torch.cat(W["idx"][:t]).tolist() if arm == "CLASS_BALANCED" else past.tolist()
         byc = {}
-        for i in torch.cat(W["idx"][:t]).tolist():
+        for i in source:
             byc.setdefault(int(Y[i]), []).append(i)
-        cbr = random.Random(51000 + W["world"] * 17 + t)
+        cbr = random.Random(51000 + W["world"] * 17 + t + (7 if arm.endswith("POOL") else 0))
         for c in byc:
             cbr.shuffle(byc[c])
         out, r = [], 0
@@ -455,6 +482,9 @@ def summarize(clean, poisoned):
 
     # ---- safety (A3.2: the registered section-11 falsifier is now EXECUTABLE) ----
     pi, fp = saf["poison_ingested"], saf["forgetting_under_poison"]
+    # CLASS_BALANCED is EXCLUDED from every safety comparison: its pool is poison-free by
+    # construction (A5). CLASS_BALANCED_POOL is the fair label-balanced safety competitor and
+    # IS in MECHANISM_FREE.
     two_tier_gap = pi["CMB_RETRIEVED"] - pi["CMB_AUTHORIZED"]
     best_base = min(pi[b] for b in MECHANISM_FREE)
     best_base_arm = min(MECHANISM_FREE, key=lambda b: pi[b])
