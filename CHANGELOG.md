@@ -4,6 +4,36 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - CPB-0 DO_NOT_BUILD at $0; the question itself was malformed
+
+Second design retired at zero cost in a row. This one is not "designed badly" - the corpus lacks
+the structure the question presupposes.
+
+**The impossibility, measured over three probe worlds.** A payload rule is useful only if it
+catches all 36 forgeries and kills 0 honest corroborations. Nothing does, not even the oracle:
+`f(topic)` catches 10/36 because the exact-copy forgery inherits the host's payload; per-memory
+random catches 36 and kills 60 of 60; hand-written ground truth catches 36 and still kills 35.
+Three cases, exhaustive - copied field, fresh field, or the label itself. There is no fourth.
+
+**The sixth shortcut.** Four of six registered statuses were selectable by one line in the corpus
+generator, and no gate constrained it - `GATE_LEGIT_CORROBORATION_EXISTS` measures the unrepaired
+verifier, which never reads payload, so it passes in every regime.
+
+**Both cheap competitors are dead.** `coherence()` never reads the semantic vector, so an
+exact-duplicate check dies at attacker cost zero. `ROOT_NOVELTY` is an insertion-order oracle.
+
+**What actually matters:** a trajectory-only duplicate check kills the attack *and* takes
+legitimate corroboration from 444 to 0 - because legitimate corroboration in this corpus IS an
+exact trajectory copy. The attack and honest corroboration are the same object in every field the
+verifier reads. Corroboration here is content duplication, and treating content duplication as
+independent evidence is the defect.
+
+**What I got wrong:** I proposed the payload framing and predicted a one-line fix. Both wrong in
+the same direction - I assumed the missing thing was a check when the missing thing is a
+representation.
+
+Not redesigned. A cheap mitigation exists and is recorded as a mitigation, never a repair.
+
 ## 2026-09-02 - CMB-RP1 DO_NOT_BUILD at $0; the diagnostic is withdrawn
 
 The design was authorized, preregistered, attacked by six lanes the same day, and retired before
