@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "scope": "PRODUCTION_DEPLOYMENT",
+  "_scope_note": "This manifest describes PRODUCTION DEPLOYMENT ONLY. It is deliberately NOT a statement about development benches. CMB-RP0 DID place retrieved memories into training -- that is recorded separately as development_memory_feeds_training=true in CMB_RP0_v0_1/DEVELOPMENT_MEMORY_TRAINING_NOTE.md. The trigger reads only the production flags below, so its dormancy means: the experimental replay bench used memory in training, but no DEPLOYED system currently does.",
+  "deployment_id": "none-no-production-memory-system",
+  "config_digest": "7ed21667ba2beea7e47c170e6e8f231a96d356210005fcde2780f722afc641bf",
+  "declared_owner": "Little Henderson (owner)",
+  "timestamp": "2026-09-02T00:00:00Z",
+  "source_commit": "0d9dbbd43feafaf74a5b313640bc7e869d46d730",
+  "derivation": "declared",
+  "_derivation_note": "OWNER TARGET STATE: production_memory_feeds_training should be DERIVED FROM THE PIPELINE CONFIGURATION, not hand-declared. It is 'declared' today because no production pipeline exists to derive it from. When one does, set derivation to 'derived_from_pipeline_config' and compute the flag from that config.",
+  "production_memory_feeds_training": false,
+  "production_untrusted_write_path": false,
+  "production_observable_thresholds": false,
+  "n_memories": 0,
+  "writes_per_day": 0
+}

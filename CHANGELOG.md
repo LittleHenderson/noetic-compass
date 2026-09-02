@@ -4,6 +4,48 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - Trigger repaired under owner ruling: four fixes, and a correction to my own wording
+
+**Concept approved, implementation needed four authority/logic fixes.** All applied, and the
+self-test now covers 16 scenarios, all passing.
+
+**My wording withdrawn.** I wrote that the admission headline "is a count, not a mean, so it is
+not power-limited at all." Too absolute. The counts are exact (`119 -> 0`), but any claim about
+future unseen attacks is sample-limited. Rule-of-three 95% upper bounds: `0/119` -> ~2.52%,
+`0/3794` -> ~0.08%, `0/358` -> ~0.84%. Corrected to: **the registered attack set was blocked
+completely; generalization beyond it remains sample-limited.** "Not a mean" is not "not
+sample-limited", and I had run the two together.
+
+**Bench scope bound to the rename.** The status now emits
+`status_scope = RGM-0.2_SYNTHETIC_BENCHMARK_FAMILIES` and
+`universal_geometry_superiority = false`. "Only" means *among the five families tested*.
+
+**Fix A - direction-free separability.** This was a **documentation** defect, not a code one:
+the code always computed `max(AUC, 1-AUC)`, but the spec sentence said "AUC < 0.65", which would
+read an AUC of `0.10` - excellent *reverse*-direction separation - as an alarm.
+
+**Fix B - T3 had no authority**, appearing in the condition list and in no decision path. Now on
+an explicit ladder where scale escalates `NECESSARY` to `URGENT`. The self-test then exposed a
+*second* T3 bug: it read the memory count from the corpus and discarded the manifest, so an
+80-memory sample overrode a declared 50,000-memory deployment. Corpus is a sample, manifest
+declares the deployment, larger wins.
+
+**Fix C - unknown must stop the machinery.** Exit codes `0` / `10` / `20` / `30`; every nonzero
+code blocks a memory-to-training job. If `T5` itself is unknown the state is `WATCH_UNRESOLVED`,
+not `DORMANT`.
+
+**Fix D - flag authority.** Production-scoped flags inside an exact-schema manifest with owner
+attribution and a config digest. A missing or malformed manifest yields `UNKNOWN`, never
+`False`.
+
+**Honesty fix the owner caught:** CMB-RP0 literally put retrieved memories into training, so a
+flat `memory_feeds_training: false` was misleading. Recorded separately as
+`development_memory_feeds_training = true`. The dormancy now reads honestly: the experimental
+bench used memory in training; no deployed system does.
+
+No periodic daemon - event-driven and mandatory at seven named events. CMB-RP0 is not
+retrofitted. **CMB-RP1 may not launch unless the trigger is clear or the defence is built.**
+
 ## 2026-09-02 - Owner rulings: 12 worlds accepted, geometry status renamed, structural-forgery trigger armed
 
 **12 worlds accepted with the caveat.** The caveat is now a permanent rider on RGM-0.2: the two

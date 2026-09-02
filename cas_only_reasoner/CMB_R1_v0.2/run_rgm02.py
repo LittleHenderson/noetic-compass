@@ -246,6 +246,11 @@ def summarize(worlds):
     return {"echo": echo, "geometry_by_family": geo, "geometry_drop_one": drop_one,
             "mechanism_free_gate": gate, "status": status, "reason": reason,
             "generic_geometry_status": geo_status,
+            # Owner ruling 2026-09-02: the rename is ratified but MUST REMAIN BENCH-SCOPED.
+            # "only" means "among the five RGM-0.2 families tested"; it must never be read as
+            # "CAS geometry can only ever help those two functions anywhere".
+            "status_scope": "RGM-0.2_SYNTHETIC_BENCHMARK_FAMILIES",
+            "universal_geometry_superiority": False,
             "generic_geometry_status_legacy_name": (
                 "GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED"
                 if drop_one["authorized_mrr"]["survives_drop_one"]

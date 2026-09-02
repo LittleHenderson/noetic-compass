@@ -1,7 +1,8 @@
 # DEFERRED BUILD + TRIGGER — defence against STRUCTURAL forgery
 
 **Status:** `DEFERRED — NOT BUILT — NOT AUTHORIZED`
-**Registered:** 2026-09-02, on owner instruction, after the CMB-RP0 lane closed.
+**Registered:** 2026-09-02. **Owner ruling 2026-09-02 applied — Fixes A, B, C, D.**
+**Self-validated:** `validate_trigger.py` — **16 scenarios, all PASS**.
 **Trigger state:** run `check_structural_trigger.py`. Do not trust this file's prose for the
 current state — the script reads the actual conditions.
 
@@ -21,8 +22,8 @@ the other does not:
 **The two-tier verifier detects semantic contradiction. It does not detect structural anomaly.**
 
 **The uncovered case is a forgery that is BOTH semantically consistent AND structurally normal.**
-Neither measured defence sees it. Nothing in this program has tested that case, and nothing here
-claims it is reachable or unreachable — only that it is **not covered**.
+Neither measured defence sees it. Nothing here claims that case is reachable or unreachable —
+only that it is **not covered**.
 
 ## 2. Why this was deferred rather than built
 
@@ -35,7 +36,7 @@ those conditions are what this trigger watches.
 
 ## 3. THE TRIGGER
 
-### Automatic conditions — computed from a corpus, not judged
+### Automatic conditions — computed, not judged
 
 **`T1` BAND COLLISION.** RGM-0.2 §6 disclosed that the contradiction band `[0.80, 0.99)` is
 calibrated on a corpus where the legitimate and forgery populations **do not overlap at all**:
@@ -45,49 +46,79 @@ near-duplicates at `0.85` would collide, and the verifier would start blocking *
 > **Fires when:** more than `0.5%` of legitimate memory pairs have trajectory similarity in
 > `[0.80, 0.99)`.
 
-**`T2` STRUCTURAL SIGNAL LOST.** CMB-RP0 measured that a degree filter beats the verifier on
-bulk forgery because a one-item forgery is low-degree (`4.89` against `6.67`). That cheap
-defence is a property of *this* attack, not a general fact. An attacker who matches degree, or
-bulk forgeries that accumulate links over time, erases it — and **the verifier does not cover
-what the degree filter was covering.**
+**`T2` STRUCTURAL SIGNAL LOST — DIRECTION-FREE (Fix A).** CMB-RP0 measured that a degree filter
+beats the verifier on bulk forgery because a one-item forgery is low-degree (`4.89` against
+`6.67`). That is a property of *that* attack, not a general fact.
 
-> **Fires when:** a single-threshold degree classifier separates known forgeries from real
-> memories at `AUC < 0.65`.
+> **Separability** = `max(AUC, 1 − AUC)`. `0.50` = none; `1.00` = perfect **in either direction**.
+> **Fires when:** separability `< 0.65`.
 
-**`T3` SCALE PAST REVIEW.** Individual review of writes stops being possible.
+Direction matters, and the original specification sentence hid it. An `AUC` of `0.10` is
+*excellent* reverse-direction separation — forgeries as hubs rather than isolates — and a rule
+written "`AUC < 0.65`" would have raised an alarm on a perfectly healthy signal. **The code
+always computed `max(AUC, 1−AUC)`; the specification sentence was the defect.** The checker now
+prints separability first so the ambiguity cannot recur, and the self-test includes a
+reverse-direction corpus.
 
-> **Fires when:** the store exceeds `10,000` memories, or `500` writes/day. (Owner-adjustable.)
+**`T3` SCALE PAST REVIEW.** Individual review of writes stops being credible.
 
-### Declared conditions — facts about deployment, owner-set
+> **Fires when:** `> 10,000` memories, or `> 500` writes/day.
+> **Scale is read from BOTH the corpus and the manifest, and the LARGER wins.** A supplied
+> corpus is a *sample*; the manifest declares the *deployment*. Reading only the corpus let an
+> 80-memory synthetic sample override a declared 50,000-memory deployment, so `T3` could not
+> fire in the one case it exists for — found by the self-test, not by reading.
 
-**`T4` UNTRUSTED WRITE PATH.** Any memory write that is not first-party and reviewed —
-external ingestion, multiple users, or agent-authored memories.
+### Declared conditions — production facts, from an authoritative manifest (Fix D)
 
-**`T5` MEMORY FEEDS TRAINING.** Memory contents enter fine-tuning or replay rather than only
-display. **This is the axis that converts a retrieval mistake into a weights mistake**, and it
-is the entire reason CMB-RP0 was built: a wrong memory shown to a user can be dismissed; a
-forgery in a training batch is written into the weights and cannot be taken back.
+**`T4` PRODUCTION UNTRUSTED WRITE PATH** · **`T5` PRODUCTION MEMORY FEEDS TRAINING** ·
+**`T6` PRODUCTION OBSERVABLE THRESHOLDS**
 
-**`T6` OBSERVABLE THRESHOLDS.** A party who can write memories can observe or infer the
-verifier's thresholds — which is what makes the adaptive attack cheap rather than expensive.
+`T5` is the axis that converts a retrieval mistake into a **weights** mistake, and it is the
+whole reason CMB-RP0 existed: a wrong memory shown to a user can be dismissed; a forgery in a
+training batch is written into the weights and cannot be taken back.
 
-### FIRING RULE
+**These are PRODUCTION-scoped, and they are not ordinary editable booleans.** They must arrive
+inside `deployment_manifest.json`, carrying every one of:
 
 ```
-NECESSARY   T5 AND (T1 OR T2)
-              memory feeds training, AND one of the two defences has lost its footing
-
-URGENT      NECESSARY AND (T4 OR T6)
-              ... and there is an actual adversary write-path
-
-WATCH       any single condition met, firing rule not yet satisfied
-
-DORMANT     nothing met
+schema_version   scope   deployment_id   config_digest
+declared_owner   timestamp   source_commit   derivation
 ```
 
-**Unknown is not "no".** Any condition the checker cannot evaluate is reported `UNKNOWN`, and an
-`UNKNOWN` on `T1` or `T2` while `T5` holds escalates to `WATCH_UNRESOLVED`, which requires a
-human decision rather than passing silently. This program has been burned by silent passes.
+**A missing, malformed, mis-scoped, or non-boolean manifest yields `UNKNOWN`, never `False`.**
+A deleted or corrupted file must not read as "everything is safe".
+
+`derivation` is `declared` or `derived_from_pipeline_config`. **Owner target state:
+`production_memory_feeds_training` should be DERIVED from the pipeline configuration, not
+hand-declared.** It is `declared` today only because no production pipeline exists to derive it
+from.
+
+**Why production scope is explicit:** CMB-RP0 *did* place retrieved memories into training.
+That is recorded separately as `development_memory_feeds_training = true` in
+`CMB_RP0_v0_1/DEVELOPMENT_MEMORY_TRAINING_NOTE.md`. So the trigger's dormancy is honest and says
+exactly this: **the experimental replay bench used memory in training, but no deployed system
+currently does.**
+
+### THE STATE LADDER (Fix B) and EXIT CODES (Fix C)
+
+```
+DORMANT            not T5                                             exit  0
+CLEAR              T5, both defences measured healthy, no raiser      exit  0
+WATCH              T5, defences healthy, and any of T3 / T4 / T6      exit  0
+WATCH_UNRESOLVED   T5 unknown, OR T5 and (T1 or T2) unknown           exit 10   BLOCKS
+NECESSARY          T5 and (T1 or T2)                                  exit 20   BLOCKS
+URGENT             NECESSARY and (T3 or T4 or T6)                     exit 30   BLOCKS
+```
+
+**For any memory-to-training job, EVERY NONZERO CODE BLOCKS LAUNCH.**
+
+`T3` now has real authority: scale cannot by itself prove the defences have failed, but it makes
+manual review less credible and **escalates `NECESSARY` to `URGENT`**. Previously it appeared in
+the condition list and in **no** decision path — decorative.
+
+**`UNKNOWN` IS NOT `NO`, and it now stops the machinery rather than printing a warning.** If
+`T5` itself cannot be established, the state is `WATCH_UNRESOLVED`, not `DORMANT` — we may not
+conclude "memory does not feed training" from an absent manifest.
 
 ## 4. What gets built when it fires — scope, NOT authorization
 
@@ -101,33 +132,60 @@ preregistration, its own mechanism-free baselines, and its own owner authorizati
 3. **An adaptive attacker that matches degree**, because the whole point is the case where the
    cheap statistic has stopped working.
 4. **A joint evaluation**: the forgery that is semantically consistent AND structurally normal.
-   If neither defence nor their combination catches it, that is the honest finding, and it must
-   be reportable as such.
+   If neither defence nor their combination catches it, that is the honest finding.
 
 **Known trap, recorded in advance:** the combination will be tempting to report as "defence in
 depth" the moment it beats either component alone. It is not, unless it beats **the best
-mechanism-free competitor on both axes at once** — the standing rule that a win by mechanism M
-is uninterpretable until it beats the cheapest method without M.
+mechanism-free competitor on both axes at once**.
 
-## 5. How the trigger actually fires
+## 5. How the trigger fires — EVENT-DRIVEN, not polled
 
-Honest about the mechanism, because a note nobody reads is not a trigger:
+Owner ruling: **no periodic daemon yet.** A weekly job would currently wake, read
+`production_memory_feeds_training = false`, and reprint `DORMANT`. That is ceremony, not
+protection.
 
-1. **`docs/CAS_HARNESS_SPEC_SHEET.md` carries a row pointing here.** `CLAUDE.md` mandates
-   reading that sheet **before any CAS Harness work**, so any agent starting harness work meets
-   this record.
-2. **`check_structural_trigger.py` evaluates the conditions.** Run it against a corpus and a
-   declared-flags file; it prints the state and exits non-zero on `NECESSARY` or `URGENT` so it
-   can gate a pipeline.
-3. **It is a checkpoint, not a daemon.** Nothing here polls. If the owner wants a periodic
-   check, that is a scheduled task and is the owner's to authorize — it has not been created.
+**This check is MANDATORY at these events:**
 
-## 6. What this record does NOT do
+```
+before any replay-training job
+before memory-to-training is enabled
+after verifier thresholds change
+after memory schema changes
+after the write path becomes untrusted
+after every registered corpus snapshot
+after a major memory-volume threshold is crossed
+```
+
+```bash
+python check_structural_trigger.py --corpus <snapshot.json> --job <event-label>
+```
+
+Nonzero exit blocks the job. `--job` labels the invoking event in the log.
+
+**Backstop, deferred:** once a real deployment sets `production_memory_feeds_training = true`,
+add a weekly remote scheduled run. **Not created — owner's to authorize.**
+
+## 6. Relationship to CMB-RP0 and CMB-RP1
+
+**CMB-RP0 is NOT retrofitted.** It ran and completed under its own frozen protocol, and applying
+this trigger to it retroactively would change an experiment after launch. Its result stands
+exactly as recorded: `TWO_TIER_GATE_EARNS_NOTHING` / `NOT_PROMOTABLE`.
+
+**This trigger governs successor work and real deployment.**
+
+> **`CMB-RP1` MAY NOT LAUNCH** unless this trigger returns a clear state, **or** the structural
+> defence it demands has been implemented and independently audited.
+
+## 7. What this record does NOT do
 
 - It does **not** license building the structural defence.
 - It does **not** claim the uncovered case is reachable, or that any real system faces it.
 - It does **not** change any status. RGM-0.2 stands at `ADMISSION_SAFETY_REPAIRED`; CMB-RP0
   stands at `TWO_TIER_GATE_EARNS_NOTHING` / `NOT_PROMOTABLE`.
+- It is a **smoke alarm**. It does not stop structural forgery. It says: *the current
+  contradiction and degree defences are no longer enough — build or enable the stronger defence
+  before memory is allowed to train the model.*
 
 Provenance: `cas_only_reasoner/CMB_RP0_v0_1/CMB_RP0_FINDINGS.md` §13,
-`cas_only_reasoner/CMB_R1_v0.2/RGM02_FINDINGS.md` §10, GLM audit finding 3.
+`cas_only_reasoner/CMB_R1_v0.2/RGM02_FINDINGS.md` §10, GLM audit finding 3, owner ruling
+2026-09-02 (Fixes A–D).

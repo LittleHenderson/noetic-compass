@@ -235,11 +235,35 @@ caveat is a permanent rider on this result and travels with every quotation of i
 > RGM-0.2 ran on **12 worlds**, not the >=20 prescribed. The two winning families
 > (`PATTERN_COMPLETION` +0.4108, `INDEPENDENT_CORROB` +0.3190) are **12/12 and unambiguous at
 > this sample size**. The three losing families (-0.0117, -0.0251, -0.0133) are **small and
-> noise-limited**, and 12 worlds cannot establish their magnitude. The admission-safety result
-> (119 -> 0 false authorizations) is a **count**, not a mean, and is not power-limited.
+> noise-limited**, and 12 worlds cannot establish their magnitude.
+>
+> **The admission-safety result is EXACT ON THE REGISTERED ATTACK SET, and generalization
+> beyond that set remains sample-limited.**
 
-So the caveat binds the *geometry* comparison, not the *admission-safety* headline. The
-admission result is the one that carries the lane, and it is a count.
+### Correction — my earlier wording was too absolute
+
+I wrote that the admission headline *"is a count, not a mean, so it is not power-limited at
+all."* **The owner is right that this overreaches, and it is withdrawn.**
+
+The observed counts are exact and are not estimates: `119` registered near-miss forgeries
+admitted before, `0` after. But any statement about *future, unseen* attacks is still limited by
+how many were tested. A rough 95% rule-of-three reading (`3/n`, assuming sufficiently
+independent cases) gives:
+
+| observed | rough 95% upper bound on the unseen rate |
+|---|---|
+| `0` failures among `119` registered attacks | **~2.5%** |
+| `0` collateral blocks among `3794` legitimate comparisons | **~0.08%** |
+| `0` legitimate memories lost among `358` authorized | **~0.84%** |
+
+So the correct sentence is:
+
+> **The registered attack set was blocked completely. Generalization beyond that attack set
+> remains sample-limited.**
+
+That preserves the real achievement without turning `119` tests into infinity. What the count
+*does* avoid is the between-world variance problem that limits the geometry comparison — but
+"not a mean" is not the same as "not sample-limited", and I had run the two together.
 
 ### Finding 2: RENAME RATIFIED
 
@@ -247,6 +271,18 @@ admission result is the one that carries the lane, and it is a count.
 GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED     -> CAS_GEOMETRY_HELPS_COMPOSITION_AND_CORROBORATION_ONLY
 GENERIC_GEOMETRY_ADVANTAGE_NOT_SUPPORTED -> CAS_GEOMETRY_NO_ADVANTAGE_OVER_GENERIC_CONTROL
 ```
+
+**BENCH-SCOPED (owner ruling 2026-09-02).** The status is now emitted with two companion
+fields, so the word *only* cannot be read as a universal claim:
+
+```
+status_scope                    RGM-0.2_SYNTHETIC_BENCHMARK_FAMILIES
+universal_geometry_superiority  false
+```
+
+**`only` means:** among the five RGM-0.2 families tested, a CAS advantage appeared in
+composition and corroboration and nowhere else.
+**`only` does NOT mean:** CAS geometry can only ever help those two functions anywhere.
 
 `run_rgm02.py` emits the new name and additionally emits the old one as
 `generic_geometry_status_legacy_name`, so no historical reference breaks.
