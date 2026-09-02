@@ -136,3 +136,170 @@ expect an attacker to say, registered now so they cannot be presented as novel l
 3. *"`D2` with enough data matches `D4`, so this is a sample-efficiency question dressed as an
    accuracy question."* — probably correct, which is why `SAMPLE_EFFICIENCY_SIGNAL` is a separate
    status and not a component of the main one.
+
+---
+
+# AMENDMENT A1 — OWNER RULING 2026-09-02, seven load-bearing requirements
+
+**v0.1 is committed untouched at `47259705`.** This amendment is dated, attributed, and openly
+attached — the "commit untouched first" rule exists to stop a design being *quietly* rewritten
+to dodge critics, and an owner ruling recorded in the open is the opposite of that.
+
+**Primary outcome changed.** It is **`VERIFIED NEXT-TICK RECOVERY`**, not *"predicted the repair
+label"*. Predicting a label is not repairing anything.
+
+## A1.A — `D5` may be algebraically vacuous. `PROOF_OF_NON_EQUIVARIANCE_REQUIRED`
+
+**The most important risk, and I had missed it entirely.** If the CAS channels are renamed and
+`D5` is *trained from scratch* with symmetric learnable machinery, the model simply relearns the
+permutation. `D4` and `D5` would then be **the same function class under renamed parameters**,
+and the shuffle would prove nothing.
+
+> Changing the labels on the storage drawers, then letting the worker relearn where every drawer
+> is, does not show the labels mattered.
+
+**Registered:** before `D5` is accepted, enumerate the channel permutations and test whether a
+parameter permutation restores the same computation and loss. **If it can, `D5` is demoted to an
+implementation-conformance test** and a valid eval-time corruption replaces it:
+
+```
+train D4 normally, then shuffle source->type at EVALUATION
+keep repair operators fixed, feed the WRONG causal source into each
+freeze the typed read-in BEFORE training
+zero-shot transfer to fault combinations where type meaning cannot be relearned
+```
+
+## A1.B — `D4` must not carry a disguised answer key
+
+`CAS_TYPED_REPAIR` may **not** hard-code `Wisdom low → retrieve`, `resource high → allocate`,
+`policy closed → refuse` and then race an MLP that must *learn* those mappings. That hands CAS
+the repair table and calls the result a finding.
+
+**`D4` receives typed channels and structural constraints. The repair policy is LEARNED, from
+the same examples available to `D2` and `D3`.** A hard-coded rule controller may exist only as
+**`CAS_RULE_ORACLE`** — a ceiling, never the hypothesis arm.
+
+## A1.C — cost-robust construction gold (this replaces my rule, and it is better)
+
+My v0.1 rule — *"if the arm ranking changes across cost functions, emit no status"* — is too
+blunt. It voids a whole study for a property of individual episodes. The owner's rule filters
+**episodes before training**:
+
+```
+1. enumerate all legal repairs
+2. simulate the next tick
+3. drop repairs that fail verification or violate authority
+4. score survivors under ALL THREE frozen cost functions
+5. KEEP the episode only if the same repair is uniquely optimal under all three
+6. otherwise mark COST_SENSITIVE and exclude from the primary set
+```
+
+Arm rankings may then legitimately vary somewhat without voiding the study, because the gold
+itself is cost-invariant by construction. **`COST_SENSITIVE` episodes are retained and reported,
+never deleted** — they are the honest measure of how much of the space is cost-dependent.
+
+## A1.D — `D_SEARCH_MODEL_BASED`: the awkward baseline that must be beaten
+
+The gold is *made* by enumerating repairs and simulating. So the obvious question is: **why learn
+a controller if the machine can just try every legal repair?**
+
+```
+D_SEARCH_MODEL_BASED   enumerate legal repairs at inference, simulate each,
+                       take the cheapest verified one
+```
+
+This is an *oracle* only if the deployed system cannot reach the simulator. **If the search is
+deployable and cheap, a learned controller cannot claim an accuracy win over it** — it must win
+on **latency, compute, number of simulations, or operation under partial information**, and those
+must be measured.
+
+## A1.E — `D_ANON_FACTORIZED`: does factorisation help, or do CAS *meanings* help?
+
+A CAS win might come from **having factors at all**, not from what they mean. So:
+
+```
+D_ANON_FACTORIZED   same channel count, modules, monotonic constraints, parameters and
+                    compute as D4 -- but the factors are ANONYMOUS
+```
+
+The ladder now separates four different questions:
+
+| arm | question it answers |
+|---|---|
+| `D2_GENERIC_FULL_STATE_MLP` | does any structure help? |
+| `D3_GENERIC_MONOTONE` | does *monotone* structure help? |
+| `D_ANON_FACTORIZED` | does *factorisation* help? |
+| `D4_CAS_TYPED_REPAIR` | do the *particular CAS meanings* help? |
+
+**If anonymous factorisation matches CAS, the status is `FACTORIZED_DIAGNOSIS_SUFFICIENT`** — not
+a CAS-typed repair signal.
+
+## A1.F — every practical arm sits behind the SAME hard policy mask
+
+`CJT-OHM-0R` `C9` was reclassified: the exact-zero mask is **governance, not CAS arithmetic**. So
+`D2`, `D3`, `D_ANON_FACTORIZED` and `D4` are **all** placed behind the same external hard
+permission mask.
+
+> The bench must not let the generic arm violate policy and then award CAS a safety victory for
+> owning a Boolean gate.
+
+## A1.G — the trivial-rule gate, widened
+
+`GATE_REPAIR_NOT_TRIVIALLY_RECOVERABLE` now tests **all** of:
+
+```
+largest resistance component      cheapest legal repair          decision tree
+smallest Drive                    most common training repair    nearest neighbour
+first failed D/W/P prerequisite   one-field lookup table         linear classifier
+repair by operating region        two-field lookup table         process of elimination
+repair by previous verifier status                               model-based exhaustive search
+```
+
+**and every small subset of raw fields.** If one field or one simple rule predicts the repair
+nearly perfectly, `D0` is not testing typed diagnosis — **it is testing whether a model can read
+a label disguised as a number.**
+
+## A1.H — required construction shape
+
+Collision groups where **everything immediately visible is identical**:
+
+```
+same g    same alpha    same I_total    same immediate Effect
+                    but
+different underlying causal state    ->    different uniquely successful repair
+```
+
+And the cases must not be one-field mappings. Required combinations include:
+
+```
+low Drive + resource abundance            Wisdom missing + abundant compute
+high Drive + severe context conflict      two simultaneous resistance sources
+previous rejection + newly supplied prerequisite
+policy open in one context, closed in another
+```
+
+## A1.I — three kinds of value, never OR-ed into one status
+
+```
+INFORMATION VALUE       ratio-only fails, full state succeeds
+                        -> conductance alone discards causal information.
+                           THIS IS NOT YET CAS VALUE.
+
+INDUCTIVE-BIAS VALUE    CAS typed learns faster or transfers better than the
+                        full-state generic controls.
+
+GOVERNANCE/TRACE VALUE  arms perform alike, but CAS gives faithful typed reasons,
+                        hard authority compliance and auditable transitions.
+                        -> inspectability, NOT accuracy.
+```
+
+## A1.J — the review must be able to say no
+
+The attack returns **exactly one**:
+
+```
+D0_DESIGN_INVALID:<typed reason>        or        D0_READY_FOR_BUILD_REVIEW
+```
+
+**No automatic build follows either.** In the owner's words: *a design review whose only possible
+answer is "proceed" is a parade, not a gate.*
