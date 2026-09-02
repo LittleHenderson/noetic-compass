@@ -73,22 +73,70 @@ AUTHORIZED   may influence REASONING or LEARNING (replay, weight updates).
 a near-miss that cannot be told from a true match is exactly the case that must not be allowed
 to influence learning.
 
-### Item 3 — the matched generic geometry control is HANDICAPPED
+### Item 3 — keeping the matched control matched under a NEW verifier
 
-`cmb_r1_core.py:490`:
+> **🟥 CORRECTION, 2026-09-02, before any run. MY ORIGINAL CLAIM HERE WAS WRONG.**
+>
+> This section first asserted that the matched generic geometry control was *handicapped*,
+> citing `cmb_r1_core.py:490`:
+> ```python
+> coherence_off = (geo_mode == "generic") or not use_coherence
+> ```
+> **That line does not affect the generic geometry control.** `E2` — the actual matched
+> control — is run through `arm_prop(field="role", ...)` in `cmb_r1_v01_core.py`, whose
+> `coherence` parameter **defaults to `True`**, and whose verifier (lines 133–155) *does*
+> apply the `TAU_COH` check. `PROP_ARMS["E2"]` passes no `coherence` key, so `E2` receives the
+> verifier.
+>
+> The `coherence_off` line reaches only `M_NOISE`, which `run_rgm01.py:92` runs with
+> `use_coherence=False` **deliberately** — it is the relational misinformation control and is
+> *supposed* to have no verifier.
+>
+> **So `GENERIC_GEOMETRY_ADVANTAGE` was measured fairly on this axis in RGM-0.1**, and my own
+> earlier audit said so ("the verifier configuration is no longer silently disabled for it").
+> I contradicted my own audit by reading one line without checking which arm uses that path —
+> the exact error class I have criticised in others. The claim is **withdrawn**; no RGM-0.1
+> status changes because of it.
 
-```python
-coherence_off = (geo_mode == "generic") or not use_coherence
-```
-
-**The generic-geometry control never receives the coherence verifier, while the CAS arm
-does.** So `GENERIC_GEOMETRY_ADVANTAGE` has been comparing *CAS-with-verifier* against
-*generic-without-verifier*. That is not a matched control, and it inflates the CAS advantage
-by an unmeasured amount.
+**What item 3 actually is.** The handicap does not exist in RGM-0.1 — but **it would be
+introduced by my own RGM-0.2 change** if I gave the CAS arm the new two-tier verifier and left
+the control on the old one. That would manufacture precisely the defect I falsely alleged.
 
 **Repair:** the generic control gets the identical verifier, the identical two-tier admission,
 and the identical thresholds. `GENERIC_GEOMETRY_ADVANTAGE` is then **re-measured from
-scratch** and its previous value is superseded, not adjusted.
+scratch** and its previous value is superseded **because the verifier changed for both arms**, not
+because the old measurement was unfair.
+
+### Item 1b — WHICH condition does the work (measured, and it corrected me twice)
+
+I wrote that the **relative margin** is what generalises. Measured, it is not. Ablation over
+20 near-miss queries on 2 dev worlds:
+
+| config | FALSE authorized | TRUE authorized | blocked by |
+|---|---|---|---|
+| *registered attack, false coherence 0.8333, bar 0.90* | | | |
+| all three conditions | 0 | 60 | — |
+| absolute OFF | 0 | 60 | — (relative alone suffices) |
+| relative OFF | 0 | 0 | **consistency** |
+| *adaptive attack, forged at 0.9375 — above the bar AND inside the margin* | | | |
+| all three conditions | **0** | 0 | **consistency** |
+| absolute OFF | 0 | 0 | **consistency** |
+| relative OFF | 0 | 0 | **consistency** |
+
+**The load-bearing condition is (c) consistency — the top cluster must agree with itself.** An
+attacker who knows the thresholds can forge above the absolute bar and inside the relative
+margin; what they cannot do is make a forgery *agree with the truth it is impersonating*,
+because if it agreed it would not be a forgery.
+
+**Disclosed cost, not hidden:** under the adaptive attack the system authorises **nothing** —
+true memories included. It fails **closed**. That is the right trade for a memory system, but
+a flood of near-identical forgeries can deny authorisation to legitimate memories. That is an
+availability cost and it is a registered limitation, not a footnote.
+
+*Also recorded: my first ablation set `delta = 0` to "disable" the relative condition, which
+actually empties the top cluster and disables authorisation entirely — a degenerate control,
+not an ablation. Disabling it properly requires `delta` LARGE. The corrected ablation is the
+one above.*
 
 ### Item 4 — confirm across new independent memory worlds
 

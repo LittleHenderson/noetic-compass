@@ -59,10 +59,27 @@ def verify_two_tier(memories, q, ranked, use_coherence=True, provenance_aware=Tr
                     (c) unambiguous: the top cluster AGREES WITH ITSELF -- corroborating
                                      memories must actually corroborate
 
-    Why (b) is the load-bearing one: an absolute bar alone is gameable by constructing the
-    attack just above it, which is exactly how the near-miss attack defeated TAU_COH = 0.75.
-    (a) is kept as a cheap floor and is NOT claimed to generalise. The ablation in the runner
-    measures which condition is actually doing the work.
+    WHICH CONDITION IS LOAD-BEARING -- MEASURED, and not what I first claimed.
+    Ablation on 20 near-miss queries over 2 dev worlds:
+
+      registered attack (false coherence 0.8333, bar 0.90)
+        both on                   FALSE 0  TRUE 60
+        (a) OFF, (b)+(c) on       FALSE 0  TRUE 60   <- relative alone suffices here
+        (b) OFF, (a)+(c) on       FALSE 0  TRUE  0   <- blocked by (c) consistency
+
+      ADAPTIVE attack, forged at 0.9375 -- ABOVE the absolute bar, and inside the relative
+      margin (gap 0.0625 < DELTA 0.08), so (a) and (b) are BOTH defeated by construction
+        every configuration          FALSE 0  TRUE  0   <- blocked by (c) consistency
+
+    So (c) is the condition that actually holds the line, not (b) as I first wrote. An
+    attacker who knows the thresholds can beat the absolute bar and the relative margin; what
+    they cannot do is make a forgery AGREE with the truth it is impersonating -- if it agreed,
+    it would not be a forgery.
+
+    DISCLOSED COST: under the adaptive attack the system authorises NOTHING -- true memories
+    included (TRUE 0). It fails CLOSED. That is the right trade for a memory system, but it is
+    an availability cost, not a free win, and a flood of near-identical forgeries can deny
+    authorisation to legitimate memories.
     """
     reps, seen = [], set()
     for mid, sc in ranked:
