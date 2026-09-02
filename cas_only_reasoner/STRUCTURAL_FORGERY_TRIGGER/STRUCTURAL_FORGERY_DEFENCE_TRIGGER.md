@@ -289,9 +289,42 @@ source can always skip the call entirely. You cannot stop code from lying about 
 check.**
 
 What it does buy: the correct path is the easy path; a run receipt without a clearance is
-*visibly incomplete* and an auditor can grep for it; and every blocking state provably stops the
-trainer. The residual assurance is **procedural, not technical** — the receipt must carry the
-clearance, and an auditor must check it.
+*visibly incomplete*; and every blocking state provably stops the trainer.
+
+### THE LAST HUMAN PROMISE IS NOW A GREP — `verify_receipt_clearance.py`
+
+The sentence above used to end *"and an auditor must check it"*. GLM's audit of `69695680` named
+that as the weak link: the residue is **detectable only if something looks**. So the looking is
+now mechanical.
+
+```bash
+python verify_receipt_clearance.py <run_receipt.json>     # exit 1 fails the build
+```
+
+It fails a receipt that **has no clearance at all** — the likeliest real failure, a run that
+simply never called the gate — and it fails a clearance that does not re-verify against the
+trigger receipt embedded inside it: state, exit code, manifest digest, scope, job id, and any
+refusal or authority problem the trigger recorded. `validate_receipt_check.py` proves it against
+**ten** receipts: one genuine, nine damaged one specific way each.
+
+```
+genuine receipt from the gate                              exit 0
+NO clearance at all -- the run never called the gate        exit 1
+clearance state edited away from the trigger receipt        exit 1
+manifest digest edited -- does not re-verify                exit 1
+a BLOCKING result bound into a receipt anyway               exit 1
+clearance stripped of its embedded trigger receipt          exit 1
+clearance from a different, unknown gate                    exit 1
+trigger receipt recorded a refusal but was bound anyway     exit 1
+trigger receipt recorded an authority problem, bound anyway exit 1
+job id edited away from the trigger receipt                 exit 1
+```
+
+**What this closes and what it does not.** It closes *"nobody looked"*. It does **not** close *"a
+launcher that controls its own source lied about everything consistently"* — that remains
+impossible in code, and saying otherwise would be the dressed-up green row this lane already
+caught once. What it removes is the far likelier failure: a run that never called the gate, and a
+receipt nobody noticed was incomplete.
 
 **Backstop, deferred:** once a real deployment sets `production_memory_feeds_training = true`,
 add a weekly remote scheduled run. **Not created — owner's to authorize.**

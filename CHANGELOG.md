@@ -4,6 +4,27 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - Interlock audited PASS; the last human promise is now a grep
+
+GLM's sixth audit this session, `$0` total across all six. Both named risk points judged sound:
+the derived-manifest path takes the pipeline config, not a manifest object, so there is no
+manifest-shaped injection parameter anywhere on it; and the residual limit is correctly bounded.
+
+**Its one recommendation is built.** `verify_receipt_clearance.py` is a CI step that fails any
+run receipt lacking a bound clearance - the likeliest real failure being a run that simply never
+called the gate - and any clearance that does not re-verify against the trigger receipt embedded
+in it. `validate_receipt_check.py` proves it on ten receipts: one genuine, nine damaged one
+specific way each, all caught.
+
+Built now rather than "the day the first real training launcher exists", so it is audited before
+it is needed rather than invented under pressure.
+
+**Still not closed, and said so:** a launcher controlling its own source can lie about everything
+consistently. That is impossible in code, and claiming otherwise would be the dressed-up green
+row this lane already caught once.
+
+CMB-RP1: technically unblocked, not authorized.
+
 ## 2026-09-02 - Trigger PASSED; the interlock is built and the trainer provably stops
 
 Owner ruled the trigger itself PASS at `bc9e89df`, with the alarm bench-tested but not yet wired
