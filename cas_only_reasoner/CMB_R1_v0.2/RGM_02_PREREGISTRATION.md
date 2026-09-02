@@ -138,6 +138,45 @@ actually empties the top cluster and disables authorisation entirely — a degen
 not an ablation. Disabling it properly requires `delta` LARGE. The corrected ablation is the
 one above.*
 
+### Item 1c — a defect I INTRODUCED, found on the smoke run and repaired
+
+The first verifier required the top cluster to **agree with itself at >= 0.99**. That
+**destroyed pattern completion outright**: `authorized_empty_rate = 1.000`, D dropped from
+`0.0948` retrieved to `0.0000` authorized. Every pattern-completion query authorised nothing.
+
+**Cause:** the rule conflated two different things. Pattern completion works by combining
+**complementary fragments** that do *not* agree — they **compose**. A bare agreement threshold
+cannot tell composition from contradiction.
+
+**Is the check even needed?** I had never ablated it alone. Measured:
+
+| | consistency ON | consistency OFF |
+|---|---|---|
+| registered near-miss | FALSE 0 | FALSE 0 — relative margin suffices |
+| **adaptive forgery (0.9375)** | **FALSE 0** | **FALSE 20 — forgeries AUTHORIZED** |
+
+So it is **necessary** — it is the only thing stopping an adaptive attacker — and it had to be
+fixed rather than dropped.
+
+**Repair: a CONTRADICTION BAND rather than a bare threshold.**
+
+```
+similarity 1.00              CORROBORATION  identical copies        -> allow
+similarity 0.80 .. 0.99      IMPERSONATION  near-identical, DIFFERENT -> BLOCK
+similarity below 0.80        COMPOSITION    complementary fragments -> allow
+```
+
+Measured on 3794 pattern-completion top-cluster pairs and 108 adaptive-forgery pairs:
+
+| band [0.80, 0.99) | caught |
+|---|---|
+| pattern-completion pairs (collateral) | **0 / 3794 = 0.0000** |
+| forgery pairs (intended) | 54 / 108 — exactly the true-vs-forgery pairs; the other 54 are true-vs-true at 1.00 |
+
+The two populations do not overlap at all: pattern completion occupies 0.33–0.67 and 1.00,
+the forgery sits at 0.9375. **The forgery signature is not "different" — it is "almost the
+same".**
+
 ### Item 4 — confirm across new independent memory worlds
 
 New, disjoint world seeds, and **the five-depth shortcut gate**

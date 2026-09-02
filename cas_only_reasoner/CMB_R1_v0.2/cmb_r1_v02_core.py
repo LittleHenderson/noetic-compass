@@ -39,7 +39,17 @@ VERSION = "rgm_0_2_core_v0.1"
 TAU_FLOOR = 0.60      # absolute floor for RETRIEVED -- its only job is to exclude junk
 TAU_AUTH = 0.90       # absolute bar for AUTHORIZED
 DELTA = 0.08          # RELATIVE margin: the top coherence cluster must clear the rest by this
-CONSISTENCY = 0.99    # members of the top cluster must agree with each other at least this much
+# CONTRADICTION BAND, not a bare threshold. A bare "must agree at >= 0.99" conflates two
+# different things and destroyed pattern completion entirely (authorized_empty_rate 1.000):
+#   CORROBORATION  identical copies, similarity 1.00        -> legitimate, must be allowed
+#   COMPOSITION    complementary fragments, 0.33-0.67        -> legitimate, must be allowed
+#   IMPERSONATION  near-identical but DIFFERENT, 0.80-0.99   -> the forgery signature, block
+# Measured on 3794 pattern-completion top-cluster pairs and 108 adaptive-forgery pairs:
+#   pattern completion in [0.80, 0.99): 0/3794 = 0.0000   (no collateral)
+#   forgery pairs       in [0.80, 0.99): 54/108           (exactly the true-vs-forgery pairs;
+#                                                          the other 54 are true-vs-true at 1.0)
+CONSISTENCY = 0.99          # at or above this, two memories CORROBORATE
+CONTRADICTION_LOW = 0.80    # below this, they COMPOSE; between the two, one impersonates
 MAX_RETRIEVED = 10
 
 
@@ -53,7 +63,8 @@ def coherence(q, m):
 
 def verify_two_tier(memories, q, ranked, use_coherence=True, provenance_aware=True,
                     tau_floor=TAU_FLOOR, tau_auth=TAU_AUTH, delta=DELTA,
-                    consistency=CONSISTENCY):
+                    consistency=CONSISTENCY, contradiction_low=CONTRADICTION_LOW,
+                    use_consistency=True):
     """Two-tier admission.
 
     RETRIEVED  -- passed the absolute floor. May be SHOWN or used as context.
@@ -61,8 +72,11 @@ def verify_two_tier(memories, q, ranked, use_coherence=True, provenance_aware=Tr
                     (a) absolute:   coh >= tau_auth
                     (b) relative:   member of the top coherence cluster, and that cluster is
                                     separated from everything else by >= delta
-                    (c) unambiguous: the top cluster AGREES WITH ITSELF -- corroborating
-                                     memories must actually corroborate
+                    (c) no contradiction: no pair in the top cluster sits in the
+                                     IMPERSONATION band [contradiction_low, consistency).
+                                     Identical copies CORROBORATE and are fine; genuinely
+                                     different fragments COMPOSE and are fine; near-identical
+                                     but different is a forgery and is not.
 
     WHICH CONDITION IS LOAD-BEARING -- MEASURED, and not what I first claimed.
     Ablation on 20 near-miss queries over 2 dev worlds:
@@ -109,13 +123,15 @@ def verify_two_tier(memories, q, ranked, use_coherence=True, provenance_aware=Tr
     # the ONLY thing there. A tie across the whole set with nothing below it is ambiguous.
     cond_rel = bool(rest) or len(top) == len(reps)
     # consistent: every pair in the top cluster agrees. Corroboration means agreement.
-    cond_cons = True
-    for i in range(len(top)):
+    # contradiction, not mere difference: block only the impersonation band
+    cond_cons, n_contra = True, 0
+    for i in range(len(top) if use_consistency else 0):
         for j in range(i + 1, len(top)):
-            if K.traj_sim(memories[top[i]["mid"]]["trajectory"],
-                          memories[top[j]["mid"]]["trajectory"]) < consistency:
+            sim = K.traj_sim(memories[top[i]["mid"]]["trajectory"],
+                             memories[top[j]["mid"]]["trajectory"])
+            if contradiction_low <= sim < consistency:
                 cond_cons = False
-                break
+                n_contra += 1
         if not cond_cons:
             break
 
@@ -123,7 +139,7 @@ def verify_two_tier(memories, q, ranked, use_coherence=True, provenance_aware=Tr
                   if (cond_abs and cond_rel and cond_cons) else [])
     diag = {"best_coh": best, "n_top_cluster": len(top), "n_rest": len(rest),
             "cond_absolute": bool(cond_abs), "cond_relative": bool(cond_rel),
-            "cond_consistent": bool(cond_cons),
+            "cond_consistent": bool(cond_cons), "n_contradicting_pairs": n_contra,
             "runner_up_coh": (max(x["coh"] for x in rest) if rest else None)}
     return retrieved, authorized, diag
 

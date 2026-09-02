@@ -1,0 +1,523 @@
+{
+ "auditor": "a different model, named by the owner",
+ "builder": "Claude",
+ "claim_note": "No CAS-specific or cognition-general claim is licensed. Items 5-6 not built.",
+ "compute": {
+  "device": "cpu",
+  "wall_s": 68.68,
+  "why": "string similarity and small graph algebra; no neural inference, so the GPU-only law does not apply"
+ },
+ "conflict_of_interest": "Claude audited RGM-0/0.1 and built RGM-0.2; see prereg 0",
+ "determinism": {
+  "content_hash": "5b665c692b57c02860b0d147538b1e2a12323cf2826bee2505868d190539cccf"
+ },
+ "frozen_params": {
+  "CONSISTENCY": 0.99,
+  "DELTA": 0.08,
+  "TAU_AUTH": 0.9,
+  "TAU_COH_legacy": 0.75,
+  "TAU_FLOOR": 0.6,
+  "arm_cfg": {
+   "damping": 0.3,
+   "depth": 3,
+   "gamma": 0.5,
+   "mode": "recurrent",
+   "topk": 20
+  },
+  "attacks_per_world": 5
+ },
+ "legacy_seeds_excluded": [
+  20260901,
+  20261901,
+  20262901,
+  20263901,
+  20264901,
+  20265901,
+  20266901,
+  20267901,
+  20268901,
+  20269901,
+  20270901,
+  20271901,
+  20272901,
+  20273901,
+  20274901,
+  20275901,
+  20276901,
+  20277901,
+  20278901,
+  20279901
+ ],
+ "n_worlds": 2,
+ "preregistration": "RGM_02_PREREGISTRATION.md v0.1",
+ "project": "RGM-0.2 admission safety and matched-control repair",
+ "summary": {
+  "echo": {
+   "classic": {
+    "auth_empty": 0,
+    "auth_false": 0,
+    "auth_true": 123,
+    "n": 41,
+    "ret_false": 24,
+    "ret_true": 123,
+    "v01_false": 0,
+    "v01_true": 123
+   },
+   "near_miss": {
+    "auth_empty": 0,
+    "auth_false": 0,
+    "auth_true": 28,
+    "n": 10,
+    "ret_false": 9,
+    "ret_true": 28,
+    "v01_false": 9,
+    "v01_true": 28
+   },
+   "overlap": {
+    "auth_empty": 0,
+    "auth_false": 0,
+    "auth_true": 30,
+    "n": 10,
+    "ret_false": 10,
+    "ret_true": 30,
+    "v01_false": 0,
+    "v01_true": 30
+   }
+  },
+  "escalate_to_owner": false,
+  "generic_geometry_status": "GENERIC_GEOMETRY_ADVANTAGE_NOT_SUPPORTED",
+  "geometry_by_family": {
+   "authorized_mrr": {
+    "CROSS_DOMAIN": {
+     "D": 0.97125,
+     "E": 0.99375,
+     "delta": -0.02250000000000002,
+     "n": 2,
+     "worlds_positive": 0
+    },
+    "INDEPENDENT_CORROB": {
+     "D": 0.9520833333333333,
+     "E": 0.6568840579710145,
+     "delta": 0.29519927536231877,
+     "n": 2,
+     "worlds_positive": 2
+    },
+    "LOOKALIKE": {
+     "D": 0.984375,
+     "E": 0.98125,
+     "delta": 0.003124999999999989,
+     "n": 2,
+     "worlds_positive": 1
+    },
+    "ORDER_MATTERS": {
+     "D": 0.9612499999999999,
+     "E": 1.0,
+     "delta": -0.03875000000000006,
+     "n": 2,
+     "worlds_positive": 0
+    },
+    "PATTERN_COMPLETION": {
+     "D": 0.0,
+     "E": 0.0,
+     "delta": 0.0,
+     "n": 2,
+     "worlds_positive": 0
+    }
+   },
+   "retrieved_mrr": {
+    "CROSS_DOMAIN": {
+     "D": 0.97125,
+     "E": 0.99375,
+     "delta": -0.02250000000000002,
+     "n": 2,
+     "worlds_positive": 0
+    },
+    "INDEPENDENT_CORROB": {
+     "D": 0.9520833333333333,
+     "E": 0.6568840579710145,
+     "delta": 0.29519927536231877,
+     "n": 2,
+     "worlds_positive": 2
+    },
+    "LOOKALIKE": {
+     "D": 0.978125,
+     "E": 0.9650000000000001,
+     "delta": 0.013124999999999942,
+     "n": 2,
+     "worlds_positive": 2
+    },
+    "ORDER_MATTERS": {
+     "D": 0.9612499999999999,
+     "E": 1.0,
+     "delta": -0.03875000000000006,
+     "n": 2,
+     "worlds_positive": 0
+    },
+    "PATTERN_COMPLETION": {
+     "D": 0.09477377461248429,
+     "E": 0.0,
+     "delta": 0.09477377461248429,
+     "n": 2,
+     "worlds_positive": 2
+    }
+   }
+  },
+  "geometry_drop_one": {
+   "authorized_mrr": {
+    "all_families": 0.047414855072463735,
+    "survives_drop_one": false,
+    "worst_drop_one": -0.014531250000000023
+   },
+   "retrieved_mrr": {
+    "all_families": 0.06836960999496058,
+    "survives_drop_one": true,
+    "worst_drop_one": 0.011662193653121038
+   }
+  },
+  "items_5_6": "NOT BUILT -- gated on admission safety passing",
+  "mechanism_free_gate": {
+   "CROSS_DOMAIN": {
+    "D_authorized_mrr": 0.97125,
+    "D_beats_semantic_only": true,
+    "popularity_mrr": 0.023616938616938615,
+    "semantic_only_mrr": 0.8541666666666667
+   },
+   "INDEPENDENT_CORROB": {
+    "D_authorized_mrr": 0.9520833333333333,
+    "D_beats_semantic_only": true,
+    "popularity_mrr": 0.0,
+    "semantic_only_mrr": 0.3120652173913043
+   },
+   "LOOKALIKE": {
+    "D_authorized_mrr": 0.984375,
+    "D_beats_semantic_only": true,
+    "popularity_mrr": 0.005649038461538462,
+    "semantic_only_mrr": 0.941144047583921
+   },
+   "ORDER_MATTERS": {
+    "D_authorized_mrr": 0.9612499999999999,
+    "D_beats_semantic_only": true,
+    "popularity_mrr": 0.0,
+    "semantic_only_mrr": 0.9125
+   },
+   "PATTERN_COMPLETION": {
+    "D_authorized_mrr": 0.0,
+    "D_beats_semantic_only": false,
+    "popularity_mrr": 0.0,
+    "semantic_only_mrr": 0.00027817006992087584
+   },
+   "answer_set_recoverable_any_world": false
+  },
+  "reason": null,
+  "status": "ADMISSION_SAFETY_REPAIRED"
+ },
+ "version": "rgm_0_2_v0.1",
+ "worlds": [
+  500,
+  501
+ ],
+ "worlds_raw": [
+  {
+   "arms": {
+    "D_FULL_CAS": {
+     "CROSS_DOMAIN": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.96125,
+      "authorized_top1": 0.95,
+      "n": 40,
+      "retrieved_mrr": 0.96125,
+      "retrieved_top1": 0.95
+     },
+     "INDEPENDENT_CORROB": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 1.0,
+      "authorized_top1": 1.0,
+      "n": 23,
+      "retrieved_mrr": 1.0,
+      "retrieved_top1": 1.0
+     },
+     "LOOKALIKE": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 1.0,
+      "authorized_top1": 1.0,
+      "n": 40,
+      "retrieved_mrr": 1.0,
+      "retrieved_top1": 1.0
+     },
+     "ORDER_MATTERS": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.9412499999999999,
+      "authorized_top1": 0.925,
+      "n": 40,
+      "retrieved_mrr": 0.9412499999999999,
+      "retrieved_top1": 0.925
+     },
+     "PATTERN_COMPLETION": {
+      "authorized_empty_rate": 1.0,
+      "authorized_mrr": 0.0,
+      "authorized_top1": 0.0,
+      "n": 33,
+      "retrieved_mrr": 0.09415584415584415,
+      "retrieved_top1": 0.0
+     }
+    },
+    "E_GENERIC_GEOMETRY": {
+     "CROSS_DOMAIN": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.9875,
+      "authorized_top1": 0.975,
+      "n": 40,
+      "retrieved_mrr": 0.9875,
+      "retrieved_top1": 0.975
+     },
+     "INDEPENDENT_CORROB": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.6304347826086957,
+      "authorized_top1": 0.2608695652173913,
+      "n": 23,
+      "retrieved_mrr": 0.6304347826086957,
+      "retrieved_top1": 0.2608695652173913
+     },
+     "LOOKALIKE": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.9875,
+      "authorized_top1": 0.975,
+      "n": 40,
+      "retrieved_mrr": 0.9875,
+      "retrieved_top1": 0.975
+     },
+     "ORDER_MATTERS": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 1.0,
+      "authorized_top1": 1.0,
+      "n": 40,
+      "retrieved_mrr": 1.0,
+      "retrieved_top1": 1.0
+     },
+     "PATTERN_COMPLETION": {
+      "authorized_empty_rate": 1.0,
+      "authorized_mrr": 0.0,
+      "authorized_top1": 0.0,
+      "n": 33,
+      "retrieved_mrr": 0.0,
+      "retrieved_top1": 0.0
+     }
+    }
+   },
+   "echo": {
+    "classic": {
+     "auth_empty": 0,
+     "auth_false": 0,
+     "auth_true": 66,
+     "n": 22,
+     "ret_false": 12,
+     "ret_true": 66,
+     "v01_false": 0,
+     "v01_true": 66
+    },
+    "near_miss": {
+     "auth_empty": 0,
+     "auth_false": 0,
+     "auth_true": 14,
+     "n": 5,
+     "ret_false": 5,
+     "ret_true": 14,
+     "v01_false": 5,
+     "v01_true": 14
+    },
+    "overlap": {
+     "auth_empty": 0,
+     "auth_false": 0,
+     "auth_true": 15,
+     "n": 5,
+     "ret_false": 8,
+     "ret_true": 15,
+     "v01_false": 0,
+     "v01_true": 15
+    }
+   },
+   "mechanism_free_gate": {
+    "CROSS_DOMAIN": {
+     "n": 40,
+     "popularity_mrr": 0.01143939393939394,
+     "semantic_only_mrr": 0.9
+    },
+    "INDEPENDENT_CORROB": {
+     "n": 23,
+     "popularity_mrr": 0.0,
+     "semantic_only_mrr": 0.32028985507246366
+    },
+    "LOOKALIKE": {
+     "n": 40,
+     "popularity_mrr": 0.008173076923076924,
+     "semantic_only_mrr": 0.9559615384615384
+    },
+    "ORDER_MATTERS": {
+     "n": 40,
+     "popularity_mrr": 0.0,
+     "semantic_only_mrr": 0.9125
+    },
+    "PATTERN_COMPLETION": {
+     "n": 33,
+     "popularity_mrr": 0.0,
+     "semantic_only_mrr": 0.00034687218843831635
+    },
+    "answer_set_recoverable_from_graph": false,
+    "n_targets": 246
+   },
+   "seed": 20760901,
+   "world": 500
+  },
+  {
+   "arms": {
+    "D_FULL_CAS": {
+     "CROSS_DOMAIN": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.98125,
+      "authorized_top1": 0.975,
+      "n": 40,
+      "retrieved_mrr": 0.98125,
+      "retrieved_top1": 0.975
+     },
+     "INDEPENDENT_CORROB": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.9041666666666666,
+      "authorized_top1": 0.85,
+      "n": 20,
+      "retrieved_mrr": 0.9041666666666666,
+      "retrieved_top1": 0.85
+     },
+     "LOOKALIKE": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.96875,
+      "authorized_top1": 0.95,
+      "n": 40,
+      "retrieved_mrr": 0.95625,
+      "retrieved_top1": 0.925
+     },
+     "ORDER_MATTERS": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.98125,
+      "authorized_top1": 0.975,
+      "n": 40,
+      "retrieved_mrr": 0.98125,
+      "retrieved_top1": 0.975
+     },
+     "PATTERN_COMPLETION": {
+      "authorized_empty_rate": 1.0,
+      "authorized_mrr": 0.0,
+      "authorized_top1": 0.0,
+      "n": 31,
+      "retrieved_mrr": 0.09539170506912445,
+      "retrieved_top1": 0.0
+     }
+    },
+    "E_GENERIC_GEOMETRY": {
+     "CROSS_DOMAIN": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 1.0,
+      "authorized_top1": 1.0,
+      "n": 40,
+      "retrieved_mrr": 1.0,
+      "retrieved_top1": 1.0
+     },
+     "INDEPENDENT_CORROB": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.6833333333333333,
+      "authorized_top1": 0.4,
+      "n": 20,
+      "retrieved_mrr": 0.6833333333333333,
+      "retrieved_top1": 0.4
+     },
+     "LOOKALIKE": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 0.975,
+      "authorized_top1": 0.95,
+      "n": 40,
+      "retrieved_mrr": 0.9425000000000001,
+      "retrieved_top1": 0.9
+     },
+     "ORDER_MATTERS": {
+      "authorized_empty_rate": 0.0,
+      "authorized_mrr": 1.0,
+      "authorized_top1": 1.0,
+      "n": 40,
+      "retrieved_mrr": 1.0,
+      "retrieved_top1": 1.0
+     },
+     "PATTERN_COMPLETION": {
+      "authorized_empty_rate": 1.0,
+      "authorized_mrr": 0.0,
+      "authorized_top1": 0.0,
+      "n": 31,
+      "retrieved_mrr": 0.0,
+      "retrieved_top1": 0.0
+     }
+    }
+   },
+   "echo": {
+    "classic": {
+     "auth_empty": 0,
+     "auth_false": 0,
+     "auth_true": 57,
+     "n": 19,
+     "ret_false": 12,
+     "ret_true": 57,
+     "v01_false": 0,
+     "v01_true": 57
+    },
+    "near_miss": {
+     "auth_empty": 0,
+     "auth_false": 0,
+     "auth_true": 14,
+     "n": 5,
+     "ret_false": 4,
+     "ret_true": 14,
+     "v01_false": 4,
+     "v01_true": 14
+    },
+    "overlap": {
+     "auth_empty": 0,
+     "auth_false": 0,
+     "auth_true": 15,
+     "n": 5,
+     "ret_false": 2,
+     "ret_true": 15,
+     "v01_false": 0,
+     "v01_true": 15
+    }
+   },
+   "mechanism_free_gate": {
+    "CROSS_DOMAIN": {
+     "n": 40,
+     "popularity_mrr": 0.035794483294483294,
+     "semantic_only_mrr": 0.8083333333333333
+    },
+    "INDEPENDENT_CORROB": {
+     "n": 20,
+     "popularity_mrr": 0.0,
+     "semantic_only_mrr": 0.3038405797101449
+    },
+    "LOOKALIKE": {
+     "n": 40,
+     "popularity_mrr": 0.003125,
+     "semantic_only_mrr": 0.9263265567063035
+    },
+    "ORDER_MATTERS": {
+     "n": 40,
+     "popularity_mrr": 0.0,
+     "semantic_only_mrr": 0.9125
+    },
+    "PATTERN_COMPLETION": {
+     "n": 31,
+     "popularity_mrr": 0.0,
+     "semantic_only_mrr": 0.0002094679514034353
+    },
+    "answer_set_recoverable_from_graph": false,
+    "n_targets": 215
+   },
+   "seed": 20761901,
+   "world": 501
+  }
+ ]
+}
