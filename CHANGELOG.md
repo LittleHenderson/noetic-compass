@@ -4,6 +4,28 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - PHASE LANE CLOSED by owner ruling (CMB-P2 not launched, $0)
+
+CMB-P2 closed as CONSTRUCT_INVALID_TWO_HOP_SHORTCUT. The benchmark contained a two-hop
+shortcut, so it never required the system to separate thought chains: a phase-free, label-free
+rule scored 0.8255/0.8568 against an oracle handed the true labels at 0.7682/0.6797. The
+shortcut was created by the repair for the previous shortcut.
+
+Frozen state. CMB-P0 and CMB-P1 preserved exactly, including PHASE_MEMORY_UNSAFE. P8+P9
+preserved as a promising engineering observation, NOT as evidence that phase separates thought
+chains. The phase hypothesis remains open - neither proven nor disproven. Phase integration
+into CMB-R1 is not authorized. Frequency, pulse width and Q are not added to the main memory
+system. No immediate phase-benchmark redesign is authorized.
+
+Registered return condition: phase may return only when an independently designed benchmark
+proves that ordinary content, one-hop search, two-hop search, topology and candidate identity
+cannot solve the task - measured before any phase arm, and re-measured after any world repair.
+
+Total spend across the whole phase arc: $0.2776.
+
+Next active lane: CMB-R1 / RGM-0.2. The production memory board stays scalar and accountable.
+
+
 ## 2026-09-02 - CMB-P2 STOPPED PRE-LAUNCH: a phase-free rule beats the oracle ($0 spent)
 
 The owner authorized one final controlled confirmation of the P8+P9 combination. Adversarial
