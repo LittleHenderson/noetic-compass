@@ -1,0 +1,14 @@
+CMB-P2 branched from the exact final CMB-P1 result commit, per owner directive section 1.
+
+PARENT_SHA   99909e8c79b9283412826fd7658956794247b777
+PARENT_MSG   cmb-p1 RESULT: PHASE_MEMORY_UNSAFE -- no single repair survives; at convergence
+             the phase engine is NUMERICALLY IDENTICAL to the scalar engine (AWS T4, 0.1135 USD)
+BRANCH       research/cmb-p2-p8p9-confirmation
+RECORDED     before any file was modified
+
+PRESERVED, NOT REWRITTEN:
+  CMB-P0 status PHASE_MEMORY_UNSAFE and every artifact
+  CMB-P1 status PHASE_MEMORY_UNSAFE and every artifact
+  the failed first CMB-P1 AWS launch ($0.14, receipt-serialisation crash)
+  the corrected CMB-P1 relaunch ($0.1135)
+  the content leak (A3.2), the transient/convergence finding (A3.1), every negative
