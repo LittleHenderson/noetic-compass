@@ -4,6 +4,33 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - CMB-RP1 DO_NOT_BUILD at $0; the diagnostic is withdrawn
+
+The design was authorized, preregistered, attacked by six lanes the same day, and retired before
+anything was built. Every consequential claim re-verified by me before acceptance.
+
+**The curve cannot exist.** `traj_sim` over lengths 3-6 admits only thirteen values; the band
+`[0.80, 0.99)` is reachable by exactly two, both at edit distance 1. The verifier's exclusion
+rate is a step function of an integer, not a curve. The design's own falsifier fires before a
+world runs.
+
+**The diagnostic is misattributed.** On the registered near-miss attack `cond_consistent` fires
+0/30, and turning the contradiction band off changes nothing - not one forgery, not one true
+memory. The `119 -> 0` headline is the relative margin's work.
+
+**RGM-0.2: numbers stand, explanation withdrawn.** My self-correction came from an adaptive
+forgery I built at `0.9375`, which sits inside `DELTA`. True of that attack, not of the one that
+produced the headline.
+
+**CMB-RP0: `DEGREE_FILTER` qualified.** Link ties break by ascending `memory_id`. Changing the
+forgery prefix from `poison_` to `aaaF` erases the degree signal and inverts its sign. The
+verdict is unchanged; one competitor's claim is narrowed.
+
+**Free finding:** an exact copy with a fresh provenance root is authorized 20/20. Corroboration
+is judged on the fields the query matches, not on the payload that would be acted upon.
+
+Not redesigned. Total cost `$0`.
+
 ## 2026-09-02 - Interlock audited PASS; the last human promise is now a grep
 
 GLM's sixth audit this session, `$0` total across all six. Both named risk points judged sound:

@@ -299,3 +299,47 @@ negatives deleted        NONE
 Per the owner's standing `No automatic second repair`, **no successor round is started.** The
 verifier keeps its RGM-0.2 result — where it earns itself — and gains a measured boundary: it is
 a detector of semantic contradiction, not of structural anomaly.
+
+---
+
+## 16. QUALIFICATION 2026-09-02 — the `DEGREE_FILTER` headline is naming-specific
+
+Found by the CMB-RP1 design attack, re-verified by me. Full record:
+`cas_only_reasoner/CMB_RP1_v0_1/DESIGN_REVIEW_OUTCOME.md`.
+
+### What STANDS
+
+`TWO_TIER_GATE_EARNS_NOTHING`. The two-tier gap `−0.33`, positive in 3 of 9 worlds. The three
+capability losses at **0 of 9** worlds at the permutation floor. `NOT_PROMOTABLE`, 6 of 8.
+GLM's `PASS`. **No measured value changes.**
+
+### What needs a note
+
+§3 reports that `DEGREE_FILTER` — graph degree only — ingested `4.41` forgeries against the
+verifier's `5.67`, and §13 builds on that to say the verifier "does not detect structural
+anomaly".
+
+**The link rule breaks `traj_sim` ties by ascending `memory_id`.** Ties are pervasive, because
+only 13 similarity values are attainable. An id that sorts early is chosen as a neighbour by more
+memories, so it ends up with *higher* degree.
+
+Same world, same trajectories, same semantics — **only the id prefix changed:**
+
+| forgery id prefix | forgery degree | real degree | separability |
+|---|---|---|---|
+| `poison_` *(what this bench used)* | 4.90 | 6.55 | 0.6811 |
+| `zzzF` | 4.90 | 6.55 | 0.6811 |
+| `m9F` | 4.90 | 6.55 | 0.6811 |
+| **`aaaF`** | **7.03** | **6.48** | **0.5049** |
+
+**An early-sorting prefix erases the signal and inverts the sign.**
+
+**Corrected reading:** on this corpus, with forgeries named `poison_*`, a degree count excluded
+more forgeries than the verifier. That is **corpus- and naming-specific**, not a general property
+of one-item forgeries. The A2.4/A2.5 disclosure said the residual degree gap was *"a property of
+the attack, not a bug"* — it is now measured to be **partly a property of the naming convention**,
+which is worse than disclosed and is recorded here as such.
+
+**This does not rescue the mechanism.** `CMB_AUTHORIZED` was still dominated by `CMB_RETRIEVED`
+on both axes, and still lost to `SEMANTIC_DIVERSE`, `CLASS_BALANCED` and `CLASS_BALANCED_POOL` in
+0 of 9 worlds. The qualification narrows one competitor's claim; it does not change the verdict.

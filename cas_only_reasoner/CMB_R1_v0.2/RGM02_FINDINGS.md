@@ -291,3 +291,56 @@ composition and corroboration and nowhere else.
 reproduced that file byte-identically by re-execution, and its hash
 `b74a16a0e973fced16af7d172d7b502334407116ddf7f561091cf48eeafb7f1f` is the determinism proof.
 Editing it to look tidier would destroy the strongest evidence this result has.
+
+---
+
+## 12. CORRECTION 2026-09-02 — the attribution was wrong. The numbers are not.
+
+Found by the CMB-RP1 design attack and **re-verified by me before accepting it**. Full record:
+`cas_only_reasoner/CMB_RP1_v0_1/DESIGN_REVIEW_OUTCOME.md`.
+
+### What STANDS, unchanged
+
+`ADMISSION_SAFETY_REPAIRED`. Near-miss authorized **`119 → 0`**. `358` true memories still
+authorized. Every family number. GLM's byte-identical re-execution
+(`b74a16a0e973fced…`). **No measured value in this document changes.**
+
+### What is WITHDRAWN
+
+§4 self-correction 1 — *"I claimed the RELATIVE MARGIN was load-bearing. It is not… Consistency
+is what holds the line."* — and §5's description of the contradiction band as *"the load-bearing
+idea in this repair"*.
+
+**Measured on the registered near-miss attack, 30 queries across three probe worlds:**
+
+```
+cond_consistent FIRED (blocked):  0 / 30
+
+ablation, authorized memories summed over all 30 queries:
+  all conditions ON              FALSE  0    TRUE 90
+  consistency OFF                FALSE  0    TRUE 90      <- identical; it does nothing
+  relative margin OFF            FALSE  1    TRUE  3      <- refusal of service
+  both OFF                       FALSE 30    TRUE 90
+```
+
+**Turning the contradiction band off changes nothing.** The forgeries sit `0.1667` below the top
+cluster, which exceeds `DELTA = 0.08`, so **the relative margin excludes them and consistency
+never sees them.**
+
+### How I got it backwards
+
+My self-correction was drawn from an **adaptive** forgery I constructed at coherence `0.9375`.
+That value sits *inside* `DELTA` of `1.0` (gap `0.0625 < 0.08`), so for **that** forgery the
+cluster separation cannot help and consistency is the only thing left. Both observations are
+true — **of different attacks.** I generalised from the adaptive case I built to the headline
+number, which comes from an attack the band never touches.
+
+**Corrected statement:** the contradiction band's demonstrated value is confined to an adaptive
+forgery constructed to defeat the other two conditions. **It is inert on every registered attack
+in this corpus.** The `119 → 0` result is the relative margin's work.
+
+### Why the band is nearly inert by arithmetic
+
+`traj_sim = 1 − levenshtein/max(len)` over lengths 3–6 admits only **thirteen** values, and the
+band `[0.80, 0.99)` is reachable by exactly **two** of them, both at edit distance exactly 1.
+The band is not a range in practice; it is two points.
