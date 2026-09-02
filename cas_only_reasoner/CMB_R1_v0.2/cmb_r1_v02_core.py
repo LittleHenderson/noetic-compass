@@ -13,9 +13,14 @@ Three repairs, each against a defect measured in my own RGM-0/0.1 audits:
   2. NO SEPARATION OF RETRIEVED FROM AUTHORIZED. One list, everything equally usable.
      Split into two tiers, so an ambiguous candidate is DOWNGRADED rather than admitted.
 
-  3. THE GENERIC CONTROL WAS HANDICAPPED. `cmb_r1_core.py:490` reads
-     `coherence_off = (geo_mode == "generic") or not use_coherence` -- the matched control
-     never received the coherence verifier while the CAS arm did. Un-handicapped here.
+  3. KEEPING THE MATCHED CONTROL MATCHED. I first claimed the generic control was
+     handicapped by `coherence_off = (geo_mode == "generic")` at cmb_r1_core.py:490. THAT WAS
+     WRONG and is withdrawn: E2 runs through arm_prop(field="role"), whose `coherence`
+     parameter defaults to True and whose verifier does apply the check. That line reaches
+     only M_NOISE, which is deliberately unverified because it IS the misinformation control.
+     The real item: the handicap does not exist in RGM-0.1, but I would CREATE it by giving
+     the CAS arm a new two-tier verifier and leaving the control on the old one. So both arms
+     get the identical verifier here.
 
 No phase, no frequency, no pulse width, no Q. Phase integration is NOT AUTHORIZED.
 """
@@ -125,16 +130,18 @@ def verify_two_tier(memories, q, ranked, use_coherence=True, provenance_aware=Tr
 
 def arm_v2(memories, adj, q, geo_mode="cas", provenance_aware=True, use_coherence=True,
            mutant_no_propagation=False, **verifier_kw):
-    """RGM-0.1's arm_d scoring, with the two-tier verifier and NO generic handicap.
+    """RGM-0.1's arm_d scoring with the two-tier verifier applied identically to every arm.
 
-    The ONLY behavioural differences from `K.arm_d` are the verifier and the removal of
-    `coherence_off = (geo_mode == "generic")`. Scoring, propagation, seeds, weights and the
-    top-k budget are untouched, so D-vs-E remains a like-for-like comparison.
+    The ONLY behavioural difference from `K.arm_d` is the verifier. Scoring, propagation,
+    seeds, weights and the top-k budget are untouched, so D-vs-E stays like-for-like -- and
+    the control receives the SAME new verifier as the CAS arm, which is the whole point of
+    item 3. Note `K.arm_d`'s internal `coherence_off` no longer matters here: this function
+    uses `ranked` (pre-verifier) and applies its own verifier to both arms equally.
     """
     ranked, _old_verified, metrics = K.arm_d(
         memories, adj, q, geo_mode=geo_mode, provenance_aware=provenance_aware,
         use_coherence=use_coherence, mutant_no_propagation=mutant_no_propagation)
-    # The generic control now receives the IDENTICAL verifier. In RGM-0.1 it received none.
+    # Both arms receive the IDENTICAL verifier -- see item 3, and the correction to it.
     retrieved, authorized, diag = verify_two_tier(
         memories, q, ranked, use_coherence=use_coherence,
         provenance_aware=provenance_aware, **verifier_kw)
