@@ -4,6 +4,48 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - Trigger v0.3: the wiring gap closed, manifests bound to scope and job
+
+The owner found that the `DORMANT` result could not clear CMB-RP1, and was right. A
+`PRODUCTION_DEPLOYMENT` manifest reading *no production system feeds training* is true, and
+useless as clearance for a development replay job that really does put memories into training.
+
+> "It can truthfully report that the empty production building is safe while the experimental
+> workshop next door is actively using the furnace."
+
+The recurring failure class this lane keeps hitting: **the correct field exists, but the
+authority path does not read it.**
+
+**Manifests are now scope- and job-bound.** Flag names differ by scope, so one file cannot be
+repurposed across the boundary by editing a single field. The launcher declares
+`--expected-scope` and `--job-id`, and the checker REFUSES a manifest that does not govern the
+job. It also refuses a `derivation: derived_from_pipeline_config` claim with no pipeline config
+to verify it, and a declared flag that disagrees with the pipeline. **The pipeline is the fact;
+the manifest is a claim about it.**
+
+**`WATCH` is no longer a silent green** - new exit `5`, passing only with an owner
+acknowledgement bound to both the job id and the manifest digest.
+
+```
+0   DORMANT | CLEAR | WATCH_ACKNOWLEDGED
+5   WATCH               needs an owner ack bound to this job
+10  WATCH_UNRESOLVED | REFUSED
+20  NECESSARY
+30  URGENT
+```
+
+A machine-readable trigger receipt (`--receipt-out`) can now be bound into the run receipt.
+
+Self-validation 16 -> 25 scenarios, all passing, including the decisive pair: the same
+production manifest is REFUSED when a dev job declares its scope, and would have returned
+DORMANT without it.
+
+**Stated plainly in the spec:** until a launcher actually calls this, it is a correctly
+functioning checker standing beside the machinery, not an interlock inside it.
+
+CMB-RP0 is not retrofitted. **CMB-RP1 may not launch** without its own `DEVELOPMENT_REPLAY`
+manifest, derived from its actual pipeline configuration and checked.
+
 ## 2026-09-02 - Trigger repaired under owner ruling: four fixes, and a correction to my own wording
 
 **Concept approved, implementation needed four authority/logic fixes.** All applied, and the

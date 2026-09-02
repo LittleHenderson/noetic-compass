@@ -1,0 +1,36 @@
+{
+  "_WHAT_THIS_IS": "TEMPLATE ONLY. This is NOT an authorization and it is NOT a valid manifest as it stands. CMB-RP1 does not exist, is not designed, and is not approved. This file exists so that whoever builds CMB-RP1 does not have to invent the shape under time pressure.",
+
+  "_WHY_IT_CANNOT_ACCIDENTALLY_CLEAR_ANYTHING": [
+    "The filename ends in .TEMPLATE.json, so it is not the checker's default manifest.",
+    "source_commit is a placeholder, not 40 hex characters.",
+    "config_digest is empty and will not match, which the checker reports as an authority failure and blocks on.",
+    "derivation is 'derived_from_pipeline_config', so the checker REFUSES unless --pipeline-config is supplied and agrees."
+  ],
+
+  "_HOW_TO_MAKE_IT_REAL": [
+    "1. The CMB-RP1 launcher EMITS a pipeline config recording whether replayed memories actually enter training batches. It must be emitted by the pipeline, never hand-written.",
+    "2. The launcher DERIVES memory_feeds_training from that config -- it does not declare it.",
+    "3. Fill deployment-time fields: job_id, source_commit (the real tip), timestamp, declared_owner.",
+    "4. Recompute config_digest = sha256 over all non-underscore keys except config_digest itself, sorted.",
+    "5. Run the trigger with --expected-scope DEVELOPMENT_REPLAY --job-id CMB-RP1 --pipeline-config <emitted> --receipt-out <path>.",
+    "6. Abort on exit 5, 10, 20 or 30. Bind the trigger receipt and manifest digest into the run receipt."
+  ],
+
+  "schema_version": "1.0",
+  "scope": "DEVELOPMENT_REPLAY",
+  "job_id": "CMB-RP1",
+  "config_digest": "",
+  "declared_owner": "REPLACE-WITH-OWNER",
+  "timestamp": "REPLACE-WITH-ISO8601",
+  "source_commit": "REPLACE-WITH-40-HEX-COMMIT",
+  "derivation": "derived_from_pipeline_config",
+
+  "_flag_note": "CMB-RP0 measured memory_feeds_training=true for the bench, because replayed memories were mixed into training batches. CMB-RP1 is expected to be the same. This value must be DERIVED from the emitted pipeline config, not trusted from this file.",
+  "memory_feeds_training": true,
+  "untrusted_write_path": false,
+  "observable_thresholds": false,
+
+  "memory_count": 0,
+  "writes_per_day": 0
+}

@@ -1,8 +1,9 @@
 # DEFERRED BUILD + TRIGGER — defence against STRUCTURAL forgery
 
 **Status:** `DEFERRED — NOT BUILT — NOT AUTHORIZED`
-**Registered:** 2026-09-02. **Owner ruling 2026-09-02 applied — Fixes A, B, C, D.**
-**Self-validated:** `validate_trigger.py` — **16 scenarios, all PASS**.
+**Registered:** 2026-09-02. **Owner rulings 2026-09-02 applied — Fixes A–D, then v0.3
+job-scoping.**
+**Self-validated:** `validate_trigger.py` — **25 scenarios, all PASS**.
 **Trigger state:** run `check_structural_trigger.py`. Do not trust this file's prose for the
 current state — the script reads the actual conditions.
 
@@ -68,22 +69,33 @@ reverse-direction corpus.
 > 80-memory synthetic sample override a declared 50,000-memory deployment, so `T3` could not
 > fire in the one case it exists for — found by the self-test, not by reading.
 
-### Declared conditions — production facts, from an authoritative manifest (Fix D)
+### Declared conditions — from an authoritative, SCOPE-BOUND manifest (Fix D + v0.3)
 
-**`T4` PRODUCTION UNTRUSTED WRITE PATH** · **`T5` PRODUCTION MEMORY FEEDS TRAINING** ·
-**`T6` PRODUCTION OBSERVABLE THRESHOLDS**
+**`T4` UNTRUSTED WRITE PATH** · **`T5` MEMORY FEEDS TRAINING** ·
+**`T6` OBSERVABLE THRESHOLDS**
 
 `T5` is the axis that converts a retrieval mistake into a **weights** mistake, and it is the
 whole reason CMB-RP0 existed: a wrong memory shown to a user can be dismissed; a forgery in a
 training batch is written into the weights and cannot be taken back.
 
-**These are PRODUCTION-scoped, and they are not ordinary editable booleans.** They must arrive
-inside `deployment_manifest.json`, carrying every one of:
+**These are SCOPE-BOUND, and they are not ordinary editable booleans.** A manifest declares a
+`scope`, and the flag names differ by scope so one file cannot be repurposed across the boundary
+by editing a single field:
+
+| scope | id field | flag names |
+|---|---|---|
+| `PRODUCTION_DEPLOYMENT` | `deployment_id` | `production_memory_feeds_training`, … |
+| `DEVELOPMENT_REPLAY` | `job_id` | `memory_feeds_training`, … |
+
+Every manifest must carry:
 
 ```
-schema_version   scope   deployment_id   config_digest
+schema_version   scope   <deployment_id | job_id>   config_digest
 declared_owner   timestamp   source_commit   derivation
 ```
+
+`config_digest` must equal the SHA-256 of the manifest's own non-underscore fields (excluding
+itself). A tampered digest is an authority failure and blocks.
 
 **A missing, malformed, mis-scoped, or non-boolean manifest yields `UNKNOWN`, never `False`.**
 A deleted or corrupted file must not read as "everything is safe".
@@ -102,15 +114,23 @@ currently does.**
 ### THE STATE LADDER (Fix B) and EXIT CODES (Fix C)
 
 ```
-DORMANT            not T5                                             exit  0
-CLEAR              T5, both defences measured healthy, no raiser      exit  0
-WATCH              T5, defences healthy, and any of T3 / T4 / T6      exit  0
-WATCH_UNRESOLVED   T5 unknown, OR T5 and (T1 or T2) unknown           exit 10   BLOCKS
-NECESSARY          T5 and (T1 or T2)                                  exit 20   BLOCKS
-URGENT             NECESSARY and (T3 or T4 or T6)                     exit 30   BLOCKS
+DORMANT              not T5                                            exit  0
+CLEAR                T5, both defences healthy, no raiser              exit  0
+WATCH_ACKNOWLEDGED   WATCH + an owner ack BOUND TO THIS JOB            exit  0
+WATCH                T5, defences healthy, and any of T3 / T4 / T6     exit  5   BLOCKS
+WATCH_UNRESOLVED     T5 unknown, OR T5 and (T1 or T2) unknown          exit 10   BLOCKS
+REFUSED              manifest does not govern this job                 exit 10   BLOCKS
+NECESSARY            T5 and (T1 or T2)                                 exit 20   BLOCKS
+URGENT               NECESSARY and (T3 or T4 or T6)                    exit 30   BLOCKS
 ```
 
 **For any memory-to-training job, EVERY NONZERO CODE BLOCKS LAUNCH.**
+
+**`WATCH` is no longer a silent green (v0.3).** An untrusted write path, a large store, or
+observable thresholds do not prove the defences have failed — but they must not disappear into
+an ordinary zero exit either. `WATCH` passes only with an **owner acknowledgement bound to this
+job's id AND this manifest's digest**. A standing waiver, or an ack for another job, does not
+clear it.
 
 `T3` now has real authority: scale cannot by itself prove the defences have failed, but it makes
 manual review less credible and **escalates `NECESSARY` to `URGENT`**. Previously it appeared in
@@ -119,6 +139,36 @@ the condition list and in **no** decision path — decorative.
 **`UNKNOWN` IS NOT `NO`, and it now stops the machinery rather than printing a warning.** If
 `T5` itself cannot be established, the state is `WATCH_UNRESOLVED`, not `DORMANT` — we may not
 conclude "memory does not feed training" from an absent manifest.
+
+### SCOPE AND JOB BINDING (v0.3) — the gap that mattered most
+
+A `PRODUCTION_DEPLOYMENT` manifest saying *no production system feeds training* returns
+`DORMANT`. That is **true**, and it is **useless** as clearance for a development replay job
+that really does put retrieved memories into training.
+
+> Without this fix, the checker would truthfully report that the empty production building is
+> safe while the experimental workshop next door is running the furnace.
+
+The launcher must now declare what it is launching, and the checker **refuses** a manifest that
+does not govern it:
+
+```
+--expected-scope    scope the LAUNCHER declares; a mismatch is REFUSED
+--job-id            job id the LAUNCHER declares; a mismatch is REFUSED
+--pipeline-config   config EMITTED BY THE PIPELINE; memory_feeds_training is DERIVED from it,
+                    and a manifest that disagrees is REFUSED
+```
+
+**Refused, every one demonstrated in the self-test:**
+
+- a `PRODUCTION_DEPLOYMENT` manifest used to authorize a `DEVELOPMENT_REPLAY` job
+- a `DEVELOPMENT_REPLAY` manifest used to authorize production
+- a manifest whose `job_id` does not match the launcher's
+- `derivation: derived_from_pipeline_config` with **no pipeline config supplied to verify it**
+- a declared `memory_feeds_training` that **disagrees with the pipeline configuration**
+
+The last is the important one: **the pipeline is the fact; the manifest is a claim about it.**
+Nobody should obtain a clear result by editing a boolean.
 
 ## 4. What gets built when it fires — scope, NOT authorization
 
@@ -156,11 +206,45 @@ after every registered corpus snapshot
 after a major memory-volume threshold is crossed
 ```
 
-```bash
-python check_structural_trigger.py --corpus <snapshot.json> --job <event-label>
+```
+before every replay-training launch      after write-path trust changes
+before enabling memory-to-training       after major scale thresholds
+after verifier logic changes             during deployment release
+after threshold changes
+after memory schema changes
 ```
 
-Nonzero exit blocks the job. `--job` labels the invoking event in the log.
+### THE LAUNCH SEQUENCE (required, v0.3)
+
+```
+derive the job manifest FROM THE ACTUAL PIPELINE
+        |
+verify manifest scope, job identity and digest
+        |
+run the structural-forgery trigger
+        |
+exit 0                permits launch
+exit 5                WATCH -- requires an owner acknowledgement bound to this job
+exit 10 / 20 / 30     ABORTS launch
+        |
+bind the trigger receipt and manifest digest INTO the run receipt
+```
+
+```bash
+python check_structural_trigger.py \
+    --manifest CMB_RP1_JOB_MANIFEST.json \
+    --expected-scope DEVELOPMENT_REPLAY --job-id CMB-RP1 \
+    --pipeline-config <emitted_by_the_launcher.json> \
+    --corpus <snapshot.json> --job pre-training \
+    --receipt-out trigger_receipt.json
+```
+
+`--receipt-out` writes the machine-readable result — state, exit code, manifest digest and
+scope, every condition with its measured detail, and the frozen thresholds — so it can be bound
+into the experiment receipt rather than merely printed.
+
+**Until a launcher actually calls this, it is a correctly functioning checker standing beside
+the machinery, not an interlock inside it.** That is stated plainly rather than implied.
 
 **Backstop, deferred:** once a real deployment sets `production_memory_feeds_training = true`,
 add a weekly remote scheduled run. **Not created — owner's to authorize.**
@@ -173,8 +257,18 @@ exactly as recorded: `TWO_TIER_GATE_EARNS_NOTHING` / `NOT_PROMOTABLE`.
 
 **This trigger governs successor work and real deployment.**
 
-> **`CMB-RP1` MAY NOT LAUNCH** unless this trigger returns a clear state, **or** the structural
-> defence it demands has been implemented and independently audited.
+> **`CMB-RP1` MAY NOT LAUNCH** unless it has **its own `DEVELOPMENT_REPLAY` manifest, derived
+> from its actual pipeline configuration and checked**, returning a clear state — **or** the
+> structural defence it demands has been implemented and independently audited.
+
+**The current `DORMANT` result MAY NOT be used to clear CMB-RP1.** It is valid for
+`scope = PRODUCTION_DEPLOYMENT` only. CMB-RP1 will be a development replay job with
+`memory_feeds_training = true`, and presenting the production manifest for it is now `REFUSED`
+with exit `10`.
+
+A template is provided at `CMB_RP1_JOB_MANIFEST.TEMPLATE.json`. **It is not an authorization**,
+and it is deliberately not valid as it stands — its digest does not match and its `derivation`
+forces a pipeline config to be supplied — so it cannot accidentally clear anything.
 
 ## 7. What this record does NOT do
 
