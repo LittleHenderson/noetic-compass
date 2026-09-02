@@ -363,3 +363,67 @@ would have manufactured a `CAS_TYPED_REPAIR_SIGNAL` out of floating-point arithm
 GLM records that it is **no longer eligible** as the third auditor for any claim-bearing neural
 result on this line, having now audited the design such a result would test. A third distinct
 auditor is required. 🔒 owner-actionable.
+
+---
+
+# AMENDMENT A3 — `GATE_EPS_NOT_A_SIDE_CHANNEL` (A2) IS INEFFECTIVE AS WRITTEN. I wrote it; it does not work.
+
+Found by the `CJT-CASCADE-S0` adversarial attack and **confirmed by my own re-measurement**
+(artifact: `CJT_CASCADE_S0/verify_attack_findings.py`).
+
+## A3.1 — what A2 said, and why it fails
+
+A2 registered a floor: collision groups must satisfy `R ≥ 10⁴·ε` and `I ≥ 10⁴·ε`, "putting the
+residue below `10⁻⁴` of the signal."
+
+**Measured at exactly that floor**, with 200 collision pairs whose *ideal* conductance is
+identical by construction (`V/R = 1` for every state, so `g` should be `1.0` exactly):
+
+```
+actual g range   [0.999905646599079, 0.999996657437111]
+spread           9.101084e-05
+best SINGLE THRESHOLD on g recovers the hidden cause at 0.820000   (chance 0.5)
+```
+
+And raising the floor does not help — it shrinks the gap without removing it:
+
+```
+R floor   relative g gap    separable by g alone?
+1e+02     4.950495e-03      YES
+1e+04     4.999500e-05      YES   <-- the registered floor
+1e+06     4.999995e-07      YES
+1e+08     5.000000e-09      YES
+```
+
+> **THE ERROR IN MY OWN REASONING: I bounded the residue's SIZE and assumed that bounded its
+> USEFULNESS. It does not. The residue is SYSTEMATIC — it varies monotonically with `R` — and a
+> learned controller reads sign and order, not magnitude. An arbitrarily small but consistently
+> signed difference is a perfect side channel.**
+
+This is the same class of mistake as the `D0` sparsity dial: a quantity I treated as
+"small enough to ignore" turned out to be a free channel for the answer.
+
+## A3.2 — the replacement gate
+
+> **`GATE_EPS_EXACT_COLLISION`.** States that the design calls indistinguishable must be
+> **bit-identical** in every quantity any controller can read. Two admissible constructions:
+>
+> 1. **Remove `ε` from the divisor.** Guard `R = 0` by construction — reject or clamp at the
+>    world generator — so `g = m·ρ·ψ·V/R` is computed exactly.
+> 2. **Quantize `g` before any controller sees it**, at a resolution coarser than the largest
+>    achievable `ε` residue, so equal-ideal-conductance states collapse to the same float.
+>
+> **And it must be MEASURED, not assumed.** The trivial-rule gate is extended with a classifier
+> — and, cheaper and stricter, a **single-threshold scan** — trained on the readable quantities
+> alone. Above chance ⇒ `REPAIR_TRIVIALLY_RECOVERABLE`. The measurement A2 already demanded is
+> retained; only A2's *floor* is withdrawn.
+
+## A3.3 — scope
+
+**A2's finding stands; A2's remedy is withdrawn.** The ε residue IS a side channel — that part
+was right, and it came from GLM's F1. What was wrong was my belief that a magnitude floor closes
+it.
+
+`D0` remains `D0_DESIGN_INVALID` and is not revived by this amendment. A3 is recorded because
+the defective gate would otherwise be inherited by `CJT-OHM-D1`, which reuses the
+identical-conductance collision construction.

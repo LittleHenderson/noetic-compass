@@ -124,10 +124,10 @@ Two things follow:
    yields `SEQUENTIAL_CASCADE_COMPOSITION_VALUE` rather than `CAS_OHM_VALUE`. The measurements
    above are stronger than a tie: **the CAS-specific arm and the generic arm are the same function
    class**, so the CAS branch is not merely likely to tie — it cannot differ.
-2. **`SEQUENTIAL_CASCADE_COMPOSITION_VALUE` is reachable but is not our question.** "Does
-   sequential composition beat a parallel mixture at matched depth and parameters?" is a general
-   architecture question, extensively studied outside this program, and answering it would consume
-   GPU budget to produce a result with no CAS content.
+2. **`SEQUENTIAL_CASCADE_COMPOSITION_VALUE` is ALSO unreachable from this gate — see §7 B4.**
+   I originally wrote that the fallback status was "reachable but not our question." **That was
+   wrong, and the adversarial attack caught it.** `C13_SPAN_GATE` does not measure sequence at
+   all, so it cannot license the fallback either.
 
 ## 4. Applying the owner's new law to this lane
 
@@ -177,3 +177,128 @@ not run through the cascade at all. `CJT-OHM-D1` remains the registered specific
 attacking it, and this review changes nothing about it.
 
 **No negative deleted. No status upgraded. `C1`, `C9`, `C12`, `C14` and the ε repair all stand.**
+
+---
+
+## 7. FIVE-LENS ADVERSARIAL ATTACK — independent `S0_DO_NOT_BUILD`, and it found more than I did
+
+A five-lens attack (symmetry, mechanism-free baseline, free dials, fairness/matching, metric
+gaming), each lens adversarially refuted, returned **`S0_DO_NOT_BUILD`** independently.
+
+**Provenance discipline:** numbers below are labelled by who measured them. Mixing an outside
+party's figure into our record as our own is exactly the `0.2096` error corrected in §1.1, and it
+will not be repeated.
+
+### B4 — THE GATE IS BLIND TO ORDER. **Confirmed by my own measurement.**
+
+The attack claimed `C13_SPAN_GATE` passes even when the stages **commute exactly**, so sequence
+is provably irrelevant. **I re-measured it** (artifact:
+[`verify_attack_findings.py`](verify_attack_findings.py)) using diagonal stages, which commute by
+construction:
+
+```
+run 1   max commutator ||dW_i dW_j - dW_j dW_i||_inf = 0.0000000000e+00   residual 6.7079809108e-03   PASS
+run 2   max commutator ||dW_i dW_j - dW_j dW_i||_inf = 0.0000000000e+00   residual 7.8983833366e-03   PASS
+run 3   max commutator ||dW_i dW_j - dW_j dW_i||_inf = 0.0000000000e+00   residual 3.6665606453e-03   PASS
+```
+
+Every commutator is **exactly zero** — every ordering yields the identical `W_eff` — and the gate
+**passes anyway**.
+
+> **`C13_SPAN_GATE` never measured sequential composition. It measures degree-≥2 curvature: the
+> product picks up `s²` terms whether or not the factors commute.**
+
+**This is stronger than §1 and it corrects me.** I had said the gate fails to be *CAS*-specific
+but could still license the weaker sequential finding. It cannot. It reads no order at all.
+
+### B1 — the absorption is an ALGEBRAIC IDENTITY, needing no training
+
+Attack-measured: `worst |generic − CAS| = 0.0000000000e+00` over all `6 / 24 / 120 / 720`
+permutations at `n = 3,4,5,6`. **Consistent with my own `0.0000e+00` over 24 orderings on the
+committed construction** (§2).
+
+The attack's sharpening is right and worth keeping: **`D0`'s zero was found by gradient descent
+after retraining, so it could in principle have been absent. This one cannot be.** Applying
+stages in order `p` *is* applying relabelled stages in canonical order. It holds before the first
+gradient step.
+
+It also counts the collapse: **4 arms collapse into 1 here** — CAS-order, fixed-random-order,
+order-search, and free-matrix cascade. `D0` collapsed 3 of 7.
+
+### B2 — TENTH SHORTCUT: the world generator is the status dial
+
+Attack-measured, holding arms, parameter count (`36` each), training set (`N = 64`) and held-out
+set (`2000`) fixed and changing **only which world is generated**:
+
+| world | A1 (CAS order) | A2 (other fixed order) | A3 (order search) | A5 (additive, mechanism-free) | winner |
+|---|---|---|---|---|---|
+| cascade built in `πA` | `3.7475169164e-32` | `7.8348118691e-06` | `3.7475169164e-32` | `2.5961624335e-05` | **A1** |
+| cascade built in `πB` | `1.8352175489e-04` | `3.6139328105e-32` | `3.6139328105e-32` | `1.8711245099e-05` | **A2** |
+| additive world | `4.5481219199e-05` | `1.3114128926e-05` | `6.0096453119e-06` | `8.1203448801e-33` | **A5** |
+
+CAS wins 3/3 seeds in one world and loses 3/3 in another.
+
+> **The builder writes both the simulator's true stage order AND the arm's claimed CAS order. The
+> experiment then measures only whether those two choices were made to match.** That is the
+> answer-key handoff the owner explicitly prohibited, arriving through the back door.
+
+**No repair from inside the bench.** Only an outside source fixing the generative order,
+hash-committed before any arm is written, with all worlds reported.
+
+### B3 — the FAIR generic comparator CONTAINS the CAS arm
+
+Attack-measured: an order-searching generic arm — which is what "matched compute" actually
+licenses — never loses in any world. It ties the winning fixed-order arm to the last digit in
+both cascade worlds and **beats** the CAS arm in the additive world
+(`3.9917752780e-06` vs `2.1692074005e-05`).
+
+> **No reachable outcome is a CAS win.** The only channel left is sample efficiency, worth
+> `6.9069` bits at `n = 5` — i.e. `120` cheap refits, a constant the generic arm buys independent
+> of `N`.
+
+Handicapping the generic arm to make room is the prohibited answer-key move.
+
+### B5 — `GATE_EPS_NOT_A_SIDE_CHANNEL` DOES NOT FIRE. **Confirmed. This gate is mine, and it is broken.**
+
+I registered this gate as `D0` amendment A2 two commits ago, with a floor of `R ≥ 10⁴·ε`. **I
+re-measured it and the attack is right.**
+
+```
+eps = 1e-06,  collision pairs with V/R identical so IDEAL g is identical
+
+R floor    R1             R2             relative g gap   separable by g alone?
+1e+02      1.000000e-04   2.000000e-04   4.950495e-03     YES
+1e+04      1.000000e-02   2.000000e-02   4.999500e-05     YES   <== MY REGISTERED FLOOR
+1e+06      1.000000e+00   2.000000e+00   4.999995e-07     YES
+1e+08      1.000000e+02   2.000000e+02   5.000000e-09     YES
+
+200 collision pairs at the registered floor, ideal g = 1.0 exactly for every state:
+  actual g range  [0.999905646599079, 0.999996657437111]   spread 9.101084e-05
+  best SINGLE THRESHOLD on g recovers the hidden cause at 0.820000   (chance 0.5)
+```
+
+> **A magnitude floor bounds the residue's SIZE. It does not remove its CORRELATION with the
+> cause. A vanishing but SYSTEMATIC difference is a perfect side channel, because a learned
+> controller reads sign and order, not magnitude.**
+
+**Repair — registered as `D0` amendment A3:** a floor cannot work. Either remove `ε` from the
+divisor and guard `R = 0` by construction, **or quantize `g` before any controller sees it**, so
+states with equal ideal conductance are **bit-identical** downstream. And it must be measured,
+not assumed.
+
+### What the attack found and I am NOT carrying forward
+
+The adversarial refuters killed two of their own side's findings, which is the process working:
+
+- **"the cascade is exactly inside an additive span"** — **refuted.** Its `1e-15` fit was a
+  dictionary-rank artefact (16 vectors in `R¹²`). The matched additive control genuinely sits
+  inside the span at `1.7306628453e-15` while the cascade does not.
+- **one dial-lens evidence line** — **withdrawn as a tautology.** Its conclusion survives on the
+  closed-form containment measured in B1 instead.
+
+### Net effect on the verdict
+
+`S0_DO_NOT_BUILD` was already established by §1–§2 from my own measurements on the committed
+code. The attack does not change the verdict; it **removes the fallback** (B4), adds a **tenth
+shortcut** (B2), shows **no outcome is a CAS win** (B3), and **breaks a gate I had registered
+elsewhere** (B5).
