@@ -4,6 +4,38 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 — CMB-RP0 built (owner items 5 and 6): six construction faults, one disclosed limit, $0
+
+Selective replay against catastrophic forgetting. Built and dev-verified; **not launched**.
+
+Why it matters: a wrong memory *shown* to a user can be dismissed. A forgery mixed into a
+*training batch* is written into the weights. Replay is the case the two-tier verifier exists for.
+
+Six faults, every one found by measuring the bench rather than reasoning about it:
+
+- **A1.1** the task was broken two ways — topic is 100% recoverable from the semantic vector
+  (`480/480`) and the trajectory carries no topic information (`17/480`, chance `0.0312`).
+  Scope narrowed in writing: this tests the CMB as a **selector**, not CAS geometry as a feature.
+- **A1.3** my own mechanism-free baseline was a straw man (`0.6291` forgetting vs `RANDOM`'s
+  `0.0964`, covering 4 of 22 classes). Replaced; the straw man is kept as an illustration only.
+- **A2.1** forgeries had no context vector, so the verifier would have excluded them by a
+  missing field rather than by its mechanism.
+- **A2.2** the replay pool *was* the training stream, which excludes poison — no arm could ever
+  replay a forgery, so the safety test measured nothing.
+- **A2.4** degree gave the forgeries away twice, in opposite directions (`12.55` vs `7.42`, then
+  `4.00` vs `6.79`).
+- **A2.6** `CMB_AUTHORIZED` returned nothing on all 64 slots. Not the disclosed fail-closed
+  behaviour: `0` failures on every condition, best coherence `1.0000`. **The verifier was
+  correctly returning the query's own source and my harness threw it away.** Third time this
+  lane I have diagnosed a mechanism failure that was mine.
+
+One limit disclosed **before** any run (A2.8): the residual degree gap cannot be removed without
+faking the graph, so it gets a competitor instead — a new `DEGREE_FILTER` arm using graph degree
+and nothing else, added to the safety law. Stated consequence: this bench cannot cleanly separate
+*the verifier works* from *my forgeries happen to be low-degree*.
+
+Nothing is licensed and no result is claimed. Not launched, `$0` spent.
+
 ## 2026-09-02 - RGM-0.2: ADMISSION_SAFETY_REPAIRED on 12 new worlds ($0, CPU)
 
 Owner reversed my role: I build RGM-0.2, another model audits. Conflict of interest declared -
