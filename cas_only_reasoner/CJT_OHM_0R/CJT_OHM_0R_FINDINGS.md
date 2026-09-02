@@ -352,3 +352,96 @@ residue alone added to the trivial-rule gate. See `CJT_OHM_D0` amendment A2.
 
 GLM is **no longer eligible** as the third auditor for a claim-bearing neural result on this
 line, having audited the design such a result would test. A third distinct auditor is required.
+
+---
+
+## 14. CORRECTION 2026-09-02 — THE HEADLINE CASCADE NUMBER IN THIS FILE IS WRONG, AND THE QUANTITY IT NAMES IS NOT CAS-SPECIFIC
+
+Found by me while doing the pre-design check for `CJT-CASCADE-S0`, before any design work.
+Artifact: `CJT_CASCADE_S0/verify_span_gate.py` — runnable, `$0`, local CPU.
+
+### 14.1 The number is wrong
+
+Section 13 records the cascade span residual as **`0.2096`** against a matched additive control
+at **`3.0e-16`**. **The committed package does not produce those numbers.**
+
+```
+committed c13, standalone      cascade 0.054458   additive 1.785643e-15
+committed c13, full-run        cascade 0.0746     additive 1.473e-15
+RECORDED IN THIS FILE          cascade 0.2096     additive 3.0e-16
+```
+
+`0.2096` was **the auditor's number from GLM's own independent reimplementation**, which I
+transcribed into §13 — and from there into the spec-sheet Change Log and into memory — as though
+it were this package's own output. Two implementations of the same check differ by **`3.85×`**.
+
+The two committed values differ from each other too (`0.054458` vs `0.0746`), because the figure
+depends on how much of the shared RNG stream was consumed before the check ran. **It is not a
+stable quantity.**
+
+**Rule violated:** *"Keep every number exact — never round, never paraphrase a metric."* This was
+worse than rounding: it was attributing an outside reimplementation's figure to the committed
+code.
+
+### 14.2 The quantity is not CAS-specific — and could not be
+
+**The committed `Basis` contains no CAS content whatsoever.** `W0`, `A`, `B` and `U` are all
+`RNG.normal` draws. So `C13_SPAN_GATE` was never measuring anything about CAS; the right reading
+of its output is *"what does a random system score?"*
+
+Measured, 15 independent random systems under the exact `c13` protocol (`trials=200`):
+
+```
+min 0.026937   mean 0.047810   max 0.071911   sd 0.013662
+```
+
+**Every purely random system is "outside the additive span."** And the committed value
+`0.054458` sits at the **60th percentile, `0.49` sd from the random mean** — a wholly typical
+draw.
+
+> **The gate has no discriminating power for CAS. It distinguishes a PRODUCT of matrices from a
+> SUM of matrices, which is a fact of linear algebra, not a finding.**
+
+### 14.3 It is also a free dial — the NINTH in this program
+
+`s = 0.7` is hard-coded in `Basis.__init__`. No registered gate constrains it. A fresh `Basis`
+and a fresh trial stream per row:
+
+| `s` | additive | cascade | mean `‖s·ΔW_j‖₂` | `c13` gate |
+|---|---|---|---|---|
+| 1.000 | `1.4046e-15` | `9.508132e-02` | `1.2403` | **PASS** |
+| 0.700 | `3.1552e-15` | `7.815411e-02` | `0.9994` | **PASS** ← committed default |
+| 0.500 | `1.8583e-15` | `1.502731e-02` | `0.6489` | **PASS** |
+| 0.300 | `7.8447e-15` | `6.064390e-03` | `0.3897` | **PASS** |
+| 0.100 | `6.2334e-15` | `1.046009e-03` | `0.1593` | **PASS** |
+| 0.050 | `4.9564e-15` | `2.257632e-04` | `0.0742` | **FAIL** |
+| 0.030 | `6.6746e-15` | `7.082362e-05` | `0.0422` | **FAIL** |
+| 0.010 | `5.7141e-15` | `5.990553e-06` | `0.0130` | **FAIL** |
+
+Range **`15872×`**; exponent **`2.24`** — second order in `s`, exactly as the algebra predicts,
+because the cross term `s²·aᵢ·aⱼ·ΔWⱼΔWᵢ` is the only part the additive mixture cannot express and
+it vanishes quadratically while the arms' own effect vanishes linearly.
+
+> **ONE HARD-CODED FLOAT SELECTS WHETHER THE GATE PASSES.** It flips to `FAIL` at `s ≤ 0.05`.
+
+### 14.4 And the effect only exists where the comparison is unmatched
+
+At the committed default `s = 0.7` the stages have mean operator norm **`1.2385`** — greater than
+one. `(I + s·α·ΔW)` is nowhere near the identity. **These are not small updates composed
+sequentially; the cascade is a genuinely deeper, different model.** The residual is large only
+in the regime where the additive control is not a matched competitor at all — which is the
+unfair-depth problem the owner flagged and the audit believed had been deferred to a GPU stage.
+
+### 14.5 Consequence
+
+**`C13_SPAN_GATE` is downgraded to `VACUOUS`.** It does not support a CAS claim, and it never
+could have, because the object it measures has no CAS content in it.
+
+The surviving mathematical fact is narrower and should be stated only in this form:
+
+> **A sequential composition of matrix stages is not a member of the additive family. This is a
+> property of matrix multiplication. It is true of random matrices, its magnitude is set by a
+> free scale parameter, and it carries no information about CAS.**
+
+**No negative is deleted and no other status changes.** `C1`, `C9`, `C12` and `C14` are
+unaffected; the ε repair stands.
