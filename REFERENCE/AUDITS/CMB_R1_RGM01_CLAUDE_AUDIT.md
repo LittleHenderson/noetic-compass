@@ -163,13 +163,34 @@ Suggested: `NOT_SUPPORTED_FOR_ADMISSION / NARROW_BENEFIT_ON_RANK_VIOLATION`.
 
 ## Reproduction and determinism
 
-Committed canonical hash `56ff7d7ae3512252…` identical across both passes, with wall-clock
-and tracemalloc correctly excluded and the earlier non-canonical hash explicitly voided in
-the receipt — that voiding is good practice and is recorded. Independent re-execution was
-started in the audit worktree; **it exceeded 20 minutes of wall time and had not completed
-when this report was filed** (see the compute finding below). Every number quoted in this
-report was recomputed by me directly from the committed receipt's raw per-world arrays, not
-from GLM's prose.
+**RESOLVED — reproduction PASSES.** Independent re-execution completed in **57m 26s** of
+local CPU and reproduced **all ten statuses exactly**, plus `BEST_PROP: D` and
+`BEST_GRAPH: X_SUM`.
+
+My run reported `DET: False` (hash `28396a8d…`), which at first looked like a determinism
+failure. It is not. `run_rgm01.run_battery` hashes the raw per-world dicts, which contain
+`eff[arm]["wall_s"]` and `eff["peak_mem_prop_bytes"]` — volatile fields. That is a **hashing
+bug, not content nondeterminism**, and GLM both identified it and shipped
+`rgm01_detcheck.py` to correct it, recording the voiding of the earlier hash `a5e8352d…` in
+the receipt note. **I recomputed the canonical hashes independently from the committed
+artifact** (stripping `wall_s` and `peak_mem_prop_bytes` exactly as the detcheck does):
+
+```
+pass1  56ff7d7ae351225297fc06c5…
+pass2  56ff7d7ae351225297fc06c5…
+identical: True   matches the receipt's claim: True
+```
+
+**The 2-pass content-determinism claim is verified.** GLM's disclosure was accurate and its
+description of the cause was correct.
+
+*Audit hygiene note:* re-running `run_rgm01.py` inside my worktree overwrote that worktree's
+copy of `RGM01_RECEIPT.json`. All verification above was therefore performed against the
+committed blob read directly from git (`git show a086a770:…`), not against the working file.
+GLM's branch was never touched.
+
+Every number quoted in this report was recomputed by me directly from the committed
+receipt's raw per-world arrays, not from GLM's prose.
 
 ---
 
