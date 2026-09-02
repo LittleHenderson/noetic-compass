@@ -4,6 +4,36 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - RGM-0.2: ADMISSION_SAFETY_REPAIRED on 12 new worlds ($0, CPU)
+
+Owner reversed my role: I build RGM-0.2, another model audits. Conflict of interest declared -
+I audited RGM-0/0.1 and built on my own findings.
+
+Items 1-2. The lev-1 near-miss attack RGM-0.1 could not stop (119 forgeries admitted over 120
+queries) now reaches ZERO authorised memories, while 358 true ones are still authorised. A
+two-tier split separates RETRIEVED (may be shown) from AUTHORIZED (may influence reasoning or
+learning); forgeries still surface as candidates but cannot be acted on.
+
+Item 3. With the control on the identical verifier the CAS geometry advantage survives
+drop-one (+0.0672) - but the generic control BEATS CAS on three of five families. The
+advantage is concentrated in fragment composition (+0.4108) and independent corroboration
+(+0.3190), and survives only because there are two winners rather than one.
+
+Item 4. The mechanism-free gate passes: no query-independent shortcut, answer set not
+recoverable from the graph. But plain semantic retrieval already reaches 0.83-0.94 on three
+families; the machinery earns its cost at pattern completion (0.0005 -> 0.4167) and
+independent corroboration (0.3117 -> 0.9818), and little else.
+
+Three self-corrections on one verifier, each found by measurement after my reasoning produced
+a plausible wrong answer. The load-bearing idea: a forgery's signature is not that it is
+different, but that it is almost the same.
+
+Disclosed: it fails closed - under adaptive attack nothing is authorised, true memories
+included. Not licensed: any claim that CAS geometry helps retrieval generally.
+
+Items 5-6 not built; they were gated on this result and are now unlocked.
+
+
 ## 2026-09-02 - PHASE LANE CLOSED by owner ruling (CMB-P2 not launched, $0)
 
 CMB-P2 closed as CONSTRUCT_INVALID_TWO_HOP_SHORTCUT. The benchmark contained a two-hop
