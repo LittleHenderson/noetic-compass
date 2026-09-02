@@ -197,3 +197,25 @@ GLM's verification re-run briefly rewrote `RGM02_RECEIPT.json` on disk with **by
 content — the identical hash is itself the determinism proof — and restored it from git. The
 working tree is clean. Recorded here because a disclosure that lives only in the auditor's own
 report is not a disclosure.
+
+---
+
+## 10. Cross-reference — the same verifier, measured against a different attack
+
+**CMB-RP0 (2026-09-02) tested this verifier as a REPLAY SELECTOR and it added nothing there:**
+`TWO_TIER_GATE_EARNS_NOTHING`, with the authorization tier *dominated by its own retrieval tier*
+and beaten on forgery exclusion by a filter that counts graph edges (`4.41` vs `5.67`).
+Independently audited by GLM: **PASS**.
+
+**That does not disturb this result, and the reason is the useful part.** The two benches
+measured the same mechanism against two different attacks:
+
+- **Here (admission):** one **adaptive** forgery, built to sit above the absolute bar and inside
+  the relative margin. It is blocked by **consistency**, which an attacker cannot defeat without
+  the forgery ceasing to be a forgery. `119 → 0` false authorizations, `358` true kept.
+- **There (replay):** 132 **cheap** forgeries. They are not ambiguous, they are conspicuous —
+  a one-item forgery sits in the graph differently from what it copies — and the verifier does
+  not look at structure at all.
+
+**The verifier detects semantic contradiction, not structural anomaly.** Both facts are now
+measured, and the full statement is in `CMB_RP0_v0_1/CMB_RP0_FINDINGS.md` section 13.

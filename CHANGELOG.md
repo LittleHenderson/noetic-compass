@@ -4,6 +4,48 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - CMB-RP0 audited PASS by GLM; lane CLOSED on an honest negative
+
+Independent audit, $0. GLM verified live: spend inside the frozen cap, `PYTHONHASHSEED=0`
+pinned, both code mirrors byte-identical (it re-checked the hashes itself). Three findings,
+none status-changing; all three dispositioned.
+
+**The diagnostic worth keeping** - the auditor's third finding, now recorded in both benches
+so neither can be read without the other:
+
+The same verifier was measured against two different attacks and gave opposite answers.
+
+| | RGM-0.2 (admission) | CMB-RP0 (replay selection) |
+|---|---|---|
+| attack | ONE adaptive forgery at `0.9375` | 132 cheap lev-1 forgeries |
+| defeated by | **consistency** | **graph degree** |
+| verifier | `119 -> 0`, `358` true kept | ingests `5.67`; a degree count ingests `4.41` |
+| verdict | **earns itself** | **adds nothing** |
+
+**The two-tier verifier detects semantic contradiction, not structural anomaly.** Where an
+attacker must make a forgery *agree* with what it impersonates, it wins by mechanism rather than
+threshold. Where forgeries are cheap they stop being ambiguous and start being conspicuous, and
+nothing in the verifier looks at that.
+
+These are complementary defences; neither substitutes for the other. Nothing here licenses
+building the combination - that is what the two measurements jointly imply, and it would need
+its own preregistration and owner authorization.
+
+**The structural weakness was findable only because the mechanism-free competitor was registered
+before the run.** Without `DEGREE_FILTER`, CMB-RP0 would have reported the verifier beating
+`RANDOM` and `NO_REPLAY` and looked like a modest success.
+
+Also fixed: `make_audit_package.py` was still emitting the pre-launch package after the run
+completed. It now detects a receipt and emits the close-out record.
+
+```
+CMB-RP0 lane      CLOSED
+total spend       $0.2039
+claims promoted   NONE
+negatives deleted NONE
+successor round   NOT started -- owner's standing "No automatic second repair"
+```
+
 ## 2026-09-02 - CMB-RP0 RAN: the two-tier gate earns nothing as a replay selector ($0.2039)
 
 9 registered worlds on an AWS T4. Owner-authorized development run. Hash `f2fbfd0c97df96f7`.

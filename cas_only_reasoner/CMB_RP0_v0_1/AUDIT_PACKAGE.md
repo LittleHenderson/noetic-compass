@@ -11,9 +11,9 @@ to regenerate every hash below from the working tree.
 
 ```
 branch   research/cmb-r1-rgm02-v1
-commit   73ae1b3c65bb9c48f6e03ae567b47591a14b3940
-subject  cmb-rp0: owner PRE-LAUNCH ruling recorded; promotion law implemented (8 conditions, binding)
-date     2026-09-02T08:39:00-07:00
+commit   64971f1f1542c511f0e0a7a201be5cf43594d926
+subject  cmb-rp0 RESULT: TWO_TIER_GATE_EARNS_NOTHING -- the authorization tier is DOMINATED by its own retrieval tier (AWS T4, $0.2039)
+date     2026-09-02T09:37:01-07:00
 
 preserved by owner ruling: 62a9977b, 2c87a5c2, a7fde30b
 ```
@@ -21,19 +21,25 @@ preserved by owner ruling: 62a9977b, 2c87a5c2, a7fde30b
 Working tree for this directory: **DIRTY** — audit the commit, not the tree:
 
 ```
-?? cas_only_reasoner/CMB_RP0_v0_1/AUDIT_PACKAGE.md
-?? cas_only_reasoner/CMB_RP0_v0_1/make_audit_package.py
+M cas_only_reasoner/CMB_RP0_v0_1/AUDIT_PACKAGE.md
+ M cas_only_reasoner/CMB_RP0_v0_1/CMB_RP0_FINDINGS.md
+ M cas_only_reasoner/CMB_RP0_v0_1/make_audit_package.py
 ```
 
 ## 2. Artifact manifest
 
 | file | sha256 | bytes | what it is |
 |---|---|---|---|
-| `run_cmb_rp0.py` | `20d6d13c57a123d3e07c36c87a1c7b4875c1e7bb9fb808ec3040262131834992` | 32756 | the harness: worlds, poison, all 9 arms, status law, promotion law |
-| `launch_cmb_rp0.py` | `21f4a242a398a377d3ad1b7ff225fdf4520097e929618b474a343b8fada5583f` | 10155 | AWS launcher: 4 independent stops, mirror check, $0.40 ceiling |
-| `CMB_RP0_PREREGISTRATION.md` | `18709c909ddd42ae27f730ad0937395dc3d47762cdcaee539b89b7bdd285269a` | 30393 | frozen design + amendments A1, A2, A3, A3 addendum |
+| `run_cmb_rp0.py` | `f60904d89f23cfe0f9858458ccf309b3d3021904707f79fd4d929851cfdb246b` | 35298 | the harness: worlds, poison, all 10 arms, status law, promotion law |
+| `CMB_RP0_FINDINGS.md` | `2e7ff733b05290c3b9a8664bc060c1e62e591e4aa7629952077b6f7ff9abf91f` | 16506 | the RESULT |
+| `CMB_RP0_RECEIPT.json` | `26b602cd54cf5666e674f86c8aff8e73d37b5896453c5343668ea5b29f1e0547` | 90609 | the run receipt: summary, per-world raw, compute provenance |
+| `CMB_RP0_RAW.json` | `1c4b7ff624d44fc8de7c4ace50439011aa48e8018a71de0205810f9f8bc6a4b8` | 66659 | per-world raw measurements, flushed after every world |
+| `console.log` | `e28593e118015fd5f7d7cf2d48a6bf3953e07c2cefb216adb1ae03db9ebe3def` | 14633 | instance console, retrieved from S3 |
+| `CLOUD_EXECUTION_RECEIPT_CMB_RP0.json` | `82a42e0f075a65696717b844623193a39ec0999a4bd1343cd673e85d42c26ed3` | 1324 | instance id, cost, termination proof |
+| `launch_cmb_rp0.py` | `14ad69e25b654b7fef250046575ed8adc242eedd8d7a25803d7ba697d4c5756b` | 10595 | AWS launcher: 4 independent stops, mirror check, $0.40 ceiling |
+| `CMB_RP0_PREREGISTRATION.md` | `5a878a752f50d694e3d2f79cd90db4f0a69c25d3f5679cf7ac7a6c10294764f8` | 37902 | frozen design + amendments A1, A2, A3, A3 addendum |
 | `OWNER_RULING_2026_09_02_PRELAUNCH.md` | `e03a4f55403e44dc5eeefb6bd3c5af958901d91100688a3e6a4c4a0d273c609b` | 5938 | the binding owner ruling |
-| `make_audit_package.py` | `e1d9eb78a88a11bae65a6f14544181d9af89ee00a5eab21f9fed85f02cefa219` | 8003 | this script |
+| `make_audit_package.py` | `18284288df6c90bb0d3a96470575ca2f5e1dc46f9335c0b47964136a1d9e20e5` | 10626 | this script |
 
 ### Mirrored modules
 
@@ -54,7 +60,7 @@ run will actually use; check them against the preregistration.
 WORLDS = tuple(range(700, 709))
 LEGACY = {20260901 + 1000 * w for w in list(range(0, 20)) + list(range(500, 512))}
 SEEDS = (0, 1)
-N_DRAWS = 5
+N_DRAWS = 3
 N_TASKS = 3
 REPLAY_K = 32
 STEPS = 300
@@ -70,9 +76,9 @@ WIN_FRACTION = 0.7
 N_PERM = 10000
 POISON_PER_PAST_TOPIC = 6
 QUERIES_PER = 8
-ARMS = ('NO_REPLAY', 'ID_ORDER', 'RANDOM', 'SEMANTIC_DIVERSE', 'SEMANTIC_TO_NEW', 'DEGREE_FILTER', 'CMB_AUTHORIZED', 'CMB_RETRIEVED', 'CLASS_BALANCED')
+ARMS = ('NO_REPLAY', 'ID_ORDER', 'RANDOM', 'SEMANTIC_DIVERSE', 'SEMANTIC_TO_NEW', 'DEGREE_FILTER', 'CMB_AUTHORIZED', 'CMB_RETRIEVED', 'CLASS_BALANCED', 'CLASS_BALANCED_POOL')
 STOCHASTIC = ('RANDOM', 'DEGREE_FILTER')
-MECHANISM_FREE = ('ID_ORDER', 'RANDOM', 'SEMANTIC_DIVERSE', 'SEMANTIC_TO_NEW', 'DEGREE_FILTER')
+MECHANISM_FREE = ('ID_ORDER', 'RANDOM', 'SEMANTIC_DIVERSE', 'SEMANTIC_TO_NEW', 'DEGREE_FILTER', 'CLASS_BALANCED_POOL')
 ARM_SEED = {a: i for i, a in enumerate(ARMS)}
 ```
 
@@ -84,7 +90,7 @@ INSTANCE_TYPE = 'g4dn.xlarge'
 AMI = 'ami-0c779ec711a581954'
 RATE_PER_HOUR = 0.526
 HARD_CAP_USD = 0.4
-IN_INSTANCE_HARD_MIN = 40
+IN_INSTANCE_HARD_MIN = 43
 WATCHDOG_MIN = 45
 FILES = ('run_cmb_rp0.py', 'cmb_r1_core.py', 'cmb_r1_v02_core.py')
 ```
@@ -92,7 +98,7 @@ FILES = ('run_cmb_rp0.py', 'cmb_r1_core.py', 'cmb_r1_v02_core.py')
 What each stop is actually worth, so the binding number is visible:
 
 ```
-  IN_INSTANCE_HARD_MIN =  40.0 min  ->  $0.351
+  IN_INSTANCE_HARD_MIN =  43.0 min  ->  $0.377
           WATCHDOG_MIN =  45.0 min  ->  $0.395
           HARD_CAP_USD = 0.4
           binding stop = whichever fires first
@@ -187,11 +193,40 @@ def paired_permutation(deltas, rng):
     return count / float(N_PERM)
 ```
 
-## 5. What is NOT in this package
+## 5. Run status
 
-- **No result.** Nothing has been run on registered worlds 700-708. `$0` spent.
+**THE RUN IS COMPLETE.** This is the close-out package, not the pre-launch one.
+
+```
+worlds            [700, 701, 702, 703, 704, 705, 706, 707, 708]
+safety            TWO_TIER_GATE_EARNS_NOTHING
+capability        CMB_REPLAY_BEATS_NO_REPLAY_ONLY
+promotion         NOT_PROMOTABLE
+failed conditions ['admits_less_poison_than_RETRIEVED', 'beats_RANDOM', 'beats_SEMANTIC_DIVERSE', 'beats_CLASS_BALANCED', 'beats_DEGREE_FILTER', 'clears_uncertainty_law']
+content_hash      f2fbfd0c97df96f7c8ad159a39841f9f15fc62c0558b4a78bc4508bab934022e
+gpu               Tesla T4  cuda 12.4  torch 2.6.0+cu124
+PYTHONHASHSEED    0
+harness wall      1220.38 s
+peak VRAM         19711488 bytes
+```
+
+```
+instance          i-06b51636eec07f6e3  g4dn.xlarge  us-west-2
+instance minutes  23.26
+cost              $0.2039  (frozen ceiling $0.4)
+termination       self-terminated (InstanceInitiatedShutdownBehavior=terminate + EXIT-trap + in-instance timer); client watchdog armed
+```
+
+**No claim is promoted.** `NOT_PROMOTABLE` was emitted by the deterministic status
+law, and the owner's standing `No claim promotion` prohibition applies regardless.
+
+## 6. What is NOT in this package
+
 - **No audit.** See the warning at the top.
-- The effect threshold, world-level uncertainty calibration and nine-world power
-  justification are reported separately in `AUDIT_PACKAGE_STATISTICS.md`, which is
-  generated from measurements on **dev worlds 750+** so the registered worlds stay
-  untouched.
+- **No threshold recalibration.** A4.2 registered that the effect threshold could be
+  revised once, from dev worlds only. It was not revised and does not need to be: the
+  mechanism LOST its deciding comparisons in 0 of 9 worlds at the permutation floor
+  (`p = 0.0038`), so no admissible margin changes the outcome. The dev calibration that
+  was in flight was stopped for that reason, and the run measured the between-world sd
+  directly (`0.0706-0.1151`) on the registered worlds, which is stronger evidence than a
+  dev-world null would have been.

@@ -23,7 +23,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 
 ARTIFACTS = [
-    ("run_cmb_rp0.py", "the harness: worlds, poison, all 9 arms, status law, promotion law"),
+    ("run_cmb_rp0.py", "the harness: worlds, poison, all 10 arms, status law, promotion law"),
+    ("CMB_RP0_FINDINGS.md", "the RESULT"),
+    ("CMB_RP0_RECEIPT.json", "the run receipt: summary, per-world raw, compute provenance"),
+    ("CMB_RP0_RAW.json", "per-world raw measurements, flushed after every world"),
+    ("console.log", "instance console, retrieved from S3"),
+    ("CLOUD_EXECUTION_RECEIPT_CMB_RP0.json", "instance id, cost, termination proof"),
     ("launch_cmb_rp0.py", "AWS launcher: 4 independent stops, mirror check, $0.40 ceiling"),
     ("CMB_RP0_PREREGISTRATION.md", "frozen design + amendments A1, A2, A3, A3 addendum"),
     ("OWNER_RULING_2026_09_02_PRELAUNCH.md", "the binding owner ruling"),
@@ -188,14 +193,57 @@ def main():
     p("```")
 
     p("")
-    p("## 5. What is NOT in this package")
+    p("## 5. Run status")
     p("")
-    p("- **No result.** Nothing has been run on registered worlds 700-708. `$0` spent.")
+    rc = os.path.join(HERE, "CMB_RP0_RECEIPT.json")
+    if os.path.exists(rc):
+        import json
+        r = json.load(open(rc, encoding="utf-8"))
+        summ = r.get("summary", {})
+        promo = summ.get("promotion", {})
+        p("**THE RUN IS COMPLETE.** This is the close-out package, not the pre-launch one.")
+        p("")
+        p("```")
+        p(f"worlds            {r.get('worlds')}")
+        p(f"safety            {summ.get('safety_status')}")
+        p(f"capability        {summ.get('capability_status')}")
+        p(f"promotion         {promo.get('status')}")
+        p(f"failed conditions {promo.get('failed')}")
+        p(f"content_hash      {r.get('determinism', {}).get('content_hash')}")
+        c = r.get("compute", {})
+        p(f"gpu               {c.get('gpu')}  cuda {c.get('cuda')}  torch {c.get('torch')}")
+        p(f"PYTHONHASHSEED    {c.get('pythonhashseed')}")
+        p(f"harness wall      {c.get('wall_s')} s")
+        p(f"peak VRAM         {c.get('peak_vram_bytes')} bytes")
+        p("```")
+        ce = os.path.join(HERE, "CLOUD_EXECUTION_RECEIPT_CMB_RP0.json")
+        if os.path.exists(ce):
+            e = json.load(open(ce, encoding="utf-8"))
+            p("")
+            p("```")
+            p(f"instance          {e.get('instance_id')}  {e.get('instance_type')}  "
+              f"{e.get('region')}")
+            p(f"instance minutes  {e.get('wall_minutes_instance')}")
+            p(f"cost              ${e.get('cost', {}).get('instance_runtime_estimate_usd')}  "
+              f"(frozen ceiling ${e.get('budget', {}).get('hard_cap_usd')})")
+            p(f"termination       {e.get('termination')}")
+            p("```")
+        p("")
+        p("**No claim is promoted.** `NOT_PROMOTABLE` was emitted by the deterministic status")
+        p("law, and the owner's standing `No claim promotion` prohibition applies regardless.")
+    else:
+        p("**NOT RUN.** Nothing has been executed on registered worlds 700-708. `$0` spent.")
+    p("")
+    p("## 6. What is NOT in this package")
+    p("")
     p("- **No audit.** See the warning at the top.")
-    p("- The effect threshold, world-level uncertainty calibration and nine-world power")
-    p("  justification are reported separately in `AUDIT_PACKAGE_STATISTICS.md`, which is")
-    p("  generated from measurements on **dev worlds 750+** so the registered worlds stay")
-    p("  untouched.")
+    p("- **No threshold recalibration.** A4.2 registered that the effect threshold could be")
+    p("  revised once, from dev worlds only. It was not revised and does not need to be: the")
+    p("  mechanism LOST its deciding comparisons in 0 of 9 worlds at the permutation floor")
+    p("  (`p = 0.0038`), so no admissible margin changes the outcome. The dev calibration that")
+    p("  was in flight was stopped for that reason, and the run measured the between-world sd")
+    p("  directly (`0.0706-0.1151`) on the registered worlds, which is stronger evidence than a")
+    p("  dev-world null would have been.")
     return 0
 
 

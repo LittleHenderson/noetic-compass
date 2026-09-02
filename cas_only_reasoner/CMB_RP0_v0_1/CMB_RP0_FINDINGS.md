@@ -212,3 +212,90 @@ for the first time.
 
 The honest reading: **the two-tier verifier is good at the thing it was built for and adds
 nothing as a replay selector.** Those are compatible, and only the second was tested here.
+
+---
+
+## 13. The diagnostic worth keeping — ambiguity vs structure
+
+*Recorded at the independent auditor's instruction: RGM-0.2 and CMB-RP0 measured the same
+verifier against two different attacks and got opposite answers. Read them together or neither
+means much.*
+
+| | RGM-0.2 (admission) | CMB-RP0 (replay selection) |
+|---|---|---|
+| the attack | **one adaptive forgery**, built to sit above the bar and inside the margin (`0.9375`) | **132 cheap forgeries**, lev-1 mutations of real memories |
+| what defeats it | **consistency** — the top cluster must agree with itself | **graph degree** — a one-item forgery has fewer edges |
+| the verifier | near-miss authorized `119 → 0`, `358` true memories kept | ingests `5.67`; a degree count ingests `4.41` |
+| verdict | **earns itself** | **adds nothing** |
+
+**The two-tier verifier detects semantic contradiction. It does not detect structural anomaly.**
+
+Where an attacker must make a forgery *agree* with the thing it impersonates, the verifier wins,
+and it wins by mechanism rather than by threshold: a forgery that agreed would not be a forgery.
+That is the property RGM-0.2 measured and the auditor confirmed by re-execution.
+
+Where forgeries are cheap and numerous, they stop being ambiguous and start being *conspicuous* —
+they sit in the graph differently from the memories they copy. Nothing in the verifier looks at
+that, so it is beaten by a filter that counts edges and reads nothing else.
+
+**The design consequence, stated plainly:** these are complementary defences, not competing
+ones. A memory system facing both attacks needs the verifier for the adaptive case and a
+structural check for the bulk case, and **neither substitutes for the other**. Nothing here
+licenses building that; it is what the two measurements jointly imply, and it would need its own
+preregistration and its own owner authorization.
+
+**Why this was findable at all:** the structural weakness was visible only because the
+mechanism-free competitor was registered *before* the run. `DEGREE_FILTER` exists because A2.5
+disclosed a residual degree gap I could not remove, and the standing rule says a win by
+mechanism M is uninterpretable until it beats the cheapest method without M. Without that arm,
+CMB-RP0 would have reported the verifier beating `RANDOM` and `NO_REPLAY` and looked like a
+modest success.
+
+---
+
+## 14. Independent audit — GLM, 2026-09-02: **PASS. The lane may close on this.**
+
+Report: `tksCAS_audit_workspace/REFERENCE/AUDITS/CMB_RP0_GLM_AUDIT.md`, trail item 39.
+Audit spend `$0`. GLM did not build CMB-RP0, so the independence requirement is satisfied.
+
+**Verified live, not read:** the `$0.2039` spend inside the frozen `$0.40` cap, `PYTHONHASHSEED=0`
+pinned on the instance, and **both code mirrors byte-identical** — GLM re-checked the hashes
+itself rather than trusting the launcher's own mirror guard.
+
+The auditor's summary of the safety result: *"The registered requirement was a poison-admission
+gap > 1.0; measured −0.33. FAIL, emitted by the deterministic program, not prose."*
+
+On the pre-flight catch: *"A5 was real and load-bearing… Without it, the bench would have printed
+'balanced replay is immune to poisoning' — a false safety headline in the exact class the audit
+program exists to catch."*
+
+### The three findings
+
+| # | finding | disposition |
+|---|---|---|
+| 1 | `make_audit_package.py` still emitted the **pre-launch** package (*"$0 spent, no result"*) after the run completed. | **FIXED.** The generator now detects a receipt and emits a close-out section: status words, failed conditions, content hash, device provenance, instance id, cost against ceiling, and termination proof. `AUDIT_PACKAGE.md` regenerated. |
+| 2 | The 9-world power limitation stands; utility-side comparisons remain noise-limited. | **Agreed, already registered** (A3.5, before the run) and stated in §7. The ties with `RANDOM` and `DEGREE_FILTER` are absence of power, never equivalence. |
+| 3 | *"The diagnostic worth keeping: the two-tier verifier blocks **ambiguity** but not **structure**. Both are now measured. Record them together."* | **RECORDED**, as §13 above and cross-referenced from `RGM02_FINDINGS.md` §10, so neither result can be read without the other. |
+
+### Auditor's bottom line, preserved
+
+> *"$0.2039, one claim-bearing run, falsifier as registered, every guard fired before or during
+> it. This is what an honest negative looks like — close the lane on it."*
+
+---
+
+## 15. Lane status
+
+```
+CMB-RP0                  CLOSED on an audited negative
+result                   TWO_TIER_GATE_EARNS_NOTHING / CMB_REPLAY_BEATS_NO_REPLAY_ONLY
+promotion                NOT_PROMOTABLE  (6 of 8)
+independent audit        GLM -- PASS
+total spend              $0.2039
+claims promoted          NONE
+negatives deleted        NONE
+```
+
+Per the owner's standing `No automatic second repair`, **no successor round is started.** The
+verifier keeps its RGM-0.2 result — where it earns itself — and gains a measured boundary: it is
+a detector of semantic contradiction, not of structural anomaly.
