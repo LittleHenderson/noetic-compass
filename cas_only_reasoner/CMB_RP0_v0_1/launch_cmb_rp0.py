@@ -32,10 +32,10 @@ BUCKET = "cas-harness-runpod-92754088"
 PREFIX = "bridge-control-20260822/cmb_p0"
 RATE_PER_HOUR = 0.526
 
-HARD_CAP_USD = 0.60
+HARD_CAP_USD = 0.75
 CAP_MIN = HARD_CAP_USD / RATE_PER_HOUR * 60          # 91.3 min of billable runtime
-IN_INSTANCE_HARD_MIN = 55                            # stop 3
-WATCHDOG_MIN = 60                                    # stop 4
+IN_INSTANCE_HARD_MIN = 75                            # stop 3
+WATCHDOG_MIN = 80                                    # stop 4
 RUN_ID = None                                        # set from argv or clock at launch
 FILES = ("run_cmb_rp0.py", "cmb_r1_core.py", "cmb_r1_v02_core.py")
 

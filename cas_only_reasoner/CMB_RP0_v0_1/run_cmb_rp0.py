@@ -428,6 +428,10 @@ def main(worlds=WORLDS, out="CMB_RP0_RECEIPT.json"):
         for w in worlds:
             clean.append(run_world(w, "CLEAN"))
             poisoned.append(run_world(w, "POISONED"))
+            # flush after EVERY world: a run cut off by the timer still leaves the worlds it
+            # finished, instead of nothing at all
+            with open("CMB_RP0_RAW.json", "w") as f:
+                json.dump({"clean": clean, "poisoned": poisoned}, f)
             print(f"  world {w} done ({time.perf_counter()-t0:.0f}s)", flush=True)
         with open("CMB_RP0_RAW.json", "w") as f:
             json.dump({"clean": clean, "poisoned": poisoned}, f)

@@ -362,3 +362,53 @@ built in before the first measurement rather than after it.
 | `CMB_AUTHORIZED` | two-tier verifier, authorized tier | the thing under test |
 | `CMB_RETRIEVED` | two-tier verifier, retrieved tier | isolates what the second tier adds |
 | `ORACLE_BALANCED` | true labels | ceiling, never a method |
+
+---
+
+# AMENDMENT A2 (continued) — A2.6, A2.7, and a disclosed construct limit
+
+## A2.6 — the verifier was right and my harness was wrong
+
+First run of the finished harness: `CMB_AUTHORIZED` underfilled **64 of 64 slots**. The
+authorized tier came back completely empty, so the arm was numerically identical to
+`NO_REPLAY` (forgetting `0.9891` for both).
+
+I expected the fail-closed behaviour disclosed in RGM-0.2 §6. **It was not that.** Counting
+which condition fired gave: `0` absolute failures, `0` relative failures, `0` consistency
+failures, mean authorized `1.0` per query, best coherence `1.0000` on every query.
+
+The verifier was working perfectly. It was returning **the query's own source memory** — an
+exact self-match — and I was then discarding that item for not being a past memory. I queried
+the whole store with a new-task memory and got that new-task memory back.
+
+**Fixed, and the fix is the more faithful construction:** at task `t` the memory store holds
+tasks `0..t-1` and nothing else. The new task's items have not been stored yet. This is what a
+continual-learning memory actually looks like, and it removes a hidden dependency where
+propagation could reach new-task items that a downstream filter then removed.
+
+This is the third time in this lane that I have diagnosed a mechanism failure that turned out
+to be my own harness. Recorded for the auditor as a pattern, not a footnote.
+
+## A2.7 — both the mechanism and the ceiling were being judged at starved settings
+
+- One query per new-task topic supplied only **~19 of 32** replay slots, and the rest were
+  padded by duplication. A selector judged at a setting that starves it proves nothing.
+  Now: up to `QUERIES_PER = 8` examples per new-task topic, round-robin, stopping when the
+  budget is full. Underfill is now `0` for every arm.
+- `ORACLE_BALANCED` used a fixed per-class quota of `REPLAY_K // n_classes = 1`, filling only
+  22 of 32 slots — and **`SEMANTIC_DIVERSE` beat it**. A ceiling that loses to a baseline is
+  not a ceiling, and `oracle_helps` is a precondition gate. Now round-robin to a full budget.
+
+## A2.8 — DISCLOSED CONSTRUCT LIMIT, stated before the run, not after
+
+`DEGREE_FILTER` is strong on this corpus **because of the very gap A2.5 could not remove**.
+A one-item forgery earns fewer edges than a real memory in a cluster, so a filter that counts
+edges is well-suited to this particular attack.
+
+**Therefore this bench cannot cleanly separate "the two-tier verifier keeps forgeries out of
+training" from "the forgeries I built happen to be low-degree."** That is a limit of the
+construction, and the correct response is to report it and keep the competitor in the safety
+law — not to drop the competitor so the mechanism wins.
+
+If the verifier beats `DEGREE_FILTER` the result is meaningful. If it does not, the honest
+reading is that a graph statistic did the job, and the mechanism is not licensed here.
