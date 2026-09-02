@@ -324,7 +324,7 @@ outside the repo** — it did not execute this package's code.
 
 Reproduced independently at the `1e-16` class: `C1`/`C14` (worst `3.1e-16`; the convex-hull
 identity at `1.7e-16`), `C12` (`2.2e-16`), `C9` (float-exact `0.0`), `C8`, and the cascade span
-residual — **`0.2096` outside** the additive family against a matched additive control at
+residual — **`0.2096` outside** ⚠ **[WRONG NUMBER — see §14. This is GLM's own reimplementation's figure, not this package's; the committed code gives `0.054458` standalone / `0.0746` full-run. And the quantity is VACUOUS regardless: it is a 60th-percentile draw from purely random matrices.]** the additive family against a matched additive control at
 `3.0e-16` inside.
 
 The auditor confirmed the package **correctly defers** the five-way matched cascade comparison to

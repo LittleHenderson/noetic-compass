@@ -17,8 +17,8 @@
    "residual": 0.0
   },
   "C13_SPAN_GATE": {
-   "additive": 1.4441571044421242e-15,
-   "detail": "ADDITIVE law span residual 1.444e-15 (nothing beyond the span -- VACUOUS); SERIES law span residual 0.0746 (outside it)",
+   "additive": 1.4733459516139103e-15,
+   "detail": "ADDITIVE law span residual 1.473e-15 (nothing beyond the span -- VACUOUS); SERIES law span residual 0.0746 (outside it)",
    "pass": true,
    "series": 0.07462984409869175
   },
@@ -34,14 +34,14 @@
   },
   "C16_BREAK_BELONGS_TO_THE_SOCKET": {
    "cas": [
-    0.01496141658538549,
-    0.003052756645186175,
-    0.030983767163853912
+    0.014961416585385488,
+    0.003052756645186058,
+    0.030983767163854
    ],
    "detail": "generic dirichlet mean 0.0170 (p5-p95 0.0055-0.0353); CAS V/R mean 0.0150 (0.0031-0.0310) -- OVERLAPPING. The break belongs to the SOCKET, not to the CAS law.",
    "generic": [
-    0.016956016159998918,
-    0.005511330589803014,
+    0.016956016159998914,
+    0.005511330589802991,
     0.035321937150773426
    ],
    "pass": true
