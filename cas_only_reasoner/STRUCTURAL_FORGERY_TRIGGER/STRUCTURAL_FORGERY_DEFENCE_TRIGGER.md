@@ -245,8 +245,53 @@ python check_structural_trigger.py \
 scope, every condition with its measured detail, and the frozen thresholds — so it can be bound
 into the experiment receipt rather than merely printed.
 
-**Until a launcher actually calls this, it is a correctly functioning checker standing beside
-the machinery, not an interlock inside it.** That is stated plainly rather than implied.
+### THE INTERLOCK IS NOW BUILT — `replay_training_gate.py`
+
+The five steps above are no longer a procedure a launcher is asked to follow correctly. They are
+a module it calls:
+
+```python
+from replay_training_gate import require_clearance, bind_into_receipt, TrainingBlocked
+
+clearance = require_clearance(               # steps 1-4; raises TrainingBlocked on any block
+    job_id="CMB-RP1",
+    pipeline_config=<the config YOUR PIPELINE EMITTED>,
+    corpus_path=<the memory snapshot being replayed>,
+    declared_owner=..., source_commit=..., timestamp=...)
+... load the model, train ...
+receipt = bind_into_receipt(receipt, clearance)      # step 5; refuses without a real clearance
+```
+
+**The launcher never writes a manifest.** It hands over the config its pipeline emitted, and the
+manifest is *derived* from it — so there is no hand-editable boolean anywhere on the path. The
+pipeline is the fact; the claim is now generated from the fact rather than asserted beside it.
+
+`validate_gate.py` proves the wiring, and its load-bearing assertion is not "an exception was
+raised" but **"the trainer function never executed"**:
+
+```
+memory feeds training, NO corpus     WATCH_UNRESOLVED  10   trainer ran: False
+band collision                       NECESSARY         20   trainer ran: False
+degree signal gone                   NECESSARY         20   trainer ran: False
+scale + fired defence                URGENT            30   trainer ran: False
+scale raised, no acknowledgement     WATCH              5   trainer ran: False
+healthy corpus, training on          CLEAR              0   trainer ran: True, receipt bound
+pipeline says training OFF           DORMANT            0   trainer ran: True
+WATCH + ack bound to this job        WATCH_ACKNOWLEDGED 0   trainer ran: True
+WATCH + ack for a DIFFERENT job      WATCH              5   trainer ran: False
+```
+
+**THE LIMIT, STATED PLAINLY.** This defends against **mistake**, not against a launcher that
+deliberately lies about itself. `bind_into_receipt` re-reads the trigger's own receipt file and
+checks state, digest and exit code against the clearance handed to it — so a forged clearance
+must also forge that file, and both cases are tested — but **a launcher that controls its own
+source can always skip the call entirely. You cannot stop code from lying about whether it ran a
+check.**
+
+What it does buy: the correct path is the easy path; a run receipt without a clearance is
+*visibly incomplete* and an auditor can grep for it; and every blocking state provably stops the
+trainer. The residual assurance is **procedural, not technical** — the receipt must carry the
+clearance, and an auditor must check it.
 
 **Backstop, deferred:** once a real deployment sets `production_memory_feeds_training = true`,
 add a weekly remote scheduled run. **Not created — owner's to authorize.**
@@ -326,6 +371,25 @@ would have used the same metric in the fixtures as in the code.
 > `1 − levenshtein(a, b) / max(len(a), len(b))`, over the raw `trajectory` sequences.
 > Identical sequences score `1.0` and are therefore **outside** the band, whose upper end
 > `0.99` is exclusive.
+
+**THE METRIC AND ITS THRESHOLDS ARE ONE CALIBRATION PACKAGE (owner ruling 2026-09-02).**
+
+Edit distance is not an arbitrary pick among reasonable similarity measures. **Every threshold
+in this trigger was calibrated with it**, on populations measured with it:
+
+```
+contradiction band            0.80 to 0.99
+legitimate collateral          0 of 3794     (no legitimate pair falls in the band)
+forgery pairs                 54 of 108
+```
+
+Swapping in cosine similarity would leave `0.80` and `0.99` as **ungrounded numbers** — the same
+digits measuring a different quantity, against populations nobody has re-measured.
+
+> **NORMATIVE:** Any future change to `T1`'s similarity metric is a **RECALIBRATION EVENT**
+> requiring new population measurements. **Thresholds may NEVER be carried across metrics
+> unchanged.** It is not a spelling correction and it is not code cleanup — it is a new
+> measurement event, and it needs an owner ruling and a dated spec-sheet row like any other.
 
 ### 8.3 The acknowledgement format was undefined — the only path from blocking to exit 0
 

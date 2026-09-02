@@ -4,6 +4,33 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - Trigger PASSED; the interlock is built and the trainer provably stops
+
+Owner ruled the trigger itself PASS at `bc9e89df`, with the alarm bench-tested but not yet wired
+to the furnace. It is wired now.
+
+**`T1`'s metric is frozen as a calibration package.** Any future change to it is a
+**recalibration event** requiring new population measurements; thresholds may never be carried
+across metrics unchanged. `0.80`/`0.99`, the `0/3794` collateral measurement and the `54/108`
+forgery-pair measurement were all calibrated with edit distance - swapping the metric leaves the
+same digits measuring a different quantity.
+
+**`replay_training_gate.py`** implements the five launcher requirements as a module. The launcher
+never writes a manifest: it hands over the config its pipeline emitted and the manifest is
+derived from it, so no hand-editable boolean sits anywhere on the path.
+
+**`validate_gate.py` proves it**, and the assertion is not "an exception was raised" but **"the
+trainer function never executed"**. All five blocking states: `trainer ran: False`. Clear states:
+`trainer ran: True` with the clearance bound into the receipt.
+
+**The limit, stated rather than dressed up:** this defends against mistake, not against a
+launcher that deliberately lies about itself. A launcher controlling its own source can skip the
+call. An earlier draft of the gate test recorded "a hand-built clearance dict is accepted" as a
+*passing* row - a limitation dressed as a success - and that was corrected to a refusal plus an
+explicit disclosure.
+
+CMB-RP1 remains blocked.
+
 ## 2026-09-02 - External spec-only conformance suite: one real bug, three spec defects
 
 Closes GLM audit finding 1 - the existing suite was the checker validating itself. Eight parties
