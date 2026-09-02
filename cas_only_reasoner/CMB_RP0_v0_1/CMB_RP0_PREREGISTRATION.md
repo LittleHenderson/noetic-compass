@@ -590,3 +590,79 @@ interpreter overhead, not for compute. **GPU usage here is not evidence of scale
 receipt says so. Whether this workload falls inside the GPU-first law at all is an owner
 question, not mine — RGM-0.2's own receipt set the precedent in the other direction
 (`"device": "cpu"`, `$0`, 428 s).
+
+---
+
+# AMENDMENT A4 — OWNER AUTHORIZED LAUNCH (2026-09-02), written BEFORE the run
+
+Owner message: *"GLM IS AUDITING CMB-P0/P1/P2 and RGM-0.2. AND YES LAUNCH"*.
+
+This resolves the conflict recorded in `OWNER_RULING_2026_09_02_PRELAUNCH.md` section 1 in
+favour of the opening instruction. **The run is authorized.** Committed before launch so the
+ordering is checkable in git rather than asserted.
+
+## A4.1 — auditor assignments
+
+```
+CMB-P0 / CMB-P1 / CMB-P2 / RGM-0.2     GLM        <- NAMED, unblocked
+CMB-RP0                                 UNNAMED    <- still owed
+```
+
+The owner's earlier ordering (*"After audit passes: ONE AWS GPU DEVELOPMENT RUN"*) is
+superseded for the RUN only. It is **not** superseded for promotion. The standing prohibition
+`No claim promotion` remains in force, so:
+
+> **This is a DEVELOPMENT RUN. It produces raw measurements. No claim may be promoted from it
+> until an independent auditor — not Claude, who built it — has passed the design.**
+
+## A4.2 — the effect threshold at launch is PROVISIONAL, and why that is safe
+
+`MARGIN = 0.02` is unchanged at launch and is **known to be roughly five times below the
+between-world standard deviation** (`0.1077-0.1105`). The owner raised exactly this. The
+calibration measuring a defensible threshold is still in flight on dev worlds.
+
+Launching now does not bake in the wrong threshold, because **the status is a pure function of
+the per-world measurements**, and those are saved: `CMB_RP0_RAW.json` is flushed after every
+world and the full `clean` / `poisoned` arrays are embedded in the receipt. `summarize()` can
+therefore be re-applied to the saved data at **`$0`**, with no GPU and no re-run.
+
+**REGISTERED PROCEDURE, binding, so this cannot become post-hoc tuning:**
+
+1. The threshold may be revised **at most once**.
+2. The revision must be derived **only from dev worlds `750+`**. Registered worlds `700-708`
+   may **never** inform the threshold.
+3. The calibration method is fixed in advance: the null is the paired delta between **two
+   independent draws of the same stochastic arm**, which is pure noise with the same variance
+   structure as the real comparison; the candidate margin is the 95th percentile of that
+   null's `|delta|`.
+4. Any recomputed status must be reported **alongside** the launch-time status, with both
+   margin values stated. Neither replaces the other silently.
+5. If the revised threshold changes a status word, **both words are recorded** and the change
+   is flagged for the auditor.
+
+## A4.3 — what this run can and cannot settle
+
+Registered in advance, so a null result is not later reinterpreted as a win:
+
+- **CAN settle:** the safety half. Poison ingestion is a **count**, and the two-tier gap
+  (`CMB_RETRIEVED` minus `CMB_AUTHORIZED`) is the measurement the whole bench exists for. A
+  one-world dev signal already put that gap at `-1.0` — the authorized tier admitting **more**
+  forgeries, not fewer — so `TWO_TIER_GATE_EARNS_NOTHING` is a live outcome.
+- **CANNOT settle:** the capability half. Between-world sd `~0.108` against registered
+  headroom `0.045` means nine worlds cannot resolve the forgetting comparison. **A capability
+  tie is ABSENCE OF POWER, not evidence of equivalence**, and must never be reported as one.
+
+## A4.4 — compute law, as ruled
+
+```
+No experimental workload on the owner's local CPU.
+One remote AWS GPU.
+All scalable learning tensors on CUDA.
+Fail closed on silent numerical CPU fallback.
+Remote CPU host: orchestration, file I/O, hashing, JSON, monitoring, shutdown only.
+```
+
+Enforced: `require_cuda()` raises `GPU_REQUIRED` and **no CPU fallback branch exists in the
+harness**. The launcher additionally aborts before any harness work if CUDA is unavailable on
+the instance. Binding cost stop is the in-instance timer at 40 min = **`$0.351`**, inside the
+frozen `$0.40`.
