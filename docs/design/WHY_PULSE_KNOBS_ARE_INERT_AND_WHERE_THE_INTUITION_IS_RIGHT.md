@@ -160,3 +160,29 @@ by one scalar** — and one extra state variable makes the full oscillatory voca
 well-defined (measured: period 11.68 waves, Q ≈ 6.88). Whether that vocabulary is the *right*
 way to close the gap, or whether an explicit tag closes it more cheaply, is settled by one
 benchmark that does not yet exist.
+
+
+---
+
+## CLOSING NOTE (2026-09-02) — what the three benches this document launched actually settled
+
+This document proposed the multi-chain interference benchmark in §7. It was built three times
+(CMB-P0, CMB-P1, CMB-P2) and the owner closed the lane on 2026-09-02.
+
+**§4's claim — that one scalar per memory cannot encode which chain activated it — was never
+tested.** All three benches were solvable *without* separating chains: CMB-P0's gold was
+findable from one edge weight, then from content, and CMB-P2's from two-hop graph mass, where a
+phase-free rule beat an oracle handed the true labels (0.8255/0.8568 vs 0.7682/0.6797). Each
+shortcut was created by the repair for the previous one.
+
+So the capacity gap named in §4 remains **an open question, neither confirmed nor refuted**.
+What §1 and §2 established — that the knobs cannot re-rank on the RGM-0.1 engine, and that
+phase, frequency and Q are undefined on a real spectrum — still stands; those were measured
+directly on that engine and do not depend on the benchmark.
+
+**§7's three-arm design was insufficient.** It called for scalar / tag / oscillator. It should
+have required a mechanism-free baseline at every depth the mechanism can see — content,
+one-hop, two-hop, topology, candidate identity — measured before any arm and re-measured after
+every world repair. That is now the registered return condition for any future phase work.
+
+Full record: `cas_only_reasoner/CMB_P2_v0_1/PHASE_LANE_CLOSURE.md`.
