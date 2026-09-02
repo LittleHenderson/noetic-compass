@@ -558,3 +558,35 @@ mid-bench is the auditor's call, not mine. Recorded here so it is not rediscover
 
 Nine blocking items, nine fixes, four re-verified by my own measurement (A3.1, A3.3, A3.4,
 A3.9). **Still NOT LAUNCHED.**
+
+---
+
+# A3 ADDENDUM — run constants, frozen (were absent from this document; B8)
+
+```
+worlds            700-708  (9), asserted disjoint from RGM-0.1 (0-19) and RGM-0.2 (500-511)
+seeds             0, 1          per world
+replay draws      5             per stochastic arm per world (RANDOM, DEGREE_FILTER)
+tasks             3             topic-to-task split DRAWN PER WORLD
+learner           42 -> 64 -> 32 MLP, shared 32-way softmax head, ~4.8k parameters
+optimiser         Adam, lr 1e-3, batch 64, 300 steps per task
+REPLAY_K          32            equal-volume rule; underfill recorded
+QUERIES_PER       8             CMB query budget per new-task topic
+POISON            6 per past topic, lev-1 trajectory, wrong label, real context and links
+MARGIN            0.02          capability; paired permutation, N_PERM 10000
+POISON_MARGIN     1.0           forgeries; registered BEFORE seeing retention
+HARD COST CEILING $0.40         launcher: HARD_CAP_USD 0.40, in-instance 40 min, watchdog 45 min
+```
+
+Cost arithmetic, from measurement rather than estimate: `146.3 s` per world pair on the RTX 4070
+(`64.4` CLEAN + `81.8` POISONED); `x1.4` for the T4 host's slower vCPU on Python-bound work =
+`205 s` per world. Nine worlds = `35.7 min` billable including ~5 min boot and torch install =
+**`$0.313`**, sitting `4.3 min` inside the in-instance timer. Ten worlds would leave `0.9 min`
+of margin and twelve would exceed the frozen ceiling.
+
+**Honest note on what the GPU is doing.** The learner is a ~4.8k-parameter MLP. The GPU performs
+a fraction of a second of arithmetic across the entire run; the instance is rented for Python
+interpreter overhead, not for compute. **GPU usage here is not evidence of scale**, and the
+receipt says so. Whether this workload falls inside the GPU-first law at all is an owner
+question, not mine — RGM-0.2's own receipt set the precedent in the other direction
+(`"device": "cpu"`, `$0`, 428 s).

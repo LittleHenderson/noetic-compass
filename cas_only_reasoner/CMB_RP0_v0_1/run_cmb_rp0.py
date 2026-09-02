@@ -43,7 +43,14 @@ import cmb_r1_v02_core as V2                                     # noqa: E402
 
 VERSION = "cmb_rp0_v0.2"
 
-WORLDS = tuple(range(700, 718))                  # 18 worlds, disjoint from 0-19 and 500-511
+# 9 worlds, disjoint from 0-19 and 500-511. Set from MEASUREMENT, not from a guess:
+# 146.3 s per world pair on the 4070 (64.4 CLEAN + 81.8 POISONED), x1.4 for the T4 host's
+# slower vCPU on Python-bound work = 205 s/world. $0.40 at $0.526/hr = 45.6 min billable.
+#     9 worlds -> 35.7 min, $0.313, 4.3 min inside the 40-min in-instance timer
+#    10 worlds -> 39.1 min, $0.343, 0.9 min margin -- too tight, any variance overruns
+#    12 worlds -> 46.0 min, $0.403 -- OVER the frozen ceiling
+# Nine it is. Raw is flushed after every world, so even a timeout preserves what finished.
+WORLDS = tuple(range(700, 709))
 LEGACY = {20260901 + 1000 * w for w in list(range(0, 20)) + list(range(500, 512))}
 SEEDS = (0, 1)              # within-world seed sd 0.007-0.033 vs between-world 0.108 (A3.5)
 N_DRAWS = 5                 # replay draws per stochastic arm per world (B4)
