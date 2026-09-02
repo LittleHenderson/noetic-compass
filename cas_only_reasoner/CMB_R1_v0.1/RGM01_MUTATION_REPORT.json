@@ -1,0 +1,776 @@
+{
+ "all_mutants_behaved": true,
+ "mutants": [
+  {
+   "expectation": "G_STATIC fires (STATIC fails) when the static term is zeroed",
+   "fired": true,
+   "gate_detail": {
+    "G_ADDCORR": {
+     "armX": "D",
+     "armY": "X_MAX",
+     "families": [
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.47163742690058474,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.471053,
+      0.472222
+     ]
+    },
+    "G_EFF": {
+     "mean": 0.010619,
+     "median": 0.01097,
+     "ratios": [
+      0.010268,
+      0.01097
+     ]
+    },
+    "G_GENERIC": {
+     "armX": "D",
+     "armY": "E2",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.10409858387799562,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.08201,
+      0.126187
+     ]
+    },
+    "G_PROP": {
+     "armX": "D_NODAMP",
+     "armY": "C",
+     "families": [
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.2634925284865399,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.203903,
+      0.323082
+     ]
+    },
+    "G_RESON": {
+     "armX": "D",
+     "armY": "X_SUM",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.014978070175438585,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.013289,
+      0.016667
+     ]
+    },
+    "G_STATIC": {
+     "armX": "B",
+     "armY": "A",
+     "families": [
+      "LOOKALIKE"
+     ],
+     "mean": 0.0,
+     "n": 2,
+     "pos_worlds": 0,
+     "values": [
+      0.0,
+      0.0
+     ]
+    },
+    "G_TRAJ": {
+     "armX": "C",
+     "armY": "B",
+     "families": [
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.10148792637519989,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.087549,
+      0.115427
+     ]
+    }
+   },
+   "mutant": "N1",
+   "observed": "NOT_ESTABLISHED"
+  },
+  {
+   "expectation": "G_TRAJ fires when trajectory comparison is order-insensitive",
+   "fired": true,
+   "gate_detail": {
+    "G_ADDCORR": {
+     "armX": "D",
+     "armY": "X_MAX",
+     "families": [
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.47163742690058474,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.471053,
+      0.472222
+     ]
+    },
+    "G_EFF": {
+     "mean": 0.010619,
+     "median": 0.01097,
+     "ratios": [
+      0.010268,
+      0.01097
+     ]
+    },
+    "G_GENERIC": {
+     "armX": "D",
+     "armY": "E2",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.10409858387799562,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.08201,
+      0.126187
+     ]
+    },
+    "G_PROP": {
+     "armX": "D_NODAMP",
+     "armY": "C",
+     "families": [
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.26356934130917786,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.204064,
+      0.323074
+     ]
+    },
+    "G_RESON": {
+     "armX": "D",
+     "armY": "X_SUM",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.014978070175438585,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.013289,
+      0.016667
+     ]
+    },
+    "G_STATIC": {
+     "armX": "B",
+     "armY": "A",
+     "families": [
+      "LOOKALIKE"
+     ],
+     "mean": 0.05447345326897762,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.084528,
+      0.024419
+     ]
+    },
+    "G_TRAJ": {
+     "armX": "C",
+     "armY": "B",
+     "families": [
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION"
+     ],
+     "mean": -0.0006720396390893543,
+     "n": 2,
+     "pos_worlds": 0,
+     "values": [
+      -0.000801,
+      -0.000543
+     ]
+    }
+   },
+   "mutant": "N2",
+   "observed": "NOT_ESTABLISHED"
+  },
+  {
+   "expectation": "G_PROP fires when propagation is disabled (pattern completion collapses)",
+   "fired": true,
+   "gate_detail": {
+    "G_ADDCORR": {
+     "armX": "D",
+     "armY": "X_MAX",
+     "families": [
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.0,
+     "n": 2,
+     "pos_worlds": 0,
+     "values": [
+      0.0,
+      0.0
+     ]
+    },
+    "G_EFF": {
+     "mean": 0.009582,
+     "median": 0.009951,
+     "ratios": [
+      0.009213,
+      0.009951
+     ]
+    },
+    "G_GENERIC": {
+     "armX": "D",
+     "armY": "E2",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.002127192982456133,
+     "n": 2,
+     "pos_worlds": 1,
+     "values": [
+      0.004254,
+      0.0
+     ]
+    },
+    "G_PROP": {
+     "armX": "D",
+     "armY": "C",
+     "families": [
+      "PATTERN_COMPLETION"
+     ],
+     "mean": -0.001213353866401257,
+     "n": 2,
+     "pos_worlds": 0,
+     "values": [
+      -0.001979,
+      -0.000448
+     ]
+    },
+    "G_RESON": {
+     "armX": "D",
+     "armY": "X_MAX",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.0,
+     "n": 2,
+     "pos_worlds": 0,
+     "values": [
+      0.0,
+      0.0
+     ]
+    },
+    "G_STATIC": {
+     "armX": "B",
+     "armY": "A",
+     "families": [
+      "LOOKALIKE"
+     ],
+     "mean": 0.05447345326897762,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.084528,
+      0.024419
+     ]
+    },
+    "G_TRAJ": {
+     "armX": "C",
+     "armY": "B",
+     "families": [
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.03457181860337723,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.032189,
+      0.036955
+     ]
+    }
+   },
+   "mutant": "N3",
+   "observed": "NOT_ESTABLISHED"
+  },
+  {
+   "expectation": "G_GENERIC fails to establish when the generic arm equals the CAS arm (law-level)",
+   "fired": true,
+   "gate_detail": {
+    "G_ADDCORR": {
+     "armX": "D",
+     "armY": "X_MAX",
+     "families": [
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.47163742690058474,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.471053,
+      0.472222
+     ]
+    },
+    "G_EFF": {
+     "mean": 0.010619,
+     "median": 0.01097,
+     "ratios": [
+      0.010268,
+      0.01097
+     ]
+    },
+    "G_GENERIC": {
+     "armX": "D",
+     "armY": "E2",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.0,
+     "n": 2,
+     "pos_worlds": 0,
+     "values": [
+      0.0,
+      0.0
+     ]
+    },
+    "G_PROP": {
+     "armX": "D_NODAMP",
+     "armY": "C",
+     "families": [
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.2634925284865399,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.203903,
+      0.323082
+     ]
+    },
+    "G_RESON": {
+     "armX": "D",
+     "armY": "X_SUM",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.014978070175438585,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.013289,
+      0.016667
+     ]
+    },
+    "G_STATIC": {
+     "armX": "B",
+     "armY": "A",
+     "families": [
+      "LOOKALIKE"
+     ],
+     "mean": 0.05447345326897762,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.084528,
+      0.024419
+     ]
+    },
+    "G_TRAJ": {
+     "armX": "C",
+     "armY": "B",
+     "families": [
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.03457181860337723,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.032189,
+      0.036955
+     ]
+    }
+   },
+   "mutant": "N4",
+   "observed": "NOT_ESTABLISHED"
+  },
+  {
+   "expectation": "G_COHECHO fires when coherence is removed from the BOTH config",
+   "fired": true,
+   "gate_detail": {
+    "G_ADDCORR": {
+     "armX": "D",
+     "armY": "X_MAX",
+     "families": [
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.47163742690058474,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.471053,
+      0.472222
+     ]
+    },
+    "G_EFF": {
+     "mean": 0.010619,
+     "median": 0.01097,
+     "ratios": [
+      0.010268,
+      0.01097
+     ]
+    },
+    "G_GENERIC": {
+     "armX": "D",
+     "armY": "E2",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.10409858387799562,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.08201,
+      0.126187
+     ]
+    },
+    "G_PROP": {
+     "armX": "D_NODAMP",
+     "armY": "C",
+     "families": [
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.2634925284865399,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.203903,
+      0.323082
+     ]
+    },
+    "G_RESON": {
+     "armX": "D",
+     "armY": "X_SUM",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.014978070175438585,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.013289,
+      0.016667
+     ]
+    },
+    "G_STATIC": {
+     "armX": "B",
+     "armY": "A",
+     "families": [
+      "LOOKALIKE"
+     ],
+     "mean": 0.05447345326897762,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.084528,
+      0.024419
+     ]
+    },
+    "G_TRAJ": {
+     "armX": "C",
+     "armY": "B",
+     "families": [
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.03457181860337723,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.032189,
+      0.036955
+     ]
+    }
+   },
+   "mutant": "N5",
+   "observed": "FAILED"
+  },
+  {
+   "expectation": "G_EFF flags the family-level charging bug (recomputed ratio exceeds cap)",
+   "fired": true,
+   "gate_detail": {
+    "G_ADDCORR": {
+     "armX": "D",
+     "armY": "X_MAX",
+     "families": [
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.47163742690058474,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.471053,
+      0.472222
+     ]
+    },
+    "G_EFF": {
+     "mean": 0.3663325,
+     "median": 0.377382,
+     "ratios": [
+      0.355283,
+      0.377382
+     ]
+    },
+    "G_GENERIC": {
+     "armX": "D",
+     "armY": "E2",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.10409858387799562,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.08201,
+      0.126187
+     ]
+    },
+    "G_PROP": {
+     "armX": "D_NODAMP",
+     "armY": "C",
+     "families": [
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.2634925284865399,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.203903,
+      0.323082
+     ]
+    },
+    "G_RESON": {
+     "armX": "D",
+     "armY": "X_SUM",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.014978070175438585,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.013289,
+      0.016667
+     ]
+    },
+    "G_STATIC": {
+     "armX": "B",
+     "armY": "A",
+     "families": [
+      "LOOKALIKE"
+     ],
+     "mean": 0.05447345326897762,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.084528,
+      0.024419
+     ]
+    },
+    "G_TRAJ": {
+     "armX": "C",
+     "armY": "B",
+     "families": [
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.03457181860337723,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.032189,
+      0.036955
+     ]
+    }
+   },
+   "mutant": "N6",
+   "observed": "ANOMALY"
+  },
+  {
+   "expectation": "G_ROOT reports NOT_SUPPORTED on measurements despite any fiat",
+   "fired": true,
+   "gate_detail": {
+    "G_ADDCORR": {
+     "armX": "D",
+     "armY": "X_MAX",
+     "families": [
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.47163742690058474,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.471053,
+      0.472222
+     ]
+    },
+    "G_EFF": {
+     "mean": 0.010619,
+     "median": 0.01097,
+     "ratios": [
+      0.010268,
+      0.01097
+     ]
+    },
+    "G_GENERIC": {
+     "armX": "D",
+     "armY": "E2",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.10409858387799562,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.08201,
+      0.126187
+     ]
+    },
+    "G_PROP": {
+     "armX": "D_NODAMP",
+     "armY": "C",
+     "families": [
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.2634925284865399,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.203903,
+      0.323082
+     ]
+    },
+    "G_RESON": {
+     "armX": "D",
+     "armY": "X_SUM",
+     "families": [
+      "LOOKALIKE",
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION",
+      "INDEPENDENT_CORROB"
+     ],
+     "mean": 0.014978070175438585,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.013289,
+      0.016667
+     ]
+    },
+    "G_STATIC": {
+     "armX": "B",
+     "armY": "A",
+     "families": [
+      "LOOKALIKE"
+     ],
+     "mean": 0.05447345326897762,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.084528,
+      0.024419
+     ]
+    },
+    "G_TRAJ": {
+     "armX": "C",
+     "armY": "B",
+     "families": [
+      "ORDER_MATTERS",
+      "CROSS_DOMAIN",
+      "PATTERN_COMPLETION"
+     ],
+     "mean": 0.03457181860337723,
+     "n": 2,
+     "pos_worlds": 2,
+     "values": [
+      0.032189,
+      0.036955
+     ]
+    }
+   },
+   "mutant": "N7",
+   "observed": "NOT_SUPPORTED"
+  }
+ ],
+ "note": "2-world demonstration subsets; pristine 20-world battery in RGM01_RECEIPT.json"
+}

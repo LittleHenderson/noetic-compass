@@ -1,0 +1,43 @@
+{
+ "mutants": [
+  {
+   "id": "M1",
+   "expected": "RGM0_FAILED:STATIC_CAS_GEOMETRY_REDUNDANT",
+   "got": "RGM0_FAILED:STATIC_CAS_GEOMETRY_REDUNDANT",
+   "fired": true
+  },
+  {
+   "id": "M2",
+   "expected": "RGM0_FAILED:CAS_TRAJECTORY_VALUE_NOT_DEMONSTRATED",
+   "got": "RGM0_FAILED:CAS_TRAJECTORY_VALUE_NOT_DEMONSTRATED",
+   "fired": true
+  },
+  {
+   "id": "M3",
+   "expected": "RGM0_FAILED:RESONANCE_LAYER_ORNAMENTAL",
+   "got": "RGM0_FAILED:RESONANCE_LAYER_ORNAMENTAL",
+   "fired": true
+  },
+  {
+   "id": "M4",
+   "expected": "RGM0_FAILED:GENERIC_GEOMETRY_SUFFICIENT",
+   "got": "RGM0_FAILED:GENERIC_GEOMETRY_SUFFICIENT",
+   "fired": true
+  },
+  {
+   "id": "M5",
+   "expected": "RGM0_FAILED:CAS_GEOMETRY_NOT_LOAD_BEARING",
+   "got": "RGM0_FAILED:CAS_GEOMETRY_NOT_LOAD_BEARING",
+   "fired": true
+  },
+  {
+   "id": "M6",
+   "expected": "RGM0_FAILED:ECHO_CONTROLS_FAILED",
+   "got": "RGM0_FAILED:ECHO_CONTROLS_FAILED",
+   "fired": true
+  }
+ ],
+ "all_mutants_behaved": true,
+ "pristine_rerun_sha256": "b136ef730387813de701ae955a4d2f9da5f4f4690f9c5f5b4da8ebd18752c39a",
+ "note": "M7 (one-family-result residual) is exercised structurally: KL7 is evaluated inside every run; the M1-M6 mutants also re-exercise KL7 on their deltas."
+}
