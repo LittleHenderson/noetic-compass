@@ -89,3 +89,29 @@ and provenance roots do not shield anything on this bench. The memory board is r
 re-modeled honestly: a damped accumulator over an ordered-geometry graph with a coherence
 verifier that needs a boundary margin — pointed at the replay-selection problem, which it is
 NOT yet ready to take.
+
+---
+
+# AUDIT ANNOTATION (Claude audit 2f62fb5a, PARTIAL_PASS with blocker — appended, original text above preserved)
+
+1. BLOCKER (CHANGELOG destruction) — OWNED AND FIXED at dfa08de8. Cause: the builder read 30
+   lines of the shared ledger and rewrote the whole file. Rule adopted: append-only operations
+   on shared ledgers use append-only tools.
+2. RESONANCE_SPECIFIC_VALUE — OVERTURNED, builder concurs. Per-family D-X_SUM: LOOKALIKE
+   -0.0055 (1/20 worlds), ORDER_MATTERS -0.0046 (0/20), CROSS_DOMAIN -0.0040 (0/20),
+   PATTERN_COMPLETION +0.0047 (3/20), INDEPENDENT_CORROB +0.0887 (20/20). Drop-one residual
+   -0.0023. The SUPPORTED status was a one-family-dominated aggregate that double-counted
+   ADDITIVE_CORROBORATION_VALUE. The real mechanism (auditor identified): D and X_SUM differ
+   only in activation persistence; decay magnitude is inert, so the carry-forward itself is
+   the mechanism. Pending owner ruling: NOT_SUPPORTED, or the scoped label
+   ACTIVATION_PERSISTENCE_CORROBORATION_INCREMENT.
+3. LAW EXTENDED (second occurrence of this defect class): drop-one residual now applies to
+   EVERY gate without exception — recorded as spec amendment V5 below.
+4. UPHELD by audit: GENERIC_GEOMETRY_ADVANTAGE (drop-one +0.0698/+0.0778),
+   COHERENCE_ECHO_CONTROL FAILED (BOTH 359 indistinguishable from NEITHER 360 on near-miss),
+   PROVENANCE_ROOT_CONTROL NOT_SUPPORTED, RETRIEVAL_EFFICIENCY SUPPORTED, all seven typed
+   mutants, the E2 repair (C-1/C-2 closed).
+5. COMPUTE (auditor-measured): 87% of runtime is 2,647,625 Levenshtein calls on integer
+   sequences of length 3-6; GPU cannot accelerate this kernel class; measured path: 2.26x
+   (dedup vs 714 distinct trajectories) x ~20x (world parallelism) = ~39x, all CPU; heavy
+   batteries move to AWS compute-optimized instances. Owner compute ruling pending.

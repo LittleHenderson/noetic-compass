@@ -77,3 +77,12 @@ does not rubber-stamp). Pristine rerun byte-identical after mutants.
 V1. Battery passes = 2 (not 3) for determinism, to fit compute; v0.1 established the triple-run
 protocol and its hash discipline is unchanged. V2. Arm H cut. V3. Corruption control moved to
 report-only-via-v0.1. V4. Peak memory measured with tracemalloc around the propagation stage.
+
+## AMENDMENT V5 (post-audit 2f62fb5a — binding for all future rounds)
+
+The drop-one residual law applies to EVERY claim gate without exception: no gate may report
+SUPPORTED unless its delta survives removing its single largest family at MARGIN/2, and a
+family already counted by another gate may not contribute to a second gate's aggregate.
+Rationale: the same one-family-dominance defect has now produced a false SUPPORTED twice
+(v0.1 KL3 residual gap; RGM-0.1 G_RESON aggregate). Mechanical check required in the status
+law, not prose.
