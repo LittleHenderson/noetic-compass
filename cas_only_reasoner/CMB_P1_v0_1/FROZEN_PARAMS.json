@@ -1,0 +1,36 @@
+{
+ "freeze_rule": "smallest repulsion / frequency spread clearing merge_fraction <= 0.15 while staying above P0; never the value maximising top-1",
+ "note": "Sealed BEFORE any held-out world was read. Every value fixed on dev worlds 0-5 or by closed-form reasoning; P7/P8 frozen at the CONVERGED (200-substep) budget, not the flattering 10-substep transient.",
+ "p7_note": "NO setting passes both criteria at the converged budget; registered at its closest setting (quantile 0.80) so the failure is reported honestly",
+ "params": {
+  "B_GATE_CONTENT_S0": 0.3,
+  "B_GATE_REACH_S0": 0.05,
+  "CAPACITY_TOP1": 0.5,
+  "CONTAM_MARGIN": 0.05,
+  "DIAGNOSTIC_K": 4,
+  "GATE_HEADROOM_TOP1": 0.9,
+  "GATE_ORACLE_TOP1": 0.6,
+  "MARGIN": 0.02,
+  "MERGE_FRACTION_MAX": 0.15,
+  "MERGE_RAD": 0.15,
+  "MERGE_VS_P2_SLACK": 0.05,
+  "P2_CONTENT_WEIGHT": 0.5,
+  "P7_BETA": 10.0,
+  "P7_QUANTILE": 0.8,
+  "P7_REACH_DEPTH": 2,
+  "P8_OMEGA": 0.8,
+  "P8_SPECTRAL_INDEX": 2,
+  "PRIMARY_K": [
+   2,
+   3
+  ],
+  "SANITY_K": 1,
+  "WIN_FRACTION": 0.7
+ },
+ "sealed_before_heldout_read": true,
+ "substep_budgets": [
+  10,
+  200
+ ],
+ "world": "build_world_p1 -- CMB-P0's world with the CONTENT LEAK repaired"
+}

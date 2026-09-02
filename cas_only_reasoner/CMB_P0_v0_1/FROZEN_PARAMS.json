@@ -1,9 +1,14 @@
 {
+ "corrections_2026_09_02": {
+  "PHASE_SUBSTEPS_converged_claim": "WITHDRAWN -- 10 is a transient, not convergence",
+  "artifact_note": "no measured number in CMB_P0_RECEIPT.json changes; no negative deleted",
+  "chain_identity_not_in_node_features": "WITHDRAWN -- the content vector LEAKED chain identity; a per-chain flavour was applied to that chain's own completion. Measured cue-to-own-completion advantage 0.2621/0.2354/0.2411 at K=2/3/4; content alone picked the gold 25/36, 25/42, 26/48. No CMB-P0 arm reads content, so the measured comparisons stand, but a content-reading arm would have beaten all of them. Repaired in CMB-P1 only."
+ },
  "justifications": {
   "B_COUPLE/EPS_REC": "stability solved analytically over mu(W) in [-1,1] (graph-independent); among stable+oscillatory settings, chosen to make P3 -- a COMPETITOR arm -- strongest on dev (b=0.60 gave P3 top1 0.000, i.e. broken)",
   "KC_PHASE": "NOT swept -- left at its drafted value. Sweeping the hypothesis arm upward would be the biased direction.",
   "MARGIN/MERGE_MARGIN/CONTAM_MARGIN": "separate thresholds in their own units; merges are counts, contamination is quantised in steps of 1/TOPK",
-  "PHASE_SUBSTEPS": "frozen at a CONVERGED value (10), not at the 4-substep transient where P4 scores highest; a stopping time is not a mechanism",
+  "PHASE_SUBSTEPS": "CORRECTED 2026-09-02 (see prereg AMENDMENT A3.1). The original text claimed this was 'frozen at a CONVERGED value (10)'. THAT WAS FALSE: measured merge fraction is 0.6406 at 10 substeps, 0.9844 at 25, and 1.0000 at 50 and 200, with cross-chain separation reaching exactly 0.0000. Substep 10 is a LATER TRANSIENT, not convergence; the true attractor destroys every chain distinction. This STRENGTHENS the PHASE_MEMORY_UNSAFE verdict and changes no measured number. The reason for not freezing at the 4-substep peak stands: a stopping time is not a mechanism.",
   "REACH_DEPTH": "swept on dev; purity 0.781/0.787/0.752/0.724 for depth 1/2/3/4; chosen to maximise P2, again a competitor arm"
  },
  "missing_from_section_3_1_list": [

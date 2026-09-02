@@ -586,3 +586,94 @@ is +0.070 / +0.058 / **+0.021** at K=2/3/4, and the K=4 figure sits barely above
    relabel, and naming a cross-model auditor for RGM-0.1.
 
 **Status: the harness is v0.2, the dev gates pass, and no held-out world has been read.**
+
+---
+
+# AMENDMENT A3 — two CMB-P0 statements are FACTUALLY WRONG and are corrected here (2026-09-02)
+
+Found while designing CMB-P1, by verifying warnings from an independent design panel. Both
+errors are mine. **Neither weakens `PHASE_MEMORY_UNSAFE` — the first strengthens it and the
+second was never exploited by any arm — but both were stated as fact in a frozen document and
+must be corrected rather than quietly superseded.** No number in the CMB-P0 receipt changes.
+
+## A3.1 `PHASE_SUBSTEPS = 10` is **NOT** converged
+
+`FROZEN_PARAMS.json` records the justification *"frozen at a CONVERGED value (10), not at the
+4-substep transient where P4 scores highest"*. **The first half of that is false.** Running
+the identical dynamics further, on dev worlds:
+
+| phase substeps | K=2 merge fraction | K=3 merge fraction | cross-chain separation (K=2/K=3) |
+|---|---|---|---|
+| **10 (frozen)** | 0.6406 | 0.6523 | 0.2707 / 0.2390 |
+| 25 | 0.9844 | 0.9844 | 0.0205 / 0.0129 |
+| 50 | 1.0000 | 1.0000 | 0.0006 / 0.0003 |
+| 200 | **1.0000** | **1.0000** | **0.0000 / 0.0000** |
+
+**The true attractor is 100% merging with cross-chain separation of exactly zero.** Substep 10
+is a *later* transient, not convergence.
+
+**This strengthens the CMB-P0 verdict rather than weakening it.** The published merge fractions
+(0.657 / 0.617 / 0.590) were measured at a point where the system had *not yet finished
+collapsing*; run to its actual fixed point, every chain distinction is destroyed. The reasoning
+in A1.2 — *"a stopping time is not a mechanism"* — was right, and I then mislabelled where the
+stopping point was.
+
+**Method consequence, carried into CMB-P1:** every arm is reported at **two** substep budgets
+(10 and 200) and every claim must hold at both. Otherwise an arm can win simply by being a
+slower transient — which, on dev, is exactly what P4, P7, P8 and P9 all turn out to do.
+
+*(A first attempt to check this appeared to show no change at all across 10/25/50/200. That
+was a bug in my own check: `PHASE_SUBSTEPS` is imported **by value**, so setting it on the
+wrong module did nothing and all four rows were the same run. Identical numbers across a sweep
+are a tell, not a result.)*
+
+## A3.2 The CONTENT vector **LEAKED CHAIN IDENTITY**
+
+§2.1 and §3 of this preregistration state that *"chain identity appears in NO node feature"*
+and that *"the gold chain identity is never exposed … not in node features"*. **That is
+false.** `build_world` adds a per-chain "flavour" vector to every node of a chain — including
+that chain's own completion — so each completion carried its own chain's content signature.
+Measured on dev worlds:
+
+| K | cos(cue_t, gold_t) | cos(cue_t, rival completions) | gap | content alone picks the gold |
+|---|---|---|---|---|
+| 2 | 0.3901 | 0.1280 | **0.2621** | 25/36 (chance 6/36) |
+| 3 | 0.3485 | 0.1131 | **0.2354** | 25/42 (chance 6/42) |
+| 4 | 0.3429 | 0.1017 | **0.2411** | 26/48 (chance 6/48) |
+
+A one-line phase-free content threshold scored **0.5833 / 0.5443 / 0.5938** at K=2/3/4 — which
+would have **beaten `P4_PHASE_OSCILLATOR`** (0.5651 / 0.3906 / 0.2839) at every multi-chain K.
+
+**Why CMB-P0's measured comparisons nevertheless stand:** no CMB-P0 arm reads `content` at all.
+Its only effect on any arm was indirect — four content-similar distractor links per cue. So
+every arm was equally blind to the leak, the pairwise comparisons between them are unaffected,
+and the emitted status is unchanged. What *is* wrong is the claim that no feature carried chain
+identity, and the implication that no cheap non-phase method could have done better. **A
+content-reading arm would have beaten every arm in CMB-P0, for a reason that has nothing to do
+with the mechanism under test.**
+
+**This is the same class of defect as C1** — a label-free shortcut to the gold — found again in
+a different channel, and it survived three adversarial reviewers and my own construct-validity
+checks. It was caught only because an independent design panel insisted a phase-free baseline
+be registered, and I then measured it.
+
+**Repair (CMB-P1 only, so CMB-P0's published artefact is not mutated):** `build_world_p1` gives
+every completion identical content, so completions are content-indistinguishable. Verified:
+the gap falls to **0.0000** at every K, content picks the gold at **exactly chance** (6/36,
+6/42, 6/48), and the phase-free content gate drops to 0.3047 / 0.1302 / 0.1198 — now well
+*below* the scalar baseline.
+
+## A3.3 What this changes about the CMB-P0 record
+
+```
+PHASE_MEMORY_UNSAFE                        UNCHANGED, and better supported
+every measured number in the receipt       UNCHANGED
+"chain identity appears in no node feature"  WITHDRAWN -- it was false
+"PHASE_SUBSTEPS frozen at a converged value" WITHDRAWN -- 10 is a transient; the
+                                             attractor is 100% merging
+"a content-reading method could not have    WITHDRAWN -- one would have beaten every arm
+ done better"                                (never stated outright, but implied by section 3)
+```
+
+No negative result is deleted. No status is upgraded. Both corrections make the bench look
+*worse*, not better, which is the direction that matters.
