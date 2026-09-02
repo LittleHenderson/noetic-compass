@@ -412,3 +412,149 @@ law — not to drop the competitor so the mechanism wins.
 
 If the verifier beats `DEGREE_FILTER` the result is meaningful. If it does not, the honest
 reading is that a graph statistic did the job, and the mechanism is not licensed here.
+
+---
+
+# AMENDMENT A3 — independent adversarial design review, NINE BLOCKING FIXES (2026-09-02)
+
+A three-lens adversarial review (`will_it_forget`, `shortcut_and_fairness`, `stats_and_compute`;
+7 agents) returned **BUILD WITH CHANGES / DO NOT LAUNCH**. I re-verified the decisive items
+myself with the real code before accepting them. **All nine are real. All nine are fixed.**
+None of them came from me.
+
+## A3.1 — a ZERO-INFORMATION rule reproduced my registered ceiling EXACTLY
+
+`build_corpus` sets `topic = i % 32` and `memory_id = "m%04d" % i`, and I used
+`mids = sorted(memories)`. **Sorting the ids IS a class round-robin.** My own verification, pure
+index arithmetic, no seeds involved:
+
+```
+CLEAN t=1   CLASS_BALANCED 11 classes | ID_ORDER 11 classes | set overlap 32/32
+CLEAN t=2   CLASS_BALANCED 22 classes | ID_ORDER 22 classes | set overlap 32/32
+```
+
+"Take the 32 lowest-index past memories" — no query, no labels, no semantics, no graph, no CAS —
+selected the **identical 32-item set** as the arm I had registered as *"ceiling, never a method"*.
+The poison source draw and the CMB query draw took the lowest ids too, identically in every world.
+
+**This is the FOURTH label-free shortcut in this bench family** (CMB-P0 C1, CMB-P0 A3.2 content
+leak, CMB-P2 two-hop, now this). It is the same signature that closed the phase lane. I did not
+find it; the review did.
+
+**Fixed:** store order, poison source draw, CMB query draw and the task split are all drawn from
+the world's own RNG; `CLASS_BALANCED` picks a **random** member of each class rather than the
+first in order. Re-verified: overlap **2/32** and **0/32** against chance **1.9** and **0.9**.
+`ID_ORDER` is registered as a **permanent arm**, and a new precondition
+`id_order_not_equivalent` emits `STATUS_NOT_EMITTED` if it ever again reaches the class-balanced
+arm or the mechanism.
+
+**`ORACLE_BALANCED` is RENAMED `CLASS_BALANCED`.** It uses only labels already stored on the
+memories, so it is a **deployable one-line method, not an oracle**, and the mechanism must beat it.
+
+## A3.2 — the safety headline could fire on an ablation showing ZERO separation
+
+`best_base` excluded `CMB_RETRIEVED`, and nothing checked the gap between the two tiers. The
+review measured both tiers ingesting **identical** poison (2.75 vs 2.75; 3.67 vs 3.67) with
+`AUTHORIZATION_PREVENTS_POISONING` still firing. Section 11 registers exactly this as a
+falsifier and it was **implemented nowhere**.
+
+The sentence that would have been carried forward — *"the authorization tier keeps forgeries out
+of training"* — when the numbers actually said *"the retrieval floor did the work and the second
+tier, the entire subject of this bench, added nothing."*
+
+**Fixed:** `POISON_MARGIN = 1.0` forgeries, **registered before seeing any retention number**,
+and a new executable status `TWO_TIER_GATE_EARNS_NOTHING` that fires first.
+
+## A3.3 — the ceiling arm was the MOST POISONED arm, by construction
+
+Poison sits in the pool by the topic it impersonates but carries a **wrong** label, so eleven
+"classes" appeared whose only members were forgeries. Measured: `CLASS_BALANCED` ingested
+**16 of 32** forgeries, more than any other arm — and my own dev run reproduced exactly 16.
+**Fixed:** built from the true past training indices only. Re-verified: **0 of 32**.
+
+## A3.4 — `RANDOM` drew the SAME 32 items in every world
+
+`manual_seed(1000 * t + hash(arm) % 100000)` had **no world term**, and the pools are pure topic
+arithmetic identical across worlds. So the strongest mechanism-free baseline got **one** draw
+copied into all twelve worlds, and the win-fraction test would have treated twelve reuses of one
+draw as twelve independent draws — precisely how a spurious 12/12 is manufactured.
+**Fixed:** the world is in the seed, plus `N_DRAWS = 5` draws per stochastic arm. Re-verified:
+draws differ across worlds, 5 of 5 distinct within a world.
+
+## A3.5 — the margin was about five times below the noise
+
+Between-world sd on the paired delta is `0.1077-0.1105`, with the sign flipping between worlds;
+within-world seed sd is only `0.0066-0.0328`. **The variance is between worlds, not between
+seeds.** `MARGIN = 0.02`; the win-fraction rule had a floor near `0.076` that more worlds cannot
+lower; registered headroom (A1.4) is `0.045`.
+
+**Fixed and DISCLOSED:** the test is now a paired permutation (`N_PERM = 10000`); win fraction is
+descriptive only; per-world sd goes in the receipt; seeds cut to 2 because a third buys almost
+nothing. **Registered up front: no affordable world count resolves the capability question, so a
+tie there is ABSENCE OF POWER, not evidence of equivalence.** The claim rests on the safety half,
+which is a count.
+
+## A3.6 — the frozen status law and the executable status law DISAGREED
+
+Section 7 said `NO_BENEFIT` = "does not beat RANDOM"; the code said "does not beat NO_REPLAY".
+The two documents would emit **different words from the same result**, and the code's word would
+have printed over a result where the mechanism loses to `RANDOM`, `SEMANTIC_DIVERSE` and
+`DEGREE_FILTER`. Section 7 also named `SEMANTIC_ONLY`, an arm that no longer exists, and
+`GATE_MECHANISM_FREE` appeared **zero** times in the harness.
+
+**Fixed:** one law, the one the code executes. `CMB_REPLAY_TIES_SEMANTIC` renamed
+`CMB_REPLAY_BEATS_NO_REPLAY_ONLY`. The capability status must beat **every** mechanism-free arm
+measured, not a hand-picked pair. The `auth_empty` guard now covers capability as well as safety.
+
+## A3.7 — the run was not reproducible and the receipt claimed it was
+
+`hash(arm)` is randomised per process — three runs gave seeds `12308`, `27607`, `95831` — and
+`PYTHONHASHSEED` appeared nowhere in the launcher's user-data. **Fixed:** fixed per-arm integers,
+plus `PYTHONHASHSEED=0` exported in user-data and recorded in the receipt.
+
+## A3.8 — GOVERNANCE: I raised the executable ceiling above the frozen one
+
+Section 14 freezes `$0.40`. I had set `HARD_CAP_USD = 0.75` with an 80-minute watchdog worth
+`$0.70`. Under the standing rule that approval must be **executable** rather than
+prose-interpretable, the launcher's number is the real ceiling — so I had silently raised the
+owner's cap by 88%. **That is my error and it is the one I like least.**
+**Fixed:** `HARD_CAP_USD = 0.40`, `WATCHDOG_MIN = 45`, `IN_INSTANCE_HARD_MIN = 40`.
+
+## A3.9 — twelve worlds shared ONE task split
+
+`topics[i::3]` over sorted topics is the constant `(i mod 32) mod 3` in every world; the worlds
+differed only in semantic centroids and trajectories. **Fixed:** drawn per world, re-verified to
+differ across worlds.
+
+## A3.10 — what forgetting here actually IS, disclosed before the run
+
+`GATE_FORGETTING_EXISTS` passes by roughly ten times (four independent measurements: `1.0000`,
+`0.9976`, `0.9897`, `0.9911`). But **task-masked forgetting is `0.0024`** — the representation is
+not destroyed; the shared softmax stops naming classes it has not seen recently. This is a
+legitimate class-incremental protocol, so it is a **disclosure, not a gate**.
+
+Two consequences, both registered:
+
+1. Section 2's justification is **falsified by measurement**. I wrote that a linear model
+   "barely forgets, so every arm would look equally good". A linear model forgets `0.8885` and
+   the arms stay separable. **That was my stated reason for needing a neural learner, and
+   therefore for needing a GPU. Withdrawn.**
+2. Across 24 arm-world cells, the rank correlation between **distinct past classes covered** and
+   forgetting is **-0.9017**. Coverage sets the ranking almost entirely, and the two-tier
+   verifier is not a coverage mechanism. `past_classes_covered` is now logged per arm per world,
+   and the receipt states that the capability comparison largely measures **coverage**.
+
+Claims must say *"restores accuracy on earlier classes"*, never *"prevents representational
+forgetting"*.
+
+## Recorded, NOT fixed here
+
+`V2.is_correct` reads `.get("answer")` while `_mk_memory` writes `"answer_field"`, so it returns
+`False` for a known-correct memory. **Neither RGM-0.2 nor CMB-RP0 calls it, so it is latent** —
+and it lives in the module RGM-0.2's committed receipt was produced with. Changing that module
+mid-bench is the auditor's call, not mine. Recorded here so it is not rediscovered as new.
+
+## Status
+
+Nine blocking items, nine fixes, four re-verified by my own measurement (A3.1, A3.3, A3.4,
+A3.9). **Still NOT LAUNCHED.**

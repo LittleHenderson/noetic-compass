@@ -32,10 +32,10 @@ BUCKET = "cas-harness-runpod-92754088"
 PREFIX = "bridge-control-20260822/cmb_p0"
 RATE_PER_HOUR = 0.526
 
-HARD_CAP_USD = 0.75
+HARD_CAP_USD = 0.40
 CAP_MIN = HARD_CAP_USD / RATE_PER_HOUR * 60          # 91.3 min of billable runtime
-IN_INSTANCE_HARD_MIN = 75                            # stop 3
-WATCHDOG_MIN = 80                                    # stop 4
+IN_INSTANCE_HARD_MIN = 40                            # stop 3
+WATCHDOG_MIN = 45                                    # stop 4
 RUN_ID = None                                        # set from argv or clock at launch
 FILES = ("run_cmb_rp0.py", "cmb_r1_core.py", "cmb_r1_v02_core.py")
 
@@ -97,7 +97,7 @@ python3 -m pip install torch --index-url https://download.pytorch.org/whl/cu124 
 python3 -c "import torch,sys;print('TORCH',torch.__version__,'CUDA',torch.cuda.is_available());sys.exit(0 if torch.cuda.is_available() else 1)"
 if [ $? -ne 0 ]; then echo "TORCH_OR_CUDA_UNAVAILABLE"; exit 1; fi
 
-cd /opt/cmbrp0 && python3 run_cmb_rp0.py; RC=$?
+cd /opt/cmbrp0 && PYTHONHASHSEED=0 python3 run_cmb_rp0.py; RC=$?
 echo "HARNESS_RC=$RC"
 aws s3 cp /opt/cmbrp0/CMB_RP0_RAW.json s3://{BUCKET}/{PREFIX}/{run_id}/CMB_RP0_RAW.json --region {REGION} || true
 aws s3 cp /opt/cmbrp0/CMB_RP0_RECEIPT.json s3://{BUCKET}/{PREFIX}/{run_id}/CMB_RP0_RECEIPT.json --region {REGION} || true
