@@ -4,6 +4,36 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-01 - CMB-P0 multi-chain phase bench: PHASE_MEMORY_UNSAFE (AWS GPU, $0.0241)
+
+Owner-authorized side bench. Asked whether phase-coded two-state memory separates
+simultaneous overlapping reasoning chains better than a scalar engine, explicit tags, the
+same extra state without phase, and its own phase-destroyed control.
+
+**Result: the phase arm beat every control at every K, and was still refused.**
+`P4_PHASE_OSCILLATOR` won all five registered comparisons at K=2/3/4 - the pattern for
+`PHASE_MULTICHAIN_SIGNAL` - but the pre-registered safety override fired first: it collapses
+0.657 / 1.852 / 3.538 distinct chain pairs at K=2/3/4 (3.54 of 6 possible pairs at K=4) in
+20/20 worlds, against a threshold of 0.50, versus 0.000 for the oracle. It retrieves better
+while losing track of which chain it retrieved from.
+
+Contamination is *not* the defect (P4 is better than P0 at every K). Secondary negatives:
+extra state alone buys nothing, and *inferred* tags are worse than no tags while *oracle*
+tags are far better - inference, not the tag mechanism, is the bottleneck. GATE_ORACLE
+failed at K=4 (0.560 < 0.60), so that stratum is ill-posed; the verdict does not depend on
+it and is decisive at K=3.
+
+**The bench was stopped pre-launch by its own adversarial review and rebuilt first, at $0.**
+Three reviewers found - and measurement confirmed - that the gold answer was recoverable
+from one edge weight in 1152/1152 dev queries, that the 64 queries per world were only 2-4
+distinct, and that K=2,3,4 were pooled into one bag tolerating 18 negative worlds (the same
+defect this project raised twice against a sibling lane). Eleven further defects were
+repaired, two broken control arms were re-frozen upward, and a seventh control arm added.
+
+Not licensed: any resonance-specific or CAS-specific claim, anything beyond these synthetic
+worlds, or any merge into CMB-R1. Stopped after the report; next step is independent audit.
+
+
 ## 2026-09-01 (CJT-EX1 RAN, AMENDED) - NO_CJT_EXPERT_SPECIALIZATION_SIGNAL: a PROVEN meaningless partition (E4) ties the CAS partition (E2) at +0.0006, so CAS expert MEANINGS are not load-bearing; the designated killer control E1S DEGENERATED via router collapse and that comparison is VOID; $0.2404 of the $1.20 cap; branch research/cjt-dev-p1-s7d1-fivearm-v1
 
 - Owner amended the protocol after the pre-launch stop and authorized the run: headroom-aware breadth (QB_COMP frozen as saturated; QB_REL + QB_INT eligible), repaired retention (phase 1 QB_INT -> phase 2 QB_COMP with a real-interference gate), E1S anonymous sparse top-1 added as THE killer control, E3 demoted to exploratory, result vocabulary frozen, E4 required to be PROVEN class-independent. 36/36 runs on one self-terminating g4dn.xlarge (i-090962eb9f5dc5129, 27.4 min, instance_runtime_estimate $0.2404 authoritative; harness lower bound $0.2032).
