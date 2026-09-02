@@ -8,6 +8,12 @@
 ```
 STATUS                    ADMISSION_SAFETY_REPAIRED
 GENERIC GEOMETRY          GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED (survives drop-one)
+                          ^ DIRECTION-AMBIGUOUS NAME -- GLM audit finding 2.
+                          The generic control WINS 3 of 5 families (-0.010 to -0.025);
+                          CAS wins 2 of 5 (+0.4108, +0.3190). The aggregate is positive
+                          and survives drop-one ONLY because there are two winners.
+                          Read as: CAS GEOMETRY HELPS COMPOSITION AND CORROBORATION,
+                          AND LOSES EVERYWHERE ELSE MEASURED.
 MECHANISM-FREE GATE       PASS -- no query-independent shortcut, answer set not recoverable
 ITEMS 5-6                 NOT BUILT (were gated on this result; now unlocked)
 ```
@@ -157,3 +163,37 @@ about replay or forgetting, which were not built.
 **Not built**, per the owner's ordering: *"Build the selective replay selector only after
 admission safety passes."* **It now passes**, so they are unlocked — but they are a separate
 piece of work and are not started here.
+
+---
+
+## 9. Independent audit — GLM, 2026-09-02: **PASS**
+
+Owner named GLM as the third-party auditor for CMB-P0, CMB-P1, CMB-P2 and RGM-0.2. GLM did
+not build any of them (Claude did), so the independence requirement is satisfied.
+Report: `tksCAS_audit_workspace/REFERENCE/AUDITS/CMB_P012_RGM02_GLM_AUDIT.md`. Audit spend `$0`.
+
+**Verified by re-execution, not by reading.** GLM re-ran the entire 12-world bench and produced
+content hash `b74a16a0e973fced16af7d172d7b502334407116ddf7f561091cf48eeafb7f1f` —
+**byte-identical to the committed receipt** — with every headline number matching:
+`PATTERN_COMPLETION 0.4167 vs 0.0059` (+0.4108, 12/12), `INDEPENDENT_CORROB +0.3190` (12/12),
+drop-one aggregate `+0.1359`, `survives True`, and the shortcut gate's
+`answer set recoverable from the graph alone: False`.
+
+GLM's own summary of the durable asset: the admission-safety mechanism is *"the first verifier
+in this program that blocks an adaptive forgery by mechanism rather than by threshold."*
+
+### The four findings, and what was done
+
+| # | finding | disposition |
+|---|---|---|
+| 1 | **12 worlds where the RGM-0.1 audit prescribed ≥20**, no recorded justification. With margin 5× below sd, power is the open question. | 🔒 **OWNER** — accept 12 with the caveat, or authorize the extra worlds. Not the builder's call. |
+| 2 | **`GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED` is direction-ambiguous** — a drop-one aggregate hiding a 3-of-5 reversal. | **Headline corrected above** (no status changed). The rename itself is 🔒 **OWNER** — changing a status word on a completed, audited result is a governance act, not a builder edit. Proposed: `CAS_GEOMETRY_HELPS_COMPOSITION_AND_CORROBORATION_ONLY`. |
+| 3 | **ID_ORDER hazard** (`topic = i % N_TOPICS` + sorted-id coupling, inherited from GLM's own v0.1 core) not exhaustively checked here. No RGM-0.2 result implicated — all arms are score-based. Register the per-world randomized store order and the tie-refuses-status guard in any successor round. | **CLOSED in the successor round.** CMB-RP0 is that round, and it found the hazard the hard way: `ID_ORDER` reproduced its registered ceiling at **32/32 overlap**. Both guards are now in place — per-world randomized store order, poison draw, query draw and task split (A3.1, re-verified at 2/32 and 0/32 against chance 1.9 and 0.9), and the `id_order_not_equivalent` precondition that emits `STATUS_NOT_EMITTED` on a tie. |
+| 4 | **CMB-P0 / P1 not independently re-executed** (local torch is CPU-only; a GPU re-run needs an authorized instance). Receipts carry full device provenance and content hashes. | 🔒 **OWNER** — GLM recommends a GPU re-run **only if the phase lane reopens**. The lane is closed, so no action is proposed. |
+
+### Auditor disclosure, recorded
+
+GLM's verification re-run briefly rewrote `RGM02_RECEIPT.json` on disk with **byte-identical**
+content — the identical hash is itself the determinism proof — and restored it from git. The
+working tree is clean. Recorded here because a disclosure that lives only in the auditor's own
+report is not a disclosure.
