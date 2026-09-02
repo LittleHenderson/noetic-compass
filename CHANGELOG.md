@@ -4,6 +4,39 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - CMB-P2 STOPPED PRE-LAUNCH: a phase-free rule beats the oracle ($0 spent)
+
+The owner authorized one final controlled confirmation of the P8+P9 combination. Adversarial
+review returned DO-NOT-LAUNCH, and the decisive finding verified: **a two-line rule that never
+looks at which chains are active beats the arm handed the true chain labels.**
+
+  K=2 / K=3      P0 0.4974/0.3464   ORACLE 0.7682/0.6797
+                 B_TWOHOP 0.8255/0.8568   B_TWOHOP x amplitude 0.9661/0.9323
+
+The candidate set falls out of the adjacency matrix (recovered exactly in 6/6 worlds), and
+while one hop is flat as intended, two-hop mass identifies the gold at ~2.3x its nearest rival.
+I built that shortcut myself in the repair for the previous one: replacing the cue's private
+one-hop edge with 0.65-weight edges from the cue's own chain to its completion IS a two-hop
+signature.
+
+WITHDRAWN: the claim that the task requires chain separation, and the "% of oracle" framing.
+PRESERVED: PHASE_MEMORY_UNSAFE for CMB-P0 and CMB-P1, every measured number, and every
+arm-vs-arm comparison - no arm uses the shortcut, so all were equally blind.
+
+Not fixed-and-launched: flattening two-hop mass removes the chain-specific evidence entirely,
+so the oracle could not solve the task either. That is a world redesign, which the directive
+prohibits. Owner decision.
+
+Also: a verifying agent read held-out worlds 506-512, so the held-out range moved to 536-565.
+
+Verified as NOT defects: the phase-shuffle control is fair and informative - in the
+no-information limit shuffling is an exact no-op (gap 0.0000) and the collapse scales with real
+structure.
+
+Third label-free shortcut found in this bench family. The standing rule found it again: a win
+by mechanism M is uninterpretable until it beats the cheapest method without M.
+
+
 ## 2026-09-02 - CMB-P1 phase repair bench: PHASE_MEMORY_UNSAFE, no repair survives ($0.1135)
 
 Owner-authorized repair bench (R4). Three repairs tested separately: signed coupling,
