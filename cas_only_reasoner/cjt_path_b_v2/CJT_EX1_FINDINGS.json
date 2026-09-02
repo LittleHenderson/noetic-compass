@@ -1,81 +1,178 @@
 {
-  "record_id": "CJT_EX1_FINDINGS",
-  "non_claim_bearing": true,
-  "run": "CJT-EX1 amended, commit 9014e3d5, instance i-090962eb9f5dc5129, 36/36 runs complete",
-  "official_status": {
-    "value": "NO_CJT_EXPERT_SPECIALIZATION_SIGNAL",
-    "secondary": null,
-    "emitted_by": "the frozen deterministic status law",
-    "preserved": "not rewritten"
+ "arms": {
+  "E0_SHARED": {
+   "acc": 0.7733,
+   "active_experts": 1,
+   "std": 0.0044
   },
-  "headline": "CAS-organized experts did NOT clear the registered bar. The decisive number is not the killer comparison -- it is E2 vs E4: a PROVEN class-independent, load-balanced, meaningless partition scored 0.7800 against the CAS partition's 0.7806, a gap of +0.0006 (about a tenth of one paired standard error). A stable arbitrary partition of clauses across four experts does exactly as well as the CAS operation partition. What little advantage exists over a learned router comes from having a FIXED assignment, not from the assignment carrying CAS meaning.",
-  "critical_caveat_the_killer_control_degenerated": {
-    "finding": "E1S, the anonymous sparse top-1 control the owner added as THE fair race, suffered ROUTER COLLAPSE. Measured expert load over the full evaluation surface: [0.001, 0.000, 0.999, 0.000] -- 99.9% of all clauses routed to a single expert, mutual information with class 0.0026 bits. E1S was therefore not 'four anonymous experts with a learned selector'; it was ONE working expert with three dead ones, at a quarter of the active capacity.",
-    "consequence": "the E2 - E1S margin of +0.0151 is NOT evidence about CAS routing versus learned sparse routing. It is largely evidence about four working experts versus one. THE KILLER COMPARISON AS RUN IS VOID.",
-    "why_it_happened": "no load-balancing auxiliary loss. This is the standard, well-documented MoE failure mode that Switch-Transformer-style load balancing exists to prevent; I did not include one, and the pre-launch review did not catch it either.",
-    "what_would_fix_it": "add a load-balancing loss (or expert-capacity limits) to E1S and re-run that arm. That is an owner decision, not mine -- the standing rule prohibits a second EX1 repair after the result.",
-    "E1_dense_also_skewed": "the dense mixture was unbalanced too: expert load [0.128, 0.167, 0.122, 0.583]. Less degenerate than E1S but not uniform."
+  "E1S_ANON_SPARSE": {
+   "DEGENERATE": "router collapsed to one expert",
+   "acc": 0.7655,
+   "active_experts": 1,
+   "std": 0.0014
   },
-  "the_comparison_that_survives": {
-    "pair": "E2 (CAS operation routing) vs E4 (frozen per-clause hash routing)",
-    "why_valid": "E4 was PROVEN class-independent before the run (mutual information 0.000084 bits over 54,000 training clauses; 0.0030 bits measured in-run over the evaluation surface, against E2's 1.7477) and its expert load is near-uniform [0.236, 0.250, 0.264, 0.251] -- four genuinely active experts, no collapse. It is the one four-expert control that did not degenerate.",
-    "result": {"E2": 0.7806, "E4": 0.7800, "margin": 0.0006,
-               "paired_se_scale": "~0.007", "reading": "a dead tie"},
-    "interpretation": "in the owner's own frozen vocabulary this is the substance of CAS_EXPERT_MEANINGS_NOT_LOAD_BEARING. The deterministic law did not emit that status because its test is a strict point-estimate inequality (E4 >= E2) and E4 came in 0.0006 BELOW E2. The status is left exactly as emitted; this note records that the point-estimate test sits on a knife edge while the substance is a tie.",
-    "note_on_load": "E2's experts are unbalanced BY CLASS FREQUENCY ([0.474, 0.081, 0.280, 0.165], mirroring ^2 47% / ^3 8% / ^6 28% / ^8 17%) while E4's are uniform. E4 still matched it."
+  "E1_ANON_MOE_dense": {
+   "acc": 0.7767,
+   "active_experts": 4,
+   "std": 0.0052
   },
-  "arms": {
-    "E0_SHARED": {"acc": 0.7733, "std": 0.0044, "active_experts": 1},
-    "E1_ANON_MOE_dense": {"acc": 0.7767, "std": 0.0052, "active_experts": 4},
-    "E1S_ANON_SPARSE": {"acc": 0.7655, "std": 0.0014, "active_experts": 1, "DEGENERATE": "router collapsed to one expert"},
-    "E2_CAS_EXPERT": {"acc": 0.7806, "std": 0.0107, "active_experts": 1},
-    "E3_CAS_STRUCT": {"acc": 0.7789, "std": 0.0096, "active_experts": 1},
-    "E4_SHUFFLED": {"acc": 0.7800, "std": 0.0091, "active_experts": 1}
+  "E2_CAS_EXPERT": {
+   "acc": 0.7806,
+   "active_experts": 1,
+   "std": 0.0107
   },
-  "registered_conditions": {
-    "1_beats_killer_control_E1S": {"value": false, "margin": 0.0151, "threshold": 0.02, "paired_se": 0.0068, "seeds_positive": "2/3", "per_seed": [0.023451, 0.023451, -0.001675], "caveat": "VOID -- the control degenerated"},
-    "2_unseen_verbs_and_templates": "BY CONSTRUCTION (family C, verbs 6-7, form 4, disjoint from training)",
-    "3_breadth_over_eligible_families": {"value": true, "detail": "BOTH eligible families improved vs E1S with 3/3 seeds positive: QB_REL paired +0.0204 (52.2% remaining-error reduction, +4.06 answers), QB_INT paired +0.0542 (8.3% error reduction, +10.78 answers). QB_COMP correctly excluded as saturated (E1S 1.0000)."},
-    "4_shuffling_removes_the_advantage": {"value": false, "margin": 0.0006, "reading": "THE DECISIVE NEGATIVE -- shuffling did NOT remove the advantage, because there was no meaning-dependent advantage to remove"},
-    "5_structured_sharing_EXPLORATORY": {"value": false, "margin": -0.0017, "reading": "E3's involution body-sharing did not help; no STRUCTURED_WEIGHT_SHARING_SIGNAL"},
-    "6_better_retention_than_E1S": {"value": false, "E2_forgets_less_by": 0.0148, "threshold": 0.02, "seeds_positive": "2/3"},
-    "7_matched_params_compute_seeds": {"value": true, "param_spread_pct": 0.206},
-    "8_E4_proven_class_independent": {"value": true, "mutual_information_bits": 0.0030},
-    "9_competence_floor": {"value": true, "floor": 0.2542, "all_arms_clear": true}
+  "E3_CAS_STRUCT": {
+   "acc": 0.7789,
+   "active_experts": 1,
+   "std": 0.0096
   },
-  "retention_finding": {
-    "protocol": "phase 1 QB_INT (^2, ^6) -> phase 2 QB_COMP (^2, ^6, + NEW ^8)",
-    "interference_gate": "PASSED -- every condition gained ~0.43-0.49 on the new task with 500/500 nonzero-gradient updates and real parameter movement, so the test had genuine pressure",
-    "headline": "CATASTROPHIC FORGETTING IN EVERY CONDITION. Retained QB_INT accuracy collapsed from ~0.37-0.38 to 0.005-0.041 -- BELOW the 0.0909 chance level for that family, meaning the models did not merely forget but actively re-mapped onto the new task.",
-    "forgetting_by_condition": {"E0": 0.3432, "E1": 0.3678, "E1S": 0.3629, "E2": 0.3481, "E3": 0.3645, "E4": 0.3432},
-    "reading": "expert organization provided essentially NO protection. The spread across all six conditions (0.343 to 0.368) is 0.025 against absolute forgetting of ~0.35 -- under 8% of the effect. E2 forgets 0.0148 less than E1S (below the 0.02 margin, 2/3 seeds), and E0 (a single shared expert) and E4 (meaningless routing) tie for the LEAST forgetting at 0.3432. There is no coherent story in which operation-specific experts protected memory.",
-    "acquisition": "all conditions reached 0.985-0.995 on the new task, so nobody 'retained' by refusing to learn"
-  },
-  "what_this_does_and_does_not_establish": {
-    "established_in_development": [
-      "a stable FIXED partition of clauses across four experts is worth a little over a collapsed learned router, but the partition's SEMANTIC CONTENT is not what does the work (E2 vs E4: +0.0006)",
-      "E2 does improve both non-saturated families consistently against E1S (QB_REL +0.0204, QB_INT +0.0542, 3/3 seeds each) -- but E4 gets the same overall result without any CAS meaning",
-      "operation-specific experts did not reduce catastrophic forgetting on this task"
-    ],
-    "not_established": [
-      "that CAS expert organization has no value under a NON-degenerate learned sparse control -- E1S collapsed, so that specific race was not actually run",
-      "anything about CAS specificity; 'CAS-specific' and 'specific' remain prohibited and unused"
-    ],
-    "honest_summary": "This is a negative result for CAS expert MEANINGS on this task, delivered by the control that stayed valid (E4), plus a void killer comparison that needs a load-balanced re-run if the owner wants it."
-  },
-  "cost": {
-    "authoritative_instance_runtime_estimate_usd": 0.2404,
-    "harness_compute_wall_estimate_usd_lower_bound": 0.2032,
-    "cap_usd": 1.20, "fraction_of_cap_used": 0.2003,
-    "wall_minutes": 27.4, "gpu_max_memory_bytes": 1059200000,
-    "cumulative_program_usd": 2.129
-  },
-  "integrity": {
-    "runs_completed": "36/36",
-    "preflight_all_pass": true,
-    "cache_binding_verified": {"ex1_train": 9000, "ex1_eval": 597},
-    "protected_splits": "UNTOUCHED",
-    "c2_structure_eval": "SEALED -- never extracted, evaluated, or inspected",
-    "prohibited_terms_unused": ["CAS-specific", "specific", "EMPIRICALLY_SUPPORTED", "GATE1B_PASS", "CJT_TRANSFORMER_VALIDATED"]
+  "E4_SHUFFLED": {
+   "acc": 0.78,
+   "active_experts": 1,
+   "std": 0.0091
   }
+ },
+ "cost": {
+  "authoritative_instance_runtime_estimate_usd": 0.2404,
+  "cap_usd": 1.2,
+  "cumulative_program_usd": 2.129,
+  "fraction_of_cap_used": 0.2003,
+  "gpu_max_memory_bytes": 1059200000,
+  "harness_compute_wall_estimate_usd_lower_bound": 0.2032,
+  "wall_minutes": 27.4
+ },
+ "critical_caveat_the_killer_control_degenerated": {
+  "E1_dense_also_skewed": "the dense mixture was unbalanced too: expert load [0.128, 0.167, 0.122, 0.583]. Less degenerate than E1S but not uniform.",
+  "consequence": "the E2 - E1S margin of +0.0151 is NOT evidence about CAS routing versus learned sparse routing. It is largely evidence about four working experts versus one. THE KILLER COMPARISON AS RUN IS VOID.",
+  "finding": "E1S, the anonymous sparse top-1 control the owner added as THE fair race, suffered ROUTER COLLAPSE. Measured expert load over the full evaluation surface: [0.001, 0.000, 0.999, 0.000] -- 99.9% of all clauses routed to a single expert, mutual information with class 0.0026 bits. E1S was therefore not 'four anonymous experts with a learned selector'; it was ONE working expert with three dead ones, at a quarter of the active capacity.",
+  "what_would_fix_it": "add a load-balancing loss (or expert-capacity limits) to E1S and re-run that arm. That is an owner decision, not mine -- the standing rule prohibits a second EX1 repair after the result.",
+  "why_it_happened": "no load-balancing auxiliary loss. This is the standard, well-documented MoE failure mode that Switch-Transformer-style load balancing exists to prevent; I did not include one, and the pre-launch review did not catch it either."
+ },
+ "headline": "CAS-organized experts did NOT clear the registered bar. The decisive number is not the killer comparison -- it is E2 vs E4: a PROVEN class-independent, load-balanced, meaningless partition scored 0.7800 against the CAS partition's 0.7806, a gap of +0.0006 (about a tenth of one paired standard error). A stable arbitrary partition of clauses across four experts does exactly as well as the CAS operation partition. What little advantage exists over a learned router comes from having a FIXED assignment, not from the assignment carrying CAS meaning.",
+ "integrity": {
+  "c2_structure_eval": "SEALED -- never extracted, evaluated, or inspected",
+  "cache_binding_verified": {
+   "ex1_eval": 597,
+   "ex1_train": 9000
+  },
+  "preflight_all_pass": true,
+  "prohibited_terms_unused": [
+   "CAS-specific",
+   "specific",
+   "EMPIRICALLY_SUPPORTED",
+   "GATE1B_PASS",
+   "CJT_TRANSFORMER_VALIDATED"
+  ],
+  "protected_splits": "UNTOUCHED",
+  "runs_completed": "36/36"
+ },
+ "non_claim_bearing": true,
+ "official_status": {
+  "emitted_by": "the frozen deterministic status law",
+  "preserved": "not rewritten",
+  "secondary": null,
+  "value": "NO_CJT_EXPERT_SPECIALIZATION_SIGNAL"
+ },
+ "owner_closure_2026_09_02": {
+  "authority": "owner ruling 2026-09-02, recorded in cas_only_reasoner/CMB_P0_v0_1/OWNER_RULINGS_2026_09_02.md (R8)",
+  "difference": 0.0006,
+  "e1s_disposition": "ENGINEERING BACKLOG -- the load-balancing repair is not another primary research round",
+  "e2_cas_organization": 0.7806,
+  "e4_meaningless_stable_split": 0.78,
+  "further_ex1_experiments_authorized": false,
+  "reason": "The learned sparse E1S router collapsed, but the valid E4 control already tied the CAS expert organization almost exactly: E2 0.7806 vs E4 0.7800. That is sufficient negative evidence that CAS expert meanings were not load-bearing on that task.",
+  "ruling": "CLOSED",
+  "status_unchanged": "NO_CJT_EXPERT_SPECIALIZATION_SIGNAL"
+ },
+ "record_id": "CJT_EX1_FINDINGS",
+ "registered_conditions": {
+  "1_beats_killer_control_E1S": {
+   "caveat": "VOID -- the control degenerated",
+   "margin": 0.0151,
+   "paired_se": 0.0068,
+   "per_seed": [
+    0.023451,
+    0.023451,
+    -0.001675
+   ],
+   "seeds_positive": "2/3",
+   "threshold": 0.02,
+   "value": false
+  },
+  "2_unseen_verbs_and_templates": "BY CONSTRUCTION (family C, verbs 6-7, form 4, disjoint from training)",
+  "3_breadth_over_eligible_families": {
+   "detail": "BOTH eligible families improved vs E1S with 3/3 seeds positive: QB_REL paired +0.0204 (52.2% remaining-error reduction, +4.06 answers), QB_INT paired +0.0542 (8.3% error reduction, +10.78 answers). QB_COMP correctly excluded as saturated (E1S 1.0000).",
+   "value": true
+  },
+  "4_shuffling_removes_the_advantage": {
+   "margin": 0.0006,
+   "reading": "THE DECISIVE NEGATIVE -- shuffling did NOT remove the advantage, because there was no meaning-dependent advantage to remove",
+   "value": false
+  },
+  "5_structured_sharing_EXPLORATORY": {
+   "margin": -0.0017,
+   "reading": "E3's involution body-sharing did not help; no STRUCTURED_WEIGHT_SHARING_SIGNAL",
+   "value": false
+  },
+  "6_better_retention_than_E1S": {
+   "E2_forgets_less_by": 0.0148,
+   "seeds_positive": "2/3",
+   "threshold": 0.02,
+   "value": false
+  },
+  "7_matched_params_compute_seeds": {
+   "param_spread_pct": 0.206,
+   "value": true
+  },
+  "8_E4_proven_class_independent": {
+   "mutual_information_bits": 0.003,
+   "value": true
+  },
+  "9_competence_floor": {
+   "all_arms_clear": true,
+   "floor": 0.2542,
+   "value": true
+  }
+ },
+ "retention_finding": {
+  "acquisition": "all conditions reached 0.985-0.995 on the new task, so nobody 'retained' by refusing to learn",
+  "forgetting_by_condition": {
+   "E0": 0.3432,
+   "E1": 0.3678,
+   "E1S": 0.3629,
+   "E2": 0.3481,
+   "E3": 0.3645,
+   "E4": 0.3432
+  },
+  "headline": "CATASTROPHIC FORGETTING IN EVERY CONDITION. Retained QB_INT accuracy collapsed from ~0.37-0.38 to 0.005-0.041 -- BELOW the 0.0909 chance level for that family, meaning the models did not merely forget but actively re-mapped onto the new task.",
+  "interference_gate": "PASSED -- every condition gained ~0.43-0.49 on the new task with 500/500 nonzero-gradient updates and real parameter movement, so the test had genuine pressure",
+  "protocol": "phase 1 QB_INT (^2, ^6) -> phase 2 QB_COMP (^2, ^6, + NEW ^8)",
+  "reading": "expert organization provided essentially NO protection. The spread across all six conditions (0.343 to 0.368) is 0.025 against absolute forgetting of ~0.35 -- under 8% of the effect. E2 forgets 0.0148 less than E1S (below the 0.02 margin, 2/3 seeds), and E0 (a single shared expert) and E4 (meaningless routing) tie for the LEAST forgetting at 0.3432. There is no coherent story in which operation-specific experts protected memory."
+ },
+ "run": "CJT-EX1 amended, commit 9014e3d5, instance i-090962eb9f5dc5129, 36/36 runs complete",
+ "the_comparison_that_survives": {
+  "interpretation": "in the owner's own frozen vocabulary this is the substance of CAS_EXPERT_MEANINGS_NOT_LOAD_BEARING. The deterministic law did not emit that status because its test is a strict point-estimate inequality (E4 >= E2) and E4 came in 0.0006 BELOW E2. The status is left exactly as emitted; this note records that the point-estimate test sits on a knife edge while the substance is a tie.",
+  "note_on_load": "E2's experts are unbalanced BY CLASS FREQUENCY ([0.474, 0.081, 0.280, 0.165], mirroring ^2 47% / ^3 8% / ^6 28% / ^8 17%) while E4's are uniform. E4 still matched it.",
+  "pair": "E2 (CAS operation routing) vs E4 (frozen per-clause hash routing)",
+  "result": {
+   "E2": 0.7806,
+   "E4": 0.78,
+   "margin": 0.0006,
+   "paired_se_scale": "~0.007",
+   "reading": "a dead tie"
+  },
+  "why_valid": "E4 was PROVEN class-independent before the run (mutual information 0.000084 bits over 54,000 training clauses; 0.0030 bits measured in-run over the evaluation surface, against E2's 1.7477) and its expert load is near-uniform [0.236, 0.250, 0.264, 0.251] -- four genuinely active experts, no collapse. It is the one four-expert control that did not degenerate."
+ },
+ "what_this_does_and_does_not_establish": {
+  "established_in_development": [
+   "a stable FIXED partition of clauses across four experts is worth a little over a collapsed learned router, but the partition's SEMANTIC CONTENT is not what does the work (E2 vs E4: +0.0006)",
+   "E2 does improve both non-saturated families consistently against E1S (QB_REL +0.0204, QB_INT +0.0542, 3/3 seeds each) -- but E4 gets the same overall result without any CAS meaning",
+   "operation-specific experts did not reduce catastrophic forgetting on this task"
+  ],
+  "honest_summary": "This is a negative result for CAS expert MEANINGS on this task, delivered by the control that stayed valid (E4), plus a void killer comparison that needs a load-balanced re-run if the owner wants it.",
+  "not_established": [
+   "that CAS expert organization has no value under a NON-degenerate learned sparse control -- E1S collapsed, so that specific race was not actually run",
+   "anything about CAS specificity; 'CAS-specific' and 'specific' remain prohibited and unused"
+  ]
+ }
 }

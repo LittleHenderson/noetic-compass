@@ -384,10 +384,13 @@ def emit_status(held, audit):
             "PHASE_DEGENERATE_TO_SCALAR: chains locked internally but ALL locked to the SAME "
             "phase, so cos(delta theta)=1 and P4 reduces to P0. Here P4 > P5 shows only that "
             "RANDOM phases are worse than UNIFORM phases. That is NOT evidence of chain "
-            "binding. Uniform positive coupling on a connected graph has one stable "
-            "attractor: global synchrony. Separating chains by phase would need cross-chain "
-            "inhibition or frequency heterogeneity -- a free frequency control is forbidden "
-            "by the owner's constraint, so neither is added.")
+            "binding. MEASURED, not asserted as a theorem: the registered P4 system on THESE "
+            "benchmark graphs converged toward global synchronisation -- within-chain order "
+            "approached 1.0 while cross-chain separation collapsed toward 0.0. (An earlier "
+            "draft claimed uniform positive coupling has exactly one stable attractor on ANY "
+            "connected graph; that universal statement was an over-claim, was never proved, "
+            "and is withdrawn.) Separating chains by phase would need cross-chain inhibition "
+            "or frequency heterogeneity -- neither is added here.")
 
     # --- safety, in the right units ----------------------------------------------------
     contam = {k: paired(by_k[k], "P4_PHASE_OSCILLATOR", "P0_SCALAR",

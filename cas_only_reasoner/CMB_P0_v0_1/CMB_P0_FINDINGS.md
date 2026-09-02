@@ -200,3 +200,61 @@ next step is an **independent audit** by a model other than me.
    named missing ingredients for stable phase separation. Neither was built: a free frequency
    control is forbidden by your constraint, and negative coupling is a new mechanism, not a
    parameter, so it is not mine to authorize.
+
+
+---
+
+# OWNER RULINGS APPLIED (2026-09-02) — full record in `OWNER_RULINGS_2026_09_02.md`
+
+**The verdict `PHASE_MEMORY_UNSAFE` is PRESERVED.** The owner reviewed the result and ruled.
+The four open questions in the section above are now closed:
+
+1. **`P6_SCALAR_TWO_CHANNEL` is RATIFIED** and is a registered arm. It is no longer a Claude
+   addition awaiting approval. Reason given: phase beat P6 at every K, so P6 *strengthens*
+   the finding — removing it would make the phase result less convincing.
+2. **The `P0` merge comparator is RETIRED AS UNIMPLEMENTABLE.** The `P2` comparison stands as
+   a documented deviation. The verdict does not rest on it: P4 also failed against the
+   **absolute** threshold and against the **oracle's 0.000**.
+3. **`K=4` is DIAGNOSTIC ONLY.** Primary reportable range is **K=2 and K=3**. The safety
+   failure is decisive at K=3, where the oracle passes.
+4. **A repair bench (CMB-P1) is authorized**, and a **third-party auditor** is required —
+   neither Claude (built CMB-P0) nor GLM (built CMB-R1) may be the final auditor.
+
+## The merge metric, normalised as the owner directed
+
+Raw merge counts grow automatically with `K`, so future versions use
+`merge_fraction = merges / C(K,2)`. Applied to this run:
+
+| K | merges | C(K,2) | **merge fraction** |
+|---|---|---|---|
+| 2 | 0.657 | 1 | **0.657** |
+| 3 | 1.852 | 3 | **0.617** |
+| 4 | 3.538 | 6 | **0.590** |
+
+**A majority of all possible chain distinctions collapsed at every K.** This reframing makes
+the severity clearer than the raw counts did: it was never a boundary miss.
+
+## Corrected claim labels
+
+```
+Scalar CMB-R1 lane:
+    RESONANCE-SPECIFIC                  NOT SUPPORTED
+    correct term                        BOUNDED ACTIVATION PROPAGATION
+
+CMB-P0:
+    PHASE-CODED MULTICHAIN RETRIEVAL    SUPPORTED
+    SAFE PHASE MEMORY                   NOT SUPPORTED
+```
+
+## A correction to my own wording, not GLM's
+
+This document's earlier framing leaned on the claim that *uniform positive coupling on a
+connected graph has exactly one stable attractor*. **That was an over-claim and it was mine.**
+It asserts a universal theorem over all connected graphs and all nonlinear updates, which I
+did not prove and this bench does not establish. The defensible, measured statement is:
+
+> **The registered `P4` system, on these benchmark graphs, converged toward global
+> synchronisation.**
+
+No universal theorem is needed to know this engine has a synchronisation problem, and none is
+claimed. Corrected in the preregistration (A1.3) and in the runner's interpretation guard.

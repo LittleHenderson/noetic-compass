@@ -382,9 +382,19 @@ not being repeated.
 
 At convergence the chains lock **internally** (order → 1.0000) but they all lock to the
 **same phase** (cross-chain separation → 0.0000). This is not a tuning failure; it is the
-fixed point. **Uniform positive coupling on a connected graph has one stable attractor:
-global synchrony.** The link graph is connected — cross-chain links and background edges see
-to that — so distinct per-chain phase groups are not a stable configuration.
+fixed point *of this system as run*.
+
+> **OWNER CORRECTION, adopted 2026-09-02.** This passage originally asserted: *"Uniform
+> positive coupling on a connected graph has one stable attractor: global synchrony."*
+> **That is an over-claim and it was mine, not GLM's.** It states a universal theorem over all
+> connected graphs and all nonlinear updates, which I did not prove and which this bench does
+> not establish. The defensible statement is the narrower, measured one:
+>
+> **The registered `P4` system, on these benchmark graphs, converged toward global
+> synchronisation** — as phase iterations rose, within-chain order approached `1.0000` while
+> cross-chain separation collapsed toward `0.0000`, and retrieval declined after its transient
+> peak. No universal theorem is needed to know this engine has a synchronisation problem, and
+> none is claimed.
 
 The consequence is exact and was then confirmed in code: when every phase is equal,
 `cos(Δθ) = 1`, and **`P4_PHASE_OSCILLATOR` reduces precisely to `P0_SCALAR`**. Measured on
