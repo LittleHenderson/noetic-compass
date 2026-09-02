@@ -177,6 +177,38 @@ The two populations do not overlap at all: pattern completion occupies 0.33–0.
 the forgery sits at 0.9375. **The forgery signature is not "different" — it is "almost the
 same".**
 
+### Item 1d — the band was NOT the blocker either. The ABSOLUTE BAR was.
+
+The contradiction band did not restore pattern completion: `authorized_empty_rate` stayed at
+`1.000`. So I stopped guessing and counted which condition fires:
+
+| family | best coherence | fail: absolute | fail: relative | fail: contradiction | n |
+|---|---|---|---|---|---|
+| LOOKALIKE | 1.0000 | 0 | 0 | 0 | 40 |
+| ORDER_MATTERS | 1.0000 | 0 | 0 | 0 | 40 |
+| CROSS_DOMAIN | 1.0000 | 0 | 0 | 0 | 40 |
+| **PATTERN_COMPLETION** | **0.6944** | **33** | 0 | 0 | 33 |
+| INDEPENDENT_CORROB | 1.0000 | 0 | 0 | 0 | 23 |
+
+**`TAU_AUTH = 0.90` fired on 33 of 33 pattern-completion queries.** Their best coherence is
+`0.6944`, because pattern completion works by **composing fragments that individually do not
+match the query trajectory**. An absolute coherence bar penalises composition by construction
+— the same conflation as item 1c, one level up.
+
+**And the bar bought nothing.** Registered attack: disabling it left FALSE authorized at 0.
+Adaptive attack: the forgery sits at **0.9375, above the bar**, so it never caught that
+either. It cost an entire capability family and contributed no safety.
+
+**`TAU_AUTH` is set equal to `TAU_FLOOR` (0.60)** — it is no longer a second bar. Safety rests
+where the measurements say it does: the **relative margin** and the **contradiction band**.
+Re-verified after the change: both attacks still blocked (FALSE 0), pattern completion fails
+zero conditions.
+
+> **Three self-corrections on this one verifier, every one found by MEASUREMENT rather than
+> reasoning** — the relative-margin claim, the agreement-vs-composition conflation, and this
+> absolute bar. I twice "fixed" the wrong thing before counting which condition actually
+> fired. That is worth recording for the auditor as a pattern, not just three footnotes.
+
 ### Item 4 — confirm across new independent memory worlds
 
 New, disjoint world seeds, and **the five-depth shortcut gate**

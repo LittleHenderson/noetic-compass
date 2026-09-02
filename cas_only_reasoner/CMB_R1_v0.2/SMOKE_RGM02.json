@@ -4,7 +4,7 @@
  "claim_note": "No CAS-specific or cognition-general claim is licensed. Items 5-6 not built.",
  "compute": {
   "device": "cpu",
-  "wall_s": 68.68,
+  "wall_s": 71.03,
   "why": "string similarity and small graph algebra; no neural inference, so the GPU-only law does not apply"
  },
  "conflict_of_interest": "Claude audited RGM-0/0.1 and built RGM-0.2; see prereg 0",

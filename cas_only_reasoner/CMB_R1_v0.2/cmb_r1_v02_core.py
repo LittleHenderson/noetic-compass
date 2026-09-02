@@ -37,7 +37,18 @@ VERSION = "rgm_0_2_core_v0.1"
 
 # ---- frozen thresholds (RGM_02_PREREGISTRATION.md section 6) ----------------------------
 TAU_FLOOR = 0.60      # absolute floor for RETRIEVED -- its only job is to exclude junk
-TAU_AUTH = 0.90       # absolute bar for AUTHORIZED
+# The absolute bar for AUTHORIZED, set EQUAL TO THE FLOOR -- i.e. it is not a second bar.
+# It was 0.90 and that was wrong twice over:
+#   IT BOUGHT NOTHING. Registered attack: with it disabled, FALSE authorized stayed 0 (the
+#     relative margin does that work). Adaptive attack: the forgery sits at 0.9375, ABOVE
+#     0.90, so the bar never caught it either.
+#   IT COST AN ENTIRE FAMILY. It fired on 33/33 PATTERN_COMPLETION queries, whose best
+#     coherence is 0.6944 -- because pattern completion works by COMPOSING fragments that
+#     individually do NOT match the query trajectory. An absolute coherence bar penalises
+#     composition by construction.
+# Safety now rests where the measurements say it does: the relative margin and the
+# contradiction band.
+TAU_AUTH = 0.60       # == TAU_FLOOR
 DELTA = 0.08          # RELATIVE margin: the top coherence cluster must clear the rest by this
 # CONTRADICTION BAND, not a bare threshold. A bare "must agree at >= 0.99" conflates two
 # different things and destroyed pattern completion entirely (authorized_empty_rate 1.000):
