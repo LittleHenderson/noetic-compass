@@ -1,0 +1,42 @@
+{
+ "justifications": {
+  "B_COUPLE/EPS_REC": "stability solved analytically over mu(W) in [-1,1] (graph-independent); among stable+oscillatory settings, chosen to make P3 -- a COMPETITOR arm -- strongest on dev (b=0.60 gave P3 top1 0.000, i.e. broken)",
+  "KC_PHASE": "NOT swept -- left at its drafted value. Sweeping the hypothesis arm upward would be the biased direction.",
+  "MARGIN/MERGE_MARGIN/CONTAM_MARGIN": "separate thresholds in their own units; merges are counts, contamination is quantised in steps of 1/TOPK",
+  "PHASE_SUBSTEPS": "frozen at a CONVERGED value (10), not at the 4-substep transient where P4 scores highest; a stopping time is not a mechanism",
+  "REACH_DEPTH": "swept on dev; purity 0.781/0.787/0.752/0.724 for depth 1/2/3/4; chosen to maximise P2, again a competitor arm"
+ },
+ "missing_from_section_3_1_list": [
+  "PHASE_SUBSTEPS",
+  "REACH_DEPTH",
+  "TOPK_KEEP",
+  "POOL_EXTRA"
+ ],
+ "missing_note": "these parameters did not exist when section 3.1 enumerated the free parameters; they are registered here, before the held-out read.",
+ "note": "Written BEFORE any held-out world was read, as section 3.1 requires. Every value was fixed on dev worlds 0-5 or by closed-form mathematics.",
+ "params": {
+  "B_COUPLE": 0.3,
+  "CAPACITY_TOP1": 0.5,
+  "CONTAM_MARGIN": 0.05,
+  "DELTA": 0.3,
+  "DEPTH": 4,
+  "D_CONTENT": 32,
+  "EPS_REC": 0.5,
+  "GAMMA": 0.5,
+  "GATE_HEADROOM_TOP1": 0.9,
+  "GATE_ORACLE_TOP1": 0.6,
+  "KC_PHASE": 1.2,
+  "L_CHAIN": 6,
+  "MARGIN": 0.02,
+  "MERGE_MARGIN": 0.5,
+  "N_NODES": 800,
+  "PHASE_SUBSTEPS": 10,
+  "POOL_EXTRA": 4,
+  "QUERIES_PER_WORLD": 64,
+  "REACH_DEPTH": 2,
+  "TOPK": 5,
+  "TOPK_KEEP": 48,
+  "WIN_FRACTION": 0.7
+ },
+ "sealed_before_heldout_read": true
+}
