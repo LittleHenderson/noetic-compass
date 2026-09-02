@@ -1,0 +1,31 @@
+{
+ "account": "807562639912",
+ "ami": "ami-0c779ec711a581954",
+ "budget": {
+  "cap_minutes": 45.6,
+  "hard_cap_usd": 0.4,
+  "in_instance_hard_timer_min": 43,
+  "watchdog_force_terminate_min": 45
+ },
+ "cost": {
+  "authoritative_method": "instance_runtime_estimate",
+  "instance_runtime_estimate_usd": 0.2039,
+  "note": "the harness compute wall is a LOWER BOUND and is never presented as the spend; methods are not mixed",
+  "rate_per_hour_usd": 0.526
+ },
+ "gpu": "NVIDIA Tesla T4",
+ "instance_id": "i-06b51636eec07f6e3",
+ "instance_type": "g4dn.xlarge",
+ "receipt_id": "CLOUD_EXECUTION_RECEIPT_CMB_RP0",
+ "receipt_retrieved": true,
+ "region": "us-west-2",
+ "run_id": "cmb-rp0-1788365350",
+ "staged_sha256": {
+  "cmb_r1_core.py": "e4e5ac02e9491178d54d26ddad6c4d0c1b991e31c68431a27f6e4378f3d12324",
+  "cmb_r1_v02_core.py": "62af66d3162cad3edf9b71a412c87b4a35f05992661849acb5cb603507f0e53d",
+  "run_cmb_rp0.py": "f60904d89f23cfe0f9858458ccf309b3d3021904707f79fd4d929851cfdb246b"
+ },
+ "termination": "self-terminated (InstanceInitiatedShutdownBehavior=terminate + EXIT-trap + in-instance timer); client watchdog armed",
+ "torch_wheel": "cu124 index, version NOT pinned; the resolved version is recorded in the receipt compute block. Determinism is same-instance.",
+ "wall_minutes_instance": 23.26
+}

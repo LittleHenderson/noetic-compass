@@ -4,6 +4,42 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - CMB-RP0 RAN: the two-tier gate earns nothing as a replay selector ($0.2039)
+
+9 registered worlds on an AWS T4. Owner-authorized development run. Hash `f2fbfd0c97df96f7`.
+
+```
+SAFETY      TWO_TIER_GATE_EARNS_NOTHING
+CAPABILITY  CMB_REPLAY_BEATS_NO_REPLAY_ONLY
+PROMOTION   NOT_PROMOTABLE -- 6 of the owner's 8 conditions fail
+```
+
+**The authorization tier is dominated by its own retrieval tier.** `CMB_RETRIEVED` is better on
+*both* axes - forgets less (`0.1388` vs `0.1518`) and admits fewer forgeries (`5.33` vs `5.67`).
+The thing that beats the mechanism is the tier directly beneath it.
+
+**A filter that counts graph edges is safer than the verifier.** `DEGREE_FILTER` - no query, no
+semantics, no CAS - ingested `4.41` forgeries against `5.67`. This settles the A2.8 limit
+registered *before* the run, and settles it against the mechanism.
+
+**The registered falsifier fired.** Required gap `> 1.0`; measured `-0.33`, positive in 3 of 9
+worlds. Per-world: `-1, 0, -3, 0, -1, +3, +1, +1, -3`.
+
+**Three decisive losses**, each in 0 of 9 worlds at `p = 0.0038` - the floor of a sign-flip test
+at n=9: to `SEMANTIC_DIVERSE`, `CLASS_BALANCED`, and `CLASS_BALANCED_POOL`.
+
+**Nine worlds answered the power objection both ways**: enough for the effects that exist
+(losses at the permutation floor), not enough for the ties with `RANDOM` and `DEGREE_FILTER` -
+which per A3.5 are absence of power, never equivalence.
+
+**A control produced its own finding.** `CLASS_BALANCED_POOL`, added hours before launch, is
+near-best at preserving old tasks (`0.0429`) and by far the worst under poisoning (`16.00`).
+Label-balanced replay is highly vulnerable to label-forgery.
+
+Does not disturb RGM-0.2, which GLM reproduced byte-identically. That result is about admission;
+this one is about replay selection. The verifier is good at what it was built for and adds
+nothing here.
+
 ## 2026-09-02 — CMB-RP0 built (owner items 5 and 6): six construction faults, one disclosed limit, $0
 
 Selective replay against catastrophic forgetting. Built and dev-verified; **not launched**.
