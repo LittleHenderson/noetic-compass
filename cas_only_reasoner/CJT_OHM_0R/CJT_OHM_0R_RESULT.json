@@ -76,19 +76,20 @@
    ]
   },
   "C4_COMMON_MODE_CANCELS": {
-   "detail": "max |alpha change| under a common multiplier = 1.241e-07 (psi x4, and V,R x9) -- cancellation holds to O(eps), NOT exactly",
+   "detail": "psi common-mode drift 0.000e+00 (EXACT after F1); joint V,R x9 drift 1.241e-07 -- O(eps/R) from the load-bearing R+eps guard, NOT removable",
    "pass": true,
-   "residual": 1.2407399774261307e-07
+   "psi_drift": 0.0,
+   "residual": 1.2407397809166554e-07
   },
   "C5_PER_JUNCTION_SURVIVES": {
    "detail": "one R raised -> alpha moves 0.0448; one junction unready -> 0.5000",
    "pass": true,
-   "single_R": 0.04476441324254686,
-   "single_unready": 0.4999998104167468
+   "single_R": 0.04476441769432098,
+   "single_unready": 0.49999986041676386
   },
   "C6_ABSOLUTE_FLOW_PRESERVED": {
    "I_ratio": 4.0,
-   "detail": "psi x4 -> alpha unchanged to 3.8e-08 but I_total x4.0000. A MULTIPLICATIVE common factor is invisible in alpha and VISIBLE in I_total. Discarding I is what makes a global region or readiness multiplier decorative.",
+   "detail": "psi x4 -> alpha unchanged to 0.0e+00 but I_total x4.0000. A MULTIPLICATIVE common factor is invisible in alpha and VISIBLE in I_total. Discarding I is what makes a global region or readiness multiplier decorative.",
    "pass": true
   },
   "C7_VR_IDENTIFIABILITY": {

@@ -303,3 +303,63 @@ D0_DESIGN_INVALID:<typed reason>        or        D0_READY_FOR_BUILD_REVIEW
 
 **No automatic build follows either.** In the owner's words: *a design review whose only possible
 answer is "proceed" is a parade, not a gate.*
+
+---
+
+# AMENDMENT A2 — GLM AUDIT F1: the ε equality class is a SIDE CHANNEL in this bench
+
+GLM's audit of `cbffa4a0` returned **PASS** with one minor finding. It is minor for
+`CJT-OHM-0R`. **It is not minor here**, because it lands directly on `D0`'s core construction.
+
+## A2.1 — two ε effects, one removable and one not
+
+| ε | where | removable? | consequence |
+|---|---|---|---|
+| `α = i/(I + ε)` | `split_flow`, inside the `I > 0` branch | **YES — redundant, the branch already handles `I = 0`** | fixed; common-mode invariance now **exact** |
+| `V/(R + ε)` | `conductance`, guards `R = 0` | **NO — load-bearing** | same-conductance equality holds only to `O(ε/R)` |
+
+**The removable one is fixed** (`ψ` common-mode drift `1.241e-07 → 0.000e+00`). The other stays,
+and its consequence is what this amendment is about.
+
+## A2.2 — measured, and worse than the audit stated
+
+The drift is `O(ε/I)` and `O(ε/R)`, so it **grows as flow and resistance shrink**:
+
+```
+common-mode drift      I = 10      3.750e-08
+                       I = 0.1     3.750e-06
+                       I = 0.01    3.750e-05
+
+same-conductance gap   (1, 2)          vs (10, 20)     2.250e-07
+                       (10, 20)        vs (100, 200)   2.250e-08
+                       (0.001, 0.002)  vs (1, 2)       2.496e-04
+```
+
+## A2.3 — why this is BLOCKING for `D0`, not a footnote
+
+`D0` requires collision groups where `g`, `α`, `I_total` and the immediate Effect are
+**identical** while the cause differs. **They are not identical.** They differ by the ε-residue —
+up to `2.5e-04` at small `R`.
+
+> **A residue that varies systematically with `(V, R)` is a SIDE CHANNEL. A controller can read
+> it and recover the cause it was supposed to be unable to see.**
+
+That is an **eighth shortcut**, sitting in the construction I committed two commits ago, and it
+would have manufactured a `CAS_TYPED_REPAIR_SIGNAL` out of floating-point arithmetic.
+
+## A2.4 — registered, and measured rather than assumed
+
+> **`GATE_EPS_NOT_A_SIDE_CHANNEL`.** Collision groups must satisfy `R ≫ ε` and `I ≫ ε` —
+> registered floor `R ≥ 10⁴·ε` and `I ≥ 10⁴·ε`, putting the residue below `10⁻⁴` of the signal —
+> **or** the design must state the ε equality class explicitly and construct the groups to be
+> exactly equal within it.
+>
+> **And it must be MEASURED:** the trivial-rule gate (`A1.G`) is extended with **a classifier
+> trained on the ε-residue alone**. If it recovers the cause above chance, the construction is
+> invalid and the status is `REPAIR_TRIVIALLY_RECOVERABLE`.
+
+## A2.5 — the auditor's own eligibility
+
+GLM records that it is **no longer eligible** as the third auditor for any claim-bearing neural
+result on this line, having now audited the design such a result would test. A third distinct
+auditor is required. 🔒 owner-actionable.

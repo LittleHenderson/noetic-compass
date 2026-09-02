@@ -47,7 +47,12 @@ def split_flow(i, eps=EPS):
     compute budget, activation threshold, processing depth and plasticity magnitude.
     """
     I = float(i.sum())
-    alpha = i / (I + eps) if I > 0 else np.zeros_like(i)
+    # GLM AUDIT F1 (cbffa4a0): the eps here was REDUNDANT -- the I > 0 branch already handles
+    # the zero case -- and it broke exact common-mode invariance at O(eps/I), which GROWS as
+    # flow shrinks: measured drift 3.750e-08 at I=10, 3.750e-05 at I=0.01. Removed.
+    # The R + eps guard in conductance() is NOT removable (R may be 0) and its consequence is
+    # documented as the EPS EQUALITY CLASS in the findings.
+    alpha = i / I if I > 0 else np.zeros_like(i)
     return I, alpha
 
 
@@ -217,9 +222,13 @@ def c4(B):
     # NOT exactly zero: the epsilons in V/(R+eps) and i/(I+eps) break exact scale invariance.
     # The residual is O(eps) and behaviourally irrelevant, but "exact invariance" would be a
     # false claim, so the tolerance is stated at the size the implementation actually achieves.
-    return d < 1e-5, (f"max |alpha change| under a common multiplier = {d:.3e} "
-                      f"(psi x4, and V,R x9) -- cancellation holds to O(eps), NOT exactly"), {
-        "residual": d}
+    # after the F1 fix the psi case is EXACT; the V,R x9 case is not, because conductance's
+    # R + eps guard stays. Two different eps effects, one removable and one not.
+    _, a_psi = cas_controller(V, R, m, rho, [4, 4, 4, 4])
+    d_psi = float(np.max(np.abs(a1 - a_psi)))
+    return d < 1e-5, (f"psi common-mode drift {d_psi:.3e} (EXACT after F1); joint V,R x9 drift "
+                      f"{d:.3e} -- O(eps/R) from the load-bearing R+eps guard, NOT removable"), {
+        "residual": d, "psi_drift": d_psi}
 
 
 @check("C5_PER_JUNCTION_SURVIVES",

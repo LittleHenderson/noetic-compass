@@ -313,3 +313,42 @@ PRIMARY    typed diagnosis and next-tick repair
 SEPARATE   CJT cascade composition -- its own design, NOT a continuation of the retired claim
 NO GPU     until audit and preregistration
 ```
+
+---
+
+## 13. GLM INDEPENDENT AUDIT of `cbffa4a0` — `PASS`, one finding, `$0`
+
+Seventh audit this session, all `PASS`, cumulative audit spend `$0`. Fixes prohibited during the
+audit and none were made. **GLM wrote its checks fresh from the ruling's spec and ran them
+outside the repo** — it did not execute this package's code.
+
+Reproduced independently at the `1e-16` class: `C1`/`C14` (worst `3.1e-16`; the convex-hull
+identity at `1.7e-16`), `C12` (`2.2e-16`), `C9` (float-exact `0.0`), `C8`, and the cascade span
+residual — **`0.2096` outside** the additive family against a matched additive control at
+`3.0e-16` inside.
+
+The auditor confirmed the package **correctly defers** the five-way matched cascade comparison to
+a GPU stage, so **no unfair-depth claim is baked into Stage A** — and restated the owner's rule
+that if generic and CAS cascades tie, the finding is `SEQUENTIAL_CASCADE_COMPOSITION_VALUE`, not
+`CAS_OHM_VALUE`.
+
+### Finding F1 — the ε class. Fixed here; **blocking for `D0`**
+
+`split_flow` computed `α = i/(I + ε)` *inside* the `I > 0` branch, where the ε is **redundant** —
+the branch already handles `I = 0` — and it broke exact common-mode invariance at `O(ε/I)`.
+
+**Fixed.** `ψ` common-mode drift: `1.241e-07 → 0.000e+00`, exact.
+
+The `R + ε` guard in `conductance` is **load-bearing** (`R` may be zero) and stays. Its
+consequence is now documented as the **ε equality class**: same-conductance pairs are equal only
+to `O(ε/R)`, measured up to **`2.496e-04`** at small `R`.
+
+**That consequence is a side channel in `CJT-OHM-D0`'s collision groups**, where states must be
+indistinguishable but would differ by the residue. Registered there as
+`GATE_EPS_NOT_A_SIDE_CHANNEL` with a floor of `R, I ≥ 10⁴·ε`, and a classifier trained on the
+residue alone added to the trivial-rule gate. See `CJT_OHM_D0` amendment A2.
+
+### Auditor eligibility, recorded
+
+GLM is **no longer eligible** as the third auditor for a claim-bearing neural result on this
+line, having audited the design such a result would test. A third distinct auditor is required.
