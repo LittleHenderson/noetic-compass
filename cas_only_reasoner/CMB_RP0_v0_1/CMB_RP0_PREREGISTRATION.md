@@ -282,3 +282,83 @@ an arm that is empty is reported as EQUIVALENT TO NO_REPLAY, never as a winner
 
 `poison_ingested` must therefore be read alongside `underfilled` — **"kept poison out" and
 "replayed nothing" are different results and are reported separately.**
+
+---
+
+# AMENDMENT A2 — construction validity (2026-09-02, before any measurement)
+
+Written while building the harness, before any claim-bearing run. Every item below was found
+by **measuring my own construction**, not by reasoning about it. Four of the five would have
+produced an invalid result that still printed a clean status word.
+
+## A2.1 — a forgery with missing fields is caught by bookkeeping, not by the mechanism
+
+My first poison had `context = None`, `generic_profile = None`, and `links = []`, because I
+built it after `assign_generic_geometry` and `_mk_memory` starts every memory with no links.
+
+`coherence()` blends trajectory and context **only when both sides have a context**. So a
+forgery with no context would have been scored on a different quantity from every real
+memory. The verifier could then have excluded 100% of poison — and the win would have belonged
+to a missing field, not to the two-tier rule.
+
+**Fixed:** poison is built before geometry assignment, gets a real context vector (its
+source's, plus noise), and real links. Checked: `0` poison items missing any field.
+
+## A2.2 — the safety test was vacuous as first written
+
+I defined the replay pool as `torch.cat(idx[:t])`, where `idx` is the training stream. The
+training stream excludes poison. **So poison could never be replayed by any arm, and the
+poisoning condition measured nothing at all.**
+
+**Fixed:** the training stream and the replay pool are now separate. Training sees real
+memories only. The pool is everything *stored* from earlier tasks, poison included — an item
+sitting in memory, eligible for recall, that the model never legitimately learned. Checked:
+`132 of 132` poison items reachable in the final pool, `0` in the training stream.
+
+## A2.3 — a forgery is stored next to what it impersonates
+
+Pool membership follows the topic the forgery **impersonates**, not the wrong label it
+carries. Otherwise a forgery of a task-1 memory could sit in the task-2 pool, which is not
+what an attack on a memory store looks like.
+
+## A2.4 — degree gave the forgeries away, twice, in opposite directions
+
+| construction | mean degree, poison | mean degree, real |
+|---|---|---|
+| forgery inherits its source's link set | **12.55** | 7.42 |
+| forgery links out by the corpus rule only | **4.00** | 6.79 |
+| whole graph rebuilt by the corpus rule | **4.89** | 6.67 |
+
+First I made the forgeries **hubs**. Fixing that left them with no **incoming** edges — the
+same giveaway, reversed. Both would have let a filter that counts edges do the verifier's job.
+
+## A2.5 — the residual gap gets a competitor, not a patch
+
+`4.89` against `6.67` does not go away. A forgery of one memory is close to that one memory,
+so it earns fewer edges than a real memory sitting inside a cluster. **That is a property of
+the attack, not a defect in the harness**, and it cannot be tuned out without faking the graph.
+
+So it gets a competitor. **`DEGREE_FILTER`** is a new arm: keep the past items whose degree is
+at or above the pool median, then sample at random. No query, no semantics, no CAS, no
+verifier. It is added to the mechanism-free set and to the safety law:
+
+> `AUTHORIZATION_PREVENTS_POISONING` now requires the verifier to ingest less poison than the
+> best of `RANDOM`, `SEMANTIC_DIVERSE`, `SEMANTIC_TO_NEW`, **and `DEGREE_FILTER`**.
+
+This follows the standing rule from CMB-P0: *a win by mechanism M is uninterpretable until it
+beats the cheapest method without M.* There, three adversarial reviewers and a full held-out
+run all missed a content leak that a one-line gate exposed. Here the cheapest competitor is
+built in before the first measurement rather than after it.
+
+## Arms, final
+
+| arm | what it uses | role |
+|---|---|---|
+| `NO_REPLAY` | nothing | floor |
+| `RANDOM` | uniform sample of the pool | strong mechanism-free baseline |
+| `SEMANTIC_DIVERSE` | farthest-point coverage of the pool | strongest mechanism-free baseline |
+| `SEMANTIC_TO_NEW` | nearest to the new task | documented straw man (A1.3), never the bar |
+| `DEGREE_FILTER` | graph degree only | mechanism-free competitor on safety (A2.5) |
+| `CMB_AUTHORIZED` | two-tier verifier, authorized tier | the thing under test |
+| `CMB_RETRIEVED` | two-tier verifier, retrieved tier | isolates what the second tier adds |
+| `ORACLE_BALANCED` | true labels | ceiling, never a method |
