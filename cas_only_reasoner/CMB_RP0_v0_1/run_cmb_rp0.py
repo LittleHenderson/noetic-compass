@@ -62,6 +62,11 @@ HIDDEN = 64
 LR = 1e-3
 MARGIN = 0.02               # provisional; the RUN measures a null and reports both (A3.5)
 POISON_MARGIN = 1.0         # forgeries; set BEFORE seeing retention (A3.2)
+# OWNER RULING 2026-09-02: promotion requires the mechanism to beat CLASS_BALANCED as well,
+# and to preserve the old task and still learn the new one. Floors registered before the run.
+PRESERVE_FRAC = 0.80        # acc on task-0 classes at the end, as a fraction of its own peak
+LEARN_FLOOR = 0.80          # acc on the FINAL task's classes at the end
+REQUIRED_BEAT = ("RANDOM", "SEMANTIC_DIVERSE", "CLASS_BALANCED", "DEGREE_FILTER")
 WIN_FRACTION = 0.70         # descriptive only now; the test is a paired permutation (A3.5)
 N_PERM = 10000
 POISON_PER_PAST_TOPIC = 6
@@ -75,7 +80,8 @@ STOCHASTIC = ("RANDOM", "DEGREE_FILTER")
 MECHANISM_FREE = ("ID_ORDER", "RANDOM", "SEMANTIC_DIVERSE", "SEMANTIC_TO_NEW", "DEGREE_FILTER")
 ARM_SEED = {a: i for i, a in enumerate(ARMS)}       # NOT hash(): hash() is per-process (B7)
 FROZEN_NAMES = ("N_TASKS", "REPLAY_K", "STEPS", "BATCH", "HIDDEN", "LR", "MARGIN",
-                "POISON_MARGIN", "WIN_FRACTION", "N_PERM", "N_DRAWS",
+                "POISON_MARGIN", "PRESERVE_FRAC", "LEARN_FLOOR", "WIN_FRACTION",
+                "N_PERM", "N_DRAWS",
                 "POISON_PER_PAST_TOPIC", "QUERIES_PER")
 
 DEV = None
@@ -326,9 +332,12 @@ def train_arm(arm, W, seed, draw=0):
         keep = sorted({int(Y[i]) for i in idx[0].tolist()})
         km = torch.tensor(keep, device=DEV)
         masked = float((km[logits[:, km].argmax(1)] == Y[idx[0]]).double().mean())
+        last = idx[N_TASKS - 1]
+        acc_last = float((net(X[last]).argmax(1) == Y[last]).double().mean())
         seen = torch.cat(idx)
         alla = float((net(X[seen]).argmax(1) == Y[seen]).double().mean())
     return {"acc_T1_after_T1": a1, "acc_T1_end": end1, "forgetting": a1 - end1,
+            "acc_Tlast_end": acc_last,
             "masked_acc_T1_end": masked, "final_avg_acc": alla,
             "past_classes_covered": len(covered),
             "poison_ingested": ingested,
@@ -466,7 +475,37 @@ def summarize(clean, poisoned):
                       f"{best_base_arm} {best_base:.2f}; forgetting {fp['CMB_AUTHORIZED']:.4f} "
                       f"vs RANDOM {fp['RANDOM']:.4f}")
 
-    return {"gates": gates, "capability": cap, "capability_status": cap_status,
+    # ---- OWNER PROMOTION LAW (ruling 2026-09-02) --------------------------------------
+    # Stricter than the capability status above and BINDING for promotion. Eight conditions,
+    # every one executable. "No result may promote unless CMB_AUTHORIZED: admits less poison
+    # than CMB_RETRIEVED; beats RANDOM; beats SEMANTIC_DIVERSE; beats CLASS_BALANCED; beats
+    # DEGREE_FILTER; preserves old-task performance; still learns the new task; clears the
+    # frozen world-level uncertainty law."
+    peak = mean(C, "CMB_AUTHORIZED", "acc_T1_after_T1")
+    kept = mean(C, "CMB_AUTHORIZED", "acc_T1_end")
+    preserve_ratio = kept / peak if peak > 0 else 0.0
+    acc_new = mean(C, "CMB_AUTHORIZED", "acc_Tlast_end")
+    promo = {
+        "admits_less_poison_than_RETRIEVED": bool(two_tier_gap > POISON_MARGIN),
+        "beats_RANDOM": bool(cap["RANDOM"]["win"]),
+        "beats_SEMANTIC_DIVERSE": bool(cap["SEMANTIC_DIVERSE"]["win"]),
+        "beats_CLASS_BALANCED": bool(cap["CLASS_BALANCED"]["win"]),
+        "beats_DEGREE_FILTER": bool(cap["DEGREE_FILTER"]["win"]),
+        "preserves_old_task": bool(preserve_ratio >= PRESERVE_FRAC),
+        "learns_new_task": bool(acc_new >= LEARN_FLOOR),
+        "clears_uncertainty_law": bool(
+            all(cap[b]["p_perm"] is not None and cap[b]["p_perm"] < 0.05
+                for b in REQUIRED_BEAT)),
+    }
+    failed = [k for k, v in promo.items() if not v]
+    promotion = {"conditions": promo, "failed": failed,
+                 "status": "PROMOTABLE" if not failed else "NOT_PROMOTABLE",
+                 "preserve_ratio": preserve_ratio, "acc_new_task": acc_new,
+                 "note": ("Owner ruling 2026-09-02. ALL EIGHT must hold. This law is BINDING "
+                          "for promotion and is stricter than the capability status.")}
+
+    return {"promotion": promotion,
+            "gates": gates, "capability": cap, "capability_status": cap_status,
             "capability_reason": cap_reason, "best_mechanism_free": [best_mf_arm, best_mf],
             "safety": saf, "safety_status": saf_status, "safety_reason": saf_reason,
             "two_tier_poison_gap": two_tier_gap, "coverage_clean": coverage,
