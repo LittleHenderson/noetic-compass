@@ -40,8 +40,11 @@ from cmb_p0 import (N_NODES, QUERIES_PER_WORLD, TOPK, build_queries,  # noqa: E4
 # NEW, UNTOUCHED worlds. CMB-P0/P1 used ids 0-25; those revealed the promising combination
 # and are excluded. A different id yields a different world key and therefore a fresh seed.
 DEV_WORLDS = tuple(range(500, 506))
-HELDOUT_WORLDS = tuple(range(506, 536))          # 30 worlds
-EXCLUDED_WORLDS = tuple(range(0, 26))            # asserted at runtime, never read
+# MOVED 2026-09-02: a verifying agent read worlds 506-512 during the pre-launch review, so
+# that range is burned. The freeze sentence "no held-out world has been read" must stay true.
+HELDOUT_WORLDS = tuple(range(536, 566))          # 30 worlds, untouched
+# 0-25 used by CMB-P0/P1; 500-512 touched during CMB-P2 dev and pre-launch review.
+EXCLUDED_WORLDS = tuple(range(0, 26)) + tuple(range(500, 513))
 
 K_SETTINGS = (1, 2, 3, 4)
 PRIMARY_K = (2, 3)
