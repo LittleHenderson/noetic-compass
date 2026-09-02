@@ -82,7 +82,9 @@ if [ $? -ne 0 ]; then echo "TORCH_OR_CUDA_UNAVAILABLE"; exit 1; fi
 
 cd /opt/cmbp1 && python3 run_cmb_p1.py; RC=$?
 echo "HARNESS_RC=$RC"
-aws s3 cp /opt/cmbp1/CMB_P1_RECEIPT.json s3://{BUCKET}/{PREFIX}/{run_id}/CMB_P1_RECEIPT.json --region {REGION} || true
+for f in CMB_P1_RECEIPT.json CMB_P1_RAW.json; do
+  aws s3 cp /opt/cmbp1/$f s3://{BUCKET}/{PREFIX}/{run_id}/$f --region {REGION} || true
+done
 echo "DONE"
 """
 

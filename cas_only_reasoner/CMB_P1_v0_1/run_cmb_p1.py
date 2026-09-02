@@ -337,6 +337,9 @@ def main():
                     dev.append(run_world(wid, k, sub))
                 for wid in HELDOUT_WORLDS:
                     held.append(run_world(wid, k, sub))
+        json.dump({"RAW_RESULTS_ONLY": True, "heldout_worlds": strip(held),
+                   "dev_worlds": strip(dev)}, open("CMB_P1_RAW.json", "w"),
+                  indent=1, sort_keys=True)
         verdict = emit_status(held)
     except Exception:
         json.dump({"FAILED": True, "traceback": traceback.format_exc(),
@@ -346,11 +349,26 @@ def main():
         print("RUN FAILED -- partial receipt written")
         return 2
 
+    try:
+        return _finish(dev, held, verdict, t0)
+    except Exception:
+        json.dump({"FAILED_AFTER_COMPUTE": True, "traceback": traceback.format_exc(),
+                   "verdict": verdict, "heldout_worlds": strip(held)},
+                  open("CMB_P1_RECEIPT.json", "w"), indent=1, sort_keys=True)
+        traceback.print_exc()
+        print("RECEIPT BUILD FAILED -- results preserved in CMB_P1_RECEIPT.json")
+        return 3
+
+
+def _finish(dev, held, verdict, t0):
     receipt = {
         "project": "CMB-P1 Phase Separation Repair Bench",
         "preregistration": "CMB_P1_PREREGISTRATION.md v0.1",
         "authority": "owner ruling 2026-09-02 R4",
-        "frozen_params": {n: getattr(P1, n) for n in dir(P1) if n.isupper()},
+        "frozen_params": {n: getattr(P1, n) for n in dir(P1)
+                          if n.isupper()
+                          and isinstance(getattr(P1, n), (int, float, str, bool,
+                                                         list, tuple))},
         "heldout_by_substeps_and_k": {
             sub: {k: group([r for r in held if r["k_chains"] == k and r["substeps"] == sub])
                   for k in K_SETTINGS} for sub in SUBSTEP_BUDGETS},
