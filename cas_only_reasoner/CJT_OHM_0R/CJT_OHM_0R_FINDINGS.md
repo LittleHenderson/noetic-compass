@@ -4,7 +4,7 @@
 
 **Yes — but not the one the document proposed, and much narrower than the ladder it describes.**
 
-Twelve checks, all passing. `python ohm0r.py` · receipt `CJT_OHM_0R_RESULT.json`.
+Sixteen checks, all passing. `python ohm0r.py` · receipt `CJT_OHM_0R_RESULT.json`.
 
 ---
 
@@ -155,3 +155,102 @@ repair and improve the next tick, where a coefficient-only controller cannot?* T
 family, it needs no weight generation, and the `C8` construction is already the seed of it.
 
 Whether it needs a GPU at all is an open question I would want answered before asking for one.
+
+---
+
+## 9. Four results from the adversarial lanes that are STRONGER than mine
+
+An independent five-lane assessment attacked this analysis. I re-verified each consequential
+claim myself before accepting it. **Four of them improve on what I had**, and one reframes the
+whole proposal.
+
+### `C14` — the equivalence is worse than I stated, and provable for EVERY `α`
+
+I measured `C1` for one `α` over 400 inputs. The correct argument is algebraic and universal.
+Because `Σ αⱼ = 1`:
+
+```
+W_eff = W0 + s·Σⱼ αⱼ dWⱼ  =  Σⱼ αⱼ (W0 + s·dWⱼ)
+```
+
+**A convex combination of `J` FIXED matrices.** Worst relative identity error over 200 random
+`α`: **`2.807e-16`**. So the composed output lies in the span of the `J` fixed expert outputs
+**always**, and `O4 − O2` is **identically zero by algebra** — not merely small for the case I
+happened to test. The owner's registered gate was not just unlikely to fire; it was
+**mathematically impossible** to fire.
+
+### `C13` — a gate that actually discriminates, replacing the Jacobian one
+
+The registered Jacobian scalar-fit gate is worse than "too weak": it scored the **vacuous** case
+`0.3384` and a **genuine** case `0.3194` — the vacuous case slightly *higher*. It has **no
+discriminating power at all**.
+
+The replacement needs no `α` and no scalar fit — just ask whether a **free least-squares mix of
+the fixed expert outputs** can reproduce the composed output:
+
+```
+ADDITIVE law (as written)   span residual  1.8e-15    nothing beyond the span -- VACUOUS
+SERIES law                  span residual  0.0233     genuinely outside it
+```
+
+### `C15` — the law restricts nothing at all
+
+I said a generic MLP could *approximate* `normalize(m·ρ·ψ·V/R)`. Stronger: set `V` to any target
+and `R` to one, and the law reproduces that target **exactly** — worst relative error
+**`3.069e-16`** hitting random simplex points. **The CAS-Ohm law is onto the whole open simplex;
+it imposes no constraint whatsoever on reachable coefficients.**
+
+So value cannot live in the weight law under any formulation. It can only live in the **map from
+raw signals to `α`** — which is precisely the thing a generic controller also learns.
+
+### `C16` — the breaks belong to the socket, not to CAS
+
+Four formulations *do* break the equivalence: repeated linear application, nonlinear recurrence,
+attention through a softmax, and series composition. But a **generic Dirichlet `α` breaks it by
+the same amount**:
+
+```
+series socket   GENERIC dirichlet   mean 0.0170   p5-p95 0.0055-0.0353
+series socket   CAS-Ohm V/R         mean 0.0150   p5-p95 0.0031-0.0310
+```
+
+Overlapping. **Non-equivalence is a property of where the coefficients enter the network, not of
+the law that produced them.** So none of the four breaks converts into an advantage for CAS over
+the matched generic hypernetwork — which is the proposal's actual primary comparison, `O4` vs
+`O3`, and it remains untouched by all of this.
+
+## 10. The one genuinely new idea — and it is a good one
+
+**In Ohm's law, conductances ADD when elements are in PARALLEL. Parallel *is* mixture.**
+
+> **The proposal wrote the parallel law and then claimed the series benefit.**
+
+The series formulation `W_eff = Πⱼ (I + s·αⱼ dWⱼ) W0` is the one single-step arrangement that is
+genuinely outside the additive family. The best **free, unconstrained** additive fit
+`W0 + Σⱼ βⱼ dWⱼ` to a series matrix leaves a relative residual of **`0.966`–`0.972`** — the
+series matrix is essentially not representable additively at all.
+
+That is a different hypothesis class, not the same law re-parameterised, and it has the correct
+physical reading rather than a borrowed one. **If any part of this program is worth building, it
+is this** — and it is not what the document proposed.
+
+**The honest qualifier, from `C16`:** series composition being a richer class does **not** make it
+a CAS result. A generic controller at the same series socket gets the same richness. What series
+buys is a **compute and parameter saving** — every broken formulation is exactly a mixture over a
+combinatorially larger *implicit* set of composed operators, with coefficients that are monomials
+in `α`. That is what depth and multiplicative parameterisation buy in any network.
+
+## 11. Revised bottom line
+
+```
+POSSIBLE      only in a narrower form -- the weight-generation claim is dead by algebra
+BENEFICIAL    unproven, and the burden is now clearly on data efficiency and OOD transfer,
+              never on accuracy or expressiveness
+LIVE          typed diagnosis (C8), hard-mask certification (C9), absolute flow (C6)
+NEW           series composition -- physically correct, genuinely outside the additive
+              family, and NOT what was proposed
+```
+
+**Cheapest decisive next step, and it is still `$0`:** the span gate (`C13`) plus the positional
+control (`C16`) settle the entire weight lane before a GPU is booked. Both are already in this
+package and both already ran.

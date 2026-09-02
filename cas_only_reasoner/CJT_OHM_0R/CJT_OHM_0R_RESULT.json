@@ -16,6 +16,36 @@
    "pass": true,
    "residual": 0.0
   },
+  "C13_SPAN_GATE": {
+   "additive": 1.4441571044421242e-15,
+   "detail": "ADDITIVE law span residual 1.444e-15 (nothing beyond the span -- VACUOUS); SERIES law span residual 0.0746 (outside it)",
+   "pass": true,
+   "series": 0.07462984409869175
+  },
+  "C14_CONVEX_HULL": {
+   "detail": "worst relative identity error over 200 random alphas = 2.373e-16. So O4 - O2 is IDENTICALLY zero BY ALGEBRA for every alpha, not merely small for one tested.",
+   "pass": true,
+   "residual": 2.3734977479637236e-16
+  },
+  "C15_LAW_RESTRICTS_NOTHING": {
+   "detail": "worst relative error hitting a random simplex target = 3.069e-16. Setting V to the target and R to one reaches ANY point: the law is ONTO the whole open simplex and restricts NOTHING. Value can only live in the MAP from raw signals to alpha.",
+   "pass": true,
+   "residual": 3.0688350797919004e-16
+  },
+  "C16_BREAK_BELONGS_TO_THE_SOCKET": {
+   "cas": [
+    0.01496141658538549,
+    0.003052756645186175,
+    0.030983767163853912
+   ],
+   "detail": "generic dirichlet mean 0.0170 (p5-p95 0.0055-0.0353); CAS V/R mean 0.0150 (0.0031-0.0310) -- OVERLAPPING. The break belongs to the SOCKET, not to the CAS law.",
+   "generic": [
+    0.016956016159998918,
+    0.005511330589803014,
+    0.035321937150773426
+   ],
+   "pass": true
+  },
   "C1_ORIGINAL_EQUIVALENCE": {
    "detail": "max |weight-path - output-mix| = 8.882e-16 over 400 inputs",
    "pass": true,

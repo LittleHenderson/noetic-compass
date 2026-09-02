@@ -97,6 +97,24 @@ class Basis:
             traj.append(h.copy())
         return h, np.array(traj)
 
+    def series(self, alpha, x):
+        """Junctions in SERIES rather than in parallel: W_eff = prod_j (I + s a_j dW_j) W0.
+
+        In Ohm's law conductances ADD when elements are in PARALLEL -- and parallel IS mixture.
+        The original proposal wrote the PARALLEL law and then claimed the SERIES benefit.
+        """
+        M = np.eye(self.W0.shape[0])
+        for j in range(self.n):
+            M = (np.eye(self.W0.shape[0]) + self.s * alpha[j] * self.dW(j)) @ M
+        return (M @ self.W0) @ x
+
+    def series_expert(self, j, x):
+        I = np.eye(self.W0.shape[0])
+        return ((I + self.s * self.dW(j)) @ self.W0) @ x
+
+    def additive_expert(self, j, x):
+        return (self.W0 + self.s * self.dW(j)) @ x
+
     def recurrent_mix_twin(self, alpha, x, T=8, phi=np.tanh):
         """The honest twin: run each expert's own recurrence, mix the states each step."""
         hs = [np.zeros(self.W0.shape[0]) for _ in range(self.n)]
@@ -344,6 +362,88 @@ def c12(B):
         f"C8 diagnosis, not from allocation."), {"residual": d}
 
 
+@check("C13_SPAN_GATE",
+       "REPLACES the too-weak Jacobian gate: is the composed output in the SPAN of the experts?")
+def c13(B):
+    """Free least-squares mix of the J fixed expert outputs. No alpha, no scalar fit.
+
+    The registered Jacobian gate scored the VACUOUS case (0.3384) slightly HIGHER than a
+    genuine one (0.3194) -- it has no discriminating power at all. This does.
+    """
+    def resid(compose, expert, trials=200):
+        worst = 0.0
+        for _ in range(trials):
+            x = RNG.normal(0, 1, B.W0.shape[1])
+            al = RNG.dirichlet(np.ones(B.n))
+            y = compose(al, x)
+            E = np.stack([expert(j, x) for j in range(B.n)], axis=1)
+            beta, *_ = np.linalg.lstsq(E, y, rcond=None)
+            worst = max(worst, float(np.linalg.norm(y - E @ beta) / (np.linalg.norm(y) + 1e-12)))
+        return worst
+    add = resid(lambda a, x: B.linear_weight(a, x), B.additive_expert)
+    ser = resid(lambda a, x: B.series(a, x), B.series_expert)
+    return add < 1e-10 and ser > 1e-3, (
+        f"ADDITIVE law span residual {add:.3e} (nothing beyond the span -- VACUOUS); "
+        f"SERIES law span residual {ser:.4f} (outside it)"), {"additive": add, "series": ser}
+
+
+@check("C14_CONVEX_HULL",
+       "the additive law is a convex combination of J FIXED matrices, for EVERY alpha")
+def c14(B):
+    worst = 0.0
+    for _ in range(200):
+        al = RNG.dirichlet(np.ones(B.n))
+        lhs = B.W0 + B.s * sum(al[j] * B.dW(j) for j in range(B.n))
+        rhs = sum(al[j] * (B.W0 + B.s * B.dW(j)) for j in range(B.n))
+        worst = max(worst, float(np.linalg.norm(lhs - rhs) / np.linalg.norm(lhs)))
+    return worst < 1e-12, (
+        f"worst relative identity error over 200 random alphas = {worst:.3e}. So O4 - O2 is "
+        f"IDENTICALLY zero BY ALGEBRA for every alpha, not merely small for one tested."), {
+        "residual": worst}
+
+
+@check("C15_LAW_RESTRICTS_NOTHING",
+       "does the CAS-Ohm law constrain which alpha are reachable?")
+def c15(B):
+    worst = 0.0
+    for _ in range(20):
+        target = RNG.dirichlet(np.ones(B.n))
+        i = np.asarray(target) / (np.ones(B.n) + 1e-12)
+        al = i / i.sum()
+        worst = max(worst, float(np.max(np.abs(al - target)) / np.max(target)))
+    return worst < 1e-10, (
+        f"worst relative error hitting a random simplex target = {worst:.3e}. Setting V to the "
+        f"target and R to one reaches ANY point: the law is ONTO the whole open simplex and "
+        f"restricts NOTHING. Value can only live in the MAP from raw signals to alpha."), {
+        "residual": worst}
+
+
+@check("C16_BREAK_BELONGS_TO_THE_SOCKET",
+       "do CAS alphas break the equivalence MORE than generic ones at the same socket?")
+def c16(B):
+    def spread(sampler, n=200):
+        out = []
+        for _ in range(n):
+            x = RNG.normal(0, 1, B.W0.shape[1])
+            al = sampler()
+            y = B.series(al, x)
+            E = np.stack([B.series_expert(j, x) for j in range(B.n)], axis=1)
+            beta, *_ = np.linalg.lstsq(E, y, rcond=None)
+            out.append(float(np.linalg.norm(y - E @ beta) / (np.linalg.norm(y) + 1e-12)))
+        return float(np.mean(out)), float(np.percentile(out, 5)), float(np.percentile(out, 95))
+
+    def cas():
+        i = RNG.uniform(.1, 10, B.n) / (RNG.uniform(.1, 10, B.n) + EPS)
+        return i / i.sum()
+    g, c = spread(lambda: RNG.dirichlet(np.ones(B.n))), spread(cas)
+    overlap = not (c[1] > g[2] or g[1] > c[2])
+    return overlap, (
+        f"generic dirichlet mean {g[0]:.4f} (p5-p95 {g[1]:.4f}-{g[2]:.4f}); CAS V/R mean "
+        f"{c[0]:.4f} ({c[1]:.4f}-{c[2]:.4f}) -- OVERLAPPING. The break belongs to the SOCKET, "
+        f"not to the CAS law."), {"generic": g, "cas": c}
+
+
+
 def main():
     # square state space: a recurrent socket needs W to map the state to itself
     B = Basis(12, 12, 3, 4)
@@ -370,6 +470,9 @@ def main():
     vr_unidentified = results["C7_VR_IDENTIFIABILITY"]["pass"]
     diagnosis_nonvacuous = results["C8_SAME_RATIO_DIFFERENT_REPAIR"]["pass"]
     mask_real = results["C9_HARD_MASK_ABSOLUTE"]["pass"]
+    series_outside = results["C13_SPAN_GATE"]["series"] > 1e-3
+    law_restricts_nothing = results["C15_LAW_RESTRICTS_NOTHING"]["pass"]
+    break_is_socket = results["C16_BREAK_BELONGS_TO_THE_SOCKET"]["pass"]
     routing_adds_nothing = results["C12_RATIO_ONLY_TWIN"]["pass"]
 
     print("=" * 78)
@@ -384,6 +487,9 @@ def main():
     print(f"  V/R split adds nothing to ROUTING alone ............... {routing_adds_nothing}")
     print(f"  joint V,R rescaling invisible in BOTH alpha and I ..... {vr_unidentified}"
           "   -> CONDUCTANCE_ONLY")
+    print(f"  SERIES composition escapes the additive family ........ {series_outside}")
+    print(f"  the law itself restricts NOTHING (onto the simplex) ... {law_restricts_nothing}")
+    print(f"  the break belongs to the SOCKET, not to CAS ........... {break_is_socket}")
     print()
     survives = distinct_socket and flow_carries and diagnosis_nonvacuous and mask_real
     verdict = "NON_VACUOUS_EXPERIMENT_REMAINS" if survives else "NOTHING_LEFT_TO_TEST"
