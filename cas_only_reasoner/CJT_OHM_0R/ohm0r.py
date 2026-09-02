@@ -98,10 +98,15 @@ class Basis:
         return h, np.array(traj)
 
     def series(self, alpha, x):
-        """Junctions in SERIES rather than in parallel: W_eff = prod_j (I + s a_j dW_j) W0.
+        """CJT CASCADE COMPOSITION: W_eff = prod_j (I + s a_j dW_j) W0.
 
-        In Ohm's law conductances ADD when elements are in PARALLEL -- and parallel IS mixture.
-        The original proposal wrote the PARALLEL law and then claimed the SERIES benefit.
+        NAMING CORRECTED BY OWNER RULING. This is NOT "series Ohm's law": in circuits
+        conductances add in PARALLEL and resistances add in SERIES, and a matrix product is
+        neither. It is a CASCADE of active stages, where one stage's Effect becomes the next
+        stage's Cause and stage gains multiply.
+
+        What survives the rename is the mathematics: the cross term s^2 a1 a2 dW2 dW1 does not
+        exist in the additive mixture, and dW2 dW1 != dW1 dW2, so ORDER MATTERS.
         """
         M = np.eye(self.W0.shape[0])
         for j in range(self.n):
@@ -268,7 +273,7 @@ def c7(B):
 
 
 @check("C8_SAME_RATIO_DIFFERENT_REPAIR",
-       "THE KEY NON-VACUITY TEST: can a gate that sees only allocation pick the right repair?")
+       "a COEFFICIENT is insufficient -- which is NOT the same as CAS typing being necessary")
 def c8(B):
     # Same conductance, different cause, different correct repair.
     scenarios = [
@@ -300,7 +305,7 @@ def c8(B):
 
 
 @check("C9_HARD_MASK_ABSOLUTE",
-       "m=0 must be EXACTLY zero -- a guarantee a soft gate cannot give")
+       "m=0 is exactly zero -- a GOVERNANCE mechanism, NOT unique CAS arithmetic (owner ruling)")
 def c9(B):
     I, a = cas_controller([8, 3, 5, 2], [2, 6, 1, 4], [0, 1, 1, 1], [1] * 4, [1] * 4)
     exact_zero = (a[0] == 0.0)
@@ -494,6 +499,12 @@ def main():
     survives = distinct_socket and flow_carries and diagnosis_nonvacuous and mask_real
     verdict = "NON_VACUOUS_EXPERIMENT_REMAINS" if survives else "NOTHING_LEFT_TO_TEST"
     print(f"  VERDICT: {verdict}")
+    print()
+    print("  OWNER RULING: C8 shows a COEFFICIENT is insufficient. It does NOT show CAS typing")
+    print("  is NECESSARY -- the fair competitor is a GENERIC FULL-STATE controller given the")
+    print("  same raw fields, and that contest is decided by sample efficiency and unseen")
+    print("  combinations, which this package cannot measure. C9's hard mask is GOVERNANCE, not")
+    print("  CAS arithmetic. The cascade is renamed CJT CASCADE COMPOSITION.")
     print()
     print("  What remains is NOT 'CAS-Ohm generates the weights'. It is:")
     print("    absolute flow governing compute, typed diagnosis selecting repair, and a hard")

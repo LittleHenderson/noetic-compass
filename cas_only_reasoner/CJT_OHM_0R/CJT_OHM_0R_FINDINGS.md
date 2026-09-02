@@ -254,3 +254,62 @@ NEW           series composition -- physically correct, genuinely outside the ad
 **Cheapest decisive next step, and it is still `$0`:** the span gate (`C13`) plus the positional
 control (`C16`) settle the entire weight lane before a GPU is booked. Both are already in this
 package and both already ran.
+
+---
+
+## 12. OWNER RULING 2026-09-02 — three corrections to THIS package
+
+`cbffa4a0` is **provisionally accepted pending independent audit**. Three corrections apply to
+my own framing, and all three narrow claims I made.
+
+### 12.1 "Series Ohm's law" is the wrong name — it is a CASCADE
+
+My §10 said *"in Ohm's law conductances ADD in PARALLEL"* — correct — and then called the matrix
+product **series**, which conflates two different things. In circuits, **conductances add in
+parallel; resistances add in series.** Multiplying transformation matrices is neither: it is a
+**cascade of active stages**, where one stage's Effect becomes the next stage's Cause, and stage
+gains multiply.
+
+> **Renamed: `CJT CASCADE COMPOSITION`, not `SERIES CONDUCTANCE WEIGHT LAW`.**
+
+The mathematics is unchanged — the cross term `s²·α₁α₂·ΔW₂ΔW₁` still does not exist in the
+additive mixture, and `ΔW₂ΔW₁ ≠ ΔW₁ΔW₂` still makes order matter. Only my electrical analogy was
+sloppy, and a sloppy analogy in this program is how a metaphor becomes a claim.
+
+### 12.2 `C9` — the hard mask is GOVERNANCE, not unique CAS arithmetic
+
+`C9` measures something true: a hard `0/1` mask gives exactly `0.0` where a softmax floors at
+`6.388e-24`, so only the former can **certify** a path closed. But I presented it under "what
+survives for CAS," which implies CAS uniquely provides it.
+
+**It does not.** Any architecture can carry a hard permission mask. It is a **governance
+mechanism CAS includes**, not a CAS result. Reclassified.
+
+### 12.3 `C8` — my strongest result was measured against the wrong competitor
+
+`C8` proves a controller **emitting only `α`** cannot select the correct repair. True, and
+useless: that is not the competitor that matters.
+
+> **The fair generic competitor is a `GENERIC_FULL_STATE_MLP` receiving all the same nongold
+> fields — `V`, the resistance components, readiness, mask, verifier history — as a flat
+> vector.** Such a controller can distinguish the cases perfectly well.
+
+So `C8` proves **a coefficient is insufficient**. It does **not** prove **CAS typing is
+necessary**. Those are different claims and I stated the weaker measurement in the stronger
+frame. The real contest is CAS factorization versus generic full-state, both seeing identical
+inputs, and it is decided by sample efficiency, unseen combinations, repair-error rate and
+next-tick recovery — **none of which this package measured or could measure.**
+
+### 12.4 What the ruling preserves and closes
+
+```
+CLOSED     additive weight generation          mathematical reparameterization
+DELETED    O4 vs O2 as a scientific contrast   never two mechanisms
+PRESERVED  allocation alpha
+PRESERVED  absolute flow I_total
+PRESERVED  hard mask -- as GOVERNANCE, not CAS arithmetic
+PERMITTED  separate V/R interpretation ONLY with independent sources
+PRIMARY    typed diagnosis and next-tick repair
+SEPARATE   CJT cascade composition -- its own design, NOT a continuation of the retired claim
+NO GPU     until audit and preregistration
+```
