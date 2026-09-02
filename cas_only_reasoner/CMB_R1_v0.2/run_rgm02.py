@@ -230,13 +230,26 @@ def summarize(worlds):
         status, reason = "ADMISSION_SAFETY_NOT_REPAIRED", (
             f"near-miss still reaches AUTHORIZED: {nm['auth_false']} false authorized")
 
-    geo_status = ("GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED"
+    # RENAMED by owner ratification 2026-09-02, on GLM audit finding 2.
+    # The old name, GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED, was DIRECTION-AMBIGUOUS: it is a
+    # drop-one aggregate of D minus E, and it survived only because TWO families win big while
+    # THREE lose small. Read alone it says "CAS geometry beats the generic control", which is
+    # false on 3 of the 5 families measured. The new name states the direction.
+    #   old -> new  (mapping preserved so the committed receipt, which GLM reproduced
+    #                byte-identically, remains readable and is NOT rewritten)
+    #   GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED     -> CAS_GEOMETRY_HELPS_COMPOSITION_AND_CORROBORATION_ONLY
+    #   GENERIC_GEOMETRY_ADVANTAGE_NOT_SUPPORTED -> CAS_GEOMETRY_NO_ADVANTAGE_OVER_GENERIC_CONTROL
+    geo_status = ("CAS_GEOMETRY_HELPS_COMPOSITION_AND_CORROBORATION_ONLY"
                   if drop_one["authorized_mrr"]["survives_drop_one"]
-                  else "GENERIC_GEOMETRY_ADVANTAGE_NOT_SUPPORTED")
+                  else "CAS_GEOMETRY_NO_ADVANTAGE_OVER_GENERIC_CONTROL")
 
     return {"echo": echo, "geometry_by_family": geo, "geometry_drop_one": drop_one,
             "mechanism_free_gate": gate, "status": status, "reason": reason,
             "generic_geometry_status": geo_status,
+            "generic_geometry_status_legacy_name": (
+                "GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED"
+                if drop_one["authorized_mrr"]["survives_drop_one"]
+                else "GENERIC_GEOMETRY_ADVANTAGE_NOT_SUPPORTED"),
             "items_5_6": "NOT BUILT -- gated on admission safety passing",
             "escalate_to_owner": status == "STATUS_NOT_EMITTED"}
 

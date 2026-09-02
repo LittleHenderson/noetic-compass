@@ -4,6 +4,46 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - Owner rulings: 12 worlds accepted, geometry status renamed, structural-forgery trigger armed
+
+**12 worlds accepted with the caveat.** The caveat is now a permanent rider on RGM-0.2: the two
+winning families are 12/12 and unambiguous; the three losing families are small and
+noise-limited and 12 worlds cannot establish their magnitude; and the admission headline
+(`119 -> 0`) is a **count, not a mean**, so it is not power-limited. The caveat binds the
+geometry comparison, not the admission result - and the admission result is the one that carries
+the lane.
+
+**Rename ratified.**
+
+```
+GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED     -> CAS_GEOMETRY_HELPS_COMPOSITION_AND_CORROBORATION_ONLY
+GENERIC_GEOMETRY_ADVANTAGE_NOT_SUPPORTED -> CAS_GEOMETRY_NO_ADVANTAGE_OVER_GENERIC_CONTROL
+```
+
+The code emits the new name and also emits the old one as `generic_geometry_status_legacy_name`.
+`RGM02_RECEIPT.json` is **deliberately not rewritten** - GLM reproduced it byte-identically and
+that hash is the determinism proof. Editing it to look tidier would destroy the best evidence
+the result has.
+
+**Structural-forgery defence: deferred build registered, trigger armed.**
+
+The measured gap: the verifier detects semantic contradiction, a degree check detects structural
+anomaly, and **neither covers a forgery that is both semantically consistent and structurally
+normal.** Not built and not authorized - deferred under the standing `No automatic second
+repair`, because in this lane a repair manufactured the next problem four times and building
+straight off the measurement would be the fifth.
+
+Six conditions, three computed and three declared. Firing rule: `NECESSARY = T5 AND (T1 OR T2)`
+- memory feeds training, and either the semantic band has collided or the structural signal has
+vanished. **`UNKNOWN` is not `NO`**: an unevaluated condition while memory feeds training
+escalates to `WATCH_UNRESOLVED` rather than passing silently.
+
+Self-validated across 7 constructed scenarios, all passing - and the validation caught a fault
+in my own test fixture, not the checker. Current state `DORMANT`.
+
+It is a checkpoint, not a daemon. It fires because the spec sheet is mandated read-first, and
+the checker exits non-zero on `NECESSARY`/`URGENT` so it can gate a pipeline.
+
 ## 2026-09-02 - CMB-RP0 audited PASS by GLM; lane CLOSED on an honest negative
 
 Independent audit, $0. GLM verified live: spend inside the frozen cap, `PYTHONHASHSEED=0`

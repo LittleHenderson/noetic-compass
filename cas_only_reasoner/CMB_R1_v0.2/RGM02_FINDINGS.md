@@ -7,13 +7,16 @@
 
 ```
 STATUS                    ADMISSION_SAFETY_REPAIRED
-GENERIC GEOMETRY          GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED (survives drop-one)
-                          ^ DIRECTION-AMBIGUOUS NAME -- GLM audit finding 2.
-                          The generic control WINS 3 of 5 families (-0.010 to -0.025);
-                          CAS wins 2 of 5 (+0.4108, +0.3190). The aggregate is positive
-                          and survives drop-one ONLY because there are two winners.
-                          Read as: CAS GEOMETRY HELPS COMPOSITION AND CORROBORATION,
-                          AND LOSES EVERYWHERE ELSE MEASURED.
+GENERIC GEOMETRY          CAS_GEOMETRY_HELPS_COMPOSITION_AND_CORROBORATION_ONLY
+                          (survives drop-one)
+                          RENAMED by owner ratification 2026-09-02 on GLM finding 2.
+                          Legacy name: GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED -- direction-
+                          ambiguous, since the generic control WINS 3 of 5 families
+                          (-0.010 to -0.025) while CAS wins 2 of 5 (+0.4108, +0.3190).
+                          The aggregate survives drop-one ONLY because there are two
+                          winners. The committed receipt still carries the LEGACY name
+                          and is NOT rewritten -- GLM reproduced it byte-identically and
+                          that hash is the determinism proof.
 MECHANISM-FREE GATE       PASS -- no query-independent shortcut, answer set not recoverable
 ITEMS 5-6                 NOT BUILT (were gated on this result; now unlocked)
 ```
@@ -50,7 +53,7 @@ candidates and may be shown), but the separation is what stops them from being *
 | **all families** | | | **+0.1359** | |
 | **worst drop-one** | | | **+0.0672** | **survives** |
 
-**`GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED`** — and the honest shape matters more than the
+**`CAS_GEOMETRY_HELPS_COMPOSITION_AND_CORROBORATION_ONLY`** (legacy name `GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED`) — and the honest shape matters more than the
 headline:
 
 - **The generic control BEATS CAS geometry on three of five families.** On lookalike, order
@@ -219,3 +222,36 @@ measured the same mechanism against two different attacks:
 
 **The verifier detects semantic contradiction, not structural anomaly.** Both facts are now
 measured, and the full statement is in `CMB_RP0_v0_1/CMB_RP0_FINDINGS.md` section 13.
+
+---
+
+## 11. Owner rulings on the GLM findings — 2026-09-02
+
+### Finding 1: TWELVE WORLDS ACCEPTED, WITH THE CAVEAT
+
+The owner accepted 12 worlds rather than funding the >=20 the RGM-0.1 audit prescribed. **The
+caveat is a permanent rider on this result and travels with every quotation of it:**
+
+> RGM-0.2 ran on **12 worlds**, not the >=20 prescribed. The two winning families
+> (`PATTERN_COMPLETION` +0.4108, `INDEPENDENT_CORROB` +0.3190) are **12/12 and unambiguous at
+> this sample size**. The three losing families (-0.0117, -0.0251, -0.0133) are **small and
+> noise-limited**, and 12 worlds cannot establish their magnitude. The admission-safety result
+> (119 -> 0 false authorizations) is a **count**, not a mean, and is not power-limited.
+
+So the caveat binds the *geometry* comparison, not the *admission-safety* headline. The
+admission result is the one that carries the lane, and it is a count.
+
+### Finding 2: RENAME RATIFIED
+
+```
+GENERIC_GEOMETRY_ADVANTAGE_SUPPORTED     -> CAS_GEOMETRY_HELPS_COMPOSITION_AND_CORROBORATION_ONLY
+GENERIC_GEOMETRY_ADVANTAGE_NOT_SUPPORTED -> CAS_GEOMETRY_NO_ADVANTAGE_OVER_GENERIC_CONTROL
+```
+
+`run_rgm02.py` emits the new name and additionally emits the old one as
+`generic_geometry_status_legacy_name`, so no historical reference breaks.
+
+**`RGM02_RECEIPT.json` is deliberately NOT rewritten.** It carries the legacy name. GLM
+reproduced that file byte-identically by re-execution, and its hash
+`b74a16a0e973fced16af7d172d7b502334407116ddf7f561091cf48eeafb7f1f` is the determinism proof.
+Editing it to look tidier would destroy the strongest evidence this result has.

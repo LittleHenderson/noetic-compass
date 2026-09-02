@@ -1,0 +1,8 @@
+{
+  "_comment": "Declared deployment facts for the structural-forgery trigger. OWNER-SET. Changing any of these to true may fire the trigger -- see STRUCTURAL_FORGERY_DEFENCE_TRIGGER.md section 3. Recorded state as of 2026-09-02: CAS memory work is bench-only; no production memory store, no training loop fed from memory, no external write path.",
+  "untrusted_write_path": false,
+  "memory_feeds_training": false,
+  "observable_thresholds": false,
+  "n_memories": 1732,
+  "writes_per_day": 0
+}
