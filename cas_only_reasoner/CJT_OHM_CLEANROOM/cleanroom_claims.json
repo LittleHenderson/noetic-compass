@@ -167,6 +167,50 @@
       "notes": ""
     },
     {
+      "claim_id": "CR-OPEN-01",
+      "statement": "Handoff C1 / section 9: a mechanism-bound neural CJT cell has never been built or tested as an integrated trainable cell; CJT-MECH-0 (design v0.2, commit 009ae56b; build authorized by the owner on 2026-09-03) is the first attempt to test it.",
+      "status": "OPEN", "scope": "Hypothesis status only; no result exists.", "commits": ["009ae56b"],
+      "artifact_paths": ["cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_MECH_0_DESIGN_v0_2.md"],
+      "independent_auditor": "none", "raw_evidence_locator": "the design document", "known_correction": "none",
+      "may_govern_next_design": true, "key_numbers": [], "number_location": "NO_NUMBER",
+      "notes": "Added after the completeness critic flagged the missing row."
+    },
+    {
+      "claim_id": "CR-OPEN-02",
+      "statement": "Handoff C2: whether persistent Bias (typed state carried across ticks and restarts) improves next-tick behaviour in a neural controller is OPEN; only the deterministic reference controller implements delayed feedback (RC0-09).",
+      "status": "OPEN", "scope": "Hypothesis status only.", "commits": [], "artifact_paths": ["cas_only_reasoner/recursive_cjt_rc0/RECURSIVE_CJT_TICK_SEMANTICS_v0_2.md"],
+      "independent_auditor": "none", "raw_evidence_locator": "none", "known_correction": "none",
+      "may_govern_next_design": true, "key_numbers": [], "number_location": "NO_NUMBER", "notes": "Critic-flagged gap."
+    },
+    {
+      "claim_id": "CR-OPEN-03",
+      "statement": "Handoff C4: whether I_total (absolute CAS-Ohm flow) improves adaptive compute allocation is OPEN; the only committed fact is that I_total is a quantity distinct from alpha (OHM0R-04). CJT-MECH-0 arm M6 tests it against M5 at matched mean compute.",
+      "status": "OPEN", "scope": "Hypothesis status only.", "commits": [], "artifact_paths": ["cas_only_reasoner/CJT_OHM_0R/CJT_OHM_0R_RESULT.json"],
+      "independent_auditor": "none", "raw_evidence_locator": "none", "known_correction": "none",
+      "may_govern_next_design": true, "key_numbers": [], "number_location": "NO_NUMBER", "notes": "Critic-flagged gap."
+    },
+    {
+      "claim_id": "CR-OPEN-04",
+      "statement": "Handoff C5: whether the CAS-Ohm law (flow monotone increasing in drive V and decreasing in resistance R, with V and R independently grounded) is a useful inductive bias is OPEN; the only committed monotonic result (Path B dose ordering) was REFUTED (PATHB-11), and V/R are not identifiable from routing alone (OHM0R-02/03). CJT-MECH-0 arm M5 tests the law as a parameter-free routing rule.",
+      "status": "OPEN", "scope": "Hypothesis status only.", "commits": [], "artifact_paths": ["cas_only_reasoner/CJT_OHM_0R/CJT_OHM_0R_FINDINGS.md"],
+      "independent_auditor": "none", "raw_evidence_locator": "none", "known_correction": "none",
+      "may_govern_next_design": true, "key_numbers": [], "number_location": "NO_NUMBER", "notes": "Critic-flagged gap."
+    },
+    {
+      "claim_id": "CR-OPEN-05",
+      "statement": "Handoff C7: whether type-specific memory interfaces improve retrieval or learning is OPEN; the memory lane (CMB / RGM / CPB) is closed by owner ruling with its assets preserved (GOV-13) and none of its results is a CJT-typed memory result.",
+      "status": "OPEN", "scope": "Hypothesis status only.", "commits": [], "artifact_paths": ["cas_only_reasoner/MEMORY_LANE_CLOSED.md"],
+      "independent_auditor": "none", "raw_evidence_locator": "none", "known_correction": "none",
+      "may_govern_next_design": true, "key_numbers": [], "number_location": "NO_NUMBER", "notes": "Critic-flagged gap."
+    },
+    {
+      "claim_id": "CR-OPEN-06",
+      "statement": "Handoff C9 / section 9: a network of CJTs working end to end (the CNCM brain, a CJT transformer) has not been built; the transformer-substrate mapping and three killable hypotheses are reasoning only (CAS_CJT_TRANSFORMER_POSSIBILITY_v0_1.md), nothing licensed.",
+      "status": "OPEN", "scope": "Hypothesis status only.", "commits": ["0652a27b"], "artifact_paths": ["cas_only_reasoner/CJT_OHM_CLEANROOM/CAS_CJT_TRANSFORMER_POSSIBILITY_v0_1.md"],
+      "independent_auditor": "none", "raw_evidence_locator": "none", "known_correction": "none",
+      "may_govern_next_design": true, "key_numbers": [], "number_location": "NO_NUMBER", "notes": "Critic-flagged gap."
+    },
+    {
       "claim_id": "CR-REC-03",
       "statement": "The DeepSeek R1 theorem audit (PRECEDENCE_THEOREM_AUDIT_PASS on the visibility law) is a committed different-family record, but its reasoning trace is example-based (it tries and fails to construct counterexamples) rather than a proof, and its verdict line names a narrower exceptional set ('positions with W_k=0 or U_k=0 downstream') than the law it certifies ('some position invisible', which also covers killed readout and saturated biases).",
       "status": "SUPPORTED_NARROWLY",

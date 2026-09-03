@@ -30,12 +30,28 @@ word is in the ledger header. "Unverified" never means "false".
   at HEAD, and each numeric key number was searched verbatim in the committed files and, failing
   that, in the claim's commit messages. The ledger's resolution law (header) turned the results into
   statuses; 18 statuses were changed by that law, every change recorded on the claim.
-- **What is missing: second-agent adversarial verification.** The per-claim verifier fan-out (226
-  agents) and the completeness critic failed on the account's session usage limit. Five verdicts
-  landed (GOV-01..05; all `TOO_STRONG`, `VERIFIED -> SUPPORTED_NARROWLY`) and are applied. The
-  ledger header states this; no claim pretends to have been adversarially verified when it was not.
-  The run can be resumed with the recorded workflow id when the owner wants the tokens spent.
-- Successor-made claims (P6 and record gaps) are in the ledger as `CR-*` with their receipts.
+- **Second-agent adversarial verification: COMPLETE as of 2026-09-03** (three runs; the first
+  two died on the account's session usage limit). 341 of 343 claims carry a verifier verdict:
+  274 `AGREE`, 40 `TOO_STRONG`, 12 `TOO_WEAK`, 4 `WRONG_CATEGORY`. The first 51 verdicts came
+  from the full-strength verifier; the remainder from a leaner verifier (`verifier_model:
+  sonnet-lean`, recorded per claim) that skips re-execution where the extractor already recorded
+  one. A completeness critic then ran and one gap-fill round added 101 claims (`GAP*`) covering
+  the topics it named; one gap-fill extraction failed its output schema and is absent.
+- **The critic's standing inconsistencies, kept on the record rather than smoothed:** the same
+  fact can carry different statuses in different lanes (the epsilon side channel is `REFUTED` as
+  a gate and `VERIFIED` as a measurement; the `1.33e-01` harness bug is `SUPPORTED_NARROWLY` in
+  D0 and `UNVERIFIED` in PREC because the GLM diagnosis has no committed record; measurements on
+  constructions declared invalid are `VERIFIED` as measurements while the constructions are
+  `INVALID_BENCH`). These are category differences, not contradictions about numbers, and the
+  claim text says which reading applies. The handoff's item B7 (dose response) has no artifact at
+  this HEAD: the eta-epsilon phase-5 file lives on a branch not reachable from here, and the claim
+  that survives is `REFUTED` as a CAS-Ohm claim by the owner's own audit record.
+- Successor-made claims (P6, record gaps, and the six handoff hypotheses the critic found without
+  a row: `CR-OPEN-01..06`) are in the ledger as `CR-*` with their receipts.
+- **Owner ruling 2026-09-03, after this document was first written:** "Build and run everything".
+  The build lives in `cas_only_reasoner/CJT_MECH_0/`; its authorization record is
+  `CJT_MECH_0/OWNER_AUTHORIZATION_20260903_BUILD_AND_RUN.md`. Sections 6-10 below are the state
+  at the time of the first return and are kept as written.
 
 ## 1. Exact repository state
 
@@ -75,9 +91,14 @@ owner-visible work, not silently repaired.
 
 ## 3. The claim ledger -- by lane, with the load-bearing statuses
 
-Full table: `CJT_OHM_CLAIM_TABLES.md`. Counts: 242 claims -- `VERIFIED` 57, `SUPPORTED_NARROWLY` 90,
-`REFUTED` 18, `RETIRED_BY_IDENTITY` 5, `INVALID_BENCH` 13, `UNVERIFIED` 34, `CHAT_REPORTED_ONLY` 3,
-`OPEN` 22.
+Full table: `CJT_OHM_CLAIM_TABLES.md`. Counts at the first return (2026-09-02, extraction +
+mechanical checks): 242 claims -- `VERIFIED` 57, `SUPPORTED_NARROWLY` 90, `REFUTED` 18,
+`RETIRED_BY_IDENTITY` 5, `INVALID_BENCH` 13, `UNVERIFIED` 34, `CHAT_REPORTED_ONLY` 3, `OPEN` 22.
+Counts after full second-agent verification and gap-fill (2026-09-03): the ledger header of
+`CJT_OHM_CLAIM_LEDGER.json` is authoritative (343 claims at the time of writing: `SUPPORTED_NARROWLY`
+141, `VERIFIED` 82, `OPEN` 38, `REFUTED` 22, `INVALID_BENCH` 17, `UNVERIFIED` 30, `CHAT_REPORTED_ONLY`
+9, `RETIRED_BY_IDENTITY` 4, before the six `CR-OPEN` rows). The lane summaries below cite the
+original claim ids; where a verifier changed a status the ledger carries both.
 
 ### 3.1 CJT-OHM-0R -- the formal package (`OHM0R-01..20`)
 - Additive weight law `W_eff = W0 + s*sum alpha_j dW_j` = output mixing (C1 `8.882e-16`, C14
