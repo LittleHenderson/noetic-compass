@@ -128,3 +128,83 @@ wrong** — do not treat this table as the answer key.
 `CJT-OHM-D1` is authorized for **design attack only** — no implementation, no training, no AWS
 GPU, no CNCM integration. If `D1` ever produces a claim-bearing neural result, the
 different-model-family or human replication requirement above applies to it.
+
+---
+
+# EXTENSION 2026-09-02 — add commit `90248303` (`CJT-OHM-D1`)
+
+## Status correction, owner-issued
+
+I previously wrote that filing this directive **closed** the third-auditor item. **That was an
+overstatement.** The precise state:
+
+```
+Third auditor selected and briefed    CLOSED
+Independent audit result              STILL OPEN
+```
+
+## Additional commit under audit
+
+```
+90248303   CJT-OHM-D1 design attack: D1_DO_NOT_BUILD + the precedence-chain finding
+```
+
+## The auditor should verify
+
+```
+ 1. The zero-call rule really matches the four-call oracle over the reported
+    200,000 items.
+ 2. The mask-only fraction is really 0.501350.
+ 3. All 119 x 120 precedence permutations were enumerated correctly.
+ 4. The precedence residual is reproducible.
+ 5. The flat residual is exactly zero.
+ 6. The chance test is genuinely independent of the correct action.
+ 7. No hidden action mask or repair mapping entered the chain.
+ 8. The effect comes from evidence timing and position, not mismatched
+    dimensions, positional capacity, or compute.
+ 9. A matched generic recurrent chain cannot absorb the mechanism through a
+    more general transformation than simple parameter permutation.
+10. The label-accuracy versus recovery correlation is reproduced.
+```
+
+## Artifacts
+
+| Item | Path |
+|---|---|
+| 1, 2, 10 | `CJT_OHM_D1/verify_d1_attack.py` |
+| 3, 4, 5, 6, 7, 8 | `CJT_OHM_D1/verify_d1_attack.py`, section S4 |
+| **9** | `CJT_OHM_D1/extend_absorption_test.py` |
+| Written closure | `CJT_OHM_D1/DESIGN_ATTACK_OUTCOME.md` |
+
+## Item 9 — partially answered before the audit, and the answer narrows my own claim
+
+My original test searched **permutations only**, the weakest absorption group. Because `tanh` is
+odd, the correct natural group is the **signed permutations** (`32x` larger). I enlarged the search
+to all `119` relabelings by `3840` signed permutations:
+
+```
+PRECEDENCE CHAIN      4.0097e-02      (permutation-only: 4.6108e-02)
+FLAT (D0/S0 shape)    0.0000e+00      (permutation-only: 0.0000e+00)
+```
+
+**The chain survives; the flat control is still exactly absorbed.**
+
+> **This does NOT fully discharge item 9.** It settles absorption under the natural group. It does
+> **not** settle whether a matched generic recurrent chain can **LEARN** the same function —
+> expressivity, not absorption. **That part of item 9 is still open and the auditor should treat
+> it as unanswered.**
+
+## Answers on record for commit `90248303` — to CONTRADICT, not inherit
+
+| # | Our recorded answer |
+|---|---|
+| 1 | relative shortfall `1.845175e-14`, action agreement `1.000000` over `200,000` items |
+| 2 | **`0.501350`** (ours). The design attack reported `0.249850` under different cause priors — **different constructions, not merged** |
+| 3 | all `119` relabelings, each against all `120` compensating permutations |
+| 4 | chain best-case residual **`4.6108e-02`** (logit scale `1.116813`) |
+| 5 | flat control **`0.0000e+00`** — reproduces the `D0`/`S0` death, proving the test is sensitive |
+| 6 | free lunch **`0.201300`** vs chance **`0.200000`**; singleton action mask **`1.000000`** |
+| 7 | no mask in the chain construction — every module emits into the full shared action space |
+| 8 | **NOT independently isolated by us.** Positional capacity and compute are equal by construction (identical module shapes), but we did not run a dedicated control. **Treat as OPEN.** |
+| 9 | signed-permutation absorption **`4.0097e-02`**; the **expressivity** half is **OPEN** |
+| 10 | Pearson `r = 0.022389`, reproduced at `0.022779` on a second seed (attack-measured, not ours) |

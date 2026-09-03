@@ -6,8 +6,13 @@ D1_DO_NOT_BUILD: ZERO_HEADROOM_MODEL_BASED_SEARCH_IS_FREE_AND_OPTIMAL
                  GOLD_UNSTABLE_ACROSS_FROZEN_COST_LAWS
                  REQUIREMENT_2_FAILS_ON_ITS_OWN_WORKED_EXAMPLE
 
-KEPT AS A LICENSED ASSET:
-PRECEDENCE_CHAIN_BREAKS_SYMMETRY_WITHOUT_AN_ANSWER_KEY
+KEPT, OWNER-LABELLED (NOT "LICENSED" -- that status was not granted):
+ANCHORED_PRECEDENCE_NON_EQUIVARIANCE_PROVISIONAL
+  = PROMISING FORMAL RESULT, PENDING INDEPENDENT AUDIT
+
+EXPLICITLY NOT LABELLED:
+CAS_OHM_SIGNAL | CAS_PRECEDENCE_ADVANTAGE | NEURAL_CJT_SIGNAL
+CAS_PRECEDENCE_VALUE  ->  UNTESTED
 ```
 
 **Fifth design retired at `$0`.** Design attack only, per owner authorization — no
@@ -17,6 +22,9 @@ implementation, no training, no AWS GPU, no CNCM integration.
 > the CAS content was a **nameplate**. `D1` does not die that way. **`D1` dies because its TASK is
 > trivial** — and on the way to killing it, the attack found, and I confirmed, the thing three
 > reviews had failed to find: **a symmetry-breaking device that is not an answer key.**
+>
+> **Owner ruling: this is a CJT TOPOLOGY result, not a CAS-Ohm result, and non-equivariance
+> is NOT advantage. See §6.2 for the full scope limit.**
 
 ---
 
@@ -180,3 +188,165 @@ Cost                             $0 -- design attack only, no build, no GPU, no 
 **What is now OPEN and better posed than before:** the typed-diagnosis hypothesis needs a world
 where knowing *why* the flow is low actually changes what you should do. `D1` proved that its own
 world is not such a world. **That is a real narrowing of the search space, not a null result.**
+
+---
+
+## 6. OWNER RULING 2026-09-02 — `D1_DO_NOT_BUILD` RATIFIED; the finding is RELABELLED; and I was WRONG about observability
+
+```
+RATIFY                D1_DO_NOT_BUILD
+PRESERVE              the epsilon-side-channel repair
+                      the next-tick recovery metric
+                      the typed-diagnosis hypothesis
+                      the precedence-chain artifacts
+LABEL IT              ANCHORED_PRECEDENCE_NON_EQUIVARIANCE_PROVISIONAL
+DO NOT LABEL IT       CAS_OHM_SIGNAL
+                      CAS_PRECEDENCE_ADVANTAGE
+                      NEURAL_CJT_SIGNAL
+EXTEND AUDIT          include commit 90248303
+DO NOT AUTHORIZE      D1 implementation | neural training | GPU spend | CNCM integration
+AFTER A PASSING AUDIT authorize DESIGN ONLY for CJT-PREC-0
+```
+
+### 6.1 MY ERROR — the "full observability vise" was wrong
+
+I wrote in §4 that breaking full observability *"is forbidden by the fairness rule."* **That is
+incorrect, and it mattered, because it was the reason I said the successor had no clean exit.**
+
+> **Owner:** *Fairness requires that all **practical** controllers receive the same information.
+> Fairness does NOT require that every practical controller receive the complete hidden state.
+> The oracle may receive the hidden state, but only as a ceiling.*
+
+**I conflated "the same information across arms" with "all the information."** They are different
+constraints. Equal **partial** observability satisfies fairness perfectly.
+
+**And that is the clean way out of the D1 trap.** Instead of handing every controller the full
+state plus an exact simulator, require **diagnostic actions that cost something**:
+
+```
+inspect goal state
+check knowledge availability
+probe resource pressure
+inspect contextual conflict
+request one additional observation
+```
+
+The controller must decide **what to inspect, in what order, and when it has seen enough to
+repair**. **Now diagnosis has a real job.** §4's list of three things to break stands, but the
+first one is not blocked at all — it is the recommended route.
+
+### 6.2 SCOPE NARROWED — what the precedence result does and does not support
+
+**Supported, provisionally, pending audit:**
+
+> **`ANCHORED_PRECEDENCE_NON_EQUIVARIANCE_PROVISIONAL`** — a type can become computationally
+> meaningful when it governs **where evidence enters and when it is processed**.
+
+**NOT supported. None of this was tested:**
+
+```
+P > C > E > O is the best processing order
+CAS beats a generic recurrent chain
+the precedence chain learns faster
+the precedence chain generalizes better
+CAS-Ohm improves the chain
+the mechanism works in a neural network
+the resulting system reasons better
+```
+
+**Two limits the owner named, both correct:**
+
+1. **This is a CJT TOPOLOGY result, not a CAS-Ohm result.** CAS-Ohm may later regulate flow
+   through those stages, but `V/R` is **not** what produced the non-absorption.
+2. **A generic controller with the same fixed stages may still LEARN the same function.** My test
+   covered **compensating permutations**, not every possible learned reparameterization or
+   alternative recurrent controller. **Non-equivariance is not advantage.**
+
+```
+PRECEDENCE_CHAIN_MECHANISM_NON_EQUIVARIANCE   PROVISIONALLY SUPPORTED
+CAS_PRECEDENCE_VALUE                          UNTESTED
+```
+
+### 6.3 Enlarged absorption group — audit item 9, partially answered by me
+
+The owner's audit item 9 asks whether a **more general transformation than a simple parameter
+permutation** absorbs the mechanism. My original test used the weakest group, so it proved less
+than I implied. I enlarged it.
+
+`tanh` is **odd**, so the transformations satisfying `tanh(Tx) = T·tanh(x)` are exactly the
+**signed permutations** — a group `2⁵ = 32` times larger, and the correct natural absorption group
+for this architecture. Artifact: [`extend_absorption_test.py`](extend_absorption_test.py).
+
+```
+over 119 relabelings x 3840 SIGNED permutations
+
+  PRECEDENCE CHAIN      4.0097e-02      (permutation-only test gave 4.6108e-02)
+  FLAT (D0/S0 shape)    0.0000e+00      (permutation-only test gave 0.0000e+00)
+```
+
+**The chain survives the 32x larger group; the flat control is still exactly absorbed.** The
+attacker having more options moved the residual only from `4.6108e-02` to `4.0097e-02`.
+
+> **This strengthens the ABSORPTION result. It does NOT touch the EXPRESSIVITY question** — a
+> generic recurrent chain of the same depth may still *learn* the same function. That is a
+> different question, it remains open, and it is the real limit on the claim.
+
+### 6.4 The one D1 result that survives, and why it is a design law
+
+Repair-label accuracy and actual next-tick recovery correlate at **`0.022389`** — nearly no
+relationship. **A controller can be good at naming a repair category while being terrible at
+actually fixing the state.**
+
+> **PRESERVED AS A DESIGN LAW: the primary measurement must be "did the selected repair produce a
+> verified recovery on the next tick?" — never "did the controller predict the expected repair
+> label?"**
+
+### 6.5 `CJT-PREC-0` — Precedence-Anchored Diagnostic Control Bench
+
+**SPECIFICATION RECORDED. NOT AUTHORIZED. Design may be authorized only AFTER a passing audit,
+and it is a NEW LANE, not a repair of `D1`.**
+
+**Question:** does an anchored CJT precedence chain learn to **gather evidence** and repair a
+**partially observed** fault more efficiently or reliably than matched generic controllers?
+
+**World:** hidden causes that initially produce the same conductance, relative allocation, total
+flow and immediate Effect. Controllers **cannot see the cause** — they must probe. Repairs must be
+**state-dependent, bounded, nonlinear or noncommutative, able to change later observations, and
+able to succeed in one state and fail in another**. Worked examples the owner gave:
+
+```
+retrieve knowledge before splitting        may succeed
+split before retrieving knowledge          may waste the budget
+clarify the goal before allocating         may expose that no extra compute was needed
+allocate resources before checking policy  may perform prohibited work
+```
+
+**Now order genuinely matters.**
+
+**Arms:**
+
+```
+P0  ZERO-CALL RULE               cheap closed-form shortcut (mechanism-free baseline)
+P1  FLAT GENERIC CONTROLLER      same observation history, one generic model
+P2  GENERIC RECURRENT            same observations and action budget
+P3  ANONYMOUS FIXED CHAIN        same depth and factorization, no CAS meanings
+P4  LEARNED-ORDER CHAIN          learns its own processing order
+P5  CAS PRECEDENCE CHAIN         frozen P > C > E > O
+P6  REVERSED OR RANDOM PRECEDENCE matched sequential machinery
+P7  MODEL-BASED SEARCH           same observation and simulation budget
+P8  FULL-STATE ORACLE            CEILING ONLY
+```
+
+**A real result requires** the CAS precedence chain to: recover more states · use fewer diagnostic
+probes · need fewer training examples · transfer better to unseen fault combinations · stay above
+the anonymous fixed chain · beat or match the learned-order generic chain · **lose its advantage
+when source-to-position wiring is corrupted after training** · and **never receive hidden state or
+a repair table**.
+
+**Registered outcomes:**
+
+```
+anonymous or learned generic chain ties it   SEQUENTIAL FACTORIZATION SUFFICIENT
+CAS wins on examples / unseen combinations   CAS_PRECEDENCE_INDUCTIVE_BIAS_SIGNAL
+cheap rule or bounded search solves it       BENCH_INVALID_OR_GENERIC_SEARCH_SUFFICIENT
+```
