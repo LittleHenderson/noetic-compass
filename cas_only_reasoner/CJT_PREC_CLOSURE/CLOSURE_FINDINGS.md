@@ -182,3 +182,119 @@ GPU               NOT AUTHORIZED
 neural training   NOT AUTHORIZED
 Cost of this package   $0
 ```
+
+---
+
+## K = 4 RERUN OF THE COUNTEREXAMPLE AND EXPRESSIVITY WORK
+
+The counterexample hunt ran at `K = 5`. **The registered anchor `P > C > E > O` is FOUR domains,
+and this is the SECOND time an arity mismatch has been caught in this finding.** Redone at the
+registered arity. Artifacts: [`k4_theorem.py`](k4_theorem.py),
+[`k4_expressivity.py`](k4_expressivity.py).
+
+### A - counterexamples at `K = 4`, chain alive, absorbed set PREDICTED before measured
+
+Zeroing `W_k` makes position `k` **type-blind**. Relabelling among type-blind positions must then
+be absorbed exactly, while `U` stays full rank and the chain still computes.
+
+| zeroed read-ins | `rank(U_k)` | absorbed | predicted | match |
+|---|---|---|---|---|
+| `W0 = 0` | `[6,6,6,6]` | 1 of 23 | 1 | **True** |
+| `W0 = W1 = 0` | `[6,6,6,6]` | 2 of 23 | 2 | **True** |
+| `W0 = W1 = W2 = 0` | `[6,6,6,6]` | **5 of 23** | 5 | **True** |
+
+At three type-blind positions the absorbed set is
+`[(0,2,1,3), (1,0,2,3), (1,2,0,3), (2,0,1,3), (2,1,0,3)]` - **exactly the predicted set**, with
+`max|out| = 1.020928e+00`, so the model is not degenerate. The mechanism is understood, not
+merely observed.
+
+### B - the exceptional set is MEASURE ZERO, so a GENERIC claim survives
+
+Perturbing the `W0 = W1 = 0` counterexample by `eps * N(0,.5)`, tracking relabelling `(1,0,2,3)`:
+
+```
+eps        best residual over 24 compensations
+0e+00      0.000000e+00
+1e-12      2.461142e-12
+1e-09      2.461037e-09
+1e-06      2.461036e-06
+1e-03      2.459727e-03
+1e-02      2.446654e-02
+1e-01      2.335064e-01
+1e+00      8.545328e-01
+```
+
+The residual grows **linearly** with the perturbation - the counterexample is a knife edge. And
+over **200 independent random draws at `K = 4`: draws absorbing anything = `0`; smallest
+best-residual seen = `2.1682e-01`.**
+
+```
+UNIVERSAL non-absorption   DISPROVED   (U = 0; zero read-ins)
+GENERIC  non-absorption    SUPPORTED   (measure-zero exceptional set, 0/200 random draws)
+```
+
+### C - EXPRESSIVITY: NOT DECISIVE, and it does NOT come out in our favour
+
+**My first attempt at this section produced NO OUTPUT AT ALL** - I wrote it with
+finite-difference gradients, roughly 200x too slow. Rewritten with analytic gradients, and gated
+on two controls that **share the measurement's code path** - the discipline imposed after the
+fabricated free-lunch test, whose "control" did not share a code path and therefore could not
+catch it.
+
+```
+target                                        heldout rel RMSE
+POS CTRL  the baseline model itself                1.5953e-03
+POS CTRL  another random in-class model            1.0947e-02
+NEG CTRL  random 2-layer MLP (out of class)        3.4469e-01
+NEG CTRL  flat / no-U summed model (out of class)  1.2469e-01
+RELABEL   pi=(1, 0, 2, 3)                          4.4291e-02
+RELABEL   pi=(0, 1, 3, 2)                          1.2410e-01
+RELABEL   pi=(1, 2, 3, 0)                          1.4322e-01
+RELABEL   pi=(3, 2, 1, 0)                          1.7093e-01
+RELABEL   pi=(2, 0, 3, 1)                          1.4040e-01
+
+POSITIVE control  worst in-class    1.0947e-02  < 5e-2   PASS
+NEGATIVE control  best out-of-class 1.2469e-01  > 5e-2   PASS
+```
+
+**Both controls passed, and the script still refused to state a result.**
+
+> **`INTERMEDIATE and NOT DECISIVE`.** The weakest relabelling `(1,0,2,3)` fits at `4.4291e-02` -
+> only **`4.0x`** the worst in-class floor, and **below** the out-of-class floor `1.2469e-01`.
+> **That relabelling is partially expressible.** Four of five sit in out-of-class territory, but
+> one does not, and that is enough to withhold the claim.
+
+`(1,0,2,3)` is also the *weakest* relabelling under the absorption test (`6.876810e-02`, the
+minimum). The two measurements agree about which relabelling is closest.
+
+```
+Non-expressibility at matched capacity   NOT ESTABLISHED
+```
+
+**Audit item 9's expressivity half is still open, and the honest reading is that it is not going
+our way.** Scope: matched capacity only; wider models untested and not to be inferred.
+
+---
+
+## RECEIPTS for the D1 attack-side numbers
+
+Per owner ruling - *"reproduce with receipts: rerun if needed, but most importantly document
+them."* Reproduced from scratch. **This is not a rescue attempt; `D1` is dead for good.**
+Artifact: [`receipts_d1_attack.py`](receipts_d1_attack.py).
+
+| claim | reported | mine | status |
+|---|---|---|---|
+| **B5** four states occupy 3 distinct floats | 3 | **3** | **CONFIRMED** |
+| **B7** exactly 1 admissible `R` float | 1 | **1** | **CONFIRMED** - `R = 2(1+eps) - eps`; sampled `R = 2.0` fails |
+| **B2/B3** gap exactly `0` under weakened, stochastic, multi-tick and multi-cause repairs | `0` | **`0.000000e+00`** at all 9 settings, agreement `1.000000` | **CONFIRMED** |
+| **Req 6** disagreement on `16.9%` of items | `0.169` | **`0.000000`** under both discretisations | **NOT REPRODUCED** |
+| **Req 7** gold changes on `0.354500`-`0.428025` | that range | **`0.251900`** | **PHENOMENON REPLICATED, figure NOT** |
+| **B8** `RMIN` leverage `0.072425` | - | - | **NOT REPRODUCIBLE** - stays `UNVERIFIED` |
+
+**Req 6 is the important one.** I could not reach `0.169` from any faithful reconstruction - the
+disagreement rate depends entirely on **how the gains are discretised**, which the attack never
+stated. **The argument survives (argmax ties make the gold a builder choice) but the number is
+not a property of the physics and must not be cited as one.**
+
+**None of this changes `D1_DO_NOT_BUILD`**, which rests on `B1` alone: relative shortfall
+`1.845175e-14`, action agreement `1.000000` over `200,000` items, committed artifact.
