@@ -100,8 +100,15 @@ trained on a different input mapping," not "CAS typing was load-bearing."
 
 The lane reported the two arms tracking each other to `4.44e-16` across an entire **training
 curve**. **My reconstruction did not reproduce that** — I measured `1.33e-01` divergence over 200
-steps. The forward-pass identity (§1) reproduced exactly; the trajectory claim did not, in my
-implementation.
+steps.
+
+> ⚠ **DIAGNOSED 2026-09-02 BY THE FRESH-GLM AUDIT — the `1.33e-01` was MY HARNESS'S BUG, not a
+> failure of the claim.** The audit traced it to an **initialization-permutation defect**: my V2
+> setup initialized the supposedly equivalent model with `perm` where it required `perm⁻¹`, so the
+> permutation was applied in the wrong direction and the two arms never started from matching
+> parameters. **The non-reproduction was mine. `1.33e-01` measures my error, not a discrepancy in
+> the lane's claim, and it must not be cited as evidence against that claim.** The V1 forward-pass
+> identity (§1, `0.0000e+00`) was and remains correct and is what the verdict rests on.
 
 **The verdict does not rest on it.** §1 plus the from-scratch measurement — `D4` `0.9555` vs `D5`
 `0.9544`, a gap of `0.0011` against a seed standard deviation of `0.0065`, i.e. `0.17 sd`, and

@@ -65,6 +65,25 @@ And the structural version, which no parameter change escapes:
 Attack-measured unless marked. **Provenance is labelled throughout** — the `0.2096` error is not
 repeated.
 
+> ⚠ **RECEIPTS RULING 2026-09-02.** The fresh-GLM audit found that `B2`, `B3`, `B5`, `B7`, `B8`
+> and the Requirement 6/7 figures **have no committed artifact** from which an auditor could
+> reproduce them. They were produced inside subagent sessions whose scripts were not committed.
+> Owner ruling: such numbers must be *committed and reproducible*, or removed from the
+> evidentiary argument — **they may not hover in the report as ghost numbers.**
+>
+> **They are hereby marked `UNVERIFIED_AND_NON_LOAD_BEARING` and are NOT part of the evidence for
+> `D1_DO_NOT_BUILD`.** They are retained only as a record of what the attack reported.
+>
+> **The verdict does not need them.** It rests on `B1` alone, which I measured myself and
+> committed: relative shortfall `1.845175e-14`, action agreement `1.000000` over `200,000` items,
+> artifact `verify_d1_attack.py`. `B1` is sufficient: if the optimal repair is computable with
+> zero simulator calls, the bench has no headroom regardless of anything B2–B8 say.
+>
+> **Requirement 6 and 7 are consequently downgraded from "FAIL, measured" to "FAIL asserted by the
+> attack, UNVERIFIED".** The `0.022389` correlation supporting Requirement 8 carries the same mark
+> — it is attack-measured and uncommitted, so **the design law it supports is retained on
+> reasoning, not on that number.**
+
 | # | Finding | Number | Repair? |
 |---|---|---|---|
 | **B1** | zero headroom (§1) | mine `1.845175e-14` relative, agreement `1.000000`; theirs `0.000000e+00` | **NO** |
