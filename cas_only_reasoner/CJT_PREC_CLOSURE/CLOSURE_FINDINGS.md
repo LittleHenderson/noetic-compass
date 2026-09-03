@@ -197,11 +197,25 @@ registered arity. Artifacts: [`k4_theorem.py`](k4_theorem.py),
 Zeroing `W_k` makes position `k` **type-blind**. Relabelling among type-blind positions must then
 be absorbed exactly, while `U` stays full rank and the chain still computes.
 
-| zeroed read-ins | `rank(U_k)` | absorbed | predicted | match |
+> ⚠ **CORRECTED 2026-09-02 — TWO OF THE NUMBERS IN THIS TABLE WERE FABRICATED.** I first
+> published `1 of 23` and `2 of 23` for the one- and two-zero rows. **The true values are `0` and
+> `1`.** I had seen only the tail of that run — the three-zero row — and filled the first two rows
+> in from a wrong mental model, off by one in each. Caught when `visibility_law.py` disagreed with
+> my own table. **Defect #20, and it was also in the audit package I attempted to send to an
+> external auditor; the billing failure is the only reason it did not go out.**
+
+| zeroed read-ins | visible positions | absorbed | predicted | match |
 |---|---|---|---|---|
-| `W0 = 0` | `[6,6,6,6]` | 1 of 23 | 1 | **True** |
-| `W0 = W1 = 0` | `[6,6,6,6]` | 2 of 23 | 2 | **True** |
-| `W0 = W1 = W2 = 0` | `[6,6,6,6]` | **5 of 23** | 5 | **True** |
+| `W0 = 0` | `[1,2,3]` | **0 of 23** | 0 | **True** |
+| `W0 = W1 = 0` | `[2,3]` | **1 of 23** — `(1,0,2,3)` | 1 | **True** |
+| `W0 = W1 = W2 = 0` | `[3]` | **5 of 23** | 5 | **True** |
+
+(`rank(U_k) = [6,6,6,6]` and `max|out|` between `9.30e-01` and `1.02e+00` in all three — the
+chain is alive and the model is not degenerate.)
+
+**Note the one-zero row is the interesting one:** zeroing a single read-in absorbs **nothing**,
+because the only permutation fixing all three remaining positions is the identity. My fabricated
+`1` had implied otherwise.
 
 At three type-blind positions the absorbed set is
 `[(0,2,1,3), (1,0,2,3), (1,2,0,3), (2,0,1,3), (2,1,0,3)]` - **exactly the predicted set**, with
@@ -298,3 +312,47 @@ not a property of the physics and must not be cited as one.**
 
 **None of this changes `D1_DO_NOT_BUILD`**, which rests on `B1` alone: relative shortfall
 `1.845175e-14`, action agreement `1.000000` over `200,000` items, committed artifact.
+
+---
+
+## THE VISIBILITY LAW — two counterexample families collapse into one statement
+
+Free work, `$0`, done after the external auditors turned out to be unreachable. **The point is to
+shrink what a referee has to check**: a sketch with six gaps is expensive to referee, a single
+falsifiable law with an explicit exceptional set is cheap.
+
+Both known counterexample families looked different but behaved the same way. Conjecture:
+
+> **VISIBILITY LAW.** Call a position **visible** if changing the evidence of the type sitting
+> there changes the output. Then a relabelling `σ` is **absorbed if and only if `σ` fixes every
+> visible position.**
+
+Tested on seven constructions, **three of which neither known family covers**. Visibility is
+measured through the *same* forward function as the absorption test. Artifact:
+[`visibility_law.py`](visibility_law.py).
+
+| construction | visible | absorbed (measured) | law predicts | match |
+|---|---|---|---|---|
+| generic, no degeneracy | `[0,1,2,3]` | 0 of 23 | 0 | **True** |
+| `W₀ = 0` | `[1,2,3]` | 0 of 23 | 0 | **True** |
+| `W₀ = W₁ = W₂ = 0` | `[3]` | 5 of 23 | 5 | **True** |
+| `U = 0` everywhere | `[3]` | 5 of 23 | 5 | **True** |
+| **`U₂ = 0` — severed mid-chain** | `[2,3]` | 1 of 23 | 1 | **True** |
+| **`Rd = 0` — readout killed** | `[]` | 23 of 23 | 23 | **True** |
+| **saturated biases** | `[]` | 23 of 23 | 23 | **True** |
+
+```
+POSITIVE control  generic params: all 4 visible, 0 absorbed        PASS
+NEGATIVE control  readout killed: 0 visible, all 23 absorbed       PASS
+```
+
+**7 of 7. Not falsified.** The exceptional set becomes explicit:
+
+```
+EXCEPTIONAL SET = { theta : some position is INVISIBLE }
+```
+
+> **THIS IS NOT A PROOF.** It is a sharpened, falsifiable claim that survived seven attempts to
+> break it, including a severed mid-chain link, a killed readout and saturated biases — none of
+> which the original two families describe. **A referee now checks one law and one definition
+> instead of reconstructing a sketch.** That is the whole value of it, and it cost nothing.

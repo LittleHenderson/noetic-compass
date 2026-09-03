@@ -77,12 +77,17 @@ there. Every `σ` permuting within `B` and fixing the complement is absorbed exa
 stays alive (`rank U_k = H` throughout).
 
 ```
-K = 4, |B| = 1 :  1 of 23 absorbed          predicted 1     MATCH
-K = 4, |B| = 2 :  2 of 23 absorbed          predicted 2     MATCH
+K = 4, |B| = 1 :  0 of 23 absorbed          predicted 0     MATCH
+K = 4, |B| = 2 :  1 of 23 absorbed          predicted 1     MATCH   -- (1,0,2,3)
 K = 4, |B| = 3 :  5 of 23 absorbed          predicted 5     MATCH
                   absorbed set = [(0,2,1,3), (1,0,2,3), (1,2,0,3), (2,0,1,3), (2,1,0,3)]
                   |baseline output|_max = 1.020928e+00     (NOT degenerate)
+                  rank(U_k) = [6,6,6,6] throughout          (chain alive)
 ```
+
+> ⚠ **These three numbers were WRONG in the first version of this package** (`1, 2, 5` instead of
+> `0, 1, 5`). They were filled in from a wrong mental model rather than read off the run. Corrected
+> here before any auditor saw them. **Treat it as further reason to check everything.**
 
 The absorbed set was **predicted from the structure before being measured**, and matched exactly
 in all three cases.
@@ -231,3 +236,35 @@ of this package have shipped, and later caught, a fabricated measurement (a "con
 coin flip against a tautology), two arity mismatches (`K=5` where the claim is `K=4`), and several
 conclusions that did not follow from their own output. **Assume the numbers above may be wrong and
 check them.**
+
+---
+
+## 9. ADDENDUM — the VISIBILITY LAW replaces the two counterexample families
+
+Added after this package was first written, and it is the main thing we would like you to attack.
+
+> **VISIBILITY LAW.** Call a position **visible** if changing the evidence of the type sitting
+> there changes the output. Then `σ` is **absorbed if and only if `σ` fixes every visible
+> position.** Equivalently: `EXCEPTIONAL SET = { θ : some position is invisible }`.
+
+Tested on seven constructions, three of which neither family in §3 covers:
+
+| construction | visible | absorbed | law predicts | match |
+|---|---|---|---|---|
+| generic | `[0,1,2,3]` | 0 | 0 | True |
+| `W₀ = 0` | `[1,2,3]` | 0 | 0 | True |
+| `W₀=W₁=W₂=0` | `[3]` | 5 | 5 | True |
+| `U = 0` | `[3]` | 5 | 5 | True |
+| `U₂ = 0` severed mid-chain | `[2,3]` | 1 | 1 | True |
+| `Rd = 0` readout killed | `[]` | 23 | 23 | True |
+| saturated biases | `[]` | 23 | 23 | True |
+
+**7 of 7, with both controls passing.** This is **not a proof** — it is a falsifiable statement
+that survived seven attempts to break it.
+
+**Q3 for the auditor, and it now replaces much of §6: is the visibility law TRUE? A proof, or a
+counterexample — a `θ` with every position visible and some `σ ≠ id` absorbed, or a `θ` with an
+invisible position and a `σ` fixing all visible positions that is NOT absorbed.**
+
+If the law is true, the generic theorem follows immediately: for generic `θ` every position is
+visible, so the only `σ` fixing all of them is the identity.
