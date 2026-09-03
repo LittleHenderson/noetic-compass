@@ -32,11 +32,22 @@ committed, full run        cascade 0.0746     additive 1.473e-15
 recorded everywhere        cascade 0.2096     additive 3.0e-16
 ```
 
-`0.2096` was **GLM's figure from its own independent reimplementation**, transcribed by me into
-`CJT_OHM_0R_FINDINGS.md` §13 and from there into the spec sheet and memory as if it were ours.
-The implementations differ by **`3.85×`**. The two committed figures differ from **each other**
-because the value depends on how much of the shared random stream ran first — **it is not a
-stable quantity**.
+**Owner ruling on how to record this — the problem is PROVENANCE, not arithmetic.** Each figure
+gets its own label and none is called wrong:
+
+```
+0.2096      EXTERNAL REIMPLEMENTATION RESULT      (GLM's own rebuild)
+0.054458    STANDALONE COMMITTED-CODE RESULT
+0.0746      FULL-PACKAGE COMMITTED-CODE RESULT
+```
+
+> **This does NOT mean GLM's calculation was false.** The figures came from different
+> implementations and different random states. **The defect was mine: I blended them into one
+> evidentiary trail**, transcribing an external rebuild's number into `CJT_OHM_0R_FINDINGS.md`
+> §13 and from there into the spec sheet and memory as though our package had emitted it.
+
+The two committed figures also differ from **each other**, because the value depends on how much
+of the shared random stream ran first — **it is not a stable quantity**, whoever computes it.
 
 ### 1.2 The object measured contains no CAS
 
@@ -72,21 +83,41 @@ fresh trial stream per row:
 | 0.030 | `6.6746e-15` | `7.082362e-05` | `0.0422` | **FAIL** |
 | 0.010 | `5.7141e-15` | `5.990553e-06` | `0.0130` | **FAIL** |
 
-Range **`15872×`**, exponent **`2.24`** — second order in `s`, exactly as the algebra requires:
-the cross term `s²·aᵢaⱼ·ΔWⱼΔWᵢ` is the only part the additive mixture cannot express, and it
-vanishes quadratically while the arms' own effect vanishes linearly.
+Range **`15872×`**, exponent **`2.24`** — second order in `s`.
 
-> **One hard-coded float decides whether the gate passes. It flips to `FAIL` at `s ≤ 0.05`.**
+**Owner correction, and it sharpens the finding.** The scaling itself is **not** the defect. It is
+mathematically expected: cascade interaction terms begin at roughly second order in the stage
+scale, so shrinking stage strength must shrink the departure from an additive model. Reporting
+that as if it were a flaw would be reporting the algebra as a bug.
 
-### 1.4 And the effect lives only where the comparison is unfair
+> **The defect is that ONE UNGOVERNED SCALE VALUE decided whether the gate printed `PASS` or
+> `FAIL`.** It flips at `s ≤ 0.05`, and `s = 0.7` was chosen by the builder with nothing
+> constraining the choice.
+>
+> **A scale-dependent residual cannot serve as a scientific status gate unless the scale is
+> independently fixed and the residual is normalized against meaningful operator and compute
+> measures.** Neither was done.
 
-At the default `s = 0.7` the stages have mean operator norm **`1.2385` — greater than one**.
-`(I + s·α·ΔW)` is nowhere near the identity. **This is not "the same model composed
-sequentially"; it is a deeper, different model.** The residual is large only in the regime where
-the additive arm is not a matched competitor — the unfair-depth problem the owner flagged and the
-audit believed had been deferred to a GPU stage.
+### 1.4 The effect lives only where the comparison is unmatched — but DEPTH is the reason, not the norm
 
-**`C13_SPAN_GATE` is downgraded to `VACUOUS`.**
+At the default `s = 0.7` the stages have mean operator norm **`1.2385`**, greater than one.
+
+**Owner correction — I gave this number more weight than it earns.** An operator norm above one
+does **not** by itself prove instability or unfairness. It is useful diagnostic information, and
+**it is not the load-bearing reason to close the CAS claim.** I am narrowing the claim
+accordingly.
+
+> **The real fairness issue is DEPTH.** The cascade performs several sequential transformations
+> while the additive opponent performs one parallel mixture. That gives the cascade greater
+> effective depth and extra multiplicative interaction terms. The residual is large only in the
+> regime where the additive arm is not a matched competitor.
+
+A legitimate comparison would need all of: a generic cascade · a CAS cascade · a **depth-matched
+recurrent controller** · a **compute-matched** additive controller · a **parameter-matched**
+additive controller.
+
+**`C13_SPAN_GATE` is downgraded to `VACUOUS` on the grounds in §1.1–§1.3 and §7 B4** — not on the
+operator norm.
 
 ## 2. The `D0` defect transplants exactly — there is no causal control available
 
@@ -302,3 +333,67 @@ The adversarial refuters killed two of their own side's findings, which is the p
 code. The attack does not change the verdict; it **removes the fallback** (B4), adds a **tenth
 shortcut** (B2), shows **no outcome is a CAS win** (B3), and **breaks a gate I had registered
 elsewhere** (B5).
+
+---
+
+## 8. OWNER RULING 2026-09-02 — closure ratified, with TWO NARROWINGS OF MY INTERPRETATION
+
+```
+CJT-CASCADE-S0                              DO NOT BUILD AS A CAS BENCH
+GPU spend                                   NO
+C13 span gate                               VACUOUS AS A CAS GATE
+Sequential cascades as general machinery    VALID, BUT NOT A CAS FINDING
+CAS-CJT architecture                        STILL OPEN
+CAS-Ohm typed diagnosis and repair          STILL OPEN, NOW THE PRIMARY PATH
+CJT-OHM-D1                                  AUTHORIZE DESIGN ATTACK ONLY -- no implementation
+```
+
+### 8.1 The two narrowings, applied above
+
+1. **Operator norm above one is not automatically a defect** (§1.4 rewritten). The load-bearing
+   fairness issue is **depth**, not the norm.
+2. **This does NOT prove every possible CJT cascade is vacuous** — see §8.2.
+
+And a third, on the `s` finding (§1.3 rewritten): the scaling is expected algebra; the defect is
+the **ungoverned** scale deciding `PASS`/`FAIL`.
+
+### 8.2 SCOPE LIMIT — what this review does and does not close
+
+**What it closes:** *this* cascade, built from **random interchangeable stages**, has no CAS
+content. The stages could be freely renamed, so nothing typed was under test.
+
+**What it does NOT close:** a future real CJT cascade could anchor each type to **different
+machinery**:
+
+```
+^6 decomposition   accepts an Idea and emits typed parts
+comparison CJT     accepts alternatives and emits a ranking
+memory CJT         queries a memory interface
+RPM CJT            opens and returns from a prerequisite subgoal
+commitment CJT     accepts only verified Effects
+```
+
+**Those stages cannot necessarily be renamed freely**, because their input contracts, output
+contracts, legal actions, memory ports and authority differ. The architecture already defines a
+cascade as one stage's Effect becoming the next stage's Cause.
+
+> **So cascades remain usable inside the final CJT network. What we do not need is a separate GPU
+> experiment proving that matrix products differ from matrix sums.**
+
+### 8.3 Three counterfeits eliminated
+
+```
+CAS expert nameplates   ordinary experts with CAS names          (EX1)
+CAS factor nameplates   ordinary channels with CAS names         (D0)
+CAS order nameplates    ordinary stages in a CAS-labelled order  (S0)
+```
+
+> ## A CAS TYPE MUST ALTER THE MECHANISM, NOT MERELY ITS LABEL OR INDEX.
+
+A genuine neural CJT type must govern: what evidence it may read · what transformation it may
+perform · what kind of Effect it may emit · which memory store it may query · which repairs are
+legally available · how its state may change · **when verifier feedback may affect it** · **who
+may authorize its update**.
+
+That fits the intended CJT: it produces an Effect **and updates persistent Bias state**, making it
+recurrent, stateful and gated rather than a renamed ordinary unit.

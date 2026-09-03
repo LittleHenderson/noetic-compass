@@ -371,9 +371,19 @@ committed c13, full-run        cascade 0.0746     additive 1.473e-15
 RECORDED IN THIS FILE          cascade 0.2096     additive 3.0e-16
 ```
 
-`0.2096` was **the auditor's number from GLM's own independent reimplementation**, which I
-transcribed into §13 — and from there into the spec-sheet Change Log and into memory — as though
-it were this package's own output. Two implementations of the same check differ by **`3.85×`**.
+**Owner ruling on the framing: the problem is PROVENANCE, not arithmetic.** Each figure is
+labelled, and none is called wrong:
+
+```
+0.2096      EXTERNAL REIMPLEMENTATION RESULT      (GLM's own rebuild)
+0.054458    STANDALONE COMMITTED-CODE RESULT
+0.0746      FULL-PACKAGE COMMITTED-CODE RESULT
+```
+
+**This does not necessarily mean GLM's calculation was false.** The numbers came from different
+implementations and different random states. **The defect was mine: I improperly blended them
+into one evidentiary trail**, transcribing the external rebuild's figure into §13 — and from
+there into the spec-sheet Change Log and into memory — as though this package had emitted it.
 
 The two committed values differ from each other too (`0.054458` vs `0.0746`), because the figure
 depends on how much of the shared RNG stream was consumed before the check ran. **It is not a
