@@ -1,0 +1,3768 @@
+{
+  "manifest_version": "1.0",
+  "built_from_head": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+  "branch": "research/cjt-ohm-cleanroom-reset-v1",
+  "note": "missing_everywhere: paths the handoff or the ledger named that exist neither at HEAD nor in the worktree. uncommitted_at_build: clean-room files written in this worktree and committed in the same commit as this manifest (sha256_lf recorded; git_blob null at build time).",
+  "artifact_count": 270,
+  "missing_everywhere": [
+    "REFERENCE/AUDITS/CJT_OHM_0R_cbffa4a0_GLM_AUDIT.md",
+    "REFERENCE/AUDITS/CJT_OHM_D1_DESIGN_ATTACK_AUDIT.md",
+    "REFERENCE/AUDITS/PRECEDENCE_CLOSURE_AUDIT.md",
+    "REFERENCE/AUDITS/TRIGGER_CONFORMANCE.md",
+    "cas_only_reasoner/RECURSIVE_CJT_BIAS_CONTROLLER_v0_2.md",
+    "cas_only_reasoner/RECURSIVE_CJT_BIAS_CONTROLLER_v0_3.md"
+  ],
+  "uncommitted_at_build": [
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/CAS_CJT_TRANSFORMER_POSSIBILITY_v0_1.md",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_MECH_0_DESIGN_BRIEF_v0_1.md",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_OHM_CLAIM_LEDGER.json",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_OHM_CLAIM_TABLES.md",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_OHM_PROJECT_GOALS_v1.md",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_OHM_STATE_OF_EVIDENCE.md",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/agent_outputs/ledger_raw_agent_outputs.json",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/cleanroom_claims.json",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/P6_AUDIT_PACKAGE.md",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/P6_RESOLUTION.md",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/audits/DISPATCH_RECEIPT.json",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/audits/deepseek-r1_p6_audit.md",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/audits/llama3-3-70b_p6_audit.md",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_committed_repro_stdout.txt",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_heldout_repro.py",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_heldout_repro_stdout.txt",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_linear_rule_check.py",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_linear_rule_check_stdout.txt",
+    "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_order_test.sha256"
+  ],
+  "artifacts": [
+    {
+      "path": "CHANGELOG.md",
+      "exists_at_head": true,
+      "git_blob": "67b4150a6662695cbfec9904c463bed0c65d64eb",
+      "cited_by": [
+        "CJTDEV-07",
+        "CJTDEV-11",
+        "CJTDEV-14",
+        "CJTDEV-16",
+        "CR-REC-02",
+        "ETAEPS-18",
+        "EX1-01",
+        "EX1-02",
+        "EX1-03",
+        "EX1-06",
+        "EX1-10",
+        "EX1-13",
+        "PATHB-18",
+        "RC0-19",
+        "SHEET-01",
+        "SHEET-02",
+        "SHEET-14"
+      ],
+      "sha256_lf": "a42a19dc5563081df5a6bb8eb42334e4121e6f57c3a2f61438472271fdf11fdc",
+      "bytes_lf": 239487,
+      "last_commit": "c46483036c0d66a5f72c0e119e355f3c7f47ad80",
+      "last_commit_date": "2026-09-02 13:42:10 -0700"
+    },
+    {
+      "path": "CLAUDE.md",
+      "exists_at_head": true,
+      "git_blob": "fea11e2924075446cfb786ac0e197c2318960076",
+      "cited_by": [
+        "ETAEPS-14",
+        "ETAEPS-16",
+        "GOV-01",
+        "GOV-02",
+        "GOV-17"
+      ],
+      "sha256_lf": "28f377b89fc49da9cdf2ffbf65739a267bd4d2d345fa0c55d5cccc74a18bb4b6",
+      "bytes_lf": 33696,
+      "last_commit": "4879d25ddcb78dcd433da95335b3a2eceb9cd013",
+      "last_commit_date": "2026-08-30 09:57:59 -0700"
+    },
+    {
+      "path": "REFERENCE/AUDITS/CJT_OHM_0R_cbffa4a0_GLM_AUDIT.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": null,
+      "bytes_lf": null
+    },
+    {
+      "path": "REFERENCE/AUDITS/CJT_OHM_D1_DESIGN_ATTACK_AUDIT.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": null,
+      "bytes_lf": null
+    },
+    {
+      "path": "REFERENCE/AUDITS/CMB_R1_RGM01_CLAUDE_AUDIT.md",
+      "exists_at_head": true,
+      "git_blob": "a192eccaccd5a485111ee1fbef0c991f99b92825",
+      "cited_by": [
+        "CR-REC-01"
+      ],
+      "sha256_lf": "f13b8b933fb99434c6f14a6155c7b53b0a70cbbae2fd3e7c7b081ecbfedcf677",
+      "bytes_lf": 15512,
+      "last_commit": "daf7b0e02a9d8597148206f51827497136c4f7c3",
+      "last_commit_date": "2026-09-01 20:54:41 -0700"
+    },
+    {
+      "path": "REFERENCE/AUDITS/CMB_R1_RGM0_CLAUDE_AUDIT.md",
+      "exists_at_head": true,
+      "git_blob": "8087ca7b39d26d31ce6f62c9d6bb7d31b584c9d1",
+      "cited_by": [
+        "CR-REC-01"
+      ],
+      "sha256_lf": "430d5850824c6f113008309f2740451495ecfe7c390398bf8d527811345d5b0f",
+      "bytes_lf": 18021,
+      "last_commit": "68fdf5705e7d8d5861053583dc4ad5d2621018f8",
+      "last_commit_date": "2026-09-01 15:07:02 -0700"
+    },
+    {
+      "path": "REFERENCE/AUDITS/PRECEDENCE_CLOSURE_AUDIT.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": null,
+      "bytes_lf": null
+    },
+    {
+      "path": "REFERENCE/AUDITS/TRIGGER_CONFORMANCE.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": null,
+      "bytes_lf": null
+    },
+    {
+      "path": "cas_only_reasoner/AUDIT_DIRECTIVE_D0_S0_CLOSURE.md",
+      "exists_at_head": true,
+      "git_blob": "1932cd74d0dc7a99206999b02b8bc508ae6c49c8",
+      "cited_by": [
+        "D0-18",
+        "D1-01",
+        "D1-02",
+        "D1-03",
+        "D1-04",
+        "D1-06",
+        "D1-11",
+        "D1-15",
+        "D1-19",
+        "D1-20",
+        "GOV-06",
+        "GOV-08",
+        "GOV-09",
+        "GOV-10",
+        "GOV-12",
+        "GOV-15",
+        "OHM0R-13",
+        "S0-19",
+        "SHEET-10",
+        "SHEET-17"
+      ],
+      "sha256_lf": "78eb8679dcf1cc11160161166ecfbdbe13c91aea2caa0f19b74e15ab1713059c",
+      "bytes_lf": 8516,
+      "last_commit": "8572aabd3af37cd4e57a77b67a4c60f51628f66c",
+      "last_commit_date": "2026-09-02 18:15:38 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_CASCADE_S0/DESIGN_REVIEW_OUTCOME.md",
+      "exists_at_head": true,
+      "git_blob": "e9d1f4ba7bb3da63a0001a4ac160ad421d28d66e",
+      "cited_by": [
+        "D0-12",
+        "EX1-16",
+        "GOV-03",
+        "GOV-09",
+        "GOV-12",
+        "OHM0R-11",
+        "OHM0R-12",
+        "OHM0R-13",
+        "OHM0R-14",
+        "OHM0R-17",
+        "S0-01",
+        "S0-02",
+        "S0-03",
+        "S0-04",
+        "S0-05",
+        "S0-06",
+        "S0-07",
+        "S0-08",
+        "S0-09",
+        "S0-10",
+        "S0-11",
+        "S0-12",
+        "S0-13",
+        "S0-14",
+        "S0-15",
+        "S0-16",
+        "S0-17",
+        "S0-18",
+        "SHEET-08",
+        "SHEET-10"
+      ],
+      "sha256_lf": "ce00d4b0a2e2de7880a535d57ee81f0f320cbe0c3bf8bea42f87a1a8e370818c",
+      "bytes_lf": 20170,
+      "last_commit": "f16bd500b806f5d442afc51039bfa89e50f3d696",
+      "last_commit_date": "2026-09-02 17:21:53 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_CASCADE_S0/verify_attack_findings.py",
+      "exists_at_head": true,
+      "git_blob": "2c25e6d3c6775cf6e54d9ee61b36ae0e441cb0fa",
+      "cited_by": [
+        "D0-12",
+        "S0-09",
+        "S0-10",
+        "S0-11",
+        "SHEET-10"
+      ],
+      "sha256_lf": "f9c2545cf3e315240a0f7462ffd74cb176da179e0f9c4b86f3e65b72873d6b46",
+      "bytes_lf": 7647,
+      "last_commit": "db95f2fcba7fe96fa24ac2b76f5e75aff5f21c00",
+      "last_commit_date": "2026-09-02 16:39:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_CASCADE_S0/verify_order_absorption.py",
+      "exists_at_head": true,
+      "git_blob": "6fff0202163f51720d1fc85c41bc345cae91a476",
+      "cited_by": [
+        "GOV-06",
+        "S0-08",
+        "SHEET-10"
+      ],
+      "sha256_lf": "68aeeb2a3d8bc8101d0ff169a939497b8324e813846895ec5ac8320b230f781e",
+      "bytes_lf": 3986,
+      "last_commit": "8b5c2ee3a4f8c51fa7fd1eae387fad2b3ecb524f",
+      "last_commit_date": "2026-09-02 16:25:01 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_CASCADE_S0/verify_span_gate.py",
+      "exists_at_head": true,
+      "git_blob": "355dbde4ae18b0af372766cc42fa022bef86f9e2",
+      "cited_by": [
+        "GOV-08",
+        "GOV-09",
+        "OHM0R-11",
+        "OHM0R-12",
+        "OHM0R-13",
+        "OHM0R-14",
+        "S0-02",
+        "S0-03",
+        "S0-05",
+        "S0-06",
+        "S0-07",
+        "S0-10",
+        "SHEET-08",
+        "SHEET-10"
+      ],
+      "sha256_lf": "b496879b0fbf9171aa021cae97c0d07ea75ddee11dbd3b03d9cc767bb5161c6c",
+      "bytes_lf": 6709,
+      "last_commit": "60727805b80dc5406c01fdbcf7d30bbc90f53142",
+      "last_commit_date": "2026-09-02 16:19:02 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_0R/CJT_OHM_0R_FINDINGS.md",
+      "exists_at_head": true,
+      "git_blob": "dc39622ee420a62f4625e51429aba15786e8164e",
+      "cited_by": [
+        "D0-10",
+        "D0-11",
+        "GOV-08",
+        "OHM0R-01",
+        "OHM0R-02",
+        "OHM0R-03",
+        "OHM0R-04",
+        "OHM0R-05",
+        "OHM0R-06",
+        "OHM0R-07",
+        "OHM0R-08",
+        "OHM0R-09",
+        "OHM0R-10",
+        "OHM0R-11",
+        "OHM0R-12",
+        "OHM0R-13",
+        "OHM0R-14",
+        "OHM0R-15",
+        "OHM0R-16",
+        "OHM0R-17",
+        "OHM0R-18",
+        "OHM0R-19",
+        "OHM0R-20",
+        "S0-02",
+        "S0-03",
+        "S0-04",
+        "S0-05",
+        "S0-06",
+        "S0-10",
+        "SHEET-08"
+      ],
+      "sha256_lf": "296e90eb67163fad9a9aabb688afec0e791d2c08ecd141e13a4aa710e441d954",
+      "bytes_lf": 23443,
+      "last_commit": "f16bd500b806f5d442afc51039bfa89e50f3d696",
+      "last_commit_date": "2026-09-02 17:21:53 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_0R/CJT_OHM_0R_RESULT.json",
+      "exists_at_head": true,
+      "git_blob": "4a9eaa36ff917d96fb7cd86900c2586fb4a4495c",
+      "cited_by": [
+        "D0-10",
+        "OHM0R-01",
+        "OHM0R-02",
+        "OHM0R-03",
+        "OHM0R-04",
+        "OHM0R-05",
+        "OHM0R-07",
+        "OHM0R-08",
+        "OHM0R-09",
+        "OHM0R-10",
+        "OHM0R-11",
+        "OHM0R-16",
+        "OHM0R-19",
+        "OHM0R-20",
+        "S0-02",
+        "SHEET-08"
+      ],
+      "sha256_lf": "7b17b37a850ad3886c61e758d2e85a44dca3e2ce64fe2fd32614a44b775eae15",
+      "bytes_lf": 4876,
+      "last_commit": "8b5c2ee3a4f8c51fa7fd1eae387fad2b3ecb524f",
+      "last_commit_date": "2026-09-02 16:25:01 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_0R/SOURCE_PROPOSAL.txt",
+      "exists_at_head": true,
+      "git_blob": "70f4d16471bae84629bc2e3d0a17a4f31c7105ca",
+      "cited_by": [
+        "EX1-16"
+      ],
+      "sha256_lf": "962a95fb860beafcca1b11b4a5a8b686d147eadfc63febc1d879df201f593877",
+      "bytes_lf": 52824,
+      "last_commit": "05db7b75b5b9a07400976974c55dd48b0223cdf6",
+      "last_commit_date": "2026-09-02 14:38:50 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_0R/ohm0r.py",
+      "exists_at_head": true,
+      "git_blob": "deae6f21ad44e478c3ee012f7502280971fd1d06",
+      "cited_by": [
+        "D0-10",
+        "D0-11",
+        "OHM0R-01",
+        "OHM0R-02",
+        "OHM0R-03",
+        "OHM0R-04",
+        "OHM0R-05",
+        "OHM0R-06",
+        "OHM0R-07",
+        "OHM0R-08",
+        "OHM0R-09",
+        "OHM0R-10",
+        "OHM0R-11",
+        "OHM0R-16",
+        "OHM0R-17",
+        "OHM0R-18",
+        "OHM0R-19",
+        "OHM0R-20",
+        "S0-02",
+        "SHEET-08"
+      ],
+      "sha256_lf": "43a0ccfd423baf5194a79c60496910aa2f0b2561524de1d831e12870cc0a0b32",
+      "bytes_lf": 25958,
+      "last_commit": "90b601a488ed1ac9391b7babe1979dec6fcc1c6b",
+      "last_commit_date": "2026-09-02 15:35:26 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/CAS_CJT_TRANSFORMER_POSSIBILITY_v0_1.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "aa34a18f0bf661842c9740a557762e19cb7dcebd313c2d50bc4d5955364b24ec",
+      "bytes_lf": 11954
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_MECH_0_DESIGN_BRIEF_v0_1.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "3e106a617e43ae25c32c3b2bdec0fd23996cb14a3ea794ef81d8cc089bba3bfe",
+      "bytes_lf": 10292
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_OHM_CLAIM_LEDGER.json",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "1aabf5d7980b39121f70c2dc3cb371dc9e5c77d36b19e12cd5ef34c19b41f362",
+      "bytes_lf": 928251
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_OHM_CLAIM_TABLES.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "5cef14ce95b3dc625cad83d1c05d8e4e0f2fcac669e172e95bd41c4f2b99f7b7",
+      "bytes_lf": 257273
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_OHM_PROJECT_GOALS_v1.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "62f5bacaee1a5961e531c599c8813ef7a5d45da7f96fb64f5a747b0f96516171",
+      "bytes_lf": 8551
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/CJT_OHM_STATE_OF_EVIDENCE.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "44128c8bf83c274a6d040554ca09cf3ac2d0aa031cac009dc3dcac03f07a3392",
+      "bytes_lf": 24966
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/agent_outputs/ledger_raw_agent_outputs.json",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "e6cc51ac11ab41a59c926f77e6dd12eab87f526cd4559360b56b29da482482d9",
+      "bytes_lf": 750627
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/cleanroom_claims.json",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "a13133c237653896807928c33c430e4ac365450a2a09ee8b7a6d41e9639d3246",
+      "bytes_lf": 15798
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/P6_AUDIT_PACKAGE.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [
+        "CR-P6-03",
+        "CR-P6-09"
+      ],
+      "sha256_lf": "5aad2eaa5bc0860dba1c6b64c8b12f887be378d3f4fccbece452236185631634",
+      "bytes_lf": 34301
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/P6_RESOLUTION.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [
+        "CR-P6-02",
+        "CR-P6-04",
+        "CR-P6-07",
+        "CR-P6-08",
+        "CR-P6-09"
+      ],
+      "sha256_lf": "94aeba64695906d4dff6a38ac7c8b577fa16132597facc18957325220ef6431d",
+      "bytes_lf": 15536
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/audits/DISPATCH_RECEIPT.json",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "b2d06472dca52a020d84780b1f674f00da29e02549a77c5740606611193b6f75",
+      "bytes_lf": 1274
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/audits/deepseek-r1_p6_audit.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "6e421e4b3e791ec94ab54d0920a8bc8ea8bc12d7549e0b7d96fd91da82b5b25e",
+      "bytes_lf": 6362
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/audits/llama3-3-70b_p6_audit.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": "97796525d796f4385f3c203b4e3059e41ef8d8f8a6aef8211f07aa81590f9246",
+      "bytes_lf": 3070
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_committed_repro_stdout.txt",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [
+        "CR-P6-01",
+        "CR-P6-06"
+      ],
+      "sha256_lf": "25635861d2a96c85433eda281082832a6e67ccc67705a4655ac7068ee9ee4128",
+      "bytes_lf": 2488
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_heldout_repro.py",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [
+        "CR-P6-03"
+      ],
+      "sha256_lf": "ad4bd376730473ede007417be02eea9f2c01bdb2bd6778cebf68d95861651187",
+      "bytes_lf": 10601
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_heldout_repro_stdout.txt",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [
+        "CR-P6-02",
+        "CR-P6-03",
+        "CR-P6-04"
+      ],
+      "sha256_lf": "40e75d95ab3ca87bae3f64db87525e426f011431a7663c038fe114eaeb85dcd0",
+      "bytes_lf": 3295
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_linear_rule_check.py",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [
+        "CR-P6-05"
+      ],
+      "sha256_lf": "8beba56802345fec10c05277e46be38323feba4115aee609e08686af11b6f8b3",
+      "bytes_lf": 4510
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_linear_rule_check_stdout.txt",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [
+        "CR-P6-05"
+      ],
+      "sha256_lf": "6b4d8b6f18a8f7579c54f521aa93578e28ddbe8a91c9b52070381562ddb989f8",
+      "bytes_lf": 861
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_CLEANROOM/p6/p6_order_test.sha256",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [
+        "CR-P6-01"
+      ],
+      "sha256_lf": "e6208849d79913f7ed327ad3854d54d0545286a226020d11b3a1fffba8b62989",
+      "bytes_lf": 83
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_D0/CJT_OHM_D0_PREREGISTRATION.md",
+      "exists_at_head": true,
+      "git_blob": "4299fc36ebb477c88ebf53613705bc889e6e8bf1",
+      "cited_by": [
+        "D0-03",
+        "D0-10",
+        "D0-11",
+        "D0-12",
+        "D0-13",
+        "D0-15",
+        "D0-17",
+        "D0-19",
+        "GOV-04",
+        "GOV-07",
+        "GOV-14",
+        "OHM0R-15",
+        "OHM0R-16",
+        "OHM0R-17",
+        "S0-11",
+        "S0-12",
+        "SHEET-09"
+      ],
+      "sha256_lf": "b421690714d8a683eea15ffeda5948c5a99d4b1a18f3a9dea79724b20cd32bc6",
+      "bytes_lf": 20641,
+      "last_commit": "db95f2fcba7fe96fa24ac2b76f5e75aff5f21c00",
+      "last_commit_date": "2026-09-02 16:39:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_D0/DESIGN_REVIEW_OUTCOME.md",
+      "exists_at_head": true,
+      "git_blob": "0559721bada4b37d1c05633160323579e045f8ca",
+      "cited_by": [
+        "D0-01",
+        "D0-02",
+        "D0-03",
+        "D0-04",
+        "D0-05",
+        "D0-06",
+        "D0-07",
+        "D0-08",
+        "D0-09",
+        "D0-19",
+        "PREC-18",
+        "SHEET-09",
+        "SHEET-18"
+      ],
+      "sha256_lf": "fd187032149876d594ef85312fe4fd6a5619f0ab90145e8863ac516cada03bc7",
+      "bytes_lf": 7464,
+      "last_commit": "269dfd114d90f89a28c0cc00bac0ee18b59c5792",
+      "last_commit_date": "2026-09-02 18:33:17 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_D0/verify_d5_equivariance.py",
+      "exists_at_head": true,
+      "git_blob": "8a3d9e3c86bfb58eb2c6cb4168808e3d17dc7379",
+      "cited_by": [
+        "D0-01",
+        "D0-02",
+        "D0-07",
+        "D0-08",
+        "D0-09",
+        "GOV-06",
+        "SHEET-09",
+        "SHEET-18"
+      ],
+      "sha256_lf": "9d9ef5397cf9d0a7bca80e7a47c9f20d3d8262bea26243c16d4c195501bcc3b7",
+      "bytes_lf": 5943,
+      "last_commit": "a47b951b59288b950621cfc6b3515abc4ec0ace5",
+      "last_commit_date": "2026-09-02 15:51:28 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_D1/DESIGN_ATTACK_OUTCOME.md",
+      "exists_at_head": true,
+      "git_blob": "4e9e736ab6ffa0576af16d154799f2990a24ae28",
+      "cited_by": [
+        "D1-01",
+        "D1-02",
+        "D1-03",
+        "D1-04",
+        "D1-06",
+        "D1-11",
+        "D1-12",
+        "D1-14",
+        "D1-15",
+        "D1-16",
+        "D1-17",
+        "D1-18",
+        "D1-20",
+        "EX1-16",
+        "GOV-05",
+        "GOV-12",
+        "GOV-14",
+        "GOV-15",
+        "PREC-10",
+        "PREC-11",
+        "PREC-17",
+        "SHEET-11",
+        "SHEET-12",
+        "SHEET-17"
+      ],
+      "sha256_lf": "d152136c39e7224b7cbdee40e1a8a18fc8adaf9201c947eaf2f53eb95a93702b",
+      "bytes_lf": 20098,
+      "last_commit": "269dfd114d90f89a28c0cc00bac0ee18b59c5792",
+      "last_commit_date": "2026-09-02 18:33:17 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_D1/extend_absorption_test.py",
+      "exists_at_head": true,
+      "git_blob": "631b4b318d328720a241ae188f097404c4f50473",
+      "cited_by": [
+        "D1-04",
+        "GOV-15",
+        "SHEET-12"
+      ],
+      "sha256_lf": "08e58ec56f291cc677b5604478a833c884e656c3df340cdd083817cf18c4c566",
+      "bytes_lf": 2846,
+      "last_commit": "8572aabd3af37cd4e57a77b67a4c60f51628f66c",
+      "last_commit_date": "2026-09-02 18:15:38 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_OHM_D1/verify_d1_attack.py",
+      "exists_at_head": true,
+      "git_blob": "dfd00439b6025024b6506be3ab339414300f098c",
+      "cited_by": [
+        "D1-01",
+        "D1-02",
+        "D1-03",
+        "D1-06",
+        "GOV-14",
+        "PREC-17",
+        "SHEET-11",
+        "SHEET-12",
+        "SHEET-19"
+      ],
+      "sha256_lf": "8503191513c7d6f400477e3405d1d9ac5e76a0e819dd4345a09ca17e8396a760",
+      "bytes_lf": 10258,
+      "last_commit": "90248303e90a03478c2ba574e112cea9212107bf",
+      "last_commit_date": "2026-09-02 17:57:05 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/CLOSURE_FINDINGS.md",
+      "exists_at_head": true,
+      "git_blob": "a1de1e91fcabc867b972a4c4186090610849800a",
+      "cited_by": [
+        "D0-08",
+        "D0-18",
+        "D1-05",
+        "D1-06",
+        "D1-07",
+        "D1-08",
+        "D1-09",
+        "D1-10",
+        "D1-11",
+        "D1-12",
+        "D1-13",
+        "D1-14",
+        "D1-18",
+        "D1-19",
+        "D1-20",
+        "GOV-10",
+        "GOV-11",
+        "GOV-12",
+        "GOV-19",
+        "PREC-01",
+        "PREC-02",
+        "PREC-03",
+        "PREC-04",
+        "PREC-05",
+        "PREC-06",
+        "PREC-07",
+        "PREC-08",
+        "PREC-09",
+        "PREC-10",
+        "PREC-11",
+        "PREC-12",
+        "PREC-16",
+        "PREC-17",
+        "PREC-18",
+        "S0-19",
+        "SHEET-02",
+        "SHEET-04",
+        "SHEET-05",
+        "SHEET-06",
+        "SHEET-11",
+        "SHEET-12",
+        "SHEET-17",
+        "SHEET-18",
+        "SHEET-19"
+      ],
+      "sha256_lf": "bd76e05eca74e0f6f2053ce125f0009106c273c76db15d856d6b1665e2f7d24c",
+      "bytes_lf": 17381,
+      "last_commit": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+      "last_commit_date": "2026-09-02 21:29:49 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/THEOREM_AUDIT_PACKAGE.md",
+      "exists_at_head": true,
+      "git_blob": "b35a5e2d1ce19d0176fcb1f9be2371326df26451",
+      "cited_by": [
+        "CR-REC-03",
+        "D1-05",
+        "D1-08",
+        "D1-09",
+        "D1-10",
+        "D1-19",
+        "GOV-18",
+        "GOV-19",
+        "PREC-01",
+        "PREC-02",
+        "PREC-05",
+        "PREC-06",
+        "PREC-07",
+        "PREC-08",
+        "PREC-12",
+        "PREC-13",
+        "PREC-16",
+        "SHEET-02",
+        "SHEET-04",
+        "SHEET-05"
+      ],
+      "sha256_lf": "0162ce8d30a8d8522f033fdaa84995b22cbe8f8570c99e1acaa840a60b8be18a",
+      "bytes_lf": 12917,
+      "last_commit": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+      "last_commit_date": "2026-09-02 21:29:49 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/audits/DISPATCH_STATUS.md",
+      "exists_at_head": true,
+      "git_blob": "ddeeaf71e542666f29c6b8fb610e4297823a5bc3",
+      "cited_by": [
+        "D1-20",
+        "GOV-10",
+        "GOV-12",
+        "GOV-18",
+        "PREC-14",
+        "SHEET-02",
+        "SHEET-07"
+      ],
+      "sha256_lf": "9426f2d7844b4db2461bd1f189b61ff11fedb196e9e0cfb8644bea6db51d4fc3",
+      "bytes_lf": 3376,
+      "last_commit": "61a3576dcf592872c3f6fe2a15c9cd8cad06e758",
+      "last_commit_date": "2026-09-02 20:22:00 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/audits/deepseek-r1_audit.md",
+      "exists_at_head": true,
+      "git_blob": "9888c4015eb4f7aa6dff2b2f0bc9c5b06264c16f",
+      "cited_by": [
+        "CR-REC-01",
+        "CR-REC-03",
+        "D1-09",
+        "D1-10",
+        "GOV-11",
+        "PREC-12",
+        "PREC-13",
+        "SHEET-02",
+        "SHEET-04",
+        "SHEET-07"
+      ],
+      "sha256_lf": "54a43c7d710528b3570adc30ff959cda14dc881713576019c48cd65e40bab32d",
+      "bytes_lf": 18956,
+      "last_commit": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+      "last_commit_date": "2026-09-02 21:29:49 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/closure.py",
+      "exists_at_head": true,
+      "git_blob": "d7a5a7193baa52c49277cee5652e94dc9e15efdc",
+      "cited_by": [
+        "D1-05",
+        "D1-07",
+        "D1-08",
+        "PREC-01",
+        "PREC-02",
+        "PREC-03",
+        "PREC-05",
+        "SHEET-19"
+      ],
+      "sha256_lf": "e6eb5dc143765b193ecbc02a9ba23022e50fc42b0536b5e75199ba55b69ee8cd",
+      "bytes_lf": 13220,
+      "last_commit": "269dfd114d90f89a28c0cc00bac0ee18b59c5792",
+      "last_commit_date": "2026-09-02 18:33:17 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/dispatch_bedrock_audit.py",
+      "exists_at_head": true,
+      "git_blob": "0a7d1e1be61f4758d866a0cf729e55a2f18fa656",
+      "cited_by": [
+        "GOV-02",
+        "GOV-10",
+        "GOV-11",
+        "PREC-13",
+        "SHEET-07"
+      ],
+      "sha256_lf": "5aa337b6f6805ab81afbd7114d312bbfaa7f8ef5a040836e6a60173723f4b9f6",
+      "bytes_lf": 4882,
+      "last_commit": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+      "last_commit_date": "2026-09-02 21:29:49 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/dispatch_theorem_audit.py",
+      "exists_at_head": true,
+      "git_blob": "dce076e727e1fe3c6dc4bdd15ae91e7a5c79a1ed",
+      "cited_by": [
+        "GOV-10",
+        "GOV-18",
+        "PREC-14",
+        "SHEET-07"
+      ],
+      "sha256_lf": "637749a69420b2751e56f12f4c65312a7bbe7bfc84b4e8ed5d3998276160dfa0",
+      "bytes_lf": 5486,
+      "last_commit": "61a3576dcf592872c3f6fe2a15c9cd8cad06e758",
+      "last_commit_date": "2026-09-02 20:22:00 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/k4_expressivity.py",
+      "exists_at_head": true,
+      "git_blob": "9e1e6bdac5a4dc51c5a12ba2ed85451bf9af99fa",
+      "cited_by": [
+        "D1-19",
+        "PREC-08",
+        "SHEET-06"
+      ],
+      "sha256_lf": "b584d36f2a808df1f3a671fa076126bfdd4a4e91eecd799ecc296d283926b4dd",
+      "bytes_lf": 7241,
+      "last_commit": "4825a37d30b554baace979d667595102e90dde0e",
+      "last_commit_date": "2026-09-02 19:23:08 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/k4_theorem.py",
+      "exists_at_head": true,
+      "git_blob": "b63ac745b1b1188c0c8ab622e7386c4e46e66cbb",
+      "cited_by": [
+        "D1-08",
+        "D1-10",
+        "GOV-19",
+        "PREC-06",
+        "PREC-07",
+        "SHEET-05"
+      ],
+      "sha256_lf": "c17b3f3864b7e8a6d5a592216cbb00934dc9a118a1d24e1e129b46c6de0c3382",
+      "bytes_lf": 6448,
+      "last_commit": "4825a37d30b554baace979d667595102e90dde0e",
+      "last_commit_date": "2026-09-02 19:23:08 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/leakage_sweep.py",
+      "exists_at_head": true,
+      "git_blob": "581f61825fedf983dc07aecdf99234757693dd4e",
+      "cited_by": [
+        "D1-07",
+        "PREC-04"
+      ],
+      "sha256_lf": "c3dca4f3b43d8f50c8809de3354d9905c7fe33b20b20e9573741a67ccea16a86",
+      "bytes_lf": 2452,
+      "last_commit": "269dfd114d90f89a28c0cc00bac0ee18b59c5792",
+      "last_commit_date": "2026-09-02 18:33:17 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/p6_order_test.py",
+      "exists_at_head": true,
+      "git_blob": "779cc239b51579f88e8f74b349e970619585a7c8",
+      "cited_by": [
+        "CR-P6-01",
+        "CR-P6-02",
+        "CR-P6-06",
+        "CR-P6-09",
+        "D1-17",
+        "GOV-20",
+        "PREC-15",
+        "SHEET-03"
+      ],
+      "sha256_lf": "07e824e242968c11440c4cc3d256bb518cf5579416fc4d848bf3004cc8baa8dd",
+      "bytes_lf": 11834,
+      "last_commit": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+      "last_commit_date": "2026-09-02 21:29:49 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/receipts_d1_attack.py",
+      "exists_at_head": true,
+      "git_blob": "8c3b57dc2fdcf0a7406d205cc34e0e8aa4bebdfd",
+      "cited_by": [
+        "D1-13",
+        "D1-14",
+        "PREC-09",
+        "PREC-10",
+        "PREC-11",
+        "SHEET-11"
+      ],
+      "sha256_lf": "7a3912b2c1e6f3053940eb43bae1e3181d26a89aeb40a9227085f5bf7f13aa1c",
+      "bytes_lf": 10268,
+      "last_commit": "4825a37d30b554baace979d667595102e90dde0e",
+      "last_commit_date": "2026-09-02 19:23:08 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CJT_PREC_CLOSURE/visibility_law.py",
+      "exists_at_head": true,
+      "git_blob": "996f11e716db414d120551be589cb7a41f300da9",
+      "cited_by": [
+        "CR-REC-03",
+        "D1-09",
+        "GOV-11",
+        "GOV-19",
+        "PREC-12",
+        "SHEET-04"
+      ],
+      "sha256_lf": "f3c2fa605df96e9bf826117a94e5936980c9d0db9f8a1d2955f46a893f001c07",
+      "bytes_lf": 7568,
+      "last_commit": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+      "last_commit_date": "2026-09-02 21:29:49 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CMB_P0_v0_1/OWNER_RULINGS_2026_09_02.md",
+      "exists_at_head": true,
+      "git_blob": "691eed614fdb6e1e0c91662cbc4a7546c8ac02a7",
+      "cited_by": [
+        "EX1-03",
+        "EX1-05",
+        "EX1-15",
+        "EX1-18"
+      ],
+      "sha256_lf": "a69b5cb6bef9145fd675efdef2f546714bed7dbf8c12ce5c2d33e062c756646b",
+      "bytes_lf": 7309,
+      "last_commit": "15307b703f2cb36c70d7241170bc692f20cd27fc",
+      "last_commit_date": "2026-09-01 22:23:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/CORRECTION_RECORD_v1.md",
+      "exists_at_head": true,
+      "git_blob": "b6c150fb741f8c73a20b9bc3fa5ef32e25ff5607",
+      "cited_by": [
+        "GOV-16"
+      ],
+      "sha256_lf": "8dcab112782911ee5fb58286ea6154455f914a8a2dd1110f56204832df486a49",
+      "bytes_lf": 4445,
+      "last_commit": "b0a7e14d8d0abbbf7fa26ed2f380e88564f61157",
+      "last_commit_date": "2026-08-29 18:16:53 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/ETA_EPSILON_BRIDGE_v1.md",
+      "exists_at_head": true,
+      "git_blob": "4de009d57dbf5320f3e85d653b94257572984be3",
+      "cited_by": [
+        "ETAEPS-01",
+        "ETAEPS-02",
+        "ETAEPS-03",
+        "ETAEPS-05"
+      ],
+      "sha256_lf": "601526db67c8bff4914039ce6114ed7fc5644113bafd8e6b69f2435c28a7097e",
+      "bytes_lf": 13731,
+      "last_commit": "5ba523ed06c1178594b5ceeab646cca61db7e002",
+      "last_commit_date": "2026-08-29 23:22:21 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/MEMORY_LANE_CLOSED.md",
+      "exists_at_head": true,
+      "git_blob": "4684184729aae2c50e987b536644687e5f3cdd7e",
+      "cited_by": [
+        "ETAEPS-05",
+        "GOV-13"
+      ],
+      "sha256_lf": "821c84a17924098b8d233dd5dbe6dc1378e2965c3f09bc33384bcc1b17bdfdbe",
+      "bytes_lf": 1854,
+      "last_commit": "dc185d4636de0140b53dd5b89bd29d1764f7b564",
+      "last_commit_date": "2026-09-02 15:29:25 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/OWNER_RULING_20260902_D0_RATIFIED.md",
+      "exists_at_head": true,
+      "git_blob": "318c9e39ac1002c73a004bbcdd1a155dedd0f2d1",
+      "cited_by": [
+        "D0-02",
+        "D0-03",
+        "D0-05",
+        "D0-10",
+        "D0-13",
+        "D0-14",
+        "D0-15",
+        "D0-16",
+        "D0-18",
+        "D0-19",
+        "D1-15",
+        "D1-18",
+        "EX1-16",
+        "GOV-03",
+        "GOV-04",
+        "GOV-06",
+        "GOV-07",
+        "GOV-10",
+        "GOV-12",
+        "GOV-14",
+        "OHM0R-06",
+        "OHM0R-16",
+        "S0-08",
+        "S0-17",
+        "S0-18",
+        "SHEET-09"
+      ],
+      "sha256_lf": "c608401e28c6397f01de2ab26ae43a6fe1d085da5c595e5ff64748f25f64922e",
+      "bytes_lf": 9029,
+      "last_commit": "60727805b80dc5406c01fdbcf7d30bbc90f53142",
+      "last_commit_date": "2026-09-02 16:19:02 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/RECURSIVE_CJT_BIAS_CONTROLLER_v0_2.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": null,
+      "bytes_lf": null
+    },
+    {
+      "path": "cas_only_reasoner/RECURSIVE_CJT_BIAS_CONTROLLER_v0_3.md",
+      "exists_at_head": false,
+      "git_blob": null,
+      "cited_by": [],
+      "sha256_lf": null,
+      "bytes_lf": null
+    },
+    {
+      "path": "cas_only_reasoner/cas_sem_guided_plasticity_v1/PREREGISTRATION_v0_3A.md",
+      "exists_at_head": true,
+      "git_blob": "6566d0c4f08c490f474a48054667a7ca06db319a",
+      "cited_by": [
+        "ETAEPS-14",
+        "ETAEPS-16"
+      ],
+      "sha256_lf": "39cb1cdd08929699c30ea7e8104a2d1d5a57d55789ab5f0db304afad51941df4",
+      "bytes_lf": 9807,
+      "last_commit": "4879d25ddcb78dcd433da95335b3a2eceb9cd013",
+      "last_commit_date": "2026-08-30 09:57:59 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/CANDIDATE_UNIFORM_BASELINES.json",
+      "exists_at_head": true,
+      "git_blob": "75349a8ea0f81c800dd64e98fcb9200463445066",
+      "cited_by": [
+        "CJTDEV-02"
+      ],
+      "sha256_lf": "ae17aa32a9dd15404a5bdc32695bb3e08c95acd82c83f68242ec5945e8c7e96e",
+      "bytes_lf": 2089,
+      "last_commit": "3fb7802bd22bb5c235fb1d800fb7bf9728249d40",
+      "last_commit_date": "2026-08-31 19:09:14 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/CLOUD_EXECUTION_RECEIPT.json",
+      "exists_at_head": true,
+      "git_blob": "80469c6c54f1baef563d39b4572293db5f20aad7",
+      "cited_by": [
+        "CJTDEV-01",
+        "CJTDEV-10"
+      ],
+      "sha256_lf": "897e941d204b0c14d091c12aa09baf59c017bbcb0c066b2eb9cc308c172aadbd",
+      "bytes_lf": 4226,
+      "last_commit": "9229d8b4d41fa024afc050ed9e42d982a1585ea0",
+      "last_commit_date": "2026-08-31 17:53:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/CLOUD_EXECUTION_RECEIPT_P12.json",
+      "exists_at_head": true,
+      "git_blob": "827760de07943c4c7cf0f4bce821732a06134c28",
+      "cited_by": [
+        "CJTDEV-02",
+        "CJTDEV-03",
+        "CJTDEV-10"
+      ],
+      "sha256_lf": "19ea8c1491df6a5543f44a70e7d0aafb5cd1ec5c8f7ceebc8f13321cf23ad090",
+      "bytes_lf": 4208,
+      "last_commit": "30082b20bb54d0e1d111b1715de095f4d96260bf",
+      "last_commit_date": "2026-08-31 19:54:31 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/CLOUD_EXECUTION_RECEIPT_P12B.json",
+      "exists_at_head": true,
+      "git_blob": "8ffa44a90f3756c1723c9c39ecb24fd4f40a1399",
+      "cited_by": [
+        "CJTDEV-04",
+        "CJTDEV-05",
+        "CJTDEV-10"
+      ],
+      "sha256_lf": "28836c066ab34758a88a39decfb4a28a92b079a5291ed897e0d81c8b66630871",
+      "bytes_lf": 4384,
+      "last_commit": "2a8f21edbbd2ae56c5688df20c96d952992c9432",
+      "last_commit_date": "2026-08-31 20:36:56 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/CLOUD_EXECUTION_RECEIPT_P13.json",
+      "exists_at_head": true,
+      "git_blob": "ad4a630aac155f35bc7f70f003d85af877d265d2",
+      "cited_by": [
+        "CJTDEV-07",
+        "CJTDEV-08",
+        "CJTDEV-09",
+        "CJTDEV-10"
+      ],
+      "sha256_lf": "675a1fc84e5eb0094b5b1e350044d8d9af1960c634ab07d91389883ad27b8975",
+      "bytes_lf": 4813,
+      "last_commit": "f0c70de73b09cea4d1220f252bd84a4f112479db",
+      "last_commit_date": "2026-08-31 21:37:44 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/README.md",
+      "exists_at_head": true,
+      "git_blob": "f336469b631dc965db5c7510bbf935ce63d0ad43",
+      "cited_by": [
+        "CJTDEV-01",
+        "CJTDEV-03",
+        "CJTDEV-07",
+        "CJTDEV-18"
+      ],
+      "sha256_lf": "d6add8e4beb8c1d008af6896608c674a37d8d3c0eb8792ac8a1e466837e57df0",
+      "bytes_lf": 22372,
+      "last_commit": "f0c70de73b09cea4d1220f252bd84a4f112479db",
+      "last_commit_date": "2026-08-31 21:37:44 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/S7_DELTA_V2_BUILD_RECEIPT.json",
+      "exists_at_head": true,
+      "git_blob": "4ca6276cb3311458f9efc54fbac70e0b39e58527",
+      "cited_by": [
+        "CJTDEV-18"
+      ],
+      "sha256_lf": "70a09b4188c67fe5ce4ca543653735f9a84267caecd073b49aec612af2d7ca3e",
+      "bytes_lf": 12626,
+      "last_commit": "7b6f2560906a908aa8fd3b309994a7d35cc87df0",
+      "last_commit_date": "2026-08-31 18:16:21 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/S7_DELTA_V3_COMPARATOR_RECEIPT.json",
+      "exists_at_head": true,
+      "git_blob": "7f2eab5adf550479864ad5a7cb173b214ff3ddcc",
+      "cited_by": [
+        "CJTDEV-18"
+      ],
+      "sha256_lf": "89011e22fd5b914737c25f19c030d063afb53ff78199a8705ae9ca646d959522",
+      "bytes_lf": 1943,
+      "last_commit": "3fb7802bd22bb5c235fb1d800fb7bf9728249d40",
+      "last_commit_date": "2026-08-31 19:09:14 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/S7_H_BUILD_RECEIPT.json",
+      "exists_at_head": true,
+      "git_blob": "0e1b4d47b68abcf531474a84fc3ed047a9d97865",
+      "cited_by": [
+        "CJTDEV-18"
+      ],
+      "sha256_lf": "18b734174bfd33fb98543e9647624e009de61e14edaf4d95790d290f39869e90",
+      "bytes_lf": 2337,
+      "last_commit": "7b6f2560906a908aa8fd3b309994a7d35cc87df0",
+      "last_commit_date": "2026-08-31 18:16:21 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/S7_PILOT_BUILD_RECEIPT.json",
+      "exists_at_head": true,
+      "git_blob": "777a5c0f17943a8bc4bd03277e08e49ec3b02aa4",
+      "cited_by": [
+        "CJTDEV-18"
+      ],
+      "sha256_lf": "3358ec718dea406a069bf29ce26d61e9254a43fc791b26f456ea4f1a99b6f159",
+      "bytes_lf": 10168,
+      "last_commit": "19d9e8432e979d42624e46b75cdeb9cd15e77fbc",
+      "last_commit_date": "2026-08-31 16:26:32 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/STATISTICAL_CORRECTION_S7.json",
+      "exists_at_head": true,
+      "git_blob": "1b074725a831d7f1a3765ef85e76220029da1319",
+      "cited_by": [
+        "CJTDEV-18"
+      ],
+      "sha256_lf": "d81b51bd5194fb2dd745b931443223e71b47d54408e2fd3008d3893c7379bdc1",
+      "bytes_lf": 2350,
+      "last_commit": "7b6f2560906a908aa8fd3b309994a7d35cc87df0",
+      "last_commit_date": "2026-08-31 18:16:21 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_diag/DIAGNOSTIC_FINDINGS.md",
+      "exists_at_head": true,
+      "git_blob": "840b33b6dfe3fe0312960fe77184d9b598d45493",
+      "cited_by": [
+        "CJTDEV-02"
+      ],
+      "sha256_lf": "bf1ea14c769042b48dec1e1019c3ecb365cd2842d7eeb872206c64336779cd4d",
+      "bytes_lf": 3178,
+      "last_commit": "91609d948c4cb4ce1e2aae3133ec3380791c1aa7",
+      "last_commit_date": "2026-08-31 19:31:14 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_diag/DIAGNOSTIC_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "83de290720eccb2dee0915f654e53fc7d47ce795",
+      "cited_by": [
+        "CJTDEV-02"
+      ],
+      "sha256_lf": "ecee9f96e160688c9d8d4931bc5ab91ecbc4b0a4ce8789611c5f9720828f9fd8",
+      "bytes_lf": 3712,
+      "last_commit": "91609d948c4cb4ce1e2aae3133ec3380791c1aa7",
+      "last_commit_date": "2026-08-31 19:31:14 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_diag/diag_execution.log",
+      "exists_at_head": true,
+      "git_blob": "0267389f1b8ffaf9d023f9e740f27a5a90fbbb48",
+      "cited_by": [
+        "CJTDEV-02"
+      ],
+      "sha256_lf": "e7a893e2200c1646a0c138b59092a3b912f452fd289e47252a580b809d08d523",
+      "bytes_lf": 758,
+      "last_commit": "91609d948c4cb4ce1e2aae3133ec3380791c1aa7",
+      "last_commit_date": "2026-08-31 19:31:14 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_p0_ctx_v2b/DEV_PILOT_V2_RAW_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "a0dc9da8bc6c659fc27b57c7d16a602d5fcf13ae",
+      "cited_by": [
+        "CJTDEV-05"
+      ],
+      "sha256_lf": "9981fa8b8a447c23f15853807133da207fcc9c28d695d57e01bcb71e6ff5554f",
+      "bytes_lf": 28699,
+      "last_commit": "2a8f21edbbd2ae56c5688df20c96d952992c9432",
+      "last_commit_date": "2026-08-31 20:36:56 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_p0_frozen_v2b/DEV_PILOT_V2_RAW_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "101df974c044333046e9f79b399d930ff5b6c851",
+      "cited_by": [
+        "CJTDEV-04"
+      ],
+      "sha256_lf": "57459998ab6eb26a28a81b1e1d23d8d56ead31548322aa28abad12c8ba89fdce",
+      "bytes_lf": 28827,
+      "last_commit": "2a8f21edbbd2ae56c5688df20c96d952992c9432",
+      "last_commit_date": "2026-08-31 20:36:56 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_p1/DEV_PILOT_ARM_COMPARISON.json",
+      "exists_at_head": true,
+      "git_blob": "82ad383e5b6c5ed3a9685a923342a050777f22b0",
+      "cited_by": [
+        "CJTDEV-01"
+      ],
+      "sha256_lf": "20e6fdb79b3a60ce592d6d49c613e6a790b4c30d585b8b0d3d2002ffaf42b449",
+      "bytes_lf": 4087,
+      "last_commit": "9229d8b4d41fa024afc050ed9e42d982a1585ea0",
+      "last_commit_date": "2026-08-31 17:53:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_p1/DEV_PILOT_RAW_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "0fbc257b731ca87f2199e824f86f32645f8a8100",
+      "cited_by": [
+        "CJTDEV-01"
+      ],
+      "sha256_lf": "3754b55ddb9b03a56f004d84f58dcaf620151718c810a1262b719184136c16b6",
+      "bytes_lf": 81590,
+      "last_commit": "9229d8b4d41fa024afc050ed9e42d982a1585ea0",
+      "last_commit_date": "2026-08-31 17:53:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_p1/DEV_PILOT_SUMMARY.md",
+      "exists_at_head": true,
+      "git_blob": "5d90482556b500ff5715d2a694be51be65b4c265",
+      "cited_by": [
+        "CJTDEV-01"
+      ],
+      "sha256_lf": "034d09904fd463a25de8e50d7d253cbf7846574e21426c9bc900ec2fca21fb37",
+      "bytes_lf": 1289,
+      "last_commit": "9229d8b4d41fa024afc050ed9e42d982a1585ea0",
+      "last_commit_date": "2026-08-31 17:53:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_p1_ctx_v2b/DEV_PILOT_V2_RAW_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "917ff7501ec3c4244825c180549d1a1696d14e82",
+      "cited_by": [
+        "CJTDEV-05",
+        "CJTDEV-06"
+      ],
+      "sha256_lf": "0c06ada0caac2736ec7b6eabc38f02b9427f8f1a4f32b5ba2231c9871eeca523",
+      "bytes_lf": 127011,
+      "last_commit": "2a8f21edbbd2ae56c5688df20c96d952992c9432",
+      "last_commit_date": "2026-08-31 20:36:56 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_p1_ctx_v2b/pilot_v2b_execution.log",
+      "exists_at_head": true,
+      "git_blob": "6f720ed5c5c362c50a7b54cac8835fed7d1104d2",
+      "cited_by": [
+        "CJTDEV-05"
+      ],
+      "sha256_lf": "b3d5084e0943ef009a5b34f5533c96ef411bff3dc75ba476c98c41af575ff191",
+      "bytes_lf": 3946,
+      "last_commit": "2a8f21edbbd2ae56c5688df20c96d952992c9432",
+      "last_commit_date": "2026-08-31 20:36:56 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_v2_p1/DEV_PILOT_V2_RAW_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "0f225794d851e0d1c1f7b5473cb2004f73175cb5",
+      "cited_by": [
+        "CJTDEV-03"
+      ],
+      "sha256_lf": "e2150eaa67465f70111dab40b6ba518cca15c2b1d2cb7b5c06d0e592bf3ccd1c",
+      "bytes_lf": 101605,
+      "last_commit": "30082b20bb54d0e1d111b1715de095f4d96260bf",
+      "last_commit_date": "2026-08-31 19:54:31 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_v2_p1/pilot_v2_execution.log",
+      "exists_at_head": true,
+      "git_blob": "fb0314f0b335b5fb4d8b2d72c576f6d701af0f18",
+      "cited_by": [
+        "CJTDEV-03"
+      ],
+      "sha256_lf": "b64b90023586983bb499f90604ddc012367ca03fb70e993031f5da8f7d4b2333",
+      "bytes_lf": 2409,
+      "last_commit": "30082b20bb54d0e1d111b1715de095f4d96260bf",
+      "last_commit_date": "2026-08-31 19:54:31 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_v3_p0/DEV_PILOT_V3_RAW_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "8fb37cf3cb48619e36364860d6cd31b510eafd7f",
+      "cited_by": [
+        "CJTDEV-09"
+      ],
+      "sha256_lf": "b9122b79c1c20eaf1460e27e9f165662d677145a6309351dc05bf0c80563b18e",
+      "bytes_lf": 28937,
+      "last_commit": "f0c70de73b09cea4d1220f252bd84a4f112479db",
+      "last_commit_date": "2026-08-31 21:37:44 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_v3_p0/DEV_PILOT_V3_RECEIPT.json",
+      "exists_at_head": true,
+      "git_blob": "7a24ae543258d136ff470b07502b77271926efa2",
+      "cited_by": [
+        "CJTDEV-09"
+      ],
+      "sha256_lf": "421ba3ac3b034baa9ddf476b32e2963a9ca02ed0bd1290322376ac11bb9a2f2a",
+      "bytes_lf": 493,
+      "last_commit": "f0c70de73b09cea4d1220f252bd84a4f112479db",
+      "last_commit_date": "2026-08-31 21:37:44 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_v3_p1/DEV_PILOT_V3_RAW_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "28148b38850745ce2595ca6a0b2ea99322683873",
+      "cited_by": [
+        "CJTDEV-06",
+        "CJTDEV-07",
+        "CJTDEV-08",
+        "CJTDEV-10"
+      ],
+      "sha256_lf": "c38e430f1e136cbfd38b1abfc2135486a71bdb9443b1bf861c4bcf7ba8cc0509",
+      "bytes_lf": 125002,
+      "last_commit": "f0c70de73b09cea4d1220f252bd84a4f112479db",
+      "last_commit_date": "2026-08-31 21:37:44 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_v3_p1/DEV_PILOT_V3_RECEIPT.json",
+      "exists_at_head": true,
+      "git_blob": "3c43fd1ed6b08f63ce8e5dd7dd0a4ed22a8dd2d4",
+      "cited_by": [
+        "CJTDEV-07"
+      ],
+      "sha256_lf": "aa9f47bdbd06d6de392166d0cec1edc0029bd096da024a4939bf3ee80cbc511a",
+      "bytes_lf": 502,
+      "last_commit": "f0c70de73b09cea4d1220f252bd84a4f112479db",
+      "last_commit_date": "2026-08-31 21:37:44 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/results_v3_p1/pilot_v3_execution.log",
+      "exists_at_head": true,
+      "git_blob": "d82ab7a20ae3fdc1c2d26ab9ff1df06bd7250ec5",
+      "cited_by": [
+        "CJTDEV-07",
+        "CJTDEV-09"
+      ],
+      "sha256_lf": "3a88cee4979bb0a8d0104c5069e6076740f938ceb7923dacc8c2f33ccc6e4904",
+      "bytes_lf": 3540,
+      "last_commit": "f0c70de73b09cea4d1220f252bd84a4f112479db",
+      "last_commit_date": "2026-08-31 21:37:44 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/run_diagnostics.py",
+      "exists_at_head": true,
+      "git_blob": "49a918d95a62578baee892f985810b17af6d09fe",
+      "cited_by": [
+        "CJTDEV-02"
+      ],
+      "sha256_lf": "9fbfef7160d77d40d775243af45cf4a39c5afd875ca194a830e0fc4fd80a6cfd",
+      "bytes_lf": 20391,
+      "last_commit": "91609d948c4cb4ce1e2aae3133ec3380791c1aa7",
+      "last_commit_date": "2026-08-31 19:31:14 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/run_pilot.py",
+      "exists_at_head": true,
+      "git_blob": "3c04ead24f10143201f3e8fd200189997ae43b87",
+      "cited_by": [
+        "CJTDEV-01"
+      ],
+      "sha256_lf": "d27845e19d65d337dd5e499718e1bb7e78fb769ba967efd437e97a6aad4c83ca",
+      "bytes_lf": 22565,
+      "last_commit": "9229d8b4d41fa024afc050ed9e42d982a1585ea0",
+      "last_commit_date": "2026-08-31 17:53:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/run_pilot_v2.py",
+      "exists_at_head": true,
+      "git_blob": "9ba631ef277ee6169a2fa0336d63026f6730b2c1",
+      "cited_by": [
+        "CJTDEV-03"
+      ],
+      "sha256_lf": "eaff52250134e97808f1c27e16d06aba0179e71c6e4ce6f138dc78e6404b0ccf",
+      "bytes_lf": 32546,
+      "last_commit": "f19111e607dba49442dbaff653455212f9f1eaeb",
+      "last_commit_date": "2026-08-31 20:14:22 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_dev_gpu_pilot_v1/run_pilot_v3.py",
+      "exists_at_head": true,
+      "git_blob": "dfb634ec27e01e6fe40683ebbdb5cc46ac78228f",
+      "cited_by": [
+        "CJTDEV-06",
+        "CJTDEV-07"
+      ],
+      "sha256_lf": "602e2c371a56cb530661d36ad1a387e5296036cfcbb1422dd1ffeb56d4d35940",
+      "bytes_lf": 34786,
+      "last_commit": "15b79aea45e89238e73b9a419ba7bfe0a88de4c1",
+      "last_commit_date": "2026-08-31 21:13:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/.gitattributes",
+      "exists_at_head": true,
+      "git_blob": "dbdc9f89062676ecceabdc176881191573db51cd",
+      "cited_by": [
+        "RC0-13"
+      ],
+      "sha256_lf": "5dbff294fc9be6a1b1f0fda3a9329b14278fb516debac8d514556ea3b9854dae",
+      "bytes_lf": 238,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/ALTERNATIVE_TAXONOMY_MANIFEST_CANDIDATE.json",
+      "exists_at_head": true,
+      "git_blob": "9129e8f6a1864f0abc3d450f8c51566ed64e6b91",
+      "cited_by": [
+        "RC0-16"
+      ],
+      "sha256_lf": "8c86ec411fbf73d669db8f3c453d1fd7e55da1255bca2291035af8124a4a5d68",
+      "bytes_lf": 5049,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/AMENDMENT_LOG.md",
+      "exists_at_head": true,
+      "git_blob": "ff6740a99163a8f538c434145dc1f02a3d061e70",
+      "cited_by": [
+        "RC0-18"
+      ],
+      "sha256_lf": "9c7e32aa0e11867c49c0b3c65eb09acfce5392ee3a1c1e6abd93816407f811c9",
+      "bytes_lf": 25926,
+      "last_commit": "3182e0623bae63f9c0c6b80a6726fd599df6c287",
+      "last_commit_date": "2026-08-31 14:38:32 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/AWS_EXECUTION_MANIFEST.yaml",
+      "exists_at_head": true,
+      "git_blob": "3e470c0f457294330514bfcecd150141f26bf1e8",
+      "cited_by": [
+        "RC0-13",
+        "RC0-17"
+      ],
+      "sha256_lf": "33b8000e61064758ff29ecbed1a5dcba007aa09f51e1bde1be1eee481f05b216",
+      "bytes_lf": 6021,
+      "last_commit": "b3d0db8b4cf1bd6072fbc3bbf7386dec02a2fa6c",
+      "last_commit_date": "2026-08-31 09:30:34 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/CANDIDATE_OCCURRENCE_AUDIT.json",
+      "exists_at_head": true,
+      "git_blob": "698ffe5e77359dde4f1b004e3d19b1cfb64a097f",
+      "cited_by": [
+        "RC0-14"
+      ],
+      "sha256_lf": "ae3460779546c7b7e596047713d25188f8219d2e148dcf50f43acc49abef30fb",
+      "bytes_lf": 602,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/CJT_T1_STATIC_NEURAL_ARCHITECTURE.md",
+      "exists_at_head": true,
+      "git_blob": "6381b9808e9cb80cdbdb267919b1fb56bfa94bfc",
+      "cited_by": [
+        "RC0-13"
+      ],
+      "sha256_lf": "3e5a28f6955df8b7f1677b2536d8f3de62f06b7a8907232ba6c9b1b3e1fc1acb",
+      "bytes_lf": 6355,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/CLAIM_LEDGER_GATE1.json",
+      "exists_at_head": true,
+      "git_blob": "163fb8dc1c92be11a3bbea2e6bedd7bf13d3b14d",
+      "cited_by": [
+        "RC0-05",
+        "RC0-07",
+        "RC0-14"
+      ],
+      "sha256_lf": "b8604b87ab8538c5af7586bf7be04448681a628bd59d6251fe49b0589d2fd1cc",
+      "bytes_lf": 2392,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/CONSTRUCTION_GOLD_DATASET_SPEC.md",
+      "exists_at_head": true,
+      "git_blob": "c5f4ee5cbbd37822197595c9a9f343fa88bf245f",
+      "cited_by": [
+        "RC0-15"
+      ],
+      "sha256_lf": "9dcffce2aff5974bea0f5364a9941cfd7d2e6efb6ed8b42d05aec5afe50f3a9d",
+      "bytes_lf": 7261,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/COST_AND_AUTOTERMINATION_POLICY.md",
+      "exists_at_head": true,
+      "git_blob": "e4678347dbe2c591e93a582d1adea367dd1b07d2",
+      "cited_by": [
+        "RC0-13"
+      ],
+      "sha256_lf": "bc6723ccf36145d74e21aa0b851a488f0f58f7c4e01379093999ddae46f8ff2c",
+      "bytes_lf": 1838,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/DATASET_MANIFEST_CANDIDATE.json",
+      "exists_at_head": true,
+      "git_blob": "c13cdfd043cb44ef3e68a31676e6c2a0d06d9b3d",
+      "cited_by": [
+        "RC0-15",
+        "RC0-17"
+      ],
+      "sha256_lf": "b7782978aef09d6cce136d2720fd7e1866881e24e79fc0859a793ff13f34c868",
+      "bytes_lf": 3339,
+      "last_commit": "b3d0db8b4cf1bd6072fbc3bbf7386dec02a2fa6c",
+      "last_commit_date": "2026-08-31 09:30:34 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/GATE0_FREEZE_RECORD.json",
+      "exists_at_head": true,
+      "git_blob": "3da22446ad0eb800f81362b35fdb299374b24c9c",
+      "cited_by": [
+        "RC0-05",
+        "RC0-06",
+        "RC0-07"
+      ],
+      "sha256_lf": "c5a468c6c524328db38e95aacfc623d491829964674832c34b9e7a8630e3022e",
+      "bytes_lf": 2556,
+      "last_commit": "49664dacc78493e562288054f2ca9cf5df096c46",
+      "last_commit_date": "2026-08-31 07:04:43 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/GATE1A2_EXECUTION_MANIFEST.json",
+      "exists_at_head": true,
+      "git_blob": "9bf35d45acabfeb2dcee5f251364665959f2c0ed",
+      "cited_by": [
+        "RC0-13"
+      ],
+      "sha256_lf": "9f20e40601efbc14dcf9d97334ac5af4c609de38c5eff1ea86e86ce6c270578e",
+      "bytes_lf": 7583,
+      "last_commit": "3182e0623bae63f9c0c6b80a6726fd599df6c287",
+      "last_commit_date": "2026-08-31 14:38:32 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/GATE1A_SCOPE_AND_CLAIM_BOUNDARY.md",
+      "exists_at_head": true,
+      "git_blob": "1bc62b8060d265806b87d54fd6d44252ff6d41df",
+      "cited_by": [
+        "RC0-13",
+        "RC0-14"
+      ],
+      "sha256_lf": "a34c357dd0ed407e3ee3c4bcf105917a834ebd322eefa4687e17f4683f6d684d",
+      "bytes_lf": 7321,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/GATE1B_CODE_MANIFEST.json",
+      "exists_at_head": true,
+      "git_blob": "13283299cd499514858ff41f89827c0d888dfc59",
+      "cited_by": [
+        "RC0-13"
+      ],
+      "sha256_lf": "0735b1300ae3f914950db3472f1fd33edc8688193309e6fc799edce8fa36c868",
+      "bytes_lf": 6175,
+      "last_commit": "3182e0623bae63f9c0c6b80a6726fd599df6c287",
+      "last_commit_date": "2026-08-31 14:38:32 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/INDEPENDENT_PRESERVATION_CHECKER_SPEC.md",
+      "exists_at_head": true,
+      "git_blob": "0ab9312bd118f57dd67a7e3303cb2495455487ab",
+      "cited_by": [
+        "RC0-15"
+      ],
+      "sha256_lf": "5197376c2a28bef11fea419678fb537f40a5de6e9161d62338ee5900ec99f3ec",
+      "bytes_lf": 1966,
+      "last_commit": "49664dacc78493e562288054f2ca9cf5df096c46",
+      "last_commit_date": "2026-08-31 07:04:43 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/OWNER_PHASE_APPROVAL_UNSIGNED.json",
+      "exists_at_head": true,
+      "git_blob": "d68b283ede9d8010bd1865d0f49ae6fac117e4b2",
+      "cited_by": [
+        "RC0-07",
+        "RC0-13"
+      ],
+      "sha256_lf": "426e453189597b07854925cd67c15b6df0567c706db68be867c670017a2f0cd7",
+      "bytes_lf": 14043,
+      "last_commit": "3182e0623bae63f9c0c6b80a6726fd599df6c287",
+      "last_commit_date": "2026-08-31 14:38:32 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/PACKAGE_MANIFEST.json",
+      "exists_at_head": true,
+      "git_blob": "3efdef0243eaf36ce2ccf9b6fa93a90b23a99704",
+      "cited_by": [
+        "RC0-13",
+        "RC0-17"
+      ],
+      "sha256_lf": "f69e8e72f194877f9ad626acaecb53ba956c09257028afad057d5663f665c898",
+      "bytes_lf": 11055,
+      "last_commit": "3182e0623bae63f9c0c6b80a6726fd599df6c287",
+      "last_commit_date": "2026-08-31 14:38:32 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/REPLICATION_AND_RECEIPT_SPEC.md",
+      "exists_at_head": true,
+      "git_blob": "12aa6da5d2bb97f4da3393d8316ac68917164c99",
+      "cited_by": [
+        "RC0-17"
+      ],
+      "sha256_lf": "796506e10d6a9efac7a1867e50532eac34ac6f79d0b2e5385b97c28eb330a311",
+      "bytes_lf": 2214,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/RUN_SCHEDULE_MANIFEST_CANDIDATE.json",
+      "exists_at_head": true,
+      "git_blob": "8f558876e6dce525037a9fc7073d020d01859841",
+      "cited_by": [
+        "RC0-13"
+      ],
+      "sha256_lf": "a0bdc66480d8bf940e334d416f4c0713c3d1219b0c5d23c7367c2e3a78f5ebc5",
+      "bytes_lf": 2003,
+      "last_commit": "fc7ceb486b3ece2ca9774148af0531b97010bc15",
+      "last_commit_date": "2026-08-31 11:15:56 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/SPLIT_AND_PROTECTED_EVAL_SPEC.md",
+      "exists_at_head": true,
+      "git_blob": "e0078ab87be394f6f505bccecd268cb491292c9b",
+      "cited_by": [
+        "RC0-15"
+      ],
+      "sha256_lf": "692b1ab6682d3142c33bc3a76d5b43e52e7c89dc47eedfc5f3e49f1eac732a95",
+      "bytes_lf": 3836,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/STATIC_CONDITIONS_v3.yaml",
+      "exists_at_head": true,
+      "git_blob": "e9ffea4043b8175349c2722a01bd707d74b07b75",
+      "cited_by": [
+        "RC0-13",
+        "RC0-16",
+        "RC0-20"
+      ],
+      "sha256_lf": "7f86924dc660543975eff3038d8117812654b8fd04d16ac5935092a55296ff89",
+      "bytes_lf": 5805,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/SURFACE_BASELINES_CANDIDATE.json",
+      "exists_at_head": true,
+      "git_blob": "4849fbae2fad5d40cc218478f417ae9bf6306955",
+      "cited_by": [
+        "RC0-14"
+      ],
+      "sha256_lf": "934f05a509f25f7b7c40fb8be6187cb5d7c3b25be220b9c42346a4849dd54a5d",
+      "bytes_lf": 2865,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/THRESHOLDS_AND_STATUS_LAW.yaml",
+      "exists_at_head": true,
+      "git_blob": "8d7d3e240f668cdd34e9b0efa51f2761347fb888",
+      "cited_by": [
+        "RC0-14"
+      ],
+      "sha256_lf": "f85a8ae51a3909d59d7c2d70d7d9190e232e27b91aadd747066e876f7a0b788c",
+      "bytes_lf": 9846,
+      "last_commit": "fc7ceb486b3ece2ca9774148af0531b97010bc15",
+      "last_commit_date": "2026-08-31 11:15:56 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/data/candidate/train.jsonl",
+      "exists_at_head": true,
+      "git_blob": "f77229b86b8db30f11f0505475cfe4c6b62a37f7",
+      "cited_by": [
+        "RC0-15"
+      ],
+      "sha256_lf": "8d567a07ff8990f8c40f190ed98ca1706b6ac920d6c9c53e818e7307d90de4a9",
+      "bytes_lf": 5731324,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/data/candidate/val.jsonl",
+      "exists_at_head": true,
+      "git_blob": "fa8abd0414a888bbca0d08015c614696eafdea82",
+      "cited_by": [
+        "RC0-15"
+      ],
+      "sha256_lf": "ae009357f34b8916aa166c98e4f9de33ed7870fde656e65e432eb7981688e616",
+      "bytes_lf": 1031037,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/exec/arms.py",
+      "exists_at_head": true,
+      "git_blob": "d28cb90f277acf3f0426dbe604e4d1aa0cd89f05",
+      "cited_by": [
+        "RC0-19"
+      ],
+      "sha256_lf": "7c327d5ff12cb8c64e7f02c8d8287ba949e1c84e4a3790c70a436732bc77a4a0",
+      "bytes_lf": 5210,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/exec/baselines.py",
+      "exists_at_head": true,
+      "git_blob": "e312cf19c3cbc967367b248a47d32468c0085fcd",
+      "cited_by": [
+        "RC0-14"
+      ],
+      "sha256_lf": "73a3c1891b0d3b365e84f6c4ad5d256b06708c9e281ed9b3b326e4182a1b5a32",
+      "bytes_lf": 4231,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/exec/campaign_driver.py",
+      "exists_at_head": true,
+      "git_blob": "3c313628cb793d83dcb73d9b22bb35ab81e7a9b2",
+      "cited_by": [
+        "RC0-18"
+      ],
+      "sha256_lf": "52614048ce226c244a361f098bf3bab63445c4e8fd1cd540b14364d786ad9d58",
+      "bytes_lf": 51812,
+      "last_commit": "3182e0623bae63f9c0c6b80a6726fd599df6c287",
+      "last_commit_date": "2026-08-31 14:38:32 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/exec/container_prep.py",
+      "exists_at_head": true,
+      "git_blob": "06e49861ecd69c207b70c34513766e4711b7ec9b",
+      "cited_by": [
+        "RC0-16"
+      ],
+      "sha256_lf": "951a6470d7e136fcf469942734faf729d1efe4199db65fb044eeb00ec35809e7",
+      "bytes_lf": 5282,
+      "last_commit": "a6d17c63f07815362443c5ee142afd69064946e2",
+      "last_commit_date": "2026-08-31 12:35:54 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/exec/gpu_guard.py",
+      "exists_at_head": true,
+      "git_blob": "4b7aeb9e12992f821ac3976ac050cb9ea9a5aaa2",
+      "cited_by": [
+        "RC0-07"
+      ],
+      "sha256_lf": "5db41c693b5451c7b511b656dfd0d03cf850656200d0625b7b97f7dab7902423",
+      "bytes_lf": 941,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/exec/labels.py",
+      "exists_at_head": true,
+      "git_blob": "77bc42686dd57094973ab60c178b896dab7200d3",
+      "cited_by": [
+        "RC0-16"
+      ],
+      "sha256_lf": "7e57c7576c63afcf1b5c427bae72c8d6ce98cb51567f2dce29497278f2ce49a3",
+      "bytes_lf": 3195,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/exec/prng.py",
+      "exists_at_head": true,
+      "git_blob": "4a0363c5761c9e189ca200dee8fc875192df3628",
+      "cited_by": [
+        "RC0-15"
+      ],
+      "sha256_lf": "3c4f2cdd33ef4af8fcb0ab4d577181c3280425093e77b783d120604f25a90806",
+      "bytes_lf": 3334,
+      "last_commit": "ff6f40f93d4aecef756ef94e8086a51943457347",
+      "last_commit_date": "2026-08-31 08:22:48 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/exec/watchdog_config.py",
+      "exists_at_head": true,
+      "git_blob": "e4b7775cadc937746e568ebaf247e5108f8b4e91",
+      "cited_by": [
+        "RC0-18"
+      ],
+      "sha256_lf": "76598d9c6bde3d0a35b3639d336857636a63095f3f97e015aa5217d1713a9c14",
+      "bytes_lf": 4956,
+      "last_commit": "3182e0623bae63f9c0c6b80a6726fd599df6c287",
+      "last_commit_date": "2026-08-31 14:38:32 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/emit_gate1_status.py",
+      "exists_at_head": true,
+      "git_blob": "6b0b465e50461abae52e4ef0970ab1b583830b47",
+      "cited_by": [
+        "RC0-14"
+      ],
+      "sha256_lf": "006c10e9afa1236e85781a80759d65770cb9ea95ed145d88e3260c56e30fc6c2",
+      "bytes_lf": 24478,
+      "last_commit": "a6d17c63f07815362443c5ee142afd69064946e2",
+      "last_commit_date": "2026-08-31 12:35:54 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/generate_construction_gold.py",
+      "exists_at_head": true,
+      "git_blob": "77a0d898d114de15eff2157d59c525598abdcb34",
+      "cited_by": [
+        "RC0-15"
+      ],
+      "sha256_lf": "a528af454caa1c6c1c5c33fce08ade57d201955eb955d0080cd3f0334f083e68",
+      "bytes_lf": 20441,
+      "last_commit": "b3d0db8b4cf1bd6072fbc3bbf7386dec02a2fa6c",
+      "last_commit_date": "2026-08-31 09:30:34 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/independent_roundtrip_checker.py",
+      "exists_at_head": true,
+      "git_blob": "95f935bd464aa24458769cdbe411742336a46542",
+      "cited_by": [
+        "RC0-15"
+      ],
+      "sha256_lf": "543460e6c7312a7549df10a5db194689c4da98c63fd3667587d9b976c2501b3d",
+      "bytes_lf": 6050,
+      "last_commit": "49664dacc78493e562288054f2ca9cf5df096c46",
+      "last_commit_date": "2026-08-31 07:04:43 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/run_surface_baselines.py",
+      "exists_at_head": true,
+      "git_blob": "59771e90f583b9fd72bba7a3caa1f5699b3e11c0",
+      "cited_by": [
+        "RC0-14"
+      ],
+      "sha256_lf": "2f2d250065843534e7b010230bd4d7feaa52bcffac9a8d86fd4b6042398fcb8f",
+      "bytes_lf": 2141,
+      "last_commit": "b3d0db8b4cf1bd6072fbc3bbf7386dec02a2fa6c",
+      "last_commit_date": "2026-08-31 09:30:34 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/test_authority_verifier.py",
+      "exists_at_head": true,
+      "git_blob": "a2b00064b1fe7693d97b23cbe00c0dcb3cda467a",
+      "cited_by": [
+        "RC0-19"
+      ],
+      "sha256_lf": "dea771d97cd6b5493df7ab64912b6412893cdf3edd7de622ecf0801a44b96d75",
+      "bytes_lf": 14174,
+      "last_commit": "a6d17c63f07815362443c5ee142afd69064946e2",
+      "last_commit_date": "2026-08-31 12:35:54 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/test_byte_domain.py",
+      "exists_at_head": true,
+      "git_blob": "2bc29eb52b818263ecbae534dbbd77fa3de290bc",
+      "cited_by": [
+        "RC0-18"
+      ],
+      "sha256_lf": "856c07f31f652cbcf43de3ec6d0b508a208227039be0c745c63eada61dd27791",
+      "bytes_lf": 11708,
+      "last_commit": "a6140e0ccc28ccb9b1a6e07e6f578e5fc0a0583c",
+      "last_commit_date": "2026-08-31 09:31:28 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/test_clock_isolation.py",
+      "exists_at_head": true,
+      "git_blob": "0d537f6c9b602b8fad08d2c865909307a7decfea",
+      "cited_by": [
+        "RC0-18"
+      ],
+      "sha256_lf": "9a99ed0dea71bf6cff40fed9c2375b1bbf9a7bef1b53e3422b6b8713b628b3e6",
+      "bytes_lf": 8108,
+      "last_commit": "7e69f8a22ea51033a05cd643dbadffea7394b074",
+      "last_commit_date": "2026-08-31 13:39:44 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/test_exec_shapes.py",
+      "exists_at_head": true,
+      "git_blob": "5449ab104d5e84a468de10bfa9f85935cf6ed51c",
+      "cited_by": [
+        "RC0-19"
+      ],
+      "sha256_lf": "e81aadcc79b8078dc36ce3525904ee969f537419dec3615c44f2aa458b2e3fb1",
+      "bytes_lf": 10383,
+      "last_commit": "a6d17c63f07815362443c5ee142afd69064946e2",
+      "last_commit_date": "2026-08-31 12:35:54 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/test_heartbeat_failclosed.py",
+      "exists_at_head": true,
+      "git_blob": "ea0745e2338641a19785a4ccfecf2ac870d23349",
+      "cited_by": [
+        "RC0-18"
+      ],
+      "sha256_lf": "d00d685da7da0c9438e0fa22173a02e49f488e5cdf20e6f5530f3ddaee4f97ca",
+      "bytes_lf": 7609,
+      "last_commit": "3ce84531983eec6bc6f39416f92ecbea7818e820",
+      "last_commit_date": "2026-08-31 14:14:02 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/test_hook_isolation.py",
+      "exists_at_head": true,
+      "git_blob": "2543b0dcacde0c7c4ddc4f35ab5c3699fa75dd15",
+      "cited_by": [
+        "RC0-18"
+      ],
+      "sha256_lf": "862765a3325b3645444dead6e9c7651b64e3cbfd209e63b9b9f867718fbc10ce",
+      "bytes_lf": 8300,
+      "last_commit": "e3fcfda0a6a27725007fdb6f127c14073c0585fe",
+      "last_commit_date": "2026-08-31 13:19:09 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/test_real_branch_conformance.py",
+      "exists_at_head": true,
+      "git_blob": "dd20ed847d1c46c8e53d7aaf47ca92ce9f700a4e",
+      "cited_by": [
+        "RC0-18"
+      ],
+      "sha256_lf": "1a34d091e39f5593ff5456f444774a46dd9782cc8177f41e71a0288ce8fe9442",
+      "bytes_lf": 19031,
+      "last_commit": "a6d17c63f07815362443c5ee142afd69064946e2",
+      "last_commit_date": "2026-08-31 12:35:54 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/test_status_fixtures.py",
+      "exists_at_head": true,
+      "git_blob": "e624aacee772a21ae8bd04ac6c2384ed9ac0521b",
+      "cited_by": [
+        "RC0-19"
+      ],
+      "sha256_lf": "73c108276019e6833d4485eeb6d4b70f1d2cffe09e92faaf252a88da4eb329a9",
+      "bytes_lf": 12672,
+      "last_commit": "a6d17c63f07815362443c5ee142afd69064946e2",
+      "last_commit_date": "2026-08-31 12:35:54 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/tools/test_watchdog_config_authority.py",
+      "exists_at_head": true,
+      "git_blob": "a5fe97143cb2a2f385c2a4ed49998d9c051ca640",
+      "cited_by": [
+        "RC0-18"
+      ],
+      "sha256_lf": "d380f5a523d047e0aed35b40a605c23d72a02557af9f3452ed508ad7fc7d4fdc",
+      "bytes_lf": 6672,
+      "last_commit": "3182e0623bae63f9c0c6b80a6726fd599df6c287",
+      "last_commit_date": "2026-08-31 14:38:32 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_gate1a_static_neural_v1/trust/OWNER_PUBLIC_KEY_PIN_TEMPLATE.json",
+      "exists_at_head": true,
+      "git_blob": "c1fa825910ec5cd1287a4c533e5a4a7e2aaf5229",
+      "cited_by": [
+        "RC0-07",
+        "RC0-13"
+      ],
+      "sha256_lf": "337f445f38cb88027620555c549c7740406737ed65bcd17b699c362058a3184d",
+      "bytes_lf": 919,
+      "last_commit": "fc7ceb486b3ece2ca9774148af0531b97010bc15",
+      "last_commit_date": "2026-08-31 11:15:56 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/CJT_EX1_FINDINGS.json",
+      "exists_at_head": true,
+      "git_blob": "1df47cbbfc77f1d15853fb418f0756b46c789ded",
+      "cited_by": [
+        "EX1-01",
+        "EX1-02",
+        "EX1-03",
+        "EX1-04",
+        "EX1-05",
+        "EX1-06",
+        "EX1-07",
+        "EX1-08",
+        "EX1-10",
+        "EX1-15",
+        "EX1-18"
+      ],
+      "sha256_lf": "86d9dcaaa5b94e7d03909554c57284cee3e2797af0d146bc1e48f1d43e2362c4",
+      "bytes_lf": 9349,
+      "last_commit": "15307b703f2cb36c70d7241170bc692f20cd27fc",
+      "last_commit_date": "2026-09-01 22:23:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/CJT_EX1_PRELAUNCH_FINDINGS.json",
+      "exists_at_head": true,
+      "git_blob": "9eac61d2e09d68ab4dd51116d7fd84c26e462853",
+      "cited_by": [
+        "EX1-13"
+      ],
+      "sha256_lf": "2e348cf08a5c12fe0c273c7995b32d12e39f913666473bfa2771a7254a5e4ccc",
+      "bytes_lf": 10565,
+      "last_commit": "a83d0df6576ae9eb5b4c1846f2da0728e1aabf40",
+      "last_commit_date": "2026-09-01 11:36:50 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/CJT_EX1_PREREGISTRATION.md",
+      "exists_at_head": true,
+      "git_blob": "6ab4a5993320cbf26d98563a802b41001835b69d",
+      "cited_by": [
+        "EX1-02",
+        "EX1-08",
+        "EX1-10",
+        "EX1-14",
+        "EX1-18"
+      ],
+      "sha256_lf": "5c10ad9ac8965c29e7538e63562cff3294f63714d3a61f299890a9221b7a1aeb",
+      "bytes_lf": 12802,
+      "last_commit": "9014e3d5460b8b2d2a975c8475af6d2728118149",
+      "last_commit_date": "2026-09-01 12:51:43 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/CLOUD_EXECUTION_RECEIPTS_PATHB_RETROACTIVE.json",
+      "exists_at_head": true,
+      "git_blob": "efba86bbce1a43608970cf84c5cd4696c8f83924",
+      "cited_by": [
+        "PATHB-16",
+        "PATHB-17"
+      ],
+      "sha256_lf": "956fb2556416b172e111da4ebca7eaaba0ac12bc6185a89a56cb5c4b7fcf411d",
+      "bytes_lf": 3933,
+      "last_commit": "01b7224c5c940de5dbb473316b4791b2a20a17a4",
+      "last_commit_date": "2026-09-01 02:30:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/CLOUD_EXECUTION_RECEIPT_CJT_EX1.json",
+      "exists_at_head": true,
+      "git_blob": "fd5cffd6b359ebbecd7a182052c0ee6a63b39220",
+      "cited_by": [
+        "EX1-12",
+        "EX1-14"
+      ],
+      "sha256_lf": "c404771f0cf0d39e579081a84bec7ee505b121f8578d1c10f48b8d5054239a90",
+      "bytes_lf": 2738,
+      "last_commit": "66a011223b3b9a869cfec85b6e600f5b45dafad5",
+      "last_commit_date": "2026-09-01 13:24:08 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/CLOUD_EXECUTION_RECEIPT_TIERC_C1.json",
+      "exists_at_head": true,
+      "git_blob": "46748eb1e479cf57955cf85b70903e92ec28efa2",
+      "cited_by": [
+        "CJTDEV-11",
+        "CJTDEV-15"
+      ],
+      "sha256_lf": "48ded0de81b07a5708ce0b48ece3c76613499d94fd085fe3c2626330eea88996",
+      "bytes_lf": 2553,
+      "last_commit": "9a1752b9fa9f822fedfd4d34a35d478d216def0d",
+      "last_commit_date": "2026-09-01 07:21:33 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/COST_RECONCILIATION.json",
+      "exists_at_head": true,
+      "git_blob": "01de87fad2ba36bd5a9bcbebfdd8b9ebce6a830e",
+      "cited_by": [
+        "CJTDEV-10",
+        "PATHB-17",
+        "PATHB-19"
+      ],
+      "sha256_lf": "1411a6b7c928f039710fd579a2dc72ee2d93b9e86e5deb92bf23bd89837c1d85",
+      "bytes_lf": 1997,
+      "last_commit": "e4fcf5d031bf5d40758fa487c03e7bd5fa3b2c6c",
+      "last_commit_date": "2026-09-01 00:10:21 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/P0_CONTAMINATION_NOTICE.json",
+      "exists_at_head": true,
+      "git_blob": "4e3275bd3ccefa01237a76a1f21f433756ecea61",
+      "cited_by": [
+        "PATHB-03",
+        "PATHB-04",
+        "PATHB-06",
+        "PATHB-17",
+        "PATHB-19"
+      ],
+      "sha256_lf": "dd5c6b5ed21b3b74b015a15fb3a2efdb0c291dd3e37b9e05190d8110bac22c9d",
+      "bytes_lf": 3203,
+      "last_commit": "ac18326d29b1e2d94c4fe4eaf4583ec12fa3d099",
+      "last_commit_date": "2026-09-01 00:23:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/PATHB_A1_COMPONENT_FINDINGS.json",
+      "exists_at_head": true,
+      "git_blob": "e85922b7e2d7e03e6eb42805b5397943445158a3",
+      "cited_by": [
+        "PATHB-09",
+        "PATHB-10",
+        "PATHB-11",
+        "PATHB-12",
+        "PATHB-14",
+        "PATHB-15",
+        "PATHB-18",
+        "PATHB-19"
+      ],
+      "sha256_lf": "900126e3a92fc3ae9a1ab95f87f47f3e3e17cc07d02c601238e685b09661619c",
+      "bytes_lf": 4674,
+      "last_commit": "01b7224c5c940de5dbb473316b4791b2a20a17a4",
+      "last_commit_date": "2026-09-01 02:30:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/PATHB_A1_INDEPENDENT_AUDIT.json",
+      "exists_at_head": true,
+      "git_blob": "9866af81ff31dacd9641a8f0545e0fe7df5b602b",
+      "cited_by": [
+        "PATHB-13",
+        "PATHB-14",
+        "PATHB-16",
+        "PATHB-17"
+      ],
+      "sha256_lf": "b045bfbfb51bf675c17469a99abd04cf6705e13857ed6dc5f7e6f3a1156f5dba",
+      "bytes_lf": 9211,
+      "last_commit": "01b7224c5c940de5dbb473316b4791b2a20a17a4",
+      "last_commit_date": "2026-09-01 02:30:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/PATHB_CHECKS_REPORT.json",
+      "exists_at_head": true,
+      "git_blob": "b01561f7db9e34b46d1b209a4bacde03fdf65111",
+      "cited_by": [
+        "PATHB-02",
+        "PATHB-04",
+        "PATHB-14"
+      ],
+      "sha256_lf": "c959ad6600b5d9652b133145f353f216ab0bbe738964490f516c1c7aecff4f87",
+      "bytes_lf": 5529,
+      "last_commit": "ac18326d29b1e2d94c4fe4eaf4583ec12fa3d099",
+      "last_commit_date": "2026-09-01 00:23:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/PATHB_CHK_M_REPORT.json",
+      "exists_at_head": true,
+      "git_blob": "977f9223acd41e53b4c41b070d11b162d4a0ad06",
+      "cited_by": [
+        "PATHB-02",
+        "PATHB-04"
+      ],
+      "sha256_lf": "b19a05b9820a389f7b5fc18475f0e71c58a1e0993d6caadaa9b9cd16cd8ff471",
+      "bytes_lf": 4017,
+      "last_commit": "ac18326d29b1e2d94c4fe4eaf4583ec12fa3d099",
+      "last_commit_date": "2026-09-01 00:23:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/PATHB_DATASET_MANIFEST.json",
+      "exists_at_head": true,
+      "git_blob": "c1aaf63b7b2437fcbe7d24f22b3312fcc5d22ac1",
+      "cited_by": [
+        "PATHB-02"
+      ],
+      "sha256_lf": "545a94caa7356f5ecd24ead46b75a6c4877ec61d1f16183510f4c50a789d98de",
+      "bytes_lf": 1222,
+      "last_commit": "ac18326d29b1e2d94c4fe4eaf4583ec12fa3d099",
+      "last_commit_date": "2026-09-01 00:23:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/PATH_B_TASK_SPEC_v0_1.md",
+      "exists_at_head": true,
+      "git_blob": "29a51480bb9386d208c10580e4ace5e48ec1aae6",
+      "cited_by": [
+        "CJTDEV-08"
+      ],
+      "sha256_lf": "a02221b620375965a1a1a018829097886b4fd76e9b44b392b569321fde91751f",
+      "bytes_lf": 11965,
+      "last_commit": "ea5951dde5beb40120d112cdeaa95239d9760de1",
+      "last_commit_date": "2026-08-31 22:19:26 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/PATH_B_TASK_SPEC_v0_2.md",
+      "exists_at_head": true,
+      "git_blob": "b526534099d4403217504a6ab35fb1160b733d65",
+      "cited_by": [
+        "PATHB-01"
+      ],
+      "sha256_lf": "4e43337ad4f36e6eed7fd33887aad518b4ec32b12a960093bd2a29e2e2ac234e",
+      "bytes_lf": 13801,
+      "last_commit": "ea5951dde5beb40120d112cdeaa95239d9760de1",
+      "last_commit_date": "2026-08-31 22:19:26 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/PATH_B_TASK_SPEC_v0_3.md",
+      "exists_at_head": true,
+      "git_blob": "6acbd38984b0477763f0bc4d5ae257d188d33644",
+      "cited_by": [
+        "PATHB-01",
+        "PATHB-14"
+      ],
+      "sha256_lf": "bd5be439b34c8e6169bdecac9003acc3bcf2d541b9b6882f3964f2350ed0c647",
+      "bytes_lf": 5230,
+      "last_commit": "7b5dc11b8f3777e57e934e0c20fb24b20b0b0c92",
+      "last_commit_date": "2026-08-31 23:08:31 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/SPEC_V0_1_REVIEW_FINDINGS.json",
+      "exists_at_head": true,
+      "git_blob": "ca43e34d5434d537fbbdf01e024d3f205a5e14ae",
+      "cited_by": [
+        "PATHB-01"
+      ],
+      "sha256_lf": "fec4e32cbbc7f2e73363213f0609a7215cc955b3fbe0861982ee6ea8aaa896be",
+      "bytes_lf": 35119,
+      "last_commit": "ea5951dde5beb40120d112cdeaa95239d9760de1",
+      "last_commit_date": "2026-08-31 22:19:26 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/TIER_C_C1_FINDINGS.json",
+      "exists_at_head": true,
+      "git_blob": "9022c06547c101fb9bc0f357bc532fc97b0a933e",
+      "cited_by": [
+        "CJTDEV-11",
+        "CJTDEV-12",
+        "CJTDEV-13",
+        "CJTDEV-15"
+      ],
+      "sha256_lf": "baefa923f809e70053259e89ff53ba39873b25e8fe6ad4d65748fb2a2b9fbabf",
+      "bytes_lf": 7054,
+      "last_commit": "9a1752b9fa9f822fedfd4d34a35d478d216def0d",
+      "last_commit_date": "2026-09-01 07:21:33 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/TIER_C_C1_PREREGISTRATION.md",
+      "exists_at_head": true,
+      "git_blob": "dca6039a125207cfaba62c4d7233d577f138e639",
+      "cited_by": [
+        "CJTDEV-11",
+        "CJTDEV-13"
+      ],
+      "sha256_lf": "20e33d49a4c7c59c2cfd154b455ea3fc8a6765cc685fafc5885674a56e972edd",
+      "bytes_lf": 15351,
+      "last_commit": "36951d2a5e0be68592b12b6b2b67459b92b2777e",
+      "last_commit_date": "2026-09-01 06:57:20 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/TIER_C_DESIGN_v0_1.md",
+      "exists_at_head": true,
+      "git_blob": "df12f1bf2acb972a28c67beea492d7ec0e409435",
+      "cited_by": [
+        "PATHB-13",
+        "PATHB-15",
+        "PATHB-16",
+        "PATHB-18",
+        "PATHB-19"
+      ],
+      "sha256_lf": "e46f371397cec83204e0f9323933e80ae107100da0fdc134da23e95bba51ea0e",
+      "bytes_lf": 12270,
+      "last_commit": "01b7224c5c940de5dbb473316b4791b2a20a17a4",
+      "last_commit_date": "2026-09-01 02:30:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/TIER_C_J0_FINDINGS.json",
+      "exists_at_head": true,
+      "git_blob": "c5a85e59e44f1af6eea711e1d4340366c692f84a",
+      "cited_by": [
+        "CJTDEV-16",
+        "CJTDEV-17"
+      ],
+      "sha256_lf": "68ba0047e5909be9e205e3d5cfef848913a6a9c0946adbd38252de9f2f6690e1",
+      "bytes_lf": 6955,
+      "last_commit": "5c1ceb3da436259bd421d815f916b0cbb222475c",
+      "last_commit_date": "2026-09-01 09:39:15 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/TIER_C_J_NECESSITY_FINDINGS.json",
+      "exists_at_head": true,
+      "git_blob": "d35e10fbaa3bb6f46df9365f01a2608a7a31f067",
+      "cited_by": [
+        "CJTDEV-14",
+        "CJTDEV-15"
+      ],
+      "sha256_lf": "fa3e5530e2d799aa663496e184b1150691628a03f6707dc7ab0edfec7b9d4462",
+      "bytes_lf": 7587,
+      "last_commit": "ab7afd1f8170a2b537fefcdf523c27039221d56b",
+      "last_commit_date": "2026-09-01 09:04:31 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/data/train.jsonl",
+      "exists_at_head": true,
+      "git_blob": "335f043cfd941639aad930eb2439ccdbefdb6e9f",
+      "cited_by": [
+        "PATHB-02"
+      ],
+      "sha256_lf": "e49c7e99902f830eca99a464fc5450cd98a7519759bc1bad58ae561d7b94e830",
+      "bytes_lf": 14948226,
+      "last_commit": "ac18326d29b1e2d94c4fe4eaf4583ec12fa3d099",
+      "last_commit_date": "2026-09-01 00:23:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/data/val.jsonl",
+      "exists_at_head": true,
+      "git_blob": "d10d4c515308b78028ab65e583cc0aaee299221b",
+      "cited_by": [
+        "PATHB-02"
+      ],
+      "sha256_lf": "7cbbe5fa6ec7cfcf58b84f1ed3f118b98c30fd8119de08da37c44d861043b4e1",
+      "bytes_lf": 1933294,
+      "last_commit": "ac18326d29b1e2d94c4fe4eaf4583ec12fa3d099",
+      "last_commit_date": "2026-09-01 00:23:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/generate_pathb.py",
+      "exists_at_head": true,
+      "git_blob": "5f111817018eceaeea2d0abb95f6b043ddc7d202",
+      "cited_by": [
+        "PATHB-04"
+      ],
+      "sha256_lf": "e750437dbedc64c126e35818f8f96794ffd75cce9a7d143c1672b04fd5a4db0f",
+      "bytes_lf": 4571,
+      "last_commit": "ac18326d29b1e2d94c4fe4eaf4583ec12fa3d099",
+      "last_commit_date": "2026-09-01 00:23:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/pathb_a0_probe.py",
+      "exists_at_head": true,
+      "git_blob": "015ece3c5e71311faafef2548d0716d2eb4621e5",
+      "cited_by": [
+        "PATHB-05"
+      ],
+      "sha256_lf": "a8bfa821871ce963cdf98c47065655b9cfba1f70febb5504c578de543fd3ed95",
+      "bytes_lf": 17411,
+      "last_commit": "ac18326d29b1e2d94c4fe4eaf4583ec12fa3d099",
+      "last_commit_date": "2026-09-01 00:23:35 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/pathb_core.py",
+      "exists_at_head": true,
+      "git_blob": "fe60e2412b6ce4deca385a351362fbd3f87626b2",
+      "cited_by": [
+        "PATHB-11"
+      ],
+      "sha256_lf": "4299bfff96a04da03f84682cedb69055effc4b2cb03b132560be3a5ad2497b2e",
+      "bytes_lf": 15123,
+      "last_commit": "7b5dc11b8f3777e57e934e0c20fb24b20b0b0c92",
+      "last_commit_date": "2026-08-31 23:08:31 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_cjt_ex1/CJT_EX1_P0_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "3bf73e9ffdfc2f34cd8d9f2faaa491a92ed9a96e",
+      "cited_by": [
+        "EX1-04",
+        "EX1-09",
+        "EX1-11"
+      ],
+      "sha256_lf": "b96fbfe57899d19ab6532f49eb02673e467225df16234d28794d63fb57521f20",
+      "bytes_lf": 14691,
+      "last_commit": "66a011223b3b9a869cfec85b6e600f5b45dafad5",
+      "last_commit_date": "2026-09-01 13:24:08 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_cjt_ex1/CJT_EX1_PARTIAL_RUNS.json",
+      "exists_at_head": true,
+      "git_blob": "2a18e8d344720e8e86c163a8884c1d138c0d059a",
+      "cited_by": [
+        "EX1-12"
+      ],
+      "sha256_lf": "424871455a5c40bf64d7adc204d97a9728978fa1c50e7580dc7c3c49a042e3d4",
+      "bytes_lf": 3061160,
+      "last_commit": "66a011223b3b9a869cfec85b6e600f5b45dafad5",
+      "last_commit_date": "2026-09-01 13:24:08 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_cjt_ex1/CJT_EX1_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "510cd8b3e9cc20b587ffd64bd09975b2b2b81620",
+      "cited_by": [
+        "EX1-01",
+        "EX1-02",
+        "EX1-03",
+        "EX1-04",
+        "EX1-05",
+        "EX1-06",
+        "EX1-07",
+        "EX1-08",
+        "EX1-09",
+        "EX1-11",
+        "EX1-12"
+      ],
+      "sha256_lf": "2fd7f08a1cec5ec4cfb9885cee1de51a87c83e895c0d228f27130e4e0e52ff3d",
+      "bytes_lf": 3083788,
+      "last_commit": "66a011223b3b9a869cfec85b6e600f5b45dafad5",
+      "last_commit_date": "2026-09-01 13:24:08 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_cjt_ex1/ex1_execution.log",
+      "exists_at_head": true,
+      "git_blob": "928d4810f8e43df857aaff281b8cb76a8cd6fbc2",
+      "cited_by": [
+        "EX1-01",
+        "EX1-07",
+        "EX1-09",
+        "EX1-11",
+        "EX1-12"
+      ],
+      "sha256_lf": "51d621a9be4e8b0dccfa6bed023ca44222afa464a490a03a37a061946a3165e4",
+      "bytes_lf": 19333,
+      "last_commit": "66a011223b3b9a869cfec85b6e600f5b45dafad5",
+      "last_commit_date": "2026-09-01 13:24:08 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_pathb_a0/PATHB_A0_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "232eb3d85a11fb2692b2b4c613b4c73d74a6307d",
+      "cited_by": [
+        "PATHB-05",
+        "PATHB-06"
+      ],
+      "sha256_lf": "27fd0f2f0843633450a11ae672aedbec8eca59f49d69525f5c06eb3174977a43",
+      "bytes_lf": 5930,
+      "last_commit": "0b4cf2f3117f8b0addbc96e5255807c958135a7c",
+      "last_commit_date": "2026-09-01 00:53:17 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_pathb_a0/a0_execution.log",
+      "exists_at_head": true,
+      "git_blob": "6865674061b6593c304446f1230167f4ad7d7ba6",
+      "cited_by": [
+        "PATHB-05",
+        "PATHB-06"
+      ],
+      "sha256_lf": "db2540b2b772ab8d1fa12725bf3c7c3375b79698cd7d23a1dc2ab134b94b8bc2",
+      "bytes_lf": 928,
+      "last_commit": "0b4cf2f3117f8b0addbc96e5255807c958135a7c",
+      "last_commit_date": "2026-09-01 00:53:17 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_pathb_a1/PATHB_A1_P0_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "05e3d57b91279bc3dc6144446f3a2e5c36a59abd",
+      "cited_by": [
+        "PATHB-07",
+        "PATHB-15"
+      ],
+      "sha256_lf": "1e6dcf65330097bfefe946dcfee7abf3cee6713932b71e6611bdad4d0b587a9e",
+      "bytes_lf": 2416,
+      "last_commit": "3bbcd2c1e9afc98b93fec61df90b9ac045fd7f53",
+      "last_commit_date": "2026-09-01 01:33:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_pathb_a1/PATHB_A1_P1_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "def1069f391bec54783bd46e3bb7b01ad234b012",
+      "cited_by": [
+        "PATHB-08",
+        "PATHB-09",
+        "PATHB-10",
+        "PATHB-11",
+        "PATHB-12",
+        "PATHB-13",
+        "PATHB-14",
+        "PATHB-15",
+        "PATHB-18"
+      ],
+      "sha256_lf": "10ebcde110b813d9ab90f32d7950c0441fdc2870df4d08874c6ecd43a2a19972",
+      "bytes_lf": 70869,
+      "last_commit": "3bbcd2c1e9afc98b93fec61df90b9ac045fd7f53",
+      "last_commit_date": "2026-09-01 01:33:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_pathb_a1/a1_execution.log",
+      "exists_at_head": true,
+      "git_blob": "28f9bba28614e3e9fd8786340d3df9eec36cac0f",
+      "cited_by": [
+        "PATHB-07",
+        "PATHB-08"
+      ],
+      "sha256_lf": "82f5f57f794b45622d239d31ca255c6a286877a860a955ddfa5bfeb802faf055",
+      "bytes_lf": 1408,
+      "last_commit": "3bbcd2c1e9afc98b93fec61df90b9ac045fd7f53",
+      "last_commit_date": "2026-09-01 01:33:27 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_pathb_p0/PATHB_P0_RAW_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "b42d9641fddb3e9f85a2467e5de368f1b3ce73c7",
+      "cited_by": [
+        "PATHB-03"
+      ],
+      "sha256_lf": "ab572be7749e3dc888a9f0409ef666b0ec0d7d3fbf4200c2c30c609c85e96663",
+      "bytes_lf": 6598,
+      "last_commit": "5d1acec331f182498a5734e8204242cdbffcbed0",
+      "last_commit_date": "2026-08-31 23:38:38 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_pathb_p0/pathb_p0_execution.log",
+      "exists_at_head": true,
+      "git_blob": "85a17de4f4e540aca4757cf4395eeb6d105ede94",
+      "cited_by": [
+        "PATHB-03"
+      ],
+      "sha256_lf": "b672327652982f333066222a05d433600235ec7da7b9d10441b068e75f97f7aa",
+      "bytes_lf": 1424,
+      "last_commit": "5d1acec331f182498a5734e8204242cdbffcbed0",
+      "last_commit_date": "2026-08-31 23:38:38 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_tier_c_c1/TIERC_C1_RESULTS.json",
+      "exists_at_head": true,
+      "git_blob": "bf440d193291378d2a56bb75908b380cc275dc99",
+      "cited_by": [
+        "CJTDEV-11",
+        "CJTDEV-12",
+        "CJTDEV-13"
+      ],
+      "sha256_lf": "baab1725c1afffa34cf9649bd809c8e4ea7974bfc1e26f1b1f6225e62be0beaa",
+      "bytes_lf": 126101,
+      "last_commit": "9a1752b9fa9f822fedfd4d34a35d478d216def0d",
+      "last_commit_date": "2026-09-01 07:21:33 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/results_tier_c_c1/c1_execution.log",
+      "exists_at_head": true,
+      "git_blob": "42136b91fd23d4976172d416294d8b5cbaaa8aee",
+      "cited_by": [
+        "CJTDEV-11"
+      ],
+      "sha256_lf": "9a8b40027bed0ed7970a4fb1b33b6010f0d3504fce64250df1bfdd15fda23aed",
+      "bytes_lf": 15555,
+      "last_commit": "9a1752b9fa9f822fedfd4d34a35d478d216def0d",
+      "last_commit_date": "2026-09-01 07:21:33 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/run_cjt_ex1.py",
+      "exists_at_head": true,
+      "git_blob": "d9ab7c4320b859f96af5f4716d3eac5dd16225bf",
+      "cited_by": [
+        "EX1-01",
+        "EX1-03",
+        "EX1-14"
+      ],
+      "sha256_lf": "9d67054ced7e818674e906f8aff01c0549b4522a5a78f6d17418becbae47e4f0",
+      "bytes_lf": 59156,
+      "last_commit": "9014e3d5460b8b2d2a975c8475af6d2728118149",
+      "last_commit_date": "2026-09-01 12:51:43 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/run_pathb_a1.py",
+      "exists_at_head": true,
+      "git_blob": "5be4b52b557af7c095990941d693327e8469c16a",
+      "cited_by": [
+        "PATHB-07",
+        "PATHB-08",
+        "PATHB-09",
+        "PATHB-10",
+        "PATHB-13",
+        "PATHB-14",
+        "PATHB-19"
+      ],
+      "sha256_lf": "fc6f7be0acf8dab7f74e71591264a09e097498543ffb718c109d5a9c2fa062ce",
+      "bytes_lf": 27426,
+      "last_commit": "56f22d85948fd33540eb724605dda9eaeeb0845f",
+      "last_commit_date": "2026-09-01 01:05:19 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/run_tier_c_c1.py",
+      "exists_at_head": true,
+      "git_blob": "962a899657a205c7f85b3611c5c009f2e98282be",
+      "cited_by": [
+        "CJTDEV-11"
+      ],
+      "sha256_lf": "8d0ccac002c300779d6efbe8bc8d6b819f68480ced5f1ada8680bb0ed03b4c9b",
+      "bytes_lf": 43727,
+      "last_commit": "36951d2a5e0be68592b12b6b2b67459b92b2777e",
+      "last_commit_date": "2026-09-01 06:57:20 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/test_sperm_equivariance.py",
+      "exists_at_head": true,
+      "git_blob": "ae0e2600a88574e77ee182b10af15a665c846d2b",
+      "cited_by": [
+        "PATHB-01"
+      ],
+      "sha256_lf": "21512efeb9d44bcb4ae5c93f74cb282f9dc6466c4df4ed1f8f5bd9f4655a6532",
+      "bytes_lf": 4308,
+      "last_commit": "7b5dc11b8f3777e57e934e0c20fb24b20b0b0c92",
+      "last_commit_date": "2026-08-31 23:08:31 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/tier_c/J0_BENCH_REPORT.json",
+      "exists_at_head": true,
+      "git_blob": "98b6a0f60bf5ea6ed1fefd2170dd6746f544082f",
+      "cited_by": [
+        "CJTDEV-16",
+        "CJTDEV-17"
+      ],
+      "sha256_lf": "7e501345e128bb37f7709f6ce7bd826cd9bd03490e9ee29cf294c49ddfb41658",
+      "bytes_lf": 5745,
+      "last_commit": "5c1ceb3da436259bd421d815f916b0cbb222475c",
+      "last_commit_date": "2026-09-01 09:39:15 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/tier_c/J_NECESSITY_REPORT.json",
+      "exists_at_head": true,
+      "git_blob": "2347d4befa547cdebb5d19ced6680e1a0298d391",
+      "cited_by": [
+        "CJTDEV-14"
+      ],
+      "sha256_lf": "746c12096685a4c8782a0844d0dcb1e3bed32620147a8d7447364721ff4650b7",
+      "bytes_lf": 4965,
+      "last_commit": "ab7afd1f8170a2b537fefcdf523c27039221d56b",
+      "last_commit_date": "2026-09-01 09:04:31 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/tier_c_j0_bench.py",
+      "exists_at_head": true,
+      "git_blob": "01ff25a12c26b6cd71a957ee0521d39b068755c5",
+      "cited_by": [
+        "CJTDEV-16",
+        "CJTDEV-17"
+      ],
+      "sha256_lf": "b088a3eac35bbfbe5bbc4e6412d89819ef13a6b714ed6fbacd15037e20666f9b",
+      "bytes_lf": 18806,
+      "last_commit": "5c1ceb3da436259bd421d815f916b0cbb222475c",
+      "last_commit_date": "2026-09-01 09:39:15 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/cjt_path_b_v2/tier_c_j_necessity.py",
+      "exists_at_head": true,
+      "git_blob": "dd24344ac04f77559d76203dd5464d9338e0587c",
+      "cited_by": [
+        "CJTDEV-14"
+      ],
+      "sha256_lf": "5493d8ad22f600b2da4c0aca31bf25073299400c12966851ffa60a8d0e31d548",
+      "bytes_lf": 20156,
+      "last_commit": "ab7afd1f8170a2b537fefcdf523c27039221d56b",
+      "last_commit_date": "2026-09-01 09:04:31 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/AMENDMENT_LOG.md",
+      "exists_at_head": true,
+      "git_blob": "03d9aa2751b02cf5dd6eca967e0f3ad56df1f4a5",
+      "cited_by": [
+        "ETAEPS-06"
+      ],
+      "sha256_lf": "63907195272dbac200373f870c20d06e541f68a88caed51009f9f9e8ffec947e",
+      "bytes_lf": 3050,
+      "last_commit": "eb8cf2cdf2418c3a8b36d8c20a5050386d5ce2c4",
+      "last_commit_date": "2026-08-30 00:19:37 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/CLAIM_BOUNDARY.md",
+      "exists_at_head": true,
+      "git_blob": "8f0e9f9a8bdca1e76d6ae9e3f5780333a56f6648",
+      "cited_by": [
+        "ETAEPS-06"
+      ],
+      "sha256_lf": "fc0ce64dac9f655f616068d461a8b4e68ec440a91a88f8c276454e94438d4a06",
+      "bytes_lf": 2372,
+      "last_commit": "eb8cf2cdf2418c3a8b36d8c20a5050386d5ce2c4",
+      "last_commit_date": "2026-08-30 00:19:37 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/CLAIM_LEDGER.json",
+      "exists_at_head": true,
+      "git_blob": "7b7ebd499032e93879d1569ab0a43cdbd3847a2b",
+      "cited_by": [
+        "ETAEPS-06",
+        "ETAEPS-07",
+        "ETAEPS-18"
+      ],
+      "sha256_lf": "8079c3204176335a10ac9721769a16424b455f99069a0702cb73793ae783ab25",
+      "bytes_lf": 3388,
+      "last_commit": "44128fb2eb6de81f0d0d70490659a115ed7031fa",
+      "last_commit_date": "2026-08-30 00:31:00 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/COST_ESTIMATE.md",
+      "exists_at_head": true,
+      "git_blob": "00fbad0039f08a944c8a142b04e0d3d37636b886",
+      "cited_by": [
+        "ETAEPS-06"
+      ],
+      "sha256_lf": "456a5fe4e27a5734fe614949ac74b19e94eff79ade58da89e7c64b164075ac76",
+      "bytes_lf": 2009,
+      "last_commit": "eb8cf2cdf2418c3a8b36d8c20a5050386d5ce2c4",
+      "last_commit_date": "2026-08-30 00:19:37 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/EXPERIMENT_MANIFEST.yaml",
+      "exists_at_head": true,
+      "git_blob": "cee1e13594a83c72b56bf80054b221ffc13f45d2",
+      "cited_by": [
+        "ETAEPS-06"
+      ],
+      "sha256_lf": "520bae75e508da89aced50d98eed575208fdb5f3982d2d32e03f0b55dabf40a7",
+      "bytes_lf": 5730,
+      "last_commit": "eb8cf2cdf2418c3a8b36d8c20a5050386d5ce2c4",
+      "last_commit_date": "2026-08-30 00:19:37 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/MODEL_IDENTITY.json",
+      "exists_at_head": true,
+      "git_blob": "aaae1602119b78723ac39f2db48923a8c7f1536c",
+      "cited_by": [
+        "ETAEPS-06"
+      ],
+      "sha256_lf": "725d330fea63016c7d2b8e7138de2beea64acfd0ed35c03542ed6a352a5e7800",
+      "bytes_lf": 2188,
+      "last_commit": "eb8cf2cdf2418c3a8b36d8c20a5050386d5ce2c4",
+      "last_commit_date": "2026-08-30 00:19:37 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/PREREGISTRATION.md",
+      "exists_at_head": true,
+      "git_blob": "51cbf6df95fed827b1e8007c39f6855f41fd4735",
+      "cited_by": [
+        "ETAEPS-06"
+      ],
+      "sha256_lf": "705beb92dd404477a4b5ca39dfed1a4fe747dd6074925c9a5bb48a007083b77d",
+      "bytes_lf": 8709,
+      "last_commit": "eb8cf2cdf2418c3a8b36d8c20a5050386d5ce2c4",
+      "last_commit_date": "2026-08-30 00:19:37 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/PREREGISTRATION_LOCK_CANDIDATE.json",
+      "exists_at_head": true,
+      "git_blob": "aca537711df37f42a4bff1623e6b29aac9979dd5",
+      "cited_by": [
+        "ETAEPS-06"
+      ],
+      "sha256_lf": "b6b2cddf5be5aff18f84575a1812173e8563bcfa720ff2df04fd2a163062b65a",
+      "bytes_lf": 1956,
+      "last_commit": "eb8cf2cdf2418c3a8b36d8c20a5050386d5ce2c4",
+      "last_commit_date": "2026-08-30 00:19:37 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/README.md",
+      "exists_at_head": true,
+      "git_blob": "02f8f1446c2c4375a58a855983848fd4dde714c0",
+      "cited_by": [
+        "ETAEPS-06"
+      ],
+      "sha256_lf": "e436693e4d305117373557da4fc6dbf6f5617ff981f080d2a14def323492f887",
+      "bytes_lf": 2745,
+      "last_commit": "eb8cf2cdf2418c3a8b36d8c20a5050386d5ce2c4",
+      "last_commit_date": "2026-08-30 00:19:37 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/SOURCE_AUDIT.md",
+      "exists_at_head": true,
+      "git_blob": "bdb89efd36eae2fa79131788c113c698cf0655a6",
+      "cited_by": [
+        "ETAEPS-20"
+      ],
+      "sha256_lf": "4f088d5fb0c353c18af74eb4d26f34a85c1d6bf428b2e037a35b67c60767526c",
+      "bytes_lf": 4596,
+      "last_commit": "eb8cf2cdf2418c3a8b36d8c20a5050386d5ce2c4",
+      "last_commit_date": "2026-08-30 00:19:37 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/TYPE_CONTRACT.md",
+      "exists_at_head": true,
+      "git_blob": "39d89acf112d105c799cb7ad649fd66030235fe5",
+      "cited_by": [
+        "ETAEPS-02"
+      ],
+      "sha256_lf": "5a69d6c22b6735b8c74e6b1ed36a0c3afcdd770704c18214c64e61dca1af4a2e",
+      "bytes_lf": 4015,
+      "last_commit": "eb8cf2cdf2418c3a8b36d8c20a5050386d5ce2c4",
+      "last_commit_date": "2026-08-30 00:19:37 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/reports/phase1_pytest_raw.txt",
+      "exists_at_head": true,
+      "git_blob": "9d63893d8443ffe536e8ea4f5aa2e9e37e7e1086",
+      "cited_by": [
+        "ETAEPS-07"
+      ],
+      "sha256_lf": "7a11287b50b5531db76a63c2c6adc790b2569767a29237b7f2ef6660112065e0",
+      "bytes_lf": 1350,
+      "last_commit": "44128fb2eb6de81f0d0d70490659a115ed7031fa",
+      "last_commit_date": "2026-08-30 00:31:00 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/reports/phase1_receipt.json",
+      "exists_at_head": true,
+      "git_blob": "c43d752909987839ec6ba3ca2cedadf8073a2bbf",
+      "cited_by": [
+        "ETAEPS-06",
+        "ETAEPS-07"
+      ],
+      "sha256_lf": "d846f045f3ee81dbd4d6424573193694736cc691496be2ae24a25b85fbb0c09f",
+      "bytes_lf": 1260,
+      "last_commit": "44128fb2eb6de81f0d0d70490659a115ed7031fa",
+      "last_commit_date": "2026-08-30 00:31:00 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/src/realizer_core.py",
+      "exists_at_head": true,
+      "git_blob": "08fd95543c58f9831ae7986ad2c441ad1db8026b",
+      "cited_by": [
+        "ETAEPS-07"
+      ],
+      "sha256_lf": "7532aa4c150b5dfaeb2d7114dca7143a681c60c28bbb29db0dcdfc3fba744c32",
+      "bytes_lf": 3677,
+      "last_commit": "44128fb2eb6de81f0d0d70490659a115ed7031fa",
+      "last_commit_date": "2026-08-30 00:31:00 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/tests/conftest.py",
+      "exists_at_head": true,
+      "git_blob": "4908ff3f46795db5456590e27b1949c3dc893e4d",
+      "cited_by": [
+        "ETAEPS-07"
+      ],
+      "sha256_lf": "0fec2b42dc806a97ea93a9781cf4dc76e6dc6d15b880ceb240ca3c06a28f6c28",
+      "bytes_lf": 173,
+      "last_commit": "44128fb2eb6de81f0d0d70490659a115ed7031fa",
+      "last_commit_date": "2026-08-30 00:31:00 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/eta_epsilon_weight_learning_v0.1/tests/test_phase1_realizer.py",
+      "exists_at_head": true,
+      "git_blob": "412987d2824ab015aff9e5424ae77421715d1f66",
+      "cited_by": [
+        "ETAEPS-07"
+      ],
+      "sha256_lf": "d8b7ef5a9b4f0eeb7b9c860591d747b1d78aba9a6f8b9bf66678a7f4f1ee6b5f",
+      "bytes_lf": 3483,
+      "last_commit": "44128fb2eb6de81f0d0d70490659a115ed7031fa",
+      "last_commit_date": "2026-08-30 00:31:00 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/POST_GATE0_BACKLOG.md",
+      "exists_at_head": true,
+      "git_blob": "ea4cb1a5b01ce82ec5b4a1d1d9a3bfb24bd138e0",
+      "cited_by": [
+        "RC0-05",
+        "RC0-06",
+        "RC0-11"
+      ],
+      "sha256_lf": "6dec74bb69a1acfe3ad165105560d8175bb7c683372c7140170f4e9a7332eef1",
+      "bytes_lf": 1668,
+      "last_commit": "49664dacc78493e562288054f2ca9cf5df096c46",
+      "last_commit_date": "2026-08-31 07:04:43 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RC01_FEEDBACK_CLOSURE_RECEIPT.json",
+      "exists_at_head": true,
+      "git_blob": "3a9b3775835129e020a52d8822260488a46487a2",
+      "cited_by": [
+        "RC0-01",
+        "RC0-02",
+        "RC0-03",
+        "RC0-04",
+        "RC0-07",
+        "RC0-11",
+        "RC0-12"
+      ],
+      "sha256_lf": "39f9b4ed8a696bf7804f8b3151fcca5013a249a375b6fe07d125abadffb72118",
+      "bytes_lf": 35490,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RC01_SCENARIO_MATRIX.json",
+      "exists_at_head": true,
+      "git_blob": "0eeaa3b7f3e5b0e1b6d9cfc1ae4e4654e9348185",
+      "cited_by": [
+        "RC0-02"
+      ],
+      "sha256_lf": "0ac7ddf89818e13d3abb5d180f95cf18a4fb25429c32d50181795c04e046e64d",
+      "bytes_lf": 44972,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RC02_ATTESTATION.json",
+      "exists_at_head": true,
+      "git_blob": "2bcb14246350a2de065816daa5a5c4c1ab0980ee",
+      "cited_by": [
+        "RC0-06",
+        "RC0-11",
+        "RC0-12"
+      ],
+      "sha256_lf": "52cb9bec875446d5c0d07d606aa2e894e13da37f0a31d8c85d4e65b0c6082aaf",
+      "bytes_lf": 5966,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RC04_BACKLOG.md",
+      "exists_at_head": true,
+      "git_blob": "6afcb756d0b4585de95d34fa1894af3295ea0b93",
+      "cited_by": [
+        "RC0-06",
+        "RC0-10",
+        "RC0-11"
+      ],
+      "sha256_lf": "85feb8319e5b23d8e40911d393fc7d0774bcb29bd9817a5e1123434b337b0ab8",
+      "bytes_lf": 19141,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RC04_REQUIRED_MUTATIONS_v1.json",
+      "exists_at_head": true,
+      "git_blob": "a79adab1641152b7e203b4793a4cdc9e25a71a42",
+      "cited_by": [
+        "RC0-03"
+      ],
+      "sha256_lf": "bdfef6175cfa4222428fa54d5fc7f585d7c6959e804b0f413f13c8c271a482c9",
+      "bytes_lf": 2541,
+      "last_commit": "e43275122f2a6d3e689a0e3dc69ba81a49497745",
+      "last_commit_date": "2026-08-30 22:00:24 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RC04_REQUIRED_MUTATIONS_v2.json",
+      "exists_at_head": true,
+      "git_blob": "986884f430c28d525456bde19ace9e9969c56ab4",
+      "cited_by": [
+        "RC0-03"
+      ],
+      "sha256_lf": "dd00522a02ca0588380c51564163bb901d196b34d1f8fc9c7b694cc2b6c541af",
+      "bytes_lf": 3294,
+      "last_commit": "386359862e384f5eb52577c66f4bd253a85b4a47",
+      "last_commit_date": "2026-08-30 23:16:57 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RC04_REQUIRED_MUTATIONS_v3.json",
+      "exists_at_head": true,
+      "git_blob": "6116de3321f94e8036f1e1d60034ec0757a73639",
+      "cited_by": [
+        "RC0-03"
+      ],
+      "sha256_lf": "d6a1faf3a57985032ea823527ae9f9d69033d6058bf99748e989e4303317474d",
+      "bytes_lf": 4649,
+      "last_commit": "ad46418fea1ba9260361440698523e76f3abafdc",
+      "last_commit_date": "2026-08-31 00:13:03 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RC04_REQUIRED_MUTATIONS_v4.json",
+      "exists_at_head": true,
+      "git_blob": "554b7e0e64fc8c2bbf83fd19e0aa914f52d49f0d",
+      "cited_by": [
+        "RC0-03"
+      ],
+      "sha256_lf": "afbef61a98cecfd6e473800573c38ea379a42cc51ad6a4608e05e29538573bdc",
+      "bytes_lf": 6796,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RC0_SIMULATOR_RECEIPT.json",
+      "exists_at_head": true,
+      "git_blob": "aab59ed8c0c3c5f0454329d94cfe85a02eaf64c6",
+      "cited_by": [
+        "RC0-07",
+        "RC0-08"
+      ],
+      "sha256_lf": "67eff456805e690ad528332e64fa1b43095036c74ba68f7d3a46ad35e4c97a8f",
+      "bytes_lf": 2192,
+      "last_commit": "60b36e063e93d5bff60d2fad01d7cce06f1675ae",
+      "last_commit_date": "2026-08-30 17:35:01 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RECURSIVE_CJT_STATE_SCHEMA_v0_1.json",
+      "exists_at_head": true,
+      "git_blob": "635b850cfd7245946727f48dcc3c3096f13a9678",
+      "cited_by": [
+        "RC0-09"
+      ],
+      "sha256_lf": "3c509f09ce7806eecc143134acba388c00035a2a7adc467725011c9317623144",
+      "bytes_lf": 7749,
+      "last_commit": "c6eb3f4e89c7c19e685e6c643c9425f592c73c26",
+      "last_commit_date": "2026-08-30 16:46:59 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RECURSIVE_CJT_STATE_SCHEMA_v0_2.json",
+      "exists_at_head": true,
+      "git_blob": "bcd5406243e48a3fb12f87414982565bc090c0a3",
+      "cited_by": [
+        "RC0-09"
+      ],
+      "sha256_lf": "3a23db76c18c6acfe03b23d983483350064e4638279748a3153b3e2a41046450",
+      "bytes_lf": 4757,
+      "last_commit": "60b36e063e93d5bff60d2fad01d7cce06f1675ae",
+      "last_commit_date": "2026-08-30 17:35:01 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RECURSIVE_CJT_TICK_SEMANTICS_v0_1.md",
+      "exists_at_head": true,
+      "git_blob": "a02b3d7530fa1fb21655e34d8c9b763a565ca162",
+      "cited_by": [
+        "RC0-09"
+      ],
+      "sha256_lf": "4ba1192f912755eaa6f3e6a2fddfdfecde6e6bfb36b32f35b89abc04fd09a30a",
+      "bytes_lf": 4019,
+      "last_commit": "c6eb3f4e89c7c19e685e6c643c9425f592c73c26",
+      "last_commit_date": "2026-08-30 16:46:59 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RECURSIVE_CJT_TICK_SEMANTICS_v0_2.md",
+      "exists_at_head": true,
+      "git_blob": "0a179f75495f37650d97af54bbf4e710dfa526d7",
+      "cited_by": [
+        "RC0-09"
+      ],
+      "sha256_lf": "11ba2e19d6f84e3e3898d6fb65f5b3fbe541282f0373a4fc4c63c82574b43784",
+      "bytes_lf": 6186,
+      "last_commit": "60b36e063e93d5bff60d2fad01d7cce06f1675ae",
+      "last_commit_date": "2026-08-30 17:35:01 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RECURSIVE_CONDITIONS_v1.yaml",
+      "exists_at_head": true,
+      "git_blob": "6e9ed09ffcb8c48c008d3cd3ce299a91e7f65faf",
+      "cited_by": [
+        "RC0-20"
+      ],
+      "sha256_lf": "dae87c6ff72556df749f2485b70487c51971adcf7120ebc7db9e59a3e4180f40",
+      "bytes_lf": 2673,
+      "last_commit": "c6eb3f4e89c7c19e685e6c643c9425f592c73c26",
+      "last_commit_date": "2026-08-30 16:46:59 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/RECURSIVE_CONDITIONS_v2.yaml",
+      "exists_at_head": true,
+      "git_blob": "e5256ede31d4ac433b82edf0d6f9374068acf047",
+      "cited_by": [
+        "RC0-20"
+      ],
+      "sha256_lf": "e0e86d1d0447533d81aab4cadc786452ccbde87d7888c3d70cf30b5851550710",
+      "bytes_lf": 2794,
+      "last_commit": "60b36e063e93d5bff60d2fad01d7cce06f1675ae",
+      "last_commit_date": "2026-08-30 17:35:01 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/STATIC_CONDITIONS_v1.yaml",
+      "exists_at_head": true,
+      "git_blob": "86e17993ef62fb295e3fc5bbde9977baafab9173",
+      "cited_by": [
+        "RC0-20"
+      ],
+      "sha256_lf": "2807cdb7ca4fa5d5eed414519a1859cc8ce0d864aab3e8869b64278e5b285573",
+      "bytes_lf": 2440,
+      "last_commit": "c6eb3f4e89c7c19e685e6c643c9425f592c73c26",
+      "last_commit_date": "2026-08-30 16:46:59 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/STATIC_CONDITIONS_v2.yaml",
+      "exists_at_head": true,
+      "git_blob": "070407afbe1f9960521754c1216ed32cf9e23971",
+      "cited_by": [
+        "RC0-20"
+      ],
+      "sha256_lf": "b629c857c62a06654b6151cf90a2e354b19899be2cc8aee7d3a30fefb1c4d0f5",
+      "bytes_lf": 1583,
+      "last_commit": "60b36e063e93d5bff60d2fad01d7cce06f1675ae",
+      "last_commit_date": "2026-08-30 17:35:01 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/generate_rc02_receipt.py",
+      "exists_at_head": true,
+      "git_blob": "3ecd22305eda7b79511c2991398f9de4c016756c",
+      "cited_by": [
+        "RC0-03",
+        "RC0-04",
+        "RC0-12"
+      ],
+      "sha256_lf": "2611acfb77392a2d1f1981131d5db22e306ac30a3267be3d225689547ffde5f0",
+      "bytes_lf": 25887,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/rc02_raw_reports/test_rc04e.stdout.txt",
+      "exists_at_head": true,
+      "git_blob": "b6f1dcf9acfc260081fa638ae5178e2f66167122",
+      "cited_by": [
+        "RC0-01"
+      ],
+      "sha256_lf": "c9253798627eacc605bcf47dbc36bcc0c527ac928587b3f5a34171e14ddf9069",
+      "bytes_lf": 2186,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/rc03_mutation_report.json",
+      "exists_at_head": true,
+      "git_blob": "cb7c33b0a9a079bcb62b39f90d53ea7461f4cf14",
+      "cited_by": [
+        "RC0-03"
+      ],
+      "sha256_lf": "d7d93f8ee9842343cfaeb381e4d6e2831749cb6c3d5179d87cbc073175a5d1be",
+      "bytes_lf": 18584,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/run_mutation_audit.py",
+      "exists_at_head": true,
+      "git_blob": "7641b8dc8ae900e9e301b3af85b11ea4c9d5cad9",
+      "cited_by": [
+        "RC0-03",
+        "RC0-12"
+      ],
+      "sha256_lf": "314b23a25bb97aa7bc7a74764d4f2b6c1bb2179a88d0577bd75a0c952da32f91",
+      "bytes_lf": 24917,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc01_coordinator.py",
+      "exists_at_head": true,
+      "git_blob": "ff8f50f1f5e84e4d82c32e4a6c375b24bdb100d0",
+      "cited_by": [
+        "RC0-10"
+      ],
+      "sha256_lf": "f687d074cab77c5ffd71f7a8a577cbe362b8ecf9b212ad72a4c1544836b8d87b",
+      "bytes_lf": 31226,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc01_engine.py",
+      "exists_at_head": true,
+      "git_blob": "306a64fe93a94fd156fbb66339a8fd7b2ead9323",
+      "cited_by": [
+        "RC0-09",
+        "RC0-10"
+      ],
+      "sha256_lf": "87577847c4c6bce8e12652dbde4c7f6ecd6874275b7c1c80e01d44e9a9d5cae7",
+      "bytes_lf": 96574,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc01_replay_entry.py",
+      "exists_at_head": true,
+      "git_blob": "31477e174d054a4972bf22ce7d1b0e4eef84a431",
+      "cited_by": [
+        "RC0-04"
+      ],
+      "sha256_lf": "29fc415e46b3a15c4d2c5fa3af0390ce99fe37c155475518a96788f49a97a24b",
+      "bytes_lf": 1276,
+      "last_commit": "ad46418fea1ba9260361440698523e76f3abafdc",
+      "last_commit_date": "2026-08-31 00:13:03 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc01_scenarios.py",
+      "exists_at_head": true,
+      "git_blob": "4fd730710ee04674e7dfc4fab6c7dfae5328796d",
+      "cited_by": [
+        "RC0-02"
+      ],
+      "sha256_lf": "e840eb322fd89ee993cc3f3487f56e5a3d1f9eed7b0a186381ad108e7bac4915",
+      "bytes_lf": 23124,
+      "last_commit": "386359862e384f5eb52577c66f4bd253a85b4a47",
+      "last_commit_date": "2026-08-30 23:16:57 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc01_types.py",
+      "exists_at_head": true,
+      "git_blob": "614ee08ba03a61636ae7ed2e23764d7dcfdcdc3c",
+      "cited_by": [
+        "RC0-10"
+      ],
+      "sha256_lf": "9729e590276a7dcb8ac23e22b6c5343ff97bfdf8bf9224ce7a0df1e5cb1e6068",
+      "bytes_lf": 21103,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc0_routing.py",
+      "exists_at_head": true,
+      "git_blob": "43912cdd9e36f2e2d15892520ee802c8d6a4d8e9",
+      "cited_by": [
+        "RC0-09"
+      ],
+      "sha256_lf": "21635eaad8699c31bdfaa94f31d2c7a261077bbffd8084805009ce18ec81e746",
+      "bytes_lf": 4902,
+      "last_commit": "c6eb3f4e89c7c19e685e6c643c9425f592c73c26",
+      "last_commit_date": "2026-08-30 16:46:59 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc0_simulator.py",
+      "exists_at_head": true,
+      "git_blob": "8a1839cf85e2c2063ca9a5cf6838dbe4f7823ac7",
+      "cited_by": [
+        "RC0-08"
+      ],
+      "sha256_lf": "71b951a25b8ea8f869d3210d787af9769e6303dd540965307d1cafee6cdb8015",
+      "bytes_lf": 14756,
+      "last_commit": "c6eb3f4e89c7c19e685e6c643c9425f592c73c26",
+      "last_commit_date": "2026-08-30 16:46:59 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc0_types.py",
+      "exists_at_head": true,
+      "git_blob": "29c2ea25ea99d657a50afee4e858a5bd8d17689c",
+      "cited_by": [
+        "RC0-09"
+      ],
+      "sha256_lf": "df4eb57ae7c487d2122fd46a732cf7caa03507631c01723b5f17d06e8d0b72a3",
+      "bytes_lf": 12702,
+      "last_commit": "e43275122f2a6d3e689a0e3dc69ba81a49497745",
+      "last_commit_date": "2026-08-30 22:00:24 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/sim/rc_canonical.py",
+      "exists_at_head": true,
+      "git_blob": "56ed4eea5ce16e549eab82ad61c589ee6ca55d20",
+      "cited_by": [
+        "RC0-09"
+      ],
+      "sha256_lf": "f7512f625d618d28c529060f64802f846a8f96c619c34f03c1c77c20a052db72",
+      "bytes_lf": 4726,
+      "last_commit": "6e3267d2100552d8ba94e8882f8f85c094ef3876",
+      "last_commit_date": "2026-08-30 21:02:03 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/tests/test_rc0.py",
+      "exists_at_head": true,
+      "git_blob": "a4b4d90ed8450ca59ea6e4c1160b96f082aed440",
+      "cited_by": [
+        "RC0-01",
+        "RC0-08"
+      ],
+      "sha256_lf": "3fe483d7e02422c7195de9e47b75319bdf945b668f0c93366a55e336a63cec42",
+      "bytes_lf": 16540,
+      "last_commit": "60b36e063e93d5bff60d2fad01d7cce06f1675ae",
+      "last_commit_date": "2026-08-30 17:35:01 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/tests/test_rc01.py",
+      "exists_at_head": true,
+      "git_blob": "b57fa1077b84b100ba78882651569d6ab7f7fb75",
+      "cited_by": [
+        "RC0-01",
+        "RC0-02",
+        "RC0-09"
+      ],
+      "sha256_lf": "8588488b98d460d4acffafc03f6e3d5a132224600291e3950e77cad812d3d728",
+      "bytes_lf": 17667,
+      "last_commit": "c8f350df79ee22578155f325faa92a9693c0a45f",
+      "last_commit_date": "2026-08-30 18:46:04 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/tests/test_rc02.py",
+      "exists_at_head": true,
+      "git_blob": "40a6a3ffa6ee021378cb9f3592bd1490114d8f70",
+      "cited_by": [
+        "RC0-01"
+      ],
+      "sha256_lf": "60a8cec30213c40ac2b08279f448a3e60ebeb716d2aab59edfe9ee40e94cc8ad",
+      "bytes_lf": 20654,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/tests/test_rc03.py",
+      "exists_at_head": true,
+      "git_blob": "75ad66e1e7dee5a77d9089508ac1191e8cd4db7c",
+      "cited_by": [
+        "RC0-01"
+      ],
+      "sha256_lf": "6bcc87e7bf4d0dfadb64446c65df4d4a2495139aa15f860edc08228f97e86fe0",
+      "bytes_lf": 15524,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/tests/test_rc04.py",
+      "exists_at_head": true,
+      "git_blob": "fcfe3d1eeaf91675443683e005aa80966f97de67",
+      "cited_by": [
+        "RC0-01"
+      ],
+      "sha256_lf": "66645164222e5d78e2786cd472aa78414f6ac52b3a9c76b5e3d8faf4d05f09c9",
+      "bytes_lf": 25011,
+      "last_commit": "ad46418fea1ba9260361440698523e76f3abafdc",
+      "last_commit_date": "2026-08-31 00:13:03 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/tests/test_rc04a.py",
+      "exists_at_head": true,
+      "git_blob": "7bb260d267d83faca20e78249a86b189f3b6923c",
+      "cited_by": [
+        "RC0-01"
+      ],
+      "sha256_lf": "909ff05baab6788536932e9fcac18dd9b76d6b87ba8263532addade971e31f96",
+      "bytes_lf": 14713,
+      "last_commit": "e43275122f2a6d3e689a0e3dc69ba81a49497745",
+      "last_commit_date": "2026-08-30 22:00:24 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/tests/test_rc04b.py",
+      "exists_at_head": true,
+      "git_blob": "f5d423cd4a00373bd0e6f50fefa450e44fb9e84a",
+      "cited_by": [
+        "RC0-01"
+      ],
+      "sha256_lf": "24293a9a25542c39f4f15a4d78ef2870e3cf37d4fcd2d58c7b4951a03e0084f6",
+      "bytes_lf": 11492,
+      "last_commit": "386359862e384f5eb52577c66f4bd253a85b4a47",
+      "last_commit_date": "2026-08-30 23:16:57 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/tests/test_rc04c.py",
+      "exists_at_head": true,
+      "git_blob": "f1b1f805d2b819a785f4f975e2091258597e2c5e",
+      "cited_by": [
+        "RC0-01",
+        "RC0-10"
+      ],
+      "sha256_lf": "887c9380c612cddbf885d05ddfa24c89658728d6b86dcdf07d64917f7dc5b199",
+      "bytes_lf": 18513,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/tests/test_rc04d.py",
+      "exists_at_head": true,
+      "git_blob": "aa0eece56f68f502bbd041ee9d3b3a18ab753407",
+      "cited_by": [
+        "RC0-01",
+        "RC0-10"
+      ],
+      "sha256_lf": "2741b852fd3d1429551f66af784959281c827c628b85a5afc04f95325206d92a",
+      "bytes_lf": 24269,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "cas_only_reasoner/recursive_cjt_rc0/tests/test_rc04e.py",
+      "exists_at_head": true,
+      "git_blob": "6acb6340193101cbf56984f91943c51262e60646",
+      "cited_by": [
+        "RC0-01",
+        "RC0-10"
+      ],
+      "sha256_lf": "21b9edfe678b67a11130e79a7ecdfc3369def314a2599c76378afbe855c5896c",
+      "bytes_lf": 29854,
+      "last_commit": "83f57d6f724505f2c2c68593b2625c36c3e07a4d",
+      "last_commit_date": "2026-08-31 01:47:40 -0700"
+    },
+    {
+      "path": "docs/CAS_HARNESS_SPEC_SHEET.md",
+      "exists_at_head": true,
+      "git_blob": "f32416c3bf05bd0339353e8e070c8abe68445804",
+      "cited_by": [
+        "CR-P6-07",
+        "CR-REC-02",
+        "D0-01",
+        "D0-03",
+        "D0-04",
+        "D0-06",
+        "D0-07",
+        "D0-09",
+        "D0-14",
+        "D0-15",
+        "D0-16",
+        "D0-18",
+        "D1-01",
+        "D1-06",
+        "D1-07",
+        "D1-15",
+        "D1-16",
+        "ETAEPS-02",
+        "ETAEPS-03",
+        "ETAEPS-04",
+        "ETAEPS-05",
+        "ETAEPS-17",
+        "ETAEPS-18",
+        "ETAEPS-19",
+        "EX1-16",
+        "EX1-17",
+        "GOV-05",
+        "GOV-17",
+        "OHM0R-12",
+        "OHM0R-13",
+        "OHM0R-15",
+        "PREC-01",
+        "PREC-03",
+        "PREC-04",
+        "PREC-16",
+        "PREC-17",
+        "S0-01",
+        "S0-04",
+        "S0-10",
+        "S0-13",
+        "S0-14",
+        "S0-15",
+        "S0-16",
+        "S0-17",
+        "S0-19",
+        "SHEET-01",
+        "SHEET-02",
+        "SHEET-08",
+        "SHEET-12",
+        "SHEET-13",
+        "SHEET-14",
+        "SHEET-15",
+        "SHEET-16",
+        "SHEET-17",
+        "SHEET-19"
+      ],
+      "sha256_lf": "90ae6abd63d40824ca6603152ce8d1fa0d3d52abb0f1169f7cb550362347c149",
+      "bytes_lf": 586541,
+      "last_commit": "269dfd114d90f89a28c0cc00bac0ee18b59c5792",
+      "last_commit_date": "2026-09-02 18:33:17 -0700"
+    },
+    {
+      "path": "docs/research/RECURSIVE_CJT_BIAS_CONTROLLER_v0_1.md",
+      "exists_at_head": true,
+      "git_blob": "bef7ff92ebf9b6a796f41ae847f03c6b6bcb9527",
+      "cited_by": [
+        "RC0-08"
+      ],
+      "sha256_lf": "b90f780d92e86cb4fe06272a37bf8abb6e32af024a0cc21a0fc5151c6a48eade",
+      "bytes_lf": 25334,
+      "last_commit": "7bf2a3b927552f83414bc9a962509ba000985ee6",
+      "last_commit_date": "2026-08-30 16:10:12 -0700"
+    },
+    {
+      "path": "docs/research/RECURSIVE_CJT_BIAS_CONTROLLER_v0_2_CANDIDATE.md",
+      "exists_at_head": true,
+      "git_blob": "098c85adf6806326591c781a6b7ced4d206d53bf",
+      "cited_by": [],
+      "sha256_lf": "f3b0787043c0ad17c6dc43fe24654cae7af4527e5333db461d33ab9b64cc1a35",
+      "bytes_lf": 7314,
+      "last_commit": "c6eb3f4e89c7c19e685e6c643c9425f592c73c26",
+      "last_commit_date": "2026-08-30 16:46:59 -0700"
+    },
+    {
+      "path": "docs/research/RECURSIVE_CJT_BIAS_CONTROLLER_v0_3_CANDIDATE.md",
+      "exists_at_head": true,
+      "git_blob": "9cda8dd9d9a34ece85b97e0ac9774ec64c31aff2",
+      "cited_by": [
+        "RC0-20"
+      ],
+      "sha256_lf": "0966a6c4e56cfc9efa7b1c8981c21edaacfb2ac5f77ac4851a0f684afdedbe92",
+      "bytes_lf": 6981,
+      "last_commit": "c8f350df79ee22578155f325faa92a9693c0a45f",
+      "last_commit_date": "2026-08-30 18:46:04 -0700"
+    },
+    {
+      "path": "docs/whitepapers/monograph/noetic_topos2/chapters/appD_glossary.tex",
+      "exists_at_head": true,
+      "git_blob": "4bb2019bdb77a60dc4d946c2f8fa1452a6811ce8",
+      "cited_by": [
+        "ETAEPS-01"
+      ],
+      "sha256_lf": "74260d03117b20cec7ba27dfa87cbe44a62f0949155aaf4705e279b4a37e4aeb",
+      "bytes_lf": 21871,
+      "last_commit": "b891eab0786c7a2d116af20865f8df0b0ccbc2fa",
+      "last_commit_date": "2026-08-09 02:56:19 -0700"
+    },
+    {
+      "path": "docs/whitepapers/monograph/noetic_topos2/chapters/ch05_legacy_collapse.tex",
+      "exists_at_head": true,
+      "git_blob": "a0b0aee4b9a9c7202ccb99a288c7a66183fc62b3",
+      "cited_by": [
+        "ETAEPS-01"
+      ],
+      "sha256_lf": "a03cf19716601534df51080e27279ff499c4cce81cce306474bcfe656a8d91ee",
+      "bytes_lf": 52938,
+      "last_commit": "b891eab0786c7a2d116af20865f8df0b0ccbc2fa",
+      "last_commit_date": "2026-08-09 02:56:19 -0700"
+    },
+    {
+      "path": "docs/whitepapers/pdf/RESEARCH_PAPER_CAS_OHM_1_0_v0.2.pdf",
+      "exists_at_head": true,
+      "git_blob": "6db7c9bf32da57011168bdcdf13c2e0ce0f02a99",
+      "cited_by": [
+        "ETAEPS-20"
+      ],
+      "sha256_lf": "4e3337af96277b80dfadec750d8b224b1c7e25366ea327edcb6de257829666ff",
+      "bytes_lf": 293399,
+      "last_commit": "adac12c9bf9b573c1fabb34ab1f329e148e7a855",
+      "last_commit_date": "2026-08-07 20:54:49 -0700"
+    },
+    {
+      "path": "docs/whitepapers/tex/RESEARCH_PAPER_CAS_OHM_1_0_v0.2.tex",
+      "exists_at_head": true,
+      "git_blob": "45b6e8dca2b3a2968dbfe1118f1a4beb1a784ba8",
+      "cited_by": [
+        "ETAEPS-20"
+      ],
+      "sha256_lf": "611d28d0558363736737e99a0f70abab19e439e6bfd3eed1556f5f6558c99ed6",
+      "bytes_lf": 31812,
+      "last_commit": "adac12c9bf9b573c1fabb34ab1f329e148e7a855",
+      "last_commit_date": "2026-08-07 20:54:49 -0700"
+    },
+    {
+      "path": "docs/working/cas_harness_original_closure_methodology_20260526.md",
+      "exists_at_head": true,
+      "git_blob": "cfdc5364dc1ac938377829b9d89822d2e2a443b0",
+      "cited_by": [
+        "ETAEPS-04"
+      ],
+      "sha256_lf": "4867582dd3f755d0de406939f28dde6b5306891fe8493f5949a152d909843754",
+      "bytes_lf": 41496,
+      "last_commit": "04f7df27aa959dffa525f011e0dd28f96aa0bf3b",
+      "last_commit_date": "2026-06-28 09:30:35 -0700"
+    },
+    {
+      "path": "docs/working/gate2_closure/cas_specificity/RESULT_PRECEDENCE_TEST_20260818.md",
+      "exists_at_head": true,
+      "git_blob": "aa1d845b853e226748929a50db5bc60e62073d69",
+      "cited_by": [
+        "SHEET-13"
+      ],
+      "sha256_lf": "fb68911c453ccbe1ed07ee1c0253d55bebed83120e692fb424b90ad3b618dd06",
+      "bytes_lf": 5548,
+      "last_commit": "394079ddfa7b79e5a14afe158d74dc433469cb70",
+      "last_commit_date": "2026-08-19 11:04:46 -0700"
+    },
+    {
+      "path": "docs/working/gate2_closure/cas_specificity/cas_precedence_result.json",
+      "exists_at_head": true,
+      "git_blob": "9486f5f512fecab9c513680c8363fea2cd22e3aa",
+      "cited_by": [
+        "SHEET-13"
+      ],
+      "sha256_lf": "c9472fd08136eb88ed981fbb2a41b475e3fa1b26bc9891f4ded81e02a2c08084",
+      "bytes_lf": 7296,
+      "last_commit": "76e09fac1d6041355e60bee63033009d2e811d46",
+      "last_commit_date": "2026-08-18 18:29:30 -0700"
+    },
+    {
+      "path": "docs/working/gate2_closure/cas_specificity/cas_precedence_test.py",
+      "exists_at_head": true,
+      "git_blob": "f348ed87711c780d625dbb243ec107412b5730bb",
+      "cited_by": [
+        "SHEET-13"
+      ],
+      "sha256_lf": "4e75bff2b70f75907192ddbfa5ccf2aabef7df61bc4893c9a208601153f49fb0",
+      "bytes_lf": 4026,
+      "last_commit": "76e09fac1d6041355e60bee63033009d2e811d46",
+      "last_commit_date": "2026-08-18 18:29:30 -0700"
+    },
+    {
+      "path": "docs/working/gate2_closure/item4_arms/arm_E_non_tks_ontology.json",
+      "exists_at_head": true,
+      "git_blob": "6c1bba1747fbc1eb1e97b7f49510677bce68a9d9",
+      "cited_by": [
+        "SHEET-14"
+      ],
+      "sha256_lf": "bf5652e03c220db47a9a3136b41ac46bc1a69a0619101ec4f5cd3de1a0d923c1",
+      "bytes_lf": 71192,
+      "last_commit": "d85d6694fe587449825c936210dfc5e00ad90646",
+      "last_commit_date": "2026-07-25 11:08:44 -0700"
+    },
+    {
+      "path": "docs/working/gate5_weld/weld_run_report.json",
+      "exists_at_head": true,
+      "git_blob": "a8faf583ed3873f9a5622a23ce67d0b0e30dd6b8",
+      "cited_by": [
+        "ETAEPS-03"
+      ],
+      "sha256_lf": "5fa25c2657be173fd309143f01e343329b91babb26af665feacf1eebf0c47086",
+      "bytes_lf": 68117,
+      "last_commit": "2be60327920b113278f7089b04e02526f173aa4d",
+      "last_commit_date": "2026-08-19 14:47:59 -0700"
+    },
+    {
+      "path": "docs/working/gpt_neox_20b_stage9_original_40e_bridge_proof_REPRODUCIBILITY_NOTES_20260528.md",
+      "exists_at_head": true,
+      "git_blob": "3aee4348cf68994dbfd824bb0cf5d4960de001d1",
+      "cited_by": [
+        "ETAEPS-03"
+      ],
+      "sha256_lf": "b051dac629d809611789cb2dc9bb9da2bf8c3a8883db0a3884fa5ee949340814",
+      "bytes_lf": 3009,
+      "last_commit": "04f7df27aa959dffa525f011e0dd28f96aa0bf3b",
+      "last_commit_date": "2026-06-28 09:30:35 -0700"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py",
+      "exists_at_head": true,
+      "git_blob": "1e0aa382c5976d865d3a1979a605db5a044c9c04",
+      "cited_by": [
+        "ETAEPS-17",
+        "SHEET-15"
+      ],
+      "sha256_lf": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+      "bytes_lf": 1941,
+      "last_commit": "3ea9dbe67a09a4e71c38b8d2a7330229a3a0aff9",
+      "last_commit_date": "2026-08-18 20:50:18 -0700"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "exists_at_head": true,
+      "git_blob": "2c98a77378ef4abe31449c55fc0f904227e4bbd3",
+      "cited_by": [
+        "ETAEPS-17",
+        "SHEET-15"
+      ],
+      "sha256_lf": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "bytes_lf": 39003,
+      "last_commit": "3ea9dbe67a09a4e71c38b8d2a7330229a3a0aff9",
+      "last_commit_date": "2026-08-18 20:50:18 -0700"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "exists_at_head": true,
+      "git_blob": "8e0c26b174f5f70ba97682107e3f5b218693166c",
+      "cited_by": [
+        "ETAEPS-17",
+        "SHEET-15"
+      ],
+      "sha256_lf": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+      "bytes_lf": 20863,
+      "last_commit": "3ea9dbe67a09a4e71c38b8d2a7330229a3a0aff9",
+      "last_commit_date": "2026-08-18 20:50:18 -0700"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py",
+      "exists_at_head": true,
+      "git_blob": "2eaff45df55bc384748b454c6b3a8ffd9b6c2e5c",
+      "cited_by": [
+        "ETAEPS-03",
+        "ETAEPS-19"
+      ],
+      "sha256_lf": "f52fbbe33ae28d08eeb932902a2be1d0ce209204ed57dece28b98b6bb5b76faa",
+      "bytes_lf": 43617,
+      "last_commit": "6269147d5f52ab4a29d2c41f5ea932421522ff77",
+      "last_commit_date": "2026-08-18 14:27:55 -0700"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_stage9_40e_eta_epsilon_bridge.py",
+      "exists_at_head": true,
+      "git_blob": "0aea931d9bbe45fb96094f27fdaa887a0d36223b",
+      "cited_by": [
+        "ETAEPS-03",
+        "ETAEPS-19"
+      ],
+      "sha256_lf": "92e6fd525bb9e247ee04640ad3f2b95f07b7ae29c48784606cf37dc3f32cf8bf",
+      "bytes_lf": 38031,
+      "last_commit": "6269147d5f52ab4a29d2c41f5ea932421522ff77",
+      "last_commit_date": "2026-08-18 14:27:55 -0700"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_open_weight_eta_epsilon_bridge.py",
+      "exists_at_head": true,
+      "git_blob": "ac798dd374f4ad6936f340023c806dbc73031207",
+      "cited_by": [
+        "ETAEPS-19"
+      ],
+      "sha256_lf": "c6592de793955ad9e9f25526e46718402daf60b6a5cfe9e0cbbd00c8216ff57e",
+      "bytes_lf": 11438,
+      "last_commit": "6269147d5f52ab4a29d2c41f5ea932421522ff77",
+      "last_commit_date": "2026-08-18 14:27:55 -0700"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_stage9_40e_eta_epsilon_bridge.py",
+      "exists_at_head": true,
+      "git_blob": "5f6356e04d25e52ea1ade8ea5adfbaa5d2f87a48",
+      "cited_by": [
+        "ETAEPS-19"
+      ],
+      "sha256_lf": "be9214a9308b44fddb303da7c0487720d91954fb58deb3e527ddb556be508be9",
+      "bytes_lf": 4413,
+      "last_commit": "6269147d5f52ab4a29d2c41f5ea932421522ff77",
+      "last_commit_date": "2026-08-18 14:27:55 -0700"
+    },
+    {
+      "path": "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/03_RESEARCH_AND_ARCHITECTURE_DOCS/SUPPLIED_SOURCE_INPUTS/CAS_Ohm_Quantification_Guide-2.pdf",
+      "exists_at_head": true,
+      "git_blob": "17949e7b4a674bac2a0f2134b21e79f539c71aa6",
+      "cited_by": [
+        "ETAEPS-20"
+      ],
+      "sha256_lf": "42f5d8b3e0998942c1ac5cf50f3f12533ddf599c797640bcd9c174a4600759be",
+      "bytes_lf": 2610379,
+      "last_commit": "baf1dfd8a389d97ee8d865639eaf9136f7360cbd",
+      "last_commit_date": "2026-08-10 19:27:08 -0700"
+    }
+  ]
+}

@@ -4,6 +4,36 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-02 - CJT / CAS-Ohm CLEAN-ROOM RESET: P6 is invalid, the lane has a ledger, nothing is promoted
+
+A successor instance took over the CJT / CAS-Ohm lane under the owner's clean-room handoff. Branch
+`research/cjt-ohm-cleanroom-reset-v1` from `1e58d725`; everything under
+`cas_only_reasoner/CJT_OHM_CLEANROOM/`. Cost: local numpy under two minutes, plus an estimated
+USD 0.0308 of Bedrock audit tokens. No GPU, no training, no claim promoted, no negative deleted.
+
+**P6 (the P > C > E > O order screen) is dead as an instrument.** Its numbers reproduce exactly, but
+its "held-out" set was the training set: the same seed drew both. With a real held-out draw and
+nothing else changed, every arm collapses (CAS 0.6868 vs bag 0.6875 in the CAS-ordered world), the
+mechanism-free bag ties or beats every chain arm in all four worlds, and the script's own positive
+control fails. An 84-parameter linear rule beats every arm (0.7108). The commit message's status
+word was never printed by the program. DeepSeek R1 and Llama 3.3 70B both returned `P6_AUDIT_FAIL`
+and answered "specific CAS order has evidence of value: NO; generic sequencing helps: CANNOT_SAY".
+The handoff line "sequencing appears useful in the reported P6 screen" is withdrawn. Spec sheet §7.20.
+
+**The ledger.** 242 claims across 0R, D0, S0, D1, the precedence closure, EX1, Path B, CJT-DEV,
+the deterministic controller, the eta-epsilon lane, the spec sheet and governance, each with
+status, scope, commits, artifact paths, auditor, raw-evidence locator, correction and
+"may govern next design". Second-agent adversarial verification is INCOMPLETE (session usage limit
+killed 226 verifier agents); every claim carries a mechanical check instead, and the header says so.
+
+**Record gaps.** The handoff-named `REFERENCE/AUDITS/CJT_*` audit files do not exist; the lane's
+GLM audits are builder summaries only; three lane commits skipped the spec sheet; the lane had no
+capability, negatives or frontier row.
+
+**Recommendation to the owner:** `DESIGN CJT-MECH-0, NO BUILD YET` — brief drafted, not
+authorized. Goals recorded in `CJT_OHM_PROJECT_GOALS_v1.md`; the transformer question is answered
+as "constructible, value untested" in `CAS_CJT_TRANSFORMER_POSSIBILITY_v0_1.md` (reasoning only).
+
 ## 2026-09-02 - CPB-0 DO_NOT_BUILD at $0; the question itself was malformed
 
 Second design retired at zero cost in a row. This one is not "designed badly" - the corpus lacks

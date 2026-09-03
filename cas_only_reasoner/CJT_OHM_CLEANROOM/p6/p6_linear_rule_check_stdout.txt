@@ -1,0 +1,11 @@
+P6 LINEAR-RULE CHECK  (least squares on the flattened 20-dim evidence + bias; 84 parameters)
+  same train draws as the committed script (asserted), held-out seed stream 500000+sd
+
+  condition                     OLS train   OLS held  majority tr  majority he
+  (a) world = CAS order            0.7252     0.7108       0.3607       0.3744   (held sd 0.0325)
+  (c) world = REVERSED             0.7208     0.7092       0.3599       0.3592   (held sd 0.0246)
+  (b) world = RANDOM per item      0.4903     0.4536       0.3627       0.3632   (held sd 0.0218)
+  (neg) NO order structure         0.7892     0.7755       0.3035       0.3084   (held sd 0.0126)
+
+  Reference held-out means from p6_heldout_repro_stdout.txt:
+    (a) best chain 0.6868, bag 0.6875 | (c) best chain 0.6739, bag 0.6857 | (b) best chain 0.3775, bag 0.4219 | (neg) best chain 0.7167, bag 0.8548

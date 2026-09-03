@@ -1,0 +1,34 @@
+{
+  "dispatched_at_utc": "2026-09-03T04:53:02.864372+00:00",
+  "region": "us-west-2",
+  "package": "P6_AUDIT_PACKAGE.md",
+  "package_chars": 35339,
+  "auditors": [
+    {
+      "family": "deepseek-r1",
+      "model_id": "us.deepseek.r1-v1:0",
+      "outcome": "OK_EXISTING_REPORT_NOT_REDISPATCHED",
+      "usage": {
+        "inputTokens": 11241,
+        "outputTokens": 1384,
+        "totalTokens": 12625
+      },
+      "estimated_cost_usd": 0.0226,
+      "verdict_line": "P6_AUDIT_FAIL: The corrected run's POSITIVE control failed (CAS \u2264 bag in (a)), invalidating all claims. The experiment cannot distinguish order effects from capacity differences or seed noise.",
+      "report": "audits/deepseek-r1_p6_audit.md"
+    },
+    {
+      "family": "llama3-3-70b",
+      "model_id": "us.meta.llama3-3-70b-instruct-v1:0",
+      "outcome": "OK",
+      "usage": {
+        "inputTokens": 10872,
+        "outputTokens": 571,
+        "totalTokens": 11443
+      },
+      "estimated_cost_usd": 0.0082,
+      "verdict_line": "P6_AUDIT_FAIL:the experiment's design and analysis are flawed, and the results do not provide strong evidence for any specific sequencing strategy, including the specific order P > C > E > O.",
+      "report": "audits/llama3-3-70b_p6_audit.md"
+    }
+  ]
+}

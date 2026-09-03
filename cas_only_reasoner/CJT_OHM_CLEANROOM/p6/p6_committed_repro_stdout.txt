@@ -1,0 +1,51 @@
+==============================================================================
+P6 -- IS THE CAS ORDER P>C>E>O BETTER THAN A REVERSED OR RANDOM FIXED ORDER?
+==============================================================================
+  K=4  5 seeds  1500 train / 1500 held out  700 steps  chance=0.25
+  REGISTERED PREDICTION (written before running):
+    (a) true order = CAS      -> CAS arm wins
+    (b) true order = random   -> all fixed orders tie
+    (c) true order = non-CAS  -> CAS arm LOSES to the arm matching the world
+  If all three hold, the winner is set by the WORLD, not by CAS.
+
+  (a) world's true order = CAS ORDER
+    P5 CAS order  P>C>E>O   0.9689  +/- 0.0206
+    P6a reversed  O>E>C>P   0.9272  +/- 0.0272
+    P6b random fixed order   0.9471  +/- 0.0272
+    BAG mechanism-free       0.8181  +/- 0.0208
+
+  (c) world's true order = REVERSED
+    P5 CAS order  P>C>E>O   0.9312  +/- 0.0169
+    P6a reversed  O>E>C>P   0.9448  +/- 0.0561
+    P6b random fixed order   0.9203  +/- 0.0238
+    BAG mechanism-free       0.8212  +/- 0.0216
+
+  (b) world's true order = RANDOM per item
+    P5 CAS order  P>C>E>O   0.7245  +/- 0.0129
+    P6a reversed  O>E>C>P   0.7247  +/- 0.0301
+    P6b random fixed order   0.7307  +/- 0.0226
+    BAG mechanism-free       0.5689  +/- 0.0165
+
+  (NEG CTRL) world has NO order structure
+    P5 CAS order  P>C>E>O   0.9856  +/- 0.0136
+    P6a reversed  O>E>C>P   0.9921  +/- 0.0045
+    P6b random fixed order   0.9683  +/- 0.0349
+    BAG mechanism-free       0.9960  +/- 0.0040
+
+==============================================================================
+  CONTROL CHECK -- no verdict unless both behave:
+    POSITIVE  order-matching arm beats the bag in (a) and (c)   PASS
+      (a) CAS 0.9689 vs bag 0.8181 | (c) reversed 0.9448 vs bag 0.8212
+    NEGATIVE  no-order world: all fixed orders within 0.05      PASS  (spread 0.0239)
+==============================================================================
+
+    (a) CAS minus best other fixed order = +0.0219
+    (c) CAS minus the world-matching arm = -0.0136
+    (b) CAS minus best other fixed order = -0.0061   (seed sd approx 0.0301)
+
+    prediction (a) CAS wins when the world is CAS-ordered      HELD
+    prediction (b) all fixed orders tie on random-order worlds HELD
+    prediction (c) CAS loses when the world is reversed        FAILED
+
+  -> THE PREDICTION DID NOT HOLD AS REGISTERED. Report exactly which part failed
+     and do NOT substitute a new hypothesis for the registered one.

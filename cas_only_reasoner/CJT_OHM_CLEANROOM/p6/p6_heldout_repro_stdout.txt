@@ -1,0 +1,45 @@
+==============================================================================
+P6 HELD-OUT REPRODUCTION -- same arms, worlds, seeds, thresholds; held-out now HELD OUT
+==============================================================================
+  committed script sha256 07e824e242968c11440c4cc3d256bb518cf5579416fc4d848bf3004cc8baa8dd
+  K=4  5 seeds  1500 train / 1500 held out (seed stream 500000+sd)  700 steps  chance=0.25
+  registered prediction thresholds, unchanged from the committed script:
+    (a) d_a > 0.02   (b) |d_b| < 0.03   (c) d_c < -0.02
+  controls, unchanged: POSITIVE matching arm > bag + 0.02 in (a) and (c);
+                       NEGATIVE spread of fixed orders < 0.05 in the no-order world
+
+  (a) world's true order = CAS ORDER      held-out identical to train: [False, False, False, False, False]
+    arm                         train-fit  committed  match    HELD-OUT  +/- sd
+    P5 CAS order  P>C>E>O          0.9689     0.9689    yes      0.6868  +/- 0.0298
+    P6a reversed  O>E>C>P          0.9272     0.9272    yes      0.6148  +/- 0.0279
+    P6b random fixed order         0.9471     0.9471    yes      0.6384  +/- 0.0222
+    BAG mechanism-free             0.8181     0.8181    yes      0.6875  +/- 0.0210
+
+  (c) world's true order = REVERSED      held-out identical to train: [False, False, False, False, False]
+    arm                         train-fit  committed  match    HELD-OUT  +/- sd
+    P5 CAS order  P>C>E>O          0.9312     0.9312    yes      0.6209  +/- 0.0329
+    P6a reversed  O>E>C>P          0.9448     0.9448    yes      0.6739  +/- 0.0219
+    P6b random fixed order         0.9203     0.9203    yes      0.6261  +/- 0.0260
+    BAG mechanism-free             0.8212     0.8212    yes      0.6857  +/- 0.0235
+
+  (b) world's true order = RANDOM per item      held-out identical to train: [False, False, False, False, False]
+    arm                         train-fit  committed  match    HELD-OUT  +/- sd
+    P5 CAS order  P>C>E>O          0.7245     0.7245    yes      0.3743  +/- 0.0177
+    P6a reversed  O>E>C>P          0.7247     0.7247    yes      0.3675  +/- 0.0198
+    P6b random fixed order         0.7307     0.7307    yes      0.3775  +/- 0.0208
+    BAG mechanism-free             0.5689     0.5689    yes      0.4219  +/- 0.0337
+
+  (NEG CTRL) world has NO order structure      held-out identical to train: [False, False, False, False, False]
+    arm                         train-fit  committed  match    HELD-OUT  +/- sd
+    P5 CAS order  P>C>E>O          0.9856     0.9856    yes      0.7167  +/- 0.0183
+    P6a reversed  O>E>C>P          0.9921     0.9921    yes      0.7108  +/- 0.0242
+    P6b random fixed order         0.9683     0.9683    yes      0.7161  +/- 0.0121
+    BAG mechanism-free             0.9960     0.9960    yes      0.8548  +/- 0.0242
+
+==============================================================================
+  POSITIVE CONTROL OF THIS SCRIPT -- train-fit reproduces the committed numbers:  PASS
+  CONTROL CHECK on HELD-OUT numbers -- no verdict unless both behave:
+    POSITIVE  FAIL   (a) CAS 0.6868 vs bag 0.6875 | (c) reversed 0.6739 vs bag 0.6857
+    NEGATIVE  PASS   spread 0.0059
+==============================================================================
+  STATUS: CONTROLS_FAILED_NO_VERDICT
