@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/math_expression.schema.json",
+  "title": "CAS-Math Exact Expression v0.1",
+  "$ref": "#/$defs/expression",
+  "$defs": {
+    "rational": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["numerator", "denominator"],
+      "properties": {
+        "numerator": { "type": "integer" },
+        "denominator": { "type": "integer", "not": { "const": 0 } }
+      }
+    },
+    "expression": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": { "const": "integer" },
+            "value": { "type": "integer" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": { "const": "rational" },
+            "value": { "$ref": "#/$defs/rational" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "name"],
+          "properties": {
+            "kind": { "const": "variable" },
+            "name": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "operand"],
+          "properties": {
+            "kind": { "const": "negate" },
+            "operand": { "$ref": "#/$defs/expression" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "terms"],
+          "properties": {
+            "kind": { "const": "add" },
+            "terms": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "$ref": "#/$defs/expression" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "factors"],
+          "properties": {
+            "kind": { "const": "multiply" },
+            "factors": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "$ref": "#/$defs/expression" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "numerator", "denominator"],
+          "properties": {
+            "kind": { "const": "divide" },
+            "numerator": { "$ref": "#/$defs/expression" },
+            "denominator": { "$ref": "#/$defs/expression" }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/rpm_frame.schema.json",
+  "title": "CNCM RPMFrame v0.1",
+  "description": "The exact RPMFrame.to_dict() artifact shape. Foundation references remain opaque OPEN-SEMANTICS values.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "frame_id",
+    "goal_id",
+    "parent_goal_id",
+    "branch_id",
+    "target_foundation",
+    "blocked_prerequisite",
+    "return_address",
+    "resume_stage",
+    "expected_result_key",
+    "depth"
+  ],
+  "properties": {
+    "frame_id": { "type": "string", "pattern": "^rpm-frame-[0-9a-f]{16}$" },
+    "goal_id": { "type": "string", "pattern": "^goal-rpm-[0-9a-f]{16}$" },
+    "parent_goal_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "branch_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "target_foundation": {
+      "type": ["string", "null"],
+      "pattern": "^TF[1-7]([a-d])?$"
+    },
+    "blocked_prerequisite": { "type": "string", "minLength": 1 },
+    "return_address": { "type": "string", "minLength": 1 },
+    "resume_stage": { "const": "INFERENCE" },
+    "expected_result_key": { "type": "string", "minLength": 1 },
+    "depth": { "type": "integer", "minimum": 1 }
+  }
+}

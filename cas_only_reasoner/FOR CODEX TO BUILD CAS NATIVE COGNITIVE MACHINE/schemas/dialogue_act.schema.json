@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/dialogue_act.schema.json",
+  "title": "CAS DialogueAct v0.1",
+  "description": "A typed conversational purpose. It carries no proof, commitment, action, or memory-write authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "act_id",
+    "turn_id",
+    "speaker_id",
+    "act_type",
+    "target_act_id",
+    "semantic_packet_id",
+    "status",
+    "content_summary",
+    "commitments",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.dialogue_act/0.1" },
+    "act_id": { "$ref": "#/$defs/identifier" },
+    "turn_id": { "$ref": "#/$defs/identifier" },
+    "speaker_id": { "$ref": "#/$defs/identifier" },
+    "act_type": {
+      "enum": [
+        "ASSERT",
+        "ASK",
+        "ANSWER",
+        "COMMAND",
+        "CLARIFY_REQUEST",
+        "CLARIFY_RESPONSE",
+        "CORRECT",
+        "ACKNOWLEDGE",
+        "TOPIC_SHIFT",
+        "CLOSE",
+        "UNSUPPORTED"
+      ]
+    },
+    "target_act_id": {
+      "oneOf": [
+        { "$ref": "#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "semantic_packet_id": {
+      "oneOf": [
+        { "$ref": "#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "status": {
+      "enum": ["SELECTED", "UNRESOLVED", "PROVISIONAL", "RETRACTED", "UNSUPPORTED"]
+    },
+    "content_summary": { "type": "string", "minLength": 1 },
+    "commitments": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/commitment" }
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/provenance" }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$"
+    },
+    "commitment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commitment_id", "kind", "content", "status"],
+      "properties": {
+        "commitment_id": { "$ref": "#/$defs/identifier" },
+        "kind": { "enum": ["INFORM", "ANSWER", "CLARIFY", "CORRECT", "NONE"] },
+        "content": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["PROPOSED", "ACTIVE", "FULFILLED", "RETRACTED"] }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_id"],
+      "properties": {
+        "source_type": { "enum": ["TURN", "PARSER", "DIALOGUE_STATE", "MEMORY_RECORD"] },
+        "source_id": { "$ref": "#/$defs/identifier" },
+        "detail": { "type": "string" }
+      }
+    }
+  }
+}
+

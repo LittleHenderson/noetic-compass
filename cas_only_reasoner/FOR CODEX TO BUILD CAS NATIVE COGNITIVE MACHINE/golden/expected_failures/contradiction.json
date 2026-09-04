@@ -1,0 +1,11 @@
+{
+  "diagnostics": [
+    "explicit contradiction prevented commitment"
+  ],
+  "final_state_hash": "3933360265307e1461e8bae7b2726d57ec8133e248edaedf66ee8a2a1e0119e1",
+  "fixture": "contradiction",
+  "lacunae": [],
+  "schema_version": "cncm.expected-failure/0.1",
+  "terminal_status": "CONFLICT_UNRESOLVED",
+  "trace_head": "b4031829c8260797bad3695e367b324c69b05969e960cef375b0e17936c7ad10"
+}

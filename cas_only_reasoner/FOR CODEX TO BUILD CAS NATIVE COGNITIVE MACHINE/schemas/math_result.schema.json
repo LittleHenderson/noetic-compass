@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/math_result.schema.json",
+  "title": "CAS-Math Linear Run Result v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "problem_id", "theory_id", "checker_version", "input_statement", "solve_variable", "terminal_status", "solution", "claims", "checked_steps", "first_failing_step", "detail", "evidence", "result_digest"],
+  "properties": {
+    "schema_version": { "const": "cncm.math-result/0.1" },
+    "problem_id": { "type": "string", "pattern": "^math-problem-[0-9a-f]{16}$" },
+    "theory_id": { "const": "cncm.q-linear/0.1" },
+    "checker_version": { "const": "cncm.math-checker/0.1" },
+    "input_statement": { "$ref": "math_statement.schema.json" },
+    "solve_variable": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+    "terminal_status": { "$ref": "math_evidence_packet.schema.json#/properties/terminal_status" },
+    "solution": { "oneOf": [{ "$ref": "math_expression.schema.json#/$defs/rational" }, { "type": "null" }] },
+    "claims": { "type": "array", "minItems": 1, "items": { "$ref": "math_claim.schema.json" } },
+    "checked_steps": { "type": "array", "items": { "$ref": "proof_step.schema.json" } },
+    "first_failing_step": { "$ref": "math_evidence_packet.schema.json#/properties/first_failing_step" },
+    "detail": { "type": "string" },
+    "evidence": { "$ref": "math_evidence_packet.schema.json" },
+    "result_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "diagnostics": [
+    "no branch established every required premise"
+  ],
+  "final_state_hash": "9eec2706f0aa92fd46e9dfb074e4f3514d030d789a8c5f55eb804b5bcd37aa99",
+  "fixture": "memory_recall",
+  "lacunae": [
+    "holds(Q)@global"
+  ],
+  "schema_version": "cncm.expected-failure/0.1",
+  "terminal_status": "NEEDS_INFORMATION",
+  "trace_head": "04fda21df99a5160f9a12b9eaad9cbaabb2ddc0ebb273a7307cb3c54b355551b"
+}

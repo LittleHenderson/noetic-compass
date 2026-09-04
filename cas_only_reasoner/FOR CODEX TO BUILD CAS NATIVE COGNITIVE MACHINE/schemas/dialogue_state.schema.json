@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/dialogue_state.schema.json",
+  "title": "CAS DialogueState v0.1",
+  "description": "An immutable deterministic conversation snapshot. It does not grant reasoning or action authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "conversation_id",
+    "state_revision",
+    "participants",
+    "current_speaker",
+    "next_speaker",
+    "current_topic",
+    "topic_stack",
+    "referents",
+    "unresolved_questions",
+    "active_user_goal",
+    "active_system_goal",
+    "prior_turn_ids",
+    "commitments",
+    "response_style",
+    "memory_links",
+    "pending_clarification",
+    "closed"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.dialogue_state/0.1" },
+    "conversation_id": { "$ref": "#/$defs/identifier" },
+    "state_revision": { "type": "integer", "minimum": 0 },
+    "participants": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/participant" }
+    },
+    "current_speaker": {
+      "oneOf": [
+        { "$ref": "#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "next_speaker": { "$ref": "#/$defs/identifier" },
+    "current_topic": {
+      "oneOf": [
+        { "$ref": "#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "topic_stack": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/topic" }
+    },
+    "referents": {
+      "type": "array",
+      "items": { "$ref": "referent.schema.json" }
+    },
+    "unresolved_questions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/unresolved_question" }
+    },
+    "active_user_goal": {
+      "oneOf": [
+        { "$ref": "#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "active_system_goal": {
+      "oneOf": [
+        { "$ref": "#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "prior_turn_ids": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/identifier" },
+      "uniqueItems": true
+    },
+    "commitments": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/commitment" }
+    },
+    "response_style": { "$ref": "#/$defs/response_style" },
+    "memory_links": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/memory_link" }
+    },
+    "pending_clarification": {
+      "oneOf": [
+        { "$ref": "#/$defs/pending_clarification" },
+        { "type": "null" }
+      ]
+    },
+    "closed": { "type": "boolean" }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$"
+    },
+    "participant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["participant_id", "role"],
+      "properties": {
+        "participant_id": { "$ref": "#/$defs/identifier" },
+        "role": { "enum": ["USER", "SYSTEM"] }
+      }
+    },
+    "topic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topic_id", "label", "introduced_turn_id", "status"],
+      "properties": {
+        "topic_id": { "$ref": "#/$defs/identifier" },
+        "label": { "type": "string", "minLength": 1 },
+        "introduced_turn_id": { "$ref": "#/$defs/identifier" },
+        "status": { "enum": ["ACTIVE", "SUSPENDED", "CLOSED"] }
+      }
+    },
+    "unresolved_question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question_id",
+        "source_turn_id",
+        "missing_slots",
+        "status",
+        "rpm_child_goal_id"
+      ],
+      "properties": {
+        "question_id": { "$ref": "#/$defs/identifier" },
+        "source_turn_id": { "$ref": "#/$defs/identifier" },
+        "missing_slots": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/identifier" },
+          "uniqueItems": true
+        },
+        "status": { "enum": ["OPEN", "RESOLVED", "CANCELLED"] },
+        "rpm_child_goal_id": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "commitment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commitment_id", "speaker_id", "content", "created_turn_id", "status"],
+      "properties": {
+        "commitment_id": { "$ref": "#/$defs/identifier" },
+        "speaker_id": { "$ref": "#/$defs/identifier" },
+        "content": { "type": "string", "minLength": 1 },
+        "created_turn_id": { "$ref": "#/$defs/identifier" },
+        "status": { "enum": ["PROPOSED", "ACTIVE", "FULFILLED", "RETRACTED"] }
+      }
+    },
+    "response_style": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tone", "detail_level", "max_sentences"],
+      "properties": {
+        "tone": { "enum": ["NEUTRAL", "DIRECT", "CAUTIOUS"] },
+        "detail_level": { "enum": ["MINIMAL", "STANDARD", "DETAILED"] },
+        "max_sentences": { "type": "integer", "minimum": 1, "maximum": 12 }
+      }
+    },
+    "memory_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["memory_record_id", "provenance_id", "use_status"],
+      "properties": {
+        "memory_record_id": { "$ref": "#/$defs/identifier" },
+        "provenance_id": { "$ref": "#/$defs/identifier" },
+        "use_status": { "enum": ["REQUESTED", "ADMITTED", "REJECTED"] }
+      }
+    },
+    "pending_clarification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clarification_id",
+        "source_turn_id",
+        "parent_goal_id",
+        "rpm_child_goal_id",
+        "missing_slots",
+        "candidate_entity_ids",
+        "exact_question"
+      ],
+      "properties": {
+        "clarification_id": { "$ref": "#/$defs/identifier" },
+        "source_turn_id": { "$ref": "#/$defs/identifier" },
+        "parent_goal_id": { "$ref": "#/$defs/identifier" },
+        "rpm_child_goal_id": { "$ref": "#/$defs/identifier" },
+        "missing_slots": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/identifier" },
+          "uniqueItems": true
+        },
+        "candidate_entity_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/identifier" },
+          "uniqueItems": true
+        },
+        "exact_question": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
+

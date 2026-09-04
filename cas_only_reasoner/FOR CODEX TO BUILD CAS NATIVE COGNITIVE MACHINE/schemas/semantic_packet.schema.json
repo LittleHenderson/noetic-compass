@@ -1,0 +1,361 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/semantic_packet.schema.json",
+  "title": "CAS SemanticPacket v0.1",
+  "description": "A bounded candidate meaning with an explicit non-authoritative kernel handoff and direct-semantic equivalence link.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_id",
+    "source_turn_id",
+    "construction_mode",
+    "language_profile",
+    "interpretation_status",
+    "dialogue_act",
+    "semantic_content",
+    "ambiguity_candidates",
+    "unsupported_features",
+    "kernel_handoff",
+    "equivalence"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.semantic_packet/0.1" },
+    "packet_id": { "$ref": "#/$defs/identifier" },
+    "source_turn_id": {
+      "oneOf": [
+        { "$ref": "#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "construction_mode": { "enum": ["CONTROLLED_ENGLISH", "DIRECT_SEMANTIC"] },
+    "language_profile": { "enum": ["CCB-L1-CE-0.1", "NONE"] },
+    "interpretation_status": { "enum": ["SELECTED", "AMBIGUOUS", "UNSUPPORTED"] },
+    "dialogue_act": { "$ref": "dialogue_act.schema.json" },
+    "semantic_content": { "$ref": "#/$defs/semantic_content" },
+    "ambiguity_candidates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ambiguity_candidate" }
+    },
+    "unsupported_features": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "kernel_handoff": { "$ref": "#/$defs/kernel_handoff" },
+    "equivalence": { "$ref": "#/$defs/equivalence" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "construction_mode": { "const": "CONTROLLED_ENGLISH" } },
+        "required": ["construction_mode"]
+      },
+      "then": { "properties": { "language_profile": { "const": "CCB-L1-CE-0.1" } } }
+    },
+    {
+      "if": {
+        "properties": { "construction_mode": { "const": "DIRECT_SEMANTIC" } },
+        "required": ["construction_mode"]
+      },
+      "then": { "properties": { "language_profile": { "const": "NONE" } } }
+    },
+    {
+      "if": {
+        "properties": { "interpretation_status": { "const": "SELECTED" } },
+        "required": ["interpretation_status"]
+      },
+      "then": {
+        "properties": {
+          "ambiguity_candidates": { "type": "array", "maxItems": 0 },
+          "unsupported_features": { "type": "array", "maxItems": 0 },
+          "semantic_content": {
+            "type": "object",
+            "properties": {
+              "unresolved_slots": { "type": "array", "maxItems": 0 }
+            },
+            "required": ["unresolved_slots"]
+          },
+          "kernel_handoff": {
+            "type": "object",
+            "properties": {
+              "adapter_status": {
+                "enum": ["PROVISIONAL_NOT_IMPLEMENTED", "READY"]
+              },
+              "reasoning_request_id": { "$ref": "#/$defs/identifier" }
+            },
+            "required": ["adapter_status", "reasoning_request_id"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "interpretation_status": { "const": "AMBIGUOUS" } },
+        "required": ["interpretation_status"]
+      },
+      "then": {
+        "properties": {
+          "ambiguity_candidates": { "type": "array", "minItems": 2 },
+          "semantic_content": {
+            "type": "object",
+            "properties": {
+              "unresolved_slots": { "type": "array", "minItems": 1 }
+            },
+            "required": ["unresolved_slots"]
+          },
+          "kernel_handoff": {
+            "type": "object",
+            "properties": { "adapter_status": { "const": "BLOCKED_AMBIGUITY" } },
+            "required": ["adapter_status"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "interpretation_status": { "const": "UNSUPPORTED" } },
+        "required": ["interpretation_status"]
+      },
+      "then": {
+        "properties": {
+          "unsupported_features": { "type": "array", "minItems": 1 },
+          "kernel_handoff": {
+            "type": "object",
+            "properties": { "adapter_status": { "const": "BLOCKED_UNSUPPORTED" } },
+            "required": ["adapter_status"]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$"
+    },
+    "semantic_content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entities", "predicates", "events", "discourse", "unresolved_slots"],
+      "properties": {
+        "entities": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/entity" }
+        },
+        "predicates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/predicate" }
+        },
+        "events": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/event" }
+        },
+        "discourse": { "$ref": "#/$defs/discourse" },
+        "unresolved_slots": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/unresolved_slot" }
+        }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "entity_type", "canonical_label"],
+      "properties": {
+        "entity_id": { "$ref": "#/$defs/identifier" },
+        "entity_type": {
+          "enum": ["PERSON", "OBJECT", "PLACE", "EVENT", "PROPOSITION", "TOPIC", "UNKNOWN"]
+        },
+        "canonical_label": { "type": "string", "minLength": 1 }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predicate", "arguments", "polarity", "epistemic_status", "source_refs"],
+      "properties": {
+        "predicate": { "$ref": "#/$defs/identifier" },
+        "arguments": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/identifier" }
+        },
+        "polarity": { "type": "boolean" },
+        "epistemic_status": {
+          "enum": ["ASSERTED", "QUERIED", "COMMANDED", "CORRECTED", "RECALLED", "PROVISIONAL"]
+        },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/identifier" }
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "event_type", "roles", "tense", "source_refs"],
+      "properties": {
+        "event_id": { "$ref": "#/$defs/identifier" },
+        "event_type": { "$ref": "#/$defs/identifier" },
+        "roles": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/role_binding" }
+        },
+        "tense": { "enum": ["PAST", "PRESENT", "FUTURE", "NONE"] },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/identifier" }
+        }
+      }
+    },
+    "role_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "entity_id"],
+      "properties": {
+        "role": {
+          "enum": ["AGENT", "PATIENT", "THEME", "RECIPIENT", "SOURCE", "DESTINATION", "INSTRUMENT"]
+        },
+        "entity_id": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "discourse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topic_id", "anaphora"],
+      "properties": {
+        "topic_id": {
+          "oneOf": [
+            { "$ref": "#/$defs/identifier" },
+            { "type": "null" }
+          ]
+        },
+        "anaphora": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/anaphora_binding" }
+        }
+      }
+    },
+    "anaphora_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface_form", "referent_id", "resolution_status"],
+      "properties": {
+        "surface_form": { "type": "string", "minLength": 1 },
+        "referent_id": {
+          "oneOf": [
+            { "$ref": "#/$defs/identifier" },
+            { "type": "null" }
+          ]
+        },
+        "resolution_status": { "enum": ["RESOLVED", "AMBIGUOUS", "UNRESOLVED"] }
+      }
+    },
+    "unresolved_slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slot_id", "required_type", "candidate_entity_ids"],
+      "properties": {
+        "slot_id": { "$ref": "#/$defs/identifier" },
+        "required_type": {
+          "enum": ["PERSON", "OBJECT", "PLACE", "EVENT", "PROPOSITION", "TOPIC", "UNKNOWN"]
+        },
+        "candidate_entity_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/identifier" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "ambiguity_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id", "bindings", "semantic_summary"],
+      "properties": {
+        "candidate_id": { "$ref": "#/$defs/identifier" },
+        "bindings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/slot_binding" }
+        },
+        "semantic_summary": { "type": "string", "minLength": 1 }
+      }
+    },
+    "slot_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slot_id", "entity_id"],
+      "properties": {
+        "slot_id": { "$ref": "#/$defs/identifier" },
+        "entity_id": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "kernel_handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract",
+        "adapter_status",
+        "reasoning_request_id",
+        "semantic_atom_keys",
+        "authority_status"
+      ],
+      "properties": {
+        "contract": { "const": "SemanticPacket->ReasoningRequest/0.1" },
+        "adapter_status": {
+          "enum": [
+            "PROVISIONAL_NOT_IMPLEMENTED",
+            "READY",
+            "BLOCKED_AMBIGUITY",
+            "BLOCKED_UNSUPPORTED"
+          ]
+        },
+        "reasoning_request_id": {
+          "oneOf": [
+            { "$ref": "#/$defs/identifier" },
+            { "type": "null" }
+          ]
+        },
+        "semantic_atom_keys": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "authority_status": { "const": "REQUEST_ONLY" }
+      }
+    },
+    "equivalence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "equivalence_id",
+        "paired_packet_id",
+        "required_dimensions",
+        "runtime_status"
+      ],
+      "properties": {
+        "equivalence_id": { "$ref": "#/$defs/identifier" },
+        "paired_packet_id": { "$ref": "#/$defs/identifier" },
+        "required_dimensions": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "SEMANTIC_CONTENT",
+              "TERMINAL_DISPOSITION",
+              "BRANCH_TOPOLOGY",
+              "INFERENCE_TRACE",
+              "RPM_SUBGOALS",
+              "COMMITTED_RESULT",
+              "MEMORY_EFFECTS",
+              "RESPONSE_PLAN"
+            ]
+          }
+        },
+        "runtime_status": { "enum": ["NOT_RUN", "PASSED", "FAILED"] }
+      }
+    }
+  }
+}

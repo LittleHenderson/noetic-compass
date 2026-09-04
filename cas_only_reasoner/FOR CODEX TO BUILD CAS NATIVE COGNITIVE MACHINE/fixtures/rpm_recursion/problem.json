@@ -1,0 +1,41 @@
+{
+  "schema_version": "cncm.problem/0.1",
+  "problem_id": "rpm_missing_prerequisite",
+  "goal_id": "establish_q_with_child_goal",
+  "seed": 0,
+  "entities": [
+    {"entity_id": "P", "entity_type": "symbol"},
+    {"entity_id": "Q", "entity_type": "symbol"}
+  ],
+  "predicates": [{"predicate_id": "holds", "argument_types": ["symbol"], "transitive": false}],
+  "facts": [],
+  "rules": [
+    {
+      "rule_id": "p_implies_q",
+      "operation": "INFER_MODUS_PONENS",
+      "antecedents": [{"predicate": "holds", "arguments": ["P"]}],
+      "consequent": {"predicate": "holds", "arguments": ["Q"]},
+      "provenance": [{"source_type": "fixture", "source_id": "rpm_parent_rule"}]
+    }
+  ],
+  "query": {"predicate": "holds", "arguments": ["Q"]},
+  "rpm_resolvers": [
+    {
+      "target": {"predicate": "holds", "arguments": ["P"]},
+      "facts": [
+        {"predicate": "holds", "arguments": ["P"], "evidence_status": "asserted", "provenance": [{"source_type": "fixture", "source_id": "rpm_child_evidence"}]}
+      ],
+      "rules": []
+    }
+  ],
+  "foundation_ref": "TF1a",
+  "budgets": {
+    "max_ticks": 96,
+    "max_branches": 4,
+    "max_rpm_depth": 4,
+    "max_inference_steps": 48,
+    "max_memory_queries": 4,
+    "max_repeat_states": 3
+  }
+}
+

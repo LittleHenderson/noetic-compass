@@ -1,0 +1,13 @@
+{
+  "schema_version": "cncm.math-fixture/0.1",
+  "fixture_id": "math_bounded_counterexample",
+  "category": "counterexamples",
+  "operation": "counterexample",
+  "input": {
+    "notation": "x*x<5",
+    "bounds": [{ "variable": "x", "lower": -3, "upper": 3 }],
+    "max_assignments": 32
+  },
+  "expected": { "status": "FOUND", "assignment": [["x", -3]] },
+  "runtime_status": "EXECUTABLE"
+}

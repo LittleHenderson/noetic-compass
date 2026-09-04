@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/math_counterexample.schema.json",
+  "title": "CAS-Math Bounded Counterexample Result v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "statement", "guards", "bounds", "tested_assignments", "max_assignments", "assignment", "exact_left", "exact_right", "theory_id", "checker_version", "detail", "result_digest"],
+  "properties": {
+    "schema_version": { "const": "cncm.math-counterexample/0.1" },
+    "status": { "type": "string", "enum": ["FOUND", "NONE_WITHIN_BOUNDS", "NEEDS_GUARD", "UNSUPPORTED_EXPRESSION", "BUDGET_EXHAUSTED"] },
+    "statement": { "$ref": "math_statement.schema.json" },
+    "guards": { "type": "array", "items": { "$ref": "math_statement.schema.json" } },
+    "bounds": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["variable", "lower", "upper"],
+        "properties": {
+          "variable": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+          "lower": { "type": "integer" },
+          "upper": { "type": "integer" }
+        }
+      }
+    },
+    "tested_assignments": { "type": "integer", "minimum": 0 },
+    "max_assignments": { "type": "integer", "minimum": 1 },
+    "assignment": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [{ "type": "string" }, { "type": "integer" }],
+        "items": false,
+        "minItems": 2,
+        "maxItems": 2
+      }
+    },
+    "exact_left": { "oneOf": [{ "$ref": "math_expression.schema.json#/$defs/rational" }, { "type": "null" }] },
+    "exact_right": { "oneOf": [{ "$ref": "math_expression.schema.json#/$defs/rational" }, { "type": "null" }] },
+    "theory_id": { "const": "cncm.q-linear/0.1" },
+    "checker_version": { "const": "cncm.math-checker/0.1" },
+    "detail": { "type": "string" },
+    "result_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

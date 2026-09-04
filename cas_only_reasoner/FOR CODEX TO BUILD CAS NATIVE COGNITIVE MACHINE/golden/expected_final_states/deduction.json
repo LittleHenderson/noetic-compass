@@ -1,0 +1,412 @@
+{
+  "active_goal_id": "establish_q",
+  "branch_table": [
+    {
+      "active_goal_id": "establish_q",
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [],
+      "created_at_tick": 0,
+      "decompositions": [
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [],
+          "dependencies": [
+            "p_implies_q"
+          ],
+          "predicted_effects": [
+            "holds(Q)@global"
+          ],
+          "premises": [
+            "holds(P)@global"
+          ],
+          "required_prerequisites": [],
+          "unknowns": []
+        },
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [],
+          "dependencies": [
+            "p_implies_q"
+          ],
+          "predicted_effects": [
+            "holds(Q)@global"
+          ],
+          "premises": [
+            "holds(P)@global"
+          ],
+          "required_prerequisites": [],
+          "unknowns": []
+        }
+      ],
+      "hard_constraints": [],
+      "parent_branch_id": null,
+      "proof_steps": [
+        {
+          "branch_id": "branch-main",
+          "conclusion": {
+            "arguments": [
+              "Q"
+            ],
+            "evidence_status": "derived",
+            "polarity": true,
+            "predicate": "holds",
+            "provenance": [
+              {
+                "detail": "",
+                "source_id": "deduction_rule",
+                "source_type": "fixture"
+              },
+              {
+                "detail": "declared CAS-Sem inference",
+                "source_id": "p_implies_q",
+                "source_type": "rule"
+              }
+            ],
+            "scope": "global"
+          },
+          "operation": "INFER_MODUS_PONENS",
+          "premise_keys": [
+            "holds(P)@global"
+          ],
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "deduction_rule",
+              "source_type": "fixture"
+            },
+            {
+              "detail": "declared CAS-Sem inference",
+              "source_id": "p_implies_q",
+              "source_type": "rule"
+            }
+          ],
+          "rule_id": "p_implies_q",
+          "step_id": "proof-8fa5b94ad8e72d09",
+          "substitution": [],
+          "verified": true
+        }
+      ],
+      "propositions": [
+        {
+          "arguments": [
+            "P"
+          ],
+          "evidence_status": "asserted",
+          "polarity": true,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "deduction_fact_p",
+              "source_type": "fixture"
+            }
+          ],
+          "scope": "global"
+        },
+        {
+          "arguments": [
+            "Q"
+          ],
+          "evidence_status": "derived",
+          "polarity": true,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "deduction_rule",
+              "source_type": "fixture"
+            },
+            {
+              "detail": "declared CAS-Sem inference",
+              "source_id": "p_implies_q",
+              "source_type": "rule"
+            }
+          ],
+          "scope": "global"
+        }
+      ],
+      "recalled_memory_ids": [],
+      "status": "COMMITTED",
+      "unknowns": []
+    }
+  ],
+  "budget": {
+    "branches_remaining": 3,
+    "inference_steps_remaining": 31,
+    "memory_queries_remaining": 4,
+    "rpm_depth_limit": 4,
+    "ticks_remaining": 55
+  },
+  "commitment_state": {
+    "conclusion": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "deduction_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "p_implies_q",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "decision_status": "COMMITTED",
+    "gate_results": [
+      [
+        "comparison_stable",
+        true
+      ],
+      [
+        "contradiction_free",
+        true
+      ],
+      [
+        "derivation_complete",
+        true
+      ],
+      [
+        "operational_ready",
+        true
+      ],
+      [
+        "principled_gate",
+        true
+      ],
+      [
+        "provenance_present",
+        true
+      ],
+      [
+        "rpm_sufficient",
+        true
+      ]
+    ],
+    "selected_branch_id": "branch-main"
+  },
+  "constitution_revision": "cncm-constitution/0.1",
+  "domain_power_state": [
+    [
+      "P",
+      "GOOD"
+    ],
+    [
+      "C",
+      "GOOD"
+    ],
+    [
+      "E",
+      "GOOD"
+    ],
+    [
+      "O",
+      "ENABLED"
+    ]
+  ],
+  "drive_state": [
+    [
+      "F1",
+      "AVAILABLE"
+    ],
+    [
+      "F2",
+      "AVAILABLE"
+    ],
+    [
+      "F3",
+      "AVAILABLE"
+    ],
+    [
+      "F4",
+      "AVAILABLE"
+    ],
+    [
+      "F5",
+      "AVAILABLE"
+    ],
+    [
+      "F6",
+      "AVAILABLE"
+    ],
+    [
+      "F7",
+      "AVAILABLE"
+    ]
+  ],
+  "episodic_memory": [
+    {
+      "branch_id": "branch-main",
+      "conclusion": {
+        "arguments": [
+          "Q"
+        ],
+        "evidence_status": "derived",
+        "polarity": true,
+        "predicate": "holds",
+        "provenance": [
+          {
+            "detail": "",
+            "source_id": "deduction_rule",
+            "source_type": "fixture"
+          },
+          {
+            "detail": "declared CAS-Sem inference",
+            "source_id": "p_implies_q",
+            "source_type": "rule"
+          }
+        ],
+        "scope": "global"
+      },
+      "episode_id": "episode-1681de2d1707e707",
+      "final_state_hash": "2e00125dfe21a8cbe4421a5a9786ed0ee50c1d2afbba6eb10fc4a6be4579d7a2",
+      "goal_id": "establish_q",
+      "problem_id": "deduction_modus_ponens",
+      "proof_digest": "55e724cb731b209215f75f1d3b75b1d91b826fb17561b4eb1e0b822bc106432d",
+      "trace_head": "038106970db4be580f76c8f118d5fc126987e6ca834084d91b53f1928e03a759",
+      "verified": true
+    }
+  ],
+  "episodic_memory_revision": 1,
+  "foundation_state": [
+    [
+      "TF1",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF2",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF3",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF4",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF5",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF6",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF7",
+      "UNSPECIFIED"
+    ]
+  ],
+  "global_workspace": {
+    "comparison_reports": [
+      {
+        "differences": [
+          "branch-main:0,0,0,0,0,1"
+        ],
+        "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+        "metrics": [
+          [
+            "branch-main",
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          ]
+        ],
+        "ordered_branch_ids": [
+          "branch-main"
+        ],
+        "report_id": "comparison-27737f8175b96ca9",
+        "shared_features": [
+          "holds(Q)@global",
+          "same_evaluation_frame"
+        ],
+        "single_candidate_reason": "mechanically_deterministic_declared_path",
+        "winner_branch_id": "branch-main"
+      }
+    ],
+    "conclusion": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "deduction_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "p_implies_q",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "diagnostics": [],
+    "lacunae": [],
+    "problem_id": "deduction_modus_ponens",
+    "query": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [],
+      "scope": "global"
+    },
+    "recalled_memory_ids": []
+  },
+  "halt_status": "CONCLUDED",
+  "learning_queue": [
+    "episode-1681de2d1707e707"
+  ],
+  "logical_tick": 9,
+  "pending_intents": [
+    "intent-553aca955f6c824b"
+  ],
+  "rpm_stack": [],
+  "run_id": "run-6bf888a4339bf73e",
+  "runtime_version": "0.1.0",
+  "seed": 0,
+  "state_hash": "7580bfdb85c84d8ccb548433e8efa35b4c0cd1db7febfb18b66bae74fae89de6",
+  "trace_head": "3229d9f869734a8e8f5fb6628c66af23111324f9e413e854a92c92ea04156cfc",
+  "working_memory": [
+    {
+      "arguments": [
+        "P"
+      ],
+      "evidence_status": "asserted",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "deduction_fact_p",
+          "source_type": "fixture"
+        }
+      ],
+      "scope": "global"
+    }
+  ]
+}

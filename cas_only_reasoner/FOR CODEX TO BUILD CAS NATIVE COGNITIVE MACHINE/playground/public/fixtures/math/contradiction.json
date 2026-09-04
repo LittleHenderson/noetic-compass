@@ -1,0 +1,9 @@
+{
+  "schema_version": "cncm.math-fixture/0.1",
+  "fixture_id": "math_no_solution",
+  "category": "contradiction",
+  "operation": "solve_linear",
+  "input": { "notation": "0*x=3", "variable": "x" },
+  "expected": { "terminal_status": "NO_SOLUTION", "solution": null },
+  "runtime_status": "EXECUTABLE"
+}

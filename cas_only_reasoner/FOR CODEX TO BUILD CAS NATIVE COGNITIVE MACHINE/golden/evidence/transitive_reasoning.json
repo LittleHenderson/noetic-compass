@@ -1,0 +1,190 @@
+{
+  "branch_summary": [
+    {
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [],
+      "proof_step_ids": [
+        "proof-dad8cc72ebf5a46b"
+      ],
+      "proposition_keys": [
+        "precedes(A,B)@global",
+        "precedes(A,C)@global",
+        "precedes(B,C)@global"
+      ],
+      "status": "COMMITTED",
+      "unknowns": []
+    }
+  ],
+  "claim_boundary": {
+    "cas_ohm_runtime_authority": false,
+    "constitutional_learning_enabled": false,
+    "english_understanding": false,
+    "external_actions_enabled": false,
+    "external_model_used": false,
+    "general_intelligence_claim": false,
+    "procedural_learning_enabled": false,
+    "production_ready": false,
+    "status": "REFERENCE_DEMONSTRATOR_ONLY"
+  },
+  "commitment_gates": {
+    "comparison_stable": true,
+    "contradiction_free": true,
+    "derivation_complete": true,
+    "operational_ready": true,
+    "principled_gate": true,
+    "provenance_present": true,
+    "rpm_sufficient": true
+  },
+  "comparison": [
+    {
+      "differences": [
+        "branch-main:0,0,0,0,0,1"
+      ],
+      "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+      "metrics": [
+        [
+          "branch-main",
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      ],
+      "ordered_branch_ids": [
+        "branch-main"
+      ],
+      "report_id": "comparison-27737f8175b96ca9",
+      "shared_features": [
+        "precedes(A,C)@global",
+        "same_evaluation_frame"
+      ],
+      "single_candidate_reason": "mechanically_deterministic_declared_path",
+      "winner_branch_id": "branch-main"
+    }
+  ],
+  "diagnostics": [],
+  "event_count": 9,
+  "evidence_digest": "9f9a46bd31a215c36c40f2baa4b8bf4e4fd79fa98bc8e57aecad9f6c62299229",
+  "final_state_hash": "327d59826b4c992e64b48a2330b167a7ccb702905edfd18e2647264f715aebc8",
+  "goal_id": "establish_a_precedes_c",
+  "initial_state_hash": "70c5f08b68f6a3071aa4da612ae9a894c20956f23aefdec4d34ad12bc5fe072e",
+  "learning_disposition": "EPISODIC_WRITE_ONLY",
+  "problem_id": "transitive_precedes",
+  "problem_packet_hash": "b16c9c02f2fadb877bfcc67e3745d1c3b33dd7153a6a4bf770c177a7025b1d61",
+  "proof_steps": [
+    {
+      "branch_id": "branch-main",
+      "conclusion": {
+        "arguments": [
+          "A",
+          "C"
+        ],
+        "evidence_status": "derived",
+        "polarity": true,
+        "predicate": "precedes",
+        "provenance": [
+          {
+            "detail": "",
+            "source_id": "transitivity_rule",
+            "source_type": "fixture"
+          },
+          {
+            "detail": "declared CAS-Sem inference",
+            "source_id": "precedes_transitive",
+            "source_type": "rule"
+          }
+        ],
+        "scope": "global"
+      },
+      "operation": "INFER_TRANSITIVE",
+      "premise_keys": [
+        "precedes(A,B)@global",
+        "precedes(B,C)@global"
+      ],
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "transitivity_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "precedes_transitive",
+          "source_type": "rule"
+        }
+      ],
+      "rule_id": "precedes_transitive",
+      "step_id": "proof-dad8cc72ebf5a46b",
+      "substitution": [
+        [
+          "?x",
+          "A"
+        ],
+        [
+          "?y",
+          "B"
+        ],
+        [
+          "?z",
+          "C"
+        ]
+      ],
+      "verified": true
+    }
+  ],
+  "query_result": {
+    "conclusion": {
+      "arguments": [
+        "A",
+        "C"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "precedes",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "transitivity_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "precedes_transitive",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "lacunae": [],
+    "query": {
+      "arguments": [
+        "A",
+        "C"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "precedes",
+      "provenance": [],
+      "scope": "global"
+    },
+    "supported": true
+  },
+  "rpm_summary": {
+    "event_count": 0,
+    "events": [],
+    "final_depth": 0
+  },
+  "run_id": "run-1981dbbc95618b43",
+  "runtime_version": "0.1.0",
+  "schema_version": "cncm.evidence/0.1",
+  "seed": 0,
+  "terminal_status": "CONCLUDED",
+  "trace_digest": "f56b1f39827bf164333e88b2ddac2199dbc283faf526605ed302f01e97dc4a2a",
+  "trace_head": "89879535d3f854abca627378d30082b0d2ef72b5f5900c36b5eff5d10ec954fa"
+}

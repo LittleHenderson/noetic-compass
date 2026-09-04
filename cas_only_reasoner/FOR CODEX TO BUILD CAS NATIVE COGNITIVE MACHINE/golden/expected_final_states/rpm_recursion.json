@@ -1,0 +1,433 @@
+{
+  "active_goal_id": "establish_q_with_child_goal",
+  "branch_table": [
+    {
+      "active_goal_id": "establish_q_with_child_goal",
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [],
+      "created_at_tick": 0,
+      "decompositions": [
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [],
+          "dependencies": [
+            "p_implies_q"
+          ],
+          "predicted_effects": [
+            "holds(Q)@global"
+          ],
+          "premises": [
+            "holds(P)@global"
+          ],
+          "required_prerequisites": [
+            "holds(P)@global"
+          ],
+          "unknowns": [
+            "holds(P)@global"
+          ]
+        },
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [],
+          "dependencies": [
+            "p_implies_q"
+          ],
+          "predicted_effects": [
+            "holds(Q)@global"
+          ],
+          "premises": [
+            "holds(P)@global"
+          ],
+          "required_prerequisites": [],
+          "unknowns": []
+        }
+      ],
+      "hard_constraints": [],
+      "parent_branch_id": null,
+      "proof_steps": [
+        {
+          "branch_id": "branch-main",
+          "conclusion": {
+            "arguments": [
+              "P"
+            ],
+            "evidence_status": "derived",
+            "polarity": true,
+            "predicate": "holds",
+            "provenance": [
+              {
+                "detail": "bounded child result",
+                "source_id": "bb24fe8b36d8a897",
+                "source_type": "rpm_resolver"
+              }
+            ],
+            "scope": "global"
+          },
+          "operation": "RPM_CHILD_RESULT",
+          "premise_keys": [
+            "holds(P)@global"
+          ],
+          "provenance": [
+            {
+              "detail": "bounded child result",
+              "source_id": "bb24fe8b36d8a897",
+              "source_type": "rpm_resolver"
+            }
+          ],
+          "rule_id": null,
+          "step_id": "proof-4ec979b8b4bf8421",
+          "substitution": [],
+          "verified": true
+        },
+        {
+          "branch_id": "branch-main",
+          "conclusion": {
+            "arguments": [
+              "Q"
+            ],
+            "evidence_status": "derived",
+            "polarity": true,
+            "predicate": "holds",
+            "provenance": [
+              {
+                "detail": "",
+                "source_id": "rpm_parent_rule",
+                "source_type": "fixture"
+              },
+              {
+                "detail": "declared CAS-Sem inference",
+                "source_id": "p_implies_q",
+                "source_type": "rule"
+              }
+            ],
+            "scope": "global"
+          },
+          "operation": "INFER_MODUS_PONENS",
+          "premise_keys": [
+            "holds(P)@global"
+          ],
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "rpm_parent_rule",
+              "source_type": "fixture"
+            },
+            {
+              "detail": "declared CAS-Sem inference",
+              "source_id": "p_implies_q",
+              "source_type": "rule"
+            }
+          ],
+          "rule_id": "p_implies_q",
+          "step_id": "proof-8dbdfc01229be834",
+          "substitution": [],
+          "verified": true
+        }
+      ],
+      "propositions": [
+        {
+          "arguments": [
+            "P"
+          ],
+          "evidence_status": "derived",
+          "polarity": true,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "bounded child result",
+              "source_id": "bb24fe8b36d8a897",
+              "source_type": "rpm_resolver"
+            }
+          ],
+          "scope": "global"
+        },
+        {
+          "arguments": [
+            "Q"
+          ],
+          "evidence_status": "derived",
+          "polarity": true,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "rpm_parent_rule",
+              "source_type": "fixture"
+            },
+            {
+              "detail": "declared CAS-Sem inference",
+              "source_id": "p_implies_q",
+              "source_type": "rule"
+            }
+          ],
+          "scope": "global"
+        }
+      ],
+      "recalled_memory_ids": [],
+      "status": "COMMITTED",
+      "unknowns": []
+    }
+  ],
+  "budget": {
+    "branches_remaining": 3,
+    "inference_steps_remaining": 47,
+    "memory_queries_remaining": 4,
+    "rpm_depth_limit": 4,
+    "ticks_remaining": 85
+  },
+  "commitment_state": {
+    "conclusion": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "rpm_parent_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "p_implies_q",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "decision_status": "COMMITTED",
+    "gate_results": [
+      [
+        "comparison_stable",
+        true
+      ],
+      [
+        "contradiction_free",
+        true
+      ],
+      [
+        "derivation_complete",
+        true
+      ],
+      [
+        "operational_ready",
+        true
+      ],
+      [
+        "principled_gate",
+        true
+      ],
+      [
+        "provenance_present",
+        true
+      ],
+      [
+        "rpm_sufficient",
+        true
+      ]
+    ],
+    "selected_branch_id": "branch-main"
+  },
+  "constitution_revision": "cncm-constitution/0.1",
+  "domain_power_state": [
+    [
+      "P",
+      "GOOD"
+    ],
+    [
+      "C",
+      "GOOD"
+    ],
+    [
+      "E",
+      "GOOD"
+    ],
+    [
+      "O",
+      "ENABLED"
+    ]
+  ],
+  "drive_state": [
+    [
+      "F1",
+      "AVAILABLE"
+    ],
+    [
+      "F2",
+      "AVAILABLE"
+    ],
+    [
+      "F3",
+      "AVAILABLE"
+    ],
+    [
+      "F4",
+      "AVAILABLE"
+    ],
+    [
+      "F5",
+      "AVAILABLE"
+    ],
+    [
+      "F6",
+      "AVAILABLE"
+    ],
+    [
+      "F7",
+      "AVAILABLE"
+    ]
+  ],
+  "episodic_memory": [
+    {
+      "branch_id": "branch-main",
+      "conclusion": {
+        "arguments": [
+          "Q"
+        ],
+        "evidence_status": "derived",
+        "polarity": true,
+        "predicate": "holds",
+        "provenance": [
+          {
+            "detail": "",
+            "source_id": "rpm_parent_rule",
+            "source_type": "fixture"
+          },
+          {
+            "detail": "declared CAS-Sem inference",
+            "source_id": "p_implies_q",
+            "source_type": "rule"
+          }
+        ],
+        "scope": "global"
+      },
+      "episode_id": "episode-9c05ac822ba2b0cc",
+      "final_state_hash": "2fd1da20142cf91c80641972de87fa7fdf33566aa3f4f65acddef40ce3b397a4",
+      "goal_id": "establish_q_with_child_goal",
+      "problem_id": "rpm_missing_prerequisite",
+      "proof_digest": "270a206e93ceabd97d8b5a50c02cfabf8129fd83203968893a8b2a547c3f21a6",
+      "trace_head": "440a7f2e18f73cb6d29e41a8877f38c3913e8b9dc6a9636ed061906627948b65",
+      "verified": true
+    }
+  ],
+  "episodic_memory_revision": 1,
+  "foundation_state": [
+    [
+      "TF1",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF2",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF3",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF4",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF5",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF6",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF7",
+      "UNSPECIFIED"
+    ]
+  ],
+  "global_workspace": {
+    "comparison_reports": [
+      {
+        "differences": [
+          "branch-main:0,0,0,0,0,2"
+        ],
+        "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+        "metrics": [
+          [
+            "branch-main",
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              2
+            ]
+          ]
+        ],
+        "ordered_branch_ids": [
+          "branch-main"
+        ],
+        "report_id": "comparison-d9ee7318aa64a50a",
+        "shared_features": [
+          "holds(Q)@global",
+          "same_evaluation_frame"
+        ],
+        "single_candidate_reason": "mechanically_deterministic_declared_path",
+        "winner_branch_id": "branch-main"
+      }
+    ],
+    "conclusion": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "rpm_parent_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "p_implies_q",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "diagnostics": [],
+    "lacunae": [],
+    "problem_id": "rpm_missing_prerequisite",
+    "query": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [],
+      "scope": "global"
+    },
+    "recalled_memory_ids": []
+  },
+  "halt_status": "CONCLUDED",
+  "learning_queue": [
+    "episode-9c05ac822ba2b0cc"
+  ],
+  "logical_tick": 11,
+  "pending_intents": [
+    "intent-85f16d4287fb83c8"
+  ],
+  "rpm_stack": [],
+  "run_id": "run-04043977b20f552b",
+  "runtime_version": "0.1.0",
+  "seed": 0,
+  "state_hash": "ea91308cf96cdcd635e03643a76c4f03cbcaf8c58eaa2b9a627e3ac07c27aeea",
+  "trace_head": "a4b4de8325eb9e47700c4e94d5a5f3548f9410c27b6a74057940925faef57e42",
+  "working_memory": []
+}

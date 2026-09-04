@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cas-cncm"
+version = "0.1.0"
+description = "Deterministic reference kernel for a bounded CAS Native Cognitive Machine demonstrator"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+cncm = "cncm.cli:main"
+
+[tool.setuptools]
+packages = ["cncm"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

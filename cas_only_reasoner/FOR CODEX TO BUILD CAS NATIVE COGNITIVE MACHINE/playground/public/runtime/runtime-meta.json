@@ -1,0 +1,226 @@
+{
+  "bridge_version": "0.7.0",
+  "capabilities": [
+    "problem_lab",
+    "controlled_english_conversation",
+    "exact_math",
+    "verified_language_apprenticeship_local",
+    "verified_cognitive_apprenticeship_local"
+  ],
+  "conversation_protocol_version": "0.2.0",
+  "fixtures": [
+    {
+      "bytes": 2502,
+      "name": "branch_rollback",
+      "sha256": "313edf5c59dd4e7461e75d86de22c910bd98c6c90247349ae48fd81ce5db33e2"
+    },
+    {
+      "bytes": 972,
+      "name": "contradiction",
+      "sha256": "010874417008a6c73a93a8d4c378d0ed459ccb90d9991a80248f58e842aeba5e"
+    },
+    {
+      "bytes": 1174,
+      "name": "deduction",
+      "sha256": "567014dd1a235e3efde42bad180d640366c27a301bd014ac9efd23c3e31dad5b"
+    },
+    {
+      "bytes": 604,
+      "name": "memory_recall",
+      "sha256": "062bde4d60d485bfcdbdd23b918dd81459695565d46d9ad8be84132ee02fa4d8"
+    },
+    {
+      "bytes": 955,
+      "name": "missing_information",
+      "sha256": "ff9b9445b192eaa82bb6d21cc13f865daddacbe45a44d3fd98c1071e2d3b19c0"
+    },
+    {
+      "bytes": 1282,
+      "name": "rpm_failure",
+      "sha256": "eeda5f049fbacf20529c69ec225272b13faf7564bf76c404370a044b7915f49d"
+    },
+    {
+      "bytes": 1250,
+      "name": "rpm_recursion",
+      "sha256": "cafcb2576b8342bb725c5fb4402017d41b55a3f622648a127bd496be9e8546af"
+    },
+    {
+      "bytes": 1580,
+      "name": "transitive_reasoning",
+      "sha256": "fe808ef30a4c215e9b2c249e28d60777487c5b9aa7bd58346120579baf0aef36"
+    }
+  ],
+  "golden_manifest_sha256": "8fb5171b303918620347355da5645df70bb28cf75af89275a6e4fac48407f674",
+  "math_fixtures": [
+    {
+      "bytes": 380,
+      "fixture_id": "math_linear_parentheses",
+      "name": "algebra",
+      "operation": "solve_linear",
+      "path": "/fixtures/math/algebra.json",
+      "runtime_status": "EXECUTABLE",
+      "sha256": "336757cb81b2c148b4852775f6ef8202c34b299a42ee184c2312dc84f6785c85"
+    },
+    {
+      "bytes": 346,
+      "fixture_id": "math_exact_rational",
+      "name": "arithmetic",
+      "operation": "solve_linear",
+      "path": "/fixtures/math/arithmetic.json",
+      "runtime_status": "EXECUTABLE",
+      "sha256": "de75c6d9b8bfa94c792cef6e1f9e7e093489d8b586a124bc4518eb8c719eff42"
+    },
+    {
+      "bytes": 303,
+      "fixture_id": "math_no_solution",
+      "name": "contradiction",
+      "operation": "solve_linear",
+      "path": "/fixtures/math/contradiction.json",
+      "runtime_status": "EXECUTABLE",
+      "sha256": "f5e7ec81dfd9dabe66053d4b4ee4b95e8b06aee6378bbbdcbdd96a127ad371e7"
+    },
+    {
+      "bytes": 390,
+      "fixture_id": "math_bounded_counterexample",
+      "name": "counterexamples",
+      "operation": "counterexample",
+      "path": "/fixtures/math/counterexamples.json",
+      "runtime_status": "EXECUTABLE",
+      "sha256": "2f644aaec994ce5498f05c2b76748dee819512048a0460c92e8cee7b3671ebae"
+    },
+    {
+      "bytes": 495,
+      "fixture_id": "math_first_failing_step_learning",
+      "name": "recursive_learning",
+      "operation": "learning_transfer",
+      "path": "/fixtures/math/recursive_learning.json",
+      "runtime_status": "CONTRACT_ONLY",
+      "sha256": "17d5c55659b3bc2d2e20c0d46da0bcb0e1fd9c999c8948d59856f70235fa1bd8"
+    },
+    {
+      "bytes": 349,
+      "fixture_id": "math_transitive_equality",
+      "name": "transitive_relations",
+      "operation": "check_transitive_equal",
+      "path": "/fixtures/math/transitive_relations.json",
+      "runtime_status": "EXECUTABLE",
+      "sha256": "22ee5c3f7558b2310a108416070e78761774779770a54ae88c6c0d43cdffed1f"
+    }
+  ],
+  "package_files": [
+    {
+      "bytes": 2222,
+      "path": "cncm/__init__.py",
+      "sha256": "88c22b440630e5b4c56999fe0f979a11f7faa0af19c9adaaf1d3d8f7b4a18de4"
+    },
+    {
+      "bytes": 50,
+      "path": "cncm/__main__.py",
+      "sha256": "e014c07c71c5daede3fe8520fd696eaaed07cb19d77c01c14147273d0f9ed71b"
+    },
+    {
+      "bytes": 3262,
+      "path": "cncm/api.py",
+      "sha256": "c94b46d958993a468a285f7e2de8fa0f6698382323f4741236d85db1fd2e864b"
+    },
+    {
+      "bytes": 1696,
+      "path": "cncm/canonical.py",
+      "sha256": "424323335452fecd26cd6659136475c0fd19bda695ab07811d34d1734564877a"
+    },
+    {
+      "bytes": 4792,
+      "path": "cncm/cli.py",
+      "sha256": "0e141a39386b00326e5d7ac80f45b875e4f398d41656a41b16fe5951b9b2659e"
+    },
+    {
+      "bytes": 115500,
+      "path": "cncm/cognitive_apprenticeship.py",
+      "sha256": "51c4edd649400b16c4d6a1ab8cf45c54f184b2766664dac62bdb7b4617f40880"
+    },
+    {
+      "bytes": 43064,
+      "path": "cncm/conversation.py",
+      "sha256": "951a10467db313298af8f2c3c93bead5dc744b07918b0ba24c8bb07fcb5adc61"
+    },
+    {
+      "bytes": 41917,
+      "path": "cncm/engine.py",
+      "sha256": "1634056e396c7a05246512eb714f4fabeba69a00afcf670584993629d225b4b6"
+    },
+    {
+      "bytes": 96689,
+      "path": "cncm/kernel.py",
+      "sha256": "f59e1bb8bcab6eaf52b2a059a4a908faf3fcf16473b7e9f8e38fe5b156c5e3a0"
+    },
+    {
+      "bytes": 95248,
+      "path": "cncm/language_apprenticeship.py",
+      "sha256": "1b46e4550d4f03f79d2d742840ec56a6363872c20a2eb44e7b42efd124c8818c"
+    },
+    {
+      "bytes": 2434,
+      "path": "cncm/math_api.py",
+      "sha256": "76f6b4a692368a19f39dc68bb17a32eb68bede26f9a34a2c706cafb042f699a2"
+    },
+    {
+      "bytes": 13319,
+      "path": "cncm/math_counterexample.py",
+      "sha256": "ca3ba260b3d87df0d17b517144a13eacda18209a5ee16812132b039635bbcf59"
+    },
+    {
+      "bytes": 17628,
+      "path": "cncm/math_engine.py",
+      "sha256": "889948480fbd5695d58090103fadd305cced0ac8b07a27fe14a22c3417f3b316"
+    },
+    {
+      "bytes": 26337,
+      "path": "cncm/math_kernel.py",
+      "sha256": "036394c7066c3fb8b47931da71c4aa32fd1689478e8e8d082b6a1261225ad558"
+    },
+    {
+      "bytes": 43744,
+      "path": "cncm/math_model.py",
+      "sha256": "3a02464ede14c2d7bb06c9c8493f614812a045d068bbb250ea3031561867db79"
+    },
+    {
+      "bytes": 10333,
+      "path": "cncm/math_normalize.py",
+      "sha256": "c44ac643ce02a618cab8df49a05d0177003d5ce228b05b745594deb4da00908b"
+    },
+    {
+      "bytes": 9647,
+      "path": "cncm/math_parser.py",
+      "sha256": "40d8a8babee94789fd734f2e7620e1525d39628344fd2aab96e659ff06ebef7c"
+    },
+    {
+      "bytes": 58492,
+      "path": "cncm/model.py",
+      "sha256": "aafa82f0267d0e741a90ba095d939da47401be577b5682832608a6845be54766"
+    },
+    {
+      "bytes": 17097,
+      "path": "cncm/semantics.py",
+      "sha256": "c3ffbc5b8db4ac9aefe250d0fbd8a4e981b8c7bb391bc1d4c497df8d5e27ba2e"
+    },
+    {
+      "bytes": 17378,
+      "path": "cncm/verification.py",
+      "sha256": "75954a4f1022625b992ef4e159018089e215cbb3041ac4b6bf317a722743061b"
+    }
+  ],
+  "package_tree_sha256": "db0c6469b18971addc3d2535f77f36578588cbcd8a80294a532424ec32cb552f",
+  "pyodide_version": "314.0.6",
+  "runtime_archive": {
+    "bytes": 121695,
+    "path": "/runtime/cncm-runtime.zip",
+    "sha256": "bb8da06d9a84da32d95b5bf36ebcc44acc0f0b5e6e8f52c94b6593a319c248f1"
+  },
+  "runtime_version": "0.1.0",
+  "schema_version": "cncm.browser-runtime/0.7",
+  "source_spec": {
+    "bytes": 400316,
+    "path": "cas_reasoner.txt",
+    "sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+  }
+}

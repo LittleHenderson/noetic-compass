@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/math_evidence_packet.schema.json",
+  "title": "CAS-Math Evidence Packet v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "problem_id", "theory_id", "checker_version", "terminal_status", "proof_digest", "accepted_receipt_ids", "rejected_receipt_ids", "final_claim_id", "verified", "first_failing_step", "claim_boundary", "evidence_digest"],
+  "properties": {
+    "schema_version": { "const": "cncm.math-evidence/0.1" },
+    "problem_id": { "type": "string", "pattern": "^math-problem-[0-9a-f]{16}$" },
+    "theory_id": { "const": "cncm.q-linear/0.1" },
+    "checker_version": { "const": "cncm.math-checker/0.1" },
+    "terminal_status": { "type": "string", "enum": ["VERIFIED", "UNDERDETERMINED", "NO_SOLUTION", "NEEDS_GUARD", "NEEDS_CAPABILITY", "INVALID_PROOF", "BUDGET_EXHAUSTED", "FAULT"] },
+    "proof_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "accepted_receipt_ids": { "type": "array", "items": { "type": "string", "pattern": "^math-receipt-[0-9a-f]{16}$" } },
+    "rejected_receipt_ids": { "type": "array", "items": { "type": "string", "pattern": "^math-receipt-[0-9a-f]{16}$" } },
+    "final_claim_id": { "oneOf": [{ "type": "string", "pattern": "^math-claim-[0-9a-f]{16}$" }, { "type": "null" }] },
+    "verified": { "type": "boolean" },
+    "first_failing_step": { "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }] },
+    "claim_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exact_arithmetic_only", "proof_checker_protected", "candidate_self_verification", "bounded_counterexample_absence_is_proof", "approximation_used", "autonomous_axiom_change", "external_model_used"],
+      "properties": {
+        "exact_arithmetic_only": { "const": true },
+        "proof_checker_protected": { "const": true },
+        "candidate_self_verification": { "const": false },
+        "bounded_counterexample_absence_is_proof": { "const": false },
+        "approximation_used": { "const": false },
+        "autonomous_axiom_change": { "const": false },
+        "external_model_used": { "const": false }
+      }
+    },
+    "evidence_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

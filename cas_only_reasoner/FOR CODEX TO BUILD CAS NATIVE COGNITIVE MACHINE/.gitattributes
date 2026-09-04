@@ -1,0 +1,17 @@
+/.gitattributes text eol=lf
+*.json text eol=lf
+research/CASFORMER_v0_1/SOURCE_MANIFEST.json -text -eol
+research/CAS_CJT_TRANSFORMER_v0_2/SOURCE_MANIFEST.json -text -eol
+*.ini text eol=lf
+*.lock text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.toml text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.txt text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.log text eol=lf
+*.whl -text
+*.gz -text

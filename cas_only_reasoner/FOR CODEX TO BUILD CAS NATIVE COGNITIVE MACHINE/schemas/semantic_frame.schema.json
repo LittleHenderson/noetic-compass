@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/semantic_frame.schema.json",
+  "title": "CCB-L1 SemanticFrame v0.1",
+  "description": "A language-independent expected meaning graph for language qualification. It contains no raw English and grants no proof or commitment authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "frame_id",
+    "frame_type",
+    "interpretation_status",
+    "nodes",
+    "edges",
+    "features",
+    "quantifiers",
+    "alternatives",
+    "response_diagnostics",
+    "source_refs",
+    "canonicalization",
+    "frame_digest",
+    "authority_boundary",
+    "package_status"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.semantic_frame/0.1" },
+    "frame_id": { "$ref": "#/$defs/identifier" },
+    "frame_type": {
+      "type": "string",
+      "enum": [
+        "CCB_L1_FRAME_EVENT",
+        "CCB_L1_FRAME_PROPERTY",
+        "CCB_L1_FRAME_RELATION",
+        "CCB_L1_FRAME_QUANTIFIED",
+        "CCB_L1_FRAME_QUESTION",
+        "CCB_L1_FRAME_COMMAND",
+        "CCB_L1_FRAME_REFERENCE",
+        "CCB_L1_FRAME_DISCOURSE",
+        "CCB_L1_FRAME_REALIZATION"
+      ]
+    },
+    "interpretation_status": {
+      "type": "string",
+      "enum": ["CCB_L1_FRAME_SELECTED", "CCB_L1_FRAME_AMBIGUOUS", "CCB_L1_FRAME_UNSUPPORTED"]
+    },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/semanticNode" },
+      "uniqueItems": true,
+      "maxItems": 4096
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/semanticEdge" },
+      "uniqueItems": true,
+      "maxItems": 8192
+    },
+    "features": { "$ref": "#/$defs/frameFeatures" },
+    "quantifiers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/quantifierBinding" },
+      "uniqueItems": true,
+      "maxItems": 1024
+    },
+    "alternatives": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/frameReference" },
+      "uniqueItems": true,
+      "maxItems": 128
+    },
+    "response_diagnostics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/responseDiagnostic" },
+      "uniqueItems": true,
+      "maxItems": 32
+    },
+    "source_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sourceReference" },
+      "minItems": 1,
+      "uniqueItems": true,
+      "maxItems": 256
+    },
+    "canonicalization": { "const": "CNCM_SEMANTIC_FRAME_CANONICAL_JSON_V0.1_WITHOUT_FRAME_DIGEST" },
+    "frame_digest": { "$ref": "#/$defs/digest" },
+    "authority_boundary": { "$ref": "#/$defs/authorityBoundary" },
+    "package_status": { "$ref": "#/$defs/packageStatus" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "interpretation_status": { "const": "CCB_L1_FRAME_SELECTED" } }, "required": ["interpretation_status"] },
+      "then": { "properties": { "nodes": { "minItems": 1 }, "alternatives": { "maxItems": 0 } } }
+    },
+    {
+      "if": { "properties": { "interpretation_status": { "const": "CCB_L1_FRAME_AMBIGUOUS" } }, "required": ["interpretation_status"] },
+      "then": { "properties": { "alternatives": { "minItems": 2 } } }
+    },
+    {
+      "if": { "properties": { "interpretation_status": { "const": "CCB_L1_FRAME_UNSUPPORTED" } }, "required": ["interpretation_status"] },
+      "then": { "properties": { "nodes": { "maxItems": 0 }, "edges": { "maxItems": 0 }, "alternatives": { "maxItems": 0 } } }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$",
+      "maxLength": 256
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "attributeValue": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 1024 },
+        { "type": "integer" },
+        { "type": "boolean" },
+        { "type": "null" }
+      ]
+    },
+    "semanticAttribute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attribute_id", "name", "value", "value_type"],
+      "properties": {
+        "attribute_id": { "$ref": "#/$defs/identifier" },
+        "name": { "$ref": "#/$defs/identifier" },
+        "value": { "$ref": "#/$defs/attributeValue" },
+        "value_type": { "type": "string", "enum": ["SYMBOL", "INTEGER", "BOOLEAN", "NULL"] }
+      }
+    },
+    "semanticNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_id", "node_type", "semantic_symbol", "semantic_type", "attributes", "epistemic_status"],
+      "properties": {
+        "node_id": { "$ref": "#/$defs/identifier" },
+        "node_type": {
+          "type": "string",
+          "enum": ["ENTITY", "EVENT", "PREDICATE", "PROPERTY", "TIME", "QUANTITY", "CLAUSE", "REFERENCE", "DISCOURSE_UNIT"]
+        },
+        "semantic_symbol": { "$ref": "#/$defs/identifier" },
+        "semantic_type": { "$ref": "#/$defs/identifier" },
+        "attributes": { "type": "array", "items": { "$ref": "#/$defs/semanticAttribute" }, "uniqueItems": true, "maxItems": 256 },
+        "epistemic_status": { "type": "string", "enum": ["ASSERTED_IN_INPUT", "EXPECTED_BY_FIXTURE", "UNRESOLVED", "HYPOTHETICAL", "QUERIED"] }
+      }
+    },
+    "semanticEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edge_id", "source_node_id", "role", "target_node_id", "scope_index"],
+      "properties": {
+        "edge_id": { "$ref": "#/$defs/identifier" },
+        "source_node_id": { "$ref": "#/$defs/identifier" },
+        "role": {
+          "type": "string",
+          "enum": [
+            "AGENT",
+            "PATIENT",
+            "RECIPIENT",
+            "INSTRUMENT",
+            "LOCATION",
+            "EXPERIENCER",
+            "STIMULUS",
+            "SOURCE",
+            "GOAL",
+            "THEME",
+            "PREDICATE_OF",
+            "PROPERTY_OF",
+            "MEMBER_OF",
+            "RESTRICTOR",
+            "QUANTIFIER_SCOPE",
+            "NEGATION_SCOPE",
+            "CONDITION",
+            "CONSEQUENT",
+            "COORDINATE",
+            "REFERENCE_CANDIDATE",
+            "DISCOURSE_ANTECEDENT",
+            "DISCOURSE_TOPIC"
+          ]
+        },
+        "target_node_id": { "$ref": "#/$defs/identifier" },
+        "scope_index": { "type": "integer", "minimum": 0, "maximum": 4096 }
+      }
+    },
+    "frameFeatures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tense", "aspect", "voice", "polarity", "modality", "sentence_force", "clause_type"],
+      "properties": {
+        "tense": { "type": "string", "enum": ["PAST", "PRESENT", "FUTURE", "TIMELESS", "UNSPECIFIED"] },
+        "aspect": { "type": "string", "enum": ["SIMPLE", "PROGRESSIVE", "PERFECT", "PERFECT_PROGRESSIVE", "UNSPECIFIED"] },
+        "voice": { "type": "string", "enum": ["ACTIVE", "PASSIVE", "MIDDLE", "NOT_APPLICABLE", "UNSPECIFIED"] },
+        "polarity": { "type": "string", "enum": ["POSITIVE", "NEGATIVE", "UNSPECIFIED"] },
+        "modality": { "type": "string", "enum": ["ASSERTED", "POSSIBLE", "NECESSARY", "PERMITTED", "OBLIGATORY", "HYPOTHETICAL", "QUERIED", "UNSPECIFIED"] },
+        "sentence_force": { "type": "string", "enum": ["DECLARATIVE", "INTERROGATIVE", "IMPERATIVE", "EXCLAMATIVE", "UNSPECIFIED"] },
+        "clause_type": { "type": "string", "enum": ["MAIN", "COORDINATE", "SUBORDINATE", "RELATIVE", "CONDITIONAL", "NOT_APPLICABLE", "UNSPECIFIED"] }
+      }
+    },
+    "quantifierBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quantifier_id", "quantifier_type", "bound_node_id", "restrictor_node_id", "scope_node_id", "scope_index"],
+      "properties": {
+        "quantifier_id": { "$ref": "#/$defs/identifier" },
+        "quantifier_type": { "type": "string", "enum": ["UNIVERSAL", "EXISTENTIAL", "NEGATIVE", "DEFINITE", "INDEFINITE", "NUMERIC_EXACT"] },
+        "bound_node_id": { "$ref": "#/$defs/identifier" },
+        "restrictor_node_id": { "$ref": "#/$defs/identifier" },
+        "scope_node_id": { "$ref": "#/$defs/identifier" },
+        "scope_index": { "type": "integer", "minimum": 0, "maximum": 4096 }
+      }
+    },
+    "frameReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frame_id", "frame_digest"],
+      "properties": {
+        "frame_id": { "$ref": "#/$defs/identifier" },
+        "frame_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "responseDiagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["diagnostic", "detail_code", "kernel_terminal_status"],
+      "properties": {
+        "diagnostic": {
+          "type": "string",
+          "enum": [
+            "CCB_L1_DIAG_LANGUAGE_UNDERSTOOD_KNOWLEDGE_AVAILABLE",
+            "CCB_L1_DIAG_LANGUAGE_UNDERSTOOD_KNOWLEDGE_MISSING",
+            "CCB_L1_DIAG_UNKNOWN_CONSTRUCTION",
+            "CCB_L1_DIAG_AMBIGUOUS_PARSE",
+            "CCB_L1_DIAG_UNKNOWN_LEXEME",
+            "CCB_L1_DIAG_INSUFFICIENT_COVERAGE"
+          ]
+        },
+        "detail_code": { "$ref": "#/$defs/identifier" },
+        "kernel_terminal_status": { "const": false }
+      }
+    },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_id", "source_digest"],
+      "properties": {
+        "source_type": { "type": "string", "enum": ["LESSON_EXAMPLE", "PROTECTED_FIXTURE", "HUMAN_ANCHOR", "CAS_SEM_EXPECTATION", "GRAMMAR_CONSTRUCTION", "DIALOGUE_CONTEXT"] },
+        "source_id": { "$ref": "#/$defs/identifier" },
+        "source_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "authorityBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected_meaning_artifact_only", "truth_authority", "meaning_authority", "proof_authority", "promotion_authority", "commitment_authority", "permission_authority", "memory_write_authority", "state_mutation_authority", "halt_authority", "external_action_authority", "emits_cncm_intents"],
+      "properties": {
+        "expected_meaning_artifact_only": { "const": true },
+        "truth_authority": { "const": false },
+        "meaning_authority": { "const": false },
+        "proof_authority": { "const": false },
+        "promotion_authority": { "const": false },
+        "commitment_authority": { "const": false },
+        "permission_authority": { "const": false },
+        "memory_write_authority": { "const": false },
+        "state_mutation_authority": { "const": false },
+        "halt_authority": { "const": false },
+        "external_action_authority": { "const": false },
+        "emits_cncm_intents": { "const": false }
+      }
+    },
+    "packageStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package_maturity", "kernel_integration_status", "runtime_effect"],
+      "properties": {
+        "package_maturity": { "const": "EXPERIMENTAL" },
+        "kernel_integration_status": { "const": "NOT_KERNEL_INTEGRATED" },
+        "runtime_effect": { "const": "NONE" }
+      }
+    }
+  }
+}

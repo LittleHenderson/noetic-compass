@@ -1,0 +1,319 @@
+[
+  {
+    "authorized_intent_ids": [
+      "intent-653ed06157f21150"
+    ],
+    "committed_mutations": [
+      "branch/branch-main/decomposition"
+    ],
+    "enabled_components": [
+      "reasoning_engine"
+    ],
+    "event_hash": "58af39d34043c329d4ea636842aa53e2fc3f94ea2b7861fdf1e9e437491cc719",
+    "event_id": "event-run-b331da8cd5303c42-000001",
+    "logical_tick": 1,
+    "parent_event_id": null,
+    "post_state_hash": "588e49de0bf48165de4e257896fa0cf9fe4fe0534255b6304bcfe8993e5ff467",
+    "pre_state_hash": "2cbb23a01da952433d61823e7d7571c1b5d75910c4b5357a32d4656da1487e76",
+    "previous_event_hash": "",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-main",
+        "created_at_tick": 0,
+        "goal_id": "evaluate_p",
+        "intent_id": "intent-653ed06157f21150",
+        "intent_type": "RECORD_DECOMPOSITION",
+        "issuer_subsystem": "reasoning_engine",
+        "precondition": {
+          "state_hash": "2cbb23a01da952433d61823e7d7571c1b5d75910c4b5357a32d4656da1487e76"
+        },
+        "proposed_mutation": {
+          "decomposition": {
+            "assumptions": [],
+            "candidate_id": "mechanical-path",
+            "contradictions": [
+              "holds(P)@global"
+            ],
+            "dependencies": [],
+            "predicted_effects": [
+              "holds(P)@global"
+            ],
+            "premises": [
+              "holds(P)@global"
+            ],
+            "required_prerequisites": [],
+            "unknowns": []
+          }
+        },
+        "provenance": [
+          {
+            "detail": "declared decomposition",
+            "source_id": "noetic_6",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "decompose",
+        "target_scope": "branch:branch-main"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-b331da8cd5303c42",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "reasoning_engine"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-89bb08470b5d6f69"
+    ],
+    "committed_mutations": [
+      "branch/branch-main/contradiction/holds(P)@global"
+    ],
+    "enabled_components": [
+      "reasoning_engine"
+    ],
+    "event_hash": "6c97a21d9b40cea8ed5573f8f149bea827268fd5c9d8566ef95497022425fcc0",
+    "event_id": "event-run-b331da8cd5303c42-000002",
+    "logical_tick": 2,
+    "parent_event_id": "event-run-b331da8cd5303c42-000001",
+    "post_state_hash": "28dc31b5c8d29ed7f15e5a42bc29d1dc7071d1fa3d2712c9e4630247307a5aee",
+    "pre_state_hash": "588e49de0bf48165de4e257896fa0cf9fe4fe0534255b6304bcfe8993e5ff467",
+    "previous_event_hash": "58af39d34043c329d4ea636842aa53e2fc3f94ea2b7861fdf1e9e437491cc719",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-main",
+        "created_at_tick": 1,
+        "goal_id": "evaluate_p",
+        "intent_id": "intent-89bb08470b5d6f69",
+        "intent_type": "RECORD_CONTRADICTION",
+        "issuer_subsystem": "reasoning_engine",
+        "precondition": {
+          "state_hash": "588e49de0bf48165de4e257896fa0cf9fe4fe0534255b6304bcfe8993e5ff467"
+        },
+        "proposed_mutation": {
+          "atom_key": "holds(P)@global"
+        },
+        "provenance": [
+          {
+            "detail": "explicit polarity conflict",
+            "source_id": "contradiction_detector",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "detect_contradiction",
+        "target_scope": "branch:branch-main"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-b331da8cd5303c42",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "reasoning_engine"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-19104a8d3011f4f5"
+    ],
+    "committed_mutations": [
+      "branch/branch-main/decomposition"
+    ],
+    "enabled_components": [
+      "reasoning_engine"
+    ],
+    "event_hash": "1ac0571ab94fcbba41a91f8d82d64393e38a5efc4e1264caa3fed40d8fa50a41",
+    "event_id": "event-run-b331da8cd5303c42-000003",
+    "logical_tick": 3,
+    "parent_event_id": "event-run-b331da8cd5303c42-000002",
+    "post_state_hash": "b153a3200ffce69106968e75ed7e086522a65a4a9d97320f09561a96d20e50db",
+    "pre_state_hash": "28dc31b5c8d29ed7f15e5a42bc29d1dc7071d1fa3d2712c9e4630247307a5aee",
+    "previous_event_hash": "6c97a21d9b40cea8ed5573f8f149bea827268fd5c9d8566ef95497022425fcc0",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-main",
+        "created_at_tick": 2,
+        "goal_id": "evaluate_p",
+        "intent_id": "intent-19104a8d3011f4f5",
+        "intent_type": "RECORD_DECOMPOSITION",
+        "issuer_subsystem": "reasoning_engine",
+        "precondition": {
+          "state_hash": "28dc31b5c8d29ed7f15e5a42bc29d1dc7071d1fa3d2712c9e4630247307a5aee"
+        },
+        "proposed_mutation": {
+          "decomposition": {
+            "assumptions": [],
+            "candidate_id": "mechanical-path",
+            "contradictions": [
+              "holds(P)@global"
+            ],
+            "dependencies": [],
+            "predicted_effects": [
+              "holds(P)@global"
+            ],
+            "premises": [
+              "holds(P)@global"
+            ],
+            "required_prerequisites": [],
+            "unknowns": []
+          }
+        },
+        "provenance": [
+          {
+            "detail": "declared decomposition",
+            "source_id": "noetic_6",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "decompose",
+        "target_scope": "branch:branch-main"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-b331da8cd5303c42",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "reasoning_engine"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-fb7e843b33a4e380"
+    ],
+    "committed_mutations": [
+      "global_workspace/comparison/comparison-11dd45876af2df29"
+    ],
+    "enabled_components": [
+      "comparison_system"
+    ],
+    "event_hash": "93ef4c2e90dbb51f7e7e5bde6222b3aec23fda46912ca07bd5ffef58150ef553",
+    "event_id": "event-run-b331da8cd5303c42-000004",
+    "logical_tick": 4,
+    "parent_event_id": "event-run-b331da8cd5303c42-000003",
+    "post_state_hash": "d4e5c3673e455e0c4b9b03355ab5a4c4918cf8dbf7ec27f3eae2a875ea888468",
+    "pre_state_hash": "b153a3200ffce69106968e75ed7e086522a65a4a9d97320f09561a96d20e50db",
+    "previous_event_hash": "1ac0571ab94fcbba41a91f8d82d64393e38a5efc4e1264caa3fed40d8fa50a41",
+    "proposed_intents": [
+      {
+        "branch_id": null,
+        "created_at_tick": 3,
+        "goal_id": "evaluate_p",
+        "intent_id": "intent-fb7e843b33a4e380",
+        "intent_type": "RECORD_COMPARISON",
+        "issuer_subsystem": "comparison_system",
+        "precondition": {
+          "state_hash": "b153a3200ffce69106968e75ed7e086522a65a4a9d97320f09561a96d20e50db"
+        },
+        "proposed_mutation": {
+          "report": {
+            "differences": [
+              "branch-main:1,0,1,0,0,0"
+            ],
+            "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+            "metrics": [
+              [
+                "branch-main",
+                [
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0
+                ]
+              ]
+            ],
+            "ordered_branch_ids": [
+              "branch-main"
+            ],
+            "report_id": "comparison-11dd45876af2df29",
+            "shared_features": [
+              "holds(P)@global",
+              "same_evaluation_frame"
+            ],
+            "single_candidate_reason": "mechanically_deterministic_declared_path",
+            "winner_branch_id": null
+          }
+        },
+        "provenance": [
+          {
+            "detail": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+            "source_id": "cdab",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "compare_under_shared_frame",
+        "target_scope": "global_workspace"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-b331da8cd5303c42",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "comparison_system"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-6a9107e3143496c1"
+    ],
+    "committed_mutations": [
+      "halt_status"
+    ],
+    "enabled_components": [
+      "halting_controller"
+    ],
+    "event_hash": "b4031829c8260797bad3695e367b324c69b05969e960cef375b0e17936c7ad10",
+    "event_id": "event-run-b331da8cd5303c42-000005",
+    "logical_tick": 5,
+    "parent_event_id": "event-run-b331da8cd5303c42-000004",
+    "post_state_hash": "3933360265307e1461e8bae7b2726d57ec8133e248edaedf66ee8a2a1e0119e1",
+    "pre_state_hash": "d4e5c3673e455e0c4b9b03355ab5a4c4918cf8dbf7ec27f3eae2a875ea888468",
+    "previous_event_hash": "93ef4c2e90dbb51f7e7e5bde6222b3aec23fda46912ca07bd5ffef58150ef553",
+    "proposed_intents": [
+      {
+        "branch_id": null,
+        "created_at_tick": 4,
+        "goal_id": "evaluate_p",
+        "intent_id": "intent-6a9107e3143496c1",
+        "intent_type": "HALT",
+        "issuer_subsystem": "halting_controller",
+        "precondition": {
+          "state_hash": "d4e5c3673e455e0c4b9b03355ab5a4c4918cf8dbf7ec27f3eae2a875ea888468"
+        },
+        "proposed_mutation": {
+          "diagnostics": [
+            "explicit contradiction prevented commitment"
+          ],
+          "lacunae": [],
+          "status": "CONFLICT_UNRESOLVED"
+        },
+        "provenance": [
+          {
+            "detail": "CONFLICT_UNRESOLVED",
+            "source_id": "halting_controller",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "request_typed_halt",
+        "target_scope": "halt_status"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-b331da8cd5303c42",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "halting_controller"
+    ],
+    "sealed": true,
+    "terminal_status": "CONFLICT_UNRESOLVED"
+  }
+]

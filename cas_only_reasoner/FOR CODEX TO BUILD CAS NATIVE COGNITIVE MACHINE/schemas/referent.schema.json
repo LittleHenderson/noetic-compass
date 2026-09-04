@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/referent.schema.json",
+  "title": "CAS Conversation Referent v0.1",
+  "description": "A deterministic discourse referent. Scores and neural confidence are intentionally absent.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "referent_id",
+    "entity_id",
+    "canonical_label",
+    "entity_type",
+    "aliases",
+    "introduced_turn_id",
+    "last_mentioned_turn_id",
+    "grammatical_number",
+    "grammatical_gender",
+    "topic_id",
+    "resolution_status",
+    "candidates",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.referent/0.1" },
+    "referent_id": { "$ref": "#/$defs/identifier" },
+    "entity_id": {
+      "oneOf": [
+        { "$ref": "#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "canonical_label": { "type": "string", "minLength": 1 },
+    "entity_type": {
+      "enum": [
+        "PERSON",
+        "OBJECT",
+        "PLACE",
+        "EVENT",
+        "PROPOSITION",
+        "TOPIC",
+        "UNKNOWN"
+      ]
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "introduced_turn_id": { "$ref": "#/$defs/identifier" },
+    "last_mentioned_turn_id": { "$ref": "#/$defs/identifier" },
+    "grammatical_number": { "enum": ["SINGULAR", "PLURAL", "UNKNOWN"] },
+    "grammatical_gender": {
+      "enum": [
+        "FEMININE",
+        "MASCULINE",
+        "NEUTER",
+        "ANIMATE_UNKNOWN",
+        "UNKNOWN"
+      ]
+    },
+    "topic_id": {
+      "oneOf": [
+        { "$ref": "#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "resolution_status": {
+      "enum": ["RESOLVED", "AMBIGUOUS", "UNRESOLVED", "RETRACTED"]
+    },
+    "candidates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/candidate" }
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/provenance" }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "resolution_status": { "const": "RESOLVED" } },
+        "required": ["resolution_status"]
+      },
+      "then": {
+        "properties": { "entity_id": { "$ref": "#/$defs/identifier" } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "resolution_status": { "enum": ["AMBIGUOUS", "UNRESOLVED"] }
+        },
+        "required": ["resolution_status"]
+      },
+      "then": {
+        "properties": { "entity_id": { "type": "null" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "resolution_status": { "const": "AMBIGUOUS" } },
+        "required": ["resolution_status"]
+      },
+      "then": {
+        "properties": { "candidates": { "type": "array", "minItems": 2 } }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$"
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "basis", "source_turn_id"],
+      "properties": {
+        "entity_id": { "$ref": "#/$defs/identifier" },
+        "basis": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "EXPLICIT_CLARIFICATION",
+              "EXACT_ALIAS",
+              "CURRENT_TOPIC",
+              "GRAMMATICAL_COMPATIBILITY",
+              "RECENCY",
+              "MEMORY_PROVENANCE"
+            ]
+          }
+        },
+        "source_turn_id": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_id"],
+      "properties": {
+        "source_type": {
+          "enum": ["TURN", "SEMANTIC_PACKET", "CLARIFICATION", "MEMORY_RECORD"]
+        },
+        "source_id": { "$ref": "#/$defs/identifier" },
+        "detail": { "type": "string" }
+      }
+    }
+  }
+}

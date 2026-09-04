@@ -1,0 +1,279 @@
+{
+  "active_goal_id": "evaluate_p",
+  "branch_table": [
+    {
+      "active_goal_id": "evaluate_p",
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [
+        "holds(P)@global"
+      ],
+      "created_at_tick": 0,
+      "decompositions": [
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [
+            "holds(P)@global"
+          ],
+          "dependencies": [],
+          "predicted_effects": [
+            "holds(P)@global"
+          ],
+          "premises": [
+            "holds(P)@global"
+          ],
+          "required_prerequisites": [],
+          "unknowns": []
+        },
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [
+            "holds(P)@global"
+          ],
+          "dependencies": [],
+          "predicted_effects": [
+            "holds(P)@global"
+          ],
+          "premises": [
+            "holds(P)@global"
+          ],
+          "required_prerequisites": [],
+          "unknowns": []
+        }
+      ],
+      "hard_constraints": [],
+      "parent_branch_id": null,
+      "proof_steps": [],
+      "propositions": [
+        {
+          "arguments": [
+            "P"
+          ],
+          "evidence_status": "asserted",
+          "polarity": true,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "positive_p",
+              "source_type": "fixture"
+            }
+          ],
+          "scope": "global"
+        },
+        {
+          "arguments": [
+            "P"
+          ],
+          "evidence_status": "asserted",
+          "polarity": false,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "negative_p",
+              "source_type": "fixture"
+            }
+          ],
+          "scope": "global"
+        }
+      ],
+      "recalled_memory_ids": [],
+      "status": "CONTRADICTED",
+      "unknowns": []
+    }
+  ],
+  "budget": {
+    "branches_remaining": 3,
+    "inference_steps_remaining": 32,
+    "memory_queries_remaining": 4,
+    "rpm_depth_limit": 4,
+    "ticks_remaining": 59
+  },
+  "commitment_state": {
+    "conclusion": null,
+    "decision_status": "UNCOMMITTED",
+    "gate_results": [],
+    "selected_branch_id": null
+  },
+  "constitution_revision": "cncm-constitution/0.1",
+  "domain_power_state": [
+    [
+      "P",
+      "GOOD"
+    ],
+    [
+      "C",
+      "GOOD"
+    ],
+    [
+      "E",
+      "GOOD"
+    ],
+    [
+      "O",
+      "ENABLED"
+    ]
+  ],
+  "drive_state": [
+    [
+      "F1",
+      "AVAILABLE"
+    ],
+    [
+      "F2",
+      "AVAILABLE"
+    ],
+    [
+      "F3",
+      "AVAILABLE"
+    ],
+    [
+      "F4",
+      "AVAILABLE"
+    ],
+    [
+      "F5",
+      "AVAILABLE"
+    ],
+    [
+      "F6",
+      "AVAILABLE"
+    ],
+    [
+      "F7",
+      "AVAILABLE"
+    ]
+  ],
+  "episodic_memory": [],
+  "episodic_memory_revision": 0,
+  "foundation_state": [
+    [
+      "TF1",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF2",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF3",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF4",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF5",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF6",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF7",
+      "UNSPECIFIED"
+    ]
+  ],
+  "global_workspace": {
+    "comparison_reports": [
+      {
+        "differences": [
+          "branch-main:1,0,1,0,0,0"
+        ],
+        "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+        "metrics": [
+          [
+            "branch-main",
+            [
+              1,
+              0,
+              1,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        "ordered_branch_ids": [
+          "branch-main"
+        ],
+        "report_id": "comparison-11dd45876af2df29",
+        "shared_features": [
+          "holds(P)@global",
+          "same_evaluation_frame"
+        ],
+        "single_candidate_reason": "mechanically_deterministic_declared_path",
+        "winner_branch_id": null
+      }
+    ],
+    "conclusion": null,
+    "diagnostics": [
+      "explicit contradiction prevented commitment"
+    ],
+    "lacunae": [],
+    "problem_id": "explicit_contradiction",
+    "query": {
+      "arguments": [
+        "P"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [],
+      "scope": "global"
+    },
+    "recalled_memory_ids": []
+  },
+  "halt_status": "CONFLICT_UNRESOLVED",
+  "learning_queue": [],
+  "logical_tick": 5,
+  "pending_intents": [
+    "intent-6a9107e3143496c1"
+  ],
+  "rpm_stack": [],
+  "run_id": "run-b331da8cd5303c42",
+  "runtime_version": "0.1.0",
+  "seed": 0,
+  "state_hash": "3933360265307e1461e8bae7b2726d57ec8133e248edaedf66ee8a2a1e0119e1",
+  "trace_head": "b4031829c8260797bad3695e367b324c69b05969e960cef375b0e17936c7ad10",
+  "working_memory": [
+    {
+      "arguments": [
+        "P"
+      ],
+      "evidence_status": "asserted",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "positive_p",
+          "source_type": "fixture"
+        }
+      ],
+      "scope": "global"
+    },
+    {
+      "arguments": [
+        "P"
+      ],
+      "evidence_status": "asserted",
+      "polarity": false,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "negative_p",
+          "source_type": "fixture"
+        }
+      ],
+      "scope": "global"
+    }
+  ]
+}

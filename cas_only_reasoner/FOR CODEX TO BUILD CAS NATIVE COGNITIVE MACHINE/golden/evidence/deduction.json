@@ -1,0 +1,172 @@
+{
+  "branch_summary": [
+    {
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [],
+      "proof_step_ids": [
+        "proof-8fa5b94ad8e72d09"
+      ],
+      "proposition_keys": [
+        "holds(P)@global",
+        "holds(Q)@global"
+      ],
+      "status": "COMMITTED",
+      "unknowns": []
+    }
+  ],
+  "claim_boundary": {
+    "cas_ohm_runtime_authority": false,
+    "constitutional_learning_enabled": false,
+    "english_understanding": false,
+    "external_actions_enabled": false,
+    "external_model_used": false,
+    "general_intelligence_claim": false,
+    "procedural_learning_enabled": false,
+    "production_ready": false,
+    "status": "REFERENCE_DEMONSTRATOR_ONLY"
+  },
+  "commitment_gates": {
+    "comparison_stable": true,
+    "contradiction_free": true,
+    "derivation_complete": true,
+    "operational_ready": true,
+    "principled_gate": true,
+    "provenance_present": true,
+    "rpm_sufficient": true
+  },
+  "comparison": [
+    {
+      "differences": [
+        "branch-main:0,0,0,0,0,1"
+      ],
+      "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+      "metrics": [
+        [
+          "branch-main",
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      ],
+      "ordered_branch_ids": [
+        "branch-main"
+      ],
+      "report_id": "comparison-27737f8175b96ca9",
+      "shared_features": [
+        "holds(Q)@global",
+        "same_evaluation_frame"
+      ],
+      "single_candidate_reason": "mechanically_deterministic_declared_path",
+      "winner_branch_id": "branch-main"
+    }
+  ],
+  "diagnostics": [],
+  "event_count": 9,
+  "evidence_digest": "0adec3e9b36b2957dc6a412a3f663a02a22cf1376aa9cdffa72c1aa571667ccb",
+  "final_state_hash": "7580bfdb85c84d8ccb548433e8efa35b4c0cd1db7febfb18b66bae74fae89de6",
+  "goal_id": "establish_q",
+  "initial_state_hash": "3b7047aea80345b35e8a79d98b169341b212bae1d50cf0471ba7cffb91c2d337",
+  "learning_disposition": "EPISODIC_WRITE_ONLY",
+  "problem_id": "deduction_modus_ponens",
+  "problem_packet_hash": "7eb0b529958d1e5a65f0f81cc22ea301feef1d8125d638766194aa9863c70dff",
+  "proof_steps": [
+    {
+      "branch_id": "branch-main",
+      "conclusion": {
+        "arguments": [
+          "Q"
+        ],
+        "evidence_status": "derived",
+        "polarity": true,
+        "predicate": "holds",
+        "provenance": [
+          {
+            "detail": "",
+            "source_id": "deduction_rule",
+            "source_type": "fixture"
+          },
+          {
+            "detail": "declared CAS-Sem inference",
+            "source_id": "p_implies_q",
+            "source_type": "rule"
+          }
+        ],
+        "scope": "global"
+      },
+      "operation": "INFER_MODUS_PONENS",
+      "premise_keys": [
+        "holds(P)@global"
+      ],
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "deduction_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "p_implies_q",
+          "source_type": "rule"
+        }
+      ],
+      "rule_id": "p_implies_q",
+      "step_id": "proof-8fa5b94ad8e72d09",
+      "substitution": [],
+      "verified": true
+    }
+  ],
+  "query_result": {
+    "conclusion": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "deduction_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "p_implies_q",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "lacunae": [],
+    "query": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [],
+      "scope": "global"
+    },
+    "supported": true
+  },
+  "rpm_summary": {
+    "event_count": 0,
+    "events": [],
+    "final_depth": 0
+  },
+  "run_id": "run-6bf888a4339bf73e",
+  "runtime_version": "0.1.0",
+  "schema_version": "cncm.evidence/0.1",
+  "seed": 0,
+  "terminal_status": "CONCLUDED",
+  "trace_digest": "b927af368e755ca404f8349d545c3d61ec3e2a7de455d1b4a559ef3389491bd7",
+  "trace_head": "3229d9f869734a8e8f5fb6628c66af23111324f9e413e854a92c92ea04156cfc"
+}

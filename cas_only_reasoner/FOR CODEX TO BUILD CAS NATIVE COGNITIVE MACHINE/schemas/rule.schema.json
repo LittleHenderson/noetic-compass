@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/rule.schema.json",
+  "title": "CNCM Rule v0.1",
+  "description": "The bounded Horn-rule shape accepted by ProblemPacket and emitted by Rule.to_dict().",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rule_id", "operation", "antecedents", "consequent", "provenance"],
+  "properties": {
+    "rule_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "operation": {
+      "type": "string",
+      "enum": ["INFER_MODUS_PONENS", "INFER_TRANSITIVE"]
+    },
+    "antecedents": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "proposition.schema.json" }
+    },
+    "consequent": { "$ref": "proposition.schema.json" },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "proposition.schema.json#/$defs/provenance" },
+      "uniqueItems": true
+    }
+  }
+}

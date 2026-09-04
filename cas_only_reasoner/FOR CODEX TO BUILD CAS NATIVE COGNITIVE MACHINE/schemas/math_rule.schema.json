@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/math_rule.schema.json",
+  "title": "Protected CAS-Math Rule Identifier v0.1",
+  "description": "Closed built-in checker operations. This wire object cannot define new proof semantics.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "checker_version", "caller_extensible"],
+  "properties": {
+    "operation": {
+      "type": "string",
+      "enum": [
+        "EVALUATE_EXACT",
+        "SIMPLIFY_EXACT",
+        "ADD_BOTH_SIDES",
+        "SUBTRACT_BOTH_SIDES",
+        "MULTIPLY_BOTH_SIDES",
+        "DIVIDE_BOTH_SIDES",
+        "SUBSTITUTE",
+        "TRANSITIVE_EQUAL",
+        "TRANSITIVE_LESS_THAN",
+        "VERIFY_LINEAR_SOLUTION"
+      ]
+    },
+    "checker_version": { "const": "cncm.math-checker/0.1" },
+    "caller_extensible": { "const": false }
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "active_goal_id": "recall_verified_q",
+  "branch_table": [
+    {
+      "active_goal_id": "recall_verified_q",
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [],
+      "created_at_tick": 0,
+      "decompositions": [
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [],
+          "dependencies": [],
+          "predicted_effects": [],
+          "premises": [],
+          "required_prerequisites": [
+            "holds(Q)@global"
+          ],
+          "unknowns": [
+            "holds(Q)@global"
+          ]
+        },
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [],
+          "dependencies": [],
+          "predicted_effects": [],
+          "premises": [],
+          "required_prerequisites": [
+            "holds(Q)@global"
+          ],
+          "unknowns": [
+            "holds(Q)@global"
+          ]
+        }
+      ],
+      "hard_constraints": [],
+      "parent_branch_id": null,
+      "proof_steps": [],
+      "propositions": [],
+      "recalled_memory_ids": [],
+      "status": "BLOCKED",
+      "unknowns": [
+        "holds(Q)@global"
+      ]
+    }
+  ],
+  "budget": {
+    "branches_remaining": 3,
+    "inference_steps_remaining": 32,
+    "memory_queries_remaining": 4,
+    "rpm_depth_limit": 4,
+    "ticks_remaining": 59
+  },
+  "commitment_state": {
+    "conclusion": null,
+    "decision_status": "UNCOMMITTED",
+    "gate_results": [],
+    "selected_branch_id": null
+  },
+  "constitution_revision": "cncm-constitution/0.1",
+  "domain_power_state": [
+    [
+      "P",
+      "GOOD"
+    ],
+    [
+      "C",
+      "GOOD"
+    ],
+    [
+      "E",
+      "GOOD"
+    ],
+    [
+      "O",
+      "ENABLED"
+    ]
+  ],
+  "drive_state": [
+    [
+      "F1",
+      "AVAILABLE"
+    ],
+    [
+      "F2",
+      "AVAILABLE"
+    ],
+    [
+      "F3",
+      "AVAILABLE"
+    ],
+    [
+      "F4",
+      "AVAILABLE"
+    ],
+    [
+      "F5",
+      "AVAILABLE"
+    ],
+    [
+      "F6",
+      "AVAILABLE"
+    ],
+    [
+      "F7",
+      "AVAILABLE"
+    ]
+  ],
+  "episodic_memory": [],
+  "episodic_memory_revision": 0,
+  "foundation_state": [
+    [
+      "TF1",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF2",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF3",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF4",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF5",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF6",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF7",
+      "UNSPECIFIED"
+    ]
+  ],
+  "global_workspace": {
+    "comparison_reports": [
+      {
+        "differences": [
+          "branch-main:1,0,0,1,0,0"
+        ],
+        "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+        "metrics": [
+          [
+            "branch-main",
+            [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0
+            ]
+          ]
+        ],
+        "ordered_branch_ids": [
+          "branch-main"
+        ],
+        "report_id": "comparison-52dcd0a35c5d1b0e",
+        "shared_features": [
+          "holds(Q)@global",
+          "same_evaluation_frame"
+        ],
+        "single_candidate_reason": "mechanically_deterministic_declared_path",
+        "winner_branch_id": null
+      }
+    ],
+    "conclusion": null,
+    "diagnostics": [
+      "no branch established every required premise"
+    ],
+    "lacunae": [
+      "holds(Q)@global"
+    ],
+    "problem_id": "memory_exact_recall",
+    "query": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [],
+      "scope": "global"
+    },
+    "recalled_memory_ids": []
+  },
+  "halt_status": "NEEDS_INFORMATION",
+  "learning_queue": [],
+  "logical_tick": 5,
+  "pending_intents": [
+    "intent-3060bbd446f2bbc3"
+  ],
+  "rpm_stack": [],
+  "run_id": "run-1a6704dcbba218e1",
+  "runtime_version": "0.1.0",
+  "seed": 0,
+  "state_hash": "9eec2706f0aa92fd46e9dfb074e4f3514d030d789a8c5f55eb804b5bcd37aa99",
+  "trace_head": "04fda21df99a5160f9a12b9eaad9cbaabb2ddc0ebb273a7307cb3c54b355551b",
+  "working_memory": []
+}

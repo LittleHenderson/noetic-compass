@@ -1,0 +1,84 @@
+{
+  "fixture_definition": {
+    "category": "counterexamples",
+    "expected": {
+      "assignment": [
+        [
+          "x",
+          -3
+        ]
+      ],
+      "status": "FOUND"
+    },
+    "fixture_id": "math_bounded_counterexample",
+    "input": {
+      "bounds": [
+        {
+          "lower": -3,
+          "upper": 3,
+          "variable": "x"
+        }
+      ],
+      "max_assignments": 32,
+      "notation": "x*x<5"
+    },
+    "operation": "counterexample",
+    "runtime_status": "EXECUTABLE",
+    "schema_version": "cncm.math-fixture/0.1"
+  },
+  "fixture_sha256": "2f644aaec994ce5498f05c2b76748dee819512048a0460c92e8cee7b3671ebae",
+  "output": {
+    "assignment": [
+      [
+        "x",
+        -3
+      ]
+    ],
+    "bounds": [
+      {
+        "lower": -3,
+        "upper": 3,
+        "variable": "x"
+      }
+    ],
+    "checker_version": "cncm.math-checker/0.1",
+    "detail": "exact assignment falsifies the universal conjecture within the declared bounds",
+    "exact_left": {
+      "denominator": 1,
+      "numerator": 9
+    },
+    "exact_right": {
+      "denominator": 1,
+      "numerator": 5
+    },
+    "guards": [],
+    "max_assignments": 32,
+    "result_digest": "b19c5b20af38597ae809caa4b70cc251826b7fb412ac286e2649379c2bbc537d",
+    "schema_version": "cncm.math-counterexample/0.1",
+    "statement": {
+      "left": {
+        "factors": [
+          {
+            "kind": "variable",
+            "name": "x"
+          },
+          {
+            "kind": "variable",
+            "name": "x"
+          }
+        ],
+        "kind": "multiply"
+      },
+      "relation": "LESS_THAN",
+      "right": {
+        "kind": "integer",
+        "value": 5
+      }
+    },
+    "status": "FOUND",
+    "tested_assignments": 2,
+    "theory_id": "cncm.q-linear/0.1"
+  },
+  "schema_version": "cncm.math-golden/0.1",
+  "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+}

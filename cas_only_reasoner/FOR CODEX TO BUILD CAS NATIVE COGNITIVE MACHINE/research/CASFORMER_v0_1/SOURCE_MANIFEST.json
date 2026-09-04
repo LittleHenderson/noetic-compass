@@ -1,0 +1,139 @@
+{
+  "aggregate_sha256": "324603abfdcba59cb68d7351d822f612c2409dcd396d42e9e91fd3df2bbe091e",
+  "casformer_version": "0.1.0",
+  "file_count": 26,
+  "files": [
+    {
+      "bytes": 2762,
+      "path": "CLAIMS.md",
+      "sha256": "4e3f15a57e035cd260bda1aa2b7200123b21953b20b1f7f194021391526156d3"
+    },
+    {
+      "bytes": 5903,
+      "path": "README.md",
+      "sha256": "0c9c56ab1d18641f20760419045f86bc82b5cd5169aaf905ba8cb8261ec0b7be"
+    },
+    {
+      "bytes": 3101,
+      "path": "SOURCE_REFERENCES.json",
+      "sha256": "f1da4a49182b377a433c974ec371724ebd63384bb1e50a91297d2248d6a6a2d6"
+    },
+    {
+      "bytes": 13918,
+      "path": "SPEC.md",
+      "sha256": "5f794fafd2b9b55e1c3eac200bd23197835249809b5f231e539acf2e2b8949ac"
+    },
+    {
+      "bytes": 1571,
+      "path": "casformer/__init__.py",
+      "sha256": "0ac7c3ed8b408b896dd35beb0f9c5fed5a7576dcec1252bc80b91cbaef99bbe5"
+    },
+    {
+      "bytes": 6997,
+      "path": "casformer/baselines.py",
+      "sha256": "7dae14f07ea8892ccd77929c1f7a6677968107b21f7d297f86c88bdcdc8a5a71"
+    },
+    {
+      "bytes": 6322,
+      "path": "casformer/casformer_trace.schema.json",
+      "sha256": "aa6fc375ee31b1bc54a7474b82476b1da51b81fc3ff6d48b3bb6b389bd617e55"
+    },
+    {
+      "bytes": 5960,
+      "path": "casformer/circuit.py",
+      "sha256": "6b646c760268a3fa270e747e95ab3f4468a3aaf7546dfbce5569142465aa5ba7"
+    },
+    {
+      "bytes": 4829,
+      "path": "casformer/controls.py",
+      "sha256": "91eb1ac3a8cc11721d20463d17dab2dd2e5eec4a1f0be00bb51ccb895748b1c5"
+    },
+    {
+      "bytes": 51571,
+      "path": "casformer/core.py",
+      "sha256": "41e56391155697bbd568bba06d56dbe734f8554107d97458c1b9d160c7bc92a7"
+    },
+    {
+      "bytes": 3667,
+      "path": "casformer/diagnostics.py",
+      "sha256": "44f672ea7db8b0128e56a086562faf4befb930256814f20c6c1520c2b055ebb3"
+    },
+    {
+      "bytes": 444,
+      "path": "casformer/schema.py",
+      "sha256": "58be8710383f95a57ea05fc7d0cc1c1b0df96c5a89a781b2856c4f7797010e46"
+    },
+    {
+      "bytes": 17251,
+      "path": "casformer/trace.py",
+      "sha256": "fbe2b45b3963f46319b430e7a4408f143b8b45fa5b868c1eaf76fb5bd62d6f0c"
+    },
+    {
+      "bytes": 1661,
+      "path": "examples/minimal_forward.py",
+      "sha256": "ee15e941f477326678ca06a0da03a485d283b8edc5324517981b39691dcef745"
+    },
+    {
+      "bytes": 652,
+      "path": "pyproject.toml",
+      "sha256": "9eb381d39857214fb6736ec5b2c25ec854e856806e23b7160297c9bfb68725d1"
+    },
+    {
+      "bytes": 61,
+      "path": "pytest.ini",
+      "sha256": "10c8afc1e94e07a713f35b7dd36bcf34ff7ab5a4af9391ebb8adb6491be1995c"
+    },
+    {
+      "bytes": 206,
+      "path": "tests/conftest.py",
+      "sha256": "859c8b4f1d7720b3184903a86d627f83f8cfbd8bf7cc6a3e565995d8da3592f0"
+    },
+    {
+      "bytes": 5340,
+      "path": "tests/test_artifacts.py",
+      "sha256": "26d880fb99d86c94fb5d51572825427c581f1d060eb4f64ad09f818a5300dedc"
+    },
+    {
+      "bytes": 4173,
+      "path": "tests/test_circuit.py",
+      "sha256": "285905865ef0aa52d55c08cb8b44e5ed70ef75a325999eb9be3f56a02296cac7"
+    },
+    {
+      "bytes": 26001,
+      "path": "tests/test_cjt_block.py",
+      "sha256": "24da60dbde0a4ea2bf8faa4b2d858d025c576441051041ce5d6d59967cdc9e64"
+    },
+    {
+      "bytes": 2670,
+      "path": "tests/test_gradients.py",
+      "sha256": "5165be9ac34fa7fb717e5f9851bf3ce245cd4e1abcbd4a589c8f8f6ae1cccd5e"
+    },
+    {
+      "bytes": 9895,
+      "path": "tests/test_non_vacuity_and_diagnostics.py",
+      "sha256": "43ee9a4d1b5b1069ca71097cd285934c16cc214a72dfc99b2b645ead63760277"
+    },
+    {
+      "bytes": 23903,
+      "path": "tests/test_ohmic_attention.py",
+      "sha256": "76ea453d4506b727f0f4135647076b7af18e47f5679e7f1342ff5c69f3479a74"
+    },
+    {
+      "bytes": 2514,
+      "path": "tools/build_source_manifest.py",
+      "sha256": "50957e42b409b343ce3e39ac3538dd48a422ada89c310df5ea78718f7116371d"
+    },
+    {
+      "bytes": 5521,
+      "path": "tools/validate_all.py",
+      "sha256": "cca3475c95dfc43a9fe9789ef9285cbd9f7783a011ac1283731c87fbd4de31bc"
+    },
+    {
+      "bytes": 17800,
+      "path": "tools/validate_reference.py",
+      "sha256": "99f3cf4cca3fc2f033797e2bf841c34c50f1e1f948aabf059a68e474a304c862"
+    }
+  ],
+  "schema_version": "cas.casformer.source-manifest/0.1",
+  "status": "REFERENCE_IMPLEMENTATION_SOURCE_SET"
+}

@@ -1,0 +1,980 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/neural-cjt-contracts-0.2.json",
+  "title": "CAS Neural CJT v0.2 authoritative wire contracts",
+  "oneOf": [
+    {"$ref": "#/$defs/tensorArtifactRef"},
+    {"$ref": "#/$defs/cause"},
+    {"$ref": "#/$defs/readinessAxis"},
+    {"$ref": "#/$defs/readinessState"},
+    {"$ref": "#/$defs/stableSubstrate"},
+    {"$ref": "#/$defs/localMemory"},
+    {"$ref": "#/$defs/rpmState"},
+    {"$ref": "#/$defs/operatingRecord"},
+    {"$ref": "#/$defs/thetaRef"},
+    {"$ref": "#/$defs/governance"},
+    {"$ref": "#/$defs/biasState"},
+    {"$ref": "#/$defs/candidateEffect"},
+    {"$ref": "#/$defs/publishedEffect"},
+    {"$ref": "#/$defs/operationContract"},
+    {"$ref": "#/$defs/verifierReceipt"},
+    {"$ref": "#/$defs/repairFrame"},
+    {"$ref": "#/$defs/repairOutcome"},
+    {"$ref": "#/$defs/stateUpdateIntent"},
+    {"$ref": "#/$defs/modelUpdateIntent"},
+    {"$ref": "#/$defs/memoryWriteIntent"},
+    {"$ref": "#/$defs/commitReceipt"},
+    {"$ref": "#/$defs/phaseRecord"},
+    {"$ref": "#/$defs/tickTrace"}
+  ],
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "uint": {"type": "integer", "minimum": 0},
+    "positiveInt": {"type": "integer", "minimum": 1},
+    "ppm": {"type": "integer", "minimum": 0, "maximum": 1000000},
+    "stringArray": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/nonEmptyString"},
+      "uniqueItems": true
+    },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/nonEmptyString"},
+      "uniqueItems": true
+    },
+    "jsonValue": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "boolean"},
+        {"type": "string"},
+        {"type": "integer"},
+        {"type": "array", "items": {"$ref": "#/$defs/jsonValue"}},
+        {
+          "type": "object",
+          "propertyNames": {"minLength": 1},
+          "additionalProperties": {"$ref": "#/$defs/jsonValue"}
+        }
+      ]
+    },
+    "jsonObject": {
+      "type": "object",
+      "propertyNames": {"minLength": 1},
+      "additionalProperties": {"$ref": "#/$defs/jsonValue"}
+    },
+    "nonEmptyJsonObject": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"minLength": 1},
+      "additionalProperties": {"$ref": "#/$defs/jsonValue"}
+    },
+    "causeKind": {
+      "enum": [
+        "TOKEN", "PROPOSITION", "IDEA", "EVENT", "ENTITY_RELATION",
+        "EFFECT", "MEMORY_RESULT", "OBSERVATION", "RPM_SUBGOAL",
+        "TRAINING_EXPERIENCE"
+      ]
+    },
+    "readinessAxisName": {"enum": ["DESIRE", "WISDOM", "POWER"]},
+    "readinessStatus": {"enum": ["SUFFICIENT", "INSUFFICIENT", "UNKNOWN"]},
+    "operatingRegion": {
+      "enum": [
+        "UNASSESSED", "CUTOFF", "ACTIVE", "SATURATION", "BREAKDOWN",
+        "NON_OHMIC", "UNSTABLE"
+      ]
+    },
+    "semanticOutcome": {
+      "enum": ["UNASSESSED", "INTENDED", "OPPOSITE", "OFF_AXIS", "UNKNOWN"]
+    },
+    "verifierDisposition": {
+      "enum": ["ACCEPT", "REFUSE", "ABSTAIN", "REPAIR", "QUARANTINE", "ROLLBACK", "HALT"]
+    },
+    "ontologyStatus": {
+      "enum": [
+        "CANONICAL_ADMITTED", "EXPERIMENTAL_OPEN_SEMANTICS",
+        "EXPERIMENTAL_CONFLICTED_SEMANTICS", "EXPERIMENTAL_LOCAL"
+      ]
+    },
+    "tensorArtifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "artifact_id", "sha256", "dtype",
+        "shape", "encoding", "byte_length"
+      ],
+      "properties": {
+        "contract_type": {"const": "TENSOR_ARTIFACT_REF"},
+        "schema_version": {"const": "cas.neural-cjt.tensor-artifact-ref/0.2"},
+        "artifact_id": {"$ref": "#/$defs/nonEmptyString"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "dtype": {"$ref": "#/$defs/nonEmptyString"},
+        "shape": {"type": "array", "items": {"$ref": "#/$defs/uint"}},
+        "encoding": {"$ref": "#/$defs/nonEmptyString"},
+        "byte_length": {"$ref": "#/$defs/positiveInt"}
+      }
+    },
+    "cause": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "cause_id", "tick", "cause_kind",
+        "content", "source", "provenance", "time_label", "uncertainty_ppm",
+        "goal_context", "entity_bindings", "relation_bindings",
+        "candidate_operation_ids", "memory_refs", "originating_cjt_id",
+        "originating_modality", "parent_effect_id", "content_ref"
+      ],
+      "properties": {
+        "contract_type": {"const": "CAUSE"},
+        "schema_version": {"const": "cas.neural-cjt.cause/0.2"},
+        "cause_id": {"$ref": "#/$defs/nonEmptyString"},
+        "tick": {"$ref": "#/$defs/uint"},
+        "cause_kind": {"$ref": "#/$defs/causeKind"},
+        "content": {"$ref": "#/$defs/nonEmptyJsonObject"},
+        "source": {"$ref": "#/$defs/nonEmptyString"},
+        "provenance": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "time_label": {"$ref": "#/$defs/nonEmptyString"},
+        "uncertainty_ppm": {"$ref": "#/$defs/ppm"},
+        "goal_context": {"$ref": "#/$defs/nonEmptyJsonObject"},
+        "entity_bindings": {"$ref": "#/$defs/stringArray"},
+        "relation_bindings": {"$ref": "#/$defs/stringArray"},
+        "candidate_operation_ids": {"$ref": "#/$defs/stringArray"},
+        "memory_refs": {"$ref": "#/$defs/stringArray"},
+        "originating_cjt_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/nonEmptyString"}]},
+        "originating_modality": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/nonEmptyString"}]},
+        "parent_effect_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/nonEmptyString"}]},
+        "content_ref": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/tensorArtifactRef"}]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"cause_kind": {"const": "EFFECT"}}, "required": ["cause_kind"]},
+          "then": {"properties": {"parent_effect_id": {"$ref": "#/$defs/nonEmptyString"}}}
+        }
+      ]
+    },
+    "readinessAxis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "axis", "status", "score_ppm",
+        "threshold_ppm", "reason_codes", "evidence_refs", "provenance"
+      ],
+      "properties": {
+        "contract_type": {"const": "READINESS_AXIS"},
+        "schema_version": {"const": "cas.neural-cjt.readiness-axis/0.2"},
+        "axis": {"$ref": "#/$defs/readinessAxisName"},
+        "status": {"$ref": "#/$defs/readinessStatus"},
+        "score_ppm": {"$ref": "#/$defs/ppm"},
+        "threshold_ppm": {"$ref": "#/$defs/ppm"},
+        "reason_codes": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "evidence_refs": {"$ref": "#/$defs/stringArray"},
+        "provenance": {"$ref": "#/$defs/nonEmptyStringArray"}
+      }
+    },
+    "readinessState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_type", "schema_version", "profile_id", "desire", "wisdom", "power"],
+      "properties": {
+        "contract_type": {"const": "READINESS_STATE"},
+        "schema_version": {"const": "cas.neural-cjt.readiness-state/0.2"},
+        "profile_id": {"$ref": "#/$defs/nonEmptyString"},
+        "desire": {"allOf": [{"$ref": "#/$defs/readinessAxis"}, {"properties": {"axis": {"const": "DESIRE"}}}]},
+        "wisdom": {"allOf": [{"$ref": "#/$defs/readinessAxis"}, {"properties": {"axis": {"const": "WISDOM"}}}]},
+        "power": {"allOf": [{"$ref": "#/$defs/readinessAxis"}, {"properties": {"axis": {"const": "POWER"}}}]}
+      }
+    },
+    "stableSubstrate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "cjt_id", "formation_version",
+        "registered_operation_id", "specialization_tags", "lineage_refs",
+        "configuration_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "BIAS_STABLE_SUBSTRATE"},
+        "schema_version": {"const": "cas.neural-cjt.bias-stable-substrate/0.2"},
+        "cjt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "formation_version": {"$ref": "#/$defs/uint"},
+        "registered_operation_id": {"$ref": "#/$defs/nonEmptyString"},
+        "specialization_tags": {"$ref": "#/$defs/stringArray"},
+        "lineage_refs": {"$ref": "#/$defs/stringArray"},
+        "configuration_digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "localMemory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "recurrent_state_ref",
+        "recent_cause_ids", "recent_candidate_effect_ids", "verifier_receipt_ids",
+        "repair_frame_ids", "retrieved_memory_refs", "provenance_refs"
+      ],
+      "properties": {
+        "contract_type": {"const": "BIAS_LOCAL_MEMORY"},
+        "schema_version": {"const": "cas.neural-cjt.bias-local-memory/0.2"},
+        "recurrent_state_ref": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/tensorArtifactRef"}]},
+        "recent_cause_ids": {"$ref": "#/$defs/stringArray"},
+        "recent_candidate_effect_ids": {"$ref": "#/$defs/stringArray"},
+        "verifier_receipt_ids": {"$ref": "#/$defs/stringArray"},
+        "repair_frame_ids": {"$ref": "#/$defs/stringArray"},
+        "retrieved_memory_refs": {"$ref": "#/$defs/stringArray"},
+        "provenance_refs": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "rpmState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "readiness", "unmet_prerequisites",
+        "open_repair_ids", "suspended_parent_cause_id", "return_addresses",
+        "repair_history"
+      ],
+      "properties": {
+        "contract_type": {"const": "BIAS_RPM_STATE"},
+        "schema_version": {"const": "cas.neural-cjt.bias-rpm-state/0.2"},
+        "readiness": {"$ref": "#/$defs/readinessState"},
+        "unmet_prerequisites": {"$ref": "#/$defs/stringArray"},
+        "open_repair_ids": {"$ref": "#/$defs/stringArray"},
+        "suspended_parent_cause_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/nonEmptyString"}]},
+        "return_addresses": {"$ref": "#/$defs/stringArray"},
+        "repair_history": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "operatingRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "region", "stability_status",
+        "response_model_status", "semantic_outcome",
+        "previous_committed_verifier_receipt_id", "last_tick"
+      ],
+      "properties": {
+        "contract_type": {"const": "BIAS_OPERATING_RECORD"},
+        "schema_version": {"const": "cas.neural-cjt.bias-operating-record/0.2"},
+        "region": {"$ref": "#/$defs/operatingRegion"},
+        "stability_status": {"$ref": "#/$defs/nonEmptyString"},
+        "response_model_status": {"$ref": "#/$defs/nonEmptyString"},
+        "semantic_outcome": {"$ref": "#/$defs/semanticOutcome"},
+        "previous_committed_verifier_receipt_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/nonEmptyString"}]},
+        "last_tick": {"$ref": "#/$defs/uint"}
+      }
+    },
+    "thetaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "model_id", "model_version",
+        "model_digest", "parameter_artifacts", "parameter_group_ids",
+        "beta_microunits", "operating_profile_id", "adapter_ids"
+      ],
+      "properties": {
+        "contract_type": {"const": "BIAS_THETA_REF"},
+        "schema_version": {"const": "cas.neural-cjt.bias-theta-ref/0.2"},
+        "model_id": {"$ref": "#/$defs/nonEmptyString"},
+        "model_version": {"$ref": "#/$defs/uint"},
+        "model_digest": {"$ref": "#/$defs/sha256"},
+        "parameter_artifacts": {
+          "type": "array", "minItems": 1, "items": {"$ref": "#/$defs/tensorArtifactRef"}
+        },
+        "parameter_group_ids": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "beta_microunits": {"$ref": "#/$defs/uint"},
+        "operating_profile_id": {"$ref": "#/$defs/nonEmptyString"},
+        "adapter_ids": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "hard_permissions",
+        "topology_permissions", "learning_permissions", "compute_ceiling_units",
+        "quarantined", "state_write_authorities", "memory_write_authorities",
+        "effect_publication_authorities", "owner_restrictions"
+      ],
+      "properties": {
+        "contract_type": {"const": "BIAS_GOVERNANCE"},
+        "schema_version": {"const": "cas.neural-cjt.bias-governance/0.2"},
+        "hard_permissions": {"$ref": "#/$defs/stringArray"},
+        "topology_permissions": {"$ref": "#/$defs/stringArray"},
+        "learning_permissions": {"$ref": "#/$defs/stringArray"},
+        "compute_ceiling_units": {"$ref": "#/$defs/uint"},
+        "quarantined": {"type": "boolean"},
+        "state_write_authorities": {"$ref": "#/$defs/stringArray"},
+        "memory_write_authorities": {"$ref": "#/$defs/stringArray"},
+        "effect_publication_authorities": {"$ref": "#/$defs/stringArray"},
+        "owner_restrictions": {"$ref": "#/$defs/stringArray"}
+      }
+    },
+    "biasState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "bias_id", "cjt_id", "version",
+        "previous_digest", "stable", "memory", "rpm", "operating", "theta",
+        "governance", "state_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "BIAS_STATE"},
+        "schema_version": {"const": "cas.neural-cjt.bias-state/0.2"},
+        "bias_id": {"$ref": "#/$defs/nonEmptyString"},
+        "cjt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "version": {"$ref": "#/$defs/uint"},
+        "previous_digest": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+        "stable": {"$ref": "#/$defs/stableSubstrate"},
+        "memory": {"$ref": "#/$defs/localMemory"},
+        "rpm": {"$ref": "#/$defs/rpmState"},
+        "operating": {"$ref": "#/$defs/operatingRecord"},
+        "theta": {"$ref": "#/$defs/thetaRef"},
+        "governance": {"$ref": "#/$defs/governance"},
+        "state_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"version": {"const": 0}}, "required": ["version"]},
+          "then": {"properties": {"previous_digest": {"type": "null"}}},
+          "else": {"properties": {"previous_digest": {"$ref": "#/$defs/sha256"}}}
+        }
+      ]
+    },
+    "candidateEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "candidate_effect_id", "tick",
+        "parent_cause_id", "producer_cjt_id", "operation_id",
+        "operation_contract_id", "operation_contract_digest", "bias_id",
+        "bias_version", "bias_digest", "model_digest", "content", "content_ref",
+        "uncertainty_ppm", "provenance", "candidate_digest", "authoritative"
+      ],
+      "properties": {
+        "contract_type": {"const": "CANDIDATE_EFFECT"},
+        "schema_version": {"const": "cas.neural-cjt.candidate-effect/0.2"},
+        "candidate_effect_id": {"$ref": "#/$defs/nonEmptyString"},
+        "tick": {"$ref": "#/$defs/uint"},
+        "parent_cause_id": {"$ref": "#/$defs/nonEmptyString"},
+        "producer_cjt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "operation_id": {"$ref": "#/$defs/nonEmptyString"},
+        "operation_contract_id": {"$ref": "#/$defs/nonEmptyString"},
+        "operation_contract_digest": {"$ref": "#/$defs/sha256"},
+        "bias_id": {"$ref": "#/$defs/nonEmptyString"},
+        "bias_version": {"$ref": "#/$defs/uint"},
+        "bias_digest": {"$ref": "#/$defs/sha256"},
+        "model_digest": {"$ref": "#/$defs/sha256"},
+        "content": {"$ref": "#/$defs/nonEmptyJsonObject"},
+        "content_ref": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/tensorArtifactRef"}]},
+        "uncertainty_ppm": {"$ref": "#/$defs/ppm"},
+        "provenance": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "candidate_digest": {"$ref": "#/$defs/sha256"},
+        "authoritative": {"const": false}
+      }
+    },
+    "publishedEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "published_effect_id",
+        "candidate_effect_id", "tick", "producer_cjt_id", "content", "content_ref",
+        "verifier_receipt_id", "commit_receipt_id", "provenance",
+        "publication_digest", "authoritative"
+      ],
+      "properties": {
+        "contract_type": {"const": "PUBLISHED_EFFECT"},
+        "schema_version": {"const": "cas.neural-cjt.published-effect/0.2"},
+        "published_effect_id": {"$ref": "#/$defs/nonEmptyString"},
+        "candidate_effect_id": {"$ref": "#/$defs/nonEmptyString"},
+        "tick": {"$ref": "#/$defs/uint"},
+        "producer_cjt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "content": {"$ref": "#/$defs/nonEmptyJsonObject"},
+        "content_ref": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/tensorArtifactRef"}]},
+        "verifier_receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "commit_receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "provenance": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "publication_digest": {"$ref": "#/$defs/sha256"},
+        "authoritative": {"const": true}
+      }
+    },
+    "operationContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "contract_id", "contract_version",
+        "operation_id", "operation_name", "ontology_status",
+        "accepted_cause_kinds", "accepted_schema_versions",
+        "permitted_evidence_ports", "neural_transform_id", "effect_schema_id",
+        "memory_interface", "readiness_profile_id", "legal_actions",
+        "legal_bias_paths", "temporal_transition_law", "verifier_id",
+        "verifier_version", "verifier_digest", "plasticity_groups", "governance_requirements",
+        "contract_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "OPERATION_CONTRACT"},
+        "schema_version": {"const": "cas.neural-cjt.operation-contract/0.2"},
+        "contract_id": {"$ref": "#/$defs/nonEmptyString"},
+        "contract_version": {"$ref": "#/$defs/positiveInt"},
+        "operation_id": {"$ref": "#/$defs/nonEmptyString"},
+        "operation_name": {"$ref": "#/$defs/nonEmptyString"},
+        "ontology_status": {"$ref": "#/$defs/ontologyStatus"},
+        "accepted_cause_kinds": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"$ref": "#/$defs/causeKind"}
+        },
+        "accepted_schema_versions": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "permitted_evidence_ports": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "neural_transform_id": {"$ref": "#/$defs/nonEmptyString"},
+        "effect_schema_id": {"$ref": "#/$defs/nonEmptyString"},
+        "memory_interface": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "readiness_profile_id": {"$ref": "#/$defs/nonEmptyString"},
+        "legal_actions": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "legal_bias_paths": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^/(memory|rpm|operating|theta)(/|$)"}
+        },
+        "temporal_transition_law": {"$ref": "#/$defs/nonEmptyString"},
+        "verifier_id": {"$ref": "#/$defs/nonEmptyString"},
+        "verifier_version": {"$ref": "#/$defs/positiveInt"},
+        "verifier_digest": {"$ref": "#/$defs/sha256"},
+        "plasticity_groups": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "governance_requirements": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "contract_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"operation_id": {"const": "^6"}}, "required": ["operation_id"]},
+          "then": {"properties": {"operation_name": {"const": "decompose"}, "ontology_status": {"const": "CANONICAL_ADMITTED"}}}
+        },
+        {
+          "if": {"properties": {"operation_id": {"const": "^2"}}, "required": ["operation_id"]},
+          "then": {"properties": {"operation_name": {"const": "experimental_attract"}, "ontology_status": {"const": "EXPERIMENTAL_OPEN_SEMANTICS"}}}
+        },
+        {
+          "if": {"properties": {"operation_id": {"const": "^3"}}, "required": ["operation_id"]},
+          "then": {"properties": {"operation_name": {"const": "experimental_avert"}, "ontology_status": {"const": "EXPERIMENTAL_OPEN_SEMANTICS"}}}
+        },
+        {
+          "if": {"properties": {"operation_id": {"const": "^8"}}, "required": ["operation_id"]},
+          "then": {"properties": {"operation_name": {"const": "experimental_trigger"}, "ontology_status": {"const": "EXPERIMENTAL_CONFLICTED_SEMANTICS"}}}
+        },
+        {
+          "if": {"properties": {"ontology_status": {"const": "CANONICAL_ADMITTED"}}, "required": ["ontology_status"]},
+          "then": {"properties": {"operation_id": {"const": "^6"}}},
+          "else": {"properties": {"operation_name": {"pattern": "^experimental_"}}}
+        }
+      ]
+    },
+    "verifierReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "receipt_id", "tick", "verifier_id",
+        "verifier_version", "verifier_digest", "independent", "cause_id", "candidate_effect_id",
+        "candidate_effect_digest", "bias_id", "bias_version", "bias_digest",
+        "operation_contract_id", "operation_contract_digest", "model_digest",
+        "semantic_outcome", "disposition", "reason_codes", "evidence_refs",
+        "repair_required", "receipt_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "VERIFIER_RECEIPT"},
+        "schema_version": {"const": "cas.neural-cjt.verifier-receipt/0.2"},
+        "receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "tick": {"$ref": "#/$defs/uint"},
+        "verifier_id": {"$ref": "#/$defs/nonEmptyString"},
+        "verifier_version": {"$ref": "#/$defs/positiveInt"},
+        "verifier_digest": {"$ref": "#/$defs/sha256"},
+        "independent": {"const": true},
+        "cause_id": {"$ref": "#/$defs/nonEmptyString"},
+        "candidate_effect_id": {"$ref": "#/$defs/nonEmptyString"},
+        "candidate_effect_digest": {"$ref": "#/$defs/sha256"},
+        "bias_id": {"$ref": "#/$defs/nonEmptyString"},
+        "bias_version": {"$ref": "#/$defs/uint"},
+        "bias_digest": {"$ref": "#/$defs/sha256"},
+        "operation_contract_id": {"$ref": "#/$defs/nonEmptyString"},
+        "operation_contract_digest": {"$ref": "#/$defs/sha256"},
+        "model_digest": {"$ref": "#/$defs/sha256"},
+        "semantic_outcome": {"$ref": "#/$defs/semanticOutcome"},
+        "disposition": {"$ref": "#/$defs/verifierDisposition"},
+        "reason_codes": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "evidence_refs": {"$ref": "#/$defs/stringArray"},
+        "repair_required": {"type": "boolean"},
+        "receipt_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"disposition": {"const": "ACCEPT"}}, "required": ["disposition"]},
+          "then": {"properties": {"semantic_outcome": {"const": "INTENDED"}, "repair_required": {"const": false}}}
+        },
+        {
+          "if": {"properties": {"disposition": {"const": "REPAIR"}}, "required": ["disposition"]},
+          "then": {"properties": {"repair_required": {"const": true}}}
+        }
+      ]
+    },
+    "repairFrame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "repair_id", "opened_tick",
+        "eligible_tick", "parent_cause_id", "rejected_candidate_effect_id",
+        "verifier_receipt_id", "suspended_bias_id", "suspended_bias_version",
+        "prerequisite_axis", "subgoal_cause_id", "return_address", "depth",
+        "max_depth", "branch_count", "max_branches", "budget_units",
+        "consumed_units", "cycle_key", "status", "result_effect_id", "frame_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "REPAIR_FRAME"},
+        "schema_version": {"const": "cas.neural-cjt.repair-frame/0.2"},
+        "repair_id": {"$ref": "#/$defs/nonEmptyString"},
+        "opened_tick": {"$ref": "#/$defs/uint"},
+        "eligible_tick": {"$ref": "#/$defs/uint"},
+        "parent_cause_id": {"$ref": "#/$defs/nonEmptyString"},
+        "rejected_candidate_effect_id": {"$ref": "#/$defs/nonEmptyString"},
+        "verifier_receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "suspended_bias_id": {"$ref": "#/$defs/nonEmptyString"},
+        "suspended_bias_version": {"$ref": "#/$defs/uint"},
+        "prerequisite_axis": {"$ref": "#/$defs/readinessAxisName"},
+        "subgoal_cause_id": {"$ref": "#/$defs/nonEmptyString"},
+        "return_address": {"$ref": "#/$defs/nonEmptyString"},
+        "depth": {"$ref": "#/$defs/uint"},
+        "max_depth": {"$ref": "#/$defs/uint"},
+        "branch_count": {"$ref": "#/$defs/uint"},
+        "max_branches": {"$ref": "#/$defs/uint"},
+        "budget_units": {"$ref": "#/$defs/uint"},
+        "consumed_units": {"$ref": "#/$defs/uint"},
+        "cycle_key": {"$ref": "#/$defs/nonEmptyString"},
+        "status": {"const": "OPEN"},
+        "result_effect_id": {"type": "null"},
+        "frame_digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "repairOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "outcome_id", "repair_id", "tick",
+        "status", "frame_digest", "result_effect_id", "result_effect_digest",
+        "result_effect_commit_receipt_id", "resumed_cause_id",
+        "resumed_candidate_effect_id", "verifier_receipt_id", "target_bias_id",
+        "target_bias_version", "target_bias_digest", "outcome_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "REPAIR_OUTCOME"},
+        "schema_version": {"const": "cas.neural-cjt.repair-outcome/0.2"},
+        "outcome_id": {"$ref": "#/$defs/nonEmptyString"},
+        "repair_id": {"$ref": "#/$defs/nonEmptyString"},
+        "tick": {"$ref": "#/$defs/uint"},
+        "status": {"const": "RETURNED"},
+        "frame_digest": {"$ref": "#/$defs/sha256"},
+        "result_effect_id": {"$ref": "#/$defs/nonEmptyString"},
+        "result_effect_digest": {"$ref": "#/$defs/sha256"},
+        "result_effect_commit_receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "resumed_cause_id": {"$ref": "#/$defs/nonEmptyString"},
+        "resumed_candidate_effect_id": {"$ref": "#/$defs/nonEmptyString"},
+        "verifier_receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "target_bias_id": {"$ref": "#/$defs/nonEmptyString"},
+        "target_bias_version": {"$ref": "#/$defs/uint"},
+        "target_bias_digest": {"$ref": "#/$defs/sha256"},
+        "outcome_digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "stateUpdateIntent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "intent_id", "tick", "issuer_id",
+        "authority_capability", "target_bias_id", "expected_bias_version",
+        "expected_bias_digest", "target_path", "replacement",
+        "verifier_receipt_id", "reason_codes", "intent_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "STATE_UPDATE_INTENT"},
+        "schema_version": {"const": "cas.neural-cjt.state-update-intent/0.2"},
+        "intent_id": {"$ref": "#/$defs/nonEmptyString"},
+        "tick": {"$ref": "#/$defs/uint"},
+        "issuer_id": {"$ref": "#/$defs/nonEmptyString"},
+        "authority_capability": {"const": "PROPOSE_STATE_UPDATE"},
+        "target_bias_id": {"$ref": "#/$defs/nonEmptyString"},
+        "expected_bias_version": {"$ref": "#/$defs/uint"},
+        "expected_bias_digest": {"$ref": "#/$defs/sha256"},
+        "target_path": {"type": "string", "pattern": "^/(memory|rpm|operating|theta)(/|$)"},
+        "replacement": {"$ref": "#/$defs/nonEmptyJsonObject"},
+        "verifier_receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "reason_codes": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "intent_digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "modelUpdateIntent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "intent_id", "tick", "issuer_id",
+        "authority_capability", "model_id", "expected_model_version",
+        "expected_model_digest", "update_kind", "parameter_group_ids",
+        "candidate_artifact", "gradient_artifact", "plasticity_ppm",
+        "verifier_receipt_id", "qualification_receipt_id", "reason_codes",
+        "intent_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "MODEL_UPDATE_INTENT"},
+        "schema_version": {"const": "cas.neural-cjt.model-update-intent/0.2"},
+        "intent_id": {"$ref": "#/$defs/nonEmptyString"},
+        "tick": {"$ref": "#/$defs/uint"},
+        "issuer_id": {"$ref": "#/$defs/nonEmptyString"},
+        "authority_capability": {"const": "PROPOSE_MODEL_UPDATE"},
+        "model_id": {"$ref": "#/$defs/nonEmptyString"},
+        "expected_model_version": {"$ref": "#/$defs/uint"},
+        "expected_model_digest": {"$ref": "#/$defs/sha256"},
+        "update_kind": {"enum": ["GRADIENT_DELTA", "CHECKPOINT_REPLACEMENT", "ROLLBACK"]},
+        "parameter_group_ids": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "candidate_artifact": {"$ref": "#/$defs/tensorArtifactRef"},
+        "gradient_artifact": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/tensorArtifactRef"}]},
+        "plasticity_ppm": {"$ref": "#/$defs/ppm"},
+        "verifier_receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "qualification_receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "reason_codes": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "intent_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"update_kind": {"const": "GRADIENT_DELTA"}}, "required": ["update_kind"]},
+          "then": {"properties": {"gradient_artifact": {"$ref": "#/$defs/tensorArtifactRef"}}}
+        }
+      ]
+    },
+    "memoryWriteIntent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "intent_id", "tick", "issuer_id",
+        "authority_capability", "target_bias_id", "expected_bias_version",
+        "expected_bias_digest", "memory_record_id", "memory_kind", "content",
+        "content_ref", "confidence_ppm", "provenance", "evidence_refs",
+        "verifier_receipt_id", "intent_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "MEMORY_WRITE_INTENT"},
+        "schema_version": {"const": "cas.neural-cjt.memory-write-intent/0.2"},
+        "intent_id": {"$ref": "#/$defs/nonEmptyString"},
+        "tick": {"$ref": "#/$defs/uint"},
+        "issuer_id": {"$ref": "#/$defs/nonEmptyString"},
+        "authority_capability": {"const": "PROPOSE_MEMORY_WRITE"},
+        "target_bias_id": {"$ref": "#/$defs/nonEmptyString"},
+        "expected_bias_version": {"$ref": "#/$defs/uint"},
+        "expected_bias_digest": {"$ref": "#/$defs/sha256"},
+        "memory_record_id": {"$ref": "#/$defs/nonEmptyString"},
+        "memory_kind": {
+          "enum": ["SHORT_TERM", "EPISODIC", "SEMANTIC", "PROCEDURAL", "VERIFIER_HISTORY", "REPAIR_STRATEGY"]
+        },
+        "content": {"$ref": "#/$defs/nonEmptyJsonObject"},
+        "content_ref": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/tensorArtifactRef"}]},
+        "confidence_ppm": {"$ref": "#/$defs/ppm"},
+        "provenance": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "evidence_refs": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "verifier_receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "intent_digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "commitReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "receipt_id", "tick", "batch_id",
+        "coordinator_id", "authority_contract_id", "authorized", "disposition",
+        "pre_state_digest", "post_state_digest", "pre_model_digest",
+        "post_model_digest", "accepted_intent_ids", "rejected_intent_ids",
+        "published_effect_ids", "opened_repair_ids", "reason_codes", "atomic", "rollback_of_receipt_id",
+        "persisted_snapshot_id", "trace_id", "receipt_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "COMMIT_RECEIPT"},
+        "schema_version": {"const": "cas.neural-cjt.commit-receipt/0.2"},
+        "receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "tick": {"$ref": "#/$defs/uint"},
+        "batch_id": {"$ref": "#/$defs/nonEmptyString"},
+        "coordinator_id": {"$ref": "#/$defs/nonEmptyString"},
+        "authority_contract_id": {"$ref": "#/$defs/nonEmptyString"},
+        "authorized": {"type": "boolean"},
+        "disposition": {"enum": ["COMMITTED", "REJECTED", "ROLLED_BACK"]},
+        "pre_state_digest": {"$ref": "#/$defs/sha256"},
+        "post_state_digest": {"$ref": "#/$defs/sha256"},
+        "pre_model_digest": {"$ref": "#/$defs/sha256"},
+        "post_model_digest": {"$ref": "#/$defs/sha256"},
+        "accepted_intent_ids": {"$ref": "#/$defs/stringArray"},
+        "rejected_intent_ids": {"$ref": "#/$defs/stringArray"},
+        "published_effect_ids": {"$ref": "#/$defs/stringArray"},
+        "opened_repair_ids": {"$ref": "#/$defs/stringArray"},
+        "reason_codes": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "atomic": {"const": true},
+        "rollback_of_receipt_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/nonEmptyString"}]},
+        "persisted_snapshot_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/nonEmptyString"}]},
+        "trace_id": {"$ref": "#/$defs/nonEmptyString"},
+        "receipt_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"disposition": {"const": "COMMITTED"}}, "required": ["disposition"]},
+          "then": {
+            "properties": {
+              "authorized": {"const": true},
+              "rejected_intent_ids": {"maxItems": 0},
+              "persisted_snapshot_id": {"$ref": "#/$defs/nonEmptyString"}
+            },
+            "anyOf": [
+              {"properties": {"accepted_intent_ids": {"minItems": 1}}},
+              {"properties": {"published_effect_ids": {"minItems": 1}}},
+              {"properties": {"opened_repair_ids": {"minItems": 1}}}
+            ]
+          }
+        },
+        {
+          "if": {"properties": {"disposition": {"const": "REJECTED"}}, "required": ["disposition"]},
+          "then": {"properties": {"accepted_intent_ids": {"maxItems": 0}, "published_effect_ids": {"maxItems": 0}, "opened_repair_ids": {"maxItems": 0}}}
+        },
+        {
+          "if": {"properties": {"disposition": {"const": "ROLLED_BACK"}}, "required": ["disposition"]},
+          "then": {"properties": {"rollback_of_receipt_id": {"$ref": "#/$defs/nonEmptyString"}}}
+        }
+      ]
+    },
+    "phaseRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "phase", "tick", "inputs", "outputs",
+        "diagnostics", "compute_units"
+      ],
+      "properties": {
+        "contract_type": {"const": "TICK_PHASE_RECORD"},
+        "schema_version": {"const": "cas.neural-cjt.tick-phase-record/0.2"},
+        "phase": {
+          "enum": [
+            "READ", "CANDIDATE", "READINESS", "ROUTE", "EXECUTE", "OBSERVE",
+            "VERIFY", "DIAGNOSE", "EMIT", "COMMIT", "TRACE"
+          ]
+        },
+        "tick": {"$ref": "#/$defs/uint"},
+        "inputs": {"$ref": "#/$defs/jsonObject"},
+        "outputs": {"$ref": "#/$defs/jsonObject"},
+        "diagnostics": {"$ref": "#/$defs/jsonObject"},
+        "compute_units": {"$ref": "#/$defs/uint"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"phase": {"const": "READ"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["cause_id", "state_digest", "model_digest"], "properties": {"cause_id": {}, "state_digest": {}, "model_digest": {}}, "additionalProperties": false},
+            "outputs": {"required": ["bias_ids", "bias_digests", "memory_read_refs"], "properties": {"bias_ids": {}, "bias_digests": {}, "memory_read_refs": {}}, "additionalProperties": false},
+            "diagnostics": {"maxProperties": 0}, "compute_units": {"const": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "CANDIDATE"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["candidate_operation_ids"], "properties": {"candidate_operation_ids": {}}, "additionalProperties": false},
+            "outputs": {"required": ["candidate_cjt_ids", "operation_contract_ids"], "properties": {"candidate_cjt_ids": {}, "operation_contract_ids": {}}, "additionalProperties": false},
+            "diagnostics": {"maxProperties": 0}, "compute_units": {"const": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "READINESS"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["profile_ids"], "properties": {"profile_ids": {}}, "additionalProperties": false},
+            "outputs": {"required": ["desire", "wisdom", "power", "hard_open"], "properties": {"desire": {}, "wisdom": {}, "power": {}, "hard_open": {}}, "additionalProperties": false},
+            "diagnostics": {"maxProperties": 0}, "compute_units": {"const": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "ROUTE"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["control_cjt_id", "topology_mask", "permission_mask", "quarantine_mask", "budget_mask", "readiness_hard_mask", "route_settings", "native_compute", "compute_policy", "control_binding_manifest"], "properties": {"control_cjt_id": {}, "topology_mask": {}, "permission_mask": {}, "quarantine_mask": {}, "budget_mask": {}, "readiness_hard_mask": {}, "route_settings": {}, "native_compute": {}, "compute_policy": {}, "control_binding_manifest": {}}, "additionalProperties": false},
+            "outputs": {"required": ["compute_plan", "effective_path_mask", "conducting_query_mask", "current_microunits", "total_current_microunits", "flow_allocation_ppm"], "properties": {"compute_plan": {}, "effective_path_mask": {}, "conducting_query_mask": {}, "current_microunits": {}, "total_current_microunits": {}, "flow_allocation_ppm": {}}, "additionalProperties": false},
+            "diagnostics": {"maxProperties": 0}, "compute_units": {"const": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "EXECUTE"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["scheduled_cjt_ids", "operation_ids"], "properties": {"scheduled_cjt_ids": {}, "operation_ids": {}}, "additionalProperties": false},
+            "outputs": {"required": ["executed_cjt_ids", "compute_units_used"], "properties": {"executed_cjt_ids": {}, "compute_units_used": {}}, "additionalProperties": false},
+            "diagnostics": {"maxProperties": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "OBSERVE"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["executed_cjt_ids"], "properties": {"executed_cjt_ids": {}}, "additionalProperties": false},
+            "outputs": {"required": ["candidate_effect_ids", "operating_regions", "artifact_ids", "compute_observations"], "properties": {"candidate_effect_ids": {}, "operating_regions": {}, "artifact_ids": {}, "compute_observations": {}}, "additionalProperties": false},
+            "diagnostics": {"required": ["control_binding_digest", "declared_beta_microunits", "live_beta_by_head_microunits"], "properties": {"control_binding_digest": {}, "declared_beta_microunits": {}, "live_beta_by_head_microunits": {}}, "additionalProperties": false}, "compute_units": {"const": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "VERIFY"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["candidate_effect_ids", "evidence_ids"], "properties": {"candidate_effect_ids": {}, "evidence_ids": {}}, "additionalProperties": false},
+            "outputs": {"required": ["verifier_receipt_ids", "semantic_outcomes", "dispositions"], "properties": {"verifier_receipt_ids": {}, "semantic_outcomes": {}, "dispositions": {}}, "additionalProperties": false},
+            "diagnostics": {"maxProperties": 0}, "compute_units": {"const": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "DIAGNOSE"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["operating_regions", "semantic_outcomes"], "properties": {"operating_regions": {}, "semantic_outcomes": {}}, "additionalProperties": false},
+            "outputs": {"required": ["reason_codes", "repair_required"], "properties": {"reason_codes": {}, "repair_required": {}}, "additionalProperties": false},
+            "diagnostics": {"maxProperties": 0}, "compute_units": {"const": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "EMIT"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["verifier_receipt_ids"], "properties": {"verifier_receipt_ids": {}}, "additionalProperties": false},
+            "outputs": {"required": ["state_intent_ids", "model_intent_ids", "memory_intent_ids", "repair_ids", "repair_outcome_ids", "publication_requested"], "properties": {"state_intent_ids": {}, "model_intent_ids": {}, "memory_intent_ids": {}, "repair_ids": {}, "repair_outcome_ids": {}, "publication_requested": {}}, "additionalProperties": false},
+            "diagnostics": {"maxProperties": 0}, "compute_units": {"const": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "COMMIT"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["pre_state_digest", "pre_model_digest"], "properties": {"pre_state_digest": {}, "pre_model_digest": {}}, "additionalProperties": false},
+            "outputs": {"required": ["proposed_post_state_digest", "proposed_post_model_digest"], "properties": {"proposed_post_state_digest": {}, "proposed_post_model_digest": {}}, "additionalProperties": false},
+            "diagnostics": {"maxProperties": 0}, "compute_units": {"const": 0}
+          }}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "TRACE"}}, "required": ["phase"]},
+          "then": {"properties": {
+            "inputs": {"required": ["previous_trace_digest"], "properties": {"previous_trace_digest": {}}, "additionalProperties": false},
+            "outputs": {"required": ["seal_requested", "phase_count"], "properties": {"seal_requested": {}, "phase_count": {}}, "additionalProperties": false},
+            "diagnostics": {"maxProperties": 0}, "compute_units": {"const": 0}
+          }}
+        }
+      ]
+    },
+    "tickTrace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type", "schema_version", "trace_id", "tick", "runtime_id",
+        "software_digest", "cause_id", "cjt_ids", "pre_state_digest",
+        "post_state_digest", "pre_model_digest", "post_model_digest", "phases",
+        "candidate_effect_ids", "published_effect_ids", "verifier_receipt_ids",
+        "commit_receipt_id", "memory_read_refs", "memory_write_refs",
+        "accepted_intent_ids", "rejected_intent_ids", "previous_trace_digest",
+        "sealed", "trace_digest"
+      ],
+      "properties": {
+        "contract_type": {"const": "TICK_TRACE"},
+        "schema_version": {"const": "cas.neural-cjt.tick-trace/0.2"},
+        "trace_id": {"$ref": "#/$defs/nonEmptyString"},
+        "tick": {"$ref": "#/$defs/uint"},
+        "runtime_id": {"$ref": "#/$defs/nonEmptyString"},
+        "software_digest": {"$ref": "#/$defs/sha256"},
+        "cause_id": {"$ref": "#/$defs/nonEmptyString"},
+        "cjt_ids": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "pre_state_digest": {"$ref": "#/$defs/sha256"},
+        "post_state_digest": {"$ref": "#/$defs/sha256"},
+        "pre_model_digest": {"$ref": "#/$defs/sha256"},
+        "post_model_digest": {"$ref": "#/$defs/sha256"},
+        "phases": {
+          "type": "array",
+          "minItems": 11,
+          "maxItems": 11,
+          "prefixItems": [
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "READ"}}}]},
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "CANDIDATE"}}}]},
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "READINESS"}}}]},
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "ROUTE"}}}]},
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "EXECUTE"}}}]},
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "OBSERVE"}}}]},
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "VERIFY"}}}]},
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "DIAGNOSE"}}}]},
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "EMIT"}}}]},
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "COMMIT"}}}]},
+            {"allOf": [{"$ref": "#/$defs/phaseRecord"}, {"properties": {"phase": {"const": "TRACE"}}}]}
+          ],
+          "items": false
+        },
+        "candidate_effect_ids": {"$ref": "#/$defs/stringArray"},
+        "published_effect_ids": {"$ref": "#/$defs/stringArray"},
+        "verifier_receipt_ids": {"$ref": "#/$defs/stringArray"},
+        "commit_receipt_id": {"$ref": "#/$defs/nonEmptyString"},
+        "memory_read_refs": {"$ref": "#/$defs/stringArray"},
+        "memory_write_refs": {"$ref": "#/$defs/stringArray"},
+        "accepted_intent_ids": {"$ref": "#/$defs/stringArray"},
+        "rejected_intent_ids": {"$ref": "#/$defs/stringArray"},
+        "repair_frame_ids": {"$ref": "#/$defs/stringArray"},
+        "repair_outcome_ids": {"$ref": "#/$defs/stringArray"},
+        "network_request_digest": {"$ref": "#/$defs/sha256"},
+        "state_before": {"$ref": "#/$defs/jsonObject"},
+        "state_after": {"$ref": "#/$defs/jsonObject"},
+        "cause": {"$ref": "#/$defs/jsonObject"},
+        "candidate_effects": {
+          "type": "array", "items": {"$ref": "#/$defs/jsonObject"}
+        },
+        "verifier_receipts": {
+          "type": "array", "items": {"$ref": "#/$defs/jsonObject"}
+        },
+        "state_intents": {
+          "type": "array", "items": {"$ref": "#/$defs/jsonObject"}
+        },
+        "model_intents": {
+          "type": "array", "items": {"$ref": "#/$defs/jsonObject"}
+        },
+        "memory_intents": {
+          "type": "array", "items": {"$ref": "#/$defs/jsonObject"}
+        },
+        "repair_frames": {
+          "type": "array", "items": {"$ref": "#/$defs/jsonObject"}
+        },
+        "repair_outcomes": {
+          "type": "array", "items": {"$ref": "#/$defs/jsonObject"}
+        },
+        "qualification_receipts": {
+          "type": "array", "items": {"$ref": "#/$defs/jsonObject"}
+        },
+        "semantic_evidence": {
+          "type": "array", "items": {"$ref": "#/$defs/jsonObject"}
+        },
+        "decoder_contract": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/jsonObject"}]
+        },
+        "artifacts": {
+          "type": "array", "items": {"$ref": "#/$defs/jsonObject"}
+        },
+        "model_version": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/jsonObject"}]
+        },
+        "compute_plan": {"$ref": "#/$defs/jsonObject"},
+        "compute_observations": {"$ref": "#/$defs/jsonObject"},
+        "audit_transition": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/jsonObject"}]
+        },
+        "previous_trace_digest": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+        "sealed": {"const": true},
+        "trace_digest": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "anyOf": [
+              {"required": ["network_request_digest"]},
+              {"required": ["state_before"]},
+              {"required": ["compute_plan"]},
+              {"required": ["audit_transition"]}
+            ]
+          },
+          "then": {
+            "required": [
+              "repair_frame_ids", "repair_outcome_ids", "network_request_digest",
+              "state_before", "state_after", "cause", "candidate_effects",
+              "verifier_receipts", "state_intents", "model_intents",
+              "memory_intents", "repair_frames", "repair_outcomes",
+              "qualification_receipts", "semantic_evidence",
+              "decoder_contract", "artifacts", "model_version",
+              "compute_plan", "compute_observations", "audit_transition"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

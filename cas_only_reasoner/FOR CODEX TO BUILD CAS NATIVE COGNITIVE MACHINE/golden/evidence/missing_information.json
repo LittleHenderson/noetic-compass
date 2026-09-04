@@ -1,0 +1,100 @@
+{
+  "branch_summary": [
+    {
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [],
+      "proof_step_ids": [],
+      "proposition_keys": [],
+      "status": "BLOCKED",
+      "unknowns": [
+        "holds(P)@global"
+      ]
+    }
+  ],
+  "claim_boundary": {
+    "cas_ohm_runtime_authority": false,
+    "constitutional_learning_enabled": false,
+    "english_understanding": false,
+    "external_actions_enabled": false,
+    "external_model_used": false,
+    "general_intelligence_claim": false,
+    "procedural_learning_enabled": false,
+    "production_ready": false,
+    "status": "REFERENCE_DEMONSTRATOR_ONLY"
+  },
+  "commitment_gates": {},
+  "comparison": [
+    {
+      "differences": [
+        "branch-main:1,0,0,1,0,0"
+      ],
+      "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+      "metrics": [
+        [
+          "branch-main",
+          [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        ]
+      ],
+      "ordered_branch_ids": [
+        "branch-main"
+      ],
+      "report_id": "comparison-52dcd0a35c5d1b0e",
+      "shared_features": [
+        "holds(Q)@global",
+        "same_evaluation_frame"
+      ],
+      "single_candidate_reason": "mechanically_deterministic_declared_path",
+      "winner_branch_id": null
+    }
+  ],
+  "diagnostics": [
+    "no branch established every required premise"
+  ],
+  "event_count": 5,
+  "evidence_digest": "898b0015fa6fa29c3add2bc5722df92288c8dcb6a3502491b31c8ad29ba4d68f",
+  "final_state_hash": "c7af16bbe38fbf59d09d08ef270cd9c5e2a77c07f41ee5e04372d66eb1312362",
+  "goal_id": "establish_q_without_p",
+  "initial_state_hash": "25a266c3d0955ba7b9229d955b884ba9203b47329bba55dae02a578c5c2ad93e",
+  "learning_disposition": "NO_WRITE",
+  "problem_id": "missing_premise",
+  "problem_packet_hash": "e9e32b354c499eb2fe0e9e74d741263d50ac3b4891fc1e9701920d33bcd05747",
+  "proof_steps": [],
+  "query_result": {
+    "conclusion": null,
+    "lacunae": [
+      "holds(P)@global"
+    ],
+    "query": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [],
+      "scope": "global"
+    },
+    "supported": false
+  },
+  "rpm_summary": {
+    "event_count": 0,
+    "events": [],
+    "final_depth": 0
+  },
+  "run_id": "run-8e22881b3c81cd53",
+  "runtime_version": "0.1.0",
+  "schema_version": "cncm.evidence/0.1",
+  "seed": 0,
+  "terminal_status": "NEEDS_INFORMATION",
+  "trace_digest": "a07004d2c8738bae6d87f0bc1d3fc38ab58fdbde7198a54ab00eed2504a0b37d",
+  "trace_head": "50bf9d304e5299db211f5ec890c84bcfc8673a6296fa6c26735d096226eac303"
+}

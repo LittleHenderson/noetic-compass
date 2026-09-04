@@ -1,0 +1,14 @@
+{
+  "diagnostics": [
+    "RPM child failed: branch-main -> holds(P)@global",
+    "no branch established every required premise"
+  ],
+  "final_state_hash": "5010fe3d8cb42657020d34095285ab4473f50b501e905d3a248b701f16e11b14",
+  "fixture": "rpm_failure",
+  "lacunae": [
+    "holds(P)@global"
+  ],
+  "schema_version": "cncm.expected-failure/0.1",
+  "terminal_status": "NEEDS_INFORMATION",
+  "trace_head": "e432f683e6cdc30f2cf458a1f5d8e802635b0fd83203d9204c2f5cb68bd44bd4"
+}

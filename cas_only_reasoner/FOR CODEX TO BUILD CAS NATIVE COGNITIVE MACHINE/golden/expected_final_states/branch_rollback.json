@@ -1,0 +1,628 @@
+{
+  "active_goal_id": "select_supported_q_path",
+  "branch_table": [
+    {
+      "active_goal_id": "select_supported_q_path",
+      "assumptions": [],
+      "branch_id": "branch-bad",
+      "candidate_id": "bad",
+      "contradictions": [],
+      "created_at_tick": 0,
+      "decompositions": [
+        {
+          "assumptions": [],
+          "candidate_id": "bad",
+          "contradictions": [],
+          "dependencies": [
+            "p_implies_q",
+            "r_and_s_imply_q"
+          ],
+          "predicted_effects": [
+            "holds(Q)@global"
+          ],
+          "premises": [
+            "holds(P)@global",
+            "holds(R)@global",
+            "holds(S)@global"
+          ],
+          "required_prerequisites": [
+            "holds(P)@global"
+          ],
+          "unknowns": [
+            "holds(P)@global"
+          ]
+        },
+        {
+          "assumptions": [],
+          "candidate_id": "bad",
+          "contradictions": [],
+          "dependencies": [
+            "r_and_s_imply_q"
+          ],
+          "predicted_effects": [
+            "holds(Q)@global"
+          ],
+          "premises": [
+            "holds(R)@global",
+            "holds(S)@global"
+          ],
+          "required_prerequisites": [],
+          "unknowns": []
+        }
+      ],
+      "hard_constraints": [
+        {
+          "arguments": [
+            "plan_bad"
+          ],
+          "evidence_status": "unknown",
+          "polarity": true,
+          "predicate": "allowed",
+          "provenance": [],
+          "scope": "global"
+        }
+      ],
+      "parent_branch_id": "branch-root",
+      "proof_steps": [
+        {
+          "branch_id": "branch-bad",
+          "conclusion": {
+            "arguments": [
+              "Q"
+            ],
+            "evidence_status": "derived",
+            "polarity": true,
+            "predicate": "holds",
+            "provenance": [
+              {
+                "detail": "",
+                "source_id": "bad_rule",
+                "source_type": "fixture"
+              },
+              {
+                "detail": "declared CAS-Sem inference",
+                "source_id": "r_and_s_imply_q",
+                "source_type": "rule"
+              }
+            ],
+            "scope": "global"
+          },
+          "operation": "INFER_MODUS_PONENS",
+          "premise_keys": [
+            "holds(R)@global",
+            "holds(S)@global"
+          ],
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "bad_rule",
+              "source_type": "fixture"
+            },
+            {
+              "detail": "declared CAS-Sem inference",
+              "source_id": "r_and_s_imply_q",
+              "source_type": "rule"
+            }
+          ],
+          "rule_id": "r_and_s_imply_q",
+          "step_id": "proof-201dcabd8d3c3389",
+          "substitution": [],
+          "verified": true
+        }
+      ],
+      "propositions": [
+        {
+          "arguments": [
+            "Q"
+          ],
+          "evidence_status": "derived",
+          "polarity": true,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "bad_rule",
+              "source_type": "fixture"
+            },
+            {
+              "detail": "declared CAS-Sem inference",
+              "source_id": "r_and_s_imply_q",
+              "source_type": "rule"
+            }
+          ],
+          "scope": "global"
+        },
+        {
+          "arguments": [
+            "R"
+          ],
+          "evidence_status": "asserted",
+          "polarity": true,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "bad_r",
+              "source_type": "fixture"
+            }
+          ],
+          "scope": "global"
+        },
+        {
+          "arguments": [
+            "S"
+          ],
+          "evidence_status": "asserted",
+          "polarity": true,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "bad_s",
+              "source_type": "fixture"
+            }
+          ],
+          "scope": "global"
+        }
+      ],
+      "recalled_memory_ids": [],
+      "status": "DISCARDED",
+      "unknowns": []
+    },
+    {
+      "active_goal_id": "select_supported_q_path",
+      "assumptions": [],
+      "branch_id": "branch-good",
+      "candidate_id": "good",
+      "contradictions": [],
+      "created_at_tick": 1,
+      "decompositions": [
+        {
+          "assumptions": [],
+          "candidate_id": "good",
+          "contradictions": [],
+          "dependencies": [
+            "p_implies_q",
+            "r_and_s_imply_q"
+          ],
+          "predicted_effects": [
+            "holds(Q)@global"
+          ],
+          "premises": [
+            "holds(P)@global",
+            "holds(R)@global",
+            "holds(S)@global"
+          ],
+          "required_prerequisites": [
+            "holds(R)@global",
+            "holds(S)@global"
+          ],
+          "unknowns": [
+            "holds(R)@global",
+            "holds(S)@global"
+          ]
+        },
+        {
+          "assumptions": [],
+          "candidate_id": "good",
+          "contradictions": [],
+          "dependencies": [
+            "p_implies_q"
+          ],
+          "predicted_effects": [
+            "holds(Q)@global"
+          ],
+          "premises": [
+            "holds(P)@global"
+          ],
+          "required_prerequisites": [],
+          "unknowns": []
+        }
+      ],
+      "hard_constraints": [
+        {
+          "arguments": [
+            "plan_good"
+          ],
+          "evidence_status": "unknown",
+          "polarity": true,
+          "predicate": "allowed",
+          "provenance": [],
+          "scope": "global"
+        }
+      ],
+      "parent_branch_id": "branch-root",
+      "proof_steps": [
+        {
+          "branch_id": "branch-good",
+          "conclusion": {
+            "arguments": [
+              "Q"
+            ],
+            "evidence_status": "derived",
+            "polarity": true,
+            "predicate": "holds",
+            "provenance": [
+              {
+                "detail": "",
+                "source_id": "good_rule",
+                "source_type": "fixture"
+              },
+              {
+                "detail": "declared CAS-Sem inference",
+                "source_id": "p_implies_q",
+                "source_type": "rule"
+              }
+            ],
+            "scope": "global"
+          },
+          "operation": "INFER_MODUS_PONENS",
+          "premise_keys": [
+            "holds(P)@global"
+          ],
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "good_rule",
+              "source_type": "fixture"
+            },
+            {
+              "detail": "declared CAS-Sem inference",
+              "source_id": "p_implies_q",
+              "source_type": "rule"
+            }
+          ],
+          "rule_id": "p_implies_q",
+          "step_id": "proof-020c413610c2d3eb",
+          "substitution": [],
+          "verified": true
+        }
+      ],
+      "propositions": [
+        {
+          "arguments": [
+            "plan_good"
+          ],
+          "evidence_status": "asserted",
+          "polarity": true,
+          "predicate": "allowed",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "good_allowed",
+              "source_type": "fixture"
+            }
+          ],
+          "scope": "global"
+        },
+        {
+          "arguments": [
+            "P"
+          ],
+          "evidence_status": "asserted",
+          "polarity": true,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "good_p",
+              "source_type": "fixture"
+            }
+          ],
+          "scope": "global"
+        },
+        {
+          "arguments": [
+            "Q"
+          ],
+          "evidence_status": "derived",
+          "polarity": true,
+          "predicate": "holds",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "good_rule",
+              "source_type": "fixture"
+            },
+            {
+              "detail": "declared CAS-Sem inference",
+              "source_id": "p_implies_q",
+              "source_type": "rule"
+            }
+          ],
+          "scope": "global"
+        }
+      ],
+      "recalled_memory_ids": [],
+      "status": "COMMITTED",
+      "unknowns": []
+    },
+    {
+      "active_goal_id": "select_supported_q_path",
+      "assumptions": [],
+      "branch_id": "branch-root",
+      "candidate_id": "root",
+      "contradictions": [],
+      "created_at_tick": 0,
+      "decompositions": [],
+      "hard_constraints": [],
+      "parent_branch_id": null,
+      "proof_steps": [],
+      "propositions": [],
+      "recalled_memory_ids": [],
+      "status": "DISCARDED",
+      "unknowns": []
+    }
+  ],
+  "budget": {
+    "branches_remaining": 3,
+    "inference_steps_remaining": 46,
+    "memory_queries_remaining": 4,
+    "rpm_depth_limit": 4,
+    "ticks_remaining": 80
+  },
+  "commitment_state": {
+    "conclusion": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "good_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "p_implies_q",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "decision_status": "COMMITTED",
+    "gate_results": [
+      [
+        "comparison_stable",
+        true
+      ],
+      [
+        "contradiction_free",
+        true
+      ],
+      [
+        "derivation_complete",
+        true
+      ],
+      [
+        "operational_ready",
+        true
+      ],
+      [
+        "principled_gate",
+        true
+      ],
+      [
+        "provenance_present",
+        true
+      ],
+      [
+        "rpm_sufficient",
+        true
+      ]
+    ],
+    "selected_branch_id": "branch-good"
+  },
+  "constitution_revision": "cncm-constitution/0.1",
+  "domain_power_state": [
+    [
+      "P",
+      "GOOD"
+    ],
+    [
+      "C",
+      "GOOD"
+    ],
+    [
+      "E",
+      "GOOD"
+    ],
+    [
+      "O",
+      "ENABLED"
+    ]
+  ],
+  "drive_state": [
+    [
+      "F1",
+      "AVAILABLE"
+    ],
+    [
+      "F2",
+      "AVAILABLE"
+    ],
+    [
+      "F3",
+      "AVAILABLE"
+    ],
+    [
+      "F4",
+      "AVAILABLE"
+    ],
+    [
+      "F5",
+      "AVAILABLE"
+    ],
+    [
+      "F6",
+      "AVAILABLE"
+    ],
+    [
+      "F7",
+      "AVAILABLE"
+    ]
+  ],
+  "episodic_memory": [
+    {
+      "branch_id": "branch-good",
+      "conclusion": {
+        "arguments": [
+          "Q"
+        ],
+        "evidence_status": "derived",
+        "polarity": true,
+        "predicate": "holds",
+        "provenance": [
+          {
+            "detail": "",
+            "source_id": "good_rule",
+            "source_type": "fixture"
+          },
+          {
+            "detail": "declared CAS-Sem inference",
+            "source_id": "p_implies_q",
+            "source_type": "rule"
+          }
+        ],
+        "scope": "global"
+      },
+      "episode_id": "episode-611477332a08f6b8",
+      "final_state_hash": "8fcd545b9458d1abd4434dc3a5f83382e44d1e19bd06336d5cbf8ea1588bcd66",
+      "goal_id": "select_supported_q_path",
+      "problem_id": "candidate_branch_rollback",
+      "proof_digest": "2ccb99572c884b2bc20e0fcb04026adcd7b18140f7d3198e5c3c196ccaef7999",
+      "trace_head": "a483614e106204bd70816bfea06240100f76321c11127ad48b3fe36e8798c2e0",
+      "verified": true
+    }
+  ],
+  "episodic_memory_revision": 1,
+  "foundation_state": [
+    [
+      "TF1",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF2",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF3",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF4",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF5",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF6",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF7",
+      "UNSPECIFIED"
+    ]
+  ],
+  "global_workspace": {
+    "comparison_reports": [
+      {
+        "differences": [
+          "branch-bad:1,1,0,0,0,1",
+          "branch-good:0,0,0,0,0,1"
+        ],
+        "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+        "metrics": [
+          [
+            "branch-bad",
+            [
+              1,
+              1,
+              0,
+              0,
+              0,
+              1
+            ]
+          ],
+          [
+            "branch-good",
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          ]
+        ],
+        "ordered_branch_ids": [
+          "branch-bad",
+          "branch-good"
+        ],
+        "report_id": "comparison-a0e09a4e56383dac",
+        "shared_features": [
+          "holds(Q)@global",
+          "same_evaluation_frame"
+        ],
+        "single_candidate_reason": null,
+        "winner_branch_id": "branch-good"
+      }
+    ],
+    "conclusion": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "good_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "p_implies_q",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "diagnostics": [],
+    "lacunae": [],
+    "problem_id": "candidate_branch_rollback",
+    "query": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [],
+      "scope": "global"
+    },
+    "recalled_memory_ids": []
+  },
+  "halt_status": "CONCLUDED",
+  "learning_queue": [
+    "episode-611477332a08f6b8"
+  ],
+  "logical_tick": 16,
+  "pending_intents": [
+    "intent-d7e1d5dd8ff94a0e"
+  ],
+  "rpm_stack": [],
+  "run_id": "run-2a7bb5c0a5b5a8b8",
+  "runtime_version": "0.1.0",
+  "seed": 0,
+  "state_hash": "6a0c19afe1db1dee2c5ec74629c2e8be281bbebedbeeeb041a72824b2e4e339d",
+  "trace_head": "ca968fcfa6c5706f778efcc618b73b2867024429cda9418b759a59689e7d8caf",
+  "working_memory": []
+}

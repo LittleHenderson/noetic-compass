@@ -1,0 +1,223 @@
+{
+  "active_goal_id": "establish_q_without_p",
+  "branch_table": [
+    {
+      "active_goal_id": "establish_q_without_p",
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [],
+      "created_at_tick": 0,
+      "decompositions": [
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [],
+          "dependencies": [
+            "p_implies_q"
+          ],
+          "predicted_effects": [
+            "holds(Q)@global"
+          ],
+          "premises": [
+            "holds(P)@global"
+          ],
+          "required_prerequisites": [
+            "holds(P)@global"
+          ],
+          "unknowns": [
+            "holds(P)@global"
+          ]
+        },
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [],
+          "dependencies": [
+            "p_implies_q"
+          ],
+          "predicted_effects": [
+            "holds(Q)@global"
+          ],
+          "premises": [
+            "holds(P)@global"
+          ],
+          "required_prerequisites": [
+            "holds(P)@global"
+          ],
+          "unknowns": [
+            "holds(P)@global"
+          ]
+        }
+      ],
+      "hard_constraints": [],
+      "parent_branch_id": null,
+      "proof_steps": [],
+      "propositions": [],
+      "recalled_memory_ids": [],
+      "status": "BLOCKED",
+      "unknowns": [
+        "holds(P)@global"
+      ]
+    }
+  ],
+  "budget": {
+    "branches_remaining": 3,
+    "inference_steps_remaining": 32,
+    "memory_queries_remaining": 4,
+    "rpm_depth_limit": 4,
+    "ticks_remaining": 59
+  },
+  "commitment_state": {
+    "conclusion": null,
+    "decision_status": "UNCOMMITTED",
+    "gate_results": [],
+    "selected_branch_id": null
+  },
+  "constitution_revision": "cncm-constitution/0.1",
+  "domain_power_state": [
+    [
+      "P",
+      "GOOD"
+    ],
+    [
+      "C",
+      "GOOD"
+    ],
+    [
+      "E",
+      "GOOD"
+    ],
+    [
+      "O",
+      "ENABLED"
+    ]
+  ],
+  "drive_state": [
+    [
+      "F1",
+      "AVAILABLE"
+    ],
+    [
+      "F2",
+      "AVAILABLE"
+    ],
+    [
+      "F3",
+      "AVAILABLE"
+    ],
+    [
+      "F4",
+      "AVAILABLE"
+    ],
+    [
+      "F5",
+      "AVAILABLE"
+    ],
+    [
+      "F6",
+      "AVAILABLE"
+    ],
+    [
+      "F7",
+      "AVAILABLE"
+    ]
+  ],
+  "episodic_memory": [],
+  "episodic_memory_revision": 0,
+  "foundation_state": [
+    [
+      "TF1",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF2",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF3",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF4",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF5",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF6",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF7",
+      "UNSPECIFIED"
+    ]
+  ],
+  "global_workspace": {
+    "comparison_reports": [
+      {
+        "differences": [
+          "branch-main:1,0,0,1,0,0"
+        ],
+        "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+        "metrics": [
+          [
+            "branch-main",
+            [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0
+            ]
+          ]
+        ],
+        "ordered_branch_ids": [
+          "branch-main"
+        ],
+        "report_id": "comparison-52dcd0a35c5d1b0e",
+        "shared_features": [
+          "holds(Q)@global",
+          "same_evaluation_frame"
+        ],
+        "single_candidate_reason": "mechanically_deterministic_declared_path",
+        "winner_branch_id": null
+      }
+    ],
+    "conclusion": null,
+    "diagnostics": [
+      "no branch established every required premise"
+    ],
+    "lacunae": [
+      "holds(P)@global"
+    ],
+    "problem_id": "missing_premise",
+    "query": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [],
+      "scope": "global"
+    },
+    "recalled_memory_ids": []
+  },
+  "halt_status": "NEEDS_INFORMATION",
+  "learning_queue": [],
+  "logical_tick": 5,
+  "pending_intents": [
+    "intent-387455b8c808eadb"
+  ],
+  "rpm_stack": [],
+  "run_id": "run-8e22881b3c81cd53",
+  "runtime_version": "0.1.0",
+  "seed": 0,
+  "state_hash": "c7af16bbe38fbf59d09d08ef270cd9c5e2a77c07f41ee5e04372d66eb1312362",
+  "trace_head": "50bf9d304e5299db211f5ec890c84bcfc8673a6296fa6c26735d096226eac303",
+  "working_memory": []
+}

@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/evidence_packet.schema.json",
+  "title": "CNCM EvidencePacket v0.1",
+  "description": "The exact evidence artifact emitted by NativeCognitiveMachine._evidence(). Digest, trace, state, proof, and summary bindings are additionally reconstructed by verification.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "runtime_version",
+    "run_id",
+    "problem_id",
+    "goal_id",
+    "seed",
+    "problem_packet_hash",
+    "initial_state_hash",
+    "final_state_hash",
+    "trace_head",
+    "trace_digest",
+    "terminal_status",
+    "query_result",
+    "proof_steps",
+    "branch_summary",
+    "rpm_summary",
+    "comparison",
+    "commitment_gates",
+    "learning_disposition",
+    "diagnostics",
+    "event_count",
+    "claim_boundary",
+    "evidence_digest"
+  ],
+  "properties": {
+    "schema_version": { "const": "cncm.evidence/0.1" },
+    "runtime_version": { "const": "0.1.0" },
+    "run_id": { "type": "string", "pattern": "^run-[0-9a-f]{16}$" },
+    "problem_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "goal_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "seed": { "type": "integer", "minimum": 0 },
+    "problem_packet_hash": { "$ref": "#/$defs/hash" },
+    "initial_state_hash": { "$ref": "#/$defs/hash" },
+    "final_state_hash": { "$ref": "#/$defs/hash" },
+    "trace_head": { "$ref": "#/$defs/hash" },
+    "trace_digest": { "$ref": "#/$defs/hash" },
+    "terminal_status": {
+      "type": "string",
+      "enum": ["CONCLUDED", "NEEDS_INFORMATION", "CONFLICT_UNRESOLVED", "INADMISSIBLE", "BUDGET_EXHAUSTED", "FAULT"]
+    },
+    "query_result": { "$ref": "#/$defs/query_result" },
+    "proof_steps": {
+      "type": "array",
+      "items": { "$ref": "branch_frame.schema.json#/$defs/proof_step" }
+    },
+    "branch_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/branch_summary" }
+    },
+    "rpm_summary": { "$ref": "#/$defs/rpm_summary" },
+    "comparison": {
+      "type": "array",
+      "items": { "$ref": "machine_state.schema.json#/$defs/comparison_report" }
+    },
+    "commitment_gates": {
+      "oneOf": [
+        { "$ref": "#/$defs/empty_object" },
+        { "$ref": "intent.schema.json#/$defs/commitment_gates" }
+      ]
+    },
+    "learning_disposition": { "type": "string", "enum": ["NO_WRITE", "EPISODIC_WRITE_ONLY"] },
+    "diagnostics": { "$ref": "#/$defs/string_list" },
+    "event_count": { "type": "integer", "minimum": 1 },
+    "claim_boundary": { "$ref": "#/$defs/claim_boundary" },
+    "evidence_digest": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "string_list": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "nullable_proposition": {
+      "oneOf": [
+        { "$ref": "proposition.schema.json" },
+        { "type": "null" }
+      ]
+    },
+    "query_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["query", "supported", "conclusion", "lacunae"],
+      "properties": {
+        "query": { "$ref": "proposition.schema.json" },
+        "supported": { "type": "boolean" },
+        "conclusion": { "$ref": "#/$defs/nullable_proposition" },
+        "lacunae": { "$ref": "#/$defs/string_list" }
+      }
+    },
+    "branch_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "branch_id",
+        "candidate_id",
+        "status",
+        "assumptions",
+        "proposition_keys",
+        "contradictions",
+        "unknowns",
+        "proof_step_ids"
+      ],
+      "properties": {
+        "branch_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+        "candidate_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+        "status": {
+          "type": "string",
+          "enum": ["OPEN", "BLOCKED", "CONTRADICTED", "DOMINATED", "ADMISSIBLE", "SELECTED", "COMMITTED", "DISCARDED", "FAULTED"]
+        },
+        "assumptions": { "$ref": "#/$defs/string_list" },
+        "proposition_keys": { "$ref": "#/$defs/string_list" },
+        "contradictions": { "$ref": "#/$defs/string_list" },
+        "unknowns": { "$ref": "#/$defs/string_list" },
+        "proof_step_ids": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^proof-[0-9a-f]{16}$" }
+        }
+      }
+    },
+    "rpm_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_count", "events", "final_depth"],
+      "properties": {
+        "event_count": { "type": "integer", "minimum": 0 },
+        "events": {
+          "type": "array",
+          "items": { "$ref": "trace_event.schema.json" }
+        },
+        "final_depth": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "empty_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    },
+    "claim_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "production_ready",
+        "general_intelligence_claim",
+        "english_understanding",
+        "external_model_used",
+        "external_actions_enabled",
+        "cas_ohm_runtime_authority",
+        "procedural_learning_enabled",
+        "constitutional_learning_enabled"
+      ],
+      "properties": {
+        "status": { "const": "REFERENCE_DEMONSTRATOR_ONLY" },
+        "production_ready": { "const": false },
+        "general_intelligence_claim": { "const": false },
+        "english_understanding": { "const": false },
+        "external_model_used": { "const": false },
+        "external_actions_enabled": { "const": false },
+        "cas_ohm_runtime_authority": { "const": false },
+        "procedural_learning_enabled": { "const": false },
+        "constitutional_learning_enabled": { "const": false }
+      }
+    }
+  }
+}

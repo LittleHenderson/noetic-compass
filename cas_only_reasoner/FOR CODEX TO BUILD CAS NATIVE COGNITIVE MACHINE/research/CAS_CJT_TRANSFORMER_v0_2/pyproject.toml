@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cas-neural-cjt"
+version = "0.2.0"
+description = "Typed persistent governed Neural CJT Transformer research runtime"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "torch>=2.1",
+  "numpy>=1.26",
+  "casformer-reference==0.1.0",
+  "jsonschema>=4.21",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.setuptools]
+packages = ["cas_cjt", "cas_cjt.schemas"]
+
+[tool.setuptools.package-data]
+"cas_cjt.schemas" = ["*.json"]
+
+[tool.setuptools.data-files]
+"share/cas-neural-cjt" = [
+  "SOURCE_MANIFEST.json",
+  "ARCHITECTURE.md",
+  "EQUATIONS.md",
+  "API_CONTRACTS.md",
+  "CNCM_INTEGRATION_BOUNDARY.md",
+  "ROADMAP.md",
+  "MEMORY_RESEARCH_PLAN.md",
+  "OPERATION_EXPANSION.md",
+  "BUILD_CONTRACT.md",
+]
+"share/cas-neural-cjt/examples" = [
+  "examples/complete_reasoning_transistor.py",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q -p no:cacheprovider"

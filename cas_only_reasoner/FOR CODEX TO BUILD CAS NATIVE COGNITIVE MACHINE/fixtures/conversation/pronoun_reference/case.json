@@ -1,0 +1,423 @@
+{
+  "fixture_version": "cas.conversation_fixture/0.1",
+  "fixture_id": "conversation_pronoun_reference_001",
+  "category": "pronoun_reference",
+  "qualification": {
+    "contract_status": "SUPPORTED",
+    "capability_claim": "PROVISIONAL",
+    "implementation_status": "UNSUPPORTED",
+    "evidence_status": "NOT_RUN",
+    "direct_semantic_runtime_status": "NOT_RUN"
+  },
+  "initial_state": {
+    "schema_version": "cas.dialogue_state/0.1",
+    "conversation_id": "conv_pronoun",
+    "state_revision": 1,
+    "participants": [
+      {
+        "participant_id": "mind",
+        "role": "SYSTEM"
+      },
+      {
+        "participant_id": "user",
+        "role": "USER"
+      }
+    ],
+    "current_speaker": "user",
+    "next_speaker": "user",
+    "current_topic": "topic_laptop",
+    "topic_stack": [
+      {
+        "topic_id": "topic_laptop",
+        "label": "laptop problem",
+        "introduced_turn_id": "turn_pronoun_1",
+        "status": "ACTIVE"
+      }
+    ],
+    "referents": [
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_laptop",
+        "entity_id": "laptop",
+        "canonical_label": "the laptop",
+        "entity_type": "OBJECT",
+        "aliases": [
+          "the laptop"
+        ],
+        "introduced_turn_id": "turn_pronoun_1",
+        "last_mentioned_turn_id": "turn_pronoun_1",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "NEUTER",
+        "topic_id": "topic_laptop",
+        "resolution_status": "RESOLVED",
+        "candidates": [],
+        "provenance": [
+          {
+            "source_type": "TURN",
+            "source_id": "turn_pronoun_1"
+          }
+        ]
+      }
+    ],
+    "unresolved_questions": [],
+    "active_user_goal": null,
+    "active_system_goal": null,
+    "prior_turn_ids": [
+      "turn_pronoun_1"
+    ],
+    "commitments": [],
+    "response_style": {
+      "tone": "DIRECT",
+      "detail_level": "STANDARD",
+      "max_sentences": 3
+    },
+    "memory_links": [],
+    "pending_clarification": null,
+    "closed": false
+  },
+  "turns": [
+    {
+      "schema_version": "cas.dialogue_turn/0.1",
+      "conversation_id": "conv_pronoun",
+      "turn_id": "turn_pronoun_2",
+      "turn_index": 2,
+      "speaker_id": "user",
+      "speaker_role": "USER",
+      "input_mode": "CONTROLLED_ENGLISH",
+      "raw_text": "It restarts.",
+      "normalized_text": "It restarts.",
+      "language_profile": "CCB-L1-CE-0.1",
+      "acts": [
+        {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_pronoun_2",
+          "turn_id": "turn_pronoun_2",
+          "speaker_id": "user",
+          "act_type": "ASSERT",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_pronoun_lang",
+          "status": "SELECTED",
+          "content_summary": "Assert that the previously mentioned laptop restarts.",
+          "commitments": [],
+          "provenance": [
+            {
+              "source_type": "TURN",
+              "source_id": "turn_pronoun_2"
+            }
+          ]
+        }
+      ],
+      "semantic_packet_ids": [
+        "sp_pronoun_lang"
+      ],
+      "state_before_revision": 1,
+      "state_after_revision": 2,
+      "processing_status": "ACCEPTED",
+      "trace_refs": []
+    }
+  ],
+  "semantic_pairs": [
+    {
+      "equivalence_id": "eq_pronoun_1",
+      "language_packet": {
+        "schema_version": "cas.semantic_packet/0.1",
+        "packet_id": "sp_pronoun_lang",
+        "source_turn_id": "turn_pronoun_2",
+        "construction_mode": "CONTROLLED_ENGLISH",
+        "language_profile": "CCB-L1-CE-0.1",
+        "interpretation_status": "SELECTED",
+        "dialogue_act": {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_pronoun_2",
+          "turn_id": "turn_pronoun_2",
+          "speaker_id": "user",
+          "act_type": "ASSERT",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_pronoun_lang",
+          "status": "SELECTED",
+          "content_summary": "Assert that the previously mentioned laptop restarts.",
+          "commitments": [],
+          "provenance": [
+            {
+              "source_type": "TURN",
+              "source_id": "turn_pronoun_2"
+            }
+          ]
+        },
+        "semantic_content": {
+          "entities": [
+            {
+              "entity_id": "laptop",
+              "entity_type": "OBJECT",
+              "canonical_label": "the laptop"
+            }
+          ],
+          "predicates": [
+            {
+              "predicate": "restarts",
+              "arguments": [
+                "laptop"
+              ],
+              "polarity": true,
+              "epistemic_status": "ASSERTED",
+              "source_refs": [
+                "turn_pronoun_2"
+              ]
+            }
+          ],
+          "events": [],
+          "discourse": {
+            "topic_id": "topic_laptop",
+            "anaphora": [
+              {
+                "surface_form": "it",
+                "referent_id": "ref_laptop",
+                "resolution_status": "RESOLVED"
+              }
+            ]
+          },
+          "unresolved_slots": []
+        },
+        "ambiguity_candidates": [],
+        "unsupported_features": [],
+        "kernel_handoff": {
+          "contract": "SemanticPacket->ReasoningRequest/0.1",
+          "adapter_status": "PROVISIONAL_NOT_IMPLEMENTED",
+          "reasoning_request_id": "rr_eq_pronoun_1",
+          "semantic_atom_keys": [
+            "restarts(laptop)"
+          ],
+          "authority_status": "REQUEST_ONLY"
+        },
+        "equivalence": {
+          "equivalence_id": "eq_pronoun_1",
+          "paired_packet_id": "sp_pronoun_direct",
+          "required_dimensions": [
+            "SEMANTIC_CONTENT",
+            "TERMINAL_DISPOSITION",
+            "BRANCH_TOPOLOGY",
+            "INFERENCE_TRACE",
+            "RPM_SUBGOALS",
+            "COMMITTED_RESULT",
+            "MEMORY_EFFECTS",
+            "RESPONSE_PLAN"
+          ],
+          "runtime_status": "NOT_RUN"
+        }
+      },
+      "direct_packet": {
+        "schema_version": "cas.semantic_packet/0.1",
+        "packet_id": "sp_pronoun_direct",
+        "source_turn_id": "turn_pronoun_2",
+        "construction_mode": "DIRECT_SEMANTIC",
+        "language_profile": "NONE",
+        "interpretation_status": "SELECTED",
+        "dialogue_act": {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_pronoun_2_direct",
+          "turn_id": "turn_pronoun_2",
+          "speaker_id": "user",
+          "act_type": "ASSERT",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_pronoun_direct",
+          "status": "SELECTED",
+          "content_summary": "Assert that the previously mentioned laptop restarts.",
+          "commitments": [],
+          "provenance": [
+            {
+              "source_type": "TURN",
+              "source_id": "turn_pronoun_2"
+            }
+          ]
+        },
+        "semantic_content": {
+          "entities": [
+            {
+              "entity_id": "laptop",
+              "entity_type": "OBJECT",
+              "canonical_label": "the laptop"
+            }
+          ],
+          "predicates": [
+            {
+              "predicate": "restarts",
+              "arguments": [
+                "laptop"
+              ],
+              "polarity": true,
+              "epistemic_status": "ASSERTED",
+              "source_refs": [
+                "turn_pronoun_2"
+              ]
+            }
+          ],
+          "events": [],
+          "discourse": {
+            "topic_id": "topic_laptop",
+            "anaphora": [
+              {
+                "surface_form": "it",
+                "referent_id": "ref_laptop",
+                "resolution_status": "RESOLVED"
+              }
+            ]
+          },
+          "unresolved_slots": []
+        },
+        "ambiguity_candidates": [],
+        "unsupported_features": [],
+        "kernel_handoff": {
+          "contract": "SemanticPacket->ReasoningRequest/0.1",
+          "adapter_status": "PROVISIONAL_NOT_IMPLEMENTED",
+          "reasoning_request_id": "rr_eq_pronoun_1",
+          "semantic_atom_keys": [
+            "restarts(laptop)"
+          ],
+          "authority_status": "REQUEST_ONLY"
+        },
+        "equivalence": {
+          "equivalence_id": "eq_pronoun_1",
+          "paired_packet_id": "sp_pronoun_lang",
+          "required_dimensions": [
+            "SEMANTIC_CONTENT",
+            "TERMINAL_DISPOSITION",
+            "BRANCH_TOPOLOGY",
+            "INFERENCE_TRACE",
+            "RPM_SUBGOALS",
+            "COMMITTED_RESULT",
+            "MEMORY_EFFECTS",
+            "RESPONSE_PLAN"
+          ],
+          "runtime_status": "NOT_RUN"
+        }
+      }
+    }
+  ],
+  "final_state": {
+    "schema_version": "cas.dialogue_state/0.1",
+    "conversation_id": "conv_pronoun",
+    "state_revision": 2,
+    "participants": [
+      {
+        "participant_id": "mind",
+        "role": "SYSTEM"
+      },
+      {
+        "participant_id": "user",
+        "role": "USER"
+      }
+    ],
+    "current_speaker": "user",
+    "next_speaker": "mind",
+    "current_topic": "topic_laptop",
+    "topic_stack": [
+      {
+        "topic_id": "topic_laptop",
+        "label": "laptop problem",
+        "introduced_turn_id": "turn_pronoun_1",
+        "status": "ACTIVE"
+      }
+    ],
+    "referents": [
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_laptop",
+        "entity_id": "laptop",
+        "canonical_label": "the laptop",
+        "entity_type": "OBJECT",
+        "aliases": [
+          "it",
+          "the laptop"
+        ],
+        "introduced_turn_id": "turn_pronoun_1",
+        "last_mentioned_turn_id": "turn_pronoun_2",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "NEUTER",
+        "topic_id": "topic_laptop",
+        "resolution_status": "RESOLVED",
+        "candidates": [
+          {
+            "entity_id": "laptop",
+            "basis": [
+              "CURRENT_TOPIC",
+              "GRAMMATICAL_COMPATIBILITY",
+              "RECENCY"
+            ],
+            "source_turn_id": "turn_pronoun_1"
+          }
+        ],
+        "provenance": [
+          {
+            "source_type": "TURN",
+            "source_id": "turn_pronoun_1"
+          },
+          {
+            "source_type": "TURN",
+            "source_id": "turn_pronoun_2"
+          }
+        ]
+      }
+    ],
+    "unresolved_questions": [],
+    "active_user_goal": null,
+    "active_system_goal": null,
+    "prior_turn_ids": [
+      "turn_pronoun_1",
+      "turn_pronoun_2"
+    ],
+    "commitments": [],
+    "response_style": {
+      "tone": "DIRECT",
+      "detail_level": "STANDARD",
+      "max_sentences": 3
+    },
+    "memory_links": [],
+    "pending_clarification": null,
+    "closed": false
+  },
+  "response_plans": [
+    {
+      "schema_version": "cas.response_plan/0.1",
+      "plan_id": "plan_pronoun_2",
+      "conversation_id": "conv_pronoun",
+      "in_reply_to_turn_id": "turn_pronoun_2",
+      "source_result_id": "expected_result_pronoun_2",
+      "source_result_status": "COMMITTED",
+      "authority_status": "COMMITTED_SEMANTIC_RESULT",
+      "purpose": "ANSWER",
+      "ordered_content_units": [
+        {
+          "unit_id": "unit_pronoun_ack",
+          "kind": "ACKNOWLEDGEMENT",
+          "semantic_text": "The laptop restarts.",
+          "source_refs": [
+            "expected_result_pronoun_2",
+            "turn_pronoun_1"
+          ]
+        }
+      ],
+      "surface_constraints": {
+        "language_profile": "CCB-L1-CE-0.1",
+        "tone": "DIRECT",
+        "max_sentences": 3
+      },
+      "exact_clarification": null,
+      "renderer_status": "PROVISIONAL_NOT_IMPLEMENTED",
+      "planned_text": "I understood that the laptop restarts.",
+      "trace_refs": [],
+      "memory_write": {
+        "proposal_status": "NOT_REQUESTED",
+        "episode_id": null,
+        "authority_note": "A response plan cannot authorize a memory write."
+      }
+    }
+  ],
+  "expected": {
+    "surface_form": "it",
+    "resolved_referent_id": "ref_laptop",
+    "antecedent_turn_id": "turn_pronoun_1",
+    "clarification_required": false,
+    "runtime_execution": "NOT_RUN"
+  }
+}
+

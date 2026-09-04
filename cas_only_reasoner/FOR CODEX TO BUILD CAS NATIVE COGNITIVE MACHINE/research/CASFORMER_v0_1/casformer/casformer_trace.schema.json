@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.cas/schemas/casformer_trace.schema.json",
+  "title": "CASformer v0.1 non-authoritative neural trace",
+  "$defs": {
+    "tensor_summary": {
+      "type": "object",
+      "required": ["shape", "count"],
+      "properties": {
+        "shape": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "count": {"type": "integer", "minimum": 0},
+        "minimum": {"type": "number"},
+        "maximum": {"type": "number"},
+        "mean": {"type": "number"}
+      },
+      "additionalProperties": false
+    },
+    "serialized_tensor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {"type": "number"},
+          {"type": "boolean"},
+          {"$ref": "#/$defs/serialized_tensor"}
+        ]
+      }
+    },
+    "serialized_region_tensor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {"type": "integer", "enum": [0, 1, 2, 3]},
+          {"$ref": "#/$defs/serialized_region_tensor"}
+        ]
+      }
+    },
+    "serialized_boolean_tensor": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {"type": "boolean"},
+          {"$ref": "#/$defs/serialized_boolean_tensor"}
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "required": [
+    "schema_version",
+    "casformer_version",
+    "mode",
+    "status",
+    "authority",
+    "profile_id",
+    "provenance",
+    "drive_provenance",
+    "resistance_provenance",
+    "control_tick",
+    "feedback_source_tick",
+    "layer_index",
+    "summaries",
+    "operating_region_counts",
+    "payload_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "cas.casformer.trace/0.1"},
+    "casformer_version": {"const": "0.1.0"},
+    "mode": {"const": "NEURAL_PROXY"},
+    "status": {"const": "NEURAL_PROXY_UNVALIDATED"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["truth", "meaning", "proof", "validity", "commitment", "permission", "memory_occurrence", "memory_write", "state_mutation", "halt", "causal_identification", "external_action", "self_modification", "emits_cncm_intents"],
+      "properties": {
+        "truth": {"const": false},
+        "meaning": {"const": false},
+        "proof": {"const": false},
+        "validity": {"const": false},
+        "commitment": {"const": false},
+        "permission": {"const": false},
+        "memory_occurrence": {"const": false},
+        "memory_write": {"const": false},
+        "state_mutation": {"const": false},
+        "halt": {"const": false},
+        "causal_identification": {"const": false},
+        "external_action": {"const": false},
+        "self_modification": {"const": false},
+        "emits_cncm_intents": {"const": false}
+      }
+    },
+    "profile_id": {"type": "string", "minLength": 1},
+    "provenance": {"type": "string", "minLength": 1},
+    "drive_provenance": {"type": "string", "minLength": 1},
+    "resistance_provenance": {"type": "string", "minLength": 1},
+    "control_tick": {"type": "integer", "minimum": 0},
+    "feedback_source_tick": {"type": ["integer", "null"], "minimum": 0},
+    "layer_index": {"type": "integer", "minimum": 0},
+    "summaries": {
+      "type": "object",
+      "required": ["semantic_scores", "semantic_allocation", "total_resistance", "conductance", "edge_current", "attention", "total_current", "diagnostic_features", "beta", "cjt_preactivation", "cjt_gate", "cjt_candidate", "cjt_effect", "effective_path_mask"],
+      "properties": {
+        "semantic_scores": {"$ref": "#/$defs/tensor_summary"},
+        "semantic_allocation": {"$ref": "#/$defs/tensor_summary"},
+        "total_resistance": {"$ref": "#/$defs/tensor_summary"},
+        "conductance": {"$ref": "#/$defs/tensor_summary"},
+        "edge_current": {"$ref": "#/$defs/tensor_summary"},
+        "attention": {"$ref": "#/$defs/tensor_summary"},
+        "total_current": {"$ref": "#/$defs/tensor_summary"},
+        "diagnostic_features": {"$ref": "#/$defs/tensor_summary"},
+        "beta": {"$ref": "#/$defs/tensor_summary"},
+        "cjt_preactivation": {"$ref": "#/$defs/tensor_summary"},
+        "cjt_gate": {"$ref": "#/$defs/tensor_summary"},
+        "cjt_candidate": {"$ref": "#/$defs/tensor_summary"},
+        "cjt_effect": {"$ref": "#/$defs/tensor_summary"},
+        "effective_path_mask": {"$ref": "#/$defs/tensor_summary"}
+      },
+      "additionalProperties": false
+    },
+    "operating_region_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["CUTOFF", "ACTIVE", "SATURATION", "BREAKDOWN"],
+      "properties": {
+        "CUTOFF": {"type": "integer", "minimum": 0},
+        "ACTIVE": {"type": "integer", "minimum": 0},
+        "SATURATION": {"type": "integer", "minimum": 0},
+        "BREAKDOWN": {"type": "integer", "minimum": 0}
+      }
+    },
+    "tensors": {
+      "type": "object",
+      "required": ["semantic_scores", "semantic_allocation", "total_resistance", "conductance", "edge_current", "attention", "total_current", "diagnostic_features", "beta", "cjt_preactivation", "cjt_gate", "cjt_candidate", "cjt_effect", "operating_region", "effective_path_mask"],
+      "properties": {
+        "semantic_scores": {"$ref": "#/$defs/serialized_tensor"},
+        "semantic_allocation": {"$ref": "#/$defs/serialized_tensor"},
+        "total_resistance": {"$ref": "#/$defs/serialized_tensor"},
+        "conductance": {"$ref": "#/$defs/serialized_tensor"},
+        "edge_current": {"$ref": "#/$defs/serialized_tensor"},
+        "attention": {"$ref": "#/$defs/serialized_tensor"},
+        "total_current": {"$ref": "#/$defs/serialized_tensor"},
+        "diagnostic_features": {"$ref": "#/$defs/serialized_tensor"},
+        "beta": {"$ref": "#/$defs/serialized_tensor"},
+        "cjt_preactivation": {"$ref": "#/$defs/serialized_tensor"},
+        "cjt_gate": {"$ref": "#/$defs/serialized_tensor"},
+        "cjt_candidate": {"$ref": "#/$defs/serialized_tensor"},
+        "cjt_effect": {"$ref": "#/$defs/serialized_tensor"},
+        "operating_region": {"$ref": "#/$defs/serialized_region_tensor"},
+        "effective_path_mask": {"$ref": "#/$defs/serialized_boolean_tensor"}
+      },
+      "additionalProperties": false
+    },
+    "payload_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

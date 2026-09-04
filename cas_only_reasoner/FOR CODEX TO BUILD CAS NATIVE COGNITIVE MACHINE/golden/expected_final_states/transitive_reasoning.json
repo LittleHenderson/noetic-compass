@@ -1,0 +1,473 @@
+{
+  "active_goal_id": "establish_a_precedes_c",
+  "branch_table": [
+    {
+      "active_goal_id": "establish_a_precedes_c",
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [],
+      "created_at_tick": 0,
+      "decompositions": [
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [],
+          "dependencies": [
+            "precedes_transitive"
+          ],
+          "predicted_effects": [
+            "precedes(A,C)@global"
+          ],
+          "premises": [],
+          "required_prerequisites": [
+            "unbound:precedes_transitive:precedes(?x,?y)@global",
+            "unbound:precedes_transitive:precedes(?y,?z)@global"
+          ],
+          "unknowns": [
+            "unbound:precedes_transitive:precedes(?x,?y)@global",
+            "unbound:precedes_transitive:precedes(?y,?z)@global"
+          ]
+        },
+        {
+          "assumptions": [],
+          "candidate_id": "mechanical-path",
+          "contradictions": [],
+          "dependencies": [
+            "precedes_transitive"
+          ],
+          "predicted_effects": [
+            "precedes(A,C)@global"
+          ],
+          "premises": [
+            "precedes(A,B)@global",
+            "precedes(B,C)@global"
+          ],
+          "required_prerequisites": [],
+          "unknowns": []
+        }
+      ],
+      "hard_constraints": [],
+      "parent_branch_id": null,
+      "proof_steps": [
+        {
+          "branch_id": "branch-main",
+          "conclusion": {
+            "arguments": [
+              "A",
+              "C"
+            ],
+            "evidence_status": "derived",
+            "polarity": true,
+            "predicate": "precedes",
+            "provenance": [
+              {
+                "detail": "",
+                "source_id": "transitivity_rule",
+                "source_type": "fixture"
+              },
+              {
+                "detail": "declared CAS-Sem inference",
+                "source_id": "precedes_transitive",
+                "source_type": "rule"
+              }
+            ],
+            "scope": "global"
+          },
+          "operation": "INFER_TRANSITIVE",
+          "premise_keys": [
+            "precedes(A,B)@global",
+            "precedes(B,C)@global"
+          ],
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "transitivity_rule",
+              "source_type": "fixture"
+            },
+            {
+              "detail": "declared CAS-Sem inference",
+              "source_id": "precedes_transitive",
+              "source_type": "rule"
+            }
+          ],
+          "rule_id": "precedes_transitive",
+          "step_id": "proof-dad8cc72ebf5a46b",
+          "substitution": [
+            [
+              "?x",
+              "A"
+            ],
+            [
+              "?y",
+              "B"
+            ],
+            [
+              "?z",
+              "C"
+            ]
+          ],
+          "verified": true
+        }
+      ],
+      "propositions": [
+        {
+          "arguments": [
+            "A",
+            "B"
+          ],
+          "evidence_status": "asserted",
+          "polarity": true,
+          "predicate": "precedes",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "a_before_b",
+              "source_type": "fixture"
+            }
+          ],
+          "scope": "global"
+        },
+        {
+          "arguments": [
+            "A",
+            "C"
+          ],
+          "evidence_status": "derived",
+          "polarity": true,
+          "predicate": "precedes",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "transitivity_rule",
+              "source_type": "fixture"
+            },
+            {
+              "detail": "declared CAS-Sem inference",
+              "source_id": "precedes_transitive",
+              "source_type": "rule"
+            }
+          ],
+          "scope": "global"
+        },
+        {
+          "arguments": [
+            "B",
+            "C"
+          ],
+          "evidence_status": "asserted",
+          "polarity": true,
+          "predicate": "precedes",
+          "provenance": [
+            {
+              "detail": "",
+              "source_id": "b_before_c",
+              "source_type": "fixture"
+            }
+          ],
+          "scope": "global"
+        }
+      ],
+      "recalled_memory_ids": [],
+      "status": "COMMITTED",
+      "unknowns": []
+    }
+  ],
+  "budget": {
+    "branches_remaining": 3,
+    "inference_steps_remaining": 31,
+    "memory_queries_remaining": 4,
+    "rpm_depth_limit": 4,
+    "ticks_remaining": 55
+  },
+  "commitment_state": {
+    "conclusion": {
+      "arguments": [
+        "A",
+        "C"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "precedes",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "transitivity_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "precedes_transitive",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "decision_status": "COMMITTED",
+    "gate_results": [
+      [
+        "comparison_stable",
+        true
+      ],
+      [
+        "contradiction_free",
+        true
+      ],
+      [
+        "derivation_complete",
+        true
+      ],
+      [
+        "operational_ready",
+        true
+      ],
+      [
+        "principled_gate",
+        true
+      ],
+      [
+        "provenance_present",
+        true
+      ],
+      [
+        "rpm_sufficient",
+        true
+      ]
+    ],
+    "selected_branch_id": "branch-main"
+  },
+  "constitution_revision": "cncm-constitution/0.1",
+  "domain_power_state": [
+    [
+      "P",
+      "GOOD"
+    ],
+    [
+      "C",
+      "GOOD"
+    ],
+    [
+      "E",
+      "GOOD"
+    ],
+    [
+      "O",
+      "ENABLED"
+    ]
+  ],
+  "drive_state": [
+    [
+      "F1",
+      "AVAILABLE"
+    ],
+    [
+      "F2",
+      "AVAILABLE"
+    ],
+    [
+      "F3",
+      "AVAILABLE"
+    ],
+    [
+      "F4",
+      "AVAILABLE"
+    ],
+    [
+      "F5",
+      "AVAILABLE"
+    ],
+    [
+      "F6",
+      "AVAILABLE"
+    ],
+    [
+      "F7",
+      "AVAILABLE"
+    ]
+  ],
+  "episodic_memory": [
+    {
+      "branch_id": "branch-main",
+      "conclusion": {
+        "arguments": [
+          "A",
+          "C"
+        ],
+        "evidence_status": "derived",
+        "polarity": true,
+        "predicate": "precedes",
+        "provenance": [
+          {
+            "detail": "",
+            "source_id": "transitivity_rule",
+            "source_type": "fixture"
+          },
+          {
+            "detail": "declared CAS-Sem inference",
+            "source_id": "precedes_transitive",
+            "source_type": "rule"
+          }
+        ],
+        "scope": "global"
+      },
+      "episode_id": "episode-51fdd2ea07a1fd4e",
+      "final_state_hash": "dccda766d9f3bdad8f84412c86529d28b3211c323ad7a933e28a810bc6d25248",
+      "goal_id": "establish_a_precedes_c",
+      "problem_id": "transitive_precedes",
+      "proof_digest": "bcb8d27e9b560384a035a91a975552700db58148397c28824da2da9ac27449d0",
+      "trace_head": "0ff9baac86188c2d17fac9b415af3833901b559256726f87313ddd9318350494",
+      "verified": true
+    }
+  ],
+  "episodic_memory_revision": 1,
+  "foundation_state": [
+    [
+      "TF1",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF2",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF3",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF4",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF5",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF6",
+      "UNSPECIFIED"
+    ],
+    [
+      "TF7",
+      "UNSPECIFIED"
+    ]
+  ],
+  "global_workspace": {
+    "comparison_reports": [
+      {
+        "differences": [
+          "branch-main:0,0,0,0,0,1"
+        ],
+        "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+        "metrics": [
+          [
+            "branch-main",
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          ]
+        ],
+        "ordered_branch_ids": [
+          "branch-main"
+        ],
+        "report_id": "comparison-27737f8175b96ca9",
+        "shared_features": [
+          "precedes(A,C)@global",
+          "same_evaluation_frame"
+        ],
+        "single_candidate_reason": "mechanically_deterministic_declared_path",
+        "winner_branch_id": "branch-main"
+      }
+    ],
+    "conclusion": {
+      "arguments": [
+        "A",
+        "C"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "precedes",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "transitivity_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "precedes_transitive",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "diagnostics": [],
+    "lacunae": [],
+    "problem_id": "transitive_precedes",
+    "query": {
+      "arguments": [
+        "A",
+        "C"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "precedes",
+      "provenance": [],
+      "scope": "global"
+    },
+    "recalled_memory_ids": []
+  },
+  "halt_status": "CONCLUDED",
+  "learning_queue": [
+    "episode-51fdd2ea07a1fd4e"
+  ],
+  "logical_tick": 9,
+  "pending_intents": [
+    "intent-f288fb04946c592c"
+  ],
+  "rpm_stack": [],
+  "run_id": "run-1981dbbc95618b43",
+  "runtime_version": "0.1.0",
+  "seed": 0,
+  "state_hash": "327d59826b4c992e64b48a2330b167a7ccb702905edfd18e2647264f715aebc8",
+  "trace_head": "89879535d3f854abca627378d30082b0d2ef72b5f5900c36b5eff5d10ec954fa",
+  "working_memory": [
+    {
+      "arguments": [
+        "A",
+        "B"
+      ],
+      "evidence_status": "asserted",
+      "polarity": true,
+      "predicate": "precedes",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "a_before_b",
+          "source_type": "fixture"
+        }
+      ],
+      "scope": "global"
+    },
+    {
+      "arguments": [
+        "B",
+        "C"
+      ],
+      "evidence_status": "asserted",
+      "polarity": true,
+      "predicate": "precedes",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "b_before_c",
+          "source_type": "fixture"
+        }
+      ],
+      "scope": "global"
+    }
+  ]
+}

@@ -1,0 +1,689 @@
+{
+  "fixture_definition": {
+    "category": "algebra",
+    "expected": {
+      "minimum_checked_steps": 4,
+      "solution": {
+        "denominator": 1,
+        "numerator": 4
+      },
+      "terminal_status": "VERIFIED"
+    },
+    "fixture_id": "math_linear_parentheses",
+    "input": {
+      "notation": "2*(x+3)=14",
+      "variable": "x"
+    },
+    "operation": "solve_linear",
+    "runtime_status": "EXECUTABLE",
+    "schema_version": "cncm.math-fixture/0.1"
+  },
+  "fixture_sha256": "336757cb81b2c148b4852775f6ef8202c34b299a42ee184c2312dc84f6785c85",
+  "output": {
+    "checked_steps": [
+      {
+        "index": 0,
+        "proposal": {
+          "branch_id": "math_root",
+          "operation": "SIMPLIFY_EXACT",
+          "parameter": null,
+          "premise_claim_ids": [
+            "math-claim-187e182549a03974"
+          ],
+          "proposal_id": "math-proposal-15175d3f6bd2733d",
+          "proposed_conclusion": {
+            "left": {
+              "kind": "add",
+              "terms": [
+                {
+                  "factors": [
+                    {
+                      "kind": "integer",
+                      "value": 2
+                    },
+                    {
+                      "kind": "variable",
+                      "name": "x"
+                    }
+                  ],
+                  "kind": "multiply"
+                },
+                {
+                  "kind": "integer",
+                  "value": 6
+                }
+              ]
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 14
+            }
+          },
+          "substitutions": [],
+          "theory_id": "cncm.q-linear/0.1"
+        },
+        "receipt": {
+          "accepted": true,
+          "checker_version": "cncm.math-checker/0.1",
+          "detail": "",
+          "discharged_guards": [
+            "exact_normalization"
+          ],
+          "proposal_digest": "4ab315068729ea303da531ba7a43092dd9f153e9166647cef70a5a9e51f24936",
+          "receipt_id": "math-receipt-699c82e09d376055",
+          "reconstructed_conclusion": {
+            "left": {
+              "kind": "add",
+              "terms": [
+                {
+                  "factors": [
+                    {
+                      "kind": "integer",
+                      "value": 2
+                    },
+                    {
+                      "kind": "variable",
+                      "name": "x"
+                    }
+                  ],
+                  "kind": "multiply"
+                },
+                {
+                  "kind": "integer",
+                  "value": 6
+                }
+              ]
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 14
+            }
+          },
+          "rejection_code": "NONE",
+          "theory_id": "cncm.q-linear/0.1"
+        },
+        "resulting_claim": {
+          "assumption_claim_ids": [],
+          "claim_id": "math-claim-39299b5657eed939",
+          "derivation_receipt_id": "math-receipt-699c82e09d376055",
+          "provenance": [
+            {
+              "detail": "protected_checker",
+              "source_id": "math-receipt-699c82e09d376055",
+              "source_type": "math_receipt"
+            },
+            {
+              "detail": "SIMPLIFY_EXACT",
+              "source_id": "SIMPLIFY_EXACT",
+              "source_type": "math_rule"
+            }
+          ],
+          "statement": {
+            "left": {
+              "kind": "add",
+              "terms": [
+                {
+                  "factors": [
+                    {
+                      "kind": "integer",
+                      "value": 2
+                    },
+                    {
+                      "kind": "variable",
+                      "name": "x"
+                    }
+                  ],
+                  "kind": "multiply"
+                },
+                {
+                  "kind": "integer",
+                  "value": 6
+                }
+              ]
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 14
+            }
+          },
+          "status": "DERIVED",
+          "theory_id": "cncm.q-linear/0.1"
+        }
+      },
+      {
+        "index": 1,
+        "proposal": {
+          "branch_id": "math_root",
+          "operation": "SUBTRACT_BOTH_SIDES",
+          "parameter": {
+            "kind": "integer",
+            "value": 6
+          },
+          "premise_claim_ids": [
+            "math-claim-39299b5657eed939"
+          ],
+          "proposal_id": "math-proposal-cbe4b1ab49524725",
+          "proposed_conclusion": {
+            "left": {
+              "factors": [
+                {
+                  "kind": "integer",
+                  "value": 2
+                },
+                {
+                  "kind": "variable",
+                  "name": "x"
+                }
+              ],
+              "kind": "multiply"
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 8
+            }
+          },
+          "substitutions": [],
+          "theory_id": "cncm.q-linear/0.1"
+        },
+        "receipt": {
+          "accepted": true,
+          "checker_version": "cncm.math-checker/0.1",
+          "detail": "",
+          "discharged_guards": [
+            "same_expression_both_sides"
+          ],
+          "proposal_digest": "48a691ea7a57f150d658bbc2b3146541d28f089bfd41cc43483633bce86eba68",
+          "receipt_id": "math-receipt-a71189433ce97834",
+          "reconstructed_conclusion": {
+            "left": {
+              "factors": [
+                {
+                  "kind": "integer",
+                  "value": 2
+                },
+                {
+                  "kind": "variable",
+                  "name": "x"
+                }
+              ],
+              "kind": "multiply"
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 8
+            }
+          },
+          "rejection_code": "NONE",
+          "theory_id": "cncm.q-linear/0.1"
+        },
+        "resulting_claim": {
+          "assumption_claim_ids": [],
+          "claim_id": "math-claim-b9e4aa47c74efbb9",
+          "derivation_receipt_id": "math-receipt-a71189433ce97834",
+          "provenance": [
+            {
+              "detail": "protected_checker",
+              "source_id": "math-receipt-a71189433ce97834",
+              "source_type": "math_receipt"
+            },
+            {
+              "detail": "SUBTRACT_BOTH_SIDES",
+              "source_id": "SUBTRACT_BOTH_SIDES",
+              "source_type": "math_rule"
+            }
+          ],
+          "statement": {
+            "left": {
+              "factors": [
+                {
+                  "kind": "integer",
+                  "value": 2
+                },
+                {
+                  "kind": "variable",
+                  "name": "x"
+                }
+              ],
+              "kind": "multiply"
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 8
+            }
+          },
+          "status": "DERIVED",
+          "theory_id": "cncm.q-linear/0.1"
+        }
+      },
+      {
+        "index": 2,
+        "proposal": {
+          "branch_id": "math_root",
+          "operation": "DIVIDE_BOTH_SIDES",
+          "parameter": {
+            "kind": "integer",
+            "value": 2
+          },
+          "premise_claim_ids": [
+            "math-claim-b9e4aa47c74efbb9"
+          ],
+          "proposal_id": "math-proposal-5ae957ed6aef9c29",
+          "proposed_conclusion": {
+            "left": {
+              "kind": "variable",
+              "name": "x"
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 4
+            }
+          },
+          "substitutions": [],
+          "theory_id": "cncm.q-linear/0.1"
+        },
+        "receipt": {
+          "accepted": true,
+          "checker_version": "cncm.math-checker/0.1",
+          "detail": "",
+          "discharged_guards": [
+            "divisor_nonzero"
+          ],
+          "proposal_digest": "ce08a0843980b3cef2cdb5cddca71feccf97e0e3f5fe9c9c31c98c9c837c59bf",
+          "receipt_id": "math-receipt-7316416416bc1d58",
+          "reconstructed_conclusion": {
+            "left": {
+              "kind": "variable",
+              "name": "x"
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 4
+            }
+          },
+          "rejection_code": "NONE",
+          "theory_id": "cncm.q-linear/0.1"
+        },
+        "resulting_claim": {
+          "assumption_claim_ids": [],
+          "claim_id": "math-claim-0476f4be19064be9",
+          "derivation_receipt_id": "math-receipt-7316416416bc1d58",
+          "provenance": [
+            {
+              "detail": "protected_checker",
+              "source_id": "math-receipt-7316416416bc1d58",
+              "source_type": "math_receipt"
+            },
+            {
+              "detail": "DIVIDE_BOTH_SIDES",
+              "source_id": "DIVIDE_BOTH_SIDES",
+              "source_type": "math_rule"
+            }
+          ],
+          "statement": {
+            "left": {
+              "kind": "variable",
+              "name": "x"
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 4
+            }
+          },
+          "status": "DERIVED",
+          "theory_id": "cncm.q-linear/0.1"
+        }
+      },
+      {
+        "index": 3,
+        "proposal": {
+          "branch_id": "math_root",
+          "operation": "VERIFY_LINEAR_SOLUTION",
+          "parameter": null,
+          "premise_claim_ids": [
+            "math-claim-187e182549a03974"
+          ],
+          "proposal_id": "math-proposal-7e2b105777053b41",
+          "proposed_conclusion": {
+            "left": {
+              "kind": "variable",
+              "name": "x"
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 4
+            }
+          },
+          "substitutions": [],
+          "theory_id": "cncm.q-linear/0.1"
+        },
+        "receipt": {
+          "accepted": true,
+          "checker_version": "cncm.math-checker/0.1",
+          "detail": "",
+          "discharged_guards": [
+            "exact_solution_substitution"
+          ],
+          "proposal_digest": "65562fe9c42a973f30e0727f08d708773200ef237958d273d413d27eaecf2ab5",
+          "receipt_id": "math-receipt-1dd8e5ca7c1b256b",
+          "reconstructed_conclusion": {
+            "left": {
+              "kind": "variable",
+              "name": "x"
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 4
+            }
+          },
+          "rejection_code": "NONE",
+          "theory_id": "cncm.q-linear/0.1"
+        },
+        "resulting_claim": {
+          "assumption_claim_ids": [],
+          "claim_id": "math-claim-8b0aac3f55f6bdf2",
+          "derivation_receipt_id": "math-receipt-1dd8e5ca7c1b256b",
+          "provenance": [
+            {
+              "detail": "protected_checker",
+              "source_id": "math-receipt-1dd8e5ca7c1b256b",
+              "source_type": "math_receipt"
+            },
+            {
+              "detail": "VERIFY_LINEAR_SOLUTION",
+              "source_id": "VERIFY_LINEAR_SOLUTION",
+              "source_type": "math_rule"
+            }
+          ],
+          "statement": {
+            "left": {
+              "kind": "variable",
+              "name": "x"
+            },
+            "relation": "EQUAL",
+            "right": {
+              "kind": "integer",
+              "value": 4
+            }
+          },
+          "status": "VERIFIED",
+          "theory_id": "cncm.q-linear/0.1"
+        }
+      }
+    ],
+    "checker_version": "cncm.math-checker/0.1",
+    "claims": [
+      {
+        "assumption_claim_ids": [],
+        "claim_id": "math-claim-187e182549a03974",
+        "derivation_receipt_id": null,
+        "provenance": [
+          {
+            "detail": "declared equation",
+            "source_id": "math-problem-11849864cd67f1f6",
+            "source_type": "math_input"
+          }
+        ],
+        "statement": {
+          "left": {
+            "factors": [
+              {
+                "kind": "integer",
+                "value": 2
+              },
+              {
+                "kind": "add",
+                "terms": [
+                  {
+                    "kind": "variable",
+                    "name": "x"
+                  },
+                  {
+                    "kind": "integer",
+                    "value": 3
+                  }
+                ]
+              }
+            ],
+            "kind": "multiply"
+          },
+          "relation": "EQUAL",
+          "right": {
+            "kind": "integer",
+            "value": 14
+          }
+        },
+        "status": "GIVEN",
+        "theory_id": "cncm.q-linear/0.1"
+      },
+      {
+        "assumption_claim_ids": [],
+        "claim_id": "math-claim-39299b5657eed939",
+        "derivation_receipt_id": "math-receipt-699c82e09d376055",
+        "provenance": [
+          {
+            "detail": "protected_checker",
+            "source_id": "math-receipt-699c82e09d376055",
+            "source_type": "math_receipt"
+          },
+          {
+            "detail": "SIMPLIFY_EXACT",
+            "source_id": "SIMPLIFY_EXACT",
+            "source_type": "math_rule"
+          }
+        ],
+        "statement": {
+          "left": {
+            "kind": "add",
+            "terms": [
+              {
+                "factors": [
+                  {
+                    "kind": "integer",
+                    "value": 2
+                  },
+                  {
+                    "kind": "variable",
+                    "name": "x"
+                  }
+                ],
+                "kind": "multiply"
+              },
+              {
+                "kind": "integer",
+                "value": 6
+              }
+            ]
+          },
+          "relation": "EQUAL",
+          "right": {
+            "kind": "integer",
+            "value": 14
+          }
+        },
+        "status": "DERIVED",
+        "theory_id": "cncm.q-linear/0.1"
+      },
+      {
+        "assumption_claim_ids": [],
+        "claim_id": "math-claim-b9e4aa47c74efbb9",
+        "derivation_receipt_id": "math-receipt-a71189433ce97834",
+        "provenance": [
+          {
+            "detail": "protected_checker",
+            "source_id": "math-receipt-a71189433ce97834",
+            "source_type": "math_receipt"
+          },
+          {
+            "detail": "SUBTRACT_BOTH_SIDES",
+            "source_id": "SUBTRACT_BOTH_SIDES",
+            "source_type": "math_rule"
+          }
+        ],
+        "statement": {
+          "left": {
+            "factors": [
+              {
+                "kind": "integer",
+                "value": 2
+              },
+              {
+                "kind": "variable",
+                "name": "x"
+              }
+            ],
+            "kind": "multiply"
+          },
+          "relation": "EQUAL",
+          "right": {
+            "kind": "integer",
+            "value": 8
+          }
+        },
+        "status": "DERIVED",
+        "theory_id": "cncm.q-linear/0.1"
+      },
+      {
+        "assumption_claim_ids": [],
+        "claim_id": "math-claim-0476f4be19064be9",
+        "derivation_receipt_id": "math-receipt-7316416416bc1d58",
+        "provenance": [
+          {
+            "detail": "protected_checker",
+            "source_id": "math-receipt-7316416416bc1d58",
+            "source_type": "math_receipt"
+          },
+          {
+            "detail": "DIVIDE_BOTH_SIDES",
+            "source_id": "DIVIDE_BOTH_SIDES",
+            "source_type": "math_rule"
+          }
+        ],
+        "statement": {
+          "left": {
+            "kind": "variable",
+            "name": "x"
+          },
+          "relation": "EQUAL",
+          "right": {
+            "kind": "integer",
+            "value": 4
+          }
+        },
+        "status": "DERIVED",
+        "theory_id": "cncm.q-linear/0.1"
+      },
+      {
+        "assumption_claim_ids": [],
+        "claim_id": "math-claim-8b0aac3f55f6bdf2",
+        "derivation_receipt_id": "math-receipt-1dd8e5ca7c1b256b",
+        "provenance": [
+          {
+            "detail": "protected_checker",
+            "source_id": "math-receipt-1dd8e5ca7c1b256b",
+            "source_type": "math_receipt"
+          },
+          {
+            "detail": "VERIFY_LINEAR_SOLUTION",
+            "source_id": "VERIFY_LINEAR_SOLUTION",
+            "source_type": "math_rule"
+          }
+        ],
+        "statement": {
+          "left": {
+            "kind": "variable",
+            "name": "x"
+          },
+          "relation": "EQUAL",
+          "right": {
+            "kind": "integer",
+            "value": 4
+          }
+        },
+        "status": "VERIFIED",
+        "theory_id": "cncm.q-linear/0.1"
+      }
+    ],
+    "detail": "unique solution accepted after exact step reconstruction and substitution",
+    "evidence": {
+      "accepted_receipt_ids": [
+        "math-receipt-699c82e09d376055",
+        "math-receipt-a71189433ce97834",
+        "math-receipt-7316416416bc1d58",
+        "math-receipt-1dd8e5ca7c1b256b"
+      ],
+      "checker_version": "cncm.math-checker/0.1",
+      "claim_boundary": {
+        "approximation_used": false,
+        "autonomous_axiom_change": false,
+        "bounded_counterexample_absence_is_proof": false,
+        "candidate_self_verification": false,
+        "exact_arithmetic_only": true,
+        "external_model_used": false,
+        "proof_checker_protected": true
+      },
+      "evidence_digest": "08d8fe53a0f623eeca5a382db01075abc7c3c52dd84cea41aff115cb125663b7",
+      "final_claim_id": "math-claim-8b0aac3f55f6bdf2",
+      "first_failing_step": null,
+      "problem_id": "math-problem-11849864cd67f1f6",
+      "proof_digest": "d693c377a7996d5ff6c5687621a168950124834ed4a1c3dade2e76e41db20d2d",
+      "rejected_receipt_ids": [],
+      "schema_version": "cncm.math-evidence/0.1",
+      "terminal_status": "VERIFIED",
+      "theory_id": "cncm.q-linear/0.1",
+      "verified": true
+    },
+    "first_failing_step": null,
+    "input_statement": {
+      "left": {
+        "factors": [
+          {
+            "kind": "integer",
+            "value": 2
+          },
+          {
+            "kind": "add",
+            "terms": [
+              {
+                "kind": "variable",
+                "name": "x"
+              },
+              {
+                "kind": "integer",
+                "value": 3
+              }
+            ]
+          }
+        ],
+        "kind": "multiply"
+      },
+      "relation": "EQUAL",
+      "right": {
+        "kind": "integer",
+        "value": 14
+      }
+    },
+    "problem_id": "math-problem-11849864cd67f1f6",
+    "result_digest": "6b4c552a125070d616fd428160227568b703d731f5b982713a417b692fcafd2a",
+    "schema_version": "cncm.math-result/0.1",
+    "solution": {
+      "denominator": 1,
+      "numerator": 4
+    },
+    "solve_variable": "x",
+    "terminal_status": "VERIFIED",
+    "theory_id": "cncm.q-linear/0.1"
+  },
+  "schema_version": "cncm.math-golden/0.1",
+  "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+}

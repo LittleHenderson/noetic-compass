@@ -1,0 +1,650 @@
+{
+  "fixture_version": "cas.conversation_fixture/0.1",
+  "fixture_id": "conversation_ambiguity_001",
+  "category": "ambiguity",
+  "qualification": {
+    "contract_status": "SUPPORTED",
+    "capability_claim": "PROVISIONAL",
+    "implementation_status": "UNSUPPORTED",
+    "evidence_status": "NOT_RUN",
+    "direct_semantic_runtime_status": "NOT_RUN"
+  },
+  "initial_state": {
+    "schema_version": "cas.dialogue_state/0.1",
+    "conversation_id": "conv_ambiguity",
+    "state_revision": 0,
+    "participants": [
+      {
+        "participant_id": "mind",
+        "role": "SYSTEM"
+      },
+      {
+        "participant_id": "user",
+        "role": "USER"
+      }
+    ],
+    "current_speaker": null,
+    "next_speaker": "user",
+    "current_topic": "topic_boxes",
+    "topic_stack": [
+      {
+        "topic_id": "topic_boxes",
+        "label": "box arrangement",
+        "introduced_turn_id": "turn_ambiguity_0",
+        "status": "ACTIVE"
+      }
+    ],
+    "referents": [
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_blue_box",
+        "entity_id": "blue_box",
+        "canonical_label": "the blue box",
+        "entity_type": "OBJECT",
+        "aliases": [
+          "the blue box"
+        ],
+        "introduced_turn_id": "turn_ambiguity_0",
+        "last_mentioned_turn_id": "turn_ambiguity_0",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "NEUTER",
+        "topic_id": "topic_boxes",
+        "resolution_status": "RESOLVED",
+        "candidates": [],
+        "provenance": [
+          {
+            "source_type": "TURN",
+            "source_id": "turn_ambiguity_0"
+          }
+        ]
+      },
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_red_box",
+        "entity_id": "red_box",
+        "canonical_label": "the red box",
+        "entity_type": "OBJECT",
+        "aliases": [
+          "the red box"
+        ],
+        "introduced_turn_id": "turn_ambiguity_0",
+        "last_mentioned_turn_id": "turn_ambiguity_0",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "NEUTER",
+        "topic_id": "topic_boxes",
+        "resolution_status": "RESOLVED",
+        "candidates": [],
+        "provenance": [
+          {
+            "source_type": "TURN",
+            "source_id": "turn_ambiguity_0"
+          }
+        ]
+      }
+    ],
+    "unresolved_questions": [],
+    "active_user_goal": null,
+    "active_system_goal": null,
+    "prior_turn_ids": [],
+    "commitments": [],
+    "response_style": {
+      "tone": "DIRECT",
+      "detail_level": "STANDARD",
+      "max_sentences": 3
+    },
+    "memory_links": [],
+    "pending_clarification": null,
+    "closed": false
+  },
+  "turns": [
+    {
+      "schema_version": "cas.dialogue_turn/0.1",
+      "conversation_id": "conv_ambiguity",
+      "turn_id": "turn_ambiguity_1",
+      "turn_index": 1,
+      "speaker_id": "user",
+      "speaker_role": "USER",
+      "input_mode": "CONTROLLED_ENGLISH",
+      "raw_text": "Move it beside the other one.",
+      "normalized_text": "Move it beside the other one.",
+      "language_profile": "CCB-L1-CE-0.1",
+      "acts": [
+        {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_ambiguity_1",
+          "turn_id": "turn_ambiguity_1",
+          "speaker_id": "user",
+          "act_type": "COMMAND",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_ambiguity_lang",
+          "status": "UNRESOLVED",
+          "content_summary": "Command with two unresolved object references.",
+          "commitments": [],
+          "provenance": [
+            {
+              "source_type": "TURN",
+              "source_id": "turn_ambiguity_1"
+            }
+          ]
+        }
+      ],
+      "semantic_packet_ids": [
+        "sp_ambiguity_lang"
+      ],
+      "state_before_revision": 0,
+      "state_after_revision": 1,
+      "processing_status": "CLARIFICATION_REQUIRED",
+      "trace_refs": []
+    }
+  ],
+  "semantic_pairs": [
+    {
+      "equivalence_id": "eq_ambiguity_1",
+      "language_packet": {
+        "schema_version": "cas.semantic_packet/0.1",
+        "packet_id": "sp_ambiguity_lang",
+        "source_turn_id": "turn_ambiguity_1",
+        "construction_mode": "CONTROLLED_ENGLISH",
+        "language_profile": "CCB-L1-CE-0.1",
+        "interpretation_status": "AMBIGUOUS",
+        "dialogue_act": {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_ambiguity_1",
+          "turn_id": "turn_ambiguity_1",
+          "speaker_id": "user",
+          "act_type": "COMMAND",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_ambiguity_lang",
+          "status": "UNRESOLVED",
+          "content_summary": "Command with two unresolved object references.",
+          "commitments": [],
+          "provenance": [
+            {
+              "source_type": "TURN",
+              "source_id": "turn_ambiguity_1"
+            }
+          ]
+        },
+        "semantic_content": {
+          "entities": [
+            {
+              "entity_id": "blue_box",
+              "entity_type": "OBJECT",
+              "canonical_label": "the blue box"
+            },
+            {
+              "entity_id": "red_box",
+              "entity_type": "OBJECT",
+              "canonical_label": "the red box"
+            }
+          ],
+          "predicates": [
+            {
+              "predicate": "beside",
+              "arguments": [
+                "object_to_move",
+                "reference_object"
+              ],
+              "polarity": true,
+              "epistemic_status": "COMMANDED",
+              "source_refs": [
+                "turn_ambiguity_1"
+              ]
+            }
+          ],
+          "events": [],
+          "discourse": {
+            "topic_id": "topic_boxes",
+            "anaphora": [
+              {
+                "surface_form": "it",
+                "referent_id": null,
+                "resolution_status": "AMBIGUOUS"
+              },
+              {
+                "surface_form": "the other one",
+                "referent_id": null,
+                "resolution_status": "AMBIGUOUS"
+              }
+            ]
+          },
+          "unresolved_slots": [
+            {
+              "slot_id": "object_to_move",
+              "required_type": "OBJECT",
+              "candidate_entity_ids": [
+                "blue_box",
+                "red_box"
+              ]
+            },
+            {
+              "slot_id": "reference_object",
+              "required_type": "OBJECT",
+              "candidate_entity_ids": [
+                "blue_box",
+                "red_box"
+              ]
+            }
+          ]
+        },
+        "ambiguity_candidates": [
+          {
+            "candidate_id": "candidate_move_blue_beside_red",
+            "bindings": [
+              {
+                "slot_id": "object_to_move",
+                "entity_id": "blue_box"
+              },
+              {
+                "slot_id": "reference_object",
+                "entity_id": "red_box"
+              }
+            ],
+            "semantic_summary": "Move the blue box beside the red box."
+          },
+          {
+            "candidate_id": "candidate_move_red_beside_blue",
+            "bindings": [
+              {
+                "slot_id": "object_to_move",
+                "entity_id": "red_box"
+              },
+              {
+                "slot_id": "reference_object",
+                "entity_id": "blue_box"
+              }
+            ],
+            "semantic_summary": "Move the red box beside the blue box."
+          }
+        ],
+        "unsupported_features": [],
+        "kernel_handoff": {
+          "contract": "SemanticPacket->ReasoningRequest/0.1",
+          "adapter_status": "BLOCKED_AMBIGUITY",
+          "reasoning_request_id": null,
+          "semantic_atom_keys": [],
+          "authority_status": "REQUEST_ONLY"
+        },
+        "equivalence": {
+          "equivalence_id": "eq_ambiguity_1",
+          "paired_packet_id": "sp_ambiguity_direct",
+          "required_dimensions": [
+            "SEMANTIC_CONTENT",
+            "TERMINAL_DISPOSITION",
+            "BRANCH_TOPOLOGY",
+            "INFERENCE_TRACE",
+            "RPM_SUBGOALS",
+            "COMMITTED_RESULT",
+            "MEMORY_EFFECTS",
+            "RESPONSE_PLAN"
+          ],
+          "runtime_status": "NOT_RUN"
+        }
+      },
+      "direct_packet": {
+        "schema_version": "cas.semantic_packet/0.1",
+        "packet_id": "sp_ambiguity_direct",
+        "source_turn_id": "turn_ambiguity_1",
+        "construction_mode": "DIRECT_SEMANTIC",
+        "language_profile": "NONE",
+        "interpretation_status": "AMBIGUOUS",
+        "dialogue_act": {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_ambiguity_1_direct",
+          "turn_id": "turn_ambiguity_1",
+          "speaker_id": "user",
+          "act_type": "COMMAND",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_ambiguity_direct",
+          "status": "UNRESOLVED",
+          "content_summary": "Command with two unresolved object references.",
+          "commitments": [],
+          "provenance": [
+            {
+              "source_type": "TURN",
+              "source_id": "turn_ambiguity_1"
+            }
+          ]
+        },
+        "semantic_content": {
+          "entities": [
+            {
+              "entity_id": "blue_box",
+              "entity_type": "OBJECT",
+              "canonical_label": "the blue box"
+            },
+            {
+              "entity_id": "red_box",
+              "entity_type": "OBJECT",
+              "canonical_label": "the red box"
+            }
+          ],
+          "predicates": [
+            {
+              "predicate": "beside",
+              "arguments": [
+                "object_to_move",
+                "reference_object"
+              ],
+              "polarity": true,
+              "epistemic_status": "COMMANDED",
+              "source_refs": [
+                "turn_ambiguity_1"
+              ]
+            }
+          ],
+          "events": [],
+          "discourse": {
+            "topic_id": "topic_boxes",
+            "anaphora": [
+              {
+                "surface_form": "it",
+                "referent_id": null,
+                "resolution_status": "AMBIGUOUS"
+              },
+              {
+                "surface_form": "the other one",
+                "referent_id": null,
+                "resolution_status": "AMBIGUOUS"
+              }
+            ]
+          },
+          "unresolved_slots": [
+            {
+              "slot_id": "object_to_move",
+              "required_type": "OBJECT",
+              "candidate_entity_ids": [
+                "blue_box",
+                "red_box"
+              ]
+            },
+            {
+              "slot_id": "reference_object",
+              "required_type": "OBJECT",
+              "candidate_entity_ids": [
+                "blue_box",
+                "red_box"
+              ]
+            }
+          ]
+        },
+        "ambiguity_candidates": [
+          {
+            "candidate_id": "candidate_move_blue_beside_red",
+            "bindings": [
+              {
+                "slot_id": "object_to_move",
+                "entity_id": "blue_box"
+              },
+              {
+                "slot_id": "reference_object",
+                "entity_id": "red_box"
+              }
+            ],
+            "semantic_summary": "Move the blue box beside the red box."
+          },
+          {
+            "candidate_id": "candidate_move_red_beside_blue",
+            "bindings": [
+              {
+                "slot_id": "object_to_move",
+                "entity_id": "red_box"
+              },
+              {
+                "slot_id": "reference_object",
+                "entity_id": "blue_box"
+              }
+            ],
+            "semantic_summary": "Move the red box beside the blue box."
+          }
+        ],
+        "unsupported_features": [],
+        "kernel_handoff": {
+          "contract": "SemanticPacket->ReasoningRequest/0.1",
+          "adapter_status": "BLOCKED_AMBIGUITY",
+          "reasoning_request_id": null,
+          "semantic_atom_keys": [],
+          "authority_status": "REQUEST_ONLY"
+        },
+        "equivalence": {
+          "equivalence_id": "eq_ambiguity_1",
+          "paired_packet_id": "sp_ambiguity_lang",
+          "required_dimensions": [
+            "SEMANTIC_CONTENT",
+            "TERMINAL_DISPOSITION",
+            "BRANCH_TOPOLOGY",
+            "INFERENCE_TRACE",
+            "RPM_SUBGOALS",
+            "COMMITTED_RESULT",
+            "MEMORY_EFFECTS",
+            "RESPONSE_PLAN"
+          ],
+          "runtime_status": "NOT_RUN"
+        }
+      }
+    }
+  ],
+  "final_state": {
+    "schema_version": "cas.dialogue_state/0.1",
+    "conversation_id": "conv_ambiguity",
+    "state_revision": 1,
+    "participants": [
+      {
+        "participant_id": "mind",
+        "role": "SYSTEM"
+      },
+      {
+        "participant_id": "user",
+        "role": "USER"
+      }
+    ],
+    "current_speaker": "user",
+    "next_speaker": "mind",
+    "current_topic": "topic_boxes",
+    "topic_stack": [
+      {
+        "topic_id": "topic_boxes",
+        "label": "box arrangement",
+        "introduced_turn_id": "turn_ambiguity_0",
+        "status": "ACTIVE"
+      }
+    ],
+    "referents": [
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_blue_box",
+        "entity_id": "blue_box",
+        "canonical_label": "the blue box",
+        "entity_type": "OBJECT",
+        "aliases": [
+          "the blue box"
+        ],
+        "introduced_turn_id": "turn_ambiguity_0",
+        "last_mentioned_turn_id": "turn_ambiguity_0",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "NEUTER",
+        "topic_id": "topic_boxes",
+        "resolution_status": "RESOLVED",
+        "candidates": [],
+        "provenance": [
+          {
+            "source_type": "TURN",
+            "source_id": "turn_ambiguity_0"
+          }
+        ]
+      },
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_red_box",
+        "entity_id": "red_box",
+        "canonical_label": "the red box",
+        "entity_type": "OBJECT",
+        "aliases": [
+          "the red box"
+        ],
+        "introduced_turn_id": "turn_ambiguity_0",
+        "last_mentioned_turn_id": "turn_ambiguity_0",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "NEUTER",
+        "topic_id": "topic_boxes",
+        "resolution_status": "RESOLVED",
+        "candidates": [],
+        "provenance": [
+          {
+            "source_type": "TURN",
+            "source_id": "turn_ambiguity_0"
+          }
+        ]
+      },
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_unresolved_it",
+        "entity_id": null,
+        "canonical_label": "it",
+        "entity_type": "OBJECT",
+        "aliases": [
+          "it"
+        ],
+        "introduced_turn_id": "turn_ambiguity_1",
+        "last_mentioned_turn_id": "turn_ambiguity_1",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "NEUTER",
+        "topic_id": "topic_boxes",
+        "resolution_status": "AMBIGUOUS",
+        "candidates": [
+          {
+            "entity_id": "blue_box",
+            "basis": [
+              "CURRENT_TOPIC",
+              "GRAMMATICAL_COMPATIBILITY",
+              "RECENCY"
+            ],
+            "source_turn_id": "turn_ambiguity_0"
+          },
+          {
+            "entity_id": "red_box",
+            "basis": [
+              "CURRENT_TOPIC",
+              "GRAMMATICAL_COMPATIBILITY",
+              "RECENCY"
+            ],
+            "source_turn_id": "turn_ambiguity_0"
+          }
+        ],
+        "provenance": [
+          {
+            "source_type": "TURN",
+            "source_id": "turn_ambiguity_1"
+          }
+        ]
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question_id": "question_ambiguity_1",
+        "source_turn_id": "turn_ambiguity_1",
+        "missing_slots": [
+          "object_to_move",
+          "reference_object"
+        ],
+        "status": "OPEN",
+        "rpm_child_goal_id": "rpm_clarify_ambiguity_1"
+      }
+    ],
+    "active_user_goal": "goal_move_object",
+    "active_system_goal": "goal_clarify_objects",
+    "prior_turn_ids": [
+      "turn_ambiguity_1"
+    ],
+    "commitments": [],
+    "response_style": {
+      "tone": "DIRECT",
+      "detail_level": "STANDARD",
+      "max_sentences": 3
+    },
+    "memory_links": [],
+    "pending_clarification": {
+      "clarification_id": "clarification_ambiguity_1",
+      "source_turn_id": "turn_ambiguity_1",
+      "parent_goal_id": "goal_move_object",
+      "rpm_child_goal_id": "rpm_clarify_ambiguity_1",
+      "missing_slots": [
+        "object_to_move",
+        "reference_object"
+      ],
+      "candidate_entity_ids": [
+        "blue_box",
+        "red_box"
+      ],
+      "exact_question": "Which object should I move, and which object should I place it beside?"
+    },
+    "closed": false
+  },
+  "response_plans": [
+    {
+      "schema_version": "cas.response_plan/0.1",
+      "plan_id": "plan_ambiguity_1",
+      "conversation_id": "conv_ambiguity",
+      "in_reply_to_turn_id": "turn_ambiguity_1",
+      "source_result_id": "ambiguity_result_1",
+      "source_result_status": "NEEDS_INFORMATION",
+      "authority_status": "TYPED_ABSTENTION",
+      "purpose": "CLARIFY",
+      "ordered_content_units": [
+        {
+          "unit_id": "unit_ambiguity_question",
+          "kind": "CLARIFICATION_QUESTION",
+          "semantic_text": "Which object should I move, and which object should I place it beside?",
+          "source_refs": [
+            "clarification_ambiguity_1"
+          ]
+        },
+        {
+          "unit_id": "unit_ambiguity_limit",
+          "kind": "LIMITATION",
+          "semantic_text": "No action occurred.",
+          "source_refs": [
+            "ambiguity_result_1"
+          ]
+        }
+      ],
+      "surface_constraints": {
+        "language_profile": "CCB-L1-CE-0.1",
+        "tone": "DIRECT",
+        "max_sentences": 3
+      },
+      "exact_clarification": {
+        "missing_slots": [
+          "object_to_move",
+          "reference_object"
+        ],
+        "candidate_entity_ids": [
+          "blue_box",
+          "red_box"
+        ],
+        "question_text": "Which object should I move, and which object should I place it beside?",
+        "resume_goal_id": "goal_move_object",
+        "rpm_child_goal_id": "rpm_clarify_ambiguity_1"
+      },
+      "renderer_status": "PROVISIONAL_NOT_IMPLEMENTED",
+      "planned_text": "Which object should I move, and which object should I place it beside?",
+      "trace_refs": [],
+      "memory_write": {
+        "proposal_status": "NOT_REQUESTED",
+        "episode_id": null,
+        "authority_note": "A response plan cannot authorize a memory write."
+      }
+    }
+  ],
+  "expected": {
+    "clarification_required": true,
+    "exact_question": "Which object should I move, and which object should I place it beside?",
+    "missing_slots": [
+      "object_to_move",
+      "reference_object"
+    ],
+    "external_action_occurred": false,
+    "runtime_execution": "NOT_RUN"
+  }
+}
+

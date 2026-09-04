@@ -1,0 +1,81 @@
+{
+  "checks": {
+    "causal_language_model_forward": true,
+    "circuit_solve": true,
+    "cncm_no_static_direct_casformer_import_detected": true,
+    "common_drive_allocation_invariant": true,
+    "common_drive_available_flow_scales": true,
+    "compiled_attention_twin": true,
+    "compiled_current_twin": true,
+    "differential_conductance_weight_mode_forward": true,
+    "differential_pair_matches_direct_signed_map": true,
+    "finite_forward": true,
+    "hard_mask_exact_zero": true,
+    "joint_drive_resistance_invariant": true,
+    "nominal_finite_backward": true,
+    "source_manifest_current": true,
+    "source_references_current": true,
+    "trace_digest_valid": true,
+    "trace_has_zero_authority": true
+  },
+  "claims": {
+    "cas_specific_advantage": "NOT_ESTABLISHED",
+    "cncm_kernel_integration": "ABSENT",
+    "language_capability": "NOT_ESTABLISHED",
+    "neural_training": "NOT_RUN",
+    "production_readiness": "NOT_ESTABLISHED",
+    "reasoning_capability": "NOT_ESTABLISHED",
+    "software_reference_implementation": "IMPLEMENTED"
+  },
+  "created_utc": "2026-09-03T08:16:44.218455+00:00",
+  "environment": {
+    "cuda_available": false,
+    "device": "cpu",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.0",
+    "pytorch": "2.11.0+cpu"
+  },
+  "git": {
+    "branch": "research/cmb-r1-rgm02-v1",
+    "commit": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+    "commit_contains_exact_source": false,
+    "commit_identity_scope": "AMBIENT_REPOSITORY_ONLY",
+    "source_files_tracked": false,
+    "source_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1",
+    "source_worktree_clean": false
+  },
+  "metrics": {
+    "circuit_solve_residual_max_abs": 0.0,
+    "cncm_python_files_scanned_for_static_imports": 20,
+    "cncm_static_casformer_import_hits": [],
+    "common_drive_attention_max_abs_drift": 5.551115123125783e-17,
+    "common_drive_total_current_ratio": 3.0000000000000004,
+    "compiled_attention_max_abs_error": 0.0,
+    "compiled_current_max_abs_error": 0.0,
+    "compiled_total_current_max_abs_error": 0.0,
+    "differential_direct_max_abs_error": 0.0,
+    "differential_gauge_ratio": 29.93357557870334,
+    "differential_weight_block_parameter_count": 1460,
+    "joint_scale_attention_max_abs_drift": 0.0,
+    "joint_scale_total_current_max_abs_drift": 0.0,
+    "language_logits_shape": [
+      1,
+      4,
+      23
+    ],
+    "masked_attention_max_abs": 0.0,
+    "masked_current_max_abs": 0.0,
+    "output_sha256": "20978c4d6d8b45cd21af65b05f50078fff8cebd685ccbec59254f4d5f378ce0f",
+    "parameter_count_block": 762,
+    "source_reference_count": 5
+  },
+  "schema_version": "cas.casformer.validation-receipt/0.1",
+  "scope": "ENGINEERING_VALIDATION_ONLY",
+  "source_manifest": {
+    "path": "SOURCE_MANIFEST.json",
+    "sha256": "abcc0b77e8c98fd03c4dd4eb6b1e35832e6ce334f98def525dcb96ef061e0460"
+  },
+  "source_manifest_errors": [],
+  "source_reference_errors": [],
+  "status": "CORE_ENGINEERING_CHECKS_PASSED"
+}

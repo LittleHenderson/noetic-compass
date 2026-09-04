@@ -1,0 +1,23 @@
+{
+  "contract_only": true,
+  "fixture_definition": {
+    "category": "recursive_learning",
+    "expected": {
+      "checker_mutation_allowed": false,
+      "first_failing_step_localized": true,
+      "held_out_transfer_required": true
+    },
+    "fixture_id": "math_first_failing_step_learning",
+    "input": {
+      "fault_type": "INVALID_INVERSE_OPERATION_APPLICATION",
+      "invalid_transformation": "2*x=11",
+      "problem": "2*(x+3)=14"
+    },
+    "operation": "learning_transfer",
+    "runtime_status": "CONTRACT_ONLY",
+    "schema_version": "cncm.math-fixture/0.1"
+  },
+  "fixture_sha256": "17d5c55659b3bc2d2e20c0d46da0bcb0e1fd9c999c8948d59856f70235fa1bd8",
+  "schema_version": "cncm.math-golden/0.1",
+  "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+}

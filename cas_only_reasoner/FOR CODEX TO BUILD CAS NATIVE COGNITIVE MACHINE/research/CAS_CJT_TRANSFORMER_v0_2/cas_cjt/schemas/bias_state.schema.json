@@ -1,0 +1,600 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/bias-state-0.2.json",
+  "title": "CAS Neural CJT v0.2 Bias state",
+  "$ref": "#/$defs/biasState",
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "uint": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "ppm": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000
+    },
+    "stringArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      },
+      "uniqueItems": true
+    },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      },
+      "uniqueItems": true
+    },
+    "readinessAxis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type",
+        "schema_version",
+        "axis",
+        "status",
+        "score_ppm",
+        "threshold_ppm",
+        "reason_codes",
+        "evidence_refs",
+        "provenance"
+      ],
+      "properties": {
+        "contract_type": {
+          "const": "READINESS_AXIS"
+        },
+        "schema_version": {
+          "const": "cas.neural-cjt.readiness-axis/0.2"
+        },
+        "axis": {
+          "enum": [
+            "DESIRE",
+            "WISDOM",
+            "POWER"
+          ]
+        },
+        "status": {
+          "enum": [
+            "SUFFICIENT",
+            "INSUFFICIENT",
+            "UNKNOWN"
+          ]
+        },
+        "score_ppm": {
+          "$ref": "#/$defs/ppm"
+        },
+        "threshold_ppm": {
+          "$ref": "#/$defs/ppm"
+        },
+        "reason_codes": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "provenance": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        }
+      }
+    },
+    "readinessState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type",
+        "schema_version",
+        "profile_id",
+        "desire",
+        "wisdom",
+        "power"
+      ],
+      "properties": {
+        "contract_type": {
+          "const": "READINESS_STATE"
+        },
+        "schema_version": {
+          "const": "cas.neural-cjt.readiness-state/0.2"
+        },
+        "profile_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "desire": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/readinessAxis"
+            },
+            {
+              "properties": {
+                "axis": {
+                  "const": "DESIRE"
+                }
+              }
+            }
+          ]
+        },
+        "wisdom": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/readinessAxis"
+            },
+            {
+              "properties": {
+                "axis": {
+                  "const": "WISDOM"
+                }
+              }
+            }
+          ]
+        },
+        "power": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/readinessAxis"
+            },
+            {
+              "properties": {
+                "axis": {
+                  "const": "POWER"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "tensorArtifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type",
+        "schema_version",
+        "artifact_id",
+        "sha256",
+        "dtype",
+        "shape",
+        "encoding",
+        "byte_length"
+      ],
+      "properties": {
+        "contract_type": {
+          "const": "TENSOR_ARTIFACT_REF"
+        },
+        "schema_version": {
+          "const": "cas.neural-cjt.tensor-artifact-ref/0.2"
+        },
+        "artifact_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dtype": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "shape": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/uint"
+          }
+        },
+        "encoding": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "stableSubstrate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type",
+        "schema_version",
+        "cjt_id",
+        "formation_version",
+        "registered_operation_id",
+        "specialization_tags",
+        "lineage_refs",
+        "configuration_digest"
+      ],
+      "properties": {
+        "contract_type": {
+          "const": "BIAS_STABLE_SUBSTRATE"
+        },
+        "schema_version": {
+          "const": "cas.neural-cjt.bias-stable-substrate/0.2"
+        },
+        "cjt_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "formation_version": {
+          "$ref": "#/$defs/uint"
+        },
+        "registered_operation_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "specialization_tags": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "lineage_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "configuration_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "localMemory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type",
+        "schema_version",
+        "recurrent_state_ref",
+        "recent_cause_ids",
+        "recent_candidate_effect_ids",
+        "verifier_receipt_ids",
+        "repair_frame_ids",
+        "retrieved_memory_refs",
+        "provenance_refs"
+      ],
+      "properties": {
+        "contract_type": {
+          "const": "BIAS_LOCAL_MEMORY"
+        },
+        "schema_version": {
+          "const": "cas.neural-cjt.bias-local-memory/0.2"
+        },
+        "recurrent_state_ref": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/tensorArtifactRef"
+            }
+          ]
+        },
+        "recent_cause_ids": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "recent_candidate_effect_ids": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "verifier_receipt_ids": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "repair_frame_ids": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "retrieved_memory_refs": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "provenance_refs": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "rpmState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type",
+        "schema_version",
+        "readiness",
+        "unmet_prerequisites",
+        "open_repair_ids",
+        "suspended_parent_cause_id",
+        "return_addresses",
+        "repair_history"
+      ],
+      "properties": {
+        "contract_type": {
+          "const": "BIAS_RPM_STATE"
+        },
+        "schema_version": {
+          "const": "cas.neural-cjt.bias-rpm-state/0.2"
+        },
+        "readiness": {
+          "$ref": "#/$defs/readinessState"
+        },
+        "unmet_prerequisites": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "open_repair_ids": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "suspended_parent_cause_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          ]
+        },
+        "return_addresses": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "repair_history": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "operatingRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type",
+        "schema_version",
+        "region",
+        "stability_status",
+        "response_model_status",
+        "semantic_outcome",
+        "previous_committed_verifier_receipt_id",
+        "last_tick"
+      ],
+      "properties": {
+        "contract_type": {
+          "const": "BIAS_OPERATING_RECORD"
+        },
+        "schema_version": {
+          "const": "cas.neural-cjt.bias-operating-record/0.2"
+        },
+        "region": {
+          "enum": [
+            "UNASSESSED",
+            "CUTOFF",
+            "ACTIVE",
+            "SATURATION",
+            "BREAKDOWN",
+            "NON_OHMIC",
+            "UNSTABLE"
+          ]
+        },
+        "stability_status": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "response_model_status": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "semantic_outcome": {
+          "enum": [
+            "UNASSESSED",
+            "INTENDED",
+            "OPPOSITE",
+            "OFF_AXIS",
+            "UNKNOWN"
+          ]
+        },
+        "previous_committed_verifier_receipt_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          ]
+        },
+        "last_tick": {
+          "$ref": "#/$defs/uint"
+        }
+      }
+    },
+    "thetaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type",
+        "schema_version",
+        "model_id",
+        "model_version",
+        "model_digest",
+        "parameter_artifacts",
+        "parameter_group_ids",
+        "beta_microunits",
+        "operating_profile_id",
+        "adapter_ids"
+      ],
+      "properties": {
+        "contract_type": {
+          "const": "BIAS_THETA_REF"
+        },
+        "schema_version": {
+          "const": "cas.neural-cjt.bias-theta-ref/0.2"
+        },
+        "model_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "model_version": {
+          "$ref": "#/$defs/uint"
+        },
+        "model_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "parameter_artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/tensorArtifactRef"
+          }
+        },
+        "parameter_group_ids": {
+          "$ref": "#/$defs/nonEmptyStringArray"
+        },
+        "beta_microunits": {
+          "$ref": "#/$defs/uint"
+        },
+        "operating_profile_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "adapter_ids": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type",
+        "schema_version",
+        "hard_permissions",
+        "topology_permissions",
+        "learning_permissions",
+        "compute_ceiling_units",
+        "quarantined",
+        "state_write_authorities",
+        "memory_write_authorities",
+        "effect_publication_authorities",
+        "owner_restrictions"
+      ],
+      "properties": {
+        "contract_type": {
+          "const": "BIAS_GOVERNANCE"
+        },
+        "schema_version": {
+          "const": "cas.neural-cjt.bias-governance/0.2"
+        },
+        "hard_permissions": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "topology_permissions": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "learning_permissions": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "compute_ceiling_units": {
+          "$ref": "#/$defs/uint"
+        },
+        "quarantined": {
+          "type": "boolean"
+        },
+        "state_write_authorities": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "memory_write_authorities": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "effect_publication_authorities": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "owner_restrictions": {
+          "$ref": "#/$defs/stringArray"
+        }
+      }
+    },
+    "biasState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_type",
+        "schema_version",
+        "bias_id",
+        "cjt_id",
+        "version",
+        "previous_digest",
+        "stable",
+        "memory",
+        "rpm",
+        "operating",
+        "theta",
+        "governance",
+        "state_digest"
+      ],
+      "properties": {
+        "contract_type": {
+          "const": "BIAS_STATE"
+        },
+        "schema_version": {
+          "const": "cas.neural-cjt.bias-state/0.2"
+        },
+        "bias_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cjt_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "version": {
+          "$ref": "#/$defs/uint"
+        },
+        "previous_digest": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "stable": {
+          "$ref": "#/$defs/stableSubstrate"
+        },
+        "memory": {
+          "$ref": "#/$defs/localMemory"
+        },
+        "rpm": {
+          "$ref": "#/$defs/rpmState"
+        },
+        "operating": {
+          "$ref": "#/$defs/operatingRecord"
+        },
+        "theta": {
+          "$ref": "#/$defs/thetaRef"
+        },
+        "governance": {
+          "$ref": "#/$defs/governance"
+        },
+        "state_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "version": {
+                "const": 0
+              }
+            },
+            "required": [
+              "version"
+            ]
+          },
+          "then": {
+            "properties": {
+              "previous_digest": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "previous_digest": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

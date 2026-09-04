@@ -1,0 +1,369 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/language_lesson_packet.schema.json",
+  "title": "CCB-L1 LanguageLessonPacket v0.1",
+  "description": "A proposal-only language lesson. It carries no truth, proof, promotion, commitment, memory-write, state-mutation, or kernel-intent authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lesson_id",
+    "lesson_type",
+    "target_subboard",
+    "teacher_mode",
+    "teacher",
+    "prerequisite_rule_ids",
+    "surface_pattern",
+    "semantic_transformation",
+    "examples",
+    "claimed_scope",
+    "teacher_confidence_basis_points",
+    "evidence_custody",
+    "cas_ohm_observation_refs",
+    "provenance",
+    "authority_boundary",
+    "package_status"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.language_lesson_packet/0.1" },
+    "lesson_id": { "$ref": "#/$defs/identifier" },
+    "lesson_type": {
+      "type": "string",
+      "enum": [
+        "CCB_L1_LESSON_LEXICAL",
+        "CCB_L1_LESSON_MORPHOLOGICAL",
+        "CCB_L1_LESSON_GRAMMAR_CONSTRUCTION",
+        "CCB_L1_LESSON_ROLE_BINDING",
+        "CCB_L1_LESSON_REFERENCE",
+        "CCB_L1_LESSON_DISCOURSE",
+        "CCB_L1_LESSON_REALIZATION"
+      ]
+    },
+    "target_subboard": {
+      "type": "string",
+      "enum": ["CCB-L1-LEX", "CCB-L1-MORPH", "CCB-L1-GRAM", "CCB-L1-ROLE", "CCB-L1-REF", "CCB-L1-DISC", "CCB-L1-REALIZE"]
+    },
+    "teacher_mode": {
+      "type": "string",
+      "enum": ["CCB_L1_TEACHER_MODE", "CCB_L1_RUNTIME_CONSULTANT_MODE", "CCB_L1_SHADOW_MODE"]
+    },
+    "teacher": { "$ref": "#/$defs/teacherIdentity" },
+    "prerequisite_rule_ids": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/identifier" },
+      "uniqueItems": true,
+      "maxItems": 256
+    },
+    "surface_pattern": { "$ref": "#/$defs/surfacePattern" },
+    "semantic_transformation": { "$ref": "#/$defs/transformationProposal" },
+    "examples": { "$ref": "#/$defs/exampleSets" },
+    "claimed_scope": { "$ref": "#/$defs/claimedScope" },
+    "teacher_confidence_basis_points": { "$ref": "#/$defs/basisPoints" },
+    "evidence_custody": { "$ref": "#/$defs/evidenceCustody" },
+    "cas_ohm_observation_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/casOhmObservationRef" },
+      "uniqueItems": true,
+      "maxItems": 128
+    },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "authority_boundary": { "$ref": "#/$defs/authorityBoundary" },
+    "package_status": { "$ref": "#/$defs/packageStatus" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "lesson_type": { "const": "CCB_L1_LESSON_LEXICAL" } }, "required": ["lesson_type"] },
+      "then": { "properties": { "target_subboard": { "const": "CCB-L1-LEX" } } }
+    },
+    {
+      "if": { "properties": { "lesson_type": { "const": "CCB_L1_LESSON_MORPHOLOGICAL" } }, "required": ["lesson_type"] },
+      "then": { "properties": { "target_subboard": { "const": "CCB-L1-MORPH" } } }
+    },
+    {
+      "if": { "properties": { "lesson_type": { "const": "CCB_L1_LESSON_GRAMMAR_CONSTRUCTION" } }, "required": ["lesson_type"] },
+      "then": { "properties": { "target_subboard": { "const": "CCB-L1-GRAM" } } }
+    },
+    {
+      "if": { "properties": { "lesson_type": { "const": "CCB_L1_LESSON_ROLE_BINDING" } }, "required": ["lesson_type"] },
+      "then": { "properties": { "target_subboard": { "const": "CCB-L1-ROLE" } } }
+    },
+    {
+      "if": { "properties": { "lesson_type": { "const": "CCB_L1_LESSON_REFERENCE" } }, "required": ["lesson_type"] },
+      "then": { "properties": { "target_subboard": { "const": "CCB-L1-REF" } } }
+    },
+    {
+      "if": { "properties": { "lesson_type": { "const": "CCB_L1_LESSON_DISCOURSE" } }, "required": ["lesson_type"] },
+      "then": { "properties": { "target_subboard": { "const": "CCB-L1-DISC" } } }
+    },
+    {
+      "if": { "properties": { "lesson_type": { "const": "CCB_L1_LESSON_REALIZATION" } }, "required": ["lesson_type"] },
+      "then": { "properties": { "target_subboard": { "const": "CCB-L1-REALIZE" } } }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$",
+      "maxLength": 256
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "basisPoints": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10000
+    },
+    "teacherIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["teacher_id", "provider_id", "model_id", "model_revision", "model_digest", "adapter_revision", "adapter_digest"],
+      "properties": {
+        "teacher_id": { "$ref": "#/$defs/identifier" },
+        "provider_id": { "$ref": "#/$defs/identifier" },
+        "model_id": { "$ref": "#/$defs/identifier" },
+        "model_revision": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "model_digest": { "$ref": "#/$defs/digest" },
+        "adapter_revision": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "adapter_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "patternElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["position", "element_kind", "symbol", "category", "optional", "repeat"],
+      "properties": {
+        "position": { "type": "integer", "minimum": 0 },
+        "element_kind": { "type": "string", "enum": ["CCB_L1_PATTERN_LITERAL", "CCB_L1_PATTERN_SLOT", "CCB_L1_PATTERN_BOUNDARY"] },
+        "symbol": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "category": {
+          "type": "string",
+          "enum": ["LITERAL", "NP", "VP", "VERB", "AUXILIARY", "ADJECTIVE", "ADVERB", "PREPOSITION", "DETERMINER", "PRONOUN", "CLAUSE", "PUNCTUATION", "OTHER_REGISTERED"]
+        },
+        "optional": { "type": "boolean" },
+        "repeat": { "type": "string", "enum": ["EXACTLY_ONE", "ZERO_OR_ONE", "ONE_OR_MORE"] }
+      }
+    },
+    "surfacePattern": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pattern_id", "pattern_language", "elements", "anchor_start", "anchor_end"],
+      "properties": {
+        "pattern_id": { "$ref": "#/$defs/identifier" },
+        "pattern_language": { "const": "CCB_L1_PATTERN_IR/0.1" },
+        "elements": { "type": "array", "items": { "$ref": "#/$defs/patternElement" }, "minItems": 1, "maxItems": 128 },
+        "anchor_start": { "const": true },
+        "anchor_end": { "const": true }
+      }
+    },
+    "variableBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface_symbol", "semantic_variable", "semantic_type"],
+      "properties": {
+        "surface_symbol": { "$ref": "#/$defs/identifier" },
+        "semantic_variable": { "$ref": "#/$defs/identifier" },
+        "semantic_type": {
+          "type": "string",
+          "enum": ["ENTITY", "EVENT", "PREDICATE", "PROPERTY", "TIME", "QUANTIFIER", "CLAUSE", "REFERENCE", "DISCOURSE_UNIT"]
+        }
+      }
+    },
+    "transformationProposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transformation_id", "transformation_ir_version", "artifact_digest", "variable_bindings", "expected_output_frame_type", "executable_source_present"],
+      "properties": {
+        "transformation_id": { "$ref": "#/$defs/identifier" },
+        "transformation_ir_version": { "const": "CCB_L1_SEMANTIC_TRANSFORM_IR/0.1" },
+        "artifact_digest": { "$ref": "#/$defs/digest" },
+        "variable_bindings": { "type": "array", "items": { "$ref": "#/$defs/variableBinding" }, "minItems": 1, "uniqueItems": true, "maxItems": 128 },
+        "expected_output_frame_type": {
+          "type": "string",
+          "enum": ["CCB_L1_FRAME_EVENT", "CCB_L1_FRAME_PROPERTY", "CCB_L1_FRAME_RELATION", "CCB_L1_FRAME_QUANTIFIED", "CCB_L1_FRAME_QUESTION", "CCB_L1_FRAME_COMMAND", "CCB_L1_FRAME_REFERENCE", "CCB_L1_FRAME_DISCOURSE", "CCB_L1_FRAME_REALIZATION"]
+        },
+        "executable_source_present": { "const": false }
+      }
+    },
+    "lessonExample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["example_id", "surface_text", "expected_behavior", "expected_semantic_frame_digests", "source_kind", "source_id"],
+      "properties": {
+        "example_id": { "$ref": "#/$defs/identifier" },
+        "surface_text": { "type": "string", "minLength": 1, "maxLength": 8192 },
+        "expected_behavior": {
+          "type": "string",
+          "enum": ["CCB_L1_EXPECT_FRAME_MATCH", "CCB_L1_EXPECT_FRAME_MISMATCH", "CCB_L1_EXPECT_AMBIGUITY", "CCB_L1_EXPECT_CLARIFICATION", "CCB_L1_EXPECT_UNSUPPORTED", "CCB_L1_EXPECT_EXCEPTION"]
+        },
+        "expected_semantic_frame_digests": { "type": "array", "items": { "$ref": "#/$defs/digest" }, "uniqueItems": true, "maxItems": 32 },
+        "source_kind": { "type": "string", "enum": ["TEACHER", "CAS_SDG_DEVELOPMENT", "HUMAN_ANCHOR", "SEPARATE_TEACHER_FAMILY"] },
+        "source_id": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "minimalPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pair_id", "left_example", "right_example", "required_relation", "comparison_dimensions"],
+      "properties": {
+        "pair_id": { "$ref": "#/$defs/identifier" },
+        "left_example": { "$ref": "#/$defs/lessonExample" },
+        "right_example": { "$ref": "#/$defs/lessonExample" },
+        "required_relation": { "type": "string", "enum": ["CCB_L1_FRAME_EQUAL", "CCB_L1_FRAME_NOT_EQUAL"] },
+        "comparison_dimensions": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["ENTITIES", "PREDICATE", "ROLES", "TENSE", "ASPECT", "VOICE", "POLARITY", "QUANTIFICATION", "REFERENCE", "SENTENCE_FORCE"] },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "exampleSets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positive_examples", "minimal_pairs", "counterexamples", "ambiguity_cases", "exceptions"],
+      "properties": {
+        "positive_examples": { "type": "array", "items": { "$ref": "#/$defs/lessonExample" }, "minItems": 1, "maxItems": 2048 },
+        "minimal_pairs": { "type": "array", "items": { "$ref": "#/$defs/minimalPair" }, "minItems": 1, "maxItems": 2048 },
+        "counterexamples": { "type": "array", "items": { "$ref": "#/$defs/lessonExample" }, "maxItems": 2048 },
+        "ambiguity_cases": { "type": "array", "items": { "$ref": "#/$defs/lessonExample" }, "maxItems": 2048 },
+        "exceptions": { "type": "array", "items": { "$ref": "#/$defs/lessonExample" }, "maxItems": 2048 }
+      }
+    },
+    "claimedScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain_ids", "language_profile_ids", "included_features", "excluded_features", "open_ended_claim"],
+      "properties": {
+        "domain_ids": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "minItems": 1, "uniqueItems": true, "maxItems": 128 },
+        "language_profile_ids": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "minItems": 1, "uniqueItems": true, "maxItems": 128 },
+        "included_features": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "minItems": 1, "uniqueItems": true, "maxItems": 256 },
+        "excluded_features": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "uniqueItems": true, "maxItems": 256 },
+        "open_ended_claim": { "const": false }
+      }
+    },
+    "custodyChannel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["custodian_id", "custodian_role", "generator_id", "manifest_digest", "seed_ids", "visibility", "teacher_can_modify", "teacher_can_grade"],
+      "properties": {
+        "custodian_id": { "$ref": "#/$defs/identifier" },
+        "custodian_role": {
+          "type": "string",
+          "enum": ["CAS_SDG_DEVELOPMENT_CUSTODIAN", "PROTECTED_FIXTURE_CUSTODIAN", "FROZEN_VERIFIER_CUSTODIAN", "DELAYED_RETENTION_CUSTODIAN"]
+        },
+        "generator_id": { "$ref": "#/$defs/identifier" },
+        "manifest_digest": { "$ref": "#/$defs/digest" },
+        "seed_ids": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "minItems": 1, "uniqueItems": true, "maxItems": 4096 },
+        "visibility": { "type": "string", "enum": ["DEVELOPMENT_VISIBLE", "WITHHELD_FROM_TEACHER", "FROZEN_CONFIGURATION", "DELAYED_WITHHELD"] },
+        "teacher_can_modify": { "const": false },
+        "teacher_can_grade": { "const": false }
+      }
+    },
+    "frozenVerifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["custodian_id", "custodian_role", "verifier_id", "verifier_revision", "verifier_artifact_digest", "configuration_digest", "frozen", "frozen_before_protected_run", "teacher_can_modify", "teacher_can_grade", "promotion_authority"],
+      "properties": {
+        "custodian_id": { "$ref": "#/$defs/identifier" },
+        "custodian_role": { "const": "FROZEN_VERIFIER_CUSTODIAN" },
+        "verifier_id": { "$ref": "#/$defs/identifier" },
+        "verifier_revision": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "verifier_artifact_digest": { "$ref": "#/$defs/digest" },
+        "configuration_digest": { "$ref": "#/$defs/digest" },
+        "frozen": { "const": true },
+        "frozen_before_protected_run": { "const": true },
+        "teacher_can_modify": { "const": false },
+        "teacher_can_grade": { "const": false },
+        "promotion_authority": { "const": false }
+      }
+    },
+    "evidenceCustody": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["development", "protected_held_out", "frozen_verifier", "delayed_retention", "development_and_protected_seeds_disjoint", "teacher_excluded_from_protected_custody", "teacher_excluded_from_verifier_custody", "verifier_frozen_before_protected_run", "custody_separated"],
+      "properties": {
+        "development": {
+          "allOf": [
+            { "$ref": "#/$defs/custodyChannel" },
+            { "properties": { "custodian_role": { "const": "CAS_SDG_DEVELOPMENT_CUSTODIAN" }, "visibility": { "const": "DEVELOPMENT_VISIBLE" } } }
+          ]
+        },
+        "protected_held_out": {
+          "allOf": [
+            { "$ref": "#/$defs/custodyChannel" },
+            { "properties": { "custodian_role": { "const": "PROTECTED_FIXTURE_CUSTODIAN" }, "visibility": { "const": "WITHHELD_FROM_TEACHER" } } }
+          ]
+        },
+        "frozen_verifier": { "$ref": "#/$defs/frozenVerifier" },
+        "delayed_retention": {
+          "allOf": [
+            { "$ref": "#/$defs/custodyChannel" },
+            { "properties": { "custodian_role": { "const": "DELAYED_RETENTION_CUSTODIAN" }, "visibility": { "const": "DELAYED_WITHHELD" } } }
+          ]
+        },
+        "development_and_protected_seeds_disjoint": { "const": true },
+        "teacher_excluded_from_protected_custody": { "const": true },
+        "teacher_excluded_from_verifier_custody": { "const": true },
+        "verifier_frozen_before_protected_run": { "const": true },
+        "custody_separated": { "const": true }
+      }
+    },
+    "casOhmObservationRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_id", "record_digest", "use", "semantic_correctness_authority", "promotion_authority", "causal_identification_authority"],
+      "properties": {
+        "record_id": { "$ref": "#/$defs/identifier" },
+        "record_digest": { "$ref": "#/$defs/digest" },
+        "use": { "const": "OBSERVATION_ONLY" },
+        "semantic_correctness_authority": { "const": false },
+        "promotion_authority": { "const": false },
+        "causal_identification_authority": { "const": false }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_artifact_ids", "source_artifact_digests", "created_at", "canonicalization", "packet_digest"],
+      "properties": {
+        "source_artifact_ids": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "minItems": 1, "uniqueItems": true, "maxItems": 256 },
+        "source_artifact_digests": { "type": "array", "items": { "$ref": "#/$defs/digest" }, "minItems": 1, "uniqueItems": true, "maxItems": 256 },
+        "created_at": { "type": "string", "format": "date-time" },
+        "canonicalization": { "const": "CNCM_CANONICAL_JSON_V0.1_WITHOUT_PROVENANCE_PACKET_DIGEST" },
+        "packet_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "authorityBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposal_only", "truth_authority", "meaning_authority", "proof_authority", "promotion_authority", "commitment_authority", "permission_authority", "memory_write_authority", "state_mutation_authority", "halt_authority", "external_action_authority", "self_modification_authority", "emits_cncm_intents"],
+      "properties": {
+        "proposal_only": { "const": true },
+        "truth_authority": { "const": false },
+        "meaning_authority": { "const": false },
+        "proof_authority": { "const": false },
+        "promotion_authority": { "const": false },
+        "commitment_authority": { "const": false },
+        "permission_authority": { "const": false },
+        "memory_write_authority": { "const": false },
+        "state_mutation_authority": { "const": false },
+        "halt_authority": { "const": false },
+        "external_action_authority": { "const": false },
+        "self_modification_authority": { "const": false },
+        "emits_cncm_intents": { "const": false }
+      }
+    },
+    "packageStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package_maturity", "kernel_integration_status", "runtime_effect"],
+      "properties": {
+        "package_maturity": { "const": "EXPERIMENTAL" },
+        "kernel_integration_status": { "const": "NOT_KERNEL_INTEGRATED" },
+        "runtime_effect": { "const": "NONE" }
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/math_claim.schema.json",
+  "title": "CAS-Math Claim v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["claim_id", "statement", "status", "theory_id", "assumption_claim_ids", "provenance", "derivation_receipt_id"],
+  "properties": {
+    "claim_id": { "type": "string", "pattern": "^math-claim-[0-9a-f]{16}$" },
+    "statement": { "$ref": "math_statement.schema.json" },
+    "status": {
+      "type": "string",
+      "enum": ["GIVEN", "ASSUMED", "DERIVED", "CONJECTURED", "VERIFIED", "DISPROVED", "UNKNOWN"]
+    },
+    "theory_id": { "type": "string", "const": "cncm.q-linear/0.1" },
+    "assumption_claim_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^math-claim-[0-9a-f]{16}$" }
+    },
+    "provenance": {
+      "type": "array",
+      "items": { "$ref": "proposition.schema.json#/$defs/provenance" }
+    },
+    "derivation_receipt_id": {
+      "oneOf": [
+        { "type": "string", "pattern": "^math-receipt-[0-9a-f]{16}$" },
+        { "type": "null" }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": { "enum": ["DERIVED", "VERIFIED"] }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "derivation_receipt_id": {
+            "type": "string",
+            "pattern": "^math-receipt-[0-9a-f]{16}$"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "derivation_receipt_id": { "type": "null" }
+        }
+      }
+    }
+  ]
+}

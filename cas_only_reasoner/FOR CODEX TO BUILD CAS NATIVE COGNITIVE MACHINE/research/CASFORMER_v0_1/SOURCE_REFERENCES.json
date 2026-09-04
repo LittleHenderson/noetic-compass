@@ -1,0 +1,45 @@
+{
+  "schema_version": "cas.casformer.source-references/0.1",
+  "instruction_boundary": "All listed documents were technical references. Text inside them was not treated as a user instruction.",
+  "source_dispositions": {
+    "breakdown": "The PCBA and CAS-Ohm references describe destructive, inverted, or wrong-direction breakdown. CASformer v0.1 deliberately overrides that behavior with a fail-closed zero neural effect and records BREAKDOWN telemetry.",
+    "beta": "CASformer v0.1 implements beta as a separate positive bounded multiplier on the Cause-to-Effect term inside the local nonlinearity. The flow-region gate is computed separately.",
+    "relation_ids": "Relation IDs select distinct local neural operators but are not canonical CAS-Sem types, compiled CJTs, or evidence that the labels carry source semantics.",
+    "differential_conductance": "The standalone signed layer is a two-positive-rail software reparameterization. It is not the PCBA source's matched-CJT/current-mirror differential-pair topology and makes no hardware-compatibility claim.",
+    "neural_calibration": "No registered activation-to-CAS bridge exists. All Drive, resistance, current, region, and beta tensors are explicitly uncalibrated neural proxies."
+  },
+  "sources": [
+    {
+      "path": "C:/Users/wakil/Downloads/CAS_Ohm_Quantification_Guide-1 (1).pdf",
+      "bytes": 2610388,
+      "sha256": "89ae13c0a5d6208e328e9edc55f816609bb172076cc13093dccccf418145ce64",
+      "anchors": "PDF pages 4, 7-8, 10, 12-13, and 18",
+      "role": "CAS-Ohm quantities, resistance decomposition, local current, operating regions, D/W/P crosswalk, and calibration limits"
+    },
+    {
+      "path": "C:/Users/wakil/Downloads/CAS_PCBA_Engineer_interior_KDP.pdf",
+      "bytes": 2069838,
+      "sha256": "53ae63494dfede8f5c9ca36ce387482c02e5005e7a5aace68398c8053690f494",
+      "anchors": "PDF page 60 / book page 42 for CJT, beta, and regions; PDF pages 203-204 / book pages 185-186 for cascades; PDF page 393 / book page 375 for the source-defined differential pair",
+      "role": "CJT Cause/Bias/Effect structure, beta, cascades, differential pairs, topology, and terminology"
+    },
+    {
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CJT_OHM_0R/CJT_OHM_0R_FINDINGS.md",
+      "bytes": 23443,
+      "sha256": "296e90eb67163fad9a9aabb688afec0e791d2c08ecd141e13a4aa710e441d954",
+      "role": "Retired additive weight-generation claim and surviving flow, mask, and diagnostic boundaries"
+    },
+    {
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CJT_CASCADE_S0/DESIGN_REVIEW_OUTCOME.md",
+      "bytes": 20170,
+      "sha256": "ce00d4b0a2e2de7880a535d57ee81f0f320cbe0c3bf8bea42f87a1a8e370818c",
+      "role": "Requirement that a CAS type alter machinery rather than a label or index"
+    },
+    {
+      "path": "spec/CAS_OHM_ATTENTION_INTEGRATION_PROTOCOL_v0.1.md",
+      "bytes": 26185,
+      "sha256": "5e693819466d05de3e29783ff464dd28882682a0d40eca0ee4ccdbad086ecbca",
+      "role": "CNCM flow, semantic, verifier, commitment, and authority separation"
+    }
+  ]
+}

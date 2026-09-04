@@ -1,0 +1,198 @@
+{
+  "determinism_inputs": [
+    "problem_packet",
+    "initial_episodic_memory",
+    "runtime_version",
+    "seed",
+    "scheduler_policy"
+  ],
+  "entries": [
+    {
+      "evidence_digest": "bd9f1619f51b5d40117bbb3e047c2e4aa4bf5657653e1438678d93910d939dd6",
+      "evidence_sha256": "bda558892ef1024dc581b4085356407464a9e524b78cc8722ed9307bdbb20b88",
+      "expected_failure_sha256": null,
+      "final_state_hash": "6a0c19afe1db1dee2c5ec74629c2e8be281bbebedbeeeb041a72824b2e4e339d",
+      "final_state_sha256": "cfd0bbe5448c154ecbf7ad8ffdc2a86ac9e45d635983d7209092b99ec88eada8",
+      "fixture": "branch_rollback",
+      "problem_sha256": "313edf5c59dd4e7461e75d86de22c910bd98c6c90247349ae48fd81ce5db33e2",
+      "terminal_status": "CONCLUDED",
+      "trace_head": "ca968fcfa6c5706f778efcc618b73b2867024429cda9418b759a59689e7d8caf",
+      "trace_sha256": "9f2591f9e911ba10d335a6636c786221975e7bfe9a6a77fd9f877a298ad2b75e"
+    },
+    {
+      "evidence_digest": "d4dd9ebf68ddec54a2e6de57b11ab487900b712bb9c8b660ed738ad1eec625f0",
+      "evidence_sha256": "8548c45b8cc86b8cd663c5c6ab9b0a8c39ef8b043af77991f2ac853336309579",
+      "expected_failure_sha256": "6a81236bc9e6cf877badce877cda6ab287242a0055b8bffb6b1729a9dd0a727c",
+      "final_state_hash": "3933360265307e1461e8bae7b2726d57ec8133e248edaedf66ee8a2a1e0119e1",
+      "final_state_sha256": "be724c6a144d6c6e95ae3a3ffd65453a4f1f6aa7fb86f4be5b7544ca7717d94e",
+      "fixture": "contradiction",
+      "problem_sha256": "010874417008a6c73a93a8d4c378d0ed459ccb90d9991a80248f58e842aeba5e",
+      "terminal_status": "CONFLICT_UNRESOLVED",
+      "trace_head": "b4031829c8260797bad3695e367b324c69b05969e960cef375b0e17936c7ad10",
+      "trace_sha256": "6a40c40c7ecb57f7dacf17409a1f61e173ceff349d2194b5c9380dc38b2ca042"
+    },
+    {
+      "evidence_digest": "0adec3e9b36b2957dc6a412a3f663a02a22cf1376aa9cdffa72c1aa571667ccb",
+      "evidence_sha256": "1ff171dface8166a836657e48e711fd246ee2b32f05dadb37d200c78703a8b66",
+      "expected_failure_sha256": null,
+      "final_state_hash": "7580bfdb85c84d8ccb548433e8efa35b4c0cd1db7febfb18b66bae74fae89de6",
+      "final_state_sha256": "c5c916e252da3ac96cfd016594982db6505f4c004e3d617efe82c4188713c272",
+      "fixture": "deduction",
+      "problem_sha256": "567014dd1a235e3efde42bad180d640366c27a301bd014ac9efd23c3e31dad5b",
+      "terminal_status": "CONCLUDED",
+      "trace_head": "3229d9f869734a8e8f5fb6628c66af23111324f9e413e854a92c92ea04156cfc",
+      "trace_sha256": "b573fc47f851b16194fc3294099ad2a9eb021d3ccd8d8b4c7a02d8b96c557e10"
+    },
+    {
+      "evidence_digest": "c3b05f55d3e6ef86c7c09ea0dfb665ced8c926d8da6bd939cc7703f62bb2c437",
+      "evidence_sha256": "1866d1a790179009cc6f706de9773b8341c453594083fdb0c402d093fa5d9166",
+      "expected_failure_sha256": "a99f9f5a53d05b04a25bf0383c7ed06508550f6b008e7d487f2f661dd3d1b84b",
+      "final_state_hash": "9eec2706f0aa92fd46e9dfb074e4f3514d030d789a8c5f55eb804b5bcd37aa99",
+      "final_state_sha256": "6cd966df1c465fc85f7935617906a01e3c7f0ed7b3f6bc0e9987b3825c4b2c47",
+      "fixture": "memory_recall",
+      "problem_sha256": "062bde4d60d485bfcdbdd23b918dd81459695565d46d9ad8be84132ee02fa4d8",
+      "terminal_status": "NEEDS_INFORMATION",
+      "trace_head": "04fda21df99a5160f9a12b9eaad9cbaabb2ddc0ebb273a7307cb3c54b355551b",
+      "trace_sha256": "9d38fe1510190d6198485492d508ccade086e937bbe708bf205716bfb7cde0fa"
+    },
+    {
+      "evidence_digest": "898b0015fa6fa29c3add2bc5722df92288c8dcb6a3502491b31c8ad29ba4d68f",
+      "evidence_sha256": "c1aed0894c0168983fe1f139004e73f1a3a6e55bce68f96835dc2992902fe8e6",
+      "expected_failure_sha256": "d7677fbeb7f996a9d52f5ae24f1c728c5551d9993d16346f4c90ed4b3698f0d7",
+      "final_state_hash": "c7af16bbe38fbf59d09d08ef270cd9c5e2a77c07f41ee5e04372d66eb1312362",
+      "final_state_sha256": "96b82859d2016e5b8a827e201a298ca56aa68ed44cad5b9db8a817061c8f2854",
+      "fixture": "missing_information",
+      "problem_sha256": "ff9b9445b192eaa82bb6d21cc13f865daddacbe45a44d3fd98c1071e2d3b19c0",
+      "terminal_status": "NEEDS_INFORMATION",
+      "trace_head": "50bf9d304e5299db211f5ec890c84bcfc8673a6296fa6c26735d096226eac303",
+      "trace_sha256": "6a365e78376a98326edca9eff81ec2016bc1c1300a361e07284fe81c2948743d"
+    },
+    {
+      "evidence_digest": "d82329603920935ce9e666612341d536724e3262cf5e66130023ac1e568d22d7",
+      "evidence_sha256": "c42807fd5ba351b750ebbf8056c5cc76ad9bfb127c79854f0629b631684d396a",
+      "expected_failure_sha256": "e9813e2b045d425179e5c852dc39dc8d71cb7c17c519c89174c21e0fad7066c9",
+      "final_state_hash": "5010fe3d8cb42657020d34095285ab4473f50b501e905d3a248b701f16e11b14",
+      "final_state_sha256": "1ba45ec469c1be9575e657c2eafdc3942867c28a33906231f6bf309d8565baa1",
+      "fixture": "rpm_failure",
+      "problem_sha256": "eeda5f049fbacf20529c69ec225272b13faf7564bf76c404370a044b7915f49d",
+      "terminal_status": "NEEDS_INFORMATION",
+      "trace_head": "e432f683e6cdc30f2cf458a1f5d8e802635b0fd83203d9204c2f5cb68bd44bd4",
+      "trace_sha256": "0c7812474df4c9357b7c3b32b4fcbdb1b4d120081d6ce23e99d751f1f499829b"
+    },
+    {
+      "evidence_digest": "7740c8f437a0fde33298c973733c4c0eff96eed1988f1ebd6a580457a29da428",
+      "evidence_sha256": "284d78b8313bbd73ccdace5133bde847a607cf70043f4945a9a14caea09f0ac0",
+      "expected_failure_sha256": null,
+      "final_state_hash": "ea91308cf96cdcd635e03643a76c4f03cbcaf8c58eaa2b9a627e3ac07c27aeea",
+      "final_state_sha256": "9cbee1b79fe10a67ca5ebfb6ff2a3a8dac95d9d71eb52062ca810e34bf497980",
+      "fixture": "rpm_recursion",
+      "problem_sha256": "cafcb2576b8342bb725c5fb4402017d41b55a3f622648a127bd496be9e8546af",
+      "terminal_status": "CONCLUDED",
+      "trace_head": "a4b4de8325eb9e47700c4e94d5a5f3548f9410c27b6a74057940925faef57e42",
+      "trace_sha256": "2e90bb5f2ce4f93e44c5926c8b83f1696c20a682cc37443d3b52c27058c12289"
+    },
+    {
+      "evidence_digest": "9f9a46bd31a215c36c40f2baa4b8bf4e4fd79fa98bc8e57aecad9f6c62299229",
+      "evidence_sha256": "a103eae2e15f5e3be74fcd4460ab4394baebe62fe80619d007da76c7b88ab9e5",
+      "expected_failure_sha256": null,
+      "final_state_hash": "327d59826b4c992e64b48a2330b167a7ccb702905edfd18e2647264f715aebc8",
+      "final_state_sha256": "f80fb5077f8ac57c986fb91198e643036c7477cd25c33656a9c035b543f073d2",
+      "fixture": "transitive_reasoning",
+      "problem_sha256": "fe808ef30a4c215e9b2c249e28d60777487c5b9aa7bd58346120579baf0aef36",
+      "terminal_status": "CONCLUDED",
+      "trace_head": "89879535d3f854abca627378d30082b0d2ef72b5f5900c36b5eff5d10ec954fa",
+      "trace_sha256": "8adc36b1ce1f6566a6c20b4120a01228c23e8107bb3c46c4c8344635c69e35a4"
+    }
+  ],
+  "math_contract": {
+    "checker_version": "cncm.math-checker/0.1",
+    "theory_id": "cncm.q-linear/0.1"
+  },
+  "math_determinism_inputs": [
+    "math_fixture_definition",
+    "runtime_version",
+    "math_checker_version",
+    "math_theory_id"
+  ],
+  "math_entries": [
+    {
+      "artifact_path": "math/algebra.json",
+      "artifact_sha256": "02ab83e43d2cef8e9a7b6f9f91dab4258582e4dc64aa3b7043445ca12cc013b2",
+      "case_path": "fixtures/math/algebra/case.json",
+      "case_sha256": "336757cb81b2c148b4852775f6ef8202c34b299a42ee184c2312dc84f6785c85",
+      "fixture": "algebra",
+      "fixture_id": "math_linear_parentheses",
+      "operation": "solve_linear",
+      "output_sha256": "c0a0df381a1f2a2fcfd378f2fdafe45cd88db8ef71d5b2f101b0053726c6865b",
+      "runtime_status": "EXECUTABLE",
+      "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+    },
+    {
+      "artifact_path": "math/arithmetic.json",
+      "artifact_sha256": "4ca8fecd9918f6d0634f67786f56ec37dd88dc98360b1c24e22405f983e117a1",
+      "case_path": "fixtures/math/arithmetic/case.json",
+      "case_sha256": "de75c6d9b8bfa94c792cef6e1f9e7e093489d8b586a124bc4518eb8c719eff42",
+      "fixture": "arithmetic",
+      "fixture_id": "math_exact_rational",
+      "operation": "solve_linear",
+      "output_sha256": "f0785a1f8bda0307adeeaa0c91166b203f740c96c72eedcec9ab46f21bb47f04",
+      "runtime_status": "EXECUTABLE",
+      "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+    },
+    {
+      "artifact_path": "math/contradiction.json",
+      "artifact_sha256": "3a15adc80cd1cf819adc5112d022747100d6eaffedebd77121fef68f3492c470",
+      "case_path": "fixtures/math/contradiction/case.json",
+      "case_sha256": "f5e7ec81dfd9dabe66053d4b4ee4b95e8b06aee6378bbbdcbdd96a127ad371e7",
+      "fixture": "contradiction",
+      "fixture_id": "math_no_solution",
+      "operation": "solve_linear",
+      "output_sha256": "9c4921c6fe2452791f699f0055f9c4d64725d98336e0b852f4e88b341415709e",
+      "runtime_status": "EXECUTABLE",
+      "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+    },
+    {
+      "artifact_path": "math/counterexamples.json",
+      "artifact_sha256": "4ad356d32780abd41e03086e3728d4f5e22ae31d5a6bedd75897040164c2fcb1",
+      "case_path": "fixtures/math/counterexamples/case.json",
+      "case_sha256": "2f644aaec994ce5498f05c2b76748dee819512048a0460c92e8cee7b3671ebae",
+      "fixture": "counterexamples",
+      "fixture_id": "math_bounded_counterexample",
+      "operation": "counterexample",
+      "output_sha256": "41db850f62aab7cd4a93442bf067a393e232c7196b25249ae2c882a0fb596cf2",
+      "runtime_status": "EXECUTABLE",
+      "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+    },
+    {
+      "artifact_path": "math/recursive_learning.json",
+      "artifact_sha256": "8b29fc55fa7d7d7190934356a6114325702c531489a54cb683c0fb666ae65b63",
+      "case_path": "fixtures/math/recursive_learning/case.json",
+      "case_sha256": "17d5c55659b3bc2d2e20c0d46da0bcb0e1fd9c999c8948d59856f70235fa1bd8",
+      "fixture": "recursive_learning",
+      "fixture_id": "math_first_failing_step_learning",
+      "operation": "learning_transfer",
+      "output_sha256": null,
+      "runtime_status": "CONTRACT_ONLY",
+      "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+    },
+    {
+      "artifact_path": "math/transitive_relations.json",
+      "artifact_sha256": "c9a9bf592e1b3acc2aa7e73e15011517b2ec401628b4d10abf5d8d93d3bd1958",
+      "case_path": "fixtures/math/transitive_relations/case.json",
+      "case_sha256": "22ee5c3f7558b2310a108416070e78761774779770a54ae88c6c0d43cdffed1f",
+      "fixture": "transitive_relations",
+      "fixture_id": "math_transitive_equality",
+      "operation": "check_transitive_equal",
+      "output_sha256": "3aed6193e17bfe9c81afe3ef41f9cac40bbab2d9ed40008b2003de924936d8a9",
+      "runtime_status": "EXECUTABLE",
+      "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+    }
+  ],
+  "runtime_version": "0.1.0",
+  "schema_version": "cncm.golden-manifest/0.2",
+  "source_spec": {
+    "bytes": 400316,
+    "path": "cas_reasoner.txt",
+    "sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+  }
+}

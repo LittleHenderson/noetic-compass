@@ -1,0 +1,429 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/apprenticeship_qualification_receipt.schema.json",
+  "title": "CCB-T1 ApprenticeshipQualificationReceipt v0.1",
+  "description": "An immutable, non-authoritative provisional or durable qualification recommendation backed by independently custodied development, held-out, regression, replay, and retention evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "qualification_receipt_id",
+    "episode_id",
+    "episode_version_id",
+    "episode_digest",
+    "domain",
+    "transfer_channel",
+    "destination",
+    "qualification_level",
+    "teacher_role_assignment_refs",
+    "prerequisite_summary",
+    "protected_policy_compliance",
+    "evidence_partitions",
+    "frozen_verifier",
+    "deterministic_replay",
+    "gate_summary",
+    "critical_failures",
+    "metric_snapshot_ref",
+    "receipt_result",
+    "cas_ohm_observation_refs",
+    "created_at",
+    "integrity",
+    "effect",
+    "authority_boundary",
+    "package_status"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.apprenticeship_qualification_receipt/0.1" },
+    "qualification_receipt_id": { "$ref": "#/$defs/identifier" },
+    "episode_id": { "$ref": "#/$defs/identifier" },
+    "episode_version_id": { "$ref": "#/$defs/identifier" },
+    "episode_digest": { "$ref": "#/$defs/digest" },
+    "domain": { "$ref": "#/$defs/domain" },
+    "transfer_channel": { "$ref": "#/$defs/channel" },
+    "destination": { "$ref": "#/$defs/destination" },
+    "qualification_level": { "type": "string", "enum": ["CCB_T1_QUAL_PROVISIONAL_RECOMMENDATION", "CCB_T1_QUAL_DURABLE_RECOMMENDATION"] },
+    "teacher_role_assignment_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/teacherAssignmentReference" },
+      "minItems": 1,
+      "uniqueItems": true,
+      "maxItems": 64
+    },
+    "prerequisite_summary": { "$ref": "#/$defs/prerequisiteSummary" },
+    "protected_policy_compliance": { "$ref": "#/$defs/protectedPolicyCompliance" },
+    "evidence_partitions": { "$ref": "#/$defs/evidencePartitions" },
+    "frozen_verifier": { "$ref": "#/$defs/frozenVerifier" },
+    "deterministic_replay": { "$ref": "#/$defs/deterministicReplay" },
+    "gate_summary": { "$ref": "#/$defs/gateSummary" },
+    "critical_failures": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/criticalFailure" },
+      "uniqueItems": true,
+      "maxItems": 4096
+    },
+    "metric_snapshot_ref": { "$ref": "#/$defs/metricSnapshotReference" },
+    "receipt_result": { "type": "string", "enum": ["CCB_T1_QUAL_PASS", "CCB_T1_QUAL_FAIL", "CCB_T1_QUAL_INCONCLUSIVE"] },
+    "cas_ohm_observation_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/casOhmObservationRef" },
+      "uniqueItems": true,
+      "maxItems": 128
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "integrity": { "$ref": "#/$defs/integrity" },
+    "effect": { "$ref": "#/$defs/effect" },
+    "authority_boundary": { "$ref": "#/$defs/authorityBoundary" },
+    "package_status": { "$ref": "#/$defs/packageStatus" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "qualification_level": { "const": "CCB_T1_QUAL_PROVISIONAL_RECOMMENDATION" },
+          "receipt_result": { "const": "CCB_T1_QUAL_PASS" }
+        },
+        "required": ["qualification_level", "receipt_result"]
+      },
+      "then": {
+        "properties": {
+          "prerequisite_summary": { "$ref": "#/$defs/passingPrerequisiteSummary" },
+          "protected_policy_compliance": { "$ref": "#/$defs/passingProtectedPolicyCompliance" },
+          "evidence_partitions": { "$ref": "#/$defs/provisionalPassingEvidencePartitions" },
+          "deterministic_replay": { "$ref": "#/$defs/passingReplay" },
+          "gate_summary": { "$ref": "#/$defs/provisionalPassingGateSummary" },
+          "critical_failures": { "maxItems": 0 }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "qualification_level": { "const": "CCB_T1_QUAL_DURABLE_RECOMMENDATION" },
+          "receipt_result": { "const": "CCB_T1_QUAL_PASS" }
+        },
+        "required": ["qualification_level", "receipt_result"]
+      },
+      "then": {
+        "properties": {
+          "prerequisite_summary": { "$ref": "#/$defs/passingPrerequisiteSummary" },
+          "protected_policy_compliance": { "$ref": "#/$defs/passingProtectedPolicyCompliance" },
+          "evidence_partitions": { "$ref": "#/$defs/durablePassingEvidencePartitions" },
+          "deterministic_replay": { "$ref": "#/$defs/passingReplay" },
+          "gate_summary": { "$ref": "#/$defs/durablePassingGateSummary" },
+          "critical_failures": { "maxItems": 0 }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$", "maxLength": 256 },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "basisPoints": { "type": "integer", "minimum": 0, "maximum": 10000 },
+    "domain": {
+      "type": "string",
+      "enum": ["CCB_T1_DOMAIN_LANGUAGE", "CCB_T1_DOMAIN_WORLD_KNOWLEDGE", "CCB_T1_DOMAIN_REASONING_STRATEGY", "CCB_T1_DOMAIN_MATHEMATICS", "CCB_T1_DOMAIN_SOFTWARE_ENGINEERING", "CCB_T1_DOMAIN_TOOL_USE", "CCB_T1_DOMAIN_RESEARCH_METHOD", "CCB_T1_DOMAIN_MEMORY_ORGANIZATION", "CCB_T1_DOMAIN_METACOGNITION", "CCB_T1_DOMAIN_SOCIAL_CONVERSATION", "CCB_T1_DOMAIN_CREATIVITY", "CCB_T1_DOMAIN_BOARD_DESIGN", "CCB_T1_DOMAIN_SELF_DIAGNOSIS", "CCB_T1_DOMAIN_MULTIMODAL_PERCEPTION"]
+    },
+    "channel": {
+      "type": "string",
+      "enum": ["CCB_T1_CHANNEL_EXPLICIT_SYMBOLIC", "CCB_T1_CHANNEL_DEMONSTRATION_PROCEDURAL_INDUCTION", "CCB_T1_CHANNEL_NEURAL_DISTILLATION", "CCB_T1_CHANNEL_RETRIEVAL_LINKED_KNOWLEDGE", "CCB_T1_CHANNEL_SYNTHETIC_EXPERIENCE"]
+    },
+    "destination": {
+      "type": "string",
+      "enum": ["CCB_T1_DEST_CAS_SEM_CONCEPT_CANDIDATE", "CCB_T1_DEST_SOURCE_LINKED_RETRIEVAL_RECORD_CANDIDATE", "CCB_T1_DEST_PROCEDURAL_RECIPE_CANDIDATE", "CCB_T1_DEST_LANGUAGE_CONSTRUCTION_CANDIDATE", "CCB_T1_DEST_DIALOGUE_PROCEDURE_CANDIDATE", "CCB_T1_DEST_STRATEGY_BOARD_CANDIDATE", "CCB_T1_DEST_CCDL_BOARD_CANDIDATE", "CCB_T1_DEST_REPLACEABLE_NEURAL_PROPOSAL_SUBBOARD_CANDIDATE", "CCB_T1_DEST_CAS_SDG_CURRICULUM_CANDIDATE", "CCB_T1_DEST_EPISODIC_TRAINING_RECORD_CANDIDATE", "CCB_T1_DEST_PERCEPTION_GROUNDING_CURRICULUM_CANDIDATE", "CCB_T1_DEST_PROTECTED_REVIEW_ONLY"]
+    },
+    "teacherAssignmentReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assignment_id", "assignment_digest", "teacher_identity_digest", "schema_id", "teacher_excluded_from_examination"],
+      "properties": {
+        "assignment_id": { "$ref": "#/$defs/identifier" },
+        "assignment_digest": { "$ref": "#/$defs/digest" },
+        "teacher_identity_digest": { "$ref": "#/$defs/digest" },
+        "schema_id": { "const": "https://cas.local/schemas/teacher_role_assignment.schema.json" },
+        "teacher_excluded_from_examination": { "const": true }
+      }
+    },
+    "prerequisiteSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_required", "evidence_bound", "not_applicable_by_frozen_profile", "missing", "unassessed", "all_required_satisfied", "summary_digest"],
+      "properties": {
+        "total_required": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "evidence_bound": { "type": "integer", "minimum": 0, "maximum": 100000 },
+        "not_applicable_by_frozen_profile": { "type": "integer", "minimum": 0, "maximum": 100000 },
+        "missing": { "type": "integer", "minimum": 0, "maximum": 100000 },
+        "unassessed": { "type": "integer", "minimum": 0, "maximum": 100000 },
+        "all_required_satisfied": { "type": "boolean" },
+        "summary_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "passingPrerequisiteSummary": {
+      "allOf": [
+        { "$ref": "#/$defs/prerequisiteSummary" },
+        { "properties": { "missing": { "const": 0 }, "unassessed": { "const": 0 }, "all_required_satisfied": { "const": true } } }
+      ]
+    },
+    "protectedPolicyCompliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protected_category", "destination_policy_valid", "autonomous_promotion_prohibited", "separate_review_route_valid", "authority_invariants_pass", "policy_digest"],
+      "properties": {
+        "protected_category": { "type": "string", "enum": ["CCB_T1_PROTECTED_NONE", "CCB_T1_PROTECTED_AUTHORITY_CONTRACT", "CCB_T1_PROTECTED_SOLE_WRITER_RULE", "CCB_T1_PROTECTED_PROOF_CHECKER", "CCB_T1_PROTECTED_TRACE_VERIFIER", "CCB_T1_PROTECTED_BENCHMARKS", "CCB_T1_PROTECTED_CONSTITUTIONAL_VALUES", "CCB_T1_PROTECTED_DEPLOYMENT_PERMISSIONS", "CCB_T1_PROTECTED_ROLLBACK_MACHINERY", "CCB_T1_PROTECTED_DEFINITION_OF_IMPROVEMENT"] },
+        "destination_policy_valid": { "type": "boolean" },
+        "autonomous_promotion_prohibited": { "const": true },
+        "separate_review_route_valid": { "type": "boolean" },
+        "authority_invariants_pass": { "type": "boolean" },
+        "policy_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "passingProtectedPolicyCompliance": {
+      "allOf": [
+        { "$ref": "#/$defs/protectedPolicyCompliance" },
+        { "properties": { "destination_policy_valid": { "const": true }, "separate_review_route_valid": { "const": true }, "authority_invariants_pass": { "const": true } } }
+      ]
+    },
+    "partitionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["partition_id", "partition_kind", "custodian_id", "custodian_role", "manifest_digest", "seed_partition_digest", "expected_outputs_digest", "execution_status", "total_cases", "passed_cases", "failed_cases", "inconclusive_cases", "critical_failure_count", "pass_rate_numerator", "pass_rate_denominator", "pass_rate_basis_points", "teacher_involved_in_generation", "teacher_had_access_before_seal", "teacher_graded", "evidence_digest"],
+      "properties": {
+        "partition_id": { "$ref": "#/$defs/identifier" },
+        "partition_kind": { "type": "string", "enum": ["DEVELOPMENT", "PROTECTED_HELD_OUT", "FROZEN_REGRESSION", "DELAYED_RETENTION"] },
+        "custodian_id": { "$ref": "#/$defs/identifier" },
+        "custodian_role": { "type": "string", "enum": ["CCB_T1_DEVELOPMENT_CUSTODIAN", "CCB_T1_PROTECTED_HELD_OUT_CUSTODIAN", "CCB_T1_FROZEN_REGRESSION_CUSTODIAN", "CCB_T1_DELAYED_RETENTION_CUSTODIAN"] },
+        "manifest_digest": { "$ref": "#/$defs/digest" },
+        "seed_partition_digest": { "$ref": "#/$defs/digest" },
+        "expected_outputs_digest": { "$ref": "#/$defs/digest" },
+        "execution_status": { "type": "string", "enum": ["CCB_T1_PARTITION_PASS", "CCB_T1_PARTITION_FAIL", "CCB_T1_PARTITION_INCONCLUSIVE", "CCB_T1_PARTITION_SCHEDULED_SEALED_NOT_RUN"] },
+        "total_cases": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "passed_cases": { "type": "integer", "minimum": 0, "maximum": 100000 },
+        "failed_cases": { "type": "integer", "minimum": 0, "maximum": 100000 },
+        "inconclusive_cases": { "type": "integer", "minimum": 0, "maximum": 100000 },
+        "critical_failure_count": { "type": "integer", "minimum": 0, "maximum": 100000 },
+        "pass_rate_numerator": { "type": "integer", "minimum": 0, "maximum": 100000 },
+        "pass_rate_denominator": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "pass_rate_basis_points": { "$ref": "#/$defs/basisPoints" },
+        "teacher_involved_in_generation": { "const": false },
+        "teacher_had_access_before_seal": { "const": false },
+        "teacher_graded": { "const": false },
+        "evidence_digest": { "$ref": "#/$defs/digest" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "execution_status": { "const": "CCB_T1_PARTITION_PASS" } }, "required": ["execution_status"] },
+          "then": { "properties": { "failed_cases": { "const": 0 }, "inconclusive_cases": { "const": 0 }, "critical_failure_count": { "const": 0 } } }
+        },
+        {
+          "if": { "properties": { "execution_status": { "const": "CCB_T1_PARTITION_SCHEDULED_SEALED_NOT_RUN" } }, "required": ["execution_status"] },
+          "then": { "properties": { "passed_cases": { "const": 0 }, "failed_cases": { "const": 0 }, "inconclusive_cases": { "const": 0 }, "critical_failure_count": { "const": 0 }, "pass_rate_numerator": { "const": 0 }, "pass_rate_basis_points": { "const": 0 } } }
+        }
+      ]
+    },
+    "evidencePartitions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["development", "protected_held_out", "frozen_regression", "delayed_retention", "development_and_protected_seeds_disjoint", "custody_separated"],
+      "properties": {
+        "development": { "allOf": [{ "$ref": "#/$defs/partitionResult" }, { "properties": { "partition_kind": { "const": "DEVELOPMENT" }, "custodian_role": { "const": "CCB_T1_DEVELOPMENT_CUSTODIAN" } } }] },
+        "protected_held_out": { "allOf": [{ "$ref": "#/$defs/partitionResult" }, { "properties": { "partition_kind": { "const": "PROTECTED_HELD_OUT" }, "custodian_role": { "const": "CCB_T1_PROTECTED_HELD_OUT_CUSTODIAN" } } }] },
+        "frozen_regression": { "allOf": [{ "$ref": "#/$defs/partitionResult" }, { "properties": { "partition_kind": { "const": "FROZEN_REGRESSION" }, "custodian_role": { "const": "CCB_T1_FROZEN_REGRESSION_CUSTODIAN" } } }] },
+        "delayed_retention": { "allOf": [{ "$ref": "#/$defs/partitionResult" }, { "properties": { "partition_kind": { "const": "DELAYED_RETENTION" }, "custodian_role": { "const": "CCB_T1_DELAYED_RETENTION_CUSTODIAN" } } }] },
+        "development_and_protected_seeds_disjoint": { "const": true },
+        "custody_separated": { "const": true }
+      }
+    },
+    "provisionalPassingEvidencePartitions": {
+      "allOf": [
+        { "$ref": "#/$defs/evidencePartitions" },
+        {
+          "properties": {
+            "development": { "properties": { "execution_status": { "const": "CCB_T1_PARTITION_PASS" } } },
+            "protected_held_out": { "properties": { "execution_status": { "const": "CCB_T1_PARTITION_PASS" } } },
+            "frozen_regression": { "properties": { "execution_status": { "const": "CCB_T1_PARTITION_PASS" } } },
+            "delayed_retention": { "properties": { "execution_status": { "const": "CCB_T1_PARTITION_SCHEDULED_SEALED_NOT_RUN" } } }
+          }
+        }
+      ]
+    },
+    "durablePassingEvidencePartitions": {
+      "allOf": [
+        { "$ref": "#/$defs/evidencePartitions" },
+        {
+          "properties": {
+            "development": { "properties": { "execution_status": { "const": "CCB_T1_PARTITION_PASS" } } },
+            "protected_held_out": { "properties": { "execution_status": { "const": "CCB_T1_PARTITION_PASS" } } },
+            "frozen_regression": { "properties": { "execution_status": { "const": "CCB_T1_PARTITION_PASS" } } },
+            "delayed_retention": { "properties": { "execution_status": { "const": "CCB_T1_PARTITION_PASS" } } }
+          }
+        }
+      ]
+    },
+    "frozenVerifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verifier_id", "verifier_class", "verifier_revision", "verifier_artifact_digest", "configuration_digest", "custodian_id", "custodian_role", "frozen", "frozen_before_protected_run", "teacher_can_modify", "teacher_can_grade", "recommendation_authority"],
+      "properties": {
+        "verifier_id": { "$ref": "#/$defs/identifier" },
+        "verifier_class": { "type": "string", "enum": ["SEMANTIC_FRAME_COMPARER", "SOURCE_CORROBORATION_VERIFIER", "TRACE_STRATEGY_COMPARER", "EXACT_MATH_CHECKER", "PROOF_VERIFIER", "ISOLATED_CODE_TEST_HARNESS", "TOOL_PERMISSION_AND_OUTPUT_VERIFIER", "REGISTERED_RESEARCH_DESIGN_REVIEW", "MEMORY_RETENTION_VERIFIER", "CALIBRATION_VERIFIER", "DIALOGUE_CONSTRAINT_VERIFIER", "CREATIVE_CONSTRAINT_AND_LABEL_VERIFIER", "BOARD_COMPILER_DRC_SIMULATOR", "DESCENDANT_FAULT_VERIFIER", "MULTIMODAL_GROUNDING_VERIFIER", "INDEPENDENT_HUMAN_ANCHORED_REVIEW"] },
+        "verifier_revision": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "verifier_artifact_digest": { "$ref": "#/$defs/digest" },
+        "configuration_digest": { "$ref": "#/$defs/digest" },
+        "custodian_id": { "$ref": "#/$defs/identifier" },
+        "custodian_role": { "const": "CCB_T1_FROZEN_VERIFIER_CUSTODIAN" },
+        "frozen": { "const": true },
+        "frozen_before_protected_run": { "const": true },
+        "teacher_can_modify": { "const": false },
+        "teacher_can_grade": { "const": false },
+        "recommendation_authority": { "const": false }
+      }
+    },
+    "deterministicReplay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replay_id", "replay_status", "first_run_digest", "replay_digest", "runtime_revision", "runtime_digest", "same_inputs", "same_configuration"],
+      "properties": {
+        "replay_id": { "$ref": "#/$defs/identifier" },
+        "replay_status": { "type": "string", "enum": ["CCB_T1_REPLAY_PASS", "CCB_T1_REPLAY_FAIL", "CCB_T1_REPLAY_NOT_RUN"] },
+        "first_run_digest": { "$ref": "#/$defs/digest" },
+        "replay_digest": { "$ref": "#/$defs/digest" },
+        "runtime_revision": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "runtime_digest": { "$ref": "#/$defs/digest" },
+        "same_inputs": { "const": true },
+        "same_configuration": { "const": true }
+      }
+    },
+    "passingReplay": { "allOf": [{ "$ref": "#/$defs/deterministicReplay" }, { "properties": { "replay_status": { "const": "CCB_T1_REPLAY_PASS" } } }] },
+    "gateSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_valid", "domain_channel_destination_valid", "teacher_role_assignments_valid", "protected_category_policy_valid", "prerequisites_satisfied", "development_evidence_pass", "protected_held_out_pass", "frozen_regression_pass", "deterministic_replay_pass", "provenance_complete", "custody_verified", "retention_plan_sealed", "delayed_retention_pass", "lineage_complete", "qualified_rollback_ancestor_available", "critical_failure_count"],
+      "properties": {
+        "schema_valid": { "type": "boolean" },
+        "domain_channel_destination_valid": { "type": "boolean" },
+        "teacher_role_assignments_valid": { "type": "boolean" },
+        "protected_category_policy_valid": { "type": "boolean" },
+        "prerequisites_satisfied": { "type": "boolean" },
+        "development_evidence_pass": { "type": "boolean" },
+        "protected_held_out_pass": { "type": "boolean" },
+        "frozen_regression_pass": { "type": "boolean" },
+        "deterministic_replay_pass": { "type": "boolean" },
+        "provenance_complete": { "type": "boolean" },
+        "custody_verified": { "type": "boolean" },
+        "retention_plan_sealed": { "type": "boolean" },
+        "delayed_retention_pass": { "type": "boolean" },
+        "lineage_complete": { "type": "boolean" },
+        "qualified_rollback_ancestor_available": { "type": "boolean" },
+        "critical_failure_count": { "type": "integer", "minimum": 0, "maximum": 100000 }
+      }
+    },
+    "provisionalPassingGateSummary": {
+      "allOf": [
+        { "$ref": "#/$defs/gateSummary" },
+        { "properties": { "schema_valid": { "const": true }, "domain_channel_destination_valid": { "const": true }, "teacher_role_assignments_valid": { "const": true }, "protected_category_policy_valid": { "const": true }, "prerequisites_satisfied": { "const": true }, "development_evidence_pass": { "const": true }, "protected_held_out_pass": { "const": true }, "frozen_regression_pass": { "const": true }, "deterministic_replay_pass": { "const": true }, "provenance_complete": { "const": true }, "custody_verified": { "const": true }, "retention_plan_sealed": { "const": true }, "critical_failure_count": { "const": 0 } } }
+      ]
+    },
+    "durablePassingGateSummary": {
+      "allOf": [
+        { "$ref": "#/$defs/provisionalPassingGateSummary" },
+        { "properties": { "delayed_retention_pass": { "const": true }, "lineage_complete": { "const": true }, "qualified_rollback_ancestor_available": { "const": true } } }
+      ]
+    },
+    "criticalFailure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failure_code", "partition_id", "case_id", "evidence_digest"],
+      "properties": {
+        "failure_code": { "type": "string", "enum": ["INVALID_PROOF_STEP", "SOURCE_OR_VALIDITY_WINDOW_FAILURE", "PERMISSION_BYPASS", "UNSAFE_TOOL_OUTPUT_ACCEPTED", "SECURITY_REGRESSION", "AUTHORITY_REGRESSION", "PROTECTED_FIXTURE_EXPOSURE", "TEACHER_SELF_GRADING", "REPLAY_MISMATCH", "FABRICATED_PROVENANCE", "IMAGINED_RELABELLED_VERIFIED", "UNGROUNDED_MULTIMODAL_CLAIM", "CRITICAL_BEHAVIOR_REGRESSION", "UNAUTHORIZED_EFFECT", "OTHER_DECLARED_CRITICAL"] },
+        "partition_id": { "$ref": "#/$defs/identifier" },
+        "case_id": { "$ref": "#/$defs/identifier" },
+        "evidence_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "metricSnapshotReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lineage_id", "snapshot_id", "snapshot_digest", "schema_id"],
+      "properties": {
+        "lineage_id": { "$ref": "#/$defs/identifier" },
+        "snapshot_id": { "$ref": "#/$defs/identifier" },
+        "snapshot_digest": { "$ref": "#/$defs/digest" },
+        "schema_id": { "const": "https://cas.local/schemas/apprenticeship_lineage.schema.json" }
+      }
+    },
+    "casOhmObservationRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_id", "record_digest", "schema_id", "use", "correctness_authority", "qualification_authority", "promotion_authority", "causal_identification_authority"],
+      "properties": {
+        "record_id": { "$ref": "#/$defs/identifier" },
+        "record_digest": { "$ref": "#/$defs/digest" },
+        "schema_id": { "const": "https://cas.local/schemas/cas_ohm_stage_record.schema.json" },
+        "use": { "const": "OBSERVATION_ONLY" },
+        "correctness_authority": { "const": false },
+        "qualification_authority": { "const": false },
+        "promotion_authority": { "const": false },
+        "causal_identification_authority": { "const": false }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_algorithm", "canonicalization", "receipt_digest", "previous_receipt_chain_digest", "receipt_chain_digest", "sealed"],
+      "properties": {
+        "hash_algorithm": { "const": "SHA-256" },
+        "canonicalization": { "const": "CNCM_CANONICAL_JSON_V0.1_WITHOUT_INTEGRITY_RECEIPT_DIGESTS" },
+        "receipt_digest": { "$ref": "#/$defs/digest" },
+        "previous_receipt_chain_digest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "receipt_chain_digest": { "$ref": "#/$defs/digest" },
+        "sealed": { "const": true }
+      }
+    },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_effect", "authorized_by_kernel", "kernel_state_write_performed", "memory_write_performed", "runtime_code_modified", "authority_manifest_modified", "external_action_performed"],
+      "properties": {
+        "receipt_effect": { "const": "CCB_T1_QUALIFICATION_RECOMMENDATION_RECORDED_ONLY" },
+        "authorized_by_kernel": { "const": false },
+        "kernel_state_write_performed": { "const": false },
+        "memory_write_performed": { "const": false },
+        "runtime_code_modified": { "const": false },
+        "authority_manifest_modified": { "const": false },
+        "external_action_performed": { "const": false }
+      }
+    },
+    "authorityBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recommendation_record_only", "truth_authority", "meaning_authority", "proof_authority", "validity_authority", "qualification_authority", "promotion_authority", "commitment_authority", "permission_authority", "memory_write_authority", "state_mutation_authority", "halt_authority", "causal_identification_authority", "external_action_authority", "self_modification_authority", "emits_cncm_intents"],
+      "properties": {
+        "recommendation_record_only": { "const": true },
+        "truth_authority": { "const": false },
+        "meaning_authority": { "const": false },
+        "proof_authority": { "const": false },
+        "validity_authority": { "const": false },
+        "qualification_authority": { "const": false },
+        "promotion_authority": { "const": false },
+        "commitment_authority": { "const": false },
+        "permission_authority": { "const": false },
+        "memory_write_authority": { "const": false },
+        "state_mutation_authority": { "const": false },
+        "halt_authority": { "const": false },
+        "causal_identification_authority": { "const": false },
+        "external_action_authority": { "const": false },
+        "self_modification_authority": { "const": false },
+        "emits_cncm_intents": { "const": false }
+      }
+    },
+    "packageStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package_maturity", "kernel_integration_status", "runtime_effect"],
+      "properties": {
+        "package_maturity": { "const": "EXPERIMENTAL" },
+        "kernel_integration_status": { "const": "NOT_KERNEL_INTEGRATED" },
+        "runtime_effect": { "const": "NONE" }
+      }
+    }
+  }
+}

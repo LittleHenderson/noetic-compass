@@ -1,0 +1,35 @@
+{
+  "schema_version": "cncm.problem/0.1",
+  "problem_id": "explicit_contradiction",
+  "goal_id": "evaluate_p",
+  "seed": 0,
+  "entities": [{"entity_id": "P", "entity_type": "symbol"}],
+  "predicates": [{"predicate_id": "holds", "argument_types": ["symbol"], "transitive": false}],
+  "facts": [
+    {
+      "predicate": "holds",
+      "arguments": ["P"],
+      "polarity": true,
+      "evidence_status": "asserted",
+      "provenance": [{"source_type": "fixture", "source_id": "positive_p"}]
+    },
+    {
+      "predicate": "holds",
+      "arguments": ["P"],
+      "polarity": false,
+      "evidence_status": "asserted",
+      "provenance": [{"source_type": "fixture", "source_id": "negative_p"}]
+    }
+  ],
+  "rules": [],
+  "query": {"predicate": "holds", "arguments": ["P"], "polarity": true},
+  "budgets": {
+    "max_ticks": 64,
+    "max_branches": 4,
+    "max_rpm_depth": 4,
+    "max_inference_steps": 32,
+    "max_memory_queries": 4,
+    "max_repeat_states": 3
+  }
+}
+

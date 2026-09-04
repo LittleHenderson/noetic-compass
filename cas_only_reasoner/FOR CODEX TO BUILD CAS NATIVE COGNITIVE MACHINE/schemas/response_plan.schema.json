@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/response_plan.schema.json",
+  "title": "CAS ResponsePlan v0.1",
+  "description": "An ordered, source-bound plan for controlled rendering. It cannot add semantic claims or authorize memory.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_id",
+    "conversation_id",
+    "in_reply_to_turn_id",
+    "source_result_id",
+    "source_result_status",
+    "authority_status",
+    "purpose",
+    "ordered_content_units",
+    "surface_constraints",
+    "exact_clarification",
+    "renderer_status",
+    "planned_text",
+    "trace_refs",
+    "memory_write"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.response_plan/0.1" },
+    "plan_id": { "$ref": "#/$defs/identifier" },
+    "conversation_id": { "$ref": "#/$defs/identifier" },
+    "in_reply_to_turn_id": { "$ref": "#/$defs/identifier" },
+    "source_result_id": { "$ref": "#/$defs/identifier" },
+    "source_result_status": {
+      "enum": [
+        "COMMITTED",
+        "NEEDS_INFORMATION",
+        "CONFLICT_UNRESOLVED",
+        "INADMISSIBLE",
+        "BUDGET_EXHAUSTED",
+        "UNSUPPORTED"
+      ]
+    },
+    "authority_status": { "enum": ["COMMITTED_SEMANTIC_RESULT", "TYPED_ABSTENTION"] },
+    "purpose": {
+      "enum": [
+        "ANSWER",
+        "CLARIFY",
+        "ACKNOWLEDGE_CORRECTION",
+        "ACKNOWLEDGE_TOPIC_SHIFT",
+        "REPORT_MEMORY",
+        "REPORT_LIMITATION"
+      ]
+    },
+    "ordered_content_units": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/content_unit" }
+    },
+    "surface_constraints": { "$ref": "#/$defs/surface_constraints" },
+    "exact_clarification": {
+      "oneOf": [
+        { "$ref": "#/$defs/exact_clarification" },
+        { "type": "null" }
+      ]
+    },
+    "renderer_status": {
+      "enum": [
+        "PROVISIONAL_NOT_IMPLEMENTED",
+        "DETERMINISTIC_TEMPLATE_AVAILABLE",
+        "EXTERNAL_PERIPHERAL_REQUIRED"
+      ]
+    },
+    "planned_text": { "type": ["string", "null"] },
+    "trace_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/identifier" },
+      "uniqueItems": true
+    },
+    "memory_write": { "$ref": "#/$defs/memory_write" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "source_result_status": { "const": "COMMITTED" } },
+        "required": ["source_result_status"]
+      },
+      "then": {
+        "properties": { "authority_status": { "const": "COMMITTED_SEMANTIC_RESULT" } }
+      },
+      "else": {
+        "properties": { "authority_status": { "const": "TYPED_ABSTENTION" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "purpose": { "const": "CLARIFY" } },
+        "required": ["purpose"]
+      },
+      "then": {
+        "properties": {
+          "source_result_status": { "const": "NEEDS_INFORMATION" },
+          "authority_status": { "const": "TYPED_ABSTENTION" },
+          "exact_clarification": { "$ref": "#/$defs/exact_clarification" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "renderer_status": { "const": "DETERMINISTIC_TEMPLATE_AVAILABLE" }
+        },
+        "required": ["renderer_status"]
+      },
+      "then": { "properties": { "planned_text": { "type": "string", "minLength": 1 } } }
+    },
+    {
+      "if": {
+        "properties": {
+          "memory_write": {
+            "type": "object",
+            "properties": { "proposal_status": { "const": "AUTHORIZED_BY_KERNEL" } },
+            "required": ["proposal_status"]
+          }
+        },
+        "required": ["memory_write"]
+      },
+      "then": {
+        "properties": {
+          "memory_write": {
+            "type": "object",
+            "properties": { "episode_id": { "$ref": "#/$defs/identifier" } },
+            "required": ["episode_id"]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$"
+    },
+    "content_unit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit_id", "kind", "semantic_text", "source_refs"],
+      "properties": {
+        "unit_id": { "$ref": "#/$defs/identifier" },
+        "kind": {
+          "enum": [
+            "ANSWER",
+            "CLARIFICATION_QUESTION",
+            "EVIDENCE",
+            "ASSUMPTION",
+            "LIMITATION",
+            "ACKNOWLEDGEMENT",
+            "CORRECTION",
+            "TOPIC_BRIDGE",
+            "MEMORY_ATTRIBUTION"
+          ]
+        },
+        "semantic_text": { "type": "string", "minLength": 1 },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/identifier" }
+        }
+      }
+    },
+    "surface_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language_profile", "tone", "max_sentences"],
+      "properties": {
+        "language_profile": { "const": "CCB-L1-CE-0.1" },
+        "tone": { "enum": ["NEUTRAL", "DIRECT", "CAUTIOUS"] },
+        "max_sentences": { "type": "integer", "minimum": 1, "maximum": 12 }
+      }
+    },
+    "exact_clarification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "missing_slots",
+        "candidate_entity_ids",
+        "question_text",
+        "resume_goal_id",
+        "rpm_child_goal_id"
+      ],
+      "properties": {
+        "missing_slots": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/identifier" },
+          "uniqueItems": true
+        },
+        "candidate_entity_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/identifier" },
+          "uniqueItems": true
+        },
+        "question_text": { "type": "string", "minLength": 1 },
+        "resume_goal_id": { "$ref": "#/$defs/identifier" },
+        "rpm_child_goal_id": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "memory_write": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposal_status", "episode_id", "authority_note"],
+      "properties": {
+        "proposal_status": {
+          "enum": ["NOT_REQUESTED", "PROPOSED", "AUTHORIZED_BY_KERNEL", "REJECTED"]
+        },
+        "episode_id": {
+          "oneOf": [
+            { "$ref": "#/$defs/identifier" },
+            { "type": "null" }
+          ]
+        },
+        "authority_note": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

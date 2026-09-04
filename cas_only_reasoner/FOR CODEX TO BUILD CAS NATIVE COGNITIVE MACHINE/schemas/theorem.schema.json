@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/theorem.schema.json",
+  "title": "Versioned CAS-Math Theorem Contract v0.1",
+  "description": "Frozen interface for a future M2 lemma library; storage and promotion are not implemented by this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["theorem_id", "theory_id", "assumptions", "conclusion", "proof_receipt_ids", "status", "provenance"],
+  "properties": {
+    "theorem_id": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.:\\-]*$" },
+    "theory_id": { "type": "string" },
+    "assumptions": { "type": "array", "items": { "$ref": "math_claim.schema.json" } },
+    "conclusion": { "$ref": "math_claim.schema.json" },
+    "proof_receipt_ids": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^math-receipt-[0-9a-f]{16}$" } },
+    "status": { "type": "string", "enum": ["PROPOSED", "VERIFIED", "REVOKED"] },
+    "provenance": { "type": "array", "items": { "$ref": "proposition.schema.json#/$defs/provenance" } }
+  }
+}

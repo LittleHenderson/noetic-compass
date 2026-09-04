@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/machine_state.schema.json",
+  "title": "CNCM MachineState v0.1",
+  "description": "The exact MachineState.to_dict() artifact shape used by the deterministic reference kernel.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "runtime_version",
+    "logical_tick",
+    "run_id",
+    "seed",
+    "constitution_revision",
+    "foundation_state",
+    "drive_state",
+    "domain_power_state",
+    "global_workspace",
+    "working_memory",
+    "episodic_memory",
+    "episodic_memory_revision",
+    "active_goal_id",
+    "rpm_stack",
+    "branch_table",
+    "pending_intents",
+    "commitment_state",
+    "learning_queue",
+    "halt_status",
+    "trace_head",
+    "state_hash",
+    "budget"
+  ],
+  "properties": {
+    "runtime_version": { "const": "0.1.0" },
+    "logical_tick": { "type": "integer", "minimum": 0 },
+    "run_id": { "type": "string", "pattern": "^run-[0-9a-f]{16}$" },
+    "seed": { "type": "integer", "minimum": 0 },
+    "constitution_revision": { "const": "cncm-constitution/0.1" },
+    "foundation_state": { "$ref": "#/$defs/foundation_state" },
+    "drive_state": { "$ref": "#/$defs/drive_state" },
+    "domain_power_state": { "$ref": "#/$defs/domain_power_state" },
+    "global_workspace": { "$ref": "#/$defs/global_workspace" },
+    "working_memory": {
+      "type": "array",
+      "items": { "$ref": "proposition.schema.json" }
+    },
+    "episodic_memory": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/episodic_record" }
+    },
+    "episodic_memory_revision": { "type": "integer", "minimum": 0 },
+    "active_goal_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+    "rpm_stack": {
+      "type": "array",
+      "items": { "$ref": "rpm_frame.schema.json" }
+    },
+    "branch_table": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "branch_frame.schema.json" }
+    },
+    "pending_intents": { "$ref": "#/$defs/intent_id_list" },
+    "commitment_state": { "$ref": "#/$defs/commitment_state" },
+    "learning_queue": { "$ref": "#/$defs/learning_queue" },
+    "halt_status": { "$ref": "#/$defs/terminal_status" },
+    "trace_head": { "$ref": "#/$defs/hash_or_empty" },
+    "state_hash": { "$ref": "#/$defs/hash" },
+    "budget": { "$ref": "#/$defs/budget_state" }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "hash_or_empty": {
+      "type": "string",
+      "pattern": "^$|^[0-9a-f]{64}$"
+    },
+    "identifier_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "proposition.schema.json#/$defs/identifier" }
+    },
+    "intent_id_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^intent-[0-9a-f]{16}$" }
+    },
+    "learning_queue": {
+      "type": "array",
+      "maxItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^episode-[0-9a-f]{16}$" }
+    },
+    "string_list": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "terminal_status": {
+      "type": "string",
+      "enum": ["RUNNING", "CONCLUDED", "NEEDS_INFORMATION", "CONFLICT_UNRESOLVED", "INADMISSIBLE", "BUDGET_EXHAUSTED", "FAULT"]
+    },
+    "exact_pair": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": false
+    },
+    "foundation_state": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "prefixItems": [
+        { "const": ["TF1", "UNSPECIFIED"] },
+        { "const": ["TF2", "UNSPECIFIED"] },
+        { "const": ["TF3", "UNSPECIFIED"] },
+        { "const": ["TF4", "UNSPECIFIED"] },
+        { "const": ["TF5", "UNSPECIFIED"] },
+        { "const": ["TF6", "UNSPECIFIED"] },
+        { "const": ["TF7", "UNSPECIFIED"] }
+      ],
+      "items": false
+    },
+    "drive_state": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "prefixItems": [
+        { "const": ["F1", "AVAILABLE"] },
+        { "const": ["F2", "AVAILABLE"] },
+        { "const": ["F3", "AVAILABLE"] },
+        { "const": ["F4", "AVAILABLE"] },
+        { "const": ["F5", "AVAILABLE"] },
+        { "const": ["F6", "AVAILABLE"] },
+        { "const": ["F7", "AVAILABLE"] }
+      ],
+      "items": false
+    },
+    "domain_power_state": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        { "const": ["P", "GOOD"] },
+        { "const": ["C", "GOOD"] },
+        { "const": ["E", "GOOD"] },
+        { "const": ["O", "ENABLED"] }
+      ],
+      "items": false
+    },
+    "comparison_metric": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        { "$ref": "proposition.schema.json#/$defs/identifier" },
+        {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": { "type": "integer", "minimum": 0 }
+        }
+      ],
+      "items": false
+    },
+    "comparison_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report_id", "evaluation_frame_hash", "ordered_branch_ids", "metrics", "shared_features", "differences", "winner_branch_id", "single_candidate_reason"],
+      "properties": {
+        "report_id": { "type": "string", "pattern": "^comparison-[0-9a-f]{16}$" },
+        "evaluation_frame_hash": { "$ref": "#/$defs/hash" },
+        "ordered_branch_ids": { "$ref": "#/$defs/identifier_list" },
+        "metrics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/comparison_metric" }
+        },
+        "shared_features": { "$ref": "#/$defs/string_list" },
+        "differences": { "$ref": "#/$defs/string_list" },
+        "winner_branch_id": {
+          "oneOf": [
+            { "$ref": "proposition.schema.json#/$defs/identifier" },
+            { "type": "null" }
+          ]
+        },
+        "single_candidate_reason": { "type": ["string", "null"] }
+      }
+    },
+    "global_workspace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["problem_id", "query", "recalled_memory_ids", "comparison_reports", "conclusion", "lacunae", "diagnostics"],
+      "properties": {
+        "problem_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+        "query": { "$ref": "proposition.schema.json" },
+        "recalled_memory_ids": { "$ref": "#/$defs/identifier_list" },
+        "comparison_reports": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/comparison_report" }
+        },
+        "conclusion": {
+          "oneOf": [
+            { "$ref": "proposition.schema.json" },
+            { "type": "null" }
+          ]
+        },
+        "lacunae": { "$ref": "#/$defs/string_list" },
+        "diagnostics": { "$ref": "#/$defs/string_list" }
+      }
+    },
+    "episodic_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["episode_id", "problem_id", "goal_id", "conclusion", "branch_id", "proof_digest", "trace_head", "final_state_hash", "verified"],
+      "properties": {
+        "episode_id": { "type": "string", "pattern": "^episode-[0-9a-f]{16}$" },
+        "problem_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+        "goal_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+        "conclusion": { "$ref": "proposition.schema.json" },
+        "branch_id": { "$ref": "proposition.schema.json#/$defs/identifier" },
+        "proof_digest": { "$ref": "#/$defs/hash" },
+        "trace_head": { "$ref": "#/$defs/hash" },
+        "final_state_hash": { "$ref": "#/$defs/hash" },
+        "verified": { "type": "boolean" }
+      }
+    },
+    "gate_pair": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "type": "string",
+          "enum": ["principled_gate", "derivation_complete", "comparison_stable", "rpm_sufficient", "contradiction_free", "provenance_present", "operational_ready"]
+        },
+        { "type": "boolean" }
+      ],
+      "items": false
+    },
+    "committed_gate_results": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "prefixItems": [
+        { "const": ["comparison_stable", true] },
+        { "const": ["contradiction_free", true] },
+        { "const": ["derivation_complete", true] },
+        { "const": ["operational_ready", true] },
+        { "const": ["principled_gate", true] },
+        { "const": ["provenance_present", true] },
+        { "const": ["rpm_sufficient", true] }
+      ],
+      "items": false
+    },
+    "commitment_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_status", "selected_branch_id", "conclusion", "gate_results"],
+      "properties": {
+        "decision_status": { "type": "string", "enum": ["UNCOMMITTED", "COMMITTED"] },
+        "selected_branch_id": {
+          "oneOf": [
+            { "$ref": "proposition.schema.json#/$defs/identifier" },
+            { "type": "null" }
+          ]
+        },
+        "conclusion": {
+          "oneOf": [
+            { "$ref": "proposition.schema.json" },
+            { "type": "null" }
+          ]
+        },
+        "gate_results": {
+          "oneOf": [
+            { "type": "array", "maxItems": 0 },
+            { "$ref": "#/$defs/committed_gate_results" }
+          ]
+        }
+      }
+    },
+    "budget_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ticks_remaining", "branches_remaining", "rpm_depth_limit", "inference_steps_remaining", "memory_queries_remaining"],
+      "properties": {
+        "ticks_remaining": { "type": "integer", "minimum": 0 },
+        "branches_remaining": { "type": "integer", "minimum": 0 },
+        "rpm_depth_limit": { "type": "integer", "minimum": 1 },
+        "inference_steps_remaining": { "type": "integer", "minimum": 0 },
+        "memory_queries_remaining": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

@@ -1,0 +1,357 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/language_promotion_receipt.schema.json",
+  "title": "CCB-L1 LanguagePromotionReceipt v0.1",
+  "description": "A non-authoritative record of a requested transition in an offline experimental grammar store. It is not a kernel intent, capability, or memory-write credential.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "promotion_receipt_id",
+    "action",
+    "construction_id",
+    "construction_version_id",
+    "construction_digest",
+    "lineage_id",
+    "lineage_digest",
+    "from_state",
+    "to_state",
+    "qualification_receipt_refs",
+    "gate_summary",
+    "rollback_target",
+    "requester",
+    "teacher_in_decision_role",
+    "cas_ohm_observation_refs",
+    "reason_codes",
+    "effect",
+    "created_at",
+    "integrity",
+    "authority_boundary",
+    "package_status"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.language_promotion_receipt/0.1" },
+    "promotion_receipt_id": { "$ref": "#/$defs/identifier" },
+    "action": {
+      "type": "string",
+      "enum": [
+        "CCB_L1_GRAM_REQUEST_PROVISIONAL_PROMOTION",
+        "CCB_L1_GRAM_REQUEST_DURABLE_PROMOTION",
+        "CCB_L1_GRAM_REQUEST_ACTIVATION",
+        "CCB_L1_GRAM_REQUEST_QUARANTINE",
+        "CCB_L1_GRAM_REQUEST_SUPERSESSION",
+        "CCB_L1_GRAM_REQUEST_ROLLBACK",
+        "CCB_L1_GRAM_REJECT_PROMOTION"
+      ]
+    },
+    "construction_id": { "$ref": "#/$defs/identifier" },
+    "construction_version_id": { "$ref": "#/$defs/identifier" },
+    "construction_digest": { "$ref": "#/$defs/digest" },
+    "lineage_id": { "$ref": "#/$defs/identifier" },
+    "lineage_digest": { "$ref": "#/$defs/digest" },
+    "from_state": { "$ref": "#/$defs/lifecycleState" },
+    "to_state": { "$ref": "#/$defs/lifecycleState" },
+    "qualification_receipt_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/qualificationReceiptRef" },
+      "uniqueItems": true,
+      "maxItems": 512
+    },
+    "gate_summary": { "$ref": "#/$defs/gateSummary" },
+    "rollback_target": {
+      "oneOf": [
+        { "$ref": "#/$defs/rollbackTarget" },
+        { "type": "null" }
+      ]
+    },
+    "requester": { "$ref": "#/$defs/requester" },
+    "teacher_in_decision_role": { "const": false },
+    "cas_ohm_observation_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/casOhmObservationRef" },
+      "uniqueItems": true,
+      "maxItems": 128
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reasonCode" },
+      "minItems": 1,
+      "uniqueItems": true,
+      "maxItems": 128
+    },
+    "effect": { "$ref": "#/$defs/effect" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "integrity": { "$ref": "#/$defs/integrity" },
+    "authority_boundary": { "$ref": "#/$defs/authorityBoundary" },
+    "package_status": { "$ref": "#/$defs/packageStatus" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "action": { "const": "CCB_L1_GRAM_REQUEST_PROVISIONAL_PROMOTION" } }, "required": ["action"] },
+      "then": {
+        "properties": {
+          "from_state": { "const": "CCB_L1_GRAM_AMBIGUITY_BEHAVIOR_PASS" },
+          "to_state": { "const": "CCB_L1_GRAM_PROMOTED_PROVISIONALLY" },
+          "qualification_receipt_refs": { "minItems": 7 },
+          "gate_summary": { "$ref": "#/$defs/provisionalPassGateSummary" },
+          "rollback_target": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "action": { "const": "CCB_L1_GRAM_REQUEST_DURABLE_PROMOTION" } }, "required": ["action"] },
+      "then": {
+        "properties": {
+          "from_state": { "const": "CCB_L1_GRAM_DELAYED_RETENTION_PASS" },
+          "to_state": { "const": "CCB_L1_GRAM_PROMOTED_DURABLY" },
+          "qualification_receipt_refs": { "minItems": 8 },
+          "gate_summary": { "$ref": "#/$defs/durablePassGateSummary" },
+          "rollback_target": { "$ref": "#/$defs/rollbackTarget" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "action": { "const": "CCB_L1_GRAM_REQUEST_ACTIVATION" } }, "required": ["action"] },
+      "then": {
+        "properties": {
+          "from_state": { "const": "CCB_L1_GRAM_PROMOTED_DURABLY" },
+          "to_state": { "const": "CCB_L1_GRAM_ACTIVE" },
+          "gate_summary": { "$ref": "#/$defs/durablePassGateSummary" },
+          "rollback_target": { "$ref": "#/$defs/rollbackTarget" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "action": { "const": "CCB_L1_GRAM_REQUEST_QUARANTINE" } }, "required": ["action"] },
+      "then": { "properties": { "to_state": { "const": "CCB_L1_GRAM_QUARANTINED" } } }
+    },
+    {
+      "if": { "properties": { "action": { "const": "CCB_L1_GRAM_REQUEST_SUPERSESSION" } }, "required": ["action"] },
+      "then": {
+        "properties": {
+          "from_state": { "const": "CCB_L1_GRAM_ACTIVE" },
+          "to_state": { "const": "CCB_L1_GRAM_SUPERSEDED" },
+          "rollback_target": { "$ref": "#/$defs/rollbackTarget" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "action": { "const": "CCB_L1_GRAM_REQUEST_ROLLBACK" } }, "required": ["action"] },
+      "then": {
+        "properties": {
+          "to_state": { "const": "CCB_L1_GRAM_ROLLED_BACK" },
+          "rollback_target": { "$ref": "#/$defs/rollbackTarget" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "action": { "const": "CCB_L1_GRAM_REJECT_PROMOTION" } }, "required": ["action"] },
+      "then": { "properties": { "to_state": { "const": "CCB_L1_GRAM_QUARANTINED" } } }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$",
+      "maxLength": 256
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "CCB_L1_GRAM_PROPOSED",
+        "CCB_L1_GRAM_SCHEMA_VALID",
+        "CCB_L1_GRAM_COMPILED",
+        "CCB_L1_GRAM_POSITIVE_EXAMPLES_PASS",
+        "CCB_L1_GRAM_CONTRAST_TESTS_PASS",
+        "CCB_L1_GRAM_HELD_OUT_GENERALIZATION_PASS",
+        "CCB_L1_GRAM_PRIOR_GRAMMAR_REGRESSION_PASS",
+        "CCB_L1_GRAM_AMBIGUITY_BEHAVIOR_PASS",
+        "CCB_L1_GRAM_PROMOTED_PROVISIONALLY",
+        "CCB_L1_GRAM_DELAYED_RETENTION_PASS",
+        "CCB_L1_GRAM_PROMOTED_DURABLY",
+        "CCB_L1_GRAM_ACTIVE",
+        "CCB_L1_GRAM_QUARANTINED",
+        "CCB_L1_GRAM_SUPERSEDED",
+        "CCB_L1_GRAM_ROLLED_BACK"
+      ]
+    },
+    "qualificationReceiptRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qualification_receipt_id", "qualification_stage", "receipt_result", "receipt_digest", "evidence_channel"],
+      "properties": {
+        "qualification_receipt_id": { "$ref": "#/$defs/identifier" },
+        "qualification_stage": { "$ref": "#/$defs/qualificationStage" },
+        "receipt_result": { "const": "CCB_L1_QUAL_PASS" },
+        "receipt_digest": { "$ref": "#/$defs/digest" },
+        "evidence_channel": { "type": "string", "enum": ["CCB_L1_EVIDENCE_DEVELOPMENT", "CCB_L1_EVIDENCE_PROTECTED_HELD_OUT", "CCB_L1_EVIDENCE_FROZEN_REGRESSION", "CCB_L1_EVIDENCE_DELAYED_RETENTION"] }
+      }
+    },
+    "gateSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_valid", "compiled", "positive_examples_pass", "contrast_tests_pass", "held_out_generalization_pass", "prior_grammar_regression_pass", "ambiguity_behavior_pass", "deterministic_replay_pass", "provenance_complete", "custody_verified", "delayed_retention_pass", "lineage_complete", "rollback_target_available", "critical_failure_count"],
+      "properties": {
+        "schema_valid": { "type": "boolean" },
+        "compiled": { "type": "boolean" },
+        "positive_examples_pass": { "type": "boolean" },
+        "contrast_tests_pass": { "type": "boolean" },
+        "held_out_generalization_pass": { "type": "boolean" },
+        "prior_grammar_regression_pass": { "type": "boolean" },
+        "ambiguity_behavior_pass": { "type": "boolean" },
+        "deterministic_replay_pass": { "type": "boolean" },
+        "provenance_complete": { "type": "boolean" },
+        "custody_verified": { "type": "boolean" },
+        "delayed_retention_pass": { "type": "boolean" },
+        "lineage_complete": { "type": "boolean" },
+        "rollback_target_available": { "type": "boolean" },
+        "critical_failure_count": { "type": "integer", "minimum": 0, "maximum": 100000 }
+      }
+    },
+    "qualificationStage": {
+      "type": "string",
+      "enum": [
+        "CCB_L1_GRAM_SCHEMA_VALID",
+        "CCB_L1_GRAM_COMPILED",
+        "CCB_L1_GRAM_POSITIVE_EXAMPLES_PASS",
+        "CCB_L1_GRAM_CONTRAST_TESTS_PASS",
+        "CCB_L1_GRAM_HELD_OUT_GENERALIZATION_PASS",
+        "CCB_L1_GRAM_PRIOR_GRAMMAR_REGRESSION_PASS",
+        "CCB_L1_GRAM_AMBIGUITY_BEHAVIOR_PASS",
+        "CCB_L1_GRAM_DELAYED_RETENTION_PASS"
+      ]
+    },
+    "provisionalPassGateSummary": {
+      "allOf": [
+        { "$ref": "#/$defs/gateSummary" },
+        {
+          "properties": {
+            "schema_valid": { "const": true },
+            "compiled": { "const": true },
+            "positive_examples_pass": { "const": true },
+            "contrast_tests_pass": { "const": true },
+            "held_out_generalization_pass": { "const": true },
+            "prior_grammar_regression_pass": { "const": true },
+            "ambiguity_behavior_pass": { "const": true },
+            "deterministic_replay_pass": { "const": true },
+            "provenance_complete": { "const": true },
+            "custody_verified": { "const": true },
+            "critical_failure_count": { "const": 0 }
+          }
+        }
+      ]
+    },
+    "durablePassGateSummary": {
+      "allOf": [
+        { "$ref": "#/$defs/provisionalPassGateSummary" },
+        {
+          "properties": {
+            "delayed_retention_pass": { "const": true },
+            "lineage_complete": { "const": true },
+            "rollback_target_available": { "const": true }
+          }
+        }
+      ]
+    },
+    "rollbackTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ancestor_version_id", "ancestor_construction_digest", "ancestor_lifecycle_state", "ancestor_qualification_digest", "is_qualified_ancestor"],
+      "properties": {
+        "ancestor_version_id": { "$ref": "#/$defs/identifier" },
+        "ancestor_construction_digest": { "$ref": "#/$defs/digest" },
+        "ancestor_lifecycle_state": { "$ref": "#/$defs/lifecycleState" },
+        "ancestor_qualification_digest": { "$ref": "#/$defs/digest" },
+        "is_qualified_ancestor": { "const": true }
+      }
+    },
+    "requester": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requester_id", "requester_role", "request_artifact_id", "request_artifact_digest"],
+      "properties": {
+        "requester_id": { "$ref": "#/$defs/identifier" },
+        "requester_role": { "type": "string", "enum": ["EXPERIMENTAL_LANGUAGE_QUALIFICATION_CONTROLLER", "INDEPENDENT_HUMAN_REVIEWER"] },
+        "request_artifact_id": { "$ref": "#/$defs/identifier" },
+        "request_artifact_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "casOhmObservationRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_id", "record_digest", "use", "semantic_correctness_authority", "promotion_authority", "causal_identification_authority"],
+      "properties": {
+        "record_id": { "$ref": "#/$defs/identifier" },
+        "record_digest": { "$ref": "#/$defs/digest" },
+        "use": { "const": "OBSERVATION_ONLY" },
+        "semantic_correctness_authority": { "const": false },
+        "promotion_authority": { "const": false },
+        "causal_identification_authority": { "const": false }
+      }
+    },
+    "reasonCode": {
+      "type": "string",
+      "enum": ["ALL_PROVISIONAL_GATES_PASS", "ALL_DURABLE_GATES_PASS", "QUALIFIED_ACTIVATION_REQUEST", "CRITICAL_FAILURE", "NONCRITICAL_REGRESSION", "CUSTODY_BREACH", "REPLAY_MISMATCH", "PROVENANCE_INCOMPLETE", "QUALIFIED_DESCENDANT_AVAILABLE", "QUALIFIED_ANCESTOR_RESTORE", "HUMAN_REVIEW_HOLD", "OTHER_DECLARED_REASON"]
+    },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_effect", "authorized_by_kernel", "kernel_state_write_performed", "memory_write_performed", "runtime_code_modified", "authority_manifest_modified"],
+      "properties": {
+        "receipt_effect": { "const": "CCB_L1_PROMOTION_RECORDED_ONLY" },
+        "authorized_by_kernel": { "const": false },
+        "kernel_state_write_performed": { "const": false },
+        "memory_write_performed": { "const": false },
+        "runtime_code_modified": { "const": false },
+        "authority_manifest_modified": { "const": false }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_algorithm", "canonicalization", "receipt_digest", "previous_receipt_chain_digest", "receipt_chain_digest", "sealed"],
+      "properties": {
+        "hash_algorithm": { "const": "SHA-256" },
+        "canonicalization": { "const": "CNCM_CANONICAL_JSON_V0.1_WITHOUT_INTEGRITY_RECEIPT_DIGESTS" },
+        "receipt_digest": { "$ref": "#/$defs/digest" },
+        "previous_receipt_chain_digest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "receipt_chain_digest": { "$ref": "#/$defs/digest" },
+        "sealed": { "const": true }
+      }
+    },
+    "authorityBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transition_request_record_only", "truth_authority", "meaning_authority", "proof_authority", "promotion_authority", "commitment_authority", "permission_authority", "memory_write_authority", "state_mutation_authority", "halt_authority", "external_action_authority", "self_modification_authority", "emits_cncm_intents"],
+      "properties": {
+        "transition_request_record_only": { "const": true },
+        "truth_authority": { "const": false },
+        "meaning_authority": { "const": false },
+        "proof_authority": { "const": false },
+        "promotion_authority": { "const": false },
+        "commitment_authority": { "const": false },
+        "permission_authority": { "const": false },
+        "memory_write_authority": { "const": false },
+        "state_mutation_authority": { "const": false },
+        "halt_authority": { "const": false },
+        "external_action_authority": { "const": false },
+        "self_modification_authority": { "const": false },
+        "emits_cncm_intents": { "const": false }
+      }
+    },
+    "packageStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package_maturity", "kernel_integration_status", "runtime_effect"],
+      "properties": {
+        "package_maturity": { "const": "EXPERIMENTAL" },
+        "kernel_integration_status": { "const": "NOT_KERNEL_INTEGRATED" },
+        "runtime_effect": { "const": "NONE" }
+      }
+    }
+  }
+}

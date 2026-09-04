@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/version_lineage.schema.json",
+  "title": "CCB-L1 VersionLineage v0.1",
+  "description": "Append-only version ancestry and transition evidence for one experimental grammar construction. It records lineage but cannot install, promote, or roll back runtime state.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lineage_id",
+    "artifact_kind",
+    "artifact_id",
+    "root_version_id",
+    "current_version_id",
+    "nodes",
+    "transitions",
+    "attestations",
+    "integrity",
+    "authority_boundary",
+    "package_status"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.version_lineage/0.1" },
+    "lineage_id": { "$ref": "#/$defs/identifier" },
+    "artifact_kind": { "const": "CCB_L1_GRAMMAR_CONSTRUCTION" },
+    "artifact_id": { "$ref": "#/$defs/identifier" },
+    "root_version_id": { "$ref": "#/$defs/identifier" },
+    "current_version_id": { "$ref": "#/$defs/identifier" },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/versionNode" },
+      "minItems": 1,
+      "uniqueItems": true,
+      "maxItems": 100000
+    },
+    "transitions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/versionTransition" },
+      "uniqueItems": true,
+      "maxItems": 100000
+    },
+    "attestations": { "$ref": "#/$defs/attestations" },
+    "integrity": { "$ref": "#/$defs/integrity" },
+    "authority_boundary": { "$ref": "#/$defs/authorityBoundary" },
+    "package_status": { "$ref": "#/$defs/packageStatus" }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$",
+      "maxLength": 256
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "lifecycleState": {
+      "type": "string",
+      "enum": [
+        "CCB_L1_GRAM_PROPOSED",
+        "CCB_L1_GRAM_SCHEMA_VALID",
+        "CCB_L1_GRAM_COMPILED",
+        "CCB_L1_GRAM_POSITIVE_EXAMPLES_PASS",
+        "CCB_L1_GRAM_CONTRAST_TESTS_PASS",
+        "CCB_L1_GRAM_HELD_OUT_GENERALIZATION_PASS",
+        "CCB_L1_GRAM_PRIOR_GRAMMAR_REGRESSION_PASS",
+        "CCB_L1_GRAM_AMBIGUITY_BEHAVIOR_PASS",
+        "CCB_L1_GRAM_PROMOTED_PROVISIONALLY",
+        "CCB_L1_GRAM_DELAYED_RETENTION_PASS",
+        "CCB_L1_GRAM_PROMOTED_DURABLY",
+        "CCB_L1_GRAM_ACTIVE",
+        "CCB_L1_GRAM_QUARANTINED",
+        "CCB_L1_GRAM_SUPERSEDED",
+        "CCB_L1_GRAM_ROLLED_BACK"
+      ]
+    },
+    "receiptReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_id", "receipt_type", "receipt_digest"],
+      "properties": {
+        "receipt_id": { "$ref": "#/$defs/identifier" },
+        "receipt_type": { "type": "string", "enum": ["CCB_L1_QUALIFICATION_RECEIPT", "CCB_L1_PROMOTION_RECEIPT"] },
+        "receipt_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "versionNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version_id", "parent_version_ids", "construction_digest", "lifecycle_state", "source_lesson_id", "source_lesson_digest", "receipt_refs", "created_at", "rollback_eligible"],
+      "properties": {
+        "version_id": { "$ref": "#/$defs/identifier" },
+        "parent_version_ids": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "uniqueItems": true, "maxItems": 8 },
+        "construction_digest": { "$ref": "#/$defs/digest" },
+        "lifecycle_state": { "$ref": "#/$defs/lifecycleState" },
+        "source_lesson_id": { "$ref": "#/$defs/identifier" },
+        "source_lesson_digest": { "$ref": "#/$defs/digest" },
+        "receipt_refs": { "type": "array", "items": { "$ref": "#/$defs/receiptReference" }, "uniqueItems": true, "maxItems": 512 },
+        "created_at": { "type": "string", "format": "date-time" },
+        "rollback_eligible": { "type": "boolean" }
+      }
+    },
+    "versionTransition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transition_id", "action", "from_version_id", "to_version_id", "from_state", "to_state", "promotion_receipt_id", "promotion_receipt_digest", "reason_code", "evidence_digest", "recorded_at"],
+      "properties": {
+        "transition_id": { "$ref": "#/$defs/identifier" },
+        "action": {
+          "type": "string",
+          "enum": [
+            "CCB_L1_GRAM_REQUEST_PROVISIONAL_PROMOTION",
+            "CCB_L1_GRAM_REQUEST_DURABLE_PROMOTION",
+            "CCB_L1_GRAM_REQUEST_ACTIVATION",
+            "CCB_L1_GRAM_REQUEST_QUARANTINE",
+            "CCB_L1_GRAM_REQUEST_SUPERSESSION",
+            "CCB_L1_GRAM_REQUEST_ROLLBACK",
+            "CCB_L1_GRAM_REJECT_PROMOTION"
+          ]
+        },
+        "from_version_id": { "$ref": "#/$defs/identifier" },
+        "to_version_id": { "$ref": "#/$defs/identifier" },
+        "from_state": { "$ref": "#/$defs/lifecycleState" },
+        "to_state": { "$ref": "#/$defs/lifecycleState" },
+        "promotion_receipt_id": { "$ref": "#/$defs/identifier" },
+        "promotion_receipt_digest": { "$ref": "#/$defs/digest" },
+        "reason_code": {
+          "type": "string",
+          "enum": ["QUALIFICATION_ADVANCE", "PROVISIONAL_PROMOTION", "DELAYED_RETENTION", "DURABLE_PROMOTION", "ACTIVATION", "CRITICAL_FAILURE", "CUSTODY_BREACH", "REGRESSION", "QUALIFIED_DESCENDANT", "QUALIFIED_ANCESTOR_RESTORE", "HUMAN_REVIEW_HOLD", "OTHER_DECLARED_REASON"]
+        },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "attestations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["append_only", "version_ids_unique", "transition_ids_unique", "acyclic", "all_parents_present", "all_receipts_present", "current_version_present", "rollback_targets_are_ancestors", "digests_verified"],
+      "properties": {
+        "append_only": { "const": true },
+        "version_ids_unique": { "const": true },
+        "transition_ids_unique": { "const": true },
+        "acyclic": { "const": true },
+        "all_parents_present": { "const": true },
+        "all_receipts_present": { "const": true },
+        "current_version_present": { "const": true },
+        "rollback_targets_are_ancestors": { "const": true },
+        "digests_verified": { "const": true }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_algorithm", "canonicalization", "lineage_digest", "previous_lineage_digest", "sealed"],
+      "properties": {
+        "hash_algorithm": { "const": "SHA-256" },
+        "canonicalization": { "const": "CNCM_CANONICAL_JSON_V0.1_WITHOUT_INTEGRITY_LINEAGE_DIGEST" },
+        "lineage_digest": { "$ref": "#/$defs/digest" },
+        "previous_lineage_digest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "sealed": { "const": true }
+      }
+    },
+    "authorityBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lineage_record_only", "truth_authority", "meaning_authority", "proof_authority", "promotion_authority", "commitment_authority", "permission_authority", "memory_write_authority", "state_mutation_authority", "halt_authority", "external_action_authority", "self_modification_authority", "emits_cncm_intents"],
+      "properties": {
+        "lineage_record_only": { "const": true },
+        "truth_authority": { "const": false },
+        "meaning_authority": { "const": false },
+        "proof_authority": { "const": false },
+        "promotion_authority": { "const": false },
+        "commitment_authority": { "const": false },
+        "permission_authority": { "const": false },
+        "memory_write_authority": { "const": false },
+        "state_mutation_authority": { "const": false },
+        "halt_authority": { "const": false },
+        "external_action_authority": { "const": false },
+        "self_modification_authority": { "const": false },
+        "emits_cncm_intents": { "const": false }
+      }
+    },
+    "packageStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package_maturity", "kernel_integration_status", "runtime_effect"],
+      "properties": {
+        "package_maturity": { "const": "EXPERIMENTAL" },
+        "kernel_integration_status": { "const": "NOT_KERNEL_INTEGRATED" },
+        "runtime_effect": { "const": "NONE" }
+      }
+    }
+  }
+}

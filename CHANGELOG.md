@@ -4,6 +4,20 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-04 - CASformer v0.2 source freeze
+
+- Accepted the GLM execution audit as `CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL`.
+- Froze the unchanged 50-file v0.2 controlled source set, its source manifest,
+  tests, schemas, demo, and wheel-build configuration under
+  `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/`.
+- Added the hash-locked CPython 3.14 Windows CPU dependency set and committed
+  the frozen 26-file `CASFORMER_v0_1` sibling source required by v0.2.
+- Clean wheel installation, pristine-worktree reproduction, blocker attacks,
+  and evidence binding remain for a separate evidence commit tied to the
+  source-freeze SHA.
+- No language capability, general reasoning capability, CAS-specific
+  advantage, CNCM brain completion, AGI, or production readiness is claimed.
+
 ## 2026-09-02 - CPB-0 DO_NOT_BUILD at $0; the question itself was malformed
 
 Second design retired at zero cost in a row. This one is not "designed badly" - the corpus lacks

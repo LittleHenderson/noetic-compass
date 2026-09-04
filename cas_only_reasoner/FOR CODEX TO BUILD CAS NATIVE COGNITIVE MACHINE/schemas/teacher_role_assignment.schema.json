@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/teacher_role_assignment.schema.json",
+  "title": "CCB-T1 TeacherRoleAssignment v0.1",
+  "description": "A proposal-only faculty assignment. No assigned role includes protected examination, grading, promotion, permission, memory-write, or state-mutation authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "assignment_id",
+    "teaching_episode_id",
+    "assignment_version",
+    "teacher",
+    "assigned_roles",
+    "domain_scope",
+    "channel_scope",
+    "destination_scope",
+    "proposal_duties",
+    "examination_separation",
+    "protected_category_permissions",
+    "created_at",
+    "integrity",
+    "authority_boundary",
+    "package_status"
+  ],
+  "properties": {
+    "schema_version": { "const": "cas.teacher_role_assignment/0.1" },
+    "assignment_id": { "$ref": "#/$defs/identifier" },
+    "teaching_episode_id": { "$ref": "#/$defs/identifier" },
+    "assignment_version": { "$ref": "#/$defs/identifier" },
+    "teacher": { "$ref": "#/$defs/teacherIdentity" },
+    "assigned_roles": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/teacherRole" },
+      "minItems": 1,
+      "maxItems": 7,
+      "uniqueItems": true
+    },
+    "domain_scope": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/domain" },
+      "minItems": 1,
+      "maxItems": 14,
+      "uniqueItems": true
+    },
+    "channel_scope": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/channel" },
+      "minItems": 1,
+      "maxItems": 5,
+      "uniqueItems": true
+    },
+    "destination_scope": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/destination" },
+      "minItems": 1,
+      "maxItems": 12,
+      "uniqueItems": true
+    },
+    "proposal_duties": { "$ref": "#/$defs/proposalDuties" },
+    "examination_separation": { "$ref": "#/$defs/examinationSeparation" },
+    "protected_category_permissions": { "$ref": "#/$defs/protectedCategoryPermissions" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "integrity": { "$ref": "#/$defs/integrity" },
+    "authority_boundary": { "$ref": "#/$defs/authorityBoundary" },
+    "package_status": { "$ref": "#/$defs/packageStatus" }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.:-]*$",
+      "maxLength": 256
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "teacherRole": {
+      "type": "string",
+      "enum": [
+        "CCB_T1_ROLE_LECTURER",
+        "CCB_T1_ROLE_DEMONSTRATOR",
+        "CCB_T1_ROLE_SOCRATIC_TUTOR",
+        "CCB_T1_ROLE_CURRICULUM_DESIGNER",
+        "CCB_T1_ROLE_ADVERSARY",
+        "CCB_T1_ROLE_CRITIC",
+        "CCB_T1_ROLE_RESEARCH_MENTOR"
+      ]
+    },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "CCB_T1_DOMAIN_LANGUAGE",
+        "CCB_T1_DOMAIN_WORLD_KNOWLEDGE",
+        "CCB_T1_DOMAIN_REASONING_STRATEGY",
+        "CCB_T1_DOMAIN_MATHEMATICS",
+        "CCB_T1_DOMAIN_SOFTWARE_ENGINEERING",
+        "CCB_T1_DOMAIN_TOOL_USE",
+        "CCB_T1_DOMAIN_RESEARCH_METHOD",
+        "CCB_T1_DOMAIN_MEMORY_ORGANIZATION",
+        "CCB_T1_DOMAIN_METACOGNITION",
+        "CCB_T1_DOMAIN_SOCIAL_CONVERSATION",
+        "CCB_T1_DOMAIN_CREATIVITY",
+        "CCB_T1_DOMAIN_BOARD_DESIGN",
+        "CCB_T1_DOMAIN_SELF_DIAGNOSIS",
+        "CCB_T1_DOMAIN_MULTIMODAL_PERCEPTION"
+      ]
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "CCB_T1_CHANNEL_EXPLICIT_SYMBOLIC",
+        "CCB_T1_CHANNEL_DEMONSTRATION_PROCEDURAL_INDUCTION",
+        "CCB_T1_CHANNEL_NEURAL_DISTILLATION",
+        "CCB_T1_CHANNEL_RETRIEVAL_LINKED_KNOWLEDGE",
+        "CCB_T1_CHANNEL_SYNTHETIC_EXPERIENCE"
+      ]
+    },
+    "destination": {
+      "type": "string",
+      "enum": [
+        "CCB_T1_DEST_CAS_SEM_CONCEPT_CANDIDATE",
+        "CCB_T1_DEST_SOURCE_LINKED_RETRIEVAL_RECORD_CANDIDATE",
+        "CCB_T1_DEST_PROCEDURAL_RECIPE_CANDIDATE",
+        "CCB_T1_DEST_LANGUAGE_CONSTRUCTION_CANDIDATE",
+        "CCB_T1_DEST_DIALOGUE_PROCEDURE_CANDIDATE",
+        "CCB_T1_DEST_STRATEGY_BOARD_CANDIDATE",
+        "CCB_T1_DEST_CCDL_BOARD_CANDIDATE",
+        "CCB_T1_DEST_REPLACEABLE_NEURAL_PROPOSAL_SUBBOARD_CANDIDATE",
+        "CCB_T1_DEST_CAS_SDG_CURRICULUM_CANDIDATE",
+        "CCB_T1_DEST_EPISODIC_TRAINING_RECORD_CANDIDATE",
+        "CCB_T1_DEST_PERCEPTION_GROUNDING_CURRICULUM_CANDIDATE",
+        "CCB_T1_DEST_PROTECTED_REVIEW_ONLY"
+      ]
+    },
+    "teacherIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["teacher_id", "provider_id", "model_id", "model_revision", "model_digest", "adapter_revision", "adapter_digest", "identity_digest"],
+      "properties": {
+        "teacher_id": { "$ref": "#/$defs/identifier" },
+        "provider_id": { "$ref": "#/$defs/identifier" },
+        "model_id": { "$ref": "#/$defs/identifier" },
+        "model_revision": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "model_digest": { "$ref": "#/$defs/digest" },
+        "adapter_revision": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "adapter_digest": { "$ref": "#/$defs/digest" },
+        "identity_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "proposalDuties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["may_propose_lessons", "may_explain", "may_demonstrate", "may_generate_development_cases", "may_critique", "may_propose_curriculum", "may_generate_protected_cases", "may_select_protected_seeds", "may_view_protected_before_seal", "may_configure_frozen_verifier", "may_grade", "may_promote", "may_write_memory", "may_mutate_state", "may_grant_permissions"],
+      "properties": {
+        "may_propose_lessons": { "const": true },
+        "may_explain": { "type": "boolean" },
+        "may_demonstrate": { "type": "boolean" },
+        "may_generate_development_cases": { "type": "boolean" },
+        "may_critique": { "type": "boolean" },
+        "may_propose_curriculum": { "type": "boolean" },
+        "may_generate_protected_cases": { "const": false },
+        "may_select_protected_seeds": { "const": false },
+        "may_view_protected_before_seal": { "const": false },
+        "may_configure_frozen_verifier": { "const": false },
+        "may_grade": { "const": false },
+        "may_promote": { "const": false },
+        "may_write_memory": { "const": false },
+        "may_mutate_state": { "const": false },
+        "may_grant_permissions": { "const": false }
+      }
+    },
+    "examinationSeparation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["faculty_group_id", "proposal_identity_digest", "independent_examiner_ids", "protected_custodian_ids", "frozen_verifier_custodian_id", "teacher_distinct_from_examiner", "teacher_distinct_from_protected_custodians", "teacher_distinct_from_verifier_custodian", "self_grading_prohibited", "custody_manifest_digest"],
+      "properties": {
+        "faculty_group_id": { "$ref": "#/$defs/identifier" },
+        "proposal_identity_digest": { "$ref": "#/$defs/digest" },
+        "independent_examiner_ids": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "minItems": 1, "uniqueItems": true, "maxItems": 64 },
+        "protected_custodian_ids": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "minItems": 2, "uniqueItems": true, "maxItems": 64 },
+        "frozen_verifier_custodian_id": { "$ref": "#/$defs/identifier" },
+        "teacher_distinct_from_examiner": { "const": true },
+        "teacher_distinct_from_protected_custodians": { "const": true },
+        "teacher_distinct_from_verifier_custodian": { "const": true },
+        "self_grading_prohibited": { "const": true },
+        "custody_manifest_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "protectedCategoryPermissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_contract_autonomous_promotion", "sole_writer_rule_autonomous_promotion", "proof_checker_autonomous_promotion", "trace_verifier_autonomous_promotion", "protected_benchmarks_autonomous_promotion", "constitutional_values_autonomous_promotion", "deployment_permissions_autonomous_promotion", "rollback_machinery_autonomous_promotion", "definition_of_improvement_autonomous_promotion"],
+      "properties": {
+        "authority_contract_autonomous_promotion": { "const": false },
+        "sole_writer_rule_autonomous_promotion": { "const": false },
+        "proof_checker_autonomous_promotion": { "const": false },
+        "trace_verifier_autonomous_promotion": { "const": false },
+        "protected_benchmarks_autonomous_promotion": { "const": false },
+        "constitutional_values_autonomous_promotion": { "const": false },
+        "deployment_permissions_autonomous_promotion": { "const": false },
+        "rollback_machinery_autonomous_promotion": { "const": false },
+        "definition_of_improvement_autonomous_promotion": { "const": false }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_algorithm", "canonicalization", "assignment_digest", "sealed"],
+      "properties": {
+        "hash_algorithm": { "const": "SHA-256" },
+        "canonicalization": { "const": "CNCM_CANONICAL_JSON_V0.1_WITHOUT_INTEGRITY_ASSIGNMENT_DIGEST" },
+        "assignment_digest": { "$ref": "#/$defs/digest" },
+        "sealed": { "const": true }
+      }
+    },
+    "authorityBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposal_role_only", "truth_authority", "meaning_authority", "proof_authority", "validity_authority", "qualification_authority", "promotion_authority", "commitment_authority", "permission_authority", "memory_write_authority", "state_mutation_authority", "halt_authority", "external_action_authority", "self_modification_authority", "emits_cncm_intents"],
+      "properties": {
+        "proposal_role_only": { "const": true },
+        "truth_authority": { "const": false },
+        "meaning_authority": { "const": false },
+        "proof_authority": { "const": false },
+        "validity_authority": { "const": false },
+        "qualification_authority": { "const": false },
+        "promotion_authority": { "const": false },
+        "commitment_authority": { "const": false },
+        "permission_authority": { "const": false },
+        "memory_write_authority": { "const": false },
+        "state_mutation_authority": { "const": false },
+        "halt_authority": { "const": false },
+        "external_action_authority": { "const": false },
+        "self_modification_authority": { "const": false },
+        "emits_cncm_intents": { "const": false }
+      }
+    },
+    "packageStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package_maturity", "kernel_integration_status", "runtime_effect"],
+      "properties": {
+        "package_maturity": { "const": "EXPERIMENTAL" },
+        "kernel_integration_status": { "const": "NOT_KERNEL_INTEGRATED" },
+        "runtime_effect": { "const": "NONE" }
+      }
+    }
+  }
+}

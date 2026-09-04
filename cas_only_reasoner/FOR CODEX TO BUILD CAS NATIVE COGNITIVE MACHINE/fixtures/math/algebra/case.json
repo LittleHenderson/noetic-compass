@@ -1,0 +1,13 @@
+{
+  "schema_version": "cncm.math-fixture/0.1",
+  "fixture_id": "math_linear_parentheses",
+  "category": "algebra",
+  "operation": "solve_linear",
+  "input": { "notation": "2*(x+3)=14", "variable": "x" },
+  "expected": {
+    "terminal_status": "VERIFIED",
+    "solution": { "numerator": 4, "denominator": 1 },
+    "minimum_checked_steps": 4
+  },
+  "runtime_status": "EXECUTABLE"
+}

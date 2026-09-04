@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/math_object.schema.json",
+  "title": "CAS-Math Object v0.1",
+  "description": "Tagged union for the implemented exact expression, statement, and claim objects.",
+  "oneOf": [
+    { "$ref": "math_expression.schema.json" },
+    { "$ref": "math_statement.schema.json" },
+    { "$ref": "math_claim.schema.json" }
+  ]
+}

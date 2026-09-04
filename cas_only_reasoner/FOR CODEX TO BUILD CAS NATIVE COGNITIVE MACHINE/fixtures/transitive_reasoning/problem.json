@@ -1,0 +1,52 @@
+{
+  "schema_version": "cncm.problem/0.1",
+  "problem_id": "transitive_precedes",
+  "goal_id": "establish_a_precedes_c",
+  "seed": 0,
+  "entities": [
+    {"entity_id": "A", "entity_type": "node"},
+    {"entity_id": "B", "entity_type": "node"},
+    {"entity_id": "C", "entity_type": "node"}
+  ],
+  "predicates": [
+    {"predicate_id": "precedes", "argument_types": ["node", "node"], "transitive": true}
+  ],
+  "facts": [
+    {
+      "predicate": "precedes",
+      "arguments": ["A", "B"],
+      "polarity": true,
+      "evidence_status": "asserted",
+      "provenance": [{"source_type": "fixture", "source_id": "a_before_b"}]
+    },
+    {
+      "predicate": "precedes",
+      "arguments": ["B", "C"],
+      "polarity": true,
+      "evidence_status": "asserted",
+      "provenance": [{"source_type": "fixture", "source_id": "b_before_c"}]
+    }
+  ],
+  "rules": [
+    {
+      "rule_id": "precedes_transitive",
+      "operation": "INFER_TRANSITIVE",
+      "antecedents": [
+        {"predicate": "precedes", "arguments": ["?x", "?y"], "polarity": true},
+        {"predicate": "precedes", "arguments": ["?y", "?z"], "polarity": true}
+      ],
+      "consequent": {"predicate": "precedes", "arguments": ["?x", "?z"], "polarity": true},
+      "provenance": [{"source_type": "fixture", "source_id": "transitivity_rule"}]
+    }
+  ],
+  "query": {"predicate": "precedes", "arguments": ["A", "C"], "polarity": true},
+  "budgets": {
+    "max_ticks": 64,
+    "max_branches": 4,
+    "max_rpm_depth": 4,
+    "max_inference_steps": 32,
+    "max_memory_queries": 4,
+    "max_repeat_states": 3
+  }
+}
+

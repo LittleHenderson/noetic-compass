@@ -1,0 +1,260 @@
+{
+  "aggregate_sha256": "5fad64a52c8aef30d56e46fa22f113c26bc171a3016d326c3c88157425b798f1",
+  "claim_boundary": "One local prototype satisfying the owner's 15-behavior definition of the first complete neural CJT; not the complete CAS-native Transformer, CNCM brain, general reasoning system, AGI, or production system; no claim that CAS improves learning or reasoning.",
+  "file_count": 50,
+  "files": [
+    {
+      "bytes": 11440,
+      "path": "API_CONTRACTS.md",
+      "sha256": "8108d1d64060909664d6469f9bd19d3f38b34c844a8b9100f972967fe1d3c40c"
+    },
+    {
+      "bytes": 11014,
+      "path": "ARCHITECTURE.md",
+      "sha256": "f106b98a995c41ad21c9908145a83d5860eed3a1706897ff924674b6f691c7cf"
+    },
+    {
+      "bytes": 10911,
+      "path": "BUILD_CONTRACT.md",
+      "sha256": "d8e3614ae2002e71846a2dad36c7f0704bd66a945cedd72c8a59c858ef6a2130"
+    },
+    {
+      "bytes": 4527,
+      "path": "CNCM_INTEGRATION_BOUNDARY.md",
+      "sha256": "e344aa672c96e6217b19afe73861f594548df779b622641af63b30785fb98c8f"
+    },
+    {
+      "bytes": 11611,
+      "path": "EQUATIONS.md",
+      "sha256": "9a76aca4e13dd5d2eda5af4f418c331d47162c57ab8333ef2d75a9b747e34fef"
+    },
+    {
+      "bytes": 5566,
+      "path": "MEMORY_RESEARCH_PLAN.md",
+      "sha256": "cd572275203506da859494798b7e7526e62bbe90574841716076ce79b580778a"
+    },
+    {
+      "bytes": 5948,
+      "path": "OPERATION_EXPANSION.md",
+      "sha256": "6ffa951f67639b0d70dd4558f0526a590614550007749dc5e45d47363dafd069"
+    },
+    {
+      "bytes": 6817,
+      "path": "README.md",
+      "sha256": "5c421ffb890f654d94186a96410b634a9236d9f63e6204c8ceccf3807304d4a1"
+    },
+    {
+      "bytes": 7652,
+      "path": "ROADMAP.md",
+      "sha256": "16832ec858ca2647cde4673ba2fb51a653f5a06a69f95fce5ee23708a1f16bbf"
+    },
+    {
+      "bytes": 7967,
+      "path": "cas_cjt/__init__.py",
+      "sha256": "bf2efe9075aa870fe4db1c9523a895cd3c2a223fd01884077d78f72a5c57d57e"
+    },
+    {
+      "bytes": 11568,
+      "path": "cas_cjt/artifacts.py",
+      "sha256": "32ec61a5aa69f6949e71450f221a6ca9fc4f460e38ca32511e5ab7b80be2f67d"
+    },
+    {
+      "bytes": 10135,
+      "path": "cas_cjt/checkpoint.py",
+      "sha256": "a2647420bb7e7925854790217f6e884ef5f4f110948434cf9566e59da515a876"
+    },
+    {
+      "bytes": 17467,
+      "path": "cas_cjt/cncm_bridge.py",
+      "sha256": "fc25c9836f284abb6bf1378ba0d92021a9f3e03b4ee70df00bce2dcedf3ceb71"
+    },
+    {
+      "bytes": 4840,
+      "path": "cas_cjt/contracts.py",
+      "sha256": "f6aa55ed306dafe9c2e4553b74e9cdb42d8cab2641e53b2cf3c916ec1ade2b29"
+    },
+    {
+      "bytes": 19784,
+      "path": "cas_cjt/control.py",
+      "sha256": "fee2b8386feb5ad8b27f95c916a7632d4e6d6fa5365091ec2d2ef3eeb9e46804"
+    },
+    {
+      "bytes": 63668,
+      "path": "cas_cjt/coordinator.py",
+      "sha256": "16f4f30321bff3a0e9c7f7d191e1e9358eb13ec97e16b23f71bc9dd6b0c72d48"
+    },
+    {
+      "bytes": 31689,
+      "path": "cas_cjt/learning.py",
+      "sha256": "143d12791a5bb4666f2bf3831a4c0ddd072d9e94765340678b668f662a728fca"
+    },
+    {
+      "bytes": 6295,
+      "path": "cas_cjt/memory.py",
+      "sha256": "7047c40396fc2ed79910064c738b4a08740720846f24d62160603532dca8f687"
+    },
+    {
+      "bytes": 5914,
+      "path": "cas_cjt/network.py",
+      "sha256": "748ef8585c84e64e00de99c8b5b320fedb5ef738d7947afb008a2cf250fe1d1f"
+    },
+    {
+      "bytes": 184930,
+      "path": "cas_cjt/network_coordinator.py",
+      "sha256": "4820106b4499d19fd6eb1932f3efa13725c3d13e733403a3ec386d1f0399a1c2"
+    },
+    {
+      "bytes": 16546,
+      "path": "cas_cjt/neural.py",
+      "sha256": "03521d2b17311680fd91cde7076e4bf5b38393f0d6db115d47be20f63413fc96"
+    },
+    {
+      "bytes": 210780,
+      "path": "cas_cjt/persistence.py",
+      "sha256": "94eaf401078a248b9420f4b573b4fad02f0e30b7df9f0c84f74668b130570882"
+    },
+    {
+      "bytes": 5869,
+      "path": "cas_cjt/phase_contract.py",
+      "sha256": "adaf34a73d4f1352c269f2a8bb9c4ef92fb0d4dba7018c05079aa05f9b124817"
+    },
+    {
+      "bytes": 6921,
+      "path": "cas_cjt/proposals.py",
+      "sha256": "31f8731cdc0fb34df23fb6cef1b434d687153a017a3cc1695f39f14fe96fa522"
+    },
+    {
+      "bytes": 8641,
+      "path": "cas_cjt/readiness.py",
+      "sha256": "334771da6ebfb2feadaf0e5319f72f807f7c5cc1e959baf090e89a6535a8dba9"
+    },
+    {
+      "bytes": 12818,
+      "path": "cas_cjt/repair.py",
+      "sha256": "49108e6d1bdd9d566a9243a409073544a798ea6c9277787f292e7376449e1a75"
+    },
+    {
+      "bytes": 35048,
+      "path": "cas_cjt/routing.py",
+      "sha256": "711f09ebc8bfddf36c88811ce445738e2da9ce7ab032da918615ea5115826f04"
+    },
+    {
+      "bytes": 67044,
+      "path": "cas_cjt/runtime.py",
+      "sha256": "5eda27339d0d216d5359116617c6dc8c9f99c376d6cfa6be386845b59ec00187"
+    },
+    {
+      "bytes": 14152,
+      "path": "cas_cjt/schemas/bias_state.schema.json",
+      "sha256": "1dde977869dd55d91311a33e2b9c526083922dda7ca189b3bed4d6cfeb33417a"
+    },
+    {
+      "bytes": 49670,
+      "path": "cas_cjt/schemas/neural_cjt_contracts.schema.json",
+      "sha256": "35d304a3c51b0687a63c40c65c52a6cdf7eddcda8c2ee28e2234a0a4d1641969"
+    },
+    {
+      "bytes": 8323,
+      "path": "cas_cjt/semantic.py",
+      "sha256": "826de6ff11dde52e3b7796e53aee8cca26519366ab14b4490bdf7ecfd75832bf"
+    },
+    {
+      "bytes": 28665,
+      "path": "cas_cjt/state.py",
+      "sha256": "5be617d5e3dc2f9590076ac07f1b0325ce9bf5465b7766315a3322f390b94240"
+    },
+    {
+      "bytes": 14908,
+      "path": "cas_cjt/trace.py",
+      "sha256": "ba3166e9009c56876a6c5d355036cf840f9f22a3939c8310e7762c221877ecc8"
+    },
+    {
+      "bytes": 54045,
+      "path": "cas_cjt/types.py",
+      "sha256": "ee3b24468397a5529937eb738c9a82addebc28dec8893544b8be4bebcf2bf560"
+    },
+    {
+      "bytes": 14418,
+      "path": "cas_cjt/verifier.py",
+      "sha256": "c1604059580a553e131233ecdbb5b1de8439edbba03865f7985a71b0dfdfb736"
+    },
+    {
+      "bytes": 9223,
+      "path": "examples/complete_reasoning_transistor.py",
+      "sha256": "dbb254a78d2da77c890292cc339f8ab94dac6481de1709bde248fc1a59f01a3c"
+    },
+    {
+      "bytes": 997,
+      "path": "pyproject.toml",
+      "sha256": "10f7678c1540bcd14e80cb349ae235b9acc7242a00b96b72ca31f5c4103d1f58"
+    },
+    {
+      "bytes": 61,
+      "path": "pytest.ini",
+      "sha256": "10c8afc1e94e07a713f35b7dd36bcf34ff7ab5a4af9391ebb8adb6491be1995c"
+    },
+    {
+      "bytes": 11926,
+      "path": "tests/test_cncm_bridge.py",
+      "sha256": "1dcb4e3c21e1cea2ec613515584f427cbb469328f43e6879a2b9abed1c78d753"
+    },
+    {
+      "bytes": 23082,
+      "path": "tests/test_governed_learning.py",
+      "sha256": "9c6ac88df16382d30f1a3a8c74db6ece5d24a882d1d53540f474310d916a7141"
+    },
+    {
+      "bytes": 30728,
+      "path": "tests/test_integrated_runtime.py",
+      "sha256": "9afcc232eabb828180aebd55497b7a8836b54ad924766d606dc8a7971c242047"
+    },
+    {
+      "bytes": 105820,
+      "path": "tests/test_network_coordinator.py",
+      "sha256": "e45e0aeb67c21da97fbddcc905d8e10a3f36a6ed3282a5de796892516b0b21c6"
+    },
+    {
+      "bytes": 30566,
+      "path": "tests/test_neural_core.py",
+      "sha256": "233ad522cdb0139ee2d1200fb325d3745e743db2838b16a5ea28ff10e8a76531"
+    },
+    {
+      "bytes": 49065,
+      "path": "tests/test_persistence_coordinator_trace.py",
+      "sha256": "931a6bacab4f40247ad9db4d32c6eb90f73b39d00be889e182437f627e79f82a"
+    },
+    {
+      "bytes": 7125,
+      "path": "tests/test_public_api.py",
+      "sha256": "e3d97fea2010044b9991052073be50a25492f2a203f0de194f10e3b31ae3aaa9"
+    },
+    {
+      "bytes": 1080,
+      "path": "tests/test_readiness_axes.py",
+      "sha256": "3b53ae2dbb12aa1022691fd5084ec2fdf9eeb08e597dfe3237a27d1423fc8826"
+    },
+    {
+      "bytes": 3989,
+      "path": "tests/test_repair_bounds.py",
+      "sha256": "3051b9dcb466093c07a881e500e146fce7fa4695425d96d970deeaca80f3ccf3"
+    },
+    {
+      "bytes": 5632,
+      "path": "tests/test_source_manifest.py",
+      "sha256": "b21e14b3598b134518de557c5287f0070fc50c9e140bd0493f19b97027bc76d7"
+    },
+    {
+      "bytes": 28009,
+      "path": "tests/test_types_and_schemas.py",
+      "sha256": "652fdc59c9d9b38ff7148a9e96dd073de0dc7496e7ce76b71aef80012736b0a8"
+    },
+    {
+      "bytes": 3790,
+      "path": "tools/build_source_manifest.py",
+      "sha256": "f1b37eb1adff572c4396398ae5dbe6ad4671a19ac7e6e57463d896db01f1da3c"
+    }
+  ],
+  "package_version": "0.2.0",
+  "schema_version": "cas.neural-cjt.source-manifest/0.2",
+  "status": "LOCAL_NEURAL_CJT_MECHANISM_PROTOTYPE_SOURCE_SET"
+}

@@ -1,0 +1,1206 @@
+[
+  {
+    "authorized_intent_ids": [
+      "intent-f36353223a72627c"
+    ],
+    "committed_mutations": [
+      "branch_table/branch-bad"
+    ],
+    "enabled_components": [
+      "branch_manager"
+    ],
+    "event_hash": "6e96c44b6ff6abb0e336bae73f35162a8012614d09a72ab46628b8c293d4b9b1",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000001",
+    "logical_tick": 1,
+    "parent_event_id": null,
+    "post_state_hash": "18ddb4c5f9066bf689b8eb4eb2cf89981148c6e28b8681794a47cf3c1649e741",
+    "pre_state_hash": "e9e55c1846fb66a93df566bf87d898aba91832fda579c12da29237f5252c0cd2",
+    "previous_event_hash": "",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-bad",
+        "created_at_tick": 0,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-f36353223a72627c",
+        "intent_type": "FORK_BRANCH",
+        "issuer_subsystem": "branch_manager",
+        "precondition": {
+          "state_hash": "e9e55c1846fb66a93df566bf87d898aba91832fda579c12da29237f5252c0cd2"
+        },
+        "proposed_mutation": {
+          "branch": {
+            "active_goal_id": "select_supported_q_path",
+            "assumptions": [],
+            "branch_id": "branch-bad",
+            "candidate_id": "bad",
+            "contradictions": [],
+            "created_at_tick": 0,
+            "decompositions": [],
+            "hard_constraints": [
+              {
+                "arguments": [
+                  "plan_bad"
+                ],
+                "evidence_status": "unknown",
+                "polarity": true,
+                "predicate": "allowed",
+                "provenance": [],
+                "scope": "global"
+              }
+            ],
+            "parent_branch_id": "branch-root",
+            "proof_steps": [],
+            "propositions": [
+              {
+                "arguments": [
+                  "R"
+                ],
+                "evidence_status": "asserted",
+                "polarity": true,
+                "predicate": "holds",
+                "provenance": [
+                  {
+                    "detail": "",
+                    "source_id": "bad_r",
+                    "source_type": "fixture"
+                  }
+                ],
+                "scope": "global"
+              },
+              {
+                "arguments": [
+                  "S"
+                ],
+                "evidence_status": "asserted",
+                "polarity": true,
+                "predicate": "holds",
+                "provenance": [
+                  {
+                    "detail": "",
+                    "source_id": "bad_s",
+                    "source_type": "fixture"
+                  }
+                ],
+                "scope": "global"
+              }
+            ],
+            "recalled_memory_ids": [],
+            "status": "OPEN",
+            "unknowns": []
+          }
+        },
+        "provenance": [
+          {
+            "detail": "declared candidate",
+            "source_id": "candidate_branch_rollback",
+            "source_type": "problem_packet"
+          }
+        ],
+        "required_capability": "fork_branch",
+        "target_scope": "branch_table"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "branch_manager"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-6a134690d9d42e9b"
+    ],
+    "committed_mutations": [
+      "branch_table/branch-good"
+    ],
+    "enabled_components": [
+      "branch_manager"
+    ],
+    "event_hash": "8502c8a7b86759f4bc3800691741faa5e2d34f5f12a3a3d71e73106dd5971f9c",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000002",
+    "logical_tick": 2,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000001",
+    "post_state_hash": "fd39e5e781ef871295883babbfb06b6b6d413b346c0b984318b4da3d84b4b748",
+    "pre_state_hash": "18ddb4c5f9066bf689b8eb4eb2cf89981148c6e28b8681794a47cf3c1649e741",
+    "previous_event_hash": "6e96c44b6ff6abb0e336bae73f35162a8012614d09a72ab46628b8c293d4b9b1",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-good",
+        "created_at_tick": 1,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-6a134690d9d42e9b",
+        "intent_type": "FORK_BRANCH",
+        "issuer_subsystem": "branch_manager",
+        "precondition": {
+          "state_hash": "18ddb4c5f9066bf689b8eb4eb2cf89981148c6e28b8681794a47cf3c1649e741"
+        },
+        "proposed_mutation": {
+          "branch": {
+            "active_goal_id": "select_supported_q_path",
+            "assumptions": [],
+            "branch_id": "branch-good",
+            "candidate_id": "good",
+            "contradictions": [],
+            "created_at_tick": 1,
+            "decompositions": [],
+            "hard_constraints": [
+              {
+                "arguments": [
+                  "plan_good"
+                ],
+                "evidence_status": "unknown",
+                "polarity": true,
+                "predicate": "allowed",
+                "provenance": [],
+                "scope": "global"
+              }
+            ],
+            "parent_branch_id": "branch-root",
+            "proof_steps": [],
+            "propositions": [
+              {
+                "arguments": [
+                  "plan_good"
+                ],
+                "evidence_status": "asserted",
+                "polarity": true,
+                "predicate": "allowed",
+                "provenance": [
+                  {
+                    "detail": "",
+                    "source_id": "good_allowed",
+                    "source_type": "fixture"
+                  }
+                ],
+                "scope": "global"
+              },
+              {
+                "arguments": [
+                  "P"
+                ],
+                "evidence_status": "asserted",
+                "polarity": true,
+                "predicate": "holds",
+                "provenance": [
+                  {
+                    "detail": "",
+                    "source_id": "good_p",
+                    "source_type": "fixture"
+                  }
+                ],
+                "scope": "global"
+              }
+            ],
+            "recalled_memory_ids": [],
+            "status": "OPEN",
+            "unknowns": []
+          }
+        },
+        "provenance": [
+          {
+            "detail": "declared candidate",
+            "source_id": "candidate_branch_rollback",
+            "source_type": "problem_packet"
+          }
+        ],
+        "required_capability": "fork_branch",
+        "target_scope": "branch_table"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "branch_manager"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-2be800347d795816"
+    ],
+    "committed_mutations": [
+      "branch/branch-root/status"
+    ],
+    "enabled_components": [
+      "branch_manager"
+    ],
+    "event_hash": "37d06c3b4eddcb219413cb1d91881b3ef69538d3e7cfa5cb0f4b1048e6c01ee5",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000003",
+    "logical_tick": 3,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000002",
+    "post_state_hash": "80752c05447e0eceb6d669ed6e00163ff2150ff02e3af5d73f63b3bba0b8c85f",
+    "pre_state_hash": "fd39e5e781ef871295883babbfb06b6b6d413b346c0b984318b4da3d84b4b748",
+    "previous_event_hash": "8502c8a7b86759f4bc3800691741faa5e2d34f5f12a3a3d71e73106dd5971f9c",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-root",
+        "created_at_tick": 2,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-2be800347d795816",
+        "intent_type": "DISCARD_BRANCH",
+        "issuer_subsystem": "branch_manager",
+        "precondition": {
+          "state_hash": "fd39e5e781ef871295883babbfb06b6b6d413b346c0b984318b4da3d84b4b748"
+        },
+        "proposed_mutation": {
+          "reason": "candidate expansion complete"
+        },
+        "provenance": [],
+        "required_capability": "discard_branch",
+        "target_scope": "branch:branch-root"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "branch_manager"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-9740e3005ff32c22"
+    ],
+    "committed_mutations": [
+      "branch/branch-bad/decomposition"
+    ],
+    "enabled_components": [
+      "reasoning_engine"
+    ],
+    "event_hash": "b8d713b4acb2b3875696cc3d63d633b35ee3e210e20a18d020dd33d2d841457f",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000004",
+    "logical_tick": 4,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000003",
+    "post_state_hash": "83fd671982b66b1fd4f6bf88bccbee08c511043551851c6381bd5cdd869b0099",
+    "pre_state_hash": "80752c05447e0eceb6d669ed6e00163ff2150ff02e3af5d73f63b3bba0b8c85f",
+    "previous_event_hash": "37d06c3b4eddcb219413cb1d91881b3ef69538d3e7cfa5cb0f4b1048e6c01ee5",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-bad",
+        "created_at_tick": 3,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-9740e3005ff32c22",
+        "intent_type": "RECORD_DECOMPOSITION",
+        "issuer_subsystem": "reasoning_engine",
+        "precondition": {
+          "state_hash": "80752c05447e0eceb6d669ed6e00163ff2150ff02e3af5d73f63b3bba0b8c85f"
+        },
+        "proposed_mutation": {
+          "decomposition": {
+            "assumptions": [],
+            "candidate_id": "bad",
+            "contradictions": [],
+            "dependencies": [
+              "p_implies_q",
+              "r_and_s_imply_q"
+            ],
+            "predicted_effects": [
+              "holds(Q)@global"
+            ],
+            "premises": [
+              "holds(P)@global",
+              "holds(R)@global",
+              "holds(S)@global"
+            ],
+            "required_prerequisites": [
+              "holds(P)@global"
+            ],
+            "unknowns": [
+              "holds(P)@global"
+            ]
+          }
+        },
+        "provenance": [
+          {
+            "detail": "declared decomposition",
+            "source_id": "noetic_6",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "decompose",
+        "target_scope": "branch:branch-bad"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "reasoning_engine"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-6d3925c56c387a40"
+    ],
+    "committed_mutations": [
+      "branch/branch-bad/proposition/holds(Q)@global"
+    ],
+    "enabled_components": [
+      "reasoning_engine"
+    ],
+    "event_hash": "8616fe0da9e9fc161ff8d06cf0f5c72c60ac8f6171592b695ee540bb2bcc0d42",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000005",
+    "logical_tick": 5,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000004",
+    "post_state_hash": "b04d20382d59da5c2ad042cd3e457c2872f3ce22aa365518d079715e102cc4de",
+    "pre_state_hash": "83fd671982b66b1fd4f6bf88bccbee08c511043551851c6381bd5cdd869b0099",
+    "previous_event_hash": "b8d713b4acb2b3875696cc3d63d633b35ee3e210e20a18d020dd33d2d841457f",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-bad",
+        "created_at_tick": 4,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-6d3925c56c387a40",
+        "intent_type": "DERIVE_PROPOSITION",
+        "issuer_subsystem": "reasoning_engine",
+        "precondition": {
+          "state_hash": "83fd671982b66b1fd4f6bf88bccbee08c511043551851c6381bd5cdd869b0099"
+        },
+        "proposed_mutation": {
+          "proof": {
+            "branch_id": "branch-bad",
+            "conclusion": {
+              "arguments": [
+                "Q"
+              ],
+              "evidence_status": "derived",
+              "polarity": true,
+              "predicate": "holds",
+              "provenance": [
+                {
+                  "detail": "",
+                  "source_id": "bad_rule",
+                  "source_type": "fixture"
+                },
+                {
+                  "detail": "declared CAS-Sem inference",
+                  "source_id": "r_and_s_imply_q",
+                  "source_type": "rule"
+                }
+              ],
+              "scope": "global"
+            },
+            "operation": "INFER_MODUS_PONENS",
+            "premise_keys": [
+              "holds(R)@global",
+              "holds(S)@global"
+            ],
+            "provenance": [
+              {
+                "detail": "",
+                "source_id": "bad_rule",
+                "source_type": "fixture"
+              },
+              {
+                "detail": "declared CAS-Sem inference",
+                "source_id": "r_and_s_imply_q",
+                "source_type": "rule"
+              }
+            ],
+            "rule_id": "r_and_s_imply_q",
+            "step_id": "proof-201dcabd8d3c3389",
+            "substitution": [],
+            "verified": true
+          }
+        },
+        "provenance": [
+          {
+            "detail": "",
+            "source_id": "bad_rule",
+            "source_type": "fixture"
+          },
+          {
+            "detail": "declared CAS-Sem inference",
+            "source_id": "r_and_s_imply_q",
+            "source_type": "rule"
+          }
+        ],
+        "required_capability": "derive_branch_local",
+        "target_scope": "branch:branch-bad"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "reasoning_engine"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-8a48451125263476"
+    ],
+    "committed_mutations": [
+      "branch/branch-bad/decomposition"
+    ],
+    "enabled_components": [
+      "reasoning_engine"
+    ],
+    "event_hash": "0a165e20510e93f6778567737028d0b184d3d22553be607913667f7160230490",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000006",
+    "logical_tick": 6,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000005",
+    "post_state_hash": "c8916a1c1d7171ba10f17102dcf283b518c269ff8ec8761f23f160b1d20f87cf",
+    "pre_state_hash": "b04d20382d59da5c2ad042cd3e457c2872f3ce22aa365518d079715e102cc4de",
+    "previous_event_hash": "8616fe0da9e9fc161ff8d06cf0f5c72c60ac8f6171592b695ee540bb2bcc0d42",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-bad",
+        "created_at_tick": 5,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-8a48451125263476",
+        "intent_type": "RECORD_DECOMPOSITION",
+        "issuer_subsystem": "reasoning_engine",
+        "precondition": {
+          "state_hash": "b04d20382d59da5c2ad042cd3e457c2872f3ce22aa365518d079715e102cc4de"
+        },
+        "proposed_mutation": {
+          "decomposition": {
+            "assumptions": [],
+            "candidate_id": "bad",
+            "contradictions": [],
+            "dependencies": [
+              "r_and_s_imply_q"
+            ],
+            "predicted_effects": [
+              "holds(Q)@global"
+            ],
+            "premises": [
+              "holds(R)@global",
+              "holds(S)@global"
+            ],
+            "required_prerequisites": [],
+            "unknowns": []
+          }
+        },
+        "provenance": [
+          {
+            "detail": "declared decomposition",
+            "source_id": "noetic_6",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "decompose",
+        "target_scope": "branch:branch-bad"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "reasoning_engine"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-ebb9ddb857e8500f"
+    ],
+    "committed_mutations": [
+      "branch/branch-good/decomposition"
+    ],
+    "enabled_components": [
+      "reasoning_engine"
+    ],
+    "event_hash": "0c99af47b4f9b84c694cc4be14a4df7f5a26a2e63dec7c86c10cf7c760ef3ab5",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000007",
+    "logical_tick": 7,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000006",
+    "post_state_hash": "3374db698467d21920f273ff00af67fc2534b22ad269a92df4a3d7344ffaa220",
+    "pre_state_hash": "c8916a1c1d7171ba10f17102dcf283b518c269ff8ec8761f23f160b1d20f87cf",
+    "previous_event_hash": "0a165e20510e93f6778567737028d0b184d3d22553be607913667f7160230490",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-good",
+        "created_at_tick": 6,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-ebb9ddb857e8500f",
+        "intent_type": "RECORD_DECOMPOSITION",
+        "issuer_subsystem": "reasoning_engine",
+        "precondition": {
+          "state_hash": "c8916a1c1d7171ba10f17102dcf283b518c269ff8ec8761f23f160b1d20f87cf"
+        },
+        "proposed_mutation": {
+          "decomposition": {
+            "assumptions": [],
+            "candidate_id": "good",
+            "contradictions": [],
+            "dependencies": [
+              "p_implies_q",
+              "r_and_s_imply_q"
+            ],
+            "predicted_effects": [
+              "holds(Q)@global"
+            ],
+            "premises": [
+              "holds(P)@global",
+              "holds(R)@global",
+              "holds(S)@global"
+            ],
+            "required_prerequisites": [
+              "holds(R)@global",
+              "holds(S)@global"
+            ],
+            "unknowns": [
+              "holds(R)@global",
+              "holds(S)@global"
+            ]
+          }
+        },
+        "provenance": [
+          {
+            "detail": "declared decomposition",
+            "source_id": "noetic_6",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "decompose",
+        "target_scope": "branch:branch-good"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "reasoning_engine"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-1454ae901a3a2862"
+    ],
+    "committed_mutations": [
+      "branch/branch-good/proposition/holds(Q)@global"
+    ],
+    "enabled_components": [
+      "reasoning_engine"
+    ],
+    "event_hash": "b68e052ab98327cfa05563bed9249457eec65c4052e01f8d7b22d0d2b87e31b9",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000008",
+    "logical_tick": 8,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000007",
+    "post_state_hash": "531e48098ab4ac995993bc16a3dc3074f7894466d018f40e036c973f31a557ef",
+    "pre_state_hash": "3374db698467d21920f273ff00af67fc2534b22ad269a92df4a3d7344ffaa220",
+    "previous_event_hash": "0c99af47b4f9b84c694cc4be14a4df7f5a26a2e63dec7c86c10cf7c760ef3ab5",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-good",
+        "created_at_tick": 7,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-1454ae901a3a2862",
+        "intent_type": "DERIVE_PROPOSITION",
+        "issuer_subsystem": "reasoning_engine",
+        "precondition": {
+          "state_hash": "3374db698467d21920f273ff00af67fc2534b22ad269a92df4a3d7344ffaa220"
+        },
+        "proposed_mutation": {
+          "proof": {
+            "branch_id": "branch-good",
+            "conclusion": {
+              "arguments": [
+                "Q"
+              ],
+              "evidence_status": "derived",
+              "polarity": true,
+              "predicate": "holds",
+              "provenance": [
+                {
+                  "detail": "",
+                  "source_id": "good_rule",
+                  "source_type": "fixture"
+                },
+                {
+                  "detail": "declared CAS-Sem inference",
+                  "source_id": "p_implies_q",
+                  "source_type": "rule"
+                }
+              ],
+              "scope": "global"
+            },
+            "operation": "INFER_MODUS_PONENS",
+            "premise_keys": [
+              "holds(P)@global"
+            ],
+            "provenance": [
+              {
+                "detail": "",
+                "source_id": "good_rule",
+                "source_type": "fixture"
+              },
+              {
+                "detail": "declared CAS-Sem inference",
+                "source_id": "p_implies_q",
+                "source_type": "rule"
+              }
+            ],
+            "rule_id": "p_implies_q",
+            "step_id": "proof-020c413610c2d3eb",
+            "substitution": [],
+            "verified": true
+          }
+        },
+        "provenance": [
+          {
+            "detail": "",
+            "source_id": "good_rule",
+            "source_type": "fixture"
+          },
+          {
+            "detail": "declared CAS-Sem inference",
+            "source_id": "p_implies_q",
+            "source_type": "rule"
+          }
+        ],
+        "required_capability": "derive_branch_local",
+        "target_scope": "branch:branch-good"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "reasoning_engine"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-367cf24b18177266"
+    ],
+    "committed_mutations": [
+      "branch/branch-good/decomposition"
+    ],
+    "enabled_components": [
+      "reasoning_engine"
+    ],
+    "event_hash": "edd626ac84621797cd848f3f842eecb8c4a97b652f41f0e741487cdd87d3efd7",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000009",
+    "logical_tick": 9,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000008",
+    "post_state_hash": "93a58ea4c3df4ed4f58a22a9e3a5f8276566a926c58d2343866580c40f961f8f",
+    "pre_state_hash": "531e48098ab4ac995993bc16a3dc3074f7894466d018f40e036c973f31a557ef",
+    "previous_event_hash": "b68e052ab98327cfa05563bed9249457eec65c4052e01f8d7b22d0d2b87e31b9",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-good",
+        "created_at_tick": 8,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-367cf24b18177266",
+        "intent_type": "RECORD_DECOMPOSITION",
+        "issuer_subsystem": "reasoning_engine",
+        "precondition": {
+          "state_hash": "531e48098ab4ac995993bc16a3dc3074f7894466d018f40e036c973f31a557ef"
+        },
+        "proposed_mutation": {
+          "decomposition": {
+            "assumptions": [],
+            "candidate_id": "good",
+            "contradictions": [],
+            "dependencies": [
+              "p_implies_q"
+            ],
+            "predicted_effects": [
+              "holds(Q)@global"
+            ],
+            "premises": [
+              "holds(P)@global"
+            ],
+            "required_prerequisites": [],
+            "unknowns": []
+          }
+        },
+        "provenance": [
+          {
+            "detail": "declared decomposition",
+            "source_id": "noetic_6",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "decompose",
+        "target_scope": "branch:branch-good"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "reasoning_engine"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-9a57673a2fe1b2a2"
+    ],
+    "committed_mutations": [
+      "branch/branch-bad/status"
+    ],
+    "enabled_components": [
+      "comparison_system"
+    ],
+    "event_hash": "bbc6af2f6110eb12d87c68f12652e48bdfa07c3a28ab25e59fcb3ac8cf61008d",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000010",
+    "logical_tick": 10,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000009",
+    "post_state_hash": "f387737b253727df517f362668f413bbb472a03a21679dec5a1be5cbca275471",
+    "pre_state_hash": "93a58ea4c3df4ed4f58a22a9e3a5f8276566a926c58d2343866580c40f961f8f",
+    "previous_event_hash": "edd626ac84621797cd848f3f842eecb8c4a97b652f41f0e741487cdd87d3efd7",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-bad",
+        "created_at_tick": 9,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-9a57673a2fe1b2a2",
+        "intent_type": "SET_BRANCH_STATUS",
+        "issuer_subsystem": "comparison_system",
+        "precondition": {
+          "state_hash": "93a58ea4c3df4ed4f58a22a9e3a5f8276566a926c58d2343866580c40f961f8f"
+        },
+        "proposed_mutation": {
+          "status": "BLOCKED"
+        },
+        "provenance": [
+          {
+            "detail": "shared-frame classification",
+            "source_id": "cdab",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "classify_candidate",
+        "target_scope": "branch:branch-bad"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "comparison_system"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-1e155065ac78daed"
+    ],
+    "committed_mutations": [
+      "branch/branch-good/status"
+    ],
+    "enabled_components": [
+      "comparison_system"
+    ],
+    "event_hash": "6ccb6875f60b9528222692f6b305b06259e17e1def456c9b32974964ceb22cc3",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000011",
+    "logical_tick": 11,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000010",
+    "post_state_hash": "30a6197d9b39c22f851f7a26348c9272bfab9b7c834d4e635717db73fade4ee5",
+    "pre_state_hash": "f387737b253727df517f362668f413bbb472a03a21679dec5a1be5cbca275471",
+    "previous_event_hash": "bbc6af2f6110eb12d87c68f12652e48bdfa07c3a28ab25e59fcb3ac8cf61008d",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-good",
+        "created_at_tick": 10,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-1e155065ac78daed",
+        "intent_type": "SET_BRANCH_STATUS",
+        "issuer_subsystem": "comparison_system",
+        "precondition": {
+          "state_hash": "f387737b253727df517f362668f413bbb472a03a21679dec5a1be5cbca275471"
+        },
+        "proposed_mutation": {
+          "status": "ADMISSIBLE"
+        },
+        "provenance": [
+          {
+            "detail": "shared-frame classification",
+            "source_id": "cdab",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "classify_candidate",
+        "target_scope": "branch:branch-good"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "comparison_system"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-9a026c52c68af13f"
+    ],
+    "committed_mutations": [
+      "global_workspace/comparison/comparison-a0e09a4e56383dac"
+    ],
+    "enabled_components": [
+      "comparison_system"
+    ],
+    "event_hash": "8311358920b3cc6016bda9c0c4094a695520fab4a29e333bc2c1e7f2acb288c8",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000012",
+    "logical_tick": 12,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000011",
+    "post_state_hash": "28b2e590d60ed4dc00cfdd547c36880dad542b44a539c648925a3f2da5837125",
+    "pre_state_hash": "30a6197d9b39c22f851f7a26348c9272bfab9b7c834d4e635717db73fade4ee5",
+    "previous_event_hash": "6ccb6875f60b9528222692f6b305b06259e17e1def456c9b32974964ceb22cc3",
+    "proposed_intents": [
+      {
+        "branch_id": null,
+        "created_at_tick": 11,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-9a026c52c68af13f",
+        "intent_type": "RECORD_COMPARISON",
+        "issuer_subsystem": "comparison_system",
+        "precondition": {
+          "state_hash": "30a6197d9b39c22f851f7a26348c9272bfab9b7c834d4e635717db73fade4ee5"
+        },
+        "proposed_mutation": {
+          "report": {
+            "differences": [
+              "branch-bad:1,1,0,0,0,1",
+              "branch-good:0,0,0,0,0,1"
+            ],
+            "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+            "metrics": [
+              [
+                "branch-bad",
+                [
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ],
+              [
+                "branch-good",
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1
+                ]
+              ]
+            ],
+            "ordered_branch_ids": [
+              "branch-bad",
+              "branch-good"
+            ],
+            "report_id": "comparison-a0e09a4e56383dac",
+            "shared_features": [
+              "holds(Q)@global",
+              "same_evaluation_frame"
+            ],
+            "single_candidate_reason": null,
+            "winner_branch_id": "branch-good"
+          }
+        },
+        "provenance": [
+          {
+            "detail": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+            "source_id": "cdab",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "compare_under_shared_frame",
+        "target_scope": "global_workspace"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "comparison_system"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-c831a1c6a229b381"
+    ],
+    "committed_mutations": [
+      "branch/branch-good/status"
+    ],
+    "enabled_components": [
+      "comparison_system"
+    ],
+    "event_hash": "70b9e91cbc421612160744c73b1895171e48e4902b376752953c67af13eced13",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000013",
+    "logical_tick": 13,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000012",
+    "post_state_hash": "4c22a02988c748a4a6d37637ef443413b014d52f2076882baad449d61b7bdc90",
+    "pre_state_hash": "28b2e590d60ed4dc00cfdd547c36880dad542b44a539c648925a3f2da5837125",
+    "previous_event_hash": "8311358920b3cc6016bda9c0c4094a695520fab4a29e333bc2c1e7f2acb288c8",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-good",
+        "created_at_tick": 12,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-c831a1c6a229b381",
+        "intent_type": "SET_BRANCH_STATUS",
+        "issuer_subsystem": "comparison_system",
+        "precondition": {
+          "state_hash": "28b2e590d60ed4dc00cfdd547c36880dad542b44a539c648925a3f2da5837125"
+        },
+        "proposed_mutation": {
+          "status": "SELECTED"
+        },
+        "provenance": [
+          {
+            "detail": "winner report only",
+            "source_id": "comparison-a0e09a4e56383dac",
+            "source_type": "comparison"
+          }
+        ],
+        "required_capability": "report_selected_candidate",
+        "target_scope": "branch:branch-good"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "comparison_system"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-846e20d1abbd3409"
+    ],
+    "committed_mutations": [
+      "commitment_state"
+    ],
+    "enabled_components": [
+      "commitment_latch"
+    ],
+    "event_hash": "a483614e106204bd70816bfea06240100f76321c11127ad48b3fe36e8798c2e0",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000014",
+    "logical_tick": 14,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000013",
+    "post_state_hash": "8fcd545b9458d1abd4434dc3a5f83382e44d1e19bd06336d5cbf8ea1588bcd66",
+    "pre_state_hash": "4c22a02988c748a4a6d37637ef443413b014d52f2076882baad449d61b7bdc90",
+    "previous_event_hash": "70b9e91cbc421612160744c73b1895171e48e4902b376752953c67af13eced13",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-good",
+        "created_at_tick": 13,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-846e20d1abbd3409",
+        "intent_type": "DECISION_COMMIT",
+        "issuer_subsystem": "commitment_latch",
+        "precondition": {
+          "state_hash": "4c22a02988c748a4a6d37637ef443413b014d52f2076882baad449d61b7bdc90"
+        },
+        "proposed_mutation": {
+          "conclusion": {
+            "arguments": [
+              "Q"
+            ],
+            "evidence_status": "derived",
+            "polarity": true,
+            "predicate": "holds",
+            "provenance": [
+              {
+                "detail": "",
+                "source_id": "good_rule",
+                "source_type": "fixture"
+              },
+              {
+                "detail": "declared CAS-Sem inference",
+                "source_id": "p_implies_q",
+                "source_type": "rule"
+              }
+            ],
+            "scope": "global"
+          },
+          "gate_results": {
+            "comparison_stable": true,
+            "contradiction_free": true,
+            "derivation_complete": true,
+            "operational_ready": true,
+            "principled_gate": true,
+            "provenance_present": true,
+            "rpm_sufficient": true
+          }
+        },
+        "provenance": [
+          {
+            "detail": "selected branch",
+            "source_id": "comparison-a0e09a4e56383dac",
+            "source_type": "comparison"
+          }
+        ],
+        "required_capability": "request_decision_commit",
+        "target_scope": "commitment_state"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "commitment_latch"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-7bdd1e399a01eb3c"
+    ],
+    "committed_mutations": [
+      "episodic_memory/episode-611477332a08f6b8"
+    ],
+    "enabled_components": [
+      "write_back_controller"
+    ],
+    "event_hash": "646801a680e236016800bc4e2b2d1618bf6e320a7ec9025325a5cc28713935c1",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000015",
+    "logical_tick": 15,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000014",
+    "post_state_hash": "df6f676d509d350f68033a21007d904095835c25f2ba56ff767a452f2982b729",
+    "pre_state_hash": "8fcd545b9458d1abd4434dc3a5f83382e44d1e19bd06336d5cbf8ea1588bcd66",
+    "previous_event_hash": "a483614e106204bd70816bfea06240100f76321c11127ad48b3fe36e8798c2e0",
+    "proposed_intents": [
+      {
+        "branch_id": "branch-good",
+        "created_at_tick": 14,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-7bdd1e399a01eb3c",
+        "intent_type": "WRITE_EPISODE",
+        "issuer_subsystem": "write_back_controller",
+        "precondition": {
+          "state_hash": "8fcd545b9458d1abd4434dc3a5f83382e44d1e19bd06336d5cbf8ea1588bcd66"
+        },
+        "proposed_mutation": {
+          "episode": {
+            "branch_id": "branch-good",
+            "conclusion": {
+              "arguments": [
+                "Q"
+              ],
+              "evidence_status": "derived",
+              "polarity": true,
+              "predicate": "holds",
+              "provenance": [
+                {
+                  "detail": "",
+                  "source_id": "good_rule",
+                  "source_type": "fixture"
+                },
+                {
+                  "detail": "declared CAS-Sem inference",
+                  "source_id": "p_implies_q",
+                  "source_type": "rule"
+                }
+              ],
+              "scope": "global"
+            },
+            "episode_id": "episode-611477332a08f6b8",
+            "final_state_hash": "8fcd545b9458d1abd4434dc3a5f83382e44d1e19bd06336d5cbf8ea1588bcd66",
+            "goal_id": "select_supported_q_path",
+            "problem_id": "candidate_branch_rollback",
+            "proof_digest": "2ccb99572c884b2bc20e0fcb04026adcd7b18140f7d3198e5c3c196ccaef7999",
+            "trace_head": "a483614e106204bd70816bfea06240100f76321c11127ad48b3fe36e8798c2e0",
+            "verified": true
+          }
+        },
+        "provenance": [
+          {
+            "detail": "committed and trace-bound",
+            "source_id": "run-2a7bb5c0a5b5a8b8",
+            "source_type": "decision"
+          }
+        ],
+        "required_capability": "write_committed_episode",
+        "target_scope": "episodic_memory"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "write_back_controller"
+    ],
+    "sealed": true,
+    "terminal_status": "RUNNING"
+  },
+  {
+    "authorized_intent_ids": [
+      "intent-d7e1d5dd8ff94a0e"
+    ],
+    "committed_mutations": [
+      "halt_status"
+    ],
+    "enabled_components": [
+      "halting_controller"
+    ],
+    "event_hash": "ca968fcfa6c5706f778efcc618b73b2867024429cda9418b759a59689e7d8caf",
+    "event_id": "event-run-2a7bb5c0a5b5a8b8-000016",
+    "logical_tick": 16,
+    "parent_event_id": "event-run-2a7bb5c0a5b5a8b8-000015",
+    "post_state_hash": "6a0c19afe1db1dee2c5ec74629c2e8be281bbebedbeeeb041a72824b2e4e339d",
+    "pre_state_hash": "df6f676d509d350f68033a21007d904095835c25f2ba56ff767a452f2982b729",
+    "previous_event_hash": "646801a680e236016800bc4e2b2d1618bf6e320a7ec9025325a5cc28713935c1",
+    "proposed_intents": [
+      {
+        "branch_id": null,
+        "created_at_tick": 15,
+        "goal_id": "select_supported_q_path",
+        "intent_id": "intent-d7e1d5dd8ff94a0e",
+        "intent_type": "HALT",
+        "issuer_subsystem": "halting_controller",
+        "precondition": {
+          "state_hash": "df6f676d509d350f68033a21007d904095835c25f2ba56ff767a452f2982b729"
+        },
+        "proposed_mutation": {
+          "diagnostics": [],
+          "lacunae": [],
+          "status": "CONCLUDED"
+        },
+        "provenance": [
+          {
+            "detail": "CONCLUDED",
+            "source_id": "halting_controller",
+            "source_type": "operation"
+          }
+        ],
+        "required_capability": "request_typed_halt",
+        "target_scope": "halt_status"
+      }
+    ],
+    "rejected_intents": [],
+    "run_id": "run-2a7bb5c0a5b5a8b8",
+    "runtime_version": "0.1.0",
+    "scheduled_components": [
+      "halting_controller"
+    ],
+    "sealed": true,
+    "terminal_status": "CONCLUDED"
+  }
+]

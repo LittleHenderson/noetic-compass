@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/proof_step.schema.json",
+  "title": "Checked CAS-Math Proof Step v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["index", "proposal", "receipt", "resulting_claim"],
+  "properties": {
+    "index": { "type": "integer", "minimum": 0 },
+    "proposal": { "$ref": "#/$defs/proposal" },
+    "receipt": { "$ref": "#/$defs/receipt" },
+    "resulting_claim": {
+      "oneOf": [
+        { "$ref": "math_claim.schema.json" },
+        { "type": "null" }
+      ]
+    }
+  },
+  "$defs": {
+    "proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposal_id", "operation", "premise_claim_ids", "proposed_conclusion", "parameter", "substitutions", "branch_id", "theory_id"],
+      "properties": {
+        "proposal_id": { "type": "string", "pattern": "^math-proposal-[0-9a-f]{16}$" },
+        "operation": { "$ref": "math_rule.schema.json#/properties/operation" },
+        "premise_claim_ids": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^math-claim-[0-9a-f]{16}$" }
+        },
+        "proposed_conclusion": { "$ref": "math_statement.schema.json" },
+        "parameter": {
+          "oneOf": [
+            { "$ref": "math_expression.schema.json" },
+            { "type": "null" }
+          ]
+        },
+        "substitutions": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+              { "$ref": "math_expression.schema.json" }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "branch_id": { "type": "string", "const": "math_root" },
+        "theory_id": { "type": "string", "const": "cncm.q-linear/0.1" }
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_id", "proposal_digest", "accepted", "reconstructed_conclusion", "discharged_guards", "checker_version", "theory_id", "rejection_code", "detail"],
+      "properties": {
+        "receipt_id": { "type": "string", "pattern": "^math-receipt-[0-9a-f]{16}$" },
+        "proposal_digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "accepted": { "type": "boolean" },
+        "reconstructed_conclusion": {
+          "oneOf": [
+            { "$ref": "math_statement.schema.json" },
+            { "type": "null" }
+          ]
+        },
+        "discharged_guards": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "checker_version": { "const": "cncm.math-checker/0.1" },
+        "theory_id": { "const": "cncm.q-linear/0.1" },
+        "rejection_code": {
+          "type": "string",
+          "enum": ["NONE", "UNKNOWN_PREMISE", "THEORY_MISMATCH", "UNVERIFIED_PREMISE", "WRONG_PREMISE_COUNT", "MALFORMED_PARAMETER", "INVALID_TRANSFORMATION", "UNDISCHARGED_GUARD", "NEEDS_CAPABILITY", "BUDGET_EXHAUSTED"]
+        },
+        "detail": { "type": "string" }
+      }
+    }
+  }
+}

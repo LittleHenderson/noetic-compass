@@ -1,0 +1,273 @@
+{
+  "fixture_version": "cas.conversation_fixture/0.1",
+  "fixture_id": "conversation_single_turn_001",
+  "category": "single_turn",
+  "qualification": {
+    "contract_status": "SUPPORTED",
+    "capability_claim": "PROVISIONAL",
+    "implementation_status": "UNSUPPORTED",
+    "evidence_status": "NOT_RUN",
+    "direct_semantic_runtime_status": "NOT_RUN"
+  },
+  "turns": [
+    {
+      "schema_version": "cas.dialogue_turn/0.1",
+      "conversation_id": "conv_single",
+      "turn_id": "turn_single_1",
+      "turn_index": 1,
+      "speaker_id": "user",
+      "speaker_role": "USER",
+      "input_mode": "CONTROLLED_ENGLISH",
+      "raw_text": "Alice owns the laptop.",
+      "normalized_text": "Alice owns the laptop.",
+      "language_profile": "CCB-L1-CE-0.1",
+      "acts": [
+        {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_single_1",
+          "turn_id": "turn_single_1",
+          "speaker_id": "user",
+          "act_type": "ASSERT",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_single_lang",
+          "status": "SELECTED",
+          "content_summary": "Assert that Alice owns the laptop.",
+          "commitments": [],
+          "provenance": [
+            {"source_type": "TURN", "source_id": "turn_single_1"}
+          ]
+        }
+      ],
+      "semantic_packet_ids": ["sp_single_lang"],
+      "state_before_revision": 0,
+      "state_after_revision": 1,
+      "processing_status": "ACCEPTED",
+      "trace_refs": []
+    }
+  ],
+  "semantic_pairs": [
+    {
+      "equivalence_id": "eq_single_1",
+      "language_packet": {
+        "schema_version": "cas.semantic_packet/0.1",
+        "packet_id": "sp_single_lang",
+        "source_turn_id": "turn_single_1",
+        "construction_mode": "CONTROLLED_ENGLISH",
+        "language_profile": "CCB-L1-CE-0.1",
+        "interpretation_status": "SELECTED",
+        "dialogue_act": {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_single_1",
+          "turn_id": "turn_single_1",
+          "speaker_id": "user",
+          "act_type": "ASSERT",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_single_lang",
+          "status": "SELECTED",
+          "content_summary": "Assert that Alice owns the laptop.",
+          "commitments": [],
+          "provenance": [{"source_type": "TURN", "source_id": "turn_single_1"}]
+        },
+        "semantic_content": {
+          "entities": [
+            {"entity_id": "alice", "entity_type": "PERSON", "canonical_label": "Alice"},
+            {"entity_id": "laptop", "entity_type": "OBJECT", "canonical_label": "the laptop"}
+          ],
+          "predicates": [
+            {
+              "predicate": "owns",
+              "arguments": ["alice", "laptop"],
+              "polarity": true,
+              "epistemic_status": "ASSERTED",
+              "source_refs": ["turn_single_1"]
+            }
+          ],
+          "events": [],
+          "discourse": {"topic_id": "topic_laptop", "anaphora": []},
+          "unresolved_slots": []
+        },
+        "ambiguity_candidates": [],
+        "unsupported_features": [],
+        "kernel_handoff": {
+          "contract": "SemanticPacket->ReasoningRequest/0.1",
+          "adapter_status": "PROVISIONAL_NOT_IMPLEMENTED",
+          "reasoning_request_id": "rr_single_1",
+          "semantic_atom_keys": ["owns(alice,laptop)"],
+          "authority_status": "REQUEST_ONLY"
+        },
+        "equivalence": {
+          "equivalence_id": "eq_single_1",
+          "paired_packet_id": "sp_single_direct",
+          "required_dimensions": [
+            "SEMANTIC_CONTENT",
+            "TERMINAL_DISPOSITION",
+            "BRANCH_TOPOLOGY",
+            "INFERENCE_TRACE",
+            "RPM_SUBGOALS",
+            "COMMITTED_RESULT",
+            "MEMORY_EFFECTS",
+            "RESPONSE_PLAN"
+          ],
+          "runtime_status": "NOT_RUN"
+        }
+      },
+      "direct_packet": {
+        "schema_version": "cas.semantic_packet/0.1",
+        "packet_id": "sp_single_direct",
+        "source_turn_id": "turn_single_1",
+        "construction_mode": "DIRECT_SEMANTIC",
+        "language_profile": "NONE",
+        "interpretation_status": "SELECTED",
+        "dialogue_act": {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_single_direct",
+          "turn_id": "turn_single_1",
+          "speaker_id": "user",
+          "act_type": "ASSERT",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_single_direct",
+          "status": "SELECTED",
+          "content_summary": "Assert that Alice owns the laptop.",
+          "commitments": [],
+          "provenance": [{"source_type": "TURN", "source_id": "turn_single_1"}]
+        },
+        "semantic_content": {
+          "entities": [
+            {"entity_id": "alice", "entity_type": "PERSON", "canonical_label": "Alice"},
+            {"entity_id": "laptop", "entity_type": "OBJECT", "canonical_label": "the laptop"}
+          ],
+          "predicates": [
+            {
+              "predicate": "owns",
+              "arguments": ["alice", "laptop"],
+              "polarity": true,
+              "epistemic_status": "ASSERTED",
+              "source_refs": ["turn_single_1"]
+            }
+          ],
+          "events": [],
+          "discourse": {"topic_id": "topic_laptop", "anaphora": []},
+          "unresolved_slots": []
+        },
+        "ambiguity_candidates": [],
+        "unsupported_features": [],
+        "kernel_handoff": {
+          "contract": "SemanticPacket->ReasoningRequest/0.1",
+          "adapter_status": "PROVISIONAL_NOT_IMPLEMENTED",
+          "reasoning_request_id": "rr_single_1",
+          "semantic_atom_keys": ["owns(alice,laptop)"],
+          "authority_status": "REQUEST_ONLY"
+        },
+        "equivalence": {
+          "equivalence_id": "eq_single_1",
+          "paired_packet_id": "sp_single_lang",
+          "required_dimensions": [
+            "SEMANTIC_CONTENT",
+            "TERMINAL_DISPOSITION",
+            "BRANCH_TOPOLOGY",
+            "INFERENCE_TRACE",
+            "RPM_SUBGOALS",
+            "COMMITTED_RESULT",
+            "MEMORY_EFFECTS",
+            "RESPONSE_PLAN"
+          ],
+          "runtime_status": "NOT_RUN"
+        }
+      }
+    }
+  ],
+  "final_state": {
+    "schema_version": "cas.dialogue_state/0.1",
+    "conversation_id": "conv_single",
+    "state_revision": 1,
+    "participants": [
+      {"participant_id": "mind", "role": "SYSTEM"},
+      {"participant_id": "user", "role": "USER"}
+    ],
+    "current_speaker": "user",
+    "next_speaker": "mind",
+    "current_topic": "topic_laptop",
+    "topic_stack": [
+      {"topic_id": "topic_laptop", "label": "laptop ownership", "introduced_turn_id": "turn_single_1", "status": "ACTIVE"}
+    ],
+    "referents": [
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_alice",
+        "entity_id": "alice",
+        "canonical_label": "Alice",
+        "entity_type": "PERSON",
+        "aliases": ["Alice"],
+        "introduced_turn_id": "turn_single_1",
+        "last_mentioned_turn_id": "turn_single_1",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "FEMININE",
+        "topic_id": "topic_laptop",
+        "resolution_status": "RESOLVED",
+        "candidates": [],
+        "provenance": [{"source_type": "TURN", "source_id": "turn_single_1"}]
+      },
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_laptop",
+        "entity_id": "laptop",
+        "canonical_label": "the laptop",
+        "entity_type": "OBJECT",
+        "aliases": ["the laptop"],
+        "introduced_turn_id": "turn_single_1",
+        "last_mentioned_turn_id": "turn_single_1",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "NEUTER",
+        "topic_id": "topic_laptop",
+        "resolution_status": "RESOLVED",
+        "candidates": [],
+        "provenance": [{"source_type": "TURN", "source_id": "turn_single_1"}]
+      }
+    ],
+    "unresolved_questions": [],
+    "active_user_goal": "goal_check_ownership",
+    "active_system_goal": "goal_answer_ownership",
+    "prior_turn_ids": ["turn_single_1"],
+    "commitments": [],
+    "response_style": {"tone": "DIRECT", "detail_level": "MINIMAL", "max_sentences": 2},
+    "memory_links": [],
+    "pending_clarification": null,
+    "closed": false
+  },
+  "response_plans": [
+    {
+      "schema_version": "cas.response_plan/0.1",
+      "plan_id": "plan_single_1",
+      "conversation_id": "conv_single",
+      "in_reply_to_turn_id": "turn_single_1",
+      "source_result_id": "expected_result_single_1",
+      "source_result_status": "COMMITTED",
+      "authority_status": "COMMITTED_SEMANTIC_RESULT",
+      "purpose": "ANSWER",
+      "ordered_content_units": [
+        {
+          "unit_id": "unit_single_answer",
+          "kind": "ANSWER",
+          "semantic_text": "Alice owns the laptop.",
+          "source_refs": ["expected_result_single_1"]
+        }
+      ],
+      "surface_constraints": {"language_profile": "CCB-L1-CE-0.1", "tone": "DIRECT", "max_sentences": 2},
+      "exact_clarification": null,
+      "renderer_status": "PROVISIONAL_NOT_IMPLEMENTED",
+      "planned_text": "I understood: Alice owns the laptop.",
+      "trace_refs": [],
+      "memory_write": {
+        "proposal_status": "NOT_REQUESTED",
+        "episode_id": null,
+        "authority_note": "A response plan cannot authorize a memory write."
+      }
+    }
+  ],
+  "expected": {
+    "selected_referent_ids": ["ref_alice", "ref_laptop"],
+    "clarification_required": false,
+    "planned_text": "I understood: Alice owns the laptop.",
+    "runtime_execution": "NOT_RUN"
+  }
+}

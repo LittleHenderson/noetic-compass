@@ -1,0 +1,429 @@
+{
+  "fixture_version": "cas.conversation_fixture/0.1",
+  "fixture_id": "conversation_memory_recall_001",
+  "category": "memory_recall",
+  "qualification": {
+    "contract_status": "SUPPORTED",
+    "capability_claim": "PROVISIONAL",
+    "implementation_status": "UNSUPPORTED",
+    "evidence_status": "NOT_RUN",
+    "direct_semantic_runtime_status": "NOT_RUN"
+  },
+  "initial_state": {
+    "schema_version": "cas.dialogue_state/0.1",
+    "conversation_id": "conv_memory",
+    "state_revision": 0,
+    "participants": [
+      {
+        "participant_id": "mind",
+        "role": "SYSTEM"
+      },
+      {
+        "participant_id": "user",
+        "role": "USER"
+      }
+    ],
+    "current_speaker": null,
+    "next_speaker": "user",
+    "current_topic": "topic_notebook",
+    "topic_stack": [
+      {
+        "topic_id": "topic_notebook",
+        "label": "notebook alias",
+        "introduced_turn_id": "turn_memory_0",
+        "status": "ACTIVE"
+      }
+    ],
+    "referents": [
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_red_notebook",
+        "entity_id": "red_notebook",
+        "canonical_label": "the red notebook",
+        "entity_type": "OBJECT",
+        "aliases": [
+          "the red notebook"
+        ],
+        "introduced_turn_id": "turn_memory_0",
+        "last_mentioned_turn_id": "turn_memory_0",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "NEUTER",
+        "topic_id": "topic_notebook",
+        "resolution_status": "RESOLVED",
+        "candidates": [],
+        "provenance": [
+          {
+            "source_type": "MEMORY_RECORD",
+            "source_id": "episode_nova_red_notebook"
+          }
+        ]
+      }
+    ],
+    "unresolved_questions": [],
+    "active_user_goal": null,
+    "active_system_goal": null,
+    "prior_turn_ids": [],
+    "commitments": [],
+    "response_style": {
+      "tone": "DIRECT",
+      "detail_level": "STANDARD",
+      "max_sentences": 3
+    },
+    "memory_links": [
+      {
+        "memory_record_id": "episode_nova_red_notebook",
+        "provenance_id": "memory_provenance_nova",
+        "use_status": "ADMITTED"
+      }
+    ],
+    "pending_clarification": null,
+    "closed": false
+  },
+  "turns": [
+    {
+      "schema_version": "cas.dialogue_turn/0.1",
+      "conversation_id": "conv_memory",
+      "turn_id": "turn_memory_1",
+      "turn_index": 1,
+      "speaker_id": "user",
+      "speaker_role": "USER",
+      "input_mode": "CONTROLLED_ENGLISH",
+      "raw_text": "What did I call the red notebook?",
+      "normalized_text": "What did I call the red notebook?",
+      "language_profile": "CCB-L1-CE-0.1",
+      "acts": [
+        {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_memory_1",
+          "turn_id": "turn_memory_1",
+          "speaker_id": "user",
+          "act_type": "ASK",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_memory_lang",
+          "status": "SELECTED",
+          "content_summary": "Ask for the exact prior alias of the red notebook.",
+          "commitments": [],
+          "provenance": [
+            {
+              "source_type": "TURN",
+              "source_id": "turn_memory_1"
+            }
+          ]
+        }
+      ],
+      "semantic_packet_ids": [
+        "sp_memory_lang"
+      ],
+      "state_before_revision": 0,
+      "state_after_revision": 1,
+      "processing_status": "ACCEPTED",
+      "trace_refs": []
+    }
+  ],
+  "semantic_pairs": [
+    {
+      "equivalence_id": "eq_memory_1",
+      "language_packet": {
+        "schema_version": "cas.semantic_packet/0.1",
+        "packet_id": "sp_memory_lang",
+        "source_turn_id": "turn_memory_1",
+        "construction_mode": "CONTROLLED_ENGLISH",
+        "language_profile": "CCB-L1-CE-0.1",
+        "interpretation_status": "SELECTED",
+        "dialogue_act": {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_memory_1",
+          "turn_id": "turn_memory_1",
+          "speaker_id": "user",
+          "act_type": "ASK",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_memory_lang",
+          "status": "SELECTED",
+          "content_summary": "Ask for the exact prior alias of the red notebook.",
+          "commitments": [],
+          "provenance": [
+            {
+              "source_type": "TURN",
+              "source_id": "turn_memory_1"
+            }
+          ]
+        },
+        "semantic_content": {
+          "entities": [
+            {
+              "entity_id": "nova_alias",
+              "entity_type": "PROPOSITION",
+              "canonical_label": "Nova"
+            },
+            {
+              "entity_id": "red_notebook",
+              "entity_type": "OBJECT",
+              "canonical_label": "the red notebook"
+            }
+          ],
+          "predicates": [
+            {
+              "predicate": "alias_of",
+              "arguments": [
+                "nova_alias",
+                "red_notebook"
+              ],
+              "polarity": true,
+              "epistemic_status": "RECALLED",
+              "source_refs": [
+                "turn_memory_1"
+              ]
+            }
+          ],
+          "events": [],
+          "discourse": {
+            "topic_id": "topic_notebook",
+            "anaphora": []
+          },
+          "unresolved_slots": []
+        },
+        "ambiguity_candidates": [],
+        "unsupported_features": [],
+        "kernel_handoff": {
+          "contract": "SemanticPacket->ReasoningRequest/0.1",
+          "adapter_status": "PROVISIONAL_NOT_IMPLEMENTED",
+          "reasoning_request_id": "rr_eq_memory_1",
+          "semantic_atom_keys": [
+            "alias_of(nova_alias,red_notebook)"
+          ],
+          "authority_status": "REQUEST_ONLY"
+        },
+        "equivalence": {
+          "equivalence_id": "eq_memory_1",
+          "paired_packet_id": "sp_memory_direct",
+          "required_dimensions": [
+            "SEMANTIC_CONTENT",
+            "TERMINAL_DISPOSITION",
+            "BRANCH_TOPOLOGY",
+            "INFERENCE_TRACE",
+            "RPM_SUBGOALS",
+            "COMMITTED_RESULT",
+            "MEMORY_EFFECTS",
+            "RESPONSE_PLAN"
+          ],
+          "runtime_status": "NOT_RUN"
+        }
+      },
+      "direct_packet": {
+        "schema_version": "cas.semantic_packet/0.1",
+        "packet_id": "sp_memory_direct",
+        "source_turn_id": "turn_memory_1",
+        "construction_mode": "DIRECT_SEMANTIC",
+        "language_profile": "NONE",
+        "interpretation_status": "SELECTED",
+        "dialogue_act": {
+          "schema_version": "cas.dialogue_act/0.1",
+          "act_id": "act_memory_1_direct",
+          "turn_id": "turn_memory_1",
+          "speaker_id": "user",
+          "act_type": "ASK",
+          "target_act_id": null,
+          "semantic_packet_id": "sp_memory_direct",
+          "status": "SELECTED",
+          "content_summary": "Ask for the exact prior alias of the red notebook.",
+          "commitments": [],
+          "provenance": [
+            {
+              "source_type": "TURN",
+              "source_id": "turn_memory_1"
+            }
+          ]
+        },
+        "semantic_content": {
+          "entities": [
+            {
+              "entity_id": "nova_alias",
+              "entity_type": "PROPOSITION",
+              "canonical_label": "Nova"
+            },
+            {
+              "entity_id": "red_notebook",
+              "entity_type": "OBJECT",
+              "canonical_label": "the red notebook"
+            }
+          ],
+          "predicates": [
+            {
+              "predicate": "alias_of",
+              "arguments": [
+                "nova_alias",
+                "red_notebook"
+              ],
+              "polarity": true,
+              "epistemic_status": "RECALLED",
+              "source_refs": [
+                "turn_memory_1"
+              ]
+            }
+          ],
+          "events": [],
+          "discourse": {
+            "topic_id": "topic_notebook",
+            "anaphora": []
+          },
+          "unresolved_slots": []
+        },
+        "ambiguity_candidates": [],
+        "unsupported_features": [],
+        "kernel_handoff": {
+          "contract": "SemanticPacket->ReasoningRequest/0.1",
+          "adapter_status": "PROVISIONAL_NOT_IMPLEMENTED",
+          "reasoning_request_id": "rr_eq_memory_1",
+          "semantic_atom_keys": [
+            "alias_of(nova_alias,red_notebook)"
+          ],
+          "authority_status": "REQUEST_ONLY"
+        },
+        "equivalence": {
+          "equivalence_id": "eq_memory_1",
+          "paired_packet_id": "sp_memory_lang",
+          "required_dimensions": [
+            "SEMANTIC_CONTENT",
+            "TERMINAL_DISPOSITION",
+            "BRANCH_TOPOLOGY",
+            "INFERENCE_TRACE",
+            "RPM_SUBGOALS",
+            "COMMITTED_RESULT",
+            "MEMORY_EFFECTS",
+            "RESPONSE_PLAN"
+          ],
+          "runtime_status": "NOT_RUN"
+        }
+      }
+    }
+  ],
+  "final_state": {
+    "schema_version": "cas.dialogue_state/0.1",
+    "conversation_id": "conv_memory",
+    "state_revision": 1,
+    "participants": [
+      {
+        "participant_id": "mind",
+        "role": "SYSTEM"
+      },
+      {
+        "participant_id": "user",
+        "role": "USER"
+      }
+    ],
+    "current_speaker": "user",
+    "next_speaker": "mind",
+    "current_topic": "topic_notebook",
+    "topic_stack": [
+      {
+        "topic_id": "topic_notebook",
+        "label": "notebook alias",
+        "introduced_turn_id": "turn_memory_0",
+        "status": "ACTIVE"
+      }
+    ],
+    "referents": [
+      {
+        "schema_version": "cas.referent/0.1",
+        "referent_id": "ref_red_notebook",
+        "entity_id": "red_notebook",
+        "canonical_label": "the red notebook",
+        "entity_type": "OBJECT",
+        "aliases": [
+          "Nova",
+          "the red notebook"
+        ],
+        "introduced_turn_id": "turn_memory_0",
+        "last_mentioned_turn_id": "turn_memory_1",
+        "grammatical_number": "SINGULAR",
+        "grammatical_gender": "NEUTER",
+        "topic_id": "topic_notebook",
+        "resolution_status": "RESOLVED",
+        "candidates": [],
+        "provenance": [
+          {
+            "source_type": "MEMORY_RECORD",
+            "source_id": "episode_nova_red_notebook"
+          },
+          {
+            "source_type": "TURN",
+            "source_id": "turn_memory_1"
+          }
+        ]
+      }
+    ],
+    "unresolved_questions": [],
+    "active_user_goal": "goal_recall_alias",
+    "active_system_goal": "goal_report_alias",
+    "prior_turn_ids": [
+      "turn_memory_1"
+    ],
+    "commitments": [],
+    "response_style": {
+      "tone": "DIRECT",
+      "detail_level": "STANDARD",
+      "max_sentences": 3
+    },
+    "memory_links": [
+      {
+        "memory_record_id": "episode_nova_red_notebook",
+        "provenance_id": "memory_provenance_nova",
+        "use_status": "ADMITTED"
+      }
+    ],
+    "pending_clarification": null,
+    "closed": false
+  },
+  "response_plans": [
+    {
+      "schema_version": "cas.response_plan/0.1",
+      "plan_id": "plan_memory_1",
+      "conversation_id": "conv_memory",
+      "in_reply_to_turn_id": "turn_memory_1",
+      "source_result_id": "expected_result_memory_1",
+      "source_result_status": "COMMITTED",
+      "authority_status": "COMMITTED_SEMANTIC_RESULT",
+      "purpose": "REPORT_MEMORY",
+      "ordered_content_units": [
+        {
+          "unit_id": "unit_memory_answer",
+          "kind": "ANSWER",
+          "semantic_text": "The prior alias of the red notebook is Nova.",
+          "source_refs": [
+            "episode_nova_red_notebook"
+          ]
+        },
+        {
+          "unit_id": "unit_memory_provenance",
+          "kind": "MEMORY_ATTRIBUTION",
+          "semantic_text": "This answer uses exact memory record episode_nova_red_notebook.",
+          "source_refs": [
+            "memory_provenance_nova"
+          ]
+        }
+      ],
+      "surface_constraints": {
+        "language_profile": "CCB-L1-CE-0.1",
+        "tone": "DIRECT",
+        "max_sentences": 3
+      },
+      "exact_clarification": null,
+      "renderer_status": "PROVISIONAL_NOT_IMPLEMENTED",
+      "planned_text": "You called the red notebook Nova. This uses exact memory record episode_nova_red_notebook.",
+      "trace_refs": [],
+      "memory_write": {
+        "proposal_status": "NOT_REQUESTED",
+        "episode_id": null,
+        "authority_note": "A response plan cannot authorize a memory write."
+      }
+    }
+  ],
+  "expected": {
+    "memory_record_id": "episode_nova_red_notebook",
+    "provenance_id": "memory_provenance_nova",
+    "answer": "Nova",
+    "similarity_retrieval_used": false,
+    "runtime_execution": "NOT_RUN"
+  }
+}
+

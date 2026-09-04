@@ -1445,3 +1445,25 @@ VERSION DECISIONS FROZEN:
   CAS-Ohm: excluded from runtime authority
   external actions / LLM / English / neural model: excluded in Phase 1
   state commit and decision commit: separate operations, never collapsed
+
+CASFORMER V0.2 SOURCE FREEZE (2026-09-04):
+  STATUS: CASFORMER_V0_2_SOURCE_FREEZE
+  PACKAGE: FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/
+    CAS_CJT_TRANSFORMER_v0_2
+  CONTROLLED SOURCE: 50 files; aggregate SHA-256
+    5FAD64A52C8AEF30D56E46FA22F113C26BC171A3016D326C3C88157425B798F1;
+    SOURCE_MANIFEST.json SHA-256
+    F68B9BA78BB5B6BC184C4B014A799756C1B714F05D05B515DCD464A54C76E634.
+  FROZEN DEPENDENCY: CASFORMER_v0_1, 26 controlled files; manifest
+    SHA-256 ABCC0B77E8C98FD03C4DD4EB6B1E35832E6CE334F98DEF525DCB96EF061E0460.
+  ACCEPTED PRE-FREEZE EXECUTION EVIDENCE: 250 v0.2 tests, 5 manifest
+    tests, complete_reasoning_transistor.py exit 0, trace_count 6,
+    integrity true, frozen v0.1 89 tests. GLM audit classification:
+    CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL.
+  CLEAN RELEASE REPRODUCTION: PENDING a separate evidence commit bound
+    to the source-freeze SHA. No automatic merge follows.
+  CLAIM BOUNDARY: no language capability, general reasoning capability,
+    CAS-specific advantage, CNCM brain completion, AGI, or production
+    readiness is promoted.
+  MEMORY EXTENSION: reserved for a separate v0.3 branch after reproduced
+    release; no pulsation or chain-tag mechanism enters this freeze.

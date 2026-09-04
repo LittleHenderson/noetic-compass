@@ -1,0 +1,356 @@
+{
+  "branch_summary": [
+    {
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [],
+      "proof_step_ids": [
+        "proof-4ec979b8b4bf8421",
+        "proof-8dbdfc01229be834"
+      ],
+      "proposition_keys": [
+        "holds(P)@global",
+        "holds(Q)@global"
+      ],
+      "status": "COMMITTED",
+      "unknowns": []
+    }
+  ],
+  "claim_boundary": {
+    "cas_ohm_runtime_authority": false,
+    "constitutional_learning_enabled": false,
+    "english_understanding": false,
+    "external_actions_enabled": false,
+    "external_model_used": false,
+    "general_intelligence_claim": false,
+    "procedural_learning_enabled": false,
+    "production_ready": false,
+    "status": "REFERENCE_DEMONSTRATOR_ONLY"
+  },
+  "commitment_gates": {
+    "comparison_stable": true,
+    "contradiction_free": true,
+    "derivation_complete": true,
+    "operational_ready": true,
+    "principled_gate": true,
+    "provenance_present": true,
+    "rpm_sufficient": true
+  },
+  "comparison": [
+    {
+      "differences": [
+        "branch-main:0,0,0,0,0,2"
+      ],
+      "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+      "metrics": [
+        [
+          "branch-main",
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ]
+        ]
+      ],
+      "ordered_branch_ids": [
+        "branch-main"
+      ],
+      "report_id": "comparison-d9ee7318aa64a50a",
+      "shared_features": [
+        "holds(Q)@global",
+        "same_evaluation_frame"
+      ],
+      "single_candidate_reason": "mechanically_deterministic_declared_path",
+      "winner_branch_id": "branch-main"
+    }
+  ],
+  "diagnostics": [],
+  "event_count": 11,
+  "evidence_digest": "7740c8f437a0fde33298c973733c4c0eff96eed1988f1ebd6a580457a29da428",
+  "final_state_hash": "ea91308cf96cdcd635e03643a76c4f03cbcaf8c58eaa2b9a627e3ac07c27aeea",
+  "goal_id": "establish_q_with_child_goal",
+  "initial_state_hash": "40abd8da5c5378a45a70c7b2bb46177e8e9f737860e3169a0b0cdd1c0b2d5fa3",
+  "learning_disposition": "EPISODIC_WRITE_ONLY",
+  "problem_id": "rpm_missing_prerequisite",
+  "problem_packet_hash": "1fac434a73ba92926f783752b8070228cd9d0ebbf33261f4a01b08f78cbbcfba",
+  "proof_steps": [
+    {
+      "branch_id": "branch-main",
+      "conclusion": {
+        "arguments": [
+          "P"
+        ],
+        "evidence_status": "derived",
+        "polarity": true,
+        "predicate": "holds",
+        "provenance": [
+          {
+            "detail": "bounded child result",
+            "source_id": "bb24fe8b36d8a897",
+            "source_type": "rpm_resolver"
+          }
+        ],
+        "scope": "global"
+      },
+      "operation": "RPM_CHILD_RESULT",
+      "premise_keys": [
+        "holds(P)@global"
+      ],
+      "provenance": [
+        {
+          "detail": "bounded child result",
+          "source_id": "bb24fe8b36d8a897",
+          "source_type": "rpm_resolver"
+        }
+      ],
+      "rule_id": null,
+      "step_id": "proof-4ec979b8b4bf8421",
+      "substitution": [],
+      "verified": true
+    },
+    {
+      "branch_id": "branch-main",
+      "conclusion": {
+        "arguments": [
+          "Q"
+        ],
+        "evidence_status": "derived",
+        "polarity": true,
+        "predicate": "holds",
+        "provenance": [
+          {
+            "detail": "",
+            "source_id": "rpm_parent_rule",
+            "source_type": "fixture"
+          },
+          {
+            "detail": "declared CAS-Sem inference",
+            "source_id": "p_implies_q",
+            "source_type": "rule"
+          }
+        ],
+        "scope": "global"
+      },
+      "operation": "INFER_MODUS_PONENS",
+      "premise_keys": [
+        "holds(P)@global"
+      ],
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "rpm_parent_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "p_implies_q",
+          "source_type": "rule"
+        }
+      ],
+      "rule_id": "p_implies_q",
+      "step_id": "proof-8dbdfc01229be834",
+      "substitution": [],
+      "verified": true
+    }
+  ],
+  "query_result": {
+    "conclusion": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "derived",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [
+        {
+          "detail": "",
+          "source_id": "rpm_parent_rule",
+          "source_type": "fixture"
+        },
+        {
+          "detail": "declared CAS-Sem inference",
+          "source_id": "p_implies_q",
+          "source_type": "rule"
+        }
+      ],
+      "scope": "global"
+    },
+    "lacunae": [],
+    "query": {
+      "arguments": [
+        "Q"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [],
+      "scope": "global"
+    },
+    "supported": true
+  },
+  "rpm_summary": {
+    "event_count": 2,
+    "events": [
+      {
+        "authorized_intent_ids": [
+          "intent-2228b6ec31908a38"
+        ],
+        "committed_mutations": [
+          "rpm_stack"
+        ],
+        "enabled_components": [
+          "rpm_controller"
+        ],
+        "event_hash": "c5091ad18488969afab1f8dd043d403ad9fb755d72b0b85a408a266f0acdfcbe",
+        "event_id": "event-run-04043977b20f552b-000002",
+        "logical_tick": 2,
+        "parent_event_id": "event-run-04043977b20f552b-000001",
+        "post_state_hash": "201df2ccfb050371212e2f434c60d857339c64b00216d39a0c35f9a33d8cf7c8",
+        "pre_state_hash": "89f62d19eeb3699991ed5c5a371731139326b850f6c122224b49f857eef90cfb",
+        "previous_event_hash": "6e0ee0b6223ab982df0ca21752c63cb4d4abe96bb7c6202b39f4330bec6f2117",
+        "proposed_intents": [
+          {
+            "branch_id": "branch-main",
+            "created_at_tick": 1,
+            "goal_id": "goal-rpm-5e6c83fb78052e29",
+            "intent_id": "intent-2228b6ec31908a38",
+            "intent_type": "PUSH_RPM",
+            "issuer_subsystem": "rpm_controller",
+            "precondition": {
+              "state_hash": "89f62d19eeb3699991ed5c5a371731139326b850f6c122224b49f857eef90cfb"
+            },
+            "proposed_mutation": {
+              "frame": {
+                "blocked_prerequisite": "holds(P)@global",
+                "branch_id": "branch-main",
+                "depth": 1,
+                "expected_result_key": "holds(P)@global",
+                "frame_id": "rpm-frame-861b75066161cd4b",
+                "goal_id": "goal-rpm-5e6c83fb78052e29",
+                "parent_goal_id": "establish_q_with_child_goal",
+                "resume_stage": "INFERENCE",
+                "return_address": "branch:branch-main:inference",
+                "target_foundation": "TF1a"
+              }
+            },
+            "provenance": [
+              {
+                "detail": "missing prerequisite",
+                "source_id": "rpm",
+                "source_type": "operation"
+              }
+            ],
+            "required_capability": "push_prerequisite_goal",
+            "target_scope": "rpm_stack"
+          }
+        ],
+        "rejected_intents": [],
+        "run_id": "run-04043977b20f552b",
+        "runtime_version": "0.1.0",
+        "scheduled_components": [
+          "rpm_controller"
+        ],
+        "sealed": true,
+        "terminal_status": "RUNNING"
+      },
+      {
+        "authorized_intent_ids": [
+          "intent-05149de6f9e52b49"
+        ],
+        "committed_mutations": [
+          "rpm_stack"
+        ],
+        "enabled_components": [
+          "rpm_controller"
+        ],
+        "event_hash": "43ad45ddb0fde75d9fac5a6c41fefaf0b2df1b6daf7cfa58d06a9f3ac5e01e25",
+        "event_id": "event-run-04043977b20f552b-000003",
+        "logical_tick": 3,
+        "parent_event_id": "event-run-04043977b20f552b-000002",
+        "post_state_hash": "8d74d37f38b07d331748da35c2f2341391fc09cd748b7bd5e0d64e135b5b7f5a",
+        "pre_state_hash": "201df2ccfb050371212e2f434c60d857339c64b00216d39a0c35f9a33d8cf7c8",
+        "previous_event_hash": "c5091ad18488969afab1f8dd043d403ad9fb755d72b0b85a408a266f0acdfcbe",
+        "proposed_intents": [
+          {
+            "branch_id": "branch-main",
+            "created_at_tick": 2,
+            "goal_id": "establish_q_with_child_goal",
+            "intent_id": "intent-05149de6f9e52b49",
+            "intent_type": "RETURN_RPM",
+            "issuer_subsystem": "rpm_controller",
+            "precondition": {
+              "state_hash": "201df2ccfb050371212e2f434c60d857339c64b00216d39a0c35f9a33d8cf7c8"
+            },
+            "proposed_mutation": {
+              "frame_id": "rpm-frame-861b75066161cd4b",
+              "proof": {
+                "branch_id": "branch-main",
+                "conclusion": {
+                  "arguments": [
+                    "P"
+                  ],
+                  "evidence_status": "derived",
+                  "polarity": true,
+                  "predicate": "holds",
+                  "provenance": [
+                    {
+                      "detail": "bounded child result",
+                      "source_id": "bb24fe8b36d8a897",
+                      "source_type": "rpm_resolver"
+                    }
+                  ],
+                  "scope": "global"
+                },
+                "operation": "RPM_CHILD_RESULT",
+                "premise_keys": [
+                  "holds(P)@global"
+                ],
+                "provenance": [
+                  {
+                    "detail": "bounded child result",
+                    "source_id": "bb24fe8b36d8a897",
+                    "source_type": "rpm_resolver"
+                  }
+                ],
+                "rule_id": null,
+                "step_id": "proof-4ec979b8b4bf8421",
+                "substitution": [],
+                "verified": true
+              },
+              "success": true
+            },
+            "provenance": [
+              {
+                "detail": "bounded child result",
+                "source_id": "bb24fe8b36d8a897",
+                "source_type": "rpm_resolver"
+              }
+            ],
+            "required_capability": "return_prerequisite_result",
+            "target_scope": "rpm_stack"
+          }
+        ],
+        "rejected_intents": [],
+        "run_id": "run-04043977b20f552b",
+        "runtime_version": "0.1.0",
+        "scheduled_components": [
+          "rpm_controller"
+        ],
+        "sealed": true,
+        "terminal_status": "RUNNING"
+      }
+    ],
+    "final_depth": 0
+  },
+  "run_id": "run-04043977b20f552b",
+  "runtime_version": "0.1.0",
+  "schema_version": "cncm.evidence/0.1",
+  "seed": 0,
+  "terminal_status": "CONCLUDED",
+  "trace_digest": "fd92dbd5c16cd247b4ed91e2cf734607c4a88c12f7ea8abc8a7e23da364b0a1f",
+  "trace_head": "a4b4de8325eb9e47700c4e94d5a5f3548f9410c27b6a74057940925faef57e42"
+}

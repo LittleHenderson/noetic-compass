@@ -1,0 +1,13 @@
+{
+  "schema_version": "cncm.math-fixture/0.1",
+  "fixture_id": "math_transitive_equality",
+  "category": "transitive_relations",
+  "operation": "check_transitive_equal",
+  "input": {
+    "variables": ["a", "b", "c"],
+    "premises": ["a=b", "b=c"],
+    "conclusion": "a=c"
+  },
+  "expected": { "accepted": true },
+  "runtime_status": "EXECUTABLE"
+}

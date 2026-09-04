@@ -1,0 +1,941 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/cas_ohm_stage_record.schema.json",
+  "title": "CNCM CAS-Ohm Stage Record v0.1",
+  "description": "Contract-only hash-chain-capable diagnostic sidecar. Append-only retention requires independent verification. It has no truth, meaning, proof, validity, commitment, permission, memory-occurrence/write, state-mutation, halt, causal-identification, action, or self-modification authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "protocol_version",
+    "mode",
+    "substrate",
+    "run_id",
+    "runtime_version",
+    "trace_binding",
+    "component_binding",
+    "topology_binding",
+    "stage_id",
+    "board_id",
+    "test_point_id",
+    "branch_id",
+    "goal_id",
+    "resource_accounting",
+    "quantities",
+    "specialized_resistances",
+    "operating_region",
+    "cutoff",
+    "saturation",
+    "effect_type",
+    "semantic_outcome",
+    "rpm_binding",
+    "neural_profile",
+    "memory_retrieval",
+    "diagnostics",
+    "provenance",
+    "integrity",
+    "authority_boundary"
+  ],
+  "properties": {
+    "schema_version": { "const": "cncm.cas-ohm-stage/0.1" },
+    "record_id": { "type": "string", "pattern": "^cas-ohm-stage-[0-9a-f]{16}$" },
+    "protocol_version": { "const": "cas-ohm-attention/0.1" },
+    "mode": { "type": "string", "enum": ["NATIVE_RUNTIME", "NEURAL_PROFILE", "MEMORY_RETRIEVAL"] },
+    "substrate": { "type": "string", "enum": ["NATIVE_COMPUTATIONAL", "NEURAL_MODEL"] },
+    "run_id": { "$ref": "#/$defs/identifier" },
+    "runtime_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "trace_binding": { "$ref": "#/$defs/traceBinding" },
+    "component_binding": { "$ref": "#/$defs/componentBinding" },
+    "topology_binding": { "$ref": "#/$defs/topologyBinding" },
+    "stage_id": { "$ref": "#/$defs/identifier" },
+    "board_id": { "oneOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] },
+    "test_point_id": { "$ref": "#/$defs/identifier" },
+    "branch_id": { "oneOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] },
+    "goal_id": { "oneOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] },
+    "resource_accounting": { "$ref": "#/$defs/resourceAccounting" },
+    "quantities": { "$ref": "#/$defs/quantitySet" },
+    "specialized_resistances": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/specializedResistance" },
+      "maxItems": 64
+    },
+    "operating_region": {
+      "type": "string",
+      "enum": ["UNASSESSED", "CUTOFF", "ACTIVE", "SATURATION", "BREAKDOWN", "NON_OHMIC", "UNSTABLE"]
+    },
+    "cutoff": { "type": "boolean" },
+    "saturation": { "type": "boolean" },
+    "effect_type": { "oneOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] },
+    "semantic_outcome": { "$ref": "#/$defs/semanticOutcome" },
+    "rpm_binding": { "oneOf": [{ "$ref": "#/$defs/rpmBinding" }, { "type": "null" }] },
+    "neural_profile": { "oneOf": [{ "$ref": "#/$defs/neuralProfile" }, { "type": "null" }] },
+    "memory_retrieval": { "oneOf": [{ "$ref": "#/$defs/memoryRetrieval" }, { "type": "null" }] },
+    "diagnostics": { "$ref": "#/$defs/diagnostics" },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "integrity": { "$ref": "#/$defs/integrity" },
+    "authority_boundary": { "$ref": "#/$defs/authorityBoundary" }
+  },
+  "allOf": [
+    {
+      "type": "object",
+      "if": { "type": "object", "properties": { "mode": { "const": "NATIVE_RUNTIME" } }, "required": ["mode"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "substrate": { "const": "NATIVE_COMPUTATIONAL" },
+          "topology_binding": { "$ref": "#/$defs/nativeTopologyBinding" },
+          "neural_profile": { "type": "null" },
+          "memory_retrieval": { "type": "null" },
+          "provenance": { "type": "object", "properties": { "source_type": { "enum": ["NATIVE_OBSERVER", "SIMULATOR"] } } },
+          "quantities": {
+            "type": "object",
+            "properties": {
+              "v_drive": { "$ref": "#/$defs/nativeDriveQuantity" },
+              "r_capability": { "$ref": "#/$defs/nullableNativeResistanceQuantity" },
+              "r_policy": { "$ref": "#/$defs/nullableNativeResistanceQuantity" },
+              "r_context": { "$ref": "#/$defs/nullableNativeResistanceQuantity" },
+              "r_resource": { "$ref": "#/$defs/nullableNativeResistanceQuantity" },
+              "r_specialized": { "$ref": "#/$defs/nullableNativeResistanceQuantity" },
+              "r_total": { "$ref": "#/$defs/nativeResistanceQuantity" },
+              "i_pred": { "$ref": "#/$defs/nativePredictedFlowQuantity" },
+              "i_obs": { "$ref": "#/$defs/nativeObservedFlowQuantity" },
+              "delta_i": { "$ref": "#/$defs/nativeResidualQuantity" },
+              "alpha_dose": { "type": "null" },
+              "neural_activation_y": { "type": "null" },
+              "effective_resistance": { "type": "null" },
+              "beta_gain": { "$ref": "#/$defs/nullableNativeGainQuantity" },
+              "effect_activation": { "$ref": "#/$defs/nullableNativeEffectQuantity" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "if": { "type": "object", "properties": { "mode": { "const": "MEMORY_RETRIEVAL" } }, "required": ["mode"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "substrate": { "const": "NATIVE_COMPUTATIONAL" },
+          "topology_binding": { "$ref": "#/$defs/nativeTopologyBinding" },
+          "neural_profile": { "type": "null" },
+          "memory_retrieval": { "$ref": "#/$defs/memoryRetrieval" },
+          "provenance": { "type": "object", "properties": { "source_type": { "enum": ["MEMORY_RETRIEVAL_OBSERVER", "SIMULATOR"] } } },
+          "quantities": {
+            "type": "object",
+            "properties": {
+              "v_drive": { "$ref": "#/$defs/nativeDriveQuantity" },
+              "r_capability": { "$ref": "#/$defs/nullableNativeResistanceQuantity" },
+              "r_policy": { "$ref": "#/$defs/nullableNativeResistanceQuantity" },
+              "r_context": { "$ref": "#/$defs/nullableNativeResistanceQuantity" },
+              "r_resource": { "$ref": "#/$defs/nullableNativeResistanceQuantity" },
+              "r_specialized": { "$ref": "#/$defs/nullableNativeResistanceQuantity" },
+              "r_total": { "$ref": "#/$defs/nativeResistanceQuantity" },
+              "i_pred": { "$ref": "#/$defs/nativePredictedFlowQuantity" },
+              "i_obs": { "$ref": "#/$defs/nativeObservedFlowQuantity" },
+              "delta_i": { "$ref": "#/$defs/nativeResidualQuantity" },
+              "alpha_dose": { "type": "null" },
+              "neural_activation_y": { "type": "null" },
+              "effective_resistance": { "type": "null" },
+              "beta_gain": { "$ref": "#/$defs/nullableNativeGainQuantity" },
+              "effect_activation": { "$ref": "#/$defs/nullableNativeEffectQuantity" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "if": { "type": "object", "properties": { "mode": { "const": "NEURAL_PROFILE" } }, "required": ["mode"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "substrate": { "const": "NEURAL_MODEL" },
+          "topology_binding": { "$ref": "#/$defs/notApplicableTopologyBinding" },
+          "neural_profile": { "$ref": "#/$defs/neuralProfile" },
+          "memory_retrieval": { "type": "null" },
+          "specialized_resistances": { "type": "array", "maxItems": 0 },
+          "provenance": { "type": "object", "properties": { "source_type": { "const": "NEURAL_INSTRUMENT" } } },
+          "quantities": {
+            "type": "object",
+            "properties": {
+              "v_drive": { "type": "null" },
+              "r_capability": { "type": "null" },
+              "r_policy": { "type": "null" },
+              "r_context": { "type": "null" },
+              "r_resource": { "type": "null" },
+              "r_specialized": { "type": "null" },
+              "r_total": { "type": "null" },
+              "i_pred": { "$ref": "#/$defs/nullableBridgedAttentionQuantity" },
+              "i_obs": { "$ref": "#/$defs/nullableBridgedAttentionQuantity" },
+              "delta_i": { "$ref": "#/$defs/nullableBridgedResidualQuantity" },
+              "alpha_dose": { "$ref": "#/$defs/neuralDoseQuantity" },
+              "neural_activation_y": { "$ref": "#/$defs/neuralActivationQuantity" },
+              "effective_resistance": { "$ref": "#/$defs/neuralEffectiveResistanceQuantity" },
+              "beta_gain": { "$ref": "#/$defs/nullableNeuralGainQuantity" },
+              "effect_activation": { "$ref": "#/$defs/nullableNeuralEffectQuantity" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "if": {
+        "type": "object",
+        "properties": {
+          "mode": { "const": "NEURAL_PROFILE" },
+          "neural_profile": { "type": "object", "properties": { "bridge_id": { "type": "null" } }, "required": ["bridge_id"] }
+        },
+        "required": ["mode", "neural_profile"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "quantities": {
+            "type": "object",
+            "properties": {
+              "i_pred": { "type": "null" },
+              "i_obs": { "type": "null" },
+              "delta_i": { "type": "null" }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9._:-]{0,127}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "exactDecimal": {
+      "type": "string",
+      "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+    },
+    "nonNegativeDecimal": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+    },
+    "positiveDecimal": {
+      "type": "string",
+      "pattern": "^(0\\.[0-9]*[1-9][0-9]*|[1-9][0-9]*(\\.[0-9]+)?)$"
+    },
+    "unitIntervalDecimal": {
+      "type": "string",
+      "pattern": "^(0(\\.[0-9]+)?|1(\\.0+)?)$"
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["standard_uncertainty", "confidence_level", "interval_low", "interval_high", "method_id"],
+      "properties": {
+        "standard_uncertainty": { "$ref": "#/$defs/exactDecimal" },
+        "confidence_level": { "$ref": "#/$defs/exactDecimal" },
+        "interval_low": { "$ref": "#/$defs/exactDecimal" },
+        "interval_high": { "$ref": "#/$defs/exactDecimal" },
+        "method_id": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "typedQuantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quantity_kind",
+        "value",
+        "unit_id",
+        "measurement_kind",
+        "status",
+        "method_id",
+        "calibration_profile_digest",
+        "uncertainty",
+        "sample_size",
+        "evidence_refs",
+        "derivation_parents",
+        "missing_reason"
+      ],
+      "properties": {
+        "quantity_kind": {
+          "type": "string",
+          "enum": [
+            "DRIVE_INTERVENTION",
+            "DRIVE_SCORE",
+            "SIGNED_ACTIVATION",
+            "FLOW_MAGNITUDE",
+            "NORMALIZED_FLOW",
+            "CONSTRAINT_SCORE",
+            "EFFECTIVE_RESISTANCE",
+            "RESISTANCE_DELTA",
+            "CAPABILITY_SCORE",
+            "GAIN_MAGNITUDE",
+            "EFFECT_PROJECTION",
+            "SATURATION_FRACTION",
+            "CUTOFF_FRACTION",
+            "OVERLOAD_RATIO",
+            "FLOW_RESIDUAL",
+            "RELATIVE_ERROR",
+            "RESOURCE_QUANTA"
+          ]
+        },
+        "value": { "oneOf": [{ "$ref": "#/$defs/exactDecimal" }, { "type": "null" }] },
+        "unit_id": {
+          "type": "string",
+          "enum": [
+            "NATIVE_DRIVE_UNIT",
+            "NATIVE_RESISTANCE_UNIT",
+            "NATIVE_ATTENTION_UNIT",
+            "RESOURCE_QUANTA",
+            "ALPHA",
+            "ACTIVATION",
+            "ALPHA_PER_ACTIVATION",
+            "DIMENSIONLESS",
+            "FRACTION",
+            "Q10_SCORE",
+            "Q100_SCORE"
+          ]
+        },
+        "measurement_kind": {
+          "type": "string",
+          "enum": ["DESIGN_VALUE", "INSTRUMENTED", "RUNTIME_COUNTER", "BEHAVIORAL_PROXY", "MODEL_DERIVED", "HUMAN_SCORE", "LLM_SCORE"]
+        },
+        "status": { "type": "string", "enum": ["DECLARED", "DERIVED", "OBSERVED", "ESTIMATED", "MISSING", "CENSORED"] },
+        "method_id": { "$ref": "#/$defs/identifier" },
+        "calibration_profile_digest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "uncertainty": { "oneOf": [{ "$ref": "#/$defs/uncertainty" }, { "type": "null" }] },
+        "sample_size": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
+        "evidence_refs": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "uniqueItems": true, "maxItems": 128 },
+        "derivation_parents": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "uniqueItems": true, "maxItems": 128 },
+        "missing_reason": { "oneOf": [{ "type": "string", "minLength": 1, "maxLength": 512 }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "type": "object", "properties": { "status": { "enum": ["MISSING", "CENSORED"] } }, "required": ["status"] },
+          "then": { "type": "object", "properties": { "value": { "type": "null" }, "missing_reason": { "type": "string", "minLength": 1 } } },
+          "else": { "type": "object", "properties": { "value": { "$ref": "#/$defs/exactDecimal" }, "missing_reason": { "type": "null" } } }
+        },
+        {
+          "if": { "type": "object", "properties": { "measurement_kind": { "const": "INSTRUMENTED" } }, "required": ["measurement_kind"] },
+          "then": {
+            "type": "object",
+            "properties": {
+              "calibration_profile_digest": { "$ref": "#/$defs/digest" },
+              "uncertainty": { "$ref": "#/$defs/uncertainty" },
+              "sample_size": { "type": "integer", "minimum": 1 },
+              "evidence_refs": { "type": "array", "minItems": 1 }
+            }
+          }
+        }
+      ]
+    },
+    "nativeDriveQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "enum": ["DRIVE_INTERVENTION", "DRIVE_SCORE"] },
+            "value": { "$ref": "#/$defs/nonNegativeDecimal" },
+            "unit_id": { "const": "NATIVE_DRIVE_UNIT" },
+            "measurement_kind": { "enum": ["DESIGN_VALUE", "MODEL_DERIVED"] },
+            "status": { "enum": ["DECLARED", "DERIVED"] },
+            "calibration_profile_digest": { "type": "null" },
+            "uncertainty": { "type": "null" },
+            "sample_size": { "type": "null" }
+          }
+        }
+      ]
+    },
+    "nativeResistanceComponentQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "enum": ["CONSTRAINT_SCORE", "CAPABILITY_SCORE", "EFFECTIVE_RESISTANCE", "RESISTANCE_DELTA"] },
+            "value": { "$ref": "#/$defs/nonNegativeDecimal" },
+            "unit_id": { "const": "NATIVE_RESISTANCE_UNIT" },
+            "measurement_kind": { "enum": ["DESIGN_VALUE", "MODEL_DERIVED"] },
+            "status": { "enum": ["DECLARED", "DERIVED"] },
+            "calibration_profile_digest": { "type": "null" },
+            "uncertainty": { "type": "null" },
+            "sample_size": { "type": "null" }
+          }
+        }
+      ]
+    },
+    "nativeResistanceQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/nativeResistanceComponentQuantity" },
+        { "type": "object", "properties": { "value": { "$ref": "#/$defs/positiveDecimal" } } }
+      ]
+    },
+    "nativePredictedFlowQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "enum": ["FLOW_MAGNITUDE", "NORMALIZED_FLOW"] },
+            "value": { "$ref": "#/$defs/nonNegativeDecimal" },
+            "unit_id": { "const": "NATIVE_ATTENTION_UNIT" },
+            "measurement_kind": { "const": "MODEL_DERIVED" },
+            "status": { "const": "DERIVED" },
+            "calibration_profile_digest": { "type": "null" },
+            "uncertainty": { "type": "null" },
+            "sample_size": { "type": "null" }
+          }
+        }
+      ]
+    },
+    "nativeObservedFlowQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "enum": ["FLOW_MAGNITUDE", "NORMALIZED_FLOW"] },
+            "value": { "$ref": "#/$defs/nonNegativeDecimal" },
+            "unit_id": { "const": "NATIVE_ATTENTION_UNIT" },
+            "measurement_kind": { "const": "RUNTIME_COUNTER" },
+            "status": { "const": "OBSERVED" },
+            "calibration_profile_digest": { "type": "null" },
+            "uncertainty": { "type": "null" },
+            "sample_size": { "type": "null" }
+          }
+        }
+      ]
+    },
+    "nativeResidualQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "const": "FLOW_RESIDUAL" },
+            "value": { "$ref": "#/$defs/exactDecimal" },
+            "unit_id": { "const": "NATIVE_ATTENTION_UNIT" },
+            "measurement_kind": { "const": "MODEL_DERIVED" },
+            "status": { "const": "DERIVED" },
+            "calibration_profile_digest": { "type": "null" },
+            "uncertainty": { "type": "null" },
+            "sample_size": { "type": "null" }
+          }
+        }
+      ]
+    },
+    "nativeGainQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "const": "GAIN_MAGNITUDE" },
+            "value": { "$ref": "#/$defs/exactDecimal" },
+            "unit_id": { "const": "DIMENSIONLESS" },
+            "measurement_kind": { "enum": ["DESIGN_VALUE", "MODEL_DERIVED"] },
+            "status": { "enum": ["DECLARED", "DERIVED"] },
+            "calibration_profile_digest": { "type": "null" },
+            "uncertainty": { "type": "null" },
+            "sample_size": { "type": "null" }
+          }
+        }
+      ]
+    },
+    "nativeEffectQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "const": "EFFECT_PROJECTION" },
+            "value": { "$ref": "#/$defs/exactDecimal" },
+            "unit_id": { "const": "DIMENSIONLESS" },
+            "measurement_kind": { "const": "RUNTIME_COUNTER" },
+            "status": { "const": "OBSERVED" },
+            "calibration_profile_digest": { "type": "null" },
+            "uncertainty": { "type": "null" },
+            "sample_size": { "type": "null" }
+          }
+        }
+      ]
+    },
+    "neuralDoseQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "const": "DRIVE_INTERVENTION" },
+            "value": { "$ref": "#/$defs/exactDecimal" },
+            "unit_id": { "const": "ALPHA" },
+            "measurement_kind": { "const": "DESIGN_VALUE" },
+            "status": { "const": "DECLARED" }
+          }
+        }
+      ]
+    },
+    "neuralActivationQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "const": "SIGNED_ACTIVATION" },
+            "value": { "$ref": "#/$defs/exactDecimal" },
+            "unit_id": { "const": "ACTIVATION" },
+            "measurement_kind": { "const": "INSTRUMENTED" },
+            "status": { "const": "OBSERVED" }
+          }
+        }
+      ]
+    },
+    "neuralEffectiveResistanceQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "const": "EFFECTIVE_RESISTANCE" },
+            "value": { "$ref": "#/$defs/positiveDecimal" },
+            "unit_id": { "const": "ALPHA_PER_ACTIVATION" },
+            "measurement_kind": { "const": "MODEL_DERIVED" },
+            "status": { "const": "ESTIMATED" },
+            "calibration_profile_digest": { "$ref": "#/$defs/digest" },
+            "uncertainty": { "$ref": "#/$defs/uncertainty" },
+            "sample_size": { "type": "integer", "minimum": 1 },
+            "evidence_refs": { "type": "array", "minItems": 1 }
+          }
+        }
+      ]
+    },
+    "neuralGainQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "const": "GAIN_MAGNITUDE" },
+            "value": { "$ref": "#/$defs/exactDecimal" },
+            "unit_id": { "const": "DIMENSIONLESS" },
+            "measurement_kind": { "const": "MODEL_DERIVED" },
+            "status": { "const": "ESTIMATED" },
+            "calibration_profile_digest": { "$ref": "#/$defs/digest" },
+            "uncertainty": { "$ref": "#/$defs/uncertainty" },
+            "sample_size": { "type": "integer", "minimum": 1 },
+            "evidence_refs": { "type": "array", "minItems": 1 }
+          }
+        }
+      ]
+    },
+    "neuralEffectQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "const": "EFFECT_PROJECTION" },
+            "value": { "$ref": "#/$defs/exactDecimal" },
+            "unit_id": { "const": "ACTIVATION" },
+            "measurement_kind": { "const": "INSTRUMENTED" },
+            "status": { "const": "OBSERVED" }
+          }
+        }
+      ]
+    },
+    "bridgedAttentionQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "enum": ["FLOW_MAGNITUDE", "NORMALIZED_FLOW"] },
+            "value": { "$ref": "#/$defs/nonNegativeDecimal" },
+            "unit_id": { "const": "NATIVE_ATTENTION_UNIT" },
+            "measurement_kind": { "const": "MODEL_DERIVED" },
+            "status": { "const": "ESTIMATED" },
+            "calibration_profile_digest": { "$ref": "#/$defs/digest" },
+            "uncertainty": { "$ref": "#/$defs/uncertainty" },
+            "sample_size": { "type": "integer", "minimum": 1 },
+            "evidence_refs": { "type": "array", "minItems": 1 }
+          }
+        }
+      ]
+    },
+    "bridgedResidualQuantity": {
+      "allOf": [
+        { "$ref": "#/$defs/typedQuantity" },
+        {
+          "type": "object",
+          "properties": {
+            "quantity_kind": { "const": "FLOW_RESIDUAL" },
+            "value": { "$ref": "#/$defs/exactDecimal" },
+            "unit_id": { "const": "NATIVE_ATTENTION_UNIT" },
+            "measurement_kind": { "const": "MODEL_DERIVED" },
+            "status": { "const": "ESTIMATED" },
+            "calibration_profile_digest": { "$ref": "#/$defs/digest" },
+            "uncertainty": { "$ref": "#/$defs/uncertainty" },
+            "sample_size": { "type": "integer", "minimum": 1 },
+            "evidence_refs": { "type": "array", "minItems": 1 }
+          }
+        }
+      ]
+    },
+    "nullableNativeResistanceQuantity": {
+      "oneOf": [{ "$ref": "#/$defs/nativeResistanceComponentQuantity" }, { "type": "null" }]
+    },
+    "nullableNativeGainQuantity": {
+      "oneOf": [{ "$ref": "#/$defs/nativeGainQuantity" }, { "type": "null" }]
+    },
+    "nullableNativeEffectQuantity": {
+      "oneOf": [{ "$ref": "#/$defs/nativeEffectQuantity" }, { "type": "null" }]
+    },
+    "nullableBridgedAttentionQuantity": {
+      "oneOf": [{ "$ref": "#/$defs/bridgedAttentionQuantity" }, { "type": "null" }]
+    },
+    "nullableBridgedResidualQuantity": {
+      "oneOf": [{ "$ref": "#/$defs/bridgedResidualQuantity" }, { "type": "null" }]
+    },
+    "nullableNeuralGainQuantity": {
+      "oneOf": [{ "$ref": "#/$defs/neuralGainQuantity" }, { "type": "null" }]
+    },
+    "nullableNeuralEffectQuantity": {
+      "oneOf": [{ "$ref": "#/$defs/neuralEffectQuantity" }, { "type": "null" }]
+    },
+    "nullableQuantity": {
+      "oneOf": [{ "$ref": "#/$defs/typedQuantity" }, { "type": "null" }]
+    },
+    "quantitySet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "v_drive",
+        "r_capability",
+        "r_policy",
+        "r_context",
+        "r_resource",
+        "r_specialized",
+        "r_total",
+        "i_pred",
+        "i_obs",
+        "delta_i",
+        "alpha_dose",
+        "neural_activation_y",
+        "effective_resistance",
+        "beta_gain",
+        "effect_activation"
+      ],
+      "properties": {
+        "v_drive": { "$ref": "#/$defs/nullableQuantity" },
+        "r_capability": { "$ref": "#/$defs/nullableQuantity" },
+        "r_policy": { "$ref": "#/$defs/nullableQuantity" },
+        "r_context": { "$ref": "#/$defs/nullableQuantity" },
+        "r_resource": { "$ref": "#/$defs/nullableQuantity" },
+        "r_specialized": { "$ref": "#/$defs/nullableQuantity" },
+        "r_total": { "$ref": "#/$defs/nullableQuantity" },
+        "i_pred": { "$ref": "#/$defs/nullableQuantity" },
+        "i_obs": { "$ref": "#/$defs/nullableQuantity" },
+        "delta_i": { "$ref": "#/$defs/nullableQuantity" },
+        "alpha_dose": { "$ref": "#/$defs/nullableQuantity" },
+        "neural_activation_y": { "$ref": "#/$defs/nullableQuantity" },
+        "effective_resistance": { "$ref": "#/$defs/nullableQuantity" },
+        "beta_gain": { "$ref": "#/$defs/nullableQuantity" },
+        "effect_activation": { "$ref": "#/$defs/nullableQuantity" }
+      }
+    },
+    "specializedResistance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resistance_id", "subtype", "category", "quantity"],
+      "properties": {
+        "resistance_id": { "$ref": "#/$defs/identifier" },
+        "subtype": {
+          "type": "string",
+          "enum": ["LEXICAL", "ROLE_BINDING", "REFERENCE", "AMBIGUITY", "COMPUTE", "DISTANCE", "DECAY", "INTERFERENCE", "ANCHOR_CONFLICT", "OTHER"]
+        },
+        "category": { "type": "string", "enum": ["CAPABILITY", "POLICY", "CONTEXT", "RESOURCE", "SPECIALIZED"] },
+        "quantity": { "$ref": "#/$defs/nativeResistanceComponentQuantity" }
+      }
+    },
+    "traceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "logical_tick", "pre_state_hash", "post_state_hash", "event_hash", "trace_digest", "sealed"],
+      "properties": {
+        "event_id": { "$ref": "#/$defs/identifier" },
+        "logical_tick": { "type": "integer", "minimum": 0 },
+        "pre_state_hash": { "$ref": "#/$defs/digest" },
+        "post_state_hash": { "$ref": "#/$defs/digest" },
+        "event_hash": { "$ref": "#/$defs/digest" },
+        "trace_digest": { "$ref": "#/$defs/digest" },
+        "sealed": { "const": true }
+      }
+    },
+    "componentBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component_kind", "component_id", "binding_status", "compiler_artifact_digest", "ast_node_id", "enabled", "scheduled", "issuer_subsystem", "required_capability"],
+      "properties": {
+        "component_kind": { "type": "string", "enum": ["CJT", "BOARD", "SUBSYSTEM", "TEST_POINT", "MEMORY_CANDIDATE", "UNBOUND"] },
+        "component_id": { "$ref": "#/$defs/identifier" },
+        "binding_status": { "type": "string", "enum": ["COMPILED_CJT", "COMPILED_BOARD", "SUBSYSTEM_ONLY", "UNBOUND_COMPONENT"] },
+        "compiler_artifact_digest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "ast_node_id": { "oneOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] },
+        "enabled": { "type": "boolean" },
+        "scheduled": { "type": "boolean" },
+        "issuer_subsystem": { "oneOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] },
+        "required_capability": { "oneOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] }
+      }
+    },
+    "topologyBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topology_id", "topology_digest", "combination_rule", "resistance_terms"],
+      "properties": {
+        "topology_id": { "oneOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] },
+        "topology_digest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "combination_rule": { "type": "string", "enum": ["SERIES_SUM", "REGISTERED_PROFILE_FUNCTION", "NOT_APPLICABLE"] },
+        "resistance_terms": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "uniqueItems": true, "maxItems": 128 }
+      }
+    },
+    "nativeTopologyBinding": {
+      "allOf": [
+        { "$ref": "#/$defs/topologyBinding" },
+        {
+          "type": "object",
+          "properties": {
+            "topology_id": { "$ref": "#/$defs/identifier" },
+            "topology_digest": { "$ref": "#/$defs/digest" },
+            "combination_rule": { "enum": ["SERIES_SUM", "REGISTERED_PROFILE_FUNCTION"] },
+            "resistance_terms": { "type": "array", "minItems": 1 }
+          }
+        }
+      ]
+    },
+    "notApplicableTopologyBinding": {
+      "allOf": [
+        { "$ref": "#/$defs/topologyBinding" },
+        {
+          "type": "object",
+          "properties": {
+            "topology_id": { "type": "null" },
+            "topology_digest": { "type": "null" },
+            "combination_rule": { "const": "NOT_APPLICABLE" },
+            "resistance_terms": { "type": "array", "maxItems": 0 }
+          }
+        }
+      ]
+    },
+    "resourceAccounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["budget_profile_id", "resource_kind", "allocated", "consumed", "remaining_before", "remaining_after", "fairness_floor", "ceiling", "cutoff"],
+      "properties": {
+        "budget_profile_id": { "$ref": "#/$defs/identifier" },
+        "resource_kind": { "type": "string", "enum": ["LOGICAL_TICKS", "INFERENCE_STEPS", "MEMORY_QUERIES", "PROOF_DEPTH", "NATIVE_ATTENTION_QUANTA", "OTHER"] },
+        "allocated": { "type": "integer", "minimum": 0 },
+        "consumed": { "type": "integer", "minimum": 0 },
+        "remaining_before": { "type": "integer", "minimum": 0 },
+        "remaining_after": { "type": "integer", "minimum": 0 },
+        "fairness_floor": { "type": "integer", "minimum": 0 },
+        "ceiling": { "type": "integer", "minimum": 0 },
+        "cutoff": { "type": "boolean" }
+      }
+    },
+    "semanticOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "source_kind", "source_contract", "evaluation_id", "evidence_digest"],
+      "properties": {
+        "classification": { "type": "string", "enum": ["UNASSESSED", "INTENDED", "OPPOSITE", "OFF_AXIS", "UNKNOWN"] },
+        "source_kind": { "type": "string", "enum": ["NONE", "CAS_SEM", "VERIFIER"] },
+        "source_contract": { "oneOf": [{ "type": "string", "minLength": 1, "maxLength": 256 }, { "type": "null" }] },
+        "evaluation_id": { "oneOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] },
+        "evidence_digest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "type": "object", "properties": { "classification": { "const": "UNASSESSED" } }, "required": ["classification"] },
+          "then": {
+            "type": "object",
+            "properties": {
+              "source_kind": { "const": "NONE" },
+              "source_contract": { "type": "null" },
+              "evaluation_id": { "type": "null" },
+              "evidence_digest": { "type": "null" }
+            }
+          },
+          "else": {
+            "type": "object",
+            "properties": {
+              "source_kind": { "enum": ["CAS_SEM", "VERIFIER"] },
+              "source_contract": { "type": "string", "minLength": 1 },
+              "evaluation_id": { "$ref": "#/$defs/identifier" },
+              "evidence_digest": { "$ref": "#/$defs/digest" }
+            }
+          }
+        }
+      ]
+    },
+    "rpmBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frame_id", "goal_id", "parent_goal_id", "branch_id", "target_foundation", "blocked_prerequisite", "return_address", "resume_stage", "expected_result_key", "depth", "rpm_frame_digest", "phase"],
+      "properties": {
+        "frame_id": { "$ref": "#/$defs/identifier" },
+        "goal_id": { "$ref": "#/$defs/identifier" },
+        "parent_goal_id": { "$ref": "#/$defs/identifier" },
+        "branch_id": { "$ref": "#/$defs/identifier" },
+        "target_foundation": { "oneOf": [{ "type": "string", "pattern": "^TF[1-7][a-d]?$" }, { "type": "null" }] },
+        "blocked_prerequisite": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "return_address": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "resume_stage": { "$ref": "#/$defs/identifier" },
+        "expected_result_key": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "depth": { "type": "integer", "minimum": 1 },
+        "rpm_frame_digest": { "$ref": "#/$defs/digest" },
+        "phase": { "type": "string", "enum": ["PUSH", "ACTIVE_CHILD", "RETURN_SUCCESS", "RETURN_FAILURE"] }
+      }
+    },
+    "neuralProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "profile_digest", "model_digest", "checkpoint_digest", "tokenizer_digest", "code_revision", "runtime_id", "dtype", "test_point_id", "direction_id", "calibration_split_id", "validation_split_id", "calibration_manifest_digest", "validation_manifest_digest", "splits_disjoint", "same_sample_reconstruction", "held_out", "bridge_id", "controls", "seeds", "replicates"],
+      "properties": {
+        "profile_id": { "$ref": "#/$defs/identifier" },
+        "profile_digest": { "$ref": "#/$defs/digest" },
+        "model_digest": { "$ref": "#/$defs/digest" },
+        "checkpoint_digest": { "$ref": "#/$defs/digest" },
+        "tokenizer_digest": { "$ref": "#/$defs/digest" },
+        "code_revision": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "runtime_id": { "$ref": "#/$defs/identifier" },
+        "dtype": { "$ref": "#/$defs/identifier" },
+        "test_point_id": { "$ref": "#/$defs/identifier" },
+        "direction_id": { "$ref": "#/$defs/identifier" },
+        "calibration_split_id": { "$ref": "#/$defs/identifier" },
+        "validation_split_id": { "$ref": "#/$defs/identifier" },
+        "calibration_manifest_digest": { "$ref": "#/$defs/digest" },
+        "validation_manifest_digest": { "$ref": "#/$defs/digest" },
+        "splits_disjoint": { "const": true },
+        "same_sample_reconstruction": { "const": false },
+        "held_out": { "const": true },
+        "bridge_id": { "oneOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] },
+        "controls": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "minItems": 1, "uniqueItems": true, "maxItems": 128 },
+        "seeds": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "minItems": 1, "uniqueItems": true, "maxItems": 1024 },
+        "replicates": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "memoryRetrieval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cue_id", "candidate_set_id", "memory_candidate_id", "candidate_rank", "candidate_count", "candidate_weight", "allocation_cohort_digest", "ambiguity", "anchor_conflict", "policy_blocked", "verifier_passed", "evidence_label", "evidence_digest", "eligible"],
+      "properties": {
+        "cue_id": { "$ref": "#/$defs/identifier" },
+        "candidate_set_id": { "$ref": "#/$defs/identifier" },
+        "memory_candidate_id": { "$ref": "#/$defs/identifier" },
+        "candidate_rank": { "type": "integer", "minimum": 1 },
+        "candidate_count": { "type": "integer", "minimum": 1 },
+        "candidate_weight": { "$ref": "#/$defs/unitIntervalDecimal" },
+        "allocation_cohort_digest": { "$ref": "#/$defs/digest" },
+        "ambiguity": { "type": "boolean" },
+        "anchor_conflict": { "type": "boolean" },
+        "policy_blocked": { "type": "boolean" },
+        "verifier_passed": { "type": "boolean" },
+        "evidence_label": { "type": "string", "enum": ["VERIFIED", "ASSERTED", "CONTRADICTED", "UNKNOWN", "HYPOTHETICAL"] },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "eligible": { "type": "boolean" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "anyOf": [
+              { "type": "object", "properties": { "anchor_conflict": { "const": true } }, "required": ["anchor_conflict"] },
+              { "type": "object", "properties": { "policy_blocked": { "const": true } }, "required": ["policy_blocked"] },
+              { "type": "object", "properties": { "verifier_passed": { "const": false } }, "required": ["verifier_passed"] }
+            ]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "eligible": { "const": false },
+              "candidate_weight": { "type": "string", "pattern": "^0(\\.0+)?$" }
+            }
+          }
+        },
+        {
+          "if": { "type": "object", "properties": { "eligible": { "const": true } }, "required": ["eligible"] },
+          "then": {
+            "type": "object",
+            "properties": {
+              "anchor_conflict": { "const": false },
+              "policy_blocked": { "const": false },
+              "verifier_passed": { "const": true }
+            }
+          }
+        }
+      ]
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asom_label", "residual_rank", "probe_recommendations", "causes_identified"],
+      "properties": {
+        "asom_label": { "type": "string", "enum": ["UNASSESSED", "STARVED", "ALIGNED", "OVERSATURATED", "MISALIGNED"] },
+        "residual_rank": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
+        "probe_recommendations": { "type": "array", "items": { "$ref": "#/$defs/identifier" }, "uniqueItems": true, "maxItems": 128 },
+        "causes_identified": { "const": false }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_id", "method_id", "code_revision", "artifact_digests", "created_at_logical_tick"],
+      "properties": {
+        "source_type": { "type": "string", "enum": ["NATIVE_OBSERVER", "NEURAL_INSTRUMENT", "MEMORY_RETRIEVAL_OBSERVER", "SIMULATOR"] },
+        "source_id": { "$ref": "#/$defs/identifier" },
+        "method_id": { "$ref": "#/$defs/identifier" },
+        "code_revision": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "artifact_digests": { "type": "array", "items": { "$ref": "#/$defs/digest" }, "uniqueItems": true, "maxItems": 128 },
+        "created_at_logical_tick": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_algorithm", "canonicalization", "payload_digest", "previous_chain_digest", "sidecar_chain_digest", "retention_manifest_digest", "verification_status"],
+      "properties": {
+        "hash_algorithm": { "const": "SHA-256" },
+        "canonicalization": { "const": "CNCM_CANONICAL_JSON_V0.1_WITHOUT_INTEGRITY" },
+        "payload_digest": { "$ref": "#/$defs/digest" },
+        "previous_chain_digest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "sidecar_chain_digest": { "$ref": "#/$defs/digest" },
+        "retention_manifest_digest": { "$ref": "#/$defs/digest" },
+        "verification_status": { "type": "string", "enum": ["UNVERIFIED", "VERIFIED"] }
+      }
+    },
+    "authorityBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["truth_authority", "meaning_authority", "proof_authority", "validity_authority", "commitment_authority", "permission_authority", "memory_occurrence_authority", "memory_write_authority", "state_mutation_authority", "halt_authority", "causal_identification_authority", "external_action_authority", "self_modification_authority", "emits_cncm_intents"],
+      "properties": {
+        "truth_authority": { "const": false },
+        "meaning_authority": { "const": false },
+        "proof_authority": { "const": false },
+        "validity_authority": { "const": false },
+        "commitment_authority": { "const": false },
+        "permission_authority": { "const": false },
+        "memory_occurrence_authority": { "const": false },
+        "memory_write_authority": { "const": false },
+        "state_mutation_authority": { "const": false },
+        "halt_authority": { "const": false },
+        "causal_identification_authority": { "const": false },
+        "external_action_authority": { "const": false },
+        "self_modification_authority": { "const": false },
+        "emits_cncm_intents": { "const": false }
+      }
+    }
+  }
+}

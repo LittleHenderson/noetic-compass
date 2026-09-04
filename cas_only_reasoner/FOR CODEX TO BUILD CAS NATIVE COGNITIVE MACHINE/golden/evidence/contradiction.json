@@ -1,0 +1,101 @@
+{
+  "branch_summary": [
+    {
+      "assumptions": [],
+      "branch_id": "branch-main",
+      "candidate_id": "mechanical-path",
+      "contradictions": [
+        "holds(P)@global"
+      ],
+      "proof_step_ids": [],
+      "proposition_keys": [
+        "holds(P)@global",
+        "not:holds(P)@global"
+      ],
+      "status": "CONTRADICTED",
+      "unknowns": []
+    }
+  ],
+  "claim_boundary": {
+    "cas_ohm_runtime_authority": false,
+    "constitutional_learning_enabled": false,
+    "english_understanding": false,
+    "external_actions_enabled": false,
+    "external_model_used": false,
+    "general_intelligence_claim": false,
+    "procedural_learning_enabled": false,
+    "production_ready": false,
+    "status": "REFERENCE_DEMONSTRATOR_ONLY"
+  },
+  "commitment_gates": {},
+  "comparison": [
+    {
+      "differences": [
+        "branch-main:1,0,1,0,0,0"
+      ],
+      "evaluation_frame_hash": "b3cf7a2832139d87b8fb4db94419b27cc78b3db52e795f9638bc6c6cc13f2fbf",
+      "metrics": [
+        [
+          "branch-main",
+          [
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "ordered_branch_ids": [
+        "branch-main"
+      ],
+      "report_id": "comparison-11dd45876af2df29",
+      "shared_features": [
+        "holds(P)@global",
+        "same_evaluation_frame"
+      ],
+      "single_candidate_reason": "mechanically_deterministic_declared_path",
+      "winner_branch_id": null
+    }
+  ],
+  "diagnostics": [
+    "explicit contradiction prevented commitment"
+  ],
+  "event_count": 5,
+  "evidence_digest": "d4dd9ebf68ddec54a2e6de57b11ab487900b712bb9c8b660ed738ad1eec625f0",
+  "final_state_hash": "3933360265307e1461e8bae7b2726d57ec8133e248edaedf66ee8a2a1e0119e1",
+  "goal_id": "evaluate_p",
+  "initial_state_hash": "2cbb23a01da952433d61823e7d7571c1b5d75910c4b5357a32d4656da1487e76",
+  "learning_disposition": "NO_WRITE",
+  "problem_id": "explicit_contradiction",
+  "problem_packet_hash": "8a9b0002657f12c88a80dd57fd8b1bb30f4e5639ad8495faae374faf47a1bc54",
+  "proof_steps": [],
+  "query_result": {
+    "conclusion": null,
+    "lacunae": [],
+    "query": {
+      "arguments": [
+        "P"
+      ],
+      "evidence_status": "unknown",
+      "polarity": true,
+      "predicate": "holds",
+      "provenance": [],
+      "scope": "global"
+    },
+    "supported": false
+  },
+  "rpm_summary": {
+    "event_count": 0,
+    "events": [],
+    "final_depth": 0
+  },
+  "run_id": "run-b331da8cd5303c42",
+  "runtime_version": "0.1.0",
+  "schema_version": "cncm.evidence/0.1",
+  "seed": 0,
+  "terminal_status": "CONFLICT_UNRESOLVED",
+  "trace_digest": "3157352235b69b5a059542eeafef3f9d80847cdf7e5651fc77932d399772cc7b",
+  "trace_head": "b4031829c8260797bad3695e367b324c69b05969e960cef375b0e17936c7ad10"
+}

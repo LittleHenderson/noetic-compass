@@ -1,0 +1,112 @@
+{
+  "fixture_definition": {
+    "category": "contradiction",
+    "expected": {
+      "solution": null,
+      "terminal_status": "NO_SOLUTION"
+    },
+    "fixture_id": "math_no_solution",
+    "input": {
+      "notation": "0*x=3",
+      "variable": "x"
+    },
+    "operation": "solve_linear",
+    "runtime_status": "EXECUTABLE",
+    "schema_version": "cncm.math-fixture/0.1"
+  },
+  "fixture_sha256": "f5e7ec81dfd9dabe66053d4b4ee4b95e8b06aee6378bbbdcbdd96a127ad371e7",
+  "output": {
+    "checked_steps": [],
+    "checker_version": "cncm.math-checker/0.1",
+    "claims": [
+      {
+        "assumption_claim_ids": [],
+        "claim_id": "math-claim-0ea10243d36354d3",
+        "derivation_receipt_id": null,
+        "provenance": [
+          {
+            "detail": "declared equation",
+            "source_id": "math-problem-e9cb625faf4c48c4",
+            "source_type": "math_input"
+          }
+        ],
+        "statement": {
+          "left": {
+            "factors": [
+              {
+                "kind": "integer",
+                "value": 0
+              },
+              {
+                "kind": "variable",
+                "name": "x"
+              }
+            ],
+            "kind": "multiply"
+          },
+          "relation": "EQUAL",
+          "right": {
+            "kind": "integer",
+            "value": 3
+          }
+        },
+        "status": "GIVEN",
+        "theory_id": "cncm.q-linear/0.1"
+      }
+    ],
+    "detail": "variable terms cancel but exact constants disagree",
+    "evidence": {
+      "accepted_receipt_ids": [],
+      "checker_version": "cncm.math-checker/0.1",
+      "claim_boundary": {
+        "approximation_used": false,
+        "autonomous_axiom_change": false,
+        "bounded_counterexample_absence_is_proof": false,
+        "candidate_self_verification": false,
+        "exact_arithmetic_only": true,
+        "external_model_used": false,
+        "proof_checker_protected": true
+      },
+      "evidence_digest": "aff6e46fe32f17dddc3b3f70fb0aabcc3480830b0a6ca0e8bcc32297b155ac05",
+      "final_claim_id": null,
+      "first_failing_step": null,
+      "problem_id": "math-problem-e9cb625faf4c48c4",
+      "proof_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "rejected_receipt_ids": [],
+      "schema_version": "cncm.math-evidence/0.1",
+      "terminal_status": "NO_SOLUTION",
+      "theory_id": "cncm.q-linear/0.1",
+      "verified": false
+    },
+    "first_failing_step": null,
+    "input_statement": {
+      "left": {
+        "factors": [
+          {
+            "kind": "integer",
+            "value": 0
+          },
+          {
+            "kind": "variable",
+            "name": "x"
+          }
+        ],
+        "kind": "multiply"
+      },
+      "relation": "EQUAL",
+      "right": {
+        "kind": "integer",
+        "value": 3
+      }
+    },
+    "problem_id": "math-problem-e9cb625faf4c48c4",
+    "result_digest": "d004e1de0965a0291e0dbb16038642621d7ad5392241d43f67e51af60dc15779",
+    "schema_version": "cncm.math-result/0.1",
+    "solution": null,
+    "solve_variable": "x",
+    "terminal_status": "NO_SOLUTION",
+    "theory_id": "cncm.q-linear/0.1"
+  },
+  "schema_version": "cncm.math-golden/0.1",
+  "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+}

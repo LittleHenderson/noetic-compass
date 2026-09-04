@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/math_strategy.schema.json",
+  "title": "CCB-M1 Strategy Contract v0.1",
+  "description": "Frozen M1 proposal interface. Promotion and learning are not implemented by this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["strategy_id", "theory_id", "operations", "authority_ring", "status", "provenance"],
+  "properties": {
+    "strategy_id": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.:\\-]*$" },
+    "theory_id": { "type": "string" },
+    "operations": { "type": "array", "minItems": 1, "items": { "$ref": "math_rule.schema.json#/properties/operation" } },
+    "authority_ring": { "const": "M1" },
+    "status": { "type": "string", "enum": ["PROPOSED", "TESTED", "PROMOTED", "QUARANTINED", "REJECTED"] },
+    "provenance": { "type": "array", "items": { "$ref": "proposition.schema.json#/$defs/provenance" } }
+  }
+}

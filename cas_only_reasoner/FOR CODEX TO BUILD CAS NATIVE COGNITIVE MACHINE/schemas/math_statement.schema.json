@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/math_statement.schema.json",
+  "title": "CAS-Math Statement v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["left", "relation", "right"],
+  "properties": {
+    "left": { "$ref": "math_expression.schema.json" },
+    "relation": { "type": "string", "enum": ["EQUAL", "LESS_THAN"] },
+    "right": { "$ref": "math_expression.schema.json" }
+  }
+}

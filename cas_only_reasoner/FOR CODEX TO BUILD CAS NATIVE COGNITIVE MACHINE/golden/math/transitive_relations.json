@@ -1,0 +1,50 @@
+{
+  "fixture_definition": {
+    "category": "transitive_relations",
+    "expected": {
+      "accepted": true
+    },
+    "fixture_id": "math_transitive_equality",
+    "input": {
+      "conclusion": "a=c",
+      "premises": [
+        "a=b",
+        "b=c"
+      ],
+      "variables": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    "operation": "check_transitive_equal",
+    "runtime_status": "EXECUTABLE",
+    "schema_version": "cncm.math-fixture/0.1"
+  },
+  "fixture_sha256": "22ee5c3f7558b2310a108416070e78761774779770a54ae88c6c0d43cdffed1f",
+  "output": {
+    "accepted": true,
+    "checker_version": "cncm.math-checker/0.1",
+    "detail": "",
+    "discharged_guards": [
+      "shared_middle_term"
+    ],
+    "proposal_digest": "4e4a348946f16bc0561545fe9bdb0a94eabd7a0a8b8430139417d8c746a470c6",
+    "receipt_id": "math-receipt-e4ddaa995fccc3a7",
+    "reconstructed_conclusion": {
+      "left": {
+        "kind": "variable",
+        "name": "a"
+      },
+      "relation": "EQUAL",
+      "right": {
+        "kind": "variable",
+        "name": "c"
+      }
+    },
+    "rejection_code": "NONE",
+    "theory_id": "cncm.q-linear/0.1"
+  },
+  "schema_version": "cncm.math-golden/0.1",
+  "source_spec_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea"
+}
