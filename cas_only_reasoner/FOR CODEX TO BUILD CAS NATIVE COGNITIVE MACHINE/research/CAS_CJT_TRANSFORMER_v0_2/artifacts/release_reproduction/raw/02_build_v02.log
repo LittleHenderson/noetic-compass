@@ -1,0 +1,223 @@
+Building source distribution...
+running egg_info
+creating cas_neural_cjt.egg-info
+writing cas_neural_cjt.egg-info\PKG-INFO
+writing dependency_links to cas_neural_cjt.egg-info\dependency_links.txt
+writing requirements to cas_neural_cjt.egg-info\requires.txt
+writing top-level names to cas_neural_cjt.egg-info\top_level.txt
+writing manifest file 'cas_neural_cjt.egg-info\SOURCES.txt'
+reading manifest file 'cas_neural_cjt.egg-info\SOURCES.txt'
+writing manifest file 'cas_neural_cjt.egg-info\SOURCES.txt'
+running sdist
+running egg_info
+writing cas_neural_cjt.egg-info\PKG-INFO
+writing dependency_links to cas_neural_cjt.egg-info\dependency_links.txt
+writing requirements to cas_neural_cjt.egg-info\requires.txt
+writing top-level names to cas_neural_cjt.egg-info\top_level.txt
+reading manifest file 'cas_neural_cjt.egg-info\SOURCES.txt'
+writing manifest file 'cas_neural_cjt.egg-info\SOURCES.txt'
+running check
+creating cas_neural_cjt-0.2.0
+creating cas_neural_cjt-0.2.0\cas_cjt
+creating cas_neural_cjt-0.2.0\cas_cjt\schemas
+creating cas_neural_cjt-0.2.0\cas_neural_cjt.egg-info
+creating cas_neural_cjt-0.2.0\examples
+creating cas_neural_cjt-0.2.0\tests
+copying files to cas_neural_cjt-0.2.0...
+copying API_CONTRACTS.md -> cas_neural_cjt-0.2.0
+copying ARCHITECTURE.md -> cas_neural_cjt-0.2.0
+copying BUILD_CONTRACT.md -> cas_neural_cjt-0.2.0
+copying CNCM_INTEGRATION_BOUNDARY.md -> cas_neural_cjt-0.2.0
+copying EQUATIONS.md -> cas_neural_cjt-0.2.0
+copying MEMORY_RESEARCH_PLAN.md -> cas_neural_cjt-0.2.0
+copying OPERATION_EXPANSION.md -> cas_neural_cjt-0.2.0
+copying README.md -> cas_neural_cjt-0.2.0
+copying ROADMAP.md -> cas_neural_cjt-0.2.0
+copying SOURCE_MANIFEST.json -> cas_neural_cjt-0.2.0
+copying pyproject.toml -> cas_neural_cjt-0.2.0
+copying cas_cjt\__init__.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\artifacts.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\checkpoint.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\cncm_bridge.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\contracts.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\control.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\coordinator.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\learning.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\memory.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\network.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\network_coordinator.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\neural.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\persistence.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\phase_contract.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\proposals.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\readiness.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\repair.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\routing.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\runtime.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\semantic.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\state.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\trace.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\types.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\verifier.py -> cas_neural_cjt-0.2.0\cas_cjt
+copying cas_cjt\schemas\bias_state.schema.json -> cas_neural_cjt-0.2.0\cas_cjt\schemas
+copying cas_cjt\schemas\neural_cjt_contracts.schema.json -> cas_neural_cjt-0.2.0\cas_cjt\schemas
+copying cas_neural_cjt.egg-info\PKG-INFO -> cas_neural_cjt-0.2.0\cas_neural_cjt.egg-info
+copying cas_neural_cjt.egg-info\SOURCES.txt -> cas_neural_cjt-0.2.0\cas_neural_cjt.egg-info
+copying cas_neural_cjt.egg-info\dependency_links.txt -> cas_neural_cjt-0.2.0\cas_neural_cjt.egg-info
+copying cas_neural_cjt.egg-info\requires.txt -> cas_neural_cjt-0.2.0\cas_neural_cjt.egg-info
+copying cas_neural_cjt.egg-info\top_level.txt -> cas_neural_cjt-0.2.0\cas_neural_cjt.egg-info
+copying examples\complete_reasoning_transistor.py -> cas_neural_cjt-0.2.0\examples
+copying tests\test_cncm_bridge.py -> cas_neural_cjt-0.2.0\tests
+copying tests\test_governed_learning.py -> cas_neural_cjt-0.2.0\tests
+copying tests\test_integrated_runtime.py -> cas_neural_cjt-0.2.0\tests
+copying tests\test_network_coordinator.py -> cas_neural_cjt-0.2.0\tests
+copying tests\test_neural_core.py -> cas_neural_cjt-0.2.0\tests
+copying tests\test_persistence_coordinator_trace.py -> cas_neural_cjt-0.2.0\tests
+copying tests\test_public_api.py -> cas_neural_cjt-0.2.0\tests
+copying tests\test_readiness_axes.py -> cas_neural_cjt-0.2.0\tests
+copying tests\test_repair_bounds.py -> cas_neural_cjt-0.2.0\tests
+copying tests\test_source_manifest.py -> cas_neural_cjt-0.2.0\tests
+copying tests\test_types_and_schemas.py -> cas_neural_cjt-0.2.0\tests
+Writing cas_neural_cjt-0.2.0\setup.cfg
+Creating tar archive
+removing 'cas_neural_cjt-0.2.0' (and everything under it)
+Building wheel from source distribution...
+running egg_info
+writing cas_neural_cjt.egg-info\PKG-INFO
+writing dependency_links to cas_neural_cjt.egg-info\dependency_links.txt
+writing requirements to cas_neural_cjt.egg-info\requires.txt
+writing top-level names to cas_neural_cjt.egg-info\top_level.txt
+reading manifest file 'cas_neural_cjt.egg-info\SOURCES.txt'
+writing manifest file 'cas_neural_cjt.egg-info\SOURCES.txt'
+running bdist_wheel
+running build
+running build_py
+creating build\lib\cas_cjt
+copying cas_cjt\artifacts.py -> build\lib\cas_cjt
+copying cas_cjt\checkpoint.py -> build\lib\cas_cjt
+copying cas_cjt\cncm_bridge.py -> build\lib\cas_cjt
+copying cas_cjt\contracts.py -> build\lib\cas_cjt
+copying cas_cjt\control.py -> build\lib\cas_cjt
+copying cas_cjt\coordinator.py -> build\lib\cas_cjt
+copying cas_cjt\learning.py -> build\lib\cas_cjt
+copying cas_cjt\memory.py -> build\lib\cas_cjt
+copying cas_cjt\network.py -> build\lib\cas_cjt
+copying cas_cjt\network_coordinator.py -> build\lib\cas_cjt
+copying cas_cjt\neural.py -> build\lib\cas_cjt
+copying cas_cjt\persistence.py -> build\lib\cas_cjt
+copying cas_cjt\phase_contract.py -> build\lib\cas_cjt
+copying cas_cjt\proposals.py -> build\lib\cas_cjt
+copying cas_cjt\readiness.py -> build\lib\cas_cjt
+copying cas_cjt\repair.py -> build\lib\cas_cjt
+copying cas_cjt\routing.py -> build\lib\cas_cjt
+copying cas_cjt\runtime.py -> build\lib\cas_cjt
+copying cas_cjt\semantic.py -> build\lib\cas_cjt
+copying cas_cjt\state.py -> build\lib\cas_cjt
+copying cas_cjt\trace.py -> build\lib\cas_cjt
+copying cas_cjt\types.py -> build\lib\cas_cjt
+copying cas_cjt\verifier.py -> build\lib\cas_cjt
+copying cas_cjt\__init__.py -> build\lib\cas_cjt
+running egg_info
+writing cas_neural_cjt.egg-info\PKG-INFO
+writing dependency_links to cas_neural_cjt.egg-info\dependency_links.txt
+writing requirements to cas_neural_cjt.egg-info\requires.txt
+writing top-level names to cas_neural_cjt.egg-info\top_level.txt
+reading manifest file 'cas_neural_cjt.egg-info\SOURCES.txt'
+writing manifest file 'cas_neural_cjt.egg-info\SOURCES.txt'
+creating build\lib\cas_cjt\schemas
+copying cas_cjt\schemas\bias_state.schema.json -> build\lib\cas_cjt\schemas
+copying cas_cjt\schemas\neural_cjt_contracts.schema.json -> build\lib\cas_cjt\schemas
+installing to build\bdist.win-amd64\wheel
+running install
+running install_lib
+creating build\bdist.win-amd64\wheel
+creating build\bdist.win-amd64\wheel\cas_cjt
+copying build\lib\cas_cjt\artifacts.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\checkpoint.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\cncm_bridge.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\contracts.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\control.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\coordinator.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\learning.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\memory.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\network.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\network_coordinator.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\neural.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\persistence.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\phase_contract.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\proposals.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\readiness.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\repair.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\routing.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\runtime.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+creating build\bdist.win-amd64\wheel\cas_cjt\schemas
+copying build\lib\cas_cjt\schemas\bias_state.schema.json -> build\bdist.win-amd64\wheel\.\cas_cjt\schemas
+copying build\lib\cas_cjt\schemas\neural_cjt_contracts.schema.json -> build\bdist.win-amd64\wheel\.\cas_cjt\schemas
+copying build\lib\cas_cjt\semantic.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\state.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\trace.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\types.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\verifier.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+copying build\lib\cas_cjt\__init__.py -> build\bdist.win-amd64\wheel\.\cas_cjt
+running install_data
+creating build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data
+creating build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt
+copying SOURCE_MANIFEST.json -> build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt
+copying ARCHITECTURE.md -> build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt
+copying EQUATIONS.md -> build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt
+copying API_CONTRACTS.md -> build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt
+copying CNCM_INTEGRATION_BOUNDARY.md -> build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt
+copying ROADMAP.md -> build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt
+copying MEMORY_RESEARCH_PLAN.md -> build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt
+copying OPERATION_EXPANSION.md -> build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt
+copying BUILD_CONTRACT.md -> build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt
+creating build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt\examples
+copying examples\complete_reasoning_transistor.py -> build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.data\data\share\cas-neural-cjt\examples
+running install_egg_info
+Copying cas_neural_cjt.egg-info to build\bdist.win-amd64\wheel\.\cas_neural_cjt-0.2.0-py3.14.egg-info
+running install_scripts
+creating build\bdist.win-amd64\wheel\cas_neural_cjt-0.2.0.dist-info\WHEEL
+creating 'C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\v2-dist\\.tmp-5tmkclkz\\cas_neural_cjt-0.2.0-py3-none-any.whl' and adding 'build\\bdist.win-amd64\\wheel' to it
+adding 'cas_cjt/__init__.py'
+adding 'cas_cjt/artifacts.py'
+adding 'cas_cjt/checkpoint.py'
+adding 'cas_cjt/cncm_bridge.py'
+adding 'cas_cjt/contracts.py'
+adding 'cas_cjt/control.py'
+adding 'cas_cjt/coordinator.py'
+adding 'cas_cjt/learning.py'
+adding 'cas_cjt/memory.py'
+adding 'cas_cjt/network.py'
+adding 'cas_cjt/network_coordinator.py'
+adding 'cas_cjt/neural.py'
+adding 'cas_cjt/persistence.py'
+adding 'cas_cjt/phase_contract.py'
+adding 'cas_cjt/proposals.py'
+adding 'cas_cjt/readiness.py'
+adding 'cas_cjt/repair.py'
+adding 'cas_cjt/routing.py'
+adding 'cas_cjt/runtime.py'
+adding 'cas_cjt/semantic.py'
+adding 'cas_cjt/state.py'
+adding 'cas_cjt/trace.py'
+adding 'cas_cjt/types.py'
+adding 'cas_cjt/verifier.py'
+adding 'cas_cjt/schemas/bias_state.schema.json'
+adding 'cas_cjt/schemas/neural_cjt_contracts.schema.json'
+adding 'cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/API_CONTRACTS.md'
+adding 'cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/ARCHITECTURE.md'
+adding 'cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/BUILD_CONTRACT.md'
+adding 'cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/CNCM_INTEGRATION_BOUNDARY.md'
+adding 'cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/EQUATIONS.md'
+adding 'cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/MEMORY_RESEARCH_PLAN.md'
+adding 'cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/OPERATION_EXPANSION.md'
+adding 'cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/ROADMAP.md'
+adding 'cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/SOURCE_MANIFEST.json'
+adding 'cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/examples/complete_reasoning_transistor.py'
+adding 'cas_neural_cjt-0.2.0.dist-info/METADATA'
+adding 'cas_neural_cjt-0.2.0.dist-info/WHEEL'
+adding 'cas_neural_cjt-0.2.0.dist-info/top_level.txt'
+adding 'cas_neural_cjt-0.2.0.dist-info/RECORD'
+removing build\bdist.win-amd64\wheel
+Successfully built C:\Users\wakil\AppData\Local\Temp\casformer-v02-run-dec08c81\v2-dist\cas_neural_cjt-0.2.0.tar.gz
+Successfully built C:\Users\wakil\AppData\Local\Temp\casformer-v02-run-dec08c81\v2-dist\cas_neural_cjt-0.2.0-py3-none-any.whl

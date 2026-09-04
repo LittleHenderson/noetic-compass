@@ -1,0 +1,83 @@
+{
+  "artifacts": [
+    {
+      "archive_type": "wheel",
+      "bytes": 36501,
+      "filename": "casformer_reference-0.1.0-py3-none-any.whl",
+      "member_count": 15,
+      "metadata": {
+        "name": "casformer-reference",
+        "requires_dist": [
+          "torch>=2.1",
+          "pytest>=8; extra == \"test\""
+        ],
+        "requires_python": ">=3.11",
+        "version": "0.1.0"
+      },
+      "sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee",
+      "wheel": {
+        "generator": "setuptools (84.0.0)",
+        "root_is_purelib": "true",
+        "tag": "py3-none-any",
+        "wheel_version": "1.0"
+      }
+    },
+    {
+      "archive_type": "wheel",
+      "bytes": 221994,
+      "embedded_source_manifest": {
+        "aggregate_sha256": "5fad64a52c8aef30d56e46fa22f113c26bc171a3016d326c3c88157425b798f1",
+        "file_count": 50,
+        "member": "cas_neural_cjt-0.2.0.data/data/share/cas-neural-cjt/SOURCE_MANIFEST.json",
+        "sha256": "f68b9ba78bb5b6bc184c4b014a799756c1b714f05d05b515dcd464a54c76e634"
+      },
+      "filename": "cas_neural_cjt-0.2.0-py3-none-any.whl",
+      "member_count": 40,
+      "metadata": {
+        "name": "cas-neural-cjt",
+        "requires_dist": [
+          "torch>=2.1",
+          "numpy>=1.26",
+          "casformer-reference==0.1.0",
+          "jsonschema>=4.21",
+          "pytest>=8; extra == \"test\""
+        ],
+        "requires_python": ">=3.11",
+        "version": "0.2.0"
+      },
+      "sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9",
+      "wheel": {
+        "generator": "setuptools (84.0.0)",
+        "root_is_purelib": "true",
+        "tag": "py3-none-any",
+        "wheel_version": "1.0"
+      }
+    },
+    {
+      "archive_type": "sdist",
+      "bytes": 260264,
+      "embedded_source_manifest": {
+        "aggregate_sha256": "5fad64a52c8aef30d56e46fa22f113c26bc171a3016d326c3c88157425b798f1",
+        "file_count": 50,
+        "member": "cas_neural_cjt-0.2.0/SOURCE_MANIFEST.json",
+        "sha256": "f68b9ba78bb5b6bc184c4b014a799756c1b714f05d05b515dcd464a54c76e634"
+      },
+      "filename": "cas_neural_cjt-0.2.0.tar.gz",
+      "member_count": 62,
+      "sha256": "e1dfa2e186acfe054cb6d7d333b7ed5b28972f59d4fc73e856b9d433cd3a81c9"
+    }
+  ],
+  "requirements_lock": {
+    "bytes": 27424,
+    "filename": "requirements.lock",
+    "sha256": "8b394b25f29a145e60f1e6942f07e042bd8806974366035cee6831d58aa412d4"
+  },
+  "schema_version": "cas.casformer.release-artifacts/0.2",
+  "source_manifest": {
+    "aggregate_sha256": "5fad64a52c8aef30d56e46fa22f113c26bc171a3016d326c3c88157425b798f1",
+    "bytes": 8729,
+    "file_count": 50,
+    "sha256": "f68b9ba78bb5b6bc184c4b014a799756c1b714f05d05b515dcd464a54c76e634"
+  },
+  "status": "PASS"
+}

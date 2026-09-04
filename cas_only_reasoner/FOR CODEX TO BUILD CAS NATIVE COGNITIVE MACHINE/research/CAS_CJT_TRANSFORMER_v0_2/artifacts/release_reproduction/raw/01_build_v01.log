@@ -1,0 +1,71 @@
+Building wheel...
+running egg_info
+creating casformer_reference.egg-info
+writing casformer_reference.egg-info\PKG-INFO
+writing dependency_links to casformer_reference.egg-info\dependency_links.txt
+writing requirements to casformer_reference.egg-info\requires.txt
+writing top-level names to casformer_reference.egg-info\top_level.txt
+writing manifest file 'casformer_reference.egg-info\SOURCES.txt'
+reading manifest file 'casformer_reference.egg-info\SOURCES.txt'
+writing manifest file 'casformer_reference.egg-info\SOURCES.txt'
+running bdist_wheel
+running build
+running build_py
+creating build\lib\casformer
+copying casformer\baselines.py -> build\lib\casformer
+copying casformer\circuit.py -> build\lib\casformer
+copying casformer\controls.py -> build\lib\casformer
+copying casformer\core.py -> build\lib\casformer
+copying casformer\diagnostics.py -> build\lib\casformer
+copying casformer\schema.py -> build\lib\casformer
+copying casformer\trace.py -> build\lib\casformer
+copying casformer\__init__.py -> build\lib\casformer
+running egg_info
+writing casformer_reference.egg-info\PKG-INFO
+writing dependency_links to casformer_reference.egg-info\dependency_links.txt
+writing requirements to casformer_reference.egg-info\requires.txt
+writing top-level names to casformer_reference.egg-info\top_level.txt
+reading manifest file 'casformer_reference.egg-info\SOURCES.txt'
+writing manifest file 'casformer_reference.egg-info\SOURCES.txt'
+copying casformer\casformer_trace.schema.json -> build\lib\casformer
+installing to build\bdist.win-amd64\wheel
+running install
+running install_lib
+creating build\bdist.win-amd64\wheel
+creating build\bdist.win-amd64\wheel\casformer
+copying build\lib\casformer\baselines.py -> build\bdist.win-amd64\wheel\.\casformer
+copying build\lib\casformer\casformer_trace.schema.json -> build\bdist.win-amd64\wheel\.\casformer
+copying build\lib\casformer\circuit.py -> build\bdist.win-amd64\wheel\.\casformer
+copying build\lib\casformer\controls.py -> build\bdist.win-amd64\wheel\.\casformer
+copying build\lib\casformer\core.py -> build\bdist.win-amd64\wheel\.\casformer
+copying build\lib\casformer\diagnostics.py -> build\bdist.win-amd64\wheel\.\casformer
+copying build\lib\casformer\schema.py -> build\bdist.win-amd64\wheel\.\casformer
+copying build\lib\casformer\trace.py -> build\bdist.win-amd64\wheel\.\casformer
+copying build\lib\casformer\__init__.py -> build\bdist.win-amd64\wheel\.\casformer
+running install_data
+creating build\bdist.win-amd64\wheel\casformer_reference-0.1.0.data\data
+creating build\bdist.win-amd64\wheel\casformer_reference-0.1.0.data\data\share\casformer-reference
+copying SPEC.md -> build\bdist.win-amd64\wheel\casformer_reference-0.1.0.data\data\share\casformer-reference
+copying CLAIMS.md -> build\bdist.win-amd64\wheel\casformer_reference-0.1.0.data\data\share\casformer-reference
+running install_egg_info
+Copying casformer_reference.egg-info to build\bdist.win-amd64\wheel\.\casformer_reference-0.1.0-py3.14.egg-info
+running install_scripts
+creating build\bdist.win-amd64\wheel\casformer_reference-0.1.0.dist-info\WHEEL
+creating 'C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\v1-dist\\.tmp-shixdw0p\\casformer_reference-0.1.0-py3-none-any.whl' and adding 'build\\bdist.win-amd64\\wheel' to it
+adding 'casformer/__init__.py'
+adding 'casformer/baselines.py'
+adding 'casformer/casformer_trace.schema.json'
+adding 'casformer/circuit.py'
+adding 'casformer/controls.py'
+adding 'casformer/core.py'
+adding 'casformer/diagnostics.py'
+adding 'casformer/schema.py'
+adding 'casformer/trace.py'
+adding 'casformer_reference-0.1.0.data/data/share/casformer-reference/CLAIMS.md'
+adding 'casformer_reference-0.1.0.data/data/share/casformer-reference/SPEC.md'
+adding 'casformer_reference-0.1.0.dist-info/METADATA'
+adding 'casformer_reference-0.1.0.dist-info/WHEEL'
+adding 'casformer_reference-0.1.0.dist-info/top_level.txt'
+adding 'casformer_reference-0.1.0.dist-info/RECORD'
+removing build\bdist.win-amd64\wheel
+Successfully built C:\Users\wakil\AppData\Local\Temp\casformer-v02-run-dec08c81\v1-dist\casformer_reference-0.1.0-py3-none-any.whl

@@ -1,0 +1,6 @@
+Using Python 3.14.0 environment at: C:\Users\wakil\AppData\Local\Temp\casformer-v02-run-dec08c81\venv
+Resolved 2 packages in 28ms
+Prepared 2 packages in 37ms
+Installed 2 packages in 24ms
+ + cas-neural-cjt==0.2.0 (from file:///C:/Users/wakil/AppData/Local/Temp/casformer-v02-run-dec08c81/v2-dist/cas_neural_cjt-0.2.0-py3-none-any.whl)
+ + casformer-reference==0.1.0 (from file:///C:/Users/wakil/AppData/Local/Temp/casformer-v02-run-dec08c81/v1-dist/casformer_reference-0.1.0-py3-none-any.whl)

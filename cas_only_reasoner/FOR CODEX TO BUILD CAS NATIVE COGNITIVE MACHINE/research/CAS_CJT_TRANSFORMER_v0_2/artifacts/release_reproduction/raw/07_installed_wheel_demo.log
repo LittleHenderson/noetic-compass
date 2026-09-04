@@ -1,0 +1,34 @@
+{
+  "accepted_effects": 5,
+  "changed_parameter_names": [
+    "cells.node_0002.operations.modules_by_operation.^6.left.weight",
+    "cells.node_0002.operations.modules_by_operation.^6.merge.weight",
+    "cells.node_0002.operations.modules_by_operation.^6.right.weight"
+  ],
+  "cjt_chain": [
+    "A",
+    "B",
+    "C",
+    "R",
+    "C"
+  ],
+  "claim_boundary": "Mechanism prototype only; no CAS learning or reasoning advantage is claimed.",
+  "database": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\demo\\complete_reasoning_transistor.sqlite3",
+  "integrity": true,
+  "invalid_update_left_head_unchanged": true,
+  "invalid_update_reason": "CHECKPOINT_PARAMETER_SCOPE_ESCAPE",
+  "later_bias_artifact_used": "artifact-48517ec4417a90d84bb51cd9",
+  "later_symbol": "L0",
+  "learning_transition_reconstructed": true,
+  "post_model_digest": "61c13bddde3e643065b95050716b82fbe0ecd6b7ff5e3915c66322be7986e71f",
+  "post_restart_candidate_digest": "3d46ecee4ef1bf4a41c3bd8273aee90e9a210317e29b58dbdb41f22d6f294e42",
+  "pre_learning_candidate_digest": "8de27e3ca4587ceb7d57f2d40efc07d38d21a0f273655c812bbfefec07d4c1a0",
+  "pre_model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+  "repair_closed": true,
+  "repair_eligible_tick": 4,
+  "repair_opened_tick": 3,
+  "repair_outcome_id": "repair-outcome-37bcf531a7418b6aad6afc5b",
+  "same_input_cause_id": "cause-790eef9ac95beeef11398d24",
+  "same_input_output_changed": true,
+  "trace_count": 6
+}

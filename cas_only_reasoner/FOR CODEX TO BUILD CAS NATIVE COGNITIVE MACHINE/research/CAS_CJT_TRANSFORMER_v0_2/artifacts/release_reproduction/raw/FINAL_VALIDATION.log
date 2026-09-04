@@ -1,0 +1,13 @@
+command: C:\Python314\python.exe -B -I release_reproduction\probes\verify_evidence_bundle.py --artifacts-root artifacts
+exit_code: 0
+payload_sha256s_sha256: 278c1842d99b1cfa948734483cc37b32bbfacb077d8897e2fd3a88023f4fd496
+evidence_index_sha256: 047c89aea97a8621a48d520ec1f93fc37fa8e3dc0fb600e4b0b9e47e01bbe48d
+validation_receipt_sha256: 1b4071e6a74da287003afb8603bb3b0bc7435f65dba7e7cc552ca4f0faaadbeb
+{
+  "audit_classification": "CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL",
+  "payload_files_verified": 46,
+  "required_checks_verified": 7,
+  "source_commit": "dec08c81644f1c47b4b94c29a406a9432df7c7bd",
+  "status": "PASS",
+  "trace_schemas_verified": 6
+}

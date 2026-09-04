@@ -1,0 +1,38 @@
+{
+  "integrity": true,
+  "schema_validated": 6,
+  "status": "PASS",
+  "trace_count": 6,
+  "traces": [
+    {
+      "schema_valid": true,
+      "tick": 1,
+      "trace_id": "trace-ae2968ef598ea64f0116c4fb"
+    },
+    {
+      "schema_valid": true,
+      "tick": 2,
+      "trace_id": "trace-fce828da65c33b2de4074ea8"
+    },
+    {
+      "schema_valid": true,
+      "tick": 3,
+      "trace_id": "trace-07ce42bf12d7629df34b5648"
+    },
+    {
+      "schema_valid": true,
+      "tick": 4,
+      "trace_id": "trace-6dace7775e3df45c1317bacf"
+    },
+    {
+      "schema_valid": true,
+      "tick": 5,
+      "trace_id": "trace-1d1263fc1c17fb2084974949"
+    },
+    {
+      "schema_valid": true,
+      "tick": 6,
+      "trace_id": "trace-6d46e192853151d76cca61e6"
+    }
+  ]
+}

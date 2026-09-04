@@ -1,0 +1,369 @@
+Based on the GLM audit you pasted, v0.2 has crossed from “nearly complete” into “independently reproduced local mechanism prototype.”
+I have not personally executed the v0.2 package, so my judgment is about GLM’s reported audit evidence. That evidence is unusually concrete:
+```
+4/4 package identities matched
+
+250/250 v0.2 tests passed
+
+5/5 source-manifest tests passed
+
+complete reasoning-transistor demo exited successfully
+
+6 traces emitted
+
+trace integrity = true
+
+89/89 frozen v0.1 dependency tests passed
+```
+The verdict is partial, but not because a functional test failed. It is partial because:
+1.  the package is not committed in Git; 
+2.  GLM did not inspect all 50 controlled files line by line; 
+3.  GLM did not install and test the packaged wheel. 
+The demo reportedly exercises this actual sequence:
+```
+A
+↓
+B
+↓
+C
+↓
+C encounters a missing prerequisite
+↓
+repair CJT R opens
+↓
+repair closes successfully
+↓
+C resumes
+```
+That is much closer to the complete reasoning transistor than v0.1.
+It also reportedly demonstrates:
+-  persistent state across a process restart; 
+-  pre-learning and post-learning model digests; 
+-  the same input producing a different output after the committed learning transition; 
+-  repair opening and repair closure; 
+-  an immutable RepairOutcome; 
+-  rejection of an update that tries to escape its permitted parameter scope; 
+-  six integrity-valid traces; 
+-  continued compatibility with the frozen v0.1 neural engine. 
+The update refusal is especially important:
+```
+CHECKPOINT_PARAMETER_SCOPE_ESCAPE
+```
+That means the learning system tried to alter something outside its assigned authority and the coordinator rejected it.
+That is not merely telemetry. That is an authority boundary being exercised.
+The distinction I would use is:
+```
+Neural engine:
+COMPLETE ENOUGH FOR THE PROTOTYPE
+
+Cause → Effect processing:
+DEMONSTRATED
+
+multi-CJT transmission:
+DEMONSTRATED
+
+repair and resume:
+DEMONSTRATED
+
+persistent learning state across restart:
+DEMONSTRATED IN THE REGISTERED DEMO
+
+learning-scope governance:
+DEMONSTRATED
+
+trace integrity:
+DEMONSTRATED
+
+complete CNCM brain:
+NO
+
+language competence:
+NO
+
+general reasoning competence:
+NO
+
+CAS advantage over a standard Transformer:
+NO
+```
+So yes, we have apparently built something that legitimately deserves the description:
+We should not yet call it:
+```
+an intelligent reasoning machine
+
+an AGI
+
+a capable language model
+
+a superior Transformer
+
+a scientifically validated CAS architecture
+```
+Those are later questions.
+The neural portion should not itself decide:
+```
+truth
+permission
+commitment
+memory authority
+publication authority
+```
+The neural CJTs propose.
+The deterministic coordinator, verifier, and commitment machinery decide whether the proposal becomes authoritative.
+That is consistent with the v0.1 evidence discipline. Its trace is explicitly non-authoritative, records NEURAL_PROXY_UNVALIDATED, and refuses forged truth authority or forged validity status. 
+So the completed machine is not:
+```
+the neural model believes its own output,
+therefore the output becomes state
+```
+It is:
+```
+neural CJT proposes an Effect or update
+
+external verifier evaluates it
+
+coordinator checks authority and scope
+
+commitment either accepts or rolls it back
+```
+That separation is one of the strongest parts of the architecture.
+The audit says the technical questions were resolved and the full suite passed. That is strong evidence. But because GLM did not line-read every controlled file, the final release receipt should explicitly name the tests covering the three former blockers.
+The final evidence should show something like:
+```
+test_coordinator_rejects_unknown_memory_reference:
+PASS
+
+test_coordinator_rejects_forged_memory_reference_receipt:
+PASS
+
+test_compute_plan_must_be_registered:
+PASS
+
+test_compute_ceiling_cannot_be_exceeded:
+PASS
+
+test_stored_trace_validates_against_published_schema:
+PASS
+
+test_invalid_stored_trace_is_rejected:
+PASS
+```
+The v0.1 artifact suite already demonstrates the expected trace-schema discipline: payload fields, authority fields, region counts, required properties, and checksum format are checked against the frozen schema. 
+For v0.2 final acceptance, we need to know that stored multi-tick reasoning traces, not merely single-block neural traces, pass the v0.2 published schema.
+GLM describes:
+```
+same_input_output_changed: true
+```
+as a “bias-persistence effect” and reports a learning transition reconstructed across restart.
+But it also says the README describes the transition as:
+```
+audit-only
+not independently certified
+not itself authoritative
+```
+Those are compatible, but the documentation should separate three different concepts:
+```
+1. Persistent neural parameter update
+
+2. Persistent CJT Bias-state update
+
+3. Replay reconstruction of a previously recorded transition
+```
+The final report should say exactly which of these caused the changed output.
+For example:
+```
+The changed output was caused by a committed parameter update
+that survived serialization and process restart.
+
+or
+
+The changed output was caused by a committed Bias-state update.
+
+or
+
+The changed output was reconstructed from a sealed replay,
+not independently recomputed from persisted state.
+```
+Those are materially different accomplishments. The present audit summary does not give enough detail to choose among them confidently.
+GLM calls this:
+```
+SOURCE_NOT_REPRODUCIBLE
+```
+A more precise description is:
+The package has hash-pinned artifact identity, but no Git-reconstructible lineage.
+Because the wheel and source archive have matching SHA-256 identities, the package is not floating in total darkness. Its bytes can be identified.
+But as long as the tree is untracked:
+-  the repository commit does not contain it; 
+-  another developer cannot check out the exact source from Git; 
+-  ordinary diffs cannot show what changed; 
+-  receipts cannot bind to a source-containing commit; 
+-  later work can accidentally mutate the only working copy. 
+That should be fixed before another feature is added.
+Commit the complete v0.2 source without altering its behavior:
+```
+all 50 controlled files
+
+tests
+
+schemas
+
+demo
+
+source manifest
+
+README and claim boundary
+
+wheel-build configuration
+
+dependency lock
+
+CHANGELOG entry
+
+spec-sheet row
+```
+Name the status:
+```
+CASFORMER_V0_2_SOURCE_FREEZE
+```
+Create a pristine worktree or clone pinned to that commit.
+Then perform all of the following:
+```
+install the wheel into a clean environment
+
+run the 250-test v0.2 suite
+
+run the 5 source-manifest tests
+
+run complete_reasoning_transistor.py
+
+run the frozen v0.1 89-test suite
+
+run the CNCM 181-test / 403-subtest regression suite
+
+validate all stored traces against the v0.2 JSON schema
+
+run the three former blocker attacks explicitly
+```
+The wheel-install path matters because hash verification proves the archive is unchanged, but not that the distributed package imports and executes correctly.
+Commit a separate evidence package containing:
+```
+source-freeze SHA
+
+wheel and source-archive hashes
+
+exact commands
+
+raw outputs
+
+environment and dependency identity
+
+test counts
+
+demo output
+
+former-blocker test results
+
+GLM audit report
+
+audit-report hash
+
+final validation receipt
+```
+That avoids trying to make one commit contain its own future SHA.
+The last auditor should:
+-  install from the wheel; 
+-  run the exact release commands; 
+-  directly attempt the fake-memory-reference attack; 
+-  directly attempt compute-ceiling escape; 
+-  corrupt a stored trace and confirm schema rejection; 
+-  verify that unauthorized learning changes no active state; 
+-  restart the process and reproduce the claimed persistence behavior. 
+Only then merge v0.2 into the main CNCM line.
+Do not add pulsation directly into the source-freeze commit.
+Freeze v0.2 first as the clean baseline.
+Then open a separate branch such as:
+```
+research/casformer-v0.3-memory-strategies
+```
+Implement the memory strategies behind one common interface:
+```
+STATIC_DUAL_KEY
+
+BOUNDED_RELEVANCE_PROPAGATION
+
+OSCILLATORY_PHASE_PULSE
+
+EXPLICIT_CHAIN_TAG
+
+TRAJECTORY_HISTORY_READOUT
+
+HYBRID_TAG_PLUS_PULSE
+```
+The explicit chain-tag system should remain the accountability baseline. The phase mechanism should remain optional and experimental.
+Prior phase experiments showed why. The phase engine could improve retrieval while collapsing the identity of separate reasoning chains, which triggered PHASE_MEMORY_UNSAFE.  At convergence, the earlier oscillator also tended toward global synchrony, causing distinct chains to merge rather than remain separately attributable. 
+So the safest architectural hierarchy is:
+```
+chain ID:
+guarantees which train of thought owns an activation
+
+pulse amplitude:
+represents current relevance inside that chain
+
+optional phase/frequency:
+coordinates temporal behavior inside the chain
+
+verifier:
+checks the retrieved memory
+
+coordinator:
+authorizes whether it enters Bias or learning
+```
+The pulse should help retrieval. It should never be the sole authority for chain identity.
+```
+GLM V0.2 EXECUTION AUDIT:
+ACCEPT AS PARTIAL
+
+PACKAGE IDENTITIES:
+4/4 VERIFIED
+
+V0.2 TEST SUITE:
+250 PASSED, INDEPENDENTLY REPRODUCED
+
+SOURCE-MANIFEST SUITE:
+5 PASSED, INDEPENDENTLY REPRODUCED
+
+COMPLETE REASONING-TRANSISTOR DEMO:
+EXECUTED SUCCESSFULLY
+
+TRACE COUNT:
+6
+
+TRACE INTEGRITY:
+TRUE
+
+FROZEN V0.1 DEPENDENCY:
+89 PASSED
+
+LOCAL REASONING-TRANSISTOR MECHANISM:
+SUBSTANTIALLY DEMONSTRATED
+
+GIT-REPRODUCIBLE RELEASE:
+NOT YET
+
+WHEEL INSTALLATION:
+NOT YET INDEPENDENTLY TESTED
+
+LINE-BY-LINE AUDIT:
+NOT COMPLETE
+
+LANGUAGE OR GENERAL REASONING:
+NOT ESTABLISHED
+
+CAS-SPECIFIC ADVANTAGE:
+NOT ESTABLISHED
+
+NEXT:
+SOURCE FREEZE → CLEAN WHEEL INSTALL →
+FULL REPRODUCTION → EVIDENCE COMMIT →
+FINAL ACCEPTANCE AUDIT
+```

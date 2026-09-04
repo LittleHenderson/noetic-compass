@@ -1,0 +1,35 @@
+{
+  "branch": "codex/casformer-v0.2-release",
+  "build_worktree": {
+    "clean_before_build": true,
+    "path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-build-dec08c81"
+  },
+  "changed_file_count": 271,
+  "cncm_regression_footprint": {
+    "playground_files_required_for_exact_suite_count": 21,
+    "purpose": "Permit the frozen CNCM 181-test / 403-subtest regression to run from the source-freeze commit."
+  },
+  "commit": "dec08c81644f1c47b4b94c29a406a9432df7c7bd",
+  "parent": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+  "schema_version": "cas.casformer.source-freeze-receipt/0.2",
+  "source_claim_boundary": "The commit freezes a local mechanism prototype and its regression footprint. It does not establish language capability, general reasoning, CAS-specific advantage, a complete CNCM brain, AGI, or production readiness.",
+  "status": "SOURCE_FREEZE_VERIFIED",
+  "subject": "CASFORMER_V0_2_SOURCE_FREEZE",
+  "tree": "a56fc8b845279789f588b5adefee192be0327872",
+  "v0_1_manifest": {
+    "aggregate_sha256": "324603abfdcba59cb68d7351d822f612c2409dcd396d42e9e91fd3df2bbe091e",
+    "file_count": 26,
+    "sha256": "abcc0b77e8c98fd03c4dd4eb6b1e35832e6ce334f98def525dcb96ef061e0460"
+  },
+  "v0_2_manifest": {
+    "aggregate_sha256": "5fad64a52c8aef30d56e46fa22f113c26bc171a3016d326c3c88157425b798f1",
+    "file_count": 50,
+    "sha256": "f68b9ba78bb5b6bc184c4b014a799756c1b714f05d05b515dcd464a54c76e634"
+  },
+  "verification_worktree": {
+    "clean_after_all_tests": true,
+    "clean_before_tests": true,
+    "path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-source-dec08c81",
+    "tracked_diff_exit_code_after": 0
+  }
+}

@@ -1,0 +1,450 @@
+{
+  "schema_version": "cas.neural-cjt.validation-receipt/0.2",
+  "receipt_id": "cas-neural-cjt-v0.2-final-source-freeze-2-20260903T132155Z",
+  "status": "LOCAL_ENGINEERING_VALIDATION_PASSED",
+  "verdict": "PASS_WITHIN_STATED_LOCAL_PROTOTYPE_BOUNDARY",
+  "release_candidate": "FINAL_SOURCE_FREEZE_2",
+  "validation_window": {
+    "started_at_utc": "2026-09-03T13:04:12.5740452Z",
+    "completed_at_utc": "2026-09-03T13:21:55.5147594Z"
+  },
+  "source": {
+    "path": "research/CAS_CJT_TRANSFORMER_v0_2",
+    "package_name": "cas-neural-cjt",
+    "package_version": "0.2.0",
+    "manifest": {
+      "path": "SOURCE_MANIFEST.json",
+      "schema_version": "cas.neural-cjt.source-manifest/0.2",
+      "status": "LOCAL_NEURAL_CJT_MECHANISM_PROTOTYPE_SOURCE_SET",
+      "bytes": 8729,
+      "file_count": 50,
+      "sha256": "f68b9ba78bb5b6bc184c4b014a799756c1b714f05d05b515dcd464a54c76e634",
+      "aggregate_sha256": "5fad64a52c8aef30d56e46fa22f113c26bc171a3016d326c3c88157425b798f1",
+      "checked_manifest_matches_current_source_tree": true
+    },
+    "claim_boundary": "One local prototype satisfying the owner's 15-behavior definition of the first complete neural CJT; not the complete CAS-native Transformer, CNCM brain, general reasoning system, AGI, or production system; no claim that CAS improves learning or reasoning."
+  },
+  "repository_context": {
+    "repository_root": "C:/Users/wakil/OneDrive/Desktop/tksCAS",
+    "head_commit": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+    "head_commit_date": "2026-09-02T21:29:49-07:00",
+    "branch": "research/cmb-r1-rgm02-v1",
+    "worktree_clean": false,
+    "porcelain_entry_count_at_receipt_time": 65,
+    "release_candidate_git_tracked": false,
+    "release_candidate_status": "UNTRACKED_DIRECTORY",
+    "head_commit_contains_release_candidate": false,
+    "binding_note": "The source manifest and package hashes bind this release candidate. The repository HEAD does not. Unrelated dirty and untracked files were preserved."
+  },
+  "environment": {
+    "host": {
+      "operating_system": "Windows-11-10.0.26200-SP0",
+      "python_executable": "C:/Python314/python.exe",
+      "python_version": "3.14.0",
+      "python_build": "tags/v3.14.0:ebf955d, Oct 7 2025, MSC v.1944 64 bit (AMD64)",
+      "pytest_version": "9.0.2",
+      "torch_version": "2.11.0",
+      "numpy_version": "2.3.5",
+      "jsonschema_version": "4.26.0",
+      "uv_version": "0.12.7",
+      "uv_build": "61291a8ca 2026-08-27 x86_64-pc-windows-msvc"
+    },
+    "isolated_install": {
+      "temporary_root": "C:/Users/wakil/AppData/Local/Temp/cas-v02-final-release-c060d717a80644feaba69231dcd0f47a",
+      "venv_system_site_packages": true,
+      "python_isolated_mode": true,
+      "python_version": "3.14.0",
+      "pip_version": "25.2",
+      "casformer_reference_version": "0.1.0",
+      "cas_neural_cjt_version": "0.2.0",
+      "torch_version": "2.11.0",
+      "numpy_version": "2.5.2",
+      "jsonschema_version": "4.26.0",
+      "dependencies_installed_into_venv_before_isolated_check": true,
+      "pip_check": "NO_BROKEN_REQUIREMENTS"
+    }
+  },
+  "checks": {
+    "full_v0_2_suite": {
+      "status": "PASS",
+      "command": {
+        "executable": "C:/Python314/python.exe",
+        "environment": {
+          "PYTHONPATH": [
+            ".",
+            "../CASFORMER_v0_1"
+          ]
+        },
+        "arguments": [
+          "-m",
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "-o",
+          "addopts=",
+          "tests"
+        ]
+      },
+      "passed": 250,
+      "failed": 0,
+      "duration_seconds": 60.47
+    },
+    "source_demo": {
+      "status": "PASS",
+      "command": {
+        "executable": "C:/Python314/python.exe",
+        "environment": {
+          "PYTHONPATH": [
+            ".",
+            "../CASFORMER_v0_1"
+          ]
+        },
+        "arguments": [
+          "examples/complete_reasoning_transistor.py"
+        ]
+      },
+      "exit_code": 0,
+      "wall_time_seconds": 16.0661865
+    },
+    "focused_schema_and_real_trace_validation": {
+      "status": "PASS",
+      "command": {
+        "executable": "C:/Python314/python.exe",
+        "environment": {
+          "PYTHONPATH": [
+            ".",
+            "../CASFORMER_v0_1"
+          ]
+        },
+        "arguments": [
+          "-m",
+          "pytest",
+          "-vv",
+          "-p",
+          "no:cacheprovider",
+          "-o",
+          "addopts=",
+          "tests/test_integrated_runtime.py::test_complete_four_cjt_reasoning_transistor",
+          "tests/test_types_and_schemas.py::test_tick_trace_requires_exact_eleven_phase_order_and_no_extras",
+          "tests/test_types_and_schemas.py::test_phase_schema_rejects_missing_and_extra_claims_for_every_phase",
+          "tests/test_types_and_schemas.py::test_network_tick_trace_requires_the_complete_extension"
+        ]
+      },
+      "passed": 14,
+      "failed": 0,
+      "duration_seconds": 28.77,
+      "facts": [
+        "Six real persisted traces validated and reconstructed.",
+        "An undeclared top-level trace field was rejected.",
+        "Missing and extra claims were rejected for each of the 11 mandatory phases.",
+        "An incomplete network trace extension was rejected."
+      ]
+    },
+    "post_build_manifest_check": {
+      "status": "PASS",
+      "command": {
+        "executable": "C:/Python314/python.exe",
+        "environment": {
+          "PYTHONPATH": [
+            ".",
+            "../CASFORMER_v0_1"
+          ]
+        },
+        "arguments": [
+          "-m",
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "-o",
+          "addopts=",
+          "tests/test_source_manifest.py"
+        ]
+      },
+      "passed": 5,
+      "failed": 0,
+      "duration_seconds": 0.23
+    },
+    "repair_history_17_cycle_stress": {
+      "status": "PASS",
+      "executor": "SEPARATE_LOCAL_SAME_TASK_AUDIT_AGENT",
+      "command_form": "C:/Python314/python.exe - (stdin probe; no source edit)",
+      "duration_seconds": null,
+      "duration_note": "The audit reported exact result counts but did not retain a duration.",
+      "result": {
+        "repair_cycles": 17,
+        "trace_count": 51,
+        "history_len": 16,
+        "history_matches_latest_16": true,
+        "oldest_evicted": true,
+        "oldest_frame_durable": true,
+        "latest_reconstructed": true,
+        "integrity": true
+      }
+    },
+    "package_build": {
+      "status": "PASS",
+      "command": {
+        "executable": "uv",
+        "arguments": [
+          "build",
+          "--clear",
+          "--python",
+          "C:/Python314/python.exe"
+        ]
+      },
+      "exit_code": 0,
+      "wall_time_seconds": 8.9366355
+    },
+    "archive_inspection": {
+      "status": "PASS",
+      "method": "Python 3.14 isolated stdlib zipfile, tarfile, email, and hashlib assertions",
+      "wheel_member_count": 40,
+      "sdist_member_count": 62,
+      "wheel_required_members_checked": 12,
+      "sdist_required_members_checked": 13,
+      "missing_required_members": [],
+      "embedded_manifest_matches_source_bytes": true
+    },
+    "isolated_wheel_install": {
+      "status": "PASS",
+      "venv_creation": {
+        "executable": "C:/Python314/python.exe",
+        "arguments": [
+          "-m",
+          "venv",
+          "--system-site-packages",
+          "venv"
+        ]
+      },
+      "dependency_install": {
+        "executable": "venv/Scripts/python.exe",
+        "arguments": [
+          "-m",
+          "pip",
+          "install",
+          "--ignore-installed",
+          "numpy==2.5.2",
+          "torch==2.11.0",
+          "jsonschema==4.26.0"
+        ]
+      },
+      "package_install_order": [
+        {
+          "wheel": "casformer_reference-0.1.0-py3-none-any.whl",
+          "arguments": [
+            "-m",
+            "pip",
+            "install",
+            "--no-deps"
+          ]
+        },
+        {
+          "wheel": "cas_neural_cjt-0.2.0-py3-none-any.whl",
+          "arguments": [
+            "-m",
+            "pip",
+            "install",
+            "--no-deps"
+          ]
+        }
+      ],
+      "import_and_resource_probe": {
+        "python_flag": "-I",
+        "exit_code": 0,
+        "modules_loaded_from_venv_site_packages": [
+          "casformer",
+          "cas_cjt",
+          "numpy",
+          "torch"
+        ],
+        "resources_loaded": [
+          "cas_cjt/schemas/bias_state.schema.json",
+          "cas_cjt/schemas/neural_cjt_contracts.schema.json"
+        ],
+        "schema_id": "https://cas.local/schemas/neural-cjt-contracts-0.2.json"
+      },
+      "installed_demo": {
+        "command": "venv/Scripts/python.exe -I venv/share/cas-neural-cjt/examples/complete_reasoning_transistor.py",
+        "exit_code": 0,
+        "wall_time_seconds": 15.1197625,
+        "source_checkout_on_python_path": false,
+        "expected_summary_matched": true
+      }
+    },
+    "frozen_v0_1_regression": {
+      "status": "PASS",
+      "command": {
+        "executable": "C:/Python314/python.exe",
+        "arguments": [
+          "-m",
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "-o",
+          "addopts=",
+          "tests"
+        ]
+      },
+      "passed": 89,
+      "failed": 0,
+      "duration_seconds": 4.61,
+      "manifest_file_count": 26,
+      "manifest_sha256_before": "abcc0b77e8c98fd03c4dd4eb6b1e35832e6ce334f98def525dcb96ef061e0460",
+      "manifest_sha256_after": "abcc0b77e8c98fd03c4dd4eb6b1e35832e6ce334f98def525dcb96ef061e0460",
+      "manifest_aggregate_sha256": "324603abfdcba59cb68d7351d822f612c2409dcd396d42e9e91fd3df2bbe091e",
+      "manifest_unchanged": true
+    },
+    "cncm_root_regression": {
+      "status": "PASS",
+      "command": {
+        "working_directory": "FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE",
+        "executable": "C:/Python314/python.exe",
+        "environment": {
+          "PYTHONPATH": "."
+        },
+        "arguments": [
+          "-m",
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "-o",
+          "addopts=",
+          "tests"
+        ]
+      },
+      "passed": 181,
+      "subtests_passed": 403,
+      "failed": 0,
+      "duration_seconds": 7.17,
+      "boundary": "This is a regression compatibility check. It does not establish full v0.2 integration into the CNCM."
+    },
+    "same_task_adversarial_acceptance_audit": {
+      "status": "PASS",
+      "executor": "/root/final_acceptance_audit",
+      "organizationally_independent": false,
+      "facts": [
+        "The final public boundary and seven executable adversarial reproductions passed.",
+        "The 17-cycle stress passed.",
+        "The final package contents, hashes, and isolated install passed.",
+        "The final static audit reported no remaining blocker."
+      ]
+    }
+  },
+  "demo_summary": {
+    "accepted_effects": 5,
+    "trace_count": 6,
+    "cjt_chain": [
+      "A",
+      "B",
+      "C",
+      "R",
+      "C"
+    ],
+    "integrity": true,
+    "repair_closed": true,
+    "repair_opened_tick": 3,
+    "repair_eligible_tick": 4,
+    "learning_transition_reconstructed": true,
+    "same_input_output_changed": true,
+    "invalid_update_left_head_unchanged": true,
+    "invalid_update_reason": "CHECKPOINT_PARAMETER_SCOPE_ESCAPE",
+    "changed_parameter_names": [
+      "cells.node_0002.operations.modules_by_operation.^6.left.weight",
+      "cells.node_0002.operations.modules_by_operation.^6.merge.weight",
+      "cells.node_0002.operations.modules_by_operation.^6.right.weight"
+    ],
+    "pre_model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+    "post_model_digest": "61c13bddde3e643065b95050716b82fbe0ecd6b7ff5e3915c66322be7986e71f",
+    "pre_learning_candidate_digest": "8de27e3ca4587ceb7d57f2d40efc07d38d21a0f273655c812bbfefec07d4c1a0",
+    "post_restart_candidate_digest": "3d46ecee4ef1bf4a41c3bd8273aee90e9a210317e29b58dbdb41f22d6f294e42",
+    "claim_boundary": "Mechanism prototype only; no CAS learning or reasoning advantage is claimed."
+  },
+  "artifacts": {
+    "wheel": {
+      "path": "dist/cas_neural_cjt-0.2.0-py3-none-any.whl",
+      "bytes": 221994,
+      "sha256": "132324be38984207fb3a4f1d78f713bf8ce9243c11dcf86ca65beaa1fb9f3412",
+      "member_count": 40,
+      "embedded_source_manifest_sha256": "f68b9ba78bb5b6bc184c4b014a799756c1b714f05d05b515dcd464a54c76e634"
+    },
+    "sdist": {
+      "path": "dist/cas_neural_cjt-0.2.0.tar.gz",
+      "bytes": 260823,
+      "sha256": "ac2d53646ae82408cb485643568629a56df2210c2b4bfe68f9a021912d1e55c1",
+      "member_count": 62,
+      "embedded_source_manifest_sha256": "f68b9ba78bb5b6bc184c4b014a799756c1b714f05d05b515dcd464a54c76e634"
+    },
+    "wheel_metadata": {
+      "path": "cas_neural_cjt-0.2.0.dist-info/METADATA",
+      "requires_dist": [
+        "casformer-reference==0.1.0",
+        "jsonschema>=4.21",
+        "numpy>=1.26",
+        "pytest>=8; extra == \"test\"",
+        "torch>=2.1"
+      ]
+    },
+    "wheel_embedded_files": {
+      "documents": [
+        "API_CONTRACTS.md",
+        "ARCHITECTURE.md",
+        "BUILD_CONTRACT.md",
+        "CNCM_INTEGRATION_BOUNDARY.md",
+        "EQUATIONS.md",
+        "MEMORY_RESEARCH_PLAN.md",
+        "OPERATION_EXPANSION.md",
+        "ROADMAP.md"
+      ],
+      "schemas": [
+        "cas_cjt/schemas/bias_state.schema.json",
+        "cas_cjt/schemas/neural_cjt_contracts.schema.json"
+      ],
+      "example": "examples/complete_reasoning_transistor.py",
+      "source_manifest": "SOURCE_MANIFEST.json",
+      "all_checked_files_present": true
+    },
+    "sdist_additional_checked_file": "README.md",
+    "compatibility_input_v0_1_wheel": {
+      "built_from": "A temporary copy populated from the frozen v0.1 source manifest",
+      "path": "C:/Users/wakil/AppData/Local/Temp/cas-v02-final-release-c060d717a80644feaba69231dcd0f47a/v1-dist/casformer_reference-0.1.0-py3-none-any.whl",
+      "bytes": 36501,
+      "sha256": "4d06ebfceeeb75b1eed2ec61525570e70b912768e93e0a5dfb49dc0e96241aa6"
+    }
+  },
+  "closed_pre_release_issues": [
+    {
+      "issue": "NUMPY_RUNTIME_DEPENDENCY_NOT_DECLARED",
+      "status": "CLOSED_BEFORE_FINAL_SOURCE_FREEZE_2",
+      "original_observation": "A stale pre-freeze wheel imported under -I but its installed demo failed in checkpoint.py because Tensor.numpy() could not run without NumPy.",
+      "closure": "The final package declares numpy>=1.26, final wheel METADATA contains that requirement, NumPy 2.5.2 was installed inside the fresh venv, pip check passed, and the final installed demo exited 0 under -I."
+    }
+  ],
+  "claim_matrix": {
+    "first_local_neural_cjt_mechanism_prototype": "ENGINEERING_VALIDATION_PASSED",
+    "complete_cas_native_transformer": "NOT_IMPLEMENTED_OR_ESTABLISHED",
+    "complete_cncm_brain": "NOT_IMPLEMENTED_OR_ESTABLISHED",
+    "general_reasoning_system": "NOT_ESTABLISHED",
+    "agi": "NOT_ESTABLISHED",
+    "cas_improves_learning": "NOT_TESTED_OR_ESTABLISHED",
+    "cas_improves_reasoning": "NOT_TESTED_OR_ESTABLISHED",
+    "production_readiness": "NOT_ESTABLISHED",
+    "organizationally_independent_validation": "NOT_PERFORMED",
+    "third_party_certification": "NOT_PERFORMED",
+    "cryptographic_signature": "ABSENT",
+    "worm_anchor": "ABSENT",
+    "authenticated_identity": "ABSENT"
+  },
+  "evidence_boundary": {
+    "local_same_task_evidence": true,
+    "organizationally_independent": false,
+    "cryptographically_signed": false,
+    "worm_anchored": false,
+    "production_attestation": false,
+    "hashes_are_tamper_evidence_only": true,
+    "note": "Passing tests establish only their covered behavior. This receipt is not an external audit, certification, signature, immutable storage proof, production approval, or superiority result."
+  }
+}

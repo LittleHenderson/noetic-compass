@@ -1,0 +1,103 @@
+{
+  "checks": [
+    {
+      "atomic_facts": {
+        "head_unchanged": true,
+        "integrity": true,
+        "trace_count_after": 0
+      },
+      "evidence": "tests/test_network_coordinator.py::test_requested_but_unretained_memory_record_is_rejected_atomically",
+      "expected_and_observed_reason": "MEMORY_RECORD_NOT_RETAINED",
+      "name": "nonexistent_memory_reference_rejection",
+      "status": "PASS"
+    },
+    {
+      "atomic_facts": {
+        "head_unchanged": true,
+        "integrity": true,
+        "trace_count_after": 0
+      },
+      "evidence": [
+        "tests/test_network_coordinator.py::test_unrequested_memory_read_claim_is_rejected_without_moving_head",
+        "tests/test_network_coordinator.py::test_poisoned_mixed_memory_batch_writes_nothing_authoritative"
+      ],
+      "expected_and_observed_reasons": [
+        "MEMORY_RECORD_NOT_RETAINED",
+        "MEMORY_INTENT_NOT_ACCEPTED"
+      ],
+      "name": "forged_memory_reference_rejection",
+      "status": "PASS"
+    },
+    {
+      "atomic_facts": {
+        "authoritative_table_counts_unchanged": true,
+        "head_unchanged": true,
+        "integrity": true,
+        "non_authoritative_rejection_audit_delta": 1,
+        "trace_count_after": 0
+      },
+      "evidence": "probes/compute_plan_mismatch_probe.py and results/COMPUTE_PLAN_MISMATCH_RESULTS.json",
+      "expected_and_observed_reason": "COMPUTE_PLAN_NOT_REPRODUCIBLE",
+      "name": "compute_plan_mismatch_rejection",
+      "status": "PASS"
+    },
+    {
+      "atomic_facts": {
+        "head_unchanged": true,
+        "integrity": true,
+        "trace_count_after": 0
+      },
+      "evidence": "tests/test_network_coordinator.py::test_huge_observation_under_zero_compute_ceiling_is_rejected_atomically",
+      "expected_and_observed_reason": "COMPUTE_CEILING_EXCEEDED",
+      "name": "compute_ceiling_escape_rejection",
+      "status": "PASS"
+    },
+    {
+      "evidence": [
+        "tests/test_persistence_coordinator_trace.py::test_selected_reconstruction_binds_trace_payload_to_trace_row",
+        "tests/test_persistence_coordinator_trace.py::test_trace_tamper_and_chain_discontinuity_are_detected",
+        "tests/test_integrated_runtime.py::test_complete_four_cjt_reasoning_transistor"
+      ],
+      "expected_and_observed_result": "PersistenceError: trace event failed verification; integrity becomes false for the tampered copy.",
+      "name": "malformed_stored_trace_rejection",
+      "status": "PASS"
+    },
+    {
+      "atomic_facts": {
+        "head_unchanged": true,
+        "integrity": true,
+        "trace_count_after": 0
+      },
+      "evidence": [
+        "tests/test_network_coordinator.py::test_checkpoint_scope_escape_rejects_cross_cjt_bytes_and_keeps_head",
+        "results/DEMO_RESULTS.json"
+      ],
+      "expected_and_observed_reason": "CHECKPOINT_PARAMETER_SCOPE_ESCAPE",
+      "name": "invalid_cross_cjt_parameter_scope_update_rejection",
+      "status": "PASS"
+    },
+    {
+      "evidence": [
+        "results/DEMO_RESULTS.json",
+        "tests/test_integrated_runtime.py::test_complete_four_cjt_reasoning_transistor"
+      ],
+      "facts": {
+        "fresh_child_process_restore_asserted_by_test": true,
+        "post_model_digest": "61c13bddde3e643065b95050716b82fbe0ecd6b7ff5e3915c66322be7986e71f",
+        "post_restart_candidate_digest": "3d46ecee4ef1bf4a41c3bd8273aee90e9a210317e29b58dbdb41f22d6f294e42",
+        "pre_learning_candidate_digest": "8de27e3ca4587ceb7d57f2d40efc07d38d21a0f273655c812bbfefec07d4c1a0",
+        "pre_model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+        "same_input_cause_id": "cause-790eef9ac95beeef11398d24",
+        "same_input_output_changed": true,
+        "trace_count": 6
+      },
+      "interpretation_boundary": "The changed candidate follows a committed transition that changed both model state and recurrent Bias. This evidence does not isolate which change caused how much of the output difference.",
+      "name": "restart_persistence_and_changed_output_demonstration",
+      "status": "PASS"
+    }
+  ],
+  "focused_existing_test_count": 8,
+  "focused_existing_tests_passed": 8,
+  "schema_version": "cas.casformer.blocker-closure-results/0.2",
+  "status": "PASS"
+}

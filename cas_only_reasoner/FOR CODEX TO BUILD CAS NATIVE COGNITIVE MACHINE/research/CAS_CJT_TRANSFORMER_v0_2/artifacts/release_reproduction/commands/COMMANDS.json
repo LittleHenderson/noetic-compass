@@ -1,0 +1,136 @@
+{
+  "commands": [
+    {
+      "argv": ["git", "worktree", "add", "--detach", "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-source-dec08c81", "dec08c81644f1c47b4b94c29a406a9432df7c7bd"],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "exit_code": 0,
+      "id": "source-worktree"
+    },
+    {
+      "argv": ["git", "worktree", "add", "--detach", "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-build-dec08c81", "dec08c81644f1c47b4b94c29a406a9432df7c7bd"],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "exit_code": 0,
+      "id": "build-worktree"
+    },
+    {
+      "argv": ["C:\\Python314\\python.exe", "-m", "venv", "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv"],
+      "exit_code": 0,
+      "id": "create-clean-environment"
+    },
+    {
+      "argv": ["uv", "build", "--clear", "--wheel", "--python", "C:\\Python314\\python.exe", "--out-dir", "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\v1-dist", "<build-worktree>\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_1"],
+      "exit_code": 0,
+      "id": "build-v0.1-wheel",
+      "raw_output": "raw/01_build_v01.log"
+    },
+    {
+      "argv": ["uv", "build", "--clear", "--python", "C:\\Python314\\python.exe", "--out-dir", "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\v2-dist", "<build-worktree>\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2"],
+      "exit_code": 0,
+      "id": "build-v0.2-wheel-and-sdist",
+      "raw_output": "raw/02_build_v02.log"
+    },
+    {
+      "argv": ["uv", "pip", "install", "--python", "<venv>\\Scripts\\python.exe", "--require-hashes", "--torch-backend", "cpu", "-r", "<source-worktree>\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\requirements.lock"],
+      "exit_code": 0,
+      "id": "install-hash-locked-dependencies",
+      "raw_output": "raw/03_install_lock.log"
+    },
+    {
+      "argv": ["uv", "pip", "install", "--python", "<venv>\\Scripts\\python.exe", "--no-deps", "<v0.1-wheel>", "<v0.2-wheel>"],
+      "exit_code": 0,
+      "id": "install-built-wheels",
+      "raw_output": "raw/04_install_wheels.log"
+    },
+    {
+      "argv": ["uv", "pip", "check", "--python", "<venv>\\Scripts\\python.exe"],
+      "exit_code": 0,
+      "id": "dependency-check",
+      "raw_output": "raw/05_pip_check.log"
+    },
+    {
+      "command_source": "commands/reproduce.ps1#importProbe",
+      "exit_code": 0,
+      "id": "isolated-wheel-import",
+      "raw_output": "raw/06_isolated_wheel_import.log"
+    },
+    {
+      "argv": ["<venv>\\Scripts\\python.exe", "-I", "<venv>\\share\\cas-neural-cjt\\examples\\complete_reasoning_transistor.py", "--database", "<run-root>\\demo\\complete_reasoning_transistor.sqlite3"],
+      "exit_code": 0,
+      "id": "installed-wheel-demo",
+      "raw_output": "raw/07_installed_wheel_demo.log"
+    },
+    {
+      "command_source": "commands/reproduce.ps1#traceProbe",
+      "exit_code": 0,
+      "id": "validate-all-stored-traces",
+      "raw_output": "raw/08_trace_schema_validation.log"
+    },
+    {
+      "command_source": "commands/reproduce.ps1",
+      "exit_code": 0,
+      "id": "v0.2-suite",
+      "raw_output": "raw/09_v02_full_250.log",
+      "result": "250 passed in 58.79s"
+    },
+    {
+      "command_source": "commands/reproduce.ps1",
+      "exit_code": 0,
+      "id": "v0.2-manifest-suite",
+      "raw_output": "raw/10_v02_manifest_5.log",
+      "result": "5 passed in 0.19s"
+    },
+    {
+      "command_source": "commands/reproduce.ps1",
+      "exit_code": 0,
+      "id": "frozen-v0.1-suite",
+      "raw_output": "raw/11_v01_frozen_89.log",
+      "result": "89 passed in 2.96s"
+    },
+    {
+      "command_source": "commands/reproduce.ps1",
+      "exit_code": 0,
+      "id": "cncm-regression-suite",
+      "raw_output": "raw/12_cncm_181_403.log",
+      "result": "181 passed, 403 subtests passed in 7.43s"
+    },
+    {
+      "command_source": "commands/reproduce.ps1#focused",
+      "exit_code": 0,
+      "id": "explicit-existing-blocker-tests",
+      "raw_output": "raw/14_explicit_blocker_tests.log",
+      "result": "8 passed in 25.90s"
+    },
+    {
+      "argv": ["<venv>\\Scripts\\python.exe", "-I", "probes\\compute_plan_mismatch_probe.py", "<source-worktree>\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2"],
+      "exit_code": 0,
+      "id": "compute-plan-mismatch-probe",
+      "raw_output": "raw/15_compute_plan_mismatch_probe.log"
+    },
+    {
+      "argv": ["git", "status", "--porcelain=v1", "--untracked-files=all"],
+      "cwd": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-source-dec08c81",
+      "exit_code": 0,
+      "id": "source-status-after",
+      "raw_output": "raw/16_source_status_after.log",
+      "result": "clean"
+    },
+    {
+      "argv": ["git", "diff-tree", "--no-commit-id", "--name-status", "-r", "dec08c81644f1c47b4b94c29a406a9432df7c7bd"],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+      "exit_code": 0,
+      "id": "source-freeze-changed-files",
+      "raw_output": "raw/22_source_freeze_changed_files.log",
+      "result": "271 paths"
+    }
+  ],
+  "environment_rule": "PYTHONDONTWRITEBYTECODE=1 for all test commands",
+  "path_placeholders": {
+    "<build-worktree>": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-build-dec08c81",
+    "<run-root>": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81",
+    "<source-worktree>": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-source-dec08c81",
+    "<venv>": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv"
+  },
+  "schema_version": "cas.casformer.reproduction-commands/0.2",
+  "source_commit": "dec08c81644f1c47b4b94c29a406a9432df7c7bd",
+  "status": "PASS"
+}

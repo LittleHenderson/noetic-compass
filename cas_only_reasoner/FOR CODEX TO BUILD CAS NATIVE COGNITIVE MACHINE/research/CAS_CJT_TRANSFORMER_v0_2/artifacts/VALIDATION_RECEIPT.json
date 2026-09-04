@@ -1,0 +1,233 @@
+{
+  "schema_version": "cas.casformer.release-validation-receipt/0.2",
+  "receipt_id": "casformer-v0.2-release-reproduction-dec08c81-20260904",
+  "status": "CASFORMER_V0_2_RELEASE_REPRODUCED",
+  "classification": "LOCAL_RELEASE_REPRODUCTION_WITH_HASH_BOUND_EVIDENCE",
+  "source_freeze": {
+    "commit": "dec08c81644f1c47b4b94c29a406a9432df7c7bd",
+    "tree": "a56fc8b845279789f588b5adefee192be0327872",
+    "parent": "1e58d7254d97c88effa609f7ad05ee2fca9b1aee",
+    "subject": "CASFORMER_V0_2_SOURCE_FREEZE",
+    "changed_file_count": 271,
+    "v0_2_controlled_file_count": 50,
+    "v0_2_manifest_sha256": "f68b9ba78bb5b6bc184c4b014a799756c1b714f05d05b515dcd464a54c76e634",
+    "v0_2_manifest_aggregate_sha256": "5fad64a52c8aef30d56e46fa22f113c26bc171a3016d326c3c88157425b798f1",
+    "v0_1_controlled_file_count": 26,
+    "v0_1_manifest_sha256": "abcc0b77e8c98fd03c4dd4eb6b1e35832e6ce334f98def525dcb96ef061e0460",
+    "v0_1_manifest_aggregate_sha256": "324603abfdcba59cb68d7351d822f612c2409dcd396d42e9e91fd3df2bbe091e"
+  },
+  "clean_reproduction": {
+    "source_worktree": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-source-dec08c81",
+    "build_worktree": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-build-dec08c81",
+    "run_root": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81",
+    "source_clean_before": true,
+    "build_clean_before": true,
+    "source_clean_after": true,
+    "source_tracked_diff_exit_code_after": 0,
+    "fresh_virtual_environment": true,
+    "hash_locked_runtime_dependencies": true,
+    "dependency_check": "PASS",
+    "isolated_imports_from_virtual_environment": true,
+    "installed_demo_executed_from_wheel_data": true,
+    "test_execution_boundary": "The test files came from the pinned source freeze. Some frozen tests intentionally start child processes with pinned source paths. The isolated import, installed demo, stored-trace validator, and external compute-plan probe establish installed-wheel execution."
+  },
+  "tests": {
+    "v0_2": {
+      "status": "PASS",
+      "passed": 250,
+      "failed": 0,
+      "duration_seconds": 58.79,
+      "raw_output": "release_reproduction/raw/09_v02_full_250.log"
+    },
+    "manifest": {
+      "status": "PASS",
+      "passed": 5,
+      "failed": 0,
+      "duration_seconds": 0.19,
+      "raw_output": "release_reproduction/raw/10_v02_manifest_5.log"
+    },
+    "v0_1": {
+      "status": "PASS",
+      "passed": 89,
+      "failed": 0,
+      "duration_seconds": 2.96,
+      "raw_output": "release_reproduction/raw/11_v01_frozen_89.log"
+    },
+    "cncm": {
+      "status": "PASS",
+      "passed": 181,
+      "subtests_passed": 403,
+      "failed": 0,
+      "duration_seconds": 7.43,
+      "raw_output": "release_reproduction/raw/12_cncm_181_403.log",
+      "boundary": "Regression compatibility check only; not proof of a complete CNCM brain."
+    }
+  },
+  "demo": {
+    "status": "PASS",
+    "exit_code": 0,
+    "accepted_effects": 5,
+    "trace_count": 6,
+    "cjt_chain": ["A", "B", "C", "R", "C"],
+    "integrity": true,
+    "repair_closed": true,
+    "invalid_update_reason": "CHECKPOINT_PARAMETER_SCOPE_ESCAPE",
+    "invalid_update_left_head_unchanged": true,
+    "same_input_cause_id": "cause-790eef9ac95beeef11398d24",
+    "same_input_output_changed": true,
+    "pre_model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+    "post_model_digest": "61c13bddde3e643065b95050716b82fbe0ecd6b7ff5e3915c66322be7986e71f",
+    "pre_learning_candidate_digest": "8de27e3ca4587ceb7d57f2d40efc07d38d21a0f273655c812bbfefec07d4c1a0",
+    "post_restart_candidate_digest": "3d46ecee4ef1bf4a41c3bd8273aee90e9a210317e29b58dbdb41f22d6f294e42",
+    "interpretation_boundary": "The committed transition changed both model state and recurrent Bias. This evidence does not isolate their separate causal shares.",
+    "result": "release_reproduction/results/DEMO_RESULTS.json",
+    "raw_output": "release_reproduction/raw/07_installed_wheel_demo.log"
+  },
+  "stored_trace_validation": {
+    "status": "PASS",
+    "trace_count": 6,
+    "schema_validated": 6,
+    "integrity": true,
+    "schema": "Published v0.2 neural CJT contract schema",
+    "result": "release_reproduction/results/TRACE_SCHEMA_RESULTS.json",
+    "raw_output": "release_reproduction/raw/08_trace_schema_validation.log"
+  },
+  "required_checks": {
+    "status": "PASS",
+    "passed": 7,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "nonexistent memory-reference rejection",
+        "reason": "MEMORY_RECORD_NOT_RETAINED",
+        "status": "PASS"
+      },
+      {
+        "name": "forged memory-reference rejection",
+        "reasons": ["MEMORY_RECORD_NOT_RETAINED", "MEMORY_INTENT_NOT_ACCEPTED"],
+        "status": "PASS"
+      },
+      {
+        "name": "compute-plan mismatch rejection",
+        "reason": "COMPUTE_PLAN_NOT_REPRODUCIBLE",
+        "status": "PASS"
+      },
+      {
+        "name": "compute-ceiling escape rejection",
+        "reason": "COMPUTE_CEILING_EXCEEDED",
+        "status": "PASS"
+      },
+      {
+        "name": "malformed stored-trace rejection",
+        "result": "PersistenceError and integrity false for the tampered copy",
+        "status": "PASS"
+      },
+      {
+        "name": "invalid cross-CJT parameter-scope update rejection",
+        "reason": "CHECKPOINT_PARAMETER_SCOPE_ESCAPE",
+        "status": "PASS"
+      },
+      {
+        "name": "restart persistence and changed-output demonstration",
+        "same_input_output_changed": true,
+        "fresh_child_process_restore_asserted": true,
+        "status": "PASS"
+      }
+    ],
+    "focused_existing_tests": {
+      "passed": 8,
+      "duration_seconds": 25.90,
+      "raw_output": "release_reproduction/raw/14_explicit_blocker_tests.log"
+    },
+    "results": "release_reproduction/results/BLOCKER_CLOSURE_RESULTS.json"
+  },
+  "artifacts": {
+    "v0_2_wheel": {
+      "path": "release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl",
+      "bytes": 221994,
+      "sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9",
+      "member_count": 40
+    },
+    "v0_2_sdist": {
+      "path": "release_reproduction/dist/cas_neural_cjt-0.2.0.tar.gz",
+      "bytes": 260264,
+      "sha256": "e1dfa2e186acfe054cb6d7d333b7ed5b28972f59d4fc73e856b9d433cd3a81c9",
+      "member_count": 62
+    },
+    "v0_1_wheel": {
+      "path": "release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl",
+      "bytes": 36501,
+      "sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee",
+      "member_count": 15
+    },
+    "requirements_lock": {
+      "path": "requirements.lock",
+      "bytes": 27424,
+      "sha256": "8b394b25f29a145e60f1e6942f07e042bd8806974366035cee6831d58aa412d4"
+    }
+  },
+  "environment": {
+    "operating_system": "Windows 11 / 10.0.26200",
+    "architecture": "AMD64",
+    "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "python": "3.14.0",
+    "powershell": "7.6.5",
+    "git": "2.52.0.windows.1",
+    "uv": "0.12.7 (61291a8ca 2026-08-27 x86_64-pc-windows-msvc)",
+    "torch": "2.11.0+cpu",
+    "torch_cuda_available": false,
+    "numpy": "2.5.2",
+    "jsonschema": "4.26.0",
+    "pytest": "9.0.2",
+    "setuptools_runtime": "81.0.0",
+    "setuptools_build_backend": "84.0.0",
+    "identity_file": "release_reproduction/environment/ENVIRONMENT.json",
+    "package_inventory": "release_reproduction/environment/installed_packages.txt",
+    "tool_versions": "release_reproduction/environment/tool_versions.txt"
+  },
+  "commands_and_raw_outputs": {
+    "exact_commands": "release_reproduction/commands/COMMANDS.json",
+    "rerun_recipe": "release_reproduction/commands/reproduce.ps1",
+    "raw_output_directory": "release_reproduction/raw"
+  },
+  "audit": {
+    "classification": "CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL",
+    "path": "release_reproduction/audits/CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL.txt",
+    "sha256": "c50d0de687671ba6922b145e0b44777be556fd2cfa24292a263a3bd83195c73b",
+    "boundary": "Owner-supplied assessment of GLM's reported execution audit. It is not represented as a newly performed independent audit."
+  },
+  "evidence_binding": {
+    "evidence_index": "release_reproduction/EVIDENCE_INDEX.json",
+    "evidence_index_sha256": "047c89aea97a8621a48d520ec1f93fc37fa8e3dc0fb600e4b0b9e47e01bbe48d",
+    "payload_sha256s": "release_reproduction/PAYLOAD_SHA256SUMS.txt",
+    "payload_sha256s_sha256": "278c1842d99b1cfa948734483cc37b32bbfacb077d8897e2fd3a88023f4fd496",
+    "payload_file_count": 46,
+    "verification_script": "release_reproduction/probes/verify_evidence_bundle.py",
+    "verification_output": "release_reproduction/raw/FINAL_VALIDATION.log",
+    "git_binding_rule": "The evidence commit must have the source-freeze commit as its sole parent and must change only the v0.2 artifacts tree."
+  },
+  "historical_receipt": {
+    "path": "release_reproduction/audits/PRE_FREEZE_LOCAL_VALIDATION_RECEIPT.json",
+    "sha256": "3d9081b836511ef2680d1a183f7ebeedac02a5873fc01f22f699a3b9a77cdc6e",
+    "authority": "HISTORICAL_ONLY"
+  },
+  "claims_not_promoted": [
+    "language capability",
+    "general reasoning capability",
+    "CAS-specific advantage",
+    "CNCM brain completion",
+    "AGI",
+    "production readiness"
+  ],
+  "evidence_boundary": {
+    "local_same_task_evidence": true,
+    "organizationally_independent": false,
+    "cryptographically_signed": false,
+    "worm_anchored": false,
+    "third_party_certification": false,
+    "production_attestation": false,
+    "hashes_are_tamper_evidence_only": true,
+    "future_v0_3_memory_and_meta_logic_excluded": true,
+    "note": "Passing tests establish only their covered behavior."
+  }
+}

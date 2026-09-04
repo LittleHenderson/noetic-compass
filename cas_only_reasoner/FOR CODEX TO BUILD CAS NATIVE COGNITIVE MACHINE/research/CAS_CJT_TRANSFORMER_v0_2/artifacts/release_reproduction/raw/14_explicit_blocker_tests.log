@@ -1,0 +1,16 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\wakil\AppData\Local\Temp\casformer-v02-run-dec08c81\venv\Scripts\python.exe
+rootdir: C:\Users\wakil\AppData\Local\Temp\casformer-v02-source-dec08c81\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_CJT_TRANSFORMER_v0_2
+configfile: pytest.ini
+collecting ... collected 8 items
+
+tests/test_network_coordinator.py::test_requested_but_unretained_memory_record_is_rejected_atomically PASSED [ 12%]
+tests/test_network_coordinator.py::test_unrequested_memory_read_claim_is_rejected_without_moving_head PASSED [ 25%]
+tests/test_network_coordinator.py::test_poisoned_mixed_memory_batch_writes_nothing_authoritative PASSED [ 37%]
+tests/test_network_coordinator.py::test_huge_observation_under_zero_compute_ceiling_is_rejected_atomically PASSED [ 50%]
+tests/test_network_coordinator.py::test_checkpoint_scope_escape_rejects_cross_cjt_bytes_and_keeps_head PASSED [ 62%]
+tests/test_persistence_coordinator_trace.py::test_selected_reconstruction_binds_trace_payload_to_trace_row PASSED [ 75%]
+tests/test_persistence_coordinator_trace.py::test_trace_tamper_and_chain_discontinuity_are_detected PASSED [ 87%]
+tests/test_integrated_runtime.py::test_complete_four_cjt_reasoning_transistor PASSED [100%]
+
+============================= 8 passed in 25.90s ==============================

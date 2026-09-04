@@ -1,0 +1,551 @@
+commit dec08c81644f1c47b4b94c29a406a9432df7c7bd
+Author:     Prof. Hermes M. Thoth <98265490+LittleHenderson@users.noreply.github.com>
+AuthorDate: Fri Sep 4 08:57:11 2026 -0700
+Commit:     Prof. Hermes M. Thoth <98265490+LittleHenderson@users.noreply.github.com>
+CommitDate: Fri Sep 4 09:16:39 2026 -0700
+
+    CASFORMER_V0_2_SOURCE_FREEZE
+    
+    Freeze the unchanged 50-file v0.2 source set, frozen v0.1 dependency, locked Windows CPU test dependencies, and the committed CNCM regression footprint. Record the partial GLM audit classification and preserve all stated non-promotion boundaries.
+
+ CHANGELOG.md                                       |    14 +
+ .../.gitattributes                                 |    17 +
+ .../AGENTS.md                                      |    45 +
+ .../AUTHORITY_MANIFEST.yaml                        |   471 +
+ .../NON_GOALS.md                                   |    36 +
+ .../OPEN_QUESTIONS.md                              |   124 +
+ .../README_HANDOFF.md                              |   274 +
+ .../cas_reasoner.txt                               | 14616 +++++++++++++++++++
+ .../cncm/__init__.py                               |    81 +
+ .../cncm/__main__.py                               |     5 +
+ .../cncm/api.py                                    |   105 +
+ .../cncm/canonical.py                              |    50 +
+ .../cncm/cli.py                                    |   115 +
+ .../cncm/cognitive_apprenticeship.py               |  2875 ++++
+ .../cncm/conversation.py                           |  1252 ++
+ .../cncm/engine.py                                 |  1015 ++
+ .../cncm/kernel.py                                 |  1918 +++
+ .../cncm/language_apprenticeship.py                |  2344 +++
+ .../cncm/math_api.py                               |    84 +
+ .../cncm/math_counterexample.py                    |   345 +
+ .../cncm/math_engine.py                            |   493 +
+ .../cncm/math_kernel.py                            |   688 +
+ .../cncm/math_model.py                             |  1126 ++
+ .../cncm/math_normalize.py                         |   276 +
+ .../cncm/math_parser.py                            |   277 +
+ .../cncm/model.py                                  |  1436 ++
+ .../cncm/semantics.py                              |   459 +
+ .../cncm/verification.py                           |   426 +
+ .../docs/CNCM_COMPLETE_REQUIREMENT_LEDGER.md       |   267 +
+ .../docs/CODEX_GAP_ANALYSIS.md                     |   156 +
+ .../docs/COMPILER_RUNTIME_BOUNDARY.md              |   127 +
+ .../docs/EXISTING_CODE_MAP.md                      |   174 +
+ .../docs/ROADMAP_AFTER_v0.1.md                     |   166 +
+ .../docs/archive/README.md                         |    14 +
+ .../fixtures/branch_rollback/problem.json          |    66 +
+ .../fixtures/contradiction/problem.json            |    35 +
+ .../fixtures/conversation/ambiguity/case.json      |   650 +
+ .../fixtures/conversation/clarification/case.json  |   844 ++
+ .../conversation/correction_learning/case.json     |   730 +
+ .../fixtures/conversation/memory_recall/case.json  |   429 +
+ .../fixtures/conversation/multi_turn/case.json     |   281 +
+ .../conversation/pronoun_reference/case.json       |   423 +
+ .../fixtures/conversation/single_turn/case.json    |   273 +
+ .../conversation/topic_switching/case.json         |   643 +
+ .../fixtures/deduction/problem.json                |    41 +
+ .../fixtures/math/algebra/case.json                |    13 +
+ .../fixtures/math/arithmetic/case.json             |    12 +
+ .../fixtures/math/contradiction/case.json          |     9 +
+ .../fixtures/math/counterexamples/case.json        |    13 +
+ .../fixtures/math/recursive_learning/case.json     |    17 +
+ .../fixtures/math/transitive_relations/case.json   |    13 +
+ .../fixtures/memory_recall/problem.json            |    23 +
+ .../fixtures/missing_information/problem.json      |    31 +
+ .../fixtures/rpm_failure/problem.json              |    41 +
+ .../fixtures/rpm_recursion/problem.json            |    41 +
+ .../fixtures/transitive_reasoning/problem.json     |    52 +
+ .../golden/evidence/branch_rollback.json           |   257 +
+ .../golden/evidence/contradiction.json             |   101 +
+ .../golden/evidence/deduction.json                 |   172 +
+ .../golden/evidence/memory_recall.json             |   100 +
+ .../golden/evidence/missing_information.json       |   100 +
+ .../golden/evidence/rpm_failure.json               |   212 +
+ .../golden/evidence/rpm_recursion.json             |   356 +
+ .../golden/evidence/transitive_reasoning.json      |   190 +
+ .../golden/expected_failures/contradiction.json    |    11 +
+ .../golden/expected_failures/memory_recall.json    |    13 +
+ .../expected_failures/missing_information.json     |    13 +
+ .../golden/expected_failures/rpm_failure.json      |    14 +
+ .../expected_final_states/branch_rollback.json     |   628 +
+ .../expected_final_states/contradiction.json       |   279 +
+ .../golden/expected_final_states/deduction.json    |   412 +
+ .../expected_final_states/memory_recall.json       |   211 +
+ .../expected_final_states/missing_information.json |   223 +
+ .../golden/expected_final_states/rpm_failure.json  |   224 +
+ .../expected_final_states/rpm_recursion.json       |   433 +
+ .../transitive_reasoning.json                      |   473 +
+ .../golden/expected_traces/branch_rollback.json    |  1206 ++
+ .../golden/expected_traces/contradiction.json      |   319 +
+ .../golden/expected_traces/deduction.json          |   628 +
+ .../golden/expected_traces/memory_recall.json      |   317 +
+ .../expected_traces/missing_information.json       |   329 +
+ .../golden/expected_traces/rpm_failure.json        |   388 +
+ .../golden/expected_traces/rpm_recursion.json      |   780 +
+ .../expected_traces/transitive_reasoning.json      |   650 +
+ .../golden/manifest.json                           |   198 +
+ .../golden/math/algebra.json                       |   689 +
+ .../golden/math/arithmetic.json                    |   549 +
+ .../golden/math/contradiction.json                 |   112 +
+ .../golden/math/counterexamples.json               |    84 +
+ .../golden/math/recursive_learning.json            |    23 +
+ .../golden/math/transitive_relations.json          |    50 +
+ .../playground/app/cas-ohm-panel.tsx               |  1014 ++
+ .../playground/app/chat-panel.tsx                  |   474 +
+ .../app/cognitive-apprenticeship-panel.tsx         |   505 +
+ .../app/language-apprenticeship-panel.tsx          |   433 +
+ .../playground/app/layout.tsx                      |    42 +
+ .../playground/app/math-panel.tsx                  |   485 +
+ .../playground/app/page.tsx                        |  1054 ++
+ .../playground/app/receipt-panel.tsx               |   341 +
+ .../playground/lib/cas-ohm-graph-model.ts          |   696 +
+ .../playground/lib/cncm-client.ts                  |   230 +
+ .../playground/lib/utils.ts                        |     6 +
+ .../playground/public/fixtures/math/algebra.json   |    13 +
+ .../public/fixtures/math/arithmetic.json           |    12 +
+ .../public/fixtures/math/contradiction.json        |     9 +
+ .../public/fixtures/math/counterexamples.json      |    13 +
+ .../public/fixtures/math/recursive_learning.json   |    17 +
+ .../public/fixtures/math/transitive_relations.json |    13 +
+ .../playground/public/runtime/runtime-meta.json    |   226 +
+ .../playground/scripts/build-runtime.py            |   259 +
+ .../playground/scripts/check-runtime.py            |   417 +
+ .../playground/scripts/cncm_browser_bridge.py      |   588 +
+ .../pyproject.toml                                 |    20 +
+ .../research/CASFORMER_v0_1/CLAIMS.md              |    59 +
+ .../research/CASFORMER_v0_1/README.md              |   124 +
+ .../research/CASFORMER_v0_1/SOURCE_MANIFEST.json   |   139 +
+ .../research/CASFORMER_v0_1/SOURCE_REFERENCES.json |    45 +
+ .../research/CASFORMER_v0_1/SPEC.md                |   301 +
+ .../CASFORMER_V0_1_VALIDATION_RECEIPT.json         |    81 +
+ .../research/CASFORMER_v0_1/casformer/__init__.py  |    67 +
+ .../research/CASFORMER_v0_1/casformer/baselines.py |   178 +
+ .../casformer/casformer_trace.schema.json          |   155 +
+ .../research/CASFORMER_v0_1/casformer/circuit.py   |   138 +
+ .../research/CASFORMER_v0_1/casformer/controls.py  |   128 +
+ .../research/CASFORMER_v0_1/casformer/core.py      |  1261 ++
+ .../CASFORMER_v0_1/casformer/diagnostics.py        |   102 +
+ .../research/CASFORMER_v0_1/casformer/schema.py    |    15 +
+ .../research/CASFORMER_v0_1/casformer/trace.py     |   472 +
+ .../CASFORMER_v0_1/examples/minimal_forward.py     |    68 +
+ .../research/CASFORMER_v0_1/pyproject.toml         |    27 +
+ .../research/CASFORMER_v0_1/pytest.ini             |     4 +
+ .../research/CASFORMER_v0_1/tests/conftest.py      |    10 +
+ .../CASFORMER_v0_1/tests/test_artifacts.py         |   133 +
+ .../research/CASFORMER_v0_1/tests/test_circuit.py  |   109 +
+ .../CASFORMER_v0_1/tests/test_cjt_block.py         |   655 +
+ .../CASFORMER_v0_1/tests/test_gradients.py         |    74 +
+ .../tests/test_non_vacuity_and_diagnostics.py      |   268 +
+ .../CASFORMER_v0_1/tests/test_ohmic_attention.py   |   589 +
+ .../CASFORMER_v0_1/tools/build_source_manifest.py  |    86 +
+ .../research/CASFORMER_v0_1/tools/validate_all.py  |   148 +
+ .../CASFORMER_v0_1/tools/validate_reference.py     |   471 +
+ .../CAS_CJT_TRANSFORMER_v0_2/API_CONTRACTS.md      |   359 +
+ .../CAS_CJT_TRANSFORMER_v0_2/ARCHITECTURE.md       |   231 +
+ .../CAS_CJT_TRANSFORMER_v0_2/BUILD_CONTRACT.md     |   130 +
+ .../CNCM_INTEGRATION_BOUNDARY.md                   |   103 +
+ .../research/CAS_CJT_TRANSFORMER_v0_2/EQUATIONS.md |   342 +
+ .../MEMORY_RESEARCH_PLAN.md                        |   133 +
+ .../OPERATION_EXPANSION.md                         |   128 +
+ .../research/CAS_CJT_TRANSFORMER_v0_2/README.md    |   124 +
+ .../research/CAS_CJT_TRANSFORMER_v0_2/ROADMAP.md   |   105 +
+ .../CAS_CJT_TRANSFORMER_v0_2/SOURCE_MANIFEST.json  |   260 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/__init__.py   |   293 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/artifacts.py  |   333 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/checkpoint.py |   276 +
+ .../cas_cjt/cncm_bridge.py                         |   432 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/contracts.py  |   147 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/control.py    |   487 +
+ .../cas_cjt/coordinator.py                         |  1415 ++
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/learning.py   |   780 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/memory.py     |   173 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/network.py    |   175 +
+ .../cas_cjt/network_coordinator.py                 |  4186 ++++++
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/neural.py     |   414 +
+ .../cas_cjt/persistence.py                         |  4440 ++++++
+ .../cas_cjt/phase_contract.py                      |   167 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/proposals.py  |   212 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/readiness.py  |   242 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/repair.py     |   334 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/routing.py    |   910 ++
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/runtime.py    |  1693 +++
+ .../cas_cjt/schemas/bias_state.schema.json         |   600 +
+ .../schemas/neural_cjt_contracts.schema.json       |   980 ++
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/semantic.py   |   221 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/state.py      |   740 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/trace.py      |   439 +
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/types.py      |  1380 ++
+ .../CAS_CJT_TRANSFORMER_v0_2/cas_cjt/verifier.py   |   365 +
+ .../examples/complete_reasoning_transistor.py      |   276 +
+ .../CAS_CJT_TRANSFORMER_v0_2/pyproject.toml        |    45 +
+ .../research/CAS_CJT_TRANSFORMER_v0_2/pytest.ini   |     4 +
+ .../CAS_CJT_TRANSFORMER_v0_2/requirements.lock     |   341 +
+ .../tests/test_cncm_bridge.py                      |   312 +
+ .../tests/test_governed_learning.py                |   651 +
+ .../tests/test_integrated_runtime.py               |   843 ++
+ .../tests/test_network_coordinator.py              |  3171 ++++
+ .../tests/test_neural_core.py                      |   861 ++
+ .../tests/test_persistence_coordinator_trace.py    |  1272 ++
+ .../tests/test_public_api.py                       |   236 +
+ .../tests/test_readiness_axes.py                   |    31 +
+ .../tests/test_repair_bounds.py                    |   122 +
+ .../tests/test_source_manifest.py                  |   157 +
+ .../tests/test_types_and_schemas.py                |   817 ++
+ .../tools/build_source_manifest.py                 |   124 +
+ .../roadmap/CAS_MATH_ROADMAP_v0.1.md               |    38 +
+ .../schemas/apprenticeship_lineage.schema.json     |   272 +
+ ...pprenticeship_qualification_receipt.schema.json |   429 +
+ .../schemas/branch_frame.schema.json               |   148 +
+ .../schemas/cas_ohm_stage_record.schema.json       |   941 ++
+ .../schemas/conjecture.schema.json                 |    17 +
+ .../schemas/dialogue_act.schema.json               |    95 +
+ .../schemas/dialogue_state.schema.json             |   209 +
+ .../schemas/dialogue_turn.schema.json              |    98 +
+ .../schemas/evidence_packet.schema.json            |   174 +
+ .../schemas/grammar_construction.schema.json       |   294 +
+ .../schemas/intent.schema.json                     |   292 +
+ .../schemas/language_lesson_packet.schema.json     |   369 +
+ .../schemas/language_promotion_receipt.schema.json |   357 +
+ .../language_qualification_receipt.schema.json     |   333 +
+ .../schemas/machine_state.schema.json              |   293 +
+ .../schemas/math_claim.schema.json                 |    55 +
+ .../schemas/math_counterexample.schema.json        |    47 +
+ .../schemas/math_evidence_packet.schema.json       |    36 +
+ .../schemas/math_expression.schema.json            |    93 +
+ .../schemas/math_object.schema.json                |    11 +
+ .../schemas/math_problem_packet.schema.json        |    16 +
+ .../schemas/math_result.schema.json                |    24 +
+ .../schemas/math_rule.schema.json                  |    28 +
+ .../schemas/math_statement.schema.json             |    13 +
+ .../schemas/math_strategy.schema.json              |    17 +
+ .../schemas/problem_packet.schema.json             |   191 +
+ .../schemas/proof_step.schema.json                 |    82 +
+ .../schemas/proposition.schema.json                |    58 +
+ .../schemas/referent.schema.json                   |   154 +
+ .../schemas/response_plan.schema.json              |   223 +
+ .../schemas/rpm_frame.schema.json                  |    35 +
+ .../schemas/rule.schema.json                       |    28 +
+ .../schemas/semantic_frame.schema.json             |   282 +
+ .../schemas/semantic_packet.schema.json            |   361 +
+ .../schemas/teacher_role_assignment.schema.json    |   250 +
+ .../schemas/teaching_episode.schema.json           |   525 +
+ .../schemas/theorem.schema.json                    |    18 +
+ .../schemas/trace_event.schema.json                |   110 +
+ .../schemas/version_lineage.schema.json            |   194 +
+ .../spec/AUTHORITY_CONTRACT_v0.1.md                |   112 +
+ .../spec/CAS_CONVERSATION_PROTOCOL_v0.1.md         |   224 +
+ .../spec/CAS_CORE_ONTOLOGY_v0.1.md                 |   158 +
+ .../spec/CAS_KERNEL_IR_v0.1.md                     |    96 +
+ .../spec/CAS_MATH_MVP_v0.1.md                      |   203 +
+ .../CAS_OHM_ATTENTION_INTEGRATION_PROTOCOL_v0.1.md |   615 +
+ .../spec/CAS_RRK_SPEC_v0.1.md                      |   164 +
+ .../spec/CAS_SEM_MVP_v0.1.md                       |   120 +
+ .../spec/CCB_D1_DIALOGUE_CONTROL_BOARD_v0.1.md     |    98 +
+ .../spec/CCB_L1_GRAMMAR_APPRENTICESHIP_v0.1.md     |   306 +
+ .../spec/CCB_L1_LANGUAGE_BOARD_v0.1.md             |    98 +
+ .../spec/CCB_T1_COGNITIVE_APPRENTICESHIP_v0.1.md   |   299 +
+ .../spec/COMPILER_RUNTIME_BOUNDARY_v0.1.md         |   208 +
+ .../spec/CONFORMANCE_PLAN_v0.1.md                  |   233 +
+ .../spec/FOUNDATION_DRIVE_ADAPTER_v0.1.md          |   123 +
+ .../spec/NON_GOALS_v0.1.md                         |   135 +
+ .../tests/__init__.py                              |     1 +
+ .../tests/_support.py                              |    68 +
+ .../tests/test_authority_contract.py               |   419 +
+ ...test_browser_bridge_cognitive_apprenticeship.py |    90 +
+ .../tests/test_browser_bridge_language.py          |    98 +
+ .../tests/test_browser_bridge_math.py              |    87 +
+ .../tests/test_cli.py                              |   119 +
+ .../tests/test_cognitive_apprenticeship.py         |   496 +
+ .../tests/test_conversation_contracts.py           |   270 +
+ .../tests/test_conversation_runtime.py             |   316 +
+ .../tests/test_hardening_regressions.py            |  1541 ++
+ .../tests/test_integrity_and_schemas.py            |   305 +
+ .../tests/test_language_apprenticeship.py          |   335 +
+ .../tests/test_math_fixtures.py                    |   182 +
+ .../tests/test_math_operation_contracts.py         |   143 +
+ .../tests/test_math_runtime.py                     |   529 +
+ .../tests/test_reasoning_behavior.py               |   167 +
+ .../tests/test_repeat_path_terminal_authority.py   |   107 +
+ .../test_reserved_terminal_status_contract.py      |    72 +
+ .../tools/generate_goldens.py                      |   322 +
+ .../tools/verify_goldens.py                        |   455 +
+ cas_only_reasoner/spec sheet.txt                   |    22 +
+ 271 files changed, 109627 insertions(+)
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/.gitattributes
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/AGENTS.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/AUTHORITY_MANIFEST.yaml
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/NON_GOALS.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/OPEN_QUESTIONS.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/README_HANDOFF.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cas_reasoner.txt
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/__init__.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/__main__.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/api.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/canonical.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/cli.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/cognitive_apprenticeship.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/conversation.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/engine.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/kernel.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/language_apprenticeship.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/math_api.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/math_counterexample.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/math_engine.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/math_kernel.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/math_model.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/math_normalize.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/math_parser.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/model.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/semantics.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/verification.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/CNCM_COMPLETE_REQUIREMENT_LEDGER.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/CODEX_GAP_ANALYSIS.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/COMPILER_RUNTIME_BOUNDARY.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/EXISTING_CODE_MAP.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/ROADMAP_AFTER_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/archive/README.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/branch_rollback/problem.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/contradiction/problem.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/conversation/ambiguity/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/conversation/clarification/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/conversation/correction_learning/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/conversation/memory_recall/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/conversation/multi_turn/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/conversation/pronoun_reference/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/conversation/single_turn/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/conversation/topic_switching/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/deduction/problem.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/math/algebra/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/math/arithmetic/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/math/contradiction/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/math/counterexamples/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/math/recursive_learning/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/math/transitive_relations/case.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/memory_recall/problem.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/missing_information/problem.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/rpm_failure/problem.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/rpm_recursion/problem.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/fixtures/transitive_reasoning/problem.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/evidence/branch_rollback.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/evidence/contradiction.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/evidence/deduction.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/evidence/memory_recall.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/evidence/missing_information.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/evidence/rpm_failure.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/evidence/rpm_recursion.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/evidence/transitive_reasoning.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_failures/contradiction.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_failures/memory_recall.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_failures/missing_information.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_failures/rpm_failure.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_final_states/branch_rollback.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_final_states/contradiction.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_final_states/deduction.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_final_states/memory_recall.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_final_states/missing_information.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_final_states/rpm_failure.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_final_states/rpm_recursion.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_final_states/transitive_reasoning.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_traces/branch_rollback.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_traces/contradiction.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_traces/deduction.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_traces/memory_recall.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_traces/missing_information.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_traces/rpm_failure.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_traces/rpm_recursion.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/expected_traces/transitive_reasoning.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/manifest.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/math/algebra.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/math/arithmetic.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/math/contradiction.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/math/counterexamples.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/math/recursive_learning.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/golden/math/transitive_relations.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/app/cas-ohm-panel.tsx
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/app/chat-panel.tsx
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/app/cognitive-apprenticeship-panel.tsx
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/app/language-apprenticeship-panel.tsx
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/app/layout.tsx
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/app/math-panel.tsx
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/app/page.tsx
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/app/receipt-panel.tsx
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/lib/cas-ohm-graph-model.ts
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/lib/cncm-client.ts
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/lib/utils.ts
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/math/algebra.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/math/arithmetic.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/math/contradiction.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/math/counterexamples.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/math/recursive_learning.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/math/transitive_relations.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/runtime/runtime-meta.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/scripts/build-runtime.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/scripts/check-runtime.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/scripts/cncm_browser_bridge.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/pyproject.toml
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/CLAIMS.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/README.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/SOURCE_MANIFEST.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/SOURCE_REFERENCES.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/SPEC.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/artifacts/CASFORMER_V0_1_VALIDATION_RECEIPT.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer/__init__.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer/baselines.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer/casformer_trace.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer/circuit.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer/controls.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer/core.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer/diagnostics.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer/schema.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer/trace.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/examples/minimal_forward.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/pyproject.toml
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/pytest.ini
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/tests/conftest.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/tests/test_artifacts.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/tests/test_circuit.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/tests/test_cjt_block.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/tests/test_gradients.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/tests/test_non_vacuity_and_diagnostics.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/tests/test_ohmic_attention.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/tools/build_source_manifest.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/tools/validate_all.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/tools/validate_reference.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/API_CONTRACTS.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/ARCHITECTURE.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/BUILD_CONTRACT.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/CNCM_INTEGRATION_BOUNDARY.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/EQUATIONS.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/MEMORY_RESEARCH_PLAN.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/OPERATION_EXPANSION.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/README.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/ROADMAP.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/SOURCE_MANIFEST.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/__init__.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/artifacts.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/checkpoint.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/cncm_bridge.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/contracts.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/control.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/coordinator.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/learning.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/memory.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/network.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/network_coordinator.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/neural.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/persistence.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/phase_contract.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/proposals.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/readiness.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/repair.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/routing.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/runtime.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/schemas/bias_state.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/schemas/neural_cjt_contracts.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/semantic.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/state.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/trace.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/types.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/verifier.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/examples/complete_reasoning_transistor.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/pyproject.toml
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/pytest.ini
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/requirements.lock
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_cncm_bridge.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_governed_learning.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_integrated_runtime.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_network_coordinator.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_neural_core.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_persistence_coordinator_trace.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_public_api.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_readiness_axes.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_repair_bounds.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_source_manifest.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tests/test_types_and_schemas.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/tools/build_source_manifest.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/roadmap/CAS_MATH_ROADMAP_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/apprenticeship_lineage.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/apprenticeship_qualification_receipt.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/branch_frame.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/cas_ohm_stage_record.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/conjecture.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/dialogue_act.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/dialogue_state.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/dialogue_turn.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/evidence_packet.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/grammar_construction.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/intent.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/language_lesson_packet.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/language_promotion_receipt.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/language_qualification_receipt.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/machine_state.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/math_claim.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/math_counterexample.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/math_evidence_packet.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/math_expression.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/math_object.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/math_problem_packet.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/math_result.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/math_rule.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/math_statement.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/math_strategy.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/problem_packet.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/proof_step.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/proposition.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/referent.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/response_plan.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/rpm_frame.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/rule.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/semantic_frame.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/semantic_packet.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/teacher_role_assignment.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/teaching_episode.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/theorem.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/trace_event.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/schemas/version_lineage.schema.json
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/AUTHORITY_CONTRACT_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CAS_CONVERSATION_PROTOCOL_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CAS_CORE_ONTOLOGY_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CAS_KERNEL_IR_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CAS_MATH_MVP_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CAS_OHM_ATTENTION_INTEGRATION_PROTOCOL_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CAS_RRK_SPEC_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CAS_SEM_MVP_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CCB_D1_DIALOGUE_CONTROL_BOARD_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CCB_L1_GRAMMAR_APPRENTICESHIP_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CCB_L1_LANGUAGE_BOARD_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CCB_T1_COGNITIVE_APPRENTICESHIP_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/COMPILER_RUNTIME_BOUNDARY_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/CONFORMANCE_PLAN_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/FOUNDATION_DRIVE_ADAPTER_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/spec/NON_GOALS_v0.1.md
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/__init__.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/_support.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_authority_contract.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_browser_bridge_cognitive_apprenticeship.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_browser_bridge_language.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_browser_bridge_math.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_cli.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_cognitive_apprenticeship.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_conversation_contracts.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_conversation_runtime.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_hardening_regressions.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_integrity_and_schemas.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_language_apprenticeship.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_math_fixtures.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_math_operation_contracts.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_math_runtime.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_reasoning_behavior.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_repeat_path_terminal_authority.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tests/test_reserved_terminal_status_contract.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tools/generate_goldens.py
+ create mode 100644 cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tools/verify_goldens.py

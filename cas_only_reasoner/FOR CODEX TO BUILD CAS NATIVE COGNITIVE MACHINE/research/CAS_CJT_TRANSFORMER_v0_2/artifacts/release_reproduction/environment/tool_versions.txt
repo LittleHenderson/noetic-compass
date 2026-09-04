@@ -1,0 +1,7 @@
+Python 3.14.0
+uv 0.12.7 (61291a8ca 2026-08-27 x86_64-pc-windows-msvc)
+git version 2.52.0.windows.1
+powershell=7.6.5
+os=Microsoft Windows NT 10.0.26200.0
+architecture=X64
+framework=.NET 10.0.11

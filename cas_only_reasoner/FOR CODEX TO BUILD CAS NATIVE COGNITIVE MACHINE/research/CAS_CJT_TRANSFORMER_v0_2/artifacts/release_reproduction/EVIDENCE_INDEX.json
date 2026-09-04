@@ -1,0 +1,74 @@
+{
+  "schema_version": "cas.casformer.release-evidence-index/0.2",
+  "status": "CASFORMER_V0_2_RELEASE_REPRODUCED",
+  "created_at_utc": "2026-09-04T16:30:29.1715755Z",
+  "source_freeze": {
+    "commit": "dec08c81644f1c47b4b94c29a406a9432df7c7bd",
+    "tree": "a56fc8b845279789f588b5adefee192be0327872",
+    "subject": "CASFORMER_V0_2_SOURCE_FREEZE",
+    "details": "source/SOURCE_FREEZE.json"
+  },
+  "payload": {
+    "checksum_file": "PAYLOAD_SHA256SUMS.txt",
+    "checksum_file_sha256": "278c1842d99b1cfa948734483cc37b32bbfacb077d8897e2fd3a88023f4fd496",
+    "file_count": 46,
+    "checksum_algorithm": "SHA-256",
+    "path_format": "Forward-slash paths relative to release_reproduction",
+    "excluded_paths": [
+      {
+        "path": "EVIDENCE_INDEX.json",
+        "reason": "The index records the checksum-list digest and is bound by the final receipt and Git evidence commit."
+      },
+      {
+        "path": "PAYLOAD_SHA256SUMS.txt",
+        "reason": "A checksum list cannot contain its own SHA-256 digest."
+      },
+      {
+        "path": "raw/FINAL_VALIDATION.log",
+        "reason": "The verifier output is created after the indexed payload and is bound by the Git evidence commit."
+      }
+    ]
+  },
+  "audit": {
+    "classification": "CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL",
+    "path": "audits/CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL.txt",
+    "sha256": "c50d0de687671ba6922b145e0b44777be556fd2cfa24292a263a3bd83195c73b",
+    "boundary": "Owner-supplied assessment of GLM's reported execution audit; retained byte-for-byte and not represented as a new independent audit."
+  },
+  "release_artifacts": {
+    "inventory": "dist/ARTIFACTS.json",
+    "v0_2_wheel_sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9",
+    "v0_2_sdist_sha256": "e1dfa2e186acfe054cb6d7d333b7ed5b28972f59d4fc73e856b9d433cd3a81c9",
+    "v0_1_wheel_sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"
+  },
+  "commands": {
+    "exact_execution_record": "commands/COMMANDS.json",
+    "rerun_script": "commands/reproduce.ps1",
+    "rerun_build_backend_constraint": "commands/build-constraints.txt"
+  },
+  "environment": {
+    "identity": "environment/ENVIRONMENT.json",
+    "installed_packages": "environment/installed_packages.txt",
+    "tool_versions": "environment/tool_versions.txt"
+  },
+  "results": {
+    "demo": "results/DEMO_RESULTS.json",
+    "trace_schema_validation": "results/TRACE_SCHEMA_RESULTS.json",
+    "blocker_closure": "results/BLOCKER_CLOSURE_RESULTS.json",
+    "compute_plan_mismatch": "results/COMPUTE_PLAN_MISMATCH_RESULTS.json",
+    "raw_outputs_directory": "raw"
+  },
+  "verification": {
+    "script": "probes/verify_evidence_bundle.py",
+    "final_output": "raw/FINAL_VALIDATION.log"
+  },
+  "claims_not_promoted": [
+    "language capability",
+    "general reasoning capability",
+    "CAS-specific advantage",
+    "CNCM brain completion",
+    "AGI",
+    "production readiness"
+  ],
+  "future_design_excluded": "The v0.3 pulsation, chain-tag, memory-strategy, and meta-logic design inputs are not part of the v0.2 source freeze or this reproduced-release evidence."
+}
