@@ -1,0 +1,252 @@
+ M book/CAS_PCBA_Engineer/build/manuscript_pcba.lof
+ M book/publishing/latex/body.tex
+ M book/publishing/latex/preamble.tex
+ M book/superiority_of_tks/build/manuscript_tks.idx
+ M book/superiority_of_tks/build/manuscript_tks.ilg
+ M book/superiority_of_tks/build/manuscript_tks.ind
+ M book/superiority_of_tks/build/manuscript_tks.lof
+ M docs/working/cas_harness_production_todo.md
+?? .tmp_grounding/extract_qg.py
+?? .tmp_grounding/qg_text.txt
+?? CJT_OHM_0R_RESULT.json
+?? book/publishing/latex/manuscript.aux
+?? book/publishing/latex/manuscript.idx
+?? book/publishing/latex/manuscript.ilg
+?? book/publishing/latex/manuscript.ind
+?? book/publishing/latex/manuscript.lof
+?? book/publishing/latex/manuscript.log
+?? book/publishing/latex/manuscript.out
+?? book/publishing/latex/manuscript.pdf
+?? book/publishing/latex/manuscript.toc
+?? book/publishing/latex/t1.log
+?? book/publishing/latex/t10.log
+?? book/publishing/latex/t11.log
+?? book/publishing/latex/t12.log
+?? book/publishing/latex/t13.log
+?? book/publishing/latex/t14.log
+?? book/publishing/latex/t15.log
+?? book/publishing/latex/t16.log
+?? book/publishing/latex/t17.log
+?? book/publishing/latex/t18.log
+?? book/publishing/latex/t19.log
+?? book/publishing/latex/t2.log
+?? book/publishing/latex/t3.log
+?? book/publishing/latex/t4.log
+?? book/publishing/latex/t5.log
+?? book/publishing/latex/t6.log
+?? book/publishing/latex/t7.log
+?? book/publishing/latex/t8.log
+?? book/publishing/latex/t9.log
+?? "cas_only_reasoner/28 fOUNDATIONS 1.0.pdf"
+?? cas_only_reasoner/CAS_Ohm_Quantification_Guide-1.pdf
+?? cas_only_reasoner/CAS_PCBA_Engineer.docx
+?? "cas_only_reasoner/CMB_P0_v0_1/cjt_neurons research and development.txt"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/.rgignore"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/archive/cas_reasoner_pre_append_11834_lines.snapshot"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/.gitignore"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/.openai/hosting.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/.oxfmtrc.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/.oxlintrc.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/README.md"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/app/globals.css"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/accordion.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/alert-dialog.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/alert.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/aspect-ratio.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/attachment.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/avatar.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/badge.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/breadcrumb.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/bubble.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/button-group.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/button.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/calendar.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/card.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/carousel.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/chart.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/checkbox.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/collapsible.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/combobox.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/command.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/context-menu.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/dialog.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/direction.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/drawer.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/dropdown-menu.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/empty.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/field.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/hover-card.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/input-group.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/input-otp.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/input.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/item.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/kbd.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/label.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/marker.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/menubar.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/message-scroller.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/message.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/native-select.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/navigation-menu.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/pagination.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/popover.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/progress.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/radio-group.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/resizable.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/scroll-area.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/select.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/separator.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/sheet.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/sidebar.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/skeleton.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/slider.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/spinner.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/switch.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/table.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/tabs.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/textarea.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/toast.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/toggle-group.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/toggle.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/components/ui/tooltip.tsx"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/hooks/use-mobile.ts"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/next.config.ts"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/package-lock.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/package.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/favicon.svg"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/branch_rollback.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/contradiction.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/deduction.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/memory_recall.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/missing_information.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/rpm_failure.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/rpm_recursion.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/fixtures/transitive_reasoning.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/og.png"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/pyodide/pyodide-lock.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/pyodide/pyodide.asm.mjs"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/pyodide/pyodide.asm.wasm"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/pyodide/pyodide.mjs"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/pyodide/python_stdlib.zip"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/runtime/cncm-runtime.zip"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/runtime/cncm-worker.mjs"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/public/runtime/runtime-meta.mjs"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/tests/cas-ohm-graph-model.test.mjs"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/tsconfig.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/playground/vite.config.ts"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/artifacts/CASFORMER_V0_1_COMPLETION_RECEIPT.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/build/lib/casformer/__init__.py"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/build/lib/casformer/baselines.py"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/build/lib/casformer/casformer_trace.schema.json"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/build/lib/casformer/circuit.py"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/build/lib/casformer/controls.py"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/build/lib/casformer/core.py"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/build/lib/casformer/diagnostics.py"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/build/lib/casformer/schema.py"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/build/lib/casformer/trace.py"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer_reference.egg-info/PKG-INFO"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer_reference.egg-info/SOURCES.txt"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer_reference.egg-info/dependency_links.txt"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer_reference.egg-info/requires.txt"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CASFORMER_v0_1/casformer_reference.egg-info/top_level.txt"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_neural_cjt.egg-info/PKG-INFO"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_neural_cjt.egg-info/SOURCES.txt"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_neural_cjt.egg-info/dependency_links.txt"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_neural_cjt.egg-info/requires.txt"
+?? "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_neural_cjt.egg-info/top_level.txt"
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/core.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/out_s1_counterexamples.txt
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/out_s2_expressivity.txt
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/out_s8_generic_sweep.txt
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s0_gradcheck_anchor.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s10_depth_bound.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s11_independent_check.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s12_rank_tolerance.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s13_K4.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s1_counterexamples.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s1b_c4_fixed.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s1c_c4_worstcase.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s1d_openset.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s1e_constrained.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s1f_orthonormal.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s1g_centered.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s1h_orth_rescore.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s1i_biascap.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s1j_family.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s2_expressivity.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s3_expr_bigdata.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s4_jacobian_rank.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s5_rank_scaling.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s6.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s7_summary.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s8_generic_sweep.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s9_chainness.py
+?? cas_only_reasoner/LENS3_ABSORPTION_v0_1/s9b.py
+?? "cas_only_reasoner/MAJIK AND THE TRUE KABBALAH.pdf"
+?? "cas_only_reasoner/MATH LESSONS.txt"
+?? "cas_only_reasoner/PROGRAMMING LESSON.txt"
+?? cas_only_reasoner/RESEARCH_PAPER_CAS_CORE_8_v0.2.pdf
+?? cas_only_reasoner/RESEARCH_PAPER_CAS_OHM_1_0_v0.2.pdf
+?? cas_only_reasoner/TKS_V74_COMPILER_IMPL_MAP.md
+?? cas_only_reasoner/TKS_V74_COMPILER_PIPELINE.md
+?? "cas_only_reasoner/The 28 Foundations (1).pdf"
+?? cas_only_reasoner/cas_reasoner.txt
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/cas_ohm.txt
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-01.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-02.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-03.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-04.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-05.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-06.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-07.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-08.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-09.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-10.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-11.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-12.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-13.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-14.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-15.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-16.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-17.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/ohm_page-18.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/pcba.txt
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/pcba_p158.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/pcba_p204.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/pcba_p53.png
+?? cas_only_reasoner/tmp/pdfs/cas_transformer_review/pcba_p766.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-01.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-02.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-03.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-04.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-05.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-06.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-07.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-08.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-09.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-10.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-11.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-12.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-13.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-14.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-15.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-16.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-17.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/guide-18.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/paper-5.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/paper-6.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/paper-7.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/paper-8.png
+?? cas_only_reasoner/tmp/pdfs/native_control_review/pcba-p25.png
+?? compliance_check.py
+?? docs/design/CAS_HARNESS_APP_DESIGN_BRIEFS_ALL_20260822.pdf
+?? docs/design/CAS_HARNESS_APP_DESIGN_BRIEF_20260822.md
+?? docs/design/CAS_HARNESS_APP_DESIGN_BRIEF_PART2_20260822.md
+?? docs/design/CAS_HARNESS_APP_DESIGN_BRIEF_PART3_20260822.md
+?? docs/working/AUDIT_TARGET_INVENTORY_20260822.md
+?? docs/working/EVIDENCE_FIRST_AI_MODEL_AUDITING_PLATFORM_MASTER_PLAN_v0.1.md
+?? docs/working/gate2_closure/independent_bank/bp_gpt4o.json
+?? docs/working/gate2_closure/independent_bank/elicit_prompt_v2.txt
+?? docs/working/gate2_closure/independent_bank/gen_val.jsonl
+?? docs/working/gate2_closure/independent_bank/gen_val_raw.json

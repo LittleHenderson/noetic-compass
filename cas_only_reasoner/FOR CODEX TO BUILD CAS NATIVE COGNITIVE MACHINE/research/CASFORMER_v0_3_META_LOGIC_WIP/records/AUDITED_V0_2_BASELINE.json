@@ -1,0 +1,35 @@
+{
+  "schema_version": "cas.casformer.meta-wip-baseline/0.1",
+  "status": "V0_2_BASELINE_UNCHANGED",
+  "source_freeze": {
+    "commit": "dec08c81644f1c47b4b94c29a406a9432df7c7bd",
+    "tree": "a56fc8b845279789f588b5adefee192be0327872"
+  },
+  "evidence_binding": {
+    "commit": "b5d52d1fc9d5dce231ccb0f91ece2be0168dfa78",
+    "tree": "15aa2e97e7123647757cd5b122086453c616796b",
+    "sole_parent": "dec08c81644f1c47b4b94c29a406a9432df7c7bd"
+  },
+  "manifest": {
+    "file_count": 50,
+    "files_matching": 50,
+    "missing": [],
+    "mismatched": [],
+    "sha256": "f68b9ba78bb5b6bc184c4b014a799756c1b714f05d05b515dcd464a54c76e634",
+    "aggregate_sha256": "5fad64a52c8aef30d56e46fa22f113c26bc171a3016d326c3c88157425b798f1"
+  },
+  "evidence_commit_diff": {
+    "path_count": 51,
+    "all_paths_under_v0_2_artifacts": true,
+    "controlled_file_blob_changes": 0
+  },
+  "manifest_test": {
+    "status": "PASS",
+    "result": "5 passed in 0.77s",
+    "executed_from_clean_evidence_commit_worktree": true
+  },
+  "release_branch": {
+    "name": "release/casformer-v0.2-source-freeze",
+    "target": "b5d52d1fc9d5dce231ccb0f91ece2be0168dfa78"
+  }
+}

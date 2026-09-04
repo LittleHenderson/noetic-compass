@@ -1,0 +1,20 @@
+{
+  "schema_version": "cas.casformer.meta-wip-source-provenance/0.1",
+  "status": "RECORDED",
+  "design_input": {
+    "source_path": "C:\\Users\\wakil\\.codex\\attachments\\a5e1930b-ec83-4a43-8e57-a47e7dbb2e38\\pasted-text.txt",
+    "source_bytes": 21584,
+    "source_sha256": "91ec6c6ae68ada85fcc025ff4762fc53e4524f83c6ba3ee75efccc22da105e5a",
+    "preserved_path": "../CAS_META_0_DESIGN_INPUT.md",
+    "preserved_bytes": 20647,
+    "preserved_sha256": "4555f9076b10f45b48e28325c4c3338cb6ac25f898da2314010cd276f956c35d",
+    "normalized_text_equal": true,
+    "normalization": "CRLF and LF were normalized to LF; trailing newline differences were ignored for the equality check."
+  },
+  "preservation_directive": {
+    "source_path": "C:\\Users\\wakil\\.codex\\attachments\\3a338afc-2947-4521-836a-26f877127fdd\\pasted-text.txt",
+    "source_bytes": 9680,
+    "source_sha256": "7e822a4e4a5b25d79f45d588479afaf4e34d0c6523fb05a91a4933383afd5280",
+    "implementation": "META_LOGIC_WIP_BOUNDARY.md and the records directory"
+  }
+}
