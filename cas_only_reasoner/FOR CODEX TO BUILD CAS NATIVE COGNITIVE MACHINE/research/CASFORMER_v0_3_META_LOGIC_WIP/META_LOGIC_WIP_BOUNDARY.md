@@ -18,12 +18,12 @@ This checkpoint preserves the supplied meta-logic design without changing the re
 - Pre-meta parent SHA: `b5d52d1fc9d5dce231ccb0f91ece2be0168dfa78`
 - Reproduced v0.2 source-freeze SHA: `dec08c81644f1c47b4b94c29a406a9432df7c7bd`
 - Reproduced v0.2 evidence-binding SHA: `b5d52d1fc9d5dce231ccb0f91ece2be0168dfa78`
-- Preservation WIP content SHA: `SELF_REFERENCE_DEFERRED`
+- Preservation WIP content SHA: `3fe6695ee1230805874df68be653de603f5faaaa`
 - WIP branch: `research/casformer-v0.3-meta-logic-wip`
 - Clean release branch: `release/casformer-v0.2-source-freeze`
 - Clean release branch target: `b5d52d1fc9d5dce231ccb0f91ece2be0168dfa78`
 
-The WIP content commit cannot contain its own SHA because changing this file would change that SHA. A following documentation-only boundary commit must replace `SELF_REFERENCE_DEFERRED` with the exact preservation commit SHA. That second commit must add no runtime, schema, trace, authority, training, or test behavior.
+The WIP content commit could not contain its own SHA because changing this file would change that SHA. This exact value is therefore bound by a following documentation-only commit. The binding commit adds no runtime, schema, trace, authority, training, or test behavior.
 
 ## Audited v0.2 files
 
