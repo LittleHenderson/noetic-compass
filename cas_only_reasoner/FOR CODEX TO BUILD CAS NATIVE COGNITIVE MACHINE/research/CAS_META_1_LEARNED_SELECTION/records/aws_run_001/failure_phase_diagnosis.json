@@ -1,0 +1,34 @@
+{
+  "schema": "cas-meta1-failed-job-diagnosis/1",
+  "source_sha": "a4dc9f2fc6f6d4f3d5e0b31100ac131327e02109",
+  "job": "cas-meta1-20260905103339-cd06685e",
+  "failure": "PROCESS_TIME_OR_ARTIFACT_CEILING",
+  "identified_phase": "Native candidate evaluation, cas_untrained arm, after 62 recorded cases out of 72",
+  "cause": "The launcher stopped the training-and-evaluation subprocess at its 2700-second wall-time ceiling.",
+  "cause_evidence": {
+    "training_process_started_utc": "2026-09-05T10:39:52.393516+00:00",
+    "artifact_downloaded_utc": "2026-09-05T11:25:09.947572+00:00",
+    "separate_cloud_deadline_utc": "2026-09-05T11:33:54.258455+00:00",
+    "expanded_packet_bytes": 226816243,
+    "artifact_ceiling_bytes": 1073741824,
+    "remote_wall_seconds": 2963.572733640671
+  },
+  "gpu_contract_tests": {"passed":4,"failures":0,"errors":0,"skipped":0,"wall_seconds":127.33},
+  "training_anchors": {"cases":9,"all_reference_success":true,"all_execution_success":true},
+  "training": {
+    "cas": {"epochs":60,"optimizer_steps":840,"wall_seconds":57.83946155499996,"initial_validation_joint":8,"selected_validation_joint":69,"selected_epoch":28,"validation_total":72,"active_parameters":24302},
+    "generic": {"epochs":60,"optimizer_steps":840,"wall_seconds":13.09962661599991,"initial_validation_joint":8,"selected_validation_joint":64,"selected_epoch":55,"validation_total":72,"active_parameters":24278}
+  },
+  "sealed_predictions": {
+    "cases_per_arm":72,
+    "arms":5,
+    "sha256":"00e7a2b7d72c86d4dc9d7bdb3dd74f2c7338bb650b7e7e8136dfa6dd9ee09bc8",
+    "sealed_utc":"2026-09-05T10:44:28.104196+00:00",
+    "gold_opened_utc":"2026-09-05T10:44:28.108023+00:00"
+  },
+  "completed_references": {"count":72,"wall_seconds":462.0503873130001},
+  "partial_candidate_evaluation": {"arm":"cas_untrained","recorded_cases":62,"expected_cases":72,"successes_within_partial_prefix":8,"wall_seconds":1758.5180616320004,"complete_arm_result":false},
+  "missing_completion": ["training/receipt.json","training/payload_sha256.json","remaining candidate evaluation cases"],
+  "recovery_proposal": "Resume native evaluation only, using the unchanged sealed predictions and preserved reference/checkpoint evidence. Split remaining fixed arm/case-index work into bounded shards; retain the full 72-case denominator per arm and reject duplicate or missing records. Do not retrain, retune, change examples, or promote partial results.",
+  "boundary": "Read-only examination of the verified failed packet. No AWS actions, local neural work, or checkpoint deserialization. Validation results are not complete native test success or CAS-specific advantage. Initial inspection cleanup status was unconfirmed; subsequent provider cleanup is handled separately."
+}

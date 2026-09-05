@@ -1,0 +1,28 @@
+{
+  "schema": "cas-meta1-packet-inspection/1",
+  "status": "VERIFIED_FAILED_PACKET",
+  "job": "cas-meta1-20260905103339-cd06685e",
+  "source_sha": "a4dc9f2fc6f6d4f3d5e0b31100ac131327e02109",
+  "archive_sha256": "76fbb522a97e3018e946857ce71599fbdea8bb6daffd29bd15fb7cf2d091f7a0",
+  "member_count": 1005,
+  "expanded_bytes": 226816243,
+  "complete_file_index_verified": true,
+  "members_with_stored_hash_verified": 1004,
+  "partial_evidence": false,
+  "omitted_full_file_count": 0,
+  "partial_members_without_stored_hash": [],
+  "launch_status": "CLEANUP_REQUIRES_ATTENTION",
+  "termination_confirmed": false,
+  "neural_execution_performed": false,
+  "checkpoint_loading_performed": false,
+  "checkpoints": [
+    {"file":"cloud_job/training/cas_initial.pt","sha256":"3857568d87e5f64389a1b34e11cf5f82352d323e84c49e978edd29bd540c7f62","verified":true},
+    {"file":"cloud_job/training/cas_best.pt","sha256":"f6897996f796dfab8f3031bddef455a0280aae283fd86f0d8ea636ccb6ce625a","verified":true},
+    {"file":"cloud_job/training/cas_last.pt","sha256":"e1394f260435fca58870708a5df076b8811191bb07fcef6a5cdb73f03305cb13","verified":true},
+    {"file":"cloud_job/training/generic_initial.pt","sha256":"47662f63f848babfb80aa7b5cab995ba1b5e1ea6ce7732aa7dcf4440810f03ad","verified":true},
+    {"file":"cloud_job/training/generic_best.pt","sha256":"efb74c8b10eb747af45a3e001d57afb4f9c69bc68acfc9af37ebdd31cc4f7fa6","verified":true},
+    {"file":"cloud_job/training/generic_last.pt","sha256":"ff3197a5f808df5c7b8852ee853c8930b575b0844f2e1fca4d3e3bcb83d2c7fc","verified":true}
+  ],
+  "extracted_to": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_001_extracted",
+  "boundary": "Byte identity and recorded-outcome recount only; not independent neural or native semantic reproduction."
+}

@@ -1,0 +1,237 @@
+{
+  "account": "807562639912",
+  "calls": [
+    {
+      "exception": null,
+      "method": "get_caller_identity",
+      "request_id": "396b08a6-9b62-45fc-bd7a-e246037f9982",
+      "service": "sts",
+      "utc": "2026-09-05T11:29:45.960499+00:00"
+    },
+    {
+      "exception": null,
+      "method": "describe_instances",
+      "request_id": "3d3bfcfc-642c-4f67-b818-12d58f32f902",
+      "service": "ec2",
+      "utc": "2026-09-05T11:29:46.300031+00:00"
+    },
+    {
+      "exception": "ClientError",
+      "method": "describe_volumes",
+      "request_id": "3bc76b63-320e-4db2-9561-bb94770ce290",
+      "service": "ec2",
+      "utc": "2026-09-05T11:29:46.732173+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_schedule",
+      "request_id": "67f07b05-87df-466e-aa79-6a85c29bc7d6",
+      "service": "scheduler",
+      "utc": "2026-09-05T11:29:46.823205+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_schedule",
+      "request_id": "dae6079c-3729-4f49-8ae7-88d81119325c",
+      "service": "scheduler",
+      "utc": "2026-09-05T11:29:47.193062+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_instance_profile",
+      "request_id": "eb15586a-6f11-42ed-80f7-55e1dac6500d",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:47.235137+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_role",
+      "request_id": "2d7644d4-1bc6-45fd-87b7-52427e0c6510",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:47.827626+00:00"
+    },
+    {
+      "exception": null,
+      "method": "remove_role_from_instance_profile",
+      "request_id": "a90ed699-bbd9-4b4b-8dfc-3bb1ce96362b",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:47.954537+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_instance_profile",
+      "request_id": "f806257a-3409-4e5f-8223-f604d1c215bb",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:48.061674+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_role",
+      "request_id": "185cc2ed-65d7-4cbd-bc6f-6aa49e653eed",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:48.207025+00:00"
+    },
+    {
+      "exception": null,
+      "method": "list_role_policies",
+      "request_id": "039f9500-21a6-4010-bc38-b9d1b08a3a34",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:48.326827+00:00"
+    },
+    {
+      "exception": null,
+      "method": "list_attached_role_policies",
+      "request_id": "5a6bcc92-8372-43fb-9b17-cf5bf8d081a0",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:48.441794+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_role_policy",
+      "request_id": "52cc0967-be1b-42a9-a9f0-63d255756e75",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:48.536445+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_role_policy",
+      "request_id": "884dbda8-f47b-4b75-a35b-04d635e4c98b",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:48.648932+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_role",
+      "request_id": "e8485b5f-89a6-4b00-9f12-202c88f57db0",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:48.767241+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_role",
+      "request_id": "519066bf-a1b2-489c-b1cd-51da2e1b0c13",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:48.918741+00:00"
+    },
+    {
+      "exception": null,
+      "method": "list_role_policies",
+      "request_id": "6b41c683-ef40-4249-a56c-f534237ed206",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:49.048758+00:00"
+    },
+    {
+      "exception": null,
+      "method": "list_attached_role_policies",
+      "request_id": "2a925747-8dd2-40fc-b404-4e0c19d06d2c",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:49.162048+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_role_policy",
+      "request_id": "69c5475b-7c34-4a11-bce1-51a6b8e4f559",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:49.272774+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_role_policy",
+      "request_id": "217c34c8-0047-42bc-ba9f-76abfe8675b7",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:49.386097+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_role",
+      "request_id": "47d55bff-0d40-4e4a-8cb2-18b0e03246e9",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:49.504800+00:00"
+    },
+    {
+      "exception": null,
+      "method": "describe_security_groups",
+      "request_id": "c1e94be3-41a9-483c-afd9-17d8fb0a369c",
+      "service": "ec2",
+      "utc": "2026-09-05T11:29:49.643179+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_security_group",
+      "request_id": "b03608c8-cbb6-4792-bf54-8b4d1bf0a363",
+      "service": "ec2",
+      "utc": "2026-09-05T11:29:50.128046+00:00"
+    },
+    {
+      "exception": "ResourceNotFoundException",
+      "method": "get_schedule",
+      "request_id": "ecc85751-bdfb-4c8f-916c-27ae13d594e7",
+      "service": "scheduler",
+      "utc": "2026-09-05T11:29:50.425238+00:00"
+    },
+    {
+      "exception": "NoSuchEntityException",
+      "method": "get_instance_profile",
+      "request_id": "b7ed7167-e306-4e97-80cf-db4ed34bcde8",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:50.455557+00:00"
+    },
+    {
+      "exception": "NoSuchEntityException",
+      "method": "get_role",
+      "request_id": "15efe98e-2ab6-4b91-a7e2-ce11c6f2145f",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:50.547618+00:00"
+    },
+    {
+      "exception": "NoSuchEntityException",
+      "method": "get_role",
+      "request_id": "22937e1b-05e5-40e0-825f-d45e8e93c027",
+      "service": "iam",
+      "utc": "2026-09-05T11:29:50.640918+00:00"
+    },
+    {
+      "exception": "ClientError",
+      "method": "describe_security_groups",
+      "request_id": "77ca9443-efdc-481e-93d7-51a528e3ece2",
+      "service": "ec2",
+      "utc": "2026-09-05T11:29:50.749660+00:00"
+    },
+    {
+      "exception": "ClientError",
+      "method": "describe_volumes",
+      "request_id": "727f441a-149d-448c-9556-93fe496765da",
+      "service": "ec2",
+      "utc": "2026-09-05T11:29:50.932948+00:00"
+    }
+  ],
+  "command": [
+    "C:\\Python314\\python.exe",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_001\\cleanup_closure\\cleanup_job001.py",
+    "--cleanup"
+  ],
+  "completed_utc": "2026-09-05T11:29:51.292858+00:00",
+  "errors": [],
+  "helper_sha256": "ca9bb4100cc9c72db65f9fdddd4bfbf8b0830b60c5652f91f59f612cec9a7d7d",
+  "instance_id": "i-082ddfe8cdd92dd68",
+  "instance_state": "terminated",
+  "job": "cas-meta1-20260905103339-cd06685e",
+  "original_launch_receipt_sha256": "48618b8bba6446b8aa38c4661435e7400848ec3f4ff080bac59859248c04f1a4",
+  "original_launch_receipt_unchanged": true,
+  "original_launch_receipt_untouched": true,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "provider_calls_file": "20260905T112945Z-b7017b99.provider_calls.jsonl",
+  "provider_calls_sha256": "4c1a6f482007e275c667d9ced25f9c41ce3153f502d6061441ffb1f114993385",
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "region": "us-west-2",
+  "remaining": [],
+  "requested_cleanup": true,
+  "s3_untouched": true,
+  "security_group_id": "sg-07793c793301684d9",
+  "source_sha": "a4dc9f2fc6f6d4f3d5e0b31100ac131327e02109",
+  "started_utc": "2026-09-05T11:29:45.640017+00:00",
+  "status": "CLEANUP_CLOSED_EVIDENCE_RETAINED",
+  "termination_confirmed": true,
+  "volume_id": "vol-015288e2252227b7a",
+  "volume_state": "deleted_or_not_found"
+}

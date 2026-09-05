@@ -4,3 +4,7 @@ runs/
 .venv/
 *.pyc
 _launch_contract_tests*/
+_cloud_packet_tests*/
+records/*_extracted/
+records/incoming/
+records/local_launch_gate/g7_contract_agent*/

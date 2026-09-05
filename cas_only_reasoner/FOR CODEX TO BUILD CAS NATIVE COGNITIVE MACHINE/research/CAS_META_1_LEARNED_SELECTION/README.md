@@ -1,9 +1,11 @@
 # CAS-META-1: learned CJT-program selection
 
-Build status: runnable pilot under local contract checks; AWS GPU execution and
-the measured learning result are not yet available. The owner approved a $100
-total cap; the first bounded launch reserves $2. No neural training or evaluation
-is permitted on the laptop.
+Build status: AWS training completed and six candidate checkpoints were saved.
+The first job timed out during native evaluation, so the full learning result
+is still open. [The recovery plan](RECOVERY_PLAN.md) preserves all original
+predictions and reruns evaluation on a faster AWS GPU. The owner approved a $100
+total cap; each bounded attempt reserves $2 from one shared ledger. No neural
+training or evaluation is permitted on the laptop. No further T4 use is permitted.
 
 Accepted baseline: 0917267b1354e5d036263eaa6ba9a7197eafb776.
 The CAS-META-0 restart round is closed. Historical evidence is not rewritten.

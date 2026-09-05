@@ -1,0 +1,94 @@
+{
+  "aws_launch_performed": false,
+  "baseline": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "files_verified": 316
+  },
+  "counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 131
+  },
+  "dataset_check": {
+    "boundary": "Independent direct-native outcome checking happens on AWS, not in this text generator.",
+    "counts": {
+      "test": 72,
+      "train": 864,
+      "validation": 72
+    },
+    "neural_outcomes_checked": false,
+    "status": "STRUCTURAL_AND_SURFACE_TARGET_CHECKS_PASSED",
+    "templates": {
+      "test": [
+        "test:0",
+        "test:1",
+        "test:2"
+      ],
+      "train": [
+        "train:0",
+        "train:1",
+        "train:2",
+        "train:3",
+        "train:4",
+        "train:5"
+      ],
+      "validation": [
+        "validation:0",
+        "validation:1"
+      ]
+    },
+    "unique_formal_instances": 1008
+  },
+  "git_head_at_check": "a4dc9f2fc6f6d4f3d5e0b31100ac131327e02109",
+  "gpu_tests_run": false,
+  "installed_frozen_wheels": {
+    "cas_cjt": {
+      "package_files_verified": 26,
+      "path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Lib\\site-packages\\cas_cjt",
+      "wheel_sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+    },
+    "casformer": {
+      "package_files_verified": 9,
+      "path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Lib\\site-packages\\casformer",
+      "wheel_sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"
+    }
+  },
+  "measured_learning_result": null,
+  "neural_forward_backward_training_evaluation_local": false,
+  "python_files_parsed": 14,
+  "required_next_gate": "AWS GPU integration/training/evaluation under the recorded $100 owner cap.",
+  "source_sha256": {
+    "BASELINE_MANIFEST.json": "476a8bbdc7a4b07a406e46b246ed417ea1d902e04cfb852ca710de09dcbc59f0",
+    "PREREGISTRATION.json": "c74c9eebf11e032962f8f9cded851df7ce89526ccffec9e05eaef7f6a4df55db",
+    "README.md": "ca542e5d429668a797479de0f16c7ba6c7ae0906cb3493e6fe4d14b80971181c",
+    "aws/README.md": "53cb564115fb2f4d6a59b9f0ece009f9315a8e7861d1bfaa0ebb1ba460c99f79",
+    "aws/launch.py": "dc7f51d60aab59ddb7b099d054255f46eb6e80db8043170b578cd1a9c37867a6",
+    "aws/launch_plan.json": "c9cf4d4e150e4640a346d6978b0c1f1fe39fcb5d55bce454654aba215ded59bf",
+    "cas_meta1/__init__.py": "47dd387d2772343bfd74bea2ae33e4f81c7b4a674f39859f50b1b2949b25dd8a",
+    "cas_meta1/baseline.py": "8bf2f87eb142dcc2e90b62d3e722ad2943c88569daed0575904187fc7aeb2a42",
+    "cas_meta1/curriculum.py": "c6b55b9bc6f48c4e0461d0bd34e447468e9fc3bd145e32750043297a5eab5138",
+    "cas_meta1/execution.py": "1acb999a77fd952ba12a5927461f8d99b97b4689aa3ab5696053dccb2c6d2376",
+    "cas_meta1/policy.py": "419fc8157491c2a9fd13260cba7d5eaf99ecca017f3ae165c3f593ff95d382fc",
+    "cas_meta1/train.py": "095dc9b0b5062b2356913eb929fb9b0a511bdc12afbf55f21c76b1f2cb82368c",
+    "data/dataset_manifest.json": "33d4ff9c421a631c4ea4e1bbf680305d52387e050c874ccb3261e8d7c177bb05",
+    "data/test_private.json": "12f25867796892bd4ac12efc9e9a4c0b442e9e3a9b95d93dd251f5ca6c8034ce",
+    "data/test_public.json": "74341e470a2452735bb33cd872f8d0ba28106018bc3f20b216314e8fc1d5a7de",
+    "data/train.json": "80ac7d07998287c25ae527bb2506b86c1cab51cb0d1c848859f06f05a97e57d3",
+    "data/validation.json": "ce94411e19c906455462ed502f0ab5b0d0f39cd1c614366b0d8c252c8811ee4b",
+    "programs/0_single_a.json": "e862676e17bb85578d0a4ffbf01277044c0082cfd3d010bbdec94cebdeecdd8b",
+    "programs/1_nested_ab.json": "eab150fcbf3d4a382097983e1b7419b8d96392ca7fb4beed0264da803e1e17da",
+    "programs/2_repair_chain.json": "d059c070469c5f9130a222e76d5716015aa7642d97858f23e530414f9fb23a71",
+    "pytest.ini": "e6b410f49e463f8a9ede19918193c64712eccc3feaf06d47333febcdb90cf928",
+    "requirements-gpu.txt": "cccd0f97bf1ee429755933901d22387f3bcf7039ac07bc8303ceb6a4fdf90233",
+    "tests/test_baseline.py": "33dbefd4748a1fc6ccd579df59b7b11f5b5feccd04aff0898443c716eaff7368",
+    "tests/test_curriculum.py": "46cff8b4ecc7f0fb760b11569dd406df79da748b053f1d50cca80da3bfbafff7",
+    "tests/test_execution_contract.py": "96cfe57834eafd30e5a351713b2e91c3a1841b8732e02d6d74a99aaa60e62bf1",
+    "tests/test_launch_contract.py": "7d98ba4afbf425588489ee77a55e05d0d9b244c6e4e929cc06c8492f868021fa",
+    "tests/test_policy_contract.py": "fccb95555f5b39426ea21e1e10faa971bee232f0efc36501cb7f769a477eed11",
+    "tools/build_launch_bundle.py": "f56f1e2452a165bc5a4928b8ca63796c62d0fbede59c3f52834ba397ff548fd6",
+    "tools/validate_local.py": "ab08f7307434cd8d93f7f1d75c0de8d1b84020d251f87053dd14da4f06c2d747"
+  },
+  "status": "CAS_META_1_LOCAL_CONTRACT_CHECKS_PASSED_GPU_PENDING",
+  "trained_checkpoint": null
+}

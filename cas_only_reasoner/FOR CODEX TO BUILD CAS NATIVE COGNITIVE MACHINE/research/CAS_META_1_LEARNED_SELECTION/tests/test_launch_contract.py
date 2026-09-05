@@ -61,7 +61,7 @@ def test_exact_approval_only():
         launch.validate_approval("100",{**PLAN,"automatic_retries":1})
 
 
-@pytest.mark.parametrize("key,value",[("region","us-east-1"),("instance_type","g5.xlarge"),("artifact_bytes_max",2147483648),("ebs_encrypted",False),("s3_retention_days",30)])
+@pytest.mark.parametrize("key,value",[("region","us-east-1"),("instance_type","g4dn.xlarge"),("instance_type","g5.xlarge"),("artifact_bytes_max",2147483648),("ebs_encrypted",False),("s3_retention_days",30),("runtime_seconds_max",3600),("compute_seconds_max",2700),("recovery_workers",4),("recovery_wall_seconds_max",1800),("on_demand_hourly_usd_max","0.526"),("required_gpu_name_contains","T4")])
 def test_plan_expansion_needs_new_authority(key,value):
     with pytest.raises(launch.LaunchRefused): launch.validate_approval("100",{**PLAN,key:value})
 
@@ -147,18 +147,104 @@ def test_remote_script_is_syntactically_valid_and_cuda_only():
     assert "torch.cuda.is_available()" in source
     assert "torch.__version__=='2.11.0+cu128'" in source
     assert source.index("CLOUD_DEADLINE_NOT_CONFIRMED") < source.index("pip','install")
-    assert "cas_meta1.train" in source
+    assert "cas_meta1.resume" in source
+    assert "'--predecessor'" in source and "'records'/'aws_run_001'" in source
+    assert "'--workers',str(CONFIG['recovery_workers'])" in source
+    assert "'--max-wall-seconds',str(CONFIG['recovery_wall_seconds_max'])" in source
+    assert "seconds=CONFIG['compute_seconds_max']" in source
+    assert "cas_meta1.train" not in source
+    assert "RTX PRO 4500" in source and "cuda_matmul_passed" in source
+    assert "torch.cuda.synchronize()" in source
     assert "CAS_META1_SOURCE_SHA" in source
     assert source.index("CUBLAS_WORKSPACE_CONFIG") < source.index("torch.cuda.is_available()")
     assert source.index("PYTHONDONTWRITEBYTECODE") < source.index("torch.cuda.is_available()")
     assert "'CAS_META1_RUN_GPU_TESTS'" in source
     assert "{'tests':4,'failures':0,'errors':0,'skipped':0}" in source
-    assert source.index("GPU_CONTRACT_TESTS_MUST_REPORT_EXACTLY_FOUR_PASSED") < source.index("cas_meta1.train")
+    assert source.index("GPU_CONTRACT_TESTS_MUST_REPORT_EXACTLY_FOUR_PASSED") < source.index("cas_meta1.resume")
     assert "package / m['pilot_dir'] / 'runs' / 'cloud_job'" in source
     bootstrap = launch.user_data(config)
     assert len(bootstrap.encode()) <= 16384
     assert "shutdown -h now" in bootstrap
+    assert "sleep 2300;" in bootstrap and "3500" not in bootstrap
     assert "(3,11)" in bootstrap
+
+
+def test_recovery_plan_keeps_existing_task_budget_and_storage_limits():
+    assert PLAN['instance_type'] == 'g7.2xlarge'
+    assert PLAN['runtime_seconds_max'] == 2400
+    assert PLAN['compute_seconds_max'] == 1800
+    assert PLAN['recovery_wall_seconds_max'] == 1650
+    assert PLAN['recovery_workers'] == 8
+    assert PLAN['owner_task_cap_usd'] == '100.00'
+    assert PLAN['per_launch_reserved_cap_usd'] == '2.00'
+    assert PLAN['artifact_objects_max'] == 3
+    assert PLAN['artifact_bytes_max'] == 1073741824
+    assert PLAN['ebs_gb'] == 75
+    hourly = launch.Decimal(PLAN['on_demand_hourly_usd_max'])
+    assert hourly*launch.Decimal(2400)/launch.Decimal(3600) == launch.Decimal('1.68')
+
+
+class TerminationEC2:
+    def __init__(self, *, normal_finishes=False, wrong_tag=False):
+        self.normal_finishes = normal_finishes
+        self.wrong_tag = wrong_tag
+        self.requests = []
+        self.waits = []
+    def describe_instances(self, **arguments):
+        state = 'terminated' if self.normal_finishes and self.requests else 'shutting-down'
+        return {'Reservations':[{'Instances':[{'InstanceId':'i-new','State':{'Name':state},
+                  'Tags':[{'Key':'cas_meta_job','Value':'other' if self.wrong_tag else 'job'}]}]}]}
+    def terminate_instances(self, **arguments):
+        self.requests.append(arguments)
+        return {'TerminatingInstances':[{'InstanceId':'i-new'}]}
+    def get_waiter(self, name):
+        assert name == 'instance_terminated'
+        return SimpleNamespace(wait=lambda **arguments:self.waits.append(arguments))
+
+
+def termination_clock(monkeypatch):
+    elapsed = [0.0]
+    monkeypatch.setattr(launch.time,'monotonic',lambda:elapsed[0])
+    monkeypatch.setattr(launch.time,'sleep',lambda seconds:elapsed.__setitem__(0,elapsed[0]+seconds))
+    return elapsed
+
+
+def test_force_shutdown_requires_verified_download_and_sixty_second_grace(monkeypatch):
+    elapsed = termination_clock(monkeypatch)
+    provider, events = TerminationEC2(), []
+    launch.terminate_owned_instance(provider,'i-new','job',artifact_verified=True,
+                                   record=lambda event,**details:events.append((event,details)))
+    assert elapsed[0] == 60
+    assert provider.requests == [{'InstanceIds':['i-new']},{'InstanceIds':['i-new'],'Force':True,'SkipOsShutdown':True}]
+    assert len(provider.waits) == 1
+    assert events[1][0] == 'INSTANCE_SKIP_OS_SHUTDOWN_REQUESTED'
+    assert events[1][1]['verified_download_required'] is True
+    assert 'provider_response' in events[1][1]
+
+
+def test_unverified_download_never_allows_force_shutdown(monkeypatch):
+    elapsed = termination_clock(monkeypatch)
+    provider = TerminationEC2()
+    with pytest.raises(launch.LaunchRefused,match='NO_VERIFIED_DOWNLOAD'):
+        launch.terminate_owned_instance(provider,'i-new','job',artifact_verified=False,record=lambda *a,**k:None)
+    assert elapsed[0] == 60
+    assert provider.requests == [{'InstanceIds':['i-new']}]
+    assert provider.waits == []
+
+
+def test_completed_normal_shutdown_never_uses_force(monkeypatch):
+    elapsed = termination_clock(monkeypatch)
+    provider = TerminationEC2(normal_finishes=True)
+    launch.terminate_owned_instance(provider,'i-new','job',artifact_verified=True,record=lambda *a,**k:None)
+    assert elapsed[0] == 0
+    assert provider.requests == [{'InstanceIds':['i-new']}]
+
+
+def test_shutdown_refuses_an_unowned_instance():
+    provider = TerminationEC2(wrong_tag=True)
+    with pytest.raises(launch.LaunchRefused,match='OWNERSHIP'):
+        launch.terminate_owned_instance(provider,'i-new','job',artifact_verified=True,record=lambda *a,**k:None)
+    assert provider.requests == []
 
 
 def test_frozen_runtime_paths_not_installed_from_source():
@@ -323,18 +409,71 @@ def test_monitor_error_stops_child_before_artifact_packaging(tmp_path):
     tree = ast.parse(launch.remote_program({}))
     function = next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name == "bounded_process")
     class FakeChild:
+        pid = 123
         returncode = None
         def poll(self): return self.returncode
-        def terminate(self): self.terminated = True; self.returncode = -15
         def wait(self,timeout): self.waited = True; return self.returncode
-        def kill(self): raise AssertionError("termination should succeed")
     child = FakeChild()
+    signals = []
+    def kill_group(pid, sig):
+        assert pid == child.pid
+        signals.append(sig); child.returncode = -15
     def broken_monitor(root): raise OSError("monitor read failure")
     namespace = {"time":SimpleNamespace(time=lambda:0,sleep=lambda seconds:None),
                  "subprocess":SimpleNamespace(Popen=lambda *a,**k:child,STDOUT=-2,TimeoutExpired=TimeoutError),
+                 "os":SimpleNamespace(killpg=kill_group),"signal":SimpleNamespace(SIGTERM=15,SIGKILL=9),
                  "sample_artifact_bytes":broken_monitor,"artifact_root":tmp_path,
                  "CONFIG":{"artifact_bytes_max":1073741824}}
     exec(compile(ast.Module(body=[function],type_ignores=[]),"<bookkeeping-only>","exec"),namespace)
     with pytest.raises(OSError,match="monitor read failure"):
         namespace["bounded_process"](["fake"],tmp_path/"fake.log",env={},cwd=tmp_path,seconds=60,deadline=3600)
-    assert child.terminated and child.waited
+    assert signals == [15,9] and child.waited
+
+
+@pytest.mark.parametrize('upload_fails',[False,True])
+def test_live_progress_is_bounded_best_effort_and_reuses_bootstrap_key(tmp_path,upload_fails):
+    tree = ast.parse(launch.remote_program({}))
+    function = next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name == 'publish_progress')
+    stage = tmp_path/'stage.log'; stage.write_bytes(b'x'*100000+b'LAST STAGE LINE')
+    recovery = tmp_path/'recovery'; recovery.mkdir()
+    (recovery/'progress.json').write_bytes(b'x'*20000+b'LATEST PROGRESS')
+    calls = []
+    def upload(argv,**kwargs):
+        calls.append((argv,kwargs,(tmp_path/'live-progress.log').read_bytes()))
+        if upload_fails: raise TimeoutError('simulated upload timeout')
+    namespace = {'root':tmp_path,'out':tmp_path,'json':json,'datetime':launch.datetime,'timezone':launch.timezone,
+                 'os':SimpleNamespace(environ={}),
+                 'subprocess':SimpleNamespace(run=upload,DEVNULL=-3),
+                 'CONFIG':{'job':'job','bucket':'bucket','region':'us-west-2'}}
+    exec(compile(ast.Module(body=[function],type_ignores=[]),'<bookkeeping-only>','exec'),namespace)
+    namespace['publish_progress'](stage,{'state':'RUNNING'})
+    argv, options, body = calls[0]
+    assert len(body) <= 65536
+    assert b'LATEST PROGRESS' in body and body.endswith(b'LAST STAGE LINE')
+    assert 's3://bucket/results/bootstrap.log' in argv
+    assert options['timeout'] == 5 and options['check'] is False
+    assert options['env']['AWS_MAX_ATTEMPTS'] == '1'
+
+
+def test_bounded_stage_publishes_every_thirty_seconds_and_on_exit(tmp_path):
+    tree = ast.parse(launch.remote_program({}))
+    function = next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name == 'bounded_process')
+    elapsed, updates = [0.0], []
+    class FakeChild:
+        returncode = None
+        def poll(self):
+            if elapsed[0] >= 65: self.returncode = 0
+            return self.returncode
+    def start(*args,**kwargs):
+        assert kwargs['start_new_session'] is True
+        return FakeChild()
+    namespace = {'time':SimpleNamespace(time=lambda:elapsed[0],sleep=lambda seconds:elapsed.__setitem__(0,elapsed[0]+seconds)),
+                 'subprocess':SimpleNamespace(Popen=start,STDOUT=-2),
+                 'publish_progress':lambda path,status:updates.append((elapsed[0],status)),
+                 'sample_artifact_bytes':lambda root:0,'artifact_root':tmp_path,
+                 'CONFIG':{'artifact_bytes_max':1073741824}}
+    exec(compile(ast.Module(body=[function],type_ignores=[]),'<bookkeeping-only>','exec'),namespace)
+    result = namespace['bounded_process'](['fake'],tmp_path/'stage.log',env={},cwd=tmp_path,seconds=120,deadline=3600)
+    assert result == 0
+    assert [stamp for stamp,status in updates] == [0,30,60,66]
+    assert updates[-1][1]['state'] == 'EXITED'

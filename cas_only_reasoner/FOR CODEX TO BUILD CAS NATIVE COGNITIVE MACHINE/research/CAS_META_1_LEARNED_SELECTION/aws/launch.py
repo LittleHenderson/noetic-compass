@@ -104,10 +104,12 @@ def validate_approval(cap: str | None, plan: dict) -> None:
             raise LaunchRefused("EXPLICIT_100_USD_TASK_APPROVAL_REQUIRED")
     except InvalidOperation as exc:
         raise LaunchRefused("INVALID_APPROVAL_CAP") from exc
-    if (plan["instance_count"], plan["runtime_seconds_max"], plan["automatic_retries"], plan["ebs_gb"]) != (1, 3600, 0, 75):
+    if (plan["instance_count"], plan["runtime_seconds_max"], plan["automatic_retries"], plan["ebs_gb"]) != (1, 2400, 0, 75):
         raise LaunchRefused("UNREGISTERED_RESOURCE_PLAN")
-    fixed = {"approved_cap_usd_required":"100.00","owner_task_cap_usd":"100.00","per_launch_reserved_cap_usd":"2.00","account_id":"807562639912","region":"us-west-2","instance_type":"g4dn.xlarge",
-             "ami_id":"ami-0fbbd0facbc9e3cff","training_seconds_max":2700,"ebs_type":"gp3",
+    fixed = {"approved_cap_usd_required":"100.00","owner_task_cap_usd":"100.00","per_launch_reserved_cap_usd":"2.00","account_id":"807562639912","region":"us-west-2","instance_type":"g7.2xlarge",
+             "ami_id":"ami-0fbbd0facbc9e3cff","compute_seconds_max":1800,"ebs_type":"gp3",
+             "on_demand_hourly_usd_max":"2.52","recovery_wall_seconds_max":1650,
+             "recovery_workers":8,"required_gpu_name_contains":"RTX PRO 4500",
              "ebs_encrypted":True,"delete_on_termination":True,"artifact_bytes_max":1073741824,
              "archive_expanded_bytes_max":536870912,"s3_retention_days":7,
              "torch_version":"2.11.0","torch_cuda_version":"12.8",
@@ -216,6 +218,30 @@ def verify_schedule(confirmed: dict, target: dict, expression: str) -> None:
         raise LaunchRefused("CLOUD_DEADLINE_NOT_CONFIRMED")
 
 
+def terminate_owned_instance(ec2, instance_id: str, job: str, *, artifact_verified: bool, record) -> None:
+    """Skip guest shutdown only after verified evidence is safely downloaded."""
+    def owned_instance():
+        instance = ec2.describe_instances(InstanceIds=[instance_id])["Reservations"][0]["Instances"][0]
+        check_tag(instance.get("Tags",[]),job)
+        return instance
+    if owned_instance()["State"]["Name"] == "terminated": return
+    response = ec2.terminate_instances(InstanceIds=[instance_id])
+    record("INSTANCE_NORMAL_TERMINATION_REQUESTED",instance_id=instance_id,provider_response=response)
+    deadline = time.monotonic() + 60
+    while True:
+        state = owned_instance()["State"]["Name"]
+        if state == "terminated": return
+        remaining = deadline - time.monotonic()
+        if remaining <= 0: break
+        time.sleep(min(5,remaining))
+    if not artifact_verified:
+        raise LaunchRefused("TERMINATION_UNCONFIRMED:NO_VERIFIED_DOWNLOAD_FORCE_SHUTDOWN_REFUSED")
+    response = ec2.terminate_instances(InstanceIds=[instance_id],Force=True,SkipOsShutdown=True)
+    record("INSTANCE_SKIP_OS_SHUTDOWN_REQUESTED",instance_id=instance_id,
+           verified_download_required=True,previous_state=state,provider_response=response)
+    ec2.get_waiter("instance_terminated").wait(InstanceIds=[instance_id],WaiterConfig={"Delay":5,"MaxAttempts":24})
+
+
 def build_evidence_bundle(artifact_root, bundle, limit, job_record):
     """Pure file packaging: oversize output becomes an explicit bounded failure packet."""
     import hashlib, json, pathlib, zipfile
@@ -289,7 +315,7 @@ def sample_artifact_bytes(root):
 def remote_program(config: dict) -> str:
     """Return remote-only bookkeeping/bootstrap. It never executes on the client."""
     return "CONFIG = " + repr(config) + "\n" + inspect.getsource(build_evidence_bundle) + "\n" + inspect.getsource(sample_artifact_bytes) + "\n" + r'''
-import hashlib, json, os, pathlib, platform, subprocess, sys, time, traceback, zipfile
+import hashlib, json, os, pathlib, platform, signal, subprocess, sys, time, traceback, zipfile
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 os.environ['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'
@@ -313,26 +339,54 @@ out.mkdir(parents=True,exist_ok=True)
 artifact_root = out
 m = CONFIG['manifest']
 
+def publish_progress(log_path, status):
+    # Best effort: one existing result key, <=64 KiB, and at most five seconds.
+    try:
+        def tail(path, count):
+            try:
+                with path.open('rb') as stream:
+                    stream.seek(max(0,path.stat().st_size-count))
+                    return stream.read(count)
+            except OSError: return b''
+        header = json.dumps({'job':CONFIG['job'],'utc':datetime.now(timezone.utc).isoformat(),
+                             'stage_log':log_path.name,**status},sort_keys=True).encode()
+        progress = tail(out/'recovery'/'progress.json',8192)
+        content = header+b'\nRECOVERY STATUS\n'+progress+b'\nCURRENT STAGE LOG TAIL\n'+tail(log_path,49152)
+        target = root/'live-progress.log'
+        target.write_bytes(content[:65536])
+        subprocess.run(['aws','s3','cp',str(target),'s3://'+CONFIG['bucket']+'/results/bootstrap.log',
+                        '--region',CONFIG['region'],'--cli-connect-timeout','5','--cli-read-timeout','5'],
+                       timeout=5,check=False,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,
+                       env={**os.environ,'AWS_MAX_ATTEMPTS':'1','AWS_PAGER':''})
+    except Exception:
+        pass
+
 def bounded_process(argv, log_path, *, env, cwd, seconds, deadline):
     stage_start = time.time()
+    next_progress = stage_start
     with log_path.open('w') as log:
-        process = subprocess.Popen(argv,cwd=cwd,env=env,stdout=log,stderr=subprocess.STDOUT)
+        process = subprocess.Popen(argv,cwd=cwd,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
         try:
             while process.poll() is None:
                 size = sample_artifact_bytes(artifact_root)
                 if size > CONFIG['artifact_bytes_max'] - 2097152 or time.time()-stage_start > seconds or time.time() > deadline-120:
                     raise RuntimeError('PROCESS_TIME_OR_ARTIFACT_CEILING')
+                if time.time() >= next_progress:
+                    next_progress = time.time()+30
+                    publish_progress(log_path,{'state':'RUNNING','elapsed_seconds':time.time()-stage_start,'artifact_bytes':size})
                 time.sleep(2)
+            publish_progress(log_path,{'state':'EXITED','returncode':process.returncode,'elapsed_seconds':time.time()-stage_start})
             return process.returncode
         finally:
-            # Even a monitor error must stop the writer before evidence packaging.
-            if process.poll() is None:
-                try: process.terminate()
+            # Stop the parent and all spawned workers before packaging a failed stage.
+            if process.poll() is None or process.returncode != 0:
+                try: os.killpg(process.pid,signal.SIGTERM)
                 except ProcessLookupError: pass
                 try: process.wait(timeout=15)
-                except subprocess.TimeoutExpired:
-                    try: process.kill()
-                    except ProcessLookupError: pass
+                except subprocess.TimeoutExpired: pass
+                try: os.killpg(process.pid,signal.SIGKILL)
+                except ProcessLookupError: pass
+                if process.poll() is None:
                     process.wait(timeout=15)
 
 try:
@@ -366,7 +420,7 @@ try:
     run([str(py),'-m','pip','install','--disable-pip-version-check','torch==2.11.0','--index-url',CONFIG['torch_index_url'],'--report',str(out/'torch_install.json')],timeout=max(1,deadline-time.time()-240))
     run([str(py),'-m','pip','install','--disable-pip-version-check','-r',str(package/m['dependency_lock']),'--report',str(out/'dependency_install.json')],timeout=max(1,deadline-time.time()-240))
     run([str(py),'-m','pip','install','--no-deps',*[str(package/w) for w in m['wheel_paths']],'--report',str(out/'frozen_wheel_install.json')],timeout=max(1,deadline-time.time()-240))
-    probe = "import torch,json,sys,platform; assert torch.__version__=='2.11.0+cu128'; assert torch.version.cuda=='12.8'; assert torch.cuda.is_available(); assert torch.cuda.device_count()==1; print(json.dumps({'python':sys.version,'platform':platform.platform(),'torch':torch.__version__,'cuda':torch.version.cuda,'gpu':torch.cuda.get_device_name(0)}))"
+    probe = "import torch,json,sys,platform; assert torch.__version__=='2.11.0+cu128'; assert torch.version.cuda=='12.8'; assert torch.cuda.is_available(); assert torch.cuda.device_count()==1; gpu=torch.cuda.get_device_name(0); assert " + repr(CONFIG['required_gpu_name_contains']) + " in gpu; x=torch.ones((32,32),device='cuda'); assert (x@x).sum().item()==32768; torch.cuda.synchronize(); print(json.dumps({'python':sys.version,'platform':platform.platform(),'torch':torch.__version__,'cuda':torch.version.cuda,'gpu':gpu,'cuda_matmul_passed':True}))"
     with (out/'runtime.json').open('w') as f: run([str(py),'-c',probe],stdout=f,timeout=60)
     with (out/'pip_freeze.txt').open('w') as f: run([str(py),'-m','pip','freeze','--all'],stdout=f,timeout=30)
     env = dict(os.environ)
@@ -385,10 +439,13 @@ try:
         raise RuntimeError('GPU_CONTRACT_TESTS_MUST_REPORT_EXACTLY_FOUR_PASSED:'+str(totals))
     (out/'gpu_contract_receipt.json').write_text(json.dumps({'passed':4,**totals}))
     env.pop('CAS_META1_RUN_GPU_TESTS')
-    argv = [str(py),'-m','cas_meta1.train','--data',str(package/m['data_dir']),'--output',str(out/'training')]
+    argv = [str(py),'-m','cas_meta1.resume','--data',str(package/m['data_dir']),
+            '--predecessor',str(package/m['pilot_dir']/'records'/'aws_run_001'),
+            '--output',str(out/'recovery'),'--workers',str(CONFIG['recovery_workers']),
+            '--max-wall-seconds',str(CONFIG['recovery_wall_seconds_max'])]
     (out/'command.json').write_text(json.dumps(argv,indent=2))
-    if deadline - time.time() < 180: raise RuntimeError('INSUFFICIENT_TRAINING_TIME_AFTER_INSTALL')
-    returncode = bounded_process(argv,out/'training.log',env=env,cwd=package/m['pilot_dir'],seconds=CONFIG['training_seconds_max'],deadline=deadline)
+    if deadline - time.time() < 180: raise RuntimeError('INSUFFICIENT_RECOVERY_TIME_AFTER_INSTALL')
+    returncode = bounded_process(argv,out/'recovery.log',env=env,cwd=package/m['pilot_dir'],seconds=CONFIG['compute_seconds_max'],deadline=deadline)
 except BaseException as exc:
     (out/'remote_failure.json').write_text(json.dumps({'type':type(exc).__name__,'message':str(exc),'traceback':traceback.format_exc()},indent=2))
 finally:
@@ -412,7 +469,7 @@ def user_data(config: dict, remote_sha256: str | None = None) -> str:
     text = "\n".join([
         "#!/bin/bash", "set -eu", "umask 077", "export PYTHONDONTWRITEBYTECODE=1",
         "trap 'test ! -f /opt/cas-meta1/bootstrap.log || { tail -c 1048576 /opt/cas-meta1/bootstrap.log > /opt/cas-meta1/bootstrap-tail.log; aws s3 cp /opt/cas-meta1/bootstrap-tail.log " + shlex.quote("s3://" + config["bucket"] + "/results/bootstrap.log") + " --region " + shlex.quote(config["region"]) + " || true; }; shutdown -h now' EXIT",
-        "( sleep 3500; shutdown -h now ) >/dev/null 2>&1 &",
+        "( sleep " + str(config['runtime_seconds_max']-100) + "; shutdown -h now ) >/dev/null 2>&1 &",
         "mkdir -p /opt/cas-meta1",
         "exec > /opt/cas-meta1/bootstrap.log 2>&1",
         "command -v aws >/dev/null || { echo AWS_CLI_REQUIRED; exit 1; }",
@@ -479,6 +536,7 @@ def execute(args: argparse.Namespace, plan: dict, manifest: dict) -> dict:
         return created["Arn"]
     iid = None
     launch_attempted = False
+    artifact_verified = False
     try:
         s3.create_bucket(Bucket=bucket, CreateBucketConfiguration={"LocationConstraint":plan["region"]})
         receipt["resources"]["bucket"] = bucket; save()
@@ -532,6 +590,7 @@ def execute(args: argparse.Namespace, plan: dict, manifest: dict) -> dict:
                 artifact = output / "cloud_artifacts.zip"
                 s3.download_file(bucket,"results/artifacts.zip",str(artifact))
                 if digest(artifact) != result["sha256"]: raise LaunchRefused("DOWNLOADED_ARTIFACT_HASH_MISMATCH")
+                artifact_verified = True
                 receipt["result"] = result
                 receipt["status"] = "AWS_JOB_FINISHED" if result["returncode"] == 0 else "AWS_JOB_FAILED"
                 record("ARTIFACT_DOWNLOADED_AND_HASH_VERIFIED",path=str(artifact),sha256=result["sha256"])
@@ -561,13 +620,10 @@ def execute(args: argparse.Namespace, plan: dict, manifest: dict) -> dict:
                 record("INSTANCE_IDENTITY_UNCONFIRMED_RESOURCES_RETAINED")
         if iid:
             try:
-                instance = ec2.describe_instances(InstanceIds=[iid])["Reservations"][0]["Instances"][0]
-                check_tag(instance.get("Tags",[]),job)
-                if instance["State"]["Name"] != "terminated": ec2.terminate_instances(InstanceIds=[iid])
-                ec2.get_waiter("instance_terminated").wait(InstanceIds=[iid],WaiterConfig={"Delay":5,"MaxAttempts":24})
+                terminate_owned_instance(ec2,iid,job,artifact_verified=artifact_verified,record=record)
                 terminated = True; record("INSTANCE_TERMINATION_CONFIRMED",instance_id=iid)
                 seconds = (datetime.now(timezone.utc)-datetime.fromisoformat(receipt["provider_launch_time"])).total_seconds()
-                receipt["cost_estimate"] = {"instance_wall_clock_seconds_upper_observation":seconds,"compute_ebs_ipv4_usd_estimate":str((Decimal(str(seconds))/Decimal(3600))*(Decimal("0.526")+Decimal(75)*Decimal("0.08")/Decimal(720)+Decimal("0.005"))),"excluded":"S3 requests and retention, transfer, taxes; not an AWS invoice"}
+                receipt["cost_estimate"] = {"instance_wall_clock_seconds_upper_observation":seconds,"compute_ebs_ipv4_usd_estimate":str((Decimal(str(seconds))/Decimal(3600))*(Decimal(plan['on_demand_hourly_usd_max'])+Decimal(75)*Decimal("0.08")/Decimal(720)+Decimal("0.005"))),"excluded":"S3 requests and retention, transfer, taxes; not an AWS invoice"}
             except Exception as exc: receipt["cleanup_errors"].append("TERMINATION_UNCONFIRMED: "+str(exc))
         if terminated:
             if iid:
