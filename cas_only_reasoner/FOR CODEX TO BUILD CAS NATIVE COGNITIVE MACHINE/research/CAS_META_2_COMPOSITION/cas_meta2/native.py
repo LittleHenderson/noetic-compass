@@ -367,7 +367,7 @@ def reference_task(task, output_dir, device="cuda"):
     return _run(task["public"], task["target"], output_dir, device, reference=True)
 
 
-def _stored(result):
+def _stored(result, public, *, expected_action=None, allow_private_reference=False):
     """Examine actual SQLite records and tensor bytes; never decode a tensor."""
     output = Path(result["output_dir"]).resolve()
     if output == ROOT or not output.is_relative_to(ROOT):
@@ -435,11 +435,49 @@ def _stored(result):
         if (final["kind"] != "effect" or final["producer_cjt_id"] != final_effect["producer_cjt_id"]
                 or final["payload_sha256"] != sha256(payload(final_effect["content_ref"])).hexdigest()):
             raise ValueError("FORGED_FINAL_EFFECT_REFERENCE")
-        return {"rows": rows, "return_node": produced[final["effect_id"]],
-                "final_output_sha256": final["payload_sha256"],
-                "trace_count": len(traces)}
+        from .stored import verify_stored_composition
+        audit = verify_stored_composition(result, public, traces=traces,
+                                          expected_action=expected_action,
+                                          allow_private_reference=allow_private_reference)
+        if (audit["rows"] != rows or audit["return_node"] != produced[final["effect_id"]]
+                or audit["final_output_sha256"] != final["payload_sha256"]):
+            raise ValueError("STORED_AUDIT_DISAGREEMENT")
+        return audit
     finally:
         conn.close()
+
+
+def verify_reference_task(task, reference):
+    """Check the private direct run against its gold procedure and public input.
+
+    This is reference integrity/structure validation, not a measured candidate
+    result. Only this caller explicitly authorizes the no-call-tree exception.
+    """
+    if reference.get("status") != "EXECUTED" or reference.get("reference") is not True:
+        raise ValueError("PRIVATE_NATIVE_REFERENCE_REQUIRED")
+    expected, public = task["target"], task["public"]
+    admit_action(public, expected)
+    if (reference["selected_action"] != expected or reference["public_digest"] != digest(public)
+            or reference["runtime_identity"] != reference["runtime_identity_after"]):
+        raise ValueError("PRIVATE_REFERENCE_OR_FROZEN_IDENTITY_MISMATCH")
+    private = _stored(reference, public, expected_action=expected, allow_private_reference=True)
+    structure = check_native_topology(expected["program"])
+    expected_edges = [{"cjt_id": row["cjt_id"], "input_node": row["input_node"]}
+                      for row in structure["runs"]]
+    actual_edges = [{key: row[key] for key in ("cjt_id", "input_node")} for row in private["rows"]]
+    if actual_edges != expected_edges or private["return_node"] != structure["return_node"]:
+        raise ValueError("PRIVATE_REFERENCE_STRUCTURE_MISMATCH")
+    observation = next(row for row in public["observations"] if row["slot"] == expected["binding"])
+    input_sha = sha256(struct.pack("<8f", *observation["values"])).hexdigest()
+    if any(row["input_node"] == -1 and row["input_sha256"] != input_sha for row in private["rows"]):
+        raise ValueError("PRIVATE_REFERENCE_INPUT_MISMATCH")
+    return {"task_correct": True, "procedure_correct": True, "binding_correct": True,
+            "dependency_correct": True, "actual_output_correct": True, "trace_valid": True,
+            "repair_success": None, "repair_required": False, "native_runs": private["trace_count"],
+            "reserved_policy_units": private["reserved_policy_units"],
+            "stored_call_tree_verified": False, "stored_audit_method": private["audit_method"],
+            "verdict_kind": "PRIVATE_NATIVE_REFERENCE_CHECK", "candidate_task_evaluation": False,
+            "claim_boundary": "Private reference integrity, procedure and input checks only; no candidate learning result."}
 
 
 def verify_task(task, result, reference):
@@ -450,6 +488,8 @@ def verify_task(task, result, reference):
     if result.get("status") != "EXECUTED":
         verdict["failure"] = "PREDICTED_PROGRAM_REJECTED"
         return verdict
+    if result.get("reference") is not False:
+        raise ValueError("CANDIDATE_MUST_NOT_BE_PRIVATE_REFERENCE")
     if reference.get("status") != "EXECUTED" or not reference.get("reference"):
         raise ValueError("PRIVATE_NATIVE_REFERENCE_REQUIRED")
     expected = task["target"]
@@ -463,8 +503,9 @@ def verify_task(task, result, reference):
         raise ValueError("PRIVATE_REFERENCE_OR_FROZEN_IDENTITY_MISMATCH")
     if result["public_digest"] != digest(task["public"]):
         raise ValueError("PUBLIC_DIGEST_MISMATCH")
-    actual = _stored(result)
-    private = _stored(reference)
+    actual = _stored(result, task["public"])
+    private = _stored(reference, task["public"], expected_action=expected,
+                      allow_private_reference=True)
     structure = check_native_topology(expected["program"])
     expected_edges = [{"cjt_id": row["cjt_id"], "input_node": row["input_node"]}
                       for row in structure["runs"]]
@@ -484,7 +525,9 @@ def verify_task(task, result, reference):
         actual_output_correct=(actual["rows"] == private["rows"]
                                and actual["final_output_sha256"] == private["final_output_sha256"]),
         trace_valid=True, native_runs=actual["trace_count"],
-        reserved_policy_units=result["reserved_policy_units"])
+        reserved_policy_units=actual["reserved_policy_units"],
+        stored_call_tree_verified=actual["stored_call_tree_verified"],
+        stored_audit_method=actual["audit_method"])
     verdict["task_correct"] = all(verdict[k] for k in (
         "procedure_correct", "binding_correct", "dependency_correct", "actual_output_correct", "trace_valid"))
     return verdict

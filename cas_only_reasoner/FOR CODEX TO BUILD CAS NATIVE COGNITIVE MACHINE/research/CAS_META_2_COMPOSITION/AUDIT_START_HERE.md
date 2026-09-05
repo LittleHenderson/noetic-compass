@@ -30,11 +30,14 @@ Mock backend tests establish control behavior only. The GPU test module is skipp
 - `cas_meta2/policy.py`: separate CAS and generic neural generators with the same decoder and binding head.
 - `cas_meta2/executor.py`: named-value call stack, planned charges, unique run identities and event replay.
 - `cas_meta2/native.py`: unchanged native CJT calls and private direct-reference execution.
+- `cas_meta2/stored.py`: read-only replay of saved composition events against the selected program, actual database receipts, input/output bytes, final state and compute charges. This is documentary checking, not a new neural execution or restart test.
 - `cas_meta2/train.py`: paired training, validation-only checkpoint selection, checkpoint saving and public prediction sealing.
 - `cas_meta2/campaign.py`: smoke, training, all five arms, private evaluation and bounded failure handling.
 - `aws/launch.py`: source-pinned cloud execution and owned-resource cleanup.
 - `aws/budget.py`: one continued owner-approved allowance, not a fresh allowance per stage.
 - `tools/build_launch_bundle.py`: only committed source bytes enter the cloud source ZIP.
+- `tools/inspect_cloud_packet.py`: checks the downloaded archive, every member hash, source binding, GPU test counts, saved checkpoint hashes and recorded result totals; safely extracts to a new directory. It never loads a checkpoint.
+- `tools/audit_stored_packet.py`: after successful packet inspection, validates published trace schemas and rechecks saved program steps, memory references, compute charges and actual input/output bytes against sealed choices. It never runs a model.
 - `VISION_REQUIREMENTS.md`: the complete destination, including requirements this candidate does not yet implement.
 
 ## Cloud reproduction
@@ -45,9 +48,18 @@ Before launch, the included source must be committed and its archive validated. 
 
 The local launch receipt binds the exact source SHA, source ZIP hash, AWS job, budget reservation, downloaded artifact hash and cleanup state. A later cleanup correction must be a separate receipt; do not rewrite the initial failure history.
 
+## Evidence inspection order
+
+First inspect the original ZIP with `tools/inspect_cloud_packet.py`, passing its exact packet SHA256, source SHA, job identity and independently saved source-bundle receipt. Use a new `records/` inspection directory and a new `records/*_extracted` extraction directory. The inspector reports failed/partial runs separately from complete smoke/full runs. Its process exit code alone is not a claim that a run succeeded; read `status` and `completed_run_evidence_verified`.
+
+Only a complete, successfully inspected smoke/full packet can enter `tools/audit_stored_packet.py`. Pass `--inspection-receipt`, optionally `--extracted`, and a new `--output` directory under `records/`. This second check derives verdicts from saved database contents and the selected source program; it does not merely recount saved true/false fields. Both tools are safe data-only checks for this laptop. Their receipts explicitly exclude neural reproduction and restart claims.
+
+The first failed Blackwell attempt is documented in `records/AWS_SMOKE_001_FINDING.md` and preserved by evidence commit `b0261e8d7daaf7812cacf22ebc722acb1f56514f`. Its source is still `2a3ec1132770b121881a49effee2aa5d4e0494fb`, not the evidence commit. All 69 packet members were checked; the run remains failed. The separate cleanup receipt closes only resource cleanup, not the policy test failure.
+
 ## What a positive result would establish
 
 The intended measured result is improved execution of unseen bounded structural tasks after training. Correctness requires the declared dependency structure, observation binding, named intermediate references and all actual native output bytes. Trace integrity or a final symbol alone does not establish task correctness.
 
-A positive result still would not establish general language, full Noetic semantics, learned missing-skill repair, general recursion, durable skill installation, CAS-specific superiority, complete CNCM, physical analog hardware or production readiness. Those remain in the full vision.
+The initial public curriculum explicitly describes operations and dependencies in controlled wording. Its task is translation and composition from those instructions, not algorithm discovery from an outcome alone. New structural combinations and held-out wording test bounded generalization; they do not establish unrestricted language understanding or self-directed procedure invention.
 
+A positive result still would not establish general language, full Noetic semantics, learned missing-skill repair, general recursion, durable skill installation, CAS-specific superiority, complete CNCM, physical analog hardware or production readiness. Those remain in the full vision.

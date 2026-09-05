@@ -150,7 +150,7 @@ def _smoke_tasks(train_tasks):
 
 
 def run_smoke(train_tasks, output, deadline):
-    from .native import execute_task, reference_task, verify_task
+    from .native import execute_task, reference_task, verify_reference_task, verify_task
     from .train import setup_cuda
     _, device = setup_cuda()
     output = Path(output)
@@ -161,7 +161,7 @@ def run_smoke(train_tasks, output, deadline):
         directory = output / "smoke" / name
         reference = reference_task(task, directory / "reference", device=str(device))
         _write(directory / "reference_result.json", reference)
-        reference_verdict = verify_task(task, reference, reference)
+        reference_verdict = verify_reference_task(task, reference)
         _write(directory / "reference_verdict.json", reference_verdict)
         if reference.get("status") != "EXECUTED" or reference_verdict.get("task_correct") is not True:
             raise RuntimeError("SMOKE_NATIVE_REFERENCE_INVALID:" + name)
@@ -193,7 +193,7 @@ def _worker_init():
 
 
 def _case_worker(job):
-    from .native import execute_task, reference_task, verify_task
+    from .native import execute_task, reference_task, verify_reference_task, verify_task
     from .train import setup_cuda
     _, device = setup_cuda()
     index, task, actions, output = job
@@ -204,7 +204,7 @@ def _case_worker(job):
         reference_started = time.monotonic()
         reference = reference_task(task, case_directory / "reference", device=str(device))
         _write(case_directory / "reference_result.json", reference)
-        reference_verdict = verify_task(task, reference, reference)
+        reference_verdict = verify_reference_task(task, reference)
         _write(case_directory / "reference_verdict.json", reference_verdict)
         if reference.get("status") != "EXECUTED" or reference_verdict.get("task_correct") is not True:
             raise RuntimeError("HELD_OUT_NATIVE_REFERENCE_INVALID:" + str(index))

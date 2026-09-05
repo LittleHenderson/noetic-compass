@@ -268,15 +268,18 @@ class LaunchTests(unittest.TestCase):
         self.assertEqual(ec2.calls,[{"InstanceIds":["i-owned"]}])
 
     def test_force_shutdown_requires_verified_artifact_and_owned_token(self):
+        waits = []
         class EC2:
             def __init__(self,job): self.job,self.calls=job,[]
             def describe_instances(self,**kwargs): return {"Reservations":[{"Instances":[{"ClientToken":self.job,"State":{"Name":"shutting-down"},"Tags":[{"Key":"cas_meta_job","Value":self.job}]}]}]}
             def terminate_instances(self,**kwargs): self.calls.append(kwargs); return {}
-            def get_waiter(self,name): return types.SimpleNamespace(wait=lambda **kwargs:None)
+            def get_waiter(self,name): return types.SimpleNamespace(wait=lambda **kwargs:waits.append(kwargs))
         ec2 = EC2(self.job)
         with patch.object(launch.time,"monotonic",side_effect=[0,61]):
             launch.terminate_owned_instance(ec2,"i-owned",self.job,artifact_verified=True,record=lambda *args,**kwargs:None)
         self.assertEqual(ec2.calls[-1],{"InstanceIds":["i-owned"],"Force":True,"SkipOsShutdown":True})
+        self.assertEqual(len(ec2.calls),2)
+        self.assertEqual(waits,[{"InstanceIds":["i-owned"],"WaiterConfig":{"Delay":5,"MaxAttempts":120}}])
 
     def test_uncertain_launch_never_assumed_absent(self):
         ec2 = types.SimpleNamespace(describe_instances=lambda **kwargs:{"Reservations":[]})

@@ -43,10 +43,9 @@ The scope below remains open until verified in an integrated system. Current evi
 ## Immediate evidence sequence
 
 1. Validate a new bounded typed program representation and named intermediate values in an isolated candidate. Invalid fields, denied topology/scope, forged references, excessive expansion, incorrect returns, and changed runtime identities must fail closed.
-2. Generate varied structural tasks. Train separate CAS and matched generic program generators on AWS only. Compare trained/untrained/rule arms on public problems without giving the answer/program. Seal all predictions before private native references are generated. Save checkpoints, raw outputs and costs, including negative results.
+2. Generate varied structural tasks. Train separate CAS and matched generic program generators on AWS only. Compare trained/untrained/rule arms on public problems without giving the target program JSON or answer. The first public curriculum explicitly describes required operations and dependencies: this is controlled instruction translation, not yet algorithm discovery from an outcome alone. Seal all predictions before private native references are generated. Save checkpoints, raw outputs and costs, including negative results.
 3. Qualify a durable skill package and retrieve it in a fresh process, then use it in a new parent program with provenance and permissions intact.
 4. Add an explicit verified version transition for learning a missing skill and resuming a suspended caller. Preserve old model and neighboring scopes; require retention and rollback evidence.
 5. Continue toward all other ledger rows within the remaining total budget. Do not mark the ultimate goal complete because a bounded stage passed.
 
 The separate 12-hour campaign plan was not found in the scoped CNCM research/documents/roadmap/spec search or returned recent task history as of this record. Its absence does not cancel the owner's campaign request or ultimate scope. No prior campaign start time or completed phase is invented here.
-

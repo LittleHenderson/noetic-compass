@@ -40,6 +40,7 @@ class PolicyConfig:
     decoder_ff_width: int = 128
     max_length: int = 512
     max_action_length: int = 256
+    cas_initial_saturation_per_max_token: float = 2.0
     max_parameter_mismatch_fraction: float = 0.01
 
     def validate(self):
@@ -52,6 +53,12 @@ class PolicyConfig:
             raise PolicyContractError("POLICY_HEAD_GEOMETRY_INVALID")
         if self.max_action_length < 16 or self.max_action_length > 512:
             raise PolicyContractError("POLICY_ACTION_BOUND_INVALID")
+        if (type(self.cas_initial_saturation_per_max_token) not in (int, float)
+                or not math.isfinite(self.cas_initial_saturation_per_max_token)
+                or self.cas_initial_saturation_per_max_token <= 0
+                or not math.isfinite(self.cas_initial_saturation_per_max_token * self.max_length)
+                or self.cas_initial_saturation_per_max_token * self.max_length <= 0.01):
+            raise PolicyContractError("CAS_INITIAL_SATURATION_SCALE_INVALID")
         if not 0 <= self.max_parameter_mismatch_fraction <= 0.01:
             raise PolicyContractError("PARAMETER_MATCH_TOLERANCE_INVALID")
 
@@ -190,12 +197,13 @@ class CASProgramGenerator(_ProgramGenerator):
         cas_config = CASformerConfig(d_model=config.d_model, num_heads=config.heads,
                                     num_relations=4, num_layers=config.layers,
                                     d_ff=config.cas_ff_width, initial_cutoff=0.01,
-                                    initial_saturation=4.0)
+                                    initial_saturation=(config.cas_initial_saturation_per_max_token
+                                                        * config.max_length))
         with torch.device(device):
             self.control_adapter = LearnedCASControlAdapter(cas_config)
             self.encoder = CASformerEncoder(cas_config)
 
-    def encode(self, batch):
+    def _encoder_inputs(self, batch):
         embedded = self.embed(batch)
         batch_size, length, _ = embedded.shape
         shape = (batch_size, self.config.heads, length, length)
@@ -210,7 +218,18 @@ class CASProgramGenerator(_ProgramGenerator):
             region_multiplier=torch.ones(shape, device=embedded.device, dtype=embedded.dtype),
             topology_mask=mask, permission_mask=mask, relation_ids=relations,
         )
-        hidden, _ = self.encoder(embedded, controls)
+        # Drive and total-current summation are unchanged. Only the initial
+        # gate saturation range scales with the configured input-length bound:
+        # per-edge current near one must not saturate every multi-token query.
+        return embedded, controls
+
+    def encode_with_telemetry(self, batch):
+        """Observe the same encoder execution; no auxiliary training loss."""
+        embedded, controls = self._encoder_inputs(batch)
+        return self.encoder(embedded, controls)
+
+    def encode(self, batch):
+        hidden, _ = self.encode_with_telemetry(batch)
         return hidden
 
 
@@ -270,6 +289,13 @@ def build_matched_policies(tokenizer: PublicTokenizer, config: PolicyConfig, *, 
         "generic_ff_width": width, "absolute_difference": abs(cas_count - generic_count),
         "relative_difference": mismatch, "action_vocabulary_size": len(ACTION_VOCABULARY),
         "decoder": "identical causal Transformer decoder plus learned observation pointer",
+        "cas_initial_cutoff": 0.01,
+        "cas_initial_saturation": config.cas_initial_saturation_per_max_token * config.max_length,
+        "absolute_flow_rule": "Unchanged accepted per-edge Drive/resistance current, summed across permitted keys.",
+        "frozen_candidate_parameter_names": [
+            family + "." + name for family, model in (("cas", cas), ("generic", generic))
+            for name, parameter in model.named_parameters() if not parameter.requires_grad
+        ],
         "method": "Real encoder feed-forward width only; no disconnected filler parameters.",
     }
 

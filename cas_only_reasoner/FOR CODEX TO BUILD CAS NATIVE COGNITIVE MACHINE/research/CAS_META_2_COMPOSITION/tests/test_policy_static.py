@@ -68,3 +68,27 @@ def test_encoder_matching_uses_real_feedforward_dimensions():
     assert "slope = config.layers * (2 * config.d_model + 1)" in text
     assert "ACTIVE_PARAMETER_MATCH_FAILED" in text
     assert "nn.Parameter(" not in text
+
+
+def test_initial_gate_range_scales_without_changing_drive_or_current():
+    text = POLICY.read_text(encoding="utf-8")
+    assert "cas_initial_saturation_per_max_token: float = 2.0" in text
+    assert "config.cas_initial_saturation_per_max_token" in text
+    assert "* config.max_length" in text
+    assert "initial_saturation=4.0" not in text
+    inputs = ast.get_source_segment(text, function("_encoder_inputs"))
+    assert "controls.drive" not in inputs
+    assert "total_current" not in inputs
+    assert "frozen_candidate_parameter_names" in text
+
+
+def test_four_gpu_tests_cover_real_default_batch_and_absolute_flow():
+    gpu_path = POLICY.parents[1] / "tests" / "test_policy_gpu.py"
+    source = gpu_path.read_text(encoding="utf-8")
+    gpu_tree = ast.parse(source)
+    assert sum(isinstance(node, ast.FunctionDef) and node.name.startswith("test_") for node in gpu_tree.body) == 4
+    assert "default_longest_training_batch16" in source
+    assert "reverse=True)[:16]" in source
+    assert "default_tokenizer, PolicyConfig()" in source
+    assert "active_fraction >= 0.95" in source
+    assert "total_current_halved" in source and "relative_attention_unchanged" in source

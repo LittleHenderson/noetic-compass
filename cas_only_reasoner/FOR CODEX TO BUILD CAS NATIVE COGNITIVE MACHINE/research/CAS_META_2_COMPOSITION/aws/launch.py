@@ -320,7 +320,12 @@ def terminate_owned_instance(ec2, instance_id: str, job: str, *, artifact_verifi
     response = ec2.terminate_instances(InstanceIds=[instance_id],Force=True,SkipOsShutdown=True)
     record("INSTANCE_SKIP_OS_SHUTDOWN_REQUESTED",instance_id=instance_id,
            verified_download_required=True,previous_state=state,provider_response=response)
-    ec2.get_waiter("instance_terminated").wait(InstanceIds=[instance_id],WaiterConfig={"Delay":5,"MaxAttempts":24})
+    # Blackwell smoke 001 remained shutting-down beyond the former two-minute
+    # observer window. Keep watching the already-requested termination; this
+    # does not extend the training deadline or send more termination requests.
+    record("INSTANCE_TERMINATION_OBSERVATION_STARTED",instance_id=instance_id,
+           maximum_observation_seconds=600,additional_termination_requests=0)
+    ec2.get_waiter("instance_terminated").wait(InstanceIds=[instance_id],WaiterConfig={"Delay":5,"MaxAttempts":120})
 
 
 def build_evidence_bundle(artifact_root, bundle, limit, job_record, expanded_limit=None, force_partial=False):
