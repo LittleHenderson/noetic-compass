@@ -1,0 +1,89 @@
+{
+  "build_git_pin_verification": {
+    "binding": "LITERAL_SHA256_PINS",
+    "files": {
+      "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+      "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+      "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+    },
+    "schema": "cas-meta3-pure-dependency-receipt/0.1",
+    "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+    "verified_against_git": true
+  },
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_3_PROCEDURAL_MEMORY\\tools\\validate_local.py",
+    "--child",
+    "--output",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_3_PROCEDURAL_MEMORY\\records\\local_candidate_001",
+    "--scratch",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-0782e3fa41bd"
+  ],
+  "counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 72
+  },
+  "dependency_after": {
+    "binding": "LITERAL_SHA256_PINS",
+    "files": {
+      "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+      "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+      "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+    },
+    "schema": "cas-meta3-pure-dependency-receipt/0.1",
+    "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+    "verified_against_git": false
+  },
+  "dependency_before": {
+    "binding": "LITERAL_SHA256_PINS",
+    "files": {
+      "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+      "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+      "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+    },
+    "schema": "cas-meta3-pure-dependency-receipt/0.1",
+    "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+    "verified_against_git": false
+  },
+  "environment": {
+    "executable": "C:\\Python314\\python.exe",
+    "platform": "win32",
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "failure": null,
+  "junit_count_includes_subtests": true,
+  "local_neural_work": false,
+  "native_execution_performed": false,
+  "neural_imports_blocked": true,
+  "passed_subtests": 0,
+  "passed_test_functions": 72,
+  "protected_after": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "files_verified": 316
+  },
+  "protected_before": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "files_verified": 316
+  },
+  "qualification": "UNQUALIFIED",
+  "returncode": 0,
+  "schema": "cas-meta3-pure-validation/0.1",
+  "scope": "Pure storage/linking tests, including synthetic identities; no model or tensor execution.",
+  "scratch_retained": true,
+  "source_sha256": {
+    "cas_meta3/__init__.py": "73ad2111bf915bc4200df071ee50cadca20ff61713813def1def46097374afee",
+    "cas_meta3/linker.py": "0df59807d9c584d3355df52a28bf8584002b823dccceb4ab67e7bd12251f6dcf",
+    "cas_meta3/registry.py": "426410ea8d06c26fd4b5519096c3b3cb438fa3a89403500c0f090ddbaf3a2eee",
+    "tests/test_linker.py": "98070008c428d7895ca55047ad0402ad52a063701c3c1c3fcb4b4809a1cde73b",
+    "tests/test_registry.py": "10ec3643e3d6f75e8c691efaa7a4d4a31eace8a3be14f236045af08984588b42",
+    "tools/validate_local.py": "33160be399da3195097eba9b34059e0cdab57012602ee5712517550be7e98c82"
+  },
+  "sources_unchanged": true,
+  "status": "PURE_CHECKS_PASSED",
+  "test_scratch": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-0782e3fa41bd",
+  "utc": "2026-09-05T17:29:07.531646+00:00",
+  "wall_seconds": 2.7150489000050584
+}

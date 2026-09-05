@@ -1,0 +1,92 @@
+# CAS-META-3: a bounded procedural-memory candidate
+
+This is a separate experiment for saving and reusing one typed CJT procedure.
+It does not change the accepted executor, the saved META2 learning experiment,
+or any baseline weights. It is not yet a learned or qualified skill system.
+
+Current local receipt: `records/local_candidate_001/receipt.json` records **72
+passing pure tests**, all 316 protected files unchanged, and the three META2
+dependency hashes checked against the actual frozen Git objects. Neural imports
+were blocked. This is not native execution or a learning result.
+
+## The narrow question
+
+Can a caller save a procedure, close the process, retrieve exactly that procedure
+in a fresh process, and link it into a new parent program without expanding its
+permissions?
+
+The first package contains only `B(arg) -> v0`, with an accepted A Effect as its
+input and an accepted B Effect as its output. A fixed parent runs A and then
+calls that saved B procedure twice. Both calls use the earlier A result; the
+parent returns the first B result. This exercises distinct calls, named values,
+and an explicit return without adding a new opcode or compiler.
+
+## Boundaries
+
+- The SQLite registry stores canonical JSON data, not Python or model weights.
+- The caller supplies the expected package hash, compatibility identity, and
+  allowed CJTs. A package cannot grant itself permission.
+- Storage and link receipts always say `UNQUALIFIED`. A hash or a successful
+  retrieval does not establish task correctness or learning.
+- The registry has no update, delete, promote, or execute API. New versions use
+  new content hashes. This is an application-level storage rule, not a claim
+  that an external administrator cannot replace the database.
+- The package address identifies reusable content. It is not an execution ID,
+  a native memory reference, an oscillatory phase, or a new source of authority.
+- Retrieval in a fresh process is distinct from resuming an interrupted native
+  call. The latter is not implemented by this candidate.
+- No Noetic meanings, Foundation meanings, pulsation, lifelong learning,
+  automatic skill selection, or general-purpose program generation are added.
+
+## Source boundaries
+
+The pure META2 IR and action codec are pinned by file-byte checks to source from
+commit `b5f1718e63a2b5cf72b4b606d513d0524b9226ac`. The protected native executor
+baseline is `0917267b1354e5d036263eaa6ba9a7197eafb776`. The registry does not
+import the native executor or a neural library.
+
+Current source:
+
+- `cas_meta3/registry.py`: strict package checks, append-only installation, and
+  read-only retrieval with a chain of storage receipts.
+- `cas_meta3/linker.py`: the fixed parent program and a structural link receipt.
+- `tests/test_registry.py`: storage, rejection, and process-restart checks.
+- `tests/test_linker.py`: linking, named-value reuse, caller scope, and unchanged
+  META2 action-admission checks.
+- `tools/validate_local.py`: syntax, protected-byte, and pure test receipts.
+
+## Local checks
+
+From this directory, run:
+
+```powershell
+C:/Python314/python.exe -B tools/validate_local.py --output records/local_audit_rerun
+```
+
+The output directory must be new. The test process refuses imports of Torch,
+TensorFlow, JAX, and CASformer. These checks run no models or tensors. Fixtures
+use synthetic compatibility hashes; those hashes are not native qualification.
+Temporary test files stay in a short `_tmp/meta3-*` directory under the CNCM
+homebase. The receipt records its exact path; short paths avoid a Windows Python
+startup problem seen with a deeply nested `TEMP` directory.
+
+## Separate AWS execution gate
+
+Before claiming usable native procedural memory, a later AWS-only demonstration
+must bind a package to the actual frozen model, software, contracts, topology,
+and published schema. It must retrieve the package in a fresh process, execute
+the linked parent through the unchanged runtime, and compare every actual
+result with a separately run reference. Stored traces and unchanged protected
+bytes need their own receipts. Invalid packages must be rejected before native
+execution or native state writes.
+
+That demonstration has not run. This directory has no cloud launcher and no
+separate spending authority. Any future launch must use the existing single
+META2 campaign ledger and the owner's $400 total cap; no T4 or local neural work.
+
+## Evidence interpretation
+
+Pure test success proves only the covered storage and linking behavior. A later
+native demonstration would still not show that CASformer learns which skill to
+store, retrieves a useful skill from a problem, gains CAS-specific advantage, or
+implements the complete cognitive-machine vision.

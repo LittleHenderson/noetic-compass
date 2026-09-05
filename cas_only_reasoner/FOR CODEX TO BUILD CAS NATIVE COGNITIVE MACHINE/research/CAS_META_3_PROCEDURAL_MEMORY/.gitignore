@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+runs/
+records/**/test_tmp/
+records/**/runtime_tmp/
