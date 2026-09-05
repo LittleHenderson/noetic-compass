@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "tests": 38,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "C:\\Python314\\python.exe",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tests\\test_budget.py",
+    "--receipt-dir",
+    "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/budget/validation_20260905"
+  ],
+  "neural_work_performed": false,
+  "provider_calls": 0,
+  "raw_output_sha256": "7c53c5370a5396326ce80bcf87da0605b4c57c8e7e3ce6dd0005e9520b219bba",
+  "budget_module_sha256": "77a845ea8669b775a28a940552a9212f667a9506e5586deff64baba06a82eda0",
+  "test_module_sha256": "56bf8cd7e88c3194396bd1b7b0f3b82620bbae0aeded188dfa8dfbb541681b49"
+}

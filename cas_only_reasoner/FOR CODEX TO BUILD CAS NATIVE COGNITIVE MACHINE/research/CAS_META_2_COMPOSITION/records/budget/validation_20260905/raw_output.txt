@@ -1,0 +1,43 @@
+test_approval_changed_blocks_continued_spending (__main__.BudgetTests.test_approval_changed_blocks_continued_spending) ... ok
+test_cap_exhaustion_refused (__main__.BudgetTests.test_cap_exhaustion_refused) ... ok
+test_changed_prior_reservation_detected (__main__.BudgetTests.test_changed_prior_reservation_detected) ... ok
+test_changed_totals_detected (__main__.BudgetTests.test_changed_totals_detected) ... ok
+test_compute_plus_ancillary_bound_enforced (__main__.BudgetTests.test_compute_plus_ancillary_bound_enforced) ... ok
+test_corrupt_ledger_refused (__main__.BudgetTests.test_corrupt_ledger_refused) ... ok
+test_deleted_history_detected (__main__.BudgetTests.test_deleted_history_detected) ... ok
+test_duplicate_job_refused_no_retry (__main__.BudgetTests.test_duplicate_job_refused_no_retry) ... ok
+test_duplicate_json_keys_refused (__main__.BudgetTests.test_duplicate_json_keys_refused) ... ok
+test_evidence_missing_blocks_spending (__main__.BudgetTests.test_evidence_missing_blocks_spending) ... ok
+test_history_chain_tampering_detected (__main__.BudgetTests.test_history_chain_tampering_detected) ... ok
+test_initial_amendment_preserves_prior_reservations (__main__.BudgetTests.test_initial_amendment_preserves_prior_reservations) ... ok
+test_initialization_is_idempotent_without_reset (__main__.BudgetTests.test_initialization_is_idempotent_without_reset) ... ok
+test_interrupted_replace_prevents_automatic_refund_or_retry (__main__.BudgetTests.test_interrupted_replace_prevents_automatic_refund_or_retry) ... ok
+test_lock_contention_and_stale_lock_fail_closed (__main__.BudgetTests.test_lock_contention_and_stale_lock_fail_closed) ... ok
+test_missing_explicit_approval_refused (__main__.BudgetTests.test_missing_explicit_approval_refused) ... ok
+test_missing_ledger_is_never_a_fresh_budget (__main__.BudgetTests.test_missing_ledger_is_never_a_fresh_budget) ... ok
+test_missing_or_zero_ancillary_budget_refused (__main__.BudgetTests.test_missing_or_zero_ancillary_budget_refused) ... ok
+test_modern_blackwell_and_h100_families_allowed (__main__.BudgetTests.test_modern_blackwell_and_h100_families_allowed) ... ok
+test_new_job_bad_source_identity_refused (__main__.BudgetTests.test_new_job_bad_source_identity_refused) ... ok
+test_new_job_id_bad_shape_refused (__main__.BudgetTests.test_new_job_id_bad_shape_refused) ... ok
+test_new_reservation_plan_tampering_detected (__main__.BudgetTests.test_new_reservation_plan_tampering_detected) ... ok
+test_new_reservation_refund_forbidden (__main__.BudgetTests.test_new_reservation_refund_forbidden) ... ok
+test_nonfinite_json_rejected (__main__.BudgetTests.test_nonfinite_json_rejected) ... ok
+test_nonfinite_or_negative_or_numeric_money_refused (__main__.BudgetTests.test_nonfinite_or_negative_or_numeric_money_refused) ... ok
+test_old_ledger_changed_blocks_continued_spending (__main__.BudgetTests.test_old_ledger_changed_blocks_continued_spending) ... ok
+test_parallel_instances_retries_and_unbounded_runtime_refused (__main__.BudgetTests.test_parallel_instances_retries_and_unbounded_runtime_refused) ... ok
+test_predecessor_duplicate_job_refused (__main__.BudgetTests.test_predecessor_duplicate_job_refused) ... ok
+test_predecessor_refund_forbidden (__main__.BudgetTests.test_predecessor_refund_forbidden) ... ok
+test_predecessor_totals_must_match (__main__.BudgetTests.test_predecessor_totals_must_match) ... ok
+test_prior_job_cannot_be_reserved_again (__main__.BudgetTests.test_prior_job_cannot_be_reserved_again) ... ok
+test_reservation_is_append_only_and_cost_bounded (__main__.BudgetTests.test_reservation_is_append_only_and_cost_bounded) ... ok
+test_rolled_back_ledger_detected_by_history (__main__.BudgetTests.test_rolled_back_ledger_detected_by_history) ... ok
+test_t4_plan_refused (__main__.BudgetTests.test_t4_plan_refused) ... ok
+test_windows_transient_replace_retry (__main__.BudgetTests.test_windows_transient_replace_retry) ... ok
+test_wrong_owner_cap_refused (__main__.BudgetTests.test_wrong_owner_cap_refused) ... ok
+test_wrong_owner_task_refused (__main__.BudgetTests.test_wrong_owner_task_refused) ... ok
+test_wrong_region_and_account_refused (__main__.BudgetTests.test_wrong_region_and_account_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 38 tests in 1.634s
+
+OK

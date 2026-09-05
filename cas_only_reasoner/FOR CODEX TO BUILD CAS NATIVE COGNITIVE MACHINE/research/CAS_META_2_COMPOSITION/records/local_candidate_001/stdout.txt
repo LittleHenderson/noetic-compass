@@ -1,0 +1,44 @@
+................................................ [ 18%]
+.................................................................... [ 45%]
+........................................................................ [ 73%]
+..................FF............................ [ 91%]
+.....................                                                    [100%]
+================================== FAILURES ===================================
+___ LaunchTests.test_cleanup_deletes_owned_role_when_policy_already_absent ____
+
+self = <test_launch.LaunchTests testMethod=test_cleanup_deletes_owned_role_when_policy_already_absent>
+
+    def test_cleanup_deletes_owned_role_when_policy_already_absent(self):
+>       from botocore.exceptions import ClientError
+E       ModuleNotFoundError: No module named 'botocore'
+
+tests\test_launch.py:284: ModuleNotFoundError
+______ LaunchTests.test_cleanup_will_not_delete_untagged_security_group _______
+
+self = <test_launch.LaunchTests testMethod=test_cleanup_will_not_delete_untagged_security_group>
+
+    def test_cleanup_will_not_delete_untagged_security_group(self):
+        deleted=[]
+        ec2=types.SimpleNamespace(describe_security_groups=lambda **kwargs:{"SecurityGroups":[{"GroupId":"sg-other","Tags":[]}]},delete_security_group=lambda **kwargs:deleted.append(kwargs))
+        receipt={"resources":{"security_group":"sg-other"},"cleanup_errors":[]}
+>       launch.remove_owned_auxiliary_resources(ec2,None,None,receipt,self.job,"worker","timer",lambda *args,**kwargs:None)
+
+tests\test_launch.py:279: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+ec2 = namespace(describe_security_groups=<function LaunchTests.test_cleanup_will_not_delete_untagged_security_group.<locals>...up=<function LaunchTests.test_cleanup_will_not_delete_untagged_security_group.<locals>.<lambda> at 0x000002713BF94B40>)
+iam = None, scheduler = None
+receipt = {'cleanup_errors': [], 'resources': {'security_group': 'sg-other'}}
+job = 'cas-meta2-contract-only', worker_role = 'worker', timer_role = 'timer'
+record = <function LaunchTests.test_cleanup_will_not_delete_untagged_security_group.<locals>.<lambda> at 0x000002713BF968D0>
+
+    def remove_owned_auxiliary_resources(ec2, iam, scheduler, receipt, job, worker_role, timer_role, record):
+        """Delete only the exact tagged resources recorded for this one job."""
+>       from botocore.exceptions import ClientError
+E       ModuleNotFoundError: No module named 'botocore'
+
+aws\launch.py:222: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/test_launch.py::LaunchTests::test_cleanup_deletes_owned_role_when_policy_already_absent
+FAILED tests/test_launch.py::LaunchTests::test_cleanup_will_not_delete_untagged_security_group
+2 failed, 255 passed, 1 skipped, 52 subtests passed in 3.79s

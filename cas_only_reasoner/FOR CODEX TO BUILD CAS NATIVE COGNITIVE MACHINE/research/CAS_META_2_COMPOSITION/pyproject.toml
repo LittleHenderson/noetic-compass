@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cas-meta2-composition"
+version = "0.1.0"
+description = "Experimental bounded learned composition over frozen native CJT APIs"
+requires-python = ">=3.11"
+
+[tool.setuptools.packages.find]
+include = ["cas_meta2*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-m 'not gpu'"
+markers = ["gpu: AWS CUDA-only test; never run on the laptop", "not_gpu: pure data/control test without tensor work"]

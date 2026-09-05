@@ -1,0 +1,61 @@
+{
+  "command": [
+    "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\validate_local.py",
+    "--child",
+    "--output",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\local_candidate_001"
+  ],
+  "counts": {
+    "errors": 0,
+    "failures": 2,
+    "skipped": 1,
+    "tests": 310
+  },
+  "gpu_tests_run": false,
+  "local_neural_work": false,
+  "neural_imports_blocked": true,
+  "protected_after": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "files_verified": 316
+  },
+  "protected_before": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "files_verified": 316
+  },
+  "returncode": 1,
+  "schema": "cas-meta2-pure-validation/1",
+  "scope": "Syntax, pure data/control and mock-backend tests only.",
+  "source_sha256": {
+    "aws/__init__.py": "b1ead80f832488352f8fbf0fdaa6750c5f6bc15433001edeaf5935cc276fc221",
+    "aws/budget.py": "77a845ea8669b775a28a940552a9212f667a9506e5586deff64baba06a82eda0",
+    "aws/launch.py": "96be5f88ee96ebb394cd1d09d66f19437263225e07a80e9715bc32d5030e4b05",
+    "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+    "cas_meta2/campaign.py": "11ecaf7cff57bb54d5bd4e468f67a064d29f2bf686447a1f058840aa75346663",
+    "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "cas_meta2/curriculum.py": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384",
+    "cas_meta2/executor.py": "edeb83fd3468aaccacb871bc4561c97a78ae087bb47b9d8ad38f1a58fd7efb2a",
+    "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637",
+    "cas_meta2/native.py": "d2e6ba2eab671974007a81b16260a5fe0ae5c55ada4dc98685f1d221d122eeb6",
+    "cas_meta2/policy.py": "dc9ca987ccd00aa4935a701530bb8fa9f35ae0d2c540aa5f6f8eb0805f9c264b",
+    "cas_meta2/train.py": "d7995259548e1600b66deb15178516b4fe133183726f7645f358fd5a64e57c74",
+    "tests/test_budget.py": "56bf8cd7e88c3194396bd1b7b0f3b82620bbae0aeded188dfa8dfbb541681b49",
+    "tests/test_bundle.py": "3369f1d4f87a0676d92c597b01e7fe6eb0f84438fe2abb4d2be66ea34916ab43",
+    "tests/test_codec.py": "738c59d3b9c7a8fe164e4e20e1dd1808fa36c2039ae8d9a41124733f025f4d20",
+    "tests/test_curriculum.py": "bbc98b04e4514d4bd829cc543e4ed81f86f2d92d58f9b819886bc7bec2e85a98",
+    "tests/test_executor.py": "94eefa67ba3d43d3ddf89083b9eefd8e6c1c7f2ee949f9ed66d6e49a42224d17",
+    "tests/test_ir.py": "da9b082f958f447718c765d8ba8445c542321272486aca1718f7b77bbd302084",
+    "tests/test_launch.py": "1e3e5c3e63ab85dea7c8829b9053ce20ac824ac199bbbfc1653db734c18852d1",
+    "tests/test_native_static.py": "5e0b6a47b1a75bff2d70b6093147530b2929a9f8840d59f059bb28addef44a93",
+    "tests/test_policy_gpu.py": "b74be96215949b3cb2012f3bcba21c96d0062b21b9dfe24c317694fb4eac3297",
+    "tests/test_policy_static.py": "616c6eb8cfc50d36adf335a58c112debfb7a8b2e2844c6d76c22cb7ce9a59a55",
+    "tools/build_launch_bundle.py": "a4f772d70e950b1c1c85978527a5ec73ada73793703e6763c3e455f552f4d5d3",
+    "tools/provider_snapshot.py": "2f6f840d1f6368f0d60e7a170e2d3af07e0c07f9fd5e0c102e1e5f570d6ef199",
+    "tools/validate_local.py": "f283b1c40eef2be7e4526f54b3a81056939b1086fa604599389de361238efb72"
+  },
+  "sources_unchanged": true,
+  "status": "PURE_CHECKS_FAILED",
+  "utc": "2026-09-05T16:31:32.959722+00:00",
+  "wall_seconds": 5.185334099998727
+}
