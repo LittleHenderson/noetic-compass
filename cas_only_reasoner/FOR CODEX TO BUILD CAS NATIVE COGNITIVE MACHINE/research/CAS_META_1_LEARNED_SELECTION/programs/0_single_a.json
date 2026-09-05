@@ -1,0 +1,10 @@
+{
+  "version": "cas-meta/0.1",
+  "entry": "main",
+  "procedures": {
+    "main": {
+      "input_type": "IDEA", "output_type": "EFFECT", "allowed_cjts": ["A"],
+      "body": {"kind": "run", "cjt": "A", "operation": "^6", "expected": "L1"}
+    }
+  }
+}

@@ -1,0 +1,2 @@
+# Keep audit hashes identical in the checkout and portable Git archive.
+** -text whitespace=cr-at-eol

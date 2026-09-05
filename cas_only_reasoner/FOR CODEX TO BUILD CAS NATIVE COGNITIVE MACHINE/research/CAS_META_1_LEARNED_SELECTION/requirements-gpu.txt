@@ -1,0 +1,8 @@
+# Linux / Python 3.11 or 3.12. AWS GPU only.
+# The launcher installs torch==2.11.0 from the cu128 index separately.
+# Install the two accepted CAS wheels with --no-deps, then this file.
+# Direct pins only, NOT a complete transitive hash lock.
+# The run must retain pip freeze and actual torch/CUDA/device versions.
+numpy==2.2.6
+jsonschema==4.26.0
+pytest==9.0.2

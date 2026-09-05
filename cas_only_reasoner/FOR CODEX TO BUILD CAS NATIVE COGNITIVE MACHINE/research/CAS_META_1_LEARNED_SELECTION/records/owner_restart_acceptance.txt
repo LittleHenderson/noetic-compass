@@ -1,0 +1,130 @@
+**This closes the actual CAS-META-0 restart blocker on the audited version. We should stop treating it as unresolved.**
+
+The report now describes an independent run from a worktree pinned to `0917267b`, including the standalone pause-and-resume sequence that previously failed. That is materially stronger than a builder saying the fix works or a test suite passing under different setup conditions.
+
+The supported accomplishment is:
+
+> **A supplied, fixed-weight CJT program can be paused into a checkpoint, resumed in a fresh process using that checkpoint’s own identity, and completed with its cumulative budget intact. Its source and evidence are now preserved and checked against Git.**
+
+That is a real engineering milestone toward your programmable reasoning transistor. I am interpreting the auditor’s report, not claiming an additional execution of my own.
+
+## What is now closed
+
+| Previous issue                                     | New evidence in this report                                                                            | Interpretation                                                             |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| Standalone resume failed at `NATIVE_HEAD_MISMATCH` | Corrected `--prepare` followed by fresh-process `--resume` completed successfully                      | **Restart blocker closed for this workflow and version**                   |
+| Checkpoint digests differed between runs           | Run UUID is now documented as part of checkpoint identity; each checkpoint resumes with its own digest | **Cross-run variation is explained, not an unresolved determinism defect** |
+| Evidence might disappear with `%TEMP%` cleanup     | Evidence committed and exported; archive verified against Git                                          | **The reported evidence-preservation issue is closed**                     |
+| Meta changes might alter the frozen v0.2 core      | Five manifest checks passed; aggregate remains `5fad64a5…`                                             | **The controlled v0.2 core remains unchanged**                             |
+
+The **254 passing tests** support the corrected package. The **505/505 Git-blob matches** establish archive correspondence to committed bytes. Those are different kinds of evidence; they should remain separate rather than being combined into a larger “tests passed” headline.
+
+Similarly, the two verified wheel identities establish which wheel artifacts are preserved. That check does not, by itself, become another wheel-installation test.
+
+## Why the budget result matters
+
+The reported accounting is internally consistent:
+
+```text
+Authorized ceiling:           512
+Spent before checkpoint:      288
+Spent after completion:       360
+
+Additional spend after resume:
+360 − 288 =                    72
+
+Remaining budget:
+512 − 360 =                   152
+```
+
+The useful observation is that the resumed execution reports **360 cumulative units spent**, not a fresh allowance detached from the work performed before the checkpoint.
+
+This supports persistent budget accounting on the tested continuation. It is not a throughput, GPU-cost, or efficiency result, and those numbers should remain in their registered budget units.
+
+In practical terms, the demonstrated sequence is now:
+
+```text
+Execute part of the supplied CJT program
+                  ↓
+Save the paused execution
+                  ↓
+End that process
+                  ↓
+Start a fresh process
+                  ↓
+Validate the checkpoint against its own expected digest
+                  ↓
+Resume and complete the execution
+                  ↓
+Report cumulative resource use
+```
+
+That is precisely the missing bridge between **“the workflow runs”** and **“the workflow can survive a process boundary.”**
+
+## The checkpoint identity distinction is now settled
+
+The audit’s explanation supports the distinction we needed:
+
+**Checkpoint identity** answers: “Is this the particular saved artifact I intended to load?”
+
+**Semantic digests** answer: “Do these runs agree on the particular program, model, or semantic projection represented by those digests?”
+
+Two independently created checkpoints can represent equivalent computation while having different artifact identities because their run UUIDs differ.
+
+Therefore, the correct independent procedure is:
+
+```text
+Create checkpoint A
+→ preserve A’s issued digest
+→ resume A using A’s digest
+```
+
+It is not:
+
+```text
+Create checkpoint B
+→ try to validate B using checkpoint A’s digest
+```
+
+There is no reason to remove the UUID or weaken the identity guard merely to make independently created checkpoint hashes equal.
+
+## Preserve the historical limitation, but do not turn it into a new blocker
+
+The auditor’s original failing file pair was deleted. Consequently, **the exact original failure cannot now be replayed from that original evidence**.
+
+That limitation belongs permanently in the record. The builder’s stale-pair reproduction must remain attributed to the builder, not presented as the auditor’s recovered failure.
+
+But this does **not** prevent acceptance of the corrected workflow. These are separate questions:
+
+* Can we reconstruct every detail of the earlier failure? **Not from the missing original pair.**
+* Did the auditor independently execute the corrected checkpoint-and-resume workflow successfully? **Yes, according to this report.**
+
+The historical failure stays recorded. The corrected version gets credit for the execution that actually succeeded.
+
+## Where this puts CASformer
+
+The project now has reported support for **fixed-weight program execution with child calls, repair-and-return behavior, and fresh-process continuation**.
+
+It has not yet demonstrated that the neural model can independently invent those programs, select the correct procedure from unrestricted language, learn new nested skills, or outperform a matched generic system.
+
+A useful distinction is:
+
+> **CAS-META-0 can execute the supplied procedure. Learning which procedure to supply remains a separate capability.**
+
+This closure also does not change the operation vocabulary by itself. The attached v0.2 registry explicitly leaves the full canonical CAS operation vocabulary open; it describes an extension mechanism, not a completed set of executable Noetics. 
+
+So the broader fractal work remains unfinished, exactly as the builder and auditor state. **That does not diminish this milestone. It identifies the reliable component the next milestone can use.**
+
+## My recommended disposition
+
+**Accept the three named closures at their stated scope, preserve `0917267b` as the reproduced evidence reference, and finish this correction round.** Do not restart the same audit loop without a new finding.
+
+A concise instruction to the builder would be:
+
+> Record the independent fresh-process restart acceptance against evidence commit `0917267b` and the correction identified as `cbce17da`. Close the three named findings while preserving the earlier failure report and the disclosure that the auditor’s original failing pair no longer exists.
+>
+> Keep the distinction between run-specific checkpoint identity and cross-run semantic reproducibility. Preserve the exact commands, checkpoint/receipt pairing, budget results, and archive verification.
+>
+> This accepts the tested fixed-weight call-and-return checkpoint workflow. It does not declare broader Fractal work, new operation semantics, learning, or CAS-specific performance complete. Keep the frozen v0.2 core unchanged and return to the next separately authorized meta-logic milestone.
+
+**Bottom line: the reasoning procedure no longer has to live and die inside one uninterrupted process. The audited workflow can now stop, preserve its place, and continue under the same accounting. That is a solid piece of the machine you set out to build.**

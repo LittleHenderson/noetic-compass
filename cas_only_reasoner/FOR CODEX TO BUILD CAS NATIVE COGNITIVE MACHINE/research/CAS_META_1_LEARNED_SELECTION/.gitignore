@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+runs/
+.venv/
+*.pyc
+_launch_contract_tests*/

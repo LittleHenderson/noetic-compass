@@ -1,0 +1,24 @@
+{
+  "version": "cas-meta/0.1",
+  "entry": "main",
+  "procedures": {
+    "main": {
+      "input_type": "IDEA", "output_type": "EFFECT", "allowed_cjts": ["A", "B", "C", "R"],
+      "body": {"kind": "sequence", "steps": [
+        {"kind": "run", "cjt": "A", "operation": "^6", "expected": "L1"},
+        {"kind": "call", "procedure": "worker", "allowance": 400}
+      ]}
+    },
+    "worker": {
+      "input_type": "EFFECT", "output_type": "EFFECT", "allowed_cjts": ["B", "C", "R"],
+      "body": {"kind": "sequence", "steps": [
+        {"kind": "run", "cjt": "B", "operation": "^6", "expected": "L3"},
+        {"kind": "run", "cjt": "C", "operation": "^6", "expected": "L0", "opposite": "L2", "repair": "repair_c", "resume_expected": "L2"}
+      ]}
+    },
+    "repair_c": {
+      "input_type": "RPM_SUBGOAL", "output_type": "EFFECT", "allowed_cjts": ["R"],
+      "body": {"kind": "run", "cjt": "R", "operation": "^6", "expected": "L1"}
+    }
+  }
+}

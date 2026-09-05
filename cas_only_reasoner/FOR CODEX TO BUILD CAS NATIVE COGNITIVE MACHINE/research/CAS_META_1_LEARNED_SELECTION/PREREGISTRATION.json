@@ -1,0 +1,68 @@
+{
+  "schema": "cas-meta1.small-learning-pilot/1",
+  "baseline": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+  "stage": "REGISTERED_BEFORE_GPU_EXECUTION",
+  "curriculum": {
+    "train": 864,
+    "validation": 72,
+    "test": 72,
+    "seed": 20260905,
+    "heldout": [
+      "formal input instances",
+      "wording templates"
+    ],
+    "custody": "internal"
+  },
+  "policy": {
+    "seed": 7,
+    "epochs": 60,
+    "batch_size": 64,
+    "learning_rate": 0.003,
+    "d_model": 32,
+    "heads": 4,
+    "layers": 2,
+    "parameter_match_max_fraction": 0.01,
+    "checkpoint_selection": "validation only",
+    "test_gold_open": "only after all arms' public-input predictions are sealed"
+  },
+  "arms": [
+    "cas_untrained",
+    "cas_trained",
+    "rule",
+    "generic_trained",
+    "generic_untrained"
+  ],
+  "primary_metric": "Actual held-out task correctness after executing selected program and bound input, checked against independent direct-native result.",
+  "secondary_metrics": [
+    "procedure accuracy",
+    "binding accuracy",
+    "joint selection accuracy",
+    "repair success for required-repair tasks",
+    "invalid/rejected actions",
+    "policy GPU time",
+    "execution wall/GPU time",
+    "max GPU allocated memory",
+    "native reserved policy units"
+  ],
+  "learning_result": "Report trained minus untrained actual task accuracy; positive difference supports improvement only within this single-seed synthetic pilot. Zero/negative difference must also be reported.",
+  "no_exclusion": "Every held-out case stays in the denominator. Infrastructure/reference failure invalidates or marks the run partial rather than silently dropping cases.",
+  "aws": {
+    "region": "us-west-2",
+    "instance_type": "g4dn.xlarge",
+    "count": 1,
+    "max_runtime_seconds": 3600,
+    "per_launch_reserved_cap_usd": 2,
+    "approved_task_cap_usd": 100,
+    "retries": 0
+  },
+  "laptop_neural_execution": false,
+  "baseline_auto_promotion": false,
+  "nonclaims": [
+    "unrestricted language",
+    "new program synthesis",
+    "learning inside native CJTs",
+    "CAS-specific advantage",
+    "all fractal work",
+    "production readiness"
+  ]
+}

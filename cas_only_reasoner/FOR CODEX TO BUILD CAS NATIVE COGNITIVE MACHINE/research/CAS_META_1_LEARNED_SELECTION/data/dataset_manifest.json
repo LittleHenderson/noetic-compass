@@ -1,0 +1,53 @@
+{
+  "capability_scope": "Three named stage goals and three source bindings; not unrestricted language or new program synthesis.",
+  "checks": {
+    "boundary": "Independent direct-native outcome checking happens on AWS, not in this text generator.",
+    "counts": {
+      "test": 72,
+      "train": 864,
+      "validation": 72
+    },
+    "neural_outcomes_checked": false,
+    "status": "STRUCTURAL_AND_SURFACE_TARGET_CHECKS_PASSED",
+    "templates": {
+      "test": [
+        "test:0",
+        "test:1",
+        "test:2"
+      ],
+      "train": [
+        "train:0",
+        "train:1",
+        "train:2",
+        "train:3",
+        "train:4",
+        "train:5"
+      ],
+      "validation": [
+        "validation:0",
+        "validation:1"
+      ]
+    },
+    "unique_formal_instances": 1008
+  },
+  "excluded_selector_fields": [
+    "id",
+    "target",
+    "provenance"
+  ],
+  "generator_file_sha256": "c6b55b9bc6f48c4e0461d0bd34e447468e9fc3bd145e32750043297a5eab5138",
+  "label_custody": "Training/validation private targets are supervised inputs. Test targets may only be opened after all selector predictions are sealed.",
+  "native_outcome_authority": "Independent direct frozen-runtime reference on AWS",
+  "permitted_fields": [
+    "problem",
+    "observations"
+  ],
+  "schema": "cas-meta1-sdg/1",
+  "seed": 20260905,
+  "sha256": {
+    "test_private.json": "12f25867796892bd4ac12efc9e9a4c0b442e9e3a9b95d93dd251f5ca6c8034ce",
+    "test_public.json": "74341e470a2452735bb33cd872f8d0ba28106018bc3f20b216314e8fc1d5a7de",
+    "train.json": "80ac7d07998287c25ae527bb2506b86c1cab51cb0d1c848859f06f05a97e57d3",
+    "validation.json": "ce94411e19c906455462ed502f0ab5b0d0f39cd1c614366b0d8c252c8811ee4b"
+  }
+}

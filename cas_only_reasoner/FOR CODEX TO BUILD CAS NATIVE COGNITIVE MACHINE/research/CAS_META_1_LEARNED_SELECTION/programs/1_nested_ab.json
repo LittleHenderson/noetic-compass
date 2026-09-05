@@ -1,0 +1,17 @@
+{
+  "version": "cas-meta/0.1",
+  "entry": "main",
+  "procedures": {
+    "main": {
+      "input_type": "IDEA", "output_type": "EFFECT", "allowed_cjts": ["A", "B"],
+      "body": {"kind": "sequence", "steps": [
+        {"kind": "run", "cjt": "A", "operation": "^6", "expected": "L1"},
+        {"kind": "call", "procedure": "worker", "allowance": 400}
+      ]}
+    },
+    "worker": {
+      "input_type": "EFFECT", "output_type": "EFFECT", "allowed_cjts": ["B"],
+      "body": {"kind": "run", "cjt": "B", "operation": "^6", "expected": "L3"}
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "cas-meta1.owner-spending-authorization/1",
+  "recorded_utc": "2026-09-05 10:26:08 UTC",
+  "source": "Direct user message in this task",
+  "verbatim_instruction": "you're approved for $100.00",
+  "currency": "USD",
+  "task_total_cap": 100,
+  "scope": "AWS GPU CAS-META-1 learned program selection training and evaluation; no laptop neural work",
+  "per_launch_reserved_allowance": 2,
+  "first_launch": {
+    "instance": "g4dn.xlarge",
+    "count": 1,
+    "max_seconds": 3600
+  },
+  "automatic_retries": false,
+  "interpretation": "A task cap, not a target spend. Each bounded launch reserves $2; no refund is inferred without billing evidence.",
+  "provider_billing_receipt": false
+}

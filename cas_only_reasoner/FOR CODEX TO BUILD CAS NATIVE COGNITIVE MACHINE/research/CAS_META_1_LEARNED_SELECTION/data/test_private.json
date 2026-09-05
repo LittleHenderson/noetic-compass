@@ -1,0 +1,5162 @@
+[
+  {
+    "id": "a4e0b127934a031acc22c46b4b91eca7dd5f896ecbdc22a5245dd0f4fc89711e",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "62e56fc4c6235750ed25f6da57343164f8b20212872a85dd97f32ae547b20de8",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.0999949,
+            0.1997404,
+            0.3000002,
+            0.3997312,
+            0.5000081,
+            0.6001813,
+            0.6996571,
+            0.8000249
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "teal",
+          "values": [
+            0.0996712,
+            0.2001528,
+            0.300094,
+            0.4000689,
+            0.4999415,
+            0.6000519,
+            0.7002969,
+            0.7996474
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.0997517,
+            0.1997866,
+            0.3002813,
+            0.3999524,
+            0.5003321,
+            0.6000242,
+            0.6998044,
+            0.7998313
+          ]
+        }
+      ],
+      "problem": "I require the second stage result from the input marked teal."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "5d541fcf0f567b7c65b67eda24e731c3f8c2a723d5a3a4794e265b66a2488628",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "30a0dc380005ccb3b001e975b4142fbab2fd4f635bf420e0adc8e2333e48602b",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.1003069,
+            0.1999705,
+            0.2996218,
+            0.4002547,
+            0.4998777,
+            0.5996843,
+            0.6998536,
+            0.8001203
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.1000919,
+            0.2002084,
+            0.3003213,
+            0.399873,
+            0.5003078,
+            0.6003168,
+            0.7002317,
+            0.800034
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.0997439,
+            0.2001075,
+            0.2999849,
+            0.3996386,
+            0.5003461,
+            0.599665,
+            0.7002726,
+            0.8001637
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged indigo and finish at the second stage."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "b8d564769f967a5275efcfc9f1050558766038ee6b75d089a10f4d3df2290d04",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "9697c46bdd110673e3b4ed6d85fc457af03422006169016e6ecfe6d670e6920d",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.0999306,
+            0.1998038,
+            0.2997617,
+            0.3996081,
+            0.4998936,
+            0.600145,
+            0.7002993,
+            0.7998432
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.1002472,
+            0.199946,
+            0.3001601,
+            0.3996101,
+            0.4996174,
+            0.6001139,
+            0.7000356,
+            0.7997279
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.0997034,
+            0.2001568,
+            0.2999979,
+            0.4002382,
+            0.5003255,
+            0.5999125,
+            0.699866,
+            0.80012
+          ]
+        }
+      ],
+      "problem": "Using sample violet, provide only its second stage result."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "2074516147903e24f3ffd6e52fc61be8f7117a368071efea0ec693805a52e0dc",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "91c9b63cdf00407204a33f21f3f5c9fd6a7824aa354435c13eed8fc900b1e2bd",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.0997204,
+            0.2003392,
+            0.2999167,
+            0.4002318,
+            0.4999477,
+            0.6001921,
+            0.700009,
+            0.7999781
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.1000454,
+            0.2000921,
+            0.2996198,
+            0.3998258,
+            0.499731,
+            0.5996879,
+            0.7002885,
+            0.7996731
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0998669,
+            0.1998047,
+            0.3002723,
+            0.4002887,
+            0.5002962,
+            0.599752,
+            0.7002677,
+            0.7996917
+          ]
+        }
+      ],
+      "problem": "Using sample coral, provide only its second stage result."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "ba1544fc7f16a5f56e25991f4991dfbe7de25713adc61bb29fe2eed3725a4021",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "7769b77abf08c396841c25ea9be8971e956e00a5dd3476561b579965d4731dcf",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.0999012,
+            0.1998202,
+            0.3002305,
+            0.3999081,
+            0.4998563,
+            0.600064,
+            0.6997563,
+            0.8001582
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.0997195,
+            0.200198,
+            0.3001535,
+            0.4003723,
+            0.5002496,
+            0.6000146,
+            0.7001099,
+            0.7997959
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.099935,
+            0.2000075,
+            0.3002173,
+            0.3999384,
+            0.5000958,
+            0.5998822,
+            0.6999251,
+            0.8000543
+          ]
+        }
+      ],
+      "problem": "Using sample amber, provide only its final stage result."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "e060400faa7ca0df6590dfccdb8c1de322f0a41e6fc83498787a14159d645ef1",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "1c1d717863258e6258147274e643d840ae59af75afe07dea30dd018a2e2ab32f",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.1001534,
+            0.2003824,
+            0.2997105,
+            0.3998695,
+            0.4999443,
+            0.5998391,
+            0.7002434,
+            0.7997625
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1001307,
+            0.1998292,
+            0.2997129,
+            0.4001911,
+            0.5001491,
+            0.600171,
+            0.7001608,
+            0.7997808
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.0999619,
+            0.2000573,
+            0.3000231,
+            0.4003265,
+            0.4999117,
+            0.6002794,
+            0.6998277,
+            0.7998248
+          ]
+        }
+      ],
+      "problem": "I require the first stage result from the input marked coral."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "24cc34dccdbc31e2796a001ffcc2d6dbadfdcc5e6e06e9e6a142e0d9e2978d3c",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "7e8331e2a5bd57af8219a8b4611c7228321de217b12736fa7697c579de41779f",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.1001705,
+            0.2000934,
+            0.3000579,
+            0.4000718,
+            0.5001426,
+            0.6003444,
+            0.6999665,
+            0.7999507
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "teal",
+          "values": [
+            0.0996001,
+            0.2002624,
+            0.3001209,
+            0.4000438,
+            0.5002589,
+            0.5999756,
+            0.7003821,
+            0.8002138
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0998768,
+            0.1996224,
+            0.3002949,
+            0.3997632,
+            0.5002445,
+            0.5999559,
+            0.6997358,
+            0.8003963
+          ]
+        }
+      ],
+      "problem": "I require the final stage result from the input marked teal."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "a320ef2538de52c4be5e40ff795139e6a224d9844604ef033d3323c2a50a2efb",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "23bf36caf9774af92ad54a124c8f6624d7c435f709b4163f92bc4eece4546da2",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.1000066,
+            0.2000525,
+            0.2998708,
+            0.3999335,
+            0.499987,
+            0.6002865,
+            0.7002189,
+            0.7997414
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.1001784,
+            0.19968,
+            0.3000442,
+            0.3997917,
+            0.5000322,
+            0.6000603,
+            0.6997653,
+            0.7997182
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.0997208,
+            0.200111,
+            0.3001384,
+            0.3998442,
+            0.4999918,
+            0.6003815,
+            0.7003603,
+            0.8003572
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged teal and finish at the final stage."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "83cd642fbf935edd33c1effebaffe304030546f8c4ed8e4682553daa69d23094",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "a168f4035a548d6a066ab722090cee7c1a3443133887ff8eac69ae534069bf4c",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.100262,
+            0.2000243,
+            0.2996569,
+            0.4003843,
+            0.4999473,
+            0.5999171,
+            0.6998067,
+            0.8002064
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.1002571,
+            0.2002739,
+            0.3003091,
+            0.3996032,
+            0.4999081,
+            0.6003366,
+            0.7002627,
+            0.8001358
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0998401,
+            0.2003063,
+            0.2998583,
+            0.4003875,
+            0.4999174,
+            0.6001451,
+            0.6998927,
+            0.8001966
+          ]
+        }
+      ],
+      "problem": "Using sample teal, provide only its first stage result."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "427c54958a625f0db5c20f86d181117a6b755ac79c9b2dc225d8e6e6026ed769",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "2954d6b88cb8e9da406f8bc78ed5180c11fecdea457cf18d490e0fefb5f633a1",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.0997884,
+            0.1999178,
+            0.2999949,
+            0.3999446,
+            0.5001383,
+            0.5997038,
+            0.7001817,
+            0.8003624
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "teal",
+          "values": [
+            0.1002512,
+            0.2001304,
+            0.2998355,
+            0.4003083,
+            0.4999286,
+            0.6001293,
+            0.6999,
+            0.7998119
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.1002632,
+            0.2001957,
+            0.3001097,
+            0.4002868,
+            0.4997203,
+            0.5996645,
+            0.6996364,
+            0.7999468
+          ]
+        }
+      ],
+      "problem": "I require the second stage result from the input marked teal."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "c646b6d0c2adc5b5ad28d3be8cf2f0721cf689a63a88a8cffc3f3b822140d15a",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "096e40cfc592f498a3c0ddab1d2c4efca97785b20b3243e7587547cbec6762f7",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1002866,
+            0.2002799,
+            0.3001736,
+            0.39989,
+            0.5002189,
+            0.599922,
+            0.7000159,
+            0.7998308
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.1000794,
+            0.1999445,
+            0.3003405,
+            0.4000465,
+            0.5002068,
+            0.5999713,
+            0.7001344,
+            0.79967
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.1001486,
+            0.1997422,
+            0.2999624,
+            0.3996832,
+            0.4997977,
+            0.6002459,
+            0.699614,
+            0.7996565
+          ]
+        }
+      ],
+      "problem": "Using sample violet, provide only its second stage result."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "25c3ffd435e32a0676d81ccdc808c21a048573f0ced905744071c722f782bb84",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "6b1c6c25f9ff4ccf1f81b6316951b6ab85c24d1f53cf3a616c4284eef4d5c68f",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.0999231,
+            0.2002796,
+            0.2998615,
+            0.3997838,
+            0.500339,
+            0.5996969,
+            0.6999532,
+            0.799695
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.0997373,
+            0.1996594,
+            0.2999858,
+            0.3997559,
+            0.4998594,
+            0.60001,
+            0.6997133,
+            0.7998687
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.1000393,
+            0.199658,
+            0.2999943,
+            0.39991,
+            0.499878,
+            0.6003894,
+            0.700221,
+            0.8003854
+          ]
+        }
+      ],
+      "problem": "I require the first stage result from the input marked amber."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "1b7b6e1a074453767701507c95a752b845f509fbfb3ff82a80c05ec19b13f93e",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "74c97ded36f442786b9d3fa41afc0ad9798407eb3e4eff64908cf105a9f163d8",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.0996898,
+            0.200304,
+            0.3001884,
+            0.3997019,
+            0.4998984,
+            0.6002151,
+            0.6997939,
+            0.8002083
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.0996807,
+            0.2002783,
+            0.2998261,
+            0.3998927,
+            0.4998506,
+            0.5999046,
+            0.6996222,
+            0.7996189
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.100016,
+            0.2003232,
+            0.2996193,
+            0.3998924,
+            0.499623,
+            0.5996659,
+            0.6996248,
+            0.7996189
+          ]
+        }
+      ],
+      "problem": "I require the final stage result from the input marked coral."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "9e815c6d9a66e8e622dd9bfd8a51b7893f3c5e28a7d11eb93bddf6ac884745e6",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "c48c3f2b8cc3fa1c385c2d1f6beb516462eb2df7aaf44feeae7bffb1724b3488",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1000196,
+            0.2001119,
+            0.3002859,
+            0.4001742,
+            0.5000988,
+            0.6002679,
+            0.7003547,
+            0.8000928
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.1001627,
+            0.200021,
+            0.300246,
+            0.3996833,
+            0.4997689,
+            0.6001956,
+            0.7001724,
+            0.7999323
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.1002033,
+            0.2001008,
+            0.3003825,
+            0.3999699,
+            0.499845,
+            0.5997996,
+            0.6998261,
+            0.799775
+          ]
+        }
+      ],
+      "problem": "Using sample coral, provide only its first stage result."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "4cac921b4f2000bd536a35b6cd766dc08c28fb31394849be782cd779a592d528",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "c99dc1d0d5b7b04758fc4937a2be34f8b63450e6276e8aa5e33bdfc09c6c9c7b",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1000671,
+            0.2002871,
+            0.3000798,
+            0.399665,
+            0.5001643,
+            0.6001243,
+            0.7003085,
+            0.800186
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.1003151,
+            0.1997854,
+            0.2999061,
+            0.4001592,
+            0.5002639,
+            0.600005,
+            0.6997307,
+            0.8003221
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0998104,
+            0.1997884,
+            0.3001967,
+            0.3999844,
+            0.4998562,
+            0.6003349,
+            0.6999809,
+            0.7999544
+          ]
+        }
+      ],
+      "problem": "Using sample lime, provide only its final stage result."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "65052c29178ad5d9df8ae03f6da87e3b54ad9934088bd0434b780917fb0e09cf",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "4939cb6b0c5492d14d545c2f376b01181c117e3b1ac2508ccf43d98df02c3003",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.1003541,
+            0.1998054,
+            0.3002743,
+            0.4000179,
+            0.4997405,
+            0.5998159,
+            0.6998487,
+            0.7998544
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1000944,
+            0.1998194,
+            0.3002698,
+            0.399653,
+            0.5003272,
+            0.6003815,
+            0.7002964,
+            0.7996252
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.0997917,
+            0.1998283,
+            0.3003781,
+            0.4002536,
+            0.4999332,
+            0.5997574,
+            0.7000327,
+            0.7996678
+          ]
+        }
+      ],
+      "problem": "I require the second stage result from the input marked amber."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "4864db57a9082896c539d4da29652ba16db8d670808fc3a4e21395a756397728",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "9a86a5fd8a4172c9c75ceeac02ff46efcb949e9187d64c8e44ef995573a50f44",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.1001399,
+            0.199982,
+            0.2997948,
+            0.4003704,
+            0.4998434,
+            0.6003738,
+            0.7000879,
+            0.8002506
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.0998404,
+            0.1999485,
+            0.3000224,
+            0.3999488,
+            0.5001358,
+            0.5998124,
+            0.7000743,
+            0.7997687
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.1003045,
+            0.2001295,
+            0.2997758,
+            0.3996777,
+            0.5000549,
+            0.6001357,
+            0.7002673,
+            0.7998751
+          ]
+        }
+      ],
+      "problem": "I require the final stage result from the input marked indigo."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "acd7eb8b19bc91c97c140150d25973bac6eb242c3ecd44abad4324db1a2bfd68",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "e67c3595b75fd7eda8022fff8652f074b8eb179c963f58a57f1ea85b16f0ff80",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.0996483,
+            0.1999197,
+            0.3002443,
+            0.4002763,
+            0.5001206,
+            0.5998176,
+            0.6999069,
+            0.7997072
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "teal",
+          "values": [
+            0.0996499,
+            0.1997765,
+            0.2997099,
+            0.4002338,
+            0.4998991,
+            0.600082,
+            0.6999226,
+            0.8002166
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0999891,
+            0.200375,
+            0.2999464,
+            0.4000717,
+            0.5002712,
+            0.5997421,
+            0.7002347,
+            0.8000571
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged lime and finish at the second stage."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "dec246cc5c2b1098d0e731bb52d32fd78de0d13460f99cd4ae19c50da783b221",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "e0bf9d44e371e491d7c7fb1e94f8bb3c443736730359cdc977f15eed29d27917",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.0998262,
+            0.1998291,
+            0.3003436,
+            0.3998445,
+            0.499937,
+            0.6003721,
+            0.6998631,
+            0.7999684
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.0998134,
+            0.2002341,
+            0.300026,
+            0.3997623,
+            0.5003267,
+            0.5998431,
+            0.7002603,
+            0.80035
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.1003401,
+            0.1996809,
+            0.2996089,
+            0.4003809,
+            0.5003389,
+            0.6000625,
+            0.6996466,
+            0.8000662
+          ]
+        }
+      ],
+      "problem": "Using sample amber, provide only its second stage result."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "a0c8b2637f47a299108f27c40d208fc563f94802ca9ca630efaa0ef032efa1d1",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "962f639177fe94738aa5ade565d4142251f45d17d4fdae955ef3775be59ef4dd",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.1003952,
+            0.1998082,
+            0.3001025,
+            0.4003996,
+            0.4997215,
+            0.6001411,
+            0.7003137,
+            0.8002091
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "teal",
+          "values": [
+            0.0999867,
+            0.1998486,
+            0.3000638,
+            0.4001561,
+            0.5003331,
+            0.599691,
+            0.6999562,
+            0.7997344
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.1002054,
+            0.2002443,
+            0.2996556,
+            0.400194,
+            0.5000848,
+            0.6003871,
+            0.6998438,
+            0.8000114
+          ]
+        }
+      ],
+      "problem": "Using sample teal, provide only its final stage result."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "a0f7936f32b56e07c22bd54811df596b6f188a0870b2c69681bd563c73083bc9",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "09f7bd10b524fbd8ed689aeccf8e32cb39286a3e3ced9ad3d3e27a05b73bb95c",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.1003095,
+            0.2002957,
+            0.3002009,
+            0.3996972,
+            0.5002871,
+            0.5996299,
+            0.6999936,
+            0.8001175
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.1001181,
+            0.2003129,
+            0.3000674,
+            0.4000449,
+            0.4998933,
+            0.5996171,
+            0.6999779,
+            0.8001931
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0998859,
+            0.1996273,
+            0.2998639,
+            0.4001434,
+            0.5001777,
+            0.6003948,
+            0.7001954,
+            0.7997099
+          ]
+        }
+      ],
+      "problem": "I require the final stage result from the input marked amber."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "8861dd5319fe87fb4502aff5e196a3cf91e504e69c70d338fab35ddea3b30a13",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "a7da16ce8b94fbac9117fce402dacfa33ff32a7636e32b6a1f6b7aa7292b4a15",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1003769,
+            0.1996584,
+            0.3000533,
+            0.399878,
+            0.4997764,
+            0.6000177,
+            0.7002109,
+            0.7997435
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "teal",
+          "values": [
+            0.1002672,
+            0.1997687,
+            0.2998389,
+            0.3996531,
+            0.5000015,
+            0.5998733,
+            0.6997433,
+            0.7999134
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.1000144,
+            0.2001673,
+            0.2998312,
+            0.3999019,
+            0.5002881,
+            0.5997979,
+            0.7000345,
+            0.8003709
+          ]
+        }
+      ],
+      "problem": "Using sample lime, provide only its final stage result."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "4776beccdbbfe8f179fc459a19c5a19f9246ad78e9358b20c4fb515f8340fa99",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "eb418db75c65853e92790e25d97e20be02718aff9978b3ebfa37cbb79cda1306",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.0999708,
+            0.2000767,
+            0.2996611,
+            0.3996046,
+            0.500059,
+            0.5997456,
+            0.7000651,
+            0.8000833
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.0999839,
+            0.2003171,
+            0.2997524,
+            0.3996616,
+            0.4998768,
+            0.6003374,
+            0.6998346,
+            0.80024
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0998627,
+            0.1999741,
+            0.300149,
+            0.4003293,
+            0.5000651,
+            0.5997134,
+            0.700229,
+            0.8003271
+          ]
+        }
+      ],
+      "problem": "Using sample indigo, provide only its second stage result."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "481fb7a7ec140740d63e681c32d4bcfd09a0e05e9bf43e301a9be0f8e6dd53df",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "2346c90d82ab785902c22f63d468fd24d028156119b792ce10f45816ce159998",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.0999158,
+            0.1998829,
+            0.2998781,
+            0.3999352,
+            0.4998873,
+            0.5997278,
+            0.7003574,
+            0.7997268
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.0998533,
+            0.1998542,
+            0.2997101,
+            0.3997165,
+            0.5001112,
+            0.5999018,
+            0.6999007,
+            0.7998887
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.1002132,
+            0.2002527,
+            0.3002793,
+            0.3998672,
+            0.5001433,
+            0.5998046,
+            0.700054,
+            0.8003082
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged lime and finish at the final stage."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "3a29946ef85c4e1afe5bc459efa2a526172cf51c6960553cb798efb6fa74a9ae",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "b267d406f86bce0a2dcf434156bfb3c8bde0d3091bc6b57c09e03d86257eea5b",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.1001148,
+            0.2001993,
+            0.3000417,
+            0.3999672,
+            0.4999964,
+            0.5997164,
+            0.6999683,
+            0.800342
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.099707,
+            0.2000821,
+            0.3001125,
+            0.4003422,
+            0.5002312,
+            0.6002424,
+            0.7002556,
+            0.8001728
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "teal",
+          "values": [
+            0.1001441,
+            0.1998855,
+            0.3001377,
+            0.4002554,
+            0.500164,
+            0.6002171,
+            0.7003023,
+            0.7999182
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged teal and finish at the second stage."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "e4af27dcf345e44e18c04477cc2bce675f3ddec851a3c3c6a15de7ea2eb04ae3",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "9e41930676bd80f76f4b57bf8f2f71add081939518fc8fb2136038d16794c6ed",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.1000615,
+            0.2002952,
+            0.2998974,
+            0.4000992,
+            0.4996989,
+            0.6001271,
+            0.7000434,
+            0.8003173
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.0998071,
+            0.200207,
+            0.2999285,
+            0.399778,
+            0.5000769,
+            0.6003543,
+            0.700258,
+            0.8001572
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0998981,
+            0.2003937,
+            0.299695,
+            0.4000326,
+            0.5002676,
+            0.5997098,
+            0.7003961,
+            0.8000278
+          ]
+        }
+      ],
+      "problem": "I require the final stage result from the input marked lime."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "7065b068730eddaa0bc2fb22f9e36848b14bc88e67984e2e22253a15d20cf470",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "55f2fa620b33381e216ef17402e14966302420a69f2f98a165fb5f469fc58830",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.099874,
+            0.2002376,
+            0.2996451,
+            0.3998552,
+            0.4996026,
+            0.6001828,
+            0.6999573,
+            0.8001274
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.0999377,
+            0.2000721,
+            0.3002485,
+            0.4002451,
+            0.499724,
+            0.5997047,
+            0.700122,
+            0.8003528
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.0996202,
+            0.1998256,
+            0.3002572,
+            0.4002447,
+            0.5003304,
+            0.6001816,
+            0.6996822,
+            0.7996457
+          ]
+        }
+      ],
+      "problem": "Using sample violet, provide only its first stage result."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "24d4a475b552edcb15e37750161c523fafb92e439d76429250e3cb23ceef943d",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "c9565b19c3575716796d24b460a94f5cfe5bb720960856cfe4b85b34ddc4b447",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.1000435,
+            0.200165,
+            0.2999157,
+            0.3998877,
+            0.4998635,
+            0.6003975,
+            0.6999401,
+            0.799881
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1000521,
+            0.1998941,
+            0.2999629,
+            0.3996425,
+            0.4998105,
+            0.5999524,
+            0.6999091,
+            0.7996655
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.0996189,
+            0.1996851,
+            0.3003702,
+            0.4001038,
+            0.4997232,
+            0.6002983,
+            0.7001157,
+            0.7996495
+          ]
+        }
+      ],
+      "problem": "Using sample indigo, provide only its first stage result."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "6cff6f09907b5d58dbd994602c79ee79c00bca7d273b4288bd303dd757c3cede",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "75d269489147df1baae60f065350a2ffa636fca1a28dde0e7c3763c13a19d481",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.0998873,
+            0.1997321,
+            0.2999544,
+            0.3996069,
+            0.4997705,
+            0.5996066,
+            0.7002905,
+            0.8001207
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.1000541,
+            0.2001201,
+            0.2999778,
+            0.4000039,
+            0.5003414,
+            0.5998443,
+            0.7003279,
+            0.8002753
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0998142,
+            0.2001342,
+            0.3001777,
+            0.4002135,
+            0.5003832,
+            0.5997456,
+            0.700299,
+            0.7998061
+          ]
+        }
+      ],
+      "problem": "Using sample lime, provide only its final stage result."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "369000ed6f7eef98dc68195ae2a4323d745c8d0d8219f2d0d00ee40d87cd58c5",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "730ef1fc65ef55390db627b9b33cbcc7e4883e26ddd7e2a4f4586c91818043b5",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.0997853,
+            0.1998907,
+            0.2997401,
+            0.4003242,
+            0.4996859,
+            0.6000801,
+            0.699937,
+            0.7996693
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "teal",
+          "values": [
+            0.1003479,
+            0.2000375,
+            0.3003899,
+            0.4001493,
+            0.5001538,
+            0.6000434,
+            0.6998759,
+            0.79972
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0996085,
+            0.200276,
+            0.2997493,
+            0.4000657,
+            0.5001218,
+            0.6003577,
+            0.6998207,
+            0.7999508
+          ]
+        }
+      ],
+      "problem": "I require the final stage result from the input marked indigo."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "3e69b6c4d1a1e6c9669fac504a159dfd2e8150bf47d6939b9a51f8cb33c27822",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "7b58a3f06c05d03c659355255a7a738440905cda5a84a32960c2a20a7e661190",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.099936,
+            0.2000645,
+            0.3001462,
+            0.3996592,
+            0.4996786,
+            0.5999898,
+            0.7003651,
+            0.7998363
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.0996415,
+            0.1997915,
+            0.2996322,
+            0.399846,
+            0.5002665,
+            0.5999801,
+            0.6997481,
+            0.800319
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.1002377,
+            0.1996361,
+            0.2997788,
+            0.4000955,
+            0.4996576,
+            0.5997051,
+            0.6997652,
+            0.8000596
+          ]
+        }
+      ],
+      "problem": "Using sample lime, provide only its final stage result."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "2ae035a99fae54c36728a78c44651107172dd47cfa65648ad6e07279eacf23c2",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "bb69bbcfc19a22d8ed2101fa3ee19466737170a13f0e3be13f8408cad6dfed91",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.0998625,
+            0.199648,
+            0.3001382,
+            0.3999444,
+            0.5001388,
+            0.5999617,
+            0.6998042,
+            0.7998952
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.1000358,
+            0.200131,
+            0.2998427,
+            0.3996643,
+            0.4997802,
+            0.5998743,
+            0.7003959,
+            0.7996841
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.1001179,
+            0.1996829,
+            0.2999949,
+            0.4003031,
+            0.5003972,
+            0.599987,
+            0.6997052,
+            0.8002722
+          ]
+        }
+      ],
+      "problem": "I require the first stage result from the input marked lime."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "5b012d1461e2e1594bc819b54b04338f716ca2445c9239015e6273a4deab4873",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "853285e8a051590b8ad0721a59eef80fed4779ede9d0a08f39654922af2c31fd",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.0997454,
+            0.2000209,
+            0.2998565,
+            0.3999715,
+            0.4997904,
+            0.5996684,
+            0.7001195,
+            0.8003072
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.0996031,
+            0.1999421,
+            0.2997955,
+            0.39989,
+            0.4996642,
+            0.6000543,
+            0.6996854,
+            0.8000906
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.0999403,
+            0.2001647,
+            0.2996925,
+            0.4001959,
+            0.5003694,
+            0.5997056,
+            0.6997086,
+            0.799656
+          ]
+        }
+      ],
+      "problem": "I require the final stage result from the input marked coral."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "1e5c0c4326abab1a425010877c53e89540a2efd24763762673ee2734f79a8b24",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "b175034d464a10418f5d6391695c91814064de047466c6025c3669e0723284dd",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.1001043,
+            0.1997551,
+            0.2999075,
+            0.4001397,
+            0.5000832,
+            0.6000756,
+            0.6996277,
+            0.7998493
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1000134,
+            0.2001356,
+            0.3002479,
+            0.3998341,
+            0.5003412,
+            0.6001234,
+            0.7002483,
+            0.800158
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.1003564,
+            0.200321,
+            0.3003555,
+            0.4001744,
+            0.5003453,
+            0.5998457,
+            0.6997787,
+            0.7999215
+          ]
+        }
+      ],
+      "problem": "I require the first stage result from the input marked indigo."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "b374b8f976682094a88f695f4e53bd3d418cdad5405d13ed13e57c622c66be1f",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "1a154fe1b357eca9d1f26b1acdbb8ad5b4be53f9b1eb06be20f498dd3d03c4a8",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.0996449,
+            0.1997682,
+            0.3000939,
+            0.3996211,
+            0.5002189,
+            0.600255,
+            0.7001751,
+            0.8002037
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.1002695,
+            0.2001535,
+            0.2999103,
+            0.4001207,
+            0.4999983,
+            0.5996602,
+            0.7003124,
+            0.7996639
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.0998331,
+            0.1996937,
+            0.2996269,
+            0.3998598,
+            0.5003291,
+            0.6000643,
+            0.7002154,
+            0.800053
+          ]
+        }
+      ],
+      "problem": "I require the final stage result from the input marked lime."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "34454fc0747af1d820c38c96cef04b3f1ce2431e25af7085a5474e1c22c18b54",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "a5e4f08259a357106ddcbd5cf6a073a4414360e278592d8205e5d1786068a275",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.0996773,
+            0.2001247,
+            0.3002225,
+            0.4003326,
+            0.4996279,
+            0.5996902,
+            0.6998117,
+            0.7998534
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.1001027,
+            0.2003175,
+            0.2997153,
+            0.4003997,
+            0.4998823,
+            0.6001351,
+            0.7002223,
+            0.7998813
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.1003862,
+            0.2002343,
+            0.2999715,
+            0.4000369,
+            0.4998577,
+            0.6003777,
+            0.7003596,
+            0.8003304
+          ]
+        }
+      ],
+      "problem": "I require the second stage result from the input marked lime."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "2b8659f500b5f1e38e2d41524adb4ab97e7b6f6bc23b3c1c2fff582a1fe88c97",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "cc39ec681083894af70529dcb61568199098b1ba254a8a4beaaf64528307ce33",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.0997576,
+            0.2000692,
+            0.2996959,
+            0.3997422,
+            0.4997016,
+            0.6001209,
+            0.6997914,
+            0.7999861
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.1002257,
+            0.1999389,
+            0.3003994,
+            0.399859,
+            0.4997071,
+            0.5999772,
+            0.6996154,
+            0.7997561
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.1003477,
+            0.2003793,
+            0.3000804,
+            0.3998058,
+            0.5001006,
+            0.5998269,
+            0.7000218,
+            0.7997935
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged violet and finish at the second stage."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "63e908aa320e145fdac3325a07cf310e9b99fc5218e98b549a4bfb225ff282c8",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "bbbf3cf2cc7f26cd7e96073d400f48330cfa6befef9abad9aab20b92a322c3ec",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.1000515,
+            0.2000258,
+            0.2997961,
+            0.3999113,
+            0.5000775,
+            0.5998563,
+            0.7003654,
+            0.7998557
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.1003329,
+            0.2000268,
+            0.3000328,
+            0.4000447,
+            0.5000528,
+            0.6001837,
+            0.700023,
+            0.7997008
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.1002153,
+            0.1999107,
+            0.2996798,
+            0.4000695,
+            0.5002636,
+            0.5996531,
+            0.700396,
+            0.8001497
+          ]
+        }
+      ],
+      "problem": "Using sample coral, provide only its first stage result."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "8bb597386cd1ab1a6119509a134f50d3cf421e3b076d98df653f2cb021b5584d",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "cfec9a3cc526320172d8e3e923910a801591cc2629dbaa85579e778665223d95",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.1003767,
+            0.2002876,
+            0.299711,
+            0.4001809,
+            0.4999326,
+            0.6001969,
+            0.6998603,
+            0.7996644
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1003662,
+            0.199874,
+            0.29968,
+            0.3996772,
+            0.5001988,
+            0.6001284,
+            0.700342,
+            0.7997771
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.1000035,
+            0.2000922,
+            0.2996202,
+            0.3996578,
+            0.5001833,
+            0.5998022,
+            0.6999975,
+            0.7997273
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged indigo and finish at the first stage."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "2ffdb1d2b334d66a8fa672ec5897deb974264d75dd454336cf12cc69f5400f56",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "3819702721799d672cf6d3cd07fd50e9eec7e48c252567f8c01c007cb000049e",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.1001872,
+            0.2003393,
+            0.2999112,
+            0.4003608,
+            0.499938,
+            0.6003132,
+            0.6997675,
+            0.7999656
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.1000833,
+            0.2000709,
+            0.2996048,
+            0.3996488,
+            0.5002257,
+            0.5997891,
+            0.7003663,
+            0.8001645
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.099645,
+            0.199668,
+            0.3000809,
+            0.400359,
+            0.4999452,
+            0.5998294,
+            0.6997133,
+            0.7999298
+          ]
+        }
+      ],
+      "problem": "Using sample amber, provide only its final stage result."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "3dd011712387dec7bf373a0edb7b8472d9237e2090c11862fca2917e7be27d39",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "94220087ec3d827ed563611927c3e7eaf884a736c89168766d99d8ec404c119e",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1003772,
+            0.1999358,
+            0.300282,
+            0.4003071,
+            0.50022,
+            0.6002127,
+            0.699757,
+            0.800323
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.0997862,
+            0.1998749,
+            0.3000875,
+            0.400027,
+            0.499737,
+            0.5996745,
+            0.6996158,
+            0.7996577
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0996738,
+            0.2001359,
+            0.299975,
+            0.4001692,
+            0.5002231,
+            0.600294,
+            0.7002658,
+            0.7996263
+          ]
+        }
+      ],
+      "problem": "I require the second stage result from the input marked amber."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "4e31283948624aae2155ae2e72ebedf089922d00781f943d86ca2d9cd1c9d078",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "6b5ad4c3282ed3484ae0166b88d83df3e827de6455194d7095cdaf5c2159fe05",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.0996224,
+            0.2000987,
+            0.3003863,
+            0.3998086,
+            0.5003569,
+            0.5997357,
+            0.7001339,
+            0.7998627
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "teal",
+          "values": [
+            0.0999508,
+            0.1997466,
+            0.3001472,
+            0.4000672,
+            0.4996215,
+            0.5998521,
+            0.7001646,
+            0.8001604
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.1000016,
+            0.1996839,
+            0.2998006,
+            0.4002302,
+            0.5001449,
+            0.6001723,
+            0.7000358,
+            0.8001715
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged indigo and finish at the first stage."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "f6319740cb6dd6718c04e5e8d97720abf46e7b6fade47f4575a599a6e4aeea15",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "9e83caa3586c2166a29b10c2b69fb4fa03989eb0830602baf8803676785cbe27",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.100317,
+            0.1998378,
+            0.2996619,
+            0.3996321,
+            0.4999575,
+            0.6001676,
+            0.6999849,
+            0.8000366
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.1003363,
+            0.2003099,
+            0.2998878,
+            0.3999412,
+            0.4996374,
+            0.5998863,
+            0.6996944,
+            0.8000818
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.1003391,
+            0.2000565,
+            0.2996597,
+            0.4002169,
+            0.4998149,
+            0.6002479,
+            0.6999118,
+            0.7996596
+          ]
+        }
+      ],
+      "problem": "Using sample amber, provide only its first stage result."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "7461373fa01cc66686638a1bcc925a6328853b0aa952b0d5b98b39fefe5c4a68",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "97f61cd2036d6bfa21e21fa3d1360178a8e9183495b5c8c78608c13602feadf3",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.099638,
+            0.1996254,
+            0.3001882,
+            0.3997458,
+            0.4996058,
+            0.5999536,
+            0.7003032,
+            0.8002416
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.1000448,
+            0.2001985,
+            0.3002133,
+            0.4003261,
+            0.4996039,
+            0.6000397,
+            0.7000538,
+            0.8002526
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.1003409,
+            0.1998399,
+            0.3001617,
+            0.4000081,
+            0.4996181,
+            0.6001994,
+            0.7000573,
+            0.7996999
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged lime and finish at the first stage."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "33e72aa2fe6b4b953349a606b5ce220e96c92d1239744425ce9531789ca3430b",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "6182dd6376afff807943effaeb9a125eeb6a9449e4d33afe150ad7a345dfb020",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.1001363,
+            0.1999188,
+            0.3001322,
+            0.3998196,
+            0.4998043,
+            0.6002775,
+            0.7003235,
+            0.8000054
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.0998136,
+            0.2001306,
+            0.2996514,
+            0.3998123,
+            0.4996837,
+            0.5999815,
+            0.7002287,
+            0.8000504
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.1003844,
+            0.200155,
+            0.2997747,
+            0.400168,
+            0.499956,
+            0.599604,
+            0.6996697,
+            0.7996759
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged lime and finish at the final stage."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "2738a3a8ef2bbd9ee961fec17b3bd08c99c6453fc2aed04e70ae46104064dbb9",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "57acde627a1d316b880aa9e9ae03d66754292a4f412d8aadc0a1ac79edb8b39c",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.0996876,
+            0.2003411,
+            0.2998153,
+            0.3997216,
+            0.5001999,
+            0.6001323,
+            0.7000318,
+            0.8000187
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.0999754,
+            0.1998351,
+            0.2998901,
+            0.3997743,
+            0.5000465,
+            0.5996247,
+            0.6997224,
+            0.7996668
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "teal",
+          "values": [
+            0.0997664,
+            0.1999622,
+            0.299935,
+            0.3996984,
+            0.4998919,
+            0.6002152,
+            0.7002202,
+            0.7998884
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged violet and finish at the final stage."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "93641e004dd3842031048afc6f9f144e72cf99fcaa862a3337dd3ea7d1bb5c48",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "39341af4da9b5f13ff3a948c76069f899888ef35f1d2dcdf37b8147ce3d073ef",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.0997016,
+            0.2003371,
+            0.3003376,
+            0.4003242,
+            0.500227,
+            0.5998789,
+            0.7000866,
+            0.8001511
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.1003878,
+            0.1998781,
+            0.3003908,
+            0.4003348,
+            0.4998795,
+            0.600184,
+            0.6998185,
+            0.8003129
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.1001216,
+            0.1998349,
+            0.3001882,
+            0.3997778,
+            0.4999714,
+            0.5999256,
+            0.6996343,
+            0.8002025
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged coral and finish at the second stage."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "8d8c130d17303f16e368ee2b2a72bf853227db129be84107df8d40f213c7191c",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "df89d6f030fdb830a4395b78e0a2cfad27675d4efeca8fc3bc02aa2703fdf1e6",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.1003785,
+            0.200276,
+            0.2996366,
+            0.3998853,
+            0.4999314,
+            0.5998435,
+            0.7003321,
+            0.80002
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.0997536,
+            0.1996441,
+            0.2996258,
+            0.3998218,
+            0.5001583,
+            0.5996971,
+            0.7002418,
+            0.8003728
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0996871,
+            0.1996064,
+            0.2996846,
+            0.4001636,
+            0.500081,
+            0.5998101,
+            0.7000899,
+            0.7999477
+          ]
+        }
+      ],
+      "problem": "I require the second stage result from the input marked violet."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "766a9eef9472cf2840046c87d14bc95ca73aa4ada828dbab82fd7293aa5a4cc4",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "968c5ab4ad94fe790b2434d9b180c21aaf809ed2dbf97a34519f5b9882b21d4f",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.0996362,
+            0.2003576,
+            0.2998196,
+            0.4000829,
+            0.4998977,
+            0.5997237,
+            0.7002004,
+            0.7998176
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.0998796,
+            0.2003934,
+            0.2999247,
+            0.3997997,
+            0.4999677,
+            0.5996271,
+            0.7002757,
+            0.8003888
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.0996432,
+            0.2002449,
+            0.3003709,
+            0.3996076,
+            0.5002586,
+            0.6001636,
+            0.7000987,
+            0.8000371
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged violet and finish at the final stage."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "4d942fd6c1c81e9264247057c7b02145a634a27c9e1961708c50140b4235b350",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "bcf11b9ba17010956b2f99fdc92b6d20d2312e1abf898e881bae693adc1f5762",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.1003639,
+            0.2001704,
+            0.3002033,
+            0.4002462,
+            0.4998456,
+            0.5996791,
+            0.7001228,
+            0.799924
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.099999,
+            0.1997127,
+            0.3000538,
+            0.3997419,
+            0.5002843,
+            0.5998836,
+            0.7002009,
+            0.8003389
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.1002487,
+            0.2003963,
+            0.3003592,
+            0.4002489,
+            0.4999356,
+            0.6000441,
+            0.700039,
+            0.8003018
+          ]
+        }
+      ],
+      "problem": "Using sample amber, provide only its final stage result."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "ce5ee129747a6fb7437badbdaf7c850f9ee7ebc4df11390300e09438ce7cbdac",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "d9f9478bc9049fc1ea3fa02507b973756c15a33eab651d0422e68d7a7c5f7453",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.0997854,
+            0.1998753,
+            0.3000751,
+            0.4001857,
+            0.5002457,
+            0.6003772,
+            0.6997425,
+            0.8002631
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.1000774,
+            0.1997025,
+            0.3003437,
+            0.3999242,
+            0.4999332,
+            0.6000847,
+            0.6997017,
+            0.8002724
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.1002479,
+            0.2000594,
+            0.2999662,
+            0.4002486,
+            0.5002414,
+            0.6002415,
+            0.7003916,
+            0.7997418
+          ]
+        }
+      ],
+      "problem": "Using sample lime, provide only its second stage result."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "fcc70548de9b41f458106ff837674b2451dd4d56dee90715a12e7b6f7311c87e",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "d1bea38b5b7cbb8f5461755e3de9967dd73b8621f3f537bad68d77be27694ab2",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.1001406,
+            0.199662,
+            0.3000188,
+            0.3998795,
+            0.5003238,
+            0.599711,
+            0.6999107,
+            0.8003712
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1003293,
+            0.1998534,
+            0.2996816,
+            0.3999828,
+            0.4998612,
+            0.6001367,
+            0.7000069,
+            0.800069
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.0997445,
+            0.1998103,
+            0.3002938,
+            0.3997742,
+            0.5000967,
+            0.5996129,
+            0.7003444,
+            0.7999113
+          ]
+        }
+      ],
+      "problem": "I require the first stage result from the input marked indigo."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "9450317c314d410f3b5cf9688de672981134f2e35cd6dcd2ffc1b10241ec10df",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "d86884a454121a646af685354b9ee51beac008433dc2e216b196365b84f5b83e",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.1000055,
+            0.2000863,
+            0.2996206,
+            0.4003067,
+            0.4999281,
+            0.5996108,
+            0.6997207,
+            0.8003684
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.0996298,
+            0.2000354,
+            0.2999233,
+            0.3998606,
+            0.4999839,
+            0.600216,
+            0.7000031,
+            0.7999468
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.1002105,
+            0.2003876,
+            0.2998046,
+            0.4000335,
+            0.500092,
+            0.6001952,
+            0.6996581,
+            0.8003224
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged coral and finish at the first stage."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "ee56483904b7b13a16f032d64fce9a1f37d7b8be4950e235aaca5294b74f96e2",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "0a0044b824f984e0664d969612a0c8efa3d88c2456347674eb4be1fe33836876",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.099742,
+            0.2000807,
+            0.3002597,
+            0.4003961,
+            0.499823,
+            0.6002155,
+            0.6999568,
+            0.8002751
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1001476,
+            0.1996253,
+            0.2997489,
+            0.4003055,
+            0.4999194,
+            0.5998493,
+            0.6996334,
+            0.7998707
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.1002487,
+            0.2002616,
+            0.3001719,
+            0.4000741,
+            0.499927,
+            0.6000284,
+            0.700315,
+            0.7999568
+          ]
+        }
+      ],
+      "problem": "I require the first stage result from the input marked violet."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "8c5b4d986bccbca80c31576c3e59e7f192a506e76a8a03256c31af2e65d1d461",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "c36179d22f9399eb71fa9c0cc0406c6948685d5b0212fc6d68a695e904409016",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.1002871,
+            0.1999819,
+            0.3000005,
+            0.4002455,
+            0.499899,
+            0.6003761,
+            0.7003132,
+            0.8002071
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "teal",
+          "values": [
+            0.0999939,
+            0.2003063,
+            0.3002811,
+            0.3999883,
+            0.5000419,
+            0.6003398,
+            0.7002678,
+            0.8000594
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0998413,
+            0.2002271,
+            0.3003663,
+            0.3998396,
+            0.4997064,
+            0.6002224,
+            0.6998587,
+            0.8001641
+          ]
+        }
+      ],
+      "problem": "Using sample indigo, provide only its second stage result."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "6191f98cc6d9c2708e7b2c07cf79bca4f10da24443141086418b846afb769c43",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "9c06c706f551ac0a61bbb83e710c47bc2b3f45f50964c59a74ac65dbc7c77245",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.100077,
+            0.2002998,
+            0.3000832,
+            0.4002245,
+            0.5001148,
+            0.6002526,
+            0.7001136,
+            0.7997185
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.0996499,
+            0.2001756,
+            0.299991,
+            0.4000687,
+            0.5002808,
+            0.6001949,
+            0.7003929,
+            0.7998668
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0998925,
+            0.2001488,
+            0.2999735,
+            0.3998507,
+            0.5003579,
+            0.6001981,
+            0.6999817,
+            0.8002989
+          ]
+        }
+      ],
+      "problem": "I require the first stage result from the input marked amber."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "9241846380d8de91265100f59d959359898b776682400144956665ece56530d7",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "93727a11539382d66020ee3ec336e3ba80f4230a7d24ad53392c5907aba808f8",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.0998836,
+            0.2003055,
+            0.2997728,
+            0.4003915,
+            0.5003477,
+            0.5996945,
+            0.6998768,
+            0.8003783
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.0998284,
+            0.1997805,
+            0.3001832,
+            0.3999459,
+            0.500116,
+            0.6003213,
+            0.6997554,
+            0.7999201
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.1003714,
+            0.2003369,
+            0.2997311,
+            0.3998209,
+            0.4997534,
+            0.5998595,
+            0.7003075,
+            0.7998531
+          ]
+        }
+      ],
+      "problem": "I require the first stage result from the input marked amber."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "0b8ca5df0df5ea3f95071bd5db822bb10abb7fffad920f3603813d9490213ea4",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "0b52005840671163e7c0c3e9ca221e6033516f88a45a41053577e019cf587bb1",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1001399,
+            0.1996056,
+            0.300268,
+            0.3997445,
+            0.4998417,
+            0.5997539,
+            0.7000559,
+            0.7996061
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1003225,
+            0.2001114,
+            0.2998796,
+            0.4002465,
+            0.4998548,
+            0.5997352,
+            0.6999523,
+            0.7999283
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "teal",
+          "values": [
+            0.099962,
+            0.2000144,
+            0.2996926,
+            0.3997434,
+            0.500321,
+            0.6002088,
+            0.6996035,
+            0.8001557
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged violet and finish at the first stage."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "db540f00850ea6c30b3a2c696e710e00725e3128f446be509acc85bbe21112f6",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "fb04e9a330d574c21657d3577032809925d85391dd55b29ad56f3a93b3fcdaa3",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1000534,
+            0.2000163,
+            0.3002118,
+            0.4000147,
+            0.49987,
+            0.6000149,
+            0.7002055,
+            0.8001555
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1000599,
+            0.2001361,
+            0.300077,
+            0.3999321,
+            0.5002904,
+            0.5996648,
+            0.6997364,
+            0.7998637
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "teal",
+          "values": [
+            0.100367,
+            0.1998194,
+            0.3000467,
+            0.4000631,
+            0.5000403,
+            0.6002325,
+            0.7000117,
+            0.8001315
+          ]
+        }
+      ],
+      "problem": "I require the final stage result from the input marked teal."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "aa61cea28d777570b580a626056ade4d74c3fd3d430b005c5fb556c0c037920c",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "b0a9616e450dd15d3f18f01f5c18d667b5e94c2cde290d7814f96eb1e88b88cb",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.0997412,
+            0.2000903,
+            0.3002318,
+            0.3998619,
+            0.5002687,
+            0.6000442,
+            0.7002904,
+            0.799975
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.0996824,
+            0.1997372,
+            0.3003177,
+            0.4002486,
+            0.5003319,
+            0.600373,
+            0.699917,
+            0.7999544
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.1002435,
+            0.1999661,
+            0.3001161,
+            0.4003844,
+            0.4999722,
+            0.5999441,
+            0.7000338,
+            0.8001337
+          ]
+        }
+      ],
+      "problem": "Using sample indigo, provide only its second stage result."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "ec81f98bc995991017ecb5325f5901c4383c44684eb89ffaee748f7b34102bc4",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "215cd8818f4cd4d61bad3c1d32659c86732e7cf05ad3ce98481114972dcc9695",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.1002411,
+            0.1996662,
+            0.3001776,
+            0.3999626,
+            0.5001301,
+            0.5997959,
+            0.6996193,
+            0.7996268
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.099693,
+            0.1996509,
+            0.3002086,
+            0.3997077,
+            0.4996784,
+            0.6003001,
+            0.6996396,
+            0.7997568
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.0996207,
+            0.199757,
+            0.29993,
+            0.400092,
+            0.4998507,
+            0.5996767,
+            0.7002932,
+            0.7998642
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged coral and finish at the second stage."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "a74c8d6b74717b172971d3b5b45aaf13442d5f8d3cfc582081dd9194bf70a3cf",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "e2f5c9fc6ea9f1b9ef0de99309352c8a28099d0bb1c47259b88b3b14581c60ff",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.0997285,
+            0.1996013,
+            0.3002189,
+            0.40021,
+            0.4999506,
+            0.6002609,
+            0.7002086,
+            0.7997721
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.1002616,
+            0.1998022,
+            0.2998943,
+            0.3998681,
+            0.5001362,
+            0.5996896,
+            0.7002648,
+            0.7999975
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.1003165,
+            0.1998323,
+            0.2999966,
+            0.4000501,
+            0.4998957,
+            0.5996925,
+            0.7001021,
+            0.8003663
+          ]
+        }
+      ],
+      "problem": "I require the second stage result from the input marked teal."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "2716f30f8d33d3515171edf2192f4ac7a03cdbb972d98c1a5828b18f23db54a2",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "2c20838376c8bea7d1e3db01aa27d2839f86ae612289b4500af2f48c7b07dee2",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.0996236,
+            0.1997015,
+            0.3000355,
+            0.4002895,
+            0.4997084,
+            0.6003552,
+            0.6997785,
+            0.8000732
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.1000271,
+            0.2001205,
+            0.3000639,
+            0.3998982,
+            0.5002448,
+            0.5999855,
+            0.7002401,
+            0.7996321
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0999779,
+            0.1996594,
+            0.3000609,
+            0.3999775,
+            0.4996012,
+            0.5999655,
+            0.7002128,
+            0.8001987
+          ]
+        }
+      ],
+      "problem": "I require the second stage result from the input marked coral."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "dae3fab58789ee10a095c84fe7d20aef09139b61fe149f535f7caefe9d501c7a",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "b6e1e439d3b7c19a00a28eef19d075c45e4f0ec1ce52181a6f14cf740e7ca8ef",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.0999584,
+            0.2001459,
+            0.300376,
+            0.4000279,
+            0.5003677,
+            0.6003908,
+            0.69963,
+            0.8002955
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.1002132,
+            0.2002532,
+            0.3000769,
+            0.400061,
+            0.4998254,
+            0.600178,
+            0.699898,
+            0.8000735
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.0999691,
+            0.2003312,
+            0.3002933,
+            0.40016,
+            0.4998114,
+            0.599782,
+            0.699897,
+            0.8000486
+          ]
+        }
+      ],
+      "problem": "I require the first stage result from the input marked violet."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "03b10ab9d41461d1165f046412c0e52fcd4033c86be82eb12e64a168758c736f",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "c2307e39255e1ccca2420839f9b5f1bc3da6a33916e77b59816f1ef29242b007",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "teal",
+          "values": [
+            0.099921,
+            0.2001987,
+            0.3001278,
+            0.3997254,
+            0.4997768,
+            0.599981,
+            0.6997363,
+            0.7996508
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.0996132,
+            0.1998357,
+            0.2997555,
+            0.3997901,
+            0.4999685,
+            0.6000971,
+            0.6997075,
+            0.8002096
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "lime",
+          "values": [
+            0.1002894,
+            0.200213,
+            0.3000825,
+            0.4002132,
+            0.5000971,
+            0.6000519,
+            0.6997314,
+            0.7999416
+          ]
+        }
+      ],
+      "problem": "Using sample teal, provide only its first stage result."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "4e82549c0d510d3460b2773798d3f2d454c7962dc3fc552f076db0d6f652aaa2",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "455f89c17c148cb6a05f6a81b1b02201e299d25f3a98870b1cf129ca4e885c1c",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.1000821,
+            0.1996202,
+            0.2997088,
+            0.3996885,
+            0.5003076,
+            0.5996172,
+            0.6998337,
+            0.8001546
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.099708,
+            0.2003543,
+            0.3000431,
+            0.399718,
+            0.5003355,
+            0.5998007,
+            0.7002718,
+            0.8003299
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.0998862,
+            0.19976,
+            0.2996378,
+            0.4002199,
+            0.4999011,
+            0.5998449,
+            0.7002222,
+            0.800317
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged amber and finish at the final stage."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "f0f111803cf939f9d7b9354e532fb55aafd0082d93448306e1cb11d8bb45b247",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "327dccb995a19c0e79cede578a515d5a61138463beea889d7a08b14ed73b9382",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:2"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "lime",
+          "values": [
+            0.1003661,
+            0.200397,
+            0.2997137,
+            0.3999542,
+            0.5002951,
+            0.599666,
+            0.7003233,
+            0.7998484
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.1000105,
+            0.200353,
+            0.3001928,
+            0.3996747,
+            0.5001429,
+            0.6000019,
+            0.6999841,
+            0.7996623
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0998751,
+            0.1999631,
+            0.3003583,
+            0.3999038,
+            0.5002487,
+            0.5999988,
+            0.7001311,
+            0.7999099
+          ]
+        }
+      ],
+      "problem": "Choose the sample tagged amber and finish at the first stage."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "2d834c634a70f36a381dc40b4f14c43e3429a4fa673e09fbbad86e038737ef4a",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "cc483cfc389cbce028e99e2526b3badb0c55b4f3aff68c94d16fa4f2605bc28b",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:1"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.0998316,
+            0.2001633,
+            0.3003715,
+            0.4000685,
+            0.5003851,
+            0.600124,
+            0.6998972,
+            0.799611
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "lime",
+          "values": [
+            0.1002109,
+            0.2003811,
+            0.2997289,
+            0.3999023,
+            0.4998472,
+            0.6003558,
+            0.6997434,
+            0.8000534
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0997498,
+            0.2000321,
+            0.2996056,
+            0.399662,
+            0.4996257,
+            0.5996296,
+            0.6998858,
+            0.8001718
+          ]
+        }
+      ],
+      "problem": "I require the second stage result from the input marked indigo."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "09976fe9b19df347385db457ce1c9dc5c80ab59b8baf6bb0900d0dc704d6b530",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "09b5ca038a226473dbda7d0192911aa80e7432ef3a21e2513e20a30782c1f7bc",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.0997283,
+            0.199624,
+            0.2997203,
+            0.3998285,
+            0.4998191,
+            0.6001757,
+            0.7001429,
+            0.8000181
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.1000709,
+            0.1996187,
+            0.2997871,
+            0.4002009,
+            0.5000606,
+            0.599633,
+            0.699905,
+            0.7998331
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "teal",
+          "values": [
+            0.0997074,
+            0.2003388,
+            0.3002803,
+            0.4003057,
+            0.5000793,
+            0.6001818,
+            0.6999225,
+            0.8000027
+          ]
+        }
+      ],
+      "problem": "Using sample violet, provide only its final stage result."
+    },
+    "target": {
+      "binding": 0,
+      "expected": {
+        "final_symbol": "L2",
+        "repair_required": true,
+        "workflow": [
+          "A",
+          "B",
+          "C",
+          "R",
+          "C"
+        ]
+      },
+      "procedure": 2
+    }
+  },
+  {
+    "id": "c0598347ac69e85b2be54e683a8a5fbb1677f86138e0a6f2e9c80f43070ea8a0",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "af00a4f839d80221d3cf2ebd77059efcea838a587cb6e32669f3c254fbff309a",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.1001676,
+            0.2002635,
+            0.2997277,
+            0.4003256,
+            0.4998215,
+            0.5999488,
+            0.6999705,
+            0.7999228
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "teal",
+          "values": [
+            0.1001303,
+            0.1996378,
+            0.3003102,
+            0.3999994,
+            0.499704,
+            0.5996241,
+            0.6998829,
+            0.8002878
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.100306,
+            0.1996214,
+            0.2996132,
+            0.3999191,
+            0.4997504,
+            0.6002443,
+            0.7002917,
+            0.8002549
+          ]
+        }
+      ],
+      "problem": "Using sample amber, provide only its first stage result."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  },
+  {
+    "id": "371fe6edaacff168000c7bf81cb36a9a4cff6e5287de3cbb5b2e81a6da15e530",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "67ecd1952f51f7c9b0070c806b3c740bdd94a143446f304f23f422baed2df8a3",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1003044,
+            0.2000049,
+            0.2996253,
+            0.4001183,
+            0.4997482,
+            0.6001082,
+            0.7002812,
+            0.7999083
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.099842,
+            0.2003449,
+            0.3001877,
+            0.4002109,
+            0.4997825,
+            0.6001616,
+            0.6998509,
+            0.7999516
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0998484,
+            0.200263,
+            0.3000032,
+            0.4002264,
+            0.4996982,
+            0.600265,
+            0.6998274,
+            0.7998507
+          ]
+        }
+      ],
+      "problem": "Using sample amber, provide only its second stage result."
+    },
+    "target": {
+      "binding": 1,
+      "expected": {
+        "final_symbol": "L3",
+        "repair_required": false,
+        "workflow": [
+          "A",
+          "B"
+        ]
+      },
+      "procedure": 1
+    }
+  },
+  {
+    "id": "81ca525e3d37f524d05035eb48c1eff496453a61c1a40cd1a884c59f47256e1a",
+    "provenance": {
+      "construction": "formal stage/source and tensor first; surface wording second",
+      "custody": "INTERNAL_DEVELOPMENT_HOLDOUT_NOT_EXTERNAL_AUDIT",
+      "formal_instance_digest": "4f2cc53cf0de13452c0803600d7fcf5a383fe35a0e1383c38b9c0fbc4be133ae",
+      "generator": "cas-meta1-sdg/1",
+      "seed": 20260905,
+      "split": "test",
+      "template_id": "test:0"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.1001173,
+            0.1996754,
+            0.2999618,
+            0.4002055,
+            0.5000784,
+            0.5999188,
+            0.7001852,
+            0.7996044
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.1001103,
+            0.1998153,
+            0.299967,
+            0.399935,
+            0.4997409,
+            0.6002218,
+            0.6996338,
+            0.8001075
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.0999702,
+            0.1997989,
+            0.3003745,
+            0.3996813,
+            0.499942,
+            0.6002606,
+            0.6998083,
+            0.8000062
+          ]
+        }
+      ],
+      "problem": "Using sample coral, provide only its first stage result."
+    },
+    "target": {
+      "binding": 2,
+      "expected": {
+        "final_symbol": "L1",
+        "repair_required": false,
+        "workflow": [
+          "A"
+        ]
+      },
+      "procedure": 0
+    }
+  }
+]
