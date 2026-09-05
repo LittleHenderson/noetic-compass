@@ -4,7 +4,23 @@ This is a separate experimental candidate, not a replacement for the accepted CA
 
 The next measured skill is to turn a bounded problem into a new nested CJT program with named intermediate values, then execute it through unchanged native CJT APIs. The candidate must emit operations, calls, and bindings, not just select a prepared whole program.
 
-Latest state (2026-09-05): the second learning run from source
+Source-basis update (2026-09-05): the separate third learning candidate now
+has lexical copying, shared syntax constraints, depth-balanced selection,
+a fresh curriculum and an integrated candidate trainer. Its pure checks passed
+948 tests plus 89 subtests; all 316 protected files stayed unchanged. Six GPU
+modules were skipped, and this candidate has not been trained or launched.
+`LEARNING_V3.md` lists the remaining campaign, launch and audit integration.
+The successful receipt is `records/local_learning_v3_003/receipt.json`;
+the earlier timeout and test-runner failure are preserved separately.
+
+The v2 stored-result diagnostic has independently checked all 1,778 traces and
+360 sealed choices, without waiving the original full-acceptance failure.
+It is preserved in evidence commit `6e1fb3de`. The separate bounded native
+procedural-memory reuse demonstration is preserved in `4f3a3743`; it remains
+unqualified and is not learned retrieval. The current shared ledger reserves
+$32 total and leaves $368 unreserved. These are reservations, not invoices.
+
+Latest measured composition result (2026-09-05): the second learning run from source
 `410bce98307a5644db51928459b73391c7066b72` finished on AWS. Its saved report
 shows CAS 0/72 and generic 0/72 correct tasks after training, versus rule 72/72.
 Full protocol acceptance is **blocked**: the GPU preflight marked success despite
@@ -13,8 +29,8 @@ unchanged inspector rejected that claim, and the full stored auditor refused
 to proceed. Original failed receipts and six checkpoints are preserved under
 `records/aws_learning_v2_001*`. A separately labelled stored-result diagnostic
 does not override that failure. AWS shutdown and resource cleanup have been
-independently verified. The ledger reserves $25 total, leaving $375 unreserved;
-these are reservations, not invoices. See `records/aws_learning_v2_001/RESULT.md`.
+independently verified. At that run's closure the ledger reserved $25 total,
+leaving $375 unreserved. See `records/aws_learning_v2_001/RESULT.md`.
 
 First full run: source `b5f1718e63a2b5cf72b4b606d513d0524b9226ac` completed on an RTX PRO 4500 Blackwell. Both four-test GPU gates, three native execution preflights, 200 matched training epochs, and all 72 cases / 360 comparison choices completed. The file inspection and separate stored-record audit passed. The latter checked all 1,915 traces against the published schema across 222 databases and replayed the stored composition evidence. It did not load checkpoints or independently rerun neural inference.
 

@@ -1,0 +1,111 @@
+{
+  "boundary": "Pure capacity evidence only. These diagnostic graphs are now exposed; exclude them from future validation/test. No proof of training, learning, complete wording/input capacity, or native task success.",
+  "by_depth": {
+    "1": {
+      "accepted_unique_graphs": 1024,
+      "attempts": 2957,
+      "maxima": {
+        "action_tokens": 49,
+        "expanded_run_count": 9,
+        "instruction_count": 9,
+        "procedure_count": 1
+      },
+      "rejections": {
+        "DIAGNOSTIC_DUPLICATE": 659,
+        "OLD_GRAPH": 1274
+      }
+    },
+    "2": {
+      "accepted_unique_graphs": 1024,
+      "attempts": 1459,
+      "maxima": {
+        "action_tokens": 115,
+        "expanded_run_count": 15,
+        "instruction_count": 18,
+        "procedure_count": 4
+      },
+      "rejections": {
+        "DIAGNOSTIC_DUPLICATE": 88,
+        "OLD_GRAPH": 331,
+        "V2_NATIVE_RUN_CEILING": 16
+      }
+    },
+    "3": {
+      "accepted_unique_graphs": 1024,
+      "attempts": 1142,
+      "maxima": {
+        "action_tokens": 115,
+        "expanded_run_count": 15,
+        "instruction_count": 18,
+        "procedure_count": 4
+      },
+      "rejections": {
+        "DIAGNOSTIC_DUPLICATE": 54,
+        "OLD_GRAPH": 35,
+        "V2_NATIVE_RUN_CEILING": 29
+      }
+    }
+  },
+  "diagnostic_graph_signatures_file": "diagnostic_graph_signatures.json",
+  "diagnostic_graph_signatures_file_sha256": "e73ece07040c1cef2fca458feced4c38a6c75b9a95793b7169957f0ff3bfba5b",
+  "diagnostic_seed": 910284113,
+  "excluded_graph_count": 1240,
+  "excluded_graph_signatures_sha256": "5c3421915d7f14d732368f64b6d48996181d9a57e6d9e422914613efb12735a6",
+  "future_holdouts_created_or_opened": false,
+  "historical_exclusions": {
+    "aws_full_002": {
+      "members": {
+        "cloud_job/campaign/dataset/test_private.json": {
+          "count": 72,
+          "sha256": "cf3332ba839274f98ea0a57fd7c7e58da095612eee6f279ae0a29e8af932b005"
+        },
+        "cloud_job/campaign/dataset/train.json": {
+          "count": 256,
+          "sha256": "d28287e60c1e242ba5ede09e039fddcdc35b7f0ae4c27bc70beef5b4220fe2e4"
+        },
+        "cloud_job/campaign/dataset/validation.json": {
+          "count": 48,
+          "sha256": "fe01ffdfa8ed5019b41eb61f356d5a3b824d279ae6e57438f22aff5b953290b3"
+        }
+      },
+      "packet_sha256": "e22412583114e50cbf9e60d8b22864bfb4ca76e6ccecedee7a0f72976ec37ae0"
+    },
+    "aws_learning_v2_001": {
+      "members": {
+        "cloud_job/campaign/dataset/test_private.json": {
+          "count": 72,
+          "sha256": "c0e8f2c7a6562f031810bafdfe22e36131eb30a336ec3fc3923c44bd2c0d5cb3"
+        },
+        "cloud_job/campaign/dataset/train.json": {
+          "count": 768,
+          "sha256": "b7ed542d94073827d4492292a3c2ca04796ffc5afcf8a968e6548f26cf687f05"
+        },
+        "cloud_job/campaign/dataset/validation.json": {
+          "count": 48,
+          "sha256": "dcaa5dd5d48011988eb1786ca354b7f836c199b61bdd4e6495ce903645d3c0ba"
+        }
+      },
+      "packet_sha256": "0d1b13aa711685cc488bdfdb981d8682d3d1b02b8e67530a3742add44dd13e93"
+    }
+  },
+  "maximum_attempts_per_depth": 100000,
+  "maximum_search_seconds": 60,
+  "neural_or_provider_calls": false,
+  "new_dataset_created": false,
+  "public_wording_or_observation_tags_generated": false,
+  "requested_training_capacity": {
+    "1": 1024,
+    "2": 1024,
+    "3": 1024
+  },
+  "schema": "cas-meta2-training-graph-capacity-diagnostic/0.1",
+  "script_sha256": "dc079f37e7f46ebf925640b5d7996018ab612d20d1a67af3f143d88fff9307a3",
+  "source_sha256": {
+    "codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "curriculum.py": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384",
+    "curriculum_v2.py": "a62e7acb23024a6f195e33af57a3a19cb513b5e7181a9a00370332ee37f1c5bd",
+    "ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+  },
+  "status": "CAPACITY_DEMONSTRATED_TRAINING_ONLY",
+  "wall_seconds": 4.493422100000316
+}

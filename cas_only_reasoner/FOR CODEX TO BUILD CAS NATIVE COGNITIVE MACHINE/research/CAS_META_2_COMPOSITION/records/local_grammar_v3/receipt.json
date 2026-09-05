@@ -1,0 +1,32 @@
+{
+  "schema": "cas-meta2-pure-grammar-test-receipt/0.1",
+  "status": "PURE_GRAMMAR_TESTS_PASSED",
+  "boundary": "Pure structural grammar checks only; no neural training, inference, native execution or provider calls. Semantic task mistakes remain possible.",
+  "neural_import_blocker": ["torch", "tensorflow", "jax", "cupy", "boto3", "cas_cjt"],
+  "python_executable": "C:/Python314/python.exe",
+  "python_bytecode_writes_disabled": true,
+  "pytest_arguments": ["tests/test_grammar_v3.py", "-q", "-p", "no:cacheprovider", "--junitxml=records/local_grammar_v3/grammar_tests.xml"],
+  "import_guard_installed_before_pytest_import": true,
+  "files": {
+    "cas_meta2/grammar_v3.py": {"bytes": 12764, "sha256": "92bb1e400053c83daf0700dd782b9b5014f0da1c36f7e602133f7341cf5a2e7b"},
+    "tests/test_grammar_v3.py": {"bytes": 15852, "sha256": "2eecd5b2620f4f38da164d12c30207e982817b204359e966de05e61eb91104ea"},
+    "records/local_grammar_v3/grammar_tests.xml": {"bytes": 5746, "sha256": "7368a844df0d2c7152cb072ee2aaaffd349dcd32232e8cf9d23184bb465ff897"}
+  },
+  "historical_target_coverage": {
+    "aws_full_002": {
+      "train.json": {"count": 256, "sha256": "d28287e60c1e242ba5ede09e039fddcdc35b7f0ae4c27bc70beef5b4220fe2e4"},
+      "validation.json": {"count": 48, "sha256": "fe01ffdfa8ed5019b41eb61f356d5a3b824d279ae6e57438f22aff5b953290b3"},
+      "test_private.json": {"count": 72, "sha256": "cf3332ba839274f98ea0a57fd7c7e58da095612eee6f279ae0a29e8af932b005"}
+    },
+    "aws_learning_v2_001": {
+      "train.json": {"count": 768, "sha256": "b7ed542d94073827d4492292a3c2ca04796ffc5afcf8a968e6548f26cf687f05"},
+      "validation.json": {"count": 48, "sha256": "dcaa5dd5d48011988eb1786ca354b7f836c199b61bdd4e6495ce903645d3c0ba"},
+      "test_private.json": {"count": 72, "sha256": "c0e8f2c7a6562f031810bafdfe22e36131eb30a336ec3fc3923c44bd2c0d5cb3"}
+    }
+  },
+  "historical_targets_total": 1264,
+  "synthetic_random_dags": 120,
+  "synthetic_tiny_combinations": 48,
+  "synthetic_scope_permutations": 24,
+  "pytest": {"tests": 47, "errors": 0, "failures": 0, "skipped": 0, "xml_seconds": 12.354, "terminal_seconds": 12.50}
+}

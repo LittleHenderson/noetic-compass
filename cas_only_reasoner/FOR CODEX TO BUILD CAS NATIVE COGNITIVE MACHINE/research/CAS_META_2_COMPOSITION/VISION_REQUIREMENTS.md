@@ -25,7 +25,7 @@ The scope below remains open until verified in an integrated system. Current evi
 | V02 | Assemble task-appropriate neural CJT networks with typed Cause, evidence, neural operation, Effect, readiness, time, memory, verification, and plasticity contracts | Fixed native CJTs and accepted call execution exist. Learned network/program assembly is the next candidate. |
 | V03 | Synthesize executable CAS procedures from intent: sequence, branches, calls, iteration, repair, return, resume; explain/edit both CAS and plain language | META-1 selects 1 of 3 authored procedures. The audited META-2 generation experiment produced admitted programs but both trained arms solved 0/72 held-out tasks; rule solved 72/72. Learned composition remains open, as do branches/iteration/open-language synthesis. |
 | V04 | Recursive typed composition across CJTs, boards, subboards, goals and subgoals; distinct Noetic paths, seven Foundations and 28 Sub-Foundations; budget-governed depth | Static nested execution exists. New composition tests must withhold entire structures and deeper real operation paths. General recursion and full semantics remain open. |
-| V05 | Durable working, episodic, semantic, procedural memory with provenance, time, structure and truth labels; semantic/structural recall and dynamic working sets | Native evidence storage exists, but META-0 rejects external memory references. Separate META3 storage/linking candidate passed 72 pure checks for one B procedure; no native installation/reuse or learned retrieval has run. Integrated memory remains open. Explicit tags remain authoritative. |
+| V05 | Durable working, episodic, semantic, procedural memory with provenance, time, structure and truth labels; semantic/structural recall and dynamic working sets | Partial: source 8b5d8ac9 ran a saved B procedure in a fresh AWS process. The unchanged audit checked six native traces, matching outputs and five rejections; evidence commit 4f3a3743. This is fixed procedural reuse, not learned retrieval or integrated memory. Explicit tags remain authoritative. |
 | V06 | Lifelong instruction and skill learning; context versus durable memory versus neural skill; scoped changes, retention, versioning and rollback | Standalone v0.2 scoped updates and a separate learned selector exist. Teaching during suspended execution with a qualified identity transition is not implemented. |
 | V07 | Construction-first CAS-SDG curricula: formal structure, wording, independent checking, contrasts and held-out transfer; target real weaknesses | META-1 has a bounded checked synthetic curriculum. META-2 extends structural holdouts. Generated fixtures alone are not independent truth or broad self-curriculum. |
 | V08 | Practical self-model and RPM Desire/Wisdom/Power diagnosis; acquire missing prerequisites, verify, resume exact caller and budget | Authored repair/return is demonstrated. Detecting and acquiring genuinely missing knowledge or a skill is not. |
@@ -35,7 +35,7 @@ The scope below remains open until verified in an integrated system. Current evi
 | V12 | Researcher, engineer, teacher and creative roles with hypotheses, experiments, revisions and visible learned-skill growth | Small learning improvement exists. General role competence and scientific discovery remain unproven. |
 | V13 | Glass-brain workbench showing actual goals, calls, memory, flow, repair, results and version history; edit and rollback | Evidence records exist. A complete integrated workbench with these controls is not established. |
 | V14 | Persistent identity across phone, desktop and cloud; lightweight offline core, cloud learning, permitted state reconciliation | No cross-device continuity demonstration established. This laptop must not run neural workloads during development. |
-| V15 | Installable portable CJT skills with programs, compatible neural parts, I/O contracts, permissions, memory requirements, verification and lineage | A separate SQLite package registry and fixed linker have pure fresh-process/data checks. Packages remain STORAGE_ONLY/UNQUALIFIED. Actual native compatible reuse, useful learned skill selection, and the full portable skill contract still need evidence. |
+| V15 | Installable portable CJT skills with programs, compatible neural parts, I/O contracts, permissions, memory requirements, verification and lineage | Partial: the saved B package was retrieved in a fresh process and reused through the accepted native runtime, with software/model compatibility checks and unchanged permissions. It remains UNQUALIFIED. Learned package selection, qualification, model-version transition and the full portable skill contract remain open. |
 | V16 | Addressed local teaching; functional cognitive addresses distinct from execution IDs; repair only unsupported transitions and preserve neighbors | Named program references and explicit addresses are first candidate mechanisms. Scoped learning plus retention and resumed caller proof remain open. |
 | V17 | Structural cross-domain transfer, native independent controls, full CAS/Noetic meanings | Requires explicit semantic versions and held-out cross-domain evaluations, not renaming ordinary units. TKS Foundations TF1..TF7 and CAS Drive rails DF1..DF7 must remain distinct. |
 | V18 | Physical analog CJT hardware and matched differential pairs with measured cutoff/active/saturation/breakdown behavior | Hardware fabrication and physical measurements are not established by the software prototype. This remains part of the ultimate scope, not a claim within the current AWS experiment. |
@@ -43,12 +43,23 @@ The scope below remains open until verified in an integrated system. Current evi
 ## Immediate evidence sequence
 
 The first negative composition result is preserved in evidence commit
-`74b2322b1bd39cd09da071b61372f3183c2c9ada`. The new side-by-side learning revision
-is registered in `EXPERIMENT_V2.json`: lossless text, child-call training,
-generated-validation selection, and 24 matched test triplets. It has not yet
-produced a GPU learning result. The separate unqualified memory candidate is
-preserved on branch `codex/cas-meta-3-procedural-memory`; it does not replace this
-learning work or close integrated memory requirements.
+`74b2322b1bd39cd09da071b61372f3183c2c9ada`. The second learning revision ran from
+`410bce98307a5644db51928459b73391c7066b72` and again scored CAS 0/72, generic
+0/72, rule 72/72. Its full acceptance remains blocked by the GPU preflight's
+unconfirmed memory cleanup. A separate diagnostic checked all 1,778 stored
+traces and 360 choices; it does not waive that original failure. See
+`records/aws_learning_v2_001_partial_semantics_v2/result/diagnostic_receipt.json`.
+
+The unqualified memory source is preserved on branch
+`codex/cas-meta-3-procedural-memory`. Its native demo, unchanged stored audit,
+and independent AWS cleanup passed; evidence commit `4f3a3743` binds those
+results to source `8b5d8ac9e4f469b4cd89bbe917560678d2f52cb7`. This closes the
+fixed native-reuse demonstration only, not integrated memory or qualification.
+
+The next learning candidate adds shared lexical copying, syntax constraints,
+depth-balanced development selection and a fresh checked curriculum. It has
+not trained or passed its GPU gates. `LEARNING_V3.md` lists the remaining
+training/evaluation integration; pure tests are not a learning result.
 
 1. Validate a new bounded typed program representation and named intermediate values in an isolated candidate. Invalid fields, denied topology/scope, forged references, excessive expansion, incorrect returns, and changed runtime identities must fail closed.
 2. Generate varied structural tasks. Train separate CAS and matched generic program generators on AWS only. Compare trained/untrained/rule arms on public problems without giving the target program JSON or answer. The first public curriculum explicitly describes required operations and dependencies: this is controlled instruction translation, not yet algorithm discovery from an outcome alone. Seal all predictions before private native references are generated. Save checkpoints, raw outputs and costs, including negative results.

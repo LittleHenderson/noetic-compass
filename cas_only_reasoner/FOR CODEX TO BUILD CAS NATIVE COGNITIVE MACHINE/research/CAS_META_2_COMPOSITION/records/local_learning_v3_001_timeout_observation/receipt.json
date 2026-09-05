@@ -1,0 +1,64 @@
+{
+  "schema": "cas-meta2-prior-validation-timeout-observation/1",
+  "status": "PRIOR_PURE_VALIDATION_TIMED_OUT",
+  "original_command": [
+    "C:/Python314/python.exe",
+    "-B",
+    "tools/validate_local.py",
+    "--output",
+    "records/local_learning_v3_001"
+  ],
+  "original_cwd": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "original_session_id": 32047,
+  "original_result": {
+    "exit_code": 1,
+    "exception": "subprocess.TimeoutExpired",
+    "timeout_seconds": 180,
+    "source": "Parent agent reported the actual session completion in this task; no raw session log was copied by this helper."
+  },
+  "process_observations": [
+    {
+      "utc": "2026-09-05T23:28:58.5851915Z",
+      "source": "Read-only Win32_Process tool observation by budget_campaign",
+      "validator": {
+        "pid": 69392,
+        "parent_pid": 56748,
+        "created_utc": "2026-09-05T23:26:01.6392830Z",
+        "kernel_100ns": 5156250,
+        "user_100ns": 3906250
+      },
+      "child": {
+        "pid": 68592,
+        "parent_pid": 69392,
+        "created_utc": "2026-09-05T23:26:03.4357440Z",
+        "kernel_100ns": 828437500,
+        "user_100ns": 621875000,
+        "threads": 1,
+        "working_set_bytes": 87568384,
+        "cpu_seconds": 145.03125,
+        "command_role": "validate_local.py --child",
+        "scratch": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/meta2-ca558215040c"
+      }
+    },
+    {
+      "utc": "2026-09-05T23:29:06.9799455Z",
+      "source": "Second exact-PID Win32_Process observation",
+      "pids_queried": [
+        69392,
+        68592
+      ],
+      "processes_found": 0,
+      "original_record_files_found": 0
+    }
+  ],
+  "source_hashes_at_original_start": null,
+  "protected_hashes_from_original_run": null,
+  "raw_stdout": null,
+  "raw_stderr": null,
+  "junit_counts": null,
+  "missing_evidence_boundary": "The old validator captured its child output in memory and exited before writing receipts on timeout. This observation does not reconstruct missing stdout/stderr, test counts, or original before/after source hashes.",
+  "inference": "Recorded child CPU use shows it had executed substantial work; this was not merely a Python launch waiting without CPU use. The actual timeout reason comes from the parent's session report.",
+  "original_files_modified": false,
+  "provider_calls": 0,
+  "neural_work": false
+}

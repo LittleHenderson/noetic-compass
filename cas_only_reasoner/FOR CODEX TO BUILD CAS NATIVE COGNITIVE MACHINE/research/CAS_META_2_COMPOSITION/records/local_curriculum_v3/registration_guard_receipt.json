@@ -1,0 +1,74 @@
+{
+  "schema": "cas-meta2-curriculum-v3-local-validation/0.1",
+  "status": "PURE_CURRICULUM_CHECKS_PASSED",
+  "created_utc": "2026-09-05 23:22:59 UTC",
+  "root": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "source_sha256": {
+    "cas_meta2/curriculum_v3.py": "75ad59cd42a57eb88c5680b26cf07255c24d36132658ffd91926ccafdf5e987c",
+    "cas_meta2/exclusions_v3.json": "2e11f0e0e5a8cb8bc32907f81cc4c8a02c59f8623ce8f9b5937c59d421050f48",
+    "cas_meta2/development_exclusions_v3.json": "4642f5c1c5a9fc078343cdc5fb99c042ec6ee3c7e2e2c971ee5965776ab71913",
+    "tests/test_curriculum_v3.py": "f14fd3617044db3ff16542d653d84af847d09580d468a86cf34e7700d4f29394"
+  },
+  "tests": {
+    "passed": 62,
+    "failed": 0,
+    "elapsed_seconds": 4.5,
+    "python": "C:/Python314/python.exe",
+    "pytest_args": [
+      "tests/test_curriculum_v3.py",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp=<new short homebase _tmp directory>",
+      "--junitxml=records/local_curriculum_v3/tests_registration_guard.xml"
+    ],
+    "python_flags": [
+      "-B"
+    ],
+    "blocked_import_roots": [
+      "torch",
+      "tensorflow",
+      "jax",
+      "cupy",
+      "boto3",
+      "cas_cjt"
+    ],
+    "xml": "records/local_curriculum_v3/tests_registration_guard.xml",
+    "xml_sha256": "5975f207d4c4e9465501484b2f543ededa1537f885279f52a4b618fd3a500800"
+  },
+  "exposure": {
+    "diagnostic_seeds": [
+      914701,
+      914702,
+      914703
+    ],
+    "graph_count": 177,
+    "base_overlap_count": 1,
+    "new_graph_count": 176,
+    "base_graph_count": 4312,
+    "registered_union_count": 4488,
+    "original_exposure_record": "records/local_curriculum_v3/diagnostic_exposures.json",
+    "original_exposure_record_sha256": "18cab097a20c17e4681d288089f0df376ec4cc24d34f71a40f58131b4bea69fb",
+    "original_exposure_record_unchanged": true,
+    "rerun_exposure_object_equal": true,
+    "registered_seed_constructed": false,
+    "registered_seed": 20260919
+  },
+  "boundary": {
+    "neural_execution": false,
+    "native_execution": false,
+    "provider_calls": false,
+    "learning_measured": false,
+    "registered_evaluation_generated": false,
+    "training_integration_performed": false,
+    "source_commit_created": false,
+    "description": "Pure small diagnostic construction and validation only. Registered callers must explicitly pass registered_development_exclusions() to every construction/identity/validation call. No full-learning or native-success claim."
+  },
+  "registration_guard": {
+    "registered_seed": 20260919,
+    "combined_exclusions_require_all_development_graphs": true,
+    "missing_exclusions_rejected_before_constructor": true,
+    "complete_exclusions_identity_only_checked": true
+  },
+  "supersedes_local_receipt": "records/local_curriculum_v3/final_receipt.json"
+}
