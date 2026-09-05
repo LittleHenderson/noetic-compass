@@ -4,10 +4,17 @@ This is a separate experiment for saving and reusing one typed CJT procedure.
 It does not change the accepted executor, the saved META2 learning experiment,
 or any baseline weights. It is not yet a learned or qualified skill system.
 
-Current local receipt: `records/local_candidate_001/receipt.json` records **72
+Original storage/link receipt: `records/local_candidate_001/receipt.json` records **72
 passing pure tests**, all 316 protected files unchanged, and the three META2
 dependency hashes checked against the actual frozen Git objects. Neural imports
 were blocked. This is not native execution or a learning result.
+
+Current integration receipt: `records/local_native_demo_002/receipt.json`
+records **364 passing pure tests**, no failures/errors/skips, all 316 protected
+files unchanged, and unchanged source hashes across the run. Neural and
+provider imports were blocked. The one warning is from the intentional
+duplicate-ZIP rejection fixture. This includes synthetic audit and fake-provider
+checks; it is not a cloud native-reuse result.
 
 ## The narrow question
 
@@ -80,9 +87,14 @@ result with a separately run reference. Stored traces and unchanged protected
 bytes need their own receipts. Invalid packages must be rejected before native
 execution or native state writes.
 
-That demonstration has not run. This directory has no cloud launcher and no
-separate spending authority. Any future launch must use the existing single
-META2 campaign ledger and the owner's $400 total cap; no T4 or local neural work.
+That demonstration has not run. A separate AWS-only demo, launcher, packet
+checker, and stored-result auditor are now being integrated. See
+`NATIVE_DEMO.md` for the execution and evidence contract. New code and synthetic
+tests are not a completed AWS result.
+
+The launcher uses the existing single META2 campaign ledger and the owner's
+$400 total cap; it has no separate spending authority. No T4 or local neural
+work is permitted. The accepted learning experiment and executor are unchanged.
 
 ## Evidence interpretation
 

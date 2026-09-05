@@ -21,15 +21,16 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class NoNeuralImports(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path=None, target=None):
-        if fullname.split(".")[0] in {"torch", "tensorflow", "jax", "casformer"}:
+        if fullname.split(".")[0] in {"torch", "tensorflow", "jax", "casformer", "cas_cjt", "cupy", "boto3"}:
             raise RuntimeError("LOCAL_NEURAL_IMPORT_FORBIDDEN:" + fullname)
         return None
 
 
 def sources():
-    return {p.relative_to(ROOT).as_posix(): sha256(p.read_bytes()).hexdigest()
-            for directory in ("cas_meta3", "tests", "tools")
-            for p in sorted((ROOT / directory).rglob("*.py"))}
+    paths = [p for directory in ("cas_meta3", "tests", "tools", "aws")
+             for p in sorted((ROOT / directory).rglob("*.py"))]
+    paths += [ROOT / "aws/launch_plan.json"] if (ROOT / "aws/launch_plan.json").is_file() else []
+    return {p.relative_to(ROOT).as_posix(): sha256(p.read_bytes()).hexdigest() for p in paths}
 
 
 def protected():
@@ -67,7 +68,8 @@ def main():
     before, dependency_before, hashes = protected(), dependency_receipt(), sources()
     git_pin_check = verify_dependency_git()
     for name in hashes:
-        ast.parse((ROOT / name).read_text(encoding="utf-8"), filename=name)
+        if name.endswith(".py"):
+            ast.parse((ROOT / name).read_text(encoding="utf-8"), filename=name)
     output.mkdir(parents=True)
     # Windows Python startup can stall with a deeply nested TEMP directory.
     # Use the shortest ancestor CNCM homebase, without leaving its write scope.
@@ -127,7 +129,7 @@ def main():
                         "platform": sys.platform},
         "neural_imports_blocked": True, "local_neural_work": False,
         "native_execution_performed": False, "qualification": "UNQUALIFIED",
-        "scope": "Pure storage/linking tests, including synthetic identities; no model or tensor execution.",
+        "scope": "Pure storage/linking/native-demo/audit and mock launcher checks, including synthetic identities; no model, tensor, native execution or provider calls.",
     }
     (output / "receipt.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(stdout)
