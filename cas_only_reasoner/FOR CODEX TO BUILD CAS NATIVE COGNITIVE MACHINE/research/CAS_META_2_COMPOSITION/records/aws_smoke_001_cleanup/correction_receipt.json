@@ -1,0 +1,108 @@
+{
+  "schema": "cas-meta2-owned-cleanup-correction/1",
+  "job": "cas-meta2-20260905164134-b6dc38fe",
+  "source_sha": "2a3ec1132770b121881a49effee2aa5d4e0494fb",
+  "started_utc": "2026-09-05T16:51:19.115734+00:00",
+  "original_launch_receipt_sha256": "b64b8cf3d8fc2a51daf3136d2b9d6d45640d623d08471f3f4e9021dcb8738dae",
+  "artifact_sha256": "66582357c3c39078ae1788eed2988abcc7342504b3fa216b168b2f6130711fc0",
+  "status": "CAS_META_2_SMOKE_001_CLEANUP_VERIFIED",
+  "events": [],
+  "provider_mutations": 8,
+  "s3_mutations": 0,
+  "ledger_changes": 0,
+  "termination_requests_repeated": 0,
+  "instance_state": "terminated",
+  "termination_confirmed_utc": "2026-09-05T16:51:40.660619+00:00",
+  "cost_observation": {
+    "provider_launch_time": "2026-09-05 16:41:50+00:00",
+    "elapsed_seconds_upper_observation": "590.660625",
+    "compute_only_conservative_estimate_usd": "0.4134624374999999999999999999",
+    "reservation_usd": "7.00",
+    "caveat": "Elapsed-to-observed-termination estimate, not AWS invoice; excludes storage, IPv4, requests, transfer and taxes. No refund."
+  },
+  "volume_absent": true,
+  "checks": {
+    "instance_terminated": true,
+    "volume_absent": true,
+    "schedule_absent": true,
+    "profile_absent": true,
+    "worker_role_absent": true,
+    "timer_role_absent": true,
+    "security_group_absent": true,
+    "all_six_evidence_objects_preserved": true,
+    "seven_day_retention": true,
+    "original_receipt_unchanged": true,
+    "artifact_unchanged": true
+  },
+  "retained_s3_objects": [
+    {
+      "Key": "input/payload.zip",
+      "LastModified": "2026-09-05 16:41:39+00:00",
+      "ETag": "\"d2e449e63fec837548d337e2099283aa\"",
+      "ChecksumAlgorithm": [
+        "CRC32"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 3727351,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "input/permit.json",
+      "LastModified": "2026-09-05 16:41:51+00:00",
+      "ETag": "\"4d994d97ba0872a0db461bd5d05502b2\"",
+      "ChecksumAlgorithm": [
+        "CRC32"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 212,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "input/remote.py",
+      "LastModified": "2026-09-05 16:41:40+00:00",
+      "ETag": "\"d651717566570fb00b716dc4da4fea7f\"",
+      "ChecksumAlgorithm": [
+        "CRC32"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 79112,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "results/artifacts.zip",
+      "LastModified": "2026-09-05 16:46:23+00:00",
+      "ETag": "\"c9cc60b63a9a1c66cda6ab039bf29484\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 1070002,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "results/bootstrap.log",
+      "LastModified": "2026-09-05 16:46:24+00:00",
+      "ETag": "\"244391e86864b445e1fc85614037a56e\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 22891,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "results/complete.json",
+      "LastModified": "2026-09-05 16:46:24+00:00",
+      "ETag": "\"081af2d3c69d4f83aac98118325af9b5\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 234,
+      "StorageClass": "STANDARD"
+    }
+  ],
+  "finished_utc": "2026-09-05T16:51:45.238677+00:00",
+  "provider_calls_sha256": "5b0c04d073ce077da63bcbe6a76c23c0888e833b8f410c40233daa888a35ac4f",
+  "helper_sha256": "ea389e07c5db96dae125af52ed48c7da577a15a95fab705cf414b3c4a045d49a"
+}

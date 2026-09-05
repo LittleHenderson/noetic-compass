@@ -1,0 +1,132 @@
+{
+  "approval": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\OWNER_APPROVAL_SOURCE.json",
+    "sha256": "3e87bd4dfb51824f999b67ccc6118a75edececbc44ddc1b48d45f53e8bb62626",
+    "snapshot": {
+      "evidence_kind": "active_user_goal_returned_by_get_goal",
+      "goal": {
+        "createdAt": 1788624516,
+        "objective": "AMENDENDED AWS SPENDING BUDGET IS $400 SO IF ALL OF CAMPAIGN IS COMPLETED AND ACCOMPLISHED IN OUR FAVOR PLEASE CONTINUE WITH FURTHER RESEARCH AND DEVELOPMENT\n\nAMENDENDED IS THE 12 HOUR CAMPAIGN AND INCLUDING ANY FURTHER RESEARCH AND DEVELOPMENT DONE BEYOND THE 12 HOUR CAMPAIGN IF ANYTHING FROM THE 12 HOUR CAMPAIGN CONFLICTS WITH THE FOLLOWING VISION SUPERSED IT, FOR IT BECOMES NULL AND VOID MAKE NO MISTAKE THIS VISION IS OUR ULTIMATE GOAL:\n\nReferenced pasted text files:\n- pasted text file: C:\\Users\\wakil\\.codex\\attachments\\bbbecf38-bfe5-464a-bd8a-fe2f16b56e1a\\pasted-text-1.txt. Read this file before continuing.\n- pasted text file: C:\\Users\\wakil\\.codex\\attachments\\bbbecf38-bfe5-464a-bd8a-fe2f16b56e1a\\pasted-text-2.txt. Read this file before continuing.\n- pasted text file: C:\\Users\\wakil\\.codex\\attachments\\bbbecf38-bfe5-464a-bd8a-fe2f16b56e1a\\pasted-text-3.txt. Read this file before continuing.",
+        "status": "active",
+        "threadId": "01a065e4-1cc3-7a02-8fd6-8c2d00775ab4",
+        "timeUsedSeconds": 270,
+        "tokensUsed": 362013,
+        "updatedAt": 1788624786
+      },
+      "interpretation": {
+        "all_neural_work_on_aws": true,
+        "approval_scope": "CASformer research and development; no automatic merge; preserve accepted artifacts",
+        "includes_campaign_and_further_research": true,
+        "includes_prior_spending_and_reservations": true,
+        "no_t4": true,
+        "total_task_cap_usd": "400.00"
+      },
+      "schema": "cas-meta2-owner-budget-approval/1"
+    }
+  },
+  "no_automatic_refund": true,
+  "owner_task_cap_usd": "400.00",
+  "predecessor": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_budget_ledger.json",
+    "sha256": "3c6f61d7065fef65407dc7ca9405b8a2be8f3d163714014de1f7c4b6e33384d7",
+    "snapshot": {
+      "owner_task_cap_usd": "100.00",
+      "remaining_unreserved_usd": "96",
+      "reservations": [
+        {
+          "archive_sha256": "86239dd52b3d19a7fe98a651e0f7e6b3793c95ea2e01bb0c2d9e732650e8819f",
+          "job": "cas-meta1-20260905103339-cd06685e",
+          "reserved_usd": "2.00",
+          "reserved_utc": "2026-09-05T10:33:39.058409+00:00",
+          "source_sha": "a4dc9f2fc6f6d4f3d5e0b31100ac131327e02109",
+          "status": "RESERVED_NO_AUTOMATIC_REFUND"
+        },
+        {
+          "archive_sha256": "17688c68c1f35c06ea3c9fc6571c5b60af62201a69549cef3a4223a7dcb32b1f",
+          "job": "cas-meta1-20260905115219-33ee1c8f",
+          "reserved_usd": "2.00",
+          "reserved_utc": "2026-09-05T11:52:19.617700+00:00",
+          "source_sha": "cfd22ab96c479703d09e0792a139901f2931f5bd",
+          "status": "RESERVED_NO_AUTOMATIC_REFUND"
+        }
+      ],
+      "schema_version": 1,
+      "task": "CAS-META-1 learned selection",
+      "total_reserved_usd": "4"
+    }
+  },
+  "previous_state_sha256": "e63e02b00edb57b7faca19006daba98cd14c84da14f074f90307d05ccfee8134",
+  "remaining_unreserved_usd": "389.00",
+  "reservations": [
+    {
+      "archive_sha256": "86239dd52b3d19a7fe98a651e0f7e6b3793c95ea2e01bb0c2d9e732650e8819f",
+      "job": "cas-meta1-20260905103339-cd06685e",
+      "reserved_usd": "2.00",
+      "reserved_utc": "2026-09-05T10:33:39.058409+00:00",
+      "source_sha": "a4dc9f2fc6f6d4f3d5e0b31100ac131327e02109",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "17688c68c1f35c06ea3c9fc6571c5b60af62201a69549cef3a4223a7dcb32b1f",
+      "job": "cas-meta1-20260905115219-33ee1c8f",
+      "reserved_usd": "2.00",
+      "reserved_utc": "2026-09-05T11:52:19.617700+00:00",
+      "source_sha": "cfd22ab96c479703d09e0792a139901f2931f5bd",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "a2acd19a441e287515c908fb1d4666d25be7002bfe44f2fee48c385c3dc676b8",
+      "job": "cas-meta2-20260905164134-b6dc38fe",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 6600,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "7.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7200,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_APPROVED_COMPOSITION_CANDIDATE_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0"
+      },
+      "plan_sha256": "b03377638683eba245b33519520f2f786b22d8fb83da27980d2e81b6ae0d4f86",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-05T16:41:34.647777+00:00",
+      "source_sha": "2a3ec1132770b121881a49effee2aa5d4e0494fb",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    }
+  ],
+  "revision": 1,
+  "schema": "cas-meta-campaign-budget/2",
+  "scope": "All CASformer campaign and further research, inclusive of prior META1 reservations",
+  "total_reserved_usd": "11.00",
+  "updated_utc": "2026-09-05T16:41:34.647887+00:00"
+}

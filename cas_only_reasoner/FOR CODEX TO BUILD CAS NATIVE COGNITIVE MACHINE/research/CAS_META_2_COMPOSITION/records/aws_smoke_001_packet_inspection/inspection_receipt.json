@@ -1,0 +1,40 @@
+{
+  "archive_safety_and_all_included_bytes_checked": true,
+  "boundary": "Byte bindings and recorded-result recount only. Native stored-record semantic rechecking remains a separate gate. No CAS advantage, general reasoning, complete CNCM or hardware claim.",
+  "checkpoint_loading_performed": false,
+  "checks": {
+    "cloud_job/remote_failure.json": {
+      "message": "META2_GPU_POLICY_TESTS_MUST_REPORT_EXACTLY_FOUR_PASSED:{'tests': 4, 'failures': 1, 'errors': 0, 'skipped': 0}",
+      "traceback": "Traceback (most recent call last):\n  File \"/opt/cas-meta2/remote.py\", line 216, in <module>\n    raise RuntimeError('META2_GPU_POLICY_TESTS_MUST_REPORT_EXACTLY_FOUR_PASSED:'+str(policy_totals))\nRuntimeError: META2_GPU_POLICY_TESTS_MUST_REPORT_EXACTLY_FOUR_PASSED:{'tests': 4, 'failures': 1, 'errors': 0, 'skipped': 0}\n",
+      "type": "RuntimeError"
+    }
+  },
+  "collection": {
+    "archive_sha256": "a2acd19a441e287515c908fb1d4666d25be7002bfe44f2fee48c385c3dc676b8",
+    "included_full_file_count": 68,
+    "omitted_full_file_count": 0,
+    "original_file_count": 68,
+    "original_file_index_sha256": "01ced43ddfa0c9e321cf86192e10dbfd178b02c86098f572f25b61aa64ec1a04",
+    "partial_evidence": false,
+    "returncode": 1,
+    "smoke_only": true
+  },
+  "completed_run_evidence_verified": false,
+  "compressed_bytes": 1070002,
+  "expanded_bytes": 11299144,
+  "extraction": null,
+  "full_member_index": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_smoke_001_packet_inspection\\full_member_index.json",
+  "full_member_index_sha256": "f82eb87655bc7f674bd7c0283f2b0d1deac0aef53f1e7b0db947e21b05c63ce9",
+  "issues": [],
+  "job": "cas-meta2-20260905164134-b6dc38fe",
+  "member_files": 69,
+  "neural_execution_performed": false,
+  "original_full_index_verified": true,
+  "packet": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_smoke_001\\cloud_artifacts.zip",
+  "packet_sha256": "66582357c3c39078ae1788eed2988abcc7342504b3fa216b168b2f6130711fc0",
+  "schema": "cas-meta2-packet-inspection/1",
+  "source_sha": "2a3ec1132770b121881a49effee2aa5d4e0494fb",
+  "status": "CAS_META_2_PACKET_FAILED_RUN",
+  "stored_semantic_reverification_performed": false,
+  "utc": "2026-09-05T16:55:29.029831+00:00"
+}
