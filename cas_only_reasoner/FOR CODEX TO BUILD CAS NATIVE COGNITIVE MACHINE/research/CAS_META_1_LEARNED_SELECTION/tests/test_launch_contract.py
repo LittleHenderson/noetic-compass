@@ -246,6 +246,46 @@ def test_task_budget_stops_after_fifty_two_dollar_reservations(tmp_path):
     assert ledger.read_bytes() == before
 
 
+def test_transient_atomic_replace_permission_error_retries_under_same_lock(tmp_path,monkeypatch):
+    ledger = tmp_path/"ledger.json"
+    original_replace = launch.os.replace
+    attempts = []
+    def transient(source,target):
+        assert ledger.with_suffix(".json.lock").exists()
+        attempts.append((source,target))
+        if len(attempts) < 3: raise PermissionError("temporary Windows file lock")
+        return original_replace(source,target)
+    monkeypatch.setattr(launch.os,"replace",transient)
+    result = launch.reserve_budget(ledger,"cas-meta1-transient",SOURCE,"f"*64,PLAN)
+    assert len(attempts) == 3
+    assert all(item == attempts[0] for item in attempts)
+    assert result["total_reserved_usd"] == "2"
+    assert len(json.loads(ledger.read_text())["reservations"]) == 1
+    assert not ledger.with_suffix(".json.lock").exists()
+
+
+def test_persistent_atomic_replace_permission_error_fails_closed_after_two_seconds(tmp_path,monkeypatch):
+    ledger = tmp_path/"ledger.json"
+    launch.reserve_budget(ledger,"cas-meta1-existing",SOURCE,"f"*64,PLAN)
+    before = ledger.read_bytes()
+    elapsed,attempts = [0.0],[]
+    def blocked(source,target):
+        assert ledger.with_suffix(".json.lock").exists()
+        attempts.append((source,target))
+        raise PermissionError("persistent Windows file lock")
+    def advance(seconds): elapsed[0] += seconds
+    monkeypatch.setattr(launch.os,"replace",blocked)
+    monkeypatch.setattr(launch.time,"monotonic",lambda:elapsed[0])
+    monkeypatch.setattr(launch.time,"sleep",advance)
+    with pytest.raises(PermissionError,match="persistent Windows file lock"):
+        launch.reserve_budget(ledger,"cas-meta1-blocked",SOURCE,"f"*64,PLAN)
+    assert elapsed[0] == pytest.approx(2.0)
+    assert 2 <= len(attempts) <= 42
+    assert ledger.read_bytes() == before
+    assert not ledger.with_suffix(".json.lock").exists()
+    assert list(tmp_path.glob(".budget-*.tmp")) == []
+
+
 def test_budget_lock_refuses_concurrent_or_crashed_owner(tmp_path):
     ledger = tmp_path/"ledger.json"
     lock = ledger.with_suffix(".json.lock"); lock.write_text("existing lock")

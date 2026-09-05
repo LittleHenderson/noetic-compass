@@ -116,6 +116,20 @@ def validate_approval(cap: str | None, plan: dict) -> None:
         raise LaunchRefused("UNREGISTERED_RESOURCE_PLAN")
 
 
+def replace_budget_ledger(temporary: Path, ledger_path: Path) -> None:
+    """Retry only transient local Windows replacement locks, for at most two seconds."""
+    deadline = time.monotonic() + 2.0
+    while True:
+        try:
+            os.replace(temporary,ledger_path)
+            return
+        except PermissionError:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise
+            time.sleep(min(0.05,remaining))
+
+
 def reserve_budget(ledger_path: Path, job: str, source_sha: str, archive_sha: str, plan: dict) -> dict:
     """Exclusive, atomic $2 reservation; never auto-refund an attempted job."""
     validate_approval("100.00",plan)
@@ -152,7 +166,8 @@ def reserve_budget(ledger_path: Path, job: str, source_sha: str, archive_sha: st
             with tempfile.NamedTemporaryFile(mode="w",encoding="utf-8",dir=ledger_path.parent,prefix=".budget-",suffix=".tmp",delete=False) as stream:
                 temporary = Path(stream.name)
                 json.dump(ledger,stream,indent=2); stream.flush(); os.fsync(stream.fileno())
-            os.replace(temporary,ledger_path)
+            # The same exclusive ledger lock remains held throughout local retries.
+            replace_budget_ledger(temporary,ledger_path)
             temporary = None
             return {"reservation":reservation,"ledger_path":str(ledger_path),"total_reserved_usd":str(total),"remaining_unreserved_usd":str(Decimal(100)-total)}
     finally:
