@@ -1,0 +1,139 @@
+{
+  "schema": "cas-meta2-independent-readonly-closure/1",
+  "job": "cas-meta2-20260905214620-cfdbb893",
+  "source_sha": "410bce98307a5644db51928459b73391c7066b72",
+  "archive_sha256": "11311cf8451a95014b162e7b3b65e6854cf5eb72a61532e4c04168f59520bc5f",
+  "region": "us-west-2",
+  "account": "807562639912",
+  "started_utc": "2026-09-05T22:38:43.435677+00:00",
+  "status": "CAS_META_2_LEARNING_V2_CLEANUP_STILL_PENDING",
+  "original_launch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_learning_v2_001\\launch_receipt.json",
+  "original_launch_receipt_sha256_before": "ac4cca833790eef3aa6ce524aa64acf73ed261b4837448db8185885e6e45a082",
+  "local_artifact_sha256": "0d1b13aa711685cc488bdfdb981d8682d3d1b02b8e67530a3742add44dd13e93",
+  "artifact_bytes": 59648802,
+  "ledger_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "ledger_sha256": "1e3a3d8ca454ea0f5dbf210bc3739f524a777ab92817a075c68d19780a6a5262",
+  "budget": {
+    "cap_usd": "400.00",
+    "reserved_usd": "25.00",
+    "remaining_unreserved_usd": "375.00",
+    "this_job_reserved_usd": "7.00",
+    "refunds": 0,
+    "history_checked": true
+  },
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_learning_v2_001_cleanup_verification\\verify_readonly_closure.py",
+    "--observation",
+    "1"
+  ],
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "provider_mutations": 0,
+  "budget_mutations": 0,
+  "original_receipt_mutations": 0,
+  "neural_execution_performed": false,
+  "checks": {
+    "exact_instance_terminated_or_absent": false,
+    "no_nonterminated_job_instances": false,
+    "no_job_volumes": false,
+    "exact_volume_absent:vol-0721c2e1bc28afc5c": false,
+    "security_group_absent": false,
+    "profile_absent": false,
+    "worker_role_absent": false,
+    "timer_role_absent": false,
+    "schedule_absent": false,
+    "retained_bucket_job_owned": true,
+    "exactly_three_results_retained": false,
+    "result_bytes_below_1gib": true,
+    "seven_day_expiration": true,
+    "incomplete_upload_cleanup": true,
+    "public_access_blocked": true,
+    "default_encryption": true,
+    "remote_artifact_size_and_encryption": true,
+    "remote_completion_matches_download": true,
+    "launcher_confirmed_final_cleanup": false,
+    "ledger_unchanged": true
+  },
+  "raw_provider_calls": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_learning_v2_001_cleanup_verification\\provider_calls_01.jsonl",
+  "evidence_boundary": "Point-in-time provider cleanup and retention observation, not an AWS invoice or provider-enforced spending cap. The active launcher alone owns cleanup. No private evaluation contents are opened; local archive is hashed as opaque bytes.",
+  "instance_state": "shutting-down",
+  "provider_launch_time": "2026-09-05 21:46:35+00:00",
+  "observed_owned_volume_ids": [
+    "vol-0721c2e1bc28afc5c"
+  ],
+  "retained_objects": [
+    {
+      "Key": "input/payload.zip",
+      "LastModified": "2026-09-05 21:46:25+00:00",
+      "ETag": "\"8e4016717e2ecfc8e08ed2dccbd19c2b\"",
+      "ChecksumAlgorithm": [
+        "CRC32"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 3897251,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "input/permit.json",
+      "LastModified": "2026-09-05 21:46:37+00:00",
+      "ETag": "\"f01af0ebdbf1b0041b4c347035f1d69d\"",
+      "ChecksumAlgorithm": [
+        "CRC32"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 212,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "input/remote.py",
+      "LastModified": "2026-09-05 21:46:25+00:00",
+      "ETag": "\"d21eb4c2af04ab6ee030001904896dc7\"",
+      "ChecksumAlgorithm": [
+        "CRC32"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 83961,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "results/artifacts.zip",
+      "LastModified": "2026-09-05 22:35:05+00:00",
+      "ETag": "\"3d586b5699a5f83419ef1e4f3c57b06d-8\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 59648802,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "results/bootstrap.log",
+      "LastModified": "2026-09-05 22:35:07+00:00",
+      "ETag": "\"254c5bff12dae26e9b7578781bb28180\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 26554,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "results/complete.json",
+      "LastModified": "2026-09-05 22:35:06+00:00",
+      "ETag": "\"47e5878bff91de70f8b71fbcda25be2d\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 467,
+      "StorageClass": "STANDARD"
+    }
+  ],
+  "original_launch_receipt_sha256_after": "ac4cca833790eef3aa6ce524aa64acf73ed261b4837448db8185885e6e45a082",
+  "active_launcher_updated_its_receipt_during_observation": false,
+  "cost_estimate_from_launcher": null,
+  "finished_utc": "2026-09-05T22:38:48.493505+00:00",
+  "helper_sha256": "dad85a0cb1ad32cca350a4e981416b91c33328fc3b0864c3784dab9bc397d57b",
+  "raw_provider_calls_sha256": "4f755c54a0a68ebacf400d67c9bf671adf4012546c93b8a078d5ad45aeab806e"
+}

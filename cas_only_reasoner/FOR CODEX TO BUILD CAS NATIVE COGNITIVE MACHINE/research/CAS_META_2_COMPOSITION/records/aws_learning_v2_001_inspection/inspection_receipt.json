@@ -1,0 +1,455 @@
+{
+  "archive_safety_and_all_included_bytes_checked": true,
+  "audit_code_sha256": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\features_v2.py": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\selection_v2.py": "27a2b183d6c6e8d0a407156e13cac21c3d10d8e7917bba289824255c2d9a3816",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\experiment_profiles.py": "53008bfcf10dc10b53f531264cd0e1c6b283a30190a24787d0e2e6720c4c9dc5",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\inspect_cloud_packet.py": "fac0a9178c8d1b4d2165546f926a5ee730513c044e9e7b72131a3082575420ce",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\inspect_cloud_packet_v2.py": "262e213eaf8ee392f1c75730357500c5e93f358d1243ad2421ea4f8b6f06b7b2"
+  },
+  "boundary": "V2 byte bindings, lossless public-text round trips and recorded validation/result recount only. Native stored-record semantic rechecking remains a separate gate. No CAS advantage, general reasoning, complete CNCM or hardware claim.",
+  "checkpoint_loading_performed": false,
+  "checks": {
+    "command_binding": {
+      "entrypoint": "cas_meta2.campaign_v2",
+      "max_wall_seconds": 6600,
+      "smoke_only": false
+    },
+    "dataset_v2": {
+      "boundary": "Pure curriculum construction only. Same unchanged A\u2192B\u2192C native topology, IR and codec. Depth includes entry. Native task/output correctness still requires AWS evaluation after all predictions seal.",
+      "counts": {
+        "test": 72,
+        "train": 768,
+        "validation": 48
+      },
+      "deeper_pairs_preserve_native_work": true,
+      "duplicate_exceptions": {
+        "test_graph_reuse": "Only same_depth/wording_shift within one triplet.",
+        "test_input_reuse": "Only the three members of one matched triplet."
+      },
+      "evaluation_group_counts": {
+        "deeper_calls": 24,
+        "same_depth": 24,
+        "wording_shift": 24
+      },
+      "every_procedure_has_native_run": true,
+      "exclusions": {
+        "additional_graph_count": 0,
+        "additional_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "count": 376,
+        "legacy_constructor_seed": 20260906,
+        "legacy_graph_count": 376,
+        "sha256": "4df646291bbcb22e026f3c05d5c7a3b7b431cafff79a306321e74200afdcf88b"
+      },
+      "graph_sets_disjoint_across_splits": true,
+      "input_instances_disjoint_across_splits": true,
+      "max_action_tokens": 256,
+      "max_expanded_runs": 15,
+      "missing_training_sentence_primitives": [],
+      "native_outcomes_checked": false,
+      "positive_target_token_coverage": {
+        "missing_test_tokens": [],
+        "missing_validation_tokens": [],
+        "test_tokens_covered": true,
+        "training_counts": {
+          "A": 3668,
+          "ALLOW": 2111,
+          "B": 4565,
+          "BIND0": 256,
+          "BIND1": 256,
+          "BIND2": 256,
+          "C": 4524,
+          "CALL": 1487,
+          "ENDALLOW": 2111,
+          "ENDPROC": 2111,
+          "PROC": 2111,
+          "RETURN": 2111,
+          "RUN": 6424,
+          "[BOS]": 768,
+          "[EOS]": 768,
+          "arg": 4071,
+          "main": 768,
+          "p0": 187,
+          "p1": 178,
+          "p10": 171,
+          "p11": 168,
+          "p12": 208,
+          "p13": 179,
+          "p14": 145,
+          "p15": 167,
+          "p2": 172,
+          "p3": 198,
+          "p4": 191,
+          "p5": 189,
+          "p6": 164,
+          "p7": 158,
+          "p8": 166,
+          "p9": 189,
+          "v0": 4914,
+          "v1": 3666,
+          "v2": 2504,
+          "v3": 1549,
+          "v4": 683,
+          "v5": 360,
+          "v6": 125,
+          "v7": 45,
+          "v8": 16
+        },
+        "validation_tokens_covered": true
+      },
+      "schema": "cas-meta2-dataset-manifest/2",
+      "seed": 20260917,
+      "sha256": {
+        "test_private.json": "c0e8f2c7a6562f031810bafdfe22e36131eb30a336ec3fc3923c44bd2c0d5cb3",
+        "test_public.json": "86f8470d4c3481dcc543334735322e470805eb59fad0627a83f16c4ff6f35943",
+        "train.json": "b7ed542d94073827d4492292a3c2ca04796ffc5afcf8a968e6548f26cf687f05",
+        "validation.json": "dcaa5dd5d48011988eb1786ca354b7f836c199b61bdd4e6495ce903645d3c0ba"
+      },
+      "splits": {
+        "test": {
+          "count": 72,
+          "depth_counts": {
+            "3": 48,
+            "4": 24
+          },
+          "evaluation_groups": {
+            "deeper_calls": 24,
+            "same_depth": 24,
+            "wording_shift": 24
+          },
+          "max_action_tokens": 111,
+          "max_expanded_runs": 14,
+          "max_public_characters": 1082,
+          "sha256": "3f8cf975e8076a8e96294b92eba958e7fd34d0918f24e4990b1ea5c40bcdb7bb"
+        },
+        "train": {
+          "binding_counts": [
+            256,
+            256,
+            256
+          ],
+          "count": 768,
+          "depth_counts": {
+            "1": 192,
+            "2": 288,
+            "3": 288
+          },
+          "evaluation_groups": {
+            "training": 768
+          },
+          "max_action_tokens": 115,
+          "max_expanded_runs": 15,
+          "max_public_characters": 1084,
+          "sha256": "4b4bedd6ad127ad239c932effbb46585e3235d6040fe99c771a8583b40ecf5e2"
+        },
+        "validation": {
+          "count": 48,
+          "depth_counts": {
+            "1": 16,
+            "2": 16,
+            "3": 16
+          },
+          "evaluation_groups": {
+            "validation": 48
+          },
+          "max_action_tokens": 107,
+          "max_expanded_runs": 14,
+          "max_public_characters": 1035,
+          "sha256": "8c051063aedf6546cae0dc919bf1d0a97e1d907b9e7f390210da65a00df3ad39"
+        }
+      },
+      "training_coverage": {
+        "calls_from_child_procedures": 498,
+        "earlier_value_inputs": 4265,
+        "earlier_value_returns": 1182,
+        "instructions": {
+          "CALL": 1487,
+          "RETURN": 2111,
+          "RUN": 6424
+        },
+        "procedure_call_targets": {
+          "p0": 103,
+          "p1": 90,
+          "p10": 87,
+          "p11": 86,
+          "p12": 117,
+          "p13": 92,
+          "p14": 73,
+          "p15": 85,
+          "p2": 90,
+          "p3": 102,
+          "p4": 107,
+          "p5": 98,
+          "p6": 85,
+          "p7": 80,
+          "p8": 93,
+          "p9": 99
+        },
+        "procedure_declarations": {
+          "main": 768,
+          "p0": 84,
+          "p1": 88,
+          "p10": 84,
+          "p11": 82,
+          "p12": 91,
+          "p13": 87,
+          "p14": 72,
+          "p15": 82,
+          "p2": 82,
+          "p3": 96,
+          "p4": 84,
+          "p5": 91,
+          "p6": 79,
+          "p7": 78,
+          "p8": 73,
+          "p9": 90
+        },
+        "programs_with_child_calls": 288,
+        "repeated_callee_uses": 144,
+        "sentence_primitives": {
+          "CALL": {
+            "0": 498,
+            "1": 497,
+            "2": 492
+          },
+          "RETURN": {
+            "0": 695,
+            "1": 716,
+            "2": 700
+          },
+          "RUN": {
+            "0": 2155,
+            "1": 2152,
+            "2": 2117
+          },
+          "declaration": {
+            "0": 698,
+            "1": 717,
+            "2": 696
+          },
+          "start": {
+            "0": 261,
+            "1": 255,
+            "2": 252
+          }
+        }
+      },
+      "training_or_neural_execution_performed": false,
+      "triplets": 24,
+      "wording_partitions": {
+        "rule": "Sum of four existing sentence-family IDs modulo 3.",
+        "test_wording_shift": 1,
+        "train_and_same_depth": 0,
+        "validation": 2
+      }
+    },
+    "environment": {
+      "cuda": "12.8",
+      "gpu": "NVIDIA RTX PRO 4500 Blackwell Server Edition",
+      "torch": "2.11.0+cu128"
+    },
+    "full_evaluation": {
+      "arm_verdicts": 360,
+      "cases": 72,
+      "checkpoint_contents_loaded": false,
+      "checkpoint_sha256": {
+        "candidate_cas_best.pt": "0b23d9bf88b70a0c49e64028486f49f087d3dea461345caef00332fb2dae82a4",
+        "candidate_cas_initial.pt": "224753f5aebb7439b827e613c10564bfd51c39d24de5b571a7bb042b2c6df664",
+        "candidate_cas_last.pt": "a916fa7a2452952fe0d0e92e52734d39d702008e777147ec162cc7d0d6ffa138",
+        "candidate_generic_best.pt": "3b49e1d594f7045ccf9c426defb6aaff7c1cc9acd091a21159d103ac7e56c2d4",
+        "candidate_generic_initial.pt": "ef9fd32e9e32d2344a47663da6767fe0c05f9cf08cabccd4b0c56170139efb76",
+        "candidate_generic_last.pt": "c8b04b439cbce81e11422f2cb31dd6a434c45721227e0242725e0872301b80bd"
+      },
+      "completed_epochs": 100,
+      "evaluation_groups": {
+        "deeper_calls": 24,
+        "same_depth": 24,
+        "wording_shift": 24
+      },
+      "learning_v2": {
+        "checkpoint_contents_loaded": false,
+        "checkpoint_schema_boundary": "Declared JSON format and source-bound writer checked; binary checkpoint payloads were not parsed.",
+        "checkpoint_sha256": {
+          "candidate_cas_best.pt": "0b23d9bf88b70a0c49e64028486f49f087d3dea461345caef00332fb2dae82a4",
+          "candidate_cas_initial.pt": "224753f5aebb7439b827e613c10564bfd51c39d24de5b571a7bb042b2c6df664",
+          "candidate_cas_last.pt": "a916fa7a2452952fe0d0e92e52734d39d702008e777147ec162cc7d0d6ffa138",
+          "candidate_generic_best.pt": "3b49e1d594f7045ccf9c426defb6aaff7c1cc9acd091a21159d103ac7e56c2d4",
+          "candidate_generic_initial.pt": "ef9fd32e9e32d2344a47663da6767fe0c05f9cf08cabccd4b0c56170139efb76",
+          "candidate_generic_last.pt": "c8b04b439cbce81e11422f2cb31dd6a434c45721227e0242725e0872301b80bd"
+        },
+        "completed_epochs": 100,
+        "eligible_epochs": [
+          1,
+          5,
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          65,
+          70,
+          75,
+          80,
+          85,
+          90,
+          95,
+          100
+        ],
+        "public_text_round_trips": 888,
+        "selected_epochs": {
+          "cas": 40,
+          "generic": 60
+        },
+        "validation_examples_recounted_per_generation": 48
+      },
+      "metrics": {
+        "cas_trained": {
+          "actual_output_correct": 0,
+          "binding_correct": 3,
+          "dependency_correct": 0,
+          "model_rejections": 69,
+          "native_runs": 36,
+          "procedure_correct": 0,
+          "task_accuracy": 0.0,
+          "task_correct": 0,
+          "total": 72,
+          "trace_valid": 3
+        },
+        "cas_untrained": {
+          "actual_output_correct": 0,
+          "binding_correct": 0,
+          "dependency_correct": 0,
+          "model_rejections": 72,
+          "native_runs": 0,
+          "procedure_correct": 0,
+          "task_accuracy": 0.0,
+          "task_correct": 0,
+          "total": 72,
+          "trace_valid": 0
+        },
+        "generic_trained": {
+          "actual_output_correct": 0,
+          "binding_correct": 7,
+          "dependency_correct": 0,
+          "model_rejections": 65,
+          "native_runs": 72,
+          "procedure_correct": 0,
+          "task_accuracy": 0.0,
+          "task_correct": 0,
+          "total": 72,
+          "trace_valid": 7
+        },
+        "generic_untrained": {
+          "actual_output_correct": 0,
+          "binding_correct": 0,
+          "dependency_correct": 0,
+          "model_rejections": 72,
+          "native_runs": 0,
+          "procedure_correct": 0,
+          "task_accuracy": 0.0,
+          "task_correct": 0,
+          "total": 72,
+          "trace_valid": 0
+        },
+        "rule": {
+          "actual_output_correct": 72,
+          "binding_correct": 72,
+          "dependency_correct": 72,
+          "model_rejections": 0,
+          "native_runs": 789,
+          "procedure_correct": 72,
+          "task_accuracy": 1.0,
+          "task_correct": 72,
+          "total": 72,
+          "trace_valid": 72
+        }
+      }
+    },
+    "gpu_contract": {
+      "passed": 4,
+      "tests": [
+        "test_gpu_authored_execution_matches_independent_reference[0]",
+        "test_gpu_authored_execution_matches_independent_reference[1]",
+        "test_gpu_authored_execution_matches_independent_reference[2]",
+        "test_gpu_wrong_binding_and_wrong_procedure_are_wrong_despite_valid_traces"
+      ]
+    },
+    "gpu_policy": {
+      "passed": 6,
+      "tests": [
+        "test_both_generators_have_gradients_and_matched_active_parameters",
+        "test_cuda_guard_precedes_model_construction",
+        "test_decoder_cannot_see_future_target_tokens",
+        "test_incomplete_generation_is_rejected_without_gold_repair",
+        "test_preflight_rejects_missing_authorization_before_model_construction",
+        "test_preflight_uses_lossless_registered_geometry_and_releases_memory"
+      ]
+    },
+    "smoke": {
+      "cases": 3,
+      "fixtures": [
+        "named_earlier_value",
+        "nested_depth",
+        "training_anchor"
+      ]
+    },
+    "source_binding": {
+      "experiment": {
+        "entrypoint": "cas_meta2.campaign_v2",
+        "profile": "learning_v2",
+        "spec_path": "research/CAS_META_2_COMPOSITION/EXPERIMENT_V2.json",
+        "spec_sha256": "173fa1b30982186c10d1032a7f839d13f1c4eca4c7d50862aac827c95e67f454"
+      },
+      "protected_files": 316,
+      "source_files_bound": 18,
+      "source_sha": "410bce98307a5644db51928459b73391c7066b72"
+    }
+  },
+  "collection": {
+    "archive_sha256": "11311cf8451a95014b162e7b3b65e6854cf5eb72a61532e4c04168f59520bc5f",
+    "included_full_file_count": 2256,
+    "omitted_full_file_count": 0,
+    "original_file_count": 2256,
+    "original_file_index_sha256": "c65c4e7c2e5eeae27c7cfd859773d34de4b05307ad27fbb497628786aaddf46c",
+    "partial_evidence": false,
+    "returncode": 0,
+    "smoke_only": false
+  },
+  "completed_run_evidence_verified": false,
+  "compressed_bytes": 59648802,
+  "expanded_bytes": 562076257,
+  "experiment": {
+    "entrypoint": "cas_meta2.campaign_v2",
+    "profile": "learning_v2",
+    "spec_path": "research/CAS_META_2_COMPOSITION/EXPERIMENT_V2.json",
+    "spec_sha256": "173fa1b30982186c10d1032a7f839d13f1c4eca4c7d50862aac827c95e67f454"
+  },
+  "extraction": {
+    "all_member_bytes_verified_after_write": true,
+    "files_verified": 2257,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_learning_v2_001_extracted"
+  },
+  "full_member_index": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_learning_v2_001_inspection\\full_member_index.json",
+  "full_member_index_sha256": "fa95375d180d645dc829bd558cd3672e7bed77627bae9a112de161252a39fc0e",
+  "issues": [
+    "gpu_preflight_v2:V2_PREFLIGHT_MEMORY_CLEANUP_UNCONFIRMED"
+  ],
+  "job": "cas-meta2-20260905214620-cfdbb893",
+  "member_files": 2257,
+  "neural_execution_performed": false,
+  "original_full_index_verified": true,
+  "packet": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_learning_v2_001\\cloud_artifacts.zip",
+  "packet_sha256": "0d1b13aa711685cc488bdfdb981d8682d3d1b02b8e67530a3742add44dd13e93",
+  "schema": "cas-meta2-packet-inspection/2",
+  "source_sha": "410bce98307a5644db51928459b73391c7066b72",
+  "status": "CAS_META_2_V2_PACKET_EVIDENCE_MISMATCH",
+  "stored_semantic_reverification_performed": false,
+  "utc": "2026-09-05T22:37:47.430698+00:00"
+}
