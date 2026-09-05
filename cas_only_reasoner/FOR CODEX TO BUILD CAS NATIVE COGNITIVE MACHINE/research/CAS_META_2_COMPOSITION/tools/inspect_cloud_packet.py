@@ -173,7 +173,12 @@ def _collection(packet, job, source_sha, archive_sha):
             "COLLECTION_FILE_COUNTS_DISAGREE")
     actual = [row for row in packet.inventory.values()
               if row["path"] != COLLECTION and not row["path"].startswith("failure_log_tails/")]
-    actual.sort(key=lambda row: row["path"])
+    # The frozen AWS collector sorts Linux pathlib.Path objects: path
+    # components, not the whole slash-separated string. For example the
+    # campaign/ directory sorts before campaign.log. Reproduce that exact
+    # ordering on every audit host, including Windows, before checking ALL
+    # indexed bytes and the recorded full-index digest.
+    actual.sort(key=lambda row: PurePosixPath(row["path"]))
     require(len(actual) == record["included_full_file_count"], "INCLUDED_FILE_COUNT_MISMATCH")
     entries = record.get("index_entries")
     require(type(entries) is list and len(entries) == min(1000, record["original_file_count"]),

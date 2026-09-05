@@ -1,0 +1,151 @@
+{
+  "archive_safety_and_all_included_bytes_checked": true,
+  "boundary": "Byte bindings and recorded-result recount only. Native stored-record semantic rechecking remains a separate gate. No CAS advantage, general reasoning, complete CNCM or hardware claim.",
+  "checkpoint_loading_performed": false,
+  "checks": {
+    "environment": {
+      "cuda": "12.8",
+      "gpu": "NVIDIA RTX PRO 4500 Blackwell Server Edition",
+      "torch": "2.11.0+cu128"
+    },
+    "full_evaluation": {
+      "arm_verdicts": 360,
+      "cases": 72,
+      "checkpoint_contents_loaded": false,
+      "checkpoint_sha256": {
+        "candidate_cas_best.pt": "795b9dfb896332e53f75eca2e95c9884545a9032fdeda421b01444a99d4f1e50",
+        "candidate_cas_initial.pt": "ba093e588c8c73337772a82c3a1b0fb0531ed947e10561d71e3f18777e30140c",
+        "candidate_cas_last.pt": "4d669e334a1a518c25507a4ab4d8df5f0f4b277c063816297a347c88d101bdfe",
+        "candidate_generic_best.pt": "2a0f90ff3638f63d1c3b74a574f65e5fc85387d2cd0890a29b2c1a398e5f1b74",
+        "candidate_generic_initial.pt": "c9f2b9363b3c2e49df4aa431015ab01455d1f8a13f6a3d7aa6dcbfdd85a64dcb",
+        "candidate_generic_last.pt": "94e0825aabec50d1dfeaafd299ce10d7e95fe68a791d00053058673c0843fd83"
+      },
+      "completed_epochs": 200,
+      "metrics": {
+        "cas_trained": {
+          "actual_output_correct": 0,
+          "binding_correct": 9,
+          "dependency_correct": 0,
+          "model_rejections": 44,
+          "native_runs": 283,
+          "procedure_correct": 0,
+          "task_accuracy": 0.0,
+          "task_correct": 0,
+          "total": 72,
+          "trace_valid": 28
+        },
+        "cas_untrained": {
+          "actual_output_correct": 0,
+          "binding_correct": 0,
+          "dependency_correct": 0,
+          "model_rejections": 72,
+          "native_runs": 0,
+          "procedure_correct": 0,
+          "task_accuracy": 0.0,
+          "task_correct": 0,
+          "total": 72,
+          "trace_valid": 0
+        },
+        "generic_trained": {
+          "actual_output_correct": 0,
+          "binding_correct": 14,
+          "dependency_correct": 0,
+          "model_rejections": 37,
+          "native_runs": 296,
+          "procedure_correct": 0,
+          "task_accuracy": 0.0,
+          "task_correct": 0,
+          "total": 72,
+          "trace_valid": 35
+        },
+        "generic_untrained": {
+          "actual_output_correct": 0,
+          "binding_correct": 0,
+          "dependency_correct": 0,
+          "model_rejections": 72,
+          "native_runs": 0,
+          "procedure_correct": 0,
+          "task_accuracy": 0.0,
+          "task_correct": 0,
+          "total": 72,
+          "trace_valid": 0
+        },
+        "rule": {
+          "actual_output_correct": 72,
+          "binding_correct": 72,
+          "dependency_correct": 72,
+          "model_rejections": 0,
+          "native_runs": 628,
+          "procedure_correct": 72,
+          "task_accuracy": 1.0,
+          "task_correct": 72,
+          "total": 72,
+          "trace_valid": 72
+        }
+      }
+    },
+    "gpu_contract": {
+      "passed": 4,
+      "tests": [
+        "test_gpu_authored_execution_matches_independent_reference[0]",
+        "test_gpu_authored_execution_matches_independent_reference[1]",
+        "test_gpu_authored_execution_matches_independent_reference[2]",
+        "test_gpu_wrong_binding_and_wrong_procedure_are_wrong_despite_valid_traces"
+      ]
+    },
+    "gpu_policy": {
+      "passed": 4,
+      "tests": [
+        "test_both_generators_have_gradients_and_matched_active_parameters",
+        "test_cuda_guard_precedes_model_construction",
+        "test_decoder_cannot_see_future_target_tokens",
+        "test_incomplete_generation_is_rejected_without_gold_repair"
+      ]
+    },
+    "smoke": {
+      "cases": 3,
+      "fixtures": [
+        "named_earlier_value",
+        "nested_depth",
+        "training_anchor"
+      ]
+    },
+    "source_binding": {
+      "protected_files": 316,
+      "source_files_bound": 11,
+      "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac"
+    }
+  },
+  "collection": {
+    "archive_sha256": "d648ab877d958b6729882a870c386f70d0e1c4d9ba24e614d719081d396c19bc",
+    "included_full_file_count": 2475,
+    "omitted_full_file_count": 0,
+    "original_file_count": 2475,
+    "original_file_index_sha256": "18023d6e2fec6f7a11dbb18631db50784e3d0e7da684f6a3f72ac531378935f5",
+    "partial_evidence": false,
+    "returncode": 0,
+    "smoke_only": false
+  },
+  "completed_run_evidence_verified": true,
+  "compressed_bytes": 62269330,
+  "expanded_bytes": 605159332,
+  "extraction": {
+    "all_member_bytes_verified_after_write": true,
+    "files_verified": 2476,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_extracted"
+  },
+  "full_member_index": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_inspection\\full_member_index.json",
+  "full_member_index_sha256": "8320c5983bd9db722b5e8be38ff08988fea24710fdfaa83f0e0092c010276fcd",
+  "issues": [],
+  "job": "cas-meta2-20260905170320-4a4c71e5",
+  "member_files": 2476,
+  "neural_execution_performed": false,
+  "original_full_index_verified": true,
+  "packet": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002\\cloud_artifacts.zip",
+  "packet_sha256": "e22412583114e50cbf9e60d8b22864bfb4ca76e6ccecedee7a0f72976ec37ae0",
+  "schema": "cas-meta2-packet-inspection/1",
+  "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+  "status": "CAS_META_2_PACKET_FULL_EVIDENCE_VERIFIED",
+  "stored_semantic_reverification_performed": false,
+  "utc": "2026-09-05T20:53:53.023485+00:00"
+}

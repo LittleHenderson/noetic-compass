@@ -2,7 +2,7 @@
 from copy import deepcopy
 import importlib.util
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import stat
 import sys
 import xml.etree.ElementTree as ET
@@ -224,7 +224,8 @@ def full_fixture():
 
 
 def pack(path, payload, job, *, omit=None, mutate_collection=None):
-    original = [{"path": name, "bytes": len(value), "sha256": inspector.sha(value)} for name, value in sorted(payload.items())]
+    original = [{"path": name, "bytes": len(value), "sha256": inspector.sha(value)}
+                for name, value in sorted(payload.items(), key=lambda item: PurePosixPath(item[0]))]
     selected = {name: value for name, value in payload.items() if name != omit}
     record = {**job, "partial_evidence": omit is not None, "original_file_count": len(payload),
               "included_full_file_count": len(selected), "omitted_full_file_count": len(payload) - len(selected),
@@ -329,6 +330,28 @@ def test_full_original_index_is_checked_beyond_prefix(work):
     job["returncode"] = 1
     with pytest.raises(inspector.PacketInvalid, match="COMPLETE_ORIGINAL_INDEX_DIGEST"):
         inspect(work, payload, manifest, job, mutate_collection=lambda record: record.update(original_file_index_sha256="0" * 64))
+
+
+def test_linux_collector_orders_path_components_before_filename_suffix(work):
+    payload, manifest, job = smoke_fixture()
+    payload["cloud_job/campaign.log"] = b"synthetic log beside campaign directory"
+    receipt = inspect(work, payload, manifest, job)
+    assert receipt["original_full_index_verified"]
+    assert receipt["status"] == "CAS_META_2_PACKET_SMOKE_EVIDENCE_VERIFIED"
+
+
+def test_whole_string_order_cannot_replace_frozen_linux_collector_order(work):
+    payload, manifest, job = smoke_fixture()
+    payload["cloud_job/campaign.log"] = b"synthetic ordering conflict"
+
+    def wrong_order(record):
+        rows = sorted(record["index_entries"], key=lambda row: row["path"])
+        record["index_entries"] = rows
+        record["original_file_index_sha256"] = inspector.sha(
+            b"".join(inspector.canonical(row) + b"\n" for row in rows))
+
+    with pytest.raises(inspector.PacketInvalid, match="ORIGINAL_INDEX_PREFIX_MISMATCH"):
+        inspect(work, payload, manifest, job, mutate_collection=wrong_order)
 
 
 @pytest.mark.parametrize("name", ["../outside", "/absolute", "x/../../a", "a\\b", "C:evil", "a//b",

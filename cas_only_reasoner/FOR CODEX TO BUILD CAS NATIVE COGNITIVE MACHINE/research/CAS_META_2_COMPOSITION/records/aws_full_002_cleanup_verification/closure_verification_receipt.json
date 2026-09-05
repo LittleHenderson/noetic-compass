@@ -1,0 +1,32 @@
+{
+  "schema": "cas-meta2-independent-readonly-closure/1",
+  "job": "cas-meta2-20260905170320-4a4c71e5",
+  "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+  "archive_sha256": "d648ab877d958b6729882a870c386f70d0e1c4d9ba24e614d719081d396c19bc",
+  "started_utc": "2026-09-05T20:53:39.888749+00:00",
+  "status": "CAS_META_2_FULL_002_CLEANUP_VERIFICATION_FAILED",
+  "original_launch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002\\launch_receipt.json",
+  "original_launch_receipt_sha256": "77575229beeabd8f22df3f219547ff4d11d55ca92c3b7db4e1d42c808229d219",
+  "local_artifact_sha256": "e22412583114e50cbf9e60d8b22864bfb4ca76e6ccecedee7a0f72976ec37ae0",
+  "artifact_bytes": 62269330,
+  "ledger_sha256": "c103d0da5a672690f451639d99b0199048f2b0bebe1f128673f7c44ae49a0ee8",
+  "budget": {
+    "cap_usd": "400.00",
+    "reserved_usd": "18.00",
+    "remaining_unreserved_usd": "382.00",
+    "this_job_reserved_usd": "7.00",
+    "refunds": 0
+  },
+  "provider_mutations": 0,
+  "original_receipt_mutations": 0,
+  "budget_mutations": 0,
+  "checks": {},
+  "raw_provider_calls": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_cleanup_verification\\provider_calls.jsonl",
+  "failure": {
+    "type": "IndexError",
+    "message": "list index out of range"
+  },
+  "finished_utc": "2026-09-05T20:53:41.758422+00:00",
+  "helper_sha256": "64409018f6fcd4f6d2f4a42a9ca8b7d19ebb13005cab50a5cf93fbbe5cd9d0b1",
+  "raw_provider_calls_sha256": "bcb8b0b3973053183de4c0f74113c050a469f21f43291e7ac77e40d787589302"
+}

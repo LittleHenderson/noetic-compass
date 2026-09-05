@@ -1,0 +1,97 @@
+{
+  "schema": "cas-meta2-independent-readonly-closure/1",
+  "job": "cas-meta2-20260905170320-4a4c71e5",
+  "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+  "archive_sha256": "d648ab877d958b6729882a870c386f70d0e1c4d9ba24e614d719081d396c19bc",
+  "started_utc": "2026-09-05T20:55:24.806260+00:00",
+  "status": "CAS_META_2_FULL_002_CLEANUP_INDEPENDENTLY_VERIFIED",
+  "original_launch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002\\launch_receipt.json",
+  "original_launch_receipt_sha256": "77575229beeabd8f22df3f219547ff4d11d55ca92c3b7db4e1d42c808229d219",
+  "local_artifact_sha256": "e22412583114e50cbf9e60d8b22864bfb4ca76e6ccecedee7a0f72976ec37ae0",
+  "artifact_bytes": 62269330,
+  "ledger_sha256": "c103d0da5a672690f451639d99b0199048f2b0bebe1f128673f7c44ae49a0ee8",
+  "budget": {
+    "cap_usd": "400.00",
+    "reserved_usd": "18.00",
+    "remaining_unreserved_usd": "382.00",
+    "this_job_reserved_usd": "7.00",
+    "refunds": 0
+  },
+  "provider_mutations": 0,
+  "original_receipt_mutations": 0,
+  "budget_mutations": 0,
+  "checks": {
+    "instance_terminated_or_absent": true,
+    "no_nonterminated_job_instances": true,
+    "volume_absent": true,
+    "no_tagged_volumes": true,
+    "security_group_absent": true,
+    "profile_absent": true,
+    "worker_role_absent": true,
+    "timer_role_absent": true,
+    "schedule_absent": true,
+    "bucket_job_owned": true,
+    "exactly_three_result_objects_retained": true,
+    "result_objects_below_1gib": true,
+    "seven_day_expiration": true,
+    "incomplete_upload_cleanup": true,
+    "public_access_blocked": true,
+    "bucket_default_encrypted": true,
+    "remote_artifact_size_matches_download": true,
+    "remote_artifact_encrypted": true,
+    "remote_completion_binds_local_artifact": true,
+    "original_launch_receipt_unchanged": true,
+    "budget_ledger_unchanged": true
+  },
+  "raw_provider_calls": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_cleanup_verification\\provider_calls_v2.jsonl",
+  "instance_state": "absent_from_exact_id_lookup",
+  "instance_evidence_boundary": "Original pinned launch receipt records confirmed termination; current independent exact-ID and job-tag lookups confirm no running or otherwise nonterminated owned instance. AWS may no longer retain the terminated instance record.",
+  "prior_checker_failure_preserved": {
+    "receipt": "closure_verification_receipt.json",
+    "reason": "First checker assumed AWS would retain a terminated instance record; actual successful exact-ID lookup returned Reservations=[]."
+  },
+  "retained_result_objects": [
+    {
+      "Key": "results/artifacts.zip",
+      "LastModified": "2026-09-05 17:42:17+00:00",
+      "ETag": "\"68ca2bd416522d3c555be3086ff1ba52-8\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 62269330,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "results/bootstrap.log",
+      "LastModified": "2026-09-05 17:42:19+00:00",
+      "ETag": "\"1e185d1ae1b7dfbb2efdde699157c658\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 26767,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "results/complete.json",
+      "LastModified": "2026-09-05 17:42:18+00:00",
+      "ETag": "\"c123eb14a1732c8261dc3930393ce251\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 236,
+      "StorageClass": "STANDARD"
+    }
+  ],
+  "cost_estimate_from_original_receipt": {
+    "instance_wall_clock_seconds_upper_observation": 2633.493427,
+    "compute_ebs_ipv4_usd_estimate": "1.853199078259259259259259259",
+    "excluded": "S3 requests and retention, transfer, taxes; not an AWS invoice"
+  },
+  "evidence_boundary": "Independent current provider cleanup and retention checks. Local artifact bytes rehashed; remote artifact size and completion digest checked without rereading private evaluation content. Cost remains an estimate, not an AWS invoice.",
+  "finished_utc": "2026-09-05T20:55:29.155903+00:00",
+  "helper_sha256": "082f1cbc24b3baec93f9d0426a2731682ba4383104c1a4a4e982eee789f3312c",
+  "raw_provider_calls_sha256": "aae019b262792ccd57eb17f08355eccd02b3b0f08c8eca739bc3c0c98da33f2f"
+}

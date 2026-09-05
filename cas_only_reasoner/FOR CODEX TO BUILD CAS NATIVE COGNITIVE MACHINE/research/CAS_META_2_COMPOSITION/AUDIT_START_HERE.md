@@ -10,6 +10,61 @@ The candidate is on branch `codex/cas-meta-2-composition` in the existing `meta1
 - META-1 evidence commit: `6a4524d5f21f77194b35d0830d2b16da8530b17d`.
 - Candidate source commit, archive hash, AWS job identity, raw outputs and cleanup receipt will be recorded per launch. Never substitute branch HEAD for a recorded launch SHA.
 
+## Verified full run: negative learning result
+
+The full run used source `b5f1718e63a2b5cf72b4b606d513d0524b9226ac` and AWS job
+`cas-meta2-20260905170320-4a4c71e5`. Both learned generators solved **0/72** test
+tasks, both untrained versions solved **0/72**, and the rule parser solved
+**72/72**. All 360 choices were kept in the denominator. No learned composition
+gain or CAS advantage is established.
+
+All 2,476 packet members were checked. The stored audit passed for 1,915 traces
+across 222 databases, the three preflights, 72 private reference executions and
+360 sealed choices. The separate post-run summary agrees. Stored replay is not
+an independent neural rerun. Repair was not exercised by this curriculum.
+
+Portable retained artifacts and receipts:
+
+- `records/aws_full_002_source/cas-meta2-b5f1718e-full.zip`: exact launch source
+  archive, SHA256 `d648ab877d958b6729882a870c386f70d0e1c4d9ba24e614d719081d396c19bc`.
+- `records/aws_full_002_source/cas-meta2-b5f1718e-full.receipt.json`: independently
+  built source manifest, including the frozen wheels and 316 protected files.
+- `records/aws_full_002/cloud_artifacts.zip`: exact downloaded evidence packet,
+  SHA256 `e22412583114e50cbf9e60d8b22864bfb4ca76e6ccecedee7a0f72976ec37ae0`.
+- `records/aws_full_002/launch_receipt.json`: provider commands/results, budget,
+  artifact binding, termination and cost estimate.
+- `records/aws_full_002_inspection/inspection_receipt.json`: complete packet check.
+- `records/aws_full_002_stored_audit/stored_audit_receipt.json`: stored semantic check.
+- `records/aws_full_002_learning_summary/learning_summary.json`: all-arm, paired,
+  depth, rejection, selected-checkpoint and compute comparisons.
+- `records/aws_full_002_cleanup_verification/closure_verification_receipt_v2.json`:
+  independent read-only resource closure. First-checker failure evidence remains
+  alongside it and is not substituted for the corrected receipt.
+
+The trained CAS checkpoint is `cloud_job/campaign/candidate_cas_best.pt` inside
+the evidence ZIP; the generic counterpart is `candidate_generic_best.pt`.
+Initial and final checkpoints for both models are retained too. Never load them
+on this laptop. The inspector can safely extract them without interpreting them.
+
+The post-run inspector needed one correction to reproduce Linux path-component
+sorting on Windows. The exact diagnosis and 38-test correction are documented in
+`records/AWS_FULL_002_INDEX_ORDER_CORRECTION.md`. No experiment bytes changed.
+
+Use the current audit tools, not the original b5f inspector with that known
+ordering defect, for documentary inspection. Reproduce the original experiment
+from its pinned source archive; do not substitute the newer audit-tool commit.
+
+From this package, with new output directories, the exact documentary audit is:
+
+```text
+python -B tools/inspect_cloud_packet.py --packet records/aws_full_002/cloud_artifacts.zip --sha256 e22412583114e50cbf9e60d8b22864bfb4ca76e6ccecedee7a0f72976ec37ae0 --source-sha b5f1718e63a2b5cf72b4b606d513d0524b9226ac --job cas-meta2-20260905170320-4a4c71e5 --source-manifest records/aws_full_002_source/cas-meta2-b5f1718e-full.receipt.json --source-archive-sha256 d648ab877d958b6729882a870c386f70d0e1c4d9ba24e614d719081d396c19bc --output records/third_party_inspection --extract records/third_party_extracted
+python -B tools/audit_stored_packet.py --inspection-receipt records/third_party_inspection/inspection_receipt.json --output records/third_party_stored_audit
+python -B tools/summarize_learning.py --inspection-receipt records/third_party_inspection/inspection_receipt.json --stored-audit-receipt records/third_party_stored_audit/stored_audit_receipt.json --launch-receipt records/aws_full_002/launch_receipt.json --output records/third_party_learning_summary
+```
+
+The tools refuse reused output directories. They check bytes and saved records,
+not live neural behavior. A new neural reproduction needs the capped AWS path.
+
 ## Safe local checks
 
 Run from this package with Python that has pytest and boto3 installed:

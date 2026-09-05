@@ -1,0 +1,608 @@
+{
+  "boundary": "Post-evaluation diagnosis, not held-out tuning. Counts establish information loss and distribution shifts; they do not establish that any one change is sufficient to fix task accuracy. Pre-tensor JSON feature uniqueness does not guarantee distinct downstream neural tensors. No checkpoint/model/tensor execution, native execution, restart experiment, or stored-native semantic audit is performed.",
+  "checkpoint_loading_performed": false,
+  "command": [
+    "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+    "tools/diagnose_saved_run.py",
+    "--inspection",
+    "records/aws_full_002_inspection/inspection_receipt.json",
+    "--extracted",
+    "records/aws_full_002_extracted",
+    "--output",
+    "records/aws_full_002_diagnosis_v2"
+  ],
+  "diagnostic_code_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\diagnose_saved_run.py",
+  "diagnostic_code_sha256": "5b0adc2f491340d3b61b538e71017f96a8649da64c81c7fba1c04351ee464367",
+  "extracted_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_extracted",
+  "git_object_check_run": false,
+  "hash_scope": "Six saved JSON inputs, inspection, index and two source files; not the whole packet",
+  "heldout_tuning_performed": false,
+  "input_paths": {
+    "cas_meta2/codec.py": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\codec.py",
+    "cas_meta2/curriculum.py": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\curriculum.py",
+    "dataset/test_private.json": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_extracted\\cloud_job\\campaign\\dataset\\test_private.json",
+    "dataset/test_public.json": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_extracted\\cloud_job\\campaign\\dataset\\test_public.json",
+    "dataset/train.json": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_extracted\\cloud_job\\campaign\\dataset\\train.json",
+    "dataset/validation.json": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_extracted\\cloud_job\\campaign\\dataset\\validation.json",
+    "index": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_inspection\\full_member_index.json",
+    "inspection": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_inspection\\inspection_receipt.json",
+    "predictions.jsonl": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_extracted\\cloud_job\\campaign\\predictions.jsonl",
+    "tokenizer.json": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_extracted\\cloud_job\\campaign\\tokenizer.json"
+  },
+  "input_sha256_after": {
+    "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "cas_meta2/curriculum.py": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384",
+    "dataset/test_private.json": "cf3332ba839274f98ea0a57fd7c7e58da095612eee6f279ae0a29e8af932b005",
+    "dataset/test_public.json": "b78924c0db001c296081e3b2e3595dd04d1f461bd50204a7fa69b8c56627012f",
+    "dataset/train.json": "d28287e60c1e242ba5ede09e039fddcdc35b7f0ae4c27bc70beef5b4220fe2e4",
+    "dataset/validation.json": "fe01ffdfa8ed5019b41eb61f356d5a3b824d279ae6e57438f22aff5b953290b3",
+    "index": "8320c5983bd9db722b5e8be38ff08988fea24710fdfaa83f0e0092c010276fcd",
+    "inspection": "a61289721cd93698b854bf0fd439aa1d3254860350af946b7f156b9de48b7300",
+    "predictions.jsonl": "3bee4cda8e6b3abc760ac0809674ee05f59d23922899b31ada2fd06987553f12",
+    "tokenizer.json": "59afd690567cbe743077cb537bf853c4442736c2dfb0fe6ccbb678d6bb1145b0"
+  },
+  "input_sha256_before": {
+    "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "cas_meta2/curriculum.py": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384",
+    "dataset/test_private.json": "cf3332ba839274f98ea0a57fd7c7e58da095612eee6f279ae0a29e8af932b005",
+    "dataset/test_public.json": "b78924c0db001c296081e3b2e3595dd04d1f461bd50204a7fa69b8c56627012f",
+    "dataset/train.json": "d28287e60c1e242ba5ede09e039fddcdc35b7f0ae4c27bc70beef5b4220fe2e4",
+    "dataset/validation.json": "fe01ffdfa8ed5019b41eb61f356d5a3b824d279ae6e57438f22aff5b953290b3",
+    "index": "8320c5983bd9db722b5e8be38ff08988fea24710fdfaa83f0e0092c010276fcd",
+    "inspection": "a61289721cd93698b854bf0fd439aa1d3254860350af946b7f156b9de48b7300",
+    "predictions.jsonl": "3bee4cda8e6b3abc760ac0809674ee05f59d23922899b31ada2fd06987553f12",
+    "tokenizer.json": "59afd690567cbe743077cb537bf853c4442736c2dfb0fe6ccbb678d6bb1145b0"
+  },
+  "inspected_inputs_unchanged": true,
+  "inspection_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_full_002_inspection\\inspection_receipt.json",
+  "native_execution_performed": false,
+  "neural_execution_performed": false,
+  "packet_sha256": "e22412583114e50cbf9e60d8b22864bfb4ca76e6ccecedee7a0f72976ec37ae0",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "predictions": {
+    "cas_trained": {
+      "action_length_range": [
+        51,
+        103
+      ],
+      "binding_equal_to_target": 10,
+      "cases": 72,
+      "native_admission_or_task_correctness_rechecked": false,
+      "nonmain_calls": 0,
+      "predicted_depths": {
+        "2": 30
+      },
+      "procedure_names": {
+        "main": 30,
+        "p0": 30,
+        "p1": 26,
+        "p2": 15
+      },
+      "program_exactly_equal_to_target": 0,
+      "saved_decoded_actions": 30,
+      "saved_decoder_rejections": {
+        "ACTION_TOKEN_UNEXPECTED:RETURN": 20,
+        "GENERATION_LENGTH_EXHAUSTED:NO_SILENT_TRUNCATION": 1,
+        "STEP_CALLEE_MISSING": 11,
+        "STEP_OUTPUT_NOT_FRESH": 10
+      }
+    },
+    "cas_untrained": {
+      "action_length_range": null,
+      "binding_equal_to_target": 0,
+      "cases": 72,
+      "native_admission_or_task_correctness_rechecked": false,
+      "nonmain_calls": 0,
+      "predicted_depths": {},
+      "procedure_names": {},
+      "program_exactly_equal_to_target": 0,
+      "saved_decoded_actions": 0,
+      "saved_decoder_rejections": {
+        "ACTION_BINDING_TOKEN_INVALID": 69,
+        "GENERATION_LENGTH_EXHAUSTED:NO_SILENT_TRUNCATION": 3
+      }
+    },
+    "generic_trained": {
+      "action_length_range": [
+        65,
+        99
+      ],
+      "binding_equal_to_target": 14,
+      "cases": 72,
+      "native_admission_or_task_correctness_rechecked": false,
+      "nonmain_calls": 0,
+      "predicted_depths": {
+        "2": 35
+      },
+      "procedure_names": {
+        "main": 35,
+        "p0": 35,
+        "p1": 35,
+        "p2": 14
+      },
+      "program_exactly_equal_to_target": 0,
+      "saved_decoded_actions": 35,
+      "saved_decoder_rejections": {
+        "ACTION_TOKEN_UNEXPECTED:RETURN": 21,
+        "PROCEDURE_DUPLICATE": 3,
+        "PROCEDURE_RETURN_UNBOUND": 3,
+        "STEP_CALLEE_MISSING": 9,
+        "STEP_OUTPUT_NOT_FRESH": 1
+      }
+    },
+    "generic_untrained": {
+      "action_length_range": null,
+      "binding_equal_to_target": 0,
+      "cases": 72,
+      "native_admission_or_task_correctness_rechecked": false,
+      "nonmain_calls": 0,
+      "predicted_depths": {},
+      "procedure_names": {},
+      "program_exactly_equal_to_target": 0,
+      "saved_decoded_actions": 0,
+      "saved_decoder_rejections": {
+        "ACTION_BINDING_TOKEN_INVALID": 56,
+        "GENERATION_LENGTH_EXHAUSTED:NO_SILENT_TRUNCATION": 16
+      }
+    },
+    "rule": {
+      "action_length_range": [
+        47,
+        187
+      ],
+      "binding_equal_to_target": 72,
+      "cases": 72,
+      "native_admission_or_task_correctness_rechecked": false,
+      "nonmain_calls": 109,
+      "predicted_depths": {
+        "2": 36,
+        "3": 36
+      },
+      "procedure_names": {
+        "main": 72,
+        "p0": 72,
+        "p1": 66,
+        "p2": 46,
+        "p3": 25,
+        "p4": 22,
+        "p5": 14,
+        "p6": 10,
+        "p7": 5,
+        "p8": 1
+      },
+      "program_exactly_equal_to_target": 72,
+      "saved_decoded_actions": 72,
+      "saved_decoder_rejections": {}
+    }
+  },
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "receipt_sha256": "9e188447cfe1b624ca61193667a94b42ff8d2f7f163e7147c2373288378ec596",
+  "report_sha256": "794737681f036a0a4eb9bfaabd9e863d85ab90093043f41f4166e9b14e96a660",
+  "rule_prior_knowledge": "Frozen parser explicitly recognizes all three wording families; neural vocabulary is fitted only on family 0",
+  "schema": "cas-meta2-saved-data-diagnosis/1",
+  "source_binding": "LITERAL_SHA256_PINS_FOR_FROZEN_SOURCE",
+  "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+  "splits": {
+    "test": {
+      "cases_with_multiple_unknown_structural_names": 22,
+      "cases_with_nonmain_calls": 36,
+      "cases_with_unknown": 72,
+      "cases_with_unknown_structural_names": 25,
+      "cases_with_unseen_target_tokens": 25,
+      "depth_counts": {
+        "2": 36,
+        "3": 36
+      },
+      "encoded_token_rows": 15926,
+      "equal_complete_pre_tensor_feature_data_groups": [],
+      "equal_encoded_problem_token_groups": [],
+      "examples": 72,
+      "input_length_max": 397,
+      "input_length_mean": 221.19444444444446,
+      "input_length_min": 112,
+      "lexical_tokens": 15350,
+      "neural_tensor_uniqueness_checked": false,
+      "nonmain_call_instructions": 109,
+      "procedure_count_histogram": {
+        "10": 1,
+        "2": 6,
+        "3": 20,
+        "4": 21,
+        "5": 3,
+        "6": 8,
+        "7": 4,
+        "8": 5,
+        "9": 4
+      },
+      "structural_collision_examples": [
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 2,
+          "task_id": "meta2-test-00027",
+          "unknown_names": [
+            "p3",
+            "p4"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 3,
+          "task_id": "meta2-test-00059",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5",
+            "p6",
+            "p7"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 4,
+          "task_id": "meta2-test-00037",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 6,
+          "task_id": "meta2-test-00003",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 7,
+          "task_id": "meta2-test-00001",
+          "unknown_names": [
+            "p3",
+            "p4"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 9,
+          "task_id": "meta2-test-00035",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5",
+            "p6"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 12,
+          "task_id": "meta2-test-00061",
+          "unknown_names": [
+            "p3"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 17,
+          "task_id": "meta2-test-00047",
+          "unknown_names": [
+            "p3"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 20,
+          "task_id": "meta2-test-00009",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5",
+            "p6",
+            "p7",
+            "p8"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 25,
+          "task_id": "meta2-test-00055",
+          "unknown_names": [
+            "p3",
+            "p4"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 28,
+          "task_id": "meta2-test-00015",
+          "unknown_names": [
+            "p3",
+            "p4"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 32,
+          "task_id": "meta2-test-00057",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5",
+            "p6"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 33,
+          "task_id": "meta2-test-00021",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5",
+            "p6",
+            "p7"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 40,
+          "task_id": "meta2-test-00013",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5",
+            "p6"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 46,
+          "task_id": "meta2-test-00019",
+          "unknown_names": [
+            "p3"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 49,
+          "task_id": "meta2-test-00031",
+          "unknown_names": [
+            "p3",
+            "p4"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 54,
+          "task_id": "meta2-test-00043",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 55,
+          "task_id": "meta2-test-00023",
+          "unknown_names": [
+            "p3",
+            "p4"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 56,
+          "task_id": "meta2-test-00053",
+          "unknown_names": [
+            "p3",
+            "p4"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 58,
+          "task_id": "meta2-test-00005",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 62,
+          "task_id": "meta2-test-00069",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5",
+            "p6"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 63,
+          "task_id": "meta2-test-00049",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5",
+            "p6",
+            "p7"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 65,
+          "task_id": "meta2-test-00051",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5",
+            "p6",
+            "p7"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 70,
+          "task_id": "meta2-test-00065",
+          "unknown_names": [
+            "p3",
+            "p4",
+            "p5",
+            "p6"
+          ]
+        },
+        {
+          "all_map_to_token_id": 1,
+          "case_index": 71,
+          "task_id": "meta2-test-00033",
+          "unknown_names": [
+            "p3",
+            "p4"
+          ]
+        }
+      ],
+      "target_length_max": 187,
+      "target_length_mean": 98.63888888888889,
+      "target_length_min": 47,
+      "target_token_count": 7102,
+      "targets_longer_than_max_training_target": 21,
+      "unknown_frequency": {
+        ":": 889,
+        "acting": 889,
+        "begin": 72,
+        "call": 261,
+        "compute": 889,
+        "for": 333,
+        "incoming": 333,
+        "inside": 889,
+        "is": 666,
+        "of": 333,
+        "p3": 129,
+        "p4": 96,
+        "p5": 62,
+        "p6": 46,
+        "p7": 20,
+        "p8": 4,
+        "result": 333,
+        "the": 333,
+        "value": 333,
+        "with": 72
+      },
+      "unknown_share_encoded_rows": 0.43840261208087405,
+      "unknown_structural_frequency": {
+        "p3": 129,
+        "p4": 96,
+        "p5": 62,
+        "p6": 46,
+        "p7": 20,
+        "p8": 4
+      },
+      "unknown_token_count": 6982,
+      "unseen_target_token_frequency": {
+        "p3": 50,
+        "p4": 44,
+        "p5": 28,
+        "p6": 20,
+        "p7": 10,
+        "p8": 2
+      }
+    },
+    "train": {
+      "cases_with_multiple_unknown_structural_names": 0,
+      "cases_with_nonmain_calls": 0,
+      "cases_with_unknown": 0,
+      "cases_with_unknown_structural_names": 0,
+      "cases_with_unseen_target_tokens": 0,
+      "depth_counts": {
+        "1": 128,
+        "2": 128
+      },
+      "encoded_token_rows": 38870,
+      "equal_complete_pre_tensor_feature_data_groups": [],
+      "equal_encoded_problem_token_groups": [],
+      "examples": 256,
+      "input_length_max": 259,
+      "input_length_mean": 151.8359375,
+      "input_length_min": 61,
+      "lexical_tokens": 36822,
+      "neural_tensor_uniqueness_checked": false,
+      "nonmain_call_instructions": 0,
+      "procedure_count_histogram": {
+        "1": 128,
+        "2": 31,
+        "3": 51,
+        "4": 46
+      },
+      "structural_collision_examples": [],
+      "target_length_max": 111,
+      "target_length_mean": 62.3359375,
+      "target_length_min": 25,
+      "target_token_count": 15958,
+      "targets_longer_than_max_training_target": 0,
+      "unknown_frequency": {},
+      "unknown_share_encoded_rows": 0.0,
+      "unknown_structural_frequency": {},
+      "unknown_token_count": 0,
+      "unseen_target_token_frequency": {}
+    },
+    "validation": {
+      "cases_with_multiple_unknown_structural_names": 0,
+      "cases_with_nonmain_calls": 0,
+      "cases_with_unknown": 48,
+      "cases_with_unknown_structural_names": 0,
+      "cases_with_unseen_target_tokens": 0,
+      "depth_counts": {
+        "1": 24,
+        "2": 24
+      },
+      "encoded_token_rows": 6603,
+      "equal_complete_pre_tensor_feature_data_groups": [],
+      "equal_encoded_problem_token_groups": [],
+      "examples": 48,
+      "input_length_max": 209,
+      "input_length_mean": 137.5625,
+      "input_length_min": 66,
+      "lexical_tokens": 6219,
+      "neural_tensor_uniqueness_checked": false,
+      "nonmain_call_instructions": 0,
+      "procedure_count_histogram": {
+        "1": 24,
+        "2": 2,
+        "3": 13,
+        "4": 9
+      },
+      "structural_collision_examples": [],
+      "target_length_max": 103,
+      "target_length_mean": 64.04166666666667,
+      "target_length_min": 29,
+      "target_token_count": 3074,
+      "targets_longer_than_max_training_target": 0,
+      "unknown_frequency": {
+        "from": 103,
+        "procedure": 261,
+        "produce": 475,
+        "receives": 103,
+        "return": 103,
+        "select": 48,
+        "using": 475,
+        "with": 475
+      },
+      "unknown_share_encoded_rows": 0.30940481599273056,
+      "unknown_structural_frequency": {},
+      "unknown_token_count": 2043,
+      "unseen_target_token_frequency": {}
+    }
+  },
+  "status": "CAS_META_2_SAVED_DATA_DIAGNOSIS_COMPLETE",
+  "sufficient_failure_cause_proven": false,
+  "tokenizer_fit_and_vocabulary_reconstructed": true,
+  "utc": "2026-09-05T21:04:25.759702+00:00",
+  "vocabulary_size": 52
+}

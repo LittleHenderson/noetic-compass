@@ -4,9 +4,30 @@ This is a separate experimental candidate, not a replacement for the accepted CA
 
 The next measured skill is to turn a bounded problem into a new nested CJT program with named intermediate values, then execute it through unchanged native CJT APIs. The candidate must emit operations, calls, and bindings, not just select a prepared whole program.
 
-Current state: the first AWS Blackwell preflight ran from source `2a3ec1132770b121881a49effee2aa5d4e0494fb`. The four preserved native GPU contract tests passed. Three of four new policy GPU tests passed; the active-gradient check failed, so the job stopped before composition smoke execution or training. Raw failure evidence is retained under `records/aws_smoke_001`. No CAS-META-2 learning result has been established.
+Current state: the full AWS run from source `b5f1718e63a2b5cf72b4b606d513d0524b9226ac` completed on an RTX PRO 4500 Blackwell. Both four-test GPU gates, three native execution preflights, 200 matched training epochs, and all 72 cases / 360 comparison choices completed. The file inspection and separate stored-record audit passed. The latter checked all 1,915 traces against the published schema across 222 databases and replayed the stored composition evidence. It did not load checkpoints or independently rerun neural inference.
 
-The next candidate keeps Drive and summed absolute current unchanged, and sets initial gate saturation to twice the configured maximum input length. All gate parameters remain trainable. Its revised GPU preflight checks the real default training geometry, finite nonzero gradients, operating-region measurements and a resistance intervention. These revised neural checks still require AWS execution. Local record/control checks report 367 passed tests and 52 passed subtests; the GPU-only module was skipped, and all 316 protected files remained unchanged (`records/local_candidate_004/receipt.json`).
+The checked learning outcome is **negative**: CAS trained 0/72, CAS untrained 0/72, generic trained 0/72, generic untrained 0/72, rule 72/72. The trained policies produced more admitted programs (CAS 28, generic 35) than their untrained versions (zero), but none solved a held-out task. No successful learned composition, CAS advantage, or general reasoning is established by this run. Six checkpoints and all raw outcomes are retained.
+
+The run keeps Drive and summed absolute current unchanged and sets initial gate saturation to twice the configured maximum input length. All gate parameters remain trainable. The GPU checks cover default training geometry, finite nonzero gradients, operating-region measurements and a resistance intervention. Earlier pure checks recorded 367 passed tests and 52 passed subtests with all 316 protected files unchanged (`records/local_candidate_004/receipt.json`). Those pure checks are not a neural result.
+
+The first preflight's gradient failure is preserved under `records/aws_smoke_001`, bound to source `2a3ec1132770b121881a49effee2aa5d4e0494fb`. The full run's initial audit failure was a cross-platform file-order mismatch; `records/AWS_FULL_002_INDEX_ORDER_CORRECTION.md` explains its narrowly tested correction. Original experiment bytes were not changed.
+
+Current full-run records:
+
+- `records/aws_full_002/launch_receipt.json` and `cloud_artifacts.zip`: source/job identity, raw evidence and six saved checkpoints.
+- `records/aws_full_002_inspection/inspection_receipt.json`: all 2,476 packet members checked; no issues.
+- `records/aws_full_002_stored_audit/stored_audit_receipt.json`: full stored audit passed; 72 private reference runs and all 360 sealed choices checked, in addition to the three execution preflights.
+- `records/aws_full_002_learning_summary/learning_summary.json`: verified paired and depth comparisons, training exposure, selected checkpoints, detailed rejections and compute.
+- `records/aws_full_002_diagnosis_v2/diagnosis_receipt.json` and `REPORT.md`: reproducible data diagnosis. Test unknown-token share is 43.84%; child-call control structure and some target names were never positive training examples. The first diagnostic receipt's serialization defect is preserved separately, not presented as valid.
+- `records/aws_full_002_cleanup_verification/closure_verification_receipt_v2.json`: independent read-only cleanup checks. Paid job resources are gone; three encrypted result objects retain seven-day expiry.
+- The recorded compute/EBS/IPv4 estimate is about **$1.85**, excluding S3, transfer and taxes. It is not an invoice. The shared ledger still reserves $18 total and leaves $382 unreserved; no reservation was refunded.
+
+The next learning experiment must preserve structural names, teach the control
+forms it asks the model to combine, and evaluate wording, unfamiliar graphs and
+deeper nesting separately. Fixing unknown tokens alone is not proven sufficient:
+both learned arms also failed all 36 shallower depth-2 test cases. The rule parser
+knows all three wording families; its score is an executable reference ceiling,
+not a comparison with equal prior language knowledge.
 
 ## Preserved evidence
 

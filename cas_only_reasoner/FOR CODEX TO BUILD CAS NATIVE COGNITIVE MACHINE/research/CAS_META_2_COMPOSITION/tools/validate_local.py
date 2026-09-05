@@ -13,6 +13,7 @@ import re
 import subprocess
 import sys
 import time
+from uuid import uuid4
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,12 +45,16 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--child", action="store_true")
+    parser.add_argument("--scratch", type=Path)
     args = parser.parse_args()
     if args.child:
+        if args.scratch is None:
+            raise ValueError("EXPLICIT_TEST_SCRATCH_REQUIRED")
         sys.path.insert(0, str(ROOT))
         sys.meta_path.insert(0, NoNeuralImports())
         import pytest
         return pytest.main(["tests", "-q", "-m", "not gpu", "-p", "no:cacheprovider",
+                            "--basetemp=" + str(args.scratch / "pytest"),
                             "--junitxml=" + str(args.output / "tests.xml")])
     output = args.output.resolve()
     if not output.is_relative_to(ROOT / "records") or output.exists():
@@ -61,9 +66,19 @@ def main():
     for path in paths:
         ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     hashes = {p.relative_to(ROOT).as_posix(): sha256(p.read_bytes()).hexdigest() for p in paths}
-    command = [sys.executable, "-B", str(Path(__file__).resolve()), "--child", "--output", str(output)]
+    homebases = [p for p in ROOT.parents if p.name == "FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE"]
+    if not homebases:
+        raise ValueError("CNCM_HOMEBASE_REQUIRED")
+    scratch = homebases[-1] / "_tmp" / ("meta2-" + uuid4().hex[:12])
+    if not scratch.is_relative_to(homebases[-1]):
+        raise ValueError("TEST_SCRATCH_OUTSIDE_HOMEBASE")
+    runtime_tmp = scratch / "temp"
+    runtime_tmp.mkdir(parents=True, exist_ok=False)
+    command = [sys.executable, "-B", str(Path(__file__).resolve()), "--child", "--output", str(output),
+               "--scratch", str(scratch)]
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", CAS_META2_RUN_GPU_TESTS="0",
-               CAS_META1_RUN_GPU_TESTS="0", CUDA_VISIBLE_DEVICES="")
+               CAS_META1_RUN_GPU_TESTS="0", CUDA_VISIBLE_DEVICES="", PYTEST_DISABLE_PLUGIN_AUTOLOAD="1",
+               TEMP=str(runtime_tmp), TMP=str(runtime_tmp), TMPDIR=str(runtime_tmp))
     run = subprocess.run(command, cwd=ROOT, env=env, text=True, capture_output=True, timeout=180)
     (output / "stdout.txt").write_text(run.stdout, encoding="utf-8")
     (output / "stderr.txt").write_text(run.stderr, encoding="utf-8")
@@ -82,6 +97,7 @@ def main():
     receipt = {"schema": "cas-meta2-pure-validation/1",
                "status": "PURE_CHECKS_PASSED" if success else "PURE_CHECKS_FAILED",
                "command": command, "returncode": run.returncode, "counts": counts,
+               "test_scratch": str(scratch), "scratch_retained": True,
                "passed_test_functions": int(passed[-1]) if passed else None,
                "passed_subtests": int(subtests[-1]) if subtests else 0,
                "junit_count_includes_subtests": True,
