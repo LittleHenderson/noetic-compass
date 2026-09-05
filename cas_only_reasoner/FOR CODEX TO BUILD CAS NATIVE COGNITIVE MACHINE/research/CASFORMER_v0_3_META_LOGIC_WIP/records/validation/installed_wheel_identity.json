@@ -1,0 +1,51 @@
+{
+  "cas_cjt": {
+    "installed_path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Lib\\site-packages\\cas_cjt",
+    "matched_files": {
+      "__init__.py": "bf2efe9075aa870fe4db1c9523a895cd3c2a223fd01884077d78f72a5c57d57e",
+      "artifacts.py": "32ec61a5aa69f6949e71450f221a6ca9fc4f460e38ca32511e5ab7b80be2f67d",
+      "checkpoint.py": "a2647420bb7e7925854790217f6e884ef5f4f110948434cf9566e59da515a876",
+      "cncm_bridge.py": "fc25c9836f284abb6bf1378ba0d92021a9f3e03b4ee70df00bce2dcedf3ceb71",
+      "contracts.py": "f6aa55ed306dafe9c2e4553b74e9cdb42d8cab2641e53b2cf3c916ec1ade2b29",
+      "control.py": "fee2b8386feb5ad8b27f95c916a7632d4e6d6fa5365091ec2d2ef3eeb9e46804",
+      "coordinator.py": "16f4f30321bff3a0e9c7f7d191e1e9358eb13ec97e16b23f71bc9dd6b0c72d48",
+      "learning.py": "143d12791a5bb4666f2bf3831a4c0ddd072d9e94765340678b668f662a728fca",
+      "memory.py": "7047c40396fc2ed79910064c738b4a08740720846f24d62160603532dca8f687",
+      "network.py": "748ef8585c84e64e00de99c8b5b320fedb5ef738d7947afb008a2cf250fe1d1f",
+      "network_coordinator.py": "4820106b4499d19fd6eb1932f3efa13725c3d13e733403a3ec386d1f0399a1c2",
+      "neural.py": "03521d2b17311680fd91cde7076e4bf5b38393f0d6db115d47be20f63413fc96",
+      "persistence.py": "94eaf401078a248b9420f4b573b4fad02f0e30b7df9f0c84f74668b130570882",
+      "phase_contract.py": "adaf34a73d4f1352c269f2a8bb9c4ef92fb0d4dba7018c05079aa05f9b124817",
+      "proposals.py": "31f8731cdc0fb34df23fb6cef1b434d687153a017a3cc1695f39f14fe96fa522",
+      "readiness.py": "334771da6ebfb2feadaf0e5319f72f807f7c5cc1e959baf090e89a6535a8dba9",
+      "repair.py": "49108e6d1bdd9d566a9243a409073544a798ea6c9277787f292e7376449e1a75",
+      "routing.py": "711f09ebc8bfddf36c88811ce445738e2da9ce7ab032da918615ea5115826f04",
+      "runtime.py": "5eda27339d0d216d5359116617c6dc8c9f99c376d6cfa6be386845b59ec00187",
+      "schemas/bias_state.schema.json": "1dde977869dd55d91311a33e2b9c526083922dda7ca189b3bed4d6cfeb33417a",
+      "schemas/neural_cjt_contracts.schema.json": "35d304a3c51b0687a63c40c65c52a6cdf7eddcda8c2ee28e2234a0a4d1641969",
+      "semantic.py": "826de6ff11dde52e3b7796e53aee8cca26519366ab14b4490bdf7ecfd75832bf",
+      "state.py": "5be617d5e3dc2f9590076ac07f1b0325ce9bf5465b7766315a3322f390b94240",
+      "trace.py": "ba3166e9009c56876a6c5d355036cf840f9f22a3939c8310e7762c221877ecc8",
+      "types.py": "ee3b24468397a5529937eb738c9a82addebc28dec8893544b8be4bebcf2bf560",
+      "verifier.py": "c1604059580a553e131233ecdbb5b1de8439edbba03865f7985a71b0dfdfb736"
+    },
+    "wheel": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\artifacts\\release_reproduction\\dist\\cas_neural_cjt-0.2.0-py3-none-any.whl",
+    "wheel_sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+  },
+  "casformer": {
+    "installed_path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Lib\\site-packages\\casformer",
+    "matched_files": {
+      "__init__.py": "0ac7c3ed8b408b896dd35beb0f9c5fed5a7576dcec1252bc80b91cbaef99bbe5",
+      "baselines.py": "7dae14f07ea8892ccd77929c1f7a6677968107b21f7d297f86c88bdcdc8a5a71",
+      "casformer_trace.schema.json": "aa6fc375ee31b1bc54a7474b82476b1da51b81fc3ff6d48b3bb6b389bd617e55",
+      "circuit.py": "6b646c760268a3fa270e747e95ab3f4468a3aaf7546dfbce5569142465aa5ba7",
+      "controls.py": "91eb1ac3a8cc11721d20463d17dab2dd2e5eec4a1f0be00bb51ccb895748b1c5",
+      "core.py": "41e56391155697bbd568bba06d56dbe734f8554107d97458c1b9d160c7bc92a7",
+      "diagnostics.py": "44f672ea7db8b0128e56a086562faf4befb930256814f20c6c1520c2b055ebb3",
+      "schema.py": "58be8710383f95a57ea05fc7d0cc1c1b0df96c5a89a781b2856c4f7797010e46",
+      "trace.py": "fbe2b45b3963f46319b430e7a4408f143b8b45fa5b868c1eaf76fb5bd62d6f0c"
+    },
+    "wheel": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\artifacts\\release_reproduction\\dist\\casformer_reference-0.1.0-py3-none-any.whl",
+    "wheel_sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"
+  }
+}

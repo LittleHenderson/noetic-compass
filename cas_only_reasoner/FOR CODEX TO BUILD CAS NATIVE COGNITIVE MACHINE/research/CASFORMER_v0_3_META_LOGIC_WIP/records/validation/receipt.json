@@ -1,0 +1,82 @@
+{
+  "classification": "WIP_UNREVIEWED_NOT_PART_OF_V0_2",
+  "counts": {
+    "meta_tests": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 247
+    },
+    "v02_manifest": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 5
+    }
+  },
+  "demo": {
+    "accepted_effects": 4,
+    "budget_ceiling": 512,
+    "budget_reserved_policy_units": 360,
+    "candidate_symbols": [
+      "L1",
+      "L3",
+      "L2",
+      "L1",
+      "L2"
+    ],
+    "chain": [
+      "A",
+      "B",
+      "C",
+      "R",
+      "C"
+    ],
+    "checkpoint_digest": "e63274396c9ae7ca0c400925d7bb5bee28b132aeccb5fba5f1db2c03b9f828bf",
+    "claim_boundary": "Fixed-weight, authored-oracle composition only. Not learning equivalence, learned recursion, CAS advantage, or crash-atomic recovery.",
+    "committed_state_equal": true,
+    "fixed_weights": true,
+    "fresh_process_restart": true,
+    "integrity": true,
+    "meta_event_count": 20,
+    "model_digest_after": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+    "model_digest_before": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+    "native_schema_validated_count": 5,
+    "native_trace_count": 5,
+    "paused_call_ids": [
+      "fixed-chain:call:2c6428de3e24401caa488941f2bae0ee:1",
+      "fixed-chain:call:2c6428de3e24401caa488941f2bae0ee:2",
+      "fixed-chain:call:2c6428de3e24401caa488941f2bae0ee:3"
+    ],
+    "paused_head": {
+      "commit_receipt_id": "commit-9cfaa4f7d169acc5606b9a16",
+      "model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+      "state_digest": "0bd140b8e774588dcd04175e5c92d86a1a28886d67db63706084d0d993202bc4",
+      "state_version": 4,
+      "trace_digest": "e3f8ea69d9d93e3d26db9f6cd82718b8fb4ed59b2fc4a9feb1b7f893c77895e5"
+    },
+    "paused_native_tick": 4,
+    "paused_procedures": [
+      "main",
+      "worker",
+      "repair_c"
+    ],
+    "program_digest": "274bd1df17d94ed3e98e0ec60f24ba37ec582e580c693020d1d26822447627e2",
+    "release_status": "WIP_UNREVIEWED_NOT_PART_OF_V0_2",
+    "repair_closed": true,
+    "semantic_projection_digest": "00054db12e08dccf5122bfdd883327cf2c02a9cec4c468bc675e717e1c6e402e",
+    "semantic_projection_equal": true,
+    "status": "CAS_META_0_FIXED_WEIGHT_COMPOSITION_TEST_PASSED"
+  },
+  "full_v02_v01_cncm_regressions_rerun": false,
+  "git_head_at_run": "fda27bcff9c38af5941a15433db6ae7d59bf0d9a",
+  "new_training_performed": false,
+  "scope": "This run covers the new composition layer and unchanged v0.2 manifest. The prior full release reproduction remains separate evidence.",
+  "source_and_head_unchanged_during_run": true,
+  "status": "CAS_META_0_FIXED_WEIGHT_COMPOSITION_TEST_PASSED",
+  "tested_source_hashes": "source_sha256.json",
+  "v02_aggregate_sha256": "5fad64a52c8aef30d56e46fa22f113c26bc171a3016d326c3c88157425b798f1",
+  "v02_controlled_files": 50,
+  "v02_evidence_sha": "b5d52d1fc9d5dce231ccb0f91ece2be0168dfa78",
+  "v02_source_freeze_sha": "dec08c81644f1c47b4b94c29a406a9432df7c7bd"
+}

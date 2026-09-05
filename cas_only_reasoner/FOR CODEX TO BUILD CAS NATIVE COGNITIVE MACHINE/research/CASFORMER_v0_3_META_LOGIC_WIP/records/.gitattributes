@@ -1,0 +1,2 @@
+# Evidence hashes cover exact bytes; do not rewrite line endings on checkout.
+validation/** -text whitespace=cr-at-eol

@@ -1,0 +1,8 @@
+{
+  "audit_classification": "CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL",
+  "payload_files_verified": 46,
+  "required_checks_verified": 7,
+  "source_commit": "dec08c81644f1c47b4b94c29a406a9432df7c7bd",
+  "status": "PASS",
+  "trace_schemas_verified": 6
+}

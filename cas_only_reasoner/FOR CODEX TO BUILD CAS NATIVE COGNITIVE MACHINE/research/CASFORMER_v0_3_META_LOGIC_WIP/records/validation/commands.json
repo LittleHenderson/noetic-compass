@@ -1,0 +1,64 @@
+[
+  {
+    "argv": [
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+      "-I",
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\artifacts\\release_reproduction\\probes\\verify_evidence_bundle.py"
+    ],
+    "name": "v02_existing_evidence",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--tb=short",
+      "--basetemp",
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP\\_verify_hcazk2i9\\meta",
+      "--junitxml",
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP\\records\\validation\\meta_tests.xml"
+    ],
+    "name": "meta_tests",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\tests\\test_source_manifest.py",
+      "-q",
+      "--tb=short",
+      "--basetemp",
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP\\_verify_hcazk2i9\\manifest",
+      "--junitxml",
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP\\records\\validation\\v02_manifest.xml"
+    ],
+    "name": "v02_manifest",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+      "-m",
+      "cas_meta.demo",
+      "--output",
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP\\records\\validation\\demo"
+    ],
+    "name": "demo",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+      "-I",
+      "-c",
+      "import cas_cjt,casformer,json; print(json.dumps({'cas_cjt':cas_cjt.__file__,'casformer':casformer.__file__}))"
+    ],
+    "name": "installed_imports",
+    "returncode": 0
+  }
+]
