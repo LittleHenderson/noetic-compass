@@ -1,0 +1,1 @@
+{"status": "CAS_META_2_V2_STORED_RESULTS_CHECKED_FULL_ACCEPTANCE_BLOCKED", "diagnostic_completed": true, "full_protocol_accepted": false, "errors": []}

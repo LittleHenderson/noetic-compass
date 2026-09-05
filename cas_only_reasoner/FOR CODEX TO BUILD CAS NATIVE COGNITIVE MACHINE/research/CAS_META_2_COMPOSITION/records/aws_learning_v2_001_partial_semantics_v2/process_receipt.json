@@ -1,0 +1,24 @@
+{
+  "schema": "cas-meta2-stored-diagnostic-process/1",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_learning_v2_001_partial_semantics_v2\\check_records.py"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "started_utc": "2026-09-05T22:52:23.520644+00:00",
+  "finished_utc": "2026-09-05T22:59:00.286592+00:00",
+  "returncode": 0,
+  "pid": 53996,
+  "timeout_seconds": 1800,
+  "timed_out": false,
+  "script_sha256_before": "7b8ab8750f14dfa2cee818540cc8a92325b9006b80f56ee5b96499d315d186a2",
+  "script_sha256_after": "7b8ab8750f14dfa2cee818540cc8a92325b9006b80f56ee5b96499d315d186a2",
+  "script_unchanged": true,
+  "stdout_sha256": "3cf87bd74b6256be90dcd5ea7773baff474e390a24155dd606d62b426b0e53ff",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "full_protocol_accepted": false,
+  "neural_execution_performed": false,
+  "provider_calls_performed": false,
+  "wrapper_sha256": "3eed93ec673dbf49634454ab66da876f2b361409d4ce1fa89a2a380012ea4a25"
+}
