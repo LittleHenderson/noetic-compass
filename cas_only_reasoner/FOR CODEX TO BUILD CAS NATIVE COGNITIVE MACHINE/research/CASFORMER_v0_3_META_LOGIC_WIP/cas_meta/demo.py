@@ -5,13 +5,14 @@ from hashlib import sha256
 import argparse
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 
 from cas_cjt import validate_contract
 
 from .compiler import compile_program
-from .executor import Executor, digest
+from .executor import Executor, MetaRuntimeError, digest
 from .fixture import create_native, initial_input, open_native, run_reference
 
 
@@ -44,6 +45,12 @@ def semantic_projection(runtime):
 
 
 def resume(output, expected_digest):
+    output = Path(output).resolve()
+    # A checkpoint is not a database backup. Reject missing prerequisites
+    # before opening SQLite; never create or substitute a replacement store.
+    for name in ("checkpoint.json", "compiled.db"):
+        if not (output / name).is_file():
+            raise MetaRuntimeError("MISSING_CHECKPOINT_DEPENDENCY:" + name)
     native = open_native(output / "compiled.db")
     try:
         program = compile_program(PROGRAM_PATH.read_text(encoding="utf-8"))
@@ -51,7 +58,20 @@ def resume(output, expected_digest):
                                     expected_digest=expected_digest, chain_id="fixed-chain")
         if len(native.store.trace_events()) != 4 or len(executor.frames) != 3:
             raise AssertionError("restart did not restore the suspended repair caller")
+        before_frames = list(executor.frames)
+        before_head = asdict(native.store.head)
+        before_projection = semantic_projection(native)
+        before_events = executor.events
+        before_spent = executor.spent
+        before_model = native.state.model_digest
         executor.run()
+        if (semantic_projection(native)[:4] != before_projection
+                or executor.events[:len(before_events)] != before_events
+                or len(native.store.trace_events()) != 5
+                or before_spent != 288 or executor.spent != 360
+                or native.state.model_digest != before_model
+                or native.state.by_cjt_id["C"].rpm.open_repair_ids):
+            raise AssertionError("resume did not preserve the declared continuation")
         final_checkpoint = executor.checkpoint(output / "final_checkpoint.json")
         write_json(output / "meta_trace.json", executor.events)
         write_json(output / "worker_result.json", {
@@ -59,13 +79,31 @@ def resume(output, expected_digest):
             "result_effect_id": executor.result_effect_id,
             "final_checkpoint_digest": final_checkpoint,
             "meta_event_count": len(executor.events),
+            "restored_frames": before_frames,
+            "native_head_before": before_head,
+            "native_head_after": asdict(native.store.head),
+            "native_trace_count_before": 4,
+            "native_trace_count_after": 5,
+            "spent_before": before_spent,
+            "remaining_before": executor.limits.budget - before_spent,
+            "remaining_after": executor.limits.budget - executor.spent,
+            "model_digest_before": before_model,
+            "model_digest_after": native.state.model_digest,
+            "prior_native_projection_unchanged": True,
+            "prior_meta_events_unchanged": True,
+            "repair_closed": True,
         })
         print(json.dumps({"restart_resumed": True, "done": executor.done, "spent": executor.spent}))
     finally:
         native.close()
 
 
-def run_demo(output: Path):
+def prepare_demo(output: Path):
+    """Create a matching paused database/checkpoint and exit before resume.
+
+    The native writer is closed before any database copy or hash is taken.
+    This is a clean-boundary snapshot, not cross-store crash recovery.
+    """
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     program = compile_program(PROGRAM_PATH.read_text(encoding="utf-8"))
@@ -83,6 +121,37 @@ def run_demo(output: Path):
         checkpoint_digest = executor.checkpoint(output / "checkpoint.json")
     finally:
         native.close()
+    prepared = {
+        "status": "CAS_META_CHECKPOINT_PREPARED",
+        "checkpoint_digest": checkpoint_digest,
+        "program_digest": program.digest,
+        "model_digest": initial_model,
+        "native_head": paused_head,
+        "frames": list(paused_frames),
+        "spent": executor.spent,
+        "remaining": executor.limits.budget - executor.spent,
+        "native_trace_count": 4,
+        "database_sha256": sha256((output / "compiled.db").read_bytes()).hexdigest(),
+        "required_files": ["checkpoint.json", "compiled.db"],
+    }
+    write_json(output / "creation_receipt.json", prepared)
+    # Keep a closed, matching pair even after the live copy is consumed.
+    # Auditors copy this directory to a new location before resuming it.
+    paused = output / "paused"
+    paused.mkdir()
+    for name in ("checkpoint.json", "compiled.db", "creation_receipt.json"):
+        shutil.copyfile(output / name, paused / name)
+    return prepared
+
+
+def run_demo(output: Path):
+    output = Path(output).resolve()
+    prepared = prepare_demo(output)
+    checkpoint_digest = prepared["checkpoint_digest"]
+    initial_model = prepared["model_digest"]
+    paused_head = prepared["native_head"]
+    paused_frames = prepared["frames"]
+    program = compile_program(PROGRAM_PATH.read_text(encoding="utf-8"))
     # Passing a separately held checkpoint digest binds the fresh process to
     # these exact saved bytes. It is not a signature or protection against a
     # hostile caller replacing both the file and its trusted receipt.
@@ -152,6 +221,8 @@ def main():
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--output", type=Path)
+    group.add_argument("--prepare", type=Path,
+                       help="create a paused bundle and exit without resuming it")
     group.add_argument("--resume", type=Path)
     parser.add_argument("--expected-digest")
     args = parser.parse_args()
@@ -159,6 +230,10 @@ def main():
         if args.expected_digest is None:
             parser.error("--resume requires --expected-digest")
         resume(args.resume, args.expected_digest)
+    elif args.expected_digest is not None:
+        parser.error("--expected-digest is only valid with --resume")
+    elif args.prepare:
+        print(json.dumps(prepare_demo(args.prepare), indent=2, sort_keys=True))
     else:
         print(json.dumps(run_demo(args.output), indent=2, sort_keys=True))
 

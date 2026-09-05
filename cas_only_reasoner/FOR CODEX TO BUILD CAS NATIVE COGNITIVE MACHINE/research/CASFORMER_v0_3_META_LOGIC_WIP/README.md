@@ -128,6 +128,54 @@ script captures exact commands, outputs, JUnit counts, environment identity,
 source hashes, unchanged-v0.2 manifest checks, and restart/demo evidence.
 Do not place a pytest `--basetemp` over user data: pytest clears that directory.
 
+### Standalone prepare and resume
+
+`--output` runs the WHOLE demo, including its automatic restart. After it
+returns, its root `compiled.db` is at native step 5 but its original
+`checkpoint.json` is still at step 4. Replaying that recorded resume command
+against the completed database correctly fails with `NATIVE_HEAD_MISMATCH`.
+The native head is SQLite's committed runtime head, not Git HEAD.
+
+To stop before continuation, use this public two-process workflow from this
+directory. Choose a new directory name for each preparation:
+
+```powershell
+python -m cas_meta.demo --prepare _rerun_paused
+$receipt = Get-Content -Raw _rerun_paused/creation_receipt.json | ConvertFrom-Json
+python -m cas_meta.demo --resume _rerun_paused --expected-digest $receipt.checkpoint_digest
+```
+
+The first command exits with three saved call frames (two suspended callers),
+four native traces, and
+288 reserved policy units spent. The second restores those exact frames and
+adds only resumed C: five traces, 360 units spent, 152 remaining, closed repair,
+and unchanged neural parameters. `worker_result.json` records the restored
+frames, before/after native heads, budget, and preservation of prior events.
+
+Restart requires BOTH `checkpoint.json` and its matching `compiled.db`, plus
+the matching program, frozen dependencies, and separately retained expected
+digest. Missing files are named and rejected before SQLite opens. A checkpoint
+does not contain a standalone database backup. Do not replace database heads
+or weaken either identity check to make an incompatible pair load.
+
+Both `--prepare` and `--output` now retain a closed, matching step-4 bundle in
+`paused/`. To replay one, copy that entire folder to a NEW writable location,
+read that copy's `creation_receipt.json`, and resume the copy. Preserve the
+original evidence bundle. The older `records/validation/demo` predates this
+snapshot addition; its root step-4 checkpoint and completed step-5 database
+are not a resumable pair. Do not rewrite those historical files.
+
+The expected digest is SHA-256 of the complete checkpoint bytes. It includes
+the invocation's UUID `run_id`, call identities, event hash chain, runtime
+bindings, frames, and native head. Two independently prepared runs can have
+different checkpoint digests while their model/program digests and defined
+native semantics agree. Use each artifact's own creation receipt; a program
+digest or semantic-projection digest is not its checkpoint digest.
+
+This workflow proves clean-boundary continuation, not crash-atomic recovery.
+The CLI is for this fixed demo, not arbitrary checkpoint execution. A second
+resume of an already consumed bundle remains an explicit stale-head rejection.
+
 ## Evidence boundary and next work
 
 The frozen source is `dec08c81644f1c47b4b94c29a406a9432df7c7bd`; its separate
