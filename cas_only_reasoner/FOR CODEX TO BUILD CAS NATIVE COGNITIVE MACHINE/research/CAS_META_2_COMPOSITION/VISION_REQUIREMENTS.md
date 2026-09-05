@@ -42,6 +42,14 @@ The scope below remains open until verified in an integrated system. Current evi
 
 ## Immediate evidence sequence
 
+The first negative composition result is preserved in evidence commit
+`74b2322b1bd39cd09da071b61372f3183c2c9ada`. The new side-by-side learning revision
+is registered in `EXPERIMENT_V2.json`: lossless text, child-call training,
+generated-validation selection, and 24 matched test triplets. It has not yet
+produced a GPU learning result. The separate unqualified memory candidate is
+preserved on branch `codex/cas-meta-3-procedural-memory`; it does not replace this
+learning work or close integrated memory requirements.
+
 1. Validate a new bounded typed program representation and named intermediate values in an isolated candidate. Invalid fields, denied topology/scope, forged references, excessive expansion, incorrect returns, and changed runtime identities must fail closed.
 2. Generate varied structural tasks. Train separate CAS and matched generic program generators on AWS only. Compare trained/untrained/rule arms on public problems without giving the target program JSON or answer. The first public curriculum explicitly describes required operations and dependencies: this is controlled instruction translation, not yet algorithm discovery from an outcome alone. Seal all predictions before private native references are generated. Save checkpoints, raw outputs and costs, including negative results.
 3. Qualify a durable skill package and retrieve it in a fresh process, then use it in a new parent program with provenance and permissions intact.

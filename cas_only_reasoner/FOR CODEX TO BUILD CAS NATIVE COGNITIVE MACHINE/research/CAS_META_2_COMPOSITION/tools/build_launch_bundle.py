@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 from hashlib import sha256
 import io
+import importlib.util
 import json
 from pathlib import Path, PurePosixPath
 import stat
@@ -11,6 +12,9 @@ import subprocess
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+_PROFILE_SPEC = importlib.util.spec_from_file_location("cas_meta2_bundle_profiles", ROOT / "tools/experiment_profiles.py")
+profiles = importlib.util.module_from_spec(_PROFILE_SPEC)
+_PROFILE_SPEC.loader.exec_module(profiles)
 PACKAGES = ("CAS_META_2_COMPOSITION", "CAS_META_1_LEARNED_SELECTION",
             "CASFORMER_v0_3_META_LOGIC_WIP", "CAS_CJT_TRANSFORMER_v0_2", "CASFORMER_v0_1")
 PILOT = "research/CAS_META_2_COMPOSITION"
@@ -35,7 +39,8 @@ def include_member(relative):
     return True
 
 
-def make_manifest(members, head):
+def make_manifest(members, head, *, experiment_profile="default"):
+    experiment = profiles.make_record(members, experiment_profile)
     required = [PILOT + "/cas_meta2/campaign.py", PILOT + "/tests/test_policy_gpu.py", PILOT + "/aws/launch.py",
                 PILOT + "/aws/launch_plan.json", PILOT + "/aws/budget.py",
                 PILOT + "/requirements-gpu.txt", META1 + "/cas_meta1/execution.py",
@@ -52,7 +57,7 @@ def make_manifest(members, head):
     if sum(map(len, members.values())) > EXPANDED_LIMIT:
         raise ValueError("ARCHIVE_EXPANDED_SIZE_CEILING")
     dist = "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/"
-    return {"schema_version": 2, "source_sha": head, "baseline_sha": BASELINE_SHA,
+    manifest = {"schema_version": 2, "source_sha": head, "baseline_sha": BASELINE_SHA,
             "pilot_dir": PILOT, "meta1_dir": META1,
             "meta_runtime_dir": "research/CASFORMER_v0_3_META_LOGIC_WIP",
             "dependency_lock": PILOT + "/requirements-gpu.txt",
@@ -64,9 +69,13 @@ def make_manifest(members, head):
             "files_sha256": {name: sha256(raw).hexdigest() for name, raw in sorted(members.items())},
             "protected_baseline_files": len(baseline["files"]),
             "neural_execution_performed_during_packaging": False}
+    if experiment is not None:
+        manifest["experiment"] = experiment
+    return manifest
 
 
-def build(output):
+def build(output, *, experiment_profile="default"):
+    profiles.validate_profile_name(experiment_profile)
     output = Path(output).resolve()
     if not output.is_relative_to(ROOT) or output.exists():
         raise ValueError("NEW_OUTPUT_INSIDE_CAMPAIGN_REQUIRED")
@@ -96,7 +105,7 @@ def build(output):
             if relative in members or stat.S_ISLNK(info.external_attr >> 16):
                 raise ValueError("DUPLICATE_OR_SYMLINK_SOURCE")
             members[relative] = source.read(info)
-    manifest = make_manifest(members, head)
+    manifest = make_manifest(members, head, experiment_profile=experiment_profile)
     members["launch_manifest.json"] = (json.dumps(manifest, sort_keys=True, indent=2) + "\n").encode()
     output.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(output, "x", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
@@ -121,10 +130,11 @@ def build(output):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--experiment-profile", choices=profiles.PROFILE_NAMES, default="default")
     args = parser.parse_args()
     receipt_path = args.output.with_suffix(".receipt.json")
     if receipt_path.exists():
         raise ValueError("PACKAGE_RECEIPT_ALREADY_EXISTS")
-    receipt = build(args.output)
+    receipt = build(args.output, experiment_profile=args.experiment_profile)
     receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({key: value for key, value in receipt.items() if key != "launch_manifest"}, indent=2))

@@ -1,0 +1,116 @@
+{
+  "schema": "cas-meta2-experiment/2",
+  "profile": "learning_v2",
+  "entrypoint": "cas_meta2.campaign_v2",
+  "purpose": "Learn to generate and bind nested CJT programs from controlled problem wording, then execute them through the unchanged accepted runtime.",
+  "predecessor": {
+    "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+    "evidence_commit": "74b2322b1bd39cd09da071b61372f3183c2c9ada",
+    "result": "CAS trained 0/72; generic trained 0/72; rule 72/72",
+    "old_test_use": "Previously opened diagnostic data; never represented as a fresh holdout."
+  },
+  "protected": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "executor": "cas_meta2.executor",
+    "native_adapter": "cas_meta2.native",
+    "action_codec": "cas_meta2.codec",
+    "authority": "No accepted parameter, executor, permission, verifier or operation-contract changes."
+  },
+  "curriculum": {
+    "seed": 20260917,
+    "counts": {
+      "train": 768,
+      "validation": 48,
+      "test": 72
+    },
+    "training_depth_counts": {
+      "1": 192,
+      "2": 288,
+      "3": 288
+    },
+    "validation_depth_counts": {
+      "1": 16,
+      "2": 16,
+      "3": 16
+    },
+    "test_groups": {
+      "same_depth": 24,
+      "wording_shift": 24,
+      "deeper_calls": 24
+    },
+    "test_design": "24 matched triplets: depth3/familiar wording, same graph and inputs/new sentence-family combination, matched depth4/familiar wording. Native RUN count and dependencies held fixed for depth pairs.",
+    "graph_rule": "No graph overlap across splits or with the frozen original dataset. Within each test triplet, the wording pair deliberately repeats the graph.",
+    "input_rule": "No observation vector overlap across splits or unrelated instances. A matched test triplet deliberately shares observations and binding.",
+    "language_boundary": "Controlled procedure descriptions; all sentence primitives occur in training, while reserved combinations are evaluated. Rule parser is an authored upper baseline, not evidence of learned language.",
+    "allowed_cjts": [
+      "A",
+      "B",
+      "C"
+    ],
+    "positive_target_coverage": "Every p0-p15 name occurs in training; no evaluation target symbol absent from positive training targets.",
+    "deeper_rule": "Every procedure has a real RUN; deeper nesting is not an empty wrapper."
+  },
+  "training": {
+    "seed": 7,
+    "epochs": 100,
+    "batch_size": 16,
+    "prediction_batch_size": 16,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "gradient_clip": 1,
+    "validation_generation_interval": 5,
+    "max_training_seconds": 2700,
+    "policy": {
+      "d_model": 64,
+      "heads": 4,
+      "layers": 2,
+      "cas_ff_width": 128,
+      "decoder_layers": 1,
+      "decoder_ff_width": 128,
+      "max_length": 1024,
+      "max_action_length": 256,
+      "cas_initial_saturation_per_max_token": 2,
+      "max_parameter_mismatch_fraction": 0.01
+    }
+  },
+  "input_encoding": "Exact text units fitted only on training plus a fixed full UTF-8 byte fallback; case and whitespace preserved. Text round-trip required for all public inputs; no UNK or truncation. Float32 numeric injectivity is not claimed.",
+  "selection": {
+    "eligible_epochs": "1, every fifth epoch, and final requested epoch",
+    "priority": [
+      "generated validation exact program and binding",
+      "generated validation exact program",
+      "generated validation binding",
+      "lower teacher-forced validation token cross-entropy",
+      "earliest eligible epoch"
+    ],
+    "boundary": "Validation selection is not native-answer correctness. Private final task correctness remains the unchanged native verifier."
+  },
+  "evaluation": {
+    "arms": [
+      "cas_untrained",
+      "cas_trained",
+      "generic_untrained",
+      "generic_trained",
+      "rule"
+    ],
+    "private_gold": "Opened only after all five arms' predictions are sealed.",
+    "invalid_predictions": "Remain failures with the full denominator; no grammar repair, rule fallback, or gold-based correction.",
+    "native_reference": "Independent direct native path; candidate uses existing composition executor; compare every required intermediate and final result.",
+    "repair": "Not exercised by this RUN/CALL curriculum; no missing-skill-acquisition claim.",
+    "checkpoint_saved": [
+      "initial",
+      "best",
+      "last"
+    ]
+  },
+  "execution": {
+    "gpu": "AWS CUDA only; no T4; no laptop model or tensor work",
+    "max_wall_seconds": 6600,
+    "hard_resource_cutoff_seconds": 7200,
+    "automatic_retries": 0,
+    "shared_budget_ledger": "records/budget/campaign_ledger.json",
+    "total_owner_cap_usd": "400.00",
+    "per_launch_reserved_cap_usd": "7.00"
+  },
+  "claim_boundary": "A learning experiment toward the full vision, not a substitute for it. A valid trace or passed software test is not a correct task. No CAS advantage, general language, full Noetics, durable learned memory, complete CNCM, production readiness, or hardware claim."
+}

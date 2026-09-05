@@ -31,6 +31,14 @@ not a comparison with equal prior language knowledge.
 
 ## Preserved evidence
 
+The side-by-side second learning protocol is described in `LEARNING_V2.md` and
+registered in `EXPERIMENT_V2.json`. It adds lossless text features, nested-call
+training and freely generated validation selection. It has not yet run on AWS.
+Final pure prelaunch checks passed 615 tests plus 89 subtests, with two GPU modules
+skipped and all 316 protected files unchanged (`records/local_learning_v2_002`).
+The original learning/runtime entrypoints and negative learning result remain
+unchanged. The launcher now has an explicit, manifest-bound profile selector.
+
 - Accepted executor baseline: `0917267b1354e5d036263eaa6ba9a7197eafb776`.
 - Completed learning pilot evidence: `6a4524d5f21f77194b35d0830d2b16da8530b17d`.
 - The separate third-party receipt `../CAS_META_1_LEARNED_SELECTION/records/third_party_semantic_audit_glm2/audit_receipt.json` reports 72 references, 360 reverified executions, and matching verdicts: CAS trained 66/72, CAS untrained 8/72, generic trained 61/72, generic untrained 8/72, rule 72/72. It is a stored-evidence audit, not a new neural run. Its source file remains untouched.

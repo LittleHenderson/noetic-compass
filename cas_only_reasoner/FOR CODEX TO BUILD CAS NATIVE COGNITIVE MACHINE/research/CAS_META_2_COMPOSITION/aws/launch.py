@@ -29,6 +29,9 @@ budget = importlib.util.module_from_spec(_BUDGET_SPEC)
 _BUDGET_SPEC.loader.exec_module(budget)
 
 PILOT_ROOT = Path(__file__).resolve().parents[1]
+_PROFILE_SPEC = importlib.util.spec_from_file_location("cas_meta2_launch_profiles", PILOT_ROOT / "tools/experiment_profiles.py")
+profiles = importlib.util.module_from_spec(_PROFILE_SPEC)
+_PROFILE_SPEC.loader.exec_module(profiles)
 PLAN_FILE = Path(__file__).with_name("launch_plan.json")
 SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 SHA1 = re.compile(r"[0-9a-f]{40}\Z")
@@ -38,6 +41,13 @@ ACCEPTED_BASELINE_MANIFEST_SHA256 = "476a8bbdc7a4b07a406e46b246ed417ea1d902e04cf
 
 class LaunchRefused(ValueError):
     pass
+
+
+def experiment_record(manifest: dict, read_member=None):
+    try:
+        return profiles.validate_manifest(manifest, read_member)
+    except (ValueError, UnicodeError) as exc:
+        raise LaunchRefused(str(exc)) from exc
 
 
 def digest(path: Path) -> str:
@@ -114,6 +124,7 @@ def validate_archive(path: Path, expected_sha: str, source_sha: str, plan: dict)
             if not pin or pin.startswith("#"): continue
             if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*==[A-Za-z0-9_.+!-]+",pin) or pin.lower().startswith("torch==") or "+cpu" in pin:
                 raise LaunchRefused("GPU_LOCK_REQUIRES_EXACT_PINS_AND_SEPARATE_TORCH")
+        experiment_record(manifest, archive.read)
         return manifest
 
 
@@ -161,17 +172,24 @@ def verify_launcher_identity(manifest: dict) -> dict:
         raise LaunchRefused("SOURCE_COMMIT_NOT_AVAILABLE_OR_EXACT") from exc
     if actual_commit != manifest["source_sha"]:
         raise LaunchRefused("SOURCE_COMMIT_NOT_AVAILABLE_OR_EXACT")
+    experiment = experiment_record(manifest)
     records = {}
-    for path in (Path(__file__).resolve(),PLAN_FILE,Path(budget.__file__).resolve(),PILOT_ROOT/"requirements-gpu.txt"):
+    paths = [Path(__file__).resolve(),PLAN_FILE,Path(budget.__file__).resolve(),PILOT_ROOT/"requirements-gpu.txt",
+             PILOT_ROOT/"tools/experiment_profiles.py"]
+    if experiment is not None:
+        paths += [PILOT_ROOT / name for name in profiles.V2_LOCAL_FILES if name != "tools/experiment_profiles.py"]
+    for path in paths:
         key = manifest["pilot_dir"]+"/"+path.relative_to(PILOT_ROOT).as_posix()
         actual = digest(path)
         if manifest["files_sha256"].get(key) != actual:
             raise LaunchRefused("LOCAL_LAUNCHER_ARCHIVE_IDENTITY_MISMATCH")
         records[key] = actual
+    if experiment is not None:
+        experiment_record(manifest, lambda name: (PILOT_ROOT / name.removeprefix(profiles.PILOT + "/")).read_bytes())
     return records
 
 
-def verify_downloaded_packet(artifact: Path, result: dict, job: str, source_sha: str, plan: dict) -> dict:
+def verify_downloaded_packet(artifact: Path, result: dict, job: str, source_sha: str, plan: dict, *, experiment=None) -> dict:
     """Validate stored bytes and internal identity before force termination is allowed."""
     if artifact.stat().st_size != result["bytes"] or digest(artifact) != result["sha256"]:
         raise LaunchRefused("DOWNLOADED_ARTIFACT_IDENTITY_MISMATCH")
@@ -195,6 +213,8 @@ def verify_downloaded_packet(artifact: Path, result: dict, job: str, source_sha:
         record = json.loads(archive.read("artifact_collection_receipt.json"))
         if record.get("job") != job or record.get("source_sha") != source_sha or record.get("returncode") != result["returncode"]:
             raise LaunchRefused("RESULT_INTERNAL_IDENTITY_MISMATCH")
+        if experiment is not None and (record.get("experiment") != experiment or result.get("experiment") != experiment):
+            raise LaunchRefused("RESULT_EXPERIMENT_IDENTITY_MISMATCH")
         if result["returncode"] == 0 and (record.get("partial_evidence") is not False or record.get("omitted_full_file_count") != 0):
             raise LaunchRefused("SUCCESS_WITH_OMITTED_EVIDENCE_REFUSED")
         return record
@@ -409,7 +429,9 @@ def sample_artifact_bytes(root):
 
 def remote_program(config: dict) -> str:
     """Return remote-only bookkeeping/bootstrap. It never executes on the client."""
-    return "CONFIG = " + repr(config) + "\n" + inspect.getsource(build_evidence_bundle) + "\n" + inspect.getsource(sample_artifact_bytes) + "\n" + r'''
+    experiment = experiment_record(config['manifest'])
+    selected_entrypoint = profiles.DEFAULT_ENTRYPOINT if experiment is None else experiment['entrypoint']
+    program = "CONFIG = " + repr(config) + "\n" + inspect.getsource(build_evidence_bundle) + "\n" + inspect.getsource(sample_artifact_bytes) + "\n" + r'''
 import hashlib, json, os, pathlib, platform, shutil, signal, subprocess, sys, time, traceback, zipfile
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
@@ -527,6 +549,10 @@ try:
     env['CAS_META1_RUN_GPU_TESTS'] = '1'
     env['CAS_META2_AWS_JOB_ID'] = CONFIG['job']
     env['CAS_META2_SOURCE_SHA'] = m['source_sha']
+    if 'experiment' in m:
+        env['CAS_META2_EXPERIMENT_PROFILE'] = m['experiment']['profile']
+        env['CAS_META2_EXPERIMENT_ENTRYPOINT'] = m['experiment']['entrypoint']
+        env['CAS_META2_EXPERIMENT_SPEC_SHA256'] = m['experiment']['spec_sha256']
     env['OMP_NUM_THREADS'] = '1'
     env['MKL_NUM_THREADS'] = '1'
     gpu_argv = [str(py),'-m','pytest','-m','gpu','tests/test_execution_contract.py','-q','--junitxml',str(out/'gpu_contract_tests.xml'),'-p','no:cacheprovider']
@@ -541,18 +567,23 @@ try:
     env.pop('CAS_META1_RUN_GPU_TESTS')
     env['CAS_META2_RUN_GPU_TESTS'] = '1'
     policy_argv = [str(py),'-m','pytest','-m','gpu','tests/test_policy_gpu.py','-q','--junitxml',str(out/'gpu_policy_tests.xml'),'-p','no:cacheprovider']
+    policy_expected_tests = 4
+    if 'experiment' in m:
+        policy_argv.insert(6,'tests/test_learning_v2_gpu.py')
+        policy_expected_tests = 6
     (out/'gpu_policy_command.json').write_text(json.dumps(policy_argv,indent=2))
     policy_code = bounded_process(policy_argv,out/'gpu_policy_tests.log',env=env,cwd=package/m['pilot_dir'],seconds=600,deadline=deadline)
     policy_suites = list(ET.parse(out/'gpu_policy_tests.xml').getroot().iter('testsuite'))
     policy_totals = {key:sum(int(s.get(key,'0')) for s in policy_suites) for key in ('tests','failures','errors','skipped')}
-    if policy_code != 0 or policy_totals != {'tests':4,'failures':0,'errors':0,'skipped':0}:
-        raise RuntimeError('META2_GPU_POLICY_TESTS_MUST_REPORT_EXACTLY_FOUR_PASSED:'+str(policy_totals))
-    (out/'gpu_policy_receipt.json').write_text(json.dumps({'passed':4,**policy_totals}))
+    if policy_code != 0 or policy_totals != {'tests':policy_expected_tests,'failures':0,'errors':0,'skipped':0}:
+        label = 'META2_V2_GPU_POLICY_TESTS_MUST_REPORT_EXACTLY_SIX_PASSED:' if 'experiment' in m else 'META2_GPU_POLICY_TESTS_MUST_REPORT_EXACTLY_FOUR_PASSED:'
+        raise RuntimeError(label+str(policy_totals))
+    (out/'gpu_policy_receipt.json').write_text(json.dumps({'passed':policy_expected_tests,**policy_totals}))
     env.pop('CAS_META2_RUN_GPU_TESTS')
     effective_campaign_seconds = min(CONFIG['compute_seconds_max'],int(deadline-time.time()-180))
     if effective_campaign_seconds < 60:
         raise RuntimeError('INSUFFICIENT_CAMPAIGN_TIME_AFTER_GPU_GATES')
-    argv = [str(py),'-m','cas_meta2.campaign','--output',str(out/'campaign'),
+    argv = [str(py),'-m',__CAS_META2_ENTRYPOINT__,'--output',str(out/'campaign'),
             '--max-wall-seconds',str(effective_campaign_seconds)]
     if CONFIG['smoke_only']: argv.append('--smoke-only')
     (out/'command.json').write_text(json.dumps(argv,indent=2))
@@ -567,6 +598,8 @@ try:
         if any(not path.is_file() or path.stat().st_size == 0 for path in required):
             raise RuntimeError('SUCCESS_WITHOUT_REQUIRED_CAMPAIGN_EVIDENCE')
         campaign_receipt = json.loads((out/'campaign'/'campaign_receipt.json').read_text())
+        if 'experiment' in m and campaign_receipt.get('experiment') != m['experiment']:
+            raise RuntimeError('CAMPAIGN_EXPERIMENT_IDENTITY_MISMATCH')
         expected_status = 'CAS_META_2_AWS_SMOKE_COMPLETED' if CONFIG['smoke_only'] else 'CAS_META_2_AWS_CAMPAIGN_COMPLETED'
         if campaign_receipt.get('status') != expected_status:
             raise RuntimeError('CAMPAIGN_RECEIPT_DOES_NOT_REPORT_REQUESTED_COMPLETION')
@@ -584,16 +617,19 @@ finally:
             returncode = 1
             (out/'test_evidence_copy_failure.json').write_text(json.dumps({'type':type(exc).__name__,'message':str(exc)}))
     job_record = {'job':CONFIG['job'],'source_sha':m['source_sha'],'baseline_sha':m['baseline_sha'],'archive_sha256':CONFIG['archive_sha256'],'returncode':returncode,'remote_wall_seconds':time.time()-start,'smoke_only':CONFIG['smoke_only']}
+    if 'experiment' in m: job_record['experiment'] = m['experiment']
     (out/'job.json').write_text(json.dumps(job_record,indent=2))
     bundle = root/'artifacts.zip'
     collected = build_evidence_bundle(artifact_root,bundle,CONFIG['artifact_bytes_max']-2097152,job_record,CONFIG['evidence_expanded_bytes_max'])
     returncode = collected['returncode']
     run(['aws','s3','cp',str(bundle),'s3://'+CONFIG['bucket']+'/results/artifacts.zip','--region',CONFIG['region']])
     complete = {'sha256':sha(bundle),'bytes':bundle.stat().st_size,'returncode':returncode,'job':CONFIG['job'],'smoke_only':CONFIG['smoke_only'],'partial_evidence':collected['partial_evidence'],'omitted_full_file_count':collected['omitted_full_file_count']}
+    if 'experiment' in m: complete['experiment'] = m['experiment']
     (root/'complete.json').write_text(json.dumps(complete))
     run(['aws','s3','cp',str(root/'complete.json'),'s3://'+CONFIG['bucket']+'/results/complete.json','--region',CONFIG['region']])
 sys.exit(returncode)
 '''
+    return program.replace('__CAS_META2_ENTRYPOINT__', repr(selected_entrypoint))
 
 
 def user_data(config: dict, remote_sha256: str | None = None) -> str:
@@ -623,6 +659,7 @@ def user_data(config: dict, remote_sha256: str | None = None) -> str:
 
 def execute(args: argparse.Namespace, plan: dict, manifest: dict) -> dict:
     validate_approval(args.approved_cap_usd, plan)
+    experiment = experiment_record(manifest)
     launcher_identity = verify_launcher_identity(manifest)
     continued_budget = budget.read_ledger()
     if Decimal(continued_budget["remaining_unreserved_usd"]) < Decimal(plan["per_launch_reserved_cap_usd"]):
@@ -666,6 +703,7 @@ def execute(args: argparse.Namespace, plan: dict, manifest: dict) -> dict:
     worker_role, timer_role = job + "-worker", job + "-timer"
     tags = [{"Key":"cas_meta_job","Value":job}]
     receipt = {"status":"STARTING","job":job,"smoke_only":bool(args.smoke_only),"plan":plan,"explicit_approved_cap_argument_usd":args.approved_cap_usd,"task_budget_reservation":budget_reservation,"local_launcher_identity":launcher_identity,"source_sha":args.source_sha,"archive_sha256":args.sha256,"manifest":manifest,"caller_arn":identity["Arn"],"official_price_response":prices,"resources":{},"events":[],"cleanup_errors":[]}
+    if experiment is not None: receipt["experiment"] = experiment
     output.mkdir(parents=True)
     def save():
         (output / "launch_receipt.json").write_text(json.dumps(receipt, indent=2, default=str), encoding="utf-8")
@@ -735,7 +773,7 @@ def execute(args: argparse.Namespace, plan: dict, manifest: dict) -> dict:
                 if head["ContentLength"] != result["bytes"]: raise LaunchRefused("REMOTE_RESULT_SIZE_MISMATCH")
                 artifact = output / "cloud_artifacts.zip"
                 s3.download_file(bucket,"results/artifacts.zip",str(artifact))
-                collection = verify_downloaded_packet(artifact,result,job,args.source_sha,plan)
+                collection = verify_downloaded_packet(artifact,result,job,args.source_sha,plan,experiment=experiment)
                 artifact_verified = True
                 receipt["result"] = result
                 receipt["artifact_collection"] = collection
