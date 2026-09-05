@@ -1,0 +1,48 @@
+[
+  {
+    "argv": [
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+      "-m",
+      "cas_meta.demo",
+      "--prepare",
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP\\records\\restart_closure\\reviewer\\prepared_bundle"
+    ],
+    "cwd": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP",
+    "finished_utc": "2026-09-05T09:26:02.613678+00:00",
+    "name": "prepare",
+    "returncode": 0,
+    "started_utc": "2026-09-05T09:25:56.086601+00:00"
+  },
+  {
+    "argv": [
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+      "-m",
+      "cas_meta.demo",
+      "--resume",
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP\\records\\restart_closure\\reviewer\\prepared_bundle",
+      "--expected-digest",
+      "c2a13990d2f4a25ddef4b9e4dbb2cd03fa3686377f8be8af0fef55e756a60a02"
+    ],
+    "cwd": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP",
+    "finished_utc": "2026-09-05T09:26:22.864562+00:00",
+    "name": "resume",
+    "returncode": 0,
+    "started_utc": "2026-09-05T09:26:06.525034+00:00"
+  },
+  {
+    "argv": [
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+      "-m",
+      "cas_meta.demo",
+      "--resume",
+      "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP\\records\\restart_closure\\reviewer\\prepared_bundle",
+      "--expected-digest",
+      "c2a13990d2f4a25ddef4b9e4dbb2cd03fa3686377f8be8af0fef55e756a60a02"
+    ],
+    "cwd": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP",
+    "finished_utc": "2026-09-05T09:26:34.504060+00:00",
+    "name": "second_resume_rejected",
+    "returncode": 1,
+    "started_utc": "2026-09-05T09:26:27.968681+00:00"
+  }
+]

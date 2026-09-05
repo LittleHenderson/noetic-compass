@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\wakil\AppData\Local\Temp\casformer-v03-meta-wip\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CASFORMER_v0_3_META_LOGIC_WIP\cas_meta\demo.py", line 242, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\wakil\AppData\Local\Temp\casformer-v03-meta-wip\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CASFORMER_v0_3_META_LOGIC_WIP\cas_meta\demo.py", line 232, in main
+    resume(args.resume, args.expected_digest)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\AppData\Local\Temp\casformer-v03-meta-wip\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CASFORMER_v0_3_META_LOGIC_WIP\cas_meta\demo.py", line 57, in resume
+    executor = Executor.restore(native, program, output / "checkpoint.json",
+                                expected_digest=expected_digest, chain_id="fixed-chain")
+  File "C:\Users\wakil\AppData\Local\Temp\casformer-v03-meta-wip\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CASFORMER_v0_3_META_LOGIC_WIP\cas_meta\executor.py", line 466, in restore
+    executor._check_boundary()
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\wakil\AppData\Local\Temp\casformer-v03-meta-wip\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CASFORMER_v0_3_META_LOGIC_WIP\cas_meta\executor.py", line 195, in _check_boundary
+    raise MetaRuntimeError("NATIVE_HEAD_MISMATCH")
+cas_meta.executor.MetaRuntimeError: NATIVE_HEAD_MISMATCH

@@ -1,0 +1,9 @@
+{
+  "first_digest": "02755ece2afce58a2ecab2586598cd7dadef2aa6dde178480f7deadbdca21ddc",
+  "first_run_id": "0854ab6dbeab42829a2b4b8c59d071ae",
+  "purpose": "Per-run complete artifact identity, not cross-run semantic equivalence.",
+  "same_native_head": true,
+  "same_program_and_model": true,
+  "second_digest": "5065f906399276ee4c7e041193bb428382279d660108275b038652dfc6f0f1fc",
+  "second_run_id": "667d8f6a47904d039e325641d8f5c2c8"
+}

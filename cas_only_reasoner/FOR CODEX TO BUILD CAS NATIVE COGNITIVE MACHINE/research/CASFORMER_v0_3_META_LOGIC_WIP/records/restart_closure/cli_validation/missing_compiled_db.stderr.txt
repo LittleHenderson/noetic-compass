@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\wakil\AppData\Local\Temp\casformer-v03-meta-wip\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CASFORMER_v0_3_META_LOGIC_WIP\cas_meta\demo.py", line 242, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\wakil\AppData\Local\Temp\casformer-v03-meta-wip\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CASFORMER_v0_3_META_LOGIC_WIP\cas_meta\demo.py", line 232, in main
+    resume(args.resume, args.expected_digest)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\AppData\Local\Temp\casformer-v03-meta-wip\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CASFORMER_v0_3_META_LOGIC_WIP\cas_meta\demo.py", line 53, in resume
+    raise MetaRuntimeError("MISSING_CHECKPOINT_DEPENDENCY:" + name)
+cas_meta.executor.MetaRuntimeError: MISSING_CHECKPOINT_DEPENDENCY:compiled.db

@@ -1,0 +1,153 @@
+{
+  "schema": "cas-meta.restart-closure.local-receipt/1",
+  "status": "CAS_META_0_RESTART_WORKFLOW_LOCAL_CHECKS_PASSED",
+  "classification": "WIP_UNREVIEWED_NOT_PART_OF_V0_2",
+  "tested_source_commit": "cbce17dad55b61ffc0f77860324ca1e9ffad3746",
+  "source_change_scope": [
+    "Public fixed-demo prepare/pause and resume workflow",
+    "Retained closed paused bundle",
+    "Missing-dependency rejection before SQLite opens",
+    "Continuation receipts, documentation and regression tests"
+  ],
+  "source_and_head_unchanged_during_validation": true,
+  "original_source_commit": "fda27bcff9c38af5941a15433db6ae7d59bf0d9a",
+  "original_evidence_commit": "35a81a774dd1b2be1106b6f7403d410e28c81e4c",
+  "evidence_binding": "This receipt is committed in a separate descendant evidence commit; its tested source SHA is above. The containing commit identity is obtained from Git, not self-embedded.",
+  "completed_checks": {
+    "complete_meta_suite": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 254
+    },
+    "frozen_v02_manifest": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 5
+    },
+    "public_cli_cases": 8,
+    "public_cli_receipt": "cli_validation/receipt.json",
+    "public_cli_commands": "cli_validation/commands.json",
+    "full_validation_receipt": "full_validation/receipt.json",
+    "separate_agent_status": "INTERNAL_SEPARATE_AGENT_PUBLIC_RESTART_RERUN_PASSED",
+    "separate_agent_classification": "INTERNAL_SEPARATE_AGENT_RERUN_NOT_EXTERNAL_GLM_AUDIT",
+    "separate_agent_receipt": "reviewer/receipt.json",
+    "source_file_hash_checks": {
+      "files": 18,
+      "failures": []
+    },
+    "payload_hash_checks": [
+      {
+        "folder": "records\\validation",
+        "checked": 31,
+        "failures": []
+      },
+      {
+        "folder": "records\\restart_closure\\full_validation",
+        "checked": 35,
+        "failures": []
+      },
+      {
+        "folder": "records\\restart_closure\\cli_validation",
+        "checked": 55,
+        "failures": []
+      },
+      {
+        "folder": "records\\restart_closure\\reviewer",
+        "checked": 28,
+        "failures": []
+      }
+    ]
+  },
+  "continuation": {
+    "separate_prepare_and_resume_processes": true,
+    "native_state_version_before": 4,
+    "native_state_version_after": 5,
+    "saved_frames": [
+      "main",
+      "worker",
+      "repair_c"
+    ],
+    "suspended_callers": 2,
+    "restored_exact_call_ids": true,
+    "restored_instruction_positions": [
+      1,
+      1,
+      1
+    ],
+    "prior_native_projection_unchanged": true,
+    "prior_meta_events_unchanged": true,
+    "native_sequence": [
+      "A",
+      "B",
+      "C",
+      "R",
+      "C"
+    ],
+    "repair_execution_count": 1,
+    "accepted_effects": 4,
+    "native_schema_validated_traces": 5,
+    "meta_schema_validated_events": 20,
+    "reserved_policy_units_before": 288,
+    "reserved_policy_units_after": 360,
+    "reserved_policy_units_remaining": 152,
+    "repair_closed": true,
+    "fixed_model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+    "independently_checked_network_state_dict_sha256": "3f7ef1c63993675e0f553155f6b85f323c677018b8987459f89b4d801d61ed4a",
+    "semantic_projection_digest": "00054db12e08dccf5122bfdd883327cf2c02a9cec4c468bc675e717e1c6e402e",
+    "reference_semantic_projection_equal": true,
+    "reference_committed_state_equal": true
+  },
+  "rejection_cases": {
+    "wrong_expected_digest": "CHECKPOINT_RECEIPT_MISMATCH",
+    "missing_database": "MISSING_CHECKPOINT_DEPENDENCY:compiled.db",
+    "missing_checkpoint": "MISSING_CHECKPOINT_DEPENDENCY:checkpoint.json",
+    "already_consumed_bundle": "NATIVE_HEAD_MISMATCH",
+    "original_published_completed_bundle": "NATIVE_HEAD_MISMATCH",
+    "existing_preparation_directory": "Rejected without overwriting",
+    "wrong_digest_and_stale_resume_do_not_change_native_semantic_state": true
+  },
+  "diagnosis": {
+    "published_builder_bundle": "Original checkpoint at native step 4 was retained after the automatic successful resume advanced compiled.db to step 5. Replaying the old command against that completed database correctly rejects the stale pair.",
+    "exact_head_values": "cli_validation/native_head_diagnosis.json",
+    "original_glm_pair_cause": "NOT_ESTABLISHED_WITHOUT_ORIGINAL_RAW_BUNDLE",
+    "cross_run_checkpoint_hashes": "Run UUID, call identities and event chain are included in the complete checkpoint identity. Two measured prepares had different checkpoint hashes but equal program/model identities and native heads.",
+    "measured_identity_comparison": "cli_validation/checkpoint_identity_comparison.json"
+  },
+  "preservation": {
+    "original_payload_files": 31,
+    "original_manifest_hashes_match": true,
+    "original_git_blob_bytes_match": true,
+    "original_evidence_location": "records/validation",
+    "git_common_directory": "C:/Users/wakil/OneDrive/Desktop/tksCAS/.git",
+    "git_object_store_outside_temp": true,
+    "tracked_scratch_files": [],
+    "scratch_deleted": false,
+    "original_inputs_preserved": "inputs/",
+    "guards_unchanged": "cas_meta/executor.py has no diff against original evidence commit",
+    "frozen_v02_source_unchanged": true,
+    "frozen_v02_source_sha": "dec08c81644f1c47b4b94c29a406a9432df7c7bd",
+    "frozen_v02_evidence_sha": "b5d52d1fc9d5dce231ccb0f91ece2be0168dfa78",
+    "frozen_v02_controlled_files": 50,
+    "frozen_v02_aggregate_sha256": "5fad64a52c8aef30d56e46fa22f113c26bc171a3016d326c3c88157425b798f1"
+  },
+  "open_items": {
+    "external_glm_updated_verdict": "PENDING",
+    "original_external_verdict": "CAS_META_0_FIXED_WEIGHT_COMPOSITION_AUDIT_PARTIAL",
+    "original_glm_full_command_and_raw_failure_bundle": "NOT_AVAILABLE",
+    "needed_for_exact_external_failure_reconciliation": "Original command, working directory, interpreter, complete digest, matching checkpoint/database files, and raw stdout/stderr."
+  },
+  "claim_boundary": {
+    "fixed_weight_authored_fixture_only": true,
+    "clean_boundary_restart_only": true,
+    "crash_atomic_recovery": false,
+    "new_training_performed": false,
+    "full_historical_v02_v01_cncm_regressions_rerun": false,
+    "full_fractal_acceptance": "NOT_CLAIMED",
+    "learning_isolation": "NOT_CLAIMED",
+    "external_audit_pass": "NOT_CLAIMED",
+    "language_general_reasoning_cas_advantage_cncm_completion_agi_production_readiness": "NOT_CLAIMED",
+    "merge_push_deploy_performed": false
+  }
+}

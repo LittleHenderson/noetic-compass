@@ -1,0 +1,174 @@
+**This changes the restart assessment from “not yet independently checked” to “the documented standalone restart failed in the auditor’s hands.”** That is a real blocker for accepting CAS-META-0’s restart claim.
+
+But the two findings need different treatment:
+
+> **`NATIVE_HEAD_MISMATCH` on a checkpoint paired with its own digest is the decisive failure. Different checkpoint digests across separately generated runs are not necessarily a defect.**
+
+The right next move is a focused checkpoint-and-resume investigation, not abandoning meta-logic or rebuilding the frozen v0.2 release.
+
+## 1. What still stands, and what is now blocked
+
+Taking the report as the evidence provided, without claiming another independent execution:
+
+| Component                                                | Current evidentiary position                              |
+| -------------------------------------------------------- | --------------------------------------------------------- |
+| 247-test suite                                           | Reproduced successfully in the auditor’s test environment |
+| Five manifest checks                                     | Reproduced successfully                                   |
+| Demo’s output-producing execution                        | Reproduced successfully                                   |
+| Selected program, model, and semantic-projection digests | Reproduced across the reported runs                       |
+| Fixed-weight composition comparison                      | Still supported within the registered comparison          |
+| Standalone fresh-process resume                          | **Failed with `NATIVE_HEAD_MISMATCH`**                    |
+| Complete checkpoint determinism                          | Not established; digest contents need inspection          |
+| Frozen v0.2 release                                      | This report identifies no new defect in it                |
+
+**The model can run the supplied program. The separate process cannot yet reliably pick up the saved execution through the documented CLI.** Those are different capabilities.
+
+My earlier recommendation treated standalone restart as an unfinished audit step. It must now be treated as a failed acceptance case, with the cause still unresolved.
+
+## 2. The digest finding needs a narrower interpretation
+
+There are two legitimate questions that a digest might answer.
+
+### “Is this the exact checkpoint artifact I intended to load?”
+
+That is an **artifact-identity digest**.
+
+If the checkpoint receipt includes a run ID, issuance timestamp, nonce, or other legitimate run-specific information, independently generated checkpoints can have different digests while representing the same semantic computation.
+
+In that case:
+
+```text
+Builder checkpoint + builder checkpoint digest
+    is the matching pair.
+
+Auditor checkpoint + auditor checkpoint digest
+    is another matching pair.
+```
+
+Using the builder’s digest against the auditor’s newly generated checkpoint should fail.
+
+### “Did these independent runs produce the same defined computational state?”
+
+That is a **state-equivalence comparison**.
+
+It requires an explicitly defined representation of the state being compared. A program digest identifies the program; a model digest identifies model content; a semantic-projection digest identifies the selected projection. None automatically identifies the entire resumable execution.
+
+**The report shows that the checkpoint digests vary. It does not yet establish which field causes that variation.** “Timestamp/nonce” is a plausible explanation, not an identified cause.
+
+The builder should inspect the actual digest inputs and document their meaning before changing anything. In particular, do not remove a nonce, omit state fields, or weaken a hash check merely to make the reported digests match.
+
+### The documentation should support two distinct reproduction procedures
+
+**Replaying the builder’s checkpoint:** use the preserved builder artifact and its recorded expected digest.
+
+**Independently generating and resuming a checkpoint:** create a new checkpoint, preserve the full digest issued for that checkpoint, terminate the process, and resume that exact artifact using its own digest. Compare the declared semantic outcomes with the reference.
+
+The auditor performed the second kind of attempt and reached the deeper failure. That is why the native-head mismatch, rather than the first receipt mismatch, is the central blocker.
+
+## 3. `NATIVE_HEAD_MISMATCH` is a real failure, but its cause is not established
+
+The strongest observation is:
+
+```text
+Auditor’s checkpoint
++
+that checkpoint’s own expected digest
+        ↓
+passes the checkpoint-digest check
+        ↓
+fails at the native-head boundary
+```
+
+This rules out **the wrong expected checkpoint digest as the complete explanation**. It does not tell us what the native-head mismatch means internally.
+
+The builder must first establish what “native head” denotes in this implementation. It might be a runtime state identity, an underlying store’s current head, or another boundary identifier. **We should not assume it means Git HEAD or assume that it should simply be restored from the checkpoint.**
+
+The necessary diagnostic is small:
+
+```text
+Expected native head:
+    value and where it came from
+
+Actual native head:
+    value and where it came from
+
+Checkpoint creation:
+    which native head was bound
+
+Fresh-process startup:
+    which state was loaded
+
+Boundary check:
+    when it ran relative to loading and restoration
+```
+
+The auditor’s suggested ordering bug is one possibility. Another is an undocumented dependency or a legitimately incompatible native state. The supplied report does not distinguish them.
+
+**Do not “fix” this by disabling `_check_boundary()`, accepting whichever head happens to exist, or overwriting an authoritative head solely because the checkpoint requests it.** A refusal can be correct while the documented restart workflow is incomplete.
+
+## 4. The passing suite does not cancel the failed CLI run
+
+The important question is now:
+
+> **What setup does the passing restart test provide that the documented standalone command does not?**
+
+Compare the actual paths, rather than relying on the test’s name. Relevant differences could include fixture-created native state, restoration steps, interpreter and import paths, working directory, checkpoint selection, or additional persistent artifacts.
+
+Those are investigation targets, not established explanations.
+
+A test suite can truthfully pass while a user-facing workflow fails because it exercises different preconditions. The repair needs to close that difference.
+
+If restart genuinely requires additional files or a particular store state, the documented command must identify those requirements and the checkpoint bundle must carry or reference them correctly. If the intended contract is self-contained restart, a fixture supplying missing state would expose a coverage gap.
+
+## 5. What should count as closure
+
+I recommend one focused correction round in the **meta-logic WIP branch**, with no new architecture.
+
+| Acceptance case                                                                       | Required outcome                                                                           |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Correct checkpoint, matching expected digest, documented prerequisites, fresh process | Resume succeeds                                                                            |
+| Wrong expected digest                                                                 | Explicit rejection                                                                         |
+| Matching artifact identity but an incompatible native state                           | Rejection or the contract’s explicitly authorized recovery path, never silent substitution |
+| Missing required checkpoint dependency                                                | Explicit rejection identifying the missing dependency                                      |
+| Interrupted execution versus uninterrupted reference                                  | Agreement on the declared continuation outcomes                                            |
+| Existing fixed-weight milestone                                                       | No unintended parameter changes or loss of previously passing behavior                     |
+
+For the continuation comparison, inspect the actual suspended caller, return position, repair state, remaining budget, and accepted Effects. Success should mean **continuing from the saved state**, not rerunning the entire workflow from the beginning and arriving at the same final answer.
+
+The fresh-process test should use the same documented CLI that the auditor uses. It should not depend on preparatory fixture work that ordinary users are never instructed to perform.
+
+## 6. Correct the record without erasing it
+
+Keep the original builder receipt containing:
+
+```text
+fresh_process_restart: true
+```
+
+Preserve its source identity and the environment in which it was produced. Add the independent failure alongside it.
+
+The current conclusion should read:
+
+> **Fresh-process restart was reported by the builder and exercised successfully through the test-suite path, but the independently attempted standalone CLI path fails. Standalone restart acceptance is blocked pending reconciliation.**
+
+That is more precise than either “restart works” or “all restart evidence was fabricated.”
+
+The earlier evidence-preservation items also remain open until checked. Preserve the failing checkpoint, its corresponding receipt, the exact command, and full error output outside temporary scratch storage. That failure bundle is now essential evidence for the correction.
+
+## Message to send to the builder
+
+> **The independent standalone resume attempt failed after using a self-consistent checkpoint/digest pair. Treat `NATIVE_HEAD_MISMATCH` as a blocking acceptance case for CAS-META-0’s restart claim.**
+>
+> Preserve the original receipts, the auditor’s failing checkpoint bundle, and the exact command and traceback. Do not alter the frozen v0.2 release.
+>
+> First identify the checkpoint digest’s actual inputs and declared purpose. Distinguish per-run artifact identity from cross-run semantic equivalence. Different receipt digests are not automatically a determinism defect, and the cause of the variation must be measured rather than assumed.
+>
+> Establish what “native head” denotes. Record the expected and actual values, their origins, and the load/restore/check sequence. Compare the passing suite’s restart setup with the documented standalone invocation.
+>
+> Resolve the discrepancy through a documented prerequisite correction or a minimal implementation fix, according to the intended contract. Do not disable the digest or native-head guards, silently replace authoritative state, or disguise a full rerun as resume.
+>
+> Add a regression that creates a checkpoint, exits, and invokes the documented resume CLI in a fresh process using that checkpoint’s own recorded digest. Verify continuation semantics, budget accounting, repair state, caller resumption, and unchanged model parameters. Preserve rejection tests.
+>
+> Return the demonstrated cause, the precise correction, source-bound raw results, and an independent rerun of the previously failing command. Keep restart acceptance blocked until that rerun succeeds.
+
+**Bottom line:** the reported call-and-return result still stands at its tested scope. What failed is a specific and important promise: that a separately launched process can restore and continue that execution through the published interface. Fix that boundary without weakening its checks, and preserve the successful composition work around it.

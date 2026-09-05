@@ -1,0 +1,29 @@
+{
+  "model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+  "native_head": {
+    "commit_receipt_id": "commit-45680a5aff12d3bc7ec7641d",
+    "model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+    "state_digest": "c53893f9835b0a433b0b33346f7a9f214b43ee2dda9651d0c53b4b0295e9680f",
+    "state_version": 5,
+    "trace_digest": "0d1585776a67bd1b556186e2d3207e90c41999215fd0f7ec84fd9bbcc8524f5d"
+  },
+  "native_schema_valid_count": 5,
+  "native_trace_count": 5,
+  "network_state_dict_sha256": "3f7ef1c63993675e0f553155f6b85f323c677018b8987459f89b4d801d61ed4a",
+  "open_C_repair_ids": [],
+  "producer_sequence": [
+    "A",
+    "B",
+    "C",
+    "R",
+    "C"
+  ],
+  "published_effect_count": 4,
+  "verdict_sequence": [
+    "ACCEPT",
+    "ACCEPT",
+    "REPAIR",
+    "ACCEPT",
+    "ACCEPT"
+  ]
+}

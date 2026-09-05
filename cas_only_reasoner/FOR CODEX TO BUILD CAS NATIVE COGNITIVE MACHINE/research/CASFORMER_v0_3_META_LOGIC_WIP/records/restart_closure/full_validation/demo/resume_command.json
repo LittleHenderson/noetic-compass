@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+    "-m",
+    "cas_meta.demo",
+    "--resume",
+    "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v03-meta-wip\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CASFORMER_v0_3_META_LOGIC_WIP\\records\\restart_closure\\full_validation\\demo",
+    "--expected-digest",
+    "012b8c0ef3e22113801b1a20b546221b59c19410a94a97ae32db1ceeedf59444"
+  ],
+  "returncode": 0
+}

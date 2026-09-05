@@ -1,0 +1,219 @@
+{
+  "checkpoint_digest": "012b8c0ef3e22113801b1a20b546221b59c19410a94a97ae32db1ceeedf59444",
+  "database_sha256": "e5036537922d94c30fd7912c097e8cd6b4d0307c93dcaa1459b53230bfab48ce",
+  "frames": [
+    {
+      "allowance": 512,
+      "call_id": "fixed-chain:call:fd0a43b66fb94c5e9531e280399ee131:1",
+      "cause": {
+        "candidate_operation_ids": [
+          "^6"
+        ],
+        "cause_id": "cause-5c05fa87ddfd151dd87beb1f",
+        "cause_kind": "EFFECT",
+        "content": {
+          "candidate_effect_id": "candidate-effect-c7abbb0ed496297143211100",
+          "published_effect_id": "effect-a4f5fe308978cf2ba6b7dec3",
+          "semantic_content": {
+            "effect_kind": "DECOMPOSITION_SIGNAL",
+            "operation_id": "^6",
+            "symbol": "L1"
+          }
+        },
+        "content_ref": {
+          "artifact_id": "artifact-35ddbb530737105af8c3a109",
+          "byte_length": 32,
+          "contract_type": "TENSOR_ARTIFACT_REF",
+          "dtype": "float32",
+          "encoding": "raw-contiguous-v1",
+          "schema_version": "cas.neural-cjt.tensor-artifact-ref/0.2",
+          "sha256": "35ddbb530737105af8c3a1095fcdb9e88cc5de3a29e62ebf2fd6a59936c28aee",
+          "shape": [
+            1,
+            2,
+            4
+          ]
+        },
+        "contract_type": "CAUSE",
+        "entity_bindings": [],
+        "goal_context": {
+          "goal": "verified four-CJT chain"
+        },
+        "memory_refs": [],
+        "originating_cjt_id": "A",
+        "originating_modality": null,
+        "parent_effect_id": "effect-a4f5fe308978cf2ba6b7dec3",
+        "provenance": [
+          "published-effect:effect-a4f5fe308978cf2ba6b7dec3",
+          "commit-receipt:commit-3389cca724f7e600c634a91b"
+        ],
+        "relation_bindings": [],
+        "schema_version": "cas.neural-cjt.cause/0.2",
+        "source": "prototype:committed-effect-cascade",
+        "tick": 2,
+        "time_label": "logical-tick:2",
+        "uncertainty_ppm": 0
+      },
+      "last_effect": "effect-a4f5fe308978cf2ba6b7dec3",
+      "parent_id": null,
+      "path": "entry",
+      "pc": 1,
+      "procedure": "main",
+      "resume_repair_id": null,
+      "return_pc": null,
+      "spent": 288,
+      "waiting": {
+        "child_id": "fixed-chain:call:fd0a43b66fb94c5e9531e280399ee131:2",
+        "kind": "call",
+        "pc": 1
+      }
+    },
+    {
+      "allowance": 400,
+      "call_id": "fixed-chain:call:fd0a43b66fb94c5e9531e280399ee131:2",
+      "cause": {
+        "candidate_operation_ids": [
+          "^6"
+        ],
+        "cause_id": "cause-870a52753d6889bdc001a284",
+        "cause_kind": "EFFECT",
+        "content": {
+          "candidate_effect_id": "candidate-effect-203a4c4310c9512caf3b02ed",
+          "published_effect_id": "effect-e3ef7ade720eb28fdb12345c",
+          "semantic_content": {
+            "effect_kind": "DECOMPOSITION_SIGNAL",
+            "operation_id": "^6",
+            "symbol": "L3"
+          }
+        },
+        "content_ref": {
+          "artifact_id": "artifact-a718636a556b27e6129c46ce",
+          "byte_length": 32,
+          "contract_type": "TENSOR_ARTIFACT_REF",
+          "dtype": "float32",
+          "encoding": "raw-contiguous-v1",
+          "schema_version": "cas.neural-cjt.tensor-artifact-ref/0.2",
+          "sha256": "a718636a556b27e6129c46ceb7589909836c32df8d056915490e0102a992d5c1",
+          "shape": [
+            1,
+            2,
+            4
+          ]
+        },
+        "contract_type": "CAUSE",
+        "entity_bindings": [],
+        "goal_context": {
+          "goal": "verified four-CJT chain"
+        },
+        "memory_refs": [],
+        "originating_cjt_id": "B",
+        "originating_modality": null,
+        "parent_effect_id": "effect-e3ef7ade720eb28fdb12345c",
+        "provenance": [
+          "published-effect:effect-e3ef7ade720eb28fdb12345c",
+          "commit-receipt:commit-25a18278298e751e8b420271"
+        ],
+        "relation_bindings": [],
+        "schema_version": "cas.neural-cjt.cause/0.2",
+        "source": "prototype:committed-effect-cascade",
+        "tick": 3,
+        "time_label": "logical-tick:3",
+        "uncertainty_ppm": 0
+      },
+      "last_effect": "effect-e3ef7ade720eb28fdb12345c",
+      "parent_id": "fixed-chain:call:fd0a43b66fb94c5e9531e280399ee131:1",
+      "path": "procedures.main.body.steps[1]",
+      "pc": 1,
+      "procedure": "worker",
+      "resume_repair_id": null,
+      "return_pc": 1,
+      "spent": 216,
+      "waiting": {
+        "child_id": "fixed-chain:call:fd0a43b66fb94c5e9531e280399ee131:3",
+        "kind": "repair",
+        "pc": 1,
+        "repair_id": "repair-7c6ea8fe01f3d2288f8e1995"
+      }
+    },
+    {
+      "allowance": 256,
+      "call_id": "fixed-chain:call:fd0a43b66fb94c5e9531e280399ee131:3",
+      "cause": {
+        "candidate_operation_ids": [
+          "^6"
+        ],
+        "cause_id": "cause-13f01623f6e0e5a1ee8da493",
+        "cause_kind": "EFFECT",
+        "content": {
+          "candidate_effect_id": "candidate-effect-e6a880f0edbcc0c5d25545f1",
+          "published_effect_id": "effect-9f2c39c8659aa06c7b9bfcf1",
+          "semantic_content": {
+            "effect_kind": "DECOMPOSITION_SIGNAL",
+            "operation_id": "^6",
+            "symbol": "L1"
+          }
+        },
+        "content_ref": {
+          "artifact_id": "artifact-315cd37fe39920bd1b75ab2b",
+          "byte_length": 32,
+          "contract_type": "TENSOR_ARTIFACT_REF",
+          "dtype": "float32",
+          "encoding": "raw-contiguous-v1",
+          "schema_version": "cas.neural-cjt.tensor-artifact-ref/0.2",
+          "sha256": "315cd37fe39920bd1b75ab2bcd0c6bbdad05be5bbe30004ba0e2e1a911898f1d",
+          "shape": [
+            1,
+            2,
+            4
+          ]
+        },
+        "contract_type": "CAUSE",
+        "entity_bindings": [],
+        "goal_context": {
+          "kind": "PREREQUISITE_REPAIR",
+          "return_address": "cjt:C:cause:cause-870a52753d6889bdc001a284"
+        },
+        "memory_refs": [],
+        "originating_cjt_id": "R",
+        "originating_modality": null,
+        "parent_effect_id": "effect-9f2c39c8659aa06c7b9bfcf1",
+        "provenance": [
+          "published-effect:effect-9f2c39c8659aa06c7b9bfcf1",
+          "commit-receipt:commit-9cfaa4f7d169acc5606b9a16"
+        ],
+        "relation_bindings": [],
+        "schema_version": "cas.neural-cjt.cause/0.2",
+        "source": "prototype:committed-effect-cascade",
+        "tick": 5,
+        "time_label": "logical-tick:5",
+        "uncertainty_ppm": 0
+      },
+      "last_effect": "effect-9f2c39c8659aa06c7b9bfcf1",
+      "parent_id": "fixed-chain:call:fd0a43b66fb94c5e9531e280399ee131:2",
+      "path": "procedures.worker.body.steps[1]",
+      "pc": 1,
+      "procedure": "repair_c",
+      "resume_repair_id": null,
+      "return_pc": 1,
+      "spent": 72,
+      "waiting": null
+    }
+  ],
+  "model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+  "native_head": {
+    "commit_receipt_id": "commit-9cfaa4f7d169acc5606b9a16",
+    "model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+    "state_digest": "0bd140b8e774588dcd04175e5c92d86a1a28886d67db63706084d0d993202bc4",
+    "state_version": 4,
+    "trace_digest": "e3f8ea69d9d93e3d26db9f6cd82718b8fb4ed59b2fc4a9feb1b7f893c77895e5"
+  },
+  "native_trace_count": 4,
+  "program_digest": "274bd1df17d94ed3e98e0ec60f24ba37ec582e580c693020d1d26822447627e2",
+  "remaining": 224,
+  "required_files": [
+    "checkpoint.json",
+    "compiled.db"
+  ],
+  "spent": 288,
+  "status": "CAS_META_CHECKPOINT_PREPARED"
+}

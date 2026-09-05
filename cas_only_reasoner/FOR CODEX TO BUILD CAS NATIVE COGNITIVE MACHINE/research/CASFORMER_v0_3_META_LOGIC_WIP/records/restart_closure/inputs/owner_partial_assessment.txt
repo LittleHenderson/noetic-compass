@@ -1,0 +1,180 @@
+# CAS-META-0 has reached a real programmable-composition milestone
+
+**According to the audit you pasted, the meta-logic layer now executes child CJT calls, receives their results, and resumes the correct caller.** It is no longer only a proposed language or a diagram.
+
+The clearest statement of what you have gained is:
+
+> **CASformer can execute a supplied, structured reasoning procedure through its existing neural CJTs without changing their weights.**
+
+That is an important step toward your larger idea of reusable, nested CAS programs. The audit remains **PARTIAL**, but none of its three remaining items reports a failing functional test. They concern preservation of the evidence, workspace cleanliness, and completion of the auditor’s standalone restart check.
+
+I am assessing GLM’s report here, not claiming to have independently executed this package myself.
+
+## What this changes in plain English
+
+Previously, the demonstrated lifecycle was arranged directly in the implementation:
+
+```text
+A → B → C → repair R → resumed C
+```
+
+CAS-META-0 adds a program-execution layer that can represent and run that workflow through actual calls and returns:
+
+```text
+Caller reaches a prerequisite block
+                ↓
+Caller suspends
+                ↓
+Child repair procedure receives its own call identity
+                ↓
+Child executes within the shared budget
+                ↓
+Child returns an accepted result
+                ↓
+The correct caller resumes
+```
+
+The important addition is **control over how the existing components cooperate**.
+
+This is the difference between having a particular working circuit and having a supported way to program that circuit’s execution. It does not yet mean the model can invent the program, choose the correct program from a natural-language request, or learn a new procedure.
+
+## What the audit establishes, and where it stops
+
+| Question                                                      | What this audit supports                                                       |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Does the meta-logic test suite run?                           | **Yes: 247 tests passed in GLM’s run.**                                        |
+| Does the demo reproduce its recorded result?                  | **Yes: the reported receipt fields and digests matched exactly.**              |
+| Does the tested program match its direct reference?           | **Yes, under the registered semantic projection and fixed-weight conditions.** |
+| Was the frozen v0.2 package altered?                          | **The five manifest checks passed and its aggregate remained unchanged.**      |
+| Did this milestone train the neural model?                    | **No. The report records no training and an unchanged model digest.**          |
+| Did GLM independently complete the standalone resume command? | **No. That audit leg remains open.**                                           |
+| Is the evidence known to be committed durably?                | **Not yet confirmed by this audit.**                                           |
+
+The **874-address index** is useful navigation. As its own header says, it is not 874 verified capabilities, and it does not independently certify the proposals it points to.
+
+## Two boundaries must stay attached to the success
+
+### 1. This is equivalence to the fixed-weight reference, not the entire learning demonstration
+
+The audit explicitly says the original v0.2 fifth-tick learning step was replaced by inference.
+
+Therefore the supported comparison is:
+
+> **The meta-program reproduces the selected behavior of the direct reference when both run under the fixed-weight milestone’s conditions.**
+
+It is not:
+
+> The meta-program has reproduced every feature of v0.2, including its learning transition.
+
+That separation is appropriate. It lets you establish call-and-return correctness before adding weight changes during nested execution.
+
+An unchanged model digest also does **not** mean nothing happened. Calls, budgets, repair records, and permitted runtime state can change while neural parameters stay fixed.
+
+### 2. A semantic-projection match has a defined scope
+
+`semantic_projection_equal: true` is the right kind of result for comparing executions whose administrative traces may differ.
+
+But it means agreement on **the fields included in that projection**. It does not automatically mean every raw trace field is identical, every possible program behaves equivalently, or no omitted field matters.
+
+The projection definition should remain part of the evidence package so a reader can see exactly what was compared. The matching digest identifies that comparison result; it does not expand its scope.
+
+# The remaining work is a bounded audit closure
+
+I would keep the current implementation unchanged while closing the three named items.
+
+## 1. Confirm that the evidence survives outside `%TEMP%`
+
+**Running from a temporary worktree is not itself a defect.** The issue is whether the exact evidence exists only there.
+
+GLM has confirmed that the code is on the WIP branch. It has **not** confirmed that `records/` is committed. That is an unresolved preservation question, not proof that the evidence is absent.
+
+The builder should check the committed tree first. If the records are missing, preserve the original receipt and raw logs in an evidence commit tied to the exact tested source commit. Include GLM’s audit report and its scope limits.
+
+Do not regenerate a more convenient receipt and substitute it for the one GLM reproduced.
+
+## 2. Verify that scratch directories are not part of the source package
+
+Directories such as `_te`, `_final_tests`, and `api-review-*` may be ordinary workspace leftovers. Their existence beside the source does not invalidate the tests.
+
+The required check is narrower:
+
+> Are any temporary files accidentally committed, or required by the recorded reproduction command without being declared inputs?
+
+Record the answer. Do not delete anything before the necessary evidence has been preserved.
+
+## 3. Complete the standalone resume leg
+
+The missing `--expected-digest` is **not evidence that restart is broken**. It explains why GLM’s standalone command did not complete.
+
+The report gives restart two existing forms of support: the builder’s receipt and the passing demo test within the independently executed suite. What remains is the additional, explicit standalone audit run.
+
+The auditor should obtain the **full expected checkpoint digest from the preserved checkpoint-creation evidence**, then run the exact documented resume command in a fresh process. It should not substitute the displayed program digest or semantic-projection digest unless the checkpoint contract explicitly says they are the same identity.
+
+Record the command, exit code, resumed result, and the comparison against the milestone’s stated expectations. Keep the identity guard intact.
+
+**That closes the audit gap without redesigning the mechanism.**
+
+## Keep the newer release identities straight
+
+This report now names:
+
+```text
+v0.2 source freeze: dec08c81
+v0.2 evidence:      b5d52d1f
+```
+
+Earlier messages named `783b67cb`.
+
+The milestone evidence should identify which exact v0.2 source it consumed and preserve the historical references. The unchanged aggregate is useful evidence that the controlled core stayed the same, but I would not infer the ancestry or reason for the newer commit from this summary alone.
+
+The practical instruction is simple: **bind the meta milestone to its actual dependency commit and manifest, rather than copying an older SHA from our conversation.**
+
+# Where this places your fractal idea
+
+You now have a reported implementation of one foundational ingredient:
+
+> **A program can call a child procedure and continue after it returns.**
+
+That is the execution machinery on which richer nested programs could be built.
+
+It is not yet evidence for `Compose`, `Within`, Noetic recursion, Foundation recursion, arbitrary recursive depth, or procedure-memory retrieval. The audit explicitly excludes those.
+
+Nor does program composition expand the canonical operation vocabulary by itself. The attached operation registry admits `^6` as canonical within v0.2 and keeps `^2`, `^3`, and `^8` experimental and unable to publish authoritative Effects through the default verifier. 
+
+The registry also distinguishes adding a neural-bank operation from extending the entire durable runtime. New operations still need contract-provider and decoder-registration support to participate fully in verification, repair, learning, and coordination. 
+
+So the progression is now clearer:
+
+```text
+Working neural CJTs
+        ↓
+Working repair and resume
+        ↓
+Supplied typed programs with real call-and-return   ← this milestone
+        ↓
+Broader tested program composition
+        ↓
+Procedure retrieval or program selection
+        ↓
+Learning to propose useful programs
+```
+
+Those later steps are development possibilities, not accomplishments established by this audit.
+
+# What I recommend sending back
+
+> **Accept `CAS_META_0_FIXED_WEIGHT_COMPOSITION_AUDIT_PARTIAL` at its stated scope. Preserve the current implementation and close only the three named audit items.**
+>
+> Confirm whether `records/` is already committed. Preserve the exact source-bound receipt, raw outputs, and audit report if it is not. Verify that workspace debris is neither committed nor an undeclared dependency. Complete the standalone fresh-process resume using the expected checkpoint digest from the preserved creation record.
+>
+> Bind the closure to the actual meta source commit and its exact v0.2 dependency, including the newer freeze/evidence identities reported in this audit. Keep the original partial audit and append its closures.
+>
+> Do not add training, new operations, Foundation meanings, procedure-memory retrieval, or further recursion features during this closure. Preserve the inference-only fifth-tick substitution and the stated Bias-per-CJT-per-call limitation. Return the resulting evidence locations and the auditor’s updated verdict.
+
+## Bottom line
+
+**This is progress in programmability, not yet an intelligence-performance result.**
+
+Your CJTs can reportedly cooperate through a supplied program with real child calls, repair closure, and correct resumption while the weights remain fixed. That is exactly the first bridge we wanted between the reasoning transistor and reusable CAS procedures.
+
+The next job is not another large redesign. It is to make this particular milestone durable and finish its restart audit. Then the project has a defined call-and-return baseline on which to test the next layer of composition.

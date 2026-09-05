@@ -1,0 +1,46 @@
+{
+  "actual_sqlite_active_head": {
+    "commit_receipt_id": "commit-45680a5aff12d3bc7ec7641d",
+    "model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+    "singleton": 1,
+    "state_digest": "c53893f9835b0a433b0b33346f7a9f214b43ee2dda9651d0c53b4b0295e9680f",
+    "state_version": 5,
+    "trace_digest": "0d1585776a67bd1b556186e2d3207e90c41999215fd0f7ec84fd9bbcc8524f5d"
+  },
+  "binding_fields": [
+    "chain_id",
+    "contracts",
+    "decoders",
+    "limits",
+    "model_digest",
+    "permitted_cjts",
+    "program_digest",
+    "program_version",
+    "run_id",
+    "software_digest",
+    "topology"
+  ],
+  "binding_run_id": "2c6428de3e24401caa488941f2bae0ee",
+  "cause": "Published step-4 checkpoint paired with already-completed step-5 database.",
+  "checkpoint_fields": [
+    "artifact_ids",
+    "binding",
+    "counter",
+    "events",
+    "frames",
+    "head",
+    "result_effect_id",
+    "schema",
+    "steps"
+  ],
+  "checkpoint_sha256": "e63274396c9ae7ca0c400925d7bb5bee28b132aeccb5fba5f1db2c03b9f828bf",
+  "expected_head_from_checkpoint": {
+    "commit_receipt_id": "commit-9cfaa4f7d169acc5606b9a16",
+    "model_digest": "fa4f90cc46bb0bf24023729da3d3061988e8b1e198100dd1883b68793e513944",
+    "state_digest": "0bd140b8e774588dcd04175e5c92d86a1a28886d67db63706084d0d993202bc4",
+    "state_version": 4,
+    "trace_digest": "e3f8ea69d9d93e3d26db9f6cd82718b8fb4ed59b2fc4a9feb1b7f893c77895e5"
+  },
+  "native_head_is_git_head": false,
+  "original_glm_failure_identical_cause_proven": false
+}
