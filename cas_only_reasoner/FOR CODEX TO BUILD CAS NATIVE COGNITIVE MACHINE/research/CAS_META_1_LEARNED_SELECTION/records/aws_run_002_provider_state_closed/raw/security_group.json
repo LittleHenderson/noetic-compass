@@ -1,0 +1,25 @@
+{
+  "absent": true,
+  "response": {
+    "Error": {
+      "Code": "InvalidGroup.NotFound",
+      "Message": "The security group 'sg-09495a2dbccdfc648' does not exist"
+    },
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "cache-control": "no-cache, no-store",
+        "connection": "close",
+        "content-type": "text/xml;charset=UTF-8",
+        "date": "Sat, 05 Sep 2026 12:14:20 GMT",
+        "server": "AmazonEC2",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "transfer-encoding": "chunked",
+        "vary": "accept-encoding",
+        "x-amzn-requestid": "1432905f-1ed1-482a-b8a0-f99a10f8c14b"
+      },
+      "HTTPStatusCode": 400,
+      "RequestId": "1432905f-1ed1-482a-b8a0-f99a10f8c14b",
+      "RetryAttempts": 0
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "account": "807562639912",
+  "aws_mutations_performed": false,
+  "checks": {
+    "instance_profile_absent": false,
+    "instance_terminated": false,
+    "s3_seven_day_retention": true,
+    "schedule_absent": false,
+    "security_group_absent": false,
+    "timer_role_absent": false,
+    "volumes_absent": false,
+    "worker_role_absent": false
+  },
+  "command_argv": [
+    "C:\\Python314\\python.exe",
+    "tools/verify_cloud_cleanup.py",
+    "--run-dir",
+    "records/aws_run_002",
+    "--output",
+    "records/aws_run_002_provider_state_early"
+  ],
+  "early_snapshot_receipt_sha256": null,
+  "helper_sha256": "6f7c9fb4ac635abbf60850ffb1a4fc31917afa41433242a533407e6149736526",
+  "instance_id": "i-04ac8e28d607c2e53",
+  "instance_state": "running",
+  "job": "cas-meta1-20260905115219-33ee1c8f",
+  "launch_receipt_sha256": "ad77ff072c2c6aa23d721b8d91372842a706bb201a29e914a63ec5d4ecb1782a",
+  "observed_attached_volume_ids": [
+    "vol-0c4fe87a14872b103"
+  ],
+  "raw_response_sha256": {
+    "raw/identity.json": "a4668377305dab2c8d97420b81be463dd1c2ac4c9763590f7bb3bda2c005614d",
+    "raw/instance.json": "4e5312eb49f8915b07b9b892488c5110e15858b30f4d8bba8807cdc64a73efe1",
+    "raw/instance_profile.json": "187e39ecef40b952d162829b3fa9a3b2edfd9613bdf0b95980163952d645983e",
+    "raw/s3_lifecycle.json": "4141c946af3576a4c9c160a35435604bc3b8c091a94aa43b151819068691e42d",
+    "raw/s3_results.json": "0e1f9089a6ef7eaf24fc08d988cb34f0bbdb86c74f84166d23bdf2cfb75b1832",
+    "raw/schedule.json": "42743e7ab9356931aaa33461ead8503faacc6c7a3e382ebb0888ff9419065034",
+    "raw/security_group.json": "9a74cf0f7e850bcd6c1f713072430a81509efbf97ae38d4dbe14815a895c7d6c",
+    "raw/timer_role.json": "b5ae8ad8128251556bf54e8246bf50be282cb0d33a6cff376ea95e70aec180e7",
+    "raw/volumes.json": "070d7d4620294fa972388e0a0c05936f16d3a752ee4f25dc8f1df4660a47cebc",
+    "raw/worker_role.json": "cff842a3c734ad2f92fc9a41affae05735568bb29d36367788dfb5d0272f7ead"
+  },
+  "region": "us-west-2",
+  "requests": [
+    {
+      "absent": false,
+      "arguments": {},
+      "label": "identity",
+      "method": "get_caller_identity",
+      "request_id": "230ac8a5-01c2-48de-9819-d30999189f40"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "InstanceIds": [
+          "i-04ac8e28d607c2e53"
+        ]
+      },
+      "label": "instance",
+      "method": "describe_instances",
+      "request_id": "79094aad-7b0c-4e0d-930c-f89ccf38e0bf"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "VolumeIds": [
+          "vol-0c4fe87a14872b103"
+        ]
+      },
+      "label": "volumes",
+      "method": "describe_volumes",
+      "request_id": "20bc1787-2c88-4668-8aa9-84490efc80e1"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "GroupIds": [
+          "sg-09495a2dbccdfc648"
+        ]
+      },
+      "label": "security_group",
+      "method": "describe_security_groups",
+      "request_id": "2f7c471e-fd94-49c6-89b2-08b856d2102a"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "InstanceProfileName": "cas-meta1-20260905115219-33ee1c8f-worker"
+      },
+      "label": "instance_profile",
+      "method": "get_instance_profile",
+      "request_id": "c6f6f78a-e46a-4a20-9ef1-fae5c30249b6"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "RoleName": "cas-meta1-20260905115219-33ee1c8f-worker"
+      },
+      "label": "worker_role",
+      "method": "get_role",
+      "request_id": "d8a49c8a-98ab-45a0-9ef7-3938defa7839"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "RoleName": "cas-meta1-20260905115219-33ee1c8f-timer"
+      },
+      "label": "timer_role",
+      "method": "get_role",
+      "request_id": "8524a094-12aa-41ca-96ce-99fbee97952c"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "Name": "cas-meta1-20260905115219-33ee1c8f"
+      },
+      "label": "schedule",
+      "method": "get_schedule",
+      "request_id": "a3eae26e-08c3-4c41-a9bf-746cc68df974"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "Bucket": "cas-meta1-20260905115219-33ee1c8f-807562639912"
+      },
+      "label": "s3_lifecycle",
+      "method": "get_bucket_lifecycle_configuration",
+      "request_id": "9G0QBNE773MVY33S"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "Bucket": "cas-meta1-20260905115219-33ee1c8f-807562639912",
+        "MaxKeys": 10,
+        "Prefix": "results/"
+      },
+      "label": "s3_results",
+      "method": "list_objects_v2",
+      "request_id": "9G0M8Q283AQQ43SQ"
+    }
+  ],
+  "results_listing_truncated": false,
+  "retained_result_objects": [
+    {
+      "bytes": 507,
+      "key": "results/bootstrap.log",
+      "last_modified": "2026-09-05 12:02:02+00:00"
+    }
+  ],
+  "schema": "cas-meta1-provider-cleanup/1",
+  "security_group": "sg-09495a2dbccdfc648",
+  "status": "PROVIDER_STATE_CAPTURED_CLEANUP_PENDING",
+  "utc_finished": "2026-09-05T12:02:33.186835+00:00",
+  "utc_started": "2026-09-05T12:02:29.455534+00:00",
+  "volume_ids": [
+    "vol-0c4fe87a14872b103"
+  ]
+}

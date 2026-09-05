@@ -1,0 +1,22 @@
+{
+  "absent": true,
+  "response": {
+    "Error": {
+      "Code": "ResourceNotFoundException",
+      "Message": "Schedule cas-meta1-20260905115219-33ee1c8f does not exist."
+    },
+    "Message": "Schedule cas-meta1-20260905115219-33ee1c8f does not exist.",
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-length": "72",
+        "content-type": "application/json",
+        "date": "Sat, 05 Sep 2026 12:14:21 GMT",
+        "x-amzn-errortype": "ResourceNotFoundException:http://internal.amazon.com/coral/com.amazonaws.chronos/",
+        "x-amzn-requestid": "a5d93cf5-6312-4969-a651-fd1bec7614e4"
+      },
+      "HTTPStatusCode": 404,
+      "RequestId": "a5d93cf5-6312-4969-a651-fd1bec7614e4",
+      "RetryAttempts": 0
+    }
+  }
+}

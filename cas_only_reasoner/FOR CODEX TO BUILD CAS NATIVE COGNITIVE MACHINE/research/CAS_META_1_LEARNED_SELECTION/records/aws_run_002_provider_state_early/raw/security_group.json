@@ -1,0 +1,51 @@
+{
+  "absent": false,
+  "response": {
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "cache-control": "no-cache, no-store",
+        "content-length": "943",
+        "content-type": "text/xml;charset=UTF-8",
+        "date": "Sat, 05 Sep 2026 12:02:31 GMT",
+        "server": "AmazonEC2",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-amzn-requestid": "2f7c471e-fd94-49c6-89b2-08b856d2102a"
+      },
+      "HTTPStatusCode": 200,
+      "RequestId": "2f7c471e-fd94-49c6-89b2-08b856d2102a",
+      "RetryAttempts": 0
+    },
+    "SecurityGroups": [
+      {
+        "Description": "CAS-META-1 outbound HTTPS only",
+        "GroupId": "sg-09495a2dbccdfc648",
+        "GroupName": "cas-meta1-20260905115219-33ee1c8f",
+        "IpPermissions": [],
+        "IpPermissionsEgress": [
+          {
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "IpRanges": [
+              {
+                "CidrIp": "0.0.0.0/0"
+              }
+            ],
+            "Ipv6Ranges": [],
+            "PrefixListIds": [],
+            "ToPort": 443,
+            "UserIdGroupPairs": []
+          }
+        ],
+        "OwnerId": "807562639912",
+        "SecurityGroupArn": "arn:aws:ec2:us-west-2:807562639912:security-group/sg-09495a2dbccdfc648",
+        "Tags": [
+          {
+            "Key": "cas_meta_job",
+            "Value": "cas-meta1-20260905115219-33ee1c8f"
+          }
+        ],
+        "VpcId": "vpc-0df2f8cc1b9f23838"
+      }
+    ]
+  }
+}

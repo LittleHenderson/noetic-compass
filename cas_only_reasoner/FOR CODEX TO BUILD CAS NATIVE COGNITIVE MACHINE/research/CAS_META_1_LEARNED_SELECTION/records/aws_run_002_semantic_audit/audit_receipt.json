@@ -1,0 +1,107 @@
+{
+  "audit_git_sha": "cfd22ab96c479703d09e0792a139901f2931f5bd",
+  "boundary": "Byte/semantic audit of stored SQLite evidence with the pinned verifier; not neural reproduction. No model construction, calls, tensor operations, or checkpoint loading.",
+  "checkpoint_loading_performed": false,
+  "command_argv": [
+    "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+    "tools/audit_recovery_semantics.py",
+    "--run-dir",
+    "records/aws_run_002",
+    "--extracted",
+    "records/aws_run_002_extracted",
+    "--predecessor",
+    "records/aws_run_001",
+    "--output",
+    "records/aws_run_002_semantic_audit"
+  ],
+  "counts": {
+    "arm_executions_reverified": 360,
+    "recorded_verdicts_equal": true,
+    "references_reverified": 72,
+    "success_counts": {
+      "cas_trained": 66,
+      "cas_untrained": 8,
+      "generic_trained": 61,
+      "generic_untrained": 8,
+      "rule": 72
+    }
+  },
+  "extracted_files_unchanged": true,
+  "guard": {
+    "blocked_attempts": [],
+    "torch_version": "2.11.0+cpu"
+  },
+  "local_neural_execution": false,
+  "packet_sha256": "b42598370145843182515afe202a2b340e14d9a248517b4e35d62bc4daaa541e",
+  "paths": {
+    "extracted": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_002_extracted",
+    "output": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_002_semantic_audit",
+    "predecessor": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_001",
+    "run_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_002"
+  },
+  "predecessor_packet_sha256": "76fbb522a97e3018e946857ce71599fbdea8bb6daffd29bd15fb7cf2d091f7a0",
+  "run_source_sha": "cfd22ab96c479703d09e0792a139901f2931f5bd",
+  "runtime": {
+    "executable": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Scripts\\python.exe",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "schema": "cas-meta1-recovery-semantic-audit/1",
+  "source_after": {
+    "baseline": {
+      "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+      "files_verified": 316
+    },
+    "files_sha256": {
+      "cas_meta1/baseline.py": "8bf2f87eb142dcc2e90b62d3e722ad2943c88569daed0575904187fc7aeb2a42",
+      "cas_meta1/execution.py": "1acb999a77fd952ba12a5927461f8d99b97b4689aa3ab5696053dccb2c6d2376",
+      "data/test_private.json": "12f25867796892bd4ac12efc9e9a4c0b442e9e3a9b95d93dd251f5ca6c8034ce",
+      "data/test_public.json": "74341e470a2452735bb33cd872f8d0ba28106018bc3f20b216314e8fc1d5a7de",
+      "tools/audit_recovery_semantics.py": "32da3175db4a69ea48125849220c2d23e033d939fe45692e4850dcaf10d22eca",
+      "tools/inspect_cloud_packet.py": "aa57ba34b030951cf3d12d1f509f443dc95bac0e26a980672f496144fa9c7fb9"
+    },
+    "installed_wheels": {
+      "cas_cjt": {
+        "package_files_verified": 26,
+        "path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Lib\\site-packages\\cas_cjt",
+        "wheel_sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+      },
+      "casformer": {
+        "package_files_verified": 9,
+        "path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Lib\\site-packages\\casformer",
+        "wheel_sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"
+      }
+    }
+  },
+  "source_before": {
+    "baseline": {
+      "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+      "files_verified": 316
+    },
+    "files_sha256": {
+      "cas_meta1/baseline.py": "8bf2f87eb142dcc2e90b62d3e722ad2943c88569daed0575904187fc7aeb2a42",
+      "cas_meta1/execution.py": "1acb999a77fd952ba12a5927461f8d99b97b4689aa3ab5696053dccb2c6d2376",
+      "data/test_private.json": "12f25867796892bd4ac12efc9e9a4c0b442e9e3a9b95d93dd251f5ca6c8034ce",
+      "data/test_public.json": "74341e470a2452735bb33cd872f8d0ba28106018bc3f20b216314e8fc1d5a7de",
+      "tools/audit_recovery_semantics.py": "32da3175db4a69ea48125849220c2d23e033d939fe45692e4850dcaf10d22eca",
+      "tools/inspect_cloud_packet.py": "aa57ba34b030951cf3d12d1f509f443dc95bac0e26a980672f496144fa9c7fb9"
+    },
+    "installed_wheels": {
+      "cas_cjt": {
+        "package_files_verified": 26,
+        "path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Lib\\site-packages\\cas_cjt",
+        "wheel_sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+      },
+      "casformer": {
+        "package_files_verified": 9,
+        "path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\casformer-v02-run-dec08c81\\venv\\Lib\\site-packages\\casformer",
+        "wheel_sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"
+      }
+    }
+  },
+  "source_hashes_unchanged": true,
+  "status": "RECOVERY_BYTE_SEMANTIC_AUDIT_PASSED",
+  "tensor_operations_performed": false,
+  "utc": "2026-09-05T12:10:20.738440+00:00",
+  "wall_seconds": 319.3541483000008
+}

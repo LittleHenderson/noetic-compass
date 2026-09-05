@@ -1,0 +1,21 @@
+{
+  "absent": true,
+  "response": {
+    "Error": {
+      "Code": "NoSuchEntity",
+      "Message": "The role with name cas-meta1-20260905115219-33ee1c8f-timer cannot be found.",
+      "Type": "Sender"
+    },
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-length": "319",
+        "content-type": "text/xml",
+        "date": "Sat, 05 Sep 2026 12:14:20 GMT",
+        "x-amzn-requestid": "b7943a8b-c0a9-4283-aaab-b753e18caf43"
+      },
+      "HTTPStatusCode": 404,
+      "RequestId": "b7943a8b-c0a9-4283-aaab-b753e18caf43",
+      "RetryAttempts": 0
+    }
+  }
+}

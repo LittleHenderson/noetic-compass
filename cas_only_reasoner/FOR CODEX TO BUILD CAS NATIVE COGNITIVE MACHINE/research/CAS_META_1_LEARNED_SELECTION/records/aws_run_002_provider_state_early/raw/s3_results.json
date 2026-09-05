@@ -1,0 +1,39 @@
+{
+  "absent": false,
+  "response": {
+    "Contents": [
+      {
+        "ChecksumAlgorithm": [
+          "CRC64NVME"
+        ],
+        "ChecksumType": "FULL_OBJECT",
+        "ETag": "\"7b375a122c4b6b52af8ed7b93a5ee7e4\"",
+        "Key": "results/bootstrap.log",
+        "LastModified": "2026-09-05 12:02:02+00:00",
+        "Size": 507,
+        "StorageClass": "STANDARD"
+      }
+    ],
+    "EncodingType": "url",
+    "IsTruncated": false,
+    "KeyCount": 1,
+    "MaxKeys": 10,
+    "Name": "cas-meta1-20260905115219-33ee1c8f-807562639912",
+    "Prefix": "results/",
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-type": "application/xml",
+        "date": "Sat, 05 Sep 2026 12:02:34 GMT",
+        "server": "AmazonS3",
+        "transfer-encoding": "chunked",
+        "x-amz-bucket-region": "us-west-2",
+        "x-amz-id-2": "cjebN0ru5VsutQtgSlfKcywvgX4fOY4QrXHs4tYv8lsSsJtejmgiGj59e7oXELTTXv+JYn8QEoO9vjn8PSPTqN6Y1oBEZXi+",
+        "x-amz-request-id": "9G0M8Q283AQQ43SQ"
+      },
+      "HTTPStatusCode": 200,
+      "HostId": "cjebN0ru5VsutQtgSlfKcywvgX4fOY4QrXHs4tYv8lsSsJtejmgiGj59e7oXELTTXv+JYn8QEoO9vjn8PSPTqN6Y1oBEZXi+",
+      "RequestId": "9G0M8Q283AQQ43SQ",
+      "RetryAttempts": 0
+    }
+  }
+}

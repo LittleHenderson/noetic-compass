@@ -1,0 +1,43 @@
+{
+  "absent": false,
+  "response": {
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-length": "1025",
+        "content-type": "text/xml",
+        "date": "Sat, 05 Sep 2026 12:02:32 GMT",
+        "x-amzn-requestid": "8524a094-12aa-41ca-96ce-99fbee97952c"
+      },
+      "HTTPStatusCode": 200,
+      "RequestId": "8524a094-12aa-41ca-96ce-99fbee97952c",
+      "RetryAttempts": 0
+    },
+    "Role": {
+      "Arn": "arn:aws:iam::807562639912:role/cas-meta1-20260905115219-33ee1c8f-timer",
+      "AssumeRolePolicyDocument": {
+        "Statement": [
+          {
+            "Action": "sts:AssumeRole",
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "scheduler.amazonaws.com"
+            }
+          }
+        ],
+        "Version": "2012-10-17"
+      },
+      "CreateDate": "2026-09-05 11:52:22+00:00",
+      "MaxSessionDuration": 3600,
+      "Path": "/",
+      "RoleId": "AROA3YBT37IUPIF4HJNJA",
+      "RoleLastUsed": {},
+      "RoleName": "cas-meta1-20260905115219-33ee1c8f-timer",
+      "Tags": [
+        {
+          "Key": "cas_meta_job",
+          "Value": "cas-meta1-20260905115219-33ee1c8f"
+        }
+      ]
+    }
+  }
+}

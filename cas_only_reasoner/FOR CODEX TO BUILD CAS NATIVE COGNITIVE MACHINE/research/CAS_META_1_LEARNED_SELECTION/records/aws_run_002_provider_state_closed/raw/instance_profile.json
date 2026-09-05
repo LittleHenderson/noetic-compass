@@ -1,0 +1,21 @@
+{
+  "absent": true,
+  "response": {
+    "Error": {
+      "Code": "NoSuchEntity",
+      "Message": "Instance Profile cas-meta1-20260905115219-33ee1c8f-worker cannot be found.",
+      "Type": "Sender"
+    },
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-length": "318",
+        "content-type": "text/xml",
+        "date": "Sat, 05 Sep 2026 12:14:20 GMT",
+        "x-amzn-requestid": "156db291-ed2d-43f5-8ff9-629900a59d34"
+      },
+      "HTTPStatusCode": 404,
+      "RequestId": "156db291-ed2d-43f5-8ff9-629900a59d34",
+      "RetryAttempts": 0
+    }
+  }
+}

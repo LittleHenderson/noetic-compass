@@ -1,0 +1,50 @@
+{
+  "absent": false,
+  "response": {
+    "InstanceProfile": {
+      "Arn": "arn:aws:iam::807562639912:instance-profile/cas-meta1-20260905115219-33ee1c8f-worker",
+      "CreateDate": "2026-09-05 11:52:21+00:00",
+      "InstanceProfileId": "AIPA3YBT37IUGTAGEJCTE",
+      "InstanceProfileName": "cas-meta1-20260905115219-33ee1c8f-worker",
+      "Path": "/",
+      "Roles": [
+        {
+          "Arn": "arn:aws:iam::807562639912:role/cas-meta1-20260905115219-33ee1c8f-worker",
+          "AssumeRolePolicyDocument": {
+            "Statement": [
+              {
+                "Action": "sts:AssumeRole",
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "ec2.amazonaws.com"
+                }
+              }
+            ],
+            "Version": "2012-10-17"
+          },
+          "CreateDate": "2026-09-05 11:52:21+00:00",
+          "Path": "/",
+          "RoleId": "AROA3YBT37IUFTZXYNPJV",
+          "RoleName": "cas-meta1-20260905115219-33ee1c8f-worker"
+        }
+      ],
+      "Tags": [
+        {
+          "Key": "cas_meta_job",
+          "Value": "cas-meta1-20260905115219-33ee1c8f"
+        }
+      ]
+    },
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-length": "1432",
+        "content-type": "text/xml",
+        "date": "Sat, 05 Sep 2026 12:02:32 GMT",
+        "x-amzn-requestid": "c6f6f78a-e46a-4a20-9ef1-fae5c30249b6"
+      },
+      "HTTPStatusCode": 200,
+      "RequestId": "c6f6f78a-e46a-4a20-9ef1-fae5c30249b6",
+      "RetryAttempts": 0
+    }
+  }
+}

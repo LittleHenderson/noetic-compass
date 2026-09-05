@@ -1,0 +1,118 @@
+{
+  "schema": "cas-meta1-final-validation/1",
+  "status": "CAS_META_1_LEARNED_SELECTION_PILOT_VERIFIED",
+  "accepted_baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+  "training_source_sha": "a4dc9f2fc6f6d4f3d5e0b31100ac131327e02109",
+  "recovery_source_sha": "cfd22ab96c479703d09e0792a139901f2931f5bd",
+  "cleanup_checks": {
+    "instance_profile_absent": true,
+    "instance_terminated": true,
+    "s3_seven_day_retention": true,
+    "schedule_absent": true,
+    "security_group_absent": true,
+    "timer_role_absent": true,
+    "volumes_absent": true,
+    "worker_role_absent": true
+  },
+  "files": {
+    "records/aws_run_002/launch_receipt.json": {
+      "sha256": "47e94a62c568c9efd93701329e9c8f99589ce801a3961da7673545248f6ac4e8",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_002\\launch_receipt.json",
+      "bytes": 70514
+    },
+    "records/aws_run_001/cloud_artifacts.zip": {
+      "sha256": "76fbb522a97e3018e946857ce71599fbdea8bb6daffd29bd15fb7cf2d091f7a0",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_001\\cloud_artifacts.zip",
+      "bytes": 20718965
+    },
+    "records/aws_run_002_semantic_audit/audit_receipt.json": {
+      "sha256": "9c8302d654bf468a7d28047732af6cfad731a9eda4270c6ae0bf9c7f94f98e0c",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_002_semantic_audit\\audit_receipt.json",
+      "bytes": 5914
+    },
+    "runs/cas-meta1-cfd22ab9.zip": {
+      "sha256": "17688c68c1f35c06ea3c9fc6571c5b60af62201a69549cef3a4223a7dcb32b1f",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\runs\\cas-meta1-cfd22ab9.zip",
+      "bytes": 23475953
+    },
+    "records/aws_budget_ledger.json": {
+      "sha256": "3c6f61d7065fef65407dc7ca9405b8a2be8f3d163714014de1f7c4b6e33384d7",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_budget_ledger.json",
+      "bytes": 922
+    },
+    "records/local_final_evidence_gate/receipt.json": {
+      "sha256": "65de7391e65100f149555dc2bc9e7471b8d477917e73c3f185b49b852eba1385",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\local_final_evidence_gate\\receipt.json",
+      "bytes": 5566
+    },
+    "records/aws_run_002/cloud_artifacts.zip": {
+      "sha256": "b42598370145843182515afe202a2b340e14d9a248517b4e35d62bc4daaa541e",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_002\\cloud_artifacts.zip",
+      "bytes": 53541903
+    },
+    "records/aws_run_002_provider_state_closed/provider_state_receipt.json": {
+      "sha256": "4efb7f4de5ab2f6257dfb18f06ef706cec0cf61200bf92e5a579b10eb2ebeea4",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_run_002_provider_state_closed\\provider_state_receipt.json",
+      "bytes": 5490
+    }
+  },
+  "cleanup_status": "PROVIDER_CLEANUP_VERIFIED",
+  "audit_status": "RECOVERY_BYTE_SEMANTIC_AUDIT_PASSED",
+  "local_counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 195
+  },
+  "audit_counts": {
+    "arm_executions_reverified": 360,
+    "recorded_verdicts_equal": true,
+    "references_reverified": 72,
+    "success_counts": {
+      "cas_trained": 66,
+      "cas_untrained": 8,
+      "generic_trained": 61,
+      "generic_untrained": 8,
+      "rule": 72
+    }
+  },
+  "audit_guard": {
+    "blocked_attempts": [],
+    "torch_version": "2.11.0+cpu"
+  },
+  "gpu_integration_tests": {
+    "passed": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 73.79
+  },
+  "actual_success": {
+    "cas_trained": 66,
+    "cas_untrained": 8,
+    "generic_trained": 61,
+    "generic_untrained": 8,
+    "rule": 72
+  },
+  "cases_per_arm": 72,
+  "repair_task_success": {
+    "cas_untrained": 8,
+    "cas_trained": 22,
+    "generic_untrained": 8,
+    "generic_trained": 21,
+    "rule": 24
+  },
+  "repair_cases_per_arm": 24,
+  "budget": {
+    "approved_total_usd": 100,
+    "total_reserved_usd": 4,
+    "unreserved_usd": 96,
+    "actual_aws_invoice_available": false
+  },
+  "recovery_seconds": 698.0300424098969,
+  "training_or_selector_changes_during_recovery": false,
+  "local_neural_execution": false,
+  "original_cleanup_warnings_preserved": true,
+  "claim_boundary": "One seed, three authored procedures, synthetic held-out tasks. Learned selection and binding demonstrated; no CAS-specific advantage, general reasoning, Noetic-fractal completion or production readiness claim.",
+  "evidence_commit": "This receipt is bound by the subsequent separate Git evidence commit; it does not contain a self-referential commit hash."
+}

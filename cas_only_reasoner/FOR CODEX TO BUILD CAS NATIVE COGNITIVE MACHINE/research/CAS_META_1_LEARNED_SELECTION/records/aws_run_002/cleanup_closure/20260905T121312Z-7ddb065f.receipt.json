@@ -1,0 +1,63 @@
+{
+  "account": "807562639912",
+  "calls": [
+    {
+      "exception": null,
+      "method": "get_caller_identity",
+      "request_id": "29ccecca-ebf1-4920-8d45-e6c16ba147f8",
+      "service": "sts",
+      "utc": "2026-09-05T12:13:12.996701+00:00"
+    },
+    {
+      "exception": null,
+      "method": "describe_instances",
+      "request_id": "e8f34302-aac2-4098-85a5-7035d6406019",
+      "service": "ec2",
+      "utc": "2026-09-05T12:13:13.340298+00:00"
+    },
+    {
+      "exception": null,
+      "method": "describe_volumes",
+      "request_id": "53a29b9b-ce0d-4734-86a1-4f440fc7304b",
+      "service": "ec2",
+      "utc": "2026-09-05T12:13:13.747889+00:00"
+    }
+  ],
+  "command": [
+    "C:\\Python314\\python.exe",
+    "records/aws_run_002/cleanup_closure/cleanup_job002.py",
+    "--cleanup"
+  ],
+  "completed_utc": "2026-09-05T12:13:13.877897+00:00",
+  "early_snapshot_sha256": "0d492e0dd50f6a0b61e7a9ea0c870d747f2c988448e4e07907e27d52cbd00955",
+  "errors": [],
+  "helper_sha256": "97963324fec6e92765860138eb678b0cfb4b8ef24b9c3a2839e6458cb5f0742d",
+  "instance_id": "i-04ac8e28d607c2e53",
+  "instance_state": "shutting-down",
+  "job": "cas-meta1-20260905115219-33ee1c8f",
+  "original_launch_receipt_sha256": "47e94a62c568c9efd93701329e9c8f99589ce801a3961da7673545248f6ac4e8",
+  "original_launch_receipt_unchanged": true,
+  "original_launch_receipt_untouched": true,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "provider_calls_file": "20260905T121312Z-7ddb065f.provider_calls.jsonl",
+  "provider_calls_sha256": "c22f660efa8f8eda22b6893ccf6a1942c7f2e4dba17a293e5e3d6160696457a6",
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "region": "us-west-2",
+  "remaining": [
+    "i-04ac8e28d607c2e53",
+    "vol-0c4fe87a14872b103",
+    "cas-meta1-20260905115219-33ee1c8f",
+    "cas-meta1-20260905115219-33ee1c8f-worker",
+    "cas-meta1-20260905115219-33ee1c8f-timer",
+    "sg-09495a2dbccdfc648"
+  ],
+  "requested_cleanup": true,
+  "s3_untouched": true,
+  "security_group_id": "sg-09495a2dbccdfc648",
+  "source_sha": "cfd22ab96c479703d09e0792a139901f2931f5bd",
+  "started_utc": "2026-09-05T12:13:12.544203+00:00",
+  "status": "WAITING_FOR_TERMINATION_NO_RESOURCES_REMOVED",
+  "termination_confirmed": false,
+  "volume_id": "vol-0c4fe87a14872b103",
+  "volume_state": "available"
+}

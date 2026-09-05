@@ -1,0 +1,246 @@
+{
+  "account": "807562639912",
+  "calls": [
+    {
+      "exception": null,
+      "method": "get_caller_identity",
+      "request_id": "d94a59c4-4eb3-49af-bbb4-5dde14ab65c8",
+      "service": "sts",
+      "utc": "2026-09-05T12:13:58.139011+00:00"
+    },
+    {
+      "exception": null,
+      "method": "describe_instances",
+      "request_id": "ff8ec2e7-493e-47ee-bbd6-0fc7dd68d789",
+      "service": "ec2",
+      "utc": "2026-09-05T12:13:58.472327+00:00"
+    },
+    {
+      "exception": "ClientError",
+      "method": "describe_volumes",
+      "request_id": "702b5c7a-9f0f-45ec-8fc7-5e806c83c0ec",
+      "service": "ec2",
+      "utc": "2026-09-05T12:13:58.846097+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_schedule",
+      "request_id": "0d1652cf-f580-4059-9334-8695260ba26b",
+      "service": "scheduler",
+      "utc": "2026-09-05T12:13:59.013719+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_schedule",
+      "request_id": "be8d620f-2f08-4204-a43d-57e201bbb48f",
+      "service": "scheduler",
+      "utc": "2026-09-05T12:13:59.351478+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_instance_profile",
+      "request_id": "a62d5f5a-23f3-4b55-9039-b925b0c22d0b",
+      "service": "iam",
+      "utc": "2026-09-05T12:13:59.389758+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_role",
+      "request_id": "2fe55139-3b7f-4577-ad1e-380dcc1b93bc",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:00.005636+00:00"
+    },
+    {
+      "exception": null,
+      "method": "remove_role_from_instance_profile",
+      "request_id": "3c978455-af97-4167-8203-965c6071586c",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:00.129245+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_instance_profile",
+      "request_id": "fa4890a2-a025-4bf1-8f35-15880450bc57",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:00.254722+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_role",
+      "request_id": "84bbf945-7839-4934-b3ab-97de0e9391d2",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:00.426069+00:00"
+    },
+    {
+      "exception": null,
+      "method": "list_role_policies",
+      "request_id": "81d8c7dd-dc44-4deb-9a4c-cefb227e0820",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:00.535205+00:00"
+    },
+    {
+      "exception": null,
+      "method": "list_attached_role_policies",
+      "request_id": "796e1850-0429-44da-a76c-01f6f94f6e3e",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:00.649940+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_role_policy",
+      "request_id": "6a18fb2c-f11b-4f01-8155-91f440f6bb49",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:00.777242+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_role_policy",
+      "request_id": "fc11f934-342f-406d-bf02-35b0aa971f6c",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:00.893846+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_role",
+      "request_id": "47cc12ae-b964-4af3-80a7-74205e5f0c6c",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:01.048446+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_role",
+      "request_id": "d7593d98-9952-4d7f-82ca-3a30648048c1",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:01.248904+00:00"
+    },
+    {
+      "exception": null,
+      "method": "list_role_policies",
+      "request_id": "a21af149-c273-4287-9c12-45a29e913f4f",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:01.381186+00:00"
+    },
+    {
+      "exception": null,
+      "method": "list_attached_role_policies",
+      "request_id": "a551c88d-c9af-4e64-91fe-d5b407f1256a",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:01.500827+00:00"
+    },
+    {
+      "exception": null,
+      "method": "get_role_policy",
+      "request_id": "293a0097-c5b9-441b-a6c3-66d6ede83dd5",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:01.598954+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_role_policy",
+      "request_id": "9cba88d9-dad4-4df2-a921-dd0f20ef05db",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:01.708062+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_role",
+      "request_id": "d0e6e22e-445a-44b4-bac1-a6d2433e7b26",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:01.862351+00:00"
+    },
+    {
+      "exception": null,
+      "method": "describe_security_groups",
+      "request_id": "122ece55-f4d0-47f1-a8dd-8bf657664fd6",
+      "service": "ec2",
+      "utc": "2026-09-05T12:14:02.069893+00:00"
+    },
+    {
+      "exception": null,
+      "method": "delete_security_group",
+      "request_id": "9857b6dc-057a-41f9-9744-c5642f4a12df",
+      "service": "ec2",
+      "utc": "2026-09-05T12:14:02.578596+00:00"
+    },
+    {
+      "exception": "ClientError",
+      "method": "describe_volumes",
+      "request_id": "bedf86d1-b149-4954-87b9-bf09d52afc98",
+      "service": "ec2",
+      "utc": "2026-09-05T12:14:02.875220+00:00"
+    },
+    {
+      "exception": "ResourceNotFoundException",
+      "method": "get_schedule",
+      "request_id": "a835fc0a-4f9f-41c3-8254-fc50d5c1ee52",
+      "service": "scheduler",
+      "utc": "2026-09-05T12:14:02.960384+00:00"
+    },
+    {
+      "exception": "NoSuchEntityException",
+      "method": "get_instance_profile",
+      "request_id": "428d8392-9378-44a4-b886-e526ad930b82",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:02.993221+00:00"
+    },
+    {
+      "exception": "NoSuchEntityException",
+      "method": "get_role",
+      "request_id": "9a60f9a5-da3d-476e-982c-58bdf38fec28",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:03.090443+00:00"
+    },
+    {
+      "exception": "NoSuchEntityException",
+      "method": "get_role",
+      "request_id": "7ca1f70d-8c01-4dce-bca5-c9198f02b31f",
+      "service": "iam",
+      "utc": "2026-09-05T12:14:03.204371+00:00"
+    },
+    {
+      "exception": "ClientError",
+      "method": "describe_security_groups",
+      "request_id": "5214cd91-6ee9-4167-9d71-cf6bcbeed6d3",
+      "service": "ec2",
+      "utc": "2026-09-05T12:14:03.316941+00:00"
+    },
+    {
+      "exception": "ClientError",
+      "method": "describe_volumes",
+      "request_id": "9e2fa791-9288-43c4-b067-d7b031cf577f",
+      "service": "ec2",
+      "utc": "2026-09-05T12:14:03.804740+00:00"
+    }
+  ],
+  "command": [
+    "C:\\Python314\\python.exe",
+    "records/aws_run_002/cleanup_closure/cleanup_job002.py",
+    "--cleanup"
+  ],
+  "completed_utc": "2026-09-05T12:14:04.181736+00:00",
+  "early_snapshot_sha256": "0d492e0dd50f6a0b61e7a9ea0c870d747f2c988448e4e07907e27d52cbd00955",
+  "errors": [],
+  "helper_sha256": "4053381e20964b5030202cb365d8553b23b9a7959522b985f70dbc6460aa788d",
+  "instance_id": "i-04ac8e28d607c2e53",
+  "instance_state": "terminated",
+  "job": "cas-meta1-20260905115219-33ee1c8f",
+  "original_launch_receipt_sha256": "47e94a62c568c9efd93701329e9c8f99589ce801a3961da7673545248f6ac4e8",
+  "original_launch_receipt_unchanged": true,
+  "original_launch_receipt_untouched": true,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "provider_calls_file": "20260905T121357Z-ef5064b8.provider_calls.jsonl",
+  "provider_calls_sha256": "952cc8017ec5f353c31019582b113c5c2ef233a2f565c079a24345a31f14c4b9",
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "region": "us-west-2",
+  "remaining": [],
+  "requested_cleanup": true,
+  "s3_untouched": true,
+  "security_group_id": "sg-09495a2dbccdfc648",
+  "source_sha": "cfd22ab96c479703d09e0792a139901f2931f5bd",
+  "started_utc": "2026-09-05T12:13:57.791390+00:00",
+  "status": "CLEANUP_CLOSED_EVIDENCE_RETAINED",
+  "termination_confirmed": true,
+  "verified_local_packet_sha256": "b42598370145843182515afe202a2b340e14d9a248517b4e35d62bc4daaa541e",
+  "volume_id": "vol-0c4fe87a14872b103",
+  "volume_state": "deleted_or_not_found"
+}

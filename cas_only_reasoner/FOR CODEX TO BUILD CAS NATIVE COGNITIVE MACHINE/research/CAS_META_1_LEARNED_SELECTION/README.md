@@ -1,11 +1,12 @@
 # CAS-META-1: learned CJT-program selection
 
-Build status: AWS training completed and six candidate checkpoints were saved.
-The first job timed out during native evaluation, so the full learning result
-is still open. [The recovery plan](RECOVERY_PLAN.md) preserves all original
-predictions and reruns evaluation on a faster AWS GPU. The owner approved a $100
-total cap; each bounded attempt reserves $2 from one shared ledger. No neural
-training or evaluation is permitted on the laptop. No further T4 use is permitted.
+Build status: verified small learning pilot. CASformer improved from 8/72 to
+66/72 correctly solved held-out tasks; trained generic scored 61/72 and the
+rule selector 72/72. All 360 saved outcomes were rechecked. AWS cleanup is closed.
+See [RESULTS.md](RESULTS.md) and [AUDIT_START_HERE.md](AUDIT_START_HERE.md).
+The Blackwell recovery preserved all original predictions and checkpoints.
+Two attempts reserved $4 of the owner's $100 task cap; this is not the final AWS
+bill. No neural work ran on the laptop. No further T4 use is permitted.
 
 Accepted baseline: 0917267b1354e5d036263eaa6ba9a7197eafb776.
 The CAS-META-0 restart round is closed. Historical evidence is not rewritten.

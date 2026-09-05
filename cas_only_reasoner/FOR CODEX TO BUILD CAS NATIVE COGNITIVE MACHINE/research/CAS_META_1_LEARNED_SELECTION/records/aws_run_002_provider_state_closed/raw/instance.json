@@ -1,0 +1,112 @@
+{
+  "absent": false,
+  "response": {
+    "Reservations": [
+      {
+        "Groups": [],
+        "Instances": [
+          {
+            "AmiLaunchIndex": 0,
+            "Architecture": "x86_64",
+            "BlockDeviceMappings": [],
+            "BootMode": "uefi-preferred",
+            "CapacityReservationSpecification": {
+              "CapacityReservationPreference": "open"
+            },
+            "ClientToken": "cas-meta1-20260905115219-33ee1c8f",
+            "CpuOptions": {
+              "CoreCount": 8,
+              "ThreadsPerCore": 1
+            },
+            "CurrentInstanceBootMode": "uefi",
+            "EbsOptimized": false,
+            "EnaSupport": true,
+            "EnclaveOptions": {
+              "Enabled": false
+            },
+            "HibernationOptions": {
+              "Configured": false
+            },
+            "Hypervisor": "xen",
+            "ImageId": "ami-0fbbd0facbc9e3cff",
+            "InstanceId": "i-04ac8e28d607c2e53",
+            "InstanceType": "g7.2xlarge",
+            "LaunchTime": "2026-09-05 11:52:35+00:00",
+            "MaintenanceOptions": {
+              "AutoRecovery": "default",
+              "RebootMigration": "default"
+            },
+            "MetadataOptions": {
+              "HttpEndpoint": "enabled",
+              "HttpProtocolIpv6": "disabled",
+              "HttpPutResponseHopLimit": 2,
+              "HttpTokens": "required",
+              "InstanceMetadataTags": "disabled",
+              "State": "pending"
+            },
+            "Monitoring": {
+              "State": "disabled"
+            },
+            "NetworkInterfaces": [],
+            "NetworkPerformanceOptions": {
+              "BandwidthWeighting": "default"
+            },
+            "Operator": {
+              "HiddenByDefault": false,
+              "Managed": false
+            },
+            "Placement": {
+              "AvailabilityZone": "us-west-2b",
+              "AvailabilityZoneId": "usw2-az1",
+              "GroupName": "",
+              "Tenancy": "default"
+            },
+            "PlatformDetails": "Linux/UNIX",
+            "PrivateDnsName": "",
+            "ProductCodes": [],
+            "PublicDnsName": "",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SecondaryInterfaces": [],
+            "SecurityGroups": [],
+            "State": {
+              "Code": 48,
+              "Name": "terminated"
+            },
+            "StateReason": {
+              "Code": "Client.UserInitiatedShutdown",
+              "Message": "Client.UserInitiatedShutdown: User initiated shutdown"
+            },
+            "StateTransitionReason": "User initiated (2026-09-05 12:08:19 GMT)",
+            "Tags": [
+              {
+                "Key": "cas_meta_job",
+                "Value": "cas-meta1-20260905115219-33ee1c8f"
+              }
+            ],
+            "UsageOperation": "RunInstances",
+            "UsageOperationUpdateTime": "2026-09-05 11:52:35+00:00",
+            "VirtualizationType": "hvm"
+          }
+        ],
+        "OwnerId": "807562639912",
+        "ReservationId": "r-07d1f0a537cfbba46"
+      }
+    ],
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "cache-control": "no-cache, no-store",
+        "content-length": "2819",
+        "content-type": "text/xml;charset=UTF-8",
+        "date": "Sat, 05 Sep 2026 12:14:19 GMT",
+        "server": "AmazonEC2",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "vary": "accept-encoding",
+        "x-amzn-requestid": "5de23701-71cb-445c-87ff-b9ef4174bdb5"
+      },
+      "HTTPStatusCode": 200,
+      "RequestId": "5de23701-71cb-445c-87ff-b9ef4174bdb5",
+      "RetryAttempts": 0
+    }
+  }
+}

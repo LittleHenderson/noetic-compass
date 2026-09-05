@@ -1,0 +1,191 @@
+{
+  "absent": false,
+  "response": {
+    "Reservations": [
+      {
+        "Groups": [],
+        "Instances": [
+          {
+            "AmiLaunchIndex": 0,
+            "Architecture": "x86_64",
+            "BlockDeviceMappings": [
+              {
+                "DeviceName": "/dev/sda1",
+                "Ebs": {
+                  "AttachTime": "2026-09-05 11:52:36+00:00",
+                  "DeleteOnTermination": true,
+                  "EbsCardIndex": 0,
+                  "Status": "attached",
+                  "VolumeId": "vol-0c4fe87a14872b103"
+                }
+              }
+            ],
+            "BootMode": "uefi-preferred",
+            "CapacityReservationSpecification": {
+              "CapacityReservationPreference": "open"
+            },
+            "ClientToken": "cas-meta1-20260905115219-33ee1c8f",
+            "CpuOptions": {
+              "CoreCount": 8,
+              "ThreadsPerCore": 1
+            },
+            "CurrentInstanceBootMode": "uefi",
+            "EbsOptimized": false,
+            "EnaSupport": true,
+            "EnclaveOptions": {
+              "Enabled": false
+            },
+            "HibernationOptions": {
+              "Configured": false
+            },
+            "Hypervisor": "xen",
+            "IamInstanceProfile": {
+              "Arn": "arn:aws:iam::807562639912:instance-profile/cas-meta1-20260905115219-33ee1c8f-worker",
+              "Id": "AIPA3YBT37IUGTAGEJCTE"
+            },
+            "ImageId": "ami-0fbbd0facbc9e3cff",
+            "InstanceId": "i-04ac8e28d607c2e53",
+            "InstanceType": "g7.2xlarge",
+            "LaunchTime": "2026-09-05 11:52:35+00:00",
+            "MaintenanceOptions": {
+              "AutoRecovery": "default",
+              "RebootMigration": "default"
+            },
+            "MetadataOptions": {
+              "HttpEndpoint": "enabled",
+              "HttpProtocolIpv6": "disabled",
+              "HttpPutResponseHopLimit": 2,
+              "HttpTokens": "required",
+              "InstanceMetadataTags": "disabled",
+              "State": "pending"
+            },
+            "Monitoring": {
+              "State": "disabled"
+            },
+            "NetworkInterfaces": [
+              {
+                "Association": {
+                  "IpOwnerId": "amazon",
+                  "PublicDnsName": "ec2-34-220-151-178.us-west-2.compute.amazonaws.com",
+                  "PublicIp": "34.220.151.178"
+                },
+                "Attachment": {
+                  "AttachTime": "2026-09-05 11:52:35+00:00",
+                  "AttachmentId": "eni-attach-06538ffb3fe9d998c",
+                  "DeleteOnTermination": true,
+                  "DeviceIndex": 0,
+                  "NetworkCardIndex": 0,
+                  "Status": "attached"
+                },
+                "Description": "",
+                "Groups": [
+                  {
+                    "GroupId": "sg-09495a2dbccdfc648",
+                    "GroupName": "cas-meta1-20260905115219-33ee1c8f"
+                  }
+                ],
+                "InterfaceType": "interface",
+                "Ipv6Addresses": [],
+                "MacAddress": "02:ff:f9:e5:81:33",
+                "NetworkInterfaceId": "eni-0101916a7e9449d32",
+                "Operator": {
+                  "Managed": false
+                },
+                "OwnerId": "807562639912",
+                "PrivateDnsName": "ip-172-31-20-145.us-west-2.compute.internal",
+                "PrivateIpAddress": "172.31.20.145",
+                "PrivateIpAddresses": [
+                  {
+                    "Association": {
+                      "IpOwnerId": "amazon",
+                      "PublicDnsName": "ec2-34-220-151-178.us-west-2.compute.amazonaws.com",
+                      "PublicIp": "34.220.151.178"
+                    },
+                    "Primary": true,
+                    "PrivateDnsName": "ip-172-31-20-145.us-west-2.compute.internal",
+                    "PrivateIpAddress": "172.31.20.145"
+                  }
+                ],
+                "SourceDestCheck": true,
+                "Status": "in-use",
+                "SubnetId": "subnet-02deacfa16bdaa4f4",
+                "VpcId": "vpc-0df2f8cc1b9f23838"
+              }
+            ],
+            "NetworkPerformanceOptions": {
+              "BandwidthWeighting": "default"
+            },
+            "Operator": {
+              "HiddenByDefault": false,
+              "Managed": false
+            },
+            "Placement": {
+              "AvailabilityZone": "us-west-2b",
+              "AvailabilityZoneId": "usw2-az1",
+              "GroupName": "",
+              "Tenancy": "default"
+            },
+            "PlatformDetails": "Linux/UNIX",
+            "PrivateDnsName": "ip-172-31-20-145.us-west-2.compute.internal",
+            "PrivateDnsNameOptions": {
+              "EnableResourceNameDnsAAAARecord": false,
+              "EnableResourceNameDnsARecord": false,
+              "HostnameType": "ip-name"
+            },
+            "PrivateIpAddress": "172.31.20.145",
+            "ProductCodes": [],
+            "PublicDnsName": "ec2-34-220-151-178.us-west-2.compute.amazonaws.com",
+            "PublicIpAddress": "34.220.151.178",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SecondaryInterfaces": [],
+            "SecurityGroups": [
+              {
+                "GroupId": "sg-09495a2dbccdfc648",
+                "GroupName": "cas-meta1-20260905115219-33ee1c8f"
+              }
+            ],
+            "SourceDestCheck": true,
+            "State": {
+              "Code": 32,
+              "Name": "shutting-down"
+            },
+            "StateReason": {
+              "Code": "Client.UserInitiatedShutdown",
+              "Message": "Client.UserInitiatedShutdown: User initiated shutdown"
+            },
+            "StateTransitionReason": "User initiated (2026-09-05 12:08:19 GMT)",
+            "SubnetId": "subnet-02deacfa16bdaa4f4",
+            "Tags": [
+              {
+                "Key": "cas_meta_job",
+                "Value": "cas-meta1-20260905115219-33ee1c8f"
+              }
+            ],
+            "UsageOperation": "RunInstances",
+            "UsageOperationUpdateTime": "2026-09-05 11:52:35+00:00",
+            "VirtualizationType": "hvm",
+            "VpcId": "vpc-0df2f8cc1b9f23838"
+          }
+        ],
+        "OwnerId": "807562639912",
+        "ReservationId": "r-07d1f0a537cfbba46"
+      }
+    ],
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "cache-control": "no-cache, no-store",
+        "content-length": "5896",
+        "content-type": "text/xml;charset=UTF-8",
+        "date": "Sat, 05 Sep 2026 12:11:19 GMT",
+        "server": "AmazonEC2",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "vary": "accept-encoding",
+        "x-amzn-requestid": "db9deae1-eba6-40dd-ad18-cfdbd92e10c5"
+      },
+      "HTTPStatusCode": 200,
+      "RequestId": "db9deae1-eba6-40dd-ad18-cfdbd92e10c5",
+      "RetryAttempts": 0
+    }
+  }
+}

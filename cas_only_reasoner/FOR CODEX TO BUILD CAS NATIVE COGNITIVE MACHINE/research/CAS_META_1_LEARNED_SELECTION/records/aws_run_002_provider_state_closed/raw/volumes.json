@@ -1,0 +1,25 @@
+{
+  "absent": true,
+  "response": {
+    "Error": {
+      "Code": "InvalidVolume.NotFound",
+      "Message": "The volume 'vol-0c4fe87a14872b103' does not exist."
+    },
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "cache-control": "no-cache, no-store",
+        "connection": "close",
+        "content-type": "text/xml;charset=UTF-8",
+        "date": "Sat, 05 Sep 2026 12:14:19 GMT",
+        "server": "AmazonEC2",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "transfer-encoding": "chunked",
+        "vary": "accept-encoding",
+        "x-amzn-requestid": "683936a1-190d-4f02-92cb-d28c6a055396"
+      },
+      "HTTPStatusCode": 400,
+      "RequestId": "683936a1-190d-4f02-92cb-d28c6a055396",
+      "RetryAttempts": 0
+    }
+  }
+}

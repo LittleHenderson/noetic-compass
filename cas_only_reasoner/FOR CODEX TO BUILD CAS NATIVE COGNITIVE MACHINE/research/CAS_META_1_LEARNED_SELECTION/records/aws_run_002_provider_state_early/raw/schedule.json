@@ -1,0 +1,37 @@
+{
+  "absent": false,
+  "response": {
+    "ActionAfterCompletion": "DELETE",
+    "Arn": "arn:aws:scheduler:us-west-2:807562639912:schedule/default/cas-meta1-20260905115219-33ee1c8f",
+    "CreationDate": "2026-09-05 04:52:36.052000-07:00",
+    "FlexibleTimeWindow": {
+      "Mode": "OFF"
+    },
+    "GroupName": "default",
+    "LastModificationDate": "2026-09-05 04:52:36.052000-07:00",
+    "Name": "cas-meta1-20260905115219-33ee1c8f",
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-length": "939",
+        "content-type": "application/json",
+        "date": "Sat, 05 Sep 2026 12:02:32 GMT",
+        "x-amzn-requestid": "a3eae26e-08c3-4c41-a9bf-746cc68df974"
+      },
+      "HTTPStatusCode": 200,
+      "RequestId": "a3eae26e-08c3-4c41-a9bf-746cc68df974",
+      "RetryAttempts": 0
+    },
+    "ScheduleExpression": "at(2026-09-05T12:32:34)",
+    "ScheduleExpressionTimezone": "UTC",
+    "State": "ENABLED",
+    "Target": {
+      "Arn": "arn:aws:scheduler:::aws-sdk:ec2:terminateInstances",
+      "Input": "{\"InstanceIds\": [\"i-04ac8e28d607c2e53\"]}",
+      "RetryPolicy": {
+        "MaximumEventAgeInSeconds": 60,
+        "MaximumRetryAttempts": 0
+      },
+      "RoleArn": "arn:aws:iam::807562639912:role/cas-meta1-20260905115219-33ee1c8f-timer"
+    }
+  }
+}

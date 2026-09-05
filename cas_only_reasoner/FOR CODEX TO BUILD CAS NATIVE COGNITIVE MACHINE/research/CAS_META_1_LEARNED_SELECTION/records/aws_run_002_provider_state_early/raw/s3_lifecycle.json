@@ -1,0 +1,35 @@
+{
+  "absent": false,
+  "response": {
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-length": "378",
+        "date": "Sat, 05 Sep 2026 12:02:34 GMT",
+        "server": "AmazonS3",
+        "x-amz-id-2": "htHNo3nQbwt1pHaCOkIpu81d65a5xVZxnC822Oup5oemj8Okzsw8r0/gEGwVEKXE10pgzpUafDvFu4mLYS2ItiWyL5ClN1YP",
+        "x-amz-request-id": "9G0QBNE773MVY33S",
+        "x-amz-transition-default-minimum-object-size": "all_storage_classes_128K"
+      },
+      "HTTPStatusCode": 200,
+      "HostId": "htHNo3nQbwt1pHaCOkIpu81d65a5xVZxnC822Oup5oemj8Okzsw8r0/gEGwVEKXE10pgzpUafDvFu4mLYS2ItiWyL5ClN1YP",
+      "RequestId": "9G0QBNE773MVY33S",
+      "RetryAttempts": 0
+    },
+    "Rules": [
+      {
+        "AbortIncompleteMultipartUpload": {
+          "DaysAfterInitiation": 1
+        },
+        "Expiration": {
+          "Days": 7
+        },
+        "Filter": {
+          "Prefix": ""
+        },
+        "ID": "job-seven-days",
+        "Status": "Enabled"
+      }
+    ],
+    "TransitionDefaultMinimumObjectSize": "all_storage_classes_128K"
+  }
+}

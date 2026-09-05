@@ -1,0 +1,170 @@
+{
+  "account": "807562639912",
+  "aws_mutations_performed": false,
+  "checks": {
+    "instance_profile_absent": false,
+    "instance_terminated": false,
+    "s3_seven_day_retention": true,
+    "schedule_absent": false,
+    "security_group_absent": false,
+    "timer_role_absent": false,
+    "volumes_absent": false,
+    "worker_role_absent": false
+  },
+  "command_argv": [
+    "C:\\Python314\\python.exe",
+    "tools/verify_cloud_cleanup.py",
+    "--run-dir",
+    "records/aws_run_002",
+    "--snapshot",
+    "records/aws_run_002_provider_state_early",
+    "--output",
+    "records/aws_run_002_provider_state_final"
+  ],
+  "early_snapshot_receipt_sha256": "0d492e0dd50f6a0b61e7a9ea0c870d747f2c988448e4e07907e27d52cbd00955",
+  "helper_sha256": "d5332126932d28a91e8f3684158c2bfe514bc5472998532f9b6e77ff370f7a25",
+  "instance_id": "i-04ac8e28d607c2e53",
+  "instance_state": "shutting-down",
+  "job": "cas-meta1-20260905115219-33ee1c8f",
+  "launch_receipt_sha256": "47e94a62c568c9efd93701329e9c8f99589ce801a3961da7673545248f6ac4e8",
+  "observed_attached_volume_ids": [
+    "vol-0c4fe87a14872b103"
+  ],
+  "raw_response_sha256": {
+    "raw/identity.json": "a8aac024a21299d7d396d1de8246b786cfd9b29512f67e2056e6bad2df682c58",
+    "raw/instance.json": "bc42cb4bd191d7fbff4a3a2d10d84fcc2eda2d9b882e099ece4a02d8097730e8",
+    "raw/instance_profile.json": "ab3a386f990e5fc6fe858cccaf8f054feeb8269c590e813fcd834142950a0e73",
+    "raw/s3_lifecycle.json": "b8adc71ad99dd2711f86d29c444b3a3eacc8589fc1a0e2e845ecd6fa648da732",
+    "raw/s3_results.json": "9ce9da464a210f6a95938deea025f69dda497c0297956c932b16762300c5ea3a",
+    "raw/schedule.json": "990de9753a608ca838743dcabf1fc70a01b28e3a6dba1eb808208ddf9dc3366d",
+    "raw/security_group.json": "fe906f121d8d6fcfe571e668ae5c612d4e599fd34167db939226a3b8ca54e1ea",
+    "raw/timer_role.json": "c4e59d92b106a379fc5b3a83958c0c52575094681a0fea136693ad964e910903",
+    "raw/volumes.json": "914f00639eff34e330a30f75f65f62e2c23c26411a8d748401569fabfebbb53f",
+    "raw/worker_role.json": "e914a67e013da0de7a2dae5b5b6d6bdb3675970f4880b01b439d1f2439adfda6"
+  },
+  "region": "us-west-2",
+  "requests": [
+    {
+      "absent": false,
+      "arguments": {},
+      "label": "identity",
+      "method": "get_caller_identity",
+      "request_id": "d7173b3d-0409-4159-874f-86aabc82069a"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "InstanceIds": [
+          "i-04ac8e28d607c2e53"
+        ]
+      },
+      "label": "instance",
+      "method": "describe_instances",
+      "request_id": "db9deae1-eba6-40dd-ad18-cfdbd92e10c5"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "VolumeIds": [
+          "vol-0c4fe87a14872b103"
+        ]
+      },
+      "label": "volumes",
+      "method": "describe_volumes",
+      "request_id": "789eed00-5f04-42db-80e3-b6b56b78a895"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "GroupIds": [
+          "sg-09495a2dbccdfc648"
+        ]
+      },
+      "label": "security_group",
+      "method": "describe_security_groups",
+      "request_id": "08973dfe-5a6e-437f-b531-c85df56afd02"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "InstanceProfileName": "cas-meta1-20260905115219-33ee1c8f-worker"
+      },
+      "label": "instance_profile",
+      "method": "get_instance_profile",
+      "request_id": "e76148e7-94b9-4ddc-a913-be14a2741ed4"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "RoleName": "cas-meta1-20260905115219-33ee1c8f-worker"
+      },
+      "label": "worker_role",
+      "method": "get_role",
+      "request_id": "9371f3bb-7866-47d9-9241-c62e720124df"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "RoleName": "cas-meta1-20260905115219-33ee1c8f-timer"
+      },
+      "label": "timer_role",
+      "method": "get_role",
+      "request_id": "427b2865-2997-4783-92be-2c5d5b7f3d9b"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "Name": "cas-meta1-20260905115219-33ee1c8f"
+      },
+      "label": "schedule",
+      "method": "get_schedule",
+      "request_id": "be95dd6c-6a1c-4d46-a337-cf093c01c7e1"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "Bucket": "cas-meta1-20260905115219-33ee1c8f-807562639912"
+      },
+      "label": "s3_lifecycle",
+      "method": "get_bucket_lifecycle_configuration",
+      "request_id": "A5RS3XAYTGHKG40H"
+    },
+    {
+      "absent": false,
+      "arguments": {
+        "Bucket": "cas-meta1-20260905115219-33ee1c8f-807562639912",
+        "MaxKeys": 10,
+        "Prefix": "results/"
+      },
+      "label": "s3_results",
+      "method": "list_objects_v2",
+      "request_id": "A5RYZXK828S8K07G"
+    }
+  ],
+  "results_listing_truncated": false,
+  "retained_result_objects": [
+    {
+      "bytes": 53541903,
+      "key": "results/artifacts.zip",
+      "last_modified": "2026-09-05 12:08:10+00:00"
+    },
+    {
+      "bytes": 31307,
+      "key": "results/bootstrap.log",
+      "last_modified": "2026-09-05 12:08:12+00:00"
+    },
+    {
+      "bytes": 215,
+      "key": "results/complete.json",
+      "last_modified": "2026-09-05 12:08:11+00:00"
+    }
+  ],
+  "schema": "cas-meta1-provider-cleanup/1",
+  "security_group": "sg-09495a2dbccdfc648",
+  "status": "PROVIDER_STATE_CAPTURED_CLEANUP_PENDING",
+  "utc_finished": "2026-09-05T12:11:22.029065+00:00",
+  "utc_started": "2026-09-05T12:11:18.521045+00:00",
+  "volume_ids": [
+    "vol-0c4fe87a14872b103"
+  ]
+}

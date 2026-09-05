@@ -1,0 +1,21 @@
+{
+  "absent": true,
+  "response": {
+    "Error": {
+      "Code": "NoSuchEntity",
+      "Message": "The role with name cas-meta1-20260905115219-33ee1c8f-worker cannot be found.",
+      "Type": "Sender"
+    },
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-length": "320",
+        "content-type": "text/xml",
+        "date": "Sat, 05 Sep 2026 12:14:20 GMT",
+        "x-amzn-requestid": "3d615d55-f35e-4686-a8b7-2e39a06137df"
+      },
+      "HTTPStatusCode": 404,
+      "RequestId": "3d615d55-f35e-4686-a8b7-2e39a06137df",
+      "RetryAttempts": 0
+    }
+  }
+}

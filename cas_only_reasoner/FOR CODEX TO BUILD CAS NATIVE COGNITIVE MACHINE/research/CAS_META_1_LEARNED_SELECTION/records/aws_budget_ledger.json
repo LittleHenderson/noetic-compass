@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task": "CAS-META-1 learned selection",
+  "owner_task_cap_usd": "100.00",
+  "reservations": [
+    {
+      "job": "cas-meta1-20260905103339-cd06685e",
+      "reserved_usd": "2.00",
+      "source_sha": "a4dc9f2fc6f6d4f3d5e0b31100ac131327e02109",
+      "archive_sha256": "86239dd52b3d19a7fe98a651e0f7e6b3793c95ea2e01bb0c2d9e732650e8819f",
+      "reserved_utc": "2026-09-05T10:33:39.058409+00:00",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "job": "cas-meta1-20260905115219-33ee1c8f",
+      "reserved_usd": "2.00",
+      "source_sha": "cfd22ab96c479703d09e0792a139901f2931f5bd",
+      "archive_sha256": "17688c68c1f35c06ea3c9fc6571c5b60af62201a69549cef3a4223a7dcb32b1f",
+      "reserved_utc": "2026-09-05T11:52:19.617700+00:00",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    }
+  ],
+  "total_reserved_usd": "4",
+  "remaining_unreserved_usd": "96"
+}

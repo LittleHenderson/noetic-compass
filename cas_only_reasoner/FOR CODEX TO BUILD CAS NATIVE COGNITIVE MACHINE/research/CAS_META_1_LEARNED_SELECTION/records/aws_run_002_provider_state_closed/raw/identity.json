@@ -1,0 +1,20 @@
+{
+  "absent": false,
+  "response": {
+    "Account": "807562639912",
+    "Arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-length": "412",
+        "content-type": "text/xml",
+        "date": "Sat, 05 Sep 2026 12:14:19 GMT",
+        "x-amz-sts-extended-request-id": "MTp1cy13ZXN0LTI6UzoxNzg4NjEwNDU5MTM1OlI6cHQ5RDNkMVc=",
+        "x-amzn-requestid": "6b190753-a097-4f52-a34a-4a39eb90f0c4"
+      },
+      "HTTPStatusCode": 200,
+      "RequestId": "6b190753-a097-4f52-a34a-4a39eb90f0c4",
+      "RetryAttempts": 0
+    },
+    "UserId": "AIDA3YBT37IUN7OWL4UMU"
+  }
+}
