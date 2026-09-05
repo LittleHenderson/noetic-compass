@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cas-meta:event:0.1",
+  "title": "CAS-META bounded-call event 0.1",
+  "type": "object",
+  "required": ["schema", "seq", "chain_id", "program_digest", "kind", "previous", "digest"],
+  "properties": {
+    "schema": {"const": "cas-meta-event/0.1"},
+    "seq": {"type": "integer", "minimum": 0},
+    "chain_id": {"type": "string", "pattern": "^[A-Za-z0-9_.-]{1,128}$"},
+    "program_digest": {"$ref": "#/$defs/digest"},
+    "kind": {"enum": ["ENTER", "SUSPEND", "CHARGE", "NATIVE", "RETURN", "RESUME"]},
+    "previous": {"anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]},
+    "digest": {"$ref": "#/$defs/digest"}
+  },
+  "oneOf": [
+    {
+      "required": ["call_id", "parent_id", "procedure", "path", "return_pc", "allowance"],
+      "properties": {
+        "kind": {"const": "ENTER"},
+        "call_id": {"$ref": "#/$defs/call_id"},
+        "parent_id": {"anyOf": [{"$ref": "#/$defs/call_id"}, {"type": "null"}]},
+        "procedure": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.-]{0,63}$"},
+        "path": {"$ref": "#/$defs/path"},
+        "return_pc": {"anyOf": [{"$ref": "#/$defs/nonnegative_integer"}, {"type": "null"}]},
+        "allowance": {"type": "integer", "minimum": 0, "maximum": 1000000}
+      }
+    },
+    {
+      "required": ["call_id", "child_id", "pc"],
+      "properties": {
+        "kind": {"const": "SUSPEND"},
+        "call_id": {"$ref": "#/$defs/call_id"},
+        "child_id": {"$ref": "#/$defs/call_id"},
+        "pc": {"$ref": "#/$defs/nonnegative_integer"},
+        "repair_id": {"$ref": "#/$defs/native_id"}
+      }
+    },
+    {
+      "required": ["call_id", "units", "components", "plan_digest"],
+      "properties": {
+        "kind": {"const": "CHARGE"},
+        "call_id": {"$ref": "#/$defs/call_id"},
+        "units": {"$ref": "#/$defs/nonnegative_integer"},
+        "components": {"$ref": "#/$defs/charge_components"},
+        "plan_digest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    {
+      "required": ["call_id", "path", "cjt_id", "tick", "accepted", "receipt_id", "trace_id", "effect_ids", "repair_id", "repair_outcome_id", "head"],
+      "properties": {
+        "kind": {"const": "NATIVE"},
+        "call_id": {"$ref": "#/$defs/call_id"},
+        "path": {"$ref": "#/$defs/path"},
+        "cjt_id": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.-]{0,63}$"},
+        "tick": {"type": "integer", "minimum": 1},
+        "accepted": {"type": "boolean"},
+        "receipt_id": {"$ref": "#/$defs/native_id"},
+        "trace_id": {"$ref": "#/$defs/native_id"},
+        "effect_ids": {"type": "array", "items": {"$ref": "#/$defs/native_id"}, "maxItems": 1, "uniqueItems": true},
+        "repair_id": {"anyOf": [{"$ref": "#/$defs/native_id"}, {"type": "null"}]},
+        "repair_outcome_id": {"anyOf": [{"$ref": "#/$defs/native_id"}, {"type": "null"}]},
+        "head": {"$ref": "#/$defs/native_head"}
+      }
+    },
+    {
+      "required": ["call_id", "parent_id", "return_pc", "effect_id", "spent"],
+      "properties": {
+        "kind": {"const": "RETURN"},
+        "call_id": {"$ref": "#/$defs/call_id"},
+        "parent_id": {"anyOf": [{"$ref": "#/$defs/call_id"}, {"type": "null"}]},
+        "return_pc": {"anyOf": [{"$ref": "#/$defs/nonnegative_integer"}, {"type": "null"}]},
+        "effect_id": {"$ref": "#/$defs/native_id"},
+        "spent": {"$ref": "#/$defs/nonnegative_integer"}
+      }
+    },
+    {
+      "required": ["call_id", "child_id", "pc"],
+      "properties": {
+        "kind": {"const": "RESUME"},
+        "call_id": {"$ref": "#/$defs/call_id"},
+        "child_id": {"$ref": "#/$defs/call_id"},
+        "pc": {"$ref": "#/$defs/nonnegative_integer"}
+      }
+    }
+  ],
+  "unevaluatedProperties": false,
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "call_id": {"type": "string", "pattern": "^[A-Za-z0-9_.-]{1,128}:call:[a-f0-9]{32}:[1-9][0-9]*$", "maxLength": 200},
+    "path": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "native_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "nonnegative_integer": {"type": "integer", "minimum": 0},
+    "charge_components": {
+      "type": "object",
+      "required": ["route_quanta", "reasoning_step_quanta", "branch_quanta", "memory_read_quanta", "diagnostic_probe_quanta"],
+      "properties": {
+        "route_quanta": {"$ref": "#/$defs/nonnegative_integer"},
+        "reasoning_step_quanta": {"$ref": "#/$defs/nonnegative_integer"},
+        "branch_quanta": {"$ref": "#/$defs/nonnegative_integer"},
+        "memory_read_quanta": {"$ref": "#/$defs/nonnegative_integer"},
+        "diagnostic_probe_quanta": {"$ref": "#/$defs/nonnegative_integer"}
+      },
+      "additionalProperties": false
+    },
+    "native_head": {
+      "type": "object",
+      "required": ["state_digest", "state_version", "trace_digest", "model_digest", "commit_receipt_id"],
+      "properties": {
+        "state_digest": {"$ref": "#/$defs/digest"},
+        "state_version": {"$ref": "#/$defs/nonnegative_integer"},
+        "trace_digest": {"anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]},
+        "model_digest": {"anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]},
+        "commit_receipt_id": {"anyOf": [{"$ref": "#/$defs/native_id"}, {"type": "null"}]}
+      },
+      "additionalProperties": false
+    }
+  }
+}

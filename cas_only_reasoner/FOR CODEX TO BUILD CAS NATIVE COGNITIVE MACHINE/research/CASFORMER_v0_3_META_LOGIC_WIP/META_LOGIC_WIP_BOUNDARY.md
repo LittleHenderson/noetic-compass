@@ -11,7 +11,15 @@ NO TRAINING AUTHORIZED
 DO NOT MERGE INTO THE V0.2 RELEASE
 ```
 
-This checkpoint preserves the supplied meta-logic design without changing the reproduced CASformer v0.2 baseline. A repository and worktree audit found no existing meta-logic runtime implementation to rescue. The smallest coherent checkpoint is therefore documentation-only: preserve the design input, record the separation state, and stop feature development.
+The original preservation checkpoint was documentation-only: a repository and worktree audit found no existing meta-logic runtime implementation to rescue. That history remains below. The owner's later callable-procedure specification now authorizes the small fixed-weight implementation described in `README.md`. Neither checkpoint changes the reproduced CASformer v0.2 baseline.
+
+## Current implementation checkpoint
+
+Implemented in this separate WIP directory: a strict typed parser/compiler for `sequence`, `call`, and admitted `^6` inference; real bounded child frames; one shared reservation ledger; fixed-weight native integration; explicit clean-boundary checkpoint/restart; meta-event schema and receipt binding; and fixed-weight equivalence tests against the direct five-step chain.
+
+The original v0.2 fifth tick performs learning. This WIP replaces that tick with inference only, so its equivalence claim is limited to the declared fixed-weight adaptation. Persistent Bias remains per CJT, not per invocation. Accepted native steps are durable, not provisional parent transactions. No training or new memory strategy is implemented.
+
+Current rerun instructions are in `README.md`. The current evidence, once generated, is under `records/validation/`; older source/provenance records below describe the historical preservation checkpoint only. A separate external review and v0.3 release audit remain open.
 
 ## Commit boundary
 
@@ -36,7 +44,7 @@ The WIP content commit could not contain its own SHA because changing this file 
 
 Five untracked `cas_neural_cjt.egg-info` files exist in the user's main worktree. They are generated packaging byproducts, are outside the 50-file manifest, and are not included here. The other dirty main-worktree files are older unrelated user work and are also excluded.
 
-## New files in this WIP checkpoint
+## Files in the historical preservation checkpoint
 
 - `CAS_META_0_DESIGN_INPUT.md`
 - `META_LOGIC_WIP_BOUNDARY.md`
@@ -45,9 +53,9 @@ Five untracked `cas_neural_cjt.egg-info` files exist in the user's main worktree
 - `records/PRE_SEPARATION_WORKTREE_STATUS.txt`
 - `records/SOURCE_PROVENANCE.json`
 
-No existing file is modified by this checkpoint.
+No existing file was modified by that preservation checkpoint.
 
-## Change classification
+## Historical preservation change classification
 
 | Area | Change in this checkpoint |
 | --- | --- |
@@ -84,14 +92,12 @@ A -> B -> C -> repair R -> resumed C
 
 The compiled and hard-wired forms must produce equivalent Effect outcomes, repair lifecycle, committed Bias, parameter-scope enforcement, restart behavior, and trace validity. No automatic training or capability claim follows.
 
-## Known unfinished work
+## Work still outside this first implementation
 
-- Define the minimum CAS program grammar and typed program IR.
-- Define deterministic parser and type-checker errors.
-- Define the program-to-CJT lowering contract.
-- Define compiler-enforced memory, tool, compute, verifier, repair, and update scopes.
-- Implement the first compiled lifecycle without changing v0.2.
-- Add equivalence tests against the hard-wired v0.2 lifecycle.
+- Extend beyond the implemented, explicitly authored sequence/call/inference grammar only through a new versioned design.
+- Define dynamic procedure retrieval, memory/tool permissions, general repair composition, and learning isolation; these are not present merely because the parser has scopes.
+- Add atomic crash recovery beyond the implemented clean-checkpoint restart.
+- Qualify programs beyond the one fixed-weight oracle-guided lifecycle.
 - Add matched non-CAS controls before any CAS-specific advantage experiment.
 - Keep protected evaluation data closed until designs, controls, and thresholds are frozen.
 - Obtain a new review and audit for any v0.3 runtime candidate.

@@ -1,0 +1,4 @@
+# Install the two frozen wheels first, using the v0.2 release lock.
+# These are the existing verification environment's versions, not new training.
+jsonschema==4.26.0
+pytest==9.0.2
