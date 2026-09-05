@@ -132,7 +132,12 @@ a successful job. Original source files and checkpoints are not deleted to fit.
 The current readiness check is not a launch receipt: EC2 G/VT quota was eight
 vCPUs, while SageMaker g4dn/g5 training quotas were zero. The old shared GPU role
 and its old S3 prefix are deliberately not reused. The selected AMI is pinned
-but its remote Python/toolchain compatibility still needs the guarded run.
+to Ubuntu 24.04 image `ami-0fbbd0facbc9e3cff` (20260821). Its live Oregon image
+record declares a 75 GB `/dev/sda1` root and G4dn support. The
+[exact AWS release notes](https://docs.aws.amazon.com/dlami/latest/devguide/aws-deep-learning-ami-gpubaseoss-ul2404-2026-08-24.html)
+declare Python 3.12. The earlier unlaunched Ubuntu 22.04 image was replaced
+because its documented Python 3.10 is too old for the frozen wheels.
+Remote AWS CLI, virtual-environment setup and GPU compatibility still need the guarded run.
 
 Sources: [AWS Price List](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/price-changes.html),
 [Scheduler targets](https://docs.aws.amazon.com/scheduler/latest/UserGuide/managing-targets-universal.html),

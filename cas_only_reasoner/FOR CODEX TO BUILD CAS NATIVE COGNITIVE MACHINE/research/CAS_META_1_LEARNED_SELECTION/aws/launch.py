@@ -107,7 +107,7 @@ def validate_approval(cap: str | None, plan: dict) -> None:
     if (plan["instance_count"], plan["runtime_seconds_max"], plan["automatic_retries"], plan["ebs_gb"]) != (1, 3600, 0, 75):
         raise LaunchRefused("UNREGISTERED_RESOURCE_PLAN")
     fixed = {"approved_cap_usd_required":"100.00","owner_task_cap_usd":"100.00","per_launch_reserved_cap_usd":"2.00","account_id":"807562639912","region":"us-west-2","instance_type":"g4dn.xlarge",
-             "ami_id":"ami-0c779ec711a581954","training_seconds_max":2700,"ebs_type":"gp3",
+             "ami_id":"ami-0fbbd0facbc9e3cff","training_seconds_max":2700,"ebs_type":"gp3",
              "ebs_encrypted":True,"delete_on_termination":True,"artifact_bytes_max":1073741824,
              "archive_expanded_bytes_max":536870912,"s3_retention_days":7,
              "torch_version":"2.11.0","torch_cuda_version":"12.8",
