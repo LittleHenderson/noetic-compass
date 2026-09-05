@@ -1,0 +1,110 @@
+{
+  "schema": "cas-meta3-native-demo-final-validation/0.1",
+  "status": "CAS_META_3_BOUNDED_NATIVE_MEMORY_REUSE_VERIFIED",
+  "source_sha": "8b5d8ac9e4f469b4cd89bbe917560678d2f52cb7",
+  "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+  "job": "cas-meta3-20260905225148-462ab42e",
+  "utc": "2026-09-05 23:16:42 UTC",
+  "artifacts": [
+    {
+      "path": "runs/cas-meta3-8b5d8ac9-native-demo.zip",
+      "sha256": "f79e40602b9b0d3729d0f2b49dcf654bd4d0bd738107c8af7e6b9096b846aa5c",
+      "bytes": 4038632
+    },
+    {
+      "path": "records/aws_native_demo_source_001/cas-meta3-8b5d8ac9-native-demo.receipt.json",
+      "sha256": "c8bc5316000778c2df58649b157e626e79acbeaf7d210975ac07daf1a467d361",
+      "bytes": 137487
+    },
+    {
+      "path": "records/aws_native_demo_001/cloud_artifacts.zip",
+      "sha256": "1991e2d49e332f0c953088e5614b2d72ec17c4cb4ad09710fdc1755435bd8673",
+      "bytes": 1299987
+    },
+    {
+      "path": "records/aws_native_demo_001/launch_receipt.json",
+      "sha256": "a8b07b93267976fd97409010c79825ec617b92a3f09238793b5df00a187a22ad",
+      "bytes": 254241
+    },
+    {
+      "path": "records/aws_native_demo_001/bootstrap.log",
+      "sha256": "e7e5ac352b6558d0e542152ac34e591d234fe18ef7087cf36efc1901d09cec09",
+      "bytes": 22973
+    },
+    {
+      "path": "records/aws_native_demo_001_inspection/inspection_receipt.json",
+      "sha256": "e7c509f9bd32744f2a11f2c9123e3cfedacf32741f89e3bd0f062ac89bc34102",
+      "bytes": 32930
+    },
+    {
+      "path": "records/aws_native_demo_001_stored_audit_clean/stored_audit_receipt.json",
+      "sha256": "9af2bb1ed781c1e10550c21821cd4f01b9476494258b3379cdce2d39bf1e4fd7",
+      "bytes": 135479
+    },
+    {
+      "path": "records/aws_native_demo_001_stored_audit_clean/process_receipt.json",
+      "sha256": "4fc360c43c382c3309009d591a9d7fd7d24aadbe83352222ce5eda93a58b0e92",
+      "bytes": 3131
+    },
+    {
+      "path": "records/aws_native_demo_001_stored_audit_clean/alignment_receipt.json",
+      "sha256": "e3ecf2a3fab8e709d3b06de6848100911de694a19f46e63370a12677e8edf66a",
+      "bytes": 57839
+    },
+    {
+      "path": "records/aws_native_demo_001_cleanup_verification/closure_observation_01.json",
+      "sha256": "8dcd2dbbc43c9a835215a0e61c8f97d5e170cde01afd4ba76e66b735b2d10f4b",
+      "bytes": 7227
+    },
+    {
+      "path": "../CAS_META_2_COMPOSITION/records/budget/campaign_ledger.json",
+      "sha256": "d430a2cf3e2bf7189f2877e75df44b99993893d18c0e05d180b82091ac6a9c04",
+      "bytes": 14899
+    },
+    {
+      "path": "../CAS_META_2_COMPOSITION/records/budget/campaign_ledger.json.history/00000004.json",
+      "sha256": "d430a2cf3e2bf7189f2877e75df44b99993893d18c0e05d180b82091ac6a9c04",
+      "bytes": 14899
+    }
+  ],
+  "verified": {
+    "outer_packet": "CAS_META_3_PACKET_FULL_EVIDENCE_VERIFIED",
+    "stored_semantics": "CAS_META_3_STORED_NATIVE_DEMO_AUDIT_PASSED",
+    "cleanup": "CAS_META_3_NATIVE_DEMO_CLEANUP_INDEPENDENTLY_VERIFIED",
+    "gpu_contract_tests": 4,
+    "gpu_policy_tests": 4,
+    "protected_files": 316,
+    "native_databases": 3,
+    "native_traces": 6,
+    "reference_native_calls": 3,
+    "candidate_native_calls": 3,
+    "all_candidate_output_hashes_match_reference": true,
+    "writer_exited_before_fresh_reader": true,
+    "first_B_call_identity_returned": true,
+    "five_rejections": [
+      "forged_package_digest",
+      "wrong_compatibility",
+      "denied_child_scope",
+      "denied_parent_scope",
+      "wrong_package_schema"
+    ],
+    "evidence_unchanged": true
+  },
+  "qualification_status": "UNQUALIFIED",
+  "learning_performed": false,
+  "source_alignment": {
+    "original_failures_preserved": true,
+    "auditor_changed": false,
+    "isolated_checkout": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta3_audit_8b5d8ac9",
+    "metadata_files_normalized_to_pinned_LF": 3,
+    "active_readme_restored_sha256": "bb2529cf8d89b96df1681f735ffc82ebf9f7d433ad9e9e9471103f8283fd6cb5"
+  },
+  "budget": {
+    "owner_cap_usd": "400.00",
+    "total_reserved_usd": "32.00",
+    "unreserved_usd": "368.00",
+    "reservation_is_invoice": false,
+    "separate_budget_created": false
+  },
+  "boundary": "Fixed authored procedural-memory reuse with stored native evidence and independent provider cleanup. Not learned retrieval, qualification, missing-skill acquisition, suspended-caller restart, a model update, CAS-specific advantage, general reasoning, complete CNCM or hardware."
+}

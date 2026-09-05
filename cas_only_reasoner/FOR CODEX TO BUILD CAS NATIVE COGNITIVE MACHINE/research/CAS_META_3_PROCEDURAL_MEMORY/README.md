@@ -4,12 +4,21 @@ This is a separate experiment for saving and reusing one typed CJT procedure.
 It does not change the accepted executor, the saved META2 learning experiment,
 or any baseline weights. It is not yet a learned or qualified skill system.
 
+The AWS native-reuse demonstration has now passed both the source-bound packet
+inspection and the unchanged stored semantic audit. A separate reader retrieved
+one saved procedure after the writer exited; the native caller used it twice
+and returned the first B result. All six native traces across three databases
+were checked, and five package/scope rejection checks passed. Cloud cleanup was
+independently verified. See [the recorded result](records/aws_native_demo_001/RESULT.md)
+for exact source, packet, audit, and budget identities. This is a bounded memory
+reuse result: `learning_performed=false`, `qualification_status=UNQUALIFIED`.
+
 Original storage/link receipt: `records/local_candidate_001/receipt.json` records **72
 passing pure tests**, all 316 protected files unchanged, and the three META2
 dependency hashes checked against the actual frozen Git objects. Neural imports
 were blocked. This is not native execution or a learning result.
 
-Current integration receipt: `records/local_native_demo_002/receipt.json`
+Earlier pure integration receipt: `records/local_native_demo_002/receipt.json`
 records **364 passing pure tests**, no failures/errors/skips, all 316 protected
 files unchanged, and unchanged source hashes across the run. Neural and
 provider imports were blocked. The one warning is from the intentional
@@ -79,26 +88,23 @@ startup problem seen with a deeply nested `TEMP` directory.
 
 ## Separate AWS execution gate
 
-Before claiming usable native procedural memory, a later AWS-only demonstration
-must bind a package to the actual frozen model, software, contracts, topology,
-and published schema. It must retrieve the package in a fresh process, execute
-the linked parent through the unchanged runtime, and compare every actual
-result with a separately run reference. Stored traces and unchanged protected
-bytes need their own receipts. Invalid packages must be rejected before native
-execution or native state writes.
-
-That demonstration has not run. A separate AWS-only demo, launcher, packet
-checker, and stored-result auditor are now being integrated. See
-`NATIVE_DEMO.md` for the execution and evidence contract. New code and synthetic
-tests are not a completed AWS result.
+The separate AWS-only demonstration bound one package to the actual frozen
+model, software, contracts, topology, and published schema. Its fresh reader
+retrieved the package, and the linked parent ran through the unchanged runtime.
+All three candidate outputs matched the separately executed reference. Five
+invalid package/scope requests were rejected before candidate/probe construction;
+the earlier reference run already existed. The packet and stored semantic audits
+passed, with all 316 protected file hashes checked. See `NATIVE_DEMO.md` for the
+contract and [the result](records/aws_native_demo_001/RESULT.md) for its receipts.
 
 The launcher uses the existing single META2 campaign ledger and the owner's
 $400 total cap; it has no separate spending authority. No T4 or local neural
 work is permitted. The accepted learning experiment and executor are unchanged.
+After this job, the shared ledger records $32 reserved and $368 unreserved;
+these are reservations against the $400 cap, not an AWS invoice.
 
 ## Evidence interpretation
 
-Pure test success proves only the covered storage and linking behavior. A later
-native demonstration would still not show that CASformer learns which skill to
-store, retrieves a useful skill from a problem, gains CAS-specific advantage, or
-implements the complete cognitive-machine vision.
+The pure tests and bounded native demonstration do not show that CASformer
+learns which skill to store, retrieves a useful skill from a problem, gains
+CAS-specific advantage, or implements the complete cognitive-machine vision.

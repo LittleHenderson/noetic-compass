@@ -1,0 +1,135 @@
+{
+  "schema": "cas-meta3-independent-readonly-closure/1",
+  "job": "cas-meta3-20260905225148-462ab42e",
+  "source_sha": "8b5d8ac9e4f469b4cd89bbe917560678d2f52cb7",
+  "archive_sha256": "f79e40602b9b0d3729d0f2b49dcf654bd4d0bd738107c8af7e6b9096b846aa5c",
+  "region": "us-west-2",
+  "account": "807562639912",
+  "started_utc": "2026-09-05T23:05:42.387815+00:00",
+  "status": "CAS_META_3_NATIVE_DEMO_CLEANUP_INDEPENDENTLY_VERIFIED",
+  "original_launch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_3_PROCEDURAL_MEMORY\\records\\aws_native_demo_001\\launch_receipt.json",
+  "original_launch_receipt_sha256_before": "a8b07b93267976fd97409010c79825ec617b92a3f09238793b5df00a187a22ad",
+  "local_artifact_sha256": "1991e2d49e332f0c953088e5614b2d72ec17c4cb4ad09710fdc1755435bd8673",
+  "artifact_bytes": 1299987,
+  "ledger_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "ledger_sha256": "d430a2cf3e2bf7189f2877e75df44b99993893d18c0e05d180b82091ac6a9c04",
+  "budget": {
+    "cap_usd": "400.00",
+    "reserved_usd": "32.00",
+    "remaining_unreserved_usd": "368.00",
+    "this_job_reserved_usd": "7.00",
+    "refunds": 0,
+    "history_checked": true
+  },
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_3_PROCEDURAL_MEMORY\\records\\aws_native_demo_001_cleanup_verification\\verify_readonly_closure.py",
+    "--observation",
+    "1"
+  ],
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "provider_mutations": 0,
+  "budget_mutations": 0,
+  "original_receipt_mutations": 0,
+  "neural_execution_performed": false,
+  "checks": {
+    "exact_instance_terminated_or_absent": true,
+    "no_nonterminated_job_instances": true,
+    "no_instance_attached_volumes": true,
+    "no_job_volumes": true,
+    "security_group_absent": true,
+    "profile_absent": true,
+    "worker_role_absent": true,
+    "timer_role_absent": true,
+    "schedule_absent": true,
+    "retained_bucket_job_owned": true,
+    "exactly_three_results_retained": true,
+    "result_bytes_below_1gib": true,
+    "seven_day_expiration": true,
+    "incomplete_upload_cleanup": true,
+    "public_access_blocked": true,
+    "default_encryption": true,
+    "remote_artifact_size_and_encryption": true,
+    "every_retained_object_encrypted_and_expiring": true,
+    "remote_completion_matches_download": true,
+    "launcher_confirmed_final_cleanup": true,
+    "original_launch_receipt_unchanged": true,
+    "remote_completion_exactly_matches_launch_receipt": true,
+    "ledger_unchanged": true
+  },
+  "raw_provider_calls": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_3_PROCEDURAL_MEMORY\\records\\aws_native_demo_001_cleanup_verification\\provider_calls_01.jsonl",
+  "evidence_boundary": "Point-in-time provider cleanup and retention observation, not an AWS invoice or provider-enforced spending cap. The launcher alone performed cleanup; this helper performs only read-only observations. No private evaluation contents are opened; local archive is hashed as opaque bytes.",
+  "instance_state": "terminated",
+  "provider_launch_time": "2026-09-05 22:52:03+00:00",
+  "observed_owned_volume_ids": [],
+  "volume_verification_boundary": "Exact known volume IDs checked if retained in the terminated instance mapping or current provider lookup; no historical volume ID is present in the launch receipt. Independently queried both exact-job-tag and exact-instance-attachment filters.",
+  "retained_objects": [
+    {
+      "Key": "results/artifacts.zip",
+      "LastModified": "2026-09-05 22:56:50+00:00",
+      "ETag": "\"05833afa468f3ce6e1516d67aa4db79c\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 1299987,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "results/bootstrap.log",
+      "LastModified": "2026-09-05 22:56:51+00:00",
+      "ETag": "\"8154ea9d15624f2079f868a4ae815bf6\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 22973,
+      "StorageClass": "STANDARD"
+    },
+    {
+      "Key": "results/complete.json",
+      "LastModified": "2026-09-05 22:56:51+00:00",
+      "ETag": "\"75c4495cfda9cc9a74b623a02054f6b9\"",
+      "ChecksumAlgorithm": [
+        "CRC64NVME"
+      ],
+      "ChecksumType": "FULL_OBJECT",
+      "Size": 994,
+      "StorageClass": "STANDARD"
+    }
+  ],
+  "retained_object_expiration_headers": {
+    "results/artifacts.zip": "expiry-date=\"Sun, 13 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "results/bootstrap.log": "expiry-date=\"Sun, 13 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "results/complete.json": "expiry-date=\"Sun, 13 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\""
+  },
+  "original_launch_receipt_sha256_after": "a8b07b93267976fd97409010c79825ec617b92a3f09238793b5df00a187a22ad",
+  "active_launcher_updated_its_receipt_during_observation": false,
+  "native_reuse_evidence_boundary": {
+    "learning_performed": false,
+    "qualification_status": "UNQUALIFIED",
+    "semantic_audit_performed_by_this_helper": false,
+    "native_binding": {
+      "status": "META3_COMPLETE_BYTE_INVENTORY_VERIFIED",
+      "indexed_files": 34,
+      "qualification_status": "UNQUALIFIED",
+      "memory_demo_receipt_sha256": "e9319cdde65220298cbf464ddb1118760a3b9efbfd5172b2c843d434feb95bdf",
+      "file_index_sha256": "c00257380acf5c40ebe4102a11c531094ea434a4241693015f94a1d5a9b07fd7",
+      "demo_prefix": "cloud_job/demo/",
+      "native_prefix": "meta2_native/meta3_cas-meta3-20260905225148-462ab42e/",
+      "learning_performed": false,
+      "boundary": "Recorded fresh reader and native reuse only; no suspended-call restart or skill qualification.",
+      "job": "cas-meta3-20260905225148-462ab42e",
+      "source_sha": "8b5d8ac9e4f469b4cd89bbe917560678d2f52cb7"
+    }
+  },
+  "cost_estimate_from_launcher": {
+    "instance_wall_clock_seconds_upper_observation": 604.187653,
+    "compute_ebs_ipv4_usd_estimate": "0.4251690891481481481481481481",
+    "excluded": "S3 requests and retention, transfer, taxes; not an AWS invoice"
+  },
+  "finished_utc": "2026-09-05T23:05:47.330367+00:00",
+  "helper_sha256": "df41c02d6d98c6f154fc3c3403c6c9f0b12d61ab08e9d3158f04ab49930e3c90",
+  "raw_provider_calls_sha256": "aa8e91fa50ba3d467885e7d2c9d994add4dc17cf0bd2467660deeba9ea60f894"
+}
