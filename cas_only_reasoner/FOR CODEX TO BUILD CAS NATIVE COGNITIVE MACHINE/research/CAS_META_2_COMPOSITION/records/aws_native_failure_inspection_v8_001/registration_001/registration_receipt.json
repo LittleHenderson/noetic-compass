@@ -1,0 +1,19 @@
+{
+  "authority_sha256": "1272a507f6f95daaabf41b42dc46343cd86cd21505f2635ad8296124ae69f7c4",
+  "files": {
+    "capture_parent.py": "2a930c66cbe0574deaf0781f924df15681d273ba8a35609250fc24d94071b982",
+    "launch_request.json": "33abe7173efd939e6821afe0d1b493a303f253c67e7f423857094a1f4d786e8e",
+    "ledger_observation.json": "1dd251d13fdce7c33b320131d0aaa7077a0449b6987c1e91d78a849ec7b58e6c",
+    "standing_authority.json": "1272a507f6f95daaabf41b42dc46343cd86cd21505f2635ad8296124ae69f7c4"
+  },
+  "job": "cas-meta2-20260906162339-56837284",
+  "native_execution": false,
+  "new_reservation": false,
+  "provider_calls": false,
+  "request_sha256": "33abe7173efd939e6821afe0d1b493a303f253c67e7f423857094a1f4d786e8e",
+  "source_archive_sha256": "39a2441a2eaa4c7403af11225356a98aee2a4477e26acffbc483254befa1ed7f",
+  "source_manifest_sha256": "a4b04cb0d97c4fa28883c3b210abf4632ea4b04b7c79d267b4efe0f18ea81fb1",
+  "source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+  "sqlite_read_only": true,
+  "training": false
+}

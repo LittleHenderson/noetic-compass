@@ -1,0 +1,28 @@
+{
+  "campaign_approval": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\OWNER_APPROVAL_SOURCE.json",
+    "sha256": "3e87bd4dfb51824f999b67ccc6118a75edececbc44ddc1b48d45f53e8bb62626"
+  },
+  "campaign_cap_usd": "400.00",
+  "experiment": {
+    "entrypoint": "read_only_sqlite_export",
+    "profile": "native_failure_sqlite_inspection_v8"
+  },
+  "job": "cas-meta2-20260906162339-56837284",
+  "launch_request_sha256": "33abe7173efd939e6821afe0d1b493a303f253c67e7f423857094a1f4d786e8e",
+  "max_job_cost_usd": "4.00",
+  "native_execution": false,
+  "original_job": "cas-meta2-20260906155525-195f5ad8",
+  "parent_source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+  "schema": "cas-meta2-native-failure-inspection-standing-authority/8",
+  "source_archive_sha256": "39a2441a2eaa4c7403af11225356a98aee2a4477e26acffbc483254befa1ed7f",
+  "source_manifest_sha256": "a4b04cb0d97c4fa28883c3b210abf4632ea4b04b7c79d267b4efe0f18ea81fb1",
+  "sqlite_read_only": true,
+  "standing_campaign_authorization": true,
+  "standing_user_message": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_prefix_diagnostic_v8_001\\authorization_001\\user_message_full.txt",
+    "sha256": "d0b640ec3059ea73d677b632a4bc2f3188bbcd87b231e4362914e219459fc5bb"
+  },
+  "training": false,
+  "worker_source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675"
+}
