@@ -1,0 +1,25 @@
+{
+  "command": [
+    "git",
+    "-C",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1",
+    "-c",
+    "core.autocrlf=false",
+    "worktree",
+    "add",
+    "--detach",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\contrast-v6-audit-acbb266f",
+    "acbb266fbcdb6efcd69808f6f0f9b7b1e36b7ed0"
+  ],
+  "finished_utc": "2026-09-06T07:01:15.497897+00:00",
+  "neural_work": false,
+  "provider_calls": false,
+  "returncode": 0,
+  "scope": "Detached checkout creation only; not validation or installation.",
+  "source_sha": "acbb266fbcdb6efcd69808f6f0f9b7b1e36b7ed0",
+  "started_utc": "2026-09-06T07:01:11.245732+00:00",
+  "stderr_sha256": "ac816ac611b3d95c5aff2edd7b560a9fe20ab2f169e2ef2202aac9775d56c4a8",
+  "stdout_sha256": "402fc8924a50a967f82c54a5486972657697fbaa9067bff0d33b0b51431e9f6b",
+  "target_absent_before": true,
+  "worktree": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\contrast-v6-audit-acbb266f"
+}
