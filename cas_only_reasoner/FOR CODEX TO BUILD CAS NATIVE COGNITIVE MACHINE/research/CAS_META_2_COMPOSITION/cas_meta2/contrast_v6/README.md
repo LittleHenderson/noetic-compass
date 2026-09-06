@@ -40,6 +40,28 @@ if OS-level isolation is required.
 
 ## Remaining GPU integration
 
+`train.py` now supplies the candidate CUDA loop. It uses the frozen lexical-copy
+policies, semantic-weighted loss, and original v3 decoder for both families.
+Defaults request 200 epochs, paired batches of 16, validation at epoch 0, epoch
+1, every tenth epoch, and the final epoch. Selection uses only validation scores
+and the frozen worst-depth-first rule. The default 3,600-second worker deadline
+reserves 600 seconds for predictions; a deadline fault is incomplete, not an
+accepted shortened experiment. No checkpoint is loaded from an accepted model.
+
+Initial, each improved selected checkpoint, final, and recoverable interrupted
+states are saved as candidate-only records. Four neural prediction sets are
+sealed without running the rule parser or opening private test labels. The
+parent must record successful child exit before constructing the rule control
+and sending all arms through the unchanged native executor/verifier. The CLI
+requires the pinned 8,053-graph exclusion inventory, explicit configuration
+files, curriculum seed, job identity, and external dataset-manifest digest.
+
+The CUDA loop has not yet been executed. The AWS-only end-to-end test is
+`tests/test_contrast_v6_train_gpu.py`; it must pass on authorized non-T4 CUDA
+hardware before the registered experiment starts. This is not yet a complete
+bounded launch package. Source/archive binding, GPU gates, parent evaluation,
+budget reservation, collection, and cleanup must still be connected.
+
 This is not yet a training launch package. Do not pass these files unchanged
 to `train_v3.py`: that trainer requires the v3 manifest and equal per-depth
 training counts. This candidate deliberately has unequal per-depth counts.
