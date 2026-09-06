@@ -1,0 +1,18 @@
+{
+  "schema": "cas-meta2-decoder-ablation-experiment/0.1",
+  "profile": "decoder_ablation_v4",
+  "entrypoint": "cas_meta2.ablation_campaign_v4",
+  "purpose": "RETROSPECTIVE_DECODER_DIAGNOSTIC",
+  "training_permitted": false,
+  "fresh_held_out_claim_permitted": false,
+  "source_release_accepted": false,
+  "learning_source_sha": "ec9d161908ab4ed8a4fb300ca31cb089ac0c3b70",
+  "input_archive_sha256": "bbb538f9a6cad0ecde46106f542edac9dd64e3188568cb96b2ca550ff854ee93",
+  "modes": [
+    "v3",
+    "viability_v4"
+  ],
+  "max_wall_seconds": 6600,
+  "task_count": 72,
+  "arms_per_mode": 5
+}

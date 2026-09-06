@@ -91,6 +91,7 @@ def test_simulated_parent_order_and_failures(tmp_path, monkeypatch, fail_predict
     calls = []
     output = tmp_path / 'campaign'
     monkeypatch.setattr(candidate, 'require_request', lambda *args: None)
+    monkeypatch.setattr(candidate, 'experiment_identity', lambda: {'simulated': True})
     monkeypatch.setattr(candidate.signal, 'SIGALRM', 14, raising=False)
     monkeypatch.setattr(candidate.signal, 'getsignal', lambda *args: None)
     monkeypatch.setattr(candidate.signal, 'signal', lambda *args: None)

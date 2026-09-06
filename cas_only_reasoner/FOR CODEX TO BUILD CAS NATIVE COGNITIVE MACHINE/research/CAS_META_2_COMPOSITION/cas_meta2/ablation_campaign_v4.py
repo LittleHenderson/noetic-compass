@@ -9,6 +9,7 @@ from hashlib import sha256
 import json
 import os
 from pathlib import Path
+import re
 import signal
 import sys
 import time
@@ -19,10 +20,27 @@ from .ablation_predict_v4 import ARMS, PRIVATE_SHA, PUBLIC_SHA, require_request,
 from .codec import canonical_sha256
 
 MODES = ('v3', 'viability_v4')
+ROOT = Path(__file__).resolve().parents[1]
 DATA_HASHES = {'train.json': '579a1bfdda64702b4357f57b75c9c9b6e0710a9262c1da41d5aeec1ca1404359',
     'validation.json': 'badbffa8e54d3cadb8a12d1e7d84d79a055b0c1073f4fe48fa068270cddea249',
     'test_public.json': PUBLIC_SHA, 'test_private.json': PRIVATE_SHA,
     'dataset_manifest.json': 'c0ad48a1a1c6834775bf18ee31971d491de3ed804d4f6469c97d4194968a2dce'}
+
+
+def experiment_identity():
+    from tools.experiment_profiles_ablation_v4 import validate_ablation_spec
+    path = ROOT / 'EXPERIMENT_ABLATION_V4.json'
+    digest = file_hash(path)
+    document = validate_ablation_spec(path.read_bytes())
+    record = {'profile': document['profile'], 'entrypoint': document['entrypoint'],
+              'spec_path': 'research/CAS_META_2_COMPOSITION/EXPERIMENT_ABLATION_V4.json',
+              'spec_sha256': digest}
+    if (os.environ.get('CAS_META2_EXPERIMENT_PROFILE') != record['profile']
+            or os.environ.get('CAS_META2_EXPERIMENT_ENTRYPOINT') != record['entrypoint']
+            or os.environ.get('CAS_META2_EXPERIMENT_SPEC_SHA256') != digest
+            or re.fullmatch(r'[0-9a-f]{40}', os.environ.get('CAS_META2_SOURCE_SHA', '')) is None):
+        raise RuntimeError('ABLATION_LAUNCH_EXPERIMENT_IDENTITY_REQUIRED')
+    return record
 
 
 def file_hash(path):
@@ -98,6 +116,7 @@ def run(archive, output, *, job, max_seconds=6600):
     require_request(job, 900)
     if type(max_seconds) is not int or not 60 <= max_seconds <= 6600:
         raise ValueError('ABLATION_CAMPAIGN_BOUND_INVALID')
+    experiment = experiment_identity()
     from .campaign_v3 import (_new_output, _source_identity, _baseline_identity, _run_process,
                               _construct_data, _final_payload_index, _xml_receipt, _write)
     # Pin archive before launching any neural process. Only tokenizer is parsed later.
@@ -107,8 +126,9 @@ def run(archive, output, *, job, max_seconds=6600):
     started = time.monotonic()
     deadline = started + max_seconds - 15
     source_before = _source_identity()
+    spec_before = file_hash(ROOT / 'EXPERIMENT_ABLATION_V4.json')
     baseline_before = None
-    record = {'schema': 'cas-meta2-retrospective-campaign/0.1', 'job': job,
+    record = {'schema': 'cas-meta2-retrospective-campaign/0.1', 'job': job, 'experiment': experiment,
         'completed': False, 'evaluation_completed': False, 'stage': 'baseline',
         'training_performed': False, 'fresh_held_out_claim_permitted': False,
         'release_accepted': False, 'automatic_retry': False, 'processes': {}}
@@ -143,7 +163,8 @@ def run(archive, output, *, job, max_seconds=6600):
             if check_prediction_exit(output, job) != gate:
                 raise RuntimeError('ABLATION_PREDICTIONS_CHANGED_BEFORE_EVALUATION')
             phase('evaluate_' + mode, 2400, base + ['--phase', 'evaluate', '--mode', mode])
-        if _source_identity() != source_before or _baseline_identity() != baseline_before:
+        if (_source_identity() != source_before or _baseline_identity() != baseline_before
+                or file_hash(ROOT / 'EXPERIMENT_ABLATION_V4.json') != spec_before):
             raise RuntimeError('ABLATION_SOURCE_OR_BASELINE_CHANGED')
         if check_prediction_exit(output, job) != gate:
             raise RuntimeError('ABLATION_PREDICTIONS_CHANGED_DURING_EVALUATION')
@@ -185,10 +206,13 @@ def main():
     parser.add_argument('--job', required=True)
     parser.add_argument('--phase', choices=('run', 'runtime', 'predict', 'evaluate'), default='run')
     parser.add_argument('--mode', choices=MODES)
+    parser.add_argument('--max-wall-seconds', type=int, default=6600)
     args = parser.parse_args()
     require_request(args.job, 900)
+    experiment_identity()
     if args.phase == 'run':
-        return 0 if run(args.archive, args.output, job=args.job)['completed'] else 1
+        return 0 if run(args.archive, args.output, job=args.job,
+                        max_seconds=args.max_wall_seconds)['completed'] else 1
     if args.phase == 'predict':
         from .ablation_predict_v4 import run as predict
         predict(args.archive, args.output / 'prediction', job=args.job)
