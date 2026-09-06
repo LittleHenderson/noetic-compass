@@ -1,0 +1,114 @@
+{
+  "all_copied_bytes_rechecked": true,
+  "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\decoder_ablation_inputs_v4_001\\inputs.zip",
+  "archive_bytes": 6444247,
+  "archive_sha256": "bbb538f9a6cad0ecde46106f542edac9dd64e3188568cb96b2ca550ff854ee93",
+  "builder_sha256": "28671c0bf4fa2d07e341091f1a33e50f710268c9b4ab54033da086d682a3419f",
+  "gpu_launched": false,
+  "input_manifest_sha256": "2d0232784b17a5863f6f02a285428e1ea8a09e0221672d2fdae8ad5ca57f2f90",
+  "manifest": {
+    "checkpoint_locations": {
+      "cas_initial": {
+        "epoch": 0,
+        "member": "candidate_cas_initial.pt",
+        "optimizer_steps": 0,
+        "sha256": "cf297957bba59b54d8c07c5da2e9fc3eaa11c50a6fd86bfbcce05bd20cb7be45"
+      },
+      "cas_selected": {
+        "epoch": 60,
+        "member": "candidate_cas_best.pt",
+        "optimizer_steps": 11520,
+        "sha256": "4e327e1e8c89b27b78101a877bf9f6cf4debeeb18658e2fc28361c23df70c48f"
+      },
+      "generic_initial": {
+        "epoch": 0,
+        "member": "candidate_generic_initial.pt",
+        "optimizer_steps": 0,
+        "sha256": "cfda8ef6f081adc41a1acc036c580272d9952bc91bb93bd1c6dba5684dbb6cfe"
+      },
+      "generic_selected": {
+        "epoch": 60,
+        "member": "candidate_generic_best.pt",
+        "optimizer_steps": 11520,
+        "sha256": "7f906e974d4509922a1b84a17109acc23ad88af626135820f17fc4c3baf9fb1e"
+      }
+    },
+    "fresh_held_out_claim_permitted": false,
+    "inspection_sha256": "86fc7177a29b12836904174413f85f6f03f37ce31ac6a79e8469fa6f8b3fdfb7",
+    "learning_source_sha": "ec9d161908ab4ed8a4fb300ca31cb089ac0c3b70",
+    "members": {
+      "candidate_cas_best.pt": {
+        "bytes": 2666055,
+        "original_member": "cloud_job/campaign/candidate_cas_best.pt",
+        "sha256": "4e327e1e8c89b27b78101a877bf9f6cf4debeeb18658e2fc28361c23df70c48f"
+      },
+      "candidate_cas_initial.pt": {
+        "bytes": 1113197,
+        "original_member": "cloud_job/campaign/candidate_cas_initial.pt",
+        "sha256": "cf297957bba59b54d8c07c5da2e9fc3eaa11c50a6fd86bfbcce05bd20cb7be45"
+      },
+      "candidate_generic_best.pt": {
+        "bytes": 2624987,
+        "original_member": "cloud_job/campaign/candidate_generic_best.pt",
+        "sha256": "7f906e974d4509922a1b84a17109acc23ad88af626135820f17fc4c3baf9fb1e"
+      },
+      "candidate_generic_initial.pt": {
+        "bytes": 1099773,
+        "original_member": "cloud_job/campaign/candidate_generic_initial.pt",
+        "sha256": "cfda8ef6f081adc41a1acc036c580272d9952bc91bb93bd1c6dba5684dbb6cfe"
+      },
+      "checkpoints.json": {
+        "bytes": 23948,
+        "original_member": "cloud_job/campaign/checkpoints.json",
+        "sha256": "a4a4caa1f50efcb81089e88290c804c9f3614b2069cfda158a27a081623da785"
+      },
+      "dataset/dataset_manifest.json": {
+        "bytes": 7083,
+        "original_member": "cloud_job/campaign/dataset/dataset_manifest.json",
+        "sha256": "c0ad48a1a1c6834775bf18ee31971d491de3ed804d4f6469c97d4194968a2dce"
+      },
+      "dataset/test_private.json": {
+        "bytes": 205972,
+        "original_member": "cloud_job/campaign/dataset/test_private.json",
+        "sha256": "b08ca2f7be8d2ef88988a8a6c15edec087124abdaed788795a795cd541dff65c"
+      },
+      "dataset/test_public.json": {
+        "bytes": 94735,
+        "original_member": "cloud_job/campaign/dataset/test_public.json",
+        "sha256": "553413b0ddc4bd877c3a012fe709bd8bd8836d0d1e0fc9058a8e602153140f62"
+      },
+      "predictions.jsonl": {
+        "bytes": 239932,
+        "original_member": "cloud_job/campaign/predictions.jsonl",
+        "sha256": "502a3e514952c7c5535bfe0205679b9e1ccaf1a1e50c25d62fa24a1c8776cc80"
+      },
+      "predictions_seal.json": {
+        "bytes": 1269,
+        "original_member": "cloud_job/campaign/predictions_seal.json",
+        "sha256": "75b70efd44af8044dab540fef83995c4d734ec2760a035f044b02137e09df04a"
+      },
+      "tokenizer.json": {
+        "bytes": 6689,
+        "original_member": "cloud_job/campaign/tokenizer.json",
+        "sha256": "45ba30b06ac5127814c54109538006cb42adab78b63721870bd98830ecd648c4"
+      },
+      "training_receipt.json": {
+        "bytes": 35353,
+        "original_member": "cloud_job/campaign/training_receipt.json",
+        "sha256": "63e1032e418f6b72f420312a1d03dd917acdff819248f51af81ca551d2b58236"
+      }
+    },
+    "model_deserialization_performed": false,
+    "prediction_rule": "Load public observations only into predictors. Seal all new predictions before the evaluation process opens private targets.",
+    "previously_exposed_test_data": true,
+    "purpose": "RETROSPECTIVE_DECODER_DIAGNOSTIC",
+    "schema": "cas-meta2-decoder-ablation-inputs/0.1",
+    "source_packet_sha256": "ebb76793a3897d70563be8cd2a857b0e24c82c4e412d3db66d80ac76345acaf2",
+    "source_release_accepted": false,
+    "task_count": 72,
+    "training_permitted": false
+  },
+  "neural_execution_performed": false,
+  "provider_calls": 0,
+  "schema": "cas-meta2-decoder-ablation-input-build/0.1"
+}
