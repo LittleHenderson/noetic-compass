@@ -1,0 +1,6050 @@
+{
+  "boundary": "Offline byte checks and repeated frozen generation-score checks. No checkpoint loading, independent neural replay, teacher-forced-logit recount, native answer verification, or skill promotion.",
+  "expanded_bytes": 26887097,
+  "extraction": {
+    "all_member_bytes_verified_after_write": true,
+    "files_verified": 110,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_fit_v5_001_review_extracted"
+  },
+  "fresh_held_out_evaluation": false,
+  "full_index_verified": true,
+  "gpu_tests": {
+    "fit": {
+      "case_names": [
+        "test_cuda_fit_primitives_align_roles_change_candidate_and_reload_exactly[cas]",
+        "test_cuda_fit_primitives_align_roles_change_candidate_and_reload_exactly[generic]"
+      ],
+      "passed": 2
+    },
+    "native": {
+      "case_names": [
+        "test_gpu_authored_execution_matches_independent_reference[0]",
+        "test_gpu_authored_execution_matches_independent_reference[1]",
+        "test_gpu_authored_execution_matches_independent_reference[2]",
+        "test_gpu_wrong_binding_and_wrong_procedure_are_wrong_despite_valid_traces"
+      ],
+      "passed": 4
+    },
+    "policy": {
+      "case_names": [
+        "test_cuda_guard_precedes_model_construction",
+        "test_both_generators_have_gradients_and_matched_active_parameters",
+        "test_decoder_cannot_see_future_target_tokens",
+        "test_incomplete_generation_is_rejected_without_gold_repair",
+        "test_cuda_guard_precedes_candidate_construction",
+        "test_identical_shared_initialization_and_finite_nonzero_task_gradients",
+        "test_mean_pooling_covers_all_byte_fallback_rows",
+        "test_repeated_spelling_copy_mass_is_aggregated_in_fixed_vocabulary",
+        "test_no_symbols_uses_exact_fixed_head_and_keeps_binding_pointer_active",
+        "test_causal_copy_scores_cannot_see_future_decoder_tokens",
+        "test_occurrence_scope_refuses_observation_and_invalid_destination_ids",
+        "test_same_grammar_blocks_disallowed_high_logits_and_never_repairs_bounded_dead_end",
+        "test_mixed_symbol_and_no_symbol_rows_remain_finite_with_correct_mass",
+        "test_rejected_row_evidence_excludes_inactive_batch_padding",
+        "test_weighted_nll_matches_independent_sum_and_pad_gradients_are_zero",
+        "test_weight_encoding_rejects_misaligned_target_or_decoder_inputs",
+        "test_invalid_weights_are_refused[negative]",
+        "test_invalid_weights_are_refused[nan]",
+        "test_invalid_weights_are_refused[zero_valid]",
+        "test_invalid_weights_are_refused[positive_pad]",
+        "test_invalid_weights_are_refused[learnable]",
+        "test_invalid_weights_are_refused[cpu]",
+        "test_bad_log_probabilities_and_target_layout_are_refused[raw_logits]",
+        "test_bad_log_probabilities_and_target_layout_are_refused[nan]",
+        "test_bad_log_probabilities_and_target_layout_are_refused[wrong_vocabulary]",
+        "test_bad_log_probabilities_and_target_layout_are_refused[bad_valid]",
+        "test_bad_log_probabilities_and_target_layout_are_refused[bad_lengths]"
+      ],
+      "passed": 27
+    }
+  },
+  "history": [
+    {
+      "epoch": 0,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 0,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 0
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 0,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 0,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "eos": {
+              "correct": 0,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 0,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 18,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 4,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 0,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 46,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 0,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 23,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 0,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 0
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 0,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 0,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "eos": {
+              "correct": 0,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 0,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 16,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 3,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 0,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 53,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 0,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 23,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 0,
+        "generic": 0
+      }
+    },
+    {
+      "epoch": 1,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 0,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 0
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 0,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 3,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "eos": {
+              "correct": 0,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 0,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 20,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 8,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 0,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 94,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 0,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 34,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 0,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 0
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 0,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 2,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "eos": {
+              "correct": 0,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 0,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 19,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 8,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 0,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 99,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 0,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 32,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 3,
+        "generic": 3
+      }
+    },
+    {
+      "epoch": 10,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 0,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 0
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 9,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 3,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 15,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "eos": {
+              "correct": 0,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 11,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 4,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 34,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 28,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 137,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 190,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 224,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 63,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 0,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 0
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 1,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 5,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 14,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "eos": {
+              "correct": 0,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 14,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 4,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 36,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 27,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 143,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 186,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 213,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 63,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 30,
+        "generic": 30
+      }
+    },
+    {
+      "epoch": 20,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 2,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 2
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 2,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 2
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 4,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 4
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 24,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 153,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 23,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 24,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "eos": {
+              "correct": 0,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 18,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 54,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 8,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 40,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 173,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 220,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 236,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 68,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 1,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 1
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 2,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 2
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 3,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 3
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 24,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 154,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 26,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 24,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "eos": {
+              "correct": 1,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 20,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 60,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 52,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 11,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 36,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 172,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 212,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 227,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 66,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 60,
+        "generic": 60
+      }
+    },
+    {
+      "epoch": 30,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 5,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 6
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 5,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 5
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 1,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 1
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 11,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 12
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 34,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 185,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 30,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 47,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 1,
+              "total": 63
+            },
+            "eos": {
+              "correct": 10,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 23,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 57,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 26,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 47,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 195,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 226,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 234,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 74,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 2,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 2
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 3,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 3
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 5,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 5
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 34,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 179,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 30,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 44,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 1,
+              "total": 63
+            },
+            "eos": {
+              "correct": 3,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 22,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 58,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 31,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 45,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 201,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 226,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 234,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 71,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 90,
+        "generic": 90
+      }
+    },
+    {
+      "epoch": 40,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 3,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 3
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 2,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 2
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 13,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 13
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 45,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 187,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 34,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 53,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 0,
+              "total": 63
+            },
+            "eos": {
+              "correct": 17,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 62,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 31,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 54,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 203,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 232,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 245,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 108,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 1,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 1
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 4,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 4
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 13,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 24,
+              "valid_programs": 13
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 48,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 183,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 34,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 58,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 2,
+              "total": 63
+            },
+            "eos": {
+              "correct": 15,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 61,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 62,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 33,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 54,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 202,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 234,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 240,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 84,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 120,
+        "generic": 120
+      }
+    },
+    {
+      "epoch": 50,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 2,
+                "native_execution_performed": false,
+                "program_correct": 2,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 5,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 5
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 20,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 2,
+              "native_execution_performed": false,
+              "program_correct": 2,
+              "total": 24,
+              "valid_programs": 20
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 54,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 188,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 39,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 59,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 10,
+              "total": 63
+            },
+            "eos": {
+              "correct": 22,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 61,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 30,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 58,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 212,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 245,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 248,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 184,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 1,
+                "native_execution_performed": false,
+                "program_correct": 1,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 5,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 5
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 6,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 6
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 19,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 1,
+              "native_execution_performed": false,
+              "program_correct": 1,
+              "total": 24,
+              "valid_programs": 19
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 55,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 188,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 37,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 3,
+              "total": 63
+            },
+            "eos": {
+              "correct": 20,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 61,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 35,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 55,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 206,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 247,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 240,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 163,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 150,
+        "generic": 150
+      }
+    },
+    {
+      "epoch": 60,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 3,
+                "native_execution_performed": false,
+                "program_correct": 3,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 6,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 6
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 21,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 3,
+              "native_execution_performed": false,
+              "program_correct": 3,
+              "total": 24,
+              "valid_programs": 21
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 59,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 42,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 60,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 31,
+              "total": 63
+            },
+            "eos": {
+              "correct": 21,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 32,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 62,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 211,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 253,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 255,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 206,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 2,
+                "native_execution_performed": false,
+                "program_correct": 2,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 6,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 6
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 21,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 2,
+              "native_execution_performed": false,
+              "program_correct": 2,
+              "total": 24,
+              "valid_programs": 21
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 61,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 42,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 17,
+              "total": 63
+            },
+            "eos": {
+              "correct": 21,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 60,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 33,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 61,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 211,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 253,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 249,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 195,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 180,
+        "generic": 180
+      }
+    },
+    {
+      "epoch": 70,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 5,
+                "native_execution_performed": false,
+                "program_correct": 5,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 1,
+                "native_execution_performed": false,
+                "program_correct": 1,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 3,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 1,
+                "native_execution_performed": false,
+                "program_correct": 1,
+                "total": 8,
+                "valid_programs": 3
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 18,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 7,
+              "native_execution_performed": false,
+              "program_correct": 7,
+              "total": 24,
+              "valid_programs": 18
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 56,
+              "total": 63
+            },
+            "eos": {
+              "correct": 21,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 41,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 256,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 257,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 216,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 5,
+                "native_execution_performed": false,
+                "program_correct": 5,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 4,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 4
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 19,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 5,
+              "native_execution_performed": false,
+              "program_correct": 5,
+              "total": 24,
+              "valid_programs": 19
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 45,
+              "total": 63
+            },
+            "eos": {
+              "correct": 22,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 60,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 34,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 62,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 257,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 255,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 219,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 210,
+        "generic": 210
+      }
+    },
+    {
+      "epoch": 80,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 6,
+                "native_execution_performed": false,
+                "program_correct": 6,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 1,
+                "native_execution_performed": false,
+                "program_correct": 1,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 5,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 5
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 20,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 7,
+              "native_execution_performed": false,
+              "program_correct": 7,
+              "total": 24,
+              "valid_programs": 20
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 42,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 60,
+              "total": 63
+            },
+            "eos": {
+              "correct": 23,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 43,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 61,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 254,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 257,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 238,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 6,
+                "native_execution_performed": false,
+                "program_correct": 6,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 1,
+                "native_execution_performed": false,
+                "program_correct": 1,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 3,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 8,
+                "valid_programs": 3
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 17,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 7,
+              "native_execution_performed": false,
+              "program_correct": 7,
+              "total": 24,
+              "valid_programs": 17
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "eos": {
+              "correct": 21,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 60,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 42,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 257,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 235,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 240,
+        "generic": 240
+      }
+    },
+    {
+      "epoch": 90,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 5,
+                "native_execution_performed": false,
+                "program_correct": 5,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 5,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 1,
+                "native_execution_performed": false,
+                "program_correct": 1,
+                "total": 8,
+                "valid_programs": 5
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 20,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 14,
+              "native_execution_performed": false,
+              "program_correct": 14,
+              "total": 24,
+              "valid_programs": 20
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 23,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 50,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 249,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 7,
+                "native_execution_performed": false,
+                "program_correct": 7,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 2,
+                "native_execution_performed": false,
+                "program_correct": 2,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 3,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 1,
+                "native_execution_performed": false,
+                "program_correct": 1,
+                "total": 8,
+                "valid_programs": 3
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 18,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 10,
+              "native_execution_performed": false,
+              "program_correct": 10,
+              "total": 24,
+              "valid_programs": 18
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "eos": {
+              "correct": 23,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 60,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 46,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 250,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 270,
+        "generic": 270
+      }
+    },
+    {
+      "epoch": 100,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 6,
+                "native_execution_performed": false,
+                "program_correct": 6,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 5,
+                "native_execution_performed": false,
+                "program_correct": 5,
+                "total": 8,
+                "valid_programs": 7
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 22,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 19,
+              "native_execution_performed": false,
+              "program_correct": 19,
+              "total": 24,
+              "valid_programs": 22
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 23,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 58,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 254,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 5,
+                "native_execution_performed": false,
+                "program_correct": 5,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 4,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 1,
+                "native_execution_performed": false,
+                "program_correct": 1,
+                "total": 8,
+                "valid_programs": 4
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 19,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 14,
+              "native_execution_performed": false,
+              "program_correct": 14,
+              "total": 24,
+              "valid_programs": 19
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 23,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 51,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 253,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 300,
+        "generic": 300
+      }
+    },
+    {
+      "epoch": 110,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 7,
+                "native_execution_performed": false,
+                "program_correct": 7,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 6,
+                "native_execution_performed": false,
+                "program_correct": 6,
+                "total": 8,
+                "valid_programs": 7
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 23,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 21,
+              "native_execution_performed": false,
+              "program_correct": 21,
+              "total": 24,
+              "valid_programs": 23
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 60,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 255,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 6,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 2,
+                "native_execution_performed": false,
+                "program_correct": 2,
+                "total": 8,
+                "valid_programs": 6
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 6,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 2,
+                "native_execution_performed": false,
+                "program_correct": 2,
+                "total": 8,
+                "valid_programs": 6
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 20,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 12,
+              "native_execution_performed": false,
+              "program_correct": 12,
+              "total": 24,
+              "valid_programs": 20
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 23,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 50,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 254,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 330,
+        "generic": 330
+      }
+    },
+    {
+      "epoch": 120,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 7,
+                "native_execution_performed": false,
+                "program_correct": 7,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 7,
+                "native_execution_performed": false,
+                "program_correct": 7,
+                "total": 8,
+                "valid_programs": 7
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 23,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 22,
+              "native_execution_performed": false,
+              "program_correct": 22,
+              "total": 24,
+              "valid_programs": 23
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 61,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 255,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 5,
+                "native_execution_performed": false,
+                "program_correct": 5,
+                "total": 8,
+                "valid_programs": 7
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 7,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 6,
+                "native_execution_performed": false,
+                "program_correct": 6,
+                "total": 8,
+                "valid_programs": 7
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 22,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 19,
+              "native_execution_performed": false,
+              "program_correct": 19,
+              "total": 24,
+              "valid_programs": 22
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 23,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 59,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 257,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 360,
+        "generic": 360
+      }
+    },
+    {
+      "epoch": 130,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 7,
+                "native_execution_performed": false,
+                "program_correct": 7,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 23,
+              "native_execution_performed": false,
+              "program_correct": 23,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 257,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 7,
+                "native_execution_performed": false,
+                "program_correct": 7,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 23,
+              "native_execution_performed": false,
+              "program_correct": 23,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 62,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 257,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 390,
+        "generic": 390
+      }
+    },
+    {
+      "epoch": 140,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 257,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 258,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 420,
+        "generic": 420
+      }
+    },
+    {
+      "epoch": 150,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 257,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 258,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 450,
+        "generic": 450
+      }
+    },
+    {
+      "epoch": 160,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 257,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 258,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 480,
+        "generic": 480
+      }
+    },
+    {
+      "epoch": 170,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 257,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 258,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 510,
+        "generic": 510
+      }
+    },
+    {
+      "epoch": 180,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 258,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 258,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 540,
+        "generic": 540
+      }
+    },
+    {
+      "epoch": 190,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 258,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 258,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 570,
+        "generic": 570
+      }
+    },
+    {
+      "epoch": 200,
+      "families": {
+        "cas": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 258,
+              "total": 258
+            }
+          }
+        },
+        "generic": {
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 8,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 8,
+                "native_execution_performed": false,
+                "program_correct": 8,
+                "total": 8,
+                "valid_programs": 8
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 24,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 24,
+              "native_execution_performed": false,
+              "program_correct": 24,
+              "total": 24,
+              "valid_programs": 24
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_roles": {
+            "allow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "allowed_cjt": {
+              "correct": 189,
+              "total": 189
+            },
+            "call_target": {
+              "correct": 43,
+              "total": 43
+            },
+            "endallow_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "endproc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "eos": {
+              "correct": 24,
+              "total": 24
+            },
+            "observation_binding": {
+              "correct": 24,
+              "total": 24
+            },
+            "proc_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "procedure_name": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_marker": {
+              "correct": 63,
+              "total": 63
+            },
+            "return_value": {
+              "correct": 63,
+              "total": 63
+            },
+            "run_cjt": {
+              "correct": 215,
+              "total": 215
+            },
+            "step_input": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_kind": {
+              "correct": 258,
+              "total": 258
+            },
+            "step_output": {
+              "correct": 258,
+              "total": 258
+            }
+          }
+        }
+      },
+      "optimizer_steps": {
+        "cas": 600,
+        "generic": 600
+      }
+    }
+  ],
+  "inventory": [
+    {
+      "bytes": 23061,
+      "path": "artifact_collection_receipt.json",
+      "sha256": "2e0dc8f5b7aad435b8531388bd74dfaa107c6b05b4312f771263b8fe16181586"
+    },
+    {
+      "bytes": 0,
+      "path": "cloud_job/campaign.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 17291,
+      "path": "cloud_job/campaign/campaign_receipt.json",
+      "sha256": "9390d5561cc51e61e9ff6923afb67b1db424eb89aaf81a974f8deb88d3f3492b"
+    },
+    {
+      "bytes": 1108165,
+      "path": "cloud_job/campaign/fit/cas_epoch_0000.pt",
+      "sha256": "6c16d3e6a817decf8f055b1eddb2f1ba351ab3019ed34c67124021ebc1588de5"
+    },
+    {
+      "bytes": 2656148,
+      "path": "cloud_job/campaign/fit/cas_epoch_0200.pt",
+      "sha256": "78bb23c0445a115f72ec1c0ef0c2594c21e4140b511966935fe8dfc1c11e92d6"
+    },
+    {
+      "bytes": 168580,
+      "path": "cloud_job/campaign/fit/fit_receipt.json",
+      "sha256": "2c2d3d564cc072da7163f8de67b42685a23195483a83356285565b80318a8110"
+    },
+    {
+      "bytes": 1095445,
+      "path": "cloud_job/campaign/fit/generic_epoch_0000.pt",
+      "sha256": "6fd3027efd67debdb15c837a52fabeeff67be5065aedd87bf83ce3ecc00edc0c"
+    },
+    {
+      "bytes": 2617384,
+      "path": "cloud_job/campaign/fit/generic_epoch_0200.pt",
+      "sha256": "013d72412c6f9cd1377f0847a3bd8c4d417bd23d79b80af0ea65350b68195f7b"
+    },
+    {
+      "bytes": 63101,
+      "path": "cloud_job/campaign/fit/measurement_0000.json",
+      "sha256": "dcf60ef62d891b26f2535f6301efce5ea4cd5782ca2c8b7fa2f17ec587b06841"
+    },
+    {
+      "bytes": 73343,
+      "path": "cloud_job/campaign/fit/measurement_0001.json",
+      "sha256": "59696ec2c8e3f476915f81a0bb84b45ae154c1596fb30464af6c091db9578c13"
+    },
+    {
+      "bytes": 205004,
+      "path": "cloud_job/campaign/fit/measurement_0010.json",
+      "sha256": "d0d9d86be7aef481a0a9fe26d3a149bbb388537cb5e75daabe78d47735639e5c"
+    },
+    {
+      "bytes": 191378,
+      "path": "cloud_job/campaign/fit/measurement_0020.json",
+      "sha256": "e4925f766e9d54cfe2c2a3ebca60151f0e3f0424dcbd7d56d1a20c9d6e9b6ff1"
+    },
+    {
+      "bytes": 157741,
+      "path": "cloud_job/campaign/fit/measurement_0030.json",
+      "sha256": "5ca8fe03f53d91e618de3ac89c9ee796a072855b7e27db46eaafcf9230b4216d"
+    },
+    {
+      "bytes": 133250,
+      "path": "cloud_job/campaign/fit/measurement_0040.json",
+      "sha256": "cc5db12e72b35cc7b7cc083dd2e5365a09962e5108d12465ccbdb0fb836ccaae"
+    },
+    {
+      "bytes": 141510,
+      "path": "cloud_job/campaign/fit/measurement_0050.json",
+      "sha256": "f10d13d8b06920ca9be4cb8236f4532ec3794070cc781fbd5ea2b88dc329321a"
+    },
+    {
+      "bytes": 157306,
+      "path": "cloud_job/campaign/fit/measurement_0060.json",
+      "sha256": "5f7b6fc4694e6c1a8299f6f9de1ed294200cca78aaac9fc95cdcad8081ff054d"
+    },
+    {
+      "bytes": 141547,
+      "path": "cloud_job/campaign/fit/measurement_0070.json",
+      "sha256": "ccbc3823b8f6da3120d6e46f5aceb91caec3fed01dfb92a6b58e8a9807d68882"
+    },
+    {
+      "bytes": 146793,
+      "path": "cloud_job/campaign/fit/measurement_0080.json",
+      "sha256": "c76188c70ed36ee070d37c8930710e928a291760debe9148ef0ff00c15f8b20e"
+    },
+    {
+      "bytes": 138768,
+      "path": "cloud_job/campaign/fit/measurement_0090.json",
+      "sha256": "804693f17fa6039422fbb09cc6441d38c50c86faedf36c23dd1cff5543113a37"
+    },
+    {
+      "bytes": 135969,
+      "path": "cloud_job/campaign/fit/measurement_0100.json",
+      "sha256": "d20fa829c240318bd21660e7f98bd3d510f60ff9bc833726fe7447a214fd1a9e"
+    },
+    {
+      "bytes": 138873,
+      "path": "cloud_job/campaign/fit/measurement_0110.json",
+      "sha256": "3ecf2425b708154af46580ca529d9f7b426c91fa6bb5bbe5e93ec023d8ea0884"
+    },
+    {
+      "bytes": 140671,
+      "path": "cloud_job/campaign/fit/measurement_0120.json",
+      "sha256": "47322042e7800de0ff10ffa5305dc7469baecacf1c6d9f46b8f9636a82bb8573"
+    },
+    {
+      "bytes": 144406,
+      "path": "cloud_job/campaign/fit/measurement_0130.json",
+      "sha256": "4709b4592543e6f679729ce10c74e750736f8065806da2d0a08b3576d1222d2d"
+    },
+    {
+      "bytes": 143834,
+      "path": "cloud_job/campaign/fit/measurement_0140.json",
+      "sha256": "7ee11b4eb2aec4bdaf068b9995707ec633605574316d2e782909f9940eb947e8"
+    },
+    {
+      "bytes": 143834,
+      "path": "cloud_job/campaign/fit/measurement_0150.json",
+      "sha256": "769e10f5972012a1885f0196fe9f1b8d0bb8fc7d09846b6c8b46647e9688d665"
+    },
+    {
+      "bytes": 143834,
+      "path": "cloud_job/campaign/fit/measurement_0160.json",
+      "sha256": "2b0569a8ce7d8365075862e19771f18d9037cfd5b1ed4d8d05820a53b633fcb6"
+    },
+    {
+      "bytes": 143834,
+      "path": "cloud_job/campaign/fit/measurement_0170.json",
+      "sha256": "a15cef96aebf723c476d62c7c5ab164a64cb357f6a59fdd1c0428d3aa5068364"
+    },
+    {
+      "bytes": 143834,
+      "path": "cloud_job/campaign/fit/measurement_0180.json",
+      "sha256": "97788688fde7669a982dbff5f22b8234f154487feb82bebf3cf3d0dfbfdad41b"
+    },
+    {
+      "bytes": 143834,
+      "path": "cloud_job/campaign/fit/measurement_0190.json",
+      "sha256": "a22d7f709f0a41d0296932d4505bd6932e1131662435eb80940be2330813160c"
+    },
+    {
+      "bytes": 143834,
+      "path": "cloud_job/campaign/fit/measurement_0200.json",
+      "sha256": "d3320b8a9fb7440330808a911c715a11cb98f73ce8764cfdfe79d7e91f2b8b86"
+    },
+    {
+      "bytes": 7007,
+      "path": "cloud_job/campaign/fit/preregistration.json",
+      "sha256": "35f4c8a2806941bf857147824bb1286c56b94b7349bf9dad7bdfa242304d8e41"
+    },
+    {
+      "bytes": 566,
+      "path": "cloud_job/campaign/gpu_tests.xml",
+      "sha256": "60435092c21943fc98fe5fe0db911de048accf1824fcdfedac89874738765578"
+    },
+    {
+      "bytes": 2401293,
+      "path": "cloud_job/campaign/gpu_tmp/test_cuda_fit_primitives_align0/cas.pt",
+      "sha256": "87da0d59c7d2f9b58e6c2631674af342d4d4f5a77dd09bbcaa4c79e1bca5d83f"
+    },
+    {
+      "bytes": 2377313,
+      "path": "cloud_job/campaign/gpu_tmp/test_cuda_fit_primitives_align1/generic.pt",
+      "sha256": "cc4e879eff3fa3a74685da55a30a33bce04fbded1f99c3450db8ebc9cf8d71e5"
+    },
+    {
+      "bytes": 3840,
+      "path": "cloud_job/campaign/payload_sha256.json",
+      "sha256": "6af4f54edcb769194ac1fa9b5d0a9f606113413a300e8709ae5733fe14e714a7"
+    },
+    {
+      "bytes": 1270,
+      "path": "cloud_job/campaign/processes/gpu_contracts/process_receipt.json",
+      "sha256": "0b3587e7edbe82bbe01f73466411715ddf99bcaf892963023dfd963b93018e31"
+    },
+    {
+      "bytes": 0,
+      "path": "cloud_job/campaign/processes/gpu_contracts/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 130,
+      "path": "cloud_job/campaign/processes/gpu_contracts/stdout.txt",
+      "sha256": "1201652d06c035bac276d3a4d58500c793b447ff1e253ce7695d8d9084bddce1"
+    },
+    {
+      "bytes": 1273,
+      "path": "cloud_job/campaign/processes/training/process_receipt.json",
+      "sha256": "55494598f27ae1f8187a781da056b99311b436259b880bd47e974e599a5f9bd8"
+    },
+    {
+      "bytes": 0,
+      "path": "cloud_job/campaign/processes/training/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 1466,
+      "path": "cloud_job/campaign/processes/training/stdout.txt",
+      "sha256": "1f1c5fdb1cb90c19d1311939ff9b706de87994d68e40d486216c569638a66919"
+    },
+    {
+      "bytes": 405,
+      "path": "cloud_job/command.json",
+      "sha256": "eb50a521de6a23cfd1a7279ca0d890b731d93155946e7beac8dff36c9c973a5a"
+    },
+    {
+      "bytes": 112895,
+      "path": "cloud_job/dependency_install.json",
+      "sha256": "a6b48fd9251ecbacbda775c95ef196f3c343cbf46da9add881ab65d71e47914d"
+    },
+    {
+      "bytes": 16142,
+      "path": "cloud_job/frozen_wheel_install.json",
+      "sha256": "e5052935003519507283de6e01e411669452a8369a9912c2bc2652e9b17bf6c8"
+    },
+    {
+      "bytes": 265,
+      "path": "cloud_job/gpu_contract_command.json",
+      "sha256": "9e789d76da477693f643d8d97e0a48f0e37c089a66b4907556d6297910c08e4e"
+    },
+    {
+      "bytes": 67,
+      "path": "cloud_job/gpu_contract_receipt.json",
+      "sha256": "02c142af39b30f39bc1824df9132d69bde6bf14896de722b184b92539e06551a"
+    },
+    {
+      "bytes": 124,
+      "path": "cloud_job/gpu_contract_tests.log",
+      "sha256": "b74e594d543ac219dd0a8382ce21a328962bdcb10b4a6b17ec4bca9946c61fcd"
+    },
+    {
+      "bytes": 808,
+      "path": "cloud_job/gpu_contract_tests.xml",
+      "sha256": "fd55c95a3c9e09556e96631999437181841ac7cc586aa6cf097e4cd31ddf9f19"
+    },
+    {
+      "bytes": 319,
+      "path": "cloud_job/gpu_policy_command.json",
+      "sha256": "ef2739118ad245b4f51d9585c1276bab0dbe022a8e6983978ddddca3382eed45"
+    },
+    {
+      "bytes": 69,
+      "path": "cloud_job/gpu_policy_receipt.json",
+      "sha256": "0f479640dd5fe6f709eb08ed7b5de205a465f2392a28daa48bac5a46a44821a0"
+    },
+    {
+      "bytes": 1394,
+      "path": "cloud_job/gpu_policy_tests.log",
+      "sha256": "5523e028f86509333bdfd97ed29f75c14477ed668f614f1b851be17340afdfd4"
+    },
+    {
+      "bytes": 11088,
+      "path": "cloud_job/gpu_policy_tests.xml",
+      "sha256": "c571c9933a747bc4d7396ebf0d37272e0844ea937d9edf815d023ace0a63292d"
+    },
+    {
+      "bytes": 615,
+      "path": "cloud_job/job.json",
+      "sha256": "bedb7c4e9c4147233b16118d965b78cde55cc359e4d1a4e316b258d98abf015d"
+    },
+    {
+      "bytes": 1374,
+      "path": "cloud_job/pip_freeze.txt",
+      "sha256": "ac5ec26447991326f21d2dfcd5808978d0e48c8d75628c3bc1ea2052223a9434"
+    },
+    {
+      "bytes": 247,
+      "path": "cloud_job/runtime.json",
+      "sha256": "a8f782bd8a135939c180c29e4bd5b5d4c043a594d6847f0b9787e347e6e6eda2"
+    },
+    {
+      "bytes": 159365,
+      "path": "cloud_job/torch_install.json",
+      "sha256": "ede61b39fcf1946fef93756cda2f5a9948fc15e69866329999eb94b87aaae34b"
+    },
+    {
+      "bytes": 3,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/reference/meta_events.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 1310720,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/reference/native.db",
+      "sha256": "f6fb39b1a8608e014be370f097778bb556362b4238601e6d550e5269fb6d772e"
+    },
+    {
+      "bytes": 293631,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/reference/native_traces.json",
+      "sha256": "a50bd6302b52f4c9326f0084395ecd74f0e0eeb050af6edfc09644cce6dc0086"
+    },
+    {
+      "bytes": 5594,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/reference/published_effects.json",
+      "sha256": "5eeff61ff8f0e3d5fd2a6dc1087b020dc02e2c86bb4354807b861a00e121d36f"
+    },
+    {
+      "bytes": 4352,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/reference/result.json",
+      "sha256": "fd01c421906d6bffdbeaaa915a4f1950dca9d41f3cdb4cfbe4049ccb5f72f8d0"
+    },
+    {
+      "bytes": 229004,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/reference/semantic_projection.json",
+      "sha256": "9e5617b01b300b5ff69080b0187f8f4c9f3041f8400c751c7d7338050cfbe276"
+    },
+    {
+      "bytes": 12742,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-binding/meta_events.json",
+      "sha256": "43747176e4d2ab8b4304f8d24b1dce9e0e5d16a1f86ca9d516ba3e2688d897a3"
+    },
+    {
+      "bytes": 1310720,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-binding/native.db",
+      "sha256": "e6c8728d8e16b84481c33f8af00627129f21c355934da616784a099d3943a7d7"
+    },
+    {
+      "bytes": 293632,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-binding/native_traces.json",
+      "sha256": "6ee8f93a825855734ecde04f17a4fdc6914f7c6ef817ee52ee531f73d638486a"
+    },
+    {
+      "bytes": 5594,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-binding/published_effects.json",
+      "sha256": "489d4f296becc53db6bfcbf139282da8aeef74f3963eec783eee9cb85e58f688"
+    },
+    {
+      "bytes": 17102,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-binding/result.json",
+      "sha256": "55edbccb2f5712afa4b83b3e5cd2f3bcab89737c8ec72f96d7186ef20f9ed64a"
+    },
+    {
+      "bytes": 229005,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-binding/semantic_projection.json",
+      "sha256": "c0fb5866e4450e4cb6801af971f018e0ce16574ac2e4ee374bf83dd9535c66ba"
+    },
+    {
+      "bytes": 5969,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-procedure/meta_events.json",
+      "sha256": "46bc857f1abd26061f8073085ac2ce070bba6d7521b88489977dbf1049611012"
+    },
+    {
+      "bytes": 618496,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-procedure/native.db",
+      "sha256": "d4f584200b66f958bc65a858007403cff328de254bf2b7d91eda43239f277506"
+    },
+    {
+      "bytes": 113084,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-procedure/native_traces.json",
+      "sha256": "d0c2e205a4a9c320d66b05b7fc4d82bb54e9a39b6bb6fa6c43797a0ab4d21668"
+    },
+    {
+      "bytes": 2798,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-procedure/published_effects.json",
+      "sha256": "9607bc987c044cc2ddb43d9d80bfd4c21802e657214a8c5dc939882ddc5f3aca"
+    },
+    {
+      "bytes": 10330,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-procedure/result.json",
+      "sha256": "f635974e7dfe8f643614858aef29dfbb47d71fa12d5e9ae86ffd9d0b9fdda86e"
+    },
+    {
+      "bytes": 87565,
+      "path": "meta1_runs/gpu-contract-tests/0ec067fa6f684f74ba0760e33ff31b18/wrong-procedure/semantic_projection.json",
+      "sha256": "f1d2a61c931d1b0e2223d59e933288556b8a38e615b7298aed578fb3a71fc000"
+    },
+    {
+      "bytes": 2438,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/candidate/meta_events.json",
+      "sha256": "5389a8cdb1cd4e3c2bd8be9c377e8f998f750000a144f8172e1f8312ce60d1a8"
+    },
+    {
+      "bytes": 421888,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/candidate/native.db",
+      "sha256": "a3a7590ae3c64ae01588daacb20f30a17a480dcd352a4c41b135f1478359a4d7"
+    },
+    {
+      "bytes": 55987,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/candidate/native_traces.json",
+      "sha256": "3e9089af08f3b3f927b9bfd99ce9c48d9d68c1b027137a3450ea4b7cd5704c6b"
+    },
+    {
+      "bytes": 1400,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/candidate/published_effects.json",
+      "sha256": "c8390da8355d0db2e629cdd54f04d943a78843d8e524d8f63d3ea5b02ea151de"
+    },
+    {
+      "bytes": 6774,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/candidate/result.json",
+      "sha256": "cf9905aaa8cdb980ec1f4b16046c334071d409e38cda205e3781a7ef44dc04a8"
+    },
+    {
+      "bytes": 43072,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/candidate/semantic_projection.json",
+      "sha256": "aa77db1f750d9b2726b7eff9cb1a4ebba7da1cb43018ea97038acc3e772cec62"
+    },
+    {
+      "bytes": 3,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/reference/meta_events.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 421888,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/reference/native.db",
+      "sha256": "a3a7590ae3c64ae01588daacb20f30a17a480dcd352a4c41b135f1478359a4d7"
+    },
+    {
+      "bytes": 55987,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/reference/native_traces.json",
+      "sha256": "3e9089af08f3b3f927b9bfd99ce9c48d9d68c1b027137a3450ea4b7cd5704c6b"
+    },
+    {
+      "bytes": 1400,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/reference/published_effects.json",
+      "sha256": "c8390da8355d0db2e629cdd54f04d943a78843d8e524d8f63d3ea5b02ea151de"
+    },
+    {
+      "bytes": 4338,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/reference/result.json",
+      "sha256": "55e33e1a7a16ab2cb005d27dbefecd4f49fea7b3d9f6d4a0a1b515d3d1ffb4e2"
+    },
+    {
+      "bytes": 43072,
+      "path": "meta1_runs/gpu-contract-tests/4e3d661251024646b3c90755ce69c20d/reference/semantic_projection.json",
+      "sha256": "aa77db1f750d9b2726b7eff9cb1a4ebba7da1cb43018ea97038acc3e772cec62"
+    },
+    {
+      "bytes": 5969,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/candidate/meta_events.json",
+      "sha256": "f5165d8fd2ca18ef4656b337a6e7dad3a1fa69bff2830ed9dd1288bb783f6794"
+    },
+    {
+      "bytes": 618496,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/candidate/native.db",
+      "sha256": "d4f584200b66f958bc65a858007403cff328de254bf2b7d91eda43239f277506"
+    },
+    {
+      "bytes": 113084,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/candidate/native_traces.json",
+      "sha256": "d0c2e205a4a9c320d66b05b7fc4d82bb54e9a39b6bb6fa6c43797a0ab4d21668"
+    },
+    {
+      "bytes": 2798,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/candidate/published_effects.json",
+      "sha256": "9607bc987c044cc2ddb43d9d80bfd4c21802e657214a8c5dc939882ddc5f3aca"
+    },
+    {
+      "bytes": 10312,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/candidate/result.json",
+      "sha256": "c7295934a2cf2f659316c929d04904afcc99433c1e993cee9bdc6e9ba4166fb4"
+    },
+    {
+      "bytes": 87565,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/candidate/semantic_projection.json",
+      "sha256": "f1d2a61c931d1b0e2223d59e933288556b8a38e615b7298aed578fb3a71fc000"
+    },
+    {
+      "bytes": 3,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/reference/meta_events.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 618496,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/reference/native.db",
+      "sha256": "d4f584200b66f958bc65a858007403cff328de254bf2b7d91eda43239f277506"
+    },
+    {
+      "bytes": 113084,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/reference/native_traces.json",
+      "sha256": "d0c2e205a4a9c320d66b05b7fc4d82bb54e9a39b6bb6fa6c43797a0ab4d21668"
+    },
+    {
+      "bytes": 2798,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/reference/published_effects.json",
+      "sha256": "9607bc987c044cc2ddb43d9d80bfd4c21802e657214a8c5dc939882ddc5f3aca"
+    },
+    {
+      "bytes": 4345,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/reference/result.json",
+      "sha256": "b7db51d77786e3d1cdae8834aff0e56c0881eae0e2ce4d868b87e3524434ce74"
+    },
+    {
+      "bytes": 87565,
+      "path": "meta1_runs/gpu-contract-tests/ccf0ace85b0d49ec9d333c3649c83c66/reference/semantic_projection.json",
+      "sha256": "f1d2a61c931d1b0e2223d59e933288556b8a38e615b7298aed578fb3a71fc000"
+    },
+    {
+      "bytes": 12742,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/candidate/meta_events.json",
+      "sha256": "a35667e190a604217c2d20a4ef31b0832ec535c5ceba82ddfe2434211077b89c"
+    },
+    {
+      "bytes": 1310720,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/candidate/native.db",
+      "sha256": "f6fb39b1a8608e014be370f097778bb556362b4238601e6d550e5269fb6d772e"
+    },
+    {
+      "bytes": 293631,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/candidate/native_traces.json",
+      "sha256": "a50bd6302b52f4c9326f0084395ecd74f0e0eeb050af6edfc09644cce6dc0086"
+    },
+    {
+      "bytes": 5594,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/candidate/published_effects.json",
+      "sha256": "5eeff61ff8f0e3d5fd2a6dc1087b020dc02e2c86bb4354807b861a00e121d36f"
+    },
+    {
+      "bytes": 17092,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/candidate/result.json",
+      "sha256": "ff4db3f5a9e8f885c2126ccef26b51a6e8d50e2b05ab096a591a8795cda9e261"
+    },
+    {
+      "bytes": 229004,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/candidate/semantic_projection.json",
+      "sha256": "9e5617b01b300b5ff69080b0187f8f4c9f3041f8400c751c7d7338050cfbe276"
+    },
+    {
+      "bytes": 3,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/reference/meta_events.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "bytes": 1310720,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/reference/native.db",
+      "sha256": "f6fb39b1a8608e014be370f097778bb556362b4238601e6d550e5269fb6d772e"
+    },
+    {
+      "bytes": 293631,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/reference/native_traces.json",
+      "sha256": "a50bd6302b52f4c9326f0084395ecd74f0e0eeb050af6edfc09644cce6dc0086"
+    },
+    {
+      "bytes": 5594,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/reference/published_effects.json",
+      "sha256": "5eeff61ff8f0e3d5fd2a6dc1087b020dc02e2c86bb4354807b861a00e121d36f"
+    },
+    {
+      "bytes": 4352,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/reference/result.json",
+      "sha256": "6071a23359c45d1039898f90abae3e5afbf9722684696d99a0b10caf16d46f8a"
+    },
+    {
+      "bytes": 229004,
+      "path": "meta1_runs/gpu-contract-tests/e875561cf187453cbba06519110b3516/reference/semantic_projection.json",
+      "sha256": "9e5617b01b300b5ff69080b0187f8f4c9f3041f8400c751c7d7338050cfbe276"
+    }
+  ],
+  "job": "cas-meta2-20260906054131-feae01a9",
+  "learning_accepted": false,
+  "neural_execution": false,
+  "optimizer_steps": {
+    "cas": 600,
+    "generic": 600
+  },
+  "packet_sha256": "7e29dfa32f89159c3a1f476614fab5d9c80b9778e7a724cc2f967c72a158b34f",
+  "provider_calls": false,
+  "recount": {
+    "boundary": "Known-example fit scores only; no independent neural replay or skill acceptance.",
+    "final_checkpoints": {
+      "cas": {
+        "path": "cas_epoch_0200.pt",
+        "sha256": "78bb23c0445a115f72ec1c0ef0c2594c21e4140b511966935fe8dfc1c11e92d6"
+      },
+      "generic": {
+        "path": "generic_epoch_0200.pt",
+        "sha256": "013d72412c6f9cd1377f0847a3bd8c4d417bd23d79b80af0ea65350b68195f7b"
+      }
+    },
+    "final_generation": {
+      "cas": {
+        "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+        "by_depth": {
+          "1": {
+            "all_cases_in_denominator": true,
+            "binding_correct": 8,
+            "boundary": "Freely generated exact program and binding, not native task outcome.",
+            "joint_correct": 8,
+            "native_execution_performed": false,
+            "program_correct": 8,
+            "total": 8,
+            "valid_programs": 8
+          },
+          "2": {
+            "all_cases_in_denominator": true,
+            "binding_correct": 8,
+            "boundary": "Freely generated exact program and binding, not native task outcome.",
+            "joint_correct": 8,
+            "native_execution_performed": false,
+            "program_correct": 8,
+            "total": 8,
+            "valid_programs": 8
+          },
+          "3": {
+            "all_cases_in_denominator": true,
+            "binding_correct": 8,
+            "boundary": "Freely generated exact program and binding, not native task outcome.",
+            "joint_correct": 8,
+            "native_execution_performed": false,
+            "program_correct": 8,
+            "total": 8,
+            "valid_programs": 8
+          }
+        },
+        "expected_depths": [
+          1,
+          2,
+          3
+        ],
+        "overall": {
+          "all_cases_in_denominator": true,
+          "binding_correct": 24,
+          "boundary": "Freely generated exact program and binding, not native task outcome.",
+          "joint_correct": 24,
+          "native_execution_performed": false,
+          "program_correct": 24,
+          "total": 24,
+          "valid_programs": 24
+        },
+        "schema": "cas-meta2-depth-selection/3"
+      },
+      "generic": {
+        "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+        "by_depth": {
+          "1": {
+            "all_cases_in_denominator": true,
+            "binding_correct": 8,
+            "boundary": "Freely generated exact program and binding, not native task outcome.",
+            "joint_correct": 8,
+            "native_execution_performed": false,
+            "program_correct": 8,
+            "total": 8,
+            "valid_programs": 8
+          },
+          "2": {
+            "all_cases_in_denominator": true,
+            "binding_correct": 8,
+            "boundary": "Freely generated exact program and binding, not native task outcome.",
+            "joint_correct": 8,
+            "native_execution_performed": false,
+            "program_correct": 8,
+            "total": 8,
+            "valid_programs": 8
+          },
+          "3": {
+            "all_cases_in_denominator": true,
+            "binding_correct": 8,
+            "boundary": "Freely generated exact program and binding, not native task outcome.",
+            "joint_correct": 8,
+            "native_execution_performed": false,
+            "program_correct": 8,
+            "total": 8,
+            "valid_programs": 8
+          }
+        },
+        "expected_depths": [
+          1,
+          2,
+          3
+        ],
+        "overall": {
+          "all_cases_in_denominator": true,
+          "binding_correct": 24,
+          "boundary": "Freely generated exact program and binding, not native task outcome.",
+          "joint_correct": 24,
+          "native_execution_performed": false,
+          "program_correct": 24,
+          "total": 24,
+          "valid_programs": 24
+        },
+        "schema": "cas-meta2-depth-selection/3"
+      }
+    },
+    "initial_checkpoints": {
+      "cas": {
+        "path": "cas_epoch_0000.pt",
+        "sha256": "6c16d3e6a817decf8f055b1eddb2f1ba351ab3019ed34c67124021ebc1588de5"
+      },
+      "generic": {
+        "path": "generic_epoch_0000.pt",
+        "sha256": "6fd3027efd67debdb15c837a52fabeeff67be5065aedd87bf83ce3ecc00edc0c"
+      }
+    },
+    "measurement_sha256": {
+      "0": "dcf60ef62d891b26f2535f6301efce5ea4cd5782ca2c8b7fa2f17ec587b06841",
+      "1": "59696ec2c8e3f476915f81a0bb84b45ae154c1596fb30464af6c091db9578c13",
+      "10": "d0d9d86be7aef481a0a9fe26d3a149bbb388537cb5e75daabe78d47735639e5c",
+      "100": "d20fa829c240318bd21660e7f98bd3d510f60ff9bc833726fe7447a214fd1a9e",
+      "110": "3ecf2425b708154af46580ca529d9f7b426c91fa6bb5bbe5e93ec023d8ea0884",
+      "120": "47322042e7800de0ff10ffa5305dc7469baecacf1c6d9f46b8f9636a82bb8573",
+      "130": "4709b4592543e6f679729ce10c74e750736f8065806da2d0a08b3576d1222d2d",
+      "140": "7ee11b4eb2aec4bdaf068b9995707ec633605574316d2e782909f9940eb947e8",
+      "150": "769e10f5972012a1885f0196fe9f1b8d0bb8fc7d09846b6c8b46647e9688d665",
+      "160": "2b0569a8ce7d8365075862e19771f18d9037cfd5b1ed4d8d05820a53b633fcb6",
+      "170": "a15cef96aebf723c476d62c7c5ab164a64cb357f6a59fdd1c0428d3aa5068364",
+      "180": "97788688fde7669a982dbff5f22b8234f154487feb82bebf3cf3d0dfbfdad41b",
+      "190": "a22d7f709f0a41d0296932d4505bd6932e1131662435eb80940be2330813160c",
+      "20": "e4925f766e9d54cfe2c2a3ebca60151f0e3f0424dcbd7d56d1a20c9d6e9b6ff1",
+      "200": "d3320b8a9fb7440330808a911c715a11cb98f73ce8764cfdfe79d7e91f2b8b86",
+      "30": "5ca8fe03f53d91e618de3ac89c9ee796a072855b7e27db46eaafcf9230b4216d",
+      "40": "cc5db12e72b35cc7b7cc083dd2e5365a09962e5108d12465ccbdb0fb836ccaae",
+      "50": "f10d13d8b06920ca9be4cb8236f4532ec3794070cc781fbd5ea2b88dc329321a",
+      "60": "5f7b6fc4694e6c1a8299f6f9de1ed294200cca78aaac9fc95cdcad8081ff054d",
+      "70": "ccbc3823b8f6da3120d6e46f5aceb91caec3fed01dfb92a6b58e8a9807d68882",
+      "80": "c76188c70ed36ee070d37c8930710e928a291760debe9148ef0ff00c15f8b20e",
+      "90": "804693f17fa6039422fbb09cc6441d38c50c86faedf36c23dd1cff5543113a37"
+    },
+    "process_receipt_sha256": "55494598f27ae1f8187a781da056b99311b436259b880bd47e974e599a5f9bd8",
+    "worker_receipt_sha256": "2c2d3d564cc072da7163f8de67b42685a23195483a83356285565b80318a8110"
+  },
+  "runtime": {
+    "cuda": "12.8",
+    "cuda_matmul_passed": true,
+    "gpu": "NVIDIA RTX PRO 4500 Blackwell Server Edition",
+    "platform": "Linux-6.17.0-1020-aws-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+    "torch": "2.11.0+cu128"
+  },
+  "schema": "cas-meta2-offline-fit-review/0.1",
+  "script_sha256": "41340191099088666ab1afd2c99ad5221328ca6478b9e3b395a647c41f5a1e4c",
+  "source_archive_sha256": "17cdaaf25a9d07439598bf24ab9105193da1a15614fe9b41a2ba037a49849d4b",
+  "source_files_verified": 508,
+  "source_sha": "6a71e01c3689a1debe56eed842f101dfa4990556",
+  "status": "RECORDED_FIT_RECOUNT_PASSED",
+  "utc": "2026-09-06T05:49:32.907016+00:00"
+}
