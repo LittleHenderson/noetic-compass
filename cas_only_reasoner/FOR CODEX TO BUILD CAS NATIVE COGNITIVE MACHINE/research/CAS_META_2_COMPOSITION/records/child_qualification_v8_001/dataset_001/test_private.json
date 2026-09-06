@@ -1,0 +1,6482 @@
+[
+  {
+    "provenance": {
+      "combination": "B_CR",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "3fe8c937371a8a6e73e401d6853121bb7afcf3aa539ee130b83f6b18ab61d270",
+      "group_id": "test-group-022",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "jade",
+          "values": [
+            0.1002667,
+            0.2000975,
+            0.3003807,
+            0.3998197,
+            0.4997497,
+            0.5996592,
+            0.6997653,
+            0.8000503
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "copper",
+          "values": [
+            0.099719,
+            0.1999272,
+            0.2996032,
+            0.3996877,
+            0.4998305,
+            0.5997231,
+            0.6996006,
+            0.7997671
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.0998363,
+            0.1997722,
+            0.2997668,
+            0.399989,
+            0.4997621,
+            0.6000714,
+            0.6998634,
+            0.8001398
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v21; B(v21)->v23; C(v23)->v15; R(v15)->v0.\nCALL output: v10.\nAvailable CALL inputs: arg, v21, v23, v15, v0.\nAvailable parent returns: arg, v21, v23, v15, v0, v10.\nChild p10: C(arg)->v0; RETURN v0; authored result L2.\nChild p7: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation amber. Feed the child the second committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v10",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v21"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v21",
+                "kind": "RUN",
+                "output": "v23"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v23",
+                "kind": "RUN",
+                "output": "v15"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v15",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "input": "v23",
+                "kind": "CALL",
+                "output": "v10",
+                "procedure": "p7"
+              }
+            ]
+          },
+          "p7": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00044"
+  },
+  {
+    "provenance": {
+      "combination": "B_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "fa57940279b5f8673b5678b80bc2e8ea4383caa3d55d6433a56797941a192706",
+      "group_id": "test-group-000",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0997383,
+            0.1996186,
+            0.3001845,
+            0.4003416,
+            0.5000735,
+            0.6001952,
+            0.7000239,
+            0.8000383
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.099643,
+            0.1999623,
+            0.2999464,
+            0.3998682,
+            0.4997168,
+            0.5996389,
+            0.6997579,
+            0.8001732
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1002023,
+            0.1998577,
+            0.3000913,
+            0.3998187,
+            0.4999352,
+            0.5998935,
+            0.6996305,
+            0.7999179
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v23; B(v23)->v26; C(v26)->v19; R(v19)->v11.\nCALL output: v20.\nAvailable CALL inputs: arg, v23, v26, v19, v11.\nAvailable parent returns: arg, v23, v26, v19, v11, v20.\nChild p10: C(arg)->v0; RETURN v0; authored result L2.\nChild p5: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation coral. Feed the child the second committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v20",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v23"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v23",
+                "kind": "RUN",
+                "output": "v26"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v26",
+                "kind": "RUN",
+                "output": "v19"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v19",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "input": "v26",
+                "kind": "CALL",
+                "output": "v20",
+                "procedure": "p10"
+              }
+            ]
+          },
+          "p10": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00000"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-003",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.0997222,
+            0.1998039,
+            0.299923,
+            0.3998093,
+            0.5001834,
+            0.6000563,
+            0.7000253,
+            0.8000413
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "silver",
+          "values": [
+            0.0999792,
+            0.1996767,
+            0.300213,
+            0.3996676,
+            0.5000967,
+            0.6002957,
+            0.7001272,
+            0.7998757
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.1002943,
+            0.2002161,
+            0.3000802,
+            0.3996136,
+            0.5002113,
+            0.6002647,
+            0.7001171,
+            0.7999194
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v11; B(v11)->v0; C(v0)->v29; R(v29)->v15.\nCALL output: v28.\nAvailable CALL inputs: arg, v11, v0, v29, v15.\nAvailable parent returns: arg, v11, v0, v29, v15, v28.\nChild p14: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p0: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation violet. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v28",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v11",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v29"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v29",
+                "kind": "RUN",
+                "output": "v15"
+              },
+              {
+                "input": "v15",
+                "kind": "CALL",
+                "output": "v28",
+                "procedure": "p14"
+              }
+            ]
+          },
+          "p14": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00007"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-007",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "copper",
+          "values": [
+            0.0996907,
+            0.1998551,
+            0.2996181,
+            0.3997156,
+            0.5000786,
+            0.6000057,
+            0.6997558,
+            0.799788
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1001271,
+            0.2002202,
+            0.3002009,
+            0.3997745,
+            0.5002422,
+            0.6002099,
+            0.7001575,
+            0.8002061
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.0999916,
+            0.1996028,
+            0.2996522,
+            0.3996503,
+            0.5001374,
+            0.6002408,
+            0.6996668,
+            0.7998136
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v31; B(v31)->v20; C(v20)->v27; R(v27)->v24.\nCALL output: v9.\nAvailable CALL inputs: arg, v31, v20, v27, v24.\nAvailable parent returns: arg, v31, v20, v27, v24, v9.\nChild p2: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p9: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation jade. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v9",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v31"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v31",
+                "kind": "RUN",
+                "output": "v20"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v20",
+                "kind": "RUN",
+                "output": "v27"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v27",
+                "kind": "RUN",
+                "output": "v24"
+              },
+              {
+                "input": "v24",
+                "kind": "CALL",
+                "output": "v9",
+                "procedure": "p2"
+              }
+            ]
+          },
+          "p2": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00015"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-010",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0998178,
+            0.2000563,
+            0.2999987,
+            0.4003946,
+            0.4999685,
+            0.5998348,
+            0.6999223,
+            0.7998618
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "copper",
+          "values": [
+            0.0996462,
+            0.1999795,
+            0.3002876,
+            0.3996495,
+            0.4999244,
+            0.5997709,
+            0.6998854,
+            0.8000882
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "silver",
+          "values": [
+            0.0997066,
+            0.1996042,
+            0.3002368,
+            0.3999922,
+            0.5002934,
+            0.599666,
+            0.7001806,
+            0.7996323
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v13; B(v13)->v7; C(v7)->v9; R(v9)->v5.\nCALL output: v16.\nAvailable CALL inputs: arg, v13, v7, v9, v5.\nAvailable parent returns: arg, v13, v7, v9, v5, v16.\nChild p2: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p1: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation silver. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v16",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v13"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v13",
+                "kind": "RUN",
+                "output": "v7"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v7",
+                "kind": "RUN",
+                "output": "v9"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v9",
+                "kind": "RUN",
+                "output": "v5"
+              },
+              {
+                "input": "v5",
+                "kind": "CALL",
+                "output": "v16",
+                "procedure": "p2"
+              }
+            ]
+          },
+          "p2": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00021"
+  },
+  {
+    "provenance": {
+      "combination": "R_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "144397f4acecde6209a5cc5cada377f2db8d2ca51f5f4392717385ee84aa1389",
+      "group_id": "test-group-008",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "cobalt",
+          "values": [
+            0.0998094,
+            0.2001205,
+            0.2998164,
+            0.399871,
+            0.4997793,
+            0.6001336,
+            0.69989,
+            0.7996007
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.0998729,
+            0.1998907,
+            0.3003241,
+            0.3996597,
+            0.4996562,
+            0.6000395,
+            0.6997719,
+            0.79986
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1000567,
+            0.1996425,
+            0.2997469,
+            0.3998287,
+            0.499677,
+            0.5997159,
+            0.6997865,
+            0.7998362
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v1; B(v1)->v23; C(v23)->v30; R(v30)->v31.\nCALL output: v12.\nAvailable CALL inputs: arg, v1, v23, v30, v31.\nAvailable parent returns: arg, v1, v23, v30, v31, v12.\nChild p8: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p0: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation jade. Feed the child the fourth committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v12",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v1"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v1",
+                "kind": "RUN",
+                "output": "v23"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v23",
+                "kind": "RUN",
+                "output": "v30"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v30",
+                "kind": "RUN",
+                "output": "v31"
+              },
+              {
+                "input": "v31",
+                "kind": "CALL",
+                "output": "v12",
+                "procedure": "p0"
+              }
+            ]
+          },
+          "p0": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00016"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-015",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.0996827,
+            0.2002304,
+            0.3003965,
+            0.3998465,
+            0.5001769,
+            0.6001955,
+            0.6998532,
+            0.7996207
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "cobalt",
+          "values": [
+            0.1003449,
+            0.1996428,
+            0.3000391,
+            0.4000833,
+            0.499728,
+            0.5998124,
+            0.6996286,
+            0.8002751
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "copper",
+          "values": [
+            0.099676,
+            0.2000921,
+            0.2998816,
+            0.3999086,
+            0.4996288,
+            0.6001679,
+            0.7001887,
+            0.8001837
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v20; B(v20)->v16; C(v16)->v6; R(v6)->v11.\nCALL output: v2.\nAvailable CALL inputs: arg, v20, v16, v6, v11.\nAvailable parent returns: arg, v20, v16, v6, v11, v2.\nChild p13: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p1: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation amber. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v2",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v20"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v20",
+                "kind": "RUN",
+                "output": "v16"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v16",
+                "kind": "RUN",
+                "output": "v6"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v6",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "input": "v11",
+                "kind": "CALL",
+                "output": "v2",
+                "procedure": "p13"
+              }
+            ]
+          },
+          "p13": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00031"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-014",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.0997125,
+            0.1997092,
+            0.3003414,
+            0.3999705,
+            0.5003111,
+            0.6002488,
+            0.7000789,
+            0.7996529
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.0997845,
+            0.1996578,
+            0.2998084,
+            0.4003133,
+            0.5002463,
+            0.5999856,
+            0.7002186,
+            0.8001003
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.09972,
+            0.2002047,
+            0.3001981,
+            0.3997653,
+            0.4999963,
+            0.5999922,
+            0.7003512,
+            0.7997314
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v19; B(v19)->v21; C(v21)->v3; R(v3)->v18.\nCALL output: v7.\nAvailable CALL inputs: arg, v19, v21, v3, v18.\nAvailable parent returns: arg, v19, v21, v3, v18, v7.\nChild p11: C(arg)->v0; RETURN v0; authored result L2.\nChild p4: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation indigo. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v7",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v19"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v19",
+                "kind": "RUN",
+                "output": "v21"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v21",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v3",
+                "kind": "RUN",
+                "output": "v18"
+              },
+              {
+                "input": "v18",
+                "kind": "CALL",
+                "output": "v7",
+                "procedure": "p4"
+              }
+            ]
+          },
+          "p4": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00029"
+  },
+  {
+    "provenance": {
+      "combination": "R_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "144397f4acecde6209a5cc5cada377f2db8d2ca51f5f4392717385ee84aa1389",
+      "group_id": "test-group-011",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.1002825,
+            0.199763,
+            0.3003986,
+            0.4003433,
+            0.5001869,
+            0.599735,
+            0.6996685,
+            0.8002588
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.1003496,
+            0.2002001,
+            0.2996865,
+            0.4000896,
+            0.4999382,
+            0.6003197,
+            0.7002353,
+            0.8000424
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "cobalt",
+          "values": [
+            0.1000615,
+            0.199705,
+            0.2999306,
+            0.399864,
+            0.5001622,
+            0.6001017,
+            0.7003232,
+            0.8000935
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v25; B(v25)->v5; C(v5)->v8; R(v8)->v11.\nCALL output: v6.\nAvailable CALL inputs: arg, v25, v5, v8, v11.\nAvailable parent returns: arg, v25, v5, v8, v11, v6.\nChild p9: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p2: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation indigo. Feed the child the fourth committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v6",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v25"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v25",
+                "kind": "RUN",
+                "output": "v5"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v5",
+                "kind": "RUN",
+                "output": "v8"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v8",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "input": "v11",
+                "kind": "CALL",
+                "output": "v6",
+                "procedure": "p2"
+              }
+            ]
+          },
+          "p2": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00022"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-001",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "copper",
+          "values": [
+            0.0997883,
+            0.199939,
+            0.2996544,
+            0.3996633,
+            0.4996619,
+            0.6000904,
+            0.6996818,
+            0.7996536
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "jade",
+          "values": [
+            0.099938,
+            0.2002372,
+            0.3003399,
+            0.4000306,
+            0.4996287,
+            0.600329,
+            0.7003634,
+            0.8003464
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.1003642,
+            0.2003596,
+            0.2998079,
+            0.3999051,
+            0.4997952,
+            0.6003002,
+            0.7003618,
+            0.799741
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v13; B(v13)->v14; C(v14)->v0; R(v0)->v11.\nCALL output: v18.\nAvailable CALL inputs: arg, v13, v14, v0, v11.\nAvailable parent returns: arg, v13, v14, v0, v11, v18.\nChild p13: C(arg)->v0; RETURN v0; authored result L2.\nChild p14: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation jade. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v18",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v13"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v13",
+                "kind": "RUN",
+                "output": "v14"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v14",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "input": "v11",
+                "kind": "CALL",
+                "output": "v18",
+                "procedure": "p14"
+              }
+            ]
+          },
+          "p14": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00003"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-023",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "copper",
+          "values": [
+            0.0998031,
+            0.1998595,
+            0.299778,
+            0.4001603,
+            0.4998128,
+            0.6000184,
+            0.6996652,
+            0.8003909
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "cobalt",
+          "values": [
+            0.0999976,
+            0.199928,
+            0.3002127,
+            0.4001263,
+            0.4998135,
+            0.5999145,
+            0.7003313,
+            0.8001686
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.1001268,
+            0.2002678,
+            0.2996001,
+            0.39968,
+            0.5001408,
+            0.6000863,
+            0.7002514,
+            0.7999704
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v3; B(v3)->v7; C(v7)->v6; R(v6)->v15.\nCALL output: v0.\nAvailable CALL inputs: arg, v3, v7, v6, v15.\nAvailable parent returns: arg, v3, v7, v6, v15, v0.\nChild p6: C(arg)->v0; RETURN v0; authored result L2.\nChild p11: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation cobalt. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v3",
+                "kind": "RUN",
+                "output": "v7"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v7",
+                "kind": "RUN",
+                "output": "v6"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v6",
+                "kind": "RUN",
+                "output": "v15"
+              },
+              {
+                "input": "v15",
+                "kind": "CALL",
+                "output": "v0",
+                "procedure": "p11"
+              }
+            ]
+          },
+          "p11": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00047"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-018",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "copper",
+          "values": [
+            0.099857,
+            0.1998281,
+            0.3001304,
+            0.3997073,
+            0.499912,
+            0.5999796,
+            0.7003355,
+            0.7997676
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.1000006,
+            0.1996268,
+            0.2998296,
+            0.4002558,
+            0.5000627,
+            0.5996799,
+            0.6996457,
+            0.7997427
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0999989,
+            0.2002777,
+            0.2999124,
+            0.4001358,
+            0.5000495,
+            0.5999874,
+            0.6998156,
+            0.800285
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v10; B(v10)->v26; C(v26)->v25; R(v25)->v21.\nCALL output: v19.\nAvailable CALL inputs: arg, v10, v26, v25, v21.\nAvailable parent returns: arg, v10, v26, v25, v21, v19.\nChild p15: C(arg)->v0; RETURN v0; authored result L2.\nChild p7: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation amber. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v19",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v10"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v10",
+                "kind": "RUN",
+                "output": "v26"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v26",
+                "kind": "RUN",
+                "output": "v25"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v25",
+                "kind": "RUN",
+                "output": "v21"
+              },
+              {
+                "input": "v21",
+                "kind": "CALL",
+                "output": "v19",
+                "procedure": "p7"
+              }
+            ]
+          },
+          "p7": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00037"
+  },
+  {
+    "provenance": {
+      "combination": "B_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "fa57940279b5f8673b5678b80bc2e8ea4383caa3d55d6433a56797941a192706",
+      "group_id": "test-group-006",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "copper",
+          "values": [
+            0.1000169,
+            0.2000583,
+            0.3002297,
+            0.3998831,
+            0.5002984,
+            0.6003585,
+            0.6998059,
+            0.8000814
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.0996132,
+            0.1998597,
+            0.2996965,
+            0.4000419,
+            0.4997462,
+            0.6002631,
+            0.6997472,
+            0.799727
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.1002553,
+            0.2000266,
+            0.2996769,
+            0.3996414,
+            0.4996016,
+            0.6002377,
+            0.6999954,
+            0.8001079
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v8; B(v8)->v12; C(v12)->v6; R(v6)->v17.\nCALL output: v24.\nAvailable CALL inputs: arg, v8, v12, v6, v17.\nAvailable parent returns: arg, v8, v12, v6, v17, v24.\nChild p7: C(arg)->v0; RETURN v0; authored result L2.\nChild p4: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation indigo. Feed the child the second committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v24",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v8"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v8",
+                "kind": "RUN",
+                "output": "v12"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v12",
+                "kind": "RUN",
+                "output": "v6"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v6",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "input": "v12",
+                "kind": "CALL",
+                "output": "v24",
+                "procedure": "p7"
+              }
+            ]
+          },
+          "p7": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00012"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-004",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.0999895,
+            0.2002804,
+            0.3002476,
+            0.3998198,
+            0.5000355,
+            0.5998264,
+            0.6999512,
+            0.7996495
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.0998826,
+            0.20027,
+            0.3002276,
+            0.3999595,
+            0.5003842,
+            0.6003106,
+            0.6996704,
+            0.799618
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.0998965,
+            0.2000182,
+            0.300365,
+            0.4003327,
+            0.4998647,
+            0.6002889,
+            0.7001961,
+            0.8000279
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v17; B(v17)->v27; C(v27)->v13; R(v13)->v3.\nCALL output: v23.\nAvailable CALL inputs: arg, v17, v27, v13, v3.\nAvailable parent returns: arg, v17, v27, v13, v3, v23.\nChild p2: C(arg)->v0; RETURN v0; authored result L2.\nChild p5: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation coral. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v23",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v27"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v27",
+                "kind": "RUN",
+                "output": "v13"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v13",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "input": "v3",
+                "kind": "CALL",
+                "output": "v23",
+                "procedure": "p5"
+              }
+            ]
+          },
+          "p5": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00009"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-020",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "jade",
+          "values": [
+            0.1003709,
+            0.2003505,
+            0.2996293,
+            0.3998127,
+            0.4996615,
+            0.6002913,
+            0.6999374,
+            0.7996864
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "copper",
+          "values": [
+            0.1002628,
+            0.2002793,
+            0.2998061,
+            0.4003291,
+            0.4999786,
+            0.599899,
+            0.6998364,
+            0.8001148
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0999293,
+            0.200114,
+            0.3003221,
+            0.3999947,
+            0.4996246,
+            0.6003439,
+            0.700376,
+            0.8000922
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v23; B(v23)->v17; C(v17)->v26; R(v26)->v30.\nCALL output: v3.\nAvailable CALL inputs: arg, v23, v17, v26, v30.\nAvailable parent returns: arg, v23, v17, v26, v30, v3.\nChild p12: C(arg)->v0; RETURN v0; authored result L2.\nChild p2: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation copper. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v3",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v23"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v23",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v26"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v26",
+                "kind": "RUN",
+                "output": "v30"
+              },
+              {
+                "input": "v30",
+                "kind": "CALL",
+                "output": "v3",
+                "procedure": "p2"
+              }
+            ]
+          },
+          "p2": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00041"
+  },
+  {
+    "provenance": {
+      "combination": "R_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "144397f4acecde6209a5cc5cada377f2db8d2ca51f5f4392717385ee84aa1389",
+      "group_id": "test-group-002",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "copper",
+          "values": [
+            0.0996755,
+            0.1999171,
+            0.3003679,
+            0.3997814,
+            0.5000489,
+            0.5997979,
+            0.7000172,
+            0.7999364
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.1000959,
+            0.2003262,
+            0.3002981,
+            0.4001316,
+            0.4997919,
+            0.6000649,
+            0.6999273,
+            0.8001856
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.1001732,
+            0.1996738,
+            0.2996745,
+            0.3996789,
+            0.4996665,
+            0.6001359,
+            0.6998392,
+            0.8001637
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v12; B(v12)->v25; C(v25)->v17; R(v17)->v27.\nCALL output: v26.\nAvailable CALL inputs: arg, v12, v25, v17, v27.\nAvailable parent returns: arg, v12, v25, v17, v27, v26.\nChild p0: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p7: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation coral. Feed the child the fourth committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v26",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v12"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v12",
+                "kind": "RUN",
+                "output": "v25"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v25",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v27"
+              },
+              {
+                "input": "v27",
+                "kind": "CALL",
+                "output": "v26",
+                "procedure": "p7"
+              }
+            ]
+          },
+          "p7": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00004"
+  },
+  {
+    "provenance": {
+      "combination": "B_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "fa57940279b5f8673b5678b80bc2e8ea4383caa3d55d6433a56797941a192706",
+      "group_id": "test-group-015",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.0996827,
+            0.2002304,
+            0.3003965,
+            0.3998465,
+            0.5001769,
+            0.6001955,
+            0.6998532,
+            0.7996207
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "cobalt",
+          "values": [
+            0.1003449,
+            0.1996428,
+            0.3000391,
+            0.4000833,
+            0.499728,
+            0.5998124,
+            0.6996286,
+            0.8002751
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "copper",
+          "values": [
+            0.099676,
+            0.2000921,
+            0.2998816,
+            0.3999086,
+            0.4996288,
+            0.6001679,
+            0.7001887,
+            0.8001837
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v20; B(v20)->v16; C(v16)->v6; R(v6)->v11.\nCALL output: v2.\nAvailable CALL inputs: arg, v20, v16, v6, v11.\nAvailable parent returns: arg, v20, v16, v6, v11, v2.\nChild p13: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p1: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation amber. Feed the child the second committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v2",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v20"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v20",
+                "kind": "RUN",
+                "output": "v16"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v16",
+                "kind": "RUN",
+                "output": "v6"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v6",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "input": "v16",
+                "kind": "CALL",
+                "output": "v2",
+                "procedure": "p1"
+              }
+            ]
+          },
+          "p1": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00030"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-012",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0996566,
+            0.1999373,
+            0.300331,
+            0.3999232,
+            0.4999258,
+            0.5998442,
+            0.7003848,
+            0.8000441
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "jade",
+          "values": [
+            0.099763,
+            0.2002229,
+            0.3000712,
+            0.400176,
+            0.4999914,
+            0.599763,
+            0.699979,
+            0.7996629
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "copper",
+          "values": [
+            0.1003,
+            0.1998083,
+            0.2997454,
+            0.39991,
+            0.5002557,
+            0.5998713,
+            0.7000746,
+            0.7998045
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v0; B(v0)->v4; C(v4)->v17; R(v17)->v5.\nCALL output: v15.\nAvailable CALL inputs: arg, v0, v4, v17, v5.\nAvailable parent returns: arg, v0, v4, v17, v5, v15.\nChild p5: C(arg)->v0; RETURN v0; authored result L2.\nChild p9: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation copper. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v15",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v4"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v4",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v5"
+              },
+              {
+                "input": "v5",
+                "kind": "CALL",
+                "output": "v15",
+                "procedure": "p9"
+              }
+            ]
+          },
+          "p9": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00025"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-022",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "jade",
+          "values": [
+            0.1002667,
+            0.2000975,
+            0.3003807,
+            0.3998197,
+            0.4997497,
+            0.5996592,
+            0.6997653,
+            0.8000503
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "copper",
+          "values": [
+            0.099719,
+            0.1999272,
+            0.2996032,
+            0.3996877,
+            0.4998305,
+            0.5997231,
+            0.6996006,
+            0.7997671
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "amber",
+          "values": [
+            0.0998363,
+            0.1997722,
+            0.2997668,
+            0.399989,
+            0.4997621,
+            0.6000714,
+            0.6998634,
+            0.8001398
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v21; B(v21)->v23; C(v23)->v15; R(v15)->v0.\nCALL output: v10.\nAvailable CALL inputs: arg, v21, v23, v15, v0.\nAvailable parent returns: arg, v21, v23, v15, v0, v10.\nChild p10: C(arg)->v0; RETURN v0; authored result L2.\nChild p7: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation amber. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v10",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v21"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v21",
+                "kind": "RUN",
+                "output": "v23"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v23",
+                "kind": "RUN",
+                "output": "v15"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v15",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "input": "v0",
+                "kind": "CALL",
+                "output": "v10",
+                "procedure": "p7"
+              }
+            ]
+          },
+          "p7": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00045"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-009",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.1002701,
+            0.2001529,
+            0.3001874,
+            0.3998008,
+            0.4998942,
+            0.5997864,
+            0.7001999,
+            0.7999285
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1000391,
+            0.199642,
+            0.299731,
+            0.4003508,
+            0.5001363,
+            0.6002578,
+            0.7003491,
+            0.8001594
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "jade",
+          "values": [
+            0.0999145,
+            0.2003021,
+            0.2996934,
+            0.4003087,
+            0.4997318,
+            0.5996872,
+            0.699666,
+            0.800343
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v21; B(v21)->v4; C(v4)->v27; R(v27)->v10.\nCALL output: v0.\nAvailable CALL inputs: arg, v21, v4, v27, v10.\nAvailable parent returns: arg, v21, v4, v27, v10, v0.\nChild p6: C(arg)->v0; RETURN v0; authored result L2.\nChild p14: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation jade. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v21"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v21",
+                "kind": "RUN",
+                "output": "v4"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v4",
+                "kind": "RUN",
+                "output": "v27"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v27",
+                "kind": "RUN",
+                "output": "v10"
+              },
+              {
+                "input": "v10",
+                "kind": "CALL",
+                "output": "v0",
+                "procedure": "p14"
+              }
+            ]
+          },
+          "p14": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00019"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-008",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "cobalt",
+          "values": [
+            0.0998094,
+            0.2001205,
+            0.2998164,
+            0.399871,
+            0.4997793,
+            0.6001336,
+            0.69989,
+            0.7996007
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.0998729,
+            0.1998907,
+            0.3003241,
+            0.3996597,
+            0.4996562,
+            0.6000395,
+            0.6997719,
+            0.79986
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1000567,
+            0.1996425,
+            0.2997469,
+            0.3998287,
+            0.499677,
+            0.5997159,
+            0.6997865,
+            0.7998362
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v1; B(v1)->v23; C(v23)->v30; R(v30)->v31.\nCALL output: v12.\nAvailable CALL inputs: arg, v1, v23, v30, v31.\nAvailable parent returns: arg, v1, v23, v30, v31, v12.\nChild p8: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p0: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation jade. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v12",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v1"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v1",
+                "kind": "RUN",
+                "output": "v23"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v23",
+                "kind": "RUN",
+                "output": "v30"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v30",
+                "kind": "RUN",
+                "output": "v31"
+              },
+              {
+                "input": "v31",
+                "kind": "CALL",
+                "output": "v12",
+                "procedure": "p8"
+              }
+            ]
+          },
+          "p8": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00017"
+  },
+  {
+    "provenance": {
+      "combination": "B_CR",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "3fe8c937371a8a6e73e401d6853121bb7afcf3aa539ee130b83f6b18ab61d270",
+      "group_id": "test-group-013",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.1002332,
+            0.2002374,
+            0.3001961,
+            0.4001702,
+            0.4999085,
+            0.6000982,
+            0.7001301,
+            0.8001671
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "cobalt",
+          "values": [
+            0.1002772,
+            0.2000768,
+            0.299765,
+            0.3998575,
+            0.5001847,
+            0.6002352,
+            0.7002121,
+            0.799964
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.0998738,
+            0.2000404,
+            0.2998223,
+            0.4003564,
+            0.499924,
+            0.5998028,
+            0.6997969,
+            0.8001356
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v14; B(v14)->v3; C(v3)->v4; R(v4)->v19.\nCALL output: v8.\nAvailable CALL inputs: arg, v14, v3, v4, v19.\nAvailable parent returns: arg, v14, v3, v4, v19, v8.\nChild p1: C(arg)->v0; RETURN v0; authored result L2.\nChild p11: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation cobalt. Feed the child the second committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v8",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v14"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v14",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v3",
+                "kind": "RUN",
+                "output": "v4"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v4",
+                "kind": "RUN",
+                "output": "v19"
+              },
+              {
+                "input": "v3",
+                "kind": "CALL",
+                "output": "v8",
+                "procedure": "p11"
+              }
+            ]
+          },
+          "p11": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00026"
+  },
+  {
+    "provenance": {
+      "combination": "B_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "fa57940279b5f8673b5678b80bc2e8ea4383caa3d55d6433a56797941a192706",
+      "group_id": "test-group-021",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.0999721,
+            0.2003023,
+            0.3002252,
+            0.3997505,
+            0.5002742,
+            0.5998664,
+            0.700052,
+            0.800096
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.0999737,
+            0.2001328,
+            0.3003229,
+            0.3999747,
+            0.4998598,
+            0.6001347,
+            0.7000187,
+            0.8003884
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "silver",
+          "values": [
+            0.100252,
+            0.200227,
+            0.3002599,
+            0.400393,
+            0.4999089,
+            0.5996202,
+            0.7002445,
+            0.7998961
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v17; B(v17)->v5; C(v5)->v23; R(v23)->v9.\nCALL output: v18.\nAvailable CALL inputs: arg, v17, v5, v23, v9.\nAvailable parent returns: arg, v17, v5, v23, v9, v18.\nChild p1: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p5: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation coral. Feed the child the second committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v18",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v5"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v5",
+                "kind": "RUN",
+                "output": "v23"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v23",
+                "kind": "RUN",
+                "output": "v9"
+              },
+              {
+                "input": "v5",
+                "kind": "CALL",
+                "output": "v18",
+                "procedure": "p5"
+              }
+            ]
+          },
+          "p5": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00042"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-005",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "silver",
+          "values": [
+            0.0998738,
+            0.1999022,
+            0.3003189,
+            0.3997329,
+            0.5003625,
+            0.6000574,
+            0.7001848,
+            0.8003687
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "copper",
+          "values": [
+            0.0998579,
+            0.2003545,
+            0.2997078,
+            0.3999976,
+            0.5001705,
+            0.5999113,
+            0.7000953,
+            0.8000503
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.0999326,
+            0.1997047,
+            0.2997396,
+            0.4003515,
+            0.4997799,
+            0.5996577,
+            0.700179,
+            0.8001499
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v16; B(v16)->v8; C(v8)->v6; R(v6)->v1.\nCALL output: v22.\nAvailable CALL inputs: arg, v16, v8, v6, v1.\nAvailable parent returns: arg, v16, v8, v6, v1, v22.\nChild p3: C(arg)->v0; RETURN v0; authored result L2.\nChild p9: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation silver. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v22",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v16"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v16",
+                "kind": "RUN",
+                "output": "v8"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v8",
+                "kind": "RUN",
+                "output": "v6"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v6",
+                "kind": "RUN",
+                "output": "v1"
+              },
+              {
+                "input": "v1",
+                "kind": "CALL",
+                "output": "v22",
+                "procedure": "p9"
+              }
+            ]
+          },
+          "p9": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00011"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-013",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.1002332,
+            0.2002374,
+            0.3001961,
+            0.4001702,
+            0.4999085,
+            0.6000982,
+            0.7001301,
+            0.8001671
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "cobalt",
+          "values": [
+            0.1002772,
+            0.2000768,
+            0.299765,
+            0.3998575,
+            0.5001847,
+            0.6002352,
+            0.7002121,
+            0.799964
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.0998738,
+            0.2000404,
+            0.2998223,
+            0.4003564,
+            0.499924,
+            0.5998028,
+            0.6997969,
+            0.8001356
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v14; B(v14)->v3; C(v3)->v4; R(v4)->v19.\nCALL output: v8.\nAvailable CALL inputs: arg, v14, v3, v4, v19.\nAvailable parent returns: arg, v14, v3, v4, v19, v8.\nChild p1: C(arg)->v0; RETURN v0; authored result L2.\nChild p11: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation cobalt. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v8",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v14"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v14",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v3",
+                "kind": "RUN",
+                "output": "v4"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v4",
+                "kind": "RUN",
+                "output": "v19"
+              },
+              {
+                "input": "v19",
+                "kind": "CALL",
+                "output": "v8",
+                "procedure": "p11"
+              }
+            ]
+          },
+          "p11": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00027"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-017",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.099945,
+            0.1997393,
+            0.2998032,
+            0.3999435,
+            0.4997269,
+            0.6002868,
+            0.6998167,
+            0.8002515
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "copper",
+          "values": [
+            0.0998309,
+            0.2003442,
+            0.3000982,
+            0.3998612,
+            0.5000046,
+            0.600126,
+            0.700107,
+            0.7998293
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "cobalt",
+          "values": [
+            0.1002108,
+            0.1997499,
+            0.3002533,
+            0.3997657,
+            0.5000061,
+            0.6001701,
+            0.7001159,
+            0.7996744
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v0; B(v0)->v17; C(v17)->v7; R(v7)->v15.\nCALL output: v29.\nAvailable CALL inputs: arg, v0, v17, v7, v15.\nAvailable parent returns: arg, v0, v17, v7, v15, v29.\nChild p3: C(arg)->v0; RETURN v0; authored result L2.\nChild p1: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation silver. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v29",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v7"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v7",
+                "kind": "RUN",
+                "output": "v15"
+              },
+              {
+                "input": "v15",
+                "kind": "CALL",
+                "output": "v29",
+                "procedure": "p1"
+              }
+            ]
+          },
+          "p1": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00035"
+  },
+  {
+    "provenance": {
+      "combination": "R_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "144397f4acecde6209a5cc5cada377f2db8d2ca51f5f4392717385ee84aa1389",
+      "group_id": "test-group-014",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.0997125,
+            0.1997092,
+            0.3003414,
+            0.3999705,
+            0.5003111,
+            0.6002488,
+            0.7000789,
+            0.7996529
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.0997845,
+            0.1996578,
+            0.2998084,
+            0.4003133,
+            0.5002463,
+            0.5999856,
+            0.7002186,
+            0.8001003
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.09972,
+            0.2002047,
+            0.3001981,
+            0.3997653,
+            0.4999963,
+            0.5999922,
+            0.7003512,
+            0.7997314
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v19; B(v19)->v21; C(v21)->v3; R(v3)->v18.\nCALL output: v7.\nAvailable CALL inputs: arg, v19, v21, v3, v18.\nAvailable parent returns: arg, v19, v21, v3, v18, v7.\nChild p11: C(arg)->v0; RETURN v0; authored result L2.\nChild p4: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation indigo. Feed the child the fourth committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v7",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v19"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v19",
+                "kind": "RUN",
+                "output": "v21"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v21",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v3",
+                "kind": "RUN",
+                "output": "v18"
+              },
+              {
+                "input": "v18",
+                "kind": "CALL",
+                "output": "v7",
+                "procedure": "p11"
+              }
+            ]
+          },
+          "p11": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00028"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-011",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.1002825,
+            0.199763,
+            0.3003986,
+            0.4003433,
+            0.5001869,
+            0.599735,
+            0.6996685,
+            0.8002588
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.1003496,
+            0.2002001,
+            0.2996865,
+            0.4000896,
+            0.4999382,
+            0.6003197,
+            0.7002353,
+            0.8000424
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "cobalt",
+          "values": [
+            0.1000615,
+            0.199705,
+            0.2999306,
+            0.399864,
+            0.5001622,
+            0.6001017,
+            0.7003232,
+            0.8000935
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v25; B(v25)->v5; C(v5)->v8; R(v8)->v11.\nCALL output: v6.\nAvailable CALL inputs: arg, v25, v5, v8, v11.\nAvailable parent returns: arg, v25, v5, v8, v11, v6.\nChild p9: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p2: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation indigo. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v6",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v25"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v25",
+                "kind": "RUN",
+                "output": "v5"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v5",
+                "kind": "RUN",
+                "output": "v8"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v8",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "input": "v11",
+                "kind": "CALL",
+                "output": "v6",
+                "procedure": "p9"
+              }
+            ]
+          },
+          "p9": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00023"
+  },
+  {
+    "provenance": {
+      "combination": "B_CR",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "3fe8c937371a8a6e73e401d6853121bb7afcf3aa539ee130b83f6b18ab61d270",
+      "group_id": "test-group-010",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0998178,
+            0.2000563,
+            0.2999987,
+            0.4003946,
+            0.4999685,
+            0.5998348,
+            0.6999223,
+            0.7998618
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "copper",
+          "values": [
+            0.0996462,
+            0.1999795,
+            0.3002876,
+            0.3996495,
+            0.4999244,
+            0.5997709,
+            0.6998854,
+            0.8000882
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "silver",
+          "values": [
+            0.0997066,
+            0.1996042,
+            0.3002368,
+            0.3999922,
+            0.5002934,
+            0.599666,
+            0.7001806,
+            0.7996323
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v13; B(v13)->v7; C(v7)->v9; R(v9)->v5.\nCALL output: v16.\nAvailable CALL inputs: arg, v13, v7, v9, v5.\nAvailable parent returns: arg, v13, v7, v9, v5, v16.\nChild p2: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p1: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation silver. Feed the child the second committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v16",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v13"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v13",
+                "kind": "RUN",
+                "output": "v7"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v7",
+                "kind": "RUN",
+                "output": "v9"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v9",
+                "kind": "RUN",
+                "output": "v5"
+              },
+              {
+                "input": "v7",
+                "kind": "CALL",
+                "output": "v16",
+                "procedure": "p2"
+              }
+            ]
+          },
+          "p2": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00020"
+  },
+  {
+    "provenance": {
+      "combination": "B_CR",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "3fe8c937371a8a6e73e401d6853121bb7afcf3aa539ee130b83f6b18ab61d270",
+      "group_id": "test-group-001",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "copper",
+          "values": [
+            0.0997883,
+            0.199939,
+            0.2996544,
+            0.3996633,
+            0.4996619,
+            0.6000904,
+            0.6996818,
+            0.7996536
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "jade",
+          "values": [
+            0.099938,
+            0.2002372,
+            0.3003399,
+            0.4000306,
+            0.4996287,
+            0.600329,
+            0.7003634,
+            0.8003464
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.1003642,
+            0.2003596,
+            0.2998079,
+            0.3999051,
+            0.4997952,
+            0.6003002,
+            0.7003618,
+            0.799741
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v13; B(v13)->v14; C(v14)->v0; R(v0)->v11.\nCALL output: v18.\nAvailable CALL inputs: arg, v13, v14, v0, v11.\nAvailable parent returns: arg, v13, v14, v0, v11, v18.\nChild p13: C(arg)->v0; RETURN v0; authored result L2.\nChild p14: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation jade. Feed the child the second committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v18",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v13"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v13",
+                "kind": "RUN",
+                "output": "v14"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v14",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "input": "v14",
+                "kind": "CALL",
+                "output": "v18",
+                "procedure": "p14"
+              }
+            ]
+          },
+          "p14": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00002"
+  },
+  {
+    "provenance": {
+      "combination": "R_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "144397f4acecde6209a5cc5cada377f2db8d2ca51f5f4392717385ee84aa1389",
+      "group_id": "test-group-017",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.099945,
+            0.1997393,
+            0.2998032,
+            0.3999435,
+            0.4997269,
+            0.6002868,
+            0.6998167,
+            0.8002515
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "copper",
+          "values": [
+            0.0998309,
+            0.2003442,
+            0.3000982,
+            0.3998612,
+            0.5000046,
+            0.600126,
+            0.700107,
+            0.7998293
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "cobalt",
+          "values": [
+            0.1002108,
+            0.1997499,
+            0.3002533,
+            0.3997657,
+            0.5000061,
+            0.6001701,
+            0.7001159,
+            0.7996744
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v0; B(v0)->v17; C(v17)->v7; R(v7)->v15.\nCALL output: v29.\nAvailable CALL inputs: arg, v0, v17, v7, v15.\nAvailable parent returns: arg, v0, v17, v7, v15, v29.\nChild p3: C(arg)->v0; RETURN v0; authored result L2.\nChild p1: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation silver. Feed the child the fourth committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v29",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v7"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v7",
+                "kind": "RUN",
+                "output": "v15"
+              },
+              {
+                "input": "v15",
+                "kind": "CALL",
+                "output": "v29",
+                "procedure": "p3"
+              }
+            ]
+          },
+          "p3": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00034"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-016",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "cobalt",
+          "values": [
+            0.0996413,
+            0.2000091,
+            0.30003,
+            0.3997945,
+            0.5002287,
+            0.6002753,
+            0.700323,
+            0.8003541
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "jade",
+          "values": [
+            0.1003545,
+            0.1996973,
+            0.2999836,
+            0.3997224,
+            0.5003106,
+            0.5996439,
+            0.7001773,
+            0.799955
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.1003596,
+            0.2000572,
+            0.3000287,
+            0.4000436,
+            0.4996289,
+            0.5997933,
+            0.700396,
+            0.8000464
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v10; B(v10)->v11; C(v11)->v21; R(v21)->v20.\nCALL output: v14.\nAvailable CALL inputs: arg, v10, v11, v21, v20.\nAvailable parent returns: arg, v10, v11, v21, v20, v14.\nChild p5: C(arg)->v0; RETURN v0; authored result L2.\nChild p4: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation cobalt. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v14",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v10"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v10",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v11",
+                "kind": "RUN",
+                "output": "v21"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v21",
+                "kind": "RUN",
+                "output": "v20"
+              },
+              {
+                "input": "v20",
+                "kind": "CALL",
+                "output": "v14",
+                "procedure": "p4"
+              }
+            ]
+          },
+          "p4": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00033"
+  },
+  {
+    "provenance": {
+      "combination": "B_CR",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "3fe8c937371a8a6e73e401d6853121bb7afcf3aa539ee130b83f6b18ab61d270",
+      "group_id": "test-group-016",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "cobalt",
+          "values": [
+            0.0996413,
+            0.2000091,
+            0.30003,
+            0.3997945,
+            0.5002287,
+            0.6002753,
+            0.700323,
+            0.8003541
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "jade",
+          "values": [
+            0.1003545,
+            0.1996973,
+            0.2999836,
+            0.3997224,
+            0.5003106,
+            0.5996439,
+            0.7001773,
+            0.799955
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.1003596,
+            0.2000572,
+            0.3000287,
+            0.4000436,
+            0.4996289,
+            0.5997933,
+            0.700396,
+            0.8000464
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v10; B(v10)->v11; C(v11)->v21; R(v21)->v20.\nCALL output: v14.\nAvailable CALL inputs: arg, v10, v11, v21, v20.\nAvailable parent returns: arg, v10, v11, v21, v20, v14.\nChild p5: C(arg)->v0; RETURN v0; authored result L2.\nChild p4: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation cobalt. Feed the child the second committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v14",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v10"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v10",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v11",
+                "kind": "RUN",
+                "output": "v21"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v21",
+                "kind": "RUN",
+                "output": "v20"
+              },
+              {
+                "input": "v11",
+                "kind": "CALL",
+                "output": "v14",
+                "procedure": "p4"
+              }
+            ]
+          },
+          "p4": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00032"
+  },
+  {
+    "provenance": {
+      "combination": "B_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "fa57940279b5f8673b5678b80bc2e8ea4383caa3d55d6433a56797941a192706",
+      "group_id": "test-group-009",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.1002701,
+            0.2001529,
+            0.3001874,
+            0.3998008,
+            0.4998942,
+            0.5997864,
+            0.7001999,
+            0.7999285
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1000391,
+            0.199642,
+            0.299731,
+            0.4003508,
+            0.5001363,
+            0.6002578,
+            0.7003491,
+            0.8001594
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "jade",
+          "values": [
+            0.0999145,
+            0.2003021,
+            0.2996934,
+            0.4003087,
+            0.4997318,
+            0.5996872,
+            0.699666,
+            0.800343
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v21; B(v21)->v4; C(v4)->v27; R(v27)->v10.\nCALL output: v0.\nAvailable CALL inputs: arg, v21, v4, v27, v10.\nAvailable parent returns: arg, v21, v4, v27, v10, v0.\nChild p6: C(arg)->v0; RETURN v0; authored result L2.\nChild p14: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation jade. Feed the child the second committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v21"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v21",
+                "kind": "RUN",
+                "output": "v4"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v4",
+                "kind": "RUN",
+                "output": "v27"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v27",
+                "kind": "RUN",
+                "output": "v10"
+              },
+              {
+                "input": "v4",
+                "kind": "CALL",
+                "output": "v0",
+                "procedure": "p6"
+              }
+            ]
+          },
+          "p6": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00018"
+  },
+  {
+    "provenance": {
+      "combination": "R_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "144397f4acecde6209a5cc5cada377f2db8d2ca51f5f4392717385ee84aa1389",
+      "group_id": "test-group-023",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "copper",
+          "values": [
+            0.0998031,
+            0.1998595,
+            0.299778,
+            0.4001603,
+            0.4998128,
+            0.6000184,
+            0.6996652,
+            0.8003909
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "cobalt",
+          "values": [
+            0.0999976,
+            0.199928,
+            0.3002127,
+            0.4001263,
+            0.4998135,
+            0.5999145,
+            0.7003313,
+            0.8001686
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.1001268,
+            0.2002678,
+            0.2996001,
+            0.39968,
+            0.5001408,
+            0.6000863,
+            0.7002514,
+            0.7999704
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v3; B(v3)->v7; C(v7)->v6; R(v6)->v15.\nCALL output: v0.\nAvailable CALL inputs: arg, v3, v7, v6, v15.\nAvailable parent returns: arg, v3, v7, v6, v15, v0.\nChild p6: C(arg)->v0; RETURN v0; authored result L2.\nChild p11: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation cobalt. Feed the child the fourth committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v3",
+                "kind": "RUN",
+                "output": "v7"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v7",
+                "kind": "RUN",
+                "output": "v6"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v6",
+                "kind": "RUN",
+                "output": "v15"
+              },
+              {
+                "input": "v15",
+                "kind": "CALL",
+                "output": "v0",
+                "procedure": "p6"
+              }
+            ]
+          },
+          "p6": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00046"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-000",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0997383,
+            0.1996186,
+            0.3001845,
+            0.4003416,
+            0.5000735,
+            0.6001952,
+            0.7000239,
+            0.8000383
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.099643,
+            0.1999623,
+            0.2999464,
+            0.3998682,
+            0.4997168,
+            0.5996389,
+            0.6997579,
+            0.8001732
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.1002023,
+            0.1998577,
+            0.3000913,
+            0.3998187,
+            0.4999352,
+            0.5998935,
+            0.6996305,
+            0.7999179
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v23; B(v23)->v26; C(v26)->v19; R(v19)->v11.\nCALL output: v20.\nAvailable CALL inputs: arg, v23, v26, v19, v11.\nAvailable parent returns: arg, v23, v26, v19, v11, v20.\nChild p10: C(arg)->v0; RETURN v0; authored result L2.\nChild p5: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation coral. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v20",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v23"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v23",
+                "kind": "RUN",
+                "output": "v26"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v26",
+                "kind": "RUN",
+                "output": "v19"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v19",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "input": "v11",
+                "kind": "CALL",
+                "output": "v20",
+                "procedure": "p5"
+              }
+            ]
+          },
+          "p5": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00001"
+  },
+  {
+    "provenance": {
+      "combination": "B_CR",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "3fe8c937371a8a6e73e401d6853121bb7afcf3aa539ee130b83f6b18ab61d270",
+      "group_id": "test-group-007",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "copper",
+          "values": [
+            0.0996907,
+            0.1998551,
+            0.2996181,
+            0.3997156,
+            0.5000786,
+            0.6000057,
+            0.6997558,
+            0.799788
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.1001271,
+            0.2002202,
+            0.3002009,
+            0.3997745,
+            0.5002422,
+            0.6002099,
+            0.7001575,
+            0.8002061
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.0999916,
+            0.1996028,
+            0.2996522,
+            0.3996503,
+            0.5001374,
+            0.6002408,
+            0.6996668,
+            0.7998136
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v31; B(v31)->v20; C(v20)->v27; R(v27)->v24.\nCALL output: v9.\nAvailable CALL inputs: arg, v31, v20, v27, v24.\nAvailable parent returns: arg, v31, v20, v27, v24, v9.\nChild p2: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p9: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation jade. Feed the child the second committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v9",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v31"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v31",
+                "kind": "RUN",
+                "output": "v20"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v20",
+                "kind": "RUN",
+                "output": "v27"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v27",
+                "kind": "RUN",
+                "output": "v24"
+              },
+              {
+                "input": "v20",
+                "kind": "CALL",
+                "output": "v9",
+                "procedure": "p2"
+              }
+            ]
+          },
+          "p2": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00014"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-019",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.0996677,
+            0.1996549,
+            0.2996694,
+            0.3996889,
+            0.4997884,
+            0.5997832,
+            0.6997851,
+            0.8002298
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "silver",
+          "values": [
+            0.0999232,
+            0.200397,
+            0.3001487,
+            0.4000359,
+            0.4998571,
+            0.5998044,
+            0.699616,
+            0.7998813
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "cobalt",
+          "values": [
+            0.1001805,
+            0.2001035,
+            0.2998197,
+            0.3999584,
+            0.5002543,
+            0.6003721,
+            0.6998218,
+            0.799608
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v12; B(v12)->v5; C(v5)->v10; R(v10)->v7.\nCALL output: v11.\nAvailable CALL inputs: arg, v12, v5, v10, v7.\nAvailable parent returns: arg, v12, v5, v10, v7, v11.\nChild p12: C(arg)->v0; RETURN v0; authored result L2.\nChild p10: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation cobalt. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v11",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v12"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v12",
+                "kind": "RUN",
+                "output": "v5"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v5",
+                "kind": "RUN",
+                "output": "v10"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v10",
+                "kind": "RUN",
+                "output": "v7"
+              },
+              {
+                "input": "v7",
+                "kind": "CALL",
+                "output": "v11",
+                "procedure": "p10"
+              }
+            ]
+          },
+          "p10": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00039"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-021",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "amber",
+          "values": [
+            0.0999721,
+            0.2003023,
+            0.3002252,
+            0.3997505,
+            0.5002742,
+            0.5998664,
+            0.700052,
+            0.800096
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.0999737,
+            0.2001328,
+            0.3003229,
+            0.3999747,
+            0.4998598,
+            0.6001347,
+            0.7000187,
+            0.8003884
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "silver",
+          "values": [
+            0.100252,
+            0.200227,
+            0.3002599,
+            0.400393,
+            0.4999089,
+            0.5996202,
+            0.7002445,
+            0.7998961
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v17; B(v17)->v5; C(v5)->v23; R(v23)->v9.\nCALL output: v18.\nAvailable CALL inputs: arg, v17, v5, v23, v9.\nAvailable parent returns: arg, v17, v5, v23, v9, v18.\nChild p1: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p5: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation coral. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v18",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v5"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v5",
+                "kind": "RUN",
+                "output": "v23"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v23",
+                "kind": "RUN",
+                "output": "v9"
+              },
+              {
+                "input": "v9",
+                "kind": "CALL",
+                "output": "v18",
+                "procedure": "p1"
+              }
+            ]
+          },
+          "p1": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00043"
+  },
+  {
+    "provenance": {
+      "combination": "R_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "144397f4acecde6209a5cc5cada377f2db8d2ca51f5f4392717385ee84aa1389",
+      "group_id": "test-group-005",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "silver",
+          "values": [
+            0.0998738,
+            0.1999022,
+            0.3003189,
+            0.3997329,
+            0.5003625,
+            0.6000574,
+            0.7001848,
+            0.8003687
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "copper",
+          "values": [
+            0.0998579,
+            0.2003545,
+            0.2997078,
+            0.3999976,
+            0.5001705,
+            0.5999113,
+            0.7000953,
+            0.8000503
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "violet",
+          "values": [
+            0.0999326,
+            0.1997047,
+            0.2997396,
+            0.4003515,
+            0.4997799,
+            0.5996577,
+            0.700179,
+            0.8001499
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v16; B(v16)->v8; C(v8)->v6; R(v6)->v1.\nCALL output: v22.\nAvailable CALL inputs: arg, v16, v8, v6, v1.\nAvailable parent returns: arg, v16, v8, v6, v1, v22.\nChild p3: C(arg)->v0; RETURN v0; authored result L2.\nChild p9: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation silver. Feed the child the fourth committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v22",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v16"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v16",
+                "kind": "RUN",
+                "output": "v8"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v8",
+                "kind": "RUN",
+                "output": "v6"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v6",
+                "kind": "RUN",
+                "output": "v1"
+              },
+              {
+                "input": "v1",
+                "kind": "CALL",
+                "output": "v22",
+                "procedure": "p3"
+              }
+            ]
+          },
+          "p3": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00010"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-006",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "copper",
+          "values": [
+            0.1000169,
+            0.2000583,
+            0.3002297,
+            0.3998831,
+            0.5002984,
+            0.6003585,
+            0.6998059,
+            0.8000814
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.0996132,
+            0.1998597,
+            0.2996965,
+            0.4000419,
+            0.4997462,
+            0.6002631,
+            0.6997472,
+            0.799727
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "indigo",
+          "values": [
+            0.1002553,
+            0.2000266,
+            0.2996769,
+            0.3996414,
+            0.4996016,
+            0.6002377,
+            0.6999954,
+            0.8001079
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v8; B(v8)->v12; C(v12)->v6; R(v6)->v17.\nCALL output: v24.\nAvailable CALL inputs: arg, v8, v12, v6, v17.\nAvailable parent returns: arg, v8, v12, v6, v17, v24.\nChild p7: C(arg)->v0; RETURN v0; authored result L2.\nChild p4: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation indigo. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v24",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v8"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v8",
+                "kind": "RUN",
+                "output": "v12"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v12",
+                "kind": "RUN",
+                "output": "v6"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v6",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "input": "v17",
+                "kind": "CALL",
+                "output": "v24",
+                "procedure": "p4"
+              }
+            ]
+          },
+          "p4": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00013"
+  },
+  {
+    "provenance": {
+      "combination": "R_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "144397f4acecde6209a5cc5cada377f2db8d2ca51f5f4392717385ee84aa1389",
+      "group_id": "test-group-020",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "jade",
+          "values": [
+            0.1003709,
+            0.2003505,
+            0.2996293,
+            0.3998127,
+            0.4996615,
+            0.6002913,
+            0.6999374,
+            0.7996864
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "copper",
+          "values": [
+            0.1002628,
+            0.2002793,
+            0.2998061,
+            0.4003291,
+            0.4999786,
+            0.599899,
+            0.6998364,
+            0.8001148
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0999293,
+            0.200114,
+            0.3003221,
+            0.3999947,
+            0.4996246,
+            0.6003439,
+            0.700376,
+            0.8000922
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v23; B(v23)->v17; C(v17)->v26; R(v26)->v30.\nCALL output: v3.\nAvailable CALL inputs: arg, v23, v17, v26, v30.\nAvailable parent returns: arg, v23, v17, v26, v30, v3.\nChild p12: C(arg)->v0; RETURN v0; authored result L2.\nChild p2: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation copper. Feed the child the fourth committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v3",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v23"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v23",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v26"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v26",
+                "kind": "RUN",
+                "output": "v30"
+              },
+              {
+                "input": "v30",
+                "kind": "CALL",
+                "output": "v3",
+                "procedure": "p12"
+              }
+            ]
+          },
+          "p12": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00040"
+  },
+  {
+    "provenance": {
+      "combination": "B_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "fa57940279b5f8673b5678b80bc2e8ea4383caa3d55d6433a56797941a192706",
+      "group_id": "test-group-003",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "indigo",
+          "values": [
+            0.0997222,
+            0.1998039,
+            0.299923,
+            0.3998093,
+            0.5001834,
+            0.6000563,
+            0.7000253,
+            0.8000413
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "silver",
+          "values": [
+            0.0999792,
+            0.1996767,
+            0.300213,
+            0.3996676,
+            0.5000967,
+            0.6002957,
+            0.7001272,
+            0.7998757
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "violet",
+          "values": [
+            0.1002943,
+            0.2002161,
+            0.3000802,
+            0.3996136,
+            0.5002113,
+            0.6002647,
+            0.7001171,
+            0.7999194
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v11; B(v11)->v0; C(v0)->v29; R(v29)->v15.\nCALL output: v28.\nAvailable CALL inputs: arg, v11, v0, v29, v15.\nAvailable parent returns: arg, v11, v0, v29, v15, v28.\nChild p14: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p0: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation violet. Feed the child the second committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v28",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v11"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v11",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v29"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v29",
+                "kind": "RUN",
+                "output": "v15"
+              },
+              {
+                "input": "v0",
+                "kind": "CALL",
+                "output": "v28",
+                "procedure": "p0"
+              }
+            ]
+          },
+          "p0": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00006"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "unseen_composition",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "test-group-002",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "copper",
+          "values": [
+            0.0996755,
+            0.1999171,
+            0.3003679,
+            0.3997814,
+            0.5000489,
+            0.5997979,
+            0.7000172,
+            0.7999364
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "jade",
+          "values": [
+            0.1000959,
+            0.2003262,
+            0.3002981,
+            0.4001316,
+            0.4997919,
+            0.6000649,
+            0.6999273,
+            0.8001856
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.1001732,
+            0.1996738,
+            0.2996745,
+            0.3996789,
+            0.4996665,
+            0.6001359,
+            0.6998392,
+            0.8001637
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v12; B(v12)->v25; C(v25)->v17; R(v17)->v27.\nCALL output: v26.\nAvailable CALL inputs: arg, v12, v25, v17, v27.\nAvailable parent returns: arg, v12, v25, v17, v27, v26.\nChild p0: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p7: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation coral. Feed the child the fourth committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 1,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v26",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v12"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v12",
+                "kind": "RUN",
+                "output": "v25"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v25",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v27"
+              },
+              {
+                "input": "v27",
+                "kind": "CALL",
+                "output": "v26",
+                "procedure": "p0"
+              }
+            ]
+          },
+          "p0": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00005"
+  },
+  {
+    "provenance": {
+      "combination": "B_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "fa57940279b5f8673b5678b80bc2e8ea4383caa3d55d6433a56797941a192706",
+      "group_id": "test-group-018",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "copper",
+          "values": [
+            0.099857,
+            0.1998281,
+            0.3001304,
+            0.3997073,
+            0.499912,
+            0.5999796,
+            0.7003355,
+            0.7997676
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.1000006,
+            0.1996268,
+            0.2998296,
+            0.4002558,
+            0.5000627,
+            0.5996799,
+            0.6996457,
+            0.7997427
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.0999989,
+            0.2002777,
+            0.2999124,
+            0.4001358,
+            0.5000495,
+            0.5999874,
+            0.6998156,
+            0.800285
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v10; B(v10)->v26; C(v26)->v25; R(v25)->v21.\nCALL output: v19.\nAvailable CALL inputs: arg, v10, v26, v25, v21.\nAvailable parent returns: arg, v10, v26, v25, v21, v19.\nChild p15: C(arg)->v0; RETURN v0; authored result L2.\nChild p7: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation amber. Feed the child the second committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v19",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v10"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v10",
+                "kind": "RUN",
+                "output": "v26"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v26",
+                "kind": "RUN",
+                "output": "v25"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v25",
+                "kind": "RUN",
+                "output": "v21"
+              },
+              {
+                "input": "v26",
+                "kind": "CALL",
+                "output": "v19",
+                "procedure": "p15"
+              }
+            ]
+          },
+          "p15": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00036"
+  },
+  {
+    "provenance": {
+      "combination": "B_C",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "fa57940279b5f8673b5678b80bc2e8ea4383caa3d55d6433a56797941a192706",
+      "group_id": "test-group-012",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "indigo",
+          "values": [
+            0.0996566,
+            0.1999373,
+            0.300331,
+            0.3999232,
+            0.4999258,
+            0.5998442,
+            0.7003848,
+            0.8000441
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "jade",
+          "values": [
+            0.099763,
+            0.2002229,
+            0.3000712,
+            0.400176,
+            0.4999914,
+            0.599763,
+            0.699979,
+            0.7996629
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "copper",
+          "values": [
+            0.1003,
+            0.1998083,
+            0.2997454,
+            0.39991,
+            0.5002557,
+            0.5998713,
+            0.7000746,
+            0.7998045
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v0; B(v0)->v4; C(v4)->v17; R(v17)->v5.\nCALL output: v15.\nAvailable CALL inputs: arg, v0, v4, v17, v5.\nAvailable parent returns: arg, v0, v4, v17, v5, v15.\nChild p5: C(arg)->v0; RETURN v0; authored result L2.\nChild p9: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation copper. Feed the child the second committed prelude result and ask for authored result label L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v15",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v4"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v4",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v5"
+              },
+              {
+                "input": "v4",
+                "kind": "CALL",
+                "output": "v15",
+                "procedure": "p5"
+              }
+            ]
+          },
+          "p5": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00024"
+  },
+  {
+    "provenance": {
+      "combination": "B_CR",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "3fe8c937371a8a6e73e401d6853121bb7afcf3aa539ee130b83f6b18ab61d270",
+      "group_id": "test-group-019",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 1,
+          "tag": "coral",
+          "values": [
+            0.0996677,
+            0.1996549,
+            0.2996694,
+            0.3996889,
+            0.4997884,
+            0.5997832,
+            0.6997851,
+            0.8002298
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "silver",
+          "values": [
+            0.0999232,
+            0.200397,
+            0.3001487,
+            0.4000359,
+            0.4998571,
+            0.5998044,
+            0.699616,
+            0.7998813
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "cobalt",
+          "values": [
+            0.1001805,
+            0.2001035,
+            0.2998197,
+            0.3999584,
+            0.5002543,
+            0.6003721,
+            0.6998218,
+            0.799608
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v12; B(v12)->v5; C(v5)->v10; R(v10)->v7.\nCALL output: v11.\nAvailable CALL inputs: arg, v12, v5, v10, v7.\nAvailable parent returns: arg, v12, v5, v10, v7, v11.\nChild p12: C(arg)->v0; RETURN v0; authored result L2.\nChild p10: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation cobalt. Feed the child the second committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v11",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v12"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v12",
+                "kind": "RUN",
+                "output": "v5"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v5",
+                "kind": "RUN",
+                "output": "v10"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v10",
+                "kind": "RUN",
+                "output": "v7"
+              },
+              {
+                "input": "v5",
+                "kind": "CALL",
+                "output": "v11",
+                "procedure": "p10"
+              }
+            ]
+          },
+          "p10": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00038"
+  },
+  {
+    "provenance": {
+      "combination": "B_CR",
+      "depth": 2,
+      "evaluation_target": "fresh_instances_familiar_graphs",
+      "graph_signature": "3fe8c937371a8a6e73e401d6853121bb7afcf3aa539ee130b83f6b18ab61d270",
+      "group_id": "test-group-004",
+      "native_outcomes_checked": false,
+      "split": "test",
+      "target_source": "formal_public_constraints",
+      "wording_template": "test"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet",
+          "values": [
+            0.0999895,
+            0.2002804,
+            0.3002476,
+            0.3998198,
+            0.5000355,
+            0.5998264,
+            0.6999512,
+            0.7996495
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "coral",
+          "values": [
+            0.0998826,
+            0.20027,
+            0.3002276,
+            0.3999595,
+            0.5003842,
+            0.6003106,
+            0.6996704,
+            0.799618
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.0998965,
+            0.2000182,
+            0.300365,
+            0.4003327,
+            0.4998647,
+            0.6002889,
+            0.7001961,
+            0.8000279
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v17; B(v17)->v27; C(v27)->v13; R(v13)->v3.\nCALL output: v23.\nAvailable CALL inputs: arg, v17, v27, v13, v3.\nAvailable parent returns: arg, v17, v27, v13, v3, v23.\nChild p2: C(arg)->v0; RETURN v0; authored result L2.\nChild p5: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nChoose observation coral. Feed the child the second committed prelude result and ask for authored result label L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 2,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v23",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v17"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v17",
+                "kind": "RUN",
+                "output": "v27"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v27",
+                "kind": "RUN",
+                "output": "v13"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v13",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "input": "v27",
+                "kind": "CALL",
+                "output": "v23",
+                "procedure": "p5"
+              }
+            ]
+          },
+          "p5": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-test-00008"
+  }
+]

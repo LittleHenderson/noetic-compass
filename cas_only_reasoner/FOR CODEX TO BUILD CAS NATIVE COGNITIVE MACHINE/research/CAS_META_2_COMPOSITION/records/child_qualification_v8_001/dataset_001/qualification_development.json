@@ -1,0 +1,538 @@
+[
+  {
+    "provenance": {
+      "combination": "B_C",
+      "depth": 2,
+      "evaluation_target": "development_native_qualification",
+      "graph_signature": "fa57940279b5f8673b5678b80bc2e8ea4383caa3d55d6433a56797941a192706",
+      "group_id": "qualification-group-000",
+      "native_outcomes_checked": false,
+      "split": "qualification",
+      "target_source": "formal_public_constraints",
+      "wording_template": "qualification"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.1001138,
+            0.2002036,
+            0.3000727,
+            0.399773,
+            0.5003582,
+            0.5998555,
+            0.6996754,
+            0.8000357
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.0998557,
+            0.2001614,
+            0.2998097,
+            0.3996568,
+            0.5000377,
+            0.6003373,
+            0.7001332,
+            0.7999946
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.0997066,
+            0.2001649,
+            0.2996577,
+            0.3998252,
+            0.4998321,
+            0.5996949,
+            0.7002928,
+            0.8000123
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v3; B(v3)->v29; C(v29)->v22; R(v22)->v0.\nCALL output: v8.\nAvailable CALL inputs: arg, v3, v29, v22, v0.\nAvailable parent returns: arg, v3, v29, v22, v0, v8.\nChild p8: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p3: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nDevelopment request: observation coral; source is the second committed prelude result; desired authored child label is L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v8",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v3",
+                "kind": "RUN",
+                "output": "v29"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v29",
+                "kind": "RUN",
+                "output": "v22"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v22",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "input": "v29",
+                "kind": "CALL",
+                "output": "v8",
+                "procedure": "p3"
+              }
+            ]
+          },
+          "p3": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-qualification-00000"
+  },
+  {
+    "provenance": {
+      "combination": "B_CR",
+      "depth": 2,
+      "evaluation_target": "development_native_qualification",
+      "graph_signature": "3fe8c937371a8a6e73e401d6853121bb7afcf3aa539ee130b83f6b18ab61d270",
+      "group_id": "qualification-group-000",
+      "native_outcomes_checked": false,
+      "split": "qualification",
+      "target_source": "formal_public_constraints",
+      "wording_template": "qualification"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.1001138,
+            0.2002036,
+            0.3000727,
+            0.399773,
+            0.5003582,
+            0.5998555,
+            0.6996754,
+            0.8000357
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.0998557,
+            0.2001614,
+            0.2998097,
+            0.3996568,
+            0.5000377,
+            0.6003373,
+            0.7001332,
+            0.7999946
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.0997066,
+            0.2001649,
+            0.2996577,
+            0.3998252,
+            0.4998321,
+            0.5996949,
+            0.7002928,
+            0.8000123
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v3; B(v3)->v29; C(v29)->v22; R(v22)->v0.\nCALL output: v8.\nAvailable CALL inputs: arg, v3, v29, v22, v0.\nAvailable parent returns: arg, v3, v29, v22, v0, v8.\nChild p8: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p3: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nDevelopment request: observation coral; source is the second committed prelude result; desired authored child label is L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v8",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v3",
+                "kind": "RUN",
+                "output": "v29"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v29",
+                "kind": "RUN",
+                "output": "v22"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v22",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "input": "v29",
+                "kind": "CALL",
+                "output": "v8",
+                "procedure": "p8"
+              }
+            ]
+          },
+          "p8": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-qualification-00001"
+  },
+  {
+    "provenance": {
+      "combination": "R_C",
+      "depth": 2,
+      "evaluation_target": "development_native_qualification",
+      "graph_signature": "144397f4acecde6209a5cc5cada377f2db8d2ca51f5f4392717385ee84aa1389",
+      "group_id": "qualification-group-000",
+      "native_outcomes_checked": false,
+      "split": "qualification",
+      "target_source": "formal_public_constraints",
+      "wording_template": "qualification"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.1001138,
+            0.2002036,
+            0.3000727,
+            0.399773,
+            0.5003582,
+            0.5998555,
+            0.6996754,
+            0.8000357
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.0998557,
+            0.2001614,
+            0.2998097,
+            0.3996568,
+            0.5000377,
+            0.6003373,
+            0.7001332,
+            0.7999946
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.0997066,
+            0.2001649,
+            0.2996577,
+            0.3998252,
+            0.4998321,
+            0.5996949,
+            0.7002928,
+            0.8000123
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v3; B(v3)->v29; C(v29)->v22; R(v22)->v0.\nCALL output: v8.\nAvailable CALL inputs: arg, v3, v29, v22, v0.\nAvailable parent returns: arg, v3, v29, v22, v0, v8.\nChild p8: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p3: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nDevelopment request: observation coral; source is the fourth committed prelude result; desired authored child label is L2.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v8",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v3",
+                "kind": "RUN",
+                "output": "v29"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v29",
+                "kind": "RUN",
+                "output": "v22"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v22",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "input": "v0",
+                "kind": "CALL",
+                "output": "v8",
+                "procedure": "p3"
+              }
+            ]
+          },
+          "p3": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v0",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-qualification-00002"
+  },
+  {
+    "provenance": {
+      "combination": "R_CR",
+      "depth": 2,
+      "evaluation_target": "development_native_qualification",
+      "graph_signature": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07",
+      "group_id": "qualification-group-000",
+      "native_outcomes_checked": false,
+      "split": "qualification",
+      "target_source": "formal_public_constraints",
+      "wording_template": "qualification"
+    },
+    "public": {
+      "observations": [
+        {
+          "slot": 2,
+          "tag": "amber",
+          "values": [
+            0.1001138,
+            0.2002036,
+            0.3000727,
+            0.399773,
+            0.5003582,
+            0.5998555,
+            0.6996754,
+            0.8000357
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "silver",
+          "values": [
+            0.0998557,
+            0.2001614,
+            0.2998097,
+            0.3996568,
+            0.5000377,
+            0.6003373,
+            0.7001332,
+            0.7999946
+          ]
+        },
+        {
+          "slot": 0,
+          "tag": "coral",
+          "values": [
+            0.0997066,
+            0.2001649,
+            0.2996577,
+            0.3998252,
+            0.4998321,
+            0.5996949,
+            0.7002928,
+            0.8000123
+          ]
+        }
+      ],
+      "problem": "ONE-CHILD TASK / 8\nParent main input arg.\nPrelude: A(arg)->v3; B(v3)->v29; C(v29)->v22; R(v22)->v0.\nCALL output: v8.\nAvailable CALL inputs: arg, v3, v29, v22, v0.\nAvailable parent returns: arg, v3, v29, v22, v0, v8.\nChild p8: C(arg)->v0; R(v0)->v1; RETURN v1; authored result L1.\nChild p3: C(arg)->v0; RETURN v0; authored result L2.\nAuthored labels are fixture expectations if accepted, not new numerical meanings. All ordinary topology and Effect checks still apply.\nDevelopment request: observation coral; source is the fourth committed prelude result; desired authored child label is L1.\nParent return: the child CALL output. Execute exactly one child CALL after the supplied prelude."
+    },
+    "schema": "cas-meta2-one-child-task/8",
+    "target": {
+      "binding": 0,
+      "program": {
+        "entry": "main",
+        "procedures": {
+          "main": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v8",
+            "steps": [
+              {
+                "cjt_id": "A",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v3"
+              },
+              {
+                "cjt_id": "B",
+                "input": "v3",
+                "kind": "RUN",
+                "output": "v29"
+              },
+              {
+                "cjt_id": "C",
+                "input": "v29",
+                "kind": "RUN",
+                "output": "v22"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v22",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "input": "v0",
+                "kind": "CALL",
+                "output": "v8",
+                "procedure": "p8"
+              }
+            ]
+          },
+          "p8": {
+            "allowed_cjts": [
+              "A",
+              "B",
+              "C",
+              "R"
+            ],
+            "input": "arg",
+            "return": "v1",
+            "steps": [
+              {
+                "cjt_id": "C",
+                "input": "arg",
+                "kind": "RUN",
+                "output": "v0"
+              },
+              {
+                "cjt_id": "R",
+                "input": "v0",
+                "kind": "RUN",
+                "output": "v1"
+              }
+            ]
+          }
+        },
+        "schema": "cas-meta2-program/0.1"
+      }
+    },
+    "task_id": "child-v8-qualification-00003"
+  }
+]

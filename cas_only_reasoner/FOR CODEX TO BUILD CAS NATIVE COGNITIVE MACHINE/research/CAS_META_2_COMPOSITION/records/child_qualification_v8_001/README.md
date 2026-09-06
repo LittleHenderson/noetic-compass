@@ -1,6 +1,6 @@
 # One-child curriculum and native qualification
 
-The curriculum is prepared in pure code. Native qualification is not yet recorded here. No model has been trained by this package.
+The curriculum is saved in `dataset_001` and its source package passed the clean-extraction check. Native qualification is not yet recorded here. No model has been trained by this package.
 
 ## Declared lesson
 
@@ -33,5 +33,20 @@ The worker package preserves the exact 616-member accepted prefix archive and 13
 `checks_001` records 178 passing guarded local tests. It predates the final parent/remote/clean-package test integration and is not a native result. Later captures must use fresh directories and keep raw failures rather than overwrite them. Local checks block neural/provider imports, actual SQLite connections and network operations.
 
 `checks_002` records **362 passed in 59.83s**, exit 0, including the dedicated parent, remote runner and clean-archive verifier contracts. The capture confirmed unchanged source, protected prefix files and canonical budget. Its receipt SHA-256 is `7de1ebddc59955f70ba5cc767281f591bcef6f780fac5f8a9357cc62ebb97bad`. This is still pure/synthetic evidence, not actual native qualification.
+
+The exact source freeze is `b61b011c3d53ae49a1f7f988397df632e95e82a6`. `source_001/source.zip` contains 639 members and 8,086,367 bytes; SHA-256 `d93a39f3a264c23f27ac7dcdd2779eca665150a6bd739820651e953958e8f7d3`. The root manifest SHA-256 is `a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d`.
+
+`clean/checks_001` records **179 passed in 19.27s**, with every source member checked before and after. Its five mandatory files ran from the actual archive extraction, with no original-worktree import fallback. Receipt SHA-256: `ab68267aa2dad69302475525fabafb62b108c7189cc691a7e80654ddcfd62f72`. Only receipts and raw logs are versioned; the extracted source is reproduced from the ZIP.
+
+`dataset_001/receipt.json`, SHA-256 `d77357ff9b2c67617548c404385917374ca01cb1e3ac90639793499c8677b947`, binds the saved 192/72/48 tasks and four separate development tasks to this source freeze. No native outcomes have been inferred from saving those files.
+
+Reproduction commands from this research package root (choose fresh output names):
+
+```powershell
+& 'C:/Python314/python.exe' -B tools/verify_child_qualification_clean_v8.py --archive records/child_qualification_v8_001/source_001/source.zip --archive-sha256 d93a39f3a264c23f27ac7dcdd2779eca665150a6bd739820651e953958e8f7d3 --source-sha b61b011c3d53ae49a1f7f988397df632e95e82a6 --manifest-sha256 a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d --output records/child_qualification_v8_001/clean/checks_002
+& 'C:/Python314/python.exe' -B records/child_qualification_v8_001/prepare_curriculum.py dataset_002
+```
+
+These commands are pure and unpaid. The separately generated `records/aws_child_qualification_v8_001/registration_001/capture_parent.py` is a paid execution entrypoint for one registered job, not a reproduction command to repeat. Its request and standing-authority registration bind the existing $400 campaign authorization and proposed $4 maximum; registration itself did not reserve money or create AWS resources.
 
 Earlier familiar-program **24/24**, held-out CAS composition **0/72**, saved-prefix diagnostic, and completed B/R numerical contrast are separate evidence. None becomes a one-child learning result through this package. Accepted core, META-0 and META-1 audits are not reopened.

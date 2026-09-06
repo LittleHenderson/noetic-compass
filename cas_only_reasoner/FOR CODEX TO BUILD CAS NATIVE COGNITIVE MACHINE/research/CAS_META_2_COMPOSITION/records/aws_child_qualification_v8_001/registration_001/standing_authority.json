@@ -1,0 +1,28 @@
+{
+  "campaign_approval": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\OWNER_APPROVAL_SOURCE.json",
+    "sha256": "3e87bd4dfb51824f999b67ccc6118a75edececbc44ddc1b48d45f53e8bb62626"
+  },
+  "campaign_cap_usd": "400.00",
+  "evidence_kind": "Builder registration of existing campaign authorization and standing user direction; not a new human approval or provider receipt.",
+  "experiment": {
+    "entrypoint": "cas_meta2.child_qualification_gpu_v8",
+    "profile": "one_child_full_task_qualification_v8"
+  },
+  "job": "cas-meta2-20260906155525-195f5ad8",
+  "launch_request_sha256": "0b1b73e0b750c3c657eed42686e5aebdcd2b768786f7240134ac4d67899bf861",
+  "max_job_cost_usd": "4.00",
+  "native_execution": true,
+  "parent_source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+  "schema": "cas-meta2-child-qualification-standing-authority/8",
+  "scope_boundary": "One four-task whole-task native qualification panel only; at most20 full executions/110 ticks if all complete. No training, extra curriculum execution, automatic retry, merge or deployment.",
+  "source_archive_sha256": "d93a39f3a264c23f27ac7dcdd2779eca665150a6bd739820651e953958e8f7d3",
+  "source_manifest_sha256": "a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d",
+  "standing_campaign_authorization": true,
+  "standing_user_message": {
+    "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/aws_prefix_diagnostic_v8_001/authorization_001/user_message_full.txt",
+    "sha256": "d0b640ec3059ea73d677b632a4bc2f3188bbcd87b231e4362914e219459fc5bb"
+  },
+  "training": false,
+  "worker_source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6"
+}

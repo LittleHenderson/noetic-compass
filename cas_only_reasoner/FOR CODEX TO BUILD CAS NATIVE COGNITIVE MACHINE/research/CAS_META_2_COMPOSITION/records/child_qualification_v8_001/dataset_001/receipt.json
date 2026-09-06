@@ -1,0 +1,209 @@
+{
+  "boundary": "312 declared tasks in 112 independent contexts. Pure meaning/structure checks only. The separate four-task development qualification is not held-out evaluation. No native acceptance, learning or generalization follows from this artifact.",
+  "canonical_budget_after": {
+    "bytes": 36253,
+    "sha256": "86b98a81d1fa40844e459a07a0a01f1440a46079100fa83321234552468b8012"
+  },
+  "canonical_budget_before": {
+    "bytes": 36253,
+    "sha256": "86b98a81d1fa40844e459a07a0a01f1440a46079100fa83321234552468b8012"
+  },
+  "command": [
+    "C:\\Python314\\python.exe",
+    "records/child_qualification_v8_001/prepare_curriculum.py",
+    "dataset_001"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "database_network_operations_blocked": true,
+  "files": {
+    "manifest.json": {
+      "bytes": 3607,
+      "sha256": "361106f192a82bf68deaf09c61609c09c1fbd906ef70666e2e202cc15a7b44c8"
+    },
+    "qualification_development.json": {
+      "bytes": 15433,
+      "sha256": "7cebf64ded99eb90acebf0df0311eff4001f5a485c82457c3e7e26a0562e5060"
+    },
+    "test_private.json": {
+      "bytes": 184208,
+      "sha256": "324bb8a5e87b31159006f015a5c4080e74369bc8a3fbe69c08cf222c802d89dc"
+    },
+    "test_public.json": {
+      "bytes": 72845,
+      "sha256": "88f37cbf7bcad097d2491a3bb37dadabd623f6aba5fedc14b3097984308a3839"
+    },
+    "train.json": {
+      "bytes": 727601,
+      "sha256": "f3a3d8b65362f6f8f46476abcad2a706ecb8d81b6404f4ebed1c1a7f22374621"
+    },
+    "validation.json": {
+      "bytes": 275745,
+      "sha256": "639b1365b8e50a36e865c30f7b1515741e7b9d11b8f6dde34ad3d35816983ab6"
+    }
+  },
+  "finished_utc": "2026-09-06T15:53:12.940224+00:00",
+  "forbidden_imports": [
+    "boto3",
+    "botocore",
+    "cas_cjt",
+    "cas_meta",
+    "casformer",
+    "cupy",
+    "jax",
+    "numpy",
+    "tensorflow",
+    "torch"
+  ],
+  "native_outcomes_checked": false,
+  "neural_execution": false,
+  "observed_git_head": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+  "provider_calls": false,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-child-curriculum-artifact/8",
+  "seed": 2026090608,
+  "source_after": {
+    "cas_meta2/child_curriculum_v8.py": {
+      "bytes": 20801,
+      "sha256": "dc764d36754599b627c14a19876fdd57a30ca781e178f50e29e7ed232ba79c7d"
+    },
+    "cas_meta2/child_scaffold_v8.py": {
+      "bytes": 16435,
+      "sha256": "4ca4f80dc173d3567cd7cb32a146299c4fc9b5b8e2db797a0d6612ac5aa1570b"
+    },
+    "cas_meta2/codec.py": {
+      "bytes": 13042,
+      "sha256": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030"
+    },
+    "cas_meta2/curriculum.py": {
+      "bytes": 19392,
+      "sha256": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384"
+    },
+    "cas_meta2/executor.py": {
+      "bytes": 16760,
+      "sha256": "edeb83fd3468aaccacb871bc4561c97a78ae087bb47b9d8ad38f1a58fd7efb2a"
+    },
+    "cas_meta2/ir.py": {
+      "bytes": 11006,
+      "sha256": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+    },
+    "cas_meta2/native.py": {
+      "bytes": 29265,
+      "sha256": "16131d98dcbd76d274a1c083e9bc5f100cadfbbba7dfcdb38282c23946c20512"
+    },
+    "records/child_qualification_v8_001/prepare_curriculum.py": {
+      "bytes": 4763,
+      "sha256": "eaab88a3b18e1d272d96122c17ff4a9ae1decfbebfde0578ac1862d73942c6f3"
+    }
+  },
+  "source_before": {
+    "cas_meta2/child_curriculum_v8.py": {
+      "bytes": 20801,
+      "sha256": "dc764d36754599b627c14a19876fdd57a30ca781e178f50e29e7ed232ba79c7d"
+    },
+    "cas_meta2/child_scaffold_v8.py": {
+      "bytes": 16435,
+      "sha256": "4ca4f80dc173d3567cd7cb32a146299c4fc9b5b8e2db797a0d6612ac5aa1570b"
+    },
+    "cas_meta2/codec.py": {
+      "bytes": 13042,
+      "sha256": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030"
+    },
+    "cas_meta2/curriculum.py": {
+      "bytes": 19392,
+      "sha256": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384"
+    },
+    "cas_meta2/executor.py": {
+      "bytes": 16760,
+      "sha256": "edeb83fd3468aaccacb871bc4561c97a78ae087bb47b9d8ad38f1a58fd7efb2a"
+    },
+    "cas_meta2/ir.py": {
+      "bytes": 11006,
+      "sha256": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+    },
+    "cas_meta2/native.py": {
+      "bytes": 29265,
+      "sha256": "16131d98dcbd76d274a1c083e9bc5f100cadfbbba7dfcdb38282c23946c20512"
+    },
+    "records/child_qualification_v8_001/prepare_curriculum.py": {
+      "bytes": 4763,
+      "sha256": "eaab88a3b18e1d272d96122c17ff4a9ae1decfbebfde0578ac1862d73942c6f3"
+    }
+  },
+  "source_unchanged": true,
+  "split_report": {
+    "test": {
+      "binding_counts": {
+        "0": 16,
+        "1": 16,
+        "2": 16
+      },
+      "combination_counts": {
+        "B_C": 8,
+        "B_CR": 8,
+        "R_C": 8,
+        "R_CR": 24
+      },
+      "count": 48,
+      "depth_counts": {
+        "2": 48
+      },
+      "evaluation_target_counts": {
+        "fresh_instances_familiar_graphs": 24,
+        "unseen_composition": 24
+      },
+      "independent_context_groups": 24,
+      "private_tasks_sha256": "1694abcc2fadab8333018b2bc7a6a274124aa124d7033a8284cdcf58d194d0d9",
+      "public_sha256": "a0cec237d9c8a49828d6f735f3f676a126b64838be87c4f65bacd7c70db2d155",
+      "wording_template": "test"
+    },
+    "train": {
+      "binding_counts": {
+        "0": 66,
+        "1": 63,
+        "2": 63
+      },
+      "combination_counts": {
+        "B_C": 64,
+        "B_CR": 64,
+        "R_C": 64
+      },
+      "count": 192,
+      "depth_counts": {
+        "2": 192
+      },
+      "evaluation_target_counts": {
+        "fresh_instances_familiar_graphs": 192
+      },
+      "independent_context_groups": 64,
+      "private_tasks_sha256": "fa71d8e1482679bcb8133458933ea4269d2c54d088521c43fbc90df8a72872f2",
+      "public_sha256": "19d12f19fa25b2342766753b1bdebb4ebabea6c88bc53aa4d36c82f8e39beb29",
+      "wording_template": "train"
+    },
+    "validation": {
+      "binding_counts": {
+        "0": 24,
+        "1": 24,
+        "2": 24
+      },
+      "combination_counts": {
+        "B_C": 24,
+        "B_CR": 24,
+        "R_C": 24
+      },
+      "count": 72,
+      "depth_counts": {
+        "2": 72
+      },
+      "evaluation_target_counts": {
+        "fresh_instances_familiar_graphs": 72
+      },
+      "independent_context_groups": 24,
+      "private_tasks_sha256": "16f8050265ba62810c7d60d8d027423bf3eef1ee773eb84e7c217465775f5334",
+      "public_sha256": "235216cc72693a425e938a104e56dac5ef0a3e04e924805924eb40d337c3ff2e",
+      "wording_template": "validation"
+    }
+  },
+  "started_utc": "2026-09-06T15:53:12.036503+00:00",
+  "status": "PURE_CURRICULUM_ASSEMBLED",
+  "training": false
+}

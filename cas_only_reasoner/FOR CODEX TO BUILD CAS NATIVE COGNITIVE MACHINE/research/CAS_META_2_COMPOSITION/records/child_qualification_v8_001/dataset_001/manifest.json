@@ -1,0 +1,114 @@
+{
+  "all_depths": [
+    2
+  ],
+  "boundary": "Public-task-conditioned controlled procedure and source-provenance selection. No new numeric transformation semantics, repair claim, learned return choice, native task correctness, or training permission follows from this pure package.",
+  "calls_per_task": 1,
+  "contrast_variants_kept_in_group": true,
+  "cross_split_float32_observation_overlap": false,
+  "familiar_graph_overlap_intentional": true,
+  "graph_signatures": {
+    "B_C": "fa57940279b5f8673b5678b80bc2e8ea4383caa3d55d6433a56797941a192706",
+    "B_CR": "3fe8c937371a8a6e73e401d6853121bb7afcf3aa539ee130b83f6b18ab61d270",
+    "R_C": "144397f4acecde6209a5cc5cada377f2db8d2ca51f5f4392717385ee84aa1389",
+    "R_CR": "b507e6abb8d534a585d80842d98441a1b9c382bbc7fb7fb1ce57fd3550db0f07"
+  },
+  "held_out_combination": "R_CR",
+  "held_out_not_unseen_to": [
+    "builder",
+    "runtime_development_qualification"
+  ],
+  "held_out_unseen_to": [
+    "training",
+    "validation"
+  ],
+  "independent_observation_context_count": 112,
+  "learned_choices": [
+    "observation_binding",
+    "child_selection",
+    "child_input_source"
+  ],
+  "native_outcomes_checked": false,
+  "numeric_range": "each coordinate base/10 +/- 0.0004; native qualification is not implied for every new instance",
+  "parent_return": "fixed_child_call_output_not_a_varied_learning_target",
+  "qualification_payloads_excluded": true,
+  "schema": "cas-meta2-one-child-curriculum/8",
+  "seed": 2026090608,
+  "splits": {
+    "test": {
+      "binding_counts": {
+        "0": 16,
+        "1": 16,
+        "2": 16
+      },
+      "combination_counts": {
+        "B_C": 8,
+        "B_CR": 8,
+        "R_C": 8,
+        "R_CR": 24
+      },
+      "count": 48,
+      "depth_counts": {
+        "2": 48
+      },
+      "evaluation_target_counts": {
+        "fresh_instances_familiar_graphs": 24,
+        "unseen_composition": 24
+      },
+      "independent_context_groups": 24,
+      "private_tasks_sha256": "1694abcc2fadab8333018b2bc7a6a274124aa124d7033a8284cdcf58d194d0d9",
+      "public_sha256": "a0cec237d9c8a49828d6f735f3f676a126b64838be87c4f65bacd7c70db2d155",
+      "wording_template": "test"
+    },
+    "train": {
+      "binding_counts": {
+        "0": 66,
+        "1": 63,
+        "2": 63
+      },
+      "combination_counts": {
+        "B_C": 64,
+        "B_CR": 64,
+        "R_C": 64
+      },
+      "count": 192,
+      "depth_counts": {
+        "2": 192
+      },
+      "evaluation_target_counts": {
+        "fresh_instances_familiar_graphs": 192
+      },
+      "independent_context_groups": 64,
+      "private_tasks_sha256": "fa71d8e1482679bcb8133458933ea4269d2c54d088521c43fbc90df8a72872f2",
+      "public_sha256": "19d12f19fa25b2342766753b1bdebb4ebabea6c88bc53aa4d36c82f8e39beb29",
+      "wording_template": "train"
+    },
+    "validation": {
+      "binding_counts": {
+        "0": 24,
+        "1": 24,
+        "2": 24
+      },
+      "combination_counts": {
+        "B_C": 24,
+        "B_CR": 24,
+        "R_C": 24
+      },
+      "count": 72,
+      "depth_counts": {
+        "2": 72
+      },
+      "evaluation_target_counts": {
+        "fresh_instances_familiar_graphs": 72
+      },
+      "independent_context_groups": 24,
+      "private_tasks_sha256": "16f8050265ba62810c7d60d8d027423bf3eef1ee773eb84e7c217465775f5334",
+      "public_sha256": "235216cc72693a425e938a104e56dac5ef0a3e04e924805924eb40d337c3ff2e",
+      "wording_template": "validation"
+    }
+  },
+  "training_allowed_by_this_package": false,
+  "unique_float32_observation_payload_count": 336,
+  "validation_unseen_combinations": false,
+  "wording_templates_disjoint": true
+}

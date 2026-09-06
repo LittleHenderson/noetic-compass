@@ -1,0 +1,141 @@
+{
+  "after_check": {
+    "files_verified": 639,
+    "manifest_sha256": "a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d",
+    "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6"
+  },
+  "before_check": {
+    "files_verified": 639,
+    "manifest_sha256": "a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d",
+    "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6"
+  },
+  "boundary": "Pure tests from a fresh extracted archive only. No neural/native execution, SQLite connection, provider access, reservation, training or actual task qualification. Synthetic operations remain synthetic.",
+  "collected_test_files": [
+    "test_child_curriculum_v8.py",
+    "test_child_qualification_gpu_v8.py",
+    "test_child_qualification_package_v8.py",
+    "test_child_qualification_v8.py",
+    "test_child_scaffold_v8.py"
+  ],
+  "counts": {
+    "collected": 179,
+    "failed_reports": 0,
+    "failed_subtest_reports": 0,
+    "passed": 179,
+    "skipped_reports": 0,
+    "subtest_reports": 0
+  },
+  "imported_modules": {
+    "aws": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\aws\\__init__.py",
+      "sha256": "b1ead80f832488352f8fbf0fdaa6750c5f6bc15433001edeaf5935cc276fc221"
+    },
+    "aws.child_qualification_package_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\aws\\child_qualification_package_v8.py",
+      "sha256": "9925514d1d017cd6b247f3db634a276cc3b4b7ce69cfc858758b32e8e66d4bf7"
+    },
+    "cas_meta2": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\__init__.py",
+      "sha256": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da"
+    },
+    "cas_meta2.child_curriculum_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\child_curriculum_v8.py",
+      "sha256": "dc764d36754599b627c14a19876fdd57a30ca781e178f50e29e7ed232ba79c7d"
+    },
+    "cas_meta2.child_qualification_gpu_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\child_qualification_gpu_v8.py",
+      "sha256": "e6a27ffe5b3d38158be0564011f6e8197d68cf48e537138fb4277945b2af4175"
+    },
+    "cas_meta2.child_qualification_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\child_qualification_v8.py",
+      "sha256": "881ae6abcec8febf544e48c4745e86cb2c4954bac6668d4ca24be0e6dbe39123"
+    },
+    "cas_meta2.child_scaffold_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\child_scaffold_v8.py",
+      "sha256": "4ca4f80dc173d3567cd7cb32a146299c4fc9b5b8e2db797a0d6612ac5aa1570b"
+    },
+    "cas_meta2.codec": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\codec.py",
+      "sha256": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030"
+    },
+    "cas_meta2.curriculum": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\curriculum.py",
+      "sha256": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384"
+    },
+    "cas_meta2.diagnostic_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\diagnostic_v8\\__init__.py",
+      "sha256": "16aec4fde1e0ea60bc02211b82990a29b2af6913f73fb4343d4672a41884dbf8"
+    },
+    "cas_meta2.diagnostic_v8.gpu": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\diagnostic_v8\\gpu.py",
+      "sha256": "4d83203d143ecca241e6248449d2cd97541805ce71cfb3333bdcc45d2fd6cf4d"
+    },
+    "cas_meta2.executor": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\executor.py",
+      "sha256": "edeb83fd3468aaccacb871bc4561c97a78ae087bb47b9d8ad38f1a58fd7efb2a"
+    },
+    "cas_meta2.features_v2": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\features_v2.py",
+      "sha256": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc"
+    },
+    "cas_meta2.features_v3": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\features_v3.py",
+      "sha256": "713fef0b3b04742550cfe11937bb76fe06f1913f91de8c85a56b07bfa4df6dbd"
+    },
+    "cas_meta2.grammar_v3": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\grammar_v3.py",
+      "sha256": "92bb1e400053c83daf0700dd782b9b5014f0da1c36f7e602133f7341cf5a2e7b"
+    },
+    "cas_meta2.ir": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\ir.py",
+      "sha256": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+    },
+    "cas_meta2.native": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\native.py",
+      "sha256": "16131d98dcbd76d274a1c083e9bc5f100cadfbbba7dfcdb38282c23946c20512"
+    }
+  },
+  "package": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package",
+  "passed": true,
+  "postcheck_errors": {},
+  "pytest_argv": [
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\pytest_tmp",
+    "-c",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\pyproject.toml",
+    "--rootdir",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION",
+    "--confcutdir",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION",
+    "--override-ini",
+    "addopts=",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\tests\\test_child_curriculum_v8.py",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\tests\\test_child_qualification_v8.py",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\tests\\test_child_qualification_gpu_v8.py",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\tests\\test_child_qualification_package_v8.py",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\tests\\test_child_scaffold_v8.py"
+  ],
+  "pytest_exit_code": 0,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-child-qualification-clean-child/8",
+  "sys_path": [
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION\\tests",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_qualification_v8_001\\clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION",
+    "C:\\Python314\\python314.zip",
+    "C:\\Python314\\DLLs",
+    "C:\\Python314\\Lib",
+    "C:\\Python314",
+    "C:\\Python314\\Lib\\site-packages",
+    "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages"
+  ],
+  "tests": [
+    "test_child_curriculum_v8.py",
+    "test_child_qualification_v8.py",
+    "test_child_qualification_gpu_v8.py",
+    "test_child_qualification_package_v8.py",
+    "test_child_scaffold_v8.py"
+  ]
+}
