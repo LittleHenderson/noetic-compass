@@ -1,0 +1,20 @@
+{
+  "archive_sha256": "3230d805b665b91f1191d423342bb591cfb1fd69cd677fbe49206cf50b8729bd",
+  "auditor_sha256": "42844666a5fe43eb86af62360a1c1ba4c15131aad0d594f99fdc6f804b488c33",
+  "completed": true,
+  "learning_accepted": false,
+  "neural_execution_performed": false,
+  "provider_calls": 0,
+  "published_schema": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "git_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/schemas/neural_cjt_contracts.schema.json",
+    "jsonschema_version": "4.26.0",
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\cas_cjt\\schemas\\neural_cjt_contracts.schema.json",
+    "sha256": "35d304a3c51b0687a63c40c65c52a6cdf7eddcda8c2ee28e2234a0a4d1641969"
+  },
+  "schema": "cas-meta2-retrospective-replay-preflight/0.1",
+  "script_sha256": "ced07415d9a498bde00d75055f1d2751c64e0857ddea7be3e464cf2bcbdb90f9",
+  "source_files_checked": 495,
+  "source_sha": "9f562c761c7cb84c767673b2fab735cdd031b499",
+  "stored_outcome_audit_performed": false
+}
