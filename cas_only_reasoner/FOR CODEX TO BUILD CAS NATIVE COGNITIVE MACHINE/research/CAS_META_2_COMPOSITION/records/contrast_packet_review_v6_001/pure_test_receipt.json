@@ -1,0 +1,33 @@
+{
+  "boundary": "Synthetic checker tests and existing seed-926603 development fixture only; not a model or native runtime result.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\contrast_packet_review_v6_001\\run_tests.py"
+  ],
+  "completed": true,
+  "current_campaign_result_read": false,
+  "errors": 0,
+  "failures": 0,
+  "finished_utc": "2026-09-06T07:00:45.557591+00:00",
+  "neural_execution": false,
+  "provider_calls": false,
+  "raw_output_sha256": "1d8da2459cdd9f2a8b4851f27260da5fe54fc977dfb7722ce5eedac77b9f78e1",
+  "registered_seed_generated": false,
+  "schema": "cas-meta2-contrast-review-pure-tests/6",
+  "skips": 0,
+  "source_before_and_after": {
+    "files_verified": 538,
+    "protected_baseline_files": 316,
+    "source_archive_sha256": "3153318664641ea3affdbef306929c3113bb937cd04113bce41d02f736e0f1f1",
+    "source_sha": "acbb266fbcdb6efcd69808f6f0f9b7b1e36b7ed0"
+  },
+  "subtests": 48,
+  "test_methods": 10,
+  "test_sources_sha256": {
+    "review.py": "b9d803fd58cd6d06619221100019c6463267f88e47ee7231fde6430f41f85e3a",
+    "run_tests.py": "95c85c5aeccfeea537b6c88c916b788f7813f549d916a77466f28f658aa64ad3",
+    "test_review.py": "410a743216ed602ad66bdc3adbd4e2af0e282c0486d5958469368f093269bac4"
+  },
+  "wall_seconds": 7.9824658999996245
+}

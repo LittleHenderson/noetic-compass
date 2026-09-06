@@ -1,0 +1,27 @@
+test_added_file_is_rejected (__main__.AuditTests.test_added_file_is_rejected) ... ok
+test_aggregate_changes_refused (__main__.AuditTests.test_aggregate_changes_refused) ... ok
+test_bad_inventory_rows_refused (__main__.AuditTests.test_bad_inventory_rows_refused) ... ok
+test_baseline_private_hash_required (__main__.AuditTests.test_baseline_private_hash_required) ... ok
+test_changed_saved_verdict_rejected (__main__.AuditTests.test_changed_saved_verdict_rejected) ... ok
+test_changed_source_rejected_before_engine_load (__main__.AuditTests.test_changed_source_rejected_before_engine_load) ... ok
+test_current_top_level_group_key_required (__main__.AuditTests.test_current_top_level_group_key_required) ... ok
+test_duplicate_and_nonfinite_json_refused (__main__.AuditTests.test_duplicate_and_nonfinite_json_refused) ... ok
+test_every_trace_export_is_checked_against_database (__main__.AuditTests.test_every_trace_export_is_checked_against_database) ... ok
+test_external_source_identity_required_before_file_access (__main__.AuditTests.test_external_source_identity_required_before_file_access) ... ok
+test_file_change_is_detected_on_read (__main__.AuditTests.test_file_change_is_detected_on_read) ... ok
+test_forbidden_import_guard (__main__.AuditTests.test_forbidden_import_guard) ... ok
+test_group_coverage_refused (__main__.AuditTests.test_group_coverage_refused) ... ok
+test_native_seal_schema_required (__main__.AuditTests.test_native_seal_schema_required) ... ok
+test_neural_action_cannot_be_changed_after_seal (__main__.AuditTests.test_neural_action_cannot_be_changed_after_seal) ... ok
+test_old_evaluation_group_refused (__main__.AuditTests.test_old_evaluation_group_refused) ... ok
+test_reference_identity_mismatch_refused (__main__.AuditTests.test_reference_identity_mismatch_refused) ... ok
+test_rejected_native_writes_refused (__main__.AuditTests.test_rejected_native_writes_refused) ... ok
+test_removed_file_is_rejected (__main__.AuditTests.test_removed_file_is_rejected) ... ok
+test_rule_uses_only_frozen_public_parser (__main__.AuditTests.test_rule_uses_only_frozen_public_parser) ... ok
+test_valid_trace_is_not_correct_answer (__main__.AuditTests.test_valid_trace_is_not_correct_answer) ... ok
+test_wrong_depth_refused (__main__.AuditTests.test_wrong_depth_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.176s
+
+OK

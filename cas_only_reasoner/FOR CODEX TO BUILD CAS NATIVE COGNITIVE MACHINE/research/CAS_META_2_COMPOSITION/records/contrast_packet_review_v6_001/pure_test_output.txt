@@ -1,0 +1,15 @@
+test_changed_dataset_bytes_rejected (synthetic_review_tests.ReviewTests.test_changed_dataset_bytes_rejected) ... ok
+test_cold_dataset_report_must_match_saved_construction (synthetic_review_tests.ReviewTests.test_cold_dataset_report_must_match_saved_construction) ... ok
+test_failed_native_process_and_wrong_command_rejected (synthetic_review_tests.ReviewTests.test_failed_native_process_and_wrong_command_rejected) ... ok
+test_gpu_exact_identities_and_commands (synthetic_review_tests.ReviewTests.test_gpu_exact_identities_and_commands) ... ok
+test_gpu_wrong_commands_and_receipts_rejected (synthetic_review_tests.ReviewTests.test_gpu_wrong_commands_and_receipts_rejected) ... ok
+test_gpu_wrong_xml_identity_count_and_status_rejected (synthetic_review_tests.ReviewTests.test_gpu_wrong_xml_identity_count_and_status_rejected) ... ok
+test_import_guard_and_no_current_result_read (synthetic_review_tests.ReviewTests.test_import_guard_and_no_current_result_read) ... ok
+test_native_binding_mutations_rejected (synthetic_review_tests.ReviewTests.test_native_binding_mutations_rejected) ... ok
+test_native_neural_choices_preserved_even_if_native_seal_is_consistent (synthetic_review_tests.ReviewTests.test_native_neural_choices_preserved_even_if_native_seal_is_consistent) ... ok
+test_saved_dataset_and_native_attribution_pass (synthetic_review_tests.ReviewTests.test_saved_dataset_and_native_attribution_pass) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 7.671s
+
+OK

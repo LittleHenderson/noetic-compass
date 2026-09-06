@@ -1,0 +1,14 @@
+test_bool_is_not_an_observation_binding (__main__.DiagnosticTests.test_bool_is_not_an_observation_binding) ... ok
+test_duplicate_fields_and_nonfinite_numbers_rejected (__main__.DiagnosticTests.test_duplicate_fields_and_nonfinite_numbers_rejected) ... ok
+test_frozen_trajectory_helper_is_source_bound (__main__.DiagnosticTests.test_frozen_trajectory_helper_is_source_bound) ... ok
+test_malformed_candidate_has_no_input_credit (__main__.DiagnosticTests.test_malformed_candidate_has_no_input_credit) ... ok
+test_matching_named_sites (__main__.DiagnosticTests.test_matching_named_sites) ... ok
+test_rejection_keeps_all_expected_denominators (__main__.DiagnosticTests.test_rejection_keeps_all_expected_denominators) ... ok
+test_wrong_child_does_not_hide_input_match (__main__.DiagnosticTests.test_wrong_child_does_not_hide_input_match) ... ok
+test_wrong_input_does_not_hide_child_match (__main__.DiagnosticTests.test_wrong_input_does_not_hide_child_match) ... ok
+test_wrong_kind_counts_both_sites_wrong (__main__.DiagnosticTests.test_wrong_kind_counts_both_sites_wrong) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.115s
+
+OK

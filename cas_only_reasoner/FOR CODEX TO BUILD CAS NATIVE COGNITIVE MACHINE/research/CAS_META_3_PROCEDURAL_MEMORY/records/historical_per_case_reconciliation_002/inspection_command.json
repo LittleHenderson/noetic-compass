@@ -1,0 +1,358 @@
+{
+  "archive_safety_and_all_included_bytes_checked": true,
+  "audit_code_sha256": {
+    "mock_test_source_gate": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "boundary": "Exact archive/source/recorded GPU and native-byte evidence only. Fresh reader is not suspended-call restart; no skill qualification, learned acquisition or provider attestation.",
+  "checkpoint_loading_performed": false,
+  "checks": {
+    "environment": {
+      "boundary": "Recorded CUDA evidence; this is not an independent live AWS query.",
+      "cuda": "12.8",
+      "gpu": "NVIDIA RTX PRO 4500",
+      "torch": "2.11.0+cu128"
+    },
+    "gpu_contract": {
+      "passed": 4,
+      "tests": [
+        "test_gpu_authored_execution_matches_independent_reference[0]",
+        "test_gpu_authored_execution_matches_independent_reference[1]",
+        "test_gpu_authored_execution_matches_independent_reference[2]",
+        "test_gpu_wrong_binding_and_wrong_procedure_are_wrong_despite_valid_traces"
+      ]
+    },
+    "gpu_policy": {
+      "passed": 4,
+      "tests": [
+        "test_both_generators_have_gradients_and_matched_active_parameters",
+        "test_cuda_guard_precedes_model_construction",
+        "test_decoder_cannot_see_future_target_tokens",
+        "test_incomplete_generation_is_rejected_without_gold_repair"
+      ]
+    },
+    "root_inventory_and_native_bytes": {
+      "boundary": "Recorded fresh reader and native reuse only; no suspended-call restart or skill qualification.",
+      "demo_prefix": "cloud_job/demo/",
+      "file_index_sha256": "d99b775134242679c6ef2f4edc890ce11c66ce5aebec6b3d53a5531adcc9ef85",
+      "indexed_files": 30,
+      "job": "cas-meta3-fixture-only",
+      "learning_performed": false,
+      "memory_demo_receipt_sha256": "3f870e2772beffddc7dbf0e2c01698bb6a2d452de59bef5e68464c95ca891a82",
+      "native_prefix": "meta2_native/meta3_cas-meta3-fixture-only/",
+      "qualification_status": "UNQUALIFIED",
+      "source_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "status": "META3_COMPLETE_BYTE_INVENTORY_VERIFIED"
+    },
+    "source_binding": {
+      "meta3_demo_source_files": 4,
+      "native_source_files": 7,
+      "protected_files": 316,
+      "source_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  },
+  "collection": {
+    "archive_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "artifact_bytes_max": 8388608,
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "entrypoint": "cas_meta3.native_demo",
+    "evidence_expanded_bytes_max": 8388608,
+    "included_full_file_count": 48,
+    "index_entries": [
+      {
+        "bytes": 8640,
+        "path": "artifact_roots_index.json",
+        "sha256": "b6e2580218a4ce71712e19fd317ffaa3227534e684bff4ca9dd6ccd5f6b72f03"
+      },
+      {
+        "bytes": 37,
+        "path": "cloud_job/command.json",
+        "sha256": "8f4267d7d39414fb0b13693623f2b0752627be09581a9a9229bce4564f162cc2"
+      },
+      {
+        "bytes": 9,
+        "path": "cloud_job/demo/call_mapping_receipt.json",
+        "sha256": "00893390f88ff5f5df9489f91e9c6850a67566ed79400d9de40b46c9b812162f"
+      },
+      {
+        "bytes": 1343,
+        "path": "cloud_job/demo/candidate_result.json",
+        "sha256": "d7909a53827383d544af6334cba08a0a0385a89bf14ce57a098f4003964deda9"
+      },
+      {
+        "bytes": 144,
+        "path": "cloud_job/demo/candidate_verdict.json",
+        "sha256": "ab7008837646bbd03fb0ebf2c676fdbbce1177323698ec0b8d452b467bd07bac"
+      },
+      {
+        "bytes": 4424,
+        "path": "cloud_job/demo/file_index.json",
+        "sha256": "d99b775134242679c6ef2f4edc890ce11c66ce5aebec6b3d53a5531adcc9ef85"
+      },
+      {
+        "bytes": 9,
+        "path": "cloud_job/demo/identity_probe_receipt.json",
+        "sha256": "00893390f88ff5f5df9489f91e9c6850a67566ed79400d9de40b46c9b812162f"
+      },
+      {
+        "bytes": 9,
+        "path": "cloud_job/demo/link_receipt.json",
+        "sha256": "00893390f88ff5f5df9489f91e9c6850a67566ed79400d9de40b46c9b812162f"
+      },
+      {
+        "bytes": 2768,
+        "path": "cloud_job/demo/memory_demo_receipt.json",
+        "sha256": "3f870e2772beffddc7dbf0e2c01698bb6a2d452de59bef5e68464c95ca891a82"
+      },
+      {
+        "bytes": 9,
+        "path": "cloud_job/demo/package.json",
+        "sha256": "00893390f88ff5f5df9489f91e9c6850a67566ed79400d9de40b46c9b812162f"
+      },
+      {
+        "bytes": 9,
+        "path": "cloud_job/demo/reader.stderr.log",
+        "sha256": "00893390f88ff5f5df9489f91e9c6850a67566ed79400d9de40b46c9b812162f"
+      },
+      {
+        "bytes": 9,
+        "path": "cloud_job/demo/reader.stdout.log",
+        "sha256": "00893390f88ff5f5df9489f91e9c6850a67566ed79400d9de40b46c9b812162f"
+      },
+      {
+        "bytes": 44,
+        "path": "cloud_job/demo/reader_process.json",
+        "sha256": "9ba891022149f65037463be2826f73799d0fd807d01897834031bbe59b8d2955"
+      },
+      {
+        "bytes": 2304,
+        "path": "cloud_job/demo/reader_receipt.json",
+        "sha256": "03acec3ef34673079b08c9a612a1172813862a3b96e795a70693dca52f27567f"
+      },
+      {
+        "bytes": 1342,
+        "path": "cloud_job/demo/reference_result.json",
+        "sha256": "f95c6b85a8602d6e8d20c112f8c876f33623fb8e1144772653a4b3e502270deb"
+      },
+      {
+        "bytes": 144,
+        "path": "cloud_job/demo/reference_verdict.json",
+        "sha256": "ab7008837646bbd03fb0ebf2c676fdbbce1177323698ec0b8d452b467bd07bac"
+      },
+      {
+        "bytes": 9,
+        "path": "cloud_job/demo/registry.db",
+        "sha256": "00893390f88ff5f5df9489f91e9c6850a67566ed79400d9de40b46c9b812162f"
+      },
+      {
+        "bytes": 9,
+        "path": "cloud_job/demo/rejection_receipt.json",
+        "sha256": "00893390f88ff5f5df9489f91e9c6850a67566ed79400d9de40b46c9b812162f"
+      },
+      {
+        "bytes": 1958,
+        "path": "cloud_job/demo/trusted_compatibility.json",
+        "sha256": "b8fa1828af19998a4b202d1870a4bfc2f978fc5c75fbd94c6fcb548de45b9446"
+      },
+      {
+        "bytes": 9,
+        "path": "cloud_job/demo/writer.stderr.log",
+        "sha256": "00893390f88ff5f5df9489f91e9c6850a67566ed79400d9de40b46c9b812162f"
+      },
+      {
+        "bytes": 9,
+        "path": "cloud_job/demo/writer.stdout.log",
+        "sha256": "00893390f88ff5f5df9489f91e9c6850a67566ed79400d9de40b46c9b812162f"
+      },
+      {
+        "bytes": 44,
+        "path": "cloud_job/demo/writer_process.json",
+        "sha256": "6e1bf87f41bd8204171540496cf2f55ea23f6d05a299edf2554d3f4f9a2868af"
+      },
+      {
+        "bytes": 2304,
+        "path": "cloud_job/demo/writer_receipt.json",
+        "sha256": "0d8a6d2dc97dc358e08231308156e41b92e7f2988479edcf756abbae869b5c7f"
+      },
+      {
+        "bytes": 17,
+        "path": "cloud_job/dependency_install.json",
+        "sha256": "218589323cbe80b7ed077e3ee36f1663e7cb5f8f4e4ad02c938ad8a5c2c5a6b9"
+      },
+      {
+        "bytes": 262,
+        "path": "cloud_job/frozen_wheel_install.json",
+        "sha256": "9bc152d205652114722275b9c141e14ca470d32e86c3a9a7712621be9b873674"
+      },
+      {
+        "bytes": 71,
+        "path": "cloud_job/gpu_contract_command.json",
+        "sha256": "80549a757c8a584d221f30baa4582cf57b49ee08dee2c308c22738095b2ef886"
+      },
+      {
+        "bytes": 59,
+        "path": "cloud_job/gpu_contract_receipt.json",
+        "sha256": "f70e80040404f9e30264182d521f45afe8299703fd2c04b1b0644991cba3122a"
+      },
+      {
+        "bytes": 32,
+        "path": "cloud_job/gpu_contract_tests.log",
+        "sha256": "9f0075b70a63240bc4101933b65c609799d3bf00b1344574cb1cd0bc15e56001"
+      },
+      {
+        "bytes": 423,
+        "path": "cloud_job/gpu_contract_tests.xml",
+        "sha256": "d57df265e34e31c142e03e79c4b641206be9f60fe5537ed20a85ef45f334d4c9"
+      },
+      {
+        "bytes": 63,
+        "path": "cloud_job/gpu_policy_command.json",
+        "sha256": "d76256c35b2b645cedc6f8f12780f90a6b2bc456900f1112e43defbddf7905cf"
+      },
+      {
+        "bytes": 59,
+        "path": "cloud_job/gpu_policy_receipt.json",
+        "sha256": "f70e80040404f9e30264182d521f45afe8299703fd2c04b1b0644991cba3122a"
+      },
+      {
+        "bytes": 32,
+        "path": "cloud_job/gpu_policy_tests.log",
+        "sha256": "9f0075b70a63240bc4101933b65c609799d3bf00b1344574cb1cd0bc15e56001"
+      },
+      {
+        "bytes": 380,
+        "path": "cloud_job/gpu_policy_tests.xml",
+        "sha256": "4d150365869ae48ce64cd450e95ea6fd51ed4ff6b3df7eed120e87a880121230"
+      },
+      {
+        "bytes": 347,
+        "path": "cloud_job/job.json",
+        "sha256": "cf9cb2ecf65af6164151fccb6539b416f2eb44f8b12a2a831c57f915c50290a9"
+      },
+      {
+        "bytes": 21,
+        "path": "cloud_job/pip_freeze.txt",
+        "sha256": "16de05cb353c6cc5ad15f92007337ba24dee2ad293f60334b5636b4ba1a7eee7"
+      },
+      {
+        "bytes": 93,
+        "path": "cloud_job/runtime.json",
+        "sha256": "d329d9e32d399dda1048ff873c03da8d91ee7ab5810079942fc59e038650df03"
+      },
+      {
+        "bytes": 17,
+        "path": "cloud_job/torch_install.json",
+        "sha256": "218589323cbe80b7ed077e3ee36f1663e7cb5f8f4e4ad02c938ad8a5c2c5a6b9"
+      },
+      {
+        "bytes": 3,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/candidate/composition_events.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "bytes": 23,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/candidate/native.db",
+        "sha256": "4d25d553066309265b98832e00461c4fba6591e27bd1370bf33c5faa31959c47"
+      },
+      {
+        "bytes": 3,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/candidate/native_kernel_events.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "bytes": 11,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/candidate/native_traces.json",
+        "sha256": "709428953a07e58a83e83b0610633d595964bd27a9f967e41aa28e4b9bbca3d5"
+      },
+      {
+        "bytes": 1343,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/candidate/result.json",
+        "sha256": "d7909a53827383d544af6334cba08a0a0385a89bf14ce57a098f4003964deda9"
+      },
+      {
+        "bytes": 26,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/fresh_reader_identity/native.db",
+        "sha256": "6cb7d71eaff89ae8f3018bc23ce25c6b2379ab2402c229a73a60e175b5a05580"
+      },
+      {
+        "bytes": 3,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/reference/composition_events.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "bytes": 23,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/reference/native.db",
+        "sha256": "4d25d553066309265b98832e00461c4fba6591e27bd1370bf33c5faa31959c47"
+      },
+      {
+        "bytes": 3,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/reference/native_kernel_events.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "bytes": 11,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/reference/native_traces.json",
+        "sha256": "709428953a07e58a83e83b0610633d595964bd27a9f967e41aa28e4b9bbca3d5"
+      },
+      {
+        "bytes": 1342,
+        "path": "meta2_native/meta3_cas-meta3-fixture-only/reference/result.json",
+        "sha256": "f95c6b85a8602d6e8d20c112f8c876f33623fb8e1144772653a4b3e502270deb"
+      }
+    ],
+    "index_entries_omitted": 0,
+    "index_hash_format": "SHA256 of canonical JSON entry plus LF for every sorted original path",
+    "job": "cas-meta3-fixture-only",
+    "learning_performed": false,
+    "native_demo_binding": {
+      "boundary": "Recorded fresh reader and native reuse only; no suspended-call restart or skill qualification.",
+      "demo_prefix": "cloud_job/demo/",
+      "file_index_sha256": "d99b775134242679c6ef2f4edc890ce11c66ce5aebec6b3d53a5531adcc9ef85",
+      "indexed_files": 30,
+      "job": "cas-meta3-fixture-only",
+      "learning_performed": false,
+      "memory_demo_receipt_sha256": "3f870e2772beffddc7dbf0e2c01698bb6a2d452de59bef5e68464c95ca891a82",
+      "native_prefix": "meta2_native/meta3_cas-meta3-fixture-only/",
+      "qualification_status": "UNQUALIFIED",
+      "source_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "status": "META3_COMPLETE_BYTE_INVENTORY_VERIFIED"
+    },
+    "omitted_full_file_count": 0,
+    "original_bytes": 30253,
+    "original_file_count": 48,
+    "original_file_index_sha256": "08d95d8a4c5336580790dcb8a3edb831a73ef0a1d652d91ddced249ac3583a45",
+    "partial_evidence": false,
+    "qualification_status": "UNQUALIFIED",
+    "returncode": 0,
+    "source_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "completed_run_evidence_verified": false,
+  "compressed_bytes": 22123,
+  "expanded_bytes": 40162,
+  "extraction": {
+    "all_member_bytes_verified_after_write": true,
+    "files_verified": 49,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-58139d3cabd9\\pytest\\test_resealed_malformed_record2\\pilot\\records\\full_extracted"
+  },
+  "full_member_index": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-58139d3cabd9\\pytest\\test_resealed_malformed_record2\\pilot\\records\\inspection\\full_member_index.json",
+  "full_member_index_sha256": "f34d6674805fc59ec517a32f6522b58077ae57ce16589975cbc60e9f88930a92",
+  "issues": [
+    "command:FIXED_DEMO_COMMAND_REQUIRED"
+  ],
+  "job": "cas-meta3-fixture-only",
+  "learning_performed": false,
+  "member_files": 49,
+  "neural_execution_performed": false,
+  "original_full_index_verified": true,
+  "packet": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-58139d3cabd9\\pytest\\test_resealed_malformed_record2\\packet.zip",
+  "packet_sha256": "0a99a127a90fec7196afe3c42b443e99cb378666665a190fccb3c2498acb6ff8",
+  "provider_query_performed": false,
+  "qualification_status": "UNQUALIFIED",
+  "schema": "cas-meta3-packet-inspection/1",
+  "semantic_audit_inputs": null,
+  "source_archive_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "source_manifest_sha256": "7d9b3f9fc60c826b4dbbf0a5eb87a8691fe3681af5422fe223d4878eef00ea97",
+  "source_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "status": "CAS_META_3_PACKET_EVIDENCE_REJECTED",
+  "stored_semantic_reverification_performed": false,
+  "utc": "2026-09-06T06:58:36.714932+00:00"
+}

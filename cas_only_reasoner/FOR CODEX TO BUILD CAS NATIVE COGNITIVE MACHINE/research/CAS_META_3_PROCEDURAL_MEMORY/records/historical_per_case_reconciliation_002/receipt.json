@@ -1,0 +1,226 @@
+{
+  "artifact_sha256": {
+    "baseline_after.json": "3134149fa0e332ecde8fa3830abfd045e258906ed8e51fc852a64ba8ebba208d",
+    "baseline_before.json": "3134149fa0e332ecde8fa3830abfd045e258906ed8e51fc852a64ba8ebba208d",
+    "inspection_command.json": "fa96eace86363091f0bfec11b12f369399f58fac4fe1dc7c6da18a065ddb855d",
+    "inspection_gpu.json": "f22771aa82dbafa215fedb2d99049ed97082da259e4122b59eb93ab7bbf229b5",
+    "inspection_learning.json": "b4da0fd3c50e6c1b6ec73f0ab0dab03bed73e2e6a38d54485e781314ed8ebf3e",
+    "inspection_native.json": "023b62d380dc27076c22d873683e88c2047af786b0fab99cb5aa30825b5e6a8e",
+    "inspection_runtime.json": "d71e7a31f5463879be53e3f2a123ce4635529fc9d897369626eab201fb2439e6",
+    "inspection_sidecar.json": "481da276225622c5be1bbd8abb548d57e2f34f777a801315f102f74abc274f99",
+    "inspection_source.json": "42f7ffa4f3a3914fdcd93c8e776bf1c501e39961abe2aaec2bc1979df5b8cb59",
+    "run.py": "5c22b186afff885dc98346a81117abf0ca8bbd23a2a1860154b5350e7b75c24f",
+    "test_stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test_stdout.txt": "ee5b3395c33cf291a8b0932e813c29f88856c3ea396c28c1fc0ca6ed121cbdd1",
+    "tests.xml": "fad4258290979b5c2c229aca5f9a84961a55fca292bfbbade5b2891811ef7fd9",
+    "validation_receipt.json": "3a106d385d333c0dfd9393c43186789956bc7997386cb330c53a5d70ff79a6a3",
+    "validator_stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "validator_stdout.txt": "1a492c25b5d5f8265f608f6466ff7b74201e6e2b9d64111c03ba70e020ded715"
+  },
+  "baseline_files": 316,
+  "baseline_unchanged": true,
+  "checkout_mismatches": [],
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta3-audit-63f5b421\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_3_PROCEDURAL_MEMORY\\tools\\validate_local.py",
+    "--output",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta3-audit-63f5b421\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_3_PROCEDURAL_MEMORY\\records\\historical_per_case_reconciliation_002"
+  ],
+  "environment": {
+    "executable": "C:\\Python314\\python.exe",
+    "installed_distribution_metadata_only": {
+      "jsonschema": "4.26.0",
+      "pytest": "9.0.2",
+      "pytest-subtests": null,
+      "torch": "2.11.0"
+    },
+    "platform": "win32",
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "finding": "No absent or mismatched protected bytes found in the exact Git commit or this checkout.",
+  "full_suite_counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 531
+  },
+  "git_blob_mismatches": [],
+  "local_model_or_tensor_work": false,
+  "native_execution": false,
+  "provider_calls": false,
+  "returncode": 0,
+  "schema": "cas-meta3-historical-per-case-reconciliation/2",
+  "scope": "Unchanged historical pure validator; synthetic packet receipts only, not neural or live provider evidence.",
+  "selected_cases": [
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "node_id": "tests/test_native_demo.py::test_import_is_pure_and_native_sources_are_literal_pinned",
+      "result": "passed",
+      "seconds": 0.463
+    },
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "node_id": "tests/test_native_demo.py::test_fixed_expectation_is_independent_and_passes_unchanged_pure_native_admission",
+      "result": "passed",
+      "seconds": 0.312
+    },
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "node_id": "tests/test_native_demo.py::test_stage_parent_receipts_record_exit_before_a_reader_can_be_requested",
+      "result": "passed",
+      "seconds": 0.97
+    },
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "node_id": "tests/test_native_demo.py::test_fresh_child_discovers_all_pinned_runtime_sources_without_neural_import",
+      "result": "passed",
+      "seconds": 0.813
+    },
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "node_id": "tests/test_packet_inspection.py::test_full_synthetic_byte_packet_preserves_all_bytes_and_sidecars",
+      "result": "passed",
+      "seconds": 1.062
+    },
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "node_id": "tests/test_packet_inspection.py::test_partial_packet_never_supplies_completed_semantic_audit_inputs",
+      "result": "passed",
+      "seconds": 0.829
+    },
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "historical_scratch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-58139d3cabd9\\pytest\\test_resealed_malformed_record0\\pilot\\records\\inspection\\inspection_receipt.json",
+      "node_id": "tests/test_packet_inspection.py::test_resealed_malformed_records_do_not_pass[gpu]",
+      "observed_issues": [
+        "gpu_policy:GPU_GATE_RECEIPT_NOT_FOUR_PASSED:policy"
+      ],
+      "rejection_guard_reached": true,
+      "result": "passed",
+      "saved_inspection_receipt": "inspection_gpu.json",
+      "saved_inspection_sha256": "f22771aa82dbafa215fedb2d99049ed97082da259e4122b59eb93ab7bbf229b5",
+      "seconds": 0.982,
+      "source_assertion_lines": [
+        181,
+        182
+      ]
+    },
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "historical_scratch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-58139d3cabd9\\pytest\\test_resealed_malformed_record1\\pilot\\records\\inspection\\inspection_receipt.json",
+      "node_id": "tests/test_packet_inspection.py::test_resealed_malformed_records_do_not_pass[runtime]",
+      "observed_issues": [
+        "environment:FIXED_GPU_IDENTITY_REQUIRED"
+      ],
+      "rejection_guard_reached": true,
+      "result": "passed",
+      "saved_inspection_receipt": "inspection_runtime.json",
+      "saved_inspection_sha256": "d71e7a31f5463879be53e3f2a123ce4635529fc9d897369626eab201fb2439e6",
+      "seconds": 0.874,
+      "source_assertion_lines": [
+        181,
+        182
+      ]
+    },
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "historical_scratch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-58139d3cabd9\\pytest\\test_resealed_malformed_record2\\pilot\\records\\inspection\\inspection_receipt.json",
+      "node_id": "tests/test_packet_inspection.py::test_resealed_malformed_records_do_not_pass[command]",
+      "observed_issues": [
+        "command:FIXED_DEMO_COMMAND_REQUIRED"
+      ],
+      "rejection_guard_reached": true,
+      "result": "passed",
+      "saved_inspection_receipt": "inspection_command.json",
+      "saved_inspection_sha256": "fa96eace86363091f0bfec11b12f369399f58fac4fe1dc7c6da18a065ddb855d",
+      "seconds": 0.859,
+      "source_assertion_lines": [
+        181,
+        182
+      ]
+    },
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "historical_scratch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-58139d3cabd9\\pytest\\test_resealed_malformed_record3\\pilot\\records\\inspection\\inspection_receipt.json",
+      "node_id": "tests/test_packet_inspection.py::test_resealed_malformed_records_do_not_pass[source]",
+      "observed_issues": [
+        "source_binding:DEMO_SOURCE_BYTES_MISMATCH"
+      ],
+      "rejection_guard_reached": true,
+      "result": "passed",
+      "saved_inspection_receipt": "inspection_source.json",
+      "saved_inspection_sha256": "42f7ffa4f3a3914fdcd93c8e776bf1c501e39961abe2aaec2bc1979df5b8cb59",
+      "seconds": 0.87,
+      "source_assertion_lines": [
+        181,
+        182
+      ]
+    },
+    {
+      "historical_original_failure_root_cause": "not individually available",
+      "historical_scratch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-58139d3cabd9\\pytest\\test_resealed_malformed_record4\\pilot\\records\\inspection\\inspection_receipt.json",
+      "node_id": "tests/test_packet_inspection.py::test_resealed_malformed_records_do_not_pass[native]",
+      "observed_issues": [
+        "root_inventory_and_native_bytes:MEMBER_DIGEST_BINDING_MISMATCH:meta2_native/meta3_cas-meta3-fixture-only/candidate/native.db"
+      ],
+      "rejection_guard_reached": true,
+      "result": "passed",
+      "saved_inspection_receipt": "inspection_native.json",
+      "saved_inspection_sha256": "023b62d380dc27076c22d873683e88c2047af786b0fab99cb5aa30825b5e6a8e",
+      "seconds": 0.911,
+      "source_assertion_lines": [
+        181,
+        182
+      ]
+    },
+    {
+      "historical_original_failure_root_cause": "User supplied traceback: source_identity baseline-byte guard during full_fixture, before rejection assertion",
+      "historical_scratch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-58139d3cabd9\\pytest\\test_resealed_malformed_record5\\pilot\\records\\inspection\\inspection_receipt.json",
+      "node_id": "tests/test_packet_inspection.py::test_resealed_malformed_records_do_not_pass[learning]",
+      "observed_issues": [
+        "root_inventory_and_native_bytes:META3_DEMO_SCOPE_OR_COUNTS_MISMATCH"
+      ],
+      "rejection_guard_reached": true,
+      "result": "passed",
+      "saved_inspection_receipt": "inspection_learning.json",
+      "saved_inspection_sha256": "b4da0fd3c50e6c1b6ec73f0ab0dab03bed73e2e6a38d54485e781314ed8ebf3e",
+      "seconds": 0.913,
+      "source_assertion_lines": [
+        181,
+        182
+      ]
+    },
+    {
+      "historical_original_failure_root_cause": "User supplied traceback: source_identity baseline-byte guard during full_fixture, before rejection assertion",
+      "historical_scratch_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-58139d3cabd9\\pytest\\test_wrong_sidecar_hash_cannot0\\pilot\\records\\inspection\\inspection_receipt.json",
+      "node_id": "tests/test_packet_inspection.py::test_wrong_sidecar_hash_cannot_reach_semantic_audit",
+      "observed_issues": [
+        "root_inventory_and_native_bytes:TRUSTED_DEMO_SIDECAR_BINDING_MISMATCH"
+      ],
+      "rejection_guard_reached": true,
+      "result": "passed",
+      "saved_inspection_receipt": "inspection_sidecar.json",
+      "saved_inspection_sha256": "481da276225622c5be1bbd8abb548d57e2f34f777a801315f102f74abc274f99",
+      "seconds": 1.024,
+      "source_assertion_lines": [
+        257,
+        258,
+        259
+      ]
+    }
+  ],
+  "selected_count": 13,
+  "source_sha": "63f5b4210cc4df179193a5b5e3489ff48d79b3dd",
+  "sources_unchanged": true,
+  "status": "HISTORICAL_13_ASSERTIONS_REPRODUCED",
+  "unknowns": [
+    "Auditor's first actual mismatching path and expected/actual byte hashes are unavailable.",
+    "The original eleven failures without full tracebacks cannot be individually assigned a root cause.",
+    "Line-ending conversion is a possible checkout difference, not established as the auditor's cause.",
+    "A local pure-suite pass establishes only these covered assertions, not model capability or production readiness."
+  ],
+  "utc": "2026-09-06T06:58:44.525063+00:00",
+  "validation_neural_imports_blocked": true,
+  "wall_seconds": 35.45047020000038
+}

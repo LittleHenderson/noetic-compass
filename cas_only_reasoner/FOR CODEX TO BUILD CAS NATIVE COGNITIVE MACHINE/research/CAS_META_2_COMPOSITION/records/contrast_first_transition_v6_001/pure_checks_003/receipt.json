@@ -1,0 +1,21 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\contrast_first_transition_v6_001\\test_report.py"
+  ],
+  "started_utc": "2026-09-06T07:03:23.249482+00:00",
+  "finished_utc": "2026-09-06T07:03:23.555636+00:00",
+  "returncode": 0,
+  "source_sha256": {
+    "report.py": "5dadbccdcfbe73ef16ac3b62299ef3e4ad1208eb08f2aaee5735d674a85b2573",
+    "test_report.py": "bf23e59bbb40c6d1646a34fa69bf4cd4cd9da8d3026777359a5d31df0e3ad92c",
+    "run_checks.py": "371edeb75f9bfbda3467cd462bbf1fb8add3015426c26d39afa4480d5220403a"
+  },
+  "sources_unchanged": true,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "85c93e5934d94d9f18d1034d8e0d2bf7af5c90aebfb86c892d99a83954f08835",
+  "neural_execution": false,
+  "provider_calls": false,
+  "actual_packet_test": false
+}
