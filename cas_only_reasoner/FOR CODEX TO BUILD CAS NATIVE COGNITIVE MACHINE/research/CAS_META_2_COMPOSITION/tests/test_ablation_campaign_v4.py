@@ -113,6 +113,12 @@ def test_simulated_parent_order_and_failures(tmp_path, monkeypatch, fail_predict
     def process(command, directory, deadline, environment=None):
         name = directory.name
         calls.append(name)
+        if name == 'gpu_contracts':
+            # Override pyproject's local-only default: addopts = "-m 'not gpu'".
+            pytest_args = command[command.index('pytest') + 1:]
+            assert pytest_args[pytest_args.index('-m') + 1] == 'gpu'
+            assert 'tests/test_predict_viability_v4_gpu.py' in pytest_args
+            assert 'cas_meta2.pytest_no_aliases_v4' in pytest_args
         if name == 'prediction':
             saved_prediction(output)
             if fail_prediction:

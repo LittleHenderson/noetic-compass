@@ -4,7 +4,12 @@ The new files are `aws/launch_ablation_v4.py`,
 `tools/build_launch_bundle_ablation_v4.py`,
 `tools/experiment_profiles_ablation_v4.py`, and `EXPERIMENT_ABLATION_V4.json`.
 The old training launcher, builder, experiment profile and specification are
-unchanged. This launch path has not been cloud-executed.
+unchanged. The first cloud attempt stopped before prediction because its
+decoder-test command inherited the local "not gpu" marker. The corrected
+candidate explicitly selects the GPU tests; the required two-test gate remains.
+The failed source and packet are preserved under
+`records/aws_ablation_v4_source_001` and `records/aws_ablation_v4_001`.
+No successful decoder comparison has yet been demonstrated.
 
 ## What stays fixed
 

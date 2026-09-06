@@ -151,7 +151,7 @@ def run(archive, output, *, job, max_seconds=6600):
         data = _construct_data(output, 20260919, min(deadline, time.monotonic() + 120))
         record['dataset_sha256'] = check_dataset(data)
         phase('runtime', 120, base + ['--phase', 'runtime'])
-        phase('gpu_contracts', 300, [sys.executable, '-B', '-m', 'pytest', '-q',
+        phase('gpu_contracts', 300, [sys.executable, '-B', '-m', 'pytest', '-q', '-m', 'gpu',
             '-p', 'cas_meta2.pytest_no_aliases_v4', 'tests/test_predict_viability_v4_gpu.py',
             '--basetemp', str(output / 'gpu_tmp'), '--junitxml', str(output / 'gpu_tests.xml')])
         record['gpu_contracts'] = _xml_receipt(output / 'gpu_tests.xml', 2)
