@@ -1,0 +1,668 @@
+{
+  "boundary": "Retained metadata from an incompletely audited run, not a fresh evaluation. Unchecked generation epochs are missing measurements, not zero scores.",
+  "completed": true,
+  "curves": {
+    "cas": {
+      "checked_generations": [
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 0,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 0,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 0,
+              "total": 32
+            }
+          },
+          "epoch": 1,
+          "joint_correct": 0,
+          "selected": true,
+          "token_cross_entropy": 0.4704749790615013,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 27,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 0,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 0,
+              "total": 32
+            }
+          },
+          "epoch": 5,
+          "joint_correct": 27,
+          "selected": true,
+          "token_cross_entropy": 0.1480292974690377,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 32,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 1,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 0,
+              "total": 32
+            }
+          },
+          "epoch": 10,
+          "joint_correct": 33,
+          "selected": true,
+          "token_cross_entropy": 0.1056730036538815,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 29,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 1,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 1,
+              "total": 32
+            }
+          },
+          "epoch": 15,
+          "joint_correct": 31,
+          "selected": true,
+          "token_cross_entropy": 0.08811474234333293,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 31,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 1,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 1,
+              "total": 32
+            }
+          },
+          "epoch": 20,
+          "joint_correct": 33,
+          "selected": true,
+          "token_cross_entropy": 0.09708390465868828,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 32,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 3,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 1,
+              "total": 32
+            }
+          },
+          "epoch": 25,
+          "joint_correct": 36,
+          "selected": true,
+          "token_cross_entropy": 0.08327927110085717,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 30,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 3,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 2,
+              "total": 32
+            }
+          },
+          "epoch": 30,
+          "joint_correct": 35,
+          "selected": true,
+          "token_cross_entropy": 0.07862162437638455,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 31,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 5,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 2,
+              "total": 32
+            }
+          },
+          "epoch": 35,
+          "joint_correct": 38,
+          "selected": true,
+          "token_cross_entropy": 0.07241330875483175,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 32,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 4,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 3,
+              "total": 32
+            }
+          },
+          "epoch": 40,
+          "joint_correct": 39,
+          "selected": true,
+          "token_cross_entropy": 0.0686738570023248,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 32,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 6,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 2,
+              "total": 32
+            }
+          },
+          "epoch": 45,
+          "joint_correct": 40,
+          "selected": false,
+          "token_cross_entropy": 0.06927028358987014,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 31,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 3,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 5,
+              "total": 32
+            }
+          },
+          "epoch": 50,
+          "joint_correct": 39,
+          "selected": true,
+          "token_cross_entropy": 0.0600007415718287,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 32,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 4,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 4,
+              "total": 32
+            }
+          },
+          "epoch": 55,
+          "joint_correct": 40,
+          "selected": true,
+          "token_cross_entropy": 0.06362894702137797,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 31,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 8,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 4,
+              "total": 32
+            }
+          },
+          "epoch": 60,
+          "joint_correct": 43,
+          "selected": true,
+          "token_cross_entropy": 0.06955172557043933,
+          "total": 96
+        }
+      ],
+      "generation_not_checked_epochs": [
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        19,
+        21,
+        22,
+        23,
+        24,
+        26,
+        27,
+        28,
+        29,
+        31,
+        32,
+        33,
+        34,
+        36,
+        37,
+        38,
+        39,
+        41,
+        42,
+        43,
+        44,
+        46,
+        47,
+        48,
+        49,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        59
+      ]
+    },
+    "generic": {
+      "checked_generations": [
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 0,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 0,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 0,
+              "total": 32
+            }
+          },
+          "epoch": 1,
+          "joint_correct": 0,
+          "selected": true,
+          "token_cross_entropy": 0.4511134952808937,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 29,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 1,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 0,
+              "total": 32
+            }
+          },
+          "epoch": 5,
+          "joint_correct": 30,
+          "selected": true,
+          "token_cross_entropy": 0.14483329821713506,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 31,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 2,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 0,
+              "total": 32
+            }
+          },
+          "epoch": 10,
+          "joint_correct": 33,
+          "selected": true,
+          "token_cross_entropy": 0.1054264613876919,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 29,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 2,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 1,
+              "total": 32
+            }
+          },
+          "epoch": 15,
+          "joint_correct": 32,
+          "selected": true,
+          "token_cross_entropy": 0.08136998297931287,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 32,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 2,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 1,
+              "total": 32
+            }
+          },
+          "epoch": 20,
+          "joint_correct": 35,
+          "selected": true,
+          "token_cross_entropy": 0.08752469889027376,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 21,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 5,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 2,
+              "total": 32
+            }
+          },
+          "epoch": 25,
+          "joint_correct": 28,
+          "selected": true,
+          "token_cross_entropy": 0.059168938631792525,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 31,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 7,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 7,
+              "total": 32
+            }
+          },
+          "epoch": 30,
+          "joint_correct": 45,
+          "selected": true,
+          "token_cross_entropy": 0.0529950267696436,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 32,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 5,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 5,
+              "total": 32
+            }
+          },
+          "epoch": 35,
+          "joint_correct": 42,
+          "selected": false,
+          "token_cross_entropy": 0.05185826804179358,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 31,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 9,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 9,
+              "total": 32
+            }
+          },
+          "epoch": 40,
+          "joint_correct": 49,
+          "selected": true,
+          "token_cross_entropy": 0.04464662719230053,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 32,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 10,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 12,
+              "total": 32
+            }
+          },
+          "epoch": 45,
+          "joint_correct": 54,
+          "selected": true,
+          "token_cross_entropy": 0.03270004046371965,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 31,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 11,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 18,
+              "total": 32
+            }
+          },
+          "epoch": 50,
+          "joint_correct": 60,
+          "selected": true,
+          "token_cross_entropy": 0.025441043394932146,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 32,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 18,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 18,
+              "total": 32
+            }
+          },
+          "epoch": 55,
+          "joint_correct": 68,
+          "selected": true,
+          "token_cross_entropy": 0.027304740508997737,
+          "total": 96
+        },
+        {
+          "by_depth": {
+            "1": {
+              "joint_correct": 32,
+              "total": 32
+            },
+            "2": {
+              "joint_correct": 18,
+              "total": 32
+            },
+            "3": {
+              "joint_correct": 19,
+              "total": 32
+            }
+          },
+          "epoch": 60,
+          "joint_correct": 69,
+          "selected": true,
+          "token_cross_entropy": 0.025302712963044403,
+          "total": 96
+        }
+      ],
+      "generation_not_checked_epochs": [
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        19,
+        21,
+        22,
+        23,
+        24,
+        26,
+        27,
+        28,
+        29,
+        31,
+        32,
+        33,
+        34,
+        36,
+        37,
+        38,
+        39,
+        41,
+        42,
+        43,
+        44,
+        46,
+        47,
+        48,
+        49,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        59
+      ]
+    }
+  },
+  "epochs": 60,
+  "final_checkpoint_metadata_matches": true,
+  "history_sha256": "f7ff6d69fe6dbebfc9e984ef8f783c38023761c2be30f6e5f35220db3c839a5f",
+  "learning_accepted": false,
+  "native_evaluation_performed": false,
+  "neural_execution_performed": false,
+  "original_partial_packet_sha256": "ebb76793a3897d70563be8cd2a857b0e24c82c4e412d3db66d80ac76345acaf2",
+  "schema": "cas-meta2-preserved-learning-curve/0.1",
+  "script_sha256": "4c83e659759d970e8e1277fe41381007d9328ead043eaa50a114ebb34c462eb4",
+  "training_performed": false
+}
