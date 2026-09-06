@@ -1,0 +1,28 @@
+{
+  "schema": "cas-meta2-br-standing-authority/8",
+  "standing_campaign_authorization": true,
+  "campaign_cap_usd": "400.00",
+  "max_job_cost_usd": "4.00",
+  "experiment": {
+    "entrypoint": "cas_meta2.br_construction_v8",
+    "profile": "same_state_br_construction_v8"
+  },
+  "training": false,
+  "native_execution": true,
+  "launch_request_sha256": "8323d664ead43665ce5259a5f34185df3c083a6326d9963e801592e9dd186677",
+  "job": "cas-meta2-20260906150012-7c9f6d00",
+  "parent_source_sha": "433089fcad368de96e27f93a8f77c375500f677a",
+  "worker_source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7",
+  "source_archive_sha256": "1b13fbeb96465e2122b1709b87c99cdd06860f78a2bc4bbbfa4874e96ef7658a",
+  "source_manifest_sha256": "7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f",
+  "campaign_approval": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\OWNER_APPROVAL_SOURCE.json",
+    "sha256": "3e87bd4dfb51824f999b67ccc6118a75edececbc44ddc1b48d45f53e8bb62626"
+  },
+  "standing_user_message": {
+    "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/aws_prefix_diagnostic_v8_001/authorization_001/user_message_full.txt",
+    "sha256": "d0b640ec3059ea73d677b632a4bc2f3188bbcd87b231e4362914e219459fc5bb"
+  },
+  "evidence_kind": "Builder registration of existing campaign authorization and standing user direction; not a new human approval or provider receipt.",
+  "scope_boundary": "One same-state B/R native component construction only. No training, alternate repair fixture, architectural change, automatic retry, merge or deployment."
+}
