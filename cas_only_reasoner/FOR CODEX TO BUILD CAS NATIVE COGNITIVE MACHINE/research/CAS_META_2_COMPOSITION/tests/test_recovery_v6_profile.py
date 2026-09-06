@@ -3,6 +3,8 @@ from copy import deepcopy
 from hashlib import sha256
 import json
 from pathlib import Path
+import subprocess
+import sys
 from unittest.mock import patch
 import pytest
 from tools import experiment_profiles_recovery_v6 as p
@@ -161,6 +163,52 @@ def test_uncommitted_cli_helper_refused():
 
 
 def test_no_neural_import():
-    import sys
-    assert not {'torch','casformer','cas_cjt','boto3','botocore'} & set(sys.modules)
-
+    # The full pure suite allows botocore's exception classes. Do not mistake
+    # another test's prior import for this profile's own import behavior.
+    probe = r'''
+import importlib.abc, json, pathlib, sys
+root = pathlib.Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(root))
+forbidden = {'torch','casformer','cas_cjt','tensorflow','jax','cupy','boto3','botocore','cas_meta'}
+def blocked(name):
+    return name.split('.')[0] in forbidden or name in (
+        'cas_meta2.native', 'cas_meta2.contrast_recovery_v6.runtime')
+attempts = []
+class Guard(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if blocked(fullname):
+            attempts.append(fullname)
+            raise AssertionError('FRESH_PROFILE_FORBIDDEN_IMPORT:' + fullname)
+sys.meta_path.insert(0, Guard())
+def audit(event, args):
+    if event in ('subprocess.Popen', 'os.system', 'socket.connect', 'socket.bind'):
+        raise AssertionError('FRESH_IMPORT_SIDE_EFFECT_FORBIDDEN:' + event)
+sys.addaudithook(audit)
+before = set(sys.modules)
+before_forbidden = sorted(name for name in before if blocked(name))
+assert before_forbidden == []
+hooks, paths = list(sys.meta_path), list(sys.path)
+from tools import experiment_profiles_recovery_v6 as profile
+from tools import build_launch_bundle_recovery_v6 as builder
+after = set(sys.modules)
+assert pathlib.Path(profile.__file__).resolve() == root/'tools/experiment_profiles_recovery_v6.py'
+assert pathlib.Path(builder.__file__).resolve() == root/'tools/build_launch_bundle_recovery_v6.py'
+assert list(sys.meta_path) == hooks and list(sys.path) == paths
+after_forbidden = sorted(name for name in after if blocked(name))
+assert after_forbidden == [] and attempts == []
+print(json.dumps({'fresh_isolated_process': True, 'site_disabled': bool(sys.flags.no_site),
+    'before_forbidden': before_forbidden, 'after_forbidden': after_forbidden,
+    'attempted_forbidden_imports': attempts, 'new_modules': sorted(after-before),
+    'source_files': [str(pathlib.Path(value.__file__).resolve()) for value in (profile,builder)],
+    'hook_and_path_unchanged': True}))
+'''
+    command = [sys.executable, '-I', '-S', '-B', '-c', probe, str(ROOT)]
+    child = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, timeout=30)
+    assert child.returncode == 0, child.stdout + child.stderr
+    footprint = json.loads(child.stdout)
+    assert footprint['fresh_isolated_process'] and footprint['site_disabled']
+    assert footprint['before_forbidden'] == footprint['after_forbidden'] == []
+    assert footprint['attempted_forbidden_imports'] == []
+    assert 'tools.experiment_profiles_recovery_v6' in footprint['new_modules']
+    assert 'tools.build_launch_bundle_recovery_v6' in footprint['new_modules']
+    print('PROFILE_IMPORT_FOOTPRINT ' + child.stdout.strip())

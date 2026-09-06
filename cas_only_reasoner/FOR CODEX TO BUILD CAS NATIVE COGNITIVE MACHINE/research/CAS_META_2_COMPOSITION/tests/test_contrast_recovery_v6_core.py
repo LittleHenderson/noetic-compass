@@ -9,6 +9,7 @@ import copy
 import importlib.abc
 import json
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -440,8 +441,52 @@ class RecoveryCoreTests(GuardedTestCase):
                     self.run_case(name=name)
 
     def test_module_imports_remain_pure(self):
-        self.assertFalse({"torch", "casformer", "cas_cjt", "boto3", "botocore",
-                          "cas_meta2.native"}.intersection(sys.modules))
+        # Other collected tests may legitimately preload the pure native
+        # adapter. Check this module's imports in a genuinely fresh process.
+        probe = r'''
+import importlib.abc, json, pathlib, sys
+root = pathlib.Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(root))
+forbidden = {'torch','casformer','cas_cjt','tensorflow','jax','cupy','boto3','botocore','cas_meta'}
+def blocked(name):
+    return name.split('.')[0] in forbidden or name in (
+        'cas_meta2.native', 'cas_meta2.contrast_recovery_v6.runtime')
+attempts = []
+class Guard(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if blocked(fullname):
+            attempts.append(fullname)
+            raise AssertionError('FRESH_CORE_FORBIDDEN_IMPORT:' + fullname)
+sys.meta_path.insert(0, Guard())
+def audit(event, args):
+    if event in ('subprocess.Popen', 'os.system', 'socket.connect', 'socket.bind'):
+        raise AssertionError('FRESH_IMPORT_SIDE_EFFECT_FORBIDDEN:' + event)
+sys.addaudithook(audit)
+before = set(sys.modules)
+before_forbidden = sorted(name for name in before if blocked(name))
+assert before_forbidden == []
+hooks, paths = list(sys.meta_path), list(sys.path)
+from cas_meta2.contrast_recovery_v6 import core
+after = set(sys.modules)
+assert pathlib.Path(core.__file__).resolve() == root/'cas_meta2/contrast_recovery_v6/core.py'
+assert list(sys.meta_path) == hooks and list(sys.path) == paths
+after_forbidden = sorted(name for name in after if blocked(name))
+assert after_forbidden == [] and attempts == []
+print(json.dumps({'fresh_isolated_process': True, 'site_disabled': bool(sys.flags.no_site),
+    'before_forbidden': before_forbidden, 'after_forbidden': after_forbidden,
+    'attempted_forbidden_imports': attempts, 'new_modules': sorted(after-before),
+    'source_file': str(pathlib.Path(core.__file__).resolve()), 'hook_and_path_unchanged': True}))
+'''
+        command = [sys.executable, '-I', '-S', '-B', '-c', probe, str(ROOT)]
+        child = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, timeout=30)
+        self.assertEqual(child.returncode, 0, child.stdout + child.stderr)
+        footprint = json.loads(child.stdout)
+        self.assertTrue(footprint['fresh_isolated_process'] and footprint['site_disabled'])
+        self.assertEqual(footprint['before_forbidden'], [])
+        self.assertEqual(footprint['after_forbidden'], [])
+        self.assertEqual(footprint['attempted_forbidden_imports'], [])
+        self.assertIn('cas_meta2.contrast_recovery_v6.core', footprint['new_modules'])
+        print('CORE_IMPORT_FOOTPRINT ' + child.stdout.strip())
 
 
 def aggregation_cases():

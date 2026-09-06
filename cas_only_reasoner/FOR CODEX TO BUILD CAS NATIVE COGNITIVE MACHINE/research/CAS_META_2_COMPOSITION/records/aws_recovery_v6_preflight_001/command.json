@@ -1,0 +1,13 @@
+[
+  "C:\\Python314\\python.exe",
+  "-B",
+  "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\launch_recovery_v6.py",
+  "--archive",
+  "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_recovery_v6_source_001",
+  "--sha256",
+  "110c3f2d5ead8dbc0d241e7b01824af5d4a10d8e7bba414d0b2e00b70dfb1cad",
+  "--source-sha",
+  "bd3341b0da893d0a68cfc05fb454848d2f027cd7",
+  "--prior-packet",
+  "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_contrast_v6_001\\cloud_artifacts.zip"
+]

@@ -1,0 +1,55 @@
+........................................................................ [  4%]
+................................................ [  7%]
+.......................................................................... [ 11%]
+............................................................................................F.... [ 17%]
+...................... [ 18%]
+........................................................................ [ 22%]
+........................................................................ [ 27%]
+................................................................................................................................. [ 34%]
+........................................................................ [ 38%]
+........................................................................ [ 43%]
+........................................................................ [ 47%]
+........................................................................ [ 51%]
+........................................................................ [ 56%]
+........................................................................ [ 60%]
+..................................................................................................................... [ 67%]
+.................................................. [ 70%]
+..................................................................... [ 74%]
+........................................................................ [ 78%]
+................................................................ [ 82%]
+..........................................F............................. [ 86%]
+........................................................................ [ 90%]
+........................................................................ [ 95%]
+........................................................................ [ 99%]
+...........                                                              [100%]
+================================== FAILURES ===================================
+______________ RecoveryCoreTests.test_module_imports_remain_pure ______________
+
+self = <test_contrast_recovery_v6_core.RecoveryCoreTests testMethod=test_module_imports_remain_pure>
+
+    def test_module_imports_remain_pure(self):
+>       self.assertFalse({"torch", "casformer", "cas_cjt", "boto3", "botocore",
+                          "cas_meta2.native"}.intersection(sys.modules))
+E       AssertionError: {'cas_meta2.native'} is not false
+
+tests\test_contrast_recovery_v6_core.py:443: AssertionError
+____________________________ test_no_neural_import ____________________________
+
+    def test_no_neural_import():
+        import sys
+>       assert not {'torch','casformer','cas_cjt','boto3','botocore'} & set(sys.modules)
+E       AssertionError: assert not ({'boto3', 'botocore', 'cas_cjt', 'casformer', 'torch'} & {'__future__', '__main__', '__mp_main__', '_abc', '_ast', '_ast_unparse', ...})
+E        +  where {'__future__', '__main__', '__mp_main__', '_abc', '_ast', '_ast_unparse', ...} = set({'__future__': <module '__future__' from 'C:\\Python314\\Lib\\__future__.py'>, '__main__': <module '__main__' from 'C:...TIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\validate_local_v3.py'>, '_abc': <module '_abc' (built-in)>, ...})
+E        +    where {'__future__': <module '__future__' from 'C:\\Python314\\Lib\\__future__.py'>, '__main__': <module '__main__' from 'C:...TIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\validate_local_v3.py'>, '_abc': <module '_abc' (built-in)>, ...} = <module 'sys' (built-in)>.modules
+
+tests\test_recovery_v6_profile.py:165: AssertionError
+============================== warnings summary ===============================
+tests/test_packet.py::test_duplicate_case_alias_and_file_directory_collisions_rejected[names0]
+  C:\Python314\Lib\zipfile\__init__.py:1708: UserWarning: Duplicate name: 'a.txt'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_contrast_recovery_v6_core.py::RecoveryCoreTests::test_module_imports_remain_pure
+FAILED tests/test_recovery_v6_profile.py::test_no_neural_import - AssertionEr...
+2 failed, 1687 passed, 10 skipped, 2 deselected, 1 warning, 338 subtests passed in 172.88s (0:02:52)

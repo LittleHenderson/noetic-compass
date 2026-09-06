@@ -1,0 +1,17 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\recovery-v6-audit-bd3341b0\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_recovery_portable_v7_001\\run.py"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\recovery-v6-audit-bd3341b0\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T08:11:18.587041+00:00",
+  "name": "portable_bridge",
+  "returncode": 0,
+  "started_utc": "2026-09-06T08:11:01.993190+00:00",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "c0004e0358509667d312ee773d72272236e1060681f76de52a48f0e540b0ebed",
+  "timed_out": false,
+  "timeout_seconds": 780,
+  "wall_seconds": 16.593606700000237
+}

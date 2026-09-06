@@ -1,0 +1,106 @@
+{
+  "all_checked_files": 641,
+  "boundary": "Clean source/control and saved diagnostic proof only; no GPU, provider, paid launch, training or held-out recovery execution.",
+  "completed": false,
+  "core_autocrlf_on_checkout": false,
+  "existing_environment": {
+    "distribution_metadata_only": {
+      "boto3": "1.43.87",
+      "botocore": "1.43.87",
+      "jsonschema": "4.26.0",
+      "pytest": "9.0.2",
+      "torch": "2.11.0"
+    },
+    "executable": "C:\\Python314\\python.exe",
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "exposure_inventory": {
+    "added_unique": 784,
+    "count": 8837,
+    "previous_count": 8053,
+    "prior_origins_preserved": true,
+    "receipt_sha256": "a965297027e5ba1c1a2340bb9f9c40d52297debd91af5c4e4fab57065a5d6267",
+    "sha256": "9f579ea2d593671dfddf16db39aa22563d6b98f7388758d2a2b99539e66ed623",
+    "underlying_packet_or_task_files_reopened": false,
+    "union_recounted": true
+  },
+  "final_git_status": "?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/bridge.stderr.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/bridge.stdout.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/bridge_tests.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/exposure.stderr.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/exposure.stdout.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/exposure_tests.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/parent.stderr.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/parent.stdout.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/parent_result.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/plan.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/public.stderr.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/public.stdout.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/public_result.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/receipt.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/base_dataset/manifest.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/base_dataset/test_private.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/base_dataset/test_public.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/base_dataset/train.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/base_dataset/validation.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/dataset/base_manifest.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/dataset/base_train.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/dataset/manifest.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/dataset/test_private.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/dataset/test_public.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/dataset/tokenizer.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/dataset/train.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/dataset/training_imports.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/dataset/validation.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/trainer_input/base_manifest.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/trainer_input/base_train.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/trainer_input/manifest.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/trainer_input/test_public.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/trainer_input/tokenizer.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/trainer_input/train.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/trainer_input/training_imports.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/roundtrip/trainer_input/validation.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/run.py\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_recovery_portable_v7_001/source_pins.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_source_recovery_v6_001/full_validation/receipt.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_source_recovery_v6_001/full_validation/source_snapshot_before.json\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_source_recovery_v6_001/full_validation/stderr.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_source_recovery_v6_001/full_validation/stdout.txt\"\n?? \"cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_source_recovery_v6_001/full_validation/tests.xml\"\n",
+  "fresh_environment_or_install": false,
+  "full_validator": {
+    "completed": false,
+    "counts": {
+      "errors": 0,
+      "failures": 2,
+      "skipped": 10,
+      "tests": 2037
+    },
+    "errors": [],
+    "passed_subtests": 338,
+    "passed_test_functions": 1687,
+    "protected_unchanged": true,
+    "sources_unchanged": true
+  },
+  "git_blob_or_checkout_mismatches": [],
+  "inherited_pythonpath_removed": true,
+  "initial_git_status": "",
+  "neural_or_provider_work": false,
+  "no_double_counting_of_overlapping_tests": true,
+  "original_recovery_dependency_files": 538,
+  "packet_opened": false,
+  "portable_bridge": {
+    "completed": true,
+    "loader_sha256": "5db831d685b2343a16b93cbc3d3c16e53978ebf0e3cf9da8fefd7d10692708b0",
+    "original_manifest_sha256": "19162857679b3eb2e698c58ee8e0ac5dc3c7ffe7265e11e8ae1c726834067f29",
+    "source_pins_sha256": "9d66a81fbdc0e4041cd09d460c821f3cf68e244610ed49831324b5accf74084d",
+    "source_unchanged": true
+  },
+  "processes": [
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\recovery-v6-audit-bd3341b0\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\validate_local_v3.py",
+        "--output",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\recovery-v6-audit-bd3341b0\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_source_recovery_v6_001\\full_validation"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\recovery-v6-audit-bd3341b0\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "finished_utc": "2026-09-06T08:14:00.670068+00:00",
+      "name": "full_validator",
+      "returncode": 1,
+      "started_utc": "2026-09-06T08:11:01.992703+00:00",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "01765983e3c275d9fb1a2a6814a09f2f0419c777d68aab44bc84fa09644063d8",
+      "timed_out": false,
+      "timeout_seconds": 660,
+      "wall_seconds": 178.67697729999963
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\recovery-v6-audit-bd3341b0\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_recovery_portable_v7_001\\run.py"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\recovery-v6-audit-bd3341b0\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "finished_utc": "2026-09-06T08:11:18.587041+00:00",
+      "name": "portable_bridge",
+      "returncode": 0,
+      "started_utc": "2026-09-06T08:11:01.993190+00:00",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "c0004e0358509667d312ee773d72272236e1060681f76de52a48f0e540b0ebed",
+      "timed_out": false,
+      "timeout_seconds": 780,
+      "wall_seconds": 16.593606700000237
+    }
+  ],
+  "protected_files": 316,
+  "recovery_source_files": 557,
+  "registered_dataset_generated": false,
+  "schema": "cas-meta2-clean-recovery-source-audit/6",
+  "source_files": 176,
+  "source_package": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\recovery-v6-audit-bd3341b0\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "source_sha": "bd3341b0da893d0a68cfc05fb454848d2f027cd7",
+  "source_unchanged": true,
+  "source_worktree": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\recovery-v6-audit-bd3341b0",
+  "status": "CLEAN_RECOVERY_SOURCE_CHECKS_FAILED",
+  "wall_seconds": 182.97356540000146
+}
