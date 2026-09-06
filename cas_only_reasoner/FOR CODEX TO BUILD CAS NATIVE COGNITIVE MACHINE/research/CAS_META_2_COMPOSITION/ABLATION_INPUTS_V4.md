@@ -25,7 +25,12 @@ seed `20260919`, and `registered_development_exclusions()`. Require exact matche
 to all original partition hashes and the dataset manifest before evaluation.
 In particular, the original training JSON hash is
 `579a1bfdda64702b4357f57b75c9c9b6e0710a9262c1da41d5aeec1ca1404359`.
-This reconstruction has not yet been executed for this comparison.
+The reconstruction was executed successfully in
+`records/decoder_dataset_reconstruction_v4_001/`: all four partition files and
+the manifest match their original SHA-256 hashes exactly. The guarded child
+completed in a parent-measured 27.55 seconds; all 461 frozen source files matched
+before and after. No neural execution or provider call occurred. The rebuilt
+data remains retrospective and is not a new held-out split.
 
 The eventual AWS predictor must reuse the frozen checkpoint loader's model,
 tokenizer, source, epoch, and configuration checks with an explicitly recorded
