@@ -1,0 +1,14 @@
+{
+  "schema": "cas-meta2-development-archive-receipt/8",
+  "creation_command": "Compress-Archive -LiteralPath 'records/child_call_v8_diagnostic_001/bundle_001' -DestinationPath 'records/child_call_v8_diagnostic_001/development_bundle.zip' -CompressionLevel Optimal",
+  "creation_exit_code": 0,
+  "verification": {
+    "cmd": "$zipPath = (Resolve-Path 'records/child_call_v8_diagnostic_001/development_bundle.zip').Path\n$m = Get-Content 'records/child_call_v8_diagnostic_001/bundle_001/manifest.json' -Raw | ConvertFrom-Json\n$z = [System.IO.Compression.ZipFile]::OpenRead($zipPath)\n$seen = @()\ntry {\n  foreach ($entry in $z.Entries) {\n    if ($entry.FullName.EndsWith('/')) { continue }\n    if (-not $entry.FullName.StartsWith('bundle_001/')) { throw 'Unexpected archive prefix' }\n    $name = $entry.FullName.Substring(11)\n    if ($seen -contains $name) { throw 'Duplicate archive member' }\n    $seen += $name\n    if ($name -eq 'manifest.json') { $expected = 'b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629' }\n    else {\n      $item = $m.files.PSObject.Properties[$name]\n      if ($null -eq $item) { throw 'Unexpected archive member' }\n      $expected = $item.Value.sha256\n      if ($entry.Length -ne $item.Value.bytes) { throw 'Archive size mismatch' }\n    }\n    $stream = $entry.Open()\n    try { $actual = (Get-FileHash -InputStream $stream -Algorithm SHA256).Hash.ToLowerInvariant() }\n    finally { $stream.Dispose() }\n    if ($actual -ne $expected) { throw 'Archive member bytes mismatch' }\n  }\n  if ($seen.Count -ne 16) { throw 'Archive count mismatch' }\n} finally { $z.Dispose() }\n[pscustomobject]@{archive=$zipPath; sha256=(Get-FileHash -LiteralPath $zipPath -Algorithm SHA256).Hash.ToLowerInvariant(); bytes=(Get-Item -LiteralPath $zipPath).Length; files_verified=$seen.Count; manifest_sha256='b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629'} | ConvertTo-Json -Compress",
+    "chunk_id": "64c4f1",
+    "wall_time_seconds": 0.3660638,
+    "exit_code": 0,
+    "original_token_count": 127,
+    "output": "{\"archive\":\"C:\\\\Users\\\\wakil\\\\OneDrive\\\\Desktop\\\\tksCAS\\\\cas_only_reasoner\\\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\\\_worktrees\\\\meta1\\\\cas_only_reasoner\\\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\\\research\\\\CAS_META_2_COMPOSITION\\\\records\\\\child_call_v8_diagnostic_001\\\\development_bundle.zip\",\"sha256\":\"1874508d0baad7d6620001505c39f184b3cb091c59de4e96197f309beee0a042\",\"bytes\":6570836,\"files_verified\":16,\"manifest_sha256\":\"b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629\"}\r\n"
+  },
+  "boundary": "All 16 archive files checked against the externally pinned development manifest. Checkpoint bytes copied and hashed only, never loaded. No final-task contents, model execution or provider calls."
+}

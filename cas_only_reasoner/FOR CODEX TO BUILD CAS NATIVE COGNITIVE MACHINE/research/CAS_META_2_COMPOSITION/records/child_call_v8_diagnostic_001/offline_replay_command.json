@@ -1,0 +1,8 @@
+{
+  "command": "python -I -B tools/replay_prefix_panel_v8.py --bundle records/child_call_v8_diagnostic_001/bundle_001 --manifest-sha256 b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629 --output records/child_call_v8_diagnostic_001/offline_replay_001",
+  "cwd": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "tool_session_id": 55211,
+  "exit_code": 0,
+  "receipt_sha256": "6f435c26d1af8d441832ce7bf9198e5bc5201e5085bc1ef90899919cfed00eb1",
+  "scope": "Pure replay of saved development actions; no new model scores or native task results."
+}

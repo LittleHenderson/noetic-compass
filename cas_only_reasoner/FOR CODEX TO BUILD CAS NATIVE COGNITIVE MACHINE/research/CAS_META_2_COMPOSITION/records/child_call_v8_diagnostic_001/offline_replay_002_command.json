@@ -1,0 +1,8 @@
+{
+  "command": "python -I -B tools/replay_prefix_panel_v8.py --bundle records/child_call_v8_diagnostic_001/bundle_001 --manifest-sha256 b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629 --output records/child_call_v8_diagnostic_001/offline_replay_002",
+  "cwd": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "tool_session_id": 61281,
+  "exit_code": 0,
+  "receipt_sha256": "bb4b17ff814363ba4b5f915cca6a1e3673fe3a94488ddf0f075672778ab1cfb8",
+  "scope": "Pure replay with before/after source identity check. Supersedes offline_replay_001 for source-bound evidence; earlier files preserved."
+}

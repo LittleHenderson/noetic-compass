@@ -1,0 +1,8 @@
+{
+  "cmd": "python -B -m cas_meta2.diagnostic_v8.gpu --help",
+  "chunk_id": "0c2800",
+  "wall_time_seconds": 0.3923984,
+  "exit_code": 0,
+  "original_token_count": 222,
+  "output": "usage: python.exe -m cas_meta2.diagnostic_v8.gpu [-h] --bundle BUNDLE\r\n                                                 --output OUTPUT --job JOB\r\n                                                 --manifest-sha256 MANIFEST_SHA256\r\n                                                 --plan PLAN\r\n                                                 --plan-sha256 PLAN_SHA256\r\n\r\nAWS-only assisted development-prefix diagnostic; no training or launcher.\r\nImports are pure. Runtime admission needs independently pinned launch/budget\r\nevidence and live IMDSv2 identity before any neural import. The parent\r\nlauncher must still verify the canonical ledger and enforce instance\r\nlifetime/cleanup.\r\n\r\noptions:\r\n  -h, --help            show this help message and exit\r\n  --bundle BUNDLE\r\n  --output OUTPUT\r\n  --job JOB\r\n  --manifest-sha256 MANIFEST_SHA256\r\n  --plan PLAN\r\n  --plan-sha256 PLAN_SHA256\r\n"
+}

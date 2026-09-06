@@ -1,0 +1,94 @@
+{
+  "schema": "cas-meta2-prefix-diagnostic-readiness/8",
+  "status": "IMPLEMENTED_PURE_CHECKED_CUDA_UNEXECUTED",
+  "source_sha": "13f424981d7434b1a92815d1ad5759d543bbd3be",
+  "source_archive": {
+    "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/source_001/source.zip",
+    "sha256": "c1e784440b408a81d28efd00444fe69680972b9ef6ce14b5c298598dc6e83be1",
+    "bytes": 7952045,
+    "members": 616,
+    "frozen_source_files": 603,
+    "protected_baseline_files": 316,
+    "added_source_files": 11
+  },
+  "development_archive": {
+    "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/development_bundle.zip",
+    "sha256": "1874508d0baad7d6620001505c39f184b3cb091c59de4e96197f309beee0a042",
+    "bytes": 6570836,
+    "files": 16
+  },
+  "development_manifest": {
+    "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/bundle_001/manifest.json",
+    "sha256": "b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629"
+  },
+  "checks": {
+    "tests_passed": 313,
+    "subtests_passed": 5,
+    "exit_code": 0,
+    "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/checks_002/execution_receipt.json",
+    "sha256": "23c4b57f2791f97cf583e03b3fe6719bd00a8497b91ae4421583d7c8dfeb9337",
+    "boundary": "Pure checks only; earlier checks_001 bootstrap failure retained."
+  },
+  "offline_replay": {
+    "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/offline_replay_002/receipt.json",
+    "sha256": "bb4b17ff814363ba4b5f915cca6a1e3673fe3a94488ddf0f075672778ab1cfb8",
+    "distinct_tasks": 120,
+    "task_checkpoint_rows": 480,
+    "reference_opportunity_rows": 9088,
+    "source_before_after_equal": true,
+    "boundary": "Saved development actions, not new model scores. Earlier replay_001 ending-only hash receipt retained but superseded."
+  },
+  "per_checkpoint": {
+    "training_probes": 24,
+    "validation_tasks": 96,
+    "reference_opportunities": 2272,
+    "forced_run_inputs": 360,
+    "multiple_grammatical_options": 1912
+  },
+  "proposed_launch": {
+    "status": "UNBOOKED_NO_AUTOMATIC_PAID_LAUNCH",
+    "proposed_reservation_usd": "4.00",
+    "instance_count": 1,
+    "instance_type": "g7.2xlarge",
+    "gpu": "RTX PRO 4500",
+    "automatic_retries": 0,
+    "region": "us-west-2",
+    "account_id": "807562639912",
+    "worker_seconds_max": 1800,
+    "instance_lifetime_seconds_max": 3600,
+    "planning_hourly_usd_ceiling": "2.52",
+    "ancillary_usd": "1.00",
+    "declared_planning_cost_usd": "3.52",
+    "current_price_or_capacity_verified": false,
+    "launch_enabled": false
+  },
+  "ledger_observation": {
+    "revision": 11,
+    "cap_usd": "400.00",
+    "reserved_usd": "78.00",
+    "unreserved_usd": "322.00",
+    "sha256": "13b0e04b5a8679af2a86d63eab619a4e9c2169716cf8186bbb2f067e508be804",
+    "changed": false,
+    "new_reservation": false,
+    "live_history_reaudit_this_receipt": false
+  },
+  "open_gates": [
+    "Separate launch approval and exact job identity",
+    "Current price/capacity and canonical ledger/history verification before booking",
+    "Connect worker to bounded parent launcher and independent instance shutdown/cleanup",
+    "First CUDA checkpoint-load, prefix-capture and numerical execution test",
+    "Later child-call curriculum: meaningful executable alternatives and unchanged-verifier discrimination before training"
+  ],
+  "preserved": {
+    "accepted_model_and_executor": true,
+    "all_603_frozen_v7_source_bytes": true,
+    "v7_final_cas_correct": 0,
+    "v7_final_cas_attempted": 72,
+    "no_new_final_tasks_opened": true
+  },
+  "neural_execution_this_work": false,
+  "training_this_work": false,
+  "native_execution_this_work": false,
+  "paid_launch_this_work": false,
+  "goal_complete": false
+}

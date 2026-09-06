@@ -1,0 +1,70 @@
+{
+  "boundary": "Pure tests only. No checkpoint, tensor, model, native execution or provider.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\check_prefix_diagnostic_v8.py",
+    "--child",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_diagnostic_001\\checks_001\\pytest_tmp"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "exit_code": 1,
+  "finished_utc": "2026-09-06T12:54:19.692794+00:00",
+  "outputs": {
+    "stderr.txt": {
+      "bytes": 758,
+      "sha256": "78490b19b234463c46cd5a6839b8c330622559ef20be4b80501dc1a37eab1c4c"
+    },
+    "stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "pid": 48120,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-prefix-pure-checks/8",
+  "source_after": {
+    "cas_meta2/diagnostic_v8/__init__.py": "16aec4fde1e0ea60bc02211b82990a29b2af6913f73fb4343d4672a41884dbf8",
+    "cas_meta2/diagnostic_v8/bundle.py": "79f4a20b1d222d3269066372b9718a75bc8204ffcd2cf5a4c51a9196d5594560",
+    "cas_meta2/diagnostic_v8/gpu.py": "4d83203d143ecca241e6248449d2cd97541805ce71cfb3333bdcc45d2fd6cf4d",
+    "cas_meta2/diagnostic_v8/sites.py": "fad7260f737913e3f217b855c1ab1f098f9f4311982f05d0ee74261c7b4984d0",
+    "tests/test_codec.py": "738c59d3b9c7a8fe164e4e20e1dd1808fa36c2039ae8d9a41124733f025f4d20",
+    "tests/test_diagnostic_v8_bundle.py": "684012e1252d3b3422bcecc03b5da7c349ea19aad6b25547c3735ac4d667a762",
+    "tests/test_diagnostic_v8_gpu_contract.py": "3eef5706119875645cf7b02bfb1b64d5d0060f607cc04c601e21b4eb087792d4",
+    "tests/test_diagnostic_v8_sites.py": "c723d1949c4dec471b9f9dadcabfe30acdcac1dc9c2ad4ea2799c2f74118041f",
+    "tests/test_features_v2.py": "0d5978812e8173453c50e81854d0c23ac07847eb57b8ad5749362fa7e1957418",
+    "tests/test_features_v3.py": "784522d4225ad4e152d8116f7c51c5ef6a0874d1a576a01986e257be7c69b3fe",
+    "tests/test_grammar_v3.py": "2eecd5b2620f4f38da164d12c30207e982817b204359e966de05e61eb91104ea",
+    "tests/test_selection_v3.py": "1a0f874a775e644fd00664055f6593145ef66149d2997cebb779ae9f99f644ca",
+    "tools/check_prefix_diagnostic_v8.py": "11eab5cbe1946e3eeebea823db64ff45f70bfa39b1b89c66af74fc36415b17e3"
+  },
+  "source_before": {
+    "cas_meta2/diagnostic_v8/__init__.py": "16aec4fde1e0ea60bc02211b82990a29b2af6913f73fb4343d4672a41884dbf8",
+    "cas_meta2/diagnostic_v8/bundle.py": "79f4a20b1d222d3269066372b9718a75bc8204ffcd2cf5a4c51a9196d5594560",
+    "cas_meta2/diagnostic_v8/gpu.py": "4d83203d143ecca241e6248449d2cd97541805ce71cfb3333bdcc45d2fd6cf4d",
+    "cas_meta2/diagnostic_v8/sites.py": "fad7260f737913e3f217b855c1ab1f098f9f4311982f05d0ee74261c7b4984d0",
+    "tests/test_codec.py": "738c59d3b9c7a8fe164e4e20e1dd1808fa36c2039ae8d9a41124733f025f4d20",
+    "tests/test_diagnostic_v8_bundle.py": "684012e1252d3b3422bcecc03b5da7c349ea19aad6b25547c3735ac4d667a762",
+    "tests/test_diagnostic_v8_gpu_contract.py": "3eef5706119875645cf7b02bfb1b64d5d0060f607cc04c601e21b4eb087792d4",
+    "tests/test_diagnostic_v8_sites.py": "c723d1949c4dec471b9f9dadcabfe30acdcac1dc9c2ad4ea2799c2f74118041f",
+    "tests/test_features_v2.py": "0d5978812e8173453c50e81854d0c23ac07847eb57b8ad5749362fa7e1957418",
+    "tests/test_features_v3.py": "784522d4225ad4e152d8116f7c51c5ef6a0874d1a576a01986e257be7c69b3fe",
+    "tests/test_grammar_v3.py": "2eecd5b2620f4f38da164d12c30207e982817b204359e966de05e61eb91104ea",
+    "tests/test_selection_v3.py": "1a0f874a775e644fd00664055f6593145ef66149d2997cebb779ae9f99f644ca",
+    "tools/check_prefix_diagnostic_v8.py": "11eab5cbe1946e3eeebea823db64ff45f70bfa39b1b89c66af74fc36415b17e3"
+  },
+  "source_unchanged": true,
+  "started_utc": "2026-09-06T12:54:19.608768+00:00",
+  "tests": [
+    "test_diagnostic_v8_bundle.py",
+    "test_diagnostic_v8_sites.py",
+    "test_diagnostic_v8_gpu_contract.py",
+    "test_grammar_v3.py",
+    "test_codec.py",
+    "test_features_v2.py",
+    "test_features_v3.py",
+    "test_selection_v3.py"
+  ],
+  "wall_seconds": 0.08402059999934863
+}

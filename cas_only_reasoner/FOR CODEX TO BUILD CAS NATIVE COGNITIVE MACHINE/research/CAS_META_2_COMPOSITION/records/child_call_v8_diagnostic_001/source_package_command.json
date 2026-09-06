@@ -1,0 +1,8 @@
+{
+  "cmd": "python -I -B tools/package_prefix_diagnostic_v8.py --v7-source-archive records/aws_prototype_v7_source_001 --output records/child_call_v8_diagnostic_001/source_001",
+  "chunk_id": "641738",
+  "wall_time_seconds": 6.9920728,
+  "exit_code": 0,
+  "original_token_count": 118,
+  "output": "{\"source_sha\": \"13f424981d7434b1a92815d1ad5759d543bbd3be\", \"archive\": \"C:\\\\Users\\\\wakil\\\\OneDrive\\\\Desktop\\\\tksCAS\\\\cas_only_reasoner\\\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\\\_worktrees\\\\meta1\\\\cas_only_reasoner\\\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\\\research\\\\CAS_META_2_COMPOSITION\\\\records\\\\child_call_v8_diagnostic_001\\\\source_001\\\\source.zip\", \"archive_sha256\": \"c1e784440b408a81d28efd00444fe69680972b9ef6ce14b5c298598dc6e83be1\", \"members\": 616}\r\n"
+}
