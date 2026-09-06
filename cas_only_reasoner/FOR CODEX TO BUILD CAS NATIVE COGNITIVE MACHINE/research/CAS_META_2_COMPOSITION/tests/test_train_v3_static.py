@@ -133,6 +133,42 @@ def test_training_deadline_reaches_batches_and_validation():
     assert "reserve = max(10.0, longest_epoch_seconds * 1.25)" in training
 
 
+def test_prediction_reserve_constant_matches_registered_spec_without_neural_import():
+    assignment = next(node for node in TREE.body if isinstance(node, ast.Assign)
+        and any(isinstance(target, ast.Name) and target.id == "PREDICTION_RESERVE_SECONDS" for target in node.targets))
+    reserve = ast.literal_eval(assignment.value)
+    spec = json.loads((ROOT / "EXPERIMENT_V3.json").read_text())
+    assert type(reserve) is int and reserve == spec["execution"]["phase_seconds"]["prediction_seal"] == 480
+    impl = next(node for node in TREE.body if isinstance(node, ast.FunctionDef) and node.name == "_train_and_seal_impl")
+    deadline = next(node.value for node in ast.walk(impl) if isinstance(node, ast.Assign)
+        and any(isinstance(target, ast.Name) and target.id == "training_deadline" for target in node.targets))
+    assert ast.unparse(deadline) == "min(deadline - PREDICTION_RESERVE_SECONDS, training_started + config.max_training_seconds)"
+
+
+@pytest.mark.parametrize("setup_seconds", [0, 1, 120, 360, 479, 1000, 2700])
+def test_actual_training_deadline_preserves_prediction_reserve_after_setup(setup_seconds):
+    # Evaluate only the actual arithmetic AST, never the tensor-owning trainer.
+    impl = next(node for node in TREE.body if isinstance(node, ast.FunctionDef) and node.name == "_train_and_seal_impl")
+    expression = next(node.value for node in ast.walk(impl) if isinstance(node, ast.Assign)
+        and any(isinstance(target, ast.Name) and target.id == "training_deadline" for target in node.targets))
+    reserve_node = next(node.value for node in TREE.body if isinstance(node, ast.Assign)
+        and any(isinstance(target, ast.Name) and target.id == "PREDICTION_RESERVE_SECONDS" for target in node.targets))
+    spec = json.loads((ROOT / "EXPERIMENT_V3.json").read_text())
+    maximum = spec["training"]["max_training_seconds"]
+    learning_start = 100.0
+    deadline = learning_start + maximum + spec["execution"]["phase_seconds"]["prediction_seal"]
+    training_started = learning_start + setup_seconds
+    result = eval(compile(ast.Expression(body=deepcopy(expression)), str(PATH), "eval"),
+        {"min": min, "deadline": deadline, "training_started": training_started,
+         "PREDICTION_RESERVE_SECONDS": ast.literal_eval(reserve_node),
+         "config": SimpleNamespace(max_training_seconds=maximum)})
+    assert deadline - result >= 480
+    assert result <= training_started + maximum
+    assert result == learning_start + maximum
+    if setup_seconds == maximum:
+        assert result == training_started  # No training time remains; next guard must fail.
+
+
 def test_checkpoint_version_and_cuda_loading_are_distinct():
     assert "cas-meta2-candidate-checkpoint/2" not in TEXT
     assert "cas-meta2-candidate-checkpoint/3" in TEXT

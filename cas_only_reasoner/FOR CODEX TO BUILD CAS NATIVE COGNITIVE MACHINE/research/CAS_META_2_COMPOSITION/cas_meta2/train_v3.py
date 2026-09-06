@@ -40,6 +40,7 @@ from .policy_v3 import (PolicyConfig, build_matched_policies, encode_batch,
 
 
 ARMS = ("cas_untrained", "cas_trained", "generic_untrained", "generic_trained", "rule")
+PREDICTION_RESERVE_SECONDS = 480
 _CUDA_CONTEXT = None
 SELECTION_RULE = ("Maximize the worst-depth generated joint rate, then the macro-depth joint rate, "
                   "then the overall joint rate, then minimize unweighted validation token NLL; "
@@ -382,7 +383,8 @@ def _train_and_seal_impl(data, output, config, deadline):
     compute_seconds = {name: 0.0 for name in models}
     completed_epochs = 0
     training_started = time.monotonic()
-    training_deadline = min(deadline - 120.0, training_started + config.max_training_seconds)
+    training_deadline = min(deadline - PREDICTION_RESERVE_SECONDS,
+                            training_started + config.max_training_seconds)
     longest_epoch_seconds = 0.0
     stop_reason = "REQUESTED_EPOCHS_COMPLETED"
     last_validation = {name: None for name in models}

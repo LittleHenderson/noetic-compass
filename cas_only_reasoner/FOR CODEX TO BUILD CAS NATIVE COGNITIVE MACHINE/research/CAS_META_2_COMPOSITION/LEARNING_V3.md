@@ -1,10 +1,26 @@
 # Learning v3 candidate: copy names and generate valid nested programs
 
-This is unfinished candidate source, not a new learned checkpoint or a launchable
-release profile. The accepted executor and all older experiment files stay
-unchanged. Do not run this source under the old `learning_v2` profile.
+This candidate now has a separate campaign, launch profile and audit tools.
+Integration review and combined pure validation have passed; it has not run on
+AWS or produced a learned checkpoint. The accepted executor and all older
+experiment files stay unchanged. Do not use the old `learning_v2` profile.
 
-## Verified source basis
+## Verified launch-candidate source
+
+The final combined check passed 1,137 test functions and 178 subtests, with
+zero failures/errors and seven GPU modules skipped. All 97 code/asset/config
+files and all 316 accepted protected files were identical before and after.
+Receipt: `records/local_learning_v3_004/receipt.json`, SHA-256
+`b1c3ba096a724c5934d01b89ae4ffe4798aebc041940ef598f25834e69c85043`.
+The runner retained raw stdout/stderr, JUnit counts and source snapshots. The
+single warning comes from an intentional duplicate-ZIP-member rejection test.
+The additional 125-test focused check and final integration corrections are
+recorded in `records/local_v3_integration_review_002/REVIEW.md`.
+
+This source is prepared for its own launch-candidate commit. The bundle receipt
+must identify the exact committed SHA; none is inferred from this document.
+
+## Earlier component source basis
 
 The combined pure check passed 948 test functions and 89 subtests, with zero
 failures/errors and six GPU modules skipped. All 83 code/asset/config files
@@ -77,12 +93,12 @@ fails the original GPU-memory-cleanup gate; this new code does not amend it.
   a frozen-v2-geometry candidate plus shared cleanup primitives; it does not
   validate the new copy architecture.
 
-The proposed model geometry remains d_model 64, four heads, two encoder layers,
+The registered model geometry remains d_model 64, four heads, two encoder layers,
 one decoder layer, feed-forward widths 128, maximum input 1,024 and maximum
 action length 256. Initial saturation scale is the float `2.0`. Both models use
 the same batches, AdamW settings, fixed loss weights and syntax mask. Training
 seed is 7; curriculum seed 20260919 is reserved for the next registered run.
-The proposed limit is 60 epochs, at most 11,520 paired optimizer steps per model,
+The registered limit is 60 epochs, at most 11,520 paired optimizer steps per model,
 with a 2,700-second training allocation and separate prediction/evaluation time.
 This follows the saved failure diagnosis: more varied training data, not a
 longer repeat of the previous overfitting run. An unfinished paired epoch or
@@ -104,26 +120,57 @@ sentence syntax cannot express different permission scopes. R repair, new
 Noetic meanings, Foundation recursion and pulsation are not in this curriculum.
 Their absence does not remove them from the full vision.
 
-## Required before any paid learning launch
+## Campaign and audit integration
 
-1. Add a separate version-3 campaign/profile and source-bundle manifest. Bind
-   both exclusion assets, actual-copy preflight, shared cleanup code and all
-   new tests. Generate data in its own process; pass the same development
-   exclusions during generation, training checks and stored audit.
-2. Add a source-bound outer inspector and unchanged-native-result audit for
-   format-3 checkpoints, new selection scores, dataset identities and cleanup
-   receipts. Do not weaken the v2 inspectors or reinterpret their failures.
-3. Finish AWS-only integration tests: real copied-head gradients, causal
-   masking, matching, weighted loss, strict checkpoint reload, before/after
-   behavior and cold/warm/repeated zero-allocation cleanup. No such GPU result
-   is claimed by local syntax, mock or pure-Python tests.
-4. Freeze the separate source and run only through the existing shared $400
-   ledger, provider identity and automatic time cutoff. No T4, no laptop neural
-   work, no automatic retry and no automatic merge. The current ledger reserves
-   $32 and leaves $368 unreserved; reservations are not invoices.
-5. Compare actual native task correctness for untrained/trained CAS,
-   untrained/trained generic and the rule parser. Preserve all failures, every
-   case, checkpoints, raw outputs, compute and cleanup receipts.
+`EXPERIMENT_V3.json` registers only `learning_v3`, with entrypoint
+`cas_meta2.campaign_v3`. The new launcher and source-bundle builder are
+`aws/launch_v3.py` and `tools/build_launch_bundle_v3.py`. They bind the two
+exclusion assets, candidate components, tests and spec to committed Git bytes.
+Before paid execution, local packaged source must match those same bytes.
+The canonical budget module, ledger and resource plan remain unchanged.
+
+The campaign constructs its dataset in a separate process, which exits before
+the learner receives data. It hashes private test bytes without opening their
+answers until all 360 choices are sealed. Native admission, execution, stored
+verification and denominators remain unchanged. Wrong valid programs and
+rejections remain in the results. No more favorable subset is selected.
+
+The AWS job first runs 4 native-contract tests and 27 policy/loss tests. After
+construction, the campaign runs 3 actual-copy cold/warm/repeated tests and
+2 trainer integration tests. One trainer test uses real paired updates and
+strict checkpoint save/reload on an authored fixture. The other explicitly
+replaces the inner workload while exercising real CUDA and the actual outer
+cleanup. Neither fixture proves the production training pipeline completed.
+The subsequent real campaign must produce that evidence.
+
+The separate inspectors are `tools/inspect_cloud_packet_v3.py` and
+`tools/audit_stored_packet_v3.py`. They check version-3 receipts, dataset and
+source bindings, validation-based selection, and stored native outcomes. Local
+inspection does not deserialize checkpoints or run neural inference. Binary
+checkpoint hashes and source-bound writers are checked locally; actual CUDA
+checkpoint reload is a separate cloud check. Frozen version-2 tools and their
+failed evidence are not changed.
+
+## Remaining release and learning gates
+
+1. Commit this checked launch-candidate source and create its pinned ZIP. Check
+   the launch and both audit entry points against the real Git commit in fresh
+   processes. Passing local tests does not prove GPU behavior.
+2. Use the unchanged shared $400 ledger, fresh provider identity/price/capacity
+   checks and automatic cutoff for one bounded AWS launch. Each launch reserves
+   $7. The current ledger reserves $32 and leaves $368 unreserved; reservations
+   are not invoices. No T4, laptop neural work, automatic retry or merge.
+3. Pass the cloud gates above before training. The campaign keeps separate
+   allocations for training (2,700 seconds), predictions (480), native evaluation
+   (2,400) and final evidence (180). It refuses to start learning if those
+   reserves no longer fit. Campaign time is at most 6,600 seconds; the resource
+   cutoff remains 7,200 seconds.
+4. Measure all five arms on the complete held-out tasks, then independently
+   inspect the saved bytes and recheck stored native outcomes. Keep all failed
+   attempts, six main checkpoints, raw outputs, commands and compute receipts.
+5. Verify AWS cleanup directly and preserve a separate evidence commit bound
+   to the frozen source. Only measured held-out performance can establish
+   improved composition; successful software checks alone cannot.
 
 The immediate target is improved held-out composition. Passing these component
 checks will not establish that target, CAS-specific advantage, general language,

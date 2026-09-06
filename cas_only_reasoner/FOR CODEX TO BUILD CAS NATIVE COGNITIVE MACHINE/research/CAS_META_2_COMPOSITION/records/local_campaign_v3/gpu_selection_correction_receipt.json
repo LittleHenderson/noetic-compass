@@ -1,0 +1,33 @@
+{
+  "schema": "cas-meta2-campaign-v3-gpu-selection-correction/0.1",
+  "status": "PURE_CORRECTION_CHECKS_PASSED",
+  "created_utc": "2026-09-06 00:02:19 UTC",
+  "reason": "The project default selects not gpu. The new campaign must explicitly pass -m gpu to both registered GPU test invocations.",
+  "source_sha256": {
+    "cas_meta2/campaign_v3.py": "f81d146bd3e304f90aad3f4a99a09b46cee09fea991259bafd7a3206ee0e9556",
+    "tests/test_campaign_v3_static.py": "e77c012891f7e6cb7bdf6bce1f47fa844419c6a7f6eda8cfaf8e083c78370d14",
+    "EXPERIMENT_V3.json": "16418adabadeb43e85207a105fa2f07471ee5dec58fff0e9103f528230743b66",
+    "tests/test_train_v3_gpu.py": "db0d80853507dfc8d2e819e3c938c6502bb5a014c40fd876e008fae4caa16641"
+  },
+  "passed": 53,
+  "failed": 0,
+  "seconds": 1.22,
+  "xml": "records/local_campaign_v3/static_003_gpu_selection.xml",
+  "xml_sha256": "000d90cf23e2eca00ab50675d53c365a669bd405ee6e8a745b887d889eef78cf",
+  "blocked_imports": [
+    "torch",
+    "tensorflow",
+    "jax",
+    "cupy",
+    "boto3",
+    "cas_cjt"
+  ],
+  "prior_receipts_preserved": [
+    "records/local_campaign_v3/receipt.json",
+    "records/local_campaign_v3/static_002.xml"
+  ],
+  "neural_execution": false,
+  "provider_calls": false,
+  "dataset_construction": false,
+  "registered_holdout_access": false
+}

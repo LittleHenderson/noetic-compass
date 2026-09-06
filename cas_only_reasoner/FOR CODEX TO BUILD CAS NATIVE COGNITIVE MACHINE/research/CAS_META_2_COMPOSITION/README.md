@@ -4,13 +4,14 @@ This is a separate experimental candidate, not a replacement for the accepted CA
 
 The next measured skill is to turn a bounded problem into a new nested CJT program with named intermediate values, then execute it through unchanged native CJT APIs. The candidate must emit operations, calls, and bindings, not just select a prepared whole program.
 
-Source-basis update (2026-09-05): the separate third learning candidate now
+Launch-candidate update (2026-09-06 UTC): the separate third learning candidate now
 has lexical copying, shared syntax constraints, depth-balanced selection,
-a fresh curriculum and an integrated candidate trainer. Its pure checks passed
-948 tests plus 89 subtests; all 316 protected files stayed unchanged. Six GPU
+a fresh curriculum and an integrated candidate trainer. Its final pure checks passed
+1,137 tests plus 178 subtests; all 316 protected files stayed unchanged. Seven GPU
 modules were skipped, and this candidate has not been trained or launched.
-`LEARNING_V3.md` lists the remaining campaign, launch and audit integration.
-The successful receipt is `records/local_learning_v3_003/receipt.json`;
+The new campaign, launch profile and audit tools passed integration checks.
+`LEARNING_V3.md` lists the remaining pinned-source and cloud-run gates.
+The successful receipt is `records/local_learning_v3_004/receipt.json`;
 the earlier timeout and test-runner failure are preserved separately.
 
 The v2 stored-result diagnostic has independently checked all 1,778 traces and

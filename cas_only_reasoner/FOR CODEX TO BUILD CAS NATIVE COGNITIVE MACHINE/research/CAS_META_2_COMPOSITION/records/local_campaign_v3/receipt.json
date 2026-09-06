@@ -1,0 +1,54 @@
+{
+  "schema": "cas-meta2-campaign-v3-local-validation/0.1",
+  "status": "PURE_CAMPAIGN_CHECKS_PASSED",
+  "created_utc": "2026-09-05 23:58:26 UTC",
+  "root": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "source_sha256": {
+    "cas_meta2/campaign_v3.py": "592f2d8fb4d53ce025e7aebbce4f18dea272f3d76b857f2d82a823aeb64fedf5",
+    "EXPERIMENT_V3.json": "16418adabadeb43e85207a105fa2f07471ee5dec58fff0e9103f528230743b66",
+    "tests/test_campaign_v3_static.py": "7e281374df11c7de8d04c554269a279967207caebdb8e1f08a74185cd238d107",
+    "tests/test_train_v3_gpu.py": "db0d80853507dfc8d2e819e3c938c6502bb5a014c40fd876e008fae4caa16641"
+  },
+  "pure_tests": {
+    "passed": 52,
+    "failed": 0,
+    "seconds": 1.22,
+    "xml": "records/local_campaign_v3/static_002.xml",
+    "xml_sha256": "7c1a67d8b5622b1abd7d8059c5f43185f7e3a7da420f1aa0f53410d8420fe712",
+    "python": "C:/Python314/python.exe",
+    "blocked_imports": [
+      "torch",
+      "tensorflow",
+      "jax",
+      "cupy",
+      "boto3",
+      "cas_cjt"
+    ],
+    "command": "python -B, install NoNeuralImports before pytest, pytest.main(['tests/test_campaign_v3_static.py','-q','-p','no:cacheprovider','--basetemp=<new short homebase _tmp directory>','--junitxml=records/local_campaign_v3/static_002.xml'])"
+  },
+  "gpu_tests": {
+    "authored_cases": 2,
+    "locally_imported": false,
+    "locally_executed": false,
+    "names": [
+      "test_real_paired_update_and_format3_checkpoint_reload",
+      "test_real_cuda_outer_cleanup_with_explicit_mock_inner_frame"
+    ]
+  },
+  "boundaries": {
+    "registered_data_generated": false,
+    "any_dataset_generated_by_this_subtask": false,
+    "provider_calls": false,
+    "neural_execution": false,
+    "native_execution": false,
+    "commits": false,
+    "old_source_changes": false,
+    "learning_result": false
+  },
+  "open_risks": [
+    "Real AWS CUDA gates not yet executed",
+    "Reserved dataset construction not yet exercised",
+    "Valid generated programs can cost more native work than curriculum targets; deadline/size exhaustion remains blocked with partial evidence",
+    "Launcher installation/early tests/collection must still fit its independent 7200-second cutoff"
+  ]
+}

@@ -58,8 +58,11 @@ fixed native-reuse demonstration only, not integrated memory or qualification.
 
 The next learning candidate adds shared lexical copying, syntax constraints,
 depth-balanced development selection and a fresh checked curriculum. It has
-not trained or passed its GPU gates. `LEARNING_V3.md` lists the remaining
-training/evaluation integration; pure tests are not a learning result.
+not trained or passed its GPU gates. Its separate campaign, launch profile and
+audit tools passed combined pure validation: 1,137 tests and 178 subtests,
+with seven GPU modules skipped and all 316 protected files unchanged. See
+`records/local_learning_v3_004/receipt.json`. `LEARNING_V3.md` lists the
+remaining pinned-source and training/evaluation gates; pure tests are not a learning result.
 
 1. Validate a new bounded typed program representation and named intermediate values in an isolated candidate. Invalid fields, denied topology/scope, forged references, excessive expansion, incorrect returns, and changed runtime identities must fail closed.
 2. Generate varied structural tasks. Train separate CAS and matched generic program generators on AWS only. Compare trained/untrained/rule arms on public problems without giving the target program JSON or answer. The first public curriculum explicitly describes required operations and dependencies: this is controlled instruction translation, not yet algorithm discovery from an outcome alone. Seal all predictions before private native references are generated. Save checkpoints, raw outputs and costs, including negative results.

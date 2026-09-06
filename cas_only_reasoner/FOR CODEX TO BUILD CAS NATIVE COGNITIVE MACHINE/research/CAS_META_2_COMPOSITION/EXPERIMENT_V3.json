@@ -1,0 +1,186 @@
+{
+  "schema": "cas-meta2-experiment/3",
+  "profile": "learning_v3",
+  "entrypoint": "cas_meta2.campaign_v3",
+  "purpose": "Learn full nested CJT program generation and input binding from controlled public descriptions; execute through the unchanged accepted runtime.",
+  "source_basis": "c5c01a3010b4283932cd1720303393d6d4dea1c1",
+  "predecessor": {
+    "source_sha": "410bce98307a5644db51928459b73391c7066b72",
+    "result": "CAS trained 0/72; generic trained 0/72; rule 72/72",
+    "acceptance": "Full v2 acceptance remains blocked by its original GPU-cleanup gate; v3 does not amend it."
+  },
+  "protected": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "executor": "cas_meta2.executor",
+    "native_adapter": "cas_meta2.native",
+    "action_codec": "cas_meta2.codec",
+    "authority": "No accepted parameter, executor, permission, verifier or operation-contract changes."
+  },
+  "curriculum": {
+    "schema": "cas-meta2-dataset-manifest/3",
+    "seed": 20260919,
+    "counts": {
+      "train": 3072,
+      "validation": 96,
+      "test": 72
+    },
+    "training_depth_counts": {
+      "1": 1024,
+      "2": 1024,
+      "3": 1024
+    },
+    "validation_depth_counts": {
+      "1": 32,
+      "2": 32,
+      "3": 32
+    },
+    "test_groups": {
+      "same_depth": 24,
+      "wording_shift": 24,
+      "deeper_calls": 24
+    },
+    "exclusions": {
+      "base_count": 4312,
+      "development_count": 177,
+      "overlap_count": 1,
+      "combined_count": 4488,
+      "base_asset_sha256": "2e11f0e0e5a8cb8bc32907f81cc4c8a02c59f8623ce8f9b5937c59d421050f48",
+      "development_asset_sha256": "4642f5c1c5a9fc078343cdc5fb99c042ec6ee3c7e2e2c971ee5965776ab71913",
+      "loader": "cas_meta2.curriculum_v3.registered_development_exclusions"
+    },
+    "test_design": "24 matched triplets: depth3/familiar wording; same graph and input/new wording combination; depth4/familiar wording with matched native RUN dependencies and return. Every procedure has real RUN work.",
+    "graph_rule": "Disjoint across splits and all 4488 exposed graphs; only the declared matched wording pair repeats a formal graph.",
+    "input_rule": "Distinct float32 observation payloads across splits and unrelated triplets; a matched triplet deliberately shares observations.",
+    "presentation_order": "Public declaration order is explicitly recorded and independently parsed after cold JSON reload; dictionary insertion order is not semantics.",
+    "allowed_cjts": [
+      "A",
+      "B",
+      "C"
+    ],
+    "scope_boundary": "Every curriculum procedure has fixed ABC permissions; public syntax does not state scope variations. General grammar remains unchanged.",
+    "positive_target_coverage": "Every held-out output token must occur in positive training targets; public manifest carries no held-out token or binding frequencies."
+  },
+  "training": {
+    "seed": 7,
+    "curriculum_seed": 20260919,
+    "epochs": 60,
+    "batch_size": 16,
+    "prediction_batch_size": 16,
+    "learning_rate": 0.001,
+    "weight_decay": 0.01,
+    "gradient_clip": 1.0,
+    "max_training_seconds": 2700,
+    "validation_generation_interval": 5,
+    "training_examples_per_depth": 1024,
+    "validation_examples_per_depth": 32,
+    "test_triplets": 24,
+    "train_probe_examples_per_depth": 8,
+    "policy": {
+      "d_model": 64,
+      "heads": 4,
+      "layers": 2,
+      "cas_ff_width": 128,
+      "decoder_layers": 1,
+      "decoder_ff_width": 128,
+      "max_length": 1024,
+      "max_action_length": 256,
+      "cas_initial_saturation_per_max_token": 2.0,
+      "max_parameter_mismatch_fraction": 0.01
+    }
+  },
+  "selection": {
+    "eligible_epochs": "1, every fifth epoch, and final requested epoch; no other epoch eligible",
+    "priority": [
+      "worst-depth generated joint accuracy",
+      "macro-depth generated joint accuracy",
+      "overall generated joint accuracy",
+      "lower unweighted validation token NLL",
+      "earliest eligible epoch"
+    ],
+    "fixed_depth_denominators": {
+      "1": 32,
+      "2": 32,
+      "3": 32
+    },
+    "train_probe_used_for_selection": false,
+    "boundary": "Exact generated validation program/binding match, not native task correctness."
+  },
+  "loss": {
+    "semantic_weight": 3,
+    "structural_weight": 1,
+    "padding_weight": 0,
+    "normalization": "total positive weight",
+    "same_for_all_learned_families": true
+  },
+  "evaluation": {
+    "arms": [
+      "cas_untrained",
+      "cas_trained",
+      "generic_untrained",
+      "generic_trained",
+      "rule"
+    ],
+    "private_gold": "All 360 public-only choices sealed before test-private JSON is parsed in the learning/evaluation process.",
+    "invalid_predictions": "Retain every invalid action in denominator; no repair, rule fallback or target-derived masks.",
+    "native_reference": "Independent direct native path; candidate uses unchanged composition executor. Verify every required intermediate, dependency and final output.",
+    "checkpoints": {
+      "format": "cas-meta2-candidate-checkpoint/3",
+      "records": [
+        "initial",
+        "selected",
+        "last"
+      ],
+      "filenames": [
+        "candidate_cas_initial.pt",
+        "candidate_cas_best.pt",
+        "candidate_cas_last.pt",
+        "candidate_generic_initial.pt",
+        "candidate_generic_best.pt",
+        "candidate_generic_last.pt"
+      ]
+    },
+    "repair": "Not exercised by this curriculum.",
+    "native_limits": "Unchanged IR/native limits, including up to 256 expanded RUNs in structurally admitted predictions; do not silently restrict wrong-but-valid programs to target length."
+  },
+  "gpu_gates": {
+    "launcher_early": {
+      "old_policy": 4,
+      "copy_policy": 10,
+      "weighted_loss": 13,
+      "native_contract": 4
+    },
+    "campaign": {
+      "actual_copy_modes": 3,
+      "trainer_integration": 2
+    },
+    "actual_copy_test_file": "tests/test_gpu_preflight_copy_v3_gpu.py",
+    "trainer_test_file": "tests/test_train_v3_gpu.py",
+    "preflight": "cas_meta2.gpu_preflight_copy_v3.run_preflight",
+    "cleanup": "Version-bound shared gpu_preflight_v3 primitives; no frozen-v2 geometry invocation."
+  },
+  "execution": {
+    "gpu": "AWS CUDA only; no T4; no local neural work",
+    "max_wall_seconds": 6600,
+    "hard_resource_cutoff_seconds": 7200,
+    "phase_seconds": {
+      "dataset_construction": 120,
+      "actual_copy_gpu_tests": 240,
+      "trainer_gpu_tests": 180,
+      "actual_copy_preflight": 120,
+      "native_smoke": 180,
+      "paired_training": 2700,
+      "prediction_seal": 480,
+      "native_evaluation": 2400,
+      "final_evidence": 180
+    },
+    "native_workers": 8,
+    "expanded_output_ceiling_bytes": 2147483648,
+    "compressed_packet_ceiling_bytes": 1073741824,
+    "automatic_retries": 0,
+    "shared_budget_ledger": "records/budget/campaign_ledger.json",
+    "total_owner_cap_usd": "400.00",
+    "per_launch_reserved_cap_usd": "7.00",
+    "time_boundary": "Phases have fixed caps plus the global deadline. Reserve 480 seconds for prediction, 2400 for native evaluation and 180 for final evidence. Completed paired epochs may stop on the registered training allocation; interrupted batches/epochs are blocked, not complete."
+  },
+  "claim_boundary": "One bounded instruction-to-program learning experiment. Completed means every comparison was measured, not improvement, CAS advantage, general language/reasoning, full Noetics, qualified memory, CNCM completion, production readiness or hardware."
+}
