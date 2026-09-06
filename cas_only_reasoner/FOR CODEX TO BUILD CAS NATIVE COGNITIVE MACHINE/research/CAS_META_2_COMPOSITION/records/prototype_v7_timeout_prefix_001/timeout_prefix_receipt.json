@@ -1,0 +1,455 @@
+{
+  "all_72_cases_completed": false,
+  "all_72_prediction_rows_bound": true,
+  "arm": "generic_trained",
+  "boundary": "Interrupted by evaluation timeout. This verifies a durable committed prefix only. It does not prove a deadlock or why the remaining execution took so long, and does not certify the next tick, remaining compute, final output, full-task verdict, or a completed experiment. No fabricated RuntimeContractError receipt or old partial.audit_prefix call was used.",
+  "case_index": 45,
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "records/prototype_v7_timeout_prefix_001/audit.py"
+  ],
+  "derived_database_sha256": "b46b9772631c7553991a2990350e658fc33f2159876572fd776c2dfc389e25aa",
+  "extraction_admission_sha256": "9bf40771df6dd7f67189d402d6bcfd8e05bd8cd997b71a6825fff21da105ae98",
+  "finished_utc": "2026-09-06T11:30:29.826422+00:00",
+  "helper_files_sha256": {
+    "audit.py": "7017a699c53c413453dcd141b9b8f89190fdea2bfb379e9e0aef3c7eb9b8bc50",
+    "copy_view.py": "0f9d69688b63eb1d4c80063f2e22d9071d75907fc59c6724b5455576572f80bc",
+    "prefix.py": "c26024489523641a289e7dcb50190b1fbb88ae05a67e1425a86283d8a5b92462"
+  },
+  "input_files_sha256": {
+    "cloud_job/campaign/dataset/manifest.json": "1de691b0b2a4ea70b91288e9c78f49f058fdfaaa973de86c2051e79fb89c5c8c",
+    "cloud_job/campaign/dataset/test_public.json": "e679020923e919063a6fc94b75e6bb9c3fa826e200c55f4cdda64cb4ea926afd",
+    "cloud_job/campaign/native/evaluation/case_0045/generic_trained/native/native.db": "8b5ed623a4f4cfea7ea421475d93e18412f3d7fd7a6c40b4817b8e9b84b7a0b8",
+    "cloud_job/campaign/native/evaluation/case_0045/generic_trained/native/native.db-shm": "73f8a32316fd843d6693a7bfcc0fdde6eda6c592873fd06d4c95bfcf3e2cc88a",
+    "cloud_job/campaign/native/evaluation/case_0045/generic_trained/native/native.db-wal": "097a8454339abae1f0f536cc6cfe4efc1214463182a70ae6fd34d6d78b3fb03f",
+    "cloud_job/campaign/native/evaluation/case_0045/reference_result.json": "71a31e488d197ed8e058995b0da25e5ef2cc4ccb2b97f3a4225a6f489663f0d3",
+    "cloud_job/campaign/native/evaluation_partial.json": "c87e3df7f314b479319bb6ba47d78bd0721c7e5b970d388ef4066b7362a7a252",
+    "cloud_job/campaign/native/predictions.jsonl": "4537095c35a385b1072bfc648c31cdb2c6f15d06ea3e777d100094b46ae3badc",
+    "cloud_job/campaign/native/predictions_seal.json": "d5d7e99e804e01361c2a8fe7cf16ceeeb5c44cda258b7b198ac4e101d2bb4b64",
+    "cloud_job/campaign/native/training_parent_gate.json": "39f51fad265507da2f054a13c9ffa8ffd486fc4277afedd8533be5cd2b3beed8",
+    "cloud_job/campaign/processes/evaluate/process_receipt.json": "768ea8242a0acfdb7602353541ecf18764b107216e697b70de760072bd7ecf66",
+    "cloud_job/campaign/processes/evaluate/stderr.txt": "0e047067986bb3862682d94c1eca598075af32852ea925749684b7a4b4b36279",
+    "cloud_job/campaign/processes/evaluate/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cloud_job/campaign/training/neural_predictions.jsonl": "a2f6e284ff35c49f3501107207e56d48018c80cfa1f17a5225c70e2570cc07f5",
+    "cloud_job/campaign/training_gate.json": "39f51fad265507da2f054a13c9ffa8ffd486fc4277afedd8533be5cd2b3beed8"
+  },
+  "job": "cas-meta2-20260906094002-39762c47",
+  "learning_accepted": false,
+  "model_or_tensor_loaded": false,
+  "original_db_wal_shm_unchanged": true,
+  "packet_sha256": "f28603b7aab07d7d75a06cfa52fb5b802689b8896001fa9f572971c9140c9799",
+  "prefix": {
+    "boundary": "Verified committed prefix from the copied database plus WAL. No failure.json was invented, no RuntimeContractError path was called, no unfinished tick was counted, and no final answer or completed-run verifier result was inferred. Policy units are reservations, not GPU FLOPs or billed time.",
+    "checked_artifact_count": 39,
+    "committed_documents_checked": true,
+    "committed_native_runs": 37,
+    "committed_reserved_policy_units_lower_bound": 2664,
+    "committed_traces": 37,
+    "complete_execution_trace": false,
+    "compute_complete": false,
+    "full_task_correctness": null,
+    "model_parameter_bytes_hashed_not_loaded": true,
+    "next_sealed_run": {
+      "cjt_id": "B",
+      "frame": 13,
+      "input_node": 0,
+      "kind": "RUN",
+      "node": 37
+    },
+    "published_trace_schema_checked": true,
+    "rows": [
+      {
+        "cjt_id": "A",
+        "input_node": -1,
+        "input_sha256": "39162357e5aa7bcaf355903bb554dcbf2b8db360804e3e967e9bc9727cc38ac1",
+        "output_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "91158c0bf18f6767012cc2fc98e0c30602150179eb840d707b8c69b9c7d6f91c"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 1,
+        "input_sha256": "91158c0bf18f6767012cc2fc98e0c30602150179eb840d707b8c69b9c7d6f91c",
+        "output_sha256": "de49103bf2f86f4581b26c2ff677fb5e16d79733e41512e191b8b91e2de45d1c"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "c5dfd3d3581b34d91544cfd794fd97abc100d0655504ea9cad6cd027e30f8131"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "3c0958794ad9023d7d078c65c28d6a6c559b77ef5fc5c907c7edfd2ff8ece612"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 4,
+        "input_sha256": "3c0958794ad9023d7d078c65c28d6a6c559b77ef5fc5c907c7edfd2ff8ece612",
+        "output_sha256": "43306961bf0639cedb585d4cd9033203fca7725b18d1f844b3af54054cc282fc"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "6384ec7649823146bd301060a7e915f014210e6e703e15f8f81b58f496f6040e"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "a6578f65c5ca306250461481c8b96e316b5a9d55ebe653e175ecfc3ecd231ba1"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 7,
+        "input_sha256": "a6578f65c5ca306250461481c8b96e316b5a9d55ebe653e175ecfc3ecd231ba1",
+        "output_sha256": "0123af89d6ada3e8fcc479435f13bbba2e09808817a6853f3dec205050b3bd11"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "727bd09115f055582db627ed909f6c9b90953c1c242e1ff114d5f362e3b34ead"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "6f405c996c25e2c994824d170880904c3c028f0c82ec6500fd9cfa0cd76e82f0"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 10,
+        "input_sha256": "6f405c996c25e2c994824d170880904c3c028f0c82ec6500fd9cfa0cd76e82f0",
+        "output_sha256": "77f1c006157843ca404f8258e87dc243a9e25f3d0ae7fc940327dbcdada2ddd3"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "6565b460ffb52afa75b601f640fa26c38e27049a59b1b5f1edd71219e0e3dbed"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "2e71fc2585fc501d01ba87e0bcd8d02ca6c9baf85e7285a822f9eafbff7e9adb"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 13,
+        "input_sha256": "2e71fc2585fc501d01ba87e0bcd8d02ca6c9baf85e7285a822f9eafbff7e9adb",
+        "output_sha256": "5b6eff44b5436272f48552e3d0525153cdd2f0de2b260a33e4478c35375df79f"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "ad6c54f95b2b6eb82233668533f741b4c0563f72cd541f6a3e98ef149a0f7fcd"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "96eee0863f0be54edfddb7903e502ffefc66187138d48f75671a42d27042d784"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 16,
+        "input_sha256": "96eee0863f0be54edfddb7903e502ffefc66187138d48f75671a42d27042d784",
+        "output_sha256": "7b376901a93e4feb87480af5008fa4f44ebfb876fee0541494a085c20b86eef1"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "63db8873fd3d58442b1c95b3c342131e871a73cfa6f629cbd68bc17b3b1e5c97"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "ae0f3d792f9dd48c618087d78bcedb8892fdf32efb59906cb0e8e0e409f2480b"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 19,
+        "input_sha256": "ae0f3d792f9dd48c618087d78bcedb8892fdf32efb59906cb0e8e0e409f2480b",
+        "output_sha256": "2173147bc8e1dc1bb39afa79ba0ab97c1f64be7be8e0c7a0b74fc591b1d2bfdf"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "c4f737615bbeaecebd029854af35ca0b15d08eac82cda10c735020f6d3b68cb5"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "3519fa77516087d349af25fbb7e7c9853f7026c4a1bf246e70c7673d8b966797"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 22,
+        "input_sha256": "3519fa77516087d349af25fbb7e7c9853f7026c4a1bf246e70c7673d8b966797",
+        "output_sha256": "f64a5a28071e1bd1e5af7da75619a761ac6aa17b0f0556e35be6ff63f4a18cf7"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "16fa8a2c6d4392d53281e0cb387572c31d620d8f885fb65220adb3830072a235"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "bae573b51bac3a425bba55f39bd891cb72d965846d6cd3a42f6068da8faa5e83"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 25,
+        "input_sha256": "bae573b51bac3a425bba55f39bd891cb72d965846d6cd3a42f6068da8faa5e83",
+        "output_sha256": "dc82b73b7882399aaf96fe804a0714d1a0d904f594ccdc265fefd863905f2523"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "7a10684967c5514900c5ffb2ac7801b3a1e6bd50251d6d6ad80989db19d924a5"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "25cc3a9a68199f03bf82ae76d6b15c39eb9b932513b5cad852cef290e78ce7ac"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 28,
+        "input_sha256": "25cc3a9a68199f03bf82ae76d6b15c39eb9b932513b5cad852cef290e78ce7ac",
+        "output_sha256": "3f3e18003654ec7646ea46bd3c060a2d69407205350664b561b255489ef05479"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "d36f3ced32c30e2282bb0b8b4bb4d7d3991b430e3a8c7a0e8f679dec47e0d5c3"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "65a9a053faaeeab113d0839ac89da32f7c43fdb059753cfbc97f6f2c5b03c071"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 31,
+        "input_sha256": "65a9a053faaeeab113d0839ac89da32f7c43fdb059753cfbc97f6f2c5b03c071",
+        "output_sha256": "e2e6d3ef1b87d3590a2adb163969fe630e622016a122a68fccd67d002ed0c9e4"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "1bf70b844613c091c2db125d4221e98845af50b8b93c7ead3ba88756f3ee185d"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "a4161df24a61ea373cecce11e944f89ec89783b37c13536f26cf6e5ae256a239"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 34,
+        "input_sha256": "a4161df24a61ea373cecce11e944f89ec89783b37c13536f26cf6e5ae256a239",
+        "output_sha256": "e00f71ef357ebb51dd4287d9d68a13ac047c961fde7c72f05a5ee52342c4fc5e"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 0,
+        "input_sha256": "2ac190bac25eedf827f8c56e00c4fab0cb8cb64ccc3bc051e44bb28dc5ee9b45",
+        "output_sha256": "5fdaca8fcc823905620025a9690a06cc8a1f932e8c4d8f9b14541a992a5e9c89"
+      }
+    ],
+    "scheduled_program_native_runs": 39,
+    "sealed_program_prefix_checked": true,
+    "software_model_and_public_input_bound": true,
+    "uncommitted_tick_compute": null
+  },
+  "public_sha256": "b2a5fc1ed31df5b9809411734120f2ece05928791075989375c952a88f78104f",
+  "runtime_root_cause_determined": false,
+  "schema": "cas-meta2-prototype-timeout-prefix-review/7",
+  "schema_checked": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "git_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/schemas/neural_cjt_contracts.schema.json",
+    "jsonschema_version": "4.26.0",
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\cas_cjt\\schemas\\neural_cjt_contracts.schema.json",
+    "sha256": "35d304a3c51b0687a63c40c65c52a6cdf7eddcda8c2ee28e2234a0a4d1641969"
+  },
+  "selected_action": {
+    "binding": 0,
+    "program": {
+      "entry": "main",
+      "procedures": {
+        "main": {
+          "allowed_cjts": [
+            "A",
+            "B",
+            "C"
+          ],
+          "input": "arg",
+          "return": "v1",
+          "steps": [
+            {
+              "cjt_id": "A",
+              "input": "arg",
+              "kind": "RUN",
+              "output": "v0"
+            },
+            {
+              "input": "v0",
+              "kind": "CALL",
+              "output": "v1",
+              "procedure": "p12"
+            }
+          ]
+        },
+        "p12": {
+          "allowed_cjts": [
+            "A",
+            "B",
+            "C"
+          ],
+          "input": "arg",
+          "return": "v2",
+          "steps": [
+            {
+              "cjt_id": "B",
+              "input": "arg",
+              "kind": "RUN",
+              "output": "v0"
+            },
+            {
+              "cjt_id": "C",
+              "input": "v0",
+              "kind": "RUN",
+              "output": "v1"
+            },
+            {
+              "input": "arg",
+              "kind": "CALL",
+              "output": "v2",
+              "procedure": "p9"
+            },
+            {
+              "input": "arg",
+              "kind": "CALL",
+              "output": "v3",
+              "procedure": "p9"
+            },
+            {
+              "input": "arg",
+              "kind": "CALL",
+              "output": "v29",
+              "procedure": "p9"
+            }
+          ]
+        },
+        "p15": {
+          "allowed_cjts": [
+            "A",
+            "B",
+            "C"
+          ],
+          "input": "arg",
+          "return": "v0",
+          "steps": [
+            {
+              "cjt_id": "B",
+              "input": "arg",
+              "kind": "RUN",
+              "output": "v0"
+            },
+            {
+              "cjt_id": "B",
+              "input": "arg",
+              "kind": "RUN",
+              "output": "v1"
+            },
+            {
+              "cjt_id": "C",
+              "input": "v1",
+              "kind": "RUN",
+              "output": "v2"
+            }
+          ]
+        },
+        "p9": {
+          "allowed_cjts": [
+            "A",
+            "B",
+            "C"
+          ],
+          "input": "arg",
+          "return": "v3",
+          "steps": [
+            {
+              "cjt_id": "B",
+              "input": "arg",
+              "kind": "RUN",
+              "output": "v0"
+            },
+            {
+              "cjt_id": "B",
+              "input": "arg",
+              "kind": "RUN",
+              "output": "v1"
+            },
+            {
+              "cjt_id": "C",
+              "input": "v1",
+              "kind": "RUN",
+              "output": "v2"
+            },
+            {
+              "input": "arg",
+              "kind": "CALL",
+              "output": "v3",
+              "procedure": "p15"
+            },
+            {
+              "input": "arg",
+              "kind": "CALL",
+              "output": "v4",
+              "procedure": "p15"
+            },
+            {
+              "input": "arg",
+              "kind": "CALL",
+              "output": "v30",
+              "procedure": "p15"
+            }
+          ]
+        }
+      },
+      "schema": "cas-meta2-program/0.1"
+    }
+  },
+  "source603_and_protected316_rechecked": true,
+  "source_sha": "42f9164754312f12850d9b8789c062fa7fb8069f",
+  "sqlite_copy_receipt_sha256": "9e1708bba0701ae79e9fea2dd12044250db3c999c74de97eecb49031cf3940cd",
+  "started_utc": "2026-09-06T11:30:21.280848+00:00",
+  "status": "TIMEOUT_COMMITTED_PREFIX_VERIFIED",
+  "unfinished_case": 45
+}

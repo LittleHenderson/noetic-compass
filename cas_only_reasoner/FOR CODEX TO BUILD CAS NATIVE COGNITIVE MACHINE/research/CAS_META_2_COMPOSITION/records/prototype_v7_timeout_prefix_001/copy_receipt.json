@@ -1,0 +1,29 @@
+{
+  "admission_sha256": "9bf40771df6dd7f67189d402d6bcfd8e05bd8cd997b71a6825fff21da105ae98",
+  "arm": "generic_trained",
+  "boundary": "The derived database contains SQLite-visible committed rows from the copied database/WAL. A copied SHM may be updated by SQLite; original DB/WAL/SHM remain untouched. Integrity is not task correctness, semantic validation, or a complete execution receipt.",
+  "case_index": 45,
+  "completed_execution": false,
+  "copied_connection": "mode=ro; PRAGMA query_only=ON; WAL enabled; immutable not used",
+  "copy_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_timeout_prefix_001\\copy_001",
+  "derived_database": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_timeout_prefix_001\\copy_001\\derived_committed.db",
+  "derived_sha256": "b46b9772631c7553991a2990350e658fc33f2159876572fd776c2dfc389e25aa",
+  "integrity_check": "ok",
+  "original_bytes_unchanged": true,
+  "original_database_opened": false,
+  "original_sha256_after": {
+    "native.db": "8b5ed623a4f4cfea7ea421475d93e18412f3d7fd7a6c40b4817b8e9b84b7a0b8",
+    "native.db-shm": "73f8a32316fd843d6693a7bfcc0fdde6eda6c592873fd06d4c95bfcf3e2cc88a",
+    "native.db-wal": "097a8454339abae1f0f536cc6cfe4efc1214463182a70ae6fd34d6d78b3fb03f"
+  },
+  "original_sha256_before": {
+    "native.db": "8b5ed623a4f4cfea7ea421475d93e18412f3d7fd7a6c40b4817b8e9b84b7a0b8",
+    "native.db-shm": "73f8a32316fd843d6693a7bfcc0fdde6eda6c592873fd06d4c95bfcf3e2cc88a",
+    "native.db-wal": "097a8454339abae1f0f536cc6cfe4efc1214463182a70ae6fd34d6d78b3fb03f"
+  },
+  "packet_sha256": "f28603b7aab07d7d75a06cfa52fb5b802689b8896001fa9f572971c9140c9799",
+  "schema": "cas-meta2-prototype-timeout-sqlite-copy/7",
+  "semantic_prefix_checked": false,
+  "source_sha": "42f9164754312f12850d9b8789c062fa7fb8069f",
+  "task_correctness": null
+}
