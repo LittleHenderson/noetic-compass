@@ -1,0 +1,117 @@
+{
+  "build_git_pin_verification": {
+    "binding": "LITERAL_SHA256_PINS",
+    "files": {
+      "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+      "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+      "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+    },
+    "schema": "cas-meta3-pure-dependency-receipt/0.1",
+    "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+    "verified_against_git": true
+  },
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_3_PROCEDURAL_MEMORY\\tools\\validate_local.py",
+    "--child",
+    "--output",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_3_PROCEDURAL_MEMORY\\records\\local_learned_writer_002",
+    "--scratch",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-049e9d45c684"
+  ],
+  "counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 624
+  },
+  "dependency_after": {
+    "binding": "LITERAL_SHA256_PINS",
+    "files": {
+      "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+      "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+      "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+    },
+    "schema": "cas-meta3-pure-dependency-receipt/0.1",
+    "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+    "verified_against_git": false
+  },
+  "dependency_before": {
+    "binding": "LITERAL_SHA256_PINS",
+    "files": {
+      "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+      "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+      "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+    },
+    "schema": "cas-meta3-pure-dependency-receipt/0.1",
+    "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+    "verified_against_git": false
+  },
+  "environment": {
+    "executable": "C:\\Python314\\python.exe",
+    "platform": "win32",
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "failure": null,
+  "junit_count_includes_subtests": true,
+  "local_neural_work": false,
+  "native_execution_performed": false,
+  "neural_imports_blocked": true,
+  "passed_subtests": 0,
+  "passed_test_functions": 624,
+  "protected_after": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "files_verified": 316
+  },
+  "protected_before": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "files_verified": 316
+  },
+  "qualification": "UNQUALIFIED",
+  "returncode": 0,
+  "schema": "cas-meta3-pure-validation/0.1",
+  "scope": "Pure storage/linking/native-demo/audit and mock launcher checks, including synthetic identities; no model, tensor, native execution or provider calls.",
+  "scratch_retained": true,
+  "source_sha256": {
+    "aws/frozen_helpers.py": "dd2f2cddf52c5f6ab4298ebfd66903c9b63930f2076fe61100934885358ee190",
+    "aws/launch.py": "28650e675b1e8f0c5ec2ecf200f405bee607a9afdc8af4c61fd624385110b577",
+    "aws/launch_plan.json": "fcb77f10ee35e0bdf019683ea7a6fbe062ae48ab1c32f938beb7fbf7bbb5662a",
+    "cas_meta3/__init__.py": "73ad2111bf915bc4200df071ee50cadca20ff61713813def1def46097374afee",
+    "cas_meta3/learned_handoff.py": "501c4eb14606f62a93e925385d45a7d3228da9efc7de2ba5755c732111466e91",
+    "cas_meta3/learned_linker.py": "878abfdeb087e1ec195c74a86531cf819827d58d198b8f58c32c16e72ad09681",
+    "cas_meta3/learned_package.py": "dfc174f68deac36559884d3d12a14aed2eb9f859a8866d03149902d149cf0957",
+    "cas_meta3/learned_reuse.py": "a2aef49edb7b0ee0eebd6417b5e2f0990c963fb43c763ac0a1af742b79d29cec",
+    "cas_meta3/learned_store.py": "897528d4d43d8639bdc9311f93127eec6cef5cbcdf9ea69da4e9d07de1144f4d",
+    "cas_meta3/learned_writer.py": "4cdcf962edcdfd5aa2c0d79c5730e33a66e8692e43621a17c44ab0b9746c39e2",
+    "cas_meta3/learning_evidence.py": "fe82f98acd444f52b2d64d0c0d7afe940876dcf63cd317817dcdf528b51f3001",
+    "cas_meta3/linker.py": "0df59807d9c584d3355df52a28bf8584002b823dccceb4ab67e7bd12251f6dcf",
+    "cas_meta3/native_demo.py": "5d553f19449227ac0da1cb98b12b7192ed2f0a91c41bffbd67e4fa575fec01b4",
+    "cas_meta3/registry.py": "426410ea8d06c26fd4b5519096c3b3cb438fa3a89403500c0f090ddbaf3a2eee",
+    "tests/test_bundle.py": "d5013babc36b6caef3150d3685db3044244fdd53ce31edbad45ebddcb26031bb",
+    "tests/test_launch.py": "e82789eb6b47546a2221e50de390fe4f94b52f51c05acfa498426787cead8df5",
+    "tests/test_learned_handoff.py": "68f291cf5556527c58e24e2f0f24af1dfa4638c057569cffe2e1dfd1645f581a",
+    "tests/test_learned_linker.py": "4136f5ec0740ad437c6e888175085207d5c56a893810921de1dc0b2fb4cfd953",
+    "tests/test_learned_package.py": "8c63794915f263bee1fff6753ef074815c7111251fc90fc465b96133d49002ec",
+    "tests/test_learned_reuse.py": "d6fc27cc4c8cfb5541e30f62ab9716729354d3949114f3e9c5e8650f78e2596a",
+    "tests/test_learned_store.py": "fd1fed510421a35478b8a55fdd766c0ea9e03d639f6e70de2a92ec08e513e205",
+    "tests/test_learned_writer.py": "9516c3e949f22b3614f2b8d6004b28a09d0c2e22396cd71c19f9a555439f9e95",
+    "tests/test_learning_evidence.py": "96447449248ff3702bc80916b39a6128256e79eb9b7533be6c91d1887153d99f",
+    "tests/test_linker.py": "98070008c428d7895ca55047ad0402ad52a063701c3c1c3fcb4b4809a1cde73b",
+    "tests/test_native_audit_integration.py": "fe43905a65305ee1afa8325a287a639638b344d916107fd734107a64551eecd4",
+    "tests/test_native_demo.py": "f9114cdd5406f4adbf7836ed59166155625bf34e7cb873cf57be29fadb2629ef",
+    "tests/test_native_demo_audit.py": "50429a213552b92a64e61e212eca1895b8339c2d8811a7eb94f5e89472db4336",
+    "tests/test_native_semantic_checks.py": "6ee24ac31e71fec259864dafa29950a2448898ae0cde924eac91af9a215b2434",
+    "tests/test_packet_inspection.py": "7338f6067268caabddff5a6309bcda3ecd98d7772d5d6529a4ba7cd533d89e55",
+    "tests/test_registry.py": "10ec3643e3d6f75e8c691efaa7a4d4a31eace8a3be14f236045af08984588b42",
+    "tools/audit_native_demo.py": "3df85464cc95f234157001fbeefc0ad6ac69ba0a8226efebe458955a9d4ef80d",
+    "tools/build_launch_bundle.py": "93b2db47945108fbe5024c6c924c516f1269184a58917911902e0ef388b47c16",
+    "tools/inspect_cloud_packet.py": "9de9947348432e9aaa3c5279845269e1d9a894f61bf828e6c9054a63f36a57b1",
+    "tools/validate_local.py": "8c4093ff16824abec69e0cf13e29ec0c78594d6d1a15e59193952fd7402dd096"
+  },
+  "sources_unchanged": true,
+  "status": "PURE_CHECKS_PASSED",
+  "test_scratch": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta3-049e9d45c684",
+  "utc": "2026-09-06T01:33:24.540227+00:00",
+  "wall_seconds": 57.43483140000171
+}

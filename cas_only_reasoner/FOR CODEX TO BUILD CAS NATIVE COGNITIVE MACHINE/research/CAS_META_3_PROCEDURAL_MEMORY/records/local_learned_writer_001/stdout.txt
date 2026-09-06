@@ -1,0 +1,217 @@
+........................................................................ [ 11%]
+........................................................................ [ 23%]
+........................................................................ [ 34%]
+.........................................FFFFFF......................... [ 46%]
+........................................................................ [ 57%]
+........................................................................ [ 69%]
+........................................................................ [ 80%]
+........................................................................ [ 92%]
+................................................                         [100%]
+================================== FAILURES ===================================
+____________________ test_real_child_exit_and_saved_bytes _____________________
+
+    def test_real_child_exit_and_saved_bytes():
+        root, request = materialize()
+>       path, digest = seal(root, request)
+                       ^^^^^^^^^^^^^^^^^^^
+
+tests\test_learned_writer.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_learned_writer.py:32: in seal
+    raw = evidence.canonical(request)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta3\learning_evidence.py:66: in canonical
+    _tree(value)
+cas_meta3\learning_evidence.py:61: in _tree
+    require(type(item) in (str, int, float, bool, type(None)), "EVIDENCE_VALUE_TYPE")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'EVIDENCE_VALUE_TYPE'
+
+    def require(condition, code):
+        if not condition:
+>           raise LearningEvidenceError(code)
+E           cas_meta3.learning_evidence.LearningEvidenceError: EVIDENCE_VALUE_TYPE
+
+cas_meta3\learning_evidence.py:36: LearningEvidenceError
+_______________ test_bad_request_rejected_before_child[source] ________________
+
+change = 'source'
+
+    @pytest.mark.parametrize('change', ['source', 'digest', 'scope', 'trust'])
+    def test_bad_request_rejected_before_child(change):
+        root, request = materialize()
+        if change == 'source':
+            request['source_identity'] = {}
+        elif change == 'scope':
+            request['store_path'] = str(writer.ROOT / 'outside.sqlite')
+        elif change == 'trust':
+            request['trust'].pop('expected_inspection_sha256')
+>       path, digest = seal(root, request)
+                       ^^^^^^^^^^^^^^^^^^^
+
+tests\test_learned_writer.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_learned_writer.py:32: in seal
+    raw = evidence.canonical(request)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta3\learning_evidence.py:66: in canonical
+    _tree(value)
+cas_meta3\learning_evidence.py:61: in _tree
+    require(type(item) in (str, int, float, bool, type(None)), "EVIDENCE_VALUE_TYPE")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'EVIDENCE_VALUE_TYPE'
+
+    def require(condition, code):
+        if not condition:
+>           raise LearningEvidenceError(code)
+E           cas_meta3.learning_evidence.LearningEvidenceError: EVIDENCE_VALUE_TYPE
+
+cas_meta3\learning_evidence.py:36: LearningEvidenceError
+_______________ test_bad_request_rejected_before_child[digest] ________________
+
+change = 'digest'
+
+    @pytest.mark.parametrize('change', ['source', 'digest', 'scope', 'trust'])
+    def test_bad_request_rejected_before_child(change):
+        root, request = materialize()
+        if change == 'source':
+            request['source_identity'] = {}
+        elif change == 'scope':
+            request['store_path'] = str(writer.ROOT / 'outside.sqlite')
+        elif change == 'trust':
+            request['trust'].pop('expected_inspection_sha256')
+>       path, digest = seal(root, request)
+                       ^^^^^^^^^^^^^^^^^^^
+
+tests\test_learned_writer.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_learned_writer.py:32: in seal
+    raw = evidence.canonical(request)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta3\learning_evidence.py:66: in canonical
+    _tree(value)
+cas_meta3\learning_evidence.py:61: in _tree
+    require(type(item) in (str, int, float, bool, type(None)), "EVIDENCE_VALUE_TYPE")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'EVIDENCE_VALUE_TYPE'
+
+    def require(condition, code):
+        if not condition:
+>           raise LearningEvidenceError(code)
+E           cas_meta3.learning_evidence.LearningEvidenceError: EVIDENCE_VALUE_TYPE
+
+cas_meta3\learning_evidence.py:36: LearningEvidenceError
+________________ test_bad_request_rejected_before_child[scope] ________________
+
+change = 'scope'
+
+    @pytest.mark.parametrize('change', ['source', 'digest', 'scope', 'trust'])
+    def test_bad_request_rejected_before_child(change):
+        root, request = materialize()
+        if change == 'source':
+            request['source_identity'] = {}
+        elif change == 'scope':
+            request['store_path'] = str(writer.ROOT / 'outside.sqlite')
+        elif change == 'trust':
+            request['trust'].pop('expected_inspection_sha256')
+>       path, digest = seal(root, request)
+                       ^^^^^^^^^^^^^^^^^^^
+
+tests\test_learned_writer.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_learned_writer.py:32: in seal
+    raw = evidence.canonical(request)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta3\learning_evidence.py:66: in canonical
+    _tree(value)
+cas_meta3\learning_evidence.py:61: in _tree
+    require(type(item) in (str, int, float, bool, type(None)), "EVIDENCE_VALUE_TYPE")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'EVIDENCE_VALUE_TYPE'
+
+    def require(condition, code):
+        if not condition:
+>           raise LearningEvidenceError(code)
+E           cas_meta3.learning_evidence.LearningEvidenceError: EVIDENCE_VALUE_TYPE
+
+cas_meta3\learning_evidence.py:36: LearningEvidenceError
+________________ test_bad_request_rejected_before_child[trust] ________________
+
+change = 'trust'
+
+    @pytest.mark.parametrize('change', ['source', 'digest', 'scope', 'trust'])
+    def test_bad_request_rejected_before_child(change):
+        root, request = materialize()
+        if change == 'source':
+            request['source_identity'] = {}
+        elif change == 'scope':
+            request['store_path'] = str(writer.ROOT / 'outside.sqlite')
+        elif change == 'trust':
+            request['trust'].pop('expected_inspection_sha256')
+>       path, digest = seal(root, request)
+                       ^^^^^^^^^^^^^^^^^^^
+
+tests\test_learned_writer.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_learned_writer.py:32: in seal
+    raw = evidence.canonical(request)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta3\learning_evidence.py:66: in canonical
+    _tree(value)
+cas_meta3\learning_evidence.py:61: in _tree
+    require(type(item) in (str, int, float, bool, type(None)), "EVIDENCE_VALUE_TYPE")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'EVIDENCE_VALUE_TYPE'
+
+    def require(condition, code):
+        if not condition:
+>           raise LearningEvidenceError(code)
+E           cas_meta3.learning_evidence.LearningEvidenceError: EVIDENCE_VALUE_TYPE
+
+cas_meta3\learning_evidence.py:36: LearningEvidenceError
+______________ test_child_failure_preserves_actual_exit_receipt _______________
+
+    def test_child_failure_preserves_actual_exit_receipt():
+        root, request = materialize()
+        request['trust']['expected_inspection_sha256'] = '0' * 64
+>       path, digest = seal(root, request)
+                       ^^^^^^^^^^^^^^^^^^^
+
+tests\test_learned_writer.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_learned_writer.py:32: in seal
+    raw = evidence.canonical(request)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta3\learning_evidence.py:66: in canonical
+    _tree(value)
+cas_meta3\learning_evidence.py:61: in _tree
+    require(type(item) in (str, int, float, bool, type(None)), "EVIDENCE_VALUE_TYPE")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'EVIDENCE_VALUE_TYPE'
+
+    def require(condition, code):
+        if not condition:
+>           raise LearningEvidenceError(code)
+E           cas_meta3.learning_evidence.LearningEvidenceError: EVIDENCE_VALUE_TYPE
+
+cas_meta3\learning_evidence.py:36: LearningEvidenceError
+============================== warnings summary ===============================
+tests/test_packet_inspection.py::test_duplicate_or_case_alias_zip_is_rejected[same]
+  C:\Python314\Lib\zipfile\__init__.py:1708: UserWarning: Duplicate name: 'same'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_learned_writer.py::test_real_child_exit_and_saved_bytes - c...
+FAILED tests/test_learned_writer.py::test_bad_request_rejected_before_child[source]
+FAILED tests/test_learned_writer.py::test_bad_request_rejected_before_child[digest]
+FAILED tests/test_learned_writer.py::test_bad_request_rejected_before_child[scope]
+FAILED tests/test_learned_writer.py::test_bad_request_rejected_before_child[trust]
+FAILED tests/test_learned_writer.py::test_child_failure_preserves_actual_exit_receipt
+6 failed, 618 passed, 1 warning in 52.07s
