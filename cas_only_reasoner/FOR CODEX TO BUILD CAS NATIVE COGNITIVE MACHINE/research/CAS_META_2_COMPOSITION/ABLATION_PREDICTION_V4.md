@@ -36,6 +36,11 @@ own the evaluation stage and must never accept a partially written seal followin
 a child failure. Reuse the exactly reconstructed full dataset without bypassing
 the frozen evaluator's validation.
 
+The separate `ablation_campaign_v4` module now implements parent/CLI dispatch,
+runtime identity capture, authored GPU-test invocation, and native evaluation
+ordering. It has not run on AWS. See `ABLATION_CAMPAIGN_V4.md` for the remaining
+paid-launch and evidence-verification requirements.
+
 This comparison is retrospective decoding diagnosis. Even an improved result
 would not demonstrate new training, fresh held-out generalization, or accepted
 learned procedural memory.
